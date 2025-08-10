@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Trusted news from all areas of Rochdale.">
+  <title>Rochdale Daily</title>
+  <link rel="stylesheet" href="css/style.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="site-header">
+  <img src="assets/images/logo.svg" alt="Rochdale Daily" class="logo">
+  <div class="ticker"><span>Breaking: Live updates from Rochdale Council meeting...</span></div>
+</header>
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="rochdale.html">Rochdale</a></li>
+    <li><a href="heywood.html">Heywood</a></li>
+    <li><a href="milnrow.html">Milnrow</a></li>
+  </ul>
+  <form class="search-form">
+    <input type="text" id="search" placeholder="Search..." />
+    <ul id="suggestions"></ul>
+  </form>
+</nav>
+
+<main id="article-feed" data-location="milnrow">
+  <h1>Milnrow News</h1>
+  <div class="filters">
+    <button data-topic="all">All</button>
+    <button data-topic="crime">Crime</button>
+    <button data-topic="politics">Politics</button>
+    <button data-topic="education">Education</button>
+    <button data-topic="announcements">Announcements</button>
+    <button data-topic="appeals">Appeals</button>
+  </div>
+  <section class="content"></section>
+</main>
+
+<footer>
+  <div class="footer-ads">[Footer Ad]</div>
+  <p>&copy; 2025 Rochdale Daily. All rights reserved.</p>
+</footer>
+<script src="js/main.js"></script>
+<script src="js/article-loader.js"></script>
+</body>
+</html>

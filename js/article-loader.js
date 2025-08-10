@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded', function () { /* load articles by JSON */ });
