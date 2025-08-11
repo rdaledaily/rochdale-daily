@@ -1,0 +1,38 @@
+<!-- Rochdale Daily: Drop-in Header Partial -->
+<!-- Place this block at the top of your pages (replacing your current header nav section). -->
+<!-- Requires /assets/css/menu.css and /assets/js/menu.js to be linked (see README). -->
+
+<header class="rd-header site-header">
+  <!-- Top row: date, weather, search or logo as you prefer -->
+  <div class="rd-header-bar">
+    <!-- LEFT: logo (use your existing image if you want) -->
+    <a class="rd-logo" href="/" aria-label="Rochdale Daily Home">DAILY</a>
+
+    <!-- CENTER: (optional) weather/date/search live on your page already -->
+    <div class="rd-spacer"></div>
+
+    <!-- RIGHT: hamburger (automatically hidden on desktop) -->
+    <button class="rd-menu-toggle menu-toggle" aria-controls="primary-menu" aria-expanded="false" aria-label="Open menu">
+      <span class="sr-only">Open menu</span>
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Primary navigation -->
+  <nav id="primary-menu" class="rd-menu menu" role="navigation" aria-label="Primary">
+    <ul class="rd-nav-list">
+      <li><a href="/">Home</a></li>
+      <li><a href="/rochdale.html">Rochdale</a></li>
+      <li><a href="/heywood.html">Heywood</a></li>
+      <li><a href="/littleborough.html">Littleborough</a></li>
+      <li><a href="/milnrow.html">Milnrow</a></li>
+      <li><a href="/crime.html">Crime</a></li>
+      <li><a href="/politics.html">Politics</a></li>
+      <li><a href="/education.html">Education</a></li>
+      <li><a href="/announcements.html">Announcements</a></li>
+      <li><a href="/appeals.html">Appeals</a></li>
+    </ul>
+  </nav>
+</header>
