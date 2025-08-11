@@ -145,7 +145,97 @@ nav.nav{display:flex;gap:14px;flex-wrap:wrap;padding:8px 0 12px;border-top:1px s
     position: static;
     background: transparent;
     padding: 0;
+    gap: 1.2rem;/* Ensure header positions the toggle/panel correctly */
+header, .site-header {
+  position: relative;
+  z-index: 10;
+}
+
+button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false" aria-label="Open menu">
+  <span class="sr-only">Open menu</span>
+  <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</button>
+<nav id="primary-menu" class="menu">
+  <!-- your links -->
+</nav>
+
+
+/* Base states */
+.menu-toggle {
+  display: none;                 /* hidden by default (desktop-first) */
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: .5rem;
+  line-height: 1;
+  color: #fff;
+}
+
+.menu {
+  display: flex;                 /* desktop: horizontal */
+  gap: 1.2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  background: transparent;
+  position: static;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #dbe4ff;
+}
+.menu a:hover { text-decoration: underline; }
+
+/* ------- MOBILE (≤900px) ------- */
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: inline-flex;        /* show hamburger on mobile */
+    align-items: center;
+    justify-content: center;
+    position: absolute;          /* put it top-right of header */
+    right: 12px;
+    top: 12px;
+    z-index: 1001;
+  }
+
+  /* Turn menu into a dropdown panel under the header */
+  .menu {
+    display: none;               /* hidden until opened */
+    position: absolute;
+    left: 0; right: 0;
+    top: 60px;                   /* adjust if your header is taller/shorter */
+    background: #0f1115;
+    border-top: 1px solid #222;
+    padding: 12px;
+    flex-direction: column;
+    gap: 0;
+    z-index: 1000;               /* above ticker/content */
+  }
+
+  .menu.open { display: flex; }
+
+  .menu a {
+    display: block;
+    padding: 12px 16px;
+    border-radius: 12px;
+  }
+
+  .menu a:active { background: #1a1d24; }
+}
+
+/* ------- DESKTOP (≥901px) ------- */
+@media (min-width: 901px) {
+  .menu-toggle { display: none; }   /* hide hamburger on desktop */
+  .menu {
+    display: flex;                  /* keep bar horizontal */
+    position: static;
+    padding: 0;
     gap: 1.2rem;
+  }
+}
+
   }
 }
 
