@@ -2,16 +2,20 @@ name: Scrape Facebook and Deploy
 
 on:
   schedule:
-    - cron: "0 */3 * * *"   # every 3 hours (adjust as you like)
-  workflow_dispatch:         # allows manual run from Actions tab
+    - cron: "0 */3 * * *"   # run every 3 hours
+  workflow_dispatch:         # allow manual runs from Actions tab
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # ✅ allow pushing commits back to repo
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -39,5 +43,4 @@ jobs:
           git config user.name "RochdaleDailyBot"
           git config user.email "actions@github.com"
           git add articles.json
-          git commit -m "Auto-update articles [skip ci]" || echo "No changes"
-          git push
+          git diff --quiet && echo "No changes to commit" || (git commit -m "Auto-update articles [skip ci]" && git push)
