@@ -38,9 +38,12 @@ jobs:
         run: |
           python scraper/scraper.py
 
+      - name: Preview articles.json
+        run: head -n 20 articles.json   # ✅ show first 20 lines in logs
+
       - name: Commit & push updated articles.json
         run: |
           git config user.name "RochdaleDailyBot"
           git config user.email "actions@github.com"
           git add articles.json
-          git diff --quiet && echo "No changes to commit" || (git commit -m "Auto-update articles [skip ci]" && git push)
+          git diff --quiet && echo "ℹ️ No changes to commit" || (git commit -m "Auto-update articles [skip ci]" && git push)
