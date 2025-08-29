@@ -28,11 +28,11 @@ jobs:
         run: |
           echo '${{ secrets.FB_COOKIES }}' > scraper/fb_cookies.json
 
-      - name: Run scraper
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          python scraper/scraper.py
+      - name: Test OpenAI Key
+  env:
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  run: python scraper/test_openai.py
+
 
       - name: Commit & push updated articles.json
         run: |
