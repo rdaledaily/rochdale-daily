@@ -6,7 +6,7 @@ on:
     - cron: "0 * * * *"  # run every hour
 
 permissions:
-  contents: write
+  contents: write  # Allow pushing to repo
 
 jobs:
   scrape:
@@ -14,7 +14,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        
+        with:
+          fetch-depth: 0
+          
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -25,11 +27,18 @@ jobs:
           pip install playwright openai
           playwright install chromium
           
+      - name: Debug file structure
+        run: |
+          echo "Files in root:"
+          ls -la
+          echo "Files in scraper directory:"
+          ls -la scraper/ || echo "scraper directory not found"
+          
       - name: Run scraper
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "🚀 Running scraper..."
+          echo "Running scraper..."
           python scraper/scraper.py
         continue-on-error: true
         
@@ -47,8 +56,8 @@ jobs:
             else
               git commit -m "Update articles.json - $(date '+%Y-%m-%d %H:%M UTC')"
               git push
-              echo "✅ Articles updated and pushed"
+              echo "Articles updated and pushed"
             fi
           else
-            echo "⚠️ articles.json not found"
+            echo "articles.json not found"
           fi
