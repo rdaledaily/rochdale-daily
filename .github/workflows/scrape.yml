@@ -1,12 +1,12 @@
 name: Scrape Facebook and Update Articles
 
 on:
-  workflow_dispatch:     # allow manual trigger
+  workflow_dispatch:     # manual trigger
   schedule:
     - cron: "0 * * * *"  # run every hour
 
 permissions:
-  contents: write  # Allow pushing to repo
+  contents: write   # allow pushing to repo
 
 jobs:
   scrape:
@@ -27,34 +27,33 @@ jobs:
           pip install playwright openai
           playwright install chromium
           
-      - name: Debug file structure
+      - name: Debug environment
         run: |
           echo "Files in root:"
           ls -la
-          echo "Files in scraper directory:"
+          echo "Files in scraper/:"
           ls -la scraper/ || echo "scraper directory not found"
-          
-      - name: Run scraper
+          echo "OPENAI_API_KEY length: ${#OPENAI_API_KEY:-0}"
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Run scraper
         run: |
-          echo "Running scraper..."
+          echo "🚀 Running scraper..."
           if [ -z "$OPENAI_API_KEY" ]; then
             echo "❌ OPENAI_API_KEY is not set!"
             exit 1
-          else
-            echo "✅ OPENAI_API_KEY detected."
           fi
           python scraper/scraper.py
-        continue-on-error: true
-        
-      - name: Commit & push updated articles.json
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        continue-on-error: false
+
+      - name: Commit & push updated articles.json
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           if [[ -f articles.json ]]; then
             git add articles.json
             if git diff --staged --quiet; then
@@ -66,3 +65,4 @@ jobs:
             fi
           else
             echo "⚠️ articles.json not found"
+          fi
