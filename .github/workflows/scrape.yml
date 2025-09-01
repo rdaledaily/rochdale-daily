@@ -10,21 +10,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # -------------------------
       # 1. Checkout repo
-      # -------------------------
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # -------------------------
       # 2. Set up Python
-      # -------------------------
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
-      # -------------------------
       # 3. Install dependencies
-      # -------------------------
       - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install playwright openai
+          playwright install chromium
+
+      # 4. Ensure articles.json exists
+      - name: Ensure articles.json exists
+        run: |
+          if [ ! -f articles.json ]; then
+            echo "[]" > articles.json
+          fi
+
+      # 5. Run scraper
+      - name: Run scraper
+        run: |
+          set +e
+          echo "🚀 Running scraper..."
+          python scraper/scraper.py || echo "⚠️ Scraper failed — continuing without new articles"
+          set -e
+
+      # 6. Commit & push changes
+      - name: Commit & push updated articles.json
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add articles.json || true
+          git commit -m "Update articles.json [skip ci]" || echo "⚠️ Nothing to commit"
+          git push || echo "⚠️ Push skipped"
+
+      # 7. Notify if scraper fails
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "⚠️ Scraper failed in GitHub Actions."
+          # Optional: extend this with email/Slack/Discord alerts
