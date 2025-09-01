@@ -10,12 +10,12 @@ from openai import OpenAI
 import time
 
 # ==============================
-# CONFIG (same as yours)
+# CONFIG - Updated paths for scraper/ directory
 # ==============================
 
-OUTPUT_FILE = "articles.json"
-SESSION_FILE = "scraper/session.json"
-LOG_FILE = "scraper/scraper.log"
+OUTPUT_FILE = "../articles.json"  # Put articles.json in root directory
+SESSION_FILE = "session.json"     # Keep in scraper directory
+LOG_FILE = "scraper.log"          # Keep in scraper directory
 
 GROUPS = {
     "heywood": "https://www.facebook.com/groups/heywoodcommunity",
@@ -41,7 +41,6 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 # LOGGING SETUP
 # ==============================
 
-os.makedirs("scraper", exist_ok=True)
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -63,11 +62,14 @@ def categorise(text):
     return "announcements"
 
 def push_to_github():
-    """Commit and push articles.json to GitHub"""
+    """Commit and push articles.json to GitHub from scraper directory"""
     try:
+        # Change to root directory for git operations
+        os.chdir("..")
+        
         subprocess.run(["git", "config", "user.email", "action@github.com"], check=True)
         subprocess.run(["git", "config", "user.name", "GitHub Action"], check=True)
-        subprocess.run(["git", "add", OUTPUT_FILE], check=True)
+        subprocess.run(["git", "add", "articles.json"], check=True)
         
         # Check if there are changes to commit
         result = subprocess.run(["git", "diff", "--staged", "--quiet"], capture_output=True)
@@ -83,6 +85,12 @@ def push_to_github():
     except subprocess.CalledProcessError as e:
         logging.error(f"Git push failed: {e}")
         return False
+    finally:
+        # Change back to scraper directory
+        try:
+            os.chdir("scraper")
+        except:
+            pass
 
 async def validate_session(page):
     """Check if Facebook session is still valid"""
@@ -147,166 +155,4 @@ async def fetch_posts(playwright, group_url, area):
             "div[data-testid='story-subtitle']"
         ]
         
-        posts = []
-        for selector in post_selectors:
-            try:
-                await page.wait_for_selector(selector, timeout=10000)
-                posts = await page.locator(selector).all()
-                if len(posts) > 0:
-                    logging.info(f"Found {len(posts)} posts using selector: {selector}")
-                    break
-            except:
-                continue
-        
-        if not posts:
-            logging.warning(f"No posts found for {area}")
-            return []
-        
-        # Process first 5 posts to avoid rate limiting
-        for idx, post in enumerate(posts[:5]):
-            try:
-                content = await post.inner_text(timeout=5000)
-                
-                # Skip very short posts
-                if len(content.strip()) < 50:
-                    continue
-                
-                # Try to get post link
-                link = None
-                try:
-                    link_element = post.locator("a").first
-                    if await link_element.count() > 0:
-                        link = await link_element.get_attribute("href")
-                        if link and not link.startswith("http"):
-                            link = "https://facebook.com" + link
-                except:
-                    pass
-                
-                category = categorise(content)
-                
-                # Improved GPT prompt
-                prompt = f"""Rewrite this local community Facebook post into a professional UK news article.
-
-Requirements:
-- Write as a neutral journalist
-- Use UK English spelling
-- Include relevant context for Rochdale area residents
-- Make it factual and concise
-- Create an engaging headline
-- Keep it under 300 words
-
-Original post:
-{content[:1500]}"""  # Limit content to avoid token limits
-
-                # Call OpenAI with better error handling
-                try:
-                    completion = client.chat.completions.create(
-                        model="gpt-4o-mini",  # Make sure this model exists
-                        messages=[
-                            {"role": "system", "content": "You are a professional UK local news journalist writing for Rochdale Daily."},
-                            {"role": "user", "content": prompt}
-                        ],
-                        max_tokens=500,
-                        temperature=0.7
-                    )
-                    rewritten = completion.choices[0].message.content.strip()
-                except Exception as e:
-                    logging.error(f"OpenAI API error: {e}")
-                    continue
-                
-                # Extract title from rewritten content
-                lines = rewritten.split('\n')
-                title = lines[0] if lines else rewritten[:100]
-                title = re.sub(r'^#+\s*', '', title)  # Remove markdown headers
-                
-                # Create article object
-                article = {
-                    "id": f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{area}-{idx}",
-                    "title": title[:150],  # Limit title length
-                    "slug": re.sub(r'[^a-z0-9]+', '-', title[:50].lower()).strip("-"),
-                    "excerpt": rewritten[:200] + "..." if len(rewritten) > 200 else rewritten,
-                    "content_html": f"<p>{rewritten.replace(chr(10), '</p><p>')}</p>",
-                    "area": area,
-                    "types": [category],
-                    "published_at": datetime.utcnow().isoformat() + "Z",
-                    "image_url": f"assets/img/placeholder_{category}.jpg",
-                    "source_url": link or group_url
-                }
-                
-                results.append(article)
-                logging.info(f"Scraped article from {area}: {title[:50]}...")
-                
-                # Rate limiting between posts
-                await asyncio.sleep(2)
-                
-            except Exception as e:
-                logging.error(f"Error processing post {idx} in {area}: {e}")
-                continue
-    
-    except Exception as e:
-        logging.error(f"Browser error for {area}: {e}")
-    finally:
-        if browser:
-            await browser.close()
-    
-    return results
-
-# ==============================
-# MAIN
-# ==============================
-
-async def main():
-    if not os.path.exists(SESSION_FILE):
-        logging.error(f"Session file {SESSION_FILE} not found")
-        return
-
-    if not os.getenv("OPENAI_API_KEY"):
-        logging.error("OPENAI_API_KEY environment variable not set")
-        return
-
-    logging.info("Starting scrape...")
-    all_articles = []
-
-    async with async_playwright() as p:
-        for area, url in GROUPS.items():
-            logging.info(f"Scraping {area}...")
-            posts = await fetch_posts(p, url, area)
-            all_articles.extend(posts)
-            
-            # Delay between groups to avoid detection
-            await asyncio.sleep(5)
-
-    if not all_articles:
-        logging.warning("No articles scraped")
-        return
-
-    # Load existing articles
-    existing = []
-    if os.path.exists(OUTPUT_FILE):
-        try:
-            with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
-                existing = json.load(f)
-        except (json.JSONDecodeError, FileNotFoundError):
-            existing = []
-
-    # Merge new articles
-    existing_ids = {a["id"] for a in existing}
-    new_articles = [a for a in all_articles if a["id"] not in existing_ids]
-    
-    if new_articles:
-        combined = new_articles + existing
-        # Keep only last 100 articles to avoid file getting too large
-        combined = combined[:100]
-        
-        with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-            json.dump(combined, f, indent=2, ensure_ascii=False)
-        
-        logging.info(f"Added {len(new_articles)} new articles. Total: {len(combined)}")
-        
-        # Push to GitHub
-        push_to_github()
-    else:
-        logging.info("No new articles to add")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+        posts =
