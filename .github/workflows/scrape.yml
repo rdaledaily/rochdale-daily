@@ -3,20 +3,18 @@ name: Scrape Facebook and Update Articles
 on:
   workflow_dispatch:     # allow manual trigger
   schedule:
-    - cron: "0 * * * *"  # run every hour (fixed syntax)
+    - cron: "0 * * * *"  # run every hour
 
 permissions:
-  contents: write  # Allow pushing to repo
+  contents: write
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4  # Updated version
-        with:
-          fetch-depth: 0  # Full history for better git operations
-          
+        uses: actions/checkout@v4
+        
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -32,8 +30,8 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           echo "🚀 Running scraper..."
-          python scraper.py
-        continue-on-error: true  # Better than set +e
+          python scraper/scraper.py
+        continue-on-error: true
         
       - name: Commit & push updated articles.json
         env:
