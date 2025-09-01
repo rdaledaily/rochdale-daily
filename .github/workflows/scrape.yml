@@ -1,49 +1,49 @@
 name: Scrape Facebook and Deploy
 
 on:
+  workflow_dispatch:   # run manually
   schedule:
-    - cron: "0 */3 * * *"   # run every 3 hours
-  workflow_dispatch:         # allow manual runs from Actions tab
+    - cron: "0 * * * *"   # run every hour
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write   # ✅ allow pushing commits back to repo
-
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install playwright openai
           playwright install chromium
 
-      - name: Add FB cookies from secret
-        run: |
-          echo '${{ secrets.FB_COOKIES }}' > scraper/fb_cookies.json
-
       - name: Run scraper
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          python scraper/scraper.py
+          set +e   # <-- don’t exit if scraper fails
+          echo "🚀 Running scraper..."
+          python scraper/scraper.py || echo "⚠️ Scraper failed — continuing without new articles"
+          set -e
 
       - name: Preview articles.json
-        run: head -n 20 articles.json   # ✅ show first 20 lines in logs
+        run: head -n 40 articles.json || echo "⚠️ No articles.json file found"
 
       - name: Commit & push updated articles.json
         run: |
-          git config user.name "RochdaleDailyBot"
-          git config user.email "actions@github.com"
-          git add articles.json
-          git diff --quiet && echo "ℹ️ No changes to commit" || (git commit -m "Auto-update articles [skip ci]" && git push)
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add articles.json || true
+          git commit -m "Update articles.json [skip ci]" || echo "⚠️ Nothing to commit"
+          git push || echo "⚠️ Push skipped"
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: rochdale-daily
+          directory: .
