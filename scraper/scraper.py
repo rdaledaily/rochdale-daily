@@ -12,9 +12,9 @@ from openai import OpenAI
 # CONFIG - Paths for scraper/ directory
 # ==============================
 
-OUTPUT_FILE = "../articles.json"  # Put articles.json in root directory
-SESSION_FILE = "session.json"     # Keep in scraper directory  
-LOG_FILE = "scraper.log"          # Keep in scraper directory
+OUTPUT_FILE = "articles.json"  # Put articles.json in root directory
+SESSION_FILE = "scraper/session.json"     # Keep in scraper directory  
+LOG_FILE = "scraper/scraper.log"          # Keep in scraper directory
 
 GROUPS = {
     "heywood": "https://www.facebook.com/groups/heywoodcommunity",
