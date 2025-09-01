@@ -33,6 +33,12 @@ jobs:
           ls -la
           echo "Files in scraper directory:"
           ls -la scraper/ || echo "scraper directory not found"
+
+      - name: Debug secrets
+        run: |
+          echo "OPENAI_API_KEY length: ${#OPENAI_API_KEY}"
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           
       - name: Run scraper
         env:
