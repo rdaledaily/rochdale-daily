@@ -1,7 +1,7 @@
-name: Scrape Facebook and Deploy
+name: Scrape Facebook and Update Articles
 
 on:
-  workflow_dispatch:   # run manually
+  workflow_dispatch:   # manual run
   schedule:
     - cron: "0 * * * *"   # run every hour
 
@@ -24,13 +24,10 @@ jobs:
 
       - name: Run scraper
         run: |
-          set +e   # <-- don’t exit if scraper fails
+          set +e
           echo "🚀 Running scraper..."
           python scraper/scraper.py || echo "⚠️ Scraper failed — continuing without new articles"
           set -e
-
-      - name: Preview articles.json
-        run: head -n 40 articles.json || echo "⚠️ No articles.json file found"
 
       - name: Commit & push updated articles.json
         run: |
@@ -39,11 +36,3 @@ jobs:
           git add articles.json || true
           git commit -m "Update articles.json [skip ci]" || echo "⚠️ Nothing to commit"
           git push || echo "⚠️ Push skipped"
-
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          projectName: rochdale-daily
-          directory: .
