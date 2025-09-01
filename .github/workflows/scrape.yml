@@ -1,38 +1,30 @@
 name: Scrape Facebook and Update Articles
 
 on:
-  workflow_dispatch:   # manual run
+  workflow_dispatch:      # manual run from GitHub Actions tab
   schedule:
     - cron: "0 * * * *"   # run every hour
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+
     steps:
+      # -------------------------
+      # 1. Checkout repo
+      # -------------------------
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      # -------------------------
+      # 2. Set up Python
+      # -------------------------
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
+      # -------------------------
+      # 3. Install dependencies
+      # -------------------------
       - name: Install dependencies
-        run: |
-          pip install playwright openai
-          playwright install chromium
-
-      - name: Run scraper
-        run: |
-          set +e
-          echo "🚀 Running scraper..."
-          python scraper/scraper.py || echo "⚠️ Scraper failed — continuing without new articles"
-          set -e
-
-      - name: Commit & push updated articles.json
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add articles.json || true
-          git commit -m "Update articles.json [skip ci]" || echo "⚠️ Nothing to commit"
-          git push || echo "⚠️ Push skipped"
