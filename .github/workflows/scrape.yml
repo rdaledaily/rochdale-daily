@@ -1,62 +1,50 @@
-name: Scrape Facebook, MEN, Bing, RSS and Update Articles
+name: Scrape Facebook and Update Articles
 
 on:
-  workflow_dispatch:     # manual run
+  workflow_dispatch:     # allow manual trigger
   schedule:
     - cron: "0 * * * *"  # run every hour
 
 permissions:
-  contents: write
+  contents: write  # Allow pushing to repo
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+          
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-
+          
       - name: Install dependencies
         run: |
-          pip install playwright openai feedparser
+          pip install playwright openai feedparser requests beautifulsoup4
           playwright install chromium
-
-      - name: Verify OpenAI key
-        run: |
-          if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
-            echo "❌ OPENAI_API_KEY is not set in GitHub secrets"
-            exit 1
-          else
-            echo "✅ OPENAI_API_KEY found"
-          fi
-
+          
       - name: Debug file structure
         run: |
           echo "Files in root:"
           ls -la
-          echo "Files in scraper/:"
-          ls -la scraper/ || echo "no scraper directory"
-
+          echo "Files in scraper directory:"
+          ls -la scraper/ || echo "scraper directory not found"
+          
       - name: Run scraper
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           echo "🚀 Running scraper..."
+          if [ -z "${OPENAI_API_KEY}" ]; then
+            echo "❌ OPENAI_API_KEY is not set!"
+            exit 1
+          fi
           python scraper/scraper.py
-          echo "---- Summary ----"
-          grep "Scraping FB" scraper/scraper.log || true
-          grep "Scraping MEN" scraper/scraper.log || true
-          grep "Scraping Bing" scraper/scraper.log || true
-          grep "RSS" scraper/scraper.log || true
-          grep "✅" scraper/scraper.log || true
-
+        
       - name: Commit & push updated articles.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,3 +63,4 @@ jobs:
             fi
           else
             echo "❌ articles.json not found"
+          fi
