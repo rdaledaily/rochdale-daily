@@ -24,7 +24,7 @@ jobs:
           
       - name: Install dependencies
         run: |
-          pip install playwright openai feedparser requests beautifulsoup4
+          pip install playwright openai feedparser beautifulsoup4 requests
           playwright install chromium
           
       - name: Debug file structure
@@ -39,11 +39,12 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           echo "🚀 Running scraper..."
-          if [ -z "${OPENAI_API_KEY}" ]; then
+          if [ -z "$OPENAI_API_KEY" ]; then
             echo "❌ OPENAI_API_KEY is not set!"
             exit 1
           fi
           python scraper/scraper.py
+        continue-on-error: true
         
       - name: Commit & push updated articles.json
         env:
