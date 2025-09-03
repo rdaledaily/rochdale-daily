@@ -1,11 +1,13 @@
 import os
-import json
 import re
+import json
 import asyncio
 import logging
 from datetime import datetime
+from typing import Dict, List, Tuple
+
 import feedparser
-from playwright.async_api import async_playwright
+from playwright.async_api import async_playwright, BrowserContext, Page
 from openai import OpenAI
 
 # ==============================
@@ -13,40 +15,135 @@ from openai import OpenAI
 # ==============================
 
 OUTPUT_FILE = "articles.json"
-SESSION_FILE = "scraper/session.json"
 LOG_FILE = "scraper/scraper.log"
 
-FACEBOOK_SOURCES = {
-    "heywood_group": ("Heywood", "https://www.facebook.com/groups/heywoodcommunity"),
-    "milnrow_group": ("Milnrow", "https://www.facebook.com/groups/446308878886609"),
-    "littleborough_group": ("Littleborough", "https://www.facebook.com/groups/779196125547484"),
-    "whitworth_group": ("Whitworth", "https://www.facebook.com/groups/76137500365"),
-    "shawclough_healey": ("Shawclough / Healey", "https://www.facebook.com/groups/shawcloughandhealey"),
-    "rochdale_online_page": ("Rochdale", "https://m.facebook.com/rochdaleonline/"),
-    "bee_network_page": ("Transport", "https://m.facebook.com/beenetworkgm/"),
+# Prefer persistent FB profile; fall back to storage_state cookies if needed
+FB_PROFILE_DIR = "scraper/fb_profile"
+SESSION_FILE = "scraper/session.json"
+
+# ---------------- Facebook sources ----------------
+# name -> {type, area, url}
+FACEBOOK_SOURCES: Dict[str, Dict[str, str]] = {
+    # Groups (wards)
+    "heywood": {
+        "type": "facebook_group",
+        "area": "heywood",
+        "url": "https://www.facebook.com/groups/heywoodtown",
+    },
+    "littleborough": {
+        "type": "facebook_group",
+        "area": "littleborough",
+        "url": "https://www.facebook.com/groups/779196125547484",
+    },
+    "milnrow_newhey": {
+        "type": "facebook_group",
+        "area": "milnrow",
+        "url": "https://www.facebook.com/groups/446308878886609",
+    },
+    "whitworth": {
+        "type": "facebook_group",
+        "area": "whitworth",
+        "url": "https://www.facebook.com/groups/76137500365",
+    },
+    "shawclough_healey": {
+        "type": "facebook_group",
+        "area": "shawclough_healey",
+        "url": "https://www.facebook.com/groups/shawcloughandhealey",
+    },
+    "norden": {
+        "type": "facebook_group",
+        "area": "norden",
+        "url": "https://www.facebook.com/groups/419623505980244",
+    },
+    "kirkholt": {
+        "type": "facebook_group",
+        "area": "kirkholt",
+        "url": "https://www.facebook.com/groups/230300881463167",
+    },
+    "rochdale_group": {
+        "type": "facebook_group",
+        "area": "rochdale",
+        "url": "https://www.facebook.com/groups/2321259874849245",
+    },
+
+    # Pages
+    "rochdaleonline_page": {
+        "type": "facebook_page",
+        "area": "rochdale",
+        "url": "https://m.facebook.com/rochdaleonline/",
+    },
+    "beenetwork_page": {
+        "type": "facebook_page",
+        "area": "rochdale",
+        "url": "https://m.facebook.com/beenetworkgm/",
+    },
 }
 
-WEB_SOURCES = {
-    "men_rochdale": ("Rochdale", "https://www.manchestereveningnews.co.uk/all-about/rochdale"),
-    "bing_rochdale": ("Rochdale", "https://www.bing.com/news/search?q=Rochdale&FORM=EWRE"),
+# ---------------- Website sources (MEN/Bing) ----------------
+WEB_SOURCES: Dict[str, Dict[str, str]] = {
+    "men_rochdale": {
+        "type": "website",
+        "area": "rochdale",
+        "url": "https://www.manchestereveningnews.co.uk/all-about/rochdale",
+    },
+    "bing_rochdale": {
+        "type": "website",
+        "area": "rochdale",
+        "url": "https://www.bing.com/news/search?q=Rochdale&qpvt=rochdale+news&FORM=EWRE",
+    },
 }
 
-RSS_SOURCES = {
+# ---------------- RSS sources ----------------
+RSS_SOURCES: Dict[str, str] = {
     "rochdale_council": "https://www.rochdale.gov.uk/news/rss.xml",
     "gmp_news": "https://www.gmp.police.uk/news/rss.xml",
-    "bbc_manchester": "http://feeds.bbci.co.uk/news/england/manchester/rss.xml"
+    "bbc_manchester": "http://feeds.bbci.co.uk/news/england/manchester/rss.xml",
 }
 
+# ---------------- Categories & ward detection ----------------
 CATEGORY_KEYWORDS = {
-    "crime": ["arrest", "police", "stabbing", "theft", "burglary", "assault", "violence", "court", "knife", "gun", "drugs"],
-    "politics": ["council", "mp", "election", "vote", "government", "parliament", "politician", "policy", "minister"],
-    "education": ["school", "college", "university", "teacher", "student", "exam", "lesson", "classroom", "headteacher", "pupil"],
-    "sport": ["football", "match", "league", "team", "tournament", "goal", "player", "cup", "rugby", "cricket"],
-    "transport": ["bus", "tram", "train", "road", "traffic", "accident", "highway", "travel", "parking"],
-    "events": ["event", "festival", "concert", "fair", "market", "party", "celebration", "show", "act", "live music", "game"],
-    "announcements": ["death", "funeral", "obituary", "wedding", "birthday", "celebration", "anniversary", "congratulations", "passed away", "tribute"]
+    "crime": [
+        "arrest","police","stabbing","theft","burglary","assault",
+        "violence","court","knife","gun","drugs","wanted","jailed"
+    ],
+    "transport": [
+        "bus","tram","train","traffic","roadworks","closure","accident",
+        "transport","highway","m62","m60","bee network","parking","car park"
+    ],
+    "politics": [
+        "council","mp","election","vote","government","parliament",
+        "politician","policy","minister","mayor"
+    ],
+    "education": [
+        "school","college","university","teacher","student","exam",
+        "lesson","classroom","headteacher","ofsted","pupil"
+    ],
+    "sport": [
+        "football","match","league","team","tournament","goal","player","cup","rugby","cricket"
+    ],
+    "events": [
+        "festival","concert","match","tournament","fair","market",
+        "fundraiser","party","gala","celebration","open day","parade",
+        "show","act","live music","gig","performance","game","event"
+    ],
+    "announcements": [
+        "death","funeral","obituary","wedding","birthday","celebration",
+        "anniversary","congratulations","passed away","tribute","memorial"
+    ],
 }
 
+WARD_KEYWORDS = {
+    "heywood": ["heywood"],
+    "littleborough": ["littleborough"],
+    "milnrow": ["milnrow","newhey"],
+    "rochdale": ["rochdale","town centre","rochdale town"],
+    "shawclough_healey": ["shawclough","healey"],
+    "whitworth": ["whitworth"],
+    "norden": ["norden","bamford","caldershaw","cutgate"],
+    "kirkholt": ["kirkholt"],
+}
+
+# --- OpenAI client ---
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # ==============================
@@ -56,160 +153,331 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler(LOG_FILE), logging.StreamHandler()]
+    handlers=[logging.FileHandler(LOG_FILE), logging.StreamHandler()],
 )
 
 # ==============================
 # HELPERS
 # ==============================
 
-def categorise(text):
-    text_lower = text.lower()
-    for category, keywords in CATEGORY_KEYWORDS.items():
-        if any(kw in text_lower for kw in keywords):
-            return category
+def normalise_ws(text: str) -> str:
+    return re.sub(r"\s+", " ", text or "").strip()
+
+def categorise(text: str) -> str:
+    t = (text or "").lower()
+    for cat, kws in CATEGORY_KEYWORDS.items():
+        if any(kw in t for kw in kws):
+            return cat
     return "announcements"
 
-async def rewrite_with_gpt(content, area):
-    """Send raw content to OpenAI for rewriting."""
-    try:
-        completion = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a professional UK local news journalist writing for Rochdale Daily."},
-                {"role": "user", "content": f"Rewrite this into a factual, concise, UK local news article for {area}:\n\n{content[:2000]}"}
-            ],
-            max_tokens=500,
-            temperature=0.7
-        )
-        return completion.choices[0].message.content.strip()
-    except Exception as e:
-        logging.error(f"❌ OpenAI error: {e}")
-        return content[:300]
+def detect_area(text: str, fallback: str = "rochdale") -> str:
+    t = (text or "").lower()
+    for area, kws in WARD_KEYWORDS.items():
+        if any(kw in t for kw in kws):
+            return area
+    return fallback
 
-# ==============================
-# FACEBOOK SCRAPING
-# ==============================
-
-async def validate_session(page):
-    try:
-        await page.goto("https://facebook.com", wait_until="domcontentloaded", timeout=20000)
-        await page.wait_for_timeout(2000)
-        if await page.locator("input[name='email']").count() > 0:
-            logging.error(
-                "❌ Facebook session expired.\n"
-                "Please regenerate scraper/session.json with:\n"
-                "   python -m playwright codegen https://facebook.com --save-storage=scraper/session.json"
+async def rewrite_with_gpt(content: str, area: str) -> str:
+    """Rewrite into a concise, neutral UK local news piece with retries."""
+    content = content or ""
+    for attempt in range(3):
+        try:
+            resp = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a professional UK local news journalist for Rochdale Daily."},
+                    {"role": "user", "content": (
+                        f"Rewrite the following into a concise, factual UK local news article for {area.title()}.\n"
+                        f"- Neutral tone, UK spelling, 150–250 words.\n"
+                        f"- Start with an informative headline on the first line.\n\n"
+                        f"{content[:4000]}"
+                    )},
+                ],
+                max_tokens=800,
+                temperature=0.5,
             )
+            return resp.choices[0].message.content.strip()
+        except Exception as e:
+            logging.warning(f"OpenAI retry {attempt+1}/3 failed: {e}")
+            await asyncio.sleep(1.5 * (attempt + 1))
+    return content[:600]  # fallback
+
+def make_slug(title: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", (title or "").lower().strip())[:60].strip("-")
+
+def build_article(area: str, category: str, rewritten: str, source_url: str, id_suffix: str) -> Dict:
+    lines = [l for l in (rewritten or "").split("\n") if l.strip()]
+    title = re.sub(r"^#+\s*", "", lines[0])[:150] if lines else "Update"
+    body_lines = lines[1:] if len(lines) > 1 else lines
+    html = "<p>" + "</p><p>".join([normalise_ws(l) for l in body_lines]) + "</p>"
+    return {
+        "id": f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{area}-{id_suffix}",
+        "title": title,
+        "slug": make_slug(title),
+        "excerpt": normalise_ws(" ".join(body_lines))[:200],
+        "content_html": html,
+        "area": area,
+        "types": [category],
+        "published_at": datetime.utcnow().isoformat() + "Z",
+        "image_url": f"assets/img/placeholder_{category}.jpg",
+        "source_url": source_url,
+    }
+
+# ==============================
+# FACEBOOK (persistent login or session.json)
+# ==============================
+
+async def open_fb_context(pw) -> Tuple[BrowserContext, Page]:
+    """Prefer persistent profile; fall back to storage_state cookies."""
+    if os.path.isdir(FB_PROFILE_DIR) and any(os.scandir(FB_PROFILE_DIR)):
+        ctx = await pw.chromium.launch_persistent_context(
+            FB_PROFILE_DIR,
+            headless=True,
+            args=["--disable-blink-features=AutomationControlled", "--no-sandbox"],
+            viewport={"width": 1280, "height": 900},
+            user_agent=("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/123.0.0.0 Safari/537.36"),
+        )
+        return ctx, await ctx.new_page()
+
+    if not os.path.exists(SESSION_FILE):
+        raise FileNotFoundError(
+            "Facebook auth missing. Either use a persistent profile at "
+            f"'{FB_PROFILE_DIR}' (recommended) or create cookies JSON with:\n"
+            f"python -m playwright codegen https://facebook.com --save-storage={SESSION_FILE}"
+        )
+
+    browser = await pw.chromium.launch(headless=True, args=["--no-sandbox"])
+    ctx = await browser.new_context(
+        storage_state=SESSION_FILE,
+        viewport={"width": 1280, "height": 900},
+        user_agent=("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/123.0.0.0 Safari/537.36"),
+    )
+    return ctx, await ctx.new_page()
+
+async def fb_session_valid(page: Page) -> bool:
+    """Check on m.facebook.com; detect login UI or checkpoint."""
+    try:
+        await page.goto("https://m.facebook.com/", wait_until="domcontentloaded", timeout=25000)
+        await page.wait_for_timeout(1200)
+        if await page.locator("input[name='email']").count() > 0:
+            return False
+        if await page.get_by_role("button", name=re.compile("log in", re.I)).count() > 0:
+            return False
+        if "checkpoint" in page.url or "/login" in page.url:
             return False
         return True
     except Exception as e:
-        logging.error(f"⚠️ Session validation failed: {e}")
-        return False
+        logging.warning(f"FB session validation error: {e}")
+        return False  # be conservative
 
-async def fetch_facebook_posts(playwright, area, url):
-    browser = None
-    results = []
+async def scrape_facebook_source(pw, name: str, meta: Dict) -> List[Dict]:
+    results: List[Dict] = []
+    area_default = meta["area"]
+    url = meta["url"]
+
+    ctx, page = await open_fb_context(pw)
     try:
-        browser = await playwright.chromium.launch(headless=True, args=["--no-sandbox"])
-        context = await browser.new_context(storage_state=SESSION_FILE)
-        page = await context.new_page()
-
-        if not await validate_session(page):
-            return []
+        if not await fb_session_valid(page):
+            logging.error(
+                "❌ Facebook session expired.\n"
+                "Use a persistent profile (recommended) or refresh cookies:\n"
+                f"  1) Persistent: login once locally; Playwright will save to '{FB_PROFILE_DIR}'.\n"
+                f"  2) Cookies: python -m playwright codegen https://facebook.com --save-storage={SESSION_FILE}\n"
+            )
+            return results
 
         await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        await page.wait_for_timeout(5000)
+        await page.wait_for_timeout(2500)
+        for _ in range(2):
+            await page.mouse.wheel(0, 1800)
+            await page.wait_for_timeout(1000)
 
-        posts = await page.locator("div[role='article']").all()
-        for idx, post in enumerate(posts[:3]):
+        cards = await page.locator("div[role='article']").all()
+        if not cards:
+            logging.warning(f"⚠️ No posts found for {name} ({url})")
+            return results
+
+        for idx, card in enumerate(cards[:5]):
             try:
-                content = await post.inner_text(timeout=5000)
-                if len(content.strip()) < 50:
+                content = await card.inner_text(timeout=4000)
+                content = normalise_ws(content)
+                if len(content) < 60:
                     continue
-                category = categorise(content)
-                rewritten = await rewrite_with_gpt(content, area)
-                title = rewritten.split("\n")[0][:150]
-                article = {
-                    "id": f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{area.lower()}-fb-{idx}",
-                    "title": title,
-                    "slug": re.sub(r"[^a-z0-9]+", "-", title[:50].lower()).strip("-"),
-                    "excerpt": rewritten[:200],
-                    "content_html": f"<p>{rewritten.replace(chr(10), '</p><p>')}</p>",
-                    "area": area,
-                    "types": [category],
-                    "published_at": datetime.utcnow().isoformat() + "Z",
-                    "source_url": url
-                }
+
+                # Refine area by ward mentions if present
+                area_detected = detect_area(content, fallback=area_default)
+                cat = categorise(content)
+
+                rewritten = await rewrite_with_gpt(content, area_detected)
+                await asyncio.sleep(0.25)
+
+                article = build_article(
+                    area_detected, cat, rewritten, url,
+                    id_suffix=f"fb-{name}-{idx}"
+                )
                 results.append(article)
-            except:
+            except Exception as e:
+                logging.warning(f"FB post parse error ({name} #{idx}): {e}")
                 continue
     finally:
-        if browser:
-            await browser.close()
+        await ctx.close()
     return results
 
 # ==============================
-# WEB SCRAPING (MEN / Bing)
+# WEBSITE SCRAPING (MEN, Bing)
 # ==============================
 
-async def fetch_web_articles(playwright, area, url):
-    results = []
+async def extract_article_from_link(pw, link: str) -> Tuple[str, str]:
+    """Open a link and try to pull <h1> + first paragraphs."""
+    browser = await pw.chromium.launch(headless=True, args=["--no-sandbox"])
+    page = await browser.new_page()
+    title, body = "", ""
     try:
-        browser = await playwright.chromium.launch(headless=True, args=["--no-sandbox"])
-        page = await browser.new_page()
-        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        await page.goto(link, wait_until="domcontentloaded", timeout=25000)
+        await page.wait_for_timeout(800)
 
-        link_elements = await page.locator("a").all()
-        texts = [await el.text_content() for el in link_elements]
-        links = [await el.get_attribute("href") for el in link_elements]
+        # Headline candidates
+        for sel in ["h1", "header h1", "article h1", "[itemprop='headline']"]:
+            if await page.locator(sel).count() > 0:
+                title = (await page.locator(sel).first.text_content()) or ""
+                title = normalise_ws(title)
+                if title:
+                    break
 
-        for idx, (text, link) in enumerate(zip(texts, links)):
-            if text and link and "rochdale" in text.lower():
-                content = f"{text}\nFull link: {link}"
-                category = categorise(text)
-                rewritten = await rewrite_with_gpt(content, area)
-                title = rewritten.split("\n")[0][:150]
-                article = {
-                    "id": f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{area.lower()}-web-{idx}",
-                    "title": title,
-                    "slug": re.sub(r"[^a-z0-9]+", "-", title[:50].lower()).strip("-"),
-                    "excerpt": rewritten[:200],
-                    "content_html": f"<p>{rewritten.replace(chr(10), '</p><p>')}</p>",
-                    "area": area,
-                    "types": [category],
-                    "published_at": datetime.utcnow().isoformat() + "Z",
-                    "source_url": link
-                }
-                results.append(article)
-        await browser.close()
+        # Paragraph candidates
+        paras = []
+        for sel in ["article p", "main p", "div[itemprop='articleBody'] p", "p"]:
+            nodes = await page.locator(sel).all()
+            if nodes:
+                for n in nodes[:18]:
+                    txt = await n.text_content()
+                    txt = normalise_ws(txt)
+                    if txt and len(txt) > 30:
+                        paras.append(txt)
+                if paras:
+                    break
+
+        body = "\n".join(paras[:12])
     except Exception as e:
-        logging.error(f"❌ Error scraping {url}: {e}")
+        logging.debug(f"Link extract failed ({link}): {e}")
+    finally:
+        await browser.close()
+    return title, body
+
+async def scrape_web_source(pw, name: str, meta: Dict) -> List[Dict]:
+    results: List[Dict] = []
+    area_default = meta.get("area", "rochdale")
+    url = meta["url"]
+
+    browser = await pw.chromium.launch(headless=True, args=["--no-sandbox"])
+    page = await browser.new_page()
+    try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        await page.wait_for_timeout(1200)
+
+        # Gather anchors
+        link_elements = await page.locator("a").all()
+        link_elements = link_elements[:120]  # cap for performance
+
+        texts: List[str] = []
+        hrefs: List[str] = []
+        for el in link_elements:
+            texts.append(normalise_ws(await el.text_content()))
+            hrefs.append(await el.get_attribute("href"))
+
+        candidates = []
+        for t, h in zip(texts, hrefs):
+            if not t or not h:
+                continue
+            if not h.startswith("http"):
+                continue
+            if "facebook.com" in h:
+                continue
+            candidates.append((t, h))
+
+        # Prefer anchor text mentioning Rochdale or wards
+        def mentions_area(text: str) -> bool:
+            tl = text.lower()
+            if "rochdale" in tl:
+                return True
+            for kws in WARD_KEYWORDS.values():
+                if any(kw in tl for kw in kws):
+                    return True
+            return False
+
+        preferred = [(t, h) for (t, h) in candidates if mentions_area(t)]
+        if not preferred:
+            preferred = candidates
+
+        # Dedupe by href and limit
+        seen = set()
+        unique = []
+        for t, h in preferred:
+            if h in seen:
+                continue
+            seen.add(h)
+            unique.append((t, h))
+        unique = unique[:8]
+
+        # Visit each article to get real content
+        for idx, (anchor_text, link) in enumerate(unique):
+            try:
+                title_page, body_page = await extract_article_from_link(pw, link)
+                base_text = f"{title_page or anchor_text}\n\n{body_page}".strip()
+                if len(base_text) < 80:
+                    continue
+
+                area_detected = detect_area(base_text, fallback=area_default)
+                cat = categorise(base_text)
+                rewritten = await rewrite_with_gpt(base_text, area_detected)
+                await asyncio.sleep(0.2)
+
+                article = build_article(
+                    area_detected, cat, rewritten, link,
+                    id_suffix=f"web-{name}-{idx}"
+                )
+                results.append(article)
+            except Exception as e:
+                logging.warning(f"Web article parse error ({name}): {e}")
+                continue
+    except Exception as e:
+        logging.error(f"Website scrape error [{name} {url}]: {e}")
+    finally:
+        await browser.close()
+
     return results
 
 # ==============================
-# RSS FEEDS
+# RSS (async wrapper)
 # ==============================
 
-def fetch_rss_articles():
-    results = []
-    for name, url in RSS_SOURCES.items():
-        feed = feedparser.parse(url)
-        for idx, entry in enumerate(feed.entries[:3]):
-            content = entry.get("title", "") + " " + entry.get("summary", "")
-            category = categorise(content)
-            article = {
-                "id": f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{name}-rss-{idx}",
-                "title": entry.get("title", "Untitled"),
-                "slug": re.sub(r"[^a-z0-9]+", "-", entry.get("title", "")[:50].lower()).strip("-"),
-                "excerpt": entry.get("summary", "")[:200],
-                "content_html": f"<p>{entry.get('summary', '')}</p>",
-                "area": "Rochdale",
-                "types": [category],
-                "published_at": datetime.utcnow().isoformat() + "Z",
-                "source_url": entry.get("link", "")
-            }
-            results.append(article)
+async def scrape_rss_sources() -> List[Dict]:
+    results: List[Dict] = []
+    for name, feed_url in RSS_SOURCES.items():
+        try:
+            feed = feedparser.parse(feed_url)
+            for idx, entry in enumerate(feed.entries[:8]):
+                title = entry.get("title", "").strip()
+                summary = normalise_ws(entry.get("summary", "") or entry.get("description", ""))
+                link = entry.get("link", feed_url)
+                text = f"{title}\n\n{summary}".strip()
+
+                area_detected = detect_area(text, fallback="rochdale")
+                cat = categorise(text)
+                rewritten = await rewrite_with_gpt(text, area_detected)
+                await asyncio.sleep(0.15)
+
+                article = build_article(
+                    area_detected, cat, rewritten, link,
+                    id_suffix=f"rss-{name}-{idx}"
+                )
+                results.append(article)
+        except Exception as e:
+            logging.error(f"RSS parse error [{name}]: {e}")
     return results
 
 # ==============================
@@ -217,51 +485,70 @@ def fetch_rss_articles():
 # ==============================
 
 async def main():
-    if not os.path.exists(SESSION_FILE):
-        logging.error("❌ scraper/session.json not found. Please login with Playwright.")
-        return
     if not os.getenv("OPENAI_API_KEY"):
         logging.error("❌ OPENAI_API_KEY not set.")
         return
 
     logging.info("🚀 Starting scrape...")
-    all_articles = []
+    all_articles: List[Dict] = []
 
-    async with async_playwright() as p:
-        # Facebook
-        for area, url in FACEBOOK_SOURCES.values():
-            all_articles.extend(await fetch_facebook_posts(p, area, url))
-            await asyncio.sleep(5)
-        # Websites
-        for area, url in WEB_SOURCES.values():
-            all_articles.extend(await fetch_web_articles(p, area, url))
+    async with async_playwright() as pw:
+        # FACEBOOK
+        for name, meta in FACEBOOK_SOURCES.items():
+            logging.info(f"📘 FB: {name} → {meta['url']}")
+            fb_articles = await scrape_facebook_source(pw, name, meta)
+            all_articles.extend(fb_articles)
+            await asyncio.sleep(0.5)
+
+        # WEBSITES (MEN + Bing)
+        for name, meta in WEB_SOURCES.items():
+            logging.info(f"🌐 Web: {name} → {meta['url']}")
+            web_articles = await scrape_web_source(pw, name, meta)
+            all_articles.extend(web_articles)
+            await asyncio.sleep(0.4)
 
     # RSS
-    all_articles.extend(fetch_rss_articles())
+    logging.info("📰 RSS: fetching feeds…")
+    rss_articles = await scrape_rss_sources()
+    all_articles.extend(rss_articles)
 
     if not all_articles:
         logging.warning("⚠️ No new articles scraped.")
         return
 
-    existing = []
+    # Load existing
+    existing: List[Dict] = []
     if os.path.exists(OUTPUT_FILE):
         try:
             with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
                 existing = json.load(f)
-        except Exception:
-            existing = []
+        except Exception as e:
+            logging.warning(f"Could not read existing {OUTPUT_FILE}: {e}")
 
-    existing_ids = {a["id"] for a in existing}
-    new_articles = [a for a in all_articles if a["id"] not in existing_ids]
+    # Dedup by (slug or source_url) + area
+    def dedup_key(a: Dict) -> Tuple[str, str]:
+        slug = a.get("slug") or ""
+        src = a.get("source_url") or ""
+        area = a.get("area") or ""
+        return (slug or src, area)
 
-    if new_articles:
-        combined = new_articles + existing
-        combined = combined[:100]
-        with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-            json.dump(combined, f, indent=2, ensure_ascii=False)
-        logging.info(f"✅ Added {len(new_articles)} new articles. Total: {len(combined)}")
-    else:
-        logging.info("ℹ️ No new unique articles.")
+    seen = {dedup_key(a) for a in existing}
+    fresh: List[Dict] = []
+    for a in all_articles:
+        k = dedup_key(a)
+        if k in seen:
+            continue
+        seen.add(k)
+        fresh.append(a)
+
+    combined = fresh + existing
+    # Atomic write
+    tmp = OUTPUT_FILE + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(combined[:100], f, indent=2, ensure_ascii=False)
+    os.replace(tmp, OUTPUT_FILE)
+
+    logging.info(f"✅ Added {len(fresh)} new articles. Total stored: {min(len(combined), 100)}")
 
 if __name__ == "__main__":
     asyncio.run(main())
