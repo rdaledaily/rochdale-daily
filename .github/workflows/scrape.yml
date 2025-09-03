@@ -1,40 +1,48 @@
-name: Scrape Facebook and Update Articles
+name: Scrape Facebook, MEN, Bing, RSS and Update Articles
 
 on:
-  workflow_dispatch:     # allow manual trigger
+  workflow_dispatch:     # manual run
   schedule:
     - cron: "0 * * * *"  # run every hour
 
 permissions:
-  contents: write  # Allow pushing to repo
+  contents: write
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-          
+
       - name: Install dependencies
         run: |
-          pip install playwright openai
+          pip install playwright openai feedparser
           playwright install chromium
-          
-      - name: Debug secrets
+
+      - name: Verify OpenAI key
         run: |
           if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
             echo "❌ OPENAI_API_KEY is not set in GitHub secrets"
             exit 1
           else
-            echo "✅ OPENAI_API_KEY is available"
+            echo "✅ OPENAI_API_KEY found"
           fi
+
+      - name: Debug file structure
+        run: |
+          echo "Files in root:"
+          ls -la
+          echo "Files in scraper/:"
+          ls -la scraper/ || echo "no scraper directory"
 
       - name: Run scraper
         env:
@@ -42,23 +50,28 @@ jobs:
         run: |
           echo "🚀 Running scraper..."
           python scraper/scraper.py
-        
+          echo "---- Summary ----"
+          grep "Scraping FB" scraper/scraper.log || true
+          grep "Scraping MEN" scraper/scraper.log || true
+          grep "Scraping Bing" scraper/scraper.log || true
+          grep "RSS" scraper/scraper.log || true
+          grep "✅" scraper/scraper.log || true
+
       - name: Commit & push updated articles.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           if [[ -f articles.json ]]; then
             git add articles.json
             if git diff --staged --quiet; then
-              echo "ℹ️ No changes to commit"
+              echo "No changes to commit"
             else
               git commit -m "Update articles.json - $(date '+%Y-%m-%d %H:%M UTC')"
               git push
               echo "✅ Articles updated and pushed"
             fi
           else
-            echo "⚠️ articles.json not found"
-          fi
+            echo "❌ articles.json not found"
