@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+# OPTIONAL: add a repo secret CF_PAGES_HOOK_URL for Cloudflare Pages deploy hook
+env:
+  CF_PAGES_HOOK_URL: ${{ secrets.CF_PAGES_HOOK_URL }}
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -35,30 +39,4 @@ jobs:
       - name: Run scraper
         shell: bash
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          if [ -z "${OPENAI_API_KEY:-}" ]; then echo "OPENAI_API_KEY is not set"; exit 1; fi
-          python scraper/scraper.py
-          echo "Post-scrape file listing:" && ls -la
-          # If file was written under scraper/, move it to repo root
-          if [ -f scraper/articles.json ]; then mv scraper/articles.json ./articles.json; fi
-          if [ ! -f articles.json ]; then echo "articles.json not found after scraper"; exit 1; fi
-          # Always create a diff so deployments trigger
-          date -u +%s >> UPDATE_LOG.txt
-          echo "Head of articles.json:" && head -n 20 articles.json || true
-
-      - name: Commit and push update
-        shell: bash
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add articles.json UPDATE_LOG.txt
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            TS=$(date -u +%Y-%m-%d\ %H:%M\ UTC)
-            git commit -m "Update articles.json - ${TS}"
-            git pull --rebase || true
-            git push
-            echo "Articles updated and pushed"
-          fi
+          OPENAI_API_KEY: ${{ secrets.OPENAI_A_
