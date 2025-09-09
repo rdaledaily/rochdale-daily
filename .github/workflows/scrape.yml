@@ -1,4 +1,4 @@
-name: Scrape + Web + RSS → Rewrite → Update articles.json (with fallbacks)
+name: Scrape Web RSS Facebook with Fallbacks (Always Rewrite)
 
 on:
   workflow_dispatch:
@@ -11,8 +11,6 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    env:
-      PYTHONUTF8: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,108 +24,60 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        shell: bash
         run: |
           python -m pip install --upgrade pip
           pip install playwright openai feedparser beautifulsoup4 requests lxml html5lib
           playwright install chromium
 
-      - name: Hash articles.json before (if present)
-        id: before
-        shell: bash
+      - name: Hash articles.json before
         run: |
           if [ -f articles.json ]; then
             sha256sum articles.json | awk '{print $1}' > .before_hash
           else
             echo NOFILE > .before_hash
           fi
-          echo "Before hash: $(cat .before_hash)"
+          echo "BEFORE_HASH=$(cat .before_hash)"
 
-      - name: Run primary Facebook+sources scraper (best-effort)
-        shell: bash
+      - name: Primary scraper (best effort) + FB session notice
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          FB_COOKIE: ${{ secrets.FB_COOKIE }}         # optional for your script if it reads env
-          FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }} # optional
+          FB_COOKIE: ${{ secrets.FB_COOKIE }}
+          FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
         run: |
           echo "Running primary scraper..."
-          python scraper/scraper.py
-          SCR_RC=$?
-          echo "$SCR_RC" > .scraper_rc || true
-
-          # Normalize output location
+          python scraper/scraper.py || echo "Primary scraper exited non-zero (fallback may be used)."
           if [ -f scraper/articles.json ]; then mv scraper/articles.json ./articles.json; fi
 
-          # Detect likely FB/session issues and print a clear notice to logs
           FB_NOTICE=0
           if [ ! -f scraper/session.json ] && [ -z "$FB_COOKIE" ]; then
-            echo "NOTICE: Facebook session missing. No scraper/session.json and no FB_COOKIE secret. Fallback will be used."
+            echo "NOTICE: No Facebook session.json and no FB_COOKIE secret."
             FB_NOTICE=1
           fi
           if [ -f scraper/session.json ]; then
-            # If session file is older than 3 days, warn
-            AGE=$((($(date +%s) - $(date -r scraper/session.json +%s)) / 86400))
+            AGE=$(( ( $(date +%s) - $(date -r scraper/session.json +%s) ) / 86400 ))
             if [ "$AGE" -gt 3 ]; then
-              echo "NOTICE: Facebook session.json is $AGE days old. It may have expired. Fallback will be used if no new items."
+              echo "NOTICE: scraper/session.json is $AGE days old and may be expired."
               FB_NOTICE=1
             fi
           fi
-          if [ "$SCR_RC" -ne 0 ]; then
-            echo "NOTICE: Primary scraper exited with code $SCR_RC. Fallback will be used."
-            FB_NOTICE=1
-          fi
+          echo "$FB_NOTICE" > .fb_notice || true
 
-          # If your scraper writes a log, surface last lines
           if [ -f scraper/scraper.log ]; then
-            echo "Last 50 lines of scraper/scraper.log:"
+            echo "Tail of scraper/scraper.log:"
             tail -n 50 scraper/scraper.log || true
           fi
 
-          echo "$FB_NOTICE" > .fb_notice || true
-
-      - name: Evaluate primary output and decide on fallback
-        id: eval
-        shell: bash
+      - name: Prepare fallback builder (RSS + Web, with OpenAI rewrite)
         run: |
-          python - <<'PY'
-import json, os, sys
-need_fallback = True
-reason = "articles.json missing"
-if os.path.exists("articles.json"):
-    try:
-        with open("articles.json","r",encoding="utf-8") as f:
-            data = json.load(f)
-        if isinstance(data, list) and len(data) > 0:
-            need_fallback = False
-            reason = "valid non-empty list"
-        else:
-            reason = "empty or non-list JSON"
-    except Exception as e:
-        reason = f"invalid JSON: {e}"
-print("NEED_FALLBACK=", "1" if need_fallback else "0", sep="")
-print("PRIMARY_REASON=", reason)
-open(".need_fallback","w").write("1" if need_fallback else "0")
-PY
-          echo "FB_NOTICE=$(cat .fb_notice 2>/dev/null || echo 0)"
-          echo "NEED_FALLBACK=$(cat .need_fallback)"
-
-      - name: Fallback builder (RSS + Web → rewrite) when needed
-        if: always()  # we guard inside the script; this step never hard-fails
-        shell: bash
-        run: |
-          if [ "$(cat .need_fallback)" != "1" ]; then
-            echo "Fallback not needed (primary output looks ok)."
-          else
-            echo "Running fallback builder (RSS + Web)..."
-            python - <<'PY'
-import os, re, json, time, datetime as dt
-import feedparser, requests
+          mkdir -p .tmp
+          cat > .tmp/fallback.py << 'PY'
+import os, re, json, datetime as dt, time, requests, feedparser
 from bs4 import BeautifulSoup
 
-def norm(s): return re.sub(r'\s+',' ',(s or '').strip())
+def norm(s): return re.sub(r'\s+',' ', (s or '').strip())
 def slugify(s): return re.sub(r'[^a-z0-9]+','-', (s or '').lower()).strip('-')[:60]
-def cat_for(t):
-    t=(t or '').lower()
+def category_for(text):
+    t=(text or '').lower()
     C={"crime":["arrest","police","stabbing","theft","burglary","assault","violence","court","knife","gun","drugs","wanted","jailed"],
        "transport":["bus","tram","train","traffic","roadworks","closure","accident","transport","highway","m62","m60","bee network","parking","car park"],
        "politics":["council","mp","election","vote","government","parliament","politician","policy","minister","mayor"],
@@ -138,134 +88,167 @@ def cat_for(t):
         if any(w in t for w in v): return k
     return "announcements"
 
-items=[]
-
-# RSS sources (up to 8 each)
-RSS = {
-  "rochdale_council":"https://www.rochdale.gov.uk/news/rss.xml",
-  "gmp_news":"https://www.gmp.police.uk/news/rss.xml",
-  "bbc_manchester":"http://feeds.bbci.co.uk/news/england/manchester/rss.xml",
-}
-for key,url in RSS.items():
+def valid_nonempty_articles_json():
     try:
-        feed=feedparser.parse(url)
-        for idx,e in enumerate(feed.entries[:8]):
-            title=norm(getattr(e,"title","")) or "Update"
-            summary=norm(getattr(e,"summary","") or getattr(e,"description",""))
-            link=getattr(e,"link","") or url
-            if getattr(e,"published_parsed",None):
-                ts=dt.datetime(*e.published_parsed[:6], tzinfo=dt.timezone.utc)
-            else:
-                ts=dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)
-            cat=cat_for(f"{title}. {summary}")
-            body_html="<p>"+("</p><p>".join([x for x in [summary] if x]))+"</p>" if summary else "<p>Update</p>"
-            items.append({
-                "id": f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-rss-{key}-{idx}",
-                "title": title[:150],
-                "slug": slugify(title),
-                "excerpt": summary[:200],
-                "content_html": body_html,
-                "area": "rochdale",
-                "types": [cat],
-                "published_at": ts.isoformat().replace("+00:00","Z"),
-                "image_url": f"assets/img/placeholder_{cat}.jpg",
-                "source_url": link,
-            })
-    except Exception as ex:
-        print("RSS error", key, ex)
+        with open("articles.json","r",encoding="utf-8") as f:
+            data=json.load(f)
+        return isinstance(data,list) and len(data)>0
+    except Exception:
+        return False
 
-# Web sources: MEN Rochdale page + Bing News
-def fetch_html(url, ua=None, timeout=15):
-    h={"User-Agent": ua or "Mozilla/5.0"}
-    try:
-        r=requests.get(url, headers=h, timeout=timeout)
-        if r.ok: return r.text
-    except Exception as e:
-        print("HTTP error", url, e)
-    return ""
+def rss_items():
+    RSS={"rochdale_council":"https://www.rochdale.gov.uk/news/rss.xml",
+         "gmp_news":"https://www.gmp.police.uk/news/rss.xml",
+         "bbc_manchester":"http://feeds.bbci.co.uk/news/england/manchester/rss.xml"}
+    out=[]
+    for key,url in RSS.items():
+        try:
+            feed=feedparser.parse(url)
+            for i,e in enumerate(feed.entries[:8]):
+                title=norm(getattr(e,"title","") or "Update")[:150]
+                summary=norm(getattr(e,"summary","") or getattr(e,"description",""))
+                link=getattr(e,"link","") or url
+                if getattr(e,"published_parsed",None):
+                    ts=dt.datetime(*e.published_parsed[:6], tzinfo=dt.timezone.utc)
+                else:
+                    ts=dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)
+                cat=category_for(f"{title}. {summary}")
+                html="<p>"+("</p><p>".join([summary] if summary else ["Update"]))+"</p>"
+                out.append({
+                    "id": f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-rss-{key}-{i}",
+                    "title": title,
+                    "slug": slugify(title),
+                    "excerpt": summary[:200],
+                    "content_html": html,
+                    "area": "rochdale",
+                    "types": [cat],
+                    "published_at": ts.isoformat().replace("+00:00","Z"),
+                    "image_url": f"assets/img/placeholder_{cat}.jpg",
+                    "source_url": link
+                })
+        except Exception as ex:
+            print("RSS error", key, ex)
+    return out
 
-MEN="https://www.manchestereveningnews.co.uk/all-about/rochdale"
-BING="https://www.bing.com/news/search?q=Rochdale&FORM=EWRE"
+def web_items():
+    pages=[("men_rochdale","https://www.manchestereveningnews.co.uk/all-about/rochdale"),
+           ("bing_rochdale","https://www.bing.com/news/search?q=Rochdale&FORM=EWRE")]
+    out=[]
+    headers={"User-Agent":"Mozilla/5.0"}
+    for name,url in pages:
+        try:
+            r=requests.get(url, headers=headers, timeout=20)
+            if not r.ok: continue
+            soup=BeautifulSoup(r.text,"html.parser")
+            links=[]
+            for a in soup.find_all("a"):
+                href=a.get("href") or ""
+                text=norm(a.get_text(" "))
+                if "http" in href and len(text)>=24 and "javascript:" not in href:
+                    links.append((text, href))
+            for i,(text,href) in enumerate(links[:8]):
+                cat=category_for(text)
+                out.append({
+                    "id": f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-web-{name}-{i}",
+                    "title": text[:150],
+                    "slug": slugify(text),
+                    "excerpt": text[:200],
+                    "content_html": "<p>"+text+"</p>",
+                    "area": "rochdale",
+                    "types": [cat],
+                    "published_at": dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc).isoformat().replace("+00:00","Z"),
+                    "image_url": f"assets/img/placeholder_{cat}.jpg",
+                    "source_url": href
+                })
+        except Exception as ex:
+            print("Web error", name, ex)
+    return out
 
-for src in [("men_rochdale",MEN),("bing_rochdale",BING)]:
-    name,url=src
-    html=fetch_html(url)
-    if not html: 
-        continue
-    soup=BeautifulSoup(html, "html.parser")
-    links=[]
-    for a in soup.find_all("a"):
-        href=a.get("href") or ""
-        text=norm(a.get_text(" "))
-        if len(text)>=24 and "http" in href and "javascript:" not in href:
-            links.append((text, href))
-    for i,(text,href) in enumerate(links[:8]):
-        cat=cat_for(text)
-        items.append({
-            "id": f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-web-{name}-{i}",
-            "title": text[:150],
-            "slug": slugify(text),
-            "excerpt": text[:200],
-            "content_html": "<p>"+text+"</p>",
-            "area": "rochdale",
-            "types": [cat],
-            "published_at": dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc).isoformat().replace("+00:00","Z"),
-            "image_url": f"assets/img/placeholder_{cat}.jpg",
-            "source_url": href
-        })
-
-# Optional: rewrite first 12 with OpenAI if key exists
-OPENAI=os.getenv("OPENAI_API_KEY")
-if OPENAI and items:
+def always_rewrite_with_openai(items):
+    if not items:
+        return items
+    key=os.getenv("OPENAI_API_KEY")
+    if not key:
+        print("WARNING: OPENAI_API_KEY missing; cannot rewrite. Continuing with original text.")
+        return items
     try:
         from openai import OpenAI
-        client=OpenAI(api_key=OPENAI)
-        for it in items[:12]:
+        client=OpenAI(api_key=key)
+    except Exception as e:
+        print("OpenAI init failed", e)
+        return items
+    for it in items:
+        try:
             prompt=("Rewrite this into a concise UK local news article for Rochdale.\n"
-                    "- Neutral tone, UK spelling.\n- 150–220 words.\n"
+                    "- Neutral tone, UK spelling.\n- 150-220 words.\n"
                     "- Headline as first line.\n\n"
                     f"Title: {it['title']}\nSummary: {it['excerpt']}\nSource: {it['source_url']}")
-            try:
-                resp=client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[{"role":"system","content":"You are a UK local news journalist."},
-                              {"role":"user","content":prompt}],
-                    max_tokens=700, temperature=0.4)
-                out=resp.choices[0].message.content.strip()
-                lines=[l for l in out.split("\n") if l.strip()]
-                if lines:
-                    it["title"]=re.sub(r"^#+\s*","",lines[0])[:150]
-                    body=lines[1:] if len(lines)>1 else lines
-                    html="<p>"+"</p><p>".join([norm(l) for l in body])+"</p>" if body else "<p>Update</p>"
-                    it["content_html"]=html
-                    it["excerpt"]=norm(" ".join(body))[:200]
-                    it["slug"]=slugify(it["title"])
-            except Exception as e:
-                print("OpenAI rewrite failed:", e)
-    except Exception as e:
-        print("OpenAI init failed:", e)
+            resp=client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role":"system","content":"You are a UK local news journalist."},
+                          {"role":"user","content":prompt}],
+                max_tokens=700, temperature=0.4)
+            out=resp.choices[0].message.content.strip()
+            lines=[l for l in out.split("\n") if l.strip()]
+            if lines:
+                it["title"]=re.sub(r"^#+\s*","",lines[0])[:150]
+                body=lines[1:] if len(lines)>1 else lines
+                html="<p>"+"</p><p>".join([norm(l) for l in body])+"</p>" if body else "<p>Update</p>"
+                it["content_html"]=html
+                it["excerpt"]=norm(" ".join(body))[:200]
+                it["slug"]=slugify(it["title"])
+        except Exception as e:
+            print("OpenAI rewrite failed", e)
+    return items
 
-# Write fallback articles.json (even if empty list)
-with open("articles.json","w",encoding="utf-8") as f:
-    json.dump(items, f, ensure_ascii=False, indent=2)
-print(f"Fallback wrote {len(items)} items to articles.json")
+def main():
+    need_fallback = True
+    if os.path.exists("articles.json"):
+        try:
+            with open("articles.json","r",encoding="utf-8") as f:
+                data=json.load(f)
+            if isinstance(data, list) and len(data)>0:
+                need_fallback = False
+                items = data
+            else:
+                items = []
+        except Exception:
+            items = []
+    else:
+        items = []
+
+    if need_fallback:
+        print("Primary output missing/invalid/empty. Building from RSS + Web.")
+        items = rss_items() + web_items()
+
+    # ALWAYS attempt to rewrite with OpenAI (logs if key missing)
+    items = always_rewrite_with_openai(items)
+
+    with open("articles.json","w",encoding="utf-8") as f:
+        json.dump(items, f, ensure_ascii=False, indent=2)
+    print(f"Wrote {len(items)} items to articles.json")
+if __name__ == "__main__":
+    main()
 PY
-          fi
 
-      - name: Commit and push (articles when changed, else heartbeat)
-        shell: bash
+      - name: Run fallback builder (always safe)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Compute hashes
-          AFTER=$(sha256sum articles.json | awk '{print $1}')
-          BEFORE=$(cat .before_hash)
-          echo "After hash:  $AFTER"
-          echo "Before hash: $BEFORE"
+          python .tmp/fallback.py || echo "Fallback builder encountered a non-fatal error; continuing."
 
-          # Log FB/session status if any
-          if [ -f .fb_notice ]; then
-            if [ "$(cat .fb_notice)" = "1" ]; then
-              echo "NOTICE: Facebook session likely expired/failed. Fallback (RSS+Web) used for continuity."
-            fi
+      - name: Commit and push (articles or heartbeat)
+        run: |
+          if [ -f articles.json ]; then
+            AFTER=$(sha256sum articles.json | awk '{print $1}')
+          else
+            echo "[]" > articles.json
+            AFTER=$(sha256sum articles.json | awk '{print $1}')
+          fi
+          BEFORE=$(cat .before_hash)
+
+          if [ -f .fb_notice ] && [ "$(cat .fb_notice)" = "1" ]; then
+            echo "NOTICE: Facebook session likely expired or failed. Fallback sources used."
           fi
 
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -276,7 +259,6 @@ PY
             git add articles.json
             MSG="Update articles.json - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
           else
-            # Heartbeat so deploys keep flowing even when content identical
             date -u +%s >> UPDATE_LOG.txt
             git add UPDATE_LOG.txt
             MSG="Heartbeat (no content change) - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
