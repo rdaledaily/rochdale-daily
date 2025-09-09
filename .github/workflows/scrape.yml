@@ -29,29 +29,15 @@ jobs:
           pip install playwright openai feedparser beautifulsoup4 requests
           playwright install chromium
 
-      - name: Show files (debug)
+      - name: Debug listing (optional)
         run: |
           echo "Files in root:" && ls -la || true
           echo "Files in scraper/:" && ls -la scraper || echo "scraper directory not found"
 
-      - name: Run scraper (requires OPENAI_API_KEY and FB_COOKIE)
+      - name: Run scraper (needs OPENAI_API_KEY and FB_COOKIE)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           FB_COOKIE: ${{ secrets.FB_COOKIE }}
           FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
         run: |
-          if [ -z "${OPENAI_API_KEY:-}" ]; then echo "OPENAI_API_KEY is not set"; exit 1; fi
-          if [ -z "${FB_COOKIE:-}" ]; then echo "FB_COOKIE is not set"; exit 1; fi
-          python scraper/scraper.py
-          # ensure output is at repo root
-          if [ -f scraper/articles.json ]; then mv scraper/articles.json ./articles.json; fi
-          if [ ! -f articles.json ]; then echo "articles.json not found after scraper"; exit 1; fi
-
-      - name: Preview output head
-        run: head -n 20 articles.json || true
-
-      - name: Commit and push if changed
-        run: |
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-acti
+          if [ -z "${OPENAI_API_KEY:-}]()
