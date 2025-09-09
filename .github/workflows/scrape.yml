@@ -26,12 +26,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -euo pipefail
+          python -m pip install --upgrade pip
           pip install playwright openai feedparser beautifulsoup4 requests
           playwright install chromium
 
-      - name: Debug file structure (before scraper)
-        shell: bash
+      - name: Debug file structure before scraper
         run: |
-          set -euo pipefail
-          printf '%s\n' 'Files in
+          echo "Files in root:"; ls -la
+          echo "Files in scraper/:"; ls -la scraper/ || echo "scraper directory not found"
+
+      - name: Run scraper
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "${OPENAI_API_KEY:-}" ]; then
+            echo "OPENAI_API_KEY is not set"
