@@ -1,67 +1,37 @@
 name: Scrape Facebook and Update Articles
 
 on:
-  workflow_dispatch:     # allow manual trigger
+  workflow_dispatch:        # allow manual trigger
   schedule:
-    - cron: "0 * * * *"  # run every hour
+    - cron: "0 * * * *"     # run every hour
 
 permissions:
-  contents: write  # Allow pushing to repo
+  contents: write           # allow pushing to repo
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+          persist-credentials: true
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-          
+
       - name: Install dependencies
         run: |
           pip install playwright openai feedparser beautifulsoup4 requests
           playwright install chromium
-          
-      - name: Debug file structure
-        run: |
-          echo "Files in root:"
-          ls -la
-          echo "Files in scraper directory:"
-          ls -la scraper/ || echo "scraper directory not found"
-          
-      - name: Run scraper
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          echo "🚀 Running scraper..."
-          if [ -z "$OPENAI_API_KEY" ]; then
-            echo "❌ OPENAI_API_KEY is not set!"
-            exit 1
-          fi
-          python scraper/scraper.py
-        continue-on-error: true
-        
-      - name: Commit & push updated articles.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          if [[ -f articles.json ]]; then
-            git add articles.json
-            if git diff --staged --quiet; then
-              echo "No changes to commit"
-            else
-              git commit -m "Update articles.json - $(date '+%Y-%m-%d %H:%M UTC')"
-              git push
-              echo "✅ Articles updated and pushed"
-            fi
-          else
-            echo "❌ articles.json not found"
-          fi
+      - name: Debug file structure (before scraper)
+        run: |
+          echo "📂 Files in root:"
+          ls -la
+          echo "📂 Files in scraper/:"
+          ls -la scraper/ || echo "scraper directory not f
