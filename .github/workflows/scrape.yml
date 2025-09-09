@@ -3,7 +3,7 @@ name: Scrape Facebook and Update Articles
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "0 * * * *"   # every hour
 
 permissions:
   contents: write
@@ -11,6 +11,7 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -35,8 +36,29 @@ jobs:
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: test -n "${OPENAI_API_KEY:-}" || { echo "OPENAI_API_KEY is not set"; exit 1; }; python scraper/scraper.py && echo "Post-scrape file listing:" && ls -la && { [ -f scraper/articles.json ] && mv scraper/articles.json ./articles.json || true; } && { [ -f articles.json ] || { echo "articles.json not found after scraper"; exit 1; }; } && python -c "import json,time,io,sys; p='articles.json'; d=json.load(io.open(p,'r',encoding='utf-8')); d['_last_updated']=int(time.time()); io.open(p,'w',encoding='utf-8').write(json.dumps(d,ensure_ascii=False,indent=2))" && echo "Head of articles.json:" && head -n 20 articles.json || true
+        run: |
+          if [ -z "${OPENAI_API_KEY:-}" ]; then echo "OPENAI_API_KEY is not set"; exit 1; fi
+          python scraper/scraper.py
+          echo "Post-scrape file listing:" && ls -la
+          # If file was written under scraper/, move it to repo root
+          if [ -f scraper/articles.json ]; then mv scraper/articles.json ./articles.json; fi
+          if [ ! -f articles.json ]; then echo "articles.json not found after scraper"; exit 1; fi
+          # Always create a diff so deployments trigger
+          date -u +%s >> UPDATE_LOG.txt
+          echo "Head of articles.json:" && head -n 20 articles.json || true
 
       - name: Commit and push update
         shell: bash
-        run: git config --global user.name "github-actions[bot]" && git config --global user.email "github-actions[bot]@users.noreply.github.com" && git add articles.json && if git diff --staged --quiet; then echo "No changes to commit"; else TS=$(date -u +%Y-%m-%d\ %H:%M\ UTC) && git commit -m "Update articles.json - ${TS}" && git pull --rebase || true && git push && echo "Articles updated and pushed"; fi
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add articles.json UPDATE_LOG.txt
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            TS=$(date -u +%Y-%m-%d\ %H:%M\ UTC)
+            git commit -m "Update articles.json - ${TS}"
+            git pull --rebase || true
+            git push
+            echo "Articles updated and pushed"
+          fi
