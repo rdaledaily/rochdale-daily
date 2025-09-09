@@ -3,7 +3,7 @@ name: Scrape + Rewrite + Update articles.json
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"  # hourly
+    - cron: "0 * * * *"  # hourly, UTC
 
 permissions:
   contents: write
@@ -30,4 +30,64 @@ jobs:
           pip install playwright openai feedparser beautifulsoup4 requests
           playwright install chromium
 
-      - name: Debug
+      - name: Hash articles.json before (if present)
+        id: before
+        shell: bash
+        run: |
+          if [ -f articles.json ]; then
+            sha256sum articles.json | awk '{print $1}' > .before_hash
+          else
+            echo "NOFILE" > .before_hash
+          fi
+          echo "before_hash=$(cat .before_hash)" >> "$GITHUB_OUTPUT"
+
+      - name: Run scraper
+        shell: bash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then echo "OPENAI_API_KEY is not set"; exit 1; fi
+          # Your scraper reads cookies from scraper/session.json (already in repo)
+          python scraper/scraper.py
+          # ensure output at repo root
+          if [ -f scraper/articles.json ]; then mv scraper/articles.json ./articles.json; fi
+          if [ ! -f articles.json ]; then echo "articles.json not found after scraper"; exit 1; fi
+
+      - name: Validate output and show summary
+        shell: bash
+        run: |
+          python - <<'PY'
+import json,sys,datetime
+with open("articles.json","r",encoding="utf-8") as f:
+    data=json.load(f)
+if isinstance(data,list):
+    cnt=len(data)
+    def p(s):
+        try: return datetime.datetime.fromisoformat(s.replace("Z","+00:00"))
+        except: return None
+    latest=max((p(x.get("published_at")) for x in data if isinstance(x,dict)), default=None)
+    print("ARTICLES_COUNT:", cnt)
+    print("LATEST_PUBLISHED_AT:", latest.isoformat() if latest else "NONE")
+else:
+    print("WARNING: articles.json is not a list")
+PY
+          echo "Head of articles.json:" && head -n 20 articles.json || true
+
+      - name: Hash after and decide
+        id: decide
+        shell: bash
+        run: |
+          sha256sum articles.json | awk '{print $1}' > .after_hash
+          BEFORE=$(cat .before_hash)
+          AFTER=$(cat .after_hash)
+          echo "Before hash: $BEFORE"
+          echo "After  hash: $AFTER"
+          if [ "$BEFORE" = "$AFTER" ]; then
+            echo "No change in articles.json — scraper produced identical output."
+            echo "changed=no" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=yes" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push if changed
+        if: steps.decide.outputs.ch
