@@ -45,24 +45,32 @@ jobs:
           fi
           echo "BEFORE_HASH=$(cat .before_hash)"
 
-      - name: Primary scraper (best effort)
+      - name: Primary scraper (Facebook + RSS + Web baseline)
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           FB_COOKIE: ${{ secrets.FB_COOKIE }}
           FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
         run: |
-          echo "Running primary scraper..."
+          echo "Running primary scraper with baseline sources: Facebook + RSS + Web"
           
-          # Check if Facebook secrets are available
+          # Check Facebook availability
+          FB_AVAILABLE=1
           if [ -z "$FB_COOKIE" ] || [ -z "$FB_USER_AGENT" ]; then
-            echo "NOTICE: Facebook secrets missing - will skip Facebook scraping"
+            echo "WARNING: Facebook secrets missing - Facebook scraping disabled"
+            echo "Baseline will be: RSS + Web only"
+            FB_AVAILABLE=0
             export SKIP_FACEBOOK=1
+          else
+            echo "Facebook credentials available - Full baseline: Facebook + RSS + Web"
           fi
+          
+          # Always ensure RSS and Web scraping runs regardless of Facebook status
+          export FORCE_RSS_WEB=1
           
           # Run scraper with timeout
           timeout 600 python scraper/scraper.py 2>&1 | tee scraper_output.log || {
-            echo "Primary scraper failed or timed out"
+            echo "Primary scraper encountered errors"
             cat scraper_output.log 2>/dev/null || true
           }
 
@@ -71,37 +79,42 @@ jobs:
             mv scraper/articles.json ./articles.json
           fi
 
-          # Log Facebook session status
+          # Log Facebook session status for monitoring
           FB_NOTICE=0
-          if [ ! -f scraper/session.json ] && [ -z "$FB_COOKIE" ]; then
-            echo "NOTICE: No Facebook session.json and no FB_COOKIE secret"
+          if [ "$FB_AVAILABLE" = "0" ]; then
+            echo "STATUS: Running with RSS + Web baseline (Facebook unavailable)"
             FB_NOTICE=1
-          fi
-          if [ -z "$FB_USER_AGENT" ]; then
-            echo "NOTICE: FB_USER_AGENT secret missing"
+          elif [ ! -f scraper/session.json ] && [ -n "$FB_COOKIE" ]; then
+            echo "WARNING: No Facebook session.json but FB_COOKIE provided - session may have expired"
             FB_NOTICE=1
-          fi
-          if [ -f scraper/session.json ]; then
+          elif [ -f scraper/session.json ]; then
             AGE=$(( ( $(date +%s) - $(date -r scraper/session.json +%s) ) / 86400 ))
             if [ "$AGE" -gt 3 ]; then
-              echo "NOTICE: scraper/session.json is $AGE days old and may be expired"
+              echo "WARNING: Facebook session.json is $AGE days old - may need refresh"
               FB_NOTICE=1
+            else
+              echo "STATUS: Running with full baseline (Facebook + RSS + Web)"
             fi
           fi
           echo "$FB_NOTICE" > .fb_notice
 
           # Show scraper log if present
           if [ -f scraper/scraper.log ]; then
-            echo "Tail of scraper/scraper.log:"
+            echo "Last 50 lines of scraper log:"
             tail -n 50 scraper/scraper.log 2>/dev/null || true
           fi
 
-      - name: Check if fallback is needed
+      - name: Check if emergency fallback is needed
         id: needfb
         shell: bash
         run: |
-          NEED=1
-          if [ -f articles.json ] && [ -s articles.json ]; then
+          NEED=0
+          
+          # Only trigger emergency fallback if ALL sources failed completely
+          if [ ! -f articles.json ] || [ ! -s articles.json ]; then
+            echo "WARNING: No articles.json or file is empty - all baseline sources failed"
+            NEED=1
+          else
             # Check if articles.json contains valid data
             RESULT=$(python3 -c "
 import json
@@ -112,19 +125,29 @@ try:
 except Exception:
     print('EMPTY')
 ")
-            if [ "$RESULT" = "OK" ]; then
-              NEED=0
+            if [ "$RESULT" = "EMPTY" ]; then
+              echo "WARNING: articles.json contains no valid articles - emergency fallback needed"
+              NEED=1
+            else
+              echo "SUCCESS: Baseline sources provided $(python3 -c "import json; print(len(json.load(open('articles.json'))))" 2>/dev/null || echo "unknown") articles"
             fi
           fi
-          echo "need_fallback=$NEED" >> "$GITHUB_OUTPUT"
+          
+          echo "need_emergency_fallback=$NEED" >> "$GITHUB_OUTPUT"
           echo "$NEED" > .need_fallback
+          
+          if [ "$NEED" = "1" ]; then
+            echo "EMERGENCY: Will use Python RSS+Web fallback as last resort"
+          else
+            echo "STATUS: Baseline sources successful - no emergency fallback needed"
+          fi
 
-      - name: Create fallback script
-        if: steps.needfb.outputs.need_fallback == '1'
+      - name: Create emergency fallback script
+        if: steps.needfb.outputs.need_emergency_fallback == '1'
         shell: bash
         run: |
           mkdir -p .tmp
-          cat > .tmp/fallback.py << 'EOF'
+          cat > .tmp/fallback.py << 'FALLBACK_EOF'
 import os, re, json, datetime as dt, requests, feedparser
 from bs4 import BeautifulSoup
 
@@ -177,7 +200,7 @@ def get_rss_items():
                     'id': f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-rss-{key}-{i}",
                     'title': title,
                     'slug': slugify(title),
-                    'excerpt': summary[:200],
+                    'excerpt': summary[:300],
                     'content_html': html,
                     'area': 'rochdale',
                     'types': [category],
@@ -220,7 +243,7 @@ def get_web_items():
                     'id': f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-web-{name}-{i}",
                     'title': text[:150],
                     'slug': slugify(text),
-                    'excerpt': text[:200],
+                    'excerpt': text[:300],
                     'content_html': f'<p>{text}</p>',
                     'area': 'rochdale',
                     'types': [category],
@@ -251,15 +274,61 @@ def rewrite_with_openai(items):
     
     for item in items:
         try:
-            prompt = (
-                "Rewrite this into a concise UK local news article for Rochdale.\n"
-                "- Neutral tone, UK spelling.\n"
-                "- 150-220 words.\n"
-                "- Headline as first line.\n\n"
-                f"Title: {item['title']}\n"
-                f"Summary: {item['excerpt']}\n"
-                f"Source: {item['source_url']}"
-            )
+            # Build comprehensive prompt
+            prompt_parts = [
+                "Rewrite this into a comprehensive UK local news article for Rochdale residents.",
+                "",
+                "EDITORIAL STANDARDS:",
+                "- Use neutral, factual language - avoid sensationalism",
+                "- Include legal disclaimers (allegedly, according to reports)",
+                "- Provide extensive context and background information", 
+                "- Use proper UK spelling and grammar",
+                "- 250-350 words for comprehensive coverage",
+                "- SEO-optimized headline with location keywords",
+                "- BYLINE: By Rochdale News Desk - Fact-checked local journalism",
+                "",
+                "MOBILE-FIRST STRUCTURE:",
+                "- Short paragraphs (2-3 sentences maximum)",
+                "- Clear subheadings using relevant keywords",
+                "- Bullet points for key information",
+                "- Bold text for important facts and figures",
+                "- Front-load the most important information",
+                "",
+                "USER EXPERIENCE:",
+                "- Include FAQ section if applicable",
+                "- Add clear navigation cues and contact details",
+                "- Use numbered lists for sequential information",
+                "- Add topic tags: #RochdaleCouncil #Transport #Crime etc.",
+                "",
+                "AUTHORITY BUILDING:",
+                "- Include FACT-CHECKED label for complex stories",
+                "- Reference official sources and authorities",
+                "- Follow journalistic ethics standards",
+                "",
+                "CONTENT ENHANCEMENT BY CATEGORY:",
+                "CRIME: Use allegedly, reference Greater Manchester Police, include disclaimers",
+                "EDUCATION: Link to institutions like Hopwood Hall College, include Ofsted ratings",
+                "TRANSPORT: Include alternative routes, reference TfGM",
+                "COUNCIL: Explain budget implications, define council roles",
+                "EVENTS: Include practical details, accessibility information",
+                "",
+                "ARTICLE FOOTER:",
+                "Contact Information:",
+                "- Rochdale Borough Council: [relevant department]",
+                "- Emergency services: 999",
+                "Related Topics: #RochdaleNews #GreaterManchester",
+                "About: Fact-checked local journalism following UK standards",
+                "",
+                f"Source Material:",
+                f"Title: {item['title']}",
+                f"Summary: {item['excerpt']}",
+                f"Source: {item['source_url']}",
+                f"Category: {item.get('types', ['announcements'])[0] if item.get('types') else 'announcements'}",
+                "",
+                "Write a comprehensive, mobile-optimized, SEO-enhanced local news article."
+            ]
+            
+            prompt = "\n".join(prompt_parts)
             
             response = client.chat.completions.create(
                 model='gpt-4o-mini',
@@ -275,15 +344,11 @@ def rewrite_with_openai(items):
             lines = [line for line in content.split('\n') if line.strip()]
             
             if lines:
-                # Extract headline
                 item['title'] = re.sub(r'^#+\s*', '', lines[0])[:150]
-                
-                # Extract body
                 body_lines = lines[1:] if len(lines) > 1 else lines
                 html = '<p>' + '</p><p>'.join([norm(line) for line in body_lines]) + '</p>' if body_lines else '<p>Update</p>'
-                
                 item['content_html'] = html
-                item['excerpt'] = norm(' '.join(body_lines))[:200]
+                item['excerpt'] = norm(' '.join(body_lines))[:300]
                 item['slug'] = slugify(item['title'])
                 
         except Exception as e:
@@ -292,6 +357,7 @@ def rewrite_with_openai(items):
     return items
 
 def main():
+    print('EMERGENCY FALLBACK: Primary scraper failed completely - using RSS+Web only')
     items = []
     items.extend(get_rss_items())
     items.extend(get_web_items())
@@ -300,19 +366,19 @@ def main():
     with open('articles.json', 'w', encoding='utf-8') as f:
         json.dump(items, f, ensure_ascii=False, indent=2)
     
-    print(f'Fallback wrote {len(items)} items to articles.json')
+    print(f'Emergency fallback wrote {len(items)} items to articles.json')
 
 if __name__ == '__main__':
     main()
-EOF
+FALLBACK_EOF
 
-      - name: Run fallback builder if needed
-        if: steps.needfb.outputs.need_fallback == '1'
+      - name: Run emergency fallback if needed
+        if: steps.needfb.outputs.need_emergency_fallback == '1'
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          python .tmp/fallback.py || echo "Fallback builder encountered a non-fatal error; continuing."
+          python .tmp/fallback.py || echo "Emergency fallback builder encountered errors; continuing."
 
       - name: Final OpenAI rewrite pass (baseline content)
         shell: bash
@@ -326,8 +392,8 @@ EOF
           
           echo "Applying final OpenAI rewrite to improve article quality..."
           
-          # Run final rewrite
-          python3 -c "
+          # Create and run final rewrite script
+          cat > .tmp/final_rewrite.py << 'REWRITE_EOF'
 import os, json, re, sys
 
 def norm(s): 
@@ -359,15 +425,84 @@ else:
         
         for item in data:
             item = fix_item(item)
-            prompt = (
-                'Rewrite this into a concise UK local news article for Rochdale.\n'
-                '- Neutral tone, UK spelling.\n'
-                '- 150-220 words.\n'
-                '- Headline as first line.\n\n'
-                f'Title: {item[\"title\"]}\n'
-                f'Summary: {norm(item[\"excerpt\"])}\n'
-                f'Source: {item.get(\"source_url\", \"\")}'
-            )
+            
+            # Build comprehensive prompt
+            prompt_parts = [
+                "Rewrite this into a comprehensive UK local news article for Rochdale residents.",
+                "",
+                "EDITORIAL STANDARDS:",
+                "- Use neutral, factual language - avoid sensationalism",
+                "- Include legal disclaimers (allegedly, according to reports)",
+                "- Provide extensive context and background information", 
+                "- Use proper UK spelling and grammar",
+                "- 250-350 words for comprehensive coverage",
+                "- SEO-optimized headline with location keywords",
+                "- BYLINE: By Rochdale News Desk - Fact-checked local journalism",
+                "",
+                "AI-DRIVEN SEO OPTIMIZATION:",
+                "- Focus on user intent - answer what, why, how, when, where questions",
+                "- Include conversational queries people might ask Google",
+                "- Use semantic keywords related to the main topic",
+                "- Structure for featured snippets with clear answers",
+                "- Optimize for local search intent (Rochdale news, near me)",
+                "",
+                "MOBILE-FIRST STRUCTURE:",
+                "- Short paragraphs (2-3 sentences maximum)",
+                "- Clear subheadings using relevant keywords",
+                "- Bullet points for key information",
+                "- Bold text for important facts and figures",
+                "- Front-load the most important information",
+                "",
+                "USER EXPERIENCE ENHANCEMENTS:",
+                "- Include FAQ section if applicable",
+                "- Add clear navigation cues and contact details",
+                "- Use numbered lists for sequential information",
+                "- Add topic tags: #RochdaleCouncil #Transport #Crime etc.",
+                "",
+                "AUTHORITY & TRUST BUILDING:",
+                "- Include FACT-CHECKED label for complex stories",
+                "- Reference official sources and authorities",
+                "- Follow journalistic ethics standards",
+                "- Present multiple viewpoints where appropriate",
+                "",
+                "EXPLAIN COMPLEX TERMS:",
+                "- Define legal terms, policies, procedures in plain English",
+                "- Explain official roles and titles",
+                "- Clarify government processes and procedures",
+                "- Include where residents can find more information",
+                "",
+                "CONTENT ENHANCEMENT BY CATEGORY:",
+                "CRIME: Use allegedly, reference Greater Manchester Police, include disclaimers, explain legal terms",
+                "EDUCATION: Link to Hopwood Hall College etc, include Ofsted ratings, explain education terms",
+                "TRANSPORT: Include alternative routes, reference TfGM, explain transport terms",
+                "COUNCIL: Explain budget implications, define council roles, clarify procedures",
+                "EVENTS: Include practical details, accessibility information, licensing requirements",
+                "BUSINESS: Explain planning terms, define business roles, clarify development processes",
+                "",
+                "MOBILE-OPTIMIZED FORMATTING:",
+                "- Use bold for key facts, figures, important information",
+                "- Use italics for quotes, emphasis, legal terms",
+                "- Break up text with bullet points for key details",
+                "- Include clear subheadings with keywords",
+                "",
+                "ARTICLE FOOTER:",
+                "Contact Information:",
+                "- Rochdale Borough Council: [relevant department]",
+                "- Emergency services: 999",
+                "- Non-emergency enquiries: [relevant number]",
+                "Related Topics: #RochdaleNews #GreaterManchester",
+                "About this article: Fact-checked local journalism following UK editorial standards",
+                "",
+                f"Source Material:",
+                f"Title: {item['title']}",
+                f"Summary: {norm(item['excerpt'])}",
+                f"Source: {item.get('source_url', '')}",
+                f"Category: {item.get('types', ['announcements'])[0] if item.get('types') else 'announcements'}",
+                "",
+                "Write a comprehensive, mobile-optimized, SEO-enhanced local news article that serves the Rochdale community with authority and trust."
+            ]
+            
+            prompt = "\n".join(prompt_parts)
             
             try:
                 response = client.chat.completions.create(
@@ -376,7 +511,7 @@ else:
                         {'role': 'system', 'content': 'You are a UK local news journalist.'},
                         {'role': 'user', 'content': prompt}
                     ],
-                    max_tokens=800,
+                    max_tokens=1000,
                     temperature=0.4
                 )
                 
@@ -388,7 +523,7 @@ else:
                     body_lines = lines[1:] if len(lines) > 1 else lines
                     html = '<p>' + '</p><p>'.join([norm(line) for line in body_lines]) + '</p>' if body_lines else '<p>Update</p>'
                     item['content_html'] = html
-                    item['excerpt'] = norm(' '.join(body_lines))[:200]
+                    item['excerpt'] = norm(' '.join(body_lines))[:300]
                     item['slug'] = re.sub(r'[^a-z0-9]+', '-', item['title'].lower()).strip('-')[:60]
                     
             except Exception as e:
@@ -402,7 +537,10 @@ with open('articles.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
 
 print(f'Final rewrite step complete; items: {len(data)}')
-"
+REWRITE_EOF
+          
+          # Run the final rewrite script
+          python .tmp/final_rewrite.py
 
       - name: Commit and push changes
         shell: bash
@@ -416,9 +554,9 @@ print(f'Final rewrite step complete; items: {len(data)}')
           fi
           BEFORE=$(cat .before_hash)
 
-          # Check for Facebook notices
+          # Report Facebook status in logs
           if [ -f .fb_notice ] && [ "$(cat .fb_notice)" = "1" ]; then
-            echo "NOTICE: Facebook session likely expired or failed. Fallback sources used."
+            echo "INFO: Check logs above for Facebook session status"
           fi
 
           # Configure git
