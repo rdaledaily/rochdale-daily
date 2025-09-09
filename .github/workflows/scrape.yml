@@ -1,9 +1,9 @@
-name: Scrape + Rewrite + Update articles.json
+name: Scrape + Web + RSS → Rewrite → Update articles.json (with fallbacks)
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"  # hourly, UTC
+    - cron: '0 * * * *'  # hourly UTC
 
 permissions:
   contents: write
@@ -11,6 +11,8 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    env:
+      PYTHONUTF8: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,13 +23,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install dependencies
         shell: bash
         run: |
           python -m pip install --upgrade pip
-          pip install playwright openai feedparser beautifulsoup4 requests
+          pip install playwright openai feedparser beautifulsoup4 requests lxml html5lib
           playwright install chromium
 
       - name: Hash articles.json before (if present)
@@ -37,57 +39,77 @@ jobs:
           if [ -f articles.json ]; then
             sha256sum articles.json | awk '{print $1}' > .before_hash
           else
-            echo "NOFILE" > .before_hash
+            echo NOFILE > .before_hash
           fi
-          echo "before_hash=$(cat .before_hash)" >> "$GITHUB_OUTPUT"
+          echo "Before hash: $(cat .before_hash)"
 
-      - name: Run scraper
+      - name: Run primary Facebook+sources scraper (best-effort)
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FB_COOKIE: ${{ secrets.FB_COOKIE }}         # optional for your script if it reads env
+          FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }} # optional
         run: |
-          if [ -z "$OPENAI_API_KEY" ]; then echo "OPENAI_API_KEY is not set"; exit 1; fi
-          # Your scraper reads cookies from scraper/session.json (already in repo)
+          echo "Running primary scraper..."
           python scraper/scraper.py
-          # ensure output at repo root
-          if [ -f scraper/articles.json ]; then mv scraper/articles.json ./articles.json; fi
-          if [ ! -f articles.json ]; then echo "articles.json not found after scraper"; exit 1; fi
+          SCR_RC=$?
+          echo "$SCR_RC" > .scraper_rc || true
 
-      - name: Validate output and show summary
+          # Normalize output location
+          if [ -f scraper/articles.json ]; then mv scraper/articles.json ./articles.json; fi
+
+          # Detect likely FB/session issues and print a clear notice to logs
+          FB_NOTICE=0
+          if [ ! -f scraper/session.json ] && [ -z "$FB_COOKIE" ]; then
+            echo "NOTICE: Facebook session missing. No scraper/session.json and no FB_COOKIE secret. Fallback will be used."
+            FB_NOTICE=1
+          fi
+          if [ -f scraper/session.json ]; then
+            # If session file is older than 3 days, warn
+            AGE=$((($(date +%s) - $(date -r scraper/session.json +%s)) / 86400))
+            if [ "$AGE" -gt 3 ]; then
+              echo "NOTICE: Facebook session.json is $AGE days old. It may have expired. Fallback will be used if no new items."
+              FB_NOTICE=1
+            fi
+          fi
+          if [ "$SCR_RC" -ne 0 ]; then
+            echo "NOTICE: Primary scraper exited with code $SCR_RC. Fallback will be used."
+            FB_NOTICE=1
+          fi
+
+          # If your scraper writes a log, surface last lines
+          if [ -f scraper/scraper.log ]; then
+            echo "Last 50 lines of scraper/scraper.log:"
+            tail -n 50 scraper/scraper.log || true
+          fi
+
+          echo "$FB_NOTICE" > .fb_notice || true
+
+      - name: Evaluate primary output and decide on fallback
+        id: eval
         shell: bash
         run: |
           python - <<'PY'
-import json,sys,datetime
-with open("articles.json","r",encoding="utf-8") as f:
-    data=json.load(f)
-if isinstance(data,list):
-    cnt=len(data)
-    def p(s):
-        try: return datetime.datetime.fromisoformat(s.replace("Z","+00:00"))
-        except: return None
-    latest=max((p(x.get("published_at")) for x in data if isinstance(x,dict)), default=None)
-    print("ARTICLES_COUNT:", cnt)
-    print("LATEST_PUBLISHED_AT:", latest.isoformat() if latest else "NONE")
-else:
-    print("WARNING: articles.json is not a list")
+import json, os, sys
+need_fallback = True
+reason = "articles.json missing"
+if os.path.exists("articles.json"):
+    try:
+        with open("articles.json","r",encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, list) and len(data) > 0:
+            need_fallback = False
+            reason = "valid non-empty list"
+        else:
+            reason = "empty or non-list JSON"
+    except Exception as e:
+        reason = f"invalid JSON: {e}"
+print("NEED_FALLBACK=", "1" if need_fallback else "0", sep="")
+print("PRIMARY_REASON=", reason)
+open(".need_fallback","w").write("1" if need_fallback else "0")
 PY
-          echo "Head of articles.json:" && head -n 20 articles.json || true
+          echo "FB_NOTICE=$(cat .fb_notice 2>/dev/null || echo 0)"
+          echo "NEED_FALLBACK=$(cat .need_fallback)"
 
-      - name: Hash after and decide
-        id: decide
-        shell: bash
-        run: |
-          sha256sum articles.json | awk '{print $1}' > .after_hash
-          BEFORE=$(cat .before_hash)
-          AFTER=$(cat .after_hash)
-          echo "Before hash: $BEFORE"
-          echo "After  hash: $AFTER"
-          if [ "$BEFORE" = "$AFTER" ]; then
-            echo "No change in articles.json — scraper produced identical output."
-            echo "changed=no" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=yes" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Commit and push if changed
-        if: steps.decide.outputs.ch
+      - name: Fallback builder (RSS + Web → rewrite) when needed
+        if: always()  # we guard inside the script; this step never hard-f
