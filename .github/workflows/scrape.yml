@@ -1,12 +1,12 @@
 name: Scrape Facebook and Update Articles
 
 on:
-  workflow_dispatch:        # allow manual trigger
+  workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"     # run every hour
+    - cron: "0 * * * *"
 
 permissions:
-  contents: write           # allow pushing to repo
+  contents: write
 
 jobs:
   scrape:
@@ -26,12 +26,12 @@ jobs:
 
       - name: Install dependencies
         run: |
+          set -euo pipefail
           pip install playwright openai feedparser beautifulsoup4 requests
           playwright install chromium
 
       - name: Debug file structure (before scraper)
+        shell: bash
         run: |
-          echo "📂 Files in root:"
-          ls -la
-          echo "📂 Files in scraper/:"
-          ls -la scraper/ || echo "scraper directory not f
+          set -euo pipefail
+          printf '%s\n' 'Files in
