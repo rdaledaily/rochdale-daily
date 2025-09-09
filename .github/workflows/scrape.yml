@@ -112,4 +112,178 @@ PY
           echo "NEED_FALLBACK=$(cat .need_fallback)"
 
       - name: Fallback builder (RSS + Web → rewrite) when needed
-        if: always()  # we guard inside the script; this step never hard-f
+        if: always()  # we guard inside the script; this step never hard-fails
+        shell: bash
+        run: |
+          if [ "$(cat .need_fallback)" != "1" ]; then
+            echo "Fallback not needed (primary output looks ok)."
+          else
+            echo "Running fallback builder (RSS + Web)..."
+            python - <<'PY'
+import os, re, json, time, datetime as dt
+import feedparser, requests
+from bs4 import BeautifulSoup
+
+def norm(s): return re.sub(r'\s+',' ',(s or '').strip())
+def slugify(s): return re.sub(r'[^a-z0-9]+','-', (s or '').lower()).strip('-')[:60]
+def cat_for(t):
+    t=(t or '').lower()
+    C={"crime":["arrest","police","stabbing","theft","burglary","assault","violence","court","knife","gun","drugs","wanted","jailed"],
+       "transport":["bus","tram","train","traffic","roadworks","closure","accident","transport","highway","m62","m60","bee network","parking","car park"],
+       "politics":["council","mp","election","vote","government","parliament","politician","policy","minister","mayor"],
+       "education":["school","college","university","teacher","student","exam","lesson","classroom","headteacher","ofsted","pupil"],
+       "sport":["football","match","league","team","tournament","goal","player","cup","rugby","cricket"],
+       "events":["festival","concert","match","tournament","fair","market","fundraiser","party","gala","celebration","open day","parade","show","act","live music","gig","performance","game","event"]}
+    for k,v in C.items():
+        if any(w in t for w in v): return k
+    return "announcements"
+
+items=[]
+
+# RSS sources (up to 8 each)
+RSS = {
+  "rochdale_council":"https://www.rochdale.gov.uk/news/rss.xml",
+  "gmp_news":"https://www.gmp.police.uk/news/rss.xml",
+  "bbc_manchester":"http://feeds.bbci.co.uk/news/england/manchester/rss.xml",
+}
+for key,url in RSS.items():
+    try:
+        feed=feedparser.parse(url)
+        for idx,e in enumerate(feed.entries[:8]):
+            title=norm(getattr(e,"title","")) or "Update"
+            summary=norm(getattr(e,"summary","") or getattr(e,"description",""))
+            link=getattr(e,"link","") or url
+            if getattr(e,"published_parsed",None):
+                ts=dt.datetime(*e.published_parsed[:6], tzinfo=dt.timezone.utc)
+            else:
+                ts=dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)
+            cat=cat_for(f"{title}. {summary}")
+            body_html="<p>"+("</p><p>".join([x for x in [summary] if x]))+"</p>" if summary else "<p>Update</p>"
+            items.append({
+                "id": f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-rss-{key}-{idx}",
+                "title": title[:150],
+                "slug": slugify(title),
+                "excerpt": summary[:200],
+                "content_html": body_html,
+                "area": "rochdale",
+                "types": [cat],
+                "published_at": ts.isoformat().replace("+00:00","Z"),
+                "image_url": f"assets/img/placeholder_{cat}.jpg",
+                "source_url": link,
+            })
+    except Exception as ex:
+        print("RSS error", key, ex)
+
+# Web sources: MEN Rochdale page + Bing News
+def fetch_html(url, ua=None, timeout=15):
+    h={"User-Agent": ua or "Mozilla/5.0"}
+    try:
+        r=requests.get(url, headers=h, timeout=timeout)
+        if r.ok: return r.text
+    except Exception as e:
+        print("HTTP error", url, e)
+    return ""
+
+MEN="https://www.manchestereveningnews.co.uk/all-about/rochdale"
+BING="https://www.bing.com/news/search?q=Rochdale&FORM=EWRE"
+
+for src in [("men_rochdale",MEN),("bing_rochdale",BING)]:
+    name,url=src
+    html=fetch_html(url)
+    if not html: 
+        continue
+    soup=BeautifulSoup(html, "html.parser")
+    links=[]
+    for a in soup.find_all("a"):
+        href=a.get("href") or ""
+        text=norm(a.get_text(" "))
+        if len(text)>=24 and "http" in href and "javascript:" not in href:
+            links.append((text, href))
+    for i,(text,href) in enumerate(links[:8]):
+        cat=cat_for(text)
+        items.append({
+            "id": f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-web-{name}-{i}",
+            "title": text[:150],
+            "slug": slugify(text),
+            "excerpt": text[:200],
+            "content_html": "<p>"+text+"</p>",
+            "area": "rochdale",
+            "types": [cat],
+            "published_at": dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc).isoformat().replace("+00:00","Z"),
+            "image_url": f"assets/img/placeholder_{cat}.jpg",
+            "source_url": href
+        })
+
+# Optional: rewrite first 12 with OpenAI if key exists
+OPENAI=os.getenv("OPENAI_API_KEY")
+if OPENAI and items:
+    try:
+        from openai import OpenAI
+        client=OpenAI(api_key=OPENAI)
+        for it in items[:12]:
+            prompt=("Rewrite this into a concise UK local news article for Rochdale.\n"
+                    "- Neutral tone, UK spelling.\n- 150–220 words.\n"
+                    "- Headline as first line.\n\n"
+                    f"Title: {it['title']}\nSummary: {it['excerpt']}\nSource: {it['source_url']}")
+            try:
+                resp=client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role":"system","content":"You are a UK local news journalist."},
+                              {"role":"user","content":prompt}],
+                    max_tokens=700, temperature=0.4)
+                out=resp.choices[0].message.content.strip()
+                lines=[l for l in out.split("\n") if l.strip()]
+                if lines:
+                    it["title"]=re.sub(r"^#+\s*","",lines[0])[:150]
+                    body=lines[1:] if len(lines)>1 else lines
+                    html="<p>"+"</p><p>".join([norm(l) for l in body])+"</p>" if body else "<p>Update</p>"
+                    it["content_html"]=html
+                    it["excerpt"]=norm(" ".join(body))[:200]
+                    it["slug"]=slugify(it["title"])
+            except Exception as e:
+                print("OpenAI rewrite failed:", e)
+    except Exception as e:
+        print("OpenAI init failed:", e)
+
+# Write fallback articles.json (even if empty list)
+with open("articles.json","w",encoding="utf-8") as f:
+    json.dump(items, f, ensure_ascii=False, indent=2)
+print(f"Fallback wrote {len(items)} items to articles.json")
+PY
+          fi
+
+      - name: Commit and push (articles when changed, else heartbeat)
+        shell: bash
+        run: |
+          # Compute hashes
+          AFTER=$(sha256sum articles.json | awk '{print $1}')
+          BEFORE=$(cat .before_hash)
+          echo "After hash:  $AFTER"
+          echo "Before hash: $BEFORE"
+
+          # Log FB/session status if any
+          if [ -f .fb_notice ]; then
+            if [ "$(cat .fb_notice)" = "1" ]; then
+              echo "NOTICE: Facebook session likely expired/failed. Fallback (RSS+Web) used for continuity."
+            fi
+          fi
+
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          if [ "$BEFORE" != "$AFTER" ]; then
+            git add articles.json
+            MSG="Update articles.json - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+          else
+            # Heartbeat so deploys keep flowing even when content identical
+            date -u +%s >> UPDATE_LOG.txt
+            git add UPDATE_LOG.txt
+            MSG="Heartbeat (no content change) - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+          fi
+
+          git commit -m "$MSG" || true
+          git pull --rebase || true
+          git push || true
+
+          echo "Done."
