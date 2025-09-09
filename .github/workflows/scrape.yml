@@ -1,4 +1,4 @@
-name: Scrape Facebook and Update Articles
+name: Scrape Facebook + Web + RSS, Rewrite, and Update Articles
 
 on:
   workflow_dispatch:
@@ -8,13 +8,11 @@ on:
 permissions:
   contents: write
 
-# OPTIONAL: add a repo secret CF_PAGES_HOOK_URL for Cloudflare Pages deploy hook
-env:
-  CF_PAGES_HOOK_URL: ${{ secrets.CF_PAGES_HOOK_URL }}
-
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    env:
+      PYTHONUTF8: "1"
 
     steps:
       - name: Checkout repo
@@ -30,13 +28,60 @@ jobs:
 
       - name: Install dependencies
         shell: bash
-        run: python -m pip install --upgrade pip && pip install playwright openai feedparser beautifulsoup4 requests && playwright install chromium
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright openai feedparser beautifulsoup4 requests
+          playwright install chromium
 
-      - name: Debug file structure before scraper
+      - name: Show files before scraper
         shell: bash
-        run: echo "Files in root:" && ls -la && echo "Files in scraper/:" && (ls -la scraper/ || echo "scraper directory not found")
+        run: |
+          echo "Files in root:" && ls -la
+          echo "Files in scraper/:" && (ls -la scraper/ || echo "scraper directory not found")
 
-      - name: Run scraper
+      - name: Record before hash (if any)
+        id: before
+        shell: bash
+        run: |
+          if [ -f articles.json ]; then
+            sha256sum articles.json | awk '{print $1}' > .before_hash
+          else
+            echo "NOFILE" > .before_hash
+          fi
+          echo "before_hash=$(cat .before_hash)" >> $GITHUB_OUTPUT
+
+      - name: Run scraper (requires OPENAI_API_KEY and FB_COOKIE)
         shell: bash
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_A_
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FB_COOKIE: ${{ secrets.FB_COOKIE }}
+          FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
+        run: |
+          if [ -z "${OPENAI_API_KEY:-}" ]; then echo "OPENAI_API_KEY is not set"; exit 1; fi
+          if [ -z "${FB_COOKIE:-}" ]; then echo "FB_COOKIE is not set"; exit 1; fi
+          python scraper/scraper.py
+          echo "Post-scrape root listing:" && ls -la
+          if [ -f scraper/articles.json ]; then mv scraper/articles.json ./articles.json; fi
+          if [ ! -f articles.json ]; then echo "articles.json not found after scraper"; exit 1; fi
+
+      - name: Validate and summarize JSON
+        id: meta
+        shell: bash
+        run: |
+          python - <<'PY'
+import json, sys, pathlib, datetime
+p = pathlib.Path("articles.json")
+try:
+    data = json.loads(p.read_text(encoding="utf-8"))
+except Exception as e:
+    print("ERROR: invalid JSON:", e, file=sys.stderr)
+    sys.exit(1)
+
+def parse_iso(s):
+    try:
+        return datetime.datetime.fromisoformat(s.replace("Z","+00:00"))
+    except Exception:
+        return None
+
+count = 0
+latest = None
