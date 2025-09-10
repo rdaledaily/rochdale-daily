@@ -12,6 +12,11 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
+      FB_COOKIE: ${{ secrets.FB_COOKIES }}     # Note: maps FB_COOKIES (plural) to FB_COOKIE (singular)
+      FB_STORAGE_B64: ${{ secrets.FB_STORAGE_B64 }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,49 +53,54 @@ jobs:
           fi
           echo "BEFORE_HASH=$(cat .before_hash)"
 
-      - name: Restore Facebook storage
-        if: ${{ env.FB_STORAGE_B64 != '' }}
-        env:
-          FB_STORAGE_B64: ${{ secrets.FB_STORAGE_B64 }}
+      - name: Debug secrets presence (names only)
+        shell: bash
+        run: |
+          echo "FB_COOKIES:     $([[ -n '${{ secrets.FB_COOKIES }}' ]] && echo set || echo MISSING)"
+          echo "FB_USER_AGENT:  $([[ -n '${{ secrets.FB_USER_AGENT }}' ]] && echo set || echo MISSING)"
+          echo "FB_STORAGE_B64: $([[ -n '${{ secrets.FB_STORAGE_B64 }}' ]] && echo set || echo MISSING)"
+
+      - name: Restore Facebook storage (if present)
+        if: ${{ secrets.FB_STORAGE_B64 != '' }}
         shell: bash
         run: |
           mkdir -p scraper
           echo "$FB_STORAGE_B64" | base64 -d > scraper/session.json
-          
-          # Create verification script using printf (avoiding multi-line Python)
-          printf "%s\n" "try:" > .tmp/verify_session.py
-          printf "%s\n" "    import json" >> .tmp/verify_session.py
-          printf "%s\n" "except ImportError:" >> .tmp/verify_session.py
-          printf "%s\n" "    print('JSON module not available')" >> .tmp/verify_session.py
-          printf "%s\n" "    exit(1)" >> .tmp/verify_session.py
-          printf "%s\n" "" >> .tmp/verify_session.py
-          printf "%s\n" "try:" >> .tmp/verify_session.py
-          printf "%s\n" "    with open('scraper/session.json', 'r', encoding='utf-8') as f:" >> .tmp/verify_session.py
-          printf "%s\n" "        d = json.load(f)" >> .tmp/verify_session.py
-          printf "%s\n" "    cookies_count = len(d.get('cookies', []))" >> .tmp/verify_session.py
-          printf "%s\n" "    origins_count = len(d.get('origins', []))" >> .tmp/verify_session.py
-          printf "%s\n" "    print('Rehydrated cookies: ' + str(cookies_count) + ', origins: ' + str(origins_count))" >> .tmp/verify_session.py
-          printf "%s\n" "except Exception as e:" >> .tmp/verify_session.py
-          printf "%s\n" "    print('Session verification failed: ' + str(e))" >> .tmp/verify_session.py
-          
-          python .tmp/verify_session.py
+          ls -l scraper || true
+          python - <<'PY'
+import json, os
+p='scraper/session.json'
+if os.path.exists(p) and os.path.getsize(p)>10:
+    d=json.load(open(p,'r',encoding='utf-8'))
+    print("rehydrated cookies:",len(d.get("cookies",[])),"origins:",len(d.get("origins",[])))
+else:
+    print("session.json missing or empty")
+PY
 
       - name: Primary scraper (Facebook + RSS + Web baseline)
         shell: bash
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          FB_COOKIE: ${{ secrets.FB_COOKIE }}
-          FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
         run: |
           echo "Running primary scraper with baseline sources"
 
-          # Facebook availability check
-          if [ -z "$FB_COOKIE" ] || [ -z "$FB_USER_AGENT" ]; then
-            echo "WARNING: Facebook secrets missing - Facebook scraping disabled"
-            export SKIP_FACEBOOK=1
-          else
-            echo "Facebook credentials present - Full baseline enabled"
+          FB_OK=0
+
+          # Option A: session storage + UA
+          if [ -n "$FB_USER_AGENT" ] && [ -s scraper/session.json ]; then
+            echo "Facebook storage present + UA — will try Facebook."
+            FB_OK=1
           fi
+
+          # Option B: cookie string + UA
+          if [ "$FB_OK" = "0" ] && [ -n "$FB_USER_AGENT" ] && [ -n "$FB_COOKIE" ]; then
+            echo "Facebook cookie + UA — will try Facebook."
+            FB_OK=1
+          fi
+
+          if [ "$FB_OK" = "0" ]; then
+            echo "WARNING: Facebook secrets missing/invalid — Facebook disabled; using RSS + Web only"
+            export SKIP_FACEBOOK=1
+          fi
+
           export FORCE_RSS_WEB=1
 
           # Run scraper with timeout
@@ -105,7 +115,7 @@ jobs:
 
           # Log Facebook session status
           FB_NOTICE=0
-          if [ -z "$FB_COOKIE" ] || [ -z "$FB_USER_AGENT" ]; then
+          if [ "$FB_OK" = "0" ]; then
             echo "STATUS: Running with RSS + Web only"
             FB_NOTICE=1
           elif [ ! -f scraper/session.json ]; then
