@@ -127,8 +127,6 @@ jobs:
 
       - name: Fallback and final rewrite scripts
         shell: bash
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           mkdir -p .tmp
 
