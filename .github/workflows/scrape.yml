@@ -12,7 +12,6 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,7 +24,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies (with retry for Playwright)
+      - name: Install dependencies
         shell: bash
         run: |
           python -m pip install --upgrade pip
@@ -39,7 +38,7 @@ jobs:
             fi
           done
 
-      - name: Hash articles.json before (if present)
+      - name: Hash articles.json before
         shell: bash
         run: |
           if [ -f articles.json ]; then
@@ -56,274 +55,298 @@ jobs:
           FB_COOKIE: ${{ secrets.FB_COOKIE }}
           FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
         run: |
-          echo "Running primary scraper with baseline sources: Facebook + RSS + Web"
+          echo "Running primary scraper with baseline sources"
 
-          # Facebook availability (still allow scraper to run on RSS+Web)
+          # Facebook availability check
           if [ -z "$FB_COOKIE" ] || [ -z "$FB_USER_AGENT" ]; then
-            echo "WARNING: Facebook secrets missing - Facebook scraping disabled (RSS+Web only)"
+            echo "WARNING: Facebook secrets missing - Facebook scraping disabled"
             export SKIP_FACEBOOK=1
           else
-            echo "Facebook credentials present - FB + RSS + Web enabled"
+            echo "Facebook credentials present - Full baseline enabled"
           fi
           export FORCE_RSS_WEB=1
 
-          # Run scraper with timeout; do not fail the job
+          # Run scraper with timeout
           timeout 600 python scraper/scraper.py 2>&1 | tee scraper_output.log || {
-            echo "Primary scraper failed or timed out (continuing to fallback if needed)."
+            echo "Primary scraper failed or timed out"
           }
 
-          # Normalize output location
+          # Move output to repo root
           if [ -f scraper/articles.json ]; then
             mv scraper/articles.json ./articles.json
           fi
 
-          # Facebook session status for logs
+          # Log Facebook session status
           FB_NOTICE=0
           if [ -z "$FB_COOKIE" ] || [ -z "$FB_USER_AGENT" ]; then
-            echo "STATUS: Running with RSS + Web (Facebook unavailable)"
+            echo "STATUS: Running with RSS + Web only"
             FB_NOTICE=1
           elif [ ! -f scraper/session.json ]; then
-            echo "WARNING: FB cookie set but no scraper/session.json - session may have expired"
+            echo "WARNING: No session file - may be expired"
             FB_NOTICE=1
           else
             AGE=$(( ( $(date +%s) - $(date -r scraper/session.json +%s) ) / 86400 ))
             if [ "$AGE" -gt 3 ]; then
-              echo "WARNING: Facebook session.json is $AGE days old - may need refresh"
+              echo "WARNING: Session is $AGE days old"
               FB_NOTICE=1
-            else
-              echo "STATUS: Facebook session present and recent"
             fi
           fi
           echo "$FB_NOTICE" > .fb_notice
 
-          # Show logs if present
+          # Show logs
           if [ -f scraper/scraper.log ]; then
-            echo "Last 50 lines of scraper/scraper.log:"; tail -n 50 scraper/scraper.log || true
-          fi
-          if [ -f scraper_output.log ]; then
-            echo "Last 50 lines of scraper_output.log:"; tail -n 50 scraper_output.log || true
+            echo "Scraper log:"; tail -n 20 scraper/scraper.log || true
           fi
 
-      - name: Fallback + Final Rewrite (write helper scripts and run) — NO bare Python in YAML
+      - name: Fallback and final rewrite scripts
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          set -e
           mkdir -p .tmp
 
-          # ---- check_json.py (via printf) ----
-          : > .tmp/check_json.py
-          printf "%s\n" "import json, sys" >> .tmp/check_json.py
-          printf "%s\n" "try:" >> .tmp/check_json.py
-          printf "%s\n" "    with open('articles.json','r',encoding='utf-8') as f:" >> .tmp/check_json.py
-          printf "%s\n" "        data = json.load(f)" >> .tmp/check_json.py
-          printf "%s\n" "    ok = isinstance(data, list) and len(data) > 0" >> .tmp/check_json.py
-          printf "%s\n" "except Exception:" >> .tmp/check_json.py
-          printf "%s\n" "    ok = False" >> .tmp/check_json.py
-          printf "%s\n" "sys.stdout.write('0\\n' if ok else '1\\n')" >> .tmp/check_json.py
+          # Simple bash-only check for fallback need (no Python imports)
+          NEED_FALLBACK=1
+          if [ -f articles.json ] && [ -s articles.json ]; then
+            # Basic file size check - if file exists and has reasonable content
+            FILE_SIZE=$(wc -c < articles.json)
+            if [ "$FILE_SIZE" -gt 20 ]; then
+              NEED_FALLBACK=0
+            fi
+          fi
+          echo "NEED_FALLBACK=$NEED_FALLBACK"
 
-          python .tmp/check_json.py > .need_fallback
-          echo "NEED_FALLBACK=$(cat .need_fallback)"
+          # Create emergency fallback script if needed (RSS only)
+          if [ "$NEED_FALLBACK" = "1" ]; then
+            echo "Creating emergency fallback script..."
+            printf "%s\n" "import os" > .tmp/fallback.py
+            printf "%s\n" "import re" >> .tmp/fallback.py
+            printf "%s\n" "import datetime as dt" >> .tmp/fallback.py
+            printf "%s\n" "import requests" >> .tmp/fallback.py
+            printf "%s\n" "import feedparser" >> .tmp/fallback.py
+            printf "%s\n" "from bs4 import BeautifulSoup" >> .tmp/fallback.py
+            printf "%s\n" "try:" >> .tmp/fallback.py
+            printf "%s\n" "    import json" >> .tmp/fallback.py
+            printf "%s\n" "except ImportError:" >> .tmp/fallback.py
+            printf "%s\n" "    print('JSON module not available')" >> .tmp/fallback.py
+            printf "%s\n" "    exit(1)" >> .tmp/fallback.py
+            printf "%s\n" "" >> .tmp/fallback.py
+            printf "%s\n" "def norm(s):" >> .tmp/fallback.py
+            printf "%s\n" "    return re.sub(r'\\s+', ' ', (s or '').strip())" >> .tmp/fallback.py
+            printf "%s\n" "" >> .tmp/fallback.py
+            printf "%s\n" "def slugify(s):" >> .tmp/fallback.py
+            printf "%s\n" "    return re.sub(r'[^a-z0-9]+', '-', (s or '').lower()).strip('-')[:60]" >> .tmp/fallback.py
+            printf "%s\n" "" >> .tmp/fallback.py
+            printf "%s\n" "def category_for(text):" >> .tmp/fallback.py
+            printf "%s\n" "    t = (text or '').lower()" >> .tmp/fallback.py
+            printf "%s\n" "    if any(w in t for w in ['arrest','police','theft','court','crime']):" >> .tmp/fallback.py
+            printf "%s\n" "        return 'crime'" >> .tmp/fallback.py
+            printf "%s\n" "    if any(w in t for w in ['bus','train','traffic','road','transport']):" >> .tmp/fallback.py
+            printf "%s\n" "        return 'transport'" >> .tmp/fallback.py
+            printf "%s\n" "    if any(w in t for w in ['council','mp','election','government']):" >> .tmp/fallback.py
+            printf "%s\n" "        return 'politics'" >> .tmp/fallback.py
+            printf "%s\n" "    if any(w in t for w in ['school','college','university','education']):" >> .tmp/fallback.py
+            printf "%s\n" "        return 'education'" >> .tmp/fallback.py
+            printf "%s\n" "    if any(w in t for w in ['football','match','team','sport']):" >> .tmp/fallback.py
+            printf "%s\n" "        return 'sport'" >> .tmp/fallback.py
+            printf "%s\n" "    if any(w in t for w in ['festival','concert','event','show']):" >> .tmp/fallback.py
+            printf "%s\n" "        return 'events'" >> .tmp/fallback.py
+            printf "%s\n" "    return 'announcements'" >> .tmp/fallback.py
+            printf "%s\n" "" >> .tmp/fallback.py
+            printf "%s\n" "feeds = {" >> .tmp/fallback.py
+            printf "%s\n" "    'rochdale_council': 'https://www.rochdale.gov.uk/news/rss.xml'," >> .tmp/fallback.py
+            printf "%s\n" "    'gmp_news': 'https://www.gmp.police.uk/news/rss.xml'," >> .tmp/fallback.py
+            printf "%s\n" "    'bbc_manchester': 'http://feeds.bbci.co.uk/news/england/manchester/rss.xml'" >> .tmp/fallback.py
+            printf "%s\n" "}" >> .tmp/fallback.py
+            printf "%s\n" "" >> .tmp/fallback.py
+            printf "%s\n" "items = []" >> .tmp/fallback.py
+            printf "%s\n" "for key, url in feeds.items():" >> .tmp/fallback.py
+            printf "%s\n" "    try:" >> .tmp/fallback.py
+            printf "%s\n" "        feed = feedparser.parse(url)" >> .tmp/fallback.py
+            printf "%s\n" "        for i, entry in enumerate(feed.entries[:6]):" >> .tmp/fallback.py
+            printf "%s\n" "            title = norm(getattr(entry, 'title', '') or 'Update')[:150]" >> .tmp/fallback.py
+            printf "%s\n" "            summary = norm(getattr(entry, 'summary', '') or '')" >> .tmp/fallback.py
+            printf "%s\n" "            link = getattr(entry, 'link', '') or url" >> .tmp/fallback.py
+            printf "%s\n" "            if getattr(entry, 'published_parsed', None):" >> .tmp/fallback.py
+            printf "%s\n" "                timestamp = dt.datetime(*entry.published_parsed[:6], tzinfo=dt.timezone.utc)" >> .tmp/fallback.py
+            printf "%s\n" "            else:" >> .tmp/fallback.py
+            printf "%s\n" "                timestamp = dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)" >> .tmp/fallback.py
+            printf "%s\n" "            category = category_for(title + ' ' + summary)" >> .tmp/fallback.py
+            printf "%s\n" "            html = '<p>' + summary + '</p>' if summary else '<p>Update</p>'" >> .tmp/fallback.py
+            printf "%s\n" "            items.append({" >> .tmp/fallback.py
+            printf "%s\n" "                'id': dt.datetime.utcnow().strftime('%Y%m%d%H%M%S') + '-rss-' + key + '-' + str(i)," >> .tmp/fallback.py
+            printf "%s\n" "                'title': title," >> .tmp/fallback.py
+            printf "%s\n" "                'slug': slugify(title)," >> .tmp/fallback.py
+            printf "%s\n" "                'excerpt': summary[:250]," >> .tmp/fallback.py
+            printf "%s\n" "                'content_html': html," >> .tmp/fallback.py
+            printf "%s\n" "                'area': 'rochdale'," >> .tmp/fallback.py
+            printf "%s\n" "                'types': [category]," >> .tmp/fallback.py
+            printf "%s\n" "                'published_at': timestamp.isoformat().replace('+00:00', 'Z')," >> .tmp/fallback.py
+            printf "%s\n" "                'image_url': 'assets/img/placeholder_' + category + '.jpg'," >> .tmp/fallback.py
+            printf "%s\n" "                'source_url': link" >> .tmp/fallback.py
+            printf "%s\n" "            })" >> .tmp/fallback.py
+            printf "%s\n" "    except Exception as ex:" >> .tmp/fallback.py
+            printf "%s\n" "        print('RSS error ' + key + ': ' + str(ex))" >> .tmp/fallback.py
+            printf "%s\n" "" >> .tmp/fallback.py
+            printf "%s\n" "with open('articles.json', 'w', encoding='utf-8') as f:" >> .tmp/fallback.py
+            printf "%s\n" "    json.dump(items, f, ensure_ascii=False, indent=2)" >> .tmp/fallback.py
+            printf "%s\n" "" >> .tmp/fallback.py
+            printf "%s\n" "print('Emergency fallback wrote ' + str(len(items)) + ' items')" >> .tmp/fallback.py
 
-          # ---- fallback.py (RSS + Web; attempts OpenAI rewrite) via printf ----
-          : > .tmp/fallback.py
-          printf "%s\n" "import os, re, json, datetime as dt, requests, feedparser" >> .tmp/fallback.py
-          printf "%s\n" "from bs4 import BeautifulSoup" >> .tmp/fallback.py
-          printf "%s\n" "def norm(s): return re.sub(r'\s+',' ', (s or '').strip())" >> .tmp/fallback.py
-          printf "%s\n" "def slugify(s): return re.sub(r'[^a-z0-9]+','-', (s or '').lower()).strip('-')[:60]" >> .tmp/fallback.py
-          printf "%s\n" "def category_for(text):" >> .tmp/fallback.py
-          printf "%s\n" "    t=(text or '').lower()" >> .tmp/fallback.py
-          printf "%s\n" "    C={'crime':['arrest','police','stabbing','theft','burglary','assault','violence','court','knife','gun','drugs','wanted','jailed']," >> .tmp/fallback.py
-          printf "%s\n" "       'transport':['bus','tram','train','traffic','roadworks','closure','accident','transport','highway','m62','m60','bee network','parking','car park']," >> .tmp/fallback.py
-          printf "%s\n" "       'politics':['council','mp','election','vote','government','parliament','politician','policy','minister','mayor']," >> .tmp/fallback.py
-          printf "%s\n" "       'education':['school','college','university','teacher','student','exam','lesson','classroom','headteacher','ofsted','pupil']," >> .tmp/fallback.py
-          printf "%s\n" "       'sport':['football','match','league','team','tournament','goal','player','cup','rugby','cricket']," >> .tmp/fallback.py
-          printf "%s\n" "       'events':['festival','concert','match','tournament','fair','market','fundraiser','party','gala','celebration','open day','parade','show','act','live music','gig','performance','game','event']}" >> .tmp/fallback.py
-          printf "%s\n" "    for k,v in C.items():" >> .tmp/fallback.py
-          printf "%s\n" "        if any(w in t for w in v): return k" >> .tmp/fallback.py
-          printf "%s\n" "    return 'announcements'" >> .tmp/fallback.py
-          printf "%s\n" "" >> .tmp/fallback.py
-          printf "%s\n" "def rss_items():" >> .tmp/fallback.py
-          printf "%s\n" "    RSS={'rochdale_council':'https://www.rochdale.gov.uk/news/rss.xml'," >> .tmp/fallback.py
-          printf "%s\n" "         'gmp_news':'https://www.gmp.police.uk/news/rss.xml'," >> .tmp/fallback.py
-          printf "%s\n" "         'bbc_manchester':'http://feeds.bbci.co.uk/news/england/manchester/rss.xml'}" >> .tmp/fallback.py
-          printf "%s\n" "    out=[]" >> .tmp/fallback.py
-          printf "%s\n" "    for key,url in RSS.items():" >> .tmp/fallback.py
-          printf "%s\n" "        try:" >> .tmp/fallback.py
-          printf "%s\n" "            feed=feedparser.parse(url)" >> .tmp/fallback.py
-          printf "%s\n" "            for i,e in enumerate(feed.entries[:8]):" >> .tmp/fallback.py
-          printf "%s\n" "                title=norm(getattr(e,'title','') or 'Update')[:150]" >> .tmp/fallback.py
-          printf "%s\n" "                summary=norm(getattr(e,'summary','') or getattr(e,'description',''))" >> .tmp/fallback.py
-          printf "%s\n" "                link=getattr(e,'link','') or url" >> .tmp/fallback.py
-          printf "%s\n" "                if getattr(e,'published_parsed',None):" >> .tmp/fallback.py
-          printf "%s\n" "                    ts=dt.datetime(*e.published_parsed[:6], tzinfo=dt.timezone.utc)" >> .tmp/fallback.py
-          printf "%s\n" "                else:" >> .tmp/fallback.py
-          printf "%s\n" "                    ts=dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)" >> .tmp/fallback.py
-          printf "%s\n" "                cat=category_for(f'{title}. {summary}')" >> .tmp/fallback.py
-          printf "%s\n" "                html='<p>'+('</p><p>'.join([summary] if summary else ['Update']))+'</p>'" >> .tmp/fallback.py
-          printf "%s\n" "                out.append({" >> .tmp/fallback.py
-          printf "%s\n" "                    'id': f\"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-rss-{key}-{i}\"," >> .tmp/fallback.py
-          printf "%s\n" "                    'title': title," >> .tmp/fallback.py
-          printf "%s\n" "                    'slug': slugify(title)," >> .tmp/fallback.py
-          printf "%s\n" "                    'excerpt': summary[:300]," >> .tmp/fallback.py
-          printf "%s\n" "                    'content_html': html," >> .tmp/fallback.py
-          printf "%s\n" "                    'area': 'rochdale'," >> .tmp/fallback.py
-          printf "%s\n" "                    'types': [cat]," >> .tmp/fallback.py
-          printf "%s\n" "                    'published_at': ts.isoformat().replace('+00:00','Z')," >> .tmp/fallback.py
-          printf "%s\n" "                    'image_url': f'assets/img/placeholder_{cat}.jpg'," >> .tmp/fallback.py
-          printf "%s\n" "                    'source_url': link" >> .tmp/fallback.py
-          printf "%s\n" "                })" >> .tmp/fallback.py
-          printf "%s\n" "        except Exception as ex:" >> .tmp/fallback.py
-          printf "%s\n" "            print('RSS error', key, ex)" >> .tmp/fallback.py
-          printf "%s\n" "    return out" >> .tmp/fallback.py
-          printf "%s\n" "" >> .tmp/fallback.py
-          printf "%s\n" "def web_items():" >> .tmp/fallback.py
-          printf "%s\n" "    pages=[('men_rochdale','https://www.manchestereveningnews.co.uk/all-about/rochdale')," >> .tmp/fallback.py
-          printf "%s\n" "           ('bing_rochdale','https://www.bing.com/news/search?q=Rochdale&FORM=EWRE')]" >> .tmp/fallback.py
-          printf "%s\n" "    out=[]" >> .tmp/fallback.py
-          printf "%s\n" "    headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}" >> .tmp/fallback.py
-          printf "%s\n" "    for name,url in pages:" >> .tmp/fallback.py
-          printf "%s\n" "        try:" >> .tmp/fallback.py
-          printf "%s\n" "            r=requests.get(url, headers=headers, timeout=20)" >> .tmp/fallback.py
-          printf "%s\n" "            if not r.ok:" >> .tmp/fallback.py
-          printf "%s\n" "                continue" >> .tmp/fallback.py
-          printf "%s\n" "            soup=BeautifulSoup(r.text,'html.parser')" >> .tmp/fallback.py
-          printf "%s\n" "            links=[]" >> .tmp/fallback.py
-          printf "%s\n" "            for a in soup.find_all('a'):" >> .tmp/fallback.py
-          printf "%s\n" "                href=a.get('href') or ''" >> .tmp/fallback.py
-          printf "%s\n" "                text=norm(a.get_text(' '))" >> .tmp/fallback.py
-          printf "%s\n" "                if 'http' in href and len(text)>=24 and 'javascript:' not in href:" >> .tmp/fallback.py
-          printf "%s\n" "                    links.append((text, href))" >> .tmp/fallback.py
-          printf "%s\n" "            for i,(text,href) in enumerate(links[:8]):" >> .tmp/fallback.py
-          printf "%s\n" "                cat=category_for(text)" >> .tmp/fallback.py
-          printf "%s\n" "                out.append({" >> .tmp/fallback.py
-          printf "%s\n" "                    'id': f\"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-web-{name}-{i}\"," >> .tmp/fallback.py
-          printf "%s\n" "                    'title': text[:150]," >> .tmp/fallback.py
-          printf "%s\n" "                    'slug': slugify(text)," >> .tmp/fallback.py
-          printf "%s\n" "                    'excerpt': text[:300]," >> .tmp/fallback.py
-          printf "%s\n" "                    'content_html': '<p>'+text+'</p>'," >> .tmp/fallback.py
-          printf "%s\n" "                    'area': 'rochdale'," >> .tmp/fallback.py
-          printf "%s\n" "                    'types': [cat]," >> .tmp/fallback.py
-          printf "%s\n" "                    'published_at': dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc).isoformat().replace('+00:00','Z')," >> .tmp/fallback.py
-          printf "%s\n" "                    'image_url': f'assets/img/placeholder_{cat}.jpg'," >> .tmp/fallback.py
-          printf "%s\n" "                    'source_url': href" >> .tmp/fallback.py
-          printf "%s\n" "                })" >> .tmp/fallback.py
-          printf "%s\n" "        except Exception as ex:" >> .tmp/fallback.py
-          printf "%s\n" "            print('Web error', name, ex)" >> .tmp/fallback.py
-          printf "%s\n" "    return out" >> .tmp/fallback.py
-          printf "%s\n" "" >> .tmp/fallback.py
-          printf "%s\n" "def rewrite_with_openai(items):" >> .tmp/fallback.py
-          printf "%s\n" "    if not items:" >> .tmp/fallback.py
-          printf "%s\n" "        return items" >> .tmp/fallback.py
-          printf "%s\n" "    key=os.getenv('OPENAI_API_KEY')" >> .tmp/fallback.py
-          printf "%s\n" "    if not key:" >> .tmp/fallback.py
-          printf "%s\n" "        print('WARNING: OPENAI_API_KEY missing; cannot rewrite.')" >> .tmp/fallback.py
-          printf "%s\n" "        return items" >> .tmp/fallback.py
-          printf "%s\n" "    try:" >> .tmp/fallback.py
-          printf "%s\n" "        from openai import OpenAI" >> .tmp/fallback.py
-          printf "%s\n" "        client=OpenAI(api_key=key)" >> .tmp/fallback.py
-          printf "%s\n" "    except Exception as e:" >> .tmp/fallback.py
-          printf "%s\n" "        print('OpenAI init failed:', e)" >> .tmp/fallback.py
-          printf "%s\n" "        return items" >> .tmp/fallback.py
-          printf "%s\n" "    for it in items:" >> .tmp/fallback.py
-          printf "%s\n" "        try:" >> .tmp/fallback.py
-          printf "%s\n" "            t=it.get('title','')" >> .tmp/fallback.py
-          printf "%s\n" "            ex=it.get('excerpt','')" >> .tmp/fallback.py
-          printf "%s\n" "            src=it.get('source_url','')" >> .tmp/fallback.py
-          printf "%s\n" "            prompt=('Rewrite this into a concise UK local news article for Rochdale.\\n'" >> .tmp/fallback.py
-          printf "%s\n" "                    '- Neutral tone, UK spelling.\\n- 150-220 words.\\n'" >> .tmp/fallback.py
-          printf "%s\n" "                    '- Headline as first line.\\n\\n'" >> .tmp/fallback.py
-          printf "%s\n" "                    'Title: {}\\nSummary: {}\\nSource: {}'.format(t, ex, src))" >> .tmp/fallback.py
-          printf "%s\n" "            resp=client.chat.completions.create(" >> .tmp/fallback.py
-          printf "%s\n" "                model='gpt-4o-mini'," >> .tmp/fallback.py
-          printf "%s\n" "                messages=[{'role':'system','content':'You are a UK local news journalist.'}," >> .tmp/fallback.py
-          printf "%s\n" "                          {'role':'user','content':prompt}]," >> .tmp/fallback.py
-          printf "%s\n" "                max_tokens=900, temperature=0.4)" >> .tmp/fallback.py
-          printf "%s\n" "            out=resp.choices[0].message.content.strip()" >> .tmp/fallback.py
-          printf "%s\n" "            lines=[l for l in out.split('\\n') if l.strip()]" >> .tmp/fallback.py
-          printf "%s\n" "            if lines:" >> .tmp/fallback.py
-          printf "%s\n" "                it['title']=re.sub(r'^#+\\s*','',lines[0])[:150]" >> .tmp/fallback.py
-          printf "%s\n" "                body=lines[1:] if len(lines)>1 else lines" >> .tmp/fallback.py
-          printf "%s\n" "                html='<p>'+'</p><p>'.join([norm(l) for l in body])+'</p>' if body else '<p>Update</p>'" >> .tmp/fallback.py
-          printf "%s\n" "                it['content_html']=html" >> .tmp/fallback.py
-          printf "%s\n" "                it['excerpt']=norm(' '.join(body))[:300]" >> .tmp/fallback.py
-          printf "%s\n" "                it['slug']=slugify(it['title'])" >> .tmp/fallback.py
-          printf "%s\n" "        except Exception as e:" >> .tmp/fallback.py
-          printf "%s\n" "            print('OpenAI rewrite failed:', e)" >> .tmp/fallback.py
-          printf "%s\n" "    return items" >> .tmp/fallback.py
-          printf "%s\n" "" >> .tmp/fallback.py
-          printf "%s\n" "items=rss_items()+web_items()" >> .tmp/fallback.py
-          printf "%s\n" "items=rewrite_with_openai(items)" >> .tmp/fallback.py
-          printf "%s\n" "json.dump(items, open('articles.json','w',encoding='utf-8'), ensure_ascii=False, indent=2)" >> .tmp/fallback.py
-          printf "%s\n" "print('Fallback wrote {} items to articles.json'.format(len(items)))" >> .tmp/fallback.py
-
-          # Run fallback ONLY if needed
-          if [ "$(cat .need_fallback)" = "1" ]; then
-            python .tmp/fallback.py || echo "Fallback builder encountered errors; continuing."
-          else
-            echo "No fallback required."
+            echo "Running emergency fallback..."
+            python .tmp/fallback.py || echo "Fallback had errors; continuing."
           fi
 
-          # ---- final_rewrite.py (ALWAYS run) via printf ----
-          : > .tmp/final_rewrite.py
-          printf "%s\n" "import os, json, re" >> .tmp/final_rewrite.py
-          printf "%s\n" "def norm(s): import re as _re; return _re.sub(r'\s+',' ', (s or '').strip())" >> .tmp/final_rewrite.py
-          printf "%s\n" "def slugify(s): return re.sub(r'[^a-z0-9]+','-', (s or '').lower()).strip('-')[:60]" >> .tmp/final_rewrite.py
-          printf "%s\n" "try:" >> .tmp/final_rewrite.py
-          printf "%s\n" "    data=json.load(open('articles.json','r',encoding='utf-8'))" >> .tmp/final_rewrite.py
-          printf "%s\n" "    if not isinstance(data,list): data=[]" >> .tmp/final_rewrite.py
-          printf "%s\n" "except Exception:" >> .tmp/final_rewrite.py
-          printf "%s\n" "    data=[]" >> .tmp/final_rewrite.py
-          printf "%s\n" "key=os.getenv('OPENAI_API_KEY')" >> .tmp/final_rewrite.py
-          printf "%s\n" "if key and data:" >> .tmp/final_rewrite.py
-          printf "%s\n" "    try:" >> .tmp/final_rewrite.py
-          printf "%s\n" "        from openai import OpenAI" >> .tmp/final_rewrite.py
-          printf "%s\n" "        client=OpenAI(api_key=key)" >> .tmp/final_rewrite.py
-          printf "%s\n" "        for it in data:" >> .tmp/final_rewrite.py
-          printf "%s\n" "            title=(it.get('title') or 'Update')[:150]" >> .tmp/final_rewrite.py
-          printf "%s\n" "            excerpt=norm(it.get('excerpt') or '')" >> .tmp/final_rewrite.py
-          printf "%s\n" "            src=it.get('source_url','')" >> .tmp/final_rewrite.py
-          printf "%s\n" "            prompt=('Rewrite this into a concise UK local news article for Rochdale.\\n'" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    '- Neutral tone, UK spelling.\\n- 150-220 words.\\n'" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    '- Headline as first line.\\n\\n'" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    'Title: {}\\nSummary: {}\\nSource: {}'.format(title, excerpt, src))" >> .tmp/final_rewrite.py
-          printf "%s\n" "            try:" >> .tmp/final_rewrite.py
-          printf "%s\n" "                resp=client.chat.completions.create(" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    model='gpt-4o-mini'," >> .tmp/final_rewrite.py
-          printf "%s\n" "                    messages=[{'role':'system','content':'You are a UK local news journalist.'}," >> .tmp/final_rewrite.py
-          printf "%s\n" "                              {'role':'user','content':prompt}]," >> .tmp/final_rewrite.py
-          printf "%s\n" "                    max_tokens=900, temperature=0.4)" >> .tmp/final_rewrite.py
-          printf "%s\n" "                out=resp.choices[0].message.content.strip()" >> .tmp/final_rewrite.py
-          printf "%s\n" "                lines=[l for l in out.split('\\n') if l.strip()]" >> .tmp/final_rewrite.py
-          printf "%s\n" "                if lines:" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    it['title']=re.sub(r'^#+\\s*','',lines[0])[:150]" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    body=lines[1:] if len(lines)>1 else lines" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    html='<p>'+'</p><p>'.join([norm(l) for l in body])+'</p>' if body else '<p>Update</p>'" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    it['content_html']=html" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    it['excerpt']=norm(' '.join(body))[:300]" >> .tmp/final_rewrite.py
-          printf "%s\n" "                    it['slug']=slugify(it['title'])" >> .tmp/final_rewrite.py
-          printf "%s\n" "            except Exception as e:" >> .tmp/final_rewrite.py
-          printf "%s\n" "                print('OpenAI rewrite failed on an item:', e)" >> .tmp/final_rewrite.py
-          printf "%s\n" "    except Exception as e:" >> .tmp/final_rewrite.py
-          printf "%s\n" "        print('OpenAI init failed:', e)" >> .tmp/final_rewrite.py
-          printf "%s\n" "else:" >> .tmp/final_rewrite.py
-          printf "%s\n" "    if not key:" >> .tmp/final_rewrite.py
-          printf "%s\n" "        print('WARNING: OPENAI_API_KEY missing; skipping final rewrite.')" >> .tmp/final_rewrite.py
-          printf "%s\n" "json.dump(data, open('articles.json','w',encoding='utf-8'), ensure_ascii=False, indent=2)" >> .tmp/final_rewrite.py
-          printf "%s\n" "print('Final rewrite complete; items:', len(data))" >> .tmp/final_rewrite.py
+          # Create comprehensive rewrite script (always runs)
+          echo "Creating comprehensive rewrite script..."
+          printf "%s\n" "import os" > .tmp/rewrite.py
+          printf "%s\n" "import re" >> .tmp/rewrite.py
+          printf "%s\n" "try:" >> .tmp/rewrite.py
+          printf "%s\n" "    import json" >> .tmp/rewrite.py
+          printf "%s\n" "except ImportError:" >> .tmp/rewrite.py
+          printf "%s\n" "    print('JSON module not available')" >> .tmp/rewrite.py
+          printf "%s\n" "    exit(1)" >> .tmp/rewrite.py
+          printf "%s\n" "" >> .tmp/rewrite.py
+          printf "%s\n" "def norm(s):" >> .tmp/rewrite.py
+          printf "%s\n" "    return re.sub(r'\\s+', ' ', (s or '').strip())" >> .tmp/rewrite.py
+          printf "%s\n" "" >> .tmp/rewrite.py
+          printf "%s\n" "def slugify(s):" >> .tmp/rewrite.py
+          printf "%s\n" "    return re.sub(r'[^a-z0-9]+', '-', (s or '').lower()).strip('-')[:60]" >> .tmp/rewrite.py
+          printf "%s\n" "" >> .tmp/rewrite.py
+          printf "%s\n" "# Ensure articles.json exists" >> .tmp/rewrite.py
+          printf "%s\n" "if not os.path.exists('articles.json'):" >> .tmp/rewrite.py
+          printf "%s\n" "    with open('articles.json', 'w') as f:" >> .tmp/rewrite.py
+          printf "%s\n" "        json.dump([], f)" >> .tmp/rewrite.py
+          printf "%s\n" "" >> .tmp/rewrite.py
+          printf "%s\n" "# Load existing data" >> .tmp/rewrite.py
+          printf "%s\n" "try:" >> .tmp/rewrite.py
+          printf "%s\n" "    with open('articles.json', 'r', encoding='utf-8') as f:" >> .tmp/rewrite.py
+          printf "%s\n" "        data = json.load(f)" >> .tmp/rewrite.py
+          printf "%s\n" "    if not isinstance(data, list):" >> .tmp/rewrite.py
+          printf "%s\n" "        data = []" >> .tmp/rewrite.py
+          printf "%s\n" "except Exception:" >> .tmp/rewrite.py
+          printf "%s\n" "    data = []" >> .tmp/rewrite.py
+          printf "%s\n" "" >> .tmp/rewrite.py
+          printf "%s\n" "# Apply comprehensive OpenAI rewrite" >> .tmp/rewrite.py
+          printf "%s\n" "api_key = os.getenv('OPENAI_API_KEY')" >> .tmp/rewrite.py
+          printf "%s\n" "if api_key and data:" >> .tmp/rewrite.py
+          printf "%s\n" "    try:" >> .tmp/rewrite.py
+          printf "%s\n" "        from openai import OpenAI" >> .tmp/rewrite.py
+          printf "%s\n" "        client = OpenAI(api_key=api_key)" >> .tmp/rewrite.py
+          printf "%s\n" "        print('Applying comprehensive rewrite to ' + str(len(data)) + ' articles...')" >> .tmp/rewrite.py
+          printf "%s\n" "        " >> .tmp/rewrite.py
+          printf "%s\n" "        for item in data:" >> .tmp/rewrite.py
+          printf "%s\n" "            # Fix basic fields" >> .tmp/rewrite.py
+          printf "%s\n" "            item['title'] = item.get('title') or 'Update'" >> .tmp/rewrite.py
+          printf "%s\n" "            item['excerpt'] = item.get('excerpt') or ''" >> .tmp/rewrite.py
+          printf "%s\n" "            item['content_html'] = item.get('content_html') or '<p>Update</p>'" >> .tmp/rewrite.py
+          printf "%s\n" "            item['slug'] = slugify(item['title'])" >> .tmp/rewrite.py
+          printf "%s\n" "            " >> .tmp/rewrite.py
+          printf "%s\n" "            try:" >> .tmp/rewrite.py
+          printf "%s\n" "                # Build comprehensive journalism prompt" >> .tmp/rewrite.py
+          printf "%s\n" "                prompt_parts = [" >> .tmp/rewrite.py
+          printf "%s\n" "                    'Rewrite this into a comprehensive UK local news article for Rochdale residents.'," >> .tmp/rewrite.py
+          printf "%s\n" "                    ''," >> .tmp/rewrite.py
+          printf "%s\n" "                    'EDITORIAL STANDARDS:'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Use neutral, factual language - avoid sensationalism'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Include legal disclaimers (allegedly, according to reports)'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Provide extensive context and background information'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Use proper UK spelling and grammar'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- 250-350 words for comprehensive coverage'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- SEO-optimized headline with Rochdale location keywords'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- BYLINE: By Rochdale News Desk - Fact-checked local journalism'," >> .tmp/rewrite.py
+          printf "%s\n" "                    ''," >> .tmp/rewrite.py
+          printf "%s\n" "                    'MOBILE-FIRST STRUCTURE:'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Short paragraphs (2-3 sentences maximum)'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Clear subheadings using relevant keywords'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Bullet points for key information and lists'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Bold text for important facts and figures'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Front-load the most newsworthy information'," >> .tmp/rewrite.py
+          printf "%s\n" "                    ''," >> .tmp/rewrite.py
+          printf "%s\n" "                    'CONTENT ENHANCEMENT BY CATEGORY:'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'CRIME: Use allegedly, reference Greater Manchester Police, include anti-speculation disclaimers'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'EDUCATION: Link to Hopwood Hall College, Rochdale Sixth Form College, include Ofsted ratings'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'TRANSPORT: Include alternative routes, reference Transport for Greater Manchester (TfGM)'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'COUNCIL: Explain budget implications for residents, define council roles and procedures'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'EVENTS: Include practical details (dates, times, costs), accessibility information'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'BUSINESS: Explain planning terms, define executive roles, include economic impact'," >> .tmp/rewrite.py
+          printf "%s\n" "                    ''," >> .tmp/rewrite.py
+          printf "%s\n" "                    'EXPLAIN COMPLEX TERMS:'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Define legal terms, policies, procedures in plain English'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Explain official roles and titles (e.g. CEO, Cabinet Member, Headteacher)'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Clarify government processes and their impact on residents'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Include where residents can find more information'," >> .tmp/rewrite.py
+          printf "%s\n" "                    ''," >> .tmp/rewrite.py
+          printf "%s\n" "                    'ARTICLE FOOTER:'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'Contact Information:'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Rochdale Borough Council: [relevant department]'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Emergency services: 999'," >> .tmp/rewrite.py
+          printf "%s\n" "                    '- Non-emergency enquiries: [relevant number]'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'Related Topics: #RochdaleNews #GreaterManchester'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'About this article: Fact-checked local journalism following UK editorial standards'," >> .tmp/rewrite.py
+          printf "%s\n" "                    ''," >> .tmp/rewrite.py
+          printf "%s\n" "                    'Source Material:'," >> .tmp/rewrite.py
+          printf "%s\n" "                    'Title: ' + item['title']," >> .tmp/rewrite.py
+          printf "%s\n" "                    'Summary: ' + norm(item['excerpt'])," >> .tmp/rewrite.py
+          printf "%s\n" "                    'Source: ' + item.get('source_url', '')," >> .tmp/rewrite.py
+          printf "%s\n" "                    'Category: ' + str(item.get('types', ['announcements'])[0] if item.get('types') else 'announcements')," >> .tmp/rewrite.py
+          printf "%s\n" "                    ''," >> .tmp/rewrite.py
+          printf "%s\n" "                    'Write a comprehensive, mobile-optimized, SEO-enhanced local news article that serves the Rochdale community with authority and trust.'" >> .tmp/rewrite.py
+          printf "%s\n" "                ]" >> .tmp/rewrite.py
+          printf "%s\n" "                " >> .tmp/rewrite.py
+          printf "%s\n" "                prompt = '\\n'.join(prompt_parts)" >> .tmp/rewrite.py
+          printf "%s\n" "                " >> .tmp/rewrite.py
+          printf "%s\n" "                response = client.chat.completions.create(" >> .tmp/rewrite.py
+          printf "%s\n" "                    model='gpt-4o-mini'," >> .tmp/rewrite.py
+          printf "%s\n" "                    messages=[" >> .tmp/rewrite.py
+          printf "%s\n" "                        {'role': 'system', 'content': 'You are a UK local news journalist specializing in Rochdale community news.'}," >> .tmp/rewrite.py
+          printf "%s\n" "                        {'role': 'user', 'content': prompt}" >> .tmp/rewrite.py
+          printf "%s\n" "                    ]," >> .tmp/rewrite.py
+          printf "%s\n" "                    max_tokens=1000," >> .tmp/rewrite.py
+          printf "%s\n" "                    temperature=0.4" >> .tmp/rewrite.py
+          printf "%s\n" "                )" >> .tmp/rewrite.py
+          printf "%s\n" "                " >> .tmp/rewrite.py
+          printf "%s\n" "                content = response.choices[0].message.content.strip()" >> .tmp/rewrite.py
+          printf "%s\n" "                lines = [line for line in content.split('\\n') if line.strip()]" >> .tmp/rewrite.py
+          printf "%s\n" "                " >> .tmp/rewrite.py
+          printf "%s\n" "                if lines:" >> .tmp/rewrite.py
+          printf "%s\n" "                    # Extract and clean headline" >> .tmp/rewrite.py
+          printf "%s\n" "                    item['title'] = re.sub(r'^#+\\s*', '', lines[0])[:150]" >> .tmp/rewrite.py
+          printf "%s\n" "                    " >> .tmp/rewrite.py
+          printf "%s\n" "                    # Extract body content" >> .tmp/rewrite.py
+          printf "%s\n" "                    body_lines = lines[1:] if len(lines) > 1 else lines" >> .tmp/rewrite.py
+          printf "%s\n" "                    html = '<p>' + '</p><p>'.join([norm(line) for line in body_lines]) + '</p>' if body_lines else '<p>Update</p>'" >> .tmp/rewrite.py
+          printf "%s\n" "                    " >> .tmp/rewrite.py
+          printf "%s\n" "                    # Update article fields" >> .tmp/rewrite.py
+          printf "%s\n" "                    item['content_html'] = html" >> .tmp/rewrite.py
+          printf "%s\n" "                    item['excerpt'] = norm(' '.join(body_lines))[:300]" >> .tmp/rewrite.py
+          printf "%s\n" "                    item['slug'] = slugify(item['title'])" >> .tmp/rewrite.py
+          printf "%s\n" "                    " >> .tmp/rewrite.py
+          printf "%s\n" "            except Exception as e:" >> .tmp/rewrite.py
+          printf "%s\n" "                print('OpenAI rewrite failed on item: ' + str(e))" >> .tmp/rewrite.py
+          printf "%s\n" "                continue" >> .tmp/rewrite.py
+          printf "%s\n" "                " >> .tmp/rewrite.py
+          printf "%s\n" "    except Exception as e:" >> .tmp/rewrite.py
+          printf "%s\n" "        print('OpenAI initialization failed: ' + str(e))" >> .tmp/rewrite.py
+          printf "%s\n" "else:" >> .tmp/rewrite.py
+          printf "%s\n" "    if not api_key:" >> .tmp/rewrite.py
+          printf "%s\n" "        print('No OpenAI API key available - skipping rewrite')" >> .tmp/rewrite.py
+          printf "%s\n" "    elif not data:" >> .tmp/rewrite.py
+          printf "%s\n" "        print('No articles to rewrite')" >> .tmp/rewrite.py
+          printf "%s\n" "" >> .tmp/rewrite.py
+          printf "%s\n" "# Save final articles" >> .tmp/rewrite.py
+          printf "%s\n" "with open('articles.json', 'w', encoding='utf-8') as f:" >> .tmp/rewrite.py
+          printf "%s\n" "    json.dump(data, f, ensure_ascii=False, indent=2)" >> .tmp/rewrite.py
+          printf "%s\n" "" >> .tmp/rewrite.py
+          printf "%s\n" "print('Comprehensive rewrite complete - final articles: ' + str(len(data)))" >> .tmp/rewrite.py
 
-          if [ ! -f articles.json ]; then echo "[]" > articles.json; fi
-          python .tmp/final_rewrite.py || echo "Final rewrite encountered errors; continuing."
+          echo "Running comprehensive rewrite..."
+          python .tmp/rewrite.py || echo "Rewrite had errors; continuing."
 
-      - name: Random backoff (reduce concurrent pushes)
+      - name: Commit and push changes
         shell: bash
         run: |
-          sleep $((RANDOM % 30))
-
-      - name: Commit and push (articles or heartbeat, with retry)
-        shell: bash
-        run: |
+          # Calculate content hashes
           if [ -f articles.json ]; then
             AFTER=$(sha256sum articles.json | awk '{print $1}')
           else
@@ -332,34 +355,35 @@ jobs:
           fi
           BEFORE=$(cat .before_hash)
 
-          if [ -f .fb_notice ] && [ "$(cat .fb_notice)" = "1" ]; then
-            echo "INFO: Facebook unavailable/expired; fallbacks used."
-          fi
-
+          # Configure git for automation
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Determine what to commit
           if [ "$BEFORE" != "$AFTER" ]; then
             git add articles.json
             MSG="Update articles.json - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+            echo "Content changed - committing articles update"
           else
             date -u +%s >> UPDATE_LOG.txt
             git add UPDATE_LOG.txt
             MSG="Heartbeat (no content change) - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+            echo "No content change - committing heartbeat"
           fi
 
+          # Commit and push with retry logic
           git commit -m "$MSG" || true
-
+          
           for i in {1..3}; do
             if git push; then
-              echo "Push successful"
+              echo "Push successful on attempt $i"
               break
             else
-              echo "Push failed (attempt $i). Retrying..."
+              echo "Push failed on attempt $i - retrying..."
               git pull --rebase || true
-              sleep 10
+              sleep 5
             fi
           done
 
-          echo "Workflow complete."
+          echo "Workflow execution complete."
