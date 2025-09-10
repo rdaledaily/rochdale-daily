@@ -49,7 +49,7 @@ jobs:
           echo "BEFORE_HASH=$(cat .before_hash)"
 
       - name: Restore Facebook storage
-        if: ${{ secrets.FB_STORAGE_B64 != '' }}
+        if: secrets.FB_STORAGE_B64 != ''
         shell: bash
         run: |
           mkdir -p scraper
