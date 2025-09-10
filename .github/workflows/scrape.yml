@@ -12,6 +12,7 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,14 +25,18 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install dependencies (with retry for Playwright)
         shell: bash
         run: |
           python -m pip install --upgrade pip
           pip install playwright openai feedparser beautifulsoup4 requests lxml html5lib
-          # Install with retry logic
           for i in {1..3}; do
-            playwright install chromium && break || sleep 10
+            if playwright install chromium; then
+              break
+            else
+              echo "Playwright install failed (attempt $i). Retrying..."
+              sleep 10
+            fi
           done
 
       - name: Hash articles.json before (if present)
@@ -53,7 +58,7 @@ jobs:
           FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
         run: |
           echo "Running primary scraper with baseline sources: Facebook + RSS + Web"
-          
+
           # Check Facebook availability
           FB_AVAILABLE=1
           if [ -z "$FB_COOKIE" ] || [ -z "$FB_USER_AGENT" ]; then
@@ -64,28 +69,27 @@ jobs:
           else
             echo "Facebook credentials available - Full baseline: Facebook + RSS + Web"
           fi
-          
-          # Always ensure RSS and Web scraping runs regardless of Facebook status
+
+          # Ensure RSS and Web scraping runs regardless of Facebook status
           export FORCE_RSS_WEB=1
-          
-          # Run scraper with timeout
+
+          # Run scraper with timeout; don't fail the job
           timeout 600 python scraper/scraper.py 2>&1 | tee scraper_output.log || {
-            echo "Primary scraper encountered errors"
-            cat scraper_output.log 2>/dev/null || true
+            echo "Primary scraper failed or timed out (continuing to fallback if needed)."
           }
 
-          # Move output to repo root
-          if [ -f scraper/articles.json ]; then 
+          # Normalize output location
+          if [ -f scraper/articles.json ]; then
             mv scraper/articles.json ./articles.json
           fi
 
-          # Log Facebook session status for monitoring
+          # Facebook session status for logs
           FB_NOTICE=0
           if [ "$FB_AVAILABLE" = "0" ]; then
             echo "STATUS: Running with RSS + Web baseline (Facebook unavailable)"
             FB_NOTICE=1
           elif [ ! -f scraper/session.json ] && [ -n "$FB_COOKIE" ]; then
-            echo "WARNING: No Facebook session.json but FB_COOKIE provided - session may have expired"
+            echo "WARNING: No scraper/session.json but FB_COOKIE provided - session may have expired"
             FB_NOTICE=1
           elif [ -f scraper/session.json ]; then
             AGE=$(( ( $(date +%s) - $(date -r scraper/session.json +%s) ) / 86400 ))
@@ -98,454 +102,266 @@ jobs:
           fi
           echo "$FB_NOTICE" > .fb_notice
 
-          # Show scraper log if present
+          # Show logs if present
           if [ -f scraper/scraper.log ]; then
-            echo "Last 50 lines of scraper log:"
-            tail -n 50 scraper/scraper.log 2>/dev/null || true
+            echo "Last 50 lines of scraper/scraper.log:"
+            tail -n 50 scraper/scraper.log || true
+          fi
+          if [ -f scraper_output.log ]; then
+            echo "Last 50 lines of scraper_output.log:"
+            tail -n 50 scraper_output.log || true
           fi
 
-      - name: Check if emergency fallback is needed
-        id: needfb
+      - name: Decide if emergency fallback is needed
+        id: eval
         shell: bash
         run: |
           NEED=0
-          
-          # Only trigger emergency fallback if ALL sources failed completely
           if [ ! -f articles.json ] || [ ! -s articles.json ]; then
             echo "WARNING: No articles.json or file is empty - all baseline sources failed"
             NEED=1
           else
-            # Check if articles.json contains valid data
-            RESULT=$(python3 -c "
+            python <<'PY' > .okflag 2>/dev/null
 import json
 try:
-    with open('articles.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    print('OK' if isinstance(data, list) and len(data) > 0 else 'EMPTY')
+    with open('articles.json','r',encoding='utf-8') as f:
+        data=json.load(f)
+    if isinstance(data,list) and len(data)>0:
+        print("OK", len(data))
+    else:
+        print("EMPTY", 0)
 except Exception:
-    print('EMPTY')
-")
-            if [ "$RESULT" = "EMPTY" ]; then
+    print("EMPTY", 0)
+PY
+            STATUS=$(awk '{print $1}' .okflag 2>/dev/null)
+            COUNT=$(awk '{print $2}' .okflag 2>/dev/null)
+            if [ "$STATUS" = "OK" ]; then
+              echo "SUCCESS: Baseline sources provided ${COUNT:-unknown} articles"
+              NEED=0
+            else
               echo "WARNING: articles.json contains no valid articles - emergency fallback needed"
               NEED=1
-            else
-              echo "SUCCESS: Baseline sources provided $(python3 -c "import json; print(len(json.load(open('articles.json'))))" 2>/dev/null || echo "unknown") articles"
             fi
           fi
-          
           echo "need_emergency_fallback=$NEED" >> "$GITHUB_OUTPUT"
           echo "$NEED" > .need_fallback
-          
-          if [ "$NEED" = "1" ]; then
-            echo "EMERGENCY: Will use Python RSS+Web fallback as last resort"
-          else
-            echo "STATUS: Baseline sources successful - no emergency fallback needed"
-          fi
 
-      - name: Create emergency fallback script
-        if: steps.needfb.outputs.need_emergency_fallback == '1'
+      - name: Create helper scripts (fallback + final rewrite)
         shell: bash
         run: |
           mkdir -p .tmp
-          cat > .tmp/fallback.py << 'FALLBACK_EOF'
+
+          # ---- fallback.py (RSS + Web, attempts OpenAI rewrite) ----
+          cat > .tmp/fallback.py <<'PY'
 import os, re, json, datetime as dt, requests, feedparser
 from bs4 import BeautifulSoup
 
-def norm(s): 
-    return re.sub(r'\s+', ' ', (s or '').strip())
-
-def slugify(s): 
-    return re.sub(r'[^a-z0-9]+', '-', (s or '').lower()).strip('-')[:60]
-
+def norm(s): return re.sub(r'\s+',' ', (s or '').strip())
+def slugify(s): return re.sub(r'[^a-z0-9]+','-', (s or '').lower()).strip('-')[:60]
 def category_for(text):
-    t = (text or '').lower()
-    categories = {
-        'crime': ['arrest', 'police', 'stabbing', 'theft', 'burglary', 'assault', 'violence', 'court', 'knife', 'gun', 'drugs', 'wanted', 'jailed'],
-        'transport': ['bus', 'tram', 'train', 'traffic', 'roadworks', 'closure', 'accident', 'transport', 'highway', 'm62', 'm60', 'bee network', 'parking', 'car park'],
-        'politics': ['council', 'mp', 'election', 'vote', 'government', 'parliament', 'politician', 'policy', 'minister', 'mayor'],
-        'education': ['school', 'college', 'university', 'teacher', 'student', 'exam', 'lesson', 'classroom', 'headteacher', 'ofsted', 'pupil'],
-        'sport': ['football', 'match', 'league', 'team', 'tournament', 'goal', 'player', 'cup', 'rugby', 'cricket'],
-        'events': ['festival', 'concert', 'match', 'tournament', 'fair', 'market', 'fundraiser', 'party', 'gala', 'celebration', 'open day', 'parade', 'show', 'act', 'live music', 'gig', 'performance', 'game', 'event']
-    }
-    for category, keywords in categories.items():
-        if any(keyword in t for keyword in keywords):
-            return category
-    return 'announcements'
+    t=(text or '').lower()
+    C={"crime":["arrest","police","stabbing","theft","burglary","assault","violence","court","knife","gun","drugs","wanted","jailed"],
+       "transport":["bus","tram","train","traffic","roadworks","closure","accident","transport","highway","m62","m60","bee network","parking","car park"],
+       "politics":["council","mp","election","vote","government","parliament","politician","policy","minister","mayor"],
+       "education":["school","college","university","teacher","student","exam","lesson","classroom","headteacher","ofsted","pupil"],
+       "sport":["football","match","league","team","tournament","goal","player","cup","rugby","cricket"],
+       "events":["festival","concert","match","tournament","fair","market","fundraiser","party","gala","celebration","open day","parade","show","act","live music","gig","performance","game","event"]}
+    for k,v in C.items():
+        if any(w in t for w in v): return k
+    return "announcements"
 
-def get_rss_items():
-    rss_feeds = {
-        'rochdale_council': 'https://www.rochdale.gov.uk/news/rss.xml',
-        'gmp_news': 'https://www.gmp.police.uk/news/rss.xml',
-        'bbc_manchester': 'http://feeds.bbci.co.uk/news/england/manchester/rss.xml'
-    }
-    
-    items = []
-    for key, url in rss_feeds.items():
+def rss_items():
+    RSS={"rochdale_council":"https://www.rochdale.gov.uk/news/rss.xml",
+         "gmp_news":"https://www.gmp.police.uk/news/rss.xml",
+         "bbc_manchester":"http://feeds.bbci.co.uk/news/england/manchester/rss.xml"}
+    out=[]
+    for key,url in RSS.items():
         try:
-            feed = feedparser.parse(url)
-            for i, entry in enumerate(feed.entries[:8]):
-                title = norm(getattr(entry, 'title', '') or 'Update')[:150]
-                summary = norm(getattr(entry, 'summary', '') or getattr(entry, 'description', ''))
-                link = getattr(entry, 'link', '') or url
-                
-                if getattr(entry, 'published_parsed', None):
-                    timestamp = dt.datetime(*entry.published_parsed[:6], tzinfo=dt.timezone.utc)
+            feed=feedparser.parse(url)
+            for i,e in enumerate(feed.entries[:8]):
+                title=norm(getattr(e,"title","") or "Update")[:150]
+                summary=norm(getattr(e,"summary","") or getattr(e,"description",""))
+                link=getattr(e,"link","") or url
+                if getattr(e,"published_parsed",None):
+                    ts=dt.datetime(*e.published_parsed[:6], tzinfo=dt.timezone.utc)
                 else:
-                    timestamp = dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)
-                
-                category = category_for(f'{title}. {summary}')
-                html = f'<p>{summary}</p>' if summary else '<p>Update</p>'
-                
-                items.append({
-                    'id': f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-rss-{key}-{i}",
-                    'title': title,
-                    'slug': slugify(title),
-                    'excerpt': summary[:300],
-                    'content_html': html,
-                    'area': 'rochdale',
-                    'types': [category],
-                    'published_at': timestamp.isoformat().replace('+00:00', 'Z'),
-                    'image_url': f'assets/img/placeholder_{category}.jpg',
-                    'source_url': link
+                    ts=dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)
+                cat=category_for(f"{title}. {summary}")
+                html="<p>"+("</p><p>".join([summary] if summary else ["Update"]))+"</p>"
+                out.append({
+                    "id": f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-rss-{key}-{i}",
+                    "title": title,
+                    "slug": slugify(title),
+                    "excerpt": summary[:300],
+                    "content_html": html,
+                    "area": "rochdale",
+                    "types": [cat],
+                    "published_at": ts.isoformat().replace("+00:00","Z"),
+                    "image_url": f"assets/img/placeholder_{cat}.jpg",
+                    "source_url": link
                 })
         except Exception as ex:
-            print(f'RSS error {key}: {ex}')
-    
-    return items
+            print("RSS error", key, ex)
+    return out
 
-def get_web_items():
-    pages = [
-        ('men_rochdale', 'https://www.manchestereveningnews.co.uk/all-about/rochdale'),
-        ('bing_rochdale', 'https://www.bing.com/news/search?q=Rochdale&FORM=EWRE')
-    ]
-    
-    items = []
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-    
-    for name, url in pages:
+def web_items():
+    pages=[("men_rochdale","https://www.manchestereveningnews.co.uk/all-about/rochdale"),
+           ("bing_rochdale","https://www.bing.com/news/search?q=Rochdale&FORM=EWRE")]
+    out=[]
+    headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+    for name,url in pages:
         try:
-            response = requests.get(url, headers=headers, timeout=20)
-            if not response.ok:
+            r=requests.get(url, headers=headers, timeout=20)
+            if not r.ok: 
                 continue
-                
-            soup = BeautifulSoup(response.text, 'html.parser')
-            links = []
-            
-            for a in soup.find_all('a'):
-                href = a.get('href') or ''
-                text = norm(a.get_text(' '))
-                if 'http' in href and len(text) >= 24 and 'javascript:' not in href:
+            soup=BeautifulSoup(r.text,"html.parser")
+            links=[]
+            for a in soup.find_all("a"):
+                href=a.get("href") or ""
+                text=norm(a.get_text(" "))
+                if "http" in href and len(text)>=24 and "javascript:" not in href:
                     links.append((text, href))
-            
-            for i, (text, href) in enumerate(links[:8]):
-                category = category_for(text)
-                items.append({
-                    'id': f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-web-{name}-{i}",
-                    'title': text[:150],
-                    'slug': slugify(text),
-                    'excerpt': text[:300],
-                    'content_html': f'<p>{text}</p>',
-                    'area': 'rochdale',
-                    'types': [category],
-                    'published_at': dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc).isoformat().replace('+00:00', 'Z'),
-                    'image_url': f'assets/img/placeholder_{category}.jpg',
-                    'source_url': href
+            for i,(text,href) in enumerate(links[:8]):
+                cat=category_for(text)
+                out.append({
+                    "id": f"{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}-web-{name}-{i}",
+                    "title": text[:150],
+                    "slug": slugify(text),
+                    "excerpt": text[:300],
+                    "content_html": "<p>"+text+"</p>",
+                    "area": "rochdale",
+                    "types": [cat],
+                    "published_at": dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc).isoformat().replace("+00:00","Z"),
+                    "image_url": f"assets/img/placeholder_{cat}.jpg",
+                    "source_url": href
                 })
         except Exception as ex:
-            print(f'Web error {name}: {ex}')
-    
-    return items
+            print("Web error", name, ex)
+    return out
 
 def rewrite_with_openai(items):
-    if not items:
+    if not items: 
         return items
-    
-    api_key = os.getenv('OPENAI_API_KEY')
-    if not api_key:
-        print('WARNING: OPENAI_API_KEY missing; cannot rewrite.')
+    key=os.getenv("OPENAI_API_KEY")
+    if not key:
+        print("WARNING: OPENAI_API_KEY missing; cannot rewrite.")
         return items
-    
     try:
         from openai import OpenAI
-        client = OpenAI(api_key=api_key)
+        client=OpenAI(api_key=key)
     except Exception as e:
-        print(f'OpenAI init failed: {e}')
+        print("OpenAI init failed:", e)
         return items
-    
-    for item in items:
+    for it in items:
         try:
-            # Build comprehensive prompt
-            prompt_parts = [
-                "Rewrite this into a comprehensive UK local news article for Rochdale residents.",
-                "",
-                "EDITORIAL STANDARDS:",
-                "- Use neutral, factual language - avoid sensationalism",
-                "- Include legal disclaimers (allegedly, according to reports)",
-                "- Provide extensive context and background information", 
-                "- Use proper UK spelling and grammar",
-                "- 250-350 words for comprehensive coverage",
-                "- SEO-optimized headline with location keywords",
-                "- BYLINE: By Rochdale News Desk - Fact-checked local journalism",
-                "",
-                "MOBILE-FIRST STRUCTURE:",
-                "- Short paragraphs (2-3 sentences maximum)",
-                "- Clear subheadings using relevant keywords",
-                "- Bullet points for key information",
-                "- Bold text for important facts and figures",
-                "- Front-load the most important information",
-                "",
-                "USER EXPERIENCE:",
-                "- Include FAQ section if applicable",
-                "- Add clear navigation cues and contact details",
-                "- Use numbered lists for sequential information",
-                "- Add topic tags: #RochdaleCouncil #Transport #Crime etc.",
-                "",
-                "AUTHORITY BUILDING:",
-                "- Include FACT-CHECKED label for complex stories",
-                "- Reference official sources and authorities",
-                "- Follow journalistic ethics standards",
-                "",
-                "CONTENT ENHANCEMENT BY CATEGORY:",
-                "CRIME: Use allegedly, reference Greater Manchester Police, include disclaimers",
-                "EDUCATION: Link to institutions like Hopwood Hall College, include Ofsted ratings",
-                "TRANSPORT: Include alternative routes, reference TfGM",
-                "COUNCIL: Explain budget implications, define council roles",
-                "EVENTS: Include practical details, accessibility information",
-                "",
-                "ARTICLE FOOTER:",
-                "Contact Information:",
-                "- Rochdale Borough Council: [relevant department]",
-                "- Emergency services: 999",
-                "Related Topics: #RochdaleNews #GreaterManchester",
-                "About: Fact-checked local journalism following UK standards",
-                "",
-                f"Source Material:",
-                f"Title: {item['title']}",
-                f"Summary: {item['excerpt']}",
-                f"Source: {item['source_url']}",
-                f"Category: {item.get('types', ['announcements'])[0] if item.get('types') else 'announcements'}",
-                "",
-                "Write a comprehensive, mobile-optimized, SEO-enhanced local news article."
-            ]
-            
-            prompt = "\n".join(prompt_parts)
-            
-            response = client.chat.completions.create(
-                model='gpt-4o-mini',
-                messages=[
-                    {'role': 'system', 'content': 'You are a UK local news journalist.'},
-                    {'role': 'user', 'content': prompt}
-                ],
-                max_tokens=1000,
-                temperature=0.4
-            )
-            
-            content = response.choices[0].message.content.strip()
-            lines = [line for line in content.split('\n') if line.strip()]
-            
+            prompt=("Rewrite this into a concise UK local news article for Rochdale.\n"
+                    "- Neutral tone, UK spelling.\n- 150-220 words.\n"
+                    "- Headline as first line.\n\n"
+                    f"Title: {it['title']}\nSummary: {it['excerpt']}\nSource: {it['source_url']}")
+            resp=client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role":"system","content":"You are a UK local news journalist."},
+                          {"role":"user","content":prompt}],
+                max_tokens=900, temperature=0.4)
+            out=resp.choices[0].message.content.strip()
+            lines=[l for l in out.split("\n") if l.strip()]
             if lines:
-                item['title'] = re.sub(r'^#+\s*', '', lines[0])[:150]
-                body_lines = lines[1:] if len(lines) > 1 else lines
-                html = '<p>' + '</p><p>'.join([norm(line) for line in body_lines]) + '</p>' if body_lines else '<p>Update</p>'
-                item['content_html'] = html
-                item['excerpt'] = norm(' '.join(body_lines))[:300]
-                item['slug'] = slugify(item['title'])
-                
+                it["title"]=re.sub(r"^#+\s*","",lines[0])[:150]
+                body=lines[1:] if len(lines)>1 else lines
+                html="<p>"+"</p><p>".join([norm(l) for l in body])+"</p>" if body else "<p>Update</p>"
+                it["content_html"]=html
+                it["excerpt"]=norm(" ".join(body))[:300]
+                it["slug"]=slugify(it["title"])
         except Exception as e:
-            print(f'OpenAI rewrite failed: {e}')
-    
+            print("OpenAI rewrite failed:", e)
     return items
 
 def main():
-    print('EMERGENCY FALLBACK: Primary scraper failed completely - using RSS+Web only')
-    items = []
-    items.extend(get_rss_items())
-    items.extend(get_web_items())
-    items = rewrite_with_openai(items)
-    
-    with open('articles.json', 'w', encoding='utf-8') as f:
+    print("EMERGENCY FALLBACK: Building from RSS + Web")
+    items=rss_items()+web_items()
+    items=rewrite_with_openai(items)
+    with open("articles.json","w",encoding="utf-8") as f:
         json.dump(items, f, ensure_ascii=False, indent=2)
-    
-    print(f'Emergency fallback wrote {len(items)} items to articles.json')
+    print(f"Fallback wrote {len(items)} items to articles.json")
 
-if __name__ == '__main__':
+if __name__=="__main__":
     main()
-FALLBACK_EOF
+PY
 
-      - name: Run emergency fallback if needed
-        if: steps.needfb.outputs.need_emergency_fallback == '1'
-        shell: bash
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          python .tmp/fallback.py || echo "Emergency fallback builder encountered errors; continuing."
-
-      - name: Final OpenAI rewrite pass (baseline content)
-        shell: bash
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          # Ensure articles.json exists
-          if [ ! -f articles.json ]; then 
-            echo "[]" > articles.json
-          fi
-          
-          echo "Applying final OpenAI rewrite to improve article quality..."
-          
-          # Create and run final rewrite script
-          cat > .tmp/final_rewrite.py << 'REWRITE_EOF'
-import os, json, re, sys
-
-def norm(s): 
-    return re.sub(r'\s+', ' ', (s or '').strip())
-
-def fix_item(item):
-    item['title'] = item.get('title') or 'Update'
-    item['excerpt'] = item.get('excerpt') or ''
-    item['content_html'] = item.get('content_html') or '<p>Update</p>'
-    item['slug'] = re.sub(r'[^a-z0-9]+', '-', item['title'].lower()).strip('-')[:60]
-    return item
-
-# Load existing data
+          # ---- final_rewrite.py (ALWAYS rewrite whatever is in articles.json) ----
+          cat > .tmp/final_rewrite.py <<'PY'
+import os, json, re
+def norm(s): import re as _re; return _re.sub(r'\s+',' ', (s or '').strip())
+def slugify(s): return re.sub(r'[^a-z0-9]+','-', (s or '').lower()).strip('-')[:60]
 try:
-    with open('articles.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    if not isinstance(data, list):
-        data = []
+    data=json.load(open("articles.json","r",encoding="utf-8"))
+    if not isinstance(data,list): data=[]
 except Exception:
-    data = []
-
-api_key = os.getenv('OPENAI_API_KEY')
-if not api_key or not data:
-    print('OpenAI missing or no items; skipping final rewrite.')
-else:
+    data=[]
+key=os.getenv("OPENAI_API_KEY")
+if key and data:
     try:
         from openai import OpenAI
-        client = OpenAI(api_key=api_key)
-        
-        for item in data:
-            item = fix_item(item)
-            
-            # Build comprehensive prompt
-            prompt_parts = [
-                "Rewrite this into a comprehensive UK local news article for Rochdale residents.",
-                "",
-                "EDITORIAL STANDARDS:",
-                "- Use neutral, factual language - avoid sensationalism",
-                "- Include legal disclaimers (allegedly, according to reports)",
-                "- Provide extensive context and background information", 
-                "- Use proper UK spelling and grammar",
-                "- 250-350 words for comprehensive coverage",
-                "- SEO-optimized headline with location keywords",
-                "- BYLINE: By Rochdale News Desk - Fact-checked local journalism",
-                "",
-                "AI-DRIVEN SEO OPTIMIZATION:",
-                "- Focus on user intent - answer what, why, how, when, where questions",
-                "- Include conversational queries people might ask Google",
-                "- Use semantic keywords related to the main topic",
-                "- Structure for featured snippets with clear answers",
-                "- Optimize for local search intent (Rochdale news, near me)",
-                "",
-                "MOBILE-FIRST STRUCTURE:",
-                "- Short paragraphs (2-3 sentences maximum)",
-                "- Clear subheadings using relevant keywords",
-                "- Bullet points for key information",
-                "- Bold text for important facts and figures",
-                "- Front-load the most important information",
-                "",
-                "USER EXPERIENCE ENHANCEMENTS:",
-                "- Include FAQ section if applicable",
-                "- Add clear navigation cues and contact details",
-                "- Use numbered lists for sequential information",
-                "- Add topic tags: #RochdaleCouncil #Transport #Crime etc.",
-                "",
-                "AUTHORITY & TRUST BUILDING:",
-                "- Include FACT-CHECKED label for complex stories",
-                "- Reference official sources and authorities",
-                "- Follow journalistic ethics standards",
-                "- Present multiple viewpoints where appropriate",
-                "",
-                "EXPLAIN COMPLEX TERMS:",
-                "- Define legal terms, policies, procedures in plain English",
-                "- Explain official roles and titles",
-                "- Clarify government processes and procedures",
-                "- Include where residents can find more information",
-                "",
-                "CONTENT ENHANCEMENT BY CATEGORY:",
-                "CRIME: Use allegedly, reference Greater Manchester Police, include disclaimers, explain legal terms",
-                "EDUCATION: Link to Hopwood Hall College etc, include Ofsted ratings, explain education terms",
-                "TRANSPORT: Include alternative routes, reference TfGM, explain transport terms",
-                "COUNCIL: Explain budget implications, define council roles, clarify procedures",
-                "EVENTS: Include practical details, accessibility information, licensing requirements",
-                "BUSINESS: Explain planning terms, define business roles, clarify development processes",
-                "",
-                "MOBILE-OPTIMIZED FORMATTING:",
-                "- Use bold for key facts, figures, important information",
-                "- Use italics for quotes, emphasis, legal terms",
-                "- Break up text with bullet points for key details",
-                "- Include clear subheadings with keywords",
-                "",
-                "ARTICLE FOOTER:",
-                "Contact Information:",
-                "- Rochdale Borough Council: [relevant department]",
-                "- Emergency services: 999",
-                "- Non-emergency enquiries: [relevant number]",
-                "Related Topics: #RochdaleNews #GreaterManchester",
-                "About this article: Fact-checked local journalism following UK editorial standards",
-                "",
-                f"Source Material:",
-                f"Title: {item['title']}",
-                f"Summary: {norm(item['excerpt'])}",
-                f"Source: {item.get('source_url', '')}",
-                f"Category: {item.get('types', ['announcements'])[0] if item.get('types') else 'announcements'}",
-                "",
-                "Write a comprehensive, mobile-optimized, SEO-enhanced local news article that serves the Rochdale community with authority and trust."
-            ]
-            
-            prompt = "\n".join(prompt_parts)
-            
+        client=OpenAI(api_key=key)
+        for it in data:
+            title=(it.get("title") or "Update")[:150]
+            excerpt=norm(it.get("excerpt") or "")
+            src=it.get("source_url","")
+            prompt=("Rewrite this into a concise UK local news article for Rochdale.\n"
+                    "- Neutral tone, UK spelling.\n- 150-220 words.\n"
+                    "- Headline as first line.\n\n"
+                    f"Title: {title}\nSummary: {excerpt}\nSource: {src}")
             try:
-                response = client.chat.completions.create(
-                    model='gpt-4o-mini',
-                    messages=[
-                        {'role': 'system', 'content': 'You are a UK local news journalist.'},
-                        {'role': 'user', 'content': prompt}
-                    ],
-                    max_tokens=1000,
-                    temperature=0.4
-                )
-                
-                content = response.choices[0].message.content.strip()
-                lines = [line for line in content.split('\n') if line.strip()]
-                
+                resp=client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role":"system","content":"You are a UK local news journalist."},
+                              {"role":"user","content":prompt}],
+                    max_tokens=900, temperature=0.4)
+                out=resp.choices[0].message.content.strip()
+                lines=[l for l in out.split("\n") if l.strip()]
                 if lines:
-                    item['title'] = re.sub(r'^#+\s*', '', lines[0])[:150]
-                    body_lines = lines[1:] if len(lines) > 1 else lines
-                    html = '<p>' + '</p><p>'.join([norm(line) for line in body_lines]) + '</p>' if body_lines else '<p>Update</p>'
-                    item['content_html'] = html
-                    item['excerpt'] = norm(' '.join(body_lines))[:300]
-                    item['slug'] = re.sub(r'[^a-z0-9]+', '-', item['title'].lower()).strip('-')[:60]
-                    
+                    it["title"]=re.sub(r"^#+\s*","",lines[0])[:150]
+                    body=lines[1:] if len(lines)>1 else lines
+                    html="<p>"+"</p><p>".join([norm(l) for l in body])+"</p>" if body else "<p>Update</p>"
+                    it["content_html"]=html
+                    it["excerpt"]=norm(" ".join(body))[:300]
+                    it["slug"]=slugify(it["title"])
             except Exception as e:
-                print(f'OpenAI rewrite failed on item: {e}')
-                
+                print("OpenAI rewrite failed on an item:", e)
     except Exception as e:
-        print(f'OpenAI init failed: {e}')
-
-# Save final data
-with open('articles.json', 'w', encoding='utf-8') as f:
+        print("OpenAI init failed:", e)
+else:
+    if not key:
+        print("WARNING: OPENAI_API_KEY missing; skipping final rewrite.")
+with open("articles.json","w",encoding="utf-8") as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
+print("Final rewrite complete; items:", len(data))
+PY
 
-print(f'Final rewrite step complete; items: {len(data)}')
-REWRITE_EOF
-          
-          # Run the final rewrite script
-          python .tmp/final_rewrite.py
+      - name: Run emergency fallback if needed
+        if: ${{ steps.eval.outputs.need_emergency_fallback == '1' }}
+        shell: bash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python .tmp/fallback.py || echo "Emergency fallback encountered errors; continuing."
 
-      - name: Commit and push changes
+      - name: ALWAYS run final OpenAI rewrite pass
+        shell: bash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ ! -f articles.json ]; then echo "[]" > articles.json; fi
+          python .tmp/final_rewrite.py || echo "Final rewrite encountered errors; continuing."
+
+      - name: Random backoff (reduce concurrent pushes)
         shell: bash
         run: |
-          # Calculate hashes
+          sleep $((RANDOM % 30))
+
+      - name: Commit and push (articles or heartbeat, with retry)
+        shell: bash
+        run: |
           if [ -f articles.json ]; then
             AFTER=$(sha256sum articles.json | awk '{print $1}')
           else
@@ -554,17 +370,14 @@ REWRITE_EOF
           fi
           BEFORE=$(cat .before_hash)
 
-          # Report Facebook status in logs
           if [ -f .fb_notice ] && [ "$(cat .fb_notice)" = "1" ]; then
-            echo "INFO: Check logs above for Facebook session status"
+            echo "INFO: Facebook unavailable/expired; fallbacks used."
           fi
 
-          # Configure git
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Determine what to commit
           if [ "$BEFORE" != "$AFTER" ]; then
             git add articles.json
             MSG="Update articles.json - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
@@ -574,15 +387,14 @@ REWRITE_EOF
             MSG="Heartbeat (no content change) - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
           fi
 
-          # Commit and push with retry logic
           git commit -m "$MSG" || true
-          
+
           for i in {1..3}; do
             if git push; then
               echo "Push successful"
               break
             else
-              echo "Push failed, attempt $i, retrying..."
+              echo "Push failed (attempt $i). Retrying..."
               git pull --rebase || true
               sleep 10
             fi
