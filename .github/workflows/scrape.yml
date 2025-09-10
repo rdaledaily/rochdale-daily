@@ -48,6 +48,31 @@ jobs:
           fi
           echo "BEFORE_HASH=$(cat .before_hash)"
 
+      - name: Restore Facebook storage
+        if: ${{ secrets.FB_STORAGE_B64 != '' }}
+        shell: bash
+        run: |
+          mkdir -p scraper
+          echo "${{ secrets.FB_STORAGE_B64 }}" | base64 -d > scraper/session.json
+          
+          # Create verification script using printf (avoiding multi-line Python)
+          printf "%s\n" "try:" > .tmp/verify_session.py
+          printf "%s\n" "    import json" >> .tmp/verify_session.py
+          printf "%s\n" "except ImportError:" >> .tmp/verify_session.py
+          printf "%s\n" "    print('JSON module not available')" >> .tmp/verify_session.py
+          printf "%s\n" "    exit(1)" >> .tmp/verify_session.py
+          printf "%s\n" "" >> .tmp/verify_session.py
+          printf "%s\n" "try:" >> .tmp/verify_session.py
+          printf "%s\n" "    with open('scraper/session.json', 'r', encoding='utf-8') as f:" >> .tmp/verify_session.py
+          printf "%s\n" "        d = json.load(f)" >> .tmp/verify_session.py
+          printf "%s\n" "    cookies_count = len(d.get('cookies', []))" >> .tmp/verify_session.py
+          printf "%s\n" "    origins_count = len(d.get('origins', []))" >> .tmp/verify_session.py
+          printf "%s\n" "    print('Rehydrated cookies: ' + str(cookies_count) + ', origins: ' + str(origins_count))" >> .tmp/verify_session.py
+          printf "%s\n" "except Exception as e:" >> .tmp/verify_session.py
+          printf "%s\n" "    print('Session verification failed: ' + str(e))" >> .tmp/verify_session.py
+          
+          python .tmp/verify_session.py
+
       - name: Primary scraper (Facebook + RSS + Web baseline)
         shell: bash
         env:
