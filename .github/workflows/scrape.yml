@@ -58,16 +58,16 @@ jobs:
         run: |
           echo "Running primary scraper with baseline sources: Facebook + RSS + Web"
 
-          # Require FB secrets for FB scraping; still let scraper proceed with RSS+Web if missing
+          # Facebook availability (still allow scraper to run on RSS+Web)
           if [ -z "$FB_COOKIE" ] || [ -z "$FB_USER_AGENT" ]; then
-            echo "WARNING: Facebook secrets missing - Facebook scraping disabled; baseline is RSS + Web only"
+            echo "WARNING: Facebook secrets missing - Facebook scraping disabled (RSS+Web only)"
             export SKIP_FACEBOOK=1
           else
             echo "Facebook credentials present - FB + RSS + Web enabled"
           fi
           export FORCE_RSS_WEB=1
 
-          # Run scraper with timeout; do not fail the job on error
+          # Run scraper with timeout; do not fail the job
           timeout 600 python scraper/scraper.py 2>&1 | tee scraper_output.log || {
             echo "Primary scraper failed or timed out (continuing to fallback if needed)."
           }
@@ -85,7 +85,7 @@ jobs:
           elif [ ! -f scraper/session.json ]; then
             echo "WARNING: FB cookie set but no scraper/session.json - session may have expired"
             FB_NOTICE=1
-          elif [ -f scraper/session.json ]; then
+          else
             AGE=$(( ( $(date +%s) - $(date -r scraper/session.json +%s) ) / 86400 ))
             if [ "$AGE" -gt 3 ]; then
               echo "WARNING: Facebook session.json is $AGE days old - may need refresh"
@@ -104,13 +104,15 @@ jobs:
             echo "Last 50 lines of scraper_output.log:"; tail -n 50 scraper_output.log || true
           fi
 
-      - name: Fallback to RSS + Web if articles.json missing/invalid (and write helper scripts)
+      - name: Fallback + Final Rewrite (write helper scripts and run)
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Determine if fallback is needed
-          python <<'PY' > .need_fallback
+          mkdir -p .tmp
+
+          # ---- check_json.py: decides whether fallback is needed ----
+          cat > .tmp/check_json.py <<'PY'
 import json, sys
 try:
     with open('articles.json','r',encoding='utf-8') as f:
@@ -120,10 +122,10 @@ except Exception:
     ok = False
 sys.stdout.write('0\n' if ok else '1\n')
 PY
+          python .tmp/check_json.py > .need_fallback
           echo "NEED_FALLBACK=$(cat .need_fallback)"
 
-          # --- Write fallback.py (RSS + Web; attempts OpenAI rewrite) ---
-          mkdir -p .tmp
+          # ---- fallback.py: build items from RSS + Web, then try OpenAI rewrite ----
           cat > .tmp/fallback.py <<'PY'
 import os, re, json, datetime as dt, requests, feedparser
 from bs4 import BeautifulSoup
@@ -267,7 +269,7 @@ PY
             echo "No fallback required."
           fi
 
-          # --- Write final_rewrite.py (ALWAYS run) ---
+          # ---- final_rewrite.py: ALWAYS rewrite whatever is in articles.json ----
           cat > .tmp/final_rewrite.py <<'PY'
 import os, json, re
 def norm(s): import re as _re; return _re.sub(r'\s+',' ', (s or '').strip())
@@ -317,11 +319,7 @@ with open("articles.json","w",encoding="utf-8") as f:
 print("Final rewrite complete; items:", len(data))
 PY
 
-      - name: ALWAYS run final OpenAI rewrite pass
-        shell: bash
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
+          # ALWAYS run final rewrite
           if [ ! -f articles.json ]; then echo "[]" > articles.json; fi
           python .tmp/final_rewrite.py || echo "Final rewrite encountered errors; continuing."
 
