@@ -49,11 +49,13 @@ jobs:
           echo "BEFORE_HASH=$(cat .before_hash)"
 
       - name: Restore Facebook storage
-        if: secrets.FB_STORAGE_B64 != ''
+        if: ${{ env.FB_STORAGE_B64 != '' }}
+        env:
+          FB_STORAGE_B64: ${{ secrets.FB_STORAGE_B64 }}
         shell: bash
         run: |
           mkdir -p scraper
-          echo "${{ secrets.FB_STORAGE_B64 }}" | base64 -d > scraper/session.json
+          echo "$FB_STORAGE_B64" | base64 -d > scraper/session.json
           
           # Create verification script using printf (avoiding multi-line Python)
           printf "%s\n" "try:" > .tmp/verify_session.py
