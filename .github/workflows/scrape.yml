@@ -32,7 +32,6 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          set -e
           python -m pip install --upgrade pip
           pip install playwright openai feedparser beautifulsoup4 requests lxml html5lib tldextract
           playwright install-deps || echo "Playwright system deps install failed; continuing"
@@ -52,38 +51,13 @@ jobs:
         shell: bash
         run: |
           mkdir -p scraper
-          # Write whitelist.json using printf (no heredoc to avoid YAML parser edge cases)
-          printf '%s\n' \
-          '{' \
-          '  "rss": [' \
-          '    "https://www.rochdale.gov.uk/news/rss.xml",' \
-          '    "https://www.gmp.police.uk/news/rss.xml",' \
-          '    "https://feeds.bbci.co.uk/news/england/manchester/rss.xml",' \
-          '    "https://www.manchesterfire.gov.uk/news-events/news/feed/",' \
-          '    "https://www.rochdaleafc.co.uk/news/feed"' \
-          '  ],' \
-          '  "domains": [' \
-          '    "rochdaletimes.co.uk",' \
-          '    "manchestereveningnews.co.uk",' \
-          '    "rochdale.gov.uk",' \
-          '    "gmp.police.uk",' \
-          '    "tfgm.com",' \
-          '    "nhs.uk",' \
-          '    "bbc.co.uk",' \
-          '    "manchesterfire.gov.uk",' \
-          '    "rochdaleafc.co.uk"' \
-          '  ],' \
-          '  "paths_any_of": [' \
-          '    "/rochdale",' \
-          '    "/greater-manchester"' \
-          '  ]' \
-          '}' > scraper/whitelist.json
+          printf '%s\n'           '{'           '  "rss": ['           '    "https://www.rochdale.gov.uk/news/rss.xml",'           '    "https://www.gmp.police.uk/news/rss.xml",'           '    "https://feeds.bbci.co.uk/news/england/manchester/rss.xml",'           '    "https://www.manchesterfire.gov.uk/news-events/news/feed/",'           '    "https://www.rochdaleafc.co.uk/news/feed"'           '  ],'           '  "domains": ['           '    "rochdaletimes.co.uk",'           '    "manchestereveningnews.co.uk",'           '    "rochdale.gov.uk",'           '    "gmp.police.uk",'           '    "tfgm.com",'           '    "nhs.uk",'           '    "bbc.co.uk",'           '    "manchesterfire.gov.uk",'           '    "rochdaleafc.co.uk"'           '  ],'           '  "paths_any_of": ['           '    "/rochdale",'           '    "/greater-manchester"'           '  ]'           '}' > scraper/whitelist.json
           echo "Wrote scraper/whitelist.json"
 
       - name: Enhanced scraper with cross-reference
         shell: bash
         run: |
-          cat > scraper/hybrid_scraper.py <<EOF
+          cat > scraper/hybrid_scraper.py <<'PY'
 import re, os, json, time, logging
 import datetime as dt
 import requests, feedparser, tldextract
@@ -209,7 +183,7 @@ def pull_html_seedlists():
         if u in seen:
             continue
         seen.add(u)
-        if re.search(r'/20\\d{2}/|live-|breaking|rochdale', u.lower()):
+        if re.search(r'/20\d{2}/|live-|breaking|rochdale', u.lower()):
             clean.append(u)
     log.info(f"Found {len(clean)} seed URLs")
     return clean[:60]
@@ -359,7 +333,8 @@ def scrape_local_events():
                     'id': f"{int(time.time())}-event-{i}",
                     'title': title,
                     'slug': slugify(title),
-                    'excerpt': f"{event_date} - {location}\n{description[:200]}",
+                    'excerpt': f"{event_date} - {location}
+{description[:200]}",
                     'content_html': f'<p><strong>Date:</strong> {event_date}</p><p><strong>Location:</strong> {location}</p><p>{description}</p>',
                     'area': 'rochdale',
                     'types': ['events'],
@@ -443,11 +418,11 @@ def cross_reference(items):
     return merged
 
 def filter_bias(items):
-    """
+    '''
     Filter out opinion pieces and national Westminster politics.
     Keep local council/service reporting.
     Flag legally sensitive content.
-    """
+    '''
     DROP_PATTERNS = [
         r'\b(opinion|comment|column|analysis|editorial|leader)\b',
         r'\b(op-ed|thinkpiece)\b',
@@ -507,15 +482,14 @@ def main():
 
 if __name__ == '__main__':
     main()
-EOF
-
+PY
           echo "Running hybrid scraper..."
           python scraper/hybrid_scraper.py || echo "Scraper completed with warnings"
 
       - name: AI Rewrite with UK Legal Compliance
         shell: bash
         run: |
-          cat > ai_rewrite.py <<EOF
+          cat > ai_rewrite.py <<'PY'
 import os, re, json, logging
 from bs4 import BeautifulSoup
 
@@ -546,7 +520,7 @@ if not api_key or not data:
 from openai import OpenAI
 client = OpenAI(api_key=api_key)
 
-EDITORIAL = """
+EDITORIAL = '''
 ROLE: You are a UK local news sub-editor for Rochdale Daily, bound by UK media law and journalistic standards.
 
 ==========================
@@ -605,7 +579,7 @@ Required disclaimers and phrases for crime/court:
 - "[Name] denies the charges and will stand trial."
 - "The victim, who cannot be named for legal reasons..."
 - "A youth, who cannot be named for legal reasons..."
-"""
+'''
 
 log.info(f"Processing {len(data)} articles with AI rewrite...")
 
@@ -643,12 +617,12 @@ Keep it under 150 words.'''
         elif it.get('legal_sensitive'):
             log.warning(f"Legal sensitive rewrite: {it['title']}")
             title = it.get('title') or 'Update'
-            body_text = BeautifulSoup(it.get('content_html', ''), 'lxml').get_text("\\n")
+            body_text = BeautifulSoup(it.get('content_html', ''), 'lxml').get_text("\n")
             sources = it.get('source_urls') or [it.get('source_url', '')]
-            domains = ', '.join(sorted({re.sub(r'^www\\.', '', re.sub(r'^https?://', '', u)).split('/')[0] for u in sources if u}))
+            domains = ', '.join(sorted({re.sub(r'^www\.', '', re.sub(r'^https?://', '', u)).split('/')[0] for u in sources if u}))
             category = it.get('types', ['announcements'])[0] if it.get('types') else 'announcements'
 
-            prompt = f"""{EDITORIAL}
+            prompt = f'''{EDITORIAL}
 
 WARNING: This story involves crime, courts, or sensitive allegations. Strict legal compliance is required.
 
@@ -676,7 +650,7 @@ Legal compliance checklist to satisfy implicitly in the copy:
 
 Sources: {domains}
 Right to Reply: [Names contacted for comment]
-"""
+'''
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
@@ -687,9 +661,9 @@ Right to Reply: [Names contacted for comment]
                 max_tokens=900
             )
             content = response.choices[0].message.content.strip()
-            lines = [l for l in content.split("\\n") if l.strip()]
+            lines = [l for l in content.split("\n") if l.strip()]
             if lines:
-                it['title'] = re.sub(r'^#+\\s*', '', lines[0])[:150]
+                it['title'] = re.sub(r'^#+\s*', '', lines[0])[:150]
                 body_lines = lines[1:] if len(lines) > 1 else []
                 it['content_html'] = '<p>' + '</p><p>'.join([norm(x) for x in body_lines]) + '</p>' if body_lines else '<p>Update</p>'
                 it['excerpt'] = norm(BeautifulSoup(it['content_html'], 'lxml').get_text())[:300]
@@ -701,12 +675,12 @@ Right to Reply: [Names contacted for comment]
 
         else:
             title = it.get('title') or 'Update'
-            body_text = BeautifulSoup(it.get('content_html', ''), 'lxml').get_text("\\n")
+            body_text = BeautifulSoup(it.get('content_html', ''), 'lxml').get_text("\n")
             sources = it.get('source_urls') or [it.get('source_url', '')]
-            domains = ', '.join(sorted({re.sub(r'^www\\.', '', re.sub(r'^https?://', '', u)).split('/')[0] for u in sources if u}))
+            domains = ', '.join(sorted({re.sub(r'^www\.', '', re.sub(r'^https?://', '', u)).split('/')[0] for u in sources if u}))
             category = it.get('types', ['announcements'])[0] if it.get('types') else 'announcements'
 
-            prompt = f"""{EDITORIAL}
+            prompt = f'''{EDITORIAL}
 
 SOURCE TITLE: {title}
 SOURCE SUMMARY: {norm(it.get('excerpt', ''))}
@@ -725,7 +699,7 @@ Write a publishable local news article for Rochdale Daily.
 ---
 Sources: {domains}
 Right to Reply: [Relevant parties were contacted for comment where applicable]
-"""
+'''
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
@@ -736,9 +710,9 @@ Right to Reply: [Relevant parties were contacted for comment where applicable]
                 max_tokens=900
             )
             content = response.choices[0].message.content.strip()
-            lines = [l for l in content.split("\\n") if l.strip()]
+            lines = [l for l in content.split("\n") if l.strip()]
             if lines:
-                it['title'] = re.sub(r'^#+\\s*', '', lines[0])[:150]
+                it['title'] = re.sub(r'^#+\s*', '', lines[0])[:150]
                 body_lines = lines[1:] if len(lines) > 1 else []
                 it['content_html'] = '<p>' + '</p><p>'.join([norm(x) for x in body_lines]) + '</p>' if body_lines else '<p>Update</p>'
                 it['excerpt'] = norm(BeautifulSoup(it['content_html'], 'lxml').get_text())[:300]
@@ -755,8 +729,7 @@ with open('articles.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
 
 log.info(f"Rewrite complete: {len(data)} articles")
-EOF
-
+PY
           echo "Running AI rewrite with UK legal compliance..."
           python ai_rewrite.py || echo "Rewrite completed with warnings"
 
