@@ -51,32 +51,33 @@ jobs:
         shell: bash
         run: |
           mkdir -p scraper
-          cat > scraper/whitelist.json <<'JSONEOF'
-{
-  "rss": [
-    "https://www.rochdale.gov.uk/news/rss.xml",
-    "https://www.gmp.police.uk/news/rss.xml",
-    "https://feeds.bbci.co.uk/news/england/manchester/rss.xml",
-    "https://www.manchesterfire.gov.uk/news-events/news/feed/",
-    "https://www.rochdaleafc.co.uk/news/feed"
-  ],
-  "domains": [
-    "rochdaletimes.co.uk",
-    "manchestereveningnews.co.uk",
-    "rochdale.gov.uk",
-    "gmp.police.uk",
-    "tfgm.com",
-    "nhs.uk",
-    "bbc.co.uk",
-    "manchesterfire.gov.uk",
-    "rochdaleafc.co.uk"
-  ],
-  "paths_any_of": [
-    "/rochdale",
-    "/greater-manchester"
-  ]
-}
-JSONEOF
+          # Write whitelist.json without heredoc (avoids YAML parser false positives)
+          printf '%s\n' \
+          '{' \
+          '  "rss": [' \
+          '    "https://www.rochdale.gov.uk/news/rss.xml",' \
+          '    "https://www.gmp.police.uk/news/rss.xml",' \
+          '    "https://feeds.bbci.co.uk/news/england/manchester/rss.xml",' \
+          '    "https://www.manchesterfire.gov.uk/news-events/news/feed/",' \
+          '    "https://www.rochdaleafc.co.uk/news/feed"' \
+          '  ],' \
+          '  "domains": [' \
+          '    "rochdaletimes.co.uk",' \
+          '    "manchestereveningnews.co.uk",' \
+          '    "rochdale.gov.uk",' \
+          '    "gmp.police.uk",' \
+          '    "tfgm.com",' \
+          '    "nhs.uk",' \
+          '    "bbc.co.uk",' \
+          '    "manchesterfire.gov.uk",' \
+          '    "rochdaleafc.co.uk"' \
+          '  ],' \
+          '  "paths_any_of": [' \
+          '    "/rochdale",' \
+          '    "/greater-manchester"' \
+          '  ]' \
+          '}' > scraper/whitelist.json
+          echo "Wrote scraper/whitelist.json"
 
       - name: Enhanced scraper with cross-reference
         shell: bash
