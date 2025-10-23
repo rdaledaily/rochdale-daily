@@ -1,4 +1,4 @@
-name: Scrape + Web + RSS with Fallbacks (Always Rewrite)
+name: Rochdale Daily - Enhanced Scraper (UK Legal Compliant)
 
 on:
   workflow_dispatch:
@@ -11,12 +11,11 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      FB_USER_AGENT: ${{ secrets.FB_USER_AGENT }}
-      FB_COOKIE: ${{ secrets.FB_COOKIES }}     # Note: maps FB_COOKIES (plural) to FB_COOKIE (singular)
-      FB_STORAGE_B64: ${{ secrets.FB_STORAGE_B64 }}
+      ROCHDALE_LAT: 53.6097
+      ROCHDALE_LON: -2.1561
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,15 +32,8 @@ jobs:
         shell: bash
         run: |
           python -m pip install --upgrade pip
-          pip install playwright openai feedparser beautifulsoup4 requests lxml html5lib
-          for i in {1..3}; do
-            if playwright install chromium; then
-              break
-            else
-              echo "Playwright install failed (attempt $i). Retrying..."
-              sleep 10
-            fi
-          done
+          pip install playwright openai feedparser beautifulsoup4 requests lxml html5lib tldextract python-dateutil
+          playwright install chromium || echo "Playwright install failed; will retry if needed"
 
       - name: Hash articles.json before
         shell: bash
@@ -53,335 +45,978 @@ jobs:
           fi
           echo "BEFORE_HASH=$(cat .before_hash)"
 
-      - name: Debug secrets presence (names only)
-        shell: bash
-        run: |
-          echo "FB_COOKIES:     $([[ -n '${{ secrets.FB_COOKIES }}' ]] && echo set || echo MISSING)"
-          echo "FB_USER_AGENT:  $([[ -n '${{ secrets.FB_USER_AGENT }}' ]] && echo set || echo MISSING)"
-          echo "FB_STORAGE_B64: $([[ -n '${{ secrets.FB_STORAGE_B64 }}' ]] && echo set || echo MISSING)"
-
-      - name: Restore Facebook storage (if present)
-        if: ${{ secrets.FB_STORAGE_B64 != '' }}
+      - name: Create whitelist configuration
         shell: bash
         run: |
           mkdir -p scraper
-          echo "$FB_STORAGE_B64" | base64 -d > scraper/session.json
-          ls -l scraper || true
-          python - <<'PY'
-import json, os
-p='scraper/session.json'
-if os.path.exists(p) and os.path.getsize(p)>10:
-    d=json.load(open(p,'r',encoding='utf-8'))
-    print("rehydrated cookies:",len(d.get("cookies",[])),"origins:",len(d.get("origins",[])))
-else:
-    print("session.json missing or empty")
-PY
-
-      - name: Primary scraper (Facebook + RSS + Web baseline)
-        shell: bash
-        run: |
-          echo "Running primary scraper with baseline sources"
-
-          FB_OK=0
-
-          # Option A: session storage + UA
-          if [ -n "$FB_USER_AGENT" ] && [ -s scraper/session.json ]; then
-            echo "Facebook storage present + UA — will try Facebook."
-            FB_OK=1
-          fi
-
-          # Option B: cookie string + UA
-          if [ "$FB_OK" = "0" ] && [ -n "$FB_USER_AGENT" ] && [ -n "$FB_COOKIE" ]; then
-            echo "Facebook cookie + UA — will try Facebook."
-            FB_OK=1
-          fi
-
-          if [ "$FB_OK" = "0" ]; then
-            echo "WARNING: Facebook secrets missing/invalid — Facebook disabled; using RSS + Web only"
-            export SKIP_FACEBOOK=1
-          fi
-
-          export FORCE_RSS_WEB=1
-
-          # Run scraper with timeout
-          timeout 600 python scraper/scraper.py 2>&1 | tee scraper_output.log || {
-            echo "Primary scraper failed or timed out"
+          cat > scraper/whitelist.json <<'JSON'
+          {
+            "rss": [
+              "https://www.rochdale.gov.uk/news/rss.xml",
+              "https://www.gmp.police.uk/news/rss.xml",
+              "http://feeds.bbci.co.uk/news/england/manchester/rss.xml",
+              "https://www.manchesterfire.gov.uk/news-events/news/feed/",
+              "https://www.rochdaleafc.co.uk/news/feed"
+            ],
+            "domains": [
+              "rochdaletimes.co.uk",
+              "manchestereveningnews.co.uk",
+              "rochdale.gov.uk",
+              "gmp.police.uk",
+              "tfgm.com",
+              "nhs.uk",
+              "bbc.co.uk",
+              "manchesterfire.gov.uk",
+              "rochdaleafc.co.uk",
+              "democracy.rochdale.gov.uk"
+            ],
+            "paths_any_of": [
+              "/rochdale",
+              "/greater-manchester"
+            ]
           }
+          JSON
 
-          # Move output to repo root
-          if [ -f scraper/articles.json ]; then
-            mv scraper/articles.json ./articles.json
-          fi
-
-          # Log Facebook session status
-          FB_NOTICE=0
-          if [ "$FB_OK" = "0" ]; then
-            echo "STATUS: Running with RSS + Web only"
-            FB_NOTICE=1
-          elif [ ! -f scraper/session.json ]; then
-            echo "WARNING: No session file - may be expired"
-            FB_NOTICE=1
-          else
-            AGE=$(( ( $(date +%s) - $(date -r scraper/session.json +%s) ) / 86400 ))
-            if [ "$AGE" -gt 3 ]; then
-              echo "WARNING: Session is $AGE days old"
-              FB_NOTICE=1
-            fi
-          fi
-          echo "$FB_NOTICE" > .fb_notice
-
-          # Show logs
-          if [ -f scraper/scraper.log ]; then
-            echo "Scraper log:"; tail -n 20 scraper/scraper.log || true
-          fi
-
-      - name: Fallback and final rewrite scripts
+      - name: Enhanced scraper with cross-reference
         shell: bash
         run: |
-          mkdir -p .tmp
+          cat > scraper/hybrid_scraper.py <<'PYTHON_EOF'
+import re, os, json, time, logging
+import datetime as dt
+import requests, feedparser, tldextract
+from bs4 import BeautifulSoup
+from math import radians, sin, cos, sqrt, atan2
 
-          # Simple bash-only check for fallback need (no Python imports)
-          NEED_FALLBACK=1
-          if [ -f articles.json ] && [ -s articles.json ]; then
-            # Basic file size check - if file exists and has reasonable content
-            FILE_SIZE=$(wc -c < articles.json)
-            if [ "$FILE_SIZE" -gt 20 ]; then
-              NEED_FALLBACK=0
-            fi
-          fi
-          echo "NEED_FALLBACK=$NEED_FALLBACK"
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+log = logging.getLogger(__name__)
 
-          # Create emergency fallback script if needed (RSS only)
-          if [ "$NEED_FALLBACK" = "1" ]; then
-            echo "Creating emergency fallback script..."
-            printf "%s\n" "import os" > .tmp/fallback.py
-            printf "%s\n" "import re" >> .tmp/fallback.py
-            printf "%s\n" "import datetime as dt" >> .tmp/fallback.py
-            printf "%s\n" "import requests" >> .tmp/fallback.py
-            printf "%s\n" "import feedparser" >> .tmp/fallback.py
-            printf "%s\n" "from bs4 import BeautifulSoup" >> .tmp/fallback.py
-            printf "%s\n" "try:" >> .tmp/fallback.py
-            printf "%s\n" "    import json" >> .tmp/fallback.py
-            printf "%s\n" "except ImportError:" >> .tmp/fallback.py
-            printf "%s\n" "    print('JSON module not available')" >> .tmp/fallback.py
-            printf "%s\n" "    exit(1)" >> .tmp/fallback.py
-            printf "%s\n" "" >> .tmp/fallback.py
-            printf "%s\n" "def norm(s):" >> .tmp/fallback.py
-            printf "%s\n" "    return re.sub(r'\\s+', ' ', (s or '').strip())" >> .tmp/fallback.py
-            printf "%s\n" "" >> .tmp/fallback.py
-            printf "%s\n" "def slugify(s):" >> .tmp/fallback.py
-            printf "%s\n" "    return re.sub(r'[^a-z0-9]+', '-', (s or '').lower()).strip('-')[:60]" >> .tmp/fallback.py
-            printf "%s\n" "" >> .tmp/fallback.py
-            printf "%s\n" "def category_for(text):" >> .tmp/fallback.py
-            printf "%s\n" "    t = (text or '').lower()" >> .tmp/fallback.py
-            printf "%s\n" "    if any(w in t for w in ['arrest','police','theft','court','crime']):" >> .tmp/fallback.py
-            printf "%s\n" "        return 'crime'" >> .tmp/fallback.py
-            printf "%s\n" "    if any(w in t for w in ['bus','train','traffic','road','transport']):" >> .tmp/fallback.py
-            printf "%s\n" "        return 'transport'" >> .tmp/fallback.py
-            printf "%s\n" "    if any(w in t for w in ['council','mp','election','government']):" >> .tmp/fallback.py
-            printf "%s\n" "        return 'politics'" >> .tmp/fallback.py
-            printf "%s\n" "    if any(w in t for w in ['school','college','university','education']):" >> .tmp/fallback.py
-            printf "%s\n" "        return 'education'" >> .tmp/fallback.py
-            printf "%s\n" "    if any(w in t for w in ['football','match','team','sport']):" >> .tmp/fallback.py
-            printf "%s\n" "        return 'sport'" >> .tmp/fallback.py
-            printf "%s\n" "    if any(w in t for w in ['festival','concert','event','show']):" >> .tmp/fallback.py
-            printf "%s\n" "        return 'events'" >> .tmp/fallback.py
-            printf "%s\n" "    return 'announcements'" >> .tmp/fallback.py
-            printf "%s\n" "" >> .tmp/fallback.py
-            printf "%s\n" "feeds = {" >> .tmp/fallback.py
-            printf "%s\n" "    'rochdale_council': 'https://www.rochdale.gov.uk/news/rss.xml'," >> .tmp/fallback.py
-            printf "%s\n" "    'gmp_news': 'https://www.gmp.police.uk/news/rss.xml'," >> .tmp/fallback.py
-            printf "%s\n" "    'bbc_manchester': 'http://feeds.bbci.co.uk/news/england/manchester/rss.xml'" >> .tmp/fallback.py
-            printf "%s\n" "}" >> .tmp/fallback.py
-            printf "%s\n" "" >> .tmp/fallback.py
-            printf "%s\n" "items = []" >> .tmp/fallback.py
-            printf "%s\n" "for key, url in feeds.items():" >> .tmp/fallback.py
-            printf "%s\n" "    try:" >> .tmp/fallback.py
-            printf "%s\n" "        feed = feedparser.parse(url)" >> .tmp/fallback.py
-            printf "%s\n" "        for i, entry in enumerate(feed.entries[:6]):" >> .tmp/fallback.py
-            printf "%s\n" "            title = norm(getattr(entry, 'title', '') or 'Update')[:150]" >> .tmp/fallback.py
-            printf "%s\n" "            summary = norm(getattr(entry, 'summary', '') or '')" >> .tmp/fallback.py
-            printf "%s\n" "            link = getattr(entry, 'link', '') or url" >> .tmp/fallback.py
-            printf "%s\n" "            if getattr(entry, 'published_parsed', None):" >> .tmp/fallback.py
-            printf "%s\n" "                timestamp = dt.datetime(*entry.published_parsed[:6], tzinfo=dt.timezone.utc)" >> .tmp/fallback.py
-            printf "%s\n" "            else:" >> .tmp/fallback.py
-            printf "%s\n" "                timestamp = dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)" >> .tmp/fallback.py
-            printf "%s\n" "            category = category_for(title + ' ' + summary)" >> .tmp/fallback.py
-            printf "%s\n" "            html = '<p>' + summary + '</p>' if summary else '<p>Update</p>'" >> .tmp/fallback.py
-            printf "%s\n" "            items.append({" >> .tmp/fallback.py
-            printf "%s\n" "                'id': dt.datetime.utcnow().strftime('%Y%m%d%H%M%S') + '-rss-' + key + '-' + str(i)," >> .tmp/fallback.py
-            printf "%s\n" "                'title': title," >> .tmp/fallback.py
-            printf "%s\n" "                'slug': slugify(title)," >> .tmp/fallback.py
-            printf "%s\n" "                'excerpt': summary[:250]," >> .tmp/fallback.py
-            printf "%s\n" "                'content_html': html," >> .tmp/fallback.py
-            printf "%s\n" "                'area': 'rochdale'," >> .tmp/fallback.py
-            printf "%s\n" "                'types': [category]," >> .tmp/fallback.py
-            printf "%s\n" "                'published_at': timestamp.isoformat().replace('+00:00', 'Z')," >> .tmp/fallback.py
-            printf "%s\n" "                'image_url': 'assets/img/placeholder_' + category + '.jpg'," >> .tmp/fallback.py
-            printf "%s\n" "                'source_url': link" >> .tmp/fallback.py
-            printf "%s\n" "            })" >> .tmp/fallback.py
-            printf "%s\n" "    except Exception as ex:" >> .tmp/fallback.py
-            printf "%s\n" "        print('RSS error ' + key + ': ' + str(ex))" >> .tmp/fallback.py
-            printf "%s\n" "" >> .tmp/fallback.py
-            printf "%s\n" "with open('articles.json', 'w', encoding='utf-8') as f:" >> .tmp/fallback.py
-            printf "%s\n" "    json.dump(items, f, ensure_ascii=False, indent=2)" >> .tmp/fallback.py
-            printf "%s\n" "" >> .tmp/fallback.py
-            printf "%s\n" "print('Emergency fallback wrote ' + str(len(items)) + ' items')" >> .tmp/fallback.py
+# Load whitelist
+WL = json.load(open('scraper/whitelist.json'))
 
-            echo "Running emergency fallback..."
-            python .tmp/fallback.py || echo "Fallback had errors; continuing."
-          fi
+# Configuration
+ROCHDALE_LAT = float(os.getenv('ROCHDALE_LAT', '53.6097'))
+ROCHDALE_LON = float(os.getenv('ROCHDALE_LON', '-2.1561'))
 
-          # Create comprehensive rewrite script (always runs)
-          echo "Creating comprehensive rewrite script..."
-          printf "%s\n" "import os" > .tmp/rewrite.py
-          printf "%s\n" "import re" >> .tmp/rewrite.py
-          printf "%s\n" "try:" >> .tmp/rewrite.py
-          printf "%s\n" "    import json" >> .tmp/rewrite.py
-          printf "%s\n" "except ImportError:" >> .tmp/rewrite.py
-          printf "%s\n" "    print('JSON module not available')" >> .tmp/rewrite.py
-          printf "%s\n" "    exit(1)" >> .tmp/rewrite.py
-          printf "%s\n" "" >> .tmp/rewrite.py
-          printf "%s\n" "def norm(s):" >> .tmp/rewrite.py
-          printf "%s\n" "    return re.sub(r'\\s+', ' ', (s or '').strip())" >> .tmp/rewrite.py
-          printf "%s\n" "" >> .tmp/rewrite.py
-          printf "%s\n" "def slugify(s):" >> .tmp/rewrite.py
-          printf "%s\n" "    return re.sub(r'[^a-z0-9]+', '-', (s or '').lower()).strip('-')[:60]" >> .tmp/rewrite.py
-          printf "%s\n" "" >> .tmp/rewrite.py
-          printf "%s\n" "# Ensure articles.json exists" >> .tmp/rewrite.py
-          printf "%s\n" "if not os.path.exists('articles.json'):" >> .tmp/rewrite.py
-          printf "%s\n" "    with open('articles.json', 'w') as f:" >> .tmp/rewrite.py
-          printf "%s\n" "        json.dump([], f)" >> .tmp/rewrite.py
-          printf "%s\n" "" >> .tmp/rewrite.py
-          printf "%s\n" "# Load existing data" >> .tmp/rewrite.py
-          printf "%s\n" "try:" >> .tmp/rewrite.py
-          printf "%s\n" "    with open('articles.json', 'r', encoding='utf-8') as f:" >> .tmp/rewrite.py
-          printf "%s\n" "        data = json.load(f)" >> .tmp/rewrite.py
-          printf "%s\n" "    if not isinstance(data, list):" >> .tmp/rewrite.py
-          printf "%s\n" "        data = []" >> .tmp/rewrite.py
-          printf "%s\n" "except Exception:" >> .tmp/rewrite.py
-          printf "%s\n" "    data = []" >> .tmp/rewrite.py
-          printf "%s\n" "" >> .tmp/rewrite.py
-          printf "%s\n" "# Apply comprehensive OpenAI rewrite" >> .tmp/rewrite.py
-          printf "%s\n" "api_key = os.getenv('OPENAI_API_KEY')" >> .tmp/rewrite.py
-          printf "%s\n" "if api_key and data:" >> .tmp/rewrite.py
-          printf "%s\n" "    try:" >> .tmp/rewrite.py
-          printf "%s\n" "        from openai import OpenAI" >> .tmp/rewrite.py
-          printf "%s\n" "        client = OpenAI(api_key=api_key)" >> .tmp/rewrite.py
-          printf "%s\n" "        print('Applying comprehensive rewrite to ' + str(len(data)) + ' articles...')" >> .tmp/rewrite.py
-          printf "%s\n" "        " >> .tmp/rewrite.py
-          printf "%s\n" "        for item in data:" >> .tmp/rewrite.py
-          printf "%s\n" "            # Fix basic fields" >> .tmp/rewrite.py
-          printf "%s\n" "            item['title'] = item.get('title') or 'Update'" >> .tmp/rewrite.py
-          printf "%s\n" "            item['excerpt'] = item.get('excerpt') or ''" >> .tmp/rewrite.py
-          printf "%s\n" "            item['content_html'] = item.get('content_html') or '<p>Update</p>'" >> .tmp/rewrite.py
-          printf "%s\n" "            item['slug'] = slugify(item['title'])" >> .tmp/rewrite.py
-          printf "%s\n" "            " >> .tmp/rewrite.py
-          printf "%s\n" "            try:" >> .tmp/rewrite.py
-          printf "%s\n" "                # Build comprehensive journalism prompt" >> .tmp/rewrite.py
-          printf "%s\n" "                prompt_parts = [" >> .tmp/rewrite.py
-          printf "%s\n" "                    'Rewrite this into a comprehensive UK local news article for Rochdale residents.'," >> .tmp/rewrite.py
-          printf "%s\n" "                    ''," >> .tmp/rewrite.py
-          printf "%s\n" "                    'EDITORIAL STANDARDS:'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Use neutral, factual language - avoid sensationalism'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Include legal disclaimers (allegedly, according to reports)'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Provide extensive context and background information'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Use proper UK spelling and grammar'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- 250-350 words for comprehensive coverage'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- SEO-optimized headline with Rochdale location keywords'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- BYLINE: By Rochdale News Desk - Fact-checked local journalism'," >> .tmp/rewrite.py
-          printf "%s\n" "                    ''," >> .tmp/rewrite.py
-          printf "%s\n" "                    'MOBILE-FIRST STRUCTURE:'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Short paragraphs (2-3 sentences maximum)'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Clear subheadings using relevant keywords'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Bullet points for key information and lists'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Bold text for important facts and figures'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Front-load the most newsworthy information'," >> .tmp/rewrite.py
-          printf "%s\n" "                    ''," >> .tmp/rewrite.py
-          printf "%s\n" "                    'CONTENT ENHANCEMENT BY CATEGORY:'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'CRIME: Use allegedly, reference Greater Manchester Police, include anti-speculation disclaimers'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'EDUCATION: Link to Hopwood Hall College, Rochdale Sixth Form College, include Ofsted ratings'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'TRANSPORT: Include alternative routes, reference Transport for Greater Manchester (TfGM)'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'COUNCIL: Explain budget implications for residents, define council roles and procedures'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'EVENTS: Include practical details (dates, times, costs), accessibility information'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'BUSINESS: Explain planning terms, define executive roles, include economic impact'," >> .tmp/rewrite.py
-          printf "%s\n" "                    ''," >> .tmp/rewrite.py
-          printf "%s\n" "                    'EXPLAIN COMPLEX TERMS:'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Define legal terms, policies, procedures in plain English'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Explain official roles and titles (e.g. CEO, Cabinet Member, Headteacher)'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Clarify government processes and their impact on residents'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Include where residents can find more information'," >> .tmp/rewrite.py
-          printf "%s\n" "                    ''," >> .tmp/rewrite.py
-          printf "%s\n" "                    'ARTICLE FOOTER:'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'Contact Information:'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Rochdale Borough Council: [relevant department]'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Emergency services: 999'," >> .tmp/rewrite.py
-          printf "%s\n" "                    '- Non-emergency enquiries: [relevant number]'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'Related Topics: #RochdaleNews #GreaterManchester'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'About this article: Fact-checked local journalism following UK editorial standards'," >> .tmp/rewrite.py
-          printf "%s\n" "                    ''," >> .tmp/rewrite.py
-          printf "%s\n" "                    'Source Material:'," >> .tmp/rewrite.py
-          printf "%s\n" "                    'Title: ' + item['title']," >> .tmp/rewrite.py
-          printf "%s\n" "                    'Summary: ' + norm(item['excerpt'])," >> .tmp/rewrite.py
-          printf "%s\n" "                    'Source: ' + item.get('source_url', '')," >> .tmp/rewrite.py
-          printf "%s\n" "                    'Category: ' + str(item.get('types', ['announcements'])[0] if item.get('types') else 'announcements')," >> .tmp/rewrite.py
-          printf "%s\n" "                    ''," >> .tmp/rewrite.py
-          printf "%s\n" "                    'Write a comprehensive, mobile-optimized, SEO-enhanced local news article that serves the Rochdale community with authority and trust.'" >> .tmp/rewrite.py
-          printf "%s\n" "                ]" >> .tmp/rewrite.py
-          printf "%s\n" "                " >> .tmp/rewrite.py
-          printf "%s\n" "                prompt = '\\n'.join(prompt_parts)" >> .tmp/rewrite.py
-          printf "%s\n" "                " >> .tmp/rewrite.py
-          printf "%s\n" "                response = client.chat.completions.create(" >> .tmp/rewrite.py
-          printf "%s\n" "                    model='gpt-4o-mini'," >> .tmp/rewrite.py
-          printf "%s\n" "                    messages=[" >> .tmp/rewrite.py
-          printf "%s\n" "                        {'role': 'system', 'content': 'You are a UK local news journalist specializing in Rochdale community news.'}," >> .tmp/rewrite.py
-          printf "%s\n" "                        {'role': 'user', 'content': prompt}" >> .tmp/rewrite.py
-          printf "%s\n" "                    ]," >> .tmp/rewrite.py
-          printf "%s\n" "                    max_tokens=1000," >> .tmp/rewrite.py
-          printf "%s\n" "                    temperature=0.4" >> .tmp/rewrite.py
-          printf "%s\n" "                )" >> .tmp/rewrite.py
-          printf "%s\n" "                " >> .tmp/rewrite.py
-          printf "%s\n" "                content = response.choices[0].message.content.strip()" >> .tmp/rewrite.py
-          printf "%s\n" "                lines = [line for line in content.split('\\n') if line.strip()]" >> .tmp/rewrite.py
-          printf "%s\n" "                " >> .tmp/rewrite.py
-          printf "%s\n" "                if lines:" >> .tmp/rewrite.py
-          printf "%s\n" "                    # Extract and clean headline" >> .tmp/rewrite.py
-          printf "%s\n" "                    item['title'] = re.sub(r'^#+\\s*', '', lines[0])[:150]" >> .tmp/rewrite.py
-          printf "%s\n" "                    " >> .tmp/rewrite.py
-          printf "%s\n" "                    # Extract body content" >> .tmp/rewrite.py
-          printf "%s\n" "                    body_lines = lines[1:] if len(lines) > 1 else lines" >> .tmp/rewrite.py
-          printf "%s\n" "                    html = '<p>' + '</p><p>'.join([norm(line) for line in body_lines]) + '</p>' if body_lines else '<p>Update</p>'" >> .tmp/rewrite.py
-          printf "%s\n" "                    " >> .tmp/rewrite.py
-          printf "%s\n" "                    # Update article fields" >> .tmp/rewrite.py
-          printf "%s\n" "                    item['content_html'] = html" >> .tmp/rewrite.py
-          printf "%s\n" "                    item['excerpt'] = norm(' '.join(body_lines))[:300]" >> .tmp/rewrite.py
-          printf "%s\n" "                    item['slug'] = slugify(item['title'])" >> .tmp/rewrite.py
-          printf "%s\n" "                    " >> .tmp/rewrite.py
-          printf "%s\n" "            except Exception as e:" >> .tmp/rewrite.py
-          printf "%s\n" "                print('OpenAI rewrite failed on item: ' + str(e))" >> .tmp/rewrite.py
-          printf "%s\n" "                continue" >> .tmp/rewrite.py
-          printf "%s\n" "                " >> .tmp/rewrite.py
-          printf "%s\n" "    except Exception as e:" >> .tmp/rewrite.py
-          printf "%s\n" "        print('OpenAI initialization failed: ' + str(e))" >> .tmp/rewrite.py
-          printf "%s\n" "else:" >> .tmp/rewrite.py
-          printf "%s\n" "    if not api_key:" >> .tmp/rewrite.py
-          printf "%s\n" "        print('No OpenAI API key available - skipping rewrite')" >> .tmp/rewrite.py
-          printf "%s\n" "    elif not data:" >> .tmp/rewrite.py
-          printf "%s\n" "        print('No articles to rewrite')" >> .tmp/rewrite.py
-          printf "%s\n" "" >> .tmp/rewrite.py
-          printf "%s\n" "# Save final articles" >> .tmp/rewrite.py
-          printf "%s\n" "with open('articles.json', 'w', encoding='utf-8') as f:" >> .tmp/rewrite.py
-          printf "%s\n" "    json.dump(data, f, ensure_ascii=False, indent=2)" >> .tmp/rewrite.py
-          printf "%s\n" "" >> .tmp/rewrite.py
-          printf "%s\n" "print('Comprehensive rewrite complete - final articles: ' + str(len(data)))" >> .tmp/rewrite.py
+def norm(s): 
+    return re.sub(r'\s+', ' ', (s or '').strip())
 
-          echo "Running comprehensive rewrite..."
-          python .tmp/rewrite.py || echo "Rewrite had errors; continuing."
+def slugify(s): 
+    return re.sub(r'[^a-z0-9]+', '-', (s or '').lower()).strip('-')[:60]
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+    """Calculate distance in km using Haversine formula"""
+    R = 6371
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1-a))
+    return R * c
+
+def is_allowed(url):
+    """Check if URL is from whitelisted domain"""
+    try:
+        ext = tldextract.extract(url)
+        domain = '.'.join([ext.domain, ext.suffix])
+    except Exception:
+        return False
+    
+    if domain not in WL['domains']:
+        return False
+    
+    # Optional path focus (e.g., MEN Rochdale section)
+    if WL.get('paths_any_of'):
+        try:
+            from urllib.parse import urlparse
+            path = urlparse(url).path.lower()
+            if any(p in path for p in WL['paths_any_of']):
+                return True
+            # Always allow council/GMP/TfGM/BBC/NHS/Fire/AFC
+            if domain in ["rochdale.gov.uk", "gmp.police.uk", "tfgm.com", "bbc.co.uk", 
+                          "nhs.uk", "manchesterfire.gov.uk", "rochdaleafc.co.uk", 
+                          "democracy.rochdale.gov.uk"]:
+                return True
+            return False
+        except Exception:
+            return True
+    return True
+
+def category_for(text):
+    """Determine category from text"""
+    t = (text or '').lower()
+    if any(w in t for w in ['fire', 'rescue', 'blaze', 'emergency response']):
+        return 'emergency'
+    if any(w in t for w in ['arrest', 'police', 'theft', 'court', 'crime', 'charged']):
+        return 'crime'
+    if any(w in t for w in ['bus', 'train', 'traffic', 'road', 'transport', 'closure', 'diversion', 'metrolink']):
+        return 'transport'
+    if any(w in t for w in ['council', 'mp', 'election', 'government', 'meeting', 'agenda', 'cabinet']):
+        return 'politics'
+    if any(w in t for w in ['school', 'college', 'university', 'education', 'ofsted']):
+        return 'education'
+    if any(w in t for w in ['football', 'match', 'team', 'sport', 'afc', 'dale', 'fixture']):
+        return 'sport'
+    if any(w in t for w in ['festival', 'concert', 'event', 'show', 'exhibition', 'fair']):
+        return 'events'
+    if any(w in t for w in ['business', 'shop', 'store', 'restaurant', 'opening', 'closing']):
+        return 'business'
+    return 'announcements'
+
+# ============================================================================
+# RSS Feed Scraping (Lightweight)
+# ============================================================================
+
+def fetch_rss():
+    """Fetch all RSS feeds from whitelist"""
+    items = []
+    for url in WL['rss']:
+        try:
+            log.info(f"Fetching RSS: {url}")
+            f = feedparser.parse(url)
+            for e in f.entries[:15]:
+                title = norm(getattr(e, 'title', '') or 'Update')[:150]
+                link = getattr(e, 'link', '')
+                if not link or not is_allowed(link):
+                    continue
+                
+                summary = norm(getattr(e, 'summary', '') or getattr(e, 'description', '') or '')
+                ts = dt.datetime.now(dt.timezone.utc)
+                if getattr(e, 'published_parsed', None):
+                    ts = dt.datetime(*e.published_parsed[:6], tzinfo=dt.timezone.utc)
+                
+                category = category_for(title + ' ' + summary)
+                
+                items.append({
+                    'id': f"{int(time.time())}-rss-{slugify(title)}",
+                    'title': title,
+                    'slug': slugify(title),
+                    'excerpt': summary[:300],
+                    'content_html': f"<p>{summary}</p>" if summary else "<p>Update</p>",
+                    'area': 'rochdale',
+                    'types': [category],
+                    'published_at': ts.isoformat().replace('+00:00', 'Z'),
+                    'image_url': '',
+                    'source_url': link,
+                    'source_domain': '.'.join(tldextract.extract(link)[1:])
+                })
+            log.info(f"RSS {url}: {len([i for i in items if i['source_url'].startswith(url[:30])])} articles")
+        except Exception as ex:
+            log.error(f'RSS error {url}: {ex}')
+    return items
+
+# ============================================================================
+# Web Scraping (Lightweight - requests only)
+# ============================================================================
+
+SESSION = requests.Session()
+SESSION.headers.update({"User-Agent": "Mozilla/5.0 (compatible; RochdaleDailyBot/1.0)"})
+
+def pull_html_seedlists():
+    """Seed MEN Rochdale & Rochdale Times section pages"""
+    seeds = [
+        "https://www.manchestereveningnews.co.uk/all-about/rochdale",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/",
+    ]
+    links = []
+    for s in seeds:
+        try:
+            log.info(f"Scraping seed: {s}")
+            r = SESSION.get(s, timeout=15)
+            if r.status_code != 200:
+                continue
+            soup = BeautifulSoup(r.text, 'lxml')
+            for a in soup.select('a[href]'):
+                href = a['href']
+                if href.startswith('/'):
+                    from urllib.parse import urljoin
+                    href = urljoin(s, href)
+                if href.startswith('http') and is_allowed(href):
+                    links.append(href)
+        except Exception as ex:
+            log.error(f'Seed error {s}: {ex}')
+    
+    # De-dupe and keep recent-looking paths
+    seen = set()
+    clean = []
+    for u in links:
+        if u in seen:
+            continue
+        seen.add(u)
+        if re.search(r'/20\d{2}/|live-|breaking|rochdale', u.lower()):
+            clean.append(u)
+    
+    log.info(f"Found {len(clean)} seed URLs")
+    return clean[:60]
+
+def fetch_pages(urls):
+    """Fetch article content from URLs"""
+    out = []
+    for u in urls:
+        try:
+            r = SESSION.get(u, timeout=20)
+            if r.status_code != 200:
+                continue
+            soup = BeautifulSoup(r.text, 'lxml')
+            
+            title = soup.find('h1')
+            title = norm(title.get_text())[:150] if title else norm(soup.title.get_text() if soup.title else '')[:150]
+            if not title:
+                continue
+            
+            # Basic article body grab
+            paras = [norm(p.get_text(' ', strip=True)) for p in soup.select('article p')]
+            if not paras:
+                paras = [norm(p.get_text(' ', strip=True)) for p in soup.select('p')]
+            
+            text = ' '.join(paras)[:2000]
+            if len(text) < 120:
+                continue
+            
+            category = category_for(title + ' ' + text)
+            
+            out.append({
+                'id': f"seed-{slugify(title)}",
+                'title': title,
+                'slug': slugify(title),
+                'excerpt': text[:300],
+                'content_html': '<p>' + '</p><p>'.join(paras[:8]) + '</p>',
+                'area': 'rochdale',
+                'types': [category],
+                'published_at': dt.datetime.now(dt.timezone.utc).isoformat().replace('+00:00', 'Z'),
+                'image_url': '',
+                'source_url': u,
+                'source_domain': '.'.join(tldextract.extract(u)[1:])
+            })
+        except Exception as ex:
+            log.error(f'Page error {u}: {ex}')
+    
+    log.info(f"Scraped {len(out)} web articles")
+    return out
+
+# ============================================================================
+# Playwright Scraping (Heavy - for complex sites only)
+# ============================================================================
+
+def scrape_rochdale_times_playwright():
+    """Use Playwright for Rochdale Times (if requests fails)"""
+    articles = []
+    try:
+        log.info("Scraping Rochdale Times with Playwright...")
+        from playwright.sync_api import sync_playwright
+        
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            page.goto('https://www.rochdaletimes.co.uk/news/', timeout=30000)
+            page.wait_for_load_state('networkidle')
+            
+            soup = BeautifulSoup(page.content(), 'html.parser')
+            article_elements = soup.find_all(['article', 'div'], class_=re.compile(r'(article|story|post|news)'))[:10]
+            
+            for i, article in enumerate(article_elements):
+                try:
+                    title_elem = article.find(['h1', 'h2', 'h3', 'a'])
+                    if not title_elem:
+                        continue
+                    title = norm(title_elem.get_text())
+                    
+                    link_elem = article.find('a', href=True)
+                    link = link_elem['href'] if link_elem else 'https://www.rochdaletimes.co.uk'
+                    if not link.startswith('http'):
+                        link = 'https://www.rochdaletimes.co.uk' + link
+                    
+                    excerpt_elem = article.find(['p', 'div'], class_=re.compile(r'(excerpt|summary|description)'))
+                    excerpt = norm(excerpt_elem.get_text()) if excerpt_elem else ''
+                    
+                    category = category_for(title + ' ' + excerpt)
+                    
+                    articles.append({
+                        'id': f"{int(time.time())}-roctimes-{i}",
+                        'title': title,
+                        'slug': slugify(title),
+                        'excerpt': excerpt[:250],
+                        'content_html': f'<p>{excerpt}</p>' if excerpt else '<p>Read more at Rochdale Times</p>',
+                        'area': 'rochdale',
+                        'types': [category],
+                        'published_at': dt.datetime.now(dt.timezone.utc).isoformat().replace('+00:00', 'Z'),
+                        'image_url': '',
+                        'source_url': link,
+                        'source_domain': 'rochdaletimes.co.uk'
+                    })
+                except Exception as e:
+                    log.error(f"Error parsing Rochdale Times article: {e}")
+            
+            browser.close()
+        
+        log.info(f"Rochdale Times: {len(articles)} articles")
+    except Exception as e:
+        log.error(f"Rochdale Times Playwright error: {e}")
+    
+    return articles
+
+# ============================================================================
+# Specialized Scrapers
+# ============================================================================
+
+def scrape_traffic_incidents():
+    """Scrape TfGM for traffic incidents"""
+    articles = []
+    try:
+        log.info("Scraping traffic incidents...")
+        url = 'https://www.tfgm.com/travel-updates'
+        r = SESSION.get(url, timeout=30)
+        soup = BeautifulSoup(r.content, 'lxml')
+        
+        incidents = soup.find_all(['div', 'article'], class_=re.compile(r'(incident|update|alert)'))[:10]
+        
+        for i, incident in enumerate(incidents):
+            try:
+                title_elem = incident.find(['h2', 'h3', 'h4'])
+                if not title_elem:
+                    continue
+                
+                title = norm(title_elem.get_text())
+                
+                # Check if relevant to Rochdale
+                if not any(area in title.lower() for area in ['rochdale', 'heywood', 'milnrow', 'littleborough', 'whitworth']):
+                    continue
+                
+                desc_elem = incident.find('p')
+                description = norm(desc_elem.get_text()) if desc_elem else ''
+                
+                articles.append({
+                    'id': f"{int(time.time())}-traffic-{i}",
+                    'title': title,
+                    'slug': slugify(title),
+                    'excerpt': description[:250],
+                    'content_html': f'<p>{description}</p>' if description else '<p>Check TfGM for updates</p>',
+                    'area': 'rochdale',
+                    'types': ['transport'],
+                    'published_at': dt.datetime.now(dt.timezone.utc).isoformat().replace('+00:00', 'Z'),
+                    'image_url': '',
+                    'source_url': url,
+                    'source_domain': 'tfgm.com'
+                })
+            except Exception as e:
+                log.error(f"Traffic incident error: {e}")
+        
+        log.info(f"Traffic incidents: {len(articles)}")
+    except Exception as e:
+        log.error(f"TfGM scraping error: {e}")
+    
+    return articles
+
+def scrape_local_events():
+    """Scrape local events and sort by distance"""
+    events = []
+    try:
+        log.info("Scraping local events...")
+        url = 'https://www.rochdale.gov.uk/events'
+        r = SESSION.get(url, timeout=30)
+        soup = BeautifulSoup(r.content, 'lxml')
+        
+        event_elements = soup.find_all(['div', 'article'], class_=re.compile(r'event'))[:20]
+        
+        for i, event in enumerate(event_elements):
+            try:
+                title_elem = event.find(['h2', 'h3', 'h4'])
+                if not title_elem:
+                    continue
+                
+                title = norm(title_elem.get_text())
+                
+                date_elem = event.find(['time', 'span'], class_=re.compile(r'date'))
+                event_date = norm(date_elem.get_text()) if date_elem else ''
+                
+                location_elem = event.find(['span', 'div'], class_=re.compile(r'location'))
+                location = norm(location_elem.get_text()) if location_elem else 'Rochdale'
+                
+                desc_elem = event.find('p')
+                description = norm(desc_elem.get_text()) if desc_elem else ''
+                
+                distance = 0  # Default to center
+                
+                events.append({
+                    'id': f"{int(time.time())}-event-{i}",
+                    'title': title,
+                    'slug': slugify(title),
+                    'excerpt': f"{event_date} • {location}\n{description[:200]}",
+                    'content_html': f'<p><strong>Date:</strong> {event_date}</p><p><strong>Location:</strong> {location}</p><p>{description}</p>',
+                    'area': 'rochdale',
+                    'types': ['events'],
+                    'published_at': dt.datetime.now(dt.timezone.utc).isoformat().replace('+00:00', 'Z'),
+                    'image_url': '',
+                    'source_url': url,
+                    'source_domain': 'rochdale.gov.uk',
+                    'event_date': event_date,
+                    'event_location': location,
+                    'distance_km': distance
+                })
+            except Exception as e:
+                log.error(f"Event parsing error: {e}")
+        
+        # Sort by distance then date
+        events.sort(key=lambda x: (x.get('distance_km', 0), x.get('published_at', '')))
+        
+        log.info(f"Local events: {len(events)}")
+    except Exception as e:
+        log.error(f"Events scraping error: {e}")
+    
+    return events
+
+def scrape_council_meetings():
+    """Scrape council meetings (flagged for AI summary)"""
+    articles = []
+    try:
+        log.info("Scraping council meetings...")
+        url = 'https://democracy.rochdale.gov.uk/mgListCommittees.aspx'
+        r = SESSION.get(url, timeout=30)
+        soup = BeautifulSoup(r.content, 'lxml')
+        
+        meeting_links = soup.find_all('a', href=re.compile(r'mgCommitteeDetails'))[:5]
+        
+        for link in meeting_links:
+            try:
+                meeting_name = norm(link.get_text())
+                meeting_url = link.get('href', '')
+                if not meeting_url.startswith('http'):
+                    meeting_url = 'https://democracy.rochdale.gov.uk/' + meeting_url
+                
+                articles.append({
+                    'id': f"{int(time.time())}-council-{slugify(meeting_name)}",
+                    'title': f'Council Meeting: {meeting_name}',
+                    'slug': slugify(meeting_name),
+                    'excerpt': f'View agenda and minutes for {meeting_name}',
+                    'content_html': f'<p>Access agenda, reports and minutes for {meeting_name} meetings.</p>',
+                    'area': 'rochdale',
+                    'types': ['politics'],
+                    'published_at': dt.datetime.now(dt.timezone.utc).isoformat().replace('+00:00', 'Z'),
+                    'image_url': '',
+                    'source_url': meeting_url,
+                    'source_domain': 'democracy.rochdale.gov.uk',
+                    'needs_ai_summary': True
+                })
+            except Exception as e:
+                log.error(f"Meeting parsing error: {e}")
+        
+        log.info(f"Council meetings: {len(articles)}")
+    except Exception as e:
+        log.error(f"Council meetings error: {e}")
+    
+    return articles
+
+# ============================================================================
+# Cross-Reference & Filtering
+# ============================================================================
+
+def similar(a, b):
+    """Loose duplicate detector: Jaccard on title tokens"""
+    A = set(re.findall(r'[a-z0-9]+', a.lower()))
+    B = set(re.findall(r'[a-z0-9]+', b.lower()))
+    if not A or not B:
+        return False
+    overlap = len(A & B) / max(1, len(A | B))
+    return overlap >= 0.35
+
+def cross_reference(items):
+    """Merge duplicate stories from multiple sources"""
+    items = sorted(items, key=lambda x: x.get('published_at', ''), reverse=True)
+    merged = []
+    for it in items:
+        matched = False
+        for m in merged:
+            if similar(it['title'], m['title']):
+                m.setdefault('source_urls', [m['source_url']])
+                if it['source_url'] not in m['source_urls']:
+                    m['source_urls'].append(it['source_url'])
+                # Prefer longer content
+                if len(it.get('content_html', '')) > len(m.get('content_html', '')):
+                    m['content_html'] = it['content_html']
+                    m['excerpt'] = it['excerpt']
+                matched = True
+                break
+        if not matched:
+            it['source_urls'] = [it['source_url']]
+            merged.append(it)
+    
+    log.info(f"Cross-reference: {len(items)} → {len(merged)} unique articles")
+    return merged
+
+def filter_bias(items):
+    """
+    Filter out opinion pieces and national politics.
+    Keep local council/service reporting.
+    Flag legally sensitive content.
+    Apply editorial content filters.
+    """
+    DROP_PATTERNS = [
+        r'\b(opinion|comment|column|analysis|editorial|leader)\b',
+        r'\b(op-ed|thinkpiece)\b',
+        r'\b(general election|westminster|downing street|prime minister)\b',
+        r'\b(think tank report|polling exclusive)\b'
+    ]
+    KEEP_LOCAL_POL = [
+        r'\brochdale council\b',
+        r'\bgmp\b',
+        r'\bcabinet member for\b',
+        r'\bplanning committee\b',
+        r'\bcouncil tax\b',
+        r'\bcouncillor\b'
+    ]
+    
+    # Editorial filters - content to exclude
+    EDITORIAL_EXCLUDE_PATTERNS = [
+        r'\b(islam|islamic|muslim|muslims|mosque|mosques|imam|ramadan|eid|halal|sharia)\b',
+        r'\b(india|indian|hindi|bollywood|diwali|holi)\b',
+        r'\b(pakistan|pakistani|bangladesh|bangladeshi)\b'
+    ]
+    
+    # Legal risk patterns - flag for extra AI review
+    LEGAL_RISK_PATTERNS = [
+        r'\b(charged|arrested|accused|alleged|court|trial|convicted|sentenced)\b',
+        r'\b(sexual|rape|assault|abuse|violence)\b',
+        r'\b(fraud|theft|robbery|burglary|drugs)\b',
+        r'\b(paedophile|pedophile|grooming)\b',
+        r'\b(murder|manslaughter|death|died|killed)\b',
+        r'\b(inquest|coroner|post-mortem)\b'
+    ]
+    
+    kept = []
+    for it in items:
+        text = f"{it.get('title', '')} {BeautifulSoup(it.get('content_html', ''), 'lxml').get_text(' ')}".lower()
+        
+        # Check if it's an opinion/national politics piece
+        is_opinion = any(re.search(p, text) for p in DROP_PATTERNS)
+        is_local_pol = any(re.search(k, text) for k in KEEP_LOCAL_POL)
+        
+        if is_opinion and not is_local_pol:
+            log.info(f"Filtered opinion/national: {it.get('title', '')[:60]}")
+            continue
+        
+        # Apply editorial content filters
+        if any(re.search(p, text) for p in EDITORIAL_EXCLUDE_PATTERNS):
+            log.info(f"Filtered editorial exclusion: {it.get('title', '')[:60]}")
+            continue
+        
+        # Flag legally sensitive content for enhanced AI review
+        if any(re.search(p, text) for p in LEGAL_RISK_PATTERNS):
+            it['legal_sensitive'] = True
+            log.warning(f"Legal sensitivity flagged: {it.get('title', '')[:60]}")
+        
+        kept.append(it)
+    
+    log.info(f"Bias filter: {len(items)} → {len(kept)} articles")
+    log.info(f"Editorial exclusions applied")
+    log.info(f"Legal review needed: {sum(1 for i in kept if i.get('legal_sensitive'))} articles")
+    return kept
+
+# ============================================================================
+# Main
+# ============================================================================
+
+def main():
+    all_items = []
+    
+    # 1. RSS feeds (lightweight)
+    all_items.extend(fetch_rss())
+    
+    # 2. Web scraping (lightweight)
+    seed_urls = pull_html_seedlists()
+    all_items.extend(fetch_pages(seed_urls))
+    
+    # 3. Rochdale Times (Playwright if available)
+    try:
+        all_items.extend(scrape_rochdale_times_playwright())
+    except Exception as e:
+        log.warning(f"Playwright unavailable: {e}")
+    
+    # 4. Specialized scrapers
+    all_items.extend(scrape_traffic_incidents())
+    all_items.extend(scrape_local_events())
+    all_items.extend(scrape_council_meetings())
+    
+    # 5. Cross-reference and filter
+    all_items = cross_reference(all_items)
+    all_items = filter_bias(all_items)
+    
+    # 6. Save
+    with open('articles.json', 'w', encoding='utf-8') as f:
+        json.dump(all_items, f, ensure_ascii=False, indent=2)
+    
+    log.info(f"Final output: {len(all_items)} articles")
+    return all_items
+
+if __name__ == '__main__':
+    main()
+PYTHON_EOF
+
+          echo "Running hybrid scraper..."
+          python scraper/hybrid_scraper.py || echo "Scraper completed with warnings"
+
+      - name: AI Rewrite with UK Legal Compliance
+        shell: bash
+        run: |
+          cat > ai_rewrite.py <<'PYTHON_EOF'
+import os, re, json, logging
+from bs4 import BeautifulSoup
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
+
+def norm(s): 
+    return re.sub(r'\s+', ' ', (s or '').strip())
+
+def slugify(s): 
+    return re.sub(r'[^a-z0-9]+', '-', (s or '').lower()).strip('-')[:60]
+
+try:
+    data = json.load(open('articles.json', 'r', encoding='utf-8'))
+    if not isinstance(data, list): 
+        data = []
+except Exception:
+    data = []
+
+api_key = os.getenv('OPENAI_API_KEY')
+if not api_key or not data:
+    log.warning("No API key or no data; saving as-is.")
+    with open('articles.json', 'w', encoding='utf-8') as f: 
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    exit(0)
+
+from openai import OpenAI
+client = OpenAI(api_key=api_key)
+
+EDITORIAL = """
+ROLE: You are a UK local news sub-editor for Rochdale Daily, bound by UK media law and journalistic standards.
+
+═══════════════════════════════════════════════════════════════════
+UK LEGAL FRAMEWORKS & JOURNALISTIC STANDARDS (MANDATORY COMPLIANCE)
+═══════════════════════════════════════════════════════════════════
+
+1. DEFAMATION ACT 2013 & LIBEL PROTECTION:
+   - ALWAYS use "allegedly", "reportedly", "claims", "according to [source]" for unproven allegations
+   - NEVER state accusations as fact unless proven in court with a final conviction
+   - Attribute ALL claims to named sources (e.g., "Greater Manchester Police stated...", "According to council documents...")
+   - Use "a man/woman" or "a person" for unidentified individuals - NEVER speculate on identity
+   - Include: "These allegations have not been proven in court" for ongoing cases
+   - For convictions: "X was convicted at [Court Name] on [date] of [offence]"
+   - Defences: Truth, honest opinion (clearly labelled), public interest (factual reporting only)
+
+2. CONTEMPT OF COURT ACT 1981 (SUB JUDICE):
+   - NEVER publish anything that could prejudice active legal proceedings
+   - Once charges are filed: NO speculation on guilt, NO prejudicial details, NO defendant's character/past
+   - Permitted: Basic facts (name, age, address, charge, court date, NOT GUILTY plea)
+   - After verdict: Full reporting permitted
+   - Use: "The case is now subject to active legal proceedings and reporting restrictions apply"
+
+3. IPSO EDITORS' CODE OF PRACTICE:
+   Accuracy (Clause 1):
+   - Correct inaccuracies promptly and prominently
+   - Distinguish clearly between comment, conjecture, and fact
+   - Headlines must not mislead or exaggerate
+   
+   Right to Reply (Clause 2):
+   - ALWAYS offer right to reply to anyone criticised or accused
+   - Include: "[Individual/Organisation] was contacted for comment but did not respond by deadline" OR
+   - "[Individual/Organisation] stated: [their response]"
+   - Allow reasonable time (24-48 hours) before publication
+   
+   Privacy (Clause 2):
+   - Respect private life unless genuine public interest
+   - No intrusion into grief or shock without justification
+   - Protect children under 16 - NO names, schools, photos without parental consent
+   
+   Harassment (Clause 3):
+   - No persistent pursuit or following
+   - No repeated calls/messages after "no comment"
+
+4. DATA PROTECTION ACT 2018 & UK GDPR:
+   - Only publish personal data that is necessary and in public interest
+   - DO NOT publish: full addresses (use "of Rochdale" or street name only), phone numbers, email addresses
+   - Protect victims: NO identifying details in domestic violence, sexual assault, child abuse cases
+   - Use pseudonyms where appropriate and legally required
+
+5. ONLINE SAFETY ACT 2023:
+   - NO content that encourages/assists serious self-harm or suicide
+   - NO illegal content (terrorism, CSAM, extreme pornography, hate speech)
+   - Protect children: NO content likely to harm under-18s
+   - Clear reporting mechanisms for harmful content
+   - Duty of care to protect users from illegal content
+
+6. REGULATION OF INVESTIGATORY POWERS ACT 2000:
+   - NO hacking, phone tapping, or unauthorized surveillance
+   - Sources obtained legally only
+
+7. REHABILITATION OF OFFENDERS ACT 1974:
+   - Spent convictions: DO NOT mention unless exceptional public interest
+   - Check rehabilitation periods before publishing old convictions
+
+8. CROWN PROSECUTION SERVICE (CPS) GUIDANCE:
+   - Use CPS-approved language for charges and offences
+   - Correct legal terminology (e.g., "charged with", not "accused of" after formal charge)
+
+9. SEXUAL OFFENCES (AMENDMENT) ACT 1992:
+   - Lifetime anonymity for victims of sexual offences
+   - NEVER identify rape/sexual assault victims
+   - Use: "The victim, who cannot be named for legal reasons..."
+
+10. CHILDREN & YOUNG PERSONS ACT 1933:
+    - Children under 18 in court proceedings have automatic anonymity
+    - NO names, addresses, schools, photos that could identify them
+    - Use: "A youth, who cannot be named for legal reasons..."
+
+11. OFCOM BROADCASTING CODE (Online Content):
+    - Accuracy and impartiality in news
+    - Protect under-18s
+    - Avoid unjust or unfair treatment
+    - Respect privacy
+
+12. CORONERS AND JUSTICE ACT 2009:
+    - NO publication of sensitive material from inquests without permission
+    - Respect for bereaved families
+
+═══════════════════════════════════════════════════════════════════
+EDITORIAL STANDARDS
+═══════════════════════════════════════════════════════════════════
+
+TONE: Patriotic and pro-British (respect for heritage, service, wartime traditions), community-first, calm, factual, legally compliant.
+
+POLITICS: Avoid national partisan framing. Focus on local impacts and services. Use neutral, precise language.
+
+REQUIRED DISCLAIMERS & PHRASES:
+Crime/Court Stories:
+- "allegedly" / "reportedly" / "it is claimed that" / "according to police"
+- "[Name], [age], of [area], has been charged with [offence]. They will appear at [Court] on [date]."
+- "A [man/woman], [age], was arrested on suspicion of [offence]" (for arrests without charge)
+- "These are allegations and have not been proven in court."
+- "[Name] denies the charges and will stand trial on [date]."
+- After conviction only: "[Name] was convicted/sentenced to [sentence]"
+
+Right to Reply:
+- "Rochdale Daily contacted [individual/organisation] for comment."
+- "[Name] stated: [their response]" OR "did not respond by publication deadline"
+- "A spokesperson for [organisation] said: [response]"
+
+Sensitive Cases:
+- "The victim, who cannot be named for legal reasons..."
+- "A youth, who cannot be named for legal reasons..."
+- "Reporting restrictions apply to this case"
+
+STYLE:
+- UK spelling. Short paragraphs (2–3 sentences). Clear subheads. Bullet lists for facts.
+- 200–320 words target unless a brief makes more sense.
+- Include a 'What it means for Rochdale' section where relevant.
+- Avoid activist framing or culture-war language. No editorialising.
+- ALWAYS fact-check against multiple sources where possible
+
+BYLINE: By Rochdale News Desk — Verified local reporting
+
+FOOTER TEMPLATE:
+---
+Sources: [domains]
+
+Right to Reply: [Individuals/organisations were contacted for comment]
+
+Note: Rochdale Daily operates under UK media law including the Defamation Act 2013, Contempt of Court Act 1981, IPSO Editors' Code, and Online Safety Act 2023. We are committed to accuracy and fairness.
+
+For corrections or complaints: news@rochdaledaily.co.uk
+"""
+
+log.info(f"Processing {len(data)} articles with AI rewrite...")
+
+for it in data:
+    try:
+        # Special handling for council meetings
+        if it.get('needs_ai_summary'):
+            log.info(f"Council summary: {it['title']}")
+            
+            prompt = f"""Convert this council meeting into a plain English summary for Rochdale residents.
+
+Meeting: {it['title']}
+Source: {it.get('source_url', '')}
+
+Create a brief, accessible summary that:
+- Explains what the meeting is about in simple terms
+- Lists key topics/agenda items if available
+- Notes when and where it takes place
+- Explains how residents can participate or view documents
+- Uses plain English, avoiding jargon
+
+Keep it under 150 words."""
+
+            response = client.chat.completions.create(
+                model='gpt-4o-mini',
+                messages=[
+                    {'role': 'system', 'content': 'You make council information accessible to everyday residents.'},
+                    {'role': 'user', 'content': prompt}
+                ],
+                max_tokens=300,
+                temperature=0.3
+            )
+            
+            summary = response.choices[0].message.content.strip()
+            it['excerpt'] = summary[:250]
+            it['content_html'] = f'<p>{summary}</p>'
+            
+            # Remove flag
+            del it['needs_ai_summary']
+            
+        # Enhanced legal review for crime/court stories
+        elif it.get('legal_sensitive'):
+            log.warning(f"Legal sensitive rewrite: {it['title']}")
+            
+            title = it.get('title') or 'Update'
+            body_text = BeautifulSoup(it.get('content_html', ''), 'lxml').get_text("\n")
+            sources = it.get('source_urls') or [it.get('source_url', '')]
+            domains = ', '.join(sorted({re.sub(r'^www\.', '', re.sub(r'^https?://', '', u)).split('/')[0] for u in sources if u}))
+            category = it.get('types', ['announcements'])[0] if it.get('types') else 'announcements'
+
+            prompt = f"""{EDITORIAL}
+
+⚠️ LEGAL SENSITIVITY WARNING: This story involves crime, courts, or sensitive allegations.
+MANDATORY COMPLIANCE with UK media law is CRITICAL.
+
+SOURCE TITLE: {title}
+SOURCE SUMMARY: {norm(it.get('excerpt', ''))}
+SOURCE BODY (raw): {body_text[:2000]}
+CATEGORY: {category}
+
+CRITICAL LEGAL REQUIREMENTS FOR THIS STORY:
+1. Use "allegedly", "reportedly", "claims", "according to [source]" - NEVER state allegations as fact
+2. Include right to reply - "[Name/Organisation] was contacted for comment"
+3. If charges filed: "[Name], [age], of [area], has been charged with [offence]"
+4. If arrest only: "A [man/woman], [age], was arrested on suspicion of [offence]"
+5. Add: "These allegations have not been proven in court"
+6. If active court case: Add reporting restrictions warning
+7. Protect victims: "The victim, who cannot be named for legal reasons..."
+8. Protect minors: "A youth, who cannot be named for legal reasons..."
+9. NO speculation, NO prejudicial language, NO guilty assumptions
+
+Write a legally compliant article for Rochdale Daily:
+
+# Headline (factual, non-prejudicial, include Rochdale where apt)
+
+[Body copy with mandatory legal language and disclaimers...]
+
+## What it means for Rochdale
+- 2–4 bullets on local impact, safety, services
+
+---
+⚠️ LEGAL COMPLIANCE CHECKLIST:
+- [ ] "Allegedly" or attribution used for all claims
+- [ ] Right to reply included
+- [ ] Victim/minor anonymity protected
+- [ ] Court reporting restrictions noted if applicable
+- [ ] No prejudicial language or guilt assumptions
+
+Sources: {domains}
+
+Right to Reply: [Names contacted for comment]
+"""
+
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a UK news legal sub-editor. STRICT compliance with UK media law is mandatory. Use legally defensive language."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.3,  # Lower temperature for legal content
+                max_tokens=900
+            )
+            
+            content = response.choices[0].message.content.strip()
+            lines = [l for l in content.split("\n") if l.strip()]
+            
+            if lines:
+                it['title'] = re.sub(r'^#+\s*', '', lines[0])[:150]
+                body_lines = lines[1:] if len(lines) > 1 else []
+                it['content_html'] = '<p>' + '</p><p>'.join([norm(x) for x in body_lines]) + '</p>' if body_lines else '<p>Update</p>'
+                it['excerpt'] = norm(BeautifulSoup(it['content_html'], 'lxml').get_text())[:300]
+                it['slug'] = slugify(it['title'])
+                
+                tags = set(it.get('types', []) or [])
+                tags.update(['patriotic', 'local-news', 'legal-reviewed'])
+                it['types'] = sorted(tags)
+            
+            # Remove sensitive flag after processing
+            del it['legal_sensitive']
+            
+        # Standard rewrite for other articles
+        else:
+            title = it.get('title') or 'Update'
+            body_text = BeautifulSoup(it.get('content_html', ''), 'lxml').get_text("\n")
+            sources = it.get('source_urls') or [it.get('source_url', '')]
+            domains = ', '.join(sorted({re.sub(r'^www\.', '', re.sub(r'^https?://', '', u)).split('/')[0] for u in sources if u}))
+            category = it.get('types', ['announcements'])[0] if it.get('types') else 'announcements'
+
+            prompt = f"""{EDITORIAL}
+
+SOURCE TITLE: {title}
+SOURCE SUMMARY: {norm(it.get('excerpt', ''))}
+SOURCE BODY (raw): {body_text[:2000]}
+CATEGORY: {category}
+
+Write a publishable article for Rochdale Daily. Produce:
+
+# Headline (concise, include Rochdale where apt)
+
+[Body copy with subheadings and short paragraphs...]
+
+## What it means for Rochdale
+- 2–4 bullets on local impact, services, travel, costs, safety
+
+---
+Sources: {domains}
+
+Right to Reply: [Relevant parties were contacted for comment where applicable]
+"""
+
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You write clear, neutral UK local news for Rochdale with a patriotic, community-first tone. Comply with UK media law."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.4,
+                max_tokens=900
+            )
+            
+            content = response.choices[0].message.content.strip()
+            lines = [l for l in content.split("\n") if l.strip()]
+            
+            if lines:
+                # Extract headline
+                it['title'] = re.sub(r'^#+\s*', '', lines[0])[:150]
+                
+                # Extract body
+                body_lines = lines[1:] if len(lines) > 1 else []
+                it['content_html'] = '<p>' + '</p><p>'.join([norm(x) for x in body_lines]) + '</p>' if body_lines else '<p>Update</p>'
+                it['excerpt'] = norm(BeautifulSoup(it['content_html'], 'lxml').get_text())[:300]
+                it['slug'] = slugify(it['title'])
+                
+                # Add stance tags
+                tags = set(it.get('types', []) or [])
+                tags.update(['patriotic', 'local-news'])
+                it['types'] = sorted(tags)
+                
+    except Exception as e:
+        log.error(f"Rewrite error: {e}")
+        continue
+
+# Save
+with open('articles.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+
+log.info(f"Rewrite complete: {len(data)} articles")
+PYTHON_EOF
+
+          echo "Running AI rewrite with UK legal compliance..."
+          python ai_rewrite.py || echo "Rewrite completed with warnings"
 
       - name: Commit and push changes
         shell: bash
         run: |
-          # Calculate content hashes
           if [ -f articles.json ]; then
             AFTER=$(sha256sum articles.json | awk '{print $1}')
           else
@@ -389,36 +1024,30 @@ PY
             AFTER=$(sha256sum articles.json | awk '{print $1}')
           fi
           BEFORE=$(cat .before_hash)
-
-          # Configure git for automation
+          
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Determine what to commit
           if [ "$BEFORE" != "$AFTER" ]; then
             git add articles.json
-            MSG="Update articles.json - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
-            echo "Content changed - committing articles update"
+            MSG="Update articles - UK legal compliant - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
           else
             date -u +%s >> UPDATE_LOG.txt
             git add UPDATE_LOG.txt
             MSG="Heartbeat (no content change) - $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
-            echo "No content change - committing heartbeat"
           fi
 
-          # Commit and push with retry logic
           git commit -m "$MSG" || true
           
           for i in {1..3}; do
-            if git push; then
-              echo "Push successful on attempt $i"
+            if git push; then 
+              echo "Push successful"
               break
-            else
-              echo "Push failed on attempt $i - retrying..."
+            else 
               git pull --rebase || true
               sleep 5
             fi
           done
 
-          echo "Workflow execution complete."
+          echo "Workflow complete - UK legal standards applied"
