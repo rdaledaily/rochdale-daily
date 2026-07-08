@@ -104,6 +104,9 @@ FACEBOOK_EVENTS_DISCOVERY_URL = os.getenv(
     "FACEBOOK_EVENTS_DISCOVERY_URL",
     "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149",
 ).strip()
+FACEBOOK_EVENTS_BROWSER_ENABLED = os.getenv(
+    "FACEBOOK_EVENTS_BROWSER_ENABLED", "true"
+).lower() not in {"0", "false", "no", "off"}
 FACEBOOK_EVENTS_MAX = int(os.getenv("FACEBOOK_EVENTS_MAX", "18"))
 FACEBOOK_EVENTS_BROWSER_TIMEOUT_MS = int(
     os.getenv("FACEBOOK_EVENTS_BROWSER_TIMEOUT_MS", "30000")
@@ -1317,6 +1320,13 @@ def collect_facebook_event_discovery_candidates() -> list[Candidate]:
     not automatically republished unless FACEBOOK_EVENT_IMAGE_REUSE=true,
     because public visibility does not itself grant copyright permission.
     """
+    if not FACEBOOK_EVENTS_BROWSER_ENABLED:
+        log.info(
+            "Facebook Events browser collection skipped on this frequent run; "
+            "the hourly browser-enabled run will collect it."
+        )
+        return []
+
     if not FACEBOOK_EVENTS_DISCOVERY_URL:
         return []
 
