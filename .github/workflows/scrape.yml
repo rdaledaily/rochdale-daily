@@ -85,7 +85,154 @@ jobs:
           # cannot cause the scraper to fail at runtime.
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
-      - name: Verify Python dependencies
+      - name: Verify Python dependencies       - name: Verify API credentials
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          python - <<'PY'
+          import os
+          import sys
+          import requests
+          from openai import OpenAI
+
+          def required_secret(name):
+              value = os.getenv(name, "").strip()
+              if not value:
+                  print(f"::error::{name} is missing or empty")
+                  sys.exit(1)
+
+              # Show that it exists without revealing it.
+              print(f"{name}: configured")
+              return value
+
+          def optional_secret(name):
+              value = os.getenv(name, "").strip()
+              if value:
+                  print(f"{name}: configured")
+              else:
+                  print(f"::warning::{name} is not configured")
+              return value
+
+          # ---------------------------------------------------------
+          # OpenAI: required because AI_REWRITE_REQUIRED is true.
+          # This tests the exact model used by the scraper.
+          # ---------------------------------------------------------
+          openai_key = required_secret("OPENAI_API_KEY")
+
+          try:
+              client = OpenAI(api_key=openai_key)
+              response = client.chat.completions.create(
+                  model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+                  messages=[
+                      {
+                          "role": "user",
+                          "content": "Reply with exactly: OK",
+                      }
+                  ],
+                  temperature=0,
+                  max_tokens=3,
+              )
+              result = response.choices[0].message.content or ""
+              print(f"OpenAI API: working — response was {result!r}")
+          except Exception as exc:
+              print(
+                  f"::error::OpenAI API test failed: "
+                  f"{type(exc).__name__}: {exc}"
+              )
+              sys.exit(1)
+
+          # ---------------------------------------------------------
+          # X: tests the same recent-search endpoint as the scraper.
+          # ---------------------------------------------------------
+          x_token = optional_secret("X_BEARER_TOKEN")
+
+          if x_token:
+              response = requests.get(
+                  "https://api.x.com/2/tweets/search/recent",
+                  headers={
+                      "Authorization": f"Bearer {x_token}",
+                  },
+                  params={
+                      "query": "Rochdale -is:retweet",
+                      "max_results": 10,
+                  },
+                  timeout=30,
+              )
+
+              if response.status_code == 200:
+                  print("X API: working")
+              else:
+                  try:
+                      error = response.json()
+                  except Exception:
+                      error = response.text[:300]
+
+                  print(
+                      f"::error::X API failed with "
+                      f"HTTP {response.status_code}: {error}"
+                  )
+                  sys.exit(1)
+
+          # ---------------------------------------------------------
+          # Facebook: test the actual pages configured in the scraper.
+          # Some tokens may work for one page but not another.
+          # ---------------------------------------------------------
+          facebook_token = optional_secret(
+              "FACEBOOK_PAGE_ACCESS_TOKEN"
+          )
+
+          if facebook_token:
+              version = os.getenv(
+                  "FACEBOOK_GRAPH_VERSION",
+                  "v22.0",
+              )
+
+              pages = [
+                  "GMPRochdale",
+                  "rochvalleyradio",
+                  "rochdalecouncil",
+                  "beenetworkgm",
+                  "rochdalesfc",
+              ]
+
+              successes = 0
+
+              for page in pages:
+                  response = requests.get(
+                      (
+                          f"https://graph.facebook.com/"
+                          f"{version}/{page}/posts"
+                      ),
+                      params={
+                          "access_token": facebook_token,
+                          "fields": "id,message,created_time",
+                          "limit": 1,
+                      },
+                      timeout=30,
+                  )
+
+                  if response.status_code == 200:
+                      successes += 1
+                      print(f"Facebook API — {page}: working")
+                  else:
+                      try:
+                          error = response.json()
+                      except Exception:
+                          error = response.text[:300]
+
+                      print(
+                          f"::warning::Facebook API — {page} failed "
+                          f"with HTTP {response.status_code}: {error}"
+                      )
+
+              if successes == 0:
+                  print(
+                      "::error::The Facebook token could not access "
+                      "any configured page"
+                  )
+                  sys.exit(1)
+
+          print("API credential verification completed.")
+          PY
         run: |
           python - <<'PY'
           import bs4
