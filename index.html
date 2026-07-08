@@ -1235,6 +1235,7 @@
 
       return {
         id: String(article.id || `article-${index}`),
+        storyKey: String(article.story_key || ""),
         title: stripMarkdownText(article.title) || "Local news update",
         kicker: stripMarkdownText(article.kicker || article.section || category || "News"),
         category,
@@ -1265,6 +1266,31 @@
         eventLocation: stripMarkdownText(article.event_location || article.venue || ""),
         sourceKind: article.source_kind || "article"
       };
+    }
+
+    function dedupeFeedArticles(items) {
+      const byKey = new Map();
+      for (const article of items) {
+        const key = String(
+          article.story_key
+          || article.id
+          || article.source_url
+          || article.title
+        ).toLowerCase();
+
+        if (!byKey.has(key)) {
+          byKey.set(key, article);
+          continue;
+        }
+
+        const existing = byKey.get(key);
+        const existingTime = new Date(existing.published_at || 0).getTime() || 0;
+        const articleTime = new Date(article.published_at || 0).getTime() || 0;
+        if (articleTime > existingTime) {
+          byKey.set(key, article);
+        }
+      }
+      return Array.from(byKey.values());
     }
 
     function orderArticles(items) {
@@ -1360,13 +1386,19 @@
           if (!Array.isArray(incoming)) continue;
 
           stories = orderArticles(
-            incoming
+            dedupeFeedArticles(incoming)
               .filter(article => !article.status || article.status === "published")
+              .filter(article => !isCareerOrVacancyPost(article))
               .filter(articleHasLocalEvidence)
               .filter(article => {
                 const name = String(article.source_name || "").toLowerCase();
                 const url = String(article.source_url || "").toLowerCase();
-                if (name.includes("rochdale times") || url.includes("rochdaletimes.co.uk")) {
+                if (
+                  name.includes("rochdale times")
+                  || url.includes("rochdaletimes.co.uk")
+                  || name.includes("rochdale online")
+                  || url.includes("rochdaleonline.co.uk")
+                ) {
                   return false;
                 }
                 return isCurrentUKDay(article.published_at || article.updated_at)
@@ -1606,6 +1638,40 @@
       return new RegExp(`\\b(?:${prefixes})\\s+(?:the\\s+)?${escaped}\\b`, "i").test(text)
         || new RegExp(`\\b${escaped}(?:'s)?\\s+(?:${suffixes})\\b`, "i").test(text)
         || new RegExp(`\\b${escaped}\\s*,\\s*(?:Rochdale|Greater Manchester)\\b`, "i").test(text);
+    }
+
+    function isCareerOrVacancyPost(article) {
+      const text = [
+        article.title,
+        article.excerpt,
+        article.summary,
+        article.content_html,
+        article.source_url
+      ].filter(Boolean).join(" ").toLowerCase();
+
+      const patterns = [
+        /\bcareer(s)?\b/i,
+        /\bvacanc(y|ies)\b/i,
+        /\brecruit(ment|ing|er|ers)\b/i,
+        /\b(now|we are|we're) hiring\b/i,
+        /\bapply now\b/i,
+        /\bapplications? (are )?(now )?open\b/i,
+        /\bjoin (our|the) team\b/i,
+        /\bwork (for|with) us\b/i,
+        /\bemployment opportunit(y|ies)\b/i,
+        /\bjob(s)? (available|advert|advertisement|opening|openings|opportunit(y|ies)|listing|listings|role|roles|fair|fairs)\b/i,
+        /\brole(s)? available\b/i,
+        /\bposition(s)? available\b/i,
+        /\bstaff wanted\b/i,
+        /\bsalary\b/i,
+        /\bper annum\b/i,
+        /\bapprenticeship(s)?\b/i,
+        /\binternship(s)?\b/i,
+        /\bgraduate scheme(s)?\b/i,
+        /\/(jobs?|careers?|vacancies?|recruitment|work-for-us)(\/|$)/i
+      ];
+
+      return patterns.some(pattern => pattern.test(text));
     }
 
     function articleHasLocalEvidence(article) {
