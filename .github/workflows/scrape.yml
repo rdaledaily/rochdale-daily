@@ -1,60 +1,167 @@
-name: Update Rochdale Daily articles
+name: Rochdale Daily 15-minute scraper
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/30 * * * *"
+    # Hourly full run: includes the public Facebook Events browser collector.
+    - cron: "7 * * * *"
+    # Three fast news runs per hour: no Chromium or apt installation.
+    - cron: "22,37,52 * * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: rochdale-daily-scraper
-  cancel-in-progress: true
+  group: rochdale-daily-15-minute-scraper
+  cancel-in-progress: false
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
+
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
+      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+      FACEBOOK_GRAPH_VERSION: "v22.0"
+      FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
+      FACEBOOK_EVENTS_MAX: "18"
+      FACEBOOK_EVENT_IMAGE_REUSE: "false"
+      # Browser collection runs hourly and on manual runs. The other three
+      # scheduled checks continue with all non-browser sources.
+      FACEBOOK_EVENTS_BROWSER_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
+      OPENAI_MODEL: "gpt-4o-mini"
+      AI_REWRITE_REQUIRED: "true"
+      MAX_NEWS_AGE_HOURS: "24"
+      ARTICLE_RETENTION_DAYS: "1"
+      MAX_PUBLISHED_ARTICLES: "180"
+      MAX_AI_ARTICLES_PER_RUN: "50"
+      MAX_AI_ARTICLES_INITIAL: "100"
+      RESPECT_ROBOTS: "true"
+      USE_SOURCE_IMAGES: "true"
+      SAME_DAY_ONLY: "true"
+      RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
+      SOCIAL_CONTEXT_ENABLED: "true"
+      FACEBOOK_COMMENTS_ENABLED: "true"
+      SOCIAL_MIN_PUBLIC_REACTIONS: "3"
+      SOCIAL_MAX_PUBLIC_REACTIONS: "12"
+      SOCIAL_MAX_OFFICIAL_UPDATES: "4"
+      X_RECENT_SEARCH_MAX: "100"
+      DISCOVERY_LINKS_PER_SOURCE: "40"
+      RSS_ITEMS_PER_SOURCE: "100"
+      GOOGLE_SEARCH_QUERY_LIMIT: "128"
+      DISCOVERY_PAGE_LIMIT: "3"
+      DISCOVERY_WORKERS: "12"
+      AI_WORKERS: "6"
+      MIN_BALANCED_SELECTION_LIMIT: "40"
+      MAX_SELECTED_PER_SOURCE: "4"
+      MAX_SELECTED_PER_CATEGORY: "8"
+      HTTP_POOL_CONNECTIONS: "64"
+      HTTP_POOL_MAXSIZE: "64"
+      MIN_LIVE_STORIES: "40"
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
 
       - name: Install dependencies
-        shell: bash
         run: |
           python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
 
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          else
-            pip install requests beautifulsoup4 lxml python-dateutil openai
-          fi
+          # PIL is the Python import provided by the Pillow package.
+          # Install it explicitly so an accidentally stale requirements file
+          # cannot cause the scraper to fail at runtime.
+          python -m pip install --no-cache-dir "Pillow>=10,<13"
 
-      - name: Run article scraper
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Verify Python dependencies
+        run: |
+          python - <<'PY'
+          import bs4
+          import dateparser
+          import feedparser
+          import lxml
+          import openai
+          import requests
+
+          from PIL import Image, ImageOps, UnidentifiedImageError
+          from playwright.sync_api import sync_playwright
+
+          print("Dependency verification passed.")
+          print("Pillow version:", Image.__version__)
+          PY
+
+      - name: Restore cached Chromium
+        if: ${{ env.FACEBOOK_EVENTS_BROWSER_ENABLED == 'true' }}
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('requirements.txt') }}
+
+      - name: Install Chromium operating-system dependencies
+        if: ${{ env.FACEBOOK_EVENTS_BROWSER_ENABLED == 'true' }}
+        timeout-minutes: 10
+        run: |
+          python -m playwright install-deps chromium
+
+      - name: Install Chromium browser
+        if: ${{ env.FACEBOOK_EVENTS_BROWSER_ENABLED == 'true' && steps.playwright-cache.outputs.cache-hit != 'true' }}
+        timeout-minutes: 10
+        run: |
+          python -m playwright install chromium
+
+      - name: Confirm Facebook Events browser mode
+        run: |
+          echo "FACEBOOK_EVENTS_BROWSER_ENABLED=${FACEBOOK_EVENTS_BROWSER_ENABLED}"
+
+      - name: Validate locality, identity, coverage, search and rewrite policy
+        run: |
+          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/search_queries.py scraper/rewrite_safety.py scraper/scraper.py
+          python scraper/test_locality.py
+          python scraper/test_story_identity.py
+          python scraper/test_selection_policy.py
+          python scraper/test_search_queries.py
+          python scraper/test_rewrite_safety.py
+
+          # Execute top-level initialisation without running main().
+          # This catches import-order errors that py_compile cannot detect.
+          (
+            cd scraper
+            python -c "import scraper; print('Scraper startup import passed.')"
+          )
+
+      - name: Run Rochdale Daily pipeline
         run: |
           python scraper/scraper.py
 
-      - name: Commit updated public files
-        shell: bash
+      - name: Validate public article feed
+        run: |
+          python -m json.tool articles.json > /dev/null
+
+      - name: Commit updated feed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add articles.json
-          git add index.html category.html heywood.html milnrow.html post.html 2>/dev/null || true
+          git add articles.json scraper_status.json assets/img/generated
 
           if git diff --cached --quiet; then
             echo "No article changes to commit."
-          else
-            git commit -m "Update Rochdale Daily articles"
-            git push
+            exit 0
           fi
+
+          git commit -m "Update Rochdale Daily news feed"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
