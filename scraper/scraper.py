@@ -135,7 +135,11 @@ IMAGE_REUSE_SOURCE_DOMAINS = {
 }
 
 RSS_SOURCES = [
-    {"name": "Rochdale Borough Council", "url": "https://www.rochdale.gov.uk/news/rss.xml", "default_area": "rochdale"},
+    # Generic Rochdale Borough Council institutional news RSS deliberately
+    # omitted: council press releases are not published unless they concern
+    # a specific councillor's vote, resignation, budget decision, or an
+    # actual event (see the Rochdale Council Events / Your Events entries
+    # in DISCOVERY_PAGES below, and civic:council-actions in search_queries.py).
     {"name": "Greater Manchester Police", "url": "https://www.gmp.police.uk/news/rss.xml", "default_area": "rochdale"},
     {"name": "BBC Manchester", "url": "https://feeds.bbci.co.uk/news/england/manchester/rss.xml", "default_area": "rochdale"},
     {
@@ -151,18 +155,15 @@ RSS_SOURCES = [
 ]
 
 DISCOVERY_PAGES = [
-    # Rochdale Borough Council, democracy, planning, consultations and events
-    {"name": "Rochdale Borough Council News", "url": "https://www.rochdale.gov.uk/news", "default_area": "rochdale", "link_pattern": r"/news/article/"},
-    {"name": "Rochdale Council Your News", "url": "https://www.rochdale.gov.uk/yournews", "default_area": "rochdale", "link_pattern": r"/news/|/directory-record/|/events/"},
-    {"name": "Rochdale Council Service Updates", "url": "https://www.rochdale.gov.uk/serviceupdates", "default_area": "rochdale", "link_pattern": r"/"},
+    # Rochdale Borough Council: event listings only. Generic council news,
+    # service updates, consultations, committee/meeting-document pages and
+    # the councillor directory are deliberately NOT crawled here — routine
+    # institutional council content is out of scope unless it concerns a
+    # specific councillor's vote, resignation or budget decision (handled
+    # via civic:council-actions and councillor_query() in search_queries.py)
+    # or is an actual public event (kept below).
     {"name": "Rochdale Council Events", "url": "https://www.rochdale.gov.uk/events", "default_area": "rochdale", "link_pattern": r"/events/event/"},
     {"name": "Rochdale Council Your Events", "url": "https://www.rochdale.gov.uk/yourevents", "default_area": "rochdale", "link_pattern": r"/events/|/directory-record/"},
-    {"name": "Rochdale Council Consultations", "url": "https://consultations.rochdale.gov.uk/consultation_finder/?advanced=1", "default_area": "rochdale", "link_pattern": r"/"},
-    {"name": "Rochdale Council Committees", "url": "https://democracy.rochdale.gov.uk/mgCalendarMonthView.aspx?GL=1&bcr=1", "default_area": "rochdale", "link_pattern": r"mgMeetingAttendance|ieListDocuments|mgCommitteeDetails"},
-    {"name": "Rochdale Council Meeting Documents", "url": "https://democracy.rochdale.gov.uk/ieDocHome.aspx?Categories=", "default_area": "rochdale", "link_pattern": r"ieListDocuments|documents/"},
-    {"name": "Rochdale Councillor Directory", "url": "https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1", "default_area": "rochdale", "link_pattern": r"mgUserInfo.aspx"},
-    {"name": "Rochdale Council Document Search", "url": "https://democracy.rochdale.gov.uk/iedocsearch.aspx?SS=Text+to+search+for&adv=1&fc=1", "default_area": "rochdale", "link_pattern": r"ieListDocuments|documents/|mgAi.aspx"},
-    {"name": "Rochdale Planning Applications", "url": "https://www.rochdale.gov.uk/planningapplications", "default_area": "rochdale", "link_pattern": r"planning|application|publicaccess"},
     {"name": "Rochdale Development Agency", "url": "https://investinrochdale.co.uk/news", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "Visit Rochdale", "url": "https://www.visitrochdale.com/whats-on", "default_area": "rochdale", "link_pattern": r"/whats-on/"},
     {"name": "Rochdale Town Hall Events", "url": "https://www.rochdaletownhall.co.uk/events?page=1", "default_area": "rochdale", "link_pattern": r"/events/event/"},
@@ -404,7 +405,7 @@ CATEGORY_KEYWORDS = {
     "crime": {"arrest", "police", "charged", "court", "burglary", "robbery", "assault", "stabbing", "theft", "fraud", "wanted", "jailed", "murder"},
     "traffic": {"traffic", "roadworks", "road closure", "collision", "crash", "m62", "a627", "junction", "lane closure", "diversion", "congestion"},
     "transport": {"bus", "train", "tram", "metrolink", "bee network", "station", "timetable", "public transport"},
-    "politics": {"council", "councillor", "election", "cabinet", "committee", "planning", "consultation", "mayor", "mp "},
+    "politics": {"councillor", "council budget", "council tax", "election", "cabinet", "mayor", "resigns", "resignation", "steps down", "stands down", "quits", "mp "},
     "education": {"school", "college", "university", "ofsted", "teacher", "pupil", "student", "education"},
     "sport": {"football", "rochdale afc", "hornets", "dale", "match", "fixture", "league", "rugby", "cricket", "boxing"},
     "events": {"festival", "concert", "event", "fair", "market", "open day", "exhibition", "gig", "performance", "parade"},
