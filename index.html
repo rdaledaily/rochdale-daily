@@ -519,7 +519,7 @@
       background: rgba(0,0,0,.72); padding: 35px 15px; overflow: auto;
     }
     .modal.open { display: flex; }
-    .modal-card { width: min(880px, 100%); background: #fff; box-shadow: 0 18px 60px rgba(0,0,0,.35); position: relative; }
+    .modal-card { width: min(1180px, 100%); background: #fff; box-shadow: 0 18px 60px rgba(0,0,0,.35); position: relative; }
     .modal-close { position: sticky; float: right; top: 10px; margin: 10px 10px 0 0; z-index: 2; width: 42px; height: 42px; border: 0; background: #111; color: #fff; font-size: 24px; }
     .modal-image { aspect-ratio: 16/8; object-fit: cover; }
     .article-body { padding: 26px clamp(20px, 5vw, 56px) 42px; }
@@ -530,6 +530,58 @@
     .article-copy p { margin: 0 0 1.15em; }
     .article-share { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
     .article-share button { border: 1px solid #aaa; background: #fff; padding: 8px 11px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
+
+    /* Two-column article layout: main copy + sidebar rail for ads,
+       related stories and the newsletter signup. Collapses to a single
+       column on narrower screens (sidebar content moves below the copy). */
+    .article-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 36px; align-items: start; }
+    .article-sidebar { display: flex; flex-direction: column; gap: 22px; position: sticky; top: 20px; }
+    @media (max-width: 860px) {
+      .article-layout { grid-template-columns: 1fr; }
+      .article-sidebar { position: static; }
+    }
+
+    /* Ad slots: clearly labelled placeholders sized to standard IAB units
+       so a real ad network's script tag can be dropped straight in without
+       any layout rework. Remove the placeholder label/border once real
+       ad code is inserted. */
+    .ad-slot {
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      background: #f2f2f2; border: 1px dashed #b8b8b8; color: #8a8a8a;
+      font-family: "Roboto Condensed", Arial, sans-serif; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em; margin: 0 auto;
+    }
+    .ad-slot-leaderboard { width: 100%; max-width: 728px; height: 90px; margin: 22px auto; }
+    .ad-slot-mrec { width: 300px; height: 250px; }
+    .ad-slot-incontent { width: 100%; max-width: 580px; height: 250px; margin: 28px auto; }
+    @media (max-width: 500px) {
+      .ad-slot-leaderboard { height: 50px; }
+      .ad-slot-leaderboard::after { content: "Ad — 320×50"; }
+    }
+    .ad-slot-leaderboard::after { content: "Ad — 728×90"; }
+    .ad-slot-mrec::after { content: "Ad — 300×250"; }
+    .ad-slot-incontent::after { content: "Ad — 300×250"; }
+
+    .sidebar-box { border: 1px solid var(--line); padding: 18px; }
+    .sidebar-box h3 { margin: 0 0 12px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 3px solid var(--yellow); padding-bottom: 8px; }
+    .related-story { display: flex; gap: 10px; margin-bottom: 12px; text-decoration: none; color: inherit; cursor: pointer; }
+    .related-story:last-child { margin-bottom: 0; }
+    .related-story img { width: 72px; height: 54px; object-fit: cover; flex-shrink: 0; }
+    .related-story .related-title { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 14px; line-height: 1.25; font-weight: 700; }
+
+    .newsletter-box { background: var(--black); color: #fff; padding: 20px; }
+    .newsletter-box h3 { margin: 0 0 8px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 16px; text-transform: uppercase; color: var(--yellow); }
+    .newsletter-box p { margin: 0 0 12px; font-size: 13px; color: #cfcfcf; }
+    .newsletter-form { display: flex; flex-direction: column; gap: 8px; }
+    .newsletter-form input[type="email"] { padding: 10px; border: 1px solid #444; background: #1c1c1c; color: #fff; font-size: 14px; }
+    .newsletter-form button { padding: 10px; border: 0; background: var(--yellow); color: #111; font-weight: 900; text-transform: uppercase; font-size: 13px; cursor: pointer; }
+    .newsletter-form button:hover { background: var(--yellow-dark); }
+    .newsletter-note { font-size: 11px; color: #8f8f8f; margin-top: 8px; }
+    .newsletter-status { font-size: 12px; margin-top: 8px; min-height: 1em; }
+
+    .comments-section { margin-top: 36px; padding-top: 28px; border-top: 3px solid var(--black); }
+    .comments-section h3 { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 20px; text-transform: uppercase; margin: 0 0 14px; }
+    .comments-fallback { font-size: 13px; color: var(--muted); background: var(--soft); padding: 14px; }
 
     .search-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,.82); z-index: 950; display: none; align-items: flex-start; justify-content: center; padding: 85px 15px;
@@ -618,6 +670,10 @@
   </style>
 </head>
 <body>
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v19.0&appId=REPLACE_WITH_YOUR_FACEBOOK_APP_ID">
+  </script>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
 
@@ -1169,6 +1225,14 @@
       return Math.max(0, Math.round((Date.now() - timestamp) / 60000));
     }
 
+    function slugify(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 90);
+    }
+
     function stripMarkdownText(value) {
       return String(value || "")
         .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
@@ -1235,6 +1299,7 @@
 
       return {
         id: String(article.id || `article-${index}`),
+        slug: String(article.slug || slugify(article.title) || article.id || `article-${index}`),
         storyKey: String(article.story_key || ""),
         title: stripMarkdownText(article.title) || "Local news update",
         kicker: stripMarkdownText(article.kicker || article.section || category || "News"),
@@ -1449,6 +1514,7 @@
     let activeCategory = "all";
     let activeArea = "all";
     let lastFocusedElement = null;
+    const homeUrl = location.pathname + location.search;
 
     const daysFromNow = (offset, hour = 18, minute = 30) => {
       const date = new Date();
@@ -1474,7 +1540,7 @@
     }
 
     function storyButton(story, content, className = "story-link") {
-      return `<a href="#article-${story.id}" class="${className}" data-open-article="${story.id}">${content}</a>`;
+      return `<a href="articles/${story.slug}.html" class="${className}" data-open-article="${story.id}">${content}</a>`;
     }
 
     function renderTopStories() {
@@ -1801,40 +1867,132 @@
       </section>`;
     }
 
+    function relatedStoriesMarkup(story) {
+      const related = stories
+        .filter(item => item.id !== story.id && item.category === story.category)
+        .slice(0, 3);
+      if (!related.length) return "";
+      return `<div class="sidebar-box">
+        <h3>More in ${areaLabel(story.area)} ${story.category}</h3>
+        ${related.map(item => {
+          const fallback = item.imageFallback || stockImage(item.category || "news");
+          return `<div class="related-story" data-open-article="${item.id}" role="button" tabindex="0">
+            <img src="${item.image}" alt="" onerror="this.onerror=null;this.src='${fallback}'">
+            <span class="related-title">${item.title}</span>
+          </div>`;
+        }).join("")}
+      </div>`;
+    }
+
+    function newsletterBoxMarkup() {
+      return `<div class="sidebar-box newsletter-box">
+        <h3>Get the morning briefing</h3>
+        <p>One free email a day with Rochdale's top stories. No spam.</p>
+        <form class="newsletter-form" data-newsletter-form onsubmit="return false;">
+          <input type="email" name="email" placeholder="you@example.com" required autocomplete="email">
+          <button type="submit">Sign up free</button>
+        </form>
+        <div class="newsletter-status" data-newsletter-status></div>
+        <p class="newsletter-note">Unsubscribe anytime. See our <a href="privacy.html" style="color:#cfcfcf">privacy policy</a>.</p>
+      </div>`;
+    }
+
+    function commentsSectionMarkup(articleUrl) {
+      return `<section class="comments-section">
+        <h3>Join the discussion</h3>
+        <div class="fb-comments" data-href="${articleUrl}" data-width="100%" data-numposts="10"></div>
+        <noscript><p class="comments-fallback">Enable JavaScript and Facebook to view and post comments, or discuss this story on our <a href="https://www.facebook.com/rochdaledaily" target="_blank" rel="noopener">Facebook page</a>.</p></noscript>
+      </section>`;
+    }
+
+    async function submitNewsletterSignup(form) {
+      const status = form.parentElement.querySelector("[data-newsletter-status]");
+      const email = form.email.value.trim();
+      if (!email) return;
+      form.querySelector("button").disabled = true;
+      status.textContent = "Signing up…";
+      try {
+        const response = await fetch("/api/newsletter-signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+        if (!response.ok) throw new Error("Signup failed");
+        status.textContent = "You're signed up. Check your inbox to confirm.";
+        form.reset();
+      } catch {
+        status.textContent = "Something went wrong. Please try again shortly.";
+      } finally {
+        form.querySelector("button").disabled = false;
+      }
+    }
+
     function openArticle(id) {
       const story = stories.find(item => String(item.id) === String(id));
       if (!story) return;
       lastFocusedElement = document.activeElement;
       const fallback = story.imageFallback || stockImage(story.category || "news");
+      const articleUrl = `${location.origin}${location.pathname}#article-${story.id}`;
+      const bodyParagraphs = story.body.map(paragraph => `<p>${paragraph}</p>`);
+      // Insert an in-content ad slot after the third paragraph (or at the
+      // end, for short articles) so longer reads carry a second ad
+      // impression without breaking up the opening of the story.
+      const breakIndex = Math.min(3, bodyParagraphs.length);
+      bodyParagraphs.splice(breakIndex, 0, `<div class="ad-slot ad-slot-incontent" role="presentation" aria-hidden="true"></div>`);
+
       document.getElementById("modal-content").innerHTML = `
         <img class="modal-image" src="${story.image}" alt="" onerror="this.onerror=null;this.src='${fallback}'">
         <div class="article-body">
-          <span class="story-kicker">${story.kicker}</span>
-          <h1 id="modal-title">${story.title}</h1>
-          <p class="article-standfirst">${story.summary}</p>
-          <div class="article-byline">By ${story.byline} · Updated ${story.timeLabel} ${story.demo ? '· DEMONSTRATION CONTENT' : ''}</div>
-          <div class="article-share"><button type="button" data-share="copy">Copy link</button><button type="button" data-share="facebook">Facebook</button><button type="button" data-share="whatsapp">WhatsApp</button></div>
-          <div class="article-copy">${story.body.map(paragraph => `<p>${paragraph}</p>`).join("")}${story.sourceUrls && story.sourceUrls.length
-            ? `<div class="article-source"><strong>Sources used:</strong><ul>${story.sourceUrls.map((url, index) => `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${(story.sourceNames && story.sourceNames[index]) || `Source ${index + 1}`}</a></li>`).join("")}</ul></div>`
-            : (story.sourceUrl ? `<p class="article-source"><strong>Source:</strong> <a href="${story.sourceUrl}" target="_blank" rel="noopener noreferrer">${story.sourceName || "Original report"}</a></p>` : "")}
-          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
-            <h3 style="margin:0 0 8px">Legal and editorial note</h3>
-            <p>${story.legalDisclaimer || (story.sensitiveStory ? "No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted." : "This article was compiled from identified public sources and may be updated.")}</p>
-            <p><strong>Right to reply:</strong> ${story.rightToReply || "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk."}</p>
-          </section></div>
-          ${story.policeMatter ? reportBoxMarkup() : ''}
+          <div class="ad-slot ad-slot-leaderboard" role="presentation" aria-hidden="true"></div>
+          <div class="article-layout">
+            <div class="article-main">
+              <span class="story-kicker">${story.kicker}</span>
+              <h1 id="modal-title">${story.title}</h1>
+              <p class="article-standfirst">${story.summary}</p>
+              <div class="article-byline">By ${story.byline} · Updated ${story.timeLabel} ${story.demo ? '· DEMONSTRATION CONTENT' : ''}</div>
+              <div class="article-share"><button type="button" data-share="copy">Copy link</button><button type="button" data-share="facebook">Facebook</button><button type="button" data-share="whatsapp">WhatsApp</button></div>
+              <div class="article-copy">${bodyParagraphs.join("")}${story.sourceUrls && story.sourceUrls.length
+                ? `<div class="article-source"><strong>Sources used:</strong><ul>${story.sourceUrls.map((url, index) => `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${(story.sourceNames && story.sourceNames[index]) || `Source ${index + 1}`}</a></li>`).join("")}</ul></div>`
+                : (story.sourceUrl ? `<p class="article-source"><strong>Source:</strong> <a href="${story.sourceUrl}" target="_blank" rel="noopener noreferrer">${story.sourceName || "Original report"}</a></p>` : "")}
+              <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
+                <h3 style="margin:0 0 8px">Legal and editorial note</h3>
+                <p>${story.legalDisclaimer || (story.sensitiveStory ? "No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted." : "This article was compiled from identified public sources and may be updated.")}</p>
+                <p><strong>Right to reply:</strong> ${story.rightToReply || "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk."}</p>
+              </section>
+              </div>
+              ${story.policeMatter ? reportBoxMarkup() : ''}
+              ${commentsSectionMarkup(articleUrl)}
+            </div>
+            <aside class="article-sidebar">
+              <div class="ad-slot ad-slot-mrec" role="presentation" aria-hidden="true"></div>
+              ${relatedStoriesMarkup(story)}
+              ${newsletterBoxMarkup()}
+            </aside>
+          </div>
         </div>`;
       const modal = document.getElementById("article-modal");
       modal.classList.add("open");
       document.body.classList.add("modal-open");
       document.getElementById("modal-close").focus();
-      history.replaceState(null, "", `#article-${story.id}`);
+      history.replaceState(null, "", `articles/${story.slug}.html`);
+
+      const newsletterForm = document.querySelector("[data-newsletter-form]");
+      if (newsletterForm) {
+        newsletterForm.addEventListener("submit", event => {
+          event.preventDefault();
+          submitNewsletterSignup(newsletterForm);
+        });
+      }
+
+      if (window.FB && window.FB.XFBML) {
+        window.FB.XFBML.parse(document.getElementById("modal-content"));
+      }
     }
 
     function closeArticle() {
       document.getElementById("article-modal").classList.remove("open");
       document.body.classList.remove("modal-open");
-      history.replaceState(null, "", location.pathname + location.search);
+      history.replaceState(null, "", homeUrl);
       if (lastFocusedElement) lastFocusedElement.focus();
     }
 
@@ -2066,13 +2224,13 @@
       document.fonts.ready.then(restartBreakingTicker).catch(() => {});
     }
 
-    loadArticleFeed();
+    loadArticleFeed().then(() => {
+      const hashMatch = location.hash.match(/^#article-(\d+)$/);
+      if (hashMatch) openArticle(hashMatch[1]);
+    });
     loadWeather();
     window.setInterval(() => loadArticleFeed({ quiet: true }), ARTICLE_REFRESH_MS);
     window.setInterval(loadWeather, 15 * 60 * 1000);
-
-    const hashMatch = location.hash.match(/^#article-(\d+)$/);
-    if (hashMatch) setTimeout(() => openArticle(hashMatch[1]), 0);
   </script>
 </body>
 </html>
