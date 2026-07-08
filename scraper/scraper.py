@@ -43,6 +43,8 @@ from urllib.parse import quote_plus, urljoin, urlparse, urlunparse
 
 import feedparser
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from bs4 import BeautifulSoup
 from openai import OpenAI
 from PIL import Image, ImageOps, UnidentifiedImageError
@@ -67,6 +69,17 @@ DISCOVERY_PAGE_LIMIT = int(os.getenv("DISCOVERY_PAGE_LIMIT", "3"))
 DISCOVERY_WORKERS = int(os.getenv("DISCOVERY_WORKERS", "16"))
 AI_WORKERS = int(os.getenv("AI_WORKERS", "6"))
 MIN_LIVE_STORIES = int(os.getenv("MIN_LIVE_STORIES", "30"))
+MIN_BALANCED_SELECTION_LIMIT = int(
+    os.getenv("MIN_BALANCED_SELECTION_LIMIT", "40")
+)
+MAX_SELECTED_PER_SOURCE = int(
+    os.getenv("MAX_SELECTED_PER_SOURCE", "4")
+)
+MAX_SELECTED_PER_CATEGORY = int(
+    os.getenv("MAX_SELECTED_PER_CATEGORY", "8")
+)
+HTTP_POOL_CONNECTIONS = int(os.getenv("HTTP_POOL_CONNECTIONS", "64"))
+HTTP_POOL_MAXSIZE = int(os.getenv("HTTP_POOL_MAXSIZE", "64"))
 STATUS_FILE = ROOT / "scraper_status.json"
 GENERATED_IMAGE_DIR = ROOT / "assets" / "img" / "generated"
 GENERATED_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
@@ -437,7 +450,7 @@ CATEGORY_KEYWORDS = {
     "education": {"school", "college", "university", "ofsted", "teacher", "pupil", "student", "education"},
     "sport": {"football", "rochdale afc", "hornets", "dale", "match", "fixture", "league", "rugby", "cricket", "boxing"},
     "events": {"festival", "concert", "event", "fair", "market", "open day", "exhibition", "gig", "performance", "parade"},
-    "business": {"business", "shop", "restaurant", "pub", "company", "jobs", "investment", "opening", "closure"},
+    "business": {"business", "shop", "restaurant", "pub", "company", "investment", "opening", "closure"},
     "community": {"community", "charity", "fundraiser", "volunteer", "library", "support group", "appeal"},
     "health": {"nhs", "hospital", "health", "doctor", "gp", "clinic", "care service", "mental health"},
     "environment": {"flood", "weather", "environment", "recycling", "litter", "climate", "wildlife", "park"},
@@ -452,7 +465,7 @@ SENSITIVE_PATTERNS = [
 
 DROP_PATTERNS = [
     r"\b(opinion|comment|column|editorial)\b",
-    r"\bfor sale\b|\bfor rent\b|\broom to let\b|\bjob vacancy\b",
+    r"\bfor sale\b|\bfor rent\b|\broom to let\b",
     r"\brecommendations please\b|\bdoes anyone know\b|\bgetting rid of\b",
 ]
 
@@ -507,9 +520,27 @@ log = logging.getLogger("rochdale_daily")
 
 SESSION = requests.Session()
 SESSION.headers.update({
-    "User-Agent": "RochdaleDaily/3.0 (+https://rochdaledaily.co.uk; contact: news@rochdaledaily.co.uk)",
+    "User-Agent": "RochdaleDaily/3.2 (+https://rochdaledaily.co.uk; contact: news@rochdaledaily.co.uk)",
     "Accept-Language": "en-GB,en;q=0.9",
 })
+
+HTTP_RETRY = Retry(
+    total=2,
+    connect=2,
+    read=2,
+    backoff_factor=0.35,
+    status_forcelist=(429, 500, 502, 503, 504),
+    allowed_methods=frozenset({"GET", "HEAD"}),
+    raise_on_status=False,
+)
+HTTP_ADAPTER = HTTPAdapter(
+    pool_connections=max(16, HTTP_POOL_CONNECTIONS),
+    pool_maxsize=max(16, HTTP_POOL_MAXSIZE),
+    max_retries=HTTP_RETRY,
+    pool_block=True,
+)
+SESSION.mount("https://", HTTP_ADAPTER)
+SESSION.mount("http://", HTTP_ADAPTER)
 
 ROBOTS_CACHE: dict[str, urllib.robotparser.RobotFileParser] = {}
 
@@ -723,6 +754,14 @@ def article_is_local(article: dict[str, Any]) -> bool:
 
 # Locality rules are isolated in a dependency-free module and regression-tested
 # before each scraper run.
+from selection_policy import (
+    PUBLISH_CATEGORIES,
+    ROCHDALE_WARDS,
+    balanced_select,
+    is_job_or_career_post,
+    ward_for_item,
+)
+
 from story_identity import (
     authority_score,
     build_story_key,
@@ -741,9 +780,12 @@ from locality_rules import (
     source_is_denied,
 )
 
-def should_drop(text: str) -> bool:
+def should_drop(text: str, url: str = "") -> bool:
     low = text.lower()
-    return any(re.search(pattern, low) for pattern in DROP_PATTERNS)
+    return (
+        is_job_or_career_post(text, url)
+        or any(re.search(pattern, low) for pattern in DROP_PATTERNS)
+    )
 
 def is_sensitive(text: str, category: str) -> bool:
     return category == "crime" or any(re.search(pattern, text, flags=re.IGNORECASE) for pattern in SENSITIVE_PATTERNS)
@@ -948,7 +990,7 @@ def google_news_sources() -> list[dict[str, str]]:
     return [
         {
             "name": f"Google News search {index + 1}",
-            "url": f"https://news.google.com/rss/search?q={quote_plus(query + ' when:1d -site:rochdaleonline.co.uk -site:rochdaletimes.co.uk')}&hl=en-GB&gl=GB&ceid=GB:en",
+            "url": f"https://news.google.com/rss/search?q={quote_plus(query + ' when:1d -site:rochdaleonline.co.uk -site:rochdaletimes.co.uk -vacancy -vacancies -careers -recruitment -hiring -apprenticeship -internship')}&hl=en-GB&gl=GB&ceid=GB:en",
             "default_area": "rochdale",
             "aggregator": "google",
         }
@@ -983,7 +1025,7 @@ def collect_rss_candidates() -> list[Candidate]:
             text = f"{source_title} {summary}"
             if not source_url or not source_title or not is_fresh(published):
                 continue
-            if should_drop(text) or not is_local(text, source_name, source_url):
+            if should_drop(text, source_url) or not is_local(text, source_name, source_url):
                 continue
             image_url = rss_image(entry)
             body_excerpt = summary
@@ -1077,7 +1119,7 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
         return None
 
     text = f"{meta['title']} {meta['description']} {meta['body_excerpt']}"
-    if not meta["title"] or should_drop(text) or not is_local(text, source["name"], meta["url"]):
+    if not meta["title"] or should_drop(text, meta["url"]) or not is_local(text, source["name"], meta["url"]):
         return None
 
     source_name_lower = source["name"].lower()
@@ -1706,7 +1748,7 @@ def collect_facebook_social_records() -> list[dict[str, Any]]:
             permalink = canonicalise_url(str(post.get("permalink_url") or ""))
             if not post_id or not message or not is_fresh(created):
                 continue
-            if should_drop(message) or not is_local(message, page["name"], permalink):
+            if should_drop(message, permalink) or not is_local(message, page["name"], permalink):
                 continue
 
             records.append({
@@ -2063,6 +2105,8 @@ def load_json_list(path: Path) -> list[dict[str, Any]]:
 def recent_existing_articles() -> list[dict[str, Any]]:
     kept = []
     for article in load_json_list(OUTPUT_FILE):
+        if is_job_or_career_post(article):
+            continue
         source_name = str(article.get("source_name") or "")
         source_url = str(article.get("source_url") or "")
         if source_is_denied(source_name, source_url):
@@ -2231,6 +2275,10 @@ def source_led_draft(candidate: Candidate, sensitive: bool) -> dict[str, Any] | 
 
 
 def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, Any] | None:
+    if is_job_or_career_post(candidate):
+        log.info("Rejected careers/vacancy post: %s", candidate.source_url)
+        return None
+
     source_records = [{
         "name": candidate.source_name,
         "url": candidate.source_url,
@@ -2272,7 +2320,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             "and use only confirmed basic facts, official public-safety advice and procedural status. "
             "A legal disclaimer is not permission to publish unsafe facts. If safe anonymisation is impossible "
             "or the source material is too thin or contradictory, set publishable to false. "
-            "Never infer a Rochdale location from a person's surname. Middleton, Healey, Wardle, "
+            "Never publish job adverts, vacancy notices, recruitment posts, careers content, ""apprenticeships, internships, hiring announcements or application invitations. ""Set publishable to false if the source is primarily employment promotion. ""Never infer a Rochdale location from a person's surname. Middleton, Healey, Wardle, "
             "Bamford, Norden, Hopwood, Birch, Summit and Syke may be names or ordinary words. "
             "Treat them as places only when the source explicitly uses geographical wording such as "
             "'in Middleton', 'Middleton residents', 'Wardle village' or a local postcode. "
@@ -2547,10 +2595,18 @@ def main() -> int:
         ),
     }
 
-    raw_candidates = [
+    raw_candidates_all = [
         candidate
         for batch in batches.values()
         for candidate in batch
+    ]
+    rejected_job_candidates = [
+        candidate for candidate in raw_candidates_all
+        if is_job_or_career_post(candidate)
+    ]
+    raw_candidates = [
+        candidate for candidate in raw_candidates_all
+        if not is_job_or_career_post(candidate)
     ]
     candidates = deduplicate_and_cross_reference(raw_candidates)
 
@@ -2571,40 +2627,58 @@ def main() -> int:
         else MAX_AI_ARTICLES_PER_RUN
     )
 
-    selected_candidates: list[Candidate] = []
+    eligible_candidates: list[Candidate] = []
     for candidate in candidates:
+        if is_job_or_career_post(candidate):
+            continue
+
         candidate.story_key = candidate.story_key or build_story_key(candidate)
         existing_article = existing_by_story.get(candidate.story_key)
 
         if existing_article is None:
-            selected_candidates.append(candidate)
-        else:
-            known_urls = {
-                canonicalise_url(url)
-                for url in existing_article.get("source_urls", [])
-                if url
-            }
-            primary_url = canonicalise_url(
-                str(existing_article.get("source_url") or "")
-            )
-            if primary_url:
-                known_urls.add(primary_url)
+            eligible_candidates.append(candidate)
+            continue
 
-            candidate_urls = {
-                canonicalise_url(candidate.source_url),
-                *{
-                    canonicalise_url(item.get("url", ""))
-                    for item in candidate.related_sources
-                    if item.get("url")
-                },
-            }
-            if candidate_urls - known_urls:
-                # Rebuild an evolving story when a genuinely new corroborating
-                # source or official update has appeared.
-                selected_candidates.append(candidate)
+        known_urls = {
+            canonicalise_url(url)
+            for url in existing_article.get("source_urls", [])
+            if url
+        }
+        primary_url = canonicalise_url(
+            str(existing_article.get("source_url") or "")
+        )
+        if primary_url:
+            known_urls.add(primary_url)
 
-        if len(selected_candidates) >= run_limit:
-            break
+        candidate_urls = {
+            canonicalise_url(candidate.source_url),
+            *{
+                canonicalise_url(item.get("url", ""))
+                for item in candidate.related_sources
+                if item.get("url")
+            },
+        }
+        if candidate_urls - known_urls:
+            eligible_candidates.append(candidate)
+
+    effective_limit = min(
+        len(eligible_candidates),
+        max(run_limit, MIN_BALANCED_SELECTION_LIMIT),
+    )
+    selected_candidates, selection_diagnostics = balanced_select(
+        eligible_candidates,
+        limit=effective_limit,
+        max_per_source=MAX_SELECTED_PER_SOURCE,
+        max_per_category=MAX_SELECTED_PER_CATEGORY,
+    )
+
+    log.info(
+        "Balanced selection: %d eligible -> %d selected; categories=%s; wards=%s",
+        len(eligible_candidates),
+        len(selected_candidates),
+        selection_diagnostics.get("selected_categories", []),
+        selection_diagnostics.get("selected_wards", []),
+    )
 
     new_articles: list[dict[str, Any]] = []
     skipped = 0
@@ -2651,6 +2725,8 @@ def main() -> int:
 
     publishable_values = []
     for article in merged.values():
+        if is_job_or_career_post(article):
+            continue
         if source_is_denied(
             str(article.get("source_name") or ""),
             str(article.get("source_url") or ""),
@@ -2700,6 +2776,8 @@ def main() -> int:
 
     write_json_atomic(STATUS_FILE, {
         "last_run_at": iso_utc(utc_now()),
+        "raw_candidates_before_job_filter": len(raw_candidates_all),
+        "job_or_career_posts_rejected": len(rejected_job_candidates),
         "raw_candidates": len(raw_candidates),
         "candidate_clusters": len(candidates),
         "duplicates_merged": max(0, len(raw_candidates) - len(candidates)),
@@ -2744,6 +2822,13 @@ def main() -> int:
             "category and date; interviews/reactions are merged into the "
             "underlying announcement where they describe the same event."
         ),
+        "selection_policy": (
+            "One story is reserved for each represented category and each "
+            "represented official ward before source-rotating fill selection."
+        ),
+        "coverage": selection_diagnostics,
+        "official_ward_count": len(ROCHDALE_WARDS),
+        "career_and_vacancy_content_banned": True,
     })
 
     log.info(
