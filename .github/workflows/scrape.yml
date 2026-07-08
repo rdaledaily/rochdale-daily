@@ -16,11 +16,12 @@ concurrency:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
+      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
@@ -28,14 +29,23 @@ jobs:
       OPENAI_MODEL: "gpt-4o-mini"
       MAX_NEWS_AGE_HOURS: "24"
       ARTICLE_RETENTION_DAYS: "1"
-      MAX_PUBLISHED_ARTICLES: "160"
-      MAX_AI_ARTICLES_PER_RUN: "30"
-      MAX_AI_ARTICLES_INITIAL: "60"
+      MAX_PUBLISHED_ARTICLES: "180"
+      MAX_AI_ARTICLES_PER_RUN: "40"
+      MAX_AI_ARTICLES_INITIAL: "80"
       RESPECT_ROBOTS: "true"
-      USE_SOURCE_IMAGES: "false"
-      RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
+      USE_SOURCE_IMAGES: "true"
       SAME_DAY_ONLY: "true"
+      RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
+      SOCIAL_CONTEXT_ENABLED: "true"
+      FACEBOOK_COMMENTS_ENABLED: "true"
+      SOCIAL_MIN_PUBLIC_REACTIONS: "3"
+      SOCIAL_MAX_PUBLIC_REACTIONS: "12"
+      SOCIAL_MAX_OFFICIAL_UPDATES: "4"
+      X_RECENT_SEARCH_MAX: "100"
+      DISCOVERY_LINKS_PER_SOURCE: "8"
+      DISCOVERY_WORKERS: "12"
       AI_WORKERS: "5"
+      MIN_LIVE_STORIES: "40"
 
     steps:
       - name: Check out repository
@@ -71,7 +81,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add articles.json
+          git add articles.json scraper_status.json assets/img/generated
 
           if git diff --cached --quiet; then
             echo "No article changes to commit."
