@@ -3,8 +3,10 @@ name: Rochdale Daily 15-minute scraper
 on:
   workflow_dispatch:
   schedule:
-    # Four checks per hour, offset from :00 to reduce GitHub scheduling congestion.
-    - cron: "7,22,37,52 * * * *"
+    # Hourly full run: includes the public Facebook Events browser collector.
+    - cron: "7 * * * *"
+    # Three fast news runs per hour: no Chromium or apt installation.
+    - cron: "22,37,52 * * * *"
 
 permissions:
   contents: write
@@ -26,6 +28,9 @@ jobs:
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
       FACEBOOK_EVENT_IMAGE_REUSE: "false"
+      # Browser collection runs hourly and on manual runs. The other three
+      # scheduled checks continue with all non-browser sources.
+      FACEBOOK_EVENTS_BROWSER_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
       OPENAI_MODEL: "gpt-4o-mini"
       MAX_NEWS_AGE_HOURS: "24"
       ARTICLE_RETENTION_DAYS: "1"
@@ -95,9 +100,29 @@ jobs:
           print("Pillow version:", Image.__version__)
           PY
 
-      - name: Install browser for Facebook Events discovery
+      - name: Restore cached Chromium
+        if: ${{ env.FACEBOOK_EVENTS_BROWSER_ENABLED == 'true' }}
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('requirements.txt') }}
+
+      - name: Install Chromium operating-system dependencies
+        if: ${{ env.FACEBOOK_EVENTS_BROWSER_ENABLED == 'true' }}
+        timeout-minutes: 10
         run: |
-          python -m playwright install --with-deps chromium
+          python -m playwright install-deps chromium
+
+      - name: Install Chromium browser
+        if: ${{ env.FACEBOOK_EVENTS_BROWSER_ENABLED == 'true' && steps.playwright-cache.outputs.cache-hit != 'true' }}
+        timeout-minutes: 10
+        run: |
+          python -m playwright install chromium
+
+      - name: Confirm Facebook Events browser mode
+        run: |
+          echo "FACEBOOK_EVENTS_BROWSER_ENABLED=${FACEBOOK_EVENTS_BROWSER_ENABLED}"
 
       - name: Validate locality, identity and coverage policy
         run: |
