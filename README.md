@@ -1,121 +1,60 @@
-Got it ✅ — here’s a **full clean rewrite** of your project spec / README for **Rochdale Daily**, tightened for clarity, SEO, and production use.
+# Rochdale Daily pipeline repair
 
----
+This package replaces the broken live-feed pipeline.
 
-# 📰 Rochdale Daily (Static Site)
+## Replace these repository files
 
-A fast, privacy-conscious, SEO-friendly local news site built with a **static frontend** and an **automated scraping + rewriting pipeline**.
+- `index.html`
+- `scraper/scraper.py`
+- `.github/workflows/scrape.yml`
+- `requirements.txt`
+- `articles.json`
+- `review_queue.json`
 
----
+Upload the complete `assets/img/` directory as well.
 
-## ✨ Features
+The original September 2025 feed is preserved as
+`articles-archive-2025.json` for reference only. Do not use that archive as the
+live `articles.json`.
 
-* Dark theme with **yellow breaking news ticker**
-* Header:
+## What happens after upload
 
-  * **Date/time** (left)
-  * **Weather widget** (centre)
-  * **Search with autocomplete** (right)
-* **Mobile-first**, responsive, accessible UI
-* Articles loaded dynamically from `articles.json`
-* Category/list pages via query parameters:
+1. Commit all files to `main`.
+2. Confirm the repository secret `OPENAI_API_KEY` exists.
+3. Open Actions > Rochdale Daily hourly scraper > Run workflow.
+4. The scraper reads current RSS and discovery pages.
+5. It rejects undated, stale, non-local and promotional material.
+6. OpenAI returns strict JSON, not Markdown.
+7. Low-risk stories go into `articles.json`.
+8. Crime, court, allegation, death, child-safeguarding and similar stories go
+   into `review_queue.json` and are not shown automatically.
+9. The website checks `articles.json` every five minutes.
 
-  * `category.html?area=Heywood`
-  * `category.html?type=crime`
-* Single post view: `post.html?slug=...`
-* `robots.txt` + `sitemap.xml` for SEO & Google News indexing
+## Images
 
----
+The scraper looks for:
 
-## ⚙️ Pipeline Overview
+- RSS `media:content`
+- RSS thumbnails or image enclosures
+- Open Graph images
+- Twitter card images
+- JSON-LD `NewsArticle.image`
 
-1. **Scrape** Facebook group posts with Playwright + session cookie.
-2. **Rewrite** into professional articles with GPT.
-3. **Classify & enrich** with metadata:
+Commercial publisher images are not automatically republished. The workflow
+sets an explicit allow-list for official-source domains. Confirm the reuse
+terms for every allowed domain. Remove a domain from
+`IMAGE_REUSE_SOURCE_DOMAINS` if permission is uncertain.
 
-   * Location (e.g. Heywood, Milnrow, Rochdale, Littleborough)
-   * Category (crime, politics, education, announcements, appeals, etc.)
-   * Quotes (selected reader comments)
-   * Breaking flag
-4. **Optimise images**
+Unapproved or missing images use original Rochdale Daily category SVGs from
+`assets/img/`.
 
-   * If post includes images → download & compress
-   * If not → generate AI placeholder
-   * Size: 1200×675px, JPG at \~80% quality
-   * Save to `/assets/img/`
-5. **Write to JSON**
+## Important editorial controls
 
-   * Append or overwrite `articles.json` in repo root
-   * Must remain a valid JSON array
+Automated rewriting is not a substitute for a media lawyer or editor. The
+pipeline deliberately queues sensitive stories. Review facts, reporting
+restrictions, anonymity, copyright, attribution and right-to-reply before
+moving any queued story into the public feed.
 
----
-
-## 📦 Article JSON Format
-
-Each article in `articles.json` must follow this structure:
-
-```json
-{
-  "id": "20250829-heywood-burglary",
-  "title": "Burglary in Heywood sparks police appeal",
-  "slug": "heywood-burglary",
-  "excerpt": "Police are appealing for witnesses after a burglary in Heywood...",
-  "content_html": "<p>Full safe HTML body here...</p>",
-  "area": "Heywood",
-  "types": ["crime", "appeals"],
-  "published_at": "2025-08-29T09:10:00Z",
-  "image_url": "assets/img/heywood-burglary.jpg",
-  "source_url": "https://facebook.com/groups/.../post/123",
-  "quotes": [
-    "This has really shaken up the community.",
-    "We need more CCTV around here."
-  ],
-  "breaking": false
-}
-```
-
----
-
-## 🖥 Local Preview
-
-* Open `index.html` in a browser.
-* For ticker/search (which require `fetch`), serve via a local static server:
-
-  * VS Code Live Server extension, or
-  * `python -m http.server`
-
----
-
-## 🚀 Deployment (GitHub → Cloudflare Pages)
-
-1. Commit repo root to GitHub.
-2. Connect repo to **Cloudflare Pages**.
-
-   * Framework: **None**
-   * Build command: **None**
-   * Output directory: `/`
-3. Point custom domain: `rochdaledaily.co.uk` → Cloudflare Pages project.
-
----
-
-## 📊 Analytics
-
-* Add GA4 tracking by replacing `window.__GA4_ID__` with your Measurement ID.
-* Include `gtag.js` snippet in `index.html` if desired.
-
----
-
-## 📝 Notes
-
-* Always ensure `articles.json` is a valid JSON array.
-* Slugs should be **lowercase, dash-separated, URL-safe**.
-* IDs should follow `YYYYMMDD-slug` format to guarantee uniqueness.
-* Sanitise all `content_html` (no `<script>`, `<iframe>`, or inline JS) to prevent XSS.
-* Update `sitemap.xml` automatically from `articles.json` so Google indexes new stories quickly.
-
----
-
-⚡ This is now a **production-ready spec**: it tells developers (or your future self) exactly how the site is structured, how the pipeline works, and what rules every article must follow.
-
-Would you like me to go ahead and **write the `sitemap.xml` generator script** that pulls from `articles.json`? That’ll lock in the SEO side.
+Facebook groups are not scraped by the replacement. Group posts should be
+treated as tips and independently verified before publication.
 
