@@ -126,8 +126,9 @@ CATEGORY_QUERIES = (
     (
         "politics",
         '(Rochdale OR Heywood OR Middleton) '
-        '(council OR councillor OR committee OR consultation OR election OR '
-        'vote OR motion)',
+        '(councillor OR "council budget" OR "council tax" OR election OR '
+        'vote OR voted OR motion OR resigns OR resignation OR '
+        '"steps down" OR "stands down" OR quits)',
     ),
     (
         "education",
@@ -366,6 +367,18 @@ DISCOVERY_TOPICS = (
         "events",
         '"Rochdale Town Hall" (event OR restoration OR wedding OR exhibition)',
     ),
+    (
+        "rochdale-council-budget",
+        "politics",
+        'Rochdale ("council budget" OR "council tax" OR "budget cuts" OR '
+        '"budget proposals" OR "budget vote")',
+    ),
+    (
+        "rochdale-councillor-resigns",
+        "politics",
+        'Rochdale councillor (resigns OR resignation OR "steps down" OR '
+        '"stands down" OR quits OR quitting)',
+    ),
 )
 
 OFFICIAL_GMP_QUERIES = (
@@ -380,20 +393,16 @@ OFFICIAL_GMP_QUERIES = (
 )
 
 CIVIC_QUERIES = (
-    (
-        "civic:meeting-documents",
-        'site:democracy.rochdale.gov.uk '
-        '(minutes OR agenda OR motion OR vote OR decision) Rochdale',
-    ),
+    # Bare meeting minutes/agendas and the councillor directory listing are
+    # deliberately not queried here — they're institutional council process,
+    # not news. Individual councillor votes, resignations and budget
+    # decisions are covered by councillor_query() and the politics topics
+    # in DISCOVERY_TOPICS instead.
     (
         "civic:council-actions",
         'site:rochdale.gov.uk/news councillor '
-        '(opened OR visited OR announced OR supported OR opposed OR campaign)',
-    ),
-    (
-        "civic:councillor-directory",
-        'site:democracy.rochdale.gov.uk/mgMemberIndex.aspx '
-        '"Rochdale Borough Council" councillors',
+        '(opened OR visited OR resigns OR resignation OR "steps down" OR '
+        '"stands down" OR quits OR supported OR opposed OR campaign)',
     ),
     (
         "civic:paul-waugh",
@@ -418,7 +427,6 @@ SOURCE_QUERIES = (
     'site:manchestereveningnews.co.uk/all-about/rochdale Rochdale',
     'site:manchestereveningnews.co.uk/news/greater-manchester-news/ Rochdale',
     '"Manchester Evening News" Rochdale',
-    '"Rochdale Borough Council" news',
     '"Roch Valley Radio" Rochdale',
     '"Action Together" Rochdale',
     '"Your Trust Rochdale"',
@@ -475,7 +483,8 @@ def councillor_query(name: str, ward: str) -> SearchQuery:
             f'"Councillor {name}" Rochdale '
             '("voted" OR vote OR motion OR committee OR decision OR attended '
             'OR participated OR "called for" OR campaign OR opened OR visited '
-            'OR supported OR opposed OR questioned)'
+            'OR supported OR opposed OR questioned OR resigns OR resignation '
+            'OR "steps down" OR "stands down" OR quits OR quitting)'
         ),
         category="politics",
         ward=ward,
