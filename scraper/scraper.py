@@ -174,7 +174,7 @@ SEARCH_GROUPS = [
     '"Norden" OR "Bamford" OR "Castleton" OR "Kirkholt"',
     '"Spotland" OR "Falinge" OR "Deeplish" OR "Balderstone"',
     '"Shawclough" OR "Healey" OR "Smallbridge" OR "Smithy Bridge"',
-    '"Darnhill" OR "Hopwood" OR "Alkrington" OR "Langley" OR "Boarshaw"',
+    '"Darnhill" OR "Hopwood" OR "Alkrington" OR "Boarshaw"',
     'Rochdale police OR court OR crime OR fire',
     'Rochdale traffic OR M62 OR roadworks OR Bee Network OR Northern',
     'Rochdale council OR planning OR consultation OR ward',
@@ -271,7 +271,7 @@ LOCAL_TERMS = {
     "kirkholt", "shawclough", "healey", "whitworth", "wardle",
     "smithy bridge", "castleton", "spotland", "falinge", "balderstone",
     "deeplish", "smallbridge", "firgrove", "syke", "cutgate",
-    "darnhill", "hopwood", "alkrington", "langley", "boarshaw",
+    "darnhill", "hopwood", "alkrington", "boarshaw",
     "belfield", "wardleworth", "sudden", "buersil", "cloverhall",
     "lowerplace", "meanwood", "mandale park", "summit",
     "hollingworth lake", "slattocks", "birch", "caldershaw",
@@ -279,7 +279,7 @@ LOCAL_TERMS = {
 
 AREA_KEYWORDS = {
     "darnhill": {"darnhill"}, "hopwood": {"hopwood"},
-    "alkrington": {"alkrington"}, "langley": {"langley"}, "boarshaw": {"boarshaw"},
+    "alkrington": {"alkrington"}, "boarshaw": {"boarshaw"},
     "newhey": {"newhey"}, "smithy_bridge": {"smithy bridge"}, "wardle": {"wardle"},
     "smallbridge": {"smallbridge"}, "norden": {"norden"}, "bamford": {"bamford"},
     "cutgate": {"cutgate", "caldershaw"}, "kirkholt": {"kirkholt"},
@@ -293,6 +293,47 @@ AREA_KEYWORDS = {
     "middleton": {"middleton"}, "whitworth": {"whitworth"},
     "rochdale": {"rochdale", "rochdale town centre", "town centre"},
 }
+
+AMBIGUOUS_LOCAL_TERMS = {
+    "middleton", "healey", "wardle", "bamford", "norden",
+    "hopwood", "birch", "summit", "syke",
+}
+
+UNAMBIGUOUS_LOCAL_TERMS = LOCAL_TERMS - AMBIGUOUS_LOCAL_TERMS
+
+TRUSTED_LOCAL_SOURCE_PREFIXES = (
+    "Rochdale Borough Council",
+    "Rochdale Council",
+    "Rochdale AFC",
+    "Rochdale Hornets",
+    "Rochdale Development Agency",
+    "Rochdale Town Hall",
+    "Rochdale Police",
+    "Action Together Rochdale",
+    "Your Trust Rochdale",
+    "Visit Rochdale",
+    "Northern Care Alliance Rochdale",
+    "Hopwood Hall College",
+    "Rochdale Sixth Form College",
+    "Facebook Events — Rochdale",
+)
+
+PLACE_CONTEXT_SUFFIXES = (
+    "town", "town centre", "area", "ward", "estate", "village",
+    "residents", "community", "council", "borough", "school",
+    "college", "library", "road", "street", "lane", "avenue",
+    "park", "station", "market", "police", "fire station",
+    "hospital", "clinic", "businesses", "shops", "pub", "events",
+    "traffic", "services", "neighbourhood",
+)
+
+PLACE_CONTEXT_PREFIXES = (
+    "in", "at", "near", "around", "across", "from", "within",
+    "throughout", "towards", "toward", "outside", "serving",
+    "based in", "located in", "residents of", "people in",
+    "businesses in", "schools in", "school in", "police in",
+    "firefighters in", "travelling to", "roads in",
+)
 
 CATEGORY_KEYWORDS = {
     "crime": {"arrest", "police", "charged", "court", "burglary", "robbery", "assault", "stabbing", "theft", "fraud", "wanted", "jailed", "murder"},
@@ -479,33 +520,123 @@ def is_fresh(value: datetime | None) -> bool:
         return is_current_uk_day(value)
     return True
 
+def _plain_text(value: Any) -> str:
+    raw = str(value or "")
+    if "<" in raw and ">" in raw:
+        raw = BeautifulSoup(raw, "lxml").get_text(" ", strip=True)
+    return normalise_ws(raw)
+
+
+def _term_pattern(term: str) -> str:
+    return rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])"
+
+
+def _contains_term(text: str, term: str) -> bool:
+    return bool(re.search(_term_pattern(term), text, flags=re.IGNORECASE))
+
+
+def _has_geographical_context(text: str, term: str) -> bool:
+    term_pattern = _term_pattern(term)
+    prefix_pattern = "|".join(re.escape(prefix) for prefix in PLACE_CONTEXT_PREFIXES)
+    suffix_pattern = "|".join(re.escape(suffix) for suffix in PLACE_CONTEXT_SUFFIXES)
+
+    before = rf"\b(?:{prefix_pattern})\s+(?:the\s+)?{term_pattern}"
+    after = rf"{term_pattern}(?:'s)?\s+(?:{suffix_pattern})\b"
+    qualified = rf"{term_pattern}\s*,\s*(?:Rochdale|Greater Manchester)\b"
+    postcode_context = rf"{term_pattern}.{{0,80}}\b(?:OL|M)\d{{1,2}}\s*\d[A-Z]{{2}}\b"
+
+    return any(
+        re.search(pattern, text, flags=re.IGNORECASE)
+        for pattern in (before, after, qualified, postcode_context)
+    )
+
+
+def locality_evidence(text: str, source_name: str = "", source_url: str = "") -> dict[str, Any]:
+    plain = _plain_text(text)
+    evidence: list[str] = []
+    score = 0
+
+    if source_is_denied(source_name, source_url):
+        return {"local": False, "score": 0, "evidence": ["denied-source"]}
+
+    if source_name.startswith(TRUSTED_LOCAL_SOURCE_PREFIXES):
+        score += 5
+        evidence.append(f"trusted-source:{source_name}")
+
+    if _contains_term(plain, "rochdale"):
+        score += 5
+        evidence.append("place:rochdale")
+
+    for term in sorted(UNAMBIGUOUS_LOCAL_TERMS - {"rochdale"}, key=len, reverse=True):
+        if _contains_term(plain, term):
+            score += 2
+            evidence.append(f"place:{term}")
+
+    for term in sorted(AMBIGUOUS_LOCAL_TERMS, key=len, reverse=True):
+        if _has_geographical_context(plain, term):
+            score += 2
+            evidence.append(f"contextual-place:{term}")
+
+    return {"local": score >= 2, "score": score, "evidence": evidence}
+
+
 def detect_area(text: str, fallback: str = "rochdale") -> str:
-    low = text.lower()
+    plain = _plain_text(text)
+
     for area, terms in AREA_KEYWORDS.items():
-        if any(term in low for term in terms):
-            return area
+        if area == "rochdale":
+            continue
+        for term in sorted(terms, key=len, reverse=True):
+            if term in AMBIGUOUS_LOCAL_TERMS:
+                if _has_geographical_context(plain, term):
+                    return area
+            elif _contains_term(plain, term):
+                return area
+
+    if _contains_term(plain, "rochdale"):
+        return "rochdale"
     return fallback
+
 
 def categorise(text: str) -> str:
     low = text.lower()
-    scores = {category: sum(1 for keyword in keywords if keyword in low) for category, keywords in CATEGORY_KEYWORDS.items()}
+    scores = {
+        category: sum(1 for keyword in keywords if keyword in low)
+        for category, keywords in CATEGORY_KEYWORDS.items()
+    }
     category, score = max(scores.items(), key=lambda item: item[1])
     return category if score else "news"
 
-LOCAL_SOURCE_PREFIXES = (
-    "Rochdale Borough Council", "Rochdale AFC", "Rochdale Hornets",
-    "Rochdale Development Agency", "Rochdale Online", "Roch Valley Radio",
-    "Action Together", "Your Trust Rochdale", "Visit Rochdale",
-    "Northern Care Alliance Rochdale", "Hopwood Hall College",
-    "Rochdale Sixth Form College", "Facebook Events — Rochdale",
+
+def is_local(text: str, source_name: str, source_url: str = "") -> bool:
+    return bool(locality_evidence(text, source_name, source_url)["local"])
+
+
+def article_is_local(article: dict[str, Any]) -> bool:
+    combined = " ".join([
+        str(article.get("title") or ""),
+        str(article.get("excerpt") or ""),
+        str(article.get("content_html") or ""),
+        str(article.get("event_location") or ""),
+    ])
+    return is_local(
+        combined,
+        str(article.get("source_name") or ""),
+        str(article.get("source_url") or ""),
+    )
+
+
+# Locality rules are isolated in a dependency-free module and regression-tested
+# before each scraper run.
+from locality_rules import (
+    AREA_KEYWORDS,
+    LOCAL_TERMS,
+    article_is_local,
+    detect_area,
+    is_local,
+    locality_evidence,
+    source_is_denied,
 )
-
-
-def is_local(text: str, source_name: str) -> bool:
-    low = text.lower()
-    if source_name.startswith(LOCAL_SOURCE_PREFIXES):
-        return True
-    return any(term in low for term in LOCAL_TERMS)
 
 def should_drop(text: str) -> bool:
     low = text.lower()
@@ -749,7 +880,7 @@ def collect_rss_candidates() -> list[Candidate]:
             text = f"{source_title} {summary}"
             if not source_url or not source_title or not is_fresh(published):
                 continue
-            if should_drop(text) or not is_local(text, source_name):
+            if should_drop(text) or not is_local(text, source_name, source_url):
                 continue
             image_url = rss_image(entry)
             body_excerpt = summary
@@ -774,7 +905,12 @@ def collect_rss_candidates() -> list[Candidate]:
                 source_title=source_title,
                 source_summary=summary,
                 source_published_at=iso_utc(published),
-                area=detect_area(combined, source["default_area"]),
+                area=detect_area(
+                    combined,
+                    source["default_area"],
+                    source_name,
+                    source_url,
+                ),
                 category=categorise(combined),
                 image_candidate_url=image_url,
                 source_body_excerpt=body_excerpt,
@@ -816,7 +952,7 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
         return None
 
     text = f"{meta['title']} {meta['description']} {meta['body_excerpt']}"
-    if not meta["title"] or should_drop(text) or not is_local(text, source["name"]):
+    if not meta["title"] or should_drop(text) or not is_local(text, source["name"], meta["url"]):
         return None
 
     source_name_lower = source["name"].lower()
@@ -852,7 +988,12 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
         source_title=meta["title"],
         source_summary=meta["description"] or meta["body_excerpt"][:900],
         source_published_at=iso_utc(published),
-        area=detect_area(text, source["default_area"]),
+        area=detect_area(
+            text,
+            source["default_area"],
+            source["name"],
+            meta["url"],
+        ),
         category=category,
         image_candidate_url=meta["image"],
         source_body_excerpt=meta["body_excerpt"],
@@ -1092,7 +1233,7 @@ def collect_facebook_event_discovery_candidates() -> list[Candidate]:
         combined = f"{title} {visible_text}"
         # The supplied location filter is Rochdale, but retaining local validation
         # prevents unrelated promoted events from being auto-published.
-        if not is_local(combined, "Facebook Rochdale Events"):
+        if not is_local(combined, "Facebook Rochdale Events", event_url):
             continue
 
         event_start = extract_future_event_date(visible_text)
@@ -1109,7 +1250,12 @@ def collect_facebook_event_discovery_candidates() -> list[Candidate]:
             source_title=title,
             source_summary=summary,
             source_published_at=iso_utc(utc_now()),
-            area=detect_area(combined, "rochdale"),
+            area=detect_area(
+                combined,
+                "rochdale",
+                "Facebook Events — Rochdale discovery",
+                event_url,
+            ),
             category="events",
             image_candidate_url=image_url,
             source_body_excerpt=visible_text[:4000],
@@ -1374,7 +1520,7 @@ def collect_facebook_social_records() -> list[dict[str, Any]]:
             permalink = canonicalise_url(str(post.get("permalink_url") or ""))
             if not post_id or not message or not is_fresh(created):
                 continue
-            if should_drop(message) or not is_local(message, page["name"]):
+            if should_drop(message) or not is_local(message, page["name"], permalink):
                 continue
 
             records.append({
@@ -1485,7 +1631,12 @@ def official_social_records_to_candidates(
             source_title=title[:160],
             source_summary=text[:1000],
             source_published_at=iso_utc(created),
-            area=detect_area(text, "rochdale"),
+            area=detect_area(
+                text,
+                "rochdale",
+                str(record.get("source_name") or ""),
+                url,
+            ),
             category=categorise(text),
             image_candidate_url=str(record.get("image") or ""),
             source_body_excerpt=text[:3500],
@@ -1631,13 +1782,24 @@ def collect_environment_agency_flood_candidates() -> list[Candidate]:
         title = f"{item.get('severity', 'Flood alert')}: {area_name}"
         source_url = str(item.get("@id") or endpoint).replace("http://", "https://")
         text = f"{title} {message}"
+        if not is_local(
+            text,
+            "Environment Agency flood-monitoring API",
+            source_url,
+        ):
+            continue
+
+        detected_area = detect_area(text)
+        if not detected_area:
+            continue
+
         candidates.append(Candidate(
             source_name="Environment Agency flood-monitoring API",
             source_url=source_url,
             source_title=title[:160],
             source_summary=message[:900],
             source_published_at=iso_utc(changed),
-            area=detect_area(text, "rochdale"),
+            area=detected_area,
             category="environment",
             source_body_excerpt=message[:3500],
         ))
@@ -1710,7 +1872,7 @@ def recent_existing_articles() -> list[dict[str, Any]]:
             or (source_kind == "event" and event_is_current_or_future(event_start))
             or (source_kind == "live" and is_current_uk_day(published))
         )
-        if keep:
+        if keep and article_is_local(article):
             article["title"] = strip_markdown(article.get("title"))
             article["excerpt"] = strip_markdown(article.get("excerpt"))
             kept.append(article)
@@ -1905,6 +2067,11 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             "and use only confirmed basic facts, official public-safety advice and procedural status. "
             "A legal disclaimer is not permission to publish unsafe facts. If safe anonymisation is impossible "
             "or the source material is too thin or contradictory, set publishable to false. "
+            "Never infer a Rochdale location from a person's surname. Middleton, Healey, Wardle, "
+            "Bamford, Norden, Hopwood, Birch, Summit and Syke may be names or ordinary words. "
+            "Treat them as places only when the source explicitly uses geographical wording such as "
+            "'in Middleton', 'Middleton residents', 'Wardle village' or a local postcode. "
+            "Langley is not an accepted standalone Rochdale locality in this system. "
             "Official social posts may corroborate facts only when they come from an identified public body "
             "or organisation and agree with the primary records. Public comments and X replies are never "
             "evidence of what happened. Do not quote or identify commenters. Use public reaction only to "
@@ -2175,6 +2342,12 @@ def main() -> int:
         published_at = parse_datetime(article.get("published_at"))
         source_kind = str(article.get("source_kind") or "article")
         event_start = parse_datetime(article.get("event_start_at"))
+        if not article_is_local(article):
+            log.warning(
+                "Rejected non-local article after rewrite: %s",
+                article.get("title"),
+            )
+            continue
         if (
             is_fresh(published_at)
             or (source_kind == "event" and event_is_current_or_future(event_start))
@@ -2215,6 +2388,10 @@ def main() -> int:
         "x_enabled": bool(X_BEARER_TOKEN),
         "facebook_comments_enabled": bool(
             FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED
+        ),
+        "locality_rule": (
+            "Ambiguous place names require explicit geographical context; "
+            "Langley is not accepted as a standalone locality."
         ),
     })
     log.info(
