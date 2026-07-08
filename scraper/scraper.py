@@ -52,6 +52,8 @@ from dateparser.search import search_dates
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
+from search_queries import build_search_query_specs
+
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_FILE = ROOT / "articles.json"
 LOG_FILE = ROOT / "scraper" / "scraper.log"
@@ -713,10 +715,6 @@ def article_is_local(article: dict[str, Any]) -> bool:
 # Locality rules are isolated in a dependency-free module and regression-tested
 # before each scraper run.
 from rewrite_safety import excessive_source_overlap
-
-from search_queries import (
-    build_search_query_specs,
-)
 
 from selection_policy import (
     PUBLISH_CATEGORIES,
