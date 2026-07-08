@@ -216,20 +216,25 @@
       position: relative;
     }
     .breaking-track {
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      flex: 0 0 auto;
       width: max-content;
-      min-width: 200%;
       will-change: transform;
-      animation: breakingTicker 24s linear infinite;
+      transform: translate3d(0, 0, 0);
+      animation-name: breakingTicker;
+      animation-duration: var(--breaking-speed, 26s);
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-play-state: running;
     }
     .breaking-segment {
-      min-width: 50%;
-      flex: 0 0 50%;
-      display: flex;
+      flex: 0 0 auto;
+      display: inline-flex;
       align-items: center;
       justify-content: flex-start;
       gap: 42px;
+      min-height: 46px;
       padding: 0 42px 0 18px;
     }
     .breaking-text { display: inline-block; }
@@ -241,17 +246,8 @@
     }
     .breaking-copy:hover .breaking-track { animation-play-state: paused; }
     @keyframes breakingTicker {
-      from { transform: translate3d(0, 0, 0); }
-      to { transform: translate3d(-50%, 0, 0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .breaking-track {
-        animation: none;
-        min-width: 100%;
-        transform: none;
-      }
-      .breaking-segment { min-width: 100%; flex-basis: 100%; }
-      .breaking-segment[aria-hidden="true"] { display: none; }
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
     }
 
     .page-shell { background: var(--paper); min-height: 100vh; }
@@ -1158,6 +1154,18 @@
       });
     }
 
+    function restartBreakingTicker() {
+      const track = document.getElementById("breaking-track");
+      if (!track) return;
+
+      // Explicit values prevent browser/OS reduced-motion settings or stale
+      // inline styles from leaving the ticker static.
+      track.style.animation = "none";
+      void track.offsetWidth;
+      track.style.animation = "breakingTicker var(--breaking-speed, 26s) linear infinite";
+      track.style.animationPlayState = "running";
+    }
+
     function setBreakingTicker(message) {
       const ticker = document.getElementById("breaking-copy");
       const track = document.getElementById("breaking-track");
@@ -1169,10 +1177,10 @@
       });
       ticker.setAttribute("aria-label", cleanMessage);
 
-      // Restart from the beginning whenever a newly pushed headline arrives.
-      track.style.animation = "none";
-      void track.offsetWidth;
-      track.style.animation = "";
+      // Keep a readable, consistent speed when pushed headlines vary in length.
+      const seconds = Math.max(20, Math.min(48, cleanMessage.length * 0.24));
+      track.style.setProperty("--breaking-speed", `${seconds}s`);
+      restartBreakingTicker();
     }
 
     async function loadArticleFeed({ quiet = false } = {}) {
@@ -1547,6 +1555,10 @@
     renderTopStories();
     renderNewsGrid();
     renderEvents();
+    // Start the ticker immediately, including before articles.json finishes loading.
+    restartBreakingTicker();
+    window.addEventListener("pageshow", restartBreakingTicker);
+
     loadArticleFeed();
     loadWeather();
     window.setInterval(() => loadArticleFeed({ quiet: true }), ARTICLE_REFRESH_MS);
