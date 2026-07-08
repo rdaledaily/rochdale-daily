@@ -32,6 +32,7 @@ jobs:
       # scheduled checks continue with all non-browser sources.
       FACEBOOK_EVENTS_BROWSER_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
       OPENAI_MODEL: "gpt-4o-mini"
+      AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "24"
       ARTICLE_RETENTION_DAYS: "1"
       MAX_PUBLISHED_ARTICLES: "180"
@@ -49,6 +50,7 @@ jobs:
       X_RECENT_SEARCH_MAX: "100"
       DISCOVERY_LINKS_PER_SOURCE: "40"
       RSS_ITEMS_PER_SOURCE: "100"
+      GOOGLE_SEARCH_QUERY_LIMIT: "128"
       DISCOVERY_PAGE_LIMIT: "3"
       DISCOVERY_WORKERS: "12"
       AI_WORKERS: "6"
@@ -124,12 +126,14 @@ jobs:
         run: |
           echo "FACEBOOK_EVENTS_BROWSER_ENABLED=${FACEBOOK_EVENTS_BROWSER_ENABLED}"
 
-      - name: Validate locality, identity and coverage policy
+      - name: Validate locality, identity, coverage, search and rewrite policy
         run: |
-          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/scraper.py
+          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/search_queries.py scraper/rewrite_safety.py scraper/scraper.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py
           python scraper/test_selection_policy.py
+          python scraper/test_search_queries.py
+          python scraper/test_rewrite_safety.py
 
       - name: Run Rochdale Daily pipeline
         run: |
