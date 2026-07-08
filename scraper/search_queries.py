@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import math
 
 COUNCILLOR_DIRECTORY_URL = (
     "https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1"
@@ -522,10 +523,30 @@ def build_search_query_specs(
     max_queries: int = 128,
     now: datetime | None = None,
 ) -> list[SearchQuery]:
-    specs: list[SearchQuery] = []
+    """Build this run's Google News query list.
+
+    Google News' RSS search appears to rate-limit or bot-block bursts of
+    requests from a single IP range: past a certain volume, it returns a
+    non-RSS (likely CAPTCHA/consent) page that feedparser then reports as
+    "not well-formed (invalid token)" for every single query in the run,
+    with zero raw entries recovered from any of them. Firing 130+ Google
+    News requests back-to-back every 15 minutes from a shared GitHub
+    Actions IP range is well within the range known to trigger this.
+
+    To stay under that threshold, only the small always-on sets (official
+    GMP queries, civic/Parliament queries, and this run's councillor
+    shard) run every time. Everything else -- watch queries, discovery
+    topics, category queries, ward queries and source queries -- is
+    treated as one combined pool and sharded across the four scheduled
+    runs per hour, the same way councillor coverage already shards. Any
+    single run therefore covers roughly a quarter of the full topic list,
+    but the full set is still covered every hour, and each individual
+    Google request is far less likely to be blocked.
+    """
+    always_on: list[SearchQuery] = []
 
     for index, query in enumerate(OFFICIAL_GMP_QUERIES, start=1):
-        specs.append(
+        always_on.append(
             SearchQuery(
                 label=f"official-gmp:{index}",
                 query=query,
@@ -533,25 +554,8 @@ def build_search_query_specs(
             )
         )
 
-    for index, query in enumerate(WATCH_QUERIES, start=1):
-        specs.append(
-            SearchQuery(
-                label=f"watch:{index}",
-                query=query,
-            )
-        )
-
-    for label, category, query in DISCOVERY_TOPICS:
-        specs.append(
-            SearchQuery(
-                label=f"topic:{label}",
-                query=query,
-                category=category,
-            )
-        )
-
     for label, query in CIVIC_QUERIES:
-        specs.append(
+        always_on.append(
             SearchQuery(
                 label=label,
                 query=query,
@@ -562,13 +566,32 @@ def build_search_query_specs(
 
     # One quarter of the current councillor list is checked on each scrape.
     # At the four normal scheduled minutes, all 60 are covered every hour.
-    specs.extend(
+    always_on.extend(
         councillor_query(name, ward)
         for name, ward in councillors_for_run(now)
     )
 
+    bulk: list[SearchQuery] = []
+
+    for index, query in enumerate(WATCH_QUERIES, start=1):
+        bulk.append(
+            SearchQuery(
+                label=f"watch:{index}",
+                query=query,
+            )
+        )
+
+    for label, category, query in DISCOVERY_TOPICS:
+        bulk.append(
+            SearchQuery(
+                label=f"topic:{label}",
+                query=query,
+                category=category,
+            )
+        )
+
     for category, query in CATEGORY_QUERIES:
-        specs.append(
+        bulk.append(
             SearchQuery(
                 label=f"category:{category}",
                 query=query,
@@ -576,15 +599,22 @@ def build_search_query_specs(
             )
         )
 
-    specs.extend(ward_query(ward) for ward in ROCHDALE_WARDS)
+    bulk.extend(ward_query(ward) for ward in ROCHDALE_WARDS)
 
     for index, query in enumerate(SOURCE_QUERIES, start=1):
-        specs.append(
+        bulk.append(
             SearchQuery(
                 label=f"source:{index}",
                 query=query,
             )
         )
+
+    shard = councillor_shard_index(now)
+    shard_size = math.ceil(len(bulk) / 4) if bulk else 0
+    start = shard * shard_size
+    bulk_shard = bulk[start:start + shard_size] if shard_size else []
+
+    specs = always_on + bulk_shard
 
     unique: list[SearchQuery] = []
     seen: set[str] = set()
