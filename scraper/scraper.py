@@ -61,9 +61,11 @@ MAX_PUBLISHED_ARTICLES = int(os.getenv("MAX_PUBLISHED_ARTICLES", "100"))
 MAX_AI_ARTICLES_PER_RUN = int(os.getenv("MAX_AI_ARTICLES_PER_RUN", "30"))
 MAX_AI_ARTICLES_INITIAL = int(os.getenv("MAX_AI_ARTICLES_INITIAL", "60"))
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "12"))
-DISCOVERY_LINKS_PER_SOURCE = int(os.getenv("DISCOVERY_LINKS_PER_SOURCE", "8"))
-DISCOVERY_WORKERS = int(os.getenv("DISCOVERY_WORKERS", "12"))
-AI_WORKERS = int(os.getenv("AI_WORKERS", "5"))
+DISCOVERY_LINKS_PER_SOURCE = int(os.getenv("DISCOVERY_LINKS_PER_SOURCE", "40"))
+RSS_ITEMS_PER_SOURCE = int(os.getenv("RSS_ITEMS_PER_SOURCE", "100"))
+DISCOVERY_PAGE_LIMIT = int(os.getenv("DISCOVERY_PAGE_LIMIT", "3"))
+DISCOVERY_WORKERS = int(os.getenv("DISCOVERY_WORKERS", "16"))
+AI_WORKERS = int(os.getenv("AI_WORKERS", "6"))
 MIN_LIVE_STORIES = int(os.getenv("MIN_LIVE_STORIES", "30"))
 STATUS_FILE = ROOT / "scraper_status.json"
 GENERATED_IMAGE_DIR = ROOT / "assets" / "img" / "generated"
@@ -74,8 +76,8 @@ RIGHT_TO_REPLY_EMAIL = os.getenv("RIGHT_TO_REPLY_EMAIL", "news@rochdaledaily.co.
 UK_TZ = ZoneInfo("Europe/London")
 SAME_DAY_ONLY = os.getenv("SAME_DAY_ONLY", "true").lower() not in {"0", "false", "no"}
 
-SOURCE_DENY_DOMAINS = {"rochdaletimes.co.uk"}
-SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper"}
+SOURCE_DENY_DOMAINS = {"rochdaletimes.co.uk", "rochdaleonline.co.uk"}
+SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper", "rochdale online"}
 
 LIVE_SOURCE_NAMES = {
     "rochdale council service updates",
@@ -152,7 +154,6 @@ DISCOVERY_PAGES = [
     {"name": "GMCA News", "url": "https://www.greatermanchester-ca.gov.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/"},
 
     # Local and regional publishers
-    {"name": "Rochdale Online", "url": "https://www.rochdaleonline.co.uk/news-features/2/news", "default_area": "rochdale", "link_pattern": r"/news-features/2/news-headlines/"},
     {"name": "Manchester Evening News", "url": "https://www.manchestereveningnews.co.uk/all-about/rochdale", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "BBC Manchester", "url": "https://www.bbc.co.uk/news/england/manchester", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "About Manchester", "url": "https://aboutmanchester.co.uk/?s=Rochdale", "default_area": "rochdale", "link_pattern": r"/"},
@@ -167,6 +168,99 @@ DISCOVERY_PAGES = [
     {"name": "Rochdale AFC", "url": "https://rochdaleafc.co.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "Rochdale Hornets", "url": "https://www.rochdalehornets.co.uk/news", "default_area": "rochdale", "link_pattern": r"/news"},
 ]
+
+GMP_ROCHDALE_AREA_PAGES = [
+    {
+        "name": "GMP Rochdale Town Centre",
+        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/rochdale-town-centre/news/our-priorities",
+        "default_area": "rochdale",
+        "link_pattern": r"/news/greater-manchester/news/news/",
+    },
+    {
+        "name": "GMP Rochdale Central",
+        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/rochdale-central/news/our-priorities",
+        "default_area": "rochdale",
+        "link_pattern": r"/news/greater-manchester/news/news/",
+    },
+    {
+        "name": "GMP Bamford",
+        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/bamford/news/our-priorities",
+        "default_area": "bamford",
+        "link_pattern": r"/news/greater-manchester/news/news/",
+    },
+    {
+        "name": "GMP Healey",
+        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/healey/news/our-priorities",
+        "default_area": "healey",
+        "link_pattern": r"/news/greater-manchester/news/news/",
+    },
+    {
+        "name": "GMP East Middleton",
+        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/east-middleton/news/our-priorities",
+        "default_area": "middleton",
+        "link_pattern": r"/news/greater-manchester/news/news/",
+    },
+    {
+        "name": "GMP West Middleton",
+        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/west-middleton/news/our-priorities",
+        "default_area": "middleton",
+        "link_pattern": r"/news/greater-manchester/news/news/",
+    },
+]
+
+LIVE_PAGE_SOURCES = [
+    {
+        "name": "Bee Network live travel alerts",
+        "url": "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true",
+        "category": "transport",
+        "default_area": "rochdale",
+    },
+    {
+        "name": "Rochdale Council service updates",
+        "url": "https://www.rochdale.gov.uk/serviceupdates",
+        "category": "community",
+        "default_area": "rochdale",
+    },
+    {
+        "name": "Northern live service updates",
+        "url": "https://www.northernrailway.co.uk/service-updates",
+        "category": "transport",
+        "default_area": "rochdale",
+    },
+]
+
+DISCOVERY_LISTING_OVERRIDES = {
+    "Rochdale Borough Council News": [
+        "https://www.rochdale.gov.uk/news",
+        "https://www.rochdale.gov.uk/news?page=2",
+        "https://www.rochdale.gov.uk/news?page=3",
+    ],
+    "Rochdale Council Events": [
+        "https://www.rochdale.gov.uk/events?page=1",
+        "https://www.rochdale.gov.uk/events?page=2",
+        "https://www.rochdale.gov.uk/events?page=3",
+    ],
+    "Rochdale Town Hall Events": [
+        "https://www.rochdaletownhall.co.uk/events?page=1",
+        "https://www.rochdaletownhall.co.uk/events?page=2",
+        "https://www.rochdaletownhall.co.uk/events?page=3",
+    ],
+    "Greater Manchester Police": [
+        "https://www.gmp.police.uk/news/news-search/?ct=Updates&fdte=&page=1&tdte=",
+        "https://www.gmp.police.uk/news/news-search/?ct=Updates&fdte=&page=2&tdte=",
+        "https://www.gmp.police.uk/news/news-search/?ct=Updates&fdte=&page=3&tdte=",
+    ],
+    "Roch Valley Radio Local News": [
+        "https://www.rochvalleyradio.com/news/local-news/",
+        "https://www.rochvalleyradio.com/news/local-news/?page=2",
+        "https://www.rochvalleyradio.com/news/local-news/?page=3",
+    ],
+    "Manchester Evening News": [
+        "https://www.manchestereveningnews.co.uk/all-about/rochdale",
+        "https://www.manchestereveningnews.co.uk/all-about/rochdale?page=2",
+        "https://www.manchestereveningnews.co.uk/all-about/rochdale?page=3",
+    ],
+}
 
 SEARCH_GROUPS = [
     '"Rochdale" OR "Heywood" OR "Middleton"',
@@ -436,6 +530,7 @@ class Candidate:
     source_kind: str = "article"
     related_sources: list[dict[str, str]] = field(default_factory=list)
     social_context: list[dict[str, Any]] = field(default_factory=list)
+    story_key: str = ""
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -628,6 +723,14 @@ def article_is_local(article: dict[str, Any]) -> bool:
 
 # Locality rules are isolated in a dependency-free module and regression-tested
 # before each scraper run.
+from story_identity import (
+    authority_score,
+    build_story_key,
+    dedupe_article_records,
+    merge_article_records,
+    same_story,
+)
+
 from locality_rules import (
     AREA_KEYWORDS,
     LOCAL_TERMS,
@@ -845,7 +948,7 @@ def google_news_sources() -> list[dict[str, str]]:
     return [
         {
             "name": f"Google News search {index + 1}",
-            "url": f"https://news.google.com/rss/search?q={quote_plus(query + ' when:1d')}&hl=en-GB&gl=GB&ceid=GB:en",
+            "url": f"https://news.google.com/rss/search?q={quote_plus(query + ' when:1d -site:rochdaleonline.co.uk -site:rochdaletimes.co.uk')}&hl=en-GB&gl=GB&ceid=GB:en",
             "default_area": "rochdale",
             "aggregator": "google",
         }
@@ -859,7 +962,7 @@ def collect_rss_candidates() -> list[Candidate]:
         feed = feedparser.parse(source["url"])
         if getattr(feed, "bozo", False):
             log.warning("RSS warning for %s: %s", source["name"], getattr(feed, "bozo_exception", "unknown"))
-        for entry in list(feed.entries)[:40]:
+        for entry in list(feed.entries)[:RSS_ITEMS_PER_SOURCE]:
             source_url = canonicalise_url(str(getattr(entry, "link", "") or ""))
             source_title = strip_markdown(getattr(entry, "title", ""))
             summary_html = str(getattr(entry, "summary", "") or getattr(entry, "description", "") or "")
@@ -917,26 +1020,48 @@ def collect_rss_candidates() -> list[Candidate]:
             ))
     return candidates
 
+def discovery_listing_urls(source: dict[str, str]) -> list[str]:
+    configured = DISCOVERY_LISTING_OVERRIDES.get(source["name"], [])
+    if configured:
+        return configured[:DISCOVERY_PAGE_LIMIT]
+    return [source["url"]]
+
+
 def discovery_links(source: dict[str, str]) -> list[str]:
-    try:
-        final_url, raw_html = fetch_html(source["url"])
-    except Exception as exc:
-        log.warning("Discovery page failed for %s: %s", source["name"], exc)
-        return []
-    soup = BeautifulSoup(raw_html, "lxml")
     pattern = re.compile(source["link_pattern"], re.IGNORECASE)
-    links, seen = [], set()
-    for anchor in soup.find_all("a", href=True):
-        url = canonicalise_url(urljoin(final_url, anchor["href"]))
-        if url in seen or domain_of(url) != domain_of(final_url):
+    links: list[str] = []
+    seen: set[str] = set()
+
+    for listing_url in discovery_listing_urls(source):
+        try:
+            final_url, raw_html = fetch_html(listing_url)
+        except Exception as exc:
+            log.warning(
+                "Discovery page failed for %s (%s): %s",
+                source["name"],
+                listing_url,
+                exc,
+            )
             continue
-        if not pattern.search(urlparse(url).path + "?" + urlparse(url).query):
-            continue
-        seen.add(url)
-        links.append(url)
-        if len(links) >= DISCOVERY_LINKS_PER_SOURCE:
-            break
+
+        soup = BeautifulSoup(raw_html, "lxml")
+        for anchor in soup.find_all("a", href=True):
+            url = canonicalise_url(urljoin(final_url, anchor["href"]))
+            if url in seen or domain_of(url) != domain_of(final_url):
+                continue
+            if source_is_denied(source.get("name", ""), url):
+                continue
+            if not pattern.search(
+                urlparse(url).path + "?" + urlparse(url).query
+            ):
+                continue
+            seen.add(url)
+            links.append(url)
+            if len(links) >= DISCOVERY_LINKS_PER_SOURCE:
+                return links
+
     return links
+
 
 def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
     if source_is_denied(source.get("name", ""), url):
@@ -1006,7 +1131,10 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
 
 def collect_discovery_candidates() -> list[Candidate]:
     jobs: list[tuple[dict[str, str], str]] = []
-    for source in DISCOVERY_PAGES:
+    all_discovery_sources = DISCOVERY_PAGES + GMP_ROCHDALE_AREA_PAGES
+    for source in all_discovery_sources:
+        if source_is_denied(source.get("name", ""), source.get("url", "")):
+            continue
         log.info("Discovering pages: %s", source["name"])
         jobs.extend((source, url) for url in discovery_links(source))
 
@@ -1028,6 +1156,64 @@ def collect_discovery_candidates() -> list[Candidate]:
 
     return candidates
 
+
+
+def collect_live_page_candidates() -> list[Candidate]:
+    candidates: list[Candidate] = []
+
+    for source in LIVE_PAGE_SOURCES:
+        if source_is_denied(source["name"], source["url"]):
+            continue
+        try:
+            final_url, raw_html = fetch_html(source["url"])
+        except Exception as exc:
+            log.warning("Live page failed for %s: %s", source["name"], exc)
+            continue
+
+        soup = BeautifulSoup(raw_html, "lxml")
+        blocks: list[str] = []
+        seen_blocks: set[str] = set()
+
+        for node in soup.select(
+            "article, li, section, .alert, .travel-alert, .service-update, main p"
+        ):
+            text = normalise_ws(node.get_text(" ", strip=True))
+            if len(text) < 45:
+                continue
+            if not is_local(text, source["name"], final_url):
+                continue
+            key = text.lower()[:240]
+            if key in seen_blocks:
+                continue
+            seen_blocks.add(key)
+            blocks.append(text)
+            if len(blocks) >= 12:
+                break
+
+        for index, block in enumerate(blocks):
+            area = detect_area(
+                block,
+                source["default_area"],
+                source["name"],
+                final_url,
+            )
+            if not area:
+                continue
+
+            short = block[:145].rsplit(" ", 1)[0]
+            candidates.append(Candidate(
+                source_name=source["name"],
+                source_url=f"{canonicalise_url(final_url)}#live-{stable_id(block)}",
+                source_title=short,
+                source_summary=block[:1000],
+                source_published_at=iso_utc(utc_now()),
+                area=area,
+                category=source["category"],
+                source_body_excerpt=block[:3500],
+                source_kind="live",
+            ))
+
+    return candidates
 
 
 def extract_future_event_date(text: str) -> str:
@@ -1806,47 +1992,66 @@ def collect_environment_agency_flood_candidates() -> list[Candidate]:
     return candidates
 
 
-def title_tokens(title: str) -> set[str]:
-    stop = {"the", "a", "an", "and", "or", "to", "of", "in", "on", "for", "with", "from", "at", "rochdale"}
-    return {word for word in re.findall(r"[a-z0-9]+", title.lower()) if len(word) > 2 and word not in stop}
+def candidate_related_record(candidate: Candidate) -> dict[str, str]:
+    return {
+        "name": candidate.source_name,
+        "url": candidate.source_url,
+        "title": candidate.source_title,
+        "summary": candidate.source_summary[:1200],
+        "published_at": candidate.source_published_at,
+        "source_kind": candidate.source_kind,
+    }
 
-def title_similarity(a: str, b: str) -> float:
-    aa, bb = title_tokens(a), title_tokens(b)
-    if not aa or not bb:
-        return 0.0
-    return len(aa & bb) / len(aa | bb)
 
-def deduplicate_and_cross_reference(candidates: Iterable[Candidate]) -> list[Candidate]:
-    ordered = sorted(candidates, key=lambda item: item.source_published_at, reverse=True)
+def deduplicate_and_cross_reference(
+    candidates: Iterable[Candidate],
+) -> list[Candidate]:
+    ordered = sorted(
+        candidates,
+        key=lambda item: (
+            authority_score(item),
+            item.source_published_at,
+        ),
+        reverse=True,
+    )
     primaries: list[Candidate] = []
     seen_urls: set[str] = set()
+
     for candidate in ordered:
         if source_is_denied(candidate.source_name, candidate.source_url):
             continue
+        if not candidate.area:
+            continue
+
         candidate.related_sources = [
             item for item in candidate.related_sources
-            if not source_is_denied(item.get("name", ""), item.get("url", ""))
+            if not source_is_denied(
+                item.get("name", ""),
+                item.get("url", ""),
+            )
         ]
+
         url_key = canonicalise_url(candidate.source_url)
         if url_key in seen_urls:
             continue
         seen_urls.add(url_key)
+
         matched = None
         for primary in primaries:
-            if title_similarity(candidate.source_title, primary.source_title) >= 0.38:
+            if same_story(candidate, primary):
                 matched = primary
                 break
-        if matched:
-            matched.related_sources.append({
-                "name": candidate.source_name,
-                "url": candidate.source_url,
-                "title": candidate.source_title,
-                "summary": candidate.source_summary[:900],
-                "published_at": candidate.source_published_at,
-            })
-        else:
+
+        if matched is None:
+            candidate.story_key = build_story_key(candidate)
             primaries.append(candidate)
+            continue
+
+        matched.related_sources.append(candidate_related_record(candidate))
+        matched.story_key = build_story_key(matched)
+
     return primaries
+
 
 def load_json_list(path: Path) -> list[dict[str, Any]]:
     try:
@@ -1876,7 +2081,7 @@ def recent_existing_articles() -> list[dict[str, Any]]:
             article["title"] = strip_markdown(article.get("title"))
             article["excerpt"] = strip_markdown(article.get("excerpt"))
             kept.append(article)
-    return kept
+    return dedupe_article_records(kept)
 
 def _source_image_allowed(candidate: Candidate) -> bool:
     if not candidate.image_candidate_url:
@@ -1931,7 +2136,7 @@ ADDRESS_RE = re.compile(
 PERSON_RE = re.compile(r"\b(?:Mr|Mrs|Ms|Miss|Dr)?\s*([A-Z][a-z'-]+(?:\s+[A-Z][a-z'-]+){1,2})\b")
 NAME_EXCLUSIONS = {
     "Greater Manchester", "Rochdale Daily", "Rochdale Council", "Rochdale Borough Council",
-    "Greater Manchester Police", "Manchester Evening News", "Rochdale Online",
+    "Greater Manchester Police", "Manchester Evening News",
     "Rochdale AFC", "Rochdale Hornets", "National Highways", "Bee Network",
     "Northern Care Alliance", "Pennine Care", "Hopwood Hall", "United Kingdom",
 }
@@ -2194,8 +2399,8 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         return None
 
     image_url, image_credit = source_image(candidate, category)
-    source_urls = [candidate.source_url] + [item["url"] for item in candidate.related_sources[:4] if item.get("url")]
-    source_names = [candidate.source_name] + [item["name"] for item in candidate.related_sources[:4] if item.get("name")]
+    source_urls = [candidate.source_url] + [item["url"] for item in candidate.related_sources[:11] if item.get("url")]
+    source_names = [candidate.source_name] + [item["name"] for item in candidate.related_sources[:11] if item.get("name")]
 
     legal_disclaimer = strip_markdown(draft.get("legal_disclaimer")) or default_legal_disclaimer(sensitive)
     right_to_reply = strip_markdown(draft.get("right_to_reply")) or (
@@ -2208,6 +2413,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
 
     return {
         "id": stable_id(candidate.source_url),
+        "story_key": candidate.story_key or build_story_key(candidate),
         "title": title,
         "slug": make_slug(title),
         "excerpt": excerpt,
@@ -2264,40 +2470,141 @@ def write_json_atomic(path: Path, payload: Any) -> None:
     temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     temporary.replace(path)
 
+def safe_collect(
+    name: str,
+    collector: Any,
+    collector_counts: dict[str, int],
+    collector_errors: dict[str, str],
+) -> list[Candidate]:
+    try:
+        items = collector()
+        collector_counts[name] = len(items)
+        return items
+    except Exception as exc:
+        log.exception("Collector failed: %s", name)
+        collector_counts[name] = 0
+        collector_errors[name] = str(exc)
+        return []
+
+
 def main() -> int:
     log.info("Starting Rochdale Daily 15-minute pipeline")
     existing = recent_existing_articles()
-    existing_by_source = {
-        canonicalise_url(str(item.get("source_url") or "")): item
-        for item in existing if item.get("source_url")
+
+    existing_by_story = {
+        build_story_key(item): item
+        for item in existing
     }
+
+    collector_counts: dict[str, int] = {}
+    collector_errors: dict[str, str] = {}
 
     x_social_records = collect_x_social_records()
     facebook_social_records = collect_facebook_social_records()
 
-    candidates = deduplicate_and_cross_reference(
-        collect_rss_candidates()
-        + collect_discovery_candidates()
-        + collect_facebook_event_discovery_candidates()
-        + collect_facebook_candidates()
-        + collect_x_candidates()
-        + collect_environment_agency_flood_candidates()
-    )
+    batches = {
+        "rss_and_google_news": safe_collect(
+            "rss_and_google_news",
+            collect_rss_candidates,
+            collector_counts,
+            collector_errors,
+        ),
+        "website_discovery": safe_collect(
+            "website_discovery",
+            collect_discovery_candidates,
+            collector_counts,
+            collector_errors,
+        ),
+        "live_service_pages": safe_collect(
+            "live_service_pages",
+            collect_live_page_candidates,
+            collector_counts,
+            collector_errors,
+        ),
+        "facebook_events": safe_collect(
+            "facebook_events",
+            collect_facebook_event_discovery_candidates,
+            collector_counts,
+            collector_errors,
+        ),
+        "facebook_official": safe_collect(
+            "facebook_official",
+            collect_facebook_candidates,
+            collector_counts,
+            collector_errors,
+        ),
+        "x_official": safe_collect(
+            "x_official",
+            collect_x_candidates,
+            collector_counts,
+            collector_errors,
+        ),
+        "environment_agency": safe_collect(
+            "environment_agency",
+            collect_environment_agency_flood_candidates,
+            collector_counts,
+            collector_errors,
+        ),
+    }
+
+    raw_candidates = [
+        candidate
+        for batch in batches.values()
+        for candidate in batch
+    ]
+    candidates = deduplicate_and_cross_reference(raw_candidates)
 
     correlate_social_context(
         candidates,
         x_social_records + facebook_social_records,
     )
-    log.info("Fresh local story clusters: %d", len(candidates))
+    log.info(
+        "Candidate volume: %d raw items -> %d story clusters",
+        len(raw_candidates),
+        len(candidates),
+    )
 
     api_key = os.getenv("OPENAI_API_KEY")
-    run_limit = MAX_AI_ARTICLES_INITIAL if len(existing) < MIN_LIVE_STORIES else MAX_AI_ARTICLES_PER_RUN
+    run_limit = (
+        MAX_AI_ARTICLES_INITIAL
+        if len(existing) < MIN_LIVE_STORIES
+        else MAX_AI_ARTICLES_PER_RUN
+    )
 
-    selected_candidates = [
-        candidate for candidate in candidates
-        if canonicalise_url(candidate.source_url) not in existing_by_source
-        and not source_is_denied(candidate.source_name, candidate.source_url)
-    ][:run_limit]
+    selected_candidates: list[Candidate] = []
+    for candidate in candidates:
+        candidate.story_key = candidate.story_key or build_story_key(candidate)
+        existing_article = existing_by_story.get(candidate.story_key)
+
+        if existing_article is None:
+            selected_candidates.append(candidate)
+        else:
+            known_urls = {
+                canonicalise_url(url)
+                for url in existing_article.get("source_urls", [])
+                if url
+            }
+            primary_url = canonicalise_url(
+                str(existing_article.get("source_url") or "")
+            )
+            if primary_url:
+                known_urls.add(primary_url)
+
+            candidate_urls = {
+                canonicalise_url(candidate.source_url),
+                *{
+                    canonicalise_url(item.get("url", ""))
+                    for item in candidate.related_sources
+                    if item.get("url")
+                },
+            }
+            if candidate_urls - known_urls:
+                # Rebuild an evolving story when a genuinely new corroborating
+                # source or official update has appeared.
+                selected_candidates.append(candidate)
+
+        if len(selected_candidates) >= run_limit:
+            break
 
     new_articles: list[dict[str, Any]] = []
     skipped = 0
@@ -2316,7 +2623,11 @@ def main() -> int:
             try:
                 article = future.result()
             except Exception as exc:
-                log.exception("Rewrite failed for %s: %s", candidate.source_url, exc)
+                log.exception(
+                    "Rewrite failed for %s: %s",
+                    candidate.source_url,
+                    exc,
+                )
                 skipped += 1
                 continue
             if article:
@@ -2327,10 +2638,16 @@ def main() -> int:
     ai_count = len(selected_candidates)
 
     merged: dict[str, dict[str, Any]] = {}
-    for article in new_articles + existing:
-        key = canonicalise_url(str(article.get("source_url") or article.get("id") or ""))
-        if key and key not in merged:
-            merged[key] = article
+    for article in existing + new_articles:
+        story_key = build_story_key(article)
+        article["story_key"] = story_key
+        if story_key in merged:
+            merged[story_key] = merge_article_records(
+                merged[story_key],
+                article,
+            )
+        else:
+            merged[story_key] = article
 
     publishable_values = []
     for article in merged.values():
@@ -2339,44 +2656,73 @@ def main() -> int:
             str(article.get("source_url") or ""),
         ):
             continue
+
         published_at = parse_datetime(article.get("published_at"))
         source_kind = str(article.get("source_kind") or "article")
         event_start = parse_datetime(article.get("event_start_at"))
+
         if not article_is_local(article):
             log.warning(
                 "Rejected non-local article after rewrite: %s",
                 article.get("title"),
             )
             continue
+
         if (
             is_fresh(published_at)
-            or (source_kind == "event" and event_is_current_or_future(event_start))
-            or (source_kind == "live" and is_current_uk_day(published_at))
+            or (
+                source_kind == "event"
+                and event_is_current_or_future(event_start)
+            )
+            or (
+                source_kind == "live"
+                and is_current_uk_day(published_at)
+            )
         ):
             publishable_values.append(article)
 
     published = sorted(
-        publishable_values,
-        key=lambda article: parse_datetime(article.get("published_at"))
-        or datetime.min.replace(tzinfo=timezone.utc),
+        dedupe_article_records(publishable_values),
+        key=lambda article: (
+            parse_datetime(article.get("published_at"))
+            or datetime.min.replace(tzinfo=timezone.utc)
+        ),
         reverse=True,
     )[:MAX_PUBLISHED_ARTICLES]
 
     write_json_atomic(OUTPUT_FILE, published)
+
     source_counts: dict[str, int] = {}
-    for candidate in candidates:
-        source_counts[candidate.source_name] = source_counts.get(candidate.source_name, 0) + 1
+    for candidate in raw_candidates:
+        source_counts[candidate.source_name] = (
+            source_counts.get(candidate.source_name, 0) + 1
+        )
+
     write_json_atomic(STATUS_FILE, {
         "last_run_at": iso_utc(utc_now()),
+        "raw_candidates": len(raw_candidates),
         "candidate_clusters": len(candidates),
+        "duplicates_merged": max(0, len(raw_candidates) - len(candidates)),
         "attempted_rewrites": ai_count,
         "new_articles": len(new_articles),
         "live_articles": len(published),
         "skipped": skipped,
-        "source_counts": dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)),
+        "collector_counts": collector_counts,
+        "collector_errors": collector_errors,
+        "source_counts": dict(sorted(
+            source_counts.items(),
+            key=lambda item: item[1],
+            reverse=True,
+        )),
         "openai_enabled": bool(api_key),
         "same_day_only": SAME_DAY_ONLY,
-        "prohibited_sources": sorted(SOURCE_DENY_DOMAINS),
+        "prohibited_sources": [
+            "rochdaletimes.co.uk",
+            "rochdaleonline.co.uk",
+        ],
+        "selected_story_keys": [
+            candidate.story_key for candidate in selected_candidates
+        ],
         "selected_candidate_urls": [
             candidate.source_url for candidate in selected_candidates
         ],
@@ -2390,15 +2736,27 @@ def main() -> int:
             FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED
         ),
         "locality_rule": (
-            "Ambiguous place names require explicit geographical context; "
-            "Langley is not accepted as a standalone locality."
+            "Single-word locality names require geographical context; "
+            "person surnames are not accepted as locations."
+        ),
+        "story_identity_rule": (
+            "Stories are clustered by named entities, subject terms, area, "
+            "category and date; interviews/reactions are merged into the "
+            "underlying announcement where they describe the same event."
         ),
     })
+
     log.info(
-        "Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped",
-        len(published), len(new_articles), ai_count, skipped,
+        "Complete: %d live articles, %d new, %d AI/fallback attempts, "
+        "%d skipped, %d duplicates merged",
+        len(published),
+        len(new_articles),
+        ai_count,
+        skipped,
+        max(0, len(raw_candidates) - len(candidates)),
     )
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
