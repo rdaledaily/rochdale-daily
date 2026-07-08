@@ -126,3 +126,9 @@ assert detect_area(
 assert "langley" not in AREA_KEYWORDS
 
 print(f"Locality regression tests passed: {len(CASES)} classification cases plus area tests.")
+
+assert not is_local(
+    "Local news update",
+    "Rochdale Online",
+    "https://www.rochdaleonline.co.uk/news/example",
+)
