@@ -39,6 +39,10 @@ jobs:
       MAX_AI_ARTICLES_PER_RUN: "50"
       MAX_AI_ARTICLES_INITIAL: "100"
       RESPECT_ROBOTS: "true"
+      # Some real, legitimate sources (e.g. yourtrustrochdale.co.uk/exhibitions/)
+      # are simply slow to respond from a GitHub Actions runner. 12s was too
+      # tight and caused occasional false-negative failures on that page.
+      REQUEST_TIMEOUT: "20"
       USE_SOURCE_IMAGES: "true"
       SAME_DAY_ONLY: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
@@ -150,12 +154,16 @@ jobs:
         run: |
           python -m json.tool articles.json > /dev/null
 
+      - name: Generate static article pages and sitemap
+        run: |
+          python scraper/generate_pages.py
+
       - name: Commit updated feed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add articles.json scraper_status.json assets/img/generated
+          git add articles.json scraper_status.json assets/img/generated articles sitemap.xml
 
           if git diff --cached --quiet; then
             echo "No article changes to commit."
