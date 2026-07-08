@@ -57,6 +57,9 @@ OUTPUT_FILE = ROOT / "articles.json"
 LOG_FILE = ROOT / "scraper" / "scraper.log"
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+AI_REWRITE_REQUIRED = os.getenv(
+    "AI_REWRITE_REQUIRED", "true"
+).lower() not in {"0", "false", "no", "off"}
 MAX_NEWS_AGE_HOURS = int(os.getenv("MAX_NEWS_AGE_HOURS", "168"))
 RETENTION_DAYS = int(os.getenv("ARTICLE_RETENTION_DAYS", "14"))
 MAX_PUBLISHED_ARTICLES = int(os.getenv("MAX_PUBLISHED_ARTICLES", "100"))
@@ -65,6 +68,7 @@ MAX_AI_ARTICLES_INITIAL = int(os.getenv("MAX_AI_ARTICLES_INITIAL", "60"))
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "12"))
 DISCOVERY_LINKS_PER_SOURCE = int(os.getenv("DISCOVERY_LINKS_PER_SOURCE", "40"))
 RSS_ITEMS_PER_SOURCE = int(os.getenv("RSS_ITEMS_PER_SOURCE", "100"))
+GOOGLE_SEARCH_QUERY_LIMIT = int(os.getenv("GOOGLE_SEARCH_QUERY_LIMIT", "128"))
 DISCOVERY_PAGE_LIMIT = int(os.getenv("DISCOVERY_PAGE_LIMIT", "3"))
 DISCOVERY_WORKERS = int(os.getenv("DISCOVERY_WORKERS", "16"))
 AI_WORKERS = int(os.getenv("AI_WORKERS", "6"))
@@ -83,7 +87,7 @@ HTTP_POOL_MAXSIZE = int(os.getenv("HTTP_POOL_MAXSIZE", "64"))
 STATUS_FILE = ROOT / "scraper_status.json"
 GENERATED_IMAGE_DIR = ROOT / "assets" / "img" / "generated"
 GENERATED_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
-RESPECT_ROBOTS = os.getenv("RESPECT_ROBOTS", "true").lower() not in {"0", "false", "no"}
+RESPECT_ROBOTS = True
 USE_SOURCE_IMAGES = os.getenv("USE_SOURCE_IMAGES", "false").lower() in {"1", "true", "yes"}
 RIGHT_TO_REPLY_EMAIL = os.getenv("RIGHT_TO_REPLY_EMAIL", "news@rochdaledaily.co.uk")
 UK_TZ = ZoneInfo("Europe/London")
@@ -132,6 +136,14 @@ RSS_SOURCES = [
     {"name": "Rochdale Borough Council", "url": "https://www.rochdale.gov.uk/news/rss.xml", "default_area": "rochdale"},
     {"name": "Greater Manchester Police", "url": "https://www.gmp.police.uk/news/rss.xml", "default_area": "rochdale"},
     {"name": "BBC Manchester", "url": "https://feeds.bbci.co.uk/news/england/manchester/rss.xml", "default_area": "rochdale"},
+    {
+        "name": "Manchester Evening News — Rochdale",
+        "url": "https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss",
+        "section_url": "https://www.manchestereveningnews.co.uk/all-about/rochdale",
+        "default_area": "rochdale",
+        "rss_only": True,
+        "publisher_domain": "manchestereveningnews.co.uk",
+    },
     {"name": "Greater Manchester Fire and Rescue Service", "url": "https://www.manchesterfire.gov.uk/news-events/news/feed/", "default_area": "rochdale"},
     {"name": "Rochdale AFC", "url": "https://www.rochdaleafc.co.uk/news/feed", "default_area": "rochdale"},
 ]
@@ -145,6 +157,9 @@ DISCOVERY_PAGES = [
     {"name": "Rochdale Council Your Events", "url": "https://www.rochdale.gov.uk/yourevents", "default_area": "rochdale", "link_pattern": r"/events/|/directory-record/"},
     {"name": "Rochdale Council Consultations", "url": "https://consultations.rochdale.gov.uk/consultation_finder/?advanced=1", "default_area": "rochdale", "link_pattern": r"/"},
     {"name": "Rochdale Council Committees", "url": "https://democracy.rochdale.gov.uk/mgCalendarMonthView.aspx?GL=1&bcr=1", "default_area": "rochdale", "link_pattern": r"mgMeetingAttendance|ieListDocuments|mgCommitteeDetails"},
+    {"name": "Rochdale Council Meeting Documents", "url": "https://democracy.rochdale.gov.uk/ieDocHome.aspx?Categories=", "default_area": "rochdale", "link_pattern": r"ieListDocuments|documents/"},
+    {"name": "Rochdale Councillor Directory", "url": "https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1", "default_area": "rochdale", "link_pattern": r"mgUserInfo.aspx"},
+    {"name": "Rochdale Council Document Search", "url": "https://democracy.rochdale.gov.uk/iedocsearch.aspx?SS=Text+to+search+for&adv=1&fc=1", "default_area": "rochdale", "link_pattern": r"ieListDocuments|documents/|mgAi.aspx"},
     {"name": "Rochdale Planning Applications", "url": "https://www.rochdale.gov.uk/planningapplications", "default_area": "rochdale", "link_pattern": r"planning|application|publicaccess"},
     {"name": "Rochdale Development Agency", "url": "https://investinrochdale.co.uk/news", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "Visit Rochdale", "url": "https://www.visitrochdale.com/whats-on", "default_area": "rochdale", "link_pattern": r"/whats-on/"},
@@ -170,7 +185,6 @@ DISCOVERY_PAGES = [
     {"name": "GMCA News", "url": "https://www.greatermanchester-ca.gov.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/"},
 
     # Local and regional publishers
-    {"name": "Manchester Evening News", "url": "https://www.manchestereveningnews.co.uk/all-about/rochdale", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "BBC Manchester", "url": "https://www.bbc.co.uk/news/england/manchester", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "About Manchester", "url": "https://aboutmanchester.co.uk/?s=Rochdale", "default_area": "rochdale", "link_pattern": r"/"},
 
@@ -183,45 +197,6 @@ DISCOVERY_PAGES = [
     # Sport
     {"name": "Rochdale AFC", "url": "https://rochdaleafc.co.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "Rochdale Hornets", "url": "https://www.rochdalehornets.co.uk/news", "default_area": "rochdale", "link_pattern": r"/news"},
-]
-
-GMP_ROCHDALE_AREA_PAGES = [
-    {
-        "name": "GMP Rochdale Town Centre",
-        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/rochdale-town-centre/news/our-priorities",
-        "default_area": "rochdale",
-        "link_pattern": r"/news/greater-manchester/news/news/",
-    },
-    {
-        "name": "GMP Rochdale Central",
-        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/rochdale-central/news/our-priorities",
-        "default_area": "rochdale",
-        "link_pattern": r"/news/greater-manchester/news/news/",
-    },
-    {
-        "name": "GMP Bamford",
-        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/bamford/news/our-priorities",
-        "default_area": "bamford",
-        "link_pattern": r"/news/greater-manchester/news/news/",
-    },
-    {
-        "name": "GMP Healey",
-        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/healey/news/our-priorities",
-        "default_area": "healey",
-        "link_pattern": r"/news/greater-manchester/news/news/",
-    },
-    {
-        "name": "GMP East Middleton",
-        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/east-middleton/news/our-priorities",
-        "default_area": "middleton",
-        "link_pattern": r"/news/greater-manchester/news/news/",
-    },
-    {
-        "name": "GMP West Middleton",
-        "url": "https://www.gmp.police.uk/area/your-area/greater-manchester/rochdale/west-middleton/news/our-priorities",
-        "default_area": "middleton",
-        "link_pattern": r"/news/greater-manchester/news/news/",
-    },
 ]
 
 LIVE_PAGE_SOURCES = [
@@ -271,32 +246,10 @@ DISCOVERY_LISTING_OVERRIDES = {
         "https://www.rochvalleyradio.com/news/local-news/?page=2",
         "https://www.rochvalleyradio.com/news/local-news/?page=3",
     ],
-    "Manchester Evening News": [
-        "https://www.manchestereveningnews.co.uk/all-about/rochdale",
-        "https://www.manchestereveningnews.co.uk/all-about/rochdale?page=2",
-        "https://www.manchestereveningnews.co.uk/all-about/rochdale?page=3",
-    ],
 }
 
-SEARCH_GROUPS = [
-    '"Rochdale" OR "Heywood" OR "Middleton"',
-    '"Littleborough" OR "Milnrow" OR "Newhey" OR "Wardle"',
-    '"Norden" OR "Bamford" OR "Castleton" OR "Kirkholt"',
-    '"Spotland" OR "Falinge" OR "Deeplish" OR "Balderstone"',
-    '"Shawclough" OR "Healey" OR "Smallbridge" OR "Smithy Bridge"',
-    '"Darnhill" OR "Hopwood" OR "Alkrington" OR "Boarshaw"',
-    'Rochdale police OR court OR crime OR fire',
-    'Rochdale traffic OR M62 OR roadworks OR Bee Network OR Northern',
-    'Rochdale council OR planning OR consultation OR ward',
-    'Rochdale sport OR Rochdale AFC OR Rochdale Hornets',
-    'Rochdale community OR events OR school OR NHS',
-    '"Roch Valley Radio" Rochdale',
-    '"Action Together" Rochdale',
-    '"Your Trust" Rochdale',
-    'site:facebook.com/rochvalleyradio Rochdale',
-    'site:facebook.com/rochdalecouncil Rochdale',
-    'site:facebook.com/beenetworkgm Rochdale',
-]
+SEARCH_QUERY_SPECS = build_search_query_specs(GOOGLE_SEARCH_QUERY_LIMIT)
+SEARCH_GROUPS = [spec.query for spec in SEARCH_QUERY_SPECS]
 
 FACEBOOK_GRAPH_VERSION = os.getenv("FACEBOOK_GRAPH_VERSION", "v22.0")
 FACEBOOK_PAGE_ACCESS_TOKEN = os.getenv("FACEBOOK_PAGE_ACCESS_TOKEN", "").strip()
@@ -546,6 +499,8 @@ SESSION.mount("https://", HTTP_ADAPTER)
 SESSION.mount("http://", HTTP_ADAPTER)
 
 ROBOTS_CACHE: dict[str, urllib.robotparser.RobotFileParser] = {}
+ROBOTS_DENIED_URLS: list[str] = []
+ROBOTS_DENIED_SEEN: set[str] = set()
 
 @dataclass
 class Candidate:
@@ -757,6 +712,12 @@ def article_is_local(article: dict[str, Any]) -> bool:
 
 # Locality rules are isolated in a dependency-free module and regression-tested
 # before each scraper run.
+from rewrite_safety import excessive_source_overlap
+
+from search_queries import (
+    build_search_query_specs,
+)
+
 from selection_policy import (
     PUBLISH_CATEGORIES,
     ROCHDALE_WARDS,
@@ -815,6 +776,15 @@ def robots_allows(url: str) -> bool:
 
 def fetch_html(url: str) -> tuple[str, str]:
     if not robots_allows(url):
+        canonical = canonicalise_url(url)
+        if canonical not in ROBOTS_DENIED_SEEN:
+            ROBOTS_DENIED_SEEN.add(canonical)
+            ROBOTS_DENIED_URLS.append(canonical)
+            log.info(
+                "robots.txt declined direct fetch; relying on RSS, indexed "
+                "search results or authorised APIs instead: %s",
+                canonical,
+            )
         raise PermissionError(f"robots.txt does not permit fetching {url}")
     response = SESSION.get(url, timeout=REQUEST_TIMEOUT, allow_redirects=True)
     response.raise_for_status()
@@ -990,15 +960,33 @@ def rss_image(entry: Any) -> str:
     return ""
 
 def google_news_sources() -> list[dict[str, str]]:
-    return [
-        {
-            "name": f"Google News search {index + 1}",
-            "url": f"https://news.google.com/rss/search?q={quote_plus(query + ' when:1d -site:rochdaleonline.co.uk -site:rochdaletimes.co.uk -vacancy -vacancies -careers -recruitment -hiring -apprenticeship -internship')}&hl=en-GB&gl=GB&ceid=GB:en",
+    sources: list[dict[str, str]] = []
+    exclusions = (
+        " when:1d"
+        " -site:rochdaleonline.co.uk"
+        " -site:rochdaletimes.co.uk"
+        " -vacancy -vacancies -careers -recruitment -hiring"
+        " -apprenticeship -internship"
+    )
+
+    for index, spec in enumerate(SEARCH_QUERY_SPECS, start=1):
+        sources.append({
+            "name": f"Google News — {spec.label}",
+            "url": (
+                "https://news.google.com/rss/search?q="
+                f"{quote_plus(spec.query + exclusions)}"
+                "&hl=en-GB&gl=GB&ceid=GB:en"
+            ),
             "default_area": "rochdale",
             "aggregator": "google",
-        }
-        for index, query in enumerate(SEARCH_GROUPS)
-    ]
+            "query_label": spec.label,
+            "query_category": spec.category,
+            "query_ward": spec.ward,
+            "query_person": spec.person,
+        })
+
+    return sources
+
 
 def collect_rss_candidates() -> list[Candidate]:
     candidates: list[Candidate] = []
@@ -1032,7 +1020,11 @@ def collect_rss_candidates() -> list[Candidate]:
                 continue
             image_url = rss_image(entry)
             body_excerpt = summary
-            if source.get("aggregator") != "google" and (not image_url or len(summary) < 100):
+            if (
+                source.get("aggregator") != "google"
+                and not source.get("rss_only")
+                and (not image_url or len(summary) < 100)
+            ):
                 try:
                     meta = page_metadata(source_url)
                     source_title = meta["title"] or source_title
@@ -1059,9 +1051,18 @@ def collect_rss_candidates() -> list[Candidate]:
                     source_name,
                     source_url,
                 ),
-                category=categorise(combined),
+                category=(
+                    categorise(combined)
+                    if categorise(combined) != "news"
+                    else source.get("query_category", "news")
+                ),
                 image_candidate_url=image_url,
                 source_body_excerpt=body_excerpt,
+                source_kind=(
+                    "publisher_rss"
+                    if source.get("rss_only")
+                    else "article"
+                ),
             ))
     return candidates
 
@@ -1176,8 +1177,7 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
 
 def collect_discovery_candidates() -> list[Candidate]:
     jobs: list[tuple[dict[str, str], str]] = []
-    all_discovery_sources = DISCOVERY_PAGES + GMP_ROCHDALE_AREA_PAGES
-    for source in all_discovery_sources:
+    for source in DISCOVERY_PAGES:
         if source_is_denied(source.get("name", ""), source.get("url", "")):
             continue
         log.info("Discovering pages: %s", source["name"])
@@ -2313,13 +2313,20 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     sensitive = is_sensitive(source_text, candidate.category)
 
     if client is None:
+        if AI_REWRITE_REQUIRED:
+            log.error(
+                "OpenAI rewrite required but OPENAI_API_KEY is unavailable; "
+                "skipping %s",
+                candidate.source_url,
+            )
+            return None
         draft = source_led_draft(candidate, sensitive)
         if draft is None:
             return None
     else:
         system_message = (
             "You are the sub-editor for Rochdale Daily, an independent UK local-news publication. "
-            "Write an original local article using only the supplied source records. Combine corroborating "
+            "Write a genuinely original local article using only the facts in the supplied source records. ""Do not mirror the source headline, sentence order, paragraph order, rhetorical structure or distinctive wording. ""No sentence should reproduce ten or more consecutive words from any source record. ""Combine corroborating "
             "details where sources agree, but never invent facts, dates, quotations, prices, statistics, "
             "organisations, contact details or local impact. Do not claim the article is fact-checked. "
             "Do not output Markdown, HTML, hashtags or links. Use neutral UK English and short paragraphs. "
@@ -2392,10 +2399,24 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             )
             draft = json.loads(response.choices[0].message.content or "{}")
         except Exception as exc:
-            log.warning("OpenAI rewrite failed; using source-led brief for %s: %s", candidate.source_url, exc)
+            if AI_REWRITE_REQUIRED:
+                log.warning(
+                    "OpenAI rewrite failed; story skipped rather than using "
+                    "source-led copy for %s: %s",
+                    candidate.source_url,
+                    exc,
+                )
+                return None
+            log.warning(
+                "OpenAI rewrite failed; using source-led brief for %s: %s",
+                candidate.source_url,
+                exc,
+            )
             draft = source_led_draft(candidate, sensitive)
 
     if not draft or not bool(draft.get("publishable")):
+        if AI_REWRITE_REQUIRED:
+            return None
         draft = source_led_draft(candidate, sensitive)
         if draft is None:
             return None
@@ -2407,6 +2428,16 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         for item in draft.get("paragraphs", [])
         if strip_markdown(item)
     ][:8]
+
+    generated_copy_for_overlap = normalise_ws(" ".join(
+        [title, excerpt] + [str(paragraph) for paragraph in paragraphs]
+    ))
+    if excessive_source_overlap(generated_copy_for_overlap, source_text):
+        log.warning(
+            "Generated copy retained too much source wording; skipped: %s",
+            candidate.source_url,
+        )
+        return None
     community_reaction = strip_markdown(
         draft.get("community_reaction", "")
     )[:500]
@@ -2803,6 +2834,9 @@ def main() -> int:
             reverse=True,
         )),
         "openai_enabled": bool(api_key),
+        "ai_rewrite_required": AI_REWRITE_REQUIRED,
+        "source_led_fallback_enabled": not AI_REWRITE_REQUIRED,
+        "source_overlap_guard_enabled": True,
         "same_day_only": SAME_DAY_ONLY,
         "prohibited_sources": [
             "rochdaletimes.co.uk",
@@ -2839,6 +2873,36 @@ def main() -> int:
         "coverage": selection_diagnostics,
         "official_ward_count": len(ROCHDALE_WARDS),
         "career_and_vacancy_content_banned": True,
+        "search_query_count": len(SEARCH_QUERY_SPECS),
+        "search_queries": [
+            {
+                "label": spec.label,
+                "query": spec.query,
+                "category": spec.category,
+                "ward": spec.ward,
+                "person": spec.person,
+            }
+            for spec in SEARCH_QUERY_SPECS
+        ],
+        "robots_policy": (
+            "Direct fetching is never attempted when robots.txt declines it; "
+            "RSS, indexed search results and authorised APIs are used instead."
+        ),
+        "robots_denied_count": len(ROBOTS_DENIED_URLS),
+        "robots_denied_urls": ROBOTS_DENIED_URLS[:100],
+        "men_rochdale_source": {
+            "enabled": True,
+            "mode": "official section RSS",
+            "section_url": (
+                "https://www.manchestereveningnews.co.uk/"
+                "all-about/rochdale"
+            ),
+            "feed_url": (
+                "https://www.manchestereveningnews.co.uk/"
+                "all-about/rochdale?service=rss"
+            ),
+            "direct_page_crawling": False,
+        },
     })
 
     log.info(
