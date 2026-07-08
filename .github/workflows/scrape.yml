@@ -11,12 +11,12 @@ permissions:
 
 concurrency:
   group: rochdale-daily-15-minute-scraper
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 14
+    timeout-minutes: 35
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -26,14 +26,16 @@ jobs:
       FACEBOOK_EVENTS_MAX: "18"
       FACEBOOK_EVENT_IMAGE_REUSE: "false"
       OPENAI_MODEL: "gpt-4o-mini"
-      MAX_NEWS_AGE_HOURS: "168"
-      ARTICLE_RETENTION_DAYS: "14"
-      MAX_PUBLISHED_ARTICLES: "100"
-      MAX_AI_ARTICLES_PER_RUN: "12"
-      MAX_AI_ARTICLES_INITIAL: "35"
+      MAX_NEWS_AGE_HOURS: "24"
+      ARTICLE_RETENTION_DAYS: "1"
+      MAX_PUBLISHED_ARTICLES: "160"
+      MAX_AI_ARTICLES_PER_RUN: "30"
+      MAX_AI_ARTICLES_INITIAL: "60"
       RESPECT_ROBOTS: "true"
       USE_SOURCE_IMAGES: "false"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
+      SAME_DAY_ONLY: "true"
+      AI_WORKERS: "5"
 
     steps:
       - name: Check out repository
