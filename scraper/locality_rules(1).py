@@ -11,8 +11,8 @@ import re
 from typing import Any
 from urllib.parse import urlparse
 
-SOURCE_DENY_DOMAINS = {"rochdaletimes.co.uk"}
-SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper"}
+SOURCE_DENY_DOMAINS = {"rochdaletimes.co.uk", "rochdaleonline.co.uk"}
+SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper", "rochdale online"}
 
 TRUSTED_LOCAL_SOURCE_PREFIXES = (
     "Rochdale Borough Council",
@@ -22,7 +22,6 @@ TRUSTED_LOCAL_SOURCE_PREFIXES = (
     "Rochdale Development Agency",
     "Rochdale Town Hall",
     "Rochdale Police",
-    "Rochdale Online",
     "Roch Valley Radio",
     "Action Together Rochdale",
     "Your Trust Rochdale",
@@ -38,7 +37,6 @@ TRUSTED_LOCAL_DOMAINS = {
     "rochdaleafc.co.uk",
     "rochdalehornets.co.uk",
     "rochdaletownhall.co.uk",
-    "rochdaleonline.co.uk",
     "rochvalleyradio.com",
     "actiontogether.org.uk",
     "yourtrustrochdale.co.uk",
