@@ -23,6 +23,7 @@ unsafe or too thin after redaction are skipped rather than published.
 from __future__ import annotations
 
 import hashlib
+import io
 import html
 import json
 import logging
@@ -31,19 +32,20 @@ import re
 import time
 import urllib.parse
 import urllib.robotparser
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any, Iterable
 from zoneinfo import ZoneInfo
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import quote_plus, urljoin, urlparse, urlunparse
 
 import feedparser
 import requests
 from bs4 import BeautifulSoup
 from openai import OpenAI
+from PIL import Image, ImageOps, UnidentifiedImageError
 from dateparser.search import search_dates
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
@@ -53,23 +55,35 @@ OUTPUT_FILE = ROOT / "articles.json"
 LOG_FILE = ROOT / "scraper" / "scraper.log"
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-MAX_NEWS_AGE_HOURS = int(os.getenv("MAX_NEWS_AGE_HOURS", "24"))
-RETENTION_DAYS = int(os.getenv("ARTICLE_RETENTION_DAYS", "1"))
-MAX_PUBLISHED_ARTICLES = int(os.getenv("MAX_PUBLISHED_ARTICLES", "160"))
+MAX_NEWS_AGE_HOURS = int(os.getenv("MAX_NEWS_AGE_HOURS", "168"))
+RETENTION_DAYS = int(os.getenv("ARTICLE_RETENTION_DAYS", "14"))
+MAX_PUBLISHED_ARTICLES = int(os.getenv("MAX_PUBLISHED_ARTICLES", "100"))
 MAX_AI_ARTICLES_PER_RUN = int(os.getenv("MAX_AI_ARTICLES_PER_RUN", "30"))
 MAX_AI_ARTICLES_INITIAL = int(os.getenv("MAX_AI_ARTICLES_INITIAL", "60"))
-REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "20"))
+REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "12"))
+DISCOVERY_LINKS_PER_SOURCE = int(os.getenv("DISCOVERY_LINKS_PER_SOURCE", "8"))
+DISCOVERY_WORKERS = int(os.getenv("DISCOVERY_WORKERS", "12"))
+AI_WORKERS = int(os.getenv("AI_WORKERS", "5"))
+MIN_LIVE_STORIES = int(os.getenv("MIN_LIVE_STORIES", "30"))
+STATUS_FILE = ROOT / "scraper_status.json"
+GENERATED_IMAGE_DIR = ROOT / "assets" / "img" / "generated"
+GENERATED_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
 RESPECT_ROBOTS = os.getenv("RESPECT_ROBOTS", "true").lower() not in {"0", "false", "no"}
 USE_SOURCE_IMAGES = os.getenv("USE_SOURCE_IMAGES", "false").lower() in {"1", "true", "yes"}
 RIGHT_TO_REPLY_EMAIL = os.getenv("RIGHT_TO_REPLY_EMAIL", "news@rochdaledaily.co.uk")
 UK_TZ = ZoneInfo("Europe/London")
 SAME_DAY_ONLY = os.getenv("SAME_DAY_ONLY", "true").lower() not in {"0", "false", "no"}
-AI_WORKERS = max(1, min(8, int(os.getenv("AI_WORKERS", "5"))))
 
-# Absolute exclusion: this source can never enter the candidate list,
-# corroborating-source list or final public feed.
 SOURCE_DENY_DOMAINS = {"rochdaletimes.co.uk"}
 SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper"}
+
+LIVE_SOURCE_NAMES = {
+    "rochdale council service updates",
+    "tfgm travel alerts",
+    "northern service updates",
+    "united utilities incidents",
+    "environment agency flood-monitoring api",
+}
 
 FACEBOOK_EVENTS_DISCOVERY_URL = os.getenv(
     "FACEBOOK_EVENTS_DISCOVERY_URL",
@@ -89,7 +103,9 @@ IMAGE_REUSE_SOURCE_DOMAINS = {
         "IMAGE_REUSE_SOURCE_DOMAINS",
         "rochdale.gov.uk,gmp.police.uk,manchesterfire.gov.uk,rochdaleafc.co.uk,"
         "rochdalehornets.co.uk,tfgm.com,gmca.gov.uk,nationalhighways.co.uk,"
-        "hopwood.ac.uk,northerncarealliance.nhs.uk,penninecare.nhs.uk",
+        "hopwood.ac.uk,northerncarealliance.nhs.uk,penninecare.nhs.uk,"
+        "rochvalleyradio.com,actiontogether.org.uk,yourtrustrochdale.co.uk,"
+        "facebook.com",
     ).split(",")
     if item.strip()
 }
@@ -114,6 +130,7 @@ DISCOVERY_PAGES = [
     {"name": "Rochdale Planning Applications", "url": "https://www.rochdale.gov.uk/planningapplications", "default_area": "rochdale", "link_pattern": r"planning|application|publicaccess"},
     {"name": "Rochdale Development Agency", "url": "https://investinrochdale.co.uk/news", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "Visit Rochdale", "url": "https://www.visitrochdale.com/whats-on", "default_area": "rochdale", "link_pattern": r"/whats-on/"},
+    {"name": "Rochdale Town Hall Events", "url": "https://www.rochdaletownhall.co.uk/events?page=1", "default_area": "rochdale", "link_pattern": r"/events/event/"},
 
     # Community, culture and voluntary-sector sources
     {"name": "Action Together Rochdale News", "url": "https://www.actiontogether.org.uk/rochdale-news", "default_area": "rochdale", "link_pattern": r"/"},
@@ -169,26 +186,69 @@ SEARCH_GROUPS = [
     'site:facebook.com/rochvalleyradio Rochdale',
     'site:facebook.com/rochdalecouncil Rochdale',
     'site:facebook.com/beenetworkgm Rochdale',
-    '"Rochdale" breaking news when:1d',
-    '"Heywood" news when:1d',
-    '"Middleton" news when:1d',
-    '"Littleborough" news when:1d',
-    '"Milnrow" OR "Newhey" news when:1d',
-    '"Wardle" OR "Smallbridge" news when:1d',
-    '"Castleton" OR "Kirkholt" OR "Norden" news when:1d',
-    '"Spotland" OR "Falinge" OR "Deeplish" news when:1d',
-    '"Rochdale Council" news when:1d',
-    '"Rochdale" event OR festival OR community when:1d',
-    '"Rochdale" traffic OR collision OR closure when:1d',
-    '"Rochdale" NHS OR school OR college when:1d',
 ]
 
 FACEBOOK_GRAPH_VERSION = os.getenv("FACEBOOK_GRAPH_VERSION", "v22.0")
 FACEBOOK_PAGE_ACCESS_TOKEN = os.getenv("FACEBOOK_PAGE_ACCESS_TOKEN", "").strip()
+FACEBOOK_COMMENTS_ENABLED = os.getenv(
+    "FACEBOOK_COMMENTS_ENABLED", "true"
+).lower() not in {"0", "false", "no"}
+
+X_BEARER_TOKEN = os.getenv("X_BEARER_TOKEN", "").strip()
+X_API_BASE = os.getenv("X_API_BASE", "https://api.x.com/2").rstrip("/")
+X_RECENT_SEARCH_MAX = max(10, min(100, int(os.getenv("X_RECENT_SEARCH_MAX", "100"))))
+
+SOCIAL_CONTEXT_ENABLED = os.getenv(
+    "SOCIAL_CONTEXT_ENABLED", "true"
+).lower() not in {"0", "false", "no"}
+SOCIAL_MIN_PUBLIC_REACTIONS = max(
+    3, int(os.getenv("SOCIAL_MIN_PUBLIC_REACTIONS", "3"))
+)
+SOCIAL_MAX_PUBLIC_REACTIONS = max(
+    SOCIAL_MIN_PUBLIC_REACTIONS,
+    int(os.getenv("SOCIAL_MAX_PUBLIC_REACTIONS", "12")),
+)
+SOCIAL_MAX_OFFICIAL_UPDATES = max(
+    1, int(os.getenv("SOCIAL_MAX_OFFICIAL_UPDATES", "4"))
+)
+
+OFFICIAL_X_HANDLES = {
+    "gmprochdale": "Rochdale Police (GMP)",
+    "gmpolice": "Greater Manchester Police",
+}
+try:
+    extra_x_handles = json.loads(os.getenv("OFFICIAL_X_HANDLES_JSON", "{}"))
+    if isinstance(extra_x_handles, dict):
+        OFFICIAL_X_HANDLES.update({
+            str(handle).lstrip("@").lower(): str(name)
+            for handle, name in extra_x_handles.items()
+            if str(handle).strip() and str(name).strip()
+        })
+except json.JSONDecodeError:
+    pass
+
+X_SEARCH_QUERIES = [
+    (
+        '(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR '
+        'Newhey OR Wardle OR Norden OR Castleton OR Kirkholt OR Spotland OR '
+        'Falinge OR Deeplish) lang:en -is:retweet'
+    ),
+    '(from:GMPRochdale OR from:gmpolice) lang:en -is:retweet',
+    '(to:GMPRochdale OR @GMPRochdale) lang:en -is:retweet',
+]
+try:
+    extra_x_queries = json.loads(os.getenv("X_SEARCH_QUERIES_JSON", "[]"))
+    if isinstance(extra_x_queries, list):
+        X_SEARCH_QUERIES.extend(
+            str(query) for query in extra_x_queries if str(query).strip()
+        )
+except json.JSONDecodeError:
+    pass
 
 # Third-party public Page reading requires the appropriate Meta app review/access.
 # Additional pages can be supplied without code changes through FACEBOOK_PAGES_JSON.
 PUBLIC_FACEBOOK_PAGES = [
+    {"name": "Rochdale Police - GMP Facebook", "handle": "GMPRochdale", "url": "https://www.facebook.com/GMPRochdale", "default_area": "rochdale", "official": True},
     {"name": "Roch Valley Radio Facebook", "handle": "rochvalleyradio", "url": "https://www.facebook.com/rochvalleyradio", "default_area": "rochdale"},
     {"name": "Rochdale Borough Council Facebook", "handle": "rochdalecouncil", "url": "https://www.facebook.com/rochdalecouncil", "default_area": "rochdale"},
     {"name": "Bee Network Facebook", "handle": "beenetworkgm", "url": "https://www.facebook.com/beenetworkgm", "default_area": "rochdale"},
@@ -290,11 +350,14 @@ ARTICLE_SCHEMA = {
             "area": {"type": "string", "enum": list(AREA_KEYWORDS)},
             "legal_disclaimer": {"type": "string"},
             "right_to_reply": {"type": "string"},
+            "community_reaction": {"type": "string"},
+            "social_context_used": {"type": "boolean"},
             "reason": {"type": "string"},
         },
         "required": [
             "publishable", "title", "excerpt", "paragraphs", "category",
-            "area", "legal_disclaimer", "right_to_reply", "reason",
+            "area", "legal_disclaimer", "right_to_reply",
+            "community_reaction", "social_context_used", "reason",
         ],
     },
 }
@@ -331,6 +394,7 @@ class Candidate:
     event_location: str = ""
     source_kind: str = "article"
     related_sources: list[dict[str, str]] = field(default_factory=list)
+    social_context: list[dict[str, Any]] = field(default_factory=list)
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -347,6 +411,14 @@ def source_is_denied(source_name: str = "", source_url: str = "") -> bool:
         domain in SOURCE_DENY_DOMAINS
         or any(blocked in name for blocked in SOURCE_DENY_NAMES)
     )
+
+def is_current_uk_day(value: datetime | None) -> bool:
+    return bool(value) and value.astimezone(UK_TZ).date() == utc_now().astimezone(UK_TZ).date()
+
+def event_is_current_or_future(value: datetime | None) -> bool:
+    if value is None:
+        return False
+    return utc_now() - timedelta(hours=12) <= value <= utc_now() + timedelta(days=550)
 
 def canonicalise_url(url: str) -> str:
     parsed = urlparse(url)
@@ -400,15 +472,11 @@ def iso_utc(value: datetime) -> str:
 def is_fresh(value: datetime | None) -> bool:
     if value is None:
         return False
-
-    now = utc_now()
-    age = now - value
+    age = utc_now() - value
     if not (timedelta(minutes=-30) <= age <= timedelta(hours=MAX_NEWS_AGE_HOURS)):
         return False
-
     if SAME_DAY_ONLY:
-        return value.astimezone(UK_TZ).date() == now.astimezone(UK_TZ).date()
-
+        return is_current_uk_day(value)
     return True
 
 def detect_area(text: str, fallback: str = "rochdale") -> str:
@@ -424,9 +492,18 @@ def categorise(text: str) -> str:
     category, score = max(scores.items(), key=lambda item: item[1])
     return category if score else "news"
 
+LOCAL_SOURCE_PREFIXES = (
+    "Rochdale Borough Council", "Rochdale AFC", "Rochdale Hornets",
+    "Rochdale Development Agency", "Rochdale Online", "Roch Valley Radio",
+    "Action Together", "Your Trust Rochdale", "Visit Rochdale",
+    "Northern Care Alliance Rochdale", "Hopwood Hall College",
+    "Rochdale Sixth Form College", "Facebook Events — Rochdale",
+)
+
+
 def is_local(text: str, source_name: str) -> bool:
     low = text.lower()
-    if source_name.startswith(("Rochdale Borough Council", "Rochdale AFC", "Rochdale Hornets", "Rochdale Development Agency")):
+    if source_name.startswith(LOCAL_SOURCE_PREFIXES):
         return True
     return any(term in low for term in LOCAL_TERMS)
 
@@ -505,12 +582,17 @@ def page_metadata(url: str) -> dict[str, str]:
     final_url, raw_html = fetch_html(url)
     soup = BeautifulSoup(raw_html, "lxml")
     jsonld = extract_jsonld(soup)
-    title = first_meta(soup, [("meta", {"property": "og:title"}), ("meta", {"name": "twitter:title"})])
+
+    title = first_meta(soup, [
+        ("meta", {"property": "og:title"}),
+        ("meta", {"name": "twitter:title"}),
+    ])
     if not title:
         h1 = soup.find("h1")
         title = normalise_ws(h1.get_text(" ", strip=True) if h1 else "")
     if not title and soup.title:
         title = normalise_ws(soup.title.get_text(" ", strip=True))
+
     description = first_meta(soup, [
         ("meta", {"property": "og:description"}),
         ("meta", {"name": "description"}),
@@ -526,29 +608,82 @@ def page_metadata(url: str) -> dict[str, str]:
         ("meta", {"name": "article:published_time"}),
         ("meta", {"name": "date"}),
         ("meta", {"name": "pubdate"}),
+        ("meta", {"itemprop": "datePublished"}),
     ])
+    modified = first_meta(soup, [
+        ("meta", {"property": "article:modified_time"}),
+        ("meta", {"itemprop": "dateModified"}),
+    ])
+
+    event_start = ""
+    event_end = ""
+    event_location = ""
+    content_type = "article"
     body_parts: list[str] = []
+
     for item in jsonld:
         kind = item.get("@type")
         kinds = set(kind if isinstance(kind, list) else [kind])
-        if kinds.intersection({"NewsArticle", "Article", "ReportageNewsArticle", "Event"}):
+
+        if "Event" in kinds:
+            content_type = "event"
+            title = title or normalise_ws(item.get("name"))
+            description = description or normalise_ws(item.get("description"))
+            event_start = event_start or normalise_ws(item.get("startDate"))
+            event_end = event_end or normalise_ws(item.get("endDate"))
+            location = item.get("location")
+            if isinstance(location, dict):
+                address = location.get("address")
+                if isinstance(address, dict):
+                    event_location = normalise_ws(" ".join(
+                        str(address.get(key) or "")
+                        for key in ("streetAddress", "addressLocality", "postalCode")
+                    ))
+                event_location = event_location or normalise_ws(location.get("name"))
+            image_url = image_url or image_from_jsonld(item.get("image"))
+
+        if kinds.intersection({"NewsArticle", "Article", "ReportageNewsArticle"}):
             title = title or normalise_ws(item.get("headline") or item.get("name"))
             description = description or normalise_ws(item.get("description"))
-            published = published or normalise_ws(item.get("datePublished") or item.get("startDate"))
+            published = published or normalise_ws(item.get("datePublished"))
+            modified = modified or normalise_ws(item.get("dateModified"))
             image_url = image_url or image_from_jsonld(item.get("image"))
             article_body = normalise_ws(item.get("articleBody"))
             if article_body:
                 body_parts.append(article_body[:3500])
+
+    # A generic <time> is useful for articles, but on event pages it normally
+    # represents the event date rather than the publication date.
+    if not published and content_type != "event":
+        for time_node in soup.find_all("time"):
+            candidate_date = time_node.get("datetime") or time_node.get("content")
+            if parse_datetime(candidate_date):
+                published = str(candidate_date)
+                break
+
+    if not event_start and content_type == "event":
+        visible = normalise_ws(soup.get_text(" ", strip=True))
+        event_start = extract_future_event_date(visible)
+
     if not body_parts:
-        paragraphs = [normalise_ws(p.get_text(" ", strip=True)) for p in soup.select("article p, main p")]
-        body_parts.extend([p for p in paragraphs if len(p) >= 40][:6])
+        paragraphs = [
+            normalise_ws(p.get_text(" ", strip=True))
+            for p in soup.select("article p, main p")
+        ]
+        body_parts.extend([p for p in paragraphs if len(p) >= 40][:8])
+
     return {
         "url": canonicalise_url(final_url),
         "title": strip_markdown(title),
         "description": strip_markdown(description),
-        "published": published,
+        "published": published or modified,
+        "modified": modified,
         "image": urljoin(final_url, image_url) if image_url else "",
-        "body_excerpt": normalise_ws(" ".join(body_parts))[:4500],
+        "body_excerpt": normalise_ws(" ".join(body_parts))[:5000],
+        "content_type": content_type,
+        "event_start": event_start,
+        "event_end": event_end,
+        "event_location": event_location,
     }
 
 def entry_datetime(entry: Any) -> datetime | None:
@@ -663,44 +798,93 @@ def discovery_links(source: dict[str, str]) -> list[str]:
             continue
         seen.add(url)
         links.append(url)
-        if len(links) >= 20:
+        if len(links) >= DISCOVERY_LINKS_PER_SOURCE:
             break
     return links
 
+def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
+    if source_is_denied(source.get("name", ""), url):
+        return None
+
+    try:
+        meta = page_metadata(url)
+    except PermissionError as exc:
+        log.info("%s", exc)
+        return None
+    except Exception as exc:
+        log.debug("Page metadata failed for %s: %s", url, exc)
+        return None
+
+    text = f"{meta['title']} {meta['description']} {meta['body_excerpt']}"
+    if not meta["title"] or should_drop(text) or not is_local(text, source["name"]):
+        return None
+
+    source_name_lower = source["name"].lower()
+    event_start = parse_datetime(meta.get("event_start"))
+    is_event = (
+        meta.get("content_type") == "event"
+        or "event" in source_name_lower
+        or "what's on" in source_name_lower
+        or "/events/" in urlparse(url).path.lower()
+    )
+
+    if is_event and event_is_current_or_future(event_start):
+        published = utc_now()  # observed and verified during this run
+        source_kind = "event"
+        category = "events"
+    else:
+        published = parse_datetime(meta.get("published"))
+        source_kind = "article"
+        category = categorise(text)
+
+        if not is_fresh(published):
+            # Only a narrow allowlist of official live-status pages may use the
+            # current observation time when no publication timestamp exists.
+            if source_name_lower in LIVE_SOURCE_NAMES and len(text) >= 80:
+                published = utc_now()
+                source_kind = "live"
+            else:
+                return None
+
+    return Candidate(
+        source_name=source["name"],
+        source_url=meta["url"],
+        source_title=meta["title"],
+        source_summary=meta["description"] or meta["body_excerpt"][:900],
+        source_published_at=iso_utc(published),
+        area=detect_area(text, source["default_area"]),
+        category=category,
+        image_candidate_url=meta["image"],
+        source_body_excerpt=meta["body_excerpt"],
+        event_start_at=iso_utc(event_start) if event_start else "",
+        event_end_at=meta.get("event_end", ""),
+        event_location=meta.get("event_location", ""),
+        source_kind=source_kind,
+    )
+
+
 def collect_discovery_candidates() -> list[Candidate]:
-    candidates: list[Candidate] = []
+    jobs: list[tuple[dict[str, str], str]] = []
     for source in DISCOVERY_PAGES:
-        if source_is_denied(source.get("name", ""), source.get("url", "")):
-            log.info("Skipping prohibited discovery source: %s", source.get("name"))
-            continue
         log.info("Discovering pages: %s", source["name"])
-        for url in discovery_links(source):
+        jobs.extend((source, url) for url in discovery_links(source))
+
+    candidates: list[Candidate] = []
+    with ThreadPoolExecutor(max_workers=max(1, DISCOVERY_WORKERS)) as executor:
+        future_map = {
+            executor.submit(_discovery_candidate, source, url): (source["name"], url)
+            for source, url in jobs
+        }
+        for future in as_completed(future_map):
             try:
-                meta = page_metadata(url)
-            except PermissionError as exc:
-                log.info("%s", exc)
-                continue
+                candidate = future.result()
             except Exception as exc:
-                log.debug("Page metadata failed for %s: %s", url, exc)
+                source_name, url = future_map[future]
+                log.debug("Discovery worker failed for %s %s: %s", source_name, url, exc)
                 continue
-            published = parse_datetime(meta["published"])
-            text = f"{meta['title']} {meta['description']} {meta['body_excerpt']}"
-            if not meta["title"] or not is_fresh(published):
-                continue
-            if should_drop(text) or not is_local(text, source["name"]):
-                continue
-            candidates.append(Candidate(
-                source_name=source["name"],
-                source_url=meta["url"],
-                source_title=meta["title"],
-                source_summary=meta["description"],
-                source_published_at=iso_utc(published),
-                area=detect_area(text, source["default_area"]),
-                category=categorise(text),
-                image_candidate_url=meta["image"],
-                source_body_excerpt=meta["body_excerpt"],
-            ))
-            time.sleep(0.15)
+            if candidate:
+                candidates.append(candidate)
+
     return candidates
 
 
@@ -941,68 +1125,475 @@ def collect_facebook_event_discovery_candidates() -> list[Candidate]:
     return candidates
 
 
-def collect_facebook_candidates() -> list[Candidate]:
-    """
-    Read configured public Facebook Pages through Meta's supported Graph API.
 
-    This does not scrape Facebook HTML, bypass login screens or read private
-    groups. For pages not managed by the app owner, Meta requires Page Public
-    Content Access. If the token/permission is absent, the source is skipped.
-    """
-    if not FACEBOOK_PAGE_ACCESS_TOKEN:
+SOCIAL_STOPWORDS = {
+    "about", "after", "again", "against", "been", "before", "being",
+    "between", "could", "from", "have", "into", "local", "more", "news",
+    "people", "rochdale", "said", "that", "their", "there", "these",
+    "they", "this", "today", "under", "what", "when", "where", "which",
+    "with", "would", "your", "heywood", "middleton", "littleborough",
+}
+SOCIAL_UNSAFE_PATTERNS = [
+    r"\b(name and shame|paedophile|pedophile|rapist|murderer|terrorist)\b",
+    r"\b(he did it|she did it|they did it|definitely guilty|must be guilty)\b",
+    r"\bI know who\b|\bthe suspect is\b|\bthe offender is\b",
+    r"\bkill (?:him|her|them)\b|\bdeserves to die\b",
+]
+URL_RE = re.compile(r"https?://\S+|www\.\S+", re.IGNORECASE)
+EMAIL_RE = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
+PHONE_RE = re.compile(r"(?<!\d)(?:\+?44\s?|0)\d(?:[\s()-]*\d){8,12}(?!\d)")
+
+_FACEBOOK_SOCIAL_CACHE: list[dict[str, Any]] | None = None
+_X_SOCIAL_CACHE: list[dict[str, Any]] | None = None
+
+
+def participant_digest(platform: str, identifier: str) -> str:
+    raw = f"{platform}:{identifier}".encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()[:16]
+
+
+def sanitise_social_text(value: Any) -> str:
+    text = strip_markdown(value)
+    text = URL_RE.sub("", text)
+    text = EMAIL_RE.sub("", text)
+    text = PHONE_RE.sub("", text)
+    text = POSTCODE_RE.sub("the local area", text)
+    text = ADDRESS_RE.sub("a local location", text)
+    text = re.sub(r"(?<!\w)@[A-Za-z0-9_]{1,30}", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text[:700]
+
+
+def public_reaction_is_usable(text: str) -> bool:
+    if len(text) < 18:
+        return False
+    return not any(
+        re.search(pattern, text, flags=re.IGNORECASE)
+        for pattern in SOCIAL_UNSAFE_PATTERNS
+    )
+
+
+def social_tokens(value: str) -> set[str]:
+    return {
+        token for token in re.findall(r"[a-z0-9]+", value.lower())
+        if len(token) >= 4 and token not in SOCIAL_STOPWORDS
+    }
+
+
+def social_record_score(candidate: Candidate, record: dict[str, Any]) -> float:
+    candidate_text = (
+        f"{candidate.source_title} {candidate.source_summary} "
+        f"{candidate.source_body_excerpt[:1200]}"
+    )
+    record_text = (
+        f"{record.get('parent_text', '')} {record.get('text', '')}"
+    )
+    candidate_tokens = social_tokens(candidate_text)
+    record_tokens = social_tokens(record_text)
+    if not candidate_tokens or not record_tokens:
+        return 0.0
+
+    overlap = candidate_tokens & record_tokens
+    if len(overlap) < 2:
+        return 0.0
+
+    score = len(overlap) / max(4, min(len(candidate_tokens), len(record_tokens)))
+
+    candidate_url = canonicalise_url(candidate.source_url)
+    for related_url in record.get("related_urls", []) or []:
+        if canonicalise_url(str(related_url)) == candidate_url:
+            score += 2.0
+
+    if record.get("official"):
+        score += 0.12
+    if record.get("parent_url") == candidate_url:
+        score += 2.0
+    return score
+
+
+def today_start_utc() -> str:
+    now_local = utc_now().astimezone(UK_TZ)
+    start_local = now_local.replace(hour=0, minute=0, second=0, microsecond=0)
+    return iso_utc(start_local.astimezone(timezone.utc))
+
+
+def collect_x_social_records() -> list[dict[str, Any]]:
+    global _X_SOCIAL_CACHE
+    if _X_SOCIAL_CACHE is not None:
+        return _X_SOCIAL_CACHE
+    if not SOCIAL_CONTEXT_ENABLED or not X_BEARER_TOKEN:
         log.info(
-            "Facebook Page sources configured but inactive: add the "
-            "FACEBOOK_PAGE_ACCESS_TOKEN GitHub secret after obtaining the "
-            "required Meta Page Public Content Access."
+            "X social correlation inactive: add the X_BEARER_TOKEN GitHub secret."
         )
-        return []
+        _X_SOCIAL_CACHE = []
+        return _X_SOCIAL_CACHE
 
-    candidates: list[Candidate] = []
+    records_by_id: dict[str, dict[str, Any]] = {}
+    headers = {"Authorization": f"Bearer {X_BEARER_TOKEN}"}
+
+    for query in X_SEARCH_QUERIES:
+        params = {
+            "query": query,
+            "start_time": today_start_utc(),
+            "max_results": X_RECENT_SEARCH_MAX,
+            "tweet.fields": (
+                "created_at,author_id,conversation_id,in_reply_to_user_id,"
+                "public_metrics,referenced_tweets,entities,lang"
+            ),
+            "expansions": "author_id",
+            "user.fields": "username,name,verified,protected",
+        }
+        try:
+            response = SESSION.get(
+                f"{X_API_BASE}/tweets/search/recent",
+                headers=headers,
+                params=params,
+                timeout=REQUEST_TIMEOUT,
+            )
+            response.raise_for_status()
+            payload = response.json()
+        except Exception as exc:
+            log.warning("X recent-search query failed: %s", exc)
+            continue
+
+        users = {
+            str(user.get("id")): user
+            for user in payload.get("includes", {}).get("users", [])
+        }
+
+        for post in payload.get("data", []) or []:
+            post_id = str(post.get("id") or "")
+            text = sanitise_social_text(post.get("text", ""))
+            created = parse_datetime(post.get("created_at"))
+            if not post_id or not text or not is_fresh(created):
+                continue
+            if not is_local(text, "X public post"):
+                continue
+
+            user = users.get(str(post.get("author_id") or ""), {})
+            username = str(user.get("username") or "").lstrip("@")
+            username_lower = username.lower()
+            official = username_lower in OFFICIAL_X_HANDLES
+
+            referenced = post.get("referenced_tweets") or []
+            is_reply = any(
+                str(item.get("type")) == "replied_to" for item in referenced
+                if isinstance(item, dict)
+            )
+
+            related_urls = []
+            for url_item in (post.get("entities") or {}).get("urls", []) or []:
+                expanded = (
+                    url_item.get("expanded_url")
+                    or url_item.get("unwound_url")
+                    or url_item.get("url")
+                )
+                if expanded:
+                    related_urls.append(str(expanded))
+
+            metrics = post.get("public_metrics") or {}
+            records_by_id[post_id] = {
+                "record_id": f"x:{post_id}",
+                "platform": "x",
+                "kind": "reply" if is_reply else "post",
+                "official": official,
+                "source_name": (
+                    OFFICIAL_X_HANDLES.get(username_lower)
+                    if official else "Public X discussion"
+                ),
+                "text": text,
+                "created_at": iso_utc(created),
+                "url": (
+                    f"https://x.com/{username}/status/{post_id}"
+                    if username else f"https://x.com/i/web/status/{post_id}"
+                ),
+                "parent_url": "",
+                "parent_text": "",
+                "conversation_id": str(post.get("conversation_id") or ""),
+                "participant_hash": participant_digest(
+                    "x", str(post.get("author_id") or post_id)
+                ),
+                "related_urls": related_urls,
+                "engagement": int(metrics.get("like_count") or 0)
+                    + int(metrics.get("reply_count") or 0)
+                    + int(metrics.get("retweet_count") or 0),
+            }
+
+    # Connect replies to conversation-root text when the root was also returned.
+    for record in records_by_id.values():
+        conversation_id = record.get("conversation_id")
+        parent = records_by_id.get(str(conversation_id))
+        if record.get("kind") == "reply" and parent:
+            record["parent_text"] = parent.get("text", "")
+            record["parent_url"] = parent.get("url", "")
+
+    _X_SOCIAL_CACHE = list(records_by_id.values())
+    log.info("X social records collected: %d", len(_X_SOCIAL_CACHE))
+    return _X_SOCIAL_CACHE
+
+
+def collect_facebook_social_records() -> list[dict[str, Any]]:
+    global _FACEBOOK_SOCIAL_CACHE
+    if _FACEBOOK_SOCIAL_CACHE is not None:
+        return _FACEBOOK_SOCIAL_CACHE
+    if not SOCIAL_CONTEXT_ENABLED or not FACEBOOK_PAGE_ACCESS_TOKEN:
+        log.info(
+            "Facebook comment correlation inactive: add the "
+            "FACEBOOK_PAGE_ACCESS_TOKEN secret with the required Page access."
+        )
+        _FACEBOOK_SOCIAL_CACHE = []
+        return _FACEBOOK_SOCIAL_CACHE
+
+    records: list[dict[str, Any]] = []
+
     for page in PUBLIC_FACEBOOK_PAGES:
         handle = str(page["handle"]).strip("/")
         endpoint = f"https://graph.facebook.com/{FACEBOOK_GRAPH_VERSION}/{handle}/posts"
         params = {
             "access_token": FACEBOOK_PAGE_ACCESS_TOKEN,
-            "fields": "id,message,created_time,permalink_url,full_picture,attachments{media_type,url,target}",
-            "limit": "25",
+            "fields": "id,message,created_time,permalink_url,full_picture",
+            "limit": "30",
         }
         try:
-            response = SESSION.get(endpoint, params=params, timeout=REQUEST_TIMEOUT)
+            response = SESSION.get(
+                endpoint, params=params, timeout=REQUEST_TIMEOUT
+            )
             response.raise_for_status()
             payload = response.json()
         except Exception as exc:
-            log.warning("Facebook source unavailable for %s: %s", page["name"], exc)
+            log.warning(
+                "Facebook Page source unavailable for %s: %s",
+                page["name"], exc
+            )
             continue
 
-        for post in payload.get("data", []):
-            message = strip_markdown(post.get("message", ""))
+        for post in payload.get("data", []) or []:
+            post_id = str(post.get("id") or "")
+            message = sanitise_social_text(post.get("message", ""))
             created = parse_datetime(post.get("created_time"))
-            permalink = canonicalise_url(
-                post.get("permalink_url")
-                or f"https://www.facebook.com/{handle}/posts/{post.get('id', '')}"
-            )
-            if not message or not is_fresh(created):
+            permalink = canonicalise_url(str(post.get("permalink_url") or ""))
+            if not post_id or not message or not is_fresh(created):
                 continue
             if should_drop(message) or not is_local(message, page["name"]):
                 continue
 
-            title = message.split(".")[0].strip()
-            if len(title) < 35:
-                title = message[:140].rsplit(" ", 1)[0]
-            image = str(post.get("full_picture") or "")
-            category = categorise(message)
-            candidates.append(Candidate(
-                source_name=page["name"],
-                source_url=permalink,
-                source_title=title[:160],
-                source_summary=message[:900],
-                source_published_at=iso_utc(created),
-                area=detect_area(message, page.get("default_area", "rochdale")),
-                category=category,
-                image_candidate_url=image,
-                source_body_excerpt=message[:3500],
-            ))
+            records.append({
+                "record_id": f"facebook-post:{post_id}",
+                "platform": "facebook",
+                "kind": "official_post",
+                "official": bool(page.get("official", True)),
+                "source_name": page["name"],
+                "text": message,
+                "created_at": iso_utc(created),
+                "url": permalink,
+                "parent_url": "",
+                "parent_text": "",
+                "participant_hash": participant_digest(
+                    "facebook-page", handle.lower()
+                ),
+                "related_urls": [permalink] if permalink else [],
+                "engagement": 0,
+                "image": str(post.get("full_picture") or ""),
+            })
+
+            if not FACEBOOK_COMMENTS_ENABLED:
+                continue
+
+            comment_endpoint = (
+                f"https://graph.facebook.com/{FACEBOOK_GRAPH_VERSION}/"
+                f"{post_id}/comments"
+            )
+            comment_params = {
+                "access_token": FACEBOOK_PAGE_ACCESS_TOKEN,
+                "fields": (
+                    "id,message,created_time,like_count,comment_count,from{id}"
+                ),
+                "filter": "stream",
+                "limit": "100",
+            }
+            try:
+                comment_response = SESSION.get(
+                    comment_endpoint,
+                    params=comment_params,
+                    timeout=REQUEST_TIMEOUT,
+                )
+                comment_response.raise_for_status()
+                comments = comment_response.json().get("data", []) or []
+            except Exception as exc:
+                log.info(
+                    "Facebook comments unavailable for post %s: %s",
+                    post_id, exc
+                )
+                comments = []
+
+            for comment in comments:
+                comment_id = str(comment.get("id") or "")
+                comment_text = sanitise_social_text(comment.get("message", ""))
+                comment_created = parse_datetime(comment.get("created_time"))
+                if (
+                    not comment_id
+                    or not comment_text
+                    or not is_fresh(comment_created)
+                    or not public_reaction_is_usable(comment_text)
+                ):
+                    continue
+
+                from_id = str((comment.get("from") or {}).get("id") or comment_id)
+                records.append({
+                    "record_id": f"facebook-comment:{comment_id}",
+                    "platform": "facebook",
+                    "kind": "public_comment",
+                    "official": False,
+                    "source_name": "Public Facebook comments",
+                    "text": comment_text,
+                    "created_at": iso_utc(comment_created),
+                    "url": permalink,
+                    "parent_url": permalink,
+                    "parent_text": message,
+                    "participant_hash": participant_digest(
+                        "facebook", from_id
+                    ),
+                    "related_urls": [permalink] if permalink else [],
+                    "engagement": int(comment.get("like_count") or 0)
+                        + int(comment.get("comment_count") or 0),
+                })
+
+    _FACEBOOK_SOCIAL_CACHE = records
+    log.info("Facebook social records collected: %d", len(records))
+    return records
+
+
+def official_social_records_to_candidates(
+    records: list[dict[str, Any]]
+) -> list[Candidate]:
+    candidates: list[Candidate] = []
+    for record in records:
+        if not record.get("official"):
+            continue
+        text = sanitise_social_text(record.get("text", ""))
+        created = parse_datetime(record.get("created_at"))
+        url = canonicalise_url(str(record.get("url") or ""))
+        if not text or not url or not is_fresh(created):
+            continue
+
+        title = text.split(".")[0].strip()
+        if len(title) < 35:
+            title = text[:155].rsplit(" ", 1)[0]
+        candidates.append(Candidate(
+            source_name=str(record.get("source_name") or "Official social update"),
+            source_url=url,
+            source_title=title[:160],
+            source_summary=text[:1000],
+            source_published_at=iso_utc(created),
+            area=detect_area(text, "rochdale"),
+            category=categorise(text),
+            image_candidate_url=str(record.get("image") or ""),
+            source_body_excerpt=text[:3500],
+            source_kind="official_social",
+        ))
     return candidates
+
+
+def correlate_social_context(
+    candidates: list[Candidate],
+    records: list[dict[str, Any]],
+) -> None:
+    if not SOCIAL_CONTEXT_ENABLED or not records:
+        return
+
+    for candidate in candidates:
+        source_text = (
+            f"{candidate.source_title} {candidate.source_summary} "
+            f"{candidate.source_body_excerpt}"
+        )
+        sensitive = is_sensitive(source_text, candidate.category)
+
+        scored = []
+        for record in records:
+            score = social_record_score(candidate, record)
+            if score > 0:
+                scored.append((score, record))
+        scored.sort(
+            key=lambda item: (
+                item[0],
+                int(item[1].get("engagement") or 0),
+            ),
+            reverse=True,
+        )
+
+        official_updates = []
+        public_reactions = []
+        seen_official_urls = set()
+        seen_participants = set()
+
+        for score, record in scored:
+            if record.get("official"):
+                url = str(record.get("url") or "")
+                if url in seen_official_urls:
+                    continue
+                seen_official_urls.add(url)
+                official_updates.append({
+                    "platform": record.get("platform"),
+                    "kind": "official_update",
+                    "source_name": record.get("source_name"),
+                    "text": sanitise_social_text(record.get("text", "")),
+                    "url": url,
+                    "score": round(score, 3),
+                })
+                if len(official_updates) >= SOCIAL_MAX_OFFICIAL_UPDATES:
+                    continue
+            elif (
+                not sensitive
+                and candidate.category != "crime"
+                and record.get("kind") in {"public_comment", "reply", "post"}
+            ):
+                participant = str(record.get("participant_hash") or "")
+                if not participant or participant in seen_participants:
+                    continue
+                text = sanitise_social_text(record.get("text", ""))
+                if not public_reaction_is_usable(text):
+                    continue
+                seen_participants.add(participant)
+                public_reactions.append({
+                    "platform": record.get("platform"),
+                    "kind": "public_reaction",
+                    "text": text,
+                    "score": round(score, 3),
+                })
+                if len(public_reactions) >= SOCIAL_MAX_PUBLIC_REACTIONS:
+                    continue
+
+        if len(public_reactions) < SOCIAL_MIN_PUBLIC_REACTIONS:
+            public_reactions = []
+
+        # Official posts can also corroborate the main report.
+        for item in official_updates:
+            if item["url"] and all(
+                existing.get("url") != item["url"]
+                for existing in candidate.related_sources
+            ):
+                candidate.related_sources.append({
+                    "name": item["source_name"],
+                    "url": item["url"],
+                    "title": item["text"][:160],
+                    "summary": item["text"][:900],
+                    "published_at": "",
+                    "source_kind": "official_social",
+                })
+
+        candidate.social_context = official_updates + public_reactions
+
+
+def collect_facebook_candidates() -> list[Candidate]:
+    return official_social_records_to_candidates(
+        collect_facebook_social_records()
+    )
+
+
+def collect_x_candidates() -> list[Candidate]:
+    return official_social_records_to_candidates(
+        collect_x_social_records()
+    )
 
 
 def collect_environment_agency_flood_candidates() -> list[Candidate]:
@@ -1069,7 +1660,6 @@ def deduplicate_and_cross_reference(candidates: Iterable[Candidate]) -> list[Can
     seen_urls: set[str] = set()
     for candidate in ordered:
         if source_is_denied(candidate.source_name, candidate.source_url):
-            log.info("Discarded prohibited candidate source: %s", candidate.source_name)
             continue
         candidate.related_sources = [
             item for item in candidate.related_sources
@@ -1106,35 +1696,69 @@ def load_json_list(path: Path) -> list[dict[str, Any]]:
 def recent_existing_articles() -> list[dict[str, Any]]:
     kept = []
     for article in load_json_list(OUTPUT_FILE):
-        published = parse_datetime(article.get("published_at"))
         source_name = str(article.get("source_name") or "")
         source_url = str(article.get("source_url") or "")
         if source_is_denied(source_name, source_url):
             continue
-        if published and is_fresh(published):
+
+        published = parse_datetime(article.get("published_at"))
+        source_kind = str(article.get("source_kind") or "article")
+        event_start = parse_datetime(article.get("event_start_at"))
+
+        keep = (
+            is_fresh(published)
+            or (source_kind == "event" and event_is_current_or_future(event_start))
+            or (source_kind == "live" and is_current_uk_day(published))
+        )
+        if keep:
             article["title"] = strip_markdown(article.get("title"))
             article["excerpt"] = strip_markdown(article.get("excerpt"))
             kept.append(article)
     return kept
 
-def source_image(candidate: Candidate, category: str) -> tuple[str, str]:
-    fallback = CATEGORY_STOCK_IMAGES.get(category, CATEGORY_STOCK_IMAGES["news"])
+def _source_image_allowed(candidate: Candidate) -> bool:
     if not candidate.image_candidate_url:
-        return fallback, "Rochdale Daily category image"
-
+        return False
     source_domain = domain_of(candidate.source_url)
-    if (
-        candidate.source_kind == "event"
-        and source_domain == "facebook.com"
-        and FACEBOOK_EVENT_IMAGE_REUSE
-    ):
-        return candidate.image_candidate_url, f"Event image via {candidate.source_name}"
+    if candidate.source_kind == "event" and source_domain == "facebook.com":
+        return FACEBOOK_EVENT_IMAGE_REUSE
+    return USE_SOURCE_IMAGES and source_domain in IMAGE_REUSE_SOURCE_DOMAINS
 
-    if not USE_SOURCE_IMAGES:
+
+def cache_source_image(candidate: Candidate, category: str) -> tuple[str, str]:
+    fallback = CATEGORY_STOCK_IMAGES.get(category, CATEGORY_STOCK_IMAGES["news"])
+    if not _source_image_allowed(candidate):
         return fallback, "Rochdale Daily category image"
-    if source_domain in IMAGE_REUSE_SOURCE_DOMAINS:
-        return candidate.image_candidate_url, candidate.source_name
-    return fallback, "Rochdale Daily category image"
+
+    target_name = f"{stable_id(candidate.source_url)}.jpg"
+    relative_path = f"assets/img/generated/{target_name}"
+    target_path = GENERATED_IMAGE_DIR / target_name
+    if target_path.exists() and target_path.stat().st_size > 5000:
+        return relative_path, candidate.source_name
+
+    try:
+        response = SESSION.get(
+            candidate.image_candidate_url,
+            timeout=REQUEST_TIMEOUT,
+            stream=True,
+            headers={"Referer": candidate.source_url},
+        )
+        response.raise_for_status()
+        content = response.content
+        if len(content) > 10_000_000:
+            raise ValueError("image exceeded 10 MB")
+        image = Image.open(io.BytesIO(content))
+        image = ImageOps.exif_transpose(image).convert("RGB")
+        image = ImageOps.fit(image, (1200, 675), method=Image.Resampling.LANCZOS)
+        image.save(target_path, format="JPEG", quality=86, optimize=True)
+        return relative_path, candidate.source_name
+    except (requests.RequestException, OSError, ValueError, UnidentifiedImageError) as exc:
+        log.info("Could not cache source image for %s: %s", candidate.source_url, exc)
+        return fallback, "Rochdale Daily category image"
+
+
+def source_image(candidate: Candidate, category: str) -> tuple[str, str]:
+    return cache_source_image(candidate, category)
 
 POSTCODE_RE = re.compile(r"\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b", re.IGNORECASE)
 ADDRESS_RE = re.compile(
@@ -1180,6 +1804,65 @@ def default_legal_disclaimer(sensitive: bool) -> str:
         "information becomes available."
     )
 
+def source_led_draft(candidate: Candidate, sensitive: bool) -> dict[str, Any] | None:
+    source_text = normalise_ws(
+        f"{candidate.source_summary} {candidate.source_body_excerpt}"
+    )
+    if len(source_text) < 45:
+        return None
+
+    clean_summary = strip_markdown(candidate.source_summary or candidate.source_body_excerpt)
+    clean_body = strip_markdown(candidate.source_body_excerpt)
+    if sensitive:
+        clean_summary = anonymise_output(clean_summary, source_text)
+        clean_body = anonymise_output(clean_body, source_text)
+
+    paragraphs: list[str] = []
+    if clean_summary:
+        paragraphs.append(clean_summary[:850])
+    if clean_body and clean_body.lower() != clean_summary.lower():
+        paragraphs.append(clean_body[:900])
+
+    if candidate.related_sources:
+        paragraphs.append(
+            f"The update has also been cross-referenced against "
+            f"{len(candidate.related_sources)} additional public source"
+            f"{'s' if len(candidate.related_sources) != 1 else ''}."
+        )
+    else:
+        paragraphs.append(
+            f"The information was published by {candidate.source_name}. "
+            "Readers can use the source link for the original notice and any later amendments."
+        )
+
+    paragraphs.append(
+        "Rochdale Daily will update this report if the identified source publishes "
+        "material new information."
+    )
+    paragraphs = [p for p in paragraphs if p][:6]
+    while len(paragraphs) < 3:
+        paragraphs.append(
+            "The article remains open to correction and further verified information."
+        )
+
+    return {
+        "publishable": True,
+        "title": candidate.source_title,
+        "excerpt": clean_summary[:320] or clean_body[:320],
+        "paragraphs": paragraphs,
+        "category": candidate.category,
+        "area": candidate.area,
+        "legal_disclaimer": default_legal_disclaimer(sensitive),
+        "right_to_reply": (
+            f"Anyone directly affected may request a correction or right of reply "
+            f"by emailing {RIGHT_TO_REPLY_EMAIL}."
+        ),
+        "community_reaction": "",
+        "social_context_used": False,
+        "reason": "Conservative source-led brief used.",
+    }
+
+
 def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, Any] | None:
     source_records = [{
         "name": candidate.source_name,
@@ -1192,7 +1875,11 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         "event_start_at": candidate.event_start_at,
         "event_end_at": candidate.event_end_at,
         "event_location": candidate.event_location,
-    }] + candidate.related_sources[:4]
+    }] + candidate.related_sources[:8]
+
+    social_context = candidate.social_context[:(
+        SOCIAL_MAX_OFFICIAL_UPDATES + SOCIAL_MAX_PUBLIC_REACTIONS
+    )]
 
     source_text = normalise_ws(" ".join(
         f"{item.get('title','')} {item.get('summary','')} {item.get('body_excerpt','')}"
@@ -1201,26 +1888,9 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     sensitive = is_sensitive(source_text, candidate.category)
 
     if client is None:
-        # Conservative fallback: only publish a short source-led brief from official organisations.
-        official = domain_of(candidate.source_url) in IMAGE_REUSE_SOURCE_DOMAINS
-        if not official or len(candidate.source_summary) < 80:
+        draft = source_led_draft(candidate, sensitive)
+        if draft is None:
             return None
-        paragraphs = [
-            strip_markdown(candidate.source_summary)[:700],
-            f"Further information is available from {candidate.source_name}.",
-            "Rochdale Daily will update this report if the source publishes material changes.",
-        ]
-        draft = {
-            "publishable": True,
-            "title": candidate.source_title,
-            "excerpt": candidate.source_summary[:280],
-            "paragraphs": paragraphs,
-            "category": candidate.category,
-            "area": candidate.area,
-            "legal_disclaimer": default_legal_disclaimer(sensitive),
-            "right_to_reply": f"Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.",
-            "reason": "Official-source fallback used because no OpenAI API key was available.",
-        }
     else:
         system_message = (
             "You are the sub-editor for Rochdale Daily, an independent UK local-news publication. "
@@ -1234,7 +1904,14 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             "about guilt, motive or evidence; do not identify sexual-offence complainants or anyone under 18; "
             "and use only confirmed basic facts, official public-safety advice and procedural status. "
             "A legal disclaimer is not permission to publish unsafe facts. If safe anonymisation is impossible "
-            "or the source material is too thin or contradictory, set publishable to false."
+            "or the source material is too thin or contradictory, set publishable to false. "
+            "Official social posts may corroborate facts only when they come from an identified public body "
+            "or organisation and agree with the primary records. Public comments and X replies are never "
+            "evidence of what happened. Do not quote or identify commenters. Use public reaction only to "
+            "summarise a recurring practical question, concern or experience supported by at least three "
+            "distinct participants. Do not use public comments at all for crime, court, safeguarding, death, "
+            "sexual-offence, child-related or other sensitive stories. The community_reaction field must be "
+            "empty when those conditions are not met."
         )
         user_message = json.dumps({
             "primary_source": candidate.source_name,
@@ -1244,6 +1921,21 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             "detected_category": candidate.category,
             "sensitive_story": sensitive,
             "source_records": source_records,
+            "social_context": social_context,
+            "social_context_policy": {
+                "official_updates": (
+                    "May be used as attributed corroboration only when consistent "
+                    "with the main source records."
+                ),
+                "public_reactions": (
+                    "Unverified reaction only. Never use as factual evidence, "
+                    "never identify or quote a commenter, and only summarise a "
+                    "theme supported by at least three distinct participants."
+                ),
+                "sensitive_stories": (
+                    "Public reactions must not be used for sensitive stories."
+                ),
+            },
             "requested_style": (
                 "Headline under 150 characters; standfirst of 35-65 words; 4-7 paragraphs. "
                 "Add useful background only when it is explicitly present in the supplied records. "
@@ -1257,21 +1949,38 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
                 f"{RIGHT_TO_REPLY_EMAIL}."
             ),
         }, ensure_ascii=False)
-        response = client.chat.completions.create(
-            model=OPENAI_MODEL,
-            messages=[{"role": "system", "content": system_message}, {"role": "user", "content": user_message}],
-            response_format={"type": "json_schema", "json_schema": ARTICLE_SCHEMA},
-            temperature=0.15,
-            max_tokens=1400,
-        )
-        draft = json.loads(response.choices[0].message.content or "{}")
+        try:
+            response = client.chat.completions.create(
+                model=OPENAI_MODEL,
+                messages=[
+                    {"role": "system", "content": system_message},
+                    {"role": "user", "content": user_message},
+                ],
+                response_format={"type": "json_schema", "json_schema": ARTICLE_SCHEMA},
+                temperature=0.15,
+                max_tokens=1400,
+            )
+            draft = json.loads(response.choices[0].message.content or "{}")
+        except Exception as exc:
+            log.warning("OpenAI rewrite failed; using source-led brief for %s: %s", candidate.source_url, exc)
+            draft = source_led_draft(candidate, sensitive)
 
-    if not bool(draft.get("publishable")):
-        return None
+    if not draft or not bool(draft.get("publishable")):
+        draft = source_led_draft(candidate, sensitive)
+        if draft is None:
+            return None
 
     title = strip_markdown(draft.get("title"))[:160]
     excerpt = strip_markdown(draft.get("excerpt"))[:360]
-    paragraphs = [strip_markdown(item) for item in draft.get("paragraphs", []) if strip_markdown(item)][:8]
+    paragraphs = [
+        strip_markdown(item)
+        for item in draft.get("paragraphs", [])
+        if strip_markdown(item)
+    ][:8]
+    community_reaction = strip_markdown(
+        draft.get("community_reaction", "")
+    )[:500]
+    social_context_used = bool(draft.get("social_context_used"))
     category = str(draft.get("category") or candidate.category)
     area = str(draft.get("area") or candidate.area)
     if category not in CATEGORY_STOCK_IMAGES:
@@ -1279,11 +1988,40 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     if area not in AREA_KEYWORDS:
         area = candidate.area if candidate.area in AREA_KEYWORDS else "rochdale"
 
+    public_reaction_count = sum(
+        1 for item in candidate.social_context
+        if item.get("kind") == "public_reaction"
+    )
+    official_social_count = sum(
+        1 for item in candidate.social_context
+        if item.get("kind") == "official_update"
+    )
+
     if sensitive:
         title = anonymise_output(title, source_text)
         excerpt = anonymise_output(excerpt, source_text)
-        paragraphs = [anonymise_output(paragraph, source_text) for paragraph in paragraphs]
+        paragraphs = [
+            anonymise_output(paragraph, source_text)
+            for paragraph in paragraphs
+        ]
         paragraphs = [p for p in paragraphs if p]
+        community_reaction = ""
+        social_context_used = False
+
+    if public_reaction_count < SOCIAL_MIN_PUBLIC_REACTIONS:
+        community_reaction = ""
+        if official_social_count == 0:
+            social_context_used = False
+
+    if community_reaction:
+        community_reaction = anonymise_output(
+            community_reaction,
+            " ".join(
+                item.get("text", "")
+                for item in candidate.social_context
+            ),
+        )
+        paragraphs.append(f"Community reaction: {community_reaction}")
 
     if not title or not excerpt or len(paragraphs) < 3:
         return None
@@ -1333,6 +2071,19 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         "source_names": source_names,
         "source_urls": source_urls,
         "source_count": len(source_urls),
+        "social_context_used": social_context_used,
+        "social_reaction_count": public_reaction_count,
+        "official_social_update_count": official_social_count,
+        "social_platforms": sorted({
+            str(item.get("platform"))
+            for item in candidate.social_context
+            if item.get("platform")
+        }),
+        "social_context_note": (
+            "Public reactions are anonymised, aggregated and not treated as "
+            "evidence. Raw comments are not stored in the public article feed."
+            if social_context_used else ""
+        ),
         "sensitive_story": sensitive,
         "police_matter": category == "crime",
         "legal_disclaimer": legal_disclaimer,
@@ -1354,37 +2105,44 @@ def main() -> int:
         for item in existing if item.get("source_url")
     }
 
+    x_social_records = collect_x_social_records()
+    facebook_social_records = collect_facebook_social_records()
+
     candidates = deduplicate_and_cross_reference(
         collect_rss_candidates()
         + collect_discovery_candidates()
         + collect_facebook_event_discovery_candidates()
         + collect_facebook_candidates()
+        + collect_x_candidates()
         + collect_environment_agency_flood_candidates()
+    )
+
+    correlate_social_context(
+        candidates,
+        x_social_records + facebook_social_records,
     )
     log.info("Fresh local story clusters: %d", len(candidates))
 
     api_key = os.getenv("OPENAI_API_KEY")
-    client = OpenAI(api_key=api_key) if api_key else None
-    run_limit = MAX_AI_ARTICLES_INITIAL if not existing else MAX_AI_ARTICLES_PER_RUN
+    run_limit = MAX_AI_ARTICLES_INITIAL if len(existing) < MIN_LIVE_STORIES else MAX_AI_ARTICLES_PER_RUN
 
-    new_articles: list[dict[str, Any]] = []
-    skipped = 0
-
-    pending_candidates = [
+    selected_candidates = [
         candidate for candidate in candidates
         if canonicalise_url(candidate.source_url) not in existing_by_source
         and not source_is_denied(candidate.source_name, candidate.source_url)
     ][:run_limit]
 
-    ai_count = len(pending_candidates)
+    new_articles: list[dict[str, Any]] = []
+    skipped = 0
 
     def process_candidate(candidate: Candidate) -> dict[str, Any] | None:
-        return rewrite_candidate(candidate, client)
+        worker_client = OpenAI(api_key=api_key) if api_key else None
+        return rewrite_candidate(candidate, worker_client)
 
-    with ThreadPoolExecutor(max_workers=AI_WORKERS) as executor:
+    with ThreadPoolExecutor(max_workers=max(1, AI_WORKERS)) as executor:
         future_map = {
             executor.submit(process_candidate, candidate): candidate
-            for candidate in pending_candidates
+            for candidate in selected_candidates
         }
         for future in as_completed(future_map):
             candidate = future_map[future]
@@ -1394,13 +2152,12 @@ def main() -> int:
                 log.exception("Rewrite failed for %s: %s", candidate.source_url, exc)
                 skipped += 1
                 continue
-            if article and not source_is_denied(
-                str(article.get("source_name") or ""),
-                str(article.get("source_url") or ""),
-            ):
+            if article:
                 new_articles.append(article)
             else:
                 skipped += 1
+
+    ai_count = len(selected_candidates)
 
     merged: dict[str, dict[str, Any]] = {}
     for article in new_articles + existing:
@@ -1408,14 +2165,22 @@ def main() -> int:
         if key and key not in merged:
             merged[key] = article
 
-    publishable_values = [
-        article for article in merged.values()
-        if not source_is_denied(
+    publishable_values = []
+    for article in merged.values():
+        if source_is_denied(
             str(article.get("source_name") or ""),
             str(article.get("source_url") or ""),
-        )
-        and is_fresh(parse_datetime(article.get("published_at")))
-    ]
+        ):
+            continue
+        published_at = parse_datetime(article.get("published_at"))
+        source_kind = str(article.get("source_kind") or "article")
+        event_start = parse_datetime(article.get("event_start_at"))
+        if (
+            is_fresh(published_at)
+            or (source_kind == "event" and event_is_current_or_future(event_start))
+            or (source_kind == "live" and is_current_uk_day(published_at))
+        ):
+            publishable_values.append(article)
 
     published = sorted(
         publishable_values,
@@ -1425,6 +2190,33 @@ def main() -> int:
     )[:MAX_PUBLISHED_ARTICLES]
 
     write_json_atomic(OUTPUT_FILE, published)
+    source_counts: dict[str, int] = {}
+    for candidate in candidates:
+        source_counts[candidate.source_name] = source_counts.get(candidate.source_name, 0) + 1
+    write_json_atomic(STATUS_FILE, {
+        "last_run_at": iso_utc(utc_now()),
+        "candidate_clusters": len(candidates),
+        "attempted_rewrites": ai_count,
+        "new_articles": len(new_articles),
+        "live_articles": len(published),
+        "skipped": skipped,
+        "source_counts": dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)),
+        "openai_enabled": bool(api_key),
+        "same_day_only": SAME_DAY_ONLY,
+        "prohibited_sources": sorted(SOURCE_DENY_DOMAINS),
+        "selected_candidate_urls": [
+            candidate.source_url for candidate in selected_candidates
+        ],
+        "x_social_records": len(x_social_records),
+        "facebook_social_records": len(facebook_social_records),
+        "stories_with_social_context": sum(
+            1 for candidate in candidates if candidate.social_context
+        ),
+        "x_enabled": bool(X_BEARER_TOKEN),
+        "facebook_comments_enabled": bool(
+            FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED
+        ),
+    })
     log.info(
         "Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped",
         len(published), len(new_articles), ai_count, skipped,
