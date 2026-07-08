@@ -42,9 +42,11 @@ jobs:
       SOCIAL_MAX_PUBLIC_REACTIONS: "12"
       SOCIAL_MAX_OFFICIAL_UPDATES: "4"
       X_RECENT_SEARCH_MAX: "100"
-      DISCOVERY_LINKS_PER_SOURCE: "8"
-      DISCOVERY_WORKERS: "12"
-      AI_WORKERS: "5"
+      DISCOVERY_LINKS_PER_SOURCE: "40"
+      RSS_ITEMS_PER_SOURCE: "100"
+      DISCOVERY_PAGE_LIMIT: "3"
+      DISCOVERY_WORKERS: "16"
+      AI_WORKERS: "6"
       MIN_LIVE_STORIES: "40"
 
     steps:
@@ -58,15 +60,45 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install --no-cache-dir -r requirements.txt
+
+          # PIL is the Python import provided by the Pillow package.
+          # Install it explicitly so an accidentally stale requirements file
+          # cannot cause the scraper to fail at runtime.
+          python -m pip install --no-cache-dir "Pillow>=10,<13"
+
+      - name: Verify Python dependencies
+        run: |
+          python - <<'PY'
+          import bs4
+          import dateparser
+          import feedparser
+          import lxml
+          import openai
+          import requests
+
+          from PIL import Image, ImageOps, UnidentifiedImageError
+          from playwright.sync_api import sync_playwright
+
+          print("Dependency verification passed.")
+          print("Pillow version:", Image.__version__)
+          PY
 
       - name: Install browser for Facebook Events discovery
         run: |
           python -m playwright install --with-deps chromium
+
+      - name: Validate locality and story identity
+        run: |
+          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/scraper.py
+          python scraper/test_locality.py
+          python scraper/test_story_identity.py
 
       - name: Run Rochdale Daily pipeline
         run: |
