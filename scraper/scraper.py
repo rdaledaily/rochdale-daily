@@ -400,7 +400,7 @@ PLACE_CONTEXT_PREFIXES = (
 )
 
 CATEGORY_KEYWORDS = {
-    "crime": {"arrest", "police", "charged", "court", "burglary", "robbery", "assault", "stabbing", "theft", "fraud", "wanted", "jailed", "murder"},
+    "crime": {"arrest", "police", "charged", "court", "burglary", "robbery", "assault", "stabbing", "theft", "fraud", "wanted", "jailed", "murder", "grooming", "convicted", "sentenced", "sentencing", "deported", "deportation", "parole", "released from prison"},
     "traffic": {"traffic", "roadworks", "road closure", "collision", "crash", "m62", "a627", "junction", "lane closure", "diversion", "congestion"},
     "transport": {"bus", "train", "tram", "metrolink", "bee network", "station", "timetable", "public transport"},
     "politics": {"councillor", "council budget", "council tax", "election", "cabinet", "mayor", "resigns", "resignation", "steps down", "stands down", "quits", "mp "},
@@ -1016,6 +1016,8 @@ def collect_rss_candidates() -> list[Candidate]:
         feed = feedparser.parse(source["url"])
         if getattr(feed, "bozo", False):
             log.warning("RSS warning for %s: %s", source["name"], getattr(feed, "bozo_exception", "unknown"))
+        raw_entry_count = len(feed.entries)
+        log.info("Raw entries for %s: %d", source["name"], raw_entry_count)
         for entry in list(feed.entries)[:RSS_ITEMS_PER_SOURCE]:
             source_url = canonicalise_url(str(getattr(entry, "link", "") or ""))
             source_title = strip_markdown(getattr(entry, "title", ""))
