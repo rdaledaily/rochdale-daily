@@ -30,8 +30,8 @@ jobs:
       MAX_NEWS_AGE_HOURS: "24"
       ARTICLE_RETENTION_DAYS: "1"
       MAX_PUBLISHED_ARTICLES: "180"
-      MAX_AI_ARTICLES_PER_RUN: "40"
-      MAX_AI_ARTICLES_INITIAL: "80"
+      MAX_AI_ARTICLES_PER_RUN: "50"
+      MAX_AI_ARTICLES_INITIAL: "100"
       RESPECT_ROBOTS: "true"
       USE_SOURCE_IMAGES: "true"
       SAME_DAY_ONLY: "true"
@@ -45,8 +45,13 @@ jobs:
       DISCOVERY_LINKS_PER_SOURCE: "40"
       RSS_ITEMS_PER_SOURCE: "100"
       DISCOVERY_PAGE_LIMIT: "3"
-      DISCOVERY_WORKERS: "16"
+      DISCOVERY_WORKERS: "12"
       AI_WORKERS: "6"
+      MIN_BALANCED_SELECTION_LIMIT: "40"
+      MAX_SELECTED_PER_SOURCE: "4"
+      MAX_SELECTED_PER_CATEGORY: "8"
+      HTTP_POOL_CONNECTIONS: "64"
+      HTTP_POOL_MAXSIZE: "64"
       MIN_LIVE_STORIES: "40"
 
     steps:
@@ -94,11 +99,12 @@ jobs:
         run: |
           python -m playwright install --with-deps chromium
 
-      - name: Validate locality and story identity
+      - name: Validate locality, identity and coverage policy
         run: |
-          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/scraper.py
+          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/scraper.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py
+          python scraper/test_selection_policy.py
 
       - name: Run Rochdale Daily pipeline
         run: |
