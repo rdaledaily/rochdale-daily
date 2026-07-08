@@ -182,6 +182,13 @@ PLACE_SUFFIXES = (
 TAG_RE = re.compile(r"<[^>]+>")
 SPACE_RE = re.compile(r"\s+")
 
+# Matches a capitalised "Firstname Surname" pair anywhere in the text, e.g.
+# "Kate Middleton", "David Wardle", "Bill Heywood". Used to detect that an
+# ambiguous place term is actually being used as somebody's surname in this
+# article, so a later bare mention of the same word ("... message from
+# Middleton ...") is not mistaken for a second, independent place reference.
+FULL_NAME_RE = re.compile(r"\b[A-Z][a-zA-Z'-]+\s+([A-Z][a-zA-Z'-]+)\b")
+
 
 def normalise_text(value: Any) -> str:
     text = html.unescape(str(value or ""))
@@ -219,7 +226,31 @@ def contains_term(text: str, term: str) -> bool:
     return bool(re.search(term_pattern(term), text, flags=re.IGNORECASE))
 
 
+def mentioned_as_surname(text: str, term: str) -> bool:
+    """True if `term` appears anywhere as the surname half of a capitalised
+    "Firstname Surname" pair (e.g. "Kate Middleton", "David Wardle").
+
+    Once an ambiguous local word has been introduced as somebody's surname
+    anywhere in an article, later bare mentions of that same word ("a message
+    from Middleton", "Wardle's comments") almost always refer back to that
+    person, not to the place. Articles are checked as a whole, not sentence
+    by sentence, since surnames are commonly introduced once in full and then
+    referred to by surname alone for the rest of the piece.
+    """
+    for match in FULL_NAME_RE.finditer(text):
+        surname = match.group(1).lower()
+        # Strip a trailing possessive ('s or 's) so "Middleton's" matches
+        # the bare term "middleton" rather than being compared as one word.
+        surname = re.sub(r"[\u2019']s$", "", surname)
+        if surname == term:
+            return True
+    return False
+
+
 def has_geographical_context(text: str, term: str) -> bool:
+    if term in CONTEXT_REQUIRED_TERMS and mentioned_as_surname(text, term):
+        return False
+
     escaped_term = term_pattern(term)
     prefixes = "|".join(
         re.escape(prefix) for prefix in sorted(PLACE_PREFIXES, key=len, reverse=True)
