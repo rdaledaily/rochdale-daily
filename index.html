@@ -50,16 +50,6 @@
     .skip-link:focus { transform: translateY(0); }
     :focus-visible { outline: 3px solid #2a6fdb; outline-offset: 3px; }
 
-    .preview-bar {
-      background: #fff5c2;
-      border-bottom: 1px solid #d7c36a;
-      color: #4b3b00;
-      font-size: 13px;
-      font-weight: 700;
-      text-align: center;
-      padding: 7px 15px;
-    }
-
     .utility {
       background: var(--black);
       color: #fff;
@@ -222,11 +212,6 @@
       width: max-content;
       will-change: transform;
       transform: translate3d(0, 0, 0);
-      animation-name: breakingTicker;
-      animation-duration: var(--breaking-speed, 26s);
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      animation-play-state: running;
     }
     .breaking-segment {
       flex: 0 0 auto;
@@ -243,11 +228,6 @@
       font-size: 9px;
       line-height: 1;
       flex: 0 0 auto;
-    }
-    .breaking-copy:hover .breaking-track { animation-play-state: paused; }
-    @keyframes breakingTicker {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(-50%, 0, 0); }
     }
 
     .page-shell { background: var(--paper); min-height: 100vh; }
@@ -640,7 +620,6 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <div class="preview-bar">PREVIEW BUILD: the layout is functional, but sample headlines and event listings must be replaced or verified before publication.</div>
 
   <div class="utility">
     <div class="wrap utility-row">
@@ -900,7 +879,7 @@
         </nav>
         <nav class="footer-col" aria-label="Legal links">
           <h3>Legal</h3>
-          <ul><li><a href="#">Privacy policy</a></li><li><a href="#">Cookie policy</a></li><li><a href="#">Terms</a></li><li><a href="#">Accessibility</a></li></ul>
+          <ul><li><a href="privacy.html">Privacy policy</a></li><li><a href="#cookie-settings" id="cookie-settings-link">Cookie settings</a></li><li><a href="#">Terms</a></li><li><a href="#">Accessibility</a></li></ul>
         </nav>
       </div>
       <div class="footer-bottom"><span>© <span id="footer-year"></span> Rochdale Daily. All rights reserved.</span><span>Independent publication — not affiliated with Manchester Evening News.</span></div>
@@ -926,10 +905,10 @@
     </div>
   </div>
 
-  <div class="cookie" id="cookie-banner">
+  <div class="cookie" id="cookie-banner" role="region" aria-label="Cookie choices">
     <div class="wrap cookie-row">
-      <p>We use essential storage for preferences. Analytics and advertising cookies should only be enabled after a real consent platform is connected.</p>
-      <div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept all</button></div>
+      <p><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. Choose “Accept optional cookies” to allow them, or “Essential only” to continue without them. You can change your choice at any time using Cookie settings.</p>
+      <div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div>
     </div>
   </div>
 
@@ -1154,16 +1133,57 @@
       });
     }
 
+    let breakingTickerFrame = 0;
+    let breakingTickerLastTime = 0;
+    let breakingTickerOffset = 0;
+    let breakingTickerCycleWidth = 0;
+    const BREAKING_TICKER_SPEED = 78; // pixels per second
+
+    function measureBreakingTicker() {
+      const firstSegment = document.querySelector("#breaking-track .breaking-segment");
+      breakingTickerCycleWidth = firstSegment
+        ? Math.max(1, firstSegment.getBoundingClientRect().width)
+        : 1;
+    }
+
+    function animateBreakingTicker(timestamp) {
+      const track = document.getElementById("breaking-track");
+      if (!track) return;
+
+      if (!breakingTickerLastTime) breakingTickerLastTime = timestamp;
+      const elapsed = Math.min(80, timestamp - breakingTickerLastTime);
+      breakingTickerLastTime = timestamp;
+
+      if (!breakingTickerCycleWidth) measureBreakingTicker();
+
+      breakingTickerOffset -= BREAKING_TICKER_SPEED * (elapsed / 1000);
+
+      if (-breakingTickerOffset >= breakingTickerCycleWidth) {
+        breakingTickerOffset += breakingTickerCycleWidth;
+      }
+
+      track.style.transform = `translate3d(${breakingTickerOffset}px, 0, 0)`;
+      track.dataset.tickerRunning = "true";
+      breakingTickerFrame = window.requestAnimationFrame(animateBreakingTicker);
+    }
+
     function restartBreakingTicker() {
       const track = document.getElementById("breaking-track");
       if (!track) return;
 
-      // Explicit values prevent browser/OS reduced-motion settings or stale
-      // inline styles from leaving the ticker static.
-      track.style.animation = "none";
-      void track.offsetWidth;
-      track.style.animation = "breakingTicker var(--breaking-speed, 26s) linear infinite";
-      track.style.animationPlayState = "running";
+      if (breakingTickerFrame) {
+        window.cancelAnimationFrame(breakingTickerFrame);
+      }
+
+      breakingTickerLastTime = 0;
+      breakingTickerOffset = 0;
+      breakingTickerCycleWidth = 0;
+      track.style.transform = "translate3d(0, 0, 0)";
+
+      window.requestAnimationFrame(() => {
+        measureBreakingTicker();
+        breakingTickerFrame = window.requestAnimationFrame(animateBreakingTicker);
+      });
     }
 
     function setBreakingTicker(message) {
@@ -1176,10 +1196,6 @@
         node.textContent = cleanMessage;
       });
       ticker.setAttribute("aria-label", cleanMessage);
-
-      // Keep a readable, consistent speed when pushed headlines vary in length.
-      const seconds = Math.max(20, Math.min(48, cleanMessage.length * 0.24));
-      track.style.setProperty("--breaking-speed", `${seconds}s`);
       restartBreakingTicker();
     }
 
@@ -1509,9 +1525,47 @@
     });
 
     const cookieBanner = document.getElementById("cookie-banner");
-    if (!localStorage.getItem("rd-cookie-choice")) cookieBanner.classList.add("show");
-    document.getElementById("cookie-accept").addEventListener("click", () => { localStorage.setItem("rd-cookie-choice", "all"); cookieBanner.classList.remove("show"); showToast("Cookie preference saved"); });
-    document.getElementById("cookie-decline").addEventListener("click", () => { localStorage.setItem("rd-cookie-choice", "essential"); cookieBanner.classList.remove("show"); showToast("Essential cookies only"); });
+    const cookieSettingsLink = document.getElementById("cookie-settings-link");
+
+    function readCookieChoice() {
+      try {
+        return localStorage.getItem("rd-cookie-choice");
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function saveCookieChoice(choice) {
+      try {
+        localStorage.setItem("rd-cookie-choice", choice);
+      } catch (error) {
+        console.warn("Cookie preference could not be stored.", error);
+      }
+    }
+
+    function openCookieSettings(event) {
+      if (event) event.preventDefault();
+      cookieBanner.classList.add("show");
+      document.getElementById("cookie-decline").focus();
+    }
+
+    if (!readCookieChoice()) cookieBanner.classList.add("show");
+
+    document.getElementById("cookie-accept").addEventListener("click", () => {
+      saveCookieChoice("optional-accepted");
+      cookieBanner.classList.remove("show");
+      showToast("Optional cookie preference saved");
+    });
+
+    document.getElementById("cookie-decline").addEventListener("click", () => {
+      saveCookieChoice("essential-only");
+      cookieBanner.classList.remove("show");
+      showToast("Essential cookies only");
+    });
+
+    if (cookieSettingsLink) {
+      cookieSettingsLink.addEventListener("click", openCookieSettings);
+    }
 
 
     function weatherPresentation(code) {
@@ -1555,9 +1609,18 @@
     renderTopStories();
     renderNewsGrid();
     renderEvents();
-    // Start the ticker immediately, including before articles.json finishes loading.
+    // Start the ticker immediately, independently of the article feed.
     restartBreakingTicker();
+
     window.addEventListener("pageshow", restartBreakingTicker);
+    window.addEventListener("resize", restartBreakingTicker);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) restartBreakingTicker();
+    });
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(restartBreakingTicker).catch(() => {});
+    }
 
     loadArticleFeed();
     loadWeather();
