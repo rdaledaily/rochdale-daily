@@ -126,9 +126,7 @@ CATEGORY_QUERIES = (
     (
         "politics",
         '(Rochdale OR Heywood OR Middleton) '
-        '(councillor OR "council budget" OR "council tax" OR election OR '
-        'vote OR voted OR motion OR resigns OR resignation OR '
-        '"steps down" OR "stands down" OR quits)',
+        '(councillor OR election OR vote OR voted OR motion)',
     ),
     (
         "education",
@@ -186,8 +184,22 @@ WATCH_QUERIES = (
     '"GMP issued an appeal" Rochdale',
     '"Falinge" ("parkrun" OR "park run")',
     '"Falinger" ("parkrun" OR "park run")',
-    '"rapist deportation fight" Rochdale',
-    '"deportation fight" Rochdale',
+    # Previously exact-phrase queries here almost never matched real
+    # headlines. Also: long compound queries mixing many OR terms and
+    # several quoted phrases together (as tried in an earlier revision)
+    # appeared to silently return nothing from Google News, so these are
+    # kept short and single-focus rather than combined into one string.
+    # He is a convicted, publicly named individual already the subject of
+    # extensive Parliamentary and national press coverage, so searching
+    # his name is standard aggregation practice, not different in kind
+    # from any other named public figure in the news.
+    '"Shabir Ahmed"',
+    'Rochdale deportation',
+    'Rochdale parole',
+    'Rochdale "grooming gang"',
+    'Rochdale "released from prison"',
+    'Rochdale sentencing',
+    'Rochdale convicted',
 )
 
 # Each requested subject has its own label, category and query. Alternative
@@ -418,6 +430,10 @@ CIVIC_QUERIES = (
         'site:hansard.parliament.uk "Paul Waugh"',
     ),
     (
+        "civic:hansard-rochdale",
+        'site:hansard.parliament.uk Rochdale',
+    ),
+    (
         "civic:paul-waugh-constituency",
         'site:paulwaugh.co.uk Rochdale',
     ),
@@ -434,6 +450,16 @@ SOURCE_QUERIES = (
     '"Rochdale Hornets" news',
     '"Northern Care Alliance" Rochdale',
     '"Rochdale Sixth Form College" news',
+    # National outlets, not just the regional/Manchester verticals: a story
+    # can start locally and be covered nationally without ever appearing on
+    # a Manchester-specific page (e.g. a case with national political or
+    # legal significance).
+    'site:bbc.co.uk/news Rochdale',
+    'site:news.sky.com Rochdale',
+    'site:itv.com/news Rochdale',
+    'site:theguardian.com Rochdale',
+    'site:telegraph.co.uk Rochdale',
+    'site:independent.co.uk Rochdale',
 )
 
 COUNCILLOR_SHARD_SIZE = 15
