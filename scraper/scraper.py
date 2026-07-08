@@ -31,11 +31,13 @@ import re
 import time
 import urllib.parse
 import urllib.robotparser
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any, Iterable
+from zoneinfo import ZoneInfo
 from urllib.parse import quote_plus, urljoin, urlparse, urlunparse
 
 import feedparser
@@ -51,15 +53,23 @@ OUTPUT_FILE = ROOT / "articles.json"
 LOG_FILE = ROOT / "scraper" / "scraper.log"
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-MAX_NEWS_AGE_HOURS = int(os.getenv("MAX_NEWS_AGE_HOURS", "168"))
-RETENTION_DAYS = int(os.getenv("ARTICLE_RETENTION_DAYS", "14"))
-MAX_PUBLISHED_ARTICLES = int(os.getenv("MAX_PUBLISHED_ARTICLES", "100"))
-MAX_AI_ARTICLES_PER_RUN = int(os.getenv("MAX_AI_ARTICLES_PER_RUN", "12"))
-MAX_AI_ARTICLES_INITIAL = int(os.getenv("MAX_AI_ARTICLES_INITIAL", "35"))
+MAX_NEWS_AGE_HOURS = int(os.getenv("MAX_NEWS_AGE_HOURS", "24"))
+RETENTION_DAYS = int(os.getenv("ARTICLE_RETENTION_DAYS", "1"))
+MAX_PUBLISHED_ARTICLES = int(os.getenv("MAX_PUBLISHED_ARTICLES", "160"))
+MAX_AI_ARTICLES_PER_RUN = int(os.getenv("MAX_AI_ARTICLES_PER_RUN", "30"))
+MAX_AI_ARTICLES_INITIAL = int(os.getenv("MAX_AI_ARTICLES_INITIAL", "60"))
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "20"))
 RESPECT_ROBOTS = os.getenv("RESPECT_ROBOTS", "true").lower() not in {"0", "false", "no"}
 USE_SOURCE_IMAGES = os.getenv("USE_SOURCE_IMAGES", "false").lower() in {"1", "true", "yes"}
 RIGHT_TO_REPLY_EMAIL = os.getenv("RIGHT_TO_REPLY_EMAIL", "news@rochdaledaily.co.uk")
+UK_TZ = ZoneInfo("Europe/London")
+SAME_DAY_ONLY = os.getenv("SAME_DAY_ONLY", "true").lower() not in {"0", "false", "no"}
+AI_WORKERS = max(1, min(8, int(os.getenv("AI_WORKERS", "5"))))
+
+# Absolute exclusion: this source can never enter the candidate list,
+# corroborating-source list or final public feed.
+SOURCE_DENY_DOMAINS = {"rochdaletimes.co.uk"}
+SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper"}
 
 FACEBOOK_EVENTS_DISCOVERY_URL = os.getenv(
     "FACEBOOK_EVENTS_DISCOVERY_URL",
@@ -159,6 +169,18 @@ SEARCH_GROUPS = [
     'site:facebook.com/rochvalleyradio Rochdale',
     'site:facebook.com/rochdalecouncil Rochdale',
     'site:facebook.com/beenetworkgm Rochdale',
+    '"Rochdale" breaking news when:1d',
+    '"Heywood" news when:1d',
+    '"Middleton" news when:1d',
+    '"Littleborough" news when:1d',
+    '"Milnrow" OR "Newhey" news when:1d',
+    '"Wardle" OR "Smallbridge" news when:1d',
+    '"Castleton" OR "Kirkholt" OR "Norden" news when:1d',
+    '"Spotland" OR "Falinge" OR "Deeplish" news when:1d',
+    '"Rochdale Council" news when:1d',
+    '"Rochdale" event OR festival OR community when:1d',
+    '"Rochdale" traffic OR collision OR closure when:1d',
+    '"Rochdale" NHS OR school OR college when:1d',
 ]
 
 FACEBOOK_GRAPH_VERSION = os.getenv("FACEBOOK_GRAPH_VERSION", "v22.0")
@@ -317,6 +339,15 @@ def domain_of(url: str) -> str:
     host = (urlparse(url).hostname or "").lower()
     return host[4:] if host.startswith("www.") else host
 
+
+def source_is_denied(source_name: str = "", source_url: str = "") -> bool:
+    name = normalise_ws(source_name).lower()
+    domain = domain_of(source_url)
+    return (
+        domain in SOURCE_DENY_DOMAINS
+        or any(blocked in name for blocked in SOURCE_DENY_NAMES)
+    )
+
 def canonicalise_url(url: str) -> str:
     parsed = urlparse(url)
     query_parts = []
@@ -369,8 +400,16 @@ def iso_utc(value: datetime) -> str:
 def is_fresh(value: datetime | None) -> bool:
     if value is None:
         return False
-    age = utc_now() - value
-    return timedelta(minutes=-30) <= age <= timedelta(hours=MAX_NEWS_AGE_HOURS)
+
+    now = utc_now()
+    age = now - value
+    if not (timedelta(minutes=-30) <= age <= timedelta(hours=MAX_NEWS_AGE_HOURS)):
+        return False
+
+    if SAME_DAY_ONLY:
+        return value.astimezone(UK_TZ).date() == now.astimezone(UK_TZ).date()
+
+    return True
 
 def detect_area(text: str, fallback: str = "rochdale") -> str:
     low = text.lower()
@@ -540,7 +579,7 @@ def google_news_sources() -> list[dict[str, str]]:
     return [
         {
             "name": f"Google News search {index + 1}",
-            "url": f"https://news.google.com/rss/search?q={quote_plus(query)}&hl=en-GB&gl=GB&ceid=GB:en",
+            "url": f"https://news.google.com/rss/search?q={quote_plus(query + ' when:1d')}&hl=en-GB&gl=GB&ceid=GB:en",
             "default_area": "rochdale",
             "aggregator": "google",
         }
@@ -564,6 +603,14 @@ def collect_rss_candidates() -> list[Candidate]:
             entry_source = getattr(entry, "source", None)
             if isinstance(entry_source, dict):
                 source_name = strip_markdown(entry_source.get("title")) or source_name
+                entry_source_url = str(entry_source.get("href") or "")
+            else:
+                entry_source_url = ""
+
+            if source_is_denied(source_name, entry_source_url or source_url):
+                log.info("Blocked prohibited source: %s", source_name or source_url)
+                continue
+
             text = f"{source_title} {summary}"
             if not source_url or not source_title or not is_fresh(published):
                 continue
@@ -623,6 +670,9 @@ def discovery_links(source: dict[str, str]) -> list[str]:
 def collect_discovery_candidates() -> list[Candidate]:
     candidates: list[Candidate] = []
     for source in DISCOVERY_PAGES:
+        if source_is_denied(source.get("name", ""), source.get("url", "")):
+            log.info("Skipping prohibited discovery source: %s", source.get("name"))
+            continue
         log.info("Discovering pages: %s", source["name"])
         for url in discovery_links(source):
             try:
@@ -1018,6 +1068,13 @@ def deduplicate_and_cross_reference(candidates: Iterable[Candidate]) -> list[Can
     primaries: list[Candidate] = []
     seen_urls: set[str] = set()
     for candidate in ordered:
+        if source_is_denied(candidate.source_name, candidate.source_url):
+            log.info("Discarded prohibited candidate source: %s", candidate.source_name)
+            continue
+        candidate.related_sources = [
+            item for item in candidate.related_sources
+            if not source_is_denied(item.get("name", ""), item.get("url", ""))
+        ]
         url_key = canonicalise_url(candidate.source_url)
         if url_key in seen_urls:
             continue
@@ -1047,11 +1104,14 @@ def load_json_list(path: Path) -> list[dict[str, Any]]:
         return []
 
 def recent_existing_articles() -> list[dict[str, Any]]:
-    cutoff = utc_now() - timedelta(days=RETENTION_DAYS)
     kept = []
     for article in load_json_list(OUTPUT_FILE):
         published = parse_datetime(article.get("published_at"))
-        if published and published >= cutoff:
+        source_name = str(article.get("source_name") or "")
+        source_url = str(article.get("source_url") or "")
+        if source_is_denied(source_name, source_url):
+            continue
+        if published and is_fresh(published):
             article["title"] = strip_markdown(article.get("title"))
             article["excerpt"] = strip_markdown(article.get("excerpt"))
             kept.append(article)
@@ -1308,25 +1368,39 @@ def main() -> int:
     run_limit = MAX_AI_ARTICLES_INITIAL if not existing else MAX_AI_ARTICLES_PER_RUN
 
     new_articles: list[dict[str, Any]] = []
-    ai_count = 0
     skipped = 0
 
-    for candidate in candidates:
-        if canonicalise_url(candidate.source_url) in existing_by_source:
-            continue
-        if ai_count >= run_limit:
-            break
-        try:
-            article = rewrite_candidate(candidate, client)
-        except Exception as exc:
-            log.exception("Rewrite failed for %s: %s", candidate.source_url, exc)
-            skipped += 1
-            continue
-        ai_count += 1
-        if article:
-            new_articles.append(article)
-        else:
-            skipped += 1
+    pending_candidates = [
+        candidate for candidate in candidates
+        if canonicalise_url(candidate.source_url) not in existing_by_source
+        and not source_is_denied(candidate.source_name, candidate.source_url)
+    ][:run_limit]
+
+    ai_count = len(pending_candidates)
+
+    def process_candidate(candidate: Candidate) -> dict[str, Any] | None:
+        return rewrite_candidate(candidate, client)
+
+    with ThreadPoolExecutor(max_workers=AI_WORKERS) as executor:
+        future_map = {
+            executor.submit(process_candidate, candidate): candidate
+            for candidate in pending_candidates
+        }
+        for future in as_completed(future_map):
+            candidate = future_map[future]
+            try:
+                article = future.result()
+            except Exception as exc:
+                log.exception("Rewrite failed for %s: %s", candidate.source_url, exc)
+                skipped += 1
+                continue
+            if article and not source_is_denied(
+                str(article.get("source_name") or ""),
+                str(article.get("source_url") or ""),
+            ):
+                new_articles.append(article)
+            else:
+                skipped += 1
 
     merged: dict[str, dict[str, Any]] = {}
     for article in new_articles + existing:
@@ -1334,9 +1408,19 @@ def main() -> int:
         if key and key not in merged:
             merged[key] = article
 
+    publishable_values = [
+        article for article in merged.values()
+        if not source_is_denied(
+            str(article.get("source_name") or ""),
+            str(article.get("source_url") or ""),
+        )
+        and is_fresh(parse_datetime(article.get("published_at")))
+    ]
+
     published = sorted(
-        merged.values(),
-        key=lambda article: parse_datetime(article.get("published_at")) or datetime.min.replace(tzinfo=timezone.utc),
+        publishable_values,
+        key=lambda article: parse_datetime(article.get("published_at"))
+        or datetime.min.replace(tzinfo=timezone.utc),
         reverse=True,
     )[:MAX_PUBLISHED_ARTICLES]
 
