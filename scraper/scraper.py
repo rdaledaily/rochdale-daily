@@ -126,7 +126,7 @@ IMAGE_REUSE_SOURCE_DOMAINS = {
     for item in os.getenv(
         "IMAGE_REUSE_SOURCE_DOMAINS",
         "rochdale.gov.uk,gmp.police.uk,manchesterfire.gov.uk,rochdaleafc.co.uk,"
-        "rochdalehornets.co.uk,tfgm.com,gmca.gov.uk,nationalhighways.co.uk,"
+        "hornetsrugbyleague.co.uk,tfgm.com,gmca.gov.uk,nationalhighways.co.uk,"
         "hopwood.ac.uk,northerncarealliance.nhs.uk,penninecare.nhs.uk,"
         "rochvalleyradio.com,actiontogether.org.uk,yourtrustrochdale.co.uk,"
         "facebook.com",
@@ -199,7 +199,7 @@ DISCOVERY_PAGES = [
 
     # Sport
     {"name": "Rochdale AFC", "url": "https://rochdaleafc.co.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/"},
-    {"name": "Rochdale Hornets", "url": "https://www.rochdalehornets.co.uk/news", "default_area": "rochdale", "link_pattern": r"/news"},
+    {"name": "Rochdale Hornets", "url": "https://www.hornetsrugbyleague.co.uk/news", "default_area": "rochdale", "link_pattern": r"/news"},
 ]
 
 LIVE_PAGE_SOURCES = [
@@ -209,12 +209,10 @@ LIVE_PAGE_SOURCES = [
         "category": "transport",
         "default_area": "rochdale",
     },
-    {
-        "name": "Rochdale Council service updates",
-        "url": "https://www.rochdale.gov.uk/serviceupdates",
-        "category": "community",
-        "default_area": "rochdale",
-    },
+    # "Rochdale Council service updates" deliberately removed: in practice it
+    # surfaced generic institutional content (emergency-communications PR,
+    # "council celebrates achievements" self-promotion) rather than the
+    # practical bin-collection/roadworks alerts it was added for.
     {
         "name": "Northern live service updates",
         "url": "https://www.northernrailway.co.uk/service-updates",
@@ -415,12 +413,23 @@ CATEGORY_KEYWORDS = {
     "environment": {"flood", "weather", "environment", "recycling", "litter", "climate", "wildlife", "park"},
 }
 
+CHILD_MENTION_PATTERN = r"\b(child|children|minor|youth|under[- ]?18|schoolgirl|schoolboy)\b"
+
 SENSITIVE_PATTERNS = [
     r"\b(alleged|allegedly|accused|suspect|suspected|charged|arrested|court|trial|jury|inquest|coroner)\b",
     r"\b(murder|manslaughter|rape|sexual|assault|abuse|grooming|stabbing|death|died|killed)\b",
-    r"\b(child|children|minor|youth|under[- ]?18|schoolgirl|schoolboy)\b",
     r"\b(suicide|self-harm|domestic abuse|domestic violence)\b",
 ]
+
+# Safeguarding/crime terms that make a bare mention of a child genuinely
+# sensitive, as distinct from an ordinary story that happens to mention
+# children (a SEND award, a new school, a children's health campaign).
+SAFEGUARDING_CONTEXT_PATTERN = (
+    r"\b(alleged|allegedly|accused|suspect|suspected|charged|arrested|court|"
+    r"trial|jury|inquest|coroner|murder|manslaughter|rape|sexual|assault|"
+    r"abuse|grooming|stabbing|death|died|killed|suicide|self-harm|"
+    r"domestic abuse|domestic violence|missing|kidnap|neglect|safeguarding)\b"
+)
 
 DROP_PATTERNS = [
     r"\b(opinion|comment|column|editorial)\b",
@@ -751,7 +760,20 @@ def should_drop(text: str, url: str = "") -> bool:
     )
 
 def is_sensitive(text: str, category: str) -> bool:
-    return category == "crime" or any(re.search(pattern, text, flags=re.IGNORECASE) for pattern in SENSITIVE_PATTERNS)
+    if category == "crime":
+        return True
+    if any(re.search(pattern, text, flags=re.IGNORECASE) for pattern in SENSITIVE_PATTERNS):
+        return True
+    # A bare mention of a child/minor is only sensitive alongside genuine
+    # safeguarding or crime context (e.g. "arrested", "abuse", "missing").
+    # Without that, an ordinary story that happens to mention children --
+    # a SEND award, a new school, a children's health campaign -- must not
+    # be misclassified as sensitive and sent through name anonymisation.
+    if re.search(CHILD_MENTION_PATTERN, text, flags=re.IGNORECASE) and re.search(
+        SAFEGUARDING_CONTEXT_PATTERN, text, flags=re.IGNORECASE
+    ):
+        return True
+    return False
 
 def robots_allows(url: str) -> bool:
     if not RESPECT_ROBOTS:
