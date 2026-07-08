@@ -27,10 +27,17 @@ assert len(CURRENT_COUNCILLORS) == 60
 assert len({name for name, _ in CURRENT_COUNCILLORS}) == 60
 assert all_watched == list(CURRENT_COUNCILLORS)
 
-specs = build_search_query_specs(128, now=fixed_runs[0])
-queries = [spec.query for spec in specs]
-joined = "\n".join(queries).lower()
-labels = {spec.label for spec in specs}
+# Bulk queries (watch/topics/categories/wards/sources) are now sharded
+# across the four scheduled runs per hour, to keep Google News request
+# volume per run low enough to avoid rate-limiting/bot-detection (a burst
+# of 130+ requests in one run was observed to get every single query
+# blocked, returning zero results across the board). Any single run only
+# covers roughly a quarter of the bulk set; the full set is covered across
+# all four runs combined. So topic/ward/source coverage is checked
+# cumulatively here, the same way councillor coverage already is.
+per_run_specs = [build_search_query_specs(200, now=run_time) for run_time in fixed_runs]
+cumulative_queries = [spec.query for specs in per_run_specs for spec in specs]
+cumulative_joined = "\n".join(cumulative_queries).lower()
 
 required_fragments = (
     '"healey dell" viaduct',
@@ -78,25 +85,39 @@ required_fragments = (
     '("rochdale canal" or "rochdale canal")',
     '"rochdale town hall"',
     '"paul waugh" rochdale',
+    "site:manchestereveningnews.co.uk/all-about/rochdale rochdale",
+    "site:manchestereveningnews.co.uk/news/greater-manchester-news/ rochdale",
+    '"manchester evening news" rochdale',
 )
 
 for fragment in required_fragments:
-    assert fragment in joined, fragment
+    assert fragment in cumulative_joined, fragment
 
-assert any(spec.person == ROCHDALE_MP_NAME for spec in specs)
-assert len([spec for spec in specs if spec.label.startswith("councillor:")]) == 15
-assert set(ROCHDALE_WARDS) <= {spec.ward for spec in specs if spec.ward}
+assert set(ROCHDALE_WARDS) <= {
+    spec.ward for specs in per_run_specs for spec in specs if spec.ward
+}
 assert len(DISCOVERY_TOPICS) >= 44
 
 # Search locations and current councillors, not invented police branches.
-assert "gmp bamford" not in joined
-assert "gmp healey" not in joined
+assert "gmp bamford" not in cumulative_joined
+assert "gmp healey" not in cumulative_joined
 
-assert "site:manchestereveningnews.co.uk/all-about/rochdale rochdale" in joined
-assert "site:manchestereveningnews.co.uk/news/greater-manchester-news/ rochdale" in joined
-assert '"manchester evening news" rochdale' in joined
+# Per-run invariants: the small always-on sets (GMP, civic/Parliament,
+# this run's councillor shard) must appear on EVERY run, not just
+# cumulatively, and each run's total request volume must stay well below
+# the burst size that was observed to trigger Google's rate-limiting.
+for specs in per_run_specs:
+    labels = {spec.label for spec in specs}
+    assert any(label.startswith("official-gmp:") for label in labels)
+    assert any(spec.person == ROCHDALE_MP_NAME for spec in specs)
+    assert len([spec for spec in specs if spec.label.startswith("councillor:")]) == 15
+    assert len(specs) < 70, (
+        f"single-run query volume too high ({len(specs)}); "
+        "this is what caused Google to block every query in a run"
+    )
 
 print(
-    f"Deep-local query tests passed: {len(specs)} queries, "
-    f"{len(DISCOVERY_TOPICS)} named topics, 15 councillors this run."
+    f"Deep-local query tests passed: {len(cumulative_queries)} cumulative queries "
+    f"across 4 runs ({[len(s) for s in per_run_specs]} per run), "
+    f"{len(DISCOVERY_TOPICS)} named topics, 15 councillors per run."
 )
