@@ -68,6 +68,11 @@ MAX_PUBLISHED_ARTICLES = int(os.getenv("MAX_PUBLISHED_ARTICLES", "100"))
 MAX_AI_ARTICLES_PER_RUN = int(os.getenv("MAX_AI_ARTICLES_PER_RUN", "30"))
 MAX_AI_ARTICLES_INITIAL = int(os.getenv("MAX_AI_ARTICLES_INITIAL", "60"))
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "12"))
+# Small pause between consecutive Google News RSS requests, to avoid
+# looking like a request burst. Google appears to rate-limit/bot-block
+# bursts of automated requests, returning a non-RSS page that fails to
+# parse for every subsequent query in the same run once triggered.
+GOOGLE_NEWS_REQUEST_DELAY_SECONDS = float(os.getenv("GOOGLE_NEWS_REQUEST_DELAY_SECONDS", "1.5"))
 DISCOVERY_LINKS_PER_SOURCE = int(os.getenv("DISCOVERY_LINKS_PER_SOURCE", "40"))
 RSS_ITEMS_PER_SOURCE = int(os.getenv("RSS_ITEMS_PER_SOURCE", "100"))
 GOOGLE_SEARCH_QUERY_LIMIT = int(os.getenv("GOOGLE_SEARCH_QUERY_LIMIT", "128"))
@@ -1013,7 +1018,15 @@ def collect_rss_candidates() -> list[Candidate]:
     candidates: list[Candidate] = []
     for source in RSS_SOURCES + google_news_sources():
         log.info("Reading RSS: %s", source["name"])
-        feed = feedparser.parse(source["url"])
+        if source.get("aggregator") == "google":
+            time.sleep(GOOGLE_NEWS_REQUEST_DELAY_SECONDS)
+        feed = feedparser.parse(
+            source["url"],
+            agent=(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            ),
+        )
         if getattr(feed, "bozo", False):
             log.warning("RSS warning for %s: %s", source["name"], getattr(feed, "bozo_exception", "unknown"))
         raw_entry_count = len(feed.entries)
