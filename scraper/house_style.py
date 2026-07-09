@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-STYLE_VERSION = "rochdale-broadsheet-v2"
+STYLE_VERSION = "rochdale-broadsheet-v3"
 
 HOUSE_STYLE_SYSTEM = (
     "You are the senior news editor of Rochdale Daily. Write polished, authoritative British local journalism "
@@ -13,15 +13,17 @@ HOUSE_STYLE_SYSTEM = (
     "active verbs and accurate attribution. Vary sentence length and paragraph openings naturally. "
     "Retain a clear local-impact or reader-context paragraph whenever it is relevant. Explain how a collision, "
     "closure, service change, court decision, weather event or public-policy development may affect journeys, "
-    "families, businesses, schools or local services. This contextual analysis may draw reasonable implications "
-    "from the verified facts, but it must use careful language such as 'is likely to', 'may', 'could' or "
-    "'will mean' and must never present speculation as an established fact. "
+    "families, businesses, schools, public services or neighbourhood life. This contextual analysis may draw "
+    "reasonable implications from the verified facts, but it must use careful language such as 'is likely to', "
+    "'may', 'could' or 'will mean' and must never present speculation as an established fact. "
     "Do not remove useful local context merely because it is explanatory rather than directly quoted. "
+    "Every substantial report should include a mature reader-context paragraph where one is relevant. "
+    "Retain the contextual substance while improving the language. "
     "Avoid childish, formulaic or school-essay phrasing. Do not write 'Rochdale is gearing up', "
-    "'residents are advised', 'it is important to note', 'it is essential', 'this is significant for local "
-    "residents', 'a perfect opportunity', 'stay informed', 'plan journeys accordingly', "
-    "'local authorities are actively monitoring' or 'positively impact the local economy'. "
-    "Replace such wording with precise explanation tied to the actual story. "
+    "'residents are advised', 'it is important to note', 'it is essential', "
+    "'this is significant for local residents', 'a perfect opportunity', 'stay informed', "
+    "'plan journeys accordingly', 'local authorities are actively monitoring' or "
+    "'positively impact the local economy'. Replace such wording with precise explanation tied to the story. "
     "Do not write empty scene-setting, promotional enthusiasm, generic warnings or canned conclusions. "
     "Do not invent public concern, business benefits, official action, causes or consequences. "
     "A headline should normally contain 6-14 words, use sentence case and state the development directly. "
@@ -82,23 +84,40 @@ def _plain(value: Any) -> str:
     return re.sub(r"\s+", " ", str(value or "")).strip()
 
 
-def style_issues(draft: dict[str, Any]) -> list[str]:
+def exact_style_matches(draft: dict[str, Any]) -> list[str]:
     title = _plain(draft.get("title"))
     excerpt = _plain(draft.get("excerpt"))
     paragraphs = [_plain(item) for item in draft.get("paragraphs") or [] if _plain(item)]
     combined = " ".join([title, excerpt, *paragraphs])
+
+    matches = {
+        match.group(0)
+        for pattern in (WEAK_STYLE_RE, PROMOTIONAL_RE)
+        for match in pattern.finditer(combined)
+    }
+    if GENERIC_HEADLINE_RE.search(title):
+        matches.add(title.split(":", 1)[0] + ":")
+    return sorted(matches, key=str.casefold)
+
+
+def style_issues(draft: dict[str, Any]) -> list[str]:
+    title = _plain(draft.get("title"))
+    excerpt = _plain(draft.get("excerpt"))
+    paragraphs = [_plain(item) for item in draft.get("paragraphs") or [] if _plain(item)]
     issues: list[str] = []
 
     if GENERIC_HEADLINE_RE.search(title):
         issues.append("Replace the labelled headline with a specific news headline.")
     if ":" in title and len(title.split(":")[0].split()) <= 3:
         issues.append("Avoid a generic label followed by a colon in the headline.")
-    if WEAK_STYLE_RE.search(combined):
+
+    exact = exact_style_matches(draft)
+    if exact:
         issues.append(
-            "Elevate the formulaic wording while retaining a precise local-impact paragraph."
+            "Replace these exact formulaic expressions while retaining the local-impact meaning: "
+            + "; ".join(exact)
         )
-    if PROMOTIONAL_RE.search(combined):
-        issues.append("Remove promotional or over-excited language.")
+
     if sum(1 for paragraph in paragraphs if paragraph.lower().startswith("rochdale ")) >= 3:
         issues.append("Vary paragraph openings instead of repeating the place name mechanically.")
     if sum(1 for paragraph in paragraphs if paragraph.lower().startswith("this ")) >= 3:

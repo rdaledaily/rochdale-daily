@@ -11,7 +11,12 @@ from typing import Any
 
 from openai import OpenAI
 
-from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
+from house_style import (
+    HOUSE_STYLE_SYSTEM,
+    STYLE_VERSION,
+    exact_style_matches,
+    style_issues,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTICLES_PATH = ROOT / "articles.json"
@@ -81,6 +86,7 @@ def normalise(raw: Any) -> dict[str, Any]:
 def draft_score(draft: dict[str, Any], evidence: str) -> tuple[int, list[str]]:
     feedback: list[str] = []
     count = body_word_count(draft.get("paragraphs") or [])
+
     if not draft.get("publishable"):
         feedback.append("Revise the article rather than refusing a supported local story.")
     if count < 200:
@@ -89,6 +95,7 @@ def draft_score(draft: dict[str, Any], evidence: str) -> tuple[int, list[str]]:
         feedback.append("Tighten the article to fewer than 750 words.")
     if len(draft.get("title", "").split()) < 4:
         feedback.append("Write a complete, specific headline.")
+
     feedback.extend(style_issues(draft))
 
     invented = numbers(
@@ -103,6 +110,7 @@ def draft_score(draft: dict[str, Any], evidence: str) -> tuple[int, list[str]]:
             "Remove numerical details absent from the supplied article: "
             + ", ".join(sorted(invented))
         )
+
     return len(feedback), feedback
 
 
@@ -114,16 +122,20 @@ def edit_article(article: dict[str, Any]) -> tuple[dict[str, Any], str]:
         original_body,
     ])
     if len(re.findall(r"\b[\w’'-]+\b", evidence)) < 120:
-        return article, "insufficient-existing-evidence"
+        kept = dict(article)
+        kept.pop("editorial_style_version", None)
+        kept["style_rewrite_status"] = "insufficient-existing-evidence"
+        return kept, "insufficient-existing-evidence"
 
     prompt = {
         "task": (
-            "Line-edit this existing local-news article into polished, authoritative British journalism. "
+            "Rewrite this existing local-news article into polished, authoritative British journalism. "
             "Treat the current article as the complete factual evidence bundle. Retain every useful verified fact, "
             "but rewrite the prose rather than merely polishing individual sentences. "
             "Keep a substantive local-impact paragraph. Explain practical implications for commuters, families, "
-            "businesses or services where the facts reasonably support them, using measured conditional language. "
-            "Do not delete local context simply because it is explanatory. Do not add any new case-specific fact."
+            "businesses, schools, services or neighbourhood life where the facts reasonably support them, using "
+            "measured conditional language. Preserve the contextual meaning rather than deleting it. "
+            "Do not add any new case-specific fact."
         ),
         "article": {
             "title": article.get("title"),
@@ -145,16 +157,24 @@ def edit_article(article: dict[str, Any]) -> tuple[dict[str, Any], str]:
 
     best: dict[str, Any] | None = None
     best_score = 999
+    best_feedback: list[str] = []
     previous = None
     feedback: list[str] = []
 
-    for attempt in range(3):
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
+    for attempt in range(5):
         current_prompt = dict(prompt)
         if attempt:
             current_prompt["previous_draft"] = previous
             current_prompt["repair_required"] = feedback
+            current_prompt["repair_instruction"] = (
+                "Produce a fresh, fully edited version. Replace every exact expression listed in "
+                "repair_required. Preserve the article's useful local-impact paragraph and its meaning, "
+                "but express it in mature, precise British newspaper prose. Do not simply delete the "
+                "contextual paragraph. Do not add any factual claim."
+            )
 
-        client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
         response = client.chat.completions.create(
             model=MODEL,
             messages=[
@@ -162,7 +182,7 @@ def edit_article(article: dict[str, Any]) -> tuple[dict[str, Any], str]:
                 {"role": "user", "content": json.dumps(current_prompt, ensure_ascii=False)},
             ],
             response_format={"type": "json_schema", "json_schema": SCHEMA},
-            temperature=0.16,
+            temperature=0.12,
             max_tokens=3500,
         )
         draft = normalise(json.loads(response.choices[0].message.content or "{}"))
@@ -171,32 +191,50 @@ def edit_article(article: dict[str, Any]) -> tuple[dict[str, Any], str]:
         if score < best_score:
             best = draft
             best_score = score
+            best_feedback = list(feedback)
+
         if score == 0:
             break
-        previous = draft
 
-    if not best or body_word_count(best.get("paragraphs") or []) < 200:
+        previous = draft
+        log.info(
+            "Editorial repair attempt %d for %s: %s",
+            attempt + 1,
+            article.get("title"),
+            "; ".join(feedback),
+        )
+
+    if (
+        not best
+        or best_score != 0
+        or body_word_count(best.get("paragraphs") or []) < 200
+    ):
         kept = dict(article)
-        kept["style_rewrite_status"] = "kept-original"
-        return kept, "kept-original"
+        kept.pop("editorial_style_version", None)
+        kept["style_rewrite_status"] = "needs-editorial-retry"
+        kept["style_rewrite_issues"] = best_feedback[:8]
+        return kept, "needs-editorial-retry"
 
     updated = dict(article)
     updated["title"] = best["title"]
     updated["excerpt"] = best["excerpt"]
     updated["summary"] = best["excerpt"]
     body = "".join(f"<p>{html.escape(paragraph)}</p>" for paragraph in best["paragraphs"])
+
     if article.get("is_ongoing"):
         body = (
             '<p class="ongoing-label"><strong>ONGOING STORY</strong> — '
             'This report brings together confirmed developments from multiple sources.</p>'
             + body
         )
+
     updated["content_html"] = body
     updated["editorial_style_version"] = STYLE_VERSION
     updated["publication_route"] = "ai-professional-style-edit"
     updated["rewrite_quality_checked"] = True
-    updated["style_rewrite_status"] = "passed" if best_score == 0 else "best-safe-draft"
-    return updated, updated["style_rewrite_status"]
+    updated["style_rewrite_status"] = "passed"
+    updated.pop("style_rewrite_issues", None)
+    return updated, "passed"
 
 
 def main() -> int:
