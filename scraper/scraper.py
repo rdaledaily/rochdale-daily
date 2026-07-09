@@ -50,6 +50,7 @@ from dateparser.search import search_dates
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 from search_queries import build_search_query_specs
+from locations import LOCATION_BY_SLUG
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_FILE = ROOT / 'articles.json'
 LOG_FILE = ROOT / 'scraper' / 'scraper.log'
@@ -176,6 +177,9 @@ class Candidate:
     related_sources: list[dict[str, str]] = field(default_factory=list)
     social_context: list[dict[str, Any]] = field(default_factory=list)
     story_key: str = ''
+    discovery_query_label: str = ''
+    searched_location_slug: str = ''
+    searched_location_name: str = ''
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -368,6 +372,40 @@ def source_text_area(text: str, fallback: str='', source_name: str='', source_ur
     if traffic_area:
         return traffic_area
     return fallback if trusted_local else ''
+
+def location_query_result_allowed(
+    text: str,
+    source_name: str = '',
+    source_url: str = '',
+    location_slug: str = '',
+) -> bool:
+    """Reject a location-query result when it contains a known external match.
+
+    The requested search location is metadata only and never proves locality. The
+    normal source_text_is_local() check must still pass using the actual headline,
+    summary, publisher identity, URL or article content. This guard specifically
+    stops ambiguous searches such as Norden from accepting Norden in Swanage or a
+    Stevenage/Hertfordshire result.
+    """
+    slug = normalise_ws(location_slug).lower()
+    if not slug:
+        return True
+    profile = LOCATION_BY_SLUG.get(slug)
+    if profile is None:
+        log.warning('Rejected result from unknown location query: %s', slug)
+        return False
+    actual_result_text = normalise_ws(f'{text} {source_name} {source_url}').casefold()
+    for reject_term in profile.reject_terms:
+        term = normalise_ws(reject_term).casefold()
+        if term and term in actual_result_text:
+            log.info(
+                'Rejected external match for %s query because result contained %r: %s',
+                profile.name,
+                reject_term,
+                source_name or source_url,
+            )
+            return False
+    return True
 
 def live_category(text: str, fallback: str) -> str:
     detected = categorise(text)
@@ -562,7 +600,18 @@ def google_news_sources() -> list[dict[str, str]]:
     sources: list[dict[str, str]] = []
     exclusions = ' when:1d -site:rochdaleonline.co.uk -site:rochdaletimes.co.uk -vacancy -vacancies -careers -recruitment -hiring -apprenticeship -internship'
     for index, spec in enumerate(SEARCH_QUERY_SPECS, start=1):
-        sources.append({'name': f'Google News — {spec.label}', 'url': f'https://news.google.com/rss/search?q={quote_plus(spec.query + exclusions)}&hl=en-GB&gl=GB&ceid=GB:en', 'default_area': 'rochdale', 'aggregator': 'google', 'query_label': spec.label, 'query_category': spec.category, 'query_ward': spec.ward, 'query_person': spec.person})
+        sources.append({
+            'name': f'Google News — {spec.label}',
+            'url': f'https://news.google.com/rss/search?q={quote_plus(spec.query + exclusions)}&hl=en-GB&gl=GB&ceid=GB:en',
+            'default_area': 'rochdale',
+            'aggregator': 'google',
+            'query_label': spec.label,
+            'query_category': spec.category,
+            'query_ward': spec.ward,
+            'query_person': spec.person,
+            'query_location_slug': spec.location_slug,
+            'query_location_name': spec.location_name,
+        })
     return sources
 
 def collect_rss_candidates() -> list[Candidate]:
@@ -595,7 +644,22 @@ def collect_rss_candidates() -> list[Candidate]:
             text = f'{source_title} {summary}'
             if not source_url or not source_title or (not is_fresh(published)):
                 continue
-            if should_drop(text, source_url) or not source_text_is_local(text, source_name, source_url, bool(source.get('trusted_local'))):
+            if should_drop(text, source_url):
+                continue
+            locality_source_url = entry_source_url or source_url
+            if not location_query_result_allowed(
+                text,
+                source_name,
+                locality_source_url,
+                str(source.get('query_location_slug') or ''),
+            ):
+                continue
+            if not source_text_is_local(
+                text,
+                source_name,
+                locality_source_url,
+                bool(source.get('trusted_local')),
+            ):
                 continue
             image_url = rss_image(entry)
             body_excerpt = summary
@@ -614,7 +678,31 @@ def collect_rss_candidates() -> list[Candidate]:
             if not is_fresh(published):
                 continue
             combined = f'{source_title} {summary} {body_excerpt}'
-            candidates.append(Candidate(source_name=source_name, source_url=source_url, source_title=source_title, source_summary=summary, source_published_at=iso_utc(published), area=source_text_area(combined, source['default_area'], source_name, source_url, bool(source.get('trusted_local'))), category=categorise(combined) if categorise(combined) != 'news' else source.get('query_category') or source.get('default_category', 'news'), image_candidate_url=image_url, source_body_excerpt=body_excerpt, source_kind='publisher_rss' if source.get('rss_only') else 'article'))
+            candidates.append(Candidate(
+                source_name=source_name,
+                source_url=source_url,
+                source_title=source_title,
+                source_summary=summary,
+                source_published_at=iso_utc(published),
+                area=source_text_area(
+                    combined,
+                    source['default_area'],
+                    source_name,
+                    entry_source_url or source_url,
+                    bool(source.get('trusted_local')),
+                ),
+                category=(
+                    categorise(combined)
+                    if categorise(combined) != 'news'
+                    else source.get('query_category') or source.get('default_category', 'news')
+                ),
+                image_candidate_url=image_url,
+                source_body_excerpt=body_excerpt,
+                source_kind='publisher_rss' if source.get('rss_only') else 'article',
+                discovery_query_label=str(source.get('query_label') or ''),
+                searched_location_slug=str(source.get('query_location_slug') or ''),
+                searched_location_name=str(source.get('query_location_name') or ''),
+            ))
     return candidates
 
 def discovery_listing_urls(source: dict[str, Any]) -> list[str]:
@@ -1190,7 +1278,17 @@ def collect_environment_agency_flood_candidates() -> list[Candidate]:
     return candidates
 
 def candidate_related_record(candidate: Candidate) -> dict[str, str]:
-    return {'name': candidate.source_name, 'url': candidate.source_url, 'title': candidate.source_title, 'summary': candidate.source_summary[:1200], 'published_at': candidate.source_published_at, 'source_kind': candidate.source_kind}
+    return {
+        'name': candidate.source_name,
+        'url': candidate.source_url,
+        'title': candidate.source_title,
+        'summary': candidate.source_summary[:1200],
+        'published_at': candidate.source_published_at,
+        'source_kind': candidate.source_kind,
+        'discovery_query_label': candidate.discovery_query_label,
+        'searched_location_slug': candidate.searched_location_slug,
+        'searched_location_name': candidate.searched_location_name,
+    }
 
 def deduplicate_and_cross_reference(candidates: Iterable[Candidate]) -> list[Candidate]:
     ordered = sorted(candidates, key=lambda item: (authority_score(item), item.source_published_at), reverse=True)
@@ -1385,7 +1483,7 @@ def build_direct_crime_article(candidate: Candidate) -> dict[str, Any]:
     image_url, image_credit = source_image(candidate, 'crime')
     source_urls = [candidate.source_url] + [item['url'] for item in candidate.related_sources[:11] if item.get('url')]
     source_names = [candidate.source_name] + [item['name'] for item in candidate.related_sources[:11] if item.get('name')]
-    return {'id': stable_id(candidate.source_url), 'story_key': candidate.story_key or build_story_key(candidate), 'title': title, 'slug': make_slug(title), 'excerpt': excerpt, 'content_html': ''.join((f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs)), 'area': area, 'category': 'crime', 'types': ['crime'], 'published_at': candidate.source_published_at, 'scraped_at': iso_utc(utc_now()), 'image_url': image_url, 'image_credit': image_credit, 'source_image_candidate_url': '', 'source_image_reuse_status': '', 'event_start_at': '', 'event_end_at': '', 'event_location': '', 'source_kind': candidate.source_kind, 'source_name': candidate.source_name, 'source_url': candidate.source_url, 'source_names': source_names, 'source_urls': source_urls, 'source_count': len(source_urls), 'social_context_used': False, 'social_reaction_count': 0, 'official_social_update_count': 0, 'social_platforms': [], 'social_context_note': '', 'sensitive_story': False, 'police_matter': True, 'requires_approval': False, 'legal_disclaimer': '', 'right_to_reply': '', 'byline': 'Rochdale Daily Newsdesk', 'status': 'published', 'publication_route': 'direct-crime-autopublish'}
+    return {'id': stable_id(candidate.source_url), 'story_key': candidate.story_key or build_story_key(candidate), 'title': title, 'slug': make_slug(title), 'excerpt': excerpt, 'content_html': ''.join((f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs)), 'area': area, 'category': 'crime', 'types': ['crime'], 'published_at': candidate.source_published_at, 'scraped_at': iso_utc(utc_now()), 'image_url': image_url, 'image_credit': image_credit, 'source_image_candidate_url': '', 'source_image_reuse_status': '', 'event_start_at': '', 'event_end_at': '', 'event_location': '', 'source_kind': candidate.source_kind, 'source_name': candidate.source_name, 'source_url': candidate.source_url, 'source_names': source_names, 'source_urls': source_urls, 'source_count': len(source_urls), 'social_context_used': False, 'social_reaction_count': 0, 'official_social_update_count': 0, 'social_platforms': [], 'social_context_note': '', 'sensitive_story': False, 'police_matter': True, 'requires_approval': False, 'legal_disclaimer': '', 'right_to_reply': '', 'byline': 'Rochdale Daily Newsdesk', 'status': 'published', 'publication_route': 'direct-crime-autopublish', 'discovery_query_label': candidate.discovery_query_label, 'searched_location_slug': candidate.searched_location_slug, 'searched_location_name': candidate.searched_location_name}
 
 def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, Any] | None:
     clean_candidate_public_text(candidate)
@@ -1395,7 +1493,21 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     if candidate.category == 'crime':
         log.info('Directly publishing crime candidate: %s', candidate.source_url)
         return build_direct_crime_article(candidate)
-    source_records = [{'name': candidate.source_name, 'url': candidate.source_url, 'title': candidate.source_title, 'summary': candidate.source_summary, 'body_excerpt': candidate.source_body_excerpt, 'published_at': candidate.source_published_at, 'source_kind': candidate.source_kind, 'event_start_at': candidate.event_start_at, 'event_end_at': candidate.event_end_at, 'event_location': candidate.event_location}] + candidate.related_sources[:8]
+    source_records = [{
+        'name': candidate.source_name,
+        'url': candidate.source_url,
+        'title': candidate.source_title,
+        'summary': candidate.source_summary,
+        'body_excerpt': candidate.source_body_excerpt,
+        'published_at': candidate.source_published_at,
+        'source_kind': candidate.source_kind,
+        'event_start_at': candidate.event_start_at,
+        'event_end_at': candidate.event_end_at,
+        'event_location': candidate.event_location,
+        'discovery_query_label': candidate.discovery_query_label,
+        'searched_location_slug': candidate.searched_location_slug,
+        'searched_location_name': candidate.searched_location_name,
+    }] + candidate.related_sources[:8]
     social_context = candidate.social_context[:SOCIAL_MAX_OFFICIAL_UPDATES + SOCIAL_MAX_PUBLIC_REACTIONS]
     source_text = normalise_ws(' '.join((f"{item.get('title', '')} {item.get('summary', '')} {item.get('body_excerpt', '')}" for item in source_records)))[:12000]
     sensitive = is_sensitive(source_text, candidate.category)
@@ -1406,7 +1518,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             return None
     else:
         system_message = "You are the sub-editor for Rochdale Daily, an independent UK local-news publication. Write a genuinely original local article using only the facts in the supplied source records. Do not mirror the source headline, sentence order, paragraph order, rhetorical structure or distinctive wording. No sentence should reproduce ten or more consecutive words from any source record. Combine corroborating details where sources agree, but never invent facts, dates, quotations, prices, statistics, organisations, contact details or local impact. Do not claim the article is fact-checked. Do not output Markdown, HTML, hashtags or links. Use neutral UK English and short paragraphs. Crime, police and court items are eligible for automatic publication and must not be rejected merely because they concern an allegation, arrest, charge, investigation, court case, conviction or sentence. Attribute allegations and procedural status precisely. Do not state or imply guilt unless the supplied records state a conviction. Adult names may be retained when they are explicitly published in the supplied source records. Never identify a sexual-offence complainant or a protected child, and omit exact private residential addresses and postcodes. When source material is brief, write a concise attributed update rather than refusing it. Never publish job adverts, vacancy notices, recruitment posts, careers content, apprenticeships, internships, hiring announcements or application invitations. Set publishable to false if the source is primarily employment promotion. Never infer a Rochdale location from a person's surname. Middleton, Healey, Wardle, Bamford, Norden, Hopwood, Birch, Summit and Syke may be names or ordinary words. Treat them as places only when the source explicitly uses geographical wording such as 'in Middleton', 'Middleton residents', 'Wardle village' or a local postcode. Langley is not an accepted standalone Rochdale locality in this system. Official social posts may corroborate facts only when they come from an identified public body or organisation and agree with the primary records. Public comments and X replies are never evidence of what happened. Do not quote or identify commenters. Use public reaction only to summarise a recurring practical question, concern or experience supported by at least three distinct participants. Public comments must never be used as evidence of guilt, identity, motive or what occurred. Do not use public comments where a protected child or sexual-offence complainant could be identified. The community_reaction field must be empty when those conditions are not met."
-        user_message = json.dumps({'primary_source': candidate.source_name, 'primary_url': candidate.source_url, 'source_published_at': candidate.source_published_at, 'detected_area': candidate.area, 'detected_category': candidate.category, 'sensitive_story': sensitive, 'source_records': source_records, 'social_context': social_context, 'social_context_policy': {'official_updates': 'May be used as attributed corroboration only when consistent with the main source records.', 'public_reactions': 'Unverified reaction only. Never use as factual evidence, never identify or quote a commenter, and only summarise a theme supported by at least three distinct participants.', 'sensitive_stories': 'Public reactions must not be used for sensitive stories.'}, 'requested_style': 'Headline under 150 characters; standfirst of 35-65 words; 4-7 paragraphs. Add useful background only when it is explicitly present in the supplied records. For event listings, clearly state the supplied date, time, location, ticket or access information, age suitability and booking details only when those facts appear in the source records. Never invent missing event details. Explain practical local relevance without exaggeration.', 'required_right_to_reply': f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.'}, ensure_ascii=False)
+        user_message = json.dumps({'primary_source': candidate.source_name, 'primary_url': candidate.source_url, 'source_published_at': candidate.source_published_at, 'detected_area': candidate.area, 'detected_category': candidate.category, 'searched_location': {'slug': candidate.searched_location_slug, 'name': candidate.searched_location_name, 'warning': 'Discovery metadata only; do not treat the searched location as proof of where the incident occurred.'}, 'sensitive_story': sensitive, 'source_records': source_records, 'social_context': social_context, 'social_context_policy': {'official_updates': 'May be used as attributed corroboration only when consistent with the main source records.', 'public_reactions': 'Unverified reaction only. Never use as factual evidence, never identify or quote a commenter, and only summarise a theme supported by at least three distinct participants.', 'sensitive_stories': 'Public reactions must not be used for sensitive stories.'}, 'requested_style': 'Headline under 150 characters; standfirst of 35-65 words; 4-7 paragraphs. Add useful background only when it is explicitly present in the supplied records. For event listings, clearly state the supplied date, time, location, ticket or access information, age suitability and booking details only when those facts appear in the source records. Never invent missing event details. Explain practical local relevance without exaggeration.', 'required_right_to_reply': f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.'}, ensure_ascii=False)
         try:
             response = client.chat.completions.create(model=OPENAI_MODEL, messages=[{'role': 'system', 'content': system_message}, {'role': 'user', 'content': user_message}], response_format={'type': 'json_schema', 'json_schema': ARTICLE_SCHEMA}, temperature=0.15, max_tokens=1400)
             draft = json.loads(response.choices[0].message.content or '{}')
@@ -1470,7 +1582,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     if sensitive:
         legal_disclaimer = anonymise_output(legal_disclaimer, source_text)
         right_to_reply = anonymise_output(right_to_reply, source_text)
-    return {'id': stable_id(candidate.source_url), 'story_key': candidate.story_key or build_story_key(candidate), 'title': title, 'slug': make_slug(title), 'excerpt': excerpt, 'content_html': ''.join((f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs)), 'area': area, 'category': category, 'types': [category], 'published_at': candidate.source_published_at, 'scraped_at': iso_utc(utc_now()), 'image_url': image_url, 'image_credit': image_credit, 'source_image_candidate_url': candidate.image_candidate_url if candidate.source_kind == 'event' else '', 'source_image_reuse_status': 'enabled-by-publisher' if candidate.source_kind == 'event' and FACEBOOK_EVENT_IMAGE_REUSE else 'permission-required' if candidate.source_kind == 'event' and candidate.image_candidate_url else '', 'event_start_at': candidate.event_start_at, 'event_end_at': candidate.event_end_at, 'event_location': candidate.event_location, 'source_kind': candidate.source_kind, 'source_name': candidate.source_name, 'source_url': candidate.source_url, 'source_names': source_names, 'source_urls': source_urls, 'source_count': len(source_urls), 'social_context_used': social_context_used, 'social_reaction_count': public_reaction_count, 'official_social_update_count': official_social_count, 'social_platforms': sorted({str(item.get('platform')) for item in candidate.social_context if item.get('platform')}), 'social_context_note': 'Public reactions are anonymised, aggregated and not treated as evidence. Raw comments are not stored in the public article feed.' if social_context_used else '', 'sensitive_story': sensitive, 'police_matter': category == 'crime', 'requires_approval': False, 'legal_disclaimer': legal_disclaimer, 'right_to_reply': right_to_reply, 'byline': 'Rochdale Daily Newsdesk', 'status': 'published'}
+    return {'id': stable_id(candidate.source_url), 'story_key': candidate.story_key or build_story_key(candidate), 'title': title, 'slug': make_slug(title), 'excerpt': excerpt, 'content_html': ''.join((f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs)), 'area': area, 'category': category, 'types': [category], 'published_at': candidate.source_published_at, 'scraped_at': iso_utc(utc_now()), 'image_url': image_url, 'image_credit': image_credit, 'source_image_candidate_url': candidate.image_candidate_url if candidate.source_kind == 'event' else '', 'source_image_reuse_status': 'enabled-by-publisher' if candidate.source_kind == 'event' and FACEBOOK_EVENT_IMAGE_REUSE else 'permission-required' if candidate.source_kind == 'event' and candidate.image_candidate_url else '', 'event_start_at': candidate.event_start_at, 'event_end_at': candidate.event_end_at, 'event_location': candidate.event_location, 'source_kind': candidate.source_kind, 'source_name': candidate.source_name, 'source_url': candidate.source_url, 'source_names': source_names, 'source_urls': source_urls, 'source_count': len(source_urls), 'social_context_used': social_context_used, 'social_reaction_count': public_reaction_count, 'official_social_update_count': official_social_count, 'social_platforms': sorted({str(item.get('platform')) for item in candidate.social_context if item.get('platform')}), 'social_context_note': 'Public reactions are anonymised, aggregated and not treated as evidence. Raw comments are not stored in the public article feed.' if social_context_used else '', 'sensitive_story': sensitive, 'police_matter': category == 'crime', 'requires_approval': False, 'legal_disclaimer': legal_disclaimer, 'right_to_reply': right_to_reply, 'byline': 'Rochdale Daily Newsdesk', 'status': 'published', 'discovery_query_label': candidate.discovery_query_label, 'searched_location_slug': candidate.searched_location_slug, 'searched_location_name': candidate.searched_location_name}
 
 def write_json_atomic(path: Path, payload: Any) -> None:
     temporary = path.with_suffix(path.suffix + '.tmp')
@@ -1582,7 +1694,7 @@ def main() -> int:
     selected_by_category: dict[str, int] = {}
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
-    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaletimes.co.uk', 'rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
+    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaletimes.co.uk', 'rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
 if __name__ == '__main__':
