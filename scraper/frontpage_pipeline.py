@@ -96,6 +96,23 @@ VEHICLE_RE = re.compile(
 SPACE_RE = re.compile(r"\s+")
 TAG_RE = re.compile(r"<[^>]+>")
 
+
+LOW_QUALITY_ARTICLE_RE = re.compile(
+    r"\b(?:has published (?:a|an) (?:crime|police|court|public[- ]safety|news) update|"
+    r"the update was published by|the source item is titled|has been categorised as|"
+    r"further confirmed information will be added|will update this report if the identified source|"
+    r"the article remains open to correction|this automated brief does not add|"
+    r"readers can use the source link)\b",
+    re.IGNORECASE,
+)
+
+
+def is_low_quality_article(article: dict[str, Any]) -> bool:
+    route = str(article.get("publication_route") or "").lower()
+    if route in {"direct-crime-autopublish", "automatic-attributed-crime-fallback", "source-led-fallback"}:
+        return True
+    return bool(LOW_QUALITY_ARTICLE_RE.search(article_text(article)))
+
 CATEGORY_CAPS = {
     "crime": 6,
     "events": 4,
@@ -880,6 +897,8 @@ def main() -> int:
     blocklist = load_blocklist()
     blocked_before_processing = sum(1 for article in articles if is_blocked_article(article, blocklist))
     articles = [article for article in articles if not is_blocked_article(article, blocklist)]
+    low_quality_before_processing = sum(1 for article in articles if is_low_quality_article(article))
+    articles = [article for article in articles if not is_low_quality_article(article)]
 
     events, event_error = collect_ticket_events()
     cleaned, event_diagnostics = clean_and_integrate_events(articles, events)
@@ -899,6 +918,7 @@ def main() -> int:
         article for article in previous_articles
         if isinstance(article, dict)
         and not is_blocked_article(article, blocklist)
+        and not is_low_quality_article(article)
         and (not is_event(article) or (approved_event_source(article) and not is_online_event(article) and has_physical_local_venue(article)))
     ] if isinstance(previous_articles, list) else []
     if len(frontpage) < FRONTPAGE_MIN:
@@ -955,6 +975,7 @@ def main() -> int:
         **event_diagnostics,
         "duplicate_articles_after_postprocessing": len(merged),
         "blocked_articles_removed": blocked_before_processing,
+        "low_quality_articles_removed": low_quality_before_processing,
         "stale_article_pages_removed": stale_article_pages_removed,
         "online_events_allowed": False,
         "automated_event_sources_allowed": [EVENT_DOMAIN],

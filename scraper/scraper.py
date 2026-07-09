@@ -1333,6 +1333,9 @@ def recent_existing_articles() -> list[dict[str, Any]]:
         source_url = str(article.get('source_url') or '')
         if source_is_denied(source_name, source_url):
             continue
+        if article_is_low_quality(article):
+            log.warning('Removed low-quality template article so it can be rewritten: %s', article.get('title'))
+            continue
         published = parse_datetime(article.get('published_at'))
         source_kind = str(article.get('source_kind') or 'article')
         event_start = parse_datetime(article.get('event_start_at'))
@@ -1405,6 +1408,196 @@ def default_legal_disclaimer(sensitive: bool) -> str:
     if sensitive:
         return 'This report is based on information published by identified public sources. No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused of an offence is presumed innocent unless and until convicted, and the article may be updated as verified information changes.'
     return 'This article was compiled from identified public sources and may be updated when further verified information becomes available.'
+
+
+GENERIC_ARTICLE_PATTERNS = (
+    r"\bhas published (?:a|an) (?:crime|police|court|public[- ]safety|news) update\b",
+    r"\bthe (?:source|source item|original source) is (?:linked|included|titled)\b",
+    r"\bthe update was published by\b",
+    r"\bhas been categorised as\b",
+    r"\bfurther confirmed information will be added\b",
+    r"\bwill update this report if the identified source\b",
+    r"\bthe article remains open to correction\b",
+    r"\bthis automated brief does not add\b",
+    r"\breaders can use the source link\b",
+)
+GENERIC_ARTICLE_RE = re.compile("|".join(GENERIC_ARTICLE_PATTERNS), re.IGNORECASE)
+QUALITY_STOPWORDS = {
+    'about', 'after', 'again', 'against', 'also', 'among', 'because', 'before',
+    'being', 'between', 'could', 'from', 'have', 'into', 'latest', 'local',
+    'more', 'news', 'over', 'said', 'says', 'that', 'their', 'there', 'these',
+    'they', 'this', 'through', 'today', 'under', 'update', 'updates', 'what',
+    'when', 'where', 'which', 'with', 'would', 'will', 'rochdale', 'greater',
+    'manchester', 'source', 'report', 'reports', 'reported',
+}
+
+
+def redact_private_location(value: Any) -> str:
+    """Remove private addresses without turning every adult name into 'an individual'."""
+    text = POSTCODE_RE.sub('the Rochdale area', str(value or ''))
+    text = ADDRESS_RE.sub('a location in the Rochdale borough', text)
+    return strip_markdown(text)
+
+
+def compact_source_value(value: Any, limit: int = 2600) -> str:
+    text = _plain_text(value)
+    if len(text) <= limit:
+        return text
+    shortened = text[:limit]
+    boundary = max(shortened.rfind('. '), shortened.rfind('! '), shortened.rfind('? '))
+    if boundary >= int(limit * 0.62):
+        shortened = shortened[: boundary + 1]
+    return shortened.strip()
+
+
+def compact_source_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    compacted: list[dict[str, Any]] = []
+    total = 0
+    for record in records[:8]:
+        clean = dict(record)
+        clean['title'] = compact_source_value(clean.get('title'), 260)
+        clean['summary'] = compact_source_value(clean.get('summary'), 1500)
+        clean['body_excerpt'] = compact_source_value(clean.get('body_excerpt'), 3200)
+        size = len(json.dumps(clean, ensure_ascii=False))
+        if compacted and total + size > 14000:
+            break
+        compacted.append(clean)
+        total += size
+    return compacted
+
+
+def draft_quality_issues(draft: Any, source_text: str, candidate: Candidate) -> list[str]:
+    if not isinstance(draft, dict):
+        return ['The model did not return an article object.']
+    if not bool(draft.get('publishable')):
+        return ['The draft was marked unpublishable.']
+
+    title = strip_markdown(draft.get('title'))
+    excerpt = strip_markdown(draft.get('excerpt'))
+    paragraphs = [strip_markdown(item) for item in draft.get('paragraphs', []) if strip_markdown(item)]
+    combined = normalise_ws(' '.join([title, excerpt, *paragraphs]))
+    issues: list[str] = []
+
+    if len(title.split()) < 5 or len(title) > 155:
+        issues.append('The headline must be a complete, specific headline of 5-24 words.')
+    first_alpha = next((char for char in title if char.isalpha()), '')
+    if first_alpha and first_alpha.islower():
+        issues.append('The headline begins like a clipped sentence fragment.')
+    if title.endswith((':', '-', '–', '—', ',')):
+        issues.append('The headline ends as an incomplete fragment.')
+    if len(excerpt.split()) < 22:
+        issues.append('The standfirst is too thin to explain the story.')
+    if len(paragraphs) < 3:
+        issues.append('The article needs at least three factual paragraphs.')
+    if any(len(paragraph.split()) < 8 for paragraph in paragraphs):
+        issues.append('One or more paragraphs are filler rather than a complete factual sentence.')
+    if GENERIC_ARTICLE_RE.search(combined):
+        issues.append('The copy discusses the source or publishing process instead of reporting the story.')
+
+    normalised_paragraphs = [normalise_ws(p).casefold() for p in paragraphs]
+    if len(normalised_paragraphs) != len(set(normalised_paragraphs)):
+        issues.append('The article repeats a paragraph.')
+
+    source_tokens = {
+        token for token in re.findall(r'[a-z0-9]+', source_text.lower())
+        if len(token) >= 4 and token not in QUALITY_STOPWORDS
+    }
+    output_tokens = {
+        token for token in re.findall(r'[a-z0-9]+', combined.lower())
+        if len(token) >= 4 and token not in QUALITY_STOPWORDS
+    }
+    if len(source_text) >= 120 and len(source_tokens & output_tokens) < 4:
+        issues.append('The article is not sufficiently grounded in the supplied facts.')
+    if excessive_source_overlap(combined, source_text):
+        issues.append('The wording is too close to the source material and must be rewritten more originally.')
+    return issues
+
+
+def request_grounded_draft(
+    candidate: Candidate,
+    client: OpenAI,
+    source_records: list[dict[str, Any]],
+    social_context: list[dict[str, Any]],
+    source_text: str,
+    sensitive: bool,
+) -> dict[str, Any] | None:
+    system_message = (
+        "You are the senior sub-editor for Rochdale Daily, an independent UK local-news publication. "
+        "Write a coherent, original local news report using only facts explicitly contained in the supplied records. "
+        "The opening paragraph must explain the actual development: who or what is involved, what happened, where it happened and when, whenever those facts are supplied. "
+        "Do not write about the source having published an update, the article being categorised, the automated process, the availability of a source link, or facts being added later. "
+        "Do not use filler. Do not say that something is connected to Rochdale unless the records themselves establish the geographical connection. "
+        "The headline must be a complete, natural headline rather than a copied or clipped source fragment. Do not prefix a town merely because it was used as discovery metadata. "
+        "Use neutral UK English, short paragraphs and a clear chronological structure. Explain practical local relevance only when supported by the records. "
+        "Never invent a quotation, identity, allegation, motive, date, age, address, statistic, organisation, sentence, charge or outcome. "
+        "Attribute allegations and procedural status precisely. Do not imply guilt before conviction. Adult defendants and convicted offenders may be named when the records explicitly name them. "
+        "Never identify a sexual-offence complainant or a protected child. Omit exact private residential addresses and postcodes. "
+        "Never reproduce ten or more consecutive words from a source. Never mirror the source's sentence order or paragraph structure. "
+        "If the supplied records do not contain enough concrete facts for a meaningful article, set publishable to false instead of producing generic copy. "
+        "Never publish job adverts, recruitment posts, vacancies or application invitations."
+    )
+
+    base_payload = {
+        'primary_source': candidate.source_name,
+        'primary_url': candidate.source_url,
+        'source_published_at': candidate.source_published_at,
+        'detected_area': candidate.area,
+        'detected_category': candidate.category,
+        'searched_location': {
+            'slug': candidate.searched_location_slug,
+            'name': candidate.searched_location_name,
+            'warning': 'Discovery metadata only. It is not evidence that the incident happened there.',
+        },
+        'sensitive_story': sensitive,
+        'source_records': source_records,
+        'social_context': social_context,
+        'requested_style': (
+            'Headline of 5-24 words; standfirst of 35-70 words; 3-7 factual paragraphs. '
+            'Lead with the news, not with attribution or publishing metadata. Add background only when supplied. '
+            'Crime and court stories must clearly distinguish allegation, charge, conviction and sentence.'
+        ),
+        'required_right_to_reply': f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.',
+    }
+
+    previous: dict[str, Any] | None = None
+    feedback: list[str] = []
+    for attempt in range(2):
+        payload = dict(base_payload)
+        if attempt:
+            payload['repair_required'] = feedback
+            payload['previous_draft'] = previous
+            payload['repair_instruction'] = (
+                'Rewrite the article from scratch. Correct every listed problem. Do not merely edit the previous wording.'
+            )
+        try:
+            response = client.chat.completions.create(
+                model=OPENAI_MODEL,
+                messages=[
+                    {'role': 'system', 'content': system_message},
+                    {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)},
+                ],
+                response_format={'type': 'json_schema', 'json_schema': ARTICLE_SCHEMA},
+                temperature=0.1,
+                max_tokens=1800,
+            )
+            draft = json.loads(response.choices[0].message.content or '{}')
+        except Exception as exc:
+            log.warning('Grounded rewrite attempt %d failed for %s: %s', attempt + 1, candidate.source_url, exc)
+            continue
+        feedback = draft_quality_issues(draft, source_text, candidate)
+        if not feedback:
+            return draft
+        previous = draft
+        log.warning('Rejected rewrite attempt %d for %s: %s', attempt + 1, candidate.source_url, '; '.join(feedback))
+    return None
+
+
+def article_is_low_quality(article: dict[str, Any]) -> bool:
+    route = str(article.get('publication_route') or '').lower()
+    if route in {'direct-crime-autopublish', 'automatic-attributed-crime-fallback', 'source-led-fallback'}:
+        return True
+    text = _plain_text(' '.join(str(article.get(field) or '') for field in ('title', 'excerpt', 'summary', 'content_html')))
+    return bool(GENERIC_ARTICLE_RE.search(text))
 
 def source_led_draft(candidate: Candidate, sensitive: bool) -> dict[str, Any] | None:
     source_text = normalise_ws(f'{candidate.source_summary} {candidate.source_body_excerpt}')
@@ -1490,9 +1683,10 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     if is_job_or_career_post(candidate):
         log.info('Rejected careers/vacancy post: %s', candidate.source_url)
         return None
-    if candidate.category == 'crime':
-        log.info('Directly publishing crime candidate: %s', candidate.source_url)
-        return build_direct_crime_article(candidate)
+    if candidate.category == 'events':
+        log.info("Skipping general event candidate because What's Occurrin' Events is the approved event feed: %s", candidate.source_url)
+        return None
+
     source_records = [{
         'name': candidate.source_name,
         'url': candidate.source_url,
@@ -1508,42 +1702,33 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'searched_location_slug': candidate.searched_location_slug,
         'searched_location_name': candidate.searched_location_name,
     }] + candidate.related_sources[:8]
+    source_records = compact_source_records(source_records)
     social_context = candidate.social_context[:SOCIAL_MAX_OFFICIAL_UPDATES + SOCIAL_MAX_PUBLIC_REACTIONS]
-    source_text = normalise_ws(' '.join((f"{item.get('title', '')} {item.get('summary', '')} {item.get('body_excerpt', '')}" for item in source_records)))[:12000]
+    source_text = normalise_ws(' '.join(
+        f"{item.get('title', '')} {item.get('summary', '')} {item.get('body_excerpt', '')}"
+        for item in source_records
+    ))[:14000]
     sensitive = is_sensitive(source_text, candidate.category)
+
     if client is None:
-        log.warning('OpenAI unavailable; using an attributed fallback for %s', candidate.source_url)
-        draft = crime_autopublish_draft(candidate) if candidate.category == 'crime' else source_led_draft(candidate, sensitive)
-        if draft is None:
-            return None
-    else:
-        system_message = "You are the sub-editor for Rochdale Daily, an independent UK local-news publication. Write a genuinely original local article using only the facts in the supplied source records. Do not mirror the source headline, sentence order, paragraph order, rhetorical structure or distinctive wording. No sentence should reproduce ten or more consecutive words from any source record. Combine corroborating details where sources agree, but never invent facts, dates, quotations, prices, statistics, organisations, contact details or local impact. Do not claim the article is fact-checked. Do not output Markdown, HTML, hashtags or links. Use neutral UK English and short paragraphs. Crime, police and court items are eligible for automatic publication and must not be rejected merely because they concern an allegation, arrest, charge, investigation, court case, conviction or sentence. Attribute allegations and procedural status precisely. Do not state or imply guilt unless the supplied records state a conviction. Adult names may be retained when they are explicitly published in the supplied source records. Never identify a sexual-offence complainant or a protected child, and omit exact private residential addresses and postcodes. When source material is brief, write a concise attributed update rather than refusing it. Never publish job adverts, vacancy notices, recruitment posts, careers content, apprenticeships, internships, hiring announcements or application invitations. Set publishable to false if the source is primarily employment promotion. Never infer a Rochdale location from a person's surname. Middleton, Healey, Wardle, Bamford, Norden, Hopwood, Birch, Summit and Syke may be names or ordinary words. Treat them as places only when the source explicitly uses geographical wording such as 'in Middleton', 'Middleton residents', 'Wardle village' or a local postcode. Langley is not an accepted standalone Rochdale locality in this system. Official social posts may corroborate facts only when they come from an identified public body or organisation and agree with the primary records. Public comments and X replies are never evidence of what happened. Do not quote or identify commenters. Use public reaction only to summarise a recurring practical question, concern or experience supported by at least three distinct participants. Public comments must never be used as evidence of guilt, identity, motive or what occurred. Do not use public comments where a protected child or sexual-offence complainant could be identified. The community_reaction field must be empty when those conditions are not met."
-        user_message = json.dumps({'primary_source': candidate.source_name, 'primary_url': candidate.source_url, 'source_published_at': candidate.source_published_at, 'detected_area': candidate.area, 'detected_category': candidate.category, 'searched_location': {'slug': candidate.searched_location_slug, 'name': candidate.searched_location_name, 'warning': 'Discovery metadata only; do not treat the searched location as proof of where the incident occurred.'}, 'sensitive_story': sensitive, 'source_records': source_records, 'social_context': social_context, 'social_context_policy': {'official_updates': 'May be used as attributed corroboration only when consistent with the main source records.', 'public_reactions': 'Unverified reaction only. Never use as factual evidence, never identify or quote a commenter, and only summarise a theme supported by at least three distinct participants.', 'sensitive_stories': 'Public reactions must not be used for sensitive stories.'}, 'requested_style': 'Headline under 150 characters; standfirst of 35-65 words; 4-7 paragraphs. Add useful background only when it is explicitly present in the supplied records. For event listings, clearly state the supplied date, time, location, ticket or access information, age suitability and booking details only when those facts appear in the source records. Never invent missing event details. Explain practical local relevance without exaggeration.', 'required_right_to_reply': f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.'}, ensure_ascii=False)
-        try:
-            response = client.chat.completions.create(model=OPENAI_MODEL, messages=[{'role': 'system', 'content': system_message}, {'role': 'user', 'content': user_message}], response_format={'type': 'json_schema', 'json_schema': ARTICLE_SCHEMA}, temperature=0.15, max_tokens=1400)
-            draft = json.loads(response.choices[0].message.content or '{}')
-        except Exception as exc:
-            log.warning('OpenAI rewrite failed; using attributed fallback for %s: %s', candidate.source_url, exc)
-            draft = crime_autopublish_draft(candidate) if candidate.category == 'crime' else source_led_draft(candidate, sensitive)
-    if not draft or not bool(draft.get('publishable')):
-        log.info('Rewrite declined or invalid; using attributed fallback for %s', candidate.source_url)
-        draft = crime_autopublish_draft(candidate) if candidate.category == 'crime' else source_led_draft(candidate, sensitive)
-        if draft is None:
-            return None
+        log.error('OpenAI is unavailable; refusing to publish generic filler for %s', candidate.source_url)
+        return None
+
+    draft = request_grounded_draft(
+        candidate,
+        client,
+        source_records,
+        social_context,
+        source_text,
+        sensitive,
+    )
+    if draft is None:
+        log.warning('No coherent grounded rewrite could be produced; skipped: %s', candidate.source_url)
+        return None
+
     title = strip_markdown(draft.get('title'))[:160]
     excerpt = strip_markdown(draft.get('excerpt'))[:360]
     paragraphs = [strip_markdown(item) for item in draft.get('paragraphs', []) if strip_markdown(item)][:8]
-    generated_copy_for_overlap = normalise_ws(' '.join([title, excerpt] + [str(paragraph) for paragraph in paragraphs]))
-    if excessive_source_overlap(generated_copy_for_overlap, source_text):
-        if candidate.category == 'crime':
-            log.warning('Crime rewrite retained too much source wording; using original attributed fallback instead: %s', candidate.source_url)
-            draft = crime_autopublish_draft(candidate)
-            title = strip_markdown(draft.get('title'))[:160]
-            excerpt = strip_markdown(draft.get('excerpt'))[:360]
-            paragraphs = [strip_markdown(item) for item in draft.get('paragraphs', []) if strip_markdown(item)][:8]
-        else:
-            log.warning('Generated copy retained too much source wording; skipped: %s', candidate.source_url)
-            return None
     community_reaction = strip_markdown(draft.get('community_reaction', ''))[:500]
     social_context_used = bool(draft.get('social_context_used'))
     draft_category = str(draft.get('category') or '')
@@ -1556,13 +1741,17 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         category = candidate.category if candidate.category in CATEGORY_STOCK_IMAGES else 'news'
     if area not in AREA_KEYWORDS:
         area = candidate.area if candidate.area in AREA_KEYWORDS else 'rochdale'
-    public_reaction_count = sum((1 for item in candidate.social_context if item.get('kind') == 'public_reaction'))
-    official_social_count = sum((1 for item in candidate.social_context if item.get('kind') == 'official_update'))
+
+    public_reaction_count = sum(1 for item in candidate.social_context if item.get('kind') == 'public_reaction')
+    official_social_count = sum(1 for item in candidate.social_context if item.get('kind') == 'official_update')
     if sensitive:
-        title = anonymise_output(title, source_text)
-        excerpt = anonymise_output(excerpt, source_text)
-        paragraphs = [anonymise_output(paragraph, source_text) for paragraph in paragraphs]
-        paragraphs = [p for p in paragraphs if p]
+        # The model is instructed not to identify protected people. The deterministic
+        # layer only removes private locations; it no longer destroys legitimate adult
+        # defendant/offender names by replacing every person with "an individual".
+        title = redact_private_location(title)
+        excerpt = redact_private_location(excerpt)
+        paragraphs = [redact_private_location(paragraph) for paragraph in paragraphs]
+        paragraphs = [paragraph for paragraph in paragraphs if paragraph]
         community_reaction = ''
         social_context_used = False
     if public_reaction_count < SOCIAL_MIN_PUBLIC_REACTIONS:
@@ -1570,19 +1759,72 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         if official_social_count == 0:
             social_context_used = False
     if community_reaction:
-        community_reaction = anonymise_output(community_reaction, ' '.join((item.get('text', '') for item in candidate.social_context)))
+        community_reaction = redact_private_location(community_reaction)
         paragraphs.append(f'Community reaction: {community_reaction}')
-    if not title or not excerpt or len(paragraphs) < 3:
+
+    final_draft = {
+        'publishable': True,
+        'title': title,
+        'excerpt': excerpt,
+        'paragraphs': paragraphs,
+    }
+    final_issues = draft_quality_issues(final_draft, source_text, candidate)
+    if final_issues:
+        log.warning('Final rewrite failed quality checks for %s: %s', candidate.source_url, '; '.join(final_issues))
         return None
+
     image_url, image_credit = source_image(candidate, category)
     source_urls = [candidate.source_url] + [item['url'] for item in candidate.related_sources[:11] if item.get('url')]
     source_names = [candidate.source_name] + [item['name'] for item in candidate.related_sources[:11] if item.get('name')]
     legal_disclaimer = strip_markdown(draft.get('legal_disclaimer')) or default_legal_disclaimer(sensitive)
     right_to_reply = strip_markdown(draft.get('right_to_reply')) or f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.'
     if sensitive:
-        legal_disclaimer = anonymise_output(legal_disclaimer, source_text)
-        right_to_reply = anonymise_output(right_to_reply, source_text)
-    return {'id': stable_id(candidate.source_url), 'story_key': candidate.story_key or build_story_key(candidate), 'title': title, 'slug': make_slug(title), 'excerpt': excerpt, 'content_html': ''.join((f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs)), 'area': area, 'category': category, 'types': [category], 'published_at': candidate.source_published_at, 'scraped_at': iso_utc(utc_now()), 'image_url': image_url, 'image_credit': image_credit, 'source_image_candidate_url': candidate.image_candidate_url if candidate.source_kind == 'event' else '', 'source_image_reuse_status': 'enabled-by-publisher' if candidate.source_kind == 'event' and FACEBOOK_EVENT_IMAGE_REUSE else 'permission-required' if candidate.source_kind == 'event' and candidate.image_candidate_url else '', 'event_start_at': candidate.event_start_at, 'event_end_at': candidate.event_end_at, 'event_location': candidate.event_location, 'source_kind': candidate.source_kind, 'source_name': candidate.source_name, 'source_url': candidate.source_url, 'source_names': source_names, 'source_urls': source_urls, 'source_count': len(source_urls), 'social_context_used': social_context_used, 'social_reaction_count': public_reaction_count, 'official_social_update_count': official_social_count, 'social_platforms': sorted({str(item.get('platform')) for item in candidate.social_context if item.get('platform')}), 'social_context_note': 'Public reactions are anonymised, aggregated and not treated as evidence. Raw comments are not stored in the public article feed.' if social_context_used else '', 'sensitive_story': sensitive, 'police_matter': category == 'crime', 'requires_approval': False, 'legal_disclaimer': legal_disclaimer, 'right_to_reply': right_to_reply, 'byline': 'Rochdale Daily Newsdesk', 'status': 'published', 'discovery_query_label': candidate.discovery_query_label, 'searched_location_slug': candidate.searched_location_slug, 'searched_location_name': candidate.searched_location_name}
+        legal_disclaimer = redact_private_location(legal_disclaimer)
+        right_to_reply = redact_private_location(right_to_reply)
+
+    return {
+        'id': stable_id(candidate.source_url),
+        'story_key': candidate.story_key or build_story_key(candidate),
+        'title': title,
+        'slug': make_slug(title),
+        'excerpt': excerpt,
+        'content_html': ''.join(f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs),
+        'area': area,
+        'category': category,
+        'types': [category],
+        'published_at': candidate.source_published_at,
+        'scraped_at': iso_utc(utc_now()),
+        'image_url': image_url,
+        'image_credit': image_credit,
+        'source_image_candidate_url': '',
+        'source_image_reuse_status': '',
+        'event_start_at': candidate.event_start_at,
+        'event_end_at': candidate.event_end_at,
+        'event_location': candidate.event_location,
+        'source_kind': candidate.source_kind,
+        'source_name': candidate.source_name,
+        'source_url': candidate.source_url,
+        'source_names': source_names,
+        'source_urls': source_urls,
+        'source_count': len(source_urls),
+        'social_context_used': social_context_used,
+        'social_reaction_count': public_reaction_count,
+        'official_social_update_count': official_social_count,
+        'social_platforms': sorted({str(item.get('platform')) for item in candidate.social_context if item.get('platform')}),
+        'social_context_note': 'Public reactions are anonymised, aggregated and not treated as evidence. Raw comments are not stored in the public article feed.' if social_context_used else '',
+        'sensitive_story': sensitive,
+        'police_matter': category == 'crime',
+        'requires_approval': False,
+        'legal_disclaimer': legal_disclaimer,
+        'right_to_reply': right_to_reply,
+        'byline': 'Rochdale Daily Newsdesk',
+        'status': 'published',
+        'publication_route': 'ai-grounded-rewrite',
+        'rewrite_quality_checked': True,
+        'discovery_query_label': candidate.discovery_query_label,
+        'searched_location_slug': candidate.searched_location_slug,
+        'searched_location_name': candidate.searched_location_name,
+    }
 
 def write_json_atomic(path: Path, payload: Any) -> None:
     temporary = path.with_suffix(path.suffix + '.tmp')
