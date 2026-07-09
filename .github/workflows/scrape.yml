@@ -28,30 +28,35 @@ jobs:
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
       FACEBOOK_EVENT_IMAGE_REUSE: "false"
-      # Browser collection runs hourly and on manual runs. The other three
-      # scheduled checks continue with all non-browser sources.
       FACEBOOK_EVENTS_BROWSER_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
+
       OPENAI_MODEL: "gpt-4o-mini"
-      AI_REWRITE_REQUIRED: "true"
-      MAX_NEWS_AGE_HOURS: "24"
-      ARTICLE_RETENTION_DAYS: "1"
+
+      # Rewrites remain preferred, but a failed/declined rewrite now falls back
+      # to an attributed article instead of silently discarding the candidate.
+      AI_REWRITE_REQUIRED: "false"
+
+      # Police appeals, court updates and ongoing traffic matters often remain
+      # relevant beyond midnight.
+      MAX_NEWS_AGE_HOURS: "168"
+      ARTICLE_RETENTION_DAYS: "14"
+      SAME_DAY_ONLY: "false"
+
       MAX_PUBLISHED_ARTICLES: "180"
       MAX_AI_ARTICLES_PER_RUN: "50"
       MAX_AI_ARTICLES_INITIAL: "100"
       RESPECT_ROBOTS: "true"
-      # Some real, legitimate sources (e.g. yourtrustrochdale.co.uk/exhibitions/)
-      # are simply slow to respond from a GitHub Actions runner. 12s was too
-      # tight and caused occasional false-negative failures on that page.
       REQUEST_TIMEOUT: "20"
       USE_SOURCE_IMAGES: "true"
-      SAME_DAY_ONLY: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
+
       SOCIAL_CONTEXT_ENABLED: "true"
       FACEBOOK_COMMENTS_ENABLED: "true"
       SOCIAL_MIN_PUBLIC_REACTIONS: "3"
       SOCIAL_MAX_PUBLIC_REACTIONS: "12"
       SOCIAL_MAX_OFFICIAL_UPDATES: "4"
       X_RECENT_SEARCH_MAX: "100"
+
       DISCOVERY_LINKS_PER_SOURCE: "40"
       RSS_ITEMS_PER_SOURCE: "100"
       GOOGLE_SEARCH_QUERY_LIMIT: "128"
@@ -59,8 +64,8 @@ jobs:
       DISCOVERY_WORKERS: "12"
       AI_WORKERS: "6"
       MIN_BALANCED_SELECTION_LIMIT: "40"
-      MAX_SELECTED_PER_SOURCE: "4"
-      MAX_SELECTED_PER_CATEGORY: "8"
+      MAX_SELECTED_PER_SOURCE: "12"
+      MAX_SELECTED_PER_CATEGORY: "20"
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
       MIN_LIVE_STORIES: "40"
@@ -83,10 +88,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
-
-          # PIL is the Python import provided by the Pillow package.
-          # Install it explicitly so an accidentally stale requirements file
-          # cannot cause the scraper to fail at runtime.
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
       - name: Verify Python dependencies
@@ -130,7 +131,7 @@ jobs:
         run: |
           echo "FACEBOOK_EVENTS_BROWSER_ENABLED=${FACEBOOK_EVENTS_BROWSER_ENABLED}"
 
-      - name: Validate locality, identity, coverage, search and rewrite policy
+      - name: Validate pipeline
         run: |
           python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/search_queries.py scraper/rewrite_safety.py scraper/scraper.py
           python scraper/test_locality.py
@@ -138,9 +139,6 @@ jobs:
           python scraper/test_selection_policy.py
           python scraper/test_search_queries.py
           python scraper/test_rewrite_safety.py
-
-          # Execute top-level initialisation without running main().
-          # This catches import-order errors that py_compile cannot detect.
           (
             cd scraper
             python -c "import scraper; print('Scraper startup import passed.')"
