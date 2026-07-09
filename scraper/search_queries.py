@@ -12,6 +12,9 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import math
 
+GOOGLE_SEARCH_SAFE_LIMIT = 68
+LOCATION_QUERIES_PER_HOUR = 40
+
 try:
     from .location_discovery import build_location_queries
 except ImportError:
@@ -534,8 +537,28 @@ def councillor_query(name: str, ward: str) -> SearchQuery:
     )
 
 
+
+def rotating_location_queries(
+    now: datetime | None = None,
+    limit: int = LOCATION_QUERIES_PER_HOUR,
+):
+    # Return a safe hourly slice of the generated location matrix.
+    # Named topics, wards, categories and source searches remain on
+    # their normal four-way hourly shard. The larger generated matrix
+    # rotates by UTC hour, avoiding a rate-limiting burst.
+    items = list(build_location_queries())
+    if not items or limit <= 0:
+        return []
+
+    count = min(int(limit), len(items))
+    current = now or datetime.now(timezone.utc)
+    hour_index = int(current.timestamp() // 3600)
+    start = (hour_index * count) % len(items)
+    return [items[(start + offset) % len(items)] for offset in range(count)]
+
+
 def build_search_query_specs(
-    max_queries: int = 128,
+    max_queries: int = GOOGLE_SEARCH_SAFE_LIMIT,
     now: datetime | None = None,
 ) -> list[SearchQuery]:
     """Build this run's Google News query list.
@@ -627,7 +650,7 @@ def build_search_query_specs(
     # These searches are part of the same four-way shard as the other bulk
     # searches, so the complete location matrix is covered each hour without
     # sending hundreds of Google News requests in a single run.
-    for item in build_location_queries():
+    for item in rotating_location_queries(now):
         bulk.append(
             SearchQuery(
                 label=item.label,
@@ -664,11 +687,13 @@ def build_search_query_specs(
         seen.add(key)
         unique.append(spec)
 
-    return unique[: max(1, int(max_queries))]
+    requested_limit = max(1, int(max_queries))
+    safe_limit = min(requested_limit, GOOGLE_SEARCH_SAFE_LIMIT)
+    return unique[:safe_limit]
 
 
 def build_search_queries(
-    max_queries: int = 128,
+    max_queries: int = GOOGLE_SEARCH_SAFE_LIMIT,
     now: datetime | None = None,
 ) -> list[str]:
     return [
