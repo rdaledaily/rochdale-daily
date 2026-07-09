@@ -1,17 +1,17 @@
 {
-  "last_run_at": "2026-07-09T05:15:40.923196Z",
-  "raw_candidates_before_job_filter": 20,
+  "last_run_at": "2026-07-09T08:54:31.124832Z",
+  "raw_candidates_before_job_filter": 10,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 20,
-  "candidate_clusters": 4,
-  "duplicates_merged": 16,
-  "attempted_rewrites": 3,
-  "new_articles": 0,
-  "live_articles": 1,
-  "skipped": 3,
+  "raw_candidates": 10,
+  "candidate_clusters": 8,
+  "duplicates_merged": 2,
+  "attempted_rewrites": 8,
+  "new_articles": 4,
+  "live_articles": 5,
+  "skipped": 4,
   "collector_counts": {
-    "rss_and_google_news": 17,
-    "website_discovery": 2,
+    "rss_and_google_news": 9,
+    "website_discovery": 0,
     "live_service_pages": 1,
     "facebook_events": 0,
     "facebook_official": 0,
@@ -20,10 +20,13 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Mondaq": 6,
-    "facebook.com": 6,
-    "The Guardian": 5,
-    "TfGM Travel Alerts": 2,
+    "Roch Valley Radio": 3,
+    "Skiddle": 1,
+    "STS Cars Manchester": 1,
+    "facebook.com": 1,
+    "Rochdale AFC": 1,
+    "Footlive": 1,
+    "The Guardian": 1,
     "Bee Network live travel alerts": 1
   },
   "openai_enabled": true,
@@ -36,14 +39,24 @@
     "rochdaleonline.co.uk"
   ],
   "selected_story_keys": [
-    "crime-f64fc85ccb2251b5a8a2",
+    "crime-f37532638d01653eda2c",
+    "transport-5d1eb614dce0f2080d10",
+    "sport-6a318ad8857f54079d4a",
+    "business-ad428d3dbb404e60f302",
+    "news-9bdaa36f4892b0c775ce",
     "crime-dbd1395f51ccb9b0c61e",
-    "crime-f37532638d01653eda2c"
+    "sport-0e04c4ed5f4f73745ec3",
+    "sport-462ae38afe6c31dd7729"
   ],
   "selected_candidate_urls": [
-    "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOYkxFMUd2Rjk4cF9PUHh1a2tkTklkU3NYZlR2U3BTQURWcUVJUUlFa3I4QzZ3NC1LQXU1NHduZ1lqWW5MSm9oeDJsUm1NWXd1VmNSRDVSM2YzOEhiNkRPNnhNSU5KVHBRcVlvaVhneFZadFZTTTV1MEx5MXBYTl9uLWZKcmw1QjYxWVIxNWNwNmY2dXd3bUpwQWNwNDctTDlqbmVhNk05NHRxeVZONVlpR3FucmZFYVJLV005ZW00eUxRcnYwNTd3RTZnb1gwVXVERzVoaFFZR0FLbGhOMDZ4T3l4NHVYc3Itdy1UMFl2T2U1NE5pQVduSw?oc=5",
+    "https://news.google.com/rss/articles/CBMizAFBVV95cUxNcThvOFZ3YW9BSmlJUGw5TGhXRnlGYXJ2RHdkdm1LOG1ESXdtNnBhcjJONU9wbG1ZblZnVnJlR3lHYzhwZ1E0RXpucEdtY2JObHpiSVNGSk9pMUFHOFlOY1FFUFgyUXFzcXBMTzREXzVDOVpCMS1BU3pSUnlmSGRYcF9mRmc0RUlMZnBMLUhmb3BkS3JpTDltamtnYjM1X1RqeDJMWmFDclgzOXY2ajA1WkRMUWNRNjVscFM0U3hvU1FFNFNodXBTdjFfVUk?oc=5",
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-6d7d94e2b3bfa33de2",
+    "https://news.google.com/rss/articles/CBMiYEFVX3lxTE50d3BGU2xBY2tDSWFidEZodzM0VVlqeXIxUnQ5c1RLSWp3MkR3SWpjUnN4N3AzUnR0S0VqQmpGZE9URWE0Wk5ROXU4SldUY2dzUG1NcG0yRktkb3Zla3lpRw?oc=5",
+    "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOZGZRRXIwZlFUZlk3Tk10VzRiT1k5UGFWNE1hMmh3bXZTZXFlcHJVckhPM21hU1QtN29vTDFYajVCajdHbkRRRk52Sk5wOWhUZHREQlMzd2M2R1RiclJveG8tWnlOWUFPY0JIcXBuWjd0aWRMTFctY1FMS0tGVXlUeGdmLUdSa0E4UlFSckNTY3d6R1pwZUFGRlhRMWFVLXpQU0xIa1A1NWcza2xnbE0xdWpGZE1vQXZzUXZ3N1p2b1JxX19PRW8zd0taLXB0M2xQ?oc=5",
+    "https://news.google.com/rss/articles/CBMingJBVV95cUxQNUttX1Jfc1VHQkVDWGdzUUhHZGllNnRRaHlHY2h0WkIzZWZXSkhxLWVwUUFnLUJEWnNfV1V2TmgzeFNzdDQ2bHBCUnowZGpBY1plQi1GbnNlZ0FZOUhjS3V4RVl6QkphU0l1UlMzMU5PemZBdlp0YVktVFRFMDVfdTBWQ0dDV2hvTUs2OUJhUkxNc0NrZGVTa09JWWJLd0dsb0MxOTloZzlxUkZZWGNGT2VTOGpwSFZqdC1fcWNhcXBxbkZoeVVadDhBZUJUQl9pd0tPM1pUTVZuUnNWY1dLR1F1bk01bWFVTGFYUHZwQ2tqN1lHdjNjVWZ6dGRMeEpGNGpudVpXZVBnd2t1d0ZRbE5lUTRTTldSN3JqZzNn?oc=5",
     "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPMW5hMDlaZTA1a20ycXdUbS01aEJENXg0azlJNWhfTk9aZzNCVG1hSmdqSmpkeXd1TXZGdVZSbzVoOFZpX0VBMDhIcFJVRFVVYVdyeDE5UllrQ05rN0szMVdfNjl2Z2lxWlNOcW1DcEJYTVlLME9OSVhzOXZaUUpwZUtQbjg5QkhkYl8xeUt6R1ZwdGlDVG5ta3BEVG9rMFhGU1FQMzhlWGZMdWNxYVlYTGNpSFFVMW5JRjVmLWc1R2xvVHVCbDliREtrTTBha3ZVcGp0bzRySldiR2RQVDBsSjFhV2dfdw?oc=5",
-    "https://news.google.com/rss/articles/CBMizAFBVV95cUxNcThvOFZ3YW9BSmlJUGw5TGhXRnlGYXJ2RHdkdm1LOG1ESXdtNnBhcjJONU9wbG1ZblZnVnJlR3lHYzhwZ1E0RXpucEdtY2JObHpiSVNGSk9pMUFHOFlOY1FFUFgyUXFzcXBMTzREXzVDOVpCMS1BU3pSUnlmSGRYcF9mRmc0RUlMZnBMLUhmb3BkS3JpTDltamtnYjM1X1RqeDJMWmFDclgzOXY2ajA1WkRMUWNRNjVscFM0U3hvU1FFNFNodXBTdjFfVUk?oc=5"
+    "https://news.google.com/rss/articles/CBMiigFBVV95cUxPWWZ5OEZKamRWXzdBdS12T3hQUDBOaTRZczdka2JkeGpOcmFvTlNlWGljM003ZXlYMEdtMW83WlhXeVlJcDR2NlliNnRudUhoMjh2MGJaMlY5dUhySkNkNHJkRGl3b2V3M2dVTU5qcUplanM1N2pSaHpCbDhpODcyTEdUSEE1RFJCNXc?oc=5",
+    "https://news.google.com/rss/articles/CBMidEFVX3lxTE9iV3VQYWRYbEUxeW9NWENnRkVQNVlfbVFGZWhOck94Um9QNkQtNWVtSUJLRTkteVlkWVQ5Rk1HYVF0eWdPcTI2YWJNMTE3OGZLY1ZhRUxYdVUyNGpucDFOVjN1ZFZoYkV3X1R3R2pxVW5zVUls?oc=5"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -55,28 +68,45 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime"
+      "business",
+      "crime",
+      "news",
+      "sport",
+      "transport"
     ],
     "selected_categories": [
-      "crime"
+      "business",
+      "crime",
+      "news",
+      "sport",
+      "transport"
     ],
     "available_wards": [],
     "selected_wards": [],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "selected_by_category": {
-      "crime": 3
+      "business": 1,
+      "crime": 2,
+      "news": 1,
+      "sport": 3,
+      "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_source": {
+      "bee network live travel alerts": 1,
       "facebook.com": 1,
-      "mondaq": 1,
+      "footlive": 1,
+      "roch valley radio": 1,
+      "rochdale afc": 1,
+      "skiddle": 1,
+      "sts cars manchester": 1,
       "the guardian": 1
     }
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
-  "search_query_count": 52,
+  "search_query_count": 51,
   "search_queries": [
     {
       "label": "official-gmp:1",
@@ -149,296 +179,289 @@
       "person": "Paul Waugh"
     },
     {
-      "label": "councillor:Farooq Ahmed",
-      "query": "\"Councillor Farooq Ahmed\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:Mohammed Shafiq",
+      "query": "\"Councillor Mohammed Shafiq\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
-      "ward": "Central Rochdale",
-      "person": "Farooq Ahmed"
+      "ward": "Milkstone and Deeplish",
+      "person": "Mohammed Shafiq"
     },
     {
-      "label": "councillor:Shakil Ahmed",
-      "query": "\"Councillor Shakil Ahmed\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
-      "category": "politics",
-      "ward": "Kingsway",
-      "person": "Shakil Ahmed"
-    },
-    {
-      "label": "councillor:Daalat Ali",
-      "query": "\"Councillor Daalat Ali\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
-      "category": "politics",
-      "ward": "Kingsway",
-      "person": "Daalat Ali"
-    },
-    {
-      "label": "councillor:Stephen Anstee",
-      "query": "\"Councillor Stephen Anstee\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:Angela Smith",
+      "query": "\"Councillor Angela Smith\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
       "ward": "Bamford",
-      "person": "Stephen Anstee"
+      "person": "Angela Smith"
     },
     {
-      "label": "councillor:Elizabeth Atewologun",
-      "query": "\"Councillor Elizabeth Atewologun\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:Susan Smith",
+      "query": "\"Councillor Susan Smith\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
-      "ward": "North Middleton",
-      "person": "Elizabeth Atewologun"
+      "ward": "West Middleton",
+      "person": "Susan Smith"
     },
     {
-      "label": "councillor:Tricia Ayrton",
-      "query": "\"Councillor Tricia Ayrton\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:Terry Smith",
+      "query": "\"Councillor Terry Smith\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "category": "politics",
+      "ward": "East Middleton",
+      "person": "Terry Smith"
+    },
+    {
+      "label": "councillor:Mark Stephens",
+      "query": "\"Councillor Mark Stephens\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
       "ward": "Healey",
-      "person": "Tricia Ayrton"
+      "person": "Mark Stephens"
     },
     {
-      "label": "councillor:David Bamford",
-      "query": "\"Councillor David Bamford\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:Jordan Tarrant-Short",
+      "query": "\"Councillor Jordan Tarrant-Short\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
-      "ward": "Milnrow and Newhey",
-      "person": "David Bamford"
+      "ward": "Balderstone and Kirkholt",
+      "person": "Jordan Tarrant-Short"
     },
     {
-      "label": "councillor:Philip Barrett",
-      "query": "\"Councillor Philip Barrett\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
-      "category": "politics",
-      "ward": "Wardle, Shore and West Littleborough",
-      "person": "Philip Barrett"
-    },
-    {
-      "label": "councillor:Philip Beal",
-      "query": "\"Councillor Philip Beal\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
-      "category": "politics",
-      "ward": "Bamford",
-      "person": "Philip Beal"
-    },
-    {
-      "label": "councillor:Tom Besford",
-      "query": "\"Councillor Tom Besford\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
-      "category": "politics",
-      "ward": "Littleborough Lakeside",
-      "person": "Tom Besford"
-    },
-    {
-      "label": "councillor:John Blundell",
-      "query": "\"Councillor John Blundell\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
-      "category": "politics",
-      "ward": "Smallbridge and Firgrove",
-      "person": "John Blundell"
-    },
-    {
-      "label": "councillor:Adam Branton",
-      "query": "\"Councillor Adam Branton\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:John Taylor",
+      "query": "\"Councillor John Taylor\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
       "ward": "Wardle, Shore and West Littleborough",
-      "person": "Adam Branton"
+      "person": "John Taylor"
     },
     {
-      "label": "councillor:Kathryn Bromfield",
-      "query": "\"Councillor Kathryn Bromfield\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:Trevor Taylor",
+      "query": "\"Councillor Trevor Taylor\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
-      "ward": "North Middleton",
-      "person": "Kathryn Bromfield"
+      "ward": "West Middleton",
+      "person": "Trevor Taylor"
     },
     {
-      "label": "councillor:Stuart Crawford",
-      "query": "\"Councillor Stuart Crawford\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:Carol Wardle",
+      "query": "\"Councillor Carol Wardle\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
-      "ward": "West Heywood",
-      "person": "Stuart Crawford"
+      "ward": "Hopwood Hall",
+      "person": "Carol Wardle"
     },
     {
-      "label": "councillor:Patricia Mary Dale",
-      "query": "\"Councillor Patricia Mary Dale\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "label": "councillor:Shah Wazir",
+      "query": "\"Councillor Shah Wazir\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "category": "politics",
+      "ward": "Healey",
+      "person": "Shah Wazir"
+    },
+    {
+      "label": "councillor:June West",
+      "query": "\"Councillor June West\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
       "category": "politics",
       "ward": "South Middleton",
-      "person": "Patricia Mary Dale"
+      "person": "June West"
     },
     {
-      "label": "watch:1",
-      "query": "\"robbery\" \"Healey\" Rochdale",
+      "label": "councillor:Dylan James Williams",
+      "query": "\"Councillor Dylan James Williams\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "category": "politics",
+      "ward": "East Middleton",
+      "person": "Dylan James Williams"
+    },
+    {
+      "label": "councillor:Peter Winkler",
+      "query": "\"Councillor Peter Winkler\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "category": "politics",
+      "ward": "Norden",
+      "person": "Peter Winkler"
+    },
+    {
+      "label": "councillor:Lee Wolf",
+      "query": "\"Councillor Lee Wolf\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "category": "politics",
+      "ward": "North Middleton",
+      "person": "Lee Wolf"
+    },
+    {
+      "label": "councillor:Sameena Zaheer",
+      "query": "\"Councillor Sameena Zaheer\" Rochdale (\"voted\" OR vote OR motion OR committee OR decision OR attended OR participated OR \"called for\" OR campaign OR opened OR visited OR supported OR opposed OR questioned OR resigns OR resignation OR \"steps down\" OR \"stands down\" OR quits OR quitting)",
+      "category": "politics",
+      "ward": "Central Rochdale",
+      "person": "Sameena Zaheer"
+    },
+    {
+      "label": "ward:Milnrow and Newhey",
+      "query": "\"Milnrow and Newhey\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "Milnrow and Newhey",
+      "person": ""
+    },
+    {
+      "label": "ward:Norden",
+      "query": "\"Norden\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "Norden",
+      "person": ""
+    },
+    {
+      "label": "ward:North Heywood",
+      "query": "\"North Heywood\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "North Heywood",
+      "person": ""
+    },
+    {
+      "label": "ward:North Middleton",
+      "query": "\"North Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "North Middleton",
+      "person": ""
+    },
+    {
+      "label": "ward:Smallbridge and Firgrove",
+      "query": "\"Smallbridge and Firgrove\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "Smallbridge and Firgrove",
+      "person": ""
+    },
+    {
+      "label": "ward:South Middleton",
+      "query": "\"South Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "South Middleton",
+      "person": ""
+    },
+    {
+      "label": "ward:Spotland and Falinge",
+      "query": "\"Spotland and Falinge\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "Spotland and Falinge",
+      "person": ""
+    },
+    {
+      "label": "ward:Wardle, Shore and West Littleborough",
+      "query": "\"Wardle, Shore and West Littleborough\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "Wardle, Shore and West Littleborough",
+      "person": ""
+    },
+    {
+      "label": "ward:West Heywood",
+      "query": "\"West Heywood\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "West Heywood",
+      "person": ""
+    },
+    {
+      "label": "ward:West Middleton",
+      "query": "\"West Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport)",
+      "category": "news",
+      "ward": "West Middleton",
+      "person": ""
+    },
+    {
+      "label": "source:1",
+      "query": "site:manchestereveningnews.co.uk/all-about/rochdale Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:2",
-      "query": "\"charity event\" \"Kirkholt\"",
+      "label": "source:2",
+      "query": "site:manchestereveningnews.co.uk/news/greater-manchester-news/ Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:3",
-      "query": "\"GMP issue appeal for\" Rochdale",
+      "label": "source:3",
+      "query": "\"Manchester Evening News\" Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:4",
-      "query": "\"GMP issued an appeal\" Rochdale",
+      "label": "source:4",
+      "query": "\"Roch Valley Radio\" Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:5",
-      "query": "\"Falinge\" (\"parkrun\" OR \"park run\")",
+      "label": "source:5",
+      "query": "\"Action Together\" Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:6",
-      "query": "\"Falinger\" (\"parkrun\" OR \"park run\")",
+      "label": "source:6",
+      "query": "\"Your Trust Rochdale\"",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:7",
-      "query": "\"Shabir Ahmed\"",
+      "label": "source:7",
+      "query": "\"Rochdale AFC\" news",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:8",
-      "query": "Rochdale deportation",
+      "label": "source:8",
+      "query": "\"Rochdale Hornets\" news",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:9",
-      "query": "Rochdale parole",
+      "label": "source:9",
+      "query": "\"Northern Care Alliance\" Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:10",
-      "query": "Rochdale \"grooming gang\"",
+      "label": "source:10",
+      "query": "\"Rochdale Sixth Form College\" news",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:11",
-      "query": "Rochdale \"released from prison\"",
+      "label": "source:11",
+      "query": "site:bbc.co.uk/news Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:12",
-      "query": "Rochdale sentencing",
+      "label": "source:12",
+      "query": "site:news.sky.com Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "watch:13",
-      "query": "Rochdale convicted",
+      "label": "source:13",
+      "query": "site:itv.com/news Rochdale",
       "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "topic:healey-dell-viaduct",
-      "query": "\"Healey Dell\" viaduct",
-      "category": "environment",
+      "label": "source:14",
+      "query": "site:theguardian.com Rochdale",
+      "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "topic:healey-dell-robbery",
-      "query": "\"Healey Dell\" robbery",
-      "category": "crime",
+      "label": "source:15",
+      "query": "site:telegraph.co.uk Rochdale",
+      "category": "news",
       "ward": "",
       "person": ""
     },
     {
-      "label": "topic:healey-dell-fishing",
-      "query": "\"Healey Dell\" fishing",
-      "category": "environment",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:milkstone-road-takeaway",
-      "query": "\"Milkstone Road\" takeaway",
-      "category": "business",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:milkstone-road-speeding",
-      "query": "\"Milkstone Road\" speeding",
-      "category": "traffic",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:bamford-house-prices",
-      "query": "\"Bamford\" Rochdale \"house prices\"",
-      "category": "business",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:norden-school-results",
-      "query": "\"Norden\" Rochdale \"school results\"",
-      "category": "education",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:bamford-restaurant",
-      "query": "\"Bamford\" Rochdale restaurant",
-      "category": "business",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:norden-golf-club",
-      "query": "\"Norden Golf Club\"",
-      "category": "sport",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:kirkholt-charity",
-      "query": "\"Kirkholt\" charity",
-      "category": "community",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:kirkholt-surestart",
-      "query": "\"Kirkholt\" (\"Sure Start\" OR SureStart OR \"family sessions\")",
-      "category": "community",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:whitworth-stronger-together",
-      "query": "\"Whitworth Stronger Together\" (\"coffee morning\" OR \"coffee mornings\")",
-      "category": "events",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:whitworth-swimming-baths",
-      "query": "Whitworth (\"swimming baths\" OR pool OR leisure centre)",
-      "category": "sport",
-      "ward": "",
-      "person": ""
-    },
-    {
-      "label": "topic:oulder-hill-swimming-baths",
-      "query": "(\"Oulder Hill\" OR \"Oulder Hill Leisure Complex\") (\"swimming baths\" OR pool)",
-      "category": "sport",
+      "label": "source:16",
+      "query": "site:independent.co.uk Rochdale",
+      "category": "news",
       "ward": "",
       "person": ""
     }
