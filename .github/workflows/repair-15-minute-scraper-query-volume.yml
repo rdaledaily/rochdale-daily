@@ -1,0 +1,165 @@
+name: Repair 15-minute scraper query volume
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repair-rochdale-query-volume
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Apply safe query budget
+        shell: bash
+        run: |
+          cat > /tmp/repair-query-volume.b64 <<'B64'
+          CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAoKClNFQVJDSF9QQVRIID0gUGF0aCgic2NyYXBlci9z
+          ZWFyY2hfcXVlcmllcy5weSIpCldPUktGTE9XX1BBVEggPSBQYXRoKCIuZ2l0aHViL3dvcmtmbG93
+          cy9zY3JhcGUueW1sIikKCgpkZWYgcmVhZChwYXRoOiBQYXRoKSAtPiBzdHI6CiAgICByZXR1cm4g
+          cGF0aC5yZWFkX3RleHQoZW5jb2Rpbmc9InV0Zi04IikKCgpkZWYgd3JpdGUocGF0aDogUGF0aCwg
+          Y29udGVudDogc3RyKSAtPiBOb25lOgogICAgcGF0aC53cml0ZV90ZXh0KGNvbnRlbnQsIGVuY29k
+          aW5nPSJ1dGYtOCIpCiAgICBwcmludChmIlVwZGF0ZWQge3BhdGh9IikKCgp0ZXh0ID0gcmVhZChT
+          RUFSQ0hfUEFUSCkKCmNvbnN0YW50cyA9ICgKICAgICJHT09HTEVfU0VBUkNIX1NBRkVfTElNSVQg
+          PSA2OFxuIgogICAgIkxPQ0FUSU9OX1FVRVJJRVNfUEVSX0hPVVIgPSA0MFxuIgopCgppZiAiR09P
+          R0xFX1NFQVJDSF9TQUZFX0xJTUlUID0gNjgiIG5vdCBpbiB0ZXh0OgogICAgYW5jaG9yID0gImlt
+          cG9ydCBtYXRoXG4iCiAgICBpZiBhbmNob3Igbm90IGluIHRleHQ6CiAgICAgICAgcmFpc2UgUnVu
+          dGltZUVycm9yKCJDb3VsZCBub3QgZmluZCB0aGUgc2VhcmNoLXF1ZXJ5IGltcG9ydCBhbmNob3Iu
+          IikKICAgIHRleHQgPSB0ZXh0LnJlcGxhY2UoYW5jaG9yLCBhbmNob3IgKyAiXG4iICsgY29uc3Rh
+          bnRzLCAxKQoKcm90YXRpb25faGVscGVyID0gKAogICAgIlxuIgogICAgImRlZiByb3RhdGluZ19s
+          b2NhdGlvbl9xdWVyaWVzKFxuIgogICAgIiAgICBub3c6IGRhdGV0aW1lIHwgTm9uZSA9IE5vbmUs
+          XG4iCiAgICAiICAgIGxpbWl0OiBpbnQgPSBMT0NBVElPTl9RVUVSSUVTX1BFUl9IT1VSLFxuIgog
+          ICAgIik6XG4iCiAgICAiICAgICMgUmV0dXJuIGEgc2FmZSBob3VybHkgc2xpY2Ugb2YgdGhlIGdl
+          bmVyYXRlZCBsb2NhdGlvbiBtYXRyaXguXG4iCiAgICAiICAgICMgTmFtZWQgdG9waWNzLCB3YXJk
+          cywgY2F0ZWdvcmllcyBhbmQgc291cmNlIHNlYXJjaGVzIHJlbWFpbiBvblxuIgogICAgIiAgICAj
+          IHRoZWlyIG5vcm1hbCBmb3VyLXdheSBob3VybHkgc2hhcmQuIFRoZSBsYXJnZXIgZ2VuZXJhdGVk
+          IG1hdHJpeFxuIgogICAgIiAgICAjIHJvdGF0ZXMgYnkgVVRDIGhvdXIsIGF2b2lkaW5nIGEgcmF0
+          ZS1saW1pdGluZyBidXJzdC5cbiIKICAgICIgICAgaXRlbXMgPSBsaXN0KGJ1aWxkX2xvY2F0aW9u
+          X3F1ZXJpZXMoKSlcbiIKICAgICIgICAgaWYgbm90IGl0ZW1zIG9yIGxpbWl0IDw9IDA6XG4iCiAg
+          ICAiICAgICAgICByZXR1cm4gW11cbiIKICAgICJcbiIKICAgICIgICAgY291bnQgPSBtaW4oaW50
+          KGxpbWl0KSwgbGVuKGl0ZW1zKSlcbiIKICAgICIgICAgY3VycmVudCA9IG5vdyBvciBkYXRldGlt
+          ZS5ub3codGltZXpvbmUudXRjKVxuIgogICAgIiAgICBob3VyX2luZGV4ID0gaW50KGN1cnJlbnQu
+          dGltZXN0YW1wKCkgLy8gMzYwMClcbiIKICAgICIgICAgc3RhcnQgPSAoaG91cl9pbmRleCAqIGNv
+          dW50KSAlIGxlbihpdGVtcylcbiIKICAgICIgICAgcmV0dXJuIFtpdGVtc1soc3RhcnQgKyBvZmZz
+          ZXQpICUgbGVuKGl0ZW1zKV0gZm9yIG9mZnNldCBpbiByYW5nZShjb3VudCldXG4iCiAgICAiXG4i
+          CiAgICAiXG4iCikKCmlmICJkZWYgcm90YXRpbmdfbG9jYXRpb25fcXVlcmllcygiIG5vdCBpbiB0
+          ZXh0OgogICAgYW5jaG9yID0gImRlZiBidWlsZF9zZWFyY2hfcXVlcnlfc3BlY3MoXG4iCiAgICBp
+          ZiBhbmNob3Igbm90IGluIHRleHQ6CiAgICAgICAgcmFpc2UgUnVudGltZUVycm9yKCJDb3VsZCBu
+          b3QgZmluZCBidWlsZF9zZWFyY2hfcXVlcnlfc3BlY3MuIikKICAgIHRleHQgPSB0ZXh0LnJlcGxh
+          Y2UoYW5jaG9yLCByb3RhdGlvbl9oZWxwZXIgKyBhbmNob3IsIDEpCgp0ZXh0ID0gdGV4dC5yZXBs
+          YWNlKAogICAgIiAgICBtYXhfcXVlcmllczogaW50ID0gMTI4LFxuIiwKICAgICIgICAgbWF4X3F1
+          ZXJpZXM6IGludCA9IEdPT0dMRV9TRUFSQ0hfU0FGRV9MSU1JVCxcbiIsCikKCm9sZF9sb2NhdGlv
+          bl9sb29wID0gKAogICAgIiAgICBmb3IgaXRlbSBpbiBidWlsZF9sb2NhdGlvbl9xdWVyaWVzKCk6
+          XG4iCiAgICAiICAgICAgICBidWxrLmFwcGVuZChcbiIKKQpuZXdfbG9jYXRpb25fbG9vcCA9ICgK
+          ICAgICIgICAgZm9yIGl0ZW0gaW4gcm90YXRpbmdfbG9jYXRpb25fcXVlcmllcyhub3cpOlxuIgog
+          ICAgIiAgICAgICAgYnVsay5hcHBlbmQoXG4iCikKaWYgb2xkX2xvY2F0aW9uX2xvb3AgaW4gdGV4
+          dDoKICAgIHRleHQgPSB0ZXh0LnJlcGxhY2Uob2xkX2xvY2F0aW9uX2xvb3AsIG5ld19sb2NhdGlv
+          bl9sb29wLCAxKQplbGlmICJmb3IgaXRlbSBpbiByb3RhdGluZ19sb2NhdGlvbl9xdWVyaWVzKG5v
+          dyk6IiBub3QgaW4gdGV4dDoKICAgIHJhaXNlIFJ1bnRpbWVFcnJvcigiQ291bGQgbm90IHJlcGxh
+          Y2UgdGhlIGdlbmVyYXRlZCBsb2NhdGlvbi1xdWVyeSBsb29wLiIpCgpvbGRfcmV0dXJuID0gIiAg
+          ICByZXR1cm4gdW5pcXVlWzogbWF4KDEsIGludChtYXhfcXVlcmllcykpXVxuIgpuZXdfcmV0dXJu
+          ID0gKAogICAgIiAgICByZXF1ZXN0ZWRfbGltaXQgPSBtYXgoMSwgaW50KG1heF9xdWVyaWVzKSlc
+          biIKICAgICIgICAgc2FmZV9saW1pdCA9IG1pbihyZXF1ZXN0ZWRfbGltaXQsIEdPT0dMRV9TRUFS
+          Q0hfU0FGRV9MSU1JVClcbiIKICAgICIgICAgcmV0dXJuIHVuaXF1ZVs6c2FmZV9saW1pdF1cbiIK
+          KQppZiBvbGRfcmV0dXJuIGluIHRleHQ6CiAgICB0ZXh0ID0gdGV4dC5yZXBsYWNlKG9sZF9yZXR1
+          cm4sIG5ld19yZXR1cm4sIDEpCmVsaWYgInNhZmVfbGltaXQgPSBtaW4ocmVxdWVzdGVkX2xpbWl0
+          LCBHT09HTEVfU0VBUkNIX1NBRkVfTElNSVQpIiBub3QgaW4gdGV4dDoKICAgIHJhaXNlIFJ1bnRp
+          bWVFcnJvcigiQ291bGQgbm90IGluc3RhbGwgdGhlIGhhcmQgcGVyLXJ1biBxdWVyeSBjZWlsaW5n
+          LiIpCgp3cml0ZShTRUFSQ0hfUEFUSCwgdGV4dCkKCndvcmtmbG93ID0gcmVhZChXT1JLRkxPV19Q
+          QVRIKQppZiAnR09PR0xFX1NFQVJDSF9RVUVSWV9MSU1JVDogIjEyOCInIGluIHdvcmtmbG93Ogog
+          ICAgd29ya2Zsb3cgPSB3b3JrZmxvdy5yZXBsYWNlKAogICAgICAgICdHT09HTEVfU0VBUkNIX1FV
+          RVJZX0xJTUlUOiAiMTI4IicsCiAgICAgICAgJ0dPT0dMRV9TRUFSQ0hfUVVFUllfTElNSVQ6ICI2
+          OCInLAogICAgICAgIDEsCiAgICApCmVsaWYgJ0dPT0dMRV9TRUFSQ0hfUVVFUllfTElNSVQ6ICI2
+          OCInIG5vdCBpbiB3b3JrZmxvdzoKICAgIHJhaXNlIFJ1bnRpbWVFcnJvcigiQ291bGQgbm90IGZp
+          bmQgR09PR0xFX1NFQVJDSF9RVUVSWV9MSU1JVCBpbiBzY3JhcGUueW1sLiIpCgp3cml0ZShXT1JL
+          RkxPV19QQVRILCB3b3JrZmxvdykKcHJpbnQoIjE1LW1pbnV0ZSBxdWVyeS1idWRnZXQgcmVwYWly
+          IGFwcGxpZWQuIikK
+          B64
+          base64 --decode /tmp/repair-query-volume.b64 > /tmp/repair-query-volume.py
+          python /tmp/repair-query-volume.py
+
+      - name: Compile repaired files
+        run: |
+          python -m py_compile             scraper/search_queries.py             scraper/test_search_queries.py             scraper/scraper.py
+
+      - name: Run query regression tests
+        run: |
+          python scraper/test_search_queries.py
+
+      - name: Verify four-run coverage and hard ceiling
+        run: |
+          python - <<'PY'
+          import sys
+          from datetime import datetime, timezone
+
+          sys.path.insert(0, "scraper")
+          from search_queries import (
+              GOOGLE_SEARCH_SAFE_LIMIT,
+              LOCATION_QUERIES_PER_HOUR,
+              build_search_query_specs,
+              rotating_location_queries,
+          )
+
+          fixed_runs = (
+              datetime(2026, 7, 8, 16, 7, tzinfo=timezone.utc),
+              datetime(2026, 7, 8, 16, 22, tzinfo=timezone.utc),
+              datetime(2026, 7, 8, 16, 37, tzinfo=timezone.utc),
+              datetime(2026, 7, 8, 16, 52, tzinfo=timezone.utc),
+          )
+
+          counts = [
+              len(build_search_query_specs(200, now=run_time))
+              for run_time in fixed_runs
+          ]
+
+          assert GOOGLE_SEARCH_SAFE_LIMIT == 68
+          assert LOCATION_QUERIES_PER_HOUR == 40
+          assert all(count <= GOOGLE_SEARCH_SAFE_LIMIT for count in counts), counts
+          assert all(count < 70 for count in counts), counts
+          assert len(rotating_location_queries(fixed_runs[0])) <= 40
+
+          print("Safe per-run query counts:", counts)
+          print("Generated location searches rotated per hour:", LOCATION_QUERIES_PER_HOUR)
+          PY
+
+      - name: Run complete pipeline validation suite
+        run: |
+          python scraper/test_locality.py
+          python scraper/test_story_identity.py
+          python scraper/test_selection_policy.py
+          python scraper/test_search_queries.py
+          python scraper/test_rewrite_safety.py
+
+      - name: Commit query-volume repair
+        shell: bash
+        run: |
+          git config user.name "Rochdale Daily Automation"
+          git config user.email "actions@users.noreply.github.com"
+
+          git add scraper/search_queries.py .github/workflows/scrape.yml
+
+          if git diff --cached --quiet; then
+            echo "The query-volume repair is already installed."
+            exit 0
+          fi
+
+          git commit -m "Keep scheduled Google News searches below safe limit"
+          git pull --rebase origin main
+          git push origin HEAD:main
