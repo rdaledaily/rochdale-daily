@@ -21,6 +21,7 @@ and must come from the cited source records.
 """
 from __future__ import annotations
 from source_presentation import clean_candidate_public_text, is_subtle_source, sanitise_article
+from house_style import STYLE_VERSION
 from editorial_upgrade import (
     article_word_count as editorial_word_count,
     compact_records as editorial_compact_records,
@@ -1833,6 +1834,8 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'status': 'published',
         'publication_route': 'ai-grounded-rewrite',
         'rewrite_quality_checked': True,
+        'editorial_style_version': STYLE_VERSION,
+        'style_rewrite_status': 'generated-in-house-style',
         'discovery_query_label': candidate.discovery_query_label,
         'searched_location_slug': candidate.searched_location_slug,
         'searched_location_name': candidate.searched_location_name,
@@ -1975,6 +1978,9 @@ def main() -> int:
         candidate.story_key = candidate.story_key or build_story_key(candidate)
         existing_article = existing_by_story.get(candidate.story_key)
         if existing_article is None:
+            eligible_candidates.append(candidate)
+            continue
+        if existing_article.get('editorial_style_version') != STYLE_VERSION:
             eligible_candidates.append(candidate)
             continue
         if article_public_word_count(existing_article) < 200:

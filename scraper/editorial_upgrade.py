@@ -6,6 +6,8 @@ import re
 from collections import Counter
 from typing import Any
 
+from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
+
 CATEGORY_ORDER = (
     ("crime", re.compile(
         r"\b(?:rape|rapist|sexual assault|sexual offence|sexual abuse|grooming|"
@@ -213,6 +215,7 @@ def quality_issues(draft: Any, source_text: str) -> list[str]:
         issues.append("Ground the report more clearly in the supplied facts.")
     if contains_long_verbatim_phrase(combined, source_text, 20):
         issues.append("Rewrite the long verbatim source passage.")
+    issues.extend(style_issues(clean))
     return issues
 
 
@@ -285,23 +288,7 @@ def request_article(
     right_to_reply_email: str,
     logger,
 ) -> dict[str, Any] | None:
-    system_message = (
-        "You are the senior reporter and sub-editor for Rochdale Daily. Produce genuine, useful local journalism, "
-        "not a summary of publishing metadata. Use every relevant verified fact from the supplied evidence without "
-        "repetition. Lead with the newest development, then provide chronology, relevant background, why it matters "
-        "to local readers, and practical information such as dates, routes, reporting channels or next steps when "
-        "supported. You may briefly explain stable public concepts such as a consultation, court hearing, council "
-        "motion, road-closure order or NHS service, but keep explanation separate from case-specific facts and never "
-        "invent a local consequence. Aim for 280-600 body words in 6-10 natural paragraphs. A particularly rich "
-        "ongoing story may be longer. Use neutral UK English. The headline should be clear, search-friendly and "
-        "include the genuine local place or organisation when established by the evidence. Never invent quotations, "
-        "motives, identities, allegations, statistics, dates, ages, charges, outcomes, public reaction or addresses. "
-        "Preserve the difference between allegation, arrest, charge, conviction and sentence. Never identify a "
-        "protected child or sexual-offence complainant. Do not copy a source headline or any run of twenty source "
-        "words. Do not refuse merely because one record is short: combine all records and write the fullest report "
-        "the evidence supports. Set publishable false only when the material is genuinely non-local, contradictory, "
-        "a vacancy, or too insubstantial to report safely."
-    )
+    system_message = HOUSE_STYLE_SYSTEM
 
     base_payload = {
         "primary_source": getattr(candidate, "source_name", ""),
@@ -325,6 +312,8 @@ def request_article(
                 "what happens next",
             ],
             "seo": "Natural descriptive headline; no keyword stuffing or clickbait.",
+            "house_style": STYLE_VERSION,
+            "retain_local_impact_context": True,
         },
         "right_to_reply": (
             "Anyone directly affected may request a correction or right of reply by emailing "
