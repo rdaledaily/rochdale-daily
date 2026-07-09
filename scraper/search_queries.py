@@ -12,6 +12,11 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import math
 
+try:
+    from .location_discovery import build_location_queries
+except ImportError:
+    from location_discovery import build_location_queries
+
 COUNCILLOR_DIRECTORY_URL = (
     "https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1"
 )
@@ -473,6 +478,8 @@ class SearchQuery:
     category: str = "news"
     ward: str = ""
     person: str = ""
+    location_slug: str = ""
+    location_name: str = ""
 
 
 def ward_query(ward: str) -> SearchQuery:
@@ -596,6 +603,21 @@ def build_search_query_specs(
                 label=f"category:{category}",
                 query=query,
                 category=category,
+            )
+        )
+
+    # Location/category discovery is generated centrally from locations.py.
+    # These searches are part of the same four-way shard as the other bulk
+    # searches, so the complete location matrix is covered each hour without
+    # sending hundreds of Google News requests in a single run.
+    for item in build_location_queries():
+        bulk.append(
+            SearchQuery(
+                label=item.label,
+                query=item.query,
+                category=item.category,
+                location_slug=item.location_slug,
+                location_name=item.location_name,
             )
         )
 
