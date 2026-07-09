@@ -3,8 +3,8 @@
 Rochdale Daily autonomous local-news pipeline.
 
 The pipeline:
-- checks public RSS feeds, public news pages and Google News RSS searches
-  every scheduled run;
+- checks public RSS feeds, public news pages, selected local organisations,
+  social accounts, live service pages and Google News RSS searches every run;
 - searches the borough, townships, wards and named neighbourhoods;
 - keeps the original source date and rejects stale or undated material;
 - cross-references similar reports before asking OpenAI for an original article;
@@ -62,8 +62,8 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 AI_REWRITE_REQUIRED = os.getenv(
     "AI_REWRITE_REQUIRED", "true"
 ).lower() not in {"0", "false", "no", "off"}
-MAX_NEWS_AGE_HOURS = int(os.getenv("MAX_NEWS_AGE_HOURS", "168"))
-RETENTION_DAYS = int(os.getenv("ARTICLE_RETENTION_DAYS", "14"))
+MAX_NEWS_AGE_HOURS = max(168, int(os.getenv("MAX_NEWS_AGE_HOURS", "168")))
+RETENTION_DAYS = max(14, int(os.getenv("ARTICLE_RETENTION_DAYS", "14")))
 MAX_PUBLISHED_ARTICLES = int(os.getenv("MAX_PUBLISHED_ARTICLES", "100"))
 MAX_AI_ARTICLES_PER_RUN = int(os.getenv("MAX_AI_ARTICLES_PER_RUN", "30"))
 MAX_AI_ARTICLES_INITIAL = int(os.getenv("MAX_AI_ARTICLES_INITIAL", "60"))
@@ -83,11 +83,13 @@ MIN_LIVE_STORIES = int(os.getenv("MIN_LIVE_STORIES", "30"))
 MIN_BALANCED_SELECTION_LIMIT = int(
     os.getenv("MIN_BALANCED_SELECTION_LIMIT", "40")
 )
-MAX_SELECTED_PER_SOURCE = int(
-    os.getenv("MAX_SELECTED_PER_SOURCE", "4")
+MAX_SELECTED_PER_SOURCE = max(
+    12,
+    int(os.getenv("MAX_SELECTED_PER_SOURCE", "12")),
 )
-MAX_SELECTED_PER_CATEGORY = int(
-    os.getenv("MAX_SELECTED_PER_CATEGORY", "8")
+MAX_SELECTED_PER_CATEGORY = max(
+    20,
+    int(os.getenv("MAX_SELECTED_PER_CATEGORY", "20")),
 )
 HTTP_POOL_CONNECTIONS = int(os.getenv("HTTP_POOL_CONNECTIONS", "64"))
 HTTP_POOL_MAXSIZE = int(os.getenv("HTTP_POOL_MAXSIZE", "64"))
@@ -98,7 +100,10 @@ RESPECT_ROBOTS = True
 USE_SOURCE_IMAGES = os.getenv("USE_SOURCE_IMAGES", "false").lower() in {"1", "true", "yes"}
 RIGHT_TO_REPLY_EMAIL = os.getenv("RIGHT_TO_REPLY_EMAIL", "news@rochdaledaily.co.uk")
 UK_TZ = ZoneInfo("Europe/London")
-SAME_DAY_ONLY = os.getenv("SAME_DAY_ONLY", "true").lower() not in {"0", "false", "no"}
+# Ongoing police appeals, court cases and road incidents often remain relevant
+# beyond midnight. The scraper therefore keeps a rolling seven-day window even
+# if an older workflow still supplies SAME_DAY_ONLY=true.
+SAME_DAY_ONLY = False
 
 SOURCE_DENY_DOMAINS = {"rochdaletimes.co.uk", "rochdaleonline.co.uk"}
 SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper", "rochdale online"}
@@ -145,7 +150,6 @@ RSS_SOURCES = [
     # a specific councillor's vote, resignation, budget decision, or an
     # actual event (see the Rochdale Council Events / Your Events entries
     # in DISCOVERY_PAGES below, and civic:council-actions in search_queries.py).
-    {"name": "Greater Manchester Police", "url": "https://www.gmp.police.uk/news/rss.xml", "default_area": "rochdale"},
     {"name": "BBC Manchester", "url": "https://feeds.bbci.co.uk/news/england/manchester/rss.xml", "default_area": "rochdale"},
     {
         "name": "Manchester Evening News — Rochdale",
@@ -178,11 +182,11 @@ DISCOVERY_PAGES = [
     {"name": "Action Together Latest News", "url": "https://www.actiontogether.org.uk/whats-happening", "default_area": "rochdale", "link_pattern": r"/"},
     {"name": "Your Trust Rochdale News", "url": "https://www.yourtrustrochdale.co.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/|/category/news/"},
     {"name": "Your Trust Rochdale News Archive", "url": "https://www.yourtrustrochdale.co.uk/category/news/", "default_area": "rochdale", "link_pattern": r"/"},
-    {"name": "Roch Valley Radio Local News", "url": "https://www.rochvalleyradio.com/news/local-news/", "default_area": "rochdale", "link_pattern": r"/news/local-news/"},
-    {"name": "Roch Valley Radio Notices", "url": "https://www.rochvalleyradio.com/news/notices/", "default_area": "rochdale", "link_pattern": r"/news/notices/|/news/local-news/"},
+    {"name": "Roch Valley Radio Local News", "url": "https://www.rochvalleyradio.com/news/local-news/", "default_area": "rochdale", "default_category": "news", "trusted_local": True, "link_pattern": r"/news/local-news/"},
+    {"name": "Roch Valley Radio Notices", "url": "https://www.rochvalleyradio.com/news/notices/", "default_area": "rochdale", "default_category": "community", "trusted_local": True, "link_pattern": r"/news/notices/|/news/local-news/"},
 
     # Emergency, transport, utility and public-service sources
-    {"name": "Greater Manchester Police", "url": "https://www.gmp.police.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/"},
+    {"name": "Greater Manchester Police", "url": "https://www.gmp.police.uk/news/", "default_area": "rochdale", "default_category": "crime", "page_limit": 12, "link_pattern": r"/news/"},
     {"name": "Greater Manchester Fire and Rescue Service", "url": "https://www.manchesterfire.gov.uk/news-events/news/", "default_area": "rochdale", "link_pattern": r"/news"},
     {"name": "TfGM Newsroom", "url": "https://news.tfgm.com/", "default_area": "rochdale", "link_pattern": r"/press-releases/"},
     {"name": "TfGM Travel Alerts", "url": "https://tfgm.com/travel-updates/travel-alerts", "default_area": "rochdale", "link_pattern": r"/travel-updates/"},
@@ -196,15 +200,99 @@ DISCOVERY_PAGES = [
     {"name": "BBC Manchester", "url": "https://www.bbc.co.uk/news/england/manchester", "default_area": "rochdale", "link_pattern": r"/news/"},
     {"name": "About Manchester", "url": "https://aboutmanchester.co.uk/?s=Rochdale", "default_area": "rochdale", "link_pattern": r"/"},
 
+    # Housing and town-centre organisations
+    {
+        "name": "Rochdale Boroughwide Housing",
+        "url": "https://www.rbh.org.uk/",
+        "default_area": "rochdale",
+        "default_category": "community",
+        "trusted_local": True,
+        "link_pattern": r"/news/|/latest-news/|/updates/|/our-news/",
+    },
+    {
+        "name": "Rochdale Riverside News",
+        "url": "https://rochdaleriverside.com/news/",
+        "default_area": "rochdale",
+        "default_category": "business",
+        "trusted_local": True,
+        "link_pattern": r"/news/",
+    },
+
+    # Additional local, national and political coverage
+    {
+        "name": "The Independent — Rochdale",
+        "url": "https://www.independent.co.uk/topic/rochdale",
+        "default_area": "rochdale",
+        "default_category": "news",
+        "link_pattern": r"/news/|/topic/rochdale",
+    },
+    {
+        "name": "Rochdale Council Webcasts",
+        "url": "https://rochdale.public-i.tv/core/data/21235/archived/1/future/1/agenda/1/enctag/Council",
+        "default_area": "rochdale",
+        "default_category": "politics",
+        "trusted_local": True,
+        "link_pattern": r"/core/portal/|/core/data/",
+    },
+    {
+        "name": "Rochdale Valiant",
+        "url": "https://www.rochdalevaliant.uk/",
+        "default_area": "rochdale",
+        "default_category": "news",
+        "trusted_local": True,
+        "link_pattern": r"/",
+    },
+
     # Health and education
-    {"name": "Northern Care Alliance Rochdale", "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news", "default_area": "rochdale", "link_pattern": r"/news/"},
-    {"name": "Pennine Care NHS", "url": "https://www.penninecare.nhs.uk/about-us/latest-news", "default_area": "rochdale", "link_pattern": r"/latest-news/|/news/"},
-    {"name": "Hopwood Hall College", "url": "https://www.hopwood.ac.uk/news-and-events/latest-news/", "default_area": "rochdale", "link_pattern": r"/news-and-events/"},
-    {"name": "Rochdale Sixth Form College", "url": "https://www.rochdalesfc.ac.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/"},
+    {"name": "Northern Care Alliance Rochdale", "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news", "default_area": "rochdale", "default_category": "health", "link_pattern": r"/news/"},
+    {"name": "Northern Care Alliance News", "url": "https://www.northerncarealliance.nhs.uk/nca-news", "default_area": "rochdale", "default_category": "health", "link_pattern": r"/nca-news/|/news/"},
+    {"name": "Pennine Care NHS", "url": "https://www.penninecare.nhs.uk/about-us/latest-news", "default_area": "rochdale", "default_category": "health", "link_pattern": r"/latest-news/|/news/"},
+    {"name": "Hopwood Hall College", "url": "https://www.hopwood.ac.uk/news-and-events/latest-news/", "default_area": "rochdale", "default_category": "education", "link_pattern": r"/news-and-events/"},
+    {"name": "Rochdale Sixth Form College", "url": "https://www.rochdalesfc.ac.uk/news/", "default_area": "rochdale", "default_category": "education", "link_pattern": r"/news/"},
+    {
+        "name": "Falinge Park High School",
+        "url": "https://www.falingepark.com/news-and-events/",
+        "default_area": "falinge",
+        "default_category": "education",
+        "trusted_local": True,
+        "link_pattern": r"/news-and-events/|/news/",
+    },
+    {
+        "name": "Oulder Hill Leadership Academy",
+        "url": "https://www.oulderhillacademy.com/latest-news/",
+        "default_area": "rochdale",
+        "default_category": "education",
+        "trusted_local": True,
+        "link_pattern": r"/latest-news/|/news/",
+    },
+    {
+        "name": "Wardle Academy",
+        "url": "https://www.wchs.co/topic/news-and-events",
+        "default_area": "wardle",
+        "default_category": "education",
+        "trusted_local": True,
+        "link_pattern": r"/topic/news-and-events|/news/",
+    },
+    {
+        "name": "St Cuthbert's RC High School",
+        "url": "https://stcuthberts.com/news",
+        "default_area": "rochdale",
+        "default_category": "education",
+        "trusted_local": True,
+        "link_pattern": r"/news",
+    },
+    {
+        "name": "Edgar Wood Academy",
+        "url": "https://www.edgarwood.org/80/news-and-events",
+        "default_area": "middleton",
+        "default_category": "education",
+        "trusted_local": True,
+        "link_pattern": r"/80/news-and-events|/news-and-events|/news/",
+    },
 
     # Sport
-    {"name": "Rochdale AFC", "url": "https://rochdaleafc.co.uk/news/", "default_area": "rochdale", "link_pattern": r"/news/"},
-    {"name": "Rochdale Hornets", "url": "https://www.hornetsrugbyleague.co.uk/news", "default_area": "rochdale", "link_pattern": r"/news"},
+    {"name": "Rochdale AFC", "url": "https://rochdaleafc.co.uk/news/", "default_area": "rochdale", "default_category": "sport", "link_pattern": r"/news/"},
+    {"name": "Rochdale Hornets", "url": "https://www.hornetsrugbyleague.co.uk/news", "default_area": "rochdale", "default_category": "sport", "link_pattern": r"/news"},
 ]
 
 LIVE_PAGE_SOURCES = [
@@ -223,6 +311,43 @@ LIVE_PAGE_SOURCES = [
         "url": "https://www.northernrailway.co.uk/service-updates",
         "category": "transport",
         "default_area": "rochdale",
+    },
+    {
+        "name": "Traffic Update — Rochdale",
+        "url": "https://www.traffic-update.co.uk/traffic/rochdale.asp",
+        "category": "traffic",
+        "default_area": "rochdale",
+        "trusted_local": True,
+        "max_blocks": 12,
+    },
+    {
+        "name": "Met Office — Rochdale forecast",
+        "url": "https://weather.metoffice.gov.uk/forecast/gcw3nb4ge",
+        "category": "environment",
+        "default_area": "rochdale",
+        "trusted_local": True,
+        "whole_page": True,
+        "max_blocks": 1,
+        "title": "Rochdale weather forecast",
+    },
+]
+
+# Aggregators are discovery aids only. The scraper follows outbound links and
+# attributes the original publisher; it does not rewrite aggregator summaries.
+AGGREGATOR_PAGES = [
+    {
+        "name": "NewsNow — Rochdale",
+        "url": "https://www.newsnow.co.uk/h/UK/England/Greater+Manchester/Rochdale",
+        "default_area": "rochdale",
+        "default_category": "news",
+        "max_links": 30,
+    },
+    {
+        "name": "Ground News — Rochdale",
+        "url": "https://ground.news/interest/rochdale",
+        "default_area": "rochdale",
+        "default_category": "news",
+        "max_links": 30,
     },
 ]
 
@@ -243,9 +368,20 @@ DISCOVERY_LISTING_OVERRIDES = {
         "https://www.rochdaletownhall.co.uk/events?page=3",
     ],
     "Greater Manchester Police": [
-        "https://www.gmp.police.uk/news/news-search/?ct=Updates&fdte=&page=1&tdte=",
-        "https://www.gmp.police.uk/news/news-search/?ct=Updates&fdte=&page=2&tdte=",
-        "https://www.gmp.police.uk/news/news-search/?ct=Updates&fdte=&page=3&tdte=",
+        *[
+            (
+                "https://www.gmp.police.uk/news/news-search/"
+                f"?ct=News&fdte=&page={page}&tdte="
+            )
+            for page in range(1, 9)
+        ],
+        *[
+            (
+                "https://www.gmp.police.uk/news/news-search/"
+                f"?ct=Appeals&fdte=&page={page}&tdte="
+            )
+            for page in range(1, 5)
+        ],
     ],
     "Roch Valley Radio Local News": [
         "https://www.rochvalleyradio.com/news/local-news/",
@@ -284,6 +420,11 @@ SOCIAL_MAX_OFFICIAL_UPDATES = max(
 OFFICIAL_X_HANDLES = {
     "gmprochdale": "Rochdale Police (GMP)",
     "gmpolice": "Greater Manchester Police",
+    "highwaysnwest": "National Highways North West",
+}
+OFFICIAL_X_PROFILE_URLS = {
+    "gmprochdale": "https://x.com/GMPRochdale",
+    "highwaysnwest": "https://x.com/HighwaysNWEST",
 }
 try:
     extra_x_handles = json.loads(os.getenv("OFFICIAL_X_HANDLES_JSON", "{}"))
@@ -304,6 +445,13 @@ X_SEARCH_QUERIES = [
     ),
     '(from:GMPRochdale OR from:gmpolice) lang:en -is:retweet',
     '(to:GMPRochdale OR @GMPRochdale) lang:en -is:retweet',
+    (
+        'from:HighwaysNWEST '
+        '("M62 J19" OR "M62 J20" OR "M62 J21" OR "M62 junction 19" '
+        'OR "M62 junction 20" OR "M62 junction 21" OR "A627(M)" '
+        'OR Rochdale OR Heywood OR Milnrow OR Middleton OR Littleborough) '
+        'lang:en -is:retweet'
+    ),
 ]
 try:
     extra_x_queries = json.loads(os.getenv("X_SEARCH_QUERIES_JSON", "[]"))
@@ -322,6 +470,15 @@ PUBLIC_FACEBOOK_PAGES = [
     {"name": "Rochdale Borough Council Facebook", "handle": "rochdalecouncil", "url": "https://www.facebook.com/rochdalecouncil", "default_area": "rochdale"},
     {"name": "Bee Network Facebook", "handle": "beenetworkgm", "url": "https://www.facebook.com/beenetworkgm", "default_area": "rochdale"},
     {"name": "Rochdale Sixth Form College Facebook", "handle": "rochdalesfc", "url": "https://www.facebook.com/rochdalesfc", "default_area": "rochdale"},
+    {
+        "name": "My Rochdale News Facebook",
+        "handle": "MyRochdaleNews",
+        "url": "https://www.facebook.com/MyRochdaleNews/",
+        "default_area": "rochdale",
+        "official": False,
+        "publish_as_source": True,
+        "trusted_local": True,
+    },
 ]
 
 try:
@@ -405,8 +562,23 @@ PLACE_CONTEXT_PREFIXES = (
 )
 
 CATEGORY_KEYWORDS = {
-    "crime": {"arrest", "police", "charged", "court", "burglary", "robbery", "assault", "stabbing", "theft", "fraud", "wanted", "jailed", "murder", "grooming", "convicted", "sentenced", "sentencing", "deported", "deportation", "parole", "released from prison"},
-    "traffic": {"traffic", "roadworks", "road closure", "collision", "crash", "m62", "a627", "junction", "lane closure", "diversion", "congestion"},
+    "crime": {
+        "arrest", "arrested", "police", "officer", "officers", "charged",
+        "charge", "court", "magistrates", "crown court", "burglary",
+        "robbery", "assault", "stabbing", "shooting", "theft", "fraud",
+        "wanted", "jailed", "murder", "manslaughter", "grooming",
+        "convicted", "sentenced", "sentencing", "warrant", "raid",
+        "seized", "drugs", "cannabis farm", "appeal for information",
+        "appeal for witnesses", "anti-social behaviour",
+        "criminal behaviour order", "public order", "deported",
+        "deportation", "parole", "released from prison",
+    },
+    "traffic": {
+        "traffic", "roadworks", "road work", "road closure", "road closed",
+        "collision", "crash", "m62", "a627", "junction", "lane closure",
+        "lane closed", "carriageway", "diversion", "congestion",
+        "temporary traffic lights", "motorway incident",
+    },
     "transport": {"bus", "train", "tram", "metrolink", "bee network", "station", "timetable", "public transport"},
     "politics": {"councillor", "council budget", "council tax", "election", "cabinet", "mayor", "resigns", "resignation", "steps down", "stands down", "quits", "mp "},
     "education": {"school", "college", "university", "ofsted", "teacher", "pupil", "student", "education"},
@@ -754,8 +926,174 @@ from locality_rules import (
     detect_area,
     is_local,
     locality_evidence,
-    source_is_denied,
+    source_is_denied as locality_source_is_denied,
 )
+
+
+def source_is_denied(source_name: str = "", source_url: str = "") -> bool:
+    """Keep Roch Valley Radio allowed while hard-blocking prohibited outlets."""
+    name = normalise_ws(source_name).lower()
+    domain = domain_of(source_url)
+
+    if domain == "rochvalleyradio.com" or "roch valley radio" in name:
+        return False
+    if domain in {"rochdaletimes.co.uk", "rochdaleonline.co.uk"}:
+        return True
+    if any(
+        blocked in name
+        for blocked in ("rochdale times", "rochdale times paper", "rochdale online")
+    ):
+        return True
+    return locality_source_is_denied(source_name, source_url)
+
+
+# Some live traffic sources and official road accounts identify the exact road
+# or motorway junction without repeating the word "Rochdale". These patterns
+# are deliberately narrow to avoid treating unrelated North West incidents as
+# local stories.
+ROCHDALE_TRAFFIC_AREA_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "heywood",
+        (
+            r"\bm62\s+(?:junction|j)\s*19\b",
+            r"\bpilsworth road\b",
+            r"\bqueen'?s park road\b",
+        ),
+    ),
+    (
+        "rochdale",
+        (
+            r"\bm62\s+(?:junction|j)\s*20\b",
+            r"\ba627\s*\(m\)\b",
+            r"\bedinburgh way\b",
+            r"\broch valley way\b",
+            r"\bmilnrow road\b",
+            r"\bsandbrook park\b",
+        ),
+    ),
+    (
+        "milnrow",
+        (
+            r"\bm62\s+(?:junction|j)\s*21\b",
+            r"\belizabethan way\b",
+        ),
+    ),
+    (
+        "middleton",
+        (
+            r"\bmanchester new road\b",
+            r"\ba664\b.{0,100}\bmiddleton\b",
+            r"\bmiddleton\b.{0,100}\ba664\b",
+        ),
+    ),
+    (
+        "littleborough",
+        (
+            r"\bhare hill road\b",
+            r"\ba58\b.{0,100}\blittleborough\b",
+            r"\blittleborough\b.{0,100}\ba58\b",
+        ),
+    ),
+)
+
+TRAFFIC_CONTEXT_RE = re.compile(
+    r"\b(?:traffic|collision|crash|incident|roadworks|road work|"
+    r"road closed|road closure|closed|closure|lane closed|lane closure|"
+    r"carriageway|congestion|delay|delays|diversion|temporary traffic lights|"
+    r"motorway)\b",
+    flags=re.IGNORECASE,
+)
+
+
+def rochdale_traffic_area(text: str) -> str:
+    plain = normalise_ws(text)
+    if not TRAFFIC_CONTEXT_RE.search(plain):
+        return ""
+    for area, patterns in ROCHDALE_TRAFFIC_AREA_PATTERNS:
+        if any(re.search(pattern, plain, flags=re.IGNORECASE) for pattern in patterns):
+            return area
+    return ""
+
+
+def source_text_is_local(
+    text: str,
+    source_name: str = "",
+    source_url: str = "",
+    trusted_local: bool = False,
+) -> bool:
+    if source_is_denied(source_name, source_url):
+        return False
+    return bool(
+        trusted_local
+        or is_local(text, source_name, source_url)
+        or rochdale_traffic_area(text)
+    )
+
+
+def source_text_area(
+    text: str,
+    fallback: str = "",
+    source_name: str = "",
+    source_url: str = "",
+    trusted_local: bool = False,
+) -> str:
+    area = detect_area(text, fallback, source_name, source_url)
+    if area:
+        return area
+    traffic_area = rochdale_traffic_area(text)
+    if traffic_area:
+        return traffic_area
+    return fallback if trusted_local else ""
+
+
+def live_category(text: str, fallback: str) -> str:
+    detected = categorise(text)
+    if detected == "traffic":
+        return "traffic"
+    if detected != "news" and fallback == "news":
+        return detected
+    return fallback or detected or "news"
+
+def article_passes_locality(article: dict[str, Any]) -> bool:
+    """Apply the normal locality rules plus the explicitly trusted added sources."""
+    if article_is_local(article):
+        return True
+
+    source_name = normalise_ws(article.get("source_name", ""))
+    source_url = str(article.get("source_url") or "")
+    source_domain = domain_of(source_url)
+    text = " ".join(
+        str(article.get(field) or "")
+        for field in (
+            "title",
+            "excerpt",
+            "summary",
+            "content_html",
+            "event_location",
+        )
+    )
+
+    trusted_names = {
+        str(source.get("name") or "")
+        for source in DISCOVERY_PAGES + LIVE_PAGE_SOURCES
+        if source.get("trusted_local")
+    } | {
+        str(page.get("name") or "")
+        for page in PUBLIC_FACEBOOK_PAGES
+        if page.get("trusted_local")
+    }
+    trusted_domains = {
+        domain_of(str(source.get("url") or ""))
+        for source in DISCOVERY_PAGES + LIVE_PAGE_SOURCES
+        if source.get("trusted_local")
+    }
+
+    return bool(
+        source_name in trusted_names
+        or source_domain in trusted_domains
+        or rochdale_traffic_area(text)
+    )
+
 
 def should_drop(text: str, url: str = "") -> bool:
     low = text.lower()
@@ -1052,7 +1390,12 @@ def collect_rss_candidates() -> list[Candidate]:
             text = f"{source_title} {summary}"
             if not source_url or not source_title or not is_fresh(published):
                 continue
-            if should_drop(text, source_url) or not is_local(text, source_name, source_url):
+            if should_drop(text, source_url) or not source_text_is_local(
+                text,
+                source_name,
+                source_url,
+                bool(source.get("trusted_local")),
+            ):
                 continue
             image_url = rss_image(entry)
             body_excerpt = summary
@@ -1081,16 +1424,20 @@ def collect_rss_candidates() -> list[Candidate]:
                 source_title=source_title,
                 source_summary=summary,
                 source_published_at=iso_utc(published),
-                area=detect_area(
+                area=source_text_area(
                     combined,
                     source["default_area"],
                     source_name,
                     source_url,
+                    bool(source.get("trusted_local")),
                 ),
                 category=(
                     categorise(combined)
                     if categorise(combined) != "news"
-                    else source.get("query_category", "news")
+                    else (
+                        source.get("query_category")
+                        or source.get("default_category", "news")
+                    )
                 ),
                 image_candidate_url=image_url,
                 source_body_excerpt=body_excerpt,
@@ -1102,10 +1449,17 @@ def collect_rss_candidates() -> list[Candidate]:
             ))
     return candidates
 
-def discovery_listing_urls(source: dict[str, str]) -> list[str]:
+def discovery_listing_urls(source: dict[str, Any]) -> list[str]:
     configured = DISCOVERY_LISTING_OVERRIDES.get(source["name"], [])
+    page_limit = max(
+        1,
+        int(source.get("page_limit") or DISCOVERY_PAGE_LIMIT),
+    )
     if configured:
-        return configured[:DISCOVERY_PAGE_LIMIT]
+        return configured[:page_limit]
+    listing_urls = source.get("listing_urls") or []
+    if listing_urls:
+        return [str(url) for url in listing_urls[:page_limit]]
     return [source["url"]]
 
 
@@ -1159,7 +1513,17 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
         return None
 
     text = f"{meta['title']} {meta['description']} {meta['body_excerpt']}"
-    if not meta["title"] or should_drop(text, meta["url"]) or not is_local(text, source["name"], meta["url"]):
+    trusted_local = bool(source.get("trusted_local"))
+    if (
+        not meta["title"]
+        or should_drop(text, meta["url"])
+        or not source_text_is_local(
+            text,
+            source["name"],
+            meta["url"],
+            trusted_local,
+        )
+    ):
         return None
 
     source_name_lower = source["name"].lower()
@@ -1178,7 +1542,12 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
     else:
         published = parse_datetime(meta.get("published"))
         source_kind = "article"
-        category = categorise(text)
+        detected_category = categorise(text)
+        category = (
+            detected_category
+            if detected_category != "news"
+            else source.get("default_category", "news")
+        )
 
         if not is_fresh(published):
             # Only a narrow allowlist of official live-status pages may use the
@@ -1195,11 +1564,12 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
         source_title=meta["title"],
         source_summary=meta["description"] or meta["body_excerpt"][:900],
         source_published_at=iso_utc(published),
-        area=detect_area(
+        area=source_text_area(
             text,
             source["default_area"],
             source["name"],
             meta["url"],
+            trusted_local,
         ),
         category=category,
         image_candidate_url=meta["image"],
@@ -1238,6 +1608,96 @@ def collect_discovery_candidates() -> list[Candidate]:
     return candidates
 
 
+def _embedded_external_url(raw_url: str, base_url: str) -> str:
+    """Return a direct external URL from an aggregator anchor where possible."""
+    absolute = urljoin(base_url, raw_url)
+    parsed = urlparse(absolute)
+    query = urllib.parse.parse_qs(parsed.query)
+    for key in ("url", "u", "target", "destination", "redirect", "redirect_url"):
+        values = query.get(key) or []
+        for value in values:
+            decoded = urllib.parse.unquote(str(value))
+            if decoded.startswith(("http://", "https://")):
+                return canonicalise_url(decoded)
+    return canonicalise_url(absolute)
+
+
+def aggregator_outbound_links(source: dict[str, Any]) -> list[str]:
+    try:
+        final_url, raw_html = fetch_html(source["url"])
+    except Exception as exc:
+        log.warning("Aggregator page failed for %s: %s", source["name"], exc)
+        return []
+
+    aggregator_domain = domain_of(final_url)
+    links: list[str] = []
+    seen: set[str] = set()
+    soup = BeautifulSoup(raw_html, "lxml")
+    max_links = max(1, int(source.get("max_links") or 30))
+
+    for anchor in soup.find_all("a", href=True):
+        url = _embedded_external_url(str(anchor.get("href") or ""), final_url)
+        domain = domain_of(url)
+        if (
+            not url.startswith(("http://", "https://"))
+            or not domain
+            or domain == aggregator_domain
+            or domain in {"facebook.com", "x.com", "twitter.com", "instagram.com"}
+            or source_is_denied("", url)
+            or url in seen
+        ):
+            continue
+        seen.add(url)
+        links.append(url)
+        if len(links) >= max_links:
+            break
+
+    return links
+
+
+def _publisher_name_for_url(url: str) -> str:
+    domain = domain_of(url)
+    stem = domain.split(".")[0].replace("-", " ").strip()
+    return stem.title() if stem else domain
+
+
+def collect_aggregator_candidates() -> list[Candidate]:
+    """Use NewsNow/Ground News only to discover original publisher pages."""
+    jobs: list[tuple[dict[str, Any], str]] = []
+    for aggregator in AGGREGATOR_PAGES:
+        log.info("Discovering outbound publisher links: %s", aggregator["name"])
+        for url in aggregator_outbound_links(aggregator):
+            source = {
+                "name": _publisher_name_for_url(url),
+                "url": url,
+                "default_area": aggregator.get("default_area", "rochdale"),
+                "default_category": aggregator.get("default_category", "news"),
+                "trusted_local": False,
+            }
+            jobs.append((source, url))
+
+    candidates: list[Candidate] = []
+    with ThreadPoolExecutor(max_workers=max(1, DISCOVERY_WORKERS)) as executor:
+        future_map = {
+            executor.submit(_discovery_candidate, source, url): url
+            for source, url in jobs
+        }
+        for future in as_completed(future_map):
+            try:
+                candidate = future.result()
+            except Exception as exc:
+                log.debug(
+                    "Aggregator outbound worker failed for %s: %s",
+                    future_map[future],
+                    exc,
+                )
+                continue
+            if candidate:
+                candidate.source_kind = "aggregator_discovered_article"
+                candidates.append(candidate)
+
+    return candidates
+
 
 def collect_live_page_candidates() -> list[Candidate]:
     candidates: list[Candidate] = []
@@ -1254,42 +1714,66 @@ def collect_live_page_candidates() -> list[Candidate]:
         soup = BeautifulSoup(raw_html, "lxml")
         blocks: list[str] = []
         seen_blocks: set[str] = set()
+        trusted_local = bool(source.get("trusted_local"))
+        max_blocks = max(1, int(source.get("max_blocks") or 12))
 
-        for node in soup.select(
-            "article, li, section, .alert, .travel-alert, .service-update, main p"
-        ):
-            text = normalise_ws(node.get_text(" ", strip=True))
-            if len(text) < 45:
-                continue
-            if not is_local(text, source["name"], final_url):
-                continue
-            key = text.lower()[:240]
-            if key in seen_blocks:
-                continue
-            seen_blocks.add(key)
-            blocks.append(text)
-            if len(blocks) >= 12:
-                break
+        if source.get("whole_page"):
+            main_node = soup.select_one("main") or soup.body or soup
+            whole_text = normalise_ws(main_node.get_text(" ", strip=True))
+            if len(whole_text) >= 45:
+                blocks.append(whole_text[:5000])
+        else:
+            for node in soup.select(
+                "article, li, section, .alert, .travel-alert, "
+                ".service-update, main p"
+            ):
+                block_text = normalise_ws(node.get_text(" ", strip=True))
+                if len(block_text) < 45:
+                    continue
+                if not source_text_is_local(
+                    block_text,
+                    source["name"],
+                    final_url,
+                    trusted_local,
+                ):
+                    continue
+                key = block_text.lower()[:240]
+                if key in seen_blocks:
+                    continue
+                seen_blocks.add(key)
+                blocks.append(block_text)
+                if len(blocks) >= max_blocks:
+                    break
 
-        for index, block in enumerate(blocks):
-            area = detect_area(
+        for block in blocks[:max_blocks]:
+            if not source_text_is_local(
+                block,
+                source["name"],
+                final_url,
+                trusted_local,
+            ):
+                continue
+            area = source_text_area(
                 block,
                 source["default_area"],
                 source["name"],
                 final_url,
+                trusted_local,
             )
             if not area:
                 continue
 
-            short = block[:145].rsplit(" ", 1)[0]
+            short = normalise_ws(str(source.get("title") or ""))
+            if not short:
+                short = block[:145].rsplit(" ", 1)[0]
             candidates.append(Candidate(
                 source_name=source["name"],
                 source_url=f"{canonicalise_url(final_url)}#live-{stable_id(block)}",
-                source_title=short,
+                source_title=short[:160],
                 source_summary=block[:1000],
                 source_published_at=iso_utc(utc_now()),
                 area=area,
-                category=source["category"],
+                category=live_category(block, source["category"]),
                 source_body_excerpt=block[:3500],
                 source_kind="live",
             ))
@@ -1507,7 +1991,12 @@ def collect_facebook_event_discovery_candidates() -> list[Candidate]:
         combined = f"{title} {visible_text}"
         # The supplied location filter is Rochdale, but retaining local validation
         # prevents unrelated promoted events from being auto-published.
-        if not is_local(combined, "Facebook Rochdale Events", event_url):
+        if not source_text_is_local(
+            combined,
+            "Facebook Events — Rochdale discovery",
+            event_url,
+            True,
+        ):
             continue
 
         event_start = extract_future_event_date(visible_text)
@@ -1687,13 +2176,27 @@ def collect_x_social_records() -> list[dict[str, Any]]:
             created = parse_datetime(post.get("created_at"))
             if not post_id or not text or not is_fresh(created):
                 continue
-            if not is_local(text, "X public post"):
-                continue
 
             user = users.get(str(post.get("author_id") or ""), {})
             username = str(user.get("username") or "").lstrip("@")
             username_lower = username.lower()
             official = username_lower in OFFICIAL_X_HANDLES
+            trusted_local_handle = username_lower == "gmprochdale"
+            post_url = (
+                f"https://x.com/{username}/status/{post_id}"
+                if username else f"https://x.com/i/web/status/{post_id}"
+            )
+            source_name = (
+                OFFICIAL_X_HANDLES.get(username_lower)
+                if official else "X public post"
+            )
+            if not source_text_is_local(
+                text,
+                str(source_name or ""),
+                post_url,
+                trusted_local_handle,
+            ):
+                continue
 
             referenced = post.get("referenced_tweets") or []
             is_reply = any(
@@ -1721,12 +2224,11 @@ def collect_x_social_records() -> list[dict[str, Any]]:
                     OFFICIAL_X_HANDLES.get(username_lower)
                     if official else "Public X discussion"
                 ),
+                "trusted_local": trusted_local_handle,
+                "publish_as_source": official,
                 "text": text,
                 "created_at": iso_utc(created),
-                "url": (
-                    f"https://x.com/{username}/status/{post_id}"
-                    if username else f"https://x.com/i/web/status/{post_id}"
-                ),
+                "url": post_url,
                 "parent_url": "",
                 "parent_text": "",
                 "conversation_id": str(post.get("conversation_id") or ""),
@@ -1794,7 +2296,16 @@ def collect_facebook_social_records() -> list[dict[str, Any]]:
             permalink = canonicalise_url(str(post.get("permalink_url") or ""))
             if not post_id or not message or not is_fresh(created):
                 continue
-            if should_drop(message, permalink) or not is_local(message, page["name"], permalink):
+            trusted_local = bool(page.get("trusted_local"))
+            if (
+                should_drop(message, permalink)
+                or not source_text_is_local(
+                    message,
+                    page["name"],
+                    permalink,
+                    trusted_local,
+                )
+            ):
                 continue
 
             records.append({
@@ -1802,6 +2313,10 @@ def collect_facebook_social_records() -> list[dict[str, Any]]:
                 "platform": "facebook",
                 "kind": "official_post",
                 "official": bool(page.get("official", True)),
+                "publish_as_source": bool(
+                    page.get("publish_as_source", page.get("official", True))
+                ),
+                "trusted_local": trusted_local,
                 "source_name": page["name"],
                 "text": message,
                 "created_at": iso_utc(created),
@@ -1888,7 +2403,10 @@ def official_social_records_to_candidates(
 ) -> list[Candidate]:
     candidates: list[Candidate] = []
     for record in records:
-        if not record.get("official"):
+        if not (
+            record.get("official")
+            or record.get("publish_as_source")
+        ):
             continue
         text = sanitise_social_text(record.get("text", ""))
         created = parse_datetime(record.get("created_at"))
@@ -1905,11 +2423,12 @@ def official_social_records_to_candidates(
             source_title=title[:160],
             source_summary=text[:1000],
             source_published_at=iso_utc(created),
-            area=detect_area(
+            area=source_text_area(
                 text,
                 "rochdale",
                 str(record.get("source_name") or ""),
                 url,
+                bool(record.get("trusted_local")),
             ),
             category=categorise(text),
             image_candidate_url=str(record.get("image") or ""),
@@ -2167,7 +2686,7 @@ def recent_existing_articles() -> list[dict[str, Any]]:
             or (source_kind == "event" and event_is_current_or_future(event_start))
             or (source_kind == "live" and is_current_uk_day(published))
         )
-        if keep and article_is_local(article):
+        if keep and article_passes_locality(article):
             article["title"] = strip_markdown(article.get("title"))
             article["excerpt"] = strip_markdown(article.get("excerpt"))
             kept.append(article)
@@ -2478,7 +2997,14 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         draft.get("community_reaction", "")
     )[:500]
     social_context_used = bool(draft.get("social_context_used"))
-    category = str(draft.get("category") or candidate.category)
+    draft_category = str(draft.get("category") or "")
+    if (
+        candidate.category in CATEGORY_STOCK_IMAGES
+        and candidate.category != "news"
+    ):
+        category = candidate.category
+    else:
+        category = draft_category or candidate.category
     area = str(draft.get("area") or candidate.area)
     if category not in CATEGORY_STOCK_IMAGES:
         category = candidate.category if candidate.category in CATEGORY_STOCK_IMAGES else "news"
@@ -2637,6 +3163,12 @@ def main() -> int:
         "website_discovery": safe_collect(
             "website_discovery",
             collect_discovery_candidates,
+            collector_counts,
+            collector_errors,
+        ),
+        "aggregator_discovery": safe_collect(
+            "aggregator_discovery",
+            collect_aggregator_candidates,
             collector_counts,
             collector_errors,
         ),
@@ -2814,7 +3346,7 @@ def main() -> int:
         source_kind = str(article.get("source_kind") or "article")
         event_start = parse_datetime(article.get("event_start_at"))
 
-        if not article_is_local(article):
+        if not article_passes_locality(article):
             log.warning(
                 "Rejected non-local article after rewrite: %s",
                 article.get("title"),
