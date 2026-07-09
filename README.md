@@ -1,60 +1,70 @@
-# Rochdale Daily pipeline repair
+[README.md](https://github.com/user-attachments/files/29856667/README.md)
+# Rochdale Daily autonomous news pipeline
 
-This package replaces the broken live-feed pipeline.
+Rochdale Daily runs from GitHub Actions and publishes current local stories into `articles.json`, then generates static article pages and the sitemap.
 
-## Replace these repository files
+## Active flow
 
-- `index.html`
+```text
+.github/workflows/scrape.yml
+    -> scraper/scraper.py
+        -> scraper/search_queries.py
+        -> scraper/locality_rules.py
+        -> scraper/selection_policy.py
+        -> scraper/story_identity.py
+        -> scraper/rewrite_safety.py
+    -> articles.json
+    -> scraper/generate_pages.py
+    -> articles/*.html and sitemap.xml
+```
+
+## Crime, police and court stories
+
+Crime items do not use an approval queue. When a candidate passes the ordinary source, date, locality, duplicate and content checks, it is published automatically.
+
+OpenAI remains the preferred rewriting route. If OpenAI is unavailable, errors, or returns `publishable: false`, the scraper creates an attributed fallback article instead of silently dropping a valid crime candidate.
+
+Every published crime article is written with:
+
+```json
+{
+  "category": "crime",
+  "police_matter": true,
+  "requires_approval": false,
+  "status": "published"
+}
+```
+
+The only retained identity protection is for protected children and sexual-offence complainants. This is not an approval queue and does not prevent ordinary crime stories from publishing.
+
+## Source policy
+
+Roch Valley Radio remains an allowed local source. Rochdale Times and Rochdale Online remain blocked.
+
+The scraper respects `robots.txt`. Sources that cannot be fetched directly may still be discovered through permitted RSS feeds, indexed search results or authorised APIs.
+
+## `review_queue.json`
+
+`review_queue.json` is legacy output and is not read or written by the current pipeline. It can be deleted from the repository after any old material you need has been archived.
+
+## Installation
+
+Replace these two active files:
+
 - `scraper/scraper.py`
 - `.github/workflows/scrape.yml`
-- `requirements.txt`
-- `articles.json`
-- `review_queue.json`
 
-Upload the complete `assets/img/` directory as well.
+Replace `README.md` with this file so the repository documentation matches the live behaviour. Delete the old `review_queue.json` to remove the misleading legacy queue.
 
-The original September 2025 feed is preserved as
-`articles-archive-2025.json` for reference only. Do not use that archive as the
-live `articles.json`.
+Commit the changes to `main`, then run:
 
-## What happens after upload
+**Actions -> Rochdale Daily 15-minute scraper -> Run workflow**
 
-1. Commit all files to `main`.
-2. Confirm the repository secret `OPENAI_API_KEY` exists.
-3. Open Actions > Rochdale Daily hourly scraper > Run workflow.
-4. The scraper reads current RSS and discovery pages.
-5. It rejects undated, stale, non-local and promotional material.
-6. OpenAI returns strict JSON, not Markdown.
-7. Low-risk stories go into `articles.json`.
-8. Crime, court, allegation, death, child-safeguarding and similar stories go
-   into `review_queue.json` and are not shown automatically.
-9. The website checks `articles.json` every five minutes.
+After the run, inspect `scraper_status.json`. It now records:
 
-## Images
+- `crime_auto_publish_enabled`
+- `crime_review_queue_enabled`
+- `selected_by_category`
+- `published_by_category`
 
-The scraper looks for:
-
-- RSS `media:content`
-- RSS thumbnails or image enclosures
-- Open Graph images
-- Twitter card images
-- JSON-LD `NewsArticle.image`
-
-Commercial publisher images are not automatically republished. The workflow
-sets an explicit allow-list for official-source domains. Confirm the reuse
-terms for every allowed domain. Remove a domain from
-`IMAGE_REUSE_SOURCE_DOMAINS` if permission is uncertain.
-
-Unapproved or missing images use original Rochdale Daily category SVGs from
-`assets/img/`.
-
-## Important editorial controls
-
-Automated rewriting is not a substitute for a media lawyer or editor. The
-pipeline deliberately queues sensitive stories. Review facts, reporting
-restrictions, anonymity, copyright, attribution and right-to-reply before
-moving any queued story into the public feed.
-
-Facebook groups are not scraped by the replacement. Group posts should be
-treated as tips and independently verified before publication.
-
+A successful run should show at least one published crime article whenever eligible crime candidates were selected.
