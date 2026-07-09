@@ -148,6 +148,8 @@ def write_sitemap(slugs_with_dates: list[tuple[str, str]]) -> None:
     SITEMAP_PATH.write_text(xml, encoding='utf-8')
 
 def main() -> None:
+    from frontpage_pipeline import main as build_frontpage
+    build_frontpage()
     articles = load_articles()
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     written = 0

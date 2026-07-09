@@ -654,3 +654,26 @@
       .cookie-actions { width: 100%; }
       .cookie-actions button { flex: 1; }
     }
+
+/* ROCHDALE_ONGOING_STORY_STYLES */
+.ongoing-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 0 0 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--red);
+  background: var(--red);
+  color: #fff;
+  font-family: "Roboto Condensed", Roboto, Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .055em;
+  line-height: 1;
+}
+.ongoing-label {
+  padding: 12px 14px;
+  border-left: 5px solid var(--red);
+  background: #f6f6f6;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+}

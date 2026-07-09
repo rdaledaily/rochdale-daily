@@ -1192,7 +1192,7 @@
 
     let stories = [];
 
-    const ARTICLE_FEED_SOURCES = ["/api/articles", "articles.json"];
+    const ARTICLE_FEED_SOURCES = ["/api/frontpage", "articles/frontpage.json", "/api/articles", "articles.json"];
     const ARTICLE_REFRESH_MS = 60 * 1000;
 
     function ukDateKey(value) {
@@ -1210,6 +1210,13 @@
 
     function isCurrentUKDay(value) {
       return Boolean(value) && ukDateKey(value) === ukDateKey(new Date());
+    }
+
+    function isRecentArticle(value, maxDays = 14) {
+      const timestamp = new Date(value || "").getTime();
+      if (!Number.isFinite(timestamp)) return false;
+      const age = Date.now() - timestamp;
+      return age >= 0 && age <= maxDays * 24 * 60 * 60 * 1000;
     }
 
     function isCurrentOrFutureEvent(article) {
@@ -1313,6 +1320,9 @@
         timeLabel: formatArticleTime(publishedAt),
         byline: stripMarkdownText(article.byline || article.author || "Rochdale Daily Newsdesk"),
         demo: false,
+        isOngoing: Boolean(article.is_ongoing),
+        ongoingLabel: stripMarkdownText(article.ongoing_label || (article.is_ongoing ? "ONGOING" : "")),
+        updateCount: Number(article.update_count) || 1,
         policeMatter: Boolean(article.policeMatter || article.police_matter || category === "crime"),
         body: body.length ? body : ["Further verified details will be added by the Rochdale Daily newsdesk."],
         slot: article.slot || "",
@@ -1361,6 +1371,9 @@
     function orderArticles(items) {
       const slotOrder = { lead: 0, "secondary-1": 1, "secondary-2": 2 };
       return items.slice().sort((a, b) => {
+        const aRank = Number.isFinite(Number(a.frontpage_rank)) ? Number(a.frontpage_rank) : 9999;
+        const bRank = Number.isFinite(Number(b.frontpage_rank)) ? Number(b.frontpage_rank) : 9999;
+        if (aRank !== bRank) return aRank - bRank;
         const aSlot = Object.prototype.hasOwnProperty.call(slotOrder, a.slot) ? slotOrder[a.slot] : 99;
         const bSlot = Object.prototype.hasOwnProperty.call(slotOrder, b.slot) ? slotOrder[b.slot] : 99;
         if (aSlot !== bSlot) return aSlot - bSlot;
@@ -1447,13 +1460,16 @@
           const response = await fetch(feedUrl, { cache: "no-store", headers: { Accept: "application/json" } });
           if (!response.ok) continue;
           const payload = await response.json();
-          const incoming = Array.isArray(payload) ? payload : payload.articles;
-          if (!Array.isArray(incoming)) continue;
+          const incomingArticles = Array.isArray(payload) ? payload : payload.articles;
+          const incomingEvents = !Array.isArray(payload) && Array.isArray(payload.events) ? payload.events : [];
+          if (!Array.isArray(incomingArticles)) continue;
+          const incoming = [...incomingArticles, ...incomingEvents];
 
           stories = orderArticles(
             dedupeFeedArticles(incoming)
               .filter(article => !article.status || article.status === "published")
               .filter(article => !isCareerOrVacancyPost(article))
+              .filter(article => !isRejectedOnlineEvent(article))
               .filter(articleHasLocalEvidence)
               .filter(article => {
                 const name = String(article.source_name || "").toLowerCase();
@@ -1466,8 +1482,8 @@
                 ) {
                   return false;
                 }
-                return isCurrentUKDay(article.published_at || article.updated_at)
-                  || isCurrentOrFutureEvent(article);
+                return isCurrentOrFutureEvent(article)
+                  || isRecentArticle(article.published_at || article.updated_at, 14);
               })
               .map(normaliseArticle)
           );
@@ -1581,6 +1597,7 @@
       leadElement.dataset.contentSlot = "lead";
       leadElement.innerHTML = storyButton(lead, `
         ${imageMarkup(lead)}
+        ${lead.isOngoing ? '<span class="ongoing-badge">ONGOING</span>' : ''}
         <span class="story-kicker">${lead.kicker}</span>
         <h2 class="lead-headline">${lead.title}</h2>
         <p class="story-summary">${lead.summary}</p>
@@ -1591,6 +1608,7 @@
         <article class="secondary-story" data-content-slot="secondary-${index + 1}">
           ${storyButton(story, `
             ${imageMarkup(story)}
+            ${story.isOngoing ? '<span class="ongoing-badge">ONGOING</span>' : ''}
             <span class="story-kicker black">${story.kicker}</span>
             <h2 class="secondary-headline">${story.title}</h2>
             <div class="story-meta">${story.timeLabel}</div>
@@ -1746,6 +1764,26 @@
       return patterns.some(pattern => pattern.test(text));
     }
 
+    function isRejectedOnlineEvent(article) {
+      const category = String(article.category || "").toLowerCase();
+      const sourceKind = String(article.source_kind || "").toLowerCase();
+      if (category !== "events" && sourceKind !== "event") return false;
+      const text = [
+        article.title, article.excerpt, article.summary, article.content_html,
+        article.event_location, article.source_url
+      ].filter(Boolean).join(" ").toLowerCase();
+      const isOnline = /\b(online|virtual|webinar|zoom|microsoft teams|google meet|livestream|live stream|remote event|digital event)\b/i.test(text);
+      const sourceHost = (() => {
+        try { return new URL(String(article.source_url || ""), location.origin).hostname.replace(/^www\./, ""); }
+        catch { return ""; }
+      })();
+      const locationText = String(article.event_location || "").trim();
+      return isOnline
+        || sourceHost !== "whatsoccurrinevents.co.uk"
+        || !locationText
+        || !/(rochdale|littleborough|heywood|middleton|milnrow|newhey|wardle|norden|castleton|kirkholt|spotland|falinge|deeplish|bamford|smallbridge|firgrove|whitworth|shawclough|healey|hopwood|balderstone|\bOL\d{1,2}\s*\d[A-Z]{2}\b)/i.test(locationText);
+    }
+
     function articleHasLocalEvidence(article) {
       const sourceName = String(article.source_name || article.sourceName || "").toLowerCase();
       const sourceUrl = String(article.source_url || article.sourceUrl || "").toLowerCase();
@@ -1782,11 +1820,11 @@
     }
 
     function renderNewsGrid() {
-      const leadId = stories[0] ? stories[0].id : null;
+      const featuredIds = new Set(stories.slice(0, 9).map(story => story.id));
       const MAX_EVENTS_IN_MIXED_GRID = 4;
       let eventsShown = 0;
       const list = filteredStories().filter(story => {
-        if (story.id === leadId) return false;
+        if (featuredIds.has(story.id)) return false;
         // Events remain "current" in the feed until their date passes,
         // unlike daily news which expires each day, so without a cap they
         // gradually crowd out other categories in the mixed "all" view.
@@ -1805,6 +1843,7 @@
         <article class="news-card" data-content-slot="grid-${index + 1}" data-category="${story.category}" data-area="${story.area}">
           ${storyButton(story, `
             ${imageMarkup(story)}
+            ${story.isOngoing ? '<span class="ongoing-badge">ONGOING</span>' : ''}
             <span class="story-kicker">${story.kicker}</span>
             <h3 class="card-headline">${story.title}</h3>
             <p class="card-summary">${story.summary}</p>
@@ -1964,6 +2003,7 @@
           <div class="ad-slot ad-slot-leaderboard" role="presentation" aria-hidden="true"></div>
           <div class="article-layout">
             <div class="article-main">
+              ${story.isOngoing ? `<span class="ongoing-badge">ONGOING · ${story.updateCount} UPDATES</span>` : ''}
               <span class="story-kicker">${story.kicker}</span>
               <h1 id="modal-title">${story.title}</h1>
               <p class="article-standfirst">${story.summary}</p>
