@@ -6,18 +6,19 @@ The pipeline:
 - checks public RSS feeds, public news pages, selected local organisations,
   social accounts, live service pages and Google News RSS searches every run;
 - searches the borough, townships, wards and named neighbourhoods;
-- keeps the original source date and rejects stale or undated material;
+- keeps the original source date and rejects stale, undated and non-local material;
 - cross-references similar reports before asking OpenAI for an original article;
-- automatically anonymises crime, court, safeguarding and allegation stories;
-- removes names of suspects/defendants, exact residential addresses, postcodes,
-  victim-identifying information and details that may prejudice proceedings;
-- publishes suitable sensitive stories instead of placing them in a review queue;
-- adds a legal/editorial note and a standing right-to-reply invitation;
+- publishes crime, police and court material automatically when it passes the same
+  source, date, locality, duplication and minimum-content checks as other stories;
+- falls back to an attributed source-led brief when an AI rewrite is unavailable,
+  invalid or declined, so crime candidates are not silently discarded;
+- protects identities that must not be exposed, including children and sexual-
+  offence complainants, without putting ordinary crime reports into an approval queue;
+- adds a standing correction and right-to-reply invitation;
 - uses locally stored category artwork by default, avoiding unlicensed image reuse.
 
-This is a technical risk-control system, not a substitute for qualified media-law
-advice. A disclaimer cannot make unlawful content lawful, so items that remain
-unsafe or too thin after redaction are skipped rather than published.
+The pipeline does not use a crime review queue. All published facts remain attributed
+and must come from the cited source records.
 """
 
 from __future__ import annotations
@@ -60,7 +61,7 @@ LOG_FILE = ROOT / "scraper" / "scraper.log"
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 AI_REWRITE_REQUIRED = os.getenv(
-    "AI_REWRITE_REQUIRED", "true"
+    "AI_REWRITE_REQUIRED", "false"
 ).lower() not in {"0", "false", "no", "off"}
 MAX_NEWS_AGE_HOURS = max(168, int(os.getenv("MAX_NEWS_AGE_HOURS", "168")))
 RETENTION_DAYS = max(14, int(os.getenv("ARTICLE_RETENTION_DAYS", "14")))
@@ -592,10 +593,12 @@ CATEGORY_KEYWORDS = {
 
 CHILD_MENTION_PATTERN = r"\b(child|children|minor|youth|under[- ]?18|schoolgirl|schoolboy)\b"
 
+# These are identity-protection triggers, not crime-publication blockers.
+# Ordinary arrests, charges, court reports, police appeals and convictions are not
+# automatically marked sensitive merely because they are crime stories.
 SENSITIVE_PATTERNS = [
-    r"\b(alleged|allegedly|accused|suspect|suspected|charged|arrested|court|trial|jury|inquest|coroner)\b",
-    r"\b(murder|manslaughter|rape|sexual|assault|abuse|grooming|stabbing|death|died|killed)\b",
-    r"\b(suicide|self-harm|domestic abuse|domestic violence)\b",
+    r"\b(rape|sexual assault|sexual offence|sexual abuse)\b",
+    r"\b(child sexual abuse|child grooming|child victim|minor victim)\b",
 ]
 
 # Safeguarding/crime terms that make a bare mention of a child genuinely
@@ -1103,15 +1106,14 @@ def should_drop(text: str, url: str = "") -> bool:
     )
 
 def is_sensitive(text: str, category: str) -> bool:
-    if category == "crime":
-        return True
+    """Return True only where protected identities may be exposed.
+
+    Crime, police, court, arrest, charge and conviction stories are not routed to
+    approval or rejected merely because of their category. This flag is retained
+    only for child-safeguarding and sexual-offence identity protection.
+    """
     if any(re.search(pattern, text, flags=re.IGNORECASE) for pattern in SENSITIVE_PATTERNS):
         return True
-    # A bare mention of a child/minor is only sensitive alongside genuine
-    # safeguarding or crime context (e.g. "arrested", "abuse", "missing").
-    # Without that, an ordinary story that happens to mention children --
-    # a SEND award, a new school, a children's health campaign -- must not
-    # be misclassified as sensitive and sent through name anonymisation.
     if re.search(CHILD_MENTION_PATTERN, text, flags=re.IGNORECASE) and re.search(
         SAFEGUARDING_CONTEXT_PATTERN, text, flags=re.IGNORECASE
     ):
@@ -2488,7 +2490,6 @@ def correlate_social_context(
                     continue
             elif (
                 not sensitive
-                and candidate.category != "crime"
                 and record.get("kind") in {"public_comment", "reply", "post"}
             ):
                 participant = str(record.get("participant_hash") or "")
@@ -2771,9 +2772,8 @@ def default_legal_disclaimer(sensitive: bool) -> str:
         return (
             "This report is based on information published by identified public sources. "
             "No finding of guilt should be inferred from an arrest, allegation or charge. "
-            "Anyone accused of an offence is presumed innocent unless and until convicted. "
-            "Rochdale Daily does not publish suspected offenders' names or exact residential addresses "
-            "in automatically produced reports, and the article may be updated as verified information changes."
+            "Anyone accused of an offence is presumed innocent unless and until convicted, "
+            "and the article may be updated as verified information changes."
         )
     return (
         "This article was compiled from identified public sources and may be updated when further verified "
@@ -2839,6 +2839,60 @@ def source_led_draft(candidate: Candidate, sensitive: bool) -> dict[str, Any] | 
     }
 
 
+def crime_autopublish_draft(candidate: Candidate) -> dict[str, Any]:
+    """Create an original attributed brief when a crime rewrite cannot be used.
+
+    This deliberately avoids copying the source body. It ensures that an otherwise
+    valid crime candidate is represented in the public feed rather than silently
+    disappearing because an AI call failed or returned publishable=false.
+    """
+    area_label = (candidate.area or "rochdale").replace("_", " ").title()
+    published = parse_datetime(candidate.source_published_at)
+    date_label = (
+        published.astimezone(UK_TZ).strftime("%d %B %Y at %H:%M")
+        if published else "the date shown by the source"
+    )
+    cited_title = strip_markdown(candidate.source_title)[:220]
+    title = f"{area_label} crime update: {cited_title}"[:160]
+    excerpt = (
+        f"{candidate.source_name} has published a crime, police or court update "
+        f"connected to {area_label}. Rochdale Daily is carrying an attributed brief "
+        "and linking readers to the original source for the full confirmed details."
+    )
+    paragraphs = [
+        (
+            f"{candidate.source_name} published an update connected to {area_label}. "
+            f"The source item is titled ‘{cited_title}’."
+        ),
+        (
+            f"The source recorded the update on {date_label}. This automated brief "
+            "does not add allegations, conclusions or details that are absent from "
+            "the cited material."
+        ),
+        (
+            "The original source link is included with this article. Rochdale Daily "
+            "will update the report if the source issues a correction or materially "
+            "new confirmed information."
+        ),
+    ]
+    return {
+        "publishable": True,
+        "title": title,
+        "excerpt": excerpt,
+        "paragraphs": paragraphs,
+        "category": "crime",
+        "area": candidate.area or "rochdale",
+        "legal_disclaimer": "This report is based on the cited public source and may be updated.",
+        "right_to_reply": (
+            f"Anyone directly affected may request a correction or right of reply "
+            f"by emailing {RIGHT_TO_REPLY_EMAIL}."
+        ),
+        "community_reaction": "",
+        "social_context_used": False,
+        "reason": "Automatic attributed crime fallback used.",
+    }
+
+
 def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, Any] | None:
     if is_job_or_career_post(candidate):
         log.info("Rejected careers/vacancy post: %s", candidate.source_url)
@@ -2868,14 +2922,15 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     sensitive = is_sensitive(source_text, candidate.category)
 
     if client is None:
-        if AI_REWRITE_REQUIRED:
-            log.error(
-                "OpenAI rewrite required but OPENAI_API_KEY is unavailable; "
-                "skipping %s",
-                candidate.source_url,
-            )
-            return None
-        draft = source_led_draft(candidate, sensitive)
+        log.warning(
+            "OpenAI unavailable; using an attributed fallback for %s",
+            candidate.source_url,
+        )
+        draft = (
+            crime_autopublish_draft(candidate)
+            if candidate.category == "crime"
+            else source_led_draft(candidate, sensitive)
+        )
         if draft is None:
             return None
     else:
@@ -2885,13 +2940,13 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             "details where sources agree, but never invent facts, dates, quotations, prices, statistics, "
             "organisations, contact details or local impact. Do not claim the article is fact-checked. "
             "Do not output Markdown, HTML, hashtags or links. Use neutral UK English and short paragraphs. "
-            "For crime, court, safeguarding, deaths, allegations or active investigations: omit every "
-            "suspect, defendant, victim, witness and private individual's name; omit house numbers, exact "
-            "residential addresses and postcodes; do not mention previous convictions; do not speculate "
-            "about guilt, motive or evidence; do not identify sexual-offence complainants or anyone under 18; "
-            "and use only confirmed basic facts, official public-safety advice and procedural status. "
-            "A legal disclaimer is not permission to publish unsafe facts. If safe anonymisation is impossible "
-            "or the source material is too thin or contradictory, set publishable to false. "
+            "Crime, police and court items are eligible for automatic publication and must not be "
+            "rejected merely because they concern an allegation, arrest, charge, investigation, court case, "
+            "conviction or sentence. Attribute allegations and procedural status precisely. Do not state or "
+            "imply guilt unless the supplied records state a conviction. Adult names may be retained when "
+            "they are explicitly published in the supplied source records. Never identify a sexual-offence "
+            "complainant or a protected child, and omit exact private residential addresses and postcodes. "
+            "When source material is brief, write a concise attributed update rather than refusing it. "
             "Never publish job adverts, vacancy notices, recruitment posts, careers content, ""apprenticeships, internships, hiring announcements or application invitations. ""Set publishable to false if the source is primarily employment promotion. ""Never infer a Rochdale location from a person's surname. Middleton, Healey, Wardle, "
             "Bamford, Norden, Hopwood, Birch, Summit and Syke may be names or ordinary words. "
             "Treat them as places only when the source explicitly uses geographical wording such as "
@@ -2901,9 +2956,10 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             "or organisation and agree with the primary records. Public comments and X replies are never "
             "evidence of what happened. Do not quote or identify commenters. Use public reaction only to "
             "summarise a recurring practical question, concern or experience supported by at least three "
-            "distinct participants. Do not use public comments at all for crime, court, safeguarding, death, "
-            "sexual-offence, child-related or other sensitive stories. The community_reaction field must be "
-            "empty when those conditions are not met."
+            "distinct participants. Public comments must never be used as evidence of guilt, identity, motive "
+            "or what occurred. Do not use public comments where a protected child or sexual-offence "
+            "complainant could be identified. The community_reaction field must be empty when those "
+            "conditions are not met."
         )
         user_message = json.dumps({
             "primary_source": candidate.source_name,
@@ -2954,25 +3010,27 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             )
             draft = json.loads(response.choices[0].message.content or "{}")
         except Exception as exc:
-            if AI_REWRITE_REQUIRED:
-                log.warning(
-                    "OpenAI rewrite failed; story skipped rather than using "
-                    "source-led copy for %s: %s",
-                    candidate.source_url,
-                    exc,
-                )
-                return None
             log.warning(
-                "OpenAI rewrite failed; using source-led brief for %s: %s",
+                "OpenAI rewrite failed; using attributed fallback for %s: %s",
                 candidate.source_url,
                 exc,
             )
-            draft = source_led_draft(candidate, sensitive)
+            draft = (
+                crime_autopublish_draft(candidate)
+                if candidate.category == "crime"
+                else source_led_draft(candidate, sensitive)
+            )
 
     if not draft or not bool(draft.get("publishable")):
-        if AI_REWRITE_REQUIRED:
-            return None
-        draft = source_led_draft(candidate, sensitive)
+        log.info(
+            "Rewrite declined or invalid; using attributed fallback for %s",
+            candidate.source_url,
+        )
+        draft = (
+            crime_autopublish_draft(candidate)
+            if candidate.category == "crime"
+            else source_led_draft(candidate, sensitive)
+        )
         if draft is None:
             return None
 
@@ -2988,11 +3046,26 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         [title, excerpt] + [str(paragraph) for paragraph in paragraphs]
     ))
     if excessive_source_overlap(generated_copy_for_overlap, source_text):
-        log.warning(
-            "Generated copy retained too much source wording; skipped: %s",
-            candidate.source_url,
-        )
-        return None
+        if candidate.category == "crime":
+            log.warning(
+                "Crime rewrite retained too much source wording; using original "
+                "attributed fallback instead: %s",
+                candidate.source_url,
+            )
+            draft = crime_autopublish_draft(candidate)
+            title = strip_markdown(draft.get("title"))[:160]
+            excerpt = strip_markdown(draft.get("excerpt"))[:360]
+            paragraphs = [
+                strip_markdown(item)
+                for item in draft.get("paragraphs", [])
+                if strip_markdown(item)
+            ][:8]
+        else:
+            log.warning(
+                "Generated copy retained too much source wording; skipped: %s",
+                candidate.source_url,
+            )
+            return None
     community_reaction = strip_markdown(
         draft.get("community_reaction", "")
     )[:500]
@@ -3110,6 +3183,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         ),
         "sensitive_story": sensitive,
         "police_matter": category == "crime",
+        "requires_approval": False,
         "legal_disclaimer": legal_disclaimer,
         "right_to_reply": right_to_reply,
         "byline": "Rochdale Daily Newsdesk",
@@ -3383,6 +3457,19 @@ def main() -> int:
             source_counts.get(candidate.source_name, 0) + 1
         )
 
+    published_by_category: dict[str, int] = {}
+    for article in published:
+        category_name = str(article.get("category") or "news")
+        published_by_category[category_name] = (
+            published_by_category.get(category_name, 0) + 1
+        )
+
+    selected_by_category: dict[str, int] = {}
+    for candidate in selected_candidates:
+        selected_by_category[candidate.category] = (
+            selected_by_category.get(candidate.category, 0) + 1
+        )
+
     write_json_atomic(STATUS_FILE, {
         "last_run_at": iso_utc(utc_now()),
         "raw_candidates_before_job_filter": len(raw_candidates_all),
@@ -3401,9 +3488,14 @@ def main() -> int:
             key=lambda item: item[1],
             reverse=True,
         )),
+        "selected_by_category": dict(sorted(selected_by_category.items())),
+        "published_by_category": dict(sorted(published_by_category.items())),
         "openai_enabled": bool(api_key),
         "ai_rewrite_required": AI_REWRITE_REQUIRED,
-        "source_led_fallback_enabled": not AI_REWRITE_REQUIRED,
+        "source_led_fallback_enabled": True,
+        "crime_auto_publish_enabled": True,
+        "crime_review_queue_enabled": False,
+        "protected_identity_filter_enabled": True,
         "source_overlap_guard_enabled": True,
         "same_day_only": SAME_DAY_ONLY,
         "prohibited_sources": [
