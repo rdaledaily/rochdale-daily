@@ -644,7 +644,7 @@
       .brand-logo { width: min(225px, 62vw); }
       .header-button.solid { padding: 9px 10px; font-size: 10px; }
       .menu-toggle { display: block; }
-      .nav-row { position: relative; }
+      .nav-row { position: relative; justify-content: center; }
       .nav-list {
         display: none; position: absolute; top: 50px; left: 0; right: 0; background: #111; flex-direction: column; overflow: visible; box-shadow: var(--shadow);
       }
@@ -1316,7 +1316,7 @@
         policeMatter: Boolean(article.policeMatter || article.police_matter || category === "crime"),
         body: body.length ? body : ["Further verified details will be added by the Rochdale Daily newsdesk."],
         slot: article.slot || "",
-        priority: Number(article.priority) || 0,
+        priority: category === "crime" ? 100 : (Number(article.priority) || 0),
         published_at: publishedAt,
         sourceUrl: article.source_url || "",
         sourceName: stripMarkdownText(article.source_name || ""),
@@ -1475,9 +1475,15 @@
           renderNewsGrid();
           renderEvents();
 
+          const crimeHeadlines = stories
+            .filter(story => story.category === "crime")
+            .slice(0, 5)
+            .map(story => story.title);
           const breakingMessage = !Array.isArray(payload) && payload.breaking
             ? payload.breaking
-            : (stories[0] ? stories[0].title : "Rochdale Daily · Independent local news, events and public information");
+            : crimeHeadlines.length
+              ? crimeHeadlines.join("     •     BREAKING     •     ")
+              : (stories[0] ? stories[0].title : "Rochdale Daily · Independent local news, events and public information");
           setBreakingTicker(stripMarkdownText(breakingMessage));
 
           if (status) {
@@ -1777,7 +1783,19 @@
 
     function renderNewsGrid() {
       const leadId = stories[0] ? stories[0].id : null;
-      const list = filteredStories().filter(story => story.id !== leadId);
+      const MAX_EVENTS_IN_MIXED_GRID = 4;
+      let eventsShown = 0;
+      const list = filteredStories().filter(story => {
+        if (story.id === leadId) return false;
+        // Events remain "current" in the feed until their date passes,
+        // unlike daily news which expires each day, so without a cap they
+        // gradually crowd out other categories in the mixed "all" view.
+        if (activeCategory === "all" && story.category === "events") {
+          eventsShown += 1;
+          return eventsShown <= MAX_EVENTS_IN_MIXED_GRID;
+        }
+        return true;
+      });
       const grid = document.getElementById("news-grid");
       if (!list.length) {
         grid.innerHTML = `<div style="grid-column:1/-1;border:1px solid #ccc;padding:24px"><h3 style="margin-top:0">No stories match these filters</h3><p>Choose another area or category, or select Show all.</p></div>`;
