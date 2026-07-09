@@ -183,6 +183,14 @@ CATEGORY_QUERIES = (
     ),
 )
 
+TRAFFIC_ALWAYS_ON_QUERIES = (
+    '(Rochdale OR Heywood OR Middleton OR Littleborough) ("road closure" OR collision OR crash)',
+    '(Rochdale OR Milnrow OR Newhey OR Littleborough) (M62 OR A627M OR "A627(M)") traffic',
+    '(Rochdale OR Heywood OR Middleton) (roadworks OR diversion OR congestion)',
+    'site:rochdale.gov.uk (Rochdale OR Heywood OR Middleton) ("road closure" OR "traffic order")',
+    'site:tfgm.com (Rochdale OR Heywood OR Middleton) (traffic OR disruption)',
+)
+
 WATCH_QUERIES = (
     '"robbery" "Healey" Rochdale',
     '"charity event" "Kirkholt"',
@@ -558,6 +566,15 @@ def build_search_query_specs(
                 label=f"official-gmp:{index}",
                 query=query,
                 category="crime",
+            )
+        )
+
+    for index, query in enumerate(TRAFFIC_ALWAYS_ON_QUERIES, start=1):
+        always_on.append(
+            SearchQuery(
+                label=f"always-traffic:{index}",
+                query=query,
+                category="traffic",
             )
         )
 

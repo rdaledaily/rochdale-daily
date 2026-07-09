@@ -7,6 +7,22 @@
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="description" content="Rochdale Daily: independent local news, events, sport, public information and community updates for Rochdale borough and nearby towns.">
   <title>Rochdale Daily | Independent local news</title>
+  <link rel="canonical" href="https://rochdaledaily.co.uk/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Rochdale Daily">
+  <meta property="og:title" content="Rochdale Daily | Independent local news">
+  <meta property="og:description" content="Independent news, traffic, crime, politics, community reporting and events for Rochdale borough.">
+  <meta property="og:url" content="https://rochdaledaily.co.uk/">
+  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rochdale Daily | Independent local news">
+  <meta name="twitter:description" content="Independent news and public-interest reporting for Rochdale borough.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"NewsMediaOrganization","@id":"https://rochdaledaily.co.uk/#publisher","name":"Rochdale Daily","url":"https://rochdaledaily.co.uk/","logo":{"@type":"ImageObject","url":"https://rochdaledaily.co.uk/assets/img/logo.png"},"areaServed":{"@type":"AdministrativeArea","name":"Rochdale borough"}},
+    {"@type":"WebSite","@id":"https://rochdaledaily.co.uk/#website","url":"https://rochdaledaily.co.uk/","name":"Rochdale Daily","publisher":{"@id":"https://rochdaledaily.co.uk/#publisher"},"inLanguage":"en-GB"}
+  ]}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -667,12 +683,29 @@
       .cookie-actions { width: 100%; }
       .cookie-actions button { flex: 1; }
     }
+    /* ROCHDALE_EDITORIAL_QUALITY_V2 */
+    .visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    .article-share{display:flex;align-items:center;gap:10px;margin:16px 0 22px}
+    .share-icon-button{width:44px;height:44px;display:inline-grid;place-items:center;border:1px solid #bdbdbd;border-radius:50%;background:#fff;color:#111;padding:10px}
+    .share-icon-button:hover{background:#111;color:#fff}
+    .share-icon-button svg{width:21px;height:21px;fill:currentColor;stroke:currentColor;stroke-width:1.5}
+    .article-sources{margin:24px 0 8px;font-size:14px;color:#555}
+    .article-sources summary{display:inline-block;cursor:pointer;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+    .article-sources ul{margin:10px 0 0;padding-left:20px}
+    .article-sources li{margin:5px 0}
+    .article-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;color:#666}
+    .article-breadcrumb a{color:inherit}
+    .comment-signup-box{margin:34px 0 18px;padding:22px;border:3px solid #111;border-top:8px solid #f5c400;background:#fff}
+    .comment-signup-box h3{margin:4px 0 8px;font-family:"Roboto Condensed",Arial,sans-serif;font-size:28px}
+    .comment-eyebrow{font-family:"Roboto Condensed",Arial,sans-serif;font-size:13px;font-weight:800;letter-spacing:.12em}
+    .comment-rules{color:#666;font-size:14px;margin-bottom:0}
+    .comments-section .fb-comments,.comments-section .fb-comments>span,.comments-section iframe{width:100%!important}
   </style>
 </head>
 <body>
   <div id="fb-root"></div>
   <script async defer crossorigin="anonymous"
-    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v19.0&appId=REPLACE_WITH_YOUR_FACEBOOK_APP_ID">
+    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v19.0">
   </script>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
@@ -1954,11 +1987,15 @@
       </div>`;
     }
 
-    function commentsSectionMarkup(articleUrl) {
-      return `<section class="comments-section">
-        <h3>Join the discussion</h3>
-        <div class="fb-comments" data-href="${articleUrl}" data-width="100%" data-numposts="10"></div>
-        <noscript><p class="comments-fallback">Enable JavaScript and Facebook to view and post comments, or discuss this story on our <a href="https://www.facebook.com/rochdaledaily" target="_blank" rel="noopener">Facebook page</a>.</p></noscript>
+function commentsSectionMarkup(articleUrl) {
+      return `<section class="comments-section" id="comments">
+        <div class="comment-signup-box">
+          <span class="comment-eyebrow">ROCHDALE VOICES</span>
+          <h3>Have your say</h3>
+          <p>Share your view on this story. Use the comments box below to sign in with Facebook or create an account when prompted.</p>
+          <p class="comment-rules">Keep discussion lawful, relevant and respectful. Do not identify protected victims, children or people whose identity is restricted by law.</p>
+        </div>
+        <div class="fb-comments" data-href="${articleUrl}" data-width="100%" data-numposts="15" data-order-by="reverse_time"></div>
       </section>`;
     }
 
@@ -1982,6 +2019,25 @@
       } finally {
         form.querySelector("button").disabled = false;
       }
+    }
+
+function shareIconMarkup(action, label) {
+      const icons = {
+        copy: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v11H8z"></path><path d="M5 16H3V3h13v2"></path></svg>`,
+        facebook: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v7h4v-7h3l1-4h-4V9c0-.7.3-1 1-1z"></path></svg>`,
+        whatsapp: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.8a8 8 0 0 1-11.8 7L4 20l1.2-4A8 8 0 1 1 20 11.8z"></path><path d="M9 8.5c.3 2.8 2 4.5 4.8 5l1-1.2 2 .9c-.5 1.7-1.6 2.4-3.2 2.1-3.7-.7-6-3-6.7-6.7-.3-1.6.4-2.7 2.1-3.2l.9 2-.9 1.1z"></path></svg>`
+      };
+      return `<button class="share-icon-button" type="button" data-share="${action}" aria-label="${label}">${icons[action]}<span class="visually-hidden">${label}</span></button>`;
+    }
+
+    function sourcesDisclosureMarkup(story) {
+      const urls = [];
+      if (story.sourceUrl) urls.push(story.sourceUrl);
+      (story.sourceUrls || []).forEach(url => {
+        if (url && !urls.includes(url)) urls.push(url);
+      });
+      if (!urls.length) return "";
+      return `<details class="article-sources"><summary>Sources</summary><ul>${urls.slice(0, 12).map((url, index) => `<li><a href="${url}" target="_blank" rel="nofollow noopener noreferrer">Open source ${index + 1}</a></li>`).join("")}</ul></details>`;
     }
 
     function openArticle(id) {
@@ -2008,10 +2064,8 @@
               <h1 id="modal-title">${story.title}</h1>
               <p class="article-standfirst">${story.summary}</p>
               <div class="article-byline">By ${story.byline} · Updated ${story.timeLabel} ${story.demo ? '· DEMONSTRATION CONTENT' : ''}</div>
-              <div class="article-share"><button type="button" data-share="copy">Copy link</button><button type="button" data-share="facebook">Facebook</button><button type="button" data-share="whatsapp">WhatsApp</button></div>
-              <div class="article-copy">${bodyParagraphs.join("")}${story.sourceUrls && story.sourceUrls.length
-                ? `<div class="article-source"><strong>Sources used:</strong><ul>${story.sourceUrls.map((url, index) => `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${(story.sourceNames && story.sourceNames[index]) || `Source ${index + 1}`}</a></li>`).join("")}</ul></div>`
-                : (story.sourceUrl ? `<p class="article-source"><strong>Source:</strong> <a href="${story.sourceUrl}" target="_blank" rel="noopener noreferrer">${story.sourceName || "Original report"}</a></p>` : "")}
+              <div class="article-share" aria-label="Share this article">${shareIconMarkup("copy", "Copy article link")}${shareIconMarkup("facebook", "Share on Facebook")}${shareIconMarkup("whatsapp", "Share on WhatsApp")}</div>
+              <div class="article-copy">${bodyParagraphs.join("")}${sourcesDisclosureMarkup(story)}
               <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
                 <h3 style="margin:0 0 8px">Legal and editorial note</h3>
                 <p>${story.legalDisclaimer || (story.sensitiveStory ? "No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted." : "This article was compiled from identified public sources and may be updated.")}</p>

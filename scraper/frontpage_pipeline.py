@@ -27,6 +27,12 @@ import dateparser
 import requests
 from bs4 import BeautifulSoup
 
+from editorial_upgrade import (
+    DEFAULT_CATEGORY_MINIMUMS,
+    article_word_count as editorial_word_count,
+    deterministic_category as editorial_category,
+    enforce_category_minimums,
+)
 from selection_policy import (
     PUBLISH_CATEGORIES,
     balanced_select,
@@ -116,11 +122,11 @@ def is_low_quality_article(article: dict[str, Any]) -> bool:
 CATEGORY_CAPS = {
     "crime": 6,
     "events": 4,
-    "traffic": 5,
+    "traffic": 6,
     "transport": 5,
     "politics": 5,
     "education": 5,
-    "sport": 5,
+    "sport": 4,
     "business": 5,
     "community": 5,
     "health": 5,
@@ -188,7 +194,26 @@ def article_text(article: dict[str, Any]) -> str:
 
 
 def article_category(article: dict[str, Any]) -> str:
-    return str(article.get("category") or "news").lower()
+    text = article_text(article)
+    if re.search(r"(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)", text, re.IGNORECASE):
+        return "community"
+    detected = editorial_category(text, str(article.get("category") or "news"))
+    if detected != "news":
+        return detected
+    if str(article.get("source_kind") or "").lower() == "event":
+        return "events"
+    return detected
+
+
+def apply_category_rules(article: dict[str, Any]) -> dict[str, Any]:
+    article = dict(article)
+    category = article_category(article)
+    article["category"] = category
+    article["types"] = [category]
+    if category == "crime":
+        article["police_matter"] = True
+    return article
+
 
 
 def is_event(article: dict[str, Any]) -> bool:
@@ -751,6 +776,10 @@ def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
         "events": 35,
         "news": 58,
     }.get(category, 50)
+    if editorial_word_count(article) >= 200 or is_event(article):
+        importance += 18
+    else:
+        importance -= 25
     if article.get("is_ongoing"):
         importance += 12
     importance += min(12, int(article.get("source_count") or 1) * 2)
@@ -850,6 +879,12 @@ def select_frontpage(articles: list[dict[str, Any]], now: datetime | None = None
     primary = [article for article in base if _age_eligible(article, primary_cutoff)]
     pool = primary if len(primary) >= FRONTPAGE_MIN else [article for article in base if _age_eligible(article, fallback_cutoff)]
     pool = sorted(pool, key=lambda item: _article_rank(item, reference), reverse=True)
+    longform_pool = [
+        item for item in pool
+        if is_event(item) or editorial_word_count(item) >= 200
+    ]
+    if len(longform_pool) >= FRONTPAGE_MIN:
+        pool = longform_pool
 
     balanced, diagnostics = balanced_select(
         pool,
@@ -857,7 +892,18 @@ def select_frontpage(articles: list[dict[str, Any]], now: datetime | None = None
         max_per_source=4,
         max_per_category=6,
     )
-    capped = _cap_selected(balanced + [item for item in pool if item not in balanced], min(FRONTPAGE_TARGET, len(pool)))
+    target = min(FRONTPAGE_TARGET, len(pool))
+    capped = _cap_selected(
+        balanced + [item for item in pool if item not in balanced],
+        target,
+    )
+    capped = enforce_category_minimums(
+        capped,
+        pool,
+        target,
+        category_key,
+        DEFAULT_CATEGORY_MINIMUMS,
+    )
     arranged = arrange_frontpage(capped, reference)
     diagnostics = dict(diagnostics)
     diagnostics.update({
@@ -899,10 +945,13 @@ def main() -> int:
     articles = [article for article in articles if not is_blocked_article(article, blocklist)]
     low_quality_before_processing = sum(1 for article in articles if is_low_quality_article(article))
     articles = [article for article in articles if not is_low_quality_article(article)]
+    articles = [apply_category_rules(article) for article in articles]
 
     events, event_error = collect_ticket_events()
     cleaned, event_diagnostics = clean_and_integrate_events(articles, events)
+    cleaned = [apply_category_rules(article) for article in cleaned]
     merged = merge_duplicate_articles(cleaned)
+    merged = [apply_category_rules(article) for article in merged]
     merged = _dedupe_by_url(merged)
     merged.sort(
         key=lambda article: parse_datetime(article.get("published_at")) or datetime.min.replace(tzinfo=timezone.utc),

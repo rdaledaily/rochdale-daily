@@ -187,7 +187,6 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
 
 
 def generic_sources_markup(article: dict[str, Any]) -> str:
-    """Render discreet attribution using generic linked source labels."""
     urls: list[str] = []
     primary = str(article.get("source_url") or "").strip()
     if primary:
@@ -196,17 +195,17 @@ def generic_sources_markup(article: dict[str, Any]) -> str:
         url = str(value or "").strip()
         if url and url not in urls:
             urls.append(url)
-
     urls = [url for url in urls if url.startswith(("https://", "http://"))]
     if not urls:
         return ""
-
-    links = []
-    for index, url in enumerate(urls[:4], start=1):
-        label = "Source" if len(urls) == 1 else f"Source {index}"
-        links.append(
-            f'<a href="{html.escape(url, quote=True)}" '
-            f'target="_blank" rel="nofollow noopener noreferrer">{label}</a>'
-        )
-
-    return '<p class="article-source"><small>' + " · ".join(links) + "</small></p>"
+    items = "".join(
+        f'<li><a href="{html.escape(url, quote=True)}" target="_blank" '
+        f'rel="nofollow noopener noreferrer">Open source {index}</a></li>'
+        for index, url in enumerate(urls[:12], start=1)
+    )
+    return (
+        '<details class="article-sources">'
+        '<summary>Sources</summary>'
+        f'<ul>{items}</ul>'
+        '</details>'
+    )

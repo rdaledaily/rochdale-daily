@@ -21,6 +21,14 @@ and must come from the cited source records.
 """
 from __future__ import annotations
 from source_presentation import clean_candidate_public_text, is_subtle_source, sanitise_article
+from editorial_upgrade import (
+    article_word_count as editorial_word_count,
+    compact_records as editorial_compact_records,
+    deterministic_category as editorial_category,
+    enrich_records as editorial_enrich_records,
+    quality_issues as editorial_quality_issues,
+    request_article as editorial_request_article,
+)
 import hashlib
 import io
 import html
@@ -145,7 +153,7 @@ SAFEGUARDING_CONTEXT_PATTERN = '\\b(alleged|allegedly|accused|suspect|suspected|
 DROP_PATTERNS = ['\\b(opinion|comment|column|editorial)\\b', '\\bfor sale\\b|\\bfor rent\\b|\\broom to let\\b', '\\brecommendations please\\b|\\bdoes anyone know\\b|\\bgetting rid of\\b']
 PLACEHOLDER_PATTERNS = ['\\[(?:insert|relevant|contact|date|number|details|link)[^\\]]*\\]', '\\babout this article\\b.*$', '\\brelated topics\\b.*$', '#rochdalenews|#greatermanchester', '\\bfact-checked local journalism\\b']
 CATEGORY_STOCK_IMAGES = {category: f'assets/img/stock_{category}.jpg' for category in ['news', 'crime', 'traffic', 'transport', 'politics', 'education', 'sport', 'events', 'business', 'community', 'health', 'environment']}
-ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 3, 'maxItems': 8}, 'category': {'type': 'string', 'enum': list(CATEGORY_STOCK_IMAGES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_context_used', 'reason']}}
+ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(CATEGORY_STOCK_IMAGES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_context_used', 'reason']}}
 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', handlers=[logging.FileHandler(LOG_FILE, encoding='utf-8'), logging.StreamHandler()])
 log = logging.getLogger('rochdale_daily')
@@ -1701,13 +1709,14 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'discovery_query_label': candidate.discovery_query_label,
         'searched_location_slug': candidate.searched_location_slug,
         'searched_location_name': candidate.searched_location_name,
-    }] + candidate.related_sources[:8]
+    }] + candidate.related_sources[:11]
+    source_records = enrich_source_records(source_records)
     source_records = compact_source_records(source_records)
     social_context = candidate.social_context[:SOCIAL_MAX_OFFICIAL_UPDATES + SOCIAL_MAX_PUBLIC_REACTIONS]
     source_text = normalise_ws(' '.join(
         f"{item.get('title', '')} {item.get('summary', '')} {item.get('body_excerpt', '')}"
         for item in source_records
-    ))[:14000]
+    ))[:32000]
     sensitive = is_sensitive(source_text, candidate.category)
 
     if client is None:
@@ -1732,13 +1741,16 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     community_reaction = strip_markdown(draft.get('community_reaction', ''))[:500]
     social_context_used = bool(draft.get('social_context_used'))
     draft_category = str(draft.get('category') or '')
-    if candidate.category in CATEGORY_STOCK_IMAGES and candidate.category != 'news':
-        category = candidate.category
-    else:
-        category = draft_category or candidate.category
+    category_evidence = normalise_ws(
+        f"{source_text} {title} {excerpt} {' '.join(paragraphs)}"
+    )
+    category = editorial_category(
+        category_evidence,
+        draft_category or candidate.category or 'news',
+    )
     area = str(draft.get('area') or candidate.area)
     if category not in CATEGORY_STOCK_IMAGES:
-        category = candidate.category if candidate.category in CATEGORY_STOCK_IMAGES else 'news'
+        category = 'news'
     if area not in AREA_KEYWORDS:
         area = candidate.area if candidate.area in AREA_KEYWORDS else 'rochdale'
 
@@ -1842,6 +1854,103 @@ def safe_collect(name: str, collector: Any, collector_counts: dict[str, int], co
         collector_errors[name] = str(exc)
         return []
 
+
+# ROCHDALE_EDITORIAL_QUALITY_V2
+def categorise(text: str) -> str:
+    return editorial_category(text, "news")
+
+
+def article_public_word_count(article: dict[str, Any]) -> int:
+    return editorial_word_count(article)
+
+
+BOROUGH_FINISHED_LOCATION_RE = re.compile(
+    r"\b(?:in|at|near|around|across|from|within|throughout|towards|outside|serving|based in|located in)\s+"
+    r"(?:the\s+)?(?:heywood|middleton|littleborough|milnrow|newhey|wardle|norden|bamford|"
+    r"kirkholt|castleton|spotland|falinge|deeplish|smallbridge|firgrove|shawclough|healey|"
+    r"balderstone|darnhill|hopwood|alkrington|boarshaw|smithy bridge|rochdale)\b|"
+    r"\b(?:heywood|middleton|littleborough|milnrow|newhey|wardle|norden|bamford|kirkholt|"
+    r"castleton|spotland|falinge|deeplish|smallbridge|firgrove|shawclough|healey|balderstone|"
+    r"darnhill|hopwood|alkrington|boarshaw|smithy bridge)\s+"
+    r"(?:town|town centre|area|ward|estate|village|residents|community|road|street|school|"
+    r"college|library|station|market|business|businesses|shops|club|services|families)\b",
+    re.IGNORECASE,
+)
+
+
+def article_passes_locality(article: dict[str, Any]) -> bool:
+    # Accept explicit finished-copy evidence for every Rochdale borough town.
+    if article_is_local(article):
+        return True
+    source_name = normalise_ws(article.get("source_name", ""))
+    source_url = str(article.get("source_url") or "")
+    source_domain = domain_of(source_url)
+    text = " ".join(
+        str(article.get(field) or "")
+        for field in ("title", "excerpt", "summary", "content_html", "event_location")
+    )
+    trusted_names = {
+        str(source.get("name") or "")
+        for source in DISCOVERY_PAGES + LIVE_PAGE_SOURCES
+        if source.get("trusted_local")
+    } | {
+        str(page.get("name") or "")
+        for page in PUBLIC_FACEBOOK_PAGES
+        if page.get("trusted_local")
+    }
+    trusted_domains = {
+        domain_of(str(source.get("url") or ""))
+        for source in DISCOVERY_PAGES + LIVE_PAGE_SOURCES
+        if source.get("trusted_local")
+    }
+    return bool(
+        source_name in trusted_names
+        or source_domain in trusted_domains
+        or rochdale_traffic_area(text)
+        or BOROUGH_FINISHED_LOCATION_RE.search(normalise_ws(text))
+    )
+
+
+def enrich_source_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return editorial_enrich_records(
+        records,
+        page_metadata,
+        canonicalise_url,
+        source_is_denied,
+        log,
+    )
+
+
+def compact_source_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return editorial_compact_records(records)
+
+
+def draft_quality_issues(draft: Any, source_text: str, candidate: Candidate) -> list[str]:
+    return editorial_quality_issues(draft, source_text)
+
+
+def request_grounded_draft(
+    candidate: Candidate,
+    client: OpenAI,
+    source_records: list[dict[str, Any]],
+    social_context: list[dict[str, Any]],
+    source_text: str,
+    sensitive: bool,
+) -> dict[str, Any] | None:
+    return editorial_request_article(
+        client=client,
+        model=OPENAI_MODEL,
+        schema=ARTICLE_SCHEMA,
+        candidate=candidate,
+        source_records=source_records,
+        social_context=social_context,
+        source_text=source_text,
+        sensitive=sensitive,
+        right_to_reply_email=RIGHT_TO_REPLY_EMAIL,
+        logger=log,
+    )
+
+
 def main() -> int:
     log.info('Starting Rochdale Daily 15-minute pipeline')
     existing = recent_existing_articles()
@@ -1866,6 +1975,9 @@ def main() -> int:
         candidate.story_key = candidate.story_key or build_story_key(candidate)
         existing_article = existing_by_story.get(candidate.story_key)
         if existing_article is None:
+            eligible_candidates.append(candidate)
+            continue
+        if article_public_word_count(existing_article) < 200:
             eligible_candidates.append(candidate)
             continue
         known_urls = {canonicalise_url(url) for url in existing_article.get('source_urls', []) if url}
