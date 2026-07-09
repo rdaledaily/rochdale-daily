@@ -195,7 +195,7 @@ def article_text(article: dict[str, Any]) -> str:
 
 def article_category(article: dict[str, Any]) -> str:
     text = article_text(article)
-    if re.search(r"(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)", text, re.IGNORECASE):
+    if re.search(r"\b(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)\b", text, re.IGNORECASE):
         return "community"
     detected = editorial_category(text, str(article.get("category") or "news"))
     if detected != "news":

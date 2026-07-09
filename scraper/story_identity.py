@@ -1024,9 +1024,25 @@ def _choose_preferred_record(
     return left, right
 
 
+def _article_body_word_count(item: dict[str, Any]) -> int:
+    body = re.sub(r"<[^>]+>", " ", str(item.get("content_html") or ""))
+    if not body.strip():
+        body = str(item.get("excerpt") or item.get("summary") or "")
+    return len(re.findall(r"\b[\w’'-]+\b", body))
+
+
 def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
     preferred, other = _choose_preferred_record(left, right)
     merged = dict(preferred)
+
+    # Recency and authority decide the headline and update metadata, but they
+    # must not replace a substantial grounded article with a thin update.
+    body_source = preferred
+    if _article_body_word_count(other) > _article_body_word_count(preferred):
+        body_source = other
+    for field in ("content_html", "excerpt", "summary"):
+        if body_source.get(field):
+            merged[field] = body_source[field]
 
     # Preserve the already-published canonical URL/id where possible, while
     # allowing the headline and body to be refreshed from a newer update.

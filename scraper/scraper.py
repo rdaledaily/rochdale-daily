@@ -2036,7 +2036,28 @@ def main() -> int:
             continue
         if is_fresh(published_at) or (source_kind == 'event' and event_is_current_or_future(event_start)) or (source_kind == 'live' and is_current_uk_day(published_at)):
             publishable_values.append(article)
-    published = sorted(dedupe_article_records(publishable_values), key=lambda article: parse_datetime(article.get('published_at')) or datetime.min.replace(tzinfo=timezone.utc), reverse=True)[:MAX_PUBLISHED_ARTICLES]
+    deduped_publishable = dedupe_article_records(publishable_values)
+    short_after_merge = [
+        article for article in deduped_publishable
+        if str(article.get('source_kind') or 'article') != 'event'
+        and article_public_word_count(article) < 200
+    ]
+    if short_after_merge:
+        log.warning(
+            'Held back %d article(s) below the 200-word publication floor after merging: %s',
+            len(short_after_merge),
+            '; '.join(str(article.get('title') or 'Untitled') for article in short_after_merge[:10]),
+        )
+    publication_ready = [
+        article for article in deduped_publishable
+        if str(article.get('source_kind') or 'article') == 'event'
+        or article_public_word_count(article) >= 200
+    ]
+    published = sorted(
+        publication_ready,
+        key=lambda article: parse_datetime(article.get('published_at')) or datetime.min.replace(tzinfo=timezone.utc),
+        reverse=True,
+    )[:MAX_PUBLISHED_ARTICLES]
     write_json_atomic(OUTPUT_FILE, published)
     source_counts: dict[str, int] = {}
     for candidate in raw_candidates:
