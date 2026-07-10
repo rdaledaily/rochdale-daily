@@ -502,13 +502,35 @@ def is_blocked_article(article: dict[str, Any], blocklist: dict[str, list[str]])
     return any(pattern and pattern in title for pattern in blocklist.get("title_patterns", []))
 
 
-def cleanup_stale_article_pages(articles: list[dict[str, Any]]) -> int:
+def cleanup_stale_article_pages(
+    articles: list[dict[str, Any]],
+    blocklist: dict[str, list[str]] | None = None,
+) -> int:
+    """Delete article pages ONLY for editorially blocklisted slugs.
+
+    A story dropping out of the live articles.json — through freshness
+    pruning, a duplicate merge, or headline/slug drift on a rewrite — must
+    NOT remove its page. Published URLs stay online permanently and become
+    archive background for newer entries; deleting them 404s already-indexed
+    pages and destroys the site's search long tail. (The previous behaviour
+    deleted every page whose slug was not in the current articles.json,
+    which gave published pages a median lifespan of 4.3 hours.)
+
+    Deletion is reserved for deliberate takedowns via the "slugs" list in
+    story_blocklist.json.
+    """
     if not ARTICLE_PAGES_DIR.exists():
         return 0
-    valid = {str(article.get("slug") or "") for article in articles if article.get("slug")}
+    blocked = {
+        str(slug).lower()
+        for slug in (blocklist or {}).get("slugs", [])
+        if slug
+    }
+    if not blocked:
+        return 0
     removed = 0
     for path in ARTICLE_PAGES_DIR.glob("*.html"):
-        if path.stem not in valid:
+        if path.stem.lower() in blocked:
             path.unlink()
             removed += 1
     return removed
@@ -958,7 +980,7 @@ def main() -> int:
         reverse=True,
     )
     write_json_atomic(ARTICLES_PATH, merged)
-    stale_article_pages_removed = cleanup_stale_article_pages(merged)
+    stale_article_pages_removed = cleanup_stale_article_pages(merged, blocklist)
 
     frontpage, coverage = select_frontpage(merged, now)
     previous = read_json(FRONTPAGE_PATH, {})
