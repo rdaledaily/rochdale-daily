@@ -1340,6 +1340,20 @@ def recent_existing_articles() -> list[dict[str, Any]]:
         if keep and article_passes_locality(article):
             article['title'] = strip_markdown(article.get('title'))
             article['excerpt'] = strip_markdown(article.get('excerpt'))
+            # Self-heal categories on retained articles: score-based
+            # recategorisation from the article's own final text, so old
+            # stock misfiled by first-match category selection (a football
+            # report labelled traffic because one paragraph mentioned
+            # matchday congestion) is corrected on the next run. When the
+            # card image is a category stock image, it moves with the
+            # category; genuine source images are never touched.
+            text = ' '.join(str(article.get(field) or '') for field in ('title', 'excerpt', 'content_html'))
+            corrected = editorial_category(text, fallback=str(article.get('category') or 'news'))
+            if corrected != article.get('category'):
+                old_stock = CATEGORY_STOCK_IMAGES.get(str(article.get('category') or ''), '')
+                if str(article.get('image_url') or '') == old_stock:
+                    article['image_url'] = CATEGORY_STOCK_IMAGES.get(corrected, CATEGORY_STOCK_IMAGES['news'])
+                article['category'] = corrected
             kept.append(article)
     return dedupe_article_records(kept)
 
