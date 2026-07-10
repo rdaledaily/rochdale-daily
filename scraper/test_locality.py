@@ -390,3 +390,29 @@ assert not is_local(
     "Rochdale Online",
     "https://www.rochdaleonline.co.uk/news/example",
 )
+
+# ---------------------------------------------------------------------------
+# has_disqualifying_evidence: used by scraper.py to gate its weak acceptance
+# paths (traffic copy, borough place names in finished text).
+# ---------------------------------------------------------------------------
+from locality_rules import has_disqualifying_evidence
+
+assert has_disqualifying_evidence(
+    "A man has been arrested following a two-vehicle collision near Norden.",
+    source_name="Swanage News",
+)
+assert has_disqualifying_evidence(
+    "Lightnin' Willie will perform at Norden Farm Centre for the Arts in Maidenhead."
+)
+assert has_disqualifying_evidence(
+    "New one-bed bungalow available in Middleton Park.", source_name="Leeds Homes"
+)
+# Genuine local stories are never disqualified, even when rival geography
+# appears alongside strong anchoring.
+assert not has_disqualifying_evidence(
+    "Police closed a road in Middleton, Rochdale after a collision."
+)
+assert not has_disqualifying_evidence(
+    "A Rochdale man was jailed at Dorchester Crown Court."
+)
+print("Disqualifying-evidence tests passed.")
