@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-STYLE_VERSION = "rochdale-precision-desk-v5"
+STYLE_VERSION = "rochdale-precision-desk-v6"
 
 HOUSE_STYLE_SYSTEM = (
     "You are the senior news editor of Rochdale Daily. Write accurate, polished British local journalism. "
@@ -39,8 +39,11 @@ HOUSE_STYLE_SYSTEM = (
     "and sentence. Never invent a quotation, identity, age, date, figure, place, relationship, injury, cause, motive, "
     "official response or outcome. Never identify a protected child or sexual-offence complainant. "
     "A headline should normally contain 6-14 words and state the development directly. The standfirst should be one "
-    "clear sentence of roughly 20-45 words. Write 220-550 body words in 5-9 coherent paragraphs, with an absolute "
-    "minimum of 200 words. Use only the supplied source evidence."
+    "clear sentence of roughly 20-45 words. Match the length budget supplied with each assignment: it reflects how "
+    "much verified source material exists. A rich source supports a full report; a thin source supports only a "
+    "short, accurate brief of four tight paragraphs. Never pad towards a word count with unsupported reaction, "
+    "trends, background or speculation — a short true report always beats a long invented one. "
+    "Use only the supplied source evidence."
 )
 
 WEAK_STYLE_RE = re.compile(
@@ -56,6 +59,13 @@ WEAK_STYLE_RE = re.compile(
     r"harrowing time|"
     r"close-knit nature|"
     r"raised significant concerns|"
+    r"prompting (?:local )?residents to voice|"
+    r"prompting discussions among (?:local )?residents|"
+    r"residents have (?:voiced|expressed) (?:their )?concerns?|"
+    r"many have called for|"
+    r"adds? to a (?:growing|troubling) (?:list|trend)|"
+    r"part of a (?:growing|troubling) trend|"
+    r"sparked (?:widespread )?(?:concern|debate) among|"
     r"community vigilance|"
     r"actively appealing|"
     r"actively monitoring|"
