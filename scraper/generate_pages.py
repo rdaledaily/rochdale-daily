@@ -228,10 +228,29 @@ def write_sitemap(slugs_with_dates: list[tuple[str, str]]) -> None:
     now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     entries = [f'  <url><loc>{esc(SITE_BASE_URL)}/</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>']
     for slug, lastmod in slugs_with_dates:
-        clean_lastmod = lastmod or now
-        entries.append(f'  <url><loc>{esc(SITE_BASE_URL)}/articles/{esc(slug)}.html</loc><lastmod>{esc(clean_lastmod)}</lastmod><changefreq>daily</changefreq></url>')
+        loc = f'<loc>{esc(SITE_BASE_URL)}/articles/{esc(slug)}.html</loc>'
+        if lastmod:
+            entries.append(f'  <url>{loc}<lastmod>{esc(lastmod)}</lastmod><changefreq>daily</changefreq></url>')
+        else:
+            entries.append(f'  <url>{loc}<changefreq>daily</changefreq></url>')
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + '\n'.join(entries) + '\n</urlset>\n'
     SITEMAP_PATH.write_text(xml, encoding='utf-8')
+
+DATE_PUBLISHED_RE = re.compile(r'"datePublished"\s*:\s*"([^"]+)"')
+
+def archive_page_lastmod(path: Path) -> str:
+    """Read datePublished from an archived page's own JSON-LD.
+
+    File mtimes are useless on CI (every checkout resets them), so the
+    page's embedded NewsArticle schema is the stable record of when the
+    story was published. Returns '' when unavailable; the sitemap entry is
+    then written without a lastmod, which is valid.
+    """
+    try:
+        match = DATE_PUBLISHED_RE.search(path.read_text(encoding='utf-8', errors='ignore'))
+        return match.group(1) if match else ''
+    except OSError:
+        return ''
 
 def main() -> None:
     from frontpage_pipeline import main as build_frontpage
@@ -251,7 +270,18 @@ def main() -> None:
         page_html = render_article_page(article, articles)
         out_path.write_text(page_html, encoding='utf-8')
         written += 1
+    # Archive coverage: every page on disk stays in the sitemap, including
+    # stories that have left the live articles.json window. Pages are never
+    # deleted (see module docstring), so the archive keeps growing and every
+    # published URL remains discoverable and indexed.
+    live_slugs = {slug for slug, _ in slugs_with_dates}
+    archived = 0
+    for path in sorted(OUTPUT_DIR.glob('*.html')):
+        if path.stem in live_slugs:
+            continue
+        slugs_with_dates.append((path.stem, archive_page_lastmod(path)))
+        archived += 1
     write_sitemap(slugs_with_dates)
-    print(f'Generated {written} new article page(s), left {skipped_existing} existing page(s) untouched, sitemap has {len(slugs_with_dates) + 1} URL(s).')
+    print(f'Generated {written} article page(s), left {skipped_existing} pre-existing, {archived} archived page(s) retained in sitemap; sitemap has {len(slugs_with_dates) + 1} URL(s).')
 if __name__ == '__main__':
     main()
