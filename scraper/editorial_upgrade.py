@@ -117,9 +117,20 @@ def deterministic_category(value: Any, fallback: str = "news") -> str:
     text = plain_text(value)
     if re.search(r"\b(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)\b", text, re.I):
         return "community"
+    # Score every category by DISTINCT matched terms and pick the strongest,
+    # using the priority order only to break ties. First-match-wins misfiled
+    # a live football report as traffic because one paragraph advised fans
+    # about matchday congestion: 2 traffic tokens outranked 4 sport tokens
+    # purely because traffic sits earlier in the list.
+    best_category = ""
+    best_score = 0
     for category, pattern in CATEGORY_ORDER:
-        if pattern.search(text):
-            return category
+        score = len({match.group(0).lower() for match in pattern.finditer(text)})
+        if score > best_score:
+            best_category = category
+            best_score = score
+    if best_category:
+        return best_category
     clean = str(fallback or "news").lower()
     return clean if clean in {item[0] for item in CATEGORY_ORDER} | {"news"} else "news"
 
