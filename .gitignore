@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Secrets and sessions — these belong in GitHub Actions secrets or
+# Cloudflare environment variables, never in the repository.
+session.json
+*.session.json
+.env
+.env.*
+
+# OS junk
+.DS_Store
+Thumbs.db
