@@ -1091,13 +1091,23 @@ def _article_body_word_count(item: dict[str, Any]) -> int:
 
 
 def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
-    preferred, other = _choose_preferred_record(left, right)
+    # An editorially locked record (hand-edited via articles.json) is always
+    # preferred whole: its title, body and category survive any merge.
+    if left.get("editorial_lock") and not right.get("editorial_lock"):
+        preferred, other = left, right
+    elif right.get("editorial_lock") and not left.get("editorial_lock"):
+        preferred, other = right, left
+    else:
+        preferred, other = _choose_preferred_record(left, right)
     merged = dict(preferred)
 
     # Recency and authority decide the headline and update metadata, but they
     # must not replace a substantial grounded article with a thin update.
     body_source = preferred
-    if _article_body_word_count(other) > _article_body_word_count(preferred):
+    if (
+        not preferred.get("editorial_lock")
+        and _article_body_word_count(other) > _article_body_word_count(preferred)
+    ):
         body_source = other
     for field in ("content_html", "excerpt", "summary"):
         if body_source.get(field):
