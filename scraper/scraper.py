@@ -1381,6 +1381,15 @@ def recent_existing_articles() -> list[dict[str, Any]]:
             # matchday congestion) is corrected on the next run. When the
             # card image is a category stock image, it moves with the
             # category; genuine source images are never touched.
+            # Ticket events are exempt: their category is "events" by
+            # definition, and text scoring misfiles them (a concert whose
+            # only category keyword was "opening" scored as business).
+            if source_kind == 'event':
+                if article.get('category') != 'events' and not article.get('editorial_lock'):
+                    article['category'] = 'events'
+                    article['types'] = ['events']
+                kept.append(article)
+                continue
             text = ' '.join(str(article.get(field) or '') for field in ('title', 'excerpt', 'content_html'))
             corrected = editorial_category(text, fallback=str(article.get('category') or 'news'))
             if corrected != article.get('category') and not article.get('editorial_lock'):
