@@ -1,683 +1,0 @@
-ó
-    ²TNj8ˆ  ã                  ó^  • % S r SSKJr  SSKrSSKrSSKrSSKrSSK r SSKrSSK	r	SSK
-r
-SSKJ
-r
-Jr  SSKJrJrJr  SSKJr  SS KJr  SSKJrJr  SS	KJrJrJr  SSKrSSKrSS
-KJ r   SS
-K!J"r"  \" \#5      RI                  5       RJ                  S   r&\&S
--
-  r'\&S-
-  r(\&S-
-  S-
-  r)\ RT                  " SS5      r+\," \ RT                  " SS5      5      r-\," \ RT                  " SS5      5      r.\," \ RT                  " SS5      5      r/\," \ RT                  " SS5      5      r0\," \ RT                  " SS5      5      r1\ RT                  " SS5      Re                  5       S;  r3\ RT                  " SS 5      Ri                  S!5       V s1 s H8  n U Rk                  5       (       d  M  U Rk                  5       Re                  5       iM:  
-   sn r6S"S#S$S%.S&S'S$S%.S(S)S$S%.S*S+S$S%.S,S-S$S%./r7S"S.S$S/S0.S&S1S$S/S0.S*S2S$S3S0.S,S4S$S/S0.S5S6S$S/S0.S(S7S$S/S0./r81 S8kr90 S9S91_S:S:1_S;S;1_S<S<1_S=S=1_S>S>1_S?S@1_SASA1_SBSB1_SCSC1_SDSD1_SESESF1_SGSG1_SHSH1_SISI1_SJSJ1_SKSK1_SL1SM1SN1SO1SP1SQ1SR1SS1ST11 SUkSVSW1SX1SY1SZ11 S[kS\.Er:1 S]k1 S^k1 S_k1 S`k1 Sak1 Sbk1 Sck1 SdkSe.r;/ SfQr</ SgQr=/ ShQr>SiSjSkSlSmSn0SmSo0SmSo0SpSmSo0SqSrSs.So/ StQSu.So/ SvQSu.SmSo0Sw. / SwQSx.Sy.r?\)R€                  Rƒ                  SjSjSz9  \R„                  " \R†                  S{\Rˆ                  " \)S|S}9\RŠ                  " 5       /S~9  \RŒ                  " S5      rG\R                  " 5       rI\IR”                  R—                  S€SS‚.5        0 rLSƒ\MS„'   \
- " S… S†5      5       rNS©S‡ jrOSªSˆ jrPSªS‰ jrQSªSŠ jrRS«S‹ jrSS«SŒ jrTS¬S jrUS­SŽ jrVS®S jrWS¯S jrXS°S±S‘ jjrYS²S’ jrZS³S“ jr[S´S” jr\SµS• jr]S¶S– jr^S·S— jr_S¸S˜ jr`S¹S™ jraS«Sš jrbSºS› jrcS»Sœ jrdS¼S jreS½Sž jrfS¾SŸ jrgS½S  jrhS¿S¡ jriSÀS¢ jrjSÁS£ jrkSÂS¤ jrlSÃS¥ jrmSÄS¦ jrnSÅS§ jro\pS¨:X  a
-  \q" \o" 5       5      egs  sn f )Æa–  
-Rochdale Daily autonomous news pipeline.
-
-What this replacement fixes:
-- Uses the source publication date instead of the scrape time.
-- Rejects stale or undated stories.
-- Removes Markdown from every public field.
-- Requests strict structured JSON from OpenAI.
-- Never invents missing dates, quotes, contacts, prices or facts.
-- Extracts image candidates from RSS, Open Graph, Twitter cards and JSON-LD.
-- Only publishes source images from an explicit allow-list.
-- Sends crime, court, death, child-safeguarding and allegation stories to
-  review_queue.json instead of automatically publishing them.
-- Avoids Facebook-group scraping and search-result scraping.
-é    )Ú
-annotationsN)Ú	dataclassÚasdict)ÚdatetimeÚ	timedeltaÚtimezone)Úparsedate_to_datetime)ÚPath)ÚAnyÚIterable)Ú urljoinÚurlparseÚ
-urlunparse)Ú
-BeautifulSoup)ÚOpenAIé   z
-articles.jsonzreview_queue.jsonÚ scraperz
-scraper.logÚOPENAI_MODELz
-gpt-4o-miniÚMAX_NEWS_AGE_HOURSÚ168ÚARTICLE_RETENTION_DAYSÚ14ÚMAX_PUBLISHED_ARTICLESÚ60ÚMAX_AI_ARTICLES_PER_RUNÚ20ÚREQUEST_TIMEOUTÚRESPECT_ROBOTSÚtrue>   Ú0ÚnoÚfalseÚIMAGE_REUSE_SOURCE_DOMAINSzNrochdale.gov.uk,gmp.police.uk,manchesterfire.gov.uk,rochdaleafc.co.uk,tfgm.comÚ,úRochdale Borough Councilz(https://www.rochdale.gov.uk/news/rss.xmlÚrochdale)ÚnameÚurlÚdefault_areazGreater Manchester Policez&https://www.gmp.police.uk/news/rss.xmlzBBC Manchesterz8https://feeds.bbci.co.uk/news/england/manchester/rss.xmlzManchester Fire and Rescuez8https://www.manchesterfire.gov.uk/news-events/news/feed/úRochdale AFCz'https://www.rochdaleafc.co.uk/news/feedz https://www.rochdale.gov.uk/newsz/news/)r'   r(   r)   Úlink_patternzhttps://www.gmp.police.uk/news/z3https://www.manchesterfire.gov.uk/news-events/news/z/newsz#https://www.rochdaleafc.co.uk/news/zManchester Evening Newsz:https://www.manchestereveningnews.co.uk/all-about/rochdalez-https://www.bbc.co.uk/news/england/manchester>*   ÚsykeÚbirchÚhealeyÚnewheyÚnordenÚsuddenÚsummitÚwardleÚ bamfordÚ buersilÚ cutgateÚ falingeÚ heywoodÚ hopwoodÚ langleyÚ milnrowÚbelfieldÚblackleyÚboarshawÚdarnhillÚdeeplishÚfirgroveÚkirkholtÚmeanwoodr&   ÚspotlandÚ	castletonÚ	middletonÚ	slattocksÚ	whitworthÚ
-alkringtonÚ
-cloverhallÚ
-lowerplaceÚ
-shawcloughÚ
-balderstoneÚ
-smallbridgeÚ
-wardleworthÚ
-littleboroughúmandale parkú
-smithy bridgeúhollingworth lakeúrochdale town centrer?   r9   rI   r:   r>   r/   Ú
-smithy_bridgerR   r3   rN   r0   r4   r6   Ú
-caldershawrB   rE   rD   r7   r@   rM   rA   rL   r.   r,   rO   r1   rK   rC   >   r2   rP   rS   r;   rG   r8   rF   rH   >   r&   ú
-town centrerT   )rM   rA   rL   r.   r,   rO   r1   rK   rC   rP   r;   r8   rF   rH   r&   >   ÚcourtÚfraudÚtheftÚarrestÚjailedÚpoliceÚwantedÚ assaultÚ chargedÚ robberyÚburglaryÚstabbing>
-   ÚbusÚm62ÚroadÚtrainÚ closureÚ parkingÚ trafficÚ	diversionÚ	metrolinkú
-bee network>   ÚmayorÚ cabinetÚ councilÚelectionÚplanningÚ	committeeÚ
-councillorúmp >   ÚpupilÚofstedÚschoolÚ collegeÚ studentÚ teacherÚ	educationÚ
-university>	   ÚdaleÚmatchÚrugbyÚboxingÚleagueÚ cricketÚ fixtureÚfootballúrochdale afc>
-   ÚgigÚfairÚeventÚmarketÚparadeÚ concertÚfestivalÚ
-exhibitionÚ
-performanceúopen day>	   ÚpubÚjobsÚshoprh   Ú companyÚ openingÚbusinessÚ
-investmentÚ
-restaurant>    ÚappealÚ charityÚ libraryÚ	communityÚ	volunteerÚ
-fundraiserú
-support group)ÚcrimeÚ	transportÚpoliticsr|   ÚsportÚeventsr–   rœ   )zQ\b(alleged|allegedly|accused|charged|arrested|court|trial|jury|inquest|coroner)\bzW\b(murder|manslaughter|rape|sexual|assault|abuse|grooming|stabbing|death|died|killed)\bzB\b(child|children|minor|youth|under[- ]?18|schoolgirl|schoolboy)\bz8\b(suicide|self-harm|domestic abuse|domestic violence)\b)z/\b(opinion|comment|column|editorial|analysis)\bz9\bfor sale\b|\bfor rent\b|\broom to let\b|\bjob vacancy\bzB\brecommendations please\b|\bdoes anyone know\b|\bgetting rid of\b)z>\[(?:insert|relevant|contact|date|number|details|link)[^\]]*\]z\babout this article\b.*$z\brelated topics\b.*$z #rochdalenews|#greatermanchesterz!\bfact-checked local journalism\bÚrochdale_daily_articleTÚobjectFÚtypeÚ booleanÚstringÚarrayé   é   )r§   ÚitemsÚminItemsÚmaxItems)	Únewsr    r¡   r¢   r|   r£   r¤   r–   rœ   )r§   Úenum) r&   r8   rF   rP   r;   r/   r3   rN   rU   rH   r0   r4   r6   rB   rE   rD   r7   r@   rM   rA   rL   r.   r,   r?   r9   rI   r:   r>   rO   r1   rK   rC   © Ú
-publishableÚtitleÚ excerptÚ
-paragraphsÚcategoryÚareaÚreason)r§   ÚadditionalPropertiesÚ
-propertiesÚrequired)r'   ÚstrictÚschema©Ú parentsÚexist_okz%%(asctime)s %(levelname)s %(message)súutf-8©Úencoding)ÚlevelÚformatÚhandlersÚrochdale_dailyz]RochdaleDaily/2.0 (+https://rochdaledaily.co.uk; editorial contact: news@rochdaledaily.co.uk)zen-GB,en;q=0.9)ú
-User-AgentzAccept-Languagez-dict[str, urllib.robotparser.RobotFileParser]ÚROBOTS_CACHEc                  óx   • \ rS rSr% S\S'   S\S'   S\S'   S\S'   S\S '   S\S'   S\S	'   S
-rS\S
-'   S
-rS\S'   S
-r g)Ú	Candidatei.  ÚstrÚ
-source_nameÚ
-source_urlÚsource_titleÚsource_summaryÚsource_published_atr¸   r·   Ú Úimage_candidate_urlÚsource_body_excerpt© N)Ú__name__Ú
-__module__Ú__qualname__Ú__firstlineno__Ú__annotations__rÔ   rÕ   Ú__static_attributes__rÖ   ó    Ú5/mnt/data/rochdale-daily-all-areas/scraper/scraper.pyrÌ   rÌ   .  s?   ‡ àÓØƒOØÓØÓØÓØ
-
-ƒIØƒMØ!Ð˜Ó!Ø!Ð˜Ö!rÝ   rÌ   c                 óJ   • [         R                  " [        R                  5      $ ©N)r   Únowr   ÚutcrÖ   rÝ   rÞ   Ú utc_nowrã   ;  s   € Ü
-<Š<œŸ™Ó
-%Ð%rÝ   c                ó”   • [        U 5      R                  =(       d    SR                  5       nUR                   S5      (       a  USS  $ U$ )NrÓ   zwww.é   )r   ÚhostnameÚlowerÚ
-startswith)r(   Úhosts     rÞ   Ú	domain_ofrê   ?  s>   € ÜS‹M×"Ñ"×( b×
-/Ñ
-/Ó
-1€DØ—‘ v×.Ñ.ˆ4ˆ8Ð8°DÐ8rÝ   c                ó  • [        U 5      nSR                  S UR                  R                   S5       5       5      n[	        UR
-                  =(       d    SUR                  R                  5       UR                  SUS45      $ )NÚ&c              3  ó„   #   • U  H6  nU(       d  M  UR                  5       R                  S 5      (       a  M2  Uv •  M8  
-   g7f))Úutm_z
-at_medium=zat_campaign=z fbclid=zgclid=N)rç   rè   ©Ú.0Úparts     rÞ   Ú	<genexpr>Ú#canonicalise_url.<locals>.<genexpr>F  s8   é € ð Ú0Ü
-ó 	
-ØŸ
-™
-›×/Ñ/ØG÷
-÷ 	
-‰Ò0ùs   ‚
-A ‘"A ·	A ÚhttpsrÓ   )	r   ÚjoinÚqueryÚsplitr   ÚschemeÚnetlocrç   Úpath)r(   ÚparsedÚ
-clean_querys      rÞ   Úcanonicalise_urlrý   D  so   € Ü
-c‹]€FØ—(‘(ñ ØŸ™×+Ñ+¨CÔ0óó €Kô Ø	‰×	!˜' 6§=¡=×#6Ñ#6Ó#8¸&¿+¹+ÀrÈ;ÐXZÐ[óð rÝ   c                ó€   • [         R                  " [        U 5      R                   S5      5      R	                  5       S S $ )NrÂ   é   )Ú hashlibÚsha256rý   ÚencodeÚ	hexdigest)r(   s    rÞ   Ú	stable_idr  Q  s2   € Ü
->Š>Ô*¨3Ó/×6Ñ6°wÓ?Ó
-@×
-JÑ
-JÓ
-LÈSÈbÐ
-QÐQrÝ   c                ór   • [         R                  " SS[        U =(       d    S5      5      R                   5       $ )Nz\s+Ú rÓ   )ÚreÚsubrÍ   Ústrip©Úvalues    rÞ   Únormalise_wsr  U  s'   € Ü
-
-6Š6&˜#œs 5§;¨BÓ/Ó
-0×
-6Ñ
-6Ó
-8Ð8rÝ   c                ó²  • [        U =(       d    S5      n[        R                  " SSU5      n[        R                  " SSU5      n[        R                  " SSU[        R                  S9n[        R                  " S SU[        R                  S9n[        R                  " S	SU5      n[        R                  " S
-SU5      n[        R                  " S
-SU5      n[        R                  " SSU[        R                  S9n[
-         H9  n[        R                  " USU[        R                  [        R                  -   S9nM;  
-   [        U5      R                  S
-5      $ )NrÓ   z!\[([^\]]*)\]\([^)]+\)z\1z\[([^\]]+)\]\([^)]+\)z^\s{0,3}#{1,6}\s*©Úflagsz(\*\*|__)(.*?)\1z\2z(?<!\*)\*([^*\n]+)\*(?!\*)z(?<!_)_([^_\n]+)_(?!_)z`{1,3}([^`]+)`{1,3}z^\s*[-*+]\s+z*_#- )	rÍ   r   r  Ú	MULTILINEÚDOTALLÚPLACEHOLDER_PATTERNSÚ
-IGNORECASEr  r	  )r
-  ÚtextÚ patterns      rÞ   Ústrip_markdownr  Y  sú   € Ü
-ˆu{˜Ó
-€DÜ
-
-6Š6Ð+¨U°DÓ
-9€DÜ
-
-6Š6Ð*¨E°4Ó
-8€DÜ
-
-6Š6Ð&¨¨D¼¿¹Ñ
-E€DÜ
-
-6Š6Ð% u¨d¼"¿)¹)Ñ
-D€DÜ
-
-6Š6Ð/°¸Ó
-=€DÜ
-
-6Š6Ð+¨U°DÓ
-9€DÜ
-
-6Š6Ð(¨%°Ó
-6€DÜ
-
-6Š6/ 2 t´2·<±<Ñ
-@€Dß'ˆ ÜvŠvg˜r 4¬r¯}©}¼r¿|¹|Ñ/KÑLŠñ (ä
-˜Ó
-×
-#Ñ
-# GÓ
-,Ð,rÝ   c                 óš   • [         R                  " SS[        U 5      R                   5       5      R	                  S5      nUS S =(       d    S$ )Nú
-[^a-z0-9]+Ú-éP   zlocal-news-update)r   r  r  rç   r	  )r´   Úslugs     rÞ   Ú	make_slugr  h  s?   € Ü
-
-6Š6- ¤n°UÓ&;×&AÑ&AÓ&CÓ
-D×
-JÑ
-JÈ3Ó
-O€DØ
-ˆ9×
-+Ð+Ð+rÝ   c                óÄ  • U (       d  g [        U [        5      (       a  U nO@[        U 5      R                   5       n [        R                  " UR
-                  SS5      5      nUR                  c  UR
-                  [        R                  S9nUR                  [        R                  5      $ ! [          a+     [        U5      n Na! [        [        [        4  a      g f = ff = f)NÚZú+00:00©Útzinfo)Ú
-isinstancer   rÍ   r	  Ú
-fromisoformatÚ replaceÚ
-ValueErrorr	   Ú	TypeErrorÚ
-OverflowErrorr!  r   râ   Ú
-astimezone)r
-  Úresultr  s      rÞ   Úparse_datetimer*  m  sº   € Þ
-ØÜ %œ× "Ñ "Ø‰ä5‹z×ÑÓ!ˆð	Ü×+Ò+¨D¯L©L¸¸hÓ,GÓHˆFð ‡}}Ñ Ø—‘¤x§|¡|Ð4ˆØ
-×
-Ñ
-œXŸ\™\Ó
-*Ð*øô ó 	ð
-Ü.¨tÓ4’øÜœz¬=Ð9ó 
-Úð
-úð 	ús)   »&B* Â*
-CÂ5
-CÃCÃCÃCÃCc                ó|   • U R                  [        R                  5      R                   5       R	                  SS5      $ )Nr  r  )r(  r   râ   Ú	isoformatr$  r
-  s    rÞ   Ú iso_utcr-  €  s-   € Ø
-×
-Ñ
-œHŸL™LÓ
-)×
-3Ñ
-3Ó
-5×
-=Ñ
-=¸hÈÓ
-LÐLrÝ   c                ór   • U c  g[        5       U -
-  n[        SS9Us=:*  =(       a    [        [        S9:*  $ s  $ )NFiñÿÿÿ)Ú minutes)Úhours)rã   r    r   )r
-  Úages     rÞ   Úis_freshr2  „  s:   € Ø }ØÜ
-‹)eÑ
-€CÜ
-˜SÑ
-! S×
-OÓ
-O¬IÔ<NÑ,OÑ
-OÐOÑ
-OÐOrÝ   c                óž   ^• U R                  5       m[        R                  5        H#  u  p#[         U4S jU 5       5      (       d  M!  Us  $ 
-   U$ )Nc              3  ó,   >#   • U  H	  oT;   v •  M
-  
-   g 7frà   rÖ   ©rð   ÚtermÚ lowereds     €rÞ   rò   Údetect_area.<locals>.<genexpr>Ž  s   øé € Ð1ª5 4wŽª5ùó   ƒ)rç   Ú
-AREA_KEYWORDSr­   Úany)r  Úfallbackr¸   Útermsr7  s       @rÞ   Ú
-detect_arear>  ‹  s@   ø€ Øj‰j‹l€GÜ$×*Ñ*Ö,‰
-ˆÜ
-Ô1©5Ó1×
-1Ó
-1ØŠKñ -ð €OrÝ   c           	     óô   ^• U R                  5       m[        R                  5        VVs0 s H  u  pU[         U4S jU 5       5      _M  
-   nnn[	        UR                  5       S S9u  pU(       a  U$ S$ s  snnf )Nc              3  ó6   >#   • U  H  oT;   d  M
-  S v •  M  
-   g7f)r   NrÖ   )rð   Ú keywordr7  s     €rÞ   rò   Úcategorise.<locals>.<genexpr>–  s   øé € ÐF¢x˜G¸gÑ3E—a‘a¢xùs   ƒ		c                ó   • U S   $ )Nr   rÖ   ©Úitems    rÞ   Ú<lambda>Úcategorise.<locals>.<lambda>™  s   € ¸4Àº7rÝ   )Úkeyr°   )rç   ÚCATEGORY_KEYWORDSr­   ÚsumÚmax)r  r·   ÚkeywordsÚscoresÚscorer7  s        @rÞ   Ú
-categoriserO  “  su   ø€ Øj‰j‹l€Gô #4×"9Ñ"9Ô";ôâ";ÑˆHð 	”#ÔF¡xÓFÓFÒFÙ";ð 
-ñ ô ˜&Ÿ,™,›.Ñ.BÑCO€HÞˆ8Ð( &Ð(ùó
-s   ©"A4c                ód   ^• U R                  5       mUS;   a  g[        U4S j[         5       5      $ )N>   r*   r%   Tc              3  ó,   >#   • U  H	  oT;   v •  M
-  
-   g 7frà   rÖ   r5  s     €rÞ   rò   Úis_local.<locals>.<genexpr>¡  s   øé € Ð7ª; 4wŽª;ùr9  )rç   r;  Ú
-LOCAL_TERMS)r  rÎ   r7  s     @rÞ   Úis_localrT    s+   ø€ Øj‰j‹l€GØ ÐBÓ BØÜ
-Ô7­;Ó7Ó
-7Ð7rÝ   c                óV   ^• U R                  5       m[        U4S j[         5       5      $ )Nc              3  óR   >#   • U  H  n[         R                  " UT5      v •  M  
-   g 7frà   )r   Úsearch)rð   r  r7  s     €rÞ   rò   Úshould_drop.<locals>.<genexpr>¦  s   øé € ÐHº-¨wŒryŠy˜ '×*Ð*º-ùs   ƒ$')rç   r;  Ú
-DROP_PATTERNS)r  r7  s    @rÞ   Ú
-should_droprZ  ¤  s   ø€ Øj‰j‹l€GÜ
-ÔH½-ÓHÓ
-HÐHrÝ   c           	     óª   • [          Vs/ s H/  n[        R                  " X [        R                  S9(       d  M-  UPM1  
-   nnUS:X  d   U(       a  ggs  snf )Nr  r    )TzNCrime, court, death, safeguarding or allegation content requires human review.)FrÓ   )ÚSENSITIVE_PATTERNSr   rW  r  )r  r·   r  Ú matchess       rÞ   Úrequires_editorial_reviewr^  ©  sK   € å1óÚ1GÜ
-
-9Š9W¬"¯-©-Õ
-8÷ 	Ñ1ð ð ð 7Ó žgØeØ
-ùò
-s
-   ‰,A¹Ac                óð  • [         (       d  g[        U 5      nUR                   SUR                   3n[        R
-                  U5      nUcS  [        R                  R                  5       nUR                  [        US5      5         UR                  5         U[        U'    UR                  [         R"                  S   U 5      $ ! [          a    [        R                  SU5         gf = f! [          a     gf = f)NTz://z
-/robots.txtzACould not read robots.txt for %s; allowing metadata request only.rÉ   )r   r   rø   rù   rÊ   ÚgetÚurllibÚ
-robotparserÚRobotFileParserÚ set_urlr
-   ÚreadÚ	ExceptionÚlogÚ warningÚ	can_fetchÚ SESSIONÚ headers)r(   rû   ÚbaseÚrobots       rÞ   Ú
-robots_allowsrn  ³  sÙ   € ß
-Š>ØÜ
-c‹]€FØm‰mˆ_˜C §
-¡
-˜Ð
-/€DÜ×Ñ˜TÓ"€EØ }Ü×"Ñ"×2Ñ2Ó4ˆØ
-
-‰
-”g˜d MÓ2Ô3ð	ØJ‰JŒLð #ŒTÑðØ‰œwŸ™¨|Ñ<¸cÓBÐBøô ó 	ô 
-K‰KÐ[Ð]aÔbÙð		ûô ó Ùðús$   ÂC Â"C( Ã C%Ã$C%Ã(
-C5Ã4C5c                ób  • [        U 5      (       d  [        SU  35      e[        R                   U [        SS9nUR
-                  5         UR                  R                   SS5      nSU;  a/  S UR                  S S R                  5       ;  a  [        S	U 35      eUR                  UR                  4$ )
-Nz$robots.txt does not permit fetching T)Ú timeoutÚallow_redirectszcontent-typerÓ   Úhtmlz<htmliô  zNot an HTML page: )
-rn  ÚPermissionErrorrj  r`  r   Úraise_for_statusrk  r  rç   r%  r(   )r(   ÚresponseÚcontent_types      rÞ   Ú
-fetch_htmlrw  Ê  s¡   € Ü
-˜×
-Ñ
-ÜÐ DÀSÀEÐJÓKÐKÜ{‰{˜3¬Èˆ{ÐN€HØ×ÑÔØ×#Ñ#×'Ñ'¨¸Ó;€LØ 
-\Ó ! g°X·]±]À4ÀCÐ5H×5NÑ5NÓ5PÓ&PÜÐ-¨l¨^Ð<Ó=Ð=Ø
-<‰<˜Ÿ™Ð
-&Ð&rÝ   c                ó®   • U HO  u  p#U R                  X#S9nU(       d  M  UR                  S5      (       d  M5  [        UR                  S5      5      s  $ 
-   g)N©ÚattrsÚ contentrÓ   )Úfindr`  r  )ÚsoupÚ	selectorsÚtagrz  Únodes        rÞ   Ú
-first_metar  Õ  sJ   € Û‰
-ˆØy‰y˜ˆyÐ*ˆß
-ˆ4D—H‘H˜Y×'Ó'Ü §¡¨Ó 3Ó4Ò4ñ   ð rÝ   c                 ó,  • / nU R                  SSS0S9 Hà  nUR                  =(       d    UR                  5       nU(       d  M/   [        R                  " U5      n[
-        U[        5      (       a  UOU/nU Hz  n[
-        U[        5      (       a:  [
-        UR                  S5      [        5      (       a  UR                  US   5        MR  [
-        U[        5      (       d  Mi  UR                  U5        M|  
-   Mâ  
-   U$ ! [        R
-                    a     Mý  f = f)NÚscriptr§   zapplication/ld+jsonry  z@graph)Úfind_allr©   Úget_textÚjsonÚloadsÚJSONDecodeErrorr"  ÚlistÚdictr`  ÚextendÚappend) r}  Ú objectsr€  ÚrawÚ payloadÚqueuerE  s           rÞ   Úextract_jsonldr‘  Ý  sÞ   € Ø$&€GØ—
-‘
-˜h¨vÐ7LÐ.M
-ÓNˆØk‰k×,˜TŸ]™]›_ˆÞÙð	Ü—j’j “oˆGô & g¬t×4Ñ4‘ ¸7¸)ˆÛˆDÜ˜$¤×%Ñ%¬*°T·X±X¸hÓ5GÌ×*NÑ*NØ—‘˜T (™^Ö,Ü˜D¤$×'Ó'Ø—‘˜tÖ$ó	 ñ Oð €Nøô ×#Ñ#ó 	Úð	ús   ÁC;Ã;DÄDc                ó&  • [        U [        5      (       a  U $ [        U [        5      (       a  U (       a  [         U S   5      $ [        U [        5      (       a;  [        U R
-                  S5      =(       d    U R
-                  S5      =(       d    S5      $ g)Nr   r(   Ú
-contentUrlrÓ   )r"  rÍ   r‰  Úimage_from_jsonldrŠ  r`  r
-  s    rÞ   r”  r”  ð  si   € Ü %œ× Ñ ØˆÜ %œ× Ñ ¦5Ü   q¡Ó*Ð*Ü %œ× Ñ Ü5—9‘9˜UÓ#×D u§y¡y°Ó'>×DÀ"ÓEÐEØ
-
-rÝ   c           
-     óê  • [        U 5      u  p[        US5      n[        U5      n[         USSS04SSS04/5      nU(       d3  UR	                  S 5      n[
-        U(       a  UR
-                  SS	S
-9OS
-5      nU(       d4  UR                  (       a#  [
-        UR                  R
-                  SS	S
-95      n[         USSS04SSS
-04SSS04/5      n [         USSS04SSS04SSS04/5      n[         USSS04SSS04SSS04SSS04/5      n	/ n
-U GH  n
-U
-R                  S5      n[        [        U[        5      (       a  UOU/5      n
-U
-R                  1 Sk5      (       d  MR  U=(       d    [
-        U
-R                  S5      5      nU =(       d    [
-        U
-R                  S
-5      5      n U	=(       d    [
-        U
-R                  S5      5      n	U=(       d    [        U
-R                  S5      5      n[
-        U
-R                  S5      5      nU(       d  GM  U
-R                  US S 5        GM  
-   U
-(       dn  UR                  S5       Vs/ s H  n[
-        UR
-                  SS	S
-95      PM  
-   nnU
-R!                  U Vs/ s H  n[#        U5      S:¼  d  M  UPM  
-   snS S 5        [%        U5      ['        U5      ['        U 5      U	U(       a
-  [)        X5      OS
-[
-        SR+                  U
-5      5      S S S .$ s  snf s  snf )!NÚlxmlÚmetaÚpropertyzog:titler'   z
-twitter:titleÚh1r  T©r	  rÓ   zog:descriptionÚ
-descriptionztwitter:descriptionzog:image:secure_urlzog:imagez
-twitter:imagezarticle:published_timeÚdateÚ pubdatez@type>   Ú ArticleÚ
-NewsArticleÚReportageNewsArticleÚheadlineÚ
-datePublishedÚimageÚ
-articleBodyiÄ	  zarticle p, main pé(   rå   i¸
-  )r(   r´   r›  Ú	publishedr£  Úbody_excerpt)rw  r   r‘  r  r|  r  r…  r´   r`  Úsetr"  r‰  Úintersectionr”  rŒ  Úselectr‹  Úlenrý   r  r
-   rõ   )r(   Ú	final_urlÚraw_htmlr}  Újsonldr´   r™  r›  Ú	image_urlr¦  Ú
-body_partsrE  ÚkindÚkindsÚarticle_bodyÚpr¶   s                    rÞ   Ú
-page_metadatarµ  ú  s   € Ü$ S›/Ñ€IÜ
-˜ 6Ó
-*€DÜ
-˜DÓ
-!€FäØà
-j *Ð-Ð.Ø
-f˜oÐ.Ð/ð	
-ó
-€Eö Ø
-Y‰Yt‹_ˆÜ¾R˜RŸ[™[¨°D˜[Ñ9ÀRÓHˆÞ
-T—Z—ZÜ˜TŸZ™Z×0Ñ0°¸DÐ0ÐAÓBˆäØà
-jÐ"2Ð3Ð4Ø
-f˜mÐ,Ð-Ø
-fÐ3Ð4Ð5ð 	
-ó €Kô Øà
-jÐ"7Ð8Ð9Ø
-j *Ð-Ð.Ø
-f˜oÐ.Ð/ð 	
-ó €Iô Øà
-jÐ":Ð;Ð<Ø
-fÐ6Ð7Ð8Ø
-f˜fÐ%Ð&Ø
-f˜iÐ(Ð)ð		
-ó€Ið €JÜˆØx‰x˜ Ó ˆÜœJ t¬T×2Ñ2‘D¸¸Ó?ˆØ
-×
-Ñ
-ÒP×
-QÓ
-QØ×?œ\¨$¯(©(°:Ó*>Ó?ˆEØ%×N¬°d·h±h¸}Ó6MÓ)NˆKØ!×L¤\°$·(±(¸?Ó2KÓ%LˆIØ!×IÔ%6°t·x±xÀ Ó7HÓ%IˆIÜ'¨¯©°Ó(?Ó@ˆLß‰|Ø×!Ñ! ,¨u°Ð"5×6ñ ö ð —[‘[Ð!4Ô5ó
-â5ô 
-˜Ÿ™ C¨t˜Ð4Ö5Ù5ð 	ð 
-ð 	×Ñ¡jÓA¢j ´C¸³F¸b±LŸ1¡jÑAÀ"À1ÐEÔFô   	Ó*Ü Ó&Ü% kÓ2ØÞ2;”˜Ô.ÀÜ$ S§X¡X¨jÓ%9Ó:¸5¸DÐAñ
- ð  ùò
-
-ùò Bs   È?#K+É3K0Ê
-K0c                óò   • S H%  n[        XS 5      n[        U5      nU(       d  M#  Us  $ 
-   S H5  n[        XS 5      nU(       d  M   [        US S S[        R                  06s  $ 
-   g ! [
-          a     MG  f = f)N)r¦  Ú updatedÚ created)Úpublished_parsedÚupdated_parsedÚcreated_parsedé   r!  )Ú getattrr*  r   r   râ   rf  )ÚentryrH  r
-  rû   s       rÞ   Úentry_datetimer¿  F  sƒ   € Û2ˆÜ˜ DÓ)ˆÜ Ó&ˆß
-ˆ6ØŠMñ	 3ó
- HˆÜ˜ DÓ)ˆß
-ˆ5ð
-Ü  r¨ Ð@´8·<±<Ñ@Ò@ñ	 Hð øô ó 
-Úð
-ús   Á A(Á(
-A6Á5A6c                óú  • S H`  n[        XS 5      =(       d    / nU HB  n[        U[        5      (       d  M  UR                   S5      (       d  M2  [	        US   5      s  s  $ 
-   Mb  
-   [        U SS 5      =(       d    /  H{  n[        U[        5      (       d  M  [	        UR                   S5      =(       d    S5      nUR
-                  S5      (       d  MU  UR                   S 5      (       d  Mm  [	        US    5      s  $ 
-   g)N)Ú
-media_contentÚmedia_thumbnailr(   Ú
-enclosuresr§   rÓ   zimage/Úhref)r½  r"  rŠ  r`  rÍ   rè   )r¾  ÚattrÚvaluesrE  rv  s        rÞ   Ú	rss_imagerÇ  V  sÄ   € Û4ˆÜ˜ dÓ+×1¨rˆÛˆDÜ˜$¤×%Ó%¨$¯(©(°5¯/«/Ü˜4 ™;Ó'Ô'ó ñ 5ô
- ˜˜|¨TÓ2×8°bÒ8ˆÜ
-dœD×
-!Ó
-!Ü˜tŸx™x¨Ó/×5°2Ó6ˆLØ×&Ñ& x×0Ó0°T·X±X¸f×5EÓ5EÜ˜4 ™<Ó(Ò(ñ	 9ð
- rÝ   c                 ó  • / n [          GHO  n[        R                  SUS   5        [        R                  " US   5      n[
-        USS5      (       a%  [        R
-                  SUS   [
-        US S5      5        [        UR                  5      S S	  GHÅ  n[        [        [
-        US
-S
-5      =(       d    S
-5      5      n[        [
-        USS
-5      5      n[        [
-        US
-S
-5      =(       d    [
-        USS
-5      =(       d    S
-5      n[        [        US5      R                  SSS95      n [        U5      nU SU  3n	U(       a  U(       a  [        U5      (       d  MÊ  [!        U	5      (       d  [#        X‘S   5      (       d  Mï  [%        U5      n
-U n
-U
-(       a  ['        U 5      S:  a[   [)        U5      nUS   =(       d    UnUS   =(       d    U n U
-=(       d    US   n
-US   =(       d    U
-n
-[+        US   5      n
-U
-(       a  U
-n[        U5      (       d  GM€  [1        X‘S   5      n[3        U	5      nU R5                  [7        US   UUU [9        U5      UUU
-U
-S9	5        GMÈ  
-   GMR  
-   U $ ! [,          a   n[        R/                  SXN5         S nAN‰S nAff = f)NzReading RSS: %sr'   r(   ÚbozoFzRSS warning for %s: %sÚbozo_exceptionÚ unknowné   ÚlinkrÓ   r´   Ú summaryr›  r–  r  Trš  r  r£  r§  r¦  z#Metadata fallback failed for %s: %sr)   ©	rÎ   rÏ   rÐ   rÑ   rÒ   r¸   r·   rÔ   rÕ   )Ú
-RSS_SOURCESrg  ÚinfoÚ
-feedparserÚparser½  rh  r‰  Ú entriesrý   rÍ   r  r   r…  r¿  r2  rZ  rT  rÇ  r«  rµ  r*  rf  Údebugr>  rO  rŒ  rÌ   r-  )Ú
-candidatesÚsourceÚfeedr¾  rÏ   rÐ   Úsummary_htmlrÎ  r¦  r  r¯  r§  r—  Ú	page_dateÚexcr¸   r·   s                    rÞ   Úcollect_rss_candidatesrÜ  d  s`  € Ø"$€Jß+ˆÜ
-‰Ð" F¨6¡NÔ3Ü×Ò  u¡
-Ó.ˆÜ
-4˜ ×
-'Ñ
-'ÜK‰KÐ0°&¸±.Ä'È$ÐP`ÐbkÓBlÔmÜ˜$Ÿ,™,Ó'¨¨Ô,ˆEÜ)¬#¬g°e¸VÀRÓ.H×.NÈBÓ*OÓPˆJÜ)¬'°%¸À"Ó*EÓFˆLÜÜ˜˜y¨"Ó-÷ Ü˜5 -°Ó4÷àó ˆLô
- %¤]°<ÀÓ%H×%QÑ%QÐRUÐ]aÐ%QÐ%bÓcˆGÜ& uÓ-ˆIØ"^ 1 W IÐ.ˆDÞ¦\¼À)×9LÑ9LÙÜ˜4× Ñ ¬°¸f±~×(FÑ(FÙä! %Ó(ˆIØ"ˆLæ¤ G£¨rÓ 1ð
-VÜ(¨Ó4DØ#'¨ ¡=×#@°LLØ" =Ñ1×<°WGØ )× :¨T°'©]IØ#'¨Ñ#7×#G¸<LÜ .¨t°KÑ/@Ó AIÞ Ø$-˜	ô ˜I×&Ñ&ÚÜ˜t¨NÑ%;Ó<ˆDÜ! $Ó'ˆHØ×ÑÜØ & v¡Ø)Ø!-Ø#*Ü(/°	Ó(:ØØ%Ø(1Ø(4ñ
-÷
-ôI -ñ
- ðl Ðøô) !ó VÜ—I‘IÐCÀZ×UÑUûðVús   Æ!AIÉ
-J	 É)J ÊJ	 c                óf  •  [        U S   5      u  p[	        US5      n[
-        R                  " U S   [
-        R                  5      n/ n[        5       n UR                  SS S9 H˜  n[        [        XS	   5      5      n	X—;   d  [        U	5      [        U5      :w  a  M9  UR                  [        U	5      R                  5      (       d  Md  U R!                  U	5        UR#                  U	5        [%        U5      S
-:¼  d  M—    U$ 
-   U$ ! [          a&  n[        R                   SU S   U5        / s S nA$ S nAff = f)
-Nr(   z Discovery page failed for %s: %sr'   r–  r+   ÚaT)rÄ  rÄ  é   )rw  rf  rg  rh  r   r   Ú compiler  r¨  r„  rý   r
-   rê   rW  r   rú   ÚaddrŒ  r«  )
-r×  r¬  r­  rÛ  r}  r  ÚlinksÚseenÚanchorr(   s
-             rÞ   Údiscovery_linksrå  Ÿ  s   € ðÜ(¨°©Ó7Ñˆ	ô ˜ 6Ó
-*€DÜjŠj˜ Ñ/´·±Ó?€GØ€EÜ“U€DØ—-‘- ¨$-Ó/ˆÜœw y¸±.ÓAÓBˆØ
-‹;œ) C›.¬I°iÓ,@Ó@ÙØ~‰~œh s›m×0Ñ0×1Ñ1ÙØ‰Œ
-Ø
-‰SÔÜ
-ˆu‹:˜Õ
-ØØ
-€Lñ 0ð €Løô# ó Ü
-
-‰
-Ð6¸¸v¹ÈÔLØ	ûðús   ‚D  Ä 
-D0Ä
-D+Ä%D0Ä+D0c                 óØ  • / n [          GH  n[        R                  SUS   5        [         U5       H×  n [	        U5      n[        US   5      nUS    S US    S US	    3nUS   (       a  [        U5      (       d  ML  [        U5      (       d  [        XaS   5      (       d  Mq  U R                  [        US   US
-   US   US   [        U5      [        XaS
-   5      [!        U5      US   US	   S
-9	5        ["        R$                  " S5        MÙ  
-   GM  
-   U $ ! [
-          a"  n[        R                  SU5         S nAGM	  S nAf[          a"  n[        R                  SX$5         S nAGM3  S nAff = f)NzDiscovering pages: %sr'   z%szPage metadata failed for %s: %sr¦  r´   r  r›  r§  r(   r)   r£  rÏ  g      Ð?)ÚDISCOVERY_PAGESrg  rÑ  rå  rµ  rs  rf  rÕ  r*  r2  rZ  rT  rŒ  rÌ   r-  r>  rO  ÚtimeÚsleep) rÖ  r×  r(   r—  rÛ  r¦  r  s           rÞ   Úcollect_discovery_candidatesrê  ¶  s_  € Ø"$€Jß!/ˆÜ
-‰Ð(¨&°©.Ô9Ü" 6Ö*ˆCð 
-Ü$ SÓ)ô ' t¨KÑ'8Ó9ˆIØ˜7‘m_ A d¨=Ñ&9Ð%:¸!¸DÀÑ<PÐ;QÐRˆDØ˜ —=¬°×(;Ñ(;ÙÜ˜4× Ñ ¬°¸f±~×(FÑ(FÙà×ÑÜØ & v¡Ø# E™{Ø!% g¡Ø#'¨
-Ñ#6Ü(/°	Ó(:Ü$ T°.Ñ+AÓBÜ'¨Ó-Ø(,¨W©
-Ø(,¨^Ñ(<ñ
-ô
-ô 
-JŠJtÖô= +ñ "ðB Ðøô9 #ó 
-Ü—‘˜˜sÔ#ÞûÜó 
-Ü—	‘	Ð;¸SÔFÞûð
-ús#   µ
-DÄ
-E) ÄD: Ä:
-E) Å E$ Å$E) c                 ót  • 0 n0 n[        U S SS9 HŒ  n[        UR                  5      n[        R                  " SSUR
-                  R
-                  5       5      R                  5       nSR                  UR                  5       S S 5      nXA;   d  XR;   a  M„  X1U'   X2U'   MŽ  
-   [        UR                  5       5      $ ) Nc                ó   • U R                   $ rà   )rÒ   rD  s    rÞ   rF  Údeduplicate.<locals>.<lambda>á  s
-   € ˜×1Ò1rÝ   T©rH  Ú reverser  r  é   )Úsortedrý   rÏ   r   r  rÐ   rç   r	  rõ   r÷   r‰  rÆ  )rÖ  Úby_urlÚby_titleÚ	candidateÚ url_keyÚ	title_keys         rÞ   Ú
-deduplicater÷  Ü  s¬   € Ø#%€FØ%'€HÜØÙ1Øô ˆ	ô
- # 9×#7Ñ#7Ó8ˆ Ü—F’F˜=¨#¨y×/EÑ/E×/KÑ/KÓ/MÓN×TÑTÓVˆ	Ø—H‘H˜YŸ_™_Ó.¨s°Ð3Ó4ˆ	Ø
-Ó
- 	Ó 5ÙØ#ˆw‰Ø'Óñô —
-‘
-“Ó
- Ð rÝ   c                óÀ   •  [         R                  " U R                  SS95      n[         U[        5      (       a  U$ / $ ! [
-        [         R                  4  a    / s $ f = f)NrÂ   rÃ   ) r†  r‡  Ú	read_textr"  r‰  ÚFileNotFoundErrorrˆ  )rú   r  s     rÞ   Úload_json_listrû  î  sV   € ðÜ—*’*˜TŸ^™^°W˜^Ð=Ó>ˆ Ü$ W¬d×3Ñ3ˆwÐ;¸Ð;øÜœt×3Ñ3Ð
-4ó ØŠ	ðús   ‚9> ¼> ¾AÁAc                 ó€  • [        5       [        [        S9-
-  n / n[         [        5       H  n[
-        UR
-                  S5      5      nU(       d  M&  X0:¼  d  M-  UR
-                  SS5      S:X  d  ME  [        UR
-                  S5      5      US'   [        UR
-                  S5      5      US'   UR                  U5        M’  
-   U$ ) N)ÚdaysÚpublished_atÚstatusr¦  r´   rµ   )	rã   r    ÚRETENTION_DAYSrû  Ú
-OUTPUT_FILEr*  r`  r  rŒ  )ÚcutoffÚkeptÚ articler¦  s       rÞ   Úrecent_existing_articlesr  ö  sš   € Ü
-‹Yœ¬Ñ7Ñ
-7€FØ!#€DÜ!¤+Ö.ˆ Ü" 7§;¡;¨~Ó#>Ó?ˆ	ß
-ˆ9˜Õ,°·±¸XÀ{Ó1SÐWbÕ1bÜ-¨g¯k©k¸'Ó.BÓCˆGGÑÜ!/° ·
-±
-¸IÓ0FÓ!GˆGIÑØK‰K˜ Ö ñ
- /ð €KrÝ   c                ó´   • SU S3nU R                   (       d  USS4$ [        U R                  5      nU[        ;   a  U R                   U R                  S4$ USS4$ )Nzassets/img/category_z.svgrÓ   FT)rÔ   rê   rÏ   r#   rÎ   )rô  r·   r<  Ú
-source_domains       rÞ   Úsource_imager    se   € Ø% h Z¨tÐ4€HØ
-×
-(×
-(Ø˜˜UÐ"Ð"Ü˜i×2Ñ2Ó3€MØ Ô2Ó 2Ø×,Ñ,¨i×.CÑ.CÀUÐJÐJØ
-R˜Ð
-ÐrÝ   c           
-     ó  • [        SR                  S U R                  U R                  U R                  4 5       5      5      S S n[
-        X R                  5      u  p4Uch  SU R                  U R                  U R                  =(       d    U R                  S/U R                  [        ;   a  U R                  OSU R                  S S. nOËS	n[        R                  " U R                  U R                  U R                  U R                  U R                  US
-S
-. SS9n UR                  R                  R!                  ["        S
-US.SU S./S[$        S.SSS9n[        R&                  " UR(                  S   R*                  R,                  =(       d    S5      n[/        UR1                  S5      5      S S n	[/        UR1                  S5      5      S S n
-UR1                  S/ 5       V
-s/ s H   n
-[/        U
-5      (       d  M  [/        U
-5      PM"  
-   sn
-S S n[3        UR1                  S5      =(       d    U R                  5      n
-[3        UR1                  S5      =(       d    U R                  5      n[5        UR1                  S5      5      =(       a)    [5        U	=(       a    U
-=(       a    [7        U5      S :¬  5      n[9        X
-5      u  nnn0 S![;        U R                  5      _SU	=(       d    U R                  _S"[=        U	=(       d    U R                  5      _SU
-=(       d    [/        U R                  5      S S _S#S$R                  S% U 5       5      _SU_SU
-_S&U
-/_S'U R                  _S([?        [A        5       5      _S)U_S*U RB                  _S+U_S,U_S-U R                  _S.U R                  _S/U(       d   U(       d  S0OS1_U=(       d    [/        UR1                  S25      5      S3S4.EnUS#   (       d   S5[D        RF                  " US   5       S63US#'   U$ s  sn
-f )7Nr  c              3  ó8   #   • U  H  nU(       d  M  Uv •  M  
-   g 7frà   rÖ   rï   s     rÞ   rò   Ú$rewrite_candidate.<locals>.<genexpr>  s"   é € ð  
-òTô
- ÷
- 
-‰Dò ùs   ‚
-‘	ip  FzEditorial review required.r°   z;OPENAI_API_KEY is missing; source retained for review only.r²   aÊ  You are the sub-editor for Rochdale Daily, an independent UK local-news publication. Use only facts contained in the supplied source material. Never invent or infer dates, quotes, prices, addresses, identities, contact details, statistics, organisations or local impacts. Do not claim that material is fact-checked. Do not output Markdown, asterisks, headings, hashtags, links or HTML. Write original wording rather than closely following the source's expressive language. If the source is too thin, stale, promotional, speculative or not clearly relevant to Rochdale borough, set publishable to false. Separate allegation from fact. Do not decide that legally sensitive material is safe for automatic publication.z­A concise headline, a 35-60 word standfirst and 3-6 short factual paragraphs in neutral UK English. Mention Rochdale only where the source itself establishes the connection.) rÎ   rÏ   rÒ   Ú
-detected_areaÚdetected_categoryÚsource_materialÚrequested_style)Úensure_asciiÚsystem)Úroler{  ÚuserÚ
-json_schema)r§   r  gš™™™™™É?iè  )ÚmodelÚmessagesÚresponse_formatÚ
-temperatureÚ
-max_tokensr   z{}r´   é    rµ   i@  r¶   r¬   r·   r¸   r³   r«   Úidr  Úcontent_htmlrÓ   c              3  óV   #   • U  H  nS [         R                  " U5       S3v •  M!  
-   g7f)ú<p>ú</p>N)rr  Úescape)rð   Ú	paragraphs     rÞ   rò   r
-  `  s%   é € Ð_ÒT^Ày #¤d§k¢k°)Ó&<Ð%=¸TÕ BÒT^ùs   ‚')Útypesrþ  Ú
-scraped_atr¯  rÔ   Úimage_creditÚimage_review_requiredrÎ   rÏ   rÿ  Úreviewr¦  r¹   zRochdale Daily Newsdesk)Ú
-review_reasonÚbyliner  r  )$r  rõ   rÐ   rÑ   rÕ   r^  r·   rI  r¸   r†  ÚdumpsrÎ   rÏ   rÒ   ÚchatÚ
-completionsÚcreater   ÚARTICLE_SCHEMAr‡  Ú choicesÚ messager{  r  r`  rÍ   Úboolr«  r  r  r  r-  rã   rÔ   rr  r   )rô  ÚclientÚ	raw_factsÚ	sensitiver'  ÚdraftÚsystem_messageÚuser_messageru  r´   rµ   rE  r¶   r·   r¸   r³   Úpublic_imager$  r%  r  s                       rÞ   Úrewrite_candidater8    s)  € ÜØ
-‰ñ  
-à×&Ñ&Ø×(Ñ(Ø×-Ñ-ñ ó 
-ó  	
-ó	ð  €tð	
-€Iô  9¸×DVÑDVÓWÑ€Ià 
-~à Ø×+Ñ+Ø ×/Ñ/Ø$×3Ñ3×M°y×7MÑ7MÐOkÐlØ.7×.@Ñ.@ÔDUÓ.U˜	×*Ò*Ð[aØ—N‘NØSñ
-‰ð
-%ð 	ô —z’zà(×4Ñ4Ø'×2Ñ2Ø'0×'DÑ'DØ!*§¡Ø%.×%7Ñ%7Ø#,ð&ñ
-ð ñ
-ˆð  —;‘;×*Ñ*×1Ñ1Üà!¨nÑ=Ø¨LÑ9ðð
- &Ü-ñð Øð 2ð 
-ˆô —
-’
-˜8×+Ñ+¨AÑ.×6Ñ6×>Ñ>×FÀ$ÓGˆä˜5Ÿ9™9 WÓ-Ó.¨t°Ð4€EÜ˜UŸY™Y yÓ1Ó2°4°CÐ8€Gð —I‘I˜l¨BÔ/óâ/ˆDÜ
-˜$×
-ó 	ŒtÖÙ/ñð  	€qð	
-€Jô
- 5—9‘9˜ZÓ(×>¨I×,>Ñ,>Ó?€HÜ
-ˆuy‰y˜Ó ×2 I§N¡NÓ
-3€DÜu—y‘y Ó/Ó0×e´T¸%×:dÀG×:dÔPSÐT^ÓP_ÐcdÑPdÓ5e€Kä8DÀYÓ8YÑ5€L,Ð 5ðØŒi˜	×,Ñ,Ó-ðà×0˜)×0Ñ0ðð 	”	˜%×9 9×#9Ñ#9Ó:ð ð 	7×Lœn¨Y×-EÑ-EÓFÀtÈÐLð	ð
- 	˜Ÿ ™ Ñ_ÑT^Ó_Ó_ð
-ð 	ð
-ð 	Hðð 	(ðð 	˜	×5Ñ5ðð 	”gœg›iÓ(ðð 	\ðð 	˜y×<Ñ<ðð 	˜ðð 	 Ð!6ðð 	y×,Ñ,ðð  	i×*Ñ*ð!ð" 	ži®{‘(À
-ð#ð$ '×M¬.¸¿¹À8Ó9LÓ*MØ+ò'€Gð, >×
-"Ø$'¬¯
-ª
-°G¸IÑ4FÓ(GÐ'HÈÐ"Mˆ ÑØ
-€NùòEs   Ç!P	Ç9P	c                óÞ   • U R                   R                  SSS9  U R                  U R                  S-   5      nUR	                  [
-        R                  " USSS9S S9  UR                  U 5        g )	NTr¿   z.tmpFr«   )r  ÚindentrÂ   rÃ   )ÚparentÚmkdirÚ
-with_suffixÚsuffixÚ
-write_textr†  r)  r$  )rú   r  Ú	temporarys      rÞ   Úwrite_json_atomicrA  v  sh   € Ø‡KK×Ñ˜d¨TÐÑ2Ø× Ñ  §¡¨vÑ!5Ó6€IØ
-×ÑÜ
-Š
-7¨°qÑ9Øð ñ ð ×ÑdÕrÝ   c            
-     óî  • [         R                  S5        [        5       n U  Vs0 s HH  nUR                   S5      (       d  M  [	        [
-        UR                   S5      =(       d    S5      5      U_MJ  
-   nn[
-        [        5       [        5       -   5      n[         R                  S[        U5      5        [        R                  " S5      nU(       a	  [        US9OS n/ n/ n S nU Hi  n	[	        U	R                  5      n
-X¢;   a  M  U[        :¼  a    OB [        X•5      n
-US	-
-  nU
-S
-   S
-:X  a  UR%                  U
-5        MX  U R%                  U
-5        Mk  
-   0 n
-X`-    H[  n
-[	        [
-        U
-R                   S5      =(       d    U
-R                   S5      =(       d    S5      5      nU(       d  MP  Xí;  d  MW  X½U'   M]  
-   ['        U
-R)                  5       S
- SS9S [*         nU R-                  [/        [0        5      5        0 nU  HU  n
-[	        [
-        U
-R                   S5      =(       d    U
-R                   S5      =(       d    S5      5      nU(       d  MP  U
-UU'   MW  
-   ['        UR)                  5       S SS9S S n[3        [4        U5        [3        [0        U5        [         R                  S[        U5      [        U5      U5        g s  snf ! [           a-  n[         R#                  SU	R                  U5         S nAGM
-  S nAff = f)Nz Starting Rochdale Daily pipelinerÏ   rÓ   zFresh, local candidates: %dÚOPENAI_API_KEY)Ú api_keyr   zRewrite failed for %s: %sr   rÿ  r¦  r  c                óš   • [        U R                  S5      5      =(       d+    [        R                  R	                  [
-        R                  S9$ ©Nrþ  r   © r*  r`  r   Úminr$  r   râ   ©r  s    rÞ   rF  Úmain.<locals>.<lambda>®  ó3   € œN¨7¯;©;°~Ó+FÓG×tÌ8Ï<É<×K_ÑK_Ôgo×gsÑgsÐK_ÐKtÐtrÝ   Trî  c                óš   • [        U R                  S5      5      =(       d+    [        R                  R	                  [
-        R                  S9$ rF  rG  rI  s    rÞ   rF  rJ  º  rK  rÝ   éd   z;Complete: %d live articles, %d review items, %d AI rewrites)rg  rÑ  r  r`  rý   rÍ   r÷  rÜ  rê  r«  ÚosÚgetenvr   rÏ   r   r8  rf  Ú	exceptionrŒ  rñ  rÆ  r   r‹  rû  Ú
-REVIEW_FILErA  r  )ÚexistingrE  Úexisting_by_sourcerÖ  rD  r1  Ú
-published_newÚreview_queueÚai_countrô  Ú
-source_keyr  rÛ  ÚmergedrH  r¦  Úreview_by_sourceÚ reviewss                     rÞ   Úmainr[  €  s£  € Ü ‡HHÐ
-/Ô0Ü'Ó)€Hñ óâˆDØ
-8‰8L×
-!ó 	BÔœ˜TŸX™X lÓ3×9°rÓ:Ó;¸TÒAÙð ð ô ÜÓ Ô#?Ó#AÑAó€Jô ‡HHÐ
-*¬C°
-«OÔ<äiŠiÐ(Ó)€GÞ(/ŒV˜GÒ
-$°T€Fà*,€MØ)+€LØ€Hãˆ	Ü% i×&:Ñ&:Ó;ˆ
-Ø
-Ó
-+ÙØ
-Ô.Ó
-.Ùð	Ü'¨	Ó:ˆGð 	A‰
-ˆØ
-8Ñ
- 
-Ó
-+Ø× Ñ  Ö)à×Ñ  Ö(ñ  ð" )+€FØ Ô+ˆ Üœs 7§;¡;¨|Ó#<×#WÀ Ç
-Á
-ÈDÓ@Q×#WÐUWÓXÓYˆß
-ˆ33Õ$Ø!3‹Kñ  ,ô
- Ø
-‰
-‹ÙtØñ ð  Ô ð	€Ið ×Ñœ¤{Ó3Ô4Ø24ÐÛˆ Üœs 7§;¡;¨|Ó#<×#WÀ Ç
-Á
-ÈDÓ@Q×#WÐUWÓXÓYˆß
-ˆ3Ø$+Ð˜SÓ!ñ   ô Ø×ÑÓ!ÙtØñ ð  
-€sð	€Gô ”k 9Ô-Ü”k 7Ô+Ü ‡HHØEÜ
-ˆI‹œ˜G› hôð 
-ùòCøô4 ó 	ÜM‰MÐ5°y×7KÑ7KÈSÔQÞûð	ús#   ¤J8Á1J8Ä
-J=Ê=
-K4Ë !K/Ë/K4Ú__main__)Úreturnr   )r(   rÍ   r]  rÍ   )r
-  r
-   r]  rÍ   )r´   rÍ   r]  rÍ   )r
-  r
-   r]  údatetime | None)r
-  r   r]  rÍ   )r
-  r^  r]  r0  )r&   )r  rÍ   r<  rÍ   r]  rÍ   )r  rÍ   r]  rÍ   )r  rÍ   rÎ   rÍ   r]  r0  )r  rÍ   r]  r0  )r  rÍ   r·   rÍ   r]  ztuple[bool, str])r(   rÍ   r]  r0  )r(   rÍ   r]  ztuple[str, str])r}  r   r~  z$Iterable[tuple[str, dict[str, str]]]r]  rÍ   )r}  r   r]  úlist[dict[str, Any]])r(   rÍ   r]  údict[str, str])r¾  r
-   r]  r^  )r¾  r
-   r]  rÍ   )r]  úlist[Candidate])r×  r`  r]  z	list[str])rÖ  zIterable[Candidate]r]  ra  )rú   r
-   r]  r_  )r]  r_  )rô  rÌ   r·   rÍ   r]  ztuple[str, str, bool])rô  rÌ   r1  z
-OpenAI | Noner]  zdict[str, Any])rú   r
-   r  r
-   r]  ÚNone)r]  Úint)rÚ __doc__Ú
-__future__r   r   rr  r†  Ú loggingrN  r   rè  Úurllib.robotparserra  Ú
-dataclassesr   r   r   r    r   Ú
-email.utilsr	   Ú pathlibr
-   Útypingr
-   r   Úurllib.parser
-   r   r   rÒ  ÚrequestsÚbs4r   Úopenair   Ú__file__Ú resolverÀ   ÚROOTr  rQ  ÚLOG_FILErO  r   rc  r   r   r   r   r   rç   r   r÷   r	  r#   rÐ  rç  rS  r:  rI  r\  rY  r  r-  r;  r<  Ú
-basicConfigÚINFOÚ
-FileHandlerÚ
-StreamHandlerÚ	getLoggerrg  Ú Sessionrj  rk  ÚupdaterÊ   rÛ   rÌ   rã   rê   rý   r  r  r  r  r*  r-  r2  r>  rO  rT  rZ  r^  rn  rw  r  r‘  r”  rµ  r¿  rÇ  rÜ  rå  rê  r÷  rû  r  r  r8  rA  r[  r×   Ú
-SystemExitrD  s   0rÞ   Ú<module>r|     sþ  ðòõ  #ã Û 
-Û 
-Û Û 	Û 	Û 
-Û ß )ß 2Ñ 2Ý -Ý ß  ß 6Ñ 6ã Û Ý Ý á 
-ˆHƒ~× Ñ Ó × 'Ñ '¨Ñ *€Ø_Ñ$€
-ØÐ(Ñ(€
-Ø
-)Ñ
-˜mÑ
-+€àyŠy˜¨Ó7€Ù˜ŸšÐ#7¸Ó?Ó@Ð ÙR—Y’YÐ7¸Ó>Ó?€Ù˜RŸYšYÐ'?ÀÓFÓGÐ Ù˜bŸišiÐ(AÀ4ÓHÓIÐ Ùb—i’iÐ 1°4Ó8Ó9€Ø—’Ð+¨VÓ4×:Ñ:Ó<ÐDXÑX€ð —	’	Ø$ØXó÷  eˆCƒjð ó òˆð ‡zz‡|ó
- €D‡JJƒL×ÑÖññ Ð ð +Ø9Ø"ñ ð ,Ø7Ø"ñ ð !ØIØ"ñ ð -ØIØ"ñ ð Ø8Ø"ñ ð+€
-ð< +Ø1Ø"Ø!ñ	ð ,Ø0Ø"Ø!ñ	ð -ØDØ"Ø ñ	ð Ø4Ø"Ø!ñ	ð *ØKØ"Ø!ñ	ð !Ø>Ø"Ø!ñ	ð?%€òN
-€
-ð"àð"ð 	ˆ{ð "ð <.ð	"ð
- 	ˆ{ð
-"ð ð
-"ð 
-ˆxˆjð"ð oÐ&ð"ð 
-ˆxˆjð"ð M?ð"ð 
-ˆxˆjð"ð 	ˆ{ð"ð 	˜<Ð(ð"ð ð"ð +ð"ð  ð!"ð" 	ˆ{ð#"ð$ ð%"ð& "?ØØ.ØˆjØ
-ˆHØ!?ØˆjØ.ØÚEØ˜;Ð'Øˆ{ØØÚCòC"€
-òJòòòòòòòñ;!Ð òFÐ ò€
-òÐ ð 
-%ØàØ %à" IÐ.Ø˜hÐ'Ø Ð)àØ  (Ð+ØØñ	ð !òñð !ò	ñð ˜xÐ(ñ=
-ò@
-ñG'ñ +€ðZ 	‡× Ñ ˜d¨TÐ Ñ 2Ø  × Ò Ø
-,‰,Ø
-2Ø×!Ò! (°WÑ=¸w×?TÒ?TÓ?VÐ
-Wò ð
-  ×ÒÐ(Ó)€à
-×
-Ò
-Ó
-€ Ø  ‡× Ñ ð
-;ð ,ñ
-ôð ?A€Ð;Ó @ð 
-÷	"ð 	"ó 
-ð	"ô&ô9ô
-
-ôRô9ô-ô,ô
-+ô&MôPöô )ô8ôIô
- ôô.'ôôô& ôIôX
-ô 
-ô8ôvô.#ôL!ô$ô	ô ôgôT ôD
-ðN ˆzÓÙ
-‘T“VÓ
-Ðð ùòa s   Å;P*Æ"P*
