@@ -443,8 +443,8 @@ def should_drop(text: str, url: str='') -> bool:
 def is_sensitive(text: str, category: str) -> bool:
     """Crime is never routed through the sensitive-story publication path.
 
-    This function remains for non-crime material only. Crime publishing uses the
-    direct deterministic path in build_direct_crime_article().
+    This function remains for non-crime material only. Crime candidates go
+    through the standard grounded rewrite like every other category.
     """
     if category == 'crime':
         return False
@@ -1607,85 +1607,6 @@ def article_is_low_quality(article: dict[str, Any]) -> bool:
         return True
     text = _plain_text(' '.join(str(article.get(field) or '') for field in ('title', 'excerpt', 'summary', 'content_html')))
     return bool(GENERIC_ARTICLE_RE.search(text))
-
-def source_led_draft(candidate: Candidate, sensitive: bool) -> dict[str, Any] | None:
-    source_text = normalise_ws(f'{candidate.source_summary} {candidate.source_body_excerpt}')
-    if len(source_text) < 45:
-        return None
-    clean_summary = strip_markdown(candidate.source_summary or candidate.source_body_excerpt)
-    clean_body = strip_markdown(candidate.source_body_excerpt)
-    if sensitive:
-        clean_summary = anonymise_output(clean_summary, source_text)
-        clean_body = anonymise_output(clean_body, source_text)
-    paragraphs: list[str] = []
-    if clean_summary:
-        paragraphs.append(clean_summary[:850])
-    if clean_body and clean_body.lower() != clean_summary.lower():
-        paragraphs.append(clean_body[:900])
-    if candidate.related_sources:
-        paragraphs.append(f"The update has also been cross-referenced against {len(candidate.related_sources)} additional public source{('s' if len(candidate.related_sources) != 1 else '')}.")
-    else:
-        paragraphs.append(f'The information was published by {candidate.source_name}. Readers can use the source link for the original notice and any later amendments.')
-    paragraphs.append('Rochdale Daily will update this report if the identified source publishes material new information.')
-    paragraphs = [p for p in paragraphs if p][:6]
-    while len(paragraphs) < 3:
-        paragraphs.append('The article remains open to correction and further verified information.')
-    return {'publishable': True, 'title': candidate.source_title, 'excerpt': clean_summary[:320] or clean_body[:320], 'paragraphs': paragraphs, 'category': candidate.category, 'area': candidate.area, 'legal_disclaimer': default_legal_disclaimer(sensitive), 'right_to_reply': f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.', 'community_reaction': '', 'social_context_used': False, 'reason': 'Conservative source-led brief used.'}
-
-def crime_autopublish_draft(candidate: Candidate) -> dict[str, Any]:
-    """Create an original attributed brief when a crime rewrite cannot be used.
-
-    This deliberately avoids copying the source body. It ensures that an otherwise
-    valid crime candidate is represented in the public feed rather than silently
-    disappearing because an AI call failed or returned publishable=false.
-    """
-    area_label = (candidate.area or 'rochdale').replace('_', ' ').title()
-    published = parse_datetime(candidate.source_published_at)
-    date_label = published.astimezone(UK_TZ).strftime('%d %B %Y at %H:%M') if published else 'the date shown by the source'
-    cited_title = strip_markdown(candidate.source_title)[:220]
-    title = f'{area_label} crime update: {cited_title}'[:160]
-    excerpt = f'{candidate.source_name} has published a crime, police or court update connected to {area_label}. Rochdale Daily is carrying an attributed brief and linking readers to the original source for the full confirmed details.'
-    paragraphs = [f'{candidate.source_name} published an update connected to {area_label}. The source item is titled ‘{cited_title}’.', f'The source recorded the update on {date_label}. This automated brief does not add allegations, conclusions or details that are absent from the cited material.', 'The original source link is included with this article. Rochdale Daily will update the report if the source issues a correction or materially new confirmed information.']
-    return {'publishable': True, 'title': title, 'excerpt': excerpt, 'paragraphs': paragraphs, 'category': 'crime', 'area': candidate.area or 'rochdale', 'legal_disclaimer': 'This report is based on the cited public source and may be updated.', 'right_to_reply': f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.', 'community_reaction': '', 'social_context_used': False, 'reason': 'Automatic attributed crime fallback used.'}
-
-def build_direct_crime_article(candidate: Candidate) -> dict[str, Any]:
-    """Publish a selected crime candidate without an AI or approval gate.
-
-    This path deliberately bypasses:
-    - the model's publishable decision;
-    - sensitive-story routing and blanket anonymisation;
-    - source-overlap rejection;
-    - minimum AI paragraph requirements;
-    - review or approval status.
-
-    Normal source denial, locality, freshness and story-deduplication checks still
-    run elsewhere in the pipeline.
-    """
-    area = candidate.area if candidate.area in AREA_KEYWORDS else 'rochdale'
-    area_label = area.replace('_', ' ').title()
-    source_title = strip_markdown(candidate.source_title)[:220]
-    source_summary = strip_markdown(candidate.source_summary or candidate.source_body_excerpt)[:1200]
-    source_body = strip_markdown(candidate.source_body_excerpt)[:1800]
-    published = parse_datetime(candidate.source_published_at)
-    published_label = published.astimezone(UK_TZ).strftime('%-d %B %Y at %H:%M') if published else 'the time recorded by the source'
-    title = source_title or f'Police and crime update for {area_label}'
-    if area_label.lower() not in title.lower():
-        title = f'{area_label}: {title}'
-    title = title[:160]
-    excerpt = source_summary[:360] if source_summary else f'{candidate.source_name} has published a police, crime or court update connected to {area_label}.'
-    paragraphs: list[str] = []
-    if source_summary:
-        paragraphs.append(source_summary[:900])
-    if source_body and source_body.casefold() != source_summary.casefold():
-        paragraphs.append(source_body[:1100])
-    paragraphs.extend([f'The update was published by {candidate.source_name} on {published_label} and has been categorised as crime because it concerns a police, court or public-safety matter connected to {area_label}.', 'The original source is linked with this report so readers can check the full notice and any later amendment.'])
-    paragraphs = [normalise_ws(p) for p in paragraphs if normalise_ws(p)][:8]
-    while len(paragraphs) < 3:
-        paragraphs.append('Further confirmed information will be added when it is published by the identified source.')
-    image_url, image_credit = source_image(candidate, 'crime')
-    source_urls = [candidate.source_url] + [item['url'] for item in candidate.related_sources[:11] if item.get('url')]
-    source_names = [candidate.source_name] + [item['name'] for item in candidate.related_sources[:11] if item.get('name')]
-    return {'id': stable_id(candidate.source_url), 'story_key': candidate.story_key or build_story_key(candidate), 'title': title, 'slug': make_slug(title), 'excerpt': excerpt, 'content_html': ''.join((f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs)), 'area': area, 'category': 'crime', 'types': ['crime'], 'published_at': candidate.source_published_at, 'scraped_at': iso_utc(utc_now()), 'image_url': image_url, 'image_credit': image_credit, 'source_image_candidate_url': '', 'source_image_reuse_status': '', 'event_start_at': '', 'event_end_at': '', 'event_location': '', 'source_kind': candidate.source_kind, 'source_name': candidate.source_name, 'source_url': candidate.source_url, 'source_names': source_names, 'source_urls': source_urls, 'source_count': len(source_urls), 'social_context_used': False, 'social_reaction_count': 0, 'official_social_update_count': 0, 'social_platforms': [], 'social_context_note': '', 'sensitive_story': False, 'police_matter': True, 'requires_approval': False, 'legal_disclaimer': '', 'right_to_reply': '', 'byline': 'Rochdale Daily Newsdesk', 'status': 'published', 'publication_route': 'direct-crime-autopublish', 'discovery_query_label': candidate.discovery_query_label, 'searched_location_slug': candidate.searched_location_slug, 'searched_location_name': candidate.searched_location_name}
 
 def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, Any] | None:
     clean_candidate_public_text(candidate)
