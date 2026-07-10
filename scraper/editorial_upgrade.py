@@ -161,6 +161,34 @@ def draft_word_count(draft: dict[str, Any]) -> int:
     ))
 
 
+def source_word_count(source_text: str) -> int:
+    return len(re.findall(r"\b[\w’'-]+\b", plain_text(source_text)))
+
+
+# A source rich enough to support a full-length report.
+RICH_SOURCE_WORDS = 320
+
+
+def length_budget(source_text: str) -> tuple[int, int]:
+    """Return (minimum, maximum) body words supported by the source material.
+
+    The previous fixed 200-word floor forced fabrication: given a 40-word
+    police snippet and the instruction "expand to at least 200 body words",
+    the model's only way to comply was to invent residents' concerns, trends
+    and calls for action — which is exactly what reached the live site. The
+    budget now scales with the evidence: a rich source keeps the original
+    200-word floor and 900-word ceiling; a thin source gets a short-brief
+    budget, and the CEILING becomes the enforcement point, so padding a thin
+    story is a quality failure rather than a quality requirement.
+    """
+    words = source_word_count(source_text)
+    if words >= RICH_SOURCE_WORDS:
+        return 200, 900
+    floor = max(50, int(words * 0.6))
+    cap = min(900, max(floor + 60, int(words * 1.5)))
+    return floor, cap
+
+
 def contains_long_verbatim_phrase(output: str, source: str, words: int = 20) -> bool:
     out_words = re.findall(r"[a-z0-9]+", plain_text(output).lower())
     src_words = re.findall(r"[a-z0-9]+", plain_text(source).lower())
@@ -196,10 +224,18 @@ def quality_issues(draft: Any, source_text: str) -> list[str]:
     if len(paragraphs) < 4:
         issues.append("Use at least four substantive paragraphs.")
     words = draft_word_count(clean)
-    if words < 200:
-        issues.append(f"Expand the report to at least 200 body words; it currently has {words}.")
-    if words > 900:
-        issues.append("Tighten the report to fewer than 900 body words.")
+    floor, cap = length_budget(source_text)
+    if words < floor:
+        issues.append(
+            f"Write at least {floor} body words using only facts already "
+            f"present in the sources; the draft currently has {words}."
+        )
+    if words > cap:
+        issues.append(
+            f"Tighten the report to fewer than {cap} body words. The source "
+            "material only supports a short report; cut every sentence that "
+            "is not directly supported by the supplied evidence."
+        )
     if GENERIC_COPY_RE.search(combined):
         issues.append("Remove publishing-process language and report the story itself.")
 
@@ -289,6 +325,7 @@ def request_article(
     logger,
 ) -> dict[str, Any] | None:
     system_message = HOUSE_STYLE_SYSTEM
+    floor, cap = length_budget(source_text)
 
     base_payload = {
         "primary_source": getattr(candidate, "source_name", ""),
@@ -300,9 +337,17 @@ def request_article(
         "social_context": social_context,
         "sensitive_story": sensitive,
         "editorial_requirements": {
-            "minimum_body_words": 200,
-            "target_body_words": "280-600",
-            "paragraphs": "6-10",
+            "minimum_body_words": floor,
+            "maximum_body_words": cap,
+            "target_body_words": f"{floor}-{cap}",
+            "length_policy": (
+                "This budget reflects how much verified source material "
+                "exists. A thin source gets a short accurate brief of four "
+                "tight paragraphs. Never pad towards a word count with "
+                "unsupported reaction, trends, background or speculation; "
+                "a short true report always beats a long invented one."
+            ),
+            "paragraphs": "4-10",
             "include_when_supported": [
                 "latest development",
                 "chronology",
@@ -331,7 +376,8 @@ def request_article(
             payload["repair_required"] = feedback
             payload["repair_instruction"] = (
                 "Correct every issue while preserving all supported facts. "
-                "Do not pad with generic prose."
+                "Do not pad with generic prose, and never add reaction, "
+                "trends or consequences that the sources do not state."
             )
         try:
             response = client.chat.completions.create(
