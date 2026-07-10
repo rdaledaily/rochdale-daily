@@ -703,31 +703,53 @@ def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
     return merged
 
 
+def _mergeable(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    """Decide whether two feed records are the same story.
+
+    Ticket events have canonical per-event URLs on the approved feed, so an
+    event record is only ever the same event as another when the URLs match.
+    Fuzzy matching is disabled for them: same-venue events share boilerplate
+    ("Live Music, Great Food…"), which chained Oktoberfest, Pure 80s,
+    Monsters of Rock and the Littlebrewer Ale Festival into a single record
+    on the live site.
+    """
+    left_event = is_event(left)
+    right_event = is_event(right)
+    if left_event or right_event:
+        if not (left_event and right_event):
+            return False
+        left_url = normalise_url(str(left.get("source_url") or ""))
+        right_url = normalise_url(str(right.get("source_url") or ""))
+        return bool(left_url) and left_url == right_url
+    return records_match(left, right)
+
+
 def merge_duplicate_articles(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Collapse duplicate records using complete-linkage clustering.
+
+    A record only joins a cluster when it matches EVERY existing member.
+    This mirrors story_identity.dedupe_article_records: transitive
+    (union-find) clustering was removed there because a single contaminated
+    bridge record chained unrelated stories together on every run, but this
+    function kept the union-find variant and reproduced the same defect on
+    the front-page feed. The feed is small, so O(n²) is harmless.
+    """
     records = [dict(item) for item in items]
-    count = len(records)
-    parent = list(range(count))
-
-    def find(index: int) -> int:
-        while parent[index] != index:
-            parent[index] = parent[parent[index]]
-            index = parent[index]
-        return index
-
-    def union(left: int, right: int) -> None:
-        left_root, right_root = find(left), find(right)
-        if left_root != right_root:
-            parent[right_root] = left_root
-
-    for left in range(count):
-        for right in range(left + 1, count):
-            if records_match(records[left], records[right]):
-                union(left, right)
-
-    groups: dict[int, list[dict[str, Any]]] = defaultdict(list)
-    for index, record in enumerate(records):
-        groups[find(index)].append(record)
-    return [merge_group(group) for group in groups.values()]
+    clusters: list[list[dict[str, Any]]] = []
+    for record in records:
+        best_cluster: list[dict[str, Any]] | None = None
+        best_size = 0
+        for cluster in clusters:
+            if len(cluster) > best_size and all(
+                _mergeable(record, member) for member in cluster
+            ):
+                best_cluster = cluster
+                best_size = len(cluster)
+        if best_cluster is None:
+            clusters.append([record])
+        else:
+            best_cluster.append(record)
+    return [merge_group(cluster) for cluster in clusters]
 
 
 def clean_and_integrate_events(
