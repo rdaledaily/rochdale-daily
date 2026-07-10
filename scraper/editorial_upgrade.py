@@ -57,7 +57,8 @@ CATEGORY_ORDER = (
     )),
     ("environment", re.compile(
         r"\b(?:flood|weather warning|pollution|recycling|litter|climate|wildlife|"
-        r"reservoir|canal|park|environment|heatwave)\b",
+        r"reservoir|canal|environmental|nature reserve|green space|country park|"
+        r"heatwave)\b",
         re.I,
     )),
     ("sport", re.compile(
@@ -238,6 +239,31 @@ def quality_issues(draft: Any, source_text: str) -> list[str]:
         )
     if GENERIC_COPY_RE.search(combined):
         issues.append("Remove publishing-process language and report the story itself.")
+
+    # A preposition running straight into punctuation means the model left a
+    # date, time or place blank ("the first session set to take place on .").
+    if re.search(r"\b(?:on|at|from|until|between|by)\s*[.,;:]", combined):
+        issues.append(
+            "Complete or remove the sentence with a missing date, time or "
+            "place; never leave a preposition hanging before punctuation."
+        )
+
+    # The headline must describe the same story as the body. A published
+    # example: headline about indoor five-a-side football sessions on a body
+    # entirely about back-care yoga at the same venue.
+    title_tokens = {
+        token for token in re.findall(r"[a-z0-9-]+", title.lower())
+        if len(token) >= 4 and token not in STOPWORDS
+    }
+    body_tokens = set(re.findall(r"[a-z0-9-]+", " ".join([excerpt, *paragraphs]).lower()))
+    if len(title_tokens) >= 4:
+        present = len(title_tokens & body_tokens)
+        if present / len(title_tokens) < 0.6:
+            issues.append(
+                "Align the headline with the report: most of its key words "
+                "never appear in the body, so the headline and body describe "
+                "different stories."
+            )
 
     source_tokens = {
         token for token in re.findall(r"[a-z0-9]+", source_text.lower())
