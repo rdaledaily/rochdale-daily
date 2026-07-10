@@ -46,5 +46,35 @@ jobs:
           git add articles.json scraper_status.json articles sitemap.xml
           if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
           git commit -m "Publish manual article edits"
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+          # A scheduled scrape can land while this publish is building.
+          # articles.json is machine-generated whole-file state, so a plain
+          # rebase can never resolve a conflict in it; merge origin instead
+          # and resolve the feed with the pipeline's story-aware merger.
+          # The editor's version is passed as the authoritative (remote)
+          # side so a manual edit is never overwritten by the racing run.
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); merging origin/${GITHUB_REF_NAME}."
+            git fetch origin "${GITHUB_REF_NAME}"
+            if ! git merge --no-edit "origin/${GITHUB_REF_NAME}"; then
+              if git ls-files -u -- articles.json | grep -q .; then
+                git show ":2:articles.json" > /tmp/editorial_articles.json
+                git show ":3:articles.json" > /tmp/scraper_articles.json
+                python scraper/merge_feeds.py /tmp/editorial_articles.json /tmp/scraper_articles.json articles.json
+                git add articles.json
+              fi
+              conflicted=$(git diff --name-only --diff-filter=U)
+              if [ -n "${conflicted}" ]; then
+                echo "${conflicted}" | while read -r file; do
+                  git checkout --ours -- "${file}" 2>/dev/null || git rm -q -- "${file}"
+                  git add -- "${file}" 2>/dev/null || true
+                done
+              fi
+              git commit --no-edit
+            fi
+          done
+          echo "Failed to push after 5 attempts."
+          exit 1
