@@ -124,3 +124,52 @@ for sample in LEGITIMATE_SAMPLES:
     assert not WEAK_STYLE_RE.search(sample), f"Wrongly flagged: {sample!r}"
 
 print("Editorial length and fabrication tests passed.")
+
+# ---------------------------------------------------------------------------
+# Regressions from the live Whitworth Swimming Baths article: wrong category
+# from prose-word match, dangling empty date, headline describing a different
+# story than the body.
+# ---------------------------------------------------------------------------
+from editorial_upgrade import deterministic_category
+
+assert deterministic_category(
+    "The initiative aims to provide a supportive environment for participants "
+    "to engage in gentle yoga practices."
+) != "environment", "'supportive environment' must not categorise as environment"
+assert deterministic_category("Flood warning issued for the borough") == "environment"
+assert deterministic_category("Litter pickers clean up the canal towpath") == "environment"
+
+dangling = build_draft([60, 60, 60, 60], seed_terms)
+dangling["paragraphs"][2] += " The first session is set to take place on ."
+issues = quality_issues(dangling, rich_source + " arrested collision norden police enquiries")
+assert any("missing date" in issue for issue in issues), issues
+
+mismatch = {
+    "publishable": True,
+    "title": "Indoor Five-a-Side Football Sessions Announced at Whitworth Swimming Baths",
+    "excerpt": (
+        "New Back Care Yoga sessions are set to begin at Whitworth Swimming "
+        "Baths, aimed at improving posture and alleviating back pain."
+    ),
+    "paragraphs": [
+        "A series of Back Care Yoga sessions will commence at Whitworth Swimming Baths, designed to assist individuals in improving posture and managing back pain.",
+        "The sessions will be led by qualified instructors who specialise in back care and yoga therapy for participants of all levels.",
+        "Each class incorporates relaxation and mindfulness techniques alongside exercises that address common back issues for attendees.",
+        "Classes run weekly and are expected to last approximately one hour, with mats available for anyone who does not bring their own.",
+    ],
+}
+issues = quality_issues(
+    mismatch,
+    "Back Care Yoga sessions begin at Whitworth Swimming Baths led by qualified instructors weekly classes",
+)
+assert any("Align the headline" in issue for issue in issues), issues
+
+coherent = dict(mismatch)
+coherent["title"] = "Back Care Yoga Sessions Announced at Whitworth Swimming Baths"
+issues = quality_issues(
+    coherent,
+    "Back Care Yoga sessions begin at Whitworth Swimming Baths led by qualified instructors weekly classes",
+)
+assert not any("Align the headline" in issue for issue in issues), issues
+
+print("Category, dangling-date and headline-coherence tests passed.")
