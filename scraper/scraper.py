@@ -1923,6 +1923,47 @@ def request_grounded_draft(
     )
 
 
+def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[str, dict[str, Any]]) -> bool:
+    """Decide whether a clustered candidate earns one of the run's rewrite slots.
+
+    A story that is already published stays published exactly as it is; it is
+    only re-attempted when the house style version changes or when the
+    candidate brings a source URL the article has never seen (i.e. genuinely
+    new material arrived).
+
+    There is deliberately NO "under 200 words" re-eligibility rule here.
+    length_budget() intentionally produces short briefs (as few as 50 body
+    words) from thin sources, so a word-count threshold re-queued the same
+    correctly-sized briefs for a fresh rewrite on every 15-minute run: each
+    rewrite produced a slightly different headline, which changed the slug,
+    which orphaned the old article page (median measured page lifespan on the
+    live site: 4.3 hours). A short article only genuinely improves when MORE
+    source material arrives, and that is exactly the new-source-URL check.
+    """
+    if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate)):
+        return False
+    if candidate.category == 'events':
+        # rewrite_candidate() unconditionally rejects general event
+        # candidates because What's Occurrin' Events is the approved feed,
+        # so selecting them only wastes rewrite slots and inflates the skip
+        # count. Filter them before selection instead of after.
+        return False
+    candidate.story_key = candidate.story_key or build_story_key(candidate)
+    existing_article = existing_by_story.get(candidate.story_key)
+    if existing_article is None:
+        return True
+    if existing_article.get('editorial_lock'):
+        # Hand-edited by the editor: the pipeline never rewrites it.
+        return False
+    if existing_article.get('editorial_style_version') != STYLE_VERSION:
+        return True
+    known_urls = {canonicalise_url(url) for url in existing_article.get('source_urls', []) if url}
+    primary_url = canonicalise_url(str(existing_article.get('source_url') or ''))
+    if primary_url:
+        known_urls.add(primary_url)
+    candidate_urls = {canonicalise_url(candidate.source_url), *{canonicalise_url(item.get('url', '')) for item in candidate.related_sources if item.get('url')}}
+    return bool(candidate_urls - known_urls)
+
 def main() -> int:
     log.info('Starting Rochdale Daily 15-minute pipeline')
     existing = recent_existing_articles()
@@ -1940,31 +1981,10 @@ def main() -> int:
     log.info('Candidate volume: %d raw items -> %d story clusters', len(raw_candidates), len(candidates))
     api_key = os.getenv('OPENAI_API_KEY')
     run_limit = MAX_AI_ARTICLES_INITIAL if len(existing) < MIN_LIVE_STORIES else MAX_AI_ARTICLES_PER_RUN
-    eligible_candidates: list[Candidate] = []
-    for candidate in candidates:
-        if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate)):
-            continue
-        candidate.story_key = candidate.story_key or build_story_key(candidate)
-        existing_article = existing_by_story.get(candidate.story_key)
-        if existing_article is None:
-            eligible_candidates.append(candidate)
-            continue
-        if existing_article.get('editorial_lock'):
-            # Hand-edited by the editor: the pipeline never rewrites it.
-            continue
-        if existing_article.get('editorial_style_version') != STYLE_VERSION:
-            eligible_candidates.append(candidate)
-            continue
-        if article_public_word_count(existing_article) < 200:
-            eligible_candidates.append(candidate)
-            continue
-        known_urls = {canonicalise_url(url) for url in existing_article.get('source_urls', []) if url}
-        primary_url = canonicalise_url(str(existing_article.get('source_url') or ''))
-        if primary_url:
-            known_urls.add(primary_url)
-        candidate_urls = {canonicalise_url(candidate.source_url), *{canonicalise_url(item.get('url', '')) for item in candidate.related_sources if item.get('url')}}
-        if candidate_urls - known_urls:
-            eligible_candidates.append(candidate)
+    eligible_candidates = [
+        candidate for candidate in candidates
+        if candidate_is_rewrite_eligible(candidate, existing_by_story)
+    ]
     effective_limit = min(len(eligible_candidates), max(run_limit, MIN_BALANCED_SELECTION_LIMIT))
     selected_candidates, selection_diagnostics = balanced_select(eligible_candidates, limit=effective_limit, max_per_source=MAX_SELECTED_PER_SOURCE, max_per_category=MAX_SELECTED_PER_CATEGORY)
     log.info('Balanced selection: %d eligible -> %d selected; categories=%s; wards=%s', len(eligible_candidates), len(selected_candidates), selection_diagnostics.get('selected_categories', []), selection_diagnostics.get('selected_wards', []))
@@ -1991,10 +2011,27 @@ def main() -> int:
             else:
                 skipped += 1
     ai_count = len(selected_candidates)
+    # URL stability: a story that has already been published keeps its slug,
+    # id and first-publication date forever, even when the latest rewrite
+    # produced a different headline. Headline drift must never change the
+    # public URL of an already-indexed article page.
+    for article in new_articles:
+        prior = existing_by_story.get(str(article.get('story_key') or ''))
+        if not prior:
+            continue
+        for field in ('slug', 'id'):
+            if prior.get(field):
+                article[field] = prior[field]
+        if prior.get('first_published_at'):
+            article['first_published_at'] = prior['first_published_at']
     merged: dict[str, dict[str, Any]] = {}
     for article in existing + new_articles:
         article = sanitise_article(article)
-        story_key = build_story_key(article)
+        # Trust the stored story key when one exists: recomputing identity
+        # from the freshly rewritten headline made the same story oscillate
+        # between keys run-to-run, splitting it into duplicates whose merge
+        # then dropped one slug (and deleted its page).
+        story_key = str(article.get('story_key') or '') or build_story_key(article)
         article['story_key'] = story_key
         if story_key in merged:
             merged[story_key] = merge_article_records(merged[story_key], article)
