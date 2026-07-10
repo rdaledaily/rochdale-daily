@@ -343,7 +343,7 @@ def article_is_local(article: dict[str, Any]) -> bool:
 from rewrite_safety import excessive_source_overlap
 from selection_policy import PUBLISH_CATEGORIES, ROCHDALE_WARDS, balanced_select, is_job_or_career_post, ward_for_item
 from story_identity import authority_score, build_story_key, dedupe_article_records, merge_article_records, same_story
-from locality_rules import AREA_KEYWORDS, LOCAL_TERMS, article_is_local, detect_area, is_local, locality_evidence, source_is_denied as locality_source_is_denied
+from locality_rules import AREA_KEYWORDS, LOCAL_TERMS, article_is_local, detect_area, has_disqualifying_evidence, is_local, locality_evidence, source_is_denied as locality_source_is_denied
 
 def source_is_denied(source_name: str='', source_url: str='') -> bool:
     """Keep Roch Valley Radio allowed while hard-blocking prohibited outlets."""
@@ -423,18 +423,6 @@ def live_category(text: str, fallback: str) -> str:
     if detected != 'news' and fallback == 'news':
         return detected
     return fallback or detected or 'news'
-
-def article_passes_locality(article: dict[str, Any]) -> bool:
-    """Apply the normal locality rules plus the explicitly trusted added sources."""
-    if article_is_local(article):
-        return True
-    source_name = normalise_ws(article.get('source_name', ''))
-    source_url = str(article.get('source_url') or '')
-    source_domain = domain_of(source_url)
-    text = ' '.join((str(article.get(field) or '') for field in ('title', 'excerpt', 'summary', 'content_html', 'event_location')))
-    trusted_names = {str(source.get('name') or '') for source in DISCOVERY_PAGES + LIVE_PAGE_SOURCES if source.get('trusted_local')} | {str(page.get('name') or '') for page in PUBLIC_FACEBOOK_PAGES if page.get('trusted_local')}
-    trusted_domains = {domain_of(str(source.get('url') or '')) for source in DISCOVERY_PAGES + LIVE_PAGE_SOURCES if source.get('trusted_local')}
-    return bool(source_name in trusted_names or source_domain in trusted_domains or rochdale_traffic_area(text))
 
 def should_drop(text: str, url: str='') -> bool:
     low = text.lower()
@@ -1827,10 +1815,17 @@ def article_passes_locality(article: dict[str, Any]) -> bool:
         for source in DISCOVERY_PAGES + LIVE_PAGE_SOURCES
         if source.get("trusted_local")
     }
+    if source_name in trusted_names or source_domain in trusted_domains:
+        return True
+    # The remaining acceptance paths are weak: traffic-desk copy and a borough
+    # place name appearing in finished text. A namesake elsewhere (Norden in
+    # Dorset, Norden Farm in Maidenhead, Middleton Park in Leeds) satisfies
+    # those regexes for the wrong reason, so impostor or rival-geography
+    # evidence always vetoes them.
+    if has_disqualifying_evidence(text, source_name, source_url):
+        return False
     return bool(
-        source_name in trusted_names
-        or source_domain in trusted_domains
-        or rochdale_traffic_area(text)
+        rochdale_traffic_area(text)
         or BOROUGH_FINISHED_LOCATION_RE.search(normalise_ws(text))
     )
 
@@ -1978,7 +1973,7 @@ def main() -> int:
     publication_ready = [
         article for article in deduped_publishable
         if str(article.get('source_kind') or 'article') == 'event'
-        or article_public_word_count(article) >= 200
+        or article_public_word_count(article) >= 50
     ]
     published = sorted(
         publication_ready,
