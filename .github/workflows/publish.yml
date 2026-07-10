@@ -1,0 +1,50 @@
+name: Publish manual article edits
+
+# Rebuilds the site whenever articles.json changes (e.g. edited in the GitHub
+# web editor) so editorial updates go live without waiting for a scrape.
+on:
+  push:
+    paths:
+      - articles.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Shares the scraper's lock so a publish never races a scheduled run.
+concurrency:
+  group: rochdale-daily-15-minute-scraper
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The scraper's own feed commits also touch articles.json; skip those.
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+      - name: Rebuild pages and sitemap
+        run: |
+          python -m json.tool articles.json > /dev/null
+          python scraper/generate_pages.py
+      - name: Commit rebuilt site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add articles.json scraper_status.json articles sitemap.xml
+          if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
+          git commit -m "Publish manual article edits"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
