@@ -133,7 +133,7 @@ jobs:
 
       - name: Validate pipeline
         run: |
-          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/search_queries.py scraper/rewrite_safety.py scraper/house_style.py scraper/editorial_upgrade.py scraper/source_presentation.py scraper/generate_pages.py scraper/food_hygiene.py scraper/frontpage_pipeline.py scraper/scraper.py
+          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/search_queries.py scraper/rewrite_safety.py scraper/house_style.py scraper/editorial_upgrade.py scraper/source_presentation.py scraper/generate_pages.py scraper/food_hygiene.py scraper/frontpage_pipeline.py scraper/merge_feeds.py scraper/scraper.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py
           python scraper/test_selection_policy.py
@@ -172,5 +172,42 @@ jobs:
           fi
 
           git commit -m "Update Rochdale Daily news feed"
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+          # origin/main can move while a run is in progress (an editorial
+          # publish, a manual push, or the hourly run overlapping a fast
+          # run). articles.json is machine-generated whole-file state, so a
+          # plain rebase can never resolve a conflict in it. Instead: merge
+          # origin/main, resolve articles.json with the pipeline's own
+          # story-identity merge (lossless union, locked edits preserved,
+          # published slugs stable), take this run's version of the other
+          # generated files, and retry the push a few times.
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); merging origin/${GITHUB_REF_NAME}."
+            git fetch origin "${GITHUB_REF_NAME}"
+            if ! git merge --no-edit "origin/${GITHUB_REF_NAME}"; then
+              # articles.json: story-aware merge of both sides.
+              if git ls-files -u -- articles.json | grep -q .; then
+                git show ":3:articles.json" > /tmp/remote_articles.json
+                git show ":2:articles.json" > /tmp/local_articles.json
+                python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
+                git add articles.json
+              fi
+              # Every other conflicted file is generated output; this run's
+              # copy is the freshest and is regenerated in 15 minutes anyway.
+              # Article pages only ever gain files now, so add/add conflicts
+              # on the same slug are identical stories: keep ours.
+              conflicted=$(git diff --name-only --diff-filter=U)
+              if [ -n "${conflicted}" ]; then
+                echo "${conflicted}" | while read -r file; do
+                  git checkout --ours -- "${file}" 2>/dev/null || git rm -q -- "${file}"
+                  git add -- "${file}" 2>/dev/null || true
+                done
+              fi
+              git commit --no-edit
+            fi
+          done
+          echo "Failed to push after 5 attempts."
+          exit 1
