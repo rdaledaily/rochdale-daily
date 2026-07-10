@@ -142,6 +142,7 @@ jobs:
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
           python scraper/test_archive_persistence.py
+          python scraper/test_event_identity.py
           (
             cd scraper
             python -c "import scraper; print('Scraper startup import passed.')"
