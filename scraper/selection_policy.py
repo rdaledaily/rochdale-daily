@@ -205,6 +205,49 @@ def item_url(item: Any) -> str:
     )
 
 
+# Classified listings are advertising, not journalism: individual property
+# rentals/sales and pet sales/adoption posts. News ABOUT the housing market
+# ("average rents rise") carries none of these listing signatures.
+CLASSIFIED_URL_PARTS = (
+    "/property-for-sale", "/property-to-rent", "/to-rent/", "/for-sale/",
+    "/houses-for-sale", "/houses-to-rent", "/pets-for-sale", "/classifieds/",
+    "/listings/",
+)
+CLASSIFIED_PATTERNS = (
+    # Property listings: an availability phrase near a dwelling word, or a
+    # dwelling word with a listed rent price.
+    r"\b(?:available\s+(?:for\s+rent|to\s+rent|to\s+let)|for\s+rent|to\s+let|up\s+for\s+rent)\b"
+    r"[\s\S]{0,120}?\b(?:house|home|flat|apartment|bungalow|property|bedroom|maisonette)\b",
+    r"\b(?:house|home|flat|apartment|bungalow|property|maisonette)\b"
+    r"[\s\S]{0,120}?\b(?:available\s+(?:for\s+rent|to\s+rent|to\s+let)|for\s+rent|to\s+let|now\s+available\s+to\s+rent)\b",
+    r"\b\d+[- ]bed(?:room)?\b[\s\S]{0,120}?\b(?:for\s+sale|for\s+rent|to\s+let|to\s+rent|available)\b",
+    r"£\s?[\d,]+\s*(?:pcm|per\s+calendar\s+month|per\s+month|per\s+week|pw)\b",
+    # Pet sales and rehoming listings.
+    r"\b(?:pupp(?:y|ies)|kitten(?:s)?|dog(?:s)?|cat(?:s)?)\b"
+    r"[\s\S]{0,80}?\b(?:for\s+sale|available\s+for\s+(?:sale|adoption|rehoming)|"
+    r"looking\s+for\s+(?:a\s+)?(?:new\s+)?(?:forever\s+)?home(?:s)?|ready\s+(?:to\s+leave|now))\b",
+    r"\b(?:for\s+sale|available\s+for\s+adoption)\b[\s\S]{0,80}?\b(?:pupp(?:y|ies)|kitten(?:s)?)\b",
+)
+
+
+def is_classified_listing_post(item_or_text: Any, url: str = "") -> bool:
+    if isinstance(item_or_text, str):
+        text = normalise_text(item_or_text)
+        candidate_url = str(url or "")
+    else:
+        text = item_text(item_or_text)
+        candidate_url = item_url(item_or_text)
+
+    path = urlparse(candidate_url).path.lower()
+    if any(part in path for part in CLASSIFIED_URL_PARTS):
+        return True
+
+    return any(
+        re.search(pattern, text, flags=re.IGNORECASE)
+        for pattern in CLASSIFIED_PATTERNS
+    )
+
+
 def is_job_or_career_post(item_or_text: Any, url: str = "") -> bool:
     if isinstance(item_or_text, str):
         text = normalise_text(item_or_text)
