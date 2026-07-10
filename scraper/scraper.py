@@ -1383,7 +1383,7 @@ def recent_existing_articles() -> list[dict[str, Any]]:
             # category; genuine source images are never touched.
             text = ' '.join(str(article.get(field) or '') for field in ('title', 'excerpt', 'content_html'))
             corrected = editorial_category(text, fallback=str(article.get('category') or 'news'))
-            if corrected != article.get('category'):
+            if corrected != article.get('category') and not article.get('editorial_lock'):
                 old_stock = CATEGORY_STOCK_IMAGES.get(str(article.get('category') or ''), '')
                 if str(article.get('image_url') or '') == old_stock:
                     article['image_url'] = CATEGORY_STOCK_IMAGES.get(corrected, CATEGORY_STOCK_IMAGES['news'])
@@ -1948,6 +1948,9 @@ def main() -> int:
         existing_article = existing_by_story.get(candidate.story_key)
         if existing_article is None:
             eligible_candidates.append(candidate)
+            continue
+        if existing_article.get('editorial_lock'):
+            # Hand-edited by the editor: the pipeline never rewrites it.
             continue
         if existing_article.get('editorial_style_version') != STYLE_VERSION:
             eligible_candidates.append(candidate)
