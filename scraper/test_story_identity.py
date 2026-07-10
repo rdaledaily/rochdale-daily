@@ -334,3 +334,86 @@ for item in deportation_records:
     assert not ("farm" in surface and "fire" in surface), item.get("title")
 
 print("Story identity regression tests passed.")
+
+# ---------------------------------------------------------------------------
+# Venue divergence: two DIFFERENT programmes at the same venue must never
+# merge. Live failure: a football-sessions headline published over a
+# back-care-yoga body because both were "announced at Whitworth Swimming
+# Baths" and the venue's own words satisfied every overlap check.
+# ---------------------------------------------------------------------------
+FOOTBALL_SESSIONS = {
+    "title": "Indoor 5 A Side Football Sessions Announced at Whitworth Swimming Baths",
+    "summary": (
+        "Indoor five-a-side football sessions for adults will run weekly at "
+        "Whitworth Swimming Baths sports hall."
+    ),
+    "category": "events",
+    "area": "whitworth",
+    "published_at": "2026-07-09T10:00:00Z",
+    "source_name": "Your Trust",
+    "source_url": "https://example.org/football-sessions",
+}
+YOGA_SESSIONS = {
+    "title": "Back Care Yoga Sessions Announced at Whitworth Swimming Baths",
+    "summary": (
+        "New Back Care Yoga sessions are set to begin at Whitworth Swimming "
+        "Baths, aimed at improving posture and alleviating back pain."
+    ),
+    "category": "events",
+    "area": "whitworth",
+    "published_at": "2026-07-09T14:00:00Z",
+    "source_name": "Your Trust",
+    "source_url": "https://example.org/yoga-sessions",
+}
+YOGA_SECOND_OUTLET = {
+    "title": "New back care yoga classes to start at Whitworth Swimming Baths",
+    "summary": (
+        "Weekly back care yoga sessions aimed at posture and back pain begin "
+        "at Whitworth Swimming Baths this month."
+    ),
+    "category": "events",
+    "area": "whitworth",
+    "published_at": "2026-07-09T18:00:00Z",
+    "source_name": "Rochdale Observer",
+    "source_url": "https://example.org/yoga-observer",
+}
+
+assert not same_story(FOOTBALL_SESSIONS, YOGA_SESSIONS), (
+    "different programmes at the same venue must not merge"
+)
+# The same programme reported by two outlets is a genuine duplicate.
+assert same_story(YOGA_SESSIONS, YOGA_SECOND_OUTLET)
+venue_clusters = dedupe_article_records(
+    [FOOTBALL_SESSIONS, YOGA_SESSIONS, YOGA_SECOND_OUTLET]
+)
+assert len(venue_clusters) == 2, [item["title"] for item in venue_clusters]
+
+# ---------------------------------------------------------------------------
+# Title-case robustness: the same incident published in Title Case and in
+# sentence case must merge despite the fake capitalised "entities" Title
+# Case creates.
+# ---------------------------------------------------------------------------
+TITLE_CASE_REPORT = {
+    "title": "Man Charged After Serious Assault On Yorkshire Street In Rochdale",
+    "summary": "A Man Has Been Charged Following A Serious Assault On Yorkshire Street.",
+    "category": "crime",
+    "area": "rochdale",
+    "published_at": "2026-07-09T10:00:00Z",
+    "source_name": "GMP",
+    "source_url": "https://example.org/title-case",
+}
+SENTENCE_CASE_REPORT = {
+    "title": "Man charged after serious assault on Yorkshire Street",
+    "summary": (
+        "Police have charged a man after a serious assault on Yorkshire "
+        "Street in Rochdale town centre."
+    ),
+    "category": "crime",
+    "area": "rochdale",
+    "published_at": "2026-07-09T12:00:00Z",
+    "source_name": "MEN",
+    "source_url": "https://example.org/sentence-case",
+}
+assert same_story(TITLE_CASE_REPORT, SENTENCE_CASE_REPORT)
+
+print("Venue-divergence and title-case regression tests passed.")
