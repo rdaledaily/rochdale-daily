@@ -1699,8 +1699,13 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     community_reaction = strip_markdown(draft.get('community_reaction', ''))[:500]
     social_context_used = bool(draft.get('social_context_used'))
     draft_category = str(draft.get('category') or '')
+    # Categorise the PUBLISHED article only. Raw source_text is excluded:
+    # a story found via a traffic search query can arrive wrapped in traffic
+    # page furniture, and those words outvoted the finished football
+    # report's own vocabulary (live example: "Rochdale to face Swindon Town"
+    # labelled traffic).
     category_evidence = normalise_ws(
-        f"{source_text} {title} {excerpt} {' '.join(paragraphs)}"
+        f"{title} {excerpt} {' '.join(paragraphs)}"
     )
     category = editorial_category(
         category_evidence,
