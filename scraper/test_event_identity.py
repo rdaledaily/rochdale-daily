@@ -124,11 +124,41 @@ def test_bridge_record_cannot_chain_stories() -> None:
     print("contaminated bridge cannot chain unrelated stories — OK")
 
 
+
+
+def test_events_exempt_from_text_categorisation() -> None:
+    """A ticket event can never be recategorised by text scoring.
+
+    Live example: the Black Dyke Band concert's only category keyword was
+    "opening" (the Town Hall's 1871 opening ceremony), so score-based
+    categorisation filed it as business on every run, undoing any repair.
+    """
+    concert = {
+        "slug": "the-black-dyke-band-at-rochdale-town-hall-2027",
+        "title": "The Black Dyke Band at Rochdale Town Hall 2027",
+        "source_kind": "event",
+        "category": "business",  # wrongly labelled by a previous run
+        "content_html": (
+            "<p>In 1871 The Black Dyke Band performed at the original "
+            "opening ceremony for Rochdale Town Hall. The band have since "
+            "gone on to perform every year.</p>"
+        ),
+        "source_url": "https://www.whatsoccurrinevents.co.uk/event-details/the-black-dyke-band-at-rochdale-town-hall-2027",
+        "source_urls": ["https://www.whatsoccurrinevents.co.uk/event-details/the-black-dyke-band-at-rochdale-town-hall-2027"],
+    }
+    fixed = fp.apply_category_rules(concert)
+    assert fixed["category"] == "events", (
+        f"ticket event recategorised to {fixed['category']!r} by text scoring"
+    )
+    print("ticket events exempt from text categorisation — OK")
+
+
 def main() -> int:
     test_distinct_events_never_merge()
     test_same_event_updates_still_merge()
     test_event_never_merges_with_article()
     test_bridge_record_cannot_chain_stories()
+    test_events_exempt_from_text_categorisation()
     print("Event identity and complete-linkage merge tests passed.")
     return 0
 
