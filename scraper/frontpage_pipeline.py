@@ -752,6 +752,25 @@ def merge_duplicate_articles(items: list[dict[str, Any]]) -> list[dict[str, Any]
     return [merge_group(cluster) for cluster in clusters]
 
 
+def _event_identity_trustworthy(previous: dict[str, Any]) -> bool:
+    """Only inherit id/slug from a previous record whose identity is sane.
+
+    Identity carry-over keeps an event's URL stable across re-scrapes, but
+    it also perpetuates corruption forever: after the union-find merge
+    fused several events, a fresh Monsters of Rock scrape inherited the
+    Littlebrewer Ale Festival's slug and id from the contaminated record it
+    replaced, and every subsequent run re-inherited the borrowed identity.
+    A previous record is trusted only when it carries a single source URL
+    and its slug is the slug of its own title.
+    """
+    urls = [url for url in previous.get("source_urls") or [] if url]
+    if len(urls) > 1:
+        return False
+    slug = str(previous.get("slug") or "")
+    title = str(previous.get("title") or "")
+    return bool(slug) and slug == slugify(title)
+
+
 def clean_and_integrate_events(
     articles: list[dict[str, Any]],
     scraped_events: list[dict[str, Any]],
@@ -780,7 +799,7 @@ def clean_and_integrate_events(
     for event in scraped_events:
         key = normalise_url(str(event.get("source_url") or ""))
         previous = existing_approved.get(key)
-        if previous:
+        if previous and _event_identity_trustworthy(previous):
             event["id"] = previous.get("id") or event["id"]
             event["slug"] = previous.get("slug") or event["slug"]
             event["published_at"] = previous.get("published_at") or event["published_at"]
