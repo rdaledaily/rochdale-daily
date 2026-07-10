@@ -133,7 +133,7 @@ jobs:
 
       - name: Validate pipeline
         run: |
-          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/search_queries.py scraper/rewrite_safety.py scraper/house_style.py scraper/editorial_upgrade.py scraper/source_presentation.py scraper/generate_pages.py scraper/food_hygiene.py scraper/scraper.py
+          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/search_queries.py scraper/rewrite_safety.py scraper/house_style.py scraper/editorial_upgrade.py scraper/source_presentation.py scraper/generate_pages.py scraper/food_hygiene.py scraper/frontpage_pipeline.py scraper/scraper.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py
           python scraper/test_selection_policy.py
@@ -141,6 +141,7 @@ jobs:
           python scraper/test_rewrite_safety.py
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
+          python scraper/test_archive_persistence.py
           (
             cd scraper
             python -c "import scraper; print('Scraper startup import passed.')"
