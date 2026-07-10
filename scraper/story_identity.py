@@ -72,7 +72,7 @@ STOPWORDS = {
     "reported", "reportedly", "breaking", "live", "online", "exclusive",
     "rochdale", "heywood", "middleton", "littleborough", "milnrow",
     "newhey", "wardle", "norden", "castleton", "kirkholt", "spotland",
-    "falinge", "deeplish", "greater", "manchester",
+    "falinge", "deeplish", "whitworth", "greater", "manchester",
 }
 
 GENERIC_ENTITIES = {
@@ -189,6 +189,7 @@ PHRASE_ALIASES: tuple[tuple[re.Pattern[str], str], ...] = (
 )
 
 TOKEN_ALIASES = {
+    "announced": "announce", "announces": "announce", "announcing": "announce",
     "arrested": "arrest", "arrests": "arrest", "arresting": "arrest",
     "charged": "charge", "charges": "charge", "charging": "charge",
     "convicted": "convict", "conviction": "convict", "convictions": "convict",
@@ -221,6 +222,12 @@ ACTION_CONCEPTS = {
     "reject", "release", "resign", "robbery", "sentence", "shooting", "sign",
     "stabbing", "theft", "trial", "vandalism", "win",
 }
+
+# Publication verbs shared by unrelated stories ("announced", "launches",
+# "opens").  They still contribute to similarity scoring, but they are never
+# evidence AGAINST subject divergence: two different programmes at the same
+# venue are both "announced".
+BLAND_ACTION_CONCEPTS = {"announce", "launch", "open"}
 
 # A shared incident concept is required by the structured incident matcher.
 # This covers both crimes and non-criminal emergencies such as fires.
@@ -755,6 +762,48 @@ def _shared_person_or_named_entity(left: Any, right: Any) -> bool:
     return bool(shared)
 
 
+def _subject_divergence(left: Any, right: Any) -> bool:
+    """True when two items are DIFFERENT stories sharing a venue or place.
+
+    The live failure: "Indoor 5 A Side Football Sessions Announced at
+    Whitworth Swimming Baths" merged with "Back Care Yoga Sessions ... at
+    Whitworth Swimming Baths" and published a football headline over a yoga
+    body.  The shared entity was the venue, the "shared subjects" were the
+    venue's own words, and the real subjects (football/indoor vs
+    yoga/back/care) were completely disjoint.
+
+    Divergence requires each side to have at least two distinctive subject
+    tokens the other lacks, at most one genuinely shared subject once the
+    shared entities' own words are set aside, and no shared strong compound,
+    incident or action concepts.  Genuine rolling stories fail at least one
+    of those conditions, so this never blocks a real follow-up.
+    """
+    shared_entities = named_entities(left) & named_entities(right)
+    entity_words: set[str] = set()
+    for entity in shared_entities:
+        entity_words.update(concept_sequence_from_text(entity))
+
+    left_subject, right_subject = subject_tokens(left), subject_tokens(right)
+    shared_beyond_entity = (left_subject & right_subject) - entity_words
+    left_distinct = left_subject - right_subject - entity_words
+    right_distinct = right_subject - left_subject - entity_words
+
+    if len(left_distinct) < 2 or len(right_distinct) < 2:
+        return False
+    if len(shared_beyond_entity) > 1:
+        return False
+    if (left_subject & right_subject) & STRONG_SUBJECT_CONCEPTS:
+        return False
+    if incident_tokens(left) & incident_tokens(right):
+        return False
+    meaningful_actions = (
+        action_tokens(left) & action_tokens(right)
+    ) - BLAND_ACTION_CONCEPTS
+    if meaningful_actions:
+        return False
+    return True
+
+
 def ongoing_story_match(left: Any, right: Any) -> bool:
     """Guarded low-threshold route for differently worded updates.
 
@@ -774,6 +823,13 @@ def ongoing_story_match(left: Any, right: Any) -> bool:
     # the same fire on the same named road.
     if incident_fact_match(left, right):
         return True
+
+    # Two different stories at the same venue share the venue's words in
+    # their titles, so every title-overlap branch below is fooled by them.
+    # Once the subjects have provably diverged, no wording-based route may
+    # merge the pair.
+    if _subject_divergence(left, right):
+        return False
 
     left_title, right_title = title_tokens(left), title_tokens(right)
     shared_title = left_title & right_title
@@ -870,6 +926,9 @@ def story_similarity(left: Any, right: Any) -> float:
     right_event = str(get_value(right, "event_start_at", "") or "")
     if left_event and right_event and date_key(left) == date_key(right):
         score += 0.42
+
+    if _subject_divergence(left, right):
+        score *= 0.55
 
     if ongoing_story_match(left, right):
         score = max(score, 0.78)
