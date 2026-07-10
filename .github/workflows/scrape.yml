@@ -148,6 +148,13 @@ jobs:
             python -c "import scraper; print('Scraper startup import passed.')"
           )
 
+      - name: Repair contaminated event records
+        run: |
+          # Idempotent: drops any event record fused from multiple event
+          # URLs (re-collected cleanly from the ticket feed this same run)
+          # and corrects miscategorised events. A no-op on clean data.
+          python scraper/repair_event_records.py
+
       - name: Run Rochdale Daily pipeline
         run: |
           python scraper/scraper.py
