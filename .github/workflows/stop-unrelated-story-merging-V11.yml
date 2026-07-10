@@ -1,0 +1,374 @@
+name: Stop unrelated story merging V11
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rochdale-strict-story-merge-v11
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+
+      - name: Install strict story identity rules
+        shell: bash
+        run: |
+          cat > /tmp/strict-story-merge-v11.b64 <<'B64'
+          ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCgpwYXRoID0gUGF0aCgic2NyYXBlci9zdG9yeV9pZGVu
+          dGl0eS5weSIpCnRleHQgPSBwYXRoLnJlYWRfdGV4dChlbmNvZGluZz0idXRmLTgiKQptYXJrZXIg
+          PSAiIyBST0NIREFMRV9TVFJJQ1RfU1RPUllfTUVSR0VfVjExIgoKaWYgbWFya2VyIGluIHRleHQ6
+          CiAgICB0ZXh0ID0gdGV4dC5zcGxpdChtYXJrZXIsIDEpWzBdLnJzdHJpcCgpICsgIlxuXG4iCgp0
+          ZXh0ICs9ICcjIFJPQ0hEQUxFX1NUUklDVF9TVE9SWV9NRVJHRV9WMTFcbiMgQnJvYWQgb25nb2lu
+          Zy1zdG9yeSBjbHVzdGVyaW5nIGlzIGludGVudGlvbmFsbHkgZGlzYWJsZWQuIFJlY29yZHMgb25s
+          eSBtZXJnZVxuIyB3aGVuIHRoZXkgc2hhcmUgc3BlY2lmaWMgaWRlbnRpdHkgZXZpZGVuY2UuXG5c
+          bkNBU0VfUkVGRVJFTkNFX1JFID0gcmUuY29tcGlsZShcbiAgICByIlxcYig/OmluY2lkZW50fGNy
+          aW1lfGNhc2V8bG9nfHJlZmVyZW5jZXxyZWYpXFxzKiJcbiAgICByIig/Om51bWJlcnxub1xcLj8p
+          P1xccypbOiMtXT9cXHMqKFtBLVowLTldW0EtWjAtOS8tXXs0LH0pXFxiIixcbiAgICByZS5JR05P
+          UkVDQVNFLFxuKVxuXG5FWFBMSUNJVF9EQVRFX1JFID0gcmUuY29tcGlsZShcbiAgICByIlxcYig/
+          OiJcbiAgICByIlxcZHs0fS1cXGR7Mn0tXFxkezJ9fCJcbiAgICByIlxcZHsxLDJ9XFxzKyg/Okph
+          bnVhcnl8RmVicnVhcnl8TWFyY2h8QXByaWx8TWF5fEp1bmV8SnVseXxBdWd1c3R8IlxuICAgIHIi
+          U2VwdGVtYmVyfE9jdG9iZXJ8Tm92ZW1iZXJ8RGVjZW1iZXIpXFxzK1xcZHs0fSJcbiAgICByIilc
+          XGIiLFxuICAgIHJlLklHTk9SRUNBU0UsXG4pXG5cblBFUlNPTl9FWENMVVNJT05fV09SRFMgPSB7
+          XG4gICAgInJvY2hkYWxlIiwgImhleXdvb2QiLCAibWlkZGxldG9uIiwgImxpdHRsZWJvcm91Z2gi
+          LCAibWlsbnJvdyIsICJuZXdoZXkiLFxuICAgICJ3YXJkbGUiLCAibm9yZGVuIiwgImNhc3RsZXRv
+          biIsICJraXJraG9sdCIsICJzcG90bGFuZCIsICJmYWxpbmdlIixcbiAgICAiZGVlcGxpc2giLCAi
+          Z3JlYXRlciIsICJtYW5jaGVzdGVyIiwgInBvbGljZSIsICJjb3VuY2lsIiwgImNvdXJ0IixcbiAg
+          ICAiaW52ZXN0aWdhdGlvbiIsICJtdXJkZXIiLCAiZmlyZSIsICJmYXJtIiwgImdvdmVybm1lbnQi
+          LCAicGFraXN0YW4iLFxuICAgICJlbmdsYW5kIiwgImJyaXRhaW4iLCAidWsiLCAidG93biIsICJo
+          YWxsIiwgImRhaWx5IiwgIm5ld3MiLFxufVxuXG5cbmRlZiBfc291cmNlX3VybF9zZXQoaXRlbTog
+          QW55KSAtPiBzZXRbc3RyXTpcbiAgICB1cmxzOiBzZXRbc3RyXSA9IHNldCgpXG4gICAgcHJpbWFy
+          eSA9IGNhbm9uaWNhbGlzZV91cmwoXG4gICAgICAgIGdldF92YWx1ZShpdGVtLCAic291cmNlX3Vy
+          bCIsICIiKSBvciBnZXRfdmFsdWUoaXRlbSwgInVybCIsICIiKVxuICAgIClcbiAgICBpZiBwcmlt
+          YXJ5OlxuICAgICAgICB1cmxzLmFkZChwcmltYXJ5KVxuICAgIGZvciByYXcgaW4gZ2V0X3ZhbHVl
+          KGl0ZW0sICJzb3VyY2VfdXJscyIsIFtdKSBvciBbXTpcbiAgICAgICAgdmFsdWUgPSBjYW5vbmlj
+          YWxpc2VfdXJsKHN0cihyYXcgb3IgIiIpKVxuICAgICAgICBpZiB2YWx1ZTpcbiAgICAgICAgICAg
+          IHVybHMuYWRkKHZhbHVlKVxuICAgIHJldHVybiB1cmxzXG5cblxuZGVmIHN0cmljdF9uYW1lZF9w
+          ZW9wbGUoaXRlbTogQW55KSAtPiBzZXRbc3RyXTpcbiAgICBwZW9wbGU6IHNldFtzdHJdID0gc2V0
+          KClcbiAgICBmb3IgZW50aXR5IGluIG5hbWVkX2VudGl0aWVzKGl0ZW0pOlxuICAgICAgICB3b3Jk
+          cyA9IGVudGl0eS5sb3dlcigpLnNwbGl0KClcbiAgICAgICAgaWYgbm90IDIgPD0gbGVuKHdvcmRz
+          KSA8PSA0OlxuICAgICAgICAgICAgY29udGludWVcbiAgICAgICAgaWYgYW55KHdvcmQgaW4gUEVS
+          U09OX0VYQ0xVU0lPTl9XT1JEUyBmb3Igd29yZCBpbiB3b3Jkcyk6XG4gICAgICAgICAgICBjb250
+          aW51ZVxuICAgICAgICBpZiBhbnkod29yZCBpbiBBQ1RJT05fQ09OQ0VQVFMgZm9yIHdvcmQgaW4g
+          d29yZHMpOlxuICAgICAgICAgICAgY29udGludWVcbiAgICAgICAgcGVvcGxlLmFkZCgiICIuam9p
+          bih3b3JkcykpXG4gICAgcmV0dXJuIHBlb3BsZVxuXG5cbmRlZiBleHBsaWNpdF9jYXNlX3JlZmVy
+          ZW5jZXMoaXRlbTogQW55KSAtPiBzZXRbc3RyXTpcbiAgICByZXR1cm4ge1xuICAgICAgICBTUEFD
+          RV9SRS5zdWIoIiIsIG1hdGNoKS5sb3dlcigpXG4gICAgICAgIGZvciBtYXRjaCBpbiBDQVNFX1JF
+          RkVSRU5DRV9SRS5maW5kYWxsKGNvbWJpbmVkX3RleHQoaXRlbSkpXG4gICAgfVxuXG5cbmRlZiBl
+          eHBsaWNpdF9pbmNpZGVudF9kYXRlcyhpdGVtOiBBbnkpIC0+IHNldFtzdHJdOlxuICAgIHJldHVy
+          biB7XG4gICAgICAgIFNQQUNFX1JFLnN1YigiICIsIG1hdGNoKS5zdHJpcCgpLmxvd2VyKClcbiAg
+          ICAgICAgZm9yIG1hdGNoIGluIEVYUExJQ0lUX0RBVEVfUkUuZmluZGFsbChjb21iaW5lZF90ZXh0
+          KGl0ZW0pKVxuICAgIH1cblxuXG5kZWYgX25lYXJfaWRlbnRpY2FsX2hlYWRsaW5lcyhsZWZ0OiBB
+          bnksIHJpZ2h0OiBBbnkpIC0+IGJvb2w6XG4gICAgbGVmdF90b2tlbnMgPSB0aXRsZV90b2tlbnMo
+          bGVmdClcbiAgICByaWdodF90b2tlbnMgPSB0aXRsZV90b2tlbnMocmlnaHQpXG4gICAgaWYgbWlu
+          KGxlbihsZWZ0X3Rva2VucyksIGxlbihyaWdodF90b2tlbnMpKSA8IDU6XG4gICAgICAgIHJldHVy
+          biBGYWxzZVxuICAgIGlmIGNhdGVnb3J5X2ZhbWlseShsZWZ0KSAhPSBjYXRlZ29yeV9mYW1pbHko
+          cmlnaHQpOlxuICAgICAgICByZXR1cm4gRmFsc2VcbiAgICBpZiBhcmVhX2tleShsZWZ0KSAhPSBh
+          cmVhX2tleShyaWdodCk6XG4gICAgICAgIHJldHVybiBGYWxzZVxuICAgIGlmIGhvdXJzX2FwYXJ0
+          KGxlZnQsIHJpZ2h0KSA+IDI0OlxuICAgICAgICByZXR1cm4gRmFsc2VcbiAgICByZXR1cm4gamFj
+          Y2FyZChsZWZ0X3Rva2VucywgcmlnaHRfdG9rZW5zKSA+PSAwLjg0XG5cblxuZGVmIHN0cmljdF9z
+          dG9yeV9ldmlkZW5jZShsZWZ0OiBBbnksIHJpZ2h0OiBBbnkpIC0+IGJvb2w6XG4gICAgIiIiUmV0
+          dXJuIFRydWUgb25seSB3aGVuIHR3byByZWNvcmRzIGhhdmUgc3BlY2lmaWMgc2hhcmVkIGlkZW50
+          aXR5IGV2aWRlbmNlLiIiIlxuICAgIGlmIF9zb3VyY2VfdXJsX3NldChsZWZ0KSAmIF9zb3VyY2Vf
+          dXJsX3NldChyaWdodCk6XG4gICAgICAgIHJldHVybiBUcnVlXG5cbiAgICBpZiBub3QgY2F0ZWdv
+          cmllc19jb21wYXRpYmxlKGxlZnQsIHJpZ2h0KTpcbiAgICAgICAgcmV0dXJuIEZhbHNlXG4gICAg
+          aWYgbm90IGFyZWFzX2NvbXBhdGlibGUobGVmdCwgcmlnaHQpOlxuICAgICAgICByZXR1cm4gRmFs
+          c2VcbiAgICBpZiBob3Vyc19hcGFydChsZWZ0LCByaWdodCkgPiBzdG9yeV93aW5kb3dfaG91cnMo
+          bGVmdCwgcmlnaHQpOlxuICAgICAgICByZXR1cm4gRmFsc2VcblxuICAgIGxlZnRfc3Ryb25nID0g
+          c3ViamVjdF90b2tlbnMobGVmdCkgJiBTVFJPTkdfU1VCSkVDVF9DT05DRVBUU1xuICAgIHJpZ2h0
+          X3N0cm9uZyA9IHN1YmplY3RfdG9rZW5zKHJpZ2h0KSAmIFNUUk9OR19TVUJKRUNUX0NPTkNFUFRT
+          XG4gICAgaWYgbGVmdF9zdHJvbmcgYW5kIHJpZ2h0X3N0cm9uZyBhbmQgbm90IChsZWZ0X3N0cm9u
+          ZyAmIHJpZ2h0X3N0cm9uZyk6XG4gICAgICAgIHJldHVybiBGYWxzZVxuXG4gICAgc2hhcmVkX3Jl
+          ZmVyZW5jZXMgPSAoXG4gICAgICAgIGV4cGxpY2l0X2Nhc2VfcmVmZXJlbmNlcyhsZWZ0KSAmIGV4
+          cGxpY2l0X2Nhc2VfcmVmZXJlbmNlcyhyaWdodClcbiAgICApXG4gICAgaWYgc2hhcmVkX3JlZmVy
+          ZW5jZXM6XG4gICAgICAgIHJldHVybiBUcnVlXG5cbiAgICBzaGFyZWRfcGVvcGxlID0gc3RyaWN0
+          X25hbWVkX3Blb3BsZShsZWZ0KSAmIHN0cmljdF9uYW1lZF9wZW9wbGUocmlnaHQpXG4gICAgaWYg
+          c2hhcmVkX3Blb3BsZTpcbiAgICAgICAgc2hhcmVkX2FjdGlvbnMgPSBhY3Rpb25fdG9rZW5zKGxl
+          ZnQpICYgYWN0aW9uX3Rva2VucyhyaWdodClcbiAgICAgICAgc2hhcmVkX3N1YmplY3RzID0gc3Vi
+          amVjdF90b2tlbnMobGVmdCkgJiBzdWJqZWN0X3Rva2VucyhyaWdodClcbiAgICAgICAgdGl0bGVf
+          b3ZlcmxhcCA9IGphY2NhcmQodGl0bGVfdG9rZW5zKGxlZnQpLCB0aXRsZV90b2tlbnMocmlnaHQp
+          KVxuICAgICAgICBpZiAoXG4gICAgICAgICAgICBzaGFyZWRfYWN0aW9uc1xuICAgICAgICAgICAg
+          b3IgKHNoYXJlZF9zdWJqZWN0cyAmIFNUUk9OR19TVUJKRUNUX0NPTkNFUFRTKVxuICAgICAgICAg
+          ICAgb3IgdGl0bGVfb3ZlcmxhcCA+PSAwLjI4XG4gICAgICAgICk6XG4gICAgICAgICAgICByZXR1
+          cm4gVHJ1ZVxuXG4gICAgc2hhcmVkX3ByZWNpc2VfbG9jYXRpb25zID0gcHJlY2lzZV9sb2NhdGlv
+          bnMobGVmdCkgJiBwcmVjaXNlX2xvY2F0aW9ucyhyaWdodClcbiAgICBzaGFyZWRfZGF0ZXMgPSBl
+          eHBsaWNpdF9pbmNpZGVudF9kYXRlcyhsZWZ0KSAmIGV4cGxpY2l0X2luY2lkZW50X2RhdGVzKHJp
+          Z2h0KVxuICAgIHNoYXJlZF9pbmNpZGVudHMgPSBpbmNpZGVudF90b2tlbnMobGVmdCkgJiBpbmNp
+          ZGVudF90b2tlbnMocmlnaHQpXG4gICAgaWYgc2hhcmVkX3ByZWNpc2VfbG9jYXRpb25zIGFuZCBz
+          aGFyZWRfZGF0ZXMgYW5kIHNoYXJlZF9pbmNpZGVudHM6XG4gICAgICAgIHJldHVybiBUcnVlXG5c
+          biAgICBpZiBfbmVhcl9pZGVudGljYWxfaGVhZGxpbmVzKGxlZnQsIHJpZ2h0KTpcbiAgICAgICAg
+          cmV0dXJuIFRydWVcblxuICAgIHJldHVybiBGYWxzZVxuXG5cbmRlZiBvbmdvaW5nX3N0b3J5X21h
+          dGNoKGxlZnQ6IEFueSwgcmlnaHQ6IEFueSkgLT4gYm9vbDpcbiAgICAjIFRoZSBwcmV2aW91cyBi
+          cm9hZCBzdWJqZWN0LWJhc2VkIG9uZ29pbmcgbWF0Y2hlciBpcyBkaXNhYmxlZCB0ZW1wb3Jhcmls
+          eS5cbiAgICByZXR1cm4gc3RyaWN0X3N0b3J5X2V2aWRlbmNlKGxlZnQsIHJpZ2h0KVxuXG5cbmRl
+          ZiBzdG9yeV9zaW1pbGFyaXR5KGxlZnQ6IEFueSwgcmlnaHQ6IEFueSkgLT4gZmxvYXQ6XG4gICAg
+          cmV0dXJuIDEuMCBpZiBzdHJpY3Rfc3RvcnlfZXZpZGVuY2UobGVmdCwgcmlnaHQpIGVsc2UgMC4w
+          XG5cblxuZGVmIHNhbWVfc3RvcnkobGVmdDogQW55LCByaWdodDogQW55KSAtPiBib29sOlxuICAg
+          IHJldHVybiBzdHJpY3Rfc3RvcnlfZXZpZGVuY2UobGVmdCwgcmlnaHQpXG5cblxuZGVmIGRlZHVw
+          ZV9hcnRpY2xlX3JlY29yZHMoaXRlbXM6IGxpc3RbZGljdFtzdHIsIEFueV1dKSAtPiBsaXN0W2Rp
+          Y3Rbc3RyLCBBbnldXTpcbiAgICAiIiJNZXJnZSBvbmx5IGNvbXBsZXRlLWxpbmsgY2x1c3RlcnMu
+          XG5cbiAgICBBIHJlY29yZCBtdXN0IGRpcmVjdGx5IG1hdGNoIGV2ZXJ5IG1lbWJlciBhbHJlYWR5
+          IGluIGEgY2x1c3Rlci4gVGhpcyBwcmV2ZW50c1xuICAgIGEgY29udGFtaW5hdGVkIGJyaWRnZSBy
+          ZWNvcmQgZnJvbSBqb2luaW5nIHR3byB1bnJlbGF0ZWQgc3RvcnkgZ3JvdXBzLlxuICAgIFNlbWFu
+          dGljIHN0b3J5LWtleSBlcXVhbGl0eSBhbG9uZSBpcyBuZXZlciBzdWZmaWNpZW50LlxuICAgICIi
+          IlxuICAgIHJlY29yZHMgPSBbZGljdChpdGVtKSBmb3IgaXRlbSBpbiBpdGVtc11cbiAgICBmb3Ig
+          cmVjb3JkIGluIHJlY29yZHM6XG4gICAgICAgIHJlY29yZFsic3Rvcnlfa2V5Il0gPSBidWlsZF9z
+          dG9yeV9rZXkocmVjb3JkKVxuXG4gICAgY2x1c3RlcnM6IGxpc3RbbGlzdFtkaWN0W3N0ciwgQW55
+          XV1dID0gW11cbiAgICBmb3IgcmVjb3JkIGluIHJlY29yZHM6XG4gICAgICAgIGRlc3RpbmF0aW9u
+          OiBsaXN0W2RpY3Rbc3RyLCBBbnldXSB8IE5vbmUgPSBOb25lXG4gICAgICAgIGZvciBjbHVzdGVy
+          IGluIGNsdXN0ZXJzOlxuICAgICAgICAgICAgaWYgYWxsKHN0cmljdF9zdG9yeV9ldmlkZW5jZShy
+          ZWNvcmQsIG1lbWJlcikgZm9yIG1lbWJlciBpbiBjbHVzdGVyKTpcbiAgICAgICAgICAgICAgICBk
+          ZXN0aW5hdGlvbiA9IGNsdXN0ZXJcbiAgICAgICAgICAgICAgICBicmVha1xuICAgICAgICBpZiBk
+          ZXN0aW5hdGlvbiBpcyBOb25lOlxuICAgICAgICAgICAgY2x1c3RlcnMuYXBwZW5kKFtyZWNvcmRd
+          KVxuICAgICAgICBlbHNlOlxuICAgICAgICAgICAgZGVzdGluYXRpb24uYXBwZW5kKHJlY29yZClc
+          blxuICAgIG91dHB1dDogbGlzdFtkaWN0W3N0ciwgQW55XV0gPSBbXVxuICAgIGZvciBjbHVzdGVy
+          IGluIGNsdXN0ZXJzOlxuICAgICAgICBtZXJnZWQgPSBjbHVzdGVyWzBdXG4gICAgICAgIGZvciBy
+          ZWNvcmQgaW4gY2x1c3RlclsxOl06XG4gICAgICAgICAgICBtZXJnZWQgPSBtZXJnZV9hcnRpY2xl
+          X3JlY29yZHMobWVyZ2VkLCByZWNvcmQpXG4gICAgICAgIG1lcmdlZFsic3Rvcnlfa2V5Il0gPSBi
+          dWlsZF9zdG9yeV9rZXkobWVyZ2VkKVxuICAgICAgICBvdXRwdXQuYXBwZW5kKG1lcmdlZClcbiAg
+          ICByZXR1cm4gb3V0cHV0XG4nCnBhdGgud3JpdGVfdGV4dCh0ZXh0LCBlbmNvZGluZz0idXRmLTgi
+          KQoKUGF0aCgic2NyYXBlci9yZXBhaXJfY3Jvc3Nfc3RvcnlfbWVyZ2VzLnB5Iikud3JpdGVfdGV4
+          dCgKICAgICdmcm9tIF9fZnV0dXJlX18gaW1wb3J0IGFubm90YXRpb25zXG5cbmltcG9ydCBqc29u
+          XG5mcm9tIHBhdGhsaWIgaW1wb3J0IFBhdGhcblxuUk9PVCA9IFBhdGgoX19maWxlX18pLnJlc29s
+          dmUoKS5wYXJlbnRzWzFdXG5BUlRJQ0xFU19QQVRIID0gUk9PVCAvICJhcnRpY2xlcy5qc29uIlxu
+          QVJUSUNMRV9ESVIgPSBST09UIC8gImFydGljbGVzIlxuXG5cbmRlZiBpc19rbm93bl9jcm9zc19z
+          dG9yeV9jb250YW1pbmF0aW9uKGFydGljbGU6IGRpY3QpIC0+IGJvb2w6XG4gICAgdGl0bGUgPSBz
+          dHIoYXJ0aWNsZS5nZXQoInRpdGxlIikgb3IgIiIpLmxvd2VyKClcbiAgICBleGNlcnB0ID0gc3Ry
+          KGFydGljbGUuZ2V0KCJleGNlcnB0Iikgb3IgYXJ0aWNsZS5nZXQoInN1bW1hcnkiKSBvciAiIiku
+          bG93ZXIoKVxuICAgIGJvZHkgPSBzdHIoYXJ0aWNsZS5nZXQoImNvbnRlbnRfaHRtbCIpIG9yICIi
+          KS5sb3dlcigpXG4gICAgY29tYmluZWQgPSAiICIuam9pbihbdGl0bGUsIGV4Y2VycHQsIGJvZHld
+          KVxuXG4gICAgaGFzX3NoYWJpcl9jYXNlID0gKFxuICAgICAgICAic2hhYmlyIGFobWVkIiBpbiBj
+          b21iaW5lZFxuICAgICAgICBvciAoXG4gICAgICAgICAgICAiZ3Jvb21pbmciIGluIGNvbWJpbmVk
+          XG4gICAgICAgICAgICBhbmQgKCJkZXBvcnQiIGluIGNvbWJpbmVkIG9yICJwYWtpc3RhbiIgaW4g
+          Y29tYmluZWQpXG4gICAgICAgIClcbiAgICApXG4gICAgaGFzX2Zhcm1fZmlyZSA9IChcbiAgICAg
+          ICAgImZhcm0iIGluIGNvbWJpbmVkXG4gICAgICAgIGFuZCAoImZpcmUiIGluIGNvbWJpbmVkIG9y
+          ICJibGF6ZSIgaW4gY29tYmluZWQpXG4gICAgICAgIGFuZCAoIm11cmRlciIgaW4gY29tYmluZWQg
+          b3IgImRpZWQiIGluIGNvbWJpbmVkIG9yICJkZWFkIiBpbiBjb21iaW5lZClcbiAgICApXG5cbiAg
+          ICB0aXRsZV9pc19mYXJtX2ZpcmUgPSAoXG4gICAgICAgICJmYXJtIiBpbiB0aXRsZVxuICAgICAg
+          ICBhbmQgKCJmaXJlIiBpbiB0aXRsZSBvciAiYmxhemUiIGluIHRpdGxlKVxuICAgICAgICBhbmQg
+          KCJtdXJkZXIiIGluIHRpdGxlIG9yICJmYXRhbCIgaW4gdGl0bGUgb3IgImRlYXRoIiBpbiB0aXRs
+          ZSlcbiAgICApXG4gICAgYm9keV9pc19zaGFiaXIgPSAoXG4gICAgICAgICJzaGFiaXIgYWhtZWQi
+          IGluIGV4Y2VycHRcbiAgICAgICAgb3IgInNoYWJpciBhaG1lZCIgaW4gYm9keVxuICAgICAgICBv
+          ciAoXG4gICAgICAgICAgICAiZ3Jvb21pbmciIGluIGV4Y2VycHRcbiAgICAgICAgICAgIGFuZCAo
+          ImRlcG9ydCIgaW4gZXhjZXJwdCBvciAicGFraXN0YW4iIGluIGV4Y2VycHQpXG4gICAgICAgIClc
+          biAgICApXG5cbiAgICByZXR1cm4gKFxuICAgICAgICBoYXNfc2hhYmlyX2Nhc2UgYW5kIGhhc19m
+          YXJtX2ZpcmVcbiAgICAgICAgb3IgdGl0bGVfaXNfZmFybV9maXJlIGFuZCBib2R5X2lzX3NoYWJp
+          clxuICAgIClcblxuXG5kZWYgbWFpbigpIC0+IGludDpcbiAgICBhcnRpY2xlcyA9IGpzb24ubG9h
+          ZHMoQVJUSUNMRVNfUEFUSC5yZWFkX3RleHQoZW5jb2Rpbmc9InV0Zi04IikpXG4gICAga2VwdDog
+          bGlzdFtkaWN0XSA9IFtdXG4gICAgcmVtb3ZlZDogbGlzdFtkaWN0XSA9IFtdXG5cbiAgICBmb3Ig
+          YXJ0aWNsZSBpbiBhcnRpY2xlczpcbiAgICAgICAgaWYgaXNpbnN0YW5jZShhcnRpY2xlLCBkaWN0
+          KSBhbmQgaXNfa25vd25fY3Jvc3Nfc3RvcnlfY29udGFtaW5hdGlvbihhcnRpY2xlKTpcbiAgICAg
+          ICAgICAgIHJlbW92ZWQuYXBwZW5kKGFydGljbGUpXG4gICAgICAgICAgICBzbHVnID0gc3RyKGFy
+          dGljbGUuZ2V0KCJzbHVnIikgb3IgIiIpLnN0cmlwKClcbiAgICAgICAgICAgIGlmIHNsdWc6XG4g
+          ICAgICAgICAgICAgICAgcGFnZSA9IEFSVElDTEVfRElSIC8gZiJ7c2x1Z30uaHRtbCJcbiAgICAg
+          ICAgICAgICAgICBpZiBwYWdlLmV4aXN0cygpOlxuICAgICAgICAgICAgICAgICAgICBwYWdlLnVu
+          bGluaygpXG4gICAgICAgICAgICAgICAgICAgIHByaW50KGYiRGVsZXRlZCBjb250YW1pbmF0ZWQg
+          cGFnZToge3BhZ2V9IilcbiAgICAgICAgICAgIGNvbnRpbnVlXG4gICAgICAgIGtlcHQuYXBwZW5k
+          KGFydGljbGUpXG5cbiAgICBBUlRJQ0xFU19QQVRILndyaXRlX3RleHQoXG4gICAgICAgIGpzb24u
+          ZHVtcHMoa2VwdCwgZW5zdXJlX2FzY2lpPUZhbHNlLCBpbmRlbnQ9MiksXG4gICAgICAgIGVuY29k
+          aW5nPSJ1dGYtOCIsXG4gICAgKVxuXG4gICAgcHJpbnQoZiJSZW1vdmVkIHtsZW4ocmVtb3ZlZCl9
+          IGNyb3NzLXN0b3J5IGNvbnRhbWluYXRlZCBhcnRpY2xlKHMpLiIpXG4gICAgZm9yIGFydGljbGUg
+          aW4gcmVtb3ZlZDpcbiAgICAgICAgcHJpbnQoIiAtIiwgYXJ0aWNsZS5nZXQoInRpdGxlIikgb3Ig
+          YXJ0aWNsZS5nZXQoInNsdWciKSBvciAiVW50aXRsZWQiKVxuICAgIHJldHVybiAwXG5cblxuaWYg
+          X19uYW1lX18gPT0gIl9fbWFpbl9fIjpcbiAgICByYWlzZSBTeXN0ZW1FeGl0KG1haW4oKSlcbics
+          CiAgICBlbmNvZGluZz0idXRmLTgiLAopCgpwcmludCgiSW5zdGFsbGVkIHN0cmljdCBldmlkZW5j
+          ZS1vbmx5IHN0b3J5IG1lcmdpbmcuIikK
+          B64
+          base64 --decode /tmp/strict-story-merge-v11.b64 > /tmp/strict-story-merge-v11.py
+          python /tmp/strict-story-merge-v11.py
+
+          python -m py_compile             scraper/story_identity.py             scraper/repair_cross_story_merges.py             scraper/scraper.py
+
+      - name: Test exact cross-story regression
+        shell: bash
+        run: |
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, "scraper")
+
+          from story_identity import dedupe_article_records, same_story
+
+          farm_fire = {
+              "title": "Murder investigation launched following fatal fire at Rochdale farm",
+              "excerpt": (
+                  "Emergency services were called to Tunshill Farm in Milnrow on "
+                  "9 July 2026. A woman was pronounced dead at the scene."
+              ),
+              "content_html": (
+                  "<p>A woman died following a fire at Tunshill Farm in Milnrow "
+                  "on 9 July 2026. A person was arrested.</p>"
+              ),
+              "category": "crime",
+              "area": "milnrow",
+              "event_location": "Tunshill Farm, Milnrow",
+              "published_at": "2026-07-09T10:00:00Z",
+              "source_url": "https://example.com/farm-fire",
+          }
+
+          shabir = {
+              "title": "Pakistan refuses deportation of Shabir Ahmed",
+              "excerpt": (
+                  "Pakistan has declined to accept the deportation of Shabir Ahmed, "
+                  "described in reports as a Rochdale grooming-gang leader."
+              ),
+              "content_html": (
+                  "<p>The UK government is considering its next step after Pakistan "
+                  "refused to accept Shabir Ahmed.</p>"
+              ),
+              "category": "crime",
+              "area": "rochdale",
+              "published_at": "2026-07-09T12:00:00Z",
+              "source_url": "https://example.com/shabir-deportation",
+          }
+
+          shabir_update = {
+              "title": "UK considers law change after Shabir Ahmed deportation refusal",
+              "excerpt": (
+                  "Ministers are considering legal changes after Pakistan declined "
+                  "to accept Shabir Ahmed."
+              ),
+              "content_html": (
+                  "<p>Shabir Ahmed remains the subject of a deportation dispute "
+                  "following his release from prison.</p>"
+              ),
+              "category": "crime",
+              "area": "rochdale",
+              "published_at": "2026-07-09T15:00:00Z",
+              "source_url": "https://example.com/shabir-law-change",
+          }
+
+          assert not same_story(farm_fire, shabir)
+          assert same_story(shabir, shabir_update)
+          result = dedupe_article_records([farm_fire, shabir, shabir_update])
+          assert len(result) == 2, len(result)
+
+          combined = " ".join(
+              str(value)
+              for article in result
+              for value in (
+                  article.get("title"),
+                  article.get("excerpt"),
+                  article.get("content_html"),
+              )
+          ).lower()
+          assert not (
+              "fatal fire" in combined
+              and "shabir ahmed" in next(
+                  str(article.get("excerpt") or "").lower()
+                  for article in result
+                  if "fatal fire" in str(article.get("title") or "").lower()
+              )
+          )
+
+          print("Farm-fire/Shabir cross-story regression passed.")
+          PY
+
+      - name: Run existing story identity tests
+        run: |
+          python scraper/test_story_identity.py
+
+      - name: Commit permanent merge protection
+        shell: bash
+        run: |
+          git config user.name "Rochdale Daily Automation"
+          git config user.email "actions@users.noreply.github.com"
+
+          git add             scraper/story_identity.py             scraper/repair_cross_story_merges.py
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Require specific evidence before merging stories"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          else
+            echo "Strict merge protection is already installed."
+          fi
+
+      - name: Remove existing cross-story contamination
+        run: |
+          python scraper/repair_cross_story_merges.py
+
+      - name: Regenerate article pages and front page
+        run: |
+          python scraper/generate_pages.py
+
+      - name: Validate cleaned public feed
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          articles = json.loads(Path("articles.json").read_text(encoding="utf-8"))
+          offenders = []
+
+          for article in articles:
+              title = str(article.get("title") or "").lower()
+              excerpt = str(article.get("excerpt") or article.get("summary") or "").lower()
+              body = str(article.get("content_html") or "").lower()
+              combined = " ".join([title, excerpt, body])
+
+              has_shabir = "shabir ahmed" in combined
+              has_farm_fire = (
+                  "farm" in combined
+                  and ("fire" in combined or "blaze" in combined)
+                  and ("murder" in combined or "died" in combined or "dead" in combined)
+              )
+              if has_shabir and has_farm_fire:
+                  offenders.append(article.get("title") or "Untitled")
+
+          if offenders:
+              raise SystemExit(
+                  "Cross-story contamination remains: " + "; ".join(offenders[:10])
+              )
+
+          frontpage = json.loads(
+              Path("articles/frontpage.json").read_text(encoding="utf-8")
+          )
+          if len(frontpage.get("articles", [])) < 30:
+              raise SystemExit("Front page fell below 30 stories after cleanup.")
+
+          print(
+              f"Validated {len(articles)} clean articles and "
+              f"{len(frontpage.get('articles', []))} front-page stories."
+          )
+          PY
+
+      - name: Commit cleaned site
+        shell: bash
+        run: |
+          git config user.name "Rochdale Daily Automation"
+          git config user.email "actions@users.noreply.github.com"
+
+          git add             articles.json             scraper_status.json             articles/frontpage.json             articles             sitemap.xml             assets/img/generated || true
+
+          if git diff --cached --quiet; then
+            echo "No contaminated public records remained."
+            exit 0
+          fi
+
+          git commit -m "Remove unrelated merged farm-fire and deportation story"
+          git pull --rebase origin main
+          git push origin HEAD:main
