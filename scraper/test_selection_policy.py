@@ -97,3 +97,37 @@ assert {
 assert len(ROCHDALE_WARDS) == 20
 
 print("Selection policy regression tests passed.")
+
+# ---------------------------------------------------------------------------
+# Classified listings are advertising, not news. Live examples that published:
+# a Milkstone Road rental, a "£1,285 pcm" pair of properties, and pet
+# adoption posts. Market/housing NEWS must never be caught.
+# ---------------------------------------------------------------------------
+from selection_policy import is_classified_listing_post
+
+assert is_classified_listing_post(
+    "Three-bedroom terraced house available for rent on Milkstone Road. "
+    "A three-bedroom terraced house on Milkstone Road in Rochdale is now "
+    "available for rent at £1,295 per month."
+)
+assert is_classified_listing_post(
+    "Two properties in Rochdale available for rent at £1,285 pcm."
+)
+assert is_classified_listing_post(
+    "Adorable labrador puppies for sale in Heywood, ready to leave now."
+)
+assert is_classified_listing_post(
+    "Ragamuffins available for adoption: kittens looking for forever homes."
+)
+assert is_classified_listing_post("", "https://example.com/property-for-sale/rochdale/123")
+
+assert not is_classified_listing_post(
+    "Average private rents in Rochdale rose 9% in a year, new figures show."
+)
+assert not is_classified_listing_post(
+    "Rochdale council approves plan to build 200 new affordable homes in Kirkholt."
+)
+assert not is_classified_listing_post(
+    "Fire crews rescued a dog from a house fire on Milkstone Road."
+)
+print("Classified-listing filter tests passed.")
