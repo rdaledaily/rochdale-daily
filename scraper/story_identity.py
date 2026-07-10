@@ -1135,50 +1135,47 @@ def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[s
     return merged
 
 
-def dedupe_article_records(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Collapse records using connected components rather than one representative.
+def _records_match(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    return left["story_key"] == right["story_key"] or same_story(left, right)
 
-    Connected components make clustering transitive: if A matches B and B
-    matches C, all three are combined even when A and C use very different
-    wording.  The feed is small enough that the O(n²) comparison is harmless.
+
+def dedupe_article_records(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Collapse records using complete-linkage clustering.
+
+    A record only joins a cluster when it matches EVERY existing member of
+    that cluster.  Transitive (union-find) clustering was removed because it
+    let a single contaminated bridge record — one whose text mixes two
+    unrelated stories, e.g. a farm fire headline over a deportation body —
+    chain two otherwise-unrelated story groups into one merged article on
+    every run.  Complete linkage contains such a record instead of letting it
+    bridge, and it also stops rolling stories drifting into unrelated topics
+    via weak chained matches.  The feed is small enough that the O(n²)
+    comparison is harmless.
     """
     records = [dict(item) for item in items]
     for record in records:
         record["story_key"] = build_story_key(record)
 
-    count = len(records)
-    parent = list(range(count))
-
-    def find(index: int) -> int:
-        while parent[index] != index:
-            parent[index] = parent[parent[index]]
-            index = parent[index]
-        return index
-
-    def union(left_index: int, right_index: int) -> None:
-        left_root, right_root = find(left_index), find(right_index)
-        if left_root != right_root:
-            parent[right_root] = left_root
-
-    for left_index in range(count):
-        for right_index in range(left_index + 1, count):
-            left = records[left_index]
-            right = records[right_index]
-            if (
-                left["story_key"] == right["story_key"]
-                or same_story(left, right)
+    clusters: list[list[dict[str, Any]]] = []
+    for record in records:
+        best_cluster: list[dict[str, Any]] | None = None
+        best_size = 0
+        for cluster in clusters:
+            if len(cluster) > best_size and all(
+                _records_match(record, member) for member in cluster
             ):
-                union(left_index, right_index)
-
-    groups: dict[int, list[int]] = {}
-    for index in range(count):
-        groups.setdefault(find(index), []).append(index)
+                best_cluster = cluster
+                best_size = len(cluster)
+        if best_cluster is None:
+            clusters.append([record])
+        else:
+            best_cluster.append(record)
 
     output: list[dict[str, Any]] = []
-    for indices in groups.values():
-        merged = records[indices[0]]
-        for index in indices[1:]:
-            merged = merge_article_records(merged, records[index])
+    for cluster in clusters:
+        merged = cluster[0]
+        for record in cluster[1:]:
+            merged = merge_article_records(merged, record)
         merged["story_key"] = build_story_key(merged)
         output.append(merged)
 
