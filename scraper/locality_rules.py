@@ -38,7 +38,13 @@ import re
 from typing import Any
 from urllib.parse import urlparse
 
-SOURCE_DENY_DOMAINS = {"rochdaletimes.co.uk", "rochdaleonline.co.uk"}
+SOURCE_DENY_DOMAINS = {
+    "rochdaletimes.co.uk",
+    "rochdaleonline.co.uk",
+    # SEO advertorial, not journalism ("Middleton residents can access
+    # local and emergency plumbing services").
+    "manchesterplumbers.com",
+}
 SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper", "rochdale online"}
 
 TRUSTED_LOCAL_SOURCE_PREFIXES = (
@@ -317,8 +323,12 @@ def domain_of(url: str) -> str:
 def source_is_denied(source_name: str = "", source_url: str = "") -> bool:
     name = normalise_text(source_name).lower()
     domain = domain_of(source_url)
-    return domain in SOURCE_DENY_DOMAINS or any(
-        denied in name for denied in SOURCE_DENY_NAMES
+    # Aggregator links (Google News redirects) hide the real domain in the
+    # URL, but the source NAME often carries it — check both.
+    return (
+        domain in SOURCE_DENY_DOMAINS
+        or any(denied in name for denied in SOURCE_DENY_NAMES)
+        or any(denied in name for denied in SOURCE_DENY_DOMAINS)
     )
 
 
@@ -549,6 +559,25 @@ def detect_area(
         return fallback
 
     return ""
+
+
+def has_disqualifying_evidence(
+    text: str,
+    source_name: str = "",
+    source_url: str = "",
+) -> bool:
+    """True when the article shows impostor or rival-geography evidence.
+
+    Weak acceptance paths elsewhere in the pipeline (traffic-desk copy, a
+    borough place name appearing in finished text) must never override this:
+    the wrong-town articles that motivated the negative-evidence rules all
+    mention a borough place name precisely BECAUSE the namesake fooled the
+    system. Anchored articles (a genuine Rochdale mention, a specific
+    multi-word local place, a trusted source) never report rival evidence,
+    so they are never disqualified here.
+    """
+    evidence = locality_evidence(text, source_name, source_url)["evidence"]
+    return any(item.startswith(("impostor:", "rival-", "denied-source")) for item in evidence)
 
 
 def article_is_local(article: dict[str, Any]) -> bool:
