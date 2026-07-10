@@ -270,4 +270,67 @@ DIFFERENT_ROBBERY["title"] = "Asian male suspect wanted over Drake Street robber
 DIFFERENT_ROBBERY["excerpt"] = "Police want an Asian man after a robbery on Drake Street."
 assert not incident_fact_match(ROBBERY_A, DIFFERENT_ROBBERY)
 
+
+# Regression: the Milnrow farm fire and the grooming-gang deportation case are
+# unrelated stories and must never merge, even though both are crime items in
+# the borough on the same day.
+FARM_FIRE = {
+    "title": "Murder investigation launched following fatal fire at Rochdale farm",
+    "excerpt": (
+        "Emergency services were called to Tunshill Farm in Milnrow on "
+        "9 July 2026. A woman was pronounced dead at the scene."
+    ),
+    "content_html": (
+        "<p>A woman died following a fire at Tunshill Farm in Milnrow "
+        "on 9 July 2026. A person was arrested.</p>"
+    ),
+    "category": "crime",
+    "area": "milnrow",
+    "event_location": "Tunshill Farm, Milnrow",
+    "published_at": "2026-07-09T10:00:00Z",
+    "source_url": "https://example.com/farm-fire",
+}
+
+assert not same_story(FARM_FIRE, GROOMING_UPDATES[0])
+assert not same_story(FARM_FIRE, GROOMING_UPDATES[3])
+separated = dedupe_article_records([FARM_FIRE, GROOMING_UPDATES[0], GROOMING_UPDATES[3]])
+assert len(separated) == 2, [item["title"] for item in separated]
+
+# Regression: a contaminated legacy record whose text mixes two stories must
+# not act as a bridge that chains the two unrelated clusters together.  With
+# complete-linkage clustering it can join at most one cluster, and only if it
+# fully matches every member of that cluster.
+CONTAMINATED_BRIDGE = {
+    "title": "Murder investigation launched following fatal fire at Rochdale farm",
+    "excerpt": (
+        "A woman died in a fire at Tunshill Farm in Milnrow. Pakistan has "
+        "refused to accept the return of the released Rochdale grooming "
+        "gang leader."
+    ),
+    "content_html": (
+        "<p>A woman died following a blaze at Tunshill Farm. Ministers "
+        "consider law changes to deport the grooming gang leader to "
+        "Pakistan.</p>"
+    ),
+    "category": "crime",
+    "area": "rochdale",
+    "published_at": "2026-07-09T11:00:00Z",
+    "source_url": "https://old.example/contaminated",
+}
+
+bridged = dedupe_article_records(
+    [GROOMING_UPDATES[0], CONTAMINATED_BRIDGE, GROOMING_UPDATES[3], FARM_FIRE]
+)
+assert len(bridged) >= 2, [item["title"] for item in bridged]
+deportation_records = [
+    item for item in bridged
+    if "grooming" in str(item.get("title") or "").lower()
+]
+for item in deportation_records:
+    surface = " ".join([
+        str(item.get("title") or ""),
+        str(item.get("excerpt") or ""),
+    ]).lower()
+    assert not ("farm" in surface and "fire" in surface), item.get("title")
+
 print("Story identity regression tests passed.")
