@@ -161,7 +161,7 @@ TERM_IMPOSTOR_CONTEXTS: dict[str, set[str]] = {
     },
     "castleton": {
         "derbyshire", "hope valley", "peak district", "blue john",
-        "buxton", "whitby", "north yorkshire",
+        "buxton", "whitby", "north yorkshire", "vermont",
     },
     "bamford": {
         "derbyshire", "hope valley", "peak district", "bamford edge",
@@ -214,6 +214,22 @@ RIVAL_GEOGRAPHY_TERMS = {
     "maidenhead", "swanage", "wareham", "poole", "bournemouth",
     "dorchester", "corfe castle", "purbeck", "buxton", "matlock",
     "hope valley", "peak district", "milton keynes", "slough",
+    # United States and other countries. A live example: a Castleton,
+    # Vermont community Facebook page supplied wrestling clinics and pet
+    # adoptions that published as Castleton, Rochdale. Single-word states
+    # still require place context ("in Vermont", "Castleton, Vermont"), so
+    # states that double as common personal names (Georgia, Virginia,
+    # Washington, Jersey) are deliberately excluded.
+    "vermont", "texas", "california", "florida", "ohio", "michigan",
+    "arizona", "colorado", "oregon", "montana", "utah", "nevada", "idaho",
+    "kansas", "iowa", "maine", "alaska", "hawaii", "nebraska", "wyoming",
+    "oklahoma", "kentucky", "tennessee", "missouri", "arkansas",
+    "louisiana", "alabama", "mississippi", "delaware", "connecticut",
+    "massachusetts", "pennsylvania", "wisconsin", "minnesota", "illinois",
+    "indiana", "maryland", "new jersey", "new mexico", "new hampshire",
+    "new york", "north carolina", "south carolina", "north dakota",
+    "south dakota", "rhode island", "west virginia", "ncaa",
+    "united states", "usa", "canada", "australia", "new zealand",
 }
 
 # Postcode areas that cover the borough of Rochdale and its immediate edges:
