@@ -342,7 +342,7 @@ def article_is_local(article: dict[str, Any]) -> bool:
     combined = ' '.join([str(article.get('title') or ''), str(article.get('excerpt') or ''), str(article.get('content_html') or ''), str(article.get('event_location') or '')])
     return is_local(combined, str(article.get('source_name') or ''), str(article.get('source_url') or ''))
 from rewrite_safety import excessive_source_overlap
-from selection_policy import PUBLISH_CATEGORIES, ROCHDALE_WARDS, balanced_select, is_job_or_career_post, ward_for_item
+from selection_policy import PUBLISH_CATEGORIES, ROCHDALE_WARDS, balanced_select, is_classified_listing_post, is_job_or_career_post, ward_for_item
 from story_identity import authority_score, build_story_key, dedupe_article_records, merge_article_records, same_story
 from locality_rules import AREA_KEYWORDS, LOCAL_TERMS, article_is_local, detect_area, has_disqualifying_evidence, is_local, locality_evidence, source_is_denied as locality_source_is_denied
 
@@ -427,7 +427,7 @@ def live_category(text: str, fallback: str) -> str:
 
 def should_drop(text: str, url: str='') -> bool:
     low = text.lower()
-    return is_job_or_career_post(text, url) or any((re.search(pattern, low) for pattern in DROP_PATTERNS))
+    return is_job_or_career_post(text, url) or is_classified_listing_post(text, url) or any((re.search(pattern, low) for pattern in DROP_PATTERNS))
 
 def is_sensitive(text: str, category: str) -> bool:
     """Crime is never routed through the sensitive-story publication path.
@@ -1358,7 +1358,7 @@ def load_json_list(path: Path) -> list[dict[str, Any]]:
 def recent_existing_articles() -> list[dict[str, Any]]:
     kept = []
     for article in load_json_list(OUTPUT_FILE):
-        if is_job_or_career_post(article):
+        if (is_job_or_career_post(article) or is_classified_listing_post(article)):
             continue
         source_name = str(article.get('source_name') or '')
         source_url = str(article.get('source_url') or '')
@@ -1646,7 +1646,7 @@ def article_is_low_quality(article: dict[str, Any]) -> bool:
 
 def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, Any] | None:
     clean_candidate_public_text(candidate)
-    if is_job_or_career_post(candidate):
+    if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate)):
         log.info('Rejected careers/vacancy post: %s', candidate.source_url)
         return None
     if candidate.category == 'events':
@@ -1928,8 +1928,8 @@ def main() -> int:
     facebook_social_records = collect_facebook_social_records()
     batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors), 'food_hygiene': safe_collect('food_hygiene', collect_food_hygiene_candidates, collector_counts, collector_errors)}
     raw_candidates_all = [candidate for batch in batches.values() for candidate in batch]
-    rejected_job_candidates = [candidate for candidate in raw_candidates_all if is_job_or_career_post(candidate)]
-    raw_candidates = [candidate for candidate in raw_candidates_all if not is_job_or_career_post(candidate)]
+    rejected_job_candidates = [candidate for candidate in raw_candidates_all if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
+    raw_candidates = [candidate for candidate in raw_candidates_all if not (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
     candidates = deduplicate_and_cross_reference(raw_candidates)
     correlate_social_context(candidates, x_social_records + facebook_social_records)
     log.info('Candidate volume: %d raw items -> %d story clusters', len(raw_candidates), len(candidates))
@@ -1937,7 +1937,7 @@ def main() -> int:
     run_limit = MAX_AI_ARTICLES_INITIAL if len(existing) < MIN_LIVE_STORIES else MAX_AI_ARTICLES_PER_RUN
     eligible_candidates: list[Candidate] = []
     for candidate in candidates:
-        if is_job_or_career_post(candidate):
+        if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate)):
             continue
         candidate.story_key = candidate.story_key or build_story_key(candidate)
         existing_article = existing_by_story.get(candidate.story_key)
@@ -1994,7 +1994,7 @@ def main() -> int:
             merged[story_key] = article
     publishable_values = []
     for article in merged.values():
-        if is_job_or_career_post(article):
+        if (is_job_or_career_post(article) or is_classified_listing_post(article)):
             continue
         if source_is_denied(str(article.get('source_name') or ''), str(article.get('source_url') or '')):
             continue
