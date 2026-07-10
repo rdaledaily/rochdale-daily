@@ -207,6 +207,15 @@ def article_category(article: dict[str, Any]) -> str:
 
 def apply_category_rules(article: dict[str, Any]) -> dict[str, Any]:
     article = dict(article)
+    if str(article.get("source_kind") or "").lower() == "event":
+        # An approved ticket event's category is "events" by definition.
+        # Text scoring misfiles them: the Black Dyke Band concert's only
+        # category keyword was "opening" (the Town Hall's 1871 opening
+        # ceremony), which scored it as business on every run, undoing any
+        # repair 15 minutes later.
+        article["category"] = "events"
+        article["types"] = ["events"]
+        return article
     category = article_category(article)
     article["category"] = category
     article["types"] = [category]
