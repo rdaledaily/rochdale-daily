@@ -60,6 +60,7 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 from search_queries import build_search_query_specs
 from locations import LOCATION_BY_SLUG
+from food_hygiene import fetch_recent_low_ratings, rating_article_fields
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_FILE = ROOT / 'articles.json'
 LOG_FILE = ROOT / 'scraper' / 'scraper.log'
@@ -1274,6 +1275,39 @@ def collect_environment_agency_flood_candidates() -> list[Candidate]:
         candidates.append(Candidate(source_name='Environment Agency flood-monitoring API', source_url=source_url, source_title=title[:160], source_summary=message[:900], source_published_at=iso_utc(changed), area=detected_area, category='environment', source_body_excerpt=message[:3500]))
     return candidates
 
+def collect_food_hygiene_candidates() -> list[Candidate]:
+    """New low food hygiene ratings in the borough, from the FSA's open API.
+
+    Primary data, not aggregation: the FSA publishes this API for reuse, so
+    there is no robots.txt question and no other outlet to rewrite. Prose is
+    generated deterministically in food_hygiene.py from published facts only.
+    """
+    if os.getenv('FOOD_HYGIENE_ENABLED', 'true').lower() != 'true':
+        return []
+    days = int(os.getenv('FOOD_HYGIENE_DAYS', '8'))
+    max_rating = int(os.getenv('FOOD_HYGIENE_MAX_RATING', '2'))
+    try:
+        records = fetch_recent_low_ratings(SESSION.get, days=days, max_rating=max_rating)
+    except Exception as exc:
+        log.warning('FSA food hygiene API unavailable: %s', exc)
+        return []
+    candidates: list[Candidate] = []
+    for record in records:
+        fields = rating_article_fields(record)
+        text = f"{fields['title']} {fields['summary']}"
+        detected_area = detect_area(text) or 'rochdale'
+        candidates.append(Candidate(
+            source_name='Food Standards Agency',
+            source_url=record['url'],
+            source_title=fields['title'][:160],
+            source_summary=fields['summary'][:900],
+            source_published_at=iso_utc(record['rating_date']),
+            area=detected_area,
+            category='business',
+            source_body_excerpt=fields['body'][:3500],
+        ))
+    return candidates
+
 def candidate_related_record(candidate: Candidate) -> dict[str, str]:
     return {
         'name': candidate.source_name,
@@ -1892,7 +1926,7 @@ def main() -> int:
     collector_errors: dict[str, str] = {}
     x_social_records = collect_x_social_records()
     facebook_social_records = collect_facebook_social_records()
-    batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors)}
+    batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors), 'food_hygiene': safe_collect('food_hygiene', collect_food_hygiene_candidates, collector_counts, collector_errors)}
     raw_candidates_all = [candidate for batch in batches.values() for candidate in batch]
     rejected_job_candidates = [candidate for candidate in raw_candidates_all if is_job_or_career_post(candidate)]
     raw_candidates = [candidate for candidate in raw_candidates_all if not is_job_or_career_post(candidate)]
