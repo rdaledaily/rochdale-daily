@@ -29,6 +29,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from story_identity import dedupe_article_records  # noqa: E402
+from story_blocklist import is_blocked_article, load_blocklist  # noqa: E402
 
 
 def parse_iso(value: object) -> datetime:
@@ -65,6 +66,22 @@ def main(remote_path: str, local_path: str, output_path: str) -> int:
     # within each cluster and merge_article_records preserves the LEFT
     # record's slug and id, so the already-published identity always wins.
     merged = dedupe_article_records(remote + local)
+
+    # Editorial takedowns override the lossless union. Without this, a
+    # story removed on origin/main was resurrected by any in-flight run
+    # whose local feed still contained it — the union guarantee made
+    # deletion structurally impossible while runs overlapped.
+    blocklist = load_blocklist()
+    blocked = [
+        article for article in merged if is_blocked_article(article, blocklist)
+    ]
+    if blocked:
+        for article in blocked:
+            print(
+                f"Takedown enforced during merge: {article.get('slug')} — "
+                f"{article.get('title')}"
+            )
+        merged = [article for article in merged if article not in blocked]
     merged.sort(
         key=lambda article: parse_iso(article.get("published_at")),
         reverse=True,
