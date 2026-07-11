@@ -52,7 +52,7 @@ CATEGORY_ORDER = (
     )),
     ("health", re.compile(
         r"\b(?:NHS|hospital|doctor|GP\b|clinic|health service|mental health|"
-        r"patient|care service|pharmacy|vaccination)\b",
+        r"patient|care service|pharmacy|vaccination|fitness|exercise (?:class(?:es)?|session(?:s)?)|workout|body combat|zumba|cardiovascular|wellbeing)\b",
         re.I,
     )),
     ("community", re.compile(
@@ -60,7 +60,7 @@ CATEGORY_ORDER = (
         r"fundraising|volunteer|donation|support group|community group|"
         r"family support|local families|neighbourhood project|hidden hero|"
         r"protests?|protesters?|demonstration|petition|campaigners?|"
-        r"safe haven|drop[- ]in|warm space|community centre|support service)\b",
+        r"safe haven|drop[- ]in|warm space|community centres?|support services?)\b",
         re.I,
     )),
     ("business", re.compile(
@@ -71,14 +71,15 @@ CATEGORY_ORDER = (
     ("environment", re.compile(
         r"\b(?:flood|weather warning|pollution|recycling|litter|climate|wildlife|"
         r"reservoir|canal|environmental|nature reserve|green space|country park|"
-        r"heatwave|asbestos|contaminated|contamination|derelict|brownfield|"
+        r"heatwave|met office|weather forecast|sunny|sunshine|rainfall|showers|"
+        r"asbestos|contaminated|contamination|derelict|brownfield|"
         r"factory site|abandoned (?:site|factory|mill|works|land|building))\b",
         re.I,
     )),
     ("sport", re.compile(
         r"\b(?:Rochdale AFC|Rochdale Hornets|football|rugby|cricket|boxing|"
         r"athletics|parkrun|netball|MMA|Muay Thai|fixture|match|league|cup tie|"
-        r"goalkeeper|striker|coach|tournament|sports club)\b",
+        r"goalkeeper|striker|coach|tournament|sports? clubs?|tennis|badminton|pickleball|squash|basketball|paddle sport)\b",
         re.I,
     )),
     ("events", re.compile(
@@ -183,7 +184,16 @@ def deterministic_category(value: Any, fallback: str = "news") -> str:
     # evidence; a lone keyword only decides genuinely uncategorised text.
     clean = str(fallback or "news").lower()
     known = {item[0] for item in CATEGORY_ORDER}
-    if best_score < 2 and clean in known and best_category != clean:
+    if (
+        best_score < 2
+        and clean in known
+        and best_category != clean
+        and scores.get(clean, 0) > 0
+    ):
+        # Keep the assigned category only while it retains SOME textual
+        # support. A pickleball participation story stayed "crime" because
+        # nothing scored 2+, even though crime scored zero: a category with
+        # no evidence at all must never beat a challenger that has some.
         return clean
     if best_category:
         return best_category
