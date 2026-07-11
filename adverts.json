@@ -1,0 +1,69 @@
+{
+  "_docs": {
+    "purpose": "Single source of truth for all advertising on Rochdale Daily. Edit this file through the GitHub web interface; the site updates on the next deploy. Expired ads drop out automatically; empty slots fall back to the built-in 'Advertise here' placeholders.",
+    "slots": {
+      "home-leaderboard": "Homepage top banner. HORIZONTAL: 728x90 or 970x90 (mobile 320x50 via image_mobile). Renders up to 120px tall.",
+      "home-billboard": "Homepage lower banner. HORIZONTAL: 970x250 (mobile 300x250). Renders up to 280px tall.",
+      "article-leaderboard": "Top of every article. HORIZONTAL: 728x90 (mobile 320x50). Renders up to 120px tall.",
+      "article-mrec": "Article sidebar. RECTANGLE or VERTICAL: 300x250 square-ish, or 300x600 skyscraper. Renders up to 620px tall.",
+      "article-incontent": "Inside article body. RECTANGLE: 300x250 or 580x250. Renders up to 280px tall."
+    },
+    "placement_fields": {
+      "id": "Unique, permanent, lowercase-with-hyphens. Used in tracking URLs and reports — never reuse an id.",
+      "slot": "One of the slot names above.",
+      "advertiser": "Business name, for your reports.",
+      "image": "Path under /assets/ads/, e.g. /assets/ads/acme-728x90.png",
+      "image_mobile": "Optional smaller creative for phones.",
+      "url": "The advertiser's landing page. Clicks are tracked then redirected here.",
+      "alt": "Accessible description, e.g. 'Acme Plumbing — emergency callouts across Rochdale'.",
+      "start": "First day the ad shows, YYYY-MM-DD inclusive.",
+      "end": "Last day the ad shows, YYYY-MM-DD inclusive.",
+      "weight": "Rotation share within the slot. Two ads weighted 2 and 1 split views roughly 2:1."
+    },
+    "directory_fields": {
+      "id": "Unique id, as above.",
+      "category": "Must exactly match a category heading on the homepage, e.g. 'Plumbers & heating'.",
+      "name": "Business name shown on the card.",
+      "blurb": "One sentence, roughly 90 characters.",
+      "phone": "Optional. Shown as a tap-to-call link.",
+      "url": "Optional. Business website.",
+      "start": "YYYY-MM-DD",
+      "end": "YYYY-MM-DD"
+    },
+    "config_fields": {
+      "tracker_base": "Your ads Worker URL, e.g. https://rd-ads.YOURNAME.workers.dev — leave empty until the Worker is deployed; ads then link directly with no tracking.",
+      "impression_sample": "1 = record every impression; 5 = record 1 in 5 (reports multiply back up). Use 5 on the free Workers plan to stay inside KV write limits."
+    },
+    "orientation_rule": "Match the creative to the slot: horizontal banners go in leaderboard/billboard slots; square, portrait or tall creatives go in article-mrec or article-incontent. Any image is letterboxed within the slot's height limit - never cropped or stretched - so a wrongly shaped creative looks small, not broken."
+  },
+  "config": {
+    "tracker_base": "",
+    "impression_sample": 5
+  },
+  "placements": [
+    {
+      "id": "example-house-2026",
+      "slot": "home-leaderboard",
+      "advertiser": "EXAMPLE — delete me",
+      "image": "/assets/ads/example-728x90.png",
+      "image_mobile": "/assets/ads/example-320x50.png",
+      "url": "https://example.com",
+      "alt": "Example advertiser banner",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1
+    }
+  ],
+  "directory": [
+    {
+      "id": "example-dir-2026",
+      "category": "Plumbers & heating",
+      "name": "EXAMPLE — delete me",
+      "blurb": "Example listing. Expired dates keep it hidden.",
+      "phone": "01706 000000",
+      "url": "https://example.com",
+      "start": "2020-01-01",
+      "end": "2020-01-02"
+    }
+  ]
+}
