@@ -775,7 +775,7 @@
 
   <div class="page-shell" id="top">
     <div class="wrap">
-      <div class="ad-slot" aria-label="Advertisement placeholder"><div><strong>Advertisement</strong>Premium homepage leaderboard — 970 × 90</div></div>
+      <div class="ad-slot" data-ad-slot="home-leaderboard" aria-label="Advertisement placeholder"><div><strong>Advertisement</strong>Premium homepage leaderboard — 970 × 90</div></div>
     </div>
 
     <main id="main-content">
@@ -962,12 +962,12 @@
           </div>
           <div class="directory-wrap">
             <div class="directory-grid">
-              <article class="directory-card"><span class="sponsored">Sponsored listing example</span><h3>Plumbers & heating</h3><p>Reach local households searching for urgent and planned work.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
-              <article class="directory-card"><span class="sponsored">Sponsored listing example</span><h3>Electricians</h3><p>Prominent category placement with phone, website and service area.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
-              <article class="directory-card"><span class="sponsored">Sponsored listing example</span><h3>Roofers</h3><p>Local directory visibility alongside relevant weather and property news.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
-              <article class="directory-card"><span class="sponsored">Sponsored listing example</span><h3>Skip hire</h3><p>Advertise borough-wide coverage, same-day availability and permits.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
-              <article class="directory-card"><span class="sponsored">Sponsored listing example</span><h3>Cleaners</h3><p>Domestic, commercial, end-of-tenancy and specialist cleaning listings.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
-              <article class="directory-card"><span class="sponsored">Sponsored listing example</span><h3>Solicitors</h3><p>Clearly labelled local advertising for family, property and business law.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
+              <article class="directory-card" data-ad-directory data-category="Plumbers & heating"><span class="sponsored">Sponsored listing example</span><h3>Plumbers & heating</h3><p>Reach local households searching for urgent and planned work.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
+              <article class="directory-card" data-ad-directory data-category="Electricians"><span class="sponsored">Sponsored listing example</span><h3>Electricians</h3><p>Prominent category placement with phone, website and service area.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
+              <article class="directory-card" data-ad-directory data-category="Roofers"><span class="sponsored">Sponsored listing example</span><h3>Roofers</h3><p>Local directory visibility alongside relevant weather and property news.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
+              <article class="directory-card" data-ad-directory data-category="Skip hire"><span class="sponsored">Sponsored listing example</span><h3>Skip hire</h3><p>Advertise borough-wide coverage, same-day availability and permits.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
+              <article class="directory-card" data-ad-directory data-category="Cleaners"><span class="sponsored">Sponsored listing example</span><h3>Cleaners</h3><p>Domestic, commercial, end-of-tenancy and specialist cleaning listings.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
+              <article class="directory-card" data-ad-directory data-category="Solicitors"><span class="sponsored">Sponsored listing example</span><h3>Solicitors</h3><p>Clearly labelled local advertising for family, property and business law.</p><a href="mailto:advertising@rochdaledaily.co.uk">Claim this category</a></article>
             </div>
             <aside class="advertise-panel">
               <h3>Reach Rochdale</h3>
@@ -978,7 +978,7 @@
         </div>
       </section>
 
-      <div class="wrap"><div class="ad-slot"><div><strong>Advertisement</strong>Local business billboard — 970 × 250</div></div></div>
+      <div class="wrap"><div class="ad-slot" data-ad-slot="home-billboard"><div><strong>Advertisement</strong>Local business billboard — 970 × 250</div></div></div>
     </main>
   </div>
 
@@ -1002,7 +1002,7 @@
           <ul><li><a href="privacy.html">Privacy policy</a></li><li><a href="#cookie-settings" id="cookie-settings-link">Cookie settings</a></li><li><a href="#">Terms</a></li><li><a href="#">Accessibility</a></li></ul>
         </nav>
       </div>
-      <div class="footer-bottom"><span>© <span id="footer-year"></span> Rochdale Daily. All rights reserved.</span><span>Independent publication for Rochdale, Greater Manchester </span></div>
+      <div class="footer-bottom"><span>© <span id="footer-year"></span> Rochdale Daily. All rights reserved.</span><span>Independent publication — not affiliated with Manchester Evening News.</span></div>
     </div>
   </footer>
 
@@ -2333,5 +2333,6 @@ function shareIconMarkup(action, label) {
     window.setInterval(() => loadArticleFeed({ quiet: true }), ARTICLE_REFRESH_MS);
     window.setInterval(loadWeather, 15 * 60 * 1000);
   </script>
+  <script defer src="/assets/ads.js"></script>
 </body>
 </html>
