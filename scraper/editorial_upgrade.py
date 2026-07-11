@@ -23,6 +23,8 @@ CATEGORY_ORDER = (
         r"(?:crown|magistrates|county) court|court (?:hearing|case|appearance|proceedings)|"
         r"appeared? (?:at|in|before) (?:the )?court|"
         r"police|wanted person|appeal for witnesses|"
+        r"(?:police )?investigation (?:launched|underway|ongoing)|police investigation|"
+        r"attacks? (?:on|against) (?:a |an )?\w+|child attacks?|"
         r"criminal behaviour order|drugs raid|cannabis farm|deportation|parole)\b",
         re.I,
     )),
