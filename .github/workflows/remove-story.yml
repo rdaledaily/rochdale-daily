@@ -1,0 +1,110 @@
+name: Remove story
+
+# Editorial takedown. Run from the Actions tab -> "Remove story" ->
+# "Run workflow". Provide any combination of the three inputs.
+#
+# What it does, in order:
+#   1. Adds the entries to story_blocklist.json (this makes the removal
+#      permanent: the scraper will never re-collect the story, and the
+#      push-race merge will never resurrect it).
+#   2. Removes matching records from articles.json.
+#   3. Deletes the matching article pages.
+#   4. Rebuilds article pages, frontpage.json and sitemap.xml.
+#   5. Commits, resolving any push race with the same story-aware merge
+#      the scrape workflow uses — the blocklist wins the race by design.
+
+on:
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: "Page slugs, comma-separated (e.g. rochdale-henry-nowak-s-killer...)"
+        required: false
+        default: ""
+      title_patterns:
+        description: "Title substrings, comma-separated, case-insensitive (e.g. henry nowak)"
+        required: false
+        default: ""
+      source_urls:
+        description: "Source URLs, comma-separated"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: feed-commit
+  cancel-in-progress: false
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Remove story
+        run: |
+          python scraper/remove_story.py \
+            --slugs "${{ github.event.inputs.slugs }}" \
+            --title-patterns "${{ github.event.inputs.title_patterns }}" \
+            --source-urls "${{ github.event.inputs.source_urls }}"
+
+      - name: Commit takedown
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add story_blocklist.json articles.json articles sitemap.xml
+
+          if git diff --cached --quiet; then
+            echo "Nothing changed (entries may already have been blocklisted)."
+            exit 0
+          fi
+
+          git commit -m "Editorial takedown via Remove story workflow"
+
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); merging origin/${GITHUB_REF_NAME}."
+            git fetch origin "${GITHUB_REF_NAME}"
+            if ! git merge --no-edit "origin/${GITHUB_REF_NAME}"; then
+              if git ls-files -u -- articles.json | grep -q .; then
+                git show ":3:articles.json" > /tmp/remote_articles.json
+                git show ":2:articles.json" > /tmp/local_articles.json
+                python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
+                git add articles.json
+              fi
+              conflicted=$(git diff --name-only --diff-filter=U)
+              if [ -n "${conflicted}" ]; then
+                echo "${conflicted}" | while read -r file; do
+                  git checkout --ours -- "${file}" 2>/dev/null || git rm -q -- "${file}"
+                  git add -- "${file}" 2>/dev/null || true
+                done
+              fi
+              git commit --no-edit
+            fi
+            # Re-enforce the takedown after any merge: the blocklist is
+            # already committed on our side, so scrub whatever the other
+            # side brought back, then continue the push loop.
+            python scraper/remove_story.py \
+              --slugs "${{ github.event.inputs.slugs }}" \
+              --title-patterns "${{ github.event.inputs.title_patterns }}" \
+              --source-urls "${{ github.event.inputs.source_urls }}"
+            git add story_blocklist.json articles.json articles sitemap.xml
+            git diff --cached --quiet || git commit -m "Re-enforce takedown after race merge"
+          done
+          echo "Failed to push after 5 attempts."
+          exit 1
