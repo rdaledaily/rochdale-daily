@@ -344,6 +344,7 @@ def article_is_local(article: dict[str, Any]) -> bool:
 from rewrite_safety import excessive_source_overlap
 from selection_policy import PUBLISH_CATEGORIES, ROCHDALE_WARDS, balanced_select, is_classified_listing_post, is_job_or_career_post, ward_for_item
 from story_identity import authority_score, build_story_key, dedupe_article_records, merge_article_records, same_story
+from story_blocklist import is_blocked_article, is_blocked_text, load_blocklist as load_story_blocklist
 from locality_rules import AREA_KEYWORDS, LOCAL_TERMS, article_is_local, detect_area, has_disqualifying_evidence, is_local, locality_evidence, source_is_denied as locality_source_is_denied
 
 def source_is_denied(source_name: str='', source_url: str='') -> bool:
@@ -1325,8 +1326,11 @@ def deduplicate_and_cross_reference(candidates: Iterable[Candidate]) -> list[Can
     ordered = sorted(candidates, key=lambda item: (authority_score(item), item.source_published_at), reverse=True)
     primaries: list[Candidate] = []
     seen_urls: set[str] = set()
+    story_blocklist = load_story_blocklist()
     for candidate in ordered:
         if source_is_denied(candidate.source_name, candidate.source_url):
+            continue
+        if is_blocked_text(candidate.title, candidate.source_url, story_blocklist):
             continue
         if not candidate.area:
             continue
@@ -1357,8 +1361,12 @@ def load_json_list(path: Path) -> list[dict[str, Any]]:
 
 def recent_existing_articles() -> list[dict[str, Any]]:
     kept = []
+    story_blocklist = load_story_blocklist()
     for article in load_json_list(OUTPUT_FILE):
         if (is_job_or_career_post(article) or is_classified_listing_post(article)):
+            continue
+        if is_blocked_article(article, story_blocklist):
+            log.warning('Dropped editorially removed story from retained feed: %s', article.get('title'))
             continue
         source_name = str(article.get('source_name') or '')
         source_url = str(article.get('source_url') or '')
