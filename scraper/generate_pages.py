@@ -70,8 +70,8 @@ def load_site_css() -> str:
     print(f'WARNING: {CSS_SOURCE_PATH} not found; generated pages will be unstyled.')
     return ''
 SITE_CSS = load_site_css()
-SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk'}
-SOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online'}
+SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}
+SOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'}
 CATEGORY_LABELS = {'crime': 'Crime', 'traffic': 'Traffic', 'transport': 'Transport', 'politics': 'Politics', 'education': 'Education', 'sport': 'Sport', 'events': 'Events', 'business': 'Business', 'community': 'Community', 'health': 'Health', 'environment': 'Environment', 'news': 'News'}
 
 def esc(value: Any) -> str:
