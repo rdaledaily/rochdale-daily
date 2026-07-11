@@ -1330,7 +1330,7 @@ def deduplicate_and_cross_reference(candidates: Iterable[Candidate]) -> list[Can
     for candidate in ordered:
         if source_is_denied(candidate.source_name, candidate.source_url):
             continue
-        if is_blocked_text(candidate.title, candidate.source_url, story_blocklist):
+        if is_blocked_text(candidate.source_title, candidate.source_url, story_blocklist):
             continue
         if not candidate.area:
             continue
