@@ -166,6 +166,14 @@ TERM_IMPOSTOR_CONTEXTS: dict[str, set[str]] = {
     "bamford": {
         "derbyshire", "hope valley", "peak district", "bamford edge",
     },
+    "healey": {
+        # Healey Ford / Healey Brothers: a Ford dealership group in New
+        # York's Hudson Valley (Goshen, Poughkeepsie). A Facebook sales
+        # post was published as a Rochdale story with the rewrite
+        # asserting "a car dealership in Healey".
+        "healey ford", "healey brothers", "goshen", "poughkeepsie",
+        "hudson valley", "new york",
+    },
     "heywood": {"wiltshire", "westbury"},
     "wardle": {"cheshire", "nantwich"},
     "hopwood": {"worcestershire", "hopwood park", "m42"},
