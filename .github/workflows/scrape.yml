@@ -148,6 +148,7 @@ jobs:
           python scraper/test_food_hygiene.py
           python scraper/test_archive_persistence.py
           python scraper/test_event_identity.py
+          python scraper/test_article_gate.py
           (
             cd scraper
             python -c "import scraper; print('Scraper startup import passed.')"
@@ -167,6 +168,7 @@ jobs:
       - name: Validate public article feed
         run: |
           python -m json.tool articles.json > /dev/null
+          python scraper/article_gate.py articles.json
 
       - name: Generate static article pages and sitemap
         run: |
