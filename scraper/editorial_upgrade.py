@@ -10,10 +10,19 @@ from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
 
 CATEGORY_ORDER = (
     ("crime", re.compile(
+        # Tokens must carry criminal CONTEXT. Bare "charge" classified a
+        # children's Bookstart event as crime because its body said
+        # "free of charge"; bare "court" matches street names and tennis
+        # courts. Weak words are now bound to legal phrasing.
         r"\b(?:rape|rapist|sexual assault|sexual offence|sexual abuse|grooming|"
-        r"murder|manslaughter|burglary|robbery|theft|fraud|assault|stabbing|"
-        r"shooting|arrested?|charged?|convicted|sentenced?|jailed|court|"
-        r"magistrates|crown court|police|wanted person|appeal for witnesses|"
+        r"murder|manslaughter|burglary|robbery|theft|fraud|stabbing|"
+        r"shooting|arrested?|convicted|sentenced?|jailed|"
+        r"charged with|charges? (?:of|against)|faces? charges?|on charges?|"
+        r"(?:weapons?|assault|drugs?|criminal|fraud) charges?|"
+        r"pleads? (?:not )?guilty|"
+        r"(?:crown|magistrates|county) court|court (?:hearing|case|appearance|proceedings)|"
+        r"appeared? (?:at|in|before) (?:the )?court|"
+        r"police|wanted person|appeal for witnesses|"
         r"criminal behaviour order|drugs raid|cannabis farm|deportation|parole)\b",
         re.I,
     )),
@@ -124,11 +133,23 @@ def deterministic_category(value: Any, fallback: str = "news") -> str:
     # purely because traffic sits earlier in the list.
     best_category = ""
     best_score = 0
+    scores: dict[str, int] = {}
     for category, pattern in CATEGORY_ORDER:
         score = len({match.group(0).lower() for match in pattern.finditer(text)})
+        scores[category] = score
         if score > best_score:
             best_category = category
             best_score = score
+    # Crime carries the heaviest visual and legal weight on the site, so a
+    # tie must never default to it: crime wins only when it OUTSCORES every
+    # other category. On a tie, the strongest non-crime category takes it.
+    if best_category == "crime" and any(
+        score == best_score for cat, score in scores.items() if cat != "crime"
+    ):
+        best_category = next(
+            cat for cat, _ in CATEGORY_ORDER
+            if cat != "crime" and scores[cat] == best_score
+        )
     if best_category:
         return best_category
     clean = str(fallback or "news").lower()
