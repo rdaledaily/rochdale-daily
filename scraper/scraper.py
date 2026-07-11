@@ -93,8 +93,8 @@ USE_SOURCE_IMAGES = os.getenv('USE_SOURCE_IMAGES', 'false').lower() in {'1', 'tr
 RIGHT_TO_REPLY_EMAIL = os.getenv('RIGHT_TO_REPLY_EMAIL', 'news@rochdaledaily.co.uk')
 UK_TZ = ZoneInfo('Europe/London')
 SAME_DAY_ONLY = False
-SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk'}
-SOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online'}
+SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}
+SOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'}
 LIVE_SOURCE_NAMES = {'rochdale council service updates', 'tfgm travel alerts', 'northern service updates', 'united utilities incidents', 'environment agency flood-monitoring api'}
 FACEBOOK_EVENTS_DISCOVERY_URL = os.getenv('FACEBOOK_EVENTS_DISCOVERY_URL', 'https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149').strip()
 FACEBOOK_EVENTS_BROWSER_ENABLED = os.getenv('FACEBOOK_EVENTS_BROWSER_ENABLED', 'true').lower() not in {'0', 'false', 'no', 'off'}
@@ -353,9 +353,9 @@ def source_is_denied(source_name: str='', source_url: str='') -> bool:
     domain = domain_of(source_url)
     if domain == 'rochvalleyradio.com' or 'roch valley radio' in name:
         return False
-    if domain in {'rochdaletimes.co.uk', 'rochdaleonline.co.uk'}:
+    if domain in {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}:
         return True
-    if any((blocked in name for blocked in ('rochdale times', 'rochdale times paper', 'rochdale online'))):
+    if any((blocked in name for blocked in ('rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'))):
         return True
     return locality_source_is_denied(source_name, source_url)
 ROCHDALE_TRAFFIC_AREA_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (('heywood', ('\\bm62\\s+(?:junction|j)\\s*19\\b', '\\bpilsworth road\\b', "\\bqueen'?s park road\\b")), ('rochdale', ('\\bm62\\s+(?:junction|j)\\s*20\\b', '\\ba627\\s*\\(m\\)\\b', '\\bedinburgh way\\b', '\\broch valley way\\b', '\\bmilnrow road\\b', '\\bsandbrook park\\b')), ('milnrow', ('\\bm62\\s+(?:junction|j)\\s*21\\b', '\\belizabethan way\\b')), ('middleton', ('\\bmanchester new road\\b', '\\ba664\\b.{0,100}\\bmiddleton\\b', '\\bmiddleton\\b.{0,100}\\ba664\\b')), ('littleborough', ('\\bhare hill road\\b', '\\ba58\\b.{0,100}\\blittleborough\\b', '\\blittleborough\\b.{0,100}\\ba58\\b')))
@@ -1405,6 +1405,8 @@ def recent_existing_articles() -> list[dict[str, Any]]:
                 if str(article.get('image_url') or '') == old_stock:
                     article['image_url'] = CATEGORY_STOCK_IMAGES.get(corrected, CATEGORY_STOCK_IMAGES['news'])
                 article['category'] = corrected
+                if corrected != 'crime':
+                    article['police_matter'] = False
             kept.append(article)
     return dedupe_article_records(kept)
 
