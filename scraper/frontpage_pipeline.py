@@ -823,17 +823,52 @@ def clean_and_integrate_events(
     }
 
 
+def _frontpage_first_published(article: dict[str, Any]) -> datetime | None:
+    """Use the story's real original publication time for homepage freshness."""
+    return parse_datetime(
+        article.get("first_published_at")
+        or article.get("published_at")
+        or article.get("scraped_at")
+    )
+
+
 def _age_eligible(article: dict[str, Any], cutoff: datetime) -> bool:
     if is_event(article):
-        return approved_event_source(article) and not is_online_event(article) and has_physical_local_venue(article) and event_is_current(article)
-    published = parse_datetime(article.get("published_at") or article.get("scraped_at"))
-    return published is not None and published >= cutoff
+        return (
+            approved_event_source(article)
+            and not is_online_event(article)
+            and has_physical_local_venue(article)
+            and event_is_current(article)
+        )
+
+    first_published = _frontpage_first_published(article)
+    return first_published is not None and first_published >= cutoff
 
 
 def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
     category = article_category(article)
-    published = parse_datetime(article.get("published_at") or article.get("scraped_at")) or datetime.min.replace(tzinfo=timezone.utc)
-    age_hours = max(0.0, (now - published).total_seconds() / 3600)
+
+    first_published = (
+        _frontpage_first_published(article)
+        or datetime.min.replace(tzinfo=timezone.utc)
+    )
+
+    latest_update = parse_datetime(
+        article.get("last_updated_at")
+        or article.get("published_at")
+        or article.get("scraped_at")
+    ) or first_published
+
+    age_hours = max(
+        0.0,
+        (now - first_published).total_seconds() / 3600,
+    )
+
+    update_age_hours = max(
+        0.0,
+        (now - latest_update).total_seconds() / 3600,
+    )
+
     importance = {
         "crime": 100,
         "traffic": 80,
@@ -842,21 +877,33 @@ def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
         "health": 70,
         "education": 65,
         "community": 60,
+        "news": 58,
         "business": 55,
         "environment": 52,
         "sport": 50,
         "events": 35,
-        "news": 58,
     }.get(category, 50)
+
     if editorial_word_count(article) >= 200 or is_event(article):
         importance += 18
     else:
         importance -= 25
-    if article.get("is_ongoing"):
-        importance += 12
-    importance += min(12, int(article.get("source_count") or 1) * 2)
-    importance -= min(40, age_hours / 12)
-    return (importance, published)
+
+    # Give genuinely recent updates a small boost, but do not let an old
+    # ongoing story permanently dominate the homepage.
+    if article.get("is_ongoing") and update_age_hours <= 6:
+        importance += 4
+
+    importance += min(
+        6,
+        int(article.get("source_count") or 1),
+    )
+
+    # Strongly demote stories according to when the story first appeared,
+    # rather than resetting their age every time another source is merged.
+    importance -= min(72, age_hours * 3)
+
+    return (importance, latest_update)
 
 
 def _cap_selected(items: list[dict[str, Any]], target: int) -> list[dict[str, Any]]:
