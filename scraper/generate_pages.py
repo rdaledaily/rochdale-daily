@@ -24,6 +24,46 @@ OUTPUT_DIR = Path(os.getenv('ARTICLE_PAGES_DIR', 'articles'))
 SITEMAP_PATH = Path(os.getenv('SITEMAP_PATH', 'sitemap.xml'))
 CSS_SOURCE_PATH = Path(os.getenv('CSS_SOURCE_PATH', 'assets/css/site.css'))
 
+LEGACY_COMMENT_MARKUP = [
+    re.compile(r'<section class="comments-section".*?</section>\s*', re.S),
+    re.compile(r'<div id="fb-root"></div>\s*', re.S),
+    re.compile(r'<script[^>]*src="https://connect\.facebook\.net/[^"]*"[^>]*>\s*</script>\s*', re.S),
+    re.compile(r'if \(window\.FB && window\.FB\.XFBML\) \{[^}]*\}\s*', re.S),
+    # Dead CSS rules for the retired comments block, embedded in each
+    # archived page's inline stylesheet.
+    re.compile(r'\.comments-section[^{]*\{[^}]*\}\s*'),
+    re.compile(r'\.comments-fallback[^{]*\{[^}]*\}\s*'),
+    re.compile(r'\.comment-signup-box[^{]*\{[^}]*\}\s*'),
+    re.compile(r'\.comment-eyebrow[^{]*\{[^}]*\}\s*'),
+    re.compile(r'\.comment-rules[^{]*\{[^}]*\}\s*'),
+]
+
+
+def scrub_legacy_comment_markup(pages_dir: Path, skip: set[str]) -> int:
+    """Strip the retired Facebook comments block from archived pages.
+
+    Meta discontinued the Comments plugin on 10 February 2026; it renders
+    as an invisible 0x0 element, leaving an empty "Have your say" box on
+    every page that still embeds it. Live pages are fully regenerated each
+    run, but archived pages (stories no longer in articles.json) are never
+    rewritten, so their embedded markup is scrubbed in place here instead.
+    """
+    scrubbed = 0
+    if not pages_dir.exists():
+        return scrubbed
+    for path in pages_dir.glob('*.html'):
+        if path.stem in skip:
+            continue
+        original = path.read_text(encoding='utf-8')
+        cleaned = original
+        for pattern in LEGACY_COMMENT_MARKUP:
+            cleaned = pattern.sub('', cleaned)
+        if cleaned != original:
+            path.write_text(cleaned, encoding='utf-8')
+            scrubbed += 1
+    return scrubbed
+
+
 def load_site_css() -> str:
     if CSS_SOURCE_PATH.exists():
         return CSS_SOURCE_PATH.read_text(encoding='utf-8')
@@ -122,21 +162,6 @@ def share_icons_markup(canonical_url: str, title: str) -> str:
         '</div>'
     )
 
-def comments_section_markup(canonical_url: str) -> str:
-    return (
-        '<section class="comments-section" id="comments">'
-        '<div class="comment-signup-box">'
-        '<span class="comment-eyebrow">ROCHDALE VOICES</span>'
-        '<h3>Have your say</h3>'
-        '<p>Share your view on this story. Use the comments box below to sign in with Facebook or create an account when prompted.</p>'
-        '<p class="comment-rules">Keep discussion lawful, relevant and respectful. Do not identify protected victims, children or people whose identity is restricted by law.</p>'
-        '</div>'
-        f'<div class="fb-comments" data-href="{esc(canonical_url)}" data-width="100%" data-numposts="15" data-order-by="reverse_time"></div>'
-        '<noscript><p class="comments-fallback">Enable JavaScript and Facebook to join the discussion, or visit the Rochdale Daily Facebook page.</p></noscript>'
-        '</section>'
-    )
-
-
 def json_ld(article: dict[str, Any], canonical_url: str, image_url: str) -> str:
     published = article.get("first_published_at") or article.get("published_at") or article.get("scraped_at") or ""
     modified = article.get("last_updated_at") or article.get("scraped_at") or published
@@ -202,7 +227,7 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     byline = esc(article.get('byline') or 'Rochdale Daily Newsdesk')
     police_matter = bool(article.get('police_matter'))
     content = insert_incontent_ad(str(article.get('content_html') or ''))
-    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="index,follow,max-image-preview:large">\n  <title>{esc(title)} | Rochdale Daily</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">\n  <style>{SITE_CSS}</style>\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(article.get("last_updated_at") or article.get("scraped_at") or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  <div id="fb-root"></div>\n  <script async defer crossorigin="anonymous"\n    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v19.0">\n  </script>\n\n  <header class="masthead">\n    <div class="wrap masthead-row">\n      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">\n        <span class="brand-text-fallback">ROCHDALE DAILY</span>\n      </a>\n      <div class="masthead-actions">\n        <a class="header-button" href="../index.html">All stories</a>\n        <a class="header-button solid" href="mailto:news@rochdaledaily.co.uk?subject=Story%20for%20Rochdale%20Daily">Send us a story</a>\n      </div>\n    </div>\n  </header>\n\n  <div class="modal-card" style="margin:24px auto;box-shadow:none">\n    <div class="article-body">\n      <div class="ad-slot ad-slot-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="../index.html#{esc(category)}">{esc(category_label(category))}</a></nav>\n          <span class="story-kicker">{esc(category_label(category))}</span>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          <div class="article-byline">By {byline}</div>\n          {share_icons_markup(canonical_url, title)}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">\n            <h3 style="margin:0 0 8px">Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n          {comments_section_markup(canonical_url)}\n        </div>\n        <aside class="article-sidebar">\n          <div class="ad-slot ad-slot-mrec" role="presentation" aria-hidden="true"></div>\n          {related_stories_markup(article, all_articles)}\n          {newsletter_box_markup()}\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n    }});\n    var newsletterForm = document.querySelector("[data-newsletter-form]");\n    if (newsletterForm) {{\n      newsletterForm.addEventListener("submit", function(event) {{\n        event.preventDefault();\n        var status = document.querySelector("[data-newsletter-status]");\n        var email = newsletterForm.email.value.trim();\n        if (!email) return;\n        status.textContent = "Signing up…";\n        fetch("/api/newsletter-signup", {{\n          method: "POST",\n          headers: {{ "Content-Type": "application/json" }},\n          body: JSON.stringify({{ email: email }})\n        }}).then(function(response) {{\n          if (!response.ok) throw new Error("failed");\n          status.textContent = "You're signed up. Check your inbox to confirm.";\n          newsletterForm.reset();\n        }}).catch(function() {{\n          status.textContent = "Something went wrong. Please try again shortly.";\n        }});\n      }});\n    }}\n  </script>\n</body>\n</html>\n'''
+    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="index,follow,max-image-preview:large">\n  <title>{esc(title)} | Rochdale Daily</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">\n  <style>{SITE_CSS}</style>\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(article.get("last_updated_at") or article.get("scraped_at") or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  <header class="masthead">\n    <div class="wrap masthead-row">\n      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">\n        <span class="brand-text-fallback">ROCHDALE DAILY</span>\n      </a>\n      <div class="masthead-actions">\n        <a class="header-button" href="../index.html">All stories</a>\n        <a class="header-button solid" href="mailto:news@rochdaledaily.co.uk?subject=Story%20for%20Rochdale%20Daily">Send us a story</a>\n      </div>\n    </div>\n  </header>\n\n  <div class="modal-card" style="margin:24px auto;box-shadow:none">\n    <div class="article-body">\n      <div class="ad-slot ad-slot-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="../index.html#{esc(category)}">{esc(category_label(category))}</a></nav>\n          <span class="story-kicker">{esc(category_label(category))}</span>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          <div class="article-byline">By {byline}</div>\n          {share_icons_markup(canonical_url, title)}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">\n            <h3 style="margin:0 0 8px">Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n        </div>\n        <aside class="article-sidebar">\n          <div class="ad-slot ad-slot-mrec" role="presentation" aria-hidden="true"></div>\n          {related_stories_markup(article, all_articles)}\n          {newsletter_box_markup()}\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n    }});\n    var newsletterForm = document.querySelector("[data-newsletter-form]");\n    if (newsletterForm) {{\n      newsletterForm.addEventListener("submit", function(event) {{\n        event.preventDefault();\n        var status = document.querySelector("[data-newsletter-status]");\n        var email = newsletterForm.email.value.trim();\n        if (!email) return;\n        status.textContent = "Signing up…";\n        fetch("/api/newsletter-signup", {{\n          method: "POST",\n          headers: {{ "Content-Type": "application/json" }},\n          body: JSON.stringify({{ email: email }})\n        }}).then(function(response) {{\n          if (!response.ok) throw new Error("failed");\n          status.textContent = "You're signed up. Check your inbox to confirm.";\n          newsletterForm.reset();\n        }}).catch(function() {{\n          status.textContent = "Something went wrong. Please try again shortly.";\n        }});\n      }});\n    }}\n  </script>\n</body>\n</html>\n'''
 
 def load_articles() -> list[dict[str, Any]]:
     if not ARTICLES_JSON.exists():
@@ -275,6 +300,7 @@ def main() -> None:
     # deleted (see module docstring), so the archive keeps growing and every
     # published URL remains discoverable and indexed.
     live_slugs = {slug for slug, _ in slugs_with_dates}
+    scrubbed = scrub_legacy_comment_markup(OUTPUT_DIR, live_slugs)
     archived = 0
     for path in sorted(OUTPUT_DIR.glob('*.html')):
         if path.stem in live_slugs:
@@ -282,6 +308,6 @@ def main() -> None:
         slugs_with_dates.append((path.stem, archive_page_lastmod(path)))
         archived += 1
     write_sitemap(slugs_with_dates)
-    print(f'Generated {written} article page(s), left {skipped_existing} pre-existing, {archived} archived page(s) retained in sitemap; sitemap has {len(slugs_with_dates) + 1} URL(s).')
+    print(f'Generated {written} article page(s), left {skipped_existing} pre-existing, {archived} archived page(s) retained in sitemap ({scrubbed} scrubbed of legacy comment markup); sitemap has {len(slugs_with_dates) + 1} URL(s).')
 if __name__ == '__main__':
     main()
