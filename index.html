@@ -1225,7 +1225,7 @@
 
     let stories = [];
 
-    const ARTICLE_FEED_SOURCES = ["/api/frontpage", "articles/frontpage.json", "/api/articles", "articles.json"];
+    const ARTICLE_FEED_SOURCES = ["articles/frontpage.json", "articles.json"];
     const ARTICLE_REFRESH_MS = 60 * 1000;
 
     function ukDateKey(value) {
@@ -1546,11 +1546,16 @@
         }
       }
 
-      stories = [];
-      renderTopStories();
-      renderNewsGrid();
-      renderEvents();
-      if (status) status.textContent = "Live feed unavailable";
+      // All sources failed (offline, laptop asleep, network suspended).
+      // Keep whatever we already rendered rather than wiping the page.
+      if (!stories.length) {
+        renderTopStories();
+        renderNewsGrid();
+        renderEvents();
+        if (status) status.textContent = "Live feed unavailable";
+      } else if (status) {
+        status.textContent = "Offline \u2014 showing earlier stories";
+      }
       return false;
     }
 
@@ -2329,7 +2334,16 @@ function shareIconMarkup(action, label) {
     window.addEventListener("pageshow", restartBreakingTicker);
     window.addEventListener("resize", restartBreakingTicker);
     document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) restartBreakingTicker();
+      if (!document.hidden) {
+        restartBreakingTicker();
+        loadArticleFeed({ quiet: true });
+      }
+    });
+    // Recover when connectivity returns (wake from sleep, network drop)
+    window.addEventListener("online", () => loadArticleFeed({ quiet: true }));
+    // Recover when restored from the back/forward cache
+    window.addEventListener("pageshow", event => {
+      if (event.persisted) loadArticleFeed({ quiet: true });
     });
 
     if (document.fonts && document.fonts.ready) {
