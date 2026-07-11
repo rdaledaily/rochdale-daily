@@ -163,6 +163,29 @@ JOB_PATTERNS = (
     r"\bapprenticeship(?:s)?\b",
     r"\binternship(?:s)?\b",
     r"\bgraduate scheme(?:s)?\b",
+    # The pipeline's own rewrite paraphrases raw job-ad language into prose
+    # that evaded every fixed phrase above ("Heritage Healthcare is hiring a
+    # Care Assistant... Interested applicants can find more details about
+    # the job and application process on the Glassdoor website"). These
+    # signatures catch the rewritten register.
+    r"\b(?:is|are) hiring (?:a|an|for)\b",
+    r"\binterested (?:applicants|candidates)\b",
+    r"\bapplication process\b",
+    r"\bhow to apply\b",
+    r"\brequires? candidates\b",
+    r"\bcandidates? (?:must|should|are required to|need to) (?:hold|have|be)\b",
+    r"\bseek(?:s|ing)? (?:a|an) [a-z /&-]{0,45}?(?:assistant|driver|coordinator|"
+    r"engineer|estimator|worker|operative|nurse|carer|cleaner|chef|technician|"
+    r"administrator|receptionist|supervisor|apprentice)\b",
+)
+
+# Job boards and aggregators are never news sources; a listing arriving via
+# a Google News redirect hides the board's domain, so the SOURCE NAME and
+# every merged source URL are checked too.
+JOB_BOARD_NAMES = (
+    "glassdoor", "indeed", "totaljobs", "total jobs", "cv-library",
+    "cv library", "reed.co.uk", "adzuna", "ziprecruiter", "jobsite",
+    "monster.co.uk", "jobtoday", "caterer.com", "linkedin jobs",
 )
 
 TAG_RE = re.compile(r"<[^>]+>")
@@ -258,6 +281,15 @@ def is_job_or_career_post(item_or_text: Any, url: str = "") -> bool:
 
     path = urlparse(candidate_url).path.lower()
     if any(part in path for part in JOB_URL_PARTS):
+        return True
+
+    sources = " ".join(str(value or "") for value in (
+        get_value(item_or_text, "source_name", "") if not isinstance(item_or_text, str) else "",
+        candidate_url,
+        " ".join(get_value(item_or_text, "source_urls", []) or []) if not isinstance(item_or_text, str) else "",
+        " ".join(get_value(item_or_text, "source_names", []) or []) if not isinstance(item_or_text, str) else "",
+    )).lower()
+    if any(board in sources for board in JOB_BOARD_NAMES):
         return True
 
     return any(
