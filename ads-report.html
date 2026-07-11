@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Ad performance | Rochdale Daily</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f4f4f4;color:#111;margin:0}
+    .bar{background:#111;color:#fff;padding:14px 20px;font-weight:800;letter-spacing:.04em}
+    .bar span{color:#f5c400}
+    .wrap{max-width:960px;margin:0 auto;padding:24px 20px 60px}
+    .setup{background:#fff;border:1px solid #ddd;border-top:6px solid #f5c400;padding:18px;margin-bottom:22px}
+    .setup input{width:100%;max-width:460px;padding:9px;border:1px solid #bbb;font-size:14px;margin:4px 0 10px;display:block}
+    button{background:#111;color:#f5c400;border:0;padding:10px 18px;font-weight:800;font-size:13px;
+      text-transform:uppercase;letter-spacing:.06em;cursor:pointer}
+    table{width:100%;border-collapse:collapse;background:#fff;font-size:14px;margin-top:14px}
+    th{background:#111;color:#fff;text-align:left;padding:9px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+    td{padding:9px 10px;border-bottom:1px solid #e4e4e4}
+    tr:hover td{background:#fdf6dc}
+    .num{text-align:right;font-variant-numeric:tabular-nums}
+    .muted{color:#777;font-size:13px}
+    .note{background:#fdf6dc;border:1px solid #e5d089;border-left:8px solid #f5c400;padding:12px 16px;font-size:13px;margin:14px 0}
+    #status{font-size:13px;margin-left:12px}
+  </style>
+</head>
+<body>
+  <div class="bar">ROCHDALE <span>DAILY</span> · AD PERFORMANCE</div>
+  <div class="wrap">
+    <div class="setup">
+      <label>Tracker Worker URL<input id="base" placeholder="https://rd-ads.yourname.workers.dev"></label>
+      <label>Stats key<input id="key" type="password" placeholder="the STATS_KEY secret you set on the Worker"></label>
+      <button id="load">Load report</button><span id="status"></span>
+      <p class="muted">Both values are remembered in this browser only. This page is private to you — it is
+        marked <code>noindex</code> and the stats endpoint refuses requests without the key.</p>
+    </div>
+    <div id="controls" style="display:none">
+      <label class="muted">Window:
+        <select id="window"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="0">All time</option></select>
+      </label>
+      <button id="csv" style="margin-left:12px">Export CSV</button>
+    </div>
+    <div id="report"></div>
+    <div class="note">Impressions are estimates from sampling (the factor is shown in the report and set in
+      <code>adverts.json</code>). Clicks are counted individually. Counting always errs low, never high —
+      you will not over-report to an advertiser. Ad ids come from <code>adverts.json</code>; keep the
+      advertiser names there accurate and this report maps ids for you where it can.</div>
+  </div>
+  <script>
+    var lastRows = [];
+    function el(id){ return document.getElementById(id); }
+    function withinWindow(day, days){
+      if (!days) return true;
+      var cutoff = new Date(Date.now() - days*86400000).toISOString().slice(0,10);
+      return day >= cutoff;
+    }
+    function sum(map, days){
+      var total = 0;
+      Object.keys(map || {}).forEach(function(day){ if (withinWindow(day, days)) total += map[day]; });
+      return total;
+    }
+    async function advertiserNames(){
+      try {
+        var feed = await fetch('/adverts.json', {cache:'no-store'}).then(function(r){ return r.json(); });
+        var names = {};
+        (feed.placements||[]).concat(feed.directory||[]).forEach(function(item){
+          if (item && item.id) names[item.id] = item.advertiser || item.name || '';
+        });
+        return names;
+      } catch(e){ return {}; }
+    }
+    function render(days){
+      var rows = lastRows.map(function(row){
+        var clicks = sum(row.clicks, days);
+        var imps = sum(row.imps, days) * row.factor;
+        var ctr = imps ? (100*clicks/imps).toFixed(2) + '%' : '—';
+        return {id: row.id, name: row.name, imps: imps, clicks: clicks, ctr: ctr};
+      }).sort(function(a,b){ return b.imps - a.imps; });
+      var html = '<table><tr><th>Ad id</th><th>Advertiser</th><th class="num">Impressions (est.)</th><th class="num">Clicks</th><th class="num">CTR</th></tr>';
+      rows.forEach(function(r){
+        html += '<tr><td>'+r.id+'</td><td>'+(r.name||'<span class="muted">unknown — not in adverts.json</span>')+
+          '</td><td class="num">'+r.imps.toLocaleString()+'</td><td class="num">'+r.clicks.toLocaleString()+
+          '</td><td class="num">'+r.ctr+'</td></tr>';
+      });
+      html += '</table>';
+      el('report').innerHTML = rows.length ? html : '<p class="muted">No tracked activity yet.</p>';
+      el('controls').style.display = 'block';
+      window.currentRows = rows;
+    }
+    el('load').addEventListener('click', async function(){
+      var base = el('base').value.trim().replace(/\/$/,'');
+      var key = el('key').value.trim();
+      if (!base || !key){ el('status').textContent = 'Enter both values.'; return; }
+      localStorage.setItem('rdads-base', base); localStorage.setItem('rdads-key', key);
+      el('status').textContent = 'Loading…';
+      try {
+        var data = await fetch(base + '/stats?key=' + encodeURIComponent(key)).then(function(r){
+          if (!r.ok) throw new Error(r.status); return r.json();
+        });
+        var names = await advertiserNames();
+        lastRows = Object.keys(data.ads || {}).map(function(id){
+          var ad = data.ads[id];
+          return {id: id, name: names[id] || '', clicks: ad.clicks || {},
+                  imps: ad.impressions_sampled || {}, factor: ad.sample_factor || 1};
+        });
+        el('status').textContent = 'Loaded ' + lastRows.length + ' ad(s) at ' + new Date().toLocaleTimeString();
+        render(Number(el('window').value));
+      } catch(e){ el('status').textContent = 'Failed: ' + e.message + ' (check URL and key)'; }
+    });
+    el('window') && document.addEventListener('change', function(ev){
+      if (ev.target.id === 'window') render(Number(ev.target.value));
+    });
+    document.addEventListener('click', function(ev){
+      if (ev.target.id !== 'csv' || !window.currentRows) return;
+      var lines = ['Ad id,Advertiser,Impressions (est.),Clicks,CTR'];
+      window.currentRows.forEach(function(r){
+        lines.push('"'+r.id+'","'+(r.name||'')+'",'+r.imps+','+r.clicks+',"'+r.ctr+'"');
+      });
+      var blob = new Blob([lines.join('\n')], {type:'text/csv'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'rochdale-daily-ad-report.csv';
+      a.click();
+    });
+    el('base').value = localStorage.getItem('rdads-base') || '';
+    el('key').value = localStorage.getItem('rdads-key') || '';
+  </script>
+</body>
+</html>
