@@ -221,6 +221,12 @@ def apply_category_rules(article: dict[str, Any]) -> dict[str, Any]:
     article["types"] = [category]
     if category == "crime":
         article["police_matter"] = True
+    else:
+        # A stale police_matter flag re-crimes the story at every merge
+        # (merge_article_records treats either side's flag as crime) and
+        # keeps injecting the Crimestoppers box. Once the category is
+        # corrected away from crime, the flag must go with it.
+        article["police_matter"] = False
     return article
 
 
