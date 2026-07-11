@@ -38,6 +38,7 @@ jobs:
       - name: Rebuild pages and sitemap
         run: |
           python -m json.tool articles.json > /dev/null
+          python scraper/article_gate.py articles.json
           python scraper/generate_pages.py
       - name: Commit rebuilt site
         run: |
