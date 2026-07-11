@@ -56,7 +56,9 @@ CATEGORY_ORDER = (
     ("community", re.compile(
         r"\b(?:community pantry|pantry|food bank|foodbank|charity|fundraiser|"
         r"fundraising|volunteer|donation|support group|community group|"
-        r"family support|local families|neighbourhood project|hidden hero)\b",
+        r"family support|local families|neighbourhood project|hidden hero|"
+        r"protests?|protesters?|demonstration|petition|campaigners?|"
+        r"safe haven|drop[- ]in|warm space|community centre|support service)\b",
         re.I,
     )),
     ("business", re.compile(
@@ -67,7 +69,8 @@ CATEGORY_ORDER = (
     ("environment", re.compile(
         r"\b(?:flood|weather warning|pollution|recycling|litter|climate|wildlife|"
         r"reservoir|canal|environmental|nature reserve|green space|country park|"
-        r"heatwave)\b",
+        r"heatwave|asbestos|contaminated|contamination|derelict|brownfield|"
+        r"factory site|abandoned (?:site|factory|mill|works|land|building))\b",
         re.I,
     )),
     ("sport", re.compile(
@@ -97,6 +100,15 @@ DEFAULT_CATEGORY_MINIMUMS = {
     "environment": 2,
     "news": 2,
 }
+
+CRIME_INCIDENT_RE = re.compile(
+    r"\b(?:investigation|investigating|arrest(?:ed|s)?|charged with|charges? (?:of|against|brought)|faces? charges|assault(?:ed)?|"
+    r"attack(?:s|ed)?|offences?|in court|court hearing|sentenc(?:ed|ing)|"
+    r"appeal for (?:information|witnesses)|witness appeal|robbery|burglar(?:y|ies)|"
+    r"theft|stolen|stabbing|murder|manslaughter|rape|wanted (?:man|woman)|"
+    r"missing (?:person|man|woman|teenager|child))\b",
+    re.I,
+)
 
 GENERIC_COPY_RE = re.compile(
     r"\b(?:the update was published by|has been categorised as|"
@@ -135,7 +147,10 @@ def deterministic_category(value: Any, fallback: str = "news") -> str:
     best_score = 0
     scores: dict[str, int] = {}
     for category, pattern in CATEGORY_ORDER:
-        score = len({match.group(0).lower() for match in pattern.finditer(text)})
+        # Multiword phrases ("safe haven", "food bank", "factory site") are
+        # far less ambiguous than single words, so they count double.
+        terms = {match.group(0).lower() for match in pattern.finditer(text)}
+        score = sum(2 if " " in term else 1 for term in terms)
         scores[category] = score
         if score > best_score:
             best_category = category
@@ -150,10 +165,27 @@ def deterministic_category(value: Any, fallback: str = "news") -> str:
             cat for cat, _ in CATEGORY_ORDER
             if cat != "crime" and scores[cat] == best_score
         )
+    # A story already filed as crime that describes a genuine incident or
+    # police process must stay crime, whatever else its text mentions. A
+    # child-attacks investigation was reclassified as community because
+    # "local families" outweighed the single crime keyword "police".
+    # Incidental police mentions (a welfare scheme the police support)
+    # carry no incident marker, so those can still be re-filed.
+    if str(fallback or "").lower() == "crime" and CRIME_INCIDENT_RE.search(text):
+        return "crime"
+    # A single ambiguous word ("opening", "school", "police") must never
+    # override a category the pipeline already assigned. One incidental
+    # keyword filed an asbestos-factory story under education ("school
+    # holidays") and a Safe Haven welfare launch under business ("opening").
+    # Overriding an existing category requires at least two points of
+    # evidence; a lone keyword only decides genuinely uncategorised text.
+    clean = str(fallback or "news").lower()
+    known = {item[0] for item in CATEGORY_ORDER}
+    if best_score < 2 and clean in known and best_category != clean:
+        return clean
     if best_category:
         return best_category
-    clean = str(fallback or "news").lower()
-    return clean if clean in {item[0] for item in CATEGORY_ORDER} | {"news"} else "news"
+    return clean if clean in known | {"news"} else "news"
 
 
 def article_word_count(article: dict[str, Any]) -> int:
