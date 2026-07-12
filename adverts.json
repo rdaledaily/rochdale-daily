@@ -1,65 +1,69 @@
 {
   "_docs": {
-    "purpose": "Single source of truth for all advertising on Rochdale Daily. Edit this file through the GitHub web interface; the site updates on the next deploy. Expired ads drop out automatically; empty slots fall back to the built-in 'Advertise here' placeholders.",
+    "purpose": "Single source of truth for all advertising on Rochdale Daily. Edit this file through the GitHub web interface; the site updates on the next deploy. Expired ads drop out automatically; empty slots fall back to the built-in 'Advertise here' placeholders. Deleting an ad here never deletes its click/impression history from the tracker.",
+    "orientation_rule": "Match the creative to the slot: horizontal banners go in leaderboard/billboard slots; square, portrait or tall creatives go in article-mrec or article-incontent. Any image is letterboxed within the slot's height limit - never cropped or stretched - so a wrongly shaped creative looks small, not broken.",
     "slots": {
       "home-leaderboard": "Homepage top banner. HORIZONTAL: 728x90 or 970x90 (mobile 320x50 via image_mobile). Renders up to 120px tall.",
       "home-billboard": "Homepage lower banner. HORIZONTAL: 970x250 (mobile 300x250). Renders up to 280px tall.",
       "article-leaderboard": "Top of every article. HORIZONTAL: 728x90 (mobile 320x50). Renders up to 120px tall.",
-      "article-mrec": "Article sidebar. RECTANGLE or VERTICAL: 300x250 square-ish, or 300x600 skyscraper. Renders up to 620px tall.",
+      "article-mrec": "Article sidebar. RECTANGLE or VERTICAL: 300x250, or 300x600 skyscraper. Renders up to 620px tall.",
       "article-incontent": "Inside article body. RECTANGLE: 300x250 or 580x250. Renders up to 280px tall."
     },
     "placement_fields": {
-      "id": "Unique, permanent, lowercase-with-hyphens. Used in tracking URLs and reports — never reuse an id.",
+      "id": "Unique, permanent, lowercase-with-hyphens, e.g. 'acme-plumbing-2026-07'. Used in tracking URLs and reports - never reuse an id, even after an ad ends.",
       "slot": "One of the slot names above.",
-      "advertiser": "Business name, for your reports.",
-      "image": "Path under /assets/ads/, e.g. /assets/ads/acme-728x90.png",
-      "image_mobile": "Optional smaller creative for phones.",
-      "url": "The advertiser's landing page. Clicks are tracked then redirected here.",
-      "alt": "Accessible description, e.g. 'Acme Plumbing — emergency callouts across Rochdale'.",
-      "start": "First day the ad shows, YYYY-MM-DD inclusive.",
-      "end": "Last day the ad shows, YYYY-MM-DD inclusive.",
-      "weight": "Rotation share within the slot. Two ads weighted 2 and 1 split views roughly 2:1."
+      "advertiser": "Business name, shown in your performance reports.",
+      "image": "Path under /assets/ads/, e.g. /assets/ads/acme-728x90.png (upload the image to that folder first).",
+      "image_mobile": "Optional smaller creative for phones, e.g. /assets/ads/acme-320x50.png",
+      "url": "The advertiser's landing page. Clicks are tracked by the Worker then redirected here.",
+      "alt": "Accessible description, e.g. 'Acme Plumbing - emergency callouts across Rochdale'.",
+      "start": "First day the ad shows, YYYY-MM-DD, inclusive.",
+      "end": "Last day the ad shows, YYYY-MM-DD, inclusive.",
+      "weight": "Rotation share within the slot. Two ads weighted 2 and 1 split views roughly 2:1. Use 1 unless an advertiser pays for a larger share."
     },
     "directory_fields": {
-      "id": "Unique id, as above.",
-      "category": "Must exactly match a category heading on the homepage, e.g. 'Plumbers & heating'.",
+      "id": "Unique permanent id, same rules as above.",
+      "category": "Must exactly match a category heading on the homepage: 'Plumbers & heating', 'Electricians', 'Roofers', 'Skip hire', 'Cleaners', 'Solicitors'.",
       "name": "Business name shown on the card.",
       "blurb": "One sentence, roughly 90 characters.",
       "phone": "Optional. Shown as a tap-to-call link.",
-      "url": "Optional. Business website.",
+      "url": "Optional. Business website - clicks are tracked.",
       "start": "YYYY-MM-DD",
       "end": "YYYY-MM-DD"
     },
     "config_fields": {
-      "tracker_base": "Your ads Worker URL, e.g. https://rd-ads.YOURNAME.workers.dev — leave empty until the Worker is deployed; ads then link directly with no tracking.",
-      "impression_sample": "1 = record every impression; 5 = record 1 in 5 (reports multiply back up). Use 5 on the free Workers plan to stay inside KV write limits."
+      "tracker_base": "Your ads Worker URL. Set - tracking is live.",
+      "impression_sample": "1 = record every impression; 5 = record 1 in 5 (reports multiply back up). Keep at 5 on the free Workers plan; set to 1 after upgrading to Workers Paid for exact counts."
     },
-    "orientation_rule": "Match the creative to the slot: horizontal banners go in leaderboard/billboard slots; square, portrait or tall creatives go in article-mrec or article-incontent. Any image is letterboxed within the slot's height limit - never cropped or stretched - so a wrongly shaped creative looks small, not broken."
+    "how_to_add_an_advertiser": "1) Upload their banner to assets/ads/. 2) Copy the template block below into 'placements' (or 'directory'), fill it in, delete the leading underscore from the key name is NOT needed - just add it as a normal object in the array. 3) Commit. The ad appears on the next deploy and disappears itself the day after 'end'."
   },
+
   "config": {
-    "tracker_base": "",
+    "tracker_base": "https://rd-ads.sjpickles-sp.workers.dev",
     "impression_sample": 5
   },
+
   "placements": [
     {
-      "id": "example-house-2026",
+      "id": "template-copy-me",
       "slot": "home-leaderboard",
-      "advertiser": "EXAMPLE — delete me",
-      "image": "/assets/ads/example-728x90.png",
-      "image_mobile": "/assets/ads/example-320x50.png",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-728x90.png",
+      "image_mobile": "/assets/ads/business-320x50.png",
       "url": "https://example.com",
-      "alt": "Example advertiser banner",
+      "alt": "Describe the advert for screen readers",
       "start": "2020-01-01",
       "end": "2020-01-02",
       "weight": 1
     }
   ],
+
   "directory": [
     {
-      "id": "example-dir-2026",
+      "id": "template-directory-copy-me",
       "category": "Plumbers & heating",
-      "name": "EXAMPLE — delete me",
-      "blurb": "Example listing. Expired dates keep it hidden.",
+      "name": "TEMPLATE - copy this block, change every field, leave this one here",
+      "blurb": "One sentence about the business, about 90 characters.",
       "phone": "01706 000000",
       "url": "https://example.com",
       "start": "2020-01-01",
