@@ -64,8 +64,20 @@ CATEGORY_ORDER = (
         re.I,
     )),
     ("business", re.compile(
-        r"\b(?:business|company|shop|restaurant|pub|takeaway|investment|"
-        r"regeneration|commercial|retail|opening|closure|apartments?|development)\b",
+        # Bare "opening", "closure" and "development" were the three most
+        # poisonous single words on the site. "opening" filed a Safe Haven
+        # welfare launch as business; "development" filed a football club's
+        # "player development" training story as business (live example:
+        # Milnrow FC's new training schedule) and, because that lone token
+        # gave the wrong label textual support, the low-evidence guard then
+        # kept the misfile forever. All three now require commercial or
+        # property context. Multiword phrases sit BEFORE their component
+        # single words so the alternation matches the phrase first.
+        r"\b(?:(?:shop|store|restaurant|business|pub|cafe|café|branch) "
+        r"(?:opening|closure|opens|closes)|"
+        r"(?:housing|retail|commercial|property|town centre|mixed[- ]use) development|"
+        r"business(?:es)?|company|shop|restaurant|pub|takeaway|investment|"
+        r"regeneration|commercial|retail|apartments?)\b",
         re.I,
     )),
     ("environment", re.compile(
@@ -77,9 +89,18 @@ CATEGORY_ORDER = (
         re.I,
     )),
     ("sport", re.compile(
-        r"\b(?:Rochdale AFC|Rochdale Hornets|football|rugby|cricket|boxing|"
+        # Club-administration language now scores as sport. A Milnrow FC
+        # training-schedule announcement previously scored a single point
+        # ("football"): "coaches" missed \bcoach\b, and "training schedule",
+        # "training sessions" and "player development" scored nothing —
+        # while "player development" handed business a point instead.
+        # Phrases precede their component single words deliberately.
+        r"\b(?:Rochdale AFC|Rochdale Hornets|football club|rugby club|cricket club|"
+        r"training (?:session|schedule)s?|player development|pre[- ]season|"
+        r"friendly (?:match|fixture)|matchday|kick[- ]off|squad|"
+        r"football|rugby|cricket|boxing|"
         r"athletics|parkrun|netball|MMA|Muay Thai|fixture|match|league|cup tie|"
-        r"goalkeeper|striker|coach|tournament|sports? clubs?|tennis|badminton|pickleball|squash|basketball|paddle sport)\b",
+        r"goalkeeper|striker|coach(?:es|ing)?|tournament|sports? clubs?|tennis|badminton|pickleball|squash|basketball|paddle sport)\b",
         re.I,
     )),
     ("events", re.compile(
@@ -129,6 +150,82 @@ STOPWORDS = {
     "when", "where", "which", "with", "would", "will", "rochdale", "greater",
     "manchester", "source", "report", "reports", "reported",
 }
+
+# ---------------------------------------------------------------------------
+# Editorial gate: the systemic defence against non-news content.
+#
+# The open-web discovery channels (Google News queries, aggregators) are
+# default-accept funnels, and pattern denylists are structurally reactive:
+# every new SEO template needs a new regex after it has already reached the
+# live site (a used-car listing, a Tes "no jobs found" search page, a
+# service-directory page and an Idaho business roundup all proved this in a
+# single week). The model already reads the full source records for every
+# candidate, so it is asked two schema-enforced questions and the answers
+# carry a deterministic veto:
+#
+#   content_class            — what IS this material? Anything other than
+#                              news_report is a terminal rejection.
+#   is_about_rochdale_borough — namesake geography (Middleton in Idaho,
+#                              Wisconsin or Leeds; Healey, Wardle, Norden
+#                              elsewhere). False is a terminal rejection.
+#
+# Terminal means terminal: the rejection short-circuits the repair loop, so
+# the model is never pressured into relabelling material as news_report just
+# to satisfy "correct every issue". Regex drop-patterns remain as cheap
+# pre-filters that save API calls; they are no longer the defence.
+# ---------------------------------------------------------------------------
+NEWS_CONTENT_CLASS = "news_report"
+GATE_REJECTION_PREFIX = "REJECTED_"
+EDITORIAL_GATE_INSTRUCTIONS = {
+    "content_class": (
+        "Classify what the source material fundamentally IS, before any "
+        "question of writing quality. news_report: a factual account of a "
+        "development, incident, decision or event. advert_or_listing: an "
+        "item offered for sale or rent (vehicles, property, goods), with or "
+        "without a price. job_or_recruitment: a vacancy, recruitment page or "
+        "application invitation. search_results_or_index_page: a search-"
+        "results, category, tag or index page, INCLUDING 'no results found' "
+        "templates. directory_or_services_page: a page whose purpose is to "
+        "advertise that a business or service is available in an area. "
+        "press_release_marketing: promotional copy with no reportable "
+        "development. other_non_news: anything else that is not journalism. "
+        "Classify honestly and never change this classification to satisfy "
+        "a repair request; if the material is not a news report, that is "
+        "the correct and final answer."
+    ),
+    "is_about_rochdale_borough": (
+        "True only when the material concerns the Metropolitan Borough of "
+        "Rochdale in Greater Manchester, England (Rochdale, Heywood, "
+        "Middleton, Littleborough, Milnrow, Newhey, Wardle and their "
+        "neighbourhoods, plus adjacent Whitworth). Many places elsewhere "
+        "share these names: Middleton exists in Idaho, Wisconsin and Leeds; "
+        "Healey, Norden, Bamford, Wardle and Hopwood all have namesakes. If "
+        "the surrounding evidence (other place names, US states, currencies, "
+        "institutions) points anywhere other than this borough, answer "
+        "false. A place name alone is not evidence."
+    ),
+}
+
+
+def gate_rejection(draft: dict[str, Any]) -> list[str]:
+    """Deterministic veto on the model's own classification answers.
+
+    Only fires when the fields are present: the final re-check in
+    rewrite_candidate validates a stripped-down draft without gate fields,
+    and an absent field must never read as a rejection.
+    """
+    content_class = str(draft.get("content_class") or "")
+    if content_class and content_class != NEWS_CONTENT_CLASS:
+        return [
+            f"{GATE_REJECTION_PREFIX}NON_NEWS: the model classified this "
+            f"material as {content_class}, so it is never published."
+        ]
+    if draft.get("is_about_rochdale_borough") is False:
+        return [
+            f"{GATE_REJECTION_PREFIX}NON_LOCAL: the model determined the "
+            "material is not about the Rochdale borough."
+        ]
+    return []
 
 
 def plain_text(value: Any) -> str:
@@ -287,6 +384,9 @@ def quality_issues(draft: Any, source_text: str) -> list[str]:
         return ["The model did not return an article object."]
     if not bool(clean.get("publishable")):
         return ["The model marked the story unpublishable."]
+    rejection = gate_rejection(clean)
+    if rejection:
+        return rejection
 
     title = clean.get("title") or ""
     excerpt = clean.get("excerpt") or ""
@@ -438,6 +538,7 @@ def request_article(
         "source_records": source_records,
         "social_context": social_context,
         "sensitive_story": sensitive,
+        "editorial_gate": EDITORIAL_GATE_INSTRUCTIONS,
         "editorial_requirements": {
             "minimum_body_words": floor,
             "maximum_body_words": cap,
@@ -505,6 +606,17 @@ def request_article(
         feedback = quality_issues(draft, source_text)
         if not feedback:
             return draft
+        if any(issue.startswith(GATE_REJECTION_PREFIX) for issue in feedback):
+            # Terminal: adverts, listings, job/search templates, directory
+            # pages and out-of-borough material are never repaired into
+            # publication, and re-prompting would only pressure the model
+            # to relabel them.
+            logger.info(
+                "Editorial gate rejected %s: %s",
+                getattr(candidate, "source_url", ""),
+                "; ".join(feedback),
+            )
+            return None
         previous = draft
         logger.warning(
             "Journalism repair requested after attempt %d for %s: %s",
