@@ -25,7 +25,10 @@ def test_midnight_manual_stamp_fixed_once_and_idempotent() -> None:
     fixed = normalise_article(manual(), notes)
     assert fixed is not None
     assert "T00:00:00" not in fixed["published_at"]
-    assert fixed["published_at"] == fixed["ingested_at"]
+    # A date-only stamp becomes NOON of its own stated day: deterministic,
+    # idempotent, and it never shifts the story across midnight onto the
+    # wrong date the way restamping to ingestion time could.
+    assert fixed["published_at"] == "2026-07-11T12:00:00Z"
     # Second pass must not re-stamp.
     stamped = fixed["published_at"]
     second = normalise_article(copy.deepcopy(fixed), [])
