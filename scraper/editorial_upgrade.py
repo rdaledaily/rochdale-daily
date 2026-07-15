@@ -64,8 +64,20 @@ CATEGORY_ORDER = (
         re.I,
     )),
     ("business", re.compile(
-        r"\b(?:business|company|shop|restaurant|pub|takeaway|investment|"
-        r"regeneration|commercial|retail|opening|closure|apartments?|development)\b",
+        # Bare "opening", "closure" and "development" were the three most
+        # poisonous single words on the site. "opening" filed a Safe Haven
+        # welfare launch as business; "development" filed a football club's
+        # "player development" training story as business (live example:
+        # Milnrow FC's new training schedule) and, because that lone token
+        # gave the wrong label textual support, the low-evidence guard then
+        # kept the misfile forever. All three now require commercial or
+        # property context. Multiword phrases sit BEFORE their component
+        # single words so the alternation matches the phrase first.
+        r"\b(?:(?:shop|store|restaurant|business|pub|cafe|café|branch) "
+        r"(?:opening|closure|opens|closes)|"
+        r"(?:housing|retail|commercial|property|town centre|mixed[- ]use) development|"
+        r"business(?:es)?|company|shop|restaurant|pub|takeaway|investment|"
+        r"regeneration|commercial|retail|apartments?)\b",
         re.I,
     )),
     ("environment", re.compile(
@@ -77,9 +89,18 @@ CATEGORY_ORDER = (
         re.I,
     )),
     ("sport", re.compile(
-        r"\b(?:Rochdale AFC|Rochdale Hornets|football|rugby|cricket|boxing|"
+        # Club-administration language now scores as sport. A Milnrow FC
+        # training-schedule announcement previously scored a single point
+        # ("football"): "coaches" missed \bcoach\b, and "training schedule",
+        # "training sessions" and "player development" scored nothing —
+        # while "player development" handed business a point instead.
+        # Phrases precede their component single words deliberately.
+        r"\b(?:Rochdale AFC|Rochdale Hornets|football club|rugby club|cricket club|"
+        r"training (?:session|schedule)s?|player development|pre[- ]season|"
+        r"friendly (?:match|fixture)|matchday|kick[- ]off|squad|"
+        r"football|rugby|cricket|boxing|"
         r"athletics|parkrun|netball|MMA|Muay Thai|fixture|match|league|cup tie|"
-        r"goalkeeper|striker|coach|tournament|sports? clubs?|tennis|badminton|pickleball|squash|basketball|paddle sport)\b",
+        r"goalkeeper|striker|coach(?:es|ing)?|tournament|sports? clubs?|tennis|badminton|pickleball|squash|basketball|paddle sport)\b",
         re.I,
     )),
     ("events", re.compile(
