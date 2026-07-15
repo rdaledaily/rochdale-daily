@@ -152,10 +152,30 @@ CATEGORY_KEYWORDS = {'crime': {'arrest', 'arrested', 'police', 'officer', 'offic
 CHILD_MENTION_PATTERN = '\\b(child|children|minor|youth|under[- ]?18|schoolgirl|schoolboy)\\b'
 SENSITIVE_PATTERNS = ['\\b(rape|sexual assault|sexual offence|sexual abuse)\\b', '\\b(child sexual abuse|child grooming|child victim|minor victim)\\b']
 SAFEGUARDING_CONTEXT_PATTERN = '\\b(alleged|allegedly|accused|suspect|suspected|charged|arrested|court|trial|jury|inquest|coroner|murder|manslaughter|rape|sexual|assault|abuse|grooming|stabbing|death|died|killed|suicide|self-harm|domestic abuse|domestic violence|missing|kidnap|neglect|safeguarding)\\b'
-DROP_PATTERNS = ['\\b(opinion|comment|column|editorial)\\b', '\\bfor sale\\b|\\bfor rent\\b|\\broom to let\\b', '\\brecommendations please\\b|\\bdoes anyone know\\b|\\bgetting rid of\\b']
+# Four live articles proved the classified/advert net had holes: a used-car
+# listing ("available in Rochdale for £10,495", via Autouncle), a Tes
+# job-search NO-RESULTS template ("No ... Jobs Found in Rochdale"), a
+# service-directory page ("Breakdown Recovery Services Available in Heywood")
+# and a US house-rental listing. All arrived through Google News queries, so
+# source denylisting alone cannot cover the long tail of SEO publishers; the
+# template LANGUAGE is the cheap early signal, and the editorial gate in
+# editorial_upgrade.py is the semantic defence behind it. Deliberately NOT
+# matched: "new warehouse to create 500 jobs" (jobs as news), "tickets on
+# sale from £15" (price lacks a thousands separator), "£10,495,000
+# investment" (no sale verb within 70 chars before the price).
+DROP_PATTERNS = ['\\b(?:opinion|comment|column|editorial)\\b', '\\bfor sale\\b|\\bfor rent\\b|\\broom to let\\b', '\\brecommendations please\\b|\\bdoes anyone know\\b|\\bgetting rid of\\b', "\\bno [a-z][a-z\\s,'-]{0,70}jobs? (?:found|available|listed)\\b", '\\bjobs? (?:found|matching|listed) in\\b', '\\b(?:available|on sale|for sale|priced)\\b[^.]{0,70}£\\s?\\d{1,3}(?:,\\d{3})+', '\\bservices? available in\\b', '\\b(?:house|home|flat|apartment|property|room) (?:rental|to let|for rent|to rent)\\b|\\brental available\\b']
 PLACEHOLDER_PATTERNS = ['\\[(?:insert|relevant|contact|date|number|details|link)[^\\]]*\\]', '\\babout this article\\b.*$', '\\brelated topics\\b.*$', '#rochdalenews|#greatermanchester', '\\bfact-checked local journalism\\b']
 CATEGORY_STOCK_IMAGES = {category: f'assets/img/stock_{category}.jpg' for category in ['news', 'crime', 'traffic', 'transport', 'politics', 'education', 'sport', 'events', 'business', 'community', 'health', 'environment']}
-ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(CATEGORY_STOCK_IMAGES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_context_used', 'reason']}}
+# ARTICLE_SCHEMA carries the editorial gate (see EDITORIAL_GATE_INSTRUCTIONS
+# in editorial_upgrade.py). Strict json_schema means the model MUST answer
+# both gate questions on every draft; the pipeline then applies a
+# deterministic veto: content_class != 'news_report' is never published
+# (adverts, classifieds, job/recruitment pages, search-results and "no
+# results found" templates, directory pages, marketing copy), and
+# is_about_rochdale_borough == false is never published (Middleton in
+# Idaho/Wisconsin/Leeds and every other namesake, without maintaining a
+# counter-term list per impostor town).
+ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'content_class': {'type': 'string', 'enum': ['news_report', 'advert_or_listing', 'job_or_recruitment', 'search_results_or_index_page', 'directory_or_services_page', 'press_release_marketing', 'other_non_news']}, 'is_about_rochdale_borough': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(CATEGORY_STOCK_IMAGES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'content_class', 'is_about_rochdale_borough', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_context_used', 'reason']}}
 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', handlers=[logging.FileHandler(LOG_FILE, encoding='utf-8'), logging.StreamHandler()])
 log = logging.getLogger('rochdale_daily')
@@ -348,14 +368,22 @@ from story_blocklist import is_blocked_article, is_blocked_text, load_blocklist 
 from locality_rules import AREA_KEYWORDS, LOCAL_TERMS, article_is_local, detect_area, has_disqualifying_evidence, is_local, locality_evidence, source_is_denied as locality_source_is_denied
 
 def source_is_denied(source_name: str='', source_url: str='') -> bool:
-    """Keep Roch Valley Radio allowed while hard-blocking prohibited outlets."""
+    """Keep Roch Valley Radio allowed while hard-blocking prohibited outlets.
+
+    autouncle.co.uk (used-car classifieds) and tes.com (teaching-job listings
+    and their "no results" SEO templates) both reached the live site through
+    Google News RSS entries, where the entry's own <source> element exposes
+    the real publisher domain, so this check fires at collection time. Names
+    are matched by substring, so only 'autouncle' is safe to add as a name;
+    'tes' as a bare substring would collide with ordinary source names.
+    """
     name = normalise_ws(source_name).lower()
     domain = domain_of(source_url)
     if domain == 'rochvalleyradio.com' or 'roch valley radio' in name:
         return False
-    if domain in {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}:
+    if domain in {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk', 'autouncle.co.uk', 'tes.com'}:
         return True
-    if any((blocked in name for blocked in ('rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'))):
+    if any((blocked in name for blocked in ('rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader', 'autouncle'))):
         return True
     return locality_source_is_denied(source_name, source_url)
 ROCHDALE_TRAFFIC_AREA_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (('heywood', ('\\bm62\\s+(?:junction|j)\\s*19\\b', '\\bpilsworth road\\b', "\\bqueen'?s park road\\b")), ('rochdale', ('\\bm62\\s+(?:junction|j)\\s*20\\b', '\\ba627\\s*\\(m\\)\\b', '\\bedinburgh way\\b', '\\broch valley way\\b', '\\bmilnrow road\\b', '\\bsandbrook park\\b')), ('milnrow', ('\\bm62\\s+(?:junction|j)\\s*21\\b', '\\belizabethan way\\b')), ('middleton', ('\\bmanchester new road\\b', '\\ba664\\b.{0,100}\\bmiddleton\\b', '\\bmiddleton\\b.{0,100}\\ba664\\b')), ('littleborough', ('\\bhare hill road\\b', '\\ba58\\b.{0,100}\\blittleborough\\b', '\\blittleborough\\b.{0,100}\\ba58\\b')))
@@ -558,7 +586,12 @@ def page_metadata(url: str) -> dict[str, str]:
             if article_body:
                 body_parts.append(article_body[:3500])
     if not published and content_type != 'event':
-        for time_node in soup.find_all('time'):
+        # Only trust <time> elements inside the story itself. The first
+        # <time> on the PAGE is frequently a current-date widget or a
+        # related-articles sidebar, which resurrected a years-old Rochdale
+        # Riverside opening story as current news.
+        date_scope = soup.select_one('article') or soup.select_one('main')
+        for time_node in (date_scope.find_all('time') if date_scope else []):
             candidate_date = time_node.get('datetime') or time_node.get('content')
             if parse_datetime(candidate_date):
                 published = str(candidate_date)
@@ -569,7 +602,13 @@ def page_metadata(url: str) -> dict[str, str]:
     if not body_parts:
         paragraphs = [normalise_ws(p.get_text(' ', strip=True)) for p in soup.select('article p, main p')]
         body_parts.extend([p for p in paragraphs if len(p) >= 40][:8])
-    return {'url': canonicalise_url(final_url), 'title': strip_markdown(title), 'description': strip_markdown(description), 'published': published or modified, 'modified': modified, 'image': urljoin(final_url, image_url) if image_url else '', 'body_excerpt': normalise_ws(' '.join(body_parts))[:5000], 'content_type': content_type, 'event_start': event_start, 'event_end': event_end, 'event_location': event_location}
+    # 'published' is a real publication date or empty — never dateModified.
+    # A site-wide template change touches dateModified on every page at
+    # once, which made archive pages look freshly published. Pages exposing
+    # no genuine publication date are treated as undated and rejected by
+    # the is_fresh() gates: an unverifiable date is a reason not to
+    # publish, not a gap to paper over.
+    return {'url': canonicalise_url(final_url), 'title': strip_markdown(title), 'description': strip_markdown(description), 'published': published, 'modified': modified, 'image': urljoin(final_url, image_url) if image_url else '', 'body_excerpt': normalise_ws(' '.join(body_parts))[:5000], 'content_type': content_type, 'event_start': event_start, 'event_end': event_end, 'event_location': event_location}
 
 def entry_datetime(entry: Any) -> datetime | None:
     for key in ('published', 'updated', 'created'):
