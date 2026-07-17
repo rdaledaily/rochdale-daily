@@ -235,6 +235,46 @@ def domain_of(url: str) -> str:
     host = (urlparse(url).hostname or '').lower()
     return host[4:] if host.startswith('www.') else host
 
+# Hosts whose pages only ever expose their own chrome (the Google News
+# newspaper logo, social sprites) via og:image. Fetching one of these for a
+# story picture caches Google/social branding and, worse, credits it to the
+# real publisher named in the RSS <source> element. An unresolved
+# news.google.com wrapper is never a picture source; it falls back to clean
+# category artwork until resolve_google_news_sources.py recovers the publisher.
+DISALLOWED_IMAGE_SOURCE_HOSTS = {
+    'news.google.com', 'google.com', 'google.co.uk',
+    'facebook.com', 'm.facebook.com', 'x.com', 'twitter.com',
+    'tiktok.com', 'instagram.com', 'reddit.com', 'old.reddit.com',
+    'youtube.com', 'youtu.be',
+}
+DISALLOWED_IMAGE_SOURCE_SUFFIXES = (
+    'facebook.com', 'instagram.com', 'tiktok.com', 'reddit.com',
+    'google.com', 'google.co.uk',
+)
+# Image-*hosting* domains that only serve Google/consent chrome.
+DISALLOWED_IMAGE_HOST_SUFFIXES = (
+    'google.com', 'google.co.uk', 'googleusercontent.com', 'gstatic.com',
+)
+
+def is_disallowed_image_source(url: str) -> bool:
+    """True for a page whose og:image is its own chrome, not a story photo."""
+    host = domain_of(url)
+    if not host:
+        return False
+    if host in DISALLOWED_IMAGE_SOURCE_HOSTS:
+        return True
+    return any(host.endswith('.' + suffix) for suffix in DISALLOWED_IMAGE_SOURCE_SUFFIXES)
+
+def is_disallowed_image_host(url: str) -> bool:
+    """True for an image URL served from Google/consent infrastructure."""
+    host = domain_of(url)
+    if not host:
+        return False
+    return any(
+        host == suffix or host.endswith('.' + suffix)
+        for suffix in DISALLOWED_IMAGE_HOST_SUFFIXES
+    )
+
 def source_is_denied(source_name: str='', source_url: str='') -> bool:
     name = normalise_ws(source_name).lower()
     domain = domain_of(source_url)
@@ -1530,7 +1570,11 @@ def _source_image_allowed(candidate: Candidate) -> bool:
     if not image_url:
         return False
     parsed = urlparse(image_url)
-    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        return False
+    # Never cache the Google News logo / social sprites, even if one leaked
+    # into image_candidate_url from an unresolved wrapper page.
+    return not is_disallowed_image_host(image_url)
 
 
 def cache_source_image(
@@ -1965,7 +2009,11 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         log.warning('Final rewrite failed quality checks for %s: %s', candidate.source_url, '; '.join(final_issues))
         return None
 
-    if candidate.source_kind != 'live' and not str(candidate.image_candidate_url or '').strip():
+    if (
+        candidate.source_kind != 'live'
+        and not str(candidate.image_candidate_url or '').strip()
+        and not is_disallowed_image_source(candidate.source_url)
+    ):
         # Google News and rss_only sources deliberately skip the
         # metadata/image fetch during discovery (collect_rss_candidates)
         # to avoid re-triggering Google's request-volume rate limiting —
@@ -1975,6 +2023,12 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         # candidates actually selected for rewrite each run (tens, not
         # the hundreds of raw candidates collected), so it carries none
         # of that rate-limit risk.
+        #
+        # It must NOT run on an unresolved news.google.com wrapper: that
+        # page's og:image is the Google News logo, which would then be
+        # cached and mis-credited to the real publisher named in the RSS
+        # feed. Such candidates fall back to clean category artwork until
+        # resolve_google_news_sources.py recovers the true publisher URL.
         try:
             backfill_meta = page_metadata(candidate.source_url)
             if backfill_meta.get('image'):
