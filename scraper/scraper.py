@@ -187,13 +187,24 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 log = logging.getLogger('rochdale_daily')
 SESSION = requests.Session()
 SESSION.headers.update({'User-Agent': 'RochdaleDaily/3.2 (+https://rochdaledaily.co.uk; contact: news@rochdaledaily.co.uk)', 'Accept-Language': 'en-GB,en;q=0.9'})
-HTTP_RETRY = Retry(total=2, connect=2, read=2, backoff_factor=0.35, status_forcelist=(429, 500, 502, 503, 504), allowed_methods=frozenset({'GET', 'HEAD'}), raise_on_status=False)
+HTTP_RETRY = Retry(total=2, connect=2, read=1, backoff_factor=0.35, status_forcelist=(429, 500, 502, 503, 504), allowed_methods=frozenset({'GET', 'HEAD'}), raise_on_status=False)
 HTTP_ADAPTER = HTTPAdapter(pool_connections=max(16, HTTP_POOL_CONNECTIONS), pool_maxsize=max(16, HTTP_POOL_MAXSIZE), max_retries=HTTP_RETRY, pool_block=True)
 SESSION.mount('https://', HTTP_ADAPTER)
 SESSION.mount('http://', HTTP_ADAPTER)
 ROBOTS_CACHE: dict[str, urllib.robotparser.RobotFileParser] = {}
 ROBOTS_DENIED_URLS: list[str] = []
 ROBOTS_DENIED_SEEN: set[str] = set()
+
+# Domain-level timeout circuit breaker. A single unresponsive publisher
+# (e.g. a slow venues page) can otherwise tie up several of the discovery
+# thread pool's workers at once, each burning a full retry sequence (up to
+# connect+read retries x REQUEST_TIMEOUT seconds) on the same dead domain,
+# starving every other source of worker time for the rest of the run. Once
+# a domain has timed out this many times in a single run, further fetches
+# to it are skipped immediately rather than retried.
+SLOW_DOMAIN_FAILURE_THRESHOLD = max(1, int(os.getenv('SLOW_DOMAIN_FAILURE_THRESHOLD', '3')))
+SLOW_DOMAIN_FAILURES: dict[str, int] = {}
+SLOW_DOMAIN_SKIPPED_LOGGED: set[str] = set()
 
 @dataclass
 class Candidate:
@@ -522,7 +533,17 @@ def fetch_html(url: str) -> tuple[str, str]:
             ROBOTS_DENIED_URLS.append(canonical)
             log.info('robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: %s', canonical)
         raise PermissionError(f'robots.txt does not permit fetching {url}')
-    response = SESSION.get(url, timeout=REQUEST_TIMEOUT, allow_redirects=True)
+    domain = domain_of(url)
+    if SLOW_DOMAIN_FAILURES.get(domain, 0) >= SLOW_DOMAIN_FAILURE_THRESHOLD:
+        if domain not in SLOW_DOMAIN_SKIPPED_LOGGED:
+            SLOW_DOMAIN_SKIPPED_LOGGED.add(domain)
+            log.warning('Skipping further requests to %s for the rest of this run: %d consecutive timeouts/connection failures.', domain, SLOW_DOMAIN_FAILURES[domain])
+        raise TimeoutError(f'{domain} exceeded the timeout failure threshold this run; skipping without retry')
+    try:
+        response = SESSION.get(url, timeout=REQUEST_TIMEOUT, allow_redirects=True)
+    except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+        SLOW_DOMAIN_FAILURES[domain] = SLOW_DOMAIN_FAILURES.get(domain, 0) + 1
+        raise
     response.raise_for_status()
     content_type = response.headers.get('content-type', '')
     if 'html' not in content_type and '<html' not in response.text[:500].lower():
@@ -2121,7 +2142,7 @@ def compact_source_records(records: list[dict[str, Any]]) -> list[dict[str, Any]
 
 
 def draft_quality_issues(draft: Any, source_text: str, candidate: Candidate) -> list[str]:
-    return editorial_quality_issues(draft, source_text)
+    return editorial_quality_issues(draft, source_text, str(getattr(candidate, 'source_kind', '') or ''))
 
 
 def request_grounded_draft(
@@ -2313,7 +2334,7 @@ def main() -> int:
     selected_by_category: dict[str, int] = {}
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
-    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaletimes.co.uk', 'rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
+    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaletimes.co.uk', 'rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
 if __name__ == '__main__':
