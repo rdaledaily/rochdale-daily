@@ -53,6 +53,11 @@ from story_identity import (
     same_story,
     strip_publisher_suffix,
 )
+from manual_events import load_manual_event_records
+from story_image import compose_story_card
+
+ARTICLE_IMAGE_DIR = Path("assets/article-images")
+_PLACEHOLDER_IMAGE_RE = re.compile(r"category_events\.svg|placeholder|/stock_|category_image", re.I)
 
 ARTICLES_PATH = Path(os.getenv("ARTICLES_JSON", "articles.json"))
 FRONTPAGE_PATH = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
@@ -309,6 +314,68 @@ def source_domain(article: dict[str, Any]) -> str:
 
 def approved_event_source(article: dict[str, Any]) -> bool:
     return source_domain(article) == EVENT_DOMAIN
+
+
+def is_manual_event(article: dict[str, Any]) -> bool:
+    """Editor-curated events (from manual_events.json) are trusted absolutely:
+    they enter the events rail regardless of source domain, online/venue checks,
+    or locality scoring."""
+    return bool(article.get("manual_event") or article.get("editorial_lock"))
+
+
+def _needs_generated_card(article: dict[str, Any]) -> bool:
+    image = str(article.get("image_url") or "").strip()
+    return not image or bool(_PLACEHOLDER_IMAGE_RE.search(image))
+
+
+def ensure_event_card(article: dict[str, Any]) -> None:
+    """Give every event the SAME composed area/category card as other stories.
+
+    Events are created in this module (What's Occurrin' listings and injected
+    manual events) and never pass through ensure_article_images.py, so without
+    this they'd keep the old static category_events.svg — a second, inconsistent
+    card style. Events that already carry a real, licensed photograph are left
+    untouched.
+    """
+    if not is_event(article) or not _needs_generated_card(article):
+        return
+    slug = slugify(str(article.get("slug") or article.get("title") or "event"))
+    path, credit = compose_story_card(
+        str(article.get("title") or ""),
+        article.get("area"),
+        "events",
+        ARTICLE_IMAGE_DIR / f"{slug}-area-category-card.jpg",
+    )
+    article["image_url"] = path
+    article["image_credit"] = credit
+    article["image_credit_url"] = "" if credit != "Rochdale Daily" else "https://rochdaledaily.co.uk/"
+    article["image_status"] = "area-category-card"
+
+
+def inject_manual_events(
+    merged: list[dict[str, Any]],
+    now: datetime,
+) -> list[dict[str, Any]]:
+    """Merge editor-curated events into the feed just before it is written.
+
+    manual_events.json is read-only to the pipeline, so these records can never
+    be stripped by a re-run. Any auto-collected record sharing a manual event's
+    id, slug, or source URL is replaced by the manual version (the editor wins).
+    """
+    manual = load_manual_event_records(now)
+    if not manual:
+        return merged
+    manual_ids = {record["id"] for record in manual}
+    manual_slugs = {record["slug"] for record in manual}
+    manual_urls = {record["source_url"] for record in manual if record.get("source_url")}
+    kept = [
+        article
+        for article in merged
+        if str(article.get("id") or "") not in manual_ids
+        and str(article.get("slug") or "") not in manual_slugs
+        and str(article.get("source_url") or "") not in manual_urls
+    ]
+    return manual + kept
 
 
 def is_online_event(article: dict[str, Any]) -> bool:
@@ -1387,6 +1454,14 @@ def main() -> int:
 
     # Recalculate category after cross-category duplicates have been combined.
     merged = [preserve_publication_dates(apply_category_rules(article)) for article in merged]
+    # Inject editor-curated events (manual_events.json) after all automatic
+    # filtering and immediately before articles.json is written, so they reach
+    # both the feed and the events rail and can never be filtered out.
+    merged = inject_manual_events(merged, now)
+    # One card style for everything: give every event the same composed
+    # area/category card the rest of the feed uses (replacing category_events.svg).
+    for article in merged:
+        ensure_event_card(article)
     merged.sort(
         key=lambda article: original_publication_date(article)
         or datetime.min.replace(tzinfo=timezone.utc),
@@ -1404,10 +1479,15 @@ def main() -> int:
     approved_events = [
         article for article in merged
         if is_event(article)
-        and approved_event_source(article)
-        and not is_online_event(article)
-        and has_physical_local_venue(article)
         and event_is_current(article, now)
+        and (
+            is_manual_event(article)
+            or (
+                approved_event_source(article)
+                and not is_online_event(article)
+                and has_physical_local_venue(article)
+            )
+        )
     ]
     approved_events.sort(
         key=lambda article: parse_datetime(article.get("event_start_at")) or datetime.max.replace(tzinfo=timezone.utc)
