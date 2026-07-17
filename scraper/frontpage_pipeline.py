@@ -62,6 +62,17 @@ AREA_ARCHIVE_DIR = Path(os.getenv("AREA_ARCHIVE_DIR", "articles/areas"))
 STATUS_PATH = Path(os.getenv("SCRAPER_STATUS_JSON", "scraper_status.json"))
 BLOCKLIST_PATH = Path(os.getenv("STORY_BLOCKLIST_JSON", "story_blocklist.json"))
 ARTICLE_PAGES_DIR = Path(os.getenv("ARTICLE_PAGES_DIR", "articles"))
+# Persistent, append-only ledger of each event's true first-seen date, keyed
+# by its normalised ticket-page URL. articles.json is whole-file state that
+# frequently loses a git push race against a concurrently running scrape,
+# publish, or takedown workflow (each on its own commit lock); when that
+# happens, a run's "previous record" lookup for an event can come up empty
+# even though the event was correctly dated in an earlier commit, and the
+# freshly re-scraped "now" timestamp is all that's left to use. This ledger
+# is looked up and updated independently of that race: an entry, once set,
+# is only ever moved EARLIER, never later, so a lost race can dull it but
+# never re-corrupt it.
+EVENT_DATES_PATH = Path(os.getenv("EVENT_DATES_JSON", "event_dates.json"))
 EVENT_SOURCE_URL = os.getenv(
     "EVENT_TICKET_SOURCE_URL",
     "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -551,6 +562,41 @@ def collect_ticket_events(session: requests.Session | None = None) -> tuple[list
 
 
 
+def load_event_dates() -> dict[str, str]:
+    payload = read_json(EVENT_DATES_PATH, {})
+    if not isinstance(payload, dict):
+        return {}
+    return {
+        str(key): str(value)
+        for key, value in payload.items()
+        if key and value
+    }
+
+
+def save_event_dates(dates: dict[str, str]) -> None:
+    write_json_atomic(
+        EVENT_DATES_PATH,
+        dict(sorted(dates.items())),
+    )
+
+
+def earliest_known_event_date(
+    ledger: dict[str, str],
+    key: str,
+    candidate: datetime | None,
+) -> datetime | None:
+    """Return the earliest date known for this event, ledger or candidate.
+
+    The ledger is consulted independently of whatever articles.json happens
+    to contain in this run's checkout, so a lost git push race against a
+    concurrent workflow can never make an event's date look newer than it
+    truly is — only ever confirm or correct it earlier.
+    """
+    ledger_value = parse_datetime(ledger.get(key))
+    candidates = [value for value in (ledger_value, candidate) if value is not None]
+    return min(candidates) if candidates else None
+
+
 def load_blocklist() -> dict[str, list[str]]:
     payload = read_json(BLOCKLIST_PATH, {})
     if not isinstance(payload, dict):
@@ -852,6 +898,8 @@ def clean_and_integrate_events(
     removed_other_source = 0
     removed_online = 0
     removed_no_venue = 0
+    event_dates = load_event_dates()
+    ledger_corrections = 0
 
     for article in articles:
         if not is_event(article):
@@ -877,14 +925,32 @@ def clean_and_integrate_events(
             event = preserve_publication_dates(event, previous)
         else:
             event = preserve_publication_dates(event)
+        # The ledger is the last line of defence against a lost git push
+        # race: even when no trustworthy "previous" record survived in
+        # THIS run's checkout of articles.json, an earlier run may already
+        # have recorded this event's true first-seen date, and that
+        # commit's ledger entry can outlive articles.json losing a race.
+        if key:
+            corrected = earliest_known_event_date(
+                event_dates, key, original_publication_date(event)
+            )
+            if corrected is not None:
+                corrected_iso = iso_utc(corrected)
+                if corrected_iso != event.get("published_at"):
+                    ledger_corrections += 1
+                event["published_at"] = corrected_iso
+                event["first_published_at"] = corrected_iso
+                event_dates[key] = corrected_iso
         existing_approved[key] = event
 
+    save_event_dates(event_dates)
     retained.extend(existing_approved.values())
     return retained, {
         "events_removed_other_source": removed_other_source,
         "online_events_rejected": removed_online,
         "events_rejected_missing_physical_local_venue": removed_no_venue,
         "approved_ticket_events": len(existing_approved),
+        "event_dates_corrected_from_ledger": ledger_corrections,
     }
 
 

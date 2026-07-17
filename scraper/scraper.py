@@ -1965,6 +1965,23 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         log.warning('Final rewrite failed quality checks for %s: %s', candidate.source_url, '; '.join(final_issues))
         return None
 
+    if candidate.source_kind != 'live' and not str(candidate.image_candidate_url or '').strip():
+        # Google News and rss_only sources deliberately skip the
+        # metadata/image fetch during discovery (collect_rss_candidates)
+        # to avoid re-triggering Google's request-volume rate limiting —
+        # but that means the vast majority of candidates never even
+        # attempt to find a publisher image, and fall back to generic
+        # category stock art. This backfill runs only for the handful of
+        # candidates actually selected for rewrite each run (tens, not
+        # the hundreds of raw candidates collected), so it carries none
+        # of that rate-limit risk.
+        try:
+            backfill_meta = page_metadata(candidate.source_url)
+            if backfill_meta.get('image'):
+                candidate.image_candidate_url = backfill_meta['image']
+        except Exception as exc:
+            log.debug('Image backfill failed for %s: %s', candidate.source_url, exc)
+
     image_url, image_credit, image_credit_url, original_image_url = source_image(candidate, category)
     source_urls = [candidate.source_url] + [item['url'] for item in candidate.related_sources[:11] if item.get('url')]
     source_names = [candidate.source_name] + [item['name'] for item in candidate.related_sources[:11] if item.get('name')]

@@ -179,7 +179,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add articles.json scraper_status.json assets/img/generated articles sitemap.xml
+          git add articles.json scraper_status.json event_dates.json assets/img/generated articles sitemap.xml
 
           if git diff --cached --quiet; then
             echo "No article changes to commit."

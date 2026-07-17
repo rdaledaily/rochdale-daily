@@ -23,13 +23,71 @@ Usage: python scraper/merge_feeds.py REMOTE_JSON LOCAL_JSON OUTPUT_JSON
 from __future__ import annotations
 
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from story_identity import dedupe_article_records  # noqa: E402
 from story_blocklist import is_blocked_article, load_blocklist  # noqa: E402
+
+# Same persistent event-dates ledger frontpage_pipeline.py maintains (see its
+# EVENT_DATES_PATH docstring). This merge path is the OTHER way articles.json
+# gets rewritten during a lost git push race, and it never calls
+# frontpage_pipeline.py's clean_and_integrate_events — so an event's true
+# first-seen date needs the same independent correction applied here too, or
+# a race resolved through this path alone could still leave a fresh "now"
+# timestamp unchallenged.
+EVENT_DATES_PATH = Path(os.getenv("EVENT_DATES_JSON", "event_dates.json"))
+
+
+def normalise_event_url(value: object) -> str:
+    parsed = urlparse(str(value or "").strip())
+    if not parsed.scheme or not parsed.netloc:
+        return ""
+    return parsed._replace(fragment="", query="").geturl().rstrip("/")
+
+
+def load_event_dates() -> dict[str, str]:
+    try:
+        payload = json.loads(EVENT_DATES_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {
+        str(key): str(value)
+        for key, value in (payload.items() if isinstance(payload, dict) else [])
+        if key and value
+    }
+
+
+def apply_event_date_ledger(articles: list[dict]) -> list[dict]:
+    """Correct any event record's date to the ledger's earliest known value.
+
+    Applied AFTER the story-identity merge, as a final, independent pass:
+    whatever the whole-file merge decided, an event whose ticket URL is in
+    the ledger can never be shown as newer than its true first-seen date.
+    """
+    ledger = load_event_dates()
+    if not ledger:
+        return articles
+    for article in articles:
+        if str(article.get("source_kind") or "").lower() != "event":
+            continue
+        key = normalise_event_url(article.get("source_url"))
+        ledger_value = ledger.get(key)
+        if not ledger_value:
+            continue
+        try:
+            ledger_dt = datetime.fromisoformat(ledger_value.replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        current_dt = parse_iso(article.get("published_at"))
+        if ledger_dt < current_dt:
+            article["published_at"] = ledger_value
+            article["first_published_at"] = ledger_value
+    return articles
 
 
 def parse_iso(value: object) -> datetime:
@@ -82,6 +140,7 @@ def main(remote_path: str, local_path: str, output_path: str) -> int:
                 f"{article.get('title')}"
             )
         merged = [article for article in merged if article not in blocked]
+    merged = apply_event_date_ledger(merged)
     merged.sort(
         key=lambda article: parse_iso(article.get("published_at")),
         reverse=True,
