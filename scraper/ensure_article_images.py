@@ -180,7 +180,28 @@ def has_real_image(article: dict[str, Any], repo_root: Path) -> bool:
         return True
 
     path = repo_root / image_url.lstrip("/")
-    return path.is_file() and path.stat().st_size >= MIN_IMAGE_BYTES
+    if not (path.is_file() and path.stat().st_size >= MIN_IMAGE_BYTES):
+        return False
+    # A cached "source image" that isn't actually a decodable image (an HTML
+    # error page saved with a .jpg name, for example) is not real — treat it as
+    # missing so it is replaced with a proper card on the next run.
+    return _looks_like_image(path)
+
+
+def _looks_like_image(path: Path) -> bool:
+    try:
+        with path.open("rb") as handle:
+            head = handle.read(16)
+    except OSError:
+        return False
+    return (
+        head.startswith(b"\xff\xd8\xff")            # JPEG
+        or head.startswith(b"\x89PNG\r\n\x1a\n")     # PNG
+        or head[:4] == b"RIFF" and head[8:12] == b"WEBP"  # WebP
+        or head.startswith(b"GIF8")                  # GIF
+        or head.lstrip()[:5].lower() == b"<?xml" and b"svg" in head.lower()  # SVG
+        or head.lstrip()[:4].lower() == b"<svg"
+    )
 
 
 def source_urls(article: dict[str, Any]) -> list[str]:
