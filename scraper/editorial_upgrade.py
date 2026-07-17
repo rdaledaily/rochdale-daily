@@ -444,7 +444,7 @@ def source_word_count(source_text: str) -> int:
 RICH_SOURCE_WORDS = 320
 
 
-def length_budget(source_text: str) -> tuple[int, int]:
+def length_budget(source_text: str, source_kind: str = "") -> tuple[int, int]:
     """Return (minimum, maximum) body words supported by the source material.
 
     The previous fixed 200-word floor forced fabrication: given a 40-word
@@ -455,7 +455,18 @@ def length_budget(source_text: str) -> tuple[int, int]:
     200-word floor and 900-word ceiling; a thin source gets a short-brief
     budget, and the CEILING becomes the enforcement point, so padding a thin
     story is a quality failure rather than a quality requirement.
+
+    Live-page sources (source_kind == "live": weather forecasts, travel
+    alerts, service-update pages) are a separate case. Their raw scraped
+    text is often bulky — navigation, multiple day tabs, a long list of
+    disruptions — without a proportional amount of actual narrative
+    substance, so word-count-derived scaling overestimates how much
+    genuine report a live snippet can support and produces an
+    unsatisfiable floor. These get a small fixed budget instead of one
+    scaled from their word count.
     """
+    if source_kind == "live":
+        return 40, 260
     words = source_word_count(source_text)
     if words >= RICH_SOURCE_WORDS:
         return 200, 900
@@ -479,7 +490,7 @@ def contains_long_verbatim_phrase(output: str, source: str, words: int = 20) -> 
     )
 
 
-def quality_issues(draft: Any, source_text: str) -> list[str]:
+def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[str]:
     clean = normalise_draft(draft)
     if not clean:
         return ["The model did not return an article object."]
@@ -502,7 +513,7 @@ def quality_issues(draft: Any, source_text: str) -> list[str]:
     if len(paragraphs) < 4:
         issues.append("Use at least four substantive paragraphs.")
     words = draft_word_count(clean)
-    floor, cap = length_budget(source_text)
+    floor, cap = length_budget(source_text, source_kind)
     if words < floor:
         issues.append(
             f"Write at least {floor} body words using only facts already "
@@ -554,7 +565,7 @@ def quality_issues(draft: Any, source_text: str) -> list[str]:
         issues.append("Ground the report more clearly in the supplied facts.")
     if contains_long_verbatim_phrase(combined, source_text, 20):
         issues.append("Rewrite the long verbatim source passage.")
-    issues.extend(style_issues(clean))
+    issues.extend(style_issues(clean, source_kind))
     return issues
 
 
@@ -628,7 +639,8 @@ def request_article(
     logger,
 ) -> dict[str, Any] | None:
     system_message = HOUSE_STYLE_SYSTEM
-    floor, cap = length_budget(source_text)
+    source_kind = str(getattr(candidate, "source_kind", "") or "")
+    floor, cap = length_budget(source_text, source_kind)
 
     base_payload = {
         "primary_source": getattr(candidate, "source_name", ""),
@@ -704,7 +716,7 @@ def request_article(
             )
             continue
 
-        feedback = quality_issues(draft, source_text)
+        feedback = quality_issues(draft, source_text, source_kind)
         if not feedback:
             return draft
         if any(issue.startswith(GATE_REJECTION_PREFIX) for issue in feedback):
