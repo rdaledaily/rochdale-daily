@@ -908,11 +908,12 @@
             <a class="section-link" href="mailto:events@rochdaledaily.co.uk?subject=Event%20listing">List your event</a>
           </div>
           <div class="event-filters" id="event-filters">
-            <button class="event-filter active" type="button" data-event-filter="all">Next seven days</button>
+            <button class="event-filter active" type="button" data-event-filter="week">Next seven days</button>
             <button class="event-filter" type="button" data-event-filter="tonight">Tonight</button>
             <button class="event-filter" type="button" data-event-filter="weekend">This weekend</button>
             <button class="event-filter" type="button" data-event-filter="family">Family</button>
             <button class="event-filter" type="button" data-event-filter="free">Free</button>
+            <button class="event-filter" type="button" data-event-filter="all">All upcoming</button>
           </div>
           <div class="events-grid" id="events-grid"></div>
         </div>
@@ -1795,6 +1796,17 @@
     }
 
     function isRejectedOnlineEvent(article) {
+      // This only screens out genuinely online/virtual events. Locality is
+      // NOT re-checked here: articleHasLocalEvidence() already runs as its
+      // own filter step for every article, including events, using the
+      // same borough-wide check (trusted sources, "Rochdale" mention,
+      // specific places, and contextual ambiguous-place matching) that the
+      // rest of the site relies on. This function used to also require
+      // source_url to be on whatsoccurrinevents.co.uk specifically, which
+      // meant a manually-added event from any other source -- a venue's
+      // own site, a Facebook event page, another local listings page --
+      // was silently dropped here regardless of how well-evidenced its
+      // locality was. That single-source restriction has been removed.
       const category = String(article.category || "").toLowerCase();
       const sourceKind = String(article.source_kind || "").toLowerCase();
       if (category !== "events" && sourceKind !== "event") return false;
@@ -1802,16 +1814,7 @@
         article.title, article.excerpt, article.summary, article.content_html,
         article.event_location, article.source_url
       ].filter(Boolean).join(" ").toLowerCase();
-      const isOnline = /\b(online|virtual|webinar|zoom|microsoft teams|google meet|livestream|live stream|remote event|digital event)\b/i.test(text);
-      const sourceHost = (() => {
-        try { return new URL(String(article.source_url || ""), location.origin).hostname.replace(/^www\./, ""); }
-        catch { return ""; }
-      })();
-      const locationText = String(article.event_location || "").trim();
-      return isOnline
-        || sourceHost !== "whatsoccurrinevents.co.uk"
-        || !locationText
-        || !/(rochdale|littleborough|heywood|middleton|milnrow|newhey|wardle|norden|castleton|kirkholt|spotland|falinge|deeplish|bamford|smallbridge|firgrove|whitworth|shawclough|healey|hopwood|balderstone|\bOL\d{1,2}\s*\d[A-Z]{2}\b)/i.test(locationText);
+      return /\b(online|virtual|webinar|zoom|microsoft teams|google meet|livestream|live stream|remote event|digital event)\b/i.test(text);
     }
 
     function articleHasLocalEvidence(article) {
@@ -1893,12 +1896,16 @@
       const now = new Date();
       if (date && date.toDateString() === now.toDateString()) tags.push("tonight");
       if (date && [0, 6].includes(date.getDay())) tags.push("weekend");
+      if (date) {
+        const diffDays = (date.getTime() - now.getTime()) / (24 * 60 * 60 * 1000);
+        if (diffDays >= -0.5 && diffDays <= 7) tags.push("week");
+      }
       if (/free|no charge|free entry/.test(text)) tags.push("free");
       if (/family|children|kids|all ages/.test(text)) tags.push("family");
       return tags;
     }
 
-    function renderEvents(filter = "all") {
+    function renderEvents(filter = "week") {
       const liveEvents = stories
         .filter(story => story.category === "events")
         .map(story => {
