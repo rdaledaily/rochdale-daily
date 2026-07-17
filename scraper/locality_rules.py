@@ -138,6 +138,17 @@ KNOWN_GM_PUBLISHER_NAME_PREFIXES = (
 )
 
 
+# Places outside Rochdale borough that must not establish locality merely
+# because a story also contains an ambiguous local name. Bury is neighbouring
+# Greater Manchester but is not part of the Rochdale Daily coverage area.
+EXPLICIT_NON_LOCAL_RE = re.compile(
+    r"\b(?:Bury|The Rock(?:,?\s+Bury)?|Bolton|Oldham|Manchester city centre|"
+    r"Piccadilly Gardens|Salford|Stockport|Tameside|Wigan|Trafford|"
+    r"Kingston,?\s+(?:Washington|New York|Jamaica)|Highway\s+101|"
+    r"Montgomery County|United States|USA|Idaho|Wisconsin|California)\b",
+    re.I,
+)
+
 def source_is_known_gm_publisher(source_name: str = "", source_url: str = "") -> bool:
     domain = domain_of(source_url)
     if domain in KNOWN_GM_PUBLISHER_DOMAINS:
