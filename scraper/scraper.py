@@ -1,4 +1,3 @@
-"""
 Rochdale Daily autonomous local-news pipeline.
 
 The pipeline:
@@ -14,7 +13,8 @@ The pipeline:
 - protects identities that must not be exposed, including children and sexual-
   offence complainants, without putting ordinary crime reports into an approval queue;
 - adds a standing correction and right-to-reply invitation;
-- uses locally stored category artwork by default, avoiding unlicensed image reuse.
+- uses the original publisher image where one is supplied, with visible source attribution;
+- falls back to locally stored category artwork only when no usable source image exists.
 
 The pipeline does not use a crime review queue. All published facts remain attributed
 and must come from the cited source records.
@@ -1501,42 +1501,118 @@ def recent_existing_articles() -> list[dict[str, Any]]:
     return dedupe_article_records(kept)
 
 def _source_image_allowed(candidate: Candidate) -> bool:
-    if not candidate.image_candidate_url:
+    """Return True for a usable publisher-supplied HTTP(S) image."""
+    image_url = str(candidate.image_candidate_url or "").strip()
+    if not image_url:
         return False
-    source_domain = domain_of(candidate.source_url)
-    if candidate.source_kind == 'event' and source_domain == 'facebook.com':
-        return FACEBOOK_EVENT_IMAGE_REUSE
-    return USE_SOURCE_IMAGES and source_domain in IMAGE_REUSE_SOURCE_DOMAINS
+    parsed = urlparse(image_url)
+    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
 
-def cache_source_image(candidate: Candidate, category: str) -> tuple[str, str]:
+
+def cache_source_image(
+    candidate: Candidate,
+    category: str,
+) -> tuple[str, str, str, str]:
+    """Cache the publisher image and return attribution metadata.
+
+    Returns:
+        image_url, image_credit, image_credit_url, original_image_url
+    """
+    fallback = CATEGORY_STOCK_IMAGES.get(
+        category,
+        CATEGORY_STOCK_IMAGES["news"],
+    )
+
     if is_subtle_source(candidate.source_name, candidate.source_url):
-        fallback = CATEGORY_STOCK_IMAGES.get(category, CATEGORY_STOCK_IMAGES['news'])
-        return (fallback, 'Rochdale Daily category image')
-    fallback = CATEGORY_STOCK_IMAGES.get(category, CATEGORY_STOCK_IMAGES['news'])
-    if not _source_image_allowed(candidate):
-        return (fallback, 'Rochdale Daily category image')
-    target_name = f'{stable_id(candidate.source_url)}.jpg'
-    relative_path = f'assets/img/generated/{target_name}'
-    target_path = GENERATED_IMAGE_DIR / target_name
-    if target_path.exists() and target_path.stat().st_size > 5000:
-        return (relative_path, candidate.source_name)
-    try:
-        response = SESSION.get(candidate.image_candidate_url, timeout=REQUEST_TIMEOUT, stream=True, headers={'Referer': candidate.source_url})
-        response.raise_for_status()
-        content = response.content
-        if len(content) > 10000000:
-            raise ValueError('image exceeded 10 MB')
-        image = Image.open(io.BytesIO(content))
-        image = ImageOps.exif_transpose(image).convert('RGB')
-        image = ImageOps.fit(image, (1200, 675), method=Image.Resampling.LANCZOS)
-        image.save(target_path, format='JPEG', quality=86, optimize=True)
-        return (relative_path, candidate.source_name)
-    except (requests.RequestException, OSError, ValueError, UnidentifiedImageError) as exc:
-        log.info('Could not cache source image for %s: %s', candidate.source_url, exc)
-        return (fallback, 'Rochdale Daily category image')
+        return fallback, "Rochdale Daily category image", "", ""
 
-def source_image(candidate: Candidate, category: str) -> tuple[str, str]:
+    if not _source_image_allowed(candidate):
+        return fallback, "Rochdale Daily category image", "", ""
+
+    original_image_url = str(candidate.image_candidate_url).strip()
+    target_name = f"{stable_id(candidate.source_url)}.jpg"
+    relative_path = f"assets/img/generated/{target_name}"
+    target_path = GENERATED_IMAGE_DIR / target_name
+
+    credit = normalise_ws(candidate.source_name) or domain_of(candidate.source_url)
+    credit_url = candidate.source_url
+
+    if target_path.exists() and target_path.stat().st_size > 5000:
+        return relative_path, credit, credit_url, original_image_url
+
+    try:
+        response = SESSION.get(
+            original_image_url,
+            timeout=REQUEST_TIMEOUT,
+            stream=True,
+            headers={
+                "Referer": candidate.source_url,
+                "User-Agent": SESSION.headers.get(
+                    "User-Agent",
+                    "RochdaleDaily/3.2",
+                ),
+            },
+        )
+        response.raise_for_status()
+
+        content_type = str(response.headers.get("content-type") or "").lower()
+        if content_type and not content_type.startswith("image/"):
+            raise ValueError(f"unexpected content type: {content_type}")
+
+        content = response.content
+        if not content:
+            raise ValueError("empty image response")
+        if len(content) > 10_000_000:
+            raise ValueError("image exceeded 10 MB")
+
+        image = Image.open(io.BytesIO(content))
+        image = ImageOps.exif_transpose(image).convert("RGB")
+
+        if image.width < 240 or image.height < 135:
+            raise ValueError(
+                f"source image too small: {image.width}x{image.height}"
+            )
+
+        image = ImageOps.fit(
+            image,
+            (1200, 675),
+            method=Image.Resampling.LANCZOS,
+        )
+        image.save(
+            target_path,
+            format="JPEG",
+            quality=86,
+            optimize=True,
+        )
+
+        return relative_path, credit, credit_url, original_image_url
+    except (
+        requests.RequestException,
+        OSError,
+        ValueError,
+        UnidentifiedImageError,
+    ) as exc:
+        log.info(
+            "Could not cache source image for %s (%s): %s",
+            candidate.source_url,
+            original_image_url,
+            exc,
+        )
+        return (
+            fallback,
+            "Rochdale Daily category image",
+            "",
+            original_image_url,
+        )
+
+
+def source_image(
+    candidate: Candidate,
+    category: str,
+) -> tuple[str, str, str, str]:
     return cache_source_image(candidate, category)
+
+
 POSTCODE_RE = re.compile('\\b[A-Z]{1,2}\\d[A-Z\\d]?\\s*\\d[A-Z]{2}\\b', re.IGNORECASE)
 ADDRESS_RE = re.compile("\\b\\d{1,4}[A-Za-z]?\\s+(?:[A-Z][a-z'-]+\\s+){0,4}(?:Street|St|Road|Rd|Lane|Ln|Drive|Dr|Avenue|Ave|Close|Court|Way|Crescent|Place|Terrace|Gardens|Grove)\\b", re.IGNORECASE)
 PERSON_RE = re.compile("\\b(?:Mr|Mrs|Ms|Miss|Dr)?\\s*([A-Z][a-z'-]+(?:\\s+[A-Z][a-z'-]+){1,2})\\b")
@@ -1865,7 +1941,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         log.warning('Final rewrite failed quality checks for %s: %s', candidate.source_url, '; '.join(final_issues))
         return None
 
-    image_url, image_credit = source_image(candidate, category)
+    image_url, image_credit, image_credit_url, original_image_url = source_image(candidate, category)
     source_urls = [candidate.source_url] + [item['url'] for item in candidate.related_sources[:11] if item.get('url')]
     source_names = [candidate.source_name] + [item['name'] for item in candidate.related_sources[:11] if item.get('name')]
     legal_disclaimer = strip_markdown(draft.get('legal_disclaimer')) or default_legal_disclaimer(sensitive)
@@ -1888,8 +1964,13 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'scraped_at': iso_utc(utc_now()),
         'image_url': image_url,
         'image_credit': image_credit,
-        'source_image_candidate_url': '',
-        'source_image_reuse_status': '',
+        'image_credit_url': image_credit_url,
+        'source_image_candidate_url': original_image_url,
+        'source_image_reuse_status': (
+            'publisher-image-cached-and-credited'
+            if image_credit_url
+            else 'category-fallback'
+        ),
         'event_start_at': candidate.event_start_at,
         'event_end_at': candidate.event_end_at,
         'event_location': candidate.event_location,
