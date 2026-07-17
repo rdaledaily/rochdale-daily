@@ -12,7 +12,9 @@ def test_existing_image_is_preserved() -> None:
         root = Path(tmp)
         image = root / "assets/article-images/existing.jpg"
         image.parent.mkdir(parents=True)
-        image.write_bytes(b"x" * mod.MIN_IMAGE_BYTES)
+        # A genuine (minimal) JPEG: has_real_image now validates that a cached
+        # image is actually an image, not an HTML error page saved as .jpg.
+        image.write_bytes(b"\xff\xd8\xff\xe0" + b"\x00" * mod.MIN_IMAGE_BYTES)
         article = {"image_url": "assets/article-images/existing.jpg"}
         assert mod.has_real_image(article, root)
 
