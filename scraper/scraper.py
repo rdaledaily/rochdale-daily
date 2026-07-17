@@ -95,7 +95,7 @@ STATUS_FILE = ROOT / 'scraper_status.json'
 GENERATED_IMAGE_DIR = ROOT / 'assets' / 'img' / 'generated'
 GENERATED_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
 RESPECT_ROBOTS = True
-USE_SOURCE_IMAGES = os.getenv('USE_SOURCE_IMAGES', 'false').lower() in {'1', 'true', 'yes'}
+USE_SOURCE_IMAGES = os.getenv('USE_SOURCE_IMAGES', 'true').lower() not in {'0', 'false', 'no', 'off'}
 RIGHT_TO_REPLY_EMAIL = os.getenv('RIGHT_TO_REPLY_EMAIL', 'news@rochdaledaily.co.uk')
 UK_TZ = ZoneInfo('Europe/London')
 SAME_DAY_ONLY = False
@@ -1503,6 +1503,8 @@ def recent_existing_articles() -> list[dict[str, Any]]:
 
 def _source_image_allowed(candidate: Candidate) -> bool:
     """Return True for a usable publisher-supplied HTTP(S) image."""
+    if not USE_SOURCE_IMAGES:
+        return False
     image_url = str(candidate.image_candidate_url or "").strip()
     if not image_url:
         return False
