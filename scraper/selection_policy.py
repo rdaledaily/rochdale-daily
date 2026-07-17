@@ -237,6 +237,9 @@ CLASSIFIED_URL_PARTS = (
     "/listings/",
 )
 CLASSIFIED_PATTERNS = (
+    r"\b(?:property|house|flat|apartment|land|commercial premises?)\s+(?:auction|auctioneers?)\b",
+    r"\b(?:for sale by auction|guide price|auction catalogue|lot number|online auction)\b",
+    r"\b(?:to let|available to rent|pcm|per calendar month|deposit required)\b",
     # Property listings: an availability phrase near a dwelling word, or a
     # dwelling word with a listed rent price.
     r"\b(?:available\s+(?:for\s+rent|to\s+rent|to\s+let)|for\s+rent|to\s+let|up\s+for\s+rent)\b"
