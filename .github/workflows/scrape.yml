@@ -3,9 +3,7 @@ name: Rochdale Daily 15-minute scraper
 on:
   workflow_dispatch:
   schedule:
-    # Hourly full run: includes the public Facebook Events browser collector.
     - cron: "7 * * * *"
-    # Three fast news runs per hour: no Chromium or apt installation.
     - cron: "22,37,52 * * * *"
 
 permissions:
@@ -24,30 +22,20 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
       X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-
       FACEBOOK_GRAPH_VERSION: "v22.0"
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
       FACEBOOK_EVENT_IMAGE_REUSE: "false"
       FACEBOOK_EVENTS_BROWSER_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
-
       OPENAI_MODEL: "gpt-4o-mini"
-
-      # Rewrites remain preferred, but a failed or declined rewrite falls back
-      # to an attributed article instead of silently discarding the candidate.
       AI_REWRITE_REQUIRED: "false"
-
-      # Police appeals, court updates and ongoing traffic matters often remain
-      # relevant beyond midnight.
       MAX_NEWS_AGE_HOURS: "168"
       ARTICLE_RETENTION_DAYS: "14"
       SAME_DAY_ONLY: "false"
-
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "3"
       FRONTPAGE_MIN_ARTICLES: "50"
       FRONTPAGE_TARGET_ARTICLES: "80"
-
       MAX_PUBLISHED_ARTICLES: "180"
       MAX_AI_ARTICLES_PER_RUN: "50"
       MAX_AI_ARTICLES_INITIAL: "100"
@@ -55,14 +43,12 @@ jobs:
       REQUEST_TIMEOUT: "20"
       USE_SOURCE_IMAGES: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
-
       SOCIAL_CONTEXT_ENABLED: "true"
       FACEBOOK_COMMENTS_ENABLED: "true"
       SOCIAL_MIN_PUBLIC_REACTIONS: "3"
       SOCIAL_MAX_PUBLIC_REACTIONS: "12"
       SOCIAL_MAX_OFFICIAL_UPDATES: "4"
       X_RECENT_SEARCH_MAX: "100"
-
       DISCOVERY_LINKS_PER_SOURCE: "40"
       RSS_ITEMS_PER_SOURCE: "100"
       GOOGLE_SEARCH_QUERY_LIMIT: "128"
@@ -105,10 +91,8 @@ jobs:
           import lxml
           import openai
           import requests
-
-          from PIL import Image, ImageOps, UnidentifiedImageError
+          from PIL import Image
           from playwright.sync_api import sync_playwright
-
           print("Dependency verification passed.")
           print("Pillow version:", Image.__version__)
           PY
@@ -124,18 +108,12 @@ jobs:
       - name: Install Chromium operating-system dependencies
         if: ${{ env.FACEBOOK_EVENTS_BROWSER_ENABLED == 'true' }}
         timeout-minutes: 10
-        run: |
-          python -m playwright install-deps chromium
+        run: python -m playwright install-deps chromium
 
       - name: Install Chromium browser
         if: ${{ env.FACEBOOK_EVENTS_BROWSER_ENABLED == 'true' && steps.playwright-cache.outputs.cache-hit != 'true' }}
         timeout-minutes: 10
-        run: |
-          python -m playwright install chromium
-
-      - name: Confirm Facebook Events browser mode
-        run: |
-          echo "FACEBOOK_EVENTS_BROWSER_ENABLED=${FACEBOOK_EVENTS_BROWSER_ENABLED}"
+        run: python -m playwright install chromium
 
       - name: Validate pipeline
         run: |
@@ -152,6 +130,7 @@ jobs:
             scraper/food_hygiene.py \
             scraper/frontpage_pipeline.py \
             scraper/merge_feeds.py \
+            scraper/resolve_google_news_sources.py \
             scraper/ensure_article_images.py \
             scraper/scraper.py
 
@@ -165,6 +144,7 @@ jobs:
           python scraper/test_archive_persistence.py
           python scraper/test_event_identity.py
           python scraper/test_article_gate.py
+          python scraper/test_resolve_google_news_sources.py
           python scraper/test_ensure_article_images.py
 
           (
@@ -173,19 +153,21 @@ jobs:
           )
 
       - name: Repair contaminated event records
-        run: |
-          # Idempotent: drops any event record fused from multiple event URLs
-          # and corrects miscategorised events. A no-op on clean data.
-          python scraper/repair_event_records.py
+        run: python scraper/repair_event_records.py
 
       - name: Run Rochdale Daily pipeline
-        run: |
-          python scraper/scraper.py
+        run: python scraper/scraper.py
 
       - name: Validate public article feed
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
+
+      - name: Resolve Google News to original publishers
+        timeout-minutes: 15
+        run: |
+          python scraper/resolve_google_news_sources.py \
+            --articles articles.json
 
       - name: Ensure every published story has an image
         timeout-minutes: 25
@@ -195,8 +177,7 @@ jobs:
             --retry-placeholders
 
       - name: Generate static article pages and sitemap
-        run: |
-          python scraper/generate_pages.py
+        run: python scraper/generate_pages.py
 
       - name: Commit updated feed
         run: |
@@ -207,6 +188,7 @@ jobs:
             articles.json \
             scraper_status.json \
             event_dates.json \
+            google_news_resolution_report.json \
             image_coverage_report.json \
             assets/img/generated \
             assets/article-images \
@@ -221,11 +203,6 @@ jobs:
 
           git commit -m "Update Rochdale Daily news feed"
 
-          # origin/main can move while a run is in progress. articles.json is
-          # machine-generated whole-file state, so a plain rebase cannot safely
-          # resolve a conflict. Merge origin/main, resolve articles.json with
-          # the story-aware merge helper, keep this run's generated output, and
-          # retry the push.
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then
               exit 0
@@ -248,12 +225,10 @@ jobs:
               conflicted=$(git diff --name-only --diff-filter=U)
               if [ -n "${conflicted}" ]; then
                 echo "${conflicted}" | while read -r file; do
-                  git checkout --ours -- "${file}" 2>/dev/null \
-                    || git rm -q -- "${file}"
+                  git checkout --ours -- "${file}" 2>/dev/null || git rm -q -- "${file}"
                   git add -- "${file}" 2>/dev/null || true
                 done
               fi
-
               git commit --no-edit
             fi
           done
