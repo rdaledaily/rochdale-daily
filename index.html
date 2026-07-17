@@ -1346,7 +1346,15 @@
       const body = articleBody(article);
       const publishedAt = article.published_at || article.updated_at || "";
       const rawImage = String(article.image || article.image_url || "").trim();
-      const legacyPlaceholder = /placeholder_|category_[a-z_-]+\.svg|replace with a verified/i.test(rawImage);
+      const rawCredit = stripMarkdownText(article.imageLabel || article.image_label || article.image_credit || article.source_name || "Rochdale Daily");
+      // Belt-and-braces: never show Google/social chrome as a story image or
+      // credit, even if a poisoned record reaches the client. 872cdca296d0 is
+      // the content hash of the cached Google News logo; the credit test
+      // catches the same failure attributed by host name.
+      const nonEditorialCredit = /^(news\.google\.com|google\.com|google\.co\.uk|facebook\.com|m\.facebook\.com|instagram\.com|tiktok\.com|reddit\.com|x\.com|twitter\.com)/i.test(rawCredit);
+      const nonEditorialImage = /872cdca296d0/.test(rawImage);
+      const suppressCredit = nonEditorialCredit || nonEditorialImage;
+      const legacyPlaceholder = /placeholder_|category_[a-z_-]+\.svg|replace with a verified/i.test(rawImage) || nonEditorialImage;
       const image = rawImage && !legacyPlaceholder ? rawImage : stockImage(category);
 
       return {
@@ -1360,7 +1368,7 @@
         summary: stripMarkdownText(article.summary || article.excerpt) || "Latest verified local information from the Rochdale Daily newsdesk.",
         image,
         imageFallback: stockImage(category),
-        imageLabel: stripMarkdownText(article.imageLabel || article.image_label || article.image_credit || article.source_name || "Rochdale Daily"),
+        imageLabel: (/^rochdale daily/i.test(rawCredit) || suppressCredit) ? "Rochdale Daily" : rawCredit,
         minutesAgo: Number.isFinite(Number(article.minutesAgo)) ? Number(article.minutesAgo) : minutesSince(publishedAt),
         timeLabel: formatArticleTime(publishedAt),
         byline: stripMarkdownText(article.byline || article.author || "Rochdale Daily Newsdesk"),
