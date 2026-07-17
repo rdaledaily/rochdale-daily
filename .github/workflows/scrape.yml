@@ -3,9 +3,10 @@ name: Rochdale Daily 15-minute scraper
 on:
   workflow_dispatch:
   schedule:
-    # Hourly full run: includes the public Facebook Events browser collector.
+    # Hourly full run: includes the public Facebook Events browser collector
+    # and a small archived-image backfill batch.
     - cron: "7 * * * *"
-    # Three fast news runs per hour: no Chromium or apt installation.
+    # Three fast news runs per hour: no Chromium or archive-image backfill.
     - cron: "22,37,52 * * * *"
 
 permissions:
@@ -29,6 +30,7 @@ jobs:
       FACEBOOK_EVENTS_MAX: "18"
       FACEBOOK_EVENT_IMAGE_REUSE: "false"
       FACEBOOK_EVENTS_BROWSER_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
+      ARCHIVE_IMAGE_BACKFILL_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
 
       OPENAI_MODEL: "gpt-4o-mini"
 
@@ -132,13 +134,28 @@ jobs:
         run: |
           python -m playwright install chromium
 
-      - name: Confirm Facebook Events browser mode
+      - name: Confirm optional full-run modes
         run: |
           echo "FACEBOOK_EVENTS_BROWSER_ENABLED=${FACEBOOK_EVENTS_BROWSER_ENABLED}"
+          echo "ARCHIVE_IMAGE_BACKFILL_ENABLED=${ARCHIVE_IMAGE_BACKFILL_ENABLED}"
 
       - name: Validate pipeline
         run: |
-          python -m py_compile scraper/locality_rules.py scraper/story_identity.py scraper/selection_policy.py scraper/search_queries.py scraper/rewrite_safety.py scraper/house_style.py scraper/editorial_upgrade.py scraper/source_presentation.py scraper/generate_pages.py scraper/food_hygiene.py scraper/frontpage_pipeline.py scraper/merge_feeds.py scraper/scraper.py
+          python -m py_compile \
+            scraper/locality_rules.py \
+            scraper/story_identity.py \
+            scraper/selection_policy.py \
+            scraper/search_queries.py \
+            scraper/rewrite_safety.py \
+            scraper/house_style.py \
+            scraper/editorial_upgrade.py \
+            scraper/source_presentation.py \
+            scraper/generate_pages.py \
+            scraper/food_hygiene.py \
+            scraper/frontpage_pipeline.py \
+            scraper/merge_feeds.py \
+            scraper/backfill_article_images.py \
+            scraper/scraper.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py
           python scraper/test_selection_policy.py
@@ -149,6 +166,7 @@ jobs:
           python scraper/test_archive_persistence.py
           python scraper/test_event_identity.py
           python scraper/test_article_gate.py
+          python scraper/test_backfill_article_images.py
           (
             cd scraper
             python -c "import scraper; print('Scraper startup import passed.')"
@@ -170,6 +188,15 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
 
+      - name: Backfill archived source images
+        if: ${{ env.ARCHIVE_IMAGE_BACKFILL_ENABLED == 'true' }}
+        timeout-minutes: 15
+        run: |
+          python scraper/backfill_article_images.py \
+            --articles articles.json \
+            --apply \
+            --limit 25
+
       - name: Generate static article pages and sitemap
         run: |
           python scraper/generate_pages.py
@@ -179,7 +206,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add articles.json scraper_status.json event_dates.json assets/img/generated articles sitemap.xml
+          git add \
+            articles.json \
+            scraper_status.json \
+            event_dates.json \
+            image_backfill_report.json \
+            assets/img/generated \
+            assets/article-images \
+            articles \
+            sitemap.xml \
+            index.html
 
           if git diff --cached --quiet; then
             echo "No article changes to commit."
@@ -210,10 +246,9 @@ jobs:
                 python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
                 git add articles.json
               fi
+
               # Every other conflicted file is generated output; this run's
-              # copy is the freshest and is regenerated in 15 minutes anyway.
-              # Article pages only ever gain files now, so add/add conflicts
-              # on the same slug are identical stories: keep ours.
+              # copy is the freshest and is regenerated shortly anyway.
               conflicted=$(git diff --name-only --diff-filter=U)
               if [ -n "${conflicted}" ]; then
                 echo "${conflicted}" | while read -r file; do
@@ -224,5 +259,6 @@ jobs:
               git commit --no-edit
             fi
           done
+
           echo "Failed to push after 5 attempts."
           exit 1
