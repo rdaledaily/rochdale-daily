@@ -267,13 +267,22 @@ def _normalise_timestamps(
             if parsed is not None:
                 candidates[field] = _format_iso(parsed)
 
-    stable_publication = _earliest_iso(
-        candidates.get("first_published_at"),
-        candidates.get("published_at"),
-        article.get("first_published_at"),
-        article.get("published_at"),
-        article["ingested_at"] if is_manual else None,
-    )
+    if is_manual:
+        # Manual date-only or midnight timestamps have already been normalised
+        # above. Do not compare them with the original raw midnight values,
+        # otherwise the earlier 00:00 value wins and undoes the noon fix.
+        stable_publication = _earliest_iso(
+            candidates.get("first_published_at"),
+            candidates.get("published_at"),
+            article["ingested_at"],
+        )
+    else:
+        stable_publication = _earliest_iso(
+            candidates.get("first_published_at"),
+            candidates.get("published_at"),
+            article.get("first_published_at"),
+            article.get("published_at"),
+        )
 
     if stable_publication is None:
         # Scraper records should normally supply a publication timestamp.
