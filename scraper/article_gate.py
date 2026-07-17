@@ -315,9 +315,17 @@ def _normalise_timestamps(
 def normalise_article(
     source_article: dict[str, Any],
     notes: list[str],
-    blocklist: Any,
+    blocklist: Any | None = None,
 ) -> dict[str, Any] | None:
-    """Return a corrected copy of an article, or None when it must be dropped."""
+    """Return a corrected copy of an article, or None when it must be dropped.
+
+    ``blocklist`` remains injectable for callers that already load it once,
+    while older callers may continue to use the two-argument form. In that
+    case the blocklist is loaded here.
+    """
+    if blocklist is None:
+        blocklist = load_blocklist()
+
     article = copy.deepcopy(source_article)
 
     title = str(article.get("title") or "").strip()
