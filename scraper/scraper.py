@@ -169,7 +169,7 @@ SAFEGUARDING_CONTEXT_PATTERN = '\\b(alleged|allegedly|accused|suspect|suspected|
 # matched: "new warehouse to create 500 jobs" (jobs as news), "tickets on
 # sale from £15" (price lacks a thousands separator), "£10,495,000
 # investment" (no sale verb within 70 chars before the price).
-DROP_PATTERNS = ['\\b(?:opinion|comment|column|editorial)\\b', '\\bfor sale\\b|\\bfor rent\\b|\\broom to let\\b', '\\brecommendations please\\b|\\bdoes anyone know\\b|\\bgetting rid of\\b', "\\bno [a-z][a-z\\s,'-]{0,70}jobs? (?:found|available|listed)\\b", '\\bjobs? (?:found|matching|listed) in\\b', '\\b(?:available|on sale|for sale|priced)\\b[^.]{0,70}£\\s?\\d{1,3}(?:,\\d{3})+', '\\bservices? available in\\b', '\\b(?:house|home|flat|apartment|property|room) (?:rental|to let|for rent|to rent)\\b|\\brental available\\b', '\\bproperty auction\\b|\\bauction (?:scheduled|to be held)\\b|\\b(?:goes?|going) under the hammer\\b|\\bguide price\\b']
+DROP_PATTERNS = ['\\b(?:opinion|comment|column|editorial)\\b', '\\bfor sale\\b|\\bfor rent\\b|\\broom to let\\b', '\\brecommendations please\\b|\\bdoes anyone know\\b|\\bgetting rid of\\b', "\\bno [a-z][a-z\\s,'-]{0,70}jobs? (?:found|available|listed)\\b", '\\bjobs? (?:found|matching|listed) in\\b', '\\b(?:available|on sale|for sale|priced)\\b[^.]{0,70}£\\s?\\d{1,3}(?:,\\d{3})+', '\\bservices? available in\\b', '\\b(?:house|home|flat|apartment|property|room) (?:rental|to let|for rent|to rent)\\b|\\brental available\\b', '\\bproperty auction\\b|\\bauction (?:scheduled|to be held)\\b|\\b(?:goes?|going) under the hammer\\b|\\bguide price\\b', '\\b(?:information|info|data)\\b[^.]{0,40}\\b[a-z]{1,2}\\d[a-z\\d]?\\s*\\d[a-z]{2}\\b|\\bpostcode\\s+[a-z]{1,2}\\d']
 PLACEHOLDER_PATTERNS = ['\\[(?:insert|relevant|contact|date|number|details|link)[^\\]]*\\]', '\\babout this article\\b.*$', '\\brelated topics\\b.*$', '#rochdalenews|#greatermanchester', '\\bfact-checked local journalism\\b']
 CATEGORY_STOCK_IMAGES = {category: f'assets/img/stock_{category}.jpg' for category in ['news', 'crime', 'traffic', 'transport', 'politics', 'education', 'sport', 'events', 'business', 'community', 'health', 'environment']}
 # ARTICLE_SCHEMA carries the editorial gate (see EDITORIAL_GATE_INSTRUCTIONS
@@ -440,9 +440,9 @@ def source_is_denied(source_name: str='', source_url: str='') -> bool:
     domain = domain_of(source_url)
     if domain == 'rochvalleyradio.com' or 'roch valley radio' in name:
         return False
-    if domain in {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk', 'autouncle.co.uk', 'tes.com'}:
+    if domain in {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk', 'autouncle.co.uk', 'tes.com', 'tiktok.com', 'youtube.com', 'youtu.be', 'reddit.com', 'old.reddit.com'}:
         return True
-    if any((blocked in name for blocked in ('rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader', 'autouncle'))):
+    if any((blocked in name for blocked in ('rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader', 'autouncle', 'tiktok', 'postcode info', 'reddit'))):
         return True
     return locality_source_is_denied(source_name, source_url)
 ROCHDALE_TRAFFIC_AREA_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (('heywood', ('\\bm62\\s+(?:junction|j)\\s*19\\b', '\\bpilsworth road\\b', "\\bqueen'?s park road\\b")), ('rochdale', ('\\bm62\\s+(?:junction|j)\\s*20\\b', '\\ba627\\s*\\(m\\)\\b', '\\bedinburgh way\\b', '\\broch valley way\\b', '\\bmilnrow road\\b', '\\bsandbrook park\\b')), ('milnrow', ('\\bm62\\s+(?:junction|j)\\s*21\\b', '\\belizabethan way\\b')), ('middleton', ('\\bmanchester new road\\b', '\\ba664\\b.{0,100}\\bmiddleton\\b', '\\bmiddleton\\b.{0,100}\\ba664\\b')), ('littleborough', ('\\bhare hill road\\b', '\\ba58\\b.{0,100}\\blittleborough\\b', '\\blittleborough\\b.{0,100}\\ba58\\b')))
