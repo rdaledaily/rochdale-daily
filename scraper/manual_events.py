@@ -34,7 +34,7 @@ from pathlib import Path
 from typing import Any
 
 MANUAL_EVENTS_PATH = Path(os.getenv("MANUAL_EVENTS_JSON", "manual_events.json"))
-DEFAULT_EVENT_IMAGE = "assets/img/category_events.svg"
+DEFAULT_EVENT_IMAGE = ""
 
 
 def _clean(value: Any) -> str:
