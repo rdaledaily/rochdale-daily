@@ -14,9 +14,11 @@ CATEGORY_ORDER = (
         # children's Bookstart event as crime because its body said
         # "free of charge"; bare "court" matches street names and tennis
         # courts. Weak words are now bound to legal phrasing.
-        r"\b(?:rape|rapist|sexual assault|sexual offence|sexual abuse|grooming|"
+        r"\b(?:rape|rapist|sexual assault|sexual offence|sexual abuse|grooming|groomers?|"
         r"murder|manslaughter|burglary|robbery|theft|fraud|stabbing|"
         r"shooting|arrested?|convicted|sentenced?|jailed|"
+        r"bail hostel|on bail|granted bail|released on bail|probation|"
+        r"sex offenders?|offenders?|gang (?:leader|member)s?|"
         r"charged with|charges? (?:of|against)|faces? charges?|on charges?|"
         r"(?:weapons?|assault|drugs?|criminal|fraud) charges?|"
         r"pleads? (?:not )?guilty|"
@@ -52,7 +54,7 @@ CATEGORY_ORDER = (
     )),
     ("health", re.compile(
         r"\b(?:NHS|hospital|doctor|GP\b|clinic|health service|mental health|"
-        r"patient|care service|pharmacy|vaccination|fitness|exercise (?:class(?:es)?|session(?:s)?)|workout|body combat|zumba|cardiovascular|wellbeing)\b",
+        r"patient|care service|pharmacy|vaccination|fitness|gym|leisure centre|exercise (?:class(?:es)?|session(?:s)?)|workout|body combat|zumba|cardiovascular|wellbeing)\b",
         re.I,
     )),
     ("community", re.compile(
@@ -81,7 +83,7 @@ CATEGORY_ORDER = (
         re.I,
     )),
     ("environment", re.compile(
-        r"\b(?:flood|weather warning|pollution|recycling|litter|climate|wildlife|"
+        r"\b(?:flood warning|flood alert|flood|weather warning|pollution|recycling|litter|climate|wildlife|"
         r"reservoir|canal|environmental|nature reserve|green space|country park|"
         r"heatwave|met office|weather forecast|sunny|sunshine|rainfall|showers|"
         r"asbestos|contaminated|contamination|derelict|brownfield|"
@@ -127,7 +129,9 @@ DEFAULT_CATEGORY_MINIMUMS = {
 
 CRIME_INCIDENT_RE = re.compile(
     r"\b(?:investigation|investigating|arrest(?:ed|s)?|charged with|charges? (?:of|against|brought)|faces? charges|assault(?:ed)?|"
-    r"attack(?:s|ed)?|offences?|in court|court hearing|sentenc(?:ed|ing)|"
+    r"attack(?:s|ed)?|offences?|offenders?|in court|court hearing|sentenc(?:ed|ing)|"
+    r"groomers?|grooming|bail hostel|on bail|granted bail|released on bail|probation|"
+    r"gang (?:leader|member)s?|convicted|jailed|deport(?:ed|ation)|"
     r"appeal for (?:information|witnesses)|witness appeal|robbery|burglar(?:y|ies)|"
     r"theft|stolen|stabbing|murder|manslaughter|rape|wanted (?:man|woman)|"
     r"missing (?:person|man|woman|teenager|child))\b",
@@ -194,15 +198,23 @@ EDITORIAL_GATE_INSTRUCTIONS = {
         "the correct and final answer."
     ),
     "is_about_rochdale_borough": (
-        "True only when the material concerns the Metropolitan Borough of "
-        "Rochdale in Greater Manchester, England (Rochdale, Heywood, "
+        "Default to FALSE. Answer true only when the SUPPLIED RECORDS "
+        "themselves explicitly place the events in the Metropolitan Borough "
+        "of Rochdale in Greater Manchester, England (Rochdale, Heywood, "
         "Middleton, Littleborough, Milnrow, Newhey, Wardle and their "
-        "neighbourhoods, plus adjacent Whitworth). Many places elsewhere "
-        "share these names: Middleton exists in Idaho, Wisconsin and Leeds; "
-        "Healey, Norden, Bamford, Wardle and Hopwood all have namesakes. If "
-        "the surrounding evidence (other place names, US states, currencies, "
-        "institutions) points anywhere other than this borough, answer "
-        "false. A place name alone is not evidence."
+        "neighbourhoods, plus adjacent Whitworth). A borough town name "
+        "ALONE is never sufficient: Middleton also exists in Nova Scotia, "
+        "Idaho, Wisconsin, Leeds and elsewhere, and Healey, Norden, "
+        "Bamford, Castleton, Wardle and Hopwood all have namesakes. "
+        "Signals that the material is about somewhere else and the answer "
+        "is false include: numbered highways (Highway 101, Interstate "
+        "anything), counties (Montgomery County), US states, Canadian "
+        "provinces, non-UK currencies or institutions, and venues that "
+        "belong to neighbouring boroughs — The Rock shopping centre is in "
+        "Bury, not the Rochdale borough. Never infer a Rochdale connection "
+        "the records do not state, and never let the searched location or "
+        "the publication's own identity substitute for evidence in the "
+        "records."
     ),
 }
 
@@ -234,8 +246,66 @@ def plain_text(value: Any) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+# ---------------------------------------------------------------------------
+# Editorial furniture: sentences the house style permits Rochdale Daily to
+# add to a story. The model was appending the Crimestoppers service sentence
+# (and the sympathy line) to EVERYTHING — TikTok clips, workforce strategies,
+# a mosque-conversion story — and the single word "police" inside that
+# self-injected sentence then outscored every genuine category signal,
+# filing all of them as crime. Furniture is therefore (a) invisible to
+# category scoring and (b) deterministically stripped from stories where the
+# house style forbids it, instead of trusting the model to obey.
+# ---------------------------------------------------------------------------
+SERVICE_SENTENCE_RE = re.compile(
+    r"anyone with information[^.!?]{0,160}crimestoppers[^.!?]*[.!?]?",
+    re.IGNORECASE,
+)
+SYMPATHY_SENTENCE_RE = re.compile(
+    r"our thoughts (?:are|remain) with[^.!?]*[.!?]?",
+    re.IGNORECASE,
+)
+DEATH_MARKER_RE = re.compile(
+    r"\b(?:died|dies|death|dead|killed|fatal(?:ly)?|inquest|funeral|"
+    r"passed away|loss of life)\b",
+    re.IGNORECASE,
+)
+
+
+def strip_category_furniture(text: str) -> str:
+    """Remove editorial furniture before any category decision."""
+    text = SERVICE_SENTENCE_RE.sub(" ", text)
+    text = SYMPATHY_SENTENCE_RE.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def strip_service_furniture(paragraphs: list[str], category: str) -> list[str]:
+    """Deterministically remove misplaced furniture from finished copy.
+
+    The Crimestoppers service sentence is only permitted in crime reports;
+    the sympathy line is only permitted where the story actually reports a
+    death. Paragraphs left empty by the removal are dropped.
+    """
+    cleaned: list[str] = []
+    body = " ".join(paragraphs)
+    death_story = bool(DEATH_MARKER_RE.search(SYMPATHY_SENTENCE_RE.sub(" ", body)))
+    for paragraph in paragraphs:
+        if str(category).lower() != "crime":
+            paragraph = SERVICE_SENTENCE_RE.sub(" ", paragraph)
+        if not death_story:
+            paragraph = SYMPATHY_SENTENCE_RE.sub(" ", paragraph)
+        paragraph = re.sub(r"\s+", " ", paragraph).strip()
+        if paragraph:
+            cleaned.append(paragraph)
+    return cleaned
+
+
 def deterministic_category(value: Any, fallback: str = "news") -> str:
-    text = plain_text(value)
+    # Editorial furniture (the Crimestoppers service sentence, the sympathy
+    # line) is Rochdale Daily's own added text, not story evidence. It must
+    # score nothing: the word "police" inside the service sentence filed a
+    # TikTok pool video, a housing association's community update and a
+    # mosque-conversion story all as crime.
+    text = strip_category_furniture(plain_text(value))
     if re.search(r"\b(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)\b", text, re.I):
         return "community"
     # Score every category by DISTINCT matched terms and pick the strongest,
@@ -273,14 +343,24 @@ def deterministic_category(value: Any, fallback: str = "news") -> str:
     # carry no incident marker, so those can still be re-filed.
     if str(fallback or "").lower() == "crime" and CRIME_INCIDENT_RE.search(text):
         return "crime"
+    clean = str(fallback or "news").lower()
+    known = {item[0] for item in CATEGORY_ORDER}
+    if clean == "crime" and scores.get("crime", 0) == 0 and not CRIME_INCIDENT_RE.search(text):
+        # The inverse of the incident-keep rule above: a crime label with
+        # ZERO crime evidence and no incident marker is a mislabel, and
+        # incumbency must not preserve it. Live example: the model's
+        # furniture sentence injected "police" into community stories,
+        # they were filed as crime, and once the furniture was stripped
+        # they retained the crime label with nothing supporting it. Crime
+        # carries the heaviest visual and legal weight on the site, so it
+        # is the one category that must never survive on zero evidence.
+        return best_category if best_score >= 2 else "news"
     # A single ambiguous word ("opening", "school", "police") must never
     # override a category the pipeline already assigned. One incidental
     # keyword filed an asbestos-factory story under education ("school
     # holidays") and a Safe Haven welfare launch under business ("opening").
     # Overriding an existing category requires at least two points of
     # evidence; a lone keyword only decides genuinely uncategorised text.
-    clean = str(fallback or "news").lower()
-    known = {item[0] for item in CATEGORY_ORDER}
     if (
         best_score < 2
         and clean in known
@@ -292,6 +372,12 @@ def deterministic_category(value: Any, fallback: str = "news") -> str:
         # nothing scored 2+, even though crime scored zero: a category with
         # no evidence at all must never beat a challenger that has some.
         return clean
+    if best_score < 2 and clean not in known:
+        # A lone keyword must never categorise an otherwise uncategorised
+        # story. One incidental "traffic" filed a gym's community
+        # transport-access initiative as a traffic story. "news" is the
+        # honest label for text with under two points of evidence.
+        return "news"
     if best_category:
         return best_category
     return clean if clean in known | {"news"} else "news"
