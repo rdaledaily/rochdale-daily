@@ -33,18 +33,37 @@ CASES = [
         "Heywood used as a surname must not count",
     ),
     (
-        True,
+        False,
         "Police have closed a road in Middleton after a collision",
         "Regional News",
         "",
-        "Explicit geographical wording",
+        "STRUCTURAL RULE: an ambiguous borough name alone never establishes "
+        "locality for an unknown publisher — 'in Middleton' is exactly what "
+        "a Middleton, Nova Scotia crash report says too (live failure)",
     ),
     (
         True,
+        "Police have closed a road in Middleton after a collision",
+        "Manchester Evening News",
+        "https://www.manchestereveningnews.co.uk/news/example",
+        "The same wording from a known Greater Manchester publisher keeps "
+        "its full contextual weight",
+    ),
+    (
+        False,
         "Middleton residents are invited to a council meeting",
         "Regional News",
         "",
-        "Place followed by residents",
+        "STRUCTURAL RULE: ambiguous name alone, unknown publisher",
+    ),
+    (
+        True,
+        "Middleton residents are invited to a council meeting about "
+        "services in Heywood",
+        "Regional News",
+        "",
+        "Two independent borough names together still establish locality "
+        "even for an unknown publisher",
     ),
     (
         True,
@@ -106,19 +125,22 @@ CASES = [
         True,
         "Flooding from Middleton has affected several roads this morning, "
         "police have confirmed.",
-        "Regional News",
-        "",
+        "BBC Manchester",
+        "https://www.bbc.co.uk/news/england/manchester/example",
         "Genuine place usage via 'from' with no full personal name present "
-        "must still count",
+        "must still count for a known Greater Manchester publisher (from an "
+        "unknown publisher this exact sentence is indistinguishable from a "
+        "Middleton, Nova Scotia flood report and is correctly rejected)",
     ),
     (
         True,
         "Councillor John Wardle spoke at a meeting in Wardle village last "
         "night about flooding concerns.",
-        "Rochdale News",
-        "",
+        "Manchester Evening News",
+        "https://www.manchestereveningnews.co.uk/news/example",
         "A person with an ambiguous surname is fine when the article also "
-        "gives real geographic context (Wardle village)",
+        "gives real geographic context (Wardle village) — from a known "
+        "Greater Manchester publisher",
     ),
     # ------------------------------------------------------------------
     # New cases: impostor places and rival geography.
@@ -216,10 +238,12 @@ CASES = [
         "A man has been arrested following a two-vehicle collision near "
         "Norden yesterday evening. Police closed the road while recovery "
         "took place.",
-        "Regional News",
-        "",
+        "Manchester Evening News",
+        "https://www.manchestereveningnews.co.uk/news/example",
         "The same Norden wording with no rival geography anywhere must "
-        "still be accepted",
+        "still be accepted from a known Greater Manchester publisher "
+        "(from an unknown publisher a lone Norden is now structurally "
+        "insufficient: Norden, Dorset reads identically)",
     ),
     (
         True,
@@ -262,14 +286,16 @@ CASES = [
         "mentions rival geography in its URL",
     ),
     (
-        True,
+        False,
         "Upcoming Bookstart events at Castleton Library are designed to "
         "cultivate a love for reading in infants and toddlers, encouraging "
         "parents to participate in reading activities.",
         "Eventbrite",
         "",
-        "The gerund 'reading' must never be mistaken for the town of "
-        "Reading (live over-veto found in impact analysis)",
+        "A lone Castleton from an unknown events platform is structurally "
+        "insufficient (Castleton, Derbyshire hosts identical listings); "
+        "the gerund-'reading' protection this case originally covered is "
+        "asserted separately below via has_disqualifying_evidence",
     ),
     (
         True,
@@ -289,6 +315,33 @@ CASES = [
         "",
         "'in Devon' used as a real place must still veto an otherwise "
         "ambiguous Middleton mention",
+    ),
+    (
+        False,
+        "A 75-year-old woman and a 28-year-old man, both from Middleton, "
+        "died following a collision involving a tractor-trailer on "
+        "Highway 101 near Kingston.",
+        "x.com",
+        "",
+        "Middleton, Nova Scotia fatal crash (live failure): Highway 101 "
+        "and Kingston are rival geography for an unanchored Middleton",
+    ),
+    (
+        False,
+        "Montgomery County will seek a trial in connection with an arson "
+        "incident in Middleton, following investigations into the fire.",
+        "shopmohsindev.presonus.com",
+        "",
+        "US Montgomery County arson case (live failure): a US-style "
+        "county is rival geography for an unanchored Middleton",
+    ),
+    (
+        False,
+        "Fire crews attended a house fire in Middleton, Wisconsin, on "
+        "Tuesday evening.",
+        "Channel 3000",
+        "",
+        "Middleton, Wisconsin is a named impostor context",
     ),
 ]
 
@@ -414,5 +467,21 @@ assert not has_disqualifying_evidence(
 )
 assert not has_disqualifying_evidence(
     "A Rochdale man was jailed at Dorchester Crown Court."
+)
+assert has_disqualifying_evidence(
+    "Two residents of Middleton died in a collision on Highway 101 near "
+    "Kingston, Nova Scotia."
+)
+assert has_disqualifying_evidence(
+    "Montgomery County will seek a trial in the Middleton arson case."
+)
+# The gerund 'reading' must never be mistaken for the town of Reading
+# (live over-veto found in impact analysis): it contributes no rival or
+# impostor evidence regardless of publisher.
+assert not has_disqualifying_evidence(
+    "Upcoming Bookstart events at Castleton Library are designed to "
+    "cultivate a love for reading in infants and toddlers, encouraging "
+    "parents to participate in reading activities.",
+    source_name="Eventbrite",
 )
 print("Disqualifying-evidence tests passed.")
