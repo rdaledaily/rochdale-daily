@@ -227,6 +227,8 @@ class Candidate:
     discovery_query_label: str = ''
     searched_location_slug: str = ''
     searched_location_name: str = ''
+    publisher_home_url: str = ''
+    google_news_url: str = ''
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -420,7 +422,7 @@ def article_is_local(article: dict[str, Any]) -> bool:
     return is_local(combined, str(article.get('source_name') or ''), str(article.get('source_url') or ''))
 from rewrite_safety import excessive_source_overlap
 from selection_policy import PUBLISH_CATEGORIES, ROCHDALE_WARDS, balanced_select, is_classified_listing_post, is_job_or_career_post, ward_for_item
-from story_identity import authority_score, build_story_key, dedupe_article_records, merge_article_records, same_story
+from story_identity import authority_score, build_story_key, dedupe_article_records, merge_article_records, same_story, strip_publisher_suffix
 from story_blocklist import is_blocked_article, is_blocked_text, load_blocklist as load_story_blocklist
 from locality_rules import AREA_KEYWORDS, LOCAL_TERMS, article_is_local, detect_area, has_disqualifying_evidence, is_local, locality_evidence, source_is_denied as locality_source_is_denied
 
@@ -735,6 +737,165 @@ def google_news_sources() -> list[dict[str, str]]:
         })
     return sources
 
+
+# --- Google News as discovery-only: resolve to the publisher via <source> -----
+# Google News RSS never gives a usable article image and its wrapper link can't
+# be decoded to the publisher without Google's fragile endpoint. But each RSS
+# item DOES name its publisher (<source> title + homepage href). We use that
+# identity to consult the publisher's OWN feed, match the headline, and take the
+# real article URL and image from there. Nothing here touches the wrapper, so
+# Google cannot break it; the cost is bounded because feeds are fetched once per
+# publisher per run and cached.
+GOOGLE_NEWS_PUBLISHER_RESOLUTION = os.getenv(
+    'GOOGLE_NEWS_PUBLISHER_RESOLUTION', 'true'
+).lower() not in {'0', 'false', 'no', 'off'}
+PUBLISHER_FEED_DISCOVERY = os.getenv(
+    'PUBLISHER_FEED_DISCOVERY', 'true'
+).lower() not in {'0', 'false', 'no', 'off'}
+PUBLISHER_FEED_MATCH_THRESHOLD = float(
+    os.getenv('PUBLISHER_FEED_MATCH_THRESHOLD', '0.6')
+)
+# Fast path: publisher domain -> a feed known to carry their local stories.
+PUBLISHER_FEED_HINTS: dict[str, str] = {
+    'bbc.co.uk': 'https://feeds.bbci.co.uk/news/england/manchester/rss.xml',
+    'bbc.com': 'https://feeds.bbci.co.uk/news/england/manchester/rss.xml',
+}
+for _rss_source in RSS_SOURCES:
+    _pub_domain = str(_rss_source.get('publisher_domain') or '').lower()
+    if _pub_domain:
+        PUBLISHER_FEED_HINTS.setdefault(_pub_domain, _rss_source['url'])
+_TITLE_MATCH_STOPWORDS = {
+    'after', 'again', 'against', 'amid', 'over', 'with', 'from', 'into', 'that',
+    'this', 'their', 'there', 'about', 'could', 'would', 'have', 'been', 'says',
+    'said', 'more', 'news', 'update', 'updates', 'rochdale', 'greater',
+    'manchester', 'live', 'latest',
+}
+_PUBLISHER_FEED_URL_CACHE: dict[str, str] = {}
+_PUBLISHER_FEED_ENTRIES_CACHE: dict[str, list[Any]] = {}
+
+
+def _title_match_tokens(text: str) -> set[str]:
+    cleaned = strip_publisher_suffix(strip_markdown(text))
+    return {
+        token for token in re.findall(r'[a-z0-9]+', cleaned.lower())
+        if len(token) >= 4 and token not in _TITLE_MATCH_STOPWORDS
+    }
+
+
+def _publisher_feed_url(home_url: str) -> str:
+    """Return a feed URL for the publisher, discovering it once per host."""
+    host = domain_of(home_url)
+    if not host:
+        return ''
+    if host in _PUBLISHER_FEED_URL_CACHE:
+        return _PUBLISHER_FEED_URL_CACHE[host]
+    feed = PUBLISHER_FEED_HINTS.get(host, '')
+    if not feed and PUBLISHER_FEED_DISCOVERY:
+        base = home_url if home_url.startswith(('http://', 'https://')) else f'https://{host}'
+        try:
+            final_url, raw_html = fetch_html(base)
+            soup = BeautifulSoup(raw_html, 'lxml')
+            for link in soup.find_all('link', href=True):
+                rels = link.get('rel') or []
+                rels = rels if isinstance(rels, list) else [rels]
+                if 'alternate' not in {str(r).lower() for r in rels}:
+                    continue
+                link_type = str(link.get('type') or '').lower()
+                if 'rss' in link_type or 'atom' in link_type or 'xml' in link_type:
+                    feed = urljoin(final_url, str(link.get('href')))
+                    break
+        except Exception as exc:
+            log.debug('Publisher feed discovery failed for %s: %s', host, exc)
+            feed = ''
+    _PUBLISHER_FEED_URL_CACHE[host] = feed
+    return feed
+
+
+def _publisher_feed_entries(feed_url: str) -> list[Any]:
+    if not feed_url:
+        return []
+    if feed_url in _PUBLISHER_FEED_ENTRIES_CACHE:
+        return _PUBLISHER_FEED_ENTRIES_CACHE[feed_url]
+    try:
+        parsed = feedparser.parse(feed_url, agent=SESSION.headers['User-Agent'])
+        entries = list(parsed.entries)
+    except Exception as exc:
+        log.debug('Publisher feed fetch failed for %s: %s', feed_url, exc)
+        entries = []
+    _PUBLISHER_FEED_ENTRIES_CACHE[feed_url] = entries
+    return entries
+
+
+def _match_publisher_entry(headline: str, entries: list[Any]) -> Any | None:
+    """Best headline match in a publisher feed, or None if nothing is confident.
+
+    A wrong image is worse than a placeholder, so the threshold is deliberately
+    strict: strong proportional overlap AND at least three shared content words.
+    """
+    target = _title_match_tokens(headline)
+    if len(target) < 3:
+        return None
+    best_entry = None
+    best_score = 0.0
+    for entry in entries:
+        entry_tokens = _title_match_tokens(getattr(entry, 'title', ''))
+        if not entry_tokens:
+            continue
+        union = target | entry_tokens
+        score = len(target & entry_tokens) / len(union) if union else 0.0
+        if score > best_score:
+            best_score = score
+            best_entry = entry
+    if best_entry is None or best_score < PUBLISHER_FEED_MATCH_THRESHOLD:
+        return None
+    if len(target & _title_match_tokens(getattr(best_entry, 'title', ''))) < 3:
+        return None
+    return best_entry
+
+
+def resolve_google_candidate_to_publisher(candidate: Candidate) -> bool:
+    """Rewrite a Google News wrapper candidate into a real publisher record.
+
+    Uses only the publisher identity from the RSS <source> element. On success
+    the candidate's source_url becomes the publisher's own article URL and its
+    image comes from that article; the wrapper is retained as google_news_url.
+    Returns False (leaving the candidate untouched) when no confident publisher
+    article can be found, so the story later falls back to a branded placeholder
+    rather than to Google's logo.
+    """
+    if not GOOGLE_NEWS_PUBLISHER_RESOLUTION:
+        return False
+    if not is_disallowed_image_source(candidate.source_url):
+        return False
+    home = candidate.publisher_home_url
+    if not home or is_disallowed_image_source(home):
+        return False
+    entries = _publisher_feed_entries(_publisher_feed_url(home))
+    match = _match_publisher_entry(candidate.source_title, entries)
+    if match is None:
+        return False
+    real_url = canonicalise_url(str(getattr(match, 'link', '') or ''))
+    if not real_url or is_disallowed_image_source(real_url):
+        return False
+    image = rss_image(match)
+    if not image:
+        try:
+            image = page_metadata(real_url).get('image', '')
+        except Exception as exc:
+            log.debug('Publisher image lookup failed for %s: %s', real_url, exc)
+            image = ''
+    candidate.google_news_url = candidate.source_url
+    candidate.source_url = real_url
+    if image:
+        candidate.image_candidate_url = image
+    log.info(
+        'Resolved Google News item to publisher via <source>: %s -> %s',
+        candidate.source_name or domain_of(home),
+        real_url,
+    )
+    return True
+
+
 def collect_rss_candidates() -> list[Candidate]:
     candidates: list[Candidate] = []
     for source in RSS_SOURCES + google_news_sources():
@@ -799,7 +960,7 @@ def collect_rss_candidates() -> list[Candidate]:
             if not is_fresh(published):
                 continue
             combined = f'{source_title} {summary} {body_excerpt}'
-            candidates.append(Candidate(
+            candidate = Candidate(
                 source_name=source_name,
                 source_url=source_url,
                 source_title=source_title,
@@ -823,7 +984,13 @@ def collect_rss_candidates() -> list[Candidate]:
                 discovery_query_label=str(source.get('query_label') or ''),
                 searched_location_slug=str(source.get('query_location_slug') or ''),
                 searched_location_name=str(source.get('query_location_name') or ''),
-            ))
+                publisher_home_url=entry_source_url,
+            )
+            if source.get('aggregator') == 'google':
+                # Discovery-only: recover the real publisher article + image
+                # from the <source> identity instead of the wrapper.
+                resolve_google_candidate_to_publisher(candidate)
+            candidates.append(candidate)
     return candidates
 
 def discovery_listing_urls(source: dict[str, Any]) -> list[str]:
@@ -1444,8 +1611,31 @@ def candidate_related_record(candidate: Candidate) -> dict[str, str]:
         'searched_location_name': candidate.searched_location_name,
     }
 
+def _candidate_primary_rank(item: Candidate) -> tuple[int, int, float, str]:
+    """Rank a candidate for the primary (imaged, canonical) slot of a cluster.
+
+    Google News / social wrapper URLs are discovery signals only: their page
+    exposes Google/social chrome as og:image, and the wrapper can't be resolved
+    to the publisher without Google's fragile decoder. So any real-publisher
+    candidate outranks a wrapper for the primary slot, and among real
+    publishers one that actually carries a usable image is preferred. A wrapper
+    only becomes primary when every candidate in the cluster is a wrapper, in
+    which case the story falls back to a clean branded placeholder rather than
+    Google's logo. The wrapper's link is still retained as a related source, so
+    readers can reach the Google-hosted copy.
+    """
+    is_real_publisher = 0 if is_disallowed_image_source(item.source_url) else 1
+    has_usable_image = 1 if _source_image_allowed(item) else 0
+    return (
+        is_real_publisher,
+        has_usable_image,
+        authority_score(item),
+        item.source_published_at,
+    )
+
+
 def deduplicate_and_cross_reference(candidates: Iterable[Candidate]) -> list[Candidate]:
-    ordered = sorted(candidates, key=lambda item: (authority_score(item), item.source_published_at), reverse=True)
+    ordered = sorted(candidates, key=_candidate_primary_rank, reverse=True)
     primaries: list[Candidate] = []
     seen_urls: set[str] = set()
     story_blocklist = load_story_blocklist()
