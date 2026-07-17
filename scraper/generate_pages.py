@@ -296,6 +296,38 @@ def json_ld(article: dict[str, Any], canonical_url: str, image_url: str) -> str:
 def sources_markup(article: dict[str, Any]) -> str:
     return generic_sources_markup(article)
 
+def hero_image_markup(article: dict[str, Any], image_url: str) -> str:
+    credit = str(article.get("image_credit") or "").strip()
+    credit_url = str(article.get("image_credit_url") or "").strip()
+
+    if not image_url:
+        return ""
+
+    caption = ""
+    if credit and credit != "Rochdale Daily category image":
+        if credit_url:
+            caption = (
+                '<figcaption class="article-image-credit">'
+                'Image: <a href="' + esc(credit_url) + '" target="_blank" '
+                'rel="noopener noreferrer">' + esc(credit) + '</a>'
+                '</figcaption>'
+            )
+        else:
+            caption = (
+                '<figcaption class="article-image-credit">'
+                'Image: ' + esc(credit) +
+                '</figcaption>'
+            )
+
+    return (
+        '<figure class="article-hero-image">'
+        '<img src="' + esc(image_url) + '" alt="" loading="eager" '
+        'fetchpriority="high">'
+        + caption +
+        '</figure>'
+    )
+
+
 def render_article_page(article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
     slug = article.get('slug')
     title = str(article.get('title') or 'Local news update')
