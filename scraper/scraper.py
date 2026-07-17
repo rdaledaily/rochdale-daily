@@ -23,12 +23,15 @@ from __future__ import annotations
 from source_presentation import clean_candidate_public_text, is_subtle_source, sanitise_article
 from house_style import STYLE_VERSION
 from editorial_upgrade import (
+    SERVICE_SENTENCE_RE,
+    SYMPATHY_SENTENCE_RE,
     article_word_count as editorial_word_count,
     compact_records as editorial_compact_records,
     deterministic_category as editorial_category,
     enrich_records as editorial_enrich_records,
     quality_issues as editorial_quality_issues,
     request_article as editorial_request_article,
+    strip_service_furniture,
 )
 import hashlib
 import io
@@ -163,7 +166,7 @@ SAFEGUARDING_CONTEXT_PATTERN = '\\b(alleged|allegedly|accused|suspect|suspected|
 # matched: "new warehouse to create 500 jobs" (jobs as news), "tickets on
 # sale from £15" (price lacks a thousands separator), "£10,495,000
 # investment" (no sale verb within 70 chars before the price).
-DROP_PATTERNS = ['\\b(?:opinion|comment|column|editorial)\\b', '\\bfor sale\\b|\\bfor rent\\b|\\broom to let\\b', '\\brecommendations please\\b|\\bdoes anyone know\\b|\\bgetting rid of\\b', "\\bno [a-z][a-z\\s,'-]{0,70}jobs? (?:found|available|listed)\\b", '\\bjobs? (?:found|matching|listed) in\\b', '\\b(?:available|on sale|for sale|priced)\\b[^.]{0,70}£\\s?\\d{1,3}(?:,\\d{3})+', '\\bservices? available in\\b', '\\b(?:house|home|flat|apartment|property|room) (?:rental|to let|for rent|to rent)\\b|\\brental available\\b']
+DROP_PATTERNS = ['\\b(?:opinion|comment|column|editorial)\\b', '\\bfor sale\\b|\\bfor rent\\b|\\broom to let\\b', '\\brecommendations please\\b|\\bdoes anyone know\\b|\\bgetting rid of\\b', "\\bno [a-z][a-z\\s,'-]{0,70}jobs? (?:found|available|listed)\\b", '\\bjobs? (?:found|matching|listed) in\\b', '\\b(?:available|on sale|for sale|priced)\\b[^.]{0,70}£\\s?\\d{1,3}(?:,\\d{3})+', '\\bservices? available in\\b', '\\b(?:house|home|flat|apartment|property|room) (?:rental|to let|for rent|to rent)\\b|\\brental available\\b', '\\bproperty auction\\b|\\bauction (?:scheduled|to be held)\\b|\\b(?:goes?|going) under the hammer\\b|\\bguide price\\b']
 PLACEHOLDER_PATTERNS = ['\\[(?:insert|relevant|contact|date|number|details|link)[^\\]]*\\]', '\\babout this article\\b.*$', '\\brelated topics\\b.*$', '#rochdalenews|#greatermanchester', '\\bfact-checked local journalism\\b']
 CATEGORY_STOCK_IMAGES = {category: f'assets/img/stock_{category}.jpg' for category in ['news', 'crime', 'traffic', 'transport', 'politics', 'education', 'sport', 'events', 'business', 'community', 'health', 'environment']}
 # ARTICLE_SCHEMA carries the editorial gate (see EDITORIAL_GATE_INSTRUCTIONS
@@ -1411,6 +1414,36 @@ def recent_existing_articles() -> list[dict[str, Any]]:
         source_url = str(article.get('source_url') or '')
         if source_is_denied(source_name, source_url):
             continue
+        if not article.get('editorial_lock'):
+            # The editorial gate only vets NEW rewrites, so an advert or
+            # listing that slipped in before the gate existed would
+            # otherwise persist for its full retention window (a house-
+            # rental listing and a property-auction listing both did).
+            # Apply the same cheap template-language check to retained
+            # headlines and standfirsts on every run. Hand-locked articles
+            # are exempt: the editor has explicitly approved those.
+            probe = _plain_text(f"{article.get('title') or ''} {article.get('excerpt') or ''}")
+            if should_drop(probe, source_url):
+                log.warning('Purged advert/listing-style article from retained feed: %s', article.get('title'))
+                continue
+            # Self-heal misplaced editorial furniture in retained copy: the
+            # Crimestoppers service sentence belongs only in crime reports,
+            # and the sympathy line only in reports of a death. The model
+            # was adding both to everything, which also poisoned category
+            # scoring ("police" filed community stories as crime).
+            body = str(article.get('content_html') or '')
+            if body:
+                cleaned = body
+                if str(article.get('category') or '') != 'crime':
+                    cleaned = SERVICE_SENTENCE_RE.sub(' ', cleaned)
+                plain_body = _plain_text(SYMPATHY_SENTENCE_RE.sub(' ', cleaned))
+                if not re.search('\\b(?:died|dies|death|dead|killed|fatal(?:ly)?|inquest|funeral|passed away)\\b', plain_body, flags=re.IGNORECASE):
+                    cleaned = SYMPATHY_SENTENCE_RE.sub(' ', cleaned)
+                if cleaned != body:
+                    cleaned = re.sub('\\s+', ' ', cleaned)
+                    cleaned = re.sub('<p>\\s*</p>', '', cleaned)
+                    article['content_html'] = cleaned.strip()
+                    article['excerpt'] = normalise_ws(SYMPATHY_SENTENCE_RE.sub(' ', SERVICE_SENTENCE_RE.sub(' ', str(article.get('excerpt') or ''))))
         if article_is_low_quality(article):
             log.warning('Removed low-quality template article so it can be rewritten: %s', article.get('title'))
             continue
@@ -1775,6 +1808,14 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     if area not in AREA_KEYWORDS:
         area = candidate.area if candidate.area in AREA_KEYWORDS else 'rochdale'
 
+    # The category is now final, so misplaced furniture can be removed
+    # deterministically: the Crimestoppers service sentence outside crime
+    # reports, and the sympathy line outside reports of a death. The house
+    # style forbids both, but the model was adding them anyway, and the
+    # word "police" inside the service sentence then dragged whole
+    # community stories into the crime category.
+    paragraphs = strip_service_furniture(paragraphs, category)
+
     public_reaction_count = sum(1 for item in candidate.social_context if item.get('kind') == 'public_reaction')
     official_social_count = sum(1 for item in candidate.social_context if item.get('kind') == 'official_update')
     if sensitive:
@@ -1887,14 +1928,21 @@ def article_public_word_count(article: dict[str, Any]) -> int:
     return editorial_word_count(article)
 
 
+# Heavy-namesake towns (middleton, wardle, norden, bamford, healey, hopwood)
+# are deliberately ABSENT from this finished-text acceptance regex. "In
+# Middleton" appears in finished copy about Middleton, Nova Scotia and
+# Middleton, Wisconsin precisely because the namesake fooled the earlier
+# stages; those names must earn locality through locality_evidence(), where
+# the known-publisher rule and the impostor/rival vetoes apply. The names
+# kept here have no significant namesakes.
 BOROUGH_FINISHED_LOCATION_RE = re.compile(
     r"\b(?:in|at|near|around|across|from|within|throughout|towards|outside|serving|based in|located in)\s+"
-    r"(?:the\s+)?(?:heywood|middleton|littleborough|milnrow|newhey|wardle|norden|bamford|"
-    r"kirkholt|castleton|spotland|falinge|deeplish|smallbridge|firgrove|shawclough|healey|"
-    r"balderstone|darnhill|hopwood|alkrington|boarshaw|smithy bridge|rochdale)\b|"
-    r"\b(?:heywood|middleton|littleborough|milnrow|newhey|wardle|norden|bamford|kirkholt|"
-    r"castleton|spotland|falinge|deeplish|smallbridge|firgrove|shawclough|healey|balderstone|"
-    r"darnhill|hopwood|alkrington|boarshaw|smithy bridge)\s+"
+    r"(?:the\s+)?(?:heywood|littleborough|milnrow|newhey|"
+    r"kirkholt|castleton|spotland|falinge|deeplish|smallbridge|firgrove|shawclough|"
+    r"balderstone|darnhill|alkrington|boarshaw|smithy bridge|rochdale)\b|"
+    r"\b(?:heywood|littleborough|milnrow|newhey|kirkholt|"
+    r"castleton|spotland|falinge|deeplish|smallbridge|firgrove|shawclough|balderstone|"
+    r"darnhill|alkrington|boarshaw|smithy bridge)\s+"
     r"(?:town|town centre|area|ward|estate|village|residents|community|road|street|school|"
     r"college|library|station|market|business|businesses|shops|club|services|families)\b",
     re.IGNORECASE,
