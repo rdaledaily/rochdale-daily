@@ -122,18 +122,31 @@ def backfill_one(article: dict[str, Any], allow_fetch: bool) -> tuple[dict[str, 
         return article, "no-source-url"
 
     image_candidate_url = str(article.get("source_image_candidate_url") or "").strip()
+    url_resolved = False
     if not image_candidate_url:
         if not allow_fetch:
             return article, "deferred-to-next-run"
         try:
             meta = page_metadata(source_url)
             image_candidate_url = str(meta.get("image") or "").strip()
+            # Google News RSS entries store a news.google.com redirect
+            # wrapper as source_url, not the real publisher page -- fetching
+            # that wrapper directly means any og:image search is looking at
+            # Google's own interstitial, not the actual article. page_metadata
+            # already follows redirects and reports the resolved final URL;
+            # if that's different from what we started with, persist the
+            # correction so both this run's image search and every future
+            # use of source_url point at the real page.
+            resolved_url = str(meta.get("url") or "").strip()
+            if resolved_url and resolved_url != source_url:
+                article["source_url"] = resolved_url
+                url_resolved = True
         except Exception as exc:
             log.debug("Backfill metadata fetch failed for %s: %s", source_url, exc)
             image_candidate_url = ""
 
     if not image_candidate_url:
-        return article, "still-fallback"
+        return article, ("still-fallback-url-resolved" if url_resolved else "still-fallback")
 
     candidate = build_candidate(article, image_candidate_url)
     category = str(article.get("category") or "news")
@@ -152,7 +165,9 @@ def backfill_one(article: dict[str, Any], allow_fetch: bool) -> tuple[dict[str, 
         "publisher-image-cached-and-credited" if image_credit_url else "category-fallback"
     )
 
-    return article, ("backfilled" if image_credit_url else "still-fallback")
+    if image_credit_url:
+        return article, ("backfilled-url-resolved" if url_resolved else "backfilled")
+    return article, ("still-fallback-url-resolved" if url_resolved else "still-fallback")
 
 
 def main() -> int:
