@@ -3,10 +3,9 @@ name: Rochdale Daily 15-minute scraper
 on:
   workflow_dispatch:
   schedule:
-    # Hourly full run: includes the public Facebook Events browser collector
-    # and a small archived-image backfill batch.
+    # Hourly full run: includes the public Facebook Events browser collector.
     - cron: "7 * * * *"
-    # Three fast news runs per hour: no Chromium or archive-image backfill.
+    # Three fast news runs per hour: no Chromium or apt installation.
     - cron: "22,37,52 * * * *"
 
 permissions:
@@ -19,22 +18,22 @@ concurrency:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
       X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+
       FACEBOOK_GRAPH_VERSION: "v22.0"
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
       FACEBOOK_EVENT_IMAGE_REUSE: "false"
       FACEBOOK_EVENTS_BROWSER_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
-      ARCHIVE_IMAGE_BACKFILL_ENABLED: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '7 * * * *' }}
 
       OPENAI_MODEL: "gpt-4o-mini"
 
-      # Rewrites remain preferred, but a failed/declined rewrite now falls back
+      # Rewrites remain preferred, but a failed or declined rewrite falls back
       # to an attributed article instead of silently discarding the candidate.
       AI_REWRITE_REQUIRED: "false"
 
@@ -134,10 +133,9 @@ jobs:
         run: |
           python -m playwright install chromium
 
-      - name: Confirm optional full-run modes
+      - name: Confirm Facebook Events browser mode
         run: |
           echo "FACEBOOK_EVENTS_BROWSER_ENABLED=${FACEBOOK_EVENTS_BROWSER_ENABLED}"
-          echo "ARCHIVE_IMAGE_BACKFILL_ENABLED=${ARCHIVE_IMAGE_BACKFILL_ENABLED}"
 
       - name: Validate pipeline
         run: |
@@ -154,8 +152,9 @@ jobs:
             scraper/food_hygiene.py \
             scraper/frontpage_pipeline.py \
             scraper/merge_feeds.py \
-            scraper/backfill_article_images.py \
+            scraper/ensure_article_images.py \
             scraper/scraper.py
+
           python scraper/test_locality.py
           python scraper/test_story_identity.py
           python scraper/test_selection_policy.py
@@ -166,7 +165,8 @@ jobs:
           python scraper/test_archive_persistence.py
           python scraper/test_event_identity.py
           python scraper/test_article_gate.py
-          python scraper/test_backfill_article_images.py
+          python scraper/test_ensure_article_images.py
+
           (
             cd scraper
             python -c "import scraper; print('Scraper startup import passed.')"
@@ -174,8 +174,7 @@ jobs:
 
       - name: Repair contaminated event records
         run: |
-          # Idempotent: drops any event record fused from multiple event
-          # URLs (re-collected cleanly from the ticket feed this same run)
+          # Idempotent: drops any event record fused from multiple event URLs
           # and corrects miscategorised events. A no-op on clean data.
           python scraper/repair_event_records.py
 
@@ -188,14 +187,12 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
 
-      - name: Backfill archived source images
-        if: ${{ env.ARCHIVE_IMAGE_BACKFILL_ENABLED == 'true' }}
-        timeout-minutes: 15
+      - name: Ensure every published story has an image
+        timeout-minutes: 25
         run: |
-          python scraper/backfill_article_images.py \
+          python scraper/ensure_article_images.py \
             --articles articles.json \
-            --apply \
-            --limit 25
+            --retry-placeholders
 
       - name: Generate static article pages and sitemap
         run: |
@@ -210,7 +207,7 @@ jobs:
             articles.json \
             scraper_status.json \
             event_dates.json \
-            image_backfill_report.json \
+            image_coverage_report.json \
             assets/img/generated \
             assets/article-images \
             articles \
@@ -224,38 +221,39 @@ jobs:
 
           git commit -m "Update Rochdale Daily news feed"
 
-          # origin/main can move while a run is in progress (an editorial
-          # publish, a manual push, or the hourly run overlapping a fast
-          # run). articles.json is machine-generated whole-file state, so a
-          # plain rebase can never resolve a conflict in it. Instead: merge
-          # origin/main, resolve articles.json with the pipeline's own
-          # story-identity merge (lossless union, locked edits preserved,
-          # published slugs stable), take this run's version of the other
-          # generated files, and retry the push a few times.
+          # origin/main can move while a run is in progress. articles.json is
+          # machine-generated whole-file state, so a plain rebase cannot safely
+          # resolve a conflict. Merge origin/main, resolve articles.json with
+          # the story-aware merge helper, keep this run's generated output, and
+          # retry the push.
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then
               exit 0
             fi
+
             echo "Push rejected (attempt ${attempt}); merging origin/${GITHUB_REF_NAME}."
             git fetch origin "${GITHUB_REF_NAME}"
+
             if ! git merge --no-edit "origin/${GITHUB_REF_NAME}"; then
-              # articles.json: story-aware merge of both sides.
               if git ls-files -u -- articles.json | grep -q .; then
                 git show ":3:articles.json" > /tmp/remote_articles.json
                 git show ":2:articles.json" > /tmp/local_articles.json
-                python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
+                python scraper/merge_feeds.py \
+                  /tmp/remote_articles.json \
+                  /tmp/local_articles.json \
+                  articles.json
                 git add articles.json
               fi
 
-              # Every other conflicted file is generated output; this run's
-              # copy is the freshest and is regenerated shortly anyway.
               conflicted=$(git diff --name-only --diff-filter=U)
               if [ -n "${conflicted}" ]; then
                 echo "${conflicted}" | while read -r file; do
-                  git checkout --ours -- "${file}" 2>/dev/null || git rm -q -- "${file}"
+                  git checkout --ours -- "${file}" 2>/dev/null \
+                    || git rm -q -- "${file}"
                   git add -- "${file}" 2>/dev/null || true
                 done
               fi
+
               git commit --no-edit
             fi
           done
