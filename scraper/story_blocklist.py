@@ -578,6 +578,15 @@ def is_blocked_article(
     3. Matches a manually blocked primary or merged source URL; or
     4. Matches a manually blocked title pattern.
     """
+    # Backward compatibility: older callers pass a bare list (historically a
+    # list of blocked slugs) instead of the current
+    # {"slugs": [...], "source_urls": [...], "title_patterns": [...]} shape.
+    # Coerce it here so blocklist.get(...) below never raises on a plain
+    # list. This does not change what gets blocked for any current caller —
+    # load_blocklist() already returns the dict shape.
+    if isinstance(blocklist, list):
+        blocklist = {"slugs": blocklist}
+
     if contains_islamic_safety_term(*_article_text_values(article)):
         return True
 
@@ -630,6 +639,9 @@ def is_blocked_text(
     The optional summary and body parameters allow the scraper to run the
     protective check again after fetching the full source page.
     """
+    if isinstance(blocklist, list):
+        blocklist = {"slugs": blocklist}
+
     if contains_islamic_safety_term(title, summary, body):
         return True
 
