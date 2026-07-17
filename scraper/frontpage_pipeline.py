@@ -56,6 +56,9 @@ from story_identity import (
 
 ARTICLES_PATH = Path(os.getenv("ARTICLES_JSON", "articles.json"))
 FRONTPAGE_PATH = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
+WHATS_ON_PATH = Path(os.getenv("WHATS_ON_JSON", "articles/whats-on.json"))
+CATEGORY_ARCHIVE_DIR = Path(os.getenv("CATEGORY_ARCHIVE_DIR", "articles/categories"))
+AREA_ARCHIVE_DIR = Path(os.getenv("AREA_ARCHIVE_DIR", "articles/areas"))
 STATUS_PATH = Path(os.getenv("SCRAPER_STATUS_JSON", "scraper_status.json"))
 BLOCKLIST_PATH = Path(os.getenv("STORY_BLOCKLIST_JSON", "story_blocklist.json"))
 ARTICLE_PAGES_DIR = Path(os.getenv("ARTICLE_PAGES_DIR", "articles"))
@@ -66,8 +69,8 @@ EVENT_SOURCE_URL = os.getenv(
 EVENT_DOMAIN = "whatsoccurrinevents.co.uk"
 FRONTPAGE_MIN = int(os.getenv("FRONTPAGE_MIN_ARTICLES", "30"))
 FRONTPAGE_TARGET = int(os.getenv("FRONTPAGE_TARGET_ARTICLES", "60"))
-PRIMARY_DAYS = int(os.getenv("FRONTPAGE_PRIMARY_DAYS", "1"))
-FALLBACK_DAYS = int(os.getenv("FRONTPAGE_FALLBACK_DAYS", "3"))
+PRIMARY_DAYS = int(os.getenv("FRONTPAGE_PRIMARY_DAYS", "2"))
+FALLBACK_DAYS = int(os.getenv("FRONTPAGE_FALLBACK_DAYS", "4"))
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "20"))
 UK_TZ = ZoneInfo("Europe/London")
 
@@ -153,6 +156,57 @@ def parse_datetime(value: Any) -> datetime | None:
         return parsed.astimezone(timezone.utc)
     except (TypeError, ValueError):
         return None
+
+
+def original_publication_date(article: dict[str, Any]) -> datetime | None:
+    """Return the permanent first-publication time used for freshness."""
+    return parse_datetime(
+        article.get("first_published_at")
+        or article.get("published_at")
+    )
+
+
+def last_update_date(article: dict[str, Any]) -> datetime | None:
+    """Return the latest edit/ingestion time without changing story age."""
+    return parse_datetime(
+        article.get("last_updated_at")
+        or article.get("scraped_at")
+        or article.get("published_at")
+    )
+
+
+def permanent_publication_iso(article: dict[str, Any]) -> str:
+    value = original_publication_date(article)
+    return iso_utc(value) if value else ""
+
+
+def preserve_publication_dates(
+    article: dict[str, Any],
+    *records: dict[str, Any],
+) -> dict[str, Any]:
+    """Keep the earliest real publication date across updates and merges."""
+    result = dict(article)
+    candidates = [
+        original_publication_date(record)
+        for record in (article, *records)
+    ]
+    valid = [value for value in candidates if value is not None]
+    if valid:
+        first = min(valid)
+        first_iso = iso_utc(first)
+        result["first_published_at"] = first_iso
+        result["published_at"] = first_iso
+    elif result.get("published_at"):
+        result["first_published_at"] = result["published_at"]
+
+    updates = [
+        last_update_date(record)
+        for record in (article, *records)
+    ]
+    valid_updates = [value for value in updates if value is not None]
+    if valid_updates:
+        result["last_updated_at"] = iso_utc(max(valid_updates))
+    return result
 
 
 def read_json(path: Path, default: Any) -> Any:
@@ -445,6 +499,8 @@ def parse_event_detail(url: str, detail_html: str, now: datetime | None = None) 
         "category": "events",
         "types": ["events"],
         "published_at": scraped_at,
+        "first_published_at": scraped_at,
+        "last_updated_at": scraped_at,
         "scraped_at": scraped_at,
         "image_url": image_url,
         "image_credit": "Rochdale Daily event artwork",
@@ -654,7 +710,7 @@ def _timeline_label(article: dict[str, Any]) -> str:
 
 def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
     if len(group) == 1:
-        single = dict(group[0])
+        single = preserve_publication_dates(dict(group[0]))
         single["story_key"] = build_story_key(single)
         return single
 
@@ -714,6 +770,7 @@ def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
     merged["ongoing_label"] = "ONGOING"
     merged["update_count"] = update_count
     merged["last_updated_at"] = iso_utc(updated)
+    merged = preserve_publication_dates(merged, *group)
     merged["story_key"] = build_story_key(merged)
     return merged
 
@@ -817,7 +874,9 @@ def clean_and_integrate_events(
         if previous and _event_identity_trustworthy(previous):
             event["id"] = previous.get("id") or event["id"]
             event["slug"] = previous.get("slug") or event["slug"]
-            event["published_at"] = previous.get("published_at") or event["published_at"]
+            event = preserve_publication_dates(event, previous)
+        else:
+            event = preserve_publication_dates(event)
         existing_approved[key] = event
 
     retained.extend(existing_approved.values())
@@ -830,25 +889,27 @@ def clean_and_integrate_events(
 
 
 def _frontpage_first_published(article: dict[str, Any]) -> datetime | None:
-    """Use the story's real original publication time for homepage freshness."""
-    return parse_datetime(
-        article.get("first_published_at")
-        or article.get("published_at")
-        or article.get("scraped_at")
-    )
+    """Use only the permanent original publication time for freshness."""
+    return original_publication_date(article)
 
 
 def _age_eligible(article: dict[str, Any], cutoff: datetime) -> bool:
+    # Events belong in the separate What's On feed, not the news homepage.
     if is_event(article):
-        return (
-            approved_event_source(article)
-            and not is_online_event(article)
-            and has_physical_local_venue(article)
-            and event_is_current(article)
-        )
+        return False
+
+    if article.get("exclude_from_frontpage") is True:
+        return False
 
     first_published = _frontpage_first_published(article)
-    return first_published is not None and first_published >= cutoff
+    if first_published is None:
+        return False
+
+    frontpage_until = parse_datetime(article.get("frontpage_until"))
+    if article.get("featured") is True and frontpage_until:
+        return frontpage_until >= utc_now()
+
+    return first_published >= cutoff
 
 
 def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
@@ -1057,6 +1118,88 @@ def select_frontpage(articles: list[dict[str, Any]], now: datetime | None = None
     return arranged, diagnostics
 
 
+def build_category_archives(
+    articles: list[dict[str, Any]],
+) -> dict[str, list[dict[str, Any]]]:
+    """Build complete category archives without pruning older stories."""
+    archives: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for article in articles:
+        if str(article.get("status") or "published").lower() != "published":
+            continue
+        if is_event(article):
+            continue
+        archives[article_category(article)].append(article)
+
+    for items in archives.values():
+        items.sort(
+            key=lambda item: original_publication_date(item)
+            or datetime.min.replace(tzinfo=timezone.utc),
+            reverse=True,
+        )
+    return dict(archives)
+
+
+def build_area_archives(
+    articles: list[dict[str, Any]],
+) -> dict[str, list[dict[str, Any]]]:
+    """Build complete town/area archives without pruning older stories."""
+    archives: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for article in articles:
+        if str(article.get("status") or "published").lower() != "published":
+            continue
+        if is_event(article):
+            continue
+        area = str(article.get("area") or "rochdale").strip().lower()
+        archives[area or "rochdale"].append(article)
+
+    for items in archives.values():
+        items.sort(
+            key=lambda item: original_publication_date(item)
+            or datetime.min.replace(tzinfo=timezone.utc),
+            reverse=True,
+        )
+    return dict(archives)
+
+
+def write_archive_views(
+    articles: list[dict[str, Any]],
+    approved_events: list[dict[str, Any]],
+    generated_at: str,
+) -> None:
+    """Write derived archive feeds while leaving articles.json intact."""
+    for category, items in build_category_archives(articles).items():
+        write_json_atomic(
+            CATEGORY_ARCHIVE_DIR / f"{category}.json",
+            {
+                "generated_at": generated_at,
+                "category": category,
+                "count": len(items),
+                "articles": items,
+            },
+        )
+
+    for area, items in build_area_archives(articles).items():
+        write_json_atomic(
+            AREA_ARCHIVE_DIR / f"{area}.json",
+            {
+                "generated_at": generated_at,
+                "area": area,
+                "count": len(items),
+                "articles": items,
+            },
+        )
+
+    write_json_atomic(
+        WHATS_ON_PATH,
+        {
+            "generated_at": generated_at,
+            "count": len(approved_events),
+            "events": approved_events,
+            "event_source": EVENT_SOURCE_URL,
+        },
+    )
+
+
 FRONTPAGE_TITLE_STOPWORDS = {
     "a", "an", "the", "to", "for", "of", "in", "on", "at", "and", "or",
     "is", "are", "was", "were", "be", "been", "being", "will", "would",
@@ -1177,33 +1320,20 @@ def main() -> int:
     merged = _dedupe_by_url(merged)
 
     # Recalculate category after cross-category duplicates have been combined.
-    merged = [apply_category_rules(article) for article in merged]
+    merged = [preserve_publication_dates(apply_category_rules(article)) for article in merged]
     merged.sort(
-        key=lambda article: parse_datetime(article.get("published_at")) or datetime.min.replace(tzinfo=timezone.utc),
+        key=lambda article: original_publication_date(article)
+        or datetime.min.replace(tzinfo=timezone.utc),
         reverse=True,
     )
     write_json_atomic(ARTICLES_PATH, merged)
     stale_article_pages_removed = cleanup_stale_article_pages(merged, blocklist)
 
     frontpage, coverage = select_frontpage(merged, now)
-    previous = read_json(FRONTPAGE_PATH, {})
-    previous_articles = previous.get("articles", []) if isinstance(previous, dict) else []
-    safe_previous_articles = [
-        article for article in previous_articles
-        if isinstance(article, dict)
-        and not is_blocked_article(article, blocklist)
-        and not is_low_quality_article(article)
-        and (not is_event(article) or (approved_event_source(article) and not is_online_event(article) and has_physical_local_venue(article)))
-    ] if isinstance(previous_articles, list) else []
-    if len(frontpage) < FRONTPAGE_MIN:
-        if len(safe_previous_articles) >= FRONTPAGE_MIN:
-            frontpage = safe_previous_articles
-            coverage["used_previous_frontpage_because_new_selection_below_minimum"] = True
-        else:
-            raise RuntimeError(
-                f"Only {len(frontpage)} valid unique stories are available; "
-                f"the front page requires at least {FRONTPAGE_MIN}."
-            )
+    # Never restore yesterday's front page merely to meet a numerical minimum.
+    # A smaller genuinely recent homepage is preferable to stale news being
+    # presented as current. Older stories remain available in archive views.
+    coverage["frontpage_minimum_met"] = len(frontpage) >= FRONTPAGE_MIN
 
     approved_events = [
         article for article in merged
@@ -1216,6 +1346,7 @@ def main() -> int:
     approved_events.sort(
         key=lambda article: parse_datetime(article.get("event_start_at")) or datetime.max.replace(tzinfo=timezone.utc)
     )
+    write_archive_views(merged, approved_events, iso_utc(now))
 
     crime_headlines = [
         article.get("title") for article in frontpage
@@ -1253,6 +1384,9 @@ def main() -> int:
         "stale_article_pages_removed": stale_article_pages_removed,
         "online_events_allowed": False,
         "automated_event_sources_allowed": [EVENT_DOMAIN],
+        "category_archive_count": len(build_category_archives(merged)),
+        "area_archive_count": len(build_area_archives(merged)),
+        "whats_on_event_count": len(approved_events),
     })
     print(
         f"Front page: {len(frontpage)} unique balanced stories; "
