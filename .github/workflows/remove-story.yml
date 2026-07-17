@@ -65,7 +65,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add story_blocklist.json articles.json articles sitemap.xml
+          git add story_blocklist.json articles.json event_dates.json articles sitemap.xml
 
           if git diff --cached --quiet; then
             echo "Nothing changed (entries may already have been blocklisted)."
@@ -103,7 +103,7 @@ jobs:
               --slugs "${{ github.event.inputs.slugs }}" \
               --title-patterns "${{ github.event.inputs.title_patterns }}" \
               --source-urls "${{ github.event.inputs.source_urls }}"
-            git add story_blocklist.json articles.json articles sitemap.xml
+            git add story_blocklist.json articles.json event_dates.json articles sitemap.xml
             git diff --cached --quiet || git commit -m "Re-enforce takedown after race merge"
           done
           echo "Failed to push after 5 attempts."
