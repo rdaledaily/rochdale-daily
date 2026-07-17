@@ -1,4 +1,3 @@
-
 """Article gate: the single normalisation and validation chokepoint.
 
 Every route that produces articles.json should pass through this gate before
@@ -59,7 +58,11 @@ try:
     from story_blocklist import is_blocked_article, load_blocklist
 except ImportError:
     def load_blocklist() -> Any:
-        return []
+        return {
+            "title_patterns": [],
+            "source_urls": [],
+            "slugs": [],
+        }
 
     def is_blocked_article(article: dict[str, Any], blocklist: Any) -> bool:
         return False
@@ -268,17 +271,10 @@ def _normalise_timestamps(
             if parsed is not None:
                 candidates[field] = _format_iso(parsed)
 
-    stable_publication = _earliest_iso(
-        candidates.get("first_published_at"),
-        candidates.get("published_at"),
-        article.get("first_published_at"),
-        article.get("published_at"),
-        article["ingested_at"] if is_manual else None,
-    )
     if is_manual:
-        # Manual date-only or midnight timestamps have already been normalised
-        # above. Do not compare them with the original raw midnight values,
-        # otherwise the earlier 00:00 value wins and undoes the noon fix.
+        # Manual midnight/date-only timestamps have already been normalised.
+        # Do not compare them with the original raw midnight values, because
+        # that would undo the deterministic noon conversion.
         stable_publication = _earliest_iso(
             candidates.get("first_published_at"),
             candidates.get("published_at"),
@@ -288,9 +284,210 @@ def _normalise_timestamps(
         stable_publication = _earliest_iso(
             candidates.get("first_published_at"),
             candidates.get("published_at"),
-            article.get("first_published_at"),
-            article.get("published_at"),
         )
 
     if stable_publication is None:
         # Scraper records should normally supply a publication timestamp.
+        # Falling back to ingestion keeps the record valid while logging the issue.
+        stable_publication = article["ingested_at"]
+        notes.append(
+            f"'{ident}': missing valid publication timestamp; "
+            f"anchored to ingested_at"
+        )
+
+    if article.get("first_published_at") != stable_publication:
+        article["first_published_at"] = stable_publication
+        notes.append(f"'{ident}': set stable first_published_at")
+
+    if article.get("published_at") != stable_publication:
+        article["published_at"] = stable_publication
+        notes.append(f"'{ident}': aligned published_at to first publication")
+
+    scraped = _latest_iso(
+        candidates.get("scraped_at"),
+        article.get("scraped_at"),
+        article.get("last_updated_at"),
+        stable_publication,
+    ) or stable_publication
+    if article.get("scraped_at") != scraped:
+        article["scraped_at"] = scraped
+        notes.append(f"'{ident}': normalised scraped_at")
+
+    last_updated = _latest_iso(
+        article.get("last_updated_at"),
+        scraped,
+        stable_publication,
+    ) or stable_publication
+    if article.get("last_updated_at") != last_updated:
+        article["last_updated_at"] = last_updated
+        notes.append(f"'{ident}': normalised last_updated_at")
+
+
+def normalise_article(
+    source_article: dict[str, Any],
+    notes: list[str],
+    blocklist: Any | None = None,
+) -> dict[str, Any] | None:
+    """Return a corrected copy of an article, or None when it must be dropped.
+
+    The optional blocklist keeps the older two-argument API working while
+    allowing gate_articles() to inject one already-loaded blocklist.
+    """
+    if blocklist is None:
+        blocklist = load_blocklist()
+
+    article = copy.deepcopy(source_article)
+
+    title = str(article.get("title") or "").strip()
+    ident = str(article.get("slug") or title or article.get("id") or "?")
+
+    if not title:
+        notes.append(f"DROPPED '{ident}': missing title")
+        return None
+    article["title"] = title
+
+    if not _meaningful_text(article):
+        notes.append(f"DROPPED '{ident}': missing meaningful article content")
+        return None
+
+    if is_blocked_article(article, blocklist):
+        notes.append(f"DROPPED '{ident}': matched story blocklist")
+        return None
+
+    violation = _fact_table_violation(article)
+    if violation:
+        notes.append(f"DROPPED '{ident}': {violation}")
+        return None
+
+    slug = _slugify(str(article.get("slug") or title))
+    if not slug:
+        notes.append(f"DROPPED '{ident}': could not derive a valid slug")
+        return None
+    if article.get("slug") != slug:
+        article["slug"] = slug
+        notes.append(f"'{ident}': normalised slug to '{slug}'")
+
+    article.setdefault("status", "published")
+    article.setdefault("byline", "Rochdale Daily Newsdesk")
+
+    _normalise_timestamps(article, ident, notes)
+
+    area = str(article.get("area") or "").strip().lower()
+    area = AREA_ALIASES.get(area, area)
+    if area not in CANONICAL_AREAS:
+        notes.append(f"'{ident}': unknown area '{area}' -> '{AREA_FALLBACK}'")
+        area = AREA_FALLBACK
+    elif article.get("area") != area:
+        notes.append(f"'{ident}': normalised area to '{area}'")
+    article["area"] = area
+
+    category = str(article.get("category") or "").strip().lower()
+    category = CATEGORY_ALIASES.get(category, category)
+    if category not in CANONICAL_CATEGORIES:
+        notes.append(f"'{ident}': unknown category '{category}' -> 'news'")
+        category = "news"
+    elif article.get("category") != category:
+        notes.append(f"'{ident}': normalised category to '{category}'")
+    article["category"] = category
+
+    # Do not infer police_matter solely from category. Preserve an explicit
+    # upstream/editorial decision and otherwise default to False.
+    if "police_matter" not in article:
+        article["police_matter"] = False
+
+    return article
+
+
+def _dedupe_slugs(
+    articles: list[dict[str, Any]],
+    notes: list[str],
+) -> list[dict[str, Any]]:
+    seen: set[str] = set()
+    kept: list[dict[str, Any]] = []
+
+    for article in articles:
+        slug = str(article.get("slug") or "")
+        if slug in seen:
+            notes.append(f"DROPPED duplicate slug '{slug}'")
+            continue
+        seen.add(slug)
+        kept.append(article)
+
+    return kept
+
+
+def gate_articles(
+    articles: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[str]]:
+    notes: list[str] = []
+    kept: list[dict[str, Any]] = []
+    blocklist = load_blocklist()
+
+    for article in articles:
+        if not isinstance(article, dict):
+            notes.append("DROPPED non-object article record")
+            continue
+        result = normalise_article(article, notes, blocklist)
+        if result is not None:
+            kept.append(result)
+
+    kept = _dedupe_slugs(kept, notes)
+    kept.sort(
+        key=lambda article: _parse_iso(
+            article.get("first_published_at")
+            or article.get("published_at")
+            or article.get("ingested_at")
+        )
+        or datetime.min.replace(tzinfo=timezone.utc),
+        reverse=True,
+    )
+    return kept, notes
+
+
+def main() -> int:
+    path = Path(sys.argv[1] if len(sys.argv) > 1 else "articles.json")
+
+    try:
+        original_text = path.read_text(encoding="utf-8")
+        articles = json.loads(original_text)
+    except OSError as exc:
+        print(f"article_gate: could not read {path}: {exc}", file=sys.stderr)
+        return 1
+    except json.JSONDecodeError as exc:
+        print(f"article_gate: invalid JSON in {path}: {exc}", file=sys.stderr)
+        return 1
+
+    if not isinstance(articles, list):
+        print(f"article_gate: {path} is not a list of articles", file=sys.stderr)
+        return 1
+
+    kept, notes = gate_articles(articles)
+
+    for note in notes:
+        print(f"article_gate: {note}")
+
+    dropped = len(articles) - len(kept)
+    print(
+        f"article_gate: {len(kept)} article(s) kept, {dropped} dropped, "
+        f"{len(notes)} note(s)"
+    )
+
+    new_text = json.dumps(kept, ensure_ascii=False, indent=2) + "\n"
+    if new_text == original_text:
+        print("article_gate: no changes needed")
+        return 0
+
+    tmp = path.with_name(path.name + ".tmp")
+    try:
+        tmp.write_text(new_text, encoding="utf-8")
+        tmp.replace(path)
+    except OSError as exc:
+        print(f"article_gate: could not rewrite {path}: {exc}", file=sys.stderr)
+        return 1
+
+    print(f"article_gate: rewrote {path}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
