@@ -424,6 +424,29 @@
     .tag.crime { background: #ffe7ec; color: #9b0020; }
     .tag.demo { background: #fff1a6; color: #4c3b00; }
 
+    .read-more-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 9px 13px;
+      background: var(--red);
+      color: #fff;
+      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .45px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .story-link:hover .read-more-button,
+    .story-link:focus-visible .read-more-button {
+      background: #8f0018;
+      transform: translateY(-1px);
+    }
+
     .side-rail { display: grid; gap: 20px; align-content: start; }
     .rail-box { border-top: 5px solid var(--black); background: #f4f4f4; padding: 17px; }
     .rail-box.yellow { background: var(--yellow); }
@@ -1633,6 +1656,7 @@
         <h2 class="lead-headline">${lead.title}</h2>
         <p class="story-summary">${lead.summary}</p>
         <div class="story-meta">By ${lead.byline} · ${lead.timeLabel}</div>
+        <span class="read-more-button" aria-hidden="true">Read More →</span>
       `);
 
       secondaryElement.innerHTML = stories.slice(1, 3).map((story, index) => `
@@ -1643,6 +1667,7 @@
             <span class="story-kicker black">${story.kicker}</span>
             <h2 class="secondary-headline">${story.title}</h2>
             <div class="story-meta">${story.timeLabel}</div>
+            <span class="read-more-button" aria-hidden="true">Read More →</span>
           `)}
         </article>
       `).join("");
@@ -1885,6 +1910,7 @@
               ${story.policeMatter ? '<span class="tag crime">Report information</span>' : ''}
               ${story.demo ? '<span class="tag demo">Example content</span>' : ''}
             </div>
+            <span class="read-more-button" aria-hidden="true">Read More →</span>
           `)}
         </article>
       `).join("");
