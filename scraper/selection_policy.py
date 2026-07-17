@@ -12,6 +12,16 @@ from collections import Counter, defaultdict, deque
 from typing import Any
 from urllib.parse import urlparse
 
+from locality_rules import AREA_KEYWORDS
+
+# Every named township/locality the pipeline recognises, in a stable order,
+# excluding "rochdale" itself. Central Rochdale naturally dominates raw
+# candidate volume (most sources, most direct name mentions), so it needs
+# no guaranteed reservation; every other named area does.
+PUBLISH_AREAS: tuple[str, ...] = tuple(
+    area for area in AREA_KEYWORDS if area != "rochdale"
+)
+
 PUBLISH_CATEGORIES = (
     "crime",
     "traffic",
@@ -331,6 +341,10 @@ def category_key(item: Any) -> str:
     return category if category in PUBLISH_CATEGORIES else "news"
 
 
+def area_key(item: Any) -> str:
+    return str(get_value(item, "area", "") or "").lower().strip()
+
+
 def unique_key(item: Any) -> str:
     return str(
         get_value(item, "story_key", "")
@@ -363,8 +377,11 @@ def balanced_select(
             "selected_categories": [],
             "available_wards": [],
             "selected_wards": [],
+            "available_areas": [],
+            "selected_areas": [],
             "uncovered_categories": [],
             "uncovered_wards": [],
+            "uncovered_areas": [],
             "selected_by_source": {},
         }
 
@@ -375,12 +392,16 @@ def balanced_select(
     source_counts: Counter[str] = Counter()
     category_counts: Counter[str] = Counter()
     ward_counts: Counter[str] = Counter()
+    area_counts: Counter[str] = Counter()
 
     available_categories = {
         category_key(item) for item in filtered
     }
     available_wards = {
         ward for item in filtered if (ward := ward_for_item(item))
+    }
+    available_areas = {
+        area_key(item) for item in filtered if area_key(item) in PUBLISH_AREAS
     }
 
     def can_add(
@@ -418,6 +439,7 @@ def balanced_select(
         source = source_key(item)
         category = category_key(item)
         ward = ward_for_item(item)
+        area = area_key(item)
 
         selected.append(item)
         selected_keys.add(key)
@@ -425,6 +447,8 @@ def balanced_select(
         category_counts[category] += 1
         if ward:
             ward_counts[ward] += 1
+        if area:
+            area_counts[area] += 1
         return True
 
     # One item for every represented category.
@@ -441,6 +465,20 @@ def balanced_select(
             continue
         for item in filtered:
             if ward_for_item(item) == ward and add(item):
+                break
+
+    # One item for every represented named area (township/locality), not
+    # just the ones that map to a single official ward. Heywood, Middleton,
+    # Littleborough and Norden each span two or more wards, so
+    # ward_for_item() almost never resolves for them — this reservation
+    # instead uses the area field the pipeline already populates reliably
+    # for every candidate, guaranteeing baseline coverage for every named
+    # town with available material, independent of ward boundaries.
+    for area in PUBLISH_AREAS:
+        if area not in available_areas or area_counts[area] or len(selected) >= limit:
+            continue
+        for item in filtered:
+            if area_key(item) == area and add(item):
                 break
 
     # If source caps blocked a represented category or ward, relax the source
@@ -466,6 +504,19 @@ def balanced_select(
         ):
             for item in filtered:
                 if ward_for_item(item) == ward and add(
+                    item,
+                    relax_source=True,
+                ):
+                    break
+
+    for area in PUBLISH_AREAS:
+        if (
+            area in available_areas
+            and area_counts[area] == 0
+            and len(selected) < limit
+        ):
+            for item in filtered:
+                if area_key(item) == area and add(
                     item,
                     relax_source=True,
                 ):
@@ -523,14 +574,22 @@ def balanced_select(
         "selected_wards": sorted(
             ward for ward, count in ward_counts.items() if count
         ),
+        "available_areas": sorted(available_areas),
+        "selected_areas": sorted(
+            area for area, count in area_counts.items() if count
+        ),
         "uncovered_categories": sorted(
             available_categories - set(category_counts)
         ),
         "uncovered_wards": sorted(
             available_wards - set(ward_counts)
         ),
+        "uncovered_areas": sorted(
+            available_areas - {area for area, count in area_counts.items() if count}
+        ),
         "selected_by_category": dict(sorted(category_counts.items())),
         "selected_by_ward": dict(sorted(ward_counts.items())),
+        "selected_by_area": dict(sorted(area_counts.items())),
         "selected_by_source": dict(sorted(source_counts.items())),
     }
     return selected, diagnostics
