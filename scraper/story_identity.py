@@ -1172,8 +1172,10 @@ def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[s
 
     if dates:
         merged["first_published_at"] = _iso_or_empty(min(dates))
-    if latest_dates:
-        merged["published_at"] = _iso_or_empty(max(latest_dates))
+    # published_at is the permanent original publication timestamp.
+    # Updates belong in last_updated_at and must never make an old story new.
+    if dates:
+        merged["published_at"] = _iso_or_empty(min(dates))
     if update_dates:
         merged["last_updated_at"] = _iso_or_empty(max(update_dates))
 
@@ -1188,15 +1190,14 @@ def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[s
         int(right.get("update_count") or 1),
     )
 
-    if (
-        str(left.get("category") or "").lower() == "crime"
-        or str(right.get("category") or "").lower() == "crime"
-        or left.get("police_matter")
-        or right.get("police_matter")
-    ):
-        merged["category"] = "crime"
-        merged["types"] = ["crime"]
-        merged["police_matter"] = True
+    # Category follows the preferred editorial record. A stale police_matter
+    # flag or one incorrectly categorised duplicate must not turn a community,
+    # health, sport or transport story into crime.
+    preferred_category = str(preferred.get("category") or "news").lower()
+    merged["category"] = preferred_category
+    merged["types"] = [preferred_category]
+    merged["police_matter"] = preferred_category == "crime"
+    if preferred_category == "crime":
         merged["requires_approval"] = False
 
     # Recompute after category and preferred content have been settled.
