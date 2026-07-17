@@ -1620,7 +1620,14 @@
     function imageMarkup(story, className = "") {
       const fallback = story.imageFallback || stockImage(story.category || "news");
       const source = story.image || fallback;
-      return `<div class="story-image-wrap ${className}"><img src="${source}" alt="" loading="lazy" referrerpolicy="origin-when-cross-origin" onerror="this.onerror=null;this.src='${fallback}'"><span class="image-label">${story.imageLabel || "Rochdale Daily"}</span></div>`;
+      // Our own composed cards already carry the Rochdale Daily wordmark and any
+      // photo credit baked in, so the overlay badge is redundant on them. Show
+      // the badge only for real source photographs, where it names the publisher.
+      const isOwnCard = /area-category-card/i.test(source);
+      const label = isOwnCard
+        ? ""
+        : `<span class="image-label">${story.imageLabel || "Rochdale Daily"}</span>`;
+      return `<div class="story-image-wrap ${className}"><img src="${source}" alt="" loading="lazy" referrerpolicy="origin-when-cross-origin" onerror="this.onerror=null;this.src='${fallback}'">${label}</div>`;
     }
 
     function storyButton(story, content, className = "story-link") {
