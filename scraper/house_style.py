@@ -147,7 +147,7 @@ def first_reference_issues(draft: dict[str, Any]) -> list[str]:
     return issues
 
 
-def style_issues(draft: dict[str, Any]) -> list[str]:
+def style_issues(draft: dict[str, Any], source_kind: str = "") -> list[str]:
     title = _plain(draft.get("title"))
     excerpt = _plain(draft.get("excerpt"))
     paragraphs = [_plain(item) for item in draft.get("paragraphs") or [] if _plain(item)]
@@ -161,7 +161,15 @@ def style_issues(draft: dict[str, Any]) -> list[str]:
         )
     if GENERIC_HEADLINE_RE.search(title):
         issues.append("Replace the labelled headline with a specific news headline.")
-    if ":" in title and len(title.split(":", 1)[0].split()) <= 3:
+    if (
+        source_kind != "live"
+        and ":" in title
+        and len(title.split(":", 1)[0].split()) <= 3
+    ):
+        # Live-page content (weather forecasts, travel alerts) conventionally
+        # uses exactly this "Location/topic: detail" headline shape — "Rochdale
+        # weather: sunny spells and light winds" is correct style for a
+        # forecast, not a lazy generic label, so the check does not apply here.
         issues.append("Avoid a generic label followed by a colon in the headline.")
     if sum(1 for paragraph in paragraphs if paragraph.lower().startswith("this ")) >= 3:
         issues.append("Replace repetitive 'This...' openings with specific subjects.")
