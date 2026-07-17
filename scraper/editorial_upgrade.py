@@ -8,6 +8,18 @@ from typing import Any
 
 from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
 
+
+
+# High-confidence editorial overrides. These run before keyword scoring so a
+# stray word such as "police", "transport" or "workforce" cannot misfile the
+# whole story.
+CATEGORY_OVERRIDES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("community", re.compile(r"\b(?:rochdale|kirkholt)\s+tiktok\s+pool\b|\btiktok\s+pool\b", re.I)),
+    ("community", re.compile(r"\brochdale boroughwide housing\b|\bRBH\b.{0,80}\bcommunity\b", re.I)),
+    ("community", re.compile(r"\bimpact gym\b.{0,160}\b(?:access|transport|initiative)\b", re.I | re.S)),
+    ("community", re.compile(r"\bbespoke clinical services\b.{0,160}\bworkforce strategy\b", re.I | re.S)),
+)
+
 CATEGORY_ORDER = (
     ("crime", re.compile(
         # Tokens must carry criminal CONTEXT. Bare "charge" classified a
@@ -306,6 +318,9 @@ def deterministic_category(value: Any, fallback: str = "news") -> str:
     # TikTok pool video, a housing association's community update and a
     # mosque-conversion story all as crime.
     text = strip_category_furniture(plain_text(value))
+    for override_category, override_pattern in CATEGORY_OVERRIDES:
+        if override_pattern.search(text):
+            return override_category
     if re.search(r"\b(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)\b", text, re.I):
         return "community"
     # Score every category by DISTINCT matched terms and pick the strongest,
