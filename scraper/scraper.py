@@ -1,3 +1,4 @@
+"""
 Rochdale Daily autonomous local-news pipeline.
 
 The pipeline:
