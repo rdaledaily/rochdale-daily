@@ -57,6 +57,78 @@ IMAGE_EXTENSIONS = {
     "image/webp": ".webp",
 }
 
+# Hosts that must never be treated as an article's picture source. These pages
+# expose their own branding (the Google News newspaper logo, social sprites,
+# etc.) via og:image, which previously got cached and credited as if it were the
+# story's photograph.
+DISALLOWED_SOURCE_HOSTS = {
+    "news.google.com", "google.com", "google.co.uk",
+    "facebook.com", "m.facebook.com", "x.com", "twitter.com",
+    "tiktok.com", "instagram.com", "reddit.com", "old.reddit.com",
+    "youtube.com", "youtu.be",
+}
+DISALLOWED_SOURCE_SUFFIXES = (
+    "facebook.com", "instagram.com", "tiktok.com", "reddit.com",
+    "google.com", "google.co.uk",
+)
+# Image *hosting* domains that only ever serve Google/consent chrome, never a
+# publisher's editorial image.
+DISALLOWED_IMAGE_HOST_SUFFIXES = (
+    "google.com", "google.co.uk", "googleusercontent.com", "gstatic.com",
+)
+# Content hashes (sha256[:12]) of known non-editorial images that leaked in
+# before this guard existed — currently the Google News logo. Any locally cached
+# file matching one of these is treated as missing so it gets re-processed.
+KNOWN_BAD_IMAGE_DIGESTS = {
+    "872cdca296d0",  # Google News newspaper logo
+}
+
+
+def host_of(url: str) -> str:
+    return urlparse(clean(url)).netloc.lower().split(":", 1)[0].removeprefix("www.")
+
+
+def is_disallowed_source(url: str) -> bool:
+    host = host_of(url)
+    if not host:
+        return False
+    if host in DISALLOWED_SOURCE_HOSTS:
+        return True
+    return any(host.endswith("." + suffix) for suffix in DISALLOWED_SOURCE_SUFFIXES)
+
+
+def is_disallowed_image(url: str) -> bool:
+    host = host_of(url)
+    if not host:
+        return False
+    return any(
+        host == suffix or host.endswith("." + suffix)
+        for suffix in DISALLOWED_IMAGE_HOST_SUFFIXES
+    )
+
+
+def credit_is_disallowed(article: dict[str, Any]) -> bool:
+    """True if the cached image was attributed to Google/social chrome."""
+    credit = clean(article.get("image_credit")).lower()
+    if credit in DISALLOWED_SOURCE_HOSTS:
+        return True
+    if any(credit == suffix or credit.endswith("." + suffix)
+           for suffix in DISALLOWED_SOURCE_SUFFIXES):
+        return True
+    return is_disallowed_source(article.get("image_credit_url"))
+
+
+def local_digest(repo_root: Path, image_url: str) -> str:
+    if is_http_url(image_url):
+        return ""
+    path = repo_root / clean(image_url).lstrip("/")
+    if not path.is_file():
+        return ""
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest()[:12]
+    except OSError:
+        return ""
+
 
 @dataclass(frozen=True)
 class Candidate:
@@ -92,6 +164,14 @@ def is_placeholder_path(value: Any) -> bool:
 def has_real_image(article: dict[str, Any], repo_root: Path) -> bool:
     image_url = clean(article.get("image_url"))
     if not image_url or is_placeholder_path(image_url):
+        return False
+
+    # Self-heal legacy records: a picture credited to Google News / a social
+    # network, or whose bytes match a known non-editorial image (the Google
+    # logo), is not a real source image and must be re-processed.
+    if credit_is_disallowed(article):
+        return False
+    if local_digest(repo_root, image_url) in KNOWN_BAD_IMAGE_DIGESTS:
         return False
 
     if is_http_url(image_url):
@@ -333,6 +413,8 @@ def deduplicate_candidates(candidates: list[Candidate]) -> list[Candidate]:
             continue
         if any(hint in lower for hint in BAD_URL_HINTS):
             continue
+        if is_disallowed_image(url):
+            continue
         seen.add(url)
         result.append(candidate)
     return result
@@ -383,6 +465,10 @@ def fetch_source_image(
     candidates = article_candidates(article)
 
     for page_url in source_urls(article):
+        if is_disallowed_source(page_url):
+            # e.g. an unresolved news.google.com wrapper — its og:image is the
+            # Google logo, not the story photo. Never scrape it.
+            continue
         try:
             page, content_type, final_page_url = request_bytes(
                 page_url,
@@ -402,6 +488,8 @@ def fetch_source_image(
         if fetched is None:
             continue
         payload, extension, final_url = fetched
+        if is_disallowed_image(final_url):
+            continue
         return (
             payload,
             extension,
