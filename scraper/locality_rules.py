@@ -5,12 +5,17 @@ before the main scraper imports Feedparser, Playwright, OpenAI or BeautifulSoup.
 
 Scoring model
 -------------
-Positive evidence (unchanged from the previous version):
+Positive evidence:
   +5  trusted first-party Rochdale source
   +5  strong direct term ("rochdale", "rochdale town centre")
   +3  specific multi-word local place ("hollingworth lake", "smithy bridge")
   +2  ambiguous single-word local place WITH geographical context
-      ("in Norden", "Wardle village")
+      ("in Norden", "Wardle village") — for a known Greater Manchester
+      publisher, or when stronger evidence already anchors the article
+  +1  the same contextual match from an UNKNOWN publisher: a lone
+      ambiguous borough name never establishes locality for the open
+      long tail ("in Middleton" is what Middleton, Nova Scotia says too),
+      but two independent borough names together still can.
 An article is local when the score reaches 2.
 
 Negative evidence (new):
@@ -44,6 +49,12 @@ SOURCE_DENY_DOMAINS = {
     # SEO advertorial, not journalism ("Middleton residents can access
     # local and emergency plumbing services").
     "manchesterplumbers.com",
+    # Property classifieds: a "House Rental Available at 1308 Shirley
+    # Street, Middleton" listing (Middleton, US) published as local news.
+    "apartments.com",
+    # Scraper-spam subdomain that laundered a US "Montgomery County /
+    # Middleton arson" story into Google News results.
+    "presonus.com",
 }
 SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper", "rochdale online"}
 
@@ -77,6 +88,73 @@ TRUSTED_LOCAL_DOMAINS = {
     "hopwood.ac.uk",
     "rochdalesfc.ac.uk",
 }
+
+# ---------------------------------------------------------------------------
+# Known Greater Manchester publishers. Not first-party Rochdale sources, but
+# outlets whose "Middleton", "Heywood" or "Norden" reliably means the
+# Greater Manchester place. For everyone else — the open long tail arriving
+# through Google News with publisher identities like "x.com", "Source" or a
+# spam subdomain — an ambiguous single-word borough name alone must never
+# establish locality, however geographically it is phrased: "in Middleton"
+# is exactly what a Middleton, Nova Scotia story says too.
+# ---------------------------------------------------------------------------
+KNOWN_GM_PUBLISHER_DOMAINS = {
+    "manchestereveningnews.co.uk",
+    "bbc.co.uk",
+    "bbc.com",
+    "gmp.police.uk",
+    "manchesterfire.gov.uk",
+    "aboutmanchester.co.uk",
+    "tfgm.com",
+    "greatermanchester-ca.gov.uk",
+    "northernrailway.co.uk",
+    "nationalhighways.co.uk",
+    "unitedutilities.com",
+    "northerncarealliance.nhs.uk",
+    "penninecare.nhs.uk",
+    "rbh.org.uk",
+    "rochdaleriverside.com",
+    "environment.data.gov.uk",
+    "itv.com",
+}
+KNOWN_GM_PUBLISHER_NAME_PREFIXES = (
+    "BBC Manchester",
+    "Manchester Evening News",
+    "Greater Manchester Police",
+    "Greater Manchester Fire",
+    "About Manchester",
+    "TfGM",
+    "Bee Network",
+    "GMCA",
+    "Northern",
+    "National Highways",
+    "United Utilities",
+    "Environment Agency",
+    "Northern Care Alliance",
+    "Pennine Care",
+    "Rochdale Boroughwide Housing",
+    # Google News truncates "Your Trust Rochdale" to "Your Trust".
+    "Your Trust",
+)
+
+
+def source_is_known_gm_publisher(source_name: str = "", source_url: str = "") -> bool:
+    domain = domain_of(source_url)
+    if domain in KNOWN_GM_PUBLISHER_DOMAINS:
+        return True
+    # Every school in the borough publishes under *.rochdale.sch.uk
+    # (a live Norden environmental story from stedwardsce.rochdale.sch.uk
+    # was rejected as an unknown publisher).
+    if domain.endswith("rochdale.sch.uk"):
+        return True
+    name = normalise_text(source_name)
+    # Google News often supplies the publisher's bare domain as the entry's
+    # source NAME while the URL is a news.google.com redirect, so the name
+    # must be checked as a domain too.
+    name_as_domain = name.lower().strip().lstrip("www.")
+    if name_as_domain in KNOWN_GM_PUBLISHER_DOMAINS or name_as_domain.endswith("rochdale.sch.uk"):
+        return True
+    return name.startswith(KNOWN_GM_PUBLISHER_NAME_PREFIXES)
 
 # Langley is intentionally absent. It is not accepted as a standalone area.
 AREA_KEYWORDS = {
@@ -121,6 +199,13 @@ LOCAL_TERMS = {
     "cloverhall",
     "mandale park",
     "birch",
+    # Distinctive multiword borough anchors. "Heywood Old Road in
+    # Middleton" is the real A6045 through Middleton, and Meanwood
+    # Community Nursery and Primary School is the borough's own school in
+    # the Meanwood estate; both were rejected as unanchored ambiguous
+    # names when they arrived from unknown publishers.
+    "heywood old road",
+    "meanwood community nursery",
 }
 
 # Only Rochdale is strong enough to count without context.
@@ -136,6 +221,17 @@ DIRECT_MULTIWORD_TERMS = {
 CONTEXT_REQUIRED_TERMS = {
     term for term in LOCAL_TERMS if " " not in term
 } - {"rochdale"}
+
+# Borough names with well-known namesake places elsewhere. With geographical
+# context these still read as places — but "in Middleton" is also what a
+# Middleton, Nova Scotia story says, so for UNKNOWN publishers these terms
+# carry half weight and cannot establish locality alone (see
+# locality_evidence). Distinctive names such as Heywood, Kirkholt, Falinge
+# and Spotland are deliberately absent and keep full weight.
+HEAVY_NAMESAKE_TERMS = {
+    "middleton", "norden", "bamford", "castleton", "healey", "wardle",
+    "hopwood", "meanwood", "birch", "summit", "syke", "sudden",
+}
 
 # ---------------------------------------------------------------------------
 # Negative evidence: known namesakes of each ambiguous local term.
@@ -158,6 +254,17 @@ TERM_IMPOSTOR_CONTEXTS: dict[str, set[str]] = {
     "middleton": {
         "teesdale", "county durham", "leeds", "north yorkshire",
         "middleton-on-sea", "middleton stoney", "middleton st george",
+        # Middleton, Nova Scotia (Annapolis Valley, on Highway 101 near
+        # Kingston NS): a fatal-crash story about its residents published
+        # as borough news. Middleton also exists in Idaho and Wisconsin,
+        # and a US "Montgomery County / Middleton" arson case reached the
+        # live site the same week.
+        "nova scotia", "annapolis", "kingston", "ontario",
+        "montgomery county", "idaho", "wisconsin",
+        # Middleton, Idaho sits in the Treasure Valley; a robbery story
+        # naming Boise and Nampa scored contextual Middleton on the live
+        # site without ever using the word "Idaho".
+        "boise", "nampa", "kuna", "meridian", "caldwell", "treasure valley",
     },
     "castleton": {
         "derbyshire", "hope valley", "peak district", "blue john",
@@ -238,6 +345,13 @@ RIVAL_GEOGRAPHY_TERMS = {
     "new york", "north carolina", "south carolina", "north dakota",
     "south dakota", "rhode island", "west virginia", "ncaa",
     "united states", "usa", "canada", "australia", "new zealand",
+    # Canadian provinces (a Middleton, Nova Scotia fatal-crash story
+    # published as borough news), plus North American geography markers
+    # that never describe the borough: numbered highways and US-style
+    # counties. Multi-word terms count on any mention.
+    "nova scotia", "annapolis valley", "new brunswick", "newfoundland",
+    "british columbia", "saskatchewan", "manitoba", "alberta", "ontario",
+    "quebec", "highway 101", "montgomery county",
 }
 
 # Postcode areas that cover the borough of Rochdale and its immediate edges:
@@ -512,13 +626,28 @@ def locality_evidence(
             anchored = True
             evidence.append(f"specific-place:{term}")
 
+    # Structural rule: a HEAVY-NAMESAKE borough name alone never
+    # establishes locality for an unknown publisher. "In Middleton" is
+    # exactly what a Middleton, Nova Scotia crash report says; "from
+    # Middleton" is what a Wisconsin obituary says. For known Greater
+    # Manchester publishers, or when stronger evidence already anchors the
+    # article, these terms keep their full weight; for the open long tail
+    # each scores 1, so a lone heavy-namesake name cannot reach the
+    # threshold, while two independent borough names together still can.
+    # Distinctive names (Heywood, Kirkholt, Falinge, Spotland...) keep
+    # full weight from any publisher: their namesakes are rare, and the
+    # per-term impostor tables cover the known ones.
+    known_gm = source_is_known_gm_publisher(source_name, source_url)
     for term in sorted(CONTEXT_REQUIRED_TERMS, key=len, reverse=True):
         if not has_geographical_context(plain, term):
             continue
         if term_is_impostor(scan_text, term):
             evidence.append(f"impostor:{term}")
             continue
-        score += 2
+        if term in HEAVY_NAMESAKE_TERMS and not (anchored or known_gm):
+            score += 1
+        else:
+            score += 2
         evidence.append(f"contextual-place:{term}")
 
     source_text = " ".join(
