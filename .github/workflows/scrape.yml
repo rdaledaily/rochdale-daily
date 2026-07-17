@@ -163,11 +163,13 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
 
-      - name: Resolve Google News to original publishers
-        timeout-minutes: 15
-        run: |
-          python scraper/resolve_google_news_sources.py \
-            --articles articles.json
+      # Google News items are now resolved to their original publisher inside
+      # scraper.py at collection time, using the publisher identity from the RSS
+      # <source> element (see resolve_google_candidate_to_publisher). The old
+      # standalone step fetched every news.google.com wrapper over the network,
+      # resolved 0 of them, and timed out after 15 minutes, so it has been
+      # removed. scraper/resolve_google_news_sources.py is retained (and still
+      # compile/test-checked above) but no longer runs in the pipeline.
 
       - name: Ensure every published story has an image
         timeout-minutes: 25
