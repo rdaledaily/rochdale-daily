@@ -63,6 +63,7 @@ from dateparser.search import search_dates
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 from search_queries import build_search_query_specs
+from google_news_resolver import is_google_wrapper, resolve_wrappers
 from locations import LOCATION_BY_SLUG
 from food_hygiene import fetch_recent_low_ratings, rating_article_fields
 ROOT = Path(__file__).resolve().parents[1]
@@ -2469,6 +2470,125 @@ def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[
     candidate_urls = {canonicalise_url(candidate.source_url), *{canonicalise_url(item.get('url', '')) for item in candidate.related_sources if item.get('url')}}
     return bool(candidate_urls - known_urls)
 
+# Display names for publishers whose domain stem doesn't title-case nicely.
+PUBLISHER_DISPLAY_NAMES = {
+    'bbc.co.uk': 'BBC News',
+    'bbc.com': 'BBC News',
+    'manchestereveningnews.co.uk': 'Manchester Evening News',
+    'theoldhamtimes.co.uk': 'The Oldham Times',
+    'burytimes.co.uk': 'Bury Times',
+    'rochdaleafc.co.uk': 'Rochdale AFC',
+    'hornetsrugbyleague.co.uk': 'Rochdale Hornets',
+    'rochdale.gov.uk': 'Rochdale Borough Council',
+    'gmp.police.uk': 'Greater Manchester Police',
+    'manchesterfire.gov.uk': 'Greater Manchester Fire and Rescue Service',
+    'rochvalleyradio.com': 'Roch Valley Radio',
+    'independent.co.uk': 'The Independent',
+    'theguardian.com': 'The Guardian',
+    'telegraph.co.uk': 'The Telegraph',
+    'itv.com': 'ITV News',
+    'sky.com': 'Sky News',
+    'granadareports.itv.com': 'ITV Granada Reports',
+    'tfgm.com': 'Transport for Greater Manchester',
+    'northernrailway.co.uk': 'Northern',
+    'nationalhighways.co.uk': 'National Highways',
+}
+
+
+def publisher_display_name(url: str, fallback: str = '') -> str:
+    """Human-readable publisher name for attribution, derived from the URL.
+
+    Google News often reports a bare host (``facebook.com``) as the source
+    name. Once a wrapper has been resolved to the publisher's own article that
+    name is wrong, so the resolved domain becomes the source of truth.
+    """
+    domain = domain_of(url)
+    if not domain:
+        return normalise_ws(fallback)
+    if domain in PUBLISHER_DISPLAY_NAMES:
+        return PUBLISHER_DISPLAY_NAMES[domain]
+    stem = domain.rsplit('.co.uk', 1)[0].rsplit('.com', 1)[0].rsplit('.org', 1)[0]
+    stem = stem.split('.')[-1].replace('-', ' ').strip()
+    return stem.title() if stem else normalise_ws(fallback)
+
+
+def _name_is_bare_domain(name: str) -> bool:
+    text = normalise_ws(name)
+    return bool(text) and ' ' not in text and '.' in text
+
+
+def apply_google_news_resolution(candidates: list[Candidate]) -> dict[str, int]:
+    """Turn Google News wrapper candidates into real publisher records.
+
+    This is the fix for the pipeline's biggest loss: an unresolved wrapper
+    carries only a headline, so the editorial gate correctly refuses to write
+    from it and the story is discarded. Resolving the link to the publisher's
+    own article means page_metadata() can then fetch the real body text, and
+    the story becomes publishable — with correct attribution and a real link
+    instead of a news.google.com redirect.
+    """
+    stats = {"wrappers": 0, "resolved": 0, "text_recovered": 0, "reattributed": 0, "images_found": 0}
+    wrappers = [c for c in candidates if is_google_wrapper(c.source_url)]
+    stats["wrappers"] = len(wrappers)
+    if not wrappers:
+        return stats
+
+    mapping = resolve_wrappers((c.source_url for c in wrappers), logger=log)
+    if not mapping:
+        return stats
+
+    for candidate in wrappers:
+        real_url = mapping.get(candidate.source_url)
+        if not real_url or is_disallowed_image_source(real_url):
+            continue
+        if source_is_denied(candidate.source_name, real_url):
+            continue
+        candidate.google_news_url = candidate.source_url
+        candidate.source_url = canonicalise_url(real_url)
+        stats["resolved"] += 1
+        # The RSS <source> name is frequently a bare host (e.g. "facebook.com")
+        # or names an aggregator rather than the publisher that owns the
+        # article and its photograph. Now that the real article URL is known,
+        # attribute to that publisher, so the image credit, the byline and the
+        # source link all point at the same place.
+        resolved_name = publisher_display_name(candidate.source_url, candidate.source_name)
+        if resolved_name and (
+            _name_is_bare_domain(candidate.source_name)
+            or not candidate.source_name
+            or domain_of(candidate.google_news_url) == domain_of(candidate.source_name)
+        ):
+            candidate.source_name = resolved_name
+            stats["reattributed"] += 1
+        # Now that we have the publisher's own URL, fetch the article itself.
+        # Without this the candidate still has only a headline.
+        if len(candidate.source_body_excerpt) >= 700:
+            continue
+        try:
+            meta = page_metadata(candidate.source_url)
+        except Exception as exc:
+            log.debug('Publisher article fetch failed for %s: %s', candidate.source_url, exc)
+            continue
+        body = normalise_ws(meta.get('body_excerpt'))
+        if len(body) > len(candidate.source_body_excerpt):
+            candidate.source_body_excerpt = body
+            stats["text_recovered"] += 1
+        if len(normalise_ws(meta.get('description'))) > len(candidate.source_summary):
+            candidate.source_summary = normalise_ws(meta['description'])
+        if meta.get('image') and not candidate.image_candidate_url:
+            candidate.image_candidate_url = meta['image']
+            stats["images_found"] += 1
+        publisher = normalise_ws(meta.get('title'))
+        if publisher and len(publisher) > len(candidate.source_title):
+            candidate.source_title = publisher
+    log.info(
+        'Google News wrappers: %d seen, %d resolved, %d gained article text, '
+        '%d gained a publisher image, %d re-attributed to the real publisher.',
+        stats["wrappers"], stats["resolved"], stats["text_recovered"],
+        stats["images_found"], stats["reattributed"],
+    )
+    return stats
+
+
 def main() -> int:
     log.info('Starting Rochdale Daily 15-minute pipeline')
     existing = recent_existing_articles()
@@ -2481,6 +2601,7 @@ def main() -> int:
     raw_candidates_all = [candidate for batch in batches.values() for candidate in batch]
     rejected_job_candidates = [candidate for candidate in raw_candidates_all if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
     raw_candidates = [candidate for candidate in raw_candidates_all if not (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
+    google_resolution_stats = apply_google_news_resolution(raw_candidates)
     candidates = deduplicate_and_cross_reference(raw_candidates)
     correlate_social_context(candidates, x_social_records + facebook_social_records)
     log.info('Candidate volume: %d raw items -> %d story clusters', len(raw_candidates), len(candidates))
@@ -2595,7 +2716,7 @@ def main() -> int:
     selected_by_category: dict[str, int] = {}
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
-    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaletimes.co.uk', 'rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
+    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaletimes.co.uk', 'rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
 if __name__ == '__main__':
