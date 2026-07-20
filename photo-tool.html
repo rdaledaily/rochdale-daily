@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rochdale Daily — Photo preparer</title>
+<style>
+  :root { --ink:#0e121a; --gold:#c8a44a; --line:#2a2f3a; --muted:#8b93a3; }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; padding:28px; background:#11151d; color:#e8ecf2;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 { font-size:20px; margin:0 0 4px; letter-spacing:.3px; }
+  h1 span { color: var(--gold); }
+  .sub { color: var(--muted); font-size:13px; margin:0 0 22px; line-height:1.5; }
+  #drop {
+    border:2px dashed #3a4152; border-radius:10px; padding:44px 20px; text-align:center;
+    background:#151a24; cursor:pointer; transition:.15s; margin-bottom:20px;
+  }
+  #drop.over { border-color: var(--gold); background:#1b2130; }
+  #drop p { margin:0; color:var(--muted); font-size:14px; }
+  #drop strong { color:#e8ecf2; display:block; font-size:15px; margin-bottom:6px; }
+  .row { display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px; }
+  .field { flex:1 1 260px; }
+  label { display:block; font-size:12px; color:var(--muted); margin-bottom:5px; }
+  input[type=text] {
+    width:100%; padding:10px 11px; border-radius:7px; border:1px solid var(--line);
+    background:#0c1017; color:#e8ecf2; font-size:14px; font-family:inherit;
+  }
+  input[type=text]:focus { outline:none; border-color:var(--gold); }
+  .filename {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--gold); font-size:13px; word-break:break-all;
+  }
+  button {
+    padding:10px 16px; border-radius:7px; border:0; cursor:pointer;
+    background:var(--gold); color:#12151c; font-weight:700; font-size:14px; font-family:inherit;
+  }
+  button:disabled { opacity:.35; cursor:not-allowed; }
+  button.ghost { background:transparent; color:var(--muted); border:1px solid var(--line); }
+  canvas { display:block; width:100%; border-radius:8px; border:1px solid var(--line); }
+  .panel { background:#151a24; border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:18px; }
+  .panel h2 { font-size:13px; margin:0 0 12px; color:var(--muted); font-weight:600; letter-spacing:.4px; text-transform:uppercase; }
+  .hint { font-size:12px; color:var(--muted); margin-top:8px; line-height:1.5; }
+  .hint code { background:#0c1017; padding:1px 5px; border-radius:4px; color:#c9d2e0; }
+  .examples { font-size:12px; color:var(--muted); line-height:1.9; }
+  .examples code { background:#0c1017; padding:2px 6px; border-radius:4px; color:var(--gold); }
+  .steps { font-size:13px; color:#c9d2e0; line-height:1.7; padding-left:20px; margin:0; }
+  .credit-out { font-family: ui-monospace, Menlo, monospace; font-size:12px; background:#0c1017;
+    padding:10px; border-radius:6px; color:#c9d2e0; white-space:pre-wrap; word-break:break-all; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Rochdale Daily — <span>Photo preparer</span></h1>
+  <p class="sub">
+    Drop a photo in, name the place, download a correctly-named and cropped file,
+    then upload it to <code style="color:#c9d2e0">assets/img/places/</code> on GitHub.
+    Everything happens in your browser — nothing is uploaded anywhere.
+  </p>
+
+  <div id="drop">
+    <strong>Drag a photo here</strong>
+    <p>or click to choose one &middot; JPG, PNG or WebP</p>
+    <input type="file" id="file" accept="image/*" hidden>
+  </div>
+
+  <div class="panel" id="editor" style="display:none">
+    <h2>1 &middot; Name the place</h2>
+    <div class="row">
+      <div class="field">
+        <label for="place">Place shown in the photo</label>
+        <input type="text" id="place" placeholder="Manchester Road, Rochdale" autocomplete="off">
+      </div>
+    </div>
+    <div class="hint">
+      Saved as: <span class="filename" id="fname">—</span><br>
+      This photo is used on any story mentioning that place.
+    </div>
+
+    <h2 style="margin-top:22px">2 &middot; Check the crop</h2>
+    <canvas id="preview" width="1200" height="675"></canvas>
+    <div class="hint">Cropped to 1200&times;675 (16:9), the exact size the cards use.</div>
+
+    <h2 style="margin-top:22px">3 &middot; Credit <span style="text-transform:none;font-weight:400">(leave blank if it's your own photo)</span></h2>
+    <div class="row">
+      <div class="field">
+        <label for="credit">Photographer / source</label>
+        <input type="text" id="credit" placeholder="e.g. Jane Smith / Geograph (CC BY-SA 2.0)" autocomplete="off">
+      </div>
+    </div>
+    <div id="creditBox" style="display:none">
+      <div class="hint">Add this line to <code>assets/img/places/credits.json</code>:</div>
+      <div class="credit-out" id="creditJson"></div>
+    </div>
+
+    <div class="row" style="margin-top:20px">
+      <button id="save" disabled>Download prepared photo</button>
+      <button class="ghost" id="reset">Start again</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Naming examples</h2>
+    <div class="examples">
+      <code>manchester_road_rochdale.jpg</code> — used on stories mentioning Manchester Road<br>
+      <code>hollingworth_lake_littleborough.jpg</code> — stories about Hollingworth Lake<br>
+      <code>yorkshire_street_rochdale.jpg</code> — stories about Yorkshire Street<br>
+      <code>rochdale_town_hall.jpg</code> — stories mentioning the Town Hall<br>
+      <code>falinge_park.jpg</code> — stories about Falinge Park
+    </div>
+    <div class="hint">
+      Use at least two words. The more specific the name, the more precisely it matches.
+      If no place photo matches a story, it falls back to the area photo, then to a generated card.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Then, on GitHub</h2>
+    <ol class="steps">
+      <li>Browse to <code>assets/img/places/</code> (create the folder if it isn't there)</li>
+      <li><strong>Add file &rarr; Upload files</strong>, drag in the downloaded photo</li>
+      <li>Commit</li>
+      <li>If you entered a credit, paste the line into <code>assets/img/places/credits.json</code></li>
+    </ol>
+  </div>
+
+</div>
+
+<script>
+  const drop = document.getElementById('drop');
+  const fileInput = document.getElementById('file');
+  const editor = document.getElementById('editor');
+  const placeInput = document.getElementById('place');
+  const creditInput = document.getElementById('credit');
+  const fnameEl = document.getElementById('fname');
+  const canvas = document.getElementById('preview');
+  const ctx = canvas.getContext('2d');
+  const saveBtn = document.getElementById('save');
+  const resetBtn = document.getElementById('reset');
+  const creditBox = document.getElementById('creditBox');
+  const creditJson = document.getElementById('creditJson');
+
+  let currentImage = null;
+
+  function slugify(value) {
+    return String(value || '')
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '')
+      .slice(0, 70);
+  }
+
+  function refreshName() {
+    const slug = slugify(placeInput.value);
+    fnameEl.textContent = slug ? slug + '.jpg' : '—';
+    const words = slug.split('_').filter(Boolean);
+    saveBtn.disabled = !currentImage || words.length < 2;
+    const credit = creditInput.value.trim();
+    if (slug && credit) {
+      creditBox.style.display = 'block';
+      creditJson.textContent = '"' + slug + '": ' + JSON.stringify(credit);
+    } else {
+      creditBox.style.display = 'none';
+    }
+  }
+
+  // Cover-fit the image into 1200x675, matching the card composer.
+  function drawPreview(img) {
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = '#0e121a';
+    ctx.fillRect(0, 0, W, H);
+    const scale = Math.max(W / img.width, H / img.height);
+    const w = img.width * scale, h = img.height * scale;
+    ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+    // Show roughly where the headline sits, so the crop can be judged.
+    const grad = ctx.createLinearGradient(0, H * 0.35, 0, H);
+    grad.addColorStop(0, 'rgba(14,18,26,0)');
+    grad.addColorStop(1, 'rgba(14,18,26,0.92)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, H * 0.35, W, H * 0.65);
+    ctx.fillStyle = 'rgba(255,255,255,.30)';
+    ctx.font = '600 34px -apple-system, Segoe UI, Roboto, sans-serif';
+    ctx.fillText('Headline sits here', 72, H - 150);
+    ctx.fillStyle = 'rgba(200,164,74,.45)';
+    ctx.font = '700 24px -apple-system, Segoe UI, Roboto, sans-serif';
+    ctx.fillText('AREA TAG', 72, H - 62);
+  }
+
+  function loadFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        currentImage = img;
+        editor.style.display = 'block';
+        drawPreview(img);
+        if (!placeInput.value) {
+          const base = file.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ');
+          placeInput.value = base;
+        }
+        refreshName();
+        placeInput.focus();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  drop.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => loadFile(e.target.files[0]));
+  ['dragenter', 'dragover'].forEach(evt =>
+    drop.addEventListener(evt, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(evt =>
+    drop.addEventListener(evt, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => loadFile(e.dataTransfer.files[0]));
+
+  placeInput.addEventListener('input', refreshName);
+  creditInput.addEventListener('input', refreshName);
+
+  saveBtn.addEventListener('click', () => {
+    if (!currentImage) return;
+    // Export the clean crop, without the preview overlay.
+    const out = document.createElement('canvas');
+    out.width = 1200; out.height = 675;
+    const octx = out.getContext('2d');
+    const scale = Math.max(1200 / currentImage.width, 675 / currentImage.height);
+    const w = currentImage.width * scale, h = currentImage.height * scale;
+    octx.drawImage(currentImage, (1200 - w) / 2, (675 - h) / 2, w, h);
+    out.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = slugify(placeInput.value) + '.jpg';
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/jpeg', 0.88);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    currentImage = null;
+    editor.style.display = 'none';
+    fileInput.value = '';
+    placeInput.value = '';
+    creditInput.value = '';
+    refreshName();
+  });
+</script>
+</body>
+</html>
