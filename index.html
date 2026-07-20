@@ -2739,6 +2739,41 @@ function shareIconMarkup(action, label) {
     loadWeather();
     window.setInterval(() => loadArticleFeed({ quiet: true }), ARTICLE_REFRESH_MS);
     window.setInterval(loadWeather, 15 * 60 * 1000);
+
+    /* ---- Community-submitted events ------------------------------------
+       Approved reader submissions from /api/events are merged into the same
+       `stories` array the What's On grid already reads. They have been checked
+       by the newsdesk, so they bypass the scraper's locality and freshness
+       filters: they are known-local by postcode and known-future by date.
+       Failures are silent by design - a missing endpoint must never blank the
+       events grid. */
+    async function loadCommunityEvents() {
+      try {
+        const response = await fetch(`/api/events?v=${Date.now()}`, {
+          cache: "no-store",
+          headers: { Accept: "application/json" }
+        });
+        if (!response.ok) return;
+
+        const payload = await response.json();
+        if (!payload || !Array.isArray(payload.events) || !payload.events.length) return;
+
+        const incoming = payload.events.map((event, index) => normaliseArticle(event, index));
+        const existing = new Set(stories.map(story => story.id));
+        const additions = incoming.filter(story => !existing.has(story.id));
+        if (!additions.length) return;
+
+        stories = orderArticles([...stories, ...additions]);
+        const activeFilter = document.querySelector("[data-event-filter].active");
+        renderEvents(activeFilter ? activeFilter.dataset.eventFilter : "week");
+      } catch (error) {
+        // Community events are additive. If the endpoint is unreachable the
+        // page carries on with the scraped feed exactly as before.
+      }
+    }
+
+    loadCommunityEvents();
+    window.setInterval(loadCommunityEvents, 5 * 60 * 1000);
   </script>
   <script defer src="/assets/ads.js"></script>
 </body>
