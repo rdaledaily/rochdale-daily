@@ -22,6 +22,7 @@ from __future__ import annotations
 import colorsys
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any, Callable
 
@@ -66,8 +67,64 @@ AREA_PARENT: dict[str, str] = {
 }
 
 AREAS_DIR = Path("assets/img/areas")
+PLACES_DIR = Path("assets/img/places")
 CREDITS_PATH = AREAS_DIR / "credits.json"
+PLACES_CREDITS_PATH = PLACES_DIR / "credits.json"
 _IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
+
+# Purely grammatical words. A filename must yield a phrase of at least two
+# tokens with at least one real word, so a single generic name can't match
+# everything — but genuine place names like "Manchester Road" or "Town Centre"
+# must still match.
+_WEAK_PLACE_TOKENS = {"the", "of", "and", "in", "at", "on", "a"}
+
+
+def _place_phrases(stem: str) -> list[str]:
+    """Candidate phrases from a filename, longest first.
+
+    ``manchester_road_rochdale`` -> ["manchester road rochdale",
+                                     "manchester road", "manchester"]
+    """
+    tokens = [t for t in re.split(r"[^a-z0-9]+", stem.lower()) if t]
+    return [" ".join(tokens[:n]) for n in range(len(tokens), 0, -1)]
+
+
+def _phrase_is_specific(phrase: str) -> bool:
+    tokens = phrase.split()
+    if len(tokens) < 2:
+        return False
+    return any(token not in _WEAK_PLACE_TOKENS for token in tokens)
+
+
+def find_place_photo(
+    text: str,
+    places_dir: Path = PLACES_DIR,
+) -> tuple[Path, str] | None:
+    """Best place photo whose filename names somewhere the story mentions.
+
+    Files are named after the place, e.g. ``manchester_road_rochdale.jpg`` or
+    ``hollingworth_lake_littleborough.jpg``. The longest phrase that actually
+    appears in the story wins, so a photo of the specific road beats a generic
+    area photo.
+    """
+    if not places_dir.is_dir():
+        return None
+    haystack = " " + re.sub(r"[^a-z0-9]+", " ", _clean(text).lower()) + " "
+    best: tuple[int, Path, str] | None = None
+    for path in sorted(places_dir.iterdir()):
+        if path.suffix.lower() not in _IMAGE_SUFFIXES:
+            continue
+        for phrase in _place_phrases(path.stem):
+            if not _phrase_is_specific(phrase):
+                continue
+            if f" {phrase} " in haystack:
+                score = len(phrase.split())
+                if best is None or score > best[0]:
+                    best = (score, path, phrase)
+                break
+    if best is None:
+        return None
+    return best[1], best[2]
 
 
 def _clean(value: Any) -> str:
@@ -139,6 +196,18 @@ def _photo_credit(area_slug: str, credits_path: Path) -> str:
             return value.strip()
         candidate = AREA_PARENT.get(candidate, "rochdale" if candidate != "rochdale" else "")
     return ""
+
+
+def _place_credit(stem: str, places_dir: Path) -> str:
+    """Credit for a place photo. Absent = the publisher's own photograph."""
+    try:
+        credits = json.loads((places_dir / "credits.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return ""
+    if not isinstance(credits, dict):
+        return ""
+    value = credits.get(stem)
+    return value.strip() if isinstance(value, str) else ""
 
 
 def _photo_background(path: Path) -> Image.Image:
@@ -253,6 +322,8 @@ def compose_story_card(
     out_path: Path,
     areas_dir: Path = AREAS_DIR,
     credits_path: Path = CREDITS_PATH,
+    story_text: str = "",
+    places_dir: Path = PLACES_DIR,
 ) -> tuple[str, str]:
     """Render the card to out_path. Returns (relative_path, image_credit)."""
     area_slug = _area_slug(area)
@@ -260,10 +331,21 @@ def compose_story_card(
     accent, cat_label = CATEGORY_STYLE[cat_key]
     area_name = _pretty_area(area)
 
-    photo = _area_photo(area_slug, areas_dir)
+    # Most specific first: a photo of the actual place named in the story beats
+    # a generic photo of the area.
+    photo = None
+    credit = "Rochdale Daily"
+    place_match = find_place_photo(f"{title} {story_text}", places_dir)
+    if place_match is not None:
+        photo = place_match[0]
+        credit = _place_credit(photo.stem, places_dir) or "Rochdale Daily"
+    if photo is None:
+        photo = _area_photo(area_slug, areas_dir)
+        if photo is not None:
+            credit = _photo_credit(area_slug, credits_path) or "Rochdale Daily"
+
     if photo is not None:
         background = _photo_background(photo)
-        credit = _photo_credit(area_slug, credits_path) or "Rochdale Daily"
     else:
         background = _generated_background(area_slug, accent)
         credit = "Rochdale Daily"
