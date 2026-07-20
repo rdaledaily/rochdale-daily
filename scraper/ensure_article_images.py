@@ -20,6 +20,7 @@ import argparse
 import hashlib
 import html
 import json
+import os
 import re
 import sys
 import time
@@ -34,6 +35,27 @@ from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
 
 from story_image import compose_story_card
+
+# When false, third-party (publisher) photographs are neither fetched nor kept.
+# Every story uses Rochdale Daily's own area/category card instead, so no other
+# outlet's copyrighted image is re-hosted and no credit overlay is needed.
+USE_SOURCE_IMAGES = os.getenv("USE_SOURCE_IMAGES", "true").lower() not in {
+    "0", "false", "no", "off",
+}
+
+OWN_IMAGE_CREDITS = {
+    "rochdale daily",
+    "rochdale daily category image",
+    "rochdale daily event artwork",
+}
+
+
+def is_third_party_credit(article: dict[str, Any]) -> bool:
+    """True when the cached image is attributed to someone other than us."""
+    credit = clean(article.get("image_credit")).lower()
+    if not credit:
+        return False
+    return credit not in OWN_IMAGE_CREDITS
 
 DEFAULT_USER_AGENT = (
     "RochdaleDailyImageCoverage/2.0 "
@@ -172,6 +194,11 @@ def has_real_image(article: dict[str, Any], repo_root: Path) -> bool:
     # network, or whose bytes match a known non-editorial image (the Google
     # logo), is not a real source image and must be re-processed.
     if credit_is_disallowed(article):
+        return False
+    # When third-party image reuse is switched off, an existing publisher photo
+    # is no longer a valid image: it is replaced by our own card on the next
+    # run, so no other outlet's photograph stays re-hosted here.
+    if not USE_SOURCE_IMAGES and is_third_party_credit(article):
         return False
     if local_digest(repo_root, image_url) in KNOWN_BAD_IMAGE_DIGESTS:
         return False
@@ -590,7 +617,7 @@ def ensure_article_image(
     existing_status = clean(article.get("image_status"))
     existing_placeholder = existing_status in {"generated-placeholder", "area-category-card"}
 
-    if not existing_placeholder or retry_placeholders:
+    if (not existing_placeholder or retry_placeholders) and USE_SOURCE_IMAGES:
         result = fetch_source_image(
             article,
             timeout=timeout,
@@ -618,6 +645,9 @@ def ensure_article_image(
         article.get("area"),
         article.get("category"),
         card_path,
+        story_text=clean(article.get("excerpt"))
+        + " "
+        + re.sub(r"<[^>]+>", " ", str(article.get("content_html") or ""))[:1200],
     )
     used_real_photo = credit != "Rochdale Daily"
     article["image_url"] = local_path
