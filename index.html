@@ -28,26 +28,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
+      /* Gold stays (it carries the masthead and the logo); surfaces move to a
+         deep navy so the site no longer reads as a white/red regional daily. */
       --yellow: #f5c400;
       --yellow-dark: #d7aa00;
-      --black: #111111;
-      --ink: #202020;
-      --muted: #666666;
-      --line: #d8d8d8;
-      --soft: #f2f2f2;
-      --paper: #ffffff;
+      --black: #060d16;
+      --ink: #eef3f9;
+      --muted: #93a6bd;
+      --line: #1e3550;
+      --soft: #12263d;
+      --paper: #0d1c2e;
+      --card: #112741;
+      --deep: #071320;
+      --accent: #f5c400;
       --red: #c8102e;
-      --blue: #0057a8;
-      --green: #137a45;
+      --red-bright: #ff5c6b;
+      --blue: #3d8bd6;
+      --green: #23a06a;
       --max: 1220px;
-      --shadow: 0 6px 22px rgba(0,0,0,.11);
+      --shadow: 0 8px 26px rgba(0,0,0,.42);
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background: #e9e9e9;
+      background: var(--deep);
       color: var(--ink);
       font-family: Roboto, Arial, Helvetica, sans-serif;
       line-height: 1.45;
@@ -100,6 +106,7 @@
 
     .masthead {
       background: var(--yellow);
+      color: #0b1524;
       border-bottom: 1px solid #c79d00;
     }
     .masthead-row {
@@ -134,7 +141,7 @@
     .header-button {
       border: 2px solid #111;
       background: transparent;
-      color: #111;
+      color: var(--ink);
       font-weight: 900;
       text-transform: uppercase;
       font-size: 12px;
@@ -152,7 +159,43 @@
       top: 0;
       z-index: 90;
     }
-    .nav-row { display: flex; align-items: stretch; min-height: 50px; }
+    .nav-row { display: flex; align-items: stretch; min-height: 50px; position: relative; }
+    /* The nav scrolls horizontally when it has more items than fit. Without a
+       cue the last item just looks cut off, so fade the right edge. */
+    .nav-row::after {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 34px;
+      pointer-events: none;
+      background: linear-gradient(to right, rgba(6,13,22,0), var(--black));
+    }
+    /* Search beside MENU on mobile. Styled to match the nav items exactly
+       (transparent on the dark bar, white text, same divider) so it reads as
+       part of the navigation rather than a button dropped on top of it.
+       On desktop, search lives in the masthead next to "Send us a story". */
+    .menu-search {
+      display: none;
+      min-height: 50px;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      border-right: 1px solid #333;
+      background: transparent;
+      color: #fff;
+      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding: 0 15px;
+      cursor: pointer;
+    }
+    .menu-search:hover { background: #2b2b2b; color: var(--yellow); }
+    .menu-search svg {
+      width: 16px; height: 16px; fill: none;
+      stroke: currentColor; stroke-width: 2.4; stroke-linecap: round;
+    }
     .menu-toggle {
       display: none;
       border: 0;
@@ -181,7 +224,7 @@
       background: transparent;
       color: #fff;
       text-decoration: none;
-      padding: 0 15px;
+      padding: 0 11px;
       font-family: "Roboto Condensed", Arial, sans-serif;
       font-size: 14px;
       font-weight: 800;
@@ -253,14 +296,14 @@
       display: grid;
       place-items: center;
       border: 1px solid #d3d3d3;
-      background: #fafafa;
+      background: var(--paper);
       color: #8a8a8a;
       text-align: center;
       font-size: 12px;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-    .ad-slot strong { display: block; color: #555; margin-bottom: 3px; }
+    .ad-slot strong { display: block; color: var(--muted); margin-bottom: 3px; }
 
     [data-content-slot] { position: relative; }
     [data-content-slot]::before {
@@ -295,7 +338,7 @@
       align-items: end;
       justify-content: space-between;
       gap: 20px;
-      border-top: 5px solid var(--black);
+      border-top: 5px solid var(--accent);
       border-bottom: 1px solid var(--line);
       padding: 11px 0 9px;
       margin-bottom: 18px;
@@ -323,29 +366,30 @@
       gap: 22px;
     }
     .lead-story, .secondary-story, .news-card, .event-card, .support-card, .directory-card {
-      background: #fff;
+      background: var(--card);
     }
     .story-link { display: block; text-decoration: none; }
-    .story-image-wrap { position: relative; overflow: hidden; background: #ddd; }
+    .story-image-wrap { position: relative; overflow: hidden; background: var(--soft); }
     .story-image-wrap img { height: 100%; object-fit: cover; transition: transform .3s ease; }
     .story-link:hover img { transform: scale(1.025); }
     .lead-story .story-image-wrap { aspect-ratio: 16/9; }
     .secondary-story .story-image-wrap { aspect-ratio: 16/8.4; }
-    .image-label {
+    .image-credit {
       position: absolute;
-      left: 0;
+      right: 0;
       bottom: 0;
-      background: rgba(0,0,0,.82);
-      color: #fff;
-      padding: 5px 8px;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: .6px;
-      text-transform: uppercase;
+      background: linear-gradient(to left, rgba(0,0,0,.58), rgba(0,0,0,0));
+      color: rgba(255,255,255,.82);
+      padding: 10px 9px 5px 26px;
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: .2px;
+      line-height: 1;
+      pointer-events: none;
     }
     .story-kicker {
       display: inline-block;
-      color: var(--red);
+      color: var(--accent);
       font-family: "Roboto Condensed", Arial, sans-serif;
       font-size: 12px;
       font-weight: 900;
@@ -353,17 +397,17 @@
       text-transform: uppercase;
       letter-spacing: .6px;
     }
-    .story-kicker.black { color: #111; }
+    .story-kicker.black { color: var(--ink); }
     .lead-headline, .secondary-headline, .card-headline {
       font-family: "Roboto Condensed", Arial, sans-serif;
       margin: 0;
-      color: #171717;
+      color: var(--ink);
       line-height: 1.05;
       letter-spacing: -.45px;
     }
     .lead-headline { font-size: clamp(31px, 4.3vw, 52px); }
     .secondary-headline { font-size: 24px; }
-    .story-summary { margin: 10px 0 0; color: #555; font-size: 16px; }
+    .story-summary { margin: 10px 0 0; color: var(--muted); font-size: 16px; }
     .story-meta { margin-top: 10px; color: #777; font-size: 12px; font-weight: 700; }
     .secondary-stack { display: grid; gap: 22px; align-content: start; }
     .secondary-story + .secondary-story { padding-top: 20px; border-top: 1px solid var(--line); }
@@ -382,9 +426,9 @@
     .latest-item { border-bottom: 1px solid var(--line); padding: 13px 0; }
     .latest-item button {
       width: 100%; border: 0; background: transparent; padding: 0; text-align: left;
-      color: #202020; font-weight: 800; line-height: 1.25;
+      color: var(--ink); font-weight: 800; line-height: 1.25;
     }
-    .latest-item button:hover { color: var(--red); }
+    .latest-item button:hover { color: var(--accent); }
     .latest-time { display: block; margin-top: 5px; color: #777; font-size: 11px; font-weight: 700; }
 
     .category-toolbar {
@@ -394,9 +438,9 @@
       margin-bottom: 18px;
     }
     .filter-button {
-      border: 1px solid #bbb;
-      background: #fff;
-      color: #222;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink);
       padding: 8px 11px;
       font-size: 12px;
       font-weight: 900;
@@ -409,20 +453,20 @@
     .news-card { border-bottom: 1px solid var(--line); padding-bottom: 18px; }
     .news-card .story-image-wrap { aspect-ratio: 16/9; }
     .card-headline { font-size: 25px; }
-    .card-summary { margin: 8px 0 0; color: #555; font-size: 14px; }
+    .card-summary { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
     .tag-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 9px; }
     .tag {
       display: inline-block;
-      background: #eeeeee;
-      color: #333;
+      background: var(--soft);
+      color: var(--muted);
       font-size: 10px;
       font-weight: 900;
       padding: 4px 6px;
       text-transform: uppercase;
       letter-spacing: .4px;
     }
-    .tag.crime { background: #ffe7ec; color: #9b0020; }
-    .tag.demo { background: #fff1a6; color: #4c3b00; }
+    .tag.crime { background: rgba(217,43,63,.16); color: #ff8a99; }
+    .tag.demo { background: rgba(245,196,0,.16); color: var(--accent); }
 
     .read-more-button {
       display: inline-flex;
@@ -448,9 +492,13 @@
     }
 
     .side-rail { display: grid; gap: 20px; align-content: start; }
-    .rail-box { border-top: 5px solid var(--black); background: #f4f4f4; padding: 17px; }
-    .rail-box.yellow { background: var(--yellow); }
-    .rail-box.red { border-top-color: var(--red); background: #fff; border-left: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .rail-box { border-top: 5px solid var(--accent); background: var(--card); padding: 17px; }
+    .rail-box.yellow { background: var(--yellow); border-top-color: #0b1524; }
+    /* Yellow panel: force dark text, since the page default is now light. */
+    .rail-box.yellow, .rail-box.yellow .rail-title, .rail-box.yellow .rail-copy,
+    .rail-box.yellow p, .rail-box.yellow li, .rail-box.yellow strong { color: #0b1524; }
+    .rail-box.yellow .rail-button { color: #0b1524; border-bottom-color: #0b1524; }
+    .rail-box.red { border-top-color: var(--accent); background: var(--card); border-left: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .rail-title {
       margin: 0 0 12px;
       font-family: "Roboto Condensed", Arial, sans-serif;
@@ -459,23 +507,26 @@
       font-weight: 900;
       text-transform: uppercase;
     }
-    .rail-copy { margin: 0 0 13px; color: #444; font-size: 14px; }
+    .rail-copy { margin: 0 0 13px; color: var(--muted); font-size: 14px; }
     .rail-input {
-      width: 100%; min-height: 43px; border: 1px solid #8f8f8f; background: #fff; padding: 9px 10px; margin-bottom: 8px;
+      width: 100%; min-height: 43px; border: 1px solid var(--line); background: var(--card); color: var(--ink); padding: 9px 10px; margin-bottom: 8px;
     }
+    /* Native dropdown lists render on the OS surface, so the options need
+       their own colours or they inherit black-on-dark. */
+    .rail-input option, .rail-input optgroup { background: var(--card); color: var(--ink); }
     .rail-button {
       width: 100%; border: 0; background: #111; color: var(--yellow); padding: 12px; font-weight: 900; text-transform: uppercase;
     }
     .rail-button:hover { background: #2a2a2a; }
 
     .report-box {
-      border: 4px solid var(--red);
-      background: #fff;
+      border: 4px solid var(--red-bright);
+      background: var(--card);
       padding: 18px;
     }
     .report-box h3 {
       margin: 0 0 6px;
-      color: var(--red);
+      color: var(--red-bright);
       font-family: "Roboto Condensed", Arial, sans-serif;
       font-size: 27px;
       line-height: 1;
@@ -493,52 +544,99 @@
       font-size: 13px;
       font-weight: 900;
     }
-    .report-action:hover { border-color: var(--red); }
-    .report-note { margin: 11px 0 0; color: #555; font-size: 12px; }
-    .incident-ref { display: grid; grid-template-columns: 1fr auto; margin-top: 12px; }
-    .incident-ref input { min-width: 0; border: 1px solid #999; padding: 9px; }
-    .incident-ref button { border: 0; background: var(--red); color: #fff; font-weight: 900; padding: 0 12px; }
+    .report-action:hover { border-color: var(--red-bright); }
+    .report-note { margin: 11px 0 0; color: var(--muted); font-size: 12px; }
 
     .whats-on { background: #111; color: #fff; padding: 34px 0 40px; }
-    .whats-on .section-head { border-top-color: var(--yellow); border-bottom-color: #484848; }
+    .whats-on .section-head { border-top-color: var(--accent); border-bottom-color: var(--line); }
     .whats-on .section-link { color: #fff; }
+    /* Add-an-event panel under What's On */
+    .add-event { margin-top: 26px; border: 1px solid var(--line); background: var(--card); }
+    .add-event-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 15px 18px; cursor: pointer; border-left: 5px solid var(--accent);
+    }
+    .add-event-head h3 {
+      margin: 0; font-family: "Roboto Condensed", Arial, sans-serif;
+      font-size: 21px; text-transform: uppercase; letter-spacing: .3px;
+    }
+    .add-event-head p { margin: 3px 0 0; font-size: 13px; color: var(--muted); }
+    .add-event-toggle {
+      border: 0; background: var(--accent); color: #0b1524; font-weight: 900;
+      font-size: 13px; text-transform: uppercase; padding: 10px 15px; cursor: pointer;
+      white-space: nowrap;
+    }
+    .add-event-body { display: none; padding: 4px 18px 20px; }
+    .add-event.open .add-event-body { display: block; }
+    .ae-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .ae-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .ae-field.wide { grid-column: 1 / -1; }
+    .ae-field label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    .ae-field input, .ae-field textarea, .ae-field select {
+      background: var(--soft); border: 1px solid var(--line); color: var(--ink);
+      padding: 10px 11px; font: inherit; font-size: 14px; border-radius: 3px; min-width: 0;
+    }
+    .ae-field input:focus, .ae-field textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .ae-field textarea { resize: vertical; min-height: 70px; }
+    .ae-hint { font-size: 11px; color: var(--muted); }
+    .ae-count { font-variant-numeric: tabular-nums; }
+    .ae-count.over { color: var(--red-bright); font-weight: 700; }
+    .ae-drop {
+      border: 2px dashed var(--line); border-radius: 4px; padding: 16px; text-align: center;
+      cursor: pointer; color: var(--muted); font-size: 13px;
+    }
+    .ae-drop.has-image { border-style: solid; padding: 0; overflow: hidden; }
+    .ae-drop img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+    .ae-actions { display: flex; align-items: center; gap: 14px; margin-top: 16px; flex-wrap: wrap; }
+    .ae-submit {
+      border: 0; background: var(--accent); color: #0b1524; font-weight: 900;
+      text-transform: uppercase; font-size: 14px; padding: 12px 22px; cursor: pointer;
+    }
+    .ae-submit:disabled { opacity: .45; cursor: not-allowed; }
+    .ae-msg { font-size: 13px; margin: 0; }
+    .ae-msg.error { color: var(--red-bright); }
+    .ae-msg.ok { color: #6fd39b; }
+    .ae-legal { margin: 14px 0 0; font-size: 11px; color: var(--muted); line-height: 1.5; }
+    @media (max-width: 620px) { .ae-grid { grid-template-columns: 1fr; } }
+
     .event-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
     .event-filter {
       border: 1px solid #666; background: transparent; color: #fff; padding: 9px 12px; font-size: 12px; font-weight: 900; text-transform: uppercase;
     }
     .event-filter.active, .event-filter:hover { background: var(--yellow); color: #000; border-color: var(--yellow); }
     .events-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-    .event-card { color: #111; min-width: 0; }
+    .event-card { color: var(--ink); min-width: 0; }
     .event-card img { aspect-ratio: 16/9; object-fit: cover; }
     .event-body { padding: 14px; }
     .event-date {
-      color: var(--red); font-family: "Roboto Condensed", Arial, sans-serif; font-size: 13px; font-weight: 900; text-transform: uppercase;
+      color: var(--accent); font-family: "Roboto Condensed", Arial, sans-serif; font-size: 13px; font-weight: 900; text-transform: uppercase;
     }
     .event-card h3 { margin: 4px 0 8px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 22px; line-height: 1.05; }
-    .event-facts { display: grid; gap: 3px; font-size: 12px; color: #4c4c4c; }
+    .event-facts { display: grid; gap: 3px; font-size: 12px; color: var(--muted); }
     .event-cta {
       display: inline-block; margin-top: 11px; border-bottom: 3px solid var(--yellow-dark); font-size: 12px; font-weight: 900; text-decoration: none; text-transform: uppercase;
     }
 
-    .support-intro { max-width: 850px; color: #4d4d4d; margin-top: -7px; margin-bottom: 18px; }
+    .support-intro { max-width: 850px; color: var(--muted); margin-top: -7px; margin-bottom: 18px; }
     .support-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
     .support-card { border: 1px solid var(--line); border-top: 5px solid var(--green); padding: 17px; }
-    .support-card.women { border-top-color: #8d2c83; }
+    .support-card.women { border-top-color: #c05fb5; }
     .support-card.carers { border-top-color: var(--blue); }
-    .support-card.crisis { border-top-color: var(--red); }
+    .support-card.crisis { border-top-color: var(--red-bright); }
     .support-card h3 { margin: 0 0 7px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 22px; line-height: 1.1; }
-    .support-card p { margin: 0 0 10px; color: #4d4d4d; font-size: 13px; }
+    .support-card p { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
     .support-card a { font-size: 12px; font-weight: 900; text-transform: uppercase; text-decoration-thickness: 3px; text-decoration-color: var(--yellow); text-underline-offset: 4px; }
     .support-small { display: block; margin-top: 9px; font-size: 11px; color: #777; }
 
     .directory-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; }
     .directory-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     .directory-card { border: 1px solid var(--line); padding: 15px; }
-    .directory-card .sponsored { font-size: 9px; color: #777; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+    .directory-card .sponsored { font-size: 9px; color: var(--muted); font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
     .directory-card h3 { margin: 5px 0 6px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 19px; }
-    .directory-card p { margin: 0; color: #555; font-size: 12px; }
+    .directory-card p { margin: 0; color: var(--muted); font-size: 12px; }
     .directory-card a { display: inline-block; margin-top: 9px; font-size: 11px; font-weight: 900; text-transform: uppercase; }
-    .advertise-panel { background: var(--yellow); padding: 20px; border: 2px solid #111; }
+    .advertise-panel { background: var(--yellow); padding: 20px; border: 2px solid #0b1524; color: #0b1524; }
+    .advertise-panel h3, .advertise-panel p, .advertise-panel a, .advertise-panel strong { color: #0b1524; }
     .advertise-panel h3 { margin: 0 0 7px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 27px; text-transform: uppercase; line-height: 1; }
     .advertise-panel p { margin: 0 0 14px; font-size: 13px; }
 
@@ -558,17 +656,17 @@
       background: rgba(0,0,0,.72); padding: 35px 15px; overflow: auto;
     }
     .modal.open { display: flex; }
-    .modal-card { width: min(1180px, 100%); background: #fff; box-shadow: 0 18px 60px rgba(0,0,0,.35); position: relative; }
+    .modal-card { width: min(1180px, 100%); background: var(--paper); box-shadow: 0 18px 60px rgba(0,0,0,.35); position: relative; }
     .modal-close { position: sticky; float: right; top: 10px; margin: 10px 10px 0 0; z-index: 2; width: 42px; height: 42px; border: 0; background: #111; color: #fff; font-size: 24px; }
     .modal-image { aspect-ratio: 16/8; object-fit: cover; }
     .article-body { padding: 26px clamp(20px, 5vw, 56px) 42px; }
     .article-body h1 { margin: 8px 0 13px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: clamp(36px, 6vw, 58px); line-height: 1; letter-spacing: -.8px; }
-    .article-standfirst { color: #505050; font-size: 19px; }
+    .article-standfirst { color: var(--muted); font-size: 19px; }
     .article-byline { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 0; margin: 18px 0; font-size: 12px; font-weight: 700; }
     .article-copy { font-family: Georgia, "Times New Roman", serif; font-size: 18px; line-height: 1.7; }
     .article-copy p { margin: 0 0 1.15em; }
     .article-share { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
-    .article-share button { border: 1px solid #aaa; background: #fff; padding: 8px 11px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
+    .article-share button { border: 1px solid var(--line); background: var(--card); padding: 8px 11px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
 
     /* Two-column article layout: main copy + sidebar rail for ads,
        related stories and the newsletter signup. Collapses to a single
@@ -586,7 +684,7 @@
        ad code is inserted. */
     .ad-slot {
       display: flex; align-items: center; justify-content: center; text-align: center;
-      background: #f2f2f2; border: 1px dashed #b8b8b8; color: #8a8a8a;
+      background: var(--soft); border: 1px dashed var(--line); color: var(--muted);
       font-family: "Roboto Condensed", Arial, sans-serif; font-size: 11px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .06em; margin: 0 auto;
     }
@@ -623,13 +721,13 @@
       position: fixed; inset: 0; background: rgba(0,0,0,.82); z-index: 950; display: none; align-items: flex-start; justify-content: center; padding: 85px 15px;
     }
     .search-overlay.open { display: flex; }
-    .search-panel { width: min(760px, 100%); background: #fff; padding: 22px; }
+    .search-panel { width: min(760px, 100%); background: var(--paper); padding: 22px; }
     .search-panel-row { display: grid; grid-template-columns: 1fr auto; }
-    .search-panel input { min-width: 0; border: 2px solid #111; padding: 14px; font-size: 18px; }
-    .search-panel button { border: 0; background: var(--yellow); font-weight: 900; padding: 0 18px; }
+    .search-panel input { min-width: 0; border: 2px solid var(--line); background: var(--card); color: var(--ink); padding: 14px; font-size: 18px; }
+    .search-panel button { border: 0; background: var(--yellow); color: #0b1524; font-weight: 900; padding: 0 18px; }
     .search-results { margin-top: 16px; max-height: 55vh; overflow: auto; }
-    .search-result { display: block; width: 100%; text-align: left; border: 0; border-top: 1px solid var(--line); background: #fff; padding: 12px 0; font-weight: 800; }
-    .search-result:hover { color: var(--red); }
+    .search-result { display: block; width: 100%; text-align: left; border: 0; border-top: 1px solid var(--line); background: transparent; color: var(--ink); padding: 12px 0; font-weight: 800; }
+    .search-result:hover { color: var(--accent); }
     .search-close { margin-top: 14px; border: 0; background: #111 !important; color: #fff; padding: 10px 15px !important; }
 
     .cookie {
@@ -659,7 +757,6 @@
     @media (max-width: 820px) {
       .utility-links a:nth-child(-n+2) { display: none; }
       .masthead-row { min-height: 142px; }
-      .masthead-actions .header-button:not(.solid) { display: none; }
       .brand-logo { width: clamp(235px, 39vw, 310px); }
       .lead-grid, .news-layout, .directory-wrap { grid-template-columns: 1fr; }
       .secondary-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -679,8 +776,10 @@
       .masthead-row { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; min-height: 116px; }
       .brand-logo { width: min(225px, 62vw); }
       .header-button.solid { padding: 9px 10px; font-size: 10px; }
+      .masthead-actions .header-button:not(.solid) { display: none; }
       .menu-toggle { display: block; background: transparent; color: var(--yellow); }
-      .nav-row { position: relative; justify-content: center; }
+      .menu-search { display: inline-flex; }
+      .nav-row { position: relative; justify-content: flex-start; }
       .nav-list {
         display: none; position: absolute; top: 50px; left: 0; right: 0; background: #111; flex-direction: column; overflow: visible; box-shadow: var(--shadow);
       }
@@ -706,8 +805,8 @@
     /* ROCHDALE_EDITORIAL_QUALITY_V2 */
     .visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
     .article-share{display:flex;align-items:center;gap:10px;margin:16px 0 22px}
-    .share-icon-button{width:44px;height:44px;display:inline-grid;place-items:center;border:1px solid #bdbdbd;border-radius:50%;background:#fff;color:#111;padding:10px}
-    .share-icon-button:hover{background:#111;color:#fff}
+    .share-icon-button{width:44px;height:44px;display:inline-grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--ink);padding:10px}
+    .share-icon-button:hover{background:var(--accent);color:#0b1524}
     .share-icon-button svg{width:21px;height:21px;fill:currentColor;stroke:currentColor;stroke-width:1.5}
     .article-sources{margin:24px 0 8px;font-size:14px;color:#555}
     .article-sources summary{display:inline-block;cursor:pointer;font-weight:700;text-decoration:underline;text-underline-offset:3px}
@@ -757,6 +856,7 @@
   <nav class="primary-nav" aria-label="Main navigation">
     <div class="wrap nav-row">
       <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">MENU</button>
+      <button class="menu-search" id="search-open-mobile" type="button" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span>SEARCH</span></button>
       <ul class="nav-list" id="main-nav">
         <li><button class="active" type="button" data-category="all">Home</button></li>
         <li><button type="button" data-category="news">News</button></li>
@@ -913,10 +1013,6 @@
                   <a class="report-action" href="https://www.gmp.police.uk/ro/report/" target="_blank" rel="noopener"><span>Report online to GMP</span><span>Open</span></a>
                   <a class="report-action" href="tel:999"><span>Emergency or crime in progress</span><span>999</span></a>
                 </div>
-                <div class="incident-ref">
-                  <input id="incident-reference" type="text" placeholder="Police incident reference">
-                  <button id="copy-reference" type="button">Copy</button>
-                </div>
                 <p class="report-note">Rochdale Daily does not receive reports submitted through these official links.</p>
               </section>
             </aside>
@@ -939,6 +1035,80 @@
             <button class="event-filter" type="button" data-event-filter="all">All upcoming</button>
           </div>
           <div class="events-grid" id="events-grid"></div>
+
+          <section class="add-event" id="add-event" aria-labelledby="add-event-title">
+            <div class="add-event-head" id="add-event-head" role="button" tabindex="0"
+                 aria-expanded="false" aria-controls="add-event-body">
+              <div>
+                <h3 id="add-event-title">Add an event</h3>
+                <p>Running something in the borough? Tell us and we'll list it — free.</p>
+              </div>
+              <button class="add-event-toggle" type="button" id="add-event-toggle">Add an event</button>
+            </div>
+
+            <div class="add-event-body" id="add-event-body">
+              <div class="ae-grid">
+                <div class="ae-field wide">
+                  <label for="ae-title">Event title <span class="ae-hint">(<span class="ae-count" id="ae-title-count">0</span>/80)</span></label>
+                  <input id="ae-title" type="text" maxlength="80" placeholder="Littleborough Christmas Lights Switch-On" autocomplete="off">
+                </div>
+
+                <div class="ae-field">
+                  <label for="ae-date">Date</label>
+                  <input id="ae-date" type="date">
+                </div>
+                <div class="ae-field">
+                  <label for="ae-time">Time</label>
+                  <input id="ae-time" type="text" placeholder="14:00-19:00" autocomplete="off">
+                  <span class="ae-hint">24-hour, start and end &mdash; for example 14:00-19:00</span>
+                </div>
+
+                <div class="ae-field">
+                  <label for="ae-location">Venue and street</label>
+                  <input id="ae-location" type="text" maxlength="120" placeholder="The Coach House, Lodge Street" autocomplete="off">
+                </div>
+                <div class="ae-field">
+                  <label for="ae-postcode">Postcode</label>
+                  <input id="ae-postcode" type="text" maxlength="10" placeholder="OL15 9AB" autocomplete="off" style="text-transform:uppercase">
+                </div>
+
+                <div class="ae-field">
+                  <label for="ae-cost">Cost</label>
+                  <input id="ae-cost" type="text" maxlength="20" placeholder="Free, or 7.50" autocomplete="off">
+                  <span class="ae-hint">In pounds. Leave blank if free.</span>
+                </div>
+                <div class="ae-field">
+                  <label for="ae-contact">Your contact (not published)</label>
+                  <input id="ae-contact" type="text" maxlength="120" placeholder="you@example.com" autocomplete="off">
+                </div>
+
+                <div class="ae-field wide">
+                  <label for="ae-description">Short description <span class="ae-hint">(<span class="ae-count" id="ae-desc-count">0</span>/400)</span></label>
+                  <textarea id="ae-description" maxlength="400" placeholder="What's happening, who it's for, anything people need to know."></textarea>
+                </div>
+
+                <div class="ae-field wide">
+                  <label>Photo (optional, JPEG)</label>
+                  <div class="ae-drop" id="ae-drop" role="button" tabindex="0">
+                    <span id="ae-drop-label">Click or drop a JPEG here &mdash; it will be resized to fit the site</span>
+                    <input id="ae-image" type="file" accept="image/jpeg,image/jpg" hidden>
+                  </div>
+                  <span class="ae-hint">Only use a photo you took or have permission to use.</span>
+                </div>
+              </div>
+
+              <div class="ae-actions">
+                <button class="ae-submit" type="button" id="ae-submit">Send for review</button>
+                <p class="ae-msg" id="ae-msg" role="status" aria-live="polite"></p>
+              </div>
+
+              <p class="ae-legal">
+                Events are checked by the newsdesk before they appear, usually within a day.
+                Please don't submit anything you don't have the right to publish.
+                Your contact details are used only to query the listing and are never published.
+              </p>
+            </div>
+          </section>
         </div>
       </section>
 
@@ -1139,8 +1309,7 @@
         demo: true,
         body: [
           "This is demonstration copy, not a report of a real incident. It shows how a police appeal, suspicious-vehicle report, wanted-person story or witness request would be presented.",
-          "The reporting panel below is injected automatically because this article is marked as a police matter. Readers can contact Crimestoppers anonymously, use Greater Manchester Police’s online reporting service or call 999 where there is immediate danger or a crime in progress.",
-          "A police incident reference can be displayed and copied where one has been supplied by the investigating force."
+          "The reporting panel below is injected automatically because this article is marked as a police matter. Readers can contact Crimestoppers anonymously, use Greater Manchester Police’s online reporting service or call 999 where there is immediate danger or a crime in progress."
         ]
       },
       {
@@ -1617,16 +1786,48 @@
     const formatDate = (date) => new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(date);
     const formatEventDate = (date) => new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(date);
 
+    // Tidy the credit for display. Feed names arrive as things like
+    // "Manchester Evening News — Rochdale" or a squashed "Manchestereveningnews";
+    // readers should just see the masthead.
+    const CREDIT_DISPLAY_NAMES = {
+      manchestereveningnews: "Manchester Evening News",
+      theoldhamtimes: "The Oldham Times",
+      burytimes: "Bury Times",
+      rochdaleafc: "Rochdale AFC",
+      bbcmanchester: "BBC News",
+      bbc: "BBC News",
+      msn: "MSN",
+    };
+
+    function formatImageCredit(value) {
+      let text = stripMarkdownText(value || "").trim();
+      if (!text) return "";
+      // Drop the section suffix our feed names carry ("— Rochdale", "- Rochdale").
+      text = text.replace(/\s*[—–-]\s*Rochdale\s*$/i, "").trim();
+      const key = text.toLowerCase().replace(/[^a-z]/g, "");
+      return CREDIT_DISPLAY_NAMES[key] || text;
+    }
+
+    // Own artwork needs no credit; anything else is credited discreetly.
+    const OWN_CREDITS = new Set([
+      "rochdale daily",
+      "rochdale daily category image",
+      "rochdale daily event artwork",
+    ]);
+
     function imageMarkup(story, className = "") {
       const fallback = story.imageFallback || stockImage(story.category || "news");
       const source = story.image || fallback;
-      // Our own composed cards already carry the Rochdale Daily wordmark and any
-      // photo credit baked in, so the overlay badge is redundant on them. Show
-      // the badge only for real source photographs, where it names the publisher.
       const isOwnCard = /area-category-card/i.test(source);
-      const label = isOwnCard
-        ? ""
-        : `<span class="image-label">${story.imageLabel || "Rochdale Daily"}</span>`;
+      const rawCredit = stripMarkdownText(story.imageLabel || "").trim();
+      const isOwnCredit = OWN_CREDITS.has(rawCredit.toLowerCase());
+      const credit = isOwnCard || isOwnCredit ? "" : formatImageCredit(rawCredit);
+      // A small "Image: <publisher>" in the corner — it credits the photograph
+      // without the old full-width bar, which read as if the whole story were
+      // reproduced from that publisher.
+      const label = credit
+        ? `<span class="image-credit">Image: ${credit}</span>`
+        : "";
       return `<div class="story-image-wrap ${className}"><img src="${source}" alt="" loading="lazy" referrerpolicy="origin-when-cross-origin" onerror="this.onerror=null;this.src='${fallback}'">${label}</div>`;
     }
 
@@ -2099,7 +2300,7 @@ function shareIconMarkup(action, label) {
               <div class="article-byline">By ${story.byline} · Updated ${story.timeLabel} ${story.demo ? '· DEMONSTRATION CONTENT' : ''}</div>
               <div class="article-share" aria-label="Share this article">${shareIconMarkup("copy", "Copy article link")}${shareIconMarkup("facebook", "Share on Facebook")}${shareIconMarkup("whatsapp", "Share on WhatsApp")}</div>
               <div class="article-copy">${bodyParagraphs.join("")}${sourcesDisclosureMarkup(story)}
-              <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
+              <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid var(--line);background:var(--soft)">
                 <h3 style="margin:0 0 8px">Legal and editorial note</h3>
                 <p>${story.legalDisclaimer || (story.sensitiveStory ? "No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted." : "This article was compiled from identified public sources and may be updated.")}</p>
                 <p><strong>Right to reply:</strong> ${story.rightToReply || "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk."}</p>
@@ -2244,15 +2445,173 @@ function shareIconMarkup(action, label) {
       event.target.reset();
     });
 
-    document.getElementById("copy-reference").addEventListener("click", () => {
-      const value = document.getElementById("incident-reference").value.trim();
-      if (!value) return showToast("Enter an incident reference first.");
-      copyText(value, "Incident reference copied");
-    });
-
     document.getElementById("modal-close").addEventListener("click", closeArticle);
     document.getElementById("article-modal").addEventListener("click", event => { if (event.target.id === "article-modal") closeArticle(); });
+
+    /* ---- Add an event -------------------------------------------------
+       Client-side validation here is only for immediate feedback. Every rule
+       is enforced again server-side in functions/api/submit-event.js, because
+       a browser form can be bypassed. Images are resized to 1200x675 here so
+       the upload stays small and the card renders correctly on phone and
+       desktop alike. */
+    (function initAddEvent() {
+      const panel = document.getElementById("add-event");
+      if (!panel) return;
+      const head = document.getElementById("add-event-head");
+      const toggle = document.getElementById("add-event-toggle");
+      const drop = document.getElementById("ae-drop");
+      const fileInput = document.getElementById("ae-image");
+      const dropLabel = document.getElementById("ae-drop-label");
+      const submit = document.getElementById("ae-submit");
+      const msg = document.getElementById("ae-msg");
+      let imageData = "";
+
+      function openPanel() {
+        const isOpen = panel.classList.toggle("open");
+        head.setAttribute("aria-expanded", String(isOpen));
+        toggle.textContent = isOpen ? "Close" : "Add an event";
+        if (isOpen) document.getElementById("ae-title").focus();
+      }
+      toggle.addEventListener("click", e => { e.stopPropagation(); openPanel(); });
+      head.addEventListener("click", openPanel);
+      head.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPanel(); }
+      });
+
+      function bindCount(inputId, countId, limit) {
+        const input = document.getElementById(inputId);
+        const out = document.getElementById(countId);
+        const update = () => {
+          out.textContent = input.value.length;
+          out.classList.toggle("over", input.value.length >= limit);
+        };
+        input.addEventListener("input", update);
+        update();
+      }
+      bindCount("ae-title", "ae-title-count", 80);
+      bindCount("ae-description", "ae-desc-count", 400);
+
+      // Cover-fit to 1200x675 so every submitted photo matches the card ratio.
+      function processImage(file) {
+        if (!file) return;
+        if (!/jpe?g$/i.test(file.type) && !/\.jpe?g$/i.test(file.name)) {
+          msg.textContent = "Please choose a JPEG photo.";
+          msg.className = "ae-msg error";
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const W = 1200, H = 675;
+            const canvas = document.createElement("canvas");
+            canvas.width = W; canvas.height = H;
+            const ctx = canvas.getContext("2d");
+            const scale = Math.max(W / img.width, H / img.height);
+            const w = img.width * scale, h = img.height * scale;
+            ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+            imageData = canvas.toDataURL("image/jpeg", 0.82);
+            drop.classList.add("has-image");
+            drop.innerHTML = '<img alt="Your event photo">';
+            drop.querySelector("img").src = imageData;
+            drop.appendChild(fileInput);
+            msg.textContent = "";
+            msg.className = "ae-msg";
+          };
+          img.onerror = () => {
+            msg.textContent = "That image could not be read.";
+            msg.className = "ae-msg error";
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      drop.addEventListener("click", () => fileInput.click());
+      drop.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput.click(); }
+      });
+      fileInput.addEventListener("change", e => processImage(e.target.files[0]));
+      ["dragenter", "dragover"].forEach(ev =>
+        drop.addEventListener(ev, e => { e.preventDefault(); drop.style.borderColor = "var(--accent)"; }));
+      ["dragleave", "drop"].forEach(ev =>
+        drop.addEventListener(ev, e => { e.preventDefault(); drop.style.borderColor = ""; }));
+      drop.addEventListener("drop", e => processImage(e.dataTransfer.files[0]));
+
+      const POSTCODE_RE = /^(OL1[0-6]|OL[1-9]|M24|M26|BL9)\s?\d[A-Z]{2}$/i;
+      const TIME_RE = /^([01]\d|2[0-3]):([0-5]\d)\s*[-\u2013]\s*([01]\d|2[0-3]):([0-5]\d)$/;
+
+      function localErrors(values) {
+        const errors = [];
+        if (values.title.length < 4) errors.push("Give the event a title.");
+        if (values.location.length < 6) errors.push("Enter the venue and street.");
+        if (!POSTCODE_RE.test(values.postcode)) errors.push("Enter a valid Rochdale-borough postcode.");
+        if (!values.date) errors.push("Choose a date.");
+        if (!TIME_RE.test(values.time)) errors.push("Enter the time as 14:00-19:00.");
+        const cost = values.cost.trim();
+        if (cost && !/^free$/i.test(cost) && !Number.isFinite(Number(cost.replace(/[\u00A3,\s]/g, "")))) {
+          errors.push('Cost must be "Free" or an amount in pounds.');
+        }
+        return errors;
+      }
+
+      submit.addEventListener("click", async () => {
+        const values = {
+          title: document.getElementById("ae-title").value.trim(),
+          date: document.getElementById("ae-date").value,
+          time: document.getElementById("ae-time").value.trim(),
+          location: document.getElementById("ae-location").value.trim(),
+          postcode: document.getElementById("ae-postcode").value.trim().toUpperCase(),
+          cost: document.getElementById("ae-cost").value.trim(),
+          contact: document.getElementById("ae-contact").value.trim(),
+          description: document.getElementById("ae-description").value.trim(),
+          image: imageData,
+        };
+        const errors = localErrors(values);
+        if (errors.length) {
+          msg.textContent = errors[0];
+          msg.className = "ae-msg error";
+          return;
+        }
+        submit.disabled = true;
+        msg.textContent = "Sending\u2026";
+        msg.className = "ae-msg";
+        try {
+          const response = await fetch("/api/submit-event", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(values),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (response.ok && data.ok) {
+            msg.textContent = data.message || "Thank you \u2014 your event has been sent for review.";
+            msg.className = "ae-msg ok";
+            panel.querySelectorAll("input, textarea").forEach(el => {
+              if (el.type !== "file") el.value = "";
+            });
+            imageData = "";
+            drop.classList.remove("has-image");
+            drop.innerHTML = "";
+            drop.appendChild(dropLabel);
+            drop.appendChild(fileInput);
+            dropLabel.textContent = "Click or drop a JPEG here \u2014 it will be resized to fit the site";
+          } else {
+            msg.textContent = (data.errors && data.errors[0]) || "Sorry, that could not be sent.";
+            msg.className = "ae-msg error";
+          }
+        } catch (err) {
+          msg.textContent = "Could not reach the newsdesk. Please try again shortly.";
+          msg.className = "ae-msg error";
+        } finally {
+          submit.disabled = false;
+        }
+      });
+    })();
+
     document.getElementById("search-open").addEventListener("click", openSearch);
+    // Mobile search button (sits beside MENU) opens the same overlay.
+    const mobileSearchBtn = document.getElementById("search-open-mobile");
+    if (mobileSearchBtn) mobileSearchBtn.addEventListener("click", openSearch);
     document.getElementById("search-close").addEventListener("click", closeSearch);
     document.getElementById("search-submit").addEventListener("click", searchStories);
     document.getElementById("site-search").addEventListener("input", searchStories);
