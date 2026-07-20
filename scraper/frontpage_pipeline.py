@@ -345,6 +345,7 @@ def ensure_event_card(article: dict[str, Any]) -> None:
         article.get("area"),
         "events",
         ARTICLE_IMAGE_DIR / f"{slug}-area-category-card.jpg",
+        story_text=str(article.get("excerpt") or "") + " " + str(article.get("event_location") or ""),
     )
     article["image_url"] = path
     article["image_credit"] = credit
