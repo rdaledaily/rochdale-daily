@@ -1,0 +1,100 @@
+name: Rochdale Daily pipeline tests
+
+# The compile checks and test suite used to run on every 15-minute scrape,
+# where they cost time on every single run and told you nothing new unless
+# the code had changed. They belong on push, plus a daily run to catch
+# breakage from changing upstream data rather than changing code.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scraper/**"
+      - "requirements.txt"
+      - ".github/workflows/**"
+  schedule:
+    - cron: "30 5 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rd-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+          python -m pip install --no-cache-dir "Pillow>=10,<13"
+
+      - name: Verify Python dependencies
+        run: |
+          python - <<'PY'
+          import bs4
+          import dateparser
+          import feedparser
+          import lxml
+          import openai
+          import requests
+          from PIL import Image
+          from playwright.sync_api import sync_playwright
+          print("Dependency verification passed.")
+          print("Pillow version:", Image.__version__)
+          PY
+
+      - name: Compile pipeline modules
+        run: |
+          python -m py_compile \
+            scraper/locality_rules.py \
+            scraper/story_identity.py \
+            scraper/selection_policy.py \
+            scraper/search_queries.py \
+            scraper/rewrite_safety.py \
+            scraper/house_style.py \
+            scraper/editorial_upgrade.py \
+            scraper/source_presentation.py \
+            scraper/generate_pages.py \
+            scraper/food_hygiene.py \
+            scraper/frontpage_pipeline.py \
+            scraper/merge_feeds.py \
+            scraper/resolve_google_news_sources.py \
+            scraper/ensure_article_images.py \
+            scraper/scraper.py
+
+      - name: Run test suite
+        run: |
+          python scraper/test_locality.py
+          python scraper/test_story_identity.py
+          python scraper/test_selection_policy.py
+          python scraper/test_search_queries.py
+          python scraper/test_rewrite_safety.py
+          python scraper/test_editorial_length.py
+          python scraper/test_food_hygiene.py
+          python scraper/test_archive_persistence.py
+          python scraper/test_event_identity.py
+          python scraper/test_article_gate.py
+          python scraper/test_resolve_google_news_sources.py
+          python scraper/test_ensure_article_images.py
+
+      - name: Verify scraper imports cleanly
+        run: |
+          cd scraper
+          python -c "import scraper; print('Scraper startup import passed.')"
