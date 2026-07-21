@@ -95,11 +95,41 @@ CATEGORY_ORDER = (
         re.I,
     )),
     ("environment", re.compile(
-        r"\b(?:flood warning|flood alert|flood|weather warning|pollution|recycling|litter|climate|wildlife|"
-        r"reservoir|canal|environmental|nature reserve|green space|country park|"
-        r"heatwave|met office|weather forecast|sunny|sunshine|rainfall|showers|"
-        r"asbestos|contaminated|contamination|derelict|brownfield|"
-        r"factory site|abandoned (?:site|factory|mill|works|land|building))\b",
+        # Every stem carries its own inflections. The previous pattern closed
+        # the whole alternation with a single \b, so "green spaces",
+        # "nature reserves" and "flood warnings" all failed to match while
+        # their singular forms matched: the trailing \b cannot sit between
+        # "space" and "s". Because a lone term scores 1 and the classifier
+        # needs 2 to override an incumbent label, a silently missed plural
+        # was often the difference between environment and news.
+        r"\b(?:"
+        # --- flooding and weather ---
+        r"flood(?:s|ing|water)?|flood (?:warning|alert)s?|weather warnings?|"
+        r"heatwave|met office|weather forecasts?|sunny|sunshine|rainfall|showers|"
+        # --- pollution and contamination ---
+        r"pollut(?:ion|ants?|ing)|air quality|emissions?|carbon emissions|"
+        r"sewage(?: discharge| spill)?|asbestos|contaminat(?:ed|ion)|"
+        r"derelict|brownfield|factory sites?|"
+        r"abandoned (?:site|factory|mill|works|land|building)s?|"
+        # --- waste ---
+        r"recycl(?:ing|ed|e)|litter(?: pick)?s?|fly.?tipping|"
+        r"(?:waste|bin|refuse) collections?|household waste|landfill|"
+        # --- green space and habitat ---
+        r"green spaces?|nature reserves?|country parks?|local nature reserves?|"
+        r"woodlands?|hedgerows?|wildflowers?|wildflower meadows?|allotments?|"
+        r"tree (?:planting|felling)|trees? (?:planted|felled)|"
+        r"biodiversity|conservation areas?|ecolog(?:y|ical)|habitats?|"
+        r"green belt|greenbelt|"
+        # --- water and moorland, named where a bare word would misfire ---
+        r"reservoirs?|canals?|riverbanks?|riversides?|"
+        r"river (?:roch|irk|beal|spodden)|"
+        r"moorlands?|moor fires?|peat(?:land)?s?|"
+        r"hollingworth lake|healey dell|watergrove|"
+        # --- climate and energy ---
+        r"climate|net zero|solar panels?|wind (?:farms?|turbines?)|"
+        # --- general ---
+        r"environmental|wildlife|in bloom"
+        r")\b",
         re.I,
     )),
     ("sport", re.compile(
