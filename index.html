@@ -876,7 +876,13 @@
     .comment-form textarea{width:100%;min-height:96px;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:11px;font-family:inherit;font-size:15px;resize:vertical}
     .comment-form .rowline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px}
     .comment-chars{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
-    .comment-submit{background:var(--accent);color:#fff;border:0;padding:11px 20px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;cursor:pointer}
+    /* --accent resolves to the masthead yellow (#f5c400), so white text on it
+       gives 1.64:1 - unreadable, and well under the 4.5:1 AA floor. Dark navy
+       on the same yellow gives 11.14:1 and matches the site's other yellow
+       controls (the rail button, the advertise panel). */
+    .comment-submit{background:var(--accent);color:#0b1524;border:2px solid #0b1524;padding:11px 20px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;cursor:pointer}
+    .comment-submit:hover{background:#ffd426}
+    .comment-submit:disabled{opacity:.55;cursor:not-allowed}
     .comment-auth{background:var(--soft);border:1px solid var(--line);padding:16px}
     .comment-auth input{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:10px;margin-bottom:9px;font-size:15px}
     .comment-auth .tabs{display:flex;gap:8px;margin-bottom:12px}
