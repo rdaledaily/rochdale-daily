@@ -2414,6 +2414,18 @@ function shareIconMarkup(action, label) {
         document.getElementById("menu-toggle").setAttribute("aria-expanded", "false");
         return;
       }
+      // Links inside the drawer (What's On, Community support, Advertise) do
+      // their own anchor jump, but nothing closed the drawer, so on a phone the
+      // open menu stayed over the viewport and the page looked stuck on the
+      // menu. The category and area buttons above already close it; the plain
+      // links did not. No preventDefault here - the browser still follows the
+      // href, we only get the menu out of the way first.
+      const navLink = event.target.closest("#main-nav a[href^='#']");
+      if (navLink) {
+        document.getElementById("main-nav").classList.remove("open");
+        document.getElementById("menu-toggle").setAttribute("aria-expanded", "false");
+        return;
+      }
       const shareTrigger = event.target.closest("[data-share]");
       if (shareTrigger) {
         const action = shareTrigger.dataset.share;
