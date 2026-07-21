@@ -645,9 +645,27 @@
     .support-card.women { border-top-color: #c05fb5; }
     .support-card.carers { border-top-color: var(--blue); }
     .support-card.crisis { border-top-color: var(--red-bright); }
+    .support-card.food { border-top-color: var(--accent); }
+    .support-card.money { border-top-color: #e0a33a; }
+    .support-card.child { border-top-color: #6f9fe8; }
+    .support-card.older { border-top-color: #b98ad6; }
+    .support-card.animal { border-top-color: #5cc9a7; }
+    .support-card.cats { border-top-color: #d98ab5; }
     .support-card h3 { margin: 0 0 7px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 22px; line-height: 1.1; }
     .support-card p { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
     .support-card a { font-size: 12px; font-weight: 900; text-transform: uppercase; text-decoration-thickness: 3px; text-decoration-color: var(--yellow); text-underline-offset: 4px; }
+    /* Helpline rows. These carry the numbers a reader in trouble actually
+       needs, so each gets its own tappable tel: link at readable size rather
+       than sitting as grey small print inside a sentence. */
+    .support-lines { list-style: none; margin: 0 0 10px; padding: 0; }
+    .support-lines li { margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--line); }
+    .support-lines li:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+    .support-lines a { display: inline-block; font-family: "Roboto Condensed", Arial, sans-serif;
+      font-size: 18px; font-weight: 800; letter-spacing: .2px; text-transform: none;
+      color: var(--accent); text-decoration: none; }
+    .support-lines a:hover, .support-lines a:focus { text-decoration: underline;
+      text-decoration-thickness: 3px; text-underline-offset: 4px; }
+    .support-lines .line-when { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
     .support-small { display: block; margin-top: 9px; font-size: 11px; color: #777; }
 
     .directory-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; }
@@ -1232,14 +1250,71 @@
             <article class="support-card carers">
               <h3>Rochdale Carers’ Hub</h3>
               <p>A single point of access for young and adult carers across the borough, offering information, advice and support.</p>
+              <ul class="support-lines">
+                <li><a href="tel:03450138208">Carers’ Hub &#183; 0345 013 8208</a><span class="line-when">Young and adult carers across the borough.</span></li>
+              </ul>
               <a href="https://www.rochdale.gov.uk/adult-social-care/carers-hub" target="_blank" rel="noopener">Visit the Carers’ Hub</a>
-              <span class="support-small">Telephone: 0345 013 8208.</span>
             </article>
             <article class="support-card crisis">
               <h3>Need to talk now?</h3>
               <p>Samaritans provides free, confidential listening support at any time of day or night.</p>
-              <a href="tel:116123">Call 116 123 free</a>
+              <ul class="support-lines">
+                <li><a href="tel:116123">Samaritans &#183; 116 123</a><span class="line-when">Free and confidential, 24 hours a day, every day.</span></li>
+              </ul>
+              <a href="https://www.samaritans.org/" target="_blank" rel="noopener">Other ways to get in touch</a>
               <span class="support-small">Call 999 where there is immediate danger to life.</span>
+            </article>
+            <article class="support-card food">
+              <h3>Food banks and pantries</h3>
+              <p>Every food bank, pantry, food club and soup kitchen in the borough, listed by township with addresses, opening times and what you need to bring.</p>
+              <a href="food-banks.html">See the full list</a>
+              <span class="support-small">Some need a voucher or referral first.</span>
+            </article>
+            <article class="support-card money">
+              <h3>Crisis support from the council</h3>
+              <p>Rochdale Borough Council&#8217;s Crisis and Resilience Fund can help with emergency payments, rent, fuel bills and essential household goods.</p>
+              <ul class="support-lines">
+                <li><a href="tel:01706647474">Rochdale Council &#183; 01706 647474</a><span class="line-when">Switchboard, Monday to Friday, 8.30am&#8211;5pm.</span></li>
+              </ul>
+              <a href="https://www.rochdale.gov.uk/cost-living/crisis-resilience-fund" target="_blank" rel="noopener">Check what you can get</a>
+            </article>
+            <article class="support-card child">
+              <h3>Worried about a child?</h3>
+              <p>The NSPCC helpline is for any adult concerned about a child. Childline is for children and young people themselves, about anything at all.</p>
+              <ul class="support-lines">
+                <li><a href="tel:08088005000">NSPCC helpline &#183; 0808 800 5000</a><span class="line-when">For any adult worried about a child. 10am&#8211;4pm, Monday to Friday.</span></li>
+                <li><a href="tel:08001111">Childline &#183; 0800 1111</a><span class="line-when">Free and confidential, for children and young people, any time.</span></li>
+              </ul>
+              <a href="https://www.nspcc.org.uk/about-us/our-services/nspcc-helpline/" target="_blank" rel="noopener">More from the NSPCC</a>
+              <span class="support-small">Call 999 if a child is in immediate danger.</span>
+            </article>
+            <article class="support-card older">
+              <h3>Help for older people</h3>
+              <p>Age UK advises on money, health, housing and care. The Silver Line is a friendship and support line for anyone aged 55 or over, at any hour.</p>
+              <ul class="support-lines">
+                <li><a href="tel:08006781602">Age UK advice line &#183; 0800 678 1602</a><span class="line-when">Money, health, housing and care. 8am&#8211;7pm, every day of the year.</span></li>
+                <li><a href="tel:08004708090">The Silver Line &#183; 0800 4 70 80 90</a><span class="line-when">Friendship and support for anyone 55 or over. 24 hours, every day.</span></li>
+              </ul>
+              <a href="https://www.ageuk.org.uk/services/age-uk-advice-line/" target="_blank" rel="noopener">More from Age UK</a>
+              <span class="support-small">Both lines are free to call.</span>
+            </article>
+            <article class="support-card animal">
+              <h3>Rochdale Dog Rescue</h3>
+              <p>A volunteer-run local charity that takes stray and abandoned dogs from the council&#8217;s contracted holding kennels before the seven-day deadline, then assesses, vaccinates and neuters them and rehomes them through foster carers.</p>
+              <ul class="support-lines">
+                <li><a href="tel:07939489363">Rochdale Dog Rescue &#183; 07939 489363</a><span class="line-when">Adopting, fostering, volunteering or donating.</span></li>
+              </ul>
+              <a href="https://rochdale-dog-rescue.com/dogs-in-our-care" target="_blank" rel="noopener">See dogs needing homes</a>
+              <span class="support-small">Registered charity 1162047. Not an emergency service &#8212; report animal cruelty or an injured animal to the RSPCA on 0300 1234 999.</span>
+            </article>
+            <article class="support-card cats">
+              <h3>Cats Protection Rochdale</h3>
+              <p>A volunteer-run branch covering the OL11, OL12, OL15, OL16 and M24 postcodes. It rehomes local cats and kittens, helps with lost and found, and funds neutering for households on benefits or facing financial hardship.</p>
+              <ul class="support-lines">
+                <li><a href="tel:03000120612">Cats Protection Rochdale &#183; 03000 12 06 12</a><span class="line-when">Answered every day except Wednesday, when the branch is closed.</span></li>
+              </ul>
+              <a href="https://www.cats.org.uk/rochdale" target="_blank" rel="noopener">See cats needing homes</a>
+              <span class="support-small">Registered charity 203644. Viewings are by appointment only, at the North Manchester Cat Centre in Greenfield.</span>
             </article>
           </div>
         </div>
