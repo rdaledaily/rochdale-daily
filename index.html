@@ -1195,19 +1195,6 @@
         </div>
       </section>
 
-      <!-- Mobile only. Cards beyond the third, plus the side rail, are moved
-           in here by splitNewsForMobile() so What's On is reachable without
-           scrolling past the whole news list. Empty and hidden on desktop. -->
-      <section class="section" id="latest-news-more" aria-labelledby="latest-news-more-title" hidden>
-        <div class="wrap">
-          <div class="section-head">
-            <h2 class="section-title" id="latest-news-more-title">More local news</h2>
-          </div>
-          <div class="news-grid" id="news-grid-extra"></div>
-          <div id="side-rail-home"></div>
-        </div>
-      </section>
-
       <section class="section" id="support" aria-labelledby="support-title">
         <div class="wrap">
           <div class="section-head">
@@ -2239,7 +2226,6 @@
       // run against an empty grid. Hooking the filter alone meant the labels
       // appeared only once a reader clicked a category.
       decorateCommentCounts();
-      splitNewsForMobile();
     }
 
     function eventTagsForStory(story, date) {
@@ -3267,49 +3253,41 @@ function shareIconMarkup(action, label) {
     });
 
     /* ---- Mobile reading order -------------------------------------------
-       On a phone every column stacks, so What's On sat below a dozen news
-       cards and three rail boxes - effectively invisible. Below 620px (the
-       breakpoint where .news-grid drops to one column) the grid keeps its
-       first three cards and the remainder, along with the side rail, move to
-       a "More local news" block placed after What's On.
+       On a phone everything stacks, and above the first news card sit the
+       masthead, the ticker, the lead story with its picture, two secondary
+       stories, the five-item Latest panel, a section heading and a ten-button
+       filter bar. What's On was below all of that plus the whole news list.
 
-       Nodes are MOVED, not copied: the rail holds the newsletter form and the
-       area filter, and cloning them would leave duplicate ids and dead
-       handlers. Re-run after every grid render, because renderNewsGrid
-       replaces the grid's innerHTML wholesale. */
-    const MOBILE_CARDS_BEFORE_EVENTS = 3;
+       Cutting the list down barely helped, so below 620px the What's On
+       section is hoisted to sit directly after Top Stories - second thing on
+       the page - and Latest News follows it in full. The section node is MOVED
+       rather than copied: it holds the Add an Event form and the event filter
+       buttons, and a clone would leave duplicate ids and dead handlers. */
     const mobileLayoutQuery = window.matchMedia("(max-width: 620px)");
 
-    function splitNewsForMobile() {
-      const grid = document.getElementById("news-grid");
-      const extra = document.getElementById("news-grid-extra");
-      const section = document.getElementById("latest-news-more");
-      const railHome = document.getElementById("side-rail-home");
-      const layout = document.querySelector(".news-layout");
-      const rail = document.querySelector(".side-rail");
-      if (!grid || !extra || !section || !railHome || !layout || !rail) return;
+    function placeEventsForViewport() {
+      const events = document.getElementById("whats-on");
+      const latest = document.querySelector('section[aria-labelledby="latest-news-title"]');
+      if (!events || !latest || !latest.parentNode) return;
 
-      // Always rebuild from the desktop arrangement first, so the function is
-      // safe to call repeatedly and in any order.
-      while (extra.firstChild) grid.appendChild(extra.firstChild);
-      if (rail.parentElement === railHome) layout.appendChild(rail);
+      const wantedBeforeLatest = mobileLayoutQuery.matches;
+      const isBeforeLatest = events.nextElementSibling === latest;
+      if (wantedBeforeLatest === isBeforeLatest) return;   // already correct
 
-      if (!mobileLayoutQuery.matches) { section.hidden = true; return; }
-
-      const cards = Array.from(grid.children);
-      if (cards.length > MOBILE_CARDS_BEFORE_EVENTS) {
-        cards.slice(MOBILE_CARDS_BEFORE_EVENTS).forEach(card => extra.appendChild(card));
+      if (wantedBeforeLatest) {
+        latest.parentNode.insertBefore(events, latest);
+      } else {
+        // Desktop home: immediately after the Latest News section.
+        latest.parentNode.insertBefore(events, latest.nextSibling);
       }
-      railHome.appendChild(rail);
-      section.hidden = false;
     }
 
-    // Fires on rotation and on resize across the breakpoint, not on every pixel.
     if (mobileLayoutQuery.addEventListener) {
-      mobileLayoutQuery.addEventListener("change", splitNewsForMobile);
+      mobileLayoutQuery.addEventListener("change", placeEventsForViewport);
     } else if (mobileLayoutQuery.addListener) {
-      mobileLayoutQuery.addListener(splitNewsForMobile);
+      mobileLayoutQuery.addListener(placeEventsForViewport);
     }
+    placeEventsForViewport();
 
     loadCommentCounts();
     loadCommunityEvents();
