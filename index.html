@@ -267,6 +267,10 @@
       place-items: center;
       flex: 0 0 auto;
       background: #8f0018;
+      /* Fixed width, not content width. BREAKING and TRAFFIC share this class
+         but are different lengths, so sizing to the text left the two bars
+         ragged and the scrolling copy starting at different points. */
+      min-width: 138px;
       padding: 0 17px;
       font-family: "Roboto Condensed", Arial, sans-serif;
       font-weight: 900;
@@ -868,7 +872,7 @@
       .nav-list a, .nav-list button { border-right: 0; border-bottom: 1px solid #333; justify-content: flex-start; }
       .breaking-copy { font-size: 12px; }
       .breaking-segment { gap: 28px; padding: 0 28px 0 12px; }
-      .breaking-label { padding-inline: 12px; font-size: 11px; }
+      .breaking-label { min-width: 104px; padding-inline: 12px; font-size: 11px; }
       .lead-grid { gap: 24px; }
       .secondary-stack, .news-grid, .side-rail, .events-grid, .support-grid, .directory-grid, .latest-list { grid-template-columns: 1fr; }
       .latest-panel { padding-top: 12px; }
@@ -3428,7 +3432,11 @@ function shareIconMarkup(action, label) {
       if (!bar || !track || !copy) return;
 
       var REFRESH_MS = 120000;
-      var SPEED = 78; // pixels per second, matching the breaking ticker
+      /* Deliberately slower than the breaking ticker's 78px/s. Scroll speed
+         reads as urgency, and a bus stop closure is not breaking news.
+         Matching the two made the traffic bar shout as loudly as the red
+         one above it. */
+      var SPEED = 46; // pixels per second
       var frame = 0, lastTime = 0, offset = 0, cycleWidth = 0;
 
       function measure() {
