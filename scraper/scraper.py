@@ -85,6 +85,10 @@ RSS_ITEMS_PER_SOURCE = int(os.getenv('RSS_ITEMS_PER_SOURCE', '100'))
 GOOGLE_SEARCH_QUERY_LIMIT = int(os.getenv('GOOGLE_SEARCH_QUERY_LIMIT', '128'))
 DISCOVERY_PAGE_LIMIT = int(os.getenv('DISCOVERY_PAGE_LIMIT', '3'))
 DISCOVERY_WORKERS = int(os.getenv('DISCOVERY_WORKERS', '16'))
+# Threads used to fetch the listing pages themselves. Kept separate from
+# DISCOVERY_WORKERS so the number of index fetches can be tuned without
+# changing how hard individual articles are fetched.
+DISCOVERY_LINK_WORKERS = int(os.getenv('DISCOVERY_LINK_WORKERS', '12'))
 AI_WORKERS = int(os.getenv('AI_WORKERS', '6'))
 MIN_LIVE_STORIES = int(os.getenv('MIN_LIVE_STORIES', '30'))
 MIN_BALANCED_SELECTION_LIMIT = int(os.getenv('MIN_BALANCED_SELECTION_LIMIT', '40'))
@@ -1125,12 +1129,30 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
     return Candidate(source_name=source['name'], source_url=meta['url'], source_title=meta['title'], source_summary=meta['description'] or meta['body_excerpt'][:900], source_published_at=iso_utc(published), area=source_text_area(text, source['default_area'], source['name'], meta['url'], trusted_local), category=category, image_candidate_url=meta['image'], source_body_excerpt=meta['body_excerpt'], event_start_at=iso_utc(event_start) if event_start else '', event_end_at=meta.get('event_end', ''), event_location=meta.get('event_location', ''), source_kind=source_kind)
 
 def collect_discovery_candidates() -> list[Candidate]:
+    # Link gathering runs in parallel. It used to be a serial loop over every
+    # entry in DISCOVERY_PAGES, and with 44 sources at up to DISCOVERY_PAGE_LIMIT
+    # listing pages each that is ~130 sequential HTTP fetches before a single
+    # article is considered. On the 15-minute schedule that alone consumed the
+    # run budget and the job was killed mid-discovery, so the run published
+    # nothing at all. The per-URL fetching below was already threaded; only this
+    # outer loop was not.
+    sources = [
+        source
+        for source in DISCOVERY_PAGES
+        if not source_is_denied(source.get('name', ''), source.get('url', ''))
+    ]
     jobs: list[tuple[dict[str, str], str]] = []
-    for source in DISCOVERY_PAGES:
-        if source_is_denied(source.get('name', ''), source.get('url', '')):
-            continue
-        log.info('Discovering pages: %s', source['name'])
-        jobs.extend(((source, url) for url in discovery_links(source)))
+    with ThreadPoolExecutor(max_workers=max(1, DISCOVERY_LINK_WORKERS)) as executor:
+        link_futures = {executor.submit(discovery_links, source): source for source in sources}
+        for future in as_completed(link_futures):
+            source = link_futures[future]
+            try:
+                urls = future.result()
+            except Exception as exc:
+                log.warning('Discovery link gathering failed for %s: %s', source.get('name', ''), exc)
+                continue
+            log.info('Discovering pages: %s (%d links)', source.get('name', ''), len(urls))
+            jobs.extend((source, url) for url in urls)
     candidates: list[Candidate] = []
     with ThreadPoolExecutor(max_workers=max(1, DISCOVERY_WORKERS)) as executor:
         future_map = {executor.submit(_discovery_candidate, source, url): (source['name'], url) for source, url in jobs}
