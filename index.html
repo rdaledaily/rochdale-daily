@@ -497,7 +497,10 @@
     /* Yellow panel: force dark text, since the page default is now light. */
     .rail-box.yellow, .rail-box.yellow .rail-title, .rail-box.yellow .rail-copy,
     .rail-box.yellow p, .rail-box.yellow li, .rail-box.yellow strong { color: #0b1524; }
-    .rail-box.yellow .rail-button { color: #0b1524; border-bottom-color: #0b1524; }
+    /* The button is NOT on the yellow surface - it paints its own #111
+       background - so the dark-text override above must not reach it.
+       Applying it gave #0b1524 on #111: a contrast ratio of 1.03:1. */
+    .rail-box.yellow .rail-button { color: var(--yellow); }
     .rail-box.red { border-top-color: var(--accent); background: var(--card); border-left: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .rail-title {
       margin: 0 0 12px;
