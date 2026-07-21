@@ -1,30 +1,32 @@
-name: Rochdale Daily fast scrape
+name: Rochdale Daily main scrape
 
-# The fast discovery loop. Runs at :22, :37 and :52 and must always finish
-# inside its 15-minute slot, so timeout-minutes is 12. Nothing slow lives
-# here: no test suite, no Chromium, no image backfill. Those run in
-# scrape-events.yml, images.yml and ci.yml on their own concurrency groups
-# so they can never queue behind this one.
+# The main pipeline run, without a browser. Paired with scrape-events.yml so
+# that exactly one full pipeline runs per half hour and the two never overlap:
+# events at :05, main at :35. The previous design scheduled a 20-minute
+# pipeline every 15 minutes, so runs queued behind each other, GitHub dropped
+# the surplus, and the feed saw 6-20 productive runs a day instead of 96.
+# Cadence sets how quickly a story reaches the page; it does not create
+# stories. Daily volume is bounded by supply and MAX_AI_ARTICLES_PER_RUN.
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "22,37,52 * * * *"
+    - cron: "35 * * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: rd-scrape-fast
+  group: rd-scrape-main
   cancel-in-progress: false
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    # Hard ceiling below the 15-minute gap. A hung run dies before the next
-    # scheduled run fires, so the queue can never build up and GitHub never
-    # silently drops a slot.
-    timeout-minutes: 12
+    # The pipeline is measured at roughly 20 minutes. This ceiling leaves it
+    # real headroom while still finishing well before the next scheduled run
+    # 30 minutes later, so the queue can never build and no slot is dropped.
+    timeout-minutes: 28
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -61,6 +63,7 @@ jobs:
       GOOGLE_SEARCH_QUERY_LIMIT: "128"
       DISCOVERY_PAGE_LIMIT: "3"
       DISCOVERY_WORKERS: "12"
+      DISCOVERY_LINK_WORKERS: "12"
       AI_WORKERS: "6"
       MIN_BALANCED_SELECTION_LIMIT: "40"
       MAX_SELECTED_PER_SOURCE: "12"
@@ -70,7 +73,7 @@ jobs:
       MIN_LIVE_STORIES: "40"
       # Chromium work belongs to scrape-events.yml only.
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
-      COMMIT_MESSAGE: "Update Rochdale Daily news feed (fast)"
+      COMMIT_MESSAGE: "Update Rochdale Daily news feed (main)"
 
     steps:
       - name: Check out repository
@@ -96,7 +99,7 @@ jobs:
         run: python scraper/repair_event_records.py
 
       - name: Run Rochdale Daily pipeline
-        timeout-minutes: 8
+        timeout-minutes: 22
         run: python scraper/scraper.py
 
       - name: Validate public article feed
