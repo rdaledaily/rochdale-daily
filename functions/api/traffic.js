@@ -23,28 +23,43 @@ const DEFAULT_ENDPOINT = "https://data.bus-data.dft.gov.uk/api/v1/siri-sx";
 const CACHE_SECONDS = 120;
 
 // Rochdale borough bounding box, used when a situation carries coordinates.
-const BOROUGH = { minLat: 53.55, maxLat: 53.70, minLon: -2.30, maxLon: -2.03 };
+// Rochdale borough bounding box. Southern edge reaches 53.52 so Middleton and
+// Alkrington are inside it; a tighter box silently dropped them.
+const BOROUGH = { minLat: 53.52, maxLat: 53.72, minLon: -2.32, maxLon: -2.00 };
 
 /**
- * Localities that are unambiguously inside Rochdale borough. A situation must
- * match one of these to qualify - nothing else is sufficient evidence.
- *
- * Deliberately excluded: kingsway, queensway, birch, langley, rhodes. Those are
- * borough place names but they are also common street names nationwide, and in
- * live data they pulled in a road closure in Scunthorpe (Kingsway Roundabout)
- * and one in New Brighton (a stop called Birch Grove). A false positive on a
- * traffic warning is worse than a miss: it tells a reader a road is shut when
- * it is not.
+ * Localities distinctive enough to identify the borough on their own.
  */
-const BOROUGH_PLACES = [
-  "rochdale", "heywood", "middleton", "littleborough", "milnrow", "newhey",
-  "wardle", "smallbridge", "castleton", "norden", "bamford", "healey",
-  "spotland", "falinge", "kirkholt", "balderstone", "sudden", "newbold",
-  "belfield", "firgrove", "shawclough", "syke", "cutgate", "bagslate",
-  "marland", "hollingworth lake", "darnhill", "hopwood", "alkrington",
-  "deeplish", "meanwood", "wardleworth", "lowerplace", "buersil",
-  "chadderton fold", "slattocks", "thornham", "whitworth road",
+const UNIQUE_PLACES = [
+  "rochdale", "heywood", "littleborough", "milnrow", "newhey", "smallbridge",
+  "spotland", "falinge", "kirkholt", "balderstone", "belfield", "firgrove",
+  "shawclough", "cutgate", "bagslate", "darnhill", "hopwood", "alkrington",
+  "deeplish", "wardleworth", "lowerplace", "buersil", "slattocks", "thornham",
+  "hollingworth lake", "chadderton fold", "milkstone", "kingsway business park",
 ];
+
+/**
+ * Borough place names that are also common words or exist elsewhere in the UK.
+ * These only count alongside a borough anchor, because on their own they were
+ * demonstrably wrong in live data:
+ *
+ *   "sudden"   - a Rochdale locality AND an ordinary English word. It matched
+ *                "Sudden closure of Walkley Road" in Sheffield.
+ *   "healey"   - matched "Healey Grove" on the Wirral.
+ *   "meanwood" - far better known as a district of Leeds.
+ *   "castleton"- far better known as the village in Derbyshire.
+ *   "middleton"- there are Middletons in Leeds, Sussex and a dozen counties.
+ */
+const AMBIGUOUS_PLACES = [
+  "middleton", "castleton", "meanwood", "norden", "bamford", "healey", "syke",
+  "marland", "wardle", "sudden", "newbold", "birch", "langley", "rhodes",
+];
+
+/** Proof that an ambiguous name refers to this borough and not another. */
+const BOROUGH_ANCHORS = [
+  "rochdale", "greater manchester", "oldham", "bury", "heywood", "metrolink",
+];
+const POSTCODE_ANCHOR = /\b(?:ol\s?(?:1[0-6]|[1-9])|m24)\b/i;
 
 /**
  * Roads worth naming once a situation has already qualified on a locality.
@@ -146,24 +161,40 @@ function hasWord(haystack, needle) {
     .test(haystack);
 }
 
+function inBox(lat, lon) {
+  return (
+    lat >= BOROUGH.minLat && lat <= BOROUGH.maxLat &&
+    lon >= BOROUGH.minLon && lon <= BOROUGH.maxLon
+  );
+}
+
 function inBorough(situation) {
-  const structured = [...situation.places, ...situation.stops].join(" ").toLowerCase();
-  const everything = [situation.summary, situation.description, structured]
-    .join(" ")
-    .toLowerCase();
-
-  // A borough locality is required. Roads and coordinates only refine.
-  if (BOROUGH_PLACES.some((place) => hasWord(everything, place))) return true;
-
-  // Coordinates are trusted when the publisher supplied them, because a point
-  // inside the boundary is stronger evidence than any name match.
+  // Coordinates decide whenever the publisher supplied them, and this check has
+  // to come FIRST. Testing names first meant a Sheffield closure whose text
+  // contained the word "sudden" was accepted and returned before the latitude
+  // that would have rejected it was ever consulted. A point on the map is
+  // stronger evidence than any string, so it wins outright.
   if (situation.lat !== null && situation.lon !== null) {
-    return (
-      situation.lat >= BOROUGH.minLat && situation.lat <= BOROUGH.maxLat &&
-      situation.lon >= BOROUGH.minLon && situation.lon <= BOROUGH.maxLon
-    );
+    return inBox(situation.lat, situation.lon);
   }
-  return false;
+
+  const text = [
+    situation.summary,
+    situation.description,
+    ...situation.places,
+    ...situation.stops,
+  ].join(" ").toLowerCase();
+
+  if (UNIQUE_PLACES.some((place) => hasWord(text, place))) return true;
+
+  // An ambiguous name needs corroboration from something that pins the text to
+  // this part of the country.
+  const anchored =
+    BOROUGH_ANCHORS.some((anchor) => hasWord(text, anchor)) ||
+    POSTCODE_ANCHOR.test(text);
+  if (!anchored) return false;
+
+  return AMBIGUOUS_PLACES.some((place) => hasWord(text, place));
 }
 
 /** True when the situation is happening now, or starts within LOOKAHEAD_MS. */
