@@ -30,25 +30,37 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 WIDTH = 1200
 HEIGHT = 675
-GOLD = (200, 164, 74)
+# Site accent. Kept as one constant so every generated card belongs to the
+# same family: the old per-category palette meant a community story arrived
+# orange and a politics story purple, which read as two unrelated designs
+# rather than one masthead. Category is still signalled, by glyph and kicker
+# label, not by hue.
+CYAN = (34, 211, 238)
+GOLD = CYAN  # retained name: referenced by the area pin and the news default
 INK = (14, 18, 26)
 
-# Per-category accent + short label. Accents are distinct enough to read as a
-# category signal while staying compatible with the black/gold identity.
+# Per-category glyph accent + short label. To restore colour-coding, replace
+# ACCENT below with the per-category values kept in the comment beneath.
+ACCENT = CYAN
 CATEGORY_STYLE: dict[str, tuple[tuple[int, int, int], str]] = {
-    "crime": ((198, 64, 64), "Crime"),
-    "traffic": ((214, 150, 46), "Traffic"),
-    "transport": ((66, 148, 168), "Transport"),
-    "politics": ((150, 108, 184), "Politics"),
-    "education": ((78, 128, 196), "Education"),
-    "sport": ((92, 168, 96), "Sport"),
-    "events": ((198, 108, 168), "Events"),
-    "business": ((110, 128, 150), "Business"),
-    "community": ((214, 132, 70), "Community"),
-    "health": ((92, 170, 150), "Health"),
-    "environment": ((104, 162, 84), "Environment"),
-    "news": (GOLD, "News"),
+    "crime": (ACCENT, "Crime"),
+    "traffic": (ACCENT, "Traffic"),
+    "transport": (ACCENT, "Transport"),
+    "politics": (ACCENT, "Politics"),
+    "education": (ACCENT, "Education"),
+    "sport": (ACCENT, "Sport"),
+    "events": (ACCENT, "Events"),
+    "business": (ACCENT, "Business"),
+    "community": (ACCENT, "Community"),
+    "health": (ACCENT, "Health"),
+    "environment": (ACCENT, "Environment"),
+    "news": (ACCENT, "News"),
 }
+# Previous per-category accents, kept for reference:
+#   crime (198,64,64)      traffic (214,150,46)   transport (66,148,168)
+#   politics (150,108,184) education (78,128,196) sport (92,168,96)
+#   events (198,108,168)   business (110,128,150) community (214,132,70)
+#   health (92,170,150)    environment (104,162,84)
 
 # Wards -> township, so a ward story can fall back to its township photo before
 # the borough-wide one. Extend freely; unknown areas fall back to "rochdale".
