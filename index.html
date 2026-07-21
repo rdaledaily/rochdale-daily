@@ -1975,6 +1975,7 @@
       latestElement.innerHTML = stories.slice(3, 9).map(story => `
         <li class="latest-item"><button type="button" data-open-article="${story.id}">${story.title}<span class="latest-time">${story.area.toUpperCase()} · ${story.timeLabel}</span></button></li>
       `).join("");
+          decorateCommentCounts();
     }
 
     const areaGroups = {
@@ -2214,6 +2215,11 @@
           `)}
         </article>
       `).join("");
+      // Decorate here rather than only from applyFilter: the first render
+      // happens when the article feed lands, long after loadCommentCounts has
+      // run against an empty grid. Hooking the filter alone meant the labels
+      // appeared only once a reader clicked a category.
+      decorateCommentCounts();
     }
 
     function eventTagsForStory(story, date) {
@@ -2985,13 +2991,15 @@ function shareIconMarkup(action, label) {
     async function loadCommentCounts() {
       try {
         const res = await fetch(`${COMMENTS_API}?counts=1`, { headers: { Accept: "application/json" } });
-        if (!res.ok) return;
-        const payload = await res.json();
-        if (payload && payload.counts) {
-          commentCounts = payload.counts;
-          decorateCommentCounts();
+        if (res.ok) {
+          const payload = await res.json();
+          if (payload && payload.counts) commentCounts = payload.counts;
         }
       } catch (e) { /* comments are additive; never block the page */ }
+      // Decorate regardless. An unreachable API means every article simply has
+      // no comments yet, which is "0 comments" - not a blank card that leaves
+      // the reader unsure whether the article can be commented on at all.
+      decorateCommentCounts();
     }
 
     function decorateCommentCounts() {
