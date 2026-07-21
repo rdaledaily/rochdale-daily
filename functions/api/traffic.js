@@ -26,10 +26,15 @@ const CACHE_SECONDS = 120;
 const BOROUGH = { minLat: 53.55, maxLat: 53.70, minLon: -2.30, maxLon: -2.03 };
 
 /**
- * Place names that mean "this is in Rochdale borough". A SIRI-SX situation may
- * identify its location by AffectedPlace, by stop name, or only in the free
- * text, so all three are searched. Ordering matters for nothing here; this is a
- * membership test.
+ * Localities that are unambiguously inside Rochdale borough. A situation must
+ * match one of these to qualify - nothing else is sufficient evidence.
+ *
+ * Deliberately excluded: kingsway, queensway, birch, langley, rhodes. Those are
+ * borough place names but they are also common street names nationwide, and in
+ * live data they pulled in a road closure in Scunthorpe (Kingsway Roundabout)
+ * and one in New Brighton (a stop called Birch Grove). A false positive on a
+ * traffic warning is worse than a miss: it tells a reader a road is shut when
+ * it is not.
  */
 const BOROUGH_PLACES = [
   "rochdale", "heywood", "middleton", "littleborough", "milnrow", "newhey",
@@ -37,17 +42,31 @@ const BOROUGH_PLACES = [
   "spotland", "falinge", "kirkholt", "balderstone", "sudden", "newbold",
   "belfield", "firgrove", "shawclough", "syke", "cutgate", "bagslate",
   "marland", "hollingworth lake", "darnhill", "hopwood", "alkrington",
-  "langley", "rhodes", "bowlee", "birch", "deeplish", "meanwood",
-  "wardleworth", "lowerplace", "buersil", "kingsway", "queensway",
+  "deeplish", "meanwood", "wardleworth", "lowerplace", "buersil",
+  "chadderton fold", "slattocks", "thornham", "whitworth road",
 ];
 
-/** Roads worth flagging even when the place name is absent from the text. */
+/**
+ * Roads worth naming once a situation has already qualified on a locality.
+ * These never qualify a situation on their own: Bury Road, Manchester Road and
+ * Oldham Road exist in dozens of towns, so matching on them alone is exactly
+ * how the Scunthorpe closure got through.
+ */
 const BOROUGH_ROADS = [
   "a58", "a627", "a664", "a671", "a680", "m62", "m66",
   "oldham road", "manchester road", "bury road", "edenfield road",
   "milnrow road", "whitworth road", "rochdale road", "halifax road",
-  "queensway", "kingsway", "drake street", "yorkshire street",
+  "drake street", "yorkshire street", "entwistle road", "sandy lane",
 ];
+
+/**
+ * How far ahead counts as "now". A closure starting within a few hours is worth
+ * warning about; one starting in October is a diary item, not traffic.
+ */
+const LOOKAHEAD_MS = 3 * 60 * 60 * 1000;
+
+/** The ticker has to stay readable. Beyond this nobody reaches the end. */
+const MAX_ITEMS = 8;
 
 /** SIRI-SX carries the cause in one of several *Reason elements. */
 const REASON_TAGS = [
@@ -122,19 +141,22 @@ function humanReason(code) {
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
 
+function hasWord(haystack, needle) {
+  return new RegExp("(^|[^a-z0-9])" + needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "([^a-z0-9]|$)")
+    .test(haystack);
+}
+
 function inBorough(situation) {
-  const haystack = [
-    situation.summary,
-    situation.description,
-    ...situation.places,
-    ...situation.stops,
-  ].join(" ").toLowerCase();
+  const structured = [...situation.places, ...situation.stops].join(" ").toLowerCase();
+  const everything = [situation.summary, situation.description, structured]
+    .join(" ")
+    .toLowerCase();
 
-  if (BOROUGH_PLACES.some((p) => haystack.includes(p))) return true;
-  if (BOROUGH_ROADS.some((r) => new RegExp(`\\b${r}\\b`).test(haystack))) return true;
+  // A borough locality is required. Roads and coordinates only refine.
+  if (BOROUGH_PLACES.some((place) => hasWord(everything, place))) return true;
 
-  // Fall back to coordinates when the publisher supplied them and the text
-  // gave us nothing to match on.
+  // Coordinates are trusted when the publisher supplied them, because a point
+  // inside the boundary is stronger evidence than any name match.
   if (situation.lat !== null && situation.lon !== null) {
     return (
       situation.lat >= BOROUGH.minLat && situation.lat <= BOROUGH.maxLat &&
@@ -142,6 +164,15 @@ function inBorough(situation) {
     );
   }
   return false;
+}
+
+/** True when the situation is happening now, or starts within LOOKAHEAD_MS. */
+function isCurrent(situation, nowMs) {
+  const start = Date.parse(situation.start || situation.created || "");
+  const end = Date.parse(situation.end || "");
+  if (Number.isFinite(end) && end < nowMs) return false;
+  if (Number.isFinite(start) && start > nowMs + LOOKAHEAD_MS) return false;
+  return true;
 }
 
 function parseSituation(block) {
@@ -184,8 +215,10 @@ export function extractDisruptions(xml, now = new Date()) {
     .map(parseSituation)
     // A situation the publisher has closed is history, not traffic.
     .filter((s) => s.progress !== "closed" && s.progress !== "closing")
-    // Nor is one whose validity window has already ended.
-    .filter((s) => !s.end || Date.parse(s.end) >= nowMs)
+    // Planned works months out are a diary item, not a live warning.
+    .filter((s) => isCurrent(s, nowMs))
+    // Publishers mark cancelled works by editing the summary, not the status.
+    .filter((s) => !/\*\*\s*(postponed|cancelled|canceled)\s*\*\*/i.test(s.summary || ""))
     .filter((s) => s.summary || s.description)
     .filter(inBorough)
     .filter((s) => {
@@ -197,7 +230,8 @@ export function extractDisruptions(xml, now = new Date()) {
     .sort((a, b) => {
       const ka = sortKey(a), kb = sortKey(b);
       return ka[0] - kb[0] || ka[1] - kb[1];
-    });
+    })
+    .slice(0, MAX_ITEMS);
 }
 
 export async function onRequest(context) {
