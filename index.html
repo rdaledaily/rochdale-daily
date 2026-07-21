@@ -47,6 +47,10 @@
       /* Weather glyph keeps its own token. It reads as a physical thing (sun,
          rain, snow), not as brand accent, so it must not follow --accent. */
       --sun: #f5c400;
+      /* Traffic warning amber. Kept off --accent on purpose: this signals
+         a hazard, so it must not follow a brand palette change. */
+      --traffic: #f5c400;
+      --traffic-dark: #c79d00;
       --red: #c8102e;
       --red-bright: #ff5c6b;
       --blue: #3d8bd6;
@@ -301,6 +305,14 @@
       padding: 0 42px 0 18px;
     }
     .breaking-text { display: inline-block; }
+    /* Traffic ticker. Amber is a functional warning colour here, not brand, so
+       it gets its own token and is deliberately not tied to --accent: changing
+       the site accent must never turn the traffic warning cyan. Dark ink on
+       this amber is 11.1:1, comfortably past AA. */
+    .traffic-bar { background: var(--traffic); color: #0b1524; }
+    .traffic-bar .breaking-label { background: var(--traffic-dark); color: #0b1524; }
+    .traffic-bar .breaking-separator { color: #7a6200; }
+    .traffic-bar[hidden] { display: none; }
     .breaking-separator {
       color: #ffccd5;
       font-size: 9px;
@@ -1004,6 +1016,23 @@
           </span>
           <span class="breaking-segment" aria-hidden="true">
             <span class="breaking-text">Rochdale Daily preview: independent local news, events and public-service information in one place.</span>
+            <span class="breaking-separator" aria-hidden="true">◆</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="traffic-bar" id="traffic-bar" hidden>
+    <div class="wrap breaking-row">
+      <div class="breaking-label">Traffic</div>
+      <div class="breaking-copy" id="traffic-copy" role="status" aria-live="polite">
+        <div class="breaking-track" id="traffic-track">
+          <span class="breaking-segment">
+            <span class="breaking-text"></span>
+            <span class="breaking-separator" aria-hidden="true">◆</span>
+          </span>
+          <span class="breaking-segment" aria-hidden="true">
+            <span class="breaking-text"></span>
             <span class="breaking-separator" aria-hidden="true">◆</span>
           </span>
         </div>
@@ -3383,5 +3412,105 @@ function shareIconMarkup(action, label) {
     window.setInterval(loadCommunityEvents, 5 * 60 * 1000);
   </script>
   <script defer src="/assets/ads.js"></script>
+  <script>
+    /* Traffic ticker. Reuses the breaking bar's layout classes but runs its own
+       animation loop against its own element IDs, so the existing breaking
+       ticker code is untouched.
+
+       The bar stays hidden whenever there is nothing to report. An empty
+       warning strip is just clutter, and a permanently visible traffic bar
+       trains readers to ignore it - which defeats the point on the morning it
+       actually matters. */
+    (function () {
+      var bar = document.getElementById("traffic-bar");
+      var track = document.getElementById("traffic-track");
+      var copy = document.getElementById("traffic-copy");
+      if (!bar || !track || !copy) return;
+
+      var REFRESH_MS = 120000;
+      var SPEED = 78; // pixels per second, matching the breaking ticker
+      var frame = 0, lastTime = 0, offset = 0, cycleWidth = 0;
+
+      function measure() {
+        var first = track.querySelector(".breaking-segment");
+        cycleWidth = first ? Math.max(1, first.getBoundingClientRect().width) : 1;
+      }
+
+      function animate(timestamp) {
+        if (!lastTime) lastTime = timestamp;
+        var elapsed = Math.min(80, timestamp - lastTime);
+        lastTime = timestamp;
+        if (!cycleWidth) measure();
+        offset -= SPEED * (elapsed / 1000);
+        if (-offset >= cycleWidth) offset += cycleWidth;
+        track.style.transform = "translate3d(" + offset + "px, 0, 0)";
+        frame = window.requestAnimationFrame(animate);
+      }
+
+      function restart() {
+        if (frame) window.cancelAnimationFrame(frame);
+        lastTime = 0; offset = 0; cycleWidth = 0;
+        track.style.transform = "translate3d(0, 0, 0)";
+        window.requestAnimationFrame(function () {
+          measure();
+          frame = window.requestAnimationFrame(animate);
+        });
+      }
+
+      function stop() {
+        if (frame) window.cancelAnimationFrame(frame);
+        frame = 0;
+      }
+
+      /* One disruption becomes one short phrase. The summary alone is usually a
+         complete sentence; the reason is appended only when it adds something
+         the summary does not already say. */
+      function phrase(item) {
+        var text = String(item.summary || "").trim();
+        var reason = String(item.reason || "").trim();
+        if (reason && text.toLowerCase().indexOf(reason.toLowerCase()) === -1) {
+          text += " (" + reason.toLowerCase() + ")";
+        }
+        var lines = (item.lines || []).slice(0, 3);
+        if (lines.length) {
+          text += " \u2014 service" + (lines.length > 1 ? "s " : " ") + lines.join(", ") + " affected";
+        }
+        return text;
+      }
+
+      function show(items) {
+        var message = items.map(phrase).filter(Boolean).join("   \u25C6   ");
+        if (!message) { hide(); return; }
+        var nodes = track.querySelectorAll(".breaking-text");
+        for (var i = 0; i < nodes.length; i++) nodes[i].textContent = message;
+        copy.setAttribute("aria-label", "Traffic: " + message);
+        bar.hidden = false;
+        restart();
+      }
+
+      function hide() {
+        bar.hidden = true;
+        stop();
+      }
+
+      function load() {
+        fetch("/api/traffic", { cache: "no-store" })
+          .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+          .then(function (data) {
+            var items = (data && data.disruptions) || [];
+            if (items.length) show(items); else hide();
+          })
+          .catch(hide);
+      }
+
+      window.addEventListener("resize", function () { if (!bar.hidden) restart(); });
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) { stop(); } else { load(); }
+      });
+
+      load();
+      setInterval(function () { if (!document.hidden) load(); }, REFRESH_MS);
+    })();
+  </script>
 </body>
 </html>
