@@ -89,6 +89,10 @@
     .utility-links a { text-decoration: none; color: #fff; }
     .utility-links a:hover { color: var(--yellow); }
     .date-stamp { color: var(--yellow); font-weight: 800; white-space: nowrap; }
+    /* Sits beside the weather but OUTSIDE .weather-compact: that element
+       carries an aria-label, which replaces its contents for screen readers,
+       so a clock nested inside it would be silently swallowed. */
+    .time-stamp { color: #fff; font-weight: 800; white-space: nowrap; font-variant-numeric: tabular-nums; }
     .utility-divider { width: 1px; height: 16px; background: #4a4a4a; flex: 0 0 auto; }
     .weather-compact {
       display: inline-flex;
@@ -696,11 +700,11 @@
     .ad-slot-incontent { width: 100%; max-width: 580px; height: 250px; margin: 28px auto; }
     @media (max-width: 500px) {
       .ad-slot-leaderboard { height: 50px; }
-      .ad-slot-leaderboard::after { content: "Advertise Here"; }
+      .ad-slot-leaderboard::after { content: "Ad — 320×50"; }
     }
-    .ad-slot-leaderboard::after { content: "Advertise Here"; }
-    .ad-slot-mrec::after { content: "Advertise Here"; }
-    .ad-slot-incontent::after { content: "Advertise Here"; }
+    .ad-slot-leaderboard::after { content: "Ad — 728×90"; }
+    .ad-slot-mrec::after { content: "Ad — 300×250"; }
+    .ad-slot-incontent::after { content: "Ad — 300×250"; }
 
     .sidebar-box { border: 1px solid var(--line); padding: 18px; }
     .sidebar-box h3 { margin: 0 0 12px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 3px solid var(--yellow); padding-bottom: 8px; }
@@ -862,6 +866,8 @@
           <span class="weather-temp" id="weather-temp">--°C</span>
           <span class="weather-condition" id="weather-condition">Loading weather</span>
         </span>
+        <span class="utility-divider" aria-hidden="true"></span>
+        <time class="time-stamp" id="current-time" aria-label="Current time in Rochdale">--:--</time>
       </div>
       <div class="utility-links">
         <a href="#support">Community support</a>
@@ -929,7 +935,7 @@
 
   <div class="page-shell" id="top">
     <div class="wrap">
-      <div class="ad-slot" data-ad-slot="home-leaderboard" aria-label="Advertising space available"><div><strong>Advertise Here</strong></div></div>
+      <div class="ad-slot" data-ad-slot="home-leaderboard" aria-label="Advertisement placeholder"><div><strong>Advertisement</strong>Premium homepage leaderboard — 970 × 90</div></div>
     </div>
 
     <main id="main-content">
@@ -1203,7 +1209,7 @@
         </div>
       </section>
 
-      <div class="wrap"><div class="ad-slot" data-ad-slot="home-billboard"><div><strong>Advertise Here</strong></div></div></div>
+      <div class="wrap"><div class="ad-slot" data-ad-slot="home-billboard"><div><strong>Advertisement</strong>Local business billboard — 970 × 250</div></div></div>
     </main>
   </div>
 
@@ -2755,6 +2761,26 @@ function shareIconMarkup(action, label) {
 
     const now = new Date();
     document.getElementById("current-date").textContent = formatDate(now);
+
+    /* ---- Live clock ------------------------------------------------------
+       Pinned to Europe/London rather than the reader's own zone: someone
+       reading from abroad should see Rochdale's time, not theirs. Re-aligns
+       to the top of each minute instead of ticking on a fixed interval, so
+       it never drifts and only wakes once a minute. */
+    (function startClock() {
+      const el = document.getElementById("current-time");
+      if (!el) return;
+      const fmt = new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London"
+      });
+      const tick = () => {
+        const t = new Date();
+        el.textContent = fmt.format(t);
+        el.setAttribute("datetime", t.toISOString());
+        window.setTimeout(tick, 60000 - (t.getSeconds() * 1000 + t.getMilliseconds()) + 50);
+      };
+      tick();
+    })();
     document.getElementById("footer-year").textContent = now.getFullYear();
 
     renderTopStories();
