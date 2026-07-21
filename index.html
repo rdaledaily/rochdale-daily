@@ -847,6 +847,46 @@
     .article-sources summary{display:inline-block;cursor:pointer;font-weight:700;text-decoration:underline;text-underline-offset:3px}
     .article-sources ul{margin:10px 0 0;padding-left:20px}
     .article-sources li{margin:5px 0}
+
+    /* ---- Comments ---- */
+    .card-comments{display:inline-flex;align-items:center;gap:5px;margin-top:8px;color:var(--muted);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px}
+    .card-comments svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+    .comments-section{margin-top:30px;padding-top:22px;border-top:3px solid var(--accent)}
+    .comments-section h2{font-family:"Roboto Condensed",Arial,sans-serif;text-transform:uppercase;font-size:22px;margin:0 0 4px}
+    .comments-note{color:var(--muted);font-size:13px;margin:0 0 18px}
+    .comments-closed{background:var(--soft);border:1px solid var(--line);padding:16px;font-size:14px}
+    .comment{background:var(--card);border:1px solid var(--line);padding:14px 16px;margin-bottom:12px;display:flex;gap:14px}
+    .comment-main{flex:1;min-width:0}
+    .comment-user{font-weight:900;color:var(--yellow);font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+    .comment-time{color:var(--muted);font-size:12px;margin-left:8px;font-weight:400;text-transform:none;letter-spacing:0}
+    .comment-body{margin:6px 0 0;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+    .comment-actions{margin-top:10px}
+    .comment-report{background:none;border:0;color:var(--muted);font-size:12px;cursor:pointer;padding:0;text-decoration:underline}
+    .comment-report:hover{color:var(--ink)}
+    .upvote{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:4px 2px;cursor:pointer;color:var(--muted);min-width:42px;flex:0 0 auto}
+    .upvote svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .12s ease}
+    .upvote-count{font-size:13px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+    .upvote:hover{color:var(--ink)}
+    .upvote:hover svg{transform:translateY(-2px)}
+    .upvote.voted{color:var(--yellow)}
+    .upvote.voted svg{fill:var(--yellow);stroke:var(--yellow)}
+    .upvote:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+    .upvote[disabled]{opacity:.45;cursor:not-allowed}
+    .upvote[disabled]:hover svg{transform:none}
+    .comment-form textarea{width:100%;min-height:96px;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:11px;font-family:inherit;font-size:15px;resize:vertical}
+    .comment-form .rowline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px}
+    .comment-chars{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+    .comment-submit{background:var(--accent);color:#fff;border:0;padding:11px 20px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;cursor:pointer}
+    .comment-auth{background:var(--soft);border:1px solid var(--line);padding:16px}
+    .comment-auth input{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:10px;margin-bottom:9px;font-size:15px}
+    .comment-auth .tabs{display:flex;gap:8px;margin-bottom:12px}
+    .comment-auth .tabs button{flex:1;background:transparent;border:1px solid var(--line);color:var(--muted);padding:9px;font-weight:900;text-transform:uppercase;font-size:12px;cursor:pointer}
+    .comment-auth .tabs button.on{background:var(--yellow);color:#0b1524;border-color:#0b1524}
+    .comment-msg{margin:10px 0 0;font-size:13px;padding:9px 11px;display:none}
+    .comment-msg.err{display:block;background:#4a1720;border-left:4px solid var(--accent)}
+    .comment-msg.ok{display:block;background:#123a2a;border-left:4px solid #35c98a}
+    .comment-signedin{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin-bottom:10px}
+    .comment-signout{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:13px}
     .article-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;color:#666}
     .article-breadcrumb a{color:inherit}
   </style>
@@ -2351,6 +2391,7 @@ function shareIconMarkup(action, label) {
               </section>
               </div>
               ${story.policeMatter ? reportBoxMarkup() : ''}
+              <section class="comments-section" id="comments-root" data-slug="${story.slug}" data-category="${story.category}"></section>
             </div>
             <aside class="article-sidebar">
               <div class="ad-slot ad-slot-mrec" role="presentation" aria-hidden="true"></div>
@@ -2364,6 +2405,7 @@ function shareIconMarkup(action, label) {
       document.body.classList.add("modal-open");
       document.getElementById("modal-close").focus();
       history.replaceState(null, "", `articles/${story.slug}.html`);
+      mountComments(story);
 
       const newsletterForm = document.querySelector("[data-newsletter-form]");
       if (newsletterForm) {
@@ -2394,6 +2436,7 @@ function shareIconMarkup(action, label) {
         areaSelect.value = "all";
       }
       renderNewsGrid();
+      decorateCommentCounts();
       document.getElementById("latest-news-title").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
@@ -2884,6 +2927,301 @@ function shareIconMarkup(action, label) {
       }
     }
 
+
+    /* ==== Comments ======================================================
+       Backend: /api/comments. Crime articles are refused server-side, so the
+       absence of a box here is presentation only, not the actual control.
+       Sort order is newest-first: most-upvoted lets the earliest comments hold
+       the top spots permanently, which suits a leaderboard, not a local paper.
+       ==================================================================== */
+    const COMMENTS_API = "/api/comments";
+    const COMMENT_MAX = 1500;
+    let commentCounts = {};
+    let commentSession = null;
+    try {
+      const raw = localStorage.getItem("rd_comment_session");
+      if (raw) commentSession = JSON.parse(raw);
+    } catch (e) { commentSession = null; }
+
+    function saveCommentSession(session) {
+      commentSession = session;
+      try {
+        if (session) localStorage.setItem("rd_comment_session", JSON.stringify(session));
+        else localStorage.removeItem("rd_comment_session");
+      } catch (e) { /* private browsing: session lasts this page only */ }
+    }
+
+    async function commentApi(payload) {
+      const res = await fetch(COMMENTS_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      let data = {};
+      try { data = await res.json(); } catch (e) { /* keep {} */ }
+      return { ok: res.ok && data.ok !== false, status: res.status, data };
+    }
+
+    const escapeHtml = value => String(value ?? "")
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+    function commentAgo(iso) {
+      const then = new Date(iso).getTime();
+      if (!Number.isFinite(then)) return "";
+      const mins = Math.max(0, Math.round((Date.now() - then) / 60000));
+      if (mins < 1) return "just now";
+      if (mins < 60) return `${mins} minute${mins === 1 ? "" : "s"} ago`;
+      const hrs = Math.round(mins / 60);
+      if (hrs < 24) return `${hrs} hour${hrs === 1 ? "" : "s"} ago`;
+      const days = Math.round(hrs / 24);
+      return `${days} day${days === 1 ? "" : "s"} ago`;
+    }
+
+    /* ---- counts on grid cards ---- */
+    async function loadCommentCounts() {
+      try {
+        const res = await fetch(`${COMMENTS_API}?counts=1`, { headers: { Accept: "application/json" } });
+        if (!res.ok) return;
+        const payload = await res.json();
+        if (payload && payload.counts) {
+          commentCounts = payload.counts;
+          decorateCommentCounts();
+        }
+      } catch (e) { /* comments are additive; never block the page */ }
+    }
+
+    function decorateCommentCounts() {
+      document.querySelectorAll(".news-card, .lead-story, .secondary-story").forEach(card => {
+        const link = card.querySelector('a[href^="articles/"]');
+        if (!link) return;
+        const slug = link.getAttribute("href").replace(/^articles\//, "").replace(/\.html$/, "");
+        const n = Number(commentCounts[slug] || 0);
+        const existing = card.querySelector(".card-comments");
+        // Zero is deliberately not rendered. A grid of "0 comments" makes a
+        // site look deserted, and says nothing a reader wanted to know.
+        if (!n) { if (existing) existing.remove(); return; }
+        const label = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-5.5A8 8 0 1 1 21 12z"/></svg>${n} comment${n === 1 ? "" : "s"}`;
+        if (existing) { existing.innerHTML = label; return; }
+        const el = document.createElement("span");
+        el.className = "card-comments";
+        el.innerHTML = label;
+        (card.querySelector(".card-meta") || card).appendChild(el);
+      });
+    }
+
+    /* ---- the section inside an open article ---- */
+    async function mountComments(story) {
+      const root = document.getElementById("comments-root");
+      if (!root) return;
+      root.innerHTML = `<h2>Comments</h2><p class="comments-note">Loading…</p>`;
+
+      let payload = {};
+      try {
+        const headers = { Accept: "application/json" };
+        if (commentSession) headers["x-session-token"] = commentSession.token;
+        const res = await fetch(`${COMMENTS_API}?slug=${encodeURIComponent(story.slug)}`, { headers });
+        payload = await res.json();
+      } catch (e) {
+        root.innerHTML = `<h2>Comments</h2><p class="comments-note">Comments are unavailable just now.</p>`;
+        return;
+      }
+
+      if (payload.closed) {
+        root.innerHTML = `<h2>Comments</h2>
+          <div class="comments-closed"><strong>${escapeHtml(payload.closedReason || "Comments are closed on this article.")}</strong>
+          <p style="margin:8px 0 0">We do not take comments on crime reports. Court proceedings can be prejudiced by public discussion of people who have not been tried.</p></div>`;
+        return;
+      }
+
+      const comments = Array.isArray(payload.comments) ? payload.comments : [];
+      commentCounts[story.slug] = comments.length;
+      decorateCommentCounts();
+
+      root.innerHTML = `<h2>Comments (${comments.length})</h2>
+        <p class="comments-note">Comments are published straight away. Be civil, stick to the story, and remember real people live here.</p>
+        <div id="comment-compose"></div>
+        <div id="comment-list">${comments.map(commentMarkup).join("") ||
+          `<p class="comments-note">No comments yet. Be the first.</p>`}</div>`;
+
+      renderCompose(story);
+    }
+
+    function commentMarkup(c) {
+      const mine = commentSession && commentSession.username &&
+        commentSession.username.toLowerCase() === String(c.username).toLowerCase();
+      const label = mine
+        ? `You cannot upvote your own comment. ${c.likeCount} upvotes`
+        : `${c.likedByMe ? "Remove your upvote" : "Upvote this comment"}. ${c.likeCount} upvotes`;
+      return `<article class="comment" data-comment="${escapeHtml(c.id)}">
+        <button class="upvote${c.likedByMe ? " voted" : ""}" data-upvote="${escapeHtml(c.id)}"
+                aria-pressed="${c.likedByMe ? "true" : "false"}" aria-label="${escapeHtml(label)}"
+                ${mine ? "disabled" : ""}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="5,15 12,8 19,15"></polyline></svg>
+          <span class="upvote-count">${c.likeCount}</span>
+        </button>
+        <div class="comment-main">
+          <div class="comment-user">${escapeHtml(c.username)}<span class="comment-time">${commentAgo(c.postedAt)}</span></div>
+          <p class="comment-body">${escapeHtml(c.body)}</p>
+          <div class="comment-actions"><button class="comment-report" data-report="${escapeHtml(c.id)}">Report</button></div>
+        </div>
+      </article>`;
+    }
+
+    function renderCompose(story) {
+      const host = document.getElementById("comment-compose");
+      if (!host) return;
+      if (commentSession) {
+        host.innerHTML = `
+          <div class="comment-signedin">
+            <span>Commenting as <strong>${escapeHtml(commentSession.username)}</strong></span>
+            <button class="comment-signout" id="comment-signout" type="button">Sign out</button>
+          </div>
+          <div class="comment-form">
+            <label class="hidden" for="comment-body">Your comment</label>
+            <textarea id="comment-body" maxlength="${COMMENT_MAX}" placeholder="Add a comment"></textarea>
+            <div class="rowline">
+              <span class="comment-chars" id="comment-chars">0 / ${COMMENT_MAX}</span>
+              <button class="comment-submit" id="comment-post" type="button">Post comment</button>
+            </div>
+            <p class="comment-msg" id="comment-msg" role="status"></p>
+          </div>`;
+      } else {
+        host.innerHTML = `
+          <div class="comment-auth">
+            <div class="tabs">
+              <button type="button" id="tab-in" class="on">Sign in</button>
+              <button type="button" id="tab-up">Create account</button>
+            </div>
+            <div id="auth-fields">
+              <label class="hidden" for="auth-user">Username</label>
+              <input id="auth-user" placeholder="Username" autocomplete="username">
+              <div id="auth-email-wrap" hidden>
+                <label class="hidden" for="auth-email">Email</label>
+                <input id="auth-email" type="email" placeholder="Email (never shown publicly)" autocomplete="email">
+              </div>
+              <label class="hidden" for="auth-pass">Password</label>
+              <input id="auth-pass" type="password" placeholder="Password" autocomplete="current-password">
+              <button class="comment-submit" id="auth-go" type="button" style="width:100%">Sign in</button>
+              <p class="comment-msg" id="comment-msg" role="status"></p>
+            </div>
+          </div>`;
+        wireAuth(story);
+      }
+      wireComposeActions(story);
+    }
+
+    function commentMessage(text, kind) {
+      const el = document.getElementById("comment-msg");
+      if (!el) return;
+      el.textContent = text;
+      el.className = `comment-msg ${kind}`;
+    }
+
+    function wireAuth(story) {
+      let mode = "login";
+      const tabIn = document.getElementById("tab-in");
+      const tabUp = document.getElementById("tab-up");
+      const emailWrap = document.getElementById("auth-email-wrap");
+      const go = document.getElementById("auth-go");
+      const setMode = next => {
+        mode = next;
+        tabIn.classList.toggle("on", mode === "login");
+        tabUp.classList.toggle("on", mode === "register");
+        emailWrap.hidden = mode !== "register";
+        go.textContent = mode === "login" ? "Sign in" : "Create account";
+        document.getElementById("auth-pass").setAttribute(
+          "autocomplete", mode === "login" ? "current-password" : "new-password");
+      };
+      tabIn.addEventListener("click", () => setMode("login"));
+      tabUp.addEventListener("click", () => setMode("register"));
+
+      go.addEventListener("click", async () => {
+        go.disabled = true;
+        const body = {
+          action: mode,
+          username: document.getElementById("auth-user").value,
+          password: document.getElementById("auth-pass").value
+        };
+        if (mode === "register") body.email = document.getElementById("auth-email").value;
+        const { ok, data } = await commentApi(body);
+        go.disabled = false;
+        if (!ok) {
+          commentMessage((data.errors || [data.error || "That did not work."]).join(" "), "err");
+          return;
+        }
+        saveCommentSession({ token: data.token, username: data.username });
+        mountComments(story);
+      });
+    }
+
+    function wireComposeActions(story) {
+      const signout = document.getElementById("comment-signout");
+      if (signout) signout.addEventListener("click", () => {
+        saveCommentSession(null);
+        mountComments(story);
+      });
+
+      const box = document.getElementById("comment-body");
+      const chars = document.getElementById("comment-chars");
+      if (box && chars) box.addEventListener("input", () => {
+        chars.textContent = `${box.value.length} / ${COMMENT_MAX}`;
+      });
+
+      const post = document.getElementById("comment-post");
+      if (post) post.addEventListener("click", async () => {
+        post.disabled = true;
+        const { ok, data } = await commentApi({
+          action: "comment", token: commentSession.token,
+          slug: story.slug, body: box.value
+        });
+        post.disabled = false;
+        if (!ok) {
+          commentMessage((data.errors || [data.error || "That did not work."]).join(" "), "err");
+          // 401 means the session expired while the page was open.
+          if (data && data.errors && /sign in/i.test(data.errors.join(" "))) saveCommentSession(null);
+          return;
+        }
+        box.value = "";
+        mountComments(story);
+      });
+    }
+
+    /* Upvote and report are delegated: the list is re-rendered often. */
+    document.addEventListener("click", async event => {
+      const up = event.target.closest("[data-upvote]");
+      if (up && !up.disabled) {
+        const root = document.getElementById("comments-root");
+        if (!commentSession) { commentMessage("Sign in to upvote a comment.", "err"); return; }
+        up.disabled = true;
+        const { ok, data } = await commentApi({
+          action: "like", token: commentSession.token,
+          slug: root.dataset.slug, id: up.dataset.upvote
+        });
+        up.disabled = false;
+        if (!ok) { commentMessage((data.errors || ["That did not work."]).join(" "), "err"); return; }
+        up.classList.toggle("voted", data.liked);
+        up.setAttribute("aria-pressed", data.liked ? "true" : "false");
+        up.setAttribute("aria-label",
+          `${data.liked ? "Remove your upvote" : "Upvote this comment"}. ${data.likeCount} upvotes`);
+        up.querySelector(".upvote-count").textContent = data.likeCount;
+        return;
+      }
+
+      const rep = event.target.closest("[data-report]");
+      if (rep) {
+        const root = document.getElementById("comments-root");
+        const reason = window.prompt("Tell us briefly what is wrong with this comment:");
+        if (reason === null) return;
+        const { ok, data } = await commentApi({
+          action: "report", slug: root.dataset.slug, id: rep.dataset.report, reason
+        });
+        commentMessage(ok ? (data.message || "Thank you. The newsdesk will review it.")
+                          : "We could not send that report.", ok ? "ok" : "err");
+      }
+    });
+
+    loadCommentCounts();
     loadCommunityEvents();
     window.setInterval(loadCommunityEvents, 5 * 60 * 1000);
   </script>
