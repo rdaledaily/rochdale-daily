@@ -9,7 +9,7 @@ name: Rochdale Daily events scrape
 on:
   workflow_dispatch:
   schedule:
-    - cron: "7 * * * *"
+    - cron: "5 * * * *"
 
 permissions:
   contents: write
@@ -21,7 +21,7 @@ concurrency:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 40
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -58,6 +58,7 @@ jobs:
       GOOGLE_SEARCH_QUERY_LIMIT: "128"
       DISCOVERY_PAGE_LIMIT: "3"
       DISCOVERY_WORKERS: "12"
+      DISCOVERY_LINK_WORKERS: "12"
       AI_WORKERS: "6"
       MIN_BALANCED_SELECTION_LIMIT: "40"
       MAX_SELECTED_PER_SOURCE: "12"
@@ -108,7 +109,7 @@ jobs:
         run: python scraper/repair_event_records.py
 
       - name: Run Rochdale Daily pipeline
-        timeout-minutes: 20
+        timeout-minutes: 25
         run: python scraper/scraper.py
 
       - name: Validate public article feed
