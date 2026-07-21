@@ -44,6 +44,9 @@
       --accent: #22d3ee;
       --navy: #0b1f3a;
       --cyan: #22d3ee;
+      /* Weather glyph keeps its own token. It reads as a physical thing (sun,
+         rain, snow), not as brand accent, so it must not follow --accent. */
+      --sun: #f5c400;
       --red: #c8102e;
       --red-bright: #ff5c6b;
       --blue: #3d8bd6;
@@ -106,7 +109,7 @@
       font-weight: 800;
       white-space: nowrap;
     }
-    .weather-icon { width: 22px; text-align: center; color: var(--yellow); font-size: 18px; line-height: 1; }
+    .weather-icon { width: 22px; text-align: center; color: var(--sun); font-size: 18px; line-height: 1; }
     .weather-temp { color: #fff; }
     .weather-location, .weather-condition { color: #cfcfcf; font-weight: 500; }
     .weather-condition::before { content: "·"; margin-right: 7px; color: #777; }
