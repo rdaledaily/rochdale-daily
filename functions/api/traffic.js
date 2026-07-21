@@ -16,16 +16,47 @@
  * Environment variables. Do not commit it.
  */
 
+/* Bumped whenever the filter changes. Visible in every response, so you can
+   tell at a glance which build an edge node is actually serving instead of
+   guessing whether a deploy landed. */
+const FILTER_VERSION = "2026-07-21-zones";
+
 const DEFAULT_ENDPOINT = "https://data.bus-data.dft.gov.uk/api/v1/siri-sx";
 
 // Cache at the edge. Long enough that a busy morning does not hammer the
 // upstream API, short enough that a new closure surfaces quickly.
-const CACHE_SECONDS = 120;
+const CACHE_SECONDS = 60;
 
 // Rochdale borough bounding box, used when a situation carries coordinates.
-// Rochdale borough bounding box. Southern edge reaches 53.52 so Middleton and
-// Alkrington are inside it; a tighter box silently dropped them.
+// Outer limit. Used only to discard things that are nowhere near - Sheffield,
+// the Wirral. Being inside it proves nothing, because it also contains Oldham,
+// Bury and Prestwich.
 const BOROUGH = { minLat: 53.52, maxLat: 53.72, minLon: -2.32, maxLon: -2.00 };
+
+/**
+ * Areas that are unambiguously in the borough with no neighbouring town inside
+ * them. A point here can be accepted on coordinates alone, which matters
+ * because plenty of records name a street and nothing else.
+ *
+ * Two zones because the borough is in two pieces for this purpose: the northern
+ * mass around Rochdale, Littleborough and Milnrow, and the Middleton salient,
+ * which is hemmed in by Bury, Manchester and Oldham. Royton (53.57) and Shaw
+ * (53.58) sit just below the northern zone, which is why it starts at 53.60.
+ */
+const CORE_ZONES = [
+  { minLat: 53.600, maxLat: 53.700, minLon: -2.220, maxLon: -2.020 },
+  { minLat: 53.535, maxLat: 53.578, minLon: -2.230, maxLon: -2.155 },
+];
+
+/**
+ * Words that turn a town name into a street name. "Bury Road" runs through
+ * Heywood and Rochdale; "Oldham Road" and "Manchester Road" are among the
+ * busiest roads in the borough. Treating those as evidence of Bury, Oldham or
+ * Manchester would discard exactly the roads readers care most about.
+ */
+const STREET_SUFFIX =
+  "road|street|lane|avenue|way|close|drive|hill|brow|gate|bank|terrace|place|" +
+  "crescent|grove|walk|row|square|bridge|fold|side|rise|view|park road";
 
 /**
  * Localities distinctive enough to identify the borough on their own.
@@ -55,9 +86,56 @@ const AMBIGUOUS_PLACES = [
   "marland", "wardle", "sudden", "newbold", "birch", "langley", "rhodes",
 ];
 
+/**
+ * Places that mean "not here". Checked before any positive name match, because
+ * an explicit statement of somewhere else is far stronger evidence than a fuzzy
+ * match on a name that might be local.
+ *
+ * This exists because the positive tests kept failing in ways I could not
+ * anticipate: a Sheffield closure, a Wirral one and a Scunthorpe one all found
+ * some borough word buried in their diversion text. Enumerating "elsewhere" is
+ * a much smaller and more stable problem than enumerating every way a name can
+ * be ambiguous.
+ */
+/**
+ * Neighbouring Greater Manchester and Lancashire places. These matter more than
+ * the far-away list: a bounding box drawn around Rochdale borough necessarily
+ * contains large parts of Oldham, Bury and Prestwich, because the borough is
+ * not a rectangle - Royton sits at longitude -2.10 while Milnrow, which IS in
+ * the borough, sits at -2.09. Coordinates therefore cannot make this
+ * distinction at all, and only the name can.
+ *
+ * Note "Rochdale Road, Oldham" is correctly rejected by this: a road named
+ * after the borough is not in it.
+ */
+const NEIGHBOURS = [
+  "oldham", "royton", "shaw and crompton", "crompton", "chadderton",
+  "failsworth", "hollinwood", "garden suburb", "lees", "springhead",
+  "uppermill", "saddleworth", "delph", "dobcross", "diggle", "greenfield",
+  "mossley", "bury", "radcliffe", "whitefield", "prestwich", "ramsbottom",
+  "tottington", "walshaw", "unsworth", "besses", "todmorden", "bacup",
+  "rawtenstall", "haslingden", "shawforth", "manchester city centre",
+  "blackley", "crumpsall", "moston", "harpurhey", "newton heath", "ancoats",
+  "central park", "victoria station", "shudehill", "market street",
+];
+
+const ELSEWHERE = [
+  "sheffield", "upperthorpe", "leeds", "bradford", "huddersfield", "halifax",
+  "wakefield", "barnsley", "doncaster", "rotherham", "scunthorpe", "grimsby",
+  "hull", "lincoln", "york", "harrogate", "liverpool", "wirral", "birkenhead",
+  "new brighton", "irby", "chester", "crewe", "warrington", "widnes", "runcorn",
+  "st helens", "wigan", "bolton", "blackburn", "burnley", "accrington",
+  "preston", "blackpool", "lancaster", "stockport", "macclesfield", "buxton",
+  "glossop", "derby", "nottingham", "leicester", "birmingham", "coventry",
+  "london", "bristol", "cardiff", "swansea", "newcastle", "sunderland",
+  "middlesbrough", "carlisle", "kendal", "hope valley", "sandbach",
+  "north lincolnshire", "west yorkshire", "south yorkshire", "merseyside",
+  "cheshire", "derbyshire", "lancashire county",
+];
+
 /** Proof that an ambiguous name refers to this borough and not another. */
 const BOROUGH_ANCHORS = [
-  "rochdale", "greater manchester", "oldham", "bury", "heywood", "metrolink",
+  "rochdale", "heywood", "littleborough", "milnrow", "middleton",
 ];
 const POSTCODE_ANCHOR = /\b(?:ol\s?(?:1[0-6]|[1-9])|m24)\b/i;
 
@@ -161,21 +239,35 @@ function hasWord(haystack, needle) {
     .test(haystack);
 }
 
+/**
+ * True when the text refers to the PLACE, not to a street named after it.
+ * "Bury Road, Heywood" names Heywood; it does not name Bury.
+ */
+function namesPlace(haystack, needle) {
+  const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(
+    "(^|[^a-z0-9])" + escaped + "(?!\\s+(?:" + STREET_SUFFIX + ")\\b)([^a-z0-9]|$)"
+  ).test(haystack);
+}
+
 function inBox(lat, lon) {
-  return (
-    lat >= BOROUGH.minLat && lat <= BOROUGH.maxLat &&
-    lon >= BOROUGH.minLon && lon <= BOROUGH.maxLon
-  );
+  return inZone(lat, lon, BOROUGH);
+}
+
+function inZone(lat, lon, zone) {
+  return lat >= zone.minLat && lat <= zone.maxLat && lon >= zone.minLon && lon <= zone.maxLon;
 }
 
 function inBorough(situation) {
-  // Coordinates decide whenever the publisher supplied them, and this check has
-  // to come FIRST. Testing names first meant a Sheffield closure whose text
-  // contained the word "sudden" was accepted and returned before the latitude
-  // that would have rejected it was ever consulted. A point on the map is
-  // stronger evidence than any string, so it wins outright.
-  if (situation.lat !== null && situation.lon !== null) {
-    return inBox(situation.lat, situation.lon);
+  const hasCoords = situation.lat !== null && situation.lon !== null;
+
+  // Nowhere near: discard before any string work.
+  if (hasCoords && !inBox(situation.lat, situation.lon)) return false;
+
+  // Unambiguously inside the borough: accept on the point alone, since many
+  // records name only a street.
+  if (hasCoords && CORE_ZONES.some((zone) => inZone(situation.lat, situation.lon, zone))) {
+    return true;
   }
 
   const text = [
@@ -185,12 +277,16 @@ function inBorough(situation) {
     ...situation.stops,
   ].join(" ").toLowerCase();
 
+  // Everything left is in the contested fringe, where coordinates cannot help
+  // and the name has to decide. An explicit somewhere-else beats any positive
+  // match - but only when the name is used as a place, not as a street.
+  if (NEIGHBOURS.some((place) => namesPlace(text, place))) return false;
+  if (ELSEWHERE.some((place) => namesPlace(text, place))) return false;
+
   if (UNIQUE_PLACES.some((place) => hasWord(text, place))) return true;
 
-  // An ambiguous name needs corroboration from something that pins the text to
-  // this part of the country.
   const anchored =
-    BOROUGH_ANCHORS.some((anchor) => hasWord(text, anchor)) ||
+    BOROUGH_ANCHORS.some((word) => hasWord(text, word)) ||
     POSTCODE_ANCHOR.test(text);
   if (!anchored) return false;
 
@@ -238,32 +334,50 @@ function sortKey(s) {
   return [-sev, -started];
 }
 
-export function extractDisruptions(xml, now = new Date()) {
+/**
+ * Parse everything, then report what was kept and what was thrown away and why.
+ * extractDisruptions() wraps this for normal use; ?debug=1 exposes the whole
+ * thing so a wrong result can be diagnosed from the response itself.
+ */
+export function analyse(xml, now = new Date()) {
   const nowMs = now.getTime();
-  const seen = new Set();
+  const all = situationBlocks(xml).map(parseSituation);
+  const kept = [];
+  const rejected = [];
 
-  return situationBlocks(xml)
-    .map(parseSituation)
-    // A situation the publisher has closed is history, not traffic.
-    .filter((s) => s.progress !== "closed" && s.progress !== "closing")
-    // Planned works months out are a diary item, not a live warning.
-    .filter((s) => isCurrent(s, nowMs))
-    // Publishers mark cancelled works by editing the summary, not the status.
-    .filter((s) => !/\*\*\s*(postponed|cancelled|canceled)\s*\*\*/i.test(s.summary || ""))
-    .filter((s) => s.summary || s.description)
-    .filter(inBorough)
-    .filter((s) => {
-      const key = s.id || s.summary;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .sort((a, b) => {
-      const ka = sortKey(a), kb = sortKey(b);
-      return ka[0] - kb[0] || ka[1] - kb[1];
-    })
-    .slice(0, MAX_ITEMS);
+  for (const item of all) {
+    let reason = "";
+    if (item.progress === "closed" || item.progress === "closing") reason = "status closed";
+    else if (!isCurrent(item, nowMs)) reason = "outside time window";
+    else if (/\*\*\s*(postponed|cancelled|canceled)\s*\*\*/i.test(item.summary || "")) reason = "marked postponed";
+    else if (!item.summary && !item.description) reason = "no text";
+    else if (!inBorough(item)) {
+      reason = item.lat !== null && item.lon !== null
+        ? `coordinates outside borough (${item.lat}, ${item.lon})`
+        : "no borough locality in text";
+    }
+    if (reason) rejected.push({ id: item.id, summary: item.summary, lat: item.lat, lon: item.lon, reason });
+    else kept.push(item);
+  }
+
+  const seen = new Set();
+  const unique = kept.filter((item) => {
+    const key = item.id || item.summary;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).sort((a, b) => {
+    const ka = sortKey(a), kb = sortKey(b);
+    return ka[0] - kb[0] || ka[1] - kb[1];
+  });
+
+  return { considered: all.length, kept: unique.slice(0, MAX_ITEMS), rejected };
 }
+
+export function extractDisruptions(xml, now = new Date()) {
+  return analyse(xml, now).kept;
+}
+
 
 export async function onRequest(context) {
   const { env } = context;
@@ -302,12 +416,17 @@ export async function onRequest(context) {
     }
 
     const xml = await upstream.text();
-    const disruptions = extractDisruptions(xml);
+    const report = analyse(xml);
+    const disruptions = report.kept;
+    const debug = new URL(context.request.url).searchParams.get("debug") === "1";
 
     return new Response(
       JSON.stringify({
+        version: FILTER_VERSION,
         updated: new Date().toISOString(),
+        considered: report.considered,
         count: disruptions.length,
+        ...(debug ? { rejected: report.rejected.slice(0, 60) } : {}),
         attribution:
           "Contains public sector information licensed under the Open Government Licence v3.0. Source: Department for Transport Bus Open Data Service.",
         disruptions,
