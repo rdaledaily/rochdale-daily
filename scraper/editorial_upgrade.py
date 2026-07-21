@@ -341,6 +341,55 @@ def strip_service_furniture(paragraphs: list[str], category: str) -> list[str]:
     return cleaned
 
 
+def _longest_alternative_first(pattern: "re.Pattern[str]") -> "re.Pattern[str]":
+    """Reorder an alternation so longer alternatives are tried first.
+
+    Python alternation is leftmost-FIRST, not leftmost-longest. When a bare
+    word precedes a phrase starting with that word, the phrase is
+    unreachable: in the environment pattern `flood(?:s|ing|water)?` sat before
+    `flood (?:warning|alert)s?`, so "Flood warning issued for the borough"
+    only ever matched "Flood". Multiword terms score two points and single
+    words one, and a category needs two points to be assigned at all, so that
+    headline scored 1 and fell back to "news".
+
+    The same shadowing hid "police investigation" behind "police" and
+    "wildflower meadows" behind "wildflowers". Normalising the order here
+    fixes those and any term added in the wrong order later, rather than
+    relying on whoever edits these lists to remember the rule.
+    """
+    body = re.match(r"\\b\(\?:(.*)\)\\b$", pattern.pattern, re.S)
+    if not body:
+        return pattern
+    depth = 0
+    current = ""
+    parts: list[str] = []
+    for char in body.group(1):
+        if char == "(":
+            depth += 1
+        elif char == ")":
+            depth -= 1
+        if char == "|" and depth == 0:
+            parts.append(current)
+            current = ""
+        else:
+            current += char
+    parts.append(current)
+    if len(parts) < 2:
+        return pattern
+    # Multiword phrases first, then longest to shortest. sorted() is stable,
+    # so terms of equal weight keep the order they were authored in.
+    ordered = sorted(parts, key=lambda term: (" " not in term, -len(term)))
+    if ordered == parts:
+        return pattern
+    return re.compile(r"\b(?:" + "|".join(ordered) + r")\b", pattern.flags)
+
+
+CATEGORY_ORDER = tuple(
+    (category, _longest_alternative_first(pattern))
+    for category, pattern in CATEGORY_ORDER
+)
+
+
 def deterministic_category(value: Any, fallback: str = "news") -> str:
     # Editorial furniture (the Crimestoppers service sentence, the sympathy
     # line) is Rochdale Daily's own added text, not story evidence. It must
