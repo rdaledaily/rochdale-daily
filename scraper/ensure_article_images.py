@@ -70,6 +70,11 @@ HEIGHT = 675
 PLACEHOLDER_MARKERS = (
     "stock_", "placeholder", "default-image", "default_image",
     "category-image", "category_image", "area-category-card",
+    # Artwork from the retired generator under assets/img/generated. Without
+    # this marker those files are judged to be real photographs, so they are
+    # never replaced and the old design persists on a handful of stories
+    # indefinitely, alongside the current cards.
+    "img/generated",
 )
 BAD_URL_HINTS = (
     "logo", "favicon", "sprite", "avatar", "tracking", "pixel",
