@@ -8,7 +8,7 @@ name: Rochdale Daily image backfill
 on:
   workflow_dispatch:
   schedule:
-    - cron: "12 * * * *"
+    - cron: "50 * * * *"
 
 permissions:
   contents: write
@@ -57,6 +57,7 @@ jobs:
       GOOGLE_SEARCH_QUERY_LIMIT: "128"
       DISCOVERY_PAGE_LIMIT: "3"
       DISCOVERY_WORKERS: "12"
+      DISCOVERY_LINK_WORKERS: "12"
       AI_WORKERS: "6"
       MIN_BALANCED_SELECTION_LIMIT: "40"
       MAX_SELECTED_PER_SOURCE: "12"
