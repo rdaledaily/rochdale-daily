@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5c400">
+  <meta name="theme-color" content="#0b1f3a">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="description" content="Rochdale Daily: independent local news, events, sport, public information and community updates for Rochdale borough and nearby towns.">
   <title>Rochdale Daily | Independent local news</title>
@@ -28,10 +28,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Gold stays (it carries the masthead and the logo); surfaces move to a
-         deep navy so the site no longer reads as a white/red regional daily. */
-      --yellow: #f5c400;
-      --yellow-dark: #d7aa00;
+      /* Accent is cyan. The masthead is navy with the logo knocked out white,
+         so a warm accent no longer has a gold surface to belong to, and gold
+         competed with the red breaking strap for urgency. */
+      --yellow: #22d3ee;
+      --yellow-dark: #0ea5c4;
       --black: #060d16;
       --ink: #eef3f9;
       --muted: #93a6bd;
@@ -40,7 +41,9 @@
       --paper: #0d1c2e;
       --card: #112741;
       --deep: #071320;
-      --accent: #f5c400;
+      --accent: #22d3ee;
+      --navy: #0b1f3a;
+      --cyan: #22d3ee;
       --red: #c8102e;
       --red-bright: #ff5c6b;
       --blue: #3d8bd6;
@@ -109,9 +112,11 @@
     .weather-condition::before { content: "·"; margin-right: 7px; color: #777; }
 
     .masthead {
-      background: var(--yellow);
-      color: #0b1524;
-      border-bottom: 1px solid #c79d00;
+      background: var(--navy);
+      color: #fff;
+      /* The nav bar below is near-black, so this rule is what stops the two
+         dark bands reading as one slab. Do not remove it. */
+      border-bottom: 3px solid var(--cyan);
     }
     .masthead-row {
       min-height: 166px;
@@ -128,6 +133,9 @@
       min-width: 0;
     }
     .brand-logo {
+      /* Source PNG is black on transparency; invert() leaves alpha alone, so
+         this renders it white against the navy masthead. */
+      filter: invert(1);
       width: clamp(255px, 31vw, 350px);
       height: auto;
       object-fit: contain;
@@ -143,9 +151,11 @@
     }
     .masthead-actions { display: flex; align-items: center; gap: 10px; }
     .header-button {
+      display: inline-flex;
+      align-items: center;
       border: 2px solid #111;
       background: transparent;
-      color: var(--ink);
+      color: #111;
       font-weight: 900;
       text-transform: uppercase;
       font-size: 12px;
@@ -153,6 +163,8 @@
       text-decoration: none;
     }
     .header-button.solid { background: #111; color: #fff; }
+    .masthead .header-button { border-color: var(--cyan); color: var(--cyan); }
+    .masthead .header-button.solid { background: var(--cyan); color: var(--navy); }
     .header-button:hover { transform: translateY(-1px); }
 
     .primary-nav {
@@ -177,7 +189,7 @@
     /* Search beside MENU on mobile. Styled to match the nav items exactly
        (transparent on the dark bar, white text, same divider) so it reads as
        part of the navigation rather than a button dropped on top of it.
-       On desktop, search lives in the masthead next to "Send us a story". */
+       On desktop, search lives in the masthead header buttons. */
     .menu-search {
       display: none;
       min-height: 50px;
@@ -470,7 +482,7 @@
       letter-spacing: .4px;
     }
     .tag.crime { background: rgba(217,43,63,.16); color: #ff8a99; }
-    .tag.demo { background: rgba(245,196,0,.16); color: var(--accent); }
+    .tag.demo { background: rgba(34,211,238,.16); color: var(--accent); }
 
     .read-more-button {
       display: inline-flex;
@@ -767,7 +779,7 @@
     }
     .to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
     .to-top.lifted { bottom: 150px; }
-    .to-top:hover { background: #ffd426; }
+    .to-top:hover { background: #5ce1f5; }
     .to-top:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
     .to-top svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 3;
       fill: none; stroke-linecap: round; stroke-linejoin: round; }
@@ -876,12 +888,12 @@
     .comment-form textarea{width:100%;min-height:96px;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:11px;font-family:inherit;font-size:15px;resize:vertical}
     .comment-form .rowline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px}
     .comment-chars{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
-    /* --accent resolves to the masthead yellow (#f5c400), so white text on it
-       gives 1.64:1 - unreadable, and well under the 4.5:1 AA floor. Dark navy
-       on the same yellow gives 11.14:1 and matches the site's other yellow
-       controls (the rail button, the advertise panel). */
+    /* --accent is cyan (#22d3ee), a light colour, so white text on it gives
+       1.6:1 - unreadable, well under the 4.5:1 AA floor. Dark navy on the same
+       cyan gives 9.8:1 and matches the site's other accent controls (the rail
+       button, the advertise panel). */
     .comment-submit{background:var(--accent);color:#0b1524;border:2px solid #0b1524;padding:11px 20px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;cursor:pointer}
-    .comment-submit:hover{background:#ffd426}
+    .comment-submit:hover{background:#5ce1f5}
     .comment-submit:disabled{opacity:.55;cursor:not-allowed}
     .comment-auth{background:var(--soft);border:1px solid var(--line);padding:16px}
     .comment-auth input{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:10px;margin-bottom:9px;font-size:15px}
@@ -931,7 +943,6 @@
       </a>
       <div class="masthead-actions">
         <button class="header-button" type="button" id="search-open">Search</button>
-        <a class="header-button solid" href="mailto:news@rochdaledaily.co.uk?subject=Story%20for%20Rochdale%20Daily">Send us a story</a>
       </div>
     </div>
   </header>
