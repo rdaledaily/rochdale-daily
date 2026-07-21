@@ -2936,6 +2936,9 @@ function shareIconMarkup(action, label) {
        ==================================================================== */
     const COMMENTS_API = "/api/comments";
     const COMMENT_MAX = 1500;
+    // Mirrors CLOSED_CATEGORIES in /api/comments. The server is the authority;
+    // this copy only decides whether to print a count on a card.
+    const COMMENTS_CLOSED_CATEGORIES = new Set(["crime"]);
     let commentCounts = {};
     let commentSession = null;
     try {
@@ -2995,12 +2998,26 @@ function shareIconMarkup(action, label) {
       document.querySelectorAll(".news-card, .lead-story, .secondary-story").forEach(card => {
         const link = card.querySelector('a[href^="articles/"]');
         if (!link) return;
+        // Crime articles refuse comments server-side, so a count on one would
+        // promise something the reader cannot do. The category is looked up
+        // from the story itself, not card.dataset: only .news-card carries a
+        // data-category attribute, and the lead and secondary stories - which
+        // is exactly where a big crime story lands - do not.
+        const slugForCategory = link.getAttribute("href")
+          .replace(/^articles\//, "").replace(/\.html$/, "");
+        const story = stories.find(item => String(item.slug) === slugForCategory);
+        const category = String((story && story.category) || card.dataset.category || "").toLowerCase();
+        if (COMMENTS_CLOSED_CATEGORIES.has(category)) {
+          const stale = card.querySelector(".card-comments");
+          if (stale) stale.remove();
+          return;
+        }
         const slug = link.getAttribute("href").replace(/^articles\//, "").replace(/\.html$/, "");
         const n = Number(commentCounts[slug] || 0);
         const existing = card.querySelector(".card-comments");
-        // Zero is deliberately not rendered. A grid of "0 comments" makes a
-        // site look deserted, and says nothing a reader wanted to know.
-        if (!n) { if (existing) existing.remove(); return; }
+        // Always shown, including zero: the label doubles as an invitation to
+        // be the first to comment, and a card that never carries the line at
+        // all gives a reader no clue the article can be commented on.
         const label = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-5.5A8 8 0 1 1 21 12z"/></svg>${n} comment${n === 1 ? "" : "s"}`;
         if (existing) { existing.innerHTML = label; return; }
         const el = document.createElement("span");
