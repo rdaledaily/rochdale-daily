@@ -100,6 +100,21 @@ DISALLOWED_SOURCE_SUFFIXES = (
 DISALLOWED_IMAGE_HOST_SUFFIXES = (
     "google.com", "google.co.uk", "googleusercontent.com", "gstatic.com",
 )
+# Hosts that only ever serve site furniture — live-data banners regenerated
+# every hour, social-share cards, CDN template art. They return a decodable
+# JPEG, so every existing "is it a real file?" test passes, but the picture is
+# never of the story. Before this guard a cached banner counted as a genuine
+# source photograph, so ensure_article_image() returned "already-covered" on
+# every run and the story never received an area/category card.
+GENERIC_IMAGE_HOST_SUFFIXES = (
+    "traffic-update.co.uk",       # /i/latest/latest_traffic_<date>_<hour>.jpg
+    "weather.metoffice.gov.uk",   # .../common/icons/social_card...
+    "metoffice.gov.uk",
+    "tfgm.com",
+    "ctfassets.net",              # Contentful CDN behind the Bee Network pages
+    "northernrailway.co.uk",
+)
+
 # Content hashes (sha256[:12]) of known non-editorial images that leaked in
 # before this guard existed — currently the Google News logo. Any locally cached
 # file matching one of these is treated as missing so it gets re-processed.
@@ -121,10 +136,23 @@ def is_disallowed_source(url: str) -> bool:
     return any(host.endswith("." + suffix) for suffix in DISALLOWED_SOURCE_SUFFIXES)
 
 
+def is_generic_furniture_image(url: str) -> bool:
+    """True for hosts that only ever serve banners, social cards or template art."""
+    host = host_of(url)
+    if not host:
+        return False
+    return any(
+        host == suffix or host.endswith("." + suffix)
+        for suffix in GENERIC_IMAGE_HOST_SUFFIXES
+    )
+
+
 def is_disallowed_image(url: str) -> bool:
     host = host_of(url)
     if not host:
         return False
+    if is_generic_furniture_image(url):
+        return True
     return any(
         host == suffix or host.endswith("." + suffix)
         for suffix in DISALLOWED_IMAGE_HOST_SUFFIXES
@@ -199,6 +227,15 @@ def has_real_image(article: dict[str, Any], repo_root: Path) -> bool:
     # is no longer a valid image: it is replaced by our own card on the next
     # run, so no other outlet's photograph stays re-hosted here.
     if not USE_SOURCE_IMAGES and is_third_party_credit(article):
+        return False
+    # The collector already recorded that this image arrived with no publisher
+    # credit URL, i.e. it was not an attributed story photograph. Treat it as
+    # missing so our own card replaces it.
+    if clean(article.get("source_image_reuse_status")) == "category-fallback":
+        return False
+    # A cached image that came from a furniture host is not a story photograph,
+    # however valid the file itself is.
+    if is_generic_furniture_image(article.get("source_image_candidate_url")):
         return False
     if local_digest(repo_root, image_url) in KNOWN_BAD_IMAGE_DIGESTS:
         return False
@@ -417,6 +454,30 @@ def page_candidates(page: bytes, page_url: str) -> list[Candidate]:
     return deduplicate_candidates(result)
 
 
+def rejected_candidates(article: dict[str, Any]) -> set[str]:
+    """Image URLs already tried and discarded for this article.
+
+    Without this, discarding a cached image only lasts until the next run:
+    the same URL is the article's first candidate, gets re-fetched, and the
+    card is skipped all over again.
+    """
+    return {
+        clean(value).lower()
+        for value in (article.get("rejected_image_candidates") or [])
+        if clean(value)
+    }
+
+
+def remember_rejected_candidate(article: dict[str, Any], url: Any) -> None:
+    value = clean(url)
+    if not value:
+        return
+    existing = list(article.get("rejected_image_candidates") or [])
+    if value.lower() not in {clean(item).lower() for item in existing}:
+        existing.append(value)
+        article["rejected_image_candidates"] = existing[-20:]
+
+
 def article_candidates(article: dict[str, Any]) -> list[Candidate]:
     result: list[Candidate] = []
     primary_source = clean(article.get("source_url"))
@@ -513,6 +574,7 @@ def fetch_source_image(
     sleep_seconds: float,
 ) -> tuple[bytes, str, Candidate, str] | None:
     candidates = article_candidates(article)
+    already_rejected = rejected_candidates(article)
 
     for page_url in source_urls(article):
         if is_disallowed_source(page_url):
@@ -534,11 +596,16 @@ def fetch_source_image(
             time.sleep(sleep_seconds)
 
     for candidate in deduplicate_candidates(candidates):
+        if clean(candidate.url).lower() in already_rejected:
+            continue
+        if is_disallowed_image(candidate.url):
+            continue
         fetched = fetch_candidate(candidate, timeout)
         if fetched is None:
             continue
         payload, extension, final_url = fetched
         if is_disallowed_image(final_url):
+            remember_rejected_candidate(article, candidate.url)
             continue
         return (
             payload,
@@ -613,6 +680,12 @@ def ensure_article_image(
 ) -> str:
     if has_real_image(article, repo_root):
         return "already-covered"
+
+    # The article carries a cached image that has just been judged unusable
+    # (furniture host, or no publisher credit at collection time). Record the
+    # URL so the next run does not fetch the very same file again.
+    if clean(article.get("image_status")) == "source-image-cached":
+        remember_rejected_candidate(article, article.get("source_image_candidate_url"))
 
     existing_status = clean(article.get("image_status"))
     existing_placeholder = existing_status in {"generated-placeholder", "area-category-card"}
