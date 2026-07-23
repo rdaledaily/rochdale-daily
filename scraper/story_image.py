@@ -23,6 +23,7 @@ import colorsys
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any, Callable
 
@@ -320,9 +321,21 @@ def _folder_credit(stem: str, directory: Path) -> str:
     return value.strip() if isinstance(value, str) else ""
 
 
-def _photo_background(path: Path) -> Image.Image:
-    photo = ImageOps.exif_transpose(Image.open(path)).convert("RGB")
-    return ImageOps.fit(photo, (WIDTH, HEIGHT), method=Image.Resampling.LANCZOS)
+def _photo_background(path: Path) -> Image.Image | None:
+    """The photograph as a card-sized background, or None if it cannot be read.
+
+    Returns None rather than raising. A file in the library that is not a valid
+    image - an empty file created by mistake, a truncated upload, a PDF renamed
+    to .jpg - used to raise out of here and end the run, so one bad upload
+    stopped every story on the site from being rendered. A single unusable file
+    should cost one card, not the pipeline.
+    """
+    try:
+        photo = ImageOps.exif_transpose(Image.open(path)).convert("RGB")
+        return ImageOps.fit(photo, (WIDTH, HEIGHT), method=Image.Resampling.LANCZOS)
+    except Exception as error:  # noqa: BLE001 - any unreadable file, same answer
+        print(f"  ! ignoring unreadable image {path}: {error}", file=sys.stderr)
+        return None
 
 
 def _generated_background(area_slug: str, accent: tuple[int, int, int]) -> Image.Image:
@@ -465,9 +478,10 @@ def compose_story_card(
                 photo = person_match[0]
                 credit = _folder_credit(photo.stem, people_dir) or "Rochdale Daily"
 
-    if photo is not None:
-        background = _photo_background(photo)
-    else:
+    background = _photo_background(photo) if photo is not None else None
+    if background is None:
+        # Either no photograph was chosen, or the one chosen could not be read.
+        photo = None
         background = _generated_background(area_slug, accent)
         credit = "Rochdale Daily"
 
