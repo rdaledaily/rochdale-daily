@@ -519,6 +519,37 @@ def source_word_count(source_text: str) -> int:
     return len(re.findall(r"\b[\w’'-]+\b", plain_text(source_text)))
 
 
+# Detail a reader can act on or check: a named road, a route number, a time, a
+# figure, a named official, a named body. A report containing none of these is
+# not reporting - it is a headline restated at length.
+CONCRETE_DETAIL_RE = re.compile(
+    r"\b[A-Z][a-z]+(?:\s[A-Z][a-z]+)*\s"
+    r"(?:Road|Street|Lane|Way|Avenue|Drive|Close|Park|Hall|Centre|Bridge|"
+    r"Station|Reserve|Moor|Lake|Estate|Roundabout|Junction)\b"
+    r"|\b[AM]\d{1,4}\b"
+    r"|\b\d{1,2}(?::\d{2})?\s?(?:am|pm)\b"
+    r"|£\s?\d"
+    r"|\b\d{2,}\b"
+    r"|\b(?:Councillor|Cllr|Sergeant|Inspector|Superintendent|Chief Executive|Mayor)\s[A-Z]"
+    r"|\b(?:Rochdale Borough Council|Greater Manchester Police|Transport for Greater Manchester|"
+    r"National Highways|Environment Agency)\b",
+)
+
+# Phrasing used to fill space when there is nothing to report. "A major route in
+# Rochdale" is what a road name becomes when the road name is not known.
+EVASIVE_RE = re.compile(
+    r"\b(?:a major route|the major route|a major road|in the area|in the vicinity|"
+    r"local authorities are|the relevant authorities|emergency services attended the scene|"
+    r"further updates will be provided|as more information becomes available|"
+    r"is likely to impact|residents are advised to|motorists are advised to seek alternative)\b",
+    re.I,
+)
+
+
+def has_concrete_detail(text: str) -> bool:
+    return bool(CONCRETE_DETAIL_RE.search(str(text or "")))
+
+
 # A source rich enough to support a full-length report.
 RICH_SOURCE_WORDS = 320
 
@@ -589,8 +620,17 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
         issues.append("Write a specific complete headline of 4-26 words.")
     if len(excerpt.split()) < 15:
         issues.append("Write a useful standfirst.")
-    if len(paragraphs) < 4:
-        issues.append("Use at least four substantive paragraphs.")
+    # The paragraph floor scales with the evidence. A fixed four forced the
+    # model to keep writing after the facts ran out, and four paragraphs built
+    # on a headline is four paragraphs of "emergency services attended" and
+    # "further updates will be provided". A two-paragraph brief that says what
+    # is known is a better piece of journalism than a padded one.
+    source_has_detail = has_concrete_detail(source_text)
+    min_paragraphs = 4 if source_word_count(source_text) >= RICH_SOURCE_WORDS else 2
+    if len(paragraphs) < min_paragraphs:
+        issues.append(
+            f"Use at least {min_paragraphs} substantive paragraphs."
+        )
     words = draft_word_count(clean)
     floor, cap = length_budget(source_text, source_kind)
     if words < floor:
@@ -606,6 +646,23 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
         )
     if GENERIC_COPY_RE.search(combined):
         issues.append("Remove publishing-process language and report the story itself.")
+
+    body_only = plain_text(" ".join(paragraphs))
+    if EVASIVE_RE.search(body_only):
+        issues.append(
+            "Remove filler phrasing such as \"a major route\", \"in the area\" and "
+            "\"further updates will be provided\". Name the road, the place and the "
+            "body involved, or leave the detail out entirely."
+        )
+
+    # Only ask for detail the source actually contains. Demanding specifics from
+    # a source that has none is an instruction to invent them, which is the
+    # failure this gate exists to prevent.
+    if source_has_detail and not has_concrete_detail(body_only):
+        issues.append(
+            "The source names a road, time, figure or organisation and the draft "
+            "does not. Carry the specific detail through."
+        )
 
     # A preposition running straight into punctuation means the model left a
     # date, time or place blank ("the first session set to take place on .").
