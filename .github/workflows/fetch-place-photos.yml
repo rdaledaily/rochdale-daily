@@ -1,4 +1,4 @@
-name: Fetch place photos
+name: Fetch photos (places and areas)
 
 # Builds the curated photo library in assets/img/places/ from Wikimedia Commons.
 #
@@ -16,8 +16,12 @@ on:
         description: "Actually download and commit (leave false for a dry run)"
         type: boolean
         default: false
+      areas:
+        description: "Fetch AREA photos instead of place photos (the universal card fallback)"
+        type: boolean
+        default: false
       only:
-        description: "Optional filter, e.g. heywood — leave blank for all places"
+        description: "Optional filter, e.g. heywood — leave blank for all"
         type: string
         default: ""
 
@@ -50,24 +54,25 @@ jobs:
       - name: Fetch place photos
         run: |
           python scraper/fetch_place_photos.py \
+            ${{ inputs.areas && '--areas' || '' }} \
             ${{ inputs.download && '--download' || '' }} \
             ${{ inputs.only != '' && format('--only {0}', inputs.only) || '' }}
 
       - name: Show what changed
         run: |
-          git status --short assets/img/places || true
+          git status --short assets/img || true
 
       - name: Commit new photos
         if: ${{ inputs.download }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/img/places
+          git add assets/img
 
           if git diff --cached --quiet; then
             echo "Nothing new to commit."
             exit 0
           fi
 
-          git commit -m "Add place photographs from Wikimedia Commons"
+          git commit -m "Add photographs from Wikimedia Commons"
           git push origin "HEAD:${GITHUB_REF_NAME}"
