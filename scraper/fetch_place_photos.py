@@ -76,6 +76,56 @@ SKIP_FRAGMENTS = (
     "svg", "seal of", "flag of", "sign", "plaque", "graph",
 )
 
+TOPICS_DIR = Path("assets/img/topics")
+TOPICS_CREDITS_PATH = TOPICS_DIR / "credits.json"
+
+# (Commons search phrase, category slug)
+#
+# Topic photographs are the answer to the complaint that every card looked the
+# same: an area photograph is a picture of the right town and tells the reader
+# nothing about the story, so a rugby report, a driving test and a helicopter
+# sighting all arrived behind the same streetscape. A pitch, a road and a school
+# at least belong to their stories.
+#
+# Several phrases share a category on purpose. Four photographs from one search
+# tend to be four angles on the same subject; four searches give genuinely
+# different pictures, which is what stops the front page repeating itself.
+TOPICS: list[tuple[str, str]] = [
+    ("Spotland Stadium Rochdale", "sport"),
+    ("Crown Oil Arena Rochdale AFC", "sport"),
+    ("Rochdale Hornets rugby league", "sport"),
+    ("football pitch Greater Manchester", "sport"),
+    ("Rochdale Town Hall council chamber", "politics"),
+    ("Number One Riverside Rochdale", "politics"),
+    ("Rochdale Town Hall exterior", "politics"),
+    ("Manchester Road Rochdale traffic", "traffic"),
+    ("M62 motorway Greater Manchester", "traffic"),
+    ("roadworks Greater Manchester street", "traffic"),
+    ("Rochdale railway station platform", "transport"),
+    ("Metrolink tram Rochdale", "transport"),
+    ("bus station Rochdale interchange", "transport"),
+    ("Rochdale Infirmary hospital", "health"),
+    ("NHS hospital Greater Manchester building", "health"),
+    ("Hopwood Hall College Rochdale", "education"),
+    ("school building Rochdale", "education"),
+    ("Rochdale Sixth Form College", "education"),
+    ("Rochdale Exchange Shopping Centre", "business"),
+    ("Kingsway Business Park Rochdale", "business"),
+    ("Drake Street Rochdale shops", "business"),
+    ("Hollingworth Lake Littleborough", "environment"),
+    ("Healey Dell nature reserve", "environment"),
+    ("Watergrove Reservoir Wardle", "environment"),
+    ("Rochdale Canal towpath", "environment"),
+    ("Falinge Park Rochdale", "community"),
+    ("Rochdale town centre pedestrians", "community"),
+    ("Queen's Park Heywood", "community"),
+    ("Touchstones Rochdale arts centre", "events"),
+    ("Rochdale Pioneers Museum", "events"),
+    ("Middleton Arena", "events"),
+    ("Rochdale town centre street scene", "news"),
+    ("Rochdale skyline Greater Manchester", "news"),
+]
+
 AREAS_DIR = Path("assets/img/areas")
 AREAS_CREDITS_PATH = AREAS_DIR / "credits.json"
 
@@ -218,6 +268,49 @@ def search(place: str) -> list[dict]:
     return data.get("query", {}).get("pages", []) or []
 
 
+def choose_many(pages: list[dict], wanted: int) -> list[tuple[str, str, str, str]]:
+    """The best usable candidates, strongest first."""
+    scored = []
+    for page in pages:
+        picked = _score(page)
+        if picked:
+            scored.append(picked)
+    scored.sort(key=lambda row: -row[0])
+    seen: set[str] = set()
+    out = []
+    for _score_value, url, title, artist, licence in scored:
+        if title in seen:
+            continue
+        seen.add(title)
+        out.append((url, title, artist, licence))
+        if len(out) >= wanted:
+            break
+    return out
+
+
+def _score(page: dict):
+    title = page.get("title", "")
+    if not looks_like_a_photograph(title):
+        return None
+    info = (page.get("imageinfo") or [{}])[0]
+    meta = info.get("extmetadata") or {}
+    licence = strip_html((meta.get("LicenseShortName") or {}).get("value", ""))
+    if not licence_ok(licence):
+        return None
+    width = int(info.get("width") or 0)
+    height = int(info.get("height") or 0)
+    if width < MIN_SOURCE_WIDTH:
+        return None
+    if height and width / height < 1.15:
+        return None
+    url = info.get("thumburl") or info.get("url")
+    if not url:
+        return None
+    artist = strip_html((meta.get("Artist") or {}).get("value", "")) or "Unknown"
+    score = width * (2 if "geograph" in title.lower() else 1)
+    return (score, url, title, artist, licence)
+
+
 def choose(pages: list[dict]) -> tuple[str, str, str, str] | None:
     """Pick the best usable candidate.
 
@@ -301,14 +394,19 @@ def main() -> int:
     # A switch whose "off" position silently does nothing is a trap, and areas
     # are the important half - they are the fallback that gives EVERY card a
     # photograph, where places only match stories naming a specific landmark.
+    # The number is how many photographs to keep per name. One is right for a
+    # place: there is only one town hall. Areas and topics need a pool, because
+    # they are fallbacks applied to dozens of stories, and a single photograph
+    # repeated across a front page is what made the site look broken.
     targets = [
-        ("places", PLACES, PLACES_DIR, CREDITS_PATH),
-        ("areas", AREAS, AREAS_DIR, AREAS_CREDITS_PATH),
+        ("places", PLACES, PLACES_DIR, CREDITS_PATH, 1),
+        ("areas", AREAS, AREAS_DIR, AREAS_CREDITS_PATH, 6),
+        ("topics", TOPICS, TOPICS_DIR, TOPICS_CREDITS_PATH, 3),
     ]
 
     total_found = total_skipped = total_written = 0
 
-    for noun, catalogue, target_dir, credits_path in targets:
+    for noun, catalogue, target_dir, credits_path, per_name in targets:
         wanted = [(q, s) for q, s in catalogue if args.only.lower() in (q + s).lower()]
         if not wanted:
             continue
@@ -321,7 +419,7 @@ def main() -> int:
               f"({'fetching' if args.download else 'dry run'}) ===\n")
 
         found, skipped, written = run_catalogue(
-            wanted, target_dir, credits, args
+            wanted, target_dir, credits, args, per_name
         )
 
         if args.download and written:
@@ -343,37 +441,68 @@ def main() -> int:
     return 0
 
 
-def run_catalogue(wanted, target_dir, credits, args):
-    found = skipped = written = 0
+def run_catalogue(wanted, target_dir, credits, args, per_name=1):
+    """Fetch one catalogue.
+
+    Entries are grouped by slug first, because several search phrases may feed
+    the same name - four searches for "sport" give four genuinely different
+    photographs where four results from one search are usually four angles on
+    the same subject.
+    """
+    from collections import OrderedDict
+
+    grouped: "OrderedDict[str, list[str]]" = OrderedDict()
     for query, slug in wanted:
-        existing = [p for p in target_dir.glob(f"{slug}.*")] if target_dir.is_dir() else []
-        if existing:
-            # A photograph already here was chosen deliberately. Never clobber it.
-            print(f"  = {slug:<34} already present, left alone")
+        grouped.setdefault(slug, []).append(query)
+
+    found = skipped = written = 0
+
+    for slug, queries in grouped.items():
+        existing = sorted(target_dir.glob(f"{slug}-*")) + sorted(target_dir.glob(f"{slug}.*"))
+        existing = [p for p in existing if p.suffix.lower() in
+                    (".jpg", ".jpeg", ".png", ".webp")]
+        if len(existing) >= per_name:
+            print(f"  = {slug:<26} {len(existing)} already present, left alone")
             skipped += 1
             continue
 
-        pages = search(query)
-        time.sleep(args.delay)
-        picked = choose(pages)
-        if picked is None:
-            print(f"  ? {slug:<34} nothing suitable for \"{query}\"")
-            continue
+        need = per_name - len(existing)
+        candidates: list[tuple[str, str, str, str]] = []
+        seen_titles = {p.stem for p in existing}
 
-        url, title, artist, licence = picked
-        found += 1
-        credit = f"{artist} / {licence} via Wikimedia Commons"
-        print(f"  + {slug:<34} {artist[:28]:<28} {licence}")
-
-        if not args.download:
-            continue
-
-        if download_and_crop(url, target_dir / f"{slug}.jpg"):
-            # The card renders "Photo: " itself, so the stored credit must not
-            # repeat it or the line reads "Photo: Photo: ...".
-            credits[slug] = credit
-            written += 1
+        for query in queries:
+            if len(candidates) >= need:
+                break
+            pages = search(query)
             time.sleep(args.delay)
+            for pick in choose_many(pages, need - len(candidates)):
+                if pick[1] in seen_titles:
+                    continue
+                seen_titles.add(pick[1])
+                candidates.append(pick)
+
+        if not candidates:
+            print(f"  ? {slug:<26} nothing suitable")
+            continue
+
+        found += len(candidates)
+        index = len(existing)
+        for url, _title, artist, licence in candidates:
+            index += 1
+            # A single photograph keeps the bare name so existing files and
+            # credits stay valid; pools are numbered.
+            name = f"{slug}.jpg" if per_name == 1 else f"{slug}-{index:02d}.jpg"
+            credit = f"{artist} / {licence} via Wikimedia Commons"
+            print(f"  + {name:<30} {artist[:26]:<26} {licence}")
+
+            if not args.download:
+                continue
+            if download_and_crop(url, target_dir / name):
+                # The card renders "Photo: " itself, so the stored credit must
+                # not repeat it or the line reads "Photo: Photo: ...".
+                credits[Path(name).stem] = credit
+                written += 1
+                time.sleep(args.delay)
 
     return found, skipped, written
 
