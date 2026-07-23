@@ -1,6 +1,11 @@
 name: Fetch photos (places and areas)
 
-# Builds the curated photo library in assets/img/places/ from Wikimedia Commons.
+# Builds the curated photo library from Wikimedia Commons — both
+# assets/img/places/ and assets/img/areas/, every run.
+#
+# Areas matter most: every story carries an area and unmatched areas climb to
+# "rochdale", so a single rochdale.jpg gives every card a photographic
+# background. Places only match stories that name a specific landmark.
 #
 # Manual only. Defaults to a dry run, which fetches nothing and simply prints
 # what it would take, with the photographer and licence for each, so the whole
@@ -14,10 +19,6 @@ on:
     inputs:
       download:
         description: "Actually download and commit (leave false for a dry run)"
-        type: boolean
-        default: false
-      areas:
-        description: "Fetch AREA photos instead of place photos (the universal card fallback)"
         type: boolean
         default: false
       only:
@@ -54,7 +55,6 @@ jobs:
       - name: Fetch place photos
         run: |
           python scraper/fetch_place_photos.py \
-            ${{ inputs.areas && '--areas' || '' }} \
             ${{ inputs.download && '--download' || '' }} \
             ${{ inputs.only != '' && format('--only {0}', inputs.only) || '' }}
 
