@@ -88,12 +88,23 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
+      # --limit 40 bounds the run. --retry-placeholders makes every story still
+      # on a card repeat a full network hunt for a source photograph, which at
+      # ~5-8 seconds each overran the step timeout once the archive passed a
+      # hundred placeholders: the job was killed part way, so some stories were
+      # upgraded and some were not. Forty per hour finishes comfortably and
+      # still works through roughly a thousand stories a day.
+      #
+      # The cap takes the first forty in feed order, so it favours recent
+      # stories. Older cards are not revisited - by design, since the curated
+      # photo library is what makes those look right.
       - name: Ensure every published story has an image
         timeout-minutes: 20
         run: |
           python scraper/ensure_article_images.py \
             --articles articles.json \
-            --retry-placeholders
+            --retry-placeholders \
+            --limit 40
 
       - name: Validate public article feed
         run: |
