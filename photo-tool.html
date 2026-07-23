@@ -65,6 +65,13 @@
     border-radius:0 6px 6px 0; font-size:12px; line-height:1.55; margin-top:12px; color:#e0d6b8; }
   .flag.bad { border-left-color:var(--bad); color:#f0c8ce; }
   .flag b { color:#fff; }
+  /* The destination folder has to be visible before a photo is dropped, because
+     the editor panel that used to be its only home starts hidden. */
+  .dest { display:flex; gap:10px; align-items:baseline; flex-wrap:wrap;
+    background:#0c1017; border:1px solid var(--line); border-radius:7px;
+    padding:11px 13px; margin-top:14px; }
+  .dest span { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+  .dest code { font-family: ui-monospace, Menlo, monospace; font-size:14px; color:var(--accent); }
 </style>
 </head>
 <body>
@@ -127,9 +134,11 @@
   <div class="panel">
     <h2>Then, on GitHub</h2>
     <ol class="steps">
-      <li>Open the repository and navigate into the folder shown above.</li>
+      <li>Open the repository and navigate to <code class="stepdir">assets/img/places/</code>
+        &mdash; create the folder if it does not exist yet.</li>
       <li><b>Add file &rarr; Upload files</b>, drag the downloaded photo in, commit.</li>
-      <li>If you have a credit, edit <code>credits.json</code> in that same folder and add the line.</li>
+      <li>If you have a credit, edit <code class="stepcredit">assets/img/places/credits.json</code>
+        and add the line. Create that file too if it is missing, starting from <code>{}</code>.</li>
       <li>New stories use it automatically. To apply it to stories already published,
         run <b>card re-render</b> from the Actions tab.</li>
     </ol>
@@ -227,12 +236,19 @@
     document.getElementById("explain").innerHTML =
       "<h2>" + kind + "</h2><div class=\"hint\" style=\"margin-top:0\">" + k.blurb + "</div>" +
       "<p class=\"examples\" style=\"margin:12px 0 0\">Examples: <code>" +
-      k.examples.replace(/ &middot; /g, "</code> &middot; <code>") + "</code></p>";
+      k.examples.replace(/ &middot; /g, "</code> &middot; <code>") + "</code></p>" +
+      "<div class=\"dest\"><span>Upload to</span><code>" + k.dir + "</code></div>";
     document.getElementById("nameHeading").textContent = k.heading;
     document.getElementById("nameLabel").textContent = k.label;
     placeInput.placeholder = k.placeholder;
     document.getElementById("fdir").textContent = k.dir;
     document.getElementById("creditPath").textContent = k.dir + "credits.json";
+    Array.prototype.forEach.call(document.querySelectorAll(".stepdir"), function (node) {
+      node.textContent = k.dir;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".stepcredit"), function (node) {
+      node.textContent = k.dir + "credits.json";
+    });
   }
 
   function refreshName() {
