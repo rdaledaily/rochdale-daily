@@ -87,6 +87,26 @@ NO_PHOTO_CATEGORIES = frozenset({"crime"})
 CARDS_DIR = Path("assets/img/cards")
 CARDS_CREDITS_PATH = CARDS_DIR / "credits.json"
 
+# Words that mark a named thing worth photographing. A title mentioning one of
+# these is naming somewhere specific, not describing the borough in general.
+_PLACE_TYPES = (
+    "road", "street", "lane", "way", "avenue", "drive", "close", "crescent",
+    "grove", "walk", "row", "square", "brow", "bank", "hill", "gate", "terrace",
+    "parade", "park", "hall", "station", "school", "academy", "college",
+    "church", "mosque", "museum", "library", "centre", "center", "arena",
+    "stadium", "reservoir", "lake", "bridge", "hospital", "infirmary",
+    "interchange", "dell", "moor", "valley", "canal", "estate", "roundabout",
+)
+
+# Words that cannot begin a name, so "closed on Manchester Road" does not become
+# "on Manchester Road".
+_NOT_A_NAME = {
+    "the", "a", "an", "of", "in", "at", "on", "and", "to", "for", "from", "as",
+    "by", "near", "over", "with", "is", "are", "was", "were", "has", "have",
+    "after", "before", "during", "into", "onto", "off", "up", "down", "new",
+    "this", "that", "its", "his", "her", "their", "will", "said", "says",
+}
+
 PEOPLE_DIR = Path("assets/img/people")
 PEOPLE_CREDITS_PATH = PEOPLE_DIR / "credits.json"
 _IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
@@ -95,6 +115,108 @@ _IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
 # tokens with at least one real word, so a single generic name can't match
 # everything — but genuine place names like "Manchester Road" or "Town Centre"
 # must still match.
+def _strip_marks(text: str) -> str:
+    """Drop apostrophes rather than treating them as separators.
+
+    "St Michael's" has to become "st michaels", not "st michael s", or a file
+    called st_michaels_church never matches the headline that names it. Every
+    saint's church and Queen's Park in the borough depends on this.
+    """
+    return re.sub(r"[\u2019\u02bc']", "", str(text))
+
+
+def _normalise(name: str) -> str:
+    """One spelling for a library name: lowercase, single underscores."""
+    return re.sub(r"[^a-z0-9]+", "_", _strip_marks(name).lower()).strip("_")
+
+
+def _library(cards_dir: Path) -> list[tuple[str, list[Path]]]:
+    """Every name in the photo library, longest phrase first.
+
+    A file's name IS the search term, which is what makes this safe: nothing
+    can be matched that you have not deliberately supplied. Numbered variants
+    of a name are pooled - manchester_road.jpg, manchester_road-02.jpg and
+    manchester_road-03.jpg are three photographs of the same road, and a story
+    gets one of them rather than always the first.
+    """
+    if not cards_dir.is_dir():
+        return []
+    pools: dict[str, list[Path]] = {}
+    for path in sorted(cards_dir.iterdir()):
+        if path.suffix.lower() not in _IMAGE_SUFFIXES:
+            continue
+        # Hyphens and underscores are treated alike, so manchester-road.jpg and
+        # manchester_road.jpg both work. Getting that wrong used to match
+        # nothing and say nothing, which is the worst kind of failure.
+        stem = _normalise(re.sub(r"-\d+$", "", path.stem))
+        pools.setdefault(stem, []).append(path)
+    # Longest name wins: rochdale_town_hall before town_hall.
+    return sorted(pools.items(), key=lambda kv: (-len(kv[0].split("_")), -len(kv[0])))
+
+
+def _choose(paths: list[Path], seed: str) -> Path:
+    """Pick from a pool the same way every time, so a card does not change
+    under a reader when it is re-rendered."""
+    digest = hashlib.sha256(seed.encode("utf-8")).hexdigest()
+    return sorted(paths)[int(digest[:8], 16) % len(paths)]
+
+
+def find_library_photo(
+    title: str,
+    slug: str,
+    category: str = "",
+    cards_dir: Path = CARDS_DIR,
+) -> Path | None:  # noqa: ARG001 - category kept for call compatibility
+    """The photograph you have chosen for this story, if you have one.
+
+    Checked in order, and every step needs a file you supplied:
+
+      1. the article slug          sample-rochdale-story.jpg
+         one story only, and it beats everything else.
+
+      2. a name in the headline    rochdale_hornets.jpg, manchester_road.jpg
+         any story whose headline says that. Longest name wins, so
+         rochdale_town_hall beats town_hall.
+
+    A headline naming nothing you hold gets no photograph. There is no third
+    tier and no catch-all: every wrong image this site has shown came from a
+    fallback filling a gap that should have been left empty.
+
+    Only the headline and slug are read, never the article body. A place
+    mentioned in passing further down is not what the story is about, and
+    matching on body text is what once put a photograph of a town centre on an
+    appeal for a wanted man.
+    """
+    pools = _library(cards_dir)
+    if not pools:
+        return None
+    lookup = dict(pools)
+
+    slug_key = _normalise(slug)
+    if slug_key in lookup:
+        return _choose(lookup[slug_key], slug)
+
+    haystack = " " + re.sub(
+        r"[^a-z0-9]+", " ",
+        _strip_marks(f"{title} {slug.replace('-', ' ')}").lower()
+    ) + " "
+    for name, paths in pools:
+        if name == slug_key:
+            continue
+        if f" {name.replace('_', ' ')} " in haystack:
+            return _choose(paths, slug)
+
+    # No category fallback, and no fallback of any kind. A file named after a
+    # category would put one photograph on every story in it regardless of what
+    # those stories are about - a town hall behind a care home visit, a stadium
+    # behind a fixture announcement. That is the same failure as the area photo
+    # it replaced, wearing a better label.
+    #
+    # A story that names nothing gets a plain card. Fewer photographs, and every
+    # one of them belongs to its story.
+    return None
+
+
 def find_person_photo(
     title: str,
     people_dir: Path = PEOPLE_DIR,
@@ -323,12 +445,13 @@ def compose_story_card(
         # An image you supplied for this specific story, if there is one. Named
         # after the article slug, so there is no matching to get wrong.
         slug = re.sub(r"-area-category-card$", "", out_path.stem)
-        for suffix in _IMAGE_SUFFIXES:
-            candidate = cards_dir / f"{slug}{suffix}"
-            if candidate.is_file():
-                photo = candidate
-                credit = _folder_credit(slug, cards_dir) or "Rochdale Daily"
-                break
+        match = find_library_photo(title, slug, cat_key, cards_dir)
+        if match is not None:
+            photo = match
+            # Credits are keyed by the base name, so every variant of
+            # manchester_road shares one entry rather than needing three.
+            credit = (_folder_credit(re.sub(r"-\d+$", "", match.stem), cards_dir)
+                      or _folder_credit(match.stem, cards_dir) or "Rochdale Daily")
 
         if photo is None:
             person_match = find_person_photo(title, people_dir)
