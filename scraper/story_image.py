@@ -94,6 +94,9 @@ AREA_PARENT: dict[str, str] = {
 # when they have no police-issued image.
 NO_PHOTO_CATEGORIES = frozenset({"crime"})
 
+TOPICS_DIR = Path("assets/img/topics")
+TOPICS_CREDITS_PATH = TOPICS_DIR / "credits.json"
+
 AREAS_DIR = Path("assets/img/areas")
 PLACES_DIR = Path("assets/img/places")
 PEOPLE_DIR = Path("assets/img/people")
@@ -238,7 +241,51 @@ def _area_hue(area_slug: str) -> float:
     return digest[0] / 255.0
 
 
-def _area_photo(area_slug: str, areas_dir: Path) -> Path | None:
+def _variants(directory: Path, stem: str) -> list[Path]:
+    """Every photograph filed under a name, including numbered alternatives.
+
+    ``rochdale.jpg``, ``rochdale-01.jpg`` and ``rochdale-02.jpg`` are all
+    photographs of Rochdale. The numeric suffix is required so that
+    ``middleton`` never collects ``middleton-gardens``, which is a different
+    subject filed under places.
+    """
+    if not directory.is_dir():
+        return []
+    pattern = re.compile(rf"^{re.escape(stem)}(?:-\d+)?$")
+    return sorted(
+        path for path in directory.iterdir()
+        if path.suffix.lower() in _IMAGE_SUFFIXES and pattern.match(path.stem.lower())
+    )
+
+
+def _pick(paths: list[Path], seed: str) -> Path | None:
+    """Choose one photograph from a pool, the same way every time.
+
+    Seeded on the article rather than chosen at random, so a card re-rendered
+    tomorrow keeps the picture it had today - readers should not see a story's
+    image change under them, and a random pick would churn the whole archive on
+    every run. Hashing the seed rather than using its position spreads
+    consecutive stories across the pool instead of clustering them.
+    """
+    if not paths:
+        return None
+    digest = hashlib.sha256(seed.encode("utf-8")).hexdigest()
+    return paths[int(digest[:8], 16) % len(paths)]
+
+
+def find_topic_photo(category: str, seed: str, topics_dir: Path = TOPICS_DIR) -> Path | None:
+    """A photograph that fits the subject rather than merely the location.
+
+    A generic streetscape behind a rugby report, a driving test and a helicopter
+    sighting is technically a photograph of the right town and tells the reader
+    nothing. A pitch, a road and a school at least belong to the story. Topic
+    photographs therefore rank above the area fallback and below anything that
+    names a specific place or person.
+    """
+    return _pick(_variants(topics_dir, _category_key(category)), seed)
+
+
+def _area_photo(area_slug: str, areas_dir: Path, seed: str = "") -> Path | None:
     """Most specific curated photo: exact area -> parent township -> borough."""
     seen: set[str] = set()
     candidate = area_slug
@@ -246,10 +293,9 @@ def _area_photo(area_slug: str, areas_dir: Path) -> Path | None:
         if not candidate or candidate in seen:
             break
         seen.add(candidate)
-        for suffix in _IMAGE_SUFFIXES:
-            path = areas_dir / f"{candidate}{suffix}"
-            if path.is_file():
-                return path
+        pool = _variants(areas_dir, candidate)
+        if pool:
+            return _pick(pool, seed)
         candidate = AREA_PARENT.get(candidate, "rochdale" if candidate != "rochdale" else "")
     return None
 
@@ -405,6 +451,7 @@ def compose_story_card(
     story_text: str = "",
     places_dir: Path = PLACES_DIR,
     people_dir: Path = PEOPLE_DIR,
+    topics_dir: Path = TOPICS_DIR,
 ) -> tuple[str, str]:
     """Render the card to out_path. Returns (relative_path, image_credit)."""
     area_slug = _area_slug(area)
@@ -418,6 +465,11 @@ def compose_story_card(
     photo = None
     credit = "Rochdale Daily"
     if cat_key not in NO_PHOTO_CATEGORIES:
+        # Seeded on the output filename, which is the article slug, so a given
+        # story keeps the same picture across re-renders while neighbouring
+        # stories draw different ones from the same pool.
+        seed = out_path.stem
+
         person_match = find_person_photo(title, people_dir)
         if person_match is not None:
             photo = person_match[0]
@@ -428,9 +480,13 @@ def compose_story_card(
                 photo = place_match[0]
                 credit = _folder_credit(photo.stem, places_dir) or "Rochdale Daily"
         if photo is None:
-            photo = _area_photo(area_slug, areas_dir)
+            photo = find_topic_photo(cat_key, seed, topics_dir)
             if photo is not None:
-                credit = _photo_credit(area_slug, credits_path) or "Rochdale Daily"
+                credit = _folder_credit(photo.stem, topics_dir) or "Rochdale Daily"
+        if photo is None:
+            photo = _area_photo(area_slug, areas_dir, seed)
+            if photo is not None:
+                credit = _photo_credit(photo.stem, credits_path) or "Rochdale Daily"
 
     if photo is not None:
         background = _photo_background(photo)
