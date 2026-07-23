@@ -53,6 +53,7 @@ from story_identity import (
     same_story,
     strip_publisher_suffix,
 )
+from manual_articles import load_manual_article_records
 from manual_events import load_manual_event_records
 from story_image import compose_story_card
 
@@ -323,6 +324,11 @@ def is_manual_event(article: dict[str, Any]) -> bool:
     return bool(article.get("manual_event") or article.get("editorial_lock"))
 
 
+def is_manual_article(article: dict[str, Any]) -> bool:
+    """Editor-written pieces from manual_articles.json, trusted the same way."""
+    return bool(article.get("manual_article"))
+
+
 def _needs_generated_card(article: dict[str, Any]) -> bool:
     image = str(article.get("image_url") or "").strip()
     return not image or bool(_PLACEHOLDER_IMAGE_RE.search(image))
@@ -364,6 +370,32 @@ def inject_manual_events(
     id, slug, or source URL is replaced by the manual version (the editor wins).
     """
     manual = load_manual_event_records(now)
+    if not manual:
+        return merged
+    manual_ids = {record["id"] for record in manual}
+    manual_slugs = {record["slug"] for record in manual}
+    manual_urls = {record["source_url"] for record in manual if record.get("source_url")}
+    kept = [
+        article
+        for article in merged
+        if str(article.get("id") or "") not in manual_ids
+        and str(article.get("slug") or "") not in manual_slugs
+        and str(article.get("source_url") or "") not in manual_urls
+    ]
+    return manual + kept
+
+
+def inject_manual_articles(
+    merged: list[dict[str, Any]],
+    now: datetime,
+) -> list[dict[str, Any]]:
+    """Merge editor-written articles into the feed just before it is written.
+
+    manual_articles.json is read-only to the pipeline, so a re-run can never
+    strip these. Anything auto-collected sharing an id, slug or source URL is
+    replaced by the editor's version.
+    """
+    manual = load_manual_article_records(now)
     if not manual:
         return merged
     manual_ids = {record["id"] for record in manual}
@@ -1459,6 +1491,7 @@ def main() -> int:
     # filtering and immediately before articles.json is written, so they reach
     # both the feed and the events rail and can never be filtered out.
     merged = inject_manual_events(merged, now)
+    merged = inject_manual_articles(merged, now)
     # One card style for everything: give every event the same composed
     # area/category card the rest of the feed uses (replacing category_events.svg).
     for article in merged:
@@ -1483,6 +1516,7 @@ def main() -> int:
         and event_is_current(article, now)
         and (
             is_manual_event(article)
+            or is_manual_article(article)
             or (
                 approved_event_source(article)
                 and not is_online_event(article)
