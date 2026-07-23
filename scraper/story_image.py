@@ -196,14 +196,20 @@ def find_library_photo(
     if slug_key in lookup:
         return _choose(lookup[slug_key], slug)
 
-    haystack = " " + re.sub(
-        r"[^a-z0-9]+", " ",
-        _strip_marks(f"{title} {slug.replace('-', ' ')}").lower()
-    ) + " "
+    # Two readings of the headline, because an apostrophe means two different
+    # things. In "St Michael's Church" it is part of the name, so the words have
+    # to join: st michaels church. In "Rochdale AFC's manager" it is possessive,
+    # so joining gives "afcs" and rochdale_afc stops matching. Both readings are
+    # searched and either may match.
+    raw = f"{title} {slug.replace('-', ' ')}"
+    joined = " " + re.sub(r"[^a-z0-9]+", " ", _strip_marks(raw).lower()) + " "
+    split = " " + re.sub(r"[^a-z0-9]+", " ", raw.lower()) + " "
+    haystacks = (joined, split)
     for name, paths in pools:
         if name == slug_key:
             continue
-        if f" {name.replace('_', ' ')} " in haystack:
+        phrase = f" {name.replace('_', ' ')} "
+        if any(phrase in hay for hay in haystacks):
             return _choose(paths, slug)
 
     # No category fallback, and no fallback of any kind. A file named after a
