@@ -78,6 +78,22 @@ AREA_PARENT: dict[str, str] = {
     "castleton": "rochdale",
 }
 
+# Categories where a curated photograph must never be used, and the generated
+# card is the only acceptable illustration.
+#
+# A photograph of a real place behind a headline about an alleged offence says
+# something the story does not: that this location is connected to the crime.
+# On an appeal naming an individual it is worse, because the reader joins the
+# name and the building unprompted. Where premises or passers-by are
+# identifiable, that is an accuracy complaint under the Editors' Code and a
+# defamation risk to whoever owns them.
+#
+# Text matching cannot separate "the incident happened here" from "the town was
+# mentioned in passing", so no photograph can be placed safely by machine. A
+# plain branded card carries no such implication, which is why newsrooms use one
+# when they have no police-issued image.
+NO_PHOTO_CATEGORIES = frozenset({"crime"})
+
 AREAS_DIR = Path("assets/img/areas")
 PLACES_DIR = Path("assets/img/places")
 PEOPLE_DIR = Path("assets/img/people")
@@ -401,19 +417,20 @@ def compose_story_card(
     # named in the story then beats a generic photo of the area.
     photo = None
     credit = "Rochdale Daily"
-    person_match = find_person_photo(title, people_dir)
-    if person_match is not None:
-        photo = person_match[0]
-        credit = _folder_credit(photo.stem, people_dir) or "Rochdale Daily"
-    if photo is None:
-        place_match = find_place_photo(f"{title} {story_text}", places_dir)
-        if place_match is not None:
-            photo = place_match[0]
-            credit = _folder_credit(photo.stem, places_dir) or "Rochdale Daily"
-    if photo is None:
-        photo = _area_photo(area_slug, areas_dir)
-        if photo is not None:
-            credit = _photo_credit(area_slug, credits_path) or "Rochdale Daily"
+    if cat_key not in NO_PHOTO_CATEGORIES:
+        person_match = find_person_photo(title, people_dir)
+        if person_match is not None:
+            photo = person_match[0]
+            credit = _folder_credit(photo.stem, people_dir) or "Rochdale Daily"
+        if photo is None:
+            place_match = find_place_photo(f"{title} {story_text}", places_dir)
+            if place_match is not None:
+                photo = place_match[0]
+                credit = _folder_credit(photo.stem, places_dir) or "Rochdale Daily"
+        if photo is None:
+            photo = _area_photo(area_slug, areas_dir)
+            if photo is not None:
+                credit = _photo_credit(area_slug, credits_path) or "Rochdale Daily"
 
     if photo is not None:
         background = _photo_background(photo)
