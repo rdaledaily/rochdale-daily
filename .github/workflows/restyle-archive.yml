@@ -1,0 +1,77 @@
+name: Restyle archive pages
+
+# Brings archived article pages onto the current card design.
+#
+# generate_pages.py rewrites a page for every article in articles.json and keeps
+# every page ever published so old URLs stay discoverable. Since articles.json
+# holds about a fortnight, most pages on disk have no article behind them and
+# are never rewritten again - so they keep the artwork of whatever generation
+# produced them, which is why retired designs keep appearing on the site.
+#
+# Defaults to a report. Nothing is written until "apply" is ticked.
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Write the cards and rewrite the pages (leave false to just look)"
+        type: boolean
+        default: false
+      limit:
+        description: "Stop after this many pages — 0 for all. Useful for a cautious first run."
+        type: string
+        default: "0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-restyle-archive
+  cancel-in-progress: false
+
+jobs:
+  restyle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Pillow
+        run: python -m pip install --no-cache-dir "Pillow>=10,<13"
+
+      # Run from the repository root, not from scraper/. The script resolves
+      # articles.json, articles/ and assets/ relative to the working directory,
+      # and imports story_image from its own folder regardless of where it is
+      # invoked from.
+      - name: Restyle archived pages
+        run: |
+          python scraper/restyle_archive_pages.py \
+            ${{ inputs.apply && '--apply' || '' }} \
+            --limit ${{ inputs.limit }}
+
+      - name: Show what changed
+        run: git status --short articles assets/article-images || true
+
+      - name: Commit restyled pages
+        if: ${{ inputs.apply }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add articles assets/article-images
+
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+
+          git commit -m "Restyle archived article pages onto the current card design"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
