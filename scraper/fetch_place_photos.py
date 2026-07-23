@@ -289,27 +289,61 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--download", action="store_true",
                         help="actually fetch and write files (default is a dry run)")
-    parser.add_argument("--areas", action="store_true",
-                        help="fetch area photographs instead of place photographs")
     parser.add_argument("--only", default="",
                         help="substring filter, e.g. --only heywood")
     parser.add_argument("--delay", type=float, default=1.0,
                         help="seconds between requests, to stay a polite client")
     args = parser.parse_args()
 
-    target_dir = AREAS_DIR if args.areas else PLACES_DIR
-    credits_path = AREAS_CREDITS_PATH if args.areas else CREDITS_PATH
-    catalogue = AREAS if args.areas else PLACES
-    noun = "areas" if args.areas else "places"
+    # Both catalogues, every run. This used to sit behind an --areas flag, and a
+    # run with the flag left off looked identical to a successful one: every
+    # place was already present, so nothing was fetched and nothing committed.
+    # A switch whose "off" position silently does nothing is a trap, and areas
+    # are the important half - they are the fallback that gives EVERY card a
+    # photograph, where places only match stories naming a specific landmark.
+    targets = [
+        ("places", PLACES, PLACES_DIR, CREDITS_PATH),
+        ("areas", AREAS, AREAS_DIR, AREAS_CREDITS_PATH),
+    ]
 
-    if args.download:
-        target_dir.mkdir(parents=True, exist_ok=True)
+    total_found = total_skipped = total_written = 0
 
-    credits = load_credits(credits_path)
-    wanted = [(q, s) for q, s in catalogue if args.only.lower() in (q + s).lower()]
+    for noun, catalogue, target_dir, credits_path in targets:
+        wanted = [(q, s) for q, s in catalogue if args.only.lower() in (q + s).lower()]
+        if not wanted:
+            continue
 
-    print(f"{'FETCHING' if args.download else 'DRY RUN'} — {len(wanted)} {noun}\n")
+        if args.download:
+            target_dir.mkdir(parents=True, exist_ok=True)
+        credits = load_credits(credits_path)
 
+        print(f"\n=== {noun.upper()} — {len(wanted)} to check "
+              f"({'fetching' if args.download else 'dry run'}) ===\n")
+
+        found, skipped, written = run_catalogue(
+            wanted, target_dir, credits, args
+        )
+
+        if args.download and written:
+            credits_path.parent.mkdir(parents=True, exist_ok=True)
+            credits_path.write_text(
+                json.dumps(dict(sorted(credits.items())), indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+
+        print(f"\n  {noun}: {found} usable, {skipped} already present, {written} written")
+        total_found += found
+        total_skipped += skipped
+        total_written += written
+
+    print(f"\nTOTAL — {total_found} usable, {total_skipped} already present, "
+          f"{total_written} written")
+    if not args.download and total_found:
+        print("Dry run only. Re-run with --download to fetch these.")
+    return 0
+
+
+def run_catalogue(wanted, target_dir, credits, args):
     found = skipped = written = 0
     for query, slug in wanted:
         existing = [p for p in target_dir.glob(f"{slug}.*")] if target_dir.is_dir() else []
@@ -341,17 +375,7 @@ def main() -> int:
             written += 1
             time.sleep(args.delay)
 
-    if args.download and written:
-        credits_path.parent.mkdir(parents=True, exist_ok=True)
-        credits_path.write_text(
-            json.dumps(dict(sorted(credits.items())), indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
-
-    print(f"\n{found} usable, {skipped} already present, {written} written")
-    if not args.download and found:
-        print("Dry run only. Re-run with --download to fetch these.")
-    return 0
+    return found, skipped, written
 
 
 if __name__ == "__main__":
