@@ -105,8 +105,16 @@ export async function onRequestGet({ request, env }) {
   // --- image passthrough -------------------------------------------------
   const imageId = url.searchParams.get("image");
   if (imageId) {
-    const approved = await readList(kv, "events:approved");
-    const record = approved.find(item => item.id === imageId);
+    // The moderation page needs to SEE a submitted photograph before deciding
+    // on it. Approving an image sight-unseen is the obvious route for something
+    // inappropriate to reach the front page, so an authenticated request may
+    // also read images still sitting in the pending queue. Unauthenticated
+    // requests continue to see approved images only.
+    const wantsPending = url.searchParams.get("queue") === "pending";
+    const list = wantsPending && isAdmin(request, env)
+      ? await readList(kv, "events:pending")
+      : await readList(kv, "events:approved");
+    const record = list.find(item => item.id === imageId);
     if (!record || !record.imageKey) return new Response("Not found", { status: 404 });
 
     const base64 = await kv.get(record.imageKey);
@@ -116,7 +124,7 @@ export async function onRequestGet({ request, env }) {
     return new Response(binary, {
       headers: {
         "Content-Type": "image/jpeg",
-        "Cache-Control": "public, max-age=86400",
+        "Cache-Control": wantsPending ? "no-store" : "public, max-age=86400",
       },
     });
   }
