@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1f3a">
+  <!-- Never index this. It is harmless without the token, but there is no
+       reason for it to appear in search results. -->
+  <meta name="robots" content="noindex,nofollow">
+  <title>Event moderation | Rochdale Daily</title>
+  <style>
+    :root {
+      --accent: #22d3ee; --navy: #0b1f3a; --ink: #eef3f9; --muted: #93a6bd;
+      --line: #1e3550; --soft: #12263d; --paper: #0d1c2e; --card: #112741;
+      --red: #c8102e; --green: #23a06a; --amber: #f5c400;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink);
+      font-family: Roboto, Arial, Helvetica, sans-serif; line-height: 1.5; }
+    .wrap { width: min(1000px, calc(100% - 28px)); margin-inline: auto; }
+    header { background: var(--navy); border-bottom: 3px solid var(--accent); padding: 16px 0; }
+    header .title { font-family: Georgia, serif; font-size: 24px; color: #fff; }
+    header .sub { color: var(--muted); font-size: 13px; }
+    h1 { font-size: 22px; margin: 22px 0 4px; }
+    .bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      background: var(--card); border: 1px solid var(--line); padding: 14px; margin: 14px 0 18px; }
+    input[type="password"], input[type="text"] { flex: 1 1 260px; min-width: 0; background: var(--soft);
+      border: 1px solid var(--line); color: var(--ink); padding: 10px 11px; font-size: 15px; font-family: inherit; }
+    button { font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: .4px;
+      text-transform: uppercase; padding: 10px 15px; border: 2px solid transparent; cursor: pointer; }
+    .btn-primary { background: var(--accent); color: var(--navy); }
+    .btn-ghost { background: transparent; border-color: var(--line); color: var(--ink); }
+    .btn-approve { background: var(--green); color: #05221a; }
+    .btn-reject { background: transparent; border-color: var(--red); color: #ff8a99; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .status { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+    .status.error { color: #ff8a99; }
+    .status.ok { color: #7fe3bd; }
+    .card { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--amber);
+      padding: 16px; margin-bottom: 14px; display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 16px; }
+    .card.no-image { grid-template-columns: minmax(0,1fr); }
+    .card img { width: 100%; height: auto; display: block; border: 1px solid var(--line); background: var(--soft); }
+    .card h2 { margin: 0 0 6px; font-size: 19px; line-height: 1.15; }
+    dl { margin: 0 0 10px; display: grid; grid-template-columns: 108px minmax(0,1fr); gap: 3px 12px; font-size: 14px; }
+    dt { color: var(--muted); }
+    dd { margin: 0; word-break: break-word; }
+    .desc { background: var(--soft); border-left: 3px solid var(--line); padding: 10px 12px;
+      margin: 0 0 12px; font-size: 14px; white-space: pre-wrap; }
+    .actions { display: flex; gap: 9px; flex-wrap: wrap; }
+    .contact { color: #ffd98a; }
+    .empty { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--green);
+      padding: 18px; color: var(--muted); }
+    .note { color: var(--muted); font-size: 12px; margin: 20px 0 40px; line-height: 1.6; }
+    @media (max-width: 640px) { .card { grid-template-columns: minmax(0,1fr); } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="title">Rochdale Daily</div>
+      <div class="sub">Event moderation</div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <h1>Pending submissions</h1>
+
+    <div class="bar">
+      <input type="password" id="token" placeholder="Admin token" autocomplete="off" spellcheck="false">
+      <button class="btn-primary" id="load">Load queue</button>
+      <button class="btn-ghost" id="forget" hidden>Forget token</button>
+    </div>
+
+    <p class="status" id="status">Enter your admin token to load the queue.</p>
+    <div id="queue"></div>
+
+    <p class="note">
+      The token is your <code>EVENTS_ADMIN_TOKEN</code> from Cloudflare. It is kept only for this
+      browser tab and is cleared when the tab closes. Submitter contact details are shown here for
+      checking and are stripped automatically on approval, so they never reach the public feed.
+      Approved events appear in What&rsquo;s On on the next page load &mdash; no deploy needed.
+    </p>
+  </div>
+
+<script>
+(function () {
+  var API = "/api/events";
+  var tokenInput = document.getElementById("token");
+  var statusEl = document.getElementById("status");
+  var queueEl = document.getElementById("queue");
+  var loadBtn = document.getElementById("load");
+  var forgetBtn = document.getElementById("forget");
+
+  /* sessionStorage, not localStorage: the token dies with the tab. A moderation
+     credential left on disk on a shared machine is a worse problem than having
+     to paste it again tomorrow. */
+  var saved = sessionStorage.getItem("rd_admin_token");
+  if (saved) { tokenInput.value = saved; forgetBtn.hidden = false; }
+
+  function say(message, kind) {
+    statusEl.textContent = message;
+    statusEl.className = "status" + (kind ? " " + kind : "");
+  }
+
+  function esc(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function when(item) {
+    var date = item.date || item.event_date || "";
+    var time = item.time || item.event_time || "";
+    return [date, time].filter(Boolean).join(", ") || "Not given";
+  }
+
+  function card(item) {
+    var id = esc(item.id);
+    var hasImage = !!item.imageKey;
+    var img = hasImage
+      ? '<div><img loading="lazy" alt="Submitted image" src="' + API +
+        "?image=" + encodeURIComponent(item.id) + "&queue=pending&t=" + Date.now() +
+        '" onerror="this.closest(\'.card\').classList.add(\'no-image\');this.remove();"></div>'
+      : "";
+    return '<article class="card' + (hasImage ? "" : " no-image") + '" data-id="' + id + '">' +
+      img +
+      "<div>" +
+        "<h2>" + esc(item.title) + "</h2>" +
+        "<dl>" +
+          "<dt>When</dt><dd>" + esc(when(item)) + "</dd>" +
+          "<dt>Where</dt><dd>" + esc(item.location || "") + ", " + esc(item.postcode || "") + "</dd>" +
+          "<dt>Cost</dt><dd>" + esc(item.cost != null && item.cost !== "" ? "\u00A3" + item.cost : "Not given") + "</dd>" +
+          "<dt>Contact</dt><dd class=\"contact\">" + esc(item.contact || "Not given") + "</dd>" +
+          "<dt>Submitted</dt><dd>" + esc((item.submittedAt || "").replace("T", " ").slice(0, 16)) + "</dd>" +
+        "</dl>" +
+        (item.description ? '<div class="desc">' + esc(item.description) + "</div>" : "") +
+        '<div class="actions">' +
+          '<button class="btn-approve" data-action="approve">Approve</button>' +
+          '<button class="btn-reject" data-action="reject">Reject</button>' +
+        "</div>" +
+      "</div>" +
+    "</article>";
+  }
+
+  function token() { return tokenInput.value.trim(); }
+
+  async function load() {
+    if (!token()) { say("Enter your admin token first.", "error"); return; }
+    say("Loading queue\u2026");
+    queueEl.innerHTML = "";
+    try {
+      var response = await fetch(API + "?queue=pending&t=" + Date.now(), {
+        cache: "no-store",
+        headers: { "x-admin-token": token(), Accept: "application/json" }
+      });
+      if (response.status === 401) { say("That token was not accepted.", "error"); return; }
+      if (!response.ok) { say("Server returned " + response.status + ".", "error"); return; }
+
+      var data = await response.json();
+      var pending = (data && data.pending) || [];
+      sessionStorage.setItem("rd_admin_token", token());
+      forgetBtn.hidden = false;
+
+      if (!pending.length) {
+        queueEl.innerHTML = '<div class="empty">Nothing waiting. The queue is empty.</div>';
+        say("Queue empty. Capacity " + (data.capacity || 50) + ".", "ok");
+        return;
+      }
+      queueEl.innerHTML = pending.map(card).join("");
+      say(pending.length + (pending.length === 1 ? " submission" : " submissions") +
+          " waiting, of " + (data.capacity || 50) + " capacity.");
+    } catch (error) {
+      say("Could not reach the server.", "error");
+    }
+  }
+
+  async function act(id, action, article) {
+    if (action === "reject" && !confirm("Reject this submission? It cannot be undone.")) return;
+    var buttons = article.querySelectorAll("button");
+    buttons.forEach(function (b) { b.disabled = true; });
+    say(action === "approve" ? "Approving\u2026" : "Rejecting\u2026");
+    try {
+      var response = await fetch(API, {
+        method: "POST",
+        headers: {
+          "x-admin-token": token(),
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ action: action, id: id })
+      });
+      var data = await response.json().catch(function () { return {}; });
+      if (!response.ok || !data.ok) {
+        say((data && data.error) || "That did not work (" + response.status + ").", "error");
+        buttons.forEach(function (b) { b.disabled = false; });
+        return;
+      }
+      article.remove();
+      say(action === "approve"
+        ? "Approved. It will show in What\u2019s On on the next page load."
+        : "Rejected and removed.", "ok");
+      if (!queueEl.querySelector(".card")) {
+        queueEl.innerHTML = '<div class="empty">Nothing waiting. The queue is empty.</div>';
+      }
+    } catch (error) {
+      say("Could not reach the server.", "error");
+      buttons.forEach(function (b) { b.disabled = false; });
+    }
+  }
+
+  loadBtn.addEventListener("click", load);
+  tokenInput.addEventListener("keydown", function (event) { if (event.key === "Enter") load(); });
+  forgetBtn.addEventListener("click", function () {
+    sessionStorage.removeItem("rd_admin_token");
+    tokenInput.value = "";
+    forgetBtn.hidden = true;
+    queueEl.innerHTML = "";
+    say("Token cleared.");
+  });
+
+  queueEl.addEventListener("click", function (event) {
+    var button = event.target.closest("button[data-action]");
+    if (!button) return;
+    var article = button.closest(".card");
+    act(article.dataset.id, button.dataset.action, article);
+  });
+
+  if (saved) load();
+})();
+</script>
+</body>
+</html>
