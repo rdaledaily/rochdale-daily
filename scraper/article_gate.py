@@ -323,6 +323,119 @@ def _normalise_timestamps(
         notes.append(f"'{ident}': normalised last_updated_at")
 
 
+# How long a story can still be described as ONGOING, measured from its last
+# update. The flag is set upstream when a story has been merged from more than
+# one source, which is not the same thing as still happening: a rugby result
+# covered by three outlets was being labelled ONGOING five days later, as was a
+# concluded murder trial. Nothing expired it, because nothing ever cleared it.
+#
+# A road incident is ongoing for hours. A council process can run for days. A
+# finished match never is.
+ONGOING_HOURS = {
+    "traffic": 12,
+    "transport": 12,
+    "environment": 24,
+    "crime": 72,
+    "health": 48,
+    "politics": 72,
+    "business": 48,
+    "education": 48,
+    "community": 48,
+    "events": 48,
+    "news": 48,
+}
+
+# Categories where the label can never be right. A result is a result.
+NEVER_ONGOING = {"sport"}
+
+DEFAULT_ONGOING_HOURS = 24
+
+
+# Words that report a conclusion. If the latest coverage says the road reopened,
+# the match finished or the trial ended, the story is over however many outlets
+# carried it.
+#
+# This exists because the upstream flag treats "covered by more than one source"
+# as evidence of an ongoing story, when it is usually the opposite: the second
+# source is the one reporting that it ended. "M62 Lanes Reopen After Lorry
+# Recovery" IS the follow-up, and it was being labelled ONGOING because of it.
+RESOLVED_RE = re.compile(
+    r"\b(?:reopen(?:s|ed|ing)?|re-open(?:s|ed|ing)?|now open|back open|"
+    r"clear(?:ed)?|cleared away|resolved|restored|lifted|"
+    r"conclude[sd]?|completed|finished|ends|ended|over|"
+    r"found guilty|found not guilty|acquitted|convicted|sentenc(?:ed|ing)|"
+    r"jailed|verdict|charged with|pleaded|"
+    r"appoint(?:s|ed|ing)?|named as|confirmed as|wins?|won|beat(?:en)?|defeat(?:s|ed)?|"
+    r"secure[sd]?|victory|result[s]?|final score|announced)\b",
+    re.I,
+)
+
+# Words that report something still to come or still running. These outrank a
+# resolution word, so "Road to Close for Roadworks from 15 August" is not read
+# as finished merely because it contains "close".
+UNRESOLVED_RE = re.compile(
+    r"\b(?:ongoing|continues?|still|remains?|expected to|due to|"
+    r"scheduled for|will (?:close|begin|start|run)|from \d|until \d|"
+    r"set to|plans? to|to close|to begin|to start)\b",
+    re.I,
+)
+
+
+def looks_resolved(article: dict[str, Any]) -> bool:
+    """True when the coverage itself reports the event has finished."""
+    text = " ".join(str(article.get(key) or "") for key in ("title", "excerpt"))
+    if UNRESOLVED_RE.search(text):
+        return False
+    return bool(RESOLVED_RE.search(text))
+
+
+def _parse_when(value: Any) -> datetime | None:
+    try:
+        parsed = datetime.fromisoformat(str(value or "").replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+
+
+def expire_ongoing(article: dict[str, Any], now: datetime | None = None) -> bool:
+    """Clear the ONGOING label once a story has stopped moving.
+
+    Applied here because every article passes through normalisation on every
+    run, so a stale flag clears itself without needing the story to be merged
+    again. Returns True when the label was removed.
+    """
+    if not article.get("is_ongoing"):
+        return False
+
+    category = str(article.get("category") or "news").strip().lower()
+    if category in NEVER_ONGOING:
+        article["is_ongoing"] = False
+        article["ongoing_label"] = ""
+        return True
+
+    # The story's own words come first. Source count says how much attention a
+    # story drew, not whether it is still running.
+    if looks_resolved(article):
+        article["is_ongoing"] = False
+        article["ongoing_label"] = ""
+        return True
+
+    now = now or datetime.now(timezone.utc)
+    last = (_parse_when(article.get("last_updated_at"))
+            or _parse_when(article.get("first_published_at"))
+            or _parse_when(article.get("published_at")))
+    if last is None:
+        return False
+
+    limit = ONGOING_HOURS.get(category, DEFAULT_ONGOING_HOURS)
+    if (now - last).total_seconds() <= limit * 3600:
+        return False
+
+    article["is_ongoing"] = False
+    article["ongoing_label"] = ""
+    return True
+
+
 def normalise_article(
     source_article: dict[str, Any],
     notes: list[str],
@@ -394,6 +507,9 @@ def normalise_article(
     # upstream/editorial decision and otherwise default to False.
     if "police_matter" not in article:
         article["police_matter"] = False
+
+    if expire_ongoing(article):
+        notes.append(f"'{ident}': cleared stale ONGOING label")
 
     return article
 
