@@ -65,7 +65,7 @@ from playwright.sync_api import sync_playwright
 from search_queries import build_search_query_specs
 from google_news_resolver import is_google_wrapper, resolve_wrappers
 from locations import LOCATION_BY_SLUG
-from food_hygiene import fetch_recent_low_ratings, rating_article_fields
+from food_hygiene import fetch_current_low_ratings, roundup_article_fields
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_FILE = ROOT / 'articles.json'
 LOG_FILE = ROOT / 'scraper' / 'scraper.log'
@@ -216,6 +216,54 @@ ROBOTS_DENIED_SEEN: set[str] = set()
 # to it are skipped immediately rather than retried.
 SLOW_DOMAIN_FAILURE_THRESHOLD = max(1, int(os.getenv('SLOW_DOMAIN_FAILURE_THRESHOLD', '3')))
 SLOW_DOMAIN_FAILURES: dict[str, int] = {}
+
+# The breaker above only lasted for one run, so every dead host was rediscovered
+# from scratch every hour: three connection attempts at REQUEST_TIMEOUT seconds
+# each, on a domain already known to be gone. Across a handful of such hosts
+# that is minutes per run, which is what pushed the pipeline past its timeout.
+#
+# Benching is remembered on disk instead, and expires, so a host that comes back
+# is retried a day later rather than never.
+SLOW_DOMAIN_FILE = Path('slow_domains.json')
+SLOW_DOMAIN_BENCH_HOURS = max(1, int(os.getenv('SLOW_DOMAIN_BENCH_HOURS', '24')))
+
+
+def load_benched_domains() -> dict[str, str]:
+    """Domains benched by an earlier run and not yet due for a retry."""
+    try:
+        raw = json.loads(SLOW_DOMAIN_FILE.read_text(encoding='utf-8'))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(raw, dict):
+        return {}
+    now = utc_now()
+    still: dict[str, str] = {}
+    for domain, benched_at in raw.items():
+        try:
+            when = datetime.fromisoformat(str(benched_at).replace('Z', '+00:00'))
+        except (TypeError, ValueError):
+            continue
+        if when.tzinfo is None:
+            when = when.replace(tzinfo=timezone.utc)
+        if (now - when).total_seconds() < SLOW_DOMAIN_BENCH_HOURS * 3600:
+            still[domain] = benched_at
+    return still
+
+
+def save_benched_domains(previous: dict[str, str]) -> None:
+    """Record every domain that tripped the breaker, keeping earlier benches."""
+    benched = dict(previous)
+    stamp = iso_utc(utc_now())
+    for domain, failures in SLOW_DOMAIN_FAILURES.items():
+        if failures >= SLOW_DOMAIN_FAILURE_THRESHOLD:
+            benched.setdefault(domain, stamp)
+    try:
+        write_json_atomic(SLOW_DOMAIN_FILE, benched)
+    except Exception as exc:  # noqa: BLE001 - never fail a run over bookkeeping
+        log.warning('Could not record benched domains: %s', exc)
+
+
+BENCHED_DOMAINS: dict[str, str] = {}
 SLOW_DOMAIN_SKIPPED_LOGGED: set[str] = set()
 
 @dataclass
@@ -588,6 +636,11 @@ def fetch_html(url: str) -> tuple[str, str]:
             log.info('robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: %s', canonical)
         raise PermissionError(f'robots.txt does not permit fetching {url}')
     domain = domain_of(url)
+    if domain in BENCHED_DOMAINS:
+        if domain not in SLOW_DOMAIN_SKIPPED_LOGGED:
+            SLOW_DOMAIN_SKIPPED_LOGGED.add(domain)
+            log.info('Skipping %s: benched by an earlier run after repeated timeouts.', domain)
+        raise TimeoutError(f'{domain} is benched after failing in an earlier run')
     if SLOW_DOMAIN_FAILURES.get(domain, 0) >= SLOW_DOMAIN_FAILURE_THRESHOLD:
         if domain not in SLOW_DOMAIN_SKIPPED_LOGGED:
             SLOW_DOMAIN_SKIPPED_LOGGED.add(domain)
@@ -1649,37 +1702,45 @@ def collect_environment_agency_flood_candidates() -> list[Candidate]:
     return candidates
 
 def collect_food_hygiene_candidates() -> list[Candidate]:
-    """New low food hygiene ratings in the borough, from the FSA's open API.
+    """The businesses in the borough currently rated 0 or 1, as one roundup.
 
     Primary data, not aggregation: the FSA publishes this API for reuse, so
     there is no robots.txt question and no other outlet to rewrite. Prose is
     generated deterministically in food_hygiene.py from published facts only.
+
+    A roundup rather than one story per rating. Rochdale publishes a low rating
+    every few months, so the previous eight-day window for new ratings produced
+    nothing almost every run. The standing list is a story in a way a single
+    rating is not, and it can be republished each month from the same source.
     """
     if os.getenv('FOOD_HYGIENE_ENABLED', 'true').lower() != 'true':
         return []
-    days = int(os.getenv('FOOD_HYGIENE_DAYS', '8'))
-    max_rating = int(os.getenv('FOOD_HYGIENE_MAX_RATING', '2'))
+    max_rating = int(os.getenv('FOOD_HYGIENE_MAX_RATING', '1'))
     try:
-        records = fetch_recent_low_ratings(SESSION.get, days=days, max_rating=max_rating)
+        records = fetch_current_low_ratings(SESSION.get, max_rating=max_rating)
     except Exception as exc:
         log.warning('FSA food hygiene API unavailable: %s', exc)
         return []
-    candidates: list[Candidate] = []
-    for record in records:
-        fields = rating_article_fields(record)
-        text = f"{fields['title']} {fields['summary']}"
-        detected_area = detect_area(text) or 'rochdale'
-        candidates.append(Candidate(
-            source_name='Food Standards Agency',
-            source_url=record['url'],
-            source_title=fields['title'][:160],
-            source_summary=fields['summary'][:900],
-            source_published_at=iso_utc(record['rating_date']),
-            area=detected_area,
-            category='business',
-            source_body_excerpt=fields['body'][:3500],
-        ))
-    return candidates
+    if not records:
+        # Nothing to report is not a story. The roundup's empty-case wording
+        # exists for a manual run, not for publishing an article saying so.
+        return []
+
+    fields = roundup_article_fields(records)
+    now = datetime.now(timezone.utc)
+    # A stable per-month identity, so the roundup is published once a month
+    # rather than re-offered on every run and deduplicated by chance.
+    period = now.strftime('%Y-%m')
+    return [Candidate(
+        source_name='Food Standards Agency',
+        source_url=f'https://ratings.food.gov.uk/open-data#rochdale-{period}',
+        source_title=fields['title'][:160],
+        source_summary=fields['summary'][:900],
+        source_published_at=iso_utc(now),
+        area='rochdale',
+        category='health',
+        source_body_excerpt=fields['body'][:3500],
+    )]
 
 def candidate_related_record(candidate: Candidate) -> dict[str, str]:
     return {
@@ -2672,6 +2733,11 @@ def apply_google_news_resolution(candidates: list[Candidate]) -> dict[str, int]:
 
 
 def main() -> int:
+    global BENCHED_DOMAINS
+    BENCHED_DOMAINS = load_benched_domains()
+    if BENCHED_DOMAINS:
+        log.info('Skipping %d domain(s) benched by earlier runs: %s',
+                 len(BENCHED_DOMAINS), ', '.join(sorted(BENCHED_DOMAINS)))
     log.info('Starting Rochdale Daily 15-minute pipeline')
     existing = recent_existing_articles()
     existing_by_story = {build_story_key(item): item for item in existing}
@@ -2798,6 +2864,7 @@ def main() -> int:
     selected_by_category: dict[str, int] = {}
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
+    save_benched_domains(BENCHED_DOMAINS)
     write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaletimes.co.uk', 'rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
