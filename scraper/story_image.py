@@ -80,8 +80,10 @@ AREA_PARENT: dict[str, str] = {
 
 AREAS_DIR = Path("assets/img/areas")
 PLACES_DIR = Path("assets/img/places")
+PEOPLE_DIR = Path("assets/img/people")
 CREDITS_PATH = AREAS_DIR / "credits.json"
 PLACES_CREDITS_PATH = PLACES_DIR / "credits.json"
+PEOPLE_CREDITS_PATH = PEOPLE_DIR / "credits.json"
 _IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
 
 # Purely grammatical words. A filename must yield a phrase of at least two
@@ -134,6 +136,52 @@ def find_place_photo(
                 if best is None or score > best[0]:
                     best = (score, path, phrase)
                 break
+    if best is None:
+        return None
+    return best[1], best[2]
+
+
+def find_person_photo(
+    title: str,
+    people_dir: Path = PEOPLE_DIR,
+) -> tuple[Path, str] | None:
+    """Photo of a person named in the HEADLINE.
+
+    Two rules make this stricter than place matching, both for the same reason:
+    putting a real person's face on a story is a far bigger claim than putting a
+    photograph of a road on it, and getting it wrong is the kind of mistake that
+    ends in a complaint or a legal letter.
+
+    1. The headline only, never the body. Someone quoted three paragraphs down
+       is not what the story is about, but a card carries no such nuance - it
+       just shows their face under a category kicker. Requiring the headline
+       means the person is the subject.
+
+    2. The whole filename must match, with no shortening. Place matching walks
+       back through shorter phrases so that a photo of a specific road can fall
+       back to the town; doing that here would let ``mayor_of_rochdale.jpg``
+       match on the fragment "mayor of" and illustrate a story about the mayor
+       of Bury. Names are precise, so the match is exact.
+
+    Files are named after the person or the office, e.g. ``paul_waugh.jpg`` or
+    ``mayor_of_rochdale.jpg``. Single-word filenames are ignored: a surname on
+    its own is far too easy to hit by accident.
+    """
+    if not people_dir.is_dir():
+        return None
+    haystack = " " + re.sub(r"[^a-z0-9]+", " ", _clean(title).lower()) + " "
+    best: tuple[int, Path, str] | None = None
+    for path in sorted(people_dir.iterdir()):
+        if path.suffix.lower() not in _IMAGE_SUFFIXES:
+            continue
+        tokens = [t for t in re.split(r"[^a-z0-9]+", path.stem.lower()) if t]
+        if len(tokens) < 2:
+            continue
+        phrase = " ".join(tokens)
+        if f" {phrase} " in haystack:
+            score = len(tokens)
+            if best is None or score > best[0]:
+                best = (score, path, phrase)
     if best is None:
         return None
     return best[1], best[2]
@@ -210,10 +258,14 @@ def _photo_credit(area_slug: str, credits_path: Path) -> str:
     return ""
 
 
-def _place_credit(stem: str, places_dir: Path) -> str:
-    """Credit for a place photo. Absent = the publisher's own photograph."""
+def _folder_credit(stem: str, directory: Path) -> str:
+    """Credit for a curated photo. Absent = the publisher's own photograph.
+
+    Used for both the places and people folders, which share the same flat
+    ``credits.json`` keyed by filename without its extension.
+    """
     try:
-        credits = json.loads((places_dir / "credits.json").read_text(encoding="utf-8"))
+        credits = json.loads((directory / "credits.json").read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return ""
     if not isinstance(credits, dict):
@@ -336,6 +388,7 @@ def compose_story_card(
     credits_path: Path = CREDITS_PATH,
     story_text: str = "",
     places_dir: Path = PLACES_DIR,
+    people_dir: Path = PEOPLE_DIR,
 ) -> tuple[str, str]:
     """Render the card to out_path. Returns (relative_path, image_credit)."""
     area_slug = _area_slug(area)
@@ -343,14 +396,20 @@ def compose_story_card(
     accent, cat_label = CATEGORY_STYLE[cat_key]
     area_name = _pretty_area(area)
 
-    # Most specific first: a photo of the actual place named in the story beats
-    # a generic photo of the area.
+    # Most specific first. A person named in the headline is the subject of the
+    # story, so their photograph beats any location; a photo of the actual place
+    # named in the story then beats a generic photo of the area.
     photo = None
     credit = "Rochdale Daily"
-    place_match = find_place_photo(f"{title} {story_text}", places_dir)
-    if place_match is not None:
-        photo = place_match[0]
-        credit = _place_credit(photo.stem, places_dir) or "Rochdale Daily"
+    person_match = find_person_photo(title, people_dir)
+    if person_match is not None:
+        photo = person_match[0]
+        credit = _folder_credit(photo.stem, people_dir) or "Rochdale Daily"
+    if photo is None:
+        place_match = find_place_photo(f"{title} {story_text}", places_dir)
+        if place_match is not None:
+            photo = place_match[0]
+            credit = _folder_credit(photo.stem, places_dir) or "Rochdale Daily"
     if photo is None:
         photo = _area_photo(area_slug, areas_dir)
         if photo is not None:
