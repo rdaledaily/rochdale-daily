@@ -43,6 +43,7 @@ import json
 import re
 import sys
 import time
+from io import BytesIO
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -223,10 +224,13 @@ def download_and_crop(url: str, destination: Path) -> bool:
         print(f"    ! download failed: {error}")
         return False
 
-    temporary = destination.with_suffix(".tmp")
-    temporary.write_bytes(raw)
+    # Decode straight from memory. An earlier version staged the bytes in a
+    # .tmp file beside the destination and only created the directory
+    # afterwards, so the very first download failed with FileNotFoundError on a
+    # repository where assets/img/places did not exist yet - which is every
+    # repository, the first time this is run.
     try:
-        image = ImageOps.exif_transpose(Image.open(temporary)).convert("RGB")
+        image = ImageOps.exif_transpose(Image.open(BytesIO(raw))).convert("RGB")
         cropped = ImageOps.fit(image, (WIDTH, HEIGHT), method=Image.Resampling.LANCZOS)
         destination.parent.mkdir(parents=True, exist_ok=True)
         cropped.save(destination, "JPEG", quality=88, optimize=True)
@@ -234,8 +238,6 @@ def download_and_crop(url: str, destination: Path) -> bool:
     except Exception as error:  # noqa: BLE001
         print(f"    ! could not process image: {error}")
         return False
-    finally:
-        temporary.unlink(missing_ok=True)
 
 
 def load_credits() -> dict:
@@ -255,6 +257,9 @@ def main() -> int:
     parser.add_argument("--delay", type=float, default=1.0,
                         help="seconds between requests, to stay a polite client")
     args = parser.parse_args()
+
+    if args.download:
+        PLACES_DIR.mkdir(parents=True, exist_ok=True)
 
     credits = load_credits()
     wanted = [(q, s) for q, s in PLACES if args.only.lower() in (q + s).lower()]
