@@ -655,6 +655,50 @@
       display: inline-block; margin-top: 11px; border-bottom: 3px solid var(--yellow-dark); font-size: 12px; font-weight: 900; text-decoration: none; text-transform: uppercase;
     }
 
+    /* Democracy panel. Every colour here is a token, never a literal, so a
+       change of palette (including a move to a light background) carries this
+       section with it instead of leaving it stranded in the old scheme. */
+    .dem-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 14px; }
+    .dem-tab { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 12px;
+      font-weight: 900; letter-spacing: .6px; text-transform: uppercase; cursor: pointer;
+      background: transparent; border: 1px solid var(--line); color: var(--muted);
+      padding: 9px 14px; }
+    .dem-tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--deep); }
+    .dem-status { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+    .dem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+    .dem-card { background: var(--card); border: 1px solid var(--line);
+      border-left: 4px solid var(--accent); padding: 14px 15px; }
+    .dem-card h3 { margin: 0 0 8px; font-family: "Roboto Condensed", Arial, sans-serif;
+      font-size: 17px; line-height: 1.2; }
+    .dem-card h3 a { color: var(--ink); text-decoration: none; }
+    .dem-card h3 a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .dem-card p { margin: 0 0 10px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    /* The borough figure is the reason this panel exists, so it is the largest
+       thing on the card - not the national total every other outlet reports. */
+    .dem-figure { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 30px;
+      font-weight: 900; color: var(--accent); line-height: 1; }
+    .dem-figure span { display: block; font-size: 11px; font-weight: 700; letter-spacing: .5px;
+      text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+    .dem-split { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 10px; }
+    .dem-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .dem-seat { display: flex; justify-content: space-between; gap: 10px;
+      border-top: 1px solid var(--line); padding: 5px 0; font-size: 12px; }
+    .dem-seat:first-of-type { border-top: 0; }
+    .dem-seat b { color: var(--ink); font-variant-numeric: tabular-nums; }
+    .dem-flag { display: inline-block; font-size: 10px; font-weight: 900; letter-spacing: .5px;
+      text-transform: uppercase; background: var(--soft); color: var(--accent); padding: 3px 6px; }
+    .dem-mp { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+    .dem-mp img { width: 52px; height: 52px; object-fit: cover; border: 1px solid var(--line); }
+    .dem-mp .who { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 18px; font-weight: 900; }
+    .dem-list { list-style: none; margin: 0; padding: 0; }
+    .dem-list li { border-top: 1px solid var(--line); padding: 8px 0; font-size: 13px; }
+    .dem-list li:first-child { border-top: 0; }
+    .dem-when { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .dem-aye { color: #7fe3bd; font-weight: 900; }
+    .dem-no { color: #ff8a99; font-weight: 900; }
+    .dem-empty { background: var(--card); border: 1px solid var(--line);
+      border-left: 4px solid var(--line); padding: 16px; color: var(--muted); font-size: 14px; }
+    .dem-note { margin-top: 14px; color: var(--muted); font-size: 12px; line-height: 1.5; }
     .support-intro { max-width: 850px; color: var(--muted); margin-top: -7px; margin-bottom: 18px; }
     .support-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
     .support-card { border: 1px solid var(--line); border-top: 5px solid var(--green); padding: 17px; }
@@ -965,6 +1009,7 @@
         <time class="time-stamp" id="current-time" aria-label="Current time in Rochdale">--:--</time>
       </div>
       <div class="utility-links">
+        <a href="#democracy">Democracy</a>
         <a href="#support">Community support</a>
         <a href="#whats-on">What’s on</a>
         <a href="mailto:news@rochdaledaily.co.uk">Contact</a>
@@ -1260,6 +1305,22 @@
         </div>
       </section>
 
+      <section class="section" id="democracy" aria-labelledby="democracy-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 class="section-title" id="democracy-title">Democracy</h2>
+            <a class="section-link" href="https://petition.parliament.uk/" target="_blank" rel="noopener">Start a petition</a>
+          </div>
+          <div class="dem-tabs" role="tablist" aria-label="Democracy sections">
+            <button class="dem-tab" role="tab" id="dem-tab-petitions" aria-controls="dem-panel" aria-selected="true" data-dem="petitions">Petitions</button>
+            <button class="dem-tab" role="tab" id="dem-tab-mp" aria-controls="dem-panel" aria-selected="false" data-dem="mp">Your MPs</button>
+            <button class="dem-tab" role="tab" id="dem-tab-council" aria-controls="dem-panel" aria-selected="false" data-dem="council">Council</button>
+          </div>
+          <p class="dem-status" data-dem-status>Loading&#8230;</p>
+          <div class="dem-grid" id="dem-panel" role="tabpanel" aria-labelledby="dem-tab-petitions" data-dem-grid></div>
+          <p class="dem-note">Contains Parliamentary information licensed under the Open Parliament Licence v3.0, and public sector information licensed under the Open Government Licence v3.0. Petition signature counts are published by constituency; the borough figure adds the Rochdale and Heywood &amp; Middleton North seats, which lie wholly within the borough.</p>
+        </div>
+      </section>
       <section class="section" id="support" aria-labelledby="support-title">
         <div class="wrap">
           <div class="section-head">
@@ -3518,6 +3579,185 @@ function shareIconMarkup(action, label) {
 
       load();
       setInterval(function () { if (!document.hidden) load(); }, REFRESH_MS);
+    })();
+  </script>
+  <script>
+    /* Democracy panel. Fetches once, renders three views from the same payload,
+       so switching tabs costs nothing after the first load. */
+    (function () {
+      var grid = document.querySelector("[data-dem-grid]");
+      var status = document.querySelector("[data-dem-status]");
+      if (!grid || !status) return;
+
+      var tabs = Array.prototype.slice.call(document.querySelectorAll(".dem-tab"));
+      var data = null;
+      var view = "petitions";
+      var loading = false;
+
+      function esc(value) {
+        return String(value == null ? "" : value)
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      }
+
+      function num(value) {
+        return (Number(value) || 0).toLocaleString("en-GB");
+      }
+
+      function shortDate(value) {
+        if (!value) return "";
+        var date = new Date(value);
+        if (isNaN(date)) return "";
+        return date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+      }
+
+      function empty(message) {
+        return '<div class="dem-empty">' + esc(message) + "</div>";
+      }
+
+      function petitionCard(item) {
+        var seats = item.breakdown.map(function (row) {
+          return '<div class="dem-seat"><span>' + esc(row.seat) +
+            (row.partial ? ' <span class="dem-flag">part</span>' : "") +
+            "</span><b>" + num(row.signatures) + "</b></div>";
+        }).join("");
+
+        /* Salience is the editorial signal: how much more than the national
+           rate the borough signed at. Flagged only when it is decisive, so the
+           badge keeps meaning something. */
+        var flag = item.salience >= 3
+          ? '<span class="dem-flag">' + item.salience.toFixed(1) + "\u00D7 national rate</span>"
+          : "";
+
+        return '<article class="dem-card">' +
+          "<h3><a href=" + JSON.stringify(item.url) + ' target="_blank" rel="noopener">' +
+            esc(item.action) + "</a></h3>" +
+          '<div class="dem-split">' +
+            '<div class="dem-figure">' + num(item.borough) + "<span>in the borough</span></div>" +
+            '<div class="dem-sub">' + num(item.national) + " nationally<br>" + flag + "</div>" +
+          "</div>" +
+          seats +
+          (item.background ? "<p style=\"margin-top:10px\">" + esc(item.background) + "</p>" : "") +
+          "</article>";
+      }
+
+      function mpCard(entry) {
+        if (!entry.memberId) {
+          return '<article class="dem-card"><h3>' + esc(entry.seat) + "</h3>" +
+            "<p>No sitting member found for this seat.</p></article>";
+        }
+        var votes = (entry.votes || []).map(function (vote) {
+          var side = vote.votedAye
+            ? '<span class="dem-aye">Aye</span>'
+            : '<span class="dem-no">No</span>';
+          return "<li>" + side + " &mdash; " + esc(vote.title) +
+            '<span class="dem-when">' + esc(shortDate(vote.date)) +
+            (vote.ayes != null ? " &middot; " + num(vote.ayes) + " ayes, " + num(vote.noes) + " noes" : "") +
+            "</span></li>";
+        }).join("");
+
+        var speeches = (entry.speeches || []).map(function (item) {
+          return "<li>" + esc(item.title) +
+            '<span class="dem-when">' + esc(shortDate(item.date)) + "</span></li>";
+        }).join("");
+
+        return '<article class="dem-card">' +
+          '<div class="dem-mp">' +
+            (entry.thumbnail ? '<img loading="lazy" alt="" src="' + esc(entry.thumbnail) + '">' : "") +
+            "<div><div class=\"who\">" + esc(entry.name) + "</div>" +
+            '<div class="dem-sub">' + esc(entry.party) + " &middot; " + esc(entry.seat) + "</div></div>" +
+          "</div>" +
+          (votes ? "<p style=\"margin:0 0 6px\"><b>Recent votes</b></p><ul class=\"dem-list\">" + votes + "</ul>" : "") +
+          (speeches ? "<p style=\"margin:12px 0 6px\"><b>Recent contributions</b></p><ul class=\"dem-list\">" + speeches + "</ul>" : "") +
+          (!votes && !speeches ? "<p>No recent activity returned.</p>" : "") +
+          "</article>";
+      }
+
+      function councilCard(item) {
+        return '<article class="dem-card">' +
+          "<h3>" + (item.link
+            ? "<a href=" + JSON.stringify(item.link) + ' target="_blank" rel="noopener">' + esc(item.title) + "</a>"
+            : esc(item.title)) + "</h3>" +
+          (item.summary ? "<p>" + esc(item.summary) + "</p>" : "") +
+          (item.date ? '<div class="dem-sub">' + esc(shortDate(item.date) || item.date) + "</div>" : "") +
+          "</article>";
+      }
+
+      function render() {
+        if (!data) { grid.innerHTML = ""; return; }
+
+        if (view === "petitions") {
+          var petitions = (data.petitions && data.petitions.items) || [];
+          grid.innerHTML = petitions.length
+            ? petitions.map(petitionCard).join("")
+            : empty("No open petition currently has significant support in the borough.");
+          status.textContent = petitions.length
+            ? petitions.length + " petition" + (petitions.length === 1 ? "" : "s") + " with notable local support"
+            : "Checked the most-signed open petitions.";
+          return;
+        }
+
+        if (view === "mp") {
+          var mps = data.mps || [];
+          grid.innerHTML = mps.length
+            ? mps.map(mpCard).join("")
+            : empty("Member information is unavailable right now.");
+          status.textContent = mps.length
+            ? "The borough is covered by " + mps.length + " Westminster seats."
+            : "";
+          return;
+        }
+
+        var council = (data.council && data.council.items) || [];
+        grid.innerHTML = council.length
+          ? council.map(councilCard).join("")
+          : empty("Council meeting information is unavailable right now. You can browse agendas directly at democracy.rochdale.gov.uk.");
+        status.textContent = council.length ? "Latest agendas and minutes" : "";
+      }
+
+      function select(name) {
+        view = name;
+        tabs.forEach(function (tab) {
+          tab.setAttribute("aria-selected", String(tab.dataset.dem === name));
+        });
+        grid.setAttribute("aria-labelledby", "dem-tab-" + name);
+        render();
+      }
+
+      function load() {
+        if (loading) return;
+        loading = true;
+        status.textContent = "Loading\u2026";
+        fetch("/api/democracy", { cache: "no-store" })
+          .then(function (response) {
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            return response.json();
+          })
+          .then(function (payload) { data = payload; render(); })
+          .catch(function () {
+            grid.innerHTML = "";
+            status.textContent = "Democracy information is unavailable right now.";
+          })
+          .then(function () { loading = false; });
+      }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () { select(tab.dataset.dem); });
+      });
+
+      /* Only fetch when the section is actually reached. It sits low on the
+         page and the petition lookups are the heaviest thing the site does, so
+         loading it on every homepage view would be wasteful. */
+      var section = document.getElementById("democracy");
+      if ("IntersectionObserver" in window && section) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { observer.disconnect(); load(); }
+          });
+        }, { rootMargin: "300px" });
+        observer.observe(section);
+      } else {
+        load();
+      }
     })();
   </script>
 </body>
