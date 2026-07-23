@@ -76,6 +76,43 @@ SKIP_FRAGMENTS = (
     "svg", "seal of", "flag of", "sign", "plaque", "graph",
 )
 
+AREAS_DIR = Path("assets/img/areas")
+AREAS_CREDITS_PATH = AREAS_DIR / "credits.json"
+
+# (Commons search phrase, area slug)
+#
+# Area photographs are the universal fallback: every story carries an area, and
+# unmatched areas climb their parent chain to "rochdale". A single rochdale.jpg
+# therefore gives every card on the site a photographic background, which no
+# amount of place-level coverage can do - places only match when a story names
+# a specific landmark, and most stories do not.
+#
+# Search phrases are disambiguated on purpose. "Castleton" and "Bamford" are far
+# better known as Derbyshire villages, and "Middleton" exists in a dozen
+# counties; searching the bare name returns the wrong county's scenery.
+AREAS: list[tuple[str, str]] = [
+    ("Rochdale town centre Greater Manchester", "rochdale"),
+    ("Heywood Greater Manchester", "heywood"),
+    ("Middleton Greater Manchester town", "middleton"),
+    ("Littleborough Greater Manchester", "littleborough"),
+    ("Milnrow Greater Manchester", "milnrow"),
+    ("Castleton Rochdale Greater Manchester", "castleton"),
+    ("Norden Rochdale", "norden"),
+    ("Bamford Rochdale Greater Manchester", "bamford"),
+    ("Wardle Greater Manchester", "wardle"),
+    ("Newhey Greater Manchester", "newhey"),
+    ("Smallbridge Rochdale", "smallbridge"),
+    ("Spotland Rochdale", "spotland"),
+    ("Falinge Rochdale", "falinge"),
+    ("Healey Rochdale", "healey"),
+    ("Alkrington Middleton", "alkrington"),
+    ("Darnhill Heywood", "darnhill"),
+    ("Hopwood Greater Manchester", "hopwood"),
+    ("Kirkholt Rochdale", "kirkholt"),
+    ("Wardleworth Rochdale", "wardleworth"),
+    ("Whitworth Lancashire", "whitworth"),
+]
+
 # (Commons search phrase, filename slug)
 #
 # Slugs follow the pipeline's matching rule: the specific thing first and the
@@ -240,9 +277,9 @@ def download_and_crop(url: str, destination: Path) -> bool:
         return False
 
 
-def load_credits() -> dict:
+def load_credits(path: Path = CREDITS_PATH) -> dict:
     try:
-        data = json.loads(CREDITS_PATH.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))
         return data if isinstance(data, dict) else {}
     except (OSError, json.JSONDecodeError):
         return {}
@@ -252,23 +289,30 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--download", action="store_true",
                         help="actually fetch and write files (default is a dry run)")
+    parser.add_argument("--areas", action="store_true",
+                        help="fetch area photographs instead of place photographs")
     parser.add_argument("--only", default="",
                         help="substring filter, e.g. --only heywood")
     parser.add_argument("--delay", type=float, default=1.0,
                         help="seconds between requests, to stay a polite client")
     args = parser.parse_args()
 
+    target_dir = AREAS_DIR if args.areas else PLACES_DIR
+    credits_path = AREAS_CREDITS_PATH if args.areas else CREDITS_PATH
+    catalogue = AREAS if args.areas else PLACES
+    noun = "areas" if args.areas else "places"
+
     if args.download:
-        PLACES_DIR.mkdir(parents=True, exist_ok=True)
+        target_dir.mkdir(parents=True, exist_ok=True)
 
-    credits = load_credits()
-    wanted = [(q, s) for q, s in PLACES if args.only.lower() in (q + s).lower()]
+    credits = load_credits(credits_path)
+    wanted = [(q, s) for q, s in catalogue if args.only.lower() in (q + s).lower()]
 
-    print(f"{'FETCHING' if args.download else 'DRY RUN'} — {len(wanted)} places\n")
+    print(f"{'FETCHING' if args.download else 'DRY RUN'} — {len(wanted)} {noun}\n")
 
     found = skipped = written = 0
     for query, slug in wanted:
-        existing = [p for p in PLACES_DIR.glob(f"{slug}.*")] if PLACES_DIR.is_dir() else []
+        existing = [p for p in target_dir.glob(f"{slug}.*")] if target_dir.is_dir() else []
         if existing:
             # A photograph already here was chosen deliberately. Never clobber it.
             print(f"  = {slug:<34} already present, left alone")
@@ -290,7 +334,7 @@ def main() -> int:
         if not args.download:
             continue
 
-        if download_and_crop(url, PLACES_DIR / f"{slug}.jpg"):
+        if download_and_crop(url, target_dir / f"{slug}.jpg"):
             # The card renders "Photo: " itself, so the stored credit must not
             # repeat it or the line reads "Photo: Photo: ...".
             credits[slug] = credit
@@ -298,8 +342,8 @@ def main() -> int:
             time.sleep(args.delay)
 
     if args.download and written:
-        CREDITS_PATH.parent.mkdir(parents=True, exist_ok=True)
-        CREDITS_PATH.write_text(
+        credits_path.parent.mkdir(parents=True, exist_ok=True)
+        credits_path.write_text(
             json.dumps(dict(sorted(credits.items())), indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
