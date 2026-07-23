@@ -483,6 +483,40 @@ def remember_rejected_candidate(article: dict[str, Any], url: Any) -> None:
         article["rejected_image_candidates"] = existing[-20:]
 
 
+# Image hosts whose photographs must never be cached.
+#
+# CDPA 1988 s.30(2) excludes photographs from the fair dealing exception for
+# reporting current events, so there is no "we are a news site" defence for
+# reproducing another publisher's picture. A photograph is the one thing the
+# news exception explicitly will not cover.
+#
+# googleusercontent is on the list because Google News thumbnails are cached
+# copies of the originating publisher's photograph - fetching one is the same
+# infringement with an extra hop.
+#
+# Blocking these does not lose usable images. It loses images that were never
+# usable, which is a different thing.
+BLOCKED_IMAGE_HOSTS = (
+    "googleusercontent.com",
+    "reachplc.com", "i2-prod.", "manchestereveningnews.co.uk", "mirror.co.uk",
+    "dailymail.co.uk", "thesun.co.uk", "express.co.uk", "metro.co.uk",
+    "bbci.co.uk", "bbc.co.uk",
+    "independent.co.uk", "telegraph.co.uk", "thetimes.co.uk", "guim.co.uk",
+    "newsquest.co.uk", "burytimes.co.uk", "theoldhamtimes.co.uk",
+    "lancashiretelegraph.co.uk", "boltonnews.co.uk",
+    "leeds-live.co.uk", "lancs.live", "liverpoolecho.co.uk", "birminghammail.co.uk",
+    "headtopics.com", "msn.com", "yahoo.com", "aol.com", "inews.co.uk",
+    "gettyimages", "alamy", "shutterstock", "pa-media", "pressassociation",
+    "licdn.com", "fbcdn.net", "cdninstagram.com", "twimg.com",
+)
+
+
+def image_host_is_blocked(url: str) -> bool:
+    """True when an image belongs to a publisher or agency, not to a source."""
+    host = urlparse(clean(url)).netloc.lower()
+    return any(marker in host for marker in BLOCKED_IMAGE_HOSTS)
+
+
 def article_candidates(article: dict[str, Any]) -> list[Candidate]:
     result: list[Candidate] = []
     primary_source = clean(article.get("source_url"))
@@ -533,7 +567,14 @@ def deduplicate_candidates(candidates: list[Candidate]) -> list[Candidate]:
             continue
         seen.add(url)
         result.append(candidate)
-    return result
+    # Drop anything belonging to a publisher or picture agency before it is
+    # ever requested, so a blocked host cannot be cached by accident.
+    kept = []
+    for candidate in result:
+        if image_host_is_blocked(candidate.url):
+            continue
+        kept.append(candidate)
+    return kept
 
 
 def extension_for(content_type: str, final_url: str, payload: bytes) -> str | None:
@@ -682,6 +723,7 @@ def ensure_article_image(
     timeout: int,
     sleep_seconds: float,
     retry_placeholders: bool,
+    allow_network: bool = True,
 ) -> str:
     if has_real_image(article, repo_root):
         return "already-covered"
@@ -695,7 +737,11 @@ def ensure_article_image(
     existing_status = clean(article.get("image_status"))
     existing_placeholder = existing_status in {"generated-placeholder", "area-category-card"}
 
-    if (not existing_placeholder or retry_placeholders) and USE_SOURCE_IMAGES:
+    # allow_network is False once the run has spent its budget of source-image
+    # hunts. The card is still rebuilt, which costs nothing and is the whole
+    # point: an image added to the library today reaches every story it matches
+    # on the next run, not just the newest handful.
+    if allow_network and (not existing_placeholder or retry_placeholders) and USE_SOURCE_IMAGES:
         result = fetch_source_image(
             article,
             timeout=timeout,
@@ -791,9 +837,12 @@ def main(argv: list[str] | None = None) -> int:
             stats.skipped_unpublished += 1
             continue
 
-        if args.limit and processed >= args.limit:
-            break
-        processed += 1
+        # The limit bounds network work only. Every article still has its card
+        # rebuilt, because rendering is local and cheap, and stopping early
+        # meant an older story could never pick up a newly added photograph.
+        allow_network = not args.limit or processed < args.limit
+        if allow_network:
+            processed += 1
 
         result = ensure_article_image(
             article,
@@ -802,6 +851,7 @@ def main(argv: list[str] | None = None) -> int:
             timeout=args.timeout,
             sleep_seconds=args.sleep,
             retry_placeholders=args.retry_placeholders,
+            allow_network=allow_network,
         )
 
         if result == "already-covered":
