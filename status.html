@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1f3a">
+  <meta name="robots" content="noindex,nofollow">
+  <title>API status | Rochdale Daily</title>
+  <style>
+    :root {
+      --accent: #22d3ee; --navy: #0b1f3a; --ink: #eef3f9; --muted: #93a6bd;
+      --line: #1e3550; --soft: #12263d; --paper: #0d1c2e; --card: #112741;
+      --good: #23a06a; --bad: #c8102e; --warn: #f5c400;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink);
+      font-family: Roboto, Arial, Helvetica, sans-serif; line-height: 1.5; }
+    .wrap { width: min(1000px, calc(100% - 28px)); margin-inline: auto; }
+    header { background: var(--navy); border-bottom: 3px solid var(--accent); padding: 16px 0; }
+    header .title { font-family: Georgia, serif; font-size: 24px; color: #fff; }
+    header .sub { color: var(--muted); font-size: 13px; }
+    h1 { font-size: 22px; margin: 22px 0 6px; }
+    .lede { color: var(--muted); font-size: 14px; margin: 0 0 18px; max-width: 68ch; }
+    button { font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: .4px;
+      text-transform: uppercase; padding: 10px 16px; border: 0; cursor: pointer;
+      background: var(--accent); color: var(--navy); margin-bottom: 18px; }
+    .ep { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+      padding: 14px 16px; margin-bottom: 12px; }
+    .ep.good { border-left-color: var(--good); }
+    .ep.bad { border-left-color: var(--bad); }
+    .ep.warn { border-left-color: var(--warn); }
+    .ep h2 { margin: 0 0 4px; font-size: 17px; font-family: "Roboto Condensed", Arial, sans-serif; }
+    .ep .path { color: var(--muted); font-size: 12px; font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .verdict { margin: 8px 0 0; font-size: 14px; }
+    .verdict b { color: var(--ink); }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+    th, td { text-align: left; padding: 6px 8px; border-top: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .4px; font-size: 10px; }
+    td.mono { font-family: ui-monospace, Menlo, Consolas, monospace; word-break: break-all; color: var(--muted); }
+    .tick { color: #7fe3bd; font-weight: 900; }
+    .cross { color: #ff8a99; font-weight: 900; }
+    .pill { display: inline-block; font-size: 10px; font-weight: 900; letter-spacing: .5px;
+      text-transform: uppercase; padding: 3px 7px; background: var(--soft); color: var(--accent); }
+    details { margin-top: 8px; }
+    summary { cursor: pointer; color: var(--accent); font-size: 13px; }
+    .note { color: var(--muted); font-size: 12px; margin: 22px 0 40px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="title">Rochdale Daily</div>
+      <div class="sub">API status</div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <h1>Endpoint health</h1>
+    <p class="lede">Checks every data endpoint the site depends on and shows exactly which
+      upstream sources answered. Use this instead of reading raw JSON when something on the
+      front page is empty.</p>
+
+    <button id="run">Run checks</button>
+    <div id="out"></div>
+
+    <p class="note">
+      Nothing here is secret and no credentials are shown, but the page is set to
+      <code>noindex</code> because it is an operational tool rather than published content.
+    </p>
+  </div>
+
+<script>
+(function () {
+  var out = document.getElementById("out");
+  var runBtn = document.getElementById("run");
+
+  /* Each endpoint declares how to judge its own payload, because "did it return
+     200" is not the same question as "did it return anything useful". */
+  var ENDPOINTS = [
+    {
+      name: "Traffic",
+      path: "/api/traffic?debug=1",
+      judge: function (d) {
+        if (!d) return ["bad", "No response."];
+        var n = d.count != null ? d.count : (d.disruptions || []).length;
+        var considered = d.considered != null ? d.considered : "?";
+        return [n >= 0 ? "good" : "warn",
+          "Version <b>" + (d.version || "unknown (old build)") + "</b>. " +
+          "Considered " + considered + " situations, kept <b>" + n + "</b> for the borough. " +
+          (n === 0 ? "Zero is normal — the ticker hides itself when nothing local is reported." : "")];
+      }
+    },
+    {
+      name: "Democracy",
+      path: "/api/democracy?debug=1",
+      judge: function (d) {
+        if (!d) return ["bad", "No response."];
+        var p = (d.petitions && d.petitions.items || []).length;
+        var m = (d.mps || []).length;
+        var c = (d.council && d.council.items || []).length;
+        var votes = (d.mps || []).reduce(function (t, x) { return t + ((x.votes || []).length); }, 0);
+        var speeches = (d.mps || []).reduce(function (t, x) { return t + ((x.speeches || []).length); }, 0);
+        var bad = (!m || (!votes && !speeches));
+        return [bad ? "warn" : "good",
+          "Version <b>" + (d.version || "unknown (old build)") + "</b>. " +
+          "Petitions with local support: <b>" + p + "</b> (sampled " +
+          ((d.petitions && d.petitions.sampled) || 0) + "). " +
+          "Seats resolved: <b>" + m + "</b>. Votes: <b>" + votes + "</b>. " +
+          "Speeches: <b>" + speeches + "</b>. Council items: <b>" + c + "</b>."];
+      }
+    },
+    {
+      name: "Events (public feed)",
+      path: "/api/events",
+      judge: function (d) {
+        if (!d) return ["bad", "No response."];
+        var n = (d.events || []).length;
+        return ["good", "<b>" + n + "</b> approved event" + (n === 1 ? "" : "s") + " showing in What\u2019s On."];
+      }
+    }
+  ];
+
+  function esc(v) {
+    return String(v == null ? "" : v)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function upstreamTable(log) {
+    if (!log || !log.length) return "";
+    var rows = log.map(function (entry) {
+      var ok = entry.ok;
+      return "<tr><td>" + (ok ? '<span class="tick">OK</span>' : '<span class="cross">FAIL</span>') +
+        "</td><td>" + esc(entry.label) + "</td><td>" +
+        esc(entry.status != null ? entry.status : (entry.error || "")) +
+        '</td><td class="mono">' + esc((entry.url || "").slice(0, 96)) + "</td></tr>";
+    }).join("");
+    var failed = log.filter(function (e) { return !e.ok; }).length;
+    return "<details" + (failed ? " open" : "") + "><summary>" +
+      log.length + " upstream call" + (log.length === 1 ? "" : "s") +
+      (failed ? ", " + failed + " failed" : ", all succeeded") +
+      "</summary><table><tr><th></th><th>Call</th><th>Status</th><th>URL</th></tr>" +
+      rows + "</table></details>";
+  }
+
+  function card(ep, state, verdict, log) {
+    return '<div class="ep ' + state + '">' +
+      "<h2>" + esc(ep.name) + ' <span class="pill">' +
+        (state === "good" ? "healthy" : state === "warn" ? "partial" : "failing") + "</span></h2>" +
+      '<div class="path">' + esc(ep.path) + "</div>" +
+      '<p class="verdict">' + verdict + "</p>" +
+      upstreamTable(log) +
+      "</div>";
+  }
+
+  function check(ep) {
+    return fetch(ep.path, { cache: "no-store" })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (d) {
+        var verdict = ep.judge(d);
+        return card(ep, verdict[0], verdict[1], d.upstream);
+      })
+      .catch(function (err) {
+        return card(ep, "bad", "Request failed: " + esc(err.message) +
+          ". If this says 404, the function file is not deployed at that path.", null);
+      });
+  }
+
+  function run() {
+    runBtn.disabled = true;
+    out.innerHTML = '<p class="lede">Checking\u2026</p>';
+    Promise.all(ENDPOINTS.map(check)).then(function (cards) {
+      out.innerHTML = cards.join("");
+      runBtn.disabled = false;
+    });
+  }
+
+  runBtn.addEventListener("click", run);
+  run();
+})();
+</script>
+</body>
+</html>
