@@ -28,7 +28,7 @@
  * cannot fix.
  */
 
-const VERSION = "2026-07-22-democracy-1";
+const VERSION = "2026-07-23-democracy-2";
 
 /* Cache windows. Petition signature counts move slowly; a council agenda is
    published once and then sits there. Nothing here needs to be live. */
@@ -255,41 +255,80 @@ async function findMember(seat, log) {
   };
 }
 
-async function loadVotes(memberId, log) {
-  const data = await getJson(
-    "https://commonsvotes-api.parliament.uk/data/divisions.json/membervoting" +
-      `?queryParameters.memberId=${memberId}&queryParameters.take=6`,
-    log, `mp:votes:${memberId}`, CACHE.mp
-  );
-  if (!Array.isArray(data)) return [];
+const VOTE_ENDPOINTS = [
+  (id) => `https://commonsvotes-api.parliament.uk/data/divisions.json/membervoting?queryParameters.memberId=${id}&queryParameters.take=6`,
+  (id) => `https://commonsvotes-api.parliament.uk/data/divisions.json/search?queryParameters.memberId=${id}&queryParameters.take=6`,
+];
 
-  return data.map((entry) => {
-    const division = entry.PublishedDivision || entry.publishedDivision || {};
-    return {
-      title: clean(division.Title || division.title),
-      date: division.Date || division.date || "",
-      votedAye: entry.MemberVotedAye != null ? entry.MemberVotedAye : entry.memberVotedAye,
-      ayes: division.AyeCount != null ? division.AyeCount : division.ayeCount,
-      noes: division.NoCount != null ? division.NoCount : division.noCount,
-      id: division.DivisionId || division.divisionId || null,
-    };
-  }).filter((vote) => vote.title);
+async function loadVotes(memberId, log) {
+  for (let index = 0; index < VOTE_ENDPOINTS.length; index += 1) {
+    const data = await getJson(
+      VOTE_ENDPOINTS[index](memberId),
+      log, `mp:votes:${memberId}:v${index + 1}`, CACHE.mp
+    );
+    if (!Array.isArray(data) || !data.length) continue;
+
+    const votes = data.map((entry) => {
+      const division = entry.PublishedDivision || entry.publishedDivision || entry;
+      return {
+        title: clean(division.Title || division.title),
+        date: division.Date || division.date || "",
+        votedAye: entry.MemberVotedAye != null ? entry.MemberVotedAye : entry.memberVotedAye,
+        ayes: division.AyeCount != null ? division.AyeCount : division.ayeCount,
+        noes: division.NoCount != null ? division.NoCount : division.noCount,
+        id: division.DivisionId || division.divisionId || null,
+      };
+    }).filter((vote) => vote.title);
+
+    if (votes.length) return votes;
+  }
+  return [];
+}
+
+/**
+ * Candidate Hansard endpoints, tried in order.
+ *
+ * The Hansard API is not documented publicly in a form I could verify, and
+ * guessing a single path is how the traffic endpoint wasted three deploys.
+ * Trying the plausible shapes and recording which one answered costs one extra
+ * request on first load and then nothing, because the result is cached.
+ */
+const HANSARD_ENDPOINTS = [
+  (id) => `https://hansard-api.parliament.uk/search/contributions/Spoken.json?queryParameters.memberId=${id}&queryParameters.take=5&queryParameters.orderBy=SittingDateDesc`,
+  (id) => `https://hansard-api.parliament.uk/search/debates.json?queryParameters.memberId=${id}&queryParameters.take=5&queryParameters.orderBy=SittingDateDesc`,
+  (id) => `https://hansard-api.parliament.uk/search.json?queryParameters.memberId=${id}&queryParameters.take=5`,
+];
+
+/** Field names vary in case and spelling between Parliament APIs. */
+function pick(row, ...names) {
+  for (const name of names) {
+    if (row[name] != null && row[name] !== "") return row[name];
+  }
+  return "";
 }
 
 async function loadSpeeches(memberId, log) {
-  const data = await getJson(
-    "https://hansard-api.parliament.uk/search/debates.json" +
-      `?queryParameters.memberId=${memberId}&queryParameters.take=5&queryParameters.orderBy=SittingDateDesc`,
-    log, `mp:speeches:${memberId}`, CACHE.mp
-  );
+  for (let index = 0; index < HANSARD_ENDPOINTS.length; index += 1) {
+    const data = await getJson(
+      HANSARD_ENDPOINTS[index](memberId),
+      log, `mp:speeches:${memberId}:v${index + 1}`, CACHE.mp
+    );
+    if (!data) continue;
 
-  const results = (data && (data.Results || data.results)) || [];
-  return results.map((row) => ({
-    title: clean(row.Title || row.title || row.DebateSection || ""),
-    date: row.SittingDate || row.sittingDate || "",
-    house: row.House || row.house || "",
-    extId: row.DebateSectionExtId || row.debateSectionExtId || "",
-  })).filter((item) => item.title);
+    const results = data.Results || data.results || data.Contributions || data.items || [];
+    if (!Array.isArray(results) || !results.length) continue;
+
+    const speeches = results.map((row) => ({
+      title: clean(pick(row, "DebateSection", "debateSection", "Title", "title", "House")),
+      date: pick(row, "SittingDate", "sittingDate", "Date", "date"),
+      house: pick(row, "House", "house"),
+      text: clean(pick(row, "ContributionTextFull", "contributionTextFull", "ContributionText")).slice(0, 200),
+      extId: pick(row, "DebateSectionExtId", "debateSectionExtId", "ContributionExtId"),
+    })).filter((item) => item.title || item.text);
+
+    if (speeches.length) return speeches;
+  }
+  return [];
 }
 
 async function loadMps(log) {
