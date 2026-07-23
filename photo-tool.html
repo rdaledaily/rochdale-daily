@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
 <title>Rochdale Daily — Photo preparer</title>
 <style>
-  :root { --ink:#0e121a; --gold:#c8a44a; --line:#2a2f3a; --muted:#8b93a3; }
+  :root { --accent:#22d3ee; --navy:#0b1f3a; --line:#2a2f3a; --muted:#8b93a3; --warn:#f5c400; --bad:#ff8a99; }
   * { box-sizing: border-box; }
   body {
     margin:0; padding:28px; background:#11151d; color:#e8ecf2;
@@ -13,13 +14,13 @@
   }
   .wrap { max-width: 880px; margin: 0 auto; }
   h1 { font-size:20px; margin:0 0 4px; letter-spacing:.3px; }
-  h1 span { color: var(--gold); }
+  h1 span { color: var(--accent); }
   .sub { color: var(--muted); font-size:13px; margin:0 0 22px; line-height:1.5; }
   #drop {
     border:2px dashed #3a4152; border-radius:10px; padding:44px 20px; text-align:center;
     background:#151a24; cursor:pointer; transition:.15s; margin-bottom:20px;
   }
-  #drop.over { border-color: var(--gold); background:#1b2130; }
+  #drop.over { border-color: var(--accent); background:#1b2130; }
   #drop p { margin:0; color:var(--muted); font-size:14px; }
   #drop strong { color:#e8ecf2; display:block; font-size:15px; margin-bottom:6px; }
   .row { display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px; }
@@ -29,228 +30,380 @@
     width:100%; padding:10px 11px; border-radius:7px; border:1px solid var(--line);
     background:#0c1017; color:#e8ecf2; font-size:14px; font-family:inherit;
   }
-  input[type=text]:focus { outline:none; border-color:var(--gold); }
+  input[type=text]:focus { outline:none; border-color:var(--accent); }
   .filename {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    color: var(--gold); font-size:13px; word-break:break-all;
+    color: var(--accent); font-size:13px; word-break:break-all;
   }
   button {
     padding:10px 16px; border-radius:7px; border:0; cursor:pointer;
-    background:var(--gold); color:#12151c; font-weight:700; font-size:14px; font-family:inherit;
+    background:var(--accent); color:#0b1524; font-weight:700; font-size:14px; font-family:inherit;
   }
   button:disabled { opacity:.35; cursor:not-allowed; }
   button.ghost { background:transparent; color:var(--muted); border:1px solid var(--line); }
+  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tab {
+    background:transparent; border:1px solid var(--line); color:var(--muted);
+    padding:9px 15px; border-radius:7px; font-size:13px; font-weight:600;
+  }
+  .tab[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#0b1524; }
   canvas { display:block; width:100%; border-radius:8px; border:1px solid var(--line); }
   .panel { background:#151a24; border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:18px; }
   .panel h2 { font-size:13px; margin:0 0 12px; color:var(--muted); font-weight:600; letter-spacing:.4px; text-transform:uppercase; }
   .hint { font-size:12px; color:var(--muted); margin-top:8px; line-height:1.5; }
   .hint code { background:#0c1017; padding:1px 5px; border-radius:4px; color:#c9d2e0; }
   .examples { font-size:12px; color:var(--muted); line-height:1.9; }
-  .examples code { background:#0c1017; padding:2px 6px; border-radius:4px; color:var(--gold); }
+  .examples code { background:#0c1017; padding:2px 6px; border-radius:4px; color:var(--accent); }
   .steps { font-size:13px; color:#c9d2e0; line-height:1.7; padding-left:20px; margin:0; }
   .credit-out { font-family: ui-monospace, Menlo, monospace; font-size:12px; background:#0c1017;
     padding:10px; border-radius:6px; color:#c9d2e0; white-space:pre-wrap; word-break:break-all; }
+  .match { font-size:12px; line-height:1.8; margin-top:10px; }
+  .match code { background:#0c1017; padding:2px 6px; border-radius:4px; }
+  .match .yes code { color:#7fe3bd; }
+  .match .no code { color:var(--muted); text-decoration:line-through; }
+  .flag { border-left:3px solid var(--warn); background:#1b2130; padding:10px 12px;
+    border-radius:0 6px 6px 0; font-size:12px; line-height:1.55; margin-top:12px; color:#e0d6b8; }
+  .flag.bad { border-left-color:var(--bad); color:#f0c8ce; }
+  .flag b { color:#fff; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <h1>Rochdale Daily — <span>Photo preparer</span></h1>
-  <p class="sub">
-    Drop a photo in, name the place, download a correctly-named and cropped file,
-    then upload it to <code style="color:#c9d2e0">assets/img/places/</code> on GitHub.
-    Everything happens in your browser — nothing is uploaded anywhere.
-  </p>
+  <p class="sub">Crops a photograph to the 1200&times;675 card size, names it so the pipeline finds it,
+    and tells you which folder it belongs in. Everything happens in this browser &mdash; nothing is uploaded anywhere.</p>
+
+  <div class="tabs" role="group" aria-label="Photo type">
+    <button class="tab" data-kind="places" aria-pressed="true">A place</button>
+    <button class="tab" data-kind="areas" aria-pressed="false">An area</button>
+    <button class="tab" data-kind="people" aria-pressed="false">A person</button>
+  </div>
+
+  <div class="panel" id="explain"></div>
 
   <div id="drop">
-    <strong>Drag a photo here</strong>
-    <p>or click to choose one &middot; JPG, PNG or WebP</p>
+    <p><strong>Drop a photograph here</strong>or click to choose one</p>
     <input type="file" id="file" accept="image/*" hidden>
   </div>
 
   <div class="panel" id="editor" style="display:none">
-    <h2>1 &middot; Name the place</h2>
+    <h2>1 &middot; <span id="nameHeading">Name it</span></h2>
     <div class="row">
       <div class="field">
-        <label for="place">Place shown in the photo</label>
-        <input type="text" id="place" placeholder="Manchester Road, Rochdale" autocomplete="off">
+        <label id="nameLabel" for="place">Name</label>
+        <input type="text" id="place" autocomplete="off" list="areaList">
+        <datalist id="areaList"></datalist>
       </div>
     </div>
-    <div class="hint">
-      Saved as: <span class="filename" id="fname">—</span><br>
-      This photo is used on any story mentioning that place.
-    </div>
+    <p class="hint">Saved as: <span class="filename" id="fname">&mdash;</span><br>
+      Goes in: <span class="filename" id="fdir">&mdash;</span></p>
+    <div id="matchBox" class="match"></div>
+    <div id="flagBox"></div>
 
     <h2 style="margin-top:22px">2 &middot; Check the crop</h2>
     <canvas id="preview" width="1200" height="675"></canvas>
-    <div class="hint">Cropped to 1200&times;675 (16:9), the exact size the cards use.</div>
+    <p class="hint">The headline sits lower-left, the area pin bottom-left and the wordmark bottom-right,
+      all over a dark scrim. Faces and detail read best centre&#8209;right.</p>
 
-    <h2 style="margin-top:22px">3 &middot; Credit <span style="text-transform:none;font-weight:400">(leave blank if it's your own photo)</span></h2>
+    <h2 style="margin-top:22px">3 &middot; Credit <span style="text-transform:none;font-weight:400">(leave blank if it&rsquo;s your own photo)</span></h2>
     <div class="row">
       <div class="field">
-        <label for="credit">Photographer / source</label>
+        <label for="credit">Photographer and licence</label>
         <input type="text" id="credit" placeholder="e.g. Jane Smith / Geograph (CC BY-SA 2.0)" autocomplete="off">
       </div>
     </div>
     <div id="creditBox" style="display:none">
-      <div class="hint">Add this line to <code>assets/img/places/credits.json</code>:</div>
+      <p class="hint">Add this line to <span class="filename" id="creditPath">credits.json</span>:</p>
       <div class="credit-out" id="creditJson"></div>
     </div>
 
-    <div class="row" style="margin-top:20px">
+    <div class="row" style="margin-top:18px">
       <button id="save" disabled>Download prepared photo</button>
       <button class="ghost" id="reset">Start again</button>
     </div>
   </div>
 
   <div class="panel">
-    <h2>Naming examples</h2>
-    <div class="examples">
-      <code>manchester_road_rochdale.jpg</code> — used on stories mentioning Manchester Road<br>
-      <code>hollingworth_lake_littleborough.jpg</code> — stories about Hollingworth Lake<br>
-      <code>yorkshire_street_rochdale.jpg</code> — stories about Yorkshire Street<br>
-      <code>rochdale_town_hall.jpg</code> — stories mentioning the Town Hall<br>
-      <code>falinge_park.jpg</code> — stories about Falinge Park
-    </div>
-    <div class="hint">
-      Use at least two words. The more specific the name, the more precisely it matches.
-      If no place photo matches a story, it falls back to the area photo, then to a generated card.
-    </div>
-  </div>
-
-  <div class="panel">
     <h2>Then, on GitHub</h2>
     <ol class="steps">
-      <li>Browse to <code>assets/img/places/</code> (create the folder if it isn't there)</li>
-      <li><strong>Add file &rarr; Upload files</strong>, drag in the downloaded photo</li>
-      <li>Commit</li>
-      <li>If you entered a credit, paste the line into <code>assets/img/places/credits.json</code></li>
+      <li>Open the repository and navigate into the folder shown above.</li>
+      <li><b>Add file &rarr; Upload files</b>, drag the downloaded photo in, commit.</li>
+      <li>If you have a credit, edit <code>credits.json</code> in that same folder and add the line.</li>
+      <li>New stories use it automatically. To apply it to stories already published,
+        run <b>card re-render</b> from the Actions tab.</li>
     </ol>
   </div>
 
 </div>
 
 <script>
-  const drop = document.getElementById('drop');
-  const fileInput = document.getElementById('file');
-  const editor = document.getElementById('editor');
-  const placeInput = document.getElementById('place');
-  const creditInput = document.getElementById('credit');
-  const fnameEl = document.getElementById('fname');
-  const canvas = document.getElementById('preview');
-  const ctx = canvas.getContext('2d');
-  const saveBtn = document.getElementById('save');
-  const resetBtn = document.getElementById('reset');
-  const creditBox = document.getElementById('creditBox');
-  const creditJson = document.getElementById('creditJson');
+(function () {
+  var W = 1200, H = 675;
 
-  let currentImage = null;
+  /* Mirrors story_image.py. If the matching rules there change, change them
+     here too, or the tool will promise matches the pipeline will not make. */
+  var WEAK = { the:1, of:1, and:1, in:1, at:1, on:1, a:1 };
+
+  var AREAS = ["rochdale","heywood","middleton","littleborough","milnrow","newhey",
+    "kirkholt","spotland","falinge","deeplish","smallbridge","firgrove","balderstone",
+    "sudden","lowerplace","meanwood","wardleworth","shawclough","healey","syke","cutgate",
+    "darnhill","hopwood","alkrington","boarshaw","slattocks","smithy_bridge","summit",
+    "wardle","norden","bamford","castleton"];
+
+  var KINDS = {
+    places: {
+      dir: "assets/img/places/",
+      heading: "Name the place",
+      label: "Place as a story would refer to it",
+      placeholder: "Manchester Road, Rochdale",
+      blurb: "<b>A place photo</b> is matched against the headline and the story text. " +
+        "The filename becomes a search phrase, and the pipeline shortens it from the end only \u2014 " +
+        "so <b>put the specific thing first and the town last</b>. " +
+        "<code>town_hall_rochdale</code> matches \u201ctown hall\u201d; <code>rochdale_town_hall</code> does not.",
+      examples: "manchester_road_rochdale &middot; hollingworth_lake &middot; town_hall_rochdale &middot; drake_street"
+    },
+    areas: {
+      dir: "assets/img/areas/",
+      heading: "Choose the area",
+      label: "Area name (must match one the pipeline uses)",
+      placeholder: "Heywood",
+      blurb: "<b>An area photo</b> is the fallback when nothing more specific matches. " +
+        "The filename must be the area slug exactly, and single words are correct here. " +
+        "Unmatched areas climb to their township and then to <code>rochdale</code>, " +
+        "so <code>rochdale.jpg</code> and <code>heywood.jpg</code> alone cover a great deal.",
+      examples: "rochdale &middot; heywood &middot; middleton &middot; littleborough &middot; milnrow"
+    },
+    people: {
+      dir: "assets/img/people/",
+      heading: "Name the person",
+      label: "Person or office, as a headline would write it",
+      placeholder: "Paul Waugh",
+      blurb: "<b>A person photo</b> is matched against the <b>headline only</b>, and the whole " +
+        "filename must appear \u2014 it is never shortened. Both rules exist because putting " +
+        "someone\u2019s face on a story is a much bigger claim than showing a road, and a card " +
+        "carries no nuance. Two words minimum; a surname alone is ignored.",
+      examples: "paul_waugh &middot; elsie_blundell &middot; mayor_of_rochdale"
+    }
+  };
+
+  var kind = "places";
+  var img = null;
+  var canvas = document.getElementById("preview");
+  var ctx = canvas.getContext("2d");
+  var placeInput = document.getElementById("place");
+  var creditInput = document.getElementById("credit");
+  var saveBtn = document.getElementById("save");
 
   function slugify(value) {
-    return String(value || '')
-      .toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/&/g, ' and ')
-      .replace(/[^a-z0-9]+/g, '_')
-      .replace(/^_+|_+$/g, '')
-      .slice(0, 70);
+    return String(value || "").toLowerCase()
+      .replace(/&/g, " and ")
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "");
+  }
+
+  function tokens(slug) {
+    return slug.split("_").filter(Boolean);
+  }
+
+  function isSpecific(phrase) {
+    var parts = phrase.split(" ");
+    if (parts.length < 2) return false;
+    return parts.some(function (p) { return !WEAK[p]; });
+  }
+
+  /** Every phrase the pipeline would try, longest first. */
+  function phrases(slug) {
+    var t = tokens(slug), out = [];
+    for (var n = t.length; n > 0; n--) out.push(t.slice(0, n).join(" "));
+    return out;
+  }
+
+  document.getElementById("areaList").innerHTML =
+    AREAS.map(function (a) { return "<option value=\"" + a.replace(/_/g, " ") + "\">"; }).join("");
+
+  function describe() {
+    var k = KINDS[kind];
+    document.getElementById("explain").innerHTML =
+      "<h2>" + kind + "</h2><div class=\"hint\" style=\"margin-top:0\">" + k.blurb + "</div>" +
+      "<p class=\"examples\" style=\"margin:12px 0 0\">Examples: <code>" +
+      k.examples.replace(/ &middot; /g, "</code> &middot; <code>") + "</code></p>";
+    document.getElementById("nameHeading").textContent = k.heading;
+    document.getElementById("nameLabel").textContent = k.label;
+    placeInput.placeholder = k.placeholder;
+    document.getElementById("fdir").textContent = k.dir;
+    document.getElementById("creditPath").textContent = k.dir + "credits.json";
   }
 
   function refreshName() {
-    const slug = slugify(placeInput.value);
-    fnameEl.textContent = slug ? slug + '.jpg' : '—';
-    const words = slug.split('_').filter(Boolean);
-    saveBtn.disabled = !currentImage || words.length < 2;
-    const credit = creditInput.value.trim();
-    if (slug && credit) {
-      creditBox.style.display = 'block';
-      creditJson.textContent = '"' + slug + '": ' + JSON.stringify(credit);
-    } else {
-      creditBox.style.display = 'none';
+    var slug = slugify(placeInput.value);
+    var t = tokens(slug);
+    var matchBox = document.getElementById("matchBox");
+    var flagBox = document.getElementById("flagBox");
+    var ok = false;
+    var rows = "", flags = "";
+
+    document.getElementById("fname").textContent = slug ? slug + ".jpg" : "\u2014";
+
+    if (!slug) {
+      matchBox.innerHTML = ""; flagBox.innerHTML = "";
+      saveBtn.disabled = true;
+      return;
     }
+
+    if (kind === "areas") {
+      ok = AREAS.indexOf(slug) !== -1;
+      rows = ok
+        ? "<div class=\"yes\">Used for stories in <code>" + slug + "</code>, and for any area that falls back to it.</div>"
+        : "";
+      if (!ok) {
+        flags = "<div class=\"flag bad\"><b>Not an area the pipeline knows.</b> " +
+          "Area photos are looked up by exact slug, so this file would never be used. " +
+          "Pick from the suggestions, or add it as a place photo instead.</div>";
+      }
+    } else if (kind === "people") {
+      ok = t.length >= 2;
+      rows = ok
+        ? "<div class=\"yes\">Matches a headline containing <code>" + t.join(" ") + "</code> \u2014 and nothing shorter.</div>"
+        : "<div class=\"no\"><code>" + t.join(" ") + "</code> \u2014 single words are ignored.</div>";
+      if (!ok) {
+        flags = "<div class=\"flag bad\"><b>Needs at least two words.</b> " +
+          "A surname on its own is far too easy to hit by accident, so the pipeline skips it.</div>";
+      } else if (/^(mayor|leader|chief|chair)_/.test(slug)) {
+        flags = "<div class=\"flag\"><b>This is an office, not a person.</b> " +
+          "It will match every story about the role \u2014 handy, but the mayoralty changes each May " +
+          "and nothing will warn you that the photograph is now the wrong person.</div>";
+      }
+    } else {
+      var list = phrases(slug);
+      rows = list.map(function (p) {
+        var good = isSpecific(p);
+        if (good) ok = true;
+        return "<div class=\"" + (good ? "yes" : "no") + "\"><code>" + p + "</code>" +
+          (good ? "" : " \u2014 too short to match") + "</div>";
+      }).join("");
+      if (!ok) {
+        flags = "<div class=\"flag bad\"><b>Nothing here will match.</b> " +
+          "A place phrase needs at least two words, one of which is a real word.</div>";
+      } else if (t.length > 1 && AREAS.indexOf(t[0]) !== -1) {
+        flags = "<div class=\"flag\"><b>Word order looks reversed.</b> " +
+          "Starting with the town means the useful phrases get trimmed away. " +
+          "Try <code>" + t.slice(1).concat(t[0]).join("_") + "</code> instead.</div>";
+      }
+    }
+
+    matchBox.innerHTML = rows ? "<p class=\"hint\" style=\"margin:0 0 4px\">Will match:</p>" + rows : "";
+    flagBox.innerHTML = flags;
+    saveBtn.disabled = !(ok && img);
+    refreshCredit();
   }
 
-  // Cover-fit the image into 1200x675, matching the card composer.
-  function drawPreview(img) {
-    const W = canvas.width, H = canvas.height;
-    ctx.fillStyle = '#0e121a';
-    ctx.fillRect(0, 0, W, H);
-    const scale = Math.max(W / img.width, H / img.height);
-    const w = img.width * scale, h = img.height * scale;
-    ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
-    // Show roughly where the headline sits, so the crop can be judged.
-    const grad = ctx.createLinearGradient(0, H * 0.35, 0, H);
-    grad.addColorStop(0, 'rgba(14,18,26,0)');
-    grad.addColorStop(1, 'rgba(14,18,26,0.92)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, H * 0.35, W, H * 0.65);
-    ctx.fillStyle = 'rgba(255,255,255,.30)';
-    ctx.font = '600 34px -apple-system, Segoe UI, Roboto, sans-serif';
-    ctx.fillText('Headline sits here', 72, H - 150);
-    ctx.fillStyle = 'rgba(200,164,74,.45)';
-    ctx.font = '700 24px -apple-system, Segoe UI, Roboto, sans-serif';
-    ctx.fillText('AREA TAG', 72, H - 62);
+  function refreshCredit() {
+    var slug = slugify(placeInput.value);
+    var credit = creditInput.value.trim();
+    var box = document.getElementById("creditBox");
+    if (!slug || !credit) { box.style.display = "none"; return; }
+    box.style.display = "";
+    document.getElementById("creditJson").textContent =
+      JSON.stringify(slug) + ": " + JSON.stringify(credit) + ",";
+  }
+
+  function drawPreview(image) {
+    var scale = Math.max(W / image.width, H / image.height);
+    var w = image.width * scale, h = image.height * scale;
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(image, (W - w) / 2, (H - h) / 2, w, h);
+
+    /* Approximate the card furniture so the crop is judged against what the
+       reader will actually see, not against the bare photograph. */
+    var scrim = ctx.createLinearGradient(0, 0, 0, H);
+    scrim.addColorStop(0, "rgba(8,12,20,.30)");
+    scrim.addColorStop(0.55, "rgba(8,12,20,.55)");
+    scrim.addColorStop(1, "rgba(8,12,20,.86)");
+    ctx.fillStyle = scrim; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#22d3ee"; ctx.fillRect(0, 0, W, 8);
+    ctx.font = "700 30px sans-serif"; ctx.fillStyle = "rgba(34,211,238,.85)";
+    ctx.fillText("CATEGORY", 134, 106);
+    ctx.font = "700 60px sans-serif"; ctx.fillStyle = "rgba(245,247,250,.85)";
+    ctx.fillText("Headline sits here", 72, 470);
+    ctx.font = "700 28px sans-serif"; ctx.fillStyle = "rgba(34,211,238,.8)";
+    ctx.fillText("AREA", 106, 596);
+    ctx.font = "700 26px sans-serif"; ctx.fillStyle = "rgba(210,216,224,.8)";
+    ctx.fillText("ROCHDALE DAILY", 872, 596);
   }
 
   function loadFile(file) {
-    if (!file || !file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        currentImage = img;
-        editor.style.display = 'block';
-        drawPreview(img);
-        if (!placeInput.value) {
-          const base = file.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ');
-          placeInput.value = base;
-        }
+    if (!file || !/^image\//.test(file.type)) return;
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      var image = new Image();
+      image.onload = function () {
+        img = image;
+        document.getElementById("editor").style.display = "";
+        drawPreview(image);
         refreshName();
-        placeInput.focus();
       };
-      img.src = e.target.result;
+      image.src = event.target.result;
     };
     reader.readAsDataURL(file);
   }
 
-  drop.addEventListener('click', () => fileInput.click());
-  fileInput.addEventListener('change', e => loadFile(e.target.files[0]));
-  ['dragenter', 'dragover'].forEach(evt =>
-    drop.addEventListener(evt, e => { e.preventDefault(); drop.classList.add('over'); }));
-  ['dragleave', 'drop'].forEach(evt =>
-    drop.addEventListener(evt, e => { e.preventDefault(); drop.classList.remove('over'); }));
-  drop.addEventListener('drop', e => loadFile(e.dataTransfer.files[0]));
+  var drop = document.getElementById("drop");
+  var fileInput = document.getElementById("file");
+  drop.addEventListener("click", function () { fileInput.click(); });
+  fileInput.addEventListener("change", function () { loadFile(fileInput.files[0]); });
+  ["dragenter", "dragover"].forEach(function (name) {
+    drop.addEventListener(name, function (e) { e.preventDefault(); drop.classList.add("over"); });
+  });
+  ["dragleave", "drop"].forEach(function (name) {
+    drop.addEventListener(name, function (e) { e.preventDefault(); drop.classList.remove("over"); });
+  });
+  drop.addEventListener("drop", function (e) { loadFile(e.dataTransfer.files[0]); });
 
-  placeInput.addEventListener('input', refreshName);
-  creditInput.addEventListener('input', refreshName);
+  placeInput.addEventListener("input", refreshName);
+  creditInput.addEventListener("input", refreshCredit);
 
-  saveBtn.addEventListener('click', () => {
-    if (!currentImage) return;
-    // Export the clean crop, without the preview overlay.
-    const out = document.createElement('canvas');
-    out.width = 1200; out.height = 675;
-    const octx = out.getContext('2d');
-    const scale = Math.max(1200 / currentImage.width, 675 / currentImage.height);
-    const w = currentImage.width * scale, h = currentImage.height * scale;
-    octx.drawImage(currentImage, (1200 - w) / 2, (675 - h) / 2, w, h);
-    out.toBlob(blob => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = slugify(placeInput.value) + '.jpg';
-      a.click();
-      URL.revokeObjectURL(url);
-    }, 'image/jpeg', 0.88);
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (tab) {
+    tab.addEventListener("click", function () {
+      kind = tab.dataset.kind;
+      Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (t) {
+        t.setAttribute("aria-pressed", String(t === tab));
+      });
+      describe();
+      refreshName();
+    });
   });
 
-  resetBtn.addEventListener('click', () => {
-    currentImage = null;
-    editor.style.display = 'none';
-    fileInput.value = '';
-    placeInput.value = '';
-    creditInput.value = '';
+  document.getElementById("save").addEventListener("click", function () {
+    if (!img) return;
+    /* Redraw without the furniture overlay - that is a guide, not part of the
+       photograph the pipeline will composite. */
+    var out = document.createElement("canvas");
+    out.width = W; out.height = H;
+    var octx = out.getContext("2d");
+    var scale = Math.max(W / img.width, H / img.height);
+    var w = img.width * scale, h = img.height * scale;
+    octx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+    out.toBlob(function (blob) {
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = url;
+      link.download = slugify(placeInput.value) + ".jpg";
+      link.click();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }, "image/jpeg", 0.9);
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    img = null;
+    placeInput.value = ""; creditInput.value = "";
+    fileInput.value = "";
+    document.getElementById("editor").style.display = "none";
     refreshName();
   });
+
+  describe();
+})();
 </script>
 </body>
 </html>
