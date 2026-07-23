@@ -43,7 +43,12 @@ jobs:
       MAX_AI_ARTICLES_PER_RUN: "50"
       MAX_AI_ARTICLES_INITIAL: "100"
       RESPECT_ROBOTS: "true"
-      REQUEST_TIMEOUT: "20"
+      REQUEST_TIMEOUT: "10"
+      # Two strikes, not three, and remembered across runs in
+      # slow_domains.json so a dead host costs one attempt a day
+      # rather than three every hour.
+      SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
+      SLOW_DOMAIN_BENCH_HOURS: "24"
       USE_SOURCE_IMAGES: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
       SOCIAL_CONTEXT_ENABLED: "true"
@@ -122,6 +127,7 @@ jobs:
 
           git add \
             articles.json \
+            slow_domains.json \
             scraper_status.json \
             event_dates.json \
             google_news_resolution_report.json \
