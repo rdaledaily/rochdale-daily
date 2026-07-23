@@ -715,6 +715,29 @@ def load_font(size: int, bold: bool = False) -> ImageFont.ImageFont:
     return ImageFont.load_default()
 
 
+CARDS_DIR = Path("assets/img/cards")
+
+
+def has_chosen_override(article: dict[str, Any], repo_root: Path) -> bool:
+    """True when an image has been filed against this exact story.
+
+    A photograph that came with the article normally wins, and should: it is
+    the actual subject. But an image named after the article slug is a
+    deliberate editorial choice for that one story, so it beats everything,
+    including the source photograph. Nothing else in the library does - a
+    general photograph of a place should not displace a picture of the thing
+    the story is actually about.
+    """
+    slug = slug_for(article)
+    if not slug:
+        return False
+    cards = repo_root / CARDS_DIR
+    if not cards.is_dir():
+        return False
+    return any((cards / f"{slug}{suffix}").is_file()
+               for suffix in (".jpg", ".jpeg", ".png", ".webp"))
+
+
 def ensure_article_image(
     article: dict[str, Any],
     *,
@@ -725,7 +748,7 @@ def ensure_article_image(
     retry_placeholders: bool,
     allow_network: bool = True,
 ) -> str:
-    if has_real_image(article, repo_root):
+    if not has_chosen_override(article, repo_root) and has_real_image(article, repo_root):
         return "already-covered"
 
     # The article carries a cached image that has just been judged unusable
