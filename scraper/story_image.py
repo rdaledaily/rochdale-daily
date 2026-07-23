@@ -64,19 +64,6 @@ CATEGORY_STYLE: dict[str, tuple[tuple[int, int, int], str]] = {
 
 # Wards -> township, so a ward story can fall back to its township photo before
 # the borough-wide one. Extend freely; unknown areas fall back to "rochdale".
-AREA_PARENT: dict[str, str] = {
-    "kirkholt": "rochdale", "spotland": "rochdale", "falinge": "rochdale",
-    "deeplish": "rochdale", "smallbridge": "rochdale", "firgrove": "rochdale",
-    "balderstone": "rochdale", "sudden": "rochdale", "lowerplace": "rochdale",
-    "meanwood": "rochdale", "wardleworth": "rochdale", "shawclough": "rochdale",
-    "healey": "rochdale", "syke": "rochdale", "cutgate": "rochdale",
-    "darnhill": "heywood", "hopwood": "heywood",
-    "alkrington": "middleton", "boarshaw": "middleton",
-    "newhey": "milnrow", "slattocks": "milnrow",
-    "smithy_bridge": "littleborough", "summit": "littleborough",
-    "wardle": "littleborough", "norden": "rochdale", "bamford": "rochdale",
-    "castleton": "rochdale",
-}
 
 # Categories where a curated photograph must never be used, and the generated
 # card is the only acceptable illustration.
@@ -94,14 +81,13 @@ AREA_PARENT: dict[str, str] = {
 # when they have no police-issued image.
 NO_PHOTO_CATEGORIES = frozenset({"crime"})
 
-TOPICS_DIR = Path("assets/img/topics")
-TOPICS_CREDITS_PATH = TOPICS_DIR / "credits.json"
+# Images you place here are used exactly as given, with no matching or
+# guesswork. Name the file after the article slug - the part of its page URL
+# before ".html" - and that story uses it. Nothing else touches this folder.
+CARDS_DIR = Path("assets/img/cards")
+CARDS_CREDITS_PATH = CARDS_DIR / "credits.json"
 
-AREAS_DIR = Path("assets/img/areas")
-PLACES_DIR = Path("assets/img/places")
 PEOPLE_DIR = Path("assets/img/people")
-CREDITS_PATH = AREAS_DIR / "credits.json"
-PLACES_CREDITS_PATH = PLACES_DIR / "credits.json"
 PEOPLE_CREDITS_PATH = PEOPLE_DIR / "credits.json"
 _IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
 
@@ -109,57 +95,6 @@ _IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
 # tokens with at least one real word, so a single generic name can't match
 # everything — but genuine place names like "Manchester Road" or "Town Centre"
 # must still match.
-_WEAK_PLACE_TOKENS = {"the", "of", "and", "in", "at", "on", "a"}
-
-
-def _place_phrases(stem: str) -> list[str]:
-    """Candidate phrases from a filename, longest first.
-
-    ``manchester_road_rochdale`` -> ["manchester road rochdale",
-                                     "manchester road", "manchester"]
-    """
-    tokens = [t for t in re.split(r"[^a-z0-9]+", stem.lower()) if t]
-    return [" ".join(tokens[:n]) for n in range(len(tokens), 0, -1)]
-
-
-def _phrase_is_specific(phrase: str) -> bool:
-    tokens = phrase.split()
-    if len(tokens) < 2:
-        return False
-    return any(token not in _WEAK_PLACE_TOKENS for token in tokens)
-
-
-def find_place_photo(
-    text: str,
-    places_dir: Path = PLACES_DIR,
-) -> tuple[Path, str] | None:
-    """Best place photo whose filename names somewhere the story mentions.
-
-    Files are named after the place, e.g. ``manchester_road_rochdale.jpg`` or
-    ``hollingworth_lake_littleborough.jpg``. The longest phrase that actually
-    appears in the story wins, so a photo of the specific road beats a generic
-    area photo.
-    """
-    if not places_dir.is_dir():
-        return None
-    haystack = " " + re.sub(r"[^a-z0-9]+", " ", _clean(text).lower()) + " "
-    best: tuple[int, Path, str] | None = None
-    for path in sorted(places_dir.iterdir()):
-        if path.suffix.lower() not in _IMAGE_SUFFIXES:
-            continue
-        for phrase in _place_phrases(path.stem):
-            if not _phrase_is_specific(phrase):
-                continue
-            if f" {phrase} " in haystack:
-                score = len(phrase.split())
-                if best is None or score > best[0]:
-                    best = (score, path, phrase)
-                break
-    if best is None:
-        return None
-    return best[1], best[2]
-
-
 def find_person_photo(
     title: str,
     people_dir: Path = PEOPLE_DIR,
@@ -239,85 +174,6 @@ def _category_key(category: Any) -> str:
 def _area_hue(area_slug: str) -> float:
     digest = hashlib.sha256(area_slug.encode("utf-8")).digest()
     return digest[0] / 255.0
-
-
-def _variants(directory: Path, stem: str) -> list[Path]:
-    """Every photograph filed under a name, including numbered alternatives.
-
-    ``rochdale.jpg``, ``rochdale-01.jpg`` and ``rochdale-02.jpg`` are all
-    photographs of Rochdale. The numeric suffix is required so that
-    ``middleton`` never collects ``middleton-gardens``, which is a different
-    subject filed under places.
-    """
-    if not directory.is_dir():
-        return []
-    pattern = re.compile(rf"^{re.escape(stem)}(?:-\d+)?$")
-    return sorted(
-        path for path in directory.iterdir()
-        if path.suffix.lower() in _IMAGE_SUFFIXES and pattern.match(path.stem.lower())
-    )
-
-
-def _pick(paths: list[Path], seed: str) -> Path | None:
-    """Choose one photograph from a pool, the same way every time.
-
-    Seeded on the article rather than chosen at random, so a card re-rendered
-    tomorrow keeps the picture it had today - readers should not see a story's
-    image change under them, and a random pick would churn the whole archive on
-    every run. Hashing the seed rather than using its position spreads
-    consecutive stories across the pool instead of clustering them.
-    """
-    if not paths:
-        return None
-    digest = hashlib.sha256(seed.encode("utf-8")).hexdigest()
-    return paths[int(digest[:8], 16) % len(paths)]
-
-
-def find_topic_photo(category: str, seed: str, topics_dir: Path = TOPICS_DIR) -> Path | None:
-    """A photograph that fits the subject rather than merely the location.
-
-    A generic streetscape behind a rugby report, a driving test and a helicopter
-    sighting is technically a photograph of the right town and tells the reader
-    nothing. A pitch, a road and a school at least belong to the story. Topic
-    photographs therefore rank above the area fallback and below anything that
-    names a specific place or person.
-    """
-    return _pick(_variants(topics_dir, _category_key(category)), seed)
-
-
-def _area_photo(area_slug: str, areas_dir: Path, seed: str = "") -> Path | None:
-    """Most specific curated photo: exact area -> parent township -> borough."""
-    seen: set[str] = set()
-    candidate = area_slug
-    for _ in range(4):
-        if not candidate or candidate in seen:
-            break
-        seen.add(candidate)
-        pool = _variants(areas_dir, candidate)
-        if pool:
-            return _pick(pool, seed)
-        candidate = AREA_PARENT.get(candidate, "rochdale" if candidate != "rochdale" else "")
-    return None
-
-
-def _photo_credit(area_slug: str, credits_path: Path) -> str:
-    try:
-        credits = json.loads(credits_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return ""
-    if not isinstance(credits, dict):
-        return ""
-    candidate = area_slug
-    seen: set[str] = set()
-    for _ in range(4):
-        if not candidate or candidate in seen:
-            break
-        seen.add(candidate)
-        value = credits.get(candidate)
-        if isinstance(value, str) and value.strip():
-            return value.strip()
-        candidate = AREA_PARENT.get(candidate, "rochdale" if candidate != "rochdale" else "")
-    return ""
 
 
 def _folder_credit(stem: str, directory: Path) -> str:
@@ -446,12 +302,9 @@ def compose_story_card(
     area: Any,
     category: Any,
     out_path: Path,
-    areas_dir: Path = AREAS_DIR,
-    credits_path: Path = CREDITS_PATH,
     story_text: str = "",
-    places_dir: Path = PLACES_DIR,
     people_dir: Path = PEOPLE_DIR,
-    topics_dir: Path = TOPICS_DIR,
+    cards_dir: Path = CARDS_DIR,
 ) -> tuple[str, str]:
     """Render the card to out_path. Returns (relative_path, image_credit)."""
     area_slug = _area_slug(area)
@@ -459,34 +312,29 @@ def compose_story_card(
     accent, cat_label = CATEGORY_STYLE[cat_key]
     area_name = _pretty_area(area)
 
-    # Most specific first. A person named in the headline is the subject of the
-    # story, so their photograph beats any location; a photo of the actual place
-    # named in the story then beats a generic photo of the area.
+    # Only two sources of photograph now: one you supplied for this story, or a
+    # portrait of someone named in the headline. Automatic matching against a
+    # stock library of places has been removed - it produced photographs that
+    # did not relate to their stories, and the same picture across unrelated
+    # ones, which is worse than no photograph at all.
     photo = None
     credit = "Rochdale Daily"
     if cat_key not in NO_PHOTO_CATEGORIES:
-        # Seeded on the output filename, which is the article slug, so a given
-        # story keeps the same picture across re-renders while neighbouring
-        # stories draw different ones from the same pool.
-        seed = out_path.stem
+        # An image you supplied for this specific story, if there is one. Named
+        # after the article slug, so there is no matching to get wrong.
+        slug = re.sub(r"-area-category-card$", "", out_path.stem)
+        for suffix in _IMAGE_SUFFIXES:
+            candidate = cards_dir / f"{slug}{suffix}"
+            if candidate.is_file():
+                photo = candidate
+                credit = _folder_credit(slug, cards_dir) or "Rochdale Daily"
+                break
 
-        person_match = find_person_photo(title, people_dir)
-        if person_match is not None:
-            photo = person_match[0]
-            credit = _folder_credit(photo.stem, people_dir) or "Rochdale Daily"
         if photo is None:
-            place_match = find_place_photo(f"{title} {story_text}", places_dir)
-            if place_match is not None:
-                photo = place_match[0]
-                credit = _folder_credit(photo.stem, places_dir) or "Rochdale Daily"
-        if photo is None:
-            photo = find_topic_photo(cat_key, seed, topics_dir)
-            if photo is not None:
-                credit = _folder_credit(photo.stem, topics_dir) or "Rochdale Daily"
-        if photo is None:
-            photo = _area_photo(area_slug, areas_dir, seed)
-            if photo is not None:
-                credit = _photo_credit(photo.stem, credits_path) or "Rochdale Daily"
+            person_match = find_person_photo(title, people_dir)
+            if person_match is not None:
+                photo = person_match[0]
+                credit = _folder_credit(photo.stem, people_dir) or "Rochdale Daily"
 
     if photo is not None:
         background = _photo_background(photo)
