@@ -2011,8 +2011,50 @@ def cache_source_image(
 def source_image(
     candidate: Candidate,
     category: str,
+    title: str = "",
 ) -> tuple[str, str, str, str]:
-    return cache_source_image(candidate, category)
+    image_url, image_credit, image_credit_url, original_image_url = (
+        cache_source_image(candidate, category)
+    )
+
+    # A real, credited publisher image was cached: keep it, it is the actual
+    # subject of the story and beats a library photo.
+    if image_credit_url:
+        return image_url, image_credit, image_credit_url, original_image_url
+
+    # Otherwise cache_source_image returned a category stock fallback
+    # (assets/img/stock_<category>.jpg). Before accepting it, check whether the
+    # headline names something we hold a curated photo for. If so, that photo is
+    # a better, deliberate illustration than generic stock art. This is not an
+    # extra fallback tier: it only ever replaces the stock image with a photo
+    # the editor placed and named, and only when the headline actually matches.
+    # A headline that names nothing in the library keeps the stock fallback
+    # exactly as before.
+    from story_image import (  # local import: avoids a module-level cycle
+        CARDS_DIR,
+        NO_PHOTO_CATEGORIES,
+        _folder_credit,
+        find_library_photo,
+    )
+
+    cat_key = str(category or "").casefold()
+    if cat_key in NO_PHOTO_CATEGORIES:
+        return image_url, image_credit, image_credit_url, original_image_url
+
+    match = find_library_photo(title, make_slug(title), cat_key, CARDS_DIR)
+    if match is None:
+        return image_url, image_credit, image_credit_url, original_image_url
+
+    library_path = str(match.as_posix())
+    library_credit = (
+        _folder_credit(re.sub(r"-\d+$", "", match.stem), CARDS_DIR)
+        or _folder_credit(match.stem, CARDS_DIR)
+        or "Rochdale Daily"
+    )
+    # image_credit_url stays empty: a curated library photo is our own
+    # illustration, not a reused publisher image, so it must not be tagged
+    # publisher-image-cached-and-credited downstream.
+    return library_path, library_credit, "", original_image_url
 
 
 POSTCODE_RE = re.compile('\\b[A-Z]{1,2}\\d[A-Z\\d]?\\s*\\d[A-Z]{2}\\b', re.IGNORECASE)
@@ -2370,7 +2412,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         except Exception as exc:
             log.debug('Image backfill failed for %s: %s', candidate.source_url, exc)
 
-    image_url, image_credit, image_credit_url, original_image_url = source_image(candidate, category)
+    image_url, image_credit, image_credit_url, original_image_url = source_image(candidate, category, title)
     source_urls = [candidate.source_url] + [item['url'] for item in candidate.related_sources[:11] if item.get('url')]
     source_names = [candidate.source_name] + [item['name'] for item in candidate.related_sources[:11] if item.get('name')]
     legal_disclaimer = strip_markdown(draft.get('legal_disclaimer')) or default_legal_disclaimer(sensitive)
@@ -2398,6 +2440,8 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'source_image_reuse_status': (
             'publisher-image-cached-and-credited'
             if image_credit_url
+            else 'curated-library-photo'
+            if image_url.startswith('assets/img/cards/')
             else 'category-fallback'
         ),
         'event_start_at': candidate.event_start_at,
