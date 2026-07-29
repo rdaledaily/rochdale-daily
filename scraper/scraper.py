@@ -65,7 +65,7 @@ from playwright.sync_api import sync_playwright
 from search_queries import build_search_query_specs
 from google_news_resolver import is_google_wrapper, resolve_wrappers
 from locations import LOCATION_BY_SLUG
-from food_hygiene import fetch_current_low_ratings, roundup_article_fields
+from food_hygiene import fetch_current_low_ratings, roundup_article_fields, roundup_paragraphs
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_FILE = ROOT / 'articles.json'
 LOG_FILE = ROOT / 'scraper' / 'scraper.log'
@@ -281,6 +281,11 @@ class Candidate:
     event_end_at: str = ''
     event_location: str = ''
     source_kind: str = 'article'
+    # For trusted structured-data sources (e.g. the FSA food-hygiene roundup)
+    # whose prose is generated deterministically from published facts and must
+    # be published verbatim, never sent through the AI rewrite. Absent for every
+    # normal source. When present it is {'title','excerpt','paragraphs'}.
+    deterministic_draft: dict | None = None
     related_sources: list[dict[str, str]] = field(default_factory=list)
     social_context: list[dict[str, Any]] = field(default_factory=list)
     story_key: str = ''
@@ -1726,20 +1731,28 @@ def collect_food_hygiene_candidates() -> list[Candidate]:
         # exists for a manual run, not for publishing an article saying so.
         return []
 
-    fields = roundup_article_fields(records)
     now = datetime.now(timezone.utc)
+    detailed = roundup_paragraphs(records, now=now)
     # A stable per-month identity, so the roundup is published once a month
     # rather than re-offered on every run and deduplicated by chance.
     period = now.strftime('%Y-%m')
     return [Candidate(
         source_name='Food Standards Agency',
         source_url=f'https://ratings.food.gov.uk/open-data#rochdale-{period}',
-        source_title=fields['title'][:160],
-        source_summary=fields['summary'][:900],
+        source_title=detailed['title'][:160],
+        source_summary=detailed['summary'][:900],
         source_published_at=iso_utc(now),
         area='rochdale',
         category='health',
-        source_body_excerpt=fields['body'][:3500],
+        # Not clipped: the full deterministic list is carried on the draft below
+        # and published verbatim, so nothing here needs to fit a rewrite budget.
+        source_body_excerpt=detailed['summary'][:900],
+        source_kind='food_hygiene_roundup',
+        deterministic_draft={
+            'title': detailed['title'],
+            'excerpt': detailed['summary'],
+            'paragraphs': detailed['paragraphs'],
+        },
     )]
 
 def candidate_related_record(candidate: Candidate) -> dict[str, str]:
@@ -2306,25 +2319,39 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     ))[:32000]
     sensitive = is_sensitive(source_text, candidate.category)
 
-    if client is None:
-        log.error('OpenAI is unavailable; refusing to publish generic filler for %s', candidate.source_url)
-        return None
+    # Trusted structured-data source: the draft was generated deterministically
+    # from published facts (the FSA roundup) and must be published verbatim, not
+    # rewritten. Sending a list of 60+ named businesses tied to hygiene scores
+    # through the model risks a name, address or rating being altered - a
+    # defamation exposure - and needlessly drops entries. So it bypasses the
+    # rewrite entirely, keeps every business, and skips the 8-paragraph cap that
+    # exists to keep rewritten articles tight.
+    deterministic = candidate.deterministic_draft
+    if deterministic:
+        draft = deterministic
+        title = strip_markdown(draft.get('title'))[:160]
+        excerpt = strip_markdown(draft.get('excerpt'))[:360]
+        paragraphs = [strip_markdown(item) for item in draft.get('paragraphs', []) if strip_markdown(item)]
+    else:
+        if client is None:
+            log.error('OpenAI is unavailable; refusing to publish generic filler for %s', candidate.source_url)
+            return None
 
-    draft = request_grounded_draft(
-        candidate,
-        client,
-        source_records,
-        social_context,
-        source_text,
-        sensitive,
-    )
-    if draft is None:
-        log.warning('No coherent grounded rewrite could be produced; skipped: %s', candidate.source_url)
-        return None
+        draft = request_grounded_draft(
+            candidate,
+            client,
+            source_records,
+            social_context,
+            source_text,
+            sensitive,
+        )
+        if draft is None:
+            log.warning('No coherent grounded rewrite could be produced; skipped: %s', candidate.source_url)
+            return None
 
-    title = strip_markdown(draft.get('title'))[:160]
-    excerpt = strip_markdown(draft.get('excerpt'))[:360]
-    paragraphs = [strip_markdown(item) for item in draft.get('paragraphs', []) if strip_markdown(item)][:8]
+        title = strip_markdown(draft.get('title'))[:160]
+        excerpt = strip_markdown(draft.get('excerpt'))[:360]
+        paragraphs = [strip_markdown(item) for item in draft.get('paragraphs', []) if strip_markdown(item)][:8]
     community_reaction = strip_markdown(draft.get('community_reaction', ''))[:500]
     social_context_used = bool(draft.get('social_context_used'))
     draft_category = str(draft.get('category') or '')
