@@ -28,7 +28,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import urljoin, urlparse
+from urllib.parse import quote, urljoin, urlparse, urlsplit, urlunsplit
 from urllib.request import Request, build_opener
 
 from bs4 import BeautifulSoup
@@ -213,6 +213,41 @@ def is_http_url(value: Any) -> bool:
     return value.startswith("https://") or value.startswith("http://")
 
 
+def safe_candidate_url(page_url: str, value: str) -> str:
+    """Resolve a scraped image reference to a fetchable absolute URL, or "".
+
+    Scraped pages sometimes carry image references that are not valid URLs -
+    e.g. a relative search link like ``/th?q=One for the Pot: A Show`` with raw
+    spaces. urljoin keeps the spaces, and Python's HTTP client then raises
+    InvalidURL ("URL can't contain control characters"), which previously
+    crashed the whole card re-render job. This resolves the reference and
+    percent-encodes any unsafe characters left in the path and query so the
+    result is always something the HTTP client will accept. Anything that still
+    is not an http(s) URL returns "" so the caller can drop it rather than fetch
+    it.
+    """
+    joined = urljoin(page_url, html.unescape(value or "")).strip()
+    if not (joined.startswith("http://") or joined.startswith("https://")):
+        return ""
+    try:
+        parts = urlsplit(joined)
+    except ValueError:
+        return ""
+    if not parts.netloc:
+        return ""
+    # Re-encode path and query, leaving already-valid characters untouched.
+    # `safe` keeps the URL delimiters so a normal URL is unchanged; only raw
+    # spaces and control characters get percent-encoded.
+    path = quote(parts.path, safe="/%:@!$&'()*+,;=~-._")
+    query = quote(parts.query, safe="/%:@!$&'()*+,;=~-._?")
+    cleaned = urlunsplit(
+        (parts.scheme, parts.netloc, path, query, "")
+    )
+    if any(ch.isspace() or ord(ch) < 0x20 for ch in cleaned):
+        return ""
+    return cleaned
+
+
 def is_placeholder_path(value: Any) -> bool:
     value = clean(value).lower()
     return not value or any(marker in value for marker in PLACEHOLDER_MARKERS)
@@ -306,6 +341,12 @@ def request_bytes(
     max_bytes: int,
     accept: str,
 ) -> tuple[bytes, str, str]:
+    # Defensive: an unencoded URL (raw spaces/control chars) makes the HTTP
+    # client raise InvalidURL, which is a ValueError. Callers already catch
+    # ValueError, but raising a clean one here means no path can escape as an
+    # uncaught crash the way a malformed scraped image URL once did.
+    if any(ch.isspace() or ord(ch) < 0x20 for ch in url):
+        raise ValueError(f"refusing to fetch URL with control characters: {url!r}")
     request = Request(
         url,
         headers={
@@ -401,9 +442,12 @@ def json_ld_images(soup: BeautifulSoup, page_url: str) -> list[Candidate]:
 
             for value in values:
                 if value:
+                    safe_url = safe_candidate_url(page_url, value)
+                    if not safe_url:
+                        continue
                     result.append(
                         Candidate(
-                            url=urljoin(page_url, html.unescape(value)),
+                            url=safe_url,
                             method="json-ld",
                             credit_url=page_url,
                         )
@@ -423,9 +467,12 @@ def page_candidates(page: bytes, page_url: str) -> list[Candidate]:
     ):
         value = meta_content(soup, **{kind: key})
         if value:
+            safe_url = safe_candidate_url(page_url, value)
+            if not safe_url:
+                continue
             result.append(
                 Candidate(
-                    url=urljoin(page_url, html.unescape(value)),
+                    url=safe_url,
                     method=key,
                     credit_url=page_url,
                 )
@@ -448,9 +495,12 @@ def page_candidates(page: bytes, page_url: str) -> list[Candidate]:
                 or clean(image.get("src"))
             )
             if value:
+                safe_url = safe_candidate_url(page_url, value)
+                if not safe_url:
+                    continue
                 result.append(
                     Candidate(
-                        url=urljoin(page_url, html.unescape(value)),
+                        url=safe_url,
                         method=selector,
                         credit_url=page_url,
                     )
