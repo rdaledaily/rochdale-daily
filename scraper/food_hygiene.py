@@ -356,6 +356,100 @@ def roundup_article_fields(
     return {"title": title, "summary": summary, "body": body}
 
 
+def roundup_paragraphs(
+    records: list[dict[str, Any]],
+    *,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """A complete, deterministic roundup as a list of paragraphs.
+
+    Unlike ``roundup_article_fields``, this lists EVERY business - no cap - and
+    breaks the output into paragraphs suitable for direct publication without an
+    AI rewrite. Every sentence restates a published FSA fact; nothing is
+    inferred, so the list can be published verbatim with no risk of a name,
+    address or rating being altered. That safety is the whole reason this
+    bypasses the model: a list of named businesses tied to hygiene scores is not
+    something to paraphrase.
+    """
+    now = now or datetime.now(timezone.utc)
+    as_at = now.strftime("%-d %B %Y")
+    total = len(records)
+    if not total:
+        fields = roundup_article_fields(records, now=now)
+        return {
+            "title": fields["title"],
+            "summary": fields["summary"],
+            "paragraphs": [fields["body"]],
+        }
+
+    zeros = [r for r in records if r["rating"] == 0]
+    ones = [r for r in records if r["rating"] == 1]
+
+    def _line(record: dict[str, Any]) -> str:
+        date_text = record["rating_date"].strftime("%-d %B %Y")
+        business_type = _type_prose(record.get("business_type"))
+        return (
+            f"{record['name']}, a {business_type} at {record['address']}, "
+            f"was rated {record['rating']} following an inspection on {date_text}."
+        )
+
+    counts = []
+    if zeros:
+        counts.append(_count_phrase(len(zeros), 0, "urgent improvement is necessary"))
+    if ones:
+        counts.append(_count_phrase(len(ones), 1, "major improvement is necessary"))
+    counts_sentence = "; ".join(
+        phrase if index == 0 else phrase[0].lower() + phrase[1:]
+        for index, phrase in enumerate(counts)
+    ) + "."
+
+    title = (
+        f"{total} Rochdale food business{'es' if total != 1 else ''} "
+        f"currently rated 0 or 1 for hygiene"
+    )
+    opener = _NUMBER_WORDS.get(total, str(total))
+    plural = "es" if total != 1 else ""
+    holds = "hold" if total != 1 else "holds"
+    summary = (
+        f"{opener} food business{plural} in the Rochdale "
+        f"borough currently {holds} a food hygiene rating of 0 or 1, according to "
+        f"Food Standards Agency records checked on {as_at}. " + counts_sentence
+    )
+
+    paragraphs: list[str] = [
+        f"{opener} food business{plural} in the Rochdale borough currently "
+        f"{holds} a food hygiene rating of 0 or 1. Food Standards Agency records "
+        f"were checked on {as_at}. " + counts_sentence
+    ]
+
+    # Every business rated 0, one per paragraph-block, then every business rated
+    # 1. One sentence each keeps each business cleanly separable and prevents any
+    # two from being conflated.
+    if zeros:
+        paragraphs.append(
+            "Businesses rated 0, where urgent improvement is necessary:"
+        )
+        paragraphs.extend(_line(r) for r in zeros)
+    if ones:
+        paragraphs.append(
+            "Businesses rated 1, where major improvement is necessary:"
+        )
+        paragraphs.extend(_line(r) for r in ones)
+
+    paragraphs.append(
+        "Under the national Food Hygiene Rating Scheme, ratings range from 0, "
+        "where urgent improvement is necessary, to 5, meaning hygiene standards "
+        "are very good. The rating reflects the standards found on the date of "
+        "the inspection and does not reflect the quality of the food. Businesses "
+        "have the right to appeal a rating, to publish a reply alongside it, and "
+        "to request a re-inspection once improvements have been made, so a rating "
+        "listed here may since have changed. Each business's current rating is on "
+        "the Food Standards Agency website."
+    )
+
+    return {"title": title, "summary": summary, "paragraphs": paragraphs}
+
+
 def rating_article_fields(record: dict[str, Any]) -> dict[str, str]:
     """Deterministic title, summary and body for one low-rating record.
 
