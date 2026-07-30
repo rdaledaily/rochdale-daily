@@ -26,6 +26,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
@@ -204,6 +205,15 @@ def resolve_wrappers(
         return resolved
 
     succeeded = 0
+    # Overall wall-clock budget for the whole resolution pass. This is what lets
+    # the count cap (MAX_NEW_PER_RUN) be set high to drain a big wrapper backlog:
+    # resolution runs flat-out recovering as many wrappers as it can, then stops
+    # cleanly when the budget is spent, instead of either being throttled to a
+    # tiny count or running unbounded and blowing the pipeline's timeout. Set to
+    # 0 to disable the budget (count cap only).
+    budget_seconds = float(os.getenv("GOOGLE_NEWS_RESOLVE_BUDGET_SECONDS", "480"))
+    deadline = (time.monotonic() + budget_seconds) if budget_seconds > 0 else None
+    stopped_early = False
     try:
         factory = browser_factory or sync_playwright
         with factory() as playwright:
@@ -220,6 +230,9 @@ def resolve_wrappers(
             page = context.new_page()
             page.set_default_timeout(NAV_TIMEOUT_MS)
             for url in pending:
+                if deadline is not None and time.monotonic() >= deadline:
+                    stopped_early = True
+                    break
                 final = ""
                 try:
                     final = _resolve_one(page, url)
@@ -231,6 +244,12 @@ def resolve_wrappers(
                     succeeded += 1
             context.close()
             browser.close()
+        if stopped_early and logger:
+            logger.info(
+                "Google News resolution hit its %.0fs budget after %d link(s); "
+                "remaining wrappers will resolve on later runs (cache persists).",
+                budget_seconds, succeeded,
+            )
     except Exception as exc:
         if logger:
             logger.warning("Google News browser resolution stopped early: %s", exc)
