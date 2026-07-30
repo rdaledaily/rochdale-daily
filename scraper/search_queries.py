@@ -410,6 +410,33 @@ DISCOVERY_TOPICS = (
     ),
 )
 
+# Borough-wide civic and environmental services beat. Related issues are grouped
+# into single OR-queries so the whole council-services beat fits inside the
+# sharded pool without any topic falling off the end of a shard. Each query
+# searches all the borough's towns; they join the sharded bulk pool, so the full
+# set is covered every hour without any single run exceeding Google News' burst
+# threshold. Every council-service topic residents report is represented here.
+TOWNS = "Rochdale OR Heywood OR Middleton OR Littleborough OR Whitworth OR Milnrow OR Wardle"
+CIVIC_SERVICE_TOPICS = (
+    ("civic-waste-dumping", "crime", f'({TOWNS}) ("fly-tipping" OR "fly tipping" OR "illegal dumping" OR "business waste" OR "trade waste" OR landfill)'),
+    ("civic-litter-needles", "crime", f'({TOWNS}) ("litter pick" OR "litter picking" OR "drug litter" OR "discarded needles" OR "syringe removal" OR "needle removal")'),
+    ("civic-dog-fouling", "crime", f'({TOWNS}) ("dog fouling" OR "dog mess" OR "stray dog" OR "lost dog")'),
+    ("civic-graffiti-asb", "crime", f'({TOWNS}) (graffiti OR "antisocial behaviour" OR "anti-social behaviour" OR ASB)'),
+    ("civic-fireworks-bonfires", "crime", f'({TOWNS}) (fireworks OR "firework nuisance" OR bonfire OR "smoke nuisance")'),
+    ("civic-vegetation", "environment", f'({TOWNS}) ("grass cutting" OR "grass verges" OR "overgrown hedge" OR "overgrown hedges" OR weeds OR "weed spraying" OR "untidy garden" OR "overgrown garden")'),
+    ("civic-trees", "environment", f'({TOWNS}) ("tree management" OR "fallen tree" OR "tree felling" OR "dangerous tree")'),
+    ("civic-gritting-winter", "traffic", f'({TOWNS}) (gritting OR "road salt" OR "grit bin" OR "grit bins" OR "winter service" OR gritters)'),
+    ("civic-highway-spills", "traffic", f'({TOWNS}) ("spill on the highway" OR "oil spill" OR "highway spill" OR "road spillage")'),
+    ("civic-school-parking", "traffic", f'({TOWNS}) ("parking outside school" OR "school parking" OR "parking outside schools")'),
+    ("civic-contaminated-land", "environment", f'({TOWNS}) ("contaminated land" OR "environmental permit" OR "smoke control" OR "clean air")'),
+    ("civic-dangerous-buildings", "environment", f'({TOWNS}) ("dangerous building" OR "dangerous structure" OR "unsafe building")'),
+    ("civic-asbestos", "environment", f'({TOWNS}) asbestos'),
+    ("civic-animal-health", "environment", f'({TOWNS}) ("animal health" OR livestock OR "animal welfare" OR "dead animal" OR "dead animals")'),
+    ("civic-rights-of-way", "environment", f'({TOWNS}) ("right of way" OR "public footpath" OR "rights of way")'),
+    ("civic-property-disputes", "environment", f'({TOWNS}) ("property damage" OR "neighbour dispute" OR "boundary dispute" OR "light nuisance" OR "light pollution")'),
+    ("civic-in-bloom", "community", f'({TOWNS}) ("in bloom" OR "Britain in Bloom" OR "borough in bloom")'),
+)
+
 OFFICIAL_GMP_QUERIES = (
     'site:gmp.police.uk/news/greater-manchester/news/news/ '
     '(Rochdale OR Heywood OR Middleton OR Littleborough)',
@@ -637,6 +664,15 @@ def build_search_query_specs(
             )
         )
 
+    for label, category, query in CIVIC_SERVICE_TOPICS:
+        bulk.append(
+            SearchQuery(
+                label=label,
+                query=query,
+                category=category,
+            )
+        )
+
     for category, query in CATEGORY_QUERIES:
         bulk.append(
             SearchQuery(
@@ -671,9 +707,25 @@ def build_search_query_specs(
             )
         )
 
+    # The shard must leave room for the always-on queries under the safe limit,
+    # or every shard's tail is chopped by the safe_limit truncation below - and
+    # because the pool is ordered, it is always the SAME tail positions that get
+    # cut, so those queries never run at all. Size the bulk slice to what remains
+    # after always_on.
     shard = councillor_shard_index(now)
-    shard_size = math.ceil(len(bulk) / 4) if bulk else 0
-    start = shard * shard_size
+    bulk_budget = max(1, GOOGLE_SEARCH_SAFE_LIMIT - len(always_on))
+    shard_size = min(math.ceil(len(bulk) / 4) if bulk else 0, bulk_budget)
+
+    # When the pool is larger than four shards of shard_size can hold in one
+    # hour, a fixed four-way split would leave the same overflow queries
+    # unreached forever. Rotate the whole window by hour so every query is
+    # covered across the day even if not every hour: the four quarter-hour
+    # shards still divide each hour, and the hourly offset walks the window
+    # through the parts of the pool that a single hour cannot reach.
+    hourly_cycle = max(1, math.ceil(len(bulk) / (shard_size * 4))) if shard_size else 1
+    hour_index = (now or datetime.now(timezone.utc)).hour % hourly_cycle
+    offset = hour_index * shard_size * 4
+    start = offset + shard * shard_size
     bulk_shard = bulk[start:start + shard_size] if shard_size else []
 
     specs = always_on + bulk_shard
