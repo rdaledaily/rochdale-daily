@@ -1,0 +1,133 @@
+name: Test Met Office key
+
+# One-off diagnostic. Confirms the METOFFICE_API_KEY secret works, works out
+# which auth header the gateway expects, and prints a sample payload so the
+# parser can be written against the real schema instead of the docs.
+#
+# Writes nothing. Delete this workflow once the weather panel is built.
+#
+# THE KEY IS NEVER PRINTED. It is read from the secret into an environment
+# variable, sent only as a request header, and never placed in a URL, a log
+# line or an error message.
+
+on:
+  workflow_dispatch:
+    inputs:
+      endpoint:
+        description: >-
+          Full endpoint URL from your DataHub subscription page
+          (Global daily spot). No key, no query string.
+        required: true
+        default: "https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/daily"
+      latitude:
+        description: "Latitude"
+        required: false
+        default: "53.6097"
+      longitude:
+        description: "Longitude"
+        required: false
+        default: "-2.1561"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Call the API
+        env:
+          METOFFICE_API_KEY: ${{ secrets.METOFFICE_API_KEY }}
+          ENDPOINT: ${{ inputs.endpoint }}
+          LAT: ${{ inputs.latitude }}
+          LON: ${{ inputs.longitude }}
+        run: |
+          python - <<'PY'
+          import json, os, re, sys
+          import requests
+
+          key = os.environ.get("METOFFICE_API_KEY", "")
+          if not key:
+              sys.exit("METOFFICE_API_KEY secret is not set or is empty. "
+                       "Check the name is exactly METOFFICE_API_KEY.")
+          print(f"Secret is present ({len(key)} characters). Value not shown.")
+
+          endpoint = os.environ["ENDPOINT"].strip()
+          if "?" in endpoint or "key" in endpoint.lower():
+              sys.exit("The endpoint input looks like it contains a query string "
+                       "or a key. Pass the bare URL only - a key in a URL ends up "
+                       "in logs and browser history.")
+
+          params = {"latitude": os.environ["LAT"], "longitude": os.environ["LON"]}
+
+          candidates = [
+              ("apikey", {"apikey": key}),
+              ("x-ibm-client-id", {"X-IBM-Client-Id": key}),
+              ("authorization-bearer", {"Authorization": f"Bearer {key}"}),
+          ]
+
+          payload = None
+          for label, headers in candidates:
+              headers = {**headers, "accept": "application/json"}
+              try:
+                  r = requests.get(endpoint, params=params, headers=headers, timeout=20)
+              except Exception as exc:
+                  print(f"  {label:<22} request failed: {type(exc).__name__}")
+                  continue
+              print(f"  {label:<22} HTTP {r.status_code}")
+              if r.status_code == 200:
+                  print(f"\nAUTHENTICATED using header: {label}")
+                  try:
+                      payload = r.json()
+                  except ValueError:
+                      print("Response was not JSON. First 300 chars:")
+                      print(r.text[:300])
+                  break
+
+          if payload is None:
+              print("\nNo header worked. If every attempt returned 401 or 403, the "
+                    "key is probably not subscribed to this API - check the "
+                    "subscription is Global Spot, not Blended Probabilistic. "
+                    "A 404 usually means the endpoint URL is wrong; copy it from "
+                    "your DataHub subscription page.")
+              sys.exit(1)
+
+          text = json.dumps(payload, indent=2)
+
+          emails = set(re.findall(r"[\w.+-]+@[\w-]+\.[\w.]+", text))
+          print(f"\nPayload size: {len(text)} characters")
+          if emails:
+              print(f"!! WARNING: {len(emails)} email-like string(s) in the payload. "
+                    f"Redact before sharing this output.")
+          else:
+              print("No email-like strings in the payload - safe to paste onwards.")
+
+          print("\n--- TOP-LEVEL KEYS ---")
+          print(list(payload) if isinstance(payload, dict) else type(payload).__name__)
+
+          feats = payload.get("features") if isinstance(payload, dict) else None
+          if isinstance(feats, list) and feats:
+              props = feats[0].get("properties", {})
+              print("\n--- feature[0].properties KEYS ---")
+              print(list(props))
+              series = props.get("timeSeries")
+              if isinstance(series, list) and series:
+                  print(f"\n--- timeSeries: {len(series)} entries ---")
+                  print("keys in entry[0]:")
+                  print(json.dumps(series[0], indent=2))
+
+          print("\n--- FULL PAYLOAD (first 6000 chars) ---")
+          print(text[:6000])
+          if len(text) > 6000:
+              print(f"\n... truncated, {len(text) - 6000} more characters")
+          PY
