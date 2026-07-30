@@ -2026,6 +2026,51 @@ def source_image(
     category: str,
     title: str = "",
 ) -> tuple[str, str, str, str]:
+    from story_image import (  # local import: avoids a module-level cycle
+        CARDS_DIR,
+        _folder_credit,
+        find_library_photo,
+    )
+
+    cat_key = str(category or "").casefold()
+
+    def library_match() -> tuple[str, str, str, str] | None:
+        """A curated photo the editor placed for this specific story, or None.
+
+        Named after the article slug (or a headline term) in assets/img/cards/.
+        image_credit_url stays empty: a curated library photo is our own
+        illustration, not a reused publisher image, so it must not be tagged
+        publisher-image-cached-and-credited downstream.
+        """
+        match = find_library_photo(
+            title, make_slug(title), cat_key, CARDS_DIR,
+            slug_only=(cat_key == "crime"),
+        )
+        if match is None:
+            return None
+        library_path = str(match.as_posix())
+        library_credit = (
+            _folder_credit(re.sub(r"-\d+$", "", match.stem), CARDS_DIR)
+            or _folder_credit(match.stem, CARDS_DIR)
+            or "Rochdale Daily"
+        )
+        return library_path, library_credit, "", ""
+
+    # Crime is handled deliberately and separately. A crime story may carry a
+    # photo the editor has cleared and placed themselves (e.g. a GMP-issued
+    # appeal image saved into assets/img/cards/ under the slug) - that is used.
+    # But a crime story must NEVER be given a scraped publisher image
+    # automatically: a copyrighted press photo, or a photo of a named
+    # individual, attached without editorial review is the exact exposure the
+    # policy guards against. So crime skips cache_source_image entirely and
+    # falls back to the category stock card when no curated photo exists.
+    if cat_key == "crime":
+        curated = library_match()
+        if curated is not None:
+            return curated
+        fallback = CATEGORY_STOCK_IMAGES.get(category, CATEGORY_STOCK_IMAGES["news"])
+        return fallback, "Rochdale Daily category image", "", ""
+
     image_url, image_credit, image_credit_url, original_image_url = (
         cache_source_image(candidate, category)
     )
@@ -2035,39 +2080,18 @@ def source_image(
     if image_credit_url:
         return image_url, image_credit, image_credit_url, original_image_url
 
-    # Otherwise cache_source_image returned a category stock fallback
-    # (assets/img/stock_<category>.jpg). Before accepting it, check whether the
-    # headline names something we hold a curated photo for. If so, that photo is
-    # a better, deliberate illustration than generic stock art. This is not an
-    # extra fallback tier: it only ever replaces the stock image with a photo
-    # the editor placed and named, and only when the headline actually matches.
-    # A headline that names nothing in the library keeps the stock fallback
-    # exactly as before.
-    from story_image import (  # local import: avoids a module-level cycle
-        CARDS_DIR,
-        NO_PHOTO_CATEGORIES,
-        _folder_credit,
-        find_library_photo,
-    )
-
-    cat_key = str(category or "").casefold()
-    if cat_key in NO_PHOTO_CATEGORIES:
-        return image_url, image_credit, image_credit_url, original_image_url
-
-    match = find_library_photo(title, make_slug(title), cat_key, CARDS_DIR)
-    if match is None:
-        return image_url, image_credit, image_credit_url, original_image_url
-
-    library_path = str(match.as_posix())
-    library_credit = (
-        _folder_credit(re.sub(r"-\d+$", "", match.stem), CARDS_DIR)
-        or _folder_credit(match.stem, CARDS_DIR)
-        or "Rochdale Daily"
-    )
-    # image_credit_url stays empty: a curated library photo is our own
-    # illustration, not a reused publisher image, so it must not be tagged
-    # publisher-image-cached-and-credited downstream.
-    return library_path, library_credit, "", original_image_url
+    # Otherwise cache_source_image returned a category stock fallback. Before
+    # accepting it, check whether the headline names something we hold a curated
+    # photo for. If so, that photo is a better, deliberate illustration than
+    # generic stock art. This is not an extra fallback tier: it only replaces
+    # the stock image with a photo the editor placed and named, and only when
+    # the headline actually matches. A headline that names nothing in the
+    # library keeps the stock fallback exactly as before.
+    curated = library_match()
+    if curated is not None:
+        library_path, library_credit, _, _ = curated
+        return library_path, library_credit, "", original_image_url
+    return image_url, image_credit, image_credit_url, original_image_url
 
 
 POSTCODE_RE = re.compile('\\b[A-Z]{1,2}\\d[A-Z\\d]?\\s*\\d[A-Z]{2}\\b', re.IGNORECASE)
