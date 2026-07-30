@@ -52,10 +52,27 @@ FEED_HEADERS = {
     "user-agent": "RochdaleDaily/1.0 (+https://rochdaledaily.co.uk)",
 }
 
-# Same fail-fast posture as the FSA collector: 20 ward feeds must never be able
-# to stall a pipeline run whose whole budget is about 20 minutes.
-PER_REQUEST_TIMEOUT = 8
-OVERALL_DEADLINE_SECONDS = 60
+# Same fail-fast posture as the FSA collector, but sized for the actual work:
+# 20 ward feeds fetched sequentially, each allowed PER_REQUEST_TIMEOUT.
+#
+# The first version set this to 60s, which was simply wrong arithmetic - the
+# budget ran out after about ten wards and the remaining ten were reported as
+# "unavailable" without ever being requested. The tell was that the failures
+# were always a contiguous tail of the ward list, and that the number of
+# failures moved between runs while the ward list did not.
+#
+# Worst case is 20 x 10s = 200s, so the budget must exceed that or it will
+# silently truncate again on a slow day. 240s of a ~20 minute pipeline run is
+# acceptable for a collector that runs once a week.
+PER_REQUEST_TIMEOUT = 10
+OVERALL_DEADLINE_SECONDS = 240
+
+# FixMyStreet RSS feeds return a bounded number of recent items. If a busy
+# ward's feed is full AND its oldest item still falls inside the requested
+# window, then reports older than that item exist but were never served - the
+# count for that ward is a floor, not a total. fetch_ward_counts flags this per
+# ward so a truncated feed can never be published as a complete figure.
+SUSPECTED_FEED_ITEM_CAP = 20
 
 
 class _FetchDeadlineReached(Exception):
@@ -237,10 +254,11 @@ def fetch_ward_counts(
           'window_days': int,
           'as_at': datetime,
           'total': int,
-          'wards': {ward_slug: {'label','area','count',
-                                'topics': Counter}},
+          'wards': {ward_slug: {'label','area','count','topics'}},
           'topics': Counter,
           'wards_unavailable': [ward_slug, ...],
+          'diagnostics': {ward_slug: {...}},
+          'truncated_wards': [ward_slug, ...],
         }
 
     A ward whose feed fails is recorded in wards_unavailable and excluded from
@@ -248,20 +266,34 @@ def fetch_ward_counts(
     are different facts, and publishing the first as the second would put a
     wrong number in an article. The caller refuses to publish when any ward is
     missing - see collect_street_report_candidates in scraper.py.
+
+    ``diagnostics`` carries, per ward, why it failed and what its feed actually
+    contained. The first version of this function reported only that a ward was
+    unavailable, which made a budget-exhaustion bug look like ten dead feeds.
     """
     now = now or datetime.now(timezone.utc)
     cutoff = now - timedelta(days=days)
-    deadline = (time.monotonic() + overall_timeout) if overall_timeout else None
+    started = time.monotonic()
+    deadline = (started + overall_timeout) if overall_timeout else None
 
     wards: dict[str, Any] = {}
     unavailable: list[str] = []
+    diagnostics: dict[str, Any] = {}
+    truncated: list[str] = []
     topic_totals: Counter = Counter()
     total = 0
 
     for ward_slug, (label, area) in WARDS.items():
         if deadline is not None and time.monotonic() >= deadline:
             unavailable.append(ward_slug)
+            diagnostics[ward_slug] = {
+                "status": "skipped",
+                "reason": "overall fetch budget exhausted before this ward was tried",
+                "elapsed_at_skip": round(time.monotonic() - started, 1),
+            }
             continue
+
+        request_started = time.monotonic()
         try:
             response = get(
                 _ward_feed_url(ward_slug),
@@ -270,11 +302,18 @@ def fetch_ward_counts(
             )
             response.raise_for_status()
             items = parse_feed(response.text)
-        except Exception:
+        except Exception as exc:
             unavailable.append(ward_slug)
+            diagnostics[ward_slug] = {
+                "status": "error",
+                "reason": f"{type(exc).__name__}: {exc}",
+                "seconds": round(time.monotonic() - request_started, 1),
+            }
             continue
 
+        dated = [entry["published_at"] for entry in items if entry["published_at"]]
         ward_topics: Counter = Counter()
+        unmatched_samples: list[str] = []
         ward_count = 0
         for entry in items:
             published = entry["published_at"]
@@ -287,12 +326,37 @@ def fetch_ward_counts(
             if topic:
                 ward_topics[topic] += 1
                 topic_totals[topic] += 1
+            elif len(unmatched_samples) < 5:
+                unmatched_samples.append(entry["text"])
+
+        oldest = min(dated) if dated else None
+        newest = max(dated) if dated else None
+
+        # A full feed whose oldest item is still inside the window means older
+        # reports exist that the feed never served. The ward count is a floor.
+        is_truncated = bool(
+            len(items) >= SUSPECTED_FEED_ITEM_CAP
+            and oldest is not None
+            and oldest > cutoff
+        )
+        if is_truncated:
+            truncated.append(ward_slug)
 
         wards[ward_slug] = {
             "label": label,
             "area": area,
             "count": ward_count,
             "topics": ward_topics,
+        }
+        diagnostics[ward_slug] = {
+            "status": "ok",
+            "seconds": round(time.monotonic() - request_started, 1),
+            "items_in_feed": len(items),
+            "items_in_window": ward_count,
+            "feed_oldest": oldest.isoformat() if oldest else None,
+            "feed_newest": newest.isoformat() if newest else None,
+            "truncated": is_truncated,
+            "unmatched_samples": unmatched_samples,
         }
         total += ward_count
 
@@ -303,6 +367,9 @@ def fetch_ward_counts(
         "wards": wards,
         "topics": topic_totals,
         "wards_unavailable": unavailable,
+        "diagnostics": diagnostics,
+        "truncated_wards": truncated,
+        "elapsed_seconds": round(time.monotonic() - started, 1),
     }
 
 
