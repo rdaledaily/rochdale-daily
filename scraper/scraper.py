@@ -513,6 +513,24 @@ def source_is_denied(source_name: str='', source_url: str='') -> bool:
 ROCHDALE_TRAFFIC_AREA_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (('heywood', ('\\bm62\\s+(?:junction|j)\\s*19\\b', '\\bpilsworth road\\b', "\\bqueen'?s park road\\b")), ('rochdale', ('\\bm62\\s+(?:junction|j)\\s*20\\b', '\\ba627\\s*\\(m\\)\\b', '\\bedinburgh way\\b', '\\broch valley way\\b', '\\bmilnrow road\\b', '\\bsandbrook park\\b')), ('milnrow', ('\\bm62\\s+(?:junction|j)\\s*21\\b', '\\belizabethan way\\b')), ('middleton', ('\\bmanchester new road\\b', '\\ba664\\b.{0,100}\\bmiddleton\\b', '\\bmiddleton\\b.{0,100}\\ba664\\b')), ('littleborough', ('\\bhare hill road\\b', '\\ba58\\b.{0,100}\\blittleborough\\b', '\\blittleborough\\b.{0,100}\\ba58\\b')))
 TRAFFIC_CONTEXT_RE = re.compile('\\b(?:traffic|collision|crash|incident|roadworks|road work|road closed|road closure|closed|closure|lane closed|lane closure|carriageway|congestion|delay|delays|diversion|temporary traffic lights|motorway)\\b', flags=re.IGNORECASE)
 
+# A live traffic page carries standing furniture even when nothing is wrong -
+# "check for updates before setting out", "speed cameras noted on the map",
+# "traffic incidents have been reported". That furniture matches the generic
+# words in TRAFFIC_CONTEXT_RE ("traffic", "incident") and used to be published
+# as an article that announced incidents and then named none. A real incident
+# instead names something concrete: a specific road, a collision, a closure, a
+# queue. This pattern matches only those concrete terms, so a block with zero
+# hits is boilerplate and must not become a story. Deliberately excludes the
+# bare words "traffic" and "incident", which the empty page always contains.
+TRAFFIC_INCIDENT_SUBSTANCE_RE = re.compile(
+    '\\b(?:collision|crash|roadworks|road work|road closed|road closure|'
+    'lane closed|lane closure|carriageway|congestion|queue|queueing|queuing|'
+    'delay|delays|diversion|temporary traffic lights|broken[- ]down|'
+    'overturned|jack[- ]?knifed|obstruction|flooding|'
+    'm62|a627|a664|a58|junction\\s*\\d|j\\d{1,2})\\b',
+    flags=re.IGNORECASE,
+)
+
 def rochdale_traffic_area(text: str) -> str:
     plain = normalise_ws(text)
     if not TRAFFIC_CONTEXT_RE.search(plain):
@@ -1323,6 +1341,15 @@ def collect_live_page_candidates() -> list[Candidate]:
                     break
         for block in blocks[:max_blocks]:
             if not source_text_is_local(block, source['name'], final_url, trusted_local):
+                continue
+            # A live traffic block with no concrete incident (no road, closure,
+            # collision, queue...) is the page's standing furniture on a quiet
+            # day. Publishing it produces an article that announces incidents
+            # and names none. Drop it: no incidents means no traffic story, not
+            # a hollow one. Only applied to the traffic source; transport and
+            # weather live blocks carry different, legitimate vocabulary.
+            if source.get('category') == 'traffic' and not TRAFFIC_INCIDENT_SUBSTANCE_RE.search(block):
+                log.info('Traffic live block has no concrete incident; skipped as boilerplate: %s', block[:80])
                 continue
             area = source_text_area(block, source['default_area'], source['name'], final_url, trusted_local)
             if not area:
