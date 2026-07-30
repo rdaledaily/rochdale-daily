@@ -2071,7 +2071,7 @@ def source_image(
         """
         match = find_library_photo(
             title, make_slug(title), cat_key, CARDS_DIR,
-            slug_only=(cat_key == "crime"),
+            slug_only=False,
         )
         if match is None:
             return None
@@ -2084,13 +2084,17 @@ def source_image(
         return library_path, library_credit, "", ""
 
     # Crime is handled deliberately and separately. A crime story may carry a
-    # photo the editor has cleared and placed themselves (e.g. a GMP-issued
-    # appeal image saved into assets/img/cards/ under the slug) - that is used.
-    # But a crime story must NEVER be given a scraped publisher image
-    # automatically: a copyrighted press photo, or a photo of a named
-    # individual, attached without editorial review is the exact exposure the
-    # policy guards against. So crime skips cache_source_image entirely and
-    # falls back to the category stock card when no curated photo exists.
+    # curated photo the editor has placed in assets/img/cards/ - matched by
+    # exact slug OR by a headline keyword (e.g. andy_burnham.jpg on a story
+    # naming him, or grooming_gang.jpg on a story with that phrase). The editor
+    # is responsible for only using topic/keyword crime cards where the image is
+    # safe on ANY story about that topic; a photo of identifiable individuals
+    # should be placed by exact slug so it cannot attach to an unrelated case.
+    # What stays blocked unconditionally: a crime story is NEVER given an
+    # automatically SCRAPED publisher image (a copyrighted press photo, or a
+    # photo of a named individual pulled without review). Crime therefore skips
+    # cache_source_image entirely and falls back to the category stock card when
+    # no curated photo matches.
     if cat_key == "crime":
         curated = library_match()
         if curated is not None:
