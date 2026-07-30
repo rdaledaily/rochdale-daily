@@ -34,7 +34,7 @@ from urllib.request import Request, build_opener
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
 
-from story_image import compose_story_card
+from story_image import compose_story_card, find_library_photo, _folder_credit
 
 # When false, third-party (publisher) photographs are neither fetched nor kept.
 # Every story uses Rochdale Daily's own area/category card instead, so no other
@@ -836,6 +836,33 @@ def ensure_article_image(
             return "source-image"
 
     slug = slug_for(article)
+
+    # A curated image the editor has filed in assets/img/cards/ always beats a
+    # generated card. Checked here, before compose_story_card, so a placed photo
+    # is used whenever one matches - by exact slug, or (for non-crime) by a
+    # headline keyword. Crime stays slug-only: a crime photograph must land only
+    # on the exact story it was named for, never on another via a shared word.
+    cat_key = clean(article.get("category")).lower()
+    library_match = find_library_photo(
+        clean(article.get("title")),
+        slug,
+        cat_key,
+        repo_root / CARDS_DIR,
+        slug_only=(cat_key == "crime"),
+    )
+    if library_match is not None:
+        base = re.sub(r"-\d+$", "", library_match.stem)
+        credit = (_folder_credit(base, repo_root / CARDS_DIR)
+                  or _folder_credit(library_match.stem, repo_root / CARDS_DIR)
+                  or "Rochdale Daily")
+        article["image_url"] = library_match.relative_to(repo_root).as_posix()
+        article["image_credit"] = credit
+        article["image_credit_url"] = "" if credit != "Rochdale Daily" else "https://rochdaledaily.co.uk/"
+        article["image_status"] = "curated-library-photo"
+        article["source_image_reuse_status"] = "curated-library-photo"
+        article.pop("image_placeholder_reason", None)
+        return "library-photo"
+
     card_path = output_dir / f"{slug}-area-category-card.jpg"
     local_path, credit = compose_story_card(
         clean(article.get("title")),
