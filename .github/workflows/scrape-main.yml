@@ -85,7 +85,13 @@ jobs:
       # 15-minute cadence. The resolver caches successes for 45 days, so a
       # backlog is cleared across several runs rather than in one long run.
       GOOGLE_NEWS_BROWSER_RESOLUTION: "true"
-      GOOGLE_NEWS_RESOLVE_MAX: "20"
+      # Count cap set high; the real limiter is the time budget below. This lets
+      # resolution drain the wrapper backlog (often 200+) as fast as a safe time
+      # window allows, rather than being throttled to a tiny fixed count while
+      # most discovered stories go unopened. 8 minutes leaves ample room under
+      # the 24-minute pipeline step.
+      GOOGLE_NEWS_RESOLVE_MAX: "200"
+      GOOGLE_NEWS_RESOLVE_BUDGET_SECONDS: "480"
       COMMIT_MESSAGE: "Update Rochdale Daily news feed (main)"
 
     steps:
