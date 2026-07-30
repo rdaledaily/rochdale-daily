@@ -137,6 +137,16 @@ jobs:
         timeout-minutes: 24
         run: python scraper/scraper.py
 
+      - name: Ensure consistent story cards
+        timeout-minutes: 6
+        # Rebuilds a composed area/category card for every story that has no
+        # real photograph, replacing the old static stock_*.jpg fallbacks so all
+        # cardless stories share one design. Card rendering is local and cheap;
+        # --limit bounds only the source-image network hunts so this cannot eat
+        # the run's time budget. Runs before page generation so the fresh cards
+        # are baked into the HTML and committed in the same run.
+        run: python scraper/ensure_article_images.py --limit 40
+
       - name: Validate public article feed
         run: |
           python -m json.tool articles.json > /dev/null
@@ -157,6 +167,7 @@ jobs:
             scraper_status.json \
             event_dates.json \
             google_news_resolution_report.json \
+            google_news_resolutions.json \
             image_coverage_report.json \
             assets/img/generated \
             assets/article-images \
