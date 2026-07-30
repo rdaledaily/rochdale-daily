@@ -481,15 +481,15 @@ def compose_story_card(
     photo = None
     credit = "Rochdale Daily"
     if cat_key not in NO_PHOTO_CATEGORIES:
-        # An image you supplied for this specific story, if there is one. Named
-        # after the article slug, so there is no matching to get wrong. Crime is
-        # restricted to an exact slug match: a curated crime photo lands only on
-        # the story it was named for, never on another via a shared headline
-        # word.
+        # An image you supplied for this story, if there is one - matched by
+        # exact slug or by a headline keyword. For crime the editor is
+        # responsible for using keyword/topic cards only where the image is safe
+        # on any story about that topic; images of identifiable people should be
+        # placed by slug so they cannot attach to an unrelated case.
         slug = re.sub(r"-area-category-card$", "", out_path.stem)
         match = find_library_photo(
             title, slug, cat_key, cards_dir,
-            slug_only=(cat_key == "crime"),
+            slug_only=False,
         )
         if match is not None:
             photo = match
@@ -498,12 +498,11 @@ def compose_story_card(
             credit = (_folder_credit(re.sub(r"-\d+$", "", match.stem), cards_dir)
                       or _folder_credit(match.stem, cards_dir) or "Rochdale Daily")
 
-        # Person photos match on name in the headline, which is a keyword match,
-        # not a per-story one. That is never allowed on crime: a face attached
-        # to a criminal case by name-match is the most damaging misattribution
-        # the site could make. Crime gets a person photo only via an exact-slug
-        # card above, placed deliberately.
-        if photo is None and cat_key != "crime":
+        # Person photos match on a name in the headline. Enabled for crime too:
+        # a named individual (e.g. a quoted public figure) may legitimately
+        # illustrate a crime story. The editor keeps people-dir files specific
+        # enough that a name maps to one intended person.
+        if photo is None:
             person_match = find_person_photo(title, people_dir)
             if person_match is not None:
                 photo = person_match[0]
