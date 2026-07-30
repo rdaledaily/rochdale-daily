@@ -2866,7 +2866,19 @@ def main() -> int:
                  len(BENCHED_DOMAINS), ', '.join(sorted(BENCHED_DOMAINS)))
     log.info('Starting Rochdale Daily 15-minute pipeline')
     existing = recent_existing_articles()
-    existing_by_story = {build_story_key(item): item for item in existing}
+    # Build the "already published" lookup from each article's STORED story key,
+    # not a freshly recomputed one. Recomputing from current (mutable) content
+    # let a story whose headline had drifted since publication compute a key
+    # that collided with an unrelated article's recomputed key - fusing two
+    # different stories (and, in one live case, merging several unrelated deaths
+    # into one article). The merge loop below was already hardened to trust the
+    # stored key for this exact reason; this lookup must use the same rule so
+    # eligibility and slug-preservation match on stable identity too. Falls back
+    # to a computed key only for a record that has none yet.
+    existing_by_story = {
+        (str(item.get('story_key') or '') or build_story_key(item)): item
+        for item in existing
+    }
     collector_counts: dict[str, int] = {}
     collector_errors: dict[str, str] = {}
     x_social_records = collect_x_social_records()

@@ -26,6 +26,7 @@ callable so the tests never touch the internet.
 from __future__ import annotations
 
 import re
+import time
 from datetime import datetime, timedelta, timezone
 from typing import Any, Callable
 
@@ -34,6 +35,22 @@ API_HEADERS = {"x-api-version": "2", "accept": "application/json"}
 AUTHORITY_NAME = "Rochdale"
 PAGE_SIZE = 500
 MAX_PAGES = 20
+
+# The whole FSA fetch (authority lookup + all pages) must not stall the
+# pipeline. On a run where the runner's network to gov endpoints is degraded -
+# the symptom that stalled a run for hours - each request would otherwise wait
+# out its full timeout and retries in sequence, on the main thread, with no cap
+# on the total. These two bounds make the collector fail fast and cheap instead:
+#   * PER_REQUEST_TIMEOUT: a single call fails in a few seconds, not 20.
+#   * OVERALL_DEADLINE_SECONDS: once the whole fetch has spent this long, it
+#     abandons and returns what it has. The roundup is monthly, so skipping it
+#     on a slow-network run costs nothing - the next run rebuilds it.
+PER_REQUEST_TIMEOUT = 8
+OVERALL_DEADLINE_SECONDS = 45
+
+
+class _FetchDeadlineReached(Exception):
+    """Raised internally when the overall FSA fetch budget is exhausted."""
 
 RATING_DESCRIPTIONS = {
     0: "urgent improvement necessary",
@@ -45,19 +62,34 @@ RATING_DESCRIPTIONS = {
 }
 
 
-def _get_json(get: Callable[..., Any], url: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
-    response = get(url, params=params or {}, headers=API_HEADERS, timeout=20)
+def _get_json(
+    get: Callable[..., Any],
+    url: str,
+    params: dict[str, Any] | None = None,
+    *,
+    deadline: float | None = None,
+) -> dict[str, Any]:
+    # If the overall budget is already spent, do not start another request -
+    # abandon the fetch cleanly rather than adding one more slow call.
+    if deadline is not None and time.monotonic() >= deadline:
+        raise _FetchDeadlineReached
+    response = get(url, params=params or {}, headers=API_HEADERS, timeout=PER_REQUEST_TIMEOUT)
     response.raise_for_status()
     return response.json()
 
 
-def find_authority_id(get: Callable[..., Any], name: str = AUTHORITY_NAME) -> int | None:
+def find_authority_id(
+    get: Callable[..., Any],
+    name: str = AUTHORITY_NAME,
+    *,
+    deadline: float | None = None,
+) -> int | None:
     """Look up the FSA authority id for the borough by name at run time.
 
     Looked up rather than hard-coded so an upstream renumbering can never
     silently attach another authority's businesses to Rochdale stories.
     """
-    payload = _get_json(get, f"{API_BASE}/Authorities/basic")
+    payload = _get_json(get, f"{API_BASE}/Authorities/basic", deadline=deadline)
     wanted = name.strip().lower()
     for authority in payload.get("authorities", []):
         if str(authority.get("Name", "")).strip().lower() == wanted:
@@ -195,6 +227,7 @@ def fetch_current_low_ratings(
     *,
     max_rating: int = 1,
     authority_id: int | None = None,
+    overall_timeout: float | None = OVERALL_DEADLINE_SECONDS,
 ) -> list[dict[str, Any]]:
     """Every establishment in the borough currently holding a low rating.
 
@@ -205,48 +238,63 @@ def fetch_current_low_ratings(
     a low rating every few months, not every week.
 
     Sorted worst first, then most recently inspected.
-    """
-    if authority_id is None:
-        authority_id = find_authority_id(get)
-    if authority_id is None:
-        return []
 
+    The whole fetch is bounded by ``overall_timeout`` seconds (set None to
+    disable). If the FSA API is slow enough that the budget is exhausted
+    mid-fetch, whatever has been collected so far is returned rather than
+    letting the collector stall the pipeline. Because the roundup is monthly, a
+    run that returns nothing here simply rebuilds it next time.
+    """
+    deadline = (time.monotonic() + overall_timeout) if overall_timeout else None
     records: list[dict[str, Any]] = []
-    for page in range(1, MAX_PAGES + 1):
-        payload = _get_json(
-            get,
-            f"{API_BASE}/Establishments",
-            {
-                "localAuthorityId": authority_id,
-                "pageNumber": page,
-                "pageSize": PAGE_SIZE,
-            },
-        )
-        establishments = payload.get("establishments", [])
-        for establishment in establishments:
-            raw_rating = _clean(establishment.get("RatingValue"))
-            if not raw_rating.isdigit():
-                continue
-            rating = int(raw_rating)
-            if rating > max_rating:
-                continue
-            rating_date = _parse_rating_date(establishment.get("RatingDate"))
-            if rating_date is None:
-                continue
-            fhrs_id = establishment.get("FHRSID")
-            if not fhrs_id:
-                continue
-            records.append({
-                "fhrs_id": int(fhrs_id),
-                "name": _clean(establishment.get("BusinessName")),
-                "business_type": _clean(establishment.get("BusinessType")),
-                "address": _address(establishment),
-                "rating": rating,
-                "rating_date": rating_date,
-                "url": f"https://ratings.food.gov.uk/business/{int(fhrs_id)}",
-            })
-        if len(establishments) < PAGE_SIZE:
-            break
+    try:
+        if authority_id is None:
+            authority_id = find_authority_id(get, deadline=deadline)
+        if authority_id is None:
+            return []
+
+        for page in range(1, MAX_PAGES + 1):
+            payload = _get_json(
+                get,
+                f"{API_BASE}/Establishments",
+                {
+                    "localAuthorityId": authority_id,
+                    "pageNumber": page,
+                    "pageSize": PAGE_SIZE,
+                },
+                deadline=deadline,
+            )
+            establishments = payload.get("establishments", [])
+            for establishment in establishments:
+                raw_rating = _clean(establishment.get("RatingValue"))
+                if not raw_rating.isdigit():
+                    continue
+                rating = int(raw_rating)
+                if rating > max_rating:
+                    continue
+                rating_date = _parse_rating_date(establishment.get("RatingDate"))
+                if rating_date is None:
+                    continue
+                fhrs_id = establishment.get("FHRSID")
+                if not fhrs_id:
+                    continue
+                records.append({
+                    "fhrs_id": int(fhrs_id),
+                    "name": _clean(establishment.get("BusinessName")),
+                    "business_type": _clean(establishment.get("BusinessType")),
+                    "address": _address(establishment),
+                    "rating": rating,
+                    "rating_date": rating_date,
+                    "url": f"https://ratings.food.gov.uk/business/{int(fhrs_id)}",
+                })
+            if len(establishments) < PAGE_SIZE:
+                break
+    except _FetchDeadlineReached:
+        # Budget spent mid-fetch on a slow-network run. A partial page set on
+        # the borough roundup would understate the count, so discard the
+        # partial result and let the next run rebuild the full list. Returning
+        # nothing is safer than publishing "N businesses" with N wrong.
+        return []
 
     records.sort(key=lambda r: (r["rating"], -r["rating_date"].timestamp()))
     return records
