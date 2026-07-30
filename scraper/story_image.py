@@ -80,7 +80,15 @@ CATEGORY_STYLE: dict[str, tuple[tuple[int, int, int], str]] = {
 # mentioned in passing", so no photograph can be placed safely by machine. A
 # plain branded card carries no such implication, which is why newsrooms use one
 # when they have no police-issued image.
-NO_PHOTO_CATEGORIES = frozenset({"crime"})
+#
+# POLICY (updated): this set is now empty. Crime stories may carry a photograph
+# the EDITOR has placed and cleared - a curated card in assets/img/cards/ named
+# after the slug, e.g. a GMP-issued appeal image. What remains blocked for crime
+# is any AUTOMATICALLY SCRAPED publisher image: source_image() in scraper.py
+# routes crime past cache_source_image entirely, so a copyrighted press photo or
+# a photo of a named individual is never attached without editorial review. The
+# machine still places nothing on its own; it only shows what the editor chose.
+NO_PHOTO_CATEGORIES = frozenset()
 
 # Images you place here are used exactly as given, with no matching or
 # guesswork. Name the file after the article slug - the part of its page URL
@@ -167,6 +175,8 @@ def find_library_photo(
     slug: str,
     category: str = "",
     cards_dir: Path = CARDS_DIR,
+    *,
+    slug_only: bool = False,
 ) -> Path | None:  # noqa: ARG001 - category kept for call compatibility
     """The photograph you have chosen for this story, if you have one.
 
@@ -183,6 +193,12 @@ def find_library_photo(
     tier and no catch-all: every wrong image this site has shown came from a
     fallback filling a gap that should have been left empty.
 
+    ``slug_only`` disables tier 2. Crime uses it: a crime photograph must land
+    only on the exact story the editor named it for, never on another story
+    that happens to share a headline word. A loose term like ``grooming_gang``
+    matching several unrelated cases is precisely the misattribution to avoid,
+    so crime requires a file named after that story's slug and nothing else.
+
     Only the headline and slug are read, never the article body. A place
     mentioned in passing further down is not what the story is about, and
     matching on body text is what once put a photograph of a town centre on an
@@ -196,6 +212,10 @@ def find_library_photo(
     slug_key = _normalise(slug)
     if slug_key in lookup:
         return _choose(lookup[slug_key], slug)
+
+    if slug_only:
+        # Crime: no headline-keyword fallback. Exact slug or nothing.
+        return None
 
     # Two readings of the headline, because an apostrophe means two different
     # things. In "St Michael's Church" it is part of the name, so the words have
@@ -462,9 +482,15 @@ def compose_story_card(
     credit = "Rochdale Daily"
     if cat_key not in NO_PHOTO_CATEGORIES:
         # An image you supplied for this specific story, if there is one. Named
-        # after the article slug, so there is no matching to get wrong.
+        # after the article slug, so there is no matching to get wrong. Crime is
+        # restricted to an exact slug match: a curated crime photo lands only on
+        # the story it was named for, never on another via a shared headline
+        # word.
         slug = re.sub(r"-area-category-card$", "", out_path.stem)
-        match = find_library_photo(title, slug, cat_key, cards_dir)
+        match = find_library_photo(
+            title, slug, cat_key, cards_dir,
+            slug_only=(cat_key == "crime"),
+        )
         if match is not None:
             photo = match
             # Credits are keyed by the base name, so every variant of
@@ -472,7 +498,12 @@ def compose_story_card(
             credit = (_folder_credit(re.sub(r"-\d+$", "", match.stem), cards_dir)
                       or _folder_credit(match.stem, cards_dir) or "Rochdale Daily")
 
-        if photo is None:
+        # Person photos match on name in the headline, which is a keyword match,
+        # not a per-story one. That is never allowed on crime: a face attached
+        # to a criminal case by name-match is the most damaging misattribution
+        # the site could make. Crime gets a person photo only via an exact-slug
+        # card above, placed deliberately.
+        if photo is None and cat_key != "crime":
             person_match = find_person_photo(title, people_dir)
             if person_match is not None:
                 photo = person_match[0]
