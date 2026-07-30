@@ -76,8 +76,16 @@ jobs:
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
       MIN_LIVE_STORIES: "40"
-      # Chromium work belongs to scrape-events.yml only.
+      # Chromium is installed in this workflow so the Google News resolver can
+      # turn wrapper URLs into real articles (recovering text and per-ward /
+      # per-category coverage). Facebook event discovery is still left to
+      # scrape-events.yml — only the lighter news resolver runs here.
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
+      # Bound the per-run browser work so resolution can never eat the whole
+      # 15-minute cadence. The resolver caches successes for 45 days, so a
+      # backlog is cleared across several runs rather than in one long run.
+      GOOGLE_NEWS_BROWSER_RESOLUTION: "true"
+      GOOGLE_NEWS_RESOLVE_MAX: "20"
       COMMIT_MESSAGE: "Update Rochdale Daily news feed (main)"
 
     steps:
@@ -100,11 +108,27 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
+      - name: Restore cached Chromium
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('requirements.txt') }}
+
+      - name: Install Chromium operating-system dependencies
+        timeout-minutes: 10
+        run: python -m playwright install-deps chromium
+
+      - name: Install Chromium browser
+        if: ${{ steps.playwright-cache.outputs.cache-hit != 'true' }}
+        timeout-minutes: 10
+        run: python -m playwright install chromium
+
       - name: Repair contaminated event records
         run: python scraper/repair_event_records.py
 
       - name: Run Rochdale Daily pipeline
-        timeout-minutes: 22
+        timeout-minutes: 24
         run: python scraper/scraper.py
 
       - name: Validate public article feed
