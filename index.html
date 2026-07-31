@@ -562,6 +562,31 @@
     }
     .rail-button:hover { background: #2a2a2a; }
 
+    /* Forecast panel. Rows, not a horizontal strip: the rail is 330px, so six
+       days across leaves 49px per day, which is not enough for the condition
+       wording - and the wording is the point. The day column uses flex-basis
+       rather than width because a fixed width on a flex child can still be
+       overrun by its own content, which is how "TODAY" ended up sitting on top
+       of the glyph. The condition cell carries min-width:0 so a long label
+       like "Heavy rain shower" truncates instead of shoving the temperature
+       off the end of the row. */
+    .weather-box { border-top: 5px solid var(--accent); background: var(--card); padding: 17px; }
+    .weather-head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 4px; }
+    .weather-head .rail-title { margin: 0; }
+    .weather-place { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    .weather-days { display: grid; gap: 8px; }
+    .weather-day { display: flex; align-items: center; gap: 12px; border: 1px solid #cfcfcf; padding: 10px 11px; }
+    .weather-day.today { border-color: var(--accent); background: #f4fafb; }
+    .weather-dow { flex: 0 0 30px; font-size: 13px; font-weight: 900; text-transform: uppercase; color: var(--muted); }
+    .weather-day.today .weather-dow { color: var(--ink); }
+    /* Follows --sun, not --accent: the glyph depicts a physical thing, so it
+       must not shift when the brand palette does. Same reasoning as the token. */
+    .weather-glyph { flex: 0 0 20px; font-size: 17px; text-align: center; color: var(--muted); }
+    .weather-glyph.sun { color: var(--sun); }
+    .weather-cond { flex: 1; min-width: 0; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .weather-temp { flex: 0 0 auto; font-size: 15px; font-weight: 900; }
+    .weather-note { margin: 11px 0 0; color: var(--muted); font-size: 12px; }
+
     .report-box {
       border: 4px solid var(--red-bright);
       background: var(--card);
@@ -1201,6 +1226,16 @@
                     <option value="whitworth">Whitworth</option>
                   </optgroup>
                 </select>
+              </section>
+
+              <section class="weather-box" id="weather-box" aria-labelledby="weather-forecast-title" hidden>
+                <div class="weather-head">
+                  <h2 class="rail-title" id="weather-forecast-title">Weather</h2>
+                  <span class="weather-place">Rochdale</span>
+                </div>
+                <p class="rail-copy" id="weather-forecast-intro">Daytime highs.</p>
+                <div class="weather-days" id="weather-days"></div>
+                <p class="weather-note" id="weather-note"></p>
               </section>
 
               <section class="report-box" aria-labelledby="report-title">
@@ -3002,6 +3037,81 @@ function shareIconMarkup(action, label) {
       }
     }
 
+    /* Forecast panel. Reads weather.json, written once per pipeline run by
+       scraper/weather_forecast.py.
+
+       Renders however many days the file holds rather than assuming a week.
+       The Met Office response routinely carries past-dated entries and a
+       night-only first and last entry, all of which the builder drops, so the
+       real count is usually five or six. The panel states the number it has
+       instead of padding to a rounder one.
+
+       Built with DOM methods rather than innerHTML: escapeHtml is declared
+       further down this script, and this avoids depending on declaration
+       order as well as avoiding the injection surface entirely.
+
+       Hidden until it has data. A panel that never appears is honest; an
+       empty bordered box captioned "unavailable" is clutter in a 330px rail. */
+    const SUN_CONDITIONS = ["Sunny", "Clear", "Partly cloudy"];
+
+    function forecastRow(day, isToday) {
+      const row = document.createElement("div");
+      row.className = isToday ? "weather-day today" : "weather-day";
+
+      const dow = document.createElement("span");
+      dow.className = "weather-dow";
+      dow.textContent = day.weekday || "";
+
+      const glyph = document.createElement("span");
+      glyph.className = SUN_CONDITIONS.includes(day.condition)
+        ? "weather-glyph sun"
+        : "weather-glyph";
+      glyph.setAttribute("aria-hidden", "true");
+      glyph.textContent = day.icon || "◌";
+
+      const condition = document.createElement("span");
+      condition.className = "weather-cond";
+      condition.textContent = day.condition || "";
+
+      const temperature = document.createElement("span");
+      temperature.className = "weather-temp";
+      temperature.textContent = `${Math.round(Number(day.temperature_c))}°`;
+
+      row.append(dow, glyph, condition, temperature);
+      return row;
+    }
+
+    async function loadForecast() {
+      const box = document.getElementById("weather-box");
+      if (!box) return;
+
+      try {
+        const response = await fetch("/weather.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("Forecast unavailable");
+
+        const feed = await response.json();
+        const days = (Array.isArray(feed.days) ? feed.days : []).filter(
+          day => day && Number.isFinite(Number(day.temperature_c))
+        );
+        if (!days.length) throw new Error("Forecast empty");
+
+        document.getElementById("weather-forecast-intro").textContent =
+          days.length === 1
+            ? "Today's high."
+            : `${days.length}-day outlook. Daytime highs.`;
+
+        const list = document.getElementById("weather-days");
+        list.textContent = "";
+        days.forEach((day, index) => list.append(forecastRow(day, index === 0)));
+
+        document.getElementById("weather-note").textContent =
+          "Met Office forecast for Rochdale.";
+        box.hidden = false;
+      } catch (error) {
+        box.hidden = true;
+      }
+    }
+
     const now = new Date();
     document.getElementById("current-date").textContent = formatDate(now);
 
@@ -3056,6 +3166,7 @@ function shareIconMarkup(action, label) {
       if (hashMatch) openArticle(hashMatch[1]);
     });
     loadWeather();
+    loadForecast();
     window.setInterval(() => loadArticleFeed({ quiet: true }), ARTICLE_REFRESH_MS);
     window.setInterval(loadWeather, 15 * 60 * 1000);
 

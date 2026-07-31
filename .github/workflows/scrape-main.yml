@@ -156,6 +156,15 @@ jobs:
         timeout-minutes: 4
         run: python scraper/generate_pages.py
 
+      # Runs once per pipeline run: 24 calls a day against the Met Office free
+      # allowance of 360. The script never exits non-zero, so a weather outage
+      # cannot stop the news feed from publishing.
+      - name: Refresh weather forecast
+        timeout-minutes: 2
+        env:
+          METOFFICE_API_KEY: ${{ secrets.METOFFICE_API_KEY }}
+        run: python scraper/weather_forecast.py
+
       - name: Commit updated feed
         run: |
           git config user.name "github-actions[bot]"
@@ -173,6 +182,7 @@ jobs:
             assets/article-images \
             articles \
             sitemap.xml \
+            weather.json \
             index.html
 
           if git diff --cached --quiet; then
