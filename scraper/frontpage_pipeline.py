@@ -872,8 +872,6 @@ def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
     merged["title"] = strip_publisher_suffix(str(merged.get("title") or ordered[0].get("title") or "Local news update"))
     paragraphs = _unique_paragraphs(ordered)
     overview = plain_text(merged.get("excerpt") or merged.get("summary") or (paragraphs[0] if paragraphs else ""))
-    latest = paragraphs[:4]
-    earlier = paragraphs[4:12]
     update_count = max(
         len(group),
         int(merged.get("source_count") or 1),
@@ -885,17 +883,34 @@ def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
         key=lambda value: value or datetime.min.replace(tzinfo=timezone.utc),
     ) or utc_now()
 
+    # The body is the newest record's own article, not a pool of paragraphs
+    # sliced into "Latest update" and "Earlier developments" buckets.
+    #
+    # Those headings asserted a chronology the slice never produced. Each
+    # record already contains a complete account of the story, so with two
+    # sources the first four pooled paragraphs were source one's whole
+    # article and the next eight were source two's whole article. Readers
+    # got the same events twice under headings implying they were separate
+    # developments - and where the two sources characterised something
+    # differently, the page carried both characterisations of one fact.
+    #
+    # The overview is no longer emitted as a paragraph either: the article
+    # template already renders `excerpt` as the standfirst, so writing it
+    # into the body printed the same sentence twice on every merged page.
+    #
+    # Selecting one coherent article does lose detail that appeared only in
+    # the other records. That is deliberate and it is a real cost: a shorter
+    # accurate article beats a longer duplicated one. Recovering that detail
+    # properly means regenerating a single body from every source record in
+    # editorial_upgrade.py, which is where it belongs. This function has no
+    # model and cannot write; it can only choose.
+    body = str(ordered[0].get("content_html") or merged.get("content_html") or "")
+
     parts = [
         f'<p class="ongoing-label"><strong>ONGOING STORY</strong> — Updated {html.escape(updated.astimezone(UK_TZ).strftime("%-d %B %Y at %H:%M"))}. {update_count} source updates have been combined into this article.</p>'
     ]
-    if overview:
-        parts.append(f"<p>{html.escape(overview)}</p>")
-    if latest:
-        parts.append("<h2>Latest update</h2>")
-        parts.extend(f"<p>{html.escape(paragraph)}</p>" for paragraph in latest)
-    if earlier:
-        parts.append("<h2>Earlier developments</h2>")
-        parts.extend(f"<p>{html.escape(paragraph)}</p>" for paragraph in earlier)
+    if body:
+        parts.append(body)
 
     parts.append("<h2>Update timeline</h2><ul>")
     seen_timeline: set[tuple[str, str]] = set()
