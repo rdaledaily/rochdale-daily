@@ -95,9 +95,20 @@ class FrontpagePipelineTests(unittest.TestCase):
         merged = merge_group([first, second])
         self.assertTrue(merged["is_ongoing"])
         self.assertIn("ONGOING STORY", merged["content_html"])
-        self.assertIn("Latest update", merged["content_html"])
         self.assertIn("Update timeline", merged["content_html"])
         self.assertGreaterEqual(merged["source_count"], 2)
+        # The merge must not reintroduce the Latest/Earlier split. It told
+        # readers the same story twice under headings implying the two halves
+        # were different developments.
+        self.assertNotIn("Latest update", merged["content_html"])
+        self.assertNotIn("Earlier developments", merged["content_html"])
+        # The template renders `excerpt` as the standfirst, so the body must
+        # not repeat it.
+        self.assertNotIn(
+            f"<p>{merged['excerpt']}</p>", merged["content_html"]
+        )
+        # The newest record's article is the body.
+        self.assertIn("A man has now been arrested", merged["content_html"])
 
     def test_frontpage_selects_at_least_thirty_when_available(self) -> None:
         now = datetime(2026, 7, 9, 12, tzinfo=timezone.utc)
