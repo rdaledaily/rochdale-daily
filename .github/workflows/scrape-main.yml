@@ -152,6 +152,15 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
 
+      # Strips stale Latest/Earlier scaffolding out of stored article bodies
+      # before pages are built from them. generate_pages.py renders
+      # content_html directly, and merge_group returns single-record groups
+      # untouched, so previously-merged bodies are otherwise frozen in place.
+      # Idempotent: a no-op once the feeds are clean.
+      - name: Repair merged article bodies
+        timeout-minutes: 2
+        run: python scraper/repair_merged_bodies.py
+
       - name: Generate static article pages and sitemap
         timeout-minutes: 4
         run: python scraper/generate_pages.py
