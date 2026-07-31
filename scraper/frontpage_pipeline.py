@@ -854,6 +854,52 @@ def _timeline_label(article: dict[str, Any]) -> str:
     return value.astimezone(UK_TZ).strftime("%-d %B %Y, %H:%M")
 
 
+_ONGOING_LABEL_RE = re.compile(r'<p class="ongoing-label">.*?</p>', re.S)
+_TIMELINE_RE = re.compile(r"<h2>\s*Update timeline\s*</h2>.*", re.S)
+_LATEST_SECTION_RE = re.compile(r"<h2>\s*Latest update\s*</h2>(.*?)(?=<h2>|$)", re.S)
+_MERGE_HEADING_RE = re.compile(r"<h2>\s*(?:Latest update|Earlier developments)\s*</h2>", re.S)
+_FIRST_PARAGRAPH_RE = re.compile(r"\s*<p>(.*?)</p>", re.S)
+
+
+def _canonical_body(record: dict[str, Any], overview: str = "") -> str:
+    """Return a record's article body with any previous merge scaffolding removed.
+
+    merge_group writes its output back into content_html, and the next run
+    reads that same field. So a story that has been merged once arrives at the
+    next merge already carrying an ONGOING banner, Latest/Earlier headings and
+    a timeline. Reusing that body verbatim reprints the duplication forever and
+    compounds the source count - which is how a single story reached ninety
+    combined updates.
+
+    Where the old structure is present, the "Latest update" section is the most
+    recent source's own account, so that is what survives; the "Earlier
+    developments" pile is the duplication and is dropped. Once no stored body
+    carries the old headings this branch stops firing on its own.
+    """
+    body = str(record.get("content_html") or "")
+    if not body:
+        return ""
+
+    body = _ONGOING_LABEL_RE.sub("", body)
+    body = _TIMELINE_RE.sub("", body)
+
+    section = _LATEST_SECTION_RE.search(body)
+    if section:
+        body = section.group(1)
+    else:
+        body = _MERGE_HEADING_RE.sub("", body)
+
+    body = body.strip()
+
+    # Drop a leading paragraph that merely restates the standfirst.
+    if overview:
+        first = _FIRST_PARAGRAPH_RE.match(body)
+        if first and plain_text(first.group(1)).strip() == overview.strip():
+            body = body[first.end():].strip()
+
+    return body
+
+
 def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
     if len(group) == 1:
         single = preserve_publication_dates(dict(group[0]))
@@ -904,7 +950,11 @@ def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
     # properly means regenerating a single body from every source record in
     # editorial_upgrade.py, which is where it belongs. This function has no
     # model and cannot write; it can only choose.
-    body = str(ordered[0].get("content_html") or merged.get("content_html") or "")
+    body = ""
+    for record in ordered:
+        body = _canonical_body(record, overview)
+        if body:
+            break
 
     parts = [
         f'<p class="ongoing-label"><strong>ONGOING STORY</strong> — Updated {html.escape(updated.astimezone(UK_TZ).strftime("%-d %B %Y at %H:%M"))}. {update_count} source updates have been combined into this article.</p>'
