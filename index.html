@@ -2408,7 +2408,23 @@
     }
 
     function renderNewsGrid() {
-      const featuredIds = new Set(stories.slice(0, 9).map(story => story.id));
+      // The lead, secondary and latest blocks above the grid show the newest
+      // nine stories, so the grid omits them to avoid printing each twice.
+      //
+      // Those blocks are NOT filtered - they always show the newest nine
+      // site-wide, whatever category or area is selected. Subtracting them
+      // while a filter was active therefore removed the newest story in that
+      // category from its own view without showing it anywhere else: the most
+      // recent community story vanished from Community, the most recent sport
+      // story from Sport, and so on. The newer the story, the more certain it
+      // was to disappear.
+      //
+      // So only omit them when the grid and the blocks above are showing the
+      // same unfiltered set.
+      const filtersActive = activeCategory !== "all" || activeArea !== "all";
+      const featuredIds = new Set(
+        filtersActive ? [] : stories.slice(0, 9).map(story => story.id)
+      );
       const MAX_EVENTS_IN_MIXED_GRID = 4;
       let eventsShown = 0;
       const list = filteredStories().filter(story => {
