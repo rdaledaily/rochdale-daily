@@ -161,7 +161,12 @@ def source_is_denied(source_name: str, source_url: str) -> bool:
 def absolute_url(path_or_url: str) -> str:
     value = str(path_or_url or '').strip()
     if not value:
-        return f'{SITE_BASE_URL}/assets/img/stock_news.jpg'
+        # No image. Previously returned assets/img/stock_news.jpg, which was part
+        # of the retired category artwork and no longer exists. Every published
+        # article gets a composed story card, so this is only reached by records
+        # that have not been through ensure_article_images yet; an empty value
+        # is better than a URL that 404s in a social preview.
+        return ''
     if value.startswith('http://') or value.startswith('https://'):
         return value
     return f"{SITE_BASE_URL}/{value.lstrip('/')}"
