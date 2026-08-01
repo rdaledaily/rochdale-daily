@@ -799,7 +799,7 @@
     .article-share button { border: 1px solid var(--line); background: var(--card); padding: 8px 11px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
 
     /* Two-column article layout: main copy + sidebar rail for ads,
-       related stories and the newsletter signup. Collapses to a single
+       related stories. Collapses to a single
        column on narrower screens (sidebar content moves below the copy). */
     .article-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 36px; align-items: start; }
     .article-sidebar { display: flex; flex-direction: column; gap: 22px; position: sticky; top: 20px; }
@@ -835,16 +835,6 @@
     .related-story:last-child { margin-bottom: 0; }
     .related-story img { width: 72px; height: 54px; object-fit: cover; flex-shrink: 0; }
     .related-story .related-title { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 14px; line-height: 1.25; font-weight: 700; }
-
-    .newsletter-box { background: var(--black); color: #fff; padding: 20px; }
-    .newsletter-box h3 { margin: 0 0 8px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 16px; text-transform: uppercase; color: var(--yellow); }
-    .newsletter-box p { margin: 0 0 12px; font-size: 13px; color: #cfcfcf; }
-    .newsletter-form { display: flex; flex-direction: column; gap: 8px; }
-    .newsletter-form input[type="email"] { padding: 10px; border: 1px solid #444; background: #1c1c1c; color: #fff; font-size: 14px; }
-    .newsletter-form button { padding: 10px; border: 0; background: var(--yellow); color: #111; font-weight: 900; text-transform: uppercase; font-size: 13px; cursor: pointer; }
-    .newsletter-form button:hover { background: var(--yellow-dark); }
-    .newsletter-note { font-size: 11px; color: #8f8f8f; margin-top: 8px; }
-    .newsletter-status { font-size: 12px; margin-top: 8px; min-height: 1em; }
 
 
     .search-overlay {
@@ -1163,16 +1153,6 @@
           <div class="news-layout">
             <div class="news-grid" id="news-grid"></div>
             <aside class="side-rail">
-              <section class="rail-box yellow">
-                <h2 class="rail-title">Daily briefing</h2>
-                <p class="rail-copy">A concise morning email with the biggest local stories, traffic alerts and things to do.</p>
-                <form id="newsletter-form">
-                  <label class="hidden" for="newsletter-email">Email address</label>
-                  <input class="rail-input" id="newsletter-email" type="email" placeholder="Email address" required>
-                  <button class="rail-button" type="submit">Join the list</button>
-                </form>
-              </section>
-
               <section class="rail-box">
                 <h2 class="rail-title">Your area</h2>
                 <p class="rail-copy">Filter the homepage to stories from your town or neighbourhood.</p>
@@ -2555,40 +2535,7 @@
       </div>`;
     }
 
-    function newsletterBoxMarkup() {
-      return `<div class="sidebar-box newsletter-box">
-        <h3>Get the morning briefing</h3>
-        <p>One free email a day with Rochdale's top stories. No spam.</p>
-        <form class="newsletter-form" data-newsletter-form onsubmit="return false;">
-          <input type="email" name="email" placeholder="you@example.com" required autocomplete="email">
-          <button type="submit">Sign up free</button>
-        </form>
-        <div class="newsletter-status" data-newsletter-status></div>
-        <p class="newsletter-note">Unsubscribe anytime. See our <a href="privacy.html" style="color:#cfcfcf">privacy policy</a>.</p>
-      </div>`;
-    }
 
-async function submitNewsletterSignup(form) {
-      const status = form.parentElement.querySelector("[data-newsletter-status]");
-      const email = form.email.value.trim();
-      if (!email) return;
-      form.querySelector("button").disabled = true;
-      status.textContent = "Signing up…";
-      try {
-        const response = await fetch("/api/newsletter-signup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email })
-        });
-        if (!response.ok) throw new Error("Signup failed");
-        status.textContent = "You're signed up. Check your inbox to confirm.";
-        form.reset();
-      } catch {
-        status.textContent = "Something went wrong. Please try again shortly.";
-      } finally {
-        form.querySelector("button").disabled = false;
-      }
-    }
 
 function shareIconMarkup(action, label) {
       const icons = {
@@ -2647,7 +2594,6 @@ function shareIconMarkup(action, label) {
             <aside class="article-sidebar">
               <div class="ad-slot ad-slot-mrec" role="presentation" aria-hidden="true"></div>
               ${relatedStoriesMarkup(story)}
-              ${newsletterBoxMarkup()}
             </aside>
           </div>
         </div>`;
@@ -2658,13 +2604,6 @@ function shareIconMarkup(action, label) {
       history.replaceState(null, "", `articles/${story.slug}.html`);
       mountComments(story);
 
-      const newsletterForm = document.querySelector("[data-newsletter-form]");
-      if (newsletterForm) {
-        newsletterForm.addEventListener("submit", event => {
-          event.preventDefault();
-          submitNewsletterSignup(newsletterForm);
-        });
-      }
     }
 
     function closeArticle() {
@@ -2785,14 +2724,6 @@ function shareIconMarkup(action, label) {
       if (!button) return;
       document.querySelectorAll("[data-event-filter]").forEach(item => item.classList.toggle("active", item === button));
       renderEvents(button.dataset.eventFilter);
-    });
-
-    document.getElementById("newsletter-form").addEventListener("submit", event => {
-      event.preventDefault();
-      const email = document.getElementById("newsletter-email");
-      if (!email.checkValidity()) return email.reportValidity();
-      showToast("Newsletter form works as a preview. Connect it to your email platform before launch.");
-      event.target.reset();
     });
 
     document.getElementById("modal-close").addEventListener("click", closeArticle);
@@ -3892,5 +3823,6 @@ function shareIconMarkup(action, label) {
       }
     })();
   </script>
+  <script defer src="/assets/js/cookie-consent.js"></script>
 </body>
 </html>
