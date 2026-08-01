@@ -32,6 +32,10 @@ const LIMIT_PER_DAY = 8;
 const HOUR = 60 * 60 * 1000;
 const DAY = 24 * HOUR;
 
+// Links a submitter may include. Generous enough for an organiser's own site
+// plus a ticket page, tight enough that the field cannot become an advert.
+const MAX_LINKS = 5;
+
 // Escalating blocks for abusive language. Index = strike count - 1.
 const STRIKE_BLOCKS = [1 * HOUR, 24 * HOUR, 7 * DAY, 30 * DAY];
 
@@ -296,9 +300,15 @@ function validate(values) {
   const description = String(values.description || "").trim();
   if (description.length > 400) errors.push("The description must be 400 characters or fewer.");
 
-  // Link spam. One organiser link is reasonable; a wall of them is not.
+  // Submitters may include their own links - an organiser's booking page or
+  // ticket link is often the most useful thing in a listing, and refusing them
+  // sent people to email instead. Kept as a cap rather than a ban so a listing
+  // cannot be turned into a wall of advertising; the queue is moderated before
+  // anything publishes, so a bad link never reaches a reader.
   const linkCount = (`${title} ${description} ${location}`.match(/https?:\/\/|www\.|\.co\.uk|\.com/gi) || []).length;
-  if (linkCount > 2) errors.push("Please remove the links — we add the organiser link ourselves.");
+  if (linkCount > MAX_LINKS) {
+    errors.push(`Please keep it to ${MAX_LINKS} links or fewer.`);
+  }
 
   return { errors, clean: { title, date, time, location, postcode, cost, contact, description } };
 }
