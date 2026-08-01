@@ -1901,7 +1901,17 @@
       const nonEditorialImage = /872cdca296d0/.test(rawImage);
       const suppressCredit = nonEditorialCredit || nonEditorialImage;
       const legacyPlaceholder = /placeholder_|category_[a-z_-]+\.svg|replace with a verified/i.test(rawImage) || nonEditorialImage;
-      const image = rawImage && !legacyPlaceholder ? rawImage : stockImage(category);
+      // Root-relative, always. Feed paths arrive as "assets/img/cards/x.jpg"
+      // with no leading slash, which is fine on the homepage but not after
+      // openArticle() rewrites the URL to articles/<slug>.html: every image
+      // rendered from then on resolved against /articles/ and 404ed. Anchoring
+      // to the site root makes the path independent of whatever the address
+      // bar currently says.
+      const rootRelative = value =>
+        !value || /^(https?:)?\/\//i.test(value) || value.startsWith("data:") || value.startsWith("/")
+          ? value
+          : "/" + value.replace(/^\.?\//, "");
+      const image = rootRelative(rawImage && !legacyPlaceholder ? rawImage : stockImage(category));
 
       return {
         id: String(article.id || `article-${index}`),
