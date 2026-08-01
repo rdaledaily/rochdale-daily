@@ -583,8 +583,10 @@ def parse_event_detail(url: str, detail_html: str, now: datetime | None = None) 
 
     image_meta = soup.find("meta", property="og:image")
     source_image_candidate_url = str(image_meta.get("content", "") if image_meta else "").strip()
-    # Keep the site's existing local artwork unless image reuse is explicitly licensed.
-    image_url = "assets/img/category_events.svg"
+    # No image unless reuse is explicitly licensed. Left empty so the story card
+    # is composed later; the previous static category_events.svg was the last
+    # remaining piece of the retired second card style.
+    image_url = ""
     area = area_from_location(location)
     scraped_at = iso_utc(reference)
     date_label = event_start.astimezone(UK_TZ).strftime("%A %-d %B %Y at %H:%M")
