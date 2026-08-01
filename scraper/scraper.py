@@ -195,7 +195,14 @@ SAFEGUARDING_CONTEXT_PATTERN = '\\b(alleged|allegedly|accused|suspect|suspected|
 # investment" (no sale verb within 70 chars before the price).
 DROP_PATTERNS = ['\\b(?:opinion|comment|column|editorial)\\b', '\\bfor sale\\b|\\bfor rent\\b|\\broom to let\\b', '\\brecommendations please\\b|\\bdoes anyone know\\b|\\bgetting rid of\\b', '\\b(?:sought|seeks|seeking|requested|requesting|request for|asked for|asking for|looking for|invites?|inviting)\\b[^.]{0,70}\\brecommendations?\\b', '\\brecommendations?\\b[^.]{0,50}\\b(?:sought|requested|invited|wanted|welcome)\\b', '\\binviting (?:community |local )?(?:suggestions|recommendations|responses)\\b', '\\b(?:residents|locals|users|members)\\b[^.]{0,40}\\b(?:are )?(?:seeking|discussing|discuss)\\b[^.]{0,50}\\brecommendations?\\b', '\\b(?:a|one|another) (?:facebook|instagram|twitter|x|tiktok|linkedin|reddit) (?:user|member|poster)\\b', '\\bfollowing (?:a )?discussions? on social media\\b', "\\bno [a-z][a-z\\s,'-]{0,70}jobs? (?:found|available|listed)\\b", '\\bjobs? (?:found|matching|listed) in\\b', '\\b(?:available|on sale|for sale|priced)\\b[^.]{0,70}£\\s?\\d{1,3}(?:,\\d{3})+', '\\bservices? available in\\b', '\\b(?:house|home|flat|apartment|property|room) (?:rental|to let|for rent|to rent)\\b|\\brental available\\b', '\\bproperty auction\\b|\\bauction (?:scheduled|to be held)\\b|\\b(?:goes?|going) under the hammer\\b|\\bguide price\\b', '\\b(?:information|info|data)\\b[^.]{0,40}\\b[a-z]{1,2}\\d[a-z\\d]?\\s*\\d[a-z]{2}\\b|\\bpostcode\\s+[a-z]{1,2}\\d']
 PLACEHOLDER_PATTERNS = ['\\[(?:insert|relevant|contact|date|number|details|link)[^\\]]*\\]', '\\babout this article\\b.*$', '\\brelated topics\\b.*$', '#rochdalenews|#greatermanchester', '\\bfact-checked local journalism\\b']
-CATEGORY_STOCK_IMAGES = {category: f'assets/img/stock_{category}.jpg' for category in ['news', 'crime', 'traffic', 'transport', 'politics', 'education', 'sport', 'events', 'business', 'community', 'health', 'environment']}
+# The canonical category vocabulary. This was previously
+# CATEGORY_STOCK_IMAGES, a map of category -> assets/img/stock_<cat>.jpg,
+# which served two unrelated purposes: the list of valid categories, and a
+# flat per-category placeholder image. The placeholder was the second card
+# style on the site - a static illustration bypassing compose_story_card,
+# from a generator that no longer exists. The images were removed on
+# 1 August 2026; only the vocabulary remains.
+PUBLISHED_CATEGORIES = ['news', 'crime', 'traffic', 'transport', 'politics', 'education', 'sport', 'events', 'business', 'community', 'health', 'environment']
 # ARTICLE_SCHEMA carries the editorial gate (see EDITORIAL_GATE_INSTRUCTIONS
 # in editorial_upgrade.py). Strict json_schema means the model MUST answer
 # both gate questions on every draft; the pipeline then applies a
@@ -205,7 +212,7 @@ CATEGORY_STOCK_IMAGES = {category: f'assets/img/stock_{category}.jpg' for catego
 # is_about_rochdale_borough == false is never published (Middleton in
 # Idaho/Wisconsin/Leeds and every other namesake, without maintaining a
 # counter-term list per impostor town).
-ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'content_class': {'type': 'string', 'enum': ['news_report', 'advert_or_listing', 'job_or_recruitment', 'search_results_or_index_page', 'directory_or_services_page', 'press_release_marketing', 'other_non_news']}, 'is_about_rochdale_borough': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(CATEGORY_STOCK_IMAGES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'content_class', 'is_about_rochdale_borough', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_context_used', 'reason']}}
+ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'content_class': {'type': 'string', 'enum': ['news_report', 'advert_or_listing', 'job_or_recruitment', 'search_results_or_index_page', 'directory_or_services_page', 'press_release_marketing', 'other_non_news']}, 'is_about_rochdale_borough': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(PUBLISHED_CATEGORIES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'content_class', 'is_about_rochdale_borough', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_context_used', 'reason']}}
 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', handlers=[logging.FileHandler(LOG_FILE, encoding='utf-8'), logging.StreamHandler()])
 log = logging.getLogger('rochdale_daily')
@@ -1939,9 +1946,6 @@ def recent_existing_articles() -> list[dict[str, Any]]:
             text = ' '.join(str(article.get(field) or '') for field in ('title', 'excerpt', 'content_html'))
             corrected = editorial_category(text, fallback=str(article.get('category') or 'news'))
             if corrected != article.get('category') and not article.get('editorial_lock'):
-                old_stock = CATEGORY_STOCK_IMAGES.get(str(article.get('category') or ''), '')
-                if str(article.get('image_url') or '') == old_stock:
-                    article['image_url'] = CATEGORY_STOCK_IMAGES.get(corrected, CATEGORY_STOCK_IMAGES['news'])
                 article['category'] = corrected
                 if corrected != 'crime':
                     article['police_matter'] = False
@@ -1972,10 +1976,9 @@ def cache_source_image(
     Returns:
         image_url, image_credit, image_credit_url, original_image_url
     """
-    fallback = CATEGORY_STOCK_IMAGES.get(
-        category,
-        CATEGORY_STOCK_IMAGES["news"],
-    )
+    # No image. ensure_article_images composes the story card later; returning a
+    # flat category placeholder here produced a second, inconsistent card style.
+    fallback = ""
 
     if is_subtle_source(candidate.source_name, candidate.source_url):
         return fallback, "Rochdale Daily category image", "", ""
@@ -2111,8 +2114,7 @@ def source_image(
         curated = library_match()
         if curated is not None:
             return curated
-        fallback = CATEGORY_STOCK_IMAGES.get(category, CATEGORY_STOCK_IMAGES["news"])
-        return fallback, "Rochdale Daily category image", "", ""
+        return "", "Rochdale Daily", "", ""
 
     image_url, image_credit, image_credit_url, original_image_url = (
         cache_source_image(candidate, category)
@@ -2436,7 +2438,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         draft_category or candidate.category or 'news',
     )
     area = str(draft.get('area') or candidate.area)
-    if category not in CATEGORY_STOCK_IMAGES:
+    if category not in PUBLISHED_CATEGORIES:
         category = 'news'
     if area not in AREA_KEYWORDS:
         area = candidate.area if candidate.area in AREA_KEYWORDS else 'rochdale'
