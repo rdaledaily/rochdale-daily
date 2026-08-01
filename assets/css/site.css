@@ -681,7 +681,27 @@
 .article-share{display:flex;align-items:center;gap:10px;margin:16px 0 22px}
 .share-icon-button{width:44px;height:44px;display:inline-grid;place-items:center;border:1px solid #bdbdbd;border-radius:50%;background:#fff;color:#111;padding:10px}
 .share-icon-button:hover{background:#111;color:#fff}
-.share-icon-button svg{width:21px;height:21px;fill:currentColor;stroke:currentColor;stroke-width:1.5}
+.share-icon-button svg{width:21px;height:21px}
+/* Brand marks are solid single-path logos and set their own fill; the stroke
+   rule that suited the old hand-drawn glyphs thickened them into blobs. Only
+   the two outline icons (copy link, email) carry a stroke, set inline. */
+
+/* Each button sits in its brand colour permanently, so the row is legible at a
+   glance rather than only under a cursor - which never happens on a phone,
+   where most of this site is read. Hover deepens the same colour instead of
+   introducing one. */
+.share-icon-button.brand-facebook{background:#1877F2;border-color:#1877F2;color:#fff}
+.share-icon-button.brand-whatsapp{background:#25D366;border-color:#25D366;color:#fff}
+.share-icon-button.brand-x{background:#000;border-color:#000;color:#fff}
+.share-icon-button.brand-bluesky{background:#0285FF;border-color:#0285FF;color:#fff}
+.share-icon-button.brand-email{background:#4b5563;border-color:#4b5563;color:#fff}
+.share-icon-button.brand-copy{background:#4b5563;border-color:#4b5563;color:#fff}
+.share-icon-button:hover.brand-facebook{background:#0f5fc2;border-color:#0f5fc2}
+.share-icon-button:hover.brand-whatsapp{background:#1da851;border-color:#1da851}
+.share-icon-button:hover.brand-x{background:#333;border-color:#333}
+.share-icon-button:hover.brand-bluesky{background:#0169cc;border-color:#0169cc}
+.share-icon-button:hover.brand-email,
+.share-icon-button:hover.brand-copy{background:#111;border-color:#111}
 .article-sources{margin:24px 0 8px;font-size:14px;color:#555}
 .article-sources summary{display:inline-block;cursor:pointer;font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .article-sources ul{margin:10px 0 0;padding-left:20px}
