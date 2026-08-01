@@ -120,7 +120,13 @@
     beacon(base, listing, "directory", sample);
   }
 
+  // Kept so slots created after load can still be filled. The homepage opens
+  // articles in a modal built from JavaScript, so its advert slots do not
+  // exist when this script first runs.
+  var loaded = null;
+
   function init(data) {
+    if (data && typeof data === "object") loaded = data;
     if (!data || typeof data !== "object") return;
     var config = data.config || {};
     var base = String(config.tracker_base || "").trim();
@@ -129,6 +135,9 @@
 
     var placements = (data.placements || []).filter(function (p) { return isActive(p, today); });
     document.querySelectorAll("[data-ad-slot]").forEach(function (container) {
+      // Already carrying a creative: leave it. Re-rendering would reroll the
+      // rotation and fire a second impression for a slot nobody re-viewed.
+      if (container.classList.contains("ad-live")) return;
       var slot = container.getAttribute("data-ad-slot");
       var candidates = placements.filter(function (p) { return p.slot === slot; });
       if (candidates.length) renderBanner(container, pickWeighted(candidates), base, sample);
@@ -141,6 +150,12 @@
       if (sold.length) renderDirectory(card, pickWeighted(sold), base, sample);
     });
   }
+
+  // Call after injecting markup that contains [data-ad-slot] containers.
+  // Safe to call repeatedly: live slots are skipped.
+  window.rdFillAds = function () {
+    if (loaded) init(loaded);
+  };
 
   fetch("/adverts.json", { cache: "no-store" })
     .then(function (r) { return r.ok ? r.json() : null; })
