@@ -719,6 +719,14 @@
        of empty placeholder either side. Shrink the box to the creative and
        drop the placeholder chrome. */
     .ad-slot.ad-live {
+      /* display:block, not the placeholder's flex. The two slots that failed
+         to render - the article leaderboard and the in-content rectangle -
+         both size themselves with width:100%, which is a percentage against a
+         flex container and can collapse. The sidebar rectangle worked because
+         it carries a fixed width:300px. Taking a live advert out of flex
+         removes the dependency entirely; the anchor ads.js writes is already
+         display:block with the image centred by margin:0 auto. */
+      display: block;
       background: transparent; border: 0; padding: 0;
       width: 100%; max-width: 100%; min-height: 0; height: auto;
     }
@@ -780,7 +788,7 @@
         </div>
         <aside class="article-sidebar">
           <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
-          <div class="sidebar-box"><h3>More in Traffic</h3><a class="related-story" href="new-parking-restrictions-to-be-introduced-on-newgate-from-september-2026.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/parking_restrictions.jpg" alt="" loading="lazy"><span class="related-title">New Parking Restrictions to be Introduced on Newgate from September 2026</span></a><a class="related-story" href="road-closures-planned-for-milaad-procession-in-rochdale-from-24-august-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/road-closures-planned-for-milaad-procession-in-rochdale-from-24-august-2026-c039baf79380.jpg" alt="" loading="lazy"><span class="related-title">Road Closures for Milaad Procession in Rochdale from 24 August 2026</span></a><a class="related-story" href="roadworks-on-queen-street-to-begin-on-7-september-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/roadworks-on-queen-street-to-begin-on-7-september-2026-c039baf79380.jpg" alt="" loading="lazy"><span class="related-title">Roadworks on Princess Street to Begin on 7 September 2026</span></a></div>
+          <div class="sidebar-box"><h3>More in Traffic</h3><a class="related-story" href="new-parking-restrictions-to-be-introduced-on-newgate-from-september-2026.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/parking_restrictions.jpg" alt="" loading="lazy"><span class="related-title">New parking restrictions to be introduced on Newgate from September 2026</span></a><a class="related-story" href="road-closures-planned-for-milaad-procession-in-rochdale-from-24-august-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/road-closures-planned-for-milaad-procession-in-rochdale-from-24-august-2026-c039baf79380.jpg" alt="" loading="lazy"><span class="related-title">Road Closures for Milaad Procession in Rochdale from 24 August 2026</span></a><a class="related-story" href="roadworks-on-queen-street-to-begin-on-7-september-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/roadworks-on-queen-street-to-begin-on-7-september-2026-c039baf79380.jpg" alt="" loading="lazy"><span class="related-title">Roadworks on Princess Street to Begin on 7 September 2026</span></a></div>
         </aside>
       </div>
     </div>

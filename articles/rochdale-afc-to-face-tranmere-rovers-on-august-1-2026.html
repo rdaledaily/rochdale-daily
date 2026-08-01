@@ -719,6 +719,14 @@
        of empty placeholder either side. Shrink the box to the creative and
        drop the placeholder chrome. */
     .ad-slot.ad-live {
+      /* display:block, not the placeholder's flex. The two slots that failed
+         to render - the article leaderboard and the in-content rectangle -
+         both size themselves with width:100%, which is a percentage against a
+         flex container and can collapse. The sidebar rectangle worked because
+         it carries a fixed width:300px. Taking a live advert out of flex
+         removes the dependency entirely; the anchor ads.js writes is already
+         display:block with the image centred by margin:0 auto. */
+      display: block;
       background: transparent; border: 0; padding: 0;
       width: 100%; max-width: 100%; min-height: 0; height: auto;
     }
@@ -780,7 +788,7 @@
         </div>
         <aside class="article-sidebar">
           <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
-          <div class="sidebar-box"><h3>More in Sport</h3><a class="related-story" href="rochdale-mayfield-women-to-face-ashton-bears-tomorrow.html"><img src="https://rochdaledaily.co.uk/assets/article-images/rochdale-mayfield-women-to-face-ashton-bears-tomorrow-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Rochdale Mayfield Women to Face Ashton Bears at Mayfield Sports Centre</span></a><a class="related-story" href="rochdale-to-face-york-in-title-decider.html"><img src="https://rochdaledaily.co.uk/assets/article-images/rochdale-to-face-york-in-title-decider-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Rochdale to Face York in Title Decider</span></a><a class="related-story" href="rochdale-to-play-chesterfield-in-upcoming-fixture.html"><img src="https://rochdaledaily.co.uk/assets/article-images/rochdale-to-play-chesterfield-in-upcoming-fixture-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Rochdale to Play Chesterfield in Upcoming Fixture</span></a></div>
+          <div class="sidebar-box"><h3>More in Sport</h3><a class="related-story" href="rochdale-mayfield-women-to-face-ashton-bears-tomorrow.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/mayfield_women.jpg" alt="" loading="lazy"><span class="related-title">Rochdale Mayfield Women to Face Ashton Bears at Mayfield Sports Centre</span></a><a class="related-story" href="rochdale-to-face-york-in-title-decider.html"><img src="https://rochdaledaily.co.uk/assets/article-images/rochdale-to-face-york-in-title-decider-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Rochdale to Face York in Title Decider</span></a><a class="related-story" href="rochdale-to-play-chesterfield-in-upcoming-fixture.html"><img src="https://rochdaledaily.co.uk/assets/article-images/rochdale-to-play-chesterfield-in-upcoming-fixture-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Rochdale to Play Chesterfield in Upcoming Fixture</span></a></div>
         </aside>
       </div>
     </div>
