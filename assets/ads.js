@@ -64,10 +64,26 @@
     "article-mrec": 620
   };
 
+  // Horizontal slots run the full width of the page column. A 970px creative
+  // in a 1220px column previously sat centred at its natural size, leaving
+  // 125px of empty slot either side. These slots stretch the creative to the
+  // column width instead - aspect ratio preserved, so it is scaled rather than
+  // distorted, and the slot's max-height still applies.
+  //
+  // Supply the creative at the column width (1220px, or 2440px for sharpness
+  // on high-density screens): anything narrower is upscaled, and text in a
+  // banner softens noticeably past about 25%.
+  var FULL_WIDTH_SLOTS = {
+    "home-leaderboard": true,
+    "article-leaderboard": true,
+    "home-billboard": true
+  };
+
   function renderBanner(container, ad, base, sample) {
     var slot = container.getAttribute("data-ad-slot");
     var maxH = SLOT_MAX_HEIGHT[slot] || 300;
-    var imgStyle = "max-width:100%;max-height:" + maxH + "px;width:auto;height:auto;display:block;margin:0 auto";
+    var widthRule = FULL_WIDTH_SLOTS[slot] ? "width:100%;" : "width:auto;";
+    var imgStyle = "max-width:100%;max-height:" + maxH + "px;" + widthRule + "height:auto;display:block;margin:0 auto";
     var src = esc(ad.image);
     var mobile = ad.image_mobile ? esc(ad.image_mobile) : "";
     var picture = mobile
