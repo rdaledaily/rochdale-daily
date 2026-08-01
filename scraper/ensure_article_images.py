@@ -258,6 +258,17 @@ def has_real_image(article: dict[str, Any], repo_root: Path) -> bool:
     if not image_url or is_placeholder_path(image_url):
         return False
 
+    # An image in the cards library was put there by hand, so it is real by
+    # definition and the credit checks below do not apply to it. Those checks
+    # exist to stop a photograph fetched from Google News or a social network
+    # being re-hosted here; nothing auto-fetched is ever written into
+    # assets/img/cards/. Without this, a curated card credited to the
+    # organisation that supplied it - "Get Together After Serving CIC", credit
+    # URL facebook.com - was judged a social-network image, discarded, and
+    # replaced with a generated card on every run.
+    if image_url.replace("\\", "/").startswith(str(CARDS_DIR).replace("\\", "/")):
+        return (repo_root / image_url).is_file()
+
     # Self-heal legacy records: a picture credited to Google News / a social
     # network, or whose bytes match a known non-editorial image (the Google
     # logo), is not a real source image and must be re-processed.
