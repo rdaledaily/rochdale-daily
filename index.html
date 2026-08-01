@@ -913,6 +913,44 @@
       .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
+    /* Mobile section layout.
+       Below 820px the flat news grid became a single column of every story on
+       the homepage - about sixty cards - so anything after it (What's on, Add
+       an event, the weather panel, community support) sat past a very long
+       scroll. Below that width the grid is replaced by category sections
+       capped at three stories each, with a jump bar above them. Desktop keeps
+       the two-column grid, where sections of three would waste the width. */
+    .mobile-jump { display: none; }
+    .mobile-sections { display: none; }
+    @media (max-width: 820px) {
+      .news-grid { display: none; }
+      .mobile-sections { display: block; }
+      .mobile-jump {
+        display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px;
+      }
+      .mobile-jump button {
+        border: 1px solid var(--line); background: transparent; color: var(--ink);
+        padding: 9px 12px; font-size: 12px; font-weight: 900; text-transform: uppercase;
+        font-family: "Roboto Condensed", Arial, sans-serif; cursor: pointer; border-radius: 999px;
+      }
+      .mobile-jump button.primary { background: var(--accent); border-color: var(--accent); color: #04222a; }
+      .m-section { margin: 0 0 26px; }
+      .m-section-head {
+        display: flex; align-items: baseline; justify-content: space-between;
+        gap: 12px; border-top: 3px solid var(--ink); padding-top: 8px; margin-bottom: 10px;
+      }
+      .m-section-title {
+        font-family: "Roboto Condensed", Arial, sans-serif; font-size: 19px;
+        text-transform: uppercase; letter-spacing: .02em; margin: 0;
+      }
+      .m-section-more {
+        border: 0; background: transparent; padding: 0; cursor: pointer;
+        font-family: "Roboto Condensed", Arial, sans-serif; font-size: 12px; font-weight: 900;
+        text-transform: uppercase; color: var(--accent); white-space: nowrap;
+      }
+      .m-section .news-card { margin-bottom: 14px; }
+    }
+
     @media (max-width: 620px) {
       .wrap { width: min(100% - 20px, var(--max)); }
       .utility-left { gap: 9px; }
@@ -1151,6 +1189,8 @@
             <button class="filter-button" type="button" data-category="environment">Environment</button>
           </div>
           <div class="news-layout">
+            <div class="mobile-jump" id="mobile-jump" aria-label="Jump to a section"></div>
+            <div class="mobile-sections" id="mobile-sections"></div>
             <div class="news-grid" id="news-grid"></div>
             <aside class="side-rail">
               <section class="rail-box">
@@ -2008,6 +2048,7 @@
           );
           renderTopStories();
           renderNewsGrid();
+          renderMobileSections();
           renderEvents();
 
           const crimeHeadlines = stories
@@ -2037,6 +2078,7 @@
       if (!stories.length) {
         renderTopStories();
         renderNewsGrid();
+        renderMobileSections();
         renderEvents();
         if (status) status.textContent = "Live feed unavailable";
       } else if (status) {
@@ -2447,6 +2489,134 @@
       decorateCommentCounts();
     }
 
+
+    /* ---- Mobile section layout -----------------------------------------
+       Below 820px the news grid is hidden and these sections replace it.
+
+       The grid printed every story on the homepage in one column - about
+       sixty cards - which pushed What's on, Add an event, the weather panel
+       and community support past a scroll almost nobody completed. Sections
+       cap each category at three and put the rest behind a "More" control,
+       which reuses the existing category filter rather than introducing a
+       second navigation model.
+
+       Thin categories are grouped. Crime, health, events and news routinely
+       hold one or two stories each, and a section header above a single item
+       looks broken, so related ones share a section.
+
+       Sport is capped like everything else. It is consistently the largest
+       category - 17 of 61 stories on the day this was written - and left
+       uncapped it crowds out every other kind of local news on a phone. */
+    const MOBILE_SECTIONS = [
+      { id: "news", title: "News and crime", categories: ["news", "crime"] },
+      { id: "politics", title: "Politics", categories: ["politics"] },
+      { id: "traffic", title: "Traffic and transport", categories: ["traffic", "transport"] },
+      { id: "community", title: "Community", categories: ["community"] },
+      { id: "sport", title: "Sport", categories: ["sport"] },
+      { id: "more", title: "More from the borough", categories: ["education", "business", "environment", "health", "events"] }
+    ];
+    const MOBILE_SECTION_SIZE = 3;
+
+    function mobileCardMarkup(story, slot) {
+      return `
+        <article class="news-card" data-content-slot="${slot}" data-category="${story.category}" data-area="${story.area}">
+          ${storyButton(story, `
+            ${imageMarkup(story)}
+            ${story.isOngoing ? '<span class="ongoing-badge">ONGOING</span>' : ''}
+            <span class="story-kicker">${story.kicker}</span>
+            <h3 class="card-headline">${story.title}</h3>
+            <p class="card-summary">${story.summary}</p>
+            <div class="tag-row">
+              <span class="tag">${areaLabel(story.area)}</span>
+              ${story.policeMatter ? '<span class="tag crime">Report information</span>' : ''}
+              ${story.demo ? '<span class="tag demo">Example content</span>' : ''}
+            </div>
+            <span class="read-more-button" aria-hidden="true">Read More →</span>
+          `)}
+        </article>`;
+    }
+
+    function renderMobileJump() {
+      const bar = document.getElementById("mobile-jump");
+      if (!bar) return;
+      /* Add an event first and accented: reaching it was the reason this
+         layout exists. The rest are the sections a reader is most likely to
+         want on a phone rather than every category. */
+      const targets = [
+        { label: "Add an event", target: "add-event", primary: true },
+        { label: "What's on", target: "whats-on" },
+        { label: "Weather", target: "weather-box" },
+        { label: "Support", target: "support" }
+      ];
+      bar.innerHTML = targets.map(item =>
+        `<button type="button" data-jump="${item.target}"${item.primary ? ' class="primary"' : ''}>${item.label}</button>`
+      ).join("");
+    }
+
+    function renderMobileSections() {
+      const host = document.getElementById("mobile-sections");
+      if (!host) return;
+
+      const list = filteredStories();
+      const filtersActive = activeCategory !== "all" || activeArea !== "all";
+
+      /* With a filter on, sections would be a single section anyway. Show the
+         whole filtered set instead, uncapped - that is what "More sport" is
+         for, and a cap here would make the More control lead nowhere. */
+      if (filtersActive) {
+        host.innerHTML = list.length
+          ? `<div class="m-section">
+               <div class="m-section-head">
+                 <h3 class="m-section-title">${list.length} ${list.length === 1 ? "story" : "stories"}</h3>
+               </div>
+               ${list.map((story, index) => mobileCardMarkup(story, `m-filtered-${index + 1}`)).join("")}
+             </div>`
+          : `<div style="border:1px solid var(--line);padding:24px"><h3 style="margin-top:0">No stories match these filters</h3><p>Choose another area or category, or select Show all.</p></div>`;
+        decorateCommentCounts();
+        return;
+      }
+
+      const used = new Set();
+      const blocks = [];
+      MOBILE_SECTIONS.forEach(section => {
+        const picked = list
+          .filter(story => section.categories.includes(story.category) && !used.has(story.id))
+          .slice(0, MOBILE_SECTION_SIZE);
+        if (!picked.length) return;
+        picked.forEach(story => used.add(story.id));
+        const total = list.filter(story => section.categories.includes(story.category)).length;
+        const more = total > picked.length
+          ? `<button class="m-section-more" type="button" data-more="${section.categories[0]}">More ${section.title.toLowerCase()} (${total})</button>`
+          : "";
+        blocks.push(`
+          <section class="m-section" id="m-${section.id}" aria-labelledby="m-${section.id}-title">
+            <div class="m-section-head">
+              <h3 class="m-section-title" id="m-${section.id}-title">${section.title}</h3>
+              ${more}
+            </div>
+            ${picked.map((story, index) => mobileCardMarkup(story, `m-${section.id}-${index + 1}`)).join("")}
+          </section>`);
+      });
+
+      host.innerHTML = blocks.join("") ||
+        `<div style="border:1px solid var(--line);padding:24px"><h3 style="margin-top:0">No stories yet</h3><p>Check back shortly.</p></div>`;
+      decorateCommentCounts();
+    }
+
+    document.addEventListener("click", function (event) {
+      const jump = event.target.closest("[data-jump]");
+      if (jump) {
+        const target = document.getElementById(jump.dataset.jump);
+        if (target) {
+          target.hidden = false;
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        return;
+      }
+      const more = event.target.closest("[data-more]");
+      if (more) applyFilter(more.dataset.more, activeArea);
+    });
+
     function eventTagsForStory(story, date) {
       const tags = [];
       const text = `${story.title} ${story.summary}`.toLowerCase();
@@ -2626,6 +2796,7 @@ function shareIconMarkup(action, label) {
         areaSelect.value = "all";
       }
       renderNewsGrid();
+      renderMobileSections();
       decorateCommentCounts();
       document.getElementById("latest-news-title").scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -3085,6 +3256,7 @@ function shareIconMarkup(action, label) {
 
     renderTopStories();
     renderNewsGrid();
+    renderMobileSections();
     renderEvents();
     // Start the ticker immediately, independently of the article feed.
     restartBreakingTicker();
