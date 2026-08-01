@@ -710,6 +710,19 @@
 .article-sources li{margin:5px 0}
 .article-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;color:#666}
 .article-breadcrumb a{color:inherit}
+
+    /* A slot holding a real advert stops being a placeholder. ads.js adds
+       .ad-live once a creative renders, but nothing styled it, so the dashed
+       box and its grey fill stayed - and because the homepage leaderboard
+       container is plain .ad-slot with no width cap, it spanned the full
+       1220px wrap while the 970px banner sat centred inside it, leaving 125px
+       of empty placeholder either side. Shrink the box to the creative and
+       drop the placeholder chrome. */
+    .ad-slot.ad-live {
+      background: transparent; border: 0; padding: 0;
+      width: 100%; max-width: 100%; min-height: 0; height: auto;
+    }
+    .ad-slot.ad-live::after { content: none; }
 </style>
 
   <meta property="og:type" content="article">
@@ -767,7 +780,7 @@
         </div>
         <aside class="article-sidebar">
           <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
-          <div class="sidebar-box"><h3>More in Politics</h3><a class="related-story" href="comment-bev-craig-wins-greater-manchester-mayor.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/bev_craig.jpg" alt="" loading="lazy"><span class="related-title">Labour Wins GM Election: a narrow mandate, a continuity platform, and a borough still waiting</span></a><a class="related-story" href="rochdale-s-voting-patterns-in-greater-manchester-mayoral-by-election-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/rochdale-s-voting-patterns-in-greater-manchester-mayoral-by-election-2026-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Rochdale&#x27;s Voting Patterns in Greater Manchester Mayoral By-Election 2026</span></a><a class="related-story" href="who-is-sian-astley-greater-manchester-mayoral-profile.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/sian-astley.jpg" alt="" loading="lazy"><span class="related-title">Who is Sian Astley? The businesswoman hoping to reshape Greater Manchester politics</span></a></div>
+          <div class="sidebar-box"><h3>More in Politics</h3><a class="related-story" href="reform-strongest-showing-reshapes-greater-manchester-politics.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/greater-manchester-mayoral-election-results.jpg" alt="" loading="lazy"><span class="related-title">Reform&#x27;s strongest showing yet reshapes Greater Manchester politics</span></a><a class="related-story" href="comment-bev-craig-wins-greater-manchester-mayor.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/bev_craig.jpg" alt="" loading="lazy"><span class="related-title">Labour Wins GM Election: a narrow mandate, a continuity platform, and a borough still waiting</span></a><a class="related-story" href="rochdale-s-voting-patterns-in-greater-manchester-mayoral-by-election-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/rochdale-s-voting-patterns-in-greater-manchester-mayoral-by-election-2026-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Rochdale&#x27;s Voting Patterns in Greater Manchester Mayoral By-Election 2026</span></a></div>
         </aside>
       </div>
     </div>

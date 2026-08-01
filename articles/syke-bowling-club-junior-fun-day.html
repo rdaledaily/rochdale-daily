@@ -710,6 +710,19 @@
 .article-sources li{margin:5px 0}
 .article-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;color:#666}
 .article-breadcrumb a{color:inherit}
+
+    /* A slot holding a real advert stops being a placeholder. ads.js adds
+       .ad-live once a creative renders, but nothing styled it, so the dashed
+       box and its grey fill stayed - and because the homepage leaderboard
+       container is plain .ad-slot with no width cap, it spanned the full
+       1220px wrap while the 970px banner sat centred inside it, leaving 125px
+       of empty placeholder either side. Shrink the box to the creative and
+       drop the placeholder chrome. */
+    .ad-slot.ad-live {
+      background: transparent; border: 0; padding: 0;
+      width: 100%; max-width: 100%; min-height: 0; height: auto;
+    }
+    .ad-slot.ad-live::after { content: none; }
 </style>
 
   <meta property="og:type" content="article">
@@ -718,7 +731,7 @@
   <meta name="keywords" content="Syke, Events, Rochdale, local news">
   <meta property="og:title" content="Young bowlers invited to take part in Syke Bowling Club fun day">
   <meta property="og:description" content="Syke Bowling Club is inviting young people from across Greater Manchester to a free Junior Fun Day featuring crown green bowling, prizes, refreshments...">
-  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/syke-bowling-green.jpg">
+  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/syke_bowling_green.jpg">
   <meta property="og:url" content="https://rochdaledaily.co.uk/articles/syke-bowling-club-junior-fun-day.html">
   <meta property="article:published_time" content="2026-08-01T11:55:00Z">
   <meta property="article:modified_time" content="2026-08-01T11:55:00Z">
@@ -726,9 +739,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Young bowlers invited to take part in Syke Bowling Club fun day">
   <meta name="twitter:description" content="Syke Bowling Club is inviting young people from across Greater Manchester to a free Junior Fun Day featuring crown green bowling, prizes, refreshments...">
-  <meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/cards/syke-bowling-green.jpg">
+  <meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/cards/syke_bowling_green.jpg">
 
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/syke-bowling-club-junior-fun-day.html#article", "headline": "Young bowlers invited to take part in Syke Bowling Club fun day", "description": "Syke Bowling Club is inviting young people from across Greater Manchester to a free Junior Fun Day featuring crown green bowling, prizes, refreshments...", "image": ["https://rochdaledaily.co.uk/assets/img/cards/syke-bowling-green.jpg"], "datePublished": "2026-08-01T11:55:00Z", "dateModified": "2026-08-01T11:55:00Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Events", "wordCount": 383, "keywords": "Syke, Events, Rochdale, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/syke-bowling-club-junior-fun-day.html"}, "contentLocation": {"@type": "Place", "name": "Syke"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Events", "item": "https://rochdaledaily.co.uk/#events"}, {"@type": "ListItem", "position": 3, "name": "Young bowlers invited to take part in Syke Bowling Club fun day", "item": "https://rochdaledaily.co.uk/articles/syke-bowling-club-junior-fun-day.html"}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/syke-bowling-club-junior-fun-day.html#article", "headline": "Young bowlers invited to take part in Syke Bowling Club fun day", "description": "Syke Bowling Club is inviting young people from across Greater Manchester to a free Junior Fun Day featuring crown green bowling, prizes, refreshments...", "image": ["https://rochdaledaily.co.uk/assets/img/cards/syke_bowling_green.jpg"], "datePublished": "2026-08-01T11:55:00Z", "dateModified": "2026-08-01T11:55:00Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Events", "wordCount": 383, "keywords": "Syke, Events, Rochdale, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/syke-bowling-club-junior-fun-day.html"}, "contentLocation": {"@type": "Place", "name": "Syke"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Events", "item": "https://rochdaledaily.co.uk/#events"}, {"@type": "ListItem", "position": 3, "name": "Young bowlers invited to take part in Syke Bowling Club fun day", "item": "https://rochdaledaily.co.uk/articles/syke-bowling-club-junior-fun-day.html"}]}]}</script>
 </head>
 <body>
   <header class="masthead">
@@ -767,7 +780,7 @@
         </div>
         <aside class="article-sidebar">
           <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
-          <div class="sidebar-box"><h3>More in Events</h3><a class="related-story" href="rochdale-feel-good-festival-2026-everything-you-need-to-know.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-feel-good-festival-2026.jpg" alt="" loading="lazy"><span class="related-title">Everything You Need to Know Before Rochdale Feel Good Festival 2026</span></a><a class="related-story" href="ellie-sax-endless-summer-tour-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/ellie-sax-endless-summer-tour-2026-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Ellie Sax - Endless Summer Tour 2026</span></a><a class="related-story" href="oktoberfest-rochdale-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/oktoberfest-rochdale-2026-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Oktoberfest Rochdale 2026</span></a></div>
+          <div class="sidebar-box"><h3>More in Events</h3><a class="related-story" href="jason-williams-grow-well-heywood.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/jason-williams-grow-well-heywood.jpg" alt="" loading="lazy"><span class="related-title">Cloud Gardener Jason Williams to host wellbeing gardening evening in Heywood</span></a><a class="related-story" href="rochdale-feel-good-festival-2026-everything-you-need-to-know.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-feel-good-festival-2026.jpg" alt="" loading="lazy"><span class="related-title">Everything You Need to Know Before Rochdale Feel Good Festival 2026</span></a><a class="related-story" href="ellie-sax-endless-summer-tour-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/ellie-sax-endless-summer-tour-2026-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Ellie Sax - Endless Summer Tour 2026</span></a></div>
         </aside>
       </div>
     </div>

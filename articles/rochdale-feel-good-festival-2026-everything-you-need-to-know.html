@@ -710,6 +710,19 @@
 .article-sources li{margin:5px 0}
 .article-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;color:#666}
 .article-breadcrumb a{color:inherit}
+
+    /* A slot holding a real advert stops being a placeholder. ads.js adds
+       .ad-live once a creative renders, but nothing styled it, so the dashed
+       box and its grey fill stayed - and because the homepage leaderboard
+       container is plain .ad-slot with no width cap, it spanned the full
+       1220px wrap while the 970px banner sat centred inside it, leaving 125px
+       of empty placeholder either side. Shrink the box to the creative and
+       drop the placeholder chrome. */
+    .ad-slot.ad-live {
+      background: transparent; border: 0; padding: 0;
+      width: 100%; max-width: 100%; min-height: 0; height: auto;
+    }
+    .ad-slot.ad-live::after { content: none; }
 </style>
 
   <meta property="og:type" content="article">
@@ -767,7 +780,7 @@
         </div>
         <aside class="article-sidebar">
           <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
-          <div class="sidebar-box"><h3>More in Events</h3><a class="related-story" href="syke-bowling-club-junior-fun-day.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/syke-bowling-green.jpg" alt="" loading="lazy"><span class="related-title">Young bowlers invited to take part in Syke Bowling Club fun day</span></a><a class="related-story" href="ellie-sax-endless-summer-tour-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/ellie-sax-endless-summer-tour-2026-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Ellie Sax - Endless Summer Tour 2026</span></a><a class="related-story" href="oktoberfest-rochdale-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/oktoberfest-rochdale-2026-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Oktoberfest Rochdale 2026</span></a></div>
+          <div class="sidebar-box"><h3>More in Events</h3><a class="related-story" href="jason-williams-grow-well-heywood.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/jason-williams-grow-well-heywood.jpg" alt="" loading="lazy"><span class="related-title">Cloud Gardener Jason Williams to host wellbeing gardening evening in Heywood</span></a><a class="related-story" href="syke-bowling-club-junior-fun-day.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/syke_bowling_green.jpg" alt="" loading="lazy"><span class="related-title">Young bowlers invited to take part in Syke Bowling Club fun day</span></a><a class="related-story" href="ellie-sax-endless-summer-tour-2026.html"><img src="https://rochdaledaily.co.uk/assets/article-images/ellie-sax-endless-summer-tour-2026-area-category-card.jpg" alt="" loading="lazy"><span class="related-title">Ellie Sax - Endless Summer Tour 2026</span></a></div>
         </aside>
       </div>
     </div>
