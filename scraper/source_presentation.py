@@ -169,10 +169,14 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     }:
         category = "news"
 
-    # Do not reuse a publisher image without a visible credit. Use Rochdale
-    # Daily's category artwork instead.
-    article["image_url"] = f"assets/img/stock_{category}.jpg"
-    article["image_credit"] = "Rochdale Daily category image"
+    # Do not reuse a publisher image without a visible credit. Clearing the URL
+    # leaves ensure_article_images to compose the story card, which is the only
+    # card style on the site. This previously assigned a flat
+    # assets/img/stock_<category>.jpg illustration - a second style, from a
+    # generator that no longer exists, which then persisted on those stories
+    # because a card is only composed when image_url is empty.
+    article["image_url"] = ""
+    article["image_credit"] = "Rochdale Daily"
     article["source_image_candidate_url"] = ""
     article["source_image_reuse_status"] = ""
 
