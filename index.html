@@ -842,13 +842,35 @@
     }
     .search-overlay.open { display: flex; }
     .search-panel { width: min(760px, 100%); background: var(--paper); padding: 22px; }
-    .search-panel-row { display: grid; grid-template-columns: 1fr auto; }
+    .search-panel-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
     .search-panel input { min-width: 0; border: 2px solid var(--line); background: var(--card); color: var(--ink); padding: 14px; font-size: 18px; }
-    .search-panel button { border: 0; background: var(--yellow); color: #0b1524; font-weight: 900; padding: 0 18px; }
+    /* White on the accent, not the near-black it used to carry. --yellow is a
+       dark teal since the palette change - the token name outlived its colour -
+       so #0b1524 on it measured 3.42:1 and the word "Search" was unreadable.
+       White measures 5.36:1 and passes AA. */
+    .search-panel button {
+      border: 0; background: var(--yellow); color: #fff; font-weight: 900;
+      padding: 0 18px; min-height: 48px; font-size: 15px; text-transform: uppercase;
+      font-family: "Roboto Condensed", Arial, sans-serif; letter-spacing: .04em; cursor: pointer;
+    }
     .search-results { margin-top: 16px; max-height: 55vh; overflow: auto; }
     .search-result { display: block; width: 100%; text-align: left; border: 0; border-top: 1px solid var(--line); background: transparent; color: var(--ink); padding: 12px 0; font-weight: 800; }
     .search-result:hover { color: var(--accent); }
-    .search-close { margin-top: 14px; border: 0; background: #111 !important; color: #fff; padding: 10px 15px !important; }
+    .search-close { margin-top: 14px; border: 0; background: #111 !important; color: #fff; padding: 12px 15px !important; min-height: 48px; cursor: pointer; }
+
+    /* On a phone the panel opened 85px down the screen, with the input and
+       button sharing one row so the field was too narrow to read a query in.
+       Stack them, sit the panel near the top, and give every control a 48px
+       tap target. */
+    @media (max-width: 560px) {
+      .search-overlay { padding: 16px 12px; align-items: stretch; }
+      .search-panel { padding: 16px; max-height: 100%; overflow: auto; }
+      .search-panel-row { grid-template-columns: 1fr; gap: 10px; }
+      .search-panel input { font-size: 16px; padding: 13px; }
+      .search-panel button { width: 100%; padding: 13px 18px; }
+      .search-results { max-height: none; }
+      .search-close { width: 100%; }
+    }
 
     .cookie {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100; display: none;
