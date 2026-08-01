@@ -828,6 +828,14 @@
        of empty placeholder either side. Shrink the box to the creative and
        drop the placeholder chrome. */
     .ad-slot.ad-live {
+      /* display:block, not the placeholder's flex. The two slots that failed
+         to render - the article leaderboard and the in-content rectangle -
+         both size themselves with width:100%, which is a percentage against a
+         flex container and can collapse. The sidebar rectangle worked because
+         it carries a fixed width:300px. Taking a live advert out of flex
+         removes the dependency entirely; the anchor ads.js writes is already
+         display:block with the image centred by margin:0 auto. */
+      display: block;
       background: transparent; border: 0; padding: 0;
       width: 100%; max-width: 100%; min-height: 0; height: auto;
     }
