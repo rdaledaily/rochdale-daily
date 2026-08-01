@@ -1,13 +1,13 @@
 {
   "_docs": {
     "purpose": "Single source of truth for all advertising on Rochdale Daily. Edit this file through the GitHub web interface; the site updates on the next deploy. Expired ads drop out automatically; empty slots fall back to the built-in 'Advertise here' placeholders. Deleting an ad here never deletes its click/impression history from the tracker.",
-    "orientation_rule": "Match the creative to the slot: horizontal banners go in leaderboard/billboard slots; square, portrait or tall creatives go in article-mrec or article-incontent. Any image is letterboxed within the slot's height limit - never cropped or stretched - so a wrongly shaped creative looks small, not broken.",
+    "orientation_rule": "Match the creative to the slot. Horizontal slots (leaderboard, billboard) stretch the creative to the column width, so supply it at that width or it will be upscaled and soften. Rectangle and vertical slots (mrec, incontent) render at natural size and are letterboxed within the height limit - never cropped or stretched.",
     "slots": {
-      "home-leaderboard": "Homepage top banner. HORIZONTAL: 728x90 or 970x90 (mobile 320x50 via image_mobile). Renders up to 120px tall.",
-      "home-billboard": "Homepage lower banner. HORIZONTAL: 970x250 (mobile 300x250). Renders up to 280px tall.",
-      "article-leaderboard": "Top of every article. HORIZONTAL: 728x90 (mobile 320x50). Renders up to 120px tall.",
-      "article-mrec": "Article sidebar. RECTANGLE or VERTICAL: 300x250, or 300x600 skyscraper. Renders up to 620px tall.",
-      "article-incontent": "Inside article body. RECTANGLE: 300x250 or 580x250. Renders up to 280px tall."
+      "home-leaderboard": "Homepage top banner. HORIZONTAL, stretched to the full page column: supply 1220x113 (or 2440x226 for high-density screens). Mobile 320x50 via image_mobile. Renders up to 120px tall.",
+      "home-billboard": "Homepage lower banner. HORIZONTAL, stretched to the full page column: supply 1220x280 (mobile 300x250). Renders up to 280px tall.",
+      "article-leaderboard": "Top of every article. HORIZONTAL, stretched to the article column: supply 728x90 (mobile 320x50). Renders up to 120px tall.",
+      "article-mrec": "Article sidebar. RECTANGLE or VERTICAL, shown at natural size: 300x250, or 300x600 skyscraper. Renders up to 620px tall.",
+      "article-incontent": "Inside article body. RECTANGLE, shown at natural size: 300x250 or 580x250. Renders up to 280px tall."
     },
     "placement_fields": {
       "id": "Unique, permanent, lowercase-with-hyphens, e.g. 'acme-plumbing-2026-07'. Used in tracking URLs and reports - never reuse an id, even after an ad ends.",
@@ -43,11 +43,57 @@
   },
   "placements": [
     {
-      "id": "template-copy-me",
+      "id": "template-home-leaderboard",
       "slot": "home-leaderboard",
       "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
-      "image": "/assets/ads/business-728x90.png",
+      "image": "/assets/ads/business-1220x113.png",
       "image_mobile": "/assets/ads/business-320x50.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1
+    },
+    {
+      "id": "template-home-billboard",
+      "slot": "home-billboard",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-1220x280.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1,
+      "image_mobile": "/assets/ads/business-300x250.png"
+    },
+    {
+      "id": "template-article-leaderboard",
+      "slot": "article-leaderboard",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-728x90.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1,
+      "image_mobile": "/assets/ads/business-320x50.png"
+    },
+    {
+      "id": "template-article-mrec",
+      "slot": "article-mrec",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-300x250.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1
+    },
+    {
+      "id": "template-article-incontent",
+      "slot": "article-incontent",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-580x250.png",
       "url": "https://example.com",
       "alt": "Describe the advert for screen readers",
       "start": "2020-01-01",
@@ -58,9 +104,53 @@
       "id": "neb-electrical-2026-08",
       "slot": "home-leaderboard",
       "advertiser": "NEB Electrical",
-      "image": "nebelectrical2440x226.png",
+      "image": "/nebelectricalbanner.jpg",
       "url": "REPLACE-BEFORE-COMMIT",
-      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale, 15 years experience",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1
+    },
+    {
+      "id": "neb-electrical-billboard-2026-08",
+      "slot": "home-billboard",
+      "image": "/assets/ads/neb-electrical-970x250.png",
+      "advertiser": "NEB Electrical",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1
+    },
+    {
+      "id": "neb-electrical-article-leaderboard-2026-08",
+      "slot": "article-leaderboard",
+      "image": "/assets/ads/neb-electrical-728x90.png",
+      "advertiser": "NEB Electrical",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1
+    },
+    {
+      "id": "neb-electrical-mrec-2026-08",
+      "slot": "article-mrec",
+      "image": "/assets/ads/neb-electrical-300x250.png",
+      "advertiser": "NEB Electrical",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1
+    },
+    {
+      "id": "neb-electrical-incontent-2026-08",
+      "slot": "article-incontent",
+      "image": "/assets/ads/neb-electrical-300x250.png",
+      "advertiser": "NEB Electrical",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
       "start": "2026-08-01",
       "end": "2028-09-01",
       "weight": 1
