@@ -957,6 +957,21 @@ def story_similarity(left: Any, right: Any) -> float:
 
 
 def same_story(left: Any, right: Any) -> bool:
+    # An identical id is a stronger statement than any text score: two records
+    # only carry the same id because the pipeline already decided they are the
+    # same story. Three reports of the Britain in Bloom judging sat in the feed
+    # separately, two of them sharing an id, because matching went only on text
+    # similarity and scored them 0.48-0.59 against a 0.72 threshold.
+    #
+    # Lowering that threshold was measured and rejected: at 0.65 it merges
+    # Oktoberfest into a Halloween rock night, and at 0.60 it merges unrelated
+    # roadworks. The false merges arrive before the right ones do, so the fix
+    # has to be a stronger signal rather than a weaker bar.
+    left_id = str(get_value(left, "id", "") or "").strip()
+    right_id = str(get_value(right, "id", "") or "").strip()
+    if left_id and left_id == right_id:
+        return True
+
     return story_similarity(left, right) >= DEFAULT_MATCH_THRESHOLD
 
 
