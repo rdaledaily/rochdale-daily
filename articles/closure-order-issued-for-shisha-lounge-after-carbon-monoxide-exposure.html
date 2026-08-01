@@ -710,6 +710,19 @@
 .article-sources li{margin:5px 0}
 .article-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;color:#666}
 .article-breadcrumb a{color:inherit}
+
+    /* A slot holding a real advert stops being a placeholder. ads.js adds
+       .ad-live once a creative renders, but nothing styled it, so the dashed
+       box and its grey fill stayed - and because the homepage leaderboard
+       container is plain .ad-slot with no width cap, it spanned the full
+       1220px wrap while the 970px banner sat centred inside it, leaving 125px
+       of empty placeholder either side. Shrink the box to the creative and
+       drop the placeholder chrome. */
+    .ad-slot.ad-live {
+      background: transparent; border: 0; padding: 0;
+      width: 100%; max-width: 100%; min-height: 0; height: auto;
+    }
+    .ad-slot.ad-live::after { content: none; }
 </style>
 
   <meta property="og:type" content="article">
@@ -721,14 +734,14 @@
   <meta property="og:image" content="">
   <meta property="og:url" content="https://rochdaledaily.co.uk/articles/closure-order-issued-for-shisha-lounge-after-carbon-monoxide-exposure.html">
   <meta property="article:published_time" content="2026-07-31T09:28:45Z">
-  <meta property="article:modified_time" content="2026-08-01T13:22:48Z">
+  <meta property="article:modified_time" content="2026-08-01T14:15:00Z">
   <meta property="article:section" content="Environment">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Shisha Lounge Closed After Carbon Monoxide Exposure">
   <meta name="twitter:description" content="Phantom The Lounge on Maclure Road in Rochdale has been ordered to close after environmental health officers discovered excessive carbon monoxide...">
   <meta name="twitter:image" content="">
 
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/closure-order-issued-for-shisha-lounge-after-carbon-monoxide-exposure.html#article", "headline": "Shisha Lounge Closed After Carbon Monoxide Exposure", "description": "Phantom The Lounge on Maclure Road in Rochdale has been ordered to close after environmental health officers discovered excessive carbon monoxide...", "image": [""], "datePublished": "2026-07-31T09:28:45Z", "dateModified": "2026-08-01T13:22:48Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Environment", "wordCount": 247, "keywords": "Rochdale, Environment, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/closure-order-issued-for-shisha-lounge-after-carbon-monoxide-exposure.html"}, "contentLocation": {"@type": "Place", "name": "Rochdale"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Environment", "item": "https://rochdaledaily.co.uk/#environment"}, {"@type": "ListItem", "position": 3, "name": "Shisha Lounge Closed After Carbon Monoxide Exposure", "item": "https://rochdaledaily.co.uk/articles/closure-order-issued-for-shisha-lounge-after-carbon-monoxide-exposure.html"}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/closure-order-issued-for-shisha-lounge-after-carbon-monoxide-exposure.html#article", "headline": "Shisha Lounge Closed After Carbon Monoxide Exposure", "description": "Phantom The Lounge on Maclure Road in Rochdale has been ordered to close after environmental health officers discovered excessive carbon monoxide...", "image": [""], "datePublished": "2026-07-31T09:28:45Z", "dateModified": "2026-08-01T14:15:00Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Environment", "wordCount": 247, "keywords": "Rochdale, Environment, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/closure-order-issued-for-shisha-lounge-after-carbon-monoxide-exposure.html"}, "contentLocation": {"@type": "Place", "name": "Rochdale"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Environment", "item": "https://rochdaledaily.co.uk/#environment"}, {"@type": "ListItem", "position": 3, "name": "Shisha Lounge Closed After Carbon Monoxide Exposure", "item": "https://rochdaledaily.co.uk/articles/closure-order-issued-for-shisha-lounge-after-carbon-monoxide-exposure.html"}]}]}</script>
 </head>
 <body>
   <header class="masthead">
