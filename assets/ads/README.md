@@ -1,0 +1,1 @@
+Advertiser banner creatives.
