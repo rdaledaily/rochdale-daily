@@ -118,7 +118,15 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     source_name = _clean(entry.get("source_name")) or "Rochdale Daily"
 
     record: dict[str, Any] = {
-        "id": _clean(entry.get("id")) or _stable_id(source_url or slug),
+        # Derived from the slug, not the source URL. Several articles can
+        # legitimately share a source URL - a generic https://www.facebook.com/
+        # stands in for a dozen different posts - and hashing that gave them
+        # one id. load_manual_article_records() skips a record whose id it has
+        # already seen, so the second and third articles from the same URL were
+        # dropped without any error: valid JSON, no draft flag, and no article.
+        # The slug is already unique per entry and is what the page is named
+        # after, so it is the right thing to key identity on.
+        "id": _clean(entry.get("id")) or _stable_id(slug or source_url),
         "slug": slug,
         "story_key": f"manual-article:{slug}",
         "title": title,
