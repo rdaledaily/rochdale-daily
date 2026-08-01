@@ -726,13 +726,33 @@ def family_key(item: Any) -> str:
     return "hard-news" if family in HARD_NEWS_FAMILIES else family
 
 
+# Cross-family merging needs this many shared subject tokens. One event is
+# routinely categorised differently by different publishers - a shisha lounge
+# closed over carbon monoxide read as "business" to one source and
+# "environment" to another - and an exact family match then made the two
+# reports permanently unmergeable.
+#
+# Relaxing the family rule outright is not safe: measured against the live
+# feed it merged a Baguley Crescent day of action into that same closure,
+# because once the family check passes, nothing else separates two unrelated
+# Rochdale stories from the same week. The family rule had been silently doing
+# that work.
+#
+# So cross-family matches must show positive evidence instead. The two shisha
+# reports share four subject tokens (carbon, lounge, monoxide, shisha); the
+# closure and the day of action share none.
+CROSS_FAMILY_SUBJECT_OVERLAP = 3
+
+
 def categories_compatible(left: Any, right: Any) -> bool:
     left_family = category_family(left)
     right_family = category_family(right)
-    return (
-        left_family == right_family
-        or {left_family, right_family} <= HARD_NEWS_FAMILIES
-    )
+    if left_family == right_family:
+        return True
+    if {left_family, right_family} <= HARD_NEWS_FAMILIES:
+        return True
+    shared = subject_tokens(left) & subject_tokens(right)
+    return len(shared) >= CROSS_FAMILY_SUBJECT_OVERLAP
 
 
 def area_key(item: Any) -> str:
