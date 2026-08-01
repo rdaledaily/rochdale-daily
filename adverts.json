@@ -1,164 +1,173 @@
-/* Rochdale Daily advertising loader.
-   Reads /adverts.json, fills every [data-ad-slot] container with a live,
-   in-date placement (weighted rotation per page view), fills sold
-   [data-ad-directory] cards, and — when config.tracker_base is set —
-   routes clicks through the tracking Worker and fires sampled impression
-   beacons. On any failure it does nothing, leaving the built-in
-   placeholders untouched. No frameworks, no cookies, no personal data. */
-(function () {
-  "use strict";
-
-  function todayKey() {
-    // Europe/London calendar day, matching start/end in adverts.json.
-    var parts = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit"
-    }).formatToParts(new Date());
-    var v = {};
-    parts.forEach(function (p) { v[p.type] = p.value; });
-    return v.year + "-" + v.month + "-" + v.day;
-  }
-
-  function isActive(item, today) {
-    return item && item.start && item.end && item.start <= today && today <= item.end;
-  }
-
-  function pickWeighted(items) {
-    var total = 0;
-    items.forEach(function (i) { total += Math.max(1, Number(i.weight) || 1); });
-    var roll = Math.random() * total;
-    for (var k = 0; k < items.length; k++) {
-      roll -= Math.max(1, Number(items[k].weight) || 1);
-      if (roll <= 0) return items[k];
+{
+  "_docs": {
+    "purpose": "Single source of truth for all advertising on Rochdale Daily. Edit this file through the GitHub web interface; the site updates on the next deploy. Expired ads drop out automatically; empty slots fall back to the built-in 'Advertise here' placeholders. Deleting an ad here never deletes its click/impression history from the tracker.",
+    "orientation_rule": "Match the creative to the slot. Horizontal slots (leaderboard, billboard) stretch the creative to the column width, so supply it at that width or it will be upscaled and soften. Rectangle and vertical slots (mrec, incontent) render at natural size and are letterboxed within the height limit - never cropped or stretched.",
+    "slots": {
+      "home-leaderboard": "Homepage top banner. HORIZONTAL, stretched to the full page column: supply 1220x113 (or 2440x226 for high-density screens). Mobile 320x50 via image_mobile. Renders up to 120px tall.",
+      "home-billboard": "Homepage lower banner. HORIZONTAL, stretched to the full page column: supply 1220x280 (mobile 300x250). Renders up to 280px tall.",
+      "article-leaderboard": "Top of every article. HORIZONTAL, stretched to the article column: supply 728x90 (mobile 320x50). Renders up to 120px tall.",
+      "article-mrec": "Article sidebar. RECTANGLE or VERTICAL, shown at natural size: 300x250, or 300x600 skyscraper. Renders up to 620px tall.",
+      "article-incontent": "Inside article body. RECTANGLE, shown at natural size: 300x250 or 580x250. Renders up to 280px tall."
+    },
+    "placement_fields": {
+      "id": "Unique, permanent, lowercase-with-hyphens, e.g. 'acme-plumbing-2026-07'. Used in tracking URLs and reports - never reuse an id, even after an ad ends.",
+      "slot": "One of the slot names above.",
+      "advertiser": "Business name, shown in your performance reports.",
+      "image": "Path under /assets/ads/, e.g. /assets/ads/acme-728x90.png (upload the image to that folder first).",
+      "image_mobile": "Optional smaller creative for phones, e.g. /assets/ads/acme-320x50.png",
+      "url": "The advertiser's landing page. Clicks are tracked by the Worker then redirected here.",
+      "alt": "Accessible description, e.g. 'Acme Plumbing - emergency callouts across Rochdale'.",
+      "start": "First day the ad shows, YYYY-MM-DD, inclusive.",
+      "end": "Last day the ad shows, YYYY-MM-DD, inclusive.",
+      "weight": "Rotation share within the slot. Two ads weighted 2 and 1 split views roughly 2:1. Use 1 unless an advertiser pays for a larger share."
+    },
+    "directory_fields": {
+      "id": "Unique permanent id, same rules as above.",
+      "category": "Must exactly match a category heading on the homepage: 'Plumbers & heating', 'Electricians', 'Roofers', 'Skip hire', 'Cleaners', 'Solicitors'.",
+      "name": "Business name shown on the card.",
+      "blurb": "One sentence, roughly 90 characters.",
+      "phone": "Optional. Shown as a tap-to-call link.",
+      "url": "Optional. Business website - clicks are tracked.",
+      "start": "YYYY-MM-DD",
+      "end": "YYYY-MM-DD"
+    },
+    "config_fields": {
+      "tracker_base": "Your ads Worker URL. Set - tracking is live.",
+      "impression_sample": "1 = record every impression; 5 = record 1 in 5 (reports multiply back up). Keep at 5 on the free Workers plan; set to 1 after upgrading to Workers Paid for exact counts."
+    },
+    "how_to_add_an_advertiser": "1) Upload their banner to assets/ads/. 2) Copy the template block below into 'placements' (or 'directory'), fill it in, delete the leading underscore from the key name is NOT needed - just add it as a normal object in the array. 3) Commit. The ad appears on the next deploy and disappears itself the day after 'end'."
+  },
+  "config": {
+    "tracker_base": "https://rd-ads.sjpickles-sp.workers.dev",
+    "impression_sample": 5
+  },
+  "placements": [
+    {
+      "id": "template-home-leaderboard",
+      "slot": "home-leaderboard",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-1220x113.png",
+      "image_mobile": "/assets/ads/business-320x50.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1
+    },
+    {
+      "id": "template-home-billboard",
+      "slot": "home-billboard",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-1220x280.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1,
+      "image_mobile": "/assets/ads/business-300x250.png"
+    },
+    {
+      "id": "template-article-leaderboard",
+      "slot": "article-leaderboard",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-728x90.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1,
+      "image_mobile": "/assets/ads/business-320x50.png"
+    },
+    {
+      "id": "template-article-mrec",
+      "slot": "article-mrec",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-300x250.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1
+    },
+    {
+      "id": "template-article-incontent",
+      "slot": "article-incontent",
+      "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
+      "image": "/assets/ads/business-580x250.png",
+      "url": "https://example.com",
+      "alt": "Describe the advert for screen readers",
+      "start": "2020-01-01",
+      "end": "2020-01-02",
+      "weight": 1
+    },
+    {
+      "id": "neb-electrical-2026-08",
+      "slot": "home-leaderboard",
+      "advertiser": "NEB Electrical",
+      "image": "/assets/ads/neb-electrical-2440x226.png",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1,
+      "image_mobile": "/assets/ads/neb-electrical-300x250.png"
+    },
+    {
+      "id": "neb-electrical-billboard-2026-08",
+      "slot": "home-billboard",
+      "image": "/assets/ads/neb-electrical-970x250.png",
+      "advertiser": "NEB Electrical",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1
+    },
+    {
+      "id": "neb-electrical-article-leaderboard-2026-08",
+      "slot": "article-leaderboard",
+      "image": "/assets/ads/neb-electrical-728x90.png",
+      "advertiser": "NEB Electrical",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1,
+      "image_mobile": "/assets/ads/neb-electrical-300x250.png"
+    },
+    {
+      "id": "neb-electrical-mrec-2026-08",
+      "slot": "article-mrec",
+      "image": "/assets/ads/neb-electrical-300x250.png",
+      "advertiser": "NEB Electrical",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1
+    },
+    {
+      "id": "neb-electrical-incontent-2026-08",
+      "slot": "article-incontent",
+      "image": "/assets/ads/neb-electrical-300x250.png",
+      "advertiser": "NEB Electrical",
+      "url": "REPLACE-BEFORE-COMMIT",
+      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "weight": 1
     }
-    return items[items.length - 1];
-  }
-
-  function esc(value) {
-    var div = document.createElement("div");
-    div.textContent = String(value == null ? "" : value);
-    return div.innerHTML;
-  }
-
-  function clickUrl(base, ad) {
-    return base ? base.replace(/\/$/, "") + "/go/" + encodeURIComponent(ad.id) : ad.url;
-  }
-
-  function beacon(base, ad, slot, sample) {
-    if (!base) return;
-    var factor = Math.max(1, Number(sample) || 1);
-    if (Math.random() >= 1 / factor) return;
-    var img = new Image(1, 1);
-    img.src = base.replace(/\/$/, "") + "/px/" + encodeURIComponent(ad.id) +
-      ".gif?s=" + encodeURIComponent(slot) + "&t=" + Date.now();
-  }
-
-  // Maximum rendered height per slot. Creatives are contained within these
-  // bounds (letterboxed, never cropped or stretched), so a portrait image
-  // accidentally assigned to a horizontal slot degrades gracefully instead
-  // of dominating the page. The sidebar accepts tall 300x600 creatives.
-  var SLOT_MAX_HEIGHT = {
-    "home-leaderboard": 120,
-    "article-leaderboard": 120,
-    "home-billboard": 280,
-    "article-incontent": 280,
-    "article-mrec": 620
-  };
-
-  // Horizontal slots run the full width of the page column. A 970px creative
-  // in a 1220px column previously sat centred at its natural size, leaving
-  // 125px of empty slot either side. These slots stretch the creative to the
-  // column width instead - aspect ratio preserved, so it is scaled rather than
-  // distorted, and the slot's max-height still applies.
-  //
-  // Supply the creative at the column width (1220px, or 2440px for sharpness
-  // on high-density screens): anything narrower is upscaled, and text in a
-  // banner softens noticeably past about 25%.
-  var FULL_WIDTH_SLOTS = {
-    "home-leaderboard": true,
-    "article-leaderboard": true,
-    "home-billboard": true
-  };
-
-  function renderBanner(container, ad, base, sample) {
-    var slot = container.getAttribute("data-ad-slot");
-    var maxH = SLOT_MAX_HEIGHT[slot] || 300;
-    var widthRule = FULL_WIDTH_SLOTS[slot] ? "width:100%;" : "width:auto;";
-    var imgStyle = "max-width:100%;max-height:" + maxH + "px;" + widthRule + "height:auto;display:block;margin:0 auto";
-    var src = esc(ad.image);
-    var mobile = ad.image_mobile ? esc(ad.image_mobile) : "";
-    var picture = mobile
-      ? '<picture><source media="(max-width: 640px)" srcset="' + mobile + '">' +
-        '<img src="' + src + '" alt="' + esc(ad.alt || ad.advertiser || "Advertisement") + '" loading="lazy" style="' + imgStyle + '"></picture>'
-      : '<img src="' + src + '" alt="' + esc(ad.alt || ad.advertiser || "Advertisement") + '" loading="lazy" style="' + imgStyle + '">';
-    container.innerHTML =
-      '<a href="' + esc(clickUrl(base, ad)) + '" rel="sponsored noopener" target="_blank" ' +
-      'style="display:block;position:relative;line-height:0;text-align:center">' + picture +
-      '<span style="position:absolute;top:0;left:0;background:#111;color:#fff;font:700 9px/1 Arial,sans-serif;' +
-      'letter-spacing:.08em;text-transform:uppercase;padding:3px 6px">Advertisement</span></a>';
-    container.removeAttribute("aria-hidden");
-    container.setAttribute("role", "complementary");
-    container.setAttribute("aria-label", "Advertisement: " + (ad.advertiser || ""));
-    container.classList.add("ad-live");
-    container.style.height = "auto";
-    beacon(base, ad, slot, sample);
-  }
-
-  function renderDirectory(card, listing, base, sample) {
-    var lines = [
-      '<span class="sponsored">Sponsored listing</span>',
-      "<h3>" + esc(listing.category) + "</h3>",
-      '<p><strong>' + esc(listing.name) + "</strong><br>" + esc(listing.blurb || "") + "</p>"
-    ];
-    if (listing.phone) {
-      lines.push('<a href="tel:' + esc(String(listing.phone).replace(/\s+/g, "")) + '">' + esc(listing.phone) + "</a>");
+  ],
+  "directory": [
+    {
+      "id": "template-directory-copy-me",
+      "category": "Plumbers & heating",
+      "name": "TEMPLATE - copy this block, change every field, leave this one here",
+      "blurb": "One sentence about the business, about 90 characters.",
+      "phone": "01706 000000",
+      "url": "https://example.com",
+      "start": "2020-01-01",
+      "end": "2020-01-02"
     }
-    if (listing.url) {
-      lines.push(' <a href="' + esc(clickUrl(base, listing)) + '" rel="sponsored noopener" target="_blank">Visit website</a>');
-    }
-    card.innerHTML = lines.join("");
-    card.classList.add("ad-live");
-    beacon(base, listing, "directory", sample);
-  }
-
-  // Kept so slots created after load can still be filled. The homepage opens
-  // articles in a modal built from JavaScript, so its advert slots do not
-  // exist when this script first runs.
-  var loaded = null;
-
-  function init(data) {
-    if (data && typeof data === "object") loaded = data;
-    if (!data || typeof data !== "object") return;
-    var config = data.config || {};
-    var base = String(config.tracker_base || "").trim();
-    var sample = config.impression_sample;
-    var today = todayKey();
-
-    var placements = (data.placements || []).filter(function (p) { return isActive(p, today); });
-    document.querySelectorAll("[data-ad-slot]").forEach(function (container) {
-      // Already carrying a creative: leave it. Re-rendering would reroll the
-      // rotation and fire a second impression for a slot nobody re-viewed.
-      if (container.classList.contains("ad-live")) return;
-      var slot = container.getAttribute("data-ad-slot");
-      var candidates = placements.filter(function (p) { return p.slot === slot; });
-      if (candidates.length) renderBanner(container, pickWeighted(candidates), base, sample);
-    });
-
-    var listings = (data.directory || []).filter(function (d) { return isActive(d, today); });
-    document.querySelectorAll("[data-ad-directory]").forEach(function (card) {
-      var category = card.getAttribute("data-category") || "";
-      var sold = listings.filter(function (d) { return d.category === category; });
-      if (sold.length) renderDirectory(card, pickWeighted(sold), base, sample);
-    });
-  }
-
-  // Call after injecting markup that contains [data-ad-slot] containers.
-  // Safe to call repeatedly: live slots are skipped.
-  window.rdFillAds = function () {
-    if (loaded) init(loaded);
-  };
-
-  fetch("/adverts.json", { cache: "no-store" })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(init)
-    .catch(function () { /* placeholders stay */ });
-})();
+  ]
+}
