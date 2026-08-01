@@ -1201,7 +1201,21 @@ def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
     # rather than resetting their age every time another source is merged.
     importance -= min(72, age_hours * 3)
 
-    return (importance, latest_update)
+    # Editor pin. arrange_frontpage() takes ranked[0] as the lead story, so a
+    # first tuple element sorted ahead of everything else is all that is needed
+    # to place a story at the top of the homepage by hand.
+    #
+    # This reuses the existing `featured` flag rather than inventing a second
+    # vocabulary for the same idea. Paired with `frontpage_until` it already
+    # keeps a story on the front page past the normal cutoff; now it also
+    # decides where. Set both and the piece leads until the date passes.
+    #
+    # Deliberately a boolean, not a numeric weight: a pin is an editorial
+    # decision that either applies or does not. Competing pins fall back to the
+    # ordinary importance score below.
+    pinned = article.get("featured") is True
+
+    return (pinned, importance, latest_update)
 
 
 def _cap_selected(items: list[dict[str, Any]], target: int) -> list[dict[str, Any]]:
