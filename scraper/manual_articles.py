@@ -163,6 +163,17 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     if entry.get("right_to_reply"):
         record["right_to_reply"] = _clean(entry.get("right_to_reply"))
 
+    # Editorial pinning. `featured: true` places the piece at the top of the
+    # homepage; `frontpage_until` keeps it there past the normal age cutoff.
+    # Without frontpage_until it leads only while it is recent enough to be
+    # eligible at all.
+    if entry.get("featured") is True:
+        record["featured"] = True
+    if entry.get("frontpage_until"):
+        record["frontpage_until"] = _clean(entry.get("frontpage_until"))
+    if entry.get("exclude_from_frontpage") is True:
+        record["exclude_from_frontpage"] = True
+
     return record
 
 
