@@ -157,6 +157,34 @@
     if (loaded) init(loaded);
   };
 
+  // Fill slots the moment they appear, without anyone having to call us.
+  //
+  // The homepage opens articles in a modal built from JavaScript. That relied
+  // on openArticle() calling rdFillAds, which meant index.html and this file
+  // had to be in step: if a reader had an older copy of either cached, the
+  // call was a no-op and every slot in the modal stayed a placeholder - with
+  // no error, because the call site guards on the function existing. Watching
+  // the DOM removes the dependency entirely.
+  if (typeof MutationObserver === "function") {
+    var pending = false;
+    new MutationObserver(function (records) {
+      if (pending || !loaded) return;
+      for (var i = 0; i < records.length; i++) {
+        var added = records[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var node = added[j];
+          if (node.nodeType !== 1) continue;
+          if (node.matches("[data-ad-slot]") || node.querySelector("[data-ad-slot]")) {
+            // Coalesce: a single innerHTML assignment fires many records.
+            pending = true;
+            requestAnimationFrame(function () { pending = false; init(loaded); });
+            return;
+          }
+        }
+      }
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+
   fetch("/adverts.json", { cache: "no-store" })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(init)
