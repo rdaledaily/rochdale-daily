@@ -2798,7 +2798,7 @@ function shareIconMarkup(action, label) {
               <section class="comments-section" id="comments-root" data-slug="${story.slug}" data-category="${story.category}"></section>
             </div>
             <aside class="article-sidebar">
-              <div class="ad-slot ad-slot-mrec" role="presentation" aria-hidden="true"></div>
+              <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
               ${relatedStoriesMarkup(story)}
             </aside>
           </div>
@@ -2809,6 +2809,10 @@ function shareIconMarkup(action, label) {
       document.getElementById("modal-close").focus();
       history.replaceState(null, "", `articles/${story.slug}.html`);
       mountComments(story);
+      // The modal is built here, long after ads.js ran, so its slots have to be
+      // filled explicitly. Without this the sidebar showed an empty placeholder
+      // on every article opened from the homepage.
+      if (window.rdFillAds) window.rdFillAds();
 
     }
 
