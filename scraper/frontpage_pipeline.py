@@ -287,6 +287,21 @@ def apply_category_rules(article: dict[str, Any]) -> dict[str, Any]:
         article["category"] = "events"
         article["types"] = ["events"]
         return article
+
+    # An editor's chosen category is a decision, not a guess, so keyword
+    # scoring must not overrule it. scraper.py already honours this flag;
+    # this function did not, and it runs later - so a hand-written article
+    # filed as politics was re-scored on its own text and moved. A comment
+    # piece on the mayoral result went to transport because it discusses the
+    # Bee Network and Metrolink, and a festival guide went the same way on
+    # the strength of its travel and parking section.
+    if article.get("editorial_lock"):
+        locked = str(article.get("category") or "news")
+        article["category"] = locked
+        article["types"] = [locked]
+        article["police_matter"] = bool(article.get("police_matter")) and locked == "crime"
+        return article
+
     category = article_category(article)
     article["category"] = category
     article["types"] = [category]
