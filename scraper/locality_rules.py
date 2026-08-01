@@ -298,6 +298,11 @@ TERM_IMPOSTOR_CONTEXTS: dict[str, set[str]] = {
     "meanwood": {"leeds"},
     "whitworth": {
         "whitworth art gallery", "whitworth street", "whitworth park",
+        # Whitworth Hall / Whitworth Estate & Deer Park at Spennymoor, County
+        # Durham. "whitworth park" above does not match the venue's actual
+        # name, "Whitworth Estate & Deer Park", so a private wedding there was
+        # published as a Rochdale ward story on 31 July 2026.
+        "whitworth estate", "whitworth hall", "deer park",
         "spennymoor", "county durham",
     },
     "littleborough": {"nottinghamshire"},
