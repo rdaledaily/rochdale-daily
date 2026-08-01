@@ -819,6 +819,20 @@
       text-transform: uppercase; letter-spacing: .06em; margin: 0 auto;
     }
     .ad-slot-leaderboard { width: 100%; max-width: 728px; height: 90px; margin: 22px auto; }
+
+    /* A slot holding a real advert stops being a placeholder. ads.js adds
+       .ad-live once a creative renders, but nothing styled it, so the dashed
+       box and its grey fill stayed - and because the homepage leaderboard
+       container is plain .ad-slot with no width cap, it spanned the full
+       1220px wrap while the 970px banner sat centred inside it, leaving 125px
+       of empty placeholder either side. Shrink the box to the creative and
+       drop the placeholder chrome. */
+    .ad-slot.ad-live {
+      background: transparent; border: 0; padding: 0;
+      width: 100%; max-width: 100%; min-height: 0; height: auto;
+    }
+    .ad-slot.ad-live::after { content: none; }
+
     .ad-slot-mrec { width: 300px; height: 250px; }
     .ad-slot-incontent { width: 100%; max-width: 580px; height: 250px; margin: 28px auto; }
     @media (max-width: 500px) {
