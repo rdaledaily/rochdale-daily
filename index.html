@@ -477,6 +477,10 @@
       flex-wrap: wrap;
       margin-bottom: 18px;
     }
+    .ward-picker select { border: 2px solid var(--line); background: var(--card); color: var(--ink);
+      padding: 12px 14px; font-size: 16px; min-height: 48px; width: 100%; max-width: 420px;
+      font-family: Roboto, Arial, sans-serif; }
+
     .filter-button {
       border: 1px solid var(--line);
       background: var(--card);
@@ -1250,60 +1254,6 @@
             <div class="mobile-sections" id="mobile-sections"></div>
             <div class="news-grid" id="news-grid"></div>
             <aside class="side-rail">
-              <section class="rail-box">
-                <h2 class="rail-title">Your area</h2>
-                <p class="rail-copy">Filter the homepage to stories from your town or neighbourhood.</p>
-                <label class="hidden" for="area-select">Choose area</label>
-                <select class="rail-input" id="area-select">
-                  <option value="all">All areas</option>
-                  <optgroup label="Townships">
-                    <option value="rochdale-township">Rochdale township</option>
-                    <option value="heywood-township">Heywood township</option>
-                    <option value="middleton-township">Middleton township</option>
-                    <option value="pennines-township">Pennines township</option>
-                  </optgroup>
-                  <optgroup label="Rochdale and neighbourhoods">
-                    <option value="rochdale">Rochdale town centre</option>
-                    <option value="castleton">Castleton</option>
-                    <option value="spotland">Spotland</option>
-                    <option value="falinge">Falinge</option>
-                    <option value="deeplish">Deeplish</option>
-                    <option value="balderstone">Balderstone</option>
-                    <option value="firgrove">Firgrove</option>
-                    <option value="kirkholt">Kirkholt</option>
-                    <option value="norden">Norden</option>
-                    <option value="bamford">Bamford</option>
-                    <option value="cutgate">Cutgate and Caldershaw</option>
-                    <option value="shawclough">Shawclough</option>
-                    <option value="healey">Healey</option>
-                    <option value="syke">Syke</option>
-                    <option value="wardleworth">Wardleworth</option>
-                    <option value="sudden">Sudden</option>
-                    <option value="lowerplace">Lowerplace</option>
-                    <option value="meanwood">Meanwood</option>
-                  </optgroup>
-                  <optgroup label="Heywood">
-                    <option value="heywood">Heywood</option>
-                    <option value="darnhill">Darnhill</option>
-                    <option value="hopwood">Hopwood</option>
-                  </optgroup>
-                  <optgroup label="Middleton">
-                    <option value="middleton">Middleton</option>
-                    <option value="alkrington">Alkrington</option>                    <option value="boarshaw">Boarshaw</option>
-                  </optgroup>
-                  <optgroup label="Pennines">
-                    <option value="milnrow">Milnrow</option>
-                    <option value="newhey">Newhey</option>
-                    <option value="littleborough">Littleborough</option>
-                    <option value="wardle">Wardle</option>
-                    <option value="smallbridge">Smallbridge</option>
-                    <option value="smithy_bridge">Smithy Bridge</option>
-                  </optgroup>
-                  <optgroup label="Nearby coverage">
-                    <option value="whitworth">Whitworth</option>
-                  </optgroup>
-                </select>
-              </section>
 
               <section class="weather-box" id="weather-box" aria-labelledby="weather-forecast-title" hidden>
                 <div class="weather-head">
@@ -1326,6 +1276,42 @@
                 <p class="report-note">Rochdale Daily does not receive reports submitted through these official links.</p>
               </section>
             </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="news-by-ward" aria-labelledby="news-by-ward-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 class="section-title" id="news-by-ward-title">News by ward</h2>
+            <a class="section-link" href="/wards/">All wards</a>
+          </div>
+          <p style="margin:0 0 14px;color:var(--muted);font-size:15px">Choose your ward for local stories and how the councillors representing you have voted.</p>
+          <div class="ward-picker">
+            <label class="hidden" for="ward-select">Choose a ward</label>
+            <select id="ward-select">
+              <option value="">Choose a ward&#8230;</option>
+              <option value="/wards/balderstone-and-kirkholt.html">Balderstone and Kirkholt</option>
+              <option value="/wards/bamford.html">Bamford</option>
+              <option value="/wards/castleton.html">Castleton</option>
+              <option value="/wards/central-rochdale.html">Central Rochdale</option>
+              <option value="/wards/east-middleton.html">East Middleton</option>
+              <option value="/wards/healey.html">Healey</option>
+              <option value="/wards/hopwood-hall.html">Hopwood Hall</option>
+              <option value="/wards/kingsway.html">Kingsway</option>
+              <option value="/wards/littleborough-lakeside.html">Littleborough Lakeside</option>
+              <option value="/wards/milkstone-and-deeplish.html">Milkstone and Deeplish</option>
+              <option value="/wards/milnrow-and-newhey.html">Milnrow and Newhey</option>
+              <option value="/wards/norden.html">Norden</option>
+              <option value="/wards/north-heywood.html">North Heywood</option>
+              <option value="/wards/north-middleton.html">North Middleton</option>
+              <option value="/wards/smallbridge-and-firgrove.html">Smallbridge and Firgrove</option>
+              <option value="/wards/south-middleton.html">South Middleton</option>
+              <option value="/wards/spotland-and-falinge.html">Spotland and Falinge</option>
+              <option value="/wards/wardle-shore-and-west-littleborough.html">Wardle, Shore and West Littleborough</option>
+              <option value="/wards/west-heywood.html">West Heywood</option>
+              <option value="/wards/west-middleton.html">West Middleton</option>
+            </select>
           </div>
         </div>
       </section>
@@ -2865,12 +2851,6 @@ function shareIconMarkup(action, label) {
       document.querySelectorAll("[data-category]").forEach(button => {
         if (button.matches("button")) button.classList.toggle("active", button.dataset.category === activeCategory);
       });
-      const areaSelect = document.getElementById("area-select");
-      if ([...areaSelect.options].some(option => option.value === activeArea)) {
-        areaSelect.value = activeArea;
-      } else {
-        areaSelect.value = "all";
-      }
       renderNewsGrid();
       renderMobileSections();
       decorateCommentCounts();
@@ -2965,7 +2945,6 @@ function shareIconMarkup(action, label) {
       document.getElementById("menu-toggle").setAttribute("aria-expanded", String(open));
     });
 
-    document.getElementById("area-select").addEventListener("change", event => applyFilter(activeCategory, event.target.value));
     document.getElementById("reset-filters").addEventListener("click", () => applyFilter("all", "all"));
 
     document.getElementById("event-filters").addEventListener("click", event => {
@@ -3368,6 +3347,15 @@ function shareIconMarkup(action, label) {
         if (target) location.replace(`articles/${target.slug}.html`);
       }
     });
+    /* Ward picker: navigates to the ward page on choice. A select rather than
+       twenty tiles, because the longest ward name is wider than a phone. */
+    var wardSelect = document.getElementById("ward-select");
+    if (wardSelect) {
+      wardSelect.addEventListener("change", function () {
+        if (wardSelect.value) window.location.href = wardSelect.value;
+      });
+    }
+
     loadWeather();
     loadForecast();
     window.setInterval(() => loadArticleFeed({ quiet: true }), ARTICLE_REFRESH_MS);
