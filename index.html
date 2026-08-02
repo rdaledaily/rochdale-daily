@@ -728,6 +728,18 @@
     .dem-no { color: #ff8a99; font-weight: 900; }
     .dem-empty { background: var(--card); border: 1px solid var(--line);
       border-left: 4px solid var(--line); padding: 16px; color: var(--muted); font-size: 14px; }
+    .dem-ward-pick { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; flex-wrap: wrap; }
+    .dem-ward-pick label { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 900;
+      text-transform: uppercase; font-size: 13px; letter-spacing: .04em; }
+    .dem-ward-pick select { border: 2px solid var(--line); background: var(--card); color: var(--ink);
+      padding: 10px 12px; font-size: 15px; min-height: 44px; min-width: 240px; }
+    .dem-vote { display: flex; gap: 8px; align-items: baseline; }
+    .dem-vote-side { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 900;
+      text-transform: uppercase; font-size: 11px; letter-spacing: .06em; padding: 2px 7px; flex: 0 0 auto; }
+    .dem-vote-for { background: #137a45; color: #fff; }
+    .dem-vote-against { background: var(--red); color: #fff; }
+    .dem-vote-abstain { background: #5f6b78; color: #fff; }
+
     .dem-note { margin-top: 14px; color: var(--muted); font-size: 12px; line-height: 1.5; }
     .support-intro { max-width: 850px; color: var(--muted); margin-top: -7px; margin-bottom: 18px; }
     .support-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
@@ -1111,6 +1123,7 @@
         <time class="time-stamp" id="current-time" aria-label="Current time in Rochdale">--:--</time>
       </div>
       <div class="utility-links">
+        <a href="/wards/">News by ward</a>
         <a href="#democracy">Democracy</a>
         <a href="#support">Community support</a>
         <a href="#whats-on">What’s on</a>
@@ -1418,7 +1431,12 @@
           <div class="dem-tabs" role="tablist" aria-label="Democracy sections">
             <button class="dem-tab" role="tab" id="dem-tab-petitions" aria-controls="dem-panel" aria-selected="true" data-dem="petitions">Petitions</button>
             <button class="dem-tab" role="tab" id="dem-tab-mp" aria-controls="dem-panel" aria-selected="false" data-dem="mp">Your MPs</button>
+            <button class="dem-tab" role="tab" id="dem-tab-councillors" aria-controls="dem-panel" aria-selected="false" data-dem="councillors">Your councillors</button>
             <button class="dem-tab" role="tab" id="dem-tab-council" aria-controls="dem-panel" aria-selected="false" data-dem="council">Council</button>
+          </div>
+          <div class="dem-ward-pick" id="dem-ward-pick" hidden>
+            <label for="dem-ward">Choose a ward</label>
+            <select id="dem-ward"></select>
           </div>
           <p class="dem-status" data-dem-status>Loading&#8230;</p>
           <div class="dem-grid" id="dem-panel" role="tabpanel" aria-labelledby="dem-tab-petitions" data-dem-grid></div>
@@ -2221,7 +2239,7 @@
     }
 
     function storyButton(story, content, className = "story-link") {
-      return `<a href="articles/${story.slug}.html" class="${className}" data-open-article="${story.id}">${content}</a>`;
+      return `<a href="articles/${story.slug}.html" class="${className}">${content}</a>`;
     }
 
     function renderTopStories() {
@@ -2278,7 +2296,7 @@
       `).join("");
 
       latestElement.innerHTML = stories.slice(3, 9).map(story => `
-        <li class="latest-item"><button type="button" data-open-article="${story.id}">${story.title}<span class="latest-time">${story.area.toUpperCase()} · ${story.timeLabel}</span></button></li>
+        <li class="latest-item"><a href="articles/${story.slug}.html">${story.title}<span class="latest-time">${story.area.toUpperCase()} · ${story.timeLabel}</span></a></li>
       `).join("");
           decorateCommentCounts();
     }
@@ -2751,7 +2769,7 @@
         <h3>More in ${areaLabel(story.area)} ${story.category}</h3>
         ${related.map(item => {
           const fallback = item.imageFallback || stockImage(item.category || "news");
-          return `<div class="related-story" data-open-article="${item.id}" role="button" tabindex="0">
+          return `<a class="related-story" href="articles/${item.slug}.html">
             <img src="${item.image}" alt="" onerror="this.onerror=null;this.src='${fallback}'">
             <span class="related-title">${item.title}</span>
           </div>`;
@@ -2879,7 +2897,7 @@ function shareIconMarkup(action, label) {
     function searchStories() {
       const query = document.getElementById("site-search").value.trim().toLowerCase();
       const results = stories.filter(story => [story.title, story.summary, story.category, story.area, story.kicker].join(" ").toLowerCase().includes(query));
-      document.getElementById("search-results").innerHTML = query ? (results.length ? results.map(story => `<button class="search-result" type="button" data-open-article="${story.id}">${story.title}<span class="latest-time">${story.kicker} · ${areaLabel(story.area)}</span></button>`).join("") : "<p>No matching stories.</p>") : "<p>Enter a word, place or topic.</p>";
+      document.getElementById("search-results").innerHTML = query ? (results.length ? results.map(story => `<a class="search-result" href="articles/${story.slug}.html">${story.title}<span class="latest-time">${story.kicker} · ${areaLabel(story.area)}</span></a>`).join("") : "<p>No matching stories.</p>") : "<p>Enter a word, place or topic.</p>";
     }
 
     function openSearch() {
@@ -2897,12 +2915,14 @@ function shareIconMarkup(action, label) {
     }
 
     document.addEventListener("click", event => {
-      const articleTrigger = event.target.closest("[data-open-article]");
-      if (articleTrigger) {
-        event.preventDefault();
-        openArticle(articleTrigger.dataset.openArticle);
-        return;
-      }
+      /* Article links navigate to the generated page. They used to be
+         intercepted and rendered into an on-page modal, which was a second,
+         duplicate rendering of every article: it rewrote the URL with
+         replaceState, resolved relative image paths against /articles/, mounted
+         comments separately, and never reliably filled its advert slots. The
+         generated pages already do all of it properly - three advert slots,
+         canonical URLs, JSON-LD, Open Graph and the legal footer - so the modal
+         was removed rather than repaired again. */
       const categoryTrigger = event.target.closest("button[data-category]");
       if (categoryTrigger) {
         applyFilter(categoryTrigger.dataset.category, activeArea);
@@ -3339,8 +3359,14 @@ function shareIconMarkup(action, label) {
     }
 
     loadArticleFeed().then(() => {
+      // Legacy deep links (#article-<id>) opened the modal. Redirect them to
+      // the generated page so links shared before the modal was removed still
+      // reach the article.
       const hashMatch = location.hash.match(/^#article-(\d+)$/);
-      if (hashMatch) openArticle(hashMatch[1]);
+      if (hashMatch) {
+        const target = stories.find(story => String(story.id) === hashMatch[1]);
+        if (target) location.replace(`articles/${target.slug}.html`);
+      }
     });
     loadWeather();
     loadForecast();
@@ -3965,6 +3991,40 @@ function shareIconMarkup(action, label) {
           "</article>";
       }
 
+      /* Councillor cards. Deliberately the same shape as the MP cards: a name,
+         party and area, then what they voted on. The difference is what can be
+         shown. Parliament records every division; the council records a vote by
+         name only when a recorded vote is held - which the law requires for the
+         budget and council tax, and which otherwise happens when a group asks
+         for one. Everything else is minuted as carried or lost with no names.
+         The panel says so rather than implying the list is complete. */
+      var SIDE_LABEL = { for: "Voted for", against: "Voted against", abstain: "Abstained" };
+
+      function voteLine(vote) {
+        var side = SIDE_LABEL[vote.side] ? vote.side : "abstain";
+        return '<li class="dem-vote">' +
+          '<span class="dem-vote-side dem-vote-' + side + '">' + esc(SIDE_LABEL[side] || "Abstained") + "</span>" +
+          "<span>" + (vote.url
+            ? "<a href=" + JSON.stringify(vote.url) + ' target="_blank" rel="noopener">' + esc(vote.title) + "</a>"
+            : esc(vote.title)) +
+          (vote.date ? '<span class="dem-when">' + esc(shortDate(vote.date) || vote.date) + "</span>" : "") +
+          "</span></li>";
+      }
+
+      function councillorCard(person) {
+        var votes = (person.votes || []).map(voteLine).join("");
+        return '<article class="dem-card">' +
+          '<div class="dem-mp"><div>' +
+            '<div class="who">' + esc(person.name) + "</div>" +
+            '<div class="dem-sub">' + esc(person.party || "") +
+              (person.ward ? " &middot; " + esc(person.ward) : "") + "</div>" +
+          "</div></div>" +
+          (votes
+            ? '<p style="margin:0 0 6px"><b>Recorded votes</b></p><ul class="dem-list">' + votes + "</ul>"
+            : "<p>No recorded vote has named this councillor yet.</p>") +
+          "</article>";
+      }
+
       function councilCard(item) {
         return '<article class="dem-card">' +
           "<h3>" + (item.link
@@ -3975,7 +4035,54 @@ function shareIconMarkup(action, label) {
           "</article>";
       }
 
+      var councilVotes = null;
+      var activeWard = "";
+      var wardPick = document.getElementById("dem-ward-pick");
+      var wardSelect = document.getElementById("dem-ward");
+
+      function wardNames() {
+        var wards = (councilVotes && councilVotes.wards) || {};
+        return Object.keys(wards).sort();
+      }
+
+      function fillWardPicker() {
+        if (!wardSelect) return;
+        var names = wardNames();
+        if (!names.length) { wardSelect.innerHTML = ""; return; }
+        if (!activeWard || names.indexOf(activeWard) === -1) activeWard = names[0];
+        wardSelect.innerHTML = names.map(function (w) {
+          return "<option value=" + JSON.stringify(w) + (w === activeWard ? " selected" : "") + ">" + esc(w) + "</option>";
+        }).join("");
+      }
+
+      if (wardSelect) {
+        wardSelect.addEventListener("change", function () {
+          activeWard = wardSelect.value;
+          render();
+        });
+      }
+
       function render() {
+        if (wardPick) wardPick.hidden = view !== "councillors";
+
+        if (view === "councillors") {
+          if (!councilVotes) {
+            grid.innerHTML = empty("Councillor voting records are not available right now.");
+            status.textContent = "";
+            return;
+          }
+          fillWardPicker();
+          var people = ((councilVotes.wards || {})[activeWard]) || [];
+          grid.innerHTML = people.length
+            ? people.map(councillorCard).join("")
+            : empty("No councillors listed for this ward yet.");
+          status.textContent = people.length
+            ? activeWard + ": " + people.length + " councillor" + (people.length === 1 ? "" : "s") +
+              ". Only votes taken by name are shown \u2014 the council records these for the budget and council tax, and otherwise only when a recorded vote is requested."
+            : "";
+          return;
+        }
+
         if (!data) { grid.innerHTML = ""; return; }
 
         if (view === "petitions") {
@@ -4020,6 +4127,15 @@ function shareIconMarkup(action, label) {
         if (loading) return;
         loading = true;
         status.textContent = "Loading\u2026";
+        /* Councillor votes are a build-time file, not a live call. ModernGov
+           blocks automated requests, so the crawl runs in the pipeline and
+           writes council_votes.json - the same pattern as the weather panel.
+           A missing file leaves the tab with an honest empty state. */
+        fetch("/council_votes.json", { cache: "no-store" })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (payload) { councilVotes = payload; if (view === "councillors") render(); })
+          .catch(function () {});
+
         fetch("/api/democracy", { cache: "no-store" })
           .then(function (response) {
             if (!response.ok) throw new Error("HTTP " + response.status);
