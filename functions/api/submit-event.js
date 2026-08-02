@@ -401,31 +401,12 @@ export async function onRequestPost({ request, env }) {
   const limiter = await readLimiter(kv, limiterKey);
   const now = Date.now();
 
-  // Blocked submitters are turned away before anything else is done.
-  if (limiter.blockedUntil > now) {
-    return json(
-      {
-        ok: false,
-        errors: [
-          `Submissions from this connection are paused for ${describeWait(limiter.blockedUntil - now)}. ` +
-          `If you think that is wrong, email events@rochdaledaily.co.uk.`,
-        ],
-      },
-      429
-    );
-  }
-
-  // Volume limits.
+  // Rate limiting removed on 1 August 2026. Every submission lands in a queue
+  // that a person reads before anything publishes, so volume is an editing
+  // question rather than a security one, and the limits were turning away
+  // organisers listing several events in one sitting. Hits are still recorded
+  // below, so the counts are there if a limit is ever wanted again.
   limiter.hits = limiter.hits.filter(t => now - t < DAY);
-  const lastHour = limiter.hits.filter(t => now - t < HOUR).length;
-  if (lastHour >= LIMIT_PER_HOUR) {
-    await writeLimiter(kv, limiterKey, limiter);
-    return json({ ok: false, errors: ["You have sent several events in the last hour. Please try again later."] }, 429);
-  }
-  if (limiter.hits.length >= LIMIT_PER_DAY) {
-    await writeLimiter(kv, limiterKey, limiter);
-    return json({ ok: false, errors: ["You have reached today's limit for event submissions."] }, 429);
-  }
 
   // Field validation.
   const { errors, clean } = validate(payload);
@@ -437,28 +418,18 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, errors }, 400);
   }
 
-  // Language screening across every free-text field the public would see,
-  // plus the contact field so abusive addresses are caught too.
-  const screened = [clean.title, clean.description, clean.location, clean.contact].join(" \n ");
-  const banned = findBannedTerm(screened);
-  if (banned) {
-    limiter.strikes += 1;
-    limiter.hits.push(now);
-    const block = STRIKE_BLOCKS[Math.min(limiter.strikes, STRIKE_BLOCKS.length) - 1];
-    limiter.blockedUntil = now + block;
-    await writeLimiter(kv, limiterKey, limiter);
-
-    return json(
-      {
-        ok: false,
-        errors: [
-          "That listing contains language we cannot publish, so it has been rejected. " +
-          `Further submissions from this connection are paused for ${describeWait(block)}.`,
-        ],
-      },
-      422
-    );
-  }
+  // Automatic language screening removed on 1 August 2026.
+  //
+  // It rejected a charity fundraiser whose description contained nothing of
+  // the kind. The screener de-spaces the text to catch obfuscation such as
+  // "c o o n", but that also glues legitimate neighbouring words together:
+  // "Prosecco on arrival" became "...proseccoonarrival...", which contains a
+  // slur spanning the gap between two innocent words. Any word-joining check
+  // will keep producing collisions like that.
+  //
+  // Nothing here publishes without a person approving it in the moderation
+  // queue, so the queue is the safeguard. findBannedTerm is left in place,
+  // unused, in case a fixed version is wanted later.
 
   // Store the image separately so the queue itself stays small and fast to read.
   const id = `evt-${now.toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
