@@ -12,6 +12,16 @@ on:
     paths:
       - "scraper/**"
       - "requirements.txt"
+      # The hand-edited data files. Without these, editing manual_articles.json
+      # through the web interface ran no checks at all - which is exactly how a
+      # trailing comma reached the live site five times in one day.
+      - "manual_articles.json"
+      - "manual_events.json"
+      - "adverts.json"
+      - "ward_areas.json"
+      - "story_blocklist.json"
+      - "council_roster.json"
+      - "council_votes.json"
       - ".github/workflows/**"
   schedule:
     - cron: "30 5 * * *"
@@ -79,8 +89,16 @@ jobs:
             scraper/ensure_article_images.py \
             scraper/scraper.py
 
+      # Hand-edited data files fail silently at runtime: manual_articles.py
+      # returns an empty list on a parse error, so one stray comma removes every
+      # manual article from the site with no error anywhere. This turns that
+      # into a failed check naming the file and the line.
+      - name: Validate hand-edited data files
+        run: python scraper/check_data_files.py
+
       - name: Run test suite
         run: |
+          python scraper/test_frontpage_pipeline.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py
           python scraper/test_selection_policy.py
