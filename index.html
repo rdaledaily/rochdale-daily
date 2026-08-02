@@ -985,6 +985,10 @@
     @media (max-width: 820px) {
       .news-grid { display: none; }
       .mobile-sections { display: block; }
+      /* On phones the ward picker renders inside the mobile sections flow,
+         directly after the first three-story section, so readers reach it
+         without scrolling past every category. Hide the desktop section. */
+      #news-by-ward { display: none; }
       .mobile-jump {
         display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px;
       }
@@ -2611,6 +2615,28 @@
       ).join("");
     }
 
+    /* Mobile ward block. The desktop section (#news-by-ward) is hidden below
+       820px and this block takes its place inside the mobile sections flow,
+       directly after the first three-story section. The option list is read
+       from the desktop select at render time, so the ward list stays defined
+       in exactly one place; adding a ward there updates both layouts. */
+    function mobileWardMarkup() {
+      const source = document.querySelector("#news-by-ward select");
+      if (!source) return "";
+      return `
+        <section class="m-section" id="m-ward" aria-labelledby="m-ward-title">
+          <div class="m-section-head">
+            <h3 class="m-section-title" id="m-ward-title">News by ward</h3>
+            <a class="m-section-more" href="/wards/" style="text-decoration:none">All wards</a>
+          </div>
+          <p style="margin:0 0 10px;color:var(--muted);font-size:14px">Choose your ward for local stories and how the councillors representing you have voted.</p>
+          <div class="ward-picker">
+            <label class="hidden" for="m-ward-select">Choose a ward</label>
+            <select id="m-ward-select">${source.innerHTML}</select>
+          </div>
+        </section>`;
+    }
+
     function renderMobileSections() {
       const host = document.getElementById("mobile-sections");
       if (!host) return;
@@ -2622,14 +2648,15 @@
          whole filtered set instead, uncapped - that is what "More sport" is
          for, and a cap here would make the More control lead nowhere. */
       if (filtersActive) {
-        host.innerHTML = list.length
+        host.innerHTML = (list.length
           ? `<div class="m-section">
                <div class="m-section-head">
                  <h3 class="m-section-title">${list.length} ${list.length === 1 ? "story" : "stories"}</h3>
                </div>
                ${list.map((story, index) => mobileCardMarkup(story, `m-filtered-${index + 1}`)).join("")}
              </div>`
-          : `<div style="border:1px solid var(--line);padding:24px"><h3 style="margin-top:0">No stories match these filters</h3><p>Choose another area or category, or select Show all.</p></div>`;
+          : `<div style="border:1px solid var(--line);padding:24px"><h3 style="margin-top:0">No stories match these filters</h3><p>Choose another area or category, or select Show all.</p></div>`)
+          + mobileWardMarkup();
         decorateCommentCounts();
         return;
       }
@@ -2656,8 +2683,14 @@
           </section>`);
       });
 
-      host.innerHTML = blocks.join("") ||
-        `<div style="border:1px solid var(--line);padding:24px"><h3 style="margin-top:0">No stories yet</h3><p>Check back shortly.</p></div>`;
+      /* News by ward goes directly after the first section, so it sits
+         after three latest stories rather than below every category. */
+      if (blocks.length) {
+        blocks.splice(1, 0, mobileWardMarkup());
+        host.innerHTML = blocks.join("");
+      } else {
+        host.innerHTML = `<div style="border:1px solid var(--line);padding:24px"><h3 style="margin-top:0">No stories yet</h3><p>Check back shortly.</p></div>` + mobileWardMarkup();
+      }
       decorateCommentCounts();
     }
 
@@ -3355,6 +3388,12 @@ function shareIconMarkup(action, label) {
         if (wardSelect.value) window.location.href = wardSelect.value;
       });
     }
+    /* The mobile ward select is re-created on every renderMobileSections
+       call, so its handler is delegated rather than bound per render. */
+    document.addEventListener("change", function (event) {
+      const mobileWard = event.target.closest("#m-ward-select");
+      if (mobileWard && mobileWard.value) window.location.href = mobileWard.value;
+    });
 
     loadWeather();
     loadForecast();
