@@ -168,6 +168,13 @@ jobs:
         timeout-minutes: 3
         run: python scraper/repair_archive_ads.py
 
+      # Ward pages: one per council ward, joining that ward's area feeds to
+      # its councillors and any recorded votes. Rebuilt every run so story
+      # counts stay current.
+      - name: Generate ward pages
+        timeout-minutes: 3
+        run: python scraper/generate_ward_pages.py
+
       - name: Generate static article pages and sitemap
         timeout-minutes: 4
         run: python scraper/generate_pages.py
@@ -198,6 +205,9 @@ jobs:
             assets/article-images \
             articles \
             sitemap.xml \
+            wards/ \
+            ward_areas.json \
+            council_votes.json \
             weather.json \
             index.html
 
