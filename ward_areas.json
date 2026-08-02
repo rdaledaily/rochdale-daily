@@ -1,0 +1,123 @@
+{
+  "_docs": {
+    "purpose": "Maps each Rochdale Borough Council ward to the area tags this site files stories under. Edit this file by hand; the ward pages rebuild from it on the next pipeline run.",
+    "why": "The council's 20 wards and this site's area tags are not the same list. Some wards cover two areas (Spotland and Falinge), and one area covers four wards (Middleton splits East, North, South and West). Keeping the mapping in data rather than code means it can be corrected without touching the pipeline.",
+    "fields": {
+      "areas": "Area slugs from articles/areas/. A ward with no matching area shows councillor information only.",
+      "note": "Optional. Shown on the ward page where the mapping is imprecise, so readers are not misled about coverage."
+    }
+  },
+  "wards": {
+    "Balderstone and Kirkholt": {
+      "areas": [
+        "kirkholt"
+      ]
+    },
+    "Bamford": {
+      "areas": [
+        "bamford"
+      ]
+    },
+    "Castleton": {
+      "areas": [
+        "castleton"
+      ]
+    },
+    "Central Rochdale": {
+      "areas": [],
+      "note": "Stories about the town centre are filed under the borough-wide Rochdale tag, which covers all twenty wards. Until town-centre stories are tagged separately, this page lists councillors only rather than presenting borough news as ward news."
+    },
+    "East Middleton": {
+      "areas": [
+        "middleton",
+        "boarshaw"
+      ],
+      "note": "Middleton stories are filed under one area tag, so this page shows Middleton news generally."
+    },
+    "Healey": {
+      "areas": [
+        "healey",
+        "shawclough"
+      ]
+    },
+    "Hopwood Hall": {
+      "areas": [
+        "hopwood"
+      ]
+    },
+    "Kingsway": {
+      "areas": [
+        "kingsway"
+      ]
+    },
+    "Littleborough Lakeside": {
+      "areas": [
+        "littleborough"
+      ]
+    },
+    "Milkstone and Deeplish": {
+      "areas": [
+        "deeplish"
+      ]
+    },
+    "Milnrow and Newhey": {
+      "areas": [
+        "milnrow"
+      ]
+    },
+    "Norden": {
+      "areas": [
+        "norden"
+      ]
+    },
+    "North Heywood": {
+      "areas": [
+        "heywood"
+      ],
+      "note": "Heywood stories are filed under one area tag, so this page shows Heywood news generally."
+    },
+    "North Middleton": {
+      "areas": [
+        "middleton"
+      ],
+      "note": "Middleton stories are filed under one area tag, so this page shows Middleton news generally."
+    },
+    "Smallbridge and Firgrove": {
+      "areas": [
+        "smallbridge",
+        "firgrove"
+      ]
+    },
+    "South Middleton": {
+      "areas": [
+        "middleton"
+      ],
+      "note": "Middleton stories are filed under one area tag, so this page shows Middleton news generally."
+    },
+    "Spotland and Falinge": {
+      "areas": [
+        "spotland",
+        "falinge"
+      ]
+    },
+    "Wardle, Shore and West Littleborough": {
+      "areas": [
+        "wardle",
+        "littleborough"
+      ]
+    },
+    "West Heywood": {
+      "areas": [
+        "heywood",
+        "darnhill"
+      ],
+      "note": "Heywood stories are filed under one area tag, so this page shows Heywood news generally."
+    },
+    "West Middleton": {
+      "areas": [
+        "middleton"
+      ],
+      "note": "Middleton stories are filed under one area tag, so this page shows Middleton news generally."
+    }
+  }
+}
