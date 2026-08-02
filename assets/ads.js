@@ -79,6 +79,32 @@
     "home-billboard": true
   };
 
+  // Match on the data attribute OR the slot's CSS class.
+  //
+  // Pages generated before the attribute existed are never rebuilt -
+  // generate_pages.py only writes the articles currently in articles.json,
+  // so the archive keeps whatever template produced it. Those pages carry
+  // <div class="ad-slot ad-slot-leaderboard"> with no data-ad-slot, which
+  // this script could not see: the slot stayed a dashed placeholder and the
+  // inventory was simply lost. Reading the class as a fallback means every
+  // page works regardless of when it was written, with no rewrite needed.
+  var SLOT_BY_CLASS = {
+    "ad-slot-leaderboard": "article-leaderboard",
+    "ad-slot-incontent": "article-incontent",
+    "ad-slot-mrec": "article-mrec"
+  };
+
+  function slotNameFor(container) {
+    var named = container.getAttribute("data-ad-slot");
+    if (named) return named;
+    for (var css in SLOT_BY_CLASS) {
+      if (container.classList.contains(css)) return SLOT_BY_CLASS[css];
+    }
+    return "";
+  }
+
+  var selector = "[data-ad-slot], .ad-slot-leaderboard, .ad-slot-incontent, .ad-slot-mrec";
+
   function renderBanner(container, ad, base, sample) {
     var slot = container.getAttribute("data-ad-slot");
     var maxH = SLOT_MAX_HEIGHT[slot] || 300;
@@ -134,11 +160,12 @@
     var today = todayKey();
 
     var placements = (data.placements || []).filter(function (p) { return isActive(p, today); });
-    document.querySelectorAll("[data-ad-slot]").forEach(function (container) {
+    document.querySelectorAll(selector).forEach(function (container) {
       // Already carrying a creative: leave it. Re-rendering would reroll the
       // rotation and fire a second impression for a slot nobody re-viewed.
       if (container.classList.contains("ad-live")) return;
-      var slot = container.getAttribute("data-ad-slot");
+      var slot = slotNameFor(container);
+      if (!slot) return;
       var candidates = placements.filter(function (p) { return p.slot === slot; });
       if (!candidates.length) {
         // Leaves the placeholder in place. Logged because a slot silently
@@ -187,7 +214,7 @@
         for (var j = 0; j < added.length; j++) {
           var node = added[j];
           if (node.nodeType !== 1) continue;
-          if (node.matches("[data-ad-slot]") || node.querySelector("[data-ad-slot]")) {
+          if (node.matches(selector) || node.querySelector(selector)) {
             // Coalesce: a single innerHTML assignment fires many records.
             pending = true;
             requestAnimationFrame(function () { pending = false; init(loaded); });
