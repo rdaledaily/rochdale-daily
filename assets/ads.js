@@ -140,7 +140,20 @@
       if (container.classList.contains("ad-live")) return;
       var slot = container.getAttribute("data-ad-slot");
       var candidates = placements.filter(function (p) { return p.slot === slot; });
-      if (candidates.length) renderBanner(container, pickWeighted(candidates), base, sample);
+      if (!candidates.length) {
+        // Leaves the placeholder in place. Logged because a slot silently
+        // staying empty is indistinguishable from a rendering fault, and that
+        // cost a lot of time to tell apart.
+        if (window.console) console.warn("[ads] no placement for slot:", slot);
+        return;
+      }
+      try {
+        renderBanner(container, pickWeighted(candidates), base, sample);
+      } catch (error) {
+        // One bad creative must not stop the slots after it. forEach aborts on
+        // a throw, so without this a single failure emptied the rest of the page.
+        if (window.console) console.warn("[ads] could not render slot:", slot, error);
+      }
     });
 
     var listings = (data.directory || []).filter(function (d) { return isActive(d, today); });
