@@ -7,9 +7,11 @@ Priority order:
 3. RSS/media/enclosure image fields already stored in the article.
 4. Original source page lead image:
    Open Graph, Twitter Card, JSON-LD, article figure/image.
-5. Deterministic Rochdale Daily placeholder generated from the story metadata.
+5. A suitably matched, reusable Wikimedia Commons image.
+6. A curated photograph from assets/img/cards.
+7. Deterministic Rochdale Daily placeholder generated from story metadata.
 
-Publisher images are cached locally and credited to the original source.
+Publisher and Wikimedia images are cached locally and credited to their source.
 Placeholders never fabricate landmarks; they use typography and simple shapes.
 
 The script is idempotent and safe to run on every workflow.
@@ -28,7 +30,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urljoin, urlparse, urlsplit, urlunsplit
+from urllib.parse import quote, urlencode, urljoin, urlparse, urlsplit, urlunsplit
 from urllib.request import Request, build_opener
 
 from bs4 import BeautifulSoup
@@ -36,10 +38,13 @@ from PIL import Image, ImageDraw, ImageFont
 
 from story_image import compose_story_card, find_library_photo, _folder_credit
 
-# When false, third-party (publisher) photographs are neither fetched nor kept.
-# Every story uses Rochdale Daily's own area/category card instead, so no other
-# outlet's copyrighted image is re-hosted and no credit overlay is needed.
+# When false, third-party publisher photographs are neither fetched nor kept.
+# Reusable Wikimedia Commons media remains eligible because its licence and
+# attribution metadata are checked before download.
 USE_SOURCE_IMAGES = os.getenv("USE_SOURCE_IMAGES", "true").lower() not in {
+    "0", "false", "no", "off",
+}
+USE_WIKIMEDIA_COMMONS = os.getenv("USE_WIKIMEDIA_COMMONS", "true").lower() not in {
     "0", "false", "no", "off",
 }
 
@@ -55,10 +60,11 @@ def is_third_party_credit(article: dict[str, Any]) -> bool:
     credit = clean(article.get("image_credit")).lower()
     if not credit:
         return False
-    return credit not in OWN_IMAGE_CREDITS
+    return credit not in OWN_IMAGE_CREDITS and "wikimedia commons" not in credit
+
 
 DEFAULT_USER_AGENT = (
-    "RochdaleDailyImageCoverage/2.0 "
+    "RochdaleDailyImageCoverage/2.1 "
     "(archive maintenance; contact: news@rochdaledaily.co.uk)"
 )
 MAX_PAGE_BYTES = 5 * 1024 * 1024
@@ -70,10 +76,6 @@ HEIGHT = 675
 PLACEHOLDER_MARKERS = (
     "stock_", "placeholder", "default-image", "default_image",
     "category-image", "category_image", "area-category-card",
-    # Artwork from the retired generator under assets/img/generated. Without
-    # this marker those files are judged to be real photographs, so they are
-    # never replaced and the old design persists on a handful of stories
-    # indefinitely, alongside the current cards.
     "img/generated",
 )
 BAD_URL_HINTS = (
@@ -86,10 +88,6 @@ IMAGE_EXTENSIONS = {
     "image/webp": ".webp",
 }
 
-# Hosts that must never be treated as an article's picture source. These pages
-# expose their own branding (the Google News newspaper logo, social sprites,
-# etc.) via og:image, which previously got cached and credited as if it were the
-# story's photograph.
 DISALLOWED_SOURCE_HOSTS = {
     "news.google.com", "google.com", "google.co.uk",
     "facebook.com", "m.facebook.com", "x.com", "twitter.com",
@@ -100,31 +98,33 @@ DISALLOWED_SOURCE_SUFFIXES = (
     "facebook.com", "instagram.com", "tiktok.com", "reddit.com",
     "google.com", "google.co.uk",
 )
-# Image *hosting* domains that only ever serve Google/consent chrome, never a
-# publisher's editorial image.
 DISALLOWED_IMAGE_HOST_SUFFIXES = (
     "google.com", "google.co.uk", "googleusercontent.com", "gstatic.com",
 )
-# Hosts that only ever serve site furniture — live-data banners regenerated
-# every hour, social-share cards, CDN template art. They return a decodable
-# JPEG, so every existing "is it a real file?" test passes, but the picture is
-# never of the story. Before this guard a cached banner counted as a genuine
-# source photograph, so ensure_article_image() returned "already-covered" on
-# every run and the story never received an area/category card.
 GENERIC_IMAGE_HOST_SUFFIXES = (
-    "traffic-update.co.uk",       # /i/latest/latest_traffic_<date>_<hour>.jpg
-    "weather.metoffice.gov.uk",   # .../common/icons/social_card...
+    "traffic-update.co.uk",
+    "weather.metoffice.gov.uk",
     "metoffice.gov.uk",
     "tfgm.com",
-    "ctfassets.net",              # Contentful CDN behind the Bee Network pages
+    "ctfassets.net",
     "northernrailway.co.uk",
 )
-
-# Content hashes (sha256[:12]) of known non-editorial images that leaked in
-# before this guard existed — currently the Google News logo. Any locally cached
-# file matching one of these is treated as missing so it gets re-processed.
 KNOWN_BAD_IMAGE_DIGESTS = {
-    "872cdca296d0",  # Google News newspaper logo
+    "872cdca296d0",
+}
+
+# Commons licences accepted for automatic reuse. Public-domain variants are
+# matched by prefix; Creative Commons licences must permit commercial reuse.
+COMMONS_LICENSE_PREFIXES = (
+    "cc by ", "cc-by-", "cc by-sa", "cc-by-sa", "public domain",
+    "pd-", "cc0",
+)
+COMMONS_API = "https://commons.wikimedia.org/w/api.php"
+COMMONS_STOP_WORDS = {
+    "after", "again", "against", "amid", "and", "are", "at", "before",
+    "for", "from", "has", "have", "into", "its", "new", "of", "on",
+    "over", "the", "to", "with", "will", "in", "a", "an", "is",
+    "rochdale", "heywood", "middleton", "littleborough", "milnrow",
 }
 
 
@@ -142,7 +142,6 @@ def is_disallowed_source(url: str) -> bool:
 
 
 def is_generic_furniture_image(url: str) -> bool:
-    """True for hosts that only ever serve banners, social cards or template art."""
     host = host_of(url)
     if not host:
         return False
@@ -165,7 +164,6 @@ def is_disallowed_image(url: str) -> bool:
 
 
 def credit_is_disallowed(article: dict[str, Any]) -> bool:
-    """True if the cached image was attributed to Google/social chrome."""
     credit = clean(article.get("image_credit")).lower()
     if credit in DISALLOWED_SOURCE_HOSTS:
         return True
@@ -192,6 +190,7 @@ class Candidate:
     url: str
     method: str
     credit_url: str
+    credit: str = ""
 
 
 @dataclass
@@ -199,6 +198,7 @@ class Stats:
     total: int = 0
     already_covered: int = 0
     source_images_added: int = 0
+    commons_images_added: int = 0
     placeholders_added: int = 0
     source_attempts_failed: int = 0
     skipped_unpublished: int = 0
@@ -214,18 +214,6 @@ def is_http_url(value: Any) -> bool:
 
 
 def safe_candidate_url(page_url: str, value: str) -> str:
-    """Resolve a scraped image reference to a fetchable absolute URL, or "".
-
-    Scraped pages sometimes carry image references that are not valid URLs -
-    e.g. a relative search link like ``/th?q=One for the Pot: A Show`` with raw
-    spaces. urljoin keeps the spaces, and Python's HTTP client then raises
-    InvalidURL ("URL can't contain control characters"), which previously
-    crashed the whole card re-render job. This resolves the reference and
-    percent-encodes any unsafe characters left in the path and query so the
-    result is always something the HTTP client will accept. Anything that still
-    is not an http(s) URL returns "" so the caller can drop it rather than fetch
-    it.
-    """
     joined = urljoin(page_url, html.unescape(value or "")).strip()
     if not (joined.startswith("http://") or joined.startswith("https://")):
         return ""
@@ -235,14 +223,9 @@ def safe_candidate_url(page_url: str, value: str) -> str:
         return ""
     if not parts.netloc:
         return ""
-    # Re-encode path and query, leaving already-valid characters untouched.
-    # `safe` keeps the URL delimiters so a normal URL is unchanged; only raw
-    # spaces and control characters get percent-encoded.
     path = quote(parts.path, safe="/%:@!$&'()*+,;=~-._")
     query = quote(parts.query, safe="/%:@!$&'()*+,;=~-._?")
-    cleaned = urlunsplit(
-        (parts.scheme, parts.netloc, path, query, "")
-    )
+    cleaned = urlunsplit((parts.scheme, parts.netloc, path, query, ""))
     if any(ch.isspace() or ord(ch) < 0x20 for ch in cleaned):
         return ""
     return cleaned
@@ -258,34 +241,15 @@ def has_real_image(article: dict[str, Any], repo_root: Path) -> bool:
     if not image_url or is_placeholder_path(image_url):
         return False
 
-    # An image in the cards library was put there by hand, so it is real by
-    # definition and the credit checks below do not apply to it. Those checks
-    # exist to stop a photograph fetched from Google News or a social network
-    # being re-hosted here; nothing auto-fetched is ever written into
-    # assets/img/cards/. Without this, a curated card credited to the
-    # organisation that supplied it - "Get Together After Serving CIC", credit
-    # URL facebook.com - was judged a social-network image, discarded, and
-    # replaced with a generated card on every run.
     if image_url.replace("\\", "/").startswith(str(CARDS_DIR).replace("\\", "/")):
         return (repo_root / image_url).is_file()
 
-    # Self-heal legacy records: a picture credited to Google News / a social
-    # network, or whose bytes match a known non-editorial image (the Google
-    # logo), is not a real source image and must be re-processed.
     if credit_is_disallowed(article):
         return False
-    # When third-party image reuse is switched off, an existing publisher photo
-    # is no longer a valid image: it is replaced by our own card on the next
-    # run, so no other outlet's photograph stays re-hosted here.
     if not USE_SOURCE_IMAGES and is_third_party_credit(article):
         return False
-    # The collector already recorded that this image arrived with no publisher
-    # credit URL, i.e. it was not an attributed story photograph. Treat it as
-    # missing so our own card replaces it.
     if clean(article.get("source_image_reuse_status")) == "category-fallback":
         return False
-    # A cached image that came from a furniture host is not a story photograph,
-    # however valid the file itself is.
     if is_generic_furniture_image(article.get("source_image_candidate_url")):
         return False
     if local_digest(repo_root, image_url) in KNOWN_BAD_IMAGE_DIGESTS:
@@ -297,9 +261,6 @@ def has_real_image(article: dict[str, Any], repo_root: Path) -> bool:
     path = repo_root / image_url.lstrip("/")
     if not (path.is_file() and path.stat().st_size >= MIN_IMAGE_BYTES):
         return False
-    # A cached "source image" that isn't actually a decodable image (an HTML
-    # error page saved with a .jpg name, for example) is not real — treat it as
-    # missing so it is replaced with a proper card on the next run.
     return _looks_like_image(path)
 
 
@@ -310,11 +271,11 @@ def _looks_like_image(path: Path) -> bool:
     except OSError:
         return False
     return (
-        head.startswith(b"\xff\xd8\xff")            # JPEG
-        or head.startswith(b"\x89PNG\r\n\x1a\n")     # PNG
-        or head[:4] == b"RIFF" and head[8:12] == b"WEBP"  # WebP
-        or head.startswith(b"GIF8")                  # GIF
-        or head.lstrip()[:5].lower() == b"<?xml" and b"svg" in head.lower()  # SVG
+        head.startswith(b"\xff\xd8\xff")
+        or head.startswith(b"\x89PNG\r\n\x1a\n")
+        or head[:4] == b"RIFF" and head[8:12] == b"WEBP"
+        or head.startswith(b"GIF8")
+        or head.lstrip()[:5].lower() == b"<?xml" and b"svg" in head.lower()
         or head.lstrip()[:4].lower() == b"<svg"
     )
 
@@ -329,6 +290,8 @@ def source_urls(article: dict[str, Any]) -> list[str]:
 
 
 def source_name(article: dict[str, Any], url: str) -> str:
+    if "commons.wikimedia.org" in host_of(url):
+        return "Wikimedia Commons"
     primary_url = clean(article.get("source_url"))
     primary_name = clean(article.get("source_name"))
     if url == primary_url and primary_name:
@@ -352,10 +315,6 @@ def request_bytes(
     max_bytes: int,
     accept: str,
 ) -> tuple[bytes, str, str]:
-    # Defensive: an unencoded URL (raw spaces/control chars) makes the HTTP
-    # client raise InvalidURL, which is a ValueError. Callers already catch
-    # ValueError, but raising a clean one here means no path can escape as an
-    # uncaught crash the way a malformed scraped image URL once did.
     if any(ch.isspace() or ord(ch) < 0x20 for ch in url):
         raise ValueError(f"refusing to fetch URL with control characters: {url!r}")
     request = Request(
@@ -384,6 +343,17 @@ def request_bytes(
             if size > max_bytes:
                 raise ValueError("response too large")
         return b"".join(chunks), content_type, final_url
+
+
+def request_json(url: str, timeout: int) -> dict[str, Any]:
+    payload, _, _ = request_bytes(
+        url,
+        timeout=timeout,
+        max_bytes=MAX_PAGE_BYTES,
+        accept="application/json,*/*;q=0.2",
+    )
+    value = json.loads(payload.decode("utf-8"))
+    return value if isinstance(value, dict) else {}
 
 
 def meta_content(soup: BeautifulSoup, *, prop: str = "", name: str = "") -> str:
@@ -454,15 +424,8 @@ def json_ld_images(soup: BeautifulSoup, page_url: str) -> list[Candidate]:
             for value in values:
                 if value:
                     safe_url = safe_candidate_url(page_url, value)
-                    if not safe_url:
-                        continue
-                    result.append(
-                        Candidate(
-                            url=safe_url,
-                            method="json-ld",
-                            credit_url=page_url,
-                        )
-                    )
+                    if safe_url:
+                        result.append(Candidate(safe_url, "json-ld", page_url))
     return result
 
 
@@ -479,15 +442,8 @@ def page_candidates(page: bytes, page_url: str) -> list[Candidate]:
         value = meta_content(soup, **{kind: key})
         if value:
             safe_url = safe_candidate_url(page_url, value)
-            if not safe_url:
-                continue
-            result.append(
-                Candidate(
-                    url=safe_url,
-                    method=key,
-                    credit_url=page_url,
-                )
-            )
+            if safe_url:
+                result.append(Candidate(safe_url, key, page_url))
 
     result.extend(json_ld_images(soup, page_url))
 
@@ -507,26 +463,13 @@ def page_candidates(page: bytes, page_url: str) -> list[Candidate]:
             )
             if value:
                 safe_url = safe_candidate_url(page_url, value)
-                if not safe_url:
-                    continue
-                result.append(
-                    Candidate(
-                        url=safe_url,
-                        method=selector,
-                        credit_url=page_url,
-                    )
-                )
+                if safe_url:
+                    result.append(Candidate(safe_url, selector, page_url))
 
     return deduplicate_candidates(result)
 
 
 def rejected_candidates(article: dict[str, Any]) -> set[str]:
-    """Image URLs already tried and discarded for this article.
-
-    Without this, discarding a cached image only lasts until the next run:
-    the same URL is the article's first candidate, gets re-fetched, and the
-    card is skipped all over again.
-    """
     return {
         clean(value).lower()
         for value in (article.get("rejected_image_candidates") or [])
@@ -544,19 +487,6 @@ def remember_rejected_candidate(article: dict[str, Any], url: Any) -> None:
         article["rejected_image_candidates"] = existing[-20:]
 
 
-# Image hosts whose photographs must never be cached.
-#
-# CDPA 1988 s.30(2) excludes photographs from the fair dealing exception for
-# reporting current events, so there is no "we are a news site" defence for
-# reproducing another publisher's picture. A photograph is the one thing the
-# news exception explicitly will not cover.
-#
-# googleusercontent is on the list because Google News thumbnails are cached
-# copies of the originating publisher's photograph - fetching one is the same
-# infringement with an extra hop.
-#
-# Blocking these does not lose usable images. It loses images that were never
-# usable, which is a different thing.
 BLOCKED_IMAGE_HOSTS = (
     "googleusercontent.com",
     "reachplc.com", "i2-prod.", "manchestereveningnews.co.uk", "mirror.co.uk",
@@ -573,7 +503,6 @@ BLOCKED_IMAGE_HOSTS = (
 
 
 def image_host_is_blocked(url: str) -> bool:
-    """True when an image belongs to a publisher or agency, not to a source."""
     host = urlparse(clean(url)).netloc.lower()
     return any(marker in host for marker in BLOCKED_IMAGE_HOSTS)
 
@@ -593,23 +522,11 @@ def article_candidates(article: dict[str, Any]) -> list[Candidate]:
     ):
         value = clean(article.get(field))
         if is_http_url(value):
-            result.append(
-                Candidate(
-                    url=value,
-                    method=field,
-                    credit_url=primary_source or value,
-                )
-            )
+            result.append(Candidate(value, field, primary_source or value))
 
     for value in article.get("source_image_candidates") or []:
         if is_http_url(value):
-            result.append(
-                Candidate(
-                    url=clean(value),
-                    method="source_image_candidates",
-                    credit_url=primary_source or clean(value),
-                )
-            )
+            result.append(Candidate(clean(value), "source_image_candidates", primary_source or clean(value)))
 
     return deduplicate_candidates(result)
 
@@ -626,16 +543,11 @@ def deduplicate_candidates(candidates: list[Candidate]) -> list[Candidate]:
             continue
         if is_disallowed_image(url):
             continue
+        if image_host_is_blocked(url):
+            continue
         seen.add(url)
         result.append(candidate)
-    # Drop anything belonging to a publisher or picture agency before it is
-    # ever requested, so a blocked host cannot be cached by accident.
-    kept = []
-    for candidate in result:
-        if image_host_is_blocked(candidate.url):
-            continue
-        kept.append(candidate)
-    return kept
+    return result
 
 
 def extension_for(content_type: str, final_url: str, payload: bytes) -> str | None:
@@ -674,6 +586,109 @@ def fetch_candidate(candidate: Candidate, timeout: int) -> tuple[bytes, str, str
     return payload, extension, final_url
 
 
+def plain_metadata(value: Any) -> str:
+    if isinstance(value, dict):
+        value = value.get("value", "")
+    return BeautifulSoup(html.unescape(clean(value)), "html.parser").get_text(" ", strip=True)
+
+
+def commons_query_terms(article: dict[str, Any]) -> list[str]:
+    title = clean(article.get("title"))
+    area = clean(article.get("area"))
+    category = clean(article.get("category"))
+    words = re.findall(r"[a-z0-9']+", title.lower())
+    useful = [word for word in words if len(word) >= 4 and word not in COMMONS_STOP_WORDS]
+    useful = useful[:7]
+
+    queries: list[str] = []
+    if title:
+        queries.append(" ".join([title, area]).strip())
+    if useful:
+        queries.append(" ".join([*useful, area]).strip())
+    if len(useful) >= 2:
+        queries.append(" ".join([*useful[:4], category]).strip())
+    return list(dict.fromkeys(query for query in queries if query))
+
+
+def commons_title_relevance(article: dict[str, Any], file_title: str) -> int:
+    article_words = {
+        word for word in re.findall(r"[a-z0-9']+", clean(article.get("title")).lower())
+        if len(word) >= 4 and word not in COMMONS_STOP_WORDS
+    }
+    file_words = set(re.findall(r"[a-z0-9']+", file_title.lower()))
+    return len(article_words & file_words)
+
+
+def commons_license_allowed(metadata: dict[str, Any]) -> bool:
+    licence = plain_metadata(metadata.get("LicenseShortName")).lower()
+    usage = plain_metadata(metadata.get("UsageTerms")).lower()
+    combined = f"{licence} {usage}".strip()
+    return any(prefix in combined for prefix in COMMONS_LICENSE_PREFIXES)
+
+
+def commons_candidates(article: dict[str, Any], timeout: int) -> list[Candidate]:
+    if not USE_WIKIMEDIA_COMMONS:
+        return []
+
+    ranked: list[tuple[int, Candidate]] = []
+    seen: set[str] = set()
+    for query in commons_query_terms(article):
+        params = {
+            "action": "query",
+            "format": "json",
+            "formatversion": "2",
+            "generator": "search",
+            "gsrnamespace": "6",
+            "gsrsearch": query,
+            "gsrlimit": "8",
+            "prop": "imageinfo",
+            "iiprop": "url|size|mime|extmetadata",
+            "iiurlwidth": "1600",
+            "origin": "*",
+        }
+        try:
+            data = request_json(f"{COMMONS_API}?{urlencode(params)}", timeout)
+        except (HTTPError, URLError, TimeoutError, ValueError, OSError, json.JSONDecodeError):
+            continue
+
+        pages = data.get("query", {}).get("pages", [])
+        if not isinstance(pages, list):
+            continue
+        for page in pages:
+            if not isinstance(page, dict):
+                continue
+            title = clean(page.get("title"))
+            info_list = page.get("imageinfo") or []
+            if not info_list or not isinstance(info_list[0], dict):
+                continue
+            info = info_list[0]
+            mime = clean(info.get("mime")).lower()
+            width = int(info.get("width") or 0)
+            height = int(info.get("height") or 0)
+            metadata = info.get("extmetadata") or {}
+            if mime not in {"image/jpeg", "image/png", "image/webp"}:
+                continue
+            if width < 700 or height < 400 or not commons_license_allowed(metadata):
+                continue
+            relevance = commons_title_relevance(article, title)
+            if relevance < 1:
+                continue
+            image_url = clean(info.get("thumburl") or info.get("url"))
+            if not image_url or image_url in seen:
+                continue
+            seen.add(image_url)
+            artist = plain_metadata(metadata.get("Artist")) or plain_metadata(metadata.get("Credit"))
+            credit = f"{artist} / Wikimedia Commons" if artist else "Wikimedia Commons"
+            page_url = "https://commons.wikimedia.org/wiki/" + quote(title.replace(" ", "_"), safe=":_/()")
+            ranked.append((relevance, Candidate(image_url, "wikimedia-commons", page_url, credit)))
+
+        if ranked:
+            break
+
+    ranked.sort(key=lambda item: item[0], reverse=True)
+    return [candidate for _, candidate in ranked[:4]]
+
+
 def fetch_source_image(
     article: dict[str, Any],
     *,
@@ -685,8 +700,6 @@ def fetch_source_image(
 
     for page_url in source_urls(article):
         if is_disallowed_source(page_url):
-            # e.g. an unresolved news.google.com wrapper — its og:image is the
-            # Google logo, not the story photo. Never scrape it.
             continue
         try:
             page, content_type, final_page_url = request_bytes(
@@ -701,6 +714,10 @@ def fetch_source_image(
             pass
         if sleep_seconds:
             time.sleep(sleep_seconds)
+
+    # Commons is the final real-image search. It runs only after explicit and
+    # source-page candidates, and always before a generated area/category card.
+    candidates.extend(commons_candidates(article, timeout))
 
     for candidate in deduplicate_candidates(candidates):
         if clean(candidate.url).lower() in already_rejected:
@@ -717,8 +734,8 @@ def fetch_source_image(
         return (
             payload,
             extension,
-            Candidate(final_url, candidate.method, candidate.credit_url),
-            source_name(article, candidate.credit_url),
+            Candidate(final_url, candidate.method, candidate.credit_url, candidate.credit),
+            candidate.credit or source_name(article, candidate.credit_url),
         )
     return None
 
@@ -780,15 +797,6 @@ CARDS_DIR = Path("assets/img/cards")
 
 
 def has_chosen_override(article: dict[str, Any], repo_root: Path) -> bool:
-    """True when an image has been filed against this exact story.
-
-    A photograph that came with the article normally wins, and should: it is
-    the actual subject. But an image named after the article slug is a
-    deliberate editorial choice for that one story, so it beats everything,
-    including the source photograph. Nothing else in the library does - a
-    general photograph of a place should not displace a picture of the thing
-    the story is actually about.
-    """
     slug = slug_for(article)
     if not slug:
         return False
@@ -812,20 +820,13 @@ def ensure_article_image(
     if not has_chosen_override(article, repo_root) and has_real_image(article, repo_root):
         return "already-covered"
 
-    # The article carries a cached image that has just been judged unusable
-    # (furniture host, or no publisher credit at collection time). Record the
-    # URL so the next run does not fetch the very same file again.
     if clean(article.get("image_status")) == "source-image-cached":
         remember_rejected_candidate(article, article.get("source_image_candidate_url"))
 
     existing_status = clean(article.get("image_status"))
     existing_placeholder = existing_status in {"generated-placeholder", "area-category-card"}
 
-    # allow_network is False once the run has spent its budget of source-image
-    # hunts. The card is still rebuilt, which costs nothing and is the whole
-    # point: an image added to the library today reaches every story it matches
-    # on the next run, not just the newest handful.
-    if allow_network and (not existing_placeholder or retry_placeholders) and USE_SOURCE_IMAGES:
+    if allow_network and (not existing_placeholder or retry_placeholders) and (USE_SOURCE_IMAGES or USE_WIKIMEDIA_COMMONS):
         result = fetch_source_image(
             article,
             timeout=timeout,
@@ -834,25 +835,21 @@ def ensure_article_image(
         if result is not None:
             payload, extension, candidate, credit = result
             local_path = save_source_image(article, payload, extension, output_dir)
+            is_commons = candidate.method == "wikimedia-commons"
             article["image_url"] = local_path
             article["image_credit"] = credit
             article["image_credit_url"] = candidate.credit_url
             article["source_image_candidate_url"] = candidate.url
-            article["image_status"] = "source-image-cached"
+            article["image_status"] = "wikimedia-commons" if is_commons else "source-image-cached"
             article["image_backfill_method"] = candidate.method
-            article["source_image_reuse_status"] = article.get(
-                "source_image_reuse_status"
-            ) or "source-attributed-review-required"
+            article["source_image_reuse_status"] = (
+                "wikimedia-commons-reusable" if is_commons
+                else article.get("source_image_reuse_status") or "source-attributed-review-required"
+            )
             article.pop("image_placeholder_reason", None)
-            return "source-image"
+            return "commons-image" if is_commons else "source-image"
 
     slug = slug_for(article)
-
-    # A curated image the editor has filed in assets/img/cards/ always beats a
-    # generated card. Checked here, before compose_story_card, so a placed photo
-    # is used whenever one matches - by exact slug, or (for non-crime) by a
-    # headline keyword. Crime stays slug-only: a crime photograph must land only
-    # on the exact story it was named for, never on another via a shared word.
     cat_key = clean(article.get("category")).lower()
     library_match = find_library_photo(
         clean(article.get("title")),
@@ -892,7 +889,7 @@ def ensure_article_image(
     article["image_placeholder_reason"] = (
         "Local area photograph, category-styled"
         if used_real_photo
-        else "Generated area/category card; no source image available"
+        else "Generated area/category card; no source, Wikimedia Commons or library image available"
     )
     return "placeholder"
 
@@ -920,7 +917,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument(
         "--retry-placeholders",
         action="store_true",
-        help="Retry source extraction for stories currently using generated placeholders.",
+        help="Retry source and Wikimedia extraction for stories using generated cards.",
     )
     parser.add_argument(
         "--report",
@@ -948,9 +945,6 @@ def main(argv: list[str] | None = None) -> int:
             stats.skipped_unpublished += 1
             continue
 
-        # The limit bounds network work only. Every article still has its card
-        # rebuilt, because rendering is local and cheap, and stopping early
-        # meant an older story could never pick up a newly added photograph.
         allow_network = not args.limit or processed < args.limit
         if allow_network:
             processed += 1
@@ -969,6 +963,8 @@ def main(argv: list[str] | None = None) -> int:
             stats.already_covered += 1
         elif result == "source-image":
             stats.source_images_added += 1
+        elif result == "commons-image":
+            stats.commons_images_added += 1
         elif result == "placeholder":
             stats.placeholders_added += 1
             stats.source_attempts_failed += 1
