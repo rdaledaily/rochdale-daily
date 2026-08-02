@@ -218,6 +218,50 @@ def check_ward_map() -> None:
     note(path.name, f"{len(wards)} wards")
 
 
+def check_card_aliases() -> None:
+    """assets/img/cards/aliases.json: editor-curated phrase groups.
+
+    The pipeline deliberately ignores a malformed file so a typo cannot stop
+    publication; this is where that typo gets reported instead. Every image
+    base listed must exist in the cards library, and every group needs at
+    least one phrase, otherwise the group silently matches nothing.
+    """
+    cards_dir = REPO_ROOT / "assets" / "img" / "cards"
+    path = cards_dir / "aliases.json"
+    if not path.exists():
+        return
+    data = load(path)
+    if data is None:
+        return
+    if not isinstance(data, dict):
+        fail(path.name, "expected an object of alias groups")
+        return
+    import re as _re
+    stems = set()
+    for p in cards_dir.iterdir():
+        if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}:
+            stem = _re.sub(r"[^a-z0-9]+", "_", _re.sub(r"-\d+$", "", p.stem).lower()).strip("_")
+            stems.add(stem)
+    groups = 0
+    for name, spec in data.items():
+        where = f"{path.name} ({name})"
+        if not isinstance(spec, dict):
+            fail(where, "group must be an object with images and phrases")
+            continue
+        groups += 1
+        images = spec.get("images") or []
+        phrases = spec.get("phrases") or []
+        if not images:
+            fail(where, "group lists no images, so it can never match")
+        for base in images:
+            key = _re.sub(r"[^a-z0-9]+", "_", str(base).lower()).strip("_")
+            if key not in stems:
+                fail(where, f'image "{base}" matches no file in assets/img/cards/')
+        if not phrases:
+            note(where, "group has no phrases; only the group name itself will match")
+    note(path.name, f"{groups} alias group(s)")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate hand-edited data files.")
     parser.add_argument("--warn-only", action="store_true",
@@ -226,6 +270,7 @@ def main() -> int:
 
     check_manual_articles()
     check_adverts()
+    check_card_aliases()
     check_ward_map()
     check_simple("manual_events.json")
     check_simple("story_blocklist.json", key=None)

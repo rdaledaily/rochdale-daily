@@ -159,6 +159,43 @@ def _library(cards_dir: Path) -> list[tuple[str, list[Path]]]:
         # nothing and say nothing, which is the worst kind of failure.
         stem = _normalise(re.sub(r"-\d+$", "", path.stem))
         pools.setdefault(stem, []).append(path)
+    # Editor-curated alias groups: assets/img/cards/aliases.json maps one pool
+    # of photographs to several headline phrases, for subjects the headlines
+    # name in many ways (Rochdale AFC is "Rochdale A.F.C.", "Rochdale vs X",
+    # a player's name...). Still nothing automatic: every phrase and every
+    # image in the file was typed by the editor, and a phrase only ever adds
+    # to what the filenames already match. Malformed JSON is ignored here so
+    # a typo cannot take the pipeline down; check_data_files.py reports it.
+    aliases_path = cards_dir / "aliases.json"
+    if aliases_path.is_file():
+        try:
+            groups = json.loads(aliases_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            groups = {}
+        if isinstance(groups, dict):
+            for group_name, spec in groups.items():
+                if not isinstance(spec, dict):
+                    continue
+                image_bases = [
+                    _normalise(str(b)) for b in spec.get("images") or []
+                ]
+                pool: list[Path] = []
+                for base in image_bases:
+                    for p in pools.get(base, []):
+                        if p not in pool:
+                            pool.append(p)
+                if not pool:
+                    continue
+                phrases = [str(p) for p in spec.get("phrases") or []]
+                phrases.append(str(group_name))
+                for phrase in phrases:
+                    key = _normalise(phrase)
+                    if not key:
+                        continue
+                    existing = pools.setdefault(key, [])
+                    for p in pool:
+                        if p not in existing:
+                            existing.append(p)
     # Longest name wins: rochdale_town_hall before town_hall.
     return sorted(pools.items(), key=lambda kv: (-len(kv[0].split("_")), -len(kv[0])))
 
