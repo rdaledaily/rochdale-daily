@@ -161,6 +161,13 @@ jobs:
         timeout-minutes: 2
         run: python scraper/repair_merged_bodies.py
 
+      # Archive pages are never rebuilt by generate_pages.py - it only writes
+      # the articles currently in articles.json - so a template change reaches
+      # new pages and silently misses the rest. Idempotent; a no-op once clean.
+      - name: Repair advert slots on archive pages
+        timeout-minutes: 3
+        run: python scraper/repair_archive_ads.py
+
       - name: Generate static article pages and sitemap
         timeout-minutes: 4
         run: python scraper/generate_pages.py
