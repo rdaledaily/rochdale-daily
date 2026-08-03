@@ -7,10 +7,10 @@
 
   var API = "/api/poll";
   var TOKEN_KEY = "rd-community-poll-voter";
-  var VOTE_KEY_PREFIX = "rd-community-poll-vote:";
   var payload = null;
   var selected = "";
   var busy = false;
+  var message = "";
   var refreshTimer = null;
 
   function esc(value) {
@@ -27,20 +27,12 @@
     try { window.localStorage.setItem(key, value); } catch (error) { /* no-op */ }
   }
 
-  function voteKey(pollId) {
-    return VOTE_KEY_PREFIX + String(pollId || "");
-  }
-
-  function storedVote(pollId) {
-    return storageGet(voteKey(pollId));
-  }
-
   function voterId() {
     var id = storageGet(TOKEN_KEY);
-    if (id) return id;
+    if (id && /^[a-zA-Z0-9_-]{20,120}$/.test(id)) return id;
 
+    var bytes = new Uint8Array(24);
     if (window.crypto && window.crypto.getRandomValues) {
-      var bytes = new Uint8Array(24);
       window.crypto.getRandomValues(bytes);
       var parts = [];
       for (var i = 0; i < bytes.length; i += 1) {
@@ -72,30 +64,22 @@
     for (var i = 0; i < options.length; i += 1) {
       if (String(options[i].id) === String(optionId)) return options[i];
     }
-    return null;
+    return { votes: 0, percentage: 0 };
   }
 
-  function applyOptimisticVote(data, optionId) {
-    if (!data || !data.results || !optionId) return data;
-    var result = findResult(data.results, optionId);
-    if (!result) return data;
-
-    var total = Number(data.results.total || 0);
-    var knownVotes = Number(result.votes || 0);
-
-    /* KV list results can lag behind a successful write. Mark one local vote
-       until the backend count catches up, then percentages are recalculated. */
-    if (!result._localVoteApplied) {
-      result.votes = knownVotes + 1;
-      result._localVoteApplied = true;
-      total += 1;
-      data.results.total = total;
-      for (var i = 0; i < data.results.options.length; i += 1) {
-        var item = data.results.options[i];
-        item.percentage = total ? Math.round((Number(item.votes || 0) / total) * 1000) / 10 : 0;
-      }
+  function applyOptimisticVote(optionId) {
+    if (!payload || !payload.results || !optionId) return;
+    var result = findResult(payload.results, optionId);
+    if (result._localVoteApplied) return;
+    result.votes = Number(result.votes || 0) + 1;
+    result._localVoteApplied = true;
+    payload.results.total = Number(payload.results.total || 0) + 1;
+    for (var i = 0; i < payload.results.options.length; i += 1) {
+      var item = payload.results.options[i];
+      item.percentage = payload.results.total
+        ? Math.round((Number(item.votes || 0) / payload.results.total) * 1000) / 10
+        : 0;
     }
-    return data;
   }
 
   function leaderText(results) {
@@ -104,32 +88,27 @@
       return Number(b.votes || 0) - Number(a.votes || 0);
     });
     if (!sorted.length) return "Be the first to vote";
-    var secondVotes = sorted[1] ? Number(sorted[1].votes || 0) : 0;
-    var margin = Number(sorted[0].votes || 0) - secondVotes;
+    var margin = Number(sorted[0].votes || 0) - Number(sorted[1] ? sorted[1].votes || 0 : 0);
     if (!margin) return "The lead is tied";
     return sorted[0].label + " leads by " + margin + " vote" + (margin === 1 ? "" : "s");
   }
 
-  function render(message) {
-    if (!payload || !payload.poll || !payload.state || !payload.results) {
-      showError("The community poll is temporarily unavailable.");
-      return;
-    }
+  function render() {
+    if (!payload || !payload.poll || !payload.state || !payload.results) return;
 
     var poll = payload.poll;
     var state = payload.state;
     var results = payload.results;
-    var chosen = storedVote(poll.id);
+    var chosen = payload.voted_for ? String(payload.voted_for) : "";
     var canVote = state.open && !chosen;
-    var options = poll.options || [];
     var rows = "";
 
-    for (var i = 0; i < options.length; i += 1) {
-      var option = options[i];
-      var result = findResult(results, option.id) || { votes: 0, percentage: 0 };
+    for (var i = 0; i < poll.options.length; i += 1) {
+      var option = poll.options[i];
+      var result = findResult(results, option.id);
       var active = selected === String(option.id);
-      var percentage = Number(result.percentage || 0);
       var votes = Number(result.votes || 0);
+      var percentage = Number(result.percentage || 0);
 
       if (canVote) {
         rows += '<button type="button" class="rd-poll-choice' + (active ? ' is-selected' : '') + '" data-poll-option="' + esc(option.id) + '" aria-pressed="' + (active ? 'true' : 'false') + '">' +
@@ -150,16 +129,18 @@
     host.innerHTML = '<div class="rd-poll-shell">' +
       '<div class="rd-poll-topline"><span class="rd-poll-kicker">Rochdale Daily community poll</span><span class="rd-poll-countdown">' + esc(timeLeft(state.ends_at)) + '</span></div>' +
       '<div class="rd-poll-grid"><div class="rd-poll-main"><h2>' + esc(poll.title) + '</h2><p class="rd-poll-intro">' + esc(poll.description) + '</p>' +
-      '<div class="rd-poll-options">' + rows + '</div><p class="rd-poll-message" role="status" aria-live="polite">' + esc(message || "") + '</p>' +
+      '<div class="rd-poll-options">' + rows + '</div>' +
+      '<p class="rd-poll-message" role="status" aria-live="assertive">' + esc(message) + '</p>' +
       '<div class="rd-poll-actions">' + (canVote ? '<button class="rd-poll-vote" type="button"' + (busy ? ' disabled' : '') + '>' + (busy ? 'Submitting…' : 'Vote now') + '</button>' : '') + '</div></div>' +
       '<aside class="rd-poll-summary"><span class="rd-poll-total">' + total.toLocaleString("en-GB") + ' vote' + (total === 1 ? '' : 's') + '</span><strong>' + esc(leaderText(results)) + '</strong></aside></div>' +
       '<p class="rd-poll-note">' + esc(poll.source_note || "Informal reader poll.") + '</p></div>';
 
-    var optionButtons = host.querySelectorAll("[data-poll-option]");
-    for (var j = 0; j < optionButtons.length; j += 1) {
-      optionButtons[j].addEventListener("click", function () {
+    var buttons = host.querySelectorAll("[data-poll-option]");
+    for (var j = 0; j < buttons.length; j += 1) {
+      buttons[j].addEventListener("click", function () {
         selected = this.getAttribute("data-poll-option") || "";
-        render("");
+        message = "";
+        render();
       });
     }
 
@@ -167,13 +148,13 @@
     if (voteButton) voteButton.addEventListener("click", submit);
   }
 
-  function showError(message) {
-    host.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">' + esc(message) + '</p></div>';
+  function showError(text) {
+    host.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">' + esc(text) + '</p></div>';
   }
 
-  function request(method, body, callback) {
+  function request(method, url, body, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open(method, API, true);
+    xhr.open(method, url, true);
     xhr.setRequestHeader("Accept", "application/json");
     if (method === "POST") xhr.setRequestHeader("Content-Type", "application/json");
     xhr.timeout = 12000;
@@ -190,51 +171,55 @@
 
   function submit() {
     if (!selected) {
-      render("Choose an option before voting.");
+      message = "Choose an option before voting.";
+      render();
       return;
     }
     if (busy) return;
+
     busy = true;
-    render("");
+    message = "";
+    render();
 
     var submittedOption = selected;
-    request("POST", {
+    request("POST", API, {
       poll_id: payload.poll.id,
       option_id: submittedOption,
       voter_id: voterId()
     }, function (ok, data) {
       busy = false;
+
       if (!data) {
-        render("The poll is temporarily unavailable.");
+        message = "The vote service did not respond. Please try again.";
+        render();
         return;
       }
 
       if (data.poll && data.state && data.results) payload = data;
 
       if (ok || data.voted_for) {
-        var confirmed = String(data.voted_for || submittedOption);
-        storageSet(voteKey(payload.poll.id), confirmed);
+        payload.voted_for = String(data.voted_for || submittedOption);
+        applyOptimisticVote(payload.voted_for);
         selected = "";
-        applyOptimisticVote(payload, confirmed);
-        render(ok ? "Your vote has been counted." : (data.error || "Your earlier vote is shown below."));
+        message = ok ? "Your vote has been counted." : (data.error || "Your existing vote is shown below.");
+        render();
         return;
       }
 
-      render(data.error || "Your vote could not be recorded.");
+      message = data.error || "Your vote could not be recorded.";
+      render();
     });
   }
 
   function load(firstLoad) {
-    request("GET", null, function (ok, data) {
+    var url = API + "?voter_id=" + encodeURIComponent(voterId()) + "&_=" + Date.now();
+    request("GET", url, null, function (ok, data) {
       if (!ok || !data || !data.poll || !data.state || !data.results) {
         if (firstLoad) showError("The community poll is temporarily unavailable. Please try again shortly.");
         return;
       }
-
-      var localChoice = storedVote(data.poll.id);
       payload = data;
-      if (localChoice) applyOptimisticVote(payload, localChoice);
-      render("");
+      if (!busy) render();
     });
   }
 
