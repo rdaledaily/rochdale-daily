@@ -5,7 +5,7 @@
   var KEY = "rd-cookie-choice";
   var ACCEPTED = "optional-accepted";
   var DECLINED = "essential-only";
-  var ASSET_VERSION = "20260803-4";
+  var ASSET_VERSION = "20260803-5";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -42,13 +42,20 @@
     document.head.appendChild(style);
   }
 
-  function addScript(src) {
+  function addScript(src, onError) {
     if (document.querySelector('script[data-rd-asset="' + src + '"]')) return;
     var script = document.createElement("script");
     script.src = src + "?v=" + ASSET_VERSION;
     script.defer = true;
     script.setAttribute("data-rd-asset", src);
+    if (typeof onError === "function") script.addEventListener("error", onError);
     document.body.appendChild(script);
+  }
+
+  function pollLoadError() {
+    var poll = document.getElementById("community-poll");
+    if (!poll) return;
+    poll.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">The community poll could not be loaded. Please refresh the page and try again.</p></div>';
   }
 
   function loadHomepageEnhancements() {
@@ -63,7 +70,12 @@
     section.setAttribute("aria-label", "Rochdale Daily community poll");
     section.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">Loading live community poll…</p></div>';
     ward.insertAdjacentElement("afterend", section);
-    addScript("/assets/js/community-poll-v2.js");
+    addScript("/assets/js/community-poll-v2.js", pollLoadError);
+
+    window.setTimeout(function () {
+      var current = document.getElementById("community-poll");
+      if (current && current.textContent.indexOf("Loading live community poll") !== -1) pollLoadError();
+    }, 15000);
   }
 
   function init() {
