@@ -5,8 +5,7 @@
   var KEY = "rd-cookie-choice";
   var ACCEPTED = "optional-accepted";
   var DECLINED = "essential-only";
-  var ASSET_VERSION = "20260803-7";
-  var POLL_MIGRATION_KEY = "rd-poll-storage-migration-v7";
+  var ASSET_VERSION = "20260803-8";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -14,19 +13,6 @@
 
   function save(choice) {
     try { window.localStorage.setItem(KEY, choice); } catch (error) { /* no-op */ }
-  }
-
-  function clearBrokenPollMarkersOnce() {
-    try {
-      if (window.localStorage.getItem(POLL_MIGRATION_KEY) === "1") return;
-      var remove = [];
-      for (var i = 0; i < window.localStorage.length; i += 1) {
-        var key = window.localStorage.key(i) || "";
-        if (key.indexOf("rd-community-poll-vote:") === 0) remove.push(key);
-      }
-      for (var j = 0; j < remove.length; j += 1) window.localStorage.removeItem(remove[j]);
-      window.localStorage.setItem(POLL_MIGRATION_KEY, "1");
-    } catch (error) { /* no-op */ }
   }
 
   window.rdCookieConsent = function () { return read() === ACCEPTED; };
@@ -39,7 +25,10 @@
     banner.id = "cookie-banner";
     banner.setAttribute("role", "region");
     banner.setAttribute("aria-label", "Cookie choices");
-    banner.innerHTML = '<div class="wrap cookie-row"><p><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. You can change your choice at any time using <a href="/privacy.html#cookies" style="color:#f5c400">Cookie settings</a>.</p><div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div></div>';
+    banner.innerHTML =
+      '<div class="wrap cookie-row">' +
+      '<p><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. You can change your choice at any time using <a href="/privacy.html#cookies" style="color:#f5c400">Cookie settings</a>.</p>' +
+      '<div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div></div>';
     document.body.appendChild(banner);
     return banner;
   }
@@ -73,6 +62,7 @@
     if (!document.getElementById("news-grid")) return;
     addStyle("/assets/css/community-poll.css");
     addScript("/assets/js/homepage-ui.js");
+
     var ward = document.getElementById("news-by-ward");
     if (!ward || document.getElementById("community-poll")) return;
     var section = document.createElement("section");
@@ -81,6 +71,7 @@
     section.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">Loading live community poll…</p></div>';
     ward.insertAdjacentElement("afterend", section);
     addScript("/assets/js/community-poll-v2.js", pollLoadError);
+
     window.setTimeout(function () {
       var current = document.getElementById("community-poll");
       if (current && current.textContent.indexOf("Loading live community poll") !== -1) pollLoadError();
@@ -88,27 +79,30 @@
   }
 
   function init() {
-    clearBrokenPollMarkersOnce();
     var banner = build();
     var accept = document.getElementById("cookie-accept");
     var decline = document.getElementById("cookie-decline");
+
     function close(choice) {
       save(choice);
       banner.classList.remove("show");
       var link = document.getElementById("cookie-settings-link");
       if (link) link.focus();
     }
+
     function open(event) {
       if (event) event.preventDefault();
       banner.classList.add("show");
       if (decline) decline.focus();
     }
+
     if (accept) accept.addEventListener("click", function () { close(ACCEPTED); });
     if (decline) decline.addEventListener("click", function () { close(DECLINED); });
     var links = [].slice.call(document.querySelectorAll("[data-cookie-settings]"));
     var byId = document.getElementById("cookie-settings-link");
     if (byId && links.indexOf(byId) === -1) links.push(byId);
     links.forEach(function (link) { link.addEventListener("click", open); });
+
     if (!read()) banner.classList.add("show");
     loadHomepageEnhancements();
   }
