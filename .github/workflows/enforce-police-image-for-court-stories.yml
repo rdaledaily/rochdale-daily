@@ -1,0 +1,95 @@
+name: Enforce police image for court stories
+
+on:
+  push:
+    paths:
+      - '.github/workflows/enforce-police-image-for-court-stories.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rochdale-daily-15-minute-scraper
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Add permanent police-image rule and update current story
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rule_file = Path('scraper/source_presentation.py')
+          text = rule_file.read_text(encoding='utf-8')
+
+          marker = 'def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:\n'
+          helper = '''COURT_POLICE_IMAGE_RE = re.compile(\n    r"\\b(sentenced|jailed|convicted|charged|arrested|imprisoned|prison|court|offences?)\\b",\n    re.IGNORECASE,\n)\n\n\ndef enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:\n    """Use the standard police photograph for generic court/crime reports.\n\n    A specific verified scene, person or official source image remains preferable.\n    This rule replaces generated category cards and other fallback artwork for\n    police matters whose headlines clearly concern arrests, charges, convictions,\n    sentencing, imprisonment, court proceedings or offences.\n    """\n    title = str(article.get("title") or "")\n    category = str(article.get("category") or "").casefold()\n    police_matter = bool(article.get("police_matter")) or category == "crime"\n    current = str(article.get("image_url") or "")\n    fallback = (\n        not current\n        or "area-category-card" in current\n        or "generated" in current\n        or str(article.get("image_status") or "") in {"area-category-card", "category-fallback"}\n    )\n    if police_matter and fallback and COURT_POLICE_IMAGE_RE.search(title):\n        article["image_url"] = "assets/img/cards/police.jpg"\n        article["image_credit"] = "Rochdale Daily"\n        article["image_credit_url"] = "https://rochdaledaily.co.uk/"\n        article["image_status"] = "standard-police-image"\n        article["image_placeholder_reason"] = "Standard police image used for court or sentencing report"\n    return article\n\n\n'''
+
+          if 'def enforce_police_image(' not in text:
+              if marker not in text:
+                  raise SystemExit('Could not locate sanitise_article in source_presentation.py')
+              text = text.replace(marker, helper + marker, 1)
+
+          old = '''    if not subtle:\n        return article\n'''
+          new = '''    if not subtle:\n        return enforce_police_image(article)\n'''
+          if new not in text:
+              if old not in text:
+                  raise SystemExit('Could not patch non-subtle return path')
+              text = text.replace(old, new, 1)
+
+          final_return = '''    return article\n\n\ndef generic_sources_markup'''
+          final_new = '''    return enforce_police_image(article)\n\n\ndef generic_sources_markup'''
+          if final_new not in text:
+              if final_return not in text:
+                  raise SystemExit('Could not patch final sanitise_article return path')
+              text = text.replace(final_return, final_new, 1)
+
+          rule_file.write_text(text, encoding='utf-8')
+
+          feed = Path('articles.json')
+          data = json.loads(feed.read_text(encoding='utf-8'))
+          records = data if isinstance(data, list) else data.get('articles', [])
+          slug = 'rochdale-man-sentenced-to-six-years-for-violent-and-sexual-offences'
+          found = False
+          for article in records:
+              if article.get('slug') == slug:
+                  article['image_url'] = 'assets/img/cards/police.jpg'
+                  article['image_credit'] = 'Rochdale Daily'
+                  article['image_credit_url'] = 'https://rochdaledaily.co.uk/'
+                  article['image_status'] = 'standard-police-image'
+                  article['image_placeholder_reason'] = 'Standard police image used for court or sentencing report'
+                  found = True
+                  break
+          if not found:
+              raise SystemExit(f'Article not found: {slug}')
+          feed.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+      - name: Install dependencies and rebuild
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+          python -m json.tool articles.json >/dev/null
+          python scraper/generate_pages.py
+      - name: Verify and commit
+        run: |
+          grep -q 'assets/img/cards/police.jpg' articles/rochdale-man-sentenced-to-six-years-for-violent-and-sexual-offences.html
+          grep -q 'def enforce_police_image' scraper/source_presentation.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add articles.json scraper/source_presentation.py articles sitemap.xml event_dates.json scraper_status.json
+          git rm .github/workflows/enforce-police-image-for-court-stories.yml
+          git commit -m 'Use police image for court and sentencing stories'
+          git push
