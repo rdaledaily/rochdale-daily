@@ -4,6 +4,7 @@
 Historically the homepage tagged every event held on any Saturday or Sunday as
 "weekend". That made the This weekend tab show events months away. This script
 is intentionally idempotent and patches the hand-authored homepage shell.
+The accompanying workflow applies it immediately and can be rerun safely.
 """
 from pathlib import Path
 
