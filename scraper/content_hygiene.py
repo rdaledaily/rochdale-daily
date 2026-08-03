@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# This module is also the permanent publishing guard against visible model artefacts.
 import argparse
 import html
 import json
