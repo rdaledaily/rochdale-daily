@@ -1,52 +1,25 @@
-/* Rochdale Daily cookie consent.
- *
- * One implementation for every page. The banner used to live inline in
- * index.html, so it appeared on the homepage only: a reader who arrived on an
- * article - which is how most people arrive - was never asked, and the
- * "Cookie settings" link the privacy policy points them at did not exist on
- * the 600+ article pages. This script injects the banner wherever it is
- * loaded and binds the settings link, so the promise the privacy page makes
- * is true on every page.
- *
- * The choice is stored in localStorage under rd-cookie-choice, the same key
- * the homepage already used, so anyone who has already chosen is not asked
- * again.
- *
- * Optional cookies stay off unless "rd-cookie-choice" is "optional-accepted".
- * Nothing here sets an analytics or advertising cookie itself; it records the
- * decision, and anything optional must check rdCookieConsent() before running.
- */
+/* Rochdale Daily cookie consent and homepage enhancements. */
 (function () {
   "use strict";
 
   var KEY = "rd-cookie-choice";
   var ACCEPTED = "optional-accepted";
   var DECLINED = "essential-only";
+  var ASSET_VERSION = "20260803-2";
 
   function read() {
-    try {
-      return window.localStorage.getItem(KEY);
-    } catch (error) {
-      return null;
-    }
+    try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
   }
 
   function save(choice) {
-    try {
-      window.localStorage.setItem(KEY, choice);
-    } catch (error) {
-      // Nothing we can do; the banner still closes for this page view.
-    }
+    try { window.localStorage.setItem(KEY, choice); } catch (error) { /* no-op */ }
   }
 
-  window.rdCookieConsent = function () {
-    return read() === ACCEPTED;
-  };
+  window.rdCookieConsent = function () { return read() === ACCEPTED; };
 
   function build() {
     var existing = document.getElementById("cookie-banner");
     if (existing) return existing;
-
     var banner = document.createElement("div");
     banner.className = "cookie";
     banner.id = "cookie-banner";
@@ -54,43 +27,43 @@
     banner.setAttribute("aria-label", "Cookie choices");
     banner.innerHTML =
       '<div class="wrap cookie-row">' +
-      '<p><strong>Cookie choices:</strong> We use strictly necessary cookies and ' +
-      "local storage to operate this website, keep it secure and remember your " +
-      "preferences. Optional analytics cookies help us understand how the site is " +
-      "used, while optional advertising cookies may be used to support relevant " +
-      "advertising. Optional cookies remain off unless you consent. You can change " +
-      'your choice at any time using <a href="/privacy.html#cookies" style="color:#f5c400">Cookie settings</a>.</p>' +
-      '<div class="cookie-actions">' +
-      '<button class="cookie-decline" id="cookie-decline" type="button">Essential only</button>' +
-      '<button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button>' +
-      "</div></div>";
+      '<p><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. You can change your choice at any time using <a href="/privacy.html#cookies" style="color:#f5c400">Cookie settings</a>.</p>' +
+      '<div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div></div>';
     document.body.appendChild(banner);
     return banner;
   }
 
-  function loadCommunityPoll() {
+  function addStyle(href) {
+    if (document.querySelector('link[data-rd-asset="' + href + '"]')) return;
+    var style = document.createElement("link");
+    style.rel = "stylesheet";
+    style.href = href + "?v=" + ASSET_VERSION;
+    style.setAttribute("data-rd-asset", href);
+    document.head.appendChild(style);
+  }
+
+  function addScript(src) {
+    if (document.querySelector('script[data-rd-asset="' + src + '"]')) return;
+    var script = document.createElement("script");
+    script.src = src + "?v=" + ASSET_VERSION;
+    script.defer = true;
+    script.setAttribute("data-rd-asset", src);
+    document.body.appendChild(script);
+  }
+
+  function loadHomepageEnhancements() {
+    if (!document.getElementById("news-grid")) return;
+    addStyle("/assets/css/community-poll.css");
+    addScript("/assets/js/homepage-ui.js");
+
     var ward = document.getElementById("news-by-ward");
     if (!ward || document.getElementById("community-poll")) return;
-
     var section = document.createElement("section");
     section.id = "community-poll";
     section.setAttribute("aria-label", "Rochdale Daily community poll");
     section.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">Loading live community poll…</p></div>';
     ward.insertAdjacentElement("afterend", section);
-
-    if (!document.querySelector('link[href="/assets/css/community-poll.css"]')) {
-      var style = document.createElement("link");
-      style.rel = "stylesheet";
-      style.href = "/assets/css/community-poll.css";
-      document.head.appendChild(style);
-    }
-
-    if (!document.querySelector('script[src="/assets/js/community-poll.js"]')) {
-      var script = document.createElement("script");
-      script.src = "/assets/js/community-poll.js";
-      script.defer = true;
-      document.body.appendChild(script);
-    }
+    addScript("/assets/js/community-poll.js");
   }
 
   function init() {
@@ -113,19 +86,15 @@
 
     if (accept) accept.addEventListener("click", function () { close(ACCEPTED); });
     if (decline) decline.addEventListener("click", function () { close(DECLINED); });
-
     var links = [].slice.call(document.querySelectorAll("[data-cookie-settings]"));
     var byId = document.getElementById("cookie-settings-link");
     if (byId && links.indexOf(byId) === -1) links.push(byId);
     links.forEach(function (link) { link.addEventListener("click", open); });
 
     if (!read()) banner.classList.add("show");
-    loadCommunityPoll();
+    loadHomepageEnhancements();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
 })();
