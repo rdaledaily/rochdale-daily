@@ -1,0 +1,47 @@
+name: Fix next seven days event filter
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fix-next-seven-days-filter.yml'
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Repair event date parsing and rebuild
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          old = 'const parsedDate = story.eventStartAt ? new Date(story.eventStartAt) : null;'
+          new = '''const rawEventDate = story.eventStartAt || story.event_start_at || story.startDate || story.start_date || "";
+          const parsedDate = rawEventDate ? new Date(rawEventDate) : null;'''
+          if old not in text:
+              raise SystemExit('Could not find event date parser in index.html')
+          text = text.replace(old, new)
+          path.write_text(text, encoding='utf-8')
+
+          # Keep the source template consistent when the homepage is regenerated.
+          for candidate in (Path('scraper/frontpage_pipeline.py'), Path('rochdale.html')):
+              if not candidate.exists():
+                  continue
+              data = candidate.read_text(encoding='utf-8')
+              if old in data:
+                  data = data.replace(old, new)
+                  candidate.write_text(data, encoding='utf-8')
+          PY
+          python scraper/generate_pages.py
+          grep -q 'story.event_start_at' index.html
+      - name: Commit repair
+        run: |
+          git config user.name 'Rochdale Daily Automation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html scraper/frontpage_pipeline.py rochdale.html articles articles.json sitemap.xml 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -m 'Fix next seven days event date parsing'
+          git push
