@@ -7,6 +7,7 @@
   const VOTE_KEY_PREFIX = "rd-community-poll-vote:";
   let payload = null;
   let showResults = false;
+  let selectedOption = "";
   let timer = null;
 
   function voterId() {
@@ -74,10 +75,13 @@
             <div class="rd-poll-track" aria-hidden="true"><span style="width:${Math.max(option.percentage, option.votes ? 1 : 0)}%"></span></div>
           </div>`).join("")
       : poll.options.map(option => `
-          <label class="rd-poll-choice">
-            <input type="radio" name="community-poll-choice" value="${esc(option.id)}">
+          <button class="rd-poll-choice${selectedOption === option.id ? " is-selected" : ""}"
+                  type="button"
+                  data-poll-option="${esc(option.id)}"
+                  aria-pressed="${selectedOption === option.id ? "true" : "false"}">
+            <span class="rd-poll-radio" aria-hidden="true"></span>
             <span>${esc(option.label)}</span>
-          </label>`).join("");
+          </button>`).join("");
 
     const activity = results.recent?.length
       ? `<div class="rd-poll-activity"><strong>Latest votes</strong>${results.recent.slice(0, 3).map(item => `<span>${ago(item.at)} — ${esc(item.label)}</span>`).join("")}</div>`
@@ -109,6 +113,13 @@
         <p class="rd-poll-note">${esc(poll.source_note || "Informal reader poll.")}</p>
       </div>`;
 
+    host.querySelectorAll("[data-poll-option]").forEach(button => {
+      button.addEventListener("click", () => {
+        selectedOption = button.dataset.pollOption || "";
+        render();
+      });
+    });
+
     const voteButton = host.querySelector(".rd-poll-vote");
     if (voteButton) voteButton.addEventListener("click", submitVote);
     const toggle = host.querySelector(".rd-poll-toggle");
@@ -120,10 +131,9 @@
   }
 
   async function submitVote() {
-    const selected = host.querySelector('input[name="community-poll-choice"]:checked');
     const message = host.querySelector(".rd-poll-message");
     const button = host.querySelector(".rd-poll-vote");
-    if (!selected) {
+    if (!selectedOption) {
       message.textContent = "Choose an eatery before voting.";
       return;
     }
@@ -133,7 +143,7 @@
       const response = await fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ poll_id: payload.poll.id, option_id: selected.value, voter_id: voterId() }),
+        body: JSON.stringify({ poll_id: payload.poll.id, option_id: selectedOption, voter_id: voterId() }),
       });
       const data = await response.json();
       if (!response.ok && !data.results) throw new Error(data.error || "Vote could not be recorded.");
