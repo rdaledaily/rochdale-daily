@@ -1,7 +1,7 @@
 /* Homepage-only progressive disclosure for Latest news.
- * Desktop shows 12 stories as a compact horizontal card grid, then a proper
- * advertising position, followed by a compact control to reveal more stories.
- * Mobile keeps its existing category-section layout and is untouched.
+ * Desktop shows 12 stories as a compact card grid. A full-width advertising
+ * position and a compact Read more control sit inside that same grid, so they
+ * cannot be pushed into the weather/sidebar layout. Mobile is untouched.
  */
 (function () {
   "use strict";
@@ -29,38 +29,44 @@
         "max-width:none!important;" +
         "margin:0!important;" +
       "}" +
-      ".latest-news-ad{" +
+      "#news-grid .latest-news-ad{" +
+        "grid-column:1/-1!important;" +
         "display:flex;" +
         "align-items:center;" +
         "justify-content:center;" +
-        "width:100%;" +
-        "min-height:250px;" +
-        "margin:30px 0 0;" +
+        "width:100%!important;" +
+        "min-width:0!important;" +
+        "min-height:180px;" +
+        "max-height:280px;" +
+        "margin:8px 0 0!important;" +
         "background:#f3f3f3;" +
         "border:1px solid #d6d6d6;" +
         "overflow:hidden;" +
         "position:relative;" +
       "}" +
-      ".latest-news-ad:not(.ad-live)::before{" +
+      "#news-grid .latest-news-ad:not(.ad-live)::before{" +
         "content:\"Advertisement\";" +
         "font:700 11px/1 Arial,sans-serif;" +
         "letter-spacing:.12em;" +
         "text-transform:uppercase;" +
         "color:#777;" +
       "}" +
-      ".latest-news-more{" +
+      "#news-grid .latest-news-more{" +
+        "grid-column:1/-1!important;" +
+        "justify-self:center!important;" +
+        "align-self:start!important;" +
         "display:block!important;" +
         "width:auto!important;" +
         "height:auto!important;" +
         "min-width:180px!important;" +
         "min-height:0!important;" +
         "max-width:280px!important;" +
-        "margin:18px auto 0!important;" +
+        "margin:0 auto!important;" +
         "padding:12px 24px!important;" +
         "position:static!important;" +
         "inset:auto!important;" +
         "border:2px solid var(--accent,#0e7490)!important;" +
-        "background:transparent!important;" +
+        "background:#fff!important;" +
         "color:var(--accent,#0e7490)!important;" +
         "font-family:\"Roboto Condensed\",Arial,sans-serif!important;" +
         "font-size:16px!important;" +
@@ -69,7 +75,7 @@
         "text-transform:uppercase!important;" +
         "cursor:pointer;" +
       "}" +
-      ".latest-news-more:hover,.latest-news-more:focus-visible{" +
+      "#news-grid .latest-news-more:hover,#news-grid .latest-news-more:focus-visible{" +
         "background:var(--accent,#0e7490)!important;" +
         "color:#fff!important;" +
       "}" +
@@ -85,7 +91,6 @@
   advert.setAttribute("data-ad-slot", "home-billboard");
   advert.setAttribute("role", "complementary");
   advert.setAttribute("aria-label", "Advertisement");
-  grid.insertAdjacentElement("afterend", advert);
 
   var button = document.createElement("button");
   button.type = "button";
@@ -93,7 +98,12 @@
   button.className = "latest-news-more";
   button.textContent = "Read more";
   button.hidden = true;
-  advert.insertAdjacentElement("afterend", button);
+
+  // These controls belong to Latest news itself. Keeping them inside the grid
+  // prevents the homepage's surrounding content/sidebar grid from treating
+  // either one as a tall independent column beside Weather.
+  grid.appendChild(advert);
+  grid.appendChild(button);
 
   if (typeof window.rdFillAds === "function") window.rdFillAds();
 
@@ -103,7 +113,7 @@
 
   function cards() {
     return Array.prototype.slice.call(grid.children).filter(function (node) {
-      return node.nodeType === 1;
+      return node.nodeType === 1 && node !== advert && node !== button;
     });
   }
 
@@ -139,11 +149,20 @@
 
   var observer = new MutationObserver(function (mutations) {
     var changed = mutations.some(function (mutation) {
-      return mutation.type === "childList";
+      return Array.prototype.some.call(mutation.addedNodes, function (node) {
+        return node.nodeType === 1 && node !== advert && node !== button;
+      }) || Array.prototype.some.call(mutation.removedNodes, function (node) {
+        return node.nodeType === 1 && node !== advert && node !== button;
+      });
     });
     if (changed) {
       visible = INITIAL;
+      // Story rendering may replace the grid contents. Put the controls back at
+      // the end before applying visibility rules.
+      if (!grid.contains(advert)) grid.appendChild(advert);
+      if (!grid.contains(button)) grid.appendChild(button);
       apply();
+      if (typeof window.rdFillAds === "function") window.rdFillAds();
     }
   });
   observer.observe(grid, { childList: true });
