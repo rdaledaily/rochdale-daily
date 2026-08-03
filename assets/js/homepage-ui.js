@@ -1,7 +1,7 @@
 /* Homepage-only progressive disclosure for Latest news.
- * Desktop shows 12 stories as a compact horizontal card grid and reveals the
- * next 12 from one simple Read more button beneath the grid. Mobile keeps its
- * existing category-section layout and is untouched.
+ * Desktop shows 12 stories as a compact horizontal card grid, then a proper
+ * advertising position, followed by a compact control to reveal more stories.
+ * Mobile keeps its existing category-section layout and is untouched.
  */
 (function () {
   "use strict";
@@ -29,21 +29,49 @@
         "max-width:none!important;" +
         "margin:0!important;" +
       "}" +
-      ".latest-news-more{" +
-        "display:block;" +
-        "min-width:180px;" +
-        "margin:28px auto 0;" +
-        "padding:12px 24px;" +
-        "border:2px solid var(--accent,#0e7490);" +
-        "background:var(--accent,#0e7490);" +
-        "color:#fff;" +
-        "font-family:\"Roboto Condensed\",Arial,sans-serif;" +
-        "font-weight:900;" +
+      ".latest-news-ad{" +
+        "display:flex;" +
+        "align-items:center;" +
+        "justify-content:center;" +
+        "width:100%;" +
+        "min-height:250px;" +
+        "margin:30px 0 0;" +
+        "background:#f3f3f3;" +
+        "border:1px solid #d6d6d6;" +
+        "overflow:hidden;" +
+        "position:relative;" +
+      "}" +
+      ".latest-news-ad:not(.ad-live)::before{" +
+        "content:\"Advertisement\";" +
+        "font:700 11px/1 Arial,sans-serif;" +
+        "letter-spacing:.12em;" +
         "text-transform:uppercase;" +
+        "color:#777;" +
+      "}" +
+      ".latest-news-more{" +
+        "display:block!important;" +
+        "width:auto!important;" +
+        "height:auto!important;" +
+        "min-width:180px!important;" +
+        "min-height:0!important;" +
+        "max-width:280px!important;" +
+        "margin:18px auto 0!important;" +
+        "padding:12px 24px!important;" +
+        "position:static!important;" +
+        "inset:auto!important;" +
+        "border:2px solid var(--accent,#0e7490)!important;" +
+        "background:transparent!important;" +
+        "color:var(--accent,#0e7490)!important;" +
+        "font-family:\"Roboto Condensed\",Arial,sans-serif!important;" +
+        "font-size:16px!important;" +
+        "line-height:1.2!important;" +
+        "font-weight:900!important;" +
+        "text-transform:uppercase!important;" +
         "cursor:pointer;" +
       "}" +
       ".latest-news-more:hover,.latest-news-more:focus-visible{" +
-        "background:var(--yellow-dark,#0b5f75);" +
+        "background:var(--accent,#0e7490)!important;" +
+        "color:#fff!important;" +
       "}" +
     "}" +
     "@media (min-width:821px) and (max-width:1080px){" +
@@ -51,13 +79,23 @@
     "}";
   document.head.appendChild(style);
 
+  var advert = document.createElement("div");
+  advert.id = "latest-news-ad";
+  advert.className = "ad-slot ad-slot-billboard latest-news-ad";
+  advert.setAttribute("data-ad-slot", "home-billboard");
+  advert.setAttribute("role", "complementary");
+  advert.setAttribute("aria-label", "Advertisement");
+  grid.insertAdjacentElement("afterend", advert);
+
   var button = document.createElement("button");
   button.type = "button";
   button.id = "latest-news-more";
   button.className = "latest-news-more";
   button.textContent = "Read more";
   button.hidden = true;
-  grid.insertAdjacentElement("afterend", button);
+  advert.insertAdjacentElement("afterend", button);
+
+  if (typeof window.rdFillAds === "function") window.rdFillAds();
 
   function isDesktop() {
     return window.matchMedia("(min-width: 821px)").matches;
@@ -74,6 +112,7 @@
     if (!isDesktop()) {
       grid.classList.remove("rd-latest-horizontal");
       items.forEach(function (item) { item.hidden = false; });
+      advert.hidden = true;
       button.hidden = true;
       return;
     }
@@ -84,6 +123,7 @@
     });
 
     var remaining = Math.max(0, items.length - visible);
+    advert.hidden = false;
     button.hidden = remaining === 0;
     button.textContent = "Read more";
     button.setAttribute(
