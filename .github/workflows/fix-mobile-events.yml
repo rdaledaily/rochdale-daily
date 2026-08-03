@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/fix-mobile-events.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,32 +19,27 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
 
           path = Path('index.html')
           text = path.read_text(encoding='utf-8')
           original = text
 
-          text = text.replace(
-              '<button class="event-filter active" type="button" data-event-filter="week">Next seven days</button>',
-              '<button class="event-filter" type="button" data-event-filter="week">Next seven days</button>'
-          )
-          text = text.replace(
-              '<button class="event-filter" type="button" data-event-filter="all">All upcoming</button>',
-              '<button class="event-filter active" type="button" data-event-filter="all">All upcoming</button>'
-          )
+          replacements = {
+              '<button class="event-filter active" type="button" data-event-filter="week">Next seven days</button>':
+              '<button class="event-filter" type="button" data-event-filter="week">Next seven days</button>',
+              '<button class="event-filter" type="button" data-event-filter="all">All upcoming</button>':
+              '<button class="event-filter active" type="button" data-event-filter="all">All upcoming</button>',
+              "let activeEventFilter = 'week';": "let activeEventFilter = 'all';",
+              'let activeEventFilter = "week";': 'let activeEventFilter = "all";',
+              "let currentEventFilter = 'week';": "let currentEventFilter = 'all';",
+              'let currentEventFilter = "week";': 'let currentEventFilter = "all";'
+          }
 
-          patterns = [
-              (r'((?:let|const|var)\s+[A-Za-z_$][\w$]*(?:event|Event)[A-Za-z_$\w]*(?:filter|Filter)[A-Za-z_$\w]*\s*=\s*)["\']week["\']', r'\1"all"'),
-              (r'((?:let|const|var)\s+[A-Za-z_$][\w$]*(?:filter|Filter)[A-Za-z_$\w]*(?:event|Event)[A-Za-z_$\w]*\s*=\s*)["\']week["\']', r'\1"all"'),
-              (r'(renderEvents\s*\([^)]*,\s*)["\']week["\'](\s*\))', r'\1"all"\2'),
-              (r'(filterEvents\s*\(\s*)["\']week["\'](\s*\))', r'\1"all"\2')
-          ]
-          for pattern, replacement in patterns:
-              text = re.sub(pattern, replacement, text)
+          for old, new in replacements.items():
+              text = text.replace(old, new)
 
           if text == original:
-              raise SystemExit('No matching event defaults found; index.html was not changed')
+              raise SystemExit('No matching event defaults found in index.html')
 
           path.write_text(text, encoding='utf-8')
           PY
