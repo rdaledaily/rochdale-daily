@@ -5,7 +5,7 @@ const PENDING_KEY = "residents:pending";
 const APPROVED_KEY = "residents:approved";
 const MAX_PENDING = 100;
 const MAX_APPROVED = 80;
-const TYPES = new Set(["story", "recipe", "birthday", "exam"]);
+const TYPES = new Set(["story", "recipe", "birthday", "exam", "death", "missing_pet", "found_pet"]);
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -74,14 +74,28 @@ export async function onRequestPost({ request, env }) {
   const name = clean(payload.name, 100);
   const area = clean(payload.area, 100);
   const contact = clean(payload.contact, 180);
+  const eventDate = clean(payload.eventDate, 40);
+  const location = clean(payload.location, 180);
+  const animalDetails = clean(payload.animalDetails, 1000);
   const consent = payload.consent === true;
+  const familyPermission = payload.familyPermission === true;
+
   if (!TYPES.has(type)) return json({ ok: false, error: "Choose a valid submission type" }, 400);
   if (!title || !body || !name || !area || !contact) return json({ ok: false, error: "Complete all required fields" }, 400);
   if (!consent) return json({ ok: false, error: "Permission to review and publish is required" }, 400);
+  if (type === "death" && !familyPermission) return json({ ok: false, error: "Death notices must be submitted with the family's permission" }, 400);
+  if ((type === "missing_pet" || type === "found_pet") && (!eventDate || !location || !animalDetails)) {
+    return json({ ok: false, error: "Include when and where the animal was last seen or found, plus identifying details" }, 400);
+  }
 
   const pending = await readList(env.EVENTS_KV, PENDING_KEY);
   if (pending.length >= MAX_PENDING) return json({ ok: false, error: "The submission queue is temporarily full" }, 429);
-  pending.unshift({ id: id(), type, title, body, name, area, contact, submittedAt: new Date().toISOString(), status: "pending" });
+  pending.unshift({
+    id: id(), type, title, body, name, area, contact,
+    eventDate, location, animalDetails,
+    familyPermission: type === "death" ? familyPermission : undefined,
+    submittedAt: new Date().toISOString(), status: "pending"
+  });
   await env.EVENTS_KV.put(PENDING_KEY, JSON.stringify(pending));
   return json({ ok: true, message: "Thank you. Your submission has been sent to the Rochdale Daily newsdesk for review." }, 201);
 }
