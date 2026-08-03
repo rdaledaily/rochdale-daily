@@ -1,0 +1,60 @@
+name: Update Albion Inn article image
+
+on:
+  push:
+    paths:
+      - '.github/workflows/update-albion-inn-image.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Update source article image
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('articles.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          slug = 'whitworth-road-restaurant-receives-positive-review-for-beef-roast'
+          changed = False
+          for article in data:
+              if article.get('slug') == slug:
+                  article['image_url'] = 'assets/img/albion_inn.jpg'
+                  article['image_credit'] = 'Rochdale Daily'
+                  article['image_credit_url'] = 'https://rochdaledaily.co.uk/'
+                  article['image_status'] = 'local-editorial-image'
+                  article['image_placeholder_reason'] = ''
+                  changed = True
+                  break
+          if not changed:
+              raise SystemExit(f'Article not found: {slug}')
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+      - name: Rebuild generated pages and feeds
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+          python scraper/generate_pages.py
+      - name: Verify image reference
+        run: |
+          grep -q 'assets/img/albion_inn.jpg' articles/whitworth-road-restaurant-receives-positive-review-for-beef-roast.html
+      - name: Commit update
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add articles.json articles sitemap.xml scraper_status.json event_dates.json
+          git rm .github/workflows/update-albion-inn-image.yml
+          git commit -m 'Use Albion Inn image for Whitworth roast article'
+          git push
