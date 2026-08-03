@@ -5,7 +5,7 @@
   var KEY = "rd-cookie-choice";
   var ACCEPTED = "optional-accepted";
   var DECLINED = "essential-only";
-  var ASSET_VERSION = "20260803-3";
+  var ASSET_VERSION = "20260803-4";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -63,7 +63,7 @@
     section.setAttribute("aria-label", "Rochdale Daily community poll");
     section.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">Loading live community poll…</p></div>';
     ward.insertAdjacentElement("afterend", section);
-    addScript("/assets/js/community-poll.js");
+    addScript("/assets/js/community-poll-v2.js");
   }
 
   function init() {
