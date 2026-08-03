@@ -27,8 +27,6 @@
     try {
       return window.localStorage.getItem(KEY);
     } catch (error) {
-      // Private browsing, or storage disabled. Treat as undecided rather than
-      // assuming consent.
       return null;
     }
   }
@@ -41,7 +39,6 @@
     }
   }
 
-  // Public: anything optional must gate itself on this.
   window.rdCookieConsent = function () {
     return read() === ACCEPTED;
   };
@@ -71,6 +68,31 @@
     return banner;
   }
 
+  function loadCommunityPoll() {
+    var ward = document.getElementById("news-by-ward");
+    if (!ward || document.getElementById("community-poll")) return;
+
+    var section = document.createElement("section");
+    section.id = "community-poll";
+    section.setAttribute("aria-label", "Rochdale Daily community poll");
+    section.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">Loading live community poll…</p></div>';
+    ward.insertAdjacentElement("afterend", section);
+
+    if (!document.querySelector('link[href="/assets/css/community-poll.css"]')) {
+      var style = document.createElement("link");
+      style.rel = "stylesheet";
+      style.href = "/assets/css/community-poll.css";
+      document.head.appendChild(style);
+    }
+
+    if (!document.querySelector('script[src="/assets/js/community-poll.js"]')) {
+      var script = document.createElement("script");
+      script.src = "/assets/js/community-poll.js";
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+  }
+
   function init() {
     var banner = build();
     var accept = document.getElementById("cookie-accept");
@@ -79,8 +101,6 @@
     function close(choice) {
       save(choice);
       banner.classList.remove("show");
-      // Return focus somewhere sensible for keyboard and screen reader users
-      // rather than dropping it on a removed element.
       var link = document.getElementById("cookie-settings-link");
       if (link) link.focus();
     }
@@ -94,15 +114,13 @@
     if (accept) accept.addEventListener("click", function () { close(ACCEPTED); });
     if (decline) decline.addEventListener("click", function () { close(DECLINED); });
 
-    // Any "Cookie settings" control on the page reopens the banner. Matched by
-    // id (the homepage's existing link) or by attribute, so a page can add one
-    // without touching this file.
     var links = [].slice.call(document.querySelectorAll("[data-cookie-settings]"));
     var byId = document.getElementById("cookie-settings-link");
     if (byId && links.indexOf(byId) === -1) links.push(byId);
     links.forEach(function (link) { link.addEventListener("click", open); });
 
     if (!read()) banner.classList.add("show");
+    loadCommunityPoll();
   }
 
   if (document.readyState === "loading") {
