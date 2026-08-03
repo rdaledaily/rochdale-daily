@@ -27,8 +27,6 @@
     try {
       return window.localStorage.getItem(KEY);
     } catch (error) {
-      // Private browsing, or storage disabled. Treat as undecided rather than
-      // assuming consent.
       return null;
     }
   }
@@ -41,7 +39,6 @@
     }
   }
 
-  // Public: anything optional must gate itself on this.
   window.rdCookieConsent = function () {
     return read() === ACCEPTED;
   };
@@ -54,7 +51,6 @@
     banner.className = "cookie";
     banner.id = "cookie-banner";
     banner.setAttribute("role", "region");
-    banner.set.setAttribute;
     banner.setAttribute("aria-label", "Cookie choices");
     banner.innerHTML =
       '<div class="wrap cookie-row">' +
@@ -105,8 +101,6 @@
     function close(choice) {
       save(choice);
       banner.classList.remove("show");
-      // Return focus somewhere sensible for keyboard and screen reader users
-      // rather than dropping it on a removed element.
       var link = document.getElementById("cookie-settings-link");
       if (link) link.focus();
     }
@@ -120,9 +114,6 @@
     if (accept) accept.addEventListener("click", function () { close(ACCEPTED); });
     if (decline) decline.addEventListener("click", function () { close(DECLINED); });
 
-    // Any "Cookie settings" control on the page reopens the banner. Matched by
-    // id (the homepage's existing link) or by attribute, so a page can add one
-    // without touching this file.
     var links = [].slice.call(document.querySelectorAll("[data-cookie-settings]"));
     var byId = document.getElementById("cookie-settings-link");
     if (byId && links.indexOf(byId) === -1) links.push(byId);
