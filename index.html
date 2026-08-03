@@ -2749,10 +2749,16 @@
       const text = `${story.title} ${story.summary}`.toLowerCase();
       const now = new Date();
       if (date && date.toDateString() === now.toDateString()) tags.push("tonight");
-      if (date && [0, 6].includes(date.getDay())) tags.push("weekend");
       if (date) {
         const diffDays = (date.getTime() - now.getTime()) / (24 * 60 * 60 * 1000);
-        if (diffDays >= -0.5 && diffDays <= 7) tags.push("week");
+        if (diffDays >= -0.5 && diffDays <= 7) {
+          tags.push("week");
+          /* "This weekend" means the weekend inside the next seven days.
+             The old check tagged ANY Saturday or Sunday date — which put
+             October's Oktoberfest and next June's festival under "This
+             weekend" all year round. */
+          if ([0, 6].includes(date.getDay())) tags.push("weekend");
+        }
       }
       if (/free|no charge|free entry/.test(text)) tags.push("free");
       if (/family|children|kids|all ages/.test(text)) tags.push("family");
