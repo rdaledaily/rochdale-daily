@@ -44,8 +44,21 @@
     return `${Math.floor(seconds / 86400)} day ago`;
   }
 
-  function storedVote(pollId) {
-    return localStorage.getItem(VOTE_KEY_PREFIX + pollId) || "";
+  function storedVote(pollId, results) {
+    const value = localStorage.getItem(VOTE_KEY_PREFIX + pollId) || "";
+    if (!value) return "";
+
+    // Old test versions of the poll wrote a local vote before the shared
+    // backend had recorded anything. Do not let that stale browser value turn
+    // a brand-new zero-vote poll into a results-only display.
+    const matching = results && results.options
+      ? results.options.find(option => option.id === value)
+      : null;
+    if (!matching || Number(matching.votes || 0) < 1) {
+      localStorage.removeItem(VOTE_KEY_PREFIX + pollId);
+      return "";
+    }
+    return value;
   }
 
   function leaderText(results) {
@@ -60,7 +73,7 @@
   function render() {
     if (!payload) return;
     const { poll, state, results } = payload;
-    const chosen = storedVote(poll.id);
+    const chosen = storedVote(poll.id, results);
     const canVote = state.open && !chosen;
     const totalCopy = `${results.total.toLocaleString("en-GB")} vote${results.total === 1 ? "" : "s"}`;
     const byId = new Map(results.options.map(option => [option.id, option]));
