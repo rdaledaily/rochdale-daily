@@ -6,7 +6,6 @@
   const TOKEN_KEY = "rd-community-poll-voter";
   const VOTE_KEY_PREFIX = "rd-community-poll-vote:";
   let payload = null;
-  let showResults = false;
   let selectedOption = "";
   let timer = null;
 
@@ -62,26 +61,37 @@
     if (!payload) return;
     const { poll, state, results } = payload;
     const chosen = storedVote(poll.id);
-    const resultsMode = showResults || chosen || !state.open;
+    const canVote = state.open && !chosen;
     const totalCopy = `${results.total.toLocaleString("en-GB")} vote${results.total === 1 ? "" : "s"}`;
+    const byId = new Map(results.options.map(option => [option.id, option]));
 
-    const options = resultsMode
-      ? results.options.map((option, index) => `
-          <div class="rd-poll-result ${index === 0 && results.total ? "is-leading" : ""}">
-            <div class="rd-poll-result-head">
-              <span>${index === 0 && results.total ? '<span class="rd-poll-leader">Leading</span>' : ""}${esc(option.label)}</span>
-              <strong>${option.percentage}% <small>(${option.votes})</small></strong>
-            </div>
-            <div class="rd-poll-track" aria-hidden="true"><span style="width:${Math.max(option.percentage, option.votes ? 1 : 0)}%"></span></div>
-          </div>`).join("")
-      : poll.options.map(option => `
-          <button class="rd-poll-choice${selectedOption === option.id ? " is-selected" : ""}"
+    const options = poll.options.map(option => {
+      const result = byId.get(option.id) || { votes: 0, percentage: 0 };
+      const selected = selectedOption === option.id;
+      const chosenClass = chosen === option.id ? " is-chosen" : "";
+      if (canVote) {
+        return `
+          <button class="rd-poll-choice${selected ? " is-selected" : ""}"
                   type="button"
                   data-poll-option="${esc(option.id)}"
-                  aria-pressed="${selectedOption === option.id ? "true" : "false"}">
+                  aria-pressed="${selected ? "true" : "false"}">
             <span class="rd-poll-radio" aria-hidden="true"></span>
-            <span>${esc(option.label)}</span>
-          </button>`).join("");
+            <span class="rd-poll-choice-copy">
+              <strong>${esc(option.label)}</strong>
+              <span class="rd-poll-choice-result">${result.percentage}% (${result.votes})</span>
+              <span class="rd-poll-track" aria-hidden="true"><span style="width:${Math.max(result.percentage, result.votes ? 1 : 0)}%"></span></span>
+            </span>
+          </button>`;
+      }
+      return `
+        <div class="rd-poll-result${chosenClass}">
+          <div class="rd-poll-result-head">
+            <span>${chosen === option.id ? '<span class="rd-poll-leader">Your vote</span>' : ""}${esc(option.label)}</span>
+            <strong>${result.percentage}% <small>(${result.votes})</small></strong>
+          </div>
+          <div class="rd-poll-track" aria-hidden="true"><span style="width:${Math.max(result.percentage, result.votes ? 1 : 0)}%"></span></div>
+        </div>`;
+    }).join("");
 
     const activity = results.recent?.length
       ? `<div class="rd-poll-activity"><strong>Latest votes</strong>${results.recent.slice(0, 3).map(item => `<span>${ago(item.at)} — ${esc(item.label)}</span>`).join("")}</div>`
@@ -100,8 +110,7 @@
             <div class="rd-poll-options" aria-live="polite">${options}</div>
             <p class="rd-poll-message" role="status" aria-live="polite"></p>
             <div class="rd-poll-actions">
-              ${!resultsMode && state.open ? '<button class="rd-poll-vote" type="button">Vote now</button>' : ""}
-              ${state.open ? `<button class="rd-poll-toggle" type="button">${resultsMode && !chosen ? "Choose an eatery" : resultsMode ? "Live results" : "View live results"}</button>` : ""}
+              ${canVote ? '<button class="rd-poll-vote" type="button">Vote now</button>' : ""}
             </div>
           </div>
           <aside class="rd-poll-summary">
@@ -122,12 +131,6 @@
 
     const voteButton = host.querySelector(".rd-poll-vote");
     if (voteButton) voteButton.addEventListener("click", submitVote);
-    const toggle = host.querySelector(".rd-poll-toggle");
-    if (toggle) toggle.addEventListener("click", () => {
-      if (chosen) return;
-      showResults = !showResults;
-      render();
-    });
   }
 
   async function submitVote() {
@@ -149,7 +152,6 @@
       if (!response.ok && !data.results) throw new Error(data.error || "Vote could not be recorded.");
       if (data.voted_for) localStorage.setItem(VOTE_KEY_PREFIX + payload.poll.id, data.voted_for);
       payload = { poll: data.poll || payload.poll, state: data.state || payload.state, results: data.results || payload.results };
-      showResults = true;
       render();
       const updatedMessage = host.querySelector(".rd-poll-message");
       if (updatedMessage) updatedMessage.textContent = response.ok ? "Your vote has been counted." : (data.error || "You have already voted.");
