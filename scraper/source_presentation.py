@@ -119,6 +119,39 @@ def clean_candidate_public_text(candidate: Any) -> Any:
     return candidate
 
 
+COURT_POLICE_IMAGE_RE = re.compile(
+    r"\b(sentenced|jailed|convicted|charged|arrested|imprisoned|prison|court|offences?)\b",
+    re.IGNORECASE,
+)
+
+
+def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
+    """Use the standard police photograph for generic court/crime reports.
+
+    A specific verified scene, person or official source image remains preferable.
+    This rule replaces generated category cards and other fallback artwork for
+    police matters whose headlines clearly concern arrests, charges, convictions,
+    sentencing, imprisonment, court proceedings or offences.
+    """
+    title = str(article.get("title") or "")
+    category = str(article.get("category") or "").casefold()
+    police_matter = bool(article.get("police_matter")) or category == "crime"
+    current = str(article.get("image_url") or "")
+    fallback = (
+        not current
+        or "area-category-card" in current
+        or "generated" in current
+        or str(article.get("image_status") or "") in {"area-category-card", "category-fallback"}
+    )
+    if police_matter and fallback and COURT_POLICE_IMAGE_RE.search(title):
+        article["image_url"] = "assets/img/cards/police.jpg"
+        article["image_credit"] = "Rochdale Daily"
+        article["image_credit_url"] = "https://rochdaledaily.co.uk/"
+        article["image_status"] = "standard-police-image"
+        article["image_placeholder_reason"] = "Standard police image used for court or sentencing report"
+    return article
+
+
 def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     """Return a public-safe article record while preserving source URLs."""
     if not isinstance(article, dict):
@@ -138,7 +171,7 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     )
 
     if not subtle:
-        return article
+        return enforce_police_image(article)
 
     original_title = str(article.get("title") or "")
     for field in _PUBLIC_TEXT_FIELDS:
@@ -187,7 +220,7 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     ):
         article["slug"] = _slugify(article.get("title"))
 
-    return article
+    return enforce_police_image(article)
 
 
 def generic_sources_markup(article: dict[str, Any]) -> str:
