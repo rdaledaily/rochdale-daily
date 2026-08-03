@@ -1,0 +1,52 @@
+name: Allow any UK event postcode
+
+on:
+  push:
+    paths:
+      - '.github/workflows/allow-any-uk-event-postcode.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-postcode-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update event postcode validation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('functions/api/submit-event.js')
+          text = path.read_text(encoding='utf-8')
+
+          old_comment = '''// Rochdale borough and immediate fringe. Rejecting out-of-area postcodes is
+// also a cheap spam filter — bots almost never get this right.
+const POSTCODE_RE = /^(OL1[0-6]|OL[1-9]|M24|M26|BL9)\\s?\\d[A-Z]{2}$/i;'''
+          new_comment = '''// Accept any postcode in the standard UK format. The postcode remains required
+// so readers can identify where the event is taking place.
+const POSTCODE_RE = /^(GIR\\s?0AA|[A-Z]{1,2}\\d[A-Z\\d]?\\s?\\d[A-Z]{2})$/i;'''
+
+          old_error = 'errors.push("Enter a valid Rochdale-borough postcode (OL1-OL16, M24, M26 or BL9).");'
+          new_error = 'errors.push("Enter a valid UK postcode.");'
+
+          if old_comment not in text:
+              raise SystemExit('Could not find the existing postcode rule')
+          if old_error not in text:
+              raise SystemExit('Could not find the existing postcode error message')
+
+          text = text.replace(old_comment, new_comment, 1)
+          text = text.replace(old_error, new_error, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit change and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/allow-any-uk-event-postcode.yml
+          git add functions/api/submit-event.js
+          git commit -m "Allow any valid UK postcode for event submissions"
+          git push
