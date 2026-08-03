@@ -106,7 +106,7 @@
   var selector = "[data-ad-slot], .ad-slot-leaderboard, .ad-slot-incontent, .ad-slot-mrec";
 
   function renderBanner(container, ad, base, sample) {
-    var slot = container.getAttribute("data-ad-slot");
+    var slot = slotNameFor(container);
     var maxH = SLOT_MAX_HEIGHT[slot] || 300;
     var widthRule = FULL_WIDTH_SLOTS[slot] ? "width:100%;" : "width:auto;";
     var imgStyle = "max-width:100%;max-height:" + maxH + "px;" + widthRule + "height:auto;display:block;margin:0 auto";
@@ -223,6 +223,81 @@
         }
       }
     }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+
+  // Keep the Democracy service compact until a reader asks for one of its
+  // sections. The existing homepage code still fetches and renders the data;
+  // this layer only controls disclosure, so it remains compatible with cached
+  // versions of index.html.
+  function initialiseDemocracyDisclosure() {
+    var section = document.getElementById("democracy");
+    if (!section || section.getAttribute("data-disclosure-ready") === "true") return;
+
+    var tabs = Array.prototype.slice.call(section.querySelectorAll(".dem-tab"));
+    var status = section.querySelector("[data-dem-status]");
+    var grid = section.querySelector("[data-dem-grid]");
+    var wardPick = section.querySelector("#dem-ward-pick");
+    var note = section.querySelector(".dem-note");
+    var openKey = "";
+
+    if (!tabs.length || !status || !grid) return;
+    section.setAttribute("data-disclosure-ready", "true");
+
+    function setContentVisible(visible) {
+      [status, grid, note].forEach(function (element) {
+        if (element) element.style.display = visible ? "" : "none";
+      });
+      if (!visible && wardPick) wardPick.style.display = "none";
+      if (visible && wardPick) wardPick.style.removeProperty("display");
+    }
+
+    function setCollapsedState() {
+      openKey = "";
+      tabs.forEach(function (tab) {
+        tab.classList.remove("active");
+        tab.setAttribute("aria-selected", "false");
+        tab.setAttribute("aria-expanded", "false");
+      });
+      grid.setAttribute("aria-hidden", "true");
+      setContentVisible(false);
+    }
+
+    tabs.forEach(function (tab) {
+      tab.setAttribute("aria-expanded", "false");
+      tab.addEventListener("click", function () {
+        var key = tab.getAttribute("data-dem") || "";
+        var shouldClose = openKey === key;
+
+        // Let the homepage's existing tab handler render the requested data,
+        // then apply the disclosure state after that handler has completed.
+        window.setTimeout(function () {
+          if (shouldClose) {
+            setCollapsedState();
+            return;
+          }
+
+          openKey = key;
+          tabs.forEach(function (item) {
+            var selected = item === tab;
+            item.classList.toggle("active", selected);
+            item.setAttribute("aria-selected", selected ? "true" : "false");
+            item.setAttribute("aria-expanded", selected ? "true" : "false");
+          });
+          grid.setAttribute("aria-hidden", "false");
+          setContentVisible(true);
+        }, 0);
+      });
+    });
+
+    // Run after the homepage's own initialisation so its default Petitions
+    // render cannot leave the content visible on first paint.
+    window.setTimeout(setCollapsedState, 0);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initialiseDemocracyDisclosure, { once: true });
+  } else {
+    initialiseDemocracyDisclosure();
   }
 
   fetch("/adverts.json", { cache: "no-store" })
