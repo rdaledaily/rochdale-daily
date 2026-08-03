@@ -6,6 +6,10 @@ Builds one page per council ward at wards/<slug>.html, plus a wards/index.html
 listing all twenty. Each ward page carries the stories filed under that ward's
 areas and the councillors who represent it, with any recorded votes.
 
+The script also keeps the homepage ward picker directly after Top stories and
+before Latest news. That makes ward browsing a primary way into the news rather
+than leaving it near the bottom of the homepage.
+
 WHY WARDS AND AREAS ARE MAPPED IN DATA
 --------------------------------------
 The council's twenty wards and the area tags this site files stories under are
@@ -36,6 +40,7 @@ ARTICLES_PATH = REPO_ROOT / "articles.json"
 VOTES_PATH = REPO_ROOT / "council_votes.json"
 CSS_PATH = REPO_ROOT / "assets" / "css" / "site.css"
 OUTPUT_DIR = REPO_ROOT / "wards"
+HOME_PATH = REPO_ROOT / "index.html"
 SITE = "https://rochdaledaily.co.uk"
 
 MAX_STORIES = 12
@@ -221,6 +226,47 @@ def build_index(wards: dict, articles: list[dict], css: str) -> str:
 """ + CHROME_FOOT
 
 
+def move_homepage_ward_picker() -> bool:
+    """Place the homepage ward picker after Top stories, before Latest news.
+
+    The homepage is a long-lived hand-authored shell whose story cards are
+    populated by JavaScript. This small idempotent transform means later page
+    generation or editorial changes cannot quietly push ward navigation back
+    below the full news feed.
+    """
+    try:
+        page = HOME_PATH.read_text(encoding="utf-8")
+    except OSError:
+        return False
+
+    ward_pattern = re.compile(
+        r'\n\s*<section class="section" id="news-by-ward"\b.*?</section>\s*',
+        re.DOTALL,
+    )
+    match = ward_pattern.search(page)
+    if not match:
+        return False
+
+    ward_section = match.group(0).strip()
+    page_without_ward = page[:match.start()] + "\n\n" + page[match.end():]
+    latest_anchor = '<section class="section" aria-labelledby="latest-news-title">'
+    anchor_at = page_without_ward.find(latest_anchor)
+    if anchor_at < 0:
+        return False
+
+    moved = (
+        page_without_ward[:anchor_at]
+        + ward_section
+        + "\n\n      "
+        + page_without_ward[anchor_at:]
+    )
+    if moved == page:
+        return False
+
+    HOME_PATH.write_text(moved, encoding="utf-8")
+    return True
+
+
 def main() -> int:
     config = read_json(WARD_MAP_PATH, {})
     wards = config.get("wards") or {}
@@ -239,6 +285,7 @@ def main() -> int:
         path.write_text(build_ward_page(ward, ward_config, articles, votes, css), encoding="utf-8")
 
     (OUTPUT_DIR / "index.html").write_text(build_index(wards, articles, css), encoding="utf-8")
+    homepage_moved = move_homepage_ward_picker()
 
     counts = {w: sum(1 for a in articles
                      if str(a.get("area") or "").lower() in {x.lower() for x in (c.get("areas") or [])})
@@ -246,6 +293,8 @@ def main() -> int:
     total = sum(counts.values())
     print(f"ward pages written: {len(wards)} + index")
     print(f"stories placed: {total} of {len(articles)}")
+    print("homepage ward picker: moved below Top stories" if homepage_moved
+          else "homepage ward picker: already in place or unavailable")
     for ward in sorted(counts, key=lambda w: -counts[w])[:6]:
         print(f"   {counts[ward]:>3}  {ward}")
     empty = [w for w, n in counts.items() if not n]
