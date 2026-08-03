@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Planning intelligence | Rochdale Daily</title>
+  <style>
+    :root{--navy:#0b1f3a;--paper:#0d1c2e;--card:#112741;--soft:#12263d;--line:#1e3550;--ink:#eef3f9;--muted:#93a6bd;--cyan:#22d3ee;--red:#ff7388;--amber:#f5c400;--green:#7fe3bd}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Arial,Helvetica,sans-serif}.wrap{width:min(1180px,calc(100% - 28px));margin:auto}header{background:var(--navy);border-bottom:3px solid var(--cyan);padding:16px 0}.brand{font:26px Georgia,serif}.sub{color:var(--muted)}h1{margin:24px 0 4px;font-size:25px}.toolbar,.stats{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.toolbar{background:var(--card);border:1px solid var(--line);padding:14px}.toolbar input,.toolbar select{background:var(--soft);border:1px solid var(--line);color:var(--ink);padding:10px;min-width:170px;flex:1}.toolbar button{border:0;padding:10px 15px;font-weight:700;text-transform:uppercase;cursor:pointer}.primary{background:var(--cyan);color:var(--navy)}.ghost{background:transparent!important;color:var(--ink);border:1px solid var(--line)!important}.stat{background:var(--card);border:1px solid var(--line);padding:12px 16px;min-width:145px}.stat strong{display:block;font-size:24px}.stat span{color:var(--muted);font-size:12px;text-transform:uppercase}.status{color:var(--muted);margin:10px 0}.status.error{color:var(--red)}.status.ok{color:var(--green)}.grid{display:grid;gap:12px;margin:15px 0 40px}.card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--line);padding:15px;display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:16px;align-items:start}.card.high{border-left-color:var(--red)}.card.medium{border-left-color:var(--amber)}.score{font-size:30px;font-weight:800;line-height:1}.score small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;margin-top:6px}.card h2{font-size:18px;line-height:1.25;margin:0 0 6px}.meta{color:var(--muted);font-size:13px;margin-bottom:7px}.tags{display:flex;gap:6px;flex-wrap:wrap}.tag{background:var(--soft);border:1px solid var(--line);padding:3px 7px;font-size:11px}.new{background:var(--red);color:white;border:0}.open{color:var(--cyan);text-decoration:none;font-weight:700;white-space:nowrap}.empty{background:var(--card);border:1px solid var(--line);padding:22px;color:var(--muted)}.note{font-size:12px;color:var(--muted);margin-bottom:35px}@media(max-width:700px){.card{grid-template-columns:62px minmax(0,1fr)}.card .open{grid-column:2}.score{font-size:24px}}
+  </style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand">Rochdale Daily</div><div class="sub">Planning intelligence monitor</div></div></header>
+<main class="wrap">
+  <h1>Planning story leads</h1>
+  <div class="toolbar">
+    <input id="token" type="password" placeholder="Admin token" autocomplete="off">
+    <input id="search" type="search" placeholder="Search proposal, location or reference">
+    <select id="priority"><option value="0">All priorities</option><option value="80">High: 80+</option><option value="55">Medium: 55+</option></select>
+    <select id="fresh"><option value="all">All records</option><option value="new">New since last check</option></select>
+    <button id="load" class="primary">Load</button>
+    <button id="refresh" class="ghost">Check now</button>
+  </div>
+  <p id="status" class="status">Enter the same admin token used for event moderation.</p>
+  <div class="stats">
+    <div class="stat"><strong id="total">0</strong><span>Stored leads</span></div>
+    <div class="stat"><strong id="high">0</strong><span>High priority</span></div>
+    <div class="stat"><strong id="newCount">0</strong><span>New this check</span></div>
+    <div class="stat"><strong id="checked">—</strong><span>Last checked</span></div>
+  </div>
+  <section id="results" class="grid"></section>
+  <p class="note">This desk tool reads public planning data, stores what it has already seen and ranks likely stories. Always open the source record and verify the underlying council documents before publication.</p>
+</main>
+<script>
+(function(){
+ const API='/api/planning', tokenEl=document.getElementById('token'), statusEl=document.getElementById('status'), results=document.getElementById('results');
+ const searchEl=document.getElementById('search'), priorityEl=document.getElementById('priority'), freshEl=document.getElementById('fresh');
+ let items=[]; const saved=sessionStorage.getItem('rd_admin_token'); if(saved) tokenEl.value=saved;
+ function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+ function say(m,k){statusEl.textContent=m;statusEl.className='status'+(k?' '+k:'')}
+ function render(){
+   const q=searchEl.value.trim().toLowerCase(), min=Number(priorityEl.value), onlyNew=freshEl.value==='new';
+   const filtered=items.filter(x=>(!q||[x.proposal,x.location,x.reference].join(' ').toLowerCase().includes(q))&&x.score>=min&&(!onlyNew||x.new));
+   if(!filtered.length){results.innerHTML='<div class="empty">No planning leads match these filters.</div>';return}
+   results.innerHTML=filtered.map(x=>{
+     const level=x.score>=80?'high':x.score>=55?'medium':'';
+     const tags=(x.new?['NEW'].concat(x.reasons||[]):(x.reasons||[])).map((t,i)=>'<span class="tag '+(x.new&&i===0?'new':'')+'">'+esc(t)+'</span>').join('');
+     return '<article class="card '+level+'"><div class="score">'+esc(x.score)+'<small>story score</small></div><div><h2>'+esc(x.proposal)+'</h2><div class="meta">'+esc(x.location)+' · '+esc(x.reference)+' · '+esc(x.status||'planning')+'</div><div class="tags">'+tags+'</div></div><a class="open" href="'+esc(x.sourceUrl)+'" target="_blank" rel="noopener">Open source ↗</a></article>'
+   }).join('')
+ }
+ function stats(data){
+   document.getElementById('total').textContent=items.length; document.getElementById('high').textContent=items.filter(x=>x.score>=80).length; document.getElementById('newCount').textContent=items.filter(x=>x.new).length;
+   document.getElementById('checked').textContent=data.lastCheckedAt?new Date(data.lastCheckedAt).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'Never';
+ }
+ async function load(refresh){
+   const token=tokenEl.value.trim(); if(!token){say('Enter the admin token first.','error');return}
+   say(refresh?'Checking public planning data…':'Loading stored planning leads…');
+   try{
+     const r=await fetch(API+(refresh?'?refresh=1':'') ,{cache:'no-store',headers:{'x-admin-token':token,Accept:'application/json'}}); const data=await r.json().catch(()=>({}));
+     if(r.status===401){say('That token was not accepted.','error');return} if(!r.ok||!data.ok){say(data.error||('Server returned '+r.status+'.'),'error');return}
+     sessionStorage.setItem('rd_admin_token',token); items=data.items||[]; stats(data); render(); say(refresh?'Check complete. '+(data.discovered||0)+' current records found.':'Planning leads loaded.','ok');
+   }catch(e){say('Could not reach the planning monitor.','error')}
+ }
+ document.getElementById('load').onclick=()=>load(false); document.getElementById('refresh').onclick=()=>load(true);
+ [searchEl,priorityEl,freshEl].forEach(el=>el.addEventListener(el.tagName==='INPUT'?'input':'change',render)); tokenEl.addEventListener('keydown',e=>{if(e.key==='Enter')load(false)}); if(saved)load(false);
+})();
+</script>
+</body>
+</html>
