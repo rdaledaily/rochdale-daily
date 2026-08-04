@@ -1,8 +1,8 @@
 """Public source-presentation rules for Rochdale Daily.
 
-Roch Valley Radio remains an allowed discovery/source publisher, but its brand is
-not repeated in public headlines, excerpts, image credits or article footers.
-The original URL is retained and presented as a small generic ``Source`` link.
+Discovery provenance is retained in article records, but social-media discovery
+URLs are never exposed as public source links. Social posts are leads, not a
+substitute for an attributable publisher or official source.
 """
 
 from __future__ import annotations
@@ -14,6 +14,20 @@ from urllib.parse import urlparse
 
 SUBTLE_SOURCE_NAMES = {"roch valley radio"}
 SUBTLE_SOURCE_DOMAINS = {"rochvalleyradio.com"}
+SOCIAL_SOURCE_DOMAINS = {
+    "facebook.com",
+    "fb.com",
+    "instagram.com",
+    "threads.net",
+    "tiktok.com",
+    "x.com",
+    "twitter.com",
+    "youtube.com",
+    "youtu.be",
+    "reddit.com",
+    "nextdoor.co.uk",
+    "nextdoor.com",
+}
 
 _PUBLIC_TEXT_FIELDS = (
     "title",
@@ -32,6 +46,11 @@ def _domain(value: Any) -> str:
     return host[4:] if host.startswith("www.") else host
 
 
+def is_social_source(source_url: Any = "") -> bool:
+    domain = _domain(source_url)
+    return any(domain == item or domain.endswith("." + item) for item in SOCIAL_SOURCE_DOMAINS)
+
+
 def is_subtle_source(source_name: Any = "", source_url: Any = "") -> bool:
     name = str(source_name or "").casefold()
     domain = _domain(source_url)
@@ -43,7 +62,6 @@ def is_subtle_source(source_name: Any = "", source_url: Any = "") -> bool:
 
 def clean_title(value: Any) -> str:
     text = str(value or "")
-    # Search/RSS titles commonly arrive as ``Headline - Publisher``.
     text = re.sub(
         r"\s*(?:-|–|—|\||:)\s*roch\s+valley\s+radio\s*$",
         "",
@@ -65,7 +83,6 @@ def clean_public_text(value: Any) -> str:
         text,
         flags=re.IGNORECASE,
     )
-    # In prose, replace the publisher name rather than leaving a broken sentence.
     text = re.sub(
         r"\broch\s+valley\s+radio\b",
         "the source",
@@ -91,10 +108,6 @@ def _slugify(value: Any) -> str:
 
 
 def clean_candidate_public_text(candidate: Any) -> Any:
-    """Remove publisher branding from text passed into rewriting.
-
-    The source name and source URL stay intact for provenance and linking.
-    """
     if not is_subtle_source(
         getattr(candidate, "source_name", ""),
         getattr(candidate, "source_url", ""),
@@ -126,13 +139,6 @@ COURT_POLICE_IMAGE_RE = re.compile(
 
 
 def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
-    """Use the standard police photograph for generic court/crime reports.
-
-    A specific verified scene, person or official source image remains preferable.
-    This rule replaces generated category cards and other fallback artwork for
-    police matters whose headlines clearly concern arrests, charges, convictions,
-    sentencing, imprisonment, court proceedings or offences.
-    """
     title = str(article.get("title") or "")
     category = str(article.get("category") or "").casefold()
     police_matter = bool(article.get("police_matter")) or category == "crime"
@@ -153,7 +159,7 @@ def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
 
 
 def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
-    """Return a public-safe article record while preserving source URLs."""
+    """Return a public-safe article record while retaining internal provenance."""
     if not isinstance(article, dict):
         return article
 
@@ -161,6 +167,20 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     source_url = article.get("source_url", "")
     source_names = article.get("source_names") or []
     source_urls = article.get("source_urls") or []
+
+    social_urls = [
+        url for url in [source_url, *source_urls]
+        if is_social_source(url)
+    ]
+    if social_urls:
+        article["public_source_hidden"] = True
+        article["discovery_source_kind"] = "social"
+        if is_social_source(source_url):
+            article["source_name"] = "Community report"
+        article["source_names"] = [
+            "Community report" if index < len(source_urls) and is_social_source(source_urls[index]) else str(name)
+            for index, name in enumerate(source_names)
+        ]
 
     subtle = is_subtle_source(source_name, source_url) or any(
         is_subtle_source(
@@ -183,8 +203,6 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
             else clean_public_text(article[field])
         )
 
-    # Keep provenance in the URL, but do not repeat the publisher brand in the
-    # public JSON feed, card, caption or footer.
     if is_subtle_source(source_name, source_url):
         article["source_name"] = "Source"
 
@@ -195,19 +213,6 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     if source_names:
         article["source_names"] = cleaned_names
 
-    category = str(article.get("category") or "news").casefold()
-    if category not in {
-        "news", "crime", "traffic", "transport", "politics", "education",
-        "sport", "events", "business", "community", "health", "environment",
-    }:
-        category = "news"
-
-    # Do not reuse a publisher image without a visible credit. Clearing the URL
-    # leaves ensure_article_images to compose the story card, which is the only
-    # card style on the site. This previously assigned a flat
-    # assets/img/stock_<category>.jpg illustration - a second style, from a
-    # generator that no longer exists, which then persisted on those stories
-    # because a card is only composed when image_url is empty.
     article["image_url"] = ""
     article["image_credit"] = "Rochdale Daily"
     article["source_image_candidate_url"] = ""
@@ -224,6 +229,7 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
 
 
 def generic_sources_markup(article: dict[str, Any]) -> str:
+    """Render attributable web sources, never social-discovery links."""
     urls: list[str] = []
     primary = str(article.get("source_url") or "").strip()
     if primary:
@@ -232,7 +238,10 @@ def generic_sources_markup(article: dict[str, Any]) -> str:
         url = str(value or "").strip()
         if url and url not in urls:
             urls.append(url)
-    urls = [url for url in urls if url.startswith(("https://", "http://"))]
+    urls = [
+        url for url in urls
+        if url.startswith(("https://", "http://")) and not is_social_source(url)
+    ]
     if not urls:
         return ""
     items = "".join(
