@@ -5,6 +5,8 @@ on:
     paths:
       - manual_article_pending.json
   workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write
