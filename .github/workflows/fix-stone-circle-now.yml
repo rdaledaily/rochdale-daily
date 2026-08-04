@@ -1,0 +1,83 @@
+name: Fix stone circle article now
+
+on:
+  push:
+    paths:
+      - stone_circle_fix_trigger.txt
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Correct article and hide social source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          slug = 'new-stone-circle-installed-near-rochdale'
+          new_title = 'Stone Circle Near Rochdale Has Stood for Nearly 20 Years'
+          new_excerpt = 'A stone circle near Stoney Heys and Brownhouse Wham Reservoir is a long-established local landmark, not a newly installed feature.'
+          new_body = (
+              '<p>A stone circle near Stoney Heys and Brownhouse Wham Reservoir has been a familiar landmark to local residents and walkers for many years.</p>'
+              '<p>Rochdale Daily previously reported that the feature had been newly installed. Local readers have since clarified that the stone circle has stood at the site since around 2010, and possibly earlier.</p>'
+              '<p>The structure includes a central table-like stone surrounded by standing stones and is well known to people who regularly walk across the surrounding moorland.</p>'
+              '<p><strong>Correction:</strong> An earlier version of this article incorrectly described the stone circle as new. We are grateful to local readers who pointed out the error and apologise for the mistake.</p>'
+          )
+
+          def patch_record(a):
+              if not isinstance(a, dict) or a.get('slug') != slug:
+                  return a
+              a['title'] = new_title
+              a['excerpt'] = new_excerpt
+              a['content_html'] = new_body
+              a['source_name'] = 'Rochdale Daily'
+              a['source_url'] = ''
+              a['source_names'] = ['Rochdale Daily']
+              a['source_urls'] = []
+              a['social_context_note'] = ''
+              a['right_to_reply'] = ''
+              a['last_updated_at'] = '2026-08-04T12:32:00Z'
+              return a
+
+          for path in [Path('articles.json'), Path('articles/frontpage.json'), Path('articles/areas/healey.json'), Path('articles/categories/environment.json')]:
+              if not path.exists():
+                  continue
+              data = json.loads(path.read_text(encoding='utf-8'))
+              if isinstance(data, list):
+                  data = [patch_record(x) for x in data]
+              elif isinstance(data, dict):
+                  if isinstance(data.get('articles'), list):
+                      data['articles'] = [patch_record(x) for x in data['articles']]
+              path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          # Regenerate all static pages from corrected data.
+          import subprocess
+          subprocess.run(['python', 'scraper/generate_pages.py'], check=True)
+
+          html_path = Path('articles/new-stone-circle-installed-near-rochdale.html')
+          text = html_path.read_text(encoding='utf-8')
+          banned = ['facebook.com', 'Facebook post', 'Open source', '<summary>Sources</summary>', 'New Stone Circle Installed Near Rochdale']
+          remaining = [x for x in banned if x in text]
+          if remaining:
+              raise SystemExit(f'Public source leak or old headline remains: {remaining}')
+          PY
+
+      - name: Commit immediate correction
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add articles.json articles/frontpage.json articles/areas/healey.json articles/categories/environment.json articles/new-stone-circle-installed-near-rochdale.html sitemap.xml index.html
+          git commit -m "Correct stone circle article and hide social source"
+          git push
