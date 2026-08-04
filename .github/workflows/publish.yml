@@ -1,17 +1,17 @@
 name: Publish manual article edits
 
-# Rebuilds the site whenever articles.json changes (e.g. edited in the GitHub
-# web editor) so editorial updates go live without waiting for a scrape.
+# Rebuilds the site whenever either article source changes so editorial updates
+go live without waiting for a scheduled scrape.
 on:
   push:
     paths:
       - articles.json
+      - manual_articles.json
   workflow_dispatch:
 
 permissions:
   contents: write
 
-# Shares the scraper's lock so a publish never races a scheduled run.
 concurrency:
   group: rochdale-daily-15-minute-scraper
   cancel-in-progress: false
@@ -20,7 +20,6 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # The scraper's own feed commits also touch articles.json; skip those.
     if: github.actor != 'github-actions[bot]'
     steps:
       - uses: actions/checkout@v4
@@ -38,27 +37,20 @@ jobs:
       - name: Rebuild pages and sitemap
         run: |
           python -m json.tool articles.json > /dev/null
+          python -m json.tool manual_articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/generate_pages.py
       - name: Commit rebuilt site
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json scraper_status.json event_dates.json articles sitemap.xml
+          git add articles.json manual_articles.json scraper_status.json event_dates.json articles sitemap.xml
           if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
           git commit -m "Publish manual article edits"
-
-          # A scheduled scrape can land while this publish is building.
-          # articles.json is machine-generated whole-file state, so a plain
-          # rebase can never resolve a conflict in it; merge origin instead
-          # and resolve the feed with the pipeline's story-aware merger.
-          # The editor's version is passed as the authoritative (remote)
-          # side so a manual edit is never overwritten by the racing run.
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then
               exit 0
             fi
-            echo "Push rejected (attempt ${attempt}); merging origin/${GITHUB_REF_NAME}."
             git fetch origin "${GITHUB_REF_NAME}"
             if ! git merge --no-edit "origin/${GITHUB_REF_NAME}"; then
               if git ls-files -u -- articles.json | grep -q .; then
@@ -77,5 +69,4 @@ jobs:
               git commit --no-edit
             fi
           done
-          echo "Failed to push after 5 attempts."
           exit 1
