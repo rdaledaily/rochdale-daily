@@ -35,6 +35,37 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
+      - name: Materialise optional attached image
+        run: |
+          python - <<'PY'
+          import base64
+          import json
+          from pathlib import Path
+          from PIL import Image
+
+          pending = Path('manual_image_pending.json')
+          if not pending.exists():
+              raise SystemExit(0)
+
+          payload = json.loads(pending.read_text(encoding='utf-8'))
+          relative_path = str(payload.get('path') or '').replace('\\', '/').lstrip('/')
+          if not relative_path.startswith(('assets/img/cards/', 'assets/article-images/')):
+              raise SystemExit('Manual image path must be inside an approved article image folder')
+
+          encoded = str(payload.get('content_base64') or '')
+          if not encoded:
+              raise SystemExit('Manual image payload is empty')
+
+          destination = Path(relative_path)
+          destination.parent.mkdir(parents=True, exist_ok=True)
+          destination.write_bytes(base64.b64decode(encoded, validate=True))
+
+          with Image.open(destination) as image:
+              image.verify()
+
+          pending.unlink()
+          PY
+
       - name: Replace and validate article
         run: |
           python - <<'PY'
@@ -103,10 +134,12 @@ jobs:
           git add \
             manual_articles.json \
             manual_article_pending.json \
+            manual_image_pending.json \
             articles.json \
             scraper_status.json \
             event_dates.json \
             image_coverage_report.json \
+            assets/img/cards \
             assets/img/generated \
             assets/article-images \
             articles \
