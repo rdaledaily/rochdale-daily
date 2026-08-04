@@ -1,0 +1,39 @@
+name: Publish pending manual article
+
+on:
+  push:
+    paths:
+      - manual_article_pending.json
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Merge and validate article
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          target = Path('manual_articles.json')
+          pending = Path('manual_article_pending.json')
+          articles = json.loads(target.read_text(encoding='utf-8'))
+          new_articles = json.loads(pending.read_text(encoding='utf-8'))
+          existing_ids = {str(a.get('id', '')) for a in articles if isinstance(a, dict)}
+          existing_slugs = {str(a.get('slug', '')) for a in articles if isinstance(a, dict)}
+          additions = [a for a in new_articles if a.get('id') not in existing_ids and a.get('slug') not in existing_slugs]
+          target.write_text(json.dumps(additions + articles, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          json.loads(target.read_text(encoding='utf-8'))
+          pending.unlink()
+          PY
+      - name: Commit publication
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add manual_articles.json manual_article_pending.json
+          git commit -m "Publish gatekeepers article as news [skip ci]"
+          git push
