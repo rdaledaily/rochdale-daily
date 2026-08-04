@@ -1,0 +1,100 @@
+name: Publish Christine story now
+
+on:
+  push:
+    paths:
+      - publish_christine_trigger.txt
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-christine-story-now
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+          python -m pip install --no-cache-dir "Pillow>=10,<13"
+
+      - name: Merge pending article into manual articles
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          target = Path('manual_articles.json')
+          pending = Path('manual_article_pending.json')
+          articles = json.loads(target.read_text(encoding='utf-8'))
+          replacements = json.loads(pending.read_text(encoding='utf-8'))
+
+          replacement_ids = {str(x.get('id')) for x in replacements if isinstance(x, dict) and x.get('id')}
+          replacement_slugs = {str(x.get('slug')) for x in replacements if isinstance(x, dict) and x.get('slug')}
+
+          cleaned = []
+          for article in articles:
+              if isinstance(article, dict):
+                  if str(article.get('id', '')) in replacement_ids:
+                      continue
+                  if str(article.get('slug', '')) in replacement_slugs:
+                      continue
+              cleaned.append(article)
+
+          target.write_text(
+              json.dumps(replacements + cleaned, ensure_ascii=False, indent=2) + '\n',
+              encoding='utf-8',
+          )
+          json.loads(target.read_text(encoding='utf-8'))
+          pending.unlink()
+          Path('publish_christine_trigger.txt').unlink(missing_ok=True)
+          Path('.github/workflows/publish-christine-now.yml').unlink()
+          PY
+
+      - name: Build live article and homepage
+        env:
+          FRONTPAGE_PRIMARY_DAYS: "1"
+          FRONTPAGE_FALLBACK_DAYS: "3"
+          FRONTPAGE_MIN_ARTICLES: "50"
+          FRONTPAGE_TARGET_ARTICLES: "80"
+        run: |
+          python scraper/frontpage_pipeline.py
+          python -m json.tool manual_articles.json > /dev/null
+          python -m json.tool articles.json > /dev/null
+          python scraper/article_gate.py articles.json
+          python scraper/generate_pages.py
+
+      - name: Commit live publication
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Publish Christine found after Newhey community search"
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}" || {
+              git rebase --abort || true
+              git merge --no-edit "origin/${GITHUB_REF_NAME}"
+            }
+          done
+          exit 1
