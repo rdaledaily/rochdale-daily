@@ -13,103 +13,92 @@ permissions:
 
 concurrency:
   group: gp-survey-image-localiser
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  publish:
+  localise:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: true
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-          cache-dependency-path: requirements.txt
-
-      - name: Install dependencies
+      - name: Download licensed photograph and update article files
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install --no-cache-dir -r requirements.txt
-          python -m pip install --no-cache-dir "Pillow>=10,<13"
-
-      - name: Download licensed photograph and update manual article
-        run: |
-          python - <<'PY'
+          python3 - <<'PY'
           import json
           from pathlib import Path
           from urllib.request import Request, urlopen
 
           article_id = "rochdale-gp-patient-survey-ranking-2026"
-          target = Path("manual_articles.json")
-          articles = json.loads(target.read_text(encoding="utf-8"))
-          article = next(
-              (item for item in articles if isinstance(item, dict) and item.get("id") == article_id),
-              None,
-          )
-          if article is None:
-              raise SystemExit("GP survey article is not present in manual_articles.json")
-
-          image_path = Path("assets/img/cards/nye-bevan-house-rochdale-gp-survey-2026.jpg")
+          remote_image = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Nye_Bevan_House%2C_Rochdale.JPG/1280px-Nye_Bevan_House%2C_Rochdale.JPG"
+          local_image = "assets/img/cards/nye-bevan-house-rochdale-gp-survey-2026.jpg"
+          image_path = Path(local_image)
           image_path.parent.mkdir(parents=True, exist_ok=True)
-          image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Nye_Bevan_House%2C_Rochdale.JPG/1280px-Nye_Bevan_House%2C_Rochdale.JPG"
-          request = Request(
-              image_url,
-              headers={"User-Agent": "RochdaleDaily/1.0 (news@rochdaledaily.co.uk)"},
-          )
+
+          request = Request(remote_image, headers={
+              "User-Agent": "RochdaleDaily/1.0 (news@rochdaledaily.co.uk)"
+          })
           with urlopen(request, timeout=60) as response:
               image_bytes = response.read()
           if len(image_bytes) < 10000 or not image_bytes.startswith(b"\xff\xd8\xff"):
               raise SystemExit("Downloaded Commons file is not a valid JPEG")
           image_path.write_bytes(image_bytes)
 
-          local_image = image_path.as_posix()
-          article["img"] = local_image
-          article["image_url"] = local_image
-          article["image_credit"] = "Rept0n1x / Wikimedia Commons, CC BY-SA 3.0"
-          article["image_credit_url"] = "https://commons.wikimedia.org/wiki/File:Nye_Bevan_House,_Rochdale.JPG"
-          article.pop("publication_trigger", None)
+          for json_name in [
+              "manual_articles.json",
+              "articles.json",
+              "articles/frontpage.json",
+              "articles/categories/health.json",
+              "articles/areas/rochdale.json",
+          ]:
+              path = Path(json_name)
+              if not path.is_file():
+                  continue
+              data = json.loads(path.read_text(encoding="utf-8"))
+              items = data if isinstance(data, list) else data.get("articles", [])
+              for item in items:
+                  if not isinstance(item, dict) or item.get("id") != article_id:
+                      continue
+                  item["image_url"] = local_image
+                  if path.name == "manual_articles.json":
+                      item["img"] = local_image
+                      item.pop("publication_trigger", None)
+                  item["image_credit"] = "Rept0n1x / Wikimedia Commons, CC BY-SA 3.0"
+                  item["image_credit_url"] = "https://commons.wikimedia.org/wiki/File:Nye_Bevan_House,_Rochdale.JPG"
+              path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-          target.write_text(
-              json.dumps(articles, ensure_ascii=False, indent=2) + "\n",
-              encoding="utf-8",
-          )
-          json.loads(target.read_text(encoding="utf-8"))
+          article_page = Path("articles/every-gp-practice-rochdale-ranked-2026-patient-survey.html")
+          if article_page.is_file():
+              text = article_page.read_text(encoding="utf-8")
+              article_page.write_text(text.replace(remote_image, local_image), encoding="utf-8")
+
+          index_page = Path("index.html")
+          if index_page.is_file():
+              text = index_page.read_text(encoding="utf-8")
+              index_page.write_text(text.replace(remote_image, local_image), encoding="utf-8")
+
           Path("gp_image_trigger.txt").unlink(missing_ok=True)
-          Path(".github/workflows/publish-gp-survey-one-off.yml").unlink()
           PY
 
-      - name: Rebuild publication
-        env:
-          FRONTPAGE_PRIMARY_DAYS: "1"
-          FRONTPAGE_FALLBACK_DAYS: "3"
-          FRONTPAGE_MIN_ARTICLES: "50"
-          FRONTPAGE_TARGET_ARTICLES: "80"
+      - name: Validate and commit local image
         run: |
-          python scraper/frontpage_pipeline.py
-          python -m json.tool manual_articles.json > /dev/null
-          python -m json.tool articles.json > /dev/null
-          python scraper/article_gate.py articles.json
-          python scraper/generate_pages.py
-
-      - name: Commit local image and rebuilt article
-        run: |
+          python3 -m json.tool manual_articles.json > /dev/null
+          python3 -m json.tool articles.json > /dev/null
+          test -s assets/img/cards/nye-bevan-house-rochdale-gp-survey-2026.jpg
           git config user.name "Rochdale Daily Bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A
-          git commit -m "Localise Rochdale GP survey article image"
-          for attempt in 1 2 3 4 5; do
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
-              exit 0
-            fi
-            git fetch origin "${GITHUB_REF_NAME}"
-            git rebase "origin/${GITHUB_REF_NAME}" || {
-              git rebase --abort || true
-              git merge --no-edit "origin/${GITHUB_REF_NAME}"
-            }
-          done
-          exit 1
+          git add \
+            manual_articles.json \
+            articles.json \
+            articles/frontpage.json \
+            articles/categories/health.json \
+            articles/areas/rochdale.json \
+            articles/every-gp-practice-rochdale-ranked-2026-patient-survey.html \
+            index.html \
+            assets/img/cards/nye-bevan-house-rochdale-gp-survey-2026.jpg \
+            gp_image_trigger.txt
+          git commit -m "Upload local image for Rochdale GP survey article"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
