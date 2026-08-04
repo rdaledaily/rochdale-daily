@@ -1,9 +1,6 @@
-name: Publish GP survey article now
+name: Localise GP survey article image
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
   schedule:
     - cron: "*/5 * * * *"
@@ -37,22 +34,22 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
-      - name: Insert article and download licensed image
+      - name: Download licensed photograph and update manual article
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           from urllib.request import Request, urlopen
 
+          article_id = "rochdale-gp-patient-survey-ranking-2026"
           target = Path("manual_articles.json")
-          pending = Path("manual_article_pending.json")
-          if not pending.exists():
-              raise SystemExit("manual_article_pending.json is missing")
-
           articles = json.loads(target.read_text(encoding="utf-8"))
-          replacements = json.loads(pending.read_text(encoding="utf-8"))
-          if not isinstance(articles, list) or not isinstance(replacements, list):
-              raise SystemExit("Manual article files must contain JSON arrays")
+          article = next(
+              (item for item in articles if isinstance(item, dict) and item.get("id") == article_id),
+              None,
+          )
+          if article is None:
+              raise SystemExit("GP survey article is not present in manual_articles.json")
 
           image_path = Path("assets/img/cards/nye-bevan-house-rochdale-gp-survey-2026.jpg")
           image_path.parent.mkdir(parents=True, exist_ok=True)
@@ -67,41 +64,18 @@ jobs:
               raise SystemExit("Downloaded Commons file is not a valid JPEG")
           image_path.write_bytes(image_bytes)
 
-          replacement_ids = {
-              str(item.get("id")) for item in replacements
-              if isinstance(item, dict) and item.get("id")
-          }
-          replacement_slugs = {
-              str(item.get("slug")) for item in replacements
-              if isinstance(item, dict) and item.get("slug")
-          }
-
-          cleaned = []
-          for article in articles:
-              if not isinstance(article, dict):
-                  cleaned.append(article)
-                  continue
-              if str(article.get("id", "")) in replacement_ids:
-                  continue
-              if str(article.get("slug", "")) in replacement_slugs:
-                  continue
-              cleaned.append(article)
-
           local_image = image_path.as_posix()
-          for replacement in replacements:
-              if not isinstance(replacement, dict):
-                  continue
-              replacement["img"] = local_image
-              replacement["image_url"] = local_image
-              replacement["image_credit"] = "Rept0n1x / Wikimedia Commons, CC BY-SA 3.0"
-              replacement["image_credit_url"] = "https://commons.wikimedia.org/wiki/File:Nye_Bevan_House,_Rochdale.JPG"
+          article["img"] = local_image
+          article["image_url"] = local_image
+          article["image_credit"] = "Rept0n1x / Wikimedia Commons, CC BY-SA 3.0"
+          article["image_credit_url"] = "https://commons.wikimedia.org/wiki/File:Nye_Bevan_House,_Rochdale.JPG"
+          article.pop("publication_trigger", None)
 
           target.write_text(
-              json.dumps(replacements + cleaned, ensure_ascii=False, indent=2) + "\n",
+              json.dumps(articles, ensure_ascii=False, indent=2) + "\n",
               encoding="utf-8",
           )
           json.loads(target.read_text(encoding="utf-8"))
-          pending.unlink()
           Path(".github/workflows/publish-gp-survey-one-off.yml").unlink()
           PY
 
@@ -113,22 +87,17 @@ jobs:
           FRONTPAGE_TARGET_ARTICLES: "80"
         run: |
           python scraper/frontpage_pipeline.py
-          python scraper/ensure_article_images.py --limit 0
           python -m json.tool manual_articles.json > /dev/null
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/generate_pages.py
 
-      - name: Commit live article
+      - name: Commit local image and rebuilt article
         run: |
           git config user.name "Rochdale Daily Bot"
           git config user.email "actions@users.noreply.github.com"
           git add -A
-          if git diff --cached --quiet; then
-            echo "Nothing to publish."
-            exit 0
-          fi
-          git commit -m "Publish Rochdale GP patient survey ranking"
+          git commit -m "Localise Rochdale GP survey article image"
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then
               exit 0
