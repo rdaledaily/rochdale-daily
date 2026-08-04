@@ -1,0 +1,69 @@
+name: Patch gatekeepers page
+
+on:
+  push:
+    paths:
+      - gatekeepers_patch_trigger.txt
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch generated article HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import html
+
+          path = Path('articles/should-gatekeepers-decide-which-local-news-you-get-to-see.html')
+          text = path.read_text(encoding='utf-8')
+
+          old_title = 'Should Gatekeepers Decide Which Local News You Get to See?'
+          new_title = 'Are Facebook Groups Becoming the Gatekeepers of Local News?'
+          old_excerpt = 'Recent Rochdale Daily posts have remained pending approval in a major local Facebook group, prompting questions about moderation, free expression and the role of independent local journalism.'
+          new_excerpt = 'Large community Facebook groups now play a major role in determining which local stories residents see, raising questions about moderation, access to information and the influence of digital gatekeepers.'
+
+          text = text.replace(old_title, new_title)
+          text = text.replace(old_excerpt, new_excerpt)
+          text = text.replace('Recent Rochdale Daily posts have remained pending approval in a major local Facebook group, prompting questions about moderation, free expression and...', html.escape(new_excerpt))
+
+          new_paragraphs = [
+            'Recent posts from independent local news publishers have, at times, remained pending approval or failed to appear in large community Facebook groups. The reasons are not always clear and may range from routine moderation and administrative delays to editorial decisions made by group administrators.',
+            'Whatever the explanation, the situation raises a wider question about how much influence large local Facebook groups have over the news and viewpoints residents are exposed to.',
+            'Many of these groups have memberships larger than the circulation of traditional local newspapers. For thousands of people, they have become the primary place where local news, events and community discussion are discovered. Decisions about which posts are approved can therefore have a significant impact on what information reaches the public.',
+            'Independent journalism exists to report what is happening within a community, regardless of whether those stories are politically convenient or uncomfortable. It should not matter whether a story reflects positively or negatively on any political party, campaign group or public body. The role of journalism is to inform readers, not to tell them what to think.',
+            'Equally, moderation is an important part of running any online community. Administrators are entitled to remove unlawful material, spam, abuse, hate speech or defamatory content. However, where lawful reporting is prevented from reaching large community audiences, it is reasonable to ask whether local people are receiving a balanced picture of events.',
+            "Too often, debate can become centred on labels rather than evidence. Terms such as 'misinformation', 'divisive' or 'harmful' should only be used where they can be supported by facts. If reporting is inaccurate, it should be corrected. If facts are disputed, they should be challenged with evidence. Robust debate is healthier than silent suppression.",
+            'Independent local journalism has become increasingly important as traditional local newsrooms have shrunk. Smaller publishers often report stories that might otherwise receive little attention, giving residents access to a broader range of information and perspectives.',
+            'Ultimately, Facebook groups have become powerful gatekeepers of local information. That influence brings responsibility. While moderators are free to manage their communities as they see fit, readers should also recognise that what appears in a Facebook feed is not necessarily the full picture of what is happening across Rochdale borough.',
+            'A healthy democracy depends on people having access to a range of lawful reporting and being trusted to reach their own conclusions.'
+          ]
+          replacement = '\n'.join(f'<p>{html.escape(p)}</p>' for p in new_paragraphs)
+
+          pattern = re.compile(
+            r'<p>Recent posts from Rochdale Daily submitted to the Rochdale Noticeboard Facebook group.*?<p>At Rochdale Daily, we will continue reporting local stories without fear or favour, regardless of which political party benefits or faces scrutiny\.</p>',
+            re.S,
+          )
+          text, count = pattern.subn(replacement, text, count=1)
+          if count != 1:
+            raise SystemExit('Could not locate old article body in generated HTML')
+
+          banned = ['Rochdale Noticeboard', 'Labour and Conservative councillors', 'prominent local community figures']
+          for phrase in banned:
+            if phrase in text:
+              raise SystemExit(f'Banned phrase remains: {phrase}')
+
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit patched page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add articles/should-gatekeepers-decide-which-local-news-you-get-to-see.html
+          git commit -m "Patch published Facebook gatekeepers article"
+          git push
