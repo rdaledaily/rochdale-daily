@@ -36,6 +36,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import re
           from pathlib import Path
           from PIL import Image, ImageOps
 
@@ -53,10 +54,8 @@ jobs:
 
           width, height = image.size
 
-          # Hero: exact 16:9 crop, centred vertically.
           target_ratio = 16 / 9
-          current_ratio = width / height
-          if current_ratio > target_ratio:
+          if width / height > target_ratio:
               crop_width = round(height * target_ratio)
               left = max(0, (width - crop_width) // 2)
               hero = image.crop((left, 0, left + crop_width, height))
@@ -65,19 +64,10 @@ jobs:
               top = max(0, (height - crop_height) // 2)
               hero = image.crop((0, top, width, top + crop_height))
           hero = hero.resize((1280, 720), Image.Resampling.LANCZOS)
-          hero.save(
-              hero_path,
-              "JPEG",
-              quality=92,
-              optimize=True,
-              progressive=False,
-              subsampling=0,
-          )
+          hero.save(hero_path, "JPEG", quality=92, optimize=True, progressive=False, subsampling=0)
 
-          # Social image: exact 1200x630 Open Graph size.
           og_ratio = 1200 / 630
-          current_ratio = width / height
-          if current_ratio > og_ratio:
+          if width / height > og_ratio:
               crop_width = round(height * og_ratio)
               left = max(0, (width - crop_width) // 2)
               og = image.crop((left, 0, left + crop_width, height))
@@ -86,31 +76,24 @@ jobs:
               top = max(0, (height - crop_height) // 2)
               og = image.crop((0, top, width, top + crop_height))
           og = og.resize((1200, 630), Image.Resampling.LANCZOS)
-          og.save(
-              og_path,
-              "JPEG",
-              quality=92,
-              optimize=True,
-              progressive=False,
-              subsampling=0,
-          )
+          og.save(og_path, "JPEG", quality=92, optimize=True, progressive=False, subsampling=0)
 
           hero_rel = hero_path.as_posix()
+          hero_abs = "https://rochdaledaily.co.uk/" + hero_rel
           og_abs = "https://rochdaledaily.co.uk/" + og_path.as_posix()
           old_rel = source_path.as_posix()
           old_abs = "https://rochdaledaily.co.uk/" + old_rel
 
-          # Update article records everywhere they appear.
           json_paths = [Path("manual_articles.json"), Path("articles.json")]
           json_paths.extend(Path("articles").rglob("*.json"))
+
           for path in json_paths:
               if not path.exists():
                   continue
               data = json.loads(path.read_text(encoding="utf-8"))
-              changed = False
+              changed = [False]
 
               def patch(item):
-                  nonlocal changed
                   if not isinstance(item, dict):
                       return
                   if item.get("id") == article_id or item.get("slug") == article_slug:
@@ -119,7 +102,7 @@ jobs:
                           item["img"] = hero_rel
                       item["image_credit"] = "Submitted to Rochdale Daily"
                       item["image_credit_url"] = ""
-                      changed = True
+                      changed[0] = True
 
               if isinstance(data, list):
                   for item in data:
@@ -131,60 +114,43 @@ jobs:
                           for item in data[key]:
                               patch(item)
 
-              if changed:
+              if changed[0]:
                   path.write_text(
                       json.dumps(data, ensure_ascii=False, indent=2) + "\n",
                       encoding="utf-8",
                   )
 
-          # Update the published page and any cards that still reference the old image.
-          html_paths = [
-              Path("articles/elderly-lady-found-after-incredible-community-effort-newhey.html"),
-              Path("index.html"),
-              Path("milnrow.html"),
-          ]
-          for path in html_paths:
+          article_page = Path("articles/elderly-lady-found-after-incredible-community-effort-newhey.html")
+          if not article_page.exists():
+              raise SystemExit("Published Christine article page is missing")
+
+          text = article_page.read_text(encoding="utf-8")
+          text = text.replace(f'../{old_rel}', f'../{hero_rel}')
+          text = re.sub(
+              r'(<meta property="og:image" content=")[^"]+("\s*/?>)',
+              r'\1' + og_abs + r'\2',
+              text,
+          )
+          text = re.sub(
+              r'(<meta name="twitter:image" content=")[^"]+("\s*/?>)',
+              r'\1' + og_abs + r'\2',
+              text,
+          )
+          text = re.sub(
+              r'("image":\[?")[^"]+("\]?)',
+              r'\1' + og_abs + r'\2',
+              text,
+              count=1,
+          )
+          article_page.write_text(text, encoding="utf-8")
+
+          for path in (Path("index.html"), Path("milnrow.html")):
               if not path.exists():
                   continue
               text = path.read_text(encoding="utf-8")
-              original = text
+              text = text.replace(old_abs, hero_abs).replace(old_rel, hero_rel)
+              path.write_text(text, encoding="utf-8")
 
-              if path.name == "elderly-lady-found-after-incredible-community-effort-newhey.html":
-                  text = text.replace(old_abs, og_abs)
-                  text = text.replace(
-                      f'../{old_rel}',
-                      f'../{hero_rel}',
-                  )
-                  text = text.replace(
-                      '"image":["' + og_abs.replace("-og-v2.jpg", ".jpeg") + '"]',
-                      '"image":["' + og_abs + '"]',
-                  )
-                  # Ensure all metadata uses the clean social image even if the old URL varied.
-                  import re
-                  text = re.sub(
-                      r'(<meta property="og:image" content=")[^"]+("\s*/?>)',
-                      r'\1' + og_abs + r'\2',
-                      text,
-                  )
-                  text = re.sub(
-                      r'(<meta name="twitter:image" content=")[^"]+("\s*/?>)',
-                      r'\1' + og_abs + r'\2',
-                      text,
-                  )
-                  text = re.sub(
-                      r'("image":\[?")[^"]+("\]?)',
-                      r'\1' + og_abs + r'\2',
-                      text,
-                      count=1,
-                  )
-              else:
-                  text = text.replace(old_abs, "https://rochdaledaily.co.uk/" + hero_rel)
-                  text = text.replace(old_rel, hero_rel)
-
-              if text != original:
-                  path.write_text(text, encoding="utf-8")
-
-          # Remove one-off trigger and workflow after success.
           Path("fix_christine_social_preview_trigger.txt").unlink(missing_ok=True)
           Path(".github/workflows/fix-christine-social-preview.yml").unlink()
           PY
