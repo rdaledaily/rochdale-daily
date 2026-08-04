@@ -1,13 +1,13 @@
 name: Publish Christine story now
 
 on:
-  push:
-    paths:
-      - publish_christine_trigger.txt
+  issue_comment:
+    types: [created]
   workflow_dispatch:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: publish-christine-story-now
@@ -15,11 +15,15 @@ concurrency:
 
 jobs:
   publish:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request && contains(github.event.comment.body, '/publish-christine-now'))
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
           persist-credentials: true
 
@@ -88,13 +92,13 @@ jobs:
           git add -A
           git commit -m "Publish Christine found after Newhey community search"
           for attempt in 1 2 3 4 5; do
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+            if git push origin "HEAD:main"; then
               exit 0
             fi
-            git fetch origin "${GITHUB_REF_NAME}"
-            git rebase "origin/${GITHUB_REF_NAME}" || {
+            git fetch origin main
+            git rebase origin/main || {
               git rebase --abort || true
-              git merge --no-edit "origin/${GITHUB_REF_NAME}"
+              git merge --no-edit origin/main
             }
           done
           exit 1
