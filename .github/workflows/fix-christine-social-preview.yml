@@ -1,0 +1,214 @@
+name: Fix Christine social preview image
+
+on:
+  push:
+    paths:
+      - fix_christine_social_preview_trigger.txt
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fix-christine-social-preview
+  cancel-in-progress: true
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Pillow
+        run: python -m pip install --no-cache-dir "Pillow>=10,<13"
+
+      - name: Rebuild clean hero and social images
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image, ImageOps
+
+          article_id = "christine-found-newhey-community-search-2026"
+          article_slug = "elderly-lady-found-after-incredible-community-effort-newhey"
+          source_path = Path("assets/img/cards/christine-found-newhey-community-search-2026.jpeg")
+          hero_path = Path("assets/img/cards/christine-found-newhey-community-search-2026-hero-v2.jpg")
+          og_path = Path("assets/img/cards/christine-found-newhey-community-search-2026-og-v2.jpg")
+
+          if not source_path.exists():
+              raise SystemExit("Christine source image is missing")
+
+          with Image.open(source_path) as source:
+              image = ImageOps.exif_transpose(source).convert("RGB")
+
+          width, height = image.size
+
+          # Hero: exact 16:9 crop, centred vertically.
+          target_ratio = 16 / 9
+          current_ratio = width / height
+          if current_ratio > target_ratio:
+              crop_width = round(height * target_ratio)
+              left = max(0, (width - crop_width) // 2)
+              hero = image.crop((left, 0, left + crop_width, height))
+          else:
+              crop_height = round(width / target_ratio)
+              top = max(0, (height - crop_height) // 2)
+              hero = image.crop((0, top, width, top + crop_height))
+          hero = hero.resize((1280, 720), Image.Resampling.LANCZOS)
+          hero.save(
+              hero_path,
+              "JPEG",
+              quality=92,
+              optimize=True,
+              progressive=False,
+              subsampling=0,
+          )
+
+          # Social image: exact 1200x630 Open Graph size.
+          og_ratio = 1200 / 630
+          current_ratio = width / height
+          if current_ratio > og_ratio:
+              crop_width = round(height * og_ratio)
+              left = max(0, (width - crop_width) // 2)
+              og = image.crop((left, 0, left + crop_width, height))
+          else:
+              crop_height = round(width / og_ratio)
+              top = max(0, (height - crop_height) // 2)
+              og = image.crop((0, top, width, top + crop_height))
+          og = og.resize((1200, 630), Image.Resampling.LANCZOS)
+          og.save(
+              og_path,
+              "JPEG",
+              quality=92,
+              optimize=True,
+              progressive=False,
+              subsampling=0,
+          )
+
+          hero_rel = hero_path.as_posix()
+          og_abs = "https://rochdaledaily.co.uk/" + og_path.as_posix()
+          old_rel = source_path.as_posix()
+          old_abs = "https://rochdaledaily.co.uk/" + old_rel
+
+          # Update article records everywhere they appear.
+          json_paths = [Path("manual_articles.json"), Path("articles.json")]
+          json_paths.extend(Path("articles").rglob("*.json"))
+          for path in json_paths:
+              if not path.exists():
+                  continue
+              data = json.loads(path.read_text(encoding="utf-8"))
+              changed = False
+
+              def patch(item):
+                  nonlocal changed
+                  if not isinstance(item, dict):
+                      return
+                  if item.get("id") == article_id or item.get("slug") == article_slug:
+                      item["image_url"] = hero_rel
+                      if "img" in item or path.name == "manual_articles.json":
+                          item["img"] = hero_rel
+                      item["image_credit"] = "Submitted to Rochdale Daily"
+                      item["image_credit_url"] = ""
+                      changed = True
+
+              if isinstance(data, list):
+                  for item in data:
+                      patch(item)
+              elif isinstance(data, dict):
+                  patch(data)
+                  for key in ("articles", "items", "stories"):
+                      if isinstance(data.get(key), list):
+                          for item in data[key]:
+                              patch(item)
+
+              if changed:
+                  path.write_text(
+                      json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+                      encoding="utf-8",
+                  )
+
+          # Update the published page and any cards that still reference the old image.
+          html_paths = [
+              Path("articles/elderly-lady-found-after-incredible-community-effort-newhey.html"),
+              Path("index.html"),
+              Path("milnrow.html"),
+          ]
+          for path in html_paths:
+              if not path.exists():
+                  continue
+              text = path.read_text(encoding="utf-8")
+              original = text
+
+              if path.name == "elderly-lady-found-after-incredible-community-effort-newhey.html":
+                  text = text.replace(old_abs, og_abs)
+                  text = text.replace(
+                      f'../{old_rel}',
+                      f'../{hero_rel}',
+                  )
+                  text = text.replace(
+                      '"image":["' + og_abs.replace("-og-v2.jpg", ".jpeg") + '"]',
+                      '"image":["' + og_abs + '"]',
+                  )
+                  # Ensure all metadata uses the clean social image even if the old URL varied.
+                  import re
+                  text = re.sub(
+                      r'(<meta property="og:image" content=")[^"]+("\s*/?>)',
+                      r'\1' + og_abs + r'\2',
+                      text,
+                  )
+                  text = re.sub(
+                      r'(<meta name="twitter:image" content=")[^"]+("\s*/?>)',
+                      r'\1' + og_abs + r'\2',
+                      text,
+                  )
+                  text = re.sub(
+                      r'("image":\[?")[^"]+("\]?)',
+                      r'\1' + og_abs + r'\2',
+                      text,
+                      count=1,
+                  )
+              else:
+                  text = text.replace(old_abs, "https://rochdaledaily.co.uk/" + hero_rel)
+                  text = text.replace(old_rel, hero_rel)
+
+              if text != original:
+                  path.write_text(text, encoding="utf-8")
+
+          # Remove one-off trigger and workflow after success.
+          Path("fix_christine_social_preview_trigger.txt").unlink(missing_ok=True)
+          Path(".github/workflows/fix-christine-social-preview.yml").unlink()
+          PY
+
+      - name: Validate and publish
+        run: |
+          python -m json.tool articles.json > /dev/null
+          python -m json.tool manual_articles.json > /dev/null
+          test -s assets/img/cards/christine-found-newhey-community-search-2026-hero-v2.jpg
+          test -s assets/img/cards/christine-found-newhey-community-search-2026-og-v2.jpg
+
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Replace distorted Christine article images"
+
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}" || {
+              git rebase --abort || true
+              git merge --no-edit "origin/${GITHUB_REF_NAME}"
+            }
+          done
+          exit 1
