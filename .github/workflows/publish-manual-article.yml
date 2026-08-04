@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Merge and validate article
+      - name: Replace and validate article
         run: |
           python - <<'PY'
           import json
@@ -22,11 +22,36 @@ jobs:
           target = Path('manual_articles.json')
           pending = Path('manual_article_pending.json')
           articles = json.loads(target.read_text(encoding='utf-8'))
-          new_articles = json.loads(pending.read_text(encoding='utf-8'))
-          existing_ids = {str(a.get('id', '')) for a in articles if isinstance(a, dict)}
-          existing_slugs = {str(a.get('slug', '')) for a in articles if isinstance(a, dict)}
-          additions = [a for a in new_articles if a.get('id') not in existing_ids and a.get('slug') not in existing_slugs]
-          target.write_text(json.dumps(additions + articles, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          replacements = json.loads(pending.read_text(encoding='utf-8'))
+
+          replacement_by_id = {
+              str(article.get('id')): article
+              for article in replacements
+              if isinstance(article, dict) and article.get('id')
+          }
+          replacement_by_slug = {
+              str(article.get('slug')): article
+              for article in replacements
+              if isinstance(article, dict) and article.get('slug')
+          }
+
+          updated = []
+          used = set()
+          for article in articles:
+              article_id = str(article.get('id', '')) if isinstance(article, dict) else ''
+              article_slug = str(article.get('slug', '')) if isinstance(article, dict) else ''
+              replacement = replacement_by_id.get(article_id) or replacement_by_slug.get(article_slug)
+              if replacement is not None:
+                  updated.append(replacement)
+                  used.add(id(replacement))
+              else:
+                  updated.append(article)
+
+          for replacement in replacements:
+              if id(replacement) not in used:
+                  updated.insert(0, replacement)
+
+          target.write_text(json.dumps(updated, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           json.loads(target.read_text(encoding='utf-8'))
           pending.unlink()
           PY
@@ -35,5 +60,5 @@ jobs:
           git config user.name "Rochdale Daily Bot"
           git config user.email "actions@users.noreply.github.com"
           git add manual_articles.json manual_article_pending.json
-          git commit -m "Publish gatekeepers article as news [skip ci]"
+          git commit -m "Replace Facebook gatekeepers article [skip ci]"
           git push
