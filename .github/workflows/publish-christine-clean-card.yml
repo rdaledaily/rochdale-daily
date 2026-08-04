@@ -1,0 +1,160 @@
+name: Publish clean Christine share card
+
+on:
+  push:
+    paths:
+      - publish_christine_clean_card_trigger.txt
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-christine-clean-card
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Pillow
+        run: python -m pip install --no-cache-dir "Pillow>=10,<13"
+
+      - name: Generate clean branded card and fresh article URL
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw, ImageFont
+          import re
+
+          assets = Path('assets/img/cards')
+          assets.mkdir(parents=True, exist_ok=True)
+          social = assets / 'christine-newhey-found-safe-social-v5.png'
+          hero = assets / 'christine-newhey-found-safe-hero-v5.png'
+
+          def font(size, bold=False):
+              choices = [
+                  '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf' if bold else '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+                  '/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf' if bold else '/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf',
+              ]
+              for candidate in choices:
+                  if Path(candidate).exists():
+                      return ImageFont.truetype(candidate, size)
+              return ImageFont.load_default()
+
+          def wrap(draw, text, fnt, max_width):
+              words = text.split()
+              lines = []
+              current = ''
+              for word in words:
+                  test = word if not current else current + ' ' + word
+                  if draw.textbbox((0,0), test, font=fnt)[2] <= max_width:
+                      current = test
+                  else:
+                      if current:
+                          lines.append(current)
+                      current = word
+              if current:
+                  lines.append(current)
+              return lines
+
+          def make_card(size, path):
+              w, h = size
+              im = Image.new('RGB', size, '#f4c300')
+              d = ImageDraw.Draw(im)
+              # Header
+              d.rectangle((0, 0, w, int(h*0.20)), fill='#111111')
+              d.text((int(w*0.055), int(h*0.055)), 'ROCHDALE DAILY', font=font(int(h*0.075), True), fill='white')
+              d.text((int(w*0.055), int(h*0.145)), 'GREAT NEWS  •  NEWHY', font=font(int(h*0.035), True), fill='#f4c300')
+              # Main white panel
+              d.rounded_rectangle((int(w*0.045), int(h*0.25), int(w*0.955), int(h*0.91)), radius=int(h*0.035), fill='white')
+              d.rounded_rectangle((int(w*0.07), int(h*0.30), int(w*0.38), int(h*0.43)), radius=int(h*0.025), fill='#137a45')
+              d.text((int(w*0.095), int(h*0.325)), 'FOUND SAFE', font=font(int(h*0.06), True), fill='white')
+
+              headline = 'Elderly lady found after incredible community effort'
+              hf = font(int(h*0.075), True)
+              lines = wrap(d, headline, hf, int(w*0.66))
+              y = int(h*0.48)
+              for line in lines[:3]:
+                  d.text((int(w*0.07), y), line, font=hf, fill='#111111')
+                  y += int(h*0.09)
+
+              sf = font(int(h*0.037), False)
+              d.text((int(w*0.07), int(h*0.83)), 'Hundreds joined the search before Christine was found at around 11pm.', font=sf, fill='#555555')
+
+              # Simple floral motif drawn from scratch, not the damaged photograph.
+              cx, cy = int(w*0.84), int(h*0.55)
+              for dx, dy, colour in [(-55,-35,'#7b2d80'), (0,-70,'#b342a6'), (50,-30,'#6f2c91'), (-25,25,'#9c3d8f'), (45,30,'#7c2c79')]:
+                  x, y0 = cx+dx, cy+dy
+                  d.line((cx, int(h*0.78), x, y0), fill='#2f6e3f', width=max(3,int(w*0.004)))
+                  r = int(w*0.025)
+                  d.ellipse((x-r,y0-r,x+r,y0+r), fill=colour)
+              d.ellipse((cx-int(w*0.07), int(h*0.73), cx+int(w*0.07), int(h*0.83)), fill='#376f44')
+
+              im.save(path, 'PNG', optimize=False, compress_level=6)
+
+          make_card((1200, 630), social)
+          make_card((1280, 720), hero)
+
+          old_page = Path('articles/christine-found-safe-after-newhey-community-search.html')
+          if not old_page.exists():
+              old_page = Path('articles/elderly-lady-found-after-incredible-community-effort-newhey.html')
+          if not old_page.exists():
+              raise SystemExit('Christine article page missing')
+
+          old_text = old_page.read_text(encoding='utf-8')
+          new_slug = 'christine-found-safe-newhey-community-effort'
+          new_url = f'https://rochdaledaily.co.uk/articles/{new_slug}.html'
+          social_url = 'https://rochdaledaily.co.uk/assets/img/cards/christine-newhey-found-safe-social-v5.png'
+          hero_rel = '../assets/img/cards/christine-newhey-found-safe-hero-v5.png'
+
+          text = old_text
+          text = re.sub(r'<link rel="canonical" href="[^"]+">', f'<link rel="canonical" href="{new_url}">', text)
+          text = re.sub(r'(<meta property="og:image" content=")[^"]+("\s*/?>)', r'\1'+social_url+r'\2', text)
+          text = re.sub(r'(<meta name="twitter:image" content=")[^"]+("\s*/?>)', r'\1'+social_url+r'\2', text)
+          text = re.sub(r'(<meta property="og:url" content=")[^"]+("\s*/?>)', r'\1'+new_url+r'\2', text)
+          text = re.sub(r'("image":\[?")[^"]+("\]?)', r'\1'+social_url+r'\2', text, count=1)
+          text = re.sub(r'("mainEntityOfPage":")[^"]+("\s*)', r'\1'+new_url+r'\2', text, count=1)
+          text = re.sub(r'<img src="\.\./assets/img/cards/christine-[^"]+" alt="The bunch of flowers[^"]*">', '<img src="'+hero_rel+'" alt="Rochdale Daily graphic marking the successful Newhey community search">', text)
+          text = text.replace('Christine was found holding a bunch of flowers after the extensive community search. Image submitted to Rochdale Daily.', 'Great news from Newhey after an extraordinary community search. Rochdale Daily graphic.')
+
+          new_page = Path('articles') / f'{new_slug}.html'
+          new_page.write_text(text, encoding='utf-8')
+
+          # Also replace the old pages with the clean card so opening them is no longer corrupted.
+          for page in [Path('articles/elderly-lady-found-after-incredible-community-effort-newhey.html'), Path('articles/christine-found-safe-after-newhey-community-search.html')]:
+              if not page.exists():
+                  continue
+              t = page.read_text(encoding='utf-8')
+              t = re.sub(r'(<meta property="og:image" content=")[^"]+("\s*/?>)', r'\1'+social_url+r'\2', t)
+              t = re.sub(r'(<meta name="twitter:image" content=")[^"]+("\s*/?>)', r'\1'+social_url+r'\2', t)
+              t = re.sub(r'("image":\[?")[^"]+("\]?)', r'\1'+social_url+r'\2', t, count=1)
+              t = re.sub(r'<img src="\.\./assets/img/cards/christine-[^"]+" alt="[^"]*">', '<img src="'+hero_rel+'" alt="Rochdale Daily graphic marking the successful Newhey community search">', t)
+              t = t.replace('Christine was found holding a bunch of flowers after the extensive community search. Image submitted to Rochdale Daily.', 'Great news from Newhey after an extraordinary community search. Rochdale Daily graphic.')
+              page.write_text(t, encoding='utf-8')
+
+          Path('publish_christine_clean_card_trigger.txt').unlink(missing_ok=True)
+          Path('.github/workflows/publish-christine-clean-card.yml').unlink()
+          PY
+
+      - name: Validate and publish
+        run: |
+          test -s assets/img/cards/christine-newhey-found-safe-social-v5.png
+          test -s assets/img/cards/christine-newhey-found-safe-hero-v5.png
+          test -s articles/christine-found-safe-newhey-community-effort.html
+          grep -q 'christine-newhey-found-safe-social-v5.png' articles/christine-found-safe-newhey-community-effort.html
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Publish clean Christine community search card"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
