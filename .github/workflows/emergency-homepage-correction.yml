@@ -1,0 +1,51 @@
+name: Emergency homepage correction
+on:
+  push:
+    paths: [emergency_homepage_correction.txt]
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Correct record and rebuild
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          slug='new-stone-circle-installed-near-rochdale'
+          title='Stone Circle Near Rochdale Is a Long-Standing Local Landmark'
+          excerpt='The stone circle near Stoney Heys and Brownhouse Wham Reservoir has been familiar to local residents and walkers for many years.'
+          body='<p><strong>Correction:</strong> An earlier version incorrectly described the stone circle as newly installed. Local residents have confirmed that it has stood near Stoney Heys and Brownhouse Wham Reservoir for many years. Rochdale Daily apologises for the error.</p><p>The stone circle is a long-standing local landmark familiar to walkers and residents in the Healey and Shawclough area.</p>'
+          def walk(x):
+            changed=False
+            if isinstance(x,dict):
+              if x.get('slug')==slug:
+                x.update(title=title,excerpt=excerpt,summary=excerpt,content_html=body,source_name='Rochdale Daily',source_url='',source_names=['Rochdale Daily'],source_urls=[],social_context_used=False,social_context_note='',publication_route='editorial-correction',editorial_lock=True,rewrite_quality_checked=True)
+                changed=True
+              for v in x.values(): changed=walk(v) or changed
+            elif isinstance(x,list):
+              for v in x: changed=walk(v) or changed
+            return changed
+          paths=[Path('articles.json'),Path('manual_articles.json'),Path('articles/frontpage.json')]+list(Path('articles/areas').glob('*.json'))+list(Path('articles/categories').glob('*.json'))
+          for p in paths:
+            if not p.exists(): continue
+            try: data=json.loads(p.read_text())
+            except Exception: continue
+            if walk(data): p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          PY
+          python scraper/generate_pages.py
+          if grep -R "New Stone Circle Installed Near Rochdale" index.html articles/frontpage.json articles.json; then exit 1; fi
+      - name: Commit
+        run: |
+          git config user.name 'Rochdale Daily Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          rm -f emergency_homepage_correction.txt
+          git add -A index.html articles.json manual_articles.json articles sitemap.xml emergency_homepage_correction.txt
+          git commit -m 'Correct stone circle story on homepage and feeds'
+          git pull --rebase origin main
+          git push origin HEAD:main
