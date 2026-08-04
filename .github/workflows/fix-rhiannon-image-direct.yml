@@ -1,0 +1,90 @@
+name: Fix Rhiannon image directly
+
+on:
+  push:
+    paths:
+      - fix_rhiannon_image_trigger.txt
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch published image references
+        run: |
+          python - <<'PY'
+          import json, re
+          from pathlib import Path
+
+          slug = 'heywood-singer-songwriter-rhiannon-thompson-releases-debut-single-rewind'
+          image = 'assets/img/cards/rhiannon-thompson-rewind-debut.jpeg'
+
+          def patch_obj(obj):
+              changed = False
+              if isinstance(obj, dict):
+                  if obj.get('slug') == slug:
+                      if obj.get('image_url') != image:
+                          obj['image_url'] = image
+                          changed = True
+                      if obj.get('img') != image:
+                          obj['img'] = image
+                          changed = True
+                      obj['image_credit'] = 'Rhiannon Thompson'
+                  for v in obj.values():
+                      changed = patch_obj(v) or changed
+              elif isinstance(obj, list):
+                  for v in obj:
+                      changed = patch_obj(v) or changed
+              return changed
+
+          json_paths = [Path('articles.json'), Path('articles/frontpage.json')]
+          json_paths += list(Path('articles/areas').glob('*.json'))
+          json_paths += list(Path('articles/categories').glob('*.json'))
+          for path in json_paths:
+              if not path.exists():
+                  continue
+              try:
+                  data = json.loads(path.read_text(encoding='utf-8'))
+              except Exception:
+                  continue
+              if patch_obj(data):
+                  path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          html_path = Path('articles') / f'{slug}.html'
+          if html_path.exists():
+              text = html_path.read_text(encoding='utf-8')
+              absolute = 'https://rochdaledaily.co.uk/' + image
+              text = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{absolute}">', text)
+              text = re.sub(r'<meta name="twitter:image" content="[^"]*">', f'<meta name="twitter:image" content="{absolute}">', text)
+              marker = "Heywood singer-songwriter releases heartfelt debut single"
+              pos = text.find(marker)
+              if pos >= 0:
+                  before, after = text[:pos], text[pos:]
+                  after = re.sub(r'(<img[^>]+src=")[^"]+("[^>]*>)', rf'\1../{image}\2', after, count=1)
+                  text = before + after
+              html_path.write_text(text, encoding='utf-8')
+
+          trigger = Path('fix_rhiannon_image_trigger.txt')
+          if trigger.exists():
+              trigger.unlink()
+          PY
+
+      - name: Commit direct image fix
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A articles.json articles fix_rhiannon_image_trigger.txt
+          if git diff --cached --quiet; then
+            echo "No files changed"
+            exit 1
+          fi
+          git commit -m "Fix Rhiannon Thompson article image"
+          git pull --rebase origin main
+          git push origin HEAD:main
