@@ -1,6 +1,9 @@
 name: Localise GP survey article image
 
 on:
+  push:
+    paths:
+      - gp_image_trigger.txt
   workflow_dispatch:
   schedule:
     - cron: "*/5 * * * *"
@@ -9,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: rochdale-daily-15-minute-scraper
+  group: gp-survey-image-localiser
   cancel-in-progress: false
 
 jobs:
@@ -76,6 +79,7 @@ jobs:
               encoding="utf-8",
           )
           json.loads(target.read_text(encoding="utf-8"))
+          Path("gp_image_trigger.txt").unlink(missing_ok=True)
           Path(".github/workflows/publish-gp-survey-one-off.yml").unlink()
           PY
 
