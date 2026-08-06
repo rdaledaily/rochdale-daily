@@ -719,3 +719,9 @@
       width: 100%; max-width: 100%; min-height: 0; height: auto;
     }
     .ad-slot.ad-live::after { content: none; }
+
+/* Article hero image (rendered by hero_image_markup in generate_pages.py) */
+.article-hero-image{margin:18px 0 22px}
+.article-hero-image img{display:block;width:100%;height:auto;max-height:560px;object-fit:cover;background:#e8e8e8}
+.article-image-credit{margin-top:6px;font-size:12px;color:#6a6a6a}
+.article-image-credit a{color:inherit}
