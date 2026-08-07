@@ -139,6 +139,31 @@ def check_manual_articles() -> None:
         if str(entry.get("right_to_reply") or "").lower().startswith("right to reply"):
             note(where, 'right_to_reply repeats the "Right to reply:" label the page already prints')
 
+        corrections = entry.get("corrections")
+        if corrections is not None:
+            if not isinstance(corrections, list):
+                fail(where, '"corrections" must be a list of {"date", "note"} objects — '
+                            "any other shape is silently ignored")
+            else:
+                for c_index, item in enumerate(corrections):
+                    c_where = f"{where} corrections[{c_index}]"
+                    if isinstance(item, str):
+                        check_text(c_where, "note", item)
+                        note(c_where, "correction has no date; the page will say "
+                                      '"This article has been amended" without one')
+                        continue
+                    if not isinstance(item, dict):
+                        fail(c_where, "entry must be an object or a string — it will be dropped")
+                        continue
+                    text = str(item.get("note") or item.get("text") or "").strip()
+                    if not text:
+                        fail(c_where, 'missing "note" — this correction will be dropped silently')
+                    check_text(c_where, "note", text)
+                    date = str(item.get("date") or "").strip()
+                    if date and not re.match(r"^\d{4}-\d{2}-\d{2}", date):
+                        fail(c_where, f'date "{date}" is not YYYY-MM-DD — it will sort as '
+                                      "undated and print no date on the page")
+
         slug = str(entry.get("slug") or "")
         if slug:
             if slug in slugs:
@@ -262,6 +287,61 @@ def check_card_aliases() -> None:
     note(path.name, f"{groups} alias group(s)")
 
 
+def check_live_updates(name: str = "feel-good-live.json") -> None:
+    """Live coverage feeds are hand-edited mid-event, under time pressure —
+    exactly when a stray comma is most likely and least affordable. The page
+    JS catches a bad file and keeps showing the last good render, so like
+    manual_articles.json the failure is silent: a green commit and an update
+    that never appears."""
+    from datetime import datetime, timezone
+
+    path = REPO_ROOT / name
+    if not path.exists():
+        return
+    data = load(path)
+    if data is None:
+        return
+    if not isinstance(data, dict):
+        fail(name, 'top level must be an object: { "title": ..., "status": ..., "updates": [ ... ] }')
+        return
+
+    status = str(data.get("status") or "").lower()
+    if status and status not in {"upcoming", "live", "ended"}:
+        note(name, f'status "{status}" is not upcoming/live/ended; the page will treat it as ended')
+
+    updates = data.get("updates")
+    if not isinstance(updates, list):
+        fail(name, '"updates" must be a list')
+        return
+    now = datetime.now(timezone.utc)
+    for index, item in enumerate(updates):
+        where = f"{name}[{index}]"
+        if not isinstance(item, dict):
+            fail(where, "update is not an object")
+            continue
+        if item.get("draft"):
+            continue  # inline template — the page skips it too
+        if not str(item.get("body") or "").strip():
+            fail(where, 'missing "body" — this update will render empty')
+        for field in ("title", "body"):
+            check_text(where, field, item.get(field))
+        time_value = str(item.get("time") or "").strip()
+        if time_value:
+            try:
+                parsed = datetime.fromisoformat(time_value.replace("Z", "+00:00"))
+                if parsed.tzinfo is None:
+                    note(where, f'time "{time_value}" has no timezone; it will be read as UTC, '
+                                "which is an hour behind UK time in August")
+                elif (parsed - now).total_seconds() > 3600:
+                    note(where, f'time "{time_value}" is in the future')
+            except ValueError:
+                fail(where, f'time "{time_value}" is not an ISO timestamp '
+                            '(use e.g. "2026-08-08T14:30:00+01:00")')
+        else:
+            note(where, "update has no time; it will show without a timestamp")
+    note(name, f"{len(updates)} update(s), status {status or 'unset'}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate hand-edited data files.")
     parser.add_argument("--warn-only", action="store_true",
@@ -272,6 +352,7 @@ def main() -> int:
     check_adverts()
     check_card_aliases()
     check_ward_map()
+    check_live_updates()
     check_simple("manual_events.json")
     check_simple("story_blocklist.json", key=None)
     check_simple("council_roster.json", key="councillors")

@@ -1,0 +1,46 @@
+# Rochdale Daily — ModernGov access diagnostic.
+#
+# Run manually from the Actions tab ("Run workflow") before building the
+# council voting-records collector. It fetches a handful of public ModernGov
+# pages two ways (plain requests, then Playwright/Chromium), classifies what
+# comes back, and uploads the page dumps plus a summary as an artifact.
+# Read moderngov_probe_out/summary.txt in the artifact for the verdict.
+#
+# Read-only: nothing on the site changes, nothing is committed.
+
+name: ModernGov diagnostic
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install requests playwright
+          playwright install --with-deps chromium
+
+      - name: Run diagnostic
+        run: python scraper/moderngov_probe.py
+
+      - name: Upload findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moderngov-probe-results
+          path: moderngov_probe_out/
+          retention-days: 14

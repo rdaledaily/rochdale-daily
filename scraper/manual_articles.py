@@ -171,6 +171,28 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     if entry.get("right_to_reply"):
         record["right_to_reply"] = _clean(entry.get("right_to_reply"))
 
+    # Published corrections: [{"date": "YYYY-MM-DD", "note": "..."}]. A bare
+    # string is accepted as an undated note. Empty notes are dropped so a
+    # half-filled template never renders an empty amendment box. These flow
+    # through to the page footer's corrections block, the article's JSON-LD
+    # and the public /corrections-log.html.
+    raw_corrections = entry.get("corrections")
+    if isinstance(raw_corrections, list):
+        cleaned_corrections: list[dict[str, str]] = []
+        for item in raw_corrections:
+            if isinstance(item, str):
+                text = _clean(item)
+                if text:
+                    cleaned_corrections.append({"date": "", "note": text})
+            elif isinstance(item, dict):
+                text = _clean(item.get("note") or item.get("text"))
+                if text:
+                    cleaned_corrections.append(
+                        {"date": _clean(item.get("date")), "note": text}
+                    )
+        if cleaned_corrections:
+            record["corrections"] = cleaned_corrections
+
     # Editorial pinning. `featured: true` places the piece at the top of the
     # homepage; `frontpage_until` keeps it there past the normal age cutoff.
     # Without frontpage_until it leads only while it is recent enough to be
