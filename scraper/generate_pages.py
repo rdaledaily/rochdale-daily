@@ -149,8 +149,81 @@ def first_published_at(article: dict[str, Any]) -> str:
 
 
 def last_modified_at(article: dict[str, Any]) -> str:
-    """Return the most recent meaningful article modification timestamp."""
-    return str(article.get("last_updated_at") or first_published_at(article))
+    """Return the most recent meaningful article modification timestamp.
+
+    A published correction is a modification, so the newest correction date
+    counts alongside last_updated_at. This keeps the sitemap lastmod,
+    article:modified_time and JSON-LD dateModified honest without the editor
+    having to remember to bump last_updated_at when logging a correction.
+    """
+    candidates = [str(article.get("last_updated_at") or first_published_at(article))]
+    candidates.extend(item["date"] for item in article_corrections(article) if item["date"])
+    return max(candidates, key=parse_iso)
+
+
+def article_corrections(article: dict[str, Any]) -> list[dict[str, str]]:
+    """Return the article's published corrections as [{date, note}], newest first.
+
+    Tolerant of hand-edited shapes: a bare string becomes an undated note, and
+    "text" is accepted as an alias for "note". Entries without any note text
+    are dropped rather than rendered empty.
+    """
+    raw = article.get("corrections")
+    if not isinstance(raw, list):
+        return []
+    cleaned: list[dict[str, str]] = []
+    for item in raw:
+        if isinstance(item, str):
+            text = item.strip()
+            if text:
+                cleaned.append({"date": "", "note": text})
+        elif isinstance(item, dict):
+            text = str(item.get("note") or item.get("text") or "").strip()
+            if text:
+                cleaned.append({"date": str(item.get("date") or "").strip(), "note": text})
+    cleaned.sort(key=lambda item: parse_iso(item["date"]), reverse=True)
+    return cleaned
+
+
+def format_correction_date(value: str) -> str:
+    """Render a correction date as '7 August 2026'; empty stays empty."""
+    parsed = parse_iso(value)
+    if parsed == datetime.min.replace(tzinfo=timezone.utc):
+        return ""
+    formatted = parsed.strftime("%d %B %Y")
+    return formatted.lstrip("0")
+
+
+def corrections_markup(article: dict[str, Any]) -> str:
+    """Foot-of-article corrections block, in the style of a printed paper's
+    corrections column: each amendment dated and stated plainly. Rendered only
+    when the record carries corrections, so ordinary articles are untouched."""
+    corrections = article_corrections(article)
+    if not corrections:
+        return ""
+    items = []
+    for item in corrections:
+        date_label = format_correction_date(item["date"])
+        prefix = (
+            f"<strong>This article was amended on {esc(date_label)}.</strong> "
+            if date_label
+            else "<strong>This article has been amended.</strong> "
+        )
+        items.append(f"<p>{prefix}{esc(item['note'])}</p>")
+    return (
+        '<section class="article-corrections" '
+        'style="margin-top:24px;padding:18px;border-left:8px solid #f5c400;'
+        'border:1px solid #e5d089;border-left-width:8px;border-left-color:#f5c400;'
+        'background:#fdf6dc">'
+        '<h3 style="margin:0 0 8px">Corrections and clarifications</h3>'
+        + "".join(items)
+        + '<p style="margin:10px 0 0;font-size:13px">'
+        'All significant corrections are recorded in our '
+        '<a href="/corrections-log.html">public corrections log</a>. '
+        'Spotted an error? See '
+        '<a href="/corrections-and-complaints.html">how to request a correction</a>.'
+        "</p></section>"
+    )
 
 
 def explicit_blocked_slugs(path: Path = BLOCKLIST_JSON) -> set[str]:
@@ -325,7 +398,7 @@ def share_icons_markup(canonical_url: str, title: str) -> str:
 
 def json_ld(article: dict[str, Any], canonical_url: str, image_url: str) -> str:
     published = article.get("first_published_at") or article.get("published_at") or article.get("scraped_at") or ""
-    modified = article.get("last_updated_at") or article.get("scraped_at") or published
+    modified = last_modified_at(article) or article.get("scraped_at") or published
     area = str(article.get("area") or "rochdale").replace("_", " ").title()
     category = str(article.get("category") or "news").lower()
     graph = {
@@ -360,6 +433,20 @@ def json_ld(article: dict[str, Any], canonical_url: str, image_url: str) -> str:
                 },
                 "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
                 "contentLocation": {"@type": "Place", "name": area},
+                **(
+                    {
+                        "correction": [
+                            {
+                                "@type": "CorrectionComment",
+                                "text": item["note"],
+                                **({"datePublished": item["date"]} if item["date"] else {}),
+                            }
+                            for item in article_corrections(article)
+                        ]
+                    }
+                    if article_corrections(article)
+                    else {}
+                ),
             },
             {
                 "@type": "BreadcrumbList",
@@ -435,7 +522,7 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
             "This is a developing story. We'll publish more details as they emerge."
             '</p>'
         )
-    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="index,follow,max-image-preview:large">\n  <title>{esc(title)} | Rochdale Daily</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">\n  <style>{SITE_CSS}</style>\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(article.get("last_updated_at") or article.get("scraped_at") or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  <header class="masthead">\n    <div class="wrap masthead-row">\n      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">\n        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>\n      </a>\n      <div class="masthead-actions">\n        <a class="header-button" href="../index.html">All stories</a>\n      </div>\n    </div>\n  </header>\n\n  <div class="modal-card" style="margin:24px auto;box-shadow:none">\n    <div class="article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="../index.html#{esc(category)}">{esc(category_label(category))}</a></nav>\n          <span class="story-kicker">{esc(category_label(category))}</span>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          {developing_note}\n          <div class="article-byline">By {byline}</div>\n          {share_icons_markup(canonical_url, title)}\n          {hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">\n            <h3 style="margin:0 0 8px">Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n          <section class="comments-section" id="comments-root" data-slug="{esc(slug)}" data-category="{esc(category)}"></section>\n        </div>\n        <aside class="article-sidebar">\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>\n          {related_stories_markup(article, all_articles)}\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n      </script>\n  <script defer src="/assets/js/article-comments.js"></script>\n  <script defer src="/assets/js/cookie-consent.js"></script>\n  <script defer src="/assets/ads.js"></script>\n</body>\n</html>\n'''
+    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="index,follow,max-image-preview:large">\n  <title>{esc(title)} | Rochdale Daily</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">\n  <style>{SITE_CSS}</style>\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(article.get("last_updated_at") or article.get("scraped_at") or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  <header class="masthead">\n    <div class="wrap masthead-row">\n      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">\n        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>\n      </a>\n      <div class="masthead-actions">\n        <a class="header-button" href="../index.html">All stories</a>\n      </div>\n    </div>\n  </header>\n\n  <div class="modal-card" style="margin:24px auto;box-shadow:none">\n    <div class="article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="../index.html#{esc(category)}">{esc(category_label(category))}</a></nav>\n          <span class="story-kicker">{esc(category_label(category))}</span>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          {developing_note}\n          <div class="article-byline">By {byline}</div>\n          {share_icons_markup(canonical_url, title)}\n          {hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">\n            <h3 style="margin:0 0 8px">Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n          <section class="comments-section" id="comments-root" data-slug="{esc(slug)}" data-category="{esc(category)}"></section>\n        </div>\n        <aside class="article-sidebar">\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>\n          {related_stories_markup(article, all_articles)}\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n      </script>\n  <script defer src="/assets/js/article-comments.js"></script>\n  <script defer src="/assets/js/cookie-consent.js"></script>\n  <script defer src="/assets/ads.js"></script>\n</body>\n</html>\n'''
 
 def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
     if not ARTICLES_JSON.exists():
@@ -460,9 +547,116 @@ def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
         published.append(article)
     return published
 
+CORRECTIONS_LOG_PATH = Path(os.getenv('CORRECTIONS_LOG_PATH', 'corrections-log.html'))
+
+
+def write_corrections_log(articles: list[dict[str, Any]]) -> int:
+    """Generate the public corrections log at /corrections-log.html.
+
+    One entry per published correction across the live archive, newest first,
+    each linking back to the corrected article. Regenerated every run, so a
+    correction added to a manual article appears here on the next publish with
+    no separate step. Styled to match the hand-built trust pages. The page is
+    written even when there are no corrections, so the URL never 404s.
+
+    Scope note: the log covers records present in articles.json. Corrections
+    on pages that have since aged out of the JSON archive remain visible on
+    the article pages themselves.
+    """
+    entries: list[tuple[str, str, str, str]] = []  # (sort_date, date_label, note, slug/title html bits)
+    rows: list[tuple[Any, str]] = []
+    for article in articles:
+        title = str(article.get("title") or "Local news update")
+        slug = str(article.get("slug") or "")
+        for item in article_corrections(article):
+            date_label = format_correction_date(item["date"])
+            row_html = (
+                '<li class="log-entry">'
+                + (f'<span class="log-date">{esc(date_label)}</span>' if date_label else '<span class="log-date">Date not recorded</span>')
+                + f'<a class="log-title" href="/articles/{esc(slug)}.html">{esc(title)}</a>'
+                + f'<p class="log-note">{esc(item["note"])}</p>'
+                + "</li>"
+            )
+            rows.append((parse_iso(item["date"]), row_html))
+    rows.sort(key=lambda pair: pair[0], reverse=True)
+    if rows:
+        body = '<ol class="log-list">' + "".join(html_row for _, html_row in rows) + "</ol>"
+    else:
+        body = "<p><em>No corrections are currently recorded against articles in the live archive.</em></p>"
+    count = len(rows)
+    page = f'''<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index,follow">
+  <title>Corrections log | Rochdale Daily</title>
+  <meta name="description" content="Every significant published correction to Rochdale Daily articles, dated and stated in full, most recent first.">
+  <link rel="canonical" href="{esc(SITE_BASE_URL)}/corrections-log.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <style>
+    .trust-wrap{{max-width:760px;margin:0 auto;padding:36px 20px 64px}}
+    .trust-kicker{{font-family:"Roboto Condensed",Arial,sans-serif;font-size:13px;font-weight:800;
+      letter-spacing:.14em;text-transform:uppercase;color:#8a6d00;border-bottom:4px solid #f5c400;
+      display:inline-block;padding-bottom:6px;margin-bottom:14px}}
+    .trust-wrap h1{{font-family:"Roboto Condensed",Arial,sans-serif;font-size:clamp(30px,5vw,44px);
+      line-height:1.05;letter-spacing:-.01em;margin:0 0 10px}}
+    .trust-standfirst{{font-size:19px;line-height:1.55;color:#333;margin:0 0 26px}}
+    .trust-wrap p{{font-size:16px;line-height:1.65;color:#1c1c1c}}
+    .log-list{{list-style:none;margin:26px 0 0;padding:0}}
+    .log-entry{{border-top:3px solid #111;padding:18px 0 22px}}
+    .log-date{{display:block;font-family:"Roboto Condensed",Arial,sans-serif;font-size:13px;font-weight:800;
+      letter-spacing:.1em;text-transform:uppercase;color:#8a6d00;margin-bottom:6px}}
+    .log-title{{font-family:"Roboto Condensed",Arial,sans-serif;font-size:20px;font-weight:700;color:#111;
+      text-decoration:none;line-height:1.25}}
+    .log-title:hover{{text-decoration:underline}}
+    .log-note{{margin:8px 0 0;font-size:16px;line-height:1.6;color:#1c1c1c}}
+    .trust-meta{{font-size:13px;color:#666;border-top:1px solid #ddd;padding-top:14px;margin-top:40px}}
+    .masthead{{background:#111}}
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap masthead-row" style="max-width:760px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+      <a class="brand" href="/" aria-label="Rochdale Daily home" style="color:#fff;text-decoration:none;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em">ROCHDALE <span style="color:#f5c400">DAILY</span></a>
+      <a href="/" style="color:#f5c400;text-decoration:none;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:700;font-size:13px;text-transform:uppercase">All stories</a>
+    </div>
+  </header>
+  <main class="trust-wrap">
+    <span class="trust-kicker">Accountability</span>
+    <h1>Corrections log</h1>
+    <p class="trust-standfirst">When we amend a published article to correct an error, the correction is dated, stated in full on the article itself, and recorded here — most recent first. Publishing our mistakes is part of earning your trust.</p>
+    <p>To request a correction, see <a href="/corrections-and-complaints.html">corrections &amp; complaints</a>.</p>
+    {body}
+    <p class="trust-meta">This page is regenerated automatically each publishing run and currently records {count} correction(s). It covers articles in the live archive; older corrected articles keep their correction notices on the article page itself.</p>
+  </main>
+  <footer style="background:#111;color:#cfcfcf;padding:26px 20px;font-size:13px">
+    <div style="max-width:760px;margin:0 auto">
+      <p style="margin:0 0 8px"><strong style="color:#fff">Rochdale Daily</strong> — independent local news for the Rochdale borough.</p>
+      <p style="margin:0">
+        <a href="/about.html" style="color:#f5c400;text-decoration:none">About</a> &nbsp;·&nbsp;
+        <a href="/editorial-standards.html" style="color:#f5c400;text-decoration:none">Editorial standards</a> &nbsp;·&nbsp;
+        <a href="/corrections-and-complaints.html" style="color:#f5c400;text-decoration:none">Corrections &amp; complaints</a> &nbsp;·&nbsp;
+        <a href="/contact.html" style="color:#f5c400;text-decoration:none">Contact</a> &nbsp;&middot;&nbsp;
+        <a href="/privacy.html" style="color:#f5c400;text-decoration:none">Privacy</a>
+      </p>
+    </div>
+  </footer>
+  <script defer src="/assets/js/cookie-consent.js"></script>
+</body>
+</html>
+'''
+    CORRECTIONS_LOG_PATH.write_text(page, encoding='utf-8')
+    return count
+
+
 def write_sitemap(slugs_with_dates: list[tuple[str, str]]) -> None:
     now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-    entries = [f'  <url><loc>{esc(SITE_BASE_URL)}/</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>']
+    entries = [f'  <url><loc>{esc(SITE_BASE_URL)}/</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>',
+               f'  <url><loc>{esc(SITE_BASE_URL)}/corrections-log.html</loc><changefreq>daily</changefreq></url>']
     for slug, lastmod in slugs_with_dates:
         loc = f'<loc>{esc(SITE_BASE_URL)}/articles/{esc(slug)}.html</loc>'
         if lastmod:
@@ -525,6 +719,7 @@ def main() -> None:
     live_slugs = {slug for slug, _ in slugs_with_dates}
     scrubbed = scrub_legacy_comment_markup(OUTPUT_DIR, live_slugs)
     remastheaded = modernise_archived_masthead(OUTPUT_DIR, live_slugs)
+    corrections_logged = write_corrections_log(articles)
     archived = 0
     for path in sorted(OUTPUT_DIR.glob('*.html')):
         if path.stem in live_slugs:
@@ -539,7 +734,8 @@ def main() -> None:
         f"{deleted_takedowns} blocklisted page(s) deleted, "
         f"{scrubbed} archived page(s) scrubbed of legacy comment markup; "
         f"{remastheaded} archived page(s) updated to the current masthead; "
-        f"sitemap has {len(slugs_with_dates) + 1} URL(s)."
+        f"corrections log has {corrections_logged} entrie(s); "
+        f"sitemap has {len(slugs_with_dates) + 2} URL(s)."
     )
 if __name__ == '__main__':
     main()
