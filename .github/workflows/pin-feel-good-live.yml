@@ -1,0 +1,98 @@
+name: Pin Feel Good live page to homepage
+
+on:
+  push:
+    paths:
+      - pin_feel_good_live.txt
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pin-live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Put live festival coverage first
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          path = Path('articles/frontpage.json')
+          data = json.loads(path.read_text())
+          articles = list(data.get('articles') or [])
+
+          live_id = 'feel-good-festival-2026-live'
+          articles = [a for a in articles if a.get('id') != live_id]
+
+          # Preserve the existing order but move every current card down one.
+          for i, article in enumerate(articles, start=1):
+              article['frontpage_rank'] = i
+              if i == 1:
+                  article['slot'] = 'secondary-1'
+              elif i == 2:
+                  article['slot'] = 'secondary-2'
+              elif article.get('slot') in {'lead', 'secondary-1', 'secondary-2'}:
+                  article['slot'] = 'latest'
+
+          now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00', 'Z')
+          live = {
+              'id': live_id,
+              'slug': '../feel-good-live',
+              'story_key': 'editorial:feel-good-festival-2026-live',
+              'title': 'LIVE: Feel Good Festival 2026 — OMD, after-party and updates from Rochdale',
+              'excerpt': 'Follow Rochdale Daily’s live Feel Good Festival coverage as OMD headline Town Hall Square, with Peter Hook & The Light, A Certain Ratio, the Moody Blue after-party and updates throughout the weekend.',
+              'content_html': '<p>Follow Rochdale Daily’s rolling live coverage of Feel Good Festival 2026, including tonight’s OMD headline show, Peter Hook & The Light, A Certain Ratio, the Moody Blue after-party and updates from across Rochdale town centre.</p>',
+              'area': 'rochdale',
+              'category': 'events',
+              'types': ['events'],
+              'source_kind': 'editorial',
+              'status': 'published',
+              'published_at': now,
+              'first_published_at': now,
+              'last_updated_at': now,
+              'scraped_at': now,
+              'source_name': 'Rochdale Daily',
+              'source_url': 'https://rochdaledaily.co.uk/feel-good-live.html',
+              'source_names': ['Rochdale Daily'],
+              'source_urls': ['https://rochdaledaily.co.uk/feel-good-live.html'],
+              'image_url': 'assets/img/category_events.svg',
+              'image_credit': 'Rochdale Daily',
+              'byline': 'Rochdale Daily',
+              'manual_article': True,
+              'editorial_lock': True,
+              'publication_route': 'editorial-live',
+              'rewrite_quality_checked': True,
+              'featured': True,
+              'is_ongoing': True,
+              'ongoing_label': 'LIVE',
+              'update_count': 4,
+              'frontpage_rank': 0,
+              'frontpage_priority': 10000,
+              'slot': 'lead'
+          }
+
+          articles.insert(0, live)
+          data['articles'] = articles
+          data['count'] = len(articles)
+          data['generated_at'] = now
+          live_breaking = 'LIVE: Feel Good Festival 2026 — OMD, after-party and updates from Rochdale'
+          existing = str(data.get('breaking') or '').strip()
+          data['breaking'] = live_breaking + (('     •     BREAKING     •     ' + existing) if existing and live_breaking not in existing else '')
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+          PY
+      - name: Commit homepage pin
+        run: |
+          git config user.name 'Rochdale Daily Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          rm -f pin_feel_good_live.txt
+          git add articles/frontpage.json pin_feel_good_live.txt
+          git commit -m 'Pin Feel Good Festival live coverage to homepage'
+          git pull --rebase origin main
+          git push origin HEAD:main
