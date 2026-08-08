@@ -1,20 +1,11 @@
 name: Rochdale Daily pipeline tests
 
-# The compile checks and test suite used to run on every 15-minute scrape,
-# where they cost time on every single run and told you nothing new unless
-# the code had changed. They belong on push, plus a daily run to catch
-# breakage from changing upstream data rather than changing code.
-
 on:
   workflow_dispatch:
   push:
-    branches: [main]
     paths:
       - "scraper/**"
       - "requirements.txt"
-      # The hand-edited data files. Without these, editing manual_articles.json
-      # through the web interface ran no checks at all - which is exactly how a
-      # trailing comma reached the live site five times in one day.
       - "manual_articles.json"
       - "manual_events.json"
       - "adverts.json"
@@ -37,39 +28,27 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
           cache-dependency-path: "requirements.txt"
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-
       - name: Verify Python dependencies
         run: |
           python - <<'PY'
-          import bs4
-          import dateparser
-          import feedparser
-          import lxml
-          import openai
-          import requests
+          import bs4, dateparser, feedparser, lxml, openai, requests
           from PIL import Image
           from playwright.sync_api import sync_playwright
           print("Dependency verification passed.")
           print("Pillow version:", Image.__version__)
           PY
-
       - name: Compile pipeline modules
         run: |
           python -m py_compile \
@@ -81,6 +60,8 @@ jobs:
             scraper/house_style.py \
             scraper/editorial_upgrade.py \
             scraper/source_presentation.py \
+            scraper/source_registry.py \
+            scraper/pipeline_health.py \
             scraper/generate_pages.py \
             scraper/food_hygiene.py \
             scraper/frontpage_pipeline.py \
@@ -88,14 +69,8 @@ jobs:
             scraper/resolve_google_news_sources.py \
             scraper/ensure_article_images.py \
             scraper/scraper.py
-
-      # Hand-edited data files fail silently at runtime: manual_articles.py
-      # returns an empty list on a parse error, so one stray comma removes every
-      # manual article from the site with no error anywhere. This turns that
-      # into a failed check naming the file and the line.
       - name: Validate hand-edited data files
         run: python scraper/check_data_files.py
-
       - name: Run test suite
         run: |
           python scraper/test_frontpage_pipeline.py
@@ -111,7 +86,8 @@ jobs:
           python scraper/test_article_gate.py
           python scraper/test_resolve_google_news_sources.py
           python scraper/test_ensure_article_images.py
-
+          python scraper/test_pipeline_health.py
+          python scraper/test_source_registry.py
       - name: Verify scraper imports cleanly
         run: |
           cd scraper
