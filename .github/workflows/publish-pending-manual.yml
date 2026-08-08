@@ -1,0 +1,100 @@
+name: Publish pending manual articles
+
+on:
+  push:
+    paths:
+      - 'pending_manual_*.json'
+      - 'manual_publish_trigger.txt'
+      - '.github/workflows/publish-pending-manual.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: manual-article-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Merge pending manual articles
+        run: |
+          python - <<'PY'
+          import glob, json, os
+          from datetime import datetime
+
+          target = 'manual_articles.json'
+          with open(target, encoding='utf-8') as f:
+              existing = json.load(f)
+
+          pending_files = sorted(glob.glob('pending_manual_*.json'))
+          pending = []
+          for path in pending_files:
+              with open(path, encoding='utf-8') as f:
+                  data = json.load(f)
+              if isinstance(data, list):
+                  pending.extend(data)
+              elif isinstance(data, dict):
+                  pending.append(data)
+              else:
+                  raise ValueError(f'Unsupported JSON in {path}')
+
+          if not pending:
+              print('No pending manual articles found.')
+          else:
+              pending_ids = {x.get('id') for x in pending if x.get('id')}
+              pending_slugs = {x.get('slug') for x in pending if x.get('slug')}
+              existing = [x for x in existing if x.get('id') not in pending_ids and x.get('slug') not in pending_slugs]
+
+              def stamp(x):
+                  return x.get('published_at') or x.get('last_updated_at') or ''
+
+              pending.sort(key=stamp, reverse=True)
+              merged = pending + existing
+              with open(target, 'w', encoding='utf-8') as f:
+                  json.dump(merged, f, ensure_ascii=False, indent=2)
+                  f.write('\n')
+
+              for path in pending_files:
+                  os.remove(path)
+
+          if os.path.exists('manual_publish_trigger.txt'):
+              os.remove('manual_publish_trigger.txt')
+          PY
+
+      - name: Validate JSON
+        run: python -m json.tool manual_articles.json > /dev/null
+
+      - name: Install site dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+
+      - name: Rebuild article pages and sitemap
+        run: |
+          python scraper/article_gate.py articles.json
+          python scraper/generate_pages.py
+
+      - name: Commit published articles and rebuilt pages
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A manual_articles.json pending_manual_*.json manual_publish_trigger.txt articles sitemap.xml scraper_status.json event_dates.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo 'Nothing changed.'
+            exit 0
+          fi
+          git commit -m 'Publish pending manual articles'
+          git push
