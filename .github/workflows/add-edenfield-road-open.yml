@@ -1,0 +1,48 @@
+name: Add Edenfield Road open article
+on:
+  push:
+    paths:
+      - add_edenfield_road_open.txt
+permissions:
+  contents: write
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Add article
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('manual_articles.json')
+          data=json.loads(p.read_text())
+          article={
+            'id':'edenfield-road-norden-reopens-early-20260808',
+            'title':'Edenfield Road reopens early after resurfacing work completed ahead of schedule',
+            'slug':'edenfield-road-norden-reopens-early-resurfacing-completed',
+            'category':'traffic','area':'norden','byline':'Rochdale Daily',
+            'excerpt':'Edenfield Road between the White Lion and Nutters has reopened early after contractors completed resurfacing and lining work ahead of schedule.',
+            'img':'assets/img/cards/edenfield-road-norden.jpg',
+            'body':"Edenfield Road between the White Lion and Nutters has reopened to traffic after resurfacing works were completed ahead of schedule.\n\nNorden councillor Paul Ellison MBE confirmed on Saturday that the road is now open and that the road closure which had been expected on Sunday will no longer be required.\n\nContractors completed the main resurfacing work early, with Saturday seeing the final road-lining work carried out. Cat's-eye road studs are due to be fitted on Monday, but the road itself has reopened.\n\nCouncillor Ellison thanked Rochdale Borough Council, A&T Surfacing and Rhodes & Son Construction for completing the scheme ahead of schedule, describing the finished work as a fantastic job.\n\nThe reopening will be welcome news for residents and motorists using one of the principal routes through Norden. The works had required traffic restrictions while the carriageway was resurfaced, with further closure time originally expected over the weekend.\n\nWith the contractors finishing earlier than planned, drivers can now use the stretch between the White Lion and Nutters without the anticipated Sunday closure.\n\nMotorists should remain aware that the final cat's-eye inserts are expected to be fitted on Monday and should follow any temporary traffic management in place while that work is completed.",
+            'published_at':'2026-08-08T13:35:00+01:00','last_updated_at':'2026-08-08T13:35:00+01:00',
+            'source_name':'Councillor Paul Ellison MBE — Norden Village Noticeboard',
+            'source_url':'https://www.facebook.com/',
+            'manual_article':True,'editorial_lock':True,
+            'right_to_reply':'Anyone directly affected may contact news@rochdaledaily.co.uk to provide further information or request a correction.'
+          }
+          data=[a for a in data if a.get('id')!=article['id']]
+          data.insert(0,article)
+          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - name: Commit
+        run: |
+          git config user.name 'Rochdale Daily Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          rm -f add_edenfield_road_open.txt
+          git add manual_articles.json add_edenfield_road_open.txt
+          git commit -m 'Add Edenfield Road reopening story'
+          git pull --rebase origin main
+          git push origin HEAD:main
