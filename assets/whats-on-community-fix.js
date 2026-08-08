@@ -1,6 +1,7 @@
 /* Rochdale Daily What's On community-event compatibility layer.
-   Keeps approved reader submissions merged after the one-minute news refresh
-   and lets "All upcoming" render the full approved event list. */
+   Keeps approved reader submissions merged after the one-minute news refresh,
+   lets "All upcoming" render the full approved event list, and keeps the
+   Events section collapsed until a reader explicitly opens it. */
 (function () {
   "use strict";
 
@@ -103,6 +104,63 @@
     }).join("");
   };
 
+  function initialiseEventsDisclosure() {
+    var grid = document.getElementById("events-grid");
+    if (!grid) return;
+
+    var section = grid.closest("section") || grid.parentElement;
+    if (!section || section.getAttribute("data-events-disclosure-ready") === "true") return;
+
+    var heading = section.querySelector("h1, h2, h3, .section-title");
+    if (!heading) return;
+
+    var filterNodes = Array.prototype.slice.call(section.querySelectorAll("[data-event-filter]"));
+    var filterContainers = [];
+    filterNodes.forEach(function (node) {
+      var parent = node.parentElement;
+      if (parent && filterContainers.indexOf(parent) === -1) filterContainers.push(parent);
+    });
+
+    section.setAttribute("data-events-disclosure-ready", "true");
+    heading.setAttribute("role", "button");
+    heading.setAttribute("tabindex", "0");
+    heading.setAttribute("aria-controls", "events-grid");
+    heading.setAttribute("aria-expanded", "false");
+    heading.style.cursor = "pointer";
+    heading.style.userSelect = "none";
+
+    var indicator = document.createElement("span");
+    indicator.setAttribute("aria-hidden", "true");
+    indicator.textContent = "  ▾";
+    indicator.style.fontFamily = "Arial, sans-serif";
+    indicator.style.fontSize = ".7em";
+    heading.appendChild(indicator);
+
+    function setOpen(open) {
+      grid.style.display = open ? "" : "none";
+      grid.setAttribute("aria-hidden", open ? "false" : "true");
+      filterContainers.forEach(function (container) {
+        container.style.display = open ? "" : "none";
+      });
+      heading.setAttribute("aria-expanded", open ? "true" : "false");
+      indicator.textContent = open ? "  ▴" : "  ▾";
+    }
+
+    function toggle() {
+      setOpen(heading.getAttribute("aria-expanded") !== "true");
+    }
+
+    heading.addEventListener("click", toggle);
+    heading.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggle();
+      }
+    });
+
+    setOpen(false);
+  }
+
   async function mergeApprovedCommunityEvents() {
     try {
       var response = await fetch('/api/events?v=' + Date.now(), {
@@ -131,6 +189,7 @@
     }
   }
 
+  initialiseEventsDisclosure();
   mergeApprovedCommunityEvents();
   window.setInterval(mergeApprovedCommunityEvents, 61 * 1000);
   window.addEventListener('online', mergeApprovedCommunityEvents);
