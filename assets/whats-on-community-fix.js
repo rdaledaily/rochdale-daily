@@ -5,8 +5,6 @@
 (function () {
   "use strict";
 
-  if (typeof window.renderEvents !== "function") return;
-
   function eventStart(value) {
     var start = new Date(value || "").getTime();
     return Number.isFinite(start) ? start : NaN;
@@ -30,7 +28,7 @@
     var time = date && Number.isFinite(date.getTime()) ? date.getTime() : NaN;
 
     if (Number.isFinite(time)) {
-      if (typeof ukDateKey === "function" && ukDateKey(date) === ukDateKey(now)) {
+      if (typeof window.ukDateKey === "function" && ukDateKey(date) === ukDateKey(now)) {
         tags.push("tonight");
       } else if (date.toDateString() === now.toDateString()) {
         tags.push("tonight");
@@ -50,69 +48,76 @@
     return tags;
   }
 
-  window.renderEvents = function (filter) {
-    var active = document.querySelector("[data-event-filter].active");
-    var selected = filter || (active && active.dataset.eventFilter) || "all";
+  function installEventRenderer() {
+    if (window.__rdEventRendererInstalled) return;
+    if (typeof window.stories === "undefined") return;
 
-    var liveEvents = stories
-      .filter(function (story) {
-        var start = eventStart(story.eventStartAt);
-        return story.category === "events" || Number.isFinite(start);
-      })
-      .map(function (story) {
-        var parsedDate = story.eventStartAt ? new Date(story.eventStartAt) : null;
-        var validDate = parsedDate && Number.isFinite(parsedDate.getTime()) ? parsedDate : null;
-        return { story: story, date: validDate, tags: tagsFor(story, validDate) };
-      })
-      .filter(function (item) {
-        return !item.date || item.date.getTime() >= Date.now() - 12 * 60 * 60 * 1000;
-      })
-      .sort(function (a, b) {
-        return (a.date ? a.date.getTime() : Infinity) - (b.date ? b.date.getTime() : Infinity);
-      });
+    window.__rdEventRendererInstalled = true;
+    window.renderEvents = function (filter) {
+      var active = document.querySelector("[data-event-filter].active");
+      var selected = filter || (active && active.dataset.eventFilter) || "all";
 
-    var list = selected === "all"
-      ? liveEvents
-      : liveEvents.filter(function (item) { return item.tags.indexOf(selected) !== -1; });
+      var liveEvents = stories
+        .filter(function (story) {
+          var start = eventStart(story.eventStartAt);
+          return story.category === "events" || Number.isFinite(start);
+        })
+        .map(function (story) {
+          var parsedDate = story.eventStartAt ? new Date(story.eventStartAt) : null;
+          var validDate = parsedDate && Number.isFinite(parsedDate.getTime()) ? parsedDate : null;
+          return { story: story, date: validDate, tags: tagsFor(story, validDate) };
+        })
+        .filter(function (item) {
+          return !item.date || item.date.getTime() >= Date.now() - 12 * 60 * 60 * 1000;
+        })
+        .sort(function (a, b) {
+          return (a.date ? a.date.getTime() : Infinity) - (b.date ? b.date.getTime() : Infinity);
+        });
 
-    var grid = document.getElementById("events-grid");
-    if (!grid) return;
-    if (!list.length) {
-      grid.innerHTML = '<div class="no-results"><strong>No verified events match this filter yet.</strong><br>The event feed is checking public Rochdale listings.</div>';
-      return;
-    }
+      var list = selected === "all"
+        ? liveEvents
+        : liveEvents.filter(function (item) { return item.tags.indexOf(selected) !== -1; });
 
-    var rendered = selected === "all" ? list : list.slice(0, 24);
-    grid.innerHTML = rendered.map(function (item) {
-      var story = item.story;
-      var date = item.date;
-      var fallback = story.imageFallback || stockImage("events");
-      var dateLabel = date ? formatEventDate(date) : "Date shown in full listing";
-      return '<article class="event-card">' +
-        '<img src="' + story.image + '" alt="" onerror="this.onerror=null;this.src=\'' + fallback + '\'">' +
-        '<div class="event-body">' +
-          '<div class="event-date">' + dateLabel + '</div>' +
-          '<h3>' + story.title + '</h3>' +
-          '<p>' + story.summary + '</p>' +
-          '<div class="event-facts">' +
-            (story.eventLocation ? '<span><strong>Location:</strong> ' + story.eventLocation + '</span>' : '') +
-            '<span><strong>Area:</strong> ' + areaLabel(story.area) + '</span>' +
+      var grid = document.getElementById("events-grid");
+      if (!grid) return;
+      if (!list.length) {
+        grid.innerHTML = '<div class="no-results"><strong>No verified events match this filter yet.</strong><br>The event feed is checking public Rochdale listings.</div>';
+        return;
+      }
+
+      var rendered = selected === "all" ? list : list.slice(0, 24);
+      grid.innerHTML = rendered.map(function (item) {
+        var story = item.story;
+        var date = item.date;
+        var fallback = story.imageFallback || stockImage("events");
+        var dateLabel = date ? formatEventDate(date) : "Date shown in full listing";
+        return '<article class="event-card">' +
+          '<img src="' + story.image + '" alt="" onerror="this.onerror=null;this.src=\'' + fallback + '\'">' +
+          '<div class="event-body">' +
+            '<div class="event-date">' + dateLabel + '</div>' +
+            '<h3>' + story.title + '</h3>' +
+            '<p>' + story.summary + '</p>' +
+            '<div class="event-facts">' +
+              (story.eventLocation ? '<span><strong>Location:</strong> ' + story.eventLocation + '</span>' : '') +
+              '<span><strong>Area:</strong> ' + areaLabel(story.area) + '</span>' +
+            '</div>' +
+            (story.sourceUrl ? '<a class="event-cta" href="' + story.sourceUrl + '" target="_blank" rel="noopener noreferrer">View organiser listing</a>' : '') +
           '</div>' +
-          (story.sourceUrl ? '<a class="event-cta" href="' + story.sourceUrl + '" target="_blank" rel="noopener noreferrer">View organiser listing</a>' : '') +
-        '</div>' +
-      '</article>';
-    }).join("");
-  };
+        '</article>';
+      }).join("");
+    };
+  }
 
   function initialiseEventsDisclosure() {
     var grid = document.getElementById("events-grid");
-    if (!grid) return;
+    if (!grid) return false;
 
     var section = grid.closest("section") || grid.parentElement;
-    if (!section || section.getAttribute("data-events-disclosure-ready") === "true") return;
+    if (!section) return false;
+    if (section.getAttribute("data-events-disclosure-ready") === "true") return true;
 
     var heading = section.querySelector("h1, h2, h3, .section-title");
-    if (!heading) return;
+    if (!heading) return false;
 
     var filterNodes = Array.prototype.slice.call(section.querySelectorAll("[data-event-filter]"));
     var filterContainers = [];
@@ -159,9 +164,11 @@
     });
 
     setOpen(false);
+    return true;
   }
 
   async function mergeApprovedCommunityEvents() {
+    if (typeof window.normaliseArticle !== "function" || typeof window.stories === "undefined") return;
     try {
       var response = await fetch('/api/events?v=' + Date.now(), {
         cache: 'no-store',
@@ -175,22 +182,39 @@
         return normaliseArticle(event, index);
       });
 
-      /* The normaliser does not retain community_submitted, so use the API's
-         source label to remove stale copies before inserting the fresh list. */
       var baseStories = stories.filter(function (story) {
         return story.sourceName !== 'Reader submission';
       });
       stories = orderArticles(baseStories.concat(incoming));
 
       var active = document.querySelector('[data-event-filter].active');
-      window.renderEvents(active ? active.dataset.eventFilter : 'all');
+      if (typeof window.renderEvents === "function") {
+        window.renderEvents(active ? active.dataset.eventFilter : 'all');
+      }
     } catch (error) {
       /* Community events are additive; never break the homepage on API failure. */
     }
   }
 
-  initialiseEventsDisclosure();
-  mergeApprovedCommunityEvents();
+  function boot() {
+    installEventRenderer();
+    if (!initialiseEventsDisclosure()) {
+      window.setTimeout(initialiseEventsDisclosure, 50);
+      window.setTimeout(initialiseEventsDisclosure, 250);
+      window.setTimeout(initialiseEventsDisclosure, 1000);
+    }
+    window.setTimeout(installEventRenderer, 0);
+    window.setTimeout(installEventRenderer, 250);
+    window.setTimeout(mergeApprovedCommunityEvents, 300);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
+  window.addEventListener("load", initialiseEventsDisclosure, { once: true });
+
   window.setInterval(mergeApprovedCommunityEvents, 61 * 1000);
   window.addEventListener('online', mergeApprovedCommunityEvents);
   document.addEventListener('visibilitychange', function () {
