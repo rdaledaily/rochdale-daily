@@ -1,0 +1,59 @@
+name: Pin Feel Good live page on homepage
+
+on:
+  push:
+    paths:
+      - pin_feel_good_homepage.txt
+
+permissions:
+  contents: write
+
+jobs:
+  pin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pin live page as homepage lead
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text()
+
+          old = '<article class="lead-story" id="lead-story"></article>'
+          new = '''<article class="lead-story" id="lead-story" data-content-slot="lead">
+              <a href="/feel-good-live.html" class="story-link">
+                <div class="story-image-wrap"><img src="/assets/img/cards/feel-good-festival-2026.jpg" alt="" loading="eager" onerror="this.onerror=null;this.src='/assets/img/category_events.svg'"></div>
+                <span class="ongoing-badge">LIVE</span>
+                <span class="story-kicker">Feel Good Festival</span>
+                <h2 class="lead-headline">LIVE: Feel Good Festival 2026 — OMD, after-party and updates from Rochdale</h2>
+                <p class="story-summary">Follow Rochdale Daily’s live Feel Good Festival coverage from Rochdale town centre, with performances, atmosphere, travel information and rolling updates throughout the day.</p>
+                <div class="story-meta">Rochdale Daily · Live now</div>
+                <span class="read-more-button" aria-hidden="true">Follow live →</span>
+              </a>
+            </article>'''
+          if old in s:
+              s = s.replace(old, new, 1)
+
+          preview = 'Rochdale Daily preview: independent local news, events and public-service information in one place.'
+          live = 'LIVE: Feel Good Festival 2026 — updates from Rochdale town centre'
+          s = s.replace(preview, live)
+
+          p.write_text(s)
+          PY
+
+          rm -f pin_feel_good_homepage.txt
+
+      - name: Commit homepage pin
+        run: |
+          git config user.name 'Rochdale Daily Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html pin_feel_good_homepage.txt
+          git commit -m 'Pin Feel Good Festival live coverage as homepage lead'
+          git pull --rebase origin main
+          git push origin HEAD:main
