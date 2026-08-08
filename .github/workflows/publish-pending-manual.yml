@@ -1,12 +1,14 @@
 name: Publish pending manual articles
 
 on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
   push:
     paths:
       - 'pending_manual_*.json'
       - 'manual_publish_trigger.txt'
       - '.github/workflows/publish-pending-manual.yml'
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -33,7 +35,6 @@ jobs:
         run: |
           python - <<'PY'
           import glob, json, os
-          from datetime import datetime
 
           target = 'manual_articles.json'
           with open(target, encoding='utf-8') as f:
@@ -51,24 +52,20 @@ jobs:
               else:
                   raise ValueError(f'Unsupported JSON in {path}')
 
-          if not pending:
-              print('No pending manual articles found.')
-          else:
+          if pending:
               pending_ids = {x.get('id') for x in pending if x.get('id')}
               pending_slugs = {x.get('slug') for x in pending if x.get('slug')}
               existing = [x for x in existing if x.get('id') not in pending_ids and x.get('slug') not in pending_slugs]
-
-              def stamp(x):
-                  return x.get('published_at') or x.get('last_updated_at') or ''
-
-              pending.sort(key=stamp, reverse=True)
+              pending.sort(key=lambda x: x.get('published_at') or x.get('last_updated_at') or '', reverse=True)
               merged = pending + existing
               with open(target, 'w', encoding='utf-8') as f:
                   json.dump(merged, f, ensure_ascii=False, indent=2)
                   f.write('\n')
-
               for path in pending_files:
                   os.remove(path)
+              print(f'Published {len(pending)} pending manual article(s).')
+          else:
+              print('No pending manual articles found.')
 
           if os.path.exists('manual_publish_trigger.txt'):
               os.remove('manual_publish_trigger.txt')
@@ -91,10 +88,17 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A manual_articles.json pending_manual_*.json manual_publish_trigger.txt articles sitemap.xml scraper_status.json event_dates.json 2>/dev/null || true
+          git add -A
           if git diff --cached --quiet; then
             echo 'Nothing changed.'
             exit 0
           fi
           git commit -m 'Publish pending manual articles'
-          git push
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; sleep 3; }
+          done
+          exit 1
