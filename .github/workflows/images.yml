@@ -2,6 +2,9 @@ name: Rochdale Daily image backfill
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - trigger_image_regeneration_20260810.txt
   schedule:
     - cron: "50 * * * *"
 
@@ -66,8 +69,7 @@ jobs:
         run: |
           python scraper/ensure_article_images.py \
             --articles articles.json \
-            --retry-placeholders \
-            --limit 120
+            --retry-placeholders
 
       - name: Validate public article feed
         run: |
