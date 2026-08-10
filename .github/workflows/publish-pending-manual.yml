@@ -14,9 +14,10 @@ on:
 permissions:
   contents: write
 
-# All workflows that regenerate or write the live site share this lock.
-# This prevents a long render from being invalidated by another workflow
-# committing articles.json/frontpage/category feeds/sitemap midway through.
+# Site-generating Actions queue behind one another. Direct editorial commits
+# (for example a new manual_articles.d story added while this job renders)
+# cannot participate in Actions concurrency, so the final push also performs
+# a safe merge of the latest main before publishing.
 concurrency:
   group: rd-site-writer
   cancel-in-progress: false
@@ -122,4 +123,41 @@ jobs:
             exit 0
           fi
           git commit -m 'Publish manual articles with live image coverage'
-          git push origin HEAD:main
+
+          # A direct editorial commit may land while this long render is running.
+          # Do not discard it and do not rebase hundreds of generated files.
+          # Merge the latest main; direct manual story files normally merge cleanly.
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git merge --no-edit origin/main; then
+              echo 'Remote main changed generated files too; resolving generated state safely.'
+              if git ls-files -u -- articles.json | grep -q .; then
+                git show ':2:articles.json' > /tmp/local_articles.json
+                git show ':3:articles.json' > /tmp/remote_articles.json
+                python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
+                git add articles.json
+              fi
+              conflicted=$(git diff --name-only --diff-filter=U)
+              if [ -n "${conflicted}" ]; then
+                echo "${conflicted}" | while read -r file; do
+                  case "$file" in
+                    manual_articles.d/*|pending_manual_*.json)
+                      git checkout --theirs -- "$file" 2>/dev/null || true
+                      git add -- "$file" 2>/dev/null || true
+                      ;;
+                    *)
+                      git checkout --ours -- "$file" 2>/dev/null || git rm -q -- "$file"
+                      git add -- "$file" 2>/dev/null || true
+                      ;;
+                  esac
+                done
+              fi
+              git commit --no-edit || true
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push raced again on attempt ${attempt}; retrying with latest main."
+            sleep 2
+          done
+          exit 1
