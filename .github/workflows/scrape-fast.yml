@@ -3,19 +3,14 @@ name: Rochdale Daily fast local news
 on:
   workflow_dispatch:
   schedule:
-    # Breaking/local news: twice an hour, no browser installation or deep
-    # Facebook event crawl. This is the latency-critical path.
     - cron: "5,35 * * * *"
-    # Browser/deep discovery only four times a day so it cannot clog the
-    # breaking-news queue. What's Occurrin' and normal event pages are still
-    # discovered by every fast run.
     - cron: "10 2,8,14,20 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: rd-scrape-pipeline
+  group: rd-site-writer
   cancel-in-progress: false
 
 jobs:
@@ -73,45 +68,41 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
           cache-dependency-path: "requirements.txt"
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-
       - name: Run Rochdale-first pipeline
         timeout-minutes: 18
         run: python scraper/run_fast_local_pipeline.py
-
       - name: Ensure consistent story cards
         timeout-minutes: 3
         run: python scraper/ensure_article_images.py --limit 20
-
       - name: Validate article feed
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
-
       - name: Generate site
         timeout-minutes: 5
         run: |
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
           python scraper/generate_pages.py
-
       - name: Refresh weather
         timeout-minutes: 2
         env:
           METOFFICE_API_KEY: ${{ secrets.METOFFICE_API_KEY }}
         run: python scraper/weather_forecast.py
-
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
@@ -122,27 +113,7 @@ jobs:
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "${COMMIT_MESSAGE}"
-          for attempt in 1 2 3 4 5; do
-            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
-            git fetch origin "${GITHUB_REF_NAME}"
-            if ! git merge --no-edit "origin/${GITHUB_REF_NAME}"; then
-              if git ls-files -u -- articles.json | grep -q .; then
-                git show ":3:articles.json" > /tmp/remote_articles.json
-                git show ":2:articles.json" > /tmp/local_articles.json
-                python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
-                git add articles.json
-              fi
-              conflicted=$(git diff --name-only --diff-filter=U)
-              if [ -n "${conflicted}" ]; then
-                echo "${conflicted}" | while read -r file; do
-                  git checkout --ours -- "${file}" 2>/dev/null || git rm -q -- "${file}"
-                  git add -- "${file}" 2>/dev/null || true
-                done
-              fi
-              git commit --no-edit
-            fi
-          done
-          exit 1
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
   deep-browser:
     if: github.event.schedule == '10 2,8,14,20 * * *'
@@ -182,6 +153,10 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -212,5 +187,4 @@ jobs:
             articles sitemap.xml wards/ ward_areas.json council_votes.json index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "${COMMIT_MESSAGE}"
-          git pull --rebase origin "${GITHUB_REF_NAME}" || true
           git push origin "HEAD:${GITHUB_REF_NAME}"
