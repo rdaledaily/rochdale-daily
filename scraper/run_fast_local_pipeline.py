@@ -1,15 +1,24 @@
 """Rochdale-first runtime configuration for the autonomous news pipeline.
 
-This wrapper fixes two production issues without duplicating scraper.py:
+This wrapper fixes production issues without duplicating scraper.py:
 
 1. The query matrix was designed for four quarter-hour runs, but production now
-   runs at :05 and :35. Shards 1 and 3 were therefore never searched. We merge
-   the two quarter-hour shards belonging to each half-hour run, so the complete
-   matrix is covered again.
+   runs at :05 and :35. We merge the two quarter-hour shards belonging to each
+   half-hour run, so the complete matrix is covered again.
 2. Mixed Greater Manchester publishers were being assigned Rochdale as a
    default area. That allowed Bury/Whitefield/Prestwich candidates to consume
    scarce rewrite slots before the final locality gate rejected them. Mixed
    publishers now have to prove Rochdale locality before rewrite selection.
+3. Balanced selection reserves categories, wards and areas in INPUT order. The
+   discovery collectors finish concurrently, so that order is not chronological.
+   Without an explicit freshness sort, an older candidate can consume a reserved
+   rewrite slot ahead of a story published minutes ago. The fast pipeline now
+   sorts every selection pool newest-first, with grounded publisher material
+   preferred when timestamps are equal.
+4. Unresolved Google News wrappers that contain only a headline/short snippet
+   cannot pass the grounded editorial rewrite. They are rejected before they can
+   consume an OpenAI slot; resolved wrappers and wrappers carrying substantial
+   source text remain eligible.
 
 It also adds direct local political-party discovery and always-on high-value
 queries for crime, planning, utilities and local political activity.
@@ -145,6 +154,23 @@ def _candidate_text(candidate) -> str:
     )
 
 
+def _selection_rank(item) -> tuple[datetime, int, int]:
+    """Newest first; prefer grounded publisher material on equal timestamps."""
+    published = core.parse_datetime(getattr(item, "source_published_at", ""))
+    if published is None:
+        published = datetime.min.replace(tzinfo=timezone.utc)
+
+    source_url = str(getattr(item, "source_url", "") or "")
+    resolved = 0 if core.is_google_wrapper(source_url) else 1
+    source_text = core.normalise_ws(
+        " ".join(
+            str(getattr(item, field, "") or "")
+            for field in ("source_summary", "source_body_excerpt")
+        )
+    )
+    return published, resolved, min(len(source_text), 5000)
+
+
 def configure_sources() -> None:
     """Make mixed-region sources prove locality and add local party pages."""
     for source in core.DISCOVERY_PAGES:
@@ -190,7 +216,7 @@ def configure_searches(now: datetime | None = None) -> None:
 
 
 def configure_pre_rewrite_locality_gate() -> None:
-    """Reject explicit rival geography before it can spend a rewrite slot."""
+    """Reject explicit rival geography and unusable wrappers before AI spend."""
     original = core.candidate_is_rewrite_eligible
 
     def rochdale_first(candidate, existing_by_story):
@@ -214,15 +240,41 @@ def configure_pre_rewrite_locality_gate() -> None:
             if not core.article_is_local(probe) and not core.rochdale_traffic_area(text):
                 if not core.BOROUGH_FINISHED_LOCATION_RE.search(core.normalise_ws(text)):
                     return False
+
+        # An unresolved Google News wrapper usually contains a headline and a
+        # short RSS snippet but no publisher article body. The grounded rewrite
+        # correctly rejects that material, so offering it to OpenAI wastes one
+        # of the finite rewrite slots while better fresh candidates wait. Keep
+        # wrappers that have accumulated enough real source material; otherwise
+        # leave them for a later run when resolution succeeds.
+        if core.is_google_wrapper(str(candidate.source_url or "")):
+            substance = core.normalise_ws(
+                f"{candidate.source_summary or ''} {candidate.source_body_excerpt or ''}"
+            )
+            if len(substance) < 500:
+                return False
+
         return original(candidate, existing_by_story)
 
     core.candidate_is_rewrite_eligible = rochdale_first
+
+
+def configure_fresh_selection() -> None:
+    """Make every balanced-selection reservation choose the freshest candidate."""
+    original = core.balanced_select
+
+    def freshest_first(items, *args, **kwargs):
+        ordered = sorted(list(items), key=_selection_rank, reverse=True)
+        return original(ordered, *args, **kwargs)
+
+    core.balanced_select = freshest_first
 
 
 def configure() -> None:
     configure_sources()
     configure_searches()
     configure_pre_rewrite_locality_gate()
+    configure_fresh_selection()
 
 
 if __name__ == "__main__":
