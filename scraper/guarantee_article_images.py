@@ -1,57 +1,39 @@
 #!/usr/bin/env python3
-"""Guarantee every published article leaves the pipeline with a usable image.
+"""Guarantee every published article leaves the pipeline with an image.
 
-This is the final publication safety net. It never generates typography/place
-cards. Earlier resolvers get first choice (manual image, source image, official
-image, Wikimedia Commons, curated story photo). If those fail, this script
-assigns an existing real photograph from the Rochdale Daily photo library,
-choosing by area/category where possible.
+Final image priority:
+1. Keep any already-usable supplied/source/official/Wikimedia image.
+2. Use a relevant existing Rochdale Daily library photograph matched by the
+   story_image library matcher (slug/title/aliases).
+3. Only if no relevant library photograph exists, create the curated Rochdale
+   Daily area/category place card as the absolute last resort.
+
+Publishing never fails solely because image sourcing was difficult.
 """
 from __future__ import annotations
 
 import json
-import re
 import sys
 from pathlib import Path
 from typing import Any
+
+from story_image import compose_story_card, find_library_photo, _folder_credit
 
 PLACEHOLDER_BITS = (
     "area-category-card", "placeholder", "default-image", "default_image",
     "category-image", "category_image", "img/generated", "stock_",
 )
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
-
-# Ordered preferred real-photo filenames. Existence is checked at runtime, so
-# this remains safe as the library evolves.
-CATEGORY_CANDIDATES = {
-    "crime": ["police.jpg", "gmp.jpg", "rochdale-town-hall.jpg"],
-    "politics": ["rochdale-town-hall.jpg", "town-hall.jpg"],
-    "community": ["rochdale-town-hall.jpg", "touchstones.jpg", "rochdale_canal.jpg"],
-    "education": ["rochdale-town-hall.jpg", "touchstones.jpg"],
-    "environment": ["rochdale_canal.jpg", "healey-dell.jpg", "rochdale-town-hall.jpg"],
-    "events": ["rochdale-town-hall.jpg", "middleton-arena.jpg", "touchstones.jpg"],
-    "health": ["rochdale-infirmary.jpg", "rochdale-town-hall.jpg"],
-    "business": ["rochdale-town-hall.jpg", "the_baum.jpg"],
-    "sport": ["rochdale_fc.jpg", "rochdale_hornets.jpg", "rochdale_hornets_women.jpg"],
-    "traffic": ["traffic.jpg", "rochdale-town-hall.jpg"],
-    "transport": ["tram.jpg", "rochdale_canal.jpg", "rochdale-town-hall.jpg"],
-    "news": ["rochdale-town-hall.jpg", "rochdale_canal.jpg", "touchstones.jpg"],
-}
-
-AREA_HINTS = {
-    "rochdale": ["rochdale-town-hall.jpg", "rochdale_canal.jpg"],
-    "middleton": ["middleton-arena.jpg"],
-    "healey": ["healey-dell.jpg"],
-    "littleborough": ["littleborough.jpg"],
-    "milnrow": ["milnrow.jpg"],
-    "newhey": ["newhey.jpg"],
-    "heywood": ["heywood.jpg"],
-    "norden": ["norden.jpg"],
-}
+CARDS_DIR = Path("assets/img/cards")
+OUTPUT_DIR = Path("assets/article-images")
 
 
 def clean(v: Any) -> str:
     return str(v or "").strip()
+
+
+def slug_for(article: dict[str, Any]) -> str:
+    return clean(article.get("slug") or article.get("id") or article.get("title")).strip()
 
 
 def is_placeholder(value: str) -> bool:
@@ -60,8 +42,11 @@ def is_placeholder(value: str) -> bool:
 
 
 def local_image_exists(root: Path, value: str) -> bool:
-    if not value or value.startswith("http://") or value.startswith("https://"):
-        return bool(value)
+    value = clean(value)
+    if value.startswith("http://") or value.startswith("https://"):
+        return True
+    if not value:
+        return False
     path = root / value.lstrip("/")
     return path.is_file() and path.suffix.lower() in IMAGE_SUFFIXES and path.stat().st_size > 4096
 
@@ -71,41 +56,61 @@ def usable(article: dict[str, Any], root: Path) -> bool:
     return not is_placeholder(value) and local_image_exists(root, value)
 
 
-def choose_library_photo(article: dict[str, Any], root: Path) -> Path | None:
-    cards = root / "assets" / "img" / "cards"
-    if not cards.is_dir():
-        return None
-
-    names: list[str] = []
-    area = clean(article.get("area")).lower()
+def set_library_photo(article: dict[str, Any], root: Path) -> bool:
+    """Assign only a library image that genuinely matches this story."""
+    title = clean(article.get("title"))
+    slug = slug_for(article)
     category = clean(article.get("category")).lower()
-    names.extend(AREA_HINTS.get(area, []))
-    names.extend(CATEGORY_CANDIDATES.get(category, []))
 
-    for name in names:
-        path = cards / name
-        if path.is_file() and path.stat().st_size > 4096:
-            return path
+    chosen = find_library_photo(
+        title,
+        slug,
+        category,
+        root / CARDS_DIR,
+        slug_only=False,
+    )
+    if chosen is None or not chosen.is_file() or chosen.stat().st_size <= 4096:
+        return False
 
-    # Last-resort real-photo fallback: choose deterministically from the actual
-    # photo library, excluding any generated/card-like filenames.
-    candidates = []
-    for path in cards.iterdir():
-        if not path.is_file() or path.suffix.lower() not in IMAGE_SUFFIXES:
-            continue
-        low = path.name.lower()
-        if any(bit in low for bit in PLACEHOLDER_BITS):
-            continue
-        if path.stat().st_size <= 4096:
-            continue
-        candidates.append(path)
-    if not candidates:
-        return None
+    rel = chosen.relative_to(root).as_posix()
+    base = chosen.stem
+    credit = (
+        _folder_credit(base, root / CARDS_DIR)
+        or _folder_credit(base.rsplit("-", 1)[0], root / CARDS_DIR)
+        or "Rochdale Daily"
+    )
+    article["image_url"] = rel
+    article["img"] = rel
+    article["image_credit"] = credit
+    article["image_credit_url"] = "" if credit != "Rochdale Daily" else "https://rochdaledaily.co.uk/"
+    article["image_status"] = "curated-library-photo"
+    article["source_image_reuse_status"] = "curated-library-photo"
+    article.pop("image_placeholder_reason", None)
+    return True
 
-    candidates.sort(key=lambda p: p.name.lower())
-    slug = clean(article.get("slug") or article.get("title"))
-    score = sum(ord(ch) for ch in slug)
-    return candidates[score % len(candidates)]
+
+def set_place_card(article: dict[str, Any], root: Path) -> None:
+    """Absolute last resort: curated Rochdale Daily area/category place card."""
+    slug = slug_for(article) or "story"
+    output = root / OUTPUT_DIR / f"{slug}-area-category-card.jpg"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    local_path, credit = compose_story_card(
+        clean(article.get("title")),
+        article.get("area"),
+        article.get("category"),
+        output,
+        story_text=(
+            clean(article.get("excerpt")) + " " +
+            clean(article.get("summary"))
+        ).strip(),
+    )
+    article["image_url"] = local_path
+    article["img"] = local_path
+    article["image_credit"] = credit or "Rochdale Daily"
+    article["image_credit_url"] = "" if credit and credit != "Rochdale Daily" else "https://rochdaledaily.co.uk/"
+    article["image_status"] = "area-category-card"
+    article["source_image_reuse_status"] = "category-fallback"
+    article["image_placeholder_reason"] = "Last-resort curated Rochdale Daily place card; no usable source, Commons or relevant library photograph was available"
 
 
 def main() -> int:
@@ -113,40 +118,37 @@ def main() -> int:
     root = Path.cwd()
     data = json.loads(target.read_text(encoding="utf-8"))
     rows = data if isinstance(data, list) else data.get("articles", [])
-    changed = 0
-    unresolved = 0
+
+    kept = 0
+    library = 0
+    place_cards = 0
 
     for article in rows:
         if not isinstance(article, dict):
             continue
         if clean(article.get("status") or "published").lower() != "published":
             continue
+
         if usable(article, root):
-            # Keep img in sync for renderers that use the legacy field.
             article["img"] = clean(article.get("image_url") or article.get("img"))
+            kept += 1
             continue
 
-        chosen = choose_library_photo(article, root)
-        if chosen is None:
-            unresolved += 1
-            print(f"NO REAL IMAGE AVAILABLE: {clean(article.get('slug') or article.get('title'))}")
+        if set_library_photo(article, root):
+            library += 1
+            print(f"LIBRARY IMAGE: {slug_for(article)} -> {article['image_url']}")
             continue
 
-        rel = chosen.relative_to(root).as_posix()
-        article["image_url"] = rel
-        article["img"] = rel
-        article["image_credit"] = article.get("image_credit") or "Rochdale Daily"
-        article["image_credit_url"] = article.get("image_credit_url") or "https://rochdaledaily.co.uk/"
-        article["image_status"] = "guaranteed-library-photo"
-        article["source_image_reuse_status"] = "curated-library-photo"
-        article.pop("image_placeholder_reason", None)
-        changed += 1
-        print(f"GUARANTEED IMAGE: {clean(article.get('slug'))} -> {rel}")
+        set_place_card(article, root)
+        place_cards += 1
+        print(f"LAST-RESORT PLACE CARD: {slug_for(article)} -> {article['image_url']}")
 
     target.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"changed": changed, "unresolved": unresolved}, indent=2))
-
-    # Publishing should continue, but in normal operation unresolved should be 0.
+    print(json.dumps({
+        "kept_existing_real_image": kept,
+        "relevant_library_image": library,
+        "last_resort_place_card": place_cards,
+    }, indent=2))
     return 0
 
 
