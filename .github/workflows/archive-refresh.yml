@@ -1,0 +1,77 @@
+name: Refresh permanent news archive
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/10 * * * *'
+  push:
+    paths:
+      - 'articles/**'
+      - 'articles.json'
+      - 'manual_articles.json'
+      - 'manual_articles.d/**'
+      - 'scraper/generate_archive.py'
+      - '.github/workflows/archive-refresh.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: permanent-news-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Rebuild permanent searchable archive
+        run: |
+          python scraper/generate_archive.py
+          cp archive.html search.html
+
+      - name: Keep archive pages in sitemap
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('sitemap.xml')
+          if not p.exists():
+              raise SystemExit(0)
+          text = p.read_text(encoding='utf-8')
+          additions = []
+          for url in ('https://rochdaledaily.co.uk/archive.html', 'https://rochdaledaily.co.uk/search.html'):
+              if url not in text:
+                  additions.append(f'  <url><loc>{url}</loc></url>\n')
+          if additions:
+              text = re.sub(r'\s*</urlset>\s*$', '\n' + ''.join(additions) + '</urlset>\n', text)
+              p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit archive refresh
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add archive.html search.html archive-index.json sitemap.xml
+          if git diff --cached --quiet; then
+            echo 'Archive already current.'
+            exit 0
+          fi
+          git commit -m 'Refresh permanent searchable news archive'
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; sleep 3; }
+          done
+          exit 1
