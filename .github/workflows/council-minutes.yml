@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: council-minutes-discovery
+  group: rd-site-writer
   cancel-in-progress: false
 
 jobs:
@@ -25,6 +25,10 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -48,14 +52,6 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add council_documents.json council_story_sources.json council_votes.json councillor_photos.json manual_articles.d/ wards/ index.html
-          if git diff --cached --quiet; then
-            echo 'No council changes.'
-            exit 0
-          fi
+          if git diff --cached --quiet; then echo 'No council changes.'; exit 0; fi
           git commit -m 'Update Rochdale council democracy records and portraits'
-          for attempt in 1 2 3 4 5; do
-            git push origin HEAD:main && exit 0
-            git fetch origin main
-            git rebase origin/main || { git rebase --abort; sleep 3; }
-          done
-          exit 1
+          git push origin HEAD:main
