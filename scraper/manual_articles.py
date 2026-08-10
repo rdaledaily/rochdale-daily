@@ -1,30 +1,8 @@
-"""Editor-written articles, read from manual_articles.json at the repo root.
+"""Editor-written articles for Rochdale Daily.
 
-This is the one route into the paper that does not depend on a source existing:
-an editorial, a follow-up, a correction, a piece written from a phone call or
-from being in the room. Nothing here is scraped, rewritten or categorised by
-machine - what is written is what publishes.
-
-    [
-      {
-        "title": "Why the Touchstones delay matters",
-        "body": "First paragraph.\\n\\nSecond paragraph.",
-        "category": "politics",
-        "area": "rochdale"
-      }
-    ]
-
-Only ``title`` and ``body`` are required. Everything else is optional:
-``category`` (defaults to news), ``area`` (defaults to rochdale), ``excerpt``,
-``byline``, ``published_at``, ``image_url``, ``image_credit``, ``source_url``,
-``source_name``, ``slug``.
-
-An entry with ``"draft": true`` is never published, which is how the templates
-in the file stay in it without appearing on the site.
-
-Unlike manual_events.json there is no date requirement and no expiry: an article
-does not stop being true, so nothing here is dropped for being old. It leaves
-the feed the same way any other article does, when it ages out of retention.
+Legacy stories remain in manual_articles.json. New stories can be added safely as
+individual JSON files under manual_articles.d/. The loader reads both sources,
+normalises them identically and deduplicates by article id.
 """
 
 from __future__ import annotations
@@ -38,9 +16,8 @@ from pathlib import Path
 from typing import Any
 
 MANUAL_ARTICLES_PATH = Path("manual_articles.json")
+MANUAL_ARTICLES_DIR = Path("manual_articles.d")
 
-# Matches the pipeline's own set, so an editor cannot file a piece under a
-# category the rest of the site does not render.
 VALID_CATEGORIES = {
     "news", "crime", "politics", "traffic", "transport", "sport", "business",
     "health", "education", "environment", "community", "events",
@@ -72,11 +49,6 @@ def _iso(value: datetime) -> str:
 
 
 def _content_html(entry: dict[str, Any]) -> str:
-    """Blank-line-separated plain text becomes paragraphs.
-
-    Escaped rather than passed through, so a stray angle bracket in typed copy
-    cannot break the page or inject markup.
-    """
     body = str(entry.get("body") or entry.get("content") or entry.get("description") or "")
     paragraphs = [
         html.escape(re.sub(r"\s+", " ", part).strip())
@@ -98,7 +70,6 @@ def _excerpt(entry: dict[str, Any]) -> str:
 def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     if not isinstance(entry, dict):
         return None
-    # Draft entries stay in the file as an inline template but never publish.
     if entry.get("draft") or entry.get("enabled") is False:
         return None
 
@@ -116,16 +87,9 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         category = "news"
 
     source_name = _clean(entry.get("source_name")) or "Rochdale Daily"
+    image_url = _clean(entry.get("image_url") or entry.get("img"))
 
     record: dict[str, Any] = {
-        # Derived from the slug, not the source URL. Several articles can
-        # legitimately share a source URL - a generic https://www.facebook.com/
-        # stands in for a dozen different posts - and hashing that gave them
-        # one id. load_manual_article_records() skips a record whose id it has
-        # already seen, so the second and third articles from the same URL were
-        # dropped without any error: valid JSON, no draft flag, and no article.
-        # The slug is already unique per entry and is what the page is named
-        # after, so it is the right thing to key identity on.
         "id": _clean(entry.get("id")) or _stable_id(slug or source_url),
         "slug": slug,
         "story_key": f"manual-article:{slug}",
@@ -145,58 +109,42 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         "source_url": source_url,
         "source_names": [source_name],
         "source_urls": [source_url] if source_url else [],
-        "image_url": _clean(entry.get("image_url")),
+        "image_url": image_url,
         "image_credit": _clean(entry.get("image_credit")) or "Rochdale Daily",
         "image_credit_url": _clean(entry.get("image_credit_url")),
         "byline": _clean(entry.get("byline")) or "Rochdale Daily Newsdesk",
-        # An editor-written piece is never re-categorised, re-filtered or
-        # rewritten. It carries the same lock manual events use, so no later
-        # stage can quietly change or drop it.
         "manual_article": True,
         "editorial_lock": True,
         "publication_route": "editorial",
         "rewrite_quality_checked": True,
     }
 
-    # Crime carries the standing legal note unless one is supplied.
     if category == "crime":
         record["police_matter"] = True
         record["legal_disclaimer"] = _clean(entry.get("legal_disclaimer")) or (
-            "No finding of guilt should be inferred from an arrest, allegation "
-            "or charge. Anyone accused is presumed innocent unless and until "
-            "convicted."
+            "No finding of guilt should be inferred from an arrest, allegation or charge. "
+            "Anyone accused is presumed innocent unless and until convicted."
         )
     if entry.get("legal_disclaimer"):
         record["legal_disclaimer"] = _clean(entry.get("legal_disclaimer"))
     if entry.get("right_to_reply"):
         record["right_to_reply"] = _clean(entry.get("right_to_reply"))
 
-    # Published corrections: [{"date": "YYYY-MM-DD", "note": "..."}]. A bare
-    # string is accepted as an undated note. Empty notes are dropped so a
-    # half-filled template never renders an empty amendment box. These flow
-    # through to the page footer's corrections block, the article's JSON-LD
-    # and the public /corrections-log.html.
     raw_corrections = entry.get("corrections")
     if isinstance(raw_corrections, list):
-        cleaned_corrections: list[dict[str, str]] = []
+        cleaned: list[dict[str, str]] = []
         for item in raw_corrections:
             if isinstance(item, str):
                 text = _clean(item)
                 if text:
-                    cleaned_corrections.append({"date": "", "note": text})
+                    cleaned.append({"date": "", "note": text})
             elif isinstance(item, dict):
                 text = _clean(item.get("note") or item.get("text"))
                 if text:
-                    cleaned_corrections.append(
-                        {"date": _clean(item.get("date")), "note": text}
-                    )
-        if cleaned_corrections:
-            record["corrections"] = cleaned_corrections
+                    cleaned.append({"date": _clean(item.get("date")), "note": text})
+        if cleaned:
+            record["corrections"] = cleaned
 
-    # Editorial pinning. `featured: true` places the piece at the top of the
-    # homepage; `frontpage_until` keeps it there past the normal age cutoff.
-    # Without frontpage_until it leads only while it is recent enough to be
-    # eligible at all.
     if entry.get("featured") is True:
         record["featured"] = True
     if entry.get("frontpage_until"):
@@ -207,21 +155,33 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     return record
 
 
-def load_manual_article_records(now: datetime | None = None) -> list[dict[str, Any]]:
-    """Return normalised editor-written article records."""
-    reference = now or datetime.now(timezone.utc)
-    if not MANUAL_ARTICLES_PATH.exists():
-        return []
+def _read_payload(path: Path) -> list[dict[str, Any]]:
     try:
-        payload = json.loads(MANUAL_ARTICLES_PATH.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return []
-    if not isinstance(payload, list):
-        return []
+    if isinstance(payload, dict):
+        return [payload]
+    if isinstance(payload, list):
+        return [entry for entry in payload if isinstance(entry, dict)]
+    return []
+
+
+def load_manual_article_records(now: datetime | None = None) -> list[dict[str, Any]]:
+    """Return normalised editor-written article records from legacy + per-story files."""
+    reference = now or datetime.now(timezone.utc)
+    entries: list[dict[str, Any]] = []
+
+    if MANUAL_ARTICLES_PATH.exists():
+        entries.extend(_read_payload(MANUAL_ARTICLES_PATH))
+
+    if MANUAL_ARTICLES_DIR.exists():
+        for path in sorted(MANUAL_ARTICLES_DIR.rglob("*.json")):
+            entries.extend(_read_payload(path))
 
     records: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
-    for entry in payload:
+    for entry in entries:
         record = _normalise(entry, reference)
         if record is None or record["id"] in seen_ids:
             continue
