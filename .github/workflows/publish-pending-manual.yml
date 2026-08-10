@@ -21,7 +21,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -94,7 +94,10 @@ jobs:
         env:
           USE_SOURCE_IMAGES: 'true'
           USE_WIKIMEDIA_COMMONS: 'true'
-        run: python scraper/ensure_article_images.py articles.json
+        run: python scraper/ensure_article_images.py --articles articles.json --retry-placeholders --limit 120
+
+      - name: Rebuild front-page feed with enriched images
+        run: python scraper/frontpage_pipeline.py
 
       - name: Rebuild article pages, archive and sitemap
         run: |
@@ -110,7 +113,7 @@ jobs:
             echo 'Nothing changed.'
             exit 0
           fi
-          git commit -m 'Publish manual articles with image coverage'
+          git commit -m 'Publish manual articles with live image coverage'
           for attempt in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
