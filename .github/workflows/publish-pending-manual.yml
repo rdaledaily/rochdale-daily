@@ -21,7 +21,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,40 +36,29 @@ jobs:
         run: |
           python - <<'PY'
           import glob, json, os
-
           target = 'manual_articles.json'
           with open(target, encoding='utf-8') as f:
               existing = json.load(f)
-
           pending_files = sorted(glob.glob('pending_manual_*.json'))
           pending = []
           for path in pending_files:
               with open(path, encoding='utf-8') as f:
                   data = json.load(f)
-              if isinstance(data, list):
-                  pending.extend(data)
-              elif isinstance(data, dict):
-                  pending.append(data)
-              else:
-                  raise ValueError(f'Unsupported JSON in {path}')
-
+              if isinstance(data, list): pending.extend(data)
+              elif isinstance(data, dict): pending.append(data)
+              else: raise ValueError(f'Unsupported JSON in {path}')
           if pending:
-              pending_ids = {x.get('id') for x in pending if x.get('id')}
-              pending_slugs = {x.get('slug') for x in pending if x.get('slug')}
-              existing = [x for x in existing if x.get('id') not in pending_ids and x.get('slug') not in pending_slugs]
+              ids = {x.get('id') for x in pending if x.get('id')}
+              slugs = {x.get('slug') for x in pending if x.get('slug')}
+              existing = [x for x in existing if x.get('id') not in ids and x.get('slug') not in slugs]
               pending.sort(key=lambda x: x.get('published_at') or x.get('last_updated_at') or '', reverse=True)
-              merged = pending + existing
               with open(target, 'w', encoding='utf-8') as f:
-                  json.dump(merged, f, ensure_ascii=False, indent=2)
-                  f.write('\n')
-              for path in pending_files:
-                  os.remove(path)
+                  json.dump(pending + existing, f, ensure_ascii=False, indent=2); f.write('\n')
+              for path in pending_files: os.remove(path)
               print(f'Published {len(pending)} pending manual article(s).')
           else:
               print('No pending manual articles found.')
-
-          if os.path.exists('manual_publish_trigger.txt'):
-              os.remove('manual_publish_trigger.txt')
+          if os.path.exists('manual_publish_trigger.txt'): os.remove('manual_publish_trigger.txt')
           PY
 
       - name: Validate JSON
@@ -80,9 +69,35 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
 
+      - name: Rebuild article dataset
+        run: python scraper/article_gate.py articles.json
+
+      - name: Mark generic category cards as replaceable
+        run: |
+          python - <<'PY'
+          import json
+          path='articles.json'
+          with open(path,encoding='utf-8') as f: data=json.load(f)
+          rows=data if isinstance(data,list) else data.get('articles',[])
+          changed=0
+          for a in rows:
+              img=str(a.get('image_url') or a.get('img') or '')
+              if img.startswith('assets/img/cards/'):
+                  a['source_image_reuse_status']='category-fallback'
+                  changed+=1
+          with open(path,'w',encoding='utf-8') as f:
+              json.dump(data,f,ensure_ascii=False,indent=2); f.write('\n')
+          print(f'Marked {changed} generic category-card image(s) as replaceable.')
+          PY
+
+      - name: Ensure every story has an image
+        env:
+          USE_SOURCE_IMAGES: 'true'
+          USE_WIKIMEDIA_COMMONS: 'true'
+        run: python scraper/ensure_article_images.py articles.json
+
       - name: Rebuild article pages, archive and sitemap
         run: |
-          python scraper/article_gate.py articles.json
           python scraper/generate_pages.py
           python scraper/generate_archive.py
 
@@ -95,11 +110,9 @@ jobs:
             echo 'Nothing changed.'
             exit 0
           fi
-          git commit -m 'Publish pending manual articles'
+          git commit -m 'Publish manual articles with image coverage'
           for attempt in 1 2 3 4 5; do
-            if git push origin HEAD:main; then
-              exit 0
-            fi
+            if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
             git rebase origin/main || { git rebase --abort; sleep 3; }
           done
