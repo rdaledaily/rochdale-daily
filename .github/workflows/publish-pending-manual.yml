@@ -80,10 +80,11 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
 
-      - name: Rebuild article pages and sitemap
+      - name: Rebuild article pages, archive and sitemap
         run: |
           python scraper/article_gate.py articles.json
           python scraper/generate_pages.py
+          python scraper/generate_archive.py
 
       - name: Commit published articles and rebuilt pages
         run: |
