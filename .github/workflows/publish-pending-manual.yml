@@ -10,14 +10,11 @@ on:
       - 'manual_articles.d/**'
       - 'manual_publish_trigger.txt'
       - '.github/workflows/publish-pending-manual.yml'
+      - 'scraper/guarantee_article_images.py'
 
 permissions:
   contents: write
 
-# Site-generating Actions queue behind one another. Direct editorial commits
-# (for example a new manual_articles.d story added while this job renders)
-# cannot participate in Actions concurrency, so the final push also performs
-# a safe merge of the latest main before publishing.
 concurrency:
   group: rd-site-writer
   cancel-in-progress: false
@@ -25,7 +22,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -79,9 +76,9 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
 
       - name: Rebuild article dataset
-        run: python scraper/article_gate.py articles.json
+        run: python scraper/run_fast_local_pipeline.py --manual-only || python scraper/article_gate.py articles.json
 
-      - name: Mark generic category cards as replaceable
+      - name: Mark generic cards as replaceable
         run: |
           python - <<'PY'
           import json
@@ -91,21 +88,25 @@ jobs:
           changed=0
           for a in rows:
               img=str(a.get('image_url') or a.get('img') or '')
-              if img.startswith('assets/img/cards/'):
+              if ('area-category-card' in img or 'placeholder' in img or
+                  img.startswith('assets/img/cards/')):
                   a['source_image_reuse_status']='category-fallback'
                   changed+=1
           with open(path,'w',encoding='utf-8') as f:
               json.dump(data,f,ensure_ascii=False,indent=2); f.write('\n')
-          print(f'Marked {changed} generic category-card image(s) as replaceable.')
+          print(f'Marked {changed} fallback image(s) as replaceable.')
           PY
 
-      - name: Ensure every story has an image
+      - name: Resolve real images for every story
         env:
           USE_SOURCE_IMAGES: 'true'
           USE_WIKIMEDIA_COMMONS: 'true'
-        run: python scraper/ensure_article_images.py --articles articles.json --retry-placeholders --limit 120
+        run: |
+          python scraper/ensure_article_images.py --articles articles.json --retry-placeholders
+          python scraper/repair_placeholder_images.py --articles articles.json || true
+          python scraper/guarantee_article_images.py articles.json
 
-      - name: Rebuild front-page feed with enriched images
+      - name: Rebuild front-page feed with resolved images
         run: python scraper/frontpage_pipeline.py
 
       - name: Rebuild article pages, archive and sitemap
@@ -122,11 +123,7 @@ jobs:
             echo 'Nothing changed.'
             exit 0
           fi
-          git commit -m 'Publish manual articles with live image coverage'
-
-          # A direct editorial commit may land while this long render is running.
-          # Do not discard it and do not rebase hundreds of generated files.
-          # Merge the latest main; direct manual story files normally merge cleanly.
+          git commit -m 'Publish manual articles with guaranteed real images'
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git merge --no-edit origin/main; then
@@ -154,10 +151,7 @@ jobs:
               fi
               git commit --no-edit || true
             fi
-            if git push origin HEAD:main; then
-              exit 0
-            fi
-            echo "Push raced again on attempt ${attempt}; retrying with latest main."
+            if git push origin HEAD:main; then exit 0; fi
             sleep 2
           done
           exit 1
