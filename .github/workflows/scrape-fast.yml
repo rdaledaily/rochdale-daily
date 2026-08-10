@@ -38,6 +38,7 @@ jobs:
       SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
       SLOW_DOMAIN_BENCH_HOURS: "24"
       USE_SOURCE_IMAGES: "true"
+      USE_WIKIMEDIA_COMMONS: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
       SOCIAL_CONTEXT_ENABLED: "true"
       FACEBOOK_COMMENTS_ENABLED: "true"
@@ -85,9 +86,9 @@ jobs:
       - name: Run Rochdale-first pipeline
         timeout-minutes: 18
         run: python scraper/run_fast_local_pipeline.py
-      - name: Ensure consistent story cards
-        timeout-minutes: 3
-        run: python scraper/ensure_article_images.py --limit 20
+      - name: Resolve article images before page generation
+        timeout-minutes: 5
+        run: python scraper/ensure_article_images.py
       - name: Validate article feed
         run: |
           python -m json.tool articles.json > /dev/null
@@ -118,7 +119,7 @@ jobs:
   deep-browser:
     if: github.event.schedule == '10 2,8,14,20 * * *'
     runs-on: ubuntu-latest
-    timeout-minutes: 38
+    timeout-minutes: 42
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
@@ -146,6 +147,8 @@ jobs:
       GOOGLE_NEWS_BROWSER_RESOLUTION: "true"
       GOOGLE_NEWS_RESOLVE_MAX: "120"
       GOOGLE_NEWS_RESOLVE_BUDGET_SECONDS: "300"
+      USE_SOURCE_IMAGES: "true"
+      USE_WIKIMEDIA_COMMONS: "true"
       COMMIT_MESSAGE: "Update Rochdale Daily deep discovery"
 
     steps:
@@ -171,6 +174,9 @@ jobs:
       - name: Run deep Rochdale discovery
         timeout-minutes: 27
         run: python scraper/run_fast_local_pipeline.py
+      - name: Resolve article images before page generation
+        timeout-minutes: 5
+        run: python scraper/ensure_article_images.py
       - name: Validate and generate site
         run: |
           python -m json.tool articles.json > /dev/null
