@@ -14,8 +14,11 @@ on:
 permissions:
   contents: write
 
+# All workflows that regenerate or write the live site share this lock.
+# This prevents a long render from being invalidated by another workflow
+# committing articles.json/frontpage/category feeds/sitemap midway through.
 concurrency:
-  group: manual-article-publisher
+  group: rd-site-writer
   cancel-in-progress: false
 
 jobs:
@@ -27,6 +30,11 @@ jobs:
         with:
           persist-credentials: true
           fetch-depth: 0
+
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
 
       - uses: actions/setup-python@v5
         with:
@@ -114,9 +122,4 @@ jobs:
             exit 0
           fi
           git commit -m 'Publish manual articles with live image coverage'
-          for attempt in 1 2 3 4 5; do
-            if git push origin HEAD:main; then exit 0; fi
-            git fetch origin main
-            git rebase origin/main || { git rebase --abort; sleep 3; }
-          done
-          exit 1
+          git push origin HEAD:main
