@@ -39,29 +39,33 @@ jobs:
       - name: Validate document index
         run: python -m json.tool council_documents.json > /dev/null
 
-      - name: Extract decisions and create sourced news stories
+      - name: Extract decisions, recorded votes and sourced news stories
         run: python scraper/publish_council_minutes_stories.py
 
-      - name: Validate generated manual stories
+      - name: Validate council vote data and generated manual stories
         run: |
+          python -m json.tool council_votes.json > /dev/null
           python - <<'PY'
           import glob, json
           for path in glob.glob('manual_articles.d/**/*.json', recursive=True):
               with open(path, encoding='utf-8') as f:
                   json.load(f)
-          print('Manual article JSON valid.')
+          print('Council vote and manual article JSON valid.')
           PY
 
-      - name: Commit council index and new stories
+      - name: Regenerate ward democracy pages
+        run: python scraper/generate_ward_pages.py
+
+      - name: Commit council index, vote records, democracy pages and stories
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add council_documents.json council_story_sources.json manual_articles.d/
+          git add council_documents.json council_story_sources.json council_votes.json manual_articles.d/ wards/ index.html
           if git diff --cached --quiet; then
-            echo 'No new council documents or stories.'
+            echo 'No new council documents, votes or stories.'
             exit 0
           fi
-          git commit -m 'Update Rochdale council minutes and decision stories'
+          git commit -m 'Update Rochdale council minutes, votes and democracy profiles'
           for attempt in 1 2 3 4 5; do
             git push origin HEAD:main && exit 0
             git fetch origin main
