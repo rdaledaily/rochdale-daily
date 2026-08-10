@@ -15,7 +15,11 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: "gpt-4o-mini"
+      COUNCIL_MAX_NEW_STORIES: "3"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,7 +31,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install collector dependencies
-        run: python -m pip install --no-cache-dir requests feedparser
+        run: python -m pip install --no-cache-dir requests feedparser beautifulsoup4 pypdf openai
 
       - name: Discover indexed council meeting documents
         run: python scraper/council_minutes_collector.py
@@ -35,16 +39,29 @@ jobs:
       - name: Validate document index
         run: python -m json.tool council_documents.json > /dev/null
 
-      - name: Commit updated council document index
+      - name: Extract decisions and create sourced news stories
+        run: python scraper/publish_council_minutes_stories.py
+
+      - name: Validate generated manual stories
+        run: |
+          python - <<'PY'
+          import glob, json
+          for path in glob.glob('manual_articles.d/**/*.json', recursive=True):
+              with open(path, encoding='utf-8') as f:
+                  json.load(f)
+          print('Manual article JSON valid.')
+          PY
+
+      - name: Commit council index and new stories
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add council_documents.json
+          git add council_documents.json council_story_sources.json manual_articles.d/
           if git diff --cached --quiet; then
-            echo 'No new council documents.'
+            echo 'No new council documents or stories.'
             exit 0
           fi
-          git commit -m 'Update Rochdale council meeting document index'
+          git commit -m 'Update Rochdale council minutes and decision stories'
           for attempt in 1 2 3 4 5; do
             git push origin HEAD:main && exit 0
             git fetch origin main
