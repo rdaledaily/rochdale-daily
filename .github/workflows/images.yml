@@ -67,18 +67,23 @@ jobs:
           python scraper/ensure_article_images.py \
             --articles articles.json \
             --retry-placeholders \
-            --limit 80
+            --limit 120
 
       - name: Validate public article feed
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
 
+      - name: Rebuild front-page and archive feeds with new images
+        run: |
+          python scraper/frontpage_pipeline.py
+          python scraper/generate_archive.py
+
       - name: Generate static article pages and sitemap
         timeout-minutes: 5
         run: python scraper/generate_pages.py
 
-      - name: Commit updated feed
+      - name: Commit updated feed and rendered site
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
