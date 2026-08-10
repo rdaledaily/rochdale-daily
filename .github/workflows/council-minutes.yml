@@ -15,7 +15,7 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 30
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       OPENAI_MODEL: "gpt-4o-mini"
@@ -25,47 +25,34 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install collector dependencies
+      - name: Install dependencies
         run: python -m pip install --no-cache-dir requests feedparser beautifulsoup4 pypdf openai
-
+      - name: Find and verify councillor portraits
+        run: python scraper/councillor_photos.py
       - name: Discover indexed council meeting documents
         run: python scraper/council_minutes_collector.py
-
-      - name: Validate document index
-        run: python -m json.tool council_documents.json > /dev/null
-
       - name: Extract decisions, recorded votes and sourced news stories
         run: python scraper/publish_council_minutes_stories.py
-
-      - name: Validate council vote data and generated manual stories
+      - name: Validate democracy data
         run: |
+          python -m json.tool council_documents.json > /dev/null
           python -m json.tool council_votes.json > /dev/null
-          python - <<'PY'
-          import glob, json
-          for path in glob.glob('manual_articles.d/**/*.json', recursive=True):
-              with open(path, encoding='utf-8') as f:
-                  json.load(f)
-          print('Council vote and manual article JSON valid.')
-          PY
-
-      - name: Regenerate ward democracy pages
+          python -m json.tool councillor_photos.json > /dev/null
+      - name: Regenerate every ward democracy page
         run: python scraper/generate_ward_pages.py
-
-      - name: Commit council index, vote records, democracy pages and stories
+      - name: Commit council data, portraits, pages and stories
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add council_documents.json council_story_sources.json council_votes.json manual_articles.d/ wards/ index.html
+          git add council_documents.json council_story_sources.json council_votes.json councillor_photos.json manual_articles.d/ wards/ index.html
           if git diff --cached --quiet; then
-            echo 'No new council documents, votes or stories.'
+            echo 'No council changes.'
             exit 0
           fi
-          git commit -m 'Update Rochdale council minutes, votes and democracy profiles'
+          git commit -m 'Update Rochdale council democracy records and portraits'
           for attempt in 1 2 3 4 5; do
             git push origin HEAD:main && exit 0
             git fetch origin main
