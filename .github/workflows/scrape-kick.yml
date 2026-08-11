@@ -38,7 +38,8 @@ jobs:
       REQUEST_TIMEOUT: "8"
       SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
       SLOW_DOMAIN_BENCH_HOURS: "24"
-      USE_SOURCE_IMAGES: "true"
+      USE_SOURCE_IMAGES: "false"
+      USE_WIKIMEDIA_COMMONS: "false"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
       SOCIAL_CONTEXT_ENABLED: "true"
       FACEBOOK_COMMENTS_ENABLED: "true"
@@ -88,9 +89,9 @@ jobs:
         timeout-minutes: 18
         run: python scraper/run_fast_local_pipeline.py
 
-      - name: Ensure consistent story cards
+      - name: Enforce cards-only article images
         timeout-minutes: 3
-        run: python scraper/ensure_article_images.py --limit 20
+        run: python scraper/ensure_article_images.py
 
       - name: Validate and generate site
         timeout-minutes: 6
@@ -113,7 +114,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add articles.json slow_domains.json scraper_status.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json assets/img/generated assets/article-images \
+            image_coverage_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
           if git diff --cached --quiet; then
             echo "Pipeline completed with no file changes."
