@@ -5,7 +5,7 @@
   var KEY = "rd-cookie-choice";
   var ACCEPTED = "optional-accepted";
   var DECLINED = "essential-only";
-  var ASSET_VERSION = "20260803-8";
+  var ASSET_VERSION = "20260811-readmore-1";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }

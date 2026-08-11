@@ -29,6 +29,9 @@
         "max-width:none!important;" +
         "margin:0!important;" +
       "}" +
+      "#news-grid.rd-latest-horizontal>.rd-latest-hidden{" +
+        "display:none!important;" +
+      "}" +
       "#news-grid .latest-news-ad{" +
         "grid-column:1/-1!important;" +
         "display:flex;" +
@@ -117,11 +120,23 @@
     });
   }
 
+  function setCardVisible(item, shouldShow) {
+    // Use our own class as the source of truth. This is more reliable than the
+    // hidden attribute here because other homepage/card CSS can set display on
+    // article elements after the grid has rendered.
+    item.classList.toggle("rd-latest-hidden", !shouldShow);
+    if (shouldShow) {
+      item.removeAttribute("hidden");
+    } else {
+      item.setAttribute("hidden", "");
+    }
+  }
+
   function apply() {
     var items = cards();
     if (!isDesktop()) {
       grid.classList.remove("rd-latest-horizontal");
-      items.forEach(function (item) { item.hidden = false; });
+      items.forEach(function (item) { setCardVisible(item, true); });
       advert.hidden = true;
       button.hidden = true;
       return;
@@ -129,7 +144,7 @@
 
     grid.classList.add("rd-latest-horizontal");
     items.forEach(function (item, index) {
-      item.hidden = index >= visible;
+      setCardVisible(item, index < visible);
     });
 
     var remaining = Math.max(0, items.length - visible);
@@ -142,8 +157,21 @@
     );
   }
 
-  button.addEventListener("click", function () {
-    visible += STEP;
+  button.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var items = cards();
+    if (!items.length) return;
+
+    var nextVisible = Math.min(items.length, visible + STEP);
+    // Reveal the next batch immediately, then run the normal layout pass. Doing
+    // this explicitly avoids a no-op if another script/style has changed a
+    // card's display state since the previous render.
+    for (var i = visible; i < nextVisible; i += 1) {
+      setCardVisible(items[i], true);
+    }
+    visible = nextVisible;
     apply();
   });
 

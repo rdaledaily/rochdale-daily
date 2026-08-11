@@ -1837,7 +1837,7 @@
 
     let stories = [];
 
-    const ARTICLE_FEED_SOURCES = ["/articles/frontpage.json", "/articles.json"];
+    const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     const ARTICLE_REFRESH_MS = 60 * 1000;
 
     function ukDateKey(value) {
@@ -2149,8 +2149,9 @@
                 ) {
                   return false;
                 }
-                return isCurrentOrFutureEvent(article)
-                  || isRecentArticle(article.published_at || article.updated_at, 14);
+                return String(article.category || '').toLowerCase() === "events"
+                  ? isCurrentOrFutureEvent(article)
+                  : true;
               })
               .map(normaliseArticle)
           );
