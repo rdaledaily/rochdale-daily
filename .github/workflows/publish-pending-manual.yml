@@ -11,6 +11,7 @@ on:
       - 'manual_publish_trigger.txt'
       - '.github/workflows/publish-pending-manual.yml'
       - 'scraper/guarantee_article_images.py'
+      - 'scraper/related_commons_images.py'
 
 permissions:
   contents: write
@@ -103,6 +104,7 @@ jobs:
           USE_WIKIMEDIA_COMMONS: 'true'
         run: |
           python scraper/ensure_article_images.py --articles articles.json --retry-placeholders
+          python scraper/related_commons_images.py --articles articles.json
           python scraper/repair_placeholder_images.py --articles articles.json || true
           python scraper/guarantee_article_images.py articles.json
 
