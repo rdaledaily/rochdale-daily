@@ -1,0 +1,47 @@
+name: Diagnose OpenAI and scraper
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: gpt-4o-mini
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install minimal dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'openai>=1.0'
+      - name: Verify OpenAI secret and API call
+        run: |
+          python - <<'PY'
+          import os
+          from openai import OpenAI
+
+          key = os.getenv('OPENAI_API_KEY', '')
+          if not key:
+              raise SystemExit('OPENAI_API_KEY is missing from this workflow environment')
+
+          client = OpenAI(api_key=key)
+          response = client.responses.create(
+              model=os.getenv('OPENAI_MODEL', 'gpt-4o-mini'),
+              input='Reply with exactly OK'
+          )
+          text = (getattr(response, 'output_text', '') or '').strip()
+          print('OpenAI API call succeeded; response length:', len(text))
+          if not text:
+              raise SystemExit('OpenAI returned no output text')
+          PY
+      - name: Compile scraper Python
+        run: python -m compileall -q scraper
