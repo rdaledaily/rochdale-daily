@@ -164,7 +164,7 @@ def test_run_gives_every_published_story_a_cards_image() -> None:
         assert all(item["image_url"].startswith("assets/img/cards/") for item in saved)
         assert all((root / item["image_url"]).is_file() for item in saved)
         report = json.loads(report_path.read_text(encoding="utf-8"))
-        assert report["policy"] == "assets/img/cards only; filename matched"
+        assert report["policy"] == "assets/img/cards only; filename matched against title, slug, excerpt and body"
 
 
 if __name__ == "__main__":
