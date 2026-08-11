@@ -1,0 +1,113 @@
+name: Preserve permanent article archive
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'articles.json'
+      - 'story_blocklist.json'
+      - 'scraper/preserve_article_archive.py'
+      - '.github/workflows/preserve-article-archive.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-site-writer
+  cancel-in-progress: false
+
+jobs:
+  preserve:
+    # The commit made by this workflow also touches articles.json. Skip only
+    # that self-generated push; all normal scraper/publisher bot pushes still
+    # run through the archive keeper.
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Preserve permanent article archive')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install site dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+
+      - name: Recover and merge permanent archive
+        run: |
+          if [ -f articles/archive.json ]; then
+            python scraper/preserve_article_archive.py
+          else
+            echo 'No permanent ledger yet: recovering every published story from Git history.'
+            python scraper/preserve_article_archive.py --recover-history
+          fi
+
+      - name: Rebuild archive feeds and article pages
+        run: |
+          python scraper/frontpage_pipeline.py
+          python scraper/generate_pages.py
+          python scraper/generate_archive.py
+
+      - name: Verify archive can never be smaller than current published news
+        run: |
+          python - <<'PY'
+          import json
+          with open('articles.json', encoding='utf-8') as f:
+              current = json.load(f)
+          with open('articles/archive.json', encoding='utf-8') as f:
+              archive = json.load(f)['articles']
+          current_news = [a for a in current if str(a.get('status') or 'published').lower() == 'published' and str(a.get('category') or '').lower() != 'events' and str(a.get('source_kind') or '').lower() != 'event']
+          print(f'Current published news: {len(current_news)}; permanent archive: {len(archive)}')
+          if len(archive) < len(current_news):
+              raise SystemExit('Permanent archive unexpectedly smaller than current published news set')
+          PY
+
+      - name: Commit recovered archive and rebuilt site
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'Archive already complete.'
+            exit 0
+          fi
+          git commit -m 'Preserve permanent article archive'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git merge --no-edit origin/main; then
+              echo 'Main changed while rebuilding; merge current article state and retry.'
+              if git ls-files -u -- articles.json | grep -q .; then
+                git show ':2:articles.json' > /tmp/local_articles.json
+                git show ':3:articles.json' > /tmp/remote_articles.json
+                python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
+                python scraper/preserve_article_archive.py
+                python scraper/frontpage_pipeline.py
+                python scraper/generate_pages.py
+                python scraper/generate_archive.py
+                git add -A
+              fi
+              conflicted=$(git diff --name-only --diff-filter=U)
+              if [ -n "${conflicted}" ]; then
+                echo "${conflicted}" | while read -r file; do
+                  git checkout --ours -- "$file" 2>/dev/null || git rm -q -- "$file"
+                  git add -- "$file" 2>/dev/null || true
+                done
+              fi
+              git commit --no-edit || true
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
