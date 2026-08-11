@@ -1,0 +1,49 @@
+name: Restore full homepage article archive
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/restore-homepage-archive.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Keep published news on homepage indefinitely
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          old_sources = 'const ARTICLE_FEED_SOURCES = ["/articles/frontpage.json", "/articles.json"];'
+          new_sources = 'const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];'
+          if old_sources not in s:
+              raise SystemExit('ARTICLE_FEED_SOURCES pattern not found')
+          s = s.replace(old_sources, new_sources, 1)
+
+          old_age = '''return isCurrentOrFutureEvent(article)\n                  || isRecentArticle(article.published_at || article.updated_at, 14);'''
+          new_age = '''return String(article.category || '').toLowerCase() === "events"\n                  ? isCurrentOrFutureEvent(article)\n                  : true;'''
+          if old_age not in s:
+              raise SystemExit('14-day homepage expiry pattern not found')
+          s = s.replace(old_age, new_age, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Remove one-off workflow and commit fix
+        run: |
+          rm .github/workflows/restore-homepage-archive.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/restore-homepage-archive.yml
+          git commit -m "Keep homepage news archive indefinitely"
+          git push
