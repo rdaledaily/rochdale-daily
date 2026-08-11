@@ -1,4 +1,4 @@
-name: Backfill article images
+name: Backfill cards-only article images
 
 on:
   schedule:
@@ -16,6 +16,9 @@ jobs:
   backfill-images:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      USE_SOURCE_IMAGES: "false"
+      USE_WIKIMEDIA_COMMONS: "false"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -37,24 +40,23 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-      - name: Backfill missing article images
-        env:
-          USE_SOURCE_IMAGES: "true"
-          USE_WIKIMEDIA_COMMONS: "true"
-          REQUEST_TIMEOUT: "20"
-        run: python scraper/backfill_images.py
+      - name: Enforce cards-only images
+        run: python scraper/ensure_article_images.py --articles articles.json
+      - name: Rebuild feeds then re-enforce image policy
+        run: |
+          python scraper/frontpage_pipeline.py
+          python scraper/ensure_article_images.py --articles articles.json
       - name: Validate feed and regenerate static pages
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
-          python scraper/frontpage_pipeline.py
           python scraper/generate_pages.py
           python scraper/generate_archive.py
-      - name: Commit backfilled images
+      - name: Commit cards-only image backfill
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then echo "No images needed backfilling this run."; exit 0; fi
-          git commit -m "Backfill missing article images"
+          git add articles.json image_coverage_report.json assets/img/cards articles sitemap.xml index.html
+          if git diff --cached --quiet; then echo "Cards-only image policy already satisfied."; exit 0; fi
+          git commit -m "Enforce cards-only article images"
           git push origin "HEAD:${GITHUB_REF_NAME}"
