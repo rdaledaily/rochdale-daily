@@ -1,790 +1,94 @@
 #!/usr/bin/env python3
-"""Ensure every published Rochdale Daily story has a usable local image.
+"""Enforce Rochdale Daily's cards-only article-image policy.
 
-Priority order:
-1. Existing valid local/non-placeholder image.
-2. Existing source_image_candidate_url.
-3. RSS/media/enclosure image fields already stored in the article.
-4. Original source page lead image:
-   Open Graph, Twitter Card, JSON-LD, article figure/image.
-5. A suitably matched, reusable Wikimedia Commons image.
-6. A curated photograph from assets/img/cards.
-7. Deterministic Rochdale Daily placeholder generated from story metadata.
+Every published article image must live under ``assets/img/cards``.
+No source-page photographs, Wikimedia Commons images, remote URLs, people-folder
+images, area-folder images, or wider ``assets/img`` photographs are eligible.
 
-Publisher and Wikimedia images are cached locally and credited to their source.
-Placeholders never fabricate landmarks; they use typography and simple shapes.
+For each story:
+1. Keep an existing valid image only when it already lives in assets/img/cards.
+2. Otherwise use a deliberately curated cards-folder photograph matched by the
+   article slug/headline using story_image.find_library_photo.
+3. If there is no suitable curated photograph, generate a plain Rochdale Daily
+   text card and save that generated card in assets/img/cards as well.
 
-The script is idempotent and safe to run on every workflow.
+The script accepts the legacy command-line flags used by existing workflows, but
+network-related flags are intentionally ignored: this module never performs a
+network request.
 """
 from __future__ import annotations
 
 import argparse
-import hashlib
-import html
 import json
-import os
 import re
 import sys
-import time
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urlencode, urljoin, urlparse, urlsplit, urlunsplit
-from urllib.request import Request, build_opener
 
-from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
 
-from story_image import compose_story_card, find_library_photo, _folder_credit
+from story_image import find_library_photo, _folder_credit
 
-# When false, third-party publisher photographs are neither fetched nor kept.
-# Reusable Wikimedia Commons media remains eligible because its licence and
-# attribution metadata are checked before download.
-USE_SOURCE_IMAGES = os.getenv("USE_SOURCE_IMAGES", "true").lower() not in {
-    "0", "false", "no", "off",
-}
-USE_WIKIMEDIA_COMMONS = os.getenv("USE_WIKIMEDIA_COMMONS", "true").lower() not in {
-    "0", "false", "no", "off",
-}
-
-OWN_IMAGE_CREDITS = {
-    "rochdale daily",
-    "rochdale daily category image",
-    "rochdale daily event artwork",
-}
-
-
-def is_third_party_credit(article: dict[str, Any]) -> bool:
-    """True when the cached image is attributed to someone other than us."""
-    credit = clean(article.get("image_credit")).lower()
-    if not credit:
-        return False
-    return credit not in OWN_IMAGE_CREDITS and "wikimedia commons" not in credit
-
-
-DEFAULT_USER_AGENT = (
-    "RochdaleDailyImageCoverage/2.1 "
-    "(archive maintenance; contact: news@rochdaledaily.co.uk)"
-)
-MAX_PAGE_BYTES = 5 * 1024 * 1024
-MAX_IMAGE_BYTES = 15 * 1024 * 1024
-MIN_IMAGE_BYTES = 7 * 1024
+CARDS_DIR = Path("assets/img/cards")
+IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
 WIDTH = 1200
 HEIGHT = 675
 
-PLACEHOLDER_MARKERS = (
-    "stock_", "placeholder", "default-image", "default_image",
-    "category-image", "category_image", "area-category-card",
-    "img/generated",
-)
-BAD_URL_HINTS = (
-    "logo", "favicon", "sprite", "avatar", "tracking", "pixel",
-    "spacer", "badge", "advert", "doubleclick",
-)
-IMAGE_EXTENSIONS = {
-    "image/jpeg": ".jpg",
-    "image/png": ".png",
-    "image/webp": ".webp",
+# Metadata that can point future jobs back at remote/source photography. Once an
+# article is cards-only, remove these so the record itself cannot re-seed a
+# Wikimedia/source-image resolver later.
+REMOTE_IMAGE_FIELDS = {
+    "source_image_candidate_url",
+    "source_image_url",
+    "source_image_candidates",
+    "rss_image_url",
+    "media_content_url",
+    "media_thumbnail_url",
+    "enclosure_url",
+    "thumbnail_url",
+    "rejected_image_candidates",
+    "image_match_title",
 }
-
-DISALLOWED_SOURCE_HOSTS = {
-    "news.google.com", "google.com", "google.co.uk",
-    "facebook.com", "m.facebook.com", "x.com", "twitter.com",
-    "tiktok.com", "instagram.com", "reddit.com", "old.reddit.com",
-    "youtube.com", "youtu.be",
-}
-DISALLOWED_SOURCE_SUFFIXES = (
-    "facebook.com", "instagram.com", "tiktok.com", "reddit.com",
-    "google.com", "google.co.uk",
-)
-DISALLOWED_IMAGE_HOST_SUFFIXES = (
-    "google.com", "google.co.uk", "googleusercontent.com", "gstatic.com",
-)
-GENERIC_IMAGE_HOST_SUFFIXES = (
-    "traffic-update.co.uk",
-    "weather.metoffice.gov.uk",
-    "metoffice.gov.uk",
-    "tfgm.com",
-    "ctfassets.net",
-    "northernrailway.co.uk",
-)
-KNOWN_BAD_IMAGE_DIGESTS = {
-    "872cdca296d0",
-}
-
-# Commons licences accepted for automatic reuse. Public-domain variants are
-# matched by prefix; Creative Commons licences must permit commercial reuse.
-COMMONS_LICENSE_PREFIXES = (
-    "cc by ", "cc-by-", "cc by-sa", "cc-by-sa", "public domain",
-    "pd-", "cc0",
-)
-COMMONS_API = "https://commons.wikimedia.org/w/api.php"
-COMMONS_STOP_WORDS = {
-    "after", "again", "against", "amid", "and", "are", "at", "before",
-    "for", "from", "has", "have", "into", "its", "new", "of", "on",
-    "over", "the", "to", "with", "will", "in", "a", "an", "is",
-    "rochdale", "heywood", "middleton", "littleborough", "milnrow",
-}
-
-
-def host_of(url: str) -> str:
-    return urlparse(clean(url)).netloc.lower().split(":", 1)[0].removeprefix("www.")
-
-
-def is_disallowed_source(url: str) -> bool:
-    host = host_of(url)
-    if not host:
-        return False
-    if host in DISALLOWED_SOURCE_HOSTS:
-        return True
-    return any(host.endswith("." + suffix) for suffix in DISALLOWED_SOURCE_SUFFIXES)
-
-
-def is_generic_furniture_image(url: str) -> bool:
-    host = host_of(url)
-    if not host:
-        return False
-    return any(
-        host == suffix or host.endswith("." + suffix)
-        for suffix in GENERIC_IMAGE_HOST_SUFFIXES
-    )
-
-
-def is_disallowed_image(url: str) -> bool:
-    host = host_of(url)
-    if not host:
-        return False
-    if is_generic_furniture_image(url):
-        return True
-    return any(
-        host == suffix or host.endswith("." + suffix)
-        for suffix in DISALLOWED_IMAGE_HOST_SUFFIXES
-    )
-
-
-def credit_is_disallowed(article: dict[str, Any]) -> bool:
-    credit = clean(article.get("image_credit")).lower()
-    if credit in DISALLOWED_SOURCE_HOSTS:
-        return True
-    if any(credit == suffix or credit.endswith("." + suffix)
-           for suffix in DISALLOWED_SOURCE_SUFFIXES):
-        return True
-    return is_disallowed_source(article.get("image_credit_url"))
-
-
-def local_digest(repo_root: Path, image_url: str) -> str:
-    if is_http_url(image_url):
-        return ""
-    path = repo_root / clean(image_url).lstrip("/")
-    if not path.is_file():
-        return ""
-    try:
-        return hashlib.sha256(path.read_bytes()).hexdigest()[:12]
-    except OSError:
-        return ""
-
-
-@dataclass(frozen=True)
-class Candidate:
-    url: str
-    method: str
-    credit_url: str
-    credit: str = ""
-
-
-@dataclass
-class Stats:
-    total: int = 0
-    already_covered: int = 0
-    source_images_added: int = 0
-    commons_images_added: int = 0
-    placeholders_added: int = 0
-    source_attempts_failed: int = 0
-    skipped_unpublished: int = 0
 
 
 def clean(value: Any) -> str:
     return str(value or "").strip()
 
 
-def is_http_url(value: Any) -> bool:
-    value = clean(value)
-    return value.startswith("https://") or value.startswith("http://")
-
-
-def safe_candidate_url(page_url: str, value: str) -> str:
-    joined = urljoin(page_url, html.unescape(value or "")).strip()
-    if not (joined.startswith("http://") or joined.startswith("https://")):
-        return ""
-    try:
-        parts = urlsplit(joined)
-    except ValueError:
-        return ""
-    if not parts.netloc:
-        return ""
-    path = quote(parts.path, safe="/%:@!$&'()*+,;=~-._")
-    query = quote(parts.query, safe="/%:@!$&'()*+,;=~-._?")
-    cleaned = urlunsplit((parts.scheme, parts.netloc, path, query, ""))
-    if any(ch.isspace() or ord(ch) < 0x20 for ch in cleaned):
-        return ""
-    return cleaned
-
-
-def is_placeholder_path(value: Any) -> bool:
-    value = clean(value).lower()
-    return not value or any(marker in value for marker in PLACEHOLDER_MARKERS)
-
-
-def has_real_image(article: dict[str, Any], repo_root: Path) -> bool:
-    image_url = clean(article.get("image_url"))
-    if not image_url or is_placeholder_path(image_url):
-        return False
-
-    if image_url.replace("\\", "/").startswith(str(CARDS_DIR).replace("\\", "/")):
-        return (repo_root / image_url).is_file()
-
-    if credit_is_disallowed(article):
-        return False
-    if not USE_SOURCE_IMAGES and is_third_party_credit(article):
-        return False
-    if clean(article.get("source_image_reuse_status")) == "category-fallback":
-        return False
-    if is_generic_furniture_image(article.get("source_image_candidate_url")):
-        return False
-    if local_digest(repo_root, image_url) in KNOWN_BAD_IMAGE_DIGESTS:
-        return False
-
-    if is_http_url(image_url):
-        return True
-
-    path = repo_root / image_url.lstrip("/")
-    if not (path.is_file() and path.stat().st_size >= MIN_IMAGE_BYTES):
-        return False
-    return _looks_like_image(path)
-
-
-def _looks_like_image(path: Path) -> bool:
-    try:
-        with path.open("rb") as handle:
-            head = handle.read(16)
-    except OSError:
-        return False
-    return (
-        head.startswith(b"\xff\xd8\xff")
-        or head.startswith(b"\x89PNG\r\n\x1a\n")
-        or head[:4] == b"RIFF" and head[8:12] == b"WEBP"
-        or head.startswith(b"GIF8")
-        or head.lstrip()[:5].lower() == b"<?xml" and b"svg" in head.lower()
-        or head.lstrip()[:4].lower() == b"<svg"
-    )
-
-
-def source_urls(article: dict[str, Any]) -> list[str]:
-    result: list[str] = []
-    for value in [article.get("source_url"), *(article.get("source_urls") or [])]:
-        value = clean(value)
-        if is_http_url(value) and value not in result:
-            result.append(value)
-    return result
-
-
-def source_name(article: dict[str, Any], url: str) -> str:
-    if "commons.wikimedia.org" in host_of(url):
-        return "Wikimedia Commons"
-    primary_url = clean(article.get("source_url"))
-    primary_name = clean(article.get("source_name"))
-    if url == primary_url and primary_name:
-        return primary_name
-
-    urls = [clean(v) for v in article.get("source_urls") or []]
-    names = [clean(v) for v in article.get("source_names") or []]
-    if url in urls:
-        index = urls.index(url)
-        if index < len(names) and names[index]:
-            return names[index]
-
-    host = urlparse(url).netloc.lower().removeprefix("www.")
-    return host or "Original source"
-
-
-def request_bytes(
-    url: str,
-    *,
-    timeout: int,
-    max_bytes: int,
-    accept: str,
-) -> tuple[bytes, str, str]:
-    if any(ch.isspace() or ord(ch) < 0x20 for ch in url):
-        raise ValueError(f"refusing to fetch URL with control characters: {url!r}")
-    request = Request(
-        url,
-        headers={
-            "User-Agent": DEFAULT_USER_AGENT,
-            "Accept": accept,
-            "Accept-Language": "en-GB,en;q=0.9",
-        },
-    )
-    with build_opener().open(request, timeout=timeout) as response:
-        content_type = response.headers.get_content_type().lower()
-        final_url = response.geturl()
-        content_length = response.headers.get("Content-Length")
-        if content_length and int(content_length) > max_bytes:
-            raise ValueError("response too large")
-
-        chunks: list[bytes] = []
-        size = 0
-        while True:
-            chunk = response.read(min(65536, max_bytes - size + 1))
-            if not chunk:
-                break
-            chunks.append(chunk)
-            size += len(chunk)
-            if size > max_bytes:
-                raise ValueError("response too large")
-        return b"".join(chunks), content_type, final_url
-
-
-def request_json(url: str, timeout: int) -> dict[str, Any]:
-    payload, _, _ = request_bytes(
-        url,
-        timeout=timeout,
-        max_bytes=MAX_PAGE_BYTES,
-        accept="application/json,*/*;q=0.2",
-    )
-    value = json.loads(payload.decode("utf-8"))
-    return value if isinstance(value, dict) else {}
-
-
-def meta_content(soup: BeautifulSoup, *, prop: str = "", name: str = "") -> str:
-    attrs = {}
-    if prop:
-        attrs["property"] = re.compile(rf"^{re.escape(prop)}$", re.I)
-    else:
-        attrs["name"] = re.compile(rf"^{re.escape(name)}$", re.I)
-    node = soup.find("meta", attrs=attrs)
-    return clean(node.get("content")) if node else ""
-
-
-def largest_srcset(srcset: str) -> str:
-    best = ("", -1)
-    for part in srcset.split(","):
-        bits = part.strip().split()
-        if not bits:
-            continue
-        width = 0
-        if len(bits) > 1 and bits[-1].endswith("w"):
-            try:
-                width = int(bits[-1][:-1])
-            except ValueError:
-                width = 0
-        if width >= best[1]:
-            best = (bits[0], width)
-    return best[0]
-
-
-def json_ld_images(soup: BeautifulSoup, page_url: str) -> list[Candidate]:
-    result: list[Candidate] = []
-    for node in soup.find_all(
-        "script", attrs={"type": re.compile(r"application/ld\+json", re.I)}
-    ):
-        raw = node.string or node.get_text(" ", strip=True)
-        if not raw:
-            continue
-        try:
-            value = json.loads(raw)
-        except Exception:
-            continue
-
-        stack = value if isinstance(value, list) else [value]
-        while stack:
-            item = stack.pop()
-            if isinstance(item, list):
-                stack.extend(item)
-                continue
-            if not isinstance(item, dict):
-                continue
-            graph = item.get("@graph")
-            if isinstance(graph, list):
-                stack.extend(graph)
-
-            image = item.get("image")
-            values: list[str] = []
-            if isinstance(image, str):
-                values.append(image)
-            elif isinstance(image, dict):
-                values.append(clean(image.get("url") or image.get("contentUrl")))
-            elif isinstance(image, list):
-                for entry in image:
-                    if isinstance(entry, str):
-                        values.append(entry)
-                    elif isinstance(entry, dict):
-                        values.append(clean(entry.get("url") or entry.get("contentUrl")))
-
-            for value in values:
-                if value:
-                    safe_url = safe_candidate_url(page_url, value)
-                    if safe_url:
-                        result.append(Candidate(safe_url, "json-ld", page_url))
-    return result
-
-
-def page_candidates(page: bytes, page_url: str) -> list[Candidate]:
-    soup = BeautifulSoup(page, "html.parser")
-    result: list[Candidate] = []
-
-    for kind, key in (
-        ("prop", "og:image:secure_url"),
-        ("prop", "og:image"),
-        ("name", "twitter:image"),
-        ("name", "twitter:image:src"),
-    ):
-        value = meta_content(soup, **{kind: key})
-        if value:
-            safe_url = safe_candidate_url(page_url, value)
-            if safe_url:
-                result.append(Candidate(safe_url, key, page_url))
-
-    result.extend(json_ld_images(soup, page_url))
-
-    for selector in (
-        "article figure img",
-        "article img",
-        "main figure img",
-        "main img",
-        "[itemprop='articleBody'] img",
-    ):
-        for image in soup.select(selector)[:12]:
-            value = (
-                largest_srcset(clean(image.get("srcset")))
-                or clean(image.get("data-src"))
-                or clean(image.get("data-lazy-src"))
-                or clean(image.get("src"))
-            )
-            if value:
-                safe_url = safe_candidate_url(page_url, value)
-                if safe_url:
-                    result.append(Candidate(safe_url, selector, page_url))
-
-    return deduplicate_candidates(result)
-
-
-def rejected_candidates(article: dict[str, Any]) -> set[str]:
-    return {
-        clean(value).lower()
-        for value in (article.get("rejected_image_candidates") or [])
-        if clean(value)
-    }
-
-
-def remember_rejected_candidate(article: dict[str, Any], url: Any) -> None:
-    value = clean(url)
-    if not value:
-        return
-    existing = list(article.get("rejected_image_candidates") or [])
-    if value.lower() not in {clean(item).lower() for item in existing}:
-        existing.append(value)
-        article["rejected_image_candidates"] = existing[-20:]
-
-
-BLOCKED_IMAGE_HOSTS = (
-    "googleusercontent.com",
-    "reachplc.com", "i2-prod.", "manchestereveningnews.co.uk", "mirror.co.uk",
-    "dailymail.co.uk", "thesun.co.uk", "express.co.uk", "metro.co.uk",
-    "bbci.co.uk", "bbc.co.uk",
-    "independent.co.uk", "telegraph.co.uk", "thetimes.co.uk", "guim.co.uk",
-    "newsquest.co.uk", "burytimes.co.uk", "theoldhamtimes.co.uk",
-    "lancashiretelegraph.co.uk", "boltonnews.co.uk",
-    "leeds-live.co.uk", "lancs.live", "liverpoolecho.co.uk", "birminghammail.co.uk",
-    "headtopics.com", "msn.com", "yahoo.com", "aol.com", "inews.co.uk",
-    "gettyimages", "alamy", "shutterstock", "pa-media", "pressassociation",
-    "licdn.com", "fbcdn.net", "cdninstagram.com", "twimg.com",
-)
-
-
-def image_host_is_blocked(url: str) -> bool:
-    host = urlparse(clean(url)).netloc.lower()
-    return any(marker in host for marker in BLOCKED_IMAGE_HOSTS)
-
-
-def article_candidates(article: dict[str, Any]) -> list[Candidate]:
-    result: list[Candidate] = []
-    primary_source = clean(article.get("source_url"))
-
-    for field in (
-        "source_image_candidate_url",
-        "source_image_url",
-        "rss_image_url",
-        "media_content_url",
-        "media_thumbnail_url",
-        "enclosure_url",
-        "thumbnail_url",
-    ):
-        value = clean(article.get(field))
-        if is_http_url(value):
-            result.append(Candidate(value, field, primary_source or value))
-
-    for value in article.get("source_image_candidates") or []:
-        if is_http_url(value):
-            result.append(Candidate(clean(value), "source_image_candidates", primary_source or clean(value)))
-
-    return deduplicate_candidates(result)
-
-
-def deduplicate_candidates(candidates: list[Candidate]) -> list[Candidate]:
-    seen: set[str] = set()
-    result: list[Candidate] = []
-    for candidate in candidates:
-        url = clean(candidate.url)
-        lower = url.lower()
-        if not is_http_url(url) or url in seen:
-            continue
-        if any(hint in lower for hint in BAD_URL_HINTS):
-            continue
-        if is_disallowed_image(url):
-            continue
-        if image_host_is_blocked(url):
-            continue
-        seen.add(url)
-        result.append(candidate)
-    return result
-
-
-def extension_for(content_type: str, final_url: str, payload: bytes) -> str | None:
-    content_type = content_type.split(";", 1)[0].lower()
-    if content_type in IMAGE_EXTENSIONS:
-        return IMAGE_EXTENSIONS[content_type]
-
-    suffix = Path(urlparse(final_url).path).suffix.lower()
-    if suffix in {".jpg", ".jpeg"}:
-        return ".jpg"
-    if suffix in {".png", ".webp"}:
-        return suffix
-    if payload.startswith(b"\xff\xd8\xff"):
-        return ".jpg"
-    if payload.startswith(b"\x89PNG\r\n\x1a\n"):
-        return ".png"
-    if payload[:4] == b"RIFF" and payload[8:12] == b"WEBP":
-        return ".webp"
-    return None
-
-
-def fetch_candidate(candidate: Candidate, timeout: int) -> tuple[bytes, str, str] | None:
-    try:
-        payload, content_type, final_url = request_bytes(
-            candidate.url,
-            timeout=timeout,
-            max_bytes=MAX_IMAGE_BYTES,
-            accept="image/avif,image/webp,image/png,image/jpeg,*/*;q=0.2",
-        )
-    except (HTTPError, URLError, TimeoutError, ValueError, OSError):
-        return None
-
-    extension = extension_for(content_type, final_url, payload)
-    if not extension or len(payload) < MIN_IMAGE_BYTES:
-        return None
-    return payload, extension, final_url
-
-
-def plain_metadata(value: Any) -> str:
-    if isinstance(value, dict):
-        value = value.get("value", "")
-    return BeautifulSoup(html.unescape(clean(value)), "html.parser").get_text(" ", strip=True)
-
-
-def commons_query_terms(article: dict[str, Any]) -> list[str]:
-    title = clean(article.get("title"))
-    area = clean(article.get("area"))
-    category = clean(article.get("category"))
-    words = re.findall(r"[a-z0-9']+", title.lower())
-    useful = [word for word in words if len(word) >= 4 and word not in COMMONS_STOP_WORDS]
-    useful = useful[:7]
-
-    queries: list[str] = []
-    if title:
-        queries.append(" ".join([title, area]).strip())
-    if useful:
-        queries.append(" ".join([*useful, area]).strip())
-    if len(useful) >= 2:
-        queries.append(" ".join([*useful[:4], category]).strip())
-    return list(dict.fromkeys(query for query in queries if query))
-
-
-def commons_title_relevance(article: dict[str, Any], file_title: str) -> int:
-    article_words = {
-        word for word in re.findall(r"[a-z0-9']+", clean(article.get("title")).lower())
-        if len(word) >= 4 and word not in COMMONS_STOP_WORDS
-    }
-    file_words = set(re.findall(r"[a-z0-9']+", file_title.lower()))
-    return len(article_words & file_words)
-
-
-def commons_license_allowed(metadata: dict[str, Any]) -> bool:
-    licence = plain_metadata(metadata.get("LicenseShortName")).lower()
-    usage = plain_metadata(metadata.get("UsageTerms")).lower()
-    combined = f"{licence} {usage}".strip()
-    return any(prefix in combined for prefix in COMMONS_LICENSE_PREFIXES)
-
-
-def commons_candidates(article: dict[str, Any], timeout: int) -> list[Candidate]:
-    if not USE_WIKIMEDIA_COMMONS:
-        return []
-
-    ranked: list[tuple[int, Candidate]] = []
-    seen: set[str] = set()
-    for query in commons_query_terms(article):
-        params = {
-            "action": "query",
-            "format": "json",
-            "formatversion": "2",
-            "generator": "search",
-            "gsrnamespace": "6",
-            "gsrsearch": query,
-            "gsrlimit": "8",
-            "prop": "imageinfo",
-            "iiprop": "url|size|mime|extmetadata",
-            "iiurlwidth": "1600",
-            "origin": "*",
-        }
-        try:
-            data = request_json(f"{COMMONS_API}?{urlencode(params)}", timeout)
-        except (HTTPError, URLError, TimeoutError, ValueError, OSError, json.JSONDecodeError):
-            continue
-
-        pages = data.get("query", {}).get("pages", [])
-        if not isinstance(pages, list):
-            continue
-        for page in pages:
-            if not isinstance(page, dict):
-                continue
-            title = clean(page.get("title"))
-            info_list = page.get("imageinfo") or []
-            if not info_list or not isinstance(info_list[0], dict):
-                continue
-            info = info_list[0]
-            mime = clean(info.get("mime")).lower()
-            width = int(info.get("width") or 0)
-            height = int(info.get("height") or 0)
-            metadata = info.get("extmetadata") or {}
-            if mime not in {"image/jpeg", "image/png", "image/webp"}:
-                continue
-            if width < 700 or height < 400 or not commons_license_allowed(metadata):
-                continue
-            relevance = commons_title_relevance(article, title)
-            if relevance < 1:
-                continue
-            image_url = clean(info.get("thumburl") or info.get("url"))
-            if not image_url or image_url in seen:
-                continue
-            seen.add(image_url)
-            artist = plain_metadata(metadata.get("Artist")) or plain_metadata(metadata.get("Credit"))
-            credit = f"{artist} / Wikimedia Commons" if artist else "Wikimedia Commons"
-            page_url = "https://commons.wikimedia.org/wiki/" + quote(title.replace(" ", "_"), safe=":_/()")
-            ranked.append((relevance, Candidate(image_url, "wikimedia-commons", page_url, credit)))
-
-        if ranked:
-            break
-
-    ranked.sort(key=lambda item: item[0], reverse=True)
-    return [candidate for _, candidate in ranked[:4]]
-
-
-def fetch_source_image(
-    article: dict[str, Any],
-    *,
-    timeout: int,
-    sleep_seconds: float,
-) -> tuple[bytes, str, Candidate, str] | None:
-    candidates = article_candidates(article)
-    already_rejected = rejected_candidates(article)
-
-    for page_url in source_urls(article):
-        if is_disallowed_source(page_url):
-            continue
-        try:
-            page, content_type, final_page_url = request_bytes(
-                page_url,
-                timeout=timeout,
-                max_bytes=MAX_PAGE_BYTES,
-                accept="text/html,application/xhtml+xml;q=0.9,*/*;q=0.2",
-            )
-            if "html" in content_type or page.lstrip().startswith(b"<"):
-                candidates.extend(page_candidates(page, final_page_url))
-        except (HTTPError, URLError, TimeoutError, ValueError, OSError):
-            pass
-        if sleep_seconds:
-            time.sleep(sleep_seconds)
-
-    # Commons is the final real-image search. It runs only after explicit and
-    # source-page candidates, and always before a generated area/category card.
-    candidates.extend(commons_candidates(article, timeout))
-
-    for candidate in deduplicate_candidates(candidates):
-        if clean(candidate.url).lower() in already_rejected:
-            continue
-        if is_disallowed_image(candidate.url):
-            continue
-        fetched = fetch_candidate(candidate, timeout)
-        if fetched is None:
-            continue
-        payload, extension, final_url = fetched
-        if is_disallowed_image(final_url):
-            remember_rejected_candidate(article, candidate.url)
-            continue
-        return (
-            payload,
-            extension,
-            Candidate(final_url, candidate.method, candidate.credit_url, candidate.credit),
-            candidate.credit or source_name(article, candidate.credit_url),
-        )
-    return None
-
-
 def slug_for(article: dict[str, Any]) -> str:
     raw = clean(article.get("slug") or article.get("id") or article.get("title"))
-    slug = re.sub(r"[^a-z0-9]+", "-", raw.lower()).strip("-")
-    return slug[:80] or "story"
+    return re.sub(r"[^a-z0-9]+", "-", raw.lower()).strip("-")[:100] or "story"
 
 
-def save_source_image(
-    article: dict[str, Any],
-    payload: bytes,
-    extension: str,
-    output_dir: Path,
-) -> str:
-    digest = hashlib.sha256(payload).hexdigest()[:12]
-    filename = f"{slug_for(article)}-{digest}{extension}"
-    path = output_dir / filename
-    output_dir.mkdir(parents=True, exist_ok=True)
-    if not path.exists():
-        path.write_bytes(payload)
-    return path.as_posix()
+def cards_relative(value: Any) -> str:
+    value = clean(value).replace("\\", "/").lstrip("/")
+    return value if value.startswith("assets/img/cards/") else ""
 
 
-def wrap_text(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.ImageFont, max_width: int) -> list[str]:
-    words = text.split()
-    lines: list[str] = []
-    current = ""
-    for word in words:
-        candidate = word if not current else f"{current} {word}"
-        box = draw.textbbox((0, 0), candidate, font=font)
-        if box[2] - box[0] <= max_width:
-            current = candidate
-        else:
-            if current:
-                lines.append(current)
-            current = word
-    if current:
-        lines.append(current)
-    return lines[:4]
+def valid_cards_image(root: Path, value: Any) -> bool:
+    rel = cards_relative(value)
+    if not rel:
+        return False
+    path = root / rel
+    try:
+        return (
+            path.is_file()
+            and path.suffix.lower() in IMAGE_SUFFIXES
+            and path.stat().st_size > 4096
+        )
+    except OSError:
+        return False
 
 
-def load_font(size: int, bold: bool = False) -> ImageFont.ImageFont:
+def strip_remote_image_metadata(article: dict[str, Any]) -> None:
+    for key in REMOTE_IMAGE_FIELDS:
+        article.pop(key, None)
+
+
+def font(size: int, *, bold: bool = False) -> ImageFont.ImageFont:
     candidates = [
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf" if bold else
-        "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
     ]
     for candidate in candidates:
         path = Path(candidate)
@@ -793,200 +97,171 @@ def load_font(size: int, bold: bool = False) -> ImageFont.ImageFont:
     return ImageFont.load_default()
 
 
-CARDS_DIR = Path("assets/img/cards")
+def wrap(draw: ImageDraw.ImageDraw, text: str, fnt: ImageFont.ImageFont, width: int) -> list[str]:
+    words = clean(text).split()
+    lines: list[str] = []
+    current = ""
+    for word in words:
+        trial = word if not current else f"{current} {word}"
+        box = draw.textbbox((0, 0), trial, font=fnt)
+        if box[2] - box[0] <= width:
+            current = trial
+        else:
+            if current:
+                lines.append(current)
+            current = word
+    if current:
+        lines.append(current)
+    if len(lines) > 4:
+        lines = lines[:4]
+        last = lines[-1]
+        while last and draw.textbbox((0, 0), last + "…", font=fnt)[2] > width:
+            last = last[:-1]
+        lines[-1] = last.rstrip() + "…"
+    return lines
 
 
-def has_chosen_override(article: dict[str, Any], repo_root: Path) -> bool:
+def make_generated_card(article: dict[str, Any], root: Path) -> str:
+    """Create a photo-free fallback card inside assets/img/cards."""
     slug = slug_for(article)
-    if not slug:
-        return False
-    cards = repo_root / CARDS_DIR
-    if not cards.is_dir():
-        return False
-    return any((cards / f"{slug}{suffix}").is_file()
-               for suffix in (".jpg", ".jpeg", ".png", ".webp"))
+    target = root / CARDS_DIR / f"{slug}-generated-card.jpg"
+    target.parent.mkdir(parents=True, exist_ok=True)
+
+    canvas = Image.new("RGB", (WIDTH, HEIGHT), (13, 19, 28))
+    draw = ImageDraw.Draw(canvas)
+    cyan = (37, 164, 201)
+    white = (248, 250, 252)
+    muted = (184, 197, 211)
+
+    draw.rectangle((0, 0, WIDTH, 18), fill=cyan)
+    kicker_font = font(34, bold=True)
+    title_font = font(66, bold=True)
+    small_font = font(30)
+
+    category = clean(article.get("category") or "news").upper()
+    area = clean(article.get("area") or "Rochdale")
+    draw.text((72, 72), category, fill=cyan, font=kicker_font)
+
+    y = 145
+    for line in wrap(draw, clean(article.get("title") or "Rochdale Daily"), title_font, WIDTH - 144):
+        draw.text((72, y), line, fill=white, font=title_font)
+        y += 78
+
+    draw.text((72, HEIGHT - 100), f"{area}  •  Rochdale Daily", fill=muted, font=small_font)
+    canvas.save(target, format="JPEG", quality=90, optimize=True)
+    return target.relative_to(root).as_posix()
 
 
-def ensure_article_image(
-    article: dict[str, Any],
-    *,
-    repo_root: Path,
-    output_dir: Path,
-    timeout: int,
-    sleep_seconds: float,
-    retry_placeholders: bool,
-    allow_network: bool = True,
-) -> str:
-    if not has_chosen_override(article, repo_root) and has_real_image(article, repo_root):
-        return "already-covered"
-
-    if clean(article.get("image_status")) == "source-image-cached":
-        remember_rejected_candidate(article, article.get("source_image_candidate_url"))
-
-    existing_status = clean(article.get("image_status"))
-    existing_placeholder = existing_status in {"generated-placeholder", "area-category-card"}
-
-    if allow_network and (not existing_placeholder or retry_placeholders) and (USE_SOURCE_IMAGES or USE_WIKIMEDIA_COMMONS):
-        result = fetch_source_image(
-            article,
-            timeout=timeout,
-            sleep_seconds=sleep_seconds,
-        )
-        if result is not None:
-            payload, extension, candidate, credit = result
-            local_path = save_source_image(article, payload, extension, output_dir)
-            is_commons = candidate.method == "wikimedia-commons"
-            article["image_url"] = local_path
-            article["image_credit"] = credit
-            article["image_credit_url"] = candidate.credit_url
-            article["source_image_candidate_url"] = candidate.url
-            article["image_status"] = "wikimedia-commons" if is_commons else "source-image-cached"
-            article["image_backfill_method"] = candidate.method
-            article["source_image_reuse_status"] = (
-                "wikimedia-commons-reusable" if is_commons
-                else article.get("source_image_reuse_status") or "source-attributed-review-required"
-            )
-            article.pop("image_placeholder_reason", None)
-            return "commons-image" if is_commons else "source-image"
-
-    slug = slug_for(article)
-    cat_key = clean(article.get("category")).lower()
-    library_match = find_library_photo(
+def curated_match(article: dict[str, Any], root: Path) -> Path | None:
+    category = clean(article.get("category")).lower()
+    return find_library_photo(
         clean(article.get("title")),
-        slug,
-        cat_key,
-        repo_root / CARDS_DIR,
-        slug_only=(cat_key == "crime"),
+        slug_for(article),
+        category,
+        root / CARDS_DIR,
+        # Crime images must be explicitly named for the story.
+        slug_only=(category == "crime"),
     )
-    if library_match is not None:
-        base = re.sub(r"-\d+$", "", library_match.stem)
-        credit = (_folder_credit(base, repo_root / CARDS_DIR)
-                  or _folder_credit(library_match.stem, repo_root / CARDS_DIR)
-                  or "Rochdale Daily")
-        article["image_url"] = library_match.relative_to(repo_root).as_posix()
-        article["image_credit"] = credit
-        article["image_credit_url"] = "" if credit != "Rochdale Daily" else "https://rochdaledaily.co.uk/"
-        article["image_status"] = "curated-library-photo"
-        article["source_image_reuse_status"] = "curated-library-photo"
-        article.pop("image_placeholder_reason", None)
-        return "library-photo"
 
-    card_path = output_dir / f"{slug}-area-category-card.jpg"
-    local_path, credit = compose_story_card(
-        clean(article.get("title")),
-        article.get("area"),
-        article.get("category"),
-        card_path,
-        story_text=clean(article.get("excerpt"))
-        + " "
-        + re.sub(r"<[^>]+>", " ", str(article.get("content_html") or ""))[:1200],
+
+def set_curated(article: dict[str, Any], root: Path, chosen: Path) -> None:
+    rel = chosen.relative_to(root).as_posix()
+    base = re.sub(r"-\d+$", "", chosen.stem)
+    credit = (
+        _folder_credit(base, root / CARDS_DIR)
+        or _folder_credit(chosen.stem, root / CARDS_DIR)
+        or "Rochdale Daily"
     )
-    used_real_photo = credit != "Rochdale Daily"
-    article["image_url"] = local_path
+    article["image_url"] = rel
+    article["img"] = rel
     article["image_credit"] = credit
-    article["image_credit_url"] = "" if used_real_photo else "https://rochdaledaily.co.uk/"
-    article["image_status"] = "area-category-card"
-    article["image_placeholder_reason"] = (
-        "Local area photograph, category-styled"
-        if used_real_photo
-        else "Generated area/category card; no source, Wikimedia Commons or library image available"
-    )
-    return "placeholder"
+    article["image_credit_url"] = "" if credit != "Rochdale Daily" else "https://rochdaledaily.co.uk/"
+    article["image_status"] = "cards-library-photo"
+    article["image_backfill_method"] = "cards-library"
+    article["source_image_reuse_status"] = "cards-only"
+    article.pop("image_placeholder_reason", None)
+    strip_remote_image_metadata(article)
 
 
-def atomic_write(path: Path, value: Any) -> None:
-    temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temp.replace(path)
+def set_generated(article: dict[str, Any], root: Path) -> None:
+    rel = make_generated_card(article, root)
+    article["image_url"] = rel
+    article["img"] = rel
+    article["image_credit"] = "Rochdale Daily"
+    article["image_credit_url"] = "https://rochdaledaily.co.uk/"
+    article["image_status"] = "cards-generated"
+    article["image_backfill_method"] = "cards-generated"
+    article["source_image_reuse_status"] = "cards-only"
+    article["image_placeholder_reason"] = "No editor-curated matching photograph exists in assets/img/cards"
+    strip_remote_image_metadata(article)
+
+
+def enforce_article(article: dict[str, Any], root: Path) -> str:
+    if valid_cards_image(root, article.get("image_url") or article.get("img")):
+        rel = cards_relative(article.get("image_url") or article.get("img"))
+        article["image_url"] = rel
+        article["img"] = rel
+        article["source_image_reuse_status"] = "cards-only"
+        strip_remote_image_metadata(article)
+        return "kept-cards"
+
+    chosen = curated_match(article, root)
+    if chosen is not None and valid_cards_image(root, chosen.relative_to(root).as_posix()):
+        set_curated(article, root, chosen)
+        return "cards-library"
+
+    set_generated(article, root)
+    return "cards-generated"
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--articles", type=Path, default=Path("articles.json"))
-    parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=Path("assets/article-images"),
-    )
+    parser.add_argument("--report", type=Path, default=Path("image_coverage_report.json"))
+    # Legacy flags kept only so older workflows do not break. They do not enable
+    # network access or any non-cards image source.
+    parser.add_argument("--retry-placeholders", action="store_true")
     parser.add_argument("--limit", type=int, default=0)
-    parser.add_argument("--timeout", type=int, default=20)
-    parser.add_argument("--sleep", type=float, default=0.15)
-    parser.add_argument(
-        "--retry-placeholders",
-        action="store_true",
-        help="Retry source and Wikimedia extraction for stories using generated cards.",
-    )
-    parser.add_argument(
-        "--report",
-        type=Path,
-        default=Path("image_coverage_report.json"),
-    )
+    parser.add_argument("--timeout", type=int, default=0)
+    parser.add_argument("--sleep", type=float, default=0.0)
+    parser.add_argument("--output-dir", type=Path, default=CARDS_DIR)
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
-    repo_root = Path.cwd()
-    articles = json.loads(args.articles.read_text(encoding="utf-8"))
-    if not isinstance(articles, list):
-        raise SystemExit("articles.json must contain a JSON array")
+    root = Path.cwd()
+    data = json.loads(args.articles.read_text(encoding="utf-8"))
+    rows = data if isinstance(data, list) else data.get("articles", [])
+    if not isinstance(rows, list):
+        raise SystemExit("Article feed must contain a JSON list")
 
-    stats = Stats(total=len(articles))
+    stats = {"kept_cards": 0, "cards_library": 0, "cards_generated": 0, "skipped": 0}
     report: list[dict[str, str]] = []
-    processed = 0
 
-    for article in articles:
+    for article in rows:
         if not isinstance(article, dict):
             continue
         if clean(article.get("status") or "published").lower() != "published":
-            stats.skipped_unpublished += 1
+            stats["skipped"] += 1
             continue
-
-        allow_network = not args.limit or processed < args.limit
-        if allow_network:
-            processed += 1
-
-        result = ensure_article_image(
-            article,
-            repo_root=repo_root,
-            output_dir=args.output_dir,
-            timeout=args.timeout,
-            sleep_seconds=args.sleep,
-            retry_placeholders=args.retry_placeholders,
-            allow_network=allow_network,
-        )
-
-        if result == "already-covered":
-            stats.already_covered += 1
-        elif result == "source-image":
-            stats.source_images_added += 1
-        elif result == "commons-image":
-            stats.commons_images_added += 1
-        elif result == "placeholder":
-            stats.placeholders_added += 1
-            stats.source_attempts_failed += 1
-
+        result = enforce_article(article, root)
+        if result == "kept-cards":
+            stats["kept_cards"] += 1
+        elif result == "cards-library":
+            stats["cards_library"] += 1
+        else:
+            stats["cards_generated"] += 1
         report.append({
             "slug": slug_for(article),
-            "title": clean(article.get("title")),
             "result": result,
             "image_url": clean(article.get("image_url")),
-            "image_credit": clean(article.get("image_credit")),
         })
-        print(f"{result:16} {slug_for(article)}")
+        print(f"{result:16} {slug_for(article)} -> {article.get('image_url')}")
 
-    atomic_write(args.articles, articles)
-    atomic_write(
-        args.report,
-        {
-            "stats": stats.__dict__,
-            "items": report,
-        },
-    )
-    print(json.dumps(stats.__dict__, indent=2))
+    args.articles.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    args.report.write_text(json.dumps({"policy": "assets/img/cards only", "stats": stats, "items": report}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps(stats, indent=2))
     return 0
 
 
