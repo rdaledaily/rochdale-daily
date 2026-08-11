@@ -1,59 +1,70 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 from pathlib import Path
+
+from PIL import Image
 
 import ensure_article_images as mod
 
 
-def test_existing_image_is_preserved() -> None:
+def write_jpeg(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (800, 450), (30, 40, 50)).save(path, format="JPEG")
+
+
+def test_existing_cards_image_is_preserved() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        image = root / "assets/img/cards/sample.jpg"
+        write_jpeg(image)
+        article = {"image_url": "assets/img/cards/sample.jpg", "status": "published"}
+        assert mod.valid_cards_image(root, article["image_url"])
+        assert mod.enforce_article(article, root) == "kept-cards"
+        assert article["image_url"] == "assets/img/cards/sample.jpg"
+
+
+def test_non_cards_image_is_never_preserved() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         image = root / "assets/article-images/existing.jpg"
-        image.parent.mkdir(parents=True)
-        # A genuine (minimal) JPEG: has_real_image now validates that a cached
-        # image is actually an image, not an HTML error page saved as .jpg.
-        image.write_bytes(b"\xff\xd8\xff\xe0" + b"\x00" * mod.MIN_IMAGE_BYTES)
-        article = {"image_url": "assets/article-images/existing.jpg"}
-        assert mod.has_real_image(article, root)
-
-
-def test_placeholder_is_created_without_source() -> None:
-    with tempfile.TemporaryDirectory() as tmp:
-        root = Path(tmp)
-        output = root / "assets/article-images"
+        write_jpeg(image)
         article = {
             "title": "Sample Rochdale story",
             "slug": "sample-rochdale-story",
             "category": "community",
             "area": "rochdale",
             "status": "published",
+            "image_url": "assets/article-images/existing.jpg",
+            "source_image_candidate_url": "https://example.invalid/photo.jpg",
         }
-        result = mod.ensure_article_image(
-            article,
-            repo_root=root,
-            output_dir=output,
-            timeout=1,
-            sleep_seconds=0,
-            retry_placeholders=False,
-        )
-        assert result == "placeholder"
+        result = mod.enforce_article(article, root)
+        assert result == "cards-generated"
+        assert article["image_url"].startswith("assets/img/cards/")
         assert (root / article["image_url"]).is_file()
-        assert article["image_credit"] == "Rochdale Daily"
+        assert "source_image_candidate_url" not in article
 
 
-def test_candidate_order_prefers_stored_source_image() -> None:
-    article = {
-        "source_url": "https://publisher.example/story",
-        "source_image_candidate_url": "https://publisher.example/image.jpg",
-        "rss_image_url": "https://publisher.example/rss.jpg",
-    }
-    candidates = mod.article_candidates(article)
-    assert candidates[0].method == "source_image_candidate_url"
+def test_curated_cards_photo_matches_story() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        chosen = root / "assets/img/cards/rochdale_town_hall.jpg"
+        write_jpeg(chosen)
+        article = {
+            "title": "Rochdale Town Hall restoration reaches milestone",
+            "slug": "rochdale-town-hall-restoration-milestone",
+            "category": "news",
+            "area": "rochdale",
+            "status": "published",
+        }
+        result = mod.enforce_article(article, root)
+        assert result == "cards-library"
+        assert article["image_url"] == "assets/img/cards/rochdale_town_hall.jpg"
 
 
-def test_run_gives_every_published_story_an_image() -> None:
+def test_run_gives_every_published_story_a_cards_image() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         articles_path = root / "articles.json"
@@ -65,6 +76,7 @@ def test_run_gives_every_published_story_an_image() -> None:
                 "status": "published",
                 "category": "news",
                 "area": "rochdale",
+                "image_url": "https://upload.wikimedia.org/example.jpg",
             },
             {
                 "title": "Two",
@@ -72,16 +84,15 @@ def test_run_gives_every_published_story_an_image() -> None:
                 "status": "published",
                 "category": "sport",
                 "area": "heywood",
+                "image_url": "assets/article-images/two.jpg",
             },
         ]), encoding="utf-8")
 
         old_cwd = Path.cwd()
         try:
-            import os
             os.chdir(root)
             rc = mod.main([
                 "--articles", str(articles_path),
-                "--output-dir", "assets/article-images",
                 "--report", str(report_path),
             ])
         finally:
@@ -89,17 +100,19 @@ def test_run_gives_every_published_story_an_image() -> None:
 
         assert rc == 0
         saved = json.loads(articles_path.read_text(encoding="utf-8"))
-        assert all(item.get("image_url") for item in saved)
+        assert all(item["image_url"].startswith("assets/img/cards/") for item in saved)
         assert all((root / item["image_url"]).is_file() for item in saved)
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        assert report["policy"] == "assets/img/cards only"
 
 
 if __name__ == "__main__":
     failures = 0
     for test in (
-        test_existing_image_is_preserved,
-        test_placeholder_is_created_without_source,
-        test_candidate_order_prefers_stored_source_image,
-        test_run_gives_every_published_story_an_image,
+        test_existing_cards_image_is_preserved,
+        test_non_cards_image_is_never_preserved,
+        test_curated_cards_photo_matches_story,
+        test_run_gives_every_published_story_a_cards_image,
     ):
         try:
             test()
