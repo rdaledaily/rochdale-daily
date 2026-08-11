@@ -10,8 +10,9 @@ on:
       - 'manual_articles.d/**'
       - 'manual_publish_trigger.txt'
       - '.github/workflows/publish-pending-manual.yml'
+      - 'scraper/ensure_article_images.py'
       - 'scraper/guarantee_article_images.py'
-      - 'scraper/related_commons_images.py'
+      - 'assets/img/cards/**'
 
 permissions:
   contents: write
@@ -75,41 +76,40 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
+          python -m pip install --no-cache-dir "Pillow>=10,<13"
 
-      - name: Rebuild article dataset
+      - name: Rebuild article dataset without remote photography
+        env:
+          USE_SOURCE_IMAGES: 'false'
+          USE_WIKIMEDIA_COMMONS: 'false'
         run: python scraper/run_fast_local_pipeline.py --manual-only || python scraper/article_gate.py articles.json
 
-      - name: Mark generic cards as replaceable
+      - name: Enforce cards-only article images
+        run: python scraper/ensure_article_images.py --articles articles.json
+
+      - name: Rebuild front-page feed
+        run: python scraper/frontpage_pipeline.py
+
+      - name: Re-enforce cards-only policy after event/feed generation
+        run: python scraper/ensure_article_images.py --articles articles.json
+
+      - name: Validate public article feed and cards-only image paths
         run: |
+          python -m json.tool articles.json > /dev/null
+          python scraper/article_gate.py articles.json
           python - <<'PY'
           import json
-          path='articles.json'
-          with open(path,encoding='utf-8') as f: data=json.load(f)
-          rows=data if isinstance(data,list) else data.get('articles',[])
-          changed=0
+          rows=json.load(open('articles.json',encoding='utf-8'))
+          bad=[]
           for a in rows:
-              img=str(a.get('image_url') or a.get('img') or '')
-              if ('area-category-card' in img or 'placeholder' in img or
-                  img.startswith('assets/img/cards/')):
-                  a['source_image_reuse_status']='category-fallback'
-                  changed+=1
-          with open(path,'w',encoding='utf-8') as f:
-              json.dump(data,f,ensure_ascii=False,indent=2); f.write('\n')
-          print(f'Marked {changed} fallback image(s) as replaceable.')
+              if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
+                  continue
+              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
+              if not image.startswith('assets/img/cards/'):
+                  bad.append((a.get('slug'),image))
+          if bad:
+              raise SystemExit(f'Cards-only image policy failed: {bad[:20]}')
           PY
-
-      - name: Resolve real images for every story
-        env:
-          USE_SOURCE_IMAGES: 'true'
-          USE_WIKIMEDIA_COMMONS: 'true'
-        run: |
-          python scraper/ensure_article_images.py --articles articles.json --retry-placeholders
-          python scraper/related_commons_images.py --articles articles.json
-          python scraper/repair_placeholder_images.py --articles articles.json || true
-          python scraper/guarantee_article_images.py articles.json
-
-      - name: Rebuild front-page feed with resolved images
-        run: python scraper/frontpage_pipeline.py
 
       - name: Rebuild article pages, archive and sitemap
         run: |
@@ -125,7 +125,7 @@ jobs:
             echo 'Nothing changed.'
             exit 0
           fi
-          git commit -m 'Publish manual articles with guaranteed real images'
+          git commit -m 'Publish manual articles with cards-only images'
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git merge --no-edit origin/main; then
@@ -134,7 +134,8 @@ jobs:
                 git show ':2:articles.json' > /tmp/local_articles.json
                 git show ':3:articles.json' > /tmp/remote_articles.json
                 python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
-                git add articles.json
+                python scraper/ensure_article_images.py --articles articles.json
+                git add articles.json assets/img/cards image_coverage_report.json
               fi
               conflicted=$(git diff --name-only --diff-filter=U)
               if [ -n "${conflicted}" ]; then
