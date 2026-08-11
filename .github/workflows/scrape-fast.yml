@@ -37,8 +37,8 @@ jobs:
       REQUEST_TIMEOUT: "8"
       SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
       SLOW_DOMAIN_BENCH_HOURS: "24"
-      USE_SOURCE_IMAGES: "true"
-      USE_WIKIMEDIA_COMMONS: "true"
+      USE_SOURCE_IMAGES: "false"
+      USE_WIKIMEDIA_COMMONS: "false"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
       SOCIAL_CONTEXT_ENABLED: "true"
       FACEBOOK_COMMENTS_ENABLED: "true"
@@ -86,7 +86,7 @@ jobs:
       - name: Run Rochdale-first pipeline
         timeout-minutes: 18
         run: python scraper/run_fast_local_pipeline.py
-      - name: Resolve article images before page generation
+      - name: Enforce cards-only article images before page generation
         timeout-minutes: 5
         run: python scraper/ensure_article_images.py
       - name: Validate article feed
@@ -110,7 +110,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add articles.json slow_domains.json scraper_status.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json assets/img/generated assets/article-images \
+            image_coverage_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "${COMMIT_MESSAGE}"
@@ -147,8 +147,8 @@ jobs:
       GOOGLE_NEWS_BROWSER_RESOLUTION: "true"
       GOOGLE_NEWS_RESOLVE_MAX: "120"
       GOOGLE_NEWS_RESOLVE_BUDGET_SECONDS: "300"
-      USE_SOURCE_IMAGES: "true"
-      USE_WIKIMEDIA_COMMONS: "true"
+      USE_SOURCE_IMAGES: "false"
+      USE_WIKIMEDIA_COMMONS: "false"
       COMMIT_MESSAGE: "Update Rochdale Daily deep discovery"
 
     steps:
@@ -174,7 +174,7 @@ jobs:
       - name: Run deep Rochdale discovery
         timeout-minutes: 27
         run: python scraper/run_fast_local_pipeline.py
-      - name: Resolve article images before page generation
+      - name: Enforce cards-only article images before page generation
         timeout-minutes: 5
         run: python scraper/ensure_article_images.py
       - name: Validate and generate site
@@ -189,7 +189,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add articles.json slow_domains.json scraper_status.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json assets/img/generated assets/article-images \
+            image_coverage_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "${COMMIT_MESSAGE}"
