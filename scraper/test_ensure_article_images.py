@@ -15,15 +15,39 @@ def write_jpeg(path: Path) -> None:
     Image.new("RGB", (800, 450), (30, 40, 50)).save(path, format="JPEG")
 
 
-def test_existing_cards_image_is_preserved() -> None:
+def test_existing_matching_cards_image_is_preserved() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
-        image = root / "assets/img/cards/sample.jpg"
+        image = root / "assets/img/cards/sample_rochdale_story.jpg"
         write_jpeg(image)
-        article = {"image_url": "assets/img/cards/sample.jpg", "status": "published"}
+        article = {
+            "title": "Sample Rochdale Story",
+            "slug": "sample-rochdale-story",
+            "image_url": "assets/img/cards/sample_rochdale_story.jpg",
+            "status": "published",
+        }
         assert mod.valid_cards_image(root, article["image_url"])
         assert mod.enforce_article(article, root) == "kept-cards"
-        assert article["image_url"] == "assets/img/cards/sample.jpg"
+        assert article["image_url"] == "assets/img/cards/sample_rochdale_story.jpg"
+
+
+def test_unrelated_existing_cards_image_is_not_preserved() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        image = root / "assets/img/cards/gift_shop.jpg"
+        write_jpeg(image)
+        article = {
+            "title": "Rochdale supporters travel to cup match",
+            "slug": "rochdale-supporters-travel-to-cup-match",
+            "category": "sport",
+            "area": "rochdale",
+            "status": "published",
+            "image_url": "assets/img/cards/gift_shop.jpg",
+        }
+        result = mod.enforce_article(article, root)
+        assert result == "cards-generated"
+        assert article["image_url"].startswith("assets/img/cards/")
+        assert "gift_shop" not in article["image_url"]
 
 
 def test_non_cards_image_is_never_preserved() -> None:
@@ -47,7 +71,7 @@ def test_non_cards_image_is_never_preserved() -> None:
         assert "source_image_candidate_url" not in article
 
 
-def test_curated_cards_photo_matches_story() -> None:
+def test_curated_cards_photo_matches_full_story_phrase() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         chosen = root / "assets/img/cards/rochdale_town_hall.jpg"
@@ -62,6 +86,43 @@ def test_curated_cards_photo_matches_story() -> None:
         result = mod.enforce_article(article, root)
         assert result == "cards-library"
         assert article["image_url"] == "assets/img/cards/rochdale_town_hall.jpg"
+
+
+def test_leading_the_filename_partially_matches_resilient_roach_project() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        chosen = root / "assets/img/cards/the_resilient_roach.jpg"
+        write_jpeg(chosen)
+        article = {
+            "title": "Resilient Roach Project expands work across Rochdale",
+            "slug": "resilient-roach-project-expands-work-across-rochdale",
+            "category": "environment",
+            "area": "rochdale",
+            "status": "published",
+        }
+        result = mod.enforce_article(article, root)
+        assert result == "cards-library"
+        assert article["image_url"] == "assets/img/cards/the_resilient_roach.jpg"
+        assert article["image_match_title"] == "the_resilient_roach.jpg"
+
+
+def test_longest_filename_subject_wins() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        short = root / "assets/img/cards/roach.jpg"
+        long = root / "assets/img/cards/resilient_roach.jpg"
+        write_jpeg(short)
+        write_jpeg(long)
+        article = {
+            "title": "Resilient Roach Project expands work across Rochdale",
+            "slug": "resilient-roach-project-expands-work-across-rochdale",
+            "category": "environment",
+            "area": "rochdale",
+            "status": "published",
+        }
+        result = mod.enforce_article(article, root)
+        assert result == "cards-library"
+        assert article["image_url"] == "assets/img/cards/resilient_roach.jpg"
 
 
 def test_run_gives_every_published_story_a_cards_image() -> None:
@@ -103,15 +164,18 @@ def test_run_gives_every_published_story_a_cards_image() -> None:
         assert all(item["image_url"].startswith("assets/img/cards/") for item in saved)
         assert all((root / item["image_url"]).is_file() for item in saved)
         report = json.loads(report_path.read_text(encoding="utf-8"))
-        assert report["policy"] == "assets/img/cards only"
+        assert report["policy"] == "assets/img/cards only; filename matched"
 
 
 if __name__ == "__main__":
     failures = 0
     for test in (
-        test_existing_cards_image_is_preserved,
+        test_existing_matching_cards_image_is_preserved,
+        test_unrelated_existing_cards_image_is_not_preserved,
         test_non_cards_image_is_never_preserved,
-        test_curated_cards_photo_matches_story,
+        test_curated_cards_photo_matches_full_story_phrase,
+        test_leading_the_filename_partially_matches_resilient_roach_project,
+        test_longest_filename_subject_wins,
         test_run_gives_every_published_story_a_cards_image,
     ):
         try:
