@@ -5,6 +5,9 @@ on:
   push:
     paths:
       - trigger_image_regeneration_20260810.txt
+      - '.github/workflows/images.yml'
+      - 'scraper/ensure_article_images.py'
+      - 'scraper/related_commons_images.py'
   schedule:
     - cron: "50 * * * *"
 
@@ -18,7 +21,7 @@ concurrency:
 jobs:
   images:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       USE_SOURCE_IMAGES: "true"
@@ -33,6 +36,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -46,7 +54,7 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
-      - name: Mark generic category cards as replaceable
+      - name: Mark every automatic placecard as replaceable
         run: |
           python - <<'PY'
           import json
@@ -54,22 +62,42 @@ jobs:
           with open(path,encoding='utf-8') as f: data=json.load(f)
           rows=data if isinstance(data,list) else data.get('articles',[])
           changed=0
+          markers=('area-category-card','placeholder','stock_','category-image','category_image','img/generated')
+          fallback_statuses={'generated-placeholder','area-category-card'}
           for a in rows:
-              img=str(a.get('image_url') or a.get('img') or '')
-              if img.startswith('assets/img/cards/'):
-                  a['source_image_reuse_status']='category-fallback'
-                  changed += 1
+              if not isinstance(a,dict):
+                  continue
+              img=str(a.get('image_url') or a.get('img') or '').lower()
+              status=str(a.get('image_status') or '').lower()
+              automatic = (
+                  not img
+                  or any(marker in img for marker in markers)
+                  or status in fallback_statuses
+              )
+              # assets/img/cards contains both curated photos and generic cards.
+              # Only mark it replaceable when its metadata says it is a fallback.
+              if img.startswith('assets/img/cards/') and str(a.get('source_image_reuse_status') or '').lower() == 'category-fallback':
+                  automatic = True
+              if automatic:
+                  if a.get('source_image_reuse_status') != 'category-fallback':
+                      a['source_image_reuse_status']='category-fallback'
+                      changed += 1
           with open(path,'w',encoding='utf-8') as f:
               json.dump(data,f,ensure_ascii=False,indent=2); f.write('\n')
-          print(f'Marked {changed} generic category-card image(s) for source/Commons replacement.')
+          print(f'Marked {changed} automatic placecard image(s) for source/Commons replacement.')
           PY
 
-      - name: Ensure every published story has an image
-        timeout-minutes: 20
+      - name: Prefer original-source or reusable Commons photographs
+        timeout-minutes: 25
         run: |
           python scraper/ensure_article_images.py \
             --articles articles.json \
             --retry-placeholders
+
+      - name: Enforce strict story-related Wikimedia matching
+        timeout-minutes: 25
+        run: |
+          python scraper/related_commons_images.py --articles articles.json
 
       - name: Validate public article feed
         run: |
@@ -82,7 +110,7 @@ jobs:
           python scraper/generate_archive.py
 
       - name: Generate static article pages and sitemap
-        timeout-minutes: 5
+        timeout-minutes: 8
         run: python scraper/generate_pages.py
 
       - name: Commit updated feed and rendered site
@@ -96,8 +124,13 @@ jobs:
           fi
           git commit -m "${COMMIT_MESSAGE}"
           for attempt in 1 2 3 4 5; do
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
-            git fetch origin "${GITHUB_REF_NAME}"
-            git rebase "origin/${GITHUB_REF_NAME}" || { git rebase --abort; sleep 3; }
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              sleep 3
+              continue
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 3
           done
           exit 1
