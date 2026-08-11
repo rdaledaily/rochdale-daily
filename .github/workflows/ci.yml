@@ -1,10 +1,5 @@
 name: Rochdale Daily pipeline tests
 
-# The compile checks and test suite used to run on every 15-minute scrape,
-# where they cost time on every single run and told you nothing new unless
-# the code had changed. They belong on push, plus a daily run to catch
-# breakage from changing upstream data rather than changing code.
-
 on:
   workflow_dispatch:
   push:
@@ -12,9 +7,8 @@ on:
     paths:
       - "scraper/**"
       - "requirements.txt"
-      # The hand-edited data files. Without these, editing manual_articles.json
-      # through the web interface ran no checks at all - which is exactly how a
-      # trailing comma reached the live site five times in one day.
+      - "articles.json"
+      - "assets/img/cards/**"
       - "manual_articles.json"
       - "manual_events.json"
       - "adverts.json"
@@ -87,12 +81,9 @@ jobs:
             scraper/merge_feeds.py \
             scraper/resolve_google_news_sources.py \
             scraper/ensure_article_images.py \
+            scraper/guarantee_article_images.py \
             scraper/scraper.py
 
-      # Hand-edited data files fail silently at runtime: manual_articles.py
-      # returns an empty list on a parse error, so one stray comma removes every
-      # manual article from the site with no error anywhere. This turns that
-      # into a failed check naming the file and the line.
       - name: Validate hand-edited data files
         run: python scraper/check_data_files.py
 
@@ -111,6 +102,30 @@ jobs:
           python scraper/test_article_gate.py
           python scraper/test_resolve_google_news_sources.py
           python scraper/test_ensure_article_images.py
+
+      - name: Verify published article image paths are cards-only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=json.loads(Path('articles.json').read_text(encoding='utf-8'))
+          bad=[]
+          missing=[]
+          for a in rows:
+              if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
+                  continue
+              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
+              if not image.startswith('assets/img/cards/'):
+                  bad.append((a.get('slug'), image))
+                  continue
+              if not Path(image).is_file():
+                  missing.append((a.get('slug'), image))
+          if bad:
+              raise SystemExit(f'Non-cards article images: {bad[:20]}')
+          if missing:
+              raise SystemExit(f'Missing cards-folder article images: {missing[:20]}')
+          print('Cards-only article image policy passed.')
+          PY
 
       - name: Verify scraper imports cleanly
         run: |
