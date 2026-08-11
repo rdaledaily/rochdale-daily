@@ -1,13 +1,17 @@
-name: Rochdale Daily image backfill
+name: Rochdale Daily cards-only image enforcement
 
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     paths:
-      - trigger_image_regeneration_20260810.txt
-      - '.github/workflows/images.yml'
+      - 'articles.json'
+      - 'manual_articles.json'
+      - 'manual_articles.d/**'
+      - 'assets/img/cards/**'
       - 'scraper/ensure_article_images.py'
-      - 'scraper/related_commons_images.py'
+      - 'scraper/guarantee_article_images.py'
+      - '.github/workflows/images.yml'
   schedule:
     - cron: "50 * * * *"
 
@@ -20,15 +24,9 @@ concurrency:
 
 jobs:
   images:
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Enforce cards-only article images')
     runs-on: ubuntu-latest
-    timeout-minutes: 45
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      USE_SOURCE_IMAGES: "true"
-      USE_WIKIMEDIA_COMMONS: "true"
-      RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
-      COMMIT_MESSAGE: "Backfill Rochdale Daily article images"
-
+    timeout-minutes: 30
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -54,75 +52,50 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
-      - name: Mark every automatic placecard as replaceable
+      - name: Enforce cards-only policy on every published article
+        run: python scraper/ensure_article_images.py --articles articles.json
+
+      - name: Rebuild feeds
+        run: python scraper/frontpage_pipeline.py
+
+      - name: Re-enforce cards-only policy after feed/event generation
+        run: python scraper/ensure_article_images.py --articles articles.json
+
+      - name: Validate every published image path is in assets/img/cards
         run: |
           python - <<'PY'
           import json
-          path='articles.json'
-          with open(path,encoding='utf-8') as f: data=json.load(f)
-          rows=data if isinstance(data,list) else data.get('articles',[])
-          changed=0
-          markers=('area-category-card','placeholder','stock_','category-image','category_image','img/generated')
-          fallback_statuses={'generated-placeholder','area-category-card'}
+          from pathlib import Path
+          rows=json.loads(Path('articles.json').read_text(encoding='utf-8'))
+          bad=[]
           for a in rows:
-              if not isinstance(a,dict):
+              if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
                   continue
-              img=str(a.get('image_url') or a.get('img') or '').lower()
-              status=str(a.get('image_status') or '').lower()
-              automatic = (
-                  not img
-                  or any(marker in img for marker in markers)
-                  or status in fallback_statuses
-              )
-              # assets/img/cards contains both curated photos and generic cards.
-              # Only mark it replaceable when its metadata says it is a fallback.
-              if img.startswith('assets/img/cards/') and str(a.get('source_image_reuse_status') or '').lower() == 'category-fallback':
-                  automatic = True
-              if automatic:
-                  if a.get('source_image_reuse_status') != 'category-fallback':
-                      a['source_image_reuse_status']='category-fallback'
-                      changed += 1
-          with open(path,'w',encoding='utf-8') as f:
-              json.dump(data,f,ensure_ascii=False,indent=2); f.write('\n')
-          print(f'Marked {changed} automatic placecard image(s) for source/Commons replacement.')
+              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
+              if not image.startswith('assets/img/cards/'):
+                  bad.append((a.get('slug'), image))
+          if bad:
+              print('\n'.join(f'{slug}: {image}' for slug,image in bad[:50]))
+              raise SystemExit(f'{len(bad)} published article image(s) violate cards-only policy')
+          print(f'Validated {len(rows)} records: published article images are cards-only.')
           PY
 
-      - name: Prefer original-source or reusable Commons photographs
-        timeout-minutes: 25
+      - name: Rebuild public pages and archives
         run: |
-          python scraper/ensure_article_images.py \
-            --articles articles.json \
-            --retry-placeholders
-
-      - name: Enforce strict story-related Wikimedia matching
-        timeout-minutes: 25
-        run: |
-          python scraper/related_commons_images.py --articles articles.json
-
-      - name: Validate public article feed
-        run: |
-          python -m json.tool articles.json > /dev/null
-          python scraper/article_gate.py articles.json
-
-      - name: Rebuild front-page and archive feeds with new images
-        run: |
-          python scraper/frontpage_pipeline.py
           python scraper/generate_archive.py
+          python scraper/generate_ward_pages.py
+          python scraper/generate_pages.py
 
-      - name: Generate static article pages and sitemap
-        timeout-minutes: 8
-        run: python scraper/generate_pages.py
-
-      - name: Commit updated feed and rendered site
+      - name: Commit cards-only feed and rendered site
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add articles.json image_coverage_report.json assets/img/cards articles sitemap.xml wards/ index.html
           if git diff --cached --quiet; then
-            echo "No article changes to commit."
+            echo "Cards-only image policy already satisfied."
             exit 0
           fi
-          git commit -m "${COMMIT_MESSAGE}"
+          git commit -m "Enforce cards-only article images"
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git rebase origin/main; then
