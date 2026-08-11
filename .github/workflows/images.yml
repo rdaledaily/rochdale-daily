@@ -9,8 +9,12 @@ on:
       - 'manual_articles.json'
       - 'manual_articles.d/**'
       - 'assets/img/cards/**'
+      - 'council_roster.json'
+      - 'council_votes.json'
       - 'scraper/ensure_article_images.py'
       - 'scraper/guarantee_article_images.py'
+      - 'scraper/councillor_photos.py'
+      - 'scraper/generate_ward_pages.py'
       - '.github/workflows/images.yml'
   schedule:
     - cron: "50 * * * *"
@@ -83,7 +87,10 @@ jobs:
           print(f'Validated {len(rows)} records: published article images are cards-only.')
           PY
 
-      - name: Rebuild public pages and archives
+      - name: Build councillor portrait index from local cards
+        run: python scraper/councillor_photos.py
+
+      - name: Rebuild public pages, ward democracy sections and archives
         run: |
           python scraper/generate_archive.py
           python scraper/generate_ward_pages.py
@@ -93,12 +100,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json image_coverage_report.json assets/img/cards articles sitemap.xml wards/ index.html
+          git add articles.json image_coverage_report.json councillor_photos.json assets/img/cards articles sitemap.xml wards/ index.html
           if git diff --cached --quiet; then
-            echo "Cards-only image policy already satisfied."
+            echo "Cards-only image policy and councillor portraits already satisfied."
             exit 0
           fi
-          git commit -m "Enforce cards-only article images"
+          git commit -m "Enforce cards-only article images and councillor portraits"
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git rebase origin/main; then
