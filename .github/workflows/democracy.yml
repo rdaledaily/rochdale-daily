@@ -1,0 +1,116 @@
+name: Populate ward democracy councillors
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/img/cards/**'
+      - 'council_roster.json'
+      - 'council_votes.json'
+      - 'ward_areas.json'
+      - 'scraper/councillor_photos.py'
+      - 'scraper/generate_ward_pages.py'
+      - 'scraper/test_councillor_photos.py'
+      - '.github/workflows/democracy.yml'
+
+permissions:
+  contents: write
+
+# Keep democracy-page generation independent from the article-image writer.
+# Multiple image uploads can arrive in quick succession; the newest run wins
+# because it checks out the latest main branch containing all uploaded files.
+concurrency:
+  group: rd-democracy-pages
+  cancel-in-progress: true
+
+jobs:
+  democracy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out latest main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Require a local portrait for every councillor
+        run: python scraper/test_councillor_photos.py
+
+      - name: Build local councillor portrait index
+        run: python scraper/councillor_photos.py
+
+      - name: Populate all ward democracy sections
+        run: python scraper/generate_ward_pages.py
+
+      - name: Verify all 20 wards show three local councillor portraits
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          wards = json.loads(Path('ward_areas.json').read_text(encoding='utf-8')).get('wards', {})
+          votes = json.loads(Path('council_votes.json').read_text(encoding='utf-8')).get('wards', {})
+          failures = []
+
+          def slugify(value):
+              import unicodedata
+              text = unicodedata.normalize('NFKD', str(value)).encode('ascii', 'ignore').decode()
+              return re.sub(r'-{2,}', '-', re.sub(r'[^a-zA-Z0-9]+', '-', text).strip('-').lower())
+
+          for ward in wards:
+              expected = len(votes.get(ward, []))
+              page = Path('wards') / f'{slugify(ward)}.html'
+              if expected != 3:
+                  failures.append(f'{ward}: expected roster size 3, got {expected}')
+                  continue
+              if not page.is_file():
+                  failures.append(f'{ward}: ward page missing')
+                  continue
+              text = page.read_text(encoding='utf-8')
+              portraits = text.count('class="cllr-photo"')
+              placeholders = text.count('class="cllr-placeholder"')
+              if portraits != 3 or placeholders:
+                  failures.append(f'{ward}: portraits={portraits}, placeholders={placeholders}')
+
+          if failures:
+              raise SystemExit('Democracy portrait coverage failed:\n' + '\n'.join(failures))
+          print(f'Democracy portrait coverage passed: {len(wards)} wards, 60/60 councillors pictured from assets/img/cards.')
+          PY
+
+      - name: Commit regenerated democracy pages
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add councillor_photos.json wards/
+          if git diff --cached --quiet; then
+            echo 'Democracy sections already contain all current councillors.'
+            exit 0
+          fi
+          git commit -m 'Populate ward democracy sections with local councillor portraits'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              sleep 2
+              continue
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
