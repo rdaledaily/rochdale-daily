@@ -19,12 +19,12 @@ concurrency:
 
 jobs:
   preserve:
-    # The commit made by this workflow also touches articles.json. Skip only
-    # that self-generated push; all normal scraper/publisher bot pushes still
-    # run through the archive keeper.
     if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Preserve permanent article archive')
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      USE_SOURCE_IMAGES: 'false'
+      USE_WIKIMEDIA_COMMONS: 'false'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,6 +44,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
+          python -m pip install --no-cache-dir "Pillow>=10,<13"
 
       - name: Recover and merge permanent archive
         run: |
@@ -54,13 +55,14 @@ jobs:
             python scraper/preserve_article_archive.py --recover-history
           fi
 
-      - name: Rebuild archive feeds and article pages
+      - name: Rebuild feeds and enforce cards-only images
         run: |
           python scraper/frontpage_pipeline.py
+          python scraper/ensure_article_images.py --articles articles.json
           python scraper/generate_pages.py
           python scraper/generate_archive.py
 
-      - name: Verify archive can never be smaller than current published news
+      - name: Verify archive and image policy
         run: |
           python - <<'PY'
           import json
@@ -72,6 +74,15 @@ jobs:
           print(f'Current published news: {len(current_news)}; permanent archive: {len(archive)}')
           if len(archive) < len(current_news):
               raise SystemExit('Permanent archive unexpectedly smaller than current published news set')
+          bad=[]
+          for a in current:
+              if str(a.get('status') or 'published').lower() != 'published':
+                  continue
+              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
+              if not image.startswith('assets/img/cards/'):
+                  bad.append((a.get('slug'), image))
+          if bad:
+              raise SystemExit(f'Cards-only policy violation: {bad[:20]}')
           PY
 
       - name: Commit recovered archive and rebuilt site
@@ -94,6 +105,7 @@ jobs:
                 python scraper/merge_feeds.py /tmp/remote_articles.json /tmp/local_articles.json articles.json
                 python scraper/preserve_article_archive.py
                 python scraper/frontpage_pipeline.py
+                python scraper/ensure_article_images.py --articles articles.json
                 python scraper/generate_pages.py
                 python scraper/generate_archive.py
                 git add -A
