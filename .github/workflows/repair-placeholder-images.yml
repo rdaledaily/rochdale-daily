@@ -1,14 +1,17 @@
-name: Repair Rochdale Daily placeholder images
+name: Enforce Rochdale Daily cards-only article images
 
 on:
   workflow_dispatch:
   schedule:
     - cron: "20,50 * * * *"
   push:
+    branches: [main]
     paths:
       - "manual_articles.json"
       - "manual_articles.d/**"
       - "articles.json"
+      - "assets/img/cards/**"
+      - "scraper/ensure_article_images.py"
 
 permissions:
   contents: write
@@ -19,12 +22,12 @@ concurrency:
 
 jobs:
   repair:
-    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, 'Repair article photography') }}
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Enforce cards-only article images')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      USE_SOURCE_IMAGES: "true"
-      USE_WIKIMEDIA_COMMONS: "true"
+      USE_SOURCE_IMAGES: "false"
+      USE_WIKIMEDIA_COMMONS: "false"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,31 +49,43 @@ jobs:
           python -m pip install --no-cache-dir "Pillow>=10,<13"
       - name: Load manual articles into published feed
         run: python scraper/run_fast_local_pipeline.py --manual-only || true
-      - name: First-pass source image resolver
-        timeout-minutes: 12
-        run: python scraper/ensure_article_images.py --articles articles.json --retry-placeholders
-      - name: Replace remaining cards with relevant Commons photography
-        timeout-minutes: 15
-        run: python scraper/repair_placeholder_images.py --articles articles.json
+      - name: Enforce cards-only image policy
+        run: python scraper/ensure_article_images.py --articles articles.json
+      - name: Rebuild feeds
+        run: python scraper/frontpage_pipeline.py
+      - name: Re-enforce cards-only policy after feed generation
+        run: python scraper/ensure_article_images.py --articles articles.json
       - name: Validate and rebuild all public pages
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
-          python scraper/frontpage_pipeline.py
           python scraper/generate_archive.py
           python scraper/generate_ward_pages.py
           python scraper/generate_pages.py
-      - name: Commit repaired photography
+          python - <<'PY'
+          import json
+          rows=json.load(open('articles.json',encoding='utf-8'))
+          bad=[]
+          for a in rows:
+              if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
+                  continue
+              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
+              if not image.startswith('assets/img/cards/'):
+                  bad.append((a.get('slug'),image))
+          if bad:
+              raise SystemExit(f'{len(bad)} non-cards article images remain: {bad[:20]}')
+          PY
+      - name: Commit cards-only image repairs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json commons_image_repair_report.json image_coverage_report.json assets/article-images articles sitemap.xml index.html
+          git add articles.json image_coverage_report.json assets/img/cards articles sitemap.xml wards/ index.html
           git add articles/frontpage.json articles/categories articles/areas 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No image changes to commit."
             exit 0
           fi
-          git commit -m "Repair article photography and replace place cards"
+          git commit -m "Enforce cards-only article images"
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
             git fetch origin "${GITHUB_REF_NAME}"
