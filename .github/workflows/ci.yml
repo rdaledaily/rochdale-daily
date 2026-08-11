@@ -76,6 +76,8 @@ jobs:
             scraper/editorial_upgrade.py \
             scraper/source_presentation.py \
             scraper/generate_pages.py \
+            scraper/generate_ward_pages.py \
+            scraper/councillor_photos.py \
             scraper/food_hygiene.py \
             scraper/frontpage_pipeline.py \
             scraper/merge_feeds.py \
@@ -102,6 +104,7 @@ jobs:
           python scraper/test_article_gate.py
           python scraper/test_resolve_google_news_sources.py
           python scraper/test_ensure_article_images.py
+          python scraper/test_councillor_photos.py
 
       - name: Verify published article image paths are cards-only
         run: |
