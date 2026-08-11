@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
 """Enforce Rochdale Daily's cards-only, filename-matched article-image policy.
 
-Every published article image must live under ``assets/img/cards``.
-No source-page photographs, Wikimedia Commons images, remote URLs, people-folder
-images, area-folder images, or wider ``assets/img`` photographs are eligible.
+Every published article image must live under ``assets/img/cards``. Images are
+selected by matching the IMAGE FILENAME to the story text, with the headline
+and slug receiving the strongest priority.
 
-Photographs in ``assets/img/cards`` are matched to stories by THEIR FILENAME.
-A full filename phrase or a strong partial filename phrase may match the article
-headline/slug. For example, ``the_resilient_roach.jpg`` matches a headline such
-as ``Resilient Roach Project launches new initiative`` because the meaningful
-filename phrase ``resilient roach`` occurs in the story name.
+Examples:
 
-Longest / most-specific filename matches win. An existing cards image is not
-blindly preserved: if its filename does not match the story, it is replaced by
-a better filename match or by a generated Rochdale Daily fallback card.
+* ``poisoned.jpeg`` -> ``Woman poisoned in Rochdale incident``
+* ``taken_to_hospital.jpeg`` -> ``2 men taken to hospital after crash``
+* ``the_resilient_roach.jpg`` -> ``Resilient Roach Project launches...``
 
-The script accepts legacy command-line flags used by existing workflows, but
-network-related flags are intentionally ignored: this module never performs a
-network request.
+Spaces, hyphens, underscores, punctuation and case are ignored. Exact/full
+phrase matches beat partial matches; longer, more-specific filenames beat broad
+one-word filenames. If a matching photograph is added later, the next run will
+replace an older generated fallback retrospectively.
+
+No source-page photographs, Wikimedia images or remote image URLs are used.
 """
 from __future__ import annotations
 
@@ -52,8 +51,12 @@ REMOTE_IMAGE_FIELDS = {
 }
 
 LEADING_ARTICLES = {"the", "a", "an"}
-# A one-word image name can match when the word is distinctive (for example
-# assault.jpg). These words are too broad to be trusted on their own.
+FILLER_WORDS = {
+    "the", "a", "an", "to", "of", "in", "at", "on", "for", "from", "with",
+    "and", "or", "by", "after", "before", "into", "over", "under", "near",
+}
+# These are too broad to trust as a one-word filename match. They may still be
+# part of a multi-word filename such as ``rochdale_infirmary.jpg``.
 TOO_GENERIC_SINGLE = {
     "rochdale", "heywood", "middleton", "littleborough", "milnrow", "newhey",
     "norden", "news", "crime", "politics", "sport", "sports", "business",
@@ -105,6 +108,8 @@ def normal_words(value: Any) -> list[str]:
 
 
 def filename_words(path: Path) -> list[str]:
+    # Treat underscores, hyphens and spaces identically. Numbered variants such
+    # as ``taken_to_hospital_2.jpeg`` share the same semantic filename.
     stem = re.sub(r"[-_ ]\d+$", "", path.stem)
     words = normal_words(stem)
     while words and words[0] in LEADING_ARTICLES:
@@ -124,13 +129,53 @@ def phrase_in(words: list[str], haystack: list[str]) -> bool:
     return any(haystack[i:i + size] == words for i in range(len(haystack) - size + 1))
 
 
-def filename_match_score(article: dict[str, Any], path: Path) -> int:
-    """Score how strongly a cards filename names the story subject.
+def meaningful_words(words: list[str]) -> list[str]:
+    return [word for word in words if word not in FILLER_WORDS]
 
-    Exact slug/full contiguous phrase wins. A partial match is accepted when all
-    meaningful filename words occur in the headline/slug, even if a harmless
-    leading article such as ``the`` differs. This is what makes
-    ``the_resilient_roach.jpg`` match ``Resilient Roach Project``.
+
+def all_words_present(needles: list[str], haystack: list[str]) -> bool:
+    if not needles:
+        return False
+    available = set(haystack)
+    return all(word in available for word in needles)
+
+
+def _field_match_score(subject: list[str], field_words: list[str], *, phrase_score: int, partial_score: int) -> int:
+    """Return a score for a filename against one story field."""
+    if not field_words:
+        return -1
+
+    subject_phrase = " ".join(subject)
+    meaningful = meaningful_words(subject)
+
+    if phrase_in(subject, field_words):
+        # Longer filename phrases are intentionally favoured. This makes
+        # taken_to_hospital.jpeg beat hospital.jpeg for the same headline.
+        return phrase_score + len(subject) * 120 + len(subject_phrase)
+
+    if not meaningful:
+        return -1
+
+    if all_words_present(meaningful, field_words):
+        if len(meaningful) >= 2:
+            return partial_score + len(meaningful) * 120 + sum(len(word) for word in meaningful)
+        word = meaningful[0]
+        if len(word) >= 5 and word not in TOO_GENERIC_SINGLE:
+            return partial_score + 250 + len(word)
+
+    return -1
+
+
+def filename_match_score(article: dict[str, Any], path: Path) -> int:
+    """Score how strongly a cards filename identifies an article.
+
+    Priority is deliberately:
+      title > slug > excerpt > body
+
+    This means a filename matching the headline cannot be displaced by a random
+    word appearing deep in the article body. Body/excerpt matching exists so a
+    deliberately named image such as ``poisoned.jpeg`` can still be found when
+    the exact word is omitted from a shortened headline.
     """
     if path.suffix.lower() not in IMAGE_SUFFIXES or is_generated_card(path):
         return -1
@@ -141,47 +186,36 @@ def filename_match_score(article: dict[str, Any], path: Path) -> int:
 
     title_words = normal_words(article.get("title"))
     slug_words = normal_words(slug_for(article))
-    combined = title_words + slug_words
-    if not combined:
-        return -1
+    excerpt_words = normal_words(article.get("excerpt") or article.get("summary") or article.get("description"))
+    body_words = normal_words(article.get("body") or article.get("content"))
 
     subject_phrase = " ".join(subject)
+    title_phrase = " ".join(title_words)
     slug_phrase = " ".join(slug_words)
 
-    # One-story exact filenames beat all reusable subject images.
-    if subject_phrase == slug_phrase:
-        return 10000 + len(subject) * 100 + len(subject_phrase)
+    # Exact story-name images always win.
+    if subject_phrase and subject_phrase == title_phrase:
+        return 20000 + len(subject) * 150 + len(subject_phrase)
+    if subject_phrase and subject_phrase == slug_phrase:
+        return 19000 + len(subject) * 150 + len(subject_phrase)
 
-    # A full contiguous filename phrase in the headline/slug is the normal and
-    # safest reusable match: resilient_roach.jpg -> Resilient Roach Project.
-    if phrase_in(subject, title_words) or phrase_in(subject, slug_words):
-        return 5000 + len(subject) * 100 + len(subject_phrase)
-
-    # Partial filename matching: every meaningful filename token must be present
-    # somewhere in the story name. Require two tokens unless the sole token is
-    # distinctive enough to avoid generic category/town images matching widely.
-    meaningful = [word for word in subject if word not in TOO_GENERIC_SINGLE]
-    if not meaningful:
-        return -1
-    available = set(combined)
-    if all(word in available for word in meaningful):
-        if len(meaningful) >= 2:
-            return 3000 + len(meaningful) * 100 + sum(len(word) for word in meaningful)
-        word = meaningful[0]
-        if len(word) >= 5 and word not in TOO_GENERIC_SINGLE:
-            return 1200 + len(word)
-
-    return -1
+    candidates = [
+        _field_match_score(subject, title_words, phrase_score=15000, partial_score=12000),
+        _field_match_score(subject, slug_words, phrase_score=14000, partial_score=11000),
+        _field_match_score(subject, excerpt_words, phrase_score=8000, partial_score=6000),
+        _field_match_score(subject, body_words, phrase_score=4500, partial_score=3000),
+    ]
+    return max(candidates)
 
 
 def choose_filename_match(article: dict[str, Any], root: Path) -> Path | None:
-    """Choose the best matching photograph using only filenames in cards/."""
+    """Choose the best matching photograph using only assets/img/cards/."""
     directory = root / CARDS_DIR
     if not directory.is_dir():
         return None
 
-    scored: list[tuple[int, str, Path]] = []
-    for path in directory.iterdir():
+    scored: list[tuple[int, int, str, Path]] = []
+    for path in directory.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in IMAGE_SUFFIXES:
             continue
         try:
@@ -191,16 +225,21 @@ def choose_filename_match(article: dict[str, Any], root: Path) -> Path | None:
             continue
         score = filename_match_score(article, path)
         if score >= 0:
-            scored.append((score, path.name.lower(), path))
+            # Token count is a secondary specificity tie-breaker.
+            scored.append((score, len(filename_words(path)), path.name.lower(), path))
 
     if not scored:
         return None
 
     best_score = max(item[0] for item in scored)
-    best = sorted((item for item in scored if item[0] == best_score), key=lambda item: item[1])
-    # If numbered variants produce an exact tie, choose deterministically by slug.
+    best_token_count = max(item[1] for item in scored if item[0] == best_score)
+    best = sorted(
+        (item for item in scored if item[0] == best_score and item[1] == best_token_count),
+        key=lambda item: item[2],
+    )
+    # If numbered variants tie exactly, choose deterministically by article slug.
     digest = int(hashlib.sha256(slug_for(article).encode("utf-8")).hexdigest()[:8], 16)
-    return best[digest % len(best)][2]
+    return best[digest % len(best)][3]
 
 
 def font(size: int, *, bold: bool = False) -> ImageFont.ImageFont:
@@ -286,9 +325,8 @@ def set_curated(article: dict[str, Any], root: Path, chosen: Path) -> None:
     article["image_backfill_method"] = "cards-filename-match"
     article["source_image_reuse_status"] = "cards-only"
     article["image_match_title"] = chosen.name
+    article["image_match_score"] = filename_match_score(article, chosen)
     article.pop("image_placeholder_reason", None)
-    # Keep image_match_title, which now records the LOCAL cards filename; remove
-    # all fields that could point a future job back to remote photography.
     for key in REMOTE_IMAGE_FIELDS - {"image_match_title"}:
         article.pop(key, None)
 
@@ -303,21 +341,19 @@ def set_generated(article: dict[str, Any], root: Path) -> None:
     article["image_backfill_method"] = "cards-generated"
     article["source_image_reuse_status"] = "cards-only"
     article["image_placeholder_reason"] = "No filename-matched photograph exists in assets/img/cards"
+    article.pop("image_match_score", None)
     strip_remote_image_metadata(article)
 
 
 def enforce_article(article: dict[str, Any], root: Path) -> str:
-    # Always re-check the library BEFORE preserving an existing cards image.
-    # This makes the policy retrospective: adding resilient_roach.jpg today will
-    # replace yesterday's generated card on the Resilient Roach story next run.
+    # Always re-check the local library first. This makes the matcher
+    # retrospective: uploading a new correctly named photo can repair old stories.
     chosen = choose_filename_match(article, root)
     if chosen is not None and valid_cards_image(root, chosen.relative_to(root).as_posix()):
         current = cards_relative(article.get("image_url") or article.get("img"))
         set_curated(article, root, chosen)
         return "kept-cards" if current == article["image_url"] else "cards-library"
 
-    # A previously generated fallback may be kept when there is still no real
-    # filename match. Other unrelated cards images are never preserved.
     current_rel = cards_relative(article.get("image_url") or article.get("img"))
     if current_rel and valid_cards_image(root, current_rel):
         current_path = root / current_rel
@@ -353,7 +389,7 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit("Article feed must contain a JSON list")
 
     stats = {"kept_cards": 0, "cards_library": 0, "cards_generated": 0, "skipped": 0}
-    report: list[dict[str, str]] = []
+    report: list[dict[str, Any]] = []
 
     for article in rows:
         if not isinstance(article, dict):
@@ -373,11 +409,23 @@ def main(argv: list[str] | None = None) -> int:
             "result": result,
             "image_url": clean(article.get("image_url")),
             "matched_filename": clean(article.get("image_match_title")),
+            "match_score": article.get("image_match_score"),
         })
         print(f"{result:16} {slug_for(article)} -> {article.get('image_url')}")
 
     args.articles.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    args.report.write_text(json.dumps({"policy": "assets/img/cards only; filename matched", "stats": stats, "items": report}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    args.report.write_text(
+        json.dumps(
+            {
+                "policy": "assets/img/cards only; filename matched against title, slug, excerpt and body",
+                "stats": stats,
+                "items": report,
+            },
+            ensure_ascii=False,
+            indent=2,
+        ) + "\n",
+        encoding="utf-8",
+    )
     print(json.dumps(stats, indent=2))
     return 0
 
