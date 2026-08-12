@@ -27,6 +27,19 @@ CITATION_PATTERNS = [
     re.compile(r"\s*\[(?:turn\d+\w*\d*|source\s*\d+|citation\s*\d+)\]", re.I),
 ]
 
+# Emoji and pictographic symbols are not part of Rochdale Daily house style.
+# This deliberately covers the standard emoji planes plus symbol/dingbat emoji,
+# regional flags, modifiers, variation selectors, ZWJ sequences and keycaps.
+EMOJI_RE = re.compile(
+    "["
+    "\U0001F1E6-\U0001F1FF"
+    "\U0001F300-\U0001FAFF"
+    "\u2600-\u27BF"
+    "]",
+    re.UNICODE,
+)
+EMOJI_COMPONENT_RE = re.compile(r"[\U0001F3FB-\U0001F3FF\uFE0F\u200D\u20E3]", re.UNICODE)
+
 # Markdown links injected solely as model citations. Keep ordinary editorial links.
 MODEL_LINK = re.compile(
     r"\s*\[[^\]]*\]\((https?://[^)]*(?:utm_source=chatgpt\.com|chatgpt\.com|openai\.com)[^)]*)\)",
@@ -57,6 +70,8 @@ BAD_SENTENCES = re.compile(
 DETECTORS = [
     re.compile(r"oai_citation|oaicite|contentReference|(?:cite|filecite)|utm_source=chatgpt\.com", re.I),
     re.compile(r"as an ai(?: language model)?|this automated brief|the source item is titled|readers can use the source link", re.I),
+    EMOJI_RE,
+    EMOJI_COMPONENT_RE,
 ]
 
 
@@ -82,6 +97,8 @@ def clean_text(value: str) -> str:
     for pattern in CITATION_PATTERNS:
         text = pattern.sub("", text)
     text = BAD_SENTENCES.sub(" ", text)
+    text = EMOJI_RE.sub("", text)
+    text = EMOJI_COMPONENT_RE.sub("", text)
     # Remove tracking parameters that survive inside ordinary prose or HTML.
     text = re.sub(r"([?&])utm_(?:source|medium|campaign|term|content)=[^&#\s\"')<]+", "", text, flags=re.I)
     text = re.sub(r"[ \t]{2,}", " ", text)
@@ -111,6 +128,9 @@ def public_paths(root: Path) -> list[Path]:
         path = root / name
         if path.exists():
             paths.add(path)
+    manual_dir = root / "manual_articles.d"
+    if manual_dir.exists():
+        paths.update(manual_dir.rglob("*.json"))
     article_dir = root / "articles"
     if article_dir.exists():
         paths.update(article_dir.rglob("*.json"))
