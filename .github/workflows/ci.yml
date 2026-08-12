@@ -75,6 +75,7 @@ jobs:
             scraper/house_style.py \
             scraper/editorial_upgrade.py \
             scraper/source_presentation.py \
+            scraper/content_hygiene.py \
             scraper/generate_pages.py \
             scraper/generate_newspaper_pages.py \
             scraper/generate_ward_pages.py \
@@ -104,6 +105,7 @@ jobs:
           python scraper/test_rewrite_safety.py
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
+          python scraper/test_content_hygiene.py
           python scraper/test_archive_persistence.py
           python scraper/test_event_identity.py
           python scraper/test_article_gate.py
