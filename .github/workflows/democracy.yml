@@ -18,12 +18,12 @@ on:
 permissions:
   contents: write
 
-# Keep democracy-page generation independent from the article-image writer.
-# Multiple image uploads can arrive in quick succession; the newest run wins
-# because it checks out the latest main branch containing all uploaded files.
+# Democracy writes index.html, wards/ and portrait data, while the newsroom also
+# writes index.html and wards/. They must share one lock or a perfectly healthy
+# scraper run can lose its image/page commit to a democracy push race.
 concurrency:
-  group: rd-democracy-pages
-  cancel-in-progress: true
+  group: rd-site-writer
+  cancel-in-progress: false
 
 jobs:
   democracy:
@@ -122,15 +122,15 @@ jobs:
           fi
           git commit -m 'Populate democracy sections with local councillor portraits'
           for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              sleep 2
-              continue
-            fi
             if git push origin HEAD:main; then
               exit 0
             fi
-            sleep 2
+            git reset --hard HEAD
+            git clean -fd
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
           done
           exit 1

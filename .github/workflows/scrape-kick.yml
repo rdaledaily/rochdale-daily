@@ -11,8 +11,10 @@ on:
 permissions:
   contents: write
 
+# Use the same writer lock as the scheduled scraper so two newsroom runs cannot
+# generate different versions of articles/images and then race to update main.
 concurrency:
-  group: rd-scrape-pipeline
+  group: rd-site-writer
   cancel-in-progress: false
 
 jobs:
@@ -90,9 +92,14 @@ jobs:
         timeout-minutes: 18
         run: python scraper/run_newspaper_pipeline.py
 
-      - name: Enforce cards-only article images
-        timeout-minutes: 3
-        run: python scraper/ensure_article_images.py
+      - name: Resolve article images
+        timeout-minutes: 6
+        run: |
+          # First use any editor-curated, filename-matched image in cards.
+          python scraper/ensure_article_images.py
+          # Then replace only the remaining generated placeholders with a
+          # permitted publisher lead photograph when one can be verified.
+          python scraper/repair_generated_article_images.py
 
       - name: Validate, generate fresh site and verify health
         timeout-minutes: 6
@@ -116,7 +123,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json assets/img/cards \
+            image_coverage_report.json image_repair_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
           if git diff --cached --quiet; then
             echo "Pipeline completed with no file changes."
@@ -124,8 +131,20 @@ jobs:
           fi
           git commit -m "${COMMIT_MESSAGE}"
           for attempt in 1 2 3 4 5; do
-            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "Push race detected; rebasing committed pipeline output (attempt ${attempt}/5)."
+            # Page generation can leave incidental unstaged files. They are not
+            # part of the committed newsroom output and previously prevented
+            # every rebase retry from even starting.
+            git reset --hard HEAD
+            git clean -fd
             git fetch origin "${GITHUB_REF_NAME}"
-            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            if ! git rebase "origin/${GITHUB_REF_NAME}"; then
+              git rebase --abort || true
+              echo "Could not safely rebase pipeline output onto current main."
+              exit 1
+            fi
           done
           exit 1
