@@ -1,0 +1,55 @@
+name: Fix Community support tab
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scraper/patch_community_support_tab.py'
+      - '.github/workflows/fix-community-support-tab.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-community-support-tab
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Apply reliable Community support tab
+        run: python scraper/patch_community_support_tab.py
+
+      - name: Verify tab wiring
+        run: |
+          grep -q 'document.getElementById("support")' assets/js/homepage-ui.js
+          grep -q 'community-support-content' assets/js/homepage-ui.js
+          grep -q 'DOMContentLoaded' assets/js/homepage-ui.js
+
+      - name: Commit fix
+        run: |
+          if git diff --quiet; then
+            echo 'Community support tab already current.'
+            exit 0
+          fi
+          git config user.name 'Rochdale Daily Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add assets/js/homepage-ui.js
+          git commit -m 'Fix Community support collapse tab'
+          git pull --rebase origin main
+          git push origin HEAD:main
