@@ -1,4 +1,4 @@
-name: Backfill cards-only article images
+name: Backfill real article images
 
 on:
   schedule:
@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 30
     env:
       USE_SOURCE_IMAGES: "false"
-      USE_WIKIMEDIA_COMMONS: "false"
+      USE_WIKIMEDIA_COMMONS: "true"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -40,23 +40,34 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-      - name: Enforce cards-only images
-        run: python scraper/ensure_article_images.py --articles articles.json
-      - name: Rebuild feeds then re-enforce image policy
+      - name: Resolve article images
         run: |
-          python scraper/frontpage_pipeline.py
           python scraper/ensure_article_images.py --articles articles.json
+          python scraper/repair_generated_article_images.py --articles articles.json
+          python scraper/repair_generated_with_commons.py --articles articles.json
+      - name: Rebuild feeds
+        run: python scraper/frontpage_pipeline.py
       - name: Validate feed and regenerate static pages
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/generate_pages.py
           python scraper/generate_archive.py
-      - name: Commit cards-only image backfill
+      - name: Commit image backfill
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json image_coverage_report.json assets/img/cards articles sitemap.xml index.html
-          if git diff --cached --quiet; then echo "Cards-only image policy already satisfied."; exit 0; fi
-          git commit -m "Enforce cards-only article images"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          git add articles.json image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards articles sitemap.xml index.html
+          if git diff --cached --quiet; then echo "Article image backfill already satisfied."; exit 0; fi
+          git commit -m "Backfill real article images"
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+            git reset --hard HEAD
+            git clean -fd
+            git fetch origin "${GITHUB_REF_NAME}"
+            if ! git rebase "origin/${GITHUB_REF_NAME}"; then
+              git rebase --abort || true
+              exit 1
+            fi
+          done
+          exit 1
