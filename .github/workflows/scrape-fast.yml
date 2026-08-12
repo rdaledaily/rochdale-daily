@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "5,35 * * * *"
-    - cron: "10 2,8,14,20 * * *"
+    - cron: "10 */2 * * *"
 
 permissions:
   contents: write
@@ -25,18 +25,18 @@ jobs:
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "false"
-      MAX_NEWS_AGE_HOURS: "168"
+      MAX_NEWS_AGE_HOURS: "72"
       SAME_DAY_ONLY: "false"
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "1"
-      FRONTPAGE_MIN_ARTICLES: "50"
-      FRONTPAGE_TARGET_ARTICLES: "80"
+      FRONTPAGE_FALLBACK_DAYS: "2"
+      FRONTPAGE_MIN_ARTICLES: "12"
+      FRONTPAGE_TARGET_ARTICLES: "30"
       MAX_AI_ARTICLES_PER_RUN: "50"
       MAX_AI_ARTICLES_INITIAL: "100"
       RESPECT_ROBOTS: "true"
       REQUEST_TIMEOUT: "8"
       SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
-      SLOW_DOMAIN_BENCH_HOURS: "24"
+      SLOW_DOMAIN_BENCH_HOURS: "12"
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "false"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
@@ -53,12 +53,12 @@ jobs:
       DISCOVERY_WORKERS: "16"
       DISCOVERY_LINK_WORKERS: "16"
       AI_WORKERS: "8"
-      MIN_BALANCED_SELECTION_LIMIT: "40"
+      MIN_BALANCED_SELECTION_LIMIT: "30"
       MAX_SELECTED_PER_SOURCE: "8"
       MAX_SELECTED_PER_CATEGORY: "24"
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
-      MIN_LIVE_STORIES: "40"
+      MIN_LIVE_STORIES: "20"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
       BROWSER_RENDER_ENABLED: "false"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "false"
@@ -93,12 +93,12 @@ jobs:
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
-      - name: Generate site
+      - name: Generate site with newsroom freshness rules
         timeout-minutes: 5
         run: |
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
-          python scraper/generate_pages.py
+          python scraper/generate_newspaper_pages.py
       - name: Refresh weather
         timeout-minutes: 2
         env:
@@ -117,7 +117,7 @@ jobs:
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
   deep-browser:
-    if: github.event.schedule == '10 2,8,14,20 * * *'
+    if: github.event.schedule == '10 */2 * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 42
     env:
@@ -128,11 +128,11 @@ jobs:
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
       OPENAI_MODEL: "gpt-4o-mini"
-      MAX_NEWS_AGE_HOURS: "168"
+      MAX_NEWS_AGE_HOURS: "72"
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "1"
-      FRONTPAGE_MIN_ARTICLES: "50"
-      FRONTPAGE_TARGET_ARTICLES: "80"
+      FRONTPAGE_FALLBACK_DAYS: "2"
+      FRONTPAGE_MIN_ARTICLES: "12"
+      FRONTPAGE_TARGET_ARTICLES: "30"
       MAX_AI_ARTICLES_PER_RUN: "40"
       MAX_AI_ARTICLES_INITIAL: "80"
       REQUEST_TIMEOUT: "10"
@@ -182,7 +182,7 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/generate_ward_pages.py
-          python scraper/generate_pages.py
+          python scraper/generate_newspaper_pages.py
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
