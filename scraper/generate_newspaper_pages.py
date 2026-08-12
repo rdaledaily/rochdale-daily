@@ -8,8 +8,7 @@ front-page editorial behaviour before delegating to generate_pages.py:
 * source-led fallbacks are judged on their actual text, not rejected by route;
 * the last 24 hours is the main news pool;
 * older material is used only when needed to reach the minimum front-page size;
-* freshness bands outrank category prestige so yesterday's feature cannot beat
-  a genuinely new local incident simply because it is longer.
+* freshness bands outrank category prestige and stale featured flags.
 """
 from __future__ import annotations
 
@@ -93,18 +92,16 @@ def _newsroom_rank(article, now: datetime):
         "events": 40,
     }.get(fp.article_category(article), 60)
 
-    # Multi-source confirmation is useful, but length itself is not a reason
-    # to suppress a short factual local brief.
     importance += min(6, int(article.get("source_count") or 1))
 
-    # A recent update can help an ongoing story within its existing freshness
-    # band, but can never make an old story look newly published.
     update_age_hours = max(0.0, (now - latest).total_seconds() / 3600)
     if article.get("is_ongoing") and update_age_hours <= 6:
         importance += 4
 
+    # Featured is an editorial tie-breaker, not a licence for an old story to
+    # sit above genuinely new reporting forever. Freshness always comes first.
     pinned = article.get("featured") is True
-    return (pinned, freshness, importance, first, latest)
+    return (freshness, pinned, importance, first, latest)
 
 
 def _newsroom_select_frontpage(articles, now=None):
@@ -124,8 +121,6 @@ def _newsroom_select_frontpage(articles, now=None):
     primary = sorted(primary, key=lambda item: _newsroom_rank(item, reference), reverse=True)
     fallback = sorted(fallback, key=lambda item: _newsroom_rank(item, reference), reverse=True)
 
-    # Do not replace a small fresh front page with an entire older fallback
-    # window. Add only enough older stories to reach the minimum.
     pool = list(primary)
     if len(pool) < fp.FRONTPAGE_MIN:
         for item in fallback:
