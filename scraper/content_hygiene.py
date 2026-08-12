@@ -9,15 +9,20 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
+# Every string field here can be rendered as reader-facing article copy or
+# metadata. Detection and cleaning deliberately share this exact field set so a
+# --fix run cannot leave a visible emoji behind and then fail verification on it.
 PUBLIC_TEXT_FIELDS = {
     "title", "body", "content", "content_html", "excerpt", "summary",
     "description", "social_context_note", "legal_disclaimer", "right_to_reply",
+    "byline", "author", "kicker", "strapline",
+    "image_credit", "image_alt", "image_caption", "image_label",
+    "source_name", "source_label", "source_note",
 }
 URL_FIELDS = {
     "source_url", "image_credit_url", "image_url", "url",
 }
 
-# Machine citation artefacts which must never be visible to readers.
 CITATION_PATTERNS = [
     re.compile(r"\s*\[oai_citation:[^\]]+\]\([^)]*\)", re.I),
     re.compile(r"\s*\[oaicite[^\]]*\]\([^)]*\)", re.I),
@@ -27,9 +32,6 @@ CITATION_PATTERNS = [
     re.compile(r"\s*\[(?:turn\d+\w*\d*|source\s*\d+|citation\s*\d+)\]", re.I),
 ]
 
-# Emoji and pictographic symbols are not part of Rochdale Daily house style.
-# This deliberately covers the standard emoji planes plus symbol/dingbat emoji,
-# regional flags, modifiers, variation selectors, ZWJ sequences and keycaps.
 EMOJI_RE = re.compile(
     "["
     "\U0001F1E6-\U0001F1FF"
@@ -40,7 +42,6 @@ EMOJI_RE = re.compile(
 )
 EMOJI_COMPONENT_RE = re.compile(r"[\U0001F3FB-\U0001F3FF\uFE0F\u200D\u20E3]", re.UNICODE)
 
-# Markdown links injected solely as model citations. Keep ordinary editorial links.
 MODEL_LINK = re.compile(
     r"\s*\[[^\]]*\]\((https?://[^)]*(?:utm_source=chatgpt\.com|chatgpt\.com|openai\.com)[^)]*)\)",
     re.I,
@@ -50,7 +51,6 @@ MODEL_ANCHOR = re.compile(
     re.I | re.S,
 )
 
-# Boilerplate and meta-writing which reads like an internal generation note.
 BAD_SENTENCES = re.compile(
     r"(?:^|(?<=[.!?]))\s*(?:"
     r"as an ai(?: language model)?[^.!?]*[.!?]|"
@@ -99,7 +99,6 @@ def clean_text(value: str) -> str:
     text = BAD_SENTENCES.sub(" ", text)
     text = EMOJI_RE.sub("", text)
     text = EMOJI_COMPONENT_RE.sub("", text)
-    # Remove tracking parameters that survive inside ordinary prose or HTML.
     text = re.sub(r"([?&])utm_(?:source|medium|campaign|term|content)=[^&#\s\"')<]+", "", text, flags=re.I)
     text = re.sub(r"[ \t]{2,}", " ", text)
     text = re.sub(r"\s+([,.;:!?])", r"\1", text)
@@ -122,6 +121,25 @@ def clean_json(value: Any, key: str = "") -> Any:
     return value
 
 
+def public_text_findings(value: Any, key: str = "") -> list[str]:
+    findings: set[str] = set()
+    if isinstance(value, dict):
+        for item_key, item in value.items():
+            findings.update(public_text_findings(item, item_key))
+    elif isinstance(value, list):
+        for item in value:
+            findings.update(public_text_findings(item, key))
+    elif isinstance(value, str) and (key in PUBLIC_TEXT_FIELDS or key in URL_FIELDS or key == ""):
+        for pattern in DETECTORS:
+            if pattern.search(value):
+                findings.add(pattern.pattern)
+    return sorted(findings)
+
+
+def has_public_text_violation(value: Any) -> bool:
+    return bool(public_text_findings(value))
+
+
 def public_paths(root: Path) -> list[Path]:
     paths: set[Path] = set()
     for name in ("manual_articles.json", "articles.json"):
@@ -140,14 +158,15 @@ def public_paths(root: Path) -> list[Path]:
 
 def process(path: Path, fix: bool) -> tuple[bool, list[str]]:
     raw = path.read_text(encoding="utf-8")
-    findings = [pattern.pattern for pattern in DETECTORS if pattern.search(raw)]
     if path.suffix == ".json":
         try:
             payload = json.loads(raw)
         except json.JSONDecodeError:
             return False, ["invalid JSON"]
+        findings = public_text_findings(payload)
         cleaned = json.dumps(clean_json(payload), ensure_ascii=False, indent=2) + "\n"
     else:
+        findings = [pattern.pattern for pattern in DETECTORS if pattern.search(raw)]
         cleaned = clean_text(raw)
         if raw.endswith("\n"):
             cleaned += "\n"
