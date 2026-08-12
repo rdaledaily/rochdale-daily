@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = "Sarah Pickles"
+TARGET = "Rochdale Daily"
 REPLACEMENT = "Rochdale Daily"
 TEXT_SUFFIXES = {
     ".html", ".json", ".md", ".txt", ".yml", ".yaml", ".py", ".js", ".css", ".xml"
