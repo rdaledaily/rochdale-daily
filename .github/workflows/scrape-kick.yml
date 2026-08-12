@@ -41,7 +41,7 @@ jobs:
       SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
       SLOW_DOMAIN_BENCH_HOURS: "12"
       USE_SOURCE_IMAGES: "false"
-      USE_WIKIMEDIA_COMMONS: "false"
+      USE_WIKIMEDIA_COMMONS: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
       SOCIAL_CONTEXT_ENABLED: "true"
       FACEBOOK_COMMENTS_ENABLED: "true"
@@ -93,13 +93,16 @@ jobs:
         run: python scraper/run_newspaper_pipeline.py
 
       - name: Resolve article images
-        timeout-minutes: 6
+        timeout-minutes: 8
         run: |
-          # First use any editor-curated, filename-matched image in cards.
+          # Prefer editor-curated filename-matched photographs first.
           python scraper/ensure_article_images.py
-          # Then replace only the remaining generated placeholders with a
-          # permitted publisher lead photograph when one can be verified.
+          # Replace generated cards with permitted publisher lead images.
           python scraper/repair_generated_article_images.py
+          # If there is still a placeholder, try a relevant freely licensed
+          # Wikimedia Commons photograph. Crime is deliberately excluded from
+          # generic Commons matching to avoid falsely linking a place to an offence.
+          python scraper/repair_generated_with_commons.py
 
       - name: Validate, generate fresh site and verify health
         timeout-minutes: 6
@@ -123,7 +126,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json image_repair_report.json assets/img/cards \
+            image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
           if git diff --cached --quiet; then
             echo "Pipeline completed with no file changes."
@@ -135,9 +138,6 @@ jobs:
               exit 0
             fi
             echo "Push race detected; rebasing committed pipeline output (attempt ${attempt}/5)."
-            # Page generation can leave incidental unstaged files. They are not
-            # part of the committed newsroom output and previously prevented
-            # every rebase retry from even starting.
             git reset --hard HEAD
             git clean -fd
             git fetch origin "${GITHUB_REF_NAME}"

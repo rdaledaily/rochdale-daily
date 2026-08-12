@@ -1,4 +1,4 @@
-name: Enforce Rochdale Daily cards-only article images
+name: Repair Rochdale Daily article placeholders
 
 on:
   workflow_dispatch:
@@ -12,6 +12,8 @@ on:
       - "articles.json"
       - "assets/img/cards/**"
       - "scraper/ensure_article_images.py"
+      - "scraper/repair_generated_article_images.py"
+      - "scraper/repair_generated_with_commons.py"
 
 permissions:
   contents: write
@@ -22,12 +24,12 @@ concurrency:
 
 jobs:
   repair:
-    if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Enforce cards-only article images')
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Repair article placeholder images')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
       USE_SOURCE_IMAGES: "false"
-      USE_WIKIMEDIA_COMMONS: "false"
+      USE_WIKIMEDIA_COMMONS: "true"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -49,12 +51,15 @@ jobs:
           python -m pip install --no-cache-dir "Pillow>=10,<13"
       - name: Load manual articles into published feed
         run: python scraper/run_fast_local_pipeline.py --manual-only || true
-      - name: Enforce cards-only image policy
+      - name: Match local article images
         run: python scraper/ensure_article_images.py --articles articles.json
       - name: Rebuild feeds
         run: python scraper/frontpage_pipeline.py
-      - name: Re-enforce cards-only policy after feed generation
-        run: python scraper/ensure_article_images.py --articles articles.json
+      - name: Replace remaining placeholders with real images
+        run: |
+          python scraper/ensure_article_images.py --articles articles.json
+          python scraper/repair_generated_article_images.py --articles articles.json
+          python scraper/repair_generated_with_commons.py --articles articles.json
       - name: Validate and rebuild all public pages
         run: |
           python -m json.tool articles.json > /dev/null
@@ -73,22 +78,27 @@ jobs:
               if not image.startswith('assets/img/cards/'):
                   bad.append((a.get('slug'),image))
           if bad:
-              raise SystemExit(f'{len(bad)} non-cards article images remain: {bad[:20]}')
+              raise SystemExit(f'{len(bad)} non-local article images remain: {bad[:20]}')
           PY
-      - name: Commit cards-only image repairs
+      - name: Commit image repairs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json image_coverage_report.json assets/img/cards articles sitemap.xml wards/ index.html
+          git add articles.json image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards articles sitemap.xml wards/ index.html
           git add articles/frontpage.json articles/categories articles/areas 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No image changes to commit."
             exit 0
           fi
-          git commit -m "Enforce cards-only article images"
+          git commit -m "Repair article placeholder images"
           for attempt in 1 2 3 4 5; do
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+            git reset --hard HEAD
+            git clean -fd
             git fetch origin "${GITHUB_REF_NAME}"
-            git rebase "origin/${GITHUB_REF_NAME}" || { git rebase --abort; sleep 3; }
+            if ! git rebase "origin/${GITHUB_REF_NAME}"; then
+              git rebase --abort || true
+              exit 1
+            fi
           done
           exit 1

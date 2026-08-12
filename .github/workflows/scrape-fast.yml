@@ -38,7 +38,7 @@ jobs:
       SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
       SLOW_DOMAIN_BENCH_HOURS: "12"
       USE_SOURCE_IMAGES: "false"
-      USE_WIKIMEDIA_COMMONS: "false"
+      USE_WIKIMEDIA_COMMONS: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
       SOCIAL_CONTEXT_ENABLED: "true"
       FACEBOOK_COMMENTS_ENABLED: "true"
@@ -88,10 +88,11 @@ jobs:
         timeout-minutes: 18
         run: python scraper/run_newspaper_pipeline.py
       - name: Resolve article images before page generation
-        timeout-minutes: 6
+        timeout-minutes: 8
         run: |
           python scraper/ensure_article_images.py
           python scraper/repair_generated_article_images.py
+          python scraper/repair_generated_with_commons.py
       - name: Validate article feed
         run: |
           python -m json.tool articles.json > /dev/null
@@ -114,7 +115,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json image_repair_report.json assets/img/cards \
+            image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "${COMMIT_MESSAGE}"
@@ -164,7 +165,7 @@ jobs:
       GOOGLE_NEWS_RESOLVE_MAX: "120"
       GOOGLE_NEWS_RESOLVE_BUDGET_SECONDS: "300"
       USE_SOURCE_IMAGES: "false"
-      USE_WIKIMEDIA_COMMONS: "false"
+      USE_WIKIMEDIA_COMMONS: "true"
       COMMIT_MESSAGE: "Update Rochdale Daily deep discovery"
 
     steps:
@@ -191,10 +192,11 @@ jobs:
         timeout-minutes: 27
         run: python scraper/run_newspaper_pipeline.py
       - name: Resolve article images before page generation
-        timeout-minutes: 8
+        timeout-minutes: 10
         run: |
           python scraper/ensure_article_images.py
           python scraper/repair_generated_article_images.py
+          python scraper/repair_generated_with_commons.py
       - name: Validate and generate site
         run: |
           python -m json.tool articles.json > /dev/null
@@ -208,7 +210,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json image_repair_report.json assets/img/cards \
+            image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "${COMMIT_MESSAGE}"
