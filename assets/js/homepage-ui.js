@@ -102,9 +102,6 @@
   button.textContent = "Read more";
   button.hidden = true;
 
-  // These controls belong to Latest news itself. Keeping them inside the grid
-  // prevents the homepage's surrounding content/sidebar grid from treating
-  // either one as a tall independent column beside Weather.
   grid.appendChild(advert);
   grid.appendChild(button);
 
@@ -121,9 +118,6 @@
   }
 
   function setCardVisible(item, shouldShow) {
-    // Use our own class as the source of truth. This is more reliable than the
-    // hidden attribute here because other homepage/card CSS can set display on
-    // article elements after the grid has rendered.
     item.classList.toggle("rd-latest-hidden", !shouldShow);
     if (shouldShow) {
       item.removeAttribute("hidden");
@@ -165,9 +159,6 @@
     if (!items.length) return;
 
     var nextVisible = Math.min(items.length, visible + STEP);
-    // Reveal the next batch immediately, then run the normal layout pass. Doing
-    // this explicitly avoids a no-op if another script/style has changed a
-    // card's display state since the previous render.
     for (var i = visible; i < nextVisible; i += 1) {
       setCardVisible(items[i], true);
     }
@@ -185,8 +176,6 @@
     });
     if (changed) {
       visible = INITIAL;
-      // Story rendering may replace the grid contents. Put the controls back at
-      // the end before applying visibility rules.
       if (!grid.contains(advert)) grid.appendChild(advert);
       if (!grid.contains(button)) grid.appendChild(button);
       apply();
@@ -197,4 +186,66 @@
 
   window.addEventListener("resize", apply);
   apply();
+})();
+
+/* Collapse the large Community support block into a compact tab. */
+(function () {
+  "use strict";
+
+  function findSupportSection() {
+    var headings = Array.prototype.slice.call(document.querySelectorAll("h1,h2,h3"));
+    var heading = headings.find(function (node) {
+      return (node.textContent || "").trim().toLowerCase() === "community support";
+    });
+    if (!heading) return null;
+    return { heading: heading, section: heading.closest("section") || heading.parentElement };
+  }
+
+  var found = findSupportSection();
+  if (!found || !found.section || found.section.dataset.rdSupportTab === "1") return;
+
+  var section = found.section;
+  var heading = found.heading;
+  section.dataset.rdSupportTab = "1";
+  section.classList.add("rd-support-collapsible");
+
+  var panel = document.createElement("div");
+  panel.className = "rd-support-panel";
+  panel.id = "community-support-panel";
+
+  Array.prototype.slice.call(section.children).forEach(function (child) {
+    if (child !== heading) panel.appendChild(child);
+  });
+
+  heading.hidden = true;
+
+  var toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "rd-support-tab";
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-controls", panel.id);
+  toggle.innerHTML = '<span>Community support</span><span class="rd-support-arrow" aria-hidden="true">&#9662;</span>';
+
+  panel.hidden = true;
+  section.appendChild(toggle);
+  section.appendChild(panel);
+
+  var style = document.createElement("style");
+  style.id = "community-support-tab-style";
+  style.textContent =
+    ".rd-support-collapsible{padding:0!important;background:transparent!important;border:0!important;}" +
+    ".rd-support-tab{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 18px;border:1px solid var(--line,#dcdcdc);border-left:5px solid var(--accent,#0e7490);background:#fff;color:var(--ink,#1a1a1a);font-family:\"Roboto Condensed\",Arial,sans-serif;font-size:18px;font-weight:900;text-align:left;text-transform:uppercase;box-shadow:0 2px 10px rgba(0,0,0,.06);}" +
+    ".rd-support-tab:hover,.rd-support-tab:focus-visible{background:#f5f7f8;}" +
+    ".rd-support-arrow{font-size:24px;line-height:1;transition:transform .18s ease;color:var(--accent,#0e7490);}" +
+    ".rd-support-tab[aria-expanded=\"true\"] .rd-support-arrow{transform:rotate(180deg);}" +
+    ".rd-support-panel{margin-top:0;padding:22px;background:#fff;border:1px solid var(--line,#dcdcdc);border-top:0;}" +
+    ".rd-support-panel[hidden]{display:none!important;}" +
+    "@media(max-width:820px){.rd-support-tab{padding:13px 15px;font-size:16px}.rd-support-panel{padding:16px}}";
+  document.head.appendChild(style);
+
+  toggle.addEventListener("click", function () {
+    var open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", open ? "false" : "true");
+    panel.hidden = open;
+  });
 })();
