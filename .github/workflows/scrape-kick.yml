@@ -26,18 +26,18 @@ jobs:
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "false"
-      MAX_NEWS_AGE_HOURS: "168"
+      MAX_NEWS_AGE_HOURS: "72"
       SAME_DAY_ONLY: "false"
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "1"
-      FRONTPAGE_MIN_ARTICLES: "50"
-      FRONTPAGE_TARGET_ARTICLES: "80"
+      FRONTPAGE_FALLBACK_DAYS: "2"
+      FRONTPAGE_MIN_ARTICLES: "12"
+      FRONTPAGE_TARGET_ARTICLES: "30"
       MAX_AI_ARTICLES_PER_RUN: "50"
       MAX_AI_ARTICLES_INITIAL: "100"
       RESPECT_ROBOTS: "true"
       REQUEST_TIMEOUT: "8"
       SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
-      SLOW_DOMAIN_BENCH_HOURS: "24"
+      SLOW_DOMAIN_BENCH_HOURS: "12"
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "false"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
@@ -54,17 +54,17 @@ jobs:
       DISCOVERY_WORKERS: "16"
       DISCOVERY_LINK_WORKERS: "16"
       AI_WORKERS: "8"
-      MIN_BALANCED_SELECTION_LIMIT: "40"
+      MIN_BALANCED_SELECTION_LIMIT: "30"
       MAX_SELECTED_PER_SOURCE: "8"
       MAX_SELECTED_PER_CATEGORY: "24"
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
-      MIN_LIVE_STORIES: "40"
+      MIN_LIVE_STORIES: "20"
       SCRAPER_HEALTH_FRESH_HOURS: "24"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
       BROWSER_RENDER_ENABLED: "false"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "false"
-      COMMIT_MESSAGE: "Update Rochdale Daily fast local news"
+      COMMIT_MESSAGE: "Update Rochdale Daily immediate local news"
 
     steps:
       - name: Check out repository
@@ -86,22 +86,22 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
-      - name: Run Rochdale-first pipeline
+      - name: Run resilient Rochdale newsroom pipeline
         timeout-minutes: 18
-        run: python scraper/run_fast_local_pipeline.py
+        run: python scraper/run_newspaper_pipeline.py
 
       - name: Enforce cards-only article images
         timeout-minutes: 3
         run: python scraper/ensure_article_images.py
 
-      - name: Validate and generate fresh site
+      - name: Validate, generate fresh site and verify health
         timeout-minutes: 6
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
-          python scraper/generate_fresh_pages.py
+          python scraper/generate_newspaper_pages.py
           python scraper/check_scraper_health.py
 
       - name: Refresh weather
