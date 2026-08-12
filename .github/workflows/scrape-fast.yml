@@ -83,9 +83,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-      - name: Run Rochdale-first pipeline
+      - name: Run resilient Rochdale newsroom pipeline
         timeout-minutes: 18
-        run: python scraper/run_fast_local_pipeline.py
+        run: python scraper/run_newspaper_pipeline.py
       - name: Enforce cards-only article images before page generation
         timeout-minutes: 5
         run: python scraper/ensure_article_images.py
@@ -171,9 +171,9 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
           python -m playwright install --with-deps chromium
-      - name: Run deep Rochdale discovery
+      - name: Run deep resilient Rochdale newsroom discovery
         timeout-minutes: 27
-        run: python scraper/run_fast_local_pipeline.py
+        run: python scraper/run_newspaper_pipeline.py
       - name: Enforce cards-only article images before page generation
         timeout-minutes: 5
         run: python scraper/ensure_article_images.py
