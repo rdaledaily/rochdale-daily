@@ -3,7 +3,8 @@
 The underlying archive remains untouched. This runtime patch changes only the
 front-page editorial behaviour before delegating to generate_pages.py:
 
-* fresh verified briefs are allowed on the homepage even when under 200 words;
+* fresh verified briefs are allowed on the homepage without a 200-word rule;
+* minimum useful length varies by story type instead of one blanket threshold;
 * source-led fallbacks are judged on their actual text, not rejected by route;
 * the last 24 hours is the main news pool;
 * older material is used only when needed to reach the minimum front-page size;
@@ -19,9 +20,38 @@ import frontpage_pipeline as fp
 import generate_pages
 
 
+CATEGORY_MIN_WORDS = {
+    "crime": 60,
+    "traffic": 60,
+    "transport": 60,
+    "news": 60,
+    "community": 75,
+    "business": 75,
+    "health": 75,
+    "education": 75,
+    "politics": 75,
+    "environment": 75,
+    "sport": 75,
+}
+DEFAULT_MIN_WORDS = 75
+
+
 def _newsroom_low_quality(article):
     """Reject boilerplate, not an otherwise factual article's publication route."""
     return bool(fp.LOW_QUALITY_ARTICLE_RE.search(fp.article_text(article)))
+
+
+def _minimum_words(article) -> int:
+    if article.get("manual_article") or article.get("editorial_lock"):
+        return 50
+    return CATEGORY_MIN_WORDS.get(fp.article_category(article), DEFAULT_MIN_WORDS)
+
+
+def _newsroom_eligible(article) -> bool:
+    """Allow short factual alerts while keeping fragments off the homepage."""
+    if fp.is_event(article):
+        return False
+    return fp.editorial_word_count(article) >= _minimum_words(article)
 
 
 def _newsroom_rank(article, now: datetime):
@@ -66,6 +96,13 @@ def _newsroom_rank(article, now: datetime):
     # Multi-source confirmation is useful, but length itself is not a reason
     # to suppress a short factual local brief.
     importance += min(6, int(article.get("source_count") or 1))
+
+    # A recent update can help an ongoing story within its existing freshness
+    # band, but can never make an old story look newly published.
+    update_age_hours = max(0.0, (now - latest).total_seconds() / 3600)
+    if article.get("is_ongoing") and update_age_hours <= 6:
+        importance += 4
+
     pinned = article.get("featured") is True
     return (pinned, freshness, importance, first, latest)
 
@@ -76,6 +113,7 @@ def _newsroom_select_frontpage(articles, now=None):
         article for article in articles
         if str(article.get("status") or "published") == "published"
         and not fp.is_job_or_career_post(article)
+        and _newsroom_eligible(article)
     ]
 
     primary_cutoff = reference - timedelta(days=fp.PRIMARY_DAYS)
@@ -117,6 +155,7 @@ def _newsroom_select_frontpage(articles, now=None):
         fp.DEFAULT_CATEGORY_MINIMUMS,
     )
     arranged = fp.arrange_frontpage(capped, reference)
+    fresh_cutoff = reference - timedelta(hours=24)
     diagnostics = dict(diagnostics)
     diagnostics.update({
         "pool_size": len(pool),
@@ -124,6 +163,13 @@ def _newsroom_select_frontpage(articles, now=None):
         "fallback_stories_used": max(0, len(pool) - len(primary)),
         "selection_window_days": fp.PRIMARY_DAYS if len(pool) == len(primary) else fp.FALLBACK_DAYS,
         "frontpage_count": len(arranged),
+        "fresh_under_24h": sum(
+            1 for item in arranged
+            if (fp._frontpage_first_published(item) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff
+        ),
+        "short_briefs_selected": sum(
+            1 for item in arranged if fp.editorial_word_count(item) < 200
+        ),
         "selected_by_category": dict(Counter(fp.category_key(item) for item in arranged)),
         "selected_by_ward": dict(Counter(fp.ward_for_item(item) or "borough-wide" for item in arranged)),
         "selected_by_source": dict(Counter(fp.source_key(item) for item in arranged)),
