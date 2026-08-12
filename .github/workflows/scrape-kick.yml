@@ -60,6 +60,7 @@ jobs:
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
       MIN_LIVE_STORIES: "40"
+      SCRAPER_HEALTH_FRESH_HOURS: "24"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
       BROWSER_RENDER_ENABLED: "false"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "false"
@@ -93,14 +94,15 @@ jobs:
         timeout-minutes: 3
         run: python scraper/ensure_article_images.py
 
-      - name: Validate and generate site
+      - name: Validate and generate fresh site
         timeout-minutes: 6
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
-          python scraper/generate_pages.py
+          python scraper/generate_fresh_pages.py
+          python scraper/check_scraper_health.py
 
       - name: Refresh weather
         timeout-minutes: 2
@@ -112,7 +114,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json slow_domains.json scraper_status.json event_dates.json \
+          git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
             image_coverage_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
