@@ -5,12 +5,15 @@ on:
   push:
     paths:
       - 'scraper/content_hygiene.py'
+      - 'manual_articles.json'
+      - 'manual_articles.d/**'
+      - 'articles.json'
 
 permissions:
   contents: write
 
 concurrency:
-  group: clean-public-article-content
+  group: rd-site-writer
   cancel-in-progress: false
 
 jobs:
@@ -21,11 +24,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Remove machine citations and internal wording
+      - name: Remove emojis, machine citations and internal wording
         run: python scraper/content_hygiene.py --fix
 
       - name: Rebuild generated article pages and feeds
@@ -49,7 +57,7 @@ jobs:
           fi
           git config user.name 'Rochdale Daily Bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add manual_articles.json articles.json articles scraper/content_hygiene.py
-          git commit -m 'Remove machine citations and internal wording from articles'
+          git add manual_articles.json manual_articles.d articles.json articles scraper/content_hygiene.py
+          git commit -m 'Remove emojis and publishing artefacts from articles'
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
