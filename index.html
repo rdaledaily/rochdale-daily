@@ -4093,8 +4093,13 @@ function shareIconMarkup(action, label) {
 
       function councillorCard(person) {
         var votes = (person.votes || []).map(voteLine).join("");
+        var photo = (councillorPhotos && councillorPhotos[person.name]) || {};
+        var image = String(photo.image_url || "");
+        var portrait = image.indexOf("/assets/img/cards/") === 0
+          ? '<img loading="lazy" alt="Portrait of ' + esc(person.name) + '" src="' + esc(image) + '">'
+          : "";
         return '<article class="dem-card">' +
-          '<div class="dem-mp"><div>' +
+          '<div class="dem-mp">' + portrait + '<div>' +
             '<div class="who">' + esc(person.name) + "</div>" +
             '<div class="dem-sub">' + esc(person.party || "") +
               (person.ward ? " &middot; " + esc(person.ward) : "") + "</div>" +
@@ -4116,6 +4121,7 @@ function shareIconMarkup(action, label) {
       }
 
       var councilVotes = null;
+      var councillorPhotos = null;
       var activeWard = "";
       var wardPick = document.getElementById("dem-ward-pick");
       var wardSelect = document.getElementById("dem-ward");
@@ -4214,6 +4220,11 @@ function shareIconMarkup(action, label) {
         fetch("/council_votes.json", { cache: "no-store" })
           .then(function (r) { return r.ok ? r.json() : null; })
           .then(function (payload) { councilVotes = payload; if (view === "councillors") render(); })
+          .catch(function () {});
+
+        fetch("/councillor_photos.json", { cache: "no-store" })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (payload) { councillorPhotos = payload; if (view === "councillors") render(); })
           .catch(function () {});
 
         fetch("/api/democracy", { cache: "no-store" })

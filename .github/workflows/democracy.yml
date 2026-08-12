@@ -11,6 +11,7 @@ on:
       - 'ward_areas.json'
       - 'scraper/councillor_photos.py'
       - 'scraper/generate_ward_pages.py'
+      - 'scraper/patch_democracy_portraits.py'
       - 'scraper/test_councillor_photos.py'
       - '.github/workflows/democracy.yml'
 
@@ -52,6 +53,9 @@ jobs:
       - name: Build local councillor portrait index
         run: python scraper/councillor_photos.py
 
+      - name: Wire portraits into homepage Democracy panel
+        run: python scraper/patch_democracy_portraits.py
+
       - name: Populate all ward democracy sections
         run: python scraper/generate_ward_pages.py
 
@@ -91,16 +95,32 @@ jobs:
           print(f'Democracy portrait coverage passed: {len(wards)} wards, 60/60 councillors pictured from assets/img/cards.')
           PY
 
+      - name: Verify homepage Democracy panel renders portraits
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('index.html').read_text(encoding='utf-8')
+          required = [
+              'var councillorPhotos = null;',
+              'fetch("/councillor_photos.json", { cache: "no-store" })',
+              'var portrait = image.indexOf("/assets/img/cards/") === 0',
+          ]
+          missing = [item for item in required if item not in text]
+          if missing:
+              raise SystemExit('Homepage Democracy portrait wiring missing: ' + ', '.join(missing))
+          print('Homepage Democracy portrait wiring passed.')
+          PY
+
       - name: Commit regenerated democracy pages
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add councillor_photos.json wards/
+          git add councillor_photos.json wards/ index.html
           if git diff --cached --quiet; then
             echo 'Democracy sections already contain all current councillors.'
             exit 0
           fi
-          git commit -m 'Populate ward democracy sections with local councillor portraits'
+          git commit -m 'Populate democracy sections with local councillor portraits'
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git rebase origin/main; then
