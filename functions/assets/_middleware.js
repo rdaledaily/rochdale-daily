@@ -7,7 +7,18 @@ export async function onRequest(context) {
   }
 
   const source = await response.text();
-  const loader = `\n;(function(){var s=document.createElement('script');s.src='/assets/whats-on-community-fix.js?v=20260808-1';s.defer=true;document.head.appendChild(s);}());\n`;
+  const loader = `\n;(function(){
+    var scripts = [
+      '/assets/whats-on-community-fix.js?v=20260808-1',
+      '/assets/democracy-hover.js?v=20260812-1'
+    ];
+    scripts.forEach(function(src){
+      var s=document.createElement('script');
+      s.src=src;
+      s.defer=true;
+      document.head.appendChild(s);
+    });
+  }());\n`;
   const headers = new Headers(response.headers);
   headers.set('Content-Type', 'application/javascript; charset=utf-8');
   headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
