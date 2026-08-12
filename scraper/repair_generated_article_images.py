@@ -11,12 +11,18 @@ For safety this automated repair is limited to source domains that the newsroom 
 explicitly allowed for image reuse. If no suitable image can be obtained, the
 existing generated card is left untouched. The pass is retrospective, so an older
 placeholder can be repaired on any later scraper run.
+
+A successful source photo is renamed to the exact article slug. That is deliberate:
+the ordinary cards matcher then recognises it as the editor-controlled image for
+that story on every future run, rather than replacing it with a generated card and
+forcing another network fetch.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -31,6 +37,7 @@ from backfill_article_images import (
     update_article,
 )
 
+CARDS_DIR = Path("assets/img/cards")
 DEFAULT_ALLOWED_DOMAINS = (
     "rochdale.gov.uk,gmp.police.uk,manchesterfire.gov.uk,rochdaleafc.co.uk,"
     "hornetsrugbyleague.co.uk,tfgm.com,gmca.gov.uk,nationalhighways.co.uk,"
@@ -68,6 +75,32 @@ def is_generated_or_placeholder(article: dict[str, Any]) -> bool:
     )
 
 
+def slug_for(article: dict[str, Any]) -> str:
+    raw = clean(article.get("slug") or article.get("id") or article.get("title"))
+    return re.sub(r"[^a-z0-9]+", "-", raw.lower()).strip("-")[:100] or "story"
+
+
+def canonicalise_download(article: dict[str, Any]) -> str:
+    """Move a downloaded source photo to cards/<exact-story-slug>.<ext>."""
+    downloaded = Path(clean(article.get("image_url")))
+    if not downloaded.is_file() or downloaded.parent != CARDS_DIR:
+        return clean(article.get("image_url"))
+
+    suffix = downloaded.suffix.lower()
+    target = CARDS_DIR / f"{slug_for(article)}{suffix}"
+    if downloaded == target:
+        return target.as_posix()
+
+    if target.exists():
+        # An exact-slug image is authoritative. The normal cards matcher would
+        # have picked it already, but never overwrite editor-controlled bytes if
+        # a concurrent/manual update created it while this run was in progress.
+        downloaded.unlink(missing_ok=True)
+    else:
+        downloaded.replace(target)
+    return target.as_posix()
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--articles", type=Path, default=Path("articles.json"))
@@ -96,7 +129,8 @@ def main(argv: list[str] | None = None) -> int:
             break
 
         eligible += 1
-        original_sources = list(article.get("source_urls") or [])
+        source_list = article.get("source_urls") or []
+        original_sources = list(source_list) if isinstance(source_list, list) else []
         primary = clean(article.get("source_url"))
         candidates = source_urls(article)
         permitted = [url for url in candidates if domain_allowed(url, allowed)]
@@ -119,12 +153,13 @@ def main(argv: list[str] | None = None) -> int:
         }
 
         # Temporarily expose only permitted sources to the existing conservative
-        # publisher-image extractor. Restore the source list immediately after.
+        # publisher-image extractor. Restore the article's source list immediately
+        # afterwards; image repair must never rewrite article sourcing.
         article["source_url"] = permitted[0]
         article["source_urls"] = permitted
         updated, reason = update_article(
             article,
-            output_dir=Path("assets/img/cards"),
+            output_dir=CARDS_DIR,
             apply=True,
             timeout=args.timeout,
             user_agent=DEFAULT_USER_AGENT,
@@ -138,7 +173,9 @@ def main(argv: list[str] | None = None) -> int:
             article.pop("source_urls", None)
 
         if updated:
-            article["img"] = article.get("image_url")
+            canonical = canonicalise_download(article)
+            article["image_url"] = canonical
+            article["img"] = canonical
             article["image_status"] = "source-photo-cached"
             article["image_backfill_method"] = "publisher-lead-image"
             article.pop("image_placeholder_reason", None)
