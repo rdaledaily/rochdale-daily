@@ -92,6 +92,9 @@ jobs:
         timeout-minutes: 18
         run: python scraper/run_newspaper_pipeline.py
 
+      - name: Remove emojis and publishing artefacts before page generation
+        run: python scraper/content_hygiene.py --fix
+
       - name: Resolve article images
         timeout-minutes: 8
         run: |
@@ -112,6 +115,10 @@ jobs:
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          # Generation can re-inject manual records, so clean and verify again
+          # after every public page has been rebuilt.
+          python scraper/content_hygiene.py --fix
+          python scraper/content_hygiene.py
           python scraper/check_scraper_health.py
 
       - name: Refresh weather
@@ -124,7 +131,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
+          git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
             image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
