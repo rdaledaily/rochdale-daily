@@ -14,6 +14,7 @@ on:
       - "scraper/ensure_article_images.py"
       - "scraper/repair_generated_article_images.py"
       - "scraper/repair_generated_with_commons.py"
+      - ".github/workflows/repair-placeholder-images.yml"
 
 permissions:
   contents: write
@@ -26,7 +27,7 @@ jobs:
   repair:
     if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Repair article placeholder images')
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     env:
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
@@ -49,38 +50,37 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-      - name: Load manual articles into published feed
-        run: python scraper/run_fast_local_pipeline.py --manual-only || true
-      - name: Match local article images
+      - name: Match existing local photographs
         run: python scraper/ensure_article_images.py --articles articles.json
-      - name: Rebuild feeds
-        run: python scraper/frontpage_pipeline.py
-      - name: Replace remaining placeholders with real images
+      - name: Replace remaining placeholders with real photographs
         run: |
-          python scraper/ensure_article_images.py --articles articles.json
           python scraper/repair_generated_article_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
-      - name: Validate and rebuild all public pages
+      - name: Validate repaired images and rebuild public pages
         run: |
           python -m json.tool articles.json > /dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=json.load(open('articles.json',encoding='utf-8'))
+          bad=[]
+          repaired_statuses={'source-photo-cached','commons-photo-cached','cards-library-photo'}
+          for a in rows:
+              if not isinstance(a,dict):
+                  continue
+              if str(a.get('image_status') or '').lower() not in repaired_statuses:
+                  continue
+              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
+              if not image.startswith('assets/img/cards/') or not Path(image).is_file():
+                  bad.append((a.get('slug'),image,a.get('image_status')))
+          if bad:
+              raise SystemExit(f'{len(bad)} successfully-repaired images are not cached locally: {bad[:20]}')
+          PY
           python scraper/article_gate.py articles.json
           python scraper/generate_archive.py
           python scraper/generate_ward_pages.py
-          python scraper/generate_pages.py
-          python - <<'PY'
-          import json
-          rows=json.load(open('articles.json',encoding='utf-8'))
-          bad=[]
-          for a in rows:
-              if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
-                  continue
-              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
-              if not image.startswith('assets/img/cards/'):
-                  bad.append((a.get('slug'),image))
-          if bad:
-              raise SystemExit(f'{len(bad)} non-local article images remain: {bad[:20]}')
-          PY
-      - name: Commit image repairs
+          python scraper/generate_newspaper_pages.py
+      - name: Commit successful image repairs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
