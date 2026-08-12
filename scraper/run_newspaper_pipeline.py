@@ -53,6 +53,11 @@ EXTRA_FRESH_SEARCHES = [
 
 
 def main() -> int:
+    # scraper.py historically forces at least 168 hours even when production
+    # asks for a shorter age window. A news desk should search recent material
+    # first, so this entrypoint explicitly enforces the configured 72-hour cap.
+    core.MAX_NEWS_AGE_HOURS = 72
+
     existing = {item.query.casefold().strip() for item in base.PRIORITY_SEARCHES}
     for item in EXTRA_FRESH_SEARCHES:
         if item.query.casefold().strip() not in existing:
