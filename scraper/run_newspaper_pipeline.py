@@ -90,10 +90,10 @@ SERVICE_PATH_RE = re.compile(
 )
 NEWS_EVENT_RE = re.compile(
     r"\b(?:"
-    r"announc(?:e|ed|es|ement|ing)|launch(?:ed|es|ing)?|open(?:ed|ing|s)?|clos(?:e|ed|es|ing|ure)|"
-    r"appoint(?:ed|ment|s)?|acquir(?:e|ed|es|ing)|acquisition|sold|sale|merg(?:e|ed|er|ing)|takeover|"
+    r"announc(?:e|ed|es|ement|ing)|launch(?:ed|es|ing)?|opened|opening|opens|closed|closing|closure|closes|"
+    r"appoint(?:ed|ment|s)?|acquir(?:e|ed|es|ing)|acquisition|sold|merg(?:e|ed|er|ing)|takeover|"
     r"planning application|planning permission|invest(?:ed|ment|ing)|expand(?:s|ed|ing|ion)|"
-    r"relocat(?:e|ed|es|ing|ion)|award(?:ed|s)?|contract(?:ed|s)?|funding|grant|"
+    r"relocat(?:e|ed|es|ing|ion)|awarded|contract(?:ed|s)?|funding|grant(?:ed)?|"
     r"jobs?|recruit(?:ing|ment)|redundan(?:cy|cies)|job losses|administration|liquidation|bankrupt(?:cy)?|"
     r"recall|warning|fine(?:d)?|prosecut(?:ed|ion)|charged|court|investigation|incident|fire|flood|"
     r"new (?:store|shop|branch|premises|site|office|facility|owner|management)|"
@@ -129,6 +129,8 @@ def _looks_like_commercial_landing_page(candidate) -> bool:
 
     # A real development wins over commercial vocabulary. For example, a
     # company's own page announcing a Rochdale branch opening is still a story.
+    # Deliberately do not count sales phrases such as "award-winning" or
+    # "open 7 days" as developments.
     if NEWS_EVENT_RE.search(text):
         return False
 
