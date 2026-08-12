@@ -59,6 +59,7 @@ jobs:
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
       MIN_LIVE_STORIES: "20"
+      SCRAPER_HEALTH_FRESH_HOURS: "24"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
       BROWSER_RENDER_ENABLED: "false"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "false"
@@ -99,6 +100,7 @@ jobs:
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          python scraper/check_scraper_health.py
       - name: Refresh weather
         timeout-minutes: 2
         env:
@@ -108,7 +110,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json slow_domains.json scraper_status.json event_dates.json \
+          git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
             image_coverage_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
@@ -142,6 +144,8 @@ jobs:
       AI_WORKERS: "6"
       MAX_SELECTED_PER_SOURCE: "8"
       MAX_SELECTED_PER_CATEGORY: "24"
+      MIN_LIVE_STORIES: "20"
+      SCRAPER_HEALTH_FRESH_HOURS: "24"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "true"
       BROWSER_RENDER_ENABLED: "true"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "true"
@@ -183,11 +187,12 @@ jobs:
           python scraper/article_gate.py articles.json
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          python scraper/check_scraper_health.py
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json slow_domains.json scraper_status.json event_dates.json \
+          git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
             image_coverage_report.json assets/img/cards \
             articles sitemap.xml wards/ ward_areas.json council_votes.json index.html
