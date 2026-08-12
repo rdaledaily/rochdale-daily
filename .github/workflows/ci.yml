@@ -76,7 +76,10 @@ jobs:
             scraper/editorial_upgrade.py \
             scraper/source_presentation.py \
             scraper/generate_pages.py \
+            scraper/generate_newspaper_pages.py \
             scraper/generate_ward_pages.py \
+            scraper/check_scraper_health.py \
+            scraper/run_newspaper_pipeline.py \
             scraper/councillor_photos.py \
             scraper/food_hygiene.py \
             scraper/frontpage_pipeline.py \
@@ -92,6 +95,7 @@ jobs:
       - name: Run test suite
         run: |
           python scraper/test_frontpage_pipeline.py
+          python scraper/test_newspaper_freshness.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py
           python scraper/test_selection_policy.py
