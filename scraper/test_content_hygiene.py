@@ -30,3 +30,15 @@ def test_detector_scope_matches_cleaner_scope() -> None:
 def test_private_machine_field_does_not_block_verification() -> None:
     # Detection is intentionally aligned with the fields the fixer owns.
     assert not hygiene.has_public_text_violation({"internal_note": "Keep \U0001f4f0"})
+
+
+def main() -> int:
+    test_public_metadata_fields_are_cleaned()
+    test_detector_scope_matches_cleaner_scope()
+    test_private_machine_field_does_not_block_verification()
+    print("Content hygiene metadata checks passed.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
