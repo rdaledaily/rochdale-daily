@@ -62,7 +62,10 @@ def image_candidates() -> list[Path]:
         if not path.is_file() or path.suffix.lower() not in IMAGE_SUFFIXES or generated(path):
             continue
         try:
-            if path.stat().st_size <= 4096:
+            # Small, web-optimised portraits can legitimately be only a few KB.
+            # Reject only empty files; filename matching below determines whether
+            # a local image is actually eligible for a councillor.
+            if path.stat().st_size <= 0:
                 continue
         except OSError:
             continue
