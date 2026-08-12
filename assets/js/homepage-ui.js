@@ -188,7 +188,7 @@
   apply();
 })();
 
-/* Collapse Community support into a simple arrow tab. */
+/* Collapse Community support while preserving its h2 -> h3 heading hierarchy. */
 (function () {
   "use strict";
 
@@ -197,10 +197,14 @@
     if (!section || section.dataset.rdSupportTab === "1") return;
 
     var content = section.querySelector(":scope > .wrap");
-    if (!content) return;
+    var heading = section.querySelector("#support-title");
+    if (!content || !heading) return;
 
     section.dataset.rdSupportTab = "1";
     section.classList.add("rd-support-collapsible");
+
+    var sectionHead = heading.closest(".section-head");
+    if (!sectionHead) return;
 
     var toggle = document.createElement("button");
     toggle.type = "button";
@@ -209,21 +213,33 @@
     toggle.setAttribute("aria-controls", "community-support-content");
     toggle.innerHTML = '<span>Community support</span><span class="rd-support-arrow" aria-hidden="true">&#9662;</span>';
 
+    /* Keep the real h2 in the accessibility tree and make the heading itself
+       own the disclosure control. The h3 support-card headings therefore retain
+       a navigable h2 parent for screen-reader heading navigation. */
+    heading.textContent = "";
+    heading.classList.add("rd-support-heading");
+    heading.appendChild(toggle);
+
     content.id = "community-support-content";
-    content.hidden = true;
-    section.insertBefore(toggle, content);
+    Array.prototype.slice.call(content.children).forEach(function (child) {
+      if (child !== sectionHead) child.hidden = true;
+    });
 
     if (!document.getElementById("community-support-tab-style")) {
       var style = document.createElement("style");
       style.id = "community-support-tab-style";
       style.textContent =
         "#support.rd-support-collapsible{padding:0!important;background:transparent!important;}" +
-        "#support .rd-support-tab{width:min(var(--max,1220px),calc(100% - 30px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--line,#dcdcdc);border-left:5px solid var(--accent,#0e7490);background:#fff;color:var(--ink,#1a1a1a);font-family:\"Roboto Condensed\",Arial,sans-serif;font-size:18px;font-weight:900;text-align:left;text-transform:uppercase;box-shadow:0 2px 10px rgba(0,0,0,.06);}" +
+        "#support .rd-support-heading{width:100%;margin:0!important;font:inherit;}" +
+        "#support .section-head{margin:0!important;}" +
+        "#support .section-head>.section-link{display:none;}" +
+        "#support .rd-support-tab{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--line,#dcdcdc);border-left:5px solid var(--accent,#0e7490);background:#fff;color:var(--ink,#1a1a1a);font-family:\"Roboto Condensed\",Arial,sans-serif;font-size:18px;font-weight:900;text-align:left;text-transform:uppercase;box-shadow:0 2px 10px rgba(0,0,0,.06);}" +
         "#support .rd-support-tab:hover,#support .rd-support-tab:focus-visible{background:#f5f7f8;}" +
         "#support .rd-support-arrow{font-size:24px;line-height:1;transition:transform .18s ease;color:var(--accent,#0e7490);}" +
         "#support .rd-support-tab[aria-expanded=\"true\"] .rd-support-arrow{transform:rotate(180deg);}" +
-        "#community-support-content{padding-top:22px;padding-bottom:22px;}" +
-        "#community-support-content[hidden]{display:none!important;}" +
+        "#community-support-content{padding-top:0;padding-bottom:0;}" +
+        "#support.rd-support-open #community-support-content{padding-top:22px;padding-bottom:22px;}" +
+        "#support.rd-support-open .section-head>.section-link{display:inline-flex;}" +
         "@media(max-width:820px){#support .rd-support-tab{padding:12px 15px;font-size:16px}}";
       document.head.appendChild(style);
     }
@@ -231,7 +247,10 @@
     toggle.addEventListener("click", function () {
       var willOpen = toggle.getAttribute("aria-expanded") !== "true";
       toggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
-      content.hidden = !willOpen;
+      section.classList.toggle("rd-support-open", willOpen);
+      Array.prototype.slice.call(content.children).forEach(function (child) {
+        if (child !== sectionHead) child.hidden = !willOpen;
+      });
     });
   }
 
