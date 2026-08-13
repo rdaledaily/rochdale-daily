@@ -23993,3 +23993,505 @@
 2026-08-13 22:05:21,484 ERROR OpenAI is unavailable; refusing to publish generic filler for https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true
 2026-08-13 22:05:43,560 WARNING Held back 27 article(s) below the 200-word publication floor after merging: Number 83 Bus Services Cancelled Due to High Temperatures; Iraqi Consul General Visits Rochdale Borough Council; Action Together Achieves Volunteer Centre Quality Accreditation in Rochdale; Lift Out of Service at Derker Tram Stop; LIVE: Woman arrested on suspicion of murder after 31-year-old man dies in Rochdale; Rochdale Hornets Wheelchair Rugby League Squad Set for Double Header Against Castleford Tigers; Rochdale Businesses Invited to Bid for £7.96bn National Highways Tender; Bluebird Care Rochdale Sponsors Added Time at Home Matches; Eclipse May Affect Night Shift Start Times for Rochdale Workers; Netwalk Event at Hollingworth Lake Draws Local Participants
 2026-08-13 22:05:43,573 INFO Complete: 67 live articles, 0 new, 19 AI/fallback attempts, 19 skipped, 45 duplicates merged
+2026-08-13 22:48:29,780 INFO Skipping 3 domain(s) benched by earlier runs: rochdaleafc.co.uk, rochdaleafccommunity.org, yourtrustrochdale.co.uk
+2026-08-13 22:48:29,780 INFO Starting Rochdale Daily 15-minute pipeline
+2026-08-13 22:48:37,888 WARNING Dropped editorially removed story from retained feed: Videos raise hygiene concerns at one-star Halifax Road halal meat shop
+2026-08-13 22:48:52,868 INFO X social correlation inactive: add the X_BEARER_TOKEN GitHub secret.
+2026-08-13 22:48:52,869 INFO Facebook comment correlation inactive: add the FACEBOOK_PAGE_ACCESS_TOKEN secret with the required Page access.
+2026-08-13 22:48:52,870 INFO Reading RSS: BBC Manchester
+2026-08-13 22:48:53,113 INFO Raw entries for BBC Manchester: 22
+2026-08-13 22:48:57,045 INFO Reading RSS: Manchester Evening News — Rochdale
+2026-08-13 22:48:57,313 INFO Raw entries for Manchester Evening News — Rochdale: 0
+2026-08-13 22:48:57,314 INFO Reading RSS: Greater Manchester Fire and Rescue Service
+2026-08-13 22:48:57,739 WARNING RSS warning for Greater Manchester Fire and Rescue Service: <unknown>:27:42: not well-formed (invalid token)
+2026-08-13 22:48:57,739 INFO Raw entries for Greater Manchester Fire and Rescue Service: 0
+2026-08-13 22:48:57,739 INFO Reading RSS: Rochdale AFC
+2026-08-13 22:49:02,701 INFO Raw entries for Rochdale AFC: 0
+2026-08-13 22:49:02,701 INFO Reading RSS: Google News — priority:reform-rochdale
+2026-08-13 22:49:04,401 INFO Raw entries for Google News — priority:reform-rochdale: 0
+2026-08-13 22:49:04,401 INFO Reading RSS: Google News — priority:reform-rochdale-local
+2026-08-13 22:49:06,158 INFO Raw entries for Google News — priority:reform-rochdale-local: 27
+2026-08-13 22:49:10,765 INFO Blocked prohibited source: TikTok
+2026-08-13 22:49:11,634 INFO Reading RSS: Google News — priority:restore-rochdale
+2026-08-13 22:49:13,317 INFO Raw entries for Google News — priority:restore-rochdale: 0
+2026-08-13 22:49:13,317 INFO Reading RSS: Google News — priority:workers-party-rochdale
+2026-08-13 22:49:14,997 INFO Raw entries for Google News — priority:workers-party-rochdale: 0
+2026-08-13 22:49:14,997 INFO Reading RSS: Google News — priority:labour-rochdale
+2026-08-13 22:49:16,739 INFO Raw entries for Google News — priority:labour-rochdale: 0
+2026-08-13 22:49:16,739 INFO Reading RSS: Google News — priority:libdem-rochdale
+2026-08-13 22:49:18,455 INFO Raw entries for Google News — priority:libdem-rochdale: 0
+2026-08-13 22:49:18,455 INFO Reading RSS: Google News — priority:green-rochdale
+2026-08-13 22:49:20,132 INFO Raw entries for Google News — priority:green-rochdale: 0
+2026-08-13 22:49:20,132 INFO Reading RSS: Google News — priority:conservative-rochdale
+2026-08-13 22:49:21,826 INFO Raw entries for Google News — priority:conservative-rochdale: 0
+2026-08-13 22:49:21,826 INFO Reading RSS: Google News — priority:planning-rochdale
+2026-08-13 22:49:24,017 INFO Raw entries for Google News — priority:planning-rochdale: 100
+2026-08-13 22:49:27,403 INFO Skipping rochdaleafc.co.uk: benched by an earlier run after repeated timeouts.
+2026-08-13 22:49:28,210 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.linkedin.com
+2026-08-13 22:49:30,997 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 22:49:45,322 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.totaljobs.com', port=443): Read timed out. (read timeout=12)")': /
+2026-08-13 22:50:03,527 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.simplyhired.co.uk
+2026-08-13 22:50:04,350 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/663/free-breakfast-clubs-extended-to-7-more-rochdale-schools
+2026-08-13 22:50:05,956 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://yaronafm.co.bw
+2026-08-13 22:50:18,493 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.glassdoor.co.uk
+2026-08-13 22:50:19,470 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.teachingpersonnel.com
+2026-08-13 22:50:21,309 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://uk.linkedin.com
+2026-08-13 22:50:25,567 INFO Reading RSS: Google News — priority:planning-council
+2026-08-13 22:50:27,320 INFO Raw entries for Google News — priority:planning-council: 5
+2026-08-13 22:50:27,954 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 22:50:28,580 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/663/free-breakfast-clubs-extended-to-7-more-rochdale-schools
+2026-08-13 22:50:28,803 INFO Reading RSS: Google News — priority:crime-fast
+2026-08-13 22:50:30,543 INFO Raw entries for Google News — priority:crime-fast: 1
+2026-08-13 22:50:31,937 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk
+2026-08-13 22:50:31,939 INFO Reading RSS: Google News — priority:crime-web
+2026-08-13 22:50:34,012 INFO Raw entries for Google News — priority:crime-web: 100
+2026-08-13 22:50:34,619 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:50:34,848 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-murder-probe-launched-after-34452039
+2026-08-13 22:50:38,652 INFO Blocked prohibited source: YouTube
+2026-08-13 22:50:44,134 INFO Blocked prohibited source: TikTok
+2026-08-13 22:50:50,159 INFO Blocked prohibited source: Rochdale Times
+2026-08-13 22:50:54,126 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://aboutmanchester.co.uk
+2026-08-13 22:50:54,555 INFO Reading RSS: Google News — priority:water
+2026-08-13 22:50:56,607 INFO Raw entries for Google News — priority:water: 100
+2026-08-13 22:51:16,215 INFO Reading RSS: Google News — priority:power
+2026-08-13 22:51:18,344 INFO Raw entries for Google News — priority:power: 100
+2026-08-13 22:51:19,563 INFO Blocked prohibited source: Apartments.com
+2026-08-13 22:51:35,515 INFO Reading RSS: Google News — priority:roads
+2026-08-13 22:51:37,654 INFO Raw entries for Google News — priority:roads: 100
+2026-08-13 22:51:38,508 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-murder-probe-launched-after-34452039
+2026-08-13 22:51:45,327 INFO Blocked prohibited source: TikTok
+2026-08-13 22:51:46,593 INFO Blocked prohibited source: Reddit
+2026-08-13 22:51:55,399 INFO Blocked prohibited source: TikTok
+2026-08-13 22:51:56,846 INFO Reading RSS: Google News — priority:environment
+2026-08-13 22:51:58,731 INFO Raw entries for Google News — priority:environment: 16
+2026-08-13 22:51:58,732 INFO Blocked prohibited source: Rochdale Times
+2026-08-13 22:52:01,823 INFO Reading RSS: Google News — official-gmp:1
+2026-08-13 22:52:03,528 INFO Raw entries for Google News — official-gmp:1: 0
+2026-08-13 22:52:03,528 INFO Reading RSS: Google News — official-gmp:2
+2026-08-13 22:52:05,249 INFO Raw entries for Google News — official-gmp:2: 0
+2026-08-13 22:52:05,249 INFO Reading RSS: Google News — official-gmp:3
+2026-08-13 22:52:06,945 INFO Raw entries for Google News — official-gmp:3: 0
+2026-08-13 22:52:06,945 INFO Reading RSS: Google News — official-gmp:4
+2026-08-13 22:52:08,639 INFO Raw entries for Google News — official-gmp:4: 0
+2026-08-13 22:52:08,639 INFO Reading RSS: Google News — always-traffic:1
+2026-08-13 22:52:10,702 INFO Raw entries for Google News — always-traffic:1: 100
+2026-08-13 22:52:17,561 INFO Blocked prohibited source: TikTok
+2026-08-13 22:52:28,475 INFO Blocked prohibited source: TikTok
+2026-08-13 22:52:30,157 INFO Reading RSS: Google News — always-traffic:2
+2026-08-13 22:52:32,144 INFO Raw entries for Google News — always-traffic:2: 82
+2026-08-13 22:52:38,936 INFO Blocked prohibited source: TikTok
+2026-08-13 22:52:45,327 INFO Blocked prohibited source: TikTok
+2026-08-13 22:52:46,350 INFO Reading RSS: Google News — always-traffic:3
+2026-08-13 22:52:48,401 INFO Raw entries for Google News — always-traffic:3: 100
+2026-08-13 22:52:54,281 INFO Blocked prohibited source: Apartments.com
+2026-08-13 22:53:03,306 INFO Blocked prohibited source: Apartments.com
+2026-08-13 22:53:07,737 INFO Reading RSS: Google News — always-traffic:4
+2026-08-13 22:53:09,442 INFO Raw entries for Google News — always-traffic:4: 0
+2026-08-13 22:53:09,442 INFO Reading RSS: Google News — always-traffic:5
+2026-08-13 22:53:11,163 INFO Raw entries for Google News — always-traffic:5: 0
+2026-08-13 22:53:11,163 INFO Reading RSS: Google News — civic:council-actions
+2026-08-13 22:53:12,901 INFO Raw entries for Google News — civic:council-actions: 2
+2026-08-13 22:53:13,876 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 22:53:14,447 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/663/free-breakfast-clubs-extended-to-7-more-rochdale-schools
+2026-08-13 22:53:14,447 INFO Reading RSS: Google News — civic:paul-waugh
+2026-08-13 22:53:16,179 INFO Raw entries for Google News — civic:paul-waugh: 6
+2026-08-13 22:53:17,462 INFO Reading RSS: Google News — civic:paul-waugh-parliament
+2026-08-13 22:53:19,145 INFO Raw entries for Google News — civic:paul-waugh-parliament: 0
+2026-08-13 22:53:19,145 INFO Reading RSS: Google News — civic:paul-waugh-hansard
+2026-08-13 22:53:20,828 INFO Raw entries for Google News — civic:paul-waugh-hansard: 0
+2026-08-13 22:53:20,828 INFO Reading RSS: Google News — civic:hansard-rochdale
+2026-08-13 22:53:22,592 INFO Raw entries for Google News — civic:hansard-rochdale: 0
+2026-08-13 22:53:22,592 INFO Reading RSS: Google News — civic:paul-waugh-constituency
+2026-08-13 22:53:24,274 INFO Raw entries for Google News — civic:paul-waugh-constituency: 0
+2026-08-13 22:53:24,274 INFO Reading RSS: Google News — councillor:Andy Kelly
+2026-08-13 22:53:26,113 INFO Raw entries for Google News — councillor:Andy Kelly: 8
+2026-08-13 22:53:26,116 INFO Blocked prohibited source: UK Casinos Not on GamStop
+2026-08-13 22:53:26,117 INFO Reading RSS: Google News — councillor:Waqar Khan
+2026-08-13 22:53:27,933 INFO Raw entries for Google News — councillor:Waqar Khan: 0
+2026-08-13 22:53:27,933 INFO Reading RSS: Google News — councillor:Mohammed Khizer
+2026-08-13 22:53:29,730 INFO Raw entries for Google News — councillor:Mohammed Khizer: 0
+2026-08-13 22:53:29,730 INFO Reading RSS: Google News — councillor:Rachel Massey
+2026-08-13 22:53:31,595 INFO Raw entries for Google News — councillor:Rachel Massey: 10
+2026-08-13 22:53:31,596 INFO Blocked prohibited source: UK Casinos Not on GamStop
+2026-08-13 22:53:31,597 INFO Blocked prohibited source: Rochdale Times
+2026-08-13 22:53:31,598 INFO Blocked prohibited source: UK Casinos Not on GamStop
+2026-08-13 22:53:31,599 INFO Reading RSS: Google News — councillor:Daniel Meredith
+2026-08-13 22:53:33,398 INFO Raw entries for Google News — councillor:Daniel Meredith: 8
+2026-08-13 22:53:33,401 INFO Reading RSS: Google News — councillor:Amna Mir
+2026-08-13 22:53:35,234 INFO Raw entries for Google News — councillor:Amna Mir: 1
+2026-08-13 22:53:35,235 INFO Reading RSS: Google News — councillor:Amber Nisa
+2026-08-13 22:53:37,011 INFO Raw entries for Google News — councillor:Amber Nisa: 2
+2026-08-13 22:53:37,012 INFO Reading RSS: Google News — councillor:Paul O'Neill
+2026-08-13 22:53:38,800 INFO Raw entries for Google News — councillor:Paul O'Neill: 3
+2026-08-13 22:53:38,802 INFO Reading RSS: Google News — councillor:Matthew Pilkington
+2026-08-13 22:53:40,571 INFO Raw entries for Google News — councillor:Matthew Pilkington: 0
+2026-08-13 22:53:40,571 INFO Reading RSS: Google News — councillor:Bev Place
+2026-08-13 22:53:42,347 INFO Raw entries for Google News — councillor:Bev Place: 2
+2026-08-13 22:53:42,349 INFO Reading RSS: Google News — councillor:Steve Potter
+2026-08-13 22:53:44,104 INFO Raw entries for Google News — councillor:Steve Potter: 0
+2026-08-13 22:53:44,104 INFO Reading RSS: Google News — councillor:Faisal Rana
+2026-08-13 22:53:45,909 INFO Raw entries for Google News — councillor:Faisal Rana: 9
+2026-08-13 22:53:46,145 INFO Reading RSS: Google News — councillor:Aasim Rashid
+2026-08-13 22:53:47,911 INFO Raw entries for Google News — councillor:Aasim Rashid: 2
+2026-08-13 22:53:47,912 INFO Reading RSS: Google News — councillor:Aiza Rashid
+2026-08-13 22:53:49,681 INFO Raw entries for Google News — councillor:Aiza Rashid: 0
+2026-08-13 22:53:49,681 INFO Reading RSS: Google News — councillor:Linda Robinson
+2026-08-13 22:53:51,466 INFO Raw entries for Google News — councillor:Linda Robinson: 1
+2026-08-13 22:53:51,466 INFO Reading RSS: Google News — category:crime
+2026-08-13 22:53:53,628 INFO Raw entries for Google News — category:crime: 100
+2026-08-13 22:53:53,868 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:53:54,102 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-murder-probe-launched-after-34452039
+2026-08-13 22:54:00,998 INFO Blocked prohibited source: TikTok
+2026-08-13 22:54:13,460 INFO Reading RSS: Google News — category:traffic
+2026-08-13 22:54:15,650 INFO Raw entries for Google News — category:traffic: 100
+2026-08-13 22:54:26,970 INFO Blocked prohibited source: TikTok
+2026-08-13 22:54:35,003 INFO Reading RSS: Google News — category:transport
+2026-08-13 22:54:37,270 INFO Raw entries for Google News — category:transport: 100
+2026-08-13 22:54:58,402 INFO Reading RSS: Google News — category:politics
+2026-08-13 22:55:00,598 INFO Raw entries for Google News — category:politics: 100
+2026-08-13 22:55:03,746 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 22:55:04,674 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/663/free-breakfast-clubs-extended-to-7-more-rochdale-schools
+2026-08-13 22:55:07,826 INFO Blocked prohibited source: TikTok
+2026-08-13 22:55:20,704 INFO Reading RSS: Google News — category:education
+2026-08-13 22:55:22,872 INFO Raw entries for Google News — category:education: 100
+2026-08-13 22:55:28,399 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/663/free-breakfast-clubs-extended-to-7-more-rochdale-schools
+2026-08-13 22:55:28,641 INFO Blocked prohibited source: YouTube
+2026-08-13 22:55:31,968 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://engagerochdale.org
+2026-08-13 22:55:40,866 INFO Resolved Google News item to publisher via <source>: darzdrivingschoolmanchester.co.uk -> https://darzdrivingschoolmanchester.co.uk/muslim-female-driving-instructor-rochdale/
+2026-08-13 22:55:43,513 INFO Blocked prohibited source: YouTube
+2026-08-13 22:55:43,966 INFO Blocked prohibited source: YouTube
+2026-08-13 22:55:44,385 INFO Reading RSS: Google News — category:sport
+2026-08-13 22:55:46,510 INFO Raw entries for Google News — category:sport: 100
+2026-08-13 22:55:46,750 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:55:47,449 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-murder-probe-launched-after-34452039
+2026-08-13 22:56:06,438 INFO Reading RSS: Google News — category:events
+2026-08-13 22:56:08,628 INFO Raw entries for Google News — category:events: 100
+2026-08-13 22:56:16,385 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 22:56:28,729 INFO Reading RSS: Google News — category:business
+2026-08-13 22:56:30,862 INFO Raw entries for Google News — category:business: 100
+2026-08-13 22:56:38,541 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 22:56:42,824 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://galestreetpostoffice.com
+2026-08-13 22:56:46,150 INFO Reading RSS: Google News — category:community
+2026-08-13 22:56:48,285 INFO Raw entries for Google News — category:community: 100
+2026-08-13 22:56:50,389 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:56:56,765 INFO Skipping yourtrustrochdale.co.uk: benched by an earlier run after repeated timeouts.
+2026-08-13 22:57:00,432 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.hellorayo.co.uk
+2026-08-13 22:57:08,089 INFO Reading RSS: Google News — category:health
+2026-08-13 22:57:10,251 INFO Raw entries for Google News — category:health: 100
+2026-08-13 22:57:14,475 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 22:57:16,854 INFO Blocked prohibited source: TikTok
+2026-08-13 22:57:19,229 INFO Blocked prohibited source: TikTok
+2026-08-13 22:57:30,370 INFO Reading RSS: Google News — category:environment
+2026-08-13 22:57:32,492 INFO Raw entries for Google News — category:environment: 100
+2026-08-13 22:57:51,787 INFO Reading RSS: Google News — category:planning
+2026-08-13 22:57:53,931 INFO Raw entries for Google News — category:planning: 100
+2026-08-13 22:57:54,985 INFO Blocked prohibited source: TikTok
+2026-08-13 22:57:55,611 INFO Resolved Google News item to publisher via <source>: Rochdale Borough Council -> https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 22:58:14,515 INFO Reading RSS: Google News — location:wardle:community
+2026-08-13 22:58:16,247 INFO Raw entries for Google News — location:wardle:community: 2
+2026-08-13 22:58:16,490 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:58:16,706 INFO Reading RSS: Google News — location:wardle:events
+2026-08-13 22:58:18,448 INFO Raw entries for Google News — location:wardle:events: 2
+2026-08-13 22:58:18,687 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:58:18,901 INFO Reading RSS: Google News — location:wardle:business
+2026-08-13 22:58:20,654 INFO Raw entries for Google News — location:wardle:business: 2
+2026-08-13 22:58:20,892 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:58:21,109 INFO Reading RSS: Google News — location:wardle:education
+2026-08-13 22:58:22,856 INFO Raw entries for Google News — location:wardle:education: 1
+2026-08-13 22:58:23,091 INFO Reading RSS: Google News — location:wardle:health
+2026-08-13 22:58:24,909 INFO Raw entries for Google News — location:wardle:health: 4
+2026-08-13 22:58:25,146 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:58:25,806 INFO Reading RSS: Google News — location:wardle:sport
+2026-08-13 22:58:27,579 INFO Raw entries for Google News — location:wardle:sport: 2
+2026-08-13 22:58:27,817 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:58:28,030 INFO Reading RSS: Google News — location:wardle:planning
+2026-08-13 22:58:29,778 INFO Raw entries for Google News — location:wardle:planning: 2
+2026-08-13 22:58:30,016 INFO Resolved Google News item to publisher via <source>: manchestereveningnews.co.uk -> https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-31-found-dead-rochdale-34453085
+2026-08-13 22:58:30,229 INFO Reading RSS: Google News — location:wardle:environment
+2026-08-13 22:58:31,997 INFO Raw entries for Google News — location:wardle:environment: 1
+2026-08-13 22:58:32,235 INFO Reading RSS: Google News — location:spotland:crime
+2026-08-13 22:58:34,093 INFO Raw entries for Google News — location:spotland:crime: 27
+2026-08-13 22:58:34,101 INFO Reading RSS: Google News — location:spotland:traffic
+2026-08-13 22:58:35,910 INFO Raw entries for Google News — location:spotland:traffic: 1
+2026-08-13 22:58:38,267 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.groundwork.org.uk/greatermanchester/latest/
+2026-08-13 22:58:38,267 WARNING Discovery page failed for Groundwork Greater Manchester (https://www.groundwork.org.uk/greatermanchester/latest/): robots.txt does not permit fetching https://www.groundwork.org.uk/greatermanchester/latest/
+2026-08-13 22:58:38,267 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.groundwork.org.uk/greatermanchester/latest/?query-6-page=2
+2026-08-13 22:58:38,267 WARNING Discovery page failed for Groundwork Greater Manchester (https://www.groundwork.org.uk/greatermanchester/latest/?query-6-page=2): robots.txt does not permit fetching https://www.groundwork.org.uk/greatermanchester/latest/?query-6-page=2
+2026-08-13 22:58:38,268 WARNING Discovery page failed for Your Trust Rochdale News (https://www.yourtrustrochdale.co.uk/news/): yourtrustrochdale.co.uk is benched after failing in an earlier run
+2026-08-13 22:58:38,268 WARNING Discovery page failed for Your Trust Rochdale News Archive (https://www.yourtrustrochdale.co.uk/category/news/): yourtrustrochdale.co.uk is benched after failing in an earlier run
+2026-08-13 22:58:38,268 INFO Discovering pages: Groundwork Greater Manchester (0 links)
+2026-08-13 22:58:38,270 INFO Discovering pages: Your Trust Rochdale News (0 links)
+2026-08-13 22:58:38,271 INFO Discovering pages: Your Trust Rochdale News Archive (0 links)
+2026-08-13 22:58:38,386 INFO Discovering pages: Roch Valley Radio Local News (40 links)
+2026-08-13 22:58:38,512 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=1&tdte=
+2026-08-13 22:58:38,512 INFO Discovering pages: What's Occurrin' Events (7 links)
+2026-08-13 22:58:38,512 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=1&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=1&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=2&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=2&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=2&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=3&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=3&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=3&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=4&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=4&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=4&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=5&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=5&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=5&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=6&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=6&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=6&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=7&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=7&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=7&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=8&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=8&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=8&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=1&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=1&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=1&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=2&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=2&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=2&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=3&tdte=
+2026-08-13 22:58:38,513 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=3&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=3&tdte=
+2026-08-13 22:58:38,513 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=4&tdte=
+2026-08-13 22:58:38,514 WARNING Discovery page failed for Greater Manchester Police (https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=4&tdte=): robots.txt does not permit fetching https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=4&tdte=
+2026-08-13 22:58:38,515 INFO Discovering pages: Greater Manchester Police (0 links)
+2026-08-13 22:58:38,957 INFO Discovering pages: Rochdale Council Your Events (9 links)
+2026-08-13 22:58:39,054 INFO Discovering pages: Action Together Latest News (40 links)
+2026-08-13 22:58:39,097 INFO Discovering pages: Action Together Rochdale News (40 links)
+2026-08-13 22:58:39,105 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.tfgm.com/
+2026-08-13 22:58:39,105 WARNING Discovery page failed for TfGM Newsroom (https://news.tfgm.com/): robots.txt does not permit fetching https://news.tfgm.com/
+2026-08-13 22:58:39,106 INFO Discovering pages: TfGM Newsroom (0 links)
+2026-08-13 22:58:39,193 INFO Discovering pages: Roch Valley Radio Notices (13 links)
+2026-08-13 22:58:39,327 WARNING Browser render failed for https://www.rochdalecreates.co.uk/whats-on: BrowserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-08-13 22:58:39,327 WARNING Discovery page failed for Rochdale Creates What's On (https://www.rochdalecreates.co.uk/whats-on): BrowserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-08-13 22:58:39,328 WARNING Browser render failed for https://www.rochdalecreates.co.uk/news: BrowserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-08-13 22:58:39,328 WARNING Discovery page failed for Rochdale Creates News (https://www.rochdalecreates.co.uk/news): BrowserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-08-13 22:58:39,328 INFO Discovering pages: Rochdale Creates What's On (0 links)
+2026-08-13 22:58:39,328 INFO Discovering pages: Rochdale Creates News (0 links)
+2026-08-13 22:58:39,405 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.northernrailway.co.uk/service-updates
+2026-08-13 22:58:39,405 WARNING Discovery page failed for Northern Service Updates (https://www.northernrailway.co.uk/service-updates): robots.txt does not permit fetching https://www.northernrailway.co.uk/service-updates
+2026-08-13 22:58:39,406 INFO Discovering pages: Northern Service Updates (0 links)
+2026-08-13 22:58:39,492 WARNING Discovery page failed for Greater Manchester Fire and Rescue Service (https://www.manchesterfire.gov.uk/news-events/news/): 404 Client Error: Not Found for url: https://manchesterfire.gov.uk/news-events/news/
+2026-08-13 22:58:39,492 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://aboutmanchester.co.uk/?s=Rochdale
+2026-08-13 22:58:39,492 WARNING Discovery page failed for About Manchester (https://aboutmanchester.co.uk/?s=Rochdale): robots.txt does not permit fetching https://aboutmanchester.co.uk/?s=Rochdale
+2026-08-13 22:58:39,492 INFO Discovering pages: Greater Manchester Fire and Rescue Service (0 links)
+2026-08-13 22:58:39,493 INFO Discovering pages: About Manchester (0 links)
+2026-08-13 22:58:39,597 INFO Discovering pages: Rochdale Council Events (30 links)
+2026-08-13 22:58:39,636 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.unitedutilities.com/emergencies/up-my-street/
+2026-08-13 22:58:39,637 WARNING Discovery page failed for United Utilities Incidents (https://www.unitedutilities.com/emergencies/up-my-street/): robots.txt does not permit fetching https://www.unitedutilities.com/emergencies/up-my-street/
+2026-08-13 22:58:39,637 INFO Discovering pages: United Utilities Incidents (0 links)
+2026-08-13 22:58:39,749 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://rochdaleriverside.com/news/
+2026-08-13 22:58:39,749 WARNING Discovery page failed for Rochdale Riverside News (https://rochdaleriverside.com/news/): robots.txt does not permit fetching https://rochdaleriverside.com/news/
+2026-08-13 22:58:39,750 INFO Discovering pages: Rochdale Riverside News (0 links)
+2026-08-13 22:58:39,814 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/
+2026-08-13 22:58:39,818 WARNING Discovery page failed for National Highways North West (https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/): robots.txt does not permit fetching https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/
+2026-08-13 22:58:39,836 INFO Discovering pages: National Highways North West (0 links)
+2026-08-13 22:58:39,859 INFO Discovering pages: TfGM Travel Alerts (3 links)
+2026-08-13 22:58:39,865 INFO Discovering pages: Rochdale Borough Council News (24 links)
+2026-08-13 22:58:39,942 INFO Discovering pages: BBC Manchester (39 links)
+2026-08-13 22:58:39,966 INFO Discovering pages: GMCA News (1 links)
+2026-08-13 22:58:39,974 INFO Discovering pages: Rochdale Development Agency (11 links)
+2026-08-13 22:58:40,022 INFO Discovering pages: The Independent — Rochdale (40 links)
+2026-08-13 22:58:40,137 INFO Discovering pages: Visit Rochdale (3 links)
+2026-08-13 22:58:40,582 INFO Discovering pages: Rochdale Boroughwide Housing (2 links)
+2026-08-13 22:58:40,673 WARNING Discovery page failed for Rochdale Council Webcasts (https://rochdale.public-i.tv/core/data/21235/archived/1/future/1/agenda/1/enctag/Council): Not an HTML page: text/xml;charset=UTF-8
+2026-08-13 22:58:40,674 INFO Discovering pages: Rochdale Council Webcasts (0 links)
+2026-08-13 22:58:40,846 INFO Discovering pages: Falinge Park High School (1 links)
+2026-08-13 22:58:40,900 WARNING Discovery page failed for Rochdale AFC (https://rochdaleafc.co.uk/news/): rochdaleafc.co.uk is benched after failing in an earlier run
+2026-08-13 22:58:40,900 INFO Discovering pages: Northern News (13 links)
+2026-08-13 22:58:40,900 INFO Discovering pages: Rochdale AFC (0 links)
+2026-08-13 22:58:40,913 WARNING Discovery page failed for Rochdale AFC Women (https://rochdaleafc.co.uk/rochdale-afc-women-news/): rochdaleafc.co.uk is benched after failing in an earlier run
+2026-08-13 22:58:40,913 INFO Discovering pages: St Cuthbert's RC High School (1 links)
+2026-08-13 22:58:40,913 INFO Discovering pages: Rochdale AFC Women (0 links)
+2026-08-13 22:58:40,991 INFO Discovering pages: Rochdale Town Hall Events (19 links)
+2026-08-13 22:58:41,187 INFO Discovering pages: Pennine Care NHS (7 links)
+2026-08-13 22:58:41,368 INFO Skipping rochdaleafccommunity.org: benched by an earlier run after repeated timeouts.
+2026-08-13 22:58:41,368 WARNING Discovery page failed for Rochdale AFC Community Trust (https://www.rochdaleafccommunity.org/news/): rochdaleafccommunity.org is benched after failing in an earlier run
+2026-08-13 22:58:41,368 INFO Discovering pages: Rochdale AFC Community Trust (0 links)
+2026-08-13 22:58:41,431 INFO Discovering pages: Northern Care Alliance Rochdale (9 links)
+2026-08-13 22:58:41,529 WARNING Discovery page failed for Rochdale Valiant (https://www.rochdalevaliant.uk/): 429 Client Error: Too Many Requests for url: https://www.google.com/sorry/index?continue=https://www.rochdalevaliant.uk/&q=EgSsrm6CGKCY-dMGIi25YiB1IAvMSm9vy7LM0etnLGGZCK2By5PPtqJkOkG-M2Z8fD78U36ImLIs0hIyAnJSWgFD
+2026-08-13 22:58:41,530 INFO Discovering pages: Rochdale Valiant (0 links)
+2026-08-13 22:58:41,636 INFO Discovering pages: Rochdale Sixth Form College (0 links)
+2026-08-13 22:58:41,897 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.hmnrconservatives.org.uk/news
+2026-08-13 22:58:41,897 WARNING Discovery page failed for Heywood Middleton North and Rochdale Conservatives (https://www.hmnrconservatives.org.uk/news): robots.txt does not permit fetching https://www.hmnrconservatives.org.uk/news
+2026-08-13 22:58:41,899 INFO Discovering pages: Heywood Middleton North and Rochdale Conservatives (0 links)
+2026-08-13 22:58:41,907 INFO Discovering pages: Edgar Wood Academy (6 links)
+2026-08-13 22:58:42,093 INFO Discovering pages: Northern Care Alliance News (6 links)
+2026-08-13 22:58:42,106 INFO Discovering pages: Rochdale Green Party (8 links)
+2026-08-13 22:58:42,165 INFO Discovering pages: Wardle Academy (1 links)
+2026-08-13 22:58:42,181 INFO Discovering pages: Rochdale Hornets (6 links)
+2026-08-13 22:58:42,312 INFO Discovering pages: Rochdale Labour (16 links)
+2026-08-13 22:58:42,878 INFO Discovering pages: Oulder Hill Leadership Academy (5 links)
+2026-08-13 22:58:42,896 INFO Discovering pages: Hopwood Hall College (8 links)
+2026-08-13 22:58:42,989 INFO Discovering pages: Rochdale Liberal Democrats (12 links)
+2026-08-13 22:59:55,833 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.independent.co.uk', port=443): Read timed out. (read timeout=12)")': /tv/news/manchester-airport-police-video-family-interview-b2586408.html
+2026-08-13 23:00:14,868 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.oulderhillacademy.com', port=443): Read timed out. (read timeout=12)")': /news/newsletters/
+2026-08-13 23:00:14,879 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.oulderhillacademy.com', port=443): Read timed out. (read timeout=12)")': /latest-news/
+2026-08-13 23:00:15,261 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.oulderhillacademy.com', port=443): Read timed out. (read timeout=12)")': /latest-news/starlight-magazine/
+2026-08-13 23:00:15,344 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.oulderhillacademy.com', port=443): Read timed out. (read timeout=12)")': /category/latest-news/
+2026-08-13 23:00:15,836 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.hopwood.ac.uk', port=443): Read timed out. (read timeout=12)")': /news-and-events/upcoming-events/
+2026-08-13 23:00:15,848 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.oulderhillacademy.com', port=443): Read timed out. (read timeout=12)")': /latest-news/page/2/
+2026-08-13 23:00:16,223 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.hopwood.ac.uk', port=443): Read timed out. (read timeout=12)")': /news-and-events/latest-news/page/3/
+2026-08-13 23:00:16,430 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.hopwood.ac.uk', port=443): Read timed out. (read timeout=12)")': /news-and-events/latest-news/page/2/
+2026-08-13 23:00:16,945 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='www.hopwood.ac.uk', port=443): Read timed out. (read timeout=12)")': /news-and-events/latest-news/page/9/
+2026-08-13 23:00:21,072 INFO Discovering outbound publisher links: NewsNow — Rochdale
+2026-08-13 23:00:22,310 INFO Discovering outbound publisher links: Ground News — Rochdale
+2026-08-13 23:00:24,187 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321620386?-57568:46921
+2026-08-13 23:00:24,187 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321620386?-57568:46921
+2026-08-13 23:00:24,187 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321583837?-57568:46921
+2026-08-13 23:00:24,187 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321583837?-57568:46921
+2026-08-13 23:00:24,187 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321581485?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321581485?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321572971?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321572971?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321508788?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321508788?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321464464?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321464464?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321416873?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321416873?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321387914?-57568:46921
+2026-08-13 23:00:24,188 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321387914?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321386455?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321386455?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321363503?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321363503?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321357289?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321357289?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321353283?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321353283?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321318208?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321318208?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321292045?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321292045?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321268403?-57568:46921
+2026-08-13 23:00:24,189 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321268403?-57568:46921
+2026-08-13 23:00:24,193 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1320572250?-57568:46921
+2026-08-13 23:00:24,195 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1320572250?-57568:46921
+2026-08-13 23:00:24,194 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321605070?-57568:46921
+2026-08-13 23:00:24,196 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321602051?-57568:46921
+2026-08-13 23:00:24,197 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321602051?-57568:46921
+2026-08-13 23:00:24,199 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321594093?-57568:46921
+2026-08-13 23:00:24,199 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321594093?-57568:46921
+2026-08-13 23:00:24,196 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321605070?-57568:46921
+2026-08-13 23:00:24,206 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321219652?-57568:46921
+2026-08-13 23:00:24,224 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321219652?-57568:46921
+2026-08-13 23:00:24,224 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.linkedin.com/company/groundnews
+2026-08-13 23:00:24,224 INFO robots.txt does not permit fetching https://www.linkedin.com/company/groundnews
+2026-08-13 23:00:24,217 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321539147?-57568:46921
+2026-08-13 23:00:24,225 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321539147?-57568:46921
+2026-08-13 23:00:24,219 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1320759115?-57568:46921
+2026-08-13 23:00:24,210 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321002913?-57568:46921
+2026-08-13 23:00:24,234 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321002913?-57568:46921
+2026-08-13 23:00:24,214 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321315184?-57568:46921
+2026-08-13 23:00:24,216 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321597587?-57568:46921
+2026-08-13 23:00:24,229 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1320759115?-57568:46921
+2026-08-13 23:00:24,237 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321315184?-57568:46921
+2026-08-13 23:00:24,211 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://c.newsnow.co.uk/A/1321230821?-57568:46921
+2026-08-13 23:00:24,241 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321597587?-57568:46921
+2026-08-13 23:00:24,249 INFO robots.txt does not permit fetching https://c.newsnow.co.uk/A/1321230821?-57568:46921
+2026-08-13 23:00:30,188 WARNING Live page failed for Northern live service updates: robots.txt does not permit fetching https://www.northernrailway.co.uk/service-updates
+2026-08-13 23:00:42,558 WARNING Retrying (Retry(total=1, connect=2, read=0, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='environment.data.gov.uk', port=443): Read timed out. (read timeout=12)")': /flood-monitoring/id/floods?lat=53.6097&long=-2.1561&dist=25
+2026-08-13 23:00:54,834 WARNING Environment Agency flood feed unavailable: HTTPSConnectionPool(host='environment.data.gov.uk', port=443): Max retries exceeded with url: /flood-monitoring/id/floods?lat=53.6097&long=-2.1561&dist=25 (Caused by ReadTimeoutError("HTTPSConnectionPool(host='environment.data.gov.uk', port=443): Read timed out. (read timeout=12)"))
+2026-08-13 23:00:57,308 WARNING Google News browser resolution stopped early: BrowserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     playwright install                                     ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+2026-08-13 23:00:57,311 INFO Google News resolution: 0/53 newly resolved (45 served from cache).
+2026-08-13 23:00:57,311 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.linkedin.com/posts/rochdale-development-agency_rochdale-greatermanchester-businessopportunity-activity-7493569539436359680-xVcm
+2026-08-13 23:00:58,606 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.simplyhired.co.uk/job/U7NMemikmDdDHlSrzAHBkI2UItLR3enmA0Dr1zm6V1lfTB_H4f4VRQ
+2026-08-13 23:00:58,606 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://yaronafm.co.bw/job/night-care-assistant-rochdale-7553394c70316e324b6436664c4e612f74773d3d
+2026-08-13 23:01:00,625 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.simplyhired.co.uk/job/BZQZfRC6p3TniGGlJuGjI9nvkdiIS_6CZhEsPWFlSTJhusFdhqFh_g
+2026-08-13 23:01:00,625 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.teachingpersonnel.com/job/graduate-cover-supervisor-in-rochdale-jid-864701
+2026-08-13 23:01:00,625 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://uk.linkedin.com/jobs/view/civil-enforcement-officer-at-marston-holdings-4454058958
+2026-08-13 23:01:03,430 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.gmp.police.uk/news/greater-manchester/news/news/2026/august/police-investigating-unexpected-death-of-31-year-old-man-in-rochdale/
+2026-08-13 23:01:05,339 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://aboutmanchester.co.uk/37-year-old-woman-arrested-on-suspicion-of-murder-at-rochdale-address/
+2026-08-13 23:01:07,953 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://engagerochdale.org/Event/307522
+2026-08-13 23:01:11,742 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://www.hellorayo.co.uk/hits-radio/manchester/news/rochdale-man-death-woman-arrested-murder
+2026-08-13 23:01:12,280 INFO Google News wrappers: 190 seen, 75 resolved, 28 gained article text, 23 gained a publisher image, 6 re-attributed to the real publisher.
+2026-08-13 23:01:17,974 INFO Candidate volume: 241 raw items -> 85 story clusters
+2026-08-13 23:01:25,926 INFO Balanced selection: 30 eligible -> 30 selected; categories=['community', 'crime', 'education', 'environment', 'health', 'news', 'politics', 'sport', 'traffic', 'transport']; wards=['Bamford', 'Littleborough Lakeside', 'Milnrow and Newhey', 'Spotland and Falinge']
+2026-08-13 23:01:25,944 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.rochvalleyradio.com/news/rochdale-council-mayors-column/mayor-faisal-rana-reflects-on-busy-start-to-mayoral-year/
+2026-08-13 23:01:25,953 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.actiontogether.org.uk/we-are-vcqa-2026
+2026-08-13 23:01:25,989 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMiUkFVX3lxTE1oNzB0Qk9TSnd5T0RhSGVmUDhGMW9DakhIYk1yYmxTU0FCSEJXdkxtZUgwUy0wMkRRNUxoS0hyTFlYcjlOR3d5ZDBvOUFkbjlyZ1E?oc=5
+2026-08-13 23:01:25,989 ERROR OpenAI is unavailable; refusing to publish generic filler for https://news.google.com/rss/articles/CBMiUkFVX3lxTE1oNzB0Qk9TSnd5T0RhSGVmUDhGMW9DakhIYk1yYmxTU0FCSEJXdkxtZUgwUy0wMkRRNUxoS0hyTFlYcjlOR3d5ZDBvOUFkbjlyZ1E?oc=5
+2026-08-13 23:01:25,990 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi4AFBVV95cUxPTnFmTG9aMnItWHJaTTZ2TktmS3pqeTZIdHdzUzlHTkxhRDRrQ3pVSWlmamFta3k1VF9KcVdtemswUGY3bURSZ2RKdkRvdnJWMGtOZm96cnE3c0E0WjF4NzAweGRhQTlmWmVsNjFVWWx1Rkd3WWJHOURRZzRjTFI4c0Z5WDVhbDF3TDlIcS1RTU9ZMlRUdDhNMDNGQi04ckxIV21qcEZXRm11QVJnOXZOWk9nSmFJWkFGLUdSZEdrOFhHb0ZselRxUlFoZ0F0MDNpeXNmdElHMGpFTS0xbUM1dQ?oc=5
+2026-08-13 23:01:25,991 ERROR OpenAI is unavailable; refusing to publish generic filler for https://news.google.com/rss/articles/CBMi4AFBVV95cUxPTnFmTG9aMnItWHJaTTZ2TktmS3pqeTZIdHdzUzlHTkxhRDRrQ3pVSWlmamFta3k1VF9KcVdtemswUGY3bURSZ2RKdkRvdnJWMGtOZm96cnE3c0E0WjF4NzAweGRhQTlmWmVsNjFVWWx1Rkd3WWJHOURRZzRjTFI4c0Z5WDVhbDF3TDlIcS1RTU9ZMlRUdDhNMDNGQi04ckxIV21qcEZXRm11QVJnOXZOWk9nSmFJWkFGLUdSZEdrOFhHb0ZselRxUlFoZ0F0MDNpeXNmdElHMGpFTS0xbUM1dQ?oc=5
+2026-08-13 23:01:25,994 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi1wFBVV95cUxOdG15MzZNS3dIaHJ0Snd4MzBkYm1IM2lTdzBJOFlvemJBMXRIVzlyWG5FWC1ISFA2dzh1My0xSERQVWs1c3U2N3hwV1g4bTFYVFlEQjdCdXF5OVJzQ1BNZmVSS2hQanNHT2xjZC1RbzVablpmb3VQaDd1V3FOVnN2ZkpIZ1BsV3RfeURkZnFKMkFIaHlvc3JPSzlXZTZkdUhlWkxxNU16OEwzS00yaW1UVHE3bDFkUWlwc2dRZ2RKbGwwZmxyYXdwc05NRFBoaTR1YlRqa00wSQ?oc=5
+2026-08-13 23:01:25,994 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi1gFBVV95cUxPLUJYa1NOR3RJaUd3SXJxWUpPMGV3YjZaM2RKX0I0R1ExbFo0M3o0SlVKT0JzSm05ak9qdTlaQUk3MEhYVGlLTWJFNGU0M3VheWpQYlM3UnlLTzhOaUxfbFFjOUpVTzhnWXVOVkRjX1J6ZVMwTTdtZ0RENl9OcUZ3WXA0ZTRCYU1zQXlYU2NOWjgxRUtXalJ3YmRDMmV4VmNLOTR2S1JGTVVJcFhrNUg3U3BaX3VTN2xqNkpjVEx5YS1LR2VEQ2JkQTJXcFI2bU9yMjJYY2p3?oc=5
+2026-08-13 23:01:25,995 ERROR OpenAI is unavailable; refusing to publish generic filler for https://news.google.com/rss/articles/CBMi1wFBVV95cUxOdG15MzZNS3dIaHJ0Snd4MzBkYm1IM2lTdzBJOFlvemJBMXRIVzlyWG5FWC1ISFA2dzh1My0xSERQVWs1c3U2N3hwV1g4bTFYVFlEQjdCdXF5OVJzQ1BNZmVSS2hQanNHT2xjZC1RbzVablpmb3VQaDd1V3FOVnN2ZkpIZ1BsV3RfeURkZnFKMkFIaHlvc3JPSzlXZTZkdUhlWkxxNU16OEwzS00yaW1UVHE3bDFkUWlwc2dRZ2RKbGwwZmxyYXdwc05NRFBoaTR1YlRqa00wSQ?oc=5
+2026-08-13 23:01:25,995 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMiwgFBVV95cUxPekpTdXJkWnNBZDd3NV9xaGl5X2pTZTN0b1Z1VkRUT2dGTk90SDZmb0tPZHBKQTQwaGtvcWdOMG9haE1FeXp5clRlN3EtWUdPekUzc0p1c204WkZhNHJ5Y0NubjRhUEdjalN5SVF4UWYyNDlsN0lidGROemlMOGNxN3l4TEV4UVZsTnNFNnVjZS1LQzNpaTFyNEFpS2Z3U29kNWY4UHhYVFN6QkdXd0pxVWdXdHlKS0FJZHdsVTZ6V2pTZw?oc=5
+2026-08-13 23:01:25,995 ERROR OpenAI is unavailable; refusing to publish generic filler for https://aboutmanchester.co.uk/37-year-old-woman-arrested-on-suspicion-of-murder-at-rochdale-address/
+2026-08-13 23:01:25,996 ERROR OpenAI is unavailable; refusing to publish generic filler for https://engagerochdale.org/Event/307522
+2026-08-13 23:01:25,997 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMiswFBVV95cUxORWlSZHN0T01uZjQxQzlnQ18yUkVmX21VRGZlamNVVllKcW4xQzctcThRc1N3MHVlZ3NrbFVhRlhnMW9ZVmNuS3lOaUNscVlMcF9jcl90N3c2Q1dFSEV5bXpIU28wb0hUT1FnM0JiYnlNSVd2cG1fc242OERlQ2xaUFlUY2dCZEdHekNCUUFDVTRfcnZjLU0tQWZkQzQxZzI5S0RvWXpmZzluSnJxbmdBbXFpVQ?oc=5
+2026-08-13 23:01:25,997 ERROR OpenAI is unavailable; refusing to publish generic filler for https://news.google.com/rss/articles/CBMiswFBVV95cUxORWlSZHN0T01uZjQxQzlnQ18yUkVmX21VRGZlamNVVllKcW4xQzctcThRc1N3MHVlZ3NrbFVhRlhnMW9ZVmNuS3lOaUNscVlMcF9jcl90N3c2Q1dFSEV5bXpIU28wb0hUT1FnM0JiYnlNSVd2cG1fc242OERlQ2xaUFlUY2dCZEdHekNCUUFDVTRfcnZjLU0tQWZkQzQxZzI5S0RvWXpmZzluSnJxbmdBbXFpVQ?oc=5
+2026-08-13 23:01:26,003 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.manchestereveningnews.co.uk/news/greater-manchester-news/this-eviction-making-really-ill-34417506
+2026-08-13 23:01:26,004 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.nowtv.com/watch/forensics-catching-the-killer/iYEQYZaTURDhxqFbdBt679/seasons/3/episodes/catching-the-rochdale-ripper-episode-8/A5EK3PiSkPquBDpRBHU1Y
+2026-08-13 23:01:26,037 ERROR OpenAI is unavailable; refusing to publish generic filler for https://mofa.gov.iq/manchester/?p=13212&lang=en
+2026-08-13 23:01:26,037 ERROR OpenAI is unavailable; refusing to publish generic filler for https://rochdaleafc.co.uk/introducing-rochdale-afc-netball/
+2026-08-13 23:01:26,117 ERROR OpenAI is unavailable; refusing to publish generic filler for https://onlineshop.oxfam.org.uk/en/vintage-bradford-city-v-rochdale-15th-april-1967/product/HD_304136920?sku=HD_304136920
+2026-08-13 23:01:26,321 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMiqgFBVV95cUxOR0xZS1NOVFJtRHpWYUJfSUtkTnA5QU1aVmh1b05vV090aGs1aHE3QXVWdzA0cFZ5UnhMVzF4VTlVSXRjRHZXLWh1a2VKcjNFUmtDUC1Hd0EwZFJFaTVfMnFScDlxTmM3ZDJvQm85MkU4WXdzTXA0OU5HRWFpZnVBbDU4UElSbWFLdXBLZ29TZ2QwYlBBV1I1eHd6MU8zNE9fRmF1N0xleVFuZw?oc=5
+2026-08-13 23:01:26,322 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.rochvalleyradio.com/news/local-news/seven-more-rochdale-schools-to-offer-free-breakfast-clubs/
+2026-08-13 23:01:26,323 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMiYEFVX3lxTE9UM0VobmVOazhCbzhjNEVsYlJKVldXVjdzbWlGRjNaQXJGZ1hZOVpEWWNBaEx1VTBfWTVzU0owSVBaSHRfV1QwUWdCYjBCTmNEUFRJSTdlRjFKME1JS3VoLQ?oc=5
+2026-08-13 23:01:26,324 ERROR OpenAI is unavailable; refusing to publish generic filler for https://news.google.com/rss/articles/CBMiYEFVX3lxTE9UM0VobmVOazhCbzhjNEVsYlJKVldXVjdzbWlGRjNaQXJGZ1hZOVpEWWNBaEx1VTBfWTVzU0owSVBaSHRfV1QwUWdCYjBCTmNEUFRJSTdlRjFKME1JS3VoLQ?oc=5
+2026-08-13 23:01:26,325 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMiUkFVX3lxTE10a2FGLUxydzZNRnhXRHFFNkRQUkZJZkRNUjA4Y0lGOU12OFpobjZfdnBjWEU3QlowWUJjNkRsMTJzNjZrTVZITlNDRGNwaTRXR2c?oc=5
+2026-08-13 23:01:26,326 ERROR OpenAI is unavailable; refusing to publish generic filler for https://uk.news.yahoo.com/man-31-found-dead-rochdale-131955829.html
+2026-08-13 23:01:26,329 ERROR OpenAI is unavailable; refusing to publish generic filler for https://yespunjab.com/uk-grooming-gang-cases-put-pakistan-under-scrutiny-over-child-protection-accountability/
+2026-08-13 23:01:26,329 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.yourtrustrochdale.co.uk/sessions/fitness-classes/728553-indoor-cycling/
+2026-08-13 23:01:26,333 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.rochvalleyradio.com/news/local-news/burnley-man-banned-from-keeping-animals-after-dog-found-emaciated-in-rochdale-home/
+2026-08-13 23:01:26,335 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi3wFBVV95cUxONFBDNjdWMl9ELUFrZzg5OFNVOXJYWVNHTGZYa0dCRWZLYUNkbmRUWmpJRzNibFpVMkM3c0xCLUsyeTg0V3lHSnU5QVczbG0yTXhPa2tMUlZHUThkWER3amNkbERBdmRQVEl0a3JSRVVKekdIaHFBdXRMbFAyTmhWYU5iMm5HeGtrem9UT0NoUWNjcU96cGFEQURXbzVkdmxpQjByWGdmMkM5dUxacktEOFBPXzVGVHRYdGd0dnRpb3VsdWJlSi1LRDU2NEYxVkR3ZjZNYkpDWlBuejdTX04w?oc=5
+2026-08-13 23:01:26,335 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi3gFBVV95cUxOY2lIa0d1UnJ5eXZsaDhDS21iN1hORXNycVlyTlUwcFc5c2ducjZ5cU51N0ZMUGlicGpZSUlTN1lCak1MWUNWOUo1VmhEanFqT0FZSjlqZUZYQkItSzA2RDlpZXZHeUVCalZQa0hQcTdlcEtwYklWYXhZZmdEWXFqRS1FUGVNWWZLRUpsSGVmdWpDVzEzbXQzNjNRMDBuVjZRdzlkWVYwd0pDWjUyYUxUNHVxX2h3S0FBRnZVNDliWjBTTk5DNjR4MGV0MW9xUmpQQV81Qm1NTW4xR1NJQWc?oc=5
+2026-08-13 23:01:26,335 ERROR OpenAI is unavailable; refusing to publish generic filler for https://news.google.com/rss/articles/CBMi3wFBVV95cUxONFBDNjdWMl9ELUFrZzg5OFNVOXJYWVNHTGZYa0dCRWZLYUNkbmRUWmpJRzNibFpVMkM3c0xCLUsyeTg0V3lHSnU5QVczbG0yTXhPa2tMUlZHUThkWER3amNkbERBdmRQVEl0a3JSRVVKekdIaHFBdXRMbFAyTmhWYU5iMm5HeGtrem9UT0NoUWNjcU96cGFEQURXbzVkdmxpQjByWGdmMkM5dUxacktEOFBPXzVGVHRYdGd0dnRpb3VsdWJlSi1LRDU2NEYxVkR3ZjZNYkpDWlBuejdTX04w?oc=5
+2026-08-13 23:01:26,336 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.linkedin.com/posts/rochdale-development-agency_rochdale-greatermanchester-businessopportunity-activity-7493569539436359680-xVcm
+2026-08-13 23:01:26,799 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.rochdale.gov.uk/news/article/662/sunshine-and-smiles-dreams-come-true-at-rochdale-feel-good-festival
+2026-08-13 23:01:26,800 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMib0FVX3lxTE1vQ3IteHpvaVd1cHdIcUY1UERTbGhtblN3eURYWWozTXl2Q3FkUzNDX29GUXdfQUI4WHdQa3h4d1R6eS1qSUJoNHRoemNRWEp3MkxiLXJLdzFqTHVfSm5HRUpJa1NMZ2lULWN3M1ZuZw?oc=5
+2026-08-13 23:01:26,800 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi3gFBVV95cUxPR0tzMzFRRlZIdHJDWFg3RDFVNlFCcWdaLXdEckVFNnZ0UlVCN1VnU0xmLUQ5SThaY3Q0SGowN25rb0pUSm1rQ3oyaWJFZ2RFbjlqaEFUYXdJc3RRT3QyZVVzOWduT3Y3QThudldUTnRqZGR0anZtTmVzQlFvQVJsRFVOUkd2WEpkVTB4V1hXYU5GMC05MG40VXZOUFRMdlhxai01S20wLUEwd0NrZFR6U1l1b0FTTWFpTC1WWXlmMm5DallndFp2VEJyN0dVSjRCc3Y3US02LVV3R0RyeVE?oc=5
+2026-08-13 23:01:26,800 ERROR OpenAI is unavailable; refusing to publish generic filler for https://news.google.com/rss/articles/CBMib0FVX3lxTE1vQ3IteHpvaVd1cHdIcUY1UERTbGhtblN3eURYWWozTXl2Q3FkUzNDX29GUXdfQUI4WHdQa3h4d1R6eS1qSUJoNHRoemNRWEp3MkxiLXJLdzFqTHVfSm5HRUpJa1NMZ2lULWN3M1ZuZw?oc=5
+2026-08-13 23:01:26,831 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.rochvalleyradio.com/news/uk/bus-driver-shot-dead-outside-london-pub-named-by-police/
+2026-08-13 23:01:26,832 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMifEFVX3lxTE5LbThYUHRCcVpJbmkwVG9Pa0hLOXEtSkpiVTFYa3BQRGlrckkxTHNZWm9tRENIaGljZEMyN3VCX0daZmQ1Z0VKTllEQzVncXoyUFVvMUJvcVlOWEtLRndVWUstc0FMaHQtX2l6dlFHdVdpaFZud2lBS0d4djc?oc=5
+2026-08-13 23:01:26,832 ERROR OpenAI is unavailable; refusing to publish generic filler for https://news.google.com/rss/articles/CBMifEFVX3lxTE5LbThYUHRCcVpJbmkwVG9Pa0hLOXEtSkpiVTFYa3BQRGlrckkxTHNZWm9tRENIaGljZEMyN3VCX0daZmQ1Z0VKTllEQzVncXoyUFVvMUJvcVlOWEtLRndVWUstc0FMaHQtX2l6dlFHdVdpaFZud2lBS0d4djc?oc=5
+2026-08-13 23:01:26,859 ERROR OpenAI is unavailable; refusing to publish generic filler for https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-c51a93d089254ea219
+2026-08-13 23:01:27,084 ERROR OpenAI is unavailable; refusing to publish generic filler for https://www.rochdale.gov.uk/contact-us/estates-asset-management-team-contact-details
+2026-08-13 23:01:27,179 WARNING Final rewrite failed quality checks for https://ratings.food.gov.uk/open-data#rochdale-2026-08: Rewrite the long verbatim source passage.
+2026-08-13 23:01:27,553 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi2AFBVV95cUxNajhqMXd6VGFvckExVXFCNDNMMnVDOUlNcEFDMUFpUHZNbjB0dHQxWTdUV09Xd214T2d5T0d2MkdPV2ZlN3E4dE1jNU5rVS0tLXI1anZFbHVGbHh2ZWVPU2Nlb1AtQWUtR0hwVmw1T25OUDgyUlhlbUQxcVNmaEdoRjZTRmFIakwtdURRemZaMFhRMUMwcjJud1Y1YlFFblNDSTVxM2pYUzhjbkpFVzVkcGRvY292aWVtMkgtQU92MThEYUQ2THhFQnJIVTFoSkI3X3UwUWNZUXY?oc=5
+2026-08-13 23:01:27,553 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMiYkFVX3lxTFBfbVN3NnRrbXpITzVuMnktaWFSWndNbTdjSEthYkVZRTFfMEpuZkJSdGhOd0NPZ1JJY2xHRGlsTzU2d1lRcmx4OTFpNDR0WEJzQS1mSHZBV0tGemt6Uzg0ODhn?oc=5
+2026-08-13 23:01:27,553 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi1AFBVV95cUxQRi1ySUVqRTY4QWU4d3hZQUI2UzVkV2FvZ2puOWdKRm5wdTFtZlg2S3ZkNFo2eWJmanlwcWIzZmQ0bi15RFY1ZC1yd2p4YWJDSzFvWnpkMDVhUy1Rd3lkWDdlcm9zV0ZmS0t4RkcyWXRVVVROWE5LWFBjVXd6aDNzVTBNeGJFRlR4d3JYUGdodFlHVVd2bVZiTl94ZVphbmk3S1hRYjR4SDdza0thanhMQVpScnlLRFRualRzaEhCMmw5czVDeVpteEdLWVNzNjk5eGJxeQ?oc=5
+2026-08-13 23:01:27,553 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi5gFBVV95cUxOR0JHclhKYmNTbkkydkJUMDVoNS10TkxTc2kwNHA4VWNTcFhCak9TQlNEWmpRMndBUzNqUG1HcENsRHFBOUowNGNpOGZfdC1mZTE0czc3RWx4VmpxYVFFY0hNeUtzb1pSa2dMenU5dzh6ZWpCTWhhQXZta21fUnpoRmlTSHhEZXo0d3ZuS0Nzck1qeV9yWGtzeTNra2xQci0xSzJOYUxHUGx0U3I3amVkNWs0NlFhYV9fbWZVQWc2cVotOXk0RHZRZWtPRS1XLU9sWG9PV1M5a0xmeTNqXzlmLUQ5VEtqdw?oc=5
+2026-08-13 23:01:27,553 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMi5gFBVV95cUxOeF9ka2Y4RTBtVFFsSmRJQlJpVFp5Y3dlMGZ4NVVwNUxPSlNHZlA3TUQ4WkVZc2xaODFERENxdFo0X2czTUNTdnZPYi10bmJIWnBBSWNqRU9kZHB4QjJHTUd1Z25jV2JURENFQUdwRldtZ1R4eE1rOFFmZkZkVXA4RUZRVHVmSElJdzZkUXRHRkVUa1FGTUNoUVFtQlh4aW9jRnlsMHRNaURVUmJhaUVzblY2RWVQd3RYOWQ1OG0tWjBQeDBYX1Jtbm1NdUJUQjZtQk01ZTZYTlJFd0NXSWgyY3h3enlwQQ?oc=5
+2026-08-13 23:01:27,553 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMixAFBVV95cUxPWV96YXpfWDQyZ3FhN1BPZmVnVWxPaTQ3ekE1bmotWDl1M0U1YkdkeXdhWTlwdXRLSG53bXhrTzJLZmRqeHAwcDQ5c1JNY1FtMm1WSl93LUUzN2VKb29QcEtNVDJ2eWJJdkR4V3ptM2R0VGp5T1hreWVYS05nY2ZpXzRtd2lLclkwbmRSOGp2MHMyVEJEekJFUlhsSlNJLWM3SXhFWFdCeEdTWnVPTXk0UzUzYnVJN1dNbVFTeHY4NmJFZHdy?oc=5
+2026-08-13 23:01:27,554 INFO robots.txt declined direct fetch; relying on RSS, indexed search results or authorised APIs instead: https://news.google.com/rss/articles/CBMiYkFVX3lxTE1ER3lHMl9oN1pnNWJBWmZQR09CdUh6bUVOOE91LWNvZ2pfRHVUZ0UyWTF0R3dwY0x0dEd5eWg4cEpHVFJMaTNyVWJuWkd3SURyU3V6LWE3ZzJYcUZIaW1GYlhn?oc=5
+2026-08-13 23:01:27,555 ERROR OpenAI is unavailable; refusing to publish generic filler for https://uk.news.yahoo.com/rochdale-murder-probe-launched-man-110406565.html
+2026-08-13 23:01:29,927 ERROR OpenAI is unavailable; refusing to publish generic filler for https://tfgm.com/travel-updates/travel-alerts?no-script=true
+2026-08-13 23:01:47,811 WARNING Held back 25 article(s) below the 200-word publication floor after merging: Number 83 Bus Services Cancelled Due to High Temperatures; Iraqi Consul General Visits Rochdale Borough Council; Action Together Achieves Volunteer Centre Quality Accreditation in Rochdale; Lift Out of Service at Derker Tram Stop; LIVE: Woman arrested on suspicion of murder after 31-year-old man dies in Rochdale; Rochdale Hornets Wheelchair Rugby League Squad Set for Double Header Against Castleford Tigers; Rochdale Businesses Invited to Bid for £7.96bn National Highways Tender; Bluebird Care Rochdale Sponsors Added Time at Home Matches; Eclipse May Affect Night Shift Start Times for Rochdale Workers; Netwalk Event at Hollingworth Lake Draws Local Participants
+2026-08-13 23:01:47,823 INFO Complete: 58 live articles, 0 new, 30 AI/fallback attempts, 30 skipped, 156 duplicates merged
