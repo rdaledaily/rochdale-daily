@@ -10,7 +10,10 @@
   try { session = JSON.parse(localStorage.getItem('rd_comment_session') || 'null'); } catch (_) {}
 
   const css = `
-    .comments-section{margin-top:18px;padding:22px;border:2px solid #8bdce8;border-radius:12px;background:linear-gradient(180deg,#f0fcfe 0,#fff 170px);box-shadow:0 8px 24px rgba(14,116,144,.09)}
+    .editorial-legal-note{margin-top:18px!important;padding:9px 12px!important;background:#fafafa!important;border:1px solid #dedede!important;color:#666!important;font-size:11px!important;line-height:1.35!important}
+    .editorial-legal-note h3{margin:0 0 4px!important;font-size:12px!important;line-height:1.2!important;color:#555!important;text-transform:uppercase!important;letter-spacing:.35px!important}
+    .editorial-legal-note p{margin:3px 0!important}.editorial-legal-note p:last-child{margin-top:5px!important;font-size:10px!important}.editorial-legal-note a{color:#555!important}
+    .comments-section{margin-top:12px;padding:22px;border:2px solid #8bdce8;border-radius:12px;background:linear-gradient(180deg,#f0fcfe 0,#fff 170px);box-shadow:0 8px 24px rgba(14,116,144,.09)}
     .comments-section h2{font-family:"Roboto Condensed",Arial,sans-serif;text-transform:uppercase;font-size:25px;margin:0 0 4px;color:#123743}
     .comments-invite{margin:0 0 18px;padding:14px 16px;background:#dff8fc;border-left:5px solid #0e7490;border-radius:0 8px 8px 0}
     .comments-invite strong{display:block;font-family:"Roboto Condensed",Arial,sans-serif;font-size:18px;color:#0b5265;margin-bottom:3px}.comments-invite span{font-size:14px;color:#334e57}
@@ -28,9 +31,19 @@
     .comment-auth .tabs button.on{background:#0e7490;color:#fff}.comment-msg{margin:10px 0 0;font-size:13px;padding:9px 11px;display:none}.comment-msg.err,.comment-msg.ok{display:block}.comment-msg.err{background:#fbeaec;border-left:4px solid #c8102e}.comment-msg.ok{background:#e7f7ef;border-left:4px solid #23a06a}
     .comment-signedin{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#666;font-size:13px;margin-bottom:10px}.comment-signout,.comment-report{background:none;border:0;color:#666;text-decoration:underline;cursor:pointer;padding:0}
     .upvote{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:4px 2px;cursor:pointer;color:#666;min-width:42px}.upvote svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.4;fill:none}.upvote.voted{color:#0e7490}.upvote-count{font-size:13px;font-weight:900}
-    @media(max-width:600px){.comments-section{margin-top:14px;padding:17px 13px}.comments-invite{padding:12px}.comment{padding:12px 10px;gap:8px}.comment-auth{padding:13px}.comment-form .rowline{align-items:stretch;flex-direction:column}.comment-submit{width:100%;min-height:46px}.comment-signedin{align-items:flex-start}.comments-section h2{font-size:23px}}
+    @media(max-width:600px){.editorial-legal-note{padding:8px 10px!important}.comments-section{margin-top:10px;padding:17px 13px}.comments-invite{padding:12px}.comment{padding:12px 10px;gap:8px}.comment-auth{padding:13px}.comment-form .rowline{align-items:stretch;flex-direction:column}.comment-submit{width:100%;min-height:46px}.comment-signedin{align-items:flex-start}.comments-section h2{font-size:23px}}
   `;
   const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
+
+  // Keep the standard legal note exact and compact. Sensitive-story wording is
+  // deliberately preserved rather than weakened by this presentation change.
+  const legal = document.querySelector('.editorial-legal-note');
+  if (legal) {
+    const paragraphs = legal.querySelectorAll('p');
+    if (paragraphs[0] && /This article was compiled from identified public sources/i.test(paragraphs[0].textContent || '')) {
+      paragraphs[0].textContent = 'This article was compiled from identified public sources and may be updated when further verified information becomes available.';
+    }
+  }
 
   const esc = value => String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   const save = value => { session = value; try { value ? localStorage.setItem('rd_comment_session', JSON.stringify(value)) : localStorage.removeItem('rd_comment_session'); } catch (_) {} };
