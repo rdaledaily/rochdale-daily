@@ -1,41 +1,7 @@
 {
   "_docs": {
-    "purpose": "Single source of truth for all advertising on Rochdale Daily. Edit this file through the GitHub web interface; the site updates on the next deploy. Expired ads drop out automatically; empty slots fall back to the built-in 'Advertise here' placeholders. Deleting an ad here never deletes its click/impression history from the tracker.",
-    "orientation_rule": "Match the creative to the slot. Horizontal slots (leaderboard, billboard) stretch the creative to the column width, so supply it at that width or it will be upscaled and soften. Rectangle and vertical slots (mrec, incontent) render at natural size and are letterboxed within the height limit - never cropped or stretched.",
-    "slots": {
-      "home-leaderboard": "Homepage top banner. HORIZONTAL, stretched to the full page column: supply 1220x113 (or 2440x226 for high-density screens). Mobile 320x50 via image_mobile. Renders up to 120px tall.",
-      "home-billboard": "Homepage lower banner. HORIZONTAL, stretched to the full page column: supply 1220x280 (mobile 300x250). Renders up to 280px tall.",
-      "article-leaderboard": "Top of every article. HORIZONTAL, stretched to the article column: supply 728x90 (mobile 320x50). Renders up to 120px tall.",
-      "article-mrec": "Article sidebar. RECTANGLE or VERTICAL, shown at natural size: 300x250, or 300x600 skyscraper. Renders up to 620px tall.",
-      "article-incontent": "Inside article body. RECTANGLE, shown at natural size: 300x250 or 580x250. Renders up to 280px tall."
-    },
-    "placement_fields": {
-      "id": "Unique, permanent, lowercase-with-hyphens, e.g. 'acme-plumbing-2026-07'. Used in tracking URLs and reports - never reuse an id, even after an ad ends.",
-      "slot": "One of the slot names above.",
-      "advertiser": "Business name, shown in your performance reports.",
-      "image": "Path under /assets/ads/, e.g. /assets/ads/acme-728x90.png (upload the image to that folder first).",
-      "image_mobile": "Optional smaller creative for phones, e.g. /assets/ads/acme-320x50.png",
-      "url": "The advertiser's landing page. Clicks are tracked by the Worker then redirected here.",
-      "alt": "Accessible description, e.g. 'Acme Plumbing - emergency callouts across Rochdale'.",
-      "start": "First day the ad shows, YYYY-MM-DD, inclusive.",
-      "end": "Last day the ad shows, YYYY-MM-DD, inclusive.",
-      "weight": "Rotation share within the slot. Two ads weighted 2 and 1 split views roughly 2:1. Use 1 unless an advertiser pays for a larger share."
-    },
-    "directory_fields": {
-      "id": "Unique permanent id, same rules as above.",
-      "category": "Must exactly match a category heading on the homepage: 'Plumbers & heating', 'Electricians', 'Roofers', 'Skip hire', 'Cleaners', 'Solicitors'.",
-      "name": "Business name shown on the card.",
-      "blurb": "One sentence, roughly 90 characters.",
-      "phone": "Optional. Shown as a tap-to-call link.",
-      "url": "Optional. Business website - clicks are tracked.",
-      "start": "YYYY-MM-DD",
-      "end": "YYYY-MM-DD"
-    },
-    "config_fields": {
-      "tracker_base": "Your ads Worker URL. Set - tracking is live.",
-      "impression_sample": "1 = record every impression; 5 = record 1 in 5 (reports multiply back up). Keep at 5 on the free Workers plan; set to 1 after upgrading to Workers Paid for exact counts."
-    },
-    "how_to_add_an_advertiser": "1) Upload their banner to assets/ads/. 2) Copy the template block below into 'placements' (or 'directory'), fill it in, delete the leading underscore from the key name is NOT needed - just add it as a normal object in the array. 3) Commit. The ad appears on the next deploy and disappears itself the day after 'end'."
+    "purpose": "Single source of truth for all advertising on Rochdale Daily.",
+    "orientation_rule": "Match the creative to the slot. Horizontal slots stretch to the page column; rectangle and vertical slots render within their height limits."
   },
   "config": {
     "tracker_base": "https://rd-ads.sjpickles-sp.workers.dev",
@@ -59,24 +25,24 @@
       "slot": "home-billboard",
       "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
       "image": "/assets/ads/business-1220x280.png",
+      "image_mobile": "/assets/ads/business-300x250.png",
       "url": "https://example.com",
       "alt": "Describe the advert for screen readers",
       "start": "2020-01-01",
       "end": "2020-01-02",
-      "weight": 1,
-      "image_mobile": "/assets/ads/business-300x250.png"
+      "weight": 1
     },
     {
       "id": "template-article-leaderboard",
       "slot": "article-leaderboard",
       "advertiser": "TEMPLATE - copy this block, change every field, leave this one here",
       "image": "/assets/ads/business-728x90.png",
+      "image_mobile": "/assets/ads/business-320x50.png",
       "url": "https://example.com",
       "alt": "Describe the advert for screen readers",
       "start": "2020-01-01",
       "end": "2020-01-02",
-      "weight": 1,
-      "image_mobile": "/assets/ads/business-320x50.png"
+      "weight": 1
     },
     {
       "id": "template-article-mrec",
@@ -104,22 +70,23 @@
       "id": "emoon-tuition-home-leaderboard-2026-08",
       "slot": "home-leaderboard",
       "advertiser": "E-Moon Tuition",
-      "image": "/assets/ads/emoon-tuition-headerboard-1280x362.jpg",
+      "image": "/assets/ads/emoon-final.svg",
+      "image_mobile": "/assets/ads/emoon-final.svg",
       "url": "https://www.emoon.co.uk",
-      "alt": "E-Moon Tuition - brighten your future with quality teaching and clear guidance",
+      "alt": "E-Moon Tuition - Brighten your future with E-Moon Tuition",
       "start": "2026-08-13",
       "end": "2028-09-01",
-      "weight": 1,
-      "image_mobile": "/assets/ads/emoon-tuition-headerboard-1280x362.jpg"
+      "weight": 1
     },
     {
-      "id": "neb-electrical-billboard-2026-08",
+      "id": "wecovered-home-billboard-2026-08",
       "slot": "home-billboard",
-      "image": "/assets/ads/neb-electrical-970x250.png",
-      "advertiser": "NEB Electrical",
-      "url": "REPLACE-BEFORE-COMMIT",
-      "alt": "NEB Electrical - domestic and commercial electrician, Rochdale. 07710585018",
-      "start": "2026-08-01",
+      "advertiser": "WeCovered",
+      "image": "/assets/ads/wecovered-final.svg",
+      "image_mobile": "/assets/ads/wecovered-final.svg",
+      "url": "https://www.wecovered.com",
+      "alt": "WeCovered - Car and Van Insurance in 60 seconds",
+      "start": "2026-08-13",
       "end": "2028-09-01",
       "weight": 1
     },
