@@ -1,13 +1,10 @@
-"""Fail closed when third-party news publisher names leak into article copy.
+"""Fail closed when generated articles are not clean Rochdale Daily copy.
 
-Rochdale Daily may retain publishers in source_name/source_names/source_url/source_urls,
-but scraped article headlines, standfirsts and bodies must read as original Rochdale
-Daily copy. A story that still says e.g. "Yahoo News UK", "Manchester Evening News"
-or "According to BBC News" has not completed the rewrite cleanly and is removed from
-the publishable feed rather than being allowed onto the site.
-
-Editor-written/manual records are exempt because they are editorially locked and may
-legitimately discuss a media organisation as the subject of a story.
+Publisher names belong in source metadata, not reader-facing copy. Retired
+source-led fallback routes are also rejected outright: they existed before
+OpenAI rewriting became mandatory and may reproduce source wording too closely.
+When a record is rejected, its stale generated HTML page is deleted as well so
+old copied pages cannot remain live outside articles.json.
 """
 from __future__ import annotations
 
@@ -17,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 ARTICLES = Path("articles.json")
+ARTICLE_PAGES = Path("articles")
 
 NEWS_PUBLISHERS = (
     "Yahoo News UK",
@@ -33,7 +31,13 @@ NEWS_PUBLISHERS = (
     "Rochdale Observer",
 )
 
-# MEN is too short to test as an unrestricted substring; require word boundaries.
+RETIRED_ROUTES = {
+    "source-led-fallback",
+    "source-led-emergency-fallback",
+    "automatic-attributed-crime-fallback",
+    "direct-crime-autopublish",
+}
+
 PATTERN = re.compile(
     r"\b(?:"
     + "|".join(sorted((re.escape(name) for name in NEWS_PUBLISHERS), key=len, reverse=True))
@@ -55,6 +59,26 @@ def is_editorial(article: dict[str, Any]) -> bool:
     ).lower() == "editorial"
 
 
+def retired_route(article: dict[str, Any]) -> str:
+    route = str(article.get("publication_route") or "").lower()
+    style = str(article.get("style_rewrite_status") or "").lower()
+    if route in RETIRED_ROUTES:
+        return route
+    if style in RETIRED_ROUTES:
+        return style
+    return ""
+
+
+def remove_stale_page(slug: str) -> bool:
+    if not slug:
+        return False
+    page = ARTICLE_PAGES / f"{slug}.html"
+    if not page.exists():
+        return False
+    page.unlink()
+    return True
+
+
 def main() -> int:
     try:
         payload = json.loads(ARTICLES.read_text(encoding="utf-8"))
@@ -66,20 +90,29 @@ def main() -> int:
 
     kept: list[dict[str, Any]] = []
     rejected: list[dict[str, str]] = []
+    deleted_pages = 0
+
     for article in payload:
         if not isinstance(article, dict):
             continue
         if is_editorial(article):
             kept.append(article)
             continue
+
+        route = retired_route(article)
         match = PATTERN.search(public_copy(article))
-        if match:
+        if route or match:
+            slug = str(article.get("slug") or "")
+            reason = f"retired route: {route}" if route else f"publisher leak: {match.group(0)}"
             rejected.append({
-                "slug": str(article.get("slug") or ""),
+                "slug": slug,
                 "title": str(article.get("title") or ""),
-                "publisher": match.group(0),
+                "reason": reason,
             })
+            if remove_stale_page(slug):
+                deleted_pages += 1
             continue
+
         kept.append(article)
 
     if rejected:
@@ -90,12 +123,12 @@ def main() -> int:
         for item in rejected:
             print(
                 "publisher_leak_gate: rejected "
-                f"{item['slug']} ({item['publisher']}) — rewrite required"
+                f"{item['slug']} ({item['reason']}) — clean rewrite required"
             )
 
     print(
-        f"publisher_leak_gate: {len(kept)} kept, {len(rejected)} rejected; "
-        "publisher names remain permitted in source metadata only"
+        f"publisher_leak_gate: {len(kept)} kept, {len(rejected)} rejected, "
+        f"{deleted_pages} stale pages deleted; source metadata remains intact on kept stories"
     )
     return 0
 
