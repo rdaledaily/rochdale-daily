@@ -1,0 +1,62 @@
+name: Strip emojis from article titles
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/scripts/strip_title_emojis.py"
+      - ".github/workflows/strip-title-emojis.yml"
+
+permissions:
+  contents: write
+
+# This is deliberately separate from the long newsroom writer queue. The job
+# only edits title fields/title markup and, on any push race, resets to the
+# latest main and reapplies that tiny deterministic cleanup before retrying.
+concurrency:
+  group: rd-title-hygiene
+  cancel-in-progress: false
+
+jobs:
+  clean-titles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Strip emoji from every article title
+        run: |
+          python .github/scripts/strip_title_emojis.py
+          python .github/scripts/strip_title_emojis.py --check
+      - name: Commit title-only repairs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add articles.json manual_articles.json manual_articles.d articles
+          if git diff --cached --quiet; then
+            echo "No title emoji repairs required."
+            exit 0
+          fi
+          git commit -m "Remove emojis from article titles"
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then exit 0; fi
+            echo "Main moved; replaying title-only cleanup on the latest main."
+            git fetch origin main
+            git reset --hard origin/main
+            python .github/scripts/strip_title_emojis.py
+            python .github/scripts/strip_title_emojis.py --check
+            git add articles.json manual_articles.json manual_articles.d articles
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Remove emojis from article titles"
+          done
+          exit 1
