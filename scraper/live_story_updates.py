@@ -55,6 +55,8 @@ def _merge(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
 
     merged["live_story"] = True
     merged["live_label"] = "LIVE"
+    merged["is_ongoing"] = True
+    merged["ongoing_label"] = "LIVE"
     merged["live_updates"] = updates[:30]
     merged["update_count"] = max(int(merged.get("update_count") or 1), len(updates))
     if updates:
@@ -67,4 +69,20 @@ def install() -> None:
     if _INSTALLED:
         return
     story_identity.merge_article_records = _merge
+
+    # The renderer runs after the scraper has written articles.json, so fresh
+    # crime reports receive LIVE labels and matched reports get a visible
+    # timestamped timeline before page generation starts.
+    import scraper as core
+    from render_live_updates import main as render_live_updates
+
+    original_main = core.main
+
+    def main_with_live_updates():
+        result = original_main()
+        if result == 0:
+            render_live_updates()
+        return result
+
+    core.main = main_with_live_updates
     _INSTALLED = True
