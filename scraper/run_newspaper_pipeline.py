@@ -16,6 +16,7 @@ from urllib.parse import urlparse
 
 import scraper as core
 import run_fast_local_pipeline as base
+from reject_publisher_leaks import main as reject_publisher_leaks
 from search_queries import SearchQuery
 
 
@@ -119,7 +120,6 @@ def _looks_like_commercial_landing_page(candidate) -> bool:
     """Reject advertising/SEO service pages while retaining genuine business news."""
     source_kind = str(getattr(candidate, "source_kind", "") or "").casefold()
     if source_kind == "event":
-        # A ticketed/commercial event can legitimately belong in What's On.
         return False
 
     title, body, url = _candidate_editorial_text(candidate)
@@ -127,10 +127,6 @@ def _looks_like_commercial_landing_page(candidate) -> bool:
     if not text:
         return False
 
-    # A real development wins over commercial vocabulary. For example, a
-    # company's own page announcing a Rochdale branch opening is still a story.
-    # Deliberately do not count sales phrases such as "award-winning" or
-    # "open 7 days" as developments.
     if NEWS_EVENT_RE.search(text):
         return False
 
@@ -141,15 +137,10 @@ def _looks_like_commercial_landing_page(candidate) -> bool:
     domain_title = bool(DOMAIN_IN_TITLE_RE.search(title))
     seo_location_title = bool(SEO_LOCATION_TITLE_RE.search(title))
 
-    # Strongest signals: the page title itself is an SEO location/service title,
-    # or a naked business domain is being used as if it were a news headline.
     if seo_location_title:
         return True
     if domain_title and (commercial_hits > 0 or service_path or first_person_service):
         return True
-
-    # Generic sales copy should not become an article even when Google or another
-    # discovery source has indexed it as fresh/local content.
     if commercial_hits >= 2:
         return True
     if service_path and (commercial_hits > 0 or first_person_service):
@@ -161,7 +152,7 @@ def _looks_like_commercial_landing_page(candidate) -> bool:
 
 
 def configure_editorial_newsworthiness_gate() -> None:
-    """Put a newspaper test in front of AI rewrite and source-led fallback."""
+    """Put a newspaper test in front of AI rewrite and any fallback path."""
     original = core.candidate_is_rewrite_eligible
 
     def newsworthy(candidate, existing_by_story):
@@ -180,9 +171,10 @@ def configure_editorial_newsworthiness_gate() -> None:
 
 
 def main() -> int:
-    # scraper.py historically forces at least 168 hours even when production
-    # asks for a shorter age window. A news desk should search recent material
-    # first, so this entrypoint explicitly enforces the configured 72-hour cap.
+    # Production policy: ordinary scraped news must be rewritten by OpenAI and
+    # pass the newsroom quality/overlap checks. If the rewrite is unavailable
+    # or rejected, fail closed rather than publishing source-led copy.
+    core.AI_REWRITE_REQUIRED = True
     core.MAX_NEWS_AGE_HOURS = 72
 
     existing = {item.query.casefold().strip() for item in base.PRIORITY_SEARCHES}
@@ -193,7 +185,14 @@ def main() -> int:
 
     base.configure()
     configure_editorial_newsworthiness_gate()
-    return core.main()
+    result = core.main()
+    if result != 0:
+        return result
+
+    # Final fail-closed publication gate. Publisher names remain in source
+    # metadata but a generated story that still contains a news outlet name in
+    # its headline, standfirst or body is not considered successfully rewritten.
+    return reject_publisher_leaks()
 
 
 if __name__ == "__main__":
