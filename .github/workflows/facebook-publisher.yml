@@ -1,0 +1,103 @@
+name: Post Rochdale Daily article to Facebook
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: facebook-page-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish-one:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out current newspaper
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Load Facebook posting history
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin facebook-state
+          if git show origin/facebook-state:facebook/facebook_posted.json > /tmp/facebook_posted.json 2>/dev/null; then
+            echo "Loaded existing Facebook posting history."
+          else
+            printf '{\n  "posted": {}\n}\n' > /tmp/facebook_posted.json
+          fi
+
+      - name: Publish one unposted article
+        env:
+          FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
+          FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+          FACEBOOK_GRAPH_VERSION: v26.0
+          FACEBOOK_STATE_PATH: /tmp/facebook_posted.json
+          FACEBOOK_RESULT_PATH: /tmp/facebook_last_result.json
+          FACEBOOK_QUEUE_ORDER: oldest
+        run: python scraper/post_facebook_article.py
+
+      - name: Save successful Facebook post to state branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('/tmp/facebook_last_result.json')
+          print(json.loads(p.read_text()).get('status', '') if p.exists() else '')
+          PY
+          )"
+
+          if [ "$status" != "posted" ]; then
+            echo "Nothing was posted; state branch does not need updating."
+            exit 0
+          fi
+
+          rm -rf /tmp/facebook-state-worktree
+          git worktree add --detach /tmp/facebook-state-worktree origin/facebook-state
+          mkdir -p /tmp/facebook-state-worktree/facebook
+          cp /tmp/facebook_posted.json /tmp/facebook-state-worktree/facebook/facebook_posted.json
+          cp /tmp/facebook_last_result.json /tmp/facebook-state-worktree/facebook/facebook_last_result.json
+
+          cd /tmp/facebook-state-worktree
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add facebook/facebook_posted.json facebook/facebook_last_result.json
+          if git diff --cached --quiet; then
+            echo "Facebook state already current."
+            exit 0
+          fi
+          git commit -m "Record Facebook article post"
+          git push origin HEAD:facebook-state
+
+      - name: Publish summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f /tmp/facebook_last_result.json ]; then
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('/tmp/facebook_last_result.json').read_text())
+          print('Facebook publisher status:', d.get('status'))
+          if d.get('title'):
+              print('Article:', d.get('title'))
+          if d.get('url'):
+              print('URL:', d.get('url'))
+          if d.get('facebook_post_id'):
+              print('Facebook post ID:', d.get('facebook_post_id'))
+          if 'remaining_unposted' in d:
+              print('Remaining queue:', d.get('remaining_unposted'))
+          PY
+          fi
