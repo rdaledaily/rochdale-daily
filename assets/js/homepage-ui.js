@@ -260,3 +260,87 @@
     initSupportTab();
   }
 })();
+
+/* 56 sellable small-ad positions. Empty inventory is invisible; when an
+ * active adverts.json placement targets small-ad-01 ... small-ad-56, that
+ * position appears automatically in a responsive Local advertisers grid. */
+(function () {
+  "use strict";
+
+  var COUNT = 56;
+
+  function initSmallAdInventory() {
+    if (document.getElementById("rd-small-ad-inventory")) return;
+
+    var footer = document.querySelector("footer");
+    if (!footer || !footer.parentNode) return;
+
+    if (!document.getElementById("rd-small-ad-inventory-style")) {
+      var style = document.createElement("style");
+      style.id = "rd-small-ad-inventory-style";
+      style.textContent =
+        "#rd-small-ad-inventory{padding:28px 0;background:#fff;border-top:1px solid var(--line,#dcdcdc);}" +
+        "#rd-small-ad-inventory[hidden]{display:none!important;}" +
+        "#rd-small-ad-inventory .rd-small-ad-wrap{width:min(var(--max,1220px),calc(100% - 30px));margin:0 auto;}" +
+        "#rd-small-ad-inventory h2{margin:0 0 14px;font-family:\"Roboto Condensed\",Arial,sans-serif;font-size:18px;line-height:1.2;font-weight:900;text-transform:uppercase;}" +
+        "#rd-small-ad-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:stretch;}" +
+        ".rd-small-ad-slot:not(.ad-live){display:none!important;}" +
+        ".rd-small-ad-slot.ad-live{display:flex;align-items:center;justify-content:center;min-width:0;min-height:92px;padding:5px;background:#f7f7f7;border:1px solid #ddd;overflow:hidden;}" +
+        ".rd-small-ad-slot.ad-live>a{width:100%;}" +
+        ".rd-small-ad-slot.ad-live img{width:100%!important;height:auto!important;max-height:120px!important;object-fit:contain!important;}" +
+        "@media(max-width:1050px){#rd-small-ad-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}" +
+        "@media(max-width:640px){#rd-small-ad-inventory{padding:20px 0;}#rd-small-ad-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}.rd-small-ad-slot.ad-live{min-height:82px;}}";
+      document.head.appendChild(style);
+    }
+
+    var section = document.createElement("section");
+    section.id = "rd-small-ad-inventory";
+    section.hidden = true;
+    section.setAttribute("aria-labelledby", "rd-small-ad-title");
+
+    var wrap = document.createElement("div");
+    wrap.className = "rd-small-ad-wrap";
+
+    var heading = document.createElement("h2");
+    heading.id = "rd-small-ad-title";
+    heading.textContent = "Local advertisers";
+
+    var grid = document.createElement("div");
+    grid.id = "rd-small-ad-grid";
+
+    for (var i = 1; i <= COUNT; i += 1) {
+      var slot = document.createElement("div");
+      var number = String(i).padStart(2, "0");
+      slot.className = "ad-slot rd-small-ad-slot";
+      slot.setAttribute("data-ad-slot", "small-ad-" + number);
+      slot.setAttribute("aria-hidden", "true");
+      grid.appendChild(slot);
+    }
+
+    wrap.appendChild(heading);
+    wrap.appendChild(grid);
+    section.appendChild(wrap);
+    footer.parentNode.insertBefore(section, footer);
+
+    function refreshVisibility() {
+      section.hidden = !grid.querySelector(".rd-small-ad-slot.ad-live");
+    }
+
+    if (typeof MutationObserver === "function") {
+      new MutationObserver(refreshVisibility).observe(grid, {
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+    }
+
+    if (typeof window.rdFillAds === "function") window.rdFillAds();
+    window.setTimeout(refreshVisibility, 0);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSmallAdInventory, { once: true });
+  } else {
+    initSmallAdInventory();
+  }
+})();
