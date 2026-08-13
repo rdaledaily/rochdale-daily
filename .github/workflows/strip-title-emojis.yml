@@ -11,8 +11,11 @@ on:
 permissions:
   contents: write
 
+# This is deliberately separate from the long newsroom writer queue. The job
+# only edits title fields/title markup and, on any push race, resets to the
+# latest main and reapplies that tiny deterministic cleanup before retrying.
 concurrency:
-  group: rd-site-writer
+  group: rd-title-hygiene
   cancel-in-progress: false
 
 jobs:
