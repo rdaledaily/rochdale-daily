@@ -19,10 +19,11 @@ This wrapper fixes production issues without duplicating scraper.py:
    cannot pass the grounded editorial rewrite. They are rejected before they can
    consume an OpenAI slot; resolved wrappers and wrappers carrying substantial
    source text remain eligible.
-5. OpenAI is preferred but is no longer a single point of failure. If the API
-   key is absent, the request fails, or the model cannot produce a passing draft,
-   a conservative attributed source-led brief is built only from collected facts.
-   A valid local story therefore cannot disappear solely because AI is down.
+5. Every ordinary scraper story must pass the OpenAI grounded rewrite and the
+   source-overlap quality checks before publication. If the API is unavailable
+   or the rewrite is rejected, the candidate is skipped. Source-led emergency
+   fallbacks are deliberately disabled because they can reproduce publisher or
+   social-media wording too closely.
 
 It also adds direct local political-party discovery and always-on high-value
 queries for crime, planning, utilities and local political activity.
@@ -30,8 +31,6 @@ queries for crime, planning, utilities and local political activity.
 from __future__ import annotations
 
 from datetime import datetime, timezone
-import html
-import re
 
 import scraper as core
 from search_queries import SearchQuery, build_search_query_specs
@@ -261,172 +260,11 @@ def configure_fresh_selection() -> None:
     core.balanced_select = freshest_first
 
 
-def _source_led_sentences(candidate) -> list[str]:
-    """Return a small set of factual source sentences for emergency publication."""
-    text = core.normalise_ws(
-        f"{candidate.source_summary or ''} {candidate.source_body_excerpt or ''}"
-    )
-    if not text:
-        return []
-    chunks = re.split(r"(?<=[.!?])\s+", text)
-    kept: list[str] = []
-    seen: set[str] = set()
-    for chunk in chunks:
-        sentence = core.normalise_ws(chunk).strip(" -–—")
-        if len(sentence.split()) < 8:
-            continue
-        if len(sentence) > 320:
-            sentence = sentence[:317].rsplit(" ", 1)[0] + "…"
-        key = re.sub(r"\W+", " ", sentence.casefold()).strip()
-        if not key or key in seen:
-            continue
-        seen.add(key)
-        kept.append(sentence)
-        if len(kept) >= 5:
-            break
-    return kept
-
-
-def _source_led_fallback(candidate):
-    """Build a conservative attributed brief without inventing any new facts."""
-    sentences = _source_led_sentences(candidate)
-    if not sentences:
-        return None
-
-    source_name = core.normalise_ws(candidate.source_name) or "the identified source"
-    title = core.strip_markdown(candidate.source_title or "Local update in the Rochdale borough")[:155]
-    if len(title.split()) < 5:
-        title = f"Rochdale update: {title}"[:155]
-
-    # Keep the source's factual meaning visible while making attribution explicit.
-    paragraphs: list[str] = []
-    for idx, sentence in enumerate(sentences):
-        if idx == 0:
-            paragraphs.append(f"According to {source_name}, {sentence[0].lower() + sentence[1:] if len(sentence) > 1 else sentence}")
-        else:
-            paragraphs.append(sentence)
-
-    # The public feed requires enough substance to be useful. If the collector only
-    # recovered one or two long source sentences, split them conservatively rather
-    # than inventing filler or dropping the story.
-    while len(paragraphs) < 3:
-        longest_idx = max(range(len(paragraphs)), key=lambda i: len(paragraphs[i]))
-        current = paragraphs[longest_idx]
-        split_at = current.rfind(", ", 80)
-        if split_at < 80 or split_at > len(current) - 50:
-            break
-        first = current[:split_at].rstrip(", ") + "."
-        second = current[split_at + 2:].strip()
-        if second:
-            second = second[0].upper() + second[1:]
-            paragraphs[longest_idx:longest_idx + 1] = [first, second]
-        else:
-            break
-
-    public_text = core.normalise_ws(" ".join(paragraphs))
-    if len(public_text.split()) < 50:
-        return None
-
-    excerpt = core.normalise_ws(" ".join(sentences[:2]))[:360]
-    evidence = core.normalise_ws(f"{title} {excerpt} {public_text}")
-    category = core.editorial_category(evidence, candidate.category or "news")
-    if category not in core.PUBLISHED_CATEGORIES:
-        category = "news"
-    area = candidate.area if candidate.area in core.AREA_KEYWORDS else "rochdale"
-
-    sensitive = core.is_sensitive(evidence, category)
-    if sensitive:
-        title = core.redact_private_location(title)
-        excerpt = core.redact_private_location(excerpt)
-        paragraphs = [core.redact_private_location(p) for p in paragraphs]
-
-    image_url, image_credit, image_credit_url, original_image_url = core.source_image(
-        candidate, category, title
-    )
-    source_urls = [candidate.source_url] + [
-        item["url"] for item in candidate.related_sources[:11] if item.get("url")
-    ]
-    source_names = [candidate.source_name] + [
-        item["name"] for item in candidate.related_sources[:11] if item.get("name")
-    ]
-
-    return {
-        "id": core.stable_id(candidate.source_url),
-        "story_key": candidate.story_key or core.build_story_key(candidate),
-        "title": title,
-        "slug": core.make_slug(title),
-        "excerpt": excerpt,
-        "content_html": "".join(f"<p>{html.escape(p)}</p>" for p in paragraphs),
-        "area": area,
-        "category": category,
-        "types": [category],
-        "published_at": candidate.source_published_at,
-        "scraped_at": core.iso_utc(core.utc_now()),
-        "image_url": image_url,
-        "image_credit": image_credit,
-        "image_credit_url": image_credit_url,
-        "source_image_candidate_url": original_image_url,
-        "source_image_reuse_status": (
-            "publisher-image-cached-and-credited" if image_credit_url
-            else "curated-library-photo" if image_url.startswith("assets/img/cards/")
-            else "category-fallback"
-        ),
-        "event_start_at": candidate.event_start_at,
-        "event_end_at": candidate.event_end_at,
-        "event_location": candidate.event_location,
-        "source_kind": candidate.source_kind,
-        "source_name": candidate.source_name,
-        "source_url": candidate.source_url,
-        "source_names": source_names,
-        "source_urls": source_urls,
-        "source_count": len(source_urls),
-        "social_context_used": False,
-        "social_reaction_count": 0,
-        "official_social_update_count": 0,
-        "social_platforms": [],
-        "social_context_note": "",
-        "sensitive_story": sensitive,
-        "police_matter": category == "crime",
-        "requires_approval": False,
-        "legal_disclaimer": core.default_legal_disclaimer(sensitive),
-        "right_to_reply": f"Anyone directly affected may request a correction or right of reply by emailing {core.RIGHT_TO_REPLY_EMAIL}.",
-        "byline": "Rochdale Daily Newsdesk",
-        "status": "published",
-        "publication_route": "source-led-fallback",
-        "rewrite_quality_checked": False,
-        "editorial_style_version": core.STYLE_VERSION,
-        "style_rewrite_status": "source-led-emergency-fallback",
-        "discovery_query_label": candidate.discovery_query_label,
-        "searched_location_slug": candidate.searched_location_slug,
-        "searched_location_name": candidate.searched_location_name,
-    }
-
-
-def configure_source_led_fallback() -> None:
-    """Never turn a valid selected story into zero output just because AI is down."""
-    original = core.rewrite_candidate
-
-    def resilient_rewrite(candidate, client):
-        article = original(candidate, client)
-        if article is not None:
-            return article
-        fallback = _source_led_fallback(candidate)
-        if fallback is not None:
-            core.log.warning(
-                "Publishing grounded source-led fallback for %s because AI rewrite was unavailable or rejected.",
-                candidate.source_url,
-            )
-        return fallback
-
-    core.rewrite_candidate = resilient_rewrite
-
-
 def configure() -> None:
     configure_sources()
     configure_searches()
     configure_pre_rewrite_locality_gate()
     configure_fresh_selection()
-    configure_source_led_fallback()
 
 
 if __name__ == "__main__":
