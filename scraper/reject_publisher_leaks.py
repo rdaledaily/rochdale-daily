@@ -1,10 +1,11 @@
 """Fail closed when generated articles are not clean Rochdale Daily copy.
 
-Publisher names belong in source metadata, not reader-facing copy. Retired
-source-led fallback routes are also rejected outright: they existed before
-OpenAI rewriting became mandatory and may reproduce source wording too closely.
-When a record is rejected, its stale generated HTML page is deleted as well so
-old copied pages cannot remain live outside articles.json.
+Publisher names belong in source metadata, not reader-facing copy. Emoji and
+pictographic symbols are also prohibited in generated headlines, standfirsts
+and bodies. Retired source-led fallback routes are rejected outright: they
+existed before OpenAI rewriting became mandatory and may reproduce source
+wording too closely. When a record is rejected, its stale generated HTML page
+is deleted as well so old copied pages cannot remain live outside articles.json.
 """
 from __future__ import annotations
 
@@ -45,11 +46,28 @@ PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+EMOJI_PATTERN = re.compile(
+    "["
+    "\U0001F1E6-\U0001F1FF"
+    "\U0001F300-\U0001F5FF"
+    "\U0001F600-\U0001F64F"
+    "\U0001F680-\U0001F6FF"
+    "\U0001F700-\U0001F77F"
+    "\U0001F780-\U0001F7FF"
+    "\U0001F800-\U0001F8FF"
+    "\U0001F900-\U0001F9FF"
+    "\U0001FA00-\U0001FAFF"
+    "\U00002600-\U000026FF"
+    "\U00002700-\U000027BF"
+    "]",
+    re.UNICODE,
+)
+
 
 def public_copy(article: dict[str, Any]) -> str:
     return "\n".join(
         str(article.get(field) or "")
-        for field in ("title", "excerpt", "summary", "content_html")
+        for field in ("title", "excerpt", "summary", "body", "content_html")
     )
 
 
@@ -100,10 +118,17 @@ def main() -> int:
             continue
 
         route = retired_route(article)
-        match = PATTERN.search(public_copy(article))
-        if route or match:
+        copy = public_copy(article)
+        publisher_match = PATTERN.search(copy)
+        emoji_match = EMOJI_PATTERN.search(copy)
+        if route or publisher_match or emoji_match:
             slug = str(article.get("slug") or "")
-            reason = f"retired route: {route}" if route else f"publisher leak: {match.group(0)}"
+            if route:
+                reason = f"retired route: {route}"
+            elif publisher_match:
+                reason = f"publisher leak: {publisher_match.group(0)}"
+            else:
+                reason = "emoji/pictograph in public copy"
             rejected.append({
                 "slug": slug,
                 "title": str(article.get("title") or ""),
