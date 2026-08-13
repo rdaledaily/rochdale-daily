@@ -103,6 +103,26 @@ NEWS_EVENT_RE = re.compile(
     r")\b",
     re.I,
 )
+LIVE_MATERIAL_RE = re.compile(
+    r"\b(?:named|identified|identity|victim|family|tribute|post[- ]mortem|cause of death|"
+    r"arrested|charged|bailed|released|remanded|custody|murder|manslaughter|fatal|court|"
+    r"hearing|convicted|sentenced|appeal|witness|found|missing|located|reopened|closed)\b",
+    re.I,
+)
+LIVE_NAME_RE = re.compile(r"\b[A-Z][a-z'’-]{2,}\s+[A-Z][a-z'’-]{2,}\b")
+LIVE_NUMBER_RE = re.compile(r"\b(?:\d{1,2}[:.]\d{2}|\d{1,2}\s+[A-Z][a-z]+|\d{2,})\b")
+LIVE_AUTHORITATIVE_DOMAINS = {
+    "gmp.police.uk",
+    "rochdale.gov.uk",
+    "manchesterfire.gov.uk",
+    "greatermanchester-ca.gov.uk",
+    "gmca.gov.uk",
+    "tfgm.com",
+    "news.tfgm.com",
+    "nationalhighways.co.uk",
+    "northerncarealliance.nhs.uk",
+    "penninecare.nhs.uk",
+}
 
 
 def _candidate_editorial_text(candidate) -> tuple[str, str, str]:
@@ -152,12 +172,103 @@ def _looks_like_commercial_landing_page(candidate) -> bool:
     return False
 
 
+def _iter_existing_articles(existing_by_story):
+    if isinstance(existing_by_story, dict):
+        if "source_url" in existing_by_story or "slug" in existing_by_story:
+            yield existing_by_story
+        else:
+            for value in existing_by_story.values():
+                yield from _iter_existing_articles(value)
+    elif isinstance(existing_by_story, (list, tuple, set)):
+        for value in existing_by_story:
+            yield from _iter_existing_articles(value)
+
+
+def _canonical_url(value: str) -> str:
+    try:
+        return str(core.canonicalise_url(str(value or "")) or "").rstrip("/")
+    except Exception:
+        return str(value or "").strip().rstrip("/")
+
+
+def _is_authoritative_live_url(url: str) -> bool:
+    host = (urlparse(str(url or "")).hostname or "").lower()
+    if host.startswith("www."):
+        host = host[4:]
+    return any(host == domain or host.endswith("." + domain) for domain in LIVE_AUTHORITATIVE_DOMAINS)
+
+
+def _article_public_text(article: dict) -> str:
+    return core.normalise_ws(
+        " ".join(
+            str(article.get(field) or "")
+            for field in ("title", "excerpt", "body", "content_html")
+        )
+    )
+
+
+def _same_source_live_update(candidate, existing_by_story) -> bool:
+    """Allow a duplicate URL only when an authoritative LIVE source has new facts."""
+    title, body, source_url = _candidate_editorial_text(candidate)
+    candidate_url = _canonical_url(source_url)
+    if not candidate_url or not _is_authoritative_live_url(candidate_url):
+        return False
+
+    source_text = core.normalise_ws(f"{title} {body}")
+    if len(source_text) < 80:
+        return False
+
+    for article in _iter_existing_articles(existing_by_story):
+        if not (article.get("live_story") or article.get("is_ongoing")):
+            continue
+        if _canonical_url(article.get("source_url", "")) != candidate_url:
+            continue
+
+        existing_text = _article_public_text(article)
+        if not existing_text:
+            return True
+
+        existing_lower = existing_text.casefold()
+
+        # Newly introduced full names are highly material in a developing
+        # police/court story (for example a victim being formally identified).
+        source_names = {name.casefold() for name in LIVE_NAME_RE.findall(source_text)}
+        existing_names = {name.casefold() for name in LIVE_NAME_RE.findall(existing_text)}
+        if source_names - existing_names:
+            return True
+
+        # Status changes such as arrest -> charge -> bail/release/court should
+        # also reopen the same article even when no new person is named.
+        source_material = {match.group(0).casefold() for match in LIVE_MATERIAL_RE.finditer(source_text)}
+        existing_material = {match.group(0).casefold() for match in LIVE_MATERIAL_RE.finditer(existing_text)}
+        if source_material - existing_material:
+            return True
+
+        # New dates/times/ages/counts attached to an otherwise developing
+        # official update are useful factual changes and should be rewritten.
+        source_numbers = {match.group(0).casefold() for match in LIVE_NUMBER_RE.finditer(source_text)}
+        existing_numbers = {match.group(0).casefold() for match in LIVE_NUMBER_RE.finditer(existing_text)}
+        if source_numbers - existing_numbers:
+            return True
+
+        return False
+
+    return False
+
+
 def configure_editorial_newsworthiness_gate() -> None:
     """Put a newspaper test in front of AI rewrite and any fallback path."""
     original = core.candidate_is_rewrite_eligible
 
     def newsworthy(candidate, existing_by_story):
-        if not original(candidate, existing_by_story):
+        eligible = original(candidate, existing_by_story)
+        if not eligible and _same_source_live_update(candidate, existing_by_story):
+            core.log.info(
+                "LIVE same-source material update bypassed duplicate rejection: %s",
+                getattr(candidate, "source_url", ""),
+            )
+            eligible = True
+        if not eligible:
             return False
         if _looks_like_commercial_landing_page(candidate):
             core.log.info(
