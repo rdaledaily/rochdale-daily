@@ -45,12 +45,22 @@ def main() -> int:
         live = bool(latest and latest >= now - timedelta(hours=72) and not FINISHED_RE.search(text))
         article["live_story"] = live
         article["live_label"] = "LIVE" if live else ""
+        article["breaking_news"] = live
+        article["breaking_label"] = "BREAKING NEWS" if live else ""
         article["is_ongoing"] = live
         article["ongoing_label"] = "LIVE" if live else ""
 
         updates = article.get("live_updates") if isinstance(article.get("live_updates"), list) else []
+        if live and not updates:
+            seed = re.sub(r"<[^>]+>", " ", str(article.get("excerpt") or article.get("summary") or article.get("title") or ""))
+            seed = re.sub(r"\s+", " ", seed).strip()
+            if seed:
+                updates = [{"timestamp": str(article.get("last_updated_at") or article.get("published_at") or ""), "text": seed}]
+                article["live_updates"] = updates
+                article["update_count"] = 1
+
         body = TIMELINE_RE.sub("", str(article.get("content_html") or "")).strip()
-        if live and len(updates) >= 2:
+        if live and len(updates) >= 1:
             rows = []
             for row in updates[:30]:
                 if not isinstance(row, dict) or not row.get("text"):
@@ -61,7 +71,7 @@ def main() -> int:
                     f'<p>{html.escape(str(row.get("text")))}</p>'
                     '</div>'
                 )
-            timeline = '<section class="live-update-timeline"><h2>Live updates</h2>' + "".join(rows) + '</section>'
+            timeline = '<section class="live-update-timeline"><h2>BREAKING NEWS — LIVE</h2><p><strong>Live updates, newest first.</strong></p>' + "".join(rows) + '</section>'
             article["content_html"] = timeline + body
         else:
             article["content_html"] = body
