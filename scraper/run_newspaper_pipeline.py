@@ -16,6 +16,7 @@ from urllib.parse import urlparse
 
 import scraper as core
 import run_fast_local_pipeline as base
+from live_story_updates import install as install_live_story_updates
 from reject_publisher_leaks import main as reject_publisher_leaks
 from search_queries import SearchQuery
 
@@ -185,6 +186,7 @@ def main() -> int:
 
     base.configure()
     configure_editorial_newsworthiness_gate()
+    install_live_story_updates()
     result = core.main()
     if result != 0:
         return result
