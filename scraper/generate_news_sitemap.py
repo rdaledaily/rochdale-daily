@@ -58,6 +58,10 @@ def eligible_articles(rows: list[dict], now: datetime) -> list[tuple[datetime, d
             continue
         if article.get("hidden") is True or article.get("noindex") is True:
             continue
+        # What's On listings have their own discovery surfaces and should not
+        # dilute the news-only feed supplied to Google News.
+        if str(article.get("source_kind") or "").lower() in {"event", "listing"}:
+            continue
 
         slug = str(article.get("slug") or "").strip().strip("/")
         title = str(article.get("title") or "").strip()
@@ -105,10 +109,12 @@ def main() -> int:
     if not isinstance(rows, list):
         raise SystemExit("articles.json must contain a JSON array")
 
-    tree = build_sitemap(rows)
+    now = datetime.now(timezone.utc)
+    selected = eligible_articles(rows, now)
+    tree = build_sitemap(rows, now)
     ET.indent(tree, space="  ")
     tree.write(OUTPUT_PATH, encoding="utf-8", xml_declaration=True)
-    print(f"Wrote {OUTPUT_PATH.name} with {len(eligible_articles(rows, datetime.now(timezone.utc)))} recent article URLs")
+    print(f"Wrote {OUTPUT_PATH.name} with {len(selected)} recent news article URLs")
     return 0
 
 
