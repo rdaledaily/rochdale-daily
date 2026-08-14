@@ -9,7 +9,8 @@ Optional:
   FACEBOOK_GRAPH_VERSION (default: v26.0)
   FACEBOOK_STATE_PATH (default: facebook/facebook_posted.json)
   FACEBOOK_RESULT_PATH (default: facebook/facebook_last_result.json)
-  FACEBOOK_QUEUE_ORDER (oldest|newest, default: oldest)
+  FACEBOOK_QUEUE_ORDER (oldest|newest, default: newest)
+  FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 48; 0 disables age filtering)
   FACEBOOK_DRY_RUN (1/true/yes to avoid the Graph API call)
 """
 from __future__ import annotations
@@ -20,7 +21,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -67,7 +68,24 @@ def clean_excerpt(article: dict[str, Any]) -> str:
     return text
 
 
-def eligible(article: Any) -> bool:
+def is_urgent(article: dict[str, Any]) -> bool:
+    title = str(article.get("title") or "").lower()
+    content = " ".join([
+        title,
+        str(article.get("excerpt") or "").lower(),
+        str(article.get("category") or "").lower(),
+    ])
+    return bool(
+        article.get("featured") is True
+        or article.get("breaking") is True
+        or article.get("live") is True
+        or "breaking" in content
+        or title.startswith("live:")
+        or title.startswith("live ")
+    )
+
+
+def eligible(article: Any, max_age_hours: int) -> bool:
     if not isinstance(article, dict):
         return False
     if str(article.get("status") or "published").lower() != "published":
@@ -81,8 +99,12 @@ def eligible(article: Any) -> bool:
     if not article_key(article):
         return False
     published = parse_dt(article.get("first_published_at") or article.get("published_at"))
-    if published != datetime.max.replace(tzinfo=timezone.utc) and published > datetime.now(timezone.utc):
+    now = datetime.now(timezone.utc)
+    if published != datetime.max.replace(tzinfo=timezone.utc) and published > now:
         return False
+    if max_age_hours > 0 and published != datetime.max.replace(tzinfo=timezone.utc):
+        if published < now - timedelta(hours=max_age_hours):
+            return False
     return True
 
 
@@ -138,8 +160,12 @@ def main() -> int:
     graph_version = env("FACEBOOK_GRAPH_VERSION", "v26.0")
     state_path = Path(env("FACEBOOK_STATE_PATH", str(ROOT / "facebook/facebook_posted.json")))
     result_path = Path(env("FACEBOOK_RESULT_PATH", str(ROOT / "facebook/facebook_last_result.json")))
-    queue_order = env("FACEBOOK_QUEUE_ORDER", "oldest").lower()
+    queue_order = env("FACEBOOK_QUEUE_ORDER", "newest").lower()
     dry_run = truthy("FACEBOOK_DRY_RUN")
+    try:
+        max_age_hours = max(0, int(env("FACEBOOK_MAX_ARTICLE_AGE_HOURS", "48") or "48"))
+    except ValueError:
+        max_age_hours = 48
 
     if not ARTICLES_PATH.exists():
         print("articles.json not found", file=sys.stderr)
@@ -164,9 +190,10 @@ def main() -> int:
         posted = {}
         state["posted"] = posted
 
-    candidates = [a for a in articles if eligible(a) and article_key(a) not in posted]
+    candidates = [a for a in articles if eligible(a, max_age_hours) and article_key(a) not in posted]
     candidates.sort(
         key=lambda a: (
+            1 if is_urgent(a) else 0,
             parse_dt(a.get("first_published_at") or a.get("published_at")),
             str(a.get("slug") or ""),
         ),
@@ -176,11 +203,11 @@ def main() -> int:
     if not candidates:
         result = {
             "status": "idle",
-            "reason": "No unpublished Facebook queue items remain",
+            "reason": "No fresh unpublished Facebook queue items remain",
             "checked_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         }
         write_json(result_path, result)
-        print("No unposted eligible articles remain.")
+        print("No fresh unposted eligible articles remain.")
         return 0
 
     article = candidates[0]
@@ -190,10 +217,23 @@ def main() -> int:
     url = canonical_url(article)
     message = title if not excerpt else f"{title}\n\n{excerpt}"
 
-    if dry_run:
-        post_id = "dry-run"
-    else:
-        post_id = graph_post(page_id, token, message, url, graph_version)
+    try:
+        if dry_run:
+            post_id = "dry-run"
+        else:
+            post_id = graph_post(page_id, token, message, url, graph_version)
+    except RuntimeError as exc:
+        result = {
+            "status": "error",
+            "reason": str(exc),
+            "article_key": key,
+            "title": title,
+            "url": url,
+            "checked_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        }
+        write_json(result_path, result)
+        print(str(exc), file=sys.stderr)
+        return 1
 
     posted_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     posted[key] = {
