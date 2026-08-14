@@ -3,6 +3,10 @@ name: Deploy Rochdale Daily to GitHub Pages
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - manual_articles.json
+      - 'manual_articles.d/**'
+      - 'pending_manual_*.json'
   workflow_dispatch:
 
 permissions:
@@ -10,11 +14,11 @@ permissions:
   pages: write
   id-token: write
 
-# The site is updated by several workflows which can push to main only seconds
-# apart (for example: an editor commits a manual article, then publish.yml
-# rebuilds the derived feeds/pages and commits those). We never want an older
-# queued Pages deployment to go live after a newer commit exists. Newest main
-# always wins.
+# Several workflows can push to main seconds apart. A manual-article source
+# commit is intentionally ignored here: publish.yml must first turn it into the
+# real articles.json/frontpage/article-page output. This prevents an incomplete
+# intermediate commit being deployed. For all deployable commits, newest main
+# always wins so a stale queued Pages build cannot replace a newer one.
 concurrency:
   group: pages
   cancel-in-progress: true
