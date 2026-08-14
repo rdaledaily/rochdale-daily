@@ -13,8 +13,10 @@ on:
 permissions:
   contents: write
 
+# Manual editorial publishing has its own queue so an urgent article cannot be
+# displaced by an unrelated archive/scraper writer waiting on the shared queue.
 concurrency:
-  group: rd-site-writer
+  group: rd-manual-publisher
   cancel-in-progress: false
 
 jobs:
