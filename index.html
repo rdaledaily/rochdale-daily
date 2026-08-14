@@ -4261,5 +4261,20 @@ function shareIconMarkup(action, label) {
     })();
   </script>
   <script defer src="/assets/js/cookie-consent.js"></script>
+
+<script data-rd-homepage-feed-bootstrap="true">
+(function () {
+  function startRochdaleDailyFeed() {
+    if (window.ROCHDALE_DAILY && typeof window.ROCHDALE_DAILY.refreshArticles === "function") {
+      window.ROCHDALE_DAILY.refreshArticles();
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startRochdaleDailyFeed, { once: true });
+  } else {
+    startRochdaleDailyFeed();
+  }
+})();
+</script>
 </body>
 </html>
