@@ -1,0 +1,68 @@
+name: Fix homepage article feed bootstrap
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-homepage-feed-bootstrap.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-homepage-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync with current main
+        run: git pull --rebase origin main
+
+      - name: Bootstrap homepage article feed
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          # The homepage should prefer the deliberately ranked frontpage feed.
+          text = re.sub(
+              r'const\s+ARTICLE_SOURCES\s*=\s*\[[^\]]*\];',
+              'const ARTICLE_SOURCES = ["/articles/frontpage.json", "/articles.json", "/articles/latest.json"];',
+              text,
+              count=1,
+          )
+
+          # loadArticleFeed existed but was never invoked on first page load.
+          # Keep this tiny bootstrap separate so cached inline code remains compatible.
+          marker = 'data-rd-homepage-feed-bootstrap="true"'
+          if marker not in text:
+              bootstrap = '''\n<script data-rd-homepage-feed-bootstrap="true">\n(function () {\n  function startRochdaleDailyFeed() {\n    if (window.ROCHDALE_DAILY && typeof window.ROCHDALE_DAILY.refreshArticles === "function") {\n      window.ROCHDALE_DAILY.refreshArticles();\n    }\n  }\n  if (document.readyState === "loading") {\n    document.addEventListener("DOMContentLoaded", startRochdaleDailyFeed, { once: true });\n  } else {\n    startRochdaleDailyFeed();\n  }\n})();\n</script>\n'''
+              if '</body>' not in text:
+                  raise SystemExit('index.html has no closing body tag')
+              text = text.replace('</body>', bootstrap + '</body>', 1)
+
+          path.write_text(text, encoding='utf-8')
+
+      - name: Commit repair
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "Homepage feed bootstrap already present"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Repair homepage article feed loading"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 3
+          done
+          exit 1
