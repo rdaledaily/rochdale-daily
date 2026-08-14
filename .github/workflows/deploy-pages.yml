@@ -10,9 +10,14 @@ permissions:
   pages: write
   id-token: write
 
+# The site is updated by several workflows which can push to main only seconds
+# apart (for example: an editor commits a manual article, then publish.yml
+# rebuilds the derived feeds/pages and commits those). We never want an older
+# queued Pages deployment to go live after a newer commit exists. Newest main
+# always wins.
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -21,8 +26,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout latest main
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Refresh to latest main before upload
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+          echo "Deploying commit $(git rev-parse HEAD)"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
