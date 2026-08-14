@@ -1,7 +1,7 @@
 name: Publish manual article edits
 
-# Rebuilds the site whenever an article source or the manual-article merge logic
-# changes so editorial updates go live without waiting for a scheduled scrape.
+# Rebuilds the site whenever an article source or the publishing/rendering logic
+# changes so editorial and SEO updates go live without waiting for a scrape.
 on:
   push:
     paths:
@@ -11,6 +11,10 @@ on:
       - scraper/manual_articles.py
       - scraper/frontpage_pipeline.py
       - scraper/story_identity.py
+      - scraper/generate_pages.py
+      - scraper/generate_newspaper_pages.py
+      - scraper/generate_news_sitemap.py
+      - .github/workflows/publish.yml
   workflow_dispatch:
 
 permissions:
