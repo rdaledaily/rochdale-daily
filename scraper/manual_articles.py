@@ -3,6 +3,12 @@
 Legacy stories remain in manual_articles.json. New stories can be added safely as
 individual JSON files under manual_articles.d/. The loader reads both sources,
 normalises them identically and deduplicates by article id.
+
+Manual articles are editorially locked by default. An individual entry may set
+``allow_scrape_merge`` to true to act as a one-time editorial seed: it is injected
+until it has reached articles.json, then subsequent runs leave the live, unlocked
+record in the normal story-merging pipeline so verified scraped updates can enrich
+or replace its details. If the live record disappears, the seed is injected again.
 """
 
 from __future__ import annotations
@@ -17,6 +23,7 @@ from typing import Any
 
 MANUAL_ARTICLES_PATH = Path("manual_articles.json")
 MANUAL_ARTICLES_DIR = Path("manual_articles.d")
+ARTICLES_FEED_PATH = Path("articles.json")
 
 VALID_CATEGORIES = {
     "news", "crime", "politics", "traffic", "transport", "sport", "business",
@@ -88,6 +95,7 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
 
     source_name = _clean(entry.get("source_name")) or "Rochdale Daily"
     image_url = _clean(entry.get("image_url") or entry.get("img"))
+    allow_scrape_merge = entry.get("allow_scrape_merge") is True
 
     record: dict[str, Any] = {
         "id": _clean(entry.get("id")) or _stable_id(slug or source_url),
@@ -114,8 +122,9 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         "image_credit_url": _clean(entry.get("image_credit_url")),
         "byline": _clean(entry.get("byline")) or "Rochdale Daily Newsdesk",
         "manual_article": True,
-        "editorial_lock": True,
-        "publication_route": "editorial",
+        "editorial_lock": not allow_scrape_merge,
+        "allow_scrape_merge": allow_scrape_merge,
+        "publication_route": "editorial-live-seed" if allow_scrape_merge else "editorial",
         "rewrite_quality_checked": True,
     }
 
@@ -167,6 +176,20 @@ def _read_payload(path: Path) -> list[dict[str, Any]]:
     return []
 
 
+def _live_feed_identity() -> tuple[set[str], set[str]]:
+    """Return ids/slugs already present in the generated live article feed."""
+    ids: set[str] = set()
+    slugs: set[str] = set()
+    for item in _read_payload(ARTICLES_FEED_PATH):
+        item_id = _clean(item.get("id"))
+        slug = _slugify(item.get("slug") or "")
+        if item_id:
+            ids.add(item_id)
+        if slug:
+            slugs.add(slug)
+    return ids, slugs
+
+
 def load_manual_article_records(now: datetime | None = None) -> list[dict[str, Any]]:
     """Return normalised editor-written article records from legacy + per-story files."""
     reference = now or datetime.now(timezone.utc)
@@ -179,11 +202,20 @@ def load_manual_article_records(now: datetime | None = None) -> list[dict[str, A
         for path in sorted(MANUAL_ARTICLES_DIR.rglob("*.json")):
             entries.extend(_read_payload(path))
 
+    live_ids, live_slugs = _live_feed_identity()
     records: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
     for entry in entries:
         record = _normalise(entry, reference)
         if record is None or record["id"] in seen_ids:
+            continue
+        if record.get("allow_scrape_merge") and (
+            record["id"] in live_ids or record["slug"] in live_slugs
+        ):
+            # The editorial seed has already reached articles.json. Do not
+            # re-inject the pristine manual copy: the unlocked live record now
+            # belongs to the ordinary scraper/dedupe pipeline and can absorb
+            # verified updates while retaining its canonical id/slug.
             continue
         seen_ids.add(record["id"])
         records.append(record)
