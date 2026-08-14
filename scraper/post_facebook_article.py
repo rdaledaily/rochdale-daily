@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Post one previously-unposted Rochdale Daily article to a Facebook Page.
 
+This publisher is intentionally conservative: it only creates Page feed posts for
+fresh Rochdale Daily articles. It does not automate likes, comments, follows,
+messages, audience manipulation, or behaviour intended to mimic a person.
+
 Required environment variables:
   FACEBOOK_PAGE_ACCESS_TOKEN
   FACEBOOK_PAGE_ID
@@ -10,7 +14,9 @@ Optional:
   FACEBOOK_STATE_PATH (default: facebook/facebook_posted.json)
   FACEBOOK_RESULT_PATH (default: facebook/facebook_last_result.json)
   FACEBOOK_QUEUE_ORDER (oldest|newest, default: newest)
-  FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 48; 0 disables age filtering)
+  FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 24; 0 disables age filtering)
+  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 30)
+  FACEBOOK_MAX_POSTS_24H (default: 20; 0 disables the cap)
   FACEBOOK_DRY_RUN (1/true/yes to avoid the Graph API call)
 """
 from __future__ import annotations
@@ -36,6 +42,13 @@ def env(name: str, default: str = "") -> str:
 
 def truthy(name: str) -> bool:
     return env(name).lower() in {"1", "true", "yes", "on"}
+
+
+def int_env(name: str, default: int, minimum: int = 0) -> int:
+    try:
+        return max(minimum, int(env(name, str(default)) or str(default)))
+    except ValueError:
+        return default
 
 
 def parse_dt(value: Any) -> datetime:
@@ -122,6 +135,36 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def recent_post_times(posted: dict[str, Any]) -> list[datetime]:
+    times: list[datetime] = []
+    for value in posted.values():
+        if not isinstance(value, dict):
+            continue
+        parsed = parse_dt(value.get("posted_at"))
+        if parsed != datetime.max.replace(tzinfo=timezone.utc):
+            times.append(parsed)
+    return times
+
+
+def rate_limit_reason(
+    posted: dict[str, Any], min_interval_minutes: int, max_posts_24h: int
+) -> str:
+    now = datetime.now(timezone.utc)
+    times = recent_post_times(posted)
+    if min_interval_minutes > 0 and times:
+        latest = max(times)
+        next_allowed = latest + timedelta(minutes=min_interval_minutes)
+        if now < next_allowed:
+            remaining = max(1, int((next_allowed - now).total_seconds() // 60) + 1)
+            return f"Facebook safety cooldown active; next post allowed in about {remaining} minutes"
+    if max_posts_24h > 0:
+        cutoff = now - timedelta(hours=24)
+        count = sum(1 for t in times if t >= cutoff)
+        if count >= max_posts_24h:
+            return f"Facebook 24-hour safety cap reached ({count}/{max_posts_24h})"
+    return ""
+
+
 def graph_post(page_id: str, token: str, message: str, link: str, version: str) -> str:
     endpoint = f"https://graph.facebook.com/{version}/{urllib.parse.quote(page_id)}/feed"
     body = urllib.parse.urlencode({
@@ -162,10 +205,9 @@ def main() -> int:
     result_path = Path(env("FACEBOOK_RESULT_PATH", str(ROOT / "facebook/facebook_last_result.json")))
     queue_order = env("FACEBOOK_QUEUE_ORDER", "newest").lower()
     dry_run = truthy("FACEBOOK_DRY_RUN")
-    try:
-        max_age_hours = max(0, int(env("FACEBOOK_MAX_ARTICLE_AGE_HOURS", "48") or "48"))
-    except ValueError:
-        max_age_hours = 48
+    max_age_hours = int_env("FACEBOOK_MAX_ARTICLE_AGE_HOURS", 24)
+    min_interval_minutes = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 30)
+    max_posts_24h = int_env("FACEBOOK_MAX_POSTS_24H", 20)
 
     if not ARTICLES_PATH.exists():
         print("articles.json not found", file=sys.stderr)
@@ -189,6 +231,17 @@ def main() -> int:
     if not isinstance(posted, dict):
         posted = {}
         state["posted"] = posted
+
+    limit_reason = rate_limit_reason(posted, min_interval_minutes, max_posts_24h)
+    if limit_reason:
+        result = {
+            "status": "idle",
+            "reason": limit_reason,
+            "checked_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        }
+        write_json(result_path, result)
+        print(limit_reason)
+        return 0
 
     candidates = [a for a in articles if eligible(a, max_age_hours) and article_key(a) not in posted]
     candidates.sort(
