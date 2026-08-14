@@ -1,13 +1,16 @@
 name: Publish manual article edits
 
-# Rebuilds the site whenever an article source changes so editorial updates
-# go live without waiting for a scheduled scrape.
+# Rebuilds the site whenever an article source or the manual-article merge logic
+# changes so editorial updates go live without waiting for a scheduled scrape.
 on:
   push:
     paths:
       - articles.json
       - manual_articles.json
       - 'manual_articles.d/**'
+      - scraper/manual_articles.py
+      - scraper/frontpage_pipeline.py
+      - scraper/story_identity.py
   workflow_dispatch:
 
 permissions:
@@ -41,10 +44,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
-      - name: Rebuild pages and sitemap
+      - name: Rebuild feed, dedupe and pages
         run: |
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
+          python scraper/frontpage_pipeline.py
           python scraper/article_gate.py articles.json
           python scraper/generate_newspaper_pages.py
       - name: Commit rebuilt site

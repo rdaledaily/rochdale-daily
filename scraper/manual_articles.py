@@ -4,11 +4,18 @@ Legacy stories remain in manual_articles.json. New stories can be added safely a
 individual JSON files under manual_articles.d/. The loader reads both sources,
 normalises them identically and deduplicates by article id.
 
-Manual articles are editorially locked by default. An individual entry may set
-``allow_scrape_merge`` to true to act as a one-time editorial seed: it is injected
-until it has reached articles.json, then subsequent runs leave the live, unlocked
-record in the normal story-merging pipeline so verified scraped updates can enrich
-or replace its details. If the live record disappears, the seed is injected again.
+Manual articles remain editorially authoritative, but they are not duplicate
+islands. Before injection, each manual article is compared with non-manual records
+already present in articles.json. When the normal story matcher is confident that
+a scraped record is the same underlying story, the manual article keeps its
+headline, body, category and canonical slug while absorbing the scraped source
+attribution and live identity. The final injector can then replace the scraped
+record instead of publishing a second article.
+
+An individual entry may set ``allow_scrape_merge`` to true to act as a one-time
+editorial seed. Once that exact live record has reached articles.json, subsequent
+runs leave it unlocked in the ordinary story-merging pipeline so verified scraped
+updates can refresh its details.
 """
 
 from __future__ import annotations
@@ -20,6 +27,8 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from story_identity import same_story
 
 MANUAL_ARTICLES_PATH = Path("manual_articles.json")
 MANUAL_ARTICLES_DIR = Path("manual_articles.d")
@@ -176,22 +185,79 @@ def _read_payload(path: Path) -> list[dict[str, Any]]:
     return []
 
 
-def _live_feed_identity() -> tuple[set[str], set[str]]:
-    """Return ids/slugs already present in the generated live article feed."""
-    ids: set[str] = set()
-    slugs: set[str] = set()
-    for item in _read_payload(ARTICLES_FEED_PATH):
-        item_id = _clean(item.get("id"))
-        slug = _slugify(item.get("slug") or "")
-        if item_id:
-            ids.add(item_id)
-        if slug:
-            slugs.add(slug)
-    return ids, slugs
+def _live_feed_records() -> list[dict[str, Any]]:
+    return _read_payload(ARTICLES_FEED_PATH)
+
+
+def _unique_strings(*values: Any) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        items = value if isinstance(value, list) else [value]
+        for item in items:
+            text = _clean(item)
+            if not text or text in seen:
+                continue
+            seen.add(text)
+            result.append(text)
+    return result
+
+
+def _absorb_scraped_match(
+    manual: dict[str, Any], scraped: dict[str, Any]
+) -> dict[str, Any]:
+    """Keep editorial copy canonical while absorbing a same-story scrape.
+
+    The scraped id is deliberately adopted because frontpage_pipeline's final
+    manual injection removes existing records by id/slug/source URL. Adopting
+    the scrape id therefore turns what used to be two records into one without
+    sacrificing the editor-selected canonical slug.
+    """
+    merged = dict(manual)
+    canonical_manual_id = _clean(manual.get("id"))
+    scraped_id = _clean(scraped.get("id"))
+    if scraped_id:
+        merged["manual_canonical_id"] = canonical_manual_id
+        merged["id"] = scraped_id
+
+    merged["source_names"] = _unique_strings(
+        manual.get("source_names"),
+        manual.get("source_name"),
+        scraped.get("source_names"),
+        scraped.get("source_name"),
+    )
+    merged["source_urls"] = _unique_strings(
+        manual.get("source_urls"),
+        manual.get("source_url"),
+        scraped.get("source_urls"),
+        scraped.get("source_url"),
+    )
+    merged["source_count"] = len(merged["source_urls"])
+
+    update_candidates = [
+        _parse_dt(manual.get("last_updated_at")),
+        _parse_dt(scraped.get("last_updated_at")),
+        _parse_dt(scraped.get("scraped_at")),
+        _parse_dt(scraped.get("published_at")),
+    ]
+    updates = [value for value in update_candidates if value is not None]
+    if updates:
+        merged["last_updated_at"] = _iso(max(updates))
+
+    if merged["source_count"] > 1 or scraped.get("is_ongoing"):
+        merged["is_ongoing"] = True
+        merged["ongoing_label"] = "ONGOING"
+        merged["update_count"] = max(
+            merged["source_count"],
+            int(scraped.get("update_count") or 1),
+        )
+
+    merged["merged_scrape_duplicate"] = True
+    return merged
 
 
 def load_manual_article_records(now: datetime | None = None) -> list[dict[str, Any]]:
-    """Return normalised editor-written article records from legacy + per-story files."""
+    """Return manual records, folded into matching scraped stories when found."""
     reference = now or datetime.now(timezone.utc)
     entries: list[dict[str, Any]] = []
 
@@ -202,20 +268,61 @@ def load_manual_article_records(now: datetime | None = None) -> list[dict[str, A
         for path in sorted(MANUAL_ARTICLES_DIR.rglob("*.json")):
             entries.extend(_read_payload(path))
 
-    live_ids, live_slugs = _live_feed_identity()
+    live = _live_feed_records()
+    live_ids = {_clean(item.get("id")) for item in live if _clean(item.get("id"))}
+    live_slugs = {_slugify(item.get("slug") or "") for item in live if item.get("slug")}
+
     records: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
     for entry in entries:
         record = _normalise(entry, reference)
-        if record is None or record["id"] in seen_ids:
+        if record is None:
             continue
+
+        # A live-seed article stops being re-injected only when its own exact
+        # canonical identity has already reached articles.json. A different
+        # scraped version of the same story must still be folded into it below.
         if record.get("allow_scrape_merge") and (
             record["id"] in live_ids or record["slug"] in live_slugs
         ):
-            # The editorial seed has already reached articles.json. Do not
-            # re-inject the pristine manual copy: the unlocked live record now
-            # belongs to the ordinary scraper/dedupe pipeline and can absorb
-            # verified updates while retaining its canonical id/slug.
+            continue
+
+        # Exclude already-injected manual/editorial records from matching. We
+        # only want an independent scrape to trigger the fold-in behaviour.
+        scraped_matches = [
+            item for item in live
+            if not item.get("manual_article")
+            and str(item.get("source_kind") or "").lower() != "editorial"
+            and same_story(record, item)
+        ]
+
+        if scraped_matches:
+            # Automatic records have already been deduplicated before manual
+            # injection, so normally there is one. If more survive, absorb the
+            # most recently updated first; adopting its id is enough for the
+            # final injector to remove that canonical scraped record.
+            scraped_matches.sort(
+                key=lambda item: (
+                    _parse_dt(item.get("last_updated_at"))
+                    or _parse_dt(item.get("scraped_at"))
+                    or _parse_dt(item.get("published_at"))
+                    or datetime.min.replace(tzinfo=timezone.utc)
+                ),
+                reverse=True,
+            )
+            record = _absorb_scraped_match(record, scraped_matches[0])
+            for extra in scraped_matches[1:]:
+                # Extra sources are retained for attribution even though only
+                # one scraped identity is needed to collapse the live record.
+                record["source_names"] = _unique_strings(
+                    record.get("source_names"), extra.get("source_names"), extra.get("source_name")
+                )
+                record["source_urls"] = _unique_strings(
+                    record.get("source_urls"), extra.get("source_urls"), extra.get("source_url")
+                )
+                record["source_count"] = len(record["source_urls"])
+
+        if record["id"] in seen_ids:
             continue
         seen_ids.add(record["id"])
         records.append(record)
