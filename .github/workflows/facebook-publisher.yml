@@ -1,9 +1,11 @@
 name: Post Rochdale Daily article to Facebook
 
+# Scheduled publishing is intentionally paused while Meta has the Rochdale Daily
+# business/Page under an account-integrity automation restriction. Keeping the
+# workflow manually dispatchable preserves the integration for testing after the
+# review without repeatedly hitting the Graph API while access is restricted.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/15 * * * *"
   push:
     branches: [main]
     paths:
