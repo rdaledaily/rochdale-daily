@@ -103,6 +103,7 @@ jobs:
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          python scraper/generate_news_sitemap.py
           python scraper/check_scraper_health.py
       - name: Refresh weather
         timeout-minutes: 2
@@ -116,7 +117,7 @@ jobs:
           git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
             image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
-            articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
+            articles sitemap.xml news-sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "${COMMIT_MESSAGE}"
           for attempt in 1 2 3 4 5; do
@@ -203,6 +204,7 @@ jobs:
           python scraper/article_gate.py articles.json
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          python scraper/generate_news_sitemap.py
           python scraper/check_scraper_health.py
       - name: Commit and push
         run: |
@@ -211,7 +213,7 @@ jobs:
           git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
             google_news_resolution_report.json google_news_resolutions.json \
             image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
-            articles sitemap.xml wards/ ward_areas.json council_votes.json index.html
+            articles sitemap.xml news-sitemap.xml wards/ ward_areas.json council_votes.json index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "${COMMIT_MESSAGE}"
           for attempt in 1 2 3 4 5; do
