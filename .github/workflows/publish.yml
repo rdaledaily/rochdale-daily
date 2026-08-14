@@ -14,6 +14,8 @@ on:
       - scraper/generate_pages.py
       - scraper/generate_newspaper_pages.py
       - scraper/generate_news_sitemap.py
+      - scraper/ensure_article_images.py
+      - scraper/repair_generated_with_commons.py
       - .github/workflows/publish.yml
   workflow_dispatch:
 
@@ -29,7 +31,9 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    env:
+      USE_WIKIMEDIA_COMMONS: "true"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,11 +52,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
-      - name: Rebuild feed, dedupe and pages
+          python -m pip install --no-cache-dir "Pillow>=10,<13"
+      - name: Rebuild feed, normalise images, dedupe and pages
         run: |
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
           python scraper/frontpage_pipeline.py
+          # Publication is the durable enforcement point for the cards-only image
+          # contract. First match existing newsroom card images or create a safe
+          # local fallback; then replace generated fallbacks with suitable Commons
+          # photography where the resolver can verify a relevant match.
+          python scraper/ensure_article_images.py --articles articles.json
+          python scraper/repair_generated_with_commons.py --articles articles.json
           python scraper/article_gate.py articles.json
           python scraper/generate_newspaper_pages.py
           python scraper/generate_news_sitemap.py
@@ -60,7 +71,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json articles sitemap.xml news-sitemap.xml
+          git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json articles sitemap.xml news-sitemap.xml assets/img/cards image_coverage_report.json commons_image_repair_report.json
           if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
           git commit -m "Publish manual article edits"
           for attempt in 1 2 3 4 5; do
