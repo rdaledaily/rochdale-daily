@@ -4,6 +4,7 @@ The underlying archive remains untouched. This runtime patch changes only the
 front-page editorial behaviour before delegating to generate_pages.py:
 
 * fresh verified briefs are allowed on the homepage without a 200-word rule;
+* manual/editorial stories have no word-count gate once they contain story text;
 * minimum useful length varies by story type instead of one blanket threshold;
 * source-led fallbacks are judged on their actual text, not rejected by route;
 * the last 24 hours is the main news pool;
@@ -41,15 +42,15 @@ def _newsroom_low_quality(article):
 
 
 def _minimum_words(article) -> int:
-    if article.get("manual_article") or article.get("editorial_lock"):
-        return 50
     return CATEGORY_MIN_WORDS.get(fp.article_category(article), DEFAULT_MIN_WORDS)
 
 
 def _newsroom_eligible(article) -> bool:
-    """Allow short factual alerts while keeping fragments off the homepage."""
+    """Allow editor-approved urgent briefs while keeping automated fragments off the homepage."""
     if fp.is_event(article):
         return False
+    if article.get("manual_article") or article.get("editorial_lock"):
+        return bool(fp.article_text(article).strip())
     return fp.editorial_word_count(article) >= _minimum_words(article)
 
 
