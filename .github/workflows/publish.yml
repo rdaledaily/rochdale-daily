@@ -1,12 +1,13 @@
 name: Publish manual article edits
 
-# Rebuilds the site whenever either article source changes so editorial updates
+# Rebuilds the site whenever an article source changes so editorial updates
 # go live without waiting for a scheduled scrape.
 on:
   push:
     paths:
       - articles.json
       - manual_articles.json
+      - 'manual_articles.d/**'
   workflow_dispatch:
 
 permissions:
@@ -43,12 +44,12 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
           python scraper/article_gate.py articles.json
-          python scraper/generate_pages.py
+          python scraper/generate_newspaper_pages.py
       - name: Commit rebuilt site
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json manual_articles.json scraper_status.json event_dates.json articles sitemap.xml
+          git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json articles sitemap.xml
           if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
           git commit -m "Publish manual article edits"
           for attempt in 1 2 3 4 5; do
