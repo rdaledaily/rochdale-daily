@@ -70,6 +70,31 @@ class StaticLatestEligibilityTests(unittest.TestCase):
         self.assertFalse(latest.is_expired_time_sensitive_preview(row, now))
         self.assertTrue(latest.eligible(row))
 
+    def test_expired_same_day_deadline_is_excluded(self):
+        now = datetime(2026, 8, 15, 21, 45, tzinfo=timezone.utc)
+        row = self.base(
+            title="Early Bird Tickets Available for Rochdale Hornets Matches Until 6pm Today",
+            category="sport",
+            excerpt="Supporters can buy the discounted tickets until 6pm today.",
+        )
+        self.assertTrue(latest.is_expired_today_deadline(row, now))
+
+    def test_future_same_day_deadline_remains_eligible(self):
+        now = datetime(2026, 8, 15, 15, 0, tzinfo=timezone.utc)
+        row = self.base(
+            title="Early Bird Tickets Available Until 6pm Today",
+            category="sport",
+        )
+        self.assertFalse(latest.is_expired_today_deadline(row, now))
+
+    def test_editorial_deadline_story_is_exempt(self):
+        now = datetime(2026, 8, 15, 21, 45, tzinfo=timezone.utc)
+        row = self.base(
+            title="Council consultation closes at 6pm today after residents raise concerns",
+            source_kind="editorial",
+        )
+        self.assertFalse(latest.is_expired_today_deadline(row, now))
+
     def test_inline_masthead_logo_is_externalised(self):
         html = (
             '<a class="brand"><img class="brand-logo" '
