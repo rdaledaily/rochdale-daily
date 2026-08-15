@@ -36,6 +36,12 @@ rebuild_from_merged_feed() {
   python scraper/repair_merged_bodies.py
   python scraper/generate_ward_pages.py
   python scraper/generate_newspaper_pages.py
+  # Page generation rebuilds frontpage.json, so final freshness ordering and the
+  # hard live-homepage window must be asserted AFTER generation. Running these
+  # only before generation allows a race-safe recovery to reintroduce a stale
+  # top-three ordering even when the feed itself is healthy.
+  python scraper/enforce_frontpage_freshness.py
+  python scraper/enforce_live_homepage_window.py
   python scraper/generate_news_sitemap.py
   python scraper/content_hygiene.py --fix
   python scraper/content_hygiene.py
