@@ -62,6 +62,8 @@ jobs:
           PY
 
       - name: Compile and run targeted tests
+        env:
+          PYTHONPATH: scraper
         run: |
           python -m py_compile scraper/frontpage_pipeline.py scraper/ensure_article_images.py scraper/generate_pages.py
           python -m unittest scraper.test_frontpage_pipeline
