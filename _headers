@@ -16,13 +16,21 @@
 /feel-good-live.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
+# Editorial images are static files and dominate article transfer size. A one-day
+# browser TTL materially improves repeat visits while still allowing same-name
+# corrections to propagate quickly; stale-while-revalidate keeps navigation fast.
+/assets/img/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# CSS is shared by many pages. Keep a modest TTL because filenames are not yet
+# content-hashed, so design changes still reach readers promptly.
+/assets/css/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
 /assets/ads.js
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
 /assets/js/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
-
-/assets/css/*
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
 /articles/*
