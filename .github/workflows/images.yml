@@ -30,7 +30,7 @@ jobs:
   images:
     if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Enforce cards-only article images')
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     env:
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "false"
@@ -98,22 +98,66 @@ jobs:
 
       - name: Commit cards-only feed and rendered site
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json image_coverage_report.json councillor_photos.json assets/img/cards articles sitemap.xml wards/ index.html
+
+          rebuild_latest() {
+            python scraper/ensure_article_images.py --articles articles.json
+            python scraper/frontpage_pipeline.py
+            python scraper/ensure_article_images.py --articles articles.json
+            python scraper/councillor_photos.py
+            python scraper/generate_archive.py
+            python scraper/generate_ward_pages.py
+            python scraper/generate_pages.py
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=json.loads(Path('articles.json').read_text(encoding='utf-8'))
+          bad=[]
+          missing=[]
+          for a in rows:
+              if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
+                  continue
+              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
+              if not image.startswith('assets/img/cards/'):
+                  bad.append((a.get('slug'), image))
+              elif not Path(image).is_file():
+                  missing.append((a.get('slug'), image))
+          if bad or missing:
+              raise SystemExit(f'Image integrity failed: {len(bad)} non-card path(s), {len(missing)} missing card file(s)')
+          print(f'Validated {len(rows)} records after race-safe rebuild.')
+          PY
+          }
+
+          # This is a clean ephemeral runner and every change below is produced by
+          # the deterministic image/feed/page rebuild above. Stage the complete
+          # generated state so Git never refuses publication because a derived
+          # file was accidentally omitted from a hand-maintained path list.
+          git add -A
           if git diff --cached --quiet; then
             echo "Cards-only image policy and councillor portraits already satisfied."
             exit 0
           fi
           git commit -m "Enforce cards-only article images and councillor portraits"
-          for attempt in 1 2 3 4 5; do
+          if git push origin HEAD:main; then exit 0; fi
+
+          # Never rebase one generated newspaper snapshot onto another. If main
+          # moved outside the shared writer lock, discard this derived snapshot,
+          # rebuild deterministically from the newest canonical main, validate it
+          # again, and publish that coherent state.
+          for attempt in 1 2 3; do
+            echo "main moved during image enforcement; rebuilding latest state (${attempt}/3)."
             git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              sleep 3
-              continue
+            git reset --hard origin/main
+            git clean -fd
+            rebuild_latest
+            git add -A
+            if git diff --cached --quiet; then
+              echo "Latest main already satisfies image integrity."
+              exit 0
             fi
+            git commit -m "Enforce cards-only article images and councillor portraits (race-safe rebuild)"
             if git push origin HEAD:main; then exit 0; fi
-            sleep 3
           done
           exit 1
