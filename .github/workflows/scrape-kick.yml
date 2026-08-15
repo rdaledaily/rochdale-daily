@@ -11,8 +11,6 @@ on:
 permissions:
   contents: write
 
-# Use the same writer lock as the scheduled scraper so two newsroom runs cannot
-# generate different versions of articles/images and then race to update main.
 concurrency:
   group: rd-site-writer
   cancel-in-progress: false
@@ -20,7 +18,7 @@ concurrency:
 jobs:
   fast-news:
     runs-on: ubuntu-latest
-    timeout-minutes: 24
+    timeout-minutes: 30
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
@@ -75,6 +73,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -98,13 +101,8 @@ jobs:
       - name: Resolve article images
         timeout-minutes: 8
         run: |
-          # Prefer editor-curated filename-matched photographs first.
           python scraper/ensure_article_images.py
-          # Replace generated cards with permitted publisher lead images.
           python scraper/repair_generated_article_images.py
-          # If there is still a placeholder, try a relevant freely licensed
-          # Wikimedia Commons photograph. Crime is deliberately excluded from
-          # generic Commons matching to avoid falsely linking a place to an offence.
           python scraper/repair_generated_with_commons.py
 
       - name: Validate, generate fresh site and verify health
@@ -115,8 +113,7 @@ jobs:
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
-          # Generation can re-inject manual records, so clean and verify again
-          # after every public page has been rebuilt.
+          python scraper/generate_news_sitemap.py
           python scraper/content_hygiene.py --fix
           python scraper/content_hygiene.py
           python scraper/check_scraper_health.py
@@ -127,31 +124,5 @@ jobs:
           METOFFICE_API_KEY: ${{ secrets.METOFFICE_API_KEY }}
         run: python scraper/weather_forecast.py
 
-      - name: Commit and push
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
-            google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
-            articles sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
-          if git diff --cached --quiet; then
-            echo "Pipeline completed with no file changes."
-            exit 0
-          fi
-          git commit -m "${COMMIT_MESSAGE}"
-          for attempt in 1 2 3 4 5; do
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
-              exit 0
-            fi
-            echo "Push race detected; rebasing committed pipeline output (attempt ${attempt}/5)."
-            git reset --hard HEAD
-            git clean -fd
-            git fetch origin "${GITHUB_REF_NAME}"
-            if ! git rebase "origin/${GITHUB_REF_NAME}"; then
-              git rebase --abort || true
-              echo "Could not safely rebase pipeline output onto current main."
-              exit 1
-            fi
-          done
-          exit 1
+      - name: Commit and push race-safe newsroom snapshot
+        run: bash scraper/publish_newsroom_snapshot.sh
