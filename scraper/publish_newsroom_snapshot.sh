@@ -8,6 +8,16 @@ message="${COMMIT_MESSAGE:-Update Rochdale Daily newsroom}"
 # shared rd-fast-news-writer Actions concurrency lane before they reach this
 # publisher. This script still retains full race recovery because unrelated
 # editorial/manual/site-maintenance commits may legitimately move main.
+#
+# When a newsroom snapshot actually reaches main, expose that fact as a step
+# output. Scheduled commits made with GITHUB_TOKEN do not reliably trigger a
+# separate push-based Pages workflow, so callers can dispatch deployment only
+# after a real publish rather than creating redundant deploy runs on no-op scans.
+mark_published() {
+  if [ -n "${GITHUB_OUTPUT:-}" ]; then
+    echo "published=true" >> "${GITHUB_OUTPUT}"
+  fi
+}
 
 stage_newsroom() {
   git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
@@ -43,6 +53,7 @@ fi
 
 git commit -m "${message}"
 if git push origin "HEAD:${branch}"; then
+  mark_published
   exit 0
 fi
 
@@ -91,6 +102,7 @@ for attempt in 1 2 3; do
   fi
   git commit -m "${message} (race-safe rebuild)"
   if git push origin "HEAD:${branch}"; then
+    mark_published
     exit 0
   fi
 
