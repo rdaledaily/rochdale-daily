@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import unittest
+from datetime import datetime, timedelta, timezone
 
 import update_homepage_static_latest as latest
 
@@ -10,7 +11,7 @@ class StaticLatestEligibilityTests(unittest.TestCase):
             "status": "published",
             "slug": "example-story",
             "title": "Rochdale residents face disruption after road closure",
-            "published_at": "2026-08-15T12:00:00Z",
+            "published_at": datetime.now(timezone.utc).isoformat(),
             "category": "news",
             "source_kind": "article",
             "source_url": "https://example.org/news/story",
@@ -43,6 +44,30 @@ class StaticLatestEligibilityTests(unittest.TestCase):
             source_url="https://tfgm.com/travel-updates/travel-alerts",
         )
         self.assertFalse(latest.is_utility_not_news(row))
+        self.assertTrue(latest.eligible(row))
+
+    def test_stale_machine_sports_preview_is_excluded(self):
+        now = datetime.now(timezone.utc)
+        row = self.base(
+            title="Rochdale AFC faces Newport County today",
+            category="sport",
+            excerpt="Supporters are advised to arrive early for kick-off.",
+            first_published_at=(now - timedelta(hours=9)).isoformat(),
+            published_at=(now - timedelta(hours=9)).isoformat(),
+        )
+        self.assertTrue(latest.is_expired_time_sensitive_preview(row, now))
+        self.assertFalse(latest.eligible(row))
+
+    def test_recent_machine_sports_preview_remains_eligible(self):
+        now = datetime.now(timezone.utc)
+        row = self.base(
+            title="Rochdale AFC faces Newport County today",
+            category="sport",
+            excerpt="A match preview ahead of this afternoon's fixture.",
+            first_published_at=(now - timedelta(hours=2)).isoformat(),
+            published_at=(now - timedelta(hours=2)).isoformat(),
+        )
+        self.assertFalse(latest.is_expired_time_sensitive_preview(row, now))
         self.assertTrue(latest.eligible(row))
 
     def test_inline_masthead_logo_is_externalised(self):
