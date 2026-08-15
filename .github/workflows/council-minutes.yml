@@ -49,9 +49,55 @@ jobs:
         run: python scraper/generate_ward_pages.py
       - name: Commit council data, portraits, pages and stories
         run: |
+          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add council_documents.json council_story_sources.json council_votes.json councillor_photos.json manual_articles.d/ wards/ index.html
-          if git diff --cached --quiet; then echo 'No council changes.'; exit 0; fi
+
+          stage_council_state() {
+            git add council_documents.json council_votes.json councillor_photos.json manual_articles.d/ wards/ index.html
+            if [ -f council_story_sources.json ]; then
+              git add council_story_sources.json
+            fi
+          }
+
+          rebuild_council_state() {
+            python scraper/councillor_photos.py
+            python scraper/council_minutes_collector.py
+            python scraper/publish_council_minutes_stories.py
+            python -m json.tool council_documents.json > /dev/null
+            python -m json.tool council_votes.json > /dev/null
+            python -m json.tool councillor_photos.json > /dev/null
+            python scraper/generate_ward_pages.py
+          }
+
+          stage_council_state
+          if git diff --cached --quiet; then
+            echo 'No council changes.'
+            exit 0
+          fi
           git commit -m 'Update Rochdale council democracy records and portraits'
-          git push origin HEAD:main
+          if git push origin HEAD:main; then
+            exit 0
+          fi
+
+          # Do not merge or rebase independently generated democracy snapshots.
+          # If main moved, rebuild the council state from the new canonical head.
+          for attempt in 1 2 3; do
+            echo "main moved during council publish; rebuilding on latest main (${attempt}/3)."
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd
+            rebuild_council_state
+            stage_council_state
+            if git diff --cached --quiet; then
+              echo 'Latest main already contains the council state.'
+              exit 0
+            fi
+            git commit -m 'Update Rochdale council democracy records and portraits (race-safe rebuild)'
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+          done
+
+          echo 'Could not publish council state after three race-safe rebuild attempts.' >&2
+          exit 1
