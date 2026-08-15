@@ -3,9 +3,11 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from enforce_frontpage_freshness import (
     is_expired_time_sensitive_preview,
+    is_expired_today_deadline,
     is_recent_live_update,
     is_utility_not_lead,
 )
@@ -94,6 +96,37 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
             "event_start_at": (now - timedelta(hours=4)).isoformat(),
         }
         self.assertTrue(is_expired_time_sensitive_preview(article, now))
+
+    def test_machine_same_day_deadline_expires_after_local_deadline(self) -> None:
+        local = ZoneInfo("Europe/London")
+        now = datetime(2026, 8, 15, 19, 5, tzinfo=local).astimezone(timezone.utc)
+        article = {
+            "title": "Early Bird Tickets Available for Rochdale Hornets Matches Until 6pm Today",
+            "excerpt": "Supporters have until 6pm today to buy discounted tickets.",
+            "source_kind": "article",
+        }
+        self.assertTrue(is_expired_today_deadline(article, now))
+
+    def test_machine_same_day_deadline_is_retained_before_local_deadline(self) -> None:
+        local = ZoneInfo("Europe/London")
+        now = datetime(2026, 8, 15, 17, 30, tzinfo=local).astimezone(timezone.utc)
+        article = {
+            "title": "Early Bird Tickets Available for Rochdale Hornets Matches Until 6pm Today",
+            "excerpt": "Supporters have until 6pm today to buy discounted tickets.",
+            "source_kind": "article",
+        }
+        self.assertFalse(is_expired_today_deadline(article, now))
+
+    def test_editorial_same_day_deadline_story_is_not_auto_expired(self) -> None:
+        local = ZoneInfo("Europe/London")
+        now = datetime(2026, 8, 15, 21, 0, tzinfo=local).astimezone(timezone.utc)
+        article = {
+            "title": "Council consultation closes at 6pm today",
+            "excerpt": "Our explainer covers what happens after the deadline.",
+            "source_kind": "editorial",
+            "manual_article": True,
+        }
+        self.assertFalse(is_expired_today_deadline(article, now))
 
 
 if __name__ == "__main__":
