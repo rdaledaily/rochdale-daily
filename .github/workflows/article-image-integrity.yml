@@ -1,0 +1,105 @@
+name: Repair article card images
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/article-image-integrity.yml'
+      - 'articles.json'
+      - 'manual_articles.json'
+      - 'manual_articles.d/**'
+      - 'scraper/ensure_article_images.py'
+      - 'assets/img/cards/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-site-writer
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install image tooling
+        run: python -m pip install --disable-pip-version-check 'Pillow>=10,<13'
+
+      - name: Enforce cards-only images for every published article
+        run: python scraper/ensure_article_images.py
+
+      - name: Rebuild generated article pages
+        run: |
+          if [ -f scraper/generate_pages.py ]; then
+            python scraper/generate_pages.py
+          fi
+
+      - name: Verify cards-only image contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rows = json.loads(Path('articles.json').read_text(encoding='utf-8'))
+          bad = []
+          missing = []
+          for article in rows:
+              if not isinstance(article, dict) or str(article.get('status') or 'published').lower() != 'published':
+                  continue
+              image = str(article.get('image_url') or article.get('img') or '').replace('\\', '/').lstrip('/')
+              if not image.startswith('assets/img/cards/'):
+                  bad.append((article.get('slug'), image))
+                  continue
+              if not Path(image).is_file():
+                  missing.append((article.get('slug'), image))
+          if bad:
+              raise SystemExit(f'Non-cards article images remain: {bad[:20]}')
+          if missing:
+              raise SystemExit(f'Missing cards-folder article images remain: {missing[:20]}')
+          print('Cards-only article image policy passed.')
+          PY
+
+      - name: Commit repaired feed, pages and cards
+        run: |
+          git config user.name 'Rochdale Daily Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add articles.json image_coverage_report.json assets/img/cards articles
+          if git diff --cached --quiet; then
+            echo 'Article image state already compliant.'
+            exit 0
+          fi
+          git commit -m 'Normalise published article card images'
+          if git push origin HEAD:main; then
+            exit 0
+          fi
+
+          # Another publishing job may have won the race. Rebuild once against
+          # the newest main rather than rebasing generated files and risking
+          # stale article output.
+          git fetch origin main
+          git reset --hard origin/main
+          git clean -fd
+          python scraper/ensure_article_images.py
+          if [ -f scraper/generate_pages.py ]; then python scraper/generate_pages.py; fi
+          git add articles.json image_coverage_report.json assets/img/cards articles
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'Normalise published article card images (fresh rebuild)'
+          git push origin HEAD:main
