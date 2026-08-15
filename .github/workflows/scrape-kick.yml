@@ -16,6 +16,7 @@ permissions:
 # image-repair or other maintenance work could previously cancel this scrape
 # before a runner was even assigned. Publication itself remains race-safe via
 # publish_newsroom_snapshot.sh if main moves while this job is running.
+# Manual kick: 2026-08-15T13:04+01:00
 concurrency:
   group: rd-immediate-news-writer
   cancel-in-progress: false
