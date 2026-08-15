@@ -21,6 +21,19 @@ START = "<!-- STATIC_LATEST_START -->"
 END = "<!-- STATIC_LATEST_END -->"
 MAX_STORIES = 6
 
+# Keep the crawler-facing Latest block aligned with the newspaper-quality rules
+# used by Google News and the front-page freshness guard. Machine-discovered
+# service endpoints remain useful elsewhere on the site, but they should not
+# displace journalism in the six static links search engines see first.
+UTILITY_TITLE_PATTERNS = (
+    re.compile(r"\blive (?:bus|tram|train) departures?\b", re.I),
+    re.compile(r"\bcontact (?:details|information)\b", re.I),
+)
+UTILITY_URL_PATTERNS = (
+    re.compile(r"/live-departures/", re.I),
+    re.compile(r"/contact-us/[^?#]*(?:contact|details)", re.I),
+)
+
 
 def parse_dt(value: object) -> datetime:
     text = str(value or "").strip()
@@ -35,6 +48,25 @@ def parse_dt(value: object) -> datetime:
     return dt.astimezone(timezone.utc)
 
 
+def is_utility_not_news(row: dict) -> bool:
+    """Return True for obvious machine-discovered service/utility endpoints.
+
+    Manual/editorial work is always exempt: an editor may legitimately write a
+    news story about a service or contact change, and that judgement must outrank
+    an automated title/URL heuristic.
+    """
+    if row.get("manual_article") is True or str(row.get("source_kind") or "").lower() == "editorial":
+        return False
+    title = str(row.get("title") or "")
+    urls = [str(row.get("source_url") or "")]
+    raw_urls = row.get("source_urls") or []
+    if isinstance(raw_urls, list):
+        urls.extend(str(url) for url in raw_urls)
+    return any(pattern.search(title) for pattern in UTILITY_TITLE_PATTERNS) or any(
+        pattern.search(url) for url in urls for pattern in UTILITY_URL_PATTERNS
+    )
+
+
 def eligible(row: object) -> bool:
     if not isinstance(row, dict):
         return False
@@ -47,6 +79,8 @@ def eligible(row: object) -> bool:
     # What's On has its own dedicated discovery surface. Keep the static Latest
     # fallback concentrated on journalism rather than ticket/event inventory.
     if str(row.get("category") or "").strip().lower() in {"event", "events", "what's on", "whats-on"}:
+        return False
+    if is_utility_not_news(row):
         return False
     published = parse_dt(row.get("first_published_at") or row.get("published_at"))
     return published <= datetime.now(timezone.utc)
