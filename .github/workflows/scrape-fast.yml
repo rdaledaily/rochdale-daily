@@ -35,8 +35,13 @@ jobs:
       AI_REWRITE_REQUIRED: "false"
       MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
+      # Use the previous week only as a lower-page reservoir when the genuinely
+      # fresh pool is small. Ranking still puts current reporting first, while
+      # scraper health separately enforces the 14-hour freshness target below.
+      # This avoids a nine-card homepage on quiet news cycles without allowing
+      # older material to masquerade as proof that the newsroom is fresh.
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "2"
+      FRONTPAGE_FALLBACK_DAYS: "7"
       FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
       MAX_AI_ARTICLES_PER_RUN: "24"
@@ -137,8 +142,11 @@ jobs:
       FACEBOOK_EVENTS_MAX: "18"
       OPENAI_MODEL: "gpt-4o-mini"
       MAX_NEWS_AGE_HOURS: "72"
+      # Deep discovery uses the same presentation rule as the fast lane: old
+      # stories may fill lower homepage slots for utility/internal linking, but
+      # they do not satisfy the independent newsroom freshness health check.
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "2"
+      FRONTPAGE_FALLBACK_DAYS: "7"
       FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
       MAX_AI_ARTICLES_PER_RUN: "40"
