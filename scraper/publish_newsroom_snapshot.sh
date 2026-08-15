@@ -5,7 +5,7 @@ branch="${GITHUB_REF_NAME:-main}"
 message="${COMMIT_MESSAGE:-Update Rochdale Daily newsroom}"
 
 stage_newsroom() {
-  git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
+  git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
     google_news_resolution_report.json google_news_resolutions.json \
     image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
     articles sitemap.xml news-sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html 2>/dev/null || true
@@ -14,6 +14,7 @@ stage_newsroom() {
 rebuild_from_merged_feed() {
   python -m json.tool articles.json > /dev/null
   python scraper/article_gate.py articles.json
+  python scraper/content_hygiene.py --fix
   python scraper/ensure_article_images.py
   python scraper/repair_generated_article_images.py
   python scraper/repair_generated_with_commons.py
@@ -21,6 +22,8 @@ rebuild_from_merged_feed() {
   python scraper/generate_ward_pages.py
   python scraper/generate_newspaper_pages.py
   python scraper/generate_news_sitemap.py
+  python scraper/content_hygiene.py --fix
+  python scraper/content_hygiene.py
   python scraper/check_scraper_health.py
 }
 
