@@ -14,12 +14,26 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
 FRONTPAGE = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
 FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
+
+# Routine service endpoints are useful elsewhere on the site, but should not become
+# the homepage lead merely because they were scraped more recently than journalism.
+# Manual/editorial records are exempt because an editor may legitimately write a
+# news story about a service change that uses the same words.
+UTILITY_TITLE_PATTERNS = (
+    re.compile(r"\blive (?:bus|tram|train) departures?\b", re.I),
+    re.compile(r"\bcontact (?:details|information)\b", re.I),
+)
+UTILITY_URL_PATTERNS = (
+    re.compile(r"/live-departures/", re.I),
+    re.compile(r"/contact-us/[^?#]*(?:contact|details)", re.I),
+)
 
 
 def parse_dt(value: Any) -> datetime | None:
@@ -54,6 +68,30 @@ def active_pin(article: dict[str, Any], now: datetime) -> bool:
     return until is None or until >= now
 
 
+def is_utility_not_lead(article: dict[str, Any]) -> bool:
+    """Identify machine-discovered service pages that should not lead the paper."""
+    if article.get("manual_article") is True or str(article.get("source_kind") or "").lower() == "editorial":
+        return False
+    title = str(article.get("title") or "")
+    urls = [str(article.get("source_url") or "")]
+    raw_urls = article.get("source_urls") or []
+    if isinstance(raw_urls, list):
+        urls.extend(str(url) for url in raw_urls)
+    return any(pattern.search(title) for pattern in UTILITY_TITLE_PATTERNS) or any(
+        pattern.search(url) for url in urls for pattern in UTILITY_URL_PATTERNS
+    )
+
+
+def is_recent_live_update(article: dict[str, Any], cutoff: datetime) -> bool:
+    """Keep genuinely active live/breaking coverage visible even if first published earlier."""
+    active = bool(
+        article.get("live_story") is True
+        or article.get("breaking_news") is True
+        or article.get("is_ongoing") is True
+    )
+    return active and latest_update(article) >= cutoff and not is_utility_not_lead(article)
+
+
 def main() -> None:
     payload = json.loads(FRONTPAGE.read_text(encoding="utf-8"))
     articles = payload.get("articles")
@@ -75,10 +113,18 @@ def main() -> None:
         and str(a.get("id") or a.get("slug") or id(a)) not in pin_ids
     ]
     fresh = [a for a in remaining if (first_published(a) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff]
-    old = [a for a in remaining if a not in fresh]
+    fresh_substantive = [a for a in fresh if not is_utility_not_lead(a)]
+    fresh_utility = [a for a in fresh if is_utility_not_lead(a)]
+
+    fresh_ids = {str(a.get("id") or a.get("slug") or id(a)) for a in fresh}
+    older = [a for a in remaining if str(a.get("id") or a.get("slug") or id(a)) not in fresh_ids]
+    recent_live = [a for a in older if is_recent_live_update(a, cutoff)]
+    live_ids = {str(a.get("id") or a.get("slug") or id(a)) for a in recent_live}
+    old = [a for a in older if str(a.get("id") or a.get("slug") or id(a)) not in live_ids]
 
     pins.sort(key=latest_update, reverse=True)
-    ordered = pins + fresh + old
+    recent_live.sort(key=latest_update, reverse=True)
+    ordered = pins + fresh_substantive + recent_live + fresh_utility + old
 
     for index, article in enumerate(ordered):
         article["frontpage_rank"] = index
@@ -90,6 +136,9 @@ def main() -> None:
         "fresh_hours": FRESH_HOURS,
         "active_editor_pins": len(pins),
         "fresh_articles": len(fresh),
+        "fresh_substantive_articles": len(fresh_substantive),
+        "recent_live_updates": len(recent_live),
+        "fresh_utility_articles": len(fresh_utility),
         "fallback_articles": len(old),
         "enforced_at": now.isoformat().replace("+00:00", "Z"),
     }
@@ -98,7 +147,9 @@ def main() -> None:
     lead = ordered[0].get("title") if ordered else "(none)"
     print(
         f"Frontpage freshness enforced: {len(pins)} active pin(s), "
-        f"{len(fresh)} <= {FRESH_HOURS}h, {len(old)} fallback. Lead: {lead}"
+        f"{len(fresh_substantive)} substantive <= {FRESH_HOURS}h, "
+        f"{len(recent_live)} active live update(s), {len(fresh_utility)} utility, "
+        f"{len(old)} fallback. Lead: {lead}"
     )
 
 
