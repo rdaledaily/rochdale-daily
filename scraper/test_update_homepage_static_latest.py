@@ -45,6 +45,20 @@ class StaticLatestEligibilityTests(unittest.TestCase):
         self.assertFalse(latest.is_utility_not_news(row))
         self.assertTrue(latest.eligible(row))
 
+    def test_inline_masthead_logo_is_externalised(self):
+        html = (
+            '<a class="brand"><img class="brand-logo" '
+            'src="data:image/png;base64,AAAAABBBBB" alt="Rochdale Daily"></a>'
+        )
+        updated = latest.externalise_inline_masthead_logo(html)
+        self.assertIn('src="/assets/img/logo.png"', updated)
+        self.assertNotIn('data:image/png;base64', updated)
+        self.assertIn('alt="Rochdale Daily"', updated)
+
+    def test_existing_static_masthead_logo_is_unchanged(self):
+        html = '<img class="brand-logo" src="/assets/img/logo.png" alt="Rochdale Daily">'
+        self.assertEqual(latest.externalise_inline_masthead_logo(html), html)
+
 
 if __name__ == "__main__":
     unittest.main()
