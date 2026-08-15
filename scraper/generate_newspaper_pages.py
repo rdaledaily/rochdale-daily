@@ -7,8 +7,9 @@ front-page editorial behaviour before delegating to generate_pages.py:
 * manual/editorial stories have no word-count gate once they contain story text;
 * minimum useful length varies by story type instead of one blanket threshold;
 * source-led fallbacks are judged on their actual text, not rejected by route;
-* the last 24 hours is the main news pool;
-* older material is used only when needed to reach the minimum front-page size;
+* the configured live-news freshness window is enforced in the generator itself;
+* older material remains in archive/category/area pages, not the live homepage;
+* explicitly time-limited editor pins and genuinely updated live coverage survive;
 * freshness bands outrank category prestige and stale featured flags;
 * related stories favour the same locality and subject, not category alone.
 """
@@ -16,6 +17,7 @@ from __future__ import annotations
 
 from collections import Counter
 from datetime import datetime, timedelta, timezone
+import os
 import re
 
 import frontpage_pipeline as fp
@@ -36,6 +38,7 @@ CATEGORY_MIN_WORDS = {
     "sport": 75,
 }
 DEFAULT_MIN_WORDS = 75
+FRONTPAGE_FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
 
 # Common headline glue is deliberately ignored when comparing topics. The
 # remaining overlap tends to capture useful local entities, roads, schools,
@@ -114,6 +117,39 @@ def _newsroom_rank(article, now: datetime):
     # sit above genuinely new reporting forever. Freshness always comes first.
     pinned = article.get("featured") is True
     return (freshness, pinned, importance, first, latest)
+
+
+def _keep_on_live_homepage(article, reference: datetime, cutoff: datetime) -> bool:
+    """Apply the final live-homepage age rule inside the page generator.
+
+    The separate freshness guard is useful defence in depth, but it previously
+    ran before this generator and could be undone when frontpage.json was written
+    again. The generator therefore owns the same final invariant: ordinary news
+    older than the configured window stays in the archive, while a deliberately
+    time-limited editor pin or genuinely updated live/breaking story can remain.
+    """
+    first = fp._frontpage_first_published(article)
+    if first is not None and first >= cutoff:
+        return True
+
+    until = fp.parse_datetime(article.get("frontpage_until"))
+    if article.get("featured") is True and until is not None and until >= reference:
+        return True
+
+    active_live = bool(
+        article.get("live_story") is True
+        or article.get("breaking_news") is True
+        or article.get("is_ongoing") is True
+    )
+    if not active_live:
+        return False
+
+    latest = fp.parse_datetime(
+        article.get("last_updated_at")
+        or article.get("scraped_at")
+        or article.get("published_at")
+    )
+    return latest is not None and latest >= cutoff
 
 
 def _normalised_area(article) -> str:
@@ -251,7 +287,14 @@ def _newsroom_select_frontpage(articles, now=None):
         fp.DEFAULT_CATEGORY_MINIMUMS,
     )
     arranged = fp.arrange_frontpage(capped, reference)
-    fresh_cutoff = reference - timedelta(hours=24)
+
+    homepage_cutoff = reference - timedelta(hours=FRONTPAGE_FRESH_HOURS)
+    arranged = [
+        item for item in arranged
+        if _keep_on_live_homepage(item, reference, homepage_cutoff)
+    ]
+
+    fresh_24h_cutoff = reference - timedelta(hours=24)
     diagnostics = dict(diagnostics)
     diagnostics.update({
         "pool_size": len(pool),
@@ -259,9 +302,14 @@ def _newsroom_select_frontpage(articles, now=None):
         "fallback_stories_used": max(0, len(pool) - len(primary)),
         "selection_window_days": fp.PRIMARY_DAYS if len(pool) == len(primary) else fp.FALLBACK_DAYS,
         "frontpage_count": len(arranged),
+        "homepage_freshness_hours": FRONTPAGE_FRESH_HOURS,
         "fresh_under_24h": sum(
             1 for item in arranged
-            if (fp._frontpage_first_published(item) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff
+            if (fp._frontpage_first_published(item) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_24h_cutoff
+        ),
+        "fresh_under_homepage_window": sum(
+            1 for item in arranged
+            if (fp._frontpage_first_published(item) or datetime.min.replace(tzinfo=timezone.utc)) >= homepage_cutoff
         ),
         "short_briefs_selected": sum(
             1 for item in arranged if fp.editorial_word_count(item) < 200
