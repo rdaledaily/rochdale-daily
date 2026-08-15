@@ -16,7 +16,7 @@ from __future__ import annotations
 import html
 import json
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,15 +24,9 @@ INDEX = ROOT / "index.html"
 ARTICLES = ROOT / "articles.json"
 START = "<!-- STATIC_LATEST_START -->"
 END = "<!-- STATIC_LATEST_END -->"
-# Mirror the newspaper's current minimum front-page depth for crawlers instead
-# of exposing only six links. Human readers still get the live/filterable grid,
-# while search engines and no-JS readers receive a useful local-news index.
 MAX_STORIES = 12
+SPORT_PREVIEW_MAX_HOURS = 8
 
-# Keep the crawler-facing Latest block aligned with the newspaper-quality rules
-# used by Google News and the front-page freshness guard. Machine-discovered
-# service endpoints remain useful elsewhere on the site, but they should not
-# displace journalism in the static links search engines see first.
 UTILITY_TITLE_PATTERNS = (
     re.compile(r"\blive (?:bus|tram|train) departures?\b", re.I),
     re.compile(r"\bcontact (?:details|information)\b", re.I),
@@ -41,10 +35,11 @@ UTILITY_URL_PATTERNS = (
     re.compile(r"/live-departures/", re.I),
     re.compile(r"/contact-us/[^?#]*(?:contact|details)", re.I),
 )
+SPORT_PREVIEW_PATTERN = re.compile(
+    r"\b(?:today|this afternoon|this evening|kick[ -]?off|fixture|faces?|match preview)\b",
+    re.I,
+)
 
-# Older homepage revisions embedded the full PNG as a data URI. Match only the
-# masthead image's src attribute, never arbitrary data URIs elsewhere on the
-# page, and replace it with the canonical asset used by generated article pages.
 INLINE_MASTHEAD_LOGO_RE = re.compile(
     r'(<img\s+class="brand-logo"\s+src=")data:image/(?:png|webp|jpeg);base64,[^"]+("[^>]*>)',
     re.I,
@@ -75,12 +70,7 @@ def parse_dt(value: object) -> datetime:
 
 
 def is_utility_not_news(row: dict) -> bool:
-    """Return True for obvious machine-discovered service/utility endpoints.
-
-    Manual/editorial work is always exempt: an editor may legitimately write a
-    news story about a service or contact change, and that judgement must outrank
-    an automated title/URL heuristic.
-    """
+    """Return True for obvious machine-discovered service/utility endpoints."""
     if row.get("manual_article") is True or str(row.get("source_kind") or "").lower() == "editorial":
         return False
     title = str(row.get("title") or "")
@@ -93,6 +83,28 @@ def is_utility_not_news(row: dict) -> bool:
     )
 
 
+def is_expired_time_sensitive_preview(row: dict, now: datetime | None = None) -> bool:
+    """Keep stale pre-match sports previews out of crawler-facing Latest links."""
+    if row.get("manual_article") is True or str(row.get("source_kind") or "").lower() == "editorial":
+        return False
+    if str(row.get("category") or "").strip().lower() not in {"sport", "sports"}:
+        return False
+
+    text = " ".join(str(row.get(key) or "") for key in ("title", "excerpt", "summary"))
+    if not SPORT_PREVIEW_PATTERN.search(text):
+        return False
+
+    now = now or datetime.now(timezone.utc)
+    event_start = parse_dt(row.get("event_start_at"))
+    if event_start.year > 1970:
+        return now >= event_start + timedelta(hours=3)
+
+    published = parse_dt(row.get("first_published_at") or row.get("published_at"))
+    if published.year <= 1970:
+        return False
+    return now >= published + timedelta(hours=SPORT_PREVIEW_MAX_HOURS)
+
+
 def eligible(row: object) -> bool:
     if not isinstance(row, dict):
         return False
@@ -102,11 +114,11 @@ def eligible(row: object) -> bool:
         return False
     if not str(row.get("slug") or "").strip() or not str(row.get("title") or "").strip():
         return False
-    # What's On has its own dedicated discovery surface. Keep the static Latest
-    # fallback concentrated on journalism rather than ticket/event inventory.
     if str(row.get("category") or "").strip().lower() in {"event", "events", "what's on", "whats-on"}:
         return False
     if is_utility_not_news(row):
+        return False
+    if is_expired_time_sensitive_preview(row):
         return False
     published = parse_dt(row.get("first_published_at") or row.get("published_at"))
     return published <= datetime.now(timezone.utc)
@@ -117,12 +129,6 @@ def clean(value: object) -> str:
 
 
 def local_card_image(value: object) -> str:
-    """Return a real local article-card path, or an empty string.
-
-    Do not invent a generic fallback here. The cards-only publishing invariant is
-    responsible for assigning story images; rendering a made-up path in the
-    crawlable homepage would turn an upstream image problem into a public 404.
-    """
     image = clean(value).lstrip("/")
     if not image.startswith("assets/img/cards/"):
         return ""
