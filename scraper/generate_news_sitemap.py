@@ -2,13 +2,19 @@
 """Generate a Google News sitemap for recently published Rochdale Daily stories.
 
 Google News sitemaps should contain only articles published in the last two days.
-This generator is deliberately deterministic: it uses the original published_at
+This generator is deliberately deterministic: it uses the original publication
 value and emits no build timestamp, avoiding unnecessary repository churn.
+
+The live archive can occasionally contain two URLs for the same story while a
+manual article is replacing a scraped version. Google News should never be asked
+to choose between duplicate headlines, so this generator collapses exact
+normalised-headline duplicates and prefers the editorial/manual record.
 """
 
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -47,9 +53,28 @@ def format_w3c(value: datetime) -> str:
     return value.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def title_fingerprint(value: object) -> str:
+    """Return a conservative exact-headline key for duplicate suppression.
+
+    Punctuation/case differences are ignored, but wording is not. Very short
+    generic headlines are deliberately not used as duplicate keys because two
+    unrelated briefs can legitimately share labels such as "Council update".
+    """
+    text = re.sub(r"[^a-z0-9]+", " ", str(value or "").casefold()).strip()
+    text = re.sub(r"\s+", " ", text)
+    return text if len(text) >= 24 else ""
+
+
+def editorial_priority(article: dict) -> int:
+    return int(
+        article.get("manual_article") is True
+        or str(article.get("source_kind") or "").lower() == "editorial"
+    )
+
+
 def eligible_articles(rows: list[dict], now: datetime) -> list[tuple[datetime, dict]]:
     cutoff = now - NEWS_WINDOW
-    selected: dict[str, tuple[datetime, dict]] = {}
+    by_slug: dict[str, tuple[datetime, dict]] = {}
 
     for article in rows:
         if not isinstance(article, dict):
@@ -65,19 +90,44 @@ def eligible_articles(rows: list[dict], now: datetime) -> list[tuple[datetime, d
 
         slug = str(article.get("slug") or "").strip().strip("/")
         title = str(article.get("title") or "").strip()
-        published = parse_datetime(article.get("published_at"))
+        # Google News wants the article's original publication time. Pipelines
+        # may update published_at while preserving first_published_at.
+        published = parse_datetime(article.get("first_published_at") or article.get("published_at"))
         if not slug or not title or published is None:
             continue
         if published < cutoff or published > now + timedelta(minutes=5):
             continue
 
-        # One canonical entry per slug, preferring the newest original publication
-        # timestamp if malformed duplicate rows ever reach the feed.
-        previous = selected.get(slug)
+        # One canonical entry per slug, preferring the newest original
+        # publication timestamp if malformed duplicate rows ever reach the feed.
+        previous = by_slug.get(slug)
         if previous is None or published > previous[0]:
-            selected[slug] = (published, article)
+            by_slug[slug] = (published, article)
 
-    return sorted(selected.values(), key=lambda item: item[0], reverse=True)[:MAX_NEWS_URLS]
+    # A manual story can temporarily coexist with the scraped story it replaces.
+    # Do not expose both URLs to Google News. Exact normalised headlines are a
+    # deliberately conservative signal: unlike fuzzy matching this cannot merge
+    # distinct stories that merely discuss the same person or incident.
+    by_headline: dict[str, tuple[datetime, dict]] = {}
+    headline_free: list[tuple[datetime, dict]] = []
+    for item in by_slug.values():
+        published, article = item
+        fingerprint = title_fingerprint(article.get("title"))
+        if not fingerprint:
+            headline_free.append(item)
+            continue
+        previous = by_headline.get(fingerprint)
+        if previous is None:
+            by_headline[fingerprint] = item
+            continue
+        previous_published, previous_article = previous
+        candidate_rank = (editorial_priority(article), published)
+        previous_rank = (editorial_priority(previous_article), previous_published)
+        if candidate_rank > previous_rank:
+            by_headline[fingerprint] = item
+
+    selected = list(by_headline.values()) + headline_free
+    return sorted(selected, key=lambda item: item[0], reverse=True)[:MAX_NEWS_URLS]
 
 
 def build_sitemap(rows: list[dict], now: datetime | None = None) -> ET.ElementTree:
