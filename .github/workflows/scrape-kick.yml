@@ -12,6 +12,8 @@ permissions:
   contents: write
   actions: write
 
+# This workflow shares the same writer lane as scheduled fast/deep newsroom
+# runs. Only one canonical newsroom snapshot may rebuild/push main at a time.
 concurrency:
   group: rd-fast-news-writer
   cancel-in-progress: false
@@ -106,15 +108,18 @@ jobs:
           python scraper/repair_generated_article_images.py
           python scraper/repair_generated_with_commons.py
 
-      - name: Validate, enforce fresh homepage, generate site and verify health
+      - name: Validate, generate, assert final freshness and verify health
         timeout-minutes: 10
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/repair_merged_bodies.py
-          python scraper/enforce_frontpage_freshness.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          # Page generation rebuilds frontpage.json, so freshness must be the
+          # final homepage mutation before sitemap/health validation.
+          python scraper/enforce_frontpage_freshness.py
+          python scraper/enforce_live_homepage_window.py
           python scraper/generate_news_sitemap.py
           python scraper/content_hygiene.py --fix
           python scraper/content_hygiene.py
