@@ -45,6 +45,7 @@ jobs:
       SLOW_DOMAIN_BENCH_HOURS: "24"
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
+      CSS_SOURCE_PATH: assets/css/article-inline.css
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
       SOCIAL_CONTEXT_ENABLED: "true"
       FACEBOOK_COMMENTS_ENABLED: "true"
@@ -167,6 +168,7 @@ jobs:
       GOOGLE_NEWS_RESOLVE_BUDGET_SECONDS: "300"
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
+      CSS_SOURCE_PATH: assets/css/article-inline.css
       COMMIT_MESSAGE: "Update Rochdale Daily deep discovery"
 
     steps:
