@@ -8,9 +8,14 @@ on:
 permissions:
   contents: write
 
+# Privacy checks should run promptly after every main update, but they should
+# not occupy the shared generated-site writer lane when there is nothing to
+# scrub. A newer push supersedes an older check; if a scrub does need to write,
+# the existing fetch/rebase/push retry loop below resolves a concurrent main
+# update safely.
 concurrency:
-  group: rd-site-writer
-  cancel-in-progress: false
+  group: rd-privacy-scrub
+  cancel-in-progress: true
 
 jobs:
   scrub:
