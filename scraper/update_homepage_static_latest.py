@@ -5,6 +5,11 @@ The homepage JavaScript still replaces this fallback with the live/filterable fe
 for human readers. This committed fallback exists so search engines, link previews,
 text browsers and readers with failed/disabled JavaScript can discover recent
 journalism directly from the homepage.
+
+The same lightweight refresh also removes any legacy inline base64 masthead logo.
+The real logo already exists as a cacheable static asset, so embedding roughly
+140 KB of PNG data inside the HTML makes every homepage response unnecessarily
+large and prevents the browser from caching the logo independently.
 """
 from __future__ import annotations
 
@@ -36,6 +41,24 @@ UTILITY_URL_PATTERNS = (
     re.compile(r"/live-departures/", re.I),
     re.compile(r"/contact-us/[^?#]*(?:contact|details)", re.I),
 )
+
+# Older homepage revisions embedded the full PNG as a data URI. Match only the
+# masthead image's src attribute, never arbitrary data URIs elsewhere on the
+# page, and replace it with the canonical asset used by generated article pages.
+INLINE_MASTHEAD_LOGO_RE = re.compile(
+    r'(<img\s+class="brand-logo"\s+src=")data:image/(?:png|webp|jpeg);base64,[^"]+("[^>]*>)',
+    re.I,
+)
+MASTHEAD_LOGO_PATH = "/assets/img/logo.png"
+
+
+def externalise_inline_masthead_logo(text: str) -> str:
+    """Replace a legacy inline masthead image with the cacheable static logo."""
+    return INLINE_MASTHEAD_LOGO_RE.sub(
+        lambda match: f'{match.group(1)}{MASTHEAD_LOGO_PATH}{match.group(2)}',
+        text,
+        count=1,
+    )
 
 
 def parse_dt(value: object) -> datetime:
@@ -184,11 +207,13 @@ def main() -> int:
             raise SystemExit("Homepage news-grid placeholder not found; refusing a broad HTML rewrite")
         updated = text.replace(needle, replacement, 1)
 
+    updated = externalise_inline_masthead_logo(updated)
+
     if updated != text:
         INDEX.write_text(updated, encoding="utf-8")
-        print(f"Updated crawlable homepage Latest fallback with {len(chosen)} stories.")
+        print(f"Updated crawlable homepage Latest fallback with {len(chosen)} stories and normalised masthead asset.")
     else:
-        print("Homepage static Latest fallback already current.")
+        print("Homepage static Latest fallback and masthead asset already current.")
     return 0
 
 
