@@ -15,7 +15,7 @@ concurrency:
 jobs:
   backfill-images:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     env:
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
@@ -53,21 +53,32 @@ jobs:
           python scraper/article_gate.py articles.json
           python scraper/generate_pages.py
           python scraper/generate_archive.py
-      - name: Commit image backfill
+      - name: Commit image backfill without rebasing generated files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards articles sitemap.xml index.html
+          stage_backfill() {
+            git add articles.json image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards articles sitemap.xml index.html
+          }
+          stage_backfill
           if git diff --cached --quiet; then echo "Article image backfill already satisfied."; exit 0; fi
           git commit -m "Backfill real article images"
-          for attempt in 1 2 3 4 5; do
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
-            git reset --hard HEAD
-            git clean -fd
+          if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+          for attempt in 1 2 3; do
             git fetch origin "${GITHUB_REF_NAME}"
-            if ! git rebase "origin/${GITHUB_REF_NAME}"; then
-              git rebase --abort || true
-              exit 1
-            fi
+            git reset --hard "origin/${GITHUB_REF_NAME}"
+            git clean -fd
+            python scraper/ensure_article_images.py --articles articles.json
+            python scraper/repair_generated_article_images.py --articles articles.json
+            python scraper/repair_generated_with_commons.py --articles articles.json
+            python scraper/frontpage_pipeline.py
+            python -m json.tool articles.json > /dev/null
+            python scraper/article_gate.py articles.json
+            python scraper/generate_pages.py
+            python scraper/generate_archive.py
+            stage_backfill
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Backfill real article images (race-safe rebuild)"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
           done
           exit 1
