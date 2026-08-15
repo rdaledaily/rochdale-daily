@@ -26,13 +26,13 @@ jobs:
     timeout-minutes: 30
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
-      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+      # X/Facebook are deliberately omitted from the half-hour lane while their
+      # credentials are invalid. Indexed fallbacks remain active, and the deep
+      # lane below continues testing the integrations so they can resume when
+      # credentials are repaired.
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "false"
-      # Fast lane is for genuinely current news. The permanent archive is not
-      # pruned by this value; it limits discovery only.
       MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
       FRONTPAGE_PRIMARY_DAYS: "1"
@@ -54,8 +54,6 @@ jobs:
       SOCIAL_MAX_PUBLIC_REACTIONS: "12"
       SOCIAL_MAX_OFFICIAL_UPDATES: "4"
       X_RECENT_SEARCH_MAX: "100"
-      # Keep every query category represented (including fire/environment),
-      # but make each source shallow. Broad/deep crawling belongs below.
       DISCOVERY_LINKS_PER_SOURCE: "14"
       RSS_ITEMS_PER_SOURCE: "45"
       GOOGLE_SEARCH_QUERY_LIMIT: "68"
@@ -68,8 +66,11 @@ jobs:
       MAX_SELECTED_PER_CATEGORY: "24"
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
-      MIN_LIVE_STORIES: "20"
-      SCRAPER_HEALTH_FRESH_HOURS: "24"
+      # A short 14-hour hyperlocal window should be judged on fresh output, not
+      # padded with older stories to hit a historical 20-story target.
+      MIN_LIVE_STORIES: "8"
+      MIN_FRESH_FRONTPAGE_STORIES: "6"
+      SCRAPER_HEALTH_FRESH_HOURS: "14"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
       BROWSER_RENDER_ENABLED: "false"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "false"
@@ -108,9 +109,6 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
       - name: Generate site with newsroom freshness rules
-        # Generation now rebuilds ward pages, the full newspaper, Google News
-        # sitemap and health report. Ten minutes is an execution ceiling only;
-        # every editorial, image and freshness validation still runs.
         timeout-minutes: 10
         run: |
           python scraper/repair_merged_bodies.py
@@ -129,12 +127,6 @@ jobs:
   deep-browser:
     if: github.event.schedule == '10 */2 * * *'
     runs-on: ubuntu-latest
-    # Deep discovery legitimately has a much larger work envelope than the
-    # half-hour fast lane: up to 27 minutes discovery + 10 minutes image work,
-    # then full validation/site generation and, when main has moved, a complete
-    # race-safe rebuild before push. The previous 48-minute job ceiling could
-    # kill an otherwise healthy validated run during that final recovery. This
-    # changes execution capacity only; no editorial or validation gate is relaxed.
     timeout-minutes: 70
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -144,8 +136,6 @@ jobs:
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
       OPENAI_MODEL: "gpt-4o-mini"
-      # Deep discovery may collect older context for archive/merging, while the
-      # homepage boundary independently enforces the 14-hour fresh-news order.
       MAX_NEWS_AGE_HOURS: "72"
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "2"
