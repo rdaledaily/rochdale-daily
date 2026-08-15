@@ -14,6 +14,7 @@ on:
       - "scraper/ensure_article_images.py"
       - "scraper/repair_generated_article_images.py"
       - "scraper/repair_generated_with_commons.py"
+      - "scraper/enforce_live_homepage_window.py"
       - ".github/workflows/repair-placeholder-images.yml"
 
 permissions:
@@ -32,6 +33,7 @@ jobs:
     env:
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
+      FRONTPAGE_FRESH_HOURS: "14"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -95,6 +97,7 @@ jobs:
           python scraper/generate_archive.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          python scraper/enforce_live_homepage_window.py
       - name: Commit successful image repairs without rebasing generated files
         if: steps.newsroom_guard.outputs.run == 'true'
         run: |
@@ -113,6 +116,7 @@ jobs:
             python scraper/generate_archive.py
             python scraper/generate_ward_pages.py
             python scraper/generate_newspaper_pages.py
+            python scraper/enforce_live_homepage_window.py
           }
           stage_repair
           if git diff --cached --quiet; then echo "No image changes to commit."; exit 0; fi
