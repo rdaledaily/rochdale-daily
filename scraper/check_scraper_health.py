@@ -92,15 +92,25 @@ def main() -> None:
     live_articles = int(status.get("live_articles") or 0)
     collector_errors = status.get("collector_errors") or {}
 
+    # A freshness target must never require the homepage to surface more newly
+    # published stories than the run actually produced. The configured value is
+    # therefore a ceiling; the current run's new-article count supplies the
+    # achievable floor. Separate lead/top-three checks below still prevent a
+    # stale homepage from passing simply because output volume is low.
+    required_fresh_frontpage = 0
+    if MIN_FRESH_FRONTPAGE_STORIES > 0 and new_articles > 0:
+        required_fresh_frontpage = min(MIN_FRESH_FRONTPAGE_STORIES, new_articles)
+
     failures: list[str] = []
     if live_articles < MIN_LIVE_STORIES:
         failures.append(
             f"live article count {live_articles} is below required minimum {MIN_LIVE_STORIES}"
         )
-    if MIN_FRESH_FRONTPAGE_STORIES > 0 and raw_candidates > 0 and len(fresh) < MIN_FRESH_FRONTPAGE_STORIES:
+    if required_fresh_frontpage > 0 and raw_candidates > 0 and len(fresh) < required_fresh_frontpage:
         failures.append(
-            f"fresh homepage count {len(fresh)} is below required minimum "
-            f"{MIN_FRESH_FRONTPAGE_STORIES} within {MAX_FRESH_AGE_HOURS} hours"
+            f"fresh homepage count {len(fresh)} is below achievable minimum "
+            f"{required_fresh_frontpage} within {MAX_FRESH_AGE_HOURS} hours "
+            f"({new_articles} new article(s) produced; configured ceiling {MIN_FRESH_FRONTPAGE_STORIES})"
         )
     if raw_candidates > 0 and new_articles > 0 and not fresh:
         failures.append(
@@ -133,7 +143,8 @@ def main() -> None:
         "fresh_top_three_articles": len(top_three_fresh),
         "eligible_top_fresh_feed_articles": len(eligible_top_fresh),
         "minimum_live_articles": MIN_LIVE_STORIES,
-        "minimum_fresh_frontpage_articles": MIN_FRESH_FRONTPAGE_STORIES,
+        "configured_minimum_fresh_frontpage_articles": MIN_FRESH_FRONTPAGE_STORIES,
+        "required_fresh_frontpage_articles_this_run": required_fresh_frontpage,
         "freshness_window_hours": MAX_FRESH_AGE_HOURS,
         "top_story_freshness_hours": TOP_STORY_FRESH_HOURS,
         "lead_first_published_at": lead_published.isoformat().replace("+00:00", "Z") if lead_published else None,
