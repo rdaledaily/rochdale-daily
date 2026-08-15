@@ -108,9 +108,10 @@ jobs:
         timeout-minutes: 10
         run: |
           python scraper/repair_merged_bodies.py
-          python scraper/enforce_frontpage_freshness.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          python scraper/enforce_frontpage_freshness.py
+          python scraper/enforce_live_homepage_window.py
           python scraper/generate_news_sitemap.py
           python scraper/check_scraper_health.py
       - name: Refresh weather
@@ -201,9 +202,10 @@ jobs:
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
-          python scraper/enforce_frontpage_freshness.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
+          python scraper/enforce_frontpage_freshness.py
+          python scraper/enforce_live_homepage_window.py
           python scraper/generate_news_sitemap.py
           python scraper/check_scraper_health.py
       - name: Commit and push race-safe newsroom snapshot
