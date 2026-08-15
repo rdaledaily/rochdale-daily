@@ -17,7 +17,7 @@ jobs:
   fast-news:
     if: github.event_name == 'workflow_dispatch' || github.event.schedule == '5,35 * * * *'
     runs-on: ubuntu-latest
-    timeout-minutes: 24
+    timeout-minutes: 30
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
@@ -110,32 +110,13 @@ jobs:
         env:
           METOFFICE_API_KEY: ${{ secrets.METOFFICE_API_KEY }}
         run: python scraper/weather_forecast.py
-      - name: Commit and push
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
-            google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
-            articles sitemap.xml news-sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "${COMMIT_MESSAGE}"
-          for attempt in 1 2 3 4 5; do
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
-            git reset --hard HEAD
-            git clean -fd
-            git fetch origin "${GITHUB_REF_NAME}"
-            if ! git rebase "origin/${GITHUB_REF_NAME}"; then
-              git rebase --abort || true
-              exit 1
-            fi
-          done
-          exit 1
+      - name: Commit and push race-safe newsroom snapshot
+        run: bash scraper/publish_newsroom_snapshot.sh
 
   deep-browser:
     if: github.event.schedule == '10 */2 * * *'
     runs-on: ubuntu-latest
-    timeout-minutes: 42
+    timeout-minutes: 48
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
@@ -206,24 +187,5 @@ jobs:
           python scraper/generate_newspaper_pages.py
           python scraper/generate_news_sitemap.py
           python scraper/check_scraper_health.py
-      - name: Commit and push
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json slow_domains.json scraper_status.json scraper_health.json event_dates.json \
-            google_news_resolution_report.json google_news_resolutions.json \
-            image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
-            articles sitemap.xml news-sitemap.xml wards/ ward_areas.json council_votes.json index.html
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "${COMMIT_MESSAGE}"
-          for attempt in 1 2 3 4 5; do
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
-            git reset --hard HEAD
-            git clean -fd
-            git fetch origin "${GITHUB_REF_NAME}"
-            if ! git rebase "origin/${GITHUB_REF_NAME}"; then
-              git rebase --abort || true
-              exit 1
-            fi
-          done
-          exit 1
+      - name: Commit and push race-safe newsroom snapshot
+        run: bash scraper/publish_newsroom_snapshot.sh
