@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 # Fast, immediate and deep newsroom runs all generate the same canonical
 # articles/site snapshot. They must never rebuild and push that snapshot at the
@@ -31,10 +32,6 @@ jobs:
       AI_REWRITE_REQUIRED: "false"
       MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
-      # Fresh reporting must dominate the page, but a quiet local-news cycle
-      # should not leave the homepage visibly sparse. The 7-day window is used
-      # only as lower-page fallback; the independent 14-hour freshness health
-      # check still requires genuinely current journalism.
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "7"
       FRONTPAGE_MIN_ARTICLES: "12"
@@ -122,7 +119,13 @@ jobs:
           METOFFICE_API_KEY: ${{ secrets.METOFFICE_API_KEY }}
         run: python scraper/weather_forecast.py
       - name: Commit and push race-safe newsroom snapshot
+        id: publish
         run: bash scraper/publish_newsroom_snapshot.sh
+      - name: Deploy published newsroom snapshot
+        if: steps.publish.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref main
 
   deep-browser:
     if: github.event.schedule == '10 */2 * * *'
@@ -204,4 +207,10 @@ jobs:
           python scraper/generate_news_sitemap.py
           python scraper/check_scraper_health.py
       - name: Commit and push race-safe newsroom snapshot
+        id: publish
         run: bash scraper/publish_newsroom_snapshot.sh
+      - name: Deploy published newsroom snapshot
+        if: steps.publish.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref main
