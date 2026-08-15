@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   schedule:
     # Fast news runs at :05 and :35. Refresh the crawlable archive/homepage
-    # shortly afterwards instead of every 10 minutes: bot-authored newsroom
-    # commits do not trigger downstream push workflows, so a scheduled healing
-    # pass is still required, but two runs per hour is sufficient and avoids
-    # unnecessary contention on the shared site-writer lock.
+    # shortly afterwards instead of every 10 minutes. This pass also dispatches
+    # the Pages deployment explicitly: commits made with GITHUB_TOKEN do not
+    # fire ordinary push workflows, so relying on deploy-pages.yml's push
+    # trigger left automated newsroom changes in Git without reaching readers.
     - cron: '15,45 * * * *'
   push:
     paths:
@@ -23,6 +23,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: rd-site-writer
@@ -87,6 +88,18 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add archive.html search.html archive-index.json articles/frontpage.json sitemap.xml index.html rss.xml
-          if git diff --cached --quiet; then echo 'Archive, homepage Latest and RSS already current.'; exit 0; fi
-          git commit -m 'Refresh archive, homepage latest news and RSS feed'
-          git push origin HEAD:main
+          if git diff --cached --quiet; then
+            echo 'Archive, homepage Latest and RSS already current.'
+          else
+            git commit -m 'Refresh archive, homepage latest news and RSS feed'
+            git push origin HEAD:main
+          fi
+      - name: Deploy latest automated newsroom state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # workflow_dispatch is deliberately used because GitHub permits a
+          # GITHUB_TOKEN-created workflow_dispatch event to start another run,
+          # whereas bot-authored push events do not recursively trigger Actions.
+          gh workflow run deploy-pages.yml --ref main
+          echo 'Requested a Pages deployment of latest main.'
