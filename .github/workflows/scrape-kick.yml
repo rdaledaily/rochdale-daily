@@ -11,14 +11,15 @@ on:
 permissions:
   contents: write
 
-# Immediate newsroom refreshes must not sit in the generic background-writer
-# queue. GitHub keeps only one pending run per concurrency group, so archive,
-# image-repair or other maintenance work could previously cancel this scrape
-# before a runner was even assigned. Publication itself remains race-safe via
-# publish_newsroom_snapshot.sh if main moves while this job is running.
-# Manual kick: 2026-08-15T13:04+01:00
+# Immediate and scheduled fast-news runs both produce the same canonical
+# articles/site snapshot. They must never publish concurrently: race-safe
+# rebuilding protects correctness when an occasional unrelated writer moves
+# main, but two full newsroom runs can otherwise repeatedly invalidate one
+# another until the 30-minute job timeout. Share the fast-news concurrency
+# group and queue rather than cancel; deep browser discovery remains separate
+# so it cannot block the time-critical half-hour lane.
 concurrency:
-  group: rd-immediate-news-writer
+  group: rd-fast-news-writer
   cancel-in-progress: false
 
 jobs:
