@@ -22,6 +22,7 @@ on:
       - scraper/generate_rss.py
       - scraper/ensure_article_images.py
       - scraper/repair_generated_with_commons.py
+      - scraper/enforce_live_homepage_window.py
       - assets/css/site.css
       - assets/css/article-inline.css
       - .github/workflows/publish.yml
@@ -46,6 +47,7 @@ jobs:
     env:
       USE_WIKIMEDIA_COMMONS: "true"
       CSS_SOURCE_PATH: assets/css/article-inline.css
+      FRONTPAGE_FRESH_HOURS: "14"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -74,6 +76,7 @@ jobs:
           python scraper/repair_generated_with_commons.py --articles articles.json
           python scraper/article_gate.py articles.json
           python scraper/generate_newspaper_pages.py
+          python scraper/enforce_live_homepage_window.py
           python scraper/generate_news_sitemap.py
           python scraper/generate_archive.py
           cp archive.html search.html
@@ -98,6 +101,7 @@ jobs:
             python scraper/repair_generated_with_commons.py --articles articles.json
             python scraper/article_gate.py articles.json
             python scraper/generate_newspaper_pages.py
+            python scraper/enforce_live_homepage_window.py
             python scraper/generate_news_sitemap.py
             python scraper/generate_archive.py
             cp archive.html search.html
