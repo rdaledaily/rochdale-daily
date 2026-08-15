@@ -32,8 +32,15 @@ jobs:
       AI_REWRITE_REQUIRED: "false"
       MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
+      # Fresh reporting still owns the top of the page, but the homepage is a
+      # destination as well as a freshness gauge. When Rochdale has a quiet
+      # 48-hour news cycle, allow useful journalism from the previous week to
+      # fill lower slots rather than publishing an under-filled front page.
+      # Scraper health continues to judge freshness on its independent 14-hour
+      # window below, so older supplemental cards can never disguise a stale
+      # newsroom.
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "2"
+      FRONTPAGE_FALLBACK_DAYS: "7"
       FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
       MAX_AI_ARTICLES_PER_RUN: "24"
