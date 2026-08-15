@@ -31,18 +31,23 @@ jobs:
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "false"
-      MAX_NEWS_AGE_HOURS: "72"
+      # The fast lane is for current news. Older material can still be found
+      # by deep discovery and retained in the archive, but must not consume
+      # half-hour scrape time or compete with the 14-hour homepage window.
+      MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "2"
       FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
-      MAX_AI_ARTICLES_PER_RUN: "50"
-      MAX_AI_ARTICLES_INITIAL: "100"
+      MAX_AI_ARTICLES_PER_RUN: "40"
+      MAX_AI_ARTICLES_INITIAL: "70"
       RESPECT_ROBOTS: "true"
-      REQUEST_TIMEOUT: "8"
-      SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
-      SLOW_DOMAIN_BENCH_HOURS: "12"
+      # Fast discovery must fail away from slow third-party sites quickly.
+      # The two-hour deep lane still has the wider timeout/budget below.
+      REQUEST_TIMEOUT: "5"
+      SLOW_DOMAIN_FAILURE_THRESHOLD: "1"
+      SLOW_DOMAIN_BENCH_HOURS: "24"
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
@@ -52,10 +57,13 @@ jobs:
       SOCIAL_MAX_PUBLIC_REACTIONS: "12"
       SOCIAL_MAX_OFFICIAL_UPDATES: "4"
       X_RECENT_SEARCH_MAX: "100"
-      DISCOVERY_LINKS_PER_SOURCE: "36"
-      RSS_ITEMS_PER_SOURCE: "100"
+      # Preserve the full query/category set (including environment/fire), but
+      # reduce work inside each source/query so the fast lane cannot become a
+      # second deep crawl. Broad/deep collection remains below.
+      DISCOVERY_LINKS_PER_SOURCE: "14"
+      RSS_ITEMS_PER_SOURCE: "45"
       GOOGLE_SEARCH_QUERY_LIMIT: "68"
-      DISCOVERY_PAGE_LIMIT: "3"
+      DISCOVERY_PAGE_LIMIT: "1"
       DISCOVERY_WORKERS: "16"
       DISCOVERY_LINK_WORKERS: "16"
       AI_WORKERS: "8"
@@ -105,10 +113,8 @@ jobs:
           python scraper/article_gate.py articles.json
       - name: Generate site with newsroom freshness rules
         # Generation now rebuilds ward pages, the full newspaper, Google News
-        # sitemap and health report. Five minutes is too tight for a healthy
-        # 50+ story feed on a hosted runner, and previously killed a run after
-        # discovery, image enforcement and article validation had all passed.
-        # This raises only the execution ceiling; every validation still runs.
+        # sitemap and health report. Ten minutes is an execution ceiling only;
+        # every editorial, image and freshness validation still runs.
         timeout-minutes: 10
         run: |
           python scraper/repair_merged_bodies.py
@@ -136,6 +142,8 @@ jobs:
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
       OPENAI_MODEL: "gpt-4o-mini"
+      # Deep discovery may collect older context for archive/merging, while the
+      # homepage boundary independently enforces the 14-hour fresh-news order.
       MAX_NEWS_AGE_HOURS: "72"
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "2"
@@ -145,6 +153,9 @@ jobs:
       MAX_AI_ARTICLES_INITIAL: "80"
       REQUEST_TIMEOUT: "10"
       GOOGLE_SEARCH_QUERY_LIMIT: "68"
+      DISCOVERY_LINKS_PER_SOURCE: "36"
+      RSS_ITEMS_PER_SOURCE: "100"
+      DISCOVERY_PAGE_LIMIT: "3"
       DISCOVERY_WORKERS: "12"
       DISCOVERY_LINK_WORKERS: "12"
       AI_WORKERS: "6"
