@@ -17,6 +17,9 @@ on:
       - scraper/generate_pages.py
       - scraper/generate_newspaper_pages.py
       - scraper/generate_news_sitemap.py
+      - scraper/generate_archive.py
+      - scraper/update_homepage_static_latest.py
+      - scraper/generate_rss.py
       - scraper/ensure_article_images.py
       - scraper/repair_generated_with_commons.py
       - .github/workflows/publish.yml
@@ -24,6 +27,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 # Manual publishing has its own latest-wins lane. Each run starts from current
 # main and the commit step below retries against a moving main, so a newer manual
@@ -58,7 +62,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-      - name: Rebuild feed, normalise images, dedupe and pages
+      - name: Rebuild feed, images, pages, homepage discovery and feeds
         run: |
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
@@ -68,6 +72,10 @@ jobs:
           python scraper/article_gate.py articles.json
           python scraper/generate_newspaper_pages.py
           python scraper/generate_news_sitemap.py
+          python scraper/generate_archive.py
+          cp archive.html search.html
+          python scraper/update_homepage_static_latest.py
+          python scraper/generate_rss.py
       - name: Commit rebuilt site without generated-file rebases
         run: |
           git config user.name "github-actions[bot]"
@@ -75,7 +83,23 @@ jobs:
 
           stage_publish() {
             git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json \
-              articles sitemap.xml news-sitemap.xml assets/img/cards image_coverage_report.json commons_image_repair_report.json
+              articles sitemap.xml news-sitemap.xml assets/img/cards image_coverage_report.json commons_image_repair_report.json \
+              archive.html search.html archive-index.json articles/frontpage.json index.html rss.xml
+          }
+
+          rebuild_from_current_main() {
+            python -m json.tool articles.json > /dev/null
+            python -m json.tool manual_articles.json > /dev/null
+            python scraper/frontpage_pipeline.py
+            python scraper/ensure_article_images.py --articles articles.json
+            python scraper/repair_generated_with_commons.py --articles articles.json
+            python scraper/article_gate.py articles.json
+            python scraper/generate_newspaper_pages.py
+            python scraper/generate_news_sitemap.py
+            python scraper/generate_archive.py
+            cp archive.html search.html
+            python scraper/update_homepage_static_latest.py
+            python scraper/generate_rss.py
           }
 
           stage_publish
@@ -90,17 +114,20 @@ jobs:
             git fetch origin "${GITHUB_REF_NAME}"
             git reset --hard "origin/${GITHUB_REF_NAME}"
             git clean -fd
-            python -m json.tool articles.json > /dev/null
-            python -m json.tool manual_articles.json > /dev/null
-            python scraper/frontpage_pipeline.py
-            python scraper/ensure_article_images.py --articles articles.json
-            python scraper/repair_generated_with_commons.py --articles articles.json
-            python scraper/article_gate.py articles.json
-            python scraper/generate_newspaper_pages.py
-            python scraper/generate_news_sitemap.py
+            rebuild_from_current_main
             stage_publish
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "Publish manual article edits (race-safe rebuild)"
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
           done
           exit 1
+      - name: Deploy manual newsroom state immediately
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Commits created with GITHUB_TOKEN do not reliably trigger a second
+          # push workflow. Explicit dispatch removes the gap where an editor's
+          # new story exists in Git but readers/search crawlers still see the old
+          # homepage until the next scheduled archive pass.
+          gh workflow run deploy-pages.yml --ref main
+          echo "Requested Pages deployment of latest manual newsroom state."
