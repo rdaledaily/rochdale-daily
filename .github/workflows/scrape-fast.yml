@@ -25,11 +25,13 @@ jobs:
       AI_REWRITE_REQUIRED: "false"
       MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
-      # Never pad the live homepage with old reporting. Older stories remain
-      # available through archive/category/area pages instead.
+      # Fresh reporting must dominate the page, but a quiet local-news cycle
+      # should not leave the homepage visibly sparse. The 7-day window is used
+      # only as lower-page fallback; the independent 14-hour freshness health
+      # check still requires genuinely current journalism.
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "1"
-      FRONTPAGE_MIN_ARTICLES: "6"
+      FRONTPAGE_FALLBACK_DAYS: "7"
+      FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
       FRONTPAGE_FRESH_HOURS: "14"
       MAX_AI_ARTICLES_PER_RUN: "24"
@@ -130,8 +132,8 @@ jobs:
       OPENAI_MODEL: "gpt-4o-mini"
       MAX_NEWS_AGE_HOURS: "72"
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "1"
-      FRONTPAGE_MIN_ARTICLES: "6"
+      FRONTPAGE_FALLBACK_DAYS: "7"
+      FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
       FRONTPAGE_FRESH_HOURS: "14"
       MAX_AI_ARTICLES_PER_RUN: "40"
