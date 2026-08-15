@@ -85,6 +85,7 @@ jobs:
             scraper/councillor_photos.py \
             scraper/food_hygiene.py \
             scraper/frontpage_pipeline.py \
+            scraper/enforce_frontpage_freshness.py \
             scraper/merge_feeds.py \
             scraper/resolve_google_news_sources.py \
             scraper/ensure_article_images.py \
@@ -98,6 +99,7 @@ jobs:
       - name: Run test suite
         run: |
           python scraper/test_frontpage_pipeline.py
+          PYTHONPATH=scraper python scraper/test_frontpage_freshness_guard.py
           python scraper/test_newspaper_freshness.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py
