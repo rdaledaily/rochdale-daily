@@ -33,6 +33,7 @@ jobs:
     env:
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
+      CSS_SOURCE_PATH: assets/css/article-inline.css
       FRONTPAGE_FRESH_HOURS: "14"
     steps:
       - uses: actions/checkout@v4
