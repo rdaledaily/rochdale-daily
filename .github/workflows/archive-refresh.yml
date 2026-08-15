@@ -16,6 +16,7 @@ on:
       - 'manual_articles.json'
       - 'manual_articles.d/**'
       - 'scraper/generate_archive.py'
+      - 'scraper/enforce_frontpage_freshness.py'
       - 'scraper/update_homepage_static_latest.py'
       - 'scraper/generate_rss.py'
       - '.github/workflows/archive-refresh.yml'
@@ -43,10 +44,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Rebuild permanent archive, crawlable Latest and RSS
+      - name: Rebuild permanent archive, enforce homepage freshness, crawlable Latest and RSS
+        env:
+          FRONTPAGE_FRESH_HOURS: '14'
         run: |
           python scraper/generate_archive.py
           cp archive.html search.html
+          python scraper/enforce_frontpage_freshness.py
           python scraper/update_homepage_static_latest.py
           python scraper/generate_rss.py
       - name: Advertise RSS feed to browsers and feed readers
@@ -82,7 +86,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add archive.html search.html archive-index.json sitemap.xml index.html rss.xml
+          git add archive.html search.html archive-index.json articles/frontpage.json sitemap.xml index.html rss.xml
           if git diff --cached --quiet; then echo 'Archive, homepage Latest and RSS already current.'; exit 0; fi
           git commit -m 'Refresh archive, homepage latest news and RSS feed'
           git push origin HEAD:main
