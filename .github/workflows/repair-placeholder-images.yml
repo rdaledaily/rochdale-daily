@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
   group: rd-site-writer
@@ -40,23 +41,41 @@ jobs:
         run: |
           git fetch origin main
           git reset --hard origin/main
+      - name: Avoid racing an active newsroom publisher
+        id: newsroom_guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active="$(gh run list --repo "${GITHUB_REPOSITORY}" --status in_progress --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          queued="$(gh run list --repo "${GITHUB_REPOSITORY}" --status queued --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          if [ "${active}" -gt 0 ] || [ "${queued}" -gt 0 ]; then
+            echo "run=false" >> "${GITHUB_OUTPUT}"
+            echo "Newsroom scrape/publish is active or queued; deferring placeholder-image repair to the next scheduled pass to avoid a Git write race."
+          else
+            echo "run=true" >> "${GITHUB_OUTPUT}"
+          fi
       - uses: actions/setup-python@v5
+        if: steps.newsroom_guard.outputs.run == 'true'
         with:
           python-version: "3.11"
           cache: "pip"
           cache-dependency-path: "requirements.txt"
       - name: Install dependencies
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
       - name: Match existing local photographs
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/ensure_article_images.py --articles articles.json
       - name: Replace remaining placeholders with real photographs
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python scraper/repair_generated_article_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
       - name: Validate repaired images and rebuild public pages
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python -m json.tool articles.json > /dev/null
           python - <<'PY'
@@ -77,6 +96,7 @@ jobs:
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
       - name: Commit successful image repairs without rebasing generated files
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
