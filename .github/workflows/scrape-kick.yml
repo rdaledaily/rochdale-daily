@@ -21,8 +21,6 @@ jobs:
     timeout-minutes: 30
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
-      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "false"
@@ -32,8 +30,8 @@ jobs:
       FRONTPAGE_FALLBACK_DAYS: "2"
       FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
-      MAX_AI_ARTICLES_PER_RUN: "40"
-      MAX_AI_ARTICLES_INITIAL: "70"
+      MAX_AI_ARTICLES_PER_RUN: "24"
+      MAX_AI_ARTICLES_INITIAL: "40"
       RESPECT_ROBOTS: "true"
       REQUEST_TIMEOUT: "5"
       SLOW_DOMAIN_FAILURE_THRESHOLD: "1"
@@ -61,8 +59,11 @@ jobs:
       MAX_SELECTED_PER_CATEGORY: "24"
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
-      MIN_LIVE_STORIES: "20"
-      SCRAPER_HEALTH_FRESH_HOURS: "24"
+      # A hyperlocal 14-hour window should be judged on fresh usable coverage,
+      # not padded to a legacy 72-hour/20-story volume target.
+      MIN_LIVE_STORIES: "8"
+      MIN_FRESH_FRONTPAGE_STORIES: "6"
+      SCRAPER_HEALTH_FRESH_HOURS: "14"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
       BROWSER_RENDER_ENABLED: "false"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "false"
