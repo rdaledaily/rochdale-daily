@@ -3,8 +3,9 @@
 
 Frontpage selection deliberately retains a wider fallback window so the homepage is
 not empty during quiet periods. The fallback must never outrank genuinely fresh
-news, however, and an editor's active ``featured``/``frontpage_until`` pin must be
-honoured even when category balancing has rearranged the selected set.
+news. An editor's active ``featured``/``frontpage_until`` pin may keep an older
+story on the homepage, but once that story is outside the freshness window it must
+not sit above genuinely fresh reporting.
 
 This post-selection guard is intentionally narrow: it does not change publication,
 legal, image, word-count, source or category eligibility. It only orders records
@@ -92,6 +93,10 @@ def is_recent_live_update(article: dict[str, Any], cutoff: datetime) -> bool:
     return active and latest_update(article) >= cutoff and not is_utility_not_lead(article)
 
 
+def _identity(article: dict[str, Any]) -> str:
+    return str(article.get("id") or article.get("slug") or id(article))
+
+
 def main() -> None:
     payload = json.loads(FRONTPAGE.read_text(encoding="utf-8"))
     articles = payload.get("articles")
@@ -100,31 +105,35 @@ def main() -> None:
 
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(hours=FRESH_HOURS)
+    valid = [a for a in articles if isinstance(a, dict)]
 
-    # Stable buckets preserve the existing editorial/category arrangement inside
-    # each freshness class. Active editor pins are sorted by most recent update so
-    # multiple simultaneous pins have deterministic behaviour.
-    pins = [a for a in articles if isinstance(a, dict) and active_pin(a, now)]
-    pin_ids = {str(a.get("id") or a.get("slug") or id(a)) for a in pins}
-
-    remaining = [
-        a for a in articles
-        if isinstance(a, dict)
-        and str(a.get("id") or a.get("slug") or id(a)) not in pin_ids
+    # Freshness outranks stale pins. A pin still keeps an older story visible,
+    # but it cannot occupy the lead/secondary slots ahead of current reporting.
+    fresh = [
+        a for a in valid
+        if (first_published(a) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff
     ]
-    fresh = [a for a in remaining if (first_published(a) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff]
-    fresh_substantive = [a for a in fresh if not is_utility_not_lead(a)]
-    fresh_utility = [a for a in fresh if is_utility_not_lead(a)]
+    fresh_ids = {_identity(a) for a in fresh}
+    older = [a for a in valid if _identity(a) not in fresh_ids]
 
-    fresh_ids = {str(a.get("id") or a.get("slug") or id(a)) for a in fresh}
-    older = [a for a in remaining if str(a.get("id") or a.get("slug") or id(a)) not in fresh_ids]
+    fresh_pins = [a for a in fresh if active_pin(a, now)]
+    fresh_pin_ids = {_identity(a) for a in fresh_pins}
+    fresh_remaining = [a for a in fresh if _identity(a) not in fresh_pin_ids]
+    fresh_substantive = [a for a in fresh_remaining if not is_utility_not_lead(a)]
+    fresh_utility = [a for a in fresh_remaining if is_utility_not_lead(a)]
+
     recent_live = [a for a in older if is_recent_live_update(a, cutoff)]
-    live_ids = {str(a.get("id") or a.get("slug") or id(a)) for a in recent_live}
-    old = [a for a in older if str(a.get("id") or a.get("slug") or id(a)) not in live_ids]
+    recent_live_ids = {_identity(a) for a in recent_live}
+    older_remaining = [a for a in older if _identity(a) not in recent_live_ids]
+    stale_pins = [a for a in older_remaining if active_pin(a, now)]
+    stale_pin_ids = {_identity(a) for a in stale_pins}
+    old = [a for a in older_remaining if _identity(a) not in stale_pin_ids]
 
-    pins.sort(key=latest_update, reverse=True)
+    fresh_pins.sort(key=latest_update, reverse=True)
     recent_live.sort(key=latest_update, reverse=True)
-    ordered = pins + fresh_substantive + recent_live + fresh_utility + old
+    stale_pins.sort(key=latest_update, reverse=True)
+
+    ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins + old
 
     for index, article in enumerate(ordered):
         article["frontpage_rank"] = index
@@ -134,9 +143,10 @@ def main() -> None:
     payload["articles"] = ordered
     payload["freshness_guard"] = {
         "fresh_hours": FRESH_HOURS,
-        "active_editor_pins": len(pins),
+        "fresh_editor_pins": len(fresh_pins),
+        "stale_editor_pins_retained": len(stale_pins),
         "fresh_articles": len(fresh),
-        "fresh_substantive_articles": len(fresh_substantive),
+        "fresh_substantive_articles": len(fresh_substantive) + len(fresh_pins),
         "recent_live_updates": len(recent_live),
         "fresh_utility_articles": len(fresh_utility),
         "fallback_articles": len(old),
@@ -146,9 +156,10 @@ def main() -> None:
 
     lead = ordered[0].get("title") if ordered else "(none)"
     print(
-        f"Frontpage freshness enforced: {len(pins)} active pin(s), "
-        f"{len(fresh_substantive)} substantive <= {FRESH_HOURS}h, "
+        f"Frontpage freshness enforced: {len(fresh_pins)} fresh pin(s), "
+        f"{len(fresh_substantive)} other substantive <= {FRESH_HOURS}h, "
         f"{len(recent_live)} active live update(s), {len(fresh_utility)} utility, "
+        f"{len(stale_pins)} stale pin(s) retained below fresh news, "
         f"{len(old)} fallback. Lead: {lead}"
     )
 
