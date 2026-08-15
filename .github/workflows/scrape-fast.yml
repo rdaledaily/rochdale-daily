@@ -9,8 +9,14 @@ on:
 permissions:
   contents: write
 
+# Fast, immediate and deep newsroom runs all generate the same canonical
+# articles/site snapshot. They must never rebuild and push that snapshot at the
+# same time: the race-safe publisher can recover from an occasional unrelated
+# main update, but two newsroom publishers continuously invalidate one another.
+# Keep cancel-in-progress false so an active validated newsroom run finishes;
+# the next run queues behind it instead of destroying its publication attempt.
 concurrency:
-  group: ${{ github.event.schedule == '10 */2 * * *' && 'rd-deep-news-writer' || 'rd-fast-news-writer' }}
+  group: rd-fast-news-writer
   cancel-in-progress: false
 
 jobs:
