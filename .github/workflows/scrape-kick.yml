@@ -26,12 +26,13 @@ jobs:
       AI_REWRITE_REQUIRED: "false"
       MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
-      # The live homepage must reflect the live newsroom. Do not pad it with
-      # older journalism just to hit a card-count target; archive/category pages
-      # remain the permanent home for older reporting.
+      # Keep this entry point aligned with the scheduled fast/deep newsroom.
+      # Fresh reporting still dominates and the independent 14-hour freshness
+      # guard remains authoritative; the 7-day pool exists only so lower-page
+      # discovery does not collapse after a maintenance-triggered immediate run.
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "1"
-      FRONTPAGE_MIN_ARTICLES: "6"
+      FRONTPAGE_FALLBACK_DAYS: "7"
+      FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
       MAX_AI_ARTICLES_PER_RUN: "24"
       MAX_AI_ARTICLES_INITIAL: "40"
