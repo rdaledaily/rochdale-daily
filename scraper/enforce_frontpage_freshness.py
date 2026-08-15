@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Keep the Rochdale Daily homepage genuinely fresh without deleting archive material.
 
-Frontpage selection deliberately retains a wider fallback window so the homepage is
-not empty during quiet periods. The fallback must never outrank genuinely fresh
-news. An editor's active ``featured``/``frontpage_until`` pin may keep an older
-story on the homepage, but once that story is outside the freshness window it must
-not sit above genuinely fresh reporting.
+The homepage is a live news surface, not an archive. Routine fallback stories older
+than the configured freshness window are therefore removed from frontpage.json
+rather than merely pushed lower down. Archive/category/area pages keep the full
+historical record.
 
-This post-selection guard is intentionally narrow: it does not change publication,
-legal, image, word-count, source or category eligibility. It only orders records
-that the existing frontpage pipeline has already approved.
+An editor may explicitly keep an older story visible with ``featured`` and a live
+``frontpage_until`` value. Genuinely active live/breaking coverage may also remain
+when it has received a verified update inside the freshness window.
 """
 from __future__ import annotations
 
@@ -23,10 +22,6 @@ from typing import Any
 FRONTPAGE = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
 FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
 
-# Routine service endpoints are useful elsewhere on the site, but should not become
-# the homepage lead merely because they were scraped more recently than journalism.
-# Manual/editorial records are exempt because an editor may legitimately write a
-# news story about a service change that uses the same words.
 UTILITY_TITLE_PATTERNS = (
     re.compile(r"\blive (?:bus|tram|train) departures?\b", re.I),
     re.compile(r"\bcontact (?:details|information)\b", re.I),
@@ -66,11 +61,12 @@ def active_pin(article: dict[str, Any], now: datetime) -> bool:
     if article.get("featured") is not True:
         return False
     until = parse_dt(article.get("frontpage_until"))
-    return until is None or until >= now
+    # Old permanent pins are not allowed. Older stories must have an explicit,
+    # still-active expiry to remain on the live homepage.
+    return until is not None and until >= now
 
 
 def is_utility_not_lead(article: dict[str, Any]) -> bool:
-    """Identify machine-discovered service pages that should not lead the paper."""
     if article.get("manual_article") is True or str(article.get("source_kind") or "").lower() == "editorial":
         return False
     title = str(article.get("title") or "")
@@ -84,7 +80,6 @@ def is_utility_not_lead(article: dict[str, Any]) -> bool:
 
 
 def is_recent_live_update(article: dict[str, Any], cutoff: datetime) -> bool:
-    """Keep genuinely active live/breaking coverage visible even if first published earlier."""
     active = bool(
         article.get("live_story") is True
         or article.get("breaking_news") is True
@@ -107,8 +102,6 @@ def main() -> None:
     cutoff = now - timedelta(hours=FRESH_HOURS)
     valid = [a for a in articles if isinstance(a, dict)]
 
-    # Freshness outranks stale pins. A pin still keeps an older story visible,
-    # but it cannot occupy the lead/secondary slots ahead of current reporting.
     fresh = [
         a for a in valid
         if (first_published(a) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff
@@ -127,13 +120,18 @@ def main() -> None:
     older_remaining = [a for a in older if _identity(a) not in recent_live_ids]
     stale_pins = [a for a in older_remaining if active_pin(a, now)]
     stale_pin_ids = {_identity(a) for a in stale_pins}
-    old = [a for a in older_remaining if _identity(a) not in stale_pin_ids]
+    dropped_stale = [a for a in older_remaining if _identity(a) not in stale_pin_ids]
 
     fresh_pins.sort(key=latest_update, reverse=True)
+    fresh_substantive.sort(key=latest_update, reverse=True)
     recent_live.sort(key=latest_update, reverse=True)
+    fresh_utility.sort(key=latest_update, reverse=True)
     stale_pins.sort(key=latest_update, reverse=True)
 
-    ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins + old
+    # No generic stale fallback. If the newsroom has only six genuinely current
+    # stories, the live homepage shows six current stories rather than pretending
+    # that last week's reporting is today's news.
+    ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins
 
     for index, article in enumerate(ordered):
         article["frontpage_rank"] = index
@@ -141,6 +139,7 @@ def main() -> None:
         article["slot"] = "lead" if index == 0 else "secondary-1" if index == 1 else "secondary-2" if index == 2 else ""
 
     payload["articles"] = ordered
+    payload["count"] = len(ordered)
     payload["freshness_guard"] = {
         "fresh_hours": FRESH_HOURS,
         "fresh_editor_pins": len(fresh_pins),
@@ -149,7 +148,7 @@ def main() -> None:
         "fresh_substantive_articles": len(fresh_substantive) + len(fresh_pins),
         "recent_live_updates": len(recent_live),
         "fresh_utility_articles": len(fresh_utility),
-        "fallback_articles": len(old),
+        "stale_fallback_dropped": len(dropped_stale),
         "enforced_at": now.isoformat().replace("+00:00", "Z"),
     }
     FRONTPAGE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -159,8 +158,8 @@ def main() -> None:
         f"Frontpage freshness enforced: {len(fresh_pins)} fresh pin(s), "
         f"{len(fresh_substantive)} other substantive <= {FRESH_HOURS}h, "
         f"{len(recent_live)} active live update(s), {len(fresh_utility)} utility, "
-        f"{len(stale_pins)} stale pin(s) retained below fresh news, "
-        f"{len(old)} fallback. Lead: {lead}"
+        f"{len(stale_pins)} explicit stale pin(s), {len(dropped_stale)} stale fallback story/stories dropped. "
+        f"Lead: {lead}"
     )
 
 
