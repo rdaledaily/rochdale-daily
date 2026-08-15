@@ -9,12 +9,14 @@ front-page editorial behaviour before delegating to generate_pages.py:
 * source-led fallbacks are judged on their actual text, not rejected by route;
 * the last 24 hours is the main news pool;
 * older material is used only when needed to reach the minimum front-page size;
-* freshness bands outrank category prestige and stale featured flags.
+* freshness bands outrank category prestige and stale featured flags;
+* related stories favour the same locality and subject, not category alone.
 """
 from __future__ import annotations
 
 from collections import Counter
 from datetime import datetime, timedelta, timezone
+import re
 
 import frontpage_pipeline as fp
 import generate_pages
@@ -34,6 +36,15 @@ CATEGORY_MIN_WORDS = {
     "sport": 75,
 }
 DEFAULT_MIN_WORDS = 75
+
+# Common headline glue is deliberately ignored when comparing topics. The
+# remaining overlap tends to capture useful local entities, roads, schools,
+# neighbourhoods and institutions without requiring an external NLP service.
+RELATED_STOPWORDS = {
+    "a", "an", "and", "are", "as", "at", "after", "before", "by", "for",
+    "from", "has", "have", "in", "into", "is", "it", "its", "new", "of",
+    "on", "over", "rochdale", "says", "the", "to", "under", "with",
+}
 
 
 def _newsroom_low_quality(article):
@@ -103,6 +114,95 @@ def _newsroom_rank(article, now: datetime):
     # sit above genuinely new reporting forever. Freshness always comes first.
     pinned = article.get("featured") is True
     return (freshness, pinned, importance, first, latest)
+
+
+def _normalised_area(article) -> str:
+    return str(article.get("area") or "").strip().lower().replace("_", " ")
+
+
+def _headline_terms(article) -> set[str]:
+    text = " ".join(
+        str(article.get(field) or "")
+        for field in ("title", "excerpt", "searched_location_name")
+    ).lower()
+    return {
+        token for token in re.findall(r"[a-z0-9][a-z0-9'-]{2,}", text)
+        if token not in RELATED_STOPWORDS
+    }
+
+
+def _article_types(article) -> set[str]:
+    raw = article.get("types") or []
+    if isinstance(raw, str):
+        raw = [raw]
+    return {str(value).strip().lower() for value in raw if str(value).strip()}
+
+
+def _related_score(current, candidate):
+    """Rank useful onward reads by locality, topic and freshness.
+
+    Same-area reporting is the strongest signal because locality is the core
+    value proposition of a hyperlocal title. Category and shared headline
+    entities then refine relevance. Publication time remains the final
+    tie-breaker so stale stories do not dominate merely because they share a
+    broad category.
+    """
+    score = 0
+    current_area = _normalised_area(current)
+    candidate_area = _normalised_area(candidate)
+    if current_area and candidate_area and current_area == candidate_area:
+        score += 8
+
+    current_ward = str(fp.ward_for_item(current) or "").strip().lower()
+    candidate_ward = str(fp.ward_for_item(candidate) or "").strip().lower()
+    if current_ward and candidate_ward and current_ward == candidate_ward:
+        score += 10
+
+    if fp.article_category(current) == fp.article_category(candidate):
+        score += 5
+
+    shared_types = _article_types(current) & _article_types(candidate)
+    score += min(3, len(shared_types) * 2)
+
+    shared_terms = _headline_terms(current) & _headline_terms(candidate)
+    score += min(8, len(shared_terms) * 2)
+
+    # Strong manual/editorial follow-ups win close ties over automated briefs.
+    if candidate.get("manual_article") or candidate.get("editorial_lock"):
+        score += 1
+
+    published = generate_pages.parse_iso(generate_pages.first_published_at(candidate))
+    return (score, published)
+
+
+def _newsroom_related_stories_markup(article, all_articles):
+    slug = article.get("slug")
+    related = [
+        candidate for candidate in all_articles
+        if candidate.get("slug") != slug
+        and str(candidate.get("status") or "published") == "published"
+        and not candidate.get("requires_approval")
+        and not fp.is_event(candidate)
+    ]
+    related.sort(key=lambda candidate: _related_score(article, candidate), reverse=True)
+    related = related[:4]
+    if not related:
+        return ""
+
+    items = []
+    for item in related:
+        title = generate_pages.esc(item.get("title") or "Local news update")
+        item_slug = generate_pages.esc(item.get("slug") or item.get("id") or "")
+        image = generate_pages.esc(generate_pages.absolute_url(item.get("image_url") or ""))
+        image_markup = (
+            f'<img src="{image}" alt="" loading="lazy" decoding="async">'
+            if image else ""
+        )
+        items.append(
+            f'<a class="related-story" href="{item_slug}.html">'
+            f'{image_markup}<span class="related-title">{title}</span></a>'
+        )
+    return '<div class="sidebar-box"><h3>Related local stories</h3>' + "".join(items) + "</div>"
 
 
 def _newsroom_select_frontpage(articles, now=None):
@@ -177,6 +277,7 @@ def main() -> None:
     fp.is_low_quality_article = _newsroom_low_quality
     fp._article_rank = _newsroom_rank
     fp.select_frontpage = _newsroom_select_frontpage
+    generate_pages.related_stories_markup = _newsroom_related_stories_markup
     generate_pages.main()
 
 
