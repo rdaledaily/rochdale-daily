@@ -78,6 +78,21 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
+      - name: Normalize canonical manual article image references
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The front-page builder reloads manual articles verbatim on each pass,
+          # including the implicit pass inside generate_pages. Normalize the
+          # authoritative manual sources first so page generation cannot restore
+          # a legacy/remote image after the public feed has already been checked.
+          python scraper/ensure_article_images.py --articles manual_articles.json --report /tmp/manual-image-report.json
+          if [ -d manual_articles.d ]; then
+            while IFS= read -r -d '' file; do
+              python scraper/ensure_article_images.py --articles "$file" --report /tmp/manual-shard-image-report.json
+            done < <(find manual_articles.d -type f -name '*.json' -print0)
+          fi
+
       - name: Rebuild article dataset without remote photography
         env:
           USE_SOURCE_IMAGES: 'false'
@@ -99,22 +114,47 @@ jobs:
           python scraper/article_gate.py articles.json
           python - <<'PY'
           import json
+          from pathlib import Path
           rows=json.load(open('articles.json',encoding='utf-8'))
           bad=[]
+          missing=[]
           for a in rows:
               if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
                   continue
               image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
               if not image.startswith('assets/img/cards/'):
                   bad.append((a.get('slug'),image))
-          if bad:
-              raise SystemExit(f'Cards-only image policy failed: {bad[:20]}')
+              elif not Path(image).is_file():
+                  missing.append((a.get('slug'),image))
+          if bad or missing:
+              raise SystemExit(f'Cards-only image policy failed: {len(bad)} non-card path(s), {len(missing)} missing card file(s)')
           PY
 
       - name: Rebuild article pages, archive and sitemap
         run: |
           python scraper/generate_pages.py
           python scraper/generate_archive.py
+
+      - name: Verify page rebuild preserved cards-only feed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=json.load(open('articles.json',encoding='utf-8'))
+          bad=[]
+          missing=[]
+          for a in rows:
+              if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
+                  continue
+              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
+              if not image.startswith('assets/img/cards/'):
+                  bad.append((a.get('slug'),image))
+              elif not Path(image).is_file():
+                  missing.append((a.get('slug'),image))
+          if bad or missing:
+              raise SystemExit(f'Page generation regressed image policy: {len(bad)} non-card path(s), {len(missing)} missing card file(s)')
+          print('Post-page-build cards-only validation passed.')
+          PY
 
       - name: Commit published articles and rebuilt pages
         run: |
