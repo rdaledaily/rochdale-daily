@@ -3,7 +3,12 @@ name: Refresh permanent news archive
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/10 * * * *'
+    # Fast news runs at :05 and :35. Refresh the crawlable archive/homepage
+    # shortly afterwards instead of every 10 minutes: bot-authored newsroom
+    # commits do not trigger downstream push workflows, so a scheduled healing
+    # pass is still required, but two runs per hour is sufficient and avoids
+    # unnecessary contention on the shared site-writer lock.
+    - cron: '15,45 * * * *'
   push:
     paths:
       - 'articles/**'
