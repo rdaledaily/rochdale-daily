@@ -11,8 +11,13 @@ on:
 permissions:
   contents: write
 
+# Immediate newsroom refreshes must not sit in the generic background-writer
+# queue. GitHub keeps only one pending run per concurrency group, so archive,
+# image-repair or other maintenance work could previously cancel this scrape
+# before a runner was even assigned. Publication itself remains race-safe via
+# publish_newsroom_snapshot.sh if main moves while this job is running.
 concurrency:
-  group: rd-site-writer
+  group: rd-immediate-news-writer
   cancel-in-progress: false
 
 jobs:
