@@ -13,6 +13,7 @@ ARTICLES_PATH = ROOT / "articles.json"
 FRONTPAGE_PATH = ROOT / "articles" / "frontpage.json"
 HEALTH_PATH = ROOT / "scraper_health.json"
 MIN_LIVE_STORIES = int(os.getenv("MIN_LIVE_STORIES", "40"))
+MIN_FRESH_FRONTPAGE_STORIES = int(os.getenv("MIN_FRESH_FRONTPAGE_STORIES", "0"))
 MAX_FRESH_AGE_HOURS = int(os.getenv("SCRAPER_HEALTH_FRESH_HOURS", "24"))
 TOP_STORY_FRESH_HOURS = int(os.getenv("SCRAPER_HEALTH_TOP_FRESH_HOURS", "6"))
 
@@ -78,12 +79,7 @@ def main() -> None:
     lead_published = published_at(valid_articles[0]) if valid_articles else None
 
     # The six-hour top-three rule is a surfacing guard, not an impossible-content
-    # requirement. A scrape can legitimately discover and publish a report whose
-    # source publication time is already more than six hours old. Only fail the
-    # homepage when at least one eligible <6h news story exists in the canonical
-    # public feed but none appears in the top three. This keeps the freshness
-    # safeguard strict while avoiding a false failure when no qualifying story
-    # exists to surface.
+    # requirement. Only fail when an eligible <6h story exists but none is surfaced.
     eligible_top_fresh = [
         article
         for article in public_feed
@@ -100,6 +96,11 @@ def main() -> None:
     if live_articles < MIN_LIVE_STORIES:
         failures.append(
             f"live article count {live_articles} is below required minimum {MIN_LIVE_STORIES}"
+        )
+    if MIN_FRESH_FRONTPAGE_STORIES > 0 and raw_candidates > 0 and len(fresh) < MIN_FRESH_FRONTPAGE_STORIES:
+        failures.append(
+            f"fresh homepage count {len(fresh)} is below required minimum "
+            f"{MIN_FRESH_FRONTPAGE_STORIES} within {MAX_FRESH_AGE_HOURS} hours"
         )
     if raw_candidates > 0 and new_articles > 0 and not fresh:
         failures.append(
@@ -131,6 +132,8 @@ def main() -> None:
         "fresh_frontpage_articles": len(fresh),
         "fresh_top_three_articles": len(top_three_fresh),
         "eligible_top_fresh_feed_articles": len(eligible_top_fresh),
+        "minimum_live_articles": MIN_LIVE_STORIES,
+        "minimum_fresh_frontpage_articles": MIN_FRESH_FRONTPAGE_STORIES,
         "freshness_window_hours": MAX_FRESH_AGE_HOURS,
         "top_story_freshness_hours": TOP_STORY_FRESH_HOURS,
         "lead_first_published_at": lead_published.isoformat().replace("+00:00", "Z") if lead_published else None,
