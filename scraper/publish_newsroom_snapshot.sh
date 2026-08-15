@@ -19,6 +19,18 @@ mark_published() {
   fi
 }
 
+# GitHub/network stalls must not occupy the fast-news writer lane indefinitely.
+# A transient push/fetch failure is handled by the existing race-safe recovery
+# loop or by the next scheduled newsroom run; freshness is better served by a
+# bounded retry than by blocking all subsequent discovery for tens of minutes.
+git_push() {
+  timeout --signal=TERM 90s git push origin "HEAD:${branch}"
+}
+
+git_fetch() {
+  timeout --signal=TERM 60s git fetch origin "${branch}"
+}
+
 stage_newsroom() {
   git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
     google_news_resolution_report.json google_news_resolutions.json \
@@ -58,7 +70,7 @@ if git diff --cached --quiet; then
 fi
 
 git commit -m "${message}"
-if git push origin "HEAD:${branch}"; then
+if git_push; then
   mark_published
   exit 0
 fi
@@ -88,7 +100,10 @@ done
 
 for attempt in 1 2 3; do
   echo "main moved during newsroom run; rebuilding on latest main (recovery ${attempt}/3)."
-  git fetch origin "${branch}"
+  if ! git_fetch; then
+    echo "Timed out or failed fetching latest main during recovery ${attempt}/3." >&2
+    continue
+  fi
   git reset --hard "origin/${branch}"
   git clean -fd
 
@@ -107,7 +122,7 @@ for attempt in 1 2 3; do
     exit 0
   fi
   git commit -m "${message} (race-safe rebuild)"
-  if git push origin "HEAD:${branch}"; then
+  if git_push; then
     mark_published
     exit 0
   fi
@@ -116,5 +131,5 @@ for attempt in 1 2 3; do
   git show HEAD:articles.json > "${recovery_dir}/local_articles.json"
 done
 
-echo "Could not publish after three race-safe rebuild attempts." >&2
+echo "Could not publish after three bounded race-safe rebuild attempts." >&2
 exit 1
