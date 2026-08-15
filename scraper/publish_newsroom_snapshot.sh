@@ -4,6 +4,11 @@ set -euo pipefail
 branch="${GITHUB_REF_NAME:-main}"
 message="${COMMIT_MESSAGE:-Update Rochdale Daily newsroom}"
 
+# Scheduled fast, immediate and deep discovery workflows are serialized by the
+# shared rd-fast-news-writer Actions concurrency lane before they reach this
+# publisher. This script still retains full race recovery because unrelated
+# editorial/manual/site-maintenance commits may legitimately move main.
+
 stage_newsroom() {
   git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
     google_news_resolution_report.json google_news_resolutions.json \
