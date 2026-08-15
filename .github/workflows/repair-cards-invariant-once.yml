@@ -66,7 +66,11 @@ jobs:
           PYTHONPATH: scraper
         run: |
           python -m py_compile scraper/frontpage_pipeline.py scraper/ensure_article_images.py scraper/generate_pages.py
-          python -m unittest scraper.test_frontpage_pipeline
+          # Run this regression file exactly as the main CI suite does.  Using
+          # `python -m unittest scraper.test_frontpage_pipeline` is incorrect in
+          # this repository because scraper/scraper.py shadows a package named
+          # `scraper`, so unittest tries to import an attribute that cannot exist.
+          python scraper/test_frontpage_pipeline.py
 
       - name: Rebuild canonical feed and generated pages
         run: |
