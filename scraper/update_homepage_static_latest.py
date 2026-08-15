@@ -56,6 +56,22 @@ def clean(value: object) -> str:
     return " ".join(str(value or "").split())
 
 
+def local_card_image(value: object) -> str:
+    """Return a real local article-card path, or an empty string.
+
+    Do not invent a generic fallback here. The cards-only publishing invariant is
+    responsible for assigning story images; rendering a made-up path in the
+    crawlable homepage would turn an upstream image problem into a public 404.
+    """
+    image = clean(value).lstrip("/")
+    if not image.startswith("assets/img/cards/"):
+        return ""
+    path = ROOT / image
+    if not path.is_file():
+        return ""
+    return image
+
+
 def card(row: dict) -> str:
     slug = html.escape(clean(row.get("slug")).strip("/"), quote=True)
     title = html.escape(clean(row.get("title")), quote=False)
@@ -64,20 +80,29 @@ def card(row: dict) -> str:
         excerpt = excerpt[:217].rstrip() + "..."
     category = clean(row.get("category") or "News").replace("-", " ").title()
     area = clean(row.get("area") or "Rochdale").replace("-", " ").title()
-    image = clean(row.get("image_url") or row.get("img") or "assets/img/cards/news.jpg").lstrip("/")
-    if not image.startswith("assets/img/cards/"):
-        image = "assets/img/cards/news.jpg"
+    image = local_card_image(row.get("image_url") or row.get("img"))
     published = parse_dt(row.get("first_published_at") or row.get("published_at"))
     date_label = published.strftime("%d %b %Y") if published.year > 1970 else "Latest"
+    datetime_attr = published.isoformat().replace("+00:00", "Z") if published.year > 1970 else ""
     href = f"/articles/{slug}.html"
+    image_markup = (
+        f'<div class="story-image-wrap"><img src="/{html.escape(image, quote=True)}" alt="" loading="lazy" decoding="async"></div>\n'
+        if image
+        else ""
+    )
+    date_markup = (
+        f'<time datetime="{html.escape(datetime_attr, quote=True)}">{html.escape(date_label)}</time>'
+        if datetime_attr
+        else html.escape(date_label)
+    )
     return (
         '              <article class="news-card static-latest-card">\n'
         f'                <a class="story-link" href="{href}">\n'
-        f'                  <div class="story-image-wrap"><img src="/{html.escape(image, quote=True)}" alt="" loading="lazy" decoding="async"></div>\n'
+        f'                  {image_markup}'
         f'                  <span class="story-kicker">{html.escape(category)}</span>\n'
         f'                  <h3 class="card-headline">{title}</h3>\n'
         f'                  <p class="card-summary">{excerpt}</p>\n'
-        f'                  <div class="story-meta">{html.escape(area)} · {date_label}</div>\n'
+        f'                  <div class="story-meta">{html.escape(area)} · {date_markup}</div>\n'
         '                </a>\n'
         '              </article>'
     )
