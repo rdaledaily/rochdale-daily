@@ -46,11 +46,19 @@ fi
 # head, merge article records deliberately, and regenerate every derived page.
 # This turns a repository race into a deterministic rebuild instead of dozens
 # of JSON/HTML merge conflicts.
+#
+# scraper_status.json is part of the validated newsroom snapshot too. Preserve
+# the originating run's discovery counters across recovery: resetting to a
+# concurrently-written main can otherwise import another workflow's smaller
+# status file and make the rebuilt snapshot fail health despite the originating
+# run having already passed its live-story gate. The rebuilt articles/frontpage
+# are still checked afresh below, so freshness and content safeguards remain in
+# force; only the run-specific discovery counters stay attached to their run.
 recovery_dir="$(mktemp -d)"
 trap 'rm -rf "${recovery_dir}"' EXIT
 
 git show HEAD:articles.json > "${recovery_dir}/local_articles.json"
-for optional in weather.json event_dates.json; do
+for optional in weather.json event_dates.json scraper_status.json; do
   if git cat-file -e "HEAD:${optional}" 2>/dev/null; then
     git show "HEAD:${optional}" > "${recovery_dir}/${optional}"
   fi
@@ -64,7 +72,7 @@ for attempt in 1 2 3; do
 
   cp articles.json "${recovery_dir}/remote_articles.json"
   python scraper/merge_feeds.py "${recovery_dir}/remote_articles.json" "${recovery_dir}/local_articles.json" articles.json
-  for optional in weather.json event_dates.json; do
+  for optional in weather.json event_dates.json scraper_status.json; do
     if [ -f "${recovery_dir}/${optional}" ]; then
       cp "${recovery_dir}/${optional}" "${optional}"
     fi
