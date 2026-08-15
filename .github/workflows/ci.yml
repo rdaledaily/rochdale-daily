@@ -79,6 +79,7 @@ jobs:
             scraper/generate_pages.py \
             scraper/generate_newspaper_pages.py \
             scraper/generate_ward_pages.py \
+            scraper/generate_news_sitemap.py \
             scraper/check_scraper_health.py \
             scraper/run_newspaper_pipeline.py \
             scraper/councillor_photos.py \
@@ -112,6 +113,7 @@ jobs:
           python scraper/test_resolve_google_news_sources.py
           python scraper/test_ensure_article_images.py
           python scraper/test_councillor_photos.py
+          PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
 
       - name: Verify published article image paths are cards-only
         run: |
