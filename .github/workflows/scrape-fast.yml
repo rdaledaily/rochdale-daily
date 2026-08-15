@@ -9,14 +9,14 @@ on:
 permissions:
   contents: write
 
-# Keep the time-critical newsroom out of the general site-writer queue. GitHub
-# concurrency keeps only one pending run per group, so sharing rd-site-writer
-# with archive/image maintenance could cancel a scheduled fast-news run before
-# it ever received a runner. The newsroom publisher is deliberately race-safe:
-# publish_newsroom_snapshot.sh merges canonical article feeds and rebuilds all
-# derived pages if main moves while a run is working.
+# Keep the time-critical half-hour scrape independent from the slower browser
+# discovery. GitHub concurrency retains only one pending run per group, so a
+# long deep-browser run must never cause the next fast-news run to be replaced
+# while waiting. Both jobs publish through publish_newsroom_snapshot.sh, which
+# safely merges canonical article feeds and regenerates derived pages if main
+# moves during publication.
 concurrency:
-  group: rd-fast-news-writer
+  group: ${{ github.event.schedule == '10 */2 * * *' && 'rd-deep-news-writer' || 'rd-fast-news-writer' }}
   cancel-in-progress: false
 
 jobs:
