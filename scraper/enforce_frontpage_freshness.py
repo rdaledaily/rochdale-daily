@@ -18,10 +18,12 @@ import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 FRONTPAGE = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
 FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
 SPORT_PREVIEW_MAX_HOURS = int(os.getenv("SPORT_PREVIEW_MAX_HOURS", "8"))
+LOCAL_TZ = ZoneInfo("Europe/London")
 
 UTILITY_TITLE_PATTERNS = (
     re.compile(r"\blive (?:bus|tram|train) departures?\b", re.I),
@@ -33,6 +35,10 @@ UTILITY_URL_PATTERNS = (
 )
 SPORT_PREVIEW_PATTERN = re.compile(
     r"\b(?:today|this afternoon|this evening|kick[ -]?off|fixture|faces?|match preview)\b",
+    re.I,
+)
+TODAY_DEADLINE_PATTERN = re.compile(
+    r"\b(?:until|by|before)\s+(?P<hour>\d{1,2})(?::(?P<minute>\d{2}))?\s*(?P<ampm>am|pm)\s+today\b",
     re.I,
 )
 
@@ -66,8 +72,6 @@ def active_pin(article: dict[str, Any], now: datetime) -> bool:
     if article.get("featured") is not True:
         return False
     until = parse_dt(article.get("frontpage_until"))
-    # Old permanent pins are not allowed. Older stories must have an explicit,
-    # still-active expiry to remain on the live homepage.
     return until is not None and until >= now
 
 
@@ -84,24 +88,35 @@ def is_utility_not_lead(article: dict[str, Any]) -> bool:
     )
 
 
-def is_expired_time_sensitive_preview(article: dict[str, Any], now: datetime) -> bool:
-    """Expire machine-generated pre-match sports copy once it has stopped being useful.
+def is_expired_today_deadline(article: dict[str, Any], now: datetime) -> bool:
+    """Expire automated same-day offers/notices once their stated local deadline passes."""
+    if article.get("manual_article") is True or str(article.get("source_kind") or "").lower() == "editorial":
+        return False
+    text = " ".join(str(article.get(key) or "") for key in ("title", "excerpt", "summary"))
+    match = TODAY_DEADLINE_PATTERN.search(text)
+    if not match:
+        return False
+    hour = int(match.group("hour"))
+    minute = int(match.group("minute") or 0)
+    if not 1 <= hour <= 12 or not 0 <= minute <= 59:
+        return False
+    if match.group("ampm").lower() == "pm" and hour != 12:
+        hour += 12
+    elif match.group("ampm").lower() == "am" and hour == 12:
+        hour = 0
+    local_now = now.astimezone(LOCAL_TZ)
+    deadline = local_now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    return local_now > deadline
 
-    Match previews are unusually perishable. Keeping a "today"/"kick-off" preview on
-    the live homepage after the fixture has likely finished makes the paper look stale
-    and can amplify a bad inferred fixture time. Explicit event timestamps win when
-    available; otherwise an eight-hour publication window is a conservative fallback.
-    Manual/editorial sports journalism is never expired by this heuristic.
-    """
+
+def is_expired_time_sensitive_preview(article: dict[str, Any], now: datetime) -> bool:
+    """Expire machine-generated pre-match sports copy once it has stopped being useful."""
     if article.get("manual_article") is True or str(article.get("source_kind") or "").lower() == "editorial":
         return False
     if str(article.get("category") or "").strip().lower() not in {"sport", "sports"}:
         return False
 
-    text = " ".join(
-        str(article.get(key) or "")
-        for key in ("title", "excerpt", "summary")
-    )
+    text = " ".join(str(article.get(key) or "") for key in ("title", "excerpt", "summary"))
     if not SPORT_PREVIEW_PATTERN.search(text):
         return False
 
@@ -138,6 +153,10 @@ def main() -> None:
     cutoff = now - timedelta(hours=FRESH_HOURS)
     valid = [a for a in articles if isinstance(a, dict)]
 
+    expired_deadlines = [a for a in valid if is_expired_today_deadline(a, now)]
+    expired_deadline_ids = {_identity(a) for a in expired_deadlines}
+    valid = [a for a in valid if _identity(a) not in expired_deadline_ids]
+
     expired_previews = [a for a in valid if is_expired_time_sensitive_preview(a, now)]
     expired_preview_ids = {_identity(a) for a in expired_previews}
     valid = [a for a in valid if _identity(a) not in expired_preview_ids]
@@ -168,9 +187,6 @@ def main() -> None:
     fresh_utility.sort(key=latest_update, reverse=True)
     stale_pins.sort(key=latest_update, reverse=True)
 
-    # No generic stale fallback. If the newsroom has only six genuinely current
-    # stories, the live homepage shows six current stories rather than pretending
-    # that last week's reporting is today's news.
     ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins
 
     for index, article in enumerate(ordered):
@@ -188,6 +204,7 @@ def main() -> None:
         "fresh_substantive_articles": len(fresh_substantive) + len(fresh_pins),
         "recent_live_updates": len(recent_live),
         "fresh_utility_articles": len(fresh_utility),
+        "expired_same_day_deadlines_dropped": len(expired_deadlines),
         "expired_sports_previews_dropped": len(expired_previews),
         "stale_fallback_dropped": len(dropped_stale),
         "enforced_at": now.isoformat().replace("+00:00", "Z"),
@@ -199,6 +216,7 @@ def main() -> None:
         f"Frontpage freshness enforced: {len(fresh_pins)} fresh pin(s), "
         f"{len(fresh_substantive)} other substantive <= {FRESH_HOURS}h, "
         f"{len(recent_live)} active live update(s), {len(fresh_utility)} utility, "
+        f"{len(expired_deadlines)} expired same-day deadline story/stories dropped, "
         f"{len(expired_previews)} expired sports preview(s) dropped, "
         f"{len(stale_pins)} explicit stale pin(s), {len(dropped_stale)} stale fallback story/stories dropped. "
         f"Lead: {lead}"
