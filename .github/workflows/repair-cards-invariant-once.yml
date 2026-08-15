@@ -12,6 +12,8 @@ concurrency:
   group: rd-site-writer
   cancel-in-progress: false
 
+# Re-trigger after the manual publisher verifier proved page generation can
+# still reintroduce non-card and missing image references after a clean feed.
 jobs:
   repair:
     runs-on: ubuntu-latest
