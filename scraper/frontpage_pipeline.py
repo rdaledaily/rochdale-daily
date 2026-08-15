@@ -56,6 +56,7 @@ from story_identity import (
 from manual_articles import load_manual_article_records
 from manual_events import load_manual_event_records
 from story_image import compose_story_card
+from ensure_article_images import enforce_article
 
 ARTICLE_IMAGE_DIR = Path("assets/article-images")
 _PLACEHOLDER_IMAGE_RE = re.compile(r"category_events\.svg|placeholder|/stock_|category_image", re.I)
@@ -1588,10 +1589,13 @@ def main() -> int:
     # both the feed and the events rail and can never be filtered out.
     merged = inject_manual_events(merged, now)
     merged = inject_manual_articles(merged, now)
-    # One card style for everything: give every event the same composed
-    # area/category card the rest of the feed uses (replacing category_events.svg).
+    # Enforce the cards-only contract AFTER manual/event injection and BEFORE
+    # articles.json, frontpage, area/category archives, or article pages are
+    # derived. This prevents manual records, remote URLs and the legacy
+    # assets/article-images event-card path from re-entering public output.
     for article in merged:
-        ensure_event_card(article)
+        if str(article.get("status") or "published").lower() == "published":
+            enforce_article(article, Path.cwd())
     merged.sort(
         key=lambda article: original_publication_date(article)
         or datetime.min.replace(tzinfo=timezone.utc),
