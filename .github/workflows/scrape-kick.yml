@@ -26,18 +26,18 @@ jobs:
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "false"
-      MAX_NEWS_AGE_HOURS: "72"
+      MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "2"
       FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "30"
-      MAX_AI_ARTICLES_PER_RUN: "50"
-      MAX_AI_ARTICLES_INITIAL: "100"
+      MAX_AI_ARTICLES_PER_RUN: "40"
+      MAX_AI_ARTICLES_INITIAL: "70"
       RESPECT_ROBOTS: "true"
-      REQUEST_TIMEOUT: "8"
-      SLOW_DOMAIN_FAILURE_THRESHOLD: "2"
-      SLOW_DOMAIN_BENCH_HOURS: "12"
+      REQUEST_TIMEOUT: "5"
+      SLOW_DOMAIN_FAILURE_THRESHOLD: "1"
+      SLOW_DOMAIN_BENCH_HOURS: "24"
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
@@ -47,10 +47,12 @@ jobs:
       SOCIAL_MAX_PUBLIC_REACTIONS: "12"
       SOCIAL_MAX_OFFICIAL_UPDATES: "4"
       X_RECENT_SEARCH_MAX: "100"
-      DISCOVERY_LINKS_PER_SOURCE: "36"
-      RSS_ITEMS_PER_SOURCE: "100"
+      DISCOVERY_LINKS_PER_SOURCE: "14"
+      RSS_ITEMS_PER_SOURCE: "45"
+      # Keep every priority/category query available, including fire and
+      # environment; save time by reducing depth within each query/source.
       GOOGLE_SEARCH_QUERY_LIMIT: "68"
-      DISCOVERY_PAGE_LIMIT: "3"
+      DISCOVERY_PAGE_LIMIT: "1"
       DISCOVERY_WORKERS: "16"
       DISCOVERY_LINK_WORKERS: "16"
       AI_WORKERS: "8"
@@ -106,7 +108,7 @@ jobs:
           python scraper/repair_generated_with_commons.py
 
       - name: Validate, generate fresh site and verify health
-        timeout-minutes: 6
+        timeout-minutes: 10
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
