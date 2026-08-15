@@ -9,12 +9,6 @@ on:
 permissions:
   contents: write
 
-# Keep the time-critical half-hour scrape independent from the slower browser
-# discovery. GitHub concurrency retains only one pending run per group, so a
-# long deep-browser run must never cause the next fast-news run to be replaced
-# while waiting. Both jobs publish through publish_newsroom_snapshot.sh, which
-# safely merges canonical article feeds and regenerates derived pages if main
-# moves during publication.
 concurrency:
   group: ${{ github.event.schedule == '10 */2 * * *' && 'rd-deep-news-writer' || 'rd-fast-news-writer' }}
   cancel-in-progress: false
@@ -26,24 +20,18 @@ jobs:
     timeout-minutes: 30
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      # X/Facebook are deliberately omitted from the half-hour lane while their
-      # credentials are invalid. Indexed fallbacks remain active, and the deep
-      # lane below continues testing the integrations so they can resume when
-      # credentials are repaired.
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "false"
       MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
-      # Use the previous week only as a lower-page reservoir when the genuinely
-      # fresh pool is small. Ranking still puts current reporting first, while
-      # scraper health separately enforces the 14-hour freshness target below.
-      # This avoids a nine-card homepage on quiet news cycles without allowing
-      # older material to masquerade as proof that the newsroom is fresh.
+      # Never pad the live homepage with old reporting. Older stories remain
+      # available through archive/category/area pages instead.
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "7"
-      FRONTPAGE_MIN_ARTICLES: "12"
+      FRONTPAGE_FALLBACK_DAYS: "1"
+      FRONTPAGE_MIN_ARTICLES: "6"
       FRONTPAGE_TARGET_ARTICLES: "30"
+      FRONTPAGE_FRESH_HOURS: "14"
       MAX_AI_ARTICLES_PER_RUN: "24"
       MAX_AI_ARTICLES_INITIAL: "40"
       RESPECT_ROBOTS: "true"
@@ -71,8 +59,6 @@ jobs:
       MAX_SELECTED_PER_CATEGORY: "24"
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
-      # A short 14-hour hyperlocal window should be judged on fresh output, not
-      # padded with older stories to hit a historical 20-story target.
       MIN_LIVE_STORIES: "8"
       MIN_FRESH_FRONTPAGE_STORIES: "6"
       SCRAPER_HEALTH_FRESH_HOURS: "14"
@@ -113,10 +99,11 @@ jobs:
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
-      - name: Generate site with newsroom freshness rules
+      - name: Generate site with strict newsroom freshness rules
         timeout-minutes: 10
         run: |
           python scraper/repair_merged_bodies.py
+          python scraper/enforce_frontpage_freshness.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
           python scraper/generate_news_sitemap.py
@@ -142,13 +129,11 @@ jobs:
       FACEBOOK_EVENTS_MAX: "18"
       OPENAI_MODEL: "gpt-4o-mini"
       MAX_NEWS_AGE_HOURS: "72"
-      # Deep discovery uses the same presentation rule as the fast lane: old
-      # stories may fill lower homepage slots for utility/internal linking, but
-      # they do not satisfy the independent newsroom freshness health check.
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "7"
-      FRONTPAGE_MIN_ARTICLES: "12"
+      FRONTPAGE_FALLBACK_DAYS: "1"
+      FRONTPAGE_MIN_ARTICLES: "6"
       FRONTPAGE_TARGET_ARTICLES: "30"
+      FRONTPAGE_FRESH_HOURS: "14"
       MAX_AI_ARTICLES_PER_RUN: "40"
       MAX_AI_ARTICLES_INITIAL: "80"
       REQUEST_TIMEOUT: "10"
@@ -205,6 +190,7 @@ jobs:
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
+          python scraper/enforce_frontpage_freshness.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
           python scraper/generate_news_sitemap.py
