@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 import generate_newspaper_pages as newsroom
 
@@ -36,6 +37,35 @@ def main() -> None:
 
     now = datetime.now(timezone.utc)
     assert newsroom._newsroom_rank(transport_brief, now) > newsroom._newsroom_rank(older_long_transport, now)
+
+    # The page generator rewrites frontpage.json, so time-sensitive rules must
+    # be owned here as a final invariant rather than only by an earlier guard.
+    local = ZoneInfo("Europe/London")
+    after_deadline = datetime(2026, 8, 15, 19, 5, tzinfo=local).astimezone(timezone.utc)
+    cutoff = after_deadline - timedelta(hours=14)
+    hornets_offer = article(category="sport", words=100, age_hours=2)
+    hornets_offer.update({
+        "title": "Early Bird Tickets Available for Rochdale Hornets Matches Until 6pm Today",
+        "excerpt": "Supporters have until 6pm today to buy discounted tickets.",
+        "source_kind": "article",
+        "first_published_at": (after_deadline - timedelta(hours=2)).isoformat(),
+        "published_at": (after_deadline - timedelta(hours=2)).isoformat(),
+    })
+    assert not newsroom._keep_on_live_homepage(hornets_offer, after_deadline, cutoff)
+
+    stale_preview = article(category="sport", words=100, age_hours=9)
+    stale_preview.update({
+        "title": "Rochdale AFC faces Newport County today",
+        "excerpt": "Supporters are advised to arrive early for kick-off.",
+        "source_kind": "article",
+        "first_published_at": (after_deadline - timedelta(hours=9)).isoformat(),
+        "published_at": (after_deadline - timedelta(hours=9)).isoformat(),
+    })
+    assert not newsroom._keep_on_live_homepage(stale_preview, after_deadline, cutoff)
+
+    editorial_deadline = dict(hornets_offer)
+    editorial_deadline.update({"manual_article": True, "source_kind": "editorial"})
+    assert newsroom._keep_on_live_homepage(editorial_deadline, after_deadline, cutoff)
 
     print("Newspaper freshness policy checks passed.")
 
