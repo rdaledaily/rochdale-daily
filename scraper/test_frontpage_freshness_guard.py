@@ -4,7 +4,11 @@ from __future__ import annotations
 import unittest
 from datetime import datetime, timedelta, timezone
 
-from enforce_frontpage_freshness import is_recent_live_update, is_utility_not_lead
+from enforce_frontpage_freshness import (
+    is_expired_time_sensitive_preview,
+    is_recent_live_update,
+    is_utility_not_lead,
+)
 
 
 class FrontpageFreshnessGuardTests(unittest.TestCase):
@@ -46,6 +50,50 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
             "last_updated_at": (now - timedelta(hours=20)).isoformat(),
         }
         self.assertFalse(is_recent_live_update(article, cutoff))
+
+    def test_machine_sports_preview_expires_after_eight_hours(self) -> None:
+        now = datetime.now(timezone.utc)
+        article = {
+            "title": "Rochdale AFC faces Newport County today",
+            "excerpt": "Supporters are advised to arrive early for kick-off.",
+            "category": "sport",
+            "source_kind": "article",
+            "first_published_at": (now - timedelta(hours=9)).isoformat(),
+        }
+        self.assertTrue(is_expired_time_sensitive_preview(article, now))
+
+    def test_recent_machine_sports_preview_is_retained(self) -> None:
+        now = datetime.now(timezone.utc)
+        article = {
+            "title": "Rochdale AFC faces Newport County today",
+            "excerpt": "A match preview ahead of this afternoon's fixture.",
+            "category": "sport",
+            "source_kind": "article",
+            "first_published_at": (now - timedelta(hours=2)).isoformat(),
+        }
+        self.assertFalse(is_expired_time_sensitive_preview(article, now))
+
+    def test_editorial_sports_story_is_never_auto_expired(self) -> None:
+        now = datetime.now(timezone.utc)
+        article = {
+            "title": "What today's Rochdale AFC fixture means for supporters",
+            "category": "sport",
+            "source_kind": "editorial",
+            "manual_article": True,
+            "first_published_at": (now - timedelta(hours=12)).isoformat(),
+        }
+        self.assertFalse(is_expired_time_sensitive_preview(article, now))
+
+    def test_event_time_expires_preview_three_hours_after_start(self) -> None:
+        now = datetime.now(timezone.utc)
+        article = {
+            "title": "Rochdale AFC match preview today",
+            "category": "sport",
+            "source_kind": "article",
+            "first_published_at": (now - timedelta(hours=2)).isoformat(),
+            "event_start_at": (now - timedelta(hours=4)).isoformat(),
+        }
+        self.assertTrue(is_expired_time_sensitive_preview(article, now))
 
 
 if __name__ == "__main__":
