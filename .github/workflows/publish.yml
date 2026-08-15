@@ -22,16 +22,16 @@ on:
 permissions:
   contents: write
 
-# Manual editorial publishing has its own queue so an urgent article cannot be
-# displaced by an unrelated archive/scraper writer waiting on the shared queue.
+# Every workflow that can rewrite the public newspaper snapshot shares one lock.
+# Manual publishing remains urgent, but must never modify main underneath a scrape.
 concurrency:
-  group: rd-manual-publisher
+  group: rd-site-writer
   cancel-in-progress: false
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       USE_WIKIMEDIA_COMMONS: "true"
     steps:
@@ -58,25 +58,45 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
           python scraper/frontpage_pipeline.py
-          # Publication is the durable enforcement point for the cards-only image
-          # contract. First match existing newsroom card images or create a safe
-          # local fallback; then replace generated fallbacks with suitable Commons
-          # photography where the resolver can verify a relevant match.
           python scraper/ensure_article_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
           python scraper/article_gate.py articles.json
           python scraper/generate_newspaper_pages.py
           python scraper/generate_news_sitemap.py
-      - name: Commit rebuilt site
+      - name: Commit rebuilt site without generated-file rebases
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json articles sitemap.xml news-sitemap.xml assets/img/cards image_coverage_report.json commons_image_repair_report.json
+
+          stage_publish() {
+            git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json \
+              articles sitemap.xml news-sitemap.xml assets/img/cards image_coverage_report.json commons_image_repair_report.json
+          }
+
+          stage_publish
           if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
           git commit -m "Publish manual article edits"
-          for attempt in 1 2 3 4 5; do
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+          if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+
+          # The editorial source push that triggered this workflow is already on
+          # main. If main moves again, discard only this derived snapshot, start
+          # from the newest canonical sources, and deterministically rebuild it.
+          for attempt in 1 2 3; do
+            echo "main moved during manual rebuild; regenerating from latest main (${attempt}/3)."
             git fetch origin "${GITHUB_REF_NAME}"
-            git rebase "origin/${GITHUB_REF_NAME}" || { git rebase --abort; sleep 3; }
+            git reset --hard "origin/${GITHUB_REF_NAME}"
+            git clean -fd
+            python -m json.tool articles.json > /dev/null
+            python -m json.tool manual_articles.json > /dev/null
+            python scraper/frontpage_pipeline.py
+            python scraper/ensure_article_images.py --articles articles.json
+            python scraper/repair_generated_with_commons.py --articles articles.json
+            python scraper/article_gate.py articles.json
+            python scraper/generate_newspaper_pages.py
+            python scraper/generate_news_sitemap.py
+            stage_publish
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Publish manual article edits (race-safe rebuild)"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
           done
           exit 1
