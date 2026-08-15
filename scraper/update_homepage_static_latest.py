@@ -19,12 +19,15 @@ INDEX = ROOT / "index.html"
 ARTICLES = ROOT / "articles.json"
 START = "<!-- STATIC_LATEST_START -->"
 END = "<!-- STATIC_LATEST_END -->"
-MAX_STORIES = 6
+# Mirror the newspaper's current minimum front-page depth for crawlers instead
+# of exposing only six links. Human readers still get the live/filterable grid,
+# while search engines and no-JS readers receive a useful local-news index.
+MAX_STORIES = 12
 
 # Keep the crawler-facing Latest block aligned with the newspaper-quality rules
 # used by Google News and the front-page freshness guard. Machine-discovered
 # service endpoints remain useful elsewhere on the site, but they should not
-# displace journalism in the six static links search engines see first.
+# displace journalism in the static links search engines see first.
 UTILITY_TITLE_PATTERNS = (
     re.compile(r"\blive (?:bus|tram|train) departures?\b", re.I),
     re.compile(r"\bcontact (?:details|information)\b", re.I),
