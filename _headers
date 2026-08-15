@@ -27,11 +27,15 @@
 /assets/css/*
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 
+# Advertising behaviour can change independently of editorial deployments, so
+# keep the ad loader uncached. The remaining shared site JavaScript is versioned
+# through normal deployments and benefits repeat readers when moving between
+# several articles in one session.
 /assets/ads.js
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
 /assets/js/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 
 /articles/*
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
