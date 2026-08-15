@@ -42,10 +42,25 @@ jobs:
         run: |
           git fetch origin main
           git reset --hard origin/main
+      - name: Avoid racing an active newsroom publisher
+        id: newsroom_guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active="$(gh run list --repo "${GITHUB_REPOSITORY}" --status in_progress --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          queued="$(gh run list --repo "${GITHUB_REPOSITORY}" --status queued --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          if [ "${active}" -gt 0 ] || [ "${queued}" -gt 0 ]; then
+            echo "run=false" >> "${GITHUB_OUTPUT}"
+            echo "Newsroom scrape/publish is active or queued; deferring archive refresh to the next scheduled pass to avoid a Git write race."
+          else
+            echo "run=true" >> "${GITHUB_OUTPUT}"
+          fi
       - uses: actions/setup-python@v5
+        if: steps.newsroom_guard.outputs.run == 'true'
         with:
           python-version: '3.11'
       - name: Rebuild permanent archive, enforce homepage freshness, crawlable Latest and RSS
+        if: steps.newsroom_guard.outputs.run == 'true'
         env:
           FRONTPAGE_FRESH_HOURS: '14'
         run: |
@@ -55,6 +70,7 @@ jobs:
           python scraper/update_homepage_static_latest.py
           python scraper/generate_rss.py
       - name: Advertise RSS feed to browsers and feed readers
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -69,6 +85,7 @@ jobs:
               p.write_text(text, encoding='utf-8')
           PY
       - name: Keep archive pages in sitemap
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -84,6 +101,7 @@ jobs:
               p.write_text(text,encoding='utf-8')
           PY
       - name: Commit archive refresh
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -95,6 +113,7 @@ jobs:
             git push origin HEAD:main
           fi
       - name: Deploy latest automated newsroom state
+        if: steps.newsroom_guard.outputs.run == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
