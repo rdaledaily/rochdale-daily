@@ -1,0 +1,178 @@
+@import url('/assets/css/site.css');
+
+/*
+ * Article-page responsive safety layer.
+ *
+ * Static article pages are generated with this stylesheet embedded in the
+ * document. The full site stylesheet remains the single source of truth and
+ * is imported above; these rules only harden article pages against mobile
+ * overflow and oversized desktop geometry.
+ */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.utility,
+.masthead,
+.primary-nav,
+.breaking-bar,
+.page-shell,
+.site-footer {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.wrap,
+.article-body,
+.article-layout,
+.article-layout > *,
+.article-sidebar,
+.article-hero-image,
+.ad-slot,
+.sidebar-box {
+  min-width: 0;
+  max-width: 100%;
+}
+
+img,
+picture,
+video,
+iframe,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+.article-body,
+.article-body p,
+.article-body h1,
+.article-body h2,
+.article-body h3,
+.article-standfirst,
+.article-byline,
+.sidebar-box,
+.related-title {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* A fixed 300px MREC is safe on most phones, but must still shrink on a
+   narrow viewport rather than making the whole document wider. */
+.ad-slot-mrec {
+  width: min(300px, 100%);
+  max-width: 100%;
+}
+
+/* Long source URLs, embeds and preformatted material must never dictate the
+   width of the page. */
+.article-body table,
+.article-body pre,
+.article-body code,
+.article-body iframe,
+.article-body blockquote {
+  max-width: 100%;
+}
+
+.article-body pre {
+  overflow-x: auto;
+}
+
+@media (max-width: 860px) {
+  .article-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .article-sidebar {
+    position: static;
+    width: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  .wrap {
+    width: calc(100% - 24px);
+    max-width: 100%;
+  }
+
+  .masthead-row {
+    min-height: 96px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+
+  .brand,
+  .masthead-actions {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .brand-logo {
+    width: min(215px, 58vw);
+    max-width: 100%;
+  }
+
+  .article-body {
+    width: 100%;
+    padding: 20px 16px 36px;
+  }
+
+  .article-body h1 {
+    font-size: clamp(30px, 9vw, 40px);
+    line-height: 1.04;
+    letter-spacing: -0.4px;
+  }
+
+  .article-standfirst {
+    font-size: 17px;
+    line-height: 1.42;
+  }
+
+  .article-share {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .share-icon-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .ad-slot-leaderboard,
+  .ad-slot-incontent,
+  .ad-slot-mrec,
+  .ad-slot.ad-live,
+  .ad-slot.ad-live > a,
+  .ad-slot.ad-live img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .article-hero-image img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 390px) {
+  .article-body {
+    padding-inline: 14px;
+  }
+
+  .article-body h1 {
+    font-size: clamp(28px, 8.5vw, 36px);
+  }
+
+  .brand-logo {
+    width: min(200px, 56vw);
+  }
+}
