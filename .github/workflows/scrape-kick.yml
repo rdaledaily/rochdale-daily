@@ -11,13 +11,6 @@ on:
 permissions:
   contents: write
 
-# Immediate and scheduled fast-news runs both produce the same canonical
-# articles/site snapshot. They must never publish concurrently: race-safe
-# rebuilding protects correctness when an occasional unrelated writer moves
-# main, but two full newsroom runs can otherwise repeatedly invalidate one
-# another until the 30-minute job timeout. Share the fast-news concurrency
-# group and queue rather than cancel; deep browser discovery remains separate
-# so it cannot block the time-critical half-hour lane.
 concurrency:
   group: rd-fast-news-writer
   cancel-in-progress: false
@@ -33,16 +26,12 @@ jobs:
       AI_REWRITE_REQUIRED: "false"
       MAX_NEWS_AGE_HOURS: "14"
       SAME_DAY_ONLY: "false"
-      # Fresh reporting still owns the top of the page, but the homepage is a
-      # destination as well as a freshness gauge. When Rochdale has a quiet
-      # 48-hour news cycle, allow useful journalism from the previous week to
-      # fill lower slots rather than publishing an under-filled front page.
-      # Scraper health continues to judge freshness on its independent 14-hour
-      # window below, so older supplemental cards can never disguise a stale
-      # newsroom.
+      # The live homepage must reflect the live newsroom. Do not pad it with
+      # older journalism just to hit a card-count target; archive/category pages
+      # remain the permanent home for older reporting.
       FRONTPAGE_PRIMARY_DAYS: "1"
-      FRONTPAGE_FALLBACK_DAYS: "7"
-      FRONTPAGE_MIN_ARTICLES: "12"
+      FRONTPAGE_FALLBACK_DAYS: "1"
+      FRONTPAGE_MIN_ARTICLES: "6"
       FRONTPAGE_TARGET_ARTICLES: "30"
       MAX_AI_ARTICLES_PER_RUN: "24"
       MAX_AI_ARTICLES_INITIAL: "40"
@@ -61,8 +50,6 @@ jobs:
       X_RECENT_SEARCH_MAX: "100"
       DISCOVERY_LINKS_PER_SOURCE: "14"
       RSS_ITEMS_PER_SOURCE: "45"
-      # Keep every priority/category query available, including fire and
-      # environment; save time by reducing depth within each query/source.
       GOOGLE_SEARCH_QUERY_LIMIT: "68"
       DISCOVERY_PAGE_LIMIT: "1"
       DISCOVERY_WORKERS: "16"
@@ -73,11 +60,10 @@ jobs:
       MAX_SELECTED_PER_CATEGORY: "24"
       HTTP_POOL_CONNECTIONS: "64"
       HTTP_POOL_MAXSIZE: "64"
-      # A hyperlocal 14-hour window should be judged on fresh usable coverage,
-      # not padded to a legacy 72-hour/20-story volume target.
       MIN_LIVE_STORIES: "8"
       MIN_FRESH_FRONTPAGE_STORIES: "6"
       SCRAPER_HEALTH_FRESH_HOURS: "14"
+      FRONTPAGE_FRESH_HOURS: "14"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "false"
       BROWSER_RENDER_ENABLED: "false"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "false"
@@ -122,12 +108,13 @@ jobs:
           python scraper/repair_generated_article_images.py
           python scraper/repair_generated_with_commons.py
 
-      - name: Validate, generate fresh site and verify health
+      - name: Validate, enforce fresh homepage, generate site and verify health
         timeout-minutes: 10
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/repair_merged_bodies.py
+          python scraper/enforce_frontpage_freshness.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
           python scraper/generate_news_sitemap.py
