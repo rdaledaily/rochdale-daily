@@ -104,7 +104,12 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
       - name: Generate site with newsroom freshness rules
-        timeout-minutes: 5
+        # Generation now rebuilds ward pages, the full newspaper, Google News
+        # sitemap and health report. Five minutes is too tight for a healthy
+        # 50+ story feed on a hosted runner, and previously killed a run after
+        # discovery, image enforcement and article validation had all passed.
+        # This raises only the execution ceiling; every validation still runs.
+        timeout-minutes: 10
         run: |
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
