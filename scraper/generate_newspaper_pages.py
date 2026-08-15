@@ -10,6 +10,7 @@ front-page editorial behaviour before delegating to generate_pages.py:
 * the configured live-news freshness window is enforced in the generator itself;
 * older material remains in archive/category/area pages, not the live homepage;
 * explicitly time-limited editor pins and genuinely updated live coverage survive;
+* automated same-day deadline notices and stale sports previews cannot reappear;
 * freshness bands outrank category prestige and stale featured flags;
 * related stories favour the same locality and subject, not category alone.
 """
@@ -20,6 +21,7 @@ from datetime import datetime, timedelta, timezone
 import os
 import re
 
+import enforce_frontpage_freshness as freshness_guard
 import frontpage_pipeline as fp
 import generate_pages
 
@@ -40,9 +42,6 @@ CATEGORY_MIN_WORDS = {
 DEFAULT_MIN_WORDS = 75
 FRONTPAGE_FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
 
-# Common headline glue is deliberately ignored when comparing topics. The
-# remaining overlap tends to capture useful local entities, roads, schools,
-# neighbourhoods and institutions without requiring an external NLP service.
 RELATED_STOPWORDS = {
     "a", "an", "and", "are", "as", "at", "after", "before", "by", "for",
     "from", "has", "have", "in", "into", "is", "it", "its", "new", "of",
@@ -51,7 +50,6 @@ RELATED_STOPWORDS = {
 
 
 def _newsroom_low_quality(article):
-    """Reject boilerplate, not an otherwise factual article's publication route."""
     return bool(fp.LOW_QUALITY_ARTICLE_RE.search(fp.article_text(article)))
 
 
@@ -60,7 +58,6 @@ def _minimum_words(article) -> int:
 
 
 def _newsroom_eligible(article) -> bool:
-    """Allow editor-approved urgent briefs while keeping automated fragments off the homepage."""
     if fp.is_event(article):
         return False
     if article.get("manual_article") or article.get("editorial_lock"):
@@ -77,8 +74,6 @@ def _newsroom_rank(article, now: datetime):
     ) or first
     age_hours = max(0.0, (now - first).total_seconds() / 3600)
 
-    # Newspaper-style freshness bands. A new verified brief should normally
-    # outrank an older feature; importance then decides within each band.
     if age_hours <= 3:
         freshness = 5
     elif age_hours <= 6:
@@ -113,21 +108,23 @@ def _newsroom_rank(article, now: datetime):
     if article.get("is_ongoing") and update_age_hours <= 6:
         importance += 4
 
-    # Featured is an editorial tie-breaker, not a licence for an old story to
-    # sit above genuinely new reporting forever. Freshness always comes first.
     pinned = article.get("featured") is True
     return (freshness, pinned, importance, first, latest)
 
 
 def _keep_on_live_homepage(article, reference: datetime, cutoff: datetime) -> bool:
-    """Apply the final live-homepage age rule inside the page generator.
+    """Own the final live-homepage invariant inside page generation.
 
-    The separate freshness guard is useful defence in depth, but it previously
-    ran before this generator and could be undone when frontpage.json was written
-    again. The generator therefore owns the same final invariant: ordinary news
-    older than the configured window stays in the archive, while a deliberately
-    time-limited editor pin or genuinely updated live/breaking story can remain.
+    A standalone freshness pass runs earlier in several workflows, but page
+    generation rewrites frontpage.json. Time-sensitive expiry rules therefore
+    have to be enforced here as well or an expired ticket offer/match preview can
+    be reintroduced into the final published snapshot.
     """
+    if freshness_guard.is_expired_today_deadline(article, reference):
+        return False
+    if freshness_guard.is_expired_time_sensitive_preview(article, reference):
+        return False
+
     first = fp._frontpage_first_published(article)
     if first is not None and first >= cutoff:
         return True
@@ -175,14 +172,6 @@ def _article_types(article) -> set[str]:
 
 
 def _related_score(current, candidate):
-    """Rank useful onward reads by locality, topic and freshness.
-
-    Same-area reporting is the strongest signal because locality is the core
-    value proposition of a hyperlocal title. Category and shared headline
-    entities then refine relevance. Publication time remains the final
-    tie-breaker so stale stories do not dominate merely because they share a
-    broad category.
-    """
     score = 0
     current_area = _normalised_area(current)
     candidate_area = _normalised_area(candidate)
@@ -203,7 +192,6 @@ def _related_score(current, candidate):
     shared_terms = _headline_terms(current) & _headline_terms(candidate)
     score += min(8, len(shared_terms) * 2)
 
-    # Strong manual/editorial follow-ups win close ties over automated briefs.
     if candidate.get("manual_article") or candidate.get("editorial_lock"):
         score += 1
 
