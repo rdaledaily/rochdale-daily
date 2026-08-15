@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
   group: rd-site-writer
@@ -29,25 +30,46 @@ jobs:
         run: |
           git fetch origin main
           git reset --hard origin/main
+      - name: Avoid racing an active newsroom publisher
+        id: newsroom_guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active="$(gh run list --repo "${GITHUB_REPOSITORY}" --status in_progress --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          queued="$(gh run list --repo "${GITHUB_REPOSITORY}" --status queued --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          if [ "${active}" -gt 0 ] || [ "${queued}" -gt 0 ]; then
+            echo "run=false" >> "${GITHUB_OUTPUT}"
+            echo "Newsroom scrape/publish is active or queued; deferring council discovery to the next scheduled pass to avoid a Git write race."
+          else
+            echo "run=true" >> "${GITHUB_OUTPUT}"
+          fi
       - uses: actions/setup-python@v5
+        if: steps.newsroom_guard.outputs.run == 'true'
         with:
           python-version: '3.11'
       - name: Install dependencies
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python -m pip install --no-cache-dir requests feedparser beautifulsoup4 pypdf openai
       - name: Find and verify councillor portraits
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/councillor_photos.py
       - name: Discover indexed council meeting documents
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/council_minutes_collector.py
       - name: Extract decisions, recorded votes and sourced news stories
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/publish_council_minutes_stories.py
       - name: Validate democracy data
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python -m json.tool council_documents.json > /dev/null
           python -m json.tool council_votes.json > /dev/null
           python -m json.tool councillor_photos.json > /dev/null
       - name: Regenerate every ward democracy page
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/generate_ward_pages.py
       - name: Commit council data, portraits, pages and stories
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
