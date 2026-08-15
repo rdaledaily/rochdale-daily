@@ -18,6 +18,7 @@ import json
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
@@ -26,6 +27,7 @@ START = "<!-- STATIC_LATEST_START -->"
 END = "<!-- STATIC_LATEST_END -->"
 MAX_STORIES = 12
 SPORT_PREVIEW_MAX_HOURS = 8
+LOCAL_TZ = ZoneInfo("Europe/London")
 
 UTILITY_TITLE_PATTERNS = (
     re.compile(r"\blive (?:bus|tram|train) departures?\b", re.I),
@@ -37,6 +39,10 @@ UTILITY_URL_PATTERNS = (
 )
 SPORT_PREVIEW_PATTERN = re.compile(
     r"\b(?:today|this afternoon|this evening|kick[ -]?off|fixture|faces?|match preview)\b",
+    re.I,
+)
+TODAY_DEADLINE_PATTERN = re.compile(
+    r"\b(?:until|by|before)\s+(?P<hour>\d{1,2})(?::(?P<minute>\d{2}))?\s*(?P<ampm>am|pm)\s+today\b",
     re.I,
 )
 
@@ -83,6 +89,28 @@ def is_utility_not_news(row: dict) -> bool:
     )
 
 
+def is_expired_today_deadline(row: dict, now: datetime | None = None) -> bool:
+    """Keep expired automated same-day offers/notices out of crawler-facing Latest."""
+    if row.get("manual_article") is True or str(row.get("source_kind") or "").lower() == "editorial":
+        return False
+    text = " ".join(str(row.get(key) or "") for key in ("title", "excerpt", "summary"))
+    match = TODAY_DEADLINE_PATTERN.search(text)
+    if not match:
+        return False
+    hour = int(match.group("hour"))
+    minute = int(match.group("minute") or 0)
+    if not 1 <= hour <= 12 or not 0 <= minute <= 59:
+        return False
+    if match.group("ampm").lower() == "pm" and hour != 12:
+        hour += 12
+    elif match.group("ampm").lower() == "am" and hour == 12:
+        hour = 0
+    now = now or datetime.now(timezone.utc)
+    local_now = now.astimezone(LOCAL_TZ)
+    deadline = local_now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    return local_now > deadline
+
+
 def is_expired_time_sensitive_preview(row: dict, now: datetime | None = None) -> bool:
     """Keep stale pre-match sports previews out of crawler-facing Latest links."""
     if row.get("manual_article") is True or str(row.get("source_kind") or "").lower() == "editorial":
@@ -117,6 +145,8 @@ def eligible(row: object) -> bool:
     if str(row.get("category") or "").strip().lower() in {"event", "events", "what's on", "whats-on"}:
         return False
     if is_utility_not_news(row):
+        return False
+    if is_expired_today_deadline(row):
         return False
     if is_expired_time_sensitive_preview(row):
         return False
