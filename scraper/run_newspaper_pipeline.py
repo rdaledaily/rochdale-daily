@@ -11,6 +11,7 @@ Rochdale repeatedly. Genuine business developments remain eligible.
 """
 from __future__ import annotations
 
+import os
 import re
 from urllib.parse import urlparse
 
@@ -44,8 +45,8 @@ EXTRA_FRESH_SEARCHES = [
     ),
     SearchQuery(
         "fallback:fire-rochdale-today",
-        'site:manchesterfire.gov.uk (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d',
-        "news",
+        'site:manchesterfire.gov.uk/news (Rochdale OR Heywood OR Middleton OR Littleborough) when:1d',
+        "environment",
     ),
     SearchQuery(
         "fallback:nca-rochdale-today",
@@ -230,22 +231,16 @@ def _same_source_live_update(candidate, existing_by_story) -> bool:
 
         existing_lower = existing_text.casefold()
 
-        # Newly introduced full names are highly material in a developing
-        # police/court story (for example a victim being formally identified).
         source_names = {name.casefold() for name in LIVE_NAME_RE.findall(source_text)}
         existing_names = {name.casefold() for name in LIVE_NAME_RE.findall(existing_text)}
         if source_names - existing_names:
             return True
 
-        # Status changes such as arrest -> charge -> bail/release/court should
-        # also reopen the same article even when no new person is named.
         source_material = {match.group(0).casefold() for match in LIVE_MATERIAL_RE.finditer(source_text)}
         existing_material = {match.group(0).casefold() for match in LIVE_MATERIAL_RE.finditer(existing_text)}
         if source_material - existing_material:
             return True
 
-        # New dates/times/ages/counts attached to an otherwise developing
-        # official update are useful factual changes and should be rewritten.
         source_numbers = {match.group(0).casefold() for match in LIVE_NUMBER_RE.finditer(source_text)}
         existing_numbers = {match.group(0).casefold() for match in LIVE_NUMBER_RE.finditer(existing_text)}
         if source_numbers - existing_numbers:
@@ -282,12 +277,51 @@ def configure_editorial_newsworthiness_gate() -> None:
     core.candidate_is_rewrite_eligible = newsworthy
 
 
+def configure_source_resilience(max_age_hours: int) -> None:
+    """Keep broken optional integrations from degrading the core newsroom."""
+    # GMFRS retired /news-events/news/. Its current official newsroom is /news/.
+    # The legacy RSS currently emits malformed XML, so use the authoritative HTML
+    # index plus the existing Google News site fallback instead of wasting every
+    # run parsing a broken feed.
+    core.RSS_SOURCES[:] = [
+        source for source in core.RSS_SOURCES
+        if source.get("name") != "Greater Manchester Fire and Rescue Service"
+    ]
+    for source in core.DISCOVERY_PAGES:
+        if source.get("name") == "Greater Manchester Fire and Rescue Service":
+            source["url"] = "https://manchesterfire.gov.uk/news/"
+            source["link_pattern"] = "/news/"
+            source["default_category"] = "environment"
+            break
+
+    # The half-hour lane already has indexed fallbacks for these organisations.
+    # Known-invalid API credentials must not consume its latency budget on every
+    # run. The deeper two-hour run keeps testing the integrations and will resume
+    # them automatically as soon as the repository secrets/permissions are fixed.
+    browser_enabled = os.getenv("BROWSER_RENDER_ENABLED", "true").lower() not in {
+        "0", "false", "no", "off"
+    }
+    if max_age_hours <= 14 and not browser_enabled:
+        os.environ["X_BEARER_TOKEN"] = ""
+        os.environ["FACEBOOK_PAGE_ACCESS_TOKEN"] = ""
+        core.log.info(
+            "Fast-news lane: skipping unavailable X/Facebook APIs; indexed fallbacks remain enabled."
+        )
+
+
 def main() -> int:
     # Production policy: ordinary scraped news must be rewritten by OpenAI and
     # pass the newsroom quality/overlap checks. If the rewrite is unavailable
     # or rejected, fail closed rather than publishing source-led copy.
     core.AI_REWRITE_REQUIRED = True
-    core.MAX_NEWS_AGE_HOURS = 72
+
+    # Honour the workflow's actual freshness contract. This used to be hard-coded
+    # to 72 hours here (and scraper.py also had a seven-day floor), which silently
+    # defeated the 14-hour fast-news policy. The permanent archive is unaffected;
+    # this value controls discovery eligibility only.
+    requested_age = max(1, int(os.getenv("MAX_NEWS_AGE_HOURS", "72")))
+    core.MAX_NEWS_AGE_HOURS = requested_age
+    configure_source_resilience(requested_age)
 
     existing = {item.query.casefold().strip() for item in base.PRIORITY_SEARCHES}
     for item in EXTRA_FRESH_SEARCHES:
@@ -296,15 +330,14 @@ def main() -> int:
             existing.add(item.query.casefold().strip())
 
     base.configure()
+    # base.configure() may reset core values, so reassert the workflow contract.
+    core.MAX_NEWS_AGE_HOURS = requested_age
     configure_editorial_newsworthiness_gate()
     install_live_story_updates()
     result = core.main()
     if result != 0:
         return result
 
-    # Final fail-closed publication gate. Publisher names remain in source
-    # metadata but a generated story that still contains a news outlet name in
-    # its headline, standfirst or body is not considered successfully rewritten.
     return reject_publisher_leaks()
 
 
