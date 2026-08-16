@@ -225,7 +225,7 @@ def main() -> None:
     recent_live_ids = {_identity(a) for a in recent_live}
     older_remaining = [a for a in older if _identity(a) not in recent_live_ids]
     stale_pins = [a for a in older_remaining if active_pin(a, now)]
-    stale_pin_ids = {_identity(a) for a in stale_pins]
+    stale_pin_ids = {_identity(a) for a in stale_pins}
     dropped_stale = [a for a in older_remaining if _identity(a) not in stale_pin_ids]
 
     fresh_pins.sort(key=latest_verified_update, reverse=True)
