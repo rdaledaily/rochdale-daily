@@ -243,7 +243,7 @@ def main() -> int:
     else:
         body = (
             '              <p class="feed-empty static-latest-empty">'
-            'Latest verified local stories are being refreshed.'</n            'p>'
+            'Latest verified local stories are being refreshed.</p>'
         )
     block = START + "\n" + body + "\n            " + END
     text = INDEX.read_text(encoding="utf-8")
