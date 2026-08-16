@@ -38,7 +38,7 @@ def parse_dt(value: Any) -> datetime | None:
         return None
     try:
         result = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-    except ValueError:
+    except (TypeError, ValueError):
         return None
     if result.tzinfo is None:
         result = result.replace(tzinfo=timezone.utc)
@@ -46,7 +46,61 @@ def parse_dt(value: Any) -> datetime | None:
 
 
 def published_at(article: dict[str, Any]) -> datetime | None:
+    """Return the original publication time, never a scrape/re-render timestamp."""
     return parse_dt(article.get("first_published_at") or article.get("published_at"))
+
+
+def verified_development_at(article: dict[str, Any]) -> datetime | None:
+    """Return the newest explicit timestamped update for a developing story.
+
+    `last_updated_at` and `scraped_at` are deliberately ignored here. Several
+    maintenance steps normalise those fields, so treating them as freshness
+    would let a re-render make an old story look new. Only a story explicitly
+    marked live/breaking/ongoing and carrying a timestamp in `live_updates[]`
+    may earn freshness from an update.
+    """
+    if not (
+        article.get("live_story") is True
+        or article.get("breaking_news") is True
+        or article.get("is_ongoing") is True
+    ):
+        return None
+    raw_updates = article.get("live_updates") or []
+    if not isinstance(raw_updates, list):
+        return None
+    timestamps: list[datetime] = []
+    for update in raw_updates:
+        if not isinstance(update, dict):
+            continue
+        parsed = parse_dt(
+            update.get("timestamp")
+            or update.get("updated_at")
+            or update.get("published_at")
+        )
+        if parsed is not None:
+            timestamps.append(parsed)
+    return max(timestamps) if timestamps else None
+
+
+def freshness_at(article: dict[str, Any]) -> datetime | None:
+    """Freshness clock: first publication, or a newer verified live update."""
+    first = published_at(article)
+    development = verified_development_at(article)
+    if development is not None and (first is None or development > first):
+        return development
+    return first
+
+
+def required_live_articles(configured_minimum: int, eligible_fresh_count: int) -> int:
+    """Never require stale/junk publication merely to satisfy a numeric floor.
+
+    The live scrape snapshot cannot be expected to contain eight publishable
+    current stories when only two genuinely fresh eligible stories exist. When
+    supply supports the configured floor, the full floor still applies.
+    """
+    if configured_minimum <= 0 or eligible_fresh_count <= 0:
+        return 0
+    return min(configured_minimum, eligible_fresh_count)
 
 
 def is_eligible_news_article(article: Any) -> bool:
@@ -118,6 +172,7 @@ def main() -> None:
     now = datetime.now(timezone.utc)
     fresh_cutoff = now - timedelta(hours=MAX_FRESH_AGE_HOURS)
     top_fresh_cutoff = now - timedelta(hours=TOP_STORY_FRESH_HOURS)
+    epoch_floor = datetime.min.replace(tzinfo=timezone.utc)
 
     valid_articles = [article for article in articles if isinstance(article, dict)]
     eligible_news_feed = [article for article in public_feed if is_eligible_news_article(article)]
@@ -127,24 +182,25 @@ def main() -> None:
     eligible_fresh_feed = [
         article
         for article in frontpage_eligible_feed
-        if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff
+        if (freshness_at(article) or epoch_floor) >= fresh_cutoff
     ]
     fresh = [
         article
         for article in valid_articles
-        if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff
+        if (freshness_at(article) or epoch_floor) >= fresh_cutoff
     ]
     top_three = valid_articles[:3]
     top_three_fresh = [
         article
         for article in top_three
-        if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_fresh_cutoff
+        if (freshness_at(article) or epoch_floor) >= top_fresh_cutoff
     ]
-    lead_published = published_at(valid_articles[0]) if valid_articles else None
+    lead_first_published = published_at(valid_articles[0]) if valid_articles else None
+    lead_freshness = freshness_at(valid_articles[0]) if valid_articles else None
     eligible_top_fresh = [
         article
         for article in frontpage_eligible_feed
-        if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_fresh_cutoff
+        if (freshness_at(article) or epoch_floor) >= top_fresh_cutoff
     ]
 
     raw_candidates = int(status.get("raw_candidates") or 0)
@@ -175,6 +231,10 @@ def main() -> None:
         MIN_FRESH_FRONTPAGE_STORIES,
         len(eligible_fresh_feed),
     ) if MIN_FRESH_FRONTPAGE_STORIES > 0 else 0
+    required_live_this_run = required_live_articles(
+        MIN_LIVE_STORIES,
+        len(eligible_fresh_feed),
+    )
 
     zero_new_after_editorial_rejection = (
         attempted_rewrites >= 5
@@ -191,6 +251,10 @@ def main() -> None:
     failures: list[str] = []
     if raw_candidates > 0 and not search_records:
         failures.append("discovery produced candidates but recorded no search-query execution plan")
+    if search_records and missing_categories:
+        failures.append("search plan missed required categories: " + ", ".join(missing_categories))
+    if search_records and missing_wards:
+        failures.append("search plan missed required wards: " + ", ".join(missing_wards))
 
     if zero_new_attempts_are_starvation(
         attempted_rewrites=attempted_rewrites,
@@ -204,9 +268,11 @@ def main() -> None:
             "and the run also shows a freshness shortfall or collector failure"
         )
 
-    if live_articles < MIN_LIVE_STORIES:
+    if live_articles < required_live_this_run:
         failures.append(
-            f"live article count {live_articles} is below required minimum {MIN_LIVE_STORIES}"
+            f"live article count {live_articles} is below achievable minimum "
+            f"{required_live_this_run} (configured {MIN_LIVE_STORIES}; "
+            f"{len(eligible_fresh_feed)} fresh eligible stories available)"
         )
     if raw_candidates > 0 and len(fresh) < required_fresh_frontpage:
         failures.append(
@@ -216,19 +282,21 @@ def main() -> None:
         )
     if raw_candidates > 0 and new_articles > 0 and not fresh:
         failures.append(
-            "discovery produced new articles but the homepage contains no story first published in the last "
+            "discovery produced new articles but the homepage contains no story first published "
+            "or materially updated in the last "
             f"{MAX_FRESH_AGE_HOURS} hours"
         )
     if raw_candidates > 0 and new_articles > 0 and eligible_top_fresh and not top_three_fresh:
         failures.append(
-            "the public feed contains eligible news first published in the last "
+            "the public feed contains eligible news first published or materially updated in the last "
             f"{TOP_STORY_FRESH_HOURS} hours but none appears in the top three homepage stories"
         )
     if raw_candidates > 0 and new_articles > 0 and valid_articles and (
-        lead_published is None or lead_published < fresh_cutoff
+        lead_freshness is None or lead_freshness < fresh_cutoff
     ):
         failures.append(
-            "discovery produced new articles but the homepage lead is older than the allowed freshness window"
+            "discovery produced new articles but the homepage lead has neither a recent first publication "
+            "nor a recent verified timestamped development"
         )
 
     if (
@@ -270,13 +338,15 @@ def main() -> None:
         "fresh_frontpage_articles": len(fresh),
         "fresh_top_three_articles": len(top_three_fresh),
         "eligible_top_fresh_feed_articles": len(eligible_top_fresh),
-        "minimum_live_articles": MIN_LIVE_STORIES,
+        "configured_minimum_live_articles": MIN_LIVE_STORIES,
+        "required_live_articles_this_run": required_live_this_run,
         "configured_minimum_frontpage_articles": FRONTPAGE_MIN_ARTICLES,
         "configured_minimum_fresh_frontpage_articles": MIN_FRESH_FRONTPAGE_STORIES,
         "required_fresh_frontpage_articles_this_run": required_fresh_frontpage,
         "freshness_window_hours": MAX_FRESH_AGE_HOURS,
         "top_story_freshness_hours": TOP_STORY_FRESH_HOURS,
-        "lead_first_published_at": lead_published.isoformat().replace("+00:00", "Z") if lead_published else None,
+        "lead_first_published_at": lead_first_published.isoformat().replace("+00:00", "Z") if lead_first_published else None,
+        "lead_freshness_at": lead_freshness.isoformat().replace("+00:00", "Z") if lead_freshness else None,
         "collector_errors": collector_errors,
         "zero_new_after_editorial_rejection": zero_new_after_editorial_rejection,
         "status": "failed" if failures else "healthy",
