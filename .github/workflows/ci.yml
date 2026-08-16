@@ -81,6 +81,7 @@ jobs:
             scraper/generate_ward_pages.py \
             scraper/generate_news_sitemap.py \
             scraper/update_homepage_static_latest.py \
+            scraper/update_homepage_weekly_news.py \
             scraper/homepage_discovery_metadata.py \
             scraper/add_article_time_metadata.py \
             scraper/externalise_article_css.py \
@@ -121,6 +122,7 @@ jobs:
           python scraper/test_councillor_photos.py
           PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
           PYTHONPATH=scraper python scraper/test_update_homepage_static_latest.py
+          PYTHONPATH=scraper python scraper/test_update_homepage_weekly_news.py
           PYTHONPATH=scraper python scraper/test_homepage_discovery_metadata.py
           PYTHONPATH=scraper python scraper/test_article_time_metadata.py
           PYTHONPATH=scraper python scraper/test_externalise_article_css.py
