@@ -24,7 +24,9 @@ from update_homepage_static_latest import (
     INDEX,
     card,
     clean,
-    eligible,
+    is_expired_time_sensitive_preview,
+    is_expired_today_deadline,
+    is_utility_not_news,
     parse_dt,
 )
 
@@ -54,13 +56,40 @@ def frontpage_slugs(path: Path = FRONTPAGE) -> set[str]:
     }
 
 
+def weekly_eligible(row: object, now: datetime) -> bool:
+    """Apply publication/content exclusions without inheriting Latest's 14-hour cap.
+
+    The weekly layer is intentionally an archive/discovery surface, so it shares
+    the Latest feed's safety and utility exclusions but owns its separate seven-day
+    age window in ``choose_weekly``.
+    """
+    if not isinstance(row, dict):
+        return False
+    if str(row.get("status") or "published").lower() != "published":
+        return False
+    if row.get("requires_approval") is True:
+        return False
+    if not clean(row.get("slug")) or not clean(row.get("title")):
+        return False
+    if clean(row.get("category")).lower() in {"event", "events", "what's on", "whats-on"}:
+        return False
+    if is_utility_not_news(row):
+        return False
+    if is_expired_today_deadline(row, now):
+        return False
+    if is_expired_time_sensitive_preview(row, now):
+        return False
+    published = parse_dt(row.get("first_published_at") or row.get("published_at"))
+    return published.year > 1970 and published <= now
+
+
 def choose_weekly(rows: list[object], current_slugs: set[str], now: datetime | None = None) -> list[dict]:
     now = now or datetime.now(timezone.utc)
     floor = now - timedelta(days=MAX_AGE_DAYS)
     candidates: list[dict] = []
     seen: set[str] = set()
     for row in rows:
-        if not isinstance(row, dict) or not eligible(row):
+        if not weekly_eligible(row, now):
             continue
         slug = clean(row.get("slug"))
         if not slug or slug in current_slugs or slug in seen:
