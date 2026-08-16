@@ -38,21 +38,25 @@ def main() -> int:
         assert "gh workflow run publish.yml" in body, name
 
     # Emergency removals have a separate priority lane, never merge stale pages,
-    # and explicitly deploy the scrubbed latest main.
+    # and always deploy latest main even when the story was already blocklisted.
     takedown = text("remove-story.yml")
     assert "group: rd-emergency-takedown" in takedown
     assert "gh workflow run deploy-pages.yml --ref main" in takedown
     assert "git merge" not in takedown
+    deploy_step = takedown.split("- name: Deploy takedown immediately", 1)[1]
+    assert "if: steps.commit" not in deploy_step
 
     # The old empty polling/scheduled maintenance writers are gone.
     assert "schedule:" not in text("publish-pending-manual.yml")
     assert "schedule:" not in text("article-image-integrity.yml")
     assert "schedule:" not in text("archive-refresh.yml")
 
-    # Production permits only the existing whitelisted source-photo reuse logic,
-    # instead of globally disabling source images.
+    # Production permits source photos only through the runtime allowlist policy,
+    # rather than globally disabling source-image discovery.
     for name in ("scrape-fast.yml", "scrape-kick.yml", "publish.yml"):
         assert 'USE_SOURCE_IMAGES: "true"' in text(name), name
+    for name in ("scrape-fast.yml", "scrape-kick.yml"):
+        assert "python scraper/run_newsroom_policy.py" in text(name), name
 
     print("Workflow architecture checks passed.")
     return 0
