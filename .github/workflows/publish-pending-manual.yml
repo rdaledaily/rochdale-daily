@@ -2,8 +2,6 @@ name: Publish pending manual articles
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '*/5 * * * *'
   push:
     branches: [main]
     paths:
@@ -16,7 +14,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: rd-manual-queue
+  group: rd-site-writer
   cancel-in-progress: false
 
 jobs:
@@ -28,12 +26,10 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-
       - name: Start from latest main
         run: |
           git fetch origin main
           git reset --hard origin/main
-
       - name: Check for pending work
         id: pending
         shell: bash
@@ -44,12 +40,10 @@ jobs:
             echo 'run=false' >> "$GITHUB_OUTPUT"
             echo 'No pending manual articles.'
           fi
-
       - uses: actions/setup-python@v5
         if: steps.pending.outputs.run == 'true'
         with:
           python-version: '3.11'
-
       - name: Merge pending records into canonical manual source
         if: steps.pending.outputs.run == 'true'
         run: |
@@ -93,12 +87,12 @@ jobs:
               os.remove('manual_publish_trigger.txt')
           PY
           python -m json.tool manual_articles.json > /dev/null
-
       - name: Commit canonical manual source only
         if: steps.pending.outputs.run == 'true'
         id: commit
         shell: bash
         run: |
+          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add manual_articles.json manual_publish_trigger.txt 2>/dev/null || true
@@ -111,8 +105,7 @@ jobs:
           git commit -m 'Merge pending manual articles into canonical source'
           git push origin HEAD:main
           echo 'published=true' >> "$GITHUB_OUTPUT"
-
-      - name: Hand off rendering to canonical manual publisher
+      - name: Hand off rendering to canonical publisher
         if: steps.commit.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ github.token }}

@@ -2,114 +2,19 @@ name: Refresh permanent news archive
 
 on:
   workflow_dispatch:
-  schedule:
-    # Fast news runs at :05 and :35. Refresh the crawlable archive/homepage
-    # shortly afterwards instead of every 10 minutes. This pass also dispatches
-    # the Pages deployment explicitly: commits made with GITHUB_TOKEN do not
-    # fire ordinary push workflows, so relying on deploy-pages.yml's push
-    # trigger left automated newsroom changes in Git without reaching readers.
-    - cron: '15,45 * * * *'
-  push:
-    paths:
-      - 'articles/**'
-      - 'articles.json'
-      - 'manual_articles.json'
-      - 'manual_articles.d/**'
-      - 'scraper/generate_archive.py'
-      - 'scraper/enforce_frontpage_freshness.py'
-      - 'scraper/update_homepage_static_latest.py'
-      - 'scraper/update_homepage_weekly_news.py'
-      - 'scraper/homepage_discovery_metadata.py'
-      - 'scraper/generate_rss.py'
-      - 'scraper/generate_image_sitemap.py'
-      - '.github/workflows/archive-refresh.yml'
 
 permissions:
-  contents: write
   actions: write
-
-concurrency:
-  group: rd-site-writer
-  cancel-in-progress: false
+  contents: read
 
 jobs:
-  archive:
+  refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: true
-      - name: Start from latest main
-        run: |
-          git fetch origin main
-          git reset --hard origin/main
-      - name: Avoid racing an active newsroom publisher
-        id: newsroom_guard
+      - name: Rebuild archive through canonical publisher
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          active="$(gh run list --repo "${GITHUB_REPOSITORY}" --status in_progress --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
-          queued="$(gh run list --repo "${GITHUB_REPOSITORY}" --status queued --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
-          if [ "${active}" -gt 0 ] || [ "${queued}" -gt 0 ]; then
-            echo "run=false" >> "${GITHUB_OUTPUT}"
-            echo "Newsroom scrape/publish is active or queued; deferring archive refresh to the next scheduled pass to avoid a Git write race."
-          else
-            echo "run=true" >> "${GITHUB_OUTPUT}"
-          fi
-      - uses: actions/setup-python@v5
-        if: steps.newsroom_guard.outputs.run == 'true'
-        with:
-          python-version: '3.11'
-      - name: Rebuild permanent archive, enforce homepage freshness, crawlable discovery sections, RSS and image sitemap
-        if: steps.newsroom_guard.outputs.run == 'true'
-        env:
-          FRONTPAGE_FRESH_HOURS: '14'
-        run: |
-          python scraper/generate_archive.py
-          cp archive.html search.html
-          python scraper/enforce_frontpage_freshness.py
-          python scraper/update_homepage_static_latest.py
-          python scraper/update_homepage_weekly_news.py
-          python scraper/homepage_discovery_metadata.py
-          python scraper/generate_rss.py
-          python scraper/generate_image_sitemap.py
-      - name: Keep archive pages in sitemap
-        if: steps.newsroom_guard.outputs.run == 'true'
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import re
-          p = Path('sitemap.xml')
-          if not p.exists(): raise SystemExit(0)
-          text = p.read_text(encoding='utf-8')
-          additions=[]
-          for url in ('https://rochdaledaily.co.uk/archive.html','https://rochdaledaily.co.uk/search.html'):
-              if url not in text: additions.append(f'  <url><loc>{url}</loc></url>\n')
-          if additions:
-              text=re.sub(r'\s*</urlset>\s*$','\n'+''.join(additions)+'</urlset>\n',text)
-              p.write_text(text,encoding='utf-8')
-          PY
-      - name: Commit archive refresh
-        if: steps.newsroom_guard.outputs.run == 'true'
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add archive.html search.html archive-index.json articles/frontpage.json sitemap.xml image-sitemap.xml index.html rss.xml
-          if git diff --cached --quiet; then
-            echo 'Archive, homepage discovery sections, RSS and image sitemap already current.'
-          else
-            git commit -m 'Refresh archive, homepage discovery sections, RSS and image sitemap'
-            git push origin HEAD:main
-          fi
-      - name: Deploy latest automated newsroom state
-        if: steps.newsroom_guard.outputs.run == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          # workflow_dispatch is deliberately used because GitHub permits a
-          # GITHUB_TOKEN-created workflow_dispatch event to start another run,
-          # whereas bot-authored push events do not recursively trigger Actions.
-          gh workflow run deploy-pages.yml --ref main
-          echo 'Requested a Pages deployment of latest main.'
+          gh workflow run publish.yml --ref main
+          echo 'Canonical site rebuild requested; archive, RSS, sitemaps and homepage will be regenerated together.'

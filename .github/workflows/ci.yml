@@ -31,24 +31,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
           cache-dependency-path: "requirements.txt"
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-
       - name: Verify Python dependencies
         run: |
           python - <<'PY'
@@ -63,7 +59,6 @@ jobs:
           print("Dependency verification passed.")
           print("Pillow version:", Image.__version__)
           PY
-
       - name: Compile pipeline modules
         run: |
           python -m py_compile \
@@ -76,6 +71,11 @@ jobs:
             scraper/editorial_upgrade.py \
             scraper/source_presentation.py \
             scraper/content_hygiene.py \
+            scraper/live_story_updates.py \
+            scraper/render_live_updates.py \
+            scraper/scrub_personal_name.py \
+            scraper/google_news_resolver.py \
+            scraper/frontpage_source_quality.py \
             scraper/generate_pages.py \
             scraper/generate_newspaper_pages.py \
             scraper/generate_ward_pages.py \
@@ -98,14 +98,13 @@ jobs:
             scraper/repair_generated_article_images.py \
             scraper/guarantee_article_images.py \
             scraper/scraper.py
-
       - name: Validate hand-edited data files
         run: python scraper/check_data_files.py
-
       - name: Run test suite
         run: |
           python scraper/test_frontpage_pipeline.py
           PYTHONPATH=scraper python scraper/test_frontpage_freshness_guard.py
+          PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
           PYTHONPATH=scraper python scraper/test_check_scraper_health.py
           python scraper/test_newspaper_freshness.py
           python scraper/test_locality.py
@@ -120,6 +119,7 @@ jobs:
           python scraper/test_event_identity.py
           python scraper/test_article_gate.py
           python scraper/test_resolve_google_news_sources.py
+          PYTHONPATH=scraper python scraper/test_google_news_resolver.py
           python scraper/test_ensure_article_images.py
           python scraper/test_councillor_photos.py
           PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
@@ -129,7 +129,9 @@ jobs:
           PYTHONPATH=scraper python scraper/test_article_time_metadata.py
           PYTHONPATH=scraper python scraper/test_externalise_article_css.py
           PYTHONPATH=scraper python scraper/test_enhance_image_alt_text.py
-
+          PYTHONPATH=scraper python scraper/test_live_story_updates.py
+          PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
+          python scraper/test_workflow_architecture.py
       - name: Verify scraper imports cleanly
         run: |
           cd scraper

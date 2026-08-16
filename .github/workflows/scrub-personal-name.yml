@@ -1,25 +1,25 @@
-name: Scrub private personal name
+name: Scrub private byline metadata
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
-  workflow_dispatch:
+    paths:
+      - 'manual_articles.json'
+      - 'manual_articles.d/**'
+      - 'scraper/scrub_personal_name.py'
+      - '.github/workflows/scrub-personal-name.yml'
 
 permissions:
   contents: write
+  actions: write
 
-# Privacy checks should run promptly after every main update, but they should
-# not occupy the shared generated-site writer lane when there is nothing to
-# scrub. A newer push supersedes an older check; if a scrub does need to write,
-# the existing fetch/rebase/push retry loop below resolves a concurrent main
-# update safely.
 concurrency:
-  group: rd-privacy-scrub
-  cancel-in-progress: true
+  group: rd-site-writer
+  cancel-in-progress: false
 
 jobs:
   scrub:
-    if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Scrub private personal name')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -27,37 +27,52 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-
       - name: Start from latest main
         run: |
           git fetch origin main
           git reset --hard origin/main
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      - name: Remove personal name from live repository files
+      - name: Remove private name from byline/author metadata only
         run: python scraper/scrub_personal_name.py
-
-      - name: Commit scrubbed files
+      - name: Commit source metadata repairs
+        id: commit
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add articles.json manual_articles.json manual_articles.d
           if git diff --cached --quiet; then
-            echo "Personal name is absent from live repository files."
+            echo 'published=false' >> "$GITHUB_OUTPUT"
+            echo 'Private byline metadata is already clear.'
             exit 0
           fi
-          git commit -m "Scrub private personal name"
-          for attempt in 1 2 3 4 5; do
-            if git push origin HEAD:main; then exit 0; fi
-            git reset --hard HEAD
-            git clean -fd
+          git commit -m "Scrub private byline metadata"
+          if git push origin HEAD:main; then
+            echo 'published=true' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          for attempt in 1 2 3; do
             git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              exit 1
+            git reset --hard origin/main
+            git clean -fd
+            python scraper/scrub_personal_name.py
+            git add articles.json manual_articles.json manual_articles.d
+            if git diff --cached --quiet; then
+              echo 'published=false' >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            git commit -m "Scrub private byline metadata (race-safe rebuild)"
+            if git push origin HEAD:main; then
+              echo 'published=true' >> "$GITHUB_OUTPUT"
+              exit 0
             fi
           done
           exit 1
+      - name: Re-render through canonical publisher
+        if: steps.commit.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish.yml --ref main

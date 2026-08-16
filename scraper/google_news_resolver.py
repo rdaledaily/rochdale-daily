@@ -1,28 +1,14 @@
-"""Resolve Google News wrapper links to the publisher's real article URL.
+"""Resolve Google News wrapper links to original publisher URLs.
 
-Google News RSS gives a headline and a `news.google.com/rss/articles/CBMi...`
-link. That link carries no article text, and plain HTTP requests to it get a
-403 or a consent wall, so the pipeline was left with a headline and nothing to
-write from — which is why most candidates were correctly discarded by the
-editorial gate.
-
-A real browser CAN follow that link through to the publisher. Playwright is
-already a dependency (and its Chromium is already installed and cached by the
-workflow), so this reuses what is there rather than adding anything new.
-
-Design notes:
-* ONE browser is launched per run and reused for every URL — launching per URL
-  would dominate the cost.
-* Results are cached on disk between runs, so a wrapper is only ever resolved
-  once. Steady state is therefore nearly free; only genuinely new stories cost
-  a navigation.
-* Failures are cached too (with a shorter TTL) so a permanently unresolvable
-  link is not retried every 15 minutes.
-* Everything is capped and fails soft: any error returns the wrapper unchanged
-  and the pipeline behaves exactly as it does today.
+Fast newsroom runs first attempt a tightly bounded HTTP/query/metadata recovery.
+The browser-enabled deep run remains the fallback for wrappers that genuinely
+need JavaScript/consent handling. Successful and failed browser resolutions are
+cached across runs; lightweight failures are not cached, so the deep resolver
+still gets a chance.
 """
 from __future__ import annotations
 
+import html
 import json
 import os
 import re
@@ -30,7 +16,9 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
-from urllib.parse import urlparse
+from urllib.error import HTTPError, URLError
+from urllib.parse import parse_qs, unquote, urljoin, urlparse
+from urllib.request import Request, build_opener
 
 CACHE_PATH = Path(os.getenv("GOOGLE_NEWS_CACHE", "google_news_resolutions.json"))
 MAX_NEW_PER_RUN = int(os.getenv("GOOGLE_NEWS_RESOLVE_MAX", "60"))
@@ -38,6 +26,8 @@ NAV_TIMEOUT_MS = int(os.getenv("GOOGLE_NEWS_RESOLVE_TIMEOUT_MS", "20000"))
 SETTLE_MS = int(os.getenv("GOOGLE_NEWS_RESOLVE_SETTLE_MS", "2500"))
 SUCCESS_TTL_DAYS = int(os.getenv("GOOGLE_NEWS_CACHE_TTL_DAYS", "45"))
 FAILURE_TTL_HOURS = int(os.getenv("GOOGLE_NEWS_FAILURE_TTL_HOURS", "12"))
+LIGHTWEIGHT_MAX = int(os.getenv("GOOGLE_NEWS_LIGHTWEIGHT_MAX", "10"))
+LIGHTWEIGHT_TIMEOUT = float(os.getenv("GOOGLE_NEWS_LIGHTWEIGHT_TIMEOUT", "2.0"))
 ENABLED = os.getenv("GOOGLE_NEWS_BROWSER_RESOLUTION", "true").lower() not in {
     "0", "false", "no", "off",
 }
@@ -47,6 +37,7 @@ _CONSENT_LABELS = (
     "Reject all", "Alle ablehnen", "Decline all", "Accept all",
     "I agree", "Alles accepteren", "Nur essenzielle",
 )
+_USER_AGENT = "Mozilla/5.0 (compatible; RochdaleDaily/2.0; +https://rochdaledaily.co.uk/)"
 
 
 def is_google_wrapper(url: str) -> bool:
@@ -57,6 +48,18 @@ def is_google_wrapper(url: str) -> bool:
 def _is_google_host(url: str) -> bool:
     host = (urlparse(str(url or "")).hostname or "").lower()
     return any(host == h or host.endswith("." + h) for h in _GOOGLE_HOSTS)
+
+
+def _is_publisher_url(url: str) -> bool:
+    value = str(url or "").strip()
+    if not value.startswith(("https://", "http://")) or _is_google_host(value):
+        return False
+    parsed = urlparse(value)
+    if not parsed.netloc:
+        return False
+    return not parsed.path.lower().endswith(
+        (".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".css", ".js", ".xml", ".json")
+    )
 
 
 def _now() -> datetime:
@@ -76,7 +79,6 @@ def _parse(value: Any) -> datetime | None:
 
 
 def _cache_key(url: str) -> str:
-    """Key on the wrapper's token, ignoring query noise like ?oc=5."""
     path = urlparse(str(url or "")).path
     match = re.search(r"/articles/([A-Za-z0-9_\-]+)", path)
     return match.group(1)[:120] if match else str(url or "")[:200]
@@ -101,7 +103,6 @@ def save_cache(cache: dict[str, dict[str, Any]], path: Path = CACHE_PATH) -> Non
 
 
 def _cached_result(entry: Any, now: datetime) -> str | None:
-    """Return cached URL, '' for a still-valid failure, or None if expired."""
     if not isinstance(entry, dict):
         return None
     stamp = _parse(entry.get("at"))
@@ -111,6 +112,64 @@ def _cached_result(entry: Any, now: datetime) -> str | None:
     if url:
         return url if now - stamp < timedelta(days=SUCCESS_TTL_DAYS) else None
     return "" if now - stamp < timedelta(hours=FAILURE_TTL_HOURS) else None
+
+
+def _query_candidates(url: str) -> list[str]:
+    parsed = urlparse(str(url or ""))
+    query = parse_qs(parsed.query)
+    result: list[str] = []
+    for key in ("url", "u", "q", "target", "dest", "destination"):
+        for value in query.get(key, []):
+            candidate = unquote(html.unescape(str(value)))
+            if _is_publisher_url(candidate) and candidate not in result:
+                result.append(candidate)
+    return result
+
+
+def _metadata_candidates(raw: str, page_url: str) -> list[str]:
+    patterns = (
+        r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)',
+        r'<link[^>]+href=["\']([^"\']+)["\'][^>]+rel=["\']canonical["\']',
+        r'<meta[^>]+property=["\']og:url["\'][^>]+content=["\']([^"\']+)',
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:url["\']',
+        r'<meta[^>]+name=["\']twitter:url["\'][^>]+content=["\']([^"\']+)',
+    )
+    result: list[str] = []
+    for pattern in patterns:
+        for match in re.findall(pattern, raw, flags=re.I):
+            candidate = urljoin(page_url, html.unescape(match))
+            if _is_publisher_url(candidate) and candidate not in result:
+                result.append(candidate)
+    refresh = re.search(r'<meta[^>]+http-equiv=["\']refresh["\'][^>]+content=["\'][^"\']*url\s*=\s*([^"\'>]+)', raw, flags=re.I)
+    if refresh:
+        candidate = urljoin(page_url, html.unescape(refresh.group(1).strip()))
+        if _is_publisher_url(candidate) and candidate not in result:
+            result.insert(0, candidate)
+    return result
+
+
+def _lightweight_resolve(url: str) -> str:
+    """Recover easy wrappers without Chromium; never raises and stays bounded."""
+    for candidate in _query_candidates(url):
+        return candidate
+    try:
+        request = Request(
+            url,
+            headers={
+                "User-Agent": _USER_AGENT,
+                "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.2",
+                "Accept-Language": "en-GB,en;q=0.9",
+            },
+        )
+        with build_opener().open(request, timeout=LIGHTWEIGHT_TIMEOUT) as response:
+            final = str(response.geturl() or "")
+            if _is_publisher_url(final):
+                return final
+            raw = response.read(512 * 1024).decode("utf-8", errors="ignore")
+    except (HTTPError, URLError, TimeoutError, ValueError, OSError):
+        return ""
+    candidates = _metadata_candidates(raw, final or url)
+    return candidates[0] if candidates else ""
 
 
 def _dismiss_consent(page) -> None:
@@ -126,14 +185,12 @@ def _dismiss_consent(page) -> None:
 
 
 def _resolve_one(page, url: str) -> str:
-    """Navigate the wrapper and return the publisher URL, or '' on failure."""
     try:
         page.goto(url, wait_until="domcontentloaded", timeout=NAV_TIMEOUT_MS)
     except Exception:
         return ""
     if _is_google_host(page.url):
         _dismiss_consent(page)
-    # The wrapper bounces via JS; give it a moment to leave the Google host.
     deadline = SETTLE_MS
     while deadline > 0 and _is_google_host(page.url):
         try:
@@ -143,7 +200,6 @@ def _resolve_one(page, url: str) -> str:
         deadline -= 500
     final = str(page.url or "")
     if not final or _is_google_host(final):
-        # Last resort: some wrappers expose the target in a canonical/meta tag.
         for selector, attribute in (
             ("link[rel='canonical']", "href"),
             ("meta[property='og:url']", "content"),
@@ -152,12 +208,12 @@ def _resolve_one(page, url: str) -> str:
                 node = page.query_selector(selector)
                 if node:
                     candidate = str(node.get_attribute(attribute) or "")
-                    if candidate and not _is_google_host(candidate):
+                    if _is_publisher_url(candidate):
                         return candidate
             except Exception:
                 continue
         return ""
-    return final
+    return final if _is_publisher_url(final) else ""
 
 
 def resolve_wrappers(
@@ -167,11 +223,6 @@ def resolve_wrappers(
     max_new: int | None = None,
     browser_factory=None,
 ) -> dict[str, str]:
-    """Map wrapper URL -> publisher URL for as many as possible.
-
-    Cached entries are free. At most `max_new` fresh navigations happen per run.
-    Never raises: on any failure the mapping simply omits that URL.
-    """
     wrappers = [u for u in dict.fromkeys(str(x) for x in urls) if is_google_wrapper(u)]
     if not wrappers:
         return {}
@@ -180,37 +231,54 @@ def resolve_wrappers(
     cache = load_cache(cache_path)
     resolved: dict[str, str] = {}
     pending: list[str] = []
-
     for url in wrappers:
         cached = _cached_result(cache.get(_cache_key(url)), now)
         if cached:
             resolved[url] = cached
         elif cached == "":
-            continue  # known-bad, still within failure TTL
+            continue
         else:
             pending.append(url)
+
+    # Frequent runs get a small cheap recovery pass even when browser resolution
+    # is disabled. Do not cache failures: the deep browser must still get a try.
+    lightweight_resolved = 0
+    still_pending: list[str] = []
+    for index, url in enumerate(pending):
+        if index >= max(0, LIGHTWEIGHT_MAX):
+            still_pending.extend(pending[index:])
+            break
+        final = _lightweight_resolve(url)
+        if final:
+            resolved[url] = final
+            cache[_cache_key(url)] = {"url": final, "at": _iso(_now())}
+            lightweight_resolved += 1
+        else:
+            still_pending.append(url)
+    pending = still_pending
+    if lightweight_resolved:
+        save_cache(cache, cache_path)
+        if logger:
+            logger.info("Google News lightweight resolution recovered %d wrapper(s).", lightweight_resolved)
 
     limit = MAX_NEW_PER_RUN if max_new is None else max_new
     pending = pending[: max(0, limit)]
     if not pending or not ENABLED:
         if logger and pending:
-            logger.info("Google News browser resolution disabled; %d link(s) left unresolved.", len(pending))
+            logger.info(
+                "Google News browser resolution disabled; %d link(s) remain for the deep resolver.",
+                len(pending),
+            )
         return resolved
 
     try:
         from playwright.sync_api import sync_playwright
-    except Exception as exc:  # pragma: no cover - dependency guard
+    except Exception as exc:  # pragma: no cover
         if logger:
             logger.warning("Playwright unavailable; Google News links left unresolved: %s", exc)
         return resolved
 
     succeeded = 0
-    # Overall wall-clock budget for the whole resolution pass. This is what lets
-    # the count cap (MAX_NEW_PER_RUN) be set high to drain a big wrapper backlog:
-    # resolution runs flat-out recovering as many wrappers as it can, then stops
-    # cleanly when the budget is spent, instead of either being throttled to a
-    # tiny count or running unbounded and blowing the pipeline's timeout. Set to
-    # 0 to disable the budget (count cap only).
     budget_seconds = float(os.getenv("GOOGLE_NEWS_RESOLVE_BUDGET_SECONDS", "480"))
     deadline = (time.monotonic() + budget_seconds) if budget_seconds > 0 else None
     stopped_early = False
@@ -219,8 +287,7 @@ def resolve_wrappers(
         with factory() as playwright:
             browser = playwright.chromium.launch(
                 headless=True,
-                args=["--disable-dev-shm-usage", "--no-sandbox",
-                      "--disable-blink-features=AutomationControlled"],
+                args=["--disable-dev-shm-usage", "--no-sandbox", "--disable-blink-features=AutomationControlled"],
             )
             context = browser.new_context(
                 locale="en-GB",
@@ -233,7 +300,6 @@ def resolve_wrappers(
                 if deadline is not None and time.monotonic() >= deadline:
                     stopped_early = True
                     break
-                final = ""
                 try:
                     final = _resolve_one(page, url)
                 except Exception:
@@ -246,9 +312,9 @@ def resolve_wrappers(
             browser.close()
         if stopped_early and logger:
             logger.info(
-                "Google News resolution hit its %.0fs budget after %d link(s); "
-                "remaining wrappers will resolve on later runs (cache persists).",
-                budget_seconds, succeeded,
+                "Google News resolution hit its %.0fs budget after %d browser success(es); remaining wrappers will retry later.",
+                budget_seconds,
+                succeeded,
             )
     except Exception as exc:
         if logger:
@@ -257,7 +323,10 @@ def resolve_wrappers(
     save_cache(cache, cache_path)
     if logger:
         logger.info(
-            "Google News resolution: %d/%d newly resolved (%d served from cache).",
-            succeeded, len(pending), len(resolved) - succeeded,
+            "Google News resolution: lightweight=%d browser=%d remaining_attempted=%d cached_total=%d.",
+            lightweight_resolved,
+            succeeded,
+            len(pending),
+            len(resolved),
         )
     return resolved

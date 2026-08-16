@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: write
-  actions: read
+  actions: write
 
 concurrency:
   group: rd-site-writer
@@ -30,53 +30,32 @@ jobs:
         run: |
           git fetch origin main
           git reset --hard origin/main
-      - name: Avoid racing an active newsroom publisher
-        id: newsroom_guard
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          active="$(gh run list --repo "${GITHUB_REPOSITORY}" --status in_progress --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
-          queued="$(gh run list --repo "${GITHUB_REPOSITORY}" --status queued --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
-          if [ "${active}" -gt 0 ] || [ "${queued}" -gt 0 ]; then
-            echo "run=false" >> "${GITHUB_OUTPUT}"
-            echo "Newsroom scrape/publish is active or queued; deferring council discovery to the next scheduled pass to avoid a Git write race."
-          else
-            echo "run=true" >> "${GITHUB_OUTPUT}"
-          fi
       - uses: actions/setup-python@v5
-        if: steps.newsroom_guard.outputs.run == 'true'
         with:
           python-version: '3.11'
       - name: Install dependencies
-        if: steps.newsroom_guard.outputs.run == 'true'
         run: python -m pip install --no-cache-dir requests feedparser beautifulsoup4 pypdf openai
       - name: Find and verify councillor portraits
-        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/councillor_photos.py
       - name: Discover indexed council meeting documents
-        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/council_minutes_collector.py
       - name: Extract decisions, recorded votes and sourced news stories
-        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/publish_council_minutes_stories.py
-      - name: Validate democracy data
-        if: steps.newsroom_guard.outputs.run == 'true'
+      - name: Validate council source data
         run: |
           python -m json.tool council_documents.json > /dev/null
           python -m json.tool council_votes.json > /dev/null
           python -m json.tool councillor_photos.json > /dev/null
-      - name: Regenerate every ward democracy page
-        if: steps.newsroom_guard.outputs.run == 'true'
-        run: python scraper/generate_ward_pages.py
-      - name: Commit council data, portraits, pages and stories
-        if: steps.newsroom_guard.outputs.run == 'true'
+      - name: Commit council source data only
+        id: commit
+        shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
           stage_council_state() {
-            git add council_documents.json council_votes.json councillor_photos.json manual_articles.d/ wards/ index.html
+            git add council_documents.json council_votes.json councillor_photos.json manual_articles.d 2>/dev/null || true
             if [ -f council_story_sources.json ]; then
               git add council_story_sources.json
             fi
@@ -89,37 +68,40 @@ jobs:
             python -m json.tool council_documents.json > /dev/null
             python -m json.tool council_votes.json > /dev/null
             python -m json.tool councillor_photos.json > /dev/null
-            python scraper/generate_ward_pages.py
           }
 
           stage_council_state
           if git diff --cached --quiet; then
-            echo 'No council changes.'
+            echo 'published=false' >> "$GITHUB_OUTPUT"
+            echo 'No council source changes.'
             exit 0
           fi
-          git commit -m 'Update Rochdale council democracy records and portraits'
+          git commit -m 'Update Rochdale council source records'
           if git push origin HEAD:main; then
+            echo 'published=true' >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Do not merge or rebase independently generated democracy snapshots.
-          # If main moved, rebuild the council state from the new canonical head.
           for attempt in 1 2 3; do
-            echo "main moved during council publish; rebuilding on latest main (${attempt}/3)."
+            echo "main moved during council collection; rebuilding source state (${attempt}/3)."
             git fetch origin main
             git reset --hard origin/main
             git clean -fd
             rebuild_council_state
             stage_council_state
             if git diff --cached --quiet; then
-              echo 'Latest main already contains the council state.'
+              echo 'published=false' >> "$GITHUB_OUTPUT"
               exit 0
             fi
-            git commit -m 'Update Rochdale council democracy records and portraits (race-safe rebuild)'
+            git commit -m 'Update Rochdale council source records (race-safe rebuild)'
             if git push origin HEAD:main; then
+              echo 'published=true' >> "$GITHUB_OUTPUT"
               exit 0
             fi
           done
-
-          echo 'Could not publish council state after three race-safe rebuild attempts.' >&2
           exit 1
+      - name: Hand council changes to canonical publisher
+        if: steps.commit.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish.yml --ref main
