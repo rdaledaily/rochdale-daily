@@ -47,6 +47,7 @@ finalise_cards_policy() {
   cp archive.html search.html
   python scraper/update_homepage_static_latest.py
   python scraper/update_homepage_weekly_news.py
+  python scraper/sync_homepage_top_story.py
   python scraper/homepage_discovery_metadata.py
   python scraper/generate_rss.py
   python scraper/generate_image_sitemap.py
@@ -75,6 +76,7 @@ rebuild_from_merged_feed() {
   cp archive.html search.html
   python scraper/update_homepage_static_latest.py
   python scraper/update_homepage_weekly_news.py
+  python scraper/sync_homepage_top_story.py
   python scraper/homepage_discovery_metadata.py
   python scraper/generate_rss.py
   python scraper/generate_image_sitemap.py
