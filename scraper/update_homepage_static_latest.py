@@ -6,6 +6,10 @@ for human readers. This committed fallback exists so search engines, link previe
 text browsers and readers with failed/disabled JavaScript can discover recent
 journalism directly from the homepage.
 
+Crucially, this block is *Latest news*, not an archive. It therefore uses the same
+14-hour freshness ceiling as the newsroom. Older useful journalism belongs in the
+separate weekly-news layer rather than being presented to crawlers as current.
+
 The same lightweight refresh also removes any legacy inline base64 masthead logo.
 The real logo already exists as a cacheable static asset, so embedding roughly
 140 KB of PNG data inside the HTML makes every homepage response unnecessarily
@@ -26,6 +30,7 @@ ARTICLES = ROOT / "articles.json"
 START = "<!-- STATIC_LATEST_START -->"
 END = "<!-- STATIC_LATEST_END -->"
 MAX_STORIES = 12
+LATEST_MAX_AGE_HOURS = 14
 SPORT_PREVIEW_MAX_HOURS = 8
 LOCAL_TZ = ZoneInfo("Europe/London")
 
@@ -140,7 +145,7 @@ def is_expired_time_sensitive_preview(row: dict, now: datetime | None = None) ->
     return now >= published + timedelta(hours=SPORT_PREVIEW_MAX_HOURS)
 
 
-def eligible(row: object) -> bool:
+def eligible(row: object, now: datetime | None = None) -> bool:
     if not isinstance(row, dict):
         return False
     if str(row.get("status") or "published").lower() != "published":
@@ -151,14 +156,17 @@ def eligible(row: object) -> bool:
         return False
     if str(row.get("category") or "").strip().lower() in {"event", "events", "what's on", "whats-on"}:
         return False
+    now = now or datetime.now(timezone.utc)
     if is_utility_not_news(row):
         return False
-    if is_expired_today_deadline(row):
+    if is_expired_today_deadline(row, now):
         return False
-    if is_expired_time_sensitive_preview(row):
+    if is_expired_time_sensitive_preview(row, now):
         return False
     published = parse_dt(row.get("first_published_at") or row.get("published_at"))
-    return published <= datetime.now(timezone.utc)
+    if published.year <= 1970 or published > now:
+        return False
+    return published >= now - timedelta(hours=LATEST_MAX_AGE_HOURS)
 
 
 def clean(value: object) -> str:
@@ -213,7 +221,8 @@ def card(row: dict) -> str:
 
 def main() -> int:
     rows = json.loads(ARTICLES.read_text(encoding="utf-8"))
-    candidates = [r for r in rows if eligible(r)]
+    now = datetime.now(timezone.utc)
+    candidates = [r for r in rows if eligible(r, now)]
     candidates.sort(
         key=lambda r: parse_dt(r.get("first_published_at") or r.get("published_at")),
         reverse=True,
@@ -229,10 +238,14 @@ def main() -> int:
         if len(chosen) >= MAX_STORIES:
             break
 
-    if not chosen:
-        raise SystemExit("No eligible published stories available for homepage static Latest fallback")
-
-    block = START + "\n" + "\n".join(card(r) for r in chosen) + "\n            " + END
+    if chosen:
+        body = "\n".join(card(r) for r in chosen)
+    else:
+        body = (
+            '              <p class="feed-empty static-latest-empty">'
+            'Latest verified local stories are being refreshed.'</n            'p>'
+        )
+    block = START + "\n" + body + "\n            " + END
     text = INDEX.read_text(encoding="utf-8")
 
     if START in text and END in text:
@@ -254,7 +267,10 @@ def main() -> int:
 
     if updated != text:
         INDEX.write_text(updated, encoding="utf-8")
-        print(f"Updated crawlable homepage Latest fallback with {len(chosen)} stories and normalised masthead asset.")
+        print(
+            f"Updated crawlable homepage Latest fallback with {len(chosen)} stories "
+            f"inside the {LATEST_MAX_AGE_HOURS}-hour window and normalised masthead asset."
+        )
     else:
         print("Homepage static Latest fallback and masthead asset already current.")
     return 0
