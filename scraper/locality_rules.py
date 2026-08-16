@@ -118,6 +118,7 @@ KNOWN_GM_PUBLISHER_DOMAINS = {
     "itv.com",
 }
 KNOWN_GM_PUBLISHER_NAME_PREFIXES = (
+    "Rochdale Times",
     "BBC Manchester",
     "Manchester Evening News",
     "Greater Manchester Police",
