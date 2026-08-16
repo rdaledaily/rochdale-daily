@@ -14,7 +14,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: rd-site-writer
+  group: rd-manual-queue
   cancel-in-progress: false
 
 jobs:
