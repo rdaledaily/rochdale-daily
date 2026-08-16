@@ -1,4 +1,4 @@
-name: Populate ward democracy councillors
+name: Refresh democracy source data
 
 on:
   workflow_dispatch:
@@ -10,17 +10,13 @@ on:
       - 'council_votes.json'
       - 'ward_areas.json'
       - 'scraper/councillor_photos.py'
-      - 'scraper/generate_ward_pages.py'
-      - 'scraper/patch_democracy_portraits.py'
       - 'scraper/test_councillor_photos.py'
       - '.github/workflows/democracy.yml'
 
 permissions:
   contents: write
+  actions: write
 
-# Democracy writes index.html, wards/ and portrait data, while the newsroom also
-# writes index.html and wards/. They must share one lock or a perfectly healthy
-# scraper run can lose its image/page commit to a democracy push race.
 concurrency:
   group: rd-site-writer
   cancel-in-progress: false
@@ -29,108 +25,62 @@ jobs:
   democracy:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
       - name: Check out latest main
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: true
-
       - name: Start from latest main
         run: |
           git fetch origin main
           git reset --hard origin/main
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Require a local portrait for every councillor
         run: python scraper/test_councillor_photos.py
-
-      - name: Build local councillor portrait index
+      - name: Rebuild councillor portrait source index
         run: python scraper/councillor_photos.py
-
-      - name: Wire portraits into homepage Democracy panel
-        run: python scraper/patch_democracy_portraits.py
-
-      - name: Populate all ward democracy sections
-        run: python scraper/generate_ward_pages.py
-
-      - name: Verify all 20 wards show three local councillor portraits
+      - name: Commit democracy source data only
+        id: commit
+        shell: bash
         run: |
-          python - <<'PY'
-          import json
-          import re
-          from pathlib import Path
-
-          wards = json.loads(Path('ward_areas.json').read_text(encoding='utf-8')).get('wards', {})
-          votes = json.loads(Path('council_votes.json').read_text(encoding='utf-8')).get('wards', {})
-          failures = []
-
-          def slugify(value):
-              import unicodedata
-              text = unicodedata.normalize('NFKD', str(value)).encode('ascii', 'ignore').decode()
-              return re.sub(r'-{2,}', '-', re.sub(r'[^a-zA-Z0-9]+', '-', text).strip('-').lower())
-
-          for ward in wards:
-              expected = len(votes.get(ward, []))
-              page = Path('wards') / f'{slugify(ward)}.html'
-              if expected != 3:
-                  failures.append(f'{ward}: expected roster size 3, got {expected}')
-                  continue
-              if not page.is_file():
-                  failures.append(f'{ward}: ward page missing')
-                  continue
-              text = page.read_text(encoding='utf-8')
-              portraits = text.count('class="cllr-photo"')
-              placeholders = text.count('class="cllr-placeholder"')
-              if portraits != 3 or placeholders:
-                  failures.append(f'{ward}: portraits={portraits}, placeholders={placeholders}')
-
-          if failures:
-              raise SystemExit('Democracy portrait coverage failed:\n' + '\n'.join(failures))
-          print(f'Democracy portrait coverage passed: {len(wards)} wards, 60/60 councillors pictured from assets/img/cards.')
-          PY
-
-      - name: Verify homepage Democracy panel renders portraits
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          text = Path('index.html').read_text(encoding='utf-8')
-          required = [
-              'var councillorPhotos = null;',
-              'fetch("/councillor_photos.json", { cache: "no-store" })',
-              'var portrait = image.indexOf("/assets/img/cards/") === 0',
-          ]
-          missing = [item for item in required if item not in text]
-          if missing:
-              raise SystemExit('Homepage Democracy portrait wiring missing: ' + ', '.join(missing))
-          print('Homepage Democracy portrait wiring passed.')
-          PY
-
-      - name: Commit regenerated democracy pages
-        run: |
+          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add councillor_photos.json wards/ index.html
+          git add councillor_photos.json
           if git diff --cached --quiet; then
-            echo 'Democracy sections already contain all current councillors.'
+            echo 'published=false' >> "$GITHUB_OUTPUT"
+            echo 'Democracy source data already current.'
             exit 0
           fi
-          git commit -m 'Populate democracy sections with local councillor portraits'
-          for attempt in 1 2 3 4 5; do
-            if git push origin HEAD:main; then
+          git commit -m 'Refresh councillor portrait source data'
+          if git push origin HEAD:main; then
+            echo 'published=true' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd
+            python scraper/test_councillor_photos.py
+            python scraper/councillor_photos.py
+            git add councillor_photos.json
+            if git diff --cached --quiet; then
+              echo 'published=false' >> "$GITHUB_OUTPUT"
               exit 0
             fi
-            git reset --hard HEAD
-            git clean -fd
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              exit 1
+            git commit -m 'Refresh councillor portrait source data (race-safe rebuild)'
+            if git push origin HEAD:main; then
+              echo 'published=true' >> "$GITHUB_OUTPUT"
+              exit 0
             fi
           done
           exit 1
+      - name: Hand democracy changes to canonical publisher
+        if: steps.commit.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish.yml --ref main
