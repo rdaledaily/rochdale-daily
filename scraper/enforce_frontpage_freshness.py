@@ -89,7 +89,12 @@ def is_utility_not_lead(article: dict[str, Any]) -> bool:
 
 
 def is_expired_today_deadline(article: dict[str, Any], now: datetime) -> bool:
-    """Expire automated same-day offers/notices once their stated local deadline passes."""
+    """Expire automated same-day offers/notices once their stated local deadline passes.
+
+    The word "today" belongs to the story's publication day, not the day on which
+    a later freshness pass happens to run. Anchoring the deadline to ``now`` would
+    incorrectly resurrect yesterday's "until 6pm today" offer after midnight.
+    """
     if article.get("manual_article") is True or str(article.get("source_kind") or "").lower() == "editorial":
         return False
     text = " ".join(str(article.get(key) or "") for key in ("title", "excerpt", "summary"))
@@ -105,7 +110,9 @@ def is_expired_today_deadline(article: dict[str, Any], now: datetime) -> bool:
     elif match.group("ampm").lower() == "am" and hour == 12:
         hour = 0
     local_now = now.astimezone(LOCAL_TZ)
-    deadline = local_now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    published = first_published(article)
+    anchor = published.astimezone(LOCAL_TZ) if published is not None else local_now
+    deadline = anchor.replace(hour=hour, minute=minute, second=0, microsecond=0)
     return local_now > deadline
 
 
