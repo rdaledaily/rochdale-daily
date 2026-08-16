@@ -12,8 +12,6 @@ permissions:
   contents: write
   actions: write
 
-# This workflow shares the same writer lane as scheduled fast/deep newsroom
-# runs. Only one canonical newsroom snapshot may rebuild/push main at a time.
 concurrency:
   group: rd-fast-news-writer
   cancel-in-progress: false
@@ -38,9 +36,9 @@ jobs:
       MAX_AI_ARTICLES_PER_RUN: "24"
       MAX_AI_ARTICLES_INITIAL: "40"
       RESPECT_ROBOTS: "true"
-      REQUEST_TIMEOUT: "5"
-      SLOW_DOMAIN_FAILURE_THRESHOLD: "1"
-      SLOW_DOMAIN_BENCH_HOURS: "24"
+      REQUEST_TIMEOUT: "7"
+      SLOW_DOMAIN_FAILURE_THRESHOLD: "3"
+      SLOW_DOMAIN_BENCH_HOURS: "4"
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
       CSS_SOURCE_PATH: assets/css/article-inline.css
@@ -51,10 +49,10 @@ jobs:
       SOCIAL_MAX_PUBLIC_REACTIONS: "12"
       SOCIAL_MAX_OFFICIAL_UPDATES: "4"
       X_RECENT_SEARCH_MAX: "100"
-      DISCOVERY_LINKS_PER_SOURCE: "14"
-      RSS_ITEMS_PER_SOURCE: "45"
+      DISCOVERY_LINKS_PER_SOURCE: "24"
+      RSS_ITEMS_PER_SOURCE: "70"
       GOOGLE_SEARCH_QUERY_LIMIT: "68"
-      DISCOVERY_PAGE_LIMIT: "1"
+      DISCOVERY_PAGE_LIMIT: "2"
       DISCOVERY_WORKERS: "16"
       DISCOVERY_LINK_WORKERS: "16"
       AI_WORKERS: "8"
@@ -104,12 +102,12 @@ jobs:
       - name: Remove emojis and publishing artefacts before page generation
         run: python scraper/content_hygiene.py --fix
 
-      - name: Resolve article images
+      - name: Resolve relevant article images, then guarantee a fallback
         timeout-minutes: 8
         run: |
-          python scraper/ensure_article_images.py
-          python scraper/repair_generated_article_images.py
-          python scraper/repair_generated_with_commons.py
+          python scraper/repair_generated_article_images.py --articles articles.json
+          python scraper/repair_generated_with_commons.py --articles articles.json
+          python scraper/ensure_article_images.py --articles articles.json
 
       - name: Validate, generate, assert final freshness and verify health
         timeout-minutes: 10
@@ -119,8 +117,6 @@ jobs:
           python scraper/repair_merged_bodies.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
-          # Page generation rebuilds frontpage.json, so freshness must be the
-          # final homepage mutation before sitemap/health validation.
           python scraper/enforce_frontpage_freshness.py
           python scraper/enforce_live_homepage_window.py
           python scraper/generate_news_sitemap.py
