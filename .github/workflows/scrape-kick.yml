@@ -12,9 +12,13 @@ permissions:
   contents: write
   actions: write
 
+# A code/config push represents a newer newsroom implementation and therefore
+# supersedes any older render still holding the shared writer lane. Scheduled
+# runs keep cancel-in-progress=false in scrape-fast.yml, so ordinary editions
+# serialize rather than cancelling one another.
 concurrency:
   group: rd-site-writer
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   fast-news:
