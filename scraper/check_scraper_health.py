@@ -1,4 +1,4 @@
-"""Fail loudly when discovery succeeds but the public homepage is stale."""
+"""Fail loudly when discovery succeeds but the public homepage is stale or starved."""
 from __future__ import annotations
 
 import json
@@ -14,6 +14,7 @@ FRONTPAGE_PATH = ROOT / "articles" / "frontpage.json"
 HEALTH_PATH = ROOT / "scraper_health.json"
 MIN_LIVE_STORIES = int(os.getenv("MIN_LIVE_STORIES", "40"))
 MIN_FRESH_FRONTPAGE_STORIES = int(os.getenv("MIN_FRESH_FRONTPAGE_STORIES", "0"))
+FRONTPAGE_MIN_ARTICLES = int(os.getenv("FRONTPAGE_MIN_ARTICLES", "12"))
 MAX_FRESH_AGE_HOURS = int(os.getenv("SCRAPER_HEALTH_FRESH_HOURS", "24"))
 TOP_STORY_FRESH_HOURS = int(os.getenv("SCRAPER_HEALTH_TOP_FRESH_HOURS", "6"))
 
@@ -42,11 +43,6 @@ def published_at(article: dict[str, Any]) -> datetime | None:
 
 
 def is_eligible_news_article(article: Any) -> bool:
-    """Return True for a published news record that could reasonably occupy a homepage news slot.
-
-    Future event listings are deliberately excluded: their ingestion time must never make an
-    otherwise stale news homepage look healthy.
-    """
     if not isinstance(article, dict):
         return False
     if str(article.get("status") or "published").lower() != "published":
@@ -78,13 +74,23 @@ def main() -> None:
 
     valid_articles = [article for article in articles if isinstance(article, dict)]
     eligible_news_feed = [article for article in public_feed if is_eligible_news_article(article)]
-    fresh = [article for article in valid_articles if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff]
+    eligible_fresh_feed = [
+        article
+        for article in eligible_news_feed
+        if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff
+    ]
+    fresh = [
+        article
+        for article in valid_articles
+        if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff
+    ]
     top_three = valid_articles[:3]
-    top_three_fresh = [article for article in top_three if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_fresh_cutoff]
+    top_three_fresh = [
+        article
+        for article in top_three
+        if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_fresh_cutoff
+    ]
     lead_published = published_at(valid_articles[0]) if valid_articles else None
-
-    # The six-hour top-three rule is a surfacing guard, not an impossible-content
-    # requirement. Only fail when an eligible <6h story exists but none is surfaced.
     eligible_top_fresh = [
         article
         for article in eligible_news_feed
@@ -96,25 +102,21 @@ def main() -> None:
     live_articles = int(status.get("live_articles") or 0)
     collector_errors = status.get("collector_errors") or {}
 
-    # A freshness target must never require the homepage to surface more newly
-    # published stories than the run actually produced. The configured value is
-    # therefore a ceiling; the current run's new-article count supplies the
-    # achievable floor. Separate lead/top-three checks below still prevent a
-    # stale homepage from passing simply because output volume is low.
-    required_fresh_frontpage = 0
-    if MIN_FRESH_FRONTPAGE_STORIES > 0 and new_articles > 0:
-        required_fresh_frontpage = min(MIN_FRESH_FRONTPAGE_STORIES, new_articles)
+    required_fresh_frontpage = min(
+        MIN_FRESH_FRONTPAGE_STORIES,
+        len(eligible_fresh_feed),
+    ) if MIN_FRESH_FRONTPAGE_STORIES > 0 else 0
 
     failures: list[str] = []
     if live_articles < MIN_LIVE_STORIES:
         failures.append(
             f"live article count {live_articles} is below required minimum {MIN_LIVE_STORIES}"
         )
-    if required_fresh_frontpage > 0 and raw_candidates > 0 and len(fresh) < required_fresh_frontpage:
+    if raw_candidates > 0 and len(fresh) < required_fresh_frontpage:
         failures.append(
             f"fresh homepage count {len(fresh)} is below achievable minimum "
             f"{required_fresh_frontpage} within {MAX_FRESH_AGE_HOURS} hours "
-            f"({new_articles} new article(s) produced; configured ceiling {MIN_FRESH_FRONTPAGE_STORIES})"
+            f"({len(eligible_fresh_feed)} eligible fresh reservoir stories available)"
         )
     if raw_candidates > 0 and new_articles > 0 and not fresh:
         failures.append(
@@ -133,16 +135,23 @@ def main() -> None:
             "discovery produced new articles but the homepage lead is older than the allowed freshness window"
         )
 
-    # Raw discovery volume includes events, duplicate clusters, non-local results,
-    # thin listings and material deliberately rejected by editorial safeguards. It
-    # therefore cannot prove that a two-story homepage has "collapsed". Keep this
-    # guard strict, but compare the homepage to the actual publishable news pool:
-    # if ten or more eligible news records exist and fewer than three surface,
-    # something in selection/generation has genuinely gone wrong.
-    if len(valid_articles) < 3 and len(eligible_news_feed) >= 10:
+    if (
+        FRONTPAGE_MIN_ARTICLES > 0
+        and len(eligible_fresh_feed) >= FRONTPAGE_MIN_ARTICLES
+        and len(valid_articles) < FRONTPAGE_MIN_ARTICLES
+    ):
+        failures.append(
+            f"homepage has {len(valid_articles)} stories despite "
+            f"{len(eligible_fresh_feed)} eligible fresh reservoir stories; "
+            f"configured minimum is {FRONTPAGE_MIN_ARTICLES}"
+        )
+
+    collapse_floor = min(3, len(eligible_fresh_feed))
+    if len(valid_articles) < collapse_floor:
         failures.append(
             f"homepage collapsed to {len(valid_articles)} stories despite "
-            f"{len(eligible_news_feed)} eligible published news records"
+            f"{len(eligible_fresh_feed)} eligible stories inside the "
+            f"{MAX_FRESH_AGE_HOURS}-hour freshness window"
         )
 
     payload = {
@@ -151,11 +160,13 @@ def main() -> None:
         "new_articles": new_articles,
         "live_articles": live_articles,
         "eligible_published_news_records": len(eligible_news_feed),
+        "eligible_fresh_news_records": len(eligible_fresh_feed),
         "frontpage_articles": len(valid_articles),
         "fresh_frontpage_articles": len(fresh),
         "fresh_top_three_articles": len(top_three_fresh),
         "eligible_top_fresh_feed_articles": len(eligible_top_fresh),
         "minimum_live_articles": MIN_LIVE_STORIES,
+        "configured_minimum_frontpage_articles": FRONTPAGE_MIN_ARTICLES,
         "configured_minimum_fresh_frontpage_articles": MIN_FRESH_FRONTPAGE_STORIES,
         "required_fresh_frontpage_articles_this_run": required_fresh_frontpage,
         "freshness_window_hours": MAX_FRESH_AGE_HOURS,
