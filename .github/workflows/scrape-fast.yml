@@ -29,8 +29,11 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
-      AI_REWRITE_REQUIRED: "false"
+      AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "14"
+      PUBLISH_MAX_NEWS_AGE_HOURS: "14"
+      MIN_AUTOMATED_ARTICLE_WORDS: "200"
+      CANDIDATE_RESERVOIR_HOURS: "96"
       SAME_DAY_ONLY: "false"
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "7"
@@ -93,8 +96,10 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
       - name: Run resilient Rochdale newsroom pipeline
-        timeout-minutes: 18
+        timeout-minutes: 24
         run: python scraper/run_newspaper_pipeline.py
+      - name: Enforce substantial automated articles
+        run: python scraper/enforce_automated_article_floor.py
       - name: Resolve article images before page generation
         timeout-minutes: 8
         run: |
@@ -141,7 +146,11 @@ jobs:
       FACEBOOK_EVENTS_DISCOVERY_URL: "https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149"
       FACEBOOK_EVENTS_MAX: "18"
       OPENAI_MODEL: "gpt-4o-mini"
+      AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "72"
+      PUBLISH_MAX_NEWS_AGE_HOURS: "14"
+      MIN_AUTOMATED_ARTICLE_WORDS: "200"
+      CANDIDATE_RESERVOIR_HOURS: "96"
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "7"
       FRONTPAGE_MIN_ARTICLES: "12"
@@ -160,7 +169,8 @@ jobs:
       MAX_SELECTED_PER_SOURCE: "8"
       MAX_SELECTED_PER_CATEGORY: "24"
       MIN_LIVE_STORIES: "20"
-      SCRAPER_HEALTH_FRESH_HOURS: "24"
+      MIN_FRESH_FRONTPAGE_STORIES: "6"
+      SCRAPER_HEALTH_FRESH_HOURS: "14"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "true"
       BROWSER_RENDER_ENABLED: "true"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "true"
@@ -192,8 +202,10 @@ jobs:
           python -m pip install --no-cache-dir "Pillow>=10,<13"
           python -m playwright install --with-deps chromium
       - name: Run deep resilient Rochdale newsroom discovery
-        timeout-minutes: 27
+        timeout-minutes: 32
         run: python scraper/run_newspaper_pipeline.py
+      - name: Enforce substantial automated articles
+        run: python scraper/enforce_automated_article_floor.py
       - name: Resolve article images before page generation
         timeout-minutes: 10
         run: |
