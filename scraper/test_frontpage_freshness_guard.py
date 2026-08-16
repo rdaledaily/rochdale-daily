@@ -10,6 +10,7 @@ from enforce_frontpage_freshness import (
     is_expired_today_deadline,
     is_recent_live_update,
     is_utility_not_lead,
+    latest_verified_update,
 )
 
 
@@ -33,12 +34,44 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
     def test_recent_live_update_can_outrank_fresh_utility(self) -> None:
         now = datetime.now(timezone.utc)
         cutoff = now - timedelta(hours=14)
+        verified = now - timedelta(minutes=20)
         article = {
             "title": "Police appeal for missing man",
             "live_story": True,
             "first_published_at": (now - timedelta(hours=22)).isoformat(),
-            "last_updated_at": (now - timedelta(minutes=20)).isoformat(),
+            "last_updated_at": verified.isoformat(),
+            "live_updates": [{"timestamp": verified.isoformat(), "text": "Police issued a new appeal."}],
             "source_url": "https://www.gmp.police.uk/news/appeal/",
+        }
+        self.assertTrue(is_recent_live_update(article, cutoff))
+
+    def test_scrape_timestamp_does_not_resurrect_old_machine_live_story(self) -> None:
+        now = datetime.now(timezone.utc)
+        cutoff = now - timedelta(hours=14)
+        original = now - timedelta(days=2)
+        article = {
+            "title": "Old automated breaking story",
+            "live_story": True,
+            "breaking_news": True,
+            "source_kind": "aggregator_discovered_article",
+            "first_published_at": original.isoformat(),
+            "last_updated_at": (now - timedelta(minutes=5)).isoformat(),
+            "scraped_at": (now - timedelta(minutes=2)).isoformat(),
+            "live_updates": [{"timestamp": original.isoformat(), "text": "Original update only."}],
+        }
+        self.assertEqual(latest_verified_update(article), original)
+        self.assertFalse(is_recent_live_update(article, cutoff))
+
+    def test_editorial_live_story_may_use_explicit_last_updated_at(self) -> None:
+        now = datetime.now(timezone.utc)
+        cutoff = now - timedelta(hours=14)
+        article = {
+            "title": "Live council meeting",
+            "live_story": True,
+            "source_kind": "editorial",
+            "manual_article": True,
+            "first_published_at": (now - timedelta(days=1)).isoformat(),
+            "last_updated_at": (now - timedelta(minutes=10)).isoformat(),
         }
         self.assertTrue(is_recent_live_update(article, cutoff))
 
