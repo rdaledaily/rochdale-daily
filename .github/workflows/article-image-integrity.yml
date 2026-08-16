@@ -1,105 +1,92 @@
-name: Repair article card images
+name: Enrich article images
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '25,55 * * * *'
   push:
+    branches: [main]
     paths:
-      - '.github/workflows/article-image-integrity.yml'
-      - 'articles.json'
       - 'manual_articles.json'
       - 'manual_articles.d/**'
-      - 'scraper/ensure_article_images.py'
+      - 'articles.json'
       - 'assets/img/cards/**'
+      - 'scraper/repair_generated_article_images.py'
+      - 'scraper/repair_generated_with_commons.py'
+      - '.github/workflows/article-image-integrity.yml'
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
-  group: rd-site-writer
-  cancel-in-progress: false
+  group: rd-image-enrichment
+  cancel-in-progress: true
 
 jobs:
-  repair:
+  enrich:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Start from latest main
         run: |
           git fetch origin main
           git reset --hard origin/main
 
+      - name: Avoid racing newsroom publication
+        id: guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active="$(gh run list --repo "${GITHUB_REPOSITORY}" --status in_progress --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run" or .workflowName == "Publish manual article edits")] | length')"
+          queued="$(gh run list --repo "${GITHUB_REPOSITORY}" --status queued --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run" or .workflowName == "Publish manual article edits")] | length')"
+          if [ "$active" -gt 0 ] || [ "$queued" -gt 0 ]; then
+            echo 'run=false' >> "$GITHUB_OUTPUT"
+            echo 'Newsroom publishing is active; image enrichment will use a later run.'
+          else
+            echo 'run=true' >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-python@v5
+        if: steps.guard.outputs.run == 'true'
         with:
-          python-version: '3.12'
+          python-version: '3.11'
           cache: pip
           cache-dependency-path: requirements.txt
 
-      - name: Install page-generation dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements.txt
-
-      - name: Enforce cards-only images for every published article
-        run: python scraper/ensure_article_images.py
-
-      - name: Rebuild generated article pages
+      - name: Install dependencies
+        if: steps.guard.outputs.run == 'true'
         run: |
-          if [ -f scraper/generate_pages.py ]; then
-            python scraper/generate_pages.py
-          fi
+          python -m pip install --no-cache-dir -r requirements.txt
+          python -m pip install --no-cache-dir 'Pillow>=10,<13'
 
-      - name: Verify cards-only image contract
+      - name: Enrich placeholders with relevant photography
+        if: steps.guard.outputs.run == 'true'
+        env:
+          USE_WIKIMEDIA_COMMONS: 'true'
+          USE_SOURCE_IMAGES: 'false'
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
+          python scraper/repair_generated_article_images.py --articles articles.json
+          python scraper/repair_generated_with_commons.py --articles articles.json
 
-          rows = json.loads(Path('articles.json').read_text(encoding='utf-8'))
-          bad = []
-          missing = []
-          for article in rows:
-              if not isinstance(article, dict) or str(article.get('status') or 'published').lower() != 'published':
-                  continue
-              image = str(article.get('image_url') or article.get('img') or '').replace('\\', '/').lstrip('/')
-              if not image.startswith('assets/img/cards/'):
-                  bad.append((article.get('slug'), image))
-                  continue
-              if not Path(image).is_file():
-                  missing.append((article.get('slug'), image))
-          if bad:
-              raise SystemExit(f'Non-cards article images remain: {bad[:20]}')
-          if missing:
-              raise SystemExit(f'Missing cards-folder article images remain: {missing[:20]}')
-          print('Cards-only article image policy passed.')
-          PY
+      - name: Validate feed
+        if: steps.guard.outputs.run == 'true'
+        run: python -m json.tool articles.json > /dev/null
 
-      - name: Commit repaired feed, pages and cards
+      - name: Commit image metadata and cached assets only
+        if: steps.guard.outputs.run == 'true'
         run: |
-          git config user.name 'Rochdale Daily Bot'
-          git config user.email 'actions@users.noreply.github.com'
-          git add articles.json image_coverage_report.json assets/img/cards articles
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add articles.json assets/img/cards image_repair_report.json commons_image_repair_report.json image_coverage_report.json 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo 'Article image state already compliant.'
+            echo 'No image enrichment changes.'
             exit 0
           fi
-          git commit -m 'Normalise published article card images'
-          if git push origin HEAD:main; then
-            exit 0
-          fi
-
-          # Another publishing job may have won the race. Rebuild once against
-          # the newest main rather than rebasing generated files and risking
-          # stale article output.
-          git fetch origin main
-          git reset --hard origin/main
-          git clean -fd
-          python scraper/ensure_article_images.py
-          if [ -f scraper/generate_pages.py ]; then python scraper/generate_pages.py; fi
-          git add articles.json image_coverage_report.json assets/img/cards articles
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m 'Normalise published article card images (fresh rebuild)'
+          git commit -m 'Enrich article images without rebuilding newsroom state'
           git push origin HEAD:main
