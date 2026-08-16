@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import unittest
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 import update_homepage_static_latest as latest
 
@@ -76,6 +77,20 @@ class StaticLatestEligibilityTests(unittest.TestCase):
             title="Early Bird Tickets Available for Rochdale Hornets Matches Until 6pm Today",
             category="sport",
             excerpt="Supporters can buy the discounted tickets until 6pm today.",
+            published_at=datetime(2026, 8, 15, 16, 54, tzinfo=timezone.utc).isoformat(),
+        )
+        self.assertTrue(latest.is_expired_today_deadline(row, now))
+
+    def test_same_day_deadline_remains_expired_after_midnight(self):
+        local = ZoneInfo("Europe/London")
+        published = datetime(2026, 8, 15, 16, 54, tzinfo=local).astimezone(timezone.utc)
+        now = datetime(2026, 8, 16, 1, 30, tzinfo=local).astimezone(timezone.utc)
+        row = self.base(
+            title="Early Bird Tickets Available for Rochdale Hornets Matches Until 6pm Today",
+            category="sport",
+            excerpt="Supporters can buy the discounted tickets until 6pm today.",
+            first_published_at=published.isoformat(),
+            published_at=published.isoformat(),
         )
         self.assertTrue(latest.is_expired_today_deadline(row, now))
 
@@ -84,6 +99,7 @@ class StaticLatestEligibilityTests(unittest.TestCase):
         row = self.base(
             title="Early Bird Tickets Available Until 6pm Today",
             category="sport",
+            published_at=datetime(2026, 8, 15, 12, 0, tzinfo=timezone.utc).isoformat(),
         )
         self.assertFalse(latest.is_expired_today_deadline(row, now))
 
