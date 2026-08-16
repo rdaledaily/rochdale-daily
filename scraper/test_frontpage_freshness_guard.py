@@ -107,6 +107,18 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
         }
         self.assertTrue(is_expired_today_deadline(article, now))
 
+    def test_machine_same_day_deadline_stays_expired_after_midnight(self) -> None:
+        local = ZoneInfo("Europe/London")
+        published = datetime(2026, 8, 15, 16, 54, tzinfo=local).astimezone(timezone.utc)
+        now = datetime(2026, 8, 16, 1, 30, tzinfo=local).astimezone(timezone.utc)
+        article = {
+            "title": "Early Bird Tickets Available for Rochdale Hornets Matches Until 6pm Today",
+            "excerpt": "Supporters have until 6pm today to buy discounted tickets.",
+            "source_kind": "article",
+            "first_published_at": published.isoformat(),
+        }
+        self.assertTrue(is_expired_today_deadline(article, now))
+
     def test_machine_same_day_deadline_is_retained_before_local_deadline(self) -> None:
         local = ZoneInfo("Europe/London")
         now = datetime(2026, 8, 15, 17, 30, tzinfo=local).astimezone(timezone.utc)
