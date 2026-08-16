@@ -2,9 +2,9 @@
 """Add a secondary, clearly labelled weekly archive discovery section.
 
 The live Latest feed remains strict and is never padded with older material. The
-weekly section exists only when the current edition is already healthy; when the
-fresh newsroom collapses, it is removed rather than visually masking the problem
-with week-old archive cards.
+weekly section is deliberately separate so a quiet current-news cycle does not
+leave readers or crawlers with an unnecessarily shallow homepage. Older stories
+are never represented as current or breaking news.
 """
 from __future__ import annotations
 
@@ -72,6 +72,7 @@ def current_edition_story_count(rows: list[dict], now: datetime | None = None) -
 
 
 def current_edition_healthy(rows: list[dict], now: datetime | None = None) -> bool:
+    """Retained as a newsroom-health signal; it no longer hides archive discovery."""
     return current_edition_story_count(rows, now) >= MIN_CURRENT_EDITION_FOR_WEEKLY
 
 
@@ -151,10 +152,10 @@ def section_markup(rows: list[dict]) -> str:
         '      <section class="section" id="more-local-news" aria-labelledby="more-local-news-title">\n'
         '        <div class="wrap">\n'
         '          <div class="section-head">\n'
-        '            <h2 class="section-title" id="more-local-news-title">More local news from this week</h2>\n'
+        '            <h2 class="section-title" id="more-local-news-title">More local news from the past 7 days</h2>\n'
         '            <a class="section-link" href="/archive.html">Browse the archive</a>\n'
         '          </div>\n'
-        '          <p style="margin:0 0 14px;color:var(--muted);font-size:15px">Archive reporting for further reading. Current and breaking stories remain in Latest news above.</p>\n'
+        '          <p style="margin:0 0 14px;color:var(--muted);font-size:15px">Further local reporting from the past week. Latest news above remains limited to verified current stories from the last 14 hours.</p>\n'
         '          <div class="news-grid weekly-news-grid">\n'
         f"{cards}\n"
         '          </div>\n'
@@ -193,13 +194,12 @@ def main() -> int:
     now = datetime.now(timezone.utc)
     current_rows = frontpage_rows()
     current_count = current_edition_story_count(current_rows, now)
-    if current_count >= MIN_CURRENT_EDITION_FOR_WEEKLY:
-        chosen = choose_weekly(payload, {clean(row.get('slug')) for row in current_rows}, now=now)
-    else:
-        chosen = []
+    chosen = choose_weekly(payload, {clean(row.get('slug')) for row in current_rows}, now=now)
+
+    if current_count < MIN_CURRENT_EDITION_FOR_WEEKLY:
         print(
-            f"Weekly archive section suppressed: current edition has {current_count} "
-            f"genuinely current stories; minimum is {MIN_CURRENT_EDITION_FOR_WEEKLY}."
+            f"Current edition has only {current_count} genuinely current stories; "
+            "keeping the clearly labelled weekly archive section visible for honest homepage depth."
         )
 
     text = INDEX.read_text(encoding="utf-8")
