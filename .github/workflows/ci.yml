@@ -96,6 +96,7 @@ jobs:
             scraper/merge_feeds.py \
             scraper/resolve_google_news_sources.py \
             scraper/ensure_article_images.py \
+            scraper/enforce_cards_only_images.py \
             scraper/repair_generated_article_images.py \
             scraper/guarantee_article_images.py \
             scraper/scraper.py
@@ -134,6 +135,8 @@ jobs:
           PYTHONPATH=scraper python scraper/test_live_story_updates.py
           PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
           python scraper/test_workflow_architecture.py
+      - name: Enforce cards-only canonical article images
+        run: python scraper/enforce_cards_only_images.py --articles articles.json --check
       - name: Verify scraper imports cleanly
         run: |
           cd scraper
