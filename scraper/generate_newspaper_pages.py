@@ -21,6 +21,7 @@ from datetime import datetime, timedelta, timezone
 import os
 import re
 
+import enforce_cards_only_images as cards_policy
 import enforce_frontpage_freshness as freshness_guard
 import frontpage_pipeline as fp
 import generate_pages
@@ -294,6 +295,11 @@ def _newsroom_select_frontpage(articles, now=None):
 
 
 def main() -> None:
+    # frontpage_pipeline injects editor-written records while rebuilding
+    # articles.json. Make that post-injection image boundary use the canonical
+    # cards-only normalizer rather than the general image matcher, so a manual
+    # source URL cannot re-enter the generated site after initial normalisation.
+    fp.enforce_article = cards_policy.enforce_article
     fp.is_low_quality_article = _newsroom_low_quality
     fp._article_rank = _newsroom_rank
     fp.select_frontpage = _newsroom_select_frontpage
