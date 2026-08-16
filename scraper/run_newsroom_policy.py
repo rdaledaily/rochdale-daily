@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install production-only source policy before running the newsroom.
+"""Install production-only source and newsroom quality policy.
 
 Local news publishers are valid discovery/corroboration sources. They are not
 allowed to leak into Rochdale Daily's reader-facing copy, and their photographs
@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
+import editorial_upgrade as editorial
 import run_newspaper_pipeline as pipeline
 
 core = pipeline.core
@@ -64,6 +65,32 @@ def _remove_local_publisher_search_exclusions(url: str) -> str:
     )
 
 
+def _remove_near_target_length_issue(
+    issues: list[str],
+    draft,
+    source_text: str,
+    source_kind: str = "",
+) -> list[str]:
+    """Treat a near-200 rich report as complete instead of forcing padding.
+
+    The 200-word rich-source budget remains the writing target. Its quality gate
+    gets a 5% (10-word) tolerance so a grounded 197-word story is not sent
+    through four expansion retries merely to manufacture three words. Thin
+    sources keep their exact adaptive floors/caps, so this cannot weaken the
+    short-brief anti-padding rules.
+    """
+    floor, _cap = editorial.length_budget(source_text, source_kind)
+    if floor < 200:
+        return list(issues)
+    clean = editorial.normalise_draft(draft)
+    words = editorial.draft_word_count(clean) if clean else 0
+    tolerance = max(10, int(round(floor * 0.05)))
+    if not (floor - tolerance <= words < floor):
+        return list(issues)
+    prefix = f"Write at least {floor} body words"
+    return [issue for issue in issues if not str(issue).startswith(prefix)]
+
+
 def install_runtime_policy() -> None:
     """Make discovery broad while keeping publication/copyright controls strict."""
     if getattr(core, "_RD_RUNTIME_SOURCE_POLICY_INSTALLED", False):
@@ -105,10 +132,24 @@ def install_runtime_policy() -> None:
         )
 
     core._source_image_allowed = source_image_allowed
+
+    original_editorial_quality_issues = core.editorial_quality_issues
+
+    def editorial_quality_issues(draft, source_text: str, source_kind: str = ""):
+        issues = original_editorial_quality_issues(draft, source_text, source_kind)
+        return _remove_near_target_length_issue(
+            issues,
+            draft,
+            source_text,
+            source_kind,
+        )
+
+    core.editorial_quality_issues = editorial_quality_issues
     core._RD_RUNTIME_SOURCE_POLICY_INSTALLED = True
     core.log.info(
         "Runtime source policy: local publishers enabled for discovery/corroboration; "
-        "automatic publisher-image reuse restricted to the explicit allowlist."
+        "automatic publisher-image reuse restricted to the explicit allowlist; "
+        "rich-source 200-word target uses a 10-word no-padding tolerance."
     )
 
 
@@ -135,6 +176,9 @@ def _normalise_runtime_status() -> None:
     )
     status["publisher_source_image_policy"] = (
         "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork."
+    )
+    status["rich_source_length_policy"] = (
+        "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded."
     )
     status["source_led_fallback_enabled"] = False
     status["crime_direct_publish_enabled"] = False
