@@ -5,14 +5,21 @@ This is intentionally conservative. It does not delete archive articles or overr
 manual/editorial judgement. It only marks specific automated records as unsuitable
 for homepage prominence when the source shape is too weak to support a time-sensitive
 news claim.
+
+When a weak item is removed, the guard also refills the vacated slot from the same
+fresh, editorially eligible reservoir used by the main freshness pass. That prevents
+quality enforcement from needlessly making the homepage shallower.
 """
 from __future__ import annotations
 
 import json
 import re
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
+
+import enforce_frontpage_freshness as freshness
 
 ARTICLES = Path("articles.json")
 FRONTPAGE = Path("articles/frontpage.json")
@@ -136,7 +143,33 @@ def _identity(article: dict[str, Any]) -> str:
     return str(article.get("id") or article.get("slug") or article.get("story_key") or "")
 
 
-def apply(articles: list[Any], frontpage: dict[str, Any]) -> tuple[int, int]:
+def _refill_after_exclusions(
+    articles: list[Any],
+    frontpage_articles: list[dict[str, Any]],
+    now: datetime,
+) -> list[dict[str, Any]]:
+    """Refill quality-vacated slots without weakening freshness or editorial rules."""
+    cutoff = now - timedelta(hours=freshness.FRESH_HOURS)
+    existing_ids = {_identity(item) for item in frontpage_articles}
+    candidates = [
+        item
+        for item in articles
+        if isinstance(item, dict)
+        and not exclusion_reason(item)
+        and freshness._eligible_reservoir_article(item, now, cutoff)
+        and _identity(item) not in existing_ids
+    ]
+    limit = max(0, freshness.FRONTPAGE_TARGET - len(frontpage_articles))
+    if limit <= 0 or not candidates:
+        return []
+    return freshness._balanced_refill(candidates, frontpage_articles, limit)
+
+
+def apply(
+    articles: list[Any],
+    frontpage: dict[str, Any],
+    now: datetime | None = None,
+) -> tuple[int, int]:
     excluded_ids: set[str] = set()
     marked = 0
     for raw in articles:
@@ -155,23 +188,31 @@ def apply(articles: list[Any], frontpage: dict[str, Any]) -> tuple[int, int]:
     current = frontpage.get("articles") if isinstance(frontpage, dict) else None
     removed = 0
     if isinstance(current, list):
-        kept = []
+        kept: list[dict[str, Any]] = []
         for raw in current:
             if isinstance(raw, dict) and (exclusion_reason(raw) or _identity(raw) in excluded_ids):
                 removed += 1
                 continue
-            kept.append(raw)
+            if isinstance(raw, dict):
+                kept.append(raw)
+
+        refilled = _refill_after_exclusions(
+            articles,
+            kept,
+            now or datetime.now(timezone.utc),
+        )
+        kept.extend(refilled)
         frontpage["articles"] = kept
         frontpage["count"] = len(kept)
         for index, raw in enumerate(kept):
-            if isinstance(raw, dict):
-                raw["frontpage_rank"] = index
-                raw["frontpage_priority"] = max(1, 1000 - index)
-                raw["slot"] = "lead" if index == 0 else "secondary-1" if index == 1 else "secondary-2" if index == 2 else ""
+            raw["frontpage_rank"] = index
+            raw["frontpage_priority"] = max(1, 1000 - index)
+            raw["slot"] = "lead" if index == 0 else "secondary-1" if index == 1 else "secondary-2" if index == 2 else ""
         quality = frontpage.setdefault("source_quality_guard", {})
         if isinstance(quality, dict):
             quality["marked_archive_records"] = marked
             quality["removed_frontpage_records"] = removed
+            quality["refilled_frontpage_records"] = len(refilled)
     return marked, removed
 
 
@@ -182,10 +223,16 @@ def main() -> None:
         raise SystemExit("articles.json must contain a JSON array")
     if not isinstance(frontpage, dict):
         raise SystemExit("articles/frontpage.json must contain a JSON object")
+    before = len(frontpage.get("articles") or [])
     marked, removed = apply(articles, frontpage)
+    after = len(frontpage.get("articles") or [])
+    refilled = max(0, after - (before - removed))
     _write(ARTICLES, articles)
     _write(FRONTPAGE, frontpage)
-    print(f"Frontpage source-quality guard: marked {marked} archive record(s); removed {removed} frontpage record(s).")
+    print(
+        f"Frontpage source-quality guard: marked {marked} archive record(s); "
+        f"removed {removed} weak frontpage record(s); refilled {refilled} fresh eligible slot(s)."
+    )
 
 
 if __name__ == "__main__":
