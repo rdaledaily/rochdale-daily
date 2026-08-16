@@ -26,8 +26,11 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
       OPENAI_MODEL: "gpt-4o-mini"
-      AI_REWRITE_REQUIRED: "false"
+      AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "14"
+      PUBLISH_MAX_NEWS_AGE_HOURS: "14"
+      MIN_AUTOMATED_ARTICLE_WORDS: "200"
+      CANDIDATE_RESERVOIR_HOURS: "96"
       SAME_DAY_ONLY: "false"
       FRONTPAGE_PRIMARY_DAYS: "1"
       FRONTPAGE_FALLBACK_DAYS: "7"
@@ -96,8 +99,11 @@ jobs:
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
       - name: Run resilient Rochdale newsroom pipeline
-        timeout-minutes: 18
+        timeout-minutes: 24
         run: python scraper/run_newspaper_pipeline.py
+
+      - name: Enforce substantial automated articles
+        run: python scraper/enforce_automated_article_floor.py
 
       - name: Remove emojis and publishing artefacts before page generation
         run: python scraper/content_hygiene.py --fix
