@@ -25,7 +25,7 @@ git_fetch() {
 stage_newsroom() {
   git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
     newsroom_candidates.json google_news_resolution_report.json google_news_resolutions.json live_source_state.json \
-    image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
+    image_coverage_report.json image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json assets/img/cards \
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json \
     archive.html search.html archive-index.json rss.xml index.html 2>/dev/null || true
 }
@@ -37,6 +37,7 @@ rebuild_from_merged_feed() {
   python scraper/repair_generated_article_images.py --articles articles.json
   python scraper/repair_generated_with_commons.py --articles articles.json
   python scraper/ensure_article_images.py --articles articles.json
+  python scraper/enforce_cards_only_images.py --articles articles.json
   python scraper/repair_merged_bodies.py
   python scraper/councillor_photos.py
   python scraper/patch_democracy_portraits.py
@@ -56,6 +57,7 @@ rebuild_from_merged_feed() {
   python scraper/generate_image_sitemap.py
   python scraper/content_hygiene.py --fix
   python scraper/content_hygiene.py
+  python scraper/enforce_cards_only_images.py --articles articles.json --check
   python scraper/check_scraper_health.py
 }
 
