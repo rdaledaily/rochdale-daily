@@ -1,0 +1,141 @@
+name: Apply image fallback policy migration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-image-fallback-policy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Pillow
+        run: python -m pip install --no-cache-dir 'Pillow>=10,<13'
+      - name: Make image guarantee preserve meaningful photography
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('scraper/ensure_article_images.py')
+          text = path.read_text(encoding='utf-8')
+
+          text, n = re.subn(
+              r'^""".*?\n"""',
+              '''"""Guarantee that every published article has a usable image.\n\nA meaningful existing editorial/source/Wikimedia image is preserved. If none\nexists, the local cards library is searched for a filename-matched photograph.\nOnly when neither route produces a real image is a generated headline card used\nas the final fallback. Image relevance is the editorial objective; the cards\nfolder is a cache/fallback implementation detail, not a publication rule.\n"""''',
+              text,
+              count=1,
+              flags=re.S,
+          )
+          if n != 1:
+              raise SystemExit('Could not replace ensure_article_images module policy docstring')
+
+          marker = '\ndef strip_remote_image_metadata(article: dict[str, Any]) -> None:\n'
+          if marker not in text:
+              raise SystemExit('Could not find image metadata helper insertion point')
+          helper = r'''
+
+def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
+    """Keep a real image already chosen by editorial/source/Commons enrichment."""
+    value = clean(article.get("image_url") or article.get("img"))
+    if not value:
+        return False
+    low = value.lower().replace("\\", "/")
+    status = clean(article.get("image_status")).lower()
+    if any(token in status for token in ("generated", "placeholder")):
+        return False
+    if any(token in low for token in ("generated-card", "placeholder", "category_", "category-")):
+        return False
+
+    if low.startswith(("https://", "http://")):
+        # Remote images are only preserved when the record carries provenance,
+        # or a prior enrichment stage explicitly marked it as a real photo.
+        return bool(
+            clean(article.get("image_credit"))
+            or clean(article.get("image_credit_url"))
+            or any(token in status for token in ("source-photo", "commons-photo", "editorial-photo"))
+        )
+
+    rel = low.lstrip("/")
+    candidate = root / rel
+    try:
+        return (
+            candidate.is_file()
+            and candidate.suffix.lower() in IMAGE_SUFFIXES
+            and candidate.stat().st_size > 4096
+            and not is_generated_card(candidate)
+        )
+    except OSError:
+        return False
+'''
+          text = text.replace(marker, helper + marker, 1)
+
+          old = '''def enforce_article(article: dict[str, Any], root: Path) -> str:\n    # Always re-check the local library first. This makes the matcher\n    # retrospective: uploading a new correctly named photo can repair old stories.\n    chosen = choose_filename_match(article, root)\n'''
+          new = '''def enforce_article(article: dict[str, Any], root: Path) -> str:\n    # Do not destroy a real photograph already selected by an editor, source\n    # cache or Wikimedia enrichment merely because it is not in one folder.\n    if existing_meaningful_image(article, root):\n        return "kept-existing"\n\n    # Otherwise check the local library before generating a fallback.\n    chosen = choose_filename_match(article, root)\n'''
+          if old not in text:
+              raise SystemExit('Could not find enforce_article entry block')
+          text = text.replace(old, new, 1)
+
+          old_policy = '"policy": "assets/img/cards only; filename matched against title, slug, excerpt and body"'
+          new_policy = '"policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback"'
+          if old_policy not in text:
+              raise SystemExit('Could not find old image report policy')
+          text = text.replace(old_policy, new_policy, 1)
+          path.write_text(text, encoding='utf-8')
+
+          test = Path('scraper/test_ensure_article_images.py')
+          data = test.read_text(encoding='utf-8')
+          data, n = re.subn(
+              r'def test_non_cards_image_is_never_preserved\(\) -> None:\n.*?(?=\ndef test_curated_cards_photo_matches_full_story_phrase)',
+              '''def test_meaningful_existing_local_image_is_preserved() -> None:\n    with tempfile.TemporaryDirectory() as tmp:\n        root = Path(tmp)\n        image = root / "assets/article-images/existing.jpg"\n        write_jpeg(image)\n        article = {\n            "title": "Sample Rochdale story",\n            "slug": "sample-rochdale-story",\n            "category": "community",\n            "area": "rochdale",\n            "status": "published",\n            "image_url": "assets/article-images/existing.jpg",\n            "image_credit": "Rochdale Daily",\n        }\n        result = mod.enforce_article(article, root)\n        assert result == "kept-existing"\n        assert article["image_url"] == "assets/article-images/existing.jpg"\n\n\n''',
+              data,
+              count=1,
+              flags=re.S,
+          )
+          if n != 1:
+              raise SystemExit('Could not replace non-cards image regression test')
+
+          data, n = re.subn(
+              r'def test_run_gives_every_published_story_a_cards_image\(\) -> None:\n.*?(?=\n\nif __name__ == "__main__":)',
+              '''def test_run_preserves_credited_commons_and_guarantees_other_images() -> None:\n    with tempfile.TemporaryDirectory() as tmp:\n        root = Path(tmp)\n        articles_path = root / "articles.json"\n        report_path = root / "report.json"\n        articles_path.write_text(json.dumps([\n            {\n                "title": "One",\n                "slug": "one",\n                "status": "published",\n                "category": "news",\n                "area": "rochdale",\n                "image_url": "https://upload.wikimedia.org/example.jpg",\n                "image_credit": "Wikimedia Commons",\n            },\n            {\n                "title": "Two",\n                "slug": "two",\n                "status": "published",\n                "category": "sport",\n                "area": "heywood",\n                "image_url": "",\n            },\n        ]), encoding="utf-8")\n\n        old_cwd = Path.cwd()\n        try:\n            os.chdir(root)\n            rc = mod.main([\n                "--articles", str(articles_path),\n                "--report", str(report_path),\n            ])\n        finally:\n            os.chdir(old_cwd)\n\n        assert rc == 0\n        saved = json.loads(articles_path.read_text(encoding="utf-8"))\n        assert saved[0]["image_url"] == "https://upload.wikimedia.org/example.jpg"\n        assert saved[1]["image_url"].startswith("assets/img/cards/")\n        assert (root / saved[1]["image_url"]).is_file()\n        report = json.loads(report_path.read_text(encoding="utf-8"))\n        assert "preserve meaningful existing image" in report["policy"]\n''',
+              data,
+              count=1,
+              flags=re.S,
+          )
+          if n != 1:
+              raise SystemExit('Could not replace full-run image policy test')
+
+          data = data.replace('test_non_cards_image_is_never_preserved,', 'test_meaningful_existing_local_image_is_preserved,')
+          data = data.replace('test_run_gives_every_published_story_a_cards_image,', 'test_run_preserves_credited_commons_and_guarantees_other_images,')
+          test.write_text(data, encoding='utf-8')
+          PY
+      - name: Validate image policy
+        env:
+          PYTHONPATH: scraper
+        run: |
+          python -m py_compile scraper/ensure_article_images.py scraper/test_ensure_article_images.py
+          python scraper/test_ensure_article_images.py
+      - name: Commit image policy
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scraper/ensure_article_images.py scraper/test_ensure_article_images.py
+          git commit -m 'Preserve relevant article photography before fallback cards'
+          git push origin HEAD:main
