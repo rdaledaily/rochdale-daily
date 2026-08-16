@@ -33,7 +33,7 @@ git_fetch() {
 
 stage_newsroom() {
   git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
-    google_news_resolution_report.json google_news_resolutions.json \
+    newsroom_candidates.json google_news_resolution_report.json google_news_resolutions.json \
     image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
     articles sitemap.xml news-sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html 2>/dev/null || true
 }
@@ -81,18 +81,15 @@ fi
 # This turns a repository race into a deterministic rebuild instead of dozens
 # of JSON/HTML merge conflicts.
 #
-# scraper_status.json is part of the validated newsroom snapshot too. Preserve
-# the originating run's discovery counters across recovery: resetting to a
-# concurrently-written main can otherwise import another workflow's smaller
-# status file and make the rebuilt snapshot fail health despite the originating
-# run having already passed its live-story gate. The rebuilt articles/frontpage
-# are still checked afresh below, so freshness and content safeguards remain in
-# force; only the run-specific discovery counters stay attached to their run.
+# scraper_status.json and the candidate reservoir are part of the validated
+# newsroom snapshot too. Preserve the originating run's discovery state across
+# recovery so an unrelated main update cannot throw away leads discovered by
+# the run that is currently publishing.
 recovery_dir="$(mktemp -d)"
 trap 'rm -rf "${recovery_dir}"' EXIT
 
 git show HEAD:articles.json > "${recovery_dir}/local_articles.json"
-for optional in weather.json event_dates.json scraper_status.json; do
+for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json; do
   if git cat-file -e "HEAD:${optional}" 2>/dev/null; then
     git show "HEAD:${optional}" > "${recovery_dir}/${optional}"
   fi
@@ -109,7 +106,7 @@ for attempt in 1 2 3; do
 
   cp articles.json "${recovery_dir}/remote_articles.json"
   python scraper/merge_feeds.py "${recovery_dir}/remote_articles.json" "${recovery_dir}/local_articles.json" articles.json
-  for optional in weather.json event_dates.json scraper_status.json; do
+  for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json; do
     if [ -f "${recovery_dir}/${optional}" ]; then
       cp "${recovery_dir}/${optional}" "${optional}"
     fi
@@ -129,6 +126,9 @@ for attempt in 1 2 3; do
 
   # Carry the now-merged feed into the next recovery attempt if main moved yet again.
   git show HEAD:articles.json > "${recovery_dir}/local_articles.json"
+  if git cat-file -e "HEAD:newsroom_candidates.json" 2>/dev/null; then
+    git show HEAD:newsroom_candidates.json > "${recovery_dir}/newsroom_candidates.json"
+  fi
 done
 
 echo "Could not publish after three bounded race-safe rebuild attempts." >&2
