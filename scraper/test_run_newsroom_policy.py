@@ -1,4 +1,4 @@
-"""Regression checks for the production discovery/image/length policy shim."""
+"""Regression checks for the production discovery/image/length/live policy shim."""
 from __future__ import annotations
 
 from types import SimpleNamespace
@@ -86,7 +86,37 @@ def main() -> None:
     )
     assert thin_issue in issues
 
-    print("Production newsroom source and no-padding policy checks passed.")
+    # Legacy static council guidance accidentally carrying a LIVE flag must not
+    # consume a recurring page-comparison fetch. Plausibly changing council news
+    # and roadworks/directory records remain watchable, as do explicit live rows.
+    assert not policy._should_watch_developing_article({
+        "live_story": True,
+        "is_ongoing": True,
+        "source_kind": "article",
+        "source_url": "https://www.rochdale.gov.uk/council-tax/pay-council-tax",
+    })
+    assert policy._should_watch_developing_article({
+        "live_story": True,
+        "source_kind": "article",
+        "source_url": "https://www.rochdale.gov.uk/news/article/662/example",
+    })
+    assert policy._should_watch_developing_article({
+        "live_story": True,
+        "source_kind": "article",
+        "source_url": "https://www.rochdale.gov.uk/directory-record/2544/example",
+    })
+    assert policy._should_watch_developing_article({
+        "source_kind": "live",
+        "source_url": "https://tfgm.com/travel-updates/travel-alerts",
+    })
+    assert policy._should_watch_developing_article({
+        "live_story": True,
+        "source_kind": "article",
+        "source_url": "https://www.rochdale.gov.uk/council-tax/pay-council-tax",
+        "live_updates": [{"timestamp": "2026-08-16T10:00:00Z", "text": "Verified update"}],
+    })
+
+    print("Production newsroom source, no-padding and live-watch policy checks passed.")
 
 
 if __name__ == "__main__":
