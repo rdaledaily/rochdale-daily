@@ -1,22 +1,11 @@
 #!/usr/bin/env python3
-"""Enforce Rochdale Daily's cards-only, filename-matched article-image policy.
+"""Guarantee that every published article has a usable image.
 
-Every published article image must live under ``assets/img/cards``. Images are
-selected by matching the IMAGE FILENAME to the story text, with the headline
-and slug receiving the strongest priority.
-
-Examples:
-
-* ``poisoned.jpeg`` -> ``Woman poisoned in Rochdale incident``
-* ``taken_to_hospital.jpeg`` -> ``2 men taken to hospital after crash``
-* ``the_resilient_roach.jpg`` -> ``Resilient Roach Project launches...``
-
-Spaces, hyphens, underscores, punctuation and case are ignored. Exact/full
-phrase matches beat partial matches; longer, more-specific filenames beat broad
-one-word filenames. If a matching photograph is added later, the next run will
-replace an older generated fallback retrospectively.
-
-No source-page photographs, Wikimedia images or remote image URLs are used.
+A meaningful existing editorial, source or Wikimedia image is preserved. If none
+exists, the local cards library is searched for a filename-matched photograph.
+Only when neither route produces a real image is a generated headline card used
+as the final fallback. Image relevance is the editorial objective; the cards
+folder is a cache/fallback implementation detail, not a publication rule.
 """
 from __future__ import annotations
 
@@ -95,6 +84,33 @@ def valid_cards_image(root: Path, value: Any) -> bool:
     except OSError:
         return False
 
+
+
+def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
+    """Keep a real image already selected by editorial/source/Commons enrichment."""
+    value = clean(article.get("image_url") or article.get("img"))
+    if not value:
+        return False
+    low = value.lower().replace("\\", "/")
+    status = clean(article.get("image_status")).lower()
+    real_status = any(token in status for token in ("source-photo", "commons-photo", "editorial-photo"))
+    if any(token in status for token in ("generated", "placeholder")):
+        return False
+    if any(token in low for token in ("generated-card", "placeholder", "category_", "category-")):
+        return False
+    if low.startswith(("https://", "http://")):
+        return bool(real_status or clean(article.get("image_credit")) or clean(article.get("image_credit_url")))
+    rel = low.lstrip("/")
+    candidate = root / rel
+    try:
+        valid = candidate.is_file() and candidate.suffix.lower() in IMAGE_SUFFIXES and candidate.stat().st_size > 4096 and not is_generated_card(candidate)
+    except OSError:
+        return False
+    if not valid:
+        return False
+    if rel.startswith("assets/img/cards/"):
+        return real_status
+    return bool(real_status or clean(article.get("image_credit")) or clean(article.get("image_credit_url")) or article.get("manual_article") is True or clean(article.get("source_kind")).lower() == "editorial")
 
 def strip_remote_image_metadata(article: dict[str, Any]) -> None:
     for key in REMOTE_IMAGE_FIELDS:
@@ -346,8 +362,9 @@ def set_generated(article: dict[str, Any], root: Path) -> None:
 
 
 def enforce_article(article: dict[str, Any], root: Path) -> str:
-    # Always re-check the local library first. This makes the matcher
-    # retrospective: uploading a new correctly named photo can repair old stories.
+    if existing_meaningful_image(article, root):
+        return "kept-existing"
+
     chosen = choose_filename_match(article, root)
     if chosen is not None and valid_cards_image(root, chosen.relative_to(root).as_posix()):
         current = cards_relative(article.get("image_url") or article.get("img"))
@@ -417,7 +434,7 @@ def main(argv: list[str] | None = None) -> int:
     args.report.write_text(
         json.dumps(
             {
-                "policy": "assets/img/cards only; filename matched against title, slug, excerpt and body",
+                "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
                 "stats": stats,
                 "items": report,
             },

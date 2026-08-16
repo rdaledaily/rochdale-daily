@@ -50,25 +50,16 @@ def test_unrelated_existing_cards_image_is_not_preserved() -> None:
         assert "gift_shop" not in article["image_url"]
 
 
-def test_non_cards_image_is_never_preserved() -> None:
+def test_meaningful_existing_local_image_is_preserved() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         image = root / "assets/article-images/existing.jpg"
         write_jpeg(image)
-        article = {
-            "title": "Sample Rochdale story",
-            "slug": "sample-rochdale-story",
-            "category": "community",
-            "area": "rochdale",
-            "status": "published",
-            "image_url": "assets/article-images/existing.jpg",
-            "source_image_candidate_url": "https://example.invalid/photo.jpg",
-        }
+        article = {"title":"Sample Rochdale story","slug":"sample-rochdale-story","category":"community","area":"rochdale","status":"published","image_url":"assets/article-images/existing.jpg","image_credit":"Rochdale Daily"}
         result = mod.enforce_article(article, root)
-        assert result == "cards-generated"
-        assert article["image_url"].startswith("assets/img/cards/")
-        assert (root / article["image_url"]).is_file()
-        assert "source_image_candidate_url" not in article
+        assert result == "kept-existing"
+        assert article["image_url"] == "assets/article-images/existing.jpg"
+
 
 
 def test_curated_cards_photo_matches_full_story_phrase() -> None:
@@ -125,46 +116,28 @@ def test_longest_filename_subject_wins() -> None:
         assert article["image_url"] == "assets/img/cards/resilient_roach.jpg"
 
 
-def test_run_gives_every_published_story_a_cards_image() -> None:
+def test_run_preserves_credited_commons_and_guarantees_other_images() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         articles_path = root / "articles.json"
         report_path = root / "report.json"
         articles_path.write_text(json.dumps([
-            {
-                "title": "One",
-                "slug": "one",
-                "status": "published",
-                "category": "news",
-                "area": "rochdale",
-                "image_url": "https://upload.wikimedia.org/example.jpg",
-            },
-            {
-                "title": "Two",
-                "slug": "two",
-                "status": "published",
-                "category": "sport",
-                "area": "heywood",
-                "image_url": "assets/article-images/two.jpg",
-            },
+            {"title":"One","slug":"one","status":"published","category":"news","area":"rochdale","image_url":"https://upload.wikimedia.org/example.jpg","image_credit":"Wikimedia Commons"},
+            {"title":"Two","slug":"two","status":"published","category":"sport","area":"heywood","image_url":""}
         ]), encoding="utf-8")
-
         old_cwd = Path.cwd()
         try:
             os.chdir(root)
-            rc = mod.main([
-                "--articles", str(articles_path),
-                "--report", str(report_path),
-            ])
+            rc = mod.main(["--articles", str(articles_path), "--report", str(report_path)])
         finally:
             os.chdir(old_cwd)
-
         assert rc == 0
         saved = json.loads(articles_path.read_text(encoding="utf-8"))
-        assert all(item["image_url"].startswith("assets/img/cards/") for item in saved)
-        assert all((root / item["image_url"]).is_file() for item in saved)
+        assert saved[0]["image_url"] == "https://upload.wikimedia.org/example.jpg"
+        assert saved[1]["image_url"].startswith("assets/img/cards/")
+        assert (root / saved[1]["image_url"]).is_file()
         report = json.loads(report_path.read_text(encoding="utf-8"))
-        assert report["policy"] == "assets/img/cards only; filename matched against title, slug, excerpt and body"
+        assert "preserve meaningful existing image" in report["policy"]
 
 
 if __name__ == "__main__":
@@ -172,11 +145,11 @@ if __name__ == "__main__":
     for test in (
         test_existing_matching_cards_image_is_preserved,
         test_unrelated_existing_cards_image_is_not_preserved,
-        test_non_cards_image_is_never_preserved,
+        test_meaningful_existing_local_image_is_preserved,
         test_curated_cards_photo_matches_full_story_phrase,
         test_leading_the_filename_partially_matches_resilient_roach_project,
         test_longest_filename_subject_wins,
-        test_run_gives_every_published_story_a_cards_image,
+        test_run_preserves_credited_commons_and_guarantees_other_images,
     ):
         try:
             test()
