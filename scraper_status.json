@@ -1,24 +1,24 @@
 {
-  "last_run_at": "2026-08-16T10:16:25.431659Z",
-  "raw_candidates_before_job_filter": 41,
+  "last_run_at": "2026-08-16T11:50:02.708185Z",
+  "raw_candidates_before_job_filter": 22,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 41,
-  "candidate_clusters": 31,
+  "raw_candidates": 22,
+  "candidate_clusters": 29,
   "google_news_resolution": {
-    "wrappers": 33,
-    "resolved": 2,
-    "text_recovered": 1,
+    "wrappers": 12,
+    "resolved": 1,
+    "text_recovered": 0,
     "reattributed": 0,
     "images_found": 1
   },
-  "duplicates_merged": 10,
-  "attempted_rewrites": 7,
-  "new_articles": 4,
-  "live_articles": 13,
+  "duplicates_merged": 0,
+  "attempted_rewrites": 5,
+  "new_articles": 2,
+  "live_articles": 8,
   "skipped": 3,
   "collector_counts": {
-    "rss_and_google_news": 33,
-    "website_discovery": 3,
+    "rss_and_google_news": 13,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -28,47 +28,35 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "facebook.com": 12,
+    "ManchesterWorld": 4,
     "Bee Network live travel alerts": 4,
-    "x.com": 3,
+    "Mshale": 3,
     "TfGM Travel Alerts": 3,
-    "Skiddle": 2,
-    "The New York Times": 2,
-    "Sky Sports": 2,
-    "Action Together": 2,
-    "instagram.com": 2,
-    "Tenpin": 1,
-    "Shrewsbury Town FC": 1,
-    "Sporting Life": 1,
-    "Your Trust": 1,
+    "Rochdale Times": 2,
+    "aboutmanchester.co.uk": 2,
+    "Sky Sports": 1,
+    "Cumbria Crack": 1,
     "Rochdale Borough Council": 1,
-    "About Manchester": 1,
-    "Mshale": 1,
-    "InYourArea": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "community": 1,
     "education": 1,
-    "health": 2,
-    "planning": 1,
-    "traffic": 1,
+    "health": 1,
+    "news": 1,
+    "sport": 1,
     "transport": 1
   },
   "published_by_category": {
-    "community": 1,
-    "events": 6,
-    "politics": 1,
+    "events": 5,
     "sport": 1,
-    "traffic": 2,
     "transport": 2
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
-  "source_led_fallback_enabled": true,
+  "source_led_fallback_enabled": false,
   "crime_auto_publish_enabled": true,
-  "crime_direct_publish_enabled": true,
-  "crime_ai_gate_enabled": false,
+  "crime_direct_publish_enabled": false,
+  "crime_ai_gate_enabled": true,
   "crime_review_queue_enabled": false,
   "crime_anonymisation_enabled": false,
   "crime_source_overlap_guard_enabled": false,
@@ -76,26 +64,27 @@
   "source_overlap_guard_enabled_for_non_crime": true,
   "same_day_only": false,
   "prohibited_sources": [
-    "rochdaletimes.co.uk",
-    "rochdaleonline.co.uk"
+    "pressreader.com",
+    "autouncle.co.uk",
+    "tes.com",
+    "tiktok.com",
+    "youtube.com",
+    "reddit.com",
+    "classified/spam denylist"
   ],
   "selected_story_keys": [
-    "transport-v3-0fd569a66c19eb422b37",
     "transport-v3-45c86329596be2c26e99",
     "education-v3-a56f7013cbb8ed5822e8",
-    "community-v3-7e8e2bedcdb0125863af",
+    "sport-v3-270c9b45bf4f69aebfee",
     "health-v3-9579733711352a821aa7",
-    "planning-v3-8f5d5e4ab4d0718d1712",
-    "health-v3-b999ce874e26d7f6af7f"
+    "hard-news-v3-45686a32b5fb270dd912"
   ],
   "selected_candidate_urls": [
-    "https://news.google.com/rss/articles/CBMifEFVX3lxTE0ya2kydUFpWlFDbk9FNmJKQjFEWkI0TFRGSWpzUWtzb3RKTUM4N0J4SWhtZzVIZlRvdFdhS2JYMi0tekoxV1lHV084SGtuSTlvenlqSHRMbkR4Z2FibzM1NXNNMzBGLTdockl1V0xkTnhVOF9NbTBsenRhdnA?oc=5",
     "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true",
     "https://www.tenpin.co.uk/our-locations/rochdale/",
-    "https://www.rochdale.gov.uk/private-landlords/apply-landlord-licence/3",
+    "https://cumbriacrack.com/2026/08/16/jaiden-tallantire-set-for-workington-town-debut-against-rochdale-hornets/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-08",
-    "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9NcE5zN3FxaUFuQmttelYzTFhXUTcza1dVM2ZEdkpHN2l5QkVYNVJ3TGhrN0JNLURqeTkxbkVpbGNsT0Z3Tm42ZzJSZ3lCVzNNQUlJRnlB?oc=5",
-    "https://www.rochdale.gov.uk/domestic-violence-abuse"
+    "https://www.rochdaletimes.co.uk/the-rochdale-pioneer-still-being-honoured-at-the-white-house/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -107,52 +96,43 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "community",
       "education",
       "health",
       "news",
-      "traffic",
+      "sport",
       "transport"
     ],
     "selected_categories": [
-      "community",
       "education",
       "health",
       "news",
-      "traffic",
+      "sport",
       "transport"
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [
-      "heywood"
-    ],
+    "available_areas": [],
     "selected_areas": [
-      "heywood",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "community": 1,
       "education": 1,
-      "health": 2,
+      "health": 1,
       "news": 1,
-      "traffic": 1,
+      "sport": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "heywood": 1,
-      "rochdale": 6
+      "rochdale": 5
     },
     "selected_by_source": {
-      "facebook.com": 1,
+      "cumbria crack": 1,
       "food standards agency": 1,
-      "instagram.com": 1,
-      "rochdale borough council": 1,
-      "rochdale borough council hmo licensing guidance": 1,
+      "rochdale times": 1,
       "tenpin": 1,
       "tfgm travel alerts": 1
     }
@@ -775,13 +755,14 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 52,
+  "robots_denied_count": 55,
   "robots_denied_urls": [
-    "https://aboutmanchester.co.uk",
+    "https://www.manchesterworld.uk",
     "https://mshale.com",
-    "https://news.tfgm.com/",
+    "https://aboutmanchester.co.uk",
     "https://www.groundwork.org.uk/greatermanchester/latest/",
     "https://www.groundwork.org.uk/greatermanchester/latest/?query-6-page=2",
+    "https://news.tfgm.com/",
     "https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=1&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=2&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=3&tdte=",
@@ -794,15 +775,21 @@
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=2&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=3&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=4&tdte=",
-    "https://www.unitedutilities.com/emergencies/up-my-street/",
-    "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.northernrailway.co.uk/service-updates",
+    "https://aboutmanchester.co.uk/?s=Rochdale",
+    "https://www.unitedutilities.com/emergencies/up-my-street/",
     "https://rochdaleriverside.com/news/",
     "https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/",
     "https://www.hmnrconservatives.org.uk/news",
-    "https://c.newsnow.co.uk/A/1321714817?-57568:46921",
+    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/august/police-investigating-unexpected-death-of-31-year-old-man-in-rochdale/",
+    "https://c.newsnow.co.uk/A/1321806475?-57568:46921",
     "https://c.newsnow.co.uk/A/1321653141?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321583837?-57568:46921",
     "https://c.newsnow.co.uk/A/1321620386?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321714817?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321751473?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321688902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321508788?-57568:46921",
     "https://c.newsnow.co.uk/A/1321605070?-57568:46921",
     "https://c.newsnow.co.uk/A/1321602051?-57568:46921",
     "https://c.newsnow.co.uk/A/1321594093?-57568:46921",
@@ -815,20 +802,16 @@
     "https://c.newsnow.co.uk/A/1321357289?-57568:46921",
     "https://c.newsnow.co.uk/A/1321353283?-57568:46921",
     "https://c.newsnow.co.uk/A/1321318208?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321751473?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321807429?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321688902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321539147?-57568:46921",
     "https://c.newsnow.co.uk/A/1321665050?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321806475?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321508788?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321583837?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321696288?-57568:46921",
     "https://c.newsnow.co.uk/A/1321597587?-57568:46921",
     "https://c.newsnow.co.uk/A/1321572971?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321807429?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321539147?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321696288?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMifEFVX3lxTE0ya2kydUFpWlFDbk9FNmJKQjFEWkI0TFRGSWpzUWtzb3RKTUM4N0J4SWhtZzVIZlRvdFdhS2JYMi0tekoxV1lHV084SGtuSTlvenlqSHRMbkR4Z2FibzM1NXNNMzBGLTdockl1V0xkTnhVOF9NbTBsenRhdnA?oc=5",
-    "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9NcE5zN3FxaUFuQmttelYzTFhXUTcza1dVM2ZEdkpHN2l5QkVYNVJ3TGhrN0JNLURqeTkxbkVpbGNsT0Z3Tm42ZzJSZ3lCVzNNQUlJRnlB?oc=5"
+    "https://news.google.com/rss/articles/CBMizwFBVV95cUxPVmQ5d2ZYTTFpT1ZuZWNkUUI1MzZjRkJCM2c4dUduZVMzdWNjYmRNaXA5Y0Q0ZDhOclEya1VBV2E1VEY3SmN0UmFxMlc0eGpfaGh5TDJnMVlsMURpS243QnNZeE9OU1RpT04wWVJHd1B0eTFqa3R3WFdibnFMa1NpU1ZTV0NhdjdOTC02VndiS2h3VkJKcmYwNE9lc3FsQ01HNVlnRDI0QjlCRDROZ2VkN05xNFN5NExBdklOVS15Yjd5ZVh6Y2JoRm95Qkc3YUU?oc=5",
+    "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNa1gwS1g2TldtdjdsSUkwX3RIdk5xRnBMMUtWUldKMF85anFqNDV2NE80TFZ5SHh0X01pMXB0d0ZtZnV2UXVQVWVJQVVxZktEckVvQ295QnFJblBQbEVEczhROUV1ZXpWYzFzV0p1ZWJGbjZpSW9WT1p2Q3BWTXhyYnZyNnJ6aVJXVTVKaUgyeGU0NFlaNERaV0xtaUhuYzFyNDlCc1doT0Fsdlg5QkpLdEhwRy1pdTQ2MTJkZG4xR0xGZVJEaEtMeVVfbjdIaHpkNnpPRFB6VDRRckU?oc=5",
+    "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1YRlNCdnFuWmJwZkRXWHhndTdtUUhSRzJKWGJCRGZuUlFxUGMzV05UeFR3ZDNfVnJIS2Zfa01PdXY3RC1UajdDZ2VmcXhJX2N0Vzh3WFFNZ1hMVEVxTUdPZGhlRnBXM2c?oc=5"
   ],
   "slow_domain_failure_threshold": 3,
   "slow_domains_circuit_broken_this_run": [],
@@ -840,40 +823,54 @@
     "feed_url": "https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss",
     "direct_page_crawling": false
   },
-  "frontpage_generated_at": "2026-08-16T10:32:20.296488Z",
-  "frontpage_article_count": 7,
+  "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
+  "local_publishers_discovery_enabled": [
+    "rochdaleobserver.co.uk",
+    "rochdaleonline.co.uk",
+    "rochdaletimes.co.uk"
+  ],
+  "local_publisher_public_copy_policy": "May be used for discovery/corroboration and source metadata only; publisher names are blocked from reader-facing copy.",
+  "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
+  "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
+  "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
+  "frontpage_generated_at": "2026-08-16T11:50:23.016362Z",
+  "frontpage_article_count": 3,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
+      "business",
       "community",
       "crime",
+      "environment",
       "politics",
       "sport",
-      "traffic",
       "transport"
     ],
     "selected_categories": [
+      "business",
       "community",
       "crime",
+      "environment",
       "politics",
       "sport",
-      "traffic",
       "transport"
     ],
     "available_wards": [
-      "Central Rochdale",
-      "Milnrow and Newhey"
+      "Milnrow and Newhey",
+      "Spotland and Falinge"
     ],
     "selected_wards": [
-      "Central Rochdale",
-      "Milnrow and Newhey"
+      "Milnrow and Newhey",
+      "Spotland and Falinge"
     ],
     "available_areas": [
       "heywood",
+      "middleton",
       "norden"
     ],
     "selected_areas": [
       "heywood",
+      "middleton",
       "norden",
       "rochdale"
     ],
@@ -882,47 +879,43 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "transport": 2,
-      "traffic": 2,
-      "politics": 1,
-      "sport": 1,
-      "community": 1
+      "sport": 1
     },
     "selected_by_ward": {
-      "borough-wide": 6,
-      "Central Rochdale": 1
+      "borough-wide": 2,
+      "Spotland and Falinge": 1
     },
     "selected_by_area": {
-      "heywood": 2,
+      "heywood": 1,
+      "middleton": 1,
       "norden": 1,
       "rochdale": 9
     },
     "selected_by_source": {
       "tfgm travel alerts": 1,
-      "rochdale borough council": 3,
       "bee network live travel alerts": 1,
-      "instagram.com": 1,
-      "bee network | powered by tfgm": 1
+      "cumbria crack": 1
     },
     "pool_size": 12,
-    "primary_pool_size": 11,
-    "fallback_stories_used": 1,
+    "primary_pool_size": 7,
+    "fallback_stories_used": 5,
     "selection_window_days": 7,
-    "frontpage_count": 7,
+    "frontpage_count": 3,
     "homepage_freshness_hours": 14,
-    "fresh_under_24h": 7,
-    "fresh_under_homepage_window": 7,
-    "short_briefs_selected": 6,
+    "fresh_under_24h": 3,
+    "fresh_under_homepage_window": 3,
+    "short_briefs_selected": 2,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
   "ticket_events_collected_this_run": 7,
-  "events_removed_other_source": 6,
+  "events_removed_other_source": 0,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 7,
   "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 135,
+  "duplicate_articles_after_postprocessing": 131,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
