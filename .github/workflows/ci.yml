@@ -88,6 +88,7 @@ jobs:
             scraper/add_article_time_metadata.py \
             scraper/externalise_article_css.py \
             scraper/enhance_image_alt_text.py \
+            scraper/consolidate_duplicate_article_signals.py \
             scraper/check_scraper_health.py \
             scraper/run_newspaper_pipeline.py \
             scraper/run_newsroom_policy.py \
@@ -135,6 +136,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_article_time_metadata.py
           PYTHONPATH=scraper python scraper/test_externalise_article_css.py
           PYTHONPATH=scraper python scraper/test_enhance_image_alt_text.py
+          PYTHONPATH=scraper python scraper/test_consolidate_duplicate_article_signals.py
           PYTHONPATH=scraper python scraper/test_live_story_updates.py
           PYTHONPATH=scraper python scraper/test_compact_live_updates.py
           PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
