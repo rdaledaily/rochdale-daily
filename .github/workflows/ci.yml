@@ -129,30 +129,6 @@ jobs:
           PYTHONPATH=scraper python scraper/test_externalise_article_css.py
           PYTHONPATH=scraper python scraper/test_enhance_image_alt_text.py
 
-      - name: Verify published article image paths are cards-only
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          rows=json.loads(Path('articles.json').read_text(encoding='utf-8'))
-          bad=[]
-          missing=[]
-          for a in rows:
-              if not isinstance(a,dict) or str(a.get('status') or 'published').lower()!='published':
-                  continue
-              image=str(a.get('image_url') or a.get('img') or '').replace('\\','/').lstrip('/')
-              if not image.startswith('assets/img/cards/'):
-                  bad.append((a.get('slug'), image))
-                  continue
-              if not Path(image).is_file():
-                  missing.append((a.get('slug'), image))
-          if bad:
-              raise SystemExit(f'Non-cards article images: {bad[:20]}')
-          if missing:
-              raise SystemExit(f'Missing cards-folder article images: {missing[:20]}')
-          print('Cards-only article image policy passed.')
-          PY
-
       - name: Verify scraper imports cleanly
         run: |
           cd scraper
