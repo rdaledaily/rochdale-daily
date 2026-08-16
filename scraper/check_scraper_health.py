@@ -66,12 +66,7 @@ def is_eligible_news_article(article: Any) -> bool:
 
 
 def is_frontpage_eligible_news_article(article: Any, now: datetime) -> bool:
-    """Use the same editorial exclusions as the final homepage freshness pass.
-
-    Health must only call a story "available" if the homepage is actually
-    allowed to show it. Otherwise a thin directory page or expired offer can
-    make a correctly filtered homepage fail as if it had dropped real news.
-    """
+    """Use the same editorial exclusions as the final homepage freshness pass."""
     if not is_eligible_news_article(article):
         return False
     assert isinstance(article, dict)
@@ -82,6 +77,32 @@ def is_frontpage_eligible_news_article(article: Any, now: datetime) -> bool:
     if is_expired_time_sensitive_preview(article, now):
         return False
     return True
+
+
+def zero_new_attempts_are_starvation(
+    *,
+    attempted_rewrites: int,
+    new_articles: int,
+    collector_errors: Any,
+    fresh_frontpage_count: int,
+    required_fresh_frontpage: int,
+) -> bool:
+    """Distinguish a broken rewrite lane from a correctly selective newsroom.
+
+    Finding five candidate leads does not create an obligation to publish five
+    stories. They may all be adverts, non-local, unsupported, duplicate or fail
+    copying/legal/editorial checks. If the current edition still meets the
+    achievable freshness requirement and collection itself is healthy, zero new
+    publications is a valid outcome and must not encourage junk or stale filler.
+
+    It becomes starvation when the run also lacks the required fresh homepage
+    supply, or when collector failures mean the zero result may be technical.
+    """
+    if attempted_rewrites < 5 or new_articles > 0:
+        return False
+    has_collector_errors = bool(collector_errors)
+    lacks_fresh_supply = fresh_frontpage_count < required_fresh_frontpage
+    return has_collector_errors or lacks_fresh_supply
 
 
 def main() -> None:
@@ -132,10 +153,6 @@ def main() -> None:
     attempted_rewrites = int(status.get("attempted_rewrites") or 0)
     collector_errors = status.get("collector_errors") or {}
 
-    # The core editorial objective is borough-wide coverage. A future refactor
-    # must not be allowed to go green after accidentally truncating categories or
-    # wards out of the search plan, which is how the August 2026 starvation
-    # regression became possible.
     search_records = status.get("search_queries") or []
     if not isinstance(search_records, list):
         search_records = []
@@ -159,17 +176,32 @@ def main() -> None:
         len(eligible_fresh_feed),
     ) if MIN_FRESH_FRONTPAGE_STORIES > 0 else 0
 
+    zero_new_after_editorial_rejection = (
+        attempted_rewrites >= 5
+        and new_articles == 0
+        and not zero_new_attempts_are_starvation(
+            attempted_rewrites=attempted_rewrites,
+            new_articles=new_articles,
+            collector_errors=collector_errors,
+            fresh_frontpage_count=len(fresh),
+            required_fresh_frontpage=required_fresh_frontpage,
+        )
+    )
+
     failures: list[str] = []
     if raw_candidates > 0 and not search_records:
         failures.append("discovery produced candidates but recorded no search-query execution plan")
 
-    # Five or more actual rewrite attempts with zero successful articles is not
-    # a quiet-news period: the pipeline found material and then failed to turn
-    # any of it into publishable journalism. Treat that as automated-news
-    # starvation rather than allowing a green run to conceal it.
-    if attempted_rewrites >= 5 and new_articles == 0:
+    if zero_new_attempts_are_starvation(
+        attempted_rewrites=attempted_rewrites,
+        new_articles=new_articles,
+        collector_errors=collector_errors,
+        fresh_frontpage_count=len(fresh),
+        required_fresh_frontpage=required_fresh_frontpage,
+    ):
         failures.append(
-            f"automated newsroom attempted {attempted_rewrites} rewrites but published no new articles"
+            f"automated newsroom attempted {attempted_rewrites} rewrites, published no new articles, "
+            "and the run also shows a freshness shortfall or collector failure"
         )
 
     if live_articles < MIN_LIVE_STORIES:
@@ -246,6 +278,7 @@ def main() -> None:
         "top_story_freshness_hours": TOP_STORY_FRESH_HOURS,
         "lead_first_published_at": lead_published.isoformat().replace("+00:00", "Z") if lead_published else None,
         "collector_errors": collector_errors,
+        "zero_new_after_editorial_rejection": zero_new_after_editorial_rejection,
         "status": "failed" if failures else "healthy",
         "failures": failures,
     }
