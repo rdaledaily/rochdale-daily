@@ -53,6 +53,7 @@ jobs:
           python3 scraper/enforce_frontpage_freshness.py
           python3 scraper/enforce_live_homepage_window.py
           python3 scraper/update_homepage_static_latest.py
+          python3 scraper/update_homepage_weekly_news.py
 
       # Readers should be able to see when an article was published without
       # inspecting source or structured metadata. Automated polling timestamps
