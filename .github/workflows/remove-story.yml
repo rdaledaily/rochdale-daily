@@ -20,8 +20,11 @@ permissions:
   contents: write
   actions: write
 
+# Emergency removals must not wait behind a long newsroom scrape. The takedown
+# itself is race-safe: if main moves while it is running, it resets to newest
+# main and reapplies the permanent blocklist/removal before pushing again.
 concurrency:
-  group: rd-site-writer
+  group: rd-emergency-takedown
   cancel-in-progress: false
 
 jobs:
@@ -81,9 +84,6 @@ jobs:
             exit 0
           fi
 
-          # Never merge stale generated pages into an emergency removal. If main
-          # moved, reset to the newest canonical state and reapply the blocklist
-          # and deletion from scratch.
           for attempt in 1 2 3 4 5; do
             echo "main moved during takedown; reapplying on latest main (${attempt}/5)."
             git fetch origin main
