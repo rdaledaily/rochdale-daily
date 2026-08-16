@@ -585,9 +585,9 @@ def source_is_denied(source_name: str='', source_url: str='') -> bool:
     domain = domain_of(source_url)
     if domain == 'rochvalleyradio.com' or 'roch valley radio' in name:
         return False
-    if domain in {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk', 'autouncle.co.uk', 'tes.com', 'tiktok.com', 'youtube.com', 'youtu.be', 'reddit.com', 'old.reddit.com'}:
+    if domain in {'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk', 'autouncle.co.uk', 'tes.com', 'tiktok.com', 'youtube.com', 'youtu.be', 'reddit.com', 'old.reddit.com'}:
         return True
-    if any((blocked in name for blocked in ('rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader', 'autouncle', 'tiktok', 'postcode info', 'reddit'))):
+    if any((blocked in name for blocked in ('rochdale online', 'rochdale observer', 'pressreader', 'autouncle', 'tiktok', 'postcode info', 'reddit'))):
         return True
     return locality_source_is_denied(source_name, source_url)
 ROCHDALE_TRAFFIC_AREA_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (('heywood', ('\\bm62\\s+(?:junction|j)\\s*19\\b', '\\bpilsworth road\\b', "\\bqueen'?s park road\\b")), ('rochdale', ('\\bm62\\s+(?:junction|j)\\s*20\\b', '\\ba627\\s*\\(m\\)\\b', '\\bedinburgh way\\b', '\\broch valley way\\b', '\\bmilnrow road\\b', '\\bsandbrook park\\b')), ('milnrow', ('\\bm62\\s+(?:junction|j)\\s*21\\b', '\\belizabethan way\\b')), ('middleton', ('\\bmanchester new road\\b', '\\ba664\\b.{0,100}\\bmiddleton\\b', '\\bmiddleton\\b.{0,100}\\ba664\\b')), ('littleborough', ('\\bhare hill road\\b', '\\ba58\\b.{0,100}\\blittleborough\\b', '\\blittleborough\\b.{0,100}\\ba58\\b')))
