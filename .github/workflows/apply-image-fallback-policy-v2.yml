@@ -1,46 +1,47 @@
-name: Audit canonical article image policy
+name: Apply final relevance-first image policy
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-image-fallback-policy-v2.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  audit:
+  migrate:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install Pillow
         run: python -m pip install --no-cache-dir 'Pillow>=10,<13'
-      - name: Validate cards-only image behaviour
+      - name: Apply relevance-first image policy
+        run: python scraper/_migrate_image_policy_v4.py
+      - name: Validate matching, unrelated-card rejection, Commons preservation and fallback
         env:
           PYTHONPATH: scraper
         run: |
           python -m py_compile scraper/ensure_article_images.py scraper/test_ensure_article_images.py
           python scraper/test_ensure_article_images.py
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          root = Path('.')
-          articles = json.loads(Path('articles.json').read_text(encoding='utf-8'))
-          failures = []
-          for article in articles:
-              if not isinstance(article, dict) or str(article.get('status') or 'published').lower() != 'published':
-                  continue
-              image = str(article.get('image_url') or article.get('img') or '').lstrip('/')
-              slug = str(article.get('slug') or article.get('id') or '<unknown>')
-              if not image.startswith('assets/img/cards/'):
-                  failures.append(f'{slug}: non-canonical image path {image!r}')
-                  continue
-              if not (root / image).is_file():
-                  failures.append(f'{slug}: missing canonical image file {image!r}')
-          if failures:
-              raise SystemExit('\n'.join(failures))
-          print('Cards-only canonical image audit passed.')
-          PY
+      - name: Commit validated image policy
+        run: |
+          rm -f scraper/_migrate_image_policy.py scraper/_migrate_image_policy_v2.py scraper/_migrate_image_policy_v3.py scraper/_migrate_image_policy_v4.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scraper/ensure_article_images.py scraper/test_ensure_article_images.py
+          git add -u scraper/_migrate_image_policy.py scraper/_migrate_image_policy_v2.py scraper/_migrate_image_policy_v3.py scraper/_migrate_image_policy_v4.py
+          git commit -m 'Preserve relevant article photography before fallback cards'
+          git push origin HEAD:main
