@@ -1,4 +1,4 @@
-"""Fail loudly when discovery succeeds but the public homepage is stale or starved."""
+"""Fail loudly when the autonomous newsroom is stale, starved or losing borough coverage."""
 from __future__ import annotations
 
 import json
@@ -6,6 +6,8 @@ import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+
+from search_queries import CATEGORY_QUERIES, ROCHDALE_WARDS
 
 ROOT = Path(__file__).resolve().parents[1]
 STATUS_PATH = ROOT / "scraper_status.json"
@@ -100,7 +102,30 @@ def main() -> None:
     raw_candidates = int(status.get("raw_candidates") or 0)
     new_articles = int(status.get("new_articles") or 0)
     live_articles = int(status.get("live_articles") or 0)
+    attempted_rewrites = int(status.get("attempted_rewrites") or 0)
     collector_errors = status.get("collector_errors") or {}
+
+    # The core editorial objective is borough-wide coverage. A future refactor
+    # must not be allowed to go green after accidentally truncating categories or
+    # wards out of the search plan, which is how the August 2026 starvation
+    # regression became possible.
+    search_records = status.get("search_queries") or []
+    if not isinstance(search_records, list):
+        search_records = []
+    searched_categories = {
+        str(item.get("category") or "").strip().lower()
+        for item in search_records
+        if isinstance(item, dict) and str(item.get("category") or "").strip()
+    }
+    searched_wards = {
+        str(item.get("ward") or "").strip()
+        for item in search_records
+        if isinstance(item, dict) and str(item.get("ward") or "").strip()
+    }
+    required_categories = {str(category).lower() for category, _query in CATEGORY_QUERIES}
+    required_wards = set(ROCHDALE_WARDS)
+    missing_categories = sorted(required_categories - searched_categories)
+    missing_wards = sorted(required_wards - searched_wards)
 
     required_fresh_frontpage = min(
         MIN_FRESH_FRONTPAGE_STORIES,
@@ -108,6 +133,26 @@ def main() -> None:
     ) if MIN_FRESH_FRONTPAGE_STORIES > 0 else 0
 
     failures: list[str] = []
+    if missing_categories:
+        failures.append(
+            "borough discovery plan is missing configured categories: "
+            + ", ".join(missing_categories)
+        )
+    if missing_wards:
+        failures.append(
+            "borough discovery plan is missing official wards: "
+            + ", ".join(missing_wards)
+        )
+
+    # Five or more actual rewrite attempts with zero successful articles is not
+    # a quiet-news period: the pipeline found material and then failed to turn
+    # any of it into publishable journalism. Treat that as automated-news
+    # starvation rather than allowing a green run to conceal it.
+    if attempted_rewrites >= 5 and new_articles == 0:
+        failures.append(
+            f"automated newsroom attempted {attempted_rewrites} rewrites but published no new articles"
+        )
+
     if live_articles < MIN_LIVE_STORIES:
         failures.append(
             f"live article count {live_articles} is below required minimum {MIN_LIVE_STORIES}"
@@ -157,8 +202,16 @@ def main() -> None:
     payload = {
         "checked_at": now.isoformat().replace("+00:00", "Z"),
         "raw_candidates": raw_candidates,
+        "attempted_rewrites": attempted_rewrites,
         "new_articles": new_articles,
         "live_articles": live_articles,
+        "search_query_count": len(search_records),
+        "required_category_count": len(required_categories),
+        "searched_category_count": len(required_categories & searched_categories),
+        "missing_categories": missing_categories,
+        "required_ward_count": len(required_wards),
+        "searched_ward_count": len(required_wards & searched_wards),
+        "missing_wards": missing_wards,
         "eligible_published_news_records": len(eligible_news_feed),
         "eligible_fresh_news_records": len(eligible_fresh_feed),
         "frontpage_articles": len(valid_articles),
