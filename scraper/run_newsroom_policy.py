@@ -12,6 +12,7 @@ import json
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import editorial_upgrade as editorial
+import live_story_updates as live_updates
 import run_newspaper_pipeline as pipeline
 
 core = pipeline.core
@@ -91,6 +92,37 @@ def _remove_near_target_length_issue(
     return [issue for issue in issues if not str(issue).startswith(prefix)]
 
 
+def _should_watch_developing_article(article: dict) -> bool:
+    """Watch genuine developing sources, not every legacy row carrying LIVE.
+
+    Historic bad data marked static council service pages such as council-tax,
+    bins and generic guidance as `live_story`. They were safely prevented from
+    republishing, but repeatedly re-fetching them wastes the frequent-run budget.
+    Explicit live/live-refresh records, breaking coverage and rows already
+    carrying timestamped live updates remain watched. For legacy Rochdale Council
+    rows, an otherwise bare LIVE flag is accepted only on news articles or
+    directory records (the latter covers changing roadworks/closure notices).
+    """
+    if not isinstance(article, dict):
+        return False
+    kind = str(article.get("source_kind") or "").strip().lower()
+    if kind in {"live", "live_refresh"} or article.get("breaking_news") is True:
+        return True
+    raw_updates = article.get("live_updates") or []
+    if isinstance(raw_updates, list) and any(isinstance(row, dict) and row.get("timestamp") for row in raw_updates):
+        return True
+    if not (article.get("live_story") is True or article.get("is_ongoing") is True):
+        return False
+
+    source_url = str(article.get("source_url") or "")
+    parsed = urlparse(source_url)
+    host = (parsed.hostname or "").lower().removeprefix("www.")
+    path = (parsed.path or "/").lower()
+    if host == "rochdale.gov.uk" or host.endswith(".rochdale.gov.uk"):
+        return path.startswith("/news/article/") or path.startswith("/directory-record/")
+    return True
+
+
 def install_runtime_policy() -> None:
     """Make discovery broad while keeping publication/copyright controls strict."""
     if getattr(core, "_RD_RUNTIME_SOURCE_POLICY_INSTALLED", False):
@@ -145,11 +177,13 @@ def install_runtime_policy() -> None:
         )
 
     core.editorial_quality_issues = editorial_quality_issues
+    live_updates._is_developing = _should_watch_developing_article
     core._RD_RUNTIME_SOURCE_POLICY_INSTALLED = True
     core.log.info(
         "Runtime source policy: local publishers enabled for discovery/corroboration; "
         "automatic publisher-image reuse restricted to the explicit allowlist; "
-        "rich-source 200-word target uses a 10-word no-padding tolerance."
+        "rich-source 200-word target uses a 10-word no-padding tolerance; "
+        "developing-source watches exclude legacy static council guidance pages."
     )
 
 
@@ -179,6 +213,9 @@ def _normalise_runtime_status() -> None:
     )
     status["rich_source_length_policy"] = (
         "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded."
+    )
+    status["developing_story_watch_policy"] = (
+        "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not."
     )
     status["source_led_fallback_enabled"] = False
     status["crime_direct_publish_enabled"] = False
