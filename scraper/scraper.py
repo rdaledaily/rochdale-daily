@@ -3045,21 +3045,31 @@ def main() -> int:
         # discarded merely because their publication date is old.
         publishable_values.append(article)
     deduped_publishable = dedupe_article_records(publishable_values)
-    short_after_merge = [
+    def publication_minimum_words(article: dict[str, Any]) -> int:
+        source_kind = str(article.get('source_kind') or 'article').strip().lower()
+        if source_kind == 'event':
+            return 0
+        if source_kind == 'live':
+            return 40
+        return 50
+
+    below_publication_floor = [
         article for article in deduped_publishable
-        if str(article.get('source_kind') or 'article') != 'event'
-        and article_public_word_count(article) < 200
+        if article_public_word_count(article) < publication_minimum_words(article)
     ]
-    if short_after_merge:
+    if below_publication_floor:
         log.warning(
-            'Held back %d article(s) below the 200-word publication floor after merging: %s',
-            len(short_after_merge),
-            '; '.join(str(article.get('title') or 'Untitled') for article in short_after_merge[:10]),
+            'Held back %d article(s) below the evidence-based publication minimum after merging: %s',
+            len(below_publication_floor),
+            '; '.join(
+                f"{article.get('title') or 'Untitled'} "
+                f"({article_public_word_count(article)}/{publication_minimum_words(article)} words)"
+                for article in below_publication_floor[:10]
+            ),
         )
     publication_ready = [
         article for article in deduped_publishable
-        if str(article.get('source_kind') or 'article') == 'event'
-        or article_public_word_count(article) >= 50
+        if article_public_word_count(article) >= publication_minimum_words(article)
     ]
     published = sorted(
         publication_ready,
