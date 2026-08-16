@@ -19,6 +19,7 @@ on:
       - 'scraper/enforce_frontpage_freshness.py'
       - 'scraper/update_homepage_static_latest.py'
       - 'scraper/generate_rss.py'
+      - 'scraper/generate_image_sitemap.py'
       - '.github/workflows/archive-refresh.yml'
 
 permissions:
@@ -59,7 +60,7 @@ jobs:
         if: steps.newsroom_guard.outputs.run == 'true'
         with:
           python-version: '3.11'
-      - name: Rebuild permanent archive, enforce homepage freshness, crawlable Latest and RSS
+      - name: Rebuild permanent archive, enforce homepage freshness, crawlable Latest, RSS and image sitemap
         if: steps.newsroom_guard.outputs.run == 'true'
         env:
           FRONTPAGE_FRESH_HOURS: '14'
@@ -69,6 +70,7 @@ jobs:
           python scraper/enforce_frontpage_freshness.py
           python scraper/update_homepage_static_latest.py
           python scraper/generate_rss.py
+          python scraper/generate_image_sitemap.py
       - name: Advertise RSS feed to browsers and feed readers
         if: steps.newsroom_guard.outputs.run == 'true'
         run: |
@@ -105,11 +107,11 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add archive.html search.html archive-index.json articles/frontpage.json sitemap.xml index.html rss.xml
+          git add archive.html search.html archive-index.json articles/frontpage.json sitemap.xml image-sitemap.xml index.html rss.xml
           if git diff --cached --quiet; then
-            echo 'Archive, homepage Latest and RSS already current.'
+            echo 'Archive, homepage Latest, RSS and image sitemap already current.'
           else
-            git commit -m 'Refresh archive, homepage latest news and RSS feed'
+            git commit -m 'Refresh archive, homepage latest news, RSS and image sitemap'
             git push origin HEAD:main
           fi
       - name: Deploy latest automated newsroom state
