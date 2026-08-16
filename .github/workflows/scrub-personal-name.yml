@@ -15,8 +15,8 @@ permissions:
   actions: write
 
 concurrency:
-  group: rd-site-writer
-  cancel-in-progress: false
+  group: rd-privacy-scrub
+  cancel-in-progress: true
 
 jobs:
   scrub:
