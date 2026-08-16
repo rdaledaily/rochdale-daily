@@ -1219,15 +1219,15 @@
 
   <div class="breaking-bar">
     <div class="wrap breaking-row">
-      <div class="breaking-label">Breaking</div>
-      <div class="breaking-copy" id="breaking-copy" role="status" aria-live="polite" aria-label="LIVE: Feel Good Festival 2026 — updates from Rochdale town centre">
+      <div class="breaking-label">Latest</div>
+      <div class="breaking-copy" id="breaking-copy" role="status" aria-live="polite" aria-label="Service Changes on Rochdale Line Due to Planned Works Until 28 August">
         <div class="breaking-track" id="breaking-track">
           <span class="breaking-segment">
-            <span class="breaking-text">LIVE: Feel Good Festival 2026 — updates from Rochdale town centre</span>
+            <span class="breaking-text">Service Changes on Rochdale Line Due to Planned Works Until 28 August</span>
             <span class="breaking-separator" aria-hidden="true">◆</span>
           </span>
           <span class="breaking-segment" aria-hidden="true">
-            <span class="breaking-text">LIVE: Feel Good Festival 2026 — updates from Rochdale town centre</span>
+            <span class="breaking-text">Service Changes on Rochdale Line Due to Planned Works Until 28 August</span>
             <span class="breaking-separator" aria-hidden="true">◆</span>
           </span>
         </div>
@@ -1266,14 +1266,14 @@
           </div>
           <div class="lead-grid">
             <article class="lead-story" id="lead-story" data-content-slot="lead">
-    <a href="/feel-good-live.html" class="story-link">
-      <div class="story-image-wrap"><img src="/assets/img/cards/feel-good-festival-2026.jpg" alt="" loading="eager" onerror="this.onerror=null;this.src='/assets/img/category_events.svg'"></div>
-      <span class="ongoing-badge">LIVE</span>
-      <span class="story-kicker">Feel Good Festival</span>
-      <h2 class="lead-headline">LIVE: Feel Good Festival 2026 — OMD, after-party and updates from Rochdale</h2>
-      <p class="story-summary">Follow Rochdale Daily’s live Feel Good Festival coverage from Rochdale town centre, with performances, atmosphere, travel information and rolling updates throughout the day.</p>
-      <div class="story-meta">Rochdale Daily · Live now</div>
-      <span class="read-more-button" aria-hidden="true">Follow live →</span>
+    <a href="/articles/service-changes-on-rochdale-line-due-to-planned-works.html" class="story-link">
+      <div class="story-image-wrap"><img src="/assets/img/cards/service-changes-on-rochdale-line-due-to-planned-works-canonical.jpg" alt="Service Changes on Rochdale Line Due to Planned Works Until 28 August" loading="eager" decoding="async"></div>
+      <span class="ongoing-badge">ONGOING</span>
+      <span class="story-kicker">Transport</span>
+      <h2 class="lead-headline">Service Changes on Rochdale Line Due to Planned Works Until 28 August</h2>
+      <p class="story-summary">Planned track renewal works on the Rochdale line will affect tram services from 15 to 28 August, with bus replacements in place.</p>
+      <div class="story-meta">By Rochdale Daily Newsdesk · 16 Aug 2026 · 10:01 UTC</div>
+      <span class="read-more-button" aria-hidden="true">Read More →</span>
     </a>
   </article>
             <div class="secondary-stack" id="secondary-stories"></div>
@@ -2194,6 +2194,12 @@
             : crimeHeadlines.length
               ? crimeHeadlines.join("     •     BREAKING     •     ")
               : (stories[0] ? stories[0].title : "Rochdale Daily · Independent local news, events and public information");
+
+          // STATIC_TICKER_LABEL_SYNC
+          const breakingLabel = document.querySelector(".breaking-bar .breaking-label");
+          if (breakingLabel) {
+            breakingLabel.textContent = (!Array.isArray(payload) && payload.breaking) ? "Breaking" : "Latest";
+          }
           setBreakingTicker(stripMarkdownText(breakingMessage));
 
           if (status) {
