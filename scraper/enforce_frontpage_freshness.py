@@ -33,6 +33,17 @@ UTILITY_URL_PATTERNS = (
     re.compile(r"/live-departures/", re.I),
     re.compile(r"/contact-us/[^?#]*(?:contact|details)", re.I),
 )
+# Directory/contact pages can be useful in search and the permanent archive, but
+# an automated rewrite of a phone/email/address page is not a homepage news story.
+# Keep this intentionally narrow so real service-change reporting is not hidden.
+THIN_UTILITY_TITLE_PATTERNS = (
+    re.compile(r"\bupdates? contact (?:details|information)\b", re.I),
+    re.compile(r"\bcontact (?:details|information) (?:for|of)\b", re.I),
+)
+THIN_UTILITY_URL_PATTERNS = (
+    re.compile(r"/contact-us/[^?#]*(?:contact|details)", re.I),
+    re.compile(r"/noindex/[^?#]*(?:contact|details)", re.I),
+)
 SPORT_PREVIEW_PATTERN = re.compile(
     r"\b(?:today|this afternoon|this evening|kick[ -]?off|fixture|faces?|match preview)\b",
     re.I,
@@ -76,6 +87,13 @@ def _is_active_live(article: dict[str, Any]) -> bool:
     )
 
 
+def _is_editorial(article: dict[str, Any]) -> bool:
+    return bool(
+        article.get("manual_article") is True
+        or str(article.get("source_kind") or "").lower() == "editorial"
+    )
+
+
 def latest_verified_update(article: dict[str, Any]) -> datetime:
     """Return the newest timestamp that can justify keeping old live copy current.
 
@@ -88,10 +106,7 @@ def latest_verified_update(article: dict[str, Any]) -> datetime:
     is under newsdesk control.
     """
     active = _is_active_live(article)
-    editorial = bool(
-        article.get("manual_article") is True
-        or str(article.get("source_kind") or "").lower() == "editorial"
-    )
+    editorial = _is_editorial(article)
     if not active or editorial:
         return latest_update(article)
 
@@ -120,16 +135,37 @@ def active_pin(article: dict[str, Any], now: datetime) -> bool:
     return until is not None and until >= now
 
 
-def is_utility_not_lead(article: dict[str, Any]) -> bool:
-    if article.get("manual_article") is True or str(article.get("source_kind") or "").lower() == "editorial":
-        return False
-    title = str(article.get("title") or "")
+def _article_urls(article: dict[str, Any]) -> list[str]:
     urls = [str(article.get("source_url") or "")]
     raw_urls = article.get("source_urls") or []
     if isinstance(raw_urls, list):
         urls.extend(str(url) for url in raw_urls)
+    return urls
+
+
+def is_utility_not_lead(article: dict[str, Any]) -> bool:
+    if _is_editorial(article):
+        return False
+    title = str(article.get("title") or "")
+    urls = _article_urls(article)
     return any(pattern.search(title) for pattern in UTILITY_TITLE_PATTERNS) or any(
         pattern.search(url) for url in urls for pattern in UTILITY_URL_PATTERNS
+    )
+
+
+def is_thin_utility_not_frontpage(article: dict[str, Any]) -> bool:
+    """Reject obvious automated directory/contact rewrites from the live homepage.
+
+    They remain published and discoverable in the archive/search surfaces. Manual
+    journalism is always exempt because a real reported service-change story can
+    legitimately mention contact information.
+    """
+    if _is_editorial(article):
+        return False
+    title = str(article.get("title") or "")
+    urls = _article_urls(article)
+    return any(pattern.search(title) for pattern in THIN_UTILITY_TITLE_PATTERNS) or any(
+        pattern.search(url) for url in urls for pattern in THIN_UTILITY_URL_PATTERNS
     )
 
 
@@ -140,7 +176,7 @@ def is_expired_today_deadline(article: dict[str, Any], now: datetime) -> bool:
     a later freshness pass happens to run. Anchoring the deadline to ``now`` would
     incorrectly resurrect yesterday's "until 6pm today" offer after midnight.
     """
-    if article.get("manual_article") is True or str(article.get("source_kind") or "").lower() == "editorial":
+    if _is_editorial(article):
         return False
     text = " ".join(str(article.get(key) or "") for key in ("title", "excerpt", "summary"))
     match = TODAY_DEADLINE_PATTERN.search(text)
@@ -163,7 +199,7 @@ def is_expired_today_deadline(article: dict[str, Any], now: datetime) -> bool:
 
 def is_expired_time_sensitive_preview(article: dict[str, Any], now: datetime) -> bool:
     """Expire machine-generated pre-match sports copy once it has stopped being useful."""
-    if article.get("manual_article") is True or str(article.get("source_kind") or "").lower() == "editorial":
+    if _is_editorial(article):
         return False
     if str(article.get("category") or "").strip().lower() not in {"sport", "sports"}:
         return False
@@ -199,6 +235,10 @@ def main() -> None:
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(hours=FRESH_HOURS)
     valid = [a for a in articles if isinstance(a, dict)]
+
+    thin_utility = [a for a in valid if is_thin_utility_not_frontpage(a)]
+    thin_utility_ids = {_identity(a) for a in thin_utility}
+    valid = [a for a in valid if _identity(a) not in thin_utility_ids]
 
     expired_deadlines = [a for a in valid if is_expired_today_deadline(a, now)]
     expired_deadline_ids = {_identity(a) for a in expired_deadlines}
@@ -251,6 +291,7 @@ def main() -> None:
         "fresh_substantive_articles": len(fresh_substantive) + len(fresh_pins),
         "recent_live_updates": len(recent_live),
         "fresh_utility_articles": len(fresh_utility),
+        "thin_utility_frontpage_dropped": len(thin_utility),
         "expired_same_day_deadlines_dropped": len(expired_deadlines),
         "expired_sports_previews_dropped": len(expired_previews),
         "stale_fallback_dropped": len(dropped_stale),
@@ -263,6 +304,7 @@ def main() -> None:
         f"Frontpage freshness enforced: {len(fresh_pins)} fresh pin(s), "
         f"{len(fresh_substantive)} other substantive <= {FRESH_HOURS}h, "
         f"{len(recent_live)} active live update(s), {len(fresh_utility)} utility, "
+        f"{len(thin_utility)} thin directory/contact rewrite(s) dropped from homepage, "
         f"{len(expired_deadlines)} expired same-day deadline story/stories dropped, "
         f"{len(expired_previews)} expired sports preview(s) dropped, "
         f"{len(stale_pins)} explicit stale pin(s), {len(dropped_stale)} stale fallback story/stories dropped. "
