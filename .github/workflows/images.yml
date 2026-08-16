@@ -21,6 +21,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
   group: rd-site-writer
@@ -46,7 +47,22 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
 
+      - name: Avoid racing an active newsroom publisher
+        id: newsroom_guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active="$(gh run list --repo "${GITHUB_REPOSITORY}" --status in_progress --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          queued="$(gh run list --repo "${GITHUB_REPOSITORY}" --status queued --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          if [ "${active}" -gt 0 ] || [ "${queued}" -gt 0 ]; then
+            echo "run=false" >> "${GITHUB_OUTPUT}"
+            echo "Newsroom scrape/publish is active or queued; deferring cards-only image enforcement to avoid a generated-site write race."
+          else
+            echo "run=true" >> "${GITHUB_OUTPUT}"
+          fi
+
       - name: Set up Python
+        if: steps.newsroom_guard.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -54,12 +70,14 @@ jobs:
           cache-dependency-path: "requirements.txt"
 
       - name: Install dependencies
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
 
       - name: Normalize canonical manual article image references
+        if: steps.newsroom_guard.outputs.run == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -76,15 +94,19 @@ jobs:
           fi
 
       - name: Enforce cards-only policy on every published article
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/ensure_article_images.py --articles articles.json
 
       - name: Rebuild feeds
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/frontpage_pipeline.py
 
       - name: Re-enforce cards-only policy after feed/event generation
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/ensure_article_images.py --articles articles.json
 
       - name: Validate every published image path is in assets/img/cards
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python - <<'PY'
           import json
@@ -104,15 +126,18 @@ jobs:
           PY
 
       - name: Build councillor portrait index from local cards
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/councillor_photos.py
 
       - name: Rebuild public pages, ward democracy sections and archives
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python scraper/generate_archive.py
           python scraper/generate_ward_pages.py
           python scraper/generate_pages.py
 
       - name: Commit cards-only feed and rendered site
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
