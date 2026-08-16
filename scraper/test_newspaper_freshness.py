@@ -67,6 +67,31 @@ def main() -> None:
     editorial_deadline.update({"manual_article": True, "source_kind": "editorial"})
     assert newsroom._keep_on_live_homepage(editorial_deadline, after_deadline, cutoff)
 
+    # Machine scraping may touch last_updated_at without adding a new verified
+    # timeline entry. That must not make an old BREAKING/LIVE article current.
+    stale_original = after_deadline - timedelta(days=2)
+    old_machine_live = article(category="crime", words=120, age_hours=48)
+    old_machine_live.update({
+        "title": "Old automated breaking story",
+        "source_kind": "aggregator_discovered_article",
+        "live_story": True,
+        "breaking_news": True,
+        "is_ongoing": True,
+        "first_published_at": stale_original.isoformat(),
+        "published_at": stale_original.isoformat(),
+        "last_updated_at": (after_deadline - timedelta(minutes=5)).isoformat(),
+        "scraped_at": (after_deadline - timedelta(minutes=2)).isoformat(),
+        "live_updates": [{"timestamp": stale_original.isoformat(), "text": "Original fact only."}],
+    })
+    assert not newsroom._keep_on_live_homepage(old_machine_live, after_deadline, cutoff)
+
+    verified_live = dict(old_machine_live)
+    verified_live["live_updates"] = [
+        {"timestamp": stale_original.isoformat(), "text": "Original fact."},
+        {"timestamp": (after_deadline - timedelta(minutes=15)).isoformat(), "text": "New verified development."},
+    ]
+    assert newsroom._keep_on_live_homepage(verified_live, after_deadline, cutoff)
+
     print("Newspaper freshness policy checks passed.")
 
 
