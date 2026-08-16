@@ -11,6 +11,8 @@ Rochdale repeatedly. Genuine business developments remain eligible.
 """
 from __future__ import annotations
 
+from dataclasses import replace
+from datetime import datetime, timedelta, timezone
 import os
 import re
 from urllib.parse import urlparse
@@ -20,6 +22,13 @@ import run_fast_local_pipeline as base
 from live_story_updates import install as install_live_story_updates
 from reject_publisher_leaks import main as reject_publisher_leaks
 from search_queries import SearchQuery
+
+
+PUBLISH_MAX_NEWS_AGE_HOURS = max(
+    1,
+    int(os.getenv("PUBLISH_MAX_NEWS_AGE_HOURS", "14")),
+)
+SEARCH_RECENCY_RE = re.compile(r"\bwhen:\d+[hd]\b", re.I)
 
 
 EXTRA_FRESH_SEARCHES = [
@@ -138,6 +147,41 @@ def _candidate_editorial_text(candidate) -> tuple[str, str, str]:
     return title, body, url
 
 
+def _candidate_within_publish_window(candidate) -> bool:
+    """Only genuinely current source material may become a newly published story."""
+    published = core.parse_datetime(getattr(candidate, "source_published_at", ""))
+    if published is None:
+        return False
+    age = datetime.now(timezone.utc) - published
+    return timedelta(minutes=-30) <= age <= timedelta(hours=PUBLISH_MAX_NEWS_AGE_HOURS)
+
+
+def configure_search_recency(discovery_age_hours: int) -> None:
+    """Spend finite indexed-search slots on recent results, not archive pages.
+
+    Fast/immediate runs ask Google News for roughly the last day. The deeper
+    two-hour run may look back as far as its discovery window (capped at three
+    days) so it can recover missed context, but the independent 14-hour publish
+    gate below prevents those older discoveries from being presented as new.
+    """
+    search_days = max(1, min(3, (max(1, discovery_age_hours) + 23) // 24))
+    updated = []
+    for spec in core.SEARCH_QUERY_SPECS:
+        query = str(spec.query or "").strip()
+        if query and not SEARCH_RECENCY_RE.search(query):
+            query = f"{query} when:{search_days}d"
+            spec = replace(spec, query=query)
+        updated.append(spec)
+    core.SEARCH_QUERY_SPECS = updated
+    core.SEARCH_GROUPS = [spec.query for spec in updated]
+    core.log.info(
+        "Indexed search recency: %dd lookback for %d borough queries; new-publication cap remains %dh",
+        search_days,
+        len(updated),
+        PUBLISH_MAX_NEWS_AGE_HOURS,
+    )
+
+
 def _looks_like_commercial_landing_page(candidate) -> bool:
     """Reject advertising/SEO service pages while retaining genuine business news."""
     source_kind = str(getattr(candidate, "source_kind", "") or "").casefold()
@@ -229,8 +273,6 @@ def _same_source_live_update(candidate, existing_by_story) -> bool:
         if not existing_text:
             return True
 
-        existing_lower = existing_text.casefold()
-
         source_names = {name.casefold() for name in LIVE_NAME_RE.findall(source_text)}
         existing_names = {name.casefold() for name in LIVE_NAME_RE.findall(existing_text)}
         if source_names - existing_names:
@@ -252,12 +294,22 @@ def _same_source_live_update(candidate, existing_by_story) -> bool:
 
 
 def configure_editorial_newsworthiness_gate() -> None:
-    """Put a newspaper test in front of AI rewrite and any fallback path."""
+    """Put freshness and a newspaper test in front of every rewrite/fallback path."""
     original = core.candidate_is_rewrite_eligible
 
     def newsworthy(candidate, existing_by_story):
+        live_material_update = _same_source_live_update(candidate, existing_by_story)
+        if not _candidate_within_publish_window(candidate) and not live_material_update:
+            core.log.info(
+                "Retained for research but too old for new publication (> %dh): %s | %s",
+                PUBLISH_MAX_NEWS_AGE_HOURS,
+                getattr(candidate, "source_title", ""),
+                getattr(candidate, "source_url", ""),
+            )
+            return False
+
         eligible = original(candidate, existing_by_story)
-        if not eligible and _same_source_live_update(candidate, existing_by_story):
+        if not eligible and live_material_update:
             core.log.info(
                 "LIVE same-source material update bypassed duplicate rejection: %s",
                 getattr(candidate, "source_url", ""),
@@ -315,10 +367,10 @@ def main() -> int:
     # or rejected, fail closed rather than publishing source-led copy.
     core.AI_REWRITE_REQUIRED = True
 
-    # Honour the workflow's actual freshness contract. This used to be hard-coded
-    # to 72 hours here (and scraper.py also had a seven-day floor), which silently
-    # defeated the 14-hour fast-news policy. The permanent archive is unaffected;
-    # this value controls discovery eligibility only.
+    # Discovery depth and publication freshness are deliberately independent.
+    # Deep discovery may look back farther to recover missed leads/context, but
+    # a newly published automated story must still be based on material no older
+    # than PUBLISH_MAX_NEWS_AGE_HOURS (14h by default).
     requested_age = max(1, int(os.getenv("MAX_NEWS_AGE_HOURS", "72")))
     core.MAX_NEWS_AGE_HOURS = requested_age
     configure_source_resilience(requested_age)
@@ -330,7 +382,8 @@ def main() -> int:
             existing.add(item.query.casefold().strip())
 
     base.configure()
-    # base.configure() may reset core values, so reassert the workflow contract.
+    configure_search_recency(requested_age)
+    # base.configure() may reset core values, so reassert the discovery contract.
     core.MAX_NEWS_AGE_HOURS = requested_age
     configure_editorial_newsworthiness_gate()
     install_live_story_updates()
