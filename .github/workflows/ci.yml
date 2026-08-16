@@ -82,6 +82,7 @@ jobs:
             scraper/generate_news_sitemap.py \
             scraper/update_homepage_static_latest.py \
             scraper/update_homepage_weekly_news.py \
+            scraper/sync_homepage_top_story.py \
             scraper/homepage_discovery_metadata.py \
             scraper/add_article_time_metadata.py \
             scraper/externalise_article_css.py \
@@ -128,6 +129,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
           PYTHONPATH=scraper python scraper/test_update_homepage_static_latest.py
           PYTHONPATH=scraper python scraper/test_update_homepage_weekly_news.py
+          PYTHONPATH=scraper python scraper/test_sync_homepage_top_story.py
           PYTHONPATH=scraper python scraper/test_homepage_discovery_metadata.py
           PYTHONPATH=scraper python scraper/test_article_time_metadata.py
           PYTHONPATH=scraper python scraper/test_externalise_article_css.py
