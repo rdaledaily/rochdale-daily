@@ -64,6 +64,36 @@ def test_manual_editorial_contact_story_remains_eligible() -> None:
     assert mod.is_frontpage_eligible_news_article(article, NOW)
 
 
+def test_zero_new_after_editorial_rejections_is_not_starvation_when_page_is_fresh() -> None:
+    assert not mod.zero_new_attempts_are_starvation(
+        attempted_rewrites=5,
+        new_articles=0,
+        collector_errors={},
+        fresh_frontpage_count=7,
+        required_fresh_frontpage=6,
+    )
+
+
+def test_zero_new_is_starvation_when_fresh_supply_is_short() -> None:
+    assert mod.zero_new_attempts_are_starvation(
+        attempted_rewrites=5,
+        new_articles=0,
+        collector_errors={},
+        fresh_frontpage_count=3,
+        required_fresh_frontpage=6,
+    )
+
+
+def test_zero_new_is_starvation_when_collection_failed() -> None:
+    assert mod.zero_new_attempts_are_starvation(
+        attempted_rewrites=5,
+        new_articles=0,
+        collector_errors={"google_news": "timeout"},
+        fresh_frontpage_count=7,
+        required_fresh_frontpage=6,
+    )
+
+
 if __name__ == "__main__":
     failures = 0
     for test in (
@@ -72,6 +102,9 @@ if __name__ == "__main__":
         test_expired_today_deadline_is_not_counted_as_available_news,
         test_expired_machine_sports_preview_is_not_counted_as_available_news,
         test_manual_editorial_contact_story_remains_eligible,
+        test_zero_new_after_editorial_rejections_is_not_starvation_when_page_is_fresh,
+        test_zero_new_is_starvation_when_fresh_supply_is_short,
+        test_zero_new_is_starvation_when_collection_failed,
     ):
         try:
             test()
