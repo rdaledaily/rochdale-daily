@@ -54,6 +54,12 @@ jobs:
           python3 scraper/enforce_live_homepage_window.py
           python3 scraper/update_homepage_static_latest.py
 
+      # Readers should be able to see when an article was published without
+      # inspecting source or structured metadata. Automated polling timestamps
+      # are deliberately excluded; only verified live/editorial updates appear.
+      - name: Add visible article publication timing
+        run: python3 scraper/add_article_time_metadata.py
+
       # robots.txt advertises image-sitemap.xml. Archive refreshes may defer
       # while a newsroom writer is active, so generate the sitemap again at the
       # final delivery boundary. This prevents deploying a robots-advertised 404
