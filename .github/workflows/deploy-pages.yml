@@ -82,6 +82,13 @@ jobs:
       - name: Audit sitemap modification dates
         run: python3 scraper/repair_sitemap_lastmod.py
 
+      # Repeated automated rewrites can occasionally create multiple slugs for
+      # the same underlying development. Keep every old URL accessible, but
+      # consolidate search authority onto the oldest/editorial canonical page
+      # and remove conservative near-duplicates from the deployed sitemap.
+      - name: Consolidate duplicate article SEO signals
+        run: python3 scraper/consolidate_duplicate_article_signals.py
+
       # Keep feed autodiscovery and the machine-readable Latest-news ItemList
       # aligned with the static links that crawlers can actually see, even if a
       # scheduled archive refresh was deferred by an active newsroom writer.
