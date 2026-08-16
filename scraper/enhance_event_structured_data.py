@@ -30,12 +30,14 @@ from zoneinfo import ZoneInfo
 
 SITE_BASE = "https://rochdaledaily.co.uk"
 EVENT_SCRIPT_ID = "rd-event-jsonld"
-# Match only the script element itself.  Earlier versions also consumed the
-# surrounding newline/indentation, so replacing an already-correct block subtly
-# changed whitespace on every deployment and broke the idempotence guarantee.
+# Match the script plus only its immediately preceding horizontal whitespace.
+# The first insertion may land after an existing </title> on the same line, so
+# anchoring the matcher to the start of a line fails to recognise our own block
+# on the second pass and duplicates it. Consuming only spaces/tabs before the
+# script also preserves the exact surrounding newline layout when replacing it.
 EVENT_SCRIPT_RE = re.compile(
-    rf"^[ \t]*<script\s+id=\"{EVENT_SCRIPT_ID}\"\s+type=\"application/ld\+json\">.*?</script>",
-    re.M | re.S,
+    rf"[ \t]*<script\s+id=\"{EVENT_SCRIPT_ID}\"\s+type=\"application/ld\+json\">.*?</script>",
+    re.S,
 )
 LONDON = ZoneInfo("Europe/London")
 
