@@ -4,7 +4,15 @@ from __future__ import annotations
 import unittest
 from datetime import datetime, timedelta, timezone
 
-from update_homepage_weekly_news import START, END, choose_weekly, update_html
+from update_homepage_weekly_news import (
+    START,
+    END,
+    MIN_CURRENT_EDITION_FOR_WEEKLY,
+    choose_weekly,
+    current_edition_healthy,
+    current_edition_story_count,
+    update_html,
+)
 
 
 NOW = datetime(2026, 8, 16, 6, 0, tzinfo=timezone.utc)
@@ -24,6 +32,28 @@ def row(slug: str, hours_old: int, area: str = "rochdale", category: str = "news
     }
     payload.update(extra)
     return payload
+
+
+class CurrentEditionHealthTests(unittest.TestCase):
+    def test_starved_latest_does_not_authorise_weekly_archive_strip(self):
+        rows = [row("fresh-a", 1), row("fresh-b", 2)]
+        self.assertEqual(current_edition_story_count(rows, NOW), 2)
+        self.assertFalse(current_edition_healthy(rows, NOW))
+
+    def test_weekly_strip_is_allowed_after_six_current_stories(self):
+        rows = [row(f"fresh-{index}", index + 1) for index in range(MIN_CURRENT_EDITION_FOR_WEEKLY)]
+        self.assertEqual(current_edition_story_count(rows, NOW), MIN_CURRENT_EDITION_FOR_WEEKLY)
+        self.assertTrue(current_edition_healthy(rows, NOW))
+
+    def test_old_verified_live_update_counts_as_current(self):
+        old = row("live-story", 36, live_story=True)
+        old["live_updates"] = [
+            {
+                "timestamp": (NOW - timedelta(minutes=20)).isoformat(),
+                "text": "Police issued a new verified appeal.",
+            }
+        ]
+        self.assertEqual(current_edition_story_count([old], NOW), 1)
 
 
 class WeeklySelectionTests(unittest.TestCase):
