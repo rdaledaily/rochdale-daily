@@ -29,6 +29,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      FRONTPAGE_FRESH_HOURS: '14'
     steps:
       - name: Checkout latest main
         uses: actions/checkout@v4
@@ -41,6 +43,16 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           echo "Deploying commit $(git rev-parse HEAD)"
+
+      # Generated-site maintenance workflows can legitimately rewrite frontpage
+      # artifacts. Reassert the same newsroom freshness policy at the final
+      # delivery boundary so stale fallback rows can never be uploaded to Pages
+      # merely because a maintenance rebuild raced a news run.
+      - name: Reassert final homepage freshness before upload
+        run: |
+          python3 scraper/enforce_frontpage_freshness.py
+          python3 scraper/enforce_live_homepage_window.py
+          python3 scraper/update_homepage_static_latest.py
 
       # robots.txt advertises image-sitemap.xml. Archive refreshes may defer
       # while a newsroom writer is active, so generate the sitemap again at the
