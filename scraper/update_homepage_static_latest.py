@@ -90,7 +90,12 @@ def is_utility_not_news(row: dict) -> bool:
 
 
 def is_expired_today_deadline(row: dict, now: datetime | None = None) -> bool:
-    """Keep expired automated same-day offers/notices out of crawler-facing Latest."""
+    """Keep expired automated same-day offers/notices out of crawler-facing Latest.
+
+    "Today" is anchored to the story's publication date. Otherwise an offer that
+    expired yesterday at 6pm would appear valid again after midnight until 6pm on
+    the following day.
+    """
     if row.get("manual_article") is True or str(row.get("source_kind") or "").lower() == "editorial":
         return False
     text = " ".join(str(row.get(key) or "") for key in ("title", "excerpt", "summary"))
@@ -107,7 +112,9 @@ def is_expired_today_deadline(row: dict, now: datetime | None = None) -> bool:
         hour = 0
     now = now or datetime.now(timezone.utc)
     local_now = now.astimezone(LOCAL_TZ)
-    deadline = local_now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    published = parse_dt(row.get("first_published_at") or row.get("published_at"))
+    anchor = published.astimezone(LOCAL_TZ) if published.year > 1970 else local_now
+    deadline = anchor.replace(hour=hour, minute=minute, second=0, microsecond=0)
     return local_now > deadline
 
 
