@@ -1,6 +1,8 @@
 """Regression checks for conservative front-page source quality rules."""
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 import frontpage_source_quality as guard
 
 
@@ -57,6 +59,36 @@ def main() -> None:
     assert frontpage["articles"][0]["source_count"] == 2
     assert archive[0]["exclude_from_frontpage"] is True
     assert archive[1]["exclude_from_frontpage"] is True
+
+    # Quality enforcement must not leave a needless hole. If a weak current
+    # story is removed and another genuinely fresh eligible article exists in
+    # the archive reservoir, the guard should refill the slot immediately.
+    now = datetime(2026, 8, 16, 11, 30, tzinfo=timezone.utc)
+    weak_current = dict(weak_result)
+    weak_current["published_at"] = (now - timedelta(hours=1)).isoformat()
+    weak_current["first_published_at"] = weak_current["published_at"]
+    fallback = {
+        "id": "community-fresh",
+        "title": "Volunteer Group Opens New Rochdale Community Session",
+        "excerpt": "A new local session has opened for residents this morning.",
+        "category": "community",
+        "area": "rochdale",
+        "source_kind": "article",
+        "source_name": "Community organisation",
+        "source_url": "https://example.org/rochdale-session",
+        "source_count": 1,
+        "status": "published",
+        "published_at": (now - timedelta(hours=2)).isoformat(),
+        "first_published_at": (now - timedelta(hours=2)).isoformat(),
+    }
+    refill_frontpage = {"articles": [dict(weak_current)]}
+    refill_archive = [dict(weak_current), dict(fallback)]
+    marked, removed = guard.apply(refill_archive, refill_frontpage, now=now)
+    assert marked == 1
+    assert removed == 1
+    assert refill_frontpage["count"] == 1
+    assert refill_frontpage["articles"][0]["id"] == "community-fresh"
+    assert refill_frontpage["source_quality_guard"]["refilled_frontpage_records"] == 1
 
     print("Frontpage source-quality checks passed.")
 
