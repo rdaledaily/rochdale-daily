@@ -42,6 +42,13 @@ jobs:
           git reset --hard origin/main
           echo "Deploying commit $(git rev-parse HEAD)"
 
+      # robots.txt advertises image-sitemap.xml. Archive refreshes may defer
+      # while a newsroom writer is active, so generate the sitemap again at the
+      # final delivery boundary. This prevents deploying a robots-advertised 404
+      # without adding another writer or modifying repository state.
+      - name: Generate image sitemap for deployed snapshot
+        run: python3 scraper/generate_image_sitemap.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
