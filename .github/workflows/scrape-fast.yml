@@ -3,24 +3,25 @@ name: Rochdale Daily fast local news
 on:
   workflow_dispatch:
   schedule:
-    # The Google News discovery matrix is deliberately split into four
-    # quarter-hour shards. Run every shard every hour so no ward, category,
-    # councillor or named-topic slice can become permanently invisible.
-    - cron: "5,20,35,50 * * * *"
-    # A browser-enabled deeper pass supplements the fast lane every two hours.
-    - cron: "10 */2 * * *"
+    # Run the complete borough/category/ward search plan three times per hour.
+    # Recent production runs take about 13-14 minutes, so a 20-minute cadence
+    # leaves recovery headroom instead of creating a permanent queue.
+    - cron: "5,25,45 * * * *"
+    # Browser-heavy recovery is supplementary. Keep it away from every fast
+    # cycle so Chromium/Google wrapper recovery cannot repeatedly starve Latest.
+    - cron: "10 2,8,14,20 * * *"
 
 permissions:
   contents: write
   actions: write
 
 concurrency:
-  group: rd-fast-news-writer
+  group: rd-site-writer
   cancel-in-progress: false
 
 jobs:
   fast-news:
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '5,20,35,50 * * * *'
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '5,25,45 * * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
@@ -41,9 +42,10 @@ jobs:
       MAX_AI_ARTICLES_INITIAL: "40"
       RESPECT_ROBOTS: "true"
       REQUEST_TIMEOUT: "7"
+      GOOGLE_NEWS_REQUEST_DELAY_SECONDS: "0.5"
       SLOW_DOMAIN_FAILURE_THRESHOLD: "3"
       SLOW_DOMAIN_BENCH_HOURS: "4"
-      USE_SOURCE_IMAGES: "false"
+      USE_SOURCE_IMAGES: "true"
       USE_WIKIMEDIA_COMMONS: "true"
       CSS_SOURCE_PATH: assets/css/article-inline.css
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
@@ -98,22 +100,31 @@ jobs:
       - name: Resolve article images before page generation
         timeout-minutes: 8
         run: |
-          python scraper/repair_generated_article_images.py
+          python scraper/repair_generated_article_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
           python scraper/ensure_article_images.py --articles articles.json
       - name: Validate article feed
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
-      - name: Generate site with strict newsroom freshness rules
+      - name: Generate complete canonical site with strict freshness rules
         timeout-minutes: 10
         run: |
           python scraper/repair_merged_bodies.py
+          python scraper/councillor_photos.py
+          python scraper/patch_democracy_portraits.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
           python scraper/enforce_frontpage_freshness.py
           python scraper/enforce_live_homepage_window.py
           python scraper/generate_news_sitemap.py
+          python scraper/generate_archive.py
+          cp archive.html search.html
+          python scraper/update_homepage_static_latest.py
+          python scraper/update_homepage_weekly_news.py
+          python scraper/homepage_discovery_metadata.py
+          python scraper/generate_rss.py
+          python scraper/generate_image_sitemap.py
           python scraper/check_scraper_health.py
       - name: Refresh weather
         timeout-minutes: 2
@@ -130,7 +141,7 @@ jobs:
         run: gh workflow run deploy-pages.yml --ref main
 
   deep-browser:
-    if: github.event.schedule == '10 */2 * * *'
+    if: github.event.schedule == '10 2,8,14,20 * * *'
     runs-on: ubuntu-latest
     timeout-minutes: 70
     env:
@@ -142,8 +153,6 @@ jobs:
       FACEBOOK_EVENTS_MAX: "18"
       OPENAI_MODEL: "gpt-4o-mini"
       AI_REWRITE_REQUIRED: "true"
-      # Deep discovery may look farther back to recover missed leads/context,
-      # but publication is still capped at 14 hours below.
       MAX_NEWS_AGE_HOURS: "72"
       PUBLISH_MAX_NEWS_AGE_HOURS: "14"
       CANDIDATE_RESERVOIR_HOURS: "96"
@@ -155,6 +164,7 @@ jobs:
       MAX_AI_ARTICLES_PER_RUN: "40"
       MAX_AI_ARTICLES_INITIAL: "80"
       REQUEST_TIMEOUT: "10"
+      GOOGLE_NEWS_REQUEST_DELAY_SECONDS: "0.5"
       GOOGLE_SEARCH_QUERY_LIMIT: "68"
       DISCOVERY_LINKS_PER_SOURCE: "36"
       RSS_ITEMS_PER_SOURCE: "100"
@@ -168,13 +178,13 @@ jobs:
       MIN_LIVE_STORIES: "20"
       MIN_FRESH_FRONTPAGE_STORIES: "6"
       SCRAPER_HEALTH_FRESH_HOURS: "14"
-      USE_SOURCE_IMAGES: "false"
+      USE_SOURCE_IMAGES: "true"
       USE_WIKIMEDIA_COMMONS: "true"
       FACEBOOK_EVENTS_BROWSER_ENABLED: "true"
       BROWSER_RENDER_ENABLED: "true"
       GOOGLE_NEWS_BROWSER_RESOLUTION: "true"
-      GOOGLE_NEWS_BROWSER_MAX: "120"
-      GOOGLE_NEWS_BROWSER_BUDGET_SECONDS: "300"
+      GOOGLE_NEWS_RESOLVE_MAX: "120"
+      GOOGLE_NEWS_RESOLVE_BUDGET_SECONDS: "300"
       CSS_SOURCE_PATH: assets/css/article-inline.css
       RIGHT_TO_REPLY_EMAIL: "news@rochdaledaily.co.uk"
       COMMIT_MESSAGE: "Update Rochdale Daily deep local news"
@@ -204,22 +214,31 @@ jobs:
       - name: Resolve article images before page generation
         timeout-minutes: 10
         run: |
-          python scraper/repair_generated_article_images.py
+          python scraper/repair_generated_article_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
           python scraper/ensure_article_images.py --articles articles.json
       - name: Validate article feed
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
-      - name: Generate and validate fresh site
+      - name: Generate complete canonical site
         timeout-minutes: 12
         run: |
           python scraper/repair_merged_bodies.py
+          python scraper/councillor_photos.py
+          python scraper/patch_democracy_portraits.py
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
           python scraper/enforce_frontpage_freshness.py
           python scraper/enforce_live_homepage_window.py
           python scraper/generate_news_sitemap.py
+          python scraper/generate_archive.py
+          cp archive.html search.html
+          python scraper/update_homepage_static_latest.py
+          python scraper/update_homepage_weekly_news.py
+          python scraper/homepage_discovery_metadata.py
+          python scraper/generate_rss.py
+          python scraper/generate_image_sitemap.py
           python scraper/check_scraper_health.py
       - name: Refresh weather
         timeout-minutes: 2
