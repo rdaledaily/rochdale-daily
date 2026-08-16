@@ -59,12 +59,14 @@ def local_iso(value: Any) -> str:
     text = str(value or "").strip()
     if not text:
         return ""
+    # datetime.fromisoformat() accepts YYYY-MM-DD and silently converts it to
+    # midnight. Preserve a genuine date-only event as date-only instead: adding
+    # 00:00 would invent a time that the source did not provide.
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
+        return text
     try:
         parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
     except ValueError:
-        # Date-only values are valid for Google events where no hour is known.
-        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
-            return text
         return ""
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=LONDON)
