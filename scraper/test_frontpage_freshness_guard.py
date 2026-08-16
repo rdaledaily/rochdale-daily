@@ -9,6 +9,7 @@ from enforce_frontpage_freshness import (
     is_expired_time_sensitive_preview,
     is_expired_today_deadline,
     is_recent_live_update,
+    is_thin_utility_not_frontpage,
     is_utility_not_lead,
     latest_verified_update,
 )
@@ -22,6 +23,7 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
             "source_url": "https://www.rochdale.gov.uk/contact-us/estates-asset-management-team-contact-details",
         }
         self.assertTrue(is_utility_not_lead(article))
+        self.assertTrue(is_thin_utility_not_frontpage(article))
 
     def test_editorial_contact_story_is_not_suppressed(self) -> None:
         article = {
@@ -30,6 +32,16 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
             "source_url": "https://www.rochdale.gov.uk/contact-us/service-contact-details",
         }
         self.assertFalse(is_utility_not_lead(article))
+        self.assertFalse(is_thin_utility_not_frontpage(article))
+
+    def test_real_service_change_story_is_not_treated_as_thin_contact_rewrite(self) -> None:
+        article = {
+            "title": "Council moves homelessness advice service to new town-centre office",
+            "source_kind": "article",
+            "source_url": "https://www.rochdale.gov.uk/news/service-moves-to-new-office",
+            "excerpt": "The service will operate from a new location from Monday, with revised opening hours.",
+        }
+        self.assertFalse(is_thin_utility_not_frontpage(article))
 
     def test_recent_live_update_can_outrank_fresh_utility(self) -> None:
         now = datetime.now(timezone.utc)
