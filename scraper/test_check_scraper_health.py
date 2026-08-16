@@ -64,6 +64,45 @@ def test_manual_editorial_contact_story_remains_eligible() -> None:
     assert mod.is_frontpage_eligible_news_article(article, NOW)
 
 
+def test_old_developing_story_uses_verified_timestamped_update_for_freshness() -> None:
+    article = base_article(
+        first_published_at=(NOW - timedelta(days=3)).isoformat(),
+        live_story=True,
+        is_ongoing=True,
+        last_updated_at=NOW.isoformat(),
+        scraped_at=NOW.isoformat(),
+        live_updates=[
+            {
+                "timestamp": (NOW - timedelta(hours=1)).isoformat(),
+                "text": "Police confirmed a new arrest in the continuing investigation.",
+            }
+        ],
+    )
+    assert mod.published_at(article) == NOW - timedelta(days=3)
+    assert mod.verified_development_at(article) == NOW - timedelta(hours=1)
+    assert mod.freshness_at(article) == NOW - timedelta(hours=1)
+
+
+def test_old_story_recheck_does_not_gain_freshness_from_maintenance_timestamps() -> None:
+    article = base_article(
+        first_published_at=(NOW - timedelta(days=3)).isoformat(),
+        live_story=True,
+        is_ongoing=True,
+        last_updated_at=NOW.isoformat(),
+        scraped_at=NOW.isoformat(),
+        live_updates=[],
+    )
+    assert mod.verified_development_at(article) is None
+    assert mod.freshness_at(article) == NOW - timedelta(days=3)
+
+
+def test_live_floor_scales_to_available_fresh_supply() -> None:
+    assert mod.required_live_articles(8, 2) == 2
+    assert mod.required_live_articles(8, 8) == 8
+    assert mod.required_live_articles(8, 20) == 8
+    assert mod.required_live_articles(8, 0) == 0
+
+
 def test_zero_new_after_editorial_rejections_is_not_starvation_when_page_is_fresh() -> None:
     assert not mod.zero_new_attempts_are_starvation(
         attempted_rewrites=5,
@@ -102,6 +141,9 @@ if __name__ == "__main__":
         test_expired_today_deadline_is_not_counted_as_available_news,
         test_expired_machine_sports_preview_is_not_counted_as_available_news,
         test_manual_editorial_contact_story_remains_eligible,
+        test_old_developing_story_uses_verified_timestamped_update_for_freshness,
+        test_old_story_recheck_does_not_gain_freshness_from_maintenance_timestamps,
+        test_live_floor_scales_to_available_fresh_supply,
         test_zero_new_after_editorial_rejections_is_not_starvation_when_page_is_fresh,
         test_zero_new_is_starvation_when_fresh_supply_is_short,
         test_zero_new_is_starvation_when_collection_failed,
