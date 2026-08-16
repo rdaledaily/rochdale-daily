@@ -96,7 +96,7 @@ jobs:
           python -m pip install --no-cache-dir "Pillow>=10,<13"
       - name: Run resilient Rochdale newsroom pipeline
         timeout-minutes: 24
-        run: python scraper/run_newspaper_pipeline.py
+        run: python scraper/run_newsroom_policy.py
       - name: Resolve article images before page generation
         timeout-minutes: 8
         run: |
@@ -212,7 +212,7 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Run deep Rochdale newsroom pipeline
         timeout-minutes: 45
-        run: python scraper/run_newspaper_pipeline.py
+        run: python scraper/run_newsroom_policy.py
       - name: Resolve article images before page generation
         timeout-minutes: 10
         run: |
