@@ -94,7 +94,7 @@ jobs:
           python -m pip install --no-cache-dir "Pillow>=10,<13"
       - name: Run resilient Rochdale newsroom pipeline
         timeout-minutes: 24
-        run: python scraper/run_newspaper_pipeline.py
+        run: python scraper/run_newsroom_policy.py
       - name: Remove emojis and publishing artefacts before page generation
         run: python scraper/content_hygiene.py --fix
       - name: Resolve relevant article images, then guarantee a fallback
