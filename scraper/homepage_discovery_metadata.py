@@ -14,8 +14,11 @@ see on the page.
 It also removes the legacy newsroom bootstrap label "Article slots ready".
 That wording was useful while the feed was being built, but once real article
 cards are rendered it makes the live homepage look unfinished to readers and
-crawlers.  The replacement is deliberately factual and does not imply a story
-count or freshness state beyond what the visible Latest block establishes.
+crawlers. The cleanup tolerates harmless markup/whitespace between the words so
+an older template cannot keep the placeholder alive just by wrapping part of
+it in a span/strong element. The replacement is deliberately factual and does
+not imply a story count or freshness state beyond what the visible Latest block
+establishes.
 """
 from __future__ import annotations
 
@@ -35,6 +38,10 @@ RSS_TAG = '<link rel="alternate" type="application/rss+xml" title="Rochdale Dail
 MAX_ITEMS = 12
 LEGACY_FEED_STATUS = "Article slots ready"
 CURRENT_FEED_STATUS = "Latest verified local stories"
+LEGACY_FEED_STATUS_RE = re.compile(
+    r"Article(?:\s|&nbsp;|<[^>]+>)*slots(?:\s|&nbsp;|<[^>]+>)*ready",
+    re.I,
+)
 
 CARD_RE = re.compile(
     r'<a class="story-link" href="(?P<href>[^"]+)">.*?'
@@ -120,7 +127,7 @@ def enhance(text: str) -> str:
             raise ValueError("Homepage </head> not found")
         text = text.replace("</head>", f"  {RSS_TAG}\n</head>", 1)
 
-    text = text.replace(LEGACY_FEED_STATUS, CURRENT_FEED_STATUS)
+    text = LEGACY_FEED_STATUS_RE.sub(CURRENT_FEED_STATUS, text)
     return text
 
 
