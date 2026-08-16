@@ -79,6 +79,14 @@ jobs:
       - name: Refresh homepage discovery metadata
         run: python3 scraper/homepage_discovery_metadata.py
 
+      # Article pages are generated with the full shared stylesheet embedded in
+      # each HTML file. Replace only exact copies of assets/css/site.css with the
+      # cacheable shared resource in the deployment snapshot. This substantially
+      # reduces repeat-navigation transfer without changing rendered styling or
+      # mutating repository history; legacy/custom inline styles are untouched.
+      - name: Externalise shared article CSS
+        run: python3 scraper/externalise_article_css.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
