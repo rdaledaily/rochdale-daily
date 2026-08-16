@@ -51,6 +51,10 @@ def is_eligible_news_article(article: Any) -> bool:
         return False
     if str(article.get("status") or "published").lower() != "published":
         return False
+    if article.get("requires_approval"):
+        return False
+    if article.get("exclude_from_frontpage") is True:
+        return False
     if str(article.get("source_kind") or "").lower() == "event":
         return False
     if str(article.get("category") or "").lower() == "events":
@@ -73,6 +77,7 @@ def main() -> None:
     top_fresh_cutoff = now - timedelta(hours=TOP_STORY_FRESH_HOURS)
 
     valid_articles = [article for article in articles if isinstance(article, dict)]
+    eligible_news_feed = [article for article in public_feed if is_eligible_news_article(article)]
     fresh = [article for article in valid_articles if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff]
     top_three = valid_articles[:3]
     top_three_fresh = [article for article in top_three if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_fresh_cutoff]
@@ -82,9 +87,8 @@ def main() -> None:
     # requirement. Only fail when an eligible <6h story exists but none is surfaced.
     eligible_top_fresh = [
         article
-        for article in public_feed
-        if is_eligible_news_article(article)
-        and (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_fresh_cutoff
+        for article in eligible_news_feed
+        if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_fresh_cutoff
     ]
 
     raw_candidates = int(status.get("raw_candidates") or 0)
@@ -128,9 +132,17 @@ def main() -> None:
         failures.append(
             "discovery produced new articles but the homepage lead is older than the allowed freshness window"
         )
-    if len(valid_articles) < 3 and raw_candidates >= 10:
+
+    # Raw discovery volume includes events, duplicate clusters, non-local results,
+    # thin listings and material deliberately rejected by editorial safeguards. It
+    # therefore cannot prove that a two-story homepage has "collapsed". Keep this
+    # guard strict, but compare the homepage to the actual publishable news pool:
+    # if ten or more eligible news records exist and fewer than three surface,
+    # something in selection/generation has genuinely gone wrong.
+    if len(valid_articles) < 3 and len(eligible_news_feed) >= 10:
         failures.append(
-            f"homepage collapsed to {len(valid_articles)} stories despite {raw_candidates} eligible discovery candidates"
+            f"homepage collapsed to {len(valid_articles)} stories despite "
+            f"{len(eligible_news_feed)} eligible published news records"
         )
 
     payload = {
@@ -138,6 +150,7 @@ def main() -> None:
         "raw_candidates": raw_candidates,
         "new_articles": new_articles,
         "live_articles": live_articles,
+        "eligible_published_news_records": len(eligible_news_feed),
         "frontpage_articles": len(valid_articles),
         "fresh_frontpage_articles": len(fresh),
         "fresh_top_three_articles": len(top_three_fresh),
