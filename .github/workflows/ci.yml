@@ -72,6 +72,7 @@ jobs:
             scraper/source_presentation.py \
             scraper/content_hygiene.py \
             scraper/live_story_updates.py \
+            scraper/compact_live_updates.py \
             scraper/render_live_updates.py \
             scraper/scrub_personal_name.py \
             scraper/google_news_resolver.py \
@@ -135,6 +136,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_externalise_article_css.py
           PYTHONPATH=scraper python scraper/test_enhance_image_alt_text.py
           PYTHONPATH=scraper python scraper/test_live_story_updates.py
+          PYTHONPATH=scraper python scraper/test_compact_live_updates.py
           PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
           python scraper/test_workflow_architecture.py
       - name: Enforce cards-only canonical article images
