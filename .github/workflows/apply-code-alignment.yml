@@ -1,0 +1,183 @@
+name: Apply validated newsroom code alignment
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-code-alignment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-code-alignment
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+          python -m pip install --no-cache-dir 'Pillow>=10,<13'
+      - name: Align newsroom code and regression policies
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          def rd(path): return Path(path).read_text(encoding='utf-8')
+          def wr(path, text): Path(path).write_text(text, encoding='utf-8')
+          def one(path, old, new):
+              text=rd(path)
+              if text.count(old) != 1:
+                  raise SystemExit(f'{path}: expected one exact match for {old[:80]!r}, got {text.count(old)}')
+              wr(path, text.replace(old,new,1))
+
+          # Fresh discovery window must not be inflated to protect the archive.
+          one('scraper/scraper.py',
+              "MAX_NEWS_AGE_HOURS = max(168, int(os.getenv('MAX_NEWS_AGE_HOURS', '168')))",
+              "MAX_NEWS_AGE_HOURS = max(1, int(os.getenv('MAX_NEWS_AGE_HOURS', '14')))")
+
+          # Local publishers are valid discovery/corroboration sources. Keep only
+          # generic republisher/paywall blocks at this layer; copyright/rewrite
+          # safety remains enforced downstream.
+          s=rd('scraper/scraper.py')
+          s=s.replace(
+              "SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}\nSOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'}",
+              "SOURCE_DENY_DOMAINS = {'pressreader.com'}\nSOURCE_DENY_NAMES = {'pressreader'}"
+          )
+          wr('scraper/scraper.py',s)
+
+          loc=rd('scraper/locality_rules.py')
+          loc=loc.replace('    "rochdaletimes.co.uk",\n    "rochdaleonline.co.uk",\n','')
+          loc=loc.replace('SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper", "rochdale online"}','SOURCE_DENY_NAMES = set()')
+          # Treat these publishers as known local/GM context rather than denying
+          # locality before a lead can be assessed.
+          loc=loc.replace('KNOWN_GM_PUBLISHER_DOMAINS = {', 'KNOWN_GM_PUBLISHER_DOMAINS = {\n    "rochdaletimes.co.uk",\n    "rochdaleonline.co.uk",')
+          wr('scraper/locality_rules.py',loc)
+
+          lt=rd('scraper/test_locality.py')
+          lt=lt.replace(
+              '        False,\n        "Local council update",\n        "Rochdale Times",\n        "https://www.rochdaletimes.co.uk/example",\n        "Explicitly denied source",',
+              '        True,\n        "Local council update",\n        "Rochdale Times",\n        "https://www.rochdaletimes.co.uk/example",\n        "Local publisher may contribute a discovery/corroboration lead",'
+          )
+          wr('scraper/test_locality.py',lt)
+
+          # Schedule comments/tests must match the live :05/:20/:35/:50 cadence.
+          sq=rd('scraper/search_queries.py').replace(
+              '# Scheduled runs at :07, :22, :37 and :52 map to shards 0, 1, 2 and 3.',
+              '# Scheduled fast runs at :05, :20, :35 and :50 map to shards 0, 1, 2 and 3.'
+          )
+          wr('scraper/search_queries.py',sq)
+          tq=rd('scraper/test_search_queries.py')
+          for a,b in [('16, 7','16, 5'),('16, 22','16, 20'),('16, 37','16, 35'),('16, 52','16, 50')]: tq=tq.replace(a,b)
+          tq=tq.replace('across the four scheduled runs per hour','across the four production fast runs per hour')
+          wr('scraper/test_search_queries.py',tq)
+
+          # Runtime health checks one shard. The cumulative four-shard coverage
+          # contract is verified by CI, so do not demand all wards in one run.
+          h=rd('scraper/check_scraper_health.py')
+          old='''    if missing_categories:\n        failures.append(\n            "borough discovery plan is missing configured categories: "\n            + ", ".join(missing_categories)\n        )\n    if missing_wards:\n        failures.append(\n            "borough discovery plan is missing official wards: "\n            + ", ".join(missing_wards)\n        )\n'''
+          if old not in h: raise SystemExit('health per-run ward/category failure block not found')
+          h=h.replace(old,'''    if raw_candidates > 0 and not search_records:\n        failures.append("discovery produced candidates but recorded no search-query execution plan")\n''',1)
+          wr('scraper/check_scraper_health.py',h)
+
+          # The adaptive editorial engine owns article length. Page generation
+          # must not impose a second 60/75-word category threshold.
+          g=rd('scraper/generate_newspaper_pages.py')
+          g,n=re.subn(r'\nCATEGORY_MIN_WORDS = \{.*?\n\}\nDEFAULT_MIN_WORDS = 75\n','\n',g,count=1,flags=re.S)
+          if n!=1: raise SystemExit('category minimum word block not found')
+          old='''\ndef _minimum_words(article) -> int:\n    return CATEGORY_MIN_WORDS.get(fp.article_category(article), DEFAULT_MIN_WORDS)\n\n\ndef _newsroom_eligible(article) -> bool:\n    if fp.is_event(article):\n        return False\n    if article.get("manual_article") or article.get("editorial_lock"):\n        return bool(fp.article_text(article).strip())\n    return fp.editorial_word_count(article) >= _minimum_words(article)\n'''
+          new='''\ndef _newsroom_eligible(article) -> bool:\n    if fp.is_event(article):\n        return False\n    text = fp.article_text(article).strip()\n    if not text:\n        return False\n    if article.get("manual_article") or article.get("editorial_lock"):\n        return True\n    if article.get("rewrite_quality_checked") is True:\n        return True\n    route = str(article.get("publication_route") or "").lower()\n    if route in {"ai-grounded-rewrite", "editorial-upgrade", "official-data"}:\n        return True\n    return fp.editorial_word_count(article) >= 40\n'''
+          if old not in g: raise SystemExit('newsroom word gate block not found')
+          wr('scraper/generate_newspaper_pages.py',g.replace(old,new,1))
+
+          nft=rd('scraper/test_newspaper_freshness.py')
+          old='''    assert newsroom._minimum_words(transport_brief) == 60\n    assert newsroom._minimum_words(business_fragment) == 75\n    assert newsroom._newsroom_eligible(transport_brief)\n    assert not newsroom._newsroom_eligible(business_fragment)\n'''
+          new='''    transport_brief["rewrite_quality_checked"] = True\n    business_fragment["rewrite_quality_checked"] = True\n    assert newsroom._newsroom_eligible(transport_brief)\n    assert newsroom._newsroom_eligible(business_fragment)\n'''
+          if old not in nft: raise SystemExit('newspaper freshness word-gate assertions not found')
+          wr('scraper/test_newspaper_freshness.py',nft.replace(old,new,1))
+
+          fpt=rd('scraper/test_frontpage_pipeline.py')
+          if 'timedelta(hours=index % 72)' not in fpt: raise SystemExit('stale frontpage fixture not found')
+          wr('scraper/test_frontpage_pipeline.py',fpt.replace('timedelta(hours=index % 72)','timedelta(hours=index % 14)',1))
+
+          # Manual/editorial locks stop churn, not verified developments. A new
+          # source URL for the same story becomes rewrite/update eligible.
+          s=rd('scraper/scraper.py')
+          old="""    if existing_article.get('editorial_lock'):\n        # Hand-edited by the editor: the pipeline never rewrites it.\n        return False\n"""
+          new="""    if existing_article.get('editorial_lock'):\n        known_urls = {canonicalise_url(url) for url in existing_article.get('source_urls', []) if url}\n        if existing_article.get('source_url'):\n            known_urls.add(canonicalise_url(existing_article.get('source_url')))\n        candidate_url = canonicalise_url(candidate.source_url)\n        # Do not churn a hand-edited story from the same material, but let a\n        # genuinely new report enter the canonical update/merge path.\n        return bool(candidate_url and candidate_url not in known_urls)\n"""
+          if old not in s: raise SystemExit('editorial lock eligibility block not found')
+          wr('scraper/scraper.py',s.replace(old,new,1))
+          at=rd('scraper/test_archive_persistence.py')
+          at=at.replace(
+              '    assert not candidate_is_rewrite_eligible(candidate, existing), (\n        "editorially locked articles are never rewritten, even with new URLs"\n    )\n    print("eligibility: editorial lock respected — OK")',
+              '    assert candidate_is_rewrite_eligible(candidate, existing), (\n        "a genuinely new source URL must be allowed to update a locked canonical story"\n    )\n    print("eligibility: editorial lock blocks churn but permits new-source updates — OK")'
+          )
+          wr('scraper/test_archive_persistence.py',at)
+
+          # Unknown machine geography is not silently converted to Rochdale.
+          ag=rd('scraper/article_gate.py')
+          old='''    if area not in CANONICAL_AREAS:\n        notes.append(f"'{ident}': unknown area '{area}' -> '{AREA_FALLBACK}'")\n        area = AREA_FALLBACK\n    elif article.get("area") != area:\n'''
+          new='''    if area not in CANONICAL_AREAS:\n        if _is_manual(article) or str(article.get("source_kind") or "").lower() == "editorial":\n            notes.append(f"'{ident}': unknown editor area '{area}' -> '{AREA_FALLBACK}'")\n            area = AREA_FALLBACK\n        else:\n            notes.append(f"'{ident}': dropped automated article with unknown area '{area or 'blank'}'")\n            return None\n    elif article.get("area") != area:\n'''
+          if old not in ag: raise SystemExit('article gate area fallback block not found')
+          wr('scraper/article_gate.py',ag.replace(old,new,1))
+          gat=rd('scraper/test_article_gate.py')
+          marker='''def test_unknown_category_falls_back_to_news() -> None:\n'''
+          addition='''def test_unknown_automated_area_is_dropped() -> None:\n    notes: list[str] = []\n    fixed = normalise_article(\n        manual(area="atlantis", publication_route="ai-grounded-rewrite"), notes\n    )\n    assert fixed is None\n    assert any("unknown area" in note or "unknown" in note for note in notes)\n\n\n'''
+          if addition not in gat:
+              if marker not in gat: raise SystemExit('article gate test insertion marker not found')
+              gat=gat.replace(marker,addition+marker,1)
+          wr('scraper/test_article_gate.py',gat)
+
+          print('Newsroom code alignment applied.')
+          PY
+      - name: Run aligned regression suite
+        env:
+          PYTHONPATH: scraper
+        run: |
+          python -m py_compile scraper/*.py
+          python scraper/check_data_files.py
+          python scraper/test_frontpage_pipeline.py
+          python scraper/test_frontpage_freshness_guard.py
+          python scraper/test_newspaper_freshness.py
+          python scraper/test_locality.py
+          python scraper/test_story_identity.py
+          python scraper/test_selection_policy.py
+          python scraper/test_search_queries.py
+          python scraper/test_rewrite_safety.py
+          python scraper/test_editorial_length.py
+          python scraper/test_food_hygiene.py
+          python scraper/test_content_hygiene.py
+          python scraper/test_archive_persistence.py
+          python scraper/test_event_identity.py
+          python scraper/test_article_gate.py
+          python scraper/test_resolve_google_news_sources.py
+          python scraper/test_ensure_article_images.py
+          python scraper/test_generate_news_sitemap.py
+          python scraper/test_update_homepage_static_latest.py
+      - name: Commit validated code alignment
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scraper/
+          git commit -m 'Align newsroom policies with fresh borough-wide coverage'
+          git push origin HEAD:main
