@@ -67,11 +67,9 @@ def _newsroom_eligible(article) -> bool:
 
 def _newsroom_rank(article, now: datetime):
     first = fp._frontpage_first_published(article) or datetime.min.replace(tzinfo=timezone.utc)
-    latest = fp.parse_datetime(
-        article.get("last_updated_at")
-        or article.get("published_at")
-        or article.get("scraped_at")
-    ) or first
+    latest = freshness_guard.latest_verified_update(article)
+    if latest == datetime.min.replace(tzinfo=timezone.utc):
+        latest = first
     age_hours = max(0.0, (now - first).total_seconds() / 3600)
 
     if age_hours <= 3:
@@ -141,12 +139,8 @@ def _keep_on_live_homepage(article, reference: datetime, cutoff: datetime) -> bo
     if not active_live:
         return False
 
-    latest = fp.parse_datetime(
-        article.get("last_updated_at")
-        or article.get("scraped_at")
-        or article.get("published_at")
-    )
-    return latest is not None and latest >= cutoff
+    latest = freshness_guard.latest_verified_update(article)
+    return latest >= cutoff
 
 
 def _normalised_area(article) -> str:
