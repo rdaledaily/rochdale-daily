@@ -10,6 +10,7 @@ import homepage_discovery_metadata as mod
 
 SAMPLE = '''<!doctype html>
 <html><head><title>Rochdale Daily</title></head><body>
+<p id="feed-status">Article slots ready</p>
 <div class="news-grid" id="news-grid">
 <!-- STATIC_LATEST_START -->
 <article class="news-card static-latest-card">
@@ -44,12 +45,18 @@ class HomepageDiscoveryMetadataTests(unittest.TestCase):
         self.assertEqual(payload["itemListElement"][0]["item"]["headline"], "First & Local Story")
         self.assertEqual(payload["itemListElement"][0]["item"]["datePublished"], "2026-08-16T03:12:27Z")
 
+    def test_replaces_legacy_feed_status(self):
+        enhanced = mod.enhance(SAMPLE)
+        self.assertNotIn(mod.LEGACY_FEED_STATUS, enhanced)
+        self.assertIn(mod.CURRENT_FEED_STATUS, enhanced)
+
     def test_enhance_is_idempotent(self):
         once = mod.enhance(SAMPLE)
         twice = mod.enhance(once)
         self.assertEqual(once, twice)
         self.assertEqual(twice.count('id="latest-news-itemlist"'), 1)
         self.assertEqual(twice.count(mod.RSS_TAG), 1)
+        self.assertEqual(twice.count(mod.CURRENT_FEED_STATUS), 1)
 
     def test_refuses_missing_static_latest(self):
         with self.assertRaises(ValueError):
