@@ -30,9 +30,12 @@ from zoneinfo import ZoneInfo
 
 SITE_BASE = "https://rochdaledaily.co.uk"
 EVENT_SCRIPT_ID = "rd-event-jsonld"
+# Match only the script element itself.  Earlier versions also consumed the
+# surrounding newline/indentation, so replacing an already-correct block subtly
+# changed whitespace on every deployment and broke the idempotence guarantee.
 EVENT_SCRIPT_RE = re.compile(
-    rf"\n?\s*<script\s+id=\"{EVENT_SCRIPT_ID}\"\s+type=\"application/ld\+json\">.*?</script>\s*",
-    re.S,
+    rf"^[ \t]*<script\s+id=\"{EVENT_SCRIPT_ID}\"\s+type=\"application/ld\+json\">.*?</script>",
+    re.M | re.S,
 )
 LONDON = ZoneInfo("Europe/London")
 
@@ -144,17 +147,21 @@ def enhance_page(page: Path, article: dict[str, Any]) -> bool:
         return False
 
     original = page.read_text(encoding="utf-8")
-    cleaned = EVENT_SCRIPT_RE.sub("\n", original)
     marker = "</head>"
-    if marker not in cleaned:
+    if marker not in original:
         return False
 
     block = (
         f'  <script id="{EVENT_SCRIPT_ID}" type="application/ld+json">'
         + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
-        + "</script>\n"
+        + "</script>"
     )
-    updated = cleaned.replace(marker, block + marker, 1)
+
+    if EVENT_SCRIPT_RE.search(original):
+        updated = EVENT_SCRIPT_RE.sub(block, original, count=1)
+    else:
+        updated = original.replace(marker, block + "\n" + marker, 1)
+
     if updated == original:
         return False
     page.write_text(updated, encoding="utf-8")
