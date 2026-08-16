@@ -1,27 +1,31 @@
 #!/usr/bin/env python3
-"""Keep the Rochdale Daily homepage genuinely fresh without deleting archive material.
+"""Keep the Rochdale Daily homepage genuinely fresh without starving it.
 
-The homepage is a live news surface, not an archive. Routine fallback stories older
-than the configured freshness window are therefore removed from frontpage.json
-rather than merely pushed lower down. Archive/category/area pages keep the full
-historical record.
+Page generation reconstructs a much larger published article reservoir than the
+small live scrape snapshot. This final pass therefore refills the homepage from
+that reconstructed reservoir, but only with genuinely eligible stories inside
+the configured freshness window. Old archive copy is never used merely to hit a
+numeric target.
 
-An editor may explicitly keep an older story visible with ``featured`` and a live
-``frontpage_until`` value. Genuinely active live/breaking coverage may also remain
-when it has received a verified update inside the freshness window.
+Editor pins and genuinely active live/breaking coverage retain their existing
+special handling.
 """
 from __future__ import annotations
 
 import json
 import os
 import re
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
 FRONTPAGE = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
+ARTICLES = Path(os.getenv("ARTICLES_JSON", "articles.json"))
 FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
+FRONTPAGE_MIN = int(os.getenv("FRONTPAGE_MIN_ARTICLES", "12"))
+FRONTPAGE_TARGET = int(os.getenv("FRONTPAGE_TARGET_ARTICLES", "30"))
 SPORT_PREVIEW_MAX_HOURS = int(os.getenv("SPORT_PREVIEW_MAX_HOURS", "8"))
 LOCAL_TZ = ZoneInfo("Europe/London")
 
@@ -33,9 +37,6 @@ UTILITY_URL_PATTERNS = (
     re.compile(r"/live-departures/", re.I),
     re.compile(r"/contact-us/[^?#]*(?:contact|details)", re.I),
 )
-# Directory/contact pages can be useful in search and the permanent archive, but
-# an automated rewrite of a phone/email/address page is not a homepage news story.
-# Keep this intentionally narrow so real service-change reporting is not hidden.
 THIN_UTILITY_TITLE_PATTERNS = (
     re.compile(r"\bupdates? contact (?:details|information)\b", re.I),
     re.compile(r"\bcontact (?:details|information) (?:for|of)\b", re.I),
@@ -52,6 +53,13 @@ TODAY_DEADLINE_PATTERN = re.compile(
     r"\b(?:until|by|before)\s+(?P<hour>\d{1,2})(?::(?P<minute>\d{2}))?\s*(?P<ampm>am|pm)\s+today\b",
     re.I,
 )
+
+
+def read_json(path: Path, default: Any) -> Any:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return default
 
 
 def parse_dt(value: Any) -> datetime | None:
@@ -95,16 +103,6 @@ def _is_editorial(article: dict[str, Any]) -> bool:
 
 
 def latest_verified_update(article: dict[str, Any]) -> datetime:
-    """Return the newest timestamp that can justify keeping old live copy current.
-
-    Automated discovery routinely refreshes ``scraped_at``/``last_updated_at`` even
-    when the underlying source has supplied no new fact. Those pipeline timestamps
-    must not resurrect an old LIVE/BREAKING story. For machine-generated active
-    coverage, only timestamped timeline entries count as verified updates; if there
-    are none, freshness falls back to the original publication time. Editorial or
-    manual live coverage may use its explicit ``last_updated_at`` because that field
-    is under newsdesk control.
-    """
     active = _is_active_live(article)
     editorial = _is_editorial(article)
     if not active or editorial:
@@ -154,12 +152,6 @@ def is_utility_not_lead(article: dict[str, Any]) -> bool:
 
 
 def is_thin_utility_not_frontpage(article: dict[str, Any]) -> bool:
-    """Reject obvious automated directory/contact rewrites from the live homepage.
-
-    They remain published and discoverable in the archive/search surfaces. Manual
-    journalism is always exempt because a real reported service-change story can
-    legitimately mention contact information.
-    """
     if _is_editorial(article):
         return False
     title = str(article.get("title") or "")
@@ -170,12 +162,6 @@ def is_thin_utility_not_frontpage(article: dict[str, Any]) -> bool:
 
 
 def is_expired_today_deadline(article: dict[str, Any], now: datetime) -> bool:
-    """Expire automated same-day offers/notices once their stated local deadline passes.
-
-    The word "today" belongs to the story's publication day, not the day on which
-    a later freshness pass happens to run. Anchoring the deadline to ``now`` would
-    incorrectly resurrect yesterday's "until 6pm today" offer after midnight.
-    """
     if _is_editorial(article):
         return False
     text = " ".join(str(article.get(key) or "") for key in ("title", "excerpt", "summary"))
@@ -198,7 +184,6 @@ def is_expired_today_deadline(article: dict[str, Any], now: datetime) -> bool:
 
 
 def is_expired_time_sensitive_preview(article: dict[str, Any], now: datetime) -> bool:
-    """Expire machine-generated pre-match sports copy once it has stopped being useful."""
     if _is_editorial(article):
         return False
     if str(article.get("category") or "").strip().lower() not in {"sport", "sports"}:
@@ -219,16 +204,92 @@ def is_expired_time_sensitive_preview(article: dict[str, Any], now: datetime) ->
 
 
 def is_recent_live_update(article: dict[str, Any], cutoff: datetime) -> bool:
-    return _is_active_live(article) and latest_verified_update(article) >= cutoff and not is_utility_not_lead(article)
+    return (
+        _is_active_live(article)
+        and latest_verified_update(article) >= cutoff
+        and not is_utility_not_lead(article)
+    )
 
 
 def _identity(article: dict[str, Any]) -> str:
-    return str(article.get("id") or article.get("slug") or id(article))
+    return str(
+        article.get("id")
+        or article.get("slug")
+        or article.get("story_key")
+        or article.get("source_url")
+        or id(article)
+    )
+
+
+def _eligible_reservoir_article(article: Any, now: datetime, cutoff: datetime) -> bool:
+    if not isinstance(article, dict):
+        return False
+    if str(article.get("status") or "published").lower() != "published":
+        return False
+    if article.get("requires_approval"):
+        return False
+    if article.get("exclude_from_frontpage") is True:
+        return False
+    if str(article.get("source_kind") or "").lower() == "event":
+        return False
+    if str(article.get("category") or "").lower() == "events":
+        return False
+    if is_thin_utility_not_frontpage(article):
+        return False
+    if is_expired_today_deadline(article, now):
+        return False
+    if is_expired_time_sensitive_preview(article, now):
+        return False
+
+    published = first_published(article)
+    return bool(
+        (published is not None and published >= cutoff)
+        or active_pin(article, now)
+        or is_recent_live_update(article, cutoff)
+    )
+
+
+def _category(article: dict[str, Any]) -> str:
+    value = str(article.get("category") or "news").strip().lower()
+    return value or "news"
+
+
+def _area(article: dict[str, Any]) -> str:
+    value = str(article.get("area") or article.get("ward") or "borough-wide").strip().lower()
+    return value or "borough-wide"
+
+
+def _balanced_refill(
+    candidates: list[dict[str, Any]],
+    existing: list[dict[str, Any]],
+    limit: int,
+) -> list[dict[str, Any]]:
+    """Choose newest refill stories while spreading them across categories/areas."""
+    remaining = sorted(candidates, key=latest_update, reverse=True)
+    selected: list[dict[str, Any]] = []
+    category_counts = Counter(_category(item) for item in existing)
+    area_counts = Counter(_area(item) for item in existing)
+
+    while remaining and len(selected) < limit:
+        best_index = max(
+            range(len(remaining)),
+            key=lambda index: (
+                -category_counts[_category(remaining[index])],
+                -area_counts[_area(remaining[index])],
+                latest_update(remaining[index]),
+            ),
+        )
+        item = remaining.pop(best_index)
+        selected.append(item)
+        category_counts[_category(item)] += 1
+        area_counts[_area(item)] += 1
+
+    return selected
 
 
 def main() -> None:
-    payload = json.loads(FRONTPAGE.read_text(encoding="utf-8"))
-    articles = payload.get("articles")
+    payload = read_json(FRONTPAGE, {})
+    articles = payload.get("articles") if isinstance(payload, dict) else None
     if not isinstance(articles, list):
         raise SystemExit("frontpage articles array missing")
 
@@ -247,6 +308,21 @@ def main() -> None:
     expired_previews = [a for a in valid if is_expired_time_sensitive_preview(a, now)]
     expired_preview_ids = {_identity(a) for a in expired_previews}
     valid = [a for a in valid if _identity(a) not in expired_preview_ids]
+
+    reservoir = read_json(ARTICLES, [])
+    if not isinstance(reservoir, list):
+        reservoir = []
+
+    existing_ids = {_identity(a) for a in valid}
+    reservoir_candidates = [
+        a for a in reservoir
+        if _eligible_reservoir_article(a, now, cutoff)
+        and _identity(a) not in existing_ids
+    ]
+    refill_limit = max(0, FRONTPAGE_TARGET - len(valid))
+    refilled = _balanced_refill(reservoir_candidates, valid, refill_limit)
+    if refilled:
+        valid.extend(refilled)
 
     fresh = [
         a for a in valid
@@ -269,12 +345,19 @@ def main() -> None:
     dropped_stale = [a for a in older_remaining if _identity(a) not in stale_pin_ids]
 
     fresh_pins.sort(key=latest_verified_update, reverse=True)
-    fresh_substantive.sort(key=latest_update, reverse=True)
+    original_ids = {_identity(a) for a in articles if isinstance(a, dict)}
+    original_fresh = [a for a in fresh_substantive if _identity(a) in original_ids]
+    refill_fresh = [a for a in fresh_substantive if _identity(a) not in original_ids]
+    original_fresh.sort(key=latest_update, reverse=True)
+    refill_fresh = _balanced_refill(refill_fresh, original_fresh, len(refill_fresh))
+    fresh_substantive = original_fresh + refill_fresh
+
     recent_live.sort(key=latest_verified_update, reverse=True)
     fresh_utility.sort(key=latest_update, reverse=True)
     stale_pins.sort(key=latest_verified_update, reverse=True)
 
     ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins
+    ordered = ordered[:FRONTPAGE_TARGET]
 
     for index, article in enumerate(ordered):
         article["frontpage_rank"] = index
@@ -283,8 +366,20 @@ def main() -> None:
 
     payload["articles"] = ordered
     payload["count"] = len(ordered)
+    coverage = payload.get("coverage")
+    if not isinstance(coverage, dict):
+        coverage = {}
+    coverage["frontpage_minimum_met"] = len(ordered) >= FRONTPAGE_MIN
+    coverage["reservoir_fresh_candidates"] = len(reservoir_candidates)
+    coverage["reservoir_refilled"] = len(refilled)
+    payload["coverage"] = coverage
     payload["freshness_guard"] = {
         "fresh_hours": FRESH_HOURS,
+        "frontpage_minimum": FRONTPAGE_MIN,
+        "frontpage_target": FRONTPAGE_TARGET,
+        "reservoir_records": len(reservoir),
+        "reservoir_fresh_candidates": len(reservoir_candidates),
+        "reservoir_refilled": len(refilled),
         "fresh_editor_pins": len(fresh_pins),
         "stale_editor_pins_retained": len(stale_pins),
         "fresh_articles": len(fresh),
@@ -301,11 +396,12 @@ def main() -> None:
 
     lead = ordered[0].get("title") if ordered else "(none)"
     print(
-        f"Frontpage freshness enforced: {len(fresh_pins)} fresh pin(s), "
-        f"{len(fresh_substantive)} other substantive <= {FRESH_HOURS}h, "
+        f"Frontpage freshness enforced: {len(ordered)} final story/stories; "
+        f"{len(refilled)} refilled from {len(reservoir_candidates)} eligible <= {FRESH_HOURS}h reservoir candidate(s); "
+        f"{len(fresh_pins)} fresh pin(s), {len(fresh_substantive)} substantive fresh story/stories, "
         f"{len(recent_live)} active live update(s), {len(fresh_utility)} utility, "
-        f"{len(thin_utility)} thin directory/contact rewrite(s) dropped from homepage, "
-        f"{len(expired_deadlines)} expired same-day deadline story/stories dropped, "
+        f"{len(thin_utility)} thin directory/contact rewrite(s) dropped, "
+        f"{len(expired_deadlines)} expired deadline story/stories dropped, "
         f"{len(expired_previews)} expired sports preview(s) dropped, "
         f"{len(stale_pins)} explicit stale pin(s), {len(dropped_stale)} stale fallback story/stories dropped. "
         f"Lead: {lead}"
