@@ -1,17 +1,10 @@
 #!/usr/bin/env python3
-"""Add a clearly separated 'More local news from this week' homepage section.
+"""Add a secondary, clearly labelled weekly archive discovery section.
 
-The live Latest feed intentionally remains strict: genuinely current reporting must
-not be padded with older stories just to make the homepage look busy. On quieter
-news cycles that can leave only a handful of cards, which reduces useful internal
-linking and onward reading. This pass keeps the meanings separate by adding a
-small secondary section of recent archive journalism that is *not* in the current
-frontpage feed.
-
-The section is static/crawlable, capped at six stories, limited to seven days,
-and reuses the same utility/deadline/sports-preview exclusions as the crawler-
-facing Latest fallback. It therefore adds discovery depth without pretending an
-older article is new.
+The live Latest feed remains strict and is never padded with older material. The
+weekly section exists only when the current edition is already healthy; when the
+fresh newsroom collapses, it is removed rather than visually masking the problem
+with week-old archive cards.
 """
 from __future__ import annotations
 
@@ -19,6 +12,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from enforce_frontpage_freshness import is_recent_live_update
 from update_homepage_static_latest import (
     ARTICLES,
     INDEX,
@@ -36,33 +30,52 @@ START = "<!-- WEEKLY_LOCAL_NEWS_START -->"
 END = "<!-- WEEKLY_LOCAL_NEWS_END -->"
 MAX_STORIES = 6
 MAX_AGE_DAYS = 7
+CURRENT_EDITION_HOURS = 14
+MIN_CURRENT_EDITION_FOR_WEEKLY = 6
 INSERT_BEFORE = '      <section class="section" id="news-by-ward" aria-labelledby="news-by-ward-title">'
 
 
-def frontpage_slugs(path: Path = FRONTPAGE) -> set[str]:
+def frontpage_rows(path: Path = FRONTPAGE) -> list[dict]:
     if not path.is_file():
-        return set()
+        return []
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return set()
+        return []
     rows = payload.get("articles", []) if isinstance(payload, dict) else []
     if not isinstance(rows, list):
-        return set()
+        return []
+    return [row for row in rows if isinstance(row, dict)]
+
+
+def frontpage_slugs(path: Path = FRONTPAGE) -> set[str]:
     return {
         clean(row.get("slug"))
-        for row in rows
-        if isinstance(row, dict) and clean(row.get("slug"))
+        for row in frontpage_rows(path)
+        if clean(row.get("slug"))
     }
 
 
-def weekly_eligible(row: object, now: datetime) -> bool:
-    """Apply publication/content exclusions without inheriting Latest's 14-hour cap.
+def current_edition_story_count(rows: list[dict], now: datetime | None = None) -> int:
+    """Count genuinely current rows, not merely whatever happens to be in frontpage.json."""
+    now = now or datetime.now(timezone.utc)
+    cutoff = now - timedelta(hours=CURRENT_EDITION_HOURS)
+    count = 0
+    for row in rows:
+        published = parse_dt(row.get("first_published_at") or row.get("published_at"))
+        if published >= cutoff:
+            count += 1
+            continue
+        if is_recent_live_update(row, cutoff):
+            count += 1
+    return count
 
-    The weekly layer is intentionally an archive/discovery surface, so it shares
-    the Latest feed's safety and utility exclusions but owns its separate seven-day
-    age window in ``choose_weekly``.
-    """
+
+def current_edition_healthy(rows: list[dict], now: datetime | None = None) -> bool:
+    return current_edition_story_count(rows, now) >= MIN_CURRENT_EDITION_FOR_WEEKLY
+
+
+def weekly_eligible(row: object, now: datetime) -> bool:
     if not isinstance(row, dict):
         return False
     if str(row.get("status") or "published").lower() != "published":
@@ -100,8 +113,6 @@ def choose_weekly(rows: list[object], current_slugs: set[str], now: datetime | N
         seen.add(slug)
         candidates.append(row)
 
-    # Editorial/manual journalism wins a close tie, then recency. A light
-    # diversity guard stops one busy beat or township monopolising the section.
     candidates.sort(
         key=lambda row: (
             1 if row.get("manual_article") is True or clean(row.get("source_kind")).lower() == "editorial" else 0,
@@ -143,7 +154,7 @@ def section_markup(rows: list[dict]) -> str:
         '            <h2 class="section-title" id="more-local-news-title">More local news from this week</h2>\n'
         '            <a class="section-link" href="/archive.html">Browse the archive</a>\n'
         '          </div>\n'
-        '          <p style="margin:0 0 14px;color:var(--muted);font-size:15px">Recent Rochdale borough reporting that is still useful to read. The latest breaking and current stories remain in Latest news above.</p>\n'
+        '          <p style="margin:0 0 14px;color:var(--muted);font-size:15px">Archive reporting for further reading. Current and breaking stories remain in Latest news above.</p>\n'
         '          <div class="news-grid weekly-news-grid">\n'
         f"{cards}\n"
         '          </div>\n'
@@ -178,7 +189,19 @@ def main() -> int:
     payload = json.loads(ARTICLES.read_text(encoding="utf-8"))
     if not isinstance(payload, list):
         raise SystemExit("articles.json must contain a JSON array")
-    chosen = choose_weekly(payload, frontpage_slugs())
+
+    now = datetime.now(timezone.utc)
+    current_rows = frontpage_rows()
+    current_count = current_edition_story_count(current_rows, now)
+    if current_count >= MIN_CURRENT_EDITION_FOR_WEEKLY:
+        chosen = choose_weekly(payload, {clean(row.get('slug')) for row in current_rows}, now=now)
+    else:
+        chosen = []
+        print(
+            f"Weekly archive section suppressed: current edition has {current_count} "
+            f"genuinely current stories; minimum is {MIN_CURRENT_EDITION_FOR_WEEKLY}."
+        )
+
     text = INDEX.read_text(encoding="utf-8")
     updated, changed = update_html(text, chosen)
     if changed:
