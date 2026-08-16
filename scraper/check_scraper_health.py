@@ -7,6 +7,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+from enforce_frontpage_freshness import (
+    is_expired_time_sensitive_preview,
+    is_expired_today_deadline,
+    is_thin_utility_not_frontpage,
+)
 from search_queries import CATEGORY_QUERIES, ROCHDALE_WARDS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,6 +65,25 @@ def is_eligible_news_article(article: Any) -> bool:
     return True
 
 
+def is_frontpage_eligible_news_article(article: Any, now: datetime) -> bool:
+    """Use the same editorial exclusions as the final homepage freshness pass.
+
+    Health must only call a story "available" if the homepage is actually
+    allowed to show it. Otherwise a thin directory page or expired offer can
+    make a correctly filtered homepage fail as if it had dropped real news.
+    """
+    if not is_eligible_news_article(article):
+        return False
+    assert isinstance(article, dict)
+    if is_thin_utility_not_frontpage(article):
+        return False
+    if is_expired_today_deadline(article, now):
+        return False
+    if is_expired_time_sensitive_preview(article, now):
+        return False
+    return True
+
+
 def main() -> None:
     status = read_json(STATUS_PATH, {})
     frontpage = read_json(FRONTPAGE_PATH, {})
@@ -76,9 +100,12 @@ def main() -> None:
 
     valid_articles = [article for article in articles if isinstance(article, dict)]
     eligible_news_feed = [article for article in public_feed if is_eligible_news_article(article)]
+    frontpage_eligible_feed = [
+        article for article in eligible_news_feed if is_frontpage_eligible_news_article(article, now)
+    ]
     eligible_fresh_feed = [
         article
-        for article in eligible_news_feed
+        for article in frontpage_eligible_feed
         if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= fresh_cutoff
     ]
     fresh = [
@@ -95,7 +122,7 @@ def main() -> None:
     lead_published = published_at(valid_articles[0]) if valid_articles else None
     eligible_top_fresh = [
         article
-        for article in eligible_news_feed
+        for article in frontpage_eligible_feed
         if (published_at(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_fresh_cutoff
     ]
 
@@ -205,6 +232,7 @@ def main() -> None:
         "searched_ward_count": len(required_wards & searched_wards),
         "missing_wards": missing_wards,
         "eligible_published_news_records": len(eligible_news_feed),
+        "frontpage_eligible_news_records": len(frontpage_eligible_feed),
         "eligible_fresh_news_records": len(eligible_fresh_feed),
         "frontpage_articles": len(valid_articles),
         "fresh_frontpage_articles": len(fresh),
