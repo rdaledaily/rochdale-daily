@@ -11,6 +11,7 @@ from update_homepage_weekly_news import (
     choose_weekly,
     current_edition_healthy,
     current_edition_story_count,
+    section_markup,
     update_html,
 )
 
@@ -35,12 +36,12 @@ def row(slug: str, hours_old: int, area: str = "rochdale", category: str = "news
 
 
 class CurrentEditionHealthTests(unittest.TestCase):
-    def test_starved_latest_does_not_authorise_weekly_archive_strip(self):
+    def test_two_story_latest_is_reported_as_unhealthy_without_relabelling_archive_news(self):
         rows = [row("fresh-a", 1), row("fresh-b", 2)]
         self.assertEqual(current_edition_story_count(rows, NOW), 2)
         self.assertFalse(current_edition_healthy(rows, NOW))
 
-    def test_weekly_strip_is_allowed_after_six_current_stories(self):
+    def test_six_current_stories_meet_health_threshold(self):
         rows = [row(f"fresh-{index}", index + 1) for index in range(MIN_CURRENT_EDITION_FOR_WEEKLY)]
         self.assertEqual(current_edition_story_count(rows, NOW), MIN_CURRENT_EDITION_FOR_WEEKLY)
         self.assertTrue(current_edition_healthy(rows, NOW))
@@ -101,6 +102,11 @@ class WeeklyMarkupTests(unittest.TestCase):
         again, changed_again = update_html(updated, rows)
         self.assertFalse(changed_again)
         self.assertEqual(updated, again)
+
+    def test_copy_clearly_separates_weekly_archive_from_latest_news(self):
+        markup = section_markup([row("recent", 20)])
+        self.assertIn("More local news from the past 7 days", markup)
+        self.assertIn("Latest news above remains limited to verified current stories from the last 14 hours", markup)
 
     def test_removes_section_when_no_weekly_rows_exist(self):
         html = f"before\n{START}\n<section>old</section>\n{END}\nafter"
