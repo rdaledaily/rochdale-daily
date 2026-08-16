@@ -1,19 +1,29 @@
-name: Publish manual article edits
+name: Publish canonical Rochdale Daily site
 
 on:
   push:
+    branches: [main]
     paths:
       - manual_articles.json
       - 'manual_articles.d/**'
+      - council_documents.json
+      - council_votes.json
+      - council_roster.json
+      - councillor_photos.json
+      - ward_areas.json
       - scraper/manual_articles.py
       - scraper/frontpage_pipeline.py
       - scraper/story_identity.py
       - scraper/generate_pages.py
       - scraper/generate_newspaper_pages.py
+      - scraper/generate_ward_pages.py
       - scraper/generate_news_sitemap.py
       - scraper/generate_archive.py
       - scraper/update_homepage_static_latest.py
+      - scraper/update_homepage_weekly_news.py
+      - scraper/homepage_discovery_metadata.py
       - scraper/generate_rss.py
+      - scraper/generate_image_sitemap.py
       - scraper/ensure_article_images.py
       - scraper/repair_generated_article_images.py
       - scraper/repair_generated_with_commons.py
@@ -29,16 +39,16 @@ permissions:
   actions: write
 
 concurrency:
-  group: rd-manual-publish
-  cancel-in-progress: true
+  group: rd-site-writer
+  cancel-in-progress: false
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       USE_WIKIMEDIA_COMMONS: "true"
-      USE_SOURCE_IMAGES: "false"
+      USE_SOURCE_IMAGES: "true"
       CSS_SOURCE_PATH: assets/css/article-inline.css
       FRONTPAGE_FRESH_HOURS: "14"
       FRONTPAGE_MIN_ARTICLES: "12"
@@ -62,17 +72,18 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-      - name: Rebuild canonical manual newsroom state
+      - name: Rebuild canonical site from source data
         run: |
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
           python scraper/frontpage_pipeline.py
-          # Prefer a relevant cached/local/Commons photograph. Generate a card
-          # only as the final fallback, never as the editorial objective.
           python scraper/repair_generated_article_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
           python scraper/ensure_article_images.py --articles articles.json
           python scraper/article_gate.py articles.json
+          python scraper/councillor_photos.py
+          python scraper/patch_democracy_portraits.py
+          python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
           python scraper/enforce_frontpage_freshness.py
           python scraper/enforce_live_homepage_window.py
@@ -80,17 +91,25 @@ jobs:
           python scraper/generate_archive.py
           cp archive.html search.html
           python scraper/update_homepage_static_latest.py
+          python scraper/update_homepage_weekly_news.py
+          python scraper/homepage_discovery_metadata.py
           python scraper/generate_rss.py
-      - name: Commit rebuilt site without generated-file rebases
+          python scraper/generate_image_sitemap.py
+          python scraper/content_hygiene.py --fix
+          python scraper/content_hygiene.py
+      - name: Commit rebuilt canonical site
+        id: commit
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           stage_publish() {
             git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json \
-              articles sitemap.xml news-sitemap.xml assets/img/cards image_coverage_report.json \
-              image_repair_report.json commons_image_repair_report.json archive.html search.html \
-              archive-index.json articles/frontpage.json index.html rss.xml 2>/dev/null || true
+              articles sitemap.xml news-sitemap.xml image-sitemap.xml assets/img/cards image_coverage_report.json \
+              image_repair_report.json commons_image_repair_report.json archive.html search.html archive-index.json \
+              articles/frontpage.json index.html rss.xml wards/ councillor_photos.json 2>/dev/null || true
           }
 
           rebuild_from_current_main() {
@@ -101,6 +120,9 @@ jobs:
             python scraper/repair_generated_with_commons.py --articles articles.json
             python scraper/ensure_article_images.py --articles articles.json
             python scraper/article_gate.py articles.json
+            python scraper/councillor_photos.py
+            python scraper/patch_democracy_portraits.py
+            python scraper/generate_ward_pages.py
             python scraper/generate_newspaper_pages.py
             python scraper/enforce_frontpage_freshness.py
             python scraper/enforce_live_homepage_window.py
@@ -108,27 +130,46 @@ jobs:
             python scraper/generate_archive.py
             cp archive.html search.html
             python scraper/update_homepage_static_latest.py
+            python scraper/update_homepage_weekly_news.py
+            python scraper/homepage_discovery_metadata.py
             python scraper/generate_rss.py
+            python scraper/generate_image_sitemap.py
+            python scraper/content_hygiene.py --fix
+            python scraper/content_hygiene.py
           }
 
           stage_publish
-          if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
-          git commit -m "Publish manual article edits"
-          if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+          if git diff --cached --quiet; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing to publish."
+            exit 0
+          fi
+          git commit -m "Publish canonical Rochdale Daily site"
+          if git push origin HEAD:main; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
           for attempt in 1 2 3; do
-            echo "main moved during manual rebuild; regenerating from latest main (${attempt}/3)."
-            git fetch origin "${GITHUB_REF_NAME}"
-            git reset --hard "origin/${GITHUB_REF_NAME}"
+            echo "main moved during canonical rebuild; regenerating from latest main (${attempt}/3)."
+            git fetch origin main
+            git reset --hard origin/main
             git clean -fd
             rebuild_from_current_main
             stage_publish
-            if git diff --cached --quiet; then exit 0; fi
-            git commit -m "Publish manual article edits (race-safe rebuild)"
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+            if git diff --cached --quiet; then
+              echo "published=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            git commit -m "Publish canonical Rochdale Daily site (race-safe rebuild)"
+            if git push origin HEAD:main; then
+              echo "published=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
           done
           exit 1
-      - name: Deploy manual newsroom state immediately
+      - name: Deploy canonical site immediately
+        if: steps.commit.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref main
