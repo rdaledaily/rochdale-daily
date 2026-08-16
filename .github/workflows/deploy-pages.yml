@@ -49,6 +49,12 @@ jobs:
       - name: Generate image sitemap for deployed snapshot
         run: python3 scraper/generate_image_sitemap.py
 
+      # Polling/scrape timestamps are operational metadata, not proof that an
+      # article changed. Repair sitemap lastmod immediately before upload so
+      # crawlers only receive publication/editorial/live-update timestamps.
+      - name: Audit sitemap modification dates
+        run: python3 scraper/repair_sitemap_lastmod.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
