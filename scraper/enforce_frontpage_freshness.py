@@ -68,6 +68,51 @@ def latest_update(article: dict[str, Any]) -> datetime:
     )
 
 
+def _is_active_live(article: dict[str, Any]) -> bool:
+    return bool(
+        article.get("live_story") is True
+        or article.get("breaking_news") is True
+        or article.get("is_ongoing") is True
+    )
+
+
+def latest_verified_update(article: dict[str, Any]) -> datetime:
+    """Return the newest timestamp that can justify keeping old live copy current.
+
+    Automated discovery routinely refreshes ``scraped_at``/``last_updated_at`` even
+    when the underlying source has supplied no new fact. Those pipeline timestamps
+    must not resurrect an old LIVE/BREAKING story. For machine-generated active
+    coverage, only timestamped timeline entries count as verified updates; if there
+    are none, freshness falls back to the original publication time. Editorial or
+    manual live coverage may use its explicit ``last_updated_at`` because that field
+    is under newsdesk control.
+    """
+    active = _is_active_live(article)
+    editorial = bool(
+        article.get("manual_article") is True
+        or str(article.get("source_kind") or "").lower() == "editorial"
+    )
+    if not active or editorial:
+        return latest_update(article)
+
+    candidates: list[datetime] = []
+    raw_updates = article.get("live_updates") or []
+    if isinstance(raw_updates, list):
+        for update in raw_updates:
+            if not isinstance(update, dict):
+                continue
+            parsed = parse_dt(
+                update.get("timestamp")
+                or update.get("updated_at")
+                or update.get("published_at")
+            )
+            if parsed is not None:
+                candidates.append(parsed)
+    if candidates:
+        return max(candidates)
+    return first_published(article) or datetime.min.replace(tzinfo=timezone.utc)
+
+
 def active_pin(article: dict[str, Any], now: datetime) -> bool:
     if article.get("featured") is not True:
         return False
@@ -138,12 +183,7 @@ def is_expired_time_sensitive_preview(article: dict[str, Any], now: datetime) ->
 
 
 def is_recent_live_update(article: dict[str, Any], cutoff: datetime) -> bool:
-    active = bool(
-        article.get("live_story") is True
-        or article.get("breaking_news") is True
-        or article.get("is_ongoing") is True
-    )
-    return active and latest_update(article) >= cutoff and not is_utility_not_lead(article)
+    return _is_active_live(article) and latest_verified_update(article) >= cutoff and not is_utility_not_lead(article)
 
 
 def _identity(article: dict[str, Any]) -> str:
@@ -185,14 +225,14 @@ def main() -> None:
     recent_live_ids = {_identity(a) for a in recent_live}
     older_remaining = [a for a in older if _identity(a) not in recent_live_ids]
     stale_pins = [a for a in older_remaining if active_pin(a, now)]
-    stale_pin_ids = {_identity(a) for a in stale_pins}
+    stale_pin_ids = {_identity(a) for a in stale_pins]
     dropped_stale = [a for a in older_remaining if _identity(a) not in stale_pin_ids]
 
-    fresh_pins.sort(key=latest_update, reverse=True)
+    fresh_pins.sort(key=latest_verified_update, reverse=True)
     fresh_substantive.sort(key=latest_update, reverse=True)
-    recent_live.sort(key=latest_update, reverse=True)
+    recent_live.sort(key=latest_verified_update, reverse=True)
     fresh_utility.sort(key=latest_update, reverse=True)
-    stale_pins.sort(key=latest_update, reverse=True)
+    stale_pins.sort(key=latest_verified_update, reverse=True)
 
     ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins
 
