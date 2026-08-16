@@ -34,9 +34,11 @@ stage_newsroom() {
 # a useful source/Commons image anywhere, but the public canonical article path
 # is always normalised into assets/img/cards/ before any snapshot can be pushed.
 # Regenerate image-bearing derived pages after normalisation so HTML/feeds cannot
-# retain a pre-normalisation path.
+# retain a pre-normalisation path. LIVE timelines are compacted at the same
+# boundary so repeated machine paraphrases do not become reader-facing clutter.
 finalise_cards_policy() {
   python scraper/enforce_cards_only_images.py --articles articles.json
+  python scraper/compact_live_updates.py --articles articles.json
   python scraper/generate_ward_pages.py
   python scraper/generate_newspaper_pages.py
   python scraper/enforce_frontpage_freshness.py
@@ -62,6 +64,7 @@ rebuild_from_merged_feed() {
   python scraper/repair_generated_with_commons.py --articles articles.json
   python scraper/ensure_article_images.py --articles articles.json
   python scraper/enforce_cards_only_images.py --articles articles.json
+  python scraper/compact_live_updates.py --articles articles.json
   python scraper/repair_merged_bodies.py
   python scraper/councillor_photos.py
   python scraper/patch_democracy_portraits.py
