@@ -30,6 +30,29 @@ stage_newsroom() {
     archive.html search.html archive-index.json rss.xml index.html 2>/dev/null || true
 }
 
+# This is the final publication boundary. Upstream image enrichment may discover
+# a useful source/Commons image anywhere, but the public canonical article path
+# is always normalised into assets/img/cards/ before any snapshot can be pushed.
+# Regenerate image-bearing derived pages after normalisation so HTML/feeds cannot
+# retain a pre-normalisation path.
+finalise_cards_policy() {
+  python scraper/enforce_cards_only_images.py --articles articles.json
+  python scraper/generate_ward_pages.py
+  python scraper/generate_newspaper_pages.py
+  python scraper/enforce_frontpage_freshness.py
+  python scraper/frontpage_source_quality.py
+  python scraper/enforce_live_homepage_window.py
+  python scraper/generate_news_sitemap.py
+  python scraper/generate_archive.py
+  cp archive.html search.html
+  python scraper/update_homepage_static_latest.py
+  python scraper/update_homepage_weekly_news.py
+  python scraper/homepage_discovery_metadata.py
+  python scraper/generate_rss.py
+  python scraper/generate_image_sitemap.py
+  python scraper/enforce_cards_only_images.py --articles articles.json --check
+}
+
 rebuild_from_merged_feed() {
   python -m json.tool articles.json > /dev/null
   python scraper/article_gate.py articles.json
@@ -64,6 +87,7 @@ rebuild_from_merged_feed() {
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+finalise_cards_policy
 stage_newsroom
 if git diff --cached --quiet; then
   echo "Pipeline completed with no file changes."
