@@ -46,7 +46,7 @@ _STOPWORDS = {
 }
 _ENTITY_STOPWORDS = {
     "A", "An", "The", "Police", "Council", "Passengers", "Customers", "Track",
-    "Planned", "Further", "During", "Additionally", "Essential",
+    "Tram", "Trams", "Planned", "Further", "During", "Additionally", "Essential",
 }
 
 
