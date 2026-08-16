@@ -50,6 +50,15 @@ class HomepageDiscoveryMetadataTests(unittest.TestCase):
         self.assertNotIn(mod.LEGACY_FEED_STATUS, enhanced)
         self.assertIn(mod.CURRENT_FEED_STATUS, enhanced)
 
+    def test_replaces_legacy_feed_status_split_by_markup(self):
+        marked_up = SAMPLE.replace(
+            "Article slots ready",
+            "Article <strong>slots</strong>&nbsp;ready",
+        )
+        enhanced = mod.enhance(marked_up)
+        self.assertNotIn("slots</strong>", enhanced)
+        self.assertIn(mod.CURRENT_FEED_STATUS, enhanced)
+
     def test_enhance_is_idempotent(self):
         once = mod.enhance(SAMPLE)
         twice = mod.enhance(once)
