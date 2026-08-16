@@ -74,6 +74,7 @@ jobs:
             scraper/live_story_updates.py \
             scraper/render_live_updates.py \
             scraper/scrub_personal_name.py \
+            scraper/google_news_resolver.py \
             scraper/generate_pages.py \
             scraper/generate_newspaper_pages.py \
             scraper/generate_ward_pages.py \
@@ -116,6 +117,7 @@ jobs:
           python scraper/test_event_identity.py
           python scraper/test_article_gate.py
           python scraper/test_resolve_google_news_sources.py
+          PYTHONPATH=scraper python scraper/test_google_news_resolver.py
           python scraper/test_ensure_article_images.py
           python scraper/test_councillor_photos.py
           PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
