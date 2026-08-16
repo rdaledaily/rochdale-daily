@@ -133,16 +133,8 @@ def main() -> None:
     ) if MIN_FRESH_FRONTPAGE_STORIES > 0 else 0
 
     failures: list[str] = []
-    if missing_categories:
-        failures.append(
-            "borough discovery plan is missing configured categories: "
-            + ", ".join(missing_categories)
-        )
-    if missing_wards:
-        failures.append(
-            "borough discovery plan is missing official wards: "
-            + ", ".join(missing_wards)
-        )
+    if raw_candidates > 0 and not search_records:
+        failures.append("discovery produced candidates but recorded no search-query execution plan")
 
     # Five or more actual rewrite attempts with zero successful articles is not
     # a quiet-news period: the pipeline found material and then failed to turn

@@ -535,7 +535,7 @@ def ward_query(ward: str) -> SearchQuery:
 
 def councillor_shard_index(now: datetime | None = None) -> int:
     current = now or datetime.now(timezone.utc)
-    # Scheduled runs at :07, :22, :37 and :52 map to shards 0, 1, 2 and 3.
+    # Scheduled fast runs at :05, :20, :35 and :50 map to shards 0, 1, 2 and 3.
     return min(3, max(0, current.minute // 15))
 
 

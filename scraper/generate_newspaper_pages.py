@@ -26,20 +26,6 @@ import frontpage_pipeline as fp
 import generate_pages
 
 
-CATEGORY_MIN_WORDS = {
-    "crime": 60,
-    "traffic": 60,
-    "transport": 60,
-    "news": 60,
-    "community": 75,
-    "business": 75,
-    "health": 75,
-    "education": 75,
-    "politics": 75,
-    "environment": 75,
-    "sport": 75,
-}
-DEFAULT_MIN_WORDS = 75
 FRONTPAGE_FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
 
 RELATED_STOPWORDS = {
@@ -53,16 +39,20 @@ def _newsroom_low_quality(article):
     return bool(fp.LOW_QUALITY_ARTICLE_RE.search(fp.article_text(article)))
 
 
-def _minimum_words(article) -> int:
-    return CATEGORY_MIN_WORDS.get(fp.article_category(article), DEFAULT_MIN_WORDS)
-
-
 def _newsroom_eligible(article) -> bool:
     if fp.is_event(article):
         return False
+    text = fp.article_text(article).strip()
+    if not text:
+        return False
     if article.get("manual_article") or article.get("editorial_lock"):
-        return bool(fp.article_text(article).strip())
-    return fp.editorial_word_count(article) >= _minimum_words(article)
+        return True
+    if article.get("rewrite_quality_checked") is True:
+        return True
+    route = str(article.get("publication_route") or "").lower()
+    if route in {"ai-grounded-rewrite", "editorial-upgrade", "official-data"}:
+        return True
+    return fp.editorial_word_count(article) >= 40
 
 
 def _newsroom_rank(article, now: datetime):

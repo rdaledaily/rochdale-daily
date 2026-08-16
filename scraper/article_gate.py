@@ -488,8 +488,12 @@ def normalise_article(
     area = str(article.get("area") or "").strip().lower()
     area = AREA_ALIASES.get(area, area)
     if area not in CANONICAL_AREAS:
-        notes.append(f"'{ident}': unknown area '{area}' -> '{AREA_FALLBACK}'")
-        area = AREA_FALLBACK
+        if _is_manual(article) or str(article.get("source_kind") or "").lower() == "editorial":
+            notes.append(f"'{ident}': unknown editor area '{area}' -> '{AREA_FALLBACK}'")
+            area = AREA_FALLBACK
+        else:
+            notes.append(f"'{ident}': dropped automated article with unknown area '{area or 'blank'}'")
+            return None
     elif article.get("area") != area:
         notes.append(f"'{ident}': normalised area to '{area}'")
     article["area"] = area

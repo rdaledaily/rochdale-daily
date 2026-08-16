@@ -44,8 +44,6 @@ from typing import Any
 from urllib.parse import urlparse
 
 SOURCE_DENY_DOMAINS = {
-    "rochdaletimes.co.uk",
-    "rochdaleonline.co.uk",
     # SEO advertorial, not journalism ("Middleton residents can access
     # local and emergency plumbing services").
     "manchesterplumbers.com",
@@ -56,7 +54,7 @@ SOURCE_DENY_DOMAINS = {
     # Middleton arson" story into Google News results.
     "presonus.com",
 }
-SOURCE_DENY_NAMES = {"rochdale times", "rochdale times paper", "rochdale online"}
+SOURCE_DENY_NAMES = set()
 
 TRUSTED_LOCAL_SOURCE_PREFIXES = (
     "Rochdale Borough Council",
@@ -99,6 +97,8 @@ TRUSTED_LOCAL_DOMAINS = {
 # is exactly what a Middleton, Nova Scotia story says too.
 # ---------------------------------------------------------------------------
 KNOWN_GM_PUBLISHER_DOMAINS = {
+    "rochdaletimes.co.uk",
+    "rochdaleonline.co.uk",
     "manchestereveningnews.co.uk",
     "bbc.co.uk",
     "bbc.com",

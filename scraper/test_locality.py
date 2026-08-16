@@ -94,11 +94,11 @@ CASES = [
         "Trusted local first-party source",
     ),
     (
-        False,
-        "Local council update",
+        True,
+        "Rochdale council update",
         "Rochdale Times",
         "https://www.rochdaletimes.co.uk/example",
-        "Explicitly denied source",
+        "Local publisher may contribute a geographically anchored discovery/corroboration lead",
     ),
     (
         False,

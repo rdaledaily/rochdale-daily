@@ -67,6 +67,15 @@ def test_area_alias_and_unknown_fallback() -> None:
     assert whitworth is not None and whitworth["area"] == "whitworth"
 
 
+def test_unknown_automated_area_is_dropped() -> None:
+    notes: list[str] = []
+    fixed = normalise_article(
+        manual(area="atlantis", publication_route="ai-grounded-rewrite"), notes
+    )
+    assert fixed is None
+    assert any("unknown area" in note for note in notes)
+
+
 def test_unknown_category_falls_back_to_news() -> None:
     unknown = normalise_article(manual(category="scandal"), [])
     canonical = normalise_article(manual(category="environment"), [])

@@ -11,10 +11,10 @@ from search_queries import (
 )
 
 fixed_runs = (
-    datetime(2026, 7, 8, 16, 7, tzinfo=timezone.utc),
-    datetime(2026, 7, 8, 16, 22, tzinfo=timezone.utc),
-    datetime(2026, 7, 8, 16, 37, tzinfo=timezone.utc),
-    datetime(2026, 7, 8, 16, 52, tzinfo=timezone.utc),
+    datetime(2026, 7, 8, 16, 5, tzinfo=timezone.utc),
+    datetime(2026, 7, 8, 16, 20, tzinfo=timezone.utc),
+    datetime(2026, 7, 8, 16, 35, tzinfo=timezone.utc),
+    datetime(2026, 7, 8, 16, 50, tzinfo=timezone.utc),
 )
 
 all_watched = []
@@ -28,7 +28,7 @@ assert len({name for name, _ in CURRENT_COUNCILLORS}) == 60
 assert all_watched == list(CURRENT_COUNCILLORS)
 
 # Bulk queries (watch/topics/categories/wards/sources) are now sharded
-# across the four scheduled runs per hour, to keep Google News request
+# across the four production fast runs per hour, to keep Google News request
 # volume per run low enough to avoid rate-limiting/bot-detection (a burst
 # of 130+ requests in one run was observed to get every single query
 # blocked, returning zero results across the board). Any single run only

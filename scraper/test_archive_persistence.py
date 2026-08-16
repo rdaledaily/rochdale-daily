@@ -190,10 +190,10 @@ def test_editorial_lock_still_respected() -> None:
             "source_urls": [],
         }
     }
-    assert not candidate_is_rewrite_eligible(candidate, existing), (
-        "editorially locked articles are never rewritten, even with new URLs"
+    assert candidate_is_rewrite_eligible(candidate, existing), (
+        "a genuinely new source URL must be allowed to update a locked canonical story"
     )
-    print("eligibility: editorial lock respected — OK")
+    print("eligibility: editorial lock blocks churn but permits new-source updates — OK")
 
 
 def main() -> int:

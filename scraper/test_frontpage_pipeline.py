@@ -132,7 +132,7 @@ class FrontpagePipelineTests(unittest.TestCase):
                 "content_html": f"<p>Verified local report number {index}.</p>",
                 "area": area,
                 "category": category,
-                "published_at": (now - timedelta(hours=index % 72)).isoformat(),
+                "published_at": (now - timedelta(hours=index % 14)).isoformat(),
                 "source_name": f"Source {index % 12}",
                 "source_url": f"https://source{index % 12}.test/{index}",
                 "status": "published",

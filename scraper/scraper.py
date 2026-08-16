@@ -71,7 +71,7 @@ OUTPUT_FILE = ROOT / 'articles.json'
 LOG_FILE = ROOT / 'scraper' / 'scraper.log'
 OPENAI_MODEL = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
 AI_REWRITE_REQUIRED = False
-MAX_NEWS_AGE_HOURS = max(168, int(os.getenv('MAX_NEWS_AGE_HOURS', '168')))
+MAX_NEWS_AGE_HOURS = max(1, int(os.getenv('MAX_NEWS_AGE_HOURS', '14')))
 # articles.json is the permanent archive. Freshness only controls discovery/front-page
 # selection; it must never prune previously published records.
 RETENTION_DAYS = None
@@ -104,8 +104,8 @@ USE_SOURCE_IMAGES = os.getenv('USE_SOURCE_IMAGES', 'true').lower() not in {'0', 
 RIGHT_TO_REPLY_EMAIL = os.getenv('RIGHT_TO_REPLY_EMAIL', 'news@rochdaledaily.co.uk')
 UK_TZ = ZoneInfo('Europe/London')
 SAME_DAY_ONLY = False
-SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}
-SOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'}
+SOURCE_DENY_DOMAINS = {'pressreader.com'}
+SOURCE_DENY_NAMES = {'pressreader'}
 LIVE_SOURCE_NAMES = {'rochdale council service updates', 'tfgm travel alerts', 'northern service updates', 'united utilities incidents', 'environment agency flood-monitoring api'}
 FACEBOOK_EVENTS_DISCOVERY_URL = os.getenv('FACEBOOK_EVENTS_DISCOVERY_URL', 'https://www.facebook.com/events/?date_filter_option=ANY_DATE&discover_tab=CUSTOM&location_id=108023932551149').strip()
 FACEBOOK_EVENTS_BROWSER_ENABLED = os.getenv('FACEBOOK_EVENTS_BROWSER_ENABLED', 'true').lower() not in {'0', 'false', 'no', 'off'}
@@ -2804,8 +2804,11 @@ def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[
     if existing_article is None:
         return True
     if existing_article.get('editorial_lock'):
-        # Hand-edited by the editor: the pipeline never rewrites it.
-        return False
+        known_urls = {canonicalise_url(url) for url in existing_article.get('source_urls', []) if url}
+        if existing_article.get('source_url'):
+            known_urls.add(canonicalise_url(existing_article.get('source_url')))
+        candidate_url = canonicalise_url(candidate.source_url)
+        return bool(candidate_url and candidate_url not in known_urls)
     if existing_article.get('editorial_style_version') != STYLE_VERSION:
         return True
     known_urls = {canonicalise_url(url) for url in existing_article.get('source_urls', []) if url}
