@@ -88,6 +88,7 @@ jobs:
             scraper/enhance_image_alt_text.py \
             scraper/check_scraper_health.py \
             scraper/run_newspaper_pipeline.py \
+            scraper/run_newsroom_policy.py \
             scraper/councillor_photos.py \
             scraper/food_hygiene.py \
             scraper/frontpage_pipeline.py \
@@ -120,6 +121,7 @@ jobs:
           python scraper/test_article_gate.py
           python scraper/test_resolve_google_news_sources.py
           PYTHONPATH=scraper python scraper/test_google_news_resolver.py
+          PYTHONPATH=scraper python scraper/test_run_newsroom_policy.py
           python scraper/test_ensure_article_images.py
           python scraper/test_councillor_photos.py
           PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
