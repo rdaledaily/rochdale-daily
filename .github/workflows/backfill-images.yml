@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
   group: rd-site-writer
@@ -19,6 +20,7 @@ jobs:
     env:
       USE_SOURCE_IMAGES: "false"
       USE_WIKIMEDIA_COMMONS: "true"
+      FRONTPAGE_FRESH_HOURS: "14"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -29,31 +31,54 @@ jobs:
         run: |
           git fetch origin main
           git reset --hard origin/main
+      - name: Avoid racing an active newsroom publisher
+        id: newsroom_guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active="$(gh run list --repo "${GITHUB_REPOSITORY}" --status in_progress --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          queued="$(gh run list --repo "${GITHUB_REPOSITORY}" --status queued --limit 100 --json workflowName --jq '[.[] | select(.workflowName == "Rochdale Daily fast local news" or .workflowName == "Rochdale Daily immediate scraper run")] | length')"
+          if [ "${active}" -gt 0 ] || [ "${queued}" -gt 0 ]; then
+            echo "run=false" >> "${GITHUB_OUTPUT}"
+            echo "Newsroom scrape/publish is active or queued; deferring image backfill to avoid a generated-site write race."
+          else
+            echo "run=true" >> "${GITHUB_OUTPUT}"
+          fi
       - name: Set up Python
+        if: steps.newsroom_guard.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
           cache-dependency-path: "requirements.txt"
       - name: Install dependencies
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
       - name: Resolve article images
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python scraper/ensure_article_images.py --articles articles.json
           python scraper/repair_generated_article_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
       - name: Rebuild feeds
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: python scraper/frontpage_pipeline.py
       - name: Validate feed and regenerate static pages
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
           python scraper/generate_pages.py
+          python scraper/enforce_frontpage_freshness.py
+          python scraper/enforce_live_homepage_window.py
           python scraper/generate_archive.py
+          python scraper/content_hygiene.py --fix
+          python scraper/content_hygiene.py
       - name: Commit image backfill without rebasing generated files
+        if: steps.newsroom_guard.outputs.run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -75,7 +100,11 @@ jobs:
             python -m json.tool articles.json > /dev/null
             python scraper/article_gate.py articles.json
             python scraper/generate_pages.py
+            python scraper/enforce_frontpage_freshness.py
+            python scraper/enforce_live_homepage_window.py
             python scraper/generate_archive.py
+            python scraper/content_hygiene.py --fix
+            python scraper/content_hygiene.py
             stage_backfill
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "Backfill real article images (race-safe rebuild)"
