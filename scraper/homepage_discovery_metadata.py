@@ -10,6 +10,12 @@ It intentionally derives the ItemList from the rendered fallback rather than
 re-selecting articles independently. That prevents structured data from
 advertising a different set of stories from the links a crawler can actually
 see on the page.
+
+It also removes the legacy newsroom bootstrap label "Article slots ready".
+That wording was useful while the feed was being built, but once real article
+cards are rendered it makes the live homepage look unfinished to readers and
+crawlers.  The replacement is deliberately factual and does not imply a story
+count or freshness state beyond what the visible Latest block establishes.
 """
 from __future__ import annotations
 
@@ -27,6 +33,8 @@ META_START = "<!-- LATEST_ITEMLIST_START -->"
 META_END = "<!-- LATEST_ITEMLIST_END -->"
 RSS_TAG = '<link rel="alternate" type="application/rss+xml" title="Rochdale Daily RSS" href="/rss.xml">'
 MAX_ITEMS = 12
+LEGACY_FEED_STATUS = "Article slots ready"
+CURRENT_FEED_STATUS = "Latest verified local stories"
 
 CARD_RE = re.compile(
     r'<a class="story-link" href="(?P<href>[^"]+)">.*?'
@@ -111,6 +119,8 @@ def enhance(text: str) -> str:
         if "</head>" not in text:
             raise ValueError("Homepage </head> not found")
         text = text.replace("</head>", f"  {RSS_TAG}\n</head>", 1)
+
+    text = text.replace(LEGACY_FEED_STATUS, CURRENT_FEED_STATUS)
     return text
 
 
@@ -119,9 +129,9 @@ def main() -> int:
     updated = enhance(text)
     if updated != text:
         INDEX.write_text(updated, encoding="utf-8")
-        print("Updated homepage RSS autodiscovery and Latest-news ItemList metadata.")
+        print("Updated homepage RSS autodiscovery, Latest-news ItemList metadata and feed status.")
     else:
-        print("Homepage discovery metadata already current.")
+        print("Homepage discovery metadata and feed status already current.")
     return 0
 
 
