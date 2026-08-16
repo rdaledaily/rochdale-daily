@@ -4,25 +4,16 @@ set -euo pipefail
 branch="${GITHUB_REF_NAME:-main}"
 message="${COMMIT_MESSAGE:-Update Rochdale Daily newsroom}"
 
-# Scheduled fast, immediate and deep discovery workflows are serialized by the
-# shared rd-fast-news-writer Actions concurrency lane before they reach this
-# publisher. This script still retains full race recovery because unrelated
-# editorial/manual/site-maintenance commits may legitimately move main.
-#
-# When a newsroom snapshot actually reaches main, expose that fact as a step
-# output. Scheduled commits made with GITHUB_TOKEN do not reliably trigger a
-# separate push-based Pages workflow, so callers can dispatch deployment only
-# after a real publish rather than creating redundant deploy runs on no-op scans.
+# All workflows that can publish canonical newsroom/site state share the
+# rd-site-writer Actions concurrency lane.  This script still retains bounded
+# race recovery for human/admin pushes that can legitimately move main while a
+# run is building.
 mark_published() {
   if [ -n "${GITHUB_OUTPUT:-}" ]; then
     echo "published=true" >> "${GITHUB_OUTPUT}"
   fi
 }
 
-# GitHub/network stalls must not occupy the fast-news writer lane indefinitely.
-# A transient push/fetch failure is handled by the existing race-safe recovery
-# loop or by the next scheduled newsroom run; freshness is better served by a
-# bounded retry than by blocking all subsequent discovery for tens of minutes.
 git_push() {
   timeout --signal=TERM 90s git push origin "HEAD:${branch}"
 }
@@ -33,28 +24,34 @@ git_fetch() {
 
 stage_newsroom() {
   git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
-    newsroom_candidates.json google_news_resolution_report.json google_news_resolutions.json \
+    newsroom_candidates.json google_news_resolution_report.json google_news_resolutions.json live_source_state.json \
     image_coverage_report.json image_repair_report.json commons_image_repair_report.json assets/img/cards \
-    articles sitemap.xml news-sitemap.xml wards/ ward_areas.json council_votes.json weather.json index.html 2>/dev/null || true
+    articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json \
+    archive.html search.html archive-index.json rss.xml index.html 2>/dev/null || true
 }
 
 rebuild_from_merged_feed() {
   python -m json.tool articles.json > /dev/null
   python scraper/article_gate.py articles.json
   python scraper/content_hygiene.py --fix
-  python scraper/ensure_article_images.py
-  python scraper/repair_generated_article_images.py
-  python scraper/repair_generated_with_commons.py
+  python scraper/repair_generated_article_images.py --articles articles.json
+  python scraper/repair_generated_with_commons.py --articles articles.json
+  python scraper/ensure_article_images.py --articles articles.json
   python scraper/repair_merged_bodies.py
+  python scraper/councillor_photos.py
+  python scraper/patch_democracy_portraits.py
   python scraper/generate_ward_pages.py
   python scraper/generate_newspaper_pages.py
-  # Page generation rebuilds frontpage.json, so final freshness ordering and the
-  # hard live-homepage window must be asserted AFTER generation. Running these
-  # only before generation allows a race-safe recovery to reintroduce a stale
-  # top-three ordering even when the feed itself is healthy.
   python scraper/enforce_frontpage_freshness.py
   python scraper/enforce_live_homepage_window.py
   python scraper/generate_news_sitemap.py
+  python scraper/generate_archive.py
+  cp archive.html search.html
+  python scraper/update_homepage_static_latest.py
+  python scraper/update_homepage_weekly_news.py
+  python scraper/homepage_discovery_metadata.py
+  python scraper/generate_rss.py
+  python scraper/generate_image_sitemap.py
   python scraper/content_hygiene.py --fix
   python scraper/content_hygiene.py
   python scraper/check_scraper_health.py
@@ -75,21 +72,14 @@ if git_push; then
   exit 0
 fi
 
-# Never rebase independently generated newspaper snapshots. If main moved while
-# this run was working, preserve the canonical article feed, reset to the new
-# head, merge article records deliberately, and regenerate every derived page.
-# This turns a repository race into a deterministic rebuild instead of dozens
-# of JSON/HTML merge conflicts.
-#
-# scraper_status.json and the candidate reservoir are part of the validated
-# newsroom snapshot too. Preserve the originating run's discovery state across
-# recovery so an unrelated main update cannot throw away leads discovered by
-# the run that is currently publishing.
+# Never merge/rebase independently generated HTML/JSON snapshots. Preserve the
+# canonical feeds/state from this run, reset to newest main, merge the article
+# feed deliberately, then regenerate every derived page from that newest state.
 recovery_dir="$(mktemp -d)"
 trap 'rm -rf "${recovery_dir}"' EXIT
 
 git show HEAD:articles.json > "${recovery_dir}/local_articles.json"
-for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json; do
+for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json live_source_state.json google_news_resolutions.json; do
   if git cat-file -e "HEAD:${optional}" 2>/dev/null; then
     git show "HEAD:${optional}" > "${recovery_dir}/${optional}"
   fi
@@ -106,7 +96,7 @@ for attempt in 1 2 3; do
 
   cp articles.json "${recovery_dir}/remote_articles.json"
   python scraper/merge_feeds.py "${recovery_dir}/remote_articles.json" "${recovery_dir}/local_articles.json" articles.json
-  for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json; do
+  for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json live_source_state.json google_news_resolutions.json; do
     if [ -f "${recovery_dir}/${optional}" ]; then
       cp "${recovery_dir}/${optional}" "${optional}"
     fi
@@ -124,11 +114,12 @@ for attempt in 1 2 3; do
     exit 0
   fi
 
-  # Carry the now-merged feed into the next recovery attempt if main moved yet again.
   git show HEAD:articles.json > "${recovery_dir}/local_articles.json"
-  if git cat-file -e "HEAD:newsroom_candidates.json" 2>/dev/null; then
-    git show HEAD:newsroom_candidates.json > "${recovery_dir}/newsroom_candidates.json"
-  fi
+  for optional in newsroom_candidates.json live_source_state.json google_news_resolutions.json; do
+    if git cat-file -e "HEAD:${optional}" 2>/dev/null; then
+      git show "HEAD:${optional}" > "${recovery_dir}/${optional}"
+    fi
+  done
 done
 
 echo "Could not publish after three bounded race-safe rebuild attempts." >&2
