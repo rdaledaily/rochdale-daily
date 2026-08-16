@@ -182,6 +182,53 @@ def configure_search_recency(discovery_age_hours: int) -> None:
     )
 
 
+def configure_adaptive_editorial_length() -> None:
+    """Use the evidence-proportional article budget in the actual live rewrite path.
+
+    scraper.py still contains an older duplicate rewrite function. The newer
+    editorial_upgrade engine is already imported there and already tested, but
+    was not the function production called. That split caused thin but genuine
+    local stories to be rejected or padded toward a fixed long-form target.
+
+    The adaptive engine permits a concise factual brief when the source is thin
+    (with a 50-word absolute floor), scales upward with the available evidence,
+    and only requires 200+ words when the source itself is rich enough to support
+    that length. It also gets four repair attempts rather than two and rejects
+    padding beyond the evidence-supported ceiling.
+    """
+    def request_adaptive(
+        candidate,
+        client,
+        source_records,
+        social_context,
+        source_text,
+        sensitive,
+    ):
+        return core.editorial_request_article(
+            client=client,
+            model=core.OPENAI_MODEL,
+            schema=core.ARTICLE_SCHEMA,
+            candidate=candidate,
+            source_records=source_records,
+            social_context=social_context,
+            source_text=source_text,
+            sensitive=sensitive,
+            right_to_reply_email=core.RIGHT_TO_REPLY_EMAIL,
+            logger=core.log,
+        )
+
+    def adaptive_issues(draft, source_text, candidate):
+        return core.editorial_quality_issues(
+            draft,
+            source_text,
+            str(getattr(candidate, "source_kind", "") or ""),
+        )
+
+    core.request_grounded_draft = request_adaptive
+    core.draft_quality_issues = adaptive_issues
+    core.log.info("Production rewrite path now uses evidence-proportional article length budgets.")
+
+
 def _looks_like_commercial_landing_page(candidate) -> bool:
     """Reject advertising/SEO service pages while retaining genuine business news."""
     source_kind = str(getattr(candidate, "source_kind", "") or "").casefold()
@@ -272,6 +319,8 @@ def _same_source_live_update(candidate, existing_by_story) -> bool:
         existing_text = _article_public_text(article)
         if not existing_text:
             return True
+
+        existing_lower = existing_text.casefold()
 
         source_names = {name.casefold() for name in LIVE_NAME_RE.findall(source_text)}
         existing_names = {name.casefold() for name in LIVE_NAME_RE.findall(existing_text)}
@@ -383,6 +432,7 @@ def main() -> int:
 
     base.configure()
     configure_search_recency(requested_age)
+    configure_adaptive_editorial_length()
     # base.configure() may reset core values, so reassert the discovery contract.
     core.MAX_NEWS_AGE_HOURS = requested_age
     configure_editorial_newsworthiness_gate()
