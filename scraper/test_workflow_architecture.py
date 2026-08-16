@@ -11,43 +11,46 @@ def text(name: str) -> str:
 
 
 def main() -> int:
-    # Every workflow that can write canonical newsroom/source state must use the
-    # same serial lane. This prevents stale generated snapshots being replayed.
-    for name in (
-        "scrape-fast.yml",
-        "scrape-kick.yml",
-        "publish.yml",
-        "remove-story.yml",
-        "council-minutes.yml",
-        "democracy.yml",
-        "publish-pending-manual.yml",
-        "preserve-article-archive.yml",
-        "scrub-personal-name.yml",
-        "article-image-integrity.yml",
-        "clean-public-article-content.yml",
-    ):
+    # Only workflows that render/push the complete public newspaper share the
+    # single site-writer lane. This serializes generated snapshots without
+    # causing independent source-data jobs to cancel each other's pending runs.
+    for name in ("scrape-fast.yml", "scrape-kick.yml", "publish.yml"):
         assert "group: rd-site-writer" in text(name), name
+
+    expected_source_lanes = {
+        "council-minutes.yml": "rd-council-source",
+        "democracy.yml": "rd-democracy-source",
+        "publish-pending-manual.yml": "rd-manual-queue",
+        "preserve-article-archive.yml": "rd-archive-ledger",
+        "scrub-personal-name.yml": "rd-privacy-scrub",
+        "article-image-integrity.yml": "rd-image-maintenance",
+        "clean-public-article-content.yml": "rd-content-hygiene",
+    }
+    for name, group in expected_source_lanes.items():
+        assert f"group: {group}" in text(name), name
 
     # Council/democracy are source-data producers; only the canonical publisher
     # may own public index/ward regeneration.
     for name in ("council-minutes.yml", "democracy.yml"):
         body = text(name)
         assert "generate_ward_pages.py" not in body, name
-        assert "git add" not in body or "index.html" not in body, name
+        assert "index.html" not in body, name
         assert "gh workflow run publish.yml" in body, name
 
-    # Emergency removals must explicitly deploy the scrubbed latest main.
+    # Emergency removals have a separate priority lane, never merge stale pages,
+    # and explicitly deploy the scrubbed latest main.
     takedown = text("remove-story.yml")
+    assert "group: rd-emergency-takedown" in takedown
     assert "gh workflow run deploy-pages.yml --ref main" in takedown
     assert "git merge" not in takedown
 
-    # The old 5-minute empty queue poll and scheduled archive/image writers are gone.
+    # The old empty polling/scheduled maintenance writers are gone.
     assert "schedule:" not in text("publish-pending-manual.yml")
     assert "schedule:" not in text("article-image-integrity.yml")
     assert "schedule:" not in text("archive-refresh.yml")
 
-    # Production now permits only explicitly whitelisted source-photo reuse,
-    # instead of globally disabling source imagery.
+    # Production permits only the existing whitelisted source-photo reuse logic,
+    # instead of globally disabling source images.
     for name in ("scrape-fast.yml", "scrape-kick.yml", "publish.yml"):
         assert 'USE_SOURCE_IMAGES: "true"' in text(name), name
 
