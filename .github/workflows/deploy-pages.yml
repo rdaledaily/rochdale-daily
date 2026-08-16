@@ -55,6 +55,12 @@ jobs:
       - name: Audit sitemap modification dates
         run: python3 scraper/repair_sitemap_lastmod.py
 
+      # Keep feed autodiscovery and the machine-readable Latest-news ItemList
+      # aligned with the static links that crawlers can actually see, even if a
+      # scheduled archive refresh was deferred by an active newsroom writer.
+      - name: Refresh homepage discovery metadata
+        run: python3 scraper/homepage_discovery_metadata.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
