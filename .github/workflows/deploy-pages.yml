@@ -69,6 +69,13 @@ jobs:
       - name: Add descriptive alt text to news images
         run: python3 scraper/enhance_image_alt_text.py
 
+      # What's On pages are article-shaped in the static generator, but the
+      # underlying records contain real event dates and locations. Add a second
+      # conservative Event JSON-LD block only where Google's required event
+      # properties are present; never invent organisers, prices or performers.
+      - name: Add Event structured data to What's On pages
+        run: python3 scraper/enhance_event_structured_data.py
+
       # robots.txt advertises image-sitemap.xml. Archive refreshes may defer
       # while a newsroom writer is active, so generate the sitemap again at the
       # final delivery boundary. This prevents deploying a robots-advertised 404
