@@ -61,6 +61,13 @@ jobs:
       - name: Add visible article publication timing
         run: python3 scraper/add_article_time_metadata.py
 
+      # Meaningful story images should not be announced as decorative to screen
+      # readers. Add the visible story headline as a conservative alt fallback
+      # for generated article heroes and homepage news cards, while preserving
+      # any human-written alt text already present.
+      - name: Add descriptive alt text to news images
+        run: python3 scraper/enhance_image_alt_text.py
+
       # robots.txt advertises image-sitemap.xml. Archive refreshes may defer
       # while a newsroom writer is active, so generate the sitemap again at the
       # final delivery boundary. This prevents deploying a robots-advertised 404
