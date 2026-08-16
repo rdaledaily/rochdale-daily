@@ -14,6 +14,7 @@ on:
       - scraper/manual_articles.py
       - scraper/frontpage_pipeline.py
       - scraper/story_identity.py
+      - scraper/frontpage_source_quality.py
       - scraper/generate_pages.py
       - scraper/generate_newspaper_pages.py
       - scraper/generate_ward_pages.py
@@ -86,6 +87,8 @@ jobs:
           python scraper/generate_ward_pages.py
           python scraper/generate_newspaper_pages.py
           python scraper/enforce_frontpage_freshness.py
+          python scraper/frontpage_source_quality.py
+          PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
           python scraper/enforce_live_homepage_window.py
           python scraper/generate_news_sitemap.py
           python scraper/generate_archive.py
@@ -125,6 +128,8 @@ jobs:
             python scraper/generate_ward_pages.py
             python scraper/generate_newspaper_pages.py
             python scraper/enforce_frontpage_freshness.py
+            python scraper/frontpage_source_quality.py
+            PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
             python scraper/enforce_live_homepage_window.py
             python scraper/generate_news_sitemap.py
             python scraper/generate_archive.py
