@@ -1,0 +1,64 @@
+name: Allow Rochdale Times discovery source once
+
+on:
+  push:
+    paths:
+      - '.github/workflows/allow-rochdale-times-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Allow Rochdale Times while retaining publication safeguards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scraper/scraper.py')
+          text = path.read_text(encoding='utf-8')
+
+          old_domains = "if domain in {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk', 'autouncle.co.uk', 'tes.com', 'tiktok.com', 'youtube.com', 'youtu.be', 'reddit.com', 'old.reddit.com'}:"
+          new_domains = "if domain in {'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk', 'autouncle.co.uk', 'tes.com', 'tiktok.com', 'youtube.com', 'youtu.be', 'reddit.com', 'old.reddit.com'}:"
+          old_names = "if any((blocked in name for blocked in ('rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader', 'autouncle', 'tiktok', 'postcode info', 'reddit'))):"
+          new_names = "if any((blocked in name for blocked in ('rochdale online', 'rochdale observer', 'pressreader', 'autouncle', 'tiktok', 'postcode info', 'reddit'))):"
+
+          if old_domains not in text:
+              raise SystemExit('Expected Rochdale Times domain deny rule not found')
+          if old_names not in text:
+              raise SystemExit('Expected Rochdale Times name deny rule not found')
+
+          text = text.replace(old_domains, new_domains, 1).replace(old_names, new_names, 1)
+          path.write_text(text, encoding='utf-8')
+
+          start = text.index("def source_is_denied(source_name: str='', source_url: str='') -> bool:", text.index('from rewrite_safety import'))
+          end = text.index('ROCHDALE_TRAFFIC_AREA_PATTERNS', start)
+          segment = text[start:end].lower()
+          assert 'rochdaletimes.co.uk' not in segment
+          assert "'rochdale times'" not in segment
+          assert 'pressreader.com' in segment
+          print('Rochdale Times is now allowed for discovery/corroboration; other deny rules remain active.')
+          PY
+
+          python -m py_compile scraper/scraper.py
+
+      - name: Commit patch and remove one-off workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/allow-rochdale-times-once.yml
+          git add scraper/scraper.py
+          git commit -m 'Allow Rochdale Times as a discovery source'
+          git pull --rebase origin main
+          git push origin HEAD:main
