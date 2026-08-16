@@ -17,7 +17,11 @@ def main() -> None:
     }
     assert guard.weak_single_source_sports_result(weak_result)
 
+    # This represents a separately verified record. It deliberately has a
+    # different identity: if it reused sport-1, the guard should correctly
+    # propagate the exclusion to every copy of that same canonical record.
     verified_result = dict(weak_result)
+    verified_result["id"] = "sport-verified"
     verified_result["source_count"] = 2
     assert not guard.weak_single_source_sports_result(verified_result)
 
