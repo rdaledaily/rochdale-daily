@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: rd-site-writer
+  group: rd-archive-ledger
   cancel-in-progress: false
 
 jobs:
@@ -81,8 +81,6 @@ jobs:
           git commit -m 'Preserve permanent article archive'
           if git push origin HEAD:main; then exit 0; fi
 
-          # Rebuild the ledger from the newest canonical state instead of merging
-          # independently rendered newspaper snapshots.
           for attempt in 1 2 3; do
             git fetch origin main
             git reset --hard origin/main
