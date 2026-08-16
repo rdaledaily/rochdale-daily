@@ -82,6 +82,7 @@ jobs:
             scraper/generate_news_sitemap.py \
             scraper/update_homepage_static_latest.py \
             scraper/homepage_discovery_metadata.py \
+            scraper/add_article_time_metadata.py \
             scraper/check_scraper_health.py \
             scraper/run_newspaper_pipeline.py \
             scraper/councillor_photos.py \
@@ -120,6 +121,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
           PYTHONPATH=scraper python scraper/test_update_homepage_static_latest.py
           PYTHONPATH=scraper python scraper/test_homepage_discovery_metadata.py
+          PYTHONPATH=scraper python scraper/test_article_time_metadata.py
 
       - name: Verify published article image paths are cards-only
         run: |
