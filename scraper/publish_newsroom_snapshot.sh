@@ -5,7 +5,7 @@ branch="${GITHUB_REF_NAME:-main}"
 message="${COMMIT_MESSAGE:-Update Rochdale Daily newsroom}"
 
 # All workflows that can publish canonical newsroom/site state share the
-# rd-site-writer Actions concurrency lane.  This script still retains bounded
+# rd-site-writer Actions concurrency lane. This script still retains bounded
 # race recovery for human/admin pushes that can legitimately move main while a
 # run is building.
 mark_published() {
@@ -43,6 +43,8 @@ rebuild_from_merged_feed() {
   python scraper/generate_ward_pages.py
   python scraper/generate_newspaper_pages.py
   python scraper/enforce_frontpage_freshness.py
+  python scraper/frontpage_source_quality.py
+  PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
   python scraper/enforce_live_homepage_window.py
   python scraper/generate_news_sitemap.py
   python scraper/generate_archive.py
