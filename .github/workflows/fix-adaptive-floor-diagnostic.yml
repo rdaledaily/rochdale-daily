@@ -1,0 +1,97 @@
+name: Fix adaptive article floor diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-adaptive-floor-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Patch and validate publication floor
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scraper/scraper.py')
+          text = path.read_text(encoding='utf-8')
+          if '200-word publication floor' not in text:
+              print('Legacy 200-word diagnostic already absent.')
+              raise SystemExit(0)
+
+          start_marker = '    short_after_merge = ['
+          end_marker = '    published = sorted('
+          start = text.find(start_marker)
+          end = text.find(end_marker, start)
+          if start < 0 or end < 0 or end <= start:
+              raise SystemExit('Could not locate bounded publication-floor block')
+
+          new_lines = [
+              '    def publication_minimum_words(article: dict[str, Any]) -> int:',
+              "        source_kind = str(article.get('source_kind') or 'article').strip().lower()",
+              "        if source_kind == 'event':",
+              '            return 0',
+              "        if source_kind == 'live':",
+              '            return 40',
+              '        return 50',
+              '',
+              '    below_publication_floor = [',
+              '        article for article in deduped_publishable',
+              '        if article_public_word_count(article) < publication_minimum_words(article)',
+              '    ]',
+              '    if below_publication_floor:',
+              '        log.warning(',
+              "            'Held back %d article(s) below the evidence-based publication minimum after merging: %s',",
+              '            len(below_publication_floor),',
+              "            '; '.join(",
+              "                f\"{article.get('title') or 'Untitled'} \"",
+              '                f"({article_public_word_count(article)}/{publication_minimum_words(article)} words)"',
+              '                for article in below_publication_floor[:10]',
+              '            ),',
+              '        )',
+              '    publication_ready = [',
+              '        article for article in deduped_publishable',
+              '        if article_public_word_count(article) >= publication_minimum_words(article)',
+              '    ]',
+              '',
+          ]
+          new = '\n'.join(new_lines)
+          text = text[:start] + new + text[end:]
+          if '200-word publication floor' in text:
+              raise SystemExit('Legacy 200-word publication-floor diagnostic still present')
+          path.write_text(text, encoding='utf-8')
+          PY
+            python -m py_compile scraper/scraper.py scraper/editorial_upgrade.py scraper/run_newspaper_pipeline.py
+            python scraper/test_editorial_length.py
+            git add scraper/scraper.py
+            if git diff --cached --quiet; then
+              echo 'Publication-floor diagnostic already fixed.'
+              exit 0
+            fi
+            git commit -m 'Align publication floor with adaptive article length'
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push race on attempt $attempt; retrying against latest main"
+          done
+          echo 'Could not publish adaptive floor fix after retries' >&2
+          exit 1
