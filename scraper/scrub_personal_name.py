@@ -1,69 +1,103 @@
 #!/usr/bin/env python3
-"""Remove the editor's private personal name from the published repository tree.
+"""Remove the editor's private name from byline/author metadata only.
 
-The target is assembled from fragments deliberately. The original implementation
-stored the target as one literal string, then scanned and rewrote this script too;
-a successful run therefore changed its own TARGET to the replacement byline and
-made every later run try to replace ``Rochdale Daily`` with itself. That caused
-thousands of no-op rewrites and permanent workflow failure.
+This deliberately does NOT scan or rewrite article prose, HTML, Python, CSS or
+other repository text. A person with the same name could legitimately appear in
+a news story; privacy protection must never silently alter journalism.
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-# Keep the private name out of this source file as a contiguous string so the
-# scrubber can safely scan its own public repository without corrupting itself.
 NAME_PARTS = ("Sarah", "Pickles")
 TARGET = " ".join(NAME_PARTS)
 LONG_TARGET = " ".join((NAME_PARTS[0], "Jane", NAME_PARTS[1]))
 REPLACEMENT = "Rochdale Daily"
-TARGETS = (LONG_TARGET, TARGET)  # longest first avoids leaving a middle name
-TEXT_SUFFIXES = {
-    ".html", ".json", ".md", ".txt", ".yml", ".yaml", ".py", ".js", ".css", ".xml"
+TARGETS = (LONG_TARGET, TARGET)
+PRIVATE_METADATA_KEYS = {
+    "byline",
+    "byline_name",
+    "author",
+    "author_name",
+    "editor",
+    "editor_name",
 }
-SKIP_DIRS = {".git", ".venv", "venv", "node_modules", "__pycache__"}
+SOURCE_FILES = (
+    ROOT / "articles.json",
+    ROOT / "manual_articles.json",
+)
 
 
-def iter_text_files():
-    for path in ROOT.rglob("*"):
-        if not path.is_file() or path.suffix.lower() not in TEXT_SUFFIXES:
-            continue
-        if any(part in SKIP_DIRS for part in path.parts):
-            continue
-        yield path
+def _clean_metadata(value: Any, *, key: str = "") -> tuple[Any, int]:
+    changed = 0
+    if isinstance(value, dict):
+        result: dict[str, Any] = {}
+        for child_key, child_value in value.items():
+            if child_key in PRIVATE_METADATA_KEYS and isinstance(child_value, str):
+                cleaned = child_value
+                for target in TARGETS:
+                    cleaned = cleaned.replace(target, REPLACEMENT)
+                changed += int(cleaned != child_value)
+                result[child_key] = cleaned
+            else:
+                result[child_key], child_changed = _clean_metadata(child_value, key=child_key)
+                changed += child_changed
+        return result, changed
+    if isinstance(value, list):
+        result = []
+        for item in value:
+            cleaned, child_changed = _clean_metadata(item, key=key)
+            result.append(cleaned)
+            changed += child_changed
+        return result, changed
+    return value, 0
+
+
+def _contains_private_metadata(value: Any) -> bool:
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key in PRIVATE_METADATA_KEYS and isinstance(child, str):
+                if any(target in child for target in TARGETS):
+                    return True
+            if _contains_private_metadata(child):
+                return True
+    elif isinstance(value, list):
+        return any(_contains_private_metadata(item) for item in value)
+    return False
+
+
+def _paths() -> list[Path]:
+    paths = [path for path in SOURCE_FILES if path.is_file()]
+    manual_dir = ROOT / "manual_articles.d"
+    if manual_dir.is_dir():
+        paths.extend(sorted(manual_dir.glob("*.json")))
+    return paths
 
 
 def main() -> int:
-    changed: list[str] = []
+    changed_files: list[str] = []
     remaining: list[str] = []
 
-    for path in iter_text_files():
+    for path in _paths():
         try:
-            text = path.read_text(encoding="utf-8")
-        except (UnicodeDecodeError, OSError):
-            continue
-        cleaned = text
-        for target in TARGETS:
-            cleaned = cleaned.replace(target, REPLACEMENT)
-        if cleaned == text:
-            continue
-        path.write_text(cleaned, encoding="utf-8")
-        changed.append(path.relative_to(ROOT).as_posix())
-
-    for path in iter_text_files():
-        try:
-            text = path.read_text(encoding="utf-8")
-        except (UnicodeDecodeError, OSError):
-            continue
-        if any(target in text for target in TARGETS):
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise SystemExit(f"Could not parse {path.relative_to(ROOT)}: {exc}")
+        cleaned, changes = _clean_metadata(payload)
+        if changes:
+            path.write_text(json.dumps(cleaned, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            changed_files.append(path.relative_to(ROOT).as_posix())
+        if _contains_private_metadata(cleaned):
             remaining.append(path.relative_to(ROOT).as_posix())
 
-    print(f"Scrubbed {len(changed)} files")
-    for item in changed:
+    print(f"Scoped privacy scrub changed {len(changed_files)} source file(s).")
+    for item in changed_files:
         print(f"  - {item}")
     if remaining:
-        raise SystemExit(f"Personal name still present in: {remaining}")
+        raise SystemExit(f"Private byline metadata still present in: {remaining}")
     return 0
 
 
