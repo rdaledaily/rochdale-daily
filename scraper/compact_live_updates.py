@@ -2,12 +2,12 @@
 """Compact repetitive LIVE timelines without hiding genuine developments.
 
 Automated source rewrites can describe the same development with slightly
-changed wording on successive passes.  Exact-string dedupe is not enough for a
+changed wording on successive passes. Exact-string dedupe is not enough for a
 reader-facing live timeline, but aggressive semantic dedupe risks hiding a real
-new fact.  This module therefore removes only strongly overlapping updates when
-the older item contributes no new material keyword or number.
+new fact. This module therefore removes only strongly overlapping updates when
+the older item contributes no new material fact or named entity.
 
-The newest wording wins.  Canonical publication/update timestamps are otherwise
+The newest wording wins. Canonical publication/update timestamps are otherwise
 left untouched; this is a presentation-quality normalisation, not a freshness
 renewal mechanism.
 """
@@ -22,12 +22,18 @@ from typing import Any
 
 _WORD_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9'’-]{2,}")
 _NUMBER_RE = re.compile(r"\b\d+(?::\d+)?\b")
+_ENTITY_RE = re.compile(r"\b(?:[A-Z][a-z]+(?:[-’'][A-Z]?[a-z]+)?)(?:\s+[A-Z][a-z]+(?:[-’'][A-Z]?[a-z]+)?)*\b")
 _MATERIAL_RE = re.compile(
     r"\b(?:named|identified|victim|tribute|arrested|charged|bailed|released|"
     r"remanded|custody|found|located|reopened|closed|closure|cancelled|"
     r"canceled|delayed|suspended|resumed|restored|repaired|evacuated|"
     r"warning|alert|collision|crash|fire|flood|diversion|replacement|"
     r"service|works|sentenced|convicted|appeal|missing)\b",
+    re.I,
+)
+_STATE_RE = re.compile(
+    r"\b(?:no\s+trams?|out\s+of\s+service|until\s+further\s+notice|"
+    r"road\s+closed|road\s+reopened|services?\s+resumed|services?\s+suspended)\b",
     re.I,
 )
 _STOPWORDS = {
@@ -38,15 +44,28 @@ _STOPWORDS = {
     "would", "your", "will", "were", "was", "are", "the", "and", "for",
     "but", "not", "our", "its", "you", "via", "now",
 }
+_ENTITY_STOPWORDS = {
+    "A", "An", "The", "Police", "Council", "Passengers", "Customers", "Track",
+    "Planned", "Further", "During", "Additionally", "Essential",
+}
 
 
 def _normalise(text: Any) -> str:
     return re.sub(r"\W+", " ", str(text or "").casefold()).strip()
 
 
+def _stem_token(token: str) -> str:
+    """Very light inflection normalisation for paraphrase comparison only."""
+    if len(token) > 5 and token.endswith("ies"):
+        return token[:-3] + "y"
+    if len(token) > 4 and token.endswith("s") and not token.endswith(("ss", "us")):
+        return token[:-1]
+    return token
+
+
 def _words(text: Any) -> set[str]:
     return {
-        match.group(0).casefold()
+        _stem_token(match.group(0).casefold())
         for match in _WORD_RE.finditer(str(text or ""))
         if match.group(0).casefold() not in _STOPWORDS
     }
@@ -55,8 +74,43 @@ def _words(text: Any) -> set[str]:
 def _facts(text: Any) -> set[str]:
     value = str(text or "")
     facts = {match.group(0).casefold() for match in _MATERIAL_RE.finditer(value)}
+    facts.update(match.group(0).casefold() for match in _STATE_RE.finditer(value))
     facts.update(_NUMBER_RE.findall(value))
     return facts
+
+
+def _entities(text: Any) -> set[str]:
+    entities: set[str] = set()
+    for match in _ENTITY_RE.finditer(str(text or "")):
+        raw = match.group(0).strip()
+        if raw in _ENTITY_STOPWORDS:
+            continue
+        entities.add(raw.casefold())
+    return entities
+
+
+def _overlap(older_text: str, newer_text: str) -> tuple[float, float, float]:
+    older_words = _words(older_text)
+    newer_words = _words(newer_text)
+    if not older_words or not newer_words:
+        return 0.0, 0.0, 0.0
+    intersection = len(older_words & newer_words)
+    coverage = intersection / len(older_words)
+    union = len(older_words | newer_words)
+    jaccard = intersection / union if union else 0.0
+    sequence = SequenceMatcher(None, _normalise(older_text), _normalise(newer_text)).ratio()
+    return coverage, jaccard, sequence
+
+
+def _strongly_overlapping(older_text: str, newer_text: str) -> bool:
+    coverage, jaccard, sequence = _overlap(older_text, newer_text)
+    return bool(
+        sequence >= 0.80
+        or coverage >= 0.82
+        or jaccard >= 0.72
+        or (sequence >= 0.68 and coverage >= 0.70)
+        or (jaccard >= 0.58 and coverage >= 0.65)
+    )
 
 
 def redundant_update(older_text: str, newer_text: str) -> bool:
@@ -68,24 +122,38 @@ def redundant_update(older_text: str, newer_text: str) -> bool:
     if older == newer:
         return True
 
-    # Never remove an older timeline item if it carries a material keyword or
-    # number that the newer wording no longer contains.  That protects genuine
-    # developments such as a newly named person, changed time, route or count.
+    # Never remove an older timeline item if it carries a material keyword,
+    # number, operational-state phrase or named entity that the newer wording
+    # no longer contains. This protects real developments such as a newly named
+    # person, changed time, route, location or count.
     if _facts(older_text) - _facts(newer_text):
         return False
-
-    older_words = _words(older_text)
-    newer_words = _words(newer_text)
-    if not older_words or not newer_words:
+    if _entities(older_text) - _entities(newer_text):
         return False
+    return _strongly_overlapping(older_text, newer_text)
 
-    coverage = len(older_words & newer_words) / len(older_words)
-    sequence = SequenceMatcher(None, older, newer).ratio()
-    return bool(
-        sequence >= 0.80
-        or coverage >= 0.82
-        or (sequence >= 0.68 and coverage >= 0.70)
-    )
+
+def _redundant_against_retained(older_text: str, newer_rows: list[dict[str, str]]) -> bool:
+    """Compare an older update against the retained newer timeline as a whole.
+
+    A fact may be split across two successive paraphrases (for example one
+    mentions the date range while another mentions Exchange Square). Pairwise
+    comparison alone then keeps every paraphrase forever. We may remove the
+    older row only when all of its facts/entities are already represented in
+    the newer retained set *and* it strongly overlaps at least one newer row.
+    """
+    if not newer_rows:
+        return False
+    newer_facts: set[str] = set()
+    newer_entities: set[str] = set()
+    for row in newer_rows:
+        newer_facts.update(_facts(row["text"]))
+        newer_entities.update(_entities(row["text"]))
+    if _facts(older_text) - newer_facts:
+        return False
+    if _entities(older_text) - newer_entities:
+        return False
+    return any(_strongly_overlapping(older_text, row["text"]) for row in newer_rows)
 
 
 def compact_updates(rows: Any, limit: int = 30) -> list[dict[str, str]]:
@@ -106,6 +174,8 @@ def compact_updates(rows: Any, limit: int = 30) -> list[dict[str, str]]:
 
     for row in valid:
         if any(redundant_update(row["text"], newer["text"]) for newer in cleaned):
+            continue
+        if _redundant_against_retained(row["text"], cleaned):
             continue
         cleaned.append(row)
         if len(cleaned) >= limit:
