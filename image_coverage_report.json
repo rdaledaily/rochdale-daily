@@ -1,15 +1,15 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 13,
-    "cards_library": 0,
+    "kept_cards": 11,
+    "cards_library": 1,
     "cards_generated": 3,
     "skipped": 0
   },
   "items": [
     {
       "slug": "rochdale-s-hurstead-smallbridge-and-belfield-to-receive-20m-for-community-improv",
-      "result": "kept-cards",
+      "result": "cards-generated",
       "image_url": "assets/img/cards/rochdale-s-hurstead-smallbridge-and-belfield-to-receive-20m-for-community-improv-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -23,10 +23,10 @@
     },
     {
       "slug": "rochdale-afc-women-to-play-at-crown-oil-arena-on-sunday",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-afc-women-to-play-at-crown-oil-arena-on-sunday-canonical.jpg",
-      "matched_filename": "",
-      "match_score": null
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
     },
     {
       "slug": "rochdale-afc-and-rochdale-netball-club-launch-new-partnership-to-promote-netball",
@@ -62,13 +62,6 @@
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "rochdale_afc.jpg",
       "match_score": 15252
-    },
-    {
-      "slug": "rochdale-commemorates-comedian-jimmy-cricket-ahead-of-funeral",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/cricket.jpg",
-      "matched_filename": "cricket.jpg",
-      "match_score": 15127
     },
     {
       "slug": "lift-out-of-service-at-derker-tram-stop-until-further-notice",
