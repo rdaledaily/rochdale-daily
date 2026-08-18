@@ -1,12 +1,19 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 11,
-    "cards_library": 1,
+    "kept_cards": 13,
+    "cards_library": 0,
     "cards_generated": 3,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "rochdale-to-hold-vigil-and-funeral-for-comedian-jimmy-cricket",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/cricket.jpg",
+      "matched_filename": "cricket.jpg",
+      "match_score": 15127
+    },
     {
       "slug": "rochdale-s-hurstead-smallbridge-and-belfield-to-receive-20-million-for-community",
       "result": "cards-generated",
@@ -51,7 +58,7 @@
     },
     {
       "slug": "plans-approved-for-23-new-homes-on-kirkholt-estate",
-      "result": "cards-library",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/plans-approved-for-23-new-homes-in-kirkholt.jpg",
       "matched_filename": "plans-approved-for-23-new-homes-in-kirkholt.jpg",
       "match_score": 12751
