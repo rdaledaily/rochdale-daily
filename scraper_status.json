@@ -1,8 +1,8 @@
 {
-  "last_run_at": "2026-08-19T13:53:42.107591Z",
-  "raw_candidates_before_job_filter": 37,
+  "last_run_at": "2026-08-19T14:43:32.244149Z",
+  "raw_candidates_before_job_filter": 38,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 37,
+  "raw_candidates": 38,
   "candidate_clusters": 18,
   "google_news_resolution": {
     "wrappers": 16,
@@ -11,15 +11,15 @@
     "reattributed": 1,
     "images_found": 1
   },
-  "duplicates_merged": 19,
+  "duplicates_merged": 20,
   "attempted_rewrites": 8,
-  "new_articles": 1,
-  "live_articles": 9,
-  "skipped": 7,
+  "new_articles": 4,
+  "live_articles": 11,
+  "skipped": 4,
   "collector_counts": {
     "rss_and_google_news": 25,
     "website_discovery": 7,
-    "aggregator_discovery": 0,
+    "aggregator_discovery": 1,
     "live_service_pages": 4,
     "facebook_official": 0,
     "x_official": 0,
@@ -40,19 +40,20 @@
     "Roch Valley Radio": 1,
     "Rochdale Borough Council": 1,
     "facebook.com": 1,
+    "Ilovemanchester": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "community": 1,
-    "education": 1,
-    "environment": 1,
+    "environment": 2,
     "health": 2,
     "news": 1,
     "transport": 2
   },
   "published_by_category": {
-    "environment": 1,
+    "environment": 2,
     "events": 6,
+    "health": 1,
     "sport": 1,
     "transport": 1
   },
@@ -79,21 +80,21 @@
   ],
   "selected_story_keys": [
     "transport-v3-45d5bd35677242aee792",
-    "education-v3-53eba1669aa71358f796",
     "community-v3-b25ca6ed4a148c61bab5",
     "health-v3-7af0a4dcd87e3f4e5aa2",
-    "environment-v3-543a3de4118b86138bdf",
+    "environment-v3-a0892bf12560f2b8d77b",
     "hard-news-v3-d2279a172eb1af77cd42",
+    "environment-v3-543a3de4118b86138bdf",
     "transport-v3-4304384750326ac529c1",
     "health-v3-c95ad54cfd88252a64f4"
   ],
   "selected_candidate_urls": [
-    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-17a8d871a5726fd657",
-    "https://ilovemanchester.com/brand-new-plans-for-major-housing-scheme-in-rochdale",
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b9e96025fc81bd93f8",
     "https://www.rochvalleyradio.com/news/local-news/new-play-area-coming-to-lower-place/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-08",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/hundreds-homes-could-built-former-34480002",
+    "https://ilovemanchester.com/brand-new-plans-for-major-housing-scheme-in-rochdale",
     "https://www.rochvalleyradio.com/news/local-news/greater-manchester-to-receive-17m-in-funding-to-help-with-the-homelessness-crisis/",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/hundreds-homes-could-built-former-34480002",
     "https://www.rochdaletimes.co.uk/courteeners-liam-fray-to-voice-tram-announcements-for-concerts/",
     "https://www.rochvalleyradio.com/news/local-news/strikes-back-on-at-four-greater-manchester-hospitals-after-payment-offer-withdrawals-says-unison/"
   ],
@@ -108,7 +109,6 @@
   "coverage": {
     "available_categories": [
       "community",
-      "education",
       "environment",
       "health",
       "news",
@@ -116,16 +116,22 @@
     ],
     "selected_categories": [
       "community",
-      "education",
       "environment",
       "health",
       "news",
       "transport"
     ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
+    "available_wards": [
+      "Bamford"
+    ],
+    "selected_wards": [
+      "Bamford"
+    ],
+    "available_areas": [
+      "norden"
+    ],
     "selected_areas": [
+      "norden",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -133,20 +139,22 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "community": 1,
-      "education": 1,
-      "environment": 1,
+      "environment": 2,
       "health": 2,
       "news": 1,
       "transport": 2
     },
-    "selected_by_ward": {},
+    "selected_by_ward": {
+      "Bamford": 1
+    },
     "selected_by_area": {
-      "rochdale": 8
+      "norden": 1,
+      "rochdale": 7
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "food standards agency": 1,
-      "i love manchester": 1,
+      "ilovemanchester": 1,
       "manchester evening news": 1,
       "roch valley radio local news": 3,
       "rochdale times": 1
@@ -772,9 +780,10 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 51,
   "robots_denied_urls": [
-    "https://news.tfgm.com/",
     "https://www.groundwork.org.uk/greatermanchester/latest/",
     "https://www.groundwork.org.uk/greatermanchester/latest/?query-6-page=2",
+    "https://news.tfgm.com/",
+    "https://www.northernrailway.co.uk/service-updates",
     "https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=1&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=2&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=3&tdte=",
@@ -787,30 +796,29 @@
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=2&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=3&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=4&tdte=",
-    "https://www.northernrailway.co.uk/service-updates",
     "https://www.unitedutilities.com/emergencies/up-my-street/",
-    "https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/",
-    "https://rochdaleriverside.com/news/",
     "https://aboutmanchester.co.uk/?s=Rochdale",
+    "https://rochdaleriverside.com/news/",
+    "https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/",
     "https://www.hmnrconservatives.org.uk/news",
-    "https://c.newsnow.co.uk/A/1322046032?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322000719?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321954476?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321944130?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321909405?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321879369?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321878841?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321956308?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321806475?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321859781?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322071248?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321714817?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321597587?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322007061?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321982578?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321851217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322004304?-57568:46921",
     "https://c.newsnow.co.uk/A/1321696288?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321806475?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321954476?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322071248?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321944130?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322007061?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321909405?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321597587?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322004304?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322046032?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321714817?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321982578?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322000719?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321956308?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321879369?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321851217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321878841?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321859781?-57568:46921",
     "https://c.newsnow.co.uk/A/1321844652?-57568:46921",
     "https://c.newsnow.co.uk/A/1321807429?-57568:46921",
     "https://c.newsnow.co.uk/A/1321751473?-57568:46921",
@@ -825,8 +833,12 @@
     "https://news.google.com/rss/articles/CBMi5wFBVV95cUxNcjhtaFFHcVhhUnNwX3NKZDBXTm1LRHBUQ2ZWX2N2X0xoQkRzZWdlRkp4QmQ3MFBTaV9QMG9FYTJKWm1RSmFqT2dhVm9yemJybDJad2VqOE81T3dzaFNQUGZkMzRMRFdQSkJEMUlqdGpScVNUWEJ0YjBVNUQxMUJRamtIN1ZhRVFKZUh1NDBIV1RtbFhZbWVvamJrOUlEV3ZRbGVoUWZrS0p0SldINlZuZkVockR6N3RVSWF0VWFEVEdPa2IxM3dYUlh0T1hPUkcxalI5YVNmd2NaMkV1M0xFN1JSRUcwVVU?oc=5"
   ],
   "slow_domain_failure_threshold": 3,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafccommunity.org"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafccommunity.org": 3
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -844,14 +856,15 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-08-19T13:59:01.098446Z",
-  "frontpage_article_count": 3,
+  "frontpage_generated_at": "2026-08-19T14:48:48.140706Z",
+  "frontpage_article_count": 4,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
       "community",
       "crime",
       "environment",
+      "health",
       "sport",
       "transport"
     ],
@@ -859,6 +872,7 @@
       "community",
       "crime",
       "environment",
+      "health",
       "sport",
       "transport"
     ],
@@ -885,33 +899,34 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1,
-      "transport": 1,
-      "sport": 1
+      "health": 1,
+      "sport": 1,
+      "environment": 2
     },
     "selected_by_ward": {
-      "Bamford": 1,
-      "borough-wide": 2
+      "borough-wide": 2,
+      "Bamford": 2
     },
     "selected_by_area": {
       "bamford": 1,
       "heywood": 1,
-      "norden": 1,
-      "rochdale": 6
+      "norden": 2,
+      "rochdale": 7
     },
     "selected_by_source": {
-      "manchester evening news": 1,
-      "bee network live travel alerts": 1,
-      "rochdale times": 1
+      "source": 1,
+      "rochdale times": 1,
+      "ilovemanchester": 1,
+      "manchester evening news": 1
     },
-    "pool_size": 9,
-    "primary_pool_size": 3,
+    "pool_size": 11,
+    "primary_pool_size": 5,
     "fallback_stories_used": 6,
     "selection_window_days": 7,
-    "frontpage_count": 3,
+    "frontpage_count": 4,
     "homepage_freshness_hours": 14,
-    "fresh_under_24h": 3,
-    "fresh_under_homepage_window": 3,
+    "fresh_under_24h": 4,
+    "fresh_under_homepage_window": 4,
     "short_briefs_selected": 2,
     "frontpage_minimum_met": false
   },
@@ -923,7 +938,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 7,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 131,
+  "duplicate_articles_after_postprocessing": 133,
   "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
