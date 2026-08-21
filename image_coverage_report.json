@@ -1,18 +1,25 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 6,
-    "cards_library": 1,
-    "cards_generated": 2,
+    "kept_cards": 7,
+    "cards_library": 0,
+    "cards_generated": 3,
     "skipped": 0
   },
   "items": [
     {
       "slug": "rochdale-afc-to-host-crawley-town-in-key-league-match",
-      "result": "cards-library",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "rochdale_afc.jpg",
       "match_score": 15252
+    },
+    {
+      "slug": "track-renewal-works-on-rochdale-line-affect-tram-services",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/adf6fe0425e3e4c13c.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "lift-at-derker-tram-stop-out-of-service-until-further-notice",
