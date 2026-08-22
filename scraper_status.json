@@ -1,24 +1,24 @@
 {
-  "last_run_at": "2026-08-22T04:45:56.233357Z",
-  "raw_candidates_before_job_filter": 16,
+  "last_run_at": "2026-08-22T05:10:27.346275Z",
+  "raw_candidates_before_job_filter": 18,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 16,
+  "raw_candidates": 18,
   "candidate_clusters": 9,
   "google_news_resolution": {
-    "wrappers": 9,
+    "wrappers": 10,
     "resolved": 9,
-    "text_recovered": 2,
+    "text_recovered": 1,
     "reattributed": 1,
     "images_found": 4
   },
-  "duplicates_merged": 7,
+  "duplicates_merged": 9,
   "attempted_rewrites": 6,
   "new_articles": 1,
-  "live_articles": 12,
+  "live_articles": 11,
   "skipped": 5,
   "collector_counts": {
-    "rss_and_google_news": 9,
-    "website_discovery": 3,
+    "rss_and_google_news": 12,
+    "website_discovery": 2,
     "aggregator_discovery": 0,
     "live_service_pages": 3,
     "facebook_official": 0,
@@ -31,23 +31,23 @@
     "Rochdale AFC": 5,
     "Bee Network live travel alerts": 3,
     "Yahoo Sports": 2,
+    "Laois Today": 2,
     "TfGM Travel Alerts": 2,
     "Aol": 1,
     "Rochdale Borough Council": 1,
-    "Rochdale Times": 1,
+    "Manchester Evening News": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "community": 1,
     "health": 1,
     "news": 1,
-    "planning": 1,
     "sport": 2,
     "transport": 1
   },
   "published_by_category": {
     "events": 7,
     "sport": 2,
-    "traffic": 1,
     "transport": 2
   },
   "openai_enabled": true,
@@ -72,19 +72,19 @@
     "classified/spam denylist"
   ],
   "selected_story_keys": [
-    "transport-v3-9586ca83f85b1cfeaade",
+    "transport-v3-402d480a82d2c3f7b4e8",
     "sport-v3-25b1e220d9a0a6671675",
+    "community-v3-d264db4a0aff094c246f",
     "health-v3-13c4d24749636f43268d",
     "hard-news-v3-6919ee72847fd4260137",
-    "planning-v3-0783605bfe4254d724dc",
     "sport-v3-2456a71a500fbec8ef54"
   ],
   "selected_candidate_urls": [
-    "https://tfgm.com/travel-updates/travel-alerts?no-script=true",
+    "https://tfgm.com/travel-updates/travel-alerts",
     "https://rochdaleafc.co.uk/dale-loan-kane-taylor-210826/",
+    "https://www.laoistoday.ie/2026/08/22/leaving-cert-2026-strong-results-celebrated-at-heywood-community-school-and-colaiste-iosagain/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-08",
     "https://www.bbc.co.uk/sport/football/articles/czrj50v76r5o",
-    "https://www.rochdale.gov.uk/directory-record/2570/toad-lane-and-surrounding-streets-roadworks-in-rochdale-on-6-november-2026",
     "https://www.rochdaletimes.co.uk/green-light-for-shopping-centres-new-look/"
   ],
   "x_social_records": 0,
@@ -97,27 +97,31 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "community",
       "health",
       "news",
       "sport",
       "transport"
     ],
     "selected_categories": [
+      "community",
       "health",
       "news",
       "sport",
       "transport"
     ],
     "available_wards": [
-      "Spotland and Falinge"
+      "Central Rochdale"
     ],
     "selected_wards": [
-      "Spotland and Falinge"
+      "Central Rochdale"
     ],
     "available_areas": [
+      "heywood",
       "middleton"
     ],
     "selected_areas": [
+      "heywood",
       "middleton",
       "rochdale"
     ],
@@ -125,23 +129,25 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "community": 1,
       "health": 1,
-      "news": 2,
+      "news": 1,
       "sport": 2,
       "transport": 1
     },
     "selected_by_ward": {
-      "Spotland and Falinge": 1
+      "Central Rochdale": 1
     },
     "selected_by_area": {
+      "heywood": 1,
       "middleton": 1,
-      "rochdale": 5
+      "rochdale": 4
     },
     "selected_by_source": {
       "bbc manchester": 1,
       "food standards agency": 1,
+      "laois today": 1,
       "rochdale afc": 1,
-      "rochdale borough council": 1,
       "rochdale times": 1,
       "tfgm travel alerts": 1
     }
@@ -783,18 +789,16 @@
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=4&tdte=",
     "https://www.northernrailway.co.uk/service-updates",
     "https://www.unitedutilities.com/emergencies/up-my-street/",
-    "https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/",
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://rochdaleriverside.com/news/",
+    "https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/",
     "https://www.hmnrconservatives.org.uk/news",
-    "https://c.newsnow.co.uk/A/1321956308?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322046032?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321806475?-57568:46921",
     "https://c.newsnow.co.uk/A/1322154691?-57568:46921",
     "https://c.newsnow.co.uk/A/1322112084?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321851217?-57568:46921",
     "https://c.newsnow.co.uk/A/1322104819?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321806475?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322296530?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322188349?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322179030?-57568:46921",
     "https://c.newsnow.co.uk/A/1322103572?-57568:46921",
     "https://c.newsnow.co.uk/A/1322094156?-57568:46921",
     "https://c.newsnow.co.uk/A/1322071248?-57568:46921",
@@ -806,21 +810,21 @@
     "https://c.newsnow.co.uk/A/1321909405?-57568:46921",
     "https://c.newsnow.co.uk/A/1321879369?-57568:46921",
     "https://c.newsnow.co.uk/A/1321878841?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321851217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322185402?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322046032?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322004304?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322210049?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322114961?-57568:46921",
     "https://c.newsnow.co.uk/A/1322250687?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321956308?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322004304?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322185402?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322114961?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322296530?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322188349?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322210049?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322179030?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 3,
-  "slow_domains_circuit_broken_this_run": [
-    "oulderhillacademy.com"
-  ],
+  "slow_domains_circuit_broken_this_run": [],
   "slow_domain_failure_counts": {
-    "oulderhillacademy.com": 5
+    "rochdaletimes.co.uk": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -839,7 +843,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-08-22T04:51:08.753760Z",
+  "frontpage_generated_at": "2026-08-22T05:13:32.770445Z",
   "frontpage_article_count": 4,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -847,25 +851,21 @@
       "community",
       "crime",
       "sport",
-      "traffic",
       "transport"
     ],
     "selected_categories": [
       "community",
       "crime",
       "sport",
-      "traffic",
       "transport"
     ],
     "available_wards": [
       "Central Rochdale",
-      "Milnrow and Newhey",
-      "Spotland and Falinge"
+      "Milnrow and Newhey"
     ],
     "selected_wards": [
       "Central Rochdale",
-      "Milnrow and Newhey",
-      "Spotland and Falinge"
+      "Milnrow and Newhey"
     ],
     "available_areas": [
       "heywood",
@@ -882,32 +882,32 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "sport": 2,
-      "transport": 2
+      "transport": 2,
+      "sport": 2
     },
     "selected_by_ward": {
-      "borough-wide": 3,
-      "Central Rochdale": 1
+      "Central Rochdale": 1,
+      "borough-wide": 3
     },
     "selected_by_area": {
       "heywood": 1,
       "middleton": 1,
       "norden": 1,
-      "rochdale": 6
+      "rochdale": 5
     },
     "selected_by_source": {
-      "rochdale afc": 2,
+      "tfgm travel alerts": 1,
       "rochdale times": 1,
-      "bee network live travel alerts": 1
+      "rochdale afc": 2
     },
-    "pool_size": 9,
-    "primary_pool_size": 5,
+    "pool_size": 8,
+    "primary_pool_size": 4,
     "fallback_stories_used": 4,
     "selection_window_days": 7,
     "frontpage_count": 4,
     "homepage_freshness_hours": 14,
     "fresh_under_24h": 4,
-    "fresh_under_homepage_window": 4,
+    "fresh_under_homepage_window": 3,
     "short_briefs_selected": 3,
     "frontpage_minimum_met": false
   },
@@ -919,7 +919,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 8,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 134,
+  "duplicate_articles_after_postprocessing": 133,
   "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
