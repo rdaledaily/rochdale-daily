@@ -1,23 +1,23 @@
 {
-  "last_run_at": "2026-08-22T23:01:34.166105Z",
-  "raw_candidates_before_job_filter": 52,
+  "last_run_at": "2026-08-22T23:29:55.093841Z",
+  "raw_candidates_before_job_filter": 53,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 52,
-  "candidate_clusters": 17,
+  "raw_candidates": 53,
+  "candidate_clusters": 16,
   "google_news_resolution": {
-    "wrappers": 41,
+    "wrappers": 42,
     "resolved": 8,
     "text_recovered": 0,
     "reattributed": 0,
     "images_found": 1
   },
-  "duplicates_merged": 35,
-  "attempted_rewrites": 12,
-  "new_articles": 1,
-  "live_articles": 10,
-  "skipped": 11,
+  "duplicates_merged": 37,
+  "attempted_rewrites": 11,
+  "new_articles": 3,
+  "live_articles": 11,
+  "skipped": 8,
   "collector_counts": {
-    "rss_and_google_news": 44,
+    "rss_and_google_news": 45,
     "website_discovery": 3,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -28,17 +28,17 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "SussexWorld": 7,
+    "SussexWorld": 6,
     "Rochdale AFC": 6,
     "The Bury Times": 4,
     "Daily Mirror": 4,
     "Bee Network live travel alerts": 4,
+    "asatunews.co.id": 3,
     "Manchester Evening News": 3,
     "Shropshire Star": 3,
     "The Northern Echo": 2,
     "Northwich Guardian": 2,
     "Lancashire Telegraph": 2,
-    "asatunews.co.id": 2,
     "TfGM Travel Alerts": 2,
     "APWin": 1,
     "Rochdale Times": 1,
@@ -49,6 +49,7 @@
     "Wrexham and Flintshire News, Sport, Events | The Leader": 1,
     "Herts Advertiser": 1,
     "Rochdale Borough Council": 1,
+    "Borehamwood Times": 1,
     "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
@@ -57,12 +58,11 @@
     "health": 1,
     "news": 3,
     "sport": 4,
-    "traffic": 1,
     "transport": 2
   },
   "published_by_category": {
     "events": 7,
-    "sport": 3
+    "sport": 4
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -86,7 +86,6 @@
     "classified/spam denylist"
   ],
   "selected_story_keys": [
-    "transport-v3-e537d5b53938dfd7e3b7",
     "transport-v3-a7d50451ee3cb33345df",
     "education-v3-d9e92e8104ecb2b80a37",
     "sport-v3-20dc1db95bf4f543daa1",
@@ -100,7 +99,6 @@
     "sport-v3-767d218ff6f1db2504cf"
   ],
   "selected_candidate_urls": [
-    "https://www.sussexexpress.co.uk/sport/football/i-dont-want-no-energy-sloths-colin-kazim-richards-issues-demand-as-crawley-town-prepare-for-rochdale-clash-8935782",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-2773799574a9d22764",
     "https://www.rochdaletimes.co.uk/.well-known/sgcaptcha/?r=%2Fstudents-hard-work-determination-and-perseverance-pays-off%2F&y=ipc:172.203.195.8:1787238521.201",
     "https://uk.sports.yahoo.com/news/matt-taylor-hails-dream-start-174815029.html",
@@ -127,7 +125,6 @@
       "health",
       "news",
       "sport",
-      "traffic",
       "transport"
     ],
     "selected_categories": [
@@ -135,7 +132,6 @@
       "health",
       "news",
       "sport",
-      "traffic",
       "transport"
     ],
     "available_wards": [],
@@ -152,12 +148,11 @@
       "health": 1,
       "news": 3,
       "sport": 4,
-      "traffic": 1,
       "transport": 2
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 12
+      "rochdale": 11
     },
     "selected_by_source": {
       "bbc": 1,
@@ -169,7 +164,7 @@
       "rochdale afc": 1,
       "rochdale times": 1,
       "rochdaleafc": 1,
-      "sussexworld": 2,
+      "sussexworld": 1,
       "yahoo sports uk": 1
     }
   },
@@ -791,18 +786,17 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 73,
+  "robots_denied_count": 69,
   "robots_denied_urls": [
     "http://www.brightonandhoveindependent.co.uk",
-    "https://www.apwin.com",
     "https://www.asatunews.co.id",
+    "https://www.apwin.com",
     "https://www.shropshirestar.com",
     "https://www.littlehamptongazette.co.uk",
-    "https://www.chichester.co.uk",
     "https://www.worthingherald.co.uk",
-    "https://news.tfgm.com/",
     "https://www.groundwork.org.uk/greatermanchester/latest/",
     "https://www.groundwork.org.uk/greatermanchester/latest/?query-6-page=2",
+    "https://news.tfgm.com/",
     "https://www.northernrailway.co.uk/service-updates",
     "https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=1&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=News&fdte=&page=2&tdte=",
@@ -821,12 +815,15 @@
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://rochdaleriverside.com/news/",
     "https://www.hmnrconservatives.org.uk/news",
-    "https://c.newsnow.co.uk/A/1322046032?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321956308?-57568:46921",
     "https://c.newsnow.co.uk/A/1322188349?-57568:46921",
     "https://c.newsnow.co.uk/A/1322185402?-57568:46921",
     "https://c.newsnow.co.uk/A/1322179030?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322114961?-57568:46921",
     "https://c.newsnow.co.uk/A/1322154691?-57568:46921",
     "https://c.newsnow.co.uk/A/1322112084?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322369475?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321851217?-57568:46921",
     "https://c.newsnow.co.uk/A/1322104819?-57568:46921",
     "https://c.newsnow.co.uk/A/1322103572?-57568:46921",
     "https://c.newsnow.co.uk/A/1322094156?-57568:46921",
@@ -836,19 +833,15 @@
     "https://c.newsnow.co.uk/A/1321982578?-57568:46921",
     "https://c.newsnow.co.uk/A/1321954476?-57568:46921",
     "https://c.newsnow.co.uk/A/1321944130?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322046032?-57568:46921",
+    "https://c.newsnow.co.uk/A/1321806475?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322341703?-57568:46921",
     "https://c.newsnow.co.uk/A/1322296530?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322368796?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322250687?-57568:46921",
     "https://c.newsnow.co.uk/A/1322004304?-57568:46921",
     "https://c.newsnow.co.uk/A/1322210049?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321956308?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322114961?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322341703?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321806475?-57568:46921",
-    "https://c.newsnow.co.uk/A/1321851217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322250687?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322369475?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322368796?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
-    "https://www.sussexexpress.co.uk/sport/football/i-dont-want-no-energy-sloths-colin-kazim-richards-issues-demand-as-crawley-town-prepare-for-rochdale-clash-8935782",
     "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPXzZGVmV0TzUyQy1nV0dfcmNHdXNKTUVlWjQxVjk2YXk5WmY2eTE2V3NUSGZRazNDd1FQODQ4UVpGY055SU1QWjFMZl8yWll1bi1OWlFra0dHQU5uT1pvc2JsVkl3cGM1d0pHX0VEM05LZU5jeUJJTjE2Y2o2TnljdGt0dVFrNW1NRUFtc1JFQnJOT18zemh5NXZlZWw5WS1PZHJ5VklZWnFScUFCRlhnYl9Cbm9OeUc4b0ozZjBCbnVpd3dETGZPVjdib2JZdVYtOFpJUWFwVmFBRFM0ejRZVFpYaHA5aDg?oc=5",
     "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQX25KbEttQXpQZ3F5Q2xxRkk3OFBnN0hpUnZHYVRzejZZTk5TZmR0MFdnZUpnN25mU2dUN0N5YUdWaENGY3c4SlZuV2xZWGJUSWJKdDdmZEZvNEZ0TkUzSEhwZUk2S2xSRlVuUWMxZUlfdl9idUNmOEtlb2VzczF6YzVsc2VheGhuMDRURzYwclAyQTJ2SGJJLW9ES1B3WUlMcC10bWo5S21VRUU?oc=5",
     "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQdFZvam9EdFVVd2dtTFBhU2R1NFhtaFZrX0J6TTB6Rk1JZjVDYjFOUnMzbmJzMDljME1uTGxGem8ycXB5N1lxbmNmeW1JRlViLUREaXpLNGd2cDJiLVprdnk3dWJIS3QxMkxIZ0kyeFppbUhlOTV6SkxtX1I1RXFCVkc3eG9fWXRuS0V6MVFHSllWcnVoeVZOOWFOekJaS282X3JrWlc2VklqTzM5a1hXR2c0TVJUeGMzaEdBQXBtZU5rSDFZaTNuMXhJZHRPRklhZXR3aUNYSQ?oc=5",
@@ -856,8 +849,6 @@
     "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPWXpLQVp3elZ1Zmx5VFBOcldzWDdORnpDWkhmaUhucWV5QVZoaWpISE1Jc3hhWHBfcF9sYV9jbDNLZTRqejlmQVJQbXBIODZBNVlrT20zMUxZZVVnQkVUdmQ4WEJkeVAzS3M2VFV2d2VWeUVXemZTSXB3c1VTMllTa3NaeGZXdmlwVDdabW1ZSUhMX01LUVg1aUxNVDBnSUJ5SlVQQ3JoVENieEVfNnpFRzdMTWpaLTVSLTVJbWtPNmwzblBNWVNXNQ?oc=5",
     "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1WdTRCZXVoczRfcVFfV1d6REN3NHlYd2daT0s1Y0hCa291bVRCX2pJdHlEM2l6am5RLVpVNkFZR0dpN0JxS3RPaWlXRFU1Y1pjdzg2SG9WbXA2d1I5Y1Z2eFZhTnlsUQ?oc=5",
     "https://news.google.com/rss/articles/CBMinwFBVV95cUxOSloySXBFRldtVjAxVG1ab2l2V2Vab1g2OGpwZkwxT1VnWE1GdjNUYjNnOGtVeWRNVEs5VXpCdWJiVVdxN2RKbVJmdTJhYm5pN0VZaWdTYjlnVFlnTjZsWk45X1Z6Q21PZmt3MUh0MXZhQWlBbDlGRHh5TUNBajlYZ1BtejZLSWlMd3cyUWhpemk0RGttVDU2ZzdRX2dJTWs?oc=5",
-    "https://news.google.com/rss/articles/CBMi8wFBVV95cUxOR2hpUFZZRjNad1JGZkZDVlpBS29HUHJwU3BFeTVDWmR6SjcxSlYwTU9GU2tzdUdXcVhLQXdXcWRLek90cGZNQ1haV3pURWxDRl9xM2lkM21MVnYyTE5aM25yZG94dVlpV1FtOEt4TENqQ0FGdWUyd2owX1hSQ3FQbHF6RGtlSVg5QXdEVzZRVzlZYk5jbWRWaDFzU1ZxLUFHc3lDYmZFVWpEcGt1MkJnUEEtUUMtU0xveVc1a19XY0tISUdYUzA5VkNDdzdNbzdTZVJlYUZ6WnpBdkp1dXJvcDJqbXd3b05HZlg4NXRiUmdOMGM?oc=5",
-    "https://news.google.com/rss/articles/CBMi7wFBVV95cUxOMW1KZUFwcEQ2YWJZVXVOZkFUckZ0cThPNU9PcmV1LXZ3UlYzVGhXRmg3R1ZQZGphajhPdkpYWHVYYmtSQ192Y0NUcGVISmRPYUFGUHdSV2E4c1VmMy1hU0piNGNjMUp4cU5FRzhJVUVEbnlPR05QQzNVbGw1TFRoRll1TmxaWnhSc0c4WWVGemxLMl8ya2tuQVFjeVUwcUFsVzNBSGdQWnVoQ1BreTRuU2NDZFFBM3QtcTBONzRGWXlFUU1iblk2UnFWaVd2ZHFSRk9VZmxNMVFTa0dkNk14eW43Z05VTjVfQTZvSXk4Zw?oc=5",
     "https://news.google.com/rss/articles/CBMifEFVX3lxTE05eGN4MjdqLUhBbVdIUDhXd2stUW9PWnRwekZrSDJyU19zVU9oU1VtNXlaNXVOaFJHY2pESXVscFNmVUlUTjBzNEtudnBTZVI2THZfSTVPSHVfVlRsUURWdlMyTDZEVWg2UjR3cUc2UzF0dWg5MWpzbFZkd1LSAYIBQVVfeXFMUGJLNmQzbHNlVElNWHotRmwxTUVKMnZjaVowUVIzRWlJMVZKN0lKRHZqQi1hbHIwSTFVVHVRQTEtWDZUdzlxZktWRENyb2o4d2p2TktIajRQbTZVdkJqcmVTQjZ6Zk4zd2Itd2JhWXJUT2sycUZfNXNQdzBuZmpaM3BjUQ?oc=5",
     "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNd3dJNmsxVGZpZ1hoTjdnVjlzMWd4SWdYOGE5RmpZM0xaOUlnemRkdlJrX2FIQWxYQ3pLUG16VmlRTl9QUmZDUUx0czNKckRkS3lHQ1hWNzd2d1ItTnhyaG9rOUpGM1NXYS1sUkgyU29aYVhiOTFWOE42cEQ1UFJBN2ZCTzI2YmhqNjBfTHkzMzc4cU0yNkUyUW44akFCN3FHWHlSU2l3RktHVmJ6RnNUbzJyN2pTcUxnLXczLU16dm0?oc=5",
     "https://news.google.com/rss/articles/CBMivwFBVV95cUxNWTEtajZLOXZ6SXJZekRpQVVGUDJKb0hrR2tPRG5TaEduS3BHdWFCbndEblNvMjVuQm0zM2JKYi0tZDFhRXN4Sm9NQXc0WVV5MFhRY0tfQUNTQzRQaklTNDZfdFVOZ0pFaENJZU9sa3lENGtaUmQ0SlRoMklpVXEtUk9SRTQ3eC1rZlR3YktGRWFGcWkyOElfSDBlME5kQXV4TC1jSnR0N2hlRVpCcXkwV21iSEdTbVIzREprc2kzbw?oc=5",
@@ -869,9 +860,7 @@
   ],
   "slow_domain_failure_threshold": 3,
   "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {
-    "greatermanchester-ca.gov.uk": 1
-  },
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -889,7 +878,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-08-22T23:05:22.356452Z",
+  "frontpage_generated_at": "2026-08-22T23:33:00.805646Z",
   "frontpage_article_count": 3,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -918,8 +907,8 @@
       "rochdale": 3
     },
     "selected_by_source": {
-      "facebook.com": 1,
       "rochdaleafc": 1,
+      "facebook.com": 1,
       "rochdale afc": 1
     },
     "pool_size": 3,
