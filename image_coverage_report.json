@@ -1,18 +1,25 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 7,
-    "cards_library": 0,
-    "cards_generated": 2,
+    "kept_cards": 6,
+    "cards_library": 1,
+    "cards_generated": 3,
     "skipped": 0
   },
   "items": [
     {
       "slug": "rochdale-afc-plays-first-home-game-in-efl-after-three-years",
-      "result": "kept-cards",
+      "result": "cards-library",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "rochdale_afc.jpg",
       "match_score": 15252
+    },
+    {
+      "slug": "rochdale-afc-defeated-3-0-by-newport-county-in-season-opener",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/d4eb9b996a1bd2e94b.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "rochdale-afc-submits-planning-application-for-bowlee-development",
@@ -29,13 +36,6 @@
       "match_score": 8252
     },
     {
-      "slug": "rock-classics-by-candlelight-rochdale",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-      "matched_filename": "rochdale-town-hall.jpg",
-      "match_score": 8378
-    },
-    {
       "slug": "ellie-sax-endless-summer-tour-2026",
       "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
@@ -46,6 +46,13 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "monsters-of-rock-halloween-special-2026",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
