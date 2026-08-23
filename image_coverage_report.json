@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 7,
+    "kept_cards": 8,
     "cards_library": 0,
-    "cards_generated": 2,
+    "cards_generated": 3,
     "skipped": 0
   },
   "items": [
@@ -11,6 +11,20 @@
       "slug": "two-women-arrested-after-three-year-old-boy-falls-from-window-in-rochdale",
       "result": "cards-generated",
       "image_url": "assets/img/cards/two-women-arrested-after-three-year-old-boy-falls-from-window-in-rochdale-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "an-evening-with-manchester-united-treble-winners-at-middleton-arena",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/middleton-arena.jpg",
+      "matched_filename": "middleton-arena.jpg",
+      "match_score": 15255
+    },
+    {
+      "slug": "rochdale-afc-women-secure-victory-against-accrington",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/65f0bc75553a5f6596.jpg",
       "matched_filename": "",
       "match_score": null
     },
