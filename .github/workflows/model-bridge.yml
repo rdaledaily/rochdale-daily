@@ -1,0 +1,105 @@
+name: OpenAI Claude review bridge
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Engineering/editorial question for OpenAI and Claude to review"
+        required: true
+        type: string
+      rounds:
+        description: "Review rounds (1-2)"
+        required: false
+        default: "2"
+        type: choice
+        options:
+          - "1"
+          - "2"
+  push:
+    branches: [main]
+    paths:
+      - 'scraper/model_bridge.py'
+      - 'scraper/test_model_bridge.py'
+      - '.github/workflows/model-bridge.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rd-model-bridge
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      BRIDGE_OPENAI_MODEL: gpt-5-mini
+      BRIDGE_ANTHROPIC_MODEL: claude-sonnet-4-5-20250929
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: python -m pip install --no-cache-dir -r requirements.txt
+
+      - name: Run bridge contract tests
+        run: PYTHONPATH=scraper python -m unittest scraper/test_model_bridge.py -v
+
+      - name: Verify required API secrets are present
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${OPENAI_API_KEY:-}" || { echo 'OPENAI_API_KEY is missing'; exit 1; }
+          test -n "${ANTHROPIC_API_KEY:-}" || { echo 'ANTHROPIC_API_KEY is missing'; exit 1; }
+
+      - name: Run bounded OpenAI Claude review
+        shell: bash
+        env:
+          MANUAL_TASK: ${{ inputs.task }}
+          MANUAL_ROUNDS: ${{ inputs.rounds }}
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            task="$MANUAL_TASK"
+            rounds="${MANUAL_ROUNDS:-2}"
+          else
+            task="Smoke-test the Rochdale Daily model bridge. Review whether this bridge is safely isolated from production publishing, uses bounded rounds, exposes no secrets, performs no autonomous repository writes, and produces a useful structured review artifact."
+            rounds="1"
+          fi
+          python scraper/model_bridge.py \
+            --task "$task" \
+            --rounds "$rounds" \
+            --output reports/model_bridge_review.json
+
+      - name: Validate review artifact
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('reports/model_bridge_review.json')
+          data = json.loads(p.read_text(encoding='utf-8'))
+          assert data['schema_version'] == 1
+          assert 1 <= data['rounds_completed'] <= 2
+          assert data['verdict'] in {'APPROVE', 'REVISE'}
+          assert data['turns']
+          assert data['safety']['autonomous_repo_write'] is False
+          print(f"Bridge completed: {data['verdict']} after {data['rounds_completed']} round(s)")
+          PY
+
+      - name: Upload review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-bridge-review-${{ github.run_id }}
+          path: reports/model_bridge_review.json
+          if-no-files-found: error
+          retention-days: 14
