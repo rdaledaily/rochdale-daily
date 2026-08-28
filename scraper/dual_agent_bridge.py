@@ -339,7 +339,7 @@ def call_openai(prompt: str, model: str, api_key: str) -> dict[str, Any]:
         payload={
             "model": model,
             "input": prompt,
-            "reasoning": {"effort": "minimal"},
+            "reasoning": {"effort": "low"},
             "text": {"verbosity": "low"},
         },
         headers={"Authorization": f"Bearer {api_key}"},
