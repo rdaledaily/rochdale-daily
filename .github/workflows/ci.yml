@@ -147,7 +147,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_live_story_updates.py
           PYTHONPATH=scraper python scraper/test_compact_live_updates.py
           PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
-          PYTHONPATH=scraper python -m unittest scraper/test_model_bridge.py -v
+          PYTHONPATH=scraper python scraper/test_model_bridge.py -v
           python scraper/test_workflow_architecture.py
       - name: Enforce cards-only canonical article images
         run: python scraper/enforce_cards_only_images.py --articles articles.json --check
