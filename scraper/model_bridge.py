@@ -49,10 +49,7 @@ def _extract_openai_text(response: Any) -> str:
 
 def ask_openai(prompt: str, model: str) -> str:
     client = OpenAI(api_key=_require_env("OPENAI_API_KEY"))
-    response = client.responses.create(
-        model=model,
-        input=prompt,
-    )
+    response = client.responses.create(model=model, input=prompt)
     text = _extract_openai_text(response)
     if not text:
         raise RuntimeError("OpenAI returned an empty response")
@@ -60,7 +57,6 @@ def ask_openai(prompt: str, model: str) -> str:
 
 
 def _anthropic_error_message(response: requests.Response) -> str:
-    """Return Anthropic's useful error message without echoing request headers/secrets."""
     try:
         payload = response.json()
     except ValueError:
@@ -76,13 +72,18 @@ def _anthropic_error_message(response: requests.Response) -> str:
 
 def ask_anthropic(prompt: str, model: str) -> str:
     key = _require_env("ANTHROPIC_API_KEY")
+    headers = {
+        "x-api-key": key,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+    }
+    workspace_id = os.getenv("ANTHROPIC_WORKSPACE_ID", "").strip()
+    if workspace_id:
+        headers["anthropic-workspace-id"] = workspace_id
+
     response = requests.post(
         "https://api.anthropic.com/v1/messages",
-        headers={
-            "x-api-key": key,
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json",
-        },
+        headers=headers,
         json={
             "model": model,
             "max_tokens": 2400,
@@ -92,9 +93,14 @@ def ask_anthropic(prompt: str, model: str) -> str:
         timeout=120,
     )
     if not response.ok:
-        raise RuntimeError(
-            f"Anthropic API returned HTTP {response.status_code}: {_anthropic_error_message(response)}"
-        )
+        error_text = _anthropic_error_message(response)
+        if "anthropic-workspace-id is required" in error_text.lower():
+            raise RuntimeError(
+                "Anthropic identity-linked API key requires ANTHROPIC_WORKSPACE_ID. "
+                "Add that workspace ID as a GitHub Actions secret and rerun the bridge."
+            )
+        raise RuntimeError(f"Anthropic API returned HTTP {response.status_code}: {error_text}")
+
     payload = response.json()
     parts = [
         block.get("text", "")
@@ -152,7 +158,6 @@ def run_bridge(task: str, openai_model: str, anthropic_model: str, max_rounds: i
     for round_no in range(1, max_rounds + 1):
         proposal = ask_openai(build_openai_prompt(task, critique), openai_model)
         turns.append(Turn(round_no, "proposer", openai_model, proposal))
-
         review = ask_anthropic(build_anthropic_prompt(task, proposal), anthropic_model)
         turns.append(Turn(round_no, "reviewer", anthropic_model, review))
         final_verdict = verdict(review)
