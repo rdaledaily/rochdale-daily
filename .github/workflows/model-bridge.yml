@@ -36,6 +36,7 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
       BRIDGE_OPENAI_MODEL: gpt-5-mini
       BRIDGE_ANTHROPIC_MODEL: claude-sonnet-5
     steps:
