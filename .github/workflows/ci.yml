@@ -91,6 +91,8 @@ jobs:
             scraper/enhance_event_structured_data.py \
             scraper/consolidate_duplicate_article_signals.py \
             scraper/check_scraper_health.py \
+            scraper/supply_watchdog.py \
+            scraper/source_yield_probe.py \
             scraper/run_newspaper_pipeline.py \
             scraper/run_newsroom_policy.py \
             scraper/councillor_photos.py \
@@ -112,6 +114,8 @@ jobs:
           PYTHONPATH=scraper python scraper/test_frontpage_freshness_guard.py
           PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
           PYTHONPATH=scraper python scraper/test_check_scraper_health.py
+          PYTHONPATH=scraper python scraper/test_supply_watchdog.py
+          PYTHONPATH=scraper python scraper/test_source_yield_probe.py
           python scraper/test_newspaper_freshness.py
           python scraper/test_locality.py
           python scraper/test_story_identity.py

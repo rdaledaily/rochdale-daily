@@ -52,9 +52,9 @@ jobs:
       USE_WIKIMEDIA_COMMONS: "true"
       USE_SOURCE_IMAGES: "true"
       CSS_SOURCE_PATH: assets/css/article-inline.css
-      FRONTPAGE_FRESH_HOURS: "14"
+      FRONTPAGE_FRESH_HOURS: "36"
       FRONTPAGE_MIN_ARTICLES: "12"
-      FRONTPAGE_TARGET_ARTICLES: "30"
+      FRONTPAGE_TARGET_ARTICLES: "45"
     steps:
       - uses: actions/checkout@v4
         with:

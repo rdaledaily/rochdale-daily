@@ -30,7 +30,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     env:
-      FRONTPAGE_FRESH_HOURS: '14'
+      FRONTPAGE_FRESH_HOURS: '36'
     steps:
       - name: Checkout latest main
         uses: actions/checkout@v4

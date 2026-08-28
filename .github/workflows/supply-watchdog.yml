@@ -1,0 +1,45 @@
+name: Rochdale Daily supply watchdog
+
+# Answers the question the newsroom health check cannot: is the borough's news
+# supply itself failing? Runs outside the site-writer lane, writes nothing to
+# the published site and can never block or delay an edition. When daily output
+# falls under the floor this job fails, and GitHub's own workflow-failure
+# notification carries the number to the editor.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Morning, afternoon and late edition checks (UTC).
+    - cron: "45 7,15,22 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rd-supply-watchdog
+  cancel-in-progress: true
+
+jobs:
+  supply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SUPPLY_DAILY_TARGET: "60"
+      SUPPLY_DAILY_FLOOR: "12"
+      SUPPLY_ROLLING_DAYS: "7"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Measure published news supply
+        run: python scraper/supply_watchdog.py
+      - name: Upload supply report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: supply-report
+          path: supply_report.json
+          if-no-files-found: warn
