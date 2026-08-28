@@ -18,6 +18,12 @@ Rochdale Daily runs from GitHub Actions and publishes current local stories into
     -> articles/*.html and sitemap.xml
 ```
 
+## Dual-agent collaboration bridge
+
+`.github/workflows/dual-agent-bridge.yml` runs a manual, comment-only bridge between OpenAI and Anthropic for a GitHub issue, pull request, or structured task payload. It never merges, never pushes repository contents, and always leaves the final decision with a human reviewer.
+
+See `docs/dual-agent-bridge.md` for the required `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` secrets, workflow inputs, and manual trigger steps.
+
 ## Crime, police and court stories
 
 Crime items do not use an approval queue. When a candidate passes the ordinary source, date, locality, duplicate and content checks, it is published automatically.
