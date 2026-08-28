@@ -1,0 +1,62 @@
+name: Rochdale Daily supply watchdog
+
+# Answers the question the newsroom health check cannot: is the borough's news
+# supply itself failing? Runs outside the site-writer lane, writes nothing to
+# the published site and can never block or delay an edition. When daily output
+# falls under the floor this job fails, and GitHub's own workflow-failure
+# notification carries the number to the editor.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Morning, afternoon and late edition checks (UTC).
+    - cron: "45 7,15,22 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-supply-watchdog
+  cancel-in-progress: true
+
+jobs:
+  supply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SUPPLY_DAILY_TARGET: "60"
+      SUPPLY_DAILY_FLOOR: "12"
+      SUPPLY_ROLLING_DAYS: "7"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Measure published news supply
+        id: measure
+        continue-on-error: true
+        run: python scraper/supply_watchdog.py
+      - name: Commit supply report
+        if: always()
+        run: |
+          mkdir -p reports
+          if [ -f supply_report.json ]; then mv supply_report.json reports/supply_report.json; fi
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add reports/supply_report.json
+          if git diff --cached --quiet; then echo 'no change'; exit 0; fi
+          git commit -m "Record borough news supply measurement"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 7))
+          done
+          echo "::warning::supply report could not push after five attempts"
+      - name: Fail the run when supply is below the floor
+        if: steps.measure.outcome == 'failure'
+        run: |
+          echo "::error::borough news supply is below the configured floor - see reports/supply_report.json"
+          exit 1

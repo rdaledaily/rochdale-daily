@@ -1,0 +1,100 @@
+name: Rochdale Daily run ledger
+
+# Actions run history, written into the repository as data.
+#
+# A newsroom run that fails before its commit step leaves no trace in main: the
+# status, health and article files are only written when the run reaches the
+# publish step. So a lane that is failing two runs in three looks, from the
+# repository alone, exactly like a lane that is running quietly. This ledger
+# records every run's conclusion so the failures are visible and countable.
+#
+# It touches no published page and holds no site-writer lock.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 */3 * * *"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: rd-run-ledger
+  cancel-in-progress: true
+
+jobs:
+  ledger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Collect run history
+        run: |
+          mkdir -p reports
+          : > reports/run_ledger.ndjson
+          for wf in scrape-fast.yml scrape-kick.yml publish.yml ci.yml supply-watchdog.yml source-yield-probe.yml; do
+            gh run list --workflow "$wf" --limit 60 \
+              --json databaseId,name,workflowName,status,conclusion,event,createdAt,updatedAt,displayTitle \
+              --jq ".[] | . + {workflow: \"$wf\"}" >> reports/run_ledger.ndjson || true
+          done
+      - name: Summarise
+        run: |
+          python - <<'PY'
+          import json, collections, pathlib
+          rows = []
+          for line in pathlib.Path("reports/run_ledger.ndjson").read_text().splitlines():
+              line = line.strip()
+              if not line:
+                  continue
+              try:
+                  rows.append(json.loads(line))
+              except json.JSONDecodeError:
+                  continue
+          tally = collections.Counter(
+              (row.get("workflow"), row.get("conclusion") or row.get("status") or "unknown")
+              for row in rows
+          )
+          summary = collections.defaultdict(dict)
+          for (workflow, outcome), count in tally.items():
+              summary[workflow][outcome] = count
+          payload = {
+              "collected_at": __import__("datetime").datetime.now(
+                  __import__("datetime").timezone.utc
+              ).isoformat().replace("+00:00", "Z"),
+              "runs_recorded": len(rows),
+              "by_workflow": dict(summary),
+              "runs": sorted(rows, key=lambda row: row.get("createdAt") or "", reverse=True),
+          }
+          pathlib.Path("reports/run_ledger.json").write_text(
+              json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+          )
+          lines = ["## Run outcomes", "", "| Workflow | Outcome | Runs |", "| --- | --- | ---: |"]
+          for workflow in sorted(summary):
+              for outcome in sorted(summary[workflow]):
+                  lines.append(f"| {workflow} | {outcome} | {summary[workflow][outcome]} |")
+          print("\n".join(lines))
+          import os
+          path = os.getenv("GITHUB_STEP_SUMMARY")
+          if path:
+              with open(path, "a", encoding="utf-8") as handle:
+                  handle.write("\n".join(lines) + "\n")
+          PY
+          rm -f reports/run_ledger.ndjson
+      - name: Commit ledger
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add reports/run_ledger.json
+          if git diff --cached --quiet; then echo 'no change'; exit 0; fi
+          git commit -m "Record newsroom run outcomes"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 7))
+          done
+          echo "::warning::run ledger could not push after five attempts"

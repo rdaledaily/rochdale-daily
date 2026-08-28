@@ -1,0 +1,124 @@
+name: Deploy Rochdale Daily to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - manual_articles.json
+      - 'manual_articles.d/**'
+      - 'pending_manual_*.json'
+      - 'reports/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Several workflows can push to main seconds apart. A manual-article source
+# commit is intentionally ignored here: publish.yml must first turn it into the
+# real articles.json/frontpage/article-page output. This prevents an incomplete
+# intermediate commit being deployed. For all deployable commits, newest main
+# always wins so a stale queued Pages build cannot replace a newer one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    env:
+      FRONTPAGE_FRESH_HOURS: '36'
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Refresh to latest main before upload
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+          echo "Deploying commit $(git rev-parse HEAD)"
+
+      # Generated-site maintenance workflows can legitimately rewrite frontpage
+      # artifacts. Reassert the same newsroom freshness policy at the final
+      # delivery boundary so stale fallback rows can never be uploaded to Pages
+      # merely because a maintenance rebuild raced a news run.
+      - name: Reassert final homepage freshness before upload
+        run: |
+          python3 scraper/enforce_frontpage_freshness.py
+          python3 scraper/enforce_live_homepage_window.py
+          python3 scraper/update_homepage_static_latest.py
+          python3 scraper/update_homepage_weekly_news.py
+          python3 scraper/sync_homepage_top_story.py
+
+      # Readers should be able to see when an article was published without
+      # inspecting source or structured metadata. Automated polling timestamps
+      # are deliberately excluded; only verified live/editorial updates appear.
+      - name: Add visible article publication timing
+        run: python3 scraper/add_article_time_metadata.py
+
+      # Meaningful story images should not be announced as decorative to screen
+      # readers. Add the visible story headline as a conservative alt fallback
+      # for generated article heroes and homepage news cards, while preserving
+      # any human-written alt text already present.
+      - name: Add descriptive alt text to news images
+        run: python3 scraper/enhance_image_alt_text.py
+
+      # What's On pages are article-shaped in the static generator, but the
+      # underlying records contain real event dates and locations. Add a second
+      # conservative Event JSON-LD block only where Google's required event
+      # properties are present; never invent organisers, prices or performers.
+      - name: Add Event structured data to What's On pages
+        run: python3 scraper/enhance_event_structured_data.py
+
+      # robots.txt advertises image-sitemap.xml. Archive refreshes may defer
+      # while a newsroom writer is active, so generate the sitemap again at the
+      # final delivery boundary. This prevents deploying a robots-advertised 404
+      # without adding another writer or modifying repository state.
+      - name: Generate image sitemap for deployed snapshot
+        run: python3 scraper/generate_image_sitemap.py
+
+      # Polling/scrape timestamps are operational metadata, not proof that an
+      # article changed. Repair sitemap lastmod immediately before upload so
+      # crawlers only receive publication/editorial/live-update timestamps.
+      - name: Audit sitemap modification dates
+        run: python3 scraper/repair_sitemap_lastmod.py
+
+      # Repeated automated rewrites can occasionally create multiple slugs for
+      # the same underlying development. Keep every old URL accessible, but
+      # consolidate search authority onto the oldest/editorial canonical page
+      # and remove conservative near-duplicates from the deployed sitemap.
+      - name: Consolidate duplicate article SEO signals
+        run: python3 scraper/consolidate_duplicate_article_signals.py
+
+      # Keep feed autodiscovery and the machine-readable Latest-news ItemList
+      # aligned with the static links that crawlers can actually see, even if a
+      # scheduled archive refresh was deferred by an active newsroom writer.
+      - name: Refresh homepage discovery metadata
+        run: python3 scraper/homepage_discovery_metadata.py
+
+      # Article pages are generated with the full shared stylesheet embedded in
+      # each HTML file. Replace only exact copies of assets/css/site.css with the
+      # cacheable shared resource in the deployment snapshot. This substantially
+      # reduces repeat-navigation transfer without changing rendered styling or
+      # mutating repository history; legacy/custom inline styles are untouched.
+      - name: Externalise shared article CSS
+        run: python3 scraper/externalise_article_css.py
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
