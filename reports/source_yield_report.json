@@ -1,0 +1,153 @@
+{
+  "probed_at": "2026-08-28T19:57:25.235770Z",
+  "recent_window_days": 14,
+  "sources_probed": 14,
+  "measured_items_per_day": 2.43,
+  "note": "measured_items_per_day counts only sources this probe could read and date. Sources marked needs-free-key or reachability contribute nothing to that number and must be measured by their own collector once built.",
+  "results": [
+    {
+      "name": "Environment Agency flood warnings",
+      "class": "public safety",
+      "licence": "Open Government Licence",
+      "story_shape": "live flood alerts on the Roch, Beal and Irk",
+      "status": "ok",
+      "items": 34,
+      "recent_items": 34,
+      "per_day": 2.43
+    },
+    {
+      "name": "Police street-level crime (data.police.uk)",
+      "class": "primary record",
+      "licence": "Open Government Licence",
+      "story_shape": "ward crime counts, month-on-month movement, hotspot streets",
+      "status": "empty",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "The Gazette official public record",
+      "class": "primary record",
+      "licence": "Open Government Licence",
+      "story_shape": "insolvencies, company strike-offs, statutory and planning notices",
+      "status": "http-500",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "UK Parliament petitions (constituency)",
+      "class": "civic",
+      "licence": "Open Parliament Licence",
+      "story_shape": "petitions signed locally, with constituency signature counts",
+      "status": "ok",
+      "items": 25,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "UK Parliament written questions and votes",
+      "class": "civic",
+      "licence": "Open Parliament Licence",
+      "story_shape": "what the borough's MPs asked, said and voted for this week",
+      "status": "robots-denied",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "Rochdale planning public access",
+      "class": "primary record",
+      "licence": "council portal (robots-governed)",
+      "story_shape": "applications lodged and decided, weekly, with addresses",
+      "status": "robots-denied",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "Rochdale council democracy (ModernGov)",
+      "class": "civic",
+      "licence": "council portal (robots-governed)",
+      "story_shape": "committee decisions, attendance, voting records by ward",
+      "status": "robots-denied",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "Greater Manchester Fire and Rescue incidents",
+      "class": "public safety",
+      "licence": "publisher feed",
+      "story_shape": "incidents and safety appeals in the borough",
+      "status": "http-404",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "Northern Care Alliance NHS news",
+      "class": "public services",
+      "licence": "publisher feed",
+      "story_shape": "Rochdale Infirmary services, waits, recruitment, closures",
+      "status": "http-404",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "Reddit r/rochdale",
+      "class": "social listening",
+      "licence": "public JSON endpoint, rate-limited",
+      "story_shape": "resident-reported incidents and complaints, as leads only",
+      "status": "robots-denied",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0
+    },
+    {
+      "name": "Bluesky local post search",
+      "class": "social listening",
+      "licence": "public API, app password",
+      "story_shape": "local accounts and keyword sweeps, as leads only",
+      "status": "needs-free-key",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0,
+      "note": "free: create an app password on bsky.app and store it as a repository secret"
+    },
+    {
+      "name": "Companies House register",
+      "class": "primary record",
+      "licence": "free API key",
+      "story_shape": "new businesses, insolvencies and dissolutions by postcode",
+      "status": "needs-free-key",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0,
+      "note": "free: register at developer.company-information.service.gov.uk"
+    },
+    {
+      "name": "Charity Commission register",
+      "class": "primary record",
+      "licence": "free API key",
+      "story_shape": "local charity accounts, new registrations, closures",
+      "status": "needs-free-key",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0,
+      "note": "free: register at api-portal.charitycommission.gov.uk"
+    },
+    {
+      "name": "National Highways network updates",
+      "class": "transport",
+      "licence": "free API key (DATEX II)",
+      "story_shape": "M62/M60 closures and incidents affecting borough journeys",
+      "status": "needs-free-key",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0,
+      "note": "free: register at api.data.nationalhighways.co.uk"
+    }
+  ]
+}
