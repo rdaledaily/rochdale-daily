@@ -318,6 +318,30 @@ def main() -> None:
             f"{MAX_FRESH_AGE_HOURS}-hour freshness window"
         )
 
+    # Every floor above is deliberately clamped to achievable supply, so that a
+    # quiet borough never forces junk or stale filler onto the page. That clamp
+    # also means a collection famine renders a "healthy" three-story edition
+    # without a word of complaint. These warnings state the unclamped shortfall
+    # so the run log is honest, while leaving publication itself unblocked --
+    # the supply watchdog is what fails and notifies.
+    warnings: list[str] = []
+    if FRONTPAGE_MIN_ARTICLES > 0 and len(valid_articles) < FRONTPAGE_MIN_ARTICLES:
+        warnings.append(
+            f"homepage rendered {len(valid_articles)} stories against a configured minimum of "
+            f"{FRONTPAGE_MIN_ARTICLES}; only {len(eligible_fresh_feed)} eligible stories exist inside "
+            f"the {MAX_FRESH_AGE_HOURS}-hour window, so this is a supply shortfall, not a render fault"
+        )
+    if MIN_LIVE_STORIES > 0 and live_articles < MIN_LIVE_STORIES:
+        warnings.append(
+            f"this run published {live_articles} live stories against a configured minimum of "
+            f"{MIN_LIVE_STORIES}"
+        )
+    if MIN_FRESH_FRONTPAGE_STORIES > 0 and len(fresh) < MIN_FRESH_FRONTPAGE_STORIES:
+        warnings.append(
+            f"homepage carries {len(fresh)} stories fresh within {MAX_FRESH_AGE_HOURS} hours "
+            f"against a configured minimum of {MIN_FRESH_FRONTPAGE_STORIES}"
+        )
+
     payload = {
         "checked_at": now.isoformat().replace("+00:00", "Z"),
         "raw_candidates": raw_candidates,
@@ -349,11 +373,16 @@ def main() -> None:
         "lead_freshness_at": lead_freshness.isoformat().replace("+00:00", "Z") if lead_freshness else None,
         "collector_errors": collector_errors,
         "zero_new_after_editorial_rejection": zero_new_after_editorial_rejection,
-        "status": "failed" if failures else "healthy",
+        "frontpage_minimum_met": len(valid_articles) >= FRONTPAGE_MIN_ARTICLES,
+        "supply_shortfall": bool(warnings),
+        "warnings": warnings,
+        "status": "failed" if failures else ("short" if warnings else "healthy"),
         "failures": failures,
     }
     HEALTH_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(payload, ensure_ascii=False, indent=2))
+    for warning in warnings:
+        print(f"::warning title=Rochdale Daily supply shortfall::{warning}")
 
     if failures:
         raise SystemExit("; ".join(failures))
