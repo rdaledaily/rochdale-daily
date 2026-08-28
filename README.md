@@ -18,6 +18,44 @@ Rochdale Daily runs from GitHub Actions and publishes current local stories into
     -> articles/*.html and sitemap.xml
 ```
 
+## Dual-agent bridge
+
+`Rochdale Daily dual-agent bridge` is a comment-only review workflow for OpenAI and Anthropic. It reads a structured task from an issue, PR, or manual workflow input, asks one model to propose improvements, asks the other to critique them, then uploads a report artifact and posts the structured consensus back to GitHub.
+
+Guardrails:
+
+- No browser automation.
+- No hardcoded secrets.
+- `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` are read only from GitHub Actions secrets.
+- Workflow permissions are limited to `contents: read`, `issues: write`, and `pull-requests: write`.
+- The bridge does not commit, push, merge, or dispatch other workflows.
+- Review loops stop after a hard maximum of three rounds and default to one round for the smallest safe test.
+
+How to trigger it manually:
+
+1. Add GitHub Actions secrets named `OPENAI_API_KEY` and `ANTHROPIC_API_KEY`.
+2. Open the Actions tab and run `Rochdale Daily dual-agent bridge`.
+3. Either pass `issue_number` or `pr_number`, or supply a `task_json` object such as:
+
+```json
+{
+  "task": "Improve fresh-story supply for Rochdale Daily without weakening the 14-hour newest-story requirement.",
+  "constraints": [
+    "Do not weaken the 14-hour newest-story requirement.",
+    "Do not propose autonomous publishing, merging, or pushing."
+  ],
+  "acceptance_criteria": [
+    "Prefer measurable source-discovery and workflow improvements."
+  ]
+}
+```
+
+How to trigger it from an issue:
+
+1. Create an issue whose title starts with `[bridge]`, or include `<!-- dual-agent-bridge -->` in the body.
+2. Optionally embed the structured task inside a fenced `json` block.
+3. The workflow will post its review back to the same issue and upload a `dual-agent-bridge-report-*` artifact on the run page.
+
 ## Crime, police and court stories
 
 Crime items do not use an approval queue. When a candidate passes the ordinary source, date, locality, duplicate and content checks, it is published automatically.
