@@ -37,7 +37,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       BRIDGE_OPENAI_MODEL: gpt-5-mini
-      BRIDGE_ANTHROPIC_MODEL: claude-sonnet-4-5-20250929
+      BRIDGE_ANTHROPIC_MODEL: claude-sonnet-5
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
