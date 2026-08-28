@@ -22,23 +22,18 @@ def main() -> int:
 
     expected_source_lanes = {
         "council-minutes.yml": "rd-council-source",
-        "democracy.yml": "rd-democracy-source",
         "publish-pending-manual.yml": "rd-manual-queue",
-        "preserve-article-archive.yml": "rd-archive-ledger",
         "scrub-personal-name.yml": "rd-privacy-scrub",
-        "article-image-integrity.yml": "rd-image-maintenance",
-        "clean-public-article-content.yml": "rd-content-hygiene",
     }
     for name, group in expected_source_lanes.items():
         assert f"group: {group}" in text(name), name
 
-    # Council/democracy are source-data producers; only the canonical publisher
+    # Council minutes is a source-data producer; only the canonical publisher
     # may own public index/ward regeneration.
-    for name in ("council-minutes.yml", "democracy.yml"):
-        body = text(name)
-        assert "generate_ward_pages.py" not in body, name
-        assert "index.html" not in body, name
-        assert "gh workflow run publish.yml" in body, name
+    council = text("council-minutes.yml")
+    assert "generate_ward_pages.py" not in council
+    assert "index.html" not in council
+    assert "gh workflow run publish.yml" in council
 
     # Emergency removals have a separate priority lane, never merge stale pages,
     # and always deploy latest main even when the story was already blocklisted.
@@ -49,10 +44,25 @@ def main() -> int:
     deploy_step = takedown.split("- name: Deploy takedown immediately", 1)[1]
     assert "if: steps.commit" not in deploy_step
 
-    # The old empty polling/scheduled maintenance writers are gone.
+    # Manual queue has no polling schedule. One-off diagnostics and repair
+    # workflows removed during the Actions cleanup must stay removed rather than
+    # creeping back in as permanent workflow entries.
     assert "schedule:" not in text("publish-pending-manual.yml")
-    assert "schedule:" not in text("article-image-integrity.yml")
-    assert "schedule:" not in text("archive-refresh.yml")
+    retired = {
+        "archive-refresh.yml",
+        "article-image-integrity.yml",
+        "clean-public-article-content.yml",
+        "democracy.yml",
+        "measure-street-reports.yml",
+        "moderngov-diagnostic.yml",
+        "preserve-article-archive.yml",
+        "restyle-archive.yml",
+        "run-ledger.yml",
+        "strip-title-emojis.yml",
+        "ward-candidates.yml",
+    }
+    for name in retired:
+        assert not (WORKFLOWS / name).exists(), name
 
     # Production permits source photos only through the runtime allowlist policy,
     # rather than globally disabling source-image discovery.
