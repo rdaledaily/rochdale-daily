@@ -2,13 +2,6 @@ name: Preserve permanent article archive
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'articles.json'
-      - 'story_blocklist.json'
-      - 'scraper/preserve_article_archive.py'
-      - '.github/workflows/preserve-article-archive.yml'
 
 permissions:
   contents: write
@@ -19,7 +12,6 @@ concurrency:
 
 jobs:
   preserve:
-    if: github.event_name != 'push' || !contains(github.event.head_commit.message, 'Preserve permanent article archive')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -27,72 +19,18 @@ jobs:
         with:
           persist-credentials: true
           fetch-depth: 0
-
-      - name: Start from latest main
-        run: |
-          git fetch origin main
-          git reset --hard origin/main
-
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
-      - name: Recover and merge permanent archive ledger
+          python-version: "3.11"
+      - name: Preserve permanent article archive
         run: |
-          if [ -f articles/archive.json ]; then
-            python scraper/preserve_article_archive.py
-          else
-            echo 'No permanent ledger yet: recovering published stories from Git history.'
-            python scraper/preserve_article_archive.py --recover-history
-          fi
-
-      - name: Verify archive contains the current published news set
+          python scraper/preserve_article_archive.py
+      - name: Commit archive ledger if changed
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          current = json.loads(Path('articles.json').read_text(encoding='utf-8'))
-          archive_payload = json.loads(Path('articles/archive.json').read_text(encoding='utf-8'))
-          archive = archive_payload.get('articles', []) if isinstance(archive_payload, dict) else []
-          current_news = [
-              a for a in current
-              if isinstance(a, dict)
-              and str(a.get('status') or 'published').lower() == 'published'
-              and str(a.get('category') or '').lower() != 'events'
-              and str(a.get('source_kind') or '').lower() != 'event'
-          ]
-          if len(archive) < len(current_news):
-              raise SystemExit(
-                  f'Permanent archive has {len(archive)} records but current published news has {len(current_news)}'
-              )
-          print(f'Permanent archive verified: {len(archive)} records; current news {len(current_news)}.')
-          PY
-
-      - name: Commit archive data only
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add articles/archive.json articles.json story_blocklist.json
-          if git diff --cached --quiet; then
-            echo 'Archive already complete.'
-            exit 0
-          fi
-          git commit -m 'Preserve permanent article archive'
-          if git push origin HEAD:main; then exit 0; fi
-
-          for attempt in 1 2 3; do
-            git fetch origin main
-            git reset --hard origin/main
-            git clean -fd
-            if [ -f articles/archive.json ]; then
-              python scraper/preserve_article_archive.py
-            else
-              python scraper/preserve_article_archive.py --recover-history
-            fi
-            git add articles/archive.json articles.json story_blocklist.json
-            if git diff --cached --quiet; then exit 0; fi
-            git commit -m 'Preserve permanent article archive'
-            if git push origin HEAD:main; then exit 0; fi
-          done
-          exit 1
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add .
+          if git diff --cached --quiet; then echo 'no change'; exit 0; fi
+          git commit -m "Preserve permanent article archive"
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
