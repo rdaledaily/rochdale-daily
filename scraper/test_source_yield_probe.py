@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 from source_yield_probe import (
     SOURCES,
     count_recent,
+    discover_feeds,
     json_dates,
     parse_dt,
     per_day,
@@ -63,6 +64,32 @@ def test_recent_window_excludes_older_items() -> None:
 def test_per_day_is_the_measured_rate() -> None:
     assert per_day(28, 14) == 2.0
     assert per_day(0, 14) == 0.0
+
+
+def test_nested_date_keys_are_followed() -> None:
+    """Reddit nests the stamp under data, Parliament under value."""
+    body = json.dumps({"data": {"children": [{"data": {"created_utc": 1787913000.0}}]}})
+    dates = json_dates(body, list_path=["data", "children"], date_keys=["data.created_utc"])
+    assert len(dates) == 1 and dates[0] is not None
+
+
+def test_declared_feed_links_are_discovered() -> None:
+    html = (
+        '<html><head><link rel="alternate" type="application/rss+xml" '
+        'href="/news/feed.xml"></head></html>'
+    )
+    assert discover_feeds(html, "https://example.gov.uk/news/") == [
+        "https://example.gov.uk/news/feed.xml"
+    ]
+
+
+def test_reversed_link_attribute_order_is_discovered() -> None:
+    html = '<link href="https://example.gov.uk/rss" type="application/atom+xml">'
+    assert discover_feeds(html, "https://example.gov.uk/") == ["https://example.gov.uk/rss"]
+
+
+def test_pages_without_feeds_discover_nothing() -> None:
+    assert discover_feeds("<html><body>no feed here</body></html>", "https://x.test/") == []
 
 
 def test_every_source_declares_its_licence_and_story_shape() -> None:
