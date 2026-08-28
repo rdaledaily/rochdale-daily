@@ -28,6 +28,7 @@ def main() -> int:
         "scrub-personal-name.yml": "rd-privacy-scrub",
         "article-image-integrity.yml": "rd-image-maintenance",
         "clean-public-article-content.yml": "rd-content-hygiene",
+        "dual-agent-bridge.yml": "rd-dual-agent-bridge",
     }
     for name, group in expected_source_lanes.items():
         assert f"group: {group}" in text(name), name
@@ -60,6 +61,18 @@ def main() -> int:
         assert 'USE_SOURCE_IMAGES: "true"' in text(name), name
     for name in ("scrape-fast.yml", "scrape-kick.yml"):
         assert "python scraper/run_newsroom_policy.py" in text(name), name
+
+    # The dual-agent bridge is deliberately comment only and cannot mutate the
+    # repository or bypass normal review lanes.
+    bridge = text("dual-agent-bridge.yml")
+    assert "contents: read" in bridge
+    assert "issues: write" in bridge
+    assert "pull-requests: read" in bridge
+    assert "persist-credentials: false" in bridge
+    assert "contents: write" not in bridge
+    assert "pull-requests: write" not in bridge
+    assert "git push" not in bridge
+    assert "gh pr merge" not in bridge
 
     print("Workflow architecture checks passed.")
     return 0
