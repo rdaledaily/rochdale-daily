@@ -1,0 +1,97 @@
+name: Dual-agent collaboration bridge
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_type:
+        description: "issue, pull_request, or task"
+        required: true
+        type: choice
+        options:
+          - issue
+          - pull_request
+          - task
+        default: issue
+      target_number:
+        description: "Issue or pull request number when using a GitHub target"
+        required: false
+        type: string
+      task_json:
+        description: "Structured task JSON when target_type=task"
+        required: false
+        type: string
+      lead_provider:
+        description: "Which model goes first"
+        required: true
+        type: choice
+        options:
+          - openai
+          - anthropic
+        default: openai
+      max_rounds:
+        description: "Maximum proposal/critique rounds, from 1 to 3"
+        required: true
+        default: "2"
+        type: string
+      openai_model:
+        description: "OpenAI model id"
+        required: true
+        default: "gpt-5"
+        type: string
+      anthropic_model:
+        description: "Anthropic model id"
+        required: true
+        default: "claude-sonnet-4-20250514"
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: rd-dual-agent-bridge-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install bridge dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir "openai>=1.40,<3"
+      - name: Run dual-agent bridge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DUAL_AGENT_TASK_JSON: ${{ inputs.task_json }}
+        run: |
+          python scraper/dual_agent_bridge.py \
+            --repository "${{ github.repository }}" \
+            --target-type "${{ inputs.target_type }}" \
+            --target-number "${{ inputs.target_number }}" \
+            --task-json-env-var DUAL_AGENT_TASK_JSON \
+            --lead-provider "${{ inputs.lead_provider }}" \
+            --openai-model "${{ inputs.openai_model }}" \
+            --anthropic-model "${{ inputs.anthropic_model }}" \
+            --max-rounds "${{ inputs.max_rounds }}" \
+            --artifact-path dual-agent-bridge-artifact.json \
+            --comment-path dual-agent-bridge-comment.md
+      - name: Upload bridge artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dual-agent-bridge
+          path: |
+            dual-agent-bridge-artifact.json
+            dual-agent-bridge-comment.md
