@@ -14,7 +14,7 @@ from openai import OpenAI
 
 
 DEFAULT_OPENAI_MODEL = os.getenv("BRIDGE_OPENAI_MODEL", "gpt-5-mini")
-DEFAULT_ANTHROPIC_MODEL = os.getenv("BRIDGE_ANTHROPIC_MODEL", "claude-sonnet-4-20250514")
+DEFAULT_ANTHROPIC_MODEL = os.getenv("BRIDGE_ANTHROPIC_MODEL", "claude-sonnet-5")
 MAX_ROUNDS = 2
 
 
@@ -59,6 +59,21 @@ def ask_openai(prompt: str, model: str) -> str:
     return text
 
 
+def _anthropic_error_message(response: requests.Response) -> str:
+    """Return Anthropic's useful error message without echoing request headers/secrets."""
+    try:
+        payload = response.json()
+    except ValueError:
+        return (response.text or response.reason or "unknown error").strip()[:1000]
+    error = payload.get("error") if isinstance(payload, dict) else None
+    if isinstance(error, dict):
+        message = str(error.get("message") or "").strip()
+        error_type = str(error.get("type") or "").strip()
+        if message:
+            return f"{error_type}: {message}" if error_type else message
+    return json.dumps(payload, ensure_ascii=False)[:1000]
+
+
 def ask_anthropic(prompt: str, model: str) -> str:
     key = _require_env("ANTHROPIC_API_KEY")
     response = requests.post(
@@ -70,18 +85,21 @@ def ask_anthropic(prompt: str, model: str) -> str:
         },
         json={
             "model": model,
-            "max_tokens": 1800,
-            "temperature": 0.2,
+            "max_tokens": 2400,
+            "thinking": {"type": "disabled"},
             "messages": [{"role": "user", "content": prompt}],
         },
         timeout=120,
     )
-    response.raise_for_status()
+    if not response.ok:
+        raise RuntimeError(
+            f"Anthropic API returned HTTP {response.status_code}: {_anthropic_error_message(response)}"
+        )
     payload = response.json()
     parts = [
         block.get("text", "")
         for block in payload.get("content", [])
-        if block.get("type") == "text"
+        if isinstance(block, dict) and block.get("type") == "text"
     ]
     text = "\n".join(p for p in parts if p).strip()
     if not text:
