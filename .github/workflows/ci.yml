@@ -94,6 +94,7 @@ jobs:
             scraper/supply_watchdog.py \
             scraper/source_yield_probe.py \
             scraper/model_bridge.py \
+            scraper/dual_agent_bridge.py \
             scraper/run_newspaper_pipeline.py \
             scraper/run_newsroom_policy.py \
             scraper/councillor_photos.py \
@@ -132,6 +133,7 @@ jobs:
           python scraper/test_resolve_google_news_sources.py
           PYTHONPATH=scraper python scraper/test_google_news_resolver.py
           PYTHONPATH=scraper python scraper/test_run_newsroom_policy.py
+          PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
           python scraper/test_ensure_article_images.py
           python scraper/test_councillor_photos.py
           PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
