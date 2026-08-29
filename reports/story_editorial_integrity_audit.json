@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 141,
-  "published_count": 141,
+  "article_count": 143,
+  "published_count": 143,
   "category_change_count": 20,
-  "image_change_count": 21,
+  "image_change_count": 22,
   "category_changes": [
     {
       "slug": "restoration-of-historic-packer-spout-steps-completed-in-rochdale-town-centre",
@@ -22,7 +22,7 @@
     },
     {
       "slug": "daniel-murphy-resigns-as-leader-of-rochdale-youth-council",
-      "title": "Daniel Murphy Resigns as Leader of Rochdale Youth Council",
+      "title": "Rochdale Youth Council Leader Daniel Murphy Resigns Immediately",
       "from": "health",
       "to": "community",
       "reason": "human-reviewed archive classification override"
@@ -149,8 +149,20 @@
   ],
   "image_changes": [
     {
+      "slug": "police-investigate-alleged-rape-of-young-man-in-rochdale",
+      "title": "Police Investigate Alleged Rape of Young Man in Rochdale",
+      "category": "crime",
+      "reason": "sensitive story image lacks explicit source/editorial provenance",
+      "before": {
+        "image_url": "assets/img/cards/police.jpg",
+        "img": "assets/img/cards/police.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/police-investigate-alleged-rape-of-young-man-in-rochdale-generated-card.jpg"
+    },
+    {
       "slug": "greater-manchester-police-to-host-cyber-crime-awareness-events-in-rochdale",
-      "title": "Greater Manchester Police to Host Cyber Crime Awareness Events in Rochdale",
+      "title": "Greater Manchester Police Launch Cyber Crime Awareness Events in Rochdale",
       "category": "crime",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -159,6 +171,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/greater-manchester-police-to-host-cyber-crime-awareness-events-in-rochdale-generated-card.jpg"
+    },
+    {
+      "slug": "colchester-united-defeats-rochdale-afc-1-0-in-league-two-clash",
+      "title": "Colchester United Defeats Rochdale AFC 1-0 in League Two Clash",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/colchester-united-defeats-rochdale-afc-1-0-in-league-two-clash-generated-card.jpg"
     },
     {
       "slug": "pakistan-refuses-to-repatriate-rochdale-grooming-gang-leader",
@@ -171,18 +195,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/pakistan-refuses-to-repatriate-rochdale-grooming-gang-leader-generated-card.jpg"
-    },
-    {
-      "slug": "daniel-murphy-resigns-as-leader-of-rochdale-youth-council",
-      "title": "Daniel Murphy Resigns as Leader of Rochdale Youth Council",
-      "category": "community",
-      "reason": "sensitive story image lacks explicit source/editorial provenance",
-      "before": {
-        "image_url": "assets/img/cards/daniel-murphy-resigns-as-leader-of-rochdale-youth-council.jpg",
-        "img": "assets/img/cards/daniel-murphy-resigns-as-leader-of-rochdale-youth-council.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/daniel-murphy-resigns-as-leader-of-rochdale-youth-council-generated-card.jpg"
     },
     {
       "slug": "wardle-resident-contributes-to-new-poetry-trail-focusing-on-recovery",
