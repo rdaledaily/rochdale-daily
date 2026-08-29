@@ -97,6 +97,22 @@ def weekly_eligible(row: object, now: datetime) -> bool:
     return published.year > 1970 and published <= now
 
 
+def article_page_exists(slug: object) -> bool:
+    """True when the story has a page a reader could actually open.
+
+    The homepage writes real links into static HTML, so a record whose page is
+    missing becomes a 404 in the reader's face and in the crawler's index. A
+    headline rewrite that changes the slug is enough to cause it, which is how
+    a dead GCSE link ended up in the weekly block on 29 August.
+    """
+    name = str(slug or "").strip().strip("/")
+    if not name:
+        return False
+    return (ROOT / "articles" / f"{name}.html").is_file() or (
+        ROOT / "articles" / name / "index.html"
+    ).is_file()
+
+
 def choose_weekly(rows: list[object], current_slugs: set[str], now: datetime | None = None) -> list[dict]:
     now = now or datetime.now(timezone.utc)
     floor = now - timedelta(days=MAX_AGE_DAYS)
@@ -194,7 +210,8 @@ def main() -> int:
     now = datetime.now(timezone.utc)
     current_rows = frontpage_rows()
     current_count = current_edition_story_count(current_rows, now)
-    chosen = choose_weekly(payload, {clean(row.get('slug')) for row in current_rows}, now=now)
+    publishable = [row for row in payload if not isinstance(row, dict) or article_page_exists(row.get("slug"))]
+    chosen = choose_weekly(publishable, {clean(row.get('slug')) for row in current_rows}, now=now)
 
     if current_count < MIN_CURRENT_EDITION_FOR_WEEKLY:
         print(
