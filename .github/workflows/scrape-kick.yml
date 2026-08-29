@@ -145,3 +145,25 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref main
+      - name: Re-seed the fast lane this run interrupted
+        # This lane holds rd-site-writer with cancel-in-progress, so starting it
+        # cancels whatever is running there -- deliberately, because a code push
+        # supersedes an obsolete render. What that also killed, every time, was
+        # the chained fast run that keeps the paper publishing: a cancelled job
+        # never reaches its own chain step. Observed on 29 August, when a burst
+        # of pushes to scraper/** silently ended the chain for six hours.
+        # So the lane that breaks the chain is the lane that restarts it.
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active=$(gh run list --workflow scrape-fast.yml --limit 15 \
+            --json databaseId,status \
+            --jq '[.[] | select(.status != "completed")] | length' \
+            || echo 0)
+          if [ "${active:-0}" -gt 0 ]; then
+            echo "a fast run is already queued or in progress; not re-seeding"
+            exit 0
+          fi
+          gh workflow run scrape-fast.yml --ref main -f chain=0
+          echo "re-seeded the fast lane at chain depth 0"
