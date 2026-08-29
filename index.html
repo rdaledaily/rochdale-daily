@@ -1703,7 +1703,11 @@
   </button>
 
   <script>
-    const STOCK_IMAGES = {"business":"/assets/img/fallback-business.jpg","community":"/assets/img/fallback-community.jpg","crime":"/assets/img/fallback-crime.jpg","education":"/assets/img/fallback-education.jpg","environment":"/assets/img/fallback-environment.jpg","events":"/assets/img/fallback-events.jpg","health":"/assets/img/fallback-health.jpg","news":"/assets/img/fallback-news.jpg","politics":"/assets/img/fallback-politics.jpg","sport":"/assets/img/fallback-sport.jpg","traffic":"/assets/img/fallback-traffic.jpg","transport":"/assets/img/fallback-transport.jpg"};
+    // When a story has no photograph of its own the card falls back to the
+    // curated library in assets/img/cards, rather than to a separate set of
+    // images kept only for this purpose. One library, editor-chosen, already
+    // credited in cards/credits.json.
+    const STOCK_IMAGES = {"business":"/assets/img/cards/rochdale-exchange-shopping-centre.jpg","community":"/assets/img/cards/rochdale_riverside.jpg","crime":"/assets/img/cards/police.jpg","education":"/assets/img/cards/alevels.jpg","environment":"/assets/img/cards/healey-dell.jpg","events":"/assets/img/cards/gracie-fields-theatre.jpg","health":"/assets/img/cards/hospitalisation.jpg","news":"/assets/img/cards/rochdale-town-square.jpg","politics":"/assets/img/cards/rochdale-town-hall.jpg","sport":"/assets/img/cards/match.jpg","traffic":"/assets/img/cards/traffic.jpg","transport":"/assets/img/cards/tram.jpg"};
     function stockImage(category) {
       return STOCK_IMAGES[String(category || "news").toLowerCase()] || STOCK_IMAGES.news;
     }
