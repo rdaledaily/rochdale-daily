@@ -1,276 +1,150 @@
 {
-  "policy": "Headline/topic-first classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
+  "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
   "article_count": 138,
   "published_count": 138,
-  "category_change_count": 38,
+  "category_change_count": 20,
   "image_change_count": 21,
   "category_changes": [
     {
       "slug": "rochdale-valiant-launches-new-media-portal-for-local-news",
       "title": "Rochdale Valiant Launches New Media Portal for Local Community",
-      "from": "news",
-      "to": "community",
-      "reason": "headline/standfirst strongly identify community"
-    },
-    {
-      "slug": "restoration-of-historic-packer-spout-steps-completed-in-rochdale-town-centre",
-      "title": "Restoration of Historic Packer Spout Steps Completed in Rochdale Town Centre",
-      "from": "sport",
+      "from": "community",
       "to": "news",
-      "reason": "headline/standfirst strongly identify news"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "rochdale-boroughwide-housing-appoints-paul-roberts-as-permanent-chair",
       "title": "Rochdale Boroughwide Housing Appoints Paul Roberts as Permanent Chair",
       "from": "community",
       "to": "business",
-      "reason": "headline/standfirst strongly identify business"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "daniel-murphy-resigns-as-leader-of-rochdale-youth-council",
       "title": "Daniel Murphy Resigns as Leader of Rochdale Youth Council",
       "from": "health",
       "to": "community",
-      "reason": "youth civic body is a community story, not health/politics by incidental vocabulary"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "wellmental-uk-hosts-first-mens-mental-health-fitness-session-in-heywood",
       "title": "WellMental UK hosts first men's mental health fitness session in Heywood",
       "from": "community",
       "to": "health",
-      "reason": "headline/standfirst strongly identify health"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "norden-cricket-club-festival-brings-community-together-today",
       "title": "Norden Cricket Club festival brings community together today",
       "from": "community",
       "to": "sport",
-      "reason": "headline/standfirst strongly identify sport"
-    },
-    {
-      "slug": "missing-rayah-rochdale-bower-avenue",
-      "title": "URGENT: Police appeal to find missing 10-year-old Rayah in Rochdale",
-      "from": "news",
-      "to": "crime",
-      "reason": "headline/standfirst strongly identify crime"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "st-marys-ce-primary-school-rochdale-summer-makeover-watergrove",
       "title": "Summer makeover under way at St Mary’s CE Primary School in Rochdale",
       "from": "community",
       "to": "education",
-      "reason": "headline/standfirst strongly identify education"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "videos-raise-hygiene-concerns-rajdhani-halal-meats-halifax-road",
       "title": "Videos raise hygiene concerns at one-star Halifax Road halal meat shop",
       "from": "environment",
       "to": "business",
-      "reason": "headline/standfirst strongly identify business"
-    },
-    {
-      "slug": "rochdale-town-hall-historic-court-chamber-guided-tours",
-      "title": "Step inside the 'other side' of Rochdale Town Hall with guided Court Chamber tours",
-      "from": "events",
-      "to": "crime",
-      "reason": "headline/standfirst strongly identify crime"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "heywood-marlborough-canal-street-alley-dumping-vermin",
       "title": "Residents furious as waste returns to Heywood alley weeks after major council clean-up",
       "from": "community",
-      "to": "politics",
-      "reason": "headline/standfirst strongly identify politics"
-    },
-    {
-      "slug": "daniel-meredith-rochdale-hornets-superhero-day-council-partnership",
-      "title": "Councillor Daniel Meredith backs stronger Hornets partnership after Superhero Day",
-      "from": "sport",
-      "to": "politics",
-      "reason": "headline/standfirst strongly identify politics"
+      "to": "environment",
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "summit-inn-reopens-new-menu-pub-classics",
       "title": "The Summit Inn reopens with new menu featuring pub classics and homemade favourites",
       "from": "news",
       "to": "business",
-      "reason": "headline/standfirst strongly identify business"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "steven-parker-rochdale-canal-basin-regeneration-vision",
       "title": "Comment: Rochdale Canal should be the jewel in the town's crown",
       "from": "community",
       "to": "environment",
-      "reason": "headline/standfirst strongly identify environment"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "police-increased-patrols-strand-kirkholt-verbal-abuse-begging",
       "title": "Police promise increased patrols around The Strand after resident reports verbal abuse",
       "from": "community",
       "to": "crime",
-      "reason": "headline/standfirst strongly identify crime"
-    },
-    {
-      "slug": "side-by-side-feed-our-minds-souls-rochdale-15-august-2026",
-      "title": "Free food, performances and community activities coming to Rochdale town centre this Saturday",
-      "from": "events",
-      "to": "community",
-      "reason": "headline/standfirst strongly identify community"
-    },
-    {
-      "slug": "norden-residents-no-water-since-friday-united-utilities",
-      "title": "Norden residents report being without water since Friday morning as outage continues",
-      "from": "news",
-      "to": "community",
-      "reason": "headline/standfirst strongly identify community"
-    },
-    {
-      "slug": "feel-good-festival-45-ticket-price-complaints-why-organisers-charge",
-      "title": "£45 for Feel Good Festival? Why today's ticket price has sparked complaints — and what organisers say",
-      "from": "news",
-      "to": "events",
-      "reason": "headline/standfirst strongly identify events"
-    },
-    {
-      "slug": "rochdale-afc-five-vacancies-first-team-academy-womens-2026",
-      "title": "Rochdale AFC recruiting for five roles across first team, academy and women's side ahead of League Two return",
-      "from": "sport",
-      "to": "education",
-      "reason": "headline/standfirst strongly identify education"
-    },
-    {
-      "slug": "rainbow-health-group-open-day-new-clinic-august-2026",
-      "title": "Rainbow Health Group invites residents to open day at new clinic after 17 years on Hornby Street",
-      "from": "health",
-      "to": "events",
-      "reason": "headline/standfirst strongly identify events"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "loombrook-meadows-302-new-homes-castleton-barratt",
       "title": "Loombrook Meadows: 302 new homes coming to Castleton - what we know so far",
       "from": "news",
       "to": "business",
-      "reason": "headline/standfirst strongly identify business"
-    },
-    {
-      "slug": "stronger-together-whitworth-lord-lieutenant-visit-packed-cafe",
-      "title": "Lord-Lieutenant's visit, a surprise inspection passed and a packed cafe: quite a week for Whitworth's Stronger Together",
-      "from": "community",
-      "to": "business",
-      "reason": "headline/standfirst strongly identify business"
-    },
-    {
-      "slug": "should-gatekeepers-decide-which-local-news-you-get-to-see",
-      "title": "Are Facebook Groups Becoming the Gatekeepers of Local News?",
-      "from": "news",
-      "to": "community",
-      "reason": "headline/standfirst strongly identify community"
-    },
-    {
-      "slug": "rochdale-veterans-breakfast-club-heywood-flying-horse",
-      "title": "Veterans invited to weekly breakfast club as Rochdale continues to support Armed Forces community",
-      "from": "community",
-      "to": "sport",
-      "reason": "headline/standfirst strongly identify sport"
-    },
-    {
-      "slug": "low-flying-helicopter-heard-across-rochdale-august-2026",
-      "title": "Low-flying helicopter heard across Rochdale as residents ask what happened",
-      "from": "news",
-      "to": "community",
-      "reason": "headline/standfirst strongly identify community"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "81-year-old-man-left-outside-rochdale-infirmary-ten-hours",
       "title": "Is this how the NHS treats its own? 81-year-old man left outside Rochdale Infirmary for ten hours",
       "from": "news",
       "to": "health",
-      "reason": "headline/standfirst strongly identify health"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "heat-exposes-challenges-facing-rochdale-workers-and-britains-infrastructure",
       "title": "Heat exposes challenges facing Rochdale workers and Britain’s ageing infrastructure",
       "from": "news",
       "to": "environment",
-      "reason": "headline/standfirst strongly identify environment"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "litter-concerns-deeplish-rochdale",
       "title": "Litter blighting Deeplish remains a concern for residents",
       "from": "community",
       "to": "environment",
-      "reason": "headline/standfirst strongly identify environment"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "anti-social-behaviour-kingsway-rochdale",
       "title": "Residents raise concerns over anti-social behaviour around Kingsway",
       "from": "news",
       "to": "community",
-      "reason": "headline/standfirst strongly identify community"
-    },
-    {
-      "slug": "littleborough-taxi-driver-safety-warning-railway-station",
-      "title": "Taxi driver issues safety warning after frightening incident near Littleborough railway station",
-      "from": "news",
-      "to": "transport",
-      "reason": "headline/standfirst strongly identify transport"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "dangerous-driving-milkstone-road-rochdale",
       "title": "Residents voice concerns over dangerous driving and alleged street racing on Milkstone Road",
       "from": "news",
       "to": "traffic",
-      "reason": "headline/standfirst strongly identify traffic"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "mayor-praises-merhaba-festival-2026",
       "title": "Mayor praises Merhaba Festival as 'a wonderful celebration of community'",
       "from": "community",
       "to": "events",
-      "reason": "headline/standfirst strongly identify events"
-    },
-    {
-      "slug": "strand-community-cafe-record-busiest-month-kirkholt",
-      "title": "Record month for The Strand Community Café as community support continues to grow",
-      "from": "community",
-      "to": "business",
-      "reason": "headline/standfirst strongly identify business"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "white-ribbon-football-tournament-returns-to-rochdale-for-2026",
       "title": "White Ribbon Football Tournament returns to Rochdale for 2026",
       "from": "community",
       "to": "sport",
-      "reason": "headline/standfirst strongly identify sport"
-    },
-    {
-      "slug": "police-presence-reported-at-ashworth-reservoir-norden",
-      "title": "Police presence reported at Ashworth Reservoir in Norden",
-      "from": "news",
-      "to": "environment",
-      "reason": "headline/standfirst strongly identify environment"
-    },
-    {
-      "slug": "greenvale-planning-committee-bamford",
-      "title": "Residents urged to attend Greenvale planning meeting as decision nears",
-      "from": "news",
-      "to": "community",
-      "reason": "headline/standfirst strongly identify community"
-    },
-    {
-      "slug": "middleton-protest-organiser-outlines-plans",
-      "title": "Middleton protest planned as organiser sets out bail conditions ahead of event",
-      "from": "news",
-      "to": "events",
-      "reason": "headline/standfirst strongly identify events"
+      "reason": "human-reviewed archive classification override"
     },
     {
       "slug": "syke-bowling-club-junior-fun-day",
       "title": "Young bowlers invited to take part in Syke Bowling Club fun day",
       "from": "events",
       "to": "sport",
-      "reason": "headline/standfirst strongly identify sport"
+      "reason": "human-reviewed archive classification override"
     }
   ],
   "image_changes": [
@@ -302,11 +176,11 @@
       "slug": "daniel-murphy-resigns-as-leader-of-rochdale-youth-council",
       "title": "Daniel Murphy Resigns as Leader of Rochdale Youth Council",
       "category": "community",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "sensitive story image lacks explicit source/editorial provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/daniel-murphy-resigns-as-leader-of-rochdale-youth-council.jpg",
         "img": "assets/img/cards/daniel-murphy-resigns-as-leader-of-rochdale-youth-council.jpg",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/daniel-murphy-resigns-as-leader-of-rochdale-youth-council-generated-card.jpg"
     },
@@ -314,11 +188,11 @@
       "slug": "wardle-resident-contributes-to-new-poetry-trail-focusing-on-recovery",
       "title": "Wardle Resident Contributes to New Poetry Trail Focusing on Recovery",
       "category": "news",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/wardle-resident-contributes-to-new-poetry-trail-focusing-on-recovery.jpg",
         "img": "assets/img/cards/wardle-resident-contributes-to-new-poetry-trail-focusing-on-recovery.jpg",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/wardle-resident-contributes-to-new-poetry-trail-focusing-on-recovery-generated-card.jpg"
     },
