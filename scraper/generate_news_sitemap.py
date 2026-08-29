@@ -72,6 +72,15 @@ def is_utility_not_news(article: dict) -> bool:
     if isinstance(raw_urls, list): urls.extend(str(url) for url in raw_urls)
     return any(p.search(title) for p in UTILITY_TITLE_PATTERNS) or any(p.search(url) for url in urls for p in UTILITY_URL_PATTERNS)
 
+def article_page_exists(slug: str) -> bool:
+    """True when the story has a page a reader could actually open."""
+    if not slug:
+        return False
+    return (ROOT / "articles" / f"{slug}.html").is_file() or (
+        ROOT / "articles" / slug / "index.html"
+    ).is_file()
+
+
 def eligible_articles(rows: list[dict], now: datetime) -> list[tuple[datetime, dict]]:
     cutoff = now - NEWS_WINDOW
     by_slug: dict[str, tuple[datetime, dict]] = {}
@@ -119,10 +128,30 @@ def build_sitemap(rows: list[dict], now: datetime | None = None) -> ET.ElementTr
         ET.SubElement(news_el, ET.QName(NEWS_NS, "title")).text = title
     return ET.ElementTree(root)
 
+def article_page_exists(slug: object) -> bool:
+    """True when the story has a page a reader could actually open.
+
+    A feed record can outlive its page when a headline rewrite changes the slug.
+    On 29 August two of the ten URLs in the news sitemap were 404s for exactly
+    that reason, and Google News was being handed both. The page on disk is the
+    authority for what may be syndicated.
+    """
+    name = str(slug or "").strip().strip("/")
+    if not name:
+        return False
+    return (ROOT / "articles" / f"{name}.html").is_file() or (
+        ROOT / "articles" / name / "index.html"
+    ).is_file()
+
+
 def main() -> int:
     try: rows = json.loads(ARTICLES_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc: raise SystemExit(f"Unable to read {ARTICLES_PATH}: {exc}")
     if not isinstance(rows, list): raise SystemExit("articles.json must contain a JSON array")
+    dropped = [r for r in rows if isinstance(r, dict) and not article_page_exists(r.get("slug"))]
+    rows = [r for r in rows if isinstance(r, dict) and article_page_exists(r.get("slug"))]
+    for row in dropped:
+        print(f"skipped {row.get('slug')}: no article page on disk")
     now = datetime.now(timezone.utc)
     selected = eligible_articles(rows, now)
     tree = build_sitemap(rows, now); ET.indent(tree, space="  ")
