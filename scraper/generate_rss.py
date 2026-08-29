@@ -78,9 +78,25 @@ def item_xml(row: dict) -> str:
     )
 
 
+def article_page_exists(slug: object) -> bool:
+    """True when the story has a page a reader could actually open.
+
+    A feed record can outlive its page when a headline rewrite changes the slug.
+    On 29 August two of the ten URLs in the news sitemap were 404s for exactly
+    that reason, and Google News was being handed both. The page on disk is the
+    authority for what may be syndicated.
+    """
+    name = str(slug or "").strip().strip("/")
+    if not name:
+        return False
+    return (ROOT / "articles" / f"{name}.html").is_file() or (
+        ROOT / "articles" / name / "index.html"
+    ).is_file()
+
+
 def main() -> int:
     rows = json.loads(ARTICLES.read_text(encoding="utf-8"))
-    candidates = [row for row in rows if eligible(row)]
+    candidates = [row for row in rows if eligible(row) and article_page_exists(row.get("slug"))]
     candidates.sort(
         key=lambda row: parse_dt(row.get("first_published_at") or row.get("published_at")),
         reverse=True,
