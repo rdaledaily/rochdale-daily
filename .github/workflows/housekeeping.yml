@@ -1,0 +1,122 @@
+name: Rochdale Daily housekeeping
+
+# One-shot cleanup, run by hand. Removes files the site no longer uses:
+#
+#  * root-level pipeline trigger notes, which are deployed with the site and
+#    publicly fetchable at their own URLs even though nothing links to them.
+#    Two of them name a vulnerable person in the filename.
+#  * scripts whose workflows were retired, and one-shot repair scripts that
+#    have already done their single job.
+#  * a stale apply note describing a workflow that no longer exists.
+#
+# It refuses to delete anything still referenced by a workflow, a script or a
+# shell file, so it cannot quietly break the pipeline. Safe to re-run: files
+# already gone are skipped.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-housekeeping
+  cancel-in-progress: false
+
+jobs:
+  tidy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Remove retired files
+        run: |
+          set -euo pipefail
+
+          TARGETS="
+          add_edenfield_road_open.txt
+          emergency_homepage_correction.txt
+          fix_live_fresh_homepage.txt
+          flush_pending_now.txt
+          gatekeepers_patch_trigger.txt
+          pin_feel_good_live.txt
+          publish_christine_trigger.txt
+          remove_christine_images_trigger.txt
+          social_source_privacy_trigger.txt
+          stone_circle_fix_trigger.txt
+          trigger_homepage_feed_repair_20260814.txt
+          trigger_image_regeneration_20260810.txt
+          trigger_publish_bamford_greenvale_20260808.txt
+          trigger_publish_environment_eclipse_20260808.txt
+          trigger_publish_norden_water_outage_20260808.txt
+          trigger_publish_syke_falinge_20260808.txt
+          APPLY-2.md
+          scraper/moderngov_probe.py
+          scraper/street_reports.py
+          scraper/preserve_article_archive.py
+          scraper/restyle_archive_pages.py
+          scraper/publish_pending_manual.py
+          scraper/fix_homepage_event_filters.py
+          scraper/patch_community_support_tab.py
+          scraper/repair_archive_ads.py
+          scraper/repair_event_records.py
+          scraper/restore_archive.py
+          "
+
+          removed=0
+          skipped=0
+          refused=0
+
+          for target in $TARGETS; do
+            if [ ! -e "$target" ]; then
+              echo "skip     $target (already gone)"
+              skipped=$((skipped + 1))
+              continue
+            fi
+
+            stem=$(basename "$target")
+            stem=${stem%.py}
+
+            # Anything still named by a workflow, script or shell file stays put.
+            if grep -rl --include='*.yml' --include='*.yaml' --include='*.py' --include='*.sh' \
+                 -- "$stem" . 2>/dev/null \
+                 | grep -v '^\./\.git/' \
+                 | grep -v '^\./\.github/workflows/housekeeping\.yml$' \
+                 | grep -v "^\./$target$" \
+                 | grep -q .; then
+              echo "REFUSED  $target is still referenced somewhere"
+              refused=$((refused + 1))
+              continue
+            fi
+
+            git rm -q "$target"
+            echo "removed  $target"
+            removed=$((removed + 1))
+          done
+
+          echo
+          echo "removed $removed, skipped $skipped, refused $refused"
+          {
+            echo "## Housekeeping"
+            echo
+            echo "- removed: $removed"
+            echo "- already gone: $skipped"
+            echo "- refused (still referenced): $refused"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          if git diff --cached --quiet; then echo 'nothing to remove'; exit 0; fi
+          git commit -m "Remove retired trigger notes and dead scripts"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 7))
+          done
+          echo "::error::housekeeping could not push after five attempts"
+          exit 1
