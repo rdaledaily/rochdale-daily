@@ -441,11 +441,6 @@ def is_disallowed_image_host(url: str) -> bool:
         for suffix in DISALLOWED_IMAGE_HOST_SUFFIXES
     )
 
-def source_is_denied(source_name: str='', source_url: str='') -> bool:
-    name = normalise_ws(source_name).lower()
-    domain = domain_of(source_url)
-    return domain in SOURCE_DENY_DOMAINS or any((blocked in name for blocked in SOURCE_DENY_NAMES))
-
 def is_current_uk_day(value: datetime | None) -> bool:
     return bool(value) and value.astimezone(UK_TZ).date() == utc_now().astimezone(UK_TZ).date()
 
@@ -571,12 +566,6 @@ def detect_area(text: str, fallback: str='rochdale') -> str:
     if _contains_term(plain, 'rochdale'):
         return 'rochdale'
     return fallback
-
-def categorise(text: str) -> str:
-    low = text.lower()
-    scores = {category: sum((1 for keyword in keywords if keyword in low)) for category, keywords in CATEGORY_KEYWORDS.items()}
-    category, score = max(scores.items(), key=lambda item: item[1])
-    return category if score else 'news'
 
 def is_local(text: str, source_name: str, source_url: str='') -> bool:
     return bool(locality_evidence(text, source_name, source_url)['local'])
@@ -2284,153 +2273,6 @@ def compact_source_value(value: Any, limit: int = 2600) -> str:
     if boundary >= int(limit * 0.62):
         shortened = shortened[: boundary + 1]
     return shortened.strip()
-
-
-def compact_source_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    compacted: list[dict[str, Any]] = []
-    total = 0
-    for record in records[:8]:
-        clean = dict(record)
-        clean['title'] = compact_source_value(clean.get('title'), 260)
-        clean['summary'] = compact_source_value(clean.get('summary'), 1500)
-        clean['body_excerpt'] = compact_source_value(clean.get('body_excerpt'), 3200)
-        size = len(json.dumps(clean, ensure_ascii=False))
-        if compacted and total + size > 14000:
-            break
-        compacted.append(clean)
-        total += size
-    return compacted
-
-
-def draft_quality_issues(draft: Any, source_text: str, candidate: Candidate) -> list[str]:
-    if not isinstance(draft, dict):
-        return ['The model did not return an article object.']
-    if not bool(draft.get('publishable')):
-        return ['The draft was marked unpublishable.']
-
-    title = strip_markdown(draft.get('title'))
-    excerpt = strip_markdown(draft.get('excerpt'))
-    paragraphs = [strip_markdown(item) for item in draft.get('paragraphs', []) if strip_markdown(item)]
-    combined = normalise_ws(' '.join([title, excerpt, *paragraphs]))
-    issues: list[str] = []
-
-    if len(title.split()) < 5 or len(title) > 155:
-        issues.append('The headline must be a complete, specific headline of 5-24 words.')
-    first_alpha = next((char for char in title if char.isalpha()), '')
-    if first_alpha and first_alpha.islower():
-        issues.append('The headline begins like a clipped sentence fragment.')
-    if title.endswith((':', '-', '–', '—', ',')):
-        issues.append('The headline ends as an incomplete fragment.')
-    if len(excerpt.split()) < 22:
-        issues.append('The standfirst is too thin to explain the story.')
-    if len(paragraphs) < 3:
-        issues.append('The article needs at least three factual paragraphs.')
-    if any(len(paragraph.split()) < 8 for paragraph in paragraphs):
-        issues.append('One or more paragraphs are filler rather than a complete factual sentence.')
-    if GENERIC_ARTICLE_RE.search(combined):
-        issues.append('The copy discusses the source or publishing process instead of reporting the story.')
-
-    normalised_paragraphs = [normalise_ws(p).casefold() for p in paragraphs]
-    if len(normalised_paragraphs) != len(set(normalised_paragraphs)):
-        issues.append('The article repeats a paragraph.')
-
-    source_tokens = {
-        token for token in re.findall(r'[a-z0-9]+', source_text.lower())
-        if len(token) >= 4 and token not in QUALITY_STOPWORDS
-    }
-    output_tokens = {
-        token for token in re.findall(r'[a-z0-9]+', combined.lower())
-        if len(token) >= 4 and token not in QUALITY_STOPWORDS
-    }
-    if len(source_text) >= 120 and len(source_tokens & output_tokens) < 4:
-        issues.append('The article is not sufficiently grounded in the supplied facts.')
-    if excessive_source_overlap(combined, source_text):
-        issues.append('The wording is too close to the source material and must be rewritten more originally.')
-    return issues
-
-
-def request_grounded_draft(
-    candidate: Candidate,
-    client: OpenAI,
-    source_records: list[dict[str, Any]],
-    social_context: list[dict[str, Any]],
-    source_text: str,
-    sensitive: bool,
-) -> dict[str, Any] | None:
-    system_message = (
-        "You are the senior sub-editor for Rochdale Daily, an independent UK local-news publication. "
-        "Write a coherent, original local news report using only facts explicitly contained in the supplied records. "
-        "The opening paragraph must explain the actual development: who or what is involved, what happened, where it happened and when, whenever those facts are supplied. "
-        "Do not write about the source having published an update, the article being categorised, the automated process, the availability of a source link, or facts being added later. "
-        "Do not use filler. Do not say that something is connected to Rochdale unless the records themselves establish the geographical connection. "
-        "The headline must be a complete, natural headline rather than a copied or clipped source fragment. Do not prefix a town merely because it was used as discovery metadata. "
-        "Use neutral UK English, short paragraphs and a clear chronological structure. Explain practical local relevance only when supported by the records. "
-        "Never invent a quotation, identity, allegation, motive, date, age, address, statistic, organisation, sentence, charge or outcome. "
-        "Attribute allegations and procedural status precisely. Do not imply guilt before conviction. Adult defendants and convicted offenders may be named when the records explicitly name them. "
-        "Never identify a sexual-offence complainant or a protected child. Omit exact private residential addresses and postcodes. "
-        "Never reproduce ten or more consecutive words from a source. Never mirror the source's sentence order or paragraph structure. "
-        "If the supplied records do not contain enough concrete facts for a meaningful article, set publishable to false instead of producing generic copy. "
-        "Never publish job adverts, recruitment posts, vacancies or application invitations."
-    )
-
-    base_payload = {
-        'primary_source': candidate.source_name,
-        'primary_url': candidate.source_url,
-        'source_published_at': candidate.source_published_at,
-        'detected_area': candidate.area,
-        'detected_category': candidate.category,
-        'searched_location': {
-            'slug': candidate.searched_location_slug,
-            'name': candidate.searched_location_name,
-            'warning': 'Discovery metadata only. It is not evidence that the incident happened there.',
-        },
-        'sensitive_story': sensitive,
-        'source_records': source_records,
-        'social_context': social_context,
-        'requested_style': (
-            'Headline of 5-24 words; standfirst of 35-70 words; 3-7 factual paragraphs. '
-            'Lead with the news, not with attribution or publishing metadata. Add background only when supplied. '
-            'Crime and court stories must clearly distinguish allegation, charge, conviction and sentence.'
-        ),
-        'required_right_to_reply': f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.',
-    }
-
-    previous: dict[str, Any] | None = None
-    feedback: list[str] = []
-    for attempt in range(2):
-        payload = dict(base_payload)
-        if attempt:
-            payload['repair_required'] = feedback
-            payload['previous_draft'] = previous
-            payload['repair_instruction'] = (
-                'Rewrite the article from scratch. Correct every listed problem. Do not merely edit the previous wording.'
-            )
-        try:
-            response = client.chat.completions.create(
-                model=OPENAI_MODEL,
-                messages=[
-                    {'role': 'system', 'content': system_message},
-                    {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)},
-                ],
-                response_format={'type': 'json_schema', 'json_schema': ARTICLE_SCHEMA},
-                temperature=0.1,
-                max_tokens=1800,
-            )
-            draft = json.loads(response.choices[0].message.content or '{}')
-        except Exception as exc:
-            log.warning('Grounded rewrite attempt %d failed for %s: %s', attempt + 1, candidate.source_url, exc)
-            note_rewrite_skip(f'model call failed: {type(exc).__name__}')
-            continue
-        feedback = draft_quality_issues(draft, source_text, candidate)
-        if not feedback:
-            return draft
-        previous = draft
-        log.warning('Rejected rewrite attempt %d for %s: %s', attempt + 1, candidate.source_url, '; '.join(feedback))
-    # Only the final attempt is tallied: a first draft repaired on the second
-    # pass is a working newsroom, not a skip.
-    for issue in (feedback or ['no draft returned']):
-        note_rewrite_skip(f'quality: {issue}')
-    return None
 
 
 def article_is_low_quality(article: dict[str, Any]) -> bool:
