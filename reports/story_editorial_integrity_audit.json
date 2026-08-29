@@ -1,15 +1,15 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 138,
-  "published_count": 138,
+  "article_count": 141,
+  "published_count": 141,
   "category_change_count": 20,
   "image_change_count": 21,
   "category_changes": [
     {
-      "slug": "rochdale-valiant-launches-new-media-portal-for-local-news",
-      "title": "Rochdale Valiant Launches New Media Portal for Local Community",
-      "from": "community",
+      "slug": "restoration-of-historic-packer-spout-steps-completed-in-rochdale-town-centre",
+      "title": "Restoration of Historic Packer Spout Steps Completed in Rochdale Town Centre",
+      "from": "traffic",
       "to": "news",
       "reason": "human-reviewed archive classification override"
     },
@@ -149,6 +149,18 @@
   ],
   "image_changes": [
     {
+      "slug": "greater-manchester-police-to-host-cyber-crime-awareness-events-in-rochdale",
+      "title": "Greater Manchester Police to Host Cyber Crime Awareness Events in Rochdale",
+      "category": "crime",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/greater_manchester_police.jpg",
+        "img": "assets/img/cards/greater_manchester_police.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/greater-manchester-police-to-host-cyber-crime-awareness-events-in-rochdale-generated-card.jpg"
+    },
+    {
       "slug": "pakistan-refuses-to-repatriate-rochdale-grooming-gang-leader",
       "title": "Pakistan Refuses to Repatriate Rochdale Grooming Gang Leader Shabir Ahmed",
       "category": "crime",
@@ -159,18 +171,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/pakistan-refuses-to-repatriate-rochdale-grooming-gang-leader-generated-card.jpg"
-    },
-    {
-      "slug": "crawley-town-manager-kazim-richards-addresses-players-after-victory-at-rochdale",
-      "title": "Crawley Town Manager Kazim-Richards Issues Rallying Call After Rochdale Victory",
-      "category": "sport",
-      "reason": "weak filename image match score 8128; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/fixtures.jpg",
-        "img": "assets/img/cards/fixtures.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/crawley-town-manager-kazim-richards-addresses-players-after-victory-at-rochdale-generated-card.jpg"
     },
     {
       "slug": "daniel-murphy-resigns-as-leader-of-rochdale-youth-council",
