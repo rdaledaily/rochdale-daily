@@ -1,0 +1,37 @@
+name: Rochdale Daily legacy archive integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scraper/legacy_archive_integrity.py"
+      - ".github/workflows/legacy-archive-integrity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rd-legacy-archive-integrity
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+          python -m pip install --no-cache-dir "Pillow>=10,<13"
+      - name: Audit retained legacy article pages
+        run: python scraper/legacy_archive_integrity.py
