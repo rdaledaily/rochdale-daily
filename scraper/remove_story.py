@@ -130,6 +130,31 @@ def main() -> int:
         regenerate()
         print("Regenerated article pages, frontpage.json and sitemap.xml.")
 
+        # generate_pages rebuilds the article pages, the frontpage feed and the
+        # sitemap. It does not touch index.html — and three modules write article
+        # headlines, summaries and links straight into the homepage as static
+        # HTML. Without this, a story removed on legal advice stayed visible in
+        # the homepage's static blocks (to crawlers, link previews and readers
+        # with JavaScript off) until an unrelated scrape run happened to rebuild
+        # them, which can be hours. An emergency takedown that leaves the story
+        # on the front page is not a takedown.
+        for module_name, description in (
+            ("update_homepage_static_latest", "static Latest block"),
+            ("update_homepage_weekly_news", "weekly news block"),
+            ("sync_homepage_top_story", "crawler-facing lead story"),
+            ("homepage_discovery_metadata", "homepage ItemList structured data"),
+        ):
+            try:
+                module = __import__(module_name)
+                module.main()
+                print(f"Refreshed the homepage {description}.")
+            except Exception as exc:  # noqa: BLE001 - never block a takedown
+                print(
+                    f"WARNING: could not refresh the homepage {description}: "
+                    f"{type(exc).__name__}: {exc}",
+                    file=sys.stderr,
+                )
+
     if not removed_records and not deleted_pages:
         print(
             "NOTE: no live records or pages matched. The blocklist entries were "
