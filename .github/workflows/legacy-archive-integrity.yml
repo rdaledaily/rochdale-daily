@@ -5,11 +5,12 @@ on:
     branches: [main]
     paths:
       - "scraper/legacy_archive_integrity.py"
+      - "scraper/legacy_archive_apply_reviewed.py"
       - ".github/workflows/legacy-archive-integrity.yml"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: rd-legacy-archive-integrity
@@ -18,11 +19,13 @@ concurrency:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 0
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -33,5 +36,37 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
-      - name: Audit retained legacy article pages
-        run: python scraper/legacy_archive_integrity.py
+      - name: Apply reviewed archive repairs and publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Rochdale Daily Editorial Integrity"
+          git config user.email "bot@rochdaledaily.co.uk"
+
+          for attempt in 1 2 3 4; do
+            echo "Legacy integrity publish attempt ${attempt}/4"
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd
+
+            python scraper/legacy_archive_apply_reviewed.py
+            python scraper/generate_archive.py
+            python scraper/generate_image_sitemap.py
+
+            if [ -z "$(git status --porcelain -- articles assets/img/cards archive-index.json archive.html search.html image-sitemap.xml reports/legacy_story_integrity_audit.json)" ]; then
+              echo "Legacy archive already passes the reviewed integrity policy."
+              exit 0
+            fi
+
+            git add articles assets/img/cards archive-index.json archive.html search.html image-sitemap.xml reports/legacy_story_integrity_audit.json
+            git commit -m "Repair legacy story classifications and image pairings"
+            if git push origin HEAD:main; then
+              echo "Legacy archive integrity repairs published."
+              exit 0
+            fi
+            echo "Main moved during archive repair; rebuilding against latest main."
+            sleep 4
+          done
+
+          echo "Could not publish legacy archive repairs after four attempts."
+          exit 1
