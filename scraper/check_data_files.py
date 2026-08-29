@@ -33,6 +33,7 @@ import argparse
 import json
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -176,6 +177,18 @@ def check_manual_articles() -> None:
     note(path.name, f"{len(data)} entries, {live} would publish")
 
 
+def advert_is_live(ad: dict, today: str | None = None) -> bool:
+    """True when today falls inside the placement's booked date range."""
+    stamp = today or datetime.now(timezone.utc).date().isoformat()
+    start = str(ad.get("start") or "")[:10]
+    end = str(ad.get("end") or "")[:10]
+    if start and stamp < start:
+        return False
+    if end and stamp > end:
+        return False
+    return bool(start or end)
+
+
 def check_adverts() -> None:
     path = REPO_ROOT / "adverts.json"
     data = load(path)
@@ -203,8 +216,16 @@ def check_adverts() -> None:
         mobile = str(ad.get("image_mobile") or "")
         if mobile and not (REPO_ROOT / mobile.lstrip("/")).is_file():
             fail(where, f"image_mobile file does not exist: {mobile}")
-        if "REPLACE" in str(ad.get("url") or ""):
-            note(where, "url is still a placeholder, so the advert will not click through")
+        url = str(ad.get("url") or "")
+        if "REPLACE" in url.upper() or "example.com" in url:
+            # A placeholder in a booking that is not running yet is housekeeping.
+            # A placeholder in a booking that is live is a paying advertiser whose
+            # advert goes nowhere, which is what happened to NEB Electrical from
+            # 1 August 2026 onwards. That is a failure, not a note.
+            if advert_is_live(ad):
+                fail(where, f"live advert has a placeholder click-through: {url}")
+            else:
+                note(where, "url is still a placeholder (booking is not live)")
     note(path.name, f"{live} live placement(s)")
 
 
