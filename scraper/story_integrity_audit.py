@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """Whole-archive editorial integrity audit for Rochdale Daily.
 
-This is deliberately conservative. It corrects only high-confidence category
-mistakes and removes/replaces images that cannot be defended from the article
-metadata. A neutral Rochdale Daily headline card is preferable to a misleading
-photo of a hospital, police scene, school, court, person or other institution.
+The failure mode this protects against is editorially serious: a loose keyword
+matcher can turn a youth-council resignation into Health, a Court Chamber tour
+into Crime, or a community breakfast club into Sport. This pass therefore uses
+human-reviewed overrides for known ambiguous stories and only changes future
+stories when the headline itself gives high-confidence evidence.
+
+Image policy is deliberately conservative. A neutral Rochdale Daily headline
+card is preferable to a photograph that could falsely imply a hospital visit,
+police involvement, a school, a court case, a named person or another factual
+connection the story does not establish.
 
 Run modes:
   classify  -- category/type corrections only
@@ -16,7 +22,6 @@ from __future__ import annotations
 import argparse
 import json
 import re
-from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -26,6 +31,49 @@ ROOT = Path(__file__).resolve().parents[1]
 ALLOWED_CATEGORIES = {
     "business", "community", "crime", "education", "environment", "events", "health",
     "news", "politics", "sport", "traffic", "transport",
+}
+
+# These records were reviewed individually after the first full-archive pass.
+# Explicit decisions beat generic keyword rules for ambiguous headlines.
+CATEGORY_OVERRIDES: dict[str, str] = {
+    "rochdale-valiant-launches-new-media-portal-for-local-news": "news",
+    "restoration-of-historic-packer-spout-steps-completed-in-rochdale-town-centre": "news",
+    "rochdale-boroughwide-housing-appoints-paul-roberts-as-permanent-chair": "business",
+    "daniel-murphy-resigns-as-leader-of-rochdale-youth-council": "community",
+    "wellmental-uk-hosts-first-mens-mental-health-fitness-session-in-heywood": "health",
+    "norden-cricket-club-festival-brings-community-together-today": "sport",
+    "missing-rayah-rochdale-bower-avenue": "news",
+    "st-marys-ce-primary-school-rochdale-summer-makeover-watergrove": "education",
+    "videos-raise-hygiene-concerns-rajdhani-halal-meats-halifax-road": "business",
+    "rochdale-town-hall-historic-court-chamber-guided-tours": "events",
+    "heywood-marlborough-canal-street-alley-dumping-vermin": "environment",
+    "daniel-meredith-rochdale-hornets-superhero-day-council-partnership": "sport",
+    "summit-inn-reopens-new-menu-pub-classics": "business",
+    "steven-parker-rochdale-canal-basin-regeneration-vision": "environment",
+    "police-increased-patrols-strand-kirkholt-verbal-abuse-begging": "crime",
+    "side-by-side-feed-our-minds-souls-rochdale-15-august-2026": "events",
+    "norden-residents-no-water-since-friday-united-utilities": "news",
+    "feel-good-festival-45-ticket-price-complaints-why-organisers-charge": "news",
+    "rochdale-afc-five-vacancies-first-team-academy-womens-2026": "sport",
+    "rainbow-health-group-open-day-new-clinic-august-2026": "health",
+    "loombrook-meadows-302-new-homes-castleton-barratt": "business",
+    "stronger-together-whitworth-lord-lieutenant-visit-packed-cafe": "community",
+    "should-gatekeepers-decide-which-local-news-you-get-to-see": "news",
+    "rochdale-veterans-breakfast-club-heywood-flying-horse": "community",
+    "low-flying-helicopter-heard-across-rochdale-august-2026": "news",
+    "81-year-old-man-left-outside-rochdale-infirmary-ten-hours": "health",
+    "heat-exposes-challenges-facing-rochdale-workers-and-britains-infrastructure": "environment",
+    "litter-concerns-deeplish-rochdale": "environment",
+    "anti-social-behaviour-kingsway-rochdale": "community",
+    "littleborough-taxi-driver-safety-warning-railway-station": "news",
+    "dangerous-driving-milkstone-road-rochdale": "traffic",
+    "mayor-praises-merhaba-festival-2026": "events",
+    "strand-community-cafe-record-busiest-month-kirkholt": "community",
+    "white-ribbon-football-tournament-returns-to-rochdale-for-2026": "sport",
+    "police-presence-reported-at-ashworth-reservoir-norden": "news",
+    "greenvale-planning-committee-bamford": "news",
+    "middleton-protest-organiser-outlines-plans": "news",
+    "syke-bowling-club-junior-fun-day": "sport",
 }
 
 
@@ -45,97 +93,132 @@ def hit(pattern: str, value: str) -> bool:
     return bool(re.search(pattern, value, re.I | re.S))
 
 
-# Headline-first rules. These are intentionally high precision. The previous
-# failure mode was body vocabulary (for example "mental health" in a list of
-# priorities) overriding the actual subject of the story.
-HEADLINE_RULES: tuple[tuple[str, str], ...] = (
-    ("community", r"\b(?:youth council|youth cabinet|youth parliament|young people'?s council)\b"),
-    ("crime", r"\b(?:murder|manslaughter|rape|rapist|grooming gang|sexual (?:assault|offence|abuse)|"
-              r"stabbing|shooting|robbery|burglary|theft|fraud|arrested?|charged|convicted|sentenced|"
-              r"jailed|prison|court hearing|magistrates'? court|crown court|police appeal|wanted (?:man|woman|person)|"
-              r"drug raid|cannabis farm|deportation|parole)\b"),
-    ("traffic", r"\b(?:roadworks?|road works?|road closure|road closed|lane closure|traffic|"
-                r"collision|crash|congestion|diversion|potholes?|speeding|M62|A627(?:\(M\))?)\b"),
-    ("transport", r"\b(?:train|railway|rail service|tram|metrolink|bee network|bus service|buses|"
-                  r"bus route|station|timetable|public transport|northern rail|service disruption)\b"),
-    ("education", r"\b(?:school|academy|college|university|ofsted|teacher|headteacher|pupil|"
-                  r"student|GCSE|A[- ]level|education results?|exam results?)\b"),
-    ("sport", r"\b(?:rochdale afc|rochdale hornets|football|rugby|cricket|boxing|netball|athletics|"
-              r"parkrun|MMA|muay thai|fixture|match|league|cup tie|goalkeeper|striker|manager .{0,35} victory|"
-              r"defender|midfielder|forward|sports? club|tennis|badminton|basketball)\b"),
-    ("events", r"\b(?:festival|concert|gig|exhibition|performance|parade|fair|"
-               r"bingo|open day|community event|live music|show at|tour at)\b"),
-    ("news", r"\b(?:restoration of historic|historic .{0,45} restored|heritage restoration|"
-             r"listed building restoration|historic steps)\b"),
-    ("politics", r"\b(?:councillor|council leader|council cabinet|council budget|council tax|"
-                 r"local election|general election|by[- ]election|mayor|member of parliament|\bMP\b|"
-                 r"parliament|minister|manifesto|political party|labour party|conservative party|"
-                 r"reform uk|liberal democrats?|workers party)\b"),
-    ("health", r"\b(?:NHS|hospital|infirmary|doctor|GP\b|general practice|clinic|patient|pharmacy|"
-               r"vaccination|health service|mental health (?:service|support|session|team|clinic)|"
-               r"fitness session|exercise class|wellbeing service)\b"),
-    ("environment", r"\b(?:flood|flooding|weather warning|weather forecast|heatwave|met office|"
-                    r"reservoir|recycling|litter|fly.?tipping|waste collection|landfill|"
-                    r"wildlife|biodiversity|nature reserve|woodland|tree planting|tree felling|"
-                    r"pollution|air quality|sewage|climate|net zero|moor fire|green belt|canal|river)\b"),
-    ("community", r"\b(?:charity|fundraiser|fundraising|food ?bank|volunteer|community group|"
-                  r"community centre|support group|homelessness|rough sleeper|church|mosque|"
-                  r"residents'? group|community project|community award|local hero)\b"),
-    ("business", r"\b(?:business|company|shop|store|restaurant|pub|cafe|café|takeaway|retail|"
-                 r"commercial|investment|regeneration|housing development|new homes|apartments?|"
-                 r"appoints? .{0,40} (?:chair|chief executive|CEO|director))\b"),
-)
-
-SUPPORT_RULES: tuple[tuple[str, str], ...] = (
-    ("crime", r"\b(?:police|court|offence|offender|arrest|charged|sentenced|jailed|investigation)\b"),
-    ("traffic", r"\b(?:road|motorway|traffic|closure|lane|junction|carriageway)\b"),
-    ("transport", r"\b(?:bus|train|tram|rail|station|metrolink|transport)\b"),
-    ("politics", r"\b(?:council|councillor|election|mayor|parliament|minister|\bMP\b)\b"),
-    ("education", r"\b(?:school|college|pupil|student|teacher|ofsted|GCSE|A[- ]level)\b"),
-    ("health", r"\b(?:NHS|hospital|GP\b|doctor|patient|clinic|health service|pharmacy)\b"),
-    ("community", r"\b(?:community|charity|volunteer|residents|youth council|support group|homeless)\b"),
-    ("events", r"\b(?:festival|concert|gig|exhibition|performance|parade|event|bingo)\b"),
-    ("business", r"\b(?:business|company|shop|restaurant|retail|commercial|investment|development)\b"),
-    ("environment", r"\b(?:flood|weather|environment|recycling|wildlife|reservoir|pollution|climate)\b"),
-    ("sport", r"\b(?:football|rugby|cricket|match|fixture|club|league|cup|player|manager)\b"),
-)
-
-VISUAL_FAMILIES: dict[str, tuple[str, ...]] = {
-    "health": ("hospital", "infirmary", "ambulance", "nhs", "doctor", "medical", "clinic", "gp-", "gp_", "pharmacy"),
-    "crime": ("police", "court", "prison", "jail", "handcuff", "knife", "grooming", "crime-scene", "crime_scene"),
-    "education": ("school", "academy", "college", "university", "classroom", "pupil"),
-    "traffic": ("roadworks", "road-closure", "road_closure", "traffic", "motorway", "collision", "crash"),
-    "sport": ("football", "rugby", "cricket", "hornets", "rochdale-afc", "rochdale_afc", "fixture"),
-}
-
-GENERATED_MARKERS = ("generated-card", "area-category-card", "placeholder")
-SAFE_REAL_STATUSES = ("source-photo", "commons-photo", "editorial-photo")
-UNSAFE_GENERIC_IMG_ONLY_STATUSES = ("source-photo-cached", "cards-library-photo")
-
-
 def headline_category(article: dict[str, Any]) -> str | None:
-    title = text(article, "title")
-    for category, pattern in HEADLINE_RULES:
-        if hit(pattern, title):
-            return category
+    slug = clean(article.get("slug")).lower()
+    if slug in CATEGORY_OVERRIDES:
+        return CATEGORY_OVERRIDES[slug]
 
-    brief = text(article, "title", "excerpt", "summary", "description")
-    scores: Counter[str] = Counter()
-    for category, pattern in SUPPORT_RULES:
-        matches = re.findall(pattern, brief, re.I | re.S)
-        if matches:
-            scores[category] += min(3, len(matches))
-    if not scores:
+    title = text(article, "title")
+    if not title:
         return None
-    category, score = scores.most_common(1)[0]
-    return category if score >= 2 else None
+
+    # Safety exceptions: these phrases must not be interpreted literally as a
+    # section signal. A missing-person appeal does not establish a crime; a
+    # Court Chamber tour is not a court case; police presence alone establishes
+    # no offence; protests/planning meetings are general news unless the actual
+    # headline establishes a more specific political/criminal event.
+    if hit(r"\b(?:missing|police appeal to find|police presence reported|guided court chamber tour|court chamber tours?)\b", title):
+        return "events" if hit(r"\b(?:guided|tour)\b", title) else "news"
+    if hit(r"\b(?:protest planned|planning meeting|planning decision)\b", title):
+        return "news"
+
+    # Explicit criminal-justice facts are allowed to drive Crime. Generic
+    # words such as police, court, appeal or investigation are intentionally
+    # absent because they do not by themselves establish criminality.
+    if hit(
+        r"\b(?:murder|manslaughter|rape|rapist|grooming gang|sexual (?:assault|offence|abuse)|"
+        r"stabbing|shooting|robbery|burglary|theft|fraud|arrested?|charged|convicted|sentenced|"
+        r"jailed|prison|magistrates'? court|crown court|wanted (?:man|woman|person)|drug raid|"
+        r"cannabis farm|parole|kidnap|assaulted?)\b",
+        title,
+    ):
+        return "crime"
+
+    # Sport precedes Education/Politics so "Rochdale AFC academy" and
+    # "Councillor backs Hornets" stay sports stories rather than being hijacked
+    # by the incidental word academy/councillor.
+    if hit(
+        r"\b(?:rochdale afc|rochdale hornets|football|rugby|cricket|boxing|netball|athletics|"
+        r"parkrun|MMA|muay thai|fixture|match|league two|cup tie|goalkeeper|striker|defender|"
+        r"midfielder|forward|bowling club|tennis|badminton|basketball)\b",
+        title,
+    ):
+        return "sport"
+
+    # Health precedes Events so a clinic open day remains a health-service
+    # story. A generic wellbeing/fitness event is not enough unless mental
+    # health/clinical/service wording is explicit.
+    if hit(
+        r"\b(?:NHS|hospital|infirmary|doctor|GP\b|general practice|clinic|patient|pharmacy|"
+        r"vaccination|health service|mental health (?:service|support|session|team|clinic|fitness)|"
+        r"wellbeing service)\b",
+        title,
+    ):
+        return "health"
+
+    if hit(
+        r"\b(?:school|college|university|ofsted|teacher|headteacher|pupil|student|GCSE|A[- ]level|"
+        r"education results?|exam results?)\b",
+        title,
+    ):
+        return "education"
+
+    if hit(
+        r"\b(?:roadworks?|road works?|road closure|road closed|lane closure|traffic|collision|crash|"
+        r"congestion|diversion|potholes?|speeding|dangerous driving|street racing|M62|A627(?:\(M\))?)\b",
+        title,
+    ):
+        return "traffic"
+
+    if hit(
+        r"\b(?:train|railway service|rail service|tram|metrolink|bee network|bus service|buses|"
+        r"bus route|timetable|public transport|northern rail|service disruption)\b",
+        title,
+    ):
+        return "transport"
+
+    if hit(
+        r"\b(?:flood|flooding|weather warning|weather forecast|heatwave|met office|recycling|litter|"
+        r"fly.?tipping|waste|landfill|wildlife|biodiversity|nature reserve|woodland|tree planting|"
+        r"tree felling|pollution|air quality|sewage|climate|net zero|moor fire|green belt|canal)\b",
+        title,
+    ):
+        return "environment"
+
+    if hit(
+        r"\b(?:festival|concert|gig|exhibition|performance|parade|fair|bingo|open day|community event|"
+        r"live music|show at|tour at|fun day)\b",
+        title,
+    ):
+        return "events"
+
+    if hit(r"\b(?:restoration of historic|historic .{0,45} restored|heritage restoration|listed building restoration|historic steps)\b", title):
+        return "news"
+
+    if hit(
+        r"\b(?:local election|general election|by[- ]election|council leader|council cabinet|council budget|"
+        r"council tax|member of parliament|\bMP\b|parliament|minister|manifesto|political party|"
+        r"labour party|conservative party|reform uk|liberal democrats?|workers party|mayoral election)\b",
+        title,
+    ):
+        return "politics"
+
+    if hit(
+        r"\b(?:youth council|youth cabinet|youth parliament|charity|fundraiser|fundraising|food ?bank|"
+        r"volunteer|community group|community centre|community cafe|community café|support group|"
+        r"homelessness|rough sleeper|residents'? group|community project|community award|local hero|"
+        r"veterans? breakfast club|anti-social behaviour)\b",
+        title,
+    ):
+        return "community"
+
+    if hit(
+        r"\b(?:business|company|shop|store|restaurant|pub|takeaway|retail|commercial|investment|"
+        r"housing development|new homes|apartments?|appoints? .{0,40} (?:chair|chief executive|CEO|director)|reopens? with new menu)\b",
+        title,
+    ):
+        return "business"
+
+    # No low-confidence body/standfirst vote. Preserve the editor/pipeline's
+    # existing category when the headline does not establish a section.
+    return None
 
 
 def category_reason(article: dict[str, Any], new_category: str) -> str:
-    title = clean(article.get("title"))
-    if hit(r"\byouth council|youth cabinet|youth parliament\b", title):
-        return "youth civic body is a community story, not health/politics by incidental vocabulary"
-    return f"headline/standfirst strongly identify {new_category}"
+    slug = clean(article.get("slug")).lower()
+    if slug in CATEGORY_OVERRIDES:
+        return "human-reviewed archive classification override"
+    return f"headline strongly identifies {new_category}"
 
 
 def apply_category(article: dict[str, Any], changes: list[dict[str, Any]]) -> None:
@@ -166,6 +249,18 @@ def apply_category(article: dict[str, Any], changes: list[dict[str, Any]]) -> No
         "to": proposed,
         "reason": category_reason(article, proposed),
     })
+
+
+VISUAL_FAMILIES: dict[str, tuple[str, ...]] = {
+    "health": ("hospital", "infirmary", "ambulance", "nhs", "doctor", "medical", "clinic", "gp-", "gp_", "pharmacy"),
+    "crime": ("police", "court", "prison", "jail", "handcuff", "knife", "grooming", "crime-scene", "crime_scene"),
+    "education": ("school", "academy", "college", "university", "classroom", "pupil"),
+    "traffic": ("roadworks", "road-closure", "road_closure", "traffic", "motorway", "collision", "crash"),
+    "sport": ("football", "rugby", "cricket", "hornets", "rochdale-afc", "rochdale_afc", "fixture"),
+}
+GENERATED_MARKERS = ("generated-card", "area-category-card", "placeholder")
+SAFE_REAL_STATUSES = ("source-photo", "commons-photo", "editorial-photo")
+UNSAFE_GENERIC_IMG_ONLY_STATUSES = ("source-photo-cached", "cards-library-photo")
 
 
 def local_image_value(article: dict[str, Any]) -> str:
@@ -205,7 +300,7 @@ def visual_family_mismatch(article: dict[str, Any]) -> tuple[bool, str]:
     if not blob:
         return False, ""
     category = clean(article.get("category")).lower()
-    title = text(article, "title", "excerpt").lower()
+    headline = text(article, "title", "excerpt").lower()
     title_support = {
         "health": r"\b(?:hospital|infirmary|ambulance|nhs|doctor|clinic|medical|gp|pharmacy)\b",
         "crime": r"\b(?:police|court|prison|jail|crime|arrest|charged|grooming|stabbing|knife)\b",
@@ -217,7 +312,7 @@ def visual_family_mismatch(article: dict[str, Any]) -> tuple[bool, str]:
         present = [token for token in tokens if token in blob]
         if not present or family == category:
             continue
-        if hit(title_support[family], title):
+        if hit(title_support[family], headline):
             continue
         return True, f"{family} visual ({', '.join(present[:3])}) does not match {category} story"
     return False, ""
@@ -228,6 +323,8 @@ def image_issue(article: dict[str, Any]) -> str:
     img = clean(article.get("img"))
     status = clean(article.get("image_status")).lower()
 
+    # Never let a hidden secondary field supply a photo that the canonical
+    # image field explicitly declined. This is the exact Daniel Murphy failure.
     if not image_url and img:
         return "uncanonical img fallback exists while image_url is empty"
     if not image_url and not img:
@@ -244,11 +341,8 @@ def image_issue(article: dict[str, Any]) -> str:
             article.get("manual_article") is True
             and "editorial" in clean(article.get("source_kind")).lower()
         )
-        explicit_source_image = bool(
-            clean(article.get("image_url"))
-            and clean(article.get("source_image_candidate_url"))
-        )
-        commons = "commons-photo" in clean(article.get("image_status")).lower()
+        explicit_source_image = bool(image_url and clean(article.get("source_image_candidate_url")))
+        commons = "commons-photo" in status
         if not (manual_editorial or explicit_source_image or commons):
             return "sensitive story image lacks explicit source/editorial provenance"
 
@@ -321,8 +415,8 @@ def audit(path: Path, mode: str) -> int:
 
     report = {
         "policy": (
-            "Headline/topic-first classification; canonical/source-backed images only; "
-            "neutral Rochdale Daily card whenever a photo could create a false implication."
+            "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; "
+            "canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication."
         ),
         "mode": mode,
         "article_count": len(articles),
@@ -350,9 +444,9 @@ def audit(path: Path, mode: str) -> int:
         f"Audited {len(articles)} stories: "
         f"{len(category_changes)} category corrections, {len(image_changes)} image corrections."
     )
-    for item in category_changes[:20]:
+    for item in category_changes[:40]:
         print(f"CATEGORY {item['from']} -> {item['to']}: {item['title']}")
-    for item in image_changes[:20]:
+    for item in image_changes[:40]:
         print(f"IMAGE -> generated: {item['title']} ({item['reason']})")
     return 0
 
