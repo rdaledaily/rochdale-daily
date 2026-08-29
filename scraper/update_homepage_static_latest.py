@@ -219,10 +219,26 @@ def card(row: dict) -> str:
     )
 
 
+def article_page_exists(slug: object) -> bool:
+    """True when the story has a page a reader could actually open.
+
+    The homepage writes real links into static HTML, so a record whose page is
+    missing becomes a 404 in the reader's face and in the crawler's index. A
+    headline rewrite that changes the slug is enough to cause it, which is how
+    a dead GCSE link ended up in the weekly block on 29 August.
+    """
+    name = str(slug or "").strip().strip("/")
+    if not name:
+        return False
+    return (ROOT / "articles" / f"{name}.html").is_file() or (
+        ROOT / "articles" / name / "index.html"
+    ).is_file()
+
+
 def main() -> int:
     rows = json.loads(ARTICLES.read_text(encoding="utf-8"))
     now = datetime.now(timezone.utc)
-    candidates = [r for r in rows if eligible(r, now)]
+    candidates = [r for r in rows if eligible(r, now) and article_page_exists(r.get("slug"))]
     candidates.sort(
         key=lambda r: parse_dt(r.get("first_published_at") or r.get("published_at")),
         reverse=True,
