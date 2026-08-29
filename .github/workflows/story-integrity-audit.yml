@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "articles.json"
       - "scraper/story_integrity_audit.py"
       - ".github/workflows/story-integrity-audit.yml"
   workflow_run:
