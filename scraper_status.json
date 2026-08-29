@@ -1,25 +1,25 @@
 {
-  "last_run_at": "2026-08-29T21:20:53.477826Z",
-  "raw_candidates_before_job_filter": 101,
+  "last_run_at": "2026-08-29T21:40:13.683920Z",
+  "raw_candidates_before_job_filter": 110,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 101,
-  "candidate_clusters": 47,
+  "raw_candidates": 110,
+  "candidate_clusters": 48,
   "google_news_resolution": {
-    "wrappers": 78,
-    "resolved": 20,
+    "wrappers": 74,
+    "resolved": 15,
     "text_recovered": 8,
     "reattributed": 1,
     "images_found": 12
   },
-  "duplicates_merged": 54,
-  "attempted_rewrites": 21,
-  "new_articles": 3,
-  "live_articles": 16,
-  "skipped": 18,
+  "duplicates_merged": 62,
+  "attempted_rewrites": 22,
+  "new_articles": 6,
+  "live_articles": 19,
+  "skipped": 16,
   "rewrite_skip_reasons": {},
   "collector_counts": {
-    "rss_and_google_news": 86,
-    "website_discovery": 9,
+    "rss_and_google_news": 91,
+    "website_discovery": 13,
     "aggregator_discovery": 2,
     "live_service_pages": 3,
     "facebook_official": 0,
@@ -29,26 +29,26 @@
   },
   "collector_errors": {},
   "source_counts": {
+    "Rochdale Times": 13,
+    "Colchester Gazette": 11,
     "facebook.com": 10,
-    "Rochdale Times": 9,
-    "Colchester Gazette": 9,
     "Rochdale Borough Council": 9,
     "Manchester Evening News": 8,
     "About Manchester": 6,
+    "Daily Express": 5,
+    "The Bury Times": 3,
     "FansNetwork.co.uk": 3,
     "Oldham Times": 3,
     "Roch Valley Radio Local News": 3,
     "Rochdale Valiant": 3,
     "Bee Network live travel alerts": 3,
-    "The Bury Times": 2,
     "Herts Advertiser": 2,
     "London 999": 2,
-    "Daily Express": 2,
     "Geo News": 2,
-    "Sky Sports": 2,
     "Colchester United FC": 2,
     "TfGM Travel Alerts": 2,
     "BBC": 1,
+    "Sky Sports": 1,
     "Yahoo Sports UK": 1,
     "Football Lowdown": 1,
     "Yahoo Sports": 1,
@@ -70,7 +70,7 @@
   },
   "selected_by_category": {
     "community": 1,
-    "crime": 1,
+    "crime": 2,
     "health": 2,
     "news": 3,
     "planning": 4,
@@ -80,14 +80,13 @@
     "transport": 2
   },
   "published_by_category": {
-    "community": 1,
-    "crime": 1,
-    "events": 6,
+    "community": 2,
+    "crime": 2,
+    "events": 7,
     "health": 1,
     "news": 3,
-    "politics": 1,
     "sport": 2,
-    "traffic": 1
+    "traffic": 2
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -131,6 +130,7 @@
     "planning-v3-bee171dcaa7bccc4f0d8",
     "sport-v3-8b7e975d91bef6953aff",
     "planning-v3-31d11f8638d2b493ccc3",
+    "hard-news-v3-66f8056cd32b91d8c54d",
     "transport-v3-0130cac038b0be0e29f7"
   ],
   "selected_candidate_urls": [
@@ -154,6 +154,7 @@
     "https://publicaccess.rochdale.gov.uk/online-applications/",
     "https://sports.yahoo.com/soccer/league-two/oldham-rochdale-13597453/",
     "https://www.rochdale.gov.uk/directory-record/2583/the-esplanade-roadworks-in-rochdale-from-4-october-2026",
+    "https://www.rochdaletimes.co.uk/experts-help-residents-stay-safe-online/",
     "https://www.rochvalleyradio.com/news/local-news/east-lancashire-railway-launches-christmas-card-competition-for-children/"
   ],
   "x_social_records": 0,
@@ -205,7 +206,7 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "community": 1,
-      "crime": 1,
+      "crime": 2,
       "health": 2,
       "news": 7,
       "politics": 1,
@@ -219,7 +220,7 @@
     "selected_by_area": {
       "alkrington": 1,
       "middleton": 1,
-      "rochdale": 19
+      "rochdale": 20
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
@@ -231,7 +232,7 @@
       "manchester evening news": 1,
       "roch valley radio local news": 2,
       "rochdale borough council": 3,
-      "rochdale times": 3,
+      "rochdale times": 4,
       "rochdale valiant": 1,
       "sussexworld": 1,
       "theoldhamtimes": 1,
@@ -858,7 +859,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 69,
+  "robots_denied_count": 70,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk",
     "https://london999.co.uk",
@@ -881,25 +882,19 @@
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=3&tdte=",
     "https://www.gmp.police.uk/news/news-search/?ct=Appeals&fdte=&page=4&tdte=",
     "https://www.northernrailway.co.uk/service-updates",
-    "https://www.unitedutilities.com/emergencies/up-my-street/",
     "https://aboutmanchester.co.uk/?s=Rochdale",
+    "https://www.unitedutilities.com/emergencies/up-my-street/",
     "https://rochdaleriverside.com/news/",
     "https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/",
     "https://www.hmnrconservatives.org.uk/news",
-    "https://c.newsnow.co.uk/A/1322574028?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322891866?-57568:46921",
     "https://c.newsnow.co.uk/A/1322551744?-57568:46921",
     "https://c.newsnow.co.uk/A/1322978491?-57568:46921",
     "https://c.newsnow.co.uk/A/1322881314?-57568:46921",
     "https://c.newsnow.co.uk/A/1322868571?-57568:46921",
     "https://c.newsnow.co.uk/A/1322783223?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322889943?-57568:46921",
     "https://c.newsnow.co.uk/A/1322759268?-57568:46921",
     "https://c.newsnow.co.uk/A/1322710430?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322662102?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322949697?-57568:46921",
     "https://c.newsnow.co.uk/A/1322676479?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322809162?-57568:46921",
     "https://c.newsnow.co.uk/A/1322652219?-57568:46921",
     "https://c.newsnow.co.uk/A/1322644338?-57568:46921",
     "https://c.newsnow.co.uk/A/1322605428?-57568:46921",
@@ -908,10 +903,16 @@
     "https://c.newsnow.co.uk/A/1322556491?-57568:46921",
     "https://c.newsnow.co.uk/A/1322546963?-57568:46921",
     "https://c.newsnow.co.uk/A/1322486848?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322879905?-57568:46921",
-    "https://c.newsnow.co.uk/A/1322894956?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322891866?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322949697?-57568:46921",
     "https://c.newsnow.co.uk/A/1322975928?-57568:46921",
     "https://c.newsnow.co.uk/A/1322890931?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322889943?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322574028?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322662102?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322879905?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322894956?-57568:46921",
+    "https://c.newsnow.co.uk/A/1322809162?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://aboutmanchester.co.uk/pakistan-tells-ed-miliband-it-will-not-take-back-rochdale-grooming-gang-leader/?__cf_chl_rt_tk=tTL.TwBBUQ3usMMBNxJ7tFA8MgLm3CoJYn97GWbDnDY-1787927183-1.0.1.1-joKMzb7PTC2RI7yqq186nxQe1pxSZ2qIBV7tXG1NlJA",
     "https://publicaccess.rochdale.gov.uk/online-applications/",
@@ -920,19 +921,22 @@
     "https://news.google.com/rss/articles/CBMirAFBVV95cUxNZVpzZEIyM3Rva3R4S3VfS2ZIM3BmQndvMEEzMGhYdGZPMDYxREY2c2FJTHg0ZWdyNjZiQ09hZmdSVUQ5c0wyaGNVUWtSTEtQZzl3TFhib0s1RmZDc3h4SnhQc0p2dndVa2loU2o0NFJ4aE05NE1MdGhqeW5obVZtXzcwNTlwR3IzR012dHk0TFdOMjZCY2JvTUZ2QnQ1ak03aF9xbkx5T094Q3c20gGyAUFVX3lxTE9SaFpBWms4Q2RYRHhhQ2RtcFpvOGJXbEo0ZHE3UV9TeFQ4c01HTW1YNTBKX2pJZ2tLakI1QjdCU1M5VlZwM2N3a0lzamdBRUhhMlVCSVJISzVMTG9EYWhNWi1PUVRBQkxWSlQzd2RNTDdmdzQ0c3RCQXJDUVlKRjFRZk4wZU5mZ2tNQ0hZY3hnZEU2c1pKa3lJNlk3NFgzSlhxeTF4VXB1V1ZSWDVfY1c3NUE?oc=5",
     "https://news.google.com/rss/articles/CBMisgFBVV95cUxPUmhaQVprOENkWER4YUNkbXBabzhiV2xKNGRxN1FfU3hUOHNNR01tWDUwSl9qSWdrS2pCNUI3QlNTOVZWcDNjd2tJc2pnQUVIYTJVQklSSEs1TExvRGFoTVotT1FUQUJMVkpUM3dkTUw3Znc0NHN0QkFyQ1FZSkYxUWZOMGVOZmdrTUNIWWN4Z2RFNnNaSmt5STZZNzRYM0pYcXkxeFVwdVdWUlg1X2NXNzVB0gGyAUFVX3lxTE9SaFpBWms4Q2RYRHhhQ2RtcFpvOGJXbEo0ZHE3UV9TeFQ4c01HTW1YNTBKX2pJZ2tLakI1QjdCU1M5VlZwM2N3a0lzamdBRUhhMlVCSVJISzVMTG9EYWhNWi1PUVRBQkxWSlQzd2RNTDdmdzQ0c3RCQXJDUVlKRjFRZk4wZU5mZ2tNQ0hZY3hnZEU2c1pKa3lJNlk3NFgzSlhxeTF4VXB1V1ZSWDVfY1c3NUE?oc=5",
     "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPY3EtQVdOU1doYWlSem1UdXVDYkg5RzdCOUdRQ2praDkwM0RyTmdfX05YRk5FV0gtNzctcXVDdjZmRS05MGhrbEowTkIzYTRpZnFyOTRsLVhCUUUxX0gyRlFUMHYzVEpSTFhLQm9rOVN0T2xZdWo0Umhac05uWG10VVhqcGVTSTFLWTlJbzlLZEZ4YjZPa0pYc29GcWVHWl9FNEZRdi1DaF96Ml81QlhUejExN1d2aUxfX3RDeng5REstdlliMHZBWnB1Z3o5dmJ1UXlBS0FBa0NnWHBXOC16YW1kcnYtZw?oc=5",
-    "https://news.google.com/rss/articles/CBMijgFBVV95cUxQRENXZE5faEZWNjJ5X3dTa3FSRGV1U0JPaUdnaTJ2M3pVa3plXzN5aHNoYjlsdzNtNVY2LXdoa19MTmJid1VrVWtyazJoME1yNHEybHpKY1Bkd1h1MnhXMjBseFlDTjhWaWZJeV9NZDBWSjV3MlFDci1YZ0hnbVdRejFGbDBseXZrMDhfbWtn?oc=5",
     "https://news.google.com/rss/articles/CBMisgFBVV95cUxPYUE1cVZvanlsMWJsdkNBeEpOZEE4Mndzd2d1VHFJc2FmTTFxT1J2NmFjM29VLWpwRkxQTzZjd2t2WjRhRm9EZVhrYjZTek15QjAxd0tZb2E3SmRCODY0dGctMXZtLWFRd0pDSlhsZXZZem9jNjFXQmxYc3F3MGhGZEE0UWhGdm1iNzZiby1LNlN1VjZ1dUpLLXZjSzc3eXF1Zi1xZ1lpcnJBRmNGQ2hmdGxR?oc=5",
     "https://news.google.com/rss/articles/CBMiugFBVV95cUxQVTg1TkxCa3RKZHhhM3oxdXJwUm1WdWhoYlZMMDltYkg4ZUlsUkhqTEdHOTFCUlU1eWZ1bTRSTmQ3b0c3NjNwNzhNYU45SGxPRWVxakw2U2J5UUloLUZnSFZwd0hCa2dYQkhNRDNORXU0RUR4dGkzaVdFSVdfbnhxNEF6UzlzeDQ0bnJ3RjE3WGZaTVd5MXNNVXZnZVJzTGFmS195a2pzSGp0Und6OXRCRHhJNjBRV2dmWWc?oc=5",
     "https://news.google.com/rss/articles/CBMihwFBVV95cUxPQnBMeDlEM2QtNEJVTGlHeElhMHZobk1vR2VHWnQtMmY3LUpZQjlrRzRydjhmQ0tZU0ZucVlDLVRzRW5mWXVESG1SZmQwUDRPY25fSnhCMUxWNmxObm9XSGZWRnlxUnVKalJFSjllQkF4bHlpcmF4SF84YjZpaUFmbjFuM01Rb1k?oc=5",
+    "https://news.google.com/rss/articles/CBMijgFBVV95cUxQRENXZE5faEZWNjJ5X3dTa3FSRGV1U0JPaUdnaTJ2M3pVa3plXzN5aHNoYjlsdzNtNVY2LXdoa19MTmJid1VrVWtyazJoME1yNHEybHpKY1Bkd1h1MnhXMjBseFlDTjhWaWZJeV9NZDBWSjV3MlFDci1YZ0hnbVdRejFGbDBseXZrMDhfbWtn?oc=5",
     "https://insights.betfred.com/football/match/england/29-08-2026/colchester-v-rochdale/",
     "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOeDhpakItaDQ1U2lBNTNuWWRMWWtKVldWbUhIRG9WNWU3b1JlVmJCR2U3eWJCcU9sZEZzR0h0LVJReUZ1Wk80VURYWEQ5R1ZvOHVfSDg2bVdxYUowQkg4R0cyYWZIVlFfQUYwLUFFWHJoekxfN1F6bWdzXzRiV3ZuRzlTVUNxSTZXZ0haOG55dlJobHN4SDJ5YXlVMlNqZ1BQQU1HZlRQbmRpNG5xcExvZ1BCRUhCOVhpUjVPR0Q5dF9CQQ?oc=5",
     "https://www.sussexexpress.co.uk/sport/football/crawley-town-v-bristol-rovers-kazim-richards-clear-message-to-players-after-win-at-rochdale-8946723",
     "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPX0FTcmVYd2kzVU94M0tvMmZScmF4aVlqcmdmTXMtSllSOUFmeTI3TEh2Nk9zS0xHR2ZrWVp3clA1UzgxRHhVT2hDcUlqM3BONjlfalY1RFdxdzFBd0M5b0poMTV2eGFiS0k1Q2FHQTdUWm1qOHItRl9yY3duZm16OXh1Sk9GYzNXQmlWNF8wT1R1WFpsbUV3V2ZzQUlQbHBOa3dzSTUxbkxrT29vQTVSTEtYVjBFUXpnV05TMzJ1eEVZaldzb0lYZ3c4WU9KZkViTFM0SzZ5NGtwTUFtUzNF?oc=5",
-    "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPOUtHN0Zmb1dYMWxhMWswSVNvNDhHa3Q5MUxBOEZmcTY1dlF5QUFTVTBjTWlhbUlFT2NoRDJTODVXU2RfTFRzbjRrX0ZxX2pXMGlQX01VLWphVmFncXo4aUNXNmZoTG94V0J0V3pNLXFDSHcyYTNuZkp4TXFBVDA3Uk10R09Cc2tGbG5xZFo5SWZLWFY1QVVSZS1zbmFkdzZNZ0Jpb2pwb0R5QWhPd25kWEo0RTBmai1FNXB6NlRGSTJUbHNiSDBLRW5Td1Izb2FnUTFtelNSWll2N2hhcFRVekN3?oc=5"
+    "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPOUtHN0Zmb1dYMWxhMWswSVNvNDhHa3Q5MUxBOEZmcTY1dlF5QUFTVTBjTWlhbUlFT2NoRDJTODVXU2RfTFRzbjRrX0ZxX2pXMGlQX01VLWphVmFncXo4aUNXNmZoTG94V0J0V3pNLXFDSHcyYTNuZkp4TXFBVDA3Uk10R09Cc2tGbG5xZFo5SWZLWFY1QVVSZS1zbmFkdzZNZ0Jpb2pwb0R5QWhPd25kWEo0RTBmai1FNXB6NlRGSTJUbHNiSDBLRW5Td1Izb2FnUTFtelNSWll2N2hhcFRVekN3?oc=5",
+    "https://news.google.com/rss/articles/CBMifEFVX3lxTFBKMEpBYVdlVzdOZzlDcVY0WUo0Y1A1bGs3ZjNJaXNYZFBNRDN3XzlsRVlIdDE0d29nWlNaRkdWbThSTUZBNkpZUVBRU3E0VTRSWnY3Z1FHNnhJbE1GenpHeW0zS2M2VkZacWszVTlQUWtJQnVmTFI2dC05U3Y?oc=5"
   ],
   "slow_domain_failure_threshold": 3,
   "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -950,8 +954,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-08-29T21:26:31.674085Z",
-  "frontpage_article_count": 6,
+  "frontpage_generated_at": "2026-08-29T21:45:31.997876Z",
+  "frontpage_article_count": 8,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -979,10 +983,12 @@
       "Milnrow and Newhey"
     ],
     "available_areas": [
+      "alkrington",
       "middleton",
       "wardle"
     ],
     "selected_areas": [
+      "alkrington",
       "middleton",
       "rochdale",
       "wardle"
@@ -991,36 +997,38 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "news": 2,
-      "crime": 1,
+      "crime": 2,
       "traffic": 2,
-      "community": 1
+      "community": 2,
+      "news": 2
     },
     "selected_by_ward": {
-      "borough-wide": 5,
+      "borough-wide": 7,
       "Central Rochdale": 1
     },
     "selected_by_area": {
+      "alkrington": 1,
       "middleton": 1,
-      "rochdale": 8,
+      "rochdale": 9,
       "wardle": 1
     },
     "selected_by_source": {
-      "rochdale valiant": 1,
+      "rochdale times": 2,
       "about manchester": 1,
       "rochdale borough council": 2,
+      "rochdale valiant": 1,
       "housingtoday": 1,
       "theoldhamtimes": 1
     },
-    "pool_size": 10,
-    "primary_pool_size": 10,
+    "pool_size": 12,
+    "primary_pool_size": 12,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 6,
+    "frontpage_count": 8,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 1,
-    "fresh_under_homepage_window": 5,
-    "short_briefs_selected": 4,
+    "fresh_under_24h": 3,
+    "fresh_under_homepage_window": 7,
+    "short_briefs_selected": 5,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1031,7 +1039,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 8,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 139,
+  "duplicate_articles_after_postprocessing": 141,
   "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1040,6 +1048,6 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 23,
+  "area_archive_count": 24,
   "whats_on_event_count": 8
 }
