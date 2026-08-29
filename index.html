@@ -1875,7 +1875,9 @@
 
     let stories = [];
 
-    const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
+    // How long a crime story keeps its lead-position boost before recency wins.
+const CRIME_PRIORITY_MS = 36 * 60 * 60 * 1000;
+const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     const ARTICLE_REFRESH_MS = 60 * 1000;
 
     function ukDateKey(value) {
@@ -2027,7 +2029,15 @@
         policeMatter: Boolean(article.policeMatter || article.police_matter || category === "crime"),
         body: body.length ? body : ["Further verified details will be added by the Rochdale Daily newsdesk."],
         slot: article.slot || "",
-        priority: category === "crime" ? 100 : (Number(article.priority) || 0),
+        // A crime story outranks the rest of the paper while it is news, not
+        // for ever. The flat "crime = 100" boost sorted above date, so every
+        // crime story ever published sat above every other story: on 29 August
+        // the Latest rail was showing 1-10 August crime pieces while that
+        // morning's stories sat below them. The boost now expires with the
+        // freshness window, after which ordering falls back to recency.
+        priority: (category === "crime" && (Date.now() - (new Date(publishedAt || 0).getTime() || 0)) <= CRIME_PRIORITY_MS)
+          ? 100
+          : (Number(article.priority) || 0),
         published_at: publishedAt,
         sourceUrl: article.source_url || "",
         sourceName: stripMarkdownText(article.source_name || ""),
