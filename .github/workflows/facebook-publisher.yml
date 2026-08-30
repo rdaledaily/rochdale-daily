@@ -1,11 +1,11 @@
 name: Post Rochdale Daily article to Facebook
 
-# Scheduled publishing is intentionally paused while Meta has the Rochdale Daily
-# business/Page under an account-integrity automation restriction. Keeping the
-# workflow manually dispatchable preserves the integration for testing after the
-# review without repeatedly hitting the Graph API while access is restricted.
+# Scheduled Page posting runs in GitHub Actions so the repository's saved
+# secrets can be used without exposing them locally.
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "*/20 * * * *"
   push:
     branches: [main]
     paths:
@@ -55,8 +55,8 @@ jobs:
           FACEBOOK_RESULT_PATH: /tmp/facebook_last_result.json
           FACEBOOK_QUEUE_ORDER: newest
           FACEBOOK_MAX_ARTICLE_AGE_HOURS: "24"
-          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "30"
-          FACEBOOK_MAX_POSTS_24H: "20"
+          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "20"
+          FACEBOOK_MAX_POSTS_24H: "72"
         run: python scraper/post_facebook_article.py
 
       - name: Save successful Facebook post to state branch
