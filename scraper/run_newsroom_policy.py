@@ -217,7 +217,10 @@ def _normalise_runtime_status() -> None:
     status["developing_story_watch_policy"] = (
         "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not."
     )
-    status["source_led_fallback_enabled"] = False
+    status["source_led_fallback_enabled"] = True
+    status["evergreen_fallback_policy"] = (
+        "Hourly watcher: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour cooldown."
+    )
     status["crime_direct_publish_enabled"] = False
     status["crime_ai_gate_enabled"] = True
     core.write_json_atomic(core.STATUS_FILE, status)
