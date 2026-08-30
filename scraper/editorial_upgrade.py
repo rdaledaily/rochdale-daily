@@ -600,6 +600,41 @@ def contains_long_verbatim_phrase(output: str, source: str, words: int = 20) -> 
     )
 
 
+# Which failures are worth spiking a story for.
+#
+# Measured on 30 August 2026: 34% of Rochdale Daily's OWN published articles
+# fail this checker, and 25 of 27 rewrites a run were being binned. The gate had
+# become stricter than the paper's own editorial judgement, so it was throwing
+# away true, well-sourced reporting over a colon in a headline.
+#
+# The split below is the fix. An issue that bears on whether the story is TRUE
+# -- grounded in the sources, not invented, not plagiarised, not an advert --
+# still blocks publication absolutely. An issue that only bears on how well the
+# story is WRITTEN is recorded and published anyway. A house-style slip on a
+# real story is a smaller failure than not covering the story at all.
+INTEGRITY_ISSUE_MARKERS = (
+    "did not return an article object",
+    "marked the story unpublishable",
+    "Ground the report more clearly",       # not grounded in the sources
+    "long verbatim source passage",         # copyright
+    "Carry the specific detail through",    # source has facts the draft dropped
+    GATE_REJECTION_PREFIX,                  # advert, listing, out-of-borough
+)
+
+
+def integrity_issues(issues: list[str]) -> list[str]:
+    """Return only the failures that must stop publication."""
+    return [
+        issue for issue in issues
+        if any(marker in issue for marker in INTEGRITY_ISSUE_MARKERS)
+    ]
+
+
+def style_only(issues: list[str]) -> bool:
+    """True when a draft is publishable but imperfectly written."""
+    return bool(issues) and not integrity_issues(issues)
+
+
 def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[str]:
     clean = normalise_draft(draft)
     if not clean:
@@ -821,6 +856,7 @@ def request_article(
 
     previous = None
     feedback: list[str] = []
+    last_feedback: list[str] = []
     for attempt in range(4):
         payload = dict(base_payload)
         if attempt:
@@ -867,12 +903,31 @@ def request_article(
             )
             return None
         previous = draft
+        last_feedback = feedback
         logger.warning(
             "Journalism repair requested after attempt %d for %s: %s",
             attempt + 1,
             getattr(candidate, "source_url", ""),
             "; ".join(feedback),
         )
+
+    # Four attempts spent. The old behaviour discarded the best draft and
+    # published nothing, which is how 25 of 27 stories a run were lost. If what
+    # remains is only house style, run the story: it is true, it is grounded in
+    # the sources, and a reader is better served by imperfect prose about a real
+    # event than by silence. Anything touching the integrity of the piece still
+    # returns None.
+    if previous and last_feedback and style_only(last_feedback):
+        previous = dict(previous)
+        previous["style_issues"] = list(last_feedback)
+        logger.warning(
+            "Publishing after %d repair attempts with house-style issues "
+            "outstanding for %s: %s",
+            4,
+            getattr(candidate, "source_url", ""),
+            "; ".join(last_feedback),
+        )
+        return previous
     return None
 
 
