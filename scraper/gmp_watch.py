@@ -735,6 +735,23 @@ def run_once(fetcher: Fetcher, state: dict[str, Any], *, push: bool = True) -> i
         key = canonical_url(str(entry.get("source_url") or ""))
         if key:
             seen.add(key)
+
+    # Also seed from what the pipeline has ALREADY published. Without this the
+    # watcher re-raises a GMP post the newsroom covered minutes earlier, and the
+    # front page carries the story twice -- a breaking stub sitting above the
+    # paper's own fuller article. Found against real data: the Section 60
+    # authority in Rochdale town centre on 30 August was already published from
+    # the GMP source URL before the watcher ever ran. Retiring it a poll later
+    # is not good enough; it must never be raised.
+    try:
+        from retire_breaking import published_index
+
+        for key in published_index():
+            if key:
+                seen.add(key)
+    except Exception as error:
+        log.warning("could not read published articles when seeding: %s", error)
+
     state["seen"] = sorted(seen)
 
     new_entries = poll_once(fetcher, state, now=now)
