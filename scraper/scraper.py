@@ -30,6 +30,7 @@ from editorial_upgrade import (
     compact_records as editorial_compact_records,
     deterministic_category as editorial_category,
     enrich_records as editorial_enrich_records,
+    integrity_issues as editorial_integrity_issues,
     quality_issues as editorial_quality_issues,
     request_article as editorial_request_article,
     strip_service_furniture,
@@ -85,6 +86,20 @@ def note_rewrite_skip(reason: str) -> None:
     key = re.sub(r'\s+', ' ', key).strip()[:120] or 'unspecified'
     with _REWRITE_SKIP_LOCK:
         REWRITE_SKIP_REASONS[key] += 1
+
+# Stories that ran despite a house-style failure. This is the ledger that keeps
+# the relaxed gate honest: if a check appears here constantly it is either
+# miscalibrated and should be fixed, or the model needs better instruction. It
+# must never become a quiet way of lowering the paper's standards.
+STYLE_ISSUES_PUBLISHED: Counter[str] = Counter()
+
+
+def note_style_issue(reason: str) -> None:
+    """Record one house-style failure that was published rather than spiked."""
+    key = re.sub(r'https?://\S+', '<url>', str(reason or 'unspecified'))
+    key = re.sub(r'\s+', ' ', key).strip()[:120] or 'unspecified'
+    with _REWRITE_SKIP_LOCK:
+        STYLE_ISSUES_PUBLISHED[key] += 1
 
 LOG_FILE = ROOT / 'scraper' / 'scraper.log'
 OPENAI_MODEL = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
@@ -2410,12 +2425,24 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     }
     final_issues = draft_quality_issues(final_draft, source_text, candidate)
     if final_issues:
-        log.warning('Final rewrite failed quality checks for %s: %s', candidate.source_url, '; '.join(final_issues))
-        # Record WHICH check failed, not merely that one did. This is the
-        # largest single loss in the pipeline and the reason it stayed
-        # invisible: the counter said 22 skipped and nothing said why.
-        note_rewrite_skip(f'quality check: {final_issues[0]}')
-        return None
+        # Integrity failures still spike the story. House-style failures no
+        # longer do: this second gate was binning drafts the repair loop had
+        # already decided were worth running, so a story could survive four
+        # repair attempts and still die one step later over a colon in the
+        # headline. Both gates now apply the same rule.
+        blocking = editorial_integrity_issues(final_issues)
+        if blocking:
+            log.warning('Final rewrite failed quality checks for %s: %s', candidate.source_url, '; '.join(blocking))
+            # Record WHICH check failed, not merely that one did. This is the
+            # largest single loss in the pipeline and the reason it stayed
+            # invisible: the counter said 22 skipped and nothing said why.
+            note_rewrite_skip(f'quality check: {blocking[0]}')
+            return None
+        log.warning(
+            'Publishing %s with house-style issues outstanding: %s',
+            candidate.source_url, '; '.join(final_issues),
+        )
+        note_style_issue(final_issues[0])
 
     if (
         candidate.source_kind != 'live'
@@ -2971,7 +2998,7 @@ def main() -> int:
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
     save_benched_domains(BENCHED_DOMAINS)
-    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
+    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
 if __name__ == '__main__':
