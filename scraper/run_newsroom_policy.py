@@ -9,6 +9,7 @@ source-overlap guard and publisher-leak gate remain the publication controls.
 from __future__ import annotations
 
 import json
+from datetime import datetime, timedelta, timezone
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import editorial_upgrade as editorial
@@ -187,14 +188,30 @@ def install_runtime_policy() -> None:
     )
 
 
-def _normalise_runtime_status() -> None:
-    """Keep diagnostic status aligned with the policy actually used in production."""
+def _read_status() -> dict:
     try:
         status = json.loads(core.STATUS_FILE.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
+        return {}
+    return status if isinstance(status, dict) else {}
+
+
+def _preserved_evergreen_status() -> dict:
+    """Keep fallback attempt state even if the core scraper rewrites status.json."""
+    return {
+        key: value
+        for key, value in _read_status().items()
+        if str(key).startswith("evergreen_")
+    }
+
+
+def _normalise_runtime_status(preserved_evergreen: dict | None = None) -> None:
+    """Keep diagnostic status aligned with the policy actually used in production."""
+    status = _read_status()
+    if not status:
         return
-    if not isinstance(status, dict):
-        return
+    if preserved_evergreen:
+        status.update(preserved_evergreen)
     status["prohibited_sources"] = [
         "pressreader.com",
         "autouncle.co.uk",
@@ -219,18 +236,62 @@ def _normalise_runtime_status() -> None:
     )
     status["source_led_fallback_enabled"] = True
     status["evergreen_fallback_policy"] = (
-        "Hourly watcher: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour cooldown."
+        "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff."
     )
     status["crime_direct_publish_enabled"] = False
     status["crime_ai_gate_enabled"] = True
     core.write_json_atomic(core.STATUS_FILE, status)
 
 
+def _maybe_run_evergreen_fallback() -> None:
+    """Measure supply after the real-news scrape and invoke one bounded fallback."""
+    try:
+        import evergreen_fallback as evergreen
+
+        articles = evergreen.read_json(evergreen.ARTICLES_PATH, [])
+        if not isinstance(articles, list):
+            core.log.warning("Evergreen fallback skipped: articles.json is not a list")
+            return
+
+        now = datetime.now(timezone.utc)
+        decision = evergreen.evaluate_trigger(articles, now)
+        if not decision.should_publish:
+            core.log.info(
+                "Evergreen fallback skip: %s (%s qualifying stories; threshold %s)",
+                decision.reason,
+                decision.qualifying_count,
+                decision.threshold,
+            )
+            return
+
+        status = _read_status()
+        last_attempt = evergreen.parse_dt(status.get("evergreen_fallback_attempt_at"))
+        if last_attempt is not None and now - last_attempt < timedelta(hours=1):
+            core.log.info(
+                "Evergreen fallback skip: failed-attempt backoff until one hour after %s",
+                last_attempt.isoformat(),
+            )
+            return
+
+        status["evergreen_fallback_attempt_at"] = now.isoformat().replace("+00:00", "Z")
+        status["evergreen_fallback_attempt_reason"] = decision.reason
+        status["evergreen_fallback_attempt_count"] = decision.qualifying_count
+        core.write_json_atomic(core.STATUS_FILE, status)
+
+        evergreen.main()
+    except Exception as exc:
+        # Fallback content is supplementary. It must never make the real-news
+        # pipeline fail or prevent a valid edition from publishing.
+        core.log.exception("Evergreen fallback guarded failure: %s", exc)
+
+
 def main() -> int:
     install_runtime_policy()
+    preserved_evergreen = _preserved_evergreen_status()
     result = pipeline.main()
     if result == 0:
-        _normalise_runtime_status()
+        _normalise_runtime_status(preserved_evergreen)
+        _maybe_run_evergreen_fallback()
     return result
 
 
