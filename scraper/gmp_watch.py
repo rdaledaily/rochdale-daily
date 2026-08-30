@@ -720,8 +720,19 @@ def retire_superseded(items: list[dict[str, Any]]) -> int:
     return retired
 
 
-def run_once(fetcher: Fetcher, state: dict[str, Any], *, push: bool = True) -> int:
-    now = utc_now()
+def run_once(
+    fetcher: Fetcher,
+    state: dict[str, Any],
+    *,
+    push: bool = True,
+    now: datetime | None = None,
+) -> int:
+    # `now` is injectable so the tests are deterministic. Without it they read
+    # the wall clock, and a fixture timestamped an hour before the suite was
+    # written silently falls outside the freshness window a few hours later --
+    # a test that passes in the evening and fails overnight, for no reason
+    # connected to the code.
+    now = now or utc_now()
 
     # Seed the seen-set from breaking.json itself, including superseded and
     # expired entries. The watch state is only committed when breaking.json
