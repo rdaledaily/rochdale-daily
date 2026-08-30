@@ -5,11 +5,22 @@
 // race cannot leave a dead/403 story card visible on the paper.
 
 const LIVE_UNTIL = Date.parse('2026-08-09T01:30:00+01:00');
-const BLOCKED_SLUGS = new Set([
+// The takedown workflow writes story_blocklist.json. This Function used to keep
+// its own copy of the list, which meant a story removed through one route was
+// still served by the other, and nothing kept the two in step. It now reads the
+// committed blocklist at request time. The names below remain only as a
+// last-resort fallback for the case where that file cannot be read at all.
+const FALLBACK_BLOCKED_SLUGS = new Set([
   'crowds-gather-at-rochdale-town-hall-this-afternoon',
   'james-and-georgina-celebrate-their-wedding-at-whitworth-estate',
   'new-stone-circle-installed-near-rochdale',
   'rochdale-borough-council-licensing-sub-committee-meeting-scheduled-for-may-2026',
+  'rochdale-valiant-launches-new-media-portal',
+  'rochdale-valiant-launches-new-media-portal-for-community-engagement',
+  'rochdale-valiant-launches-new-media-portal-for-community-news',
+  'rochdale-valiant-launches-new-media-portal-for-local-community',
+  'rochdale-valiant-launches-new-media-portal-for-local-news',
+  'rochdale-valiant-launches-new-media-portal-to-enhance-community-engagement',
   'rochdale-weather-forecast-sunny-intervals-expected-this-week',
   'rochdale-weather-forecast-warm-and-sunny-days-ahead',
   'sunny-weather-expected-in-rochdale-this-week',
@@ -19,6 +30,58 @@ const BLOCKED_SLUGS = new Set([
   'walking-the-rochdale-canal-a-scenic-journey-from-brearley-bridge-to-luddendenfoo'
 ]);
 
+// Subject-level blocks. A slug list can only stop the exact pages that already
+// exist; the scraper regenerates the same story under a new slug every time the
+// headline is reworded, which is how six near-identical pages got published.
+// The scraper matches story_blocklist.json title_patterns as a lowercase
+// substring of the headline -- this Function now does the same, so both ends of
+// the pipeline block on the same rule.
+const FALLBACK_BLOCKED_TITLE_PATTERNS = ['rochdale valiant'];
+
+function normaliseSlug(value) {
+  return String(value == null ? '' : value)
+    .replace(/^\.\.\//, '').replace(/\.html$/i, '').trim().toLowerCase();
+}
+
+/** Read the committed blocklist. Falls back to the names above if unreadable. */
+async function loadBlocklist(env, requestUrl) {
+  const slugs = new Set(FALLBACK_BLOCKED_SLUGS);
+  const patterns = new Set(FALLBACK_BLOCKED_TITLE_PATTERNS);
+  try {
+    const url = new URL('/story_blocklist.json', requestUrl);
+    const response = await env.ASSETS.fetch(url);
+    if (!response.ok) return { slugs, patterns };
+    const data = await response.json();
+    const listed = Array.isArray(data) ? data : (data && data.slugs);
+    if (Array.isArray(listed)) {
+      for (const entry of listed) {
+        // Keep the fallback names too: a slug removed from the committed file
+        // by accident should not quietly come back onto the front page.
+        const slug = normaliseSlug(entry && entry.slug ? entry.slug : entry);
+        if (slug) slugs.add(slug);
+      }
+    }
+    const titles = data && !Array.isArray(data) ? data.title_patterns : null;
+    if (Array.isArray(titles)) {
+      for (const entry of titles) {
+        const pattern = String(entry == null ? '' : entry).trim().toLowerCase();
+        if (pattern) patterns.add(pattern);
+      }
+    }
+  } catch (_) { /* fall through to the fallback sets */ }
+  return { slugs, patterns };
+}
+
+function isBlocked(article, blocklist) {
+  if (blocklist.slugs.has(slugOf(article))) return true;
+  const title = String(article?.title || '').trim().toLowerCase();
+  if (!title) return false;
+  for (const pattern of blocklist.patterns) {
+    if (title.includes(pattern)) return true;
+  }
+  return false;
+}
+
 function storyTime(article) {
   const value = article?.first_published_at || article?.published_at || article?.last_updated_at || '';
   const parsed = Date.parse(value);
@@ -26,7 +89,7 @@ function storyTime(article) {
 }
 
 function slugOf(article) {
-  return String(article?.slug || '').replace(/^\.\.\//, '').replace(/\.html$/i, '').trim().toLowerCase();
+  return normaliseSlug(article?.slug);
 }
 
 function liveStory(nowIso) {
@@ -60,7 +123,8 @@ export async function onRequest(context) {
 
   const now = new Date();
   const nowIso = now.toISOString();
-  let articles = data.articles.filter(a => a && a.id !== 'feel-good-festival-2026-live' && !BLOCKED_SLUGS.has(slugOf(a)));
+  const blocklist = await loadBlocklist(env, request.url);
+  let articles = data.articles.filter(a => a && a.id !== 'feel-good-festival-2026-live' && !isBlocked(a, blocklist));
   articles.sort((a, b) => storyTime(b) - storyTime(a));
   if (now.getTime() <= LIVE_UNTIL) articles.unshift(liveStory(nowIso));
 
