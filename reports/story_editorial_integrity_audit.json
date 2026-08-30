@@ -1,23 +1,16 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 140,
-  "published_count": 140,
-  "category_change_count": 19,
-  "image_change_count": 20,
+  "article_count": 137,
+  "published_count": 137,
+  "category_change_count": 18,
+  "image_change_count": 21,
   "category_changes": [
     {
       "slug": "restoration-of-historic-packer-spout-steps-completed-in-rochdale-town-centre",
       "title": "Restoration of Historic Packer Spout Steps Completed in Rochdale Town Centre",
       "from": "traffic",
       "to": "news",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "rochdale-boroughwide-housing-appoints-paul-roberts-as-permanent-chair",
-      "title": "Rochdale Boroughwide Housing Appoints Paul Roberts as Permanent Chair",
-      "from": "community",
-      "to": "business",
       "reason": "human-reviewed archive classification override"
     },
     {
@@ -142,6 +135,18 @@
   ],
   "image_changes": [
     {
+      "slug": "thirteen-year-old-boy-stabbed-at-taco-bell-in-rochdale-two-teenagers-arrested",
+      "title": "Thirteen-Year-Old Boy Stabbed at Taco Bell in Rochdale, Two Teenagers Arrested",
+      "category": "crime",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/taco_bell.png",
+        "img": "assets/img/cards/taco_bell.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/thirteen-year-old-boy-stabbed-at-taco-bell-in-rochdale-two-teenagers-arrested-generated-card.jpg"
+    },
+    {
       "slug": "police-investigate-alleged-rape-of-young-man-in-rochdale",
       "title": "Police Investigate Alleged Rape of Young Man in Rochdale",
       "category": "crime",
@@ -166,16 +171,16 @@
       "after": "assets/img/cards/greater-manchester-police-to-host-cyber-crime-awareness-events-in-rochdale-generated-card.jpg"
     },
     {
-      "slug": "pakistan-refuses-to-repatriate-rochdale-grooming-gang-leader",
-      "title": "Pakistan Refuses to Repatriate Rochdale Grooming Gang Leader Shabir Ahmed",
-      "category": "crime",
+      "slug": "new-tesco-express-opens-on-oldham-road-in-rochdale",
+      "title": "New Tesco Express Opens on Oldham Road in Rochdale",
+      "category": "news",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/grooming_gang.jpg",
-        "img": "assets/img/cards/grooming_gang.jpg",
+        "image_url": "assets/img/cards/tesco_express.jpg",
+        "img": "assets/img/cards/tesco_express.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/pakistan-refuses-to-repatriate-rochdale-grooming-gang-leader-generated-card.jpg"
+      "after": "assets/img/cards/new-tesco-express-opens-on-oldham-road-in-rochdale-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
