@@ -12,13 +12,23 @@ permissions:
   contents: write
   actions: write
 
-# A code/config push represents a newer newsroom implementation and therefore
-# supersedes any older render still holding the shared writer lane. Scheduled
-# runs keep cancel-in-progress=false in scrape-fast.yml, so ordinary editions
-# serialize rather than cancelling one another.
+# This lane used to cancel whatever held the writer lane, on the reasoning that
+# a code push supersedes an older render. In practice it did the opposite of its
+# job. Measured on the evening of 30 August 2026: runs #748, #749, #750, #751
+# and #752 were ALL cancelled, six in a row, because each file uploaded through
+# the GitHub web UI is its own commit and each commit fired this lane again.
+# The paper published nothing for over an hour, and #750 was killed 41 minutes
+# into a run that was about to commit.
+#
+# Queueing instead of cancelling fixes it. GitHub keeps at most ONE pending run
+# per concurrency group, so a burst of five commits now collapses to a single
+# queued re-render that starts when the current edition finishes, instead of
+# five kills in a row. A render already in flight is nearly always still worth
+# publishing: it is at most one code change behind, and the chained fast lane
+# picks the new code up on its next start regardless.
 concurrency:
   group: rd-site-writer
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   fast-news:
@@ -145,14 +155,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref main
-      - name: Re-seed the fast lane this run interrupted
-        # This lane holds rd-site-writer with cancel-in-progress, so starting it
-        # cancels whatever is running there -- deliberately, because a code push
-        # supersedes an obsolete render. What that also killed, every time, was
-        # the chained fast run that keeps the paper publishing: a cancelled job
-        # never reaches its own chain step. Observed on 29 August, when a burst
-        # of pushes to scraper/** silently ended the chain for six hours.
-        # So the lane that breaks the chain is the lane that restarts it.
+      - name: Re-seed the fast lane if nothing is keeping it alive
+        # Written when this lane still cancelled the chain and had to restart
+        # what it had just killed. It no longer cancels anything, so this is now
+        # only a safety net: if no fast run is queued or in progress when this
+        # finishes, the chain has died of some other cause and wants restarting.
+        # The guard below means it stays quiet in the normal case.
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
