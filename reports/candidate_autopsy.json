@@ -1,0 +1,43 @@
+{
+  "examined_at": "2026-08-30T12:12:55.685555Z",
+  "reservoir_retention_hours": 96,
+  "candidates_examined": 139,
+  "publish_age_gate_hours": 48,
+  "first_blocking_gate": {
+    "age": 63,
+    "would publish": 57,
+    "duplicate of published story": 18,
+    "job or career post": 1
+  },
+  "would_publish": 57,
+  "age_gate_sensitivity": {
+    "6h": 8,
+    "14h": 13,
+    "24h": 49,
+    "48h": 76,
+    "72h": 107,
+    "168h": 139
+  },
+  "gates_unavailable": [],
+  "examples": {
+    "would publish": [
+      "Food Standards Agency: 63 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "Bee Network live travel alerts: Updated: 29/08/2026 at 10:31am Live Failsworth Tram Stop - Lifts out o",
+      "facebook.com: 🚨 A serious incident has happened in Taco Bell in Rochdale town centre"
+    ],
+    "duplicate of published story": [
+      "Daily Mail: Boy, 13, seriously injured after being stabbed at Taco Bell in Rochdal",
+      "Daily Mirror: Boy, 13, stabbed at Taco Bell in Rochdale as police swarm town centre ",
+      "Daily Mirror: Boy, 13, stabbed at Taco Bell in Rochdale as police swarm town centre "
+    ],
+    "job or career post": [
+      "Secret Manchester: A brand new Tesco Express opens in Rochdale today featuring an in-stor"
+    ],
+    "age": [
+      "Guido Fawkes: Pakistan Ignores Miliband’s Pleas to Take Back Rochdale Rapist - Guido",
+      "Geo News: 'No bilateral mechanism' to take back Rochdale rapist, DPM Dar tells U",
+      "Yahoo: Pakistan tells Miliband it will not take back Rochdale rapist - Yahoo"
+    ]
+  },
+  "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
+}
