@@ -1,18 +1,11 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 137,
-  "published_count": 137,
-  "category_change_count": 18,
-  "image_change_count": 21,
+  "article_count": 138,
+  "published_count": 138,
+  "category_change_count": 17,
+  "image_change_count": 22,
   "category_changes": [
-    {
-      "slug": "restoration-of-historic-packer-spout-steps-completed-in-rochdale-town-centre",
-      "title": "Restoration of Historic Packer Spout Steps Completed in Rochdale Town Centre",
-      "from": "traffic",
-      "to": "news",
-      "reason": "human-reviewed archive classification override"
-    },
     {
       "slug": "wellmental-uk-hosts-first-mens-mental-health-fitness-session-in-heywood",
       "title": "WellMental UK hosts first men's mental health fitness session in Heywood",
@@ -135,6 +128,18 @@
   ],
   "image_changes": [
     {
+      "slug": "oldham-defeats-rochdale-hornets-32-14-in-season-finale",
+      "title": "Oldham Defeats Rochdale Hornets 32-14 in Season Finale",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_hornets.jpg",
+        "img": "assets/img/cards/rochdale_hornets.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/oldham-defeats-rochdale-hornets-32-14-in-season-finale-generated-card.jpg"
+    },
+    {
       "slug": "thirteen-year-old-boy-stabbed-at-taco-bell-in-rochdale-two-teenagers-arrested",
       "title": "Thirteen-Year-Old Boy Stabbed at Taco Bell in Rochdale, Two Teenagers Arrested",
       "category": "crime",
@@ -171,16 +176,16 @@
       "after": "assets/img/cards/greater-manchester-police-to-host-cyber-crime-awareness-events-in-rochdale-generated-card.jpg"
     },
     {
-      "slug": "new-tesco-express-opens-on-oldham-road-in-rochdale",
-      "title": "New Tesco Express Opens on Oldham Road in Rochdale",
-      "category": "news",
+      "slug": "pakistan-rejects-uk-request-to-repatriate-rochdale-grooming-gang-leader-shabir-a",
+      "title": "Pakistan Rejects UK Request to Repatriate Rochdale Grooming Gang Leader Shabir Ahmed",
+      "category": "crime",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/tesco_express.jpg",
-        "img": "assets/img/cards/tesco_express.jpg",
+        "image_url": "assets/img/cards/grooming_gang.jpg",
+        "img": "assets/img/cards/grooming_gang.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/new-tesco-express-opens-on-oldham-road-in-rochdale-generated-card.jpg"
+      "after": "assets/img/cards/pakistan-rejects-uk-request-to-repatriate-rochdale-grooming-gang-leader-shabir-a-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
