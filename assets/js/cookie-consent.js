@@ -5,7 +5,7 @@
   var KEY = "rd-cookie-choice";
   var ACCEPTED = "optional-accepted";
   var DECLINED = "essential-only";
-  var ASSET_VERSION = "20260811-readmore-1";
+  var ASSET_VERSION = "20260830-trust-pages-1";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -52,6 +52,69 @@
     document.body.appendChild(script);
   }
 
+  function upgradeTrustPage() {
+    var main = document.querySelector("main.trust-wrap");
+    if (!main) return;
+
+    addStyle("/assets/css/trust-pages.css");
+    document.body.classList.add("trust-newspaper-body");
+
+    var oldHeader = document.querySelector("body > header.masthead");
+    if (oldHeader) {
+      var header = document.createElement("header");
+      header.className = "trust-newspaper-header";
+      header.innerHTML =
+        '<div class="trust-newspaper-header__inner">' +
+          '<a class="trust-newspaper-brand" href="/" aria-label="Rochdale Daily home">ROCHDALE DAILY</a>' +
+          '<a class="trust-newspaper-edition" href="/archive.html">Browse the archive</a>' +
+        '</div>';
+
+      var nav = document.createElement("nav");
+      nav.className = "trust-newspaper-nav";
+      nav.setAttribute("aria-label", "Main navigation");
+      nav.innerHTML =
+        '<div class="trust-newspaper-nav__inner">' +
+          '<a href="/">Latest</a>' +
+          '<a href="/wards/">News by ward</a>' +
+          '<a href="/archive.html">Archive</a>' +
+          '<a href="/about.html">About</a>' +
+          '<a href="/editorial-standards.html">Standards</a>' +
+          '<a href="/corrections-and-complaints.html">Corrections</a>' +
+          '<a href="/contact.html">Contact</a>' +
+        '</div>';
+
+      oldHeader.replaceWith(header);
+      header.insertAdjacentElement("afterend", nav);
+
+      var path = window.location.pathname.replace(/\/$/, "");
+      [].slice.call(nav.querySelectorAll("a")).forEach(function (link) {
+        var href = link.getAttribute("href").replace(/\/$/, "");
+        if (href && path === href) link.setAttribute("aria-current", "page");
+      });
+    }
+
+    var footer = document.querySelector("body > footer");
+    if (footer) {
+      footer.className = "trust-newspaper-footer";
+      footer.removeAttribute("style");
+      footer.innerHTML =
+        '<div class="trust-newspaper-footer__inner">' +
+          '<strong>Rochdale Daily</strong> — independent local news for the Rochdale borough.' +
+          '<div class="trust-newspaper-footer__links">' +
+            '<a href="/about.html">About</a>' +
+            '<a href="/editor.html">The editor</a>' +
+            '<a href="/editorial-standards.html">Editorial standards</a>' +
+            '<a href="/corrections-and-complaints.html">Corrections &amp; complaints</a>' +
+            '<a href="/contact.html">Contact</a>' +
+            '<a href="/privacy.html">Privacy</a>' +
+            '<a href="#" data-cookie-settings>Cookie settings</a>' +
+            '<a href="/terms.html">Terms</a>' +
+            '<a href="/accessibility.html">Accessibility</a>' +
+          '</div>' +
+        '</div>';
+    }
+  }
+
   function pollLoadError() {
     var poll = document.getElementById("community-poll");
     if (!poll) return;
@@ -79,6 +142,7 @@
   }
 
   function init() {
+    upgradeTrustPage();
     var banner = build();
     var accept = document.getElementById("cookie-accept");
     var decline = document.getElementById("cookie-decline");
