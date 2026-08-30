@@ -1,12 +1,19 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 13,
+    "kept_cards": 14,
     "cards_library": 0,
     "cards_generated": 1,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "oldham-defeats-rochdale-hornets-32-14-in-season-finale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale_hornets.jpg",
+      "matched_filename": "rochdale_hornets.jpg",
+      "match_score": 15256
+    },
     {
       "slug": "rochdale-boroughwide-housing-proposes-demolition-of-seven-blocks-in-lower-faling",
       "result": "kept-cards",
@@ -64,13 +71,6 @@
       "match_score": null
     },
     {
-      "slug": "rock-classics-by-candlelight-rochdale",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-      "matched_filename": "rochdale-town-hall.jpg",
-      "match_score": 8378
-    },
-    {
       "slug": "ellie-sax-endless-summer-tour-2026",
       "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
@@ -81,6 +81,13 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "monsters-of-rock-halloween-special-2026",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
