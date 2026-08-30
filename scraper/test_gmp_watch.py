@@ -322,7 +322,7 @@ with tempfile.TemporaryDirectory() as tmp:
     gw.BREAKING_FILE = Path(tmp) / "breaking.json"
     gw.STATE_FILE = Path(tmp) / "reports" / "gmp_watch_state.json"
     fresh_state: dict = {}
-    live_count = gw.run_once(StubFetcher(pages), fresh_state, push=False)
+    live_count = gw.run_once(StubFetcher(pages), fresh_state, push=False, now=now)
     check(live_count == 2, "run_once reports the number published")
     payload = json.loads(gw.BREAKING_FILE.read_text(encoding="utf-8"))
     check(len(payload["items"]) == 2, "breaking.json written with both items")
