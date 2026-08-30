@@ -82,6 +82,95 @@ function isBlocked(article, blocklist) {
   return false;
 }
 
+// --------------------------------------------------------------------------
+// Breaking news from the GMP watcher.
+//
+// scraper/gmp_watch.py writes breaking.json within a minute of GMP posting.
+// Reading it here, at request time, is what makes that minute count: the story
+// reaches the front page as soon as Pages has the commit, with no site rebuild
+// and without queueing behind a scrape that holds rd-site-writer for up to 45
+// minutes. This is the same trick the live-festival story below already uses --
+// a story served from the edge that is not in the static feed at all.
+//
+// Only entries the watcher marked 'live' appear. Anything it held for legal
+// review stays in the file and stays off the site.
+// --------------------------------------------------------------------------
+
+const BREAKING_KICKER = 'BREAKING';
+
+function breakingToArticle(entry, nowIso) {
+  const slug = normaliseSlug(entry.slug);
+  const quote = String(entry.quote || '').trim();
+  const attribution = String(entry.attribution || 'Greater Manchester Police said:');
+  const sourceUrl = String(entry.source_url || '');
+  const paragraphs = quote
+    .split(/\n{2,}/)
+    .map(p => p.trim())
+    .filter(Boolean)
+    .map(p => `<p>${escapeHtml(p)}</p>`)
+    .join('');
+  return {
+    id: `breaking:${slug}`,
+    // articles/${slug}.html is how the homepage builds every card link, so
+    // escaping one level up puts the reader on the Function-rendered page.
+    slug: `../breaking/${slug}`,
+    story_key: `breaking:${slug}`,
+    title: String(entry.title || ''),
+    excerpt: quote.slice(0, 220),
+    content_html: `<p><strong>${escapeHtml(attribution)}</strong></p>${paragraphs}`,
+    area: String(entry.area || 'rochdale'),
+    category: String(entry.category || 'crime'),
+    types: ['news'],
+    source_kind: 'official-statement',
+    status: 'published',
+    published_at: entry.published_at,
+    first_published_at: entry.published_at,
+    last_updated_at: entry.published_at,
+    scraped_at: entry.detected_at || entry.published_at,
+    source_name: String(entry.source_name || 'Greater Manchester Police'),
+    source_url: sourceUrl,
+    source_names: [String(entry.source_name || 'Greater Manchester Police')],
+    source_urls: sourceUrl ? [sourceUrl] : [],
+    image_url: String(entry.image_url || 'assets/img/cards/police.jpg'),
+    image_credit: 'Rochdale Daily',
+    byline: String(entry.byline || 'Rochdale Daily'),
+    kicker: BREAKING_KICKER,
+    is_ongoing: true,
+    ongoing_label: BREAKING_KICKER,
+    breaking: true,
+    police_matter: true,
+    developing: true,
+    rewrite_quality_checked: true,
+    publication_route: 'gmp-breaking-watch'
+  };
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+async function loadBreaking(env, requestUrl, now) {
+  try {
+    const url = new URL('/breaking.json', requestUrl);
+    const response = await env.ASSETS.fetch(url);
+    if (!response.ok) return [];
+    const data = await response.json();
+    const items = Array.isArray(data) ? data : (data && data.items);
+    if (!Array.isArray(items)) return [];
+    return items
+      .filter(entry => entry && entry.status === 'live' && entry.title && entry.slug)
+      .filter(entry => {
+        const expires = Date.parse(entry.expires_at || '');
+        return !Number.isFinite(expires) || expires > now.getTime();
+      })
+      .sort((a, b) => Date.parse(b.published_at || 0) - Date.parse(a.published_at || 0));
+  } catch (_) {
+    return [];
+  }
+}
+
 function storyTime(article) {
   const value = article?.first_published_at || article?.published_at || article?.last_updated_at || '';
   const parsed = Date.parse(value);
@@ -126,6 +215,27 @@ export async function onRequest(context) {
   const blocklist = await loadBlocklist(env, request.url);
   let articles = data.articles.filter(a => a && a.id !== 'feel-good-festival-2026-live' && !isBlocked(a, blocklist));
   articles.sort((a, b) => storyTime(b) - storyTime(a));
+
+  // Breaking entries go above the sorted feed but below a running live blog.
+  // The blocklist applies to them too: a story you have taken down must not
+  // come back through the breaking door.
+  const breakingEntries = await loadBreaking(env, request.url, now);
+
+  // Once the pipeline has published its own article from the same GMP post,
+  // the canonical version wins and the breaking card steps aside -- otherwise
+  // the front page carries the story twice, the stub above the real thing.
+  const publishedSourceUrls = new Set();
+  for (const article of articles) {
+    for (const url of [article.source_url, ...(Array.isArray(article.source_urls) ? article.source_urls : [])]) {
+      if (url) publishedSourceUrls.add(String(url).trim());
+    }
+  }
+  const breakingArticles = breakingEntries
+    .filter(entry => !publishedSourceUrls.has(String(entry.source_url || '').trim()))
+    .map(entry => breakingToArticle(entry, nowIso))
+    .filter(article => !isBlocked(article, blocklist));
+  if (breakingArticles.length) articles.unshift(...breakingArticles);
+
   if (now.getTime() <= LIVE_UNTIL) articles.unshift(liveStory(nowIso));
 
   articles.forEach((article, index) => {
@@ -142,6 +252,18 @@ export async function onRequest(context) {
     const existing = String(data.breaking || '').trim();
     data.breaking = liveTitle + (existing && !existing.includes(liveTitle) ? '     •     BREAKING     •     ' + existing : '');
   }
+
+  // Put breaking headlines in the ticker too. A card the reader has to scroll
+  // to is not really breaking.
+  if (breakingArticles.length) {
+    const headlines = breakingArticles.map(a => a.title).filter(Boolean);
+    const existing = String(data.breaking || '').trim();
+    const fresh = headlines.filter(title => !existing.includes(title));
+    if (fresh.length) {
+      data.breaking = [...fresh, existing].filter(Boolean).join('     •     BREAKING     •     ');
+    }
+  }
+  data.breaking_count = breakingArticles.length;
 
   return new Response(JSON.stringify(data), {
     status: 200,
