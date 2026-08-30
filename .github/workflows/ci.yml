@@ -95,6 +95,7 @@ jobs:
             scraper/source_yield_probe.py \
             scraper/model_bridge.py \
             scraper/dual_agent_bridge.py \
+            scraper/evergreen_fallback.py \
             scraper/run_newspaper_pipeline.py \
             scraper/run_newsroom_policy.py \
             scraper/councillor_photos.py \
@@ -109,7 +110,9 @@ jobs:
             scraper/guarantee_article_images.py \
             scraper/scraper.py
       - name: Validate hand-edited data files
-        run: python scraper/check_data_files.py
+        run: |
+          python scraper/check_data_files.py
+          python -m json.tool scraper/evergreen_topics.json > /dev/null
       - name: Run test suite
         run: |
           python scraper/test_frontpage_pipeline.py
@@ -133,6 +136,7 @@ jobs:
           python scraper/test_resolve_google_news_sources.py
           PYTHONPATH=scraper python scraper/test_google_news_resolver.py
           PYTHONPATH=scraper python scraper/test_run_newsroom_policy.py
+          PYTHONPATH=scraper python scraper/test_evergreen_fallback.py
           PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
           python scraper/test_ensure_article_images.py
           python scraper/test_councillor_photos.py
