@@ -1,0 +1,157 @@
+name: Rochdale Daily GMP breaking watch
+
+# Polls Greater Manchester Police about once a minute and writes any Rochdale
+# borough post to breaking.json. It publishes nothing to the site itself and
+# never takes the rd-site-writer lock, so it cannot be blocked by -- or block --
+# a running scrape.
+#
+# Why a loop inside one job rather than a one-minute cron: GitHub's scheduler
+# drops scheduled runs freely (the fast lane's own history shows gaps of several
+# hours), and a fresh job spends 20-30 seconds on checkout and setup before it
+# can poll at all. One job that polls fifty times costs one setup and gives a
+# genuine 60-second heartbeat. The repository is public, so the minutes are free.
+#
+# Resilience: the run re-dispatches its own successor, AND a schedule re-seeds
+# the lane every 20 minutes. The concurrency group means a re-seed that arrives
+# while a watch is already running simply queues one successor rather than
+# piling up, so a dead chain self-heals within 20 minutes instead of waiting for
+# someone to notice.
+
+on:
+  workflow_dispatch:
+    inputs:
+      chain_depth:
+        description: "Internal — how many times this chain has re-dispatched"
+        required: false
+        default: "0"
+  schedule:
+    - cron: "*/20 * * * *"
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: rd-gmp-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      # Poll cadence and how long one job watches before handing over.
+      POLL_INTERVAL_SECONDS: "60"
+      WATCH_DURATION_SECONDS: "3000"   # 50 minutes
+      # Editorial rails, all overridable here without touching the code.
+      BREAKING_TTL_HOURS: "18"
+      MAX_LIVE_BREAKING: "3"
+      GMP_MAX_POST_AGE_MINUTES: "180"
+      RESPECT_ROBOTS: "true"
+      CHAIN_DEPTH: ${{ github.event.inputs.chain_depth || '0' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir requests feedparser
+
+      - name: Test the watcher
+        run: PYTHONPATH=scraper python scraper/test_gmp_watch.py
+
+      - name: Watch GMP
+        run: |
+          PYTHONPATH=scraper python scraper/gmp_watch.py \
+            --interval "$POLL_INTERVAL_SECONDS" \
+            --duration "$WATCH_DURATION_SECONDS"
+
+      # The watcher commits as it goes, so a story is live within a minute of
+      # GMP posting it rather than at the end of the run. This is a safety net
+      # for anything the loop wrote but could not push.
+      #
+      # It commits ONLY when breaking.json itself changed. The watch state file
+      # changes on every poll (a timestamp and some ETags), and committing that
+      # would add about 700 commits a month to main -- every one of which is a
+      # Cloudflare deployment. The state is disposable: a fresh run re-seeds its
+      # memory from breaking.json, which is committed.
+      - name: Commit anything still outstanding
+        if: always()
+        run: |
+          if git diff --quiet -- breaking.json && git diff --quiet --cached -- breaking.json; then
+            echo 'breaking.json unchanged; not committing poll bookkeeping'
+            git checkout -- reports/gmp_watch_state.json 2>/dev/null || true
+            exit 0
+          fi
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add breaking.json reports/gmp_watch_state.json 2>/dev/null || true
+          if git diff --cached --quiet; then echo 'nothing outstanding'; exit 0; fi
+          git commit -m "Record GMP breaking update"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 7))
+          done
+          echo "::warning::outstanding breaking update could not be pushed"
+
+      - name: Report what is waiting for the editor
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          path = pathlib.Path('breaking.json')
+          if not path.exists():
+              raise SystemExit(0)
+          items = json.loads(path.read_text(encoding='utf-8')).get('items', [])
+          live = [i for i in items if i.get('status') == 'live']
+          held = [i for i in items if i.get('status') == 'held']
+          lines = ['## GMP breaking watch', '']
+          lines.append(f'- live on the front page: {len(live)}')
+          lines.append(f'- held for your review: {len(held)}')
+          for item in held:
+              lines.append(f"  - **{item['title']}** — held: {item.get('hold_reason')}")
+              lines.append(f"    {item.get('source_url')}")
+          summary = os.getenv('GITHUB_STEP_SUMMARY')
+          if summary:
+              pathlib.Path(summary).write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          print('\n'.join(lines))
+          if held:
+              print(f"::warning::{len(held)} GMP story(ies) held for editorial review")
+          PY
+
+      # Hand over to a successor. The schedule above re-seeds the lane anyway,
+      # so this is about keeping the 60-second heartbeat unbroken between
+      # scheduled runs, not about being the only thing keeping it alive.
+      - name: Hand over to the next watch
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          depth="${CHAIN_DEPTH:-0}"
+          if [ "$depth" -ge 24 ]; then
+            echo "chain depth $depth reached; letting the schedule re-seed instead"
+            exit 0
+          fi
+          active=$(gh run list --workflow gmp-watch.yml --status in_progress --json databaseId --jq 'length' || echo 0)
+          queued=$(gh run list --workflow gmp-watch.yml --status queued --json databaseId --jq 'length' || echo 0)
+          if [ "$((active + queued))" -gt 1 ]; then
+            echo "another watch is already active or queued; not chaining"
+            exit 0
+          fi
+          gh workflow run gmp-watch.yml --ref main -f chain_depth="$((depth + 1))"
+          echo "handed over at chain depth $((depth + 1))"
