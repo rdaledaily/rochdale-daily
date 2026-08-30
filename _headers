@@ -16,6 +16,14 @@
 /feel-good-live.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
+# Written by the GMP watcher and read at request time by the Pages Functions.
+# A cached copy here would spend the minute the watcher exists to save.
+/breaking.json
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/story_blocklist.json
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
 # Editorial images are static files and dominate article transfer size. A one-day
 # browser TTL materially improves repeat visits while still allowing same-name
 # corrections to propagate quickly; stale-while-revalidate keeps navigation fast.
