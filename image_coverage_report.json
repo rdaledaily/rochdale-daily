@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 112,
-    "cards_library": 1,
-    "cards_generated": 3,
+    "kept_cards": 113,
+    "cards_library": 2,
+    "cards_generated": 2,
     "skipped": 0
   },
   "items": [
@@ -27,6 +27,13 @@
       "image_url": "assets/img/cards/greater_manchester_police.jpg",
       "matched_filename": "greater_manchester_police.jpg",
       "match_score": 8385
+    },
+    {
+      "slug": "rochdale-afc-hosts-shrewsbury-town-in-sky-bet-league-two-match",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
     },
     {
       "slug": "rochdale-boroughwide-housing-proposes-demolition-of-seven-blocks-in-lower-faling",
@@ -79,8 +86,8 @@
     },
     {
       "slug": "new-play-area-under-construction-in-alkrington-as-improvements-continue",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/new-play-area-under-construction-in-alkrington-as-improvements-continue-generated-card.jpg",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/new-play-area-under-construction-in-alkrington-as-improvements-continue.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -786,8 +793,8 @@
     },
     {
       "slug": "oktoberfest-rochdale-2026",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/pure-80-s-festival-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
