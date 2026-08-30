@@ -2347,6 +2347,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         )
         if draft is None:
             log.warning('No coherent grounded rewrite could be produced; skipped: %s', candidate.source_url)
+            note_rewrite_skip('no coherent grounded rewrite could be produced')
             return None
 
         title = strip_markdown(draft.get('title'))[:160]
@@ -2410,6 +2411,10 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
     final_issues = draft_quality_issues(final_draft, source_text, candidate)
     if final_issues:
         log.warning('Final rewrite failed quality checks for %s: %s', candidate.source_url, '; '.join(final_issues))
+        # Record WHICH check failed, not merely that one did. This is the
+        # largest single loss in the pipeline and the reason it stayed
+        # invisible: the counter said 22 skipped and nothing said why.
+        note_rewrite_skip(f'quality check: {final_issues[0]}')
         return None
 
     if (
@@ -2870,6 +2875,10 @@ def main() -> int:
             if article:
                 new_articles.append(article)
             else:
+                # Catch-all. Every return-None path inside rewrite_candidate
+                # now records its own reason, so this should stay at zero; if
+                # it does not, a path is still unaccounted for.
+                note_rewrite_skip('rewrite returned no article (reason not recorded)')
                 skipped += 1
     ai_count = len(selected_candidates)
     # URL stability: a story that has already been published keeps its slug,
