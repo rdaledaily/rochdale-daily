@@ -1,0 +1,90 @@
+name: Integrate Showbiz desk
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'showbiz/**'
+      - '.github/workflows/showbiz-integrate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: showbiz-integrate
+  cancel-in-progress: true
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add Showbiz to the permanent site surfaces
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          index_path = Path('index.html')
+          text = index_path.read_text(encoding='utf-8')
+          original = text
+
+          # Main newspaper navigation: link to the dedicated local-first desk.
+          if 'href="/showbiz/">Showbiz</a>' not in text:
+              anchor = '        <li><button type="button" data-category="health">Health</button></li>\n'
+              replacement = anchor + '        <li><a href="/showbiz/">Showbiz</a></li>\n'
+              if anchor not in text:
+                  raise SystemExit('Showbiz integration failed: main-nav Health anchor not found')
+              text = text.replace(anchor, replacement, 1)
+
+          # Latest-news desktop filter: Showbiz works exactly like Health/Sport/etc.
+          toolbar_button = '            <button class="filter-button" type="button" data-category="showbiz">Showbiz</button>\n'
+          if toolbar_button not in text:
+              anchor = '            <button class="filter-button" type="button" data-category="health">Health</button>\n'
+              if anchor not in text:
+                  raise SystemExit('Showbiz integration failed: category toolbar Health anchor not found')
+              text = text.replace(anchor, anchor + toolbar_button, 1)
+
+          # Mobile homepage: give entertainment its own capped section instead of
+          # burying it inside the catch-all block.
+          mobile_line = '      { id: "showbiz", title: "Showbiz", categories: ["showbiz", "entertainment", "tv", "television", "film", "music", "theatre", "celebrity"] },\n'
+          if mobile_line not in text:
+              anchor = '      { id: "sport", title: "Sport", categories: ["sport"] },\n'
+              if anchor not in text:
+                  raise SystemExit('Showbiz integration failed: mobile Sport anchor not found')
+              text = text.replace(anchor, anchor + mobile_line, 1)
+
+          if text != original:
+              index_path.write_text(text, encoding='utf-8')
+
+          # Static article pages must print SHOWBIZ, not fall back to NEWS.
+          pages_path = Path('scraper/generate_pages.py')
+          pages = pages_path.read_text(encoding='utf-8')
+          pages_original = pages
+          if "'showbiz': 'Showbiz'" not in pages:
+              anchor = "'health': 'Health', 'environment': 'Environment'"
+              replacement = "'health': 'Health', 'showbiz': 'Showbiz', 'environment': 'Environment'"
+              if anchor not in pages:
+                  raise SystemExit('Showbiz integration failed: CATEGORY_LABELS anchor not found')
+              pages = pages.replace(anchor, replacement, 1)
+          if pages != pages_original:
+              pages_path.write_text(pages, encoding='utf-8')
+          PY
+
+      - name: Commit integration if needed
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html scraper/generate_pages.py; then
+            echo 'Showbiz integration already present.'
+            exit 0
+          fi
+          git config user.name 'Rochdale Daily automation'
+          git config user.email 'news@rochdaledaily.co.uk'
+          git add index.html scraper/generate_pages.py
+          git commit -m 'Integrate Showbiz across homepage and article pages'
+          git push
