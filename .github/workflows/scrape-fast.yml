@@ -156,9 +156,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref main
       - name: Keep the fast lane running
-        # Three rails stop a runaway chain: a depth cap, a check that no other
-        # fast run is already queued or in progress, and a minimum spacing so a
-        # run that fails in seconds cannot spin the lane.
+        # Four rails stop a runaway/starving chain: a depth cap, a check that no
+        # other fast run is active, a check that the canonical publisher is
+        # waiting/running, and minimum spacing so a fast failure cannot spin.
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
@@ -180,6 +180,14 @@ jobs:
             wait=$(( MIN_RUN_SECONDS - elapsed ))
             echo "run finished in ${elapsed}s; spacing the next dispatch by ${wait}s"
             sleep "$wait"
+          fi
+          publisher_active=$(gh run list --workflow publish.yml --limit 15 \
+            --json databaseId,status \
+            --jq '[.[] | select(.status != "completed")] | length' \
+            || echo 0)
+          if [ "${publisher_active:-0}" -gt 0 ]; then
+            echo "canonical publisher is queued or running; yielding the fast-news chain"
+            exit 0
           fi
           active=$(gh run list --workflow scrape-fast.yml --limit 15 \
             --json databaseId,status \
