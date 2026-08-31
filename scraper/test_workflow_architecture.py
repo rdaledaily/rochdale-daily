@@ -12,13 +12,12 @@ def text(name: str) -> str:
 
 def main() -> int:
     # Only workflows that render/push the complete public newspaper share the
-    # single site-writer lane. Scheduled/manual editions serialize normally,
-    # while a code/config push supersedes an obsolete render already in flight.
+    # single site-writer lane. All of those renders queue rather than cancelling
+    # one another: cancelling an in-flight edition on every code/config push
+    # caused repeated publication starvation during bursts of commits.
     for name in ("scrape-fast.yml", "scrape-kick.yml", "publish.yml"):
         assert "group: rd-site-writer" in text(name), name
-    assert "cancel-in-progress: true" in text("scrape-kick.yml")
-    assert "cancel-in-progress: false" in text("scrape-fast.yml")
-    assert "cancel-in-progress: false" in text("publish.yml")
+        assert "cancel-in-progress: false" in text(name), name
 
     expected_source_lanes = {
         "council-minutes.yml": "rd-council-source",
