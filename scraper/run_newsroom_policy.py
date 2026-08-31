@@ -28,11 +28,25 @@ LOCAL_PUBLISHER_NAMES = (
     "rochdale online",
     "rochdale observer",
 )
+CHALLENGE_PATH_MARKERS = (
+    "/.well-known/sgcaptcha/",
+    "/cdn-cgi/challenge-platform/",
+    "/captcha/",
+)
 
 
 def _host(url: str) -> str:
     host = (urlparse(str(url or "")).hostname or "").lower()
     return host[4:] if host.startswith("www.") else host
+
+
+def _is_challenge_url(source_url: str = "") -> bool:
+    """Reject bot/challenge endpoints that can never be useful source articles."""
+    try:
+        path = (urlparse(str(source_url or "")).path or "").lower()
+    except Exception:
+        return False
+    return any(marker in path for marker in CHALLENGE_PATH_MARKERS)
 
 
 def _is_local_publisher(source_name: str = "", source_url: str = "") -> bool:
@@ -132,6 +146,11 @@ def install_runtime_policy() -> None:
     original_source_is_denied = core.source_is_denied
 
     def source_is_denied(source_name: str = "", source_url: str = "") -> bool:
+        # Challenge/CAPTCHA endpoints are not articles. Reject them before the
+        # local-publisher discovery exemption so they cannot consume fetch or AI
+        # budget on the fast lane.
+        if _is_challenge_url(source_url):
+            return True
         # Local competitors may inform a story. They still have to pass locality,
         # freshness, AI rewrite, copying and public-copy publisher-leak gates.
         if _is_local_publisher(source_name, source_url):
@@ -182,6 +201,7 @@ def install_runtime_policy() -> None:
     core._RD_RUNTIME_SOURCE_POLICY_INSTALLED = True
     core.log.info(
         "Runtime source policy: local publishers enabled for discovery/corroboration; "
+        "challenge/CAPTCHA endpoints rejected before processing; "
         "automatic publisher-image reuse restricted to the explicit allowlist; "
         "rich-source 200-word target uses a 10-word no-padding tolerance; "
         "developing-source watches exclude legacy static council guidance pages."
@@ -220,6 +240,7 @@ def _normalise_runtime_status(preserved_evergreen: dict | None = None) -> None:
         "youtube.com",
         "reddit.com",
         "classified/spam denylist",
+        "captcha/challenge endpoints",
     ]
     status["local_publishers_discovery_enabled"] = sorted(LOCAL_PUBLISHER_DOMAINS)
     status["local_publisher_public_copy_policy"] = (
