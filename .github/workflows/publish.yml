@@ -42,13 +42,13 @@ permissions:
   contents: write
   actions: write
 
-# Manual/editorial publication must never queue behind the continuous scraper.
-# A newer editorial commit supersedes an older rebuild and starts from latest main.
-# Because every run resets to latest main, cancelling an older editorial rebuild
-# cannot lose an earlier manual source commit.
+# Every workflow that renders and pushes the complete public newspaper shares
+# one writer lane. Manual publication must never race the continuous scraper:
+# it queues behind any active render, starts from the latest main, then rebuilds
+# the canonical site with the editor-written source records included.
 concurrency:
-  group: rd-manual-publisher
-  cancel-in-progress: true
+  group: rd-site-writer
+  cancel-in-progress: false
 
 jobs:
   publish:
