@@ -42,12 +42,12 @@ permissions:
   contents: write
   actions: write
 
-# Every workflow that renders and pushes the complete public newspaper shares
-# one writer lane. Manual publication must never race the continuous scraper:
-# it queues behind any active render, starts from the latest main, then rebuilds
-# the canonical site with the editor-written source records included.
+# Editor/manual publication has its own short writer lane. It deliberately does
+# not wait behind a long-running scrape: the publish step starts from latest main
+# and already has bounded race-safe rebuild logic if main moves while it renders.
+# This prevents a stalled scraper from holding editor-written stories off the site.
 concurrency:
-  group: rd-site-writer
+  group: rd-manual-publisher
   cancel-in-progress: false
 
 jobs:
@@ -83,7 +83,7 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
           # Manual publication keeps the canonical merge/frontpage logic but
-          # skips archive-wide image rescans when canonical images already exist.
+          # skips external event refreshes and archive-wide image rescans.
           python scraper/frontpage_manual_publish.py
           python scraper/article_gate.py articles.json
           python scraper/councillor_photos.py
@@ -94,9 +94,6 @@ jobs:
           python scraper/frontpage_source_quality.py
           PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
           python scraper/enforce_live_homepage_window.py
-          # This is the final frontpage mutation before homepage HTML is rebuilt:
-          # fresh editor-written stories are guaranteed a place even if automated
-          # source/category balancing would otherwise have crowded them out.
           python scraper/ensure_manual_frontpage.py
           python scraper/generate_news_sitemap.py
           python scraper/generate_archive.py
@@ -110,9 +107,6 @@ jobs:
           python scraper/content_hygiene.py --fix
           python scraper/content_hygiene.py
           python scraper/enforce_cards_only_images.py --articles articles.json --check
-          # Release invariant: never commit/deploy a snapshot in which an enabled
-          # manual story vanished from articles.json or a fresh one vanished from
-          # the frontpage, article pages or canonical image cache.
           python scraper/verify_manual_publication.py
       - name: Commit rebuilt canonical site
         id: commit
@@ -164,17 +158,16 @@ jobs:
             exit 0
           fi
           git commit -m "Publish canonical Rochdale Daily site"
-          if git push origin HEAD:main; then
+          if timeout --signal=TERM 90s git push origin HEAD:main; then
             echo "published=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Continuous scrape jobs may move main while an editor publish is
-          # rebuilding. Rebuild from the new head rather than force-pushing or
-          # silently abandoning the manual story.
-          for attempt in 1 2 3; do
-            echo "main moved during canonical rebuild; regenerating from latest main (${attempt}/3)."
-            git fetch origin main
+          # Another writer can move main while this short editor build is
+          # running. Rebuild from the newest head rather than force-pushing.
+          for attempt in 1 2; do
+            echo "main moved during canonical rebuild; regenerating from latest main (${attempt}/2)."
+            timeout --signal=TERM 60s git fetch origin main
             git reset --hard origin/main
             git clean -fd
             rebuild_from_current_main
@@ -184,7 +177,7 @@ jobs:
               exit 0
             fi
             git commit -m "Publish canonical Rochdale Daily site (race-safe rebuild)"
-            if git push origin HEAD:main; then
+            if timeout --signal=TERM 90s git push origin HEAD:main; then
               echo "published=true" >> "$GITHUB_OUTPUT"
               exit 0
             fi
