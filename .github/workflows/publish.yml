@@ -13,6 +13,7 @@ on:
       - ward_areas.json
       - scraper/manual_articles.py
       - scraper/frontpage_pipeline.py
+      - scraper/frontpage_manual_publish.py
       - scraper/story_identity.py
       - scraper/frontpage_source_quality.py
       - scraper/generate_pages.py
@@ -28,8 +29,6 @@ on:
       - scraper/generate_image_sitemap.py
       - scraper/ensure_article_images.py
       - scraper/enforce_cards_only_images.py
-      - scraper/repair_generated_article_images.py
-      - scraper/repair_generated_with_commons.py
       - scraper/enforce_frontpage_freshness.py
       - scraper/enforce_live_homepage_window.py
       - assets/css/site.css
@@ -79,12 +78,9 @@ jobs:
         run: |
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
-          python scraper/frontpage_pipeline.py
-          # Editorial publication is deliberately network-free here. Source and
-          # Commons image repair belongs to scraper/recovery runs; doing it here
-          # made a manual story wait on many 10-second remote image lookups.
-          python scraper/ensure_article_images.py --articles articles.json
-          python scraper/enforce_cards_only_images.py --articles articles.json
+          # Manual publication keeps the full canonical merge/frontpage logic but
+          # only re-runs the expensive image matcher for editor-injected records.
+          python scraper/frontpage_manual_publish.py
           python scraper/article_gate.py articles.json
           python scraper/councillor_photos.py
           python scraper/patch_democracy_portraits.py
@@ -116,17 +112,14 @@ jobs:
 
           stage_publish() {
             git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json \
-              articles sitemap.xml news-sitemap.xml image-sitemap.xml assets/img/cards image_coverage_report.json \
-              cards_image_policy_report.json archive.html search.html archive-index.json \
+              articles sitemap.xml news-sitemap.xml image-sitemap.xml assets/img/cards archive.html search.html archive-index.json \
               articles/frontpage.json index.html rss.xml wards/ councillor_photos.json 2>/dev/null || true
           }
 
           rebuild_from_current_main() {
             python -m json.tool articles.json > /dev/null
             python -m json.tool manual_articles.json > /dev/null
-            python scraper/frontpage_pipeline.py
-            python scraper/ensure_article_images.py --articles articles.json
-            python scraper/enforce_cards_only_images.py --articles articles.json
+            python scraper/frontpage_manual_publish.py
             python scraper/article_gate.py articles.json
             python scraper/councillor_photos.py
             python scraper/patch_democracy_portraits.py
