@@ -34,6 +34,13 @@
   const normalCategory = item => (item.category || 'News').trim() || 'News';
   const sectionKey = value => String(value || 'News').trim().toLowerCase();
   const titleCase = value => { const text = String(value || 'News').trim(); return text ? text.replace(/\b\w/g, char => char.toUpperCase()) : 'News'; };
+  const slugFor = item => {
+    const direct = String(item.slug || '').trim();
+    if (direct) return direct;
+    const pathname = String(item.url || '').split(/[?#]/, 1)[0];
+    const filename = pathname.split('/').filter(Boolean).pop() || '';
+    return filename.replace(/\.html?$/i, '');
+  };
 
   function dayKey(item) {
     const date = parsedDate(item.published_at);
@@ -85,7 +92,7 @@
       if (year !== 'all' && (!date || String(date.getFullYear()) !== year)) return false;
       if (month !== 'all' && (!date || String(date.getMonth()) !== month)) return false;
       if (!words.length) return true;
-      const haystack = [item.title, item.description, item.category, item.slug].join(' ').toLowerCase();
+      const haystack = [item.title, item.description, item.category, slugFor(item)].join(' ').toLowerCase();
       return words.every(word => haystack.includes(word));
     });
   }
@@ -93,13 +100,14 @@
   function storyMarkup(item) {
     const category = titleCase(normalCategory(item));
     const meta = [shortDate(item), timeLabel(item)].filter(Boolean).join(' · ');
+    const slug = slugFor(item);
     return `<article class="archive-item">
       <div class="archive-item-main">
         <div class="archive-item-meta"><span class="archive-category">${esc(category)}</span>${meta ? `<span class="archive-meta-divider">|</span><span>${esc(meta)}</span>` : ''}</div>
         <a class="archive-title" href="${esc(item.url)}">${esc(item.title)}</a>
         ${item.description ? `<p class="archive-description">${esc(item.description)}</p>` : ''}
       </div>
-      <div class="archive-engagement"><a class="archive-comments" data-slug="${esc(item.slug)}" href="${esc(item.url)}#comments-root" aria-label="View comments on ${esc(item.title)}">Comments…</a></div>
+      <div class="archive-engagement"><a class="archive-comments" data-slug="${esc(slug)}" href="${esc(item.url)}#comments-root" aria-label="View comments on ${esc(item.title)}">Comments…</a></div>
     </article>`;
   }
 
