@@ -14,6 +14,11 @@ The same lightweight refresh also removes any legacy inline base64 masthead logo
 The real logo already exists as a cacheable static asset, so embedding roughly
 140 KB of PNG data inside the HTML makes every homepage response unnecessarily
 large and prevents the browser from caching the logo independently.
+
+It also keeps the homepage category filter compatible with genuinely cross-desk
+stories. ``category`` remains the primary section for backwards compatibility,
+while optional ``categories`` / ``secondary_category`` values are preserved so a
+single canonical article can appear under more than one reader-facing filter.
 """
 from __future__ import annotations
 
@@ -65,6 +70,55 @@ def externalise_inline_masthead_logo(text: str) -> str:
         text,
         count=1,
     )
+
+
+def enable_multi_category_homepage(text: str) -> str:
+    """Teach the committed homepage JS to honour cross-desk category metadata.
+
+    ``index.html`` contains its live-feed renderer inline. Rather than duplicating
+    an article record (and therefore creating duplicate cards/URLs), this small,
+    exact patch preserves a primary category plus any optional secondary values.
+    The replacements are idempotent and deliberately narrow: if the surrounding
+    homepage code changes, a warning is emitted instead of performing a broad or
+    speculative rewrite.
+    """
+    patches = [
+        (
+            "multi-category normalisation",
+            '''      const category = String(\n        article.category ||\n        (Array.isArray(article.types) && article.types[0]) ||\n        article.section ||\n        "news"\n      ).toLowerCase();\n\n      const body = articleBody(article);''',
+            '''      const category = String(\n        article.category ||\n        (Array.isArray(article.types) && article.types[0]) ||\n        article.section ||\n        "news"\n      ).toLowerCase();\n      const categories = Array.from(new Set(\n        [category]\n          .concat(Array.isArray(article.categories) ? article.categories : [])\n          .concat(article.secondary_category ? [article.secondary_category] : [])\n          .concat(Array.isArray(article.secondary_categories) ? article.secondary_categories : [])\n          .map(value => String(value || "").trim().toLowerCase())\n          .filter(Boolean)\n      ));\n\n      const body = articleBody(article);''',
+        ),
+        (
+            "normalised article category list",
+            '''        kicker: stripMarkdownText(article.kicker || article.section || category || "News"),\n        category,\n        area: String(article.area || "rochdale").toLowerCase(),''',
+            '''        kicker: stripMarkdownText(article.kicker || article.section || category || "News"),\n        category,\n        categories,\n        area: String(article.area || "rochdale").toLowerCase(),''',
+        ),
+        (
+            "desktop category filtering",
+            '''        const categoryMatch = activeCategory === "all" || story.category === activeCategory;''',
+            '''        const categoryMatch = activeCategory === "all" || story.categories.includes(activeCategory);''',
+        ),
+        (
+            "mobile category picking",
+            '''          .filter(story => section.categories.includes(story.category) && !used.has(story.id))''',
+            '''          .filter(story => story.categories.some(category => section.categories.includes(category)) && !used.has(story.id))''',
+        ),
+        (
+            "mobile category totals",
+            '''        const total = list.filter(story => section.categories.includes(story.category)).length;''',
+            '''        const total = list.filter(story => story.categories.some(category => section.categories.includes(category))).length;''',
+        ),
+    ]
+
+    updated = text
+    for label, old, new in patches:
+        if new in updated:
+            continue
+        if old not in updated:
+            print(f"WARNING: homepage {label} anchor not found; leaving that part unchanged.")
+            continue
+        updated = updated.replace(old, new, 1)
+    return updated
 
 
 def parse_dt(value: object) -> datetime:
@@ -189,7 +243,7 @@ def card(row: dict) -> str:
     excerpt = html.escape(clean(row.get("excerpt") or row.get("summary")), quote=False)
     if len(excerpt) > 220:
         excerpt = excerpt[:217].rstrip() + "..."
-    category = clean(row.get("category") or "News").replace("-", " ").title()
+    category = clean(row.get("kicker") or row.get("category") or "News").replace("-", " ").title()
     area = clean(row.get("area") or "Rochdale").replace("-", " ").title()
     image = local_card_image(row.get("image_url") or row.get("img"))
     published = parse_dt(row.get("first_published_at") or row.get("published_at"))
@@ -280,15 +334,17 @@ def main() -> int:
         updated = text.replace(needle, replacement, 1)
 
     updated = externalise_inline_masthead_logo(updated)
+    updated = enable_multi_category_homepage(updated)
 
     if updated != text:
         INDEX.write_text(updated, encoding="utf-8")
         print(
             f"Updated crawlable homepage Latest fallback with {len(chosen)} stories "
-            f"inside the {LATEST_MAX_AGE_HOURS}-hour window and normalised masthead asset."
+            f"inside the {LATEST_MAX_AGE_HOURS}-hour window, normalised masthead asset "
+            "and multi-category filter support."
         )
     else:
-        print("Homepage static Latest fallback and masthead asset already current.")
+        print("Homepage static Latest fallback, masthead asset and category filter already current.")
     return 0
 
 
