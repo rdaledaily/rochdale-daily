@@ -77,6 +77,9 @@ jobs:
             scraper/scrub_personal_name.py \
             scraper/google_news_resolver.py \
             scraper/frontpage_source_quality.py \
+            scraper/frontpage_manual_publish.py \
+            scraper/ensure_manual_frontpage.py \
+            scraper/verify_manual_publication.py \
             scraper/generate_pages.py \
             scraper/generate_newspaper_pages.py \
             scraper/generate_ward_pages.py \
@@ -118,6 +121,7 @@ jobs:
           python scraper/test_frontpage_pipeline.py
           PYTHONPATH=scraper python scraper/test_frontpage_freshness_guard.py
           PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
+          PYTHONPATH=scraper python scraper/test_manual_frontpage_guard.py
           PYTHONPATH=scraper python scraper/test_check_scraper_health.py
           PYTHONPATH=scraper python scraper/test_supply_watchdog.py
           PYTHONPATH=scraper python scraper/test_source_yield_probe.py
