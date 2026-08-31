@@ -1,0 +1,44 @@
+name: Rochdale Daily Pulse social radar
+
+on:
+  push:
+    paths:
+      - social_radar_inbox.json
+      - scraper/social_radar.py
+      - .github/workflows/social-radar.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-social-radar
+  cancel-in-progress: true
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build Pulse lead feed
+        run: python scraper/social_radar.py --input social_radar_inbox.json --output pulse.json
+      - name: Validate Pulse feed
+        run: python -m json.tool pulse.json > /dev/null
+      - name: Commit Pulse feed
+        run: |
+          if git diff --quiet -- pulse.json; then
+            echo "No Pulse changes"
+            exit 0
+          fi
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "news@rochdaledaily.co.uk"
+          git add pulse.json
+          git commit -m "Update Rochdale Daily Pulse"
+          git pull --rebase origin main
+          git push origin HEAD:main
