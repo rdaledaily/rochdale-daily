@@ -41,6 +41,8 @@ permissions:
   contents: write
   actions: write
 
+# Manual/editorial publication must never queue behind the continuous scraper.
+# A newer editorial commit supersedes an older rebuild and starts from latest main.
 concurrency:
   group: rd-manual-publisher
   cancel-in-progress: true
@@ -48,10 +50,8 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     env:
-      USE_WIKIMEDIA_COMMONS: "true"
-      USE_SOURCE_IMAGES: "true"
       CSS_SOURCE_PATH: assets/css/article-inline.css
       FRONTPAGE_FRESH_HOURS: "36"
       FRONTPAGE_MIN_ARTICLES: "12"
@@ -80,8 +80,9 @@ jobs:
           python -m json.tool articles.json > /dev/null
           python -m json.tool manual_articles.json > /dev/null
           python scraper/frontpage_pipeline.py
-          python scraper/repair_generated_article_images.py --articles articles.json
-          python scraper/repair_generated_with_commons.py --articles articles.json
+          # Editorial publication is deliberately network-free here. Source and
+          # Commons image repair belongs to scraper/recovery runs; doing it here
+          # made a manual story wait on many 10-second remote image lookups.
           python scraper/ensure_article_images.py --articles articles.json
           python scraper/enforce_cards_only_images.py --articles articles.json
           python scraper/article_gate.py articles.json
@@ -116,7 +117,7 @@ jobs:
           stage_publish() {
             git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json \
               articles sitemap.xml news-sitemap.xml image-sitemap.xml assets/img/cards image_coverage_report.json \
-              image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json archive.html search.html archive-index.json \
+              cards_image_policy_report.json archive.html search.html archive-index.json \
               articles/frontpage.json index.html rss.xml wards/ councillor_photos.json 2>/dev/null || true
           }
 
@@ -124,8 +125,6 @@ jobs:
             python -m json.tool articles.json > /dev/null
             python -m json.tool manual_articles.json > /dev/null
             python scraper/frontpage_pipeline.py
-            python scraper/repair_generated_article_images.py --articles articles.json
-            python scraper/repair_generated_with_commons.py --articles articles.json
             python scraper/ensure_article_images.py --articles articles.json
             python scraper/enforce_cards_only_images.py --articles articles.json
             python scraper/article_gate.py articles.json
