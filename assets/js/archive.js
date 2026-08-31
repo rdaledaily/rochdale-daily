@@ -1,5 +1,20 @@
-(() => {
-  const DATA = Array.isArray(window.__RD_ARCHIVE__) ? window.__RD_ARCHIVE__ : [];
+(async () => {
+  let DATA = Array.isArray(window.__RD_ARCHIVE__) ? window.__RD_ARCHIVE__ : [];
+  if (!DATA.length) {
+    try {
+      const response = await fetch('/archive-index.json', {headers:{Accept:'application/json'}});
+      if (!response.ok) throw new Error('Archive index request failed');
+      const payload = await response.json();
+      DATA = Array.isArray(payload) ? payload : [];
+    } catch (_) {
+      const host = document.getElementById('archive-results');
+      if (host) host.innerHTML = '<p class="archive-empty">The archive index is temporarily unavailable. Please try again shortly.</p>';
+      const loadMore = document.getElementById('load-more');
+      if (loadMore) loadMore.hidden = true;
+      return;
+    }
+  }
+
   const PAGE = 60;
   let shown = PAGE;
   let activeSection = 'all';
