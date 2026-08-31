@@ -22,6 +22,7 @@ on:
       - scraper/generate_archive.py
       - scraper/update_homepage_static_latest.py
       - scraper/update_homepage_weekly_news.py
+      - scraper/sync_homepage_top_story.py
       - scraper/homepage_discovery_metadata.py
       - scraper/generate_rss.py
       - scraper/generate_image_sitemap.py
@@ -97,6 +98,7 @@ jobs:
           cp archive.html search.html
           python scraper/update_homepage_static_latest.py
           python scraper/update_homepage_weekly_news.py
+          python scraper/sync_homepage_top_story.py
           python scraper/homepage_discovery_metadata.py
           python scraper/generate_rss.py
           python scraper/generate_image_sitemap.py
@@ -140,6 +142,7 @@ jobs:
             cp archive.html search.html
             python scraper/update_homepage_static_latest.py
             python scraper/update_homepage_weekly_news.py
+            python scraper/sync_homepage_top_story.py
             python scraper/homepage_discovery_metadata.py
             python scraper/generate_rss.py
             python scraper/generate_image_sitemap.py
