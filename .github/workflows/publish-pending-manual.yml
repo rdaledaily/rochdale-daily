@@ -44,15 +44,20 @@ jobs:
         if: steps.pending.outputs.run == 'true'
         with:
           python-version: '3.11'
-      - name: Merge pending records into canonical manual source
+      - name: Merge and verify pending records
         if: steps.pending.outputs.run == 'true'
         run: |
+          set -euo pipefail
           python - <<'PY'
-          import glob, json, os
+          import glob, json
           from pathlib import Path
 
           target = Path('manual_articles.json')
-          existing = json.loads(target.read_text(encoding='utf-8'))
+          before_text = target.read_text(encoding='utf-8')
+          existing = json.loads(before_text)
+          if not isinstance(existing, list):
+              raise SystemExit('manual_articles.json must contain a JSON array')
+
           pending_files = sorted(glob.glob('pending_manual_*.json'))
           incoming = []
           for filename in pending_files:
@@ -64,10 +69,16 @@ jobs:
               else:
                   raise SystemExit(f'Unsupported JSON shape in {filename}')
 
+          for article in incoming:
+              if not isinstance(article, dict) or not article.get('id') or not article.get('slug'):
+                  raise SystemExit('Every pending manual article must contain id and slug')
+
+          ids = {str(a['id']) for a in incoming}
+          slugs = {str(a['slug']) for a in incoming}
+          canonical_changed = False
+
           if incoming:
-              ids = {str(a.get('id')) for a in incoming if a.get('id')}
-              slugs = {str(a.get('slug')) for a in incoming if a.get('slug')}
-              existing = [
+              filtered_existing = [
                   a for a in existing
                   if str(a.get('id') or '') not in ids
                   and str(a.get('slug') or '') not in slugs
@@ -76,18 +87,37 @@ jobs:
                   key=lambda a: a.get('published_at') or a.get('last_updated_at') or '',
                   reverse=True,
               )
-              target.write_text(
-                  json.dumps(incoming + existing, ensure_ascii=False, indent=2) + '\n',
-                  encoding='utf-8',
-              )
-              for filename in pending_files:
-                  os.remove(filename)
-              print(f'Merged {len(incoming)} pending manual article(s).')
-          if os.path.exists('manual_publish_trigger.txt'):
-              os.remove('manual_publish_trigger.txt')
+              merged = incoming + filtered_existing
+              after_text = json.dumps(merged, ensure_ascii=False, indent=2) + '\n'
+              target.write_text(after_text, encoding='utf-8')
+              canonical_changed = after_text != before_text
+
+              # Hard verification: never consume a queue item unless its ID and
+              # slug are present in the canonical manual source we just wrote.
+              reloaded = json.loads(target.read_text(encoding='utf-8'))
+              present_ids = {str(a.get('id') or '') for a in reloaded if isinstance(a, dict)}
+              present_slugs = {str(a.get('slug') or '') for a in reloaded if isinstance(a, dict)}
+              missing_ids = sorted(ids - present_ids)
+              missing_slugs = sorted(slugs - present_slugs)
+              if missing_ids or missing_slugs:
+                  raise SystemExit(
+                      f'Canonical verification failed; missing ids={missing_ids}, slugs={missing_slugs}'
+                  )
+              print(f'Merged and verified {len(incoming)} pending manual article(s).')
+
+          state = {
+              'pending_files': pending_files,
+              'incoming_ids': sorted(ids),
+              'incoming_slugs': sorted(slugs),
+              'canonical_changed': canonical_changed,
+          }
+          Path('.manual_publish_state.json').write_text(
+              json.dumps(state, ensure_ascii=False, indent=2) + '\n',
+              encoding='utf-8',
+          )
           PY
           python -m json.tool manual_articles.json > /dev/null
-      - name: Commit canonical manual source only
+      - name: Stage, verify and commit canonical source
         if: steps.pending.outputs.run == 'true'
         id: commit
         shell: bash
@@ -95,13 +125,63 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add manual_articles.json manual_publish_trigger.txt 2>/dev/null || true
+
+          # Stage the canonical source on its own. Previously this was combined
+          # with manual_publish_trigger.txt; when that optional file was absent,
+          # git add failed and the failure was ignored, silently dropping stories.
+          git add -- manual_articles.json
+
+          canonical_changed="$(python - <<'PY'
+          import json
+          print('true' if json.load(open('.manual_publish_state.json'))['canonical_changed'] else 'false')
+          PY
+          )"
+
+          if [ "$canonical_changed" = 'true' ] && git diff --cached --quiet -- manual_articles.json; then
+            echo 'ERROR: canonical manual source changed but is not staged; refusing to consume pending files.' >&2
+            git status --short
+            exit 1
+          fi
+
+          # Verify staged/local canonical content still contains every queued item.
+          python - <<'PY'
+          import json
+          state = json.load(open('.manual_publish_state.json'))
+          rows = json.load(open('manual_articles.json'))
+          ids = {str(a.get('id') or '') for a in rows if isinstance(a, dict)}
+          slugs = {str(a.get('slug') or '') for a in rows if isinstance(a, dict)}
+          missing_ids = sorted(set(state['incoming_ids']) - ids)
+          missing_slugs = sorted(set(state['incoming_slugs']) - slugs)
+          if missing_ids or missing_slugs:
+              raise SystemExit(f'Refusing publish: canonical source is missing ids={missing_ids}, slugs={missing_slugs}')
+          PY
+
+          # Only consume the queue after canonical staging has been verified.
+          while IFS= read -r filename; do
+            [ -n "$filename" ] || continue
+            rm -f -- "$filename"
+          done < <(python - <<'PY'
+          import json
+          for name in json.load(open('.manual_publish_state.json'))['pending_files']:
+              print(name)
+          PY
+          )
           git add -u -- 'pending_manual_*.json' 2>/dev/null || true
+
+          if [ -f manual_publish_trigger.txt ]; then
+            rm -f -- manual_publish_trigger.txt
+            git add -u -- manual_publish_trigger.txt 2>/dev/null || true
+          fi
+
+          rm -f .manual_publish_state.json
+          git status --short
+
           if git diff --cached --quiet; then
             echo 'published=false' >> "$GITHUB_OUTPUT"
             echo 'Nothing changed.'
             exit 0
           fi
+
           git commit -m 'Merge pending manual articles into canonical source'
           git push origin HEAD:main
           echo 'published=true' >> "$GITHUB_OUTPUT"
