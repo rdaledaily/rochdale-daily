@@ -4,10 +4,6 @@ set -euo pipefail
 branch="${GITHUB_REF_NAME:-main}"
 message="${COMMIT_MESSAGE:-Update Rochdale Daily newsroom}"
 
-# All workflows that can publish canonical newsroom/site state share the
-# rd-site-writer Actions concurrency lane. This script still retains bounded
-# race recovery for human/admin pushes that can legitimately move main while a
-# run is building.
 mark_published() {
   if [ -n "${GITHUB_OUTPUT:-}" ]; then
     echo "published=true" >> "${GITHUB_OUTPUT}"
@@ -30,12 +26,6 @@ stage_newsroom() {
     archive.html search.html archive-index.json rss.xml index.html 2>/dev/null || true
 }
 
-# This is the final publication boundary. Upstream image enrichment may discover
-# a useful source/Commons image anywhere, but the public canonical article path
-# is always normalised into assets/img/cards/ before any snapshot can be pushed.
-# Regenerate image-bearing derived pages after normalisation so HTML/feeds cannot
-# retain a pre-normalisation path. LIVE timelines are compacted at the same
-# boundary so repeated machine paraphrases do not become reader-facing clutter.
 finalise_cards_policy() {
   python scraper/enforce_cards_only_images.py --articles articles.json
   python scraper/compact_live_updates.py --articles articles.json
@@ -44,6 +34,7 @@ finalise_cards_policy() {
   python scraper/enforce_frontpage_freshness.py
   python scraper/frontpage_source_quality.py
   python scraper/enforce_live_homepage_window.py
+  python scraper/ensure_manual_frontpage.py
   python scraper/generate_news_sitemap.py
   python scraper/generate_archive.py
   cp archive.html search.html
@@ -56,13 +47,16 @@ finalise_cards_policy() {
   python scraper/enforce_cards_only_images.py --articles articles.json --check
 }
 
+# Race recovery must be local and bounded. The expensive network image-repair
+# passes already ran before the first commit; repeating them after every push
+# race is what allowed one writer to occupy the queue for tens of minutes.
+# Restore the first build's card assets, merge with latest main, inject any
+# manual stories added while this run was working, and regenerate derived pages.
 rebuild_from_merged_feed() {
   python -m json.tool articles.json > /dev/null
+  python scraper/frontpage_manual_publish.py
   python scraper/article_gate.py articles.json
   python scraper/content_hygiene.py --fix
-  python scraper/repair_generated_article_images.py --articles articles.json
-  python scraper/repair_generated_with_commons.py --articles articles.json
-  python scraper/ensure_article_images.py --articles articles.json
   python scraper/enforce_cards_only_images.py --articles articles.json
   python scraper/compact_live_updates.py --articles articles.json
   python scraper/repair_merged_bodies.py
@@ -74,6 +68,7 @@ rebuild_from_merged_feed() {
   python scraper/frontpage_source_quality.py
   PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
   python scraper/enforce_live_homepage_window.py
+  python scraper/ensure_manual_frontpage.py
   python scraper/generate_news_sitemap.py
   python scraper/generate_archive.py
   cp archive.html search.html
@@ -86,6 +81,7 @@ rebuild_from_merged_feed() {
   python scraper/content_hygiene.py --fix
   python scraper/content_hygiene.py
   python scraper/enforce_cards_only_images.py --articles articles.json --check
+  python scraper/verify_manual_publication.py
   python scraper/check_scraper_health.py
 }
 
@@ -100,32 +96,34 @@ if git diff --cached --quiet; then
 fi
 
 git commit -m "${message}"
+local_snapshot_commit="$(git rev-parse HEAD)"
 if git_push; then
   mark_published
   exit 0
 fi
 
-# Never merge/rebase independently generated HTML/JSON snapshots. Preserve the
-# canonical feeds/state from this run, reset to newest main, merge the article
-# feed deliberately, then regenerate every derived page from that newest state.
 recovery_dir="$(mktemp -d)"
 trap 'rm -rf "${recovery_dir}"' EXIT
 
-git show HEAD:articles.json > "${recovery_dir}/local_articles.json"
+git show "${local_snapshot_commit}:articles.json" > "${recovery_dir}/local_articles.json"
 for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json live_source_state.json google_news_resolutions.json; do
-  if git cat-file -e "HEAD:${optional}" 2>/dev/null; then
-    git show "HEAD:${optional}" > "${recovery_dir}/${optional}"
+  if git cat-file -e "${local_snapshot_commit}:${optional}" 2>/dev/null; then
+    git show "${local_snapshot_commit}:${optional}" > "${recovery_dir}/${optional}"
   fi
 done
 
-for attempt in 1 2 3; do
-  echo "main moved during newsroom run; rebuilding on latest main (recovery ${attempt}/3)."
+for attempt in 1 2; do
+  echo "main moved during newsroom run; rebuilding on latest main (recovery ${attempt}/2)."
   if ! git_fetch; then
-    echo "Timed out or failed fetching latest main during recovery ${attempt}/3." >&2
+    echo "Timed out or failed fetching latest main during recovery ${attempt}/2." >&2
     continue
   fi
   git reset --hard "origin/${branch}"
   git clean -fd
+
+  # Bring forward cards produced by the first completed build. Latest main keeps
+  # its own cards too; checkout overlays only paths that existed in this run.
+  git checkout "${local_snapshot_commit}" -- assets/img/cards 2>/dev/null || true
 
   cp articles.json "${recovery_dir}/remote_articles.json"
   python scraper/merge_feeds.py "${recovery_dir}/remote_articles.json" "${recovery_dir}/local_articles.json" articles.json
@@ -142,18 +140,14 @@ for attempt in 1 2 3; do
     exit 0
   fi
   git commit -m "${message} (race-safe rebuild)"
+  local_snapshot_commit="$(git rev-parse HEAD)"
   if git_push; then
     mark_published
     exit 0
   fi
 
-  git show HEAD:articles.json > "${recovery_dir}/local_articles.json"
-  for optional in newsroom_candidates.json live_source_state.json google_news_resolutions.json; do
-    if git cat-file -e "HEAD:${optional}" 2>/dev/null; then
-      git show "HEAD:${optional}" > "${recovery_dir}/${optional}"
-    fi
-  done
+  git show "${local_snapshot_commit}:articles.json" > "${recovery_dir}/local_articles.json"
 done
 
-echo "Could not publish after three bounded race-safe rebuild attempts." >&2
+echo "Could not publish after two bounded race-safe rebuild attempts." >&2
 exit 1
