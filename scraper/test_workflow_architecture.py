@@ -11,13 +11,20 @@ def text(name: str) -> str:
 
 
 def main() -> int:
-    # Only workflows that render/push the complete public newspaper share the
-    # single site-writer lane. All of those renders queue rather than cancelling
-    # one another: cancelling an in-flight edition on every code/config push
-    # caused repeated publication starvation during bursts of commits.
-    for name in ("scrape-fast.yml", "scrape-kick.yml", "publish.yml"):
+    # Automated full-site newsroom writers share one queue so two scraper
+    # snapshots cannot push competing editions at once.
+    for name in ("scrape-fast.yml", "scrape-kick.yml"):
         assert "group: rd-site-writer" in text(name), name
         assert "cancel-in-progress: false" in text(name), name
+
+    # Manual/editorial publication has its own short lane. It starts from latest
+    # main and performs bounded race-safe rebuilds, so a slow automated scrape
+    # must never hold editor-written stories off the public site.
+    publish = text("publish.yml")
+    assert "group: rd-manual-publisher" in publish
+    assert "cancel-in-progress: false" in publish
+    assert "frontpage_manual_publish.py" in publish
+    assert "verify_manual_publication.py" in publish
 
     expected_source_lanes = {
         "council-minutes.yml": "rd-council-source",
@@ -63,11 +70,11 @@ def main() -> int:
     for name in retired:
         assert not (WORKFLOWS / name).exists(), name
 
-    # Production permits source photos only through the runtime allowlist policy,
-    # rather than globally disabling source-image discovery.
-    for name in ("scrape-fast.yml", "scrape-kick.yml", "publish.yml"):
-        assert 'USE_SOURCE_IMAGES: "true"' in text(name), name
+    # Automated collection permits source photos through the runtime allowlist
+    # policy. The manual publisher does not discover sources and therefore does
+    # not need this scraper-only environment switch.
     for name in ("scrape-fast.yml", "scrape-kick.yml"):
+        assert 'USE_SOURCE_IMAGES: "true"' in text(name), name
         assert "python scraper/run_newsroom_policy.py" in text(name), name
 
     print("Workflow architecture checks passed.")
