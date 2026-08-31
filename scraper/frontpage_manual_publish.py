@@ -2,16 +2,17 @@
 """Run the canonical frontpage pipeline for an editorial/manual publish.
 
 The ordinary newsroom pipeline deliberately re-evaluates image selection for every
-published article. That is useful after a scrape, but it is unnecessarily expensive
-when an editor has only added or amended a manual story: the existing archive has
-already passed the image policy and scanning the entire cards library for every
-historic article delays the new story reaching the homepage.
+published article and refreshes the external What's Occurrin' ticket feed. Both are
+useful after a scrape, but they are unnecessarily expensive when an editor has only
+added or amended a manual story: the existing archive and approved event records have
+already passed those policies.
 
 This wrapper keeps all normal frontpage, merge, freshness and archive behaviour, but
 limits image selection to a manual/editorial record that does not already point at a
-valid canonical cards image. A final cards-only validation remains in the publish
-workflow, so this is a speed optimisation rather than a relaxation of the publication
-contract.
+valid canonical cards image and reuses the existing approved ticket-event records
+already present in articles.json. A final cards-only validation and manual-publication
+invariant remain in the publish workflow, so these are speed optimisations rather than
+relaxations of the publication contract.
 """
 from __future__ import annotations
 
@@ -50,8 +51,20 @@ def _enforce_editorial_only(article: dict[str, Any], root: Path) -> str:
     return "existing-canonical-image-unchanged"
 
 
+def _reuse_existing_ticket_events(session: Any = None) -> tuple[list[dict[str, Any]], str]:
+    """Skip the external ticket-site crawl during an editor-only publication.
+
+    frontpage_pipeline.clean_and_integrate_events() retains current approved event
+    records already present in articles.json when no fresh scraped events are supplied,
+    so a manual article publish does not need up to 30 network requests before it can
+    reach the site.
+    """
+    return [], "manual publish reused existing approved ticket events"
+
+
 def main() -> int:
     pipeline.enforce_article = _enforce_editorial_only
+    pipeline.collect_ticket_events = _reuse_existing_ticket_events
     return pipeline.main()
 
 
