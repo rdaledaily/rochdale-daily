@@ -17,9 +17,8 @@ permissions:
 
 # Several workflows can push to main seconds apart. A manual-article source
 # commit is intentionally ignored here: publish.yml must first turn it into the
-# real articles.json/frontpage/article-page output. This prevents an incomplete
-# intermediate commit being deployed. For all deployable commits, newest main
-# always wins so a stale queued Pages build cannot replace a newer one.
+# real articles.json/frontpage/article-page output. For all deployable commits,
+# newest main always wins so a stale queued Pages build cannot replace a newer one.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -32,6 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FRONTPAGE_FRESH_HOURS: '36'
+      FRONTPAGE_TARGET_ARTICLES: '45'
     steps:
       - name: Checkout latest main
         uses: actions/checkout@v4
@@ -53,6 +53,9 @@ jobs:
         run: |
           python3 scraper/enforce_frontpage_freshness.py
           python3 scraper/enforce_live_homepage_window.py
+          # Manual/editorial is a newsroom decision and therefore gets a final
+          # delivery-boundary guarantee after all automated frontpage mutators.
+          python3 scraper/ensure_manual_frontpage.py
           python3 scraper/update_homepage_static_latest.py
           python3 scraper/update_homepage_weekly_news.py
           python3 scraper/sync_homepage_top_story.py
@@ -110,6 +113,12 @@ jobs:
       # mutating repository history; legacy/custom inline styles are untouched.
       - name: Externalise shared article CSS
         run: python3 scraper/externalise_article_css.py
+
+      # Last line of defence: a deploy is rejected if an enabled manual source is
+      # absent from the canonical feed, or if a fresh manual story is absent from
+      # the homepage, its static article page or the canonical image cache.
+      - name: Verify manual stories survived publication
+        run: python3 scraper/verify_manual_publication.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
