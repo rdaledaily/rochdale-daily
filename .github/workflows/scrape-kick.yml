@@ -12,20 +12,6 @@ permissions:
   contents: write
   actions: write
 
-# This lane used to cancel whatever held the writer lane, on the reasoning that
-# a code push supersedes an older render. In practice it did the opposite of its
-# job. Measured on the evening of 30 August 2026: runs #748, #749, #750, #751
-# and #752 were ALL cancelled, six in a row, because each file uploaded through
-# the GitHub web UI is its own commit and each commit fired this lane again.
-# The paper published nothing for over an hour, and #750 was killed 41 minutes
-# into a run that was about to commit.
-#
-# Queueing instead of cancelling fixes it. GitHub keeps at most ONE pending run
-# per concurrency group, so a burst of five commits now collapses to a single
-# queued re-render that starts when the current edition finishes, instead of
-# five kills in a row. A render already in flight is nearly always still worth
-# publishing: it is at most one code change behind, and the chained fast lane
-# picks the new code up on its next start regardless.
 concurrency:
   group: rd-site-writer
   cancel-in-progress: false
@@ -33,7 +19,7 @@ concurrency:
 jobs:
   fast-news:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 35
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
@@ -107,18 +93,18 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
       - name: Run resilient Rochdale newsroom pipeline
-        timeout-minutes: 24
+        timeout-minutes: 20
         run: python scraper/run_newsroom_policy.py
       - name: Remove emojis and publishing artefacts before page generation
         run: python scraper/content_hygiene.py --fix
       - name: Resolve relevant article images, then guarantee a fallback
-        timeout-minutes: 8
+        timeout-minutes: 6
         run: |
           python scraper/repair_generated_article_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
           python scraper/ensure_article_images.py --articles articles.json
       - name: Validate and generate complete canonical site
-        timeout-minutes: 10
+        timeout-minutes: 7
         run: |
           python -m json.tool articles.json > /dev/null
           python scraper/article_gate.py articles.json
@@ -149,6 +135,7 @@ jobs:
         run: python scraper/weather_forecast.py
       - name: Commit and push race-safe newsroom snapshot
         id: publish
+        timeout-minutes: 8
         run: bash scraper/publish_newsroom_snapshot.sh
       - name: Deploy published newsroom snapshot
         if: steps.publish.outputs.published == 'true'
@@ -156,11 +143,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref main
       - name: Re-seed the fast lane if nothing is keeping it alive
-        # Written when this lane still cancelled the chain and had to restart
-        # what it had just killed. It no longer cancels anything, so this is now
-        # only a safety net: if no fast run is queued or in progress when this
-        # finishes, the chain has died of some other cause and wants restarting.
-        # The guard below means it stays quiet in the normal case.
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
