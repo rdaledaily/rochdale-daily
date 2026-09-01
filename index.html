@@ -1981,6 +1981,27 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         .slice(0, 90);
     }
 
+    // Every display field on this page is inserted with template literals into
+    // innerHTML, so feed text must be HTML-escaped exactly once, here, at the
+    // point it enters the story model. A poisoned headline or credit in
+    // articles.json (scraped, quoted from a source, or a bad manual paste)
+    // must render as text for every reader, never as markup.
+    function escapeHtmlText(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    }
+    function safeText(value) {
+      return escapeHtmlText(stripMarkdownText(value));
+    }
+    function safeUrl(value) {
+      // Attribute-safe: allow only http(s), root-relative and relative asset paths.
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+      if (/^(javascript|data|vbscript):/i.test(raw)) return "";
+      return escapeHtmlText(raw);
+    }
+
     function stripMarkdownText(value) {
       return String(value || "")
         .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
@@ -1999,21 +2020,21 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
 
     function articleBody(article) {
       if (Array.isArray(article.body)) {
-        return article.body.map(stripMarkdownText).filter(Boolean);
+        return article.body.map(safeText).filter(Boolean);
       }
 
       const html = String(article.content_html || "");
       if (html) {
         const documentFragment = new DOMParser().parseFromString(html, "text/html");
         const paragraphs = Array.from(documentFragment.querySelectorAll("p, h2, h3, li"))
-          .map(node => stripMarkdownText(node.textContent))
+          .map(node => safeText(node.textContent))
           .filter(Boolean);
         if (paragraphs.length) return paragraphs;
       }
 
       return String(article.body || article.content || article.summary || article.excerpt || "")
         .split(/\n\n+/)
-        .map(stripMarkdownText)
+        .map(safeText)
         .filter(Boolean);
     }
 
@@ -2050,7 +2071,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
       const body = articleBody(article);
       const publishedAt = article.published_at || article.updated_at || "";
       const rawImage = String(article.image || article.image_url || "").trim();
-      const rawCredit = stripMarkdownText(article.imageLabel || article.image_label || article.image_credit || article.source_name || "Rochdale Daily");
+      const rawCredit = safeText(article.imageLabel || article.image_label || article.image_credit || article.source_name || "Rochdale Daily");
       // Belt-and-braces: never show Google/social chrome as a story image or
       // credit, even if a poisoned record reaches the client. 872cdca296d0 is
       // the content hash of the cached Google News logo; the credit test
@@ -2069,27 +2090,27 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         !value || /^(https?:)?\/\//i.test(value) || value.startsWith("data:") || value.startsWith("/")
           ? value
           : "/" + value.replace(/^\.?\//, "");
-      const image = rootRelative(rawImage && !legacyPlaceholder ? rawImage : stockImage(category));
+      const image = safeUrl(rootRelative(rawImage && !legacyPlaceholder ? rawImage : stockImage(category))) || rootRelative(stockImage(category));
 
       return {
         id: String(article.id || `article-${index}`),
         slug: String(article.slug || slugify(article.title) || article.id || `article-${index}`),
         storyKey: String(article.story_key || ""),
-        title: stripMarkdownText(article.title) || "Local news update",
-        kicker: stripMarkdownText(article.kicker || article.section || category || "News"),
+        title: safeText(article.title) || "Local news update",
+        kicker: safeText(article.kicker || article.section || category || "News"),
         category,
         categories,
-        area: String(article.area || "rochdale").toLowerCase(),
-        summary: stripMarkdownText(article.summary || article.excerpt) || "Latest verified local information from the Rochdale Daily newsdesk.",
+        area: escapeHtmlText(String(article.area || "rochdale").toLowerCase()),
+        summary: safeText(article.summary || article.excerpt) || "Latest verified local information from the Rochdale Daily newsdesk.",
         image,
         imageFallback: stockImage(category),
         imageLabel: (/^rochdale daily/i.test(rawCredit) || suppressCredit) ? "Rochdale Daily" : rawCredit,
         minutesAgo: Number.isFinite(Number(article.minutesAgo)) ? Number(article.minutesAgo) : minutesSince(publishedAt),
         timeLabel: formatArticleTime(publishedAt),
-        byline: stripMarkdownText(article.byline || article.author || "Rochdale Daily Newsdesk"),
+        byline: safeText(article.byline || article.author || "Rochdale Daily Newsdesk"),
         demo: false,
         isOngoing: Boolean(article.is_ongoing),
-        ongoingLabel: stripMarkdownText(article.ongoing_label || (article.is_ongoing ? "ONGOING" : "")),
+        ongoingLabel: safeText(article.ongoing_label || (article.is_ongoing ? "ONGOING" : "")),
         updateCount: Number(article.update_count) || 1,
         policeMatter: Boolean(article.policeMatter || article.police_matter || category === "crime"),
         body: body.length ? body : ["Further verified details will be added by the Rochdale Daily newsdesk."],
@@ -2105,12 +2126,12 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
           : (Number(article.priority) || 0),
         published_at: publishedAt,
         sourceUrl: article.source_url || "",
-        sourceName: stripMarkdownText(article.source_name || ""),
-        sourceNames: Array.isArray(article.source_names) ? article.source_names.map(stripMarkdownText) : [],
+        sourceName: safeText(article.source_name || ""),
+        sourceNames: Array.isArray(article.source_names) ? article.source_names.map(safeText) : [],
         sourceUrls: Array.isArray(article.source_urls) ? article.source_urls : [],
         sourceCount: Number(article.source_count) || 1,
-        legalDisclaimer: stripMarkdownText(article.legal_disclaimer || ""),
-        rightToReply: stripMarkdownText(article.right_to_reply || ""),
+        legalDisclaimer: safeText(article.legal_disclaimer || ""),
+        rightToReply: safeText(article.right_to_reply || ""),
         sensitiveStory: Boolean(article.sensitive_story),
         eventStartAt: article.event_start_at || "",
         eventEndAt: article.event_end_at || "",

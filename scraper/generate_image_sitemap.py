@@ -61,12 +61,16 @@ def main() -> int:
         seen.add(slug)
         page_url = f"{SITE_BASE}/articles/{quote(slug)}.html"
         image_url = f"{SITE_BASE}/{quote(image, safe='/')}"
+        title = str(row.get("title") or "").strip()[:200]
+        caption = str(row.get("image_alt") or title).strip()[:200]
         entries.append(
             "  <url>\n"
             f"    <loc>{escape(page_url)}</loc>\n"
             "    <image:image>\n"
             f"      <image:loc>{escape(image_url)}</image:loc>\n"
-            "    </image:image>\n"
+            + (f"      <image:title>{escape(title)}</image:title>\n" if title else "")
+            + (f"      <image:caption>{escape(caption)}</image:caption>\n" if caption else "")
+            + "    </image:image>\n"
             "  </url>"
         )
 
