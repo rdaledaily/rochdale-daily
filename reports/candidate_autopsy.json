@@ -1,22 +1,21 @@
 {
-  "examined_at": "2026-09-01T04:01:29.324647Z",
+  "examined_at": "2026-09-01T12:00:11.107486Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 152,
+  "candidates_examined": 151,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 82,
-    "would publish": 54,
-    "duplicate of published story": 13,
-    "not local": 3
+    "age": 83,
+    "would publish": 47,
+    "duplicate of published story": 21
   },
-  "would_publish": 54,
+  "would_publish": 47,
   "age_gate_sensitivity": {
-    "6h": 5,
-    "14h": 14,
+    "6h": 15,
+    "14h": 19,
     "24h": 32,
-    "48h": 70,
-    "72h": 119,
-    "168h": 152
+    "48h": 68,
+    "72h": 122,
+    "168h": 151
   },
   "gates_unavailable": [],
   "examples": {
@@ -25,20 +24,15 @@
       "Bee Network live travel alerts: Updated: 31/08/2026 at 10:44am Live Failsworth Tram Stop - Lifts out o",
       "TfGM Travel Alerts: Travel alerts"
     ],
-    "not local": [
-      "rochdaleafc.co.uk: Preview | Shrewsbury Town (H) - rochdaleafc.co.uk",
-      "rochdaleafc.co.uk: Women Win At Crown Oil Arena - rochdaleafc.co.uk",
-      "rochdaleafc.co.uk: Behind The Sign | Pilot Episode - rochdaleafc.co.uk"
-    ],
     "duplicate of published story": [
-      "Rochdale Times: Four more arrested after 13-year-old boy stabbed in Rochdale - Rochdal",
-      "BBC Manchester: Rochdale teen stabbing: Four more arrests",
-      "Rochdale Times: Norden remain top despite defeat - Rochdale Times"
+      "Express: Major police update as 13-year-old boy stabbed in UK town",
+      "Rochdale AFC: Preview | Shrewsbury Town (H) - rochdaleafc.co.uk",
+      "Rochdale Times: Four more arrested after 13-year-old boy stabbed in Rochdale - Rochdal"
     ],
     "age": [
-      "Daily Mail: Boy, 13, seriously injured after being stabbed at Taco Bell in Rochdal",
-      "Daily Mail: Boy, 13, seriously injured after being stabbed at Taco Bell in Rochdal",
-      "Colchester Gazette: PLAYER RATINGS: How Colchester United fared in their win over Rochdale"
+      "Roch Valley Radio Local News: Two men arrested on suspicion of murder after man dies following balco",
+      "Rochdale AFC: TVOS Preview | Shrewsbury Town (H) - Rochdale AFC",
+      "Transfermarkt: Rochdale AFC - transfermarkt.com"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
