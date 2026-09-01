@@ -1,19 +1,59 @@
 {
-  "probed_at": "2026-08-28T19:57:25.235770Z",
+  "probed_at": "2026-09-01T04:01:15.989563Z",
+  "probe_version": 2,
   "recent_window_days": 14,
-  "sources_probed": 14,
-  "measured_items_per_day": 2.43,
-  "note": "measured_items_per_day counts only sources this probe could read and date. Sources marked needs-free-key or reachability contribute nothing to that number and must be measured by their own collector once built.",
+  "sources_probed": 15,
+  "measured_items_per_day": 3.36,
+  "note": "measured_items_per_day counts only sources this probe could read and date. Monthly bulk registers report their record count under items and contribute 0.0 to the daily rate rather than being annualised into a flattering number. Sources marked needs-free-key must be measured again once the key exists.",
   "results": [
+    {
+      "name": "The Gazette official public record",
+      "class": "primary record",
+      "licence": "Open Government Licence",
+      "story_shape": "insolvencies, company strike-offs, statutory and planning notices",
+      "status": "ok",
+      "items": 100,
+      "recent_items": 25,
+      "per_day": 1.79,
+      "robots": "allowed",
+      "url": "https://www.thegazette.co.uk/all-notices/notice/data.json?location-local-authority-1=Rochdale&results-page-size=100"
+    },
     {
       "name": "Environment Agency flood warnings",
       "class": "public safety",
       "licence": "Open Government Licence",
       "story_shape": "live flood alerts on the Roch, Beal and Irk",
       "status": "ok",
-      "items": 34,
-      "recent_items": 34,
-      "per_day": 2.43
+      "items": 20,
+      "recent_items": 20,
+      "per_day": 1.43,
+      "robots": "allowed",
+      "url": "https://environment.data.gov.uk/flood-monitoring/id/floods"
+    },
+    {
+      "name": "Rochdale council news",
+      "class": "civic",
+      "licence": "publisher feed",
+      "story_shape": "already collected; probed here as the yield baseline",
+      "status": "ok",
+      "items": 20,
+      "recent_items": 2,
+      "per_day": 0.14,
+      "robots": "allowed",
+      "url": "https://www.rochdale.gov.uk/rss/news",
+      "feeds_found": 1
+    },
+    {
+      "name": "UK Parliament petitions",
+      "class": "civic",
+      "licence": "Open Parliament Licence",
+      "story_shape": "petitions signed locally, with constituency signature counts",
+      "status": "ok",
+      "items": 25,
+      "recent_items": 0,
+      "per_day": 0.0,
+      "robots": "allowed",
+      "url": "https://petition.parliament.uk/petitions.json?state=open"
     },
     {
       "name": "Police street-level crime (data.police.uk)",
@@ -23,87 +63,84 @@
       "status": "empty",
       "items": 0,
       "recent_items": 0,
-      "per_day": 0.0
+      "per_day": 0.0,
+      "robots": "allowed",
+      "url": "https://data.police.uk/api/crimes-street/all-crime?lat=53.6136&lng=-2.1610&date=2026-06",
+      "note": "0 crimes in 2026-06 within one mile of Rochdale centre; monthly bulk, not a daily feed"
     },
     {
-      "name": "The Gazette official public record",
-      "class": "primary record",
-      "licence": "Open Government Licence",
-      "story_shape": "insolvencies, company strike-offs, statutory and planning notices",
-      "status": "http-500",
-      "items": 0,
-      "recent_items": 0,
-      "per_day": 0.0
-    },
-    {
-      "name": "UK Parliament petitions (constituency)",
-      "class": "civic",
-      "licence": "Open Parliament Licence",
-      "story_shape": "petitions signed locally, with constituency signature counts",
-      "status": "ok",
-      "items": 25,
-      "recent_items": 0,
-      "per_day": 0.0
-    },
-    {
-      "name": "UK Parliament written questions and votes",
+      "name": "UK Parliament written questions",
       "class": "civic",
       "licence": "Open Parliament Licence",
       "story_shape": "what the borough's MPs asked, said and voted for this week",
-      "status": "robots-denied",
+      "status": "robots-unreachable",
       "items": 0,
       "recent_items": 0,
-      "per_day": 0.0
+      "per_day": 0.0,
+      "robots": "robots-unreachable",
+      "note": "robots-unreachable for https://questions-statements.api.parliament.uk/api/writtenquestions/questions?take=100&expandMember=true"
+    },
+    {
+      "name": "Greater Manchester Fire and Rescue",
+      "class": "public safety",
+      "licence": "publisher feed",
+      "story_shape": "incidents and safety appeals in the borough",
+      "status": "no-feed-declared",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0,
+      "robots": "allowed",
+      "url": "https://manchesterfire.gov.uk/news/",
+      "note": "page reachable but declares no RSS/Atom feed; needs an HTML collector"
+    },
+    {
+      "name": "Northern Care Alliance NHS",
+      "class": "public services",
+      "licence": "publisher feed",
+      "story_shape": "Rochdale Infirmary services, waits, recruitment, closures",
+      "status": "no-feed-declared",
+      "items": 0,
+      "recent_items": 0,
+      "per_day": 0.0,
+      "robots": "allowed",
+      "url": "https://www.northerncarealliance.nhs.uk/news",
+      "note": "page reachable but declares no RSS/Atom feed; needs an HTML collector"
     },
     {
       "name": "Rochdale planning public access",
       "class": "primary record",
       "licence": "council portal (robots-governed)",
       "story_shape": "applications lodged and decided, weekly, with addresses",
-      "status": "robots-denied",
+      "status": "robots-unreachable",
       "items": 0,
       "recent_items": 0,
-      "per_day": 0.0
+      "per_day": 0.0,
+      "robots": "robots-unreachable",
+      "note": "robots-unreachable for https://publicaccess.rochdale.gov.uk/online-applications/search.do?action=weeklyList"
     },
     {
       "name": "Rochdale council democracy (ModernGov)",
       "class": "civic",
       "licence": "council portal (robots-governed)",
       "story_shape": "committee decisions, attendance, voting records by ward",
-      "status": "robots-denied",
+      "status": "robots-unreachable",
       "items": 0,
       "recent_items": 0,
-      "per_day": 0.0
-    },
-    {
-      "name": "Greater Manchester Fire and Rescue incidents",
-      "class": "public safety",
-      "licence": "publisher feed",
-      "story_shape": "incidents and safety appeals in the borough",
-      "status": "http-404",
-      "items": 0,
-      "recent_items": 0,
-      "per_day": 0.0
-    },
-    {
-      "name": "Northern Care Alliance NHS news",
-      "class": "public services",
-      "licence": "publisher feed",
-      "story_shape": "Rochdale Infirmary services, waits, recruitment, closures",
-      "status": "http-404",
-      "items": 0,
-      "recent_items": 0,
-      "per_day": 0.0
+      "per_day": 0.0,
+      "robots": "robots-unreachable",
+      "note": "robots-unreachable for https://democracy.rochdale.gov.uk/mgListCommittees.aspx?bcr=1"
     },
     {
       "name": "Reddit r/rochdale",
       "class": "social listening",
-      "licence": "public JSON endpoint, rate-limited",
+      "licence": "public JSON endpoint",
       "story_shape": "resident-reported incidents and complaints, as leads only",
       "status": "robots-denied",
       "items": 0,
       "recent_items": 0,
-      "per_day": 0.0
+      "per_day": 0.0,
+      "robots": "disallowed",
+      "note": "disallowed for https://www.reddit.com/r/rochdale/new.json?limit=100"
     },
     {
       "name": "Bluesky local post search",
