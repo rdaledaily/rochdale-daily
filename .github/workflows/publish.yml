@@ -42,10 +42,10 @@ permissions:
   contents: write
   actions: write
 
-# Manual/editorial publication is a latest-wins lane. If an earlier publish is
-# wedged, a newer editor change must replace it rather than queue behind it.
+# Manual/editorial publication is a latest-wins lane. The v2 group deliberately
+# leaves any already-wedged legacy publisher behind; future runs replace each other.
 concurrency:
-  group: rd-manual-publisher
+  group: rd-manual-publisher-v2
   cancel-in-progress: true
 
 jobs:
