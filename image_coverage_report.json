@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 21,
+    "kept_cards": 20,
     "cards_library": 1,
-    "cards_generated": 8,
+    "cards_generated": 9,
     "skipped": 0
   },
   "items": [
@@ -41,13 +41,6 @@
       "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "police.jpg",
       "match_score": 8126
-    },
-    {
-      "slug": "live-match-stats-for-rochdale-vs-shrewsbury-town-available-on-tnt-sports",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/match.jpg",
-      "matched_filename": "match.jpg",
-      "match_score": 15125
     },
     {
       "slug": "john-milne-table-table-milnrow-closing-september-3",
@@ -149,10 +142,17 @@
     },
     {
       "slug": "rochdale-midfielder-corey-edwards-set-for-transfer-to-everton",
-      "result": "kept-cards",
+      "result": "cards-generated",
       "image_url": "assets/img/cards/rochdale-midfielder-corey-edwards-set-for-transfer-to-everton-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "live-match-stats-for-rochdale-vs-shrewsbury-town-available-on-tnt-sports",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 15125
     },
     {
       "slug": "rochdale-afc-prepares-for-league-two-match-against-shrewsbury-town",
@@ -163,10 +163,10 @@
     },
     {
       "slug": "two-arrested-following-stabbing-incident-in-rochdale",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/police.jpg",
-      "matched_filename": "police.jpg",
-      "match_score": 8126
+      "result": "cards-library",
+      "image_url": "assets/img/cards/investigation.jpg",
+      "matched_filename": "investigation.jpg",
+      "match_score": 8133
     },
     {
       "slug": "oldham-defeats-rochdale-hornets-32-14-in-season-finale",
