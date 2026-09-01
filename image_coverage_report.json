@@ -1,8 +1,8 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 21,
-    "cards_library": 2,
+    "kept_cards": 22,
+    "cards_library": 0,
     "cards_generated": 8,
     "skipped": 0
   },
@@ -22,25 +22,11 @@
       "match_score": 15133
     },
     {
-      "slug": "rochdale-manager-prepares-for-match-against-shrewsbury-town",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/match.jpg",
-      "matched_filename": "match.jpg",
-      "match_score": 15125
-    },
-    {
       "slug": "missing-71-year-old-dementia-sufferer-found-near-piethorne-reservoir",
       "result": "kept-cards",
       "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "police.jpg",
       "match_score": 8126
-    },
-    {
-      "slug": "rochdale-manager-prepares-for-match-against-shrewsbury-town",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/rochdale_afc.jpg",
-      "matched_filename": "rochdale_afc.jpg",
-      "match_score": 15252
     },
     {
       "slug": "john-milne-table-table-milnrow-closing-september-3",
@@ -141,11 +127,18 @@
       "match_score": null
     },
     {
+      "slug": "rochdale-manager-prepares-for-match-against-shrewsbury-town",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 15125
+    },
+    {
       "slug": "two-arrested-following-stabbing-incident-in-rochdale",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/investigation.jpg",
-      "matched_filename": "investigation.jpg",
-      "match_score": 8133
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/police.jpg",
+      "matched_filename": "police.jpg",
+      "match_score": 8126
     },
     {
       "slug": "oldham-defeats-rochdale-hornets-32-14-in-season-finale",
@@ -164,9 +157,9 @@
     {
       "slug": "rochdale-afc-to-face-shrewsbury-town-in-league-two-match",
       "result": "kept-cards",
-      "image_url": "assets/img/cards/match.jpg",
-      "matched_filename": "match.jpg",
-      "match_score": 15125
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 14252
     },
     {
       "slug": "rochdale-afc-loses-1-2-to-crawley-town-in-efl-league-two",
@@ -183,6 +176,13 @@
       "match_score": 8385
     },
     {
+      "slug": "rock-classics-by-candlelight-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 8378
+    },
+    {
       "slug": "ellie-sax-endless-summer-tour-2026",
       "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
@@ -193,13 +193,6 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "monsters-of-rock-halloween-special-2026",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
