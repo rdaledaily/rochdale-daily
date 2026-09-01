@@ -1,8 +1,8 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 20,
-    "cards_library": 1,
+    "kept_cards": 19,
+    "cards_library": 2,
     "cards_generated": 9,
     "skipped": 0
   },
@@ -23,14 +23,14 @@
     },
     {
       "slug": "missing-71-year-old-dementia-sufferer-found-near-piethorne-reservoir",
-      "result": "cards-library",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "police.jpg",
       "match_score": 8126
     },
     {
       "slug": "rochdale-to-host-shrewsbury-town-match-on-tuesday-night",
-      "result": "kept-cards",
+      "result": "cards-library",
       "image_url": "assets/img/cards/match.jpg",
       "matched_filename": "match.jpg",
       "match_score": 15125
@@ -122,7 +122,7 @@
     {
       "slug": "tram-services-disruption-in-rochdale-this-weekend",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
+      "image_url": "assets/img/generated/adf6fe0425e3e4c13c.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -142,10 +142,10 @@
     },
     {
       "slug": "two-arrested-following-stabbing-incident-in-rochdale",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/police.jpg",
-      "matched_filename": "police.jpg",
-      "match_score": 8126
+      "result": "cards-library",
+      "image_url": "assets/img/cards/investigation.jpg",
+      "matched_filename": "investigation.jpg",
+      "match_score": 8133
     },
     {
       "slug": "oldham-defeats-rochdale-hornets-32-14-in-season-finale",
@@ -176,13 +176,6 @@
       "match_score": 8385
     },
     {
-      "slug": "rock-classics-by-candlelight-rochdale",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-      "matched_filename": "rochdale-town-hall.jpg",
-      "match_score": 8378
-    },
-    {
       "slug": "ellie-sax-endless-summer-tour-2026",
       "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
@@ -193,6 +186,13 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "monsters-of-rock-halloween-special-2026",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
