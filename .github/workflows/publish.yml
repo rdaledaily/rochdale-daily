@@ -42,13 +42,11 @@ permissions:
   contents: write
   actions: write
 
-# Editor/manual publication has its own short writer lane. It deliberately does
-# not wait behind a long-running scrape: the publish step starts from latest main
-# and already has bounded race-safe rebuild logic if main moves while it renders.
-# This prevents a stalled scraper from holding editor-written stories off the site.
+# Manual/editorial publication is a latest-wins lane. If an earlier publish is
+# wedged, a newer editor change must replace it rather than queue behind it.
 concurrency:
   group: rd-manual-publisher
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   publish:
@@ -63,7 +61,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
-          fetch-depth: 0
+          fetch-depth: 1
       - name: Start from latest main
         run: |
           git fetch origin main
@@ -89,7 +87,10 @@ jobs:
           python scraper/councillor_photos.py
           python scraper/patch_democracy_portraits.py
           python scraper/generate_ward_pages.py
-          python scraper/generate_newspaper_pages.py
+          # generate_newspaper_pages normally invokes frontpage_pipeline again.
+          # Keep its newsroom selection, but reuse the already-approved ticket
+          # events instead of crawling up to 30 external event pages a second time.
+          PYTHONPATH=scraper python -c "import frontpage_pipeline as fp, frontpage_manual_publish as mp, generate_newspaper_pages as g; fp.collect_ticket_events = mp._reuse_existing_ticket_events; g.main()"
           python scraper/enforce_frontpage_freshness.py
           python scraper/frontpage_source_quality.py
           PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
@@ -130,7 +131,7 @@ jobs:
             python scraper/councillor_photos.py
             python scraper/patch_democracy_portraits.py
             python scraper/generate_ward_pages.py
-            python scraper/generate_newspaper_pages.py
+            PYTHONPATH=scraper python -c "import frontpage_pipeline as fp, frontpage_manual_publish as mp, generate_newspaper_pages as g; fp.collect_ticket_events = mp._reuse_existing_ticket_events; g.main()"
             python scraper/enforce_frontpage_freshness.py
             python scraper/frontpage_source_quality.py
             PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
