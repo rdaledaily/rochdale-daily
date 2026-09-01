@@ -1,8 +1,8 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 17,
-    "cards_library": 2,
+    "kept_cards": 16,
+    "cards_library": 3,
     "cards_generated": 7,
     "skipped": 0
   },
@@ -38,7 +38,7 @@
     {
       "slug": "rochdale-afc-publishes-midweek-fixtures-and-events-guide",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/0b8704ddc914e55957.jpg",
+      "image_url": "assets/img/cards/rochdale-afc-publishes-midweek-fixtures-and-events-guide-canonical.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -62,6 +62,13 @@
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "extra-stop-and-search-powers-enforced-in-rochdale-following-stabbing-of-13-year",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/greater_manchester_police.jpg",
+      "matched_filename": "greater_manchester_police.jpg",
+      "match_score": 8385
     },
     {
       "slug": "inspector-rules-modern-house-overlooking-lake-will-not-harm-green-belt",
@@ -106,13 +113,6 @@
       "match_score": 15256
     },
     {
-      "slug": "section-60-and-60aa-authority-enforced-in-rochdale-town-centre",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/greater_manchester_police.jpg",
-      "matched_filename": "greater_manchester_police.jpg",
-      "match_score": 8385
-    },
-    {
       "slug": "rochdale-afc-to-face-shrewsbury-town-in-league-two-match",
       "result": "cards-library",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
@@ -121,7 +121,7 @@
     },
     {
       "slug": "section-60-and-60aa-authority-enforced-in-rochdale-town-centre",
-      "result": "kept-cards",
+      "result": "cards-library",
       "image_url": "assets/img/cards/greater_manchester_police.jpg",
       "matched_filename": "greater_manchester_police.jpg",
       "match_score": 8385
@@ -148,13 +148,6 @@
       "match_score": null
     },
     {
-      "slug": "rock-classics-by-candlelight-rochdale",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-      "matched_filename": "rochdale-town-hall.jpg",
-      "match_score": 8378
-    },
-    {
       "slug": "ellie-sax-endless-summer-tour-2026",
       "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
@@ -165,6 +158,13 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "monsters-of-rock-halloween-special-2026",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
