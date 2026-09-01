@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import hashlib
 import html
+from functools import lru_cache
 import re
 from datetime import datetime, timezone
 from typing import Any
@@ -303,7 +304,12 @@ def get_value(item: Any, name: str, default: Any = "") -> Any:
 
 
 def normalise_text(value: Any) -> str:
-    text = html.unescape(str(value or ""))
+    return _normalise_text_cached(str(value or ""))
+
+
+@lru_cache(maxsize=16384)
+def _normalise_text_cached(raw: str) -> str:
+    text = html.unescape(raw)
     text = TAG_RE.sub(" ", text)
     return SPACE_RE.sub(" ", text).strip()
 
@@ -377,13 +383,21 @@ def _canonical_token(token: str) -> str:
 
 
 def concept_sequence_from_text(text: str) -> list[str]:
+    # Pure function of the text. Pairwise story comparison on the frontpage
+    # feed calls this ~90k times per publish for a few hundred distinct
+    # strings, so the tokenisation is memoised; callers get a fresh list.
+    return list(_concept_sequence_cached(text))
+
+
+@lru_cache(maxsize=16384)
+def _concept_sequence_cached(text: str) -> tuple[str, ...]:
     aliased = _apply_phrase_aliases(text)
     output: list[str] = []
     for raw in TOKEN_RE.findall(aliased):
         token = _canonical_token(raw)
         if len(token) >= 3 and token:
             output.append(token)
-    return output
+    return tuple(output)
 
 
 def title_concept_sequence(item: Any) -> list[str]:
