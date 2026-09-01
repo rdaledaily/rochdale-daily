@@ -163,6 +163,8 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         if cleaned:
             record["corrections"] = cleaned
 
+    if entry.get("image_alt"):
+        record["image_alt"] = _clean(entry.get("image_alt"))[:200]
     if entry.get("featured") is True:
         record["featured"] = True
     if entry.get("frontpage_until"):
