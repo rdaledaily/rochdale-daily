@@ -265,7 +265,42 @@ def article_text(article: dict[str, Any]) -> str:
     )
 
 
+# article_category() is a pure function of the fields below. merge_duplicate_articles
+# and _dedupe_by_url compare every record against every other and ask for the
+# category on each comparison, so the classifier was re-run ~215 times per record
+# (32,238 calls for a 142-record feed, ~10 minutes on an Actions runner). Memoise
+# per distinct input so each record is classified once per process.
+_CATEGORY_KEY_FIELDS = (
+    "title",
+    "excerpt",
+    "summary",
+    "content_html",
+    "event_location",
+    "source_url",
+    "category",
+    "source_kind",
+)
+_CATEGORY_CACHE: dict[tuple[str, ...], str] = {}
+
+
+def _category_cache_key(article: dict[str, Any]) -> tuple[str, ...]:
+    return tuple(str(article.get(field) or "") for field in _CATEGORY_KEY_FIELDS)
+
+
+def clear_category_cache() -> None:
+    _CATEGORY_CACHE.clear()
+
+
 def article_category(article: dict[str, Any]) -> str:
+    key = _category_cache_key(article)
+    cached = _CATEGORY_CACHE.get(key)
+    if cached is None:
+        cached = _compute_article_category(article)
+        _CATEGORY_CACHE[key] = cached
+    return cached
+
+
+def _compute_article_category(article: dict[str, Any]) -> str:
     text = article_text(article)
     if re.search(r"\b(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)\b", text, re.IGNORECASE):
         return "community"
