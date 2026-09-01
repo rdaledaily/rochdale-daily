@@ -10,20 +10,59 @@ already passed those policies.
 This wrapper keeps all normal frontpage, merge, freshness and archive behaviour, but
 limits image selection to a manual/editorial record that does not already point at a
 valid canonical cards image and reuses the existing approved ticket-event records
-already present in articles.json. A final cards-only validation and manual-publication
-invariant remain in the publish workflow, so these are speed optimisations rather than
-relaxations of the publication contract.
+already present in articles.json. It also memoizes the expensive deterministic article
+category calculation for the lifetime of the process. Duplicate detection is O(n²), but
+category is a pure function of a record's text/category/source kind; recomputing it for
+every pair turned roughly 150 records into tens of thousands of classifier calls.
+
+A final cards-only validation and manual-publication invariant remain in the publish
+workflow, so these are speed optimisations rather than relaxations of the publication
+contract.
 """
 from __future__ import annotations
 
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 import frontpage_pipeline as pipeline
 
 _original_enforce_article = pipeline.enforce_article
+_original_article_category = pipeline.article_category
 CARDS_PREFIX = "assets/img/cards/"
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
+
+
+@lru_cache(maxsize=4096)
+def _category_for_signature(text: str, declared_category: str, source_kind: str) -> str:
+    """Classify one immutable article signature once per process.
+
+    ``frontpage_pipeline.article_category`` is deterministic for these three inputs.
+    A tiny synthetic record lets us reuse that exact production logic rather than
+    duplicating the classifier here. If an article's text or declared category changes,
+    its signature changes and it is classified again.
+    """
+    return _original_article_category(
+        {
+            "title": text,
+            "category": declared_category,
+            "source_kind": source_kind,
+        }
+    )
+
+
+def _cached_article_category(article: dict[str, Any]) -> str:
+    return _category_for_signature(
+        pipeline.article_text(article),
+        str(article.get("category") or "news"),
+        str(article.get("source_kind") or "").lower(),
+    )
+
+
+# Apply the memoized category lookup at import time as well as in ``main``. The
+# publish workflow imports this module before generate_newspaper_pages.py, so both
+# canonical passes share the fast lookup without changing any merge decision.
+pipeline.article_category = _cached_article_category
 
 
 def _has_valid_canonical_image(article: dict[str, Any], root: Path) -> bool:
@@ -63,6 +102,7 @@ def _reuse_existing_ticket_events(session: Any = None) -> tuple[list[dict[str, A
 
 
 def main() -> int:
+    pipeline.article_category = _cached_article_category
     pipeline.enforce_article = _enforce_editorial_only
     pipeline.collect_ticket_events = _reuse_existing_ticket_events
     return pipeline.main()
