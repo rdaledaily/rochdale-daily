@@ -1,3 +1,14 @@
+# Baseline browser hardening for every response. These four are safe to apply
+# site-wide: they do not restrict scripts, fonts or images (that is a CSP job,
+# to be introduced deliberately once inline scripts are inventoried). They stop
+# MIME sniffing, clickjacking in third-party frames, and referrer leakage of
+# reader URLs to other sites.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+
 /articles/frontpage.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
