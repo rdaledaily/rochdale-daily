@@ -332,7 +332,11 @@ def police_probe() -> dict[str, Any]:
     month = ""
     if code == 200:
         try:
-            month = str(json.loads(body).get("date") or "")
+            # crime-last-updated returns a full date ("2026-06-01"); the
+            # crimes-street endpoint wants YYYY-MM. Passing the full date is the
+            # most likely reason the 28 Aug probe recorded "empty" for a force
+            # area that publishes thousands of records a month.
+            month = str(json.loads(body).get("date") or "")[:7]
         except (json.JSONDecodeError, AttributeError):
             month = ""
     if not month:
