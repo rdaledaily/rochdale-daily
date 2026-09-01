@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 149,
-  "published_count": 149,
-  "category_change_count": 17,
-  "image_change_count": 27,
+  "article_count": 151,
+  "published_count": 151,
+  "category_change_count": 18,
+  "image_change_count": 19,
   "category_changes": [
+    {
+      "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
+      "title": "REFORM UK DELIVERS: PEOPLE POWER BACKED BY REFORM SCRAPS DISASTROUS ROAD CLOSURES!",
+      "from": "traffic",
+      "to": "politics",
+      "reason": "headline strongly identifies politics"
+    },
     {
       "slug": "wellmental-uk-hosts-first-mens-mental-health-fitness-session-in-heywood",
       "title": "WellMental UK hosts first men's mental health fitness session in Heywood",
@@ -128,8 +135,20 @@
   ],
   "image_changes": [
     {
+      "slug": "norden-cc-remain-top-of-lancashire-cricket-league-despite-defeat-at-littleboroug",
+      "title": "Norden CC Remain Top of Lancashire Cricket League Despite Defeat to Littleborough",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/cricket.jpg",
+        "img": "assets/img/cards/cricket.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/norden-cc-remain-top-of-lancashire-cricket-league-despite-defeat-at-littleboroug-generated-card.jpg"
+    },
+    {
       "slug": "transport-for-greater-manchester-confirms-heywood-tram-extension-project-is-stil",
-      "title": "Transport for Greater Manchester Confirms Heywood Tram Extension Project is Still Under Consideration",
+      "title": "Transport for Greater Manchester Confirms Tram Extension to Heywood is Still Under Consideration",
       "category": "transport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -176,8 +195,8 @@
       "after": "assets/img/cards/oldham-defeats-rochdale-hornets-32-14-in-season-finale-generated-card.jpg"
     },
     {
-      "slug": "rochdale-afc-prepares-for-match-against-shrewsbury-town",
-      "title": "Rochdale AFC Hosts Shrewsbury Town in Sky Bet League Two",
+      "slug": "rochdale-afc-loses-1-2-to-crawley-town-in-efl-league-two",
+      "title": "Rochdale AFC Loses 1-2 to Crawley Town in EFL League Two",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -185,35 +204,35 @@
         "img": "assets/img/cards/rochdale_afc.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/rochdale-afc-prepares-for-match-against-shrewsbury-town-generated-card.jpg"
+      "after": "assets/img/cards/rochdale-afc-loses-1-2-to-crawley-town-in-efl-league-two-generated-card.jpg"
     },
     {
-      "slug": "police-implement-stop-and-search-orders-in-rochdale-town-centre-following-stabbi",
-      "title": "Police Implement Stop and Search Orders in Rochdale Town Centre Following Stabbing Incident",
-      "category": "crime",
+      "slug": "rochdale-afc-to-face-shrewsbury-town-in-league-two-match",
+      "title": "Rochdale AFC to Face Shrewsbury Town in League Two Match",
+      "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/police.jpg",
-        "img": "assets/img/cards/police.jpg",
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/police-implement-stop-and-search-orders-in-rochdale-town-centre-following-stabbi-generated-card.jpg"
+      "after": "assets/img/cards/rochdale-afc-to-face-shrewsbury-town-in-league-two-match-generated-card.jpg"
     },
     {
       "slug": "section-60-and-60aa-authority-enforced-in-rochdale-town-centre",
-      "title": "Thirteen-Year-Old Boy Stabbed at Taco Bell in Rochdale, Two Teenagers Arrested",
+      "title": "Four Teenage Boys Arrested Following Stabbing of 13-Year-Old in Rochdale",
       "category": "crime",
-      "reason": "cached/library image lacks canonical/source provenance",
+      "reason": "weak filename image match score 8385; neutral card is safer",
       "before": {
-        "image_url": "assets/img/cards/taco_bell.png",
-        "img": "assets/img/cards/taco_bell.png",
+        "image_url": "assets/img/cards/greater_manchester_police.jpg",
+        "img": "assets/img/cards/greater_manchester_police.jpg",
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/section-60-and-60aa-authority-enforced-in-rochdale-town-centre-generated-card.jpg"
     },
     {
-      "slug": "police-investigate-alleged-rape-of-young-man-in-rochdale",
-      "title": "Police Appeal for Witnesses Following Alleged Rape of Young Man in Newbold, Rochdale",
+      "slug": "police-appeal-for-witnesses-following-alleged-rape-in-newbold-area-of-rochdale",
+      "title": "Police Appeal for Witnesses Following Alleged Rape in Newbold Area of Rochdale",
       "category": "crime",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -221,31 +240,7 @@
         "img": "assets/img/cards/police_appeal.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/police-investigate-alleged-rape-of-young-man-in-rochdale-generated-card.jpg"
-    },
-    {
-      "slug": "greater-manchester-police-to-host-cyber-crime-awareness-events-in-rochdale",
-      "title": "Greater Manchester Police Launch Cyber Crime Awareness Events in Rochdale",
-      "category": "crime",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/greater_manchester_police.jpg",
-        "img": "assets/img/cards/greater_manchester_police.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/greater-manchester-police-to-host-cyber-crime-awareness-events-in-rochdale-generated-card.jpg"
-    },
-    {
-      "slug": "pakistan-rejects-uk-request-to-repatriate-rochdale-grooming-gang-leader-shabir-a",
-      "title": "Pakistan Rejects UK Request to Repatriate Rochdale Grooming Gang Leader Shabir Ahmed",
-      "category": "crime",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/grooming_gang.jpg",
-        "img": "assets/img/cards/grooming_gang.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/pakistan-rejects-uk-request-to-repatriate-rochdale-grooming-gang-leader-shabir-a-generated-card.jpg"
+      "after": "assets/img/cards/police-appeal-for-witnesses-following-alleged-rape-in-newbold-area-of-rochdale-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
@@ -272,18 +267,6 @@
       "after": "assets/img/cards/driver-arrested-after-stolen-vehicle-recovered-on-milnrow-road-rochdale-generated-card.jpg"
     },
     {
-      "slug": "rochdale-100-businesses-challenge-denehurst-house-veterans",
-      "title": "Rochdale businesses urged to back Denehurst House in £30-a-month veterans challenge",
-      "category": "community",
-      "reason": "weak filename image match score 8506; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/get-together-after-serving.jpg",
-        "img": "assets/img/cards/get-together-after-serving.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-100-businesses-challenge-denehurst-house-veterans-generated-card.jpg"
-    },
-    {
       "slug": "littlepinkborough-cancer-research-uk-community-event-2026",
       "title": "Little'Pink'borough returns as businesses across Littleborough prepare to turn pink for Cancer Research UK",
       "category": "community",
@@ -296,112 +279,40 @@
       "after": "assets/img/cards/littlepinkborough-cancer-research-uk-community-event-2026-generated-card.jpg"
     },
     {
-      "slug": "falinge-national-emergency-briefing-screening-full-house",
-      "title": "Full house for National Emergency Briefing screening in Falinge",
-      "category": "community",
-      "reason": "weak filename image match score 8253; neutral card is safer",
+      "slug": "norden-residents-no-water-since-friday-united-utilities",
+      "title": "Norden residents report being without water since Friday morning as outage continues",
+      "category": "news",
+      "reason": "health visual (medical) does not match news story",
       "before": {
-        "image_url": "assets/img/cards/tricia_ayrton.jpg",
-        "img": "assets/img/cards/tricia_ayrton.jpg",
-        "status": "cards-library-photo"
+        "image_url": "assets/img/cards/medical_treatment.jpg",
+        "img": "assets/img/cards/medical_treatment.jpg",
+        "status": "editorial-photo"
       },
-      "after": "assets/img/cards/falinge-national-emergency-briefing-screening-full-house-generated-card.jpg"
+      "after": "assets/img/cards/norden-residents-no-water-since-friday-united-utilities-generated-card.jpg"
     },
     {
-      "slug": "creativity-for-all-free-family-festival-rochdale-13-august",
-      "title": "Free ice creams, workshops and giant games: Creativity for All takes over Rochdale town centre next Thursday",
-      "category": "events",
-      "reason": "weak filename image match score 8131; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/touchstones.jpg",
-        "img": "assets/img/cards/touchstones.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/creativity-for-all-free-family-festival-rochdale-13-august-generated-card.jpg"
-    },
-    {
-      "slug": "elderly-lady-found-after-incredible-community-effort-newhey",
-      "title": "Elderly lady found after incredible community effort",
-      "category": "community",
-      "reason": "weak filename image match score 8385; neutral card is safer",
+      "slug": "low-flying-helicopter-heard-across-rochdale-august-2026",
+      "title": "Low-flying helicopter heard across Rochdale as residents ask what happened",
+      "category": "news",
+      "reason": "crime visual (police) does not match news story",
       "before": {
         "image_url": "assets/img/cards/greater_manchester_police.jpg",
         "img": "assets/img/cards/greater_manchester_police.jpg",
-        "status": "cards-library-photo"
+        "status": "editorial-photo"
       },
-      "after": "assets/img/cards/elderly-lady-found-after-incredible-community-effort-newhey-generated-card.jpg"
+      "after": "assets/img/cards/low-flying-helicopter-heard-across-rochdale-august-2026-generated-card.jpg"
     },
     {
-      "slug": "shabir-ahmed-released-from-prison-after-serving-sentence",
-      "title": "Shabir Ahmed barred from Rochdale under strict licence conditions as government pushes to deport him",
-      "category": "crime",
-      "reason": "weak filename image match score 8253; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/grooming_gang.jpg",
-        "img": "assets/img/cards/grooming_gang.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/shabir-ahmed-released-from-prison-after-serving-sentence-generated-card.jpg"
-    },
-    {
-      "slug": "heywood-landfill-odour-complaints-return-august-2026",
-      "title": "Fresh complaints over persistent landfill odour as Heywood residents report 'sewer' stench and fly infestation",
-      "category": "environment",
-      "reason": "weak filename image match score 6382; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/pilsworth-landfill-odour.jpg",
-        "img": "assets/img/cards/pilsworth-landfill-odour.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/heywood-landfill-odour-complaints-return-august-2026-generated-card.jpg"
-    },
-    {
-      "slug": "heat-exposes-challenges-facing-rochdale-workers-and-britains-infrastructure",
-      "title": "Heat exposes challenges facing Rochdale workers and Britain’s ageing infrastructure",
-      "category": "environment",
-      "reason": "weak filename image match score 8127; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/weather.png",
-        "img": "assets/img/cards/weather.png",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/heat-exposes-challenges-facing-rochdale-workers-and-britains-infrastructure-generated-card.jpg"
-    },
-    {
-      "slug": "syke-bowling-club-junior-fun-day",
-      "title": "Young bowlers invited to take part in Syke Bowling Club fun day",
-      "category": "sport",
-      "reason": "weak filename image match score 6376; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/syke_bowling_green.jpg",
-        "img": "assets/img/cards/syke_bowling_green.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/syke-bowling-club-junior-fun-day-generated-card.jpg"
-    },
-    {
-      "slug": "after-burnham-what-the-next-mayor-inherits",
-      "title": "After Burnham: What the Next Mayor Inherits",
+      "slug": "reform-strongest-showing-reshapes-greater-manchester-politics",
+      "title": "Reform's strongest showing yet reshapes Greater Manchester politics",
       "category": "politics",
-      "reason": "weak filename image match score 6255; neutral card is safer",
+      "reason": "crime visual (police) does not match politics story",
       "before": {
-        "image_url": "assets/img/cards/manchester_mayor.jpg",
-        "img": "assets/img/cards/manchester_mayor.jpg",
-        "status": "cards-library-photo"
+        "image_url": "assets/img/cards/greater_manchester_police.jpg",
+        "img": "assets/img/cards/greater_manchester_police.jpg",
+        "status": "editorial-photo"
       },
-      "after": "assets/img/cards/after-burnham-what-the-next-mayor-inherits-generated-card.jpg"
-    },
-    {
-      "slug": "one-in-four-why-greater-manchester-stayed-home",
-      "title": "One in Four: Why Greater Manchester Stayed Home",
-      "category": "politics",
-      "reason": "weak filename image match score 6255; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/mayoral_election.jpg",
-        "img": "assets/img/cards/mayoral_election.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/one-in-four-why-greater-manchester-stayed-home-generated-card.jpg"
+      "after": "assets/img/cards/reform-strongest-showing-reshapes-greater-manchester-politics-generated-card.jpg"
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
