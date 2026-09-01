@@ -19,10 +19,14 @@ def main() -> int:
 
     # Manual/editorial publication has its own short lane. It starts from latest
     # main and performs bounded race-safe rebuilds, so a slow automated scrape
-    # must never hold editor-written stories off the public site.
+    # must never hold editor-written stories off the public site. The lane is
+    # latest-wins (cancel-in-progress: true): every run publishes the whole
+    # manual_articles.d set, so a superseded run loses nothing and a wedged one
+    # cannot block the editor's next story.
     publish = text("publish.yml")
     assert "group: rd-manual-publisher" in publish
-    assert "cancel-in-progress: false" in publish
+    assert "group: rd-site-writer" not in publish
+    assert "cancel-in-progress: true" in publish
     assert "frontpage_manual_publish.py" in publish
     assert "verify_manual_publication.py" in publish
 

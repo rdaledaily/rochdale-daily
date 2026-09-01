@@ -86,11 +86,42 @@ def valid_cards_image(root: Path, value: Any) -> bool:
 
 
 
+def is_manual_editorial(article: dict[str, Any]) -> bool:
+    """Editor-written pieces from manual_articles.d / manual_articles.json."""
+    return article.get("manual_article") is True or clean(article.get("source_kind")).lower() == "editorial"
+
+
+def mark_editorial_photo(article: dict[str, Any], rel: str) -> None:
+    """Record that a supplied cards-folder photo is the editor's choice.
+
+    Manual source JSON predates the image_status marker, and the manual injector
+    hard-replaces the stored record every run, so the marker set by a previous pass
+    does not survive. Re-derive it from the source of truth (manual_article + a
+    valid file in assets/img/cards) on every pass instead.
+    """
+    article["image_url"] = rel
+    article["img"] = rel
+    article["image_status"] = "editorial-photo"
+    article["image_backfill_method"] = "manual-editorial-photo"
+    article["source_image_reuse_status"] = "cards-only"
+    article.pop("image_placeholder_reason", None)
+    article.pop("image_match_score", None)
+
+
 def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
     """Keep a real image already selected by editorial/source/Commons enrichment."""
     value = clean(article.get("image_url") or article.get("img"))
     if not value:
         return False
+    # A manual article pointing at a real, non-generated file inside assets/img/cards
+    # is authoritative in every lane (publish, scrape-fast, scrape-kick). Previously
+    # this rule only existed as a monkey-patch in frontpage_manual_publish.py, so the
+    # scraper lanes replaced supplied photos with generated headline cards.
+    if is_manual_editorial(article):
+        manual_rel = cards_relative(value)
+        if manual_rel and valid_cards_image(root, manual_rel) and not is_generated_card(root / manual_rel):
+            mark_editorial_photo(article, manual_rel)
+            return True
     low = value.lower().replace("\\", "/")
     status = clean(article.get("image_status")).lower()
     real_status = any(token in status for token in ("source-photo", "commons-photo", "editorial-photo"))

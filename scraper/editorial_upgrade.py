@@ -808,7 +808,24 @@ def request_article(
     sensitive: bool,
     right_to_reply_email: str,
     logger,
+    on_skip=None,
 ) -> dict[str, Any] | None:
+    """Return a publishable draft, or None with the terminal reason reported.
+
+    Every None is reported once through ``on_skip(reason)`` so the run status can
+    distinguish an OpenAI outage from a correct editorial-gate rejection from a
+    quality gate that the model could not satisfy. Before this, all three were
+    logged as one "no coherent grounded rewrite" bucket and were indistinguishable
+    in scraper_status.json.
+    """
+
+    def skip(reason: str) -> None:
+        if on_skip is not None:
+            try:
+                on_skip(reason)
+            except Exception:  # never let bookkeeping break a rewrite
+                pass
+
     system_message = HOUSE_STYLE_SYSTEM
     source_kind = str(getattr(candidate, "source_kind", "") or "")
     floor, cap = length_budget(source_text, source_kind)
@@ -857,6 +874,8 @@ def request_article(
     previous = None
     feedback: list[str] = []
     last_feedback: list[str] = []
+    api_failures = 0
+    last_api_error = ""
     for attempt in range(4):
         payload = dict(base_payload)
         if attempt:
@@ -880,6 +899,8 @@ def request_article(
             )
             draft = normalise_draft(json.loads(response.choices[0].message.content or "{}"))
         except Exception as exc:
+            api_failures += 1
+            last_api_error = type(exc).__name__
             logger.warning(
                 "OpenAI journalism attempt %d failed for %s: %s",
                 attempt + 1,
@@ -901,6 +922,8 @@ def request_article(
                 getattr(candidate, "source_url", ""),
                 "; ".join(feedback),
             )
+            gate = next(issue for issue in feedback if issue.startswith(GATE_REJECTION_PREFIX))
+            skip("editorial gate: " + gate.split(":", 1)[0].strip()[:60])
             return None
         previous = draft
         last_feedback = feedback
@@ -928,6 +951,16 @@ def request_article(
             "; ".join(last_feedback),
         )
         return previous
+    if previous is None:
+        # No draft ever came back: every attempt raised inside the API call.
+        skip(f"OpenAI: all {api_failures} attempts failed ({last_api_error or 'unknown error'})")
+    else:
+        # A draft exists but still fails an integrity (non-style) check after
+        # four repairs. Name the first such check so a gate that is too strict
+        # shows up as a pattern rather than as silence.
+        integrity = [issue for issue in last_feedback if not style_only([issue])]
+        first = (integrity or last_feedback or ["unspecified"])[0]
+        skip("quality gate after 4 repairs: " + first[:90])
     return None
 
 
