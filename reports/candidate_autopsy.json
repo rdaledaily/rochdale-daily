@@ -1,21 +1,22 @@
 {
-  "examined_at": "2026-08-31T14:24:15.601276Z",
+  "examined_at": "2026-09-01T04:01:29.324647Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 146,
+  "candidates_examined": 152,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "would publish": 69,
-    "age": 58,
-    "duplicate of published story": 19
+    "age": 82,
+    "would publish": 54,
+    "duplicate of published story": 13,
+    "not local": 3
   },
-  "would_publish": 69,
+  "would_publish": 54,
   "age_gate_sensitivity": {
-    "6h": 14,
-    "14h": 17,
-    "24h": 29,
-    "48h": 88,
-    "72h": 113,
-    "168h": 146
+    "6h": 5,
+    "14h": 14,
+    "24h": 32,
+    "48h": 70,
+    "72h": 119,
+    "168h": 152
   },
   "gates_unavailable": [],
   "examples": {
@@ -24,15 +25,20 @@
       "Bee Network live travel alerts: Updated: 31/08/2026 at 10:44am Live Failsworth Tram Stop - Lifts out o",
       "TfGM Travel Alerts: Travel alerts"
     ],
+    "not local": [
+      "rochdaleafc.co.uk: Preview | Shrewsbury Town (H) - rochdaleafc.co.uk",
+      "rochdaleafc.co.uk: Women Win At Crown Oil Arena - rochdaleafc.co.uk",
+      "rochdaleafc.co.uk: Behind The Sign | Pilot Episode - rochdaleafc.co.uk"
+    ],
     "duplicate of published story": [
-      "Yahoo Sports Canada: Rochdale v Shrewsbury Town - Yahoo Sports Canada",
-      "FansNetwork.co.uk: Refwatch - Rochdale v Shrewsbury Town - FansNetwork.co.uk",
-      "Rochdale Times: Modern house overlooking lake ‘won’t harm Green Belt’, inspector rules"
+      "Rochdale Times: Four more arrested after 13-year-old boy stabbed in Rochdale - Rochdal",
+      "BBC Manchester: Rochdale teen stabbing: Four more arrests",
+      "Rochdale Times: Norden remain top despite defeat - Rochdale Times"
     ],
     "age": [
-      "Colchester Gazette: Colchester United v Rochdale - live updates, team news - Colchester Ga",
-      "Air and Space Museum: !+[𝐒𝐓ream]HERE'S*! Rochdale vs Colchester LIVE Ｓｔｒｅａｍｓ ＯＮ Ｔｖ Ｃｈａｎｎｅｌ 2",
-      "Air and Space Museum: !+[Here's Way To Watch] Colchester v Rochdale 𝐋𝐈𝐕𝐄 𝐅𝐑𝐄𝐄 ＯＮ Ｔｖ Ｃｈａｎｎｅｌ "
+      "Daily Mail: Boy, 13, seriously injured after being stabbed at Taco Bell in Rochdal",
+      "Daily Mail: Boy, 13, seriously injured after being stabbed at Taco Bell in Rochdal",
+      "Colchester Gazette: PLAYER RATINGS: How Colchester United fared in their win over Rochdale"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
