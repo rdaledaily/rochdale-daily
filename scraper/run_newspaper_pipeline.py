@@ -215,6 +215,10 @@ def configure_adaptive_editorial_length() -> None:
             sensitive=sensitive,
             right_to_reply_email=core.RIGHT_TO_REPLY_EMAIL,
             logger=core.log,
+            # This wrapper is the production rewrite path. Without on_skip the
+            # terminal reason never reached scraper_status.json: the first live
+            # run after #37 reported rewrite_skips_unattributed = 12 of 13.
+            on_skip=core.note_rewrite_skip,
         )
 
     def adaptive_issues(draft, source_text, candidate):
