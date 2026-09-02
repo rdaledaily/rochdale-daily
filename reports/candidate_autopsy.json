@@ -1,21 +1,22 @@
 {
-  "examined_at": "2026-09-01T12:00:11.107486Z",
+  "examined_at": "2026-09-02T11:43:09.908373Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 151,
+  "candidates_examined": 190,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 83,
-    "would publish": 47,
-    "duplicate of published story": 21
+    "age": 91,
+    "would publish": 80,
+    "duplicate of published story": 18,
+    "job or career post": 1
   },
-  "would_publish": 47,
+  "would_publish": 80,
   "age_gate_sensitivity": {
-    "6h": 15,
-    "14h": 19,
-    "24h": 32,
-    "48h": 68,
-    "72h": 122,
-    "168h": 151
+    "6h": 7,
+    "14h": 29,
+    "24h": 68,
+    "48h": 99,
+    "72h": 137,
+    "168h": 190
   },
   "gates_unavailable": [],
   "examples": {
@@ -25,14 +26,17 @@
       "TfGM Travel Alerts: Travel alerts"
     ],
     "duplicate of published story": [
-      "Express: Major police update as 13-year-old boy stabbed in UK town",
-      "Rochdale AFC: Preview | Shrewsbury Town (H) - rochdaleafc.co.uk",
-      "Rochdale Times: Four more arrested after 13-year-old boy stabbed in Rochdale - Rochdal"
+      "BBC: League Two: Rochdale 3-0 Shrewsbury Town - BBC",
+      "Sky Sports: Rochdale 3-0 Shrewsbury Town | League Two highlights - Sky Sports",
+      "Rochdale AFC: Dale Pick Up Convincing Win - Rochdale AFC"
+    ],
+    "job or career post": [
+      "Shrewsbury Town FC: Opposition Report | Rochdale - Shrewsbury Town FC"
     ],
     "age": [
-      "Roch Valley Radio Local News: Two men arrested on suspicion of murder after man dies following balco",
-      "Rochdale AFC: TVOS Preview | Shrewsbury Town (H) - Rochdale AFC",
-      "Transfermarkt: Rochdale AFC - transfermarkt.com"
+      "Mshale: Match Highlights: Rochdale AFC 2 - 4 Morecambe Marin čilić (8ZKODoq9OT",
+      "The Bury Times: What’s happened to the promised Metrolink line linking Bury, Heywood a",
+      "Fansnetwork: Refwatch - Rochdale v Shrewsbury Town - fansnetwork.co.uk"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
