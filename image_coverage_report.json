@@ -1,8 +1,8 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 20,
-    "cards_library": 0,
+    "kept_cards": 19,
+    "cards_library": 1,
     "cards_generated": 9,
     "skipped": 0
   },
@@ -36,13 +36,6 @@
       "match_score": 4625
     },
     {
-      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/greater_manchester_police.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
       "slug": "four-more-arrests-made-in-rochdale-stabbing-investigation",
       "result": "kept-cards",
       "image_url": "assets/img/cards/investigation.jpg",
@@ -62,13 +55,6 @@
       "image_url": "assets/img/generated/7e49842f88d0ce25e4.jpg",
       "matched_filename": "",
       "match_score": null
-    },
-    {
-      "slug": "rochdale-to-host-shrewsbury-town-in-league-two-match-on-september-2",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale_fc.jpg",
-      "matched_filename": "rochdale_fc.jpg",
-      "match_score": 15251
     },
     {
       "slug": "john-milne-table-table-milnrow-closing-september-3",
@@ -106,11 +92,18 @@
       "match_score": 15252
     },
     {
-      "slug": "shrewsbury-town-includes-new-signing-for-match-against-rochdale",
+      "slug": "rochdale-to-host-shrewsbury-town-in-league-two-match-on-september-2",
       "result": "kept-existing",
       "image_url": "assets/img/cards/shrewsbury-town-includes-new-signing-for-match-against-rochdale-canonical.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rochdale-afc-releases-midweek-action-guide-for-fans",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
     },
     {
       "slug": "transport-for-greater-manchester-confirms-heywood-tram-extension-project-is-stil",
@@ -141,6 +134,13 @@
       "match_score": null
     },
     {
+      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/greater_manchester_police.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "inspector-rules-modern-house-overlooking-lake-will-not-harm-green-belt",
       "result": "kept-cards",
       "image_url": "assets/img/cards/hollingworth_lake.jpg",
@@ -157,7 +157,7 @@
     {
       "slug": "tram-services-disruption-in-rochdale-this-weekend",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
+      "image_url": "assets/img/generated/adf6fe0425e3e4c13c.jpg",
       "matched_filename": "",
       "match_score": null
     },
