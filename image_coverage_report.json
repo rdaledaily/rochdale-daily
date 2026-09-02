@@ -2,11 +2,18 @@
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
     "kept_cards": 20,
-    "cards_library": 0,
+    "cards_library": 1,
     "cards_generated": 9,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "rochdale-afc-celebrates-first-league-win-with-3-0-victory-over-shrewsbury",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
+    },
     {
       "slug": "vestacare-s-roof-replacement-plans-refused-by-rochdale-council",
       "result": "kept-cards",
@@ -59,7 +66,7 @@
     {
       "slug": "rochdale-afc-to-face-shrewsbury-town-at-crown-oil-arena",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-afc-to-face-shrewsbury-town-at-crown-oil-arena-canonical.jpg",
+      "image_url": "assets/img/generated/7e49842f88d0ce25e4.jpg",
       "matched_filename": "",
       "match_score": null
     },
