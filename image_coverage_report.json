@@ -1,8 +1,8 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 18,
-    "cards_library": 1,
+    "kept_cards": 19,
+    "cards_library": 0,
     "cards_generated": 9,
     "skipped": 0
   },
@@ -36,13 +36,6 @@
       "match_score": 4625
     },
     {
-      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/greater_manchester_police.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
       "slug": "four-more-arrests-made-in-rochdale-stabbing-investigation",
       "result": "kept-cards",
       "image_url": "assets/img/cards/investigation.jpg",
@@ -59,7 +52,7 @@
     {
       "slug": "rochdale-afc-to-face-shrewsbury-town-at-crown-oil-arena",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/7e49842f88d0ce25e4.jpg",
+      "image_url": "assets/img/cards/rochdale-afc-to-face-shrewsbury-town-at-crown-oil-arena-canonical.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -121,7 +114,7 @@
     },
     {
       "slug": "rochdale-afc-signs-goalkeeper-tasker-on-loan-from-blackburn-rovers",
-      "result": "cards-library",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "rochdale_afc.jpg",
       "match_score": 15252
@@ -130,6 +123,13 @@
       "slug": "rochdale-afc-back-in-game-prostate-cancer-sanitary-bins",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/greater_manchester_police.jpg",
       "matched_filename": "",
       "match_score": null
     },
