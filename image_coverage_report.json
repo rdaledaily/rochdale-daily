@@ -1,16 +1,16 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 14,
+    "kept_cards": 15,
     "cards_library": 1,
-    "cards_generated": 10,
+    "cards_generated": 7,
     "skipped": 0
   },
   "items": [
     {
       "slug": "tram-services-disruption-in-rochdale-this-weekend",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/adf6fe0425e3e4c13c.jpg",
+      "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -23,7 +23,7 @@
     },
     {
       "slug": "evictions-at-seven-sisters-in-rochdale-leave-100-households-awaiting-rehousing",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/evictions-at-seven-sisters-in-rochdale-leave-100-households-awaiting-rehousing-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -34,13 +34,6 @@
       "image_url": "assets/img/cards/british-furniture-association-hosts-health-and-safety-seminar-in-rochdale-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
-    },
-    {
-      "slug": "rochdale-football-club-to-face-exeter-city-in-league-two-match",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/rochdale_afc.jpg",
-      "matched_filename": "rochdale_afc.jpg",
-      "match_score": 15252
     },
     {
       "slug": "vestacare-s-roof-replacement-plans-refused-by-rochdale-council",
@@ -71,6 +64,13 @@
       "match_score": 8125
     },
     {
+      "slug": "rochdale-to-host-shrewsbury-in-upcoming-league-match",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 15125
+    },
+    {
       "slug": "why-rochdale-says-cruckle",
       "result": "kept-cards",
       "image_url": "assets/img/cards/match.jpg",
@@ -99,6 +99,13 @@
       "match_score": 8126
     },
     {
+      "slug": "rochdale-football-club-to-face-exeter-city-in-league-two-match",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
+    },
+    {
       "slug": "rochdale-to-host-shrewsbury-in-upcoming-league-match",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale-afc-signs-glenn-middleton-and-charlie-tasker-canonical.jpg",
@@ -116,27 +123,6 @@
       "slug": "one-in-seven-rochdale-businesses-could-be-overpaying-business-rates",
       "result": "kept-existing",
       "image_url": "assets/img/cards/businessratechecker-logo-card.webp",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "rochdale-golf-club-captains-final-2026-oliver-coldman",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale-golf-club-captains-final-2026-oliver-coldman-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "halo-hair-beauty-shawclough-opening-september-2026",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/halo_hair_beauty.webp",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "rochdale-afc-back-in-game-prostate-cancer-sanitary-bins",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "",
       "match_score": null
     },
