@@ -555,14 +555,18 @@ def prune(items: Iterable[dict[str, Any]], now: datetime | None = None) -> list[
     return live + held
 
 
-def merge_breaking(existing: list[dict[str, Any]], fresh: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def merge_breaking(
+    existing: list[dict[str, Any]],
+    fresh: list[dict[str, Any]],
+    now: datetime | None = None,
+) -> list[dict[str, Any]]:
     by_url = {canonical_url(e.get("source_url", "")): e for e in existing}
     for entry in fresh:
         key = canonical_url(entry.get("source_url", ""))
         if key in by_url:
             continue
         by_url[key] = entry
-    return prune(by_url.values())
+    return prune(by_url.values(), now=now)
 
 
 # --------------------------------------------------------------------------
@@ -770,7 +774,7 @@ def run_once(
     items = list(breaking.get("items") or [])
     before = json.dumps(items, sort_keys=True)
     retire_superseded(items)
-    merged = merge_breaking(items, new_entries)
+    merged = merge_breaking(items, new_entries, now=now)
     changed = json.dumps(merged, sort_keys=True) != before
 
     if changed or new_entries:
