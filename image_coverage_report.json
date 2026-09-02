@@ -2,7 +2,7 @@
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
     "kept_cards": 14,
-    "cards_library": 0,
+    "cards_library": 1,
     "cards_generated": 8,
     "skipped": 0
   },
@@ -29,11 +29,18 @@
       "match_score": null
     },
     {
-      "slug": "rochdale-afc-secures-3-0-victory-against-shrewsbury-town",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-afc-secures-3-0-victory-against-shrewsbury-town-canonical.jpg",
+      "slug": "british-furniture-association-hosts-health-and-safety-seminar-in-rochdale",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/british-furniture-association-hosts-health-and-safety-seminar-in-rochdale-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rochdale-football-club-faces-exeter-city-in-league-two-match",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 15125
     },
     {
       "slug": "vestacare-s-roof-replacement-plans-refused-by-rochdale-council",
@@ -43,7 +50,7 @@
       "match_score": null
     },
     {
-      "slug": "rochdale-afc-signs-goalkeeper-tasker-on-loan-from-premier-league-club",
+      "slug": "rochdale-afc-secures-3-0-victory-against-shrewsbury-town",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale-afc-signs-goalkeeper-tasker-on-loan-from-premier-league-club-canonical.jpg",
       "matched_filename": "",
@@ -76,6 +83,13 @@
       "image_url": "assets/img/cards/match.jpg",
       "matched_filename": "match.jpg",
       "match_score": 4625
+    },
+    {
+      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/greater_manchester_police.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "four-more-arrests-made-in-rochdale-stabbing-investigation",
@@ -111,13 +125,6 @@
       "image_url": "assets/img/cards/cricket.jpg",
       "matched_filename": "cricket.jpg",
       "match_score": 15127
-    },
-    {
-      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/greater_manchester_police.jpg",
-      "matched_filename": "",
-      "match_score": null
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
