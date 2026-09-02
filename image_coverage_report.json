@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 19,
+    "kept_cards": 18,
     "cards_library": 0,
-    "cards_generated": 10,
+    "cards_generated": 11,
     "skipped": 0
   },
   "items": [
@@ -41,13 +41,6 @@
       "image_url": "assets/img/cards/match.jpg",
       "matched_filename": "match.jpg",
       "match_score": 4625
-    },
-    {
-      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/greater_manchester_police.jpg",
-      "matched_filename": "",
-      "match_score": null
     },
     {
       "slug": "four-more-arrests-made-in-rochdale-stabbing-investigation",
@@ -128,15 +121,22 @@
     },
     {
       "slug": "rochdale-sign-glenn-middleton-and-charlie-tasker-ahead-of-new-season",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale_afc.jpg",
-      "matched_filename": "rochdale_afc.jpg",
-      "match_score": 15252
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/5cdadb6da6db6293cd.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "rochdale-afc-back-in-game-prostate-cancer-sanitary-bins",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/greater_manchester_police.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -157,7 +157,7 @@
     {
       "slug": "tram-services-disruption-in-rochdale-this-weekend",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/adf6fe0425e3e4c13c.jpg",
+      "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -167,6 +167,13 @@
       "image_url": "assets/img/cards/rochdale-midfielder-corey-edwards-set-for-transfer-to-everton-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rock-classics-by-candlelight-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 8378
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
@@ -179,13 +186,6 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "monsters-of-rock-halloween-special-2026",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
