@@ -1,8 +1,8 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 14,
-    "cards_library": 0,
+    "kept_cards": 13,
+    "cards_library": 1,
     "cards_generated": 6,
     "skipped": 0
   },
@@ -11,6 +11,13 @@
       "slug": "why-rochdale-says-cruckle",
       "result": "kept-cards",
       "image_url": "assets/img/cards/why-rochdale-says-cruckle-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-s-year-as-greater-manchester-s-town-of-culture-generates-over-5-5-milli",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-s-year-as-greater-manchester-s-town-of-culture-generates-over-5-5-milli-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -24,7 +31,7 @@
     {
       "slug": "tram-services-disruption-in-rochdale-this-weekend",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
+      "image_url": "assets/img/generated/adf6fe0425e3e4c13c.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -93,17 +100,17 @@
     },
     {
       "slug": "rochdale-football-club-to-face-gillingham-on-5th-september-2026",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/match.jpg",
-      "matched_filename": "match.jpg",
-      "match_score": 8125
-    },
-    {
-      "slug": "rochdale-to-host-shrewsbury-in-upcoming-league-match",
-      "result": "kept-cards",
+      "result": "cards-library",
       "image_url": "assets/img/cards/match.jpg",
       "matched_filename": "match.jpg",
       "match_score": 15125
+    },
+    {
+      "slug": "rock-classics-by-candlelight-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 8378
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
@@ -116,13 +123,6 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "monsters-of-rock-halloween-special-2026",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
