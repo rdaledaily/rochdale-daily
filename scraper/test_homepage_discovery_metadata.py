@@ -67,6 +67,17 @@ class HomepageDiscoveryMetadataTests(unittest.TestCase):
         self.assertEqual(twice.count(mod.RSS_TAG), 1)
         self.assertEqual(twice.count(mod.CURRENT_FEED_STATUS), 1)
 
+    def test_empty_latest_block_does_not_fail_or_advertise_stale_stories(self):
+        empty = re.sub(
+            r"(<!-- STATIC_LATEST_START -->).*?(<!-- STATIC_LATEST_END -->)",
+            r'\1\n<p class="feed-empty">Refreshing</p>\n\2',
+            SAMPLE,
+            flags=re.S,
+        )
+        enhanced = mod.enhance(empty)
+        self.assertIn(mod.RSS_TAG, enhanced)
+        self.assertNotIn('id="latest-news-itemlist"', enhanced)
+
     def test_refuses_missing_static_latest(self):
         with self.assertRaises(ValueError):
             mod.enhance("<html><head></head><body></body></html>")
