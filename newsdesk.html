@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Newsdesk composer | Rochdale Daily</title>
+<style>
+:root{--navy:#0b1f3a;--cyan:#22d3ee;--ink:#202020;--muted:#666;--line:#d8d8d8;--paper:#fff;--red:#c8102e;--ok:#137a45;--warn:#b45309;--max:1080px}
+*{box-sizing:border-box}
+body{margin:0;background:#e9e9e9;color:var(--ink);font-family:Roboto,Arial,Helvetica,sans-serif;line-height:1.45}
+header{background:var(--navy);color:#fff;padding:14px 0}
+.wrap{width:min(var(--max),calc(100% - 30px));margin-inline:auto}
+header b{font-family:"Roboto Condensed",Arial,sans-serif;font-size:20px;letter-spacing:.5px;text-transform:uppercase}
+header span{color:var(--cyan);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;display:block}
+main{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:18px 0 40px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);padding:18px}
+h2{font-size:15px;font-family:"Roboto Condensed",Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px;border-bottom:2px solid var(--navy);padding-bottom:6px}
+label{display:block;font-weight:700;font-size:13px;margin:12px 0 4px}
+label small{font-weight:400;color:var(--muted)}
+input[type=text],input[type=url],input[type=datetime-local],select,textarea{width:100%;padding:8px;border:1px solid var(--line);font:inherit;font-size:14px}
+textarea{min-height:90px;resize:vertical}
+#body{min-height:220px}
+.hint{font-size:12px;color:var(--muted);margin-top:3px}
+.warn{color:var(--warn);font-weight:700}
+.bad{color:var(--red);font-weight:700}
+.good{color:var(--ok);font-weight:700}
+.imggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;max-height:300px;overflow:auto;border:1px solid var(--line);padding:6px;margin-top:6px;background:#fafafa}
+.imggrid figure{margin:0;cursor:pointer;border:2px solid transparent;position:relative}
+.imggrid figure.sel{border-color:var(--cyan);outline:2px solid var(--navy)}
+.imggrid img{width:100%;height:64px;object-fit:cover;display:block;background:#ddd}
+.imggrid figcaption{font-size:9px;word-break:break-all;padding:1px 2px;background:#fff}
+.quickrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.quickrow button{font-size:12px;padding:4px 8px;border:1px solid var(--navy);background:#fff;cursor:pointer}
+.quickrow button:hover{background:var(--cyan)}
+#preview{max-width:100%;max-height:180px;display:block;margin-top:8px;border:1px solid var(--line)}
+#out{width:100%;min-height:260px;font-family:ui-monospace,Consolas,monospace;font-size:12px;white-space:pre;background:#0b1f3a;color:#d9f6ff;border:0;padding:12px}
+.btnrow{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.btnrow button,.btnrow a{font:inherit;font-weight:700;padding:10px 16px;border:0;cursor:pointer;text-decoration:none;text-align:center}
+#make{background:var(--navy);color:#fff}
+#copy{background:var(--cyan);color:var(--navy)}
+#dl{background:var(--ok);color:#fff}
+a.up{background:#eee;color:var(--ink);border:1px solid var(--line)}
+#problems{margin:8px 0;padding:0 0 0 18px;font-size:13px}
+#problems li{margin:3px 0}
+.steps{font-size:13px;color:var(--muted);border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><b>Rochdale Daily</b><span>Newsdesk composer</span></div></header>
+<div class="wrap"><main>
+
+<section class="card">
+  <h2>The story</h2>
+  <label for="title">Headline</label>
+  <input type="text" id="title" maxlength="160" placeholder="Residents rally round after Kirkholt house fire">
+  <div class="hint">4–26 words, no label-colon (“URGENT:”), no full stop.</div>
+
+  <label for="excerpt">Standfirst <small>— one clear sentence, 15+ words</small></label>
+  <textarea id="excerpt" placeholder="What happened, to whom, where and when — the sentence under the headline."></textarea>
+
+  <label for="body">Body <small>— blank line between paragraphs</small></label>
+  <textarea id="body" placeholder="Write or paste the article. AI citation markers are stripped automatically."></textarea>
+
+  <label for="ward">Ward</label>
+  <select id="ward"></select>
+
+  <label for="category">Category</label>
+  <select id="category"></select>
+
+  <label for="published">Published at <small>— never in the future: future-stamped stories hide on the site</small></label>
+  <input type="datetime-local" id="published">
+  <div class="hint" id="timehint"></div>
+
+  <label for="sname">Source name <small>(optional — shown in the Sources box)</small></label>
+  <input type="text" id="sname" placeholder="e.g. Kirkholt Community Group">
+  <label for="surl">Source link <small>(optional, must be public)</small></label>
+  <input type="url" id="surl" placeholder="https://…">
+</section>
+
+<section class="card">
+  <h2>The image — every story gets one</h2>
+  <div class="quickrow" id="quick"></div>
+  <label for="imgsearch">Search the photo library <small>(<span id="libcount">…</span> photos)</small></label>
+  <input type="text" id="imgsearch" placeholder="type to filter: fire, kirkholt, town hall…">
+  <div class="imggrid" id="grid"></div>
+  <label for="imgfile">Or type a filename <small>in assets/img/cards/</small></label>
+  <input type="text" id="imgfile" placeholder="my_upload.jpg">
+  <img id="preview" alt="" hidden>
+  <div class="hint" id="imgstatus">No image chosen yet.</div>
+  <label for="credit">Image credit</label>
+  <input type="text" id="credit" placeholder="e.g. Rochdale Daily / name of photographer or page">
+  <label for="crediturl">Credit link <small>(optional)</small></label>
+  <input type="url" id="crediturl">
+
+  <h2 style="margin-top:18px">Publish</h2>
+  <ul id="problems"></ul>
+  <div class="btnrow">
+    <button id="make">Build the article file</button>
+    <button id="copy" disabled>Copy JSON</button>
+    <button id="dl" disabled>Download file</button>
+    <a class="up" href="https://github.com/rdaledaily/rochdale-daily/upload/main/" target="_blank" rel="noopener">Open the upload page ↗</a>
+  </div>
+  <textarea id="out" readonly spellcheck="false" placeholder="The pending_manual file appears here."></textarea>
+  <div class="steps">
+    <b>The whole process:</b> fill in → Build → Download → drag the file onto the
+    upload page (repo root, not a folder) → commit. The pending-manual workflow
+    merges and publishes it by itself; the image and homepage follow on the next
+    render. Nothing on this page leaves your browser.
+  </div>
+</section>
+
+</main></div>
+
+<script>
+"use strict";
+/* Baked fallbacks so the page works even before a scrape has refreshed the
+   manifest. The live manifest (written by ensure_article_images.py every run)
+   replaces this list when it loads. */
+const WARDS = [["Balderstone and Kirkholt","kirkholt"],["Bamford","bamford"],["Castleton","castleton"],["Central Rochdale","rochdale"],["East Middleton","middleton"],["Healey","healey"],["Hopwood Hall","hopwood"],["Kingsway","kingsway"],["Littleborough Lakeside","littleborough"],["Milkstone and Deeplish","deeplish"],["Milnrow and Newhey","milnrow"],["Norden","norden"],["North Heywood","heywood"],["North Middleton","middleton"],["Smallbridge and Firgrove","smallbridge"],["South Middleton","middleton"],["Spotland and Falinge","spotland"],["Wardle, Shore and West Littleborough","wardle"],["West Heywood","heywood"],["West Middleton","middleton"]];
+const CATEGORIES = ["news","crime","politics","traffic","transport","sport","business","health","education","environment","community","events"];
+const CATEGORY_DEFAULT_IMAGE = {crime:"police.jpg",traffic:"traffic.jpg",transport:"tram.jpg",politics:"rochdale-town-hall.jpg",news:"rochdale-town-square.jpg",sport:"match.jpg",community:"rochdale_riverside.jpg",environment:"healey-dell.jpg",events:"gracie-fields-theatre.jpg",education:"alevels.jpg",health:"hospitalisation.jpg",business:"rochdale-exchange-shopping-centre.jpg"};
+const CARDS = "assets/img/cards/";
+let library = Object.values(CATEGORY_DEFAULT_IMAGE);
+let chosen = "";
+let imageVerified = false;
+
+const $ = id => document.getElementById(id);
+
+/* ---- populate selects ---- */
+for (const [name] of WARDS) $("ward").add(new Option(name, name));
+for (const c of CATEGORIES) $("category").add(new Option(c, c));
+
+/* ---- time: default now, Europe/London wall clock, refuse the future ---- */
+function nowLocalISO(){
+  const d = new Date(Date.now() - new Date().getTimezoneOffset()*60000);
+  return d.toISOString().slice(0,16);
+}
+$("published").value = nowLocalISO();
+$("published").max = nowLocalISO();
+$("published").addEventListener("input", () => {
+  const future = $("published").value > nowLocalISO();
+  $("timehint").innerHTML = future
+    ? '<span class="bad">That is in the future — the site will hide this story until then. Use now or earlier.</span>'
+    : "";
+});
+
+/* ---- image library ---- */
+async function loadManifest(){
+  try{
+    const r = await fetch(CARDS + "manifest.json", {cache:"no-store"});
+    if (r.ok){
+      const data = await r.json();
+      if (Array.isArray(data.images) && data.images.length) library = data.images;
+    }
+  }catch(_){/* baked fallback stands */}
+  $("libcount").textContent = library.length;
+  renderGrid("");
+}
+function renderGrid(filter){
+  const grid = $("grid");
+  grid.innerHTML = "";
+  const q = filter.trim().toLowerCase();
+  const names = library.filter(n => !q || n.toLowerCase().includes(q)).slice(0,150);
+  for (const name of names){
+    const fig = document.createElement("figure");
+    if (name === chosen) fig.className = "sel";
+    const img = document.createElement("img");
+    img.loading = "lazy"; img.src = CARDS + name; img.alt = "";
+    const cap = document.createElement("figcaption");
+    cap.textContent = name;
+    fig.append(img, cap);
+    fig.addEventListener("click", () => selectImage(name, true));
+    grid.append(fig);
+  }
+  if (!names.length) grid.innerHTML = '<p style="grid-column:1/-1;font-size:12px;color:#666">Nothing matches — try the filename box, or upload a photo to assets/img/cards first.</p>';
+}
+function selectImage(name, fromGrid){
+  chosen = name.trim();
+  if (fromGrid) $("imgfile").value = chosen;
+  const prev = $("preview");
+  prev.hidden = false;
+  imageVerified = false;
+  prev.onload = () => { imageVerified = true;
+    $("imgstatus").innerHTML = '<span class="good">✓ ' + chosen + ' loads.</span>'; };
+  prev.onerror = () => { imageVerified = false;
+    $("imgstatus").innerHTML = '<span class="warn">⚠ ' + chosen + " doesn't load from the live site yet. If you've only just uploaded it, that's fine — otherwise check the spelling.</span>"; };
+  prev.src = CARDS + chosen + "?cb=" + Date.now();
+  renderGrid($("imgsearch").value);
+}
+$("imgsearch").addEventListener("input", e => renderGrid(e.target.value));
+$("imgfile").addEventListener("change", e => selectImage(e.target.value, false));
+const quick = $("quick");
+for (const [cat, file] of Object.entries(CATEGORY_DEFAULT_IMAGE)){
+  const b = document.createElement("button");
+  b.type = "button"; b.textContent = cat;
+  b.title = file;
+  b.addEventListener("click", () => selectImage(file, true));
+  quick.append(b);
+}
+$("category").addEventListener("change", () => {
+  if (!chosen) selectImage(CATEGORY_DEFAULT_IMAGE[$("category").value] || "rochdale-town-square.jpg", true);
+});
+loadManifest();
+
+/* ---- text hygiene: undo the ChatGPT artefacts the validator rejects ---- */
+function cleanText(value){
+  return String(value || "")
+    .replace(/:{0,2}contentReference\[oaicite:\d+\]\{index=\d+\}/g, "")   // citation markers
+    .replace(/【[^】]*】/g, "")                            // 【…】 markers
+    .replace(/[-]/g, "")                                    // private-use glyphs
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/ /g, " ")
+    .trim();
+}
+function slugify(value){
+  return cleanText(value).toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+}
+
+/* ---- build ---- */
+function problems(){
+  const list = [];
+  const title = cleanText($("title").value);
+  const words = title.split(/\s+/).filter(Boolean).length;
+  if (!title) list.push(["bad","A headline is required."]);
+  else if (words < 4 || words > 26) list.push(["warn","Headline is " + words + " words; house style is 4–26."]);
+  if (/^[A-Z]{2,}[^:]*:|^[^:]{1,18}:\s/.test(title)) list.push(["warn","Label-colon headline (“URGENT:”) — house style says avoid."]);
+  const excerpt = cleanText($("excerpt").value);
+  if (!excerpt) list.push(["bad","A standfirst is required."]);
+  else if (excerpt.split(/\s+/).length < 15) list.push(["warn","Standfirst under 15 words — the quality gate calls that thin."]);
+  if (!cleanText($("body").value)) list.push(["bad","A body is required."]);
+  if (!chosen) list.push(["bad","Choose an image — that is the whole point of this page."]);
+  else if (!imageVerified) list.push(["warn","The image didn't preview. Only proceed if you've just uploaded it and the site hasn't caught up."]);
+  if (!cleanText($("credit").value) && chosen) list.push(["warn","No image credit — fine for your own library shots, needed for anything supplied."]);
+  if ($("published").value > nowLocalISO()) list.push(["bad","Published time is in the future — the story will hide."]);
+  return list;
+}
+function render(list){
+  $("problems").innerHTML = list.map(([cls,text]) => '<li class="'+cls+'">'+text+"</li>").join("");
+  return !list.some(([cls]) => cls === "bad");
+}
+function offsetISO(localValue){
+  const d = new Date(localValue);
+  const off = -d.getTimezoneOffset();
+  const sign = off >= 0 ? "+" : "-";
+  const hh = String(Math.floor(Math.abs(off)/60)).padStart(2,"0");
+  const mm = String(Math.abs(off)%60).padStart(2,"0");
+  return localValue + ":00" + sign + hh + ":" + mm;
+}
+let currentSlug = "";
+$("make").addEventListener("click", () => {
+  const list = problems();
+  if (!render(list)) { $("out").value = ""; $("copy").disabled = $("dl").disabled = true; return; }
+  const title = cleanText($("title").value);
+  const slug = slugify(title);
+  currentSlug = slug;
+  const wardName = $("ward").value;
+  const area = (WARDS.find(w => w[0] === wardName) || [null,"rochdale"])[1];
+  const stamp = offsetISO($("published").value);
+  const paragraphs = cleanText($("body").value).split(/\n\s*\n/).map(p => p.replace(/\s+/g," ").trim()).filter(Boolean);
+  const entry = {
+    id: slug,
+    slug: slug,
+    title: title,
+    body: paragraphs.join("\n\n"),
+    category: $("category").value,
+    area: area,
+    byline: "Rochdale Daily Newsdesk",
+    excerpt: cleanText($("excerpt").value),
+    published_at: stamp,
+    last_updated_at: stamp,
+    image_url: CARDS + chosen,
+    img: CARDS + chosen,
+    image_credit: cleanText($("credit").value) || "Rochdale Daily",
+    image_status: "editorial-photo",
+    right_to_reply: "Anyone directly affected may request a correction or reply via news@rochdaledaily.co.uk.",
+    manual_article: true,
+    editorial_lock: true,
+    featured: false
+  };
+  const creditUrl = cleanText($("crediturl").value);
+  if (creditUrl) entry.image_credit_url = creditUrl;
+  const sname = cleanText($("sname").value);
+  const surl = cleanText($("surl").value);
+  if (sname) entry.source_name = sname;
+  if (surl) entry.source_url = surl;
+  if (sname) entry.legal_disclaimer = "This article was compiled from information published by " + sname + ".";
+  $("out").value = JSON.stringify([entry], null, 2) + "\n";
+  $("copy").disabled = $("dl").disabled = false;
+});
+$("copy").addEventListener("click", async () => {
+  await navigator.clipboard.writeText($("out").value);
+  $("copy").textContent = "Copied ✓"; setTimeout(() => $("copy").textContent = "Copy JSON", 1500);
+});
+$("dl").addEventListener("click", () => {
+  const blob = new Blob([$("out").value], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "pending_manual_" + (currentSlug || "article") + ".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+</script>
+</body>
+</html>
