@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 154,
-  "published_count": 154,
+  "article_count": 151,
+  "published_count": 151,
   "category_change_count": 19,
-  "image_change_count": 19,
+  "image_change_count": 15,
   "category_changes": [
     {
       "slug": "evictions-at-seven-sisters-in-rochdale-leave-100-households-awaiting-rehousing",
@@ -142,6 +142,18 @@
   ],
   "image_changes": [
     {
+      "slug": "prime-minister-calls-for-accountability-in-michael-hoolickin-murder-case",
+      "title": "Prime Minister Calls for Accountability in Michael Hoolickin Murder Case",
+      "category": "crime",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/murder.jpg",
+        "img": "assets/img/cards/murder.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/prime-minister-calls-for-accountability-in-michael-hoolickin-murder-case-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-afc-signs-goalkeeper-tasker-on-loan",
       "title": "Rochdale AFC Signs Goalkeeper Tasker on Loan from Cardiff City",
       "category": "sport",
@@ -188,66 +200,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-to-host-shrewsbury-in-upcoming-league-match-generated-card.jpg"
-    },
-    {
-      "slug": "why-rochdale-says-cruckle",
-      "title": "Why Rochdale says 'cruckle'",
-      "category": "sport",
-      "reason": "weak filename image match score 4625; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/match.jpg",
-        "img": "assets/img/cards/match.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/why-rochdale-says-cruckle-generated-card.jpg"
-    },
-    {
-      "slug": "four-more-arrests-made-in-rochdale-stabbing-investigation",
-      "title": "Four More Arrests Made in Rochdale Stabbing Investigation",
-      "category": "crime",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/investigation.jpg",
-        "img": "assets/img/cards/investigation.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/four-more-arrests-made-in-rochdale-stabbing-investigation-generated-card.jpg"
-    },
-    {
-      "slug": "missing-71-year-old-dementia-sufferer-found-near-piethorne-reservoir",
-      "title": "Mountain Rescue Team Finds Missing 71-Year-Old Man Near Piethorne Reservoir",
-      "category": "news",
-      "reason": "weak filename image match score 8126; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/police.jpg",
-        "img": "assets/img/cards/police.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/missing-71-year-old-dementia-sufferer-found-near-piethorne-reservoir-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-football-club-to-face-exeter-city-in-league-two-match",
-      "title": "Rochdale AFC to Face Exeter City in League Two Match Today",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-football-club-to-face-exeter-city-in-league-two-match-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-afc-draws-1-1-with-shrewsbury-town-at-spotland-stadium",
-      "title": "Rochdale AFC Draws 1-1 with Shrewsbury Town at Spotland Stadium",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-afc-draws-1-1-with-shrewsbury-town-at-spotland-stadium-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
