@@ -733,21 +733,52 @@ def is_sensitive(text: str, category: str) -> bool:
         return True
     return False
 
+def load_robots(base: str):
+    """Fetch and parse robots.txt. Returns None when it could not be SERVED.
+
+    RobotFileParser.read() turns a 401 or 403 on /robots.txt into
+    disallow_all = True and does NOT raise, so the `except Exception` below it
+    never fired and every URL on that host was refused in silence. Plenty of
+    public-sector and news sites answer 403 to datacentre IPs -- GitHub Actions
+    runners included -- and that answer covers robots.txt too.
+
+    The cost, measured 30 August 2026: 19 hosts recorded as "robots denied",
+    among them gmp.police.uk, news.tfgm.com, northernrailway.co.uk,
+    unitedutilities.com, nationalhighways.co.uk and aboutmanchester.co.uk.
+    None of them disallow news crawling -- GMP's real robots.txt was fetched by
+    hand and permits every URL this pipeline asks for. Whole beats were
+    disappearing because a CDN would not serve a text file.
+
+    Going through SESSION makes the status code visible, so a refusal can be
+    told apart from a failure. Rules apply only on a 200.
+    """
+    try:
+        response = SESSION.get(urljoin(base, '/robots.txt'), timeout=REQUEST_TIMEOUT)
+    except Exception as error:
+        log.warning('robots.txt unreachable for %s (%s); allowing a standard public-page request.', base, error)
+        return None
+    status = int(getattr(response, 'status_code', 0) or 0)
+    if status != 200:
+        log.warning('robots.txt for %s returned %s, so it states no policy; allowing a standard public-page request.', base, status)
+        return None
+    robot = urllib.robotparser.RobotFileParser()
+    try:
+        robot.parse((response.text or '').splitlines())
+    except Exception as error:
+        log.warning('robots.txt for %s could not be parsed (%s); allowing a standard public-page request.', base, error)
+        return None
+    return robot
+
 def robots_allows(url: str) -> bool:
     if not RESPECT_ROBOTS:
         return True
     parsed = urlparse(url)
     base = f'{parsed.scheme}://{parsed.netloc}'
-    robot = ROBOTS_CACHE.get(base)
+    if base not in ROBOTS_CACHE:
+        ROBOTS_CACHE[base] = load_robots(base)
+    robot = ROBOTS_CACHE[base]
     if robot is None:
-        robot = urllib.robotparser.RobotFileParser()
-        robot.set_url(urljoin(base, '/robots.txt'))
-        try:
-            robot.read()
-        except Exception:
-            log.warning('Could not read robots.txt for %s; allowing a standard public-page request.', base)
-            return True
-        ROBOTS_CACHE[base] = robot
+        return True
     try:
         return robot.can_fetch(SESSION.headers['User-Agent'], url)
     except Exception:
