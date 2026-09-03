@@ -2,7 +2,7 @@
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
     "kept_cards": 14,
-    "cards_library": 0,
+    "cards_library": 1,
     "cards_generated": 9,
     "skipped": 0
   },
@@ -17,7 +17,7 @@
     {
       "slug": "police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving.jpg",
+      "image_url": "",
       "matched_filename": "",
       "match_score": null
     },
@@ -34,6 +34,13 @@
       "image_url": "assets/img/cards/rochdale-afc-to-host-gillingham-at-crown-oil-arena-this-saturday-canonical.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rochdale-afc-to-host-gillingham-in-upcoming-match",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
     },
     {
       "slug": "why-rochdale-says-cruckle",
