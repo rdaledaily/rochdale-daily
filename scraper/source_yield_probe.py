@@ -530,6 +530,119 @@ SOURCES: list[dict[str, Any]] = [
         ),
         "story_shape": "local charity accounts, new registrations, closures",
     },
+    # ------------------------------------------------------------------
+    # The public-body tier (added 3 Sep 2026): every body below serves the
+    # borough and publishes under its own name. Probe first, add second --
+    # the six school sites that yielded nothing for weeks are why this list
+    # goes through the probe rather than straight into SOURCES.
+    # ------------------------------------------------------------------
+    {
+        "name": "Pennine Care NHS (mental health trust)",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.penninecare.nhs.uk/news"),
+        "story_shape": "mental health services, ward changes, trust decisions",
+    },
+    {
+        "name": "Rochdale Boroughwide Housing",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.rbh.org.uk/news/"),
+        "story_shape": "social housing, estate investment, Awaab's-law compliance",
+    },
+    {
+        "name": "Your Trust Rochdale (leisure & culture)",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.yourtrustrochdale.co.uk/news"),
+        "story_shape": "leisure centres, libraries, cultural programmes",
+    },
+    {
+        "name": "Action Together (voluntary sector hub)",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.actiontogether.org.uk/news"),
+        "story_shape": "charity funding, volunteering, community projects",
+    },
+    {
+        "name": "Greater Manchester Combined Authority",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.greatermanchester-ca.gov.uk/news/"),
+        "story_shape": "devolution decisions, transport and housing funding for the borough",
+    },
+    {
+        "name": "Transport for Greater Manchester newsroom",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://news.tfgm.com/"),
+        "story_shape": "Metrolink and bus changes, fares, Bee Network rollout",
+    },
+    {
+        "name": "United Utilities updates",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.unitedutilities.com/about-us/news/"),
+        "story_shape": "water works, supply interruptions, reservoir plans",
+    },
+    {
+        "name": "Electricity North West news",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.enwl.co.uk/about-us/news/"),
+        "story_shape": "power cuts, grid investment in the borough",
+    },
+    {
+        "name": "Hopwood Hall College news",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.hopwood.ac.uk/news-and-events/latest-news/"),
+        "story_shape": "college results, courses, campus development",
+    },
+    {
+        "name": "Rochdale Sixth Form College news",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.rochdalesfc.ac.uk/128/news"),
+        "story_shape": "sixth-form results and events",
+    },
+    {
+        "name": "Ofsted reports for the borough (LA 354)",
+        "class": "primary record",
+        "licence": "Open Government Licence",
+        "probe": lambda: discovered_feed_probe(
+            "https://reports.ofsted.gov.uk/search?local_authority%5B0%5D=354&status%5B0%5D=1&rows=20&sort=date&order=desc"
+        ),
+        "story_shape": "school and childcare inspection outcomes (register_watch.py now collects these)",
+    },
+    {
+        "name": "Rochdale AFC news",
+        "class": "publisher",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.rochdaleafc.co.uk/news/"),
+        "story_shape": "club news beyond matchday",
+    },
+    {
+        "name": "Rochdale Hornets news",
+        "class": "publisher",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.hornetsrugbyleague.co.uk/news"),
+        "story_shape": "rugby league club news",
+    },
+    {
+        "name": "Rochdale Town Hall events & news",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.rochdaletownhall.co.uk/news"),
+        "story_shape": "town hall programme and heritage",
+    },
+    {
+        "name": "Link4Life / borough markets",
+        "class": "public body",
+        "licence": "publisher content, reported with attribution",
+        "probe": lambda: discovered_feed_probe("https://www.rochdale.gov.uk/markets"),
+        "story_shape": "market trader changes, town-centre footfall",
+    },
     {
         "name": "National Highways network updates",
         "class": "transport",
