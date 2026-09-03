@@ -251,6 +251,49 @@ def is_borough_story(title: str, body: str, source_url: str) -> tuple[bool, str]
 # --------------------------------------------------------------------------
 
 
+def wildcard_disallows(robots_text: str) -> tuple[re.Pattern[str], ...]:
+    """Compile the Disallow rules that Python's own parser silently ignores.
+
+    RobotFileParser matches rule paths by plain prefix: it has no wildcard
+    support at all, so `Disallow: /api/*` is compared literally and never
+    matches /api/something, and `Disallow: /*.aspx$` matches nothing whatever.
+    Every wildcard rule on a site is therefore ignored. That under-enforcement
+    did not matter much while a failed robots.txt blocked the whole host, but
+    this watcher now proceeds when robots.txt cannot be served -- so the rules
+    it DOES receive have to be honoured properly.
+
+    Only the `user-agent: *` group is read. This watcher is not named in any
+    robots.txt, so no more specific group can apply to it.
+    """
+    patterns: list[re.Pattern[str]] = []
+    in_star_group = False
+    for raw in (robots_text or "").splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line or ":" not in line:
+            continue
+        field, _, value = line.partition(":")
+        field = field.strip().lower()
+        value = value.strip()
+        if field == "user-agent":
+            in_star_group = value == "*"
+            continue
+        if not in_star_group or field != "disallow" or not value:
+            continue
+        if "*" not in value and not value.endswith("$"):
+            continue  # a plain prefix rule; RobotFileParser handles it
+        anchored = value.endswith("$")
+        body = value[:-1] if anchored else value
+        expression = "".join(
+            ".*" if part == "*" else re.escape(part)
+            for part in re.split(r"(\*)", body)
+        )
+        try:
+            patterns.append(re.compile("^" + expression + ("$" if anchored else "")))
+        except re.error:
+            continue
+    return tuple(patterns)
+
+
 class Fetcher:
     """Conditional, robots-respecting HTTP with per-URL validators."""
 
@@ -265,27 +308,68 @@ class Fetcher:
         self._robots: dict[str, Any] = {}
 
     def robots_allows(self, url: str) -> bool:
+        """Honour robots.txt, but only when robots.txt was actually served.
+
+        RobotFileParser.read() turns a 401 or 403 on /robots.txt into
+        disallow_all = True, and does NOT raise -- so a caller's try/except
+        never sees it and every URL on that host is silently refused. Many
+        public-sector and news sites answer 403 to datacentre IPs like GitHub
+        Actions runners, robots.txt included. Rochdale Daily's own pipeline is
+        recording 19 such hosts as "robots denied", among them gmp.police.uk,
+        news.tfgm.com, northernrailway.co.uk, unitedutilities.com and
+        nationalhighways.co.uk -- none of which actually disallow news
+        crawling. Verified 30 August 2026: GMP's real robots.txt permits every
+        URL this watcher requests.
+
+        So fetch robots.txt through the normal session, where the status code
+        is visible, and apply its rules only on a 200. Anything else is a
+        failure to serve robots.txt, not a refusal, and is recorded as such.
+        """
         if os.getenv("RESPECT_ROBOTS", "true").lower() in {"0", "false", "no", "off"}:
             return True
         parsed = urlparse(url)
         base = f"{parsed.scheme}://{parsed.netloc}"
-        robot = self._robots.get(base)
-        if robot is None:
-            robot = urllib.robotparser.RobotFileParser()
-            robot.set_url(urljoin(base, "/robots.txt"))
-            try:
-                robot.read()
-            except Exception:
-                log.warning("robots.txt unreadable for %s; allowing one plain request", base)
-                self._robots[base] = False  # cache the "could not read" verdict
-                return True
-            self._robots[base] = robot
-        if robot is False:
+        if base not in self._robots:
+            self._robots[base] = self._load_robots(base)
+        robot = self._robots[base]
+        if robot is None:  # robots.txt could not be served; not a refusal
             return True
+        path = urlparse(url).path or "/"
+        if urlparse(url).query:
+            path = f"{path}?{urlparse(url).query}"
+        for pattern in getattr(robot, "_rd_wildcards", ()):  # see wildcard_disallows
+            if pattern.match(path):
+                return False
         try:
             return robot.can_fetch(USER_AGENT, url)
         except Exception:
             return True
+
+    def _load_robots(self, base: str) -> Any:
+        """Return a parser, or None when robots.txt could not be read."""
+        try:
+            response = self.session.get(urljoin(base, "/robots.txt"), timeout=15)
+        except Exception as error:
+            log.warning("robots.txt unreachable for %s (%s); proceeding", base, error)
+            return None
+        status = int(getattr(response, "status_code", 0) or 0)
+        if status != 200:
+            log.warning(
+                "robots.txt for %s returned %s, so it states no policy; "
+                "proceeding rather than treating a blocked robots.txt as a "
+                "blanket refusal",
+                base,
+                status,
+            )
+            return None
+        robot = urllib.robotparser.RobotFileParser()
+        try:
+            robot.parse((response.text or "").splitlines())
+        except Exception as error:
+            log.warning("robots.txt for %s could not be parsed (%s)", base, error)
+            return None
+        robot._rd_wildcards = wildcard_disallows(response.text or "")
+        return robot
 
     def get(self, url: str, timeout: int = 20) -> tuple[int, str]:
         """Return (status, text). 304 returns an empty body -- nothing changed."""
@@ -555,14 +639,21 @@ def prune(items: Iterable[dict[str, Any]], now: datetime | None = None) -> list[
     return live + held
 
 
-def merge_breaking(existing: list[dict[str, Any]], fresh: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def merge_breaking(
+    existing: list[dict[str, Any]],
+    fresh: list[dict[str, Any]],
+    now: datetime | None = None,
+) -> list[dict[str, Any]]:
+    # `now` is injectable for the same reason run_once takes it: without it the
+    # tests read the wall clock and their fixtures silently expire, so the suite
+    # starts failing days later for no reason connected to the code.
     by_url = {canonical_url(e.get("source_url", "")): e for e in existing}
     for entry in fresh:
         key = canonical_url(entry.get("source_url", ""))
         if key in by_url:
             continue
         by_url[key] = entry
-    return prune(by_url.values())
+    return prune(by_url.values(), now=now)
 
 
 # --------------------------------------------------------------------------
@@ -770,7 +861,7 @@ def run_once(
     items = list(breaking.get("items") or [])
     before = json.dumps(items, sort_keys=True)
     retire_superseded(items)
-    merged = merge_breaking(items, new_entries)
+    merged = merge_breaking(items, new_entries, now=now)
     changed = json.dumps(merged, sort_keys=True) != before
 
     if changed or new_entries:
