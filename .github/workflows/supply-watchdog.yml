@@ -55,8 +55,43 @@ jobs:
             sleep $((attempt * 7))
           done
           echo "::warning::supply report could not push after five attempts"
-      - name: Fail the run when supply is below the floor
+      - name: Report low supply without failing the workflow
         if: steps.measure.outcome == 'failure'
         run: |
-          echo "::error::borough news supply is below the configured floor - see reports/supply_report.json"
-          exit 1
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report_path = Path("reports/supply_report.json")
+          if not report_path.exists():
+              raise SystemExit("supply watchdog failed without writing reports/supply_report.json")
+
+          payload = json.loads(report_path.read_text(encoding="utf-8"))
+          if payload.get("status") != "failed":
+              raise SystemExit(
+                  "supply watchdog step failed for an unexpected reason; "
+                  "reports/supply_report.json did not report a supply shortfall"
+              )
+
+          last_24h = payload.get("published_last_24h")
+          rolling_days = payload.get("rolling_days")
+          rolling_mean = payload.get("rolling_mean_per_day")
+          floor = payload.get("daily_floor")
+          warning = (
+              f"borough news supply is below the floor "
+              f"({last_24h} stories in the last 24 hours; "
+              f"{rolling_days}-day average {rolling_mean}/day; floor {floor}) "
+              "see reports/supply_report.json"
+          )
+          print(f"::warning::{warning}")
+
+          summary = os.getenv("GITHUB_STEP_SUMMARY")
+          if summary:
+              with open(summary, "a", encoding="utf-8") as handle:
+                  handle.write("## Supply watchdog alert\n\n")
+                  handle.write(f"- Last 24 hours: {last_24h} stories\n")
+                  handle.write(f"- {rolling_days}-day average: {rolling_mean}/day\n")
+                  handle.write(f"- Floor: {floor}\n")
+                  handle.write("- Workflow kept green because this is a monitored supply shortfall, not a site failure.\n")
+          PY
