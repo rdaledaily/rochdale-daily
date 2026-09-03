@@ -1,18 +1,32 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 13,
-    "cards_library": 0,
-    "cards_generated": 7,
+    "kept_cards": 15,
+    "cards_library": 2,
+    "cards_generated": 10,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/police.jpg",
+      "matched_filename": "police.jpg",
+      "match_score": 15126
+    },
     {
       "slug": "medieval-knights-to-battle-at-the-ashcroft-in-whitworth-on-september-26",
       "result": "kept-cards",
       "image_url": "assets/img/cards/medieval-knights-to-battle-at-the-ashcroft-in-whitworth-on-september-26-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rochdale-afc-to-host-gillingham-in-upcoming-match",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
     },
     {
       "slug": "why-rochdale-says-cruckle",
@@ -23,7 +37,7 @@
     },
     {
       "slug": "rochdale-s-year-as-greater-manchester-s-town-of-culture-generates-over-5-5-milli",
-      "result": "kept-cards",
+      "result": "cards-generated",
       "image_url": "assets/img/cards/rochdale-s-year-as-greater-manchester-s-town-of-culture-generates-over-5-5-milli-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -58,7 +72,7 @@
     },
     {
       "slug": "british-furniture-association-hosts-health-and-safety-seminar-in-rochdale",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/british-furniture-association-hosts-health-and-safety-seminar-in-rochdale-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -69,6 +83,13 @@
       "image_url": "assets/img/generated/7e49842f88d0ce25e4.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rochdale-defeats-shrewsbury-town-3-0-in-league-two-match",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 15125
     },
     {
       "slug": "vestacare-s-roof-replacement-plans-refused-by-rochdale-council",
@@ -104,6 +125,34 @@
       "image_url": "assets/img/cards/middleton-library-hosts-how-to-research-your-house-event.jpg",
       "matched_filename": "middleton-library-hosts-how-to-research-your-house-event.jpg",
       "match_score": 20406
+    },
+    {
+      "slug": "rochdale-town-centre-stabbing-boy-13-six-arrested-live",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/greater_manchester_police.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "john-milne-table-table-milnrow-closing-september-3",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/john-milne-table-table-thank-you.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "one-in-seven-rochdale-businesses-could-be-overpaying-business-rates",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/businessratechecker-logo-card.webp",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-golf-club-captains-final-2026-oliver-coldman",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-golf-club-captains-final-2026-oliver-coldman-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
