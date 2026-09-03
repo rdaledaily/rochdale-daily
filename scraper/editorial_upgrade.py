@@ -127,6 +127,20 @@ CATEGORY_ORDER = (
         r"hollingworth lake|healey dell|watergrove|"
         # --- climate and energy ---
         r"climate|net zero|solar panels?|wind (?:farms?|turbines?)|"
+        # --- planning: folded into environment, editorial decision 3 Sep 2026.
+        # Planning previously had queries but no category, so its stories
+        # misfiled into business via "housing development"/"apartments". The
+        # phrases here are process language -- a planning story uses several of
+        # them, and multiword phrases score double, so it outscores business's
+        # single "housing development" hit. Bare "planning" is deliberately
+        # absent: "planning a fundraiser" is not a planning story.
+        r"planning (?:application|permission|committee|appeal|consent|"
+        r"inspectorate|enforcement|breach|officer|portal)s?|"
+        r"outline planning|planning (?:approved|refused|rejected|granted)|"
+        r"(?:approved|refused|rejected|granted) planning|"
+        r"change of use|listed building consents?|"
+        r"demoli(?:tion|shed|sh)|HMOs?|houses? in multiple occupation|"
+        r"section 106|"
         # --- general ---
         r"environmental|wildlife|in bloom"
         r")\b",
