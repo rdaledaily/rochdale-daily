@@ -144,16 +144,9 @@ CATEGORY_TERMS: dict[str, tuple[str, ...]] = {
         "club",
         "match",
     ),
-    "planning": (
-        '"planning application"',
-        "housing",
-        "development",
-        "demolition",
-        "HMO",
-        "licensing",
-        '"change of use"',
-        "construction",
-    ),
+    # Planning folds into environment by editorial decision (3 Sep 2026):
+    # the planning search vocabulary is kept in full, its candidates simply
+    # arrive labelled environment.
     "environment": (
         "flood",
         "flooding",
@@ -165,6 +158,13 @@ CATEGORY_TERMS: dict[str, tuple[str, ...]] = {
         "park",
         "wildlife",
         "environment",
+        '"planning application"',
+        "housing",
+        "development",
+        "demolition",
+        "HMO",
+        '"change of use"',
+        "construction",
     ),
 }
 
