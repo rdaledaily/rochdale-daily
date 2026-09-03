@@ -87,13 +87,13 @@ PRIORITY_SEARCHES = [
         "priority:planning-rochdale",
         '(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) '
         '("planning application" OR "planning permission" OR demolition OR development OR HMO)',
-        "planning",
+        "environment",  # planning folds into environment (3 Sep 2026)
     ),
     SearchQuery(
         "priority:planning-council",
         'site:rochdale.gov.uk (planning OR development OR demolition) '
         '(Rochdale OR Heywood OR Middleton OR Littleborough)',
-        "planning",
+        "environment",  # planning folds into environment (3 Sep 2026)
     ),
     SearchQuery(
         "priority:crime-fast",
