@@ -1,15 +1,15 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 13,
+    "kept_cards": 14,
     "cards_library": 0,
-    "cards_generated": 8,
+    "cards_generated": 6,
     "skipped": 0
   },
   "items": [
     {
       "slug": "why-rochdale-says-cruckle",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/why-rochdale-says-cruckle-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -24,7 +24,7 @@
     {
       "slug": "tram-services-disruption-in-rochdale-this-weekend",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/tram-services-disruption-in-rochdale-this-weekend-canonical.jpg",
+      "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -106,20 +106,6 @@
       "match_score": 15125
     },
     {
-      "slug": "six-teenagers-arrested-following-stabbing-of-13-year-old-boy-in-rochdale",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/six-teenagers-arrested-following-stabbing-of-13-year-old-boy-in-rochdale.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "rock-classics-by-candlelight-rochdale",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-      "matched_filename": "rochdale-town-hall.jpg",
-      "match_score": 8378
-    },
-    {
       "slug": "ellie-sax-endless-summer-tour-2026",
       "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
@@ -130,6 +116,13 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "monsters-of-rock-halloween-special-2026",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
