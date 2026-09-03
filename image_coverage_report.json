@@ -2,15 +2,22 @@
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
     "kept_cards": 15,
-    "cards_library": 1,
-    "cards_generated": 8,
+    "cards_library": 0,
+    "cards_generated": 9,
     "skipped": 0
   },
   "items": [
     {
+      "slug": "minor-disruption-on-train-services-affecting-smithy-bridge-area",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/train.jpg",
+      "matched_filename": "train.jpg",
+      "match_score": 15125
+    },
+    {
       "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+      "image_url": "",
       "matched_filename": "",
       "match_score": null
     },
@@ -30,10 +37,10 @@
     },
     {
       "slug": "police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving",
-      "result": "kept-cards",
+      "result": "kept-existing",
       "image_url": "assets/img/cards/police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving.jpg",
-      "matched_filename": "police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving.jpg",
-      "match_score": 20721
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "medieval-knights-to-battle-at-the-ashcroft-in-whitworth-on-september-26",
@@ -125,13 +132,6 @@
       "image_url": "assets/img/generated/7e49842f88d0ce25e4.jpg",
       "matched_filename": "",
       "match_score": null
-    },
-    {
-      "slug": "rochdale-secures-3-0-victory-over-shrewsbury-town-in-league-two-clash",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/match.jpg",
-      "matched_filename": "match.jpg",
-      "match_score": 8125
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
