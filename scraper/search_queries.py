@@ -179,7 +179,11 @@ CATEGORY_QUERIES = (
         'fishing OR park OR environment)',
     ),
     (
-        "planning",
+        # Planning folds into environment by editorial decision (3 Sep 2026):
+        # planning applications, developments and demolitions are covered as
+        # part of the borough's environment beat rather than a section of
+        # their own. The query is unchanged; only the label moved.
+        "environment",
         '(Rochdale OR Heywood OR Middleton) '
         '(planning application OR housing development OR HMO OR licensing OR '
         'demolition)',
