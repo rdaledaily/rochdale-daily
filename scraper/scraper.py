@@ -69,6 +69,7 @@ from search_queries import build_search_query_specs
 from google_news_resolver import is_google_wrapper, resolve_wrappers
 from locations import LOCATION_BY_SLUG
 from food_hygiene import fetch_current_low_ratings, roundup_article_fields, roundup_paragraphs
+from register_watch import cqc_candidates as register_cqc_candidates, load_state as register_load_state, ofsted_candidates as register_ofsted_candidates, save_state as register_save_state
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_FILE = ROOT / 'articles.json'
 
@@ -1867,6 +1868,53 @@ def collect_environment_agency_flood_candidates() -> list[Candidate]:
         candidates.append(Candidate(source_name='Environment Agency flood-monitoring API', source_url=source_url, source_title=title[:160], source_summary=message[:900], source_published_at=iso_utc(changed), area=detected_area, category='environment', source_body_excerpt=message[:3500]))
     return candidates
 
+REGISTER_STATE_FILE = ROOT / 'reports' / 'register_state.json'
+
+def collect_register_candidates() -> list[Candidate]:
+    """Fresh inspection reports from the public registers, as candidates.
+
+    Ofsted's Rochdale listing (local authority 354) works unauthenticated and
+    is fully crawlable; CQC activates only when the free CQC_SUBSCRIPTION_KEY
+    secret exists. Each record's source_url is the provider's own report page,
+    which the pipeline fetches and grounds the rewrite on -- this collector
+    only notices that a report exists. register_watch.py enforces the
+    safeguarding rule: providers Ofsted itself anonymises (children's homes,
+    childminders) are never emitted, not even as a URN.
+    """
+    if os.getenv('REGISTER_WATCH_ENABLED', 'true').lower() != 'true':
+        return []
+    seen = register_load_state(REGISTER_STATE_FILE)
+    records: list[dict[str, Any]] = []
+    try:
+        records.extend(register_ofsted_candidates(SESSION.get, seen_urns=seen))
+    except Exception as exc:
+        log.warning('Ofsted register unavailable: %s', exc)
+    try:
+        records.extend(register_cqc_candidates(SESSION.get, seen_reports=seen))
+    except Exception as exc:
+        log.warning('CQC register unavailable: %s', exc)
+    candidates: list[Candidate] = []
+    for record in records:
+        candidates.append(Candidate(
+            source_name=record['source_name'],
+            source_url=record['source_url'],
+            source_title=record['source_title'],
+            source_summary=record['source_summary'],
+            source_published_at=record['source_published_at'],
+            area=record['area'],
+            category=record['category'],
+            source_body_excerpt=record['source_summary'],
+            source_kind='inspection_register',
+        ))
+        if record.get('register_urn'):
+            seen.add(str(record['register_urn']))
+    if candidates:
+        try:
+            register_save_state(REGISTER_STATE_FILE, seen)
+        except Exception as exc:
+            log.warning('register state could not be saved: %s', exc)
+    return candidates
+
 def collect_food_hygiene_candidates() -> list[Candidate]:
     """The businesses in the borough currently rated 0 or 1, as one roundup.
 
@@ -2896,7 +2944,7 @@ def main() -> int:
     collector_errors: dict[str, str] = {}
     x_social_records = collect_x_social_records()
     facebook_social_records = collect_facebook_social_records()
-    batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors), 'food_hygiene': safe_collect('food_hygiene', collect_food_hygiene_candidates, collector_counts, collector_errors)}
+    batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors), 'food_hygiene': safe_collect('food_hygiene', collect_food_hygiene_candidates, collector_counts, collector_errors), 'inspection_registers': safe_collect('inspection_registers', collect_register_candidates, collector_counts, collector_errors)}
     raw_candidates_all = [candidate for batch in batches.values() for candidate in batch]
     rejected_job_candidates = [candidate for candidate in raw_candidates_all if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
     raw_candidates = [candidate for candidate in raw_candidates_all if not (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
