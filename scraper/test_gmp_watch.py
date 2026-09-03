@@ -191,11 +191,11 @@ def entry(slug: str, minutes_ago: int, status: str = "live") -> dict:
     }
 
 
-merged = gw.merge_breaking([entry("a", 10)], [entry("a", 5), entry("b", 2)])
+merged = gw.merge_breaking([entry("a", 10)], [entry("a", 5), entry("b", 2)], now=now)
 check(len(merged) == 2, "the same source URL is never added twice")
 check(merged[0]["slug"] == "b", "newest breaking entry sorts first")
 
-capped = gw.merge_breaking([], [entry(str(i), i) for i in range(1, 7)])
+capped = gw.merge_breaking([], [entry(str(i), i) for i in range(1, 7)], now=now)
 check(
     len([e for e in capped if e["status"] == "live"]) == gw.MAX_LIVE_BREAKING,
     f"no more than {gw.MAX_LIVE_BREAKING} live breaking cards at once",
