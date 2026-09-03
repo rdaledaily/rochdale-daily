@@ -75,8 +75,6 @@ def extract_items(text: str) -> list[dict[str, str]]:
         items.append({"url": SITE_BASE + href, "title": title, "date": date})
         if len(items) >= MAX_ITEMS:
             break
-    if not items:
-        raise ValueError("No crawlable Latest article links were found")
     return items
 
 
@@ -107,20 +105,29 @@ def itemlist_markup(items: list[dict[str, str]]) -> str:
 
 def enhance(text: str) -> str:
     items = extract_items(text)
-    metadata = itemlist_markup(items)
-
-    if META_START in text and META_END in text:
+    if items:
+        metadata = itemlist_markup(items)
+        if META_START in text and META_END in text:
+            text = re.sub(
+                re.escape(META_START) + r".*?" + re.escape(META_END),
+                metadata,
+                text,
+                count=1,
+                flags=re.S,
+            )
+        else:
+            if "</head>" not in text:
+                raise ValueError("Homepage </head> not found")
+            text = text.replace("</head>", f"  {metadata}\n</head>", 1)
+    elif META_START in text and META_END in text:
+        # An empty fallback must not leave stale structured-data story links.
         text = re.sub(
             re.escape(META_START) + r".*?" + re.escape(META_END),
-            metadata,
+            "",
             text,
             count=1,
             flags=re.S,
         )
-    else:
-        if "</head>" not in text:
-            raise ValueError("Homepage </head> not found")
-        text = text.replace("</head>", f"  {metadata}\n</head>", 1)
 
     if RSS_TAG not in text:
         if "</head>" not in text:
