@@ -461,6 +461,22 @@ def main(argv: list[str] | None = None) -> int:
         })
         print(f"{result:16} {slug_for(article)} -> {article.get('image_url')}")
 
+    # The newsdesk composer (newsdesk.html) offers the editor a picker over the
+    # real photo library. This manifest is its data: every valid, non-generated
+    # image in assets/img/cards, refreshed by every lane that runs this script,
+    # so the picker can never drift from the folder.
+    manifest_entries = sorted(
+        candidate.name
+        for candidate in (root / CARDS_DIR).glob("*")
+        if candidate.is_file()
+        and candidate.suffix.lower() in IMAGE_SUFFIXES
+        and candidate.stat().st_size > 4096
+        and not is_generated_card(candidate)
+    )
+    (root / CARDS_DIR / "manifest.json").write_text(
+        json.dumps({"images": manifest_entries}, indent=2) + "\n", encoding="utf-8"
+    )
+
     args.articles.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     args.report.write_text(
         json.dumps(
