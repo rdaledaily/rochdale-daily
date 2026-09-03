@@ -940,7 +940,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-03T12:56:48.870626Z",
+  "frontpage_generated_at": "2026-09-03T12:59:14.734953Z",
   "frontpage_article_count": 12,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -951,6 +951,7 @@
       "news",
       "politics",
       "sport",
+      "traffic",
       "transport"
     ],
     "selected_categories": [
@@ -960,6 +961,7 @@
       "news",
       "politics",
       "sport",
+      "traffic",
       "transport"
     ],
     "available_wards": [
@@ -985,7 +987,8 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 3,
+      "traffic": 1,
+      "crime": 2,
       "transport": 2,
       "politics": 1,
       "sport": 2,
@@ -1027,15 +1030,15 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 8,
-  "events_removed_other_source": 7,
+  "event_ticket_source_error": "('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+  "ticket_events_collected_this_run": 0,
+  "events_removed_other_source": 8,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 8,
   "event_dates_corrected_from_ledger": 0,
   "duplicate_articles_after_postprocessing": 153,
-  "blocked_articles_removed": 1,
+  "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
