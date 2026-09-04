@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 19,
-    "cards_library": 0,
-    "cards_generated": 10,
+    "kept_cards": 20,
+    "cards_library": 2,
+    "cards_generated": 9,
     "skipped": 0
   },
   "items": [
@@ -71,7 +71,7 @@
       "match_score": 21880
     },
     {
-      "slug": "tram-services-suspended-in-rochdale-this-weekend",
+      "slug": "tram-services-disrupted-in-rochdale-this-weekend",
       "result": "kept-existing",
       "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
       "matched_filename": "",
@@ -83,6 +83,13 @@
       "image_url": "assets/img/cards/traffic.jpg",
       "matched_filename": "traffic.jpg",
       "match_score": 8127
+    },
+    {
+      "slug": "jamie-robinson-to-referee-rochdale-s-match-against-gillingham",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 15125
     },
     {
       "slug": "rochdale-council-launches-online-planning-application-portal",
@@ -100,7 +107,14 @@
     },
     {
       "slug": "rochdale-afc-to-host-gillingham-at-crown-oil-arena-this-saturday",
-      "result": "kept-cards",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
+    },
+    {
+      "slug": "traffic-advisory-for-rochdale-afc-matchday-on-saturday",
+      "result": "cards-library",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "rochdale_afc.jpg",
       "match_score": 15252
@@ -121,10 +135,10 @@
     },
     {
       "slug": "rochdale-to-face-gillingham-in-search-of-first-win-of-the-season",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/rochdale-to-face-gillingham-in-search-of-first-win-of-the-season-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-set-to-face-gillingham-in-search-of-first-win-of-the-season.jpg",
+      "matched_filename": "rochdale-set-to-face-gillingham-in-search-of-first-win-of-the-season.jpg",
+      "match_score": 22018
     },
     {
       "slug": "rochdale-afc-prepares-for-gillingham-match-with-tvos-programme",
