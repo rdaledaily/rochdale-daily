@@ -1,19 +1,12 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 17,
-    "cards_library": 0,
-    "cards_generated": 13,
+    "kept_cards": 18,
+    "cards_library": 1,
+    "cards_generated": 11,
     "skipped": 0
   },
   "items": [
-    {
-      "slug": "rochdale-afc-set-to-host-gillingham-in-league-match",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale_afc.jpg",
-      "matched_filename": "rochdale_afc.jpg",
-      "match_score": 15252
-    },
     {
       "slug": "are-there-really-fairies-in-healey-dell",
       "result": "kept-existing",
@@ -23,14 +16,14 @@
     },
     {
       "slug": "horse-in-rochdale-left-near-death-after-being-fed-harmful-food-by-campers",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/horse-in-rochdale-left-near-death-after-being-fed-harmful-food-by-campers-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
     {
       "slug": "rochdale-reports-rise-in-avoidable-deaths-linked-to-alcohol-drugs-and-smoking",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-reports-rise-in-avoidable-deaths-linked-to-alcohol-drugs-and-smoking-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -57,6 +50,13 @@
       "match_score": null
     },
     {
+      "slug": "rochdale-to-host-gillingham-in-search-of-first-win-of-the-season",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/rochdale-to-host-gillingham-in-search-of-first-win-of-the-season-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "rochdale-sees-rise-in-teenagers-seeking-treatment-for-addiction",
       "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-sees-rise-in-teenagers-seeking-treatment-for-addiction-generated-card.jpg",
@@ -78,7 +78,7 @@
       "match_score": 21880
     },
     {
-      "slug": "tram-services-disrupted-in-rochdale-this-weekend-due-to-maintenance-works",
+      "slug": "tram-services-suspended-in-rochdale-this-weekend-due-to-maintenance-works",
       "result": "kept-existing",
       "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
       "matched_filename": "",
@@ -127,11 +127,11 @@
       "match_score": 15126
     },
     {
-      "slug": "rochdale-to-host-gillingham-in-search-of-first-win-of-the-season",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/rochdale-to-host-gillingham-in-search-of-first-win-of-the-season-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
+      "slug": "rochdale-afc-set-to-host-gillingham-in-league-match",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
     },
     {
       "slug": "rochdale-afc-prepares-for-gillingham-match-with-tvos-programme",
@@ -143,7 +143,7 @@
     {
       "slug": "rochdale-youth-team-lose-4-3-to-salford-city-in-pdl-cup-opener",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/17a29d8d942dc44733.jpg",
+      "image_url": "assets/img/cards/rochdale-youth-team-lose-4-3-to-salford-city-in-pdl-cup-opener-canonical.jpg",
       "matched_filename": "",
       "match_score": null
     },
