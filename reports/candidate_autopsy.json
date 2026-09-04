@@ -1,43 +1,42 @@
 {
-  "examined_at": "2026-09-03T11:42:37.460037Z",
+  "examined_at": "2026-09-04T11:43:40.881271Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 161,
+  "candidates_examined": 176,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "would publish": 78,
-    "age": 70,
-    "duplicate of published story": 11,
-    "not local": 2
+    "age": 117,
+    "would publish": 39,
+    "duplicate of published story": 19,
+    "not local": 1
   },
-  "would_publish": 78,
+  "would_publish": 39,
   "age_gate_sensitivity": {
-    "6h": 10,
-    "14h": 10,
-    "24h": 15,
-    "48h": 91,
-    "72h": 122,
-    "168h": 161
+    "6h": 12,
+    "14h": 25,
+    "24h": 46,
+    "48h": 59,
+    "72h": 144,
+    "168h": 176
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 63 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "TfGM Travel Alerts: Travel alerts",
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
       "TfGM Travel Alerts: Travel alerts"
     ],
+    "duplicate of published story": [
+      "Metro: Horse left close to death after being fed harmful 'human food' by camp",
+      "The Manc: Police seize convoy of supercars after reports of dangerous driving on",
+      "The Manc: Police seize convoy of supercars after reports of dangerous driving on"
+    ],
     "not local": [
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
       "Ofsted: Ofsted publishes inspection report for Little Sparks Wardle"
     ],
-    "duplicate of published story": [
-      "Rochdale Times: Family welcomes Prime Minister’s ‘accountability’ call in Michael Hool",
-      "Inside Housing: News - Rochdale Boroughwide Housing appoints new chair - Inside Housin",
-      "BBC: League Two: Rochdale 3-0 Shrewsbury Town - BBC"
-    ],
     "age": [
-      "BBC Manchester: Rochdales campers urged not to feed horses dangerous foods",
-      "Uk: publicaccess.rochdale.gov.uk",
-      "Whoscored: Rochdale vs Shrewsbury Lineups, Prediction, Betting Tips & Odds - WhoS"
+      "Inyourarea: What's On Rochdale: Of Mice and Men, a high-energy hip-hop drama and f",
+      "Shropshirestar: Big problem remains: The big talking points from Shrewsbury Town’s Roc",
+      "Rochdale AFC: One To Remember – Adeeko - Rochdale AFC"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
