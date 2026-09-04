@@ -1,39 +1,37 @@
 {
-  "last_run_at": "2026-09-04T03:13:01.709575Z",
-  "raw_candidates_before_job_filter": 96,
+  "last_run_at": "2026-09-04T03:22:02.554057Z",
+  "raw_candidates_before_job_filter": 98,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 96,
+  "raw_candidates": 98,
   "candidate_clusters": 41,
   "google_news_resolution": {
     "wrappers": 53,
     "resolved": 33,
-    "text_recovered": 18,
-    "reattributed": 1,
+    "text_recovered": 19,
+    "reattributed": 7,
     "images_found": 19
   },
-  "duplicates_merged": 55,
-  "attempted_rewrites": 25,
-  "new_articles": 11,
+  "duplicates_merged": 57,
+  "attempted_rewrites": 26,
+  "new_articles": 12,
   "live_articles": 26,
   "skipped": 14,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 9,
+    "editorial gate: REJECTED_NON_LOCAL": 7,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
     "editorial gate: REJECTED_NON_NEWS": 2,
     "quality check: Rewrite the long verbatim source passage.": 1,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1,
     "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Write at least 183 body words using only facts already present in the sources; the draft currently has 173.": 1,
-    "Tighten the report to fewer than 114 body words. The source material only supports a short report; cut every sentence th": 1,
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 2,
+    "Tighten the report to fewer than 114 body words. The source material only supports a short report; cut every sentence th": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 76,
-    "website_discovery": 6,
+    "rss_and_google_news": 77,
+    "website_discovery": 7,
     "aggregator_discovery": 3,
     "live_service_pages": 7,
     "facebook_official": 0,
@@ -44,24 +42,25 @@
   },
   "collector_errors": {},
   "source_counts": {
+    "Manchester Evening News": 15,
     "Rochdale Times": 14,
-    "manchestereveningnews.co.uk": 14,
     "Roch Valley Radio": 11,
     "Rochdale AFC": 11,
-    "Rochdale Borough Council": 8,
+    "rochdale.gov.uk": 5,
     "FansNetwork.co.uk": 4,
     "Northern live service updates": 4,
+    "Rochdale Borough Council": 3,
     "TfGM Travel Alerts": 3,
+    "Rochdale Valiant": 3,
     "Bee Network live travel alerts": 3,
     "Ofsted": 3,
-    "Largs and Millport News": 2,
+    "Largsandmillportnews": 2,
     "Shropshire Star": 2,
     "facebook.com": 2,
     "InYourArea": 2,
     "Yahoo News UK": 2,
-    "Rochdale Valiant": 2,
     "Rochdale Borough Council RSS": 1,
-    "Sky Sports": 1,
+    "Skysports": 1,
     "Mshale": 1,
     "Uk": 1,
     "Roch Valley Radio Local News": 1,
@@ -76,7 +75,7 @@
     "environment": 3,
     "health": 1,
     "news": 6,
-    "sport": 8,
+    "sport": 9,
     "transport": 4
   },
   "published_by_category": {
@@ -127,6 +126,7 @@
     "transport-v3-9871b38af91845c6fd62",
     "transport-v3-aeafe0f48d34557caf6f",
     "hard-news-v3-a595f3cba54331323b1e",
+    "sport-v3-8bf19554b28ea49cff1e",
     "hard-news-v3-d5e3af670e8660875199",
     "environment-v3-a01e515d91da2d8cbdcc",
     "hard-news-v3-a4f53a1395164e98ab97",
@@ -154,6 +154,7 @@
     "https://www.bbc.com/sport/football/live/c95y4mkvp87vt",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-9b67514f1f771f3a49",
     "https://www.bigfurnituregroup.com/bfa-joins-forces-with-didac-and-rohs-for-health-and-safety-day/",
+    "https://www.largsandmillportnews.com/sport/national/26513689.ian-watson-lauds-rochdales-courage-bravery-win-shrewsbury/",
     "https://www.manchestereveningnews.co.uk/news/once-bustling-seven-sisters-rochdale-34551331",
     "https://www.rochdale.gov.uk/directory-record/2589/heywood-remembrance-sunday-2026-road-closures-in-heywood-on-8-november-2026",
     "https://www.rochdale.gov.uk/news/article/667/don-t-lose-your-vote---residents-reminded-to-check-voter-registration-details",
@@ -225,7 +226,7 @@
       "environment": 3,
       "health": 1,
       "news": 6,
-      "sport": 8,
+      "sport": 9,
       "transport": 4
     },
     "selected_by_ward": {
@@ -235,7 +236,7 @@
     },
     "selected_by_area": {
       "middleton": 1,
-      "rochdale": 21,
+      "rochdale": 22,
       "spotland": 1,
       "wardle": 1,
       "whitworth": 1
@@ -246,6 +247,7 @@
       "bigfurnituregroup": 1,
       "food standards agency": 1,
       "kentsportsnews": 1,
+      "largsandmillportnews": 1,
       "manchester evening news": 1,
       "northern live service updates": 1,
       "ofsted": 1,
@@ -881,7 +883,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 32,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1323390483?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323288495?-57568:46921",
     "https://c.newsnow.co.uk/A/1323420091?-57568:46921",
     "https://c.newsnow.co.uk/A/1323416863?-57568:46921",
     "https://c.newsnow.co.uk/A/1323399104?-57568:46921",
@@ -900,12 +902,12 @@
     "https://c.newsnow.co.uk/A/1323108743?-57568:46921",
     "https://c.newsnow.co.uk/A/1323108633?-57568:46921",
     "https://c.newsnow.co.uk/A/1323108632?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323430101?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323430349?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323288495?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323394680?-57568:46921",
     "https://c.newsnow.co.uk/A/1323396248?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323430349?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323394680?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323390483?-57568:46921",
     "https://c.newsnow.co.uk/A/1323404216?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323430101?-57568:46921",
     "https://c.newsnow.co.uk/A/1323256509?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMisgFBVV95cUxNcFdwM1haWlFwSWlJVm9sNWhFY2otNXNkbkM1QXBadmtRZGlIN2hScENObGd6cU5UdXpVVXA1a0JGZDlHTzZZZzR5WVNFLVpYcXpMbTFYYmktek9wRXU0VHhmUGRjeDRIWXZTTklPVFpEcDNpRDZ2VHFYWnN4bDZqT0Jpc2haaDRIdTRwZ0VOUXl4cU43eFBCQXBwZzEtMmVmaFFlZXMxRHBYTUFoYzRnTEZ3?oc=5",
@@ -950,7 +952,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-04T03:14:11.776496Z",
+  "frontpage_generated_at": "2026-09-04T03:23:51.859890Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -977,20 +979,17 @@
     "available_wards": [
       "Central Rochdale",
       "Healey",
-      "Kingsway",
-      "Spotland and Falinge"
+      "Kingsway"
     ],
     "selected_wards": [
       "Central Rochdale",
       "Healey",
-      "Kingsway",
-      "Spotland and Falinge"
+      "Kingsway"
     ],
     "available_areas": [
       "healey",
       "kirkholt",
       "middleton",
-      "spotland",
       "whitworth"
     ],
     "selected_areas": [
@@ -998,7 +997,6 @@
       "kirkholt",
       "middleton",
       "rochdale",
-      "spotland",
       "whitworth"
     ],
     "uncovered_categories": [],
@@ -1024,7 +1022,6 @@
       "kirkholt": 1,
       "middleton": 1,
       "rochdale": 13,
-      "spotland": 1,
       "whitworth": 1
     },
     "selected_by_source": {
@@ -1038,8 +1035,8 @@
       "inside housing": 1,
       "yahoo": 1
     },
-    "pool_size": 18,
-    "primary_pool_size": 18,
+    "pool_size": 17,
+    "primary_pool_size": 17,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 13,
