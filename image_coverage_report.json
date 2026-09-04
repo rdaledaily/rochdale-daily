@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 18,
+    "kept_cards": 16,
     "cards_library": 1,
-    "cards_generated": 10,
+    "cards_generated": 13,
     "skipped": 0
   },
   "items": [
@@ -23,8 +23,15 @@
     },
     {
       "slug": "horse-in-rochdale-left-near-death-after-being-fed-harmful-food-by-campers",
-      "result": "kept-cards",
+      "result": "cards-generated",
       "image_url": "assets/img/cards/horse-in-rochdale-left-near-death-after-being-fed-harmful-food-by-campers-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-reports-rise-in-avoidable-deaths-linked-to-alcohol-drugs-and-smoking",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/rochdale-reports-rise-in-avoidable-deaths-linked-to-alcohol-drugs-and-smoking-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -58,10 +65,10 @@
     },
     {
       "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
-      "result": "kept-cards",
+      "result": "kept-existing",
       "image_url": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
-      "matched_filename": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
-      "match_score": 20716
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "rochdale-residents-urged-to-check-voter-registration-ahead-of-may-2027-elections",
@@ -71,7 +78,7 @@
       "match_score": 21880
     },
     {
-      "slug": "tram-services-disruption-in-rochdale-this-weekend",
+      "slug": "tram-services-suspended-between-freehold-and-rochdale-town-centre-this-saturday",
       "result": "kept-existing",
       "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
       "matched_filename": "",
@@ -129,7 +136,7 @@
     {
       "slug": "rochdale-afc-prepares-for-gillingham-match-with-tvos-programme",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-afc-prepares-for-gillingham-match-with-tvos-programme-canonical.jpg",
+      "image_url": "assets/img/generated/30c8b7a9287f171ad1.jpg",
       "matched_filename": "",
       "match_score": null
     },
