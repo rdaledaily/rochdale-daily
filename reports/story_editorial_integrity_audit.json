@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 159,
-  "published_count": 159,
+  "article_count": 160,
+  "published_count": 160,
   "category_change_count": 18,
-  "image_change_count": 17,
+  "image_change_count": 19,
   "category_changes": [
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -135,14 +135,26 @@
   ],
   "image_changes": [
     {
-      "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
-      "title": "New Café Run by Veterans Opens at Denehurst House in Rochdale",
-      "category": "news",
+      "slug": "rochdale-afc-partners-with-financial-solutions-to-enhance-financial-management",
+      "title": "Rochdale AFC Partners with Financial Solutions to Enhance Financial Management",
+      "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
-        "img": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
         "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-partners-with-financial-solutions-to-enhance-financial-management-generated-card.jpg"
+    },
+    {
+      "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
+      "title": "Denehurst House Café Opens in Rochdale, Run by Local Veterans",
+      "category": "business",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+        "status": "source-photo-cached"
       },
       "after": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale-generated-card.jpg"
     },
@@ -171,6 +183,18 @@
       "after": "assets/img/cards/rochdale-council-rejects-late-night-car-wash-proposal-on-kingsway-generated-card.jpg"
     },
     {
+      "slug": "jamie-robinson-to-referee-rochdale-s-match-against-gillingham",
+      "title": "Jamie Robinson to Referee Rochdale's Match Against Gillingham",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/jamie-robinson-to-referee-rochdale-s-match-against-gillingham-generated-card.jpg"
+    },
+    {
       "slug": "police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving",
       "title": "Five Lamborghinis and a Mercedes G-Wagon Seized Following Dangerous Driving Reports on M66 and M62",
       "category": "traffic",
@@ -195,7 +219,7 @@
       "after": "assets/img/cards/police-seize-lamborghinis-and-mercedes-g-wagon-in-rochdale-generated-card.jpg"
     },
     {
-      "slug": "rochdale-to-face-gillingham-in-search-of-first-win-of-the-season",
+      "slug": "rochdale-afc-to-host-gillingham-at-crown-oil-arena-this-saturday",
       "title": "Rochdale AFC to Host Gillingham in Key League Match",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
@@ -204,7 +228,7 @@
         "img": "assets/img/cards/rochdale_afc.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/rochdale-to-face-gillingham-in-search-of-first-win-of-the-season-generated-card.jpg"
+      "after": "assets/img/cards/rochdale-afc-to-host-gillingham-at-crown-oil-arena-this-saturday-generated-card.jpg"
     },
     {
       "slug": "prime-minister-calls-for-accountability-in-michael-hoolickin-murder-case",
