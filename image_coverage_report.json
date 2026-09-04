@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 15,
+    "kept_cards": 13,
     "cards_library": 0,
-    "cards_generated": 10,
+    "cards_generated": 12,
     "skipped": 0
   },
   "items": [
@@ -44,10 +44,10 @@
     },
     {
       "slug": "police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving",
-      "result": "kept-cards",
+      "result": "kept-existing",
       "image_url": "assets/img/cards/police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving.jpg",
-      "matched_filename": "police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving.jpg",
-      "match_score": 20721
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "medieval-knights-to-battle-at-the-ashcroft-in-whitworth-on-september-26",
@@ -69,13 +69,6 @@
       "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "police.jpg",
       "match_score": 15126
-    },
-    {
-      "slug": "rochdale-afc-to-face-gillingham-in-sky-bet-league-two-match",
-      "result": "kept-existing",
-      "image_url": "assets/img/generated/30c8b7a9287f171ad1.jpg",
-      "matched_filename": "",
-      "match_score": null
     },
     {
       "slug": "why-rochdale-says-cruckle",
@@ -113,9 +106,16 @@
       "match_score": null
     },
     {
-      "slug": "rochdale-afc-hosts-gillingham-in-sky-bet-league-two-match",
+      "slug": "rochdale-afc-to-face-gillingham-in-sky-bet-league-two-match",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-afc-hosts-gillingham-in-sky-bet-league-two-match.jpg",
+      "image_url": "assets/img/generated/30c8b7a9287f171ad1.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-set-to-face-gillingham-in-search-of-first-win-of-the-season",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-set-to-face-gillingham-in-search-of-first-win-of-the-season.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -135,7 +135,7 @@
     },
     {
       "slug": "rochdale-boroughwide-housing-appoints-new-chair",
-      "result": "kept-cards",
+      "result": "cards-generated",
       "image_url": "assets/img/cards/rochdale-boroughwide-housing-appoints-new-chair-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
