@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 160,
-  "published_count": 160,
+  "article_count": 161,
+  "published_count": 161,
   "category_change_count": 18,
-  "image_change_count": 17,
+  "image_change_count": 18,
   "category_changes": [
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -135,14 +135,26 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton",
+      "title": "Rochdale Borough Council Set to Acquire Warwick Mill in Middleton",
+      "category": "business",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton-generated-card.jpg"
+    },
+    {
       "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
       "title": "Denehurst House Café Opens in Rochdale, Run by Local Veterans",
       "category": "business",
-      "reason": "cached/library image lacks canonical/source provenance",
+      "reason": "uncanonical img fallback exists while image_url is empty",
       "before": {
-        "image_url": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+        "image_url": "",
         "img": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
-        "status": "cards-library-photo"
+        "status": "source-photo-cached"
       },
       "after": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale-generated-card.jpg"
     },
