@@ -1,14 +1,14 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 19,
-    "cards_library": 2,
-    "cards_generated": 10,
+    "kept_cards": 20,
+    "cards_library": 0,
+    "cards_generated": 11,
     "skipped": 0
   },
   "items": [
     {
-      "slug": "tram-services-disrupted-in-rochdale-this-weekend-due-to-maintenance-work",
+      "slug": "tram-services-suspended-in-rochdale-this-weekend-due-to-maintenance",
       "result": "kept-existing",
       "image_url": "assets/img/generated/5f7110b092e5da5943.jpg",
       "matched_filename": "",
@@ -16,10 +16,10 @@
     },
     {
       "slug": "rochdale-afc-partners-with-financial-solutions-to-enhance-financial-management",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/rochdale_afc.jpg",
-      "matched_filename": "rochdale_afc.jpg",
-      "match_score": 15252
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-afc-partners-with-financial-solutions-to-enhance-financial-management-canonical.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "are-there-really-fairies-in-healey-dell",
@@ -52,7 +52,14 @@
     {
       "slug": "roadworks-on-a664-manchester-road-and-constantine-road-scheduled-for-september-a",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/roadworks-on-a664-manchester-road-and-constantine-road-scheduled-for-september-a-canonical.jpg",
+      "image_url": "assets/img/generated/c75b036468502a5e0b.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "road-closures-announced-for-remembrance-sunday-events-in-littleborough-middleton",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/d0bce20ac4c529978d.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -72,10 +79,10 @@
     },
     {
       "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
-      "result": "kept-existing",
-      "image_url": "",
-      "matched_filename": "",
-      "match_score": null
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+      "matched_filename": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+      "match_score": 20716
     },
     {
       "slug": "rochdale-residents-urged-to-check-voter-registration-ahead-of-may-2027-elections",
@@ -128,20 +135,13 @@
     },
     {
       "slug": "rochdale-afc-to-host-gillingham-at-crown-oil-arena-this-saturday",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/rochdale_afc.jpg",
-      "matched_filename": "rochdale_afc.jpg",
-      "match_score": 15252
-    },
-    {
-      "slug": "rochdale-to-face-gillingham-in-search-of-first-win-of-the-season",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/30c8b7a9287f171ad1.jpg",
+      "image_url": "assets/img/generated/9e64b4f8b3dc8dbb4d.jpg",
       "matched_filename": "",
       "match_score": null
     },
     {
-      "slug": "rochdale-afc-prepares-for-gillingham-match-with-tvos-programme",
+      "slug": "rochdale-to-face-gillingham-in-search-of-first-win-of-the-season",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale-afc-prepares-for-gillingham-match-with-tvos-programme-canonical.jpg",
       "matched_filename": "",
@@ -151,6 +151,13 @@
       "slug": "rochdale-youth-team-lose-4-3-to-salford-city-in-pdl-cup-opener",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale-youth-team-lose-4-3-to-salford-city-in-pdl-cup-opener-canonical.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-afc-to-face-gillingham-at-crown-oil-arena-on-5th-september",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/30c8b7a9287f171ad1.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -176,11 +183,11 @@
       "match_score": 15126
     },
     {
-      "slug": "road-closures-for-heywood-remembrance-sunday-on-8-november-2026",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/road-closures-for-heywood-remembrance-sunday-on-8-november-2026-canonical.jpg",
-      "matched_filename": "",
-      "match_score": null
+      "slug": "rock-classics-by-candlelight-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 8378
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
@@ -193,13 +200,6 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "monsters-of-rock-halloween-special-2026",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
