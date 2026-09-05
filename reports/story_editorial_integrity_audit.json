@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 162,
-  "published_count": 162,
+  "article_count": 163,
+  "published_count": 163,
   "category_change_count": 18,
-  "image_change_count": 18,
+  "image_change_count": 21,
   "category_changes": [
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -135,6 +135,42 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton",
+      "title": "Rochdale Borough Council Set to Acquire Warwick Mill in Middleton",
+      "category": "business",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton-generated-card.jpg"
+    },
+    {
+      "slug": "man-arrested-in-rochdale-town-centre-while-wearing-balaclava",
+      "title": "Man Arrested in Rochdale Town Centre While Wearing Balaclava",
+      "category": "crime",
+      "reason": "weak filename image match score 8126; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/police.jpg",
+        "img": "assets/img/cards/police.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/man-arrested-in-rochdale-town-centre-while-wearing-balaclava-generated-card.jpg"
+    },
+    {
+      "slug": "new-12-million-storage-world-building-planned-for-old-hall-street-in-middleton",
+      "title": "New £12 Million Storage World Building Planned for Old Hall Street in Middleton",
+      "category": "business",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/storage_world.jpg",
+        "img": "assets/img/cards/storage_world.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/new-12-million-storage-world-building-planned-for-old-hall-street-in-middleton-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-to-host-gillingham-in-search-of-first-win-of-the-season",
       "title": "Rochdale Set to Face Gillingham in Search of First Win of the Season",
       "category": "sport",
@@ -147,14 +183,38 @@
       "after": "assets/img/cards/rochdale-to-host-gillingham-in-search-of-first-win-of-the-season-generated-card.jpg"
     },
     {
-      "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
-      "title": "Denehurst House Café Opens in Rochdale, Run by Local Veterans",
-      "category": "business",
+      "slug": "rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy",
+      "title": "Rochdale's Year as Town of Culture Generates Over £5.5 Million for Local Economy",
+      "category": "politics",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy-generated-card.jpg"
+    },
+    {
+      "slug": "five-lamborghinis-and-a-mercedes-seized-following-dangerous-driving-reports-on-m",
+      "title": "Police Seize Supercars Following Dangerous Driving Reports on M62 Near Rochdale",
+      "category": "traffic",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
-        "img": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+        "image_url": "assets/img/cards/five-lamborghinis-and-a-mercedes-seized-following-dangerous-driving-reports-on-m.jpg",
+        "img": "assets/img/cards/five-lamborghinis-and-a-mercedes-seized-following-dangerous-driving-reports-on-m.jpg",
         "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/five-lamborghinis-and-a-mercedes-seized-following-dangerous-driving-reports-on-m-generated-card.jpg"
+    },
+    {
+      "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
+      "title": "Denehurst House Café Opens in Rochdale Park, Run by Veterans",
+      "category": "business",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+        "status": "source-photo-cached"
       },
       "after": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale-generated-card.jpg"
     },
@@ -196,7 +256,7 @@
     },
     {
       "slug": "rochdale-afc-releases-matchday-guide-for-saturday-s-fixture",
-      "title": "Rochdale AFC Publishes Matchday Guide for Saturday's Fixture",
+      "title": "Traffic Advisory for Rochdale AFC Matchday on Saturday",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -205,30 +265,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-afc-releases-matchday-guide-for-saturday-s-fixture-generated-card.jpg"
-    },
-    {
-      "slug": "police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving",
-      "title": "Five Lamborghinis and a Mercedes G-Wagon Seized Following Dangerous Driving Reports on M66 and M62",
-      "category": "traffic",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving.jpg",
-        "img": "assets/img/cards/police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/police-seize-six-luxury-cars-in-rochdale-crackdown-on-dangerous-driving-generated-card.jpg"
-    },
-    {
-      "slug": "police-seize-lamborghinis-and-mercedes-g-wagon-in-rochdale",
-      "title": "Police Seize Lamborghinis and Mercedes G-Wagon in Rochdale",
-      "category": "crime",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/police.jpg",
-        "img": "assets/img/cards/police.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/police-seize-lamborghinis-and-mercedes-g-wagon-in-rochdale-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
