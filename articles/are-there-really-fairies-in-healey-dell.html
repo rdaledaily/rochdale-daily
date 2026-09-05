@@ -1,57 +1,41 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="index,follow,max-image-preview:large">
-  <title>Are there really fairies in Healey Dell? | Rochdale Daily</title>
-  <meta name="description" content="The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very...">
-  <link rel="canonical" href="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
-  <style>@import url('/assets/css/site.css');
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<title>Are there really fairies in Healey Dell? | Rochdale Daily</title>
+<meta name="description" content="The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very...">
+<link rel="canonical" href="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
+<style>@import url('/assets/css/site.css');
 
 /*
- * Article-page responsive safety layer.
- *
- * Static article pages are generated with this stylesheet embedded in the
- * document. The full site stylesheet remains the single source of truth and
- * is imported above; these rules only harden article pages against mobile
- * overflow and oversized desktop geometry.
- */
+* Article-page responsive safety layer.
+*
+* Static article pages are generated with this stylesheet embedded in the
+* document. The full site stylesheet remains the single source of truth and
+* is imported above; these rules only harden article pages against mobile
+* overflow and oversized desktop geometry.
+*/
 html,
 body {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+width: 100%;
+max-width: 100%;
+min-width: 0;
 }
 
 body {
-  overflow-x: hidden;
-}
-
-.utility,
-.masthead,
-.primary-nav,
-.breaking-bar,
-.page-shell,
-.site-footer {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.wrap,
-.article-body,
-.article-layout,
-.article-layout > *,
-.article-sidebar,
-.article-hero-image,
-.ad-slot,
-.sidebar-box {
-  min-width: 0;
-  max-width: 100%;
+overflow-x: hidden;
+}.utility,.masthead,.primary-nav,.breaking-bar,.page-shell,.site-footer {
+width: 100%;
+max-width: 100%;
+min-width: 0;
+}.wrap,.article-body,.article-layout,.article-layout > *,.article-sidebar,.article-hero-image,.ad-slot,.sidebar-box {
+min-width: 0;
+max-width: 100%;
 }
 
 img,
@@ -60,238 +44,185 @@ video,
 iframe,
 canvas,
 svg {
-  max-width: 100%;
-}
-
-.article-body,
-.article-body p,
-.article-body h1,
-.article-body h2,
-.article-body h3,
-.article-standfirst,
-.article-byline,
-.sidebar-box,
-.related-title {
-  overflow-wrap: anywhere;
-  word-break: normal;
+max-width: 100%;
+}.article-body,.article-body p,.article-body h1,.article-body h2,.article-body h3,.article-standfirst,.article-byline,.sidebar-box,.related-title {
+overflow-wrap: anywhere;
+word-break: normal;
 }
 
 /* A fixed 300px MREC is safe on most phones, but must still shrink on a
-   narrow viewport rather than making the whole document wider. */
-.ad-slot-mrec {
-  width: min(300px, 100%);
-  max-width: 100%;
+narrow viewport rather than making the whole document wider. */.ad-slot-mrec {
+width: min(300px, 100%);
+max-width: 100%;
 }
 
 /* Long source URLs, embeds and preformatted material must never dictate the
-   width of the page. */
-.article-body table,
-.article-body pre,
-.article-body code,
-.article-body iframe,
-.article-body blockquote {
-  max-width: 100%;
+width of the page. */.article-body table,.article-body pre,.article-body code,.article-body iframe,.article-body blockquote {
+max-width: 100%;
+}.article-body pre {
+overflow-x: auto;
 }
 
-.article-body pre {
-  overflow-x: auto;
+@media (max-width: 860px) {.article-layout {
+grid-template-columns: minmax(0, 1fr);
+gap: 24px;
+}.article-sidebar {
+position: static;
+width: 100%;
+}
 }
 
-@media (max-width: 860px) {
-  .article-layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-
-  .article-sidebar {
-    position: static;
-    width: 100%;
-  }
+@media (max-width: 620px) {.wrap {
+width: calc(100% - 24px);
+max-width: 100%;
+}.masthead-row {
+min-height: 96px;
+grid-template-columns: minmax(0, 1fr) auto;
+gap: 8px;
+}.brand,.masthead-actions {
+min-width: 0;
+max-width: 100%;
+}.brand-logo {
+width: min(215px, 58vw);
+max-width: 100%;
+}.article-body {
+width: 100%;
+padding: 20px 16px 36px;
+}.article-body h1 {
+font-size: clamp(30px, 9vw, 40px);
+line-height: 1.04;
+letter-spacing: -0.4px;
+}.article-standfirst {
+font-size: 17px;
+line-height: 1.42;
+}.article-share {
+gap: 8px;
+flex-wrap: wrap;
+}.share-icon-button {
+width: 42px;
+height: 42px;
+}.ad-slot-leaderboard,.ad-slot-incontent,.ad-slot-mrec,.ad-slot.ad-live,.ad-slot.ad-live > a,.ad-slot.ad-live img {
+width: 100%;
+max-width: 100%;
+height: auto;
+}.article-hero-image img {
+width: 100%;
+height: auto;
+}
 }
 
-@media (max-width: 620px) {
-  .wrap {
-    width: calc(100% - 24px);
-    max-width: 100%;
-  }
-
-  .masthead-row {
-    min-height: 96px;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-  }
-
-  .brand,
-  .masthead-actions {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .brand-logo {
-    width: min(215px, 58vw);
-    max-width: 100%;
-  }
-
-  .article-body {
-    width: 100%;
-    padding: 20px 16px 36px;
-  }
-
-  .article-body h1 {
-    font-size: clamp(30px, 9vw, 40px);
-    line-height: 1.04;
-    letter-spacing: -0.4px;
-  }
-
-  .article-standfirst {
-    font-size: 17px;
-    line-height: 1.42;
-  }
-
-  .article-share {
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .share-icon-button {
-    width: 42px;
-    height: 42px;
-  }
-
-  .ad-slot-leaderboard,
-  .ad-slot-incontent,
-  .ad-slot-mrec,
-  .ad-slot.ad-live,
-  .ad-slot.ad-live > a,
-  .ad-slot.ad-live img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-  }
-
-  .article-hero-image img {
-    width: 100%;
-    height: auto;
-  }
+@media (max-width: 390px) {.article-body {
+padding-inline: 14px;
+}.article-body h1 {
+font-size: clamp(28px, 8.5vw, 36px);
+}.brand-logo {
+width: min(200px, 56vw);
 }
-
-@media (max-width: 390px) {
-  .article-body {
-    padding-inline: 14px;
-  }
-
-  .article-body h1 {
-    font-size: clamp(28px, 8.5vw, 36px);
-  }
-
-  .brand-logo {
-    width: min(200px, 56vw);
-  }
 }
 </style>
 
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Rochdale Daily">
-  <meta name="author" content="Rochdale Daily Newsdesk">
-  <meta name="keywords" content="Healey, Environment, Rochdale, local news">
-  <meta property="og:title" content="Are there really fairies in Healey Dell?">
-  <meta property="og:description" content="The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very...">
-  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/are-there-really-fairies-in-healey-dell.jpg">
-  <meta property="og:image:alt" content="Are there really fairies in Healey Dell?">
-  <meta property="og:url" content="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html">
-  <meta property="article:published_time" content="2026-09-04T11:07:11Z">
-  <meta property="article:modified_time" content="2026-09-04T11:07:11Z">
-  <meta property="article:section" content="Environment">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Are there really fairies in Healey Dell?">
-  <meta name="twitter:description" content="The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very...">
-  <meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/cards/are-there-really-fairies-in-healey-dell.jpg">
-  <meta name="twitter:image:alt" content="Are there really fairies in Healey Dell?">
-  <meta name="news_keywords" content="Healey, Environment, Rochdale, local news">
-  <meta property="article:tag" content="Healey">
-  <meta property="article:tag" content="Environment">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Rochdale Daily">
+<meta name="author" content="Rochdale Daily Newsdesk">
+<meta name="keywords" content="Healey, Environment, Rochdale, local news">
+<meta property="og:title" content="Are there really fairies in Healey Dell?">
+<meta property="og:description" content="The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very...">
+<meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/are-there-really-fairies-in-healey-dell.jpg">
+<meta property="og:image:alt" content="Are there really fairies in Healey Dell?">
+<meta property="og:url" content="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html">
+<meta property="article:published_time" content="2026-09-04T11:07:11Z">
+<meta property="article:modified_time" content="2026-09-04T11:07:11Z">
+<meta property="article:section" content="Environment">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Are there really fairies in Healey Dell?">
+<meta name="twitter:description" content="The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very...">
+<meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/cards/are-there-really-fairies-in-healey-dell.jpg">
+<meta name="twitter:image:alt" content="Are there really fairies in Healey Dell?">
+<meta name="news_keywords" content="Healey, Environment, Rochdale, local news">
+<meta property="article:tag" content="Healey">
+<meta property="article:tag" content="Environment">
 
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html#article", "headline": "Are there really fairies in Healey Dell?", "description": "The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very...", "image": [{"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/cards/are-there-really-fairies-in-healey-dell.jpg", "caption": "Are there really fairies in Healey Dell?", "creditText": "Rochdale Borough Council — Healey Dell Nature Reserve and Tea Rooms"}], "datePublished": "2026-09-04T11:07:11Z", "dateModified": "2026-09-04T11:07:11Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Environment", "wordCount": 661, "keywords": "Healey, Environment, Rochdale, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html"}, "contentLocation": {"@type": "Place", "name": "Healey"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Environment", "item": "https://rochdaledaily.co.uk/#environment"}, {"@type": "ListItem", "position": 3, "name": "Are there really fairies in Healey Dell?", "item": "https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html"}]}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html#article", "headline": "Are there really fairies in Healey Dell?", "description": "The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very...", "image": [{"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/cards/are-there-really-fairies-in-healey-dell.jpg", "caption": "Are there really fairies in Healey Dell?", "creditText": "Rochdale Borough Council — Healey Dell Nature Reserve and Tea Rooms"}], "datePublished": "2026-09-04T11:07:11Z", "dateModified": "2026-09-04T11:07:11Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Environment", "wordCount": 661, "keywords": "Healey, Environment, Rochdale, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html"}, "contentLocation": {"@type": "Place", "name": "Healey"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Environment", "item": "https://rochdaledaily.co.uk/#environment"}, {"@type": "ListItem", "position": 3, "name": "Are there really fairies in Healey Dell?", "item": "https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html"}]}]}</script>
 </head>
 <body>
-  <header class="masthead">
-    <div class="wrap masthead-row">
-      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">
-        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
-      </a>
-      <div class="masthead-actions">
-        <a class="header-button" href="../index.html">All stories</a>
-      </div>
-    </div>
-  </header>
+<header class="masthead">
+<div class="wrap masthead-row">
+<a class="brand" href="../index.html" aria-label="Rochdale Daily home">
+<img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
+</a>
+<div class="masthead-actions">
+<a class="header-button" href="../index.html">All stories</a>
+</div>
+</div>
+</header>
 
-  <div class="modal-card" style="margin:24px auto;box-shadow:none">
-    <div class="article-body">
-      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>
-      <div class="article-layout">
-        <div class="article-main">
-          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/environment.html">Environment</a></nav>
-          <span class="story-kicker">Environment</span>
-          <h1>Are there really fairies in Healey Dell?</h1>
-          <p class="article-standfirst">The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very different tales.</p>
-          
-          <div class="article-byline">By Rochdale Daily</div>
-          <div class="article-share" aria-label="Share this article"><button class="share-icon-button brand-copy" type="button" data-share="copy" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" aria-label="Copy article link"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg><span class="visually-hidden">Copy link</span></button><button class="share-icon-button brand-facebook" type="button" data-share="facebook" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span class="visually-hidden">Facebook</span></button><button class="share-icon-button brand-whatsapp" type="button" data-share="whatsapp" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" data-title="Are there really fairies in Healey Dell?" aria-label="Share on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span class="visually-hidden">WhatsApp</span></button><button class="share-icon-button brand-x" type="button" data-share="x" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" data-title="Are there really fairies in Healey Dell?" aria-label="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span class="visually-hidden">X</span></button><button class="share-icon-button brand-bluesky" type="button" data-share="bluesky" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" data-title="Are there really fairies in Healey Dell?" aria-label="Share on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24 .213 24 3.883c0 .732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"/></svg><span class="visually-hidden">Bluesky</span></button><button class="share-icon-button brand-email" type="button" data-share="email" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" data-title="Are there really fairies in Healey Dell?" aria-label="Share by email"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg><span class="visually-hidden">Email</span></button></div>
-          <figure class="article-hero-image"><img src="https://rochdaledaily.co.uk/assets/img/cards/are-there-really-fairies-in-healey-dell.jpg" alt="Are there really fairies in Healey Dell?" loading="eager" fetchpriority="high"><figcaption class="article-image-credit">Image: <a href="https://www.rochdale.gov.uk/directory-record/737/healey-dell-nature-reserve-and-tea-rooms-rochdale" target="_blank" rel="noopener noreferrer">Rochdale Borough Council — Healey Dell Nature Reserve and Tea Rooms</a></figcaption></figure>
-          <div class="article-copy"><p>Walk under the stone viaduct at Healey Dell and you’ll find a narrow cleft where the River Spodden thunders through a rocky throat. Local signs and the Healey Dell Heritage Centre point visitors to a spot long called the Fairies’ Chapel — an evocative name that has attracted guidebooks, children’s trails and Victorian collectors of legend alike. The site is part of Healey Dell Nature Reserve, managed and promoted by Rochdale Borough Council as a place of industrial archaeology, woodland and waterfalls. ([rochdale.gov.uk](https://www.rochdale.gov.uk/directory-record/737/healey-dell-nature-reserve-and-tea-rooms-rochdale))</p>
+<div class="modal-card" style="margin:24px auto;box-shadow:none">
+<div class="article-body">
+<div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>
+<div class="article-layout">
+<div class="article-main">
+<nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/environment.html">Environment</a></nav>
+<span class="story-kicker">Environment</span>
+<h1>Are there really fairies in Healey Dell?</h1>
+<p class="article-standfirst">The Fairies’ Chapel is a real, water‑carved nook of rock that has gathered centuries of stories — but folklore and documentary record tell very different tales.</p>
+
+<div class="article-byline">By Rochdale Daily</div>
+<div class="article-share" aria-label="Share this article"><button class="share-icon-button brand-copy" type="button" data-share="copy" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" aria-label="Copy article link"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg><span class="visually-hidden">Copy link</span></button><button class="share-icon-button brand-facebook" type="button" data-share="facebook" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0.955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span class="visually-hidden">Facebook</span></button><button class="share-icon-button brand-whatsapp" type="button" data-share="whatsapp" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" data-title="Are there really fairies in Healey Dell?" aria-label="Share on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0.16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span class="visually-hidden">WhatsApp</span></button><button class="share-icon-button brand-x" type="button" data-share="x" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" data-title="Are there really fairies in Healey Dell?" aria-label="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span class="visually-hidden">X</span></button><button class="share-icon-button brand-bluesky" type="button" data-share="bluesky" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" data-title="Are there really fairies in Healey Dell?" aria-label="Share on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24.213 24 3.883c0.732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"/></svg><span class="visually-hidden">Bluesky</span></button><button class="share-icon-button brand-email" type="button" data-share="email" data-url="https://rochdaledaily.co.uk/articles/are-there-really-fairies-in-healey-dell.html" data-title="Are there really fairies in Healey Dell?" aria-label="Share by email"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg><span class="visually-hidden">Email</span></button></div>
+<figure class="article-hero-image"><img src="https://rochdaledaily.co.uk/assets/img/cards/are-there-really-fairies-in-healey-dell.jpg" alt="Are there really fairies in Healey Dell?" loading="eager" fetchpriority="high"><figcaption class="article-image-credit">Image: <a href="https://www.rochdale.gov.uk/directory-record/737/healey-dell-nature-reserve-and-tea-rooms-rochdale" target="_blank" rel="noopener noreferrer">Rochdale Borough Council — Healey Dell Nature Reserve and Tea Rooms</a></figcaption></figure>
+<div class="article-copy"><p>Walk under the stone viaduct at Healey Dell and you’ll find a narrow cleft where the River Spodden thunders through a rocky throat. Local signs and the Healey Dell Heritage Centre point visitors to a spot long called the Fairies’ Chapel — an evocative name that has attracted guidebooks, children’s trails and Victorian collectors of legend alike. The site is part of Healey Dell Nature Reserve, managed and promoted by Rochdale Borough Council as a place of industrial archaeology, woodland and waterfalls. ([rochdale.gov.uk](https://www.rochdale.gov.uk/directory-record/737/healey-dell-nature-reserve-and-tea-rooms-rochdale))</p>
 <p>What is indisputable: the place and its industrial history are real. The high stone viaduct that dominates the valley is a Grade II‑listed Victorian structure on the National Heritage List for England, and the valley contains the remains of mills, lodges and a former railway line now used as a trail. These are documented, protected features and form the historic backdrop that helped foreground the rock seat and grotto known as the Fairies’ Chapel. ([historicengland.org.uk](https://historicengland.org.uk/listing/the-list/list-entry/1317784))</p>
 <p>What created the ‘chapel’ is ordinary geology and the work of water. Guides and local interpretation explain that the Thrutch — a narrow gorge — contains a small natural excavation scored by the attrition of the river; older accounts and the Healey Dell visitor material say a great flood in early July 1838 altered or destroyed some of the rock formations formerly seen there. In short: the chapel‑like shapes are the result of erosion and historic landscape change, not built masonry. ([healeydelltearooms.co.uk](https://www.healeydelltearooms.co.uk/wp-content/uploads/history/Fairies-Chapel-final.pdf))</p><div class="ad-slot ad-slot-incontent" data-ad-slot="article-incontent" role="presentation" aria-hidden="true"></div></p>
 <p>And the fairies? That is the realm of story. The best‑known accounts of the Fairies’ Chapel come from 19th‑century collectors such as John Roby, whose Traditions of Lancashire (first published in 1829 and reprinted in later nineteenth‑century editions) recorded a long narrative about a miller, a Lady Eleanor, a fortune‑teller called Mother Bagden, and encounters with fairy royalty in the Thrutch. Roby’s work, and later local retellings and guidebook extracts, mixed oral tradition, local gossip and romantic reconstruction — material to be enjoyed as folklore, not read as factual history. ([upload.wikimedia.org](https://upload.wikimedia.org/wikipedia/commons/c/c1/Lancashire_legends_%28IA_lancashirelegend00roby%29.pdf))</p>
 <p>Versions of the tale vary. In some tellings a Fairy King condemns witches to a rocky chapel; in others a prophecy or an enchanted hare leads a boastful miller into the fairy grotto. These stories have been printed and reworked for more than a century, and they fed Victorian visitors’ appetite for “haunted” beauty spots. The modern Healey Dell Heritage Centre preserves and retells many of these legends, and the valley’s trails now include family‑friendly interpretation such as a fairy grotto for children. Those activities keep the stories alive, but do not serve as evidence that supernatural beings live there. ([healeydelltearooms.co.uk](https://www.healeydelltearooms.co.uk/wp-content/uploads/history/Fairies-Chapel-final.pdf))</p>
 <p>So: are there really fairies in Healey Dell? If you mean literal, sentient fairies as found in the stories — no contemporary, verifiable evidence supports that claim. If you mean “are there stories, traditions and a long local appetite for the uncanny” — absolutely. The Fairies’ Chapel is a genuine landscape feature with a documented industrial and geological history; it is also a cultural site where folklore collected since the early 19th century continues to be told and enjoyed. ([rochdale.gov.uk](https://www.rochdale.gov.uk/directory-record/737/healey-dell-nature-reserve-and-tea-rooms-rochdale))</p>
 <p>For visitors: treat the site as a meeting of nature, history and imagination. Respect the reserve’s paths and signage, enjoy the viaduct and waterfalls documented by Historic England and the borough, and bring a good torch if you try the narrow paths near the Thrutch. Above all, enjoy the stories as stories — valuable for what they tell us about local memory and the way places gather meaning over time. ([historicengland.org.uk](https://historicengland.org.uk/listing/the-list/list-entry/1317784))</p>
-          <details class="article-sources"><summary>Sources</summary><ul><li><a href="https://www.rochdale.gov.uk/directory-record/737/healey-dell-nature-reserve-and-tea-rooms-rochdale" target="_blank" rel="nofollow noopener noreferrer">Open source 1</a></li></ul></details></div>
-          
-          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
-            <h3 style="margin:0 0 8px">Legal and editorial note</h3>
-            <p>This article was compiled from identified public sources and may be updated when further verified information becomes available.</p>
-            <p><strong>Right to reply:</strong> For corrections or a right of reply, email news@rochdaledaily.co.uk.</p>
-            <p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>
-          </section>
-          
-          <section class="comments-section" id="comments-root" data-slug="are-there-really-fairies-in-healey-dell" data-category="environment"></section>
-        </div>
-        <aside class="article-sidebar">
-          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
-          <div class="sidebar-box"><h3>Related local stories</h3><a class="related-story" href="late-night-fireworks-shawclough-healey-second-night-august-2026.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/late-night-fireworks-shawclough-healey.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Late-night fireworks return to Shawclough and Healey as residents&#x27; frustration grows</span></a><a class="related-story" href="christ-church-healey-sunday-service-livestream.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/christ-church-healey-sunday-service-livestream-generated-card.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Can’t make it to church? Christ Church Healey invites community to join Sunday service online</span></a><a class="related-story" href="rochdale-reservoir-levels-recovery-dry-summer-2026.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-reservoir-levels-recovery-dry-summer-2026-generated-card.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Are our reservoirs recovering after Rochdale&#x27;s exceptionally dry summer?</span></a><a class="related-story" href="beautiful-walks-shawclough-healey-pennines.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/beautiful-walks-shawclough-healey-pennines.png" alt="" loading="lazy" decoding="async"><span class="related-title">Discover the beauty on your doorstep: The spectacular walks of Shawclough and Healey</span></a></div>
-        </aside>
-      </div>
-    </div>
-  </div>
+<details class="article-sources"><summary>Sources</summary><ul><li><a href="https://www.rochdale.gov.uk/directory-record/737/healey-dell-nature-reserve-and-tea-rooms-rochdale" target="_blank" rel="nofollow noopener noreferrer">Open source 1</a></li></ul></details></div>
 
-  <script>
-    document.addEventListener("click", function(event) {
-      var trigger = event.target.closest("[data-share]");
-      if (!trigger) return;
-      var action = trigger.dataset.share;
-      var url = trigger.dataset.url;
-      if (action === "copy") {
-        navigator.clipboard.writeText(url).catch(function() {});
-      }
-      if (action === "facebook") {
-        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "whatsapp") {
-        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "x") {
-        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "bluesky") {
-        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "email") {
-        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);
-      }
-    });
-      </script>
-  <script defer src="/assets/js/article-comments.js"></script>
-  <script defer src="/assets/js/cookie-consent.js"></script>
-  <script defer src="/assets/ads.js"></script>
+<section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
+<h3 style="margin:0 0 8px">Legal and editorial note</h3>
+<p>This article was compiled from identified public sources and may be updated when further verified information becomes available.</p>
+<p><strong>Right to reply:</strong> For corrections or a right of reply, email news@rochdaledaily.co.uk.</p>
+<p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/accessibility.html">Accessibility</a> · <a href="#" data-cookie-settings>Cookie settings</a></p>
+</section>
+
+<section class="comments-section" id="comments-root" data-slug="are-there-really-fairies-in-healey-dell" data-category="environment"></section>
+</div>
+<aside class="article-sidebar">
+<div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
+<div class="sidebar-box"><h3>Related local stories</h3><a class="related-story" href="late-night-fireworks-shawclough-healey-second-night-august-2026.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/late-night-fireworks-shawclough-healey.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Late-night fireworks return to Shawclough and Healey as residents' frustration grows</span></a><a class="related-story" href="christ-church-healey-sunday-service-livestream.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/christ-church-healey-sunday-service-livestream-generated-card.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Can’t make it to church? Christ Church Healey invites community to join Sunday service online</span></a><a class="related-story" href="rochdale-reservoir-levels-recovery-dry-summer-2026.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-reservoir-levels-recovery-dry-summer-2026-generated-card.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Are our reservoirs recovering after Rochdale's exceptionally dry summer?</span></a><a class="related-story" href="beautiful-walks-shawclough-healey-pennines.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/beautiful-walks-shawclough-healey-pennines.png" alt="" loading="lazy" decoding="async"><span class="related-title">Discover the beauty on your doorstep: The spectacular walks of Shawclough and Healey</span></a></div>
+</aside>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener("click", function(event) {
+var trigger = event.target.closest("[data-share]");
+if (!trigger) return;
+var action = trigger.dataset.share;
+var url = trigger.dataset.url;
+if (action === "copy") {
+navigator.clipboard.writeText(url).catch(function() {});
+}
+if (action === "facebook") {
+window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
+}
+if (action === "whatsapp") {
+window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
+}
+if (action === "x") {
+window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
+}
+if (action === "bluesky") {
+window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
+}
+if (action === "email") {
+window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);
+}
+});
+</script>
+<script defer src="/assets/js/article-comments.js"></script>
+<script defer src="/assets/js/cookie-consent.js"></script>
+<script defer src="/assets/ads.js"></script>
 </body>
 </html>
