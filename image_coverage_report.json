@@ -2,7 +2,7 @@
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
     "kept_cards": 18,
-    "cards_library": 0,
+    "cards_library": 1,
     "cards_generated": 13,
     "skipped": 0
   },
@@ -17,14 +17,14 @@
     {
       "slug": "tram-services-disrupted-on-rochdale-line-this-saturday",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/adf6fe0425e3e4c13c.jpg",
+      "image_url": "assets/img/cards/tram-services-disrupted-on-rochdale-line-this-saturday-canonical.jpg",
       "matched_filename": "",
       "match_score": null
     },
     {
       "slug": "rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton.jpg",
+      "image_url": "",
       "matched_filename": "",
       "match_score": null
     },
@@ -71,6 +71,13 @@
       "match_score": null
     },
     {
+      "slug": "rochdale-sees-rise-in-avoidable-deaths-linked-to-alcohol-drugs-and-smoking",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/rochdale-sees-rise-in-avoidable-deaths-linked-to-alcohol-drugs-and-smoking-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "elite-hand-car-wash-in-rochdale-fined-for-minimum-wage-violations",
       "result": "kept-cards",
       "image_url": "assets/img/cards/elite-hand-car-wash-in-rochdale-fined-for-minimum-wage-violations-generated-card.jpg",
@@ -101,7 +108,7 @@
     {
       "slug": "rochdale-afc-s-matchday-programme-returns-for-gillingham-fixture",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/2576ab7c3e5e081a6c.jpg",
+      "image_url": "assets/img/cards/rochdale-afc-s-matchday-programme-returns-for-gillingham-fixture-canonical.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -115,16 +122,16 @@
     {
       "slug": "rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy.jpg",
+      "image_url": "",
       "matched_filename": "",
       "match_score": null
     },
     {
       "slug": "five-lamborghinis-and-a-mercedes-seized-following-dangerous-driving-reports-on-m",
-      "result": "kept-existing",
+      "result": "cards-library",
       "image_url": "assets/img/cards/five-lamborghinis-and-a-mercedes-seized-following-dangerous-driving-reports-on-m.jpg",
-      "matched_filename": "",
-      "match_score": null
+      "matched_filename": "five-lamborghinis-and-a-mercedes-seized-following-dangerous-driving-reports-on-m.jpg",
+      "match_score": 20880
     },
     {
       "slug": "rochdale-sees-rise-in-teenagers-seeking-treatment-for-addiction",
@@ -136,14 +143,14 @@
     {
       "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+      "image_url": "",
       "matched_filename": "",
       "match_score": null
     },
     {
       "slug": "rochdale-residents-urged-to-check-voter-registration-ahead-of-may-2027-elections",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-residents-urged-to-check-voter-registration-ahead-of-may-2027-elections.jpg",
+      "image_url": "",
       "matched_filename": "",
       "match_score": null
     },
