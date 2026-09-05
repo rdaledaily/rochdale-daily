@@ -1,20 +1,20 @@
 {
-  "last_run_at": "2026-09-05T23:04:18.708417Z",
-  "raw_candidates_before_job_filter": 80,
+  "last_run_at": "2026-09-05T23:14:05.004753Z",
+  "raw_candidates_before_job_filter": 79,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 80,
+  "raw_candidates": 79,
   "candidate_clusters": 40,
   "google_news_resolution": {
     "wrappers": 54,
     "resolved": 51,
-    "text_recovered": 28,
-    "reattributed": 13,
-    "images_found": 40
+    "text_recovered": 26,
+    "reattributed": 9,
+    "images_found": 35
   },
-  "duplicates_merged": 40,
+  "duplicates_merged": 39,
   "attempted_rewrites": 31,
   "new_articles": 0,
-  "live_articles": 22,
+  "live_articles": 21,
   "skipped": 31,
   "rewrite_skip_reasons": {
     "OpenAI: all 4 attempts failed (RateLimitError)": 30,
@@ -24,7 +24,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 66,
+    "rss_and_google_news": 65,
     "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 6,
@@ -36,7 +36,7 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 10,
+    "Rochdale Times": 11,
     "Rochdale Borough Council": 9,
     "InYourArea": 6,
     "Northern live service updates": 6,
@@ -46,10 +46,8 @@
     "The Manc": 3,
     "Rochdale Valiant": 3,
     "Ofsted": 3,
-    "Hertsad": 2,
-    "Uk": 2,
+    "Herts Advertiser": 2,
     "The Northern Echo": 2,
-    "Fansnetwork": 2,
     "Ke": 2,
     "Sky Sports": 2,
     "Kent Online": 2,
@@ -57,10 +55,12 @@
     "Yahoo News UK": 2,
     "Secret Manchester": 2,
     "Rochdale Borough Council RSS": 1,
+    "ManchesterWorld": 1,
     "TNT Sports": 1,
     "Lancashire Telegraph": 1,
+    "Fansnetwork": 1,
     "Manchester Evening News": 1,
-    "Greater Manchester Police": 1,
+    "Uk": 1,
     "Northern Service Updates": 1,
     "Food Standards Agency": 1
   },
@@ -83,7 +83,7 @@
     "events": 7,
     "health": 1,
     "news": 2,
-    "sport": 3,
+    "sport": 2,
     "traffic": 1,
     "transport": 2
   },
@@ -894,7 +894,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 28,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1323404216?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323596280?-57568:46921",
     "https://c.newsnow.co.uk/A/1323592807?-57568:46921",
     "https://c.newsnow.co.uk/A/1323587052?-57568:46921",
     "https://c.newsnow.co.uk/A/1323577777?-57568:46921",
@@ -913,23 +913,19 @@
     "https://c.newsnow.co.uk/A/1323366127?-57568:46921",
     "https://c.newsnow.co.uk/A/1323300805?-57568:46921",
     "https://c.newsnow.co.uk/A/1323295075?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323430101?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323390483?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323396248?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323394680?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323528512?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323596280?-57568:46921",
     "https://c.newsnow.co.uk/A/1323597777?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323390483?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323430101?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323396248?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323528512?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323394680?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323404216?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMikAFBVV95cUxOSnNLR1ExUDRoR1JqRFd6N1Y3T2NNeVQ1VFZLNFcycVdZdVJIXzJLTkdLQU5PSDNLaE9aYm1tU0tmRHNxUTZmcDcwdUVhOFEwdUgwSUVhcUN6bEZOZEt2dUdPMlFqSXFEUUJsb0lvTE9QTTZzY1BUeXNlcW1FWVR1X0U5N3BhdWRvUHM1bW9uZkM?oc=5"
   ],
   "slow_domain_failure_threshold": 2,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 8
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -963,7 +959,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-05T23:08:31.257932Z",
+  "frontpage_generated_at": "2026-09-05T23:18:03.761807Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1014,17 +1010,17 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "education": 1,
+      "transport": 1,
       "crime": 1,
       "traffic": 1,
-      "transport": 1,
+      "education": 1,
       "sport": 2,
       "business": 2,
       "news": 2
     },
     "selected_by_ward": {
-      "borough-wide": 8,
-      "Central Rochdale": 2
+      "Central Rochdale": 2,
+      "borough-wide": 8
     },
     "selected_by_area": {
       "healey": 1,
@@ -1033,10 +1029,10 @@
       "rochdale": 10
     },
     "selected_by_source": {
-      "journal of linguistic geography (dann et al., 2024)": 1,
+      "tfgm travel alerts": 1,
       "rochdale times": 2,
       "rochdale borough council": 1,
-      "tfgm travel alerts": 1,
+      "journal of linguistic geography (dann et al., 2024)": 1,
       "rochdale afc": 2,
       "source": 1,
       "manchesterworld": 1,
@@ -1056,11 +1052,11 @@
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
   "ticket_events_collected_this_run": 8,
-  "events_removed_other_source": 8,
+  "events_removed_other_source": 7,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 8,
-  "event_dates_corrected_from_ledger": 0,
+  "event_dates_corrected_from_ledger": 3,
   "duplicate_articles_after_postprocessing": 152,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
