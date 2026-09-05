@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 160,
-  "published_count": 160,
+  "article_count": 157,
+  "published_count": 157,
   "category_change_count": 18,
-  "image_change_count": 20,
+  "image_change_count": 18,
   "category_changes": [
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -138,11 +138,11 @@
       "slug": "rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton",
       "title": "Rochdale Borough Council Set to Acquire Warwick Mill in Middleton",
       "category": "business",
-      "reason": "cached/library image lacks canonical/source provenance",
+      "reason": "uncanonical img fallback exists while image_url is empty",
       "before": {
-        "image_url": "assets/img/cards/rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton.jpg",
+        "image_url": "",
         "img": "assets/img/cards/rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton.jpg",
-        "status": "cards-library-photo"
+        "status": "source-photo-cached"
       },
       "after": "assets/img/cards/rochdale-borough-council-set-to-acquire-warwick-mill-in-middleton-generated-card.jpg"
     },
@@ -171,6 +171,18 @@
       "after": "assets/img/cards/new-12-million-storage-world-building-planned-for-old-hall-street-in-middleton-generated-card.jpg"
     },
     {
+      "slug": "rochdale-afc-s-matchday-programme-returns-for-gillingham-fixture",
+      "title": "Rochdale AFC Launches Matchday Programme for Gillingham Fixture",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-s-matchday-programme-returns-for-gillingham-fixture-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-to-host-gillingham-in-search-of-first-win-of-the-season",
       "title": "Rochdale Set to Face Gillingham in Search of First Win of the Season",
       "category": "sport",
@@ -186,11 +198,11 @@
       "slug": "rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy",
       "title": "Rochdale's Year as Town of Culture Generates Over £5.5 Million for Local Economy",
       "category": "politics",
-      "reason": "cached/library image lacks canonical/source provenance",
+      "reason": "uncanonical img fallback exists while image_url is empty",
       "before": {
-        "image_url": "assets/img/cards/rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy.jpg",
+        "image_url": "",
         "img": "assets/img/cards/rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy.jpg",
-        "status": "cards-library-photo"
+        "status": "source-photo-cached"
       },
       "after": "assets/img/cards/rochdale-s-year-as-town-of-culture-generates-over-5-5-million-for-local-economy-generated-card.jpg"
     },
@@ -208,51 +220,15 @@
     },
     {
       "slug": "new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale",
-      "title": "Denehurst House Café Opens in Rochdale Park, Run by Veterans",
+      "title": "Denehurst Park café opens in restored Victorian manor house on September 5",
       "category": "business",
-      "reason": "cached/library image lacks canonical/source provenance",
+      "reason": "uncanonical img fallback exists while image_url is empty",
       "before": {
-        "image_url": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
+        "image_url": "",
         "img": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale.jpg",
-        "status": "cards-library-photo"
+        "status": "source-photo-cached"
       },
       "after": "assets/img/cards/new-caf-run-by-veterans-opens-in-restored-denehurst-house-rochdale-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-residents-urged-to-check-voter-registration-ahead-of-may-2027-elections",
-      "title": "Rochdale Residents Urged to Check Voter Registration Ahead of May 2027 Elections",
-      "category": "politics",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale-residents-urged-to-check-voter-registration-ahead-of-may-2027-elections.jpg",
-        "img": "assets/img/cards/rochdale-residents-urged-to-check-voter-registration-ahead-of-may-2027-elections.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-residents-urged-to-check-voter-registration-ahead-of-may-2027-elections-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-council-rejects-late-night-car-wash-proposal-on-kingsway",
-      "title": "Rochdale Council Rejects Late-Night Car Wash Proposal on Kingsway",
-      "category": "environment",
-      "reason": "weak filename image match score 8127; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/traffic.jpg",
-        "img": "assets/img/cards/traffic.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-council-rejects-late-night-car-wash-proposal-on-kingsway-generated-card.jpg"
-    },
-    {
-      "slug": "jamie-robinson-to-referee-rochdale-s-match-against-gillingham",
-      "title": "Jamie Robinson to Referee Rochdale's Match Against Gillingham",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/match.jpg",
-        "img": "assets/img/cards/match.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/jamie-robinson-to-referee-rochdale-s-match-against-gillingham-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
