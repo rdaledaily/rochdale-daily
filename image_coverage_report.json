@@ -1,16 +1,23 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 18,
+    "kept_cards": 19,
     "cards_library": 0,
-    "cards_generated": 11,
+    "cards_generated": 13,
     "skipped": 0
   },
   "items": [
     {
+      "slug": "why-rochdale-says-cruckle",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/why-rochdale-says-cruckle-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "tram-services-disrupted-on-rochdale-line-this-saturday",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/tram-services-disrupted-on-rochdale-line-this-saturday-canonical.jpg",
+      "image_url": "assets/img/generated/adf6fe0425e3e4c13c.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -25,6 +32,20 @@
       "slug": "rochdale-afc-partners-with-financial-solutions-to-enhance-financial-management",
       "result": "kept-existing",
       "image_url": "assets/img/cards/rochdale-afc-partners-with-financial-solutions-to-enhance-financial-management-canonical.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "man-arrested-in-rochdale-town-centre-while-wearing-balaclava",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/police.jpg",
+      "matched_filename": "police.jpg",
+      "match_score": 8126
+    },
+    {
+      "slug": "charlie-tasker-discusses-his-first-goal-aspirations-for-rochdale-afc",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/7a0d5be5e97f2be14e.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -169,6 +190,13 @@
       "match_score": 15126
     },
     {
+      "slug": "rock-classics-by-candlelight-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 8378
+    },
+    {
       "slug": "ellie-sax-endless-summer-tour-2026",
       "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
@@ -179,13 +207,6 @@
       "slug": "oktoberfest-rochdale-2026",
       "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2026-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "monsters-of-rock-halloween-special-2026",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
