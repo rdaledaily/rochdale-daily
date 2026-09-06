@@ -1,38 +1,36 @@
 {
-  "examined_at": "2026-09-05T10:54:54.613270Z",
+  "examined_at": "2026-09-06T11:20:22.601458Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 162,
+  "candidates_examined": 113,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 100,
-    "would publish": 44,
-    "duplicate of published story": 18
+    "would publish": 61,
+    "age": 51,
+    "not local": 1
   },
-  "would_publish": 44,
+  "would_publish": 61,
   "age_gate_sensitivity": {
-    "6h": 8,
-    "14h": 12,
-    "24h": 26,
+    "6h": 3,
+    "14h": 6,
+    "24h": 39,
     "48h": 62,
-    "72h": 76,
-    "168h": 162
+    "72h": 100,
+    "168h": 113
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 63 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "TfGM Travel Alerts: Travel alerts",
-      "TfGM Travel Alerts: Travel alerts"
+      "Rochdale Times: £5.2m to fill borough’s potholes - Rochdale Times",
+      "Sky Sports: Rochdale 1-4 Gillingham - Sky Sports"
     ],
-    "duplicate of published story": [
-      "Rochdale Valiant: Rochdale Valiant: News and Media",
-      "Rochdale Valiant: Rochdale Valiant: News and Media",
-      "Rochdale Valiant: Rochdale Valiant: News and Media"
+    "not local": [
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "age": [
-      "Rochdale AFC: TVOS Preview | Gillingham (H) - Rochdale AFC",
-      "Rochdale AFC: Youth Team Edged Out In 7-Goal Thriller - rochdaleafc.co.uk",
-      "Ilovemanchester: How Manchester's 'Town of Culture' brought in more than £5.5m over the"
+      "ManchesterWorld: 'Something dangerous' fed to Rochdale horse by campers, owner says - M",
+      "manchesterworld.uk: 'Something dangerous' fed to Rochdale horse by campers, owner says - m",
+      "Metro: Horse left close to death after being fed harmful 'human food' by camp"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
