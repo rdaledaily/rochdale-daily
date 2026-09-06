@@ -1,20 +1,20 @@
 {
-  "last_run_at": "2026-09-06T14:53:04.069201Z",
-  "raw_candidates_before_job_filter": 68,
+  "last_run_at": "2026-09-06T15:04:02.839471Z",
+  "raw_candidates_before_job_filter": 62,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 68,
+  "raw_candidates": 62,
   "candidate_clusters": 28,
   "google_news_resolution": {
-    "wrappers": 27,
-    "resolved": 27,
-    "text_recovered": 16,
-    "reattributed": 8,
+    "wrappers": 37,
+    "resolved": 34,
+    "text_recovered": 15,
+    "reattributed": 5,
     "images_found": 24
   },
-  "duplicates_merged": 40,
+  "duplicates_merged": 34,
   "attempted_rewrites": 23,
   "new_articles": 0,
-  "live_articles": 12,
+  "live_articles": 11,
   "skipped": 23,
   "rewrite_skip_reasons": {
     "OpenAI: all 4 attempts failed (RateLimitError)": 22,
@@ -24,8 +24,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 54,
-    "website_discovery": 7,
+    "rss_and_google_news": 51,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -36,8 +36,8 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 16,
-    "Rochdale Borough Council": 7,
+    "Rochdale Times": 10,
+    "Rochdale Borough Council": 6,
     "Roch Valley Radio": 4,
     "business-live.co.uk": 4,
     "Jp": 4,
@@ -45,15 +45,15 @@
     "Sky Sports": 3,
     "Rochdale Valiant": 3,
     "Herts Advertiser": 2,
-    "Manchester Evening News": 2,
+    "manchestereveningnews.co.uk": 2,
     "The Northern Echo": 2,
-    "Inyourarea": 2,
+    "InYourArea": 2,
+    "TNT Sports": 2,
     "Kent Online": 2,
     "Express and Star": 2,
     "Ofsted": 2,
     "Rochdale Borough Council RSS": 1,
     "Rochdale AFC": 1,
-    "Tntsports": 1,
     "Richmond & Twickenham Times": 1,
     "Secret Manchester": 1,
     "Uk": 1,
@@ -74,7 +74,6 @@
   },
   "published_by_category": {
     "business": 1,
-    "crime": 1,
     "education": 1,
     "events": 7,
     "sport": 1,
@@ -856,7 +855,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 28,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1323404216?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323256509?-57568:46921",
     "https://c.newsnow.co.uk/A/1323621146?-57568:46921",
     "https://c.newsnow.co.uk/A/1323597777?-57568:46921",
     "https://c.newsnow.co.uk/A/1323596280?-57568:46921",
@@ -875,19 +874,23 @@
     "https://c.newsnow.co.uk/A/1323416863?-57568:46921",
     "https://c.newsnow.co.uk/A/1323399104?-57568:46921",
     "https://c.newsnow.co.uk/A/1323396247?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323528512?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323430101?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323394680?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323256509?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323396248?-57568:46921",
     "https://c.newsnow.co.uk/A/1323635358?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323430101?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323528512?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323394680?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323396248?-57568:46921",
     "https://c.newsnow.co.uk/A/1323390483?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323404216?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMikAFBVV95cUxOSnNLR1ExUDRoR1JqRFd6N1Y3T2NNeVQ1VFZLNFcycVdZdVJIXzJLTkdLQU5PSDNLaE9aYm1tU0tmRHNxUTZmcDcwdUVhOFEwdUgwSUVhcUN6bEZOZEt2dUdPMlFqSXFEUUJsb0lvTE9QTTZzY1BUeXNlcW1FWVR1X0U5N3BhdWRvUHM1bW9uZkM?oc=5"
   ],
   "slow_domain_failure_threshold": 2,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 13
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -921,20 +924,18 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-06T14:54:35.465825Z",
+  "frontpage_generated_at": "2026-09-06T15:05:32.951150Z",
   "frontpage_article_count": 2,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
       "business",
-      "crime",
       "education",
       "sport",
       "transport"
     ],
     "selected_categories": [
       "business",
-      "crime",
       "education",
       "sport",
       "transport"
@@ -964,14 +965,14 @@
     },
     "selected_by_area": {
       "middleton": 1,
-      "rochdale": 4
+      "rochdale": 3
     },
     "selected_by_source": {
       "journal of linguistic geography (dann et al., 2024)": 1,
       "source": 1
     },
-    "pool_size": 5,
-    "primary_pool_size": 4,
+    "pool_size": 4,
+    "primary_pool_size": 3,
     "fallback_stories_used": 1,
     "selection_window_days": 4,
     "frontpage_count": 2,
@@ -989,7 +990,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 8,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 142,
+  "duplicate_articles_after_postprocessing": 141,
   "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
