@@ -1,57 +1,41 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="index,follow,max-image-preview:large">
-  <title>Homelessness, addiction and the cruelty of public condemnation | Rochdale Daily</title>
-  <meta name="description" content="A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is...">
-  <link rel="canonical" href="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
-  <style>@import url('/assets/css/site.css');
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<title>Homelessness, addiction and the cruelty of public condemnation | Rochdale Daily</title>
+<meta name="description" content="A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is...">
+<link rel="canonical" href="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
+<style>@import url('/assets/css/site.css');
 
 /*
- * Article-page responsive safety layer.
- *
- * Static article pages are generated with this stylesheet embedded in the
- * document. The full site stylesheet remains the single source of truth and
- * is imported above; these rules only harden article pages against mobile
- * overflow and oversized desktop geometry.
- */
+* Article-page responsive safety layer.
+*
+* Static article pages are generated with this stylesheet embedded in the
+* document. The full site stylesheet remains the single source of truth and
+* is imported above; these rules only harden article pages against mobile
+* overflow and oversized desktop geometry.
+*/
 html,
 body {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+width: 100%;
+max-width: 100%;
+min-width: 0;
 }
 
 body {
-  overflow-x: hidden;
-}
-
-.utility,
-.masthead,
-.primary-nav,
-.breaking-bar,
-.page-shell,
-.site-footer {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.wrap,
-.article-body,
-.article-layout,
-.article-layout > *,
-.article-sidebar,
-.article-hero-image,
-.ad-slot,
-.sidebar-box {
-  min-width: 0;
-  max-width: 100%;
+overflow-x: hidden;
+}.utility,.masthead,.primary-nav,.breaking-bar,.page-shell,.site-footer {
+width: 100%;
+max-width: 100%;
+min-width: 0;
+}.wrap,.article-body,.article-layout,.article-layout > *,.article-sidebar,.article-hero-image,.ad-slot,.sidebar-box {
+min-width: 0;
+max-width: 100%;
 }
 
 img,
@@ -60,232 +44,179 @@ video,
 iframe,
 canvas,
 svg {
-  max-width: 100%;
-}
-
-.article-body,
-.article-body p,
-.article-body h1,
-.article-body h2,
-.article-body h3,
-.article-standfirst,
-.article-byline,
-.sidebar-box,
-.related-title {
-  overflow-wrap: anywhere;
-  word-break: normal;
+max-width: 100%;
+}.article-body,.article-body p,.article-body h1,.article-body h2,.article-body h3,.article-standfirst,.article-byline,.sidebar-box,.related-title {
+overflow-wrap: anywhere;
+word-break: normal;
 }
 
 /* A fixed 300px MREC is safe on most phones, but must still shrink on a
-   narrow viewport rather than making the whole document wider. */
-.ad-slot-mrec {
-  width: min(300px, 100%);
-  max-width: 100%;
+narrow viewport rather than making the whole document wider. */.ad-slot-mrec {
+width: min(300px, 100%);
+max-width: 100%;
 }
 
 /* Long source URLs, embeds and preformatted material must never dictate the
-   width of the page. */
-.article-body table,
-.article-body pre,
-.article-body code,
-.article-body iframe,
-.article-body blockquote {
-  max-width: 100%;
+width of the page. */.article-body table,.article-body pre,.article-body code,.article-body iframe,.article-body blockquote {
+max-width: 100%;
+}.article-body pre {
+overflow-x: auto;
 }
 
-.article-body pre {
-  overflow-x: auto;
+@media (max-width: 860px) {.article-layout {
+grid-template-columns: minmax(0, 1fr);
+gap: 24px;
+}.article-sidebar {
+position: static;
+width: 100%;
+}
 }
 
-@media (max-width: 860px) {
-  .article-layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-
-  .article-sidebar {
-    position: static;
-    width: 100%;
-  }
+@media (max-width: 620px) {.wrap {
+width: calc(100% - 24px);
+max-width: 100%;
+}.masthead-row {
+min-height: 96px;
+grid-template-columns: minmax(0, 1fr) auto;
+gap: 8px;
+}.brand,.masthead-actions {
+min-width: 0;
+max-width: 100%;
+}.brand-logo {
+width: min(215px, 58vw);
+max-width: 100%;
+}.article-body {
+width: 100%;
+padding: 20px 16px 36px;
+}.article-body h1 {
+font-size: clamp(30px, 9vw, 40px);
+line-height: 1.04;
+letter-spacing: -0.4px;
+}.article-standfirst {
+font-size: 17px;
+line-height: 1.42;
+}.article-share {
+gap: 8px;
+flex-wrap: wrap;
+}.share-icon-button {
+width: 42px;
+height: 42px;
+}.ad-slot-leaderboard,.ad-slot-incontent,.ad-slot-mrec,.ad-slot.ad-live,.ad-slot.ad-live > a,.ad-slot.ad-live img {
+width: 100%;
+max-width: 100%;
+height: auto;
+}.article-hero-image img {
+width: 100%;
+height: auto;
+}
 }
 
-@media (max-width: 620px) {
-  .wrap {
-    width: calc(100% - 24px);
-    max-width: 100%;
-  }
-
-  .masthead-row {
-    min-height: 96px;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-  }
-
-  .brand,
-  .masthead-actions {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .brand-logo {
-    width: min(215px, 58vw);
-    max-width: 100%;
-  }
-
-  .article-body {
-    width: 100%;
-    padding: 20px 16px 36px;
-  }
-
-  .article-body h1 {
-    font-size: clamp(30px, 9vw, 40px);
-    line-height: 1.04;
-    letter-spacing: -0.4px;
-  }
-
-  .article-standfirst {
-    font-size: 17px;
-    line-height: 1.42;
-  }
-
-  .article-share {
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .share-icon-button {
-    width: 42px;
-    height: 42px;
-  }
-
-  .ad-slot-leaderboard,
-  .ad-slot-incontent,
-  .ad-slot-mrec,
-  .ad-slot.ad-live,
-  .ad-slot.ad-live > a,
-  .ad-slot.ad-live img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-  }
-
-  .article-hero-image img {
-    width: 100%;
-    height: auto;
-  }
+@media (max-width: 390px) {.article-body {
+padding-inline: 14px;
+}.article-body h1 {
+font-size: clamp(28px, 8.5vw, 36px);
+}.brand-logo {
+width: min(200px, 56vw);
 }
-
-@media (max-width: 390px) {
-  .article-body {
-    padding-inline: 14px;
-  }
-
-  .article-body h1 {
-    font-size: clamp(28px, 8.5vw, 36px);
-  }
-
-  .brand-logo {
-    width: min(200px, 56vw);
-  }
 }
 </style>
 
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Rochdale Daily">
-  <meta name="author" content="Rochdale Daily Newsdesk">
-  <meta name="keywords" content="Rochdale, Community, local news">
-  <meta property="og:title" content="Homelessness, addiction and the cruelty of public condemnation">
-  <meta property="og:description" content="A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is...">
-  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/homelessness.png">
-  <meta property="og:image:alt" content="Homelessness, addiction and the cruelty of public condemnation">
-  <meta property="og:url" content="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html">
-  <meta property="article:published_time" content="2026-08-14T18:46:00Z">
-  <meta property="article:modified_time" content="2026-08-14T18:46:00Z">
-  <meta property="article:section" content="Community">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Homelessness, addiction and the cruelty of public condemnation">
-  <meta name="twitter:description" content="A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is...">
-  <meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/cards/homelessness.png">
-  <meta name="twitter:image:alt" content="Homelessness, addiction and the cruelty of public condemnation">
-  <meta name="news_keywords" content="Rochdale, Community, local news">
-  <meta property="article:tag" content="Rochdale">
-  <meta property="article:tag" content="Community">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Rochdale Daily">
+<meta name="author" content="Rochdale Daily Newsdesk">
+<meta name="keywords" content="Rochdale, Community, local news">
+<meta property="og:title" content="Homelessness, addiction and the cruelty of public condemnation">
+<meta property="og:description" content="A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is...">
+<meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/homelessness.png">
+<meta property="og:image:alt" content="Homelessness, addiction and the cruelty of public condemnation">
+<meta property="og:url" content="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html">
+<meta property="article:published_time" content="2026-08-14T18:46:00Z">
+<meta property="article:modified_time" content="2026-08-14T18:46:00Z">
+<meta property="article:section" content="Community">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Homelessness, addiction and the cruelty of public condemnation">
+<meta name="twitter:description" content="A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is...">
+<meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/cards/homelessness.png">
+<meta name="twitter:image:alt" content="Homelessness, addiction and the cruelty of public condemnation">
+<meta name="news_keywords" content="Rochdale, Community, local news">
+<meta property="article:tag" content="Rochdale">
+<meta property="article:tag" content="Community">
 
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html#article", "headline": "Homelessness, addiction and the cruelty of public condemnation", "description": "A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is...", "image": [{"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/cards/homelessness.png", "caption": "Homelessness, addiction and the cruelty of public condemnation", "creditText": "Rochdale Daily illustration"}], "datePublished": "2026-08-14T18:46:00Z", "dateModified": "2026-08-14T18:46:00Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Community", "wordCount": 1946, "keywords": "Rochdale, Community, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html"}, "contentLocation": {"@type": "Place", "name": "Rochdale"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Community", "item": "https://rochdaledaily.co.uk/#community"}, {"@type": "ListItem", "position": 3, "name": "Homelessness, addiction and the cruelty of public condemnation", "item": "https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html"}]}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html#article", "headline": "Homelessness, addiction and the cruelty of public condemnation", "description": "A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is...", "image": [{"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/cards/homelessness.png", "caption": "Homelessness, addiction and the cruelty of public condemnation", "creditText": "Rochdale Daily illustration"}], "datePublished": "2026-08-14T18:46:00Z", "dateModified": "2026-08-14T18:46:00Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Community", "wordCount": 1946, "keywords": "Rochdale, Community, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html"}, "contentLocation": {"@type": "Place", "name": "Rochdale"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Community", "item": "https://rochdaledaily.co.uk/#community"}, {"@type": "ListItem", "position": 3, "name": "Homelessness, addiction and the cruelty of public condemnation", "item": "https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html"}]}]}</script>
 </head>
 <body>
-  <header class="masthead">
-    <div class="wrap masthead-row">
-      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">
-        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
-      </a>
-      <div class="masthead-actions">
-        <a class="header-button" href="../index.html">All stories</a>
-      </div>
-    </div>
-  </header>
+<header class="masthead">
+<div class="wrap masthead-row">
+<a class="brand" href="../index.html" aria-label="Rochdale Daily home">
+<img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
+</a>
+<div class="masthead-actions">
+<a class="header-button" href="../index.html">All stories</a>
+</div>
+</div>
+</header>
 
-  <div class="modal-card" style="margin:24px auto;box-shadow:none">
-    <div class="article-body">
-      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>
-      <div class="article-layout">
-        <div class="article-main">
-          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/community.html">Community</a></nav>
-          <span class="story-kicker">Community</span>
-          <h1>Homelessness, addiction and the cruelty of public condemnation</h1>
-          <p class="article-standfirst">A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is whether public humiliation solves anything at all.</p>
-          
-          <div class="article-byline">By Rochdale Daily Newsdesk</div>
-          <div class="article-share" aria-label="Share this article"><button class="share-icon-button brand-copy" type="button" data-share="copy" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" aria-label="Copy article link"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg><span class="visually-hidden">Copy link</span></button><button class="share-icon-button brand-facebook" type="button" data-share="facebook" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span class="visually-hidden">Facebook</span></button><button class="share-icon-button brand-whatsapp" type="button" data-share="whatsapp" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" data-title="Homelessness, addiction and the cruelty of public condemnation" aria-label="Share on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span class="visually-hidden">WhatsApp</span></button><button class="share-icon-button brand-x" type="button" data-share="x" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" data-title="Homelessness, addiction and the cruelty of public condemnation" aria-label="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span class="visually-hidden">X</span></button><button class="share-icon-button brand-bluesky" type="button" data-share="bluesky" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" data-title="Homelessness, addiction and the cruelty of public condemnation" aria-label="Share on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24 .213 24 3.883c0 .732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"/></svg><span class="visually-hidden">Bluesky</span></button><button class="share-icon-button brand-email" type="button" data-share="email" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" data-title="Homelessness, addiction and the cruelty of public condemnation" aria-label="Share by email"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg><span class="visually-hidden">Email</span></button></div>
-          <figure class="article-hero-image"><img src="https://rochdaledaily.co.uk/assets/img/cards/homelessness.png" alt="Homelessness, addiction and the cruelty of public condemnation" loading="eager" fetchpriority="high"><figcaption class="article-image-credit">Image: Rochdale Daily illustration</figcaption></figure>
-          <div class="article-copy"><p>There is a homeless man who regularly sits outside Tesco Express on Whitworth Road in Rochdale. He uses a wheelchair, has one leg, and appears to have longstanding problems with drug dependency. In recent days, photographs purporting to show him using drugs have been circulated in a local social-media group, accompanied by descriptions including ‘junkie’, ‘scruff’ and ‘down and out’, together with jokes about his disability.</p><p>Those comments deserve more scrutiny than the man they were aimed at.</p><p>It is entirely legitimate for residents to object to public drug use, theft, abusive behaviour or intimidation. It is legitimate for shop workers to expect protection at work. It is legitimate for parents to dislike exposing children to distressing scenes. But there is a clear moral distinction between criticising behaviour and publicly degrading a vulnerable person. Calling a homeless, disabled man a ‘scruff’ does not protect children. Making jokes about his missing leg does not reduce drug use. Posting photographs of him at what may be one of the lowest points of his life does not help shop staff, improve public safety or increase the likelihood that he enters treatment. It serves a different purpose: humiliation.</p><div class="ad-slot ad-slot-incontent" data-ad-slot="article-incontent" role="presentation" aria-hidden="true"></div></p><p>The ease with which some people have participated in that humiliation should trouble us.</p><p>The editor of Rochdale Daily has spoken to this man several times. In those encounters, he has not demanded money. He has generally asked for a drink, usually a chocolate milkshake. Other residents have independently described similar experiences. A Tesco worker has, by contrast, said that staff sometimes experience him as abusive. Both accounts may be true. Addiction, withdrawal, mental distress and homelessness do not produce consistent behaviour.</p><p>That does not make abuse acceptable. But neither does difficult behaviour grant the public permission to strip somebody of dignity.</p><p>During one conversation, the man said he had previously been prescribed methadone but stopped collecting it because he felt demeaned and discriminated against when attending the dispensing pharmacy. Rochdale Daily has not independently verified that account. When asked whether he would consider restarting treatment if his medication could be dispensed somewhere he felt able to attend, he said yes.</p><p>That exchange should matter more than a photograph. It suggests that beneath the visible disorder is a person who can still discuss treatment, medication and the possibility of changing his circumstances. Yet this is precisely the sort of person whom public discussion can rapidly reduce to a caricature. Once the word ‘junkie’ has been applied, the individual disappears and only the label remains. That is not analysis. It is intellectual laziness.</p><p>Addiction is not a mysterious condition. It is extensively studied, medically recognised and strongly associated with homelessness, trauma, mental ill-health and social exclusion. National treatment statistics show that among people entering treatment for opiate problems in England in 2024–25, 41 per cent had no home of their own and 10 per cent were sleeping rough. Government research into rough sleeping published in 2025 found that 54 per cent of respondents reported a drug or alcohol misuse need during the preceding year.</p><p>These figures do not excuse criminal or antisocial behaviour. They do, however, make a mockery of the idea that addiction can be solved by simply telling somebody to ‘sort themselves out’. A person who is homeless must try to recover without privacy, stability, reliable sleep, secure storage, regular meals or often even basic hygiene. They may need to attend treatment, collect prescriptions, keep appointments, manage benefits, maintain identification documents and navigate housing applications while sleeping outside. To describe failure under those conditions as proof of moral inferiority is not toughness. It is ignorance.</p><p>One comment in the local discussion suggested that drug users should do these things ‘behind their own doors’. That statement is revealing precisely because the man in question does not have one.</p><p>Most people have the privilege of experiencing their worst behaviour privately. They can drink too much behind curtains, suffer mental-health crises in bedrooms, argue with family in kitchens, withdraw from medication under a duvet or make disastrous decisions without a stranger photographing them. A rough sleeper does not have a private sphere. His bedroom is public. His living room is public. His breakdowns are public. His addiction is public. And then the same society that has left him without a private space condemns him for failing to keep his problems out of sight. There is something deeply incoherent about that.</p><p>The man&#x27;s disability makes the tone of some comments particularly ugly. Government research published in 2025 found that 80 per cent of people surveyed while sleeping rough reported a longstanding physical impairment, illness or disability. Yet a local discussion about a homeless man with one leg included jokes about his wheelchair. There is no serious public-interest argument for that. It is not community safety. It is not concern for children. It is not anger about shoplifting. It is mockery of disability, and adults should be capable of naming that for what it is.</p><p>The same applies to language such as ‘scruff’ and ‘down and out’. Such terms do not describe conduct; they reduce a person to a social category deemed beneath respect. The implication is that once somebody becomes sufficiently poor, addicted or visibly disordered, ordinary standards of human decency no longer apply to the way we speak about them. That proposition should be rejected. A person&#x27;s entitlement to dignity cannot depend upon whether they are pleasant enough, clean enough, sober enough or useful enough to satisfy strangers on Facebook.</p><p>Rochdale also needs to confront the practical context. The borough is already under intense housing pressure. Under Places for Everyone, Rochdale&#x27;s housing requirement for 2025 to 2030 is 616 homes per year. Council material from 2025 recorded 7,681 applicants on the housing register, while more recent council reporting has referred to approximately 20,000 people relying upon the register and nearly 7,500 meeting statutory ‘reasonable preference’ criteria. Rochdale Council declared a housing emergency in 2023.</p><p>So the instruction often directed at people like this man is effectively the following: become sober, become stable, engage with treatment, organise your paperwork, maintain appointments, secure benefits and compete for scarce housing, all while sleeping outside and managing a major physical disability. That is not impossible. But anyone describing it as simple has probably never attempted anything remotely comparable.</p><p>There are also legal considerations when photographs and allegations are published online. Taking a photograph in a public place is not automatically unlawful, and Rochdale Daily is not suggesting otherwise. Identifiable images can, depending on context, constitute personal data, while publishing a photograph alongside a serious allegation of criminal behaviour raises separate legal questions.</p><p>The Defamation Act 2013 provides protection against statements that cause or are likely to cause serious reputational harm. Truth may be a defence, but that is different from saying that anything alleged on social media is lawful merely because the publisher believes it. If an identifiable photograph is accompanied by an assertion that a person is committing a criminal offence, the publisher should be in a position to substantiate what is being alleged. Rochdale Daily is therefore not independently stating that the man was consuming a Class A drug based solely on photographs and comments circulated online.</p><p>There is an additional point that some contributors may wish to consider before reaching for the camera. Vulnerability does not make somebody public property. The fact that a person&#x27;s suffering occurs on a pavement does not create an entitlement to turn it into entertainment, gossip or a community spectacle. There may be circumstances in which photographing suspected criminal behaviour serves a legitimate evidential purpose. There is a substantial difference between preserving evidence for police and distributing an image among neighbours so that strangers can compete to produce the most contemptuous description of the person depicted. One is potentially evidence gathering. The other can become a form of public shaming.</p><p>And public shaming has a cost. If a person already believes that institutions regard him as worthless, if he already feels humiliated collecting treatment, if strangers photograph him and hundreds of neighbours discuss whether he is a ‘scruff’, then it should not surprise anyone if disengagement, isolation and further drug use follow. People sometimes ask why addicts do not seek help while simultaneously creating a social environment in which admitting addiction results in contempt. They demand recovery while reinforcing shame. They demand engagement while making the person feel despised. They demand that somebody rejoin society while making it clear that society would rather not look at them. Those positions are difficult to reconcile.</p><p>There is also a tendency to present compassion as naïveté. Those who have defended the man have been dismissed as ‘Karens’ or ‘do gooders’, as though refusing to join in public degradation demonstrates some failure to understand the realities of addiction. The opposite may be true. It requires very little sophistication to dislike someone behaving badly in public. It requires considerably more maturity to condemn the behaviour without enjoying the destruction of the person.</p><p>Compassion does not mean giving unlimited money to somebody with an addiction. It does not mean ignoring theft. It does not mean expecting retail workers to endure abuse. It does not mean pretending crack cocaine is harmless. It means retaining the ability to distinguish a human being from his worst behaviour. That distinction is central to every serious approach to rehabilitation.</p><p>If society genuinely wants people to recover from addiction, then those people must eventually be able to imagine themselves as something other than an addict. If every interaction reinforces that they are disgusting, worthless and permanently defined by their dependency, society should not be surprised when they behave as though there is little left to recover.</p><p>Rochdale Council lists homelessness support, drug and alcohol treatment and specialist services including Turning Point. Those services are important, but complex cases require coordination. A homeless person with a major physical disability and drug dependency may simultaneously require healthcare, treatment, medication management, benefits assistance, housing support and persistent outreach. That is difficult work. Writing ‘absolute scruff’ beneath a photograph is considerably easier. Perhaps that is part of its appeal. It allows people to experience the satisfaction of condemning a social problem without undertaking any of the difficult work involved in solving it.</p><p>There is a legitimate debate to be had about public drug use in Rochdale. There is a legitimate debate about homelessness, shoplifting, antisocial behaviour, policing, treatment capacity and the availability of supported accommodation. Those are serious subjects. Wheelchair jokes are not. Photographing a visibly vulnerable disabled man for the purpose of ridicule is not. Describing somebody at the lowest point of his life as though he were vermin contributes nothing whatsoever to the safety or wellbeing of Rochdale.</p><p>Residents are entitled to expect streets that are safe and usable. Tesco staff are entitled to work without abuse. Children should not have to encounter dangerous drug paraphernalia. Police should deal with offences where offences occur. But none of those propositions requires cruelty.</p><p>The question for Rochdale is not whether this man is admirable. He may not be. The question is whether a civilised community applies standards of dignity only to people whose lives are already in order. Most of the people commenting about him will eventually put their phones down and return home. They will have a bathroom, a bed, heating, a front door and somewhere to make their mistakes privately. He will still be outside. That difference should produce some humility.</p><p>If a community cannot look at a homeless, addicted, disabled man without turning his circumstances into entertainment, then there is more than one social problem on display. One is sitting on the pavement. The other is holding the camera.</p>
-          </div>
-          
-          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
-            <h3 style="margin:0 0 8px">Legal and editorial note</h3>
-            <p>This article was compiled from identified public sources and may be updated when further verified information becomes available.</p>
-            <p><strong>Right to reply:</strong> Right to reply: Tesco, Rochdale Borough Council, relevant treatment providers and anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.</p>
-            <p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>
-          </section>
-          
-          <section class="comments-section" id="comments-root" data-slug="homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road" data-category="community"></section>
-        </div>
-        <aside class="article-sidebar">
-          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
-          <div class="sidebar-box"><h3>Related local stories</h3><a class="related-story" href="81-year-old-man-left-outside-rochdale-infirmary-ten-hours.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/get-together-after-serving.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Is this how the NHS treats its own? 81-year-old man left outside Rochdale Infirmary for ten hours</span></a><a class="related-story" href="rochdale-men-walking-and-talking-group-mental-health.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-men-walking-and-talking-group-mental-health.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">One man became one walk – now Rochdale&#x27;s Men Walking and Talking group hopes others will join him</span></a><a class="related-story" href="rochdale-businesses-urged-to-back-denehurst-house-in-30-a-month-veterans-challen.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-businesses-urged-to-back-denehurst-house-in-30-a-month-veterans-challen-canonical.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale businesses urged to back Denehurst House in £30-a-month veterans challenge</span></a><a class="related-story" href="jen-daker-rochdale-personal-trainer-hybrid-hut-fitness.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/jen-daker-supplied-photo.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">From teaching assistant to PT: how Rochdale mum Jen Daker found the strongest version of herself</span></a></div>
-        </aside>
-      </div>
-    </div>
-  </div>
+<div class="modal-card" style="margin:24px auto;box-shadow:none">
+<div class="article-body">
+<div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>
+<div class="article-layout">
+<div class="article-main">
+<nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/community.html">Community</a></nav>
+<span class="story-kicker">Community</span>
+<h1>Homelessness, addiction and the cruelty of public condemnation</h1>
+<p class="article-standfirst">A disabled homeless man outside Tesco Express on Whitworth Road has become the subject of photographs, insults and jokes online. The harder question is whether public humiliation solves anything at all.</p>
 
-  <script>
-    document.addEventListener("click", function(event) {
-      var trigger = event.target.closest("[data-share]");
-      if (!trigger) return;
-      var action = trigger.dataset.share;
-      var url = trigger.dataset.url;
-      if (action === "copy") {
-        navigator.clipboard.writeText(url).catch(function() {});
-      }
-      if (action === "facebook") {
-        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "whatsapp") {
-        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "x") {
-        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "bluesky") {
-        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "email") {
-        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);
-      }
-    });
-      </script>
-  <script defer src="/assets/js/article-comments.js"></script>
-  <script defer src="/assets/js/cookie-consent.js"></script>
-  <script defer src="/assets/ads.js"></script>
+<div class="article-byline">By Rochdale Daily Newsdesk</div>
+<div class="article-share" aria-label="Share this article"><button class="share-icon-button brand-copy" type="button" data-share="copy" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" aria-label="Copy article link"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg><span class="visually-hidden">Copy link</span></button><button class="share-icon-button brand-facebook" type="button" data-share="facebook" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0.955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span class="visually-hidden">Facebook</span></button><button class="share-icon-button brand-whatsapp" type="button" data-share="whatsapp" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" data-title="Homelessness, addiction and the cruelty of public condemnation" aria-label="Share on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0.16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span class="visually-hidden">WhatsApp</span></button><button class="share-icon-button brand-x" type="button" data-share="x" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" data-title="Homelessness, addiction and the cruelty of public condemnation" aria-label="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span class="visually-hidden">X</span></button><button class="share-icon-button brand-bluesky" type="button" data-share="bluesky" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" data-title="Homelessness, addiction and the cruelty of public condemnation" aria-label="Share on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24.213 24 3.883c0.732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"/></svg><span class="visually-hidden">Bluesky</span></button><button class="share-icon-button brand-email" type="button" data-share="email" data-url="https://rochdaledaily.co.uk/articles/homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road.html" data-title="Homelessness, addiction and the cruelty of public condemnation" aria-label="Share by email"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg><span class="visually-hidden">Email</span></button></div>
+<figure class="article-hero-image"><img src="https://rochdaledaily.co.uk/assets/img/cards/homelessness.png" alt="Homelessness, addiction and the cruelty of public condemnation" loading="eager" fetchpriority="high"><figcaption class="article-image-credit">Image: Rochdale Daily illustration</figcaption></figure>
+<div class="article-copy"><p>There is a homeless man who regularly sits outside Tesco Express on Whitworth Road in Rochdale. He uses a wheelchair, has one leg, and appears to have longstanding problems with drug dependency. In recent days, photographs purporting to show him using drugs have been circulated in a local social-media group, accompanied by descriptions including ‘junkie’, ‘scruff’ and ‘down and out’, together with jokes about his disability.</p><p>Those comments deserve more scrutiny than the man they were aimed at.</p><p>It is entirely legitimate for residents to object to public drug use, theft, abusive behaviour or intimidation. It is legitimate for shop workers to expect protection at work. It is legitimate for parents to dislike exposing children to distressing scenes. But there is a clear moral distinction between criticising behaviour and publicly degrading a vulnerable person. Calling a homeless, disabled man a ‘scruff’ does not protect children. Making jokes about his missing leg does not reduce drug use. Posting photographs of him at what may be one of the lowest points of his life does not help shop staff, improve public safety or increase the likelihood that he enters treatment. It serves a different purpose: humiliation.</p><div class="ad-slot ad-slot-incontent" data-ad-slot="article-incontent" role="presentation" aria-hidden="true"></div></p><p>The ease with which some people have participated in that humiliation should trouble us.</p><p>The editor of Rochdale Daily has spoken to this man several times. In those encounters, he has not demanded money. He has generally asked for a drink, usually a chocolate milkshake. Other residents have independently described similar experiences. A Tesco worker has, by contrast, said that staff sometimes experience him as abusive. Both accounts may be true. Addiction, withdrawal, mental distress and homelessness do not produce consistent behaviour.</p><p>That does not make abuse acceptable. But neither does difficult behaviour grant the public permission to strip somebody of dignity.</p><p>During one conversation, the man said he had previously been prescribed methadone but stopped collecting it because he felt demeaned and discriminated against when attending the dispensing pharmacy. Rochdale Daily has not independently verified that account. When asked whether he would consider restarting treatment if his medication could be dispensed somewhere he felt able to attend, he said yes.</p><p>That exchange should matter more than a photograph. It suggests that beneath the visible disorder is a person who can still discuss treatment, medication and the possibility of changing his circumstances. Yet this is precisely the sort of person whom public discussion can rapidly reduce to a caricature. Once the word ‘junkie’ has been applied, the individual disappears and only the label remains. That is not analysis. It is intellectual laziness.</p><p>Addiction is not a mysterious condition. It is extensively studied, medically recognised and strongly associated with homelessness, trauma, mental ill-health and social exclusion. National treatment statistics show that among people entering treatment for opiate problems in England in 2024–25, 41 per cent had no home of their own and 10 per cent were sleeping rough. Government research into rough sleeping published in 2025 found that 54 per cent of respondents reported a drug or alcohol misuse need during the preceding year.</p><p>These figures do not excuse criminal or antisocial behaviour. They do, however, make a mockery of the idea that addiction can be solved by simply telling somebody to ‘sort themselves out’. A person who is homeless must try to recover without privacy, stability, reliable sleep, secure storage, regular meals or often even basic hygiene. They may need to attend treatment, collect prescriptions, keep appointments, manage benefits, maintain identification documents and navigate housing applications while sleeping outside. To describe failure under those conditions as proof of moral inferiority is not toughness. It is ignorance.</p><p>One comment in the local discussion suggested that drug users should do these things ‘behind their own doors’. That statement is revealing precisely because the man in question does not have one.</p><p>Most people have the privilege of experiencing their worst behaviour privately. They can drink too much behind curtains, suffer mental-health crises in bedrooms, argue with family in kitchens, withdraw from medication under a duvet or make disastrous decisions without a stranger photographing them. A rough sleeper does not have a private sphere. His bedroom is public. His living room is public. His breakdowns are public. His addiction is public. And then the same society that has left him without a private space condemns him for failing to keep his problems out of sight. There is something deeply incoherent about that.</p><p>The man's disability makes the tone of some comments particularly ugly. Government research published in 2025 found that 80 per cent of people surveyed while sleeping rough reported a longstanding physical impairment, illness or disability. Yet a local discussion about a homeless man with one leg included jokes about his wheelchair. There is no serious public-interest argument for that. It is not community safety. It is not concern for children. It is not anger about shoplifting. It is mockery of disability, and adults should be capable of naming that for what it is.</p><p>The same applies to language such as ‘scruff’ and ‘down and out’. Such terms do not describe conduct; they reduce a person to a social category deemed beneath respect. The implication is that once somebody becomes sufficiently poor, addicted or visibly disordered, ordinary standards of human decency no longer apply to the way we speak about them. That proposition should be rejected. A person's entitlement to dignity cannot depend upon whether they are pleasant enough, clean enough, sober enough or useful enough to satisfy strangers on Facebook.</p><p>Rochdale also needs to confront the practical context. The borough is already under intense housing pressure. Under Places for Everyone, Rochdale's housing requirement for 2025 to 2030 is 616 homes per year. Council material from 2025 recorded 7,681 applicants on the housing register, while more recent council reporting has referred to approximately 20,000 people relying upon the register and nearly 7,500 meeting statutory ‘reasonable preference’ criteria. Rochdale Council declared a housing emergency in 2023.</p><p>So the instruction often directed at people like this man is effectively the following: become sober, become stable, engage with treatment, organise your paperwork, maintain appointments, secure benefits and compete for scarce housing, all while sleeping outside and managing a major physical disability. That is not impossible. But anyone describing it as simple has probably never attempted anything remotely comparable.</p><p>There are also legal considerations when photographs and allegations are published online. Taking a photograph in a public place is not automatically unlawful, and Rochdale Daily is not suggesting otherwise. Identifiable images can, depending on context, constitute personal data, while publishing a photograph alongside a serious allegation of criminal behaviour raises separate legal questions.</p><p>The Defamation Act 2013 provides protection against statements that cause or are likely to cause serious reputational harm. Truth may be a defence, but that is different from saying that anything alleged on social media is lawful merely because the publisher believes it. If an identifiable photograph is accompanied by an assertion that a person is committing a criminal offence, the publisher should be in a position to substantiate what is being alleged. Rochdale Daily is therefore not independently stating that the man was consuming a Class A drug based solely on photographs and comments circulated online.</p><p>There is an additional point that some contributors may wish to consider before reaching for the camera. Vulnerability does not make somebody public property. The fact that a person's suffering occurs on a pavement does not create an entitlement to turn it into entertainment, gossip or a community spectacle. There may be circumstances in which photographing suspected criminal behaviour serves a legitimate evidential purpose. There is a substantial difference between preserving evidence for police and distributing an image among neighbours so that strangers can compete to produce the most contemptuous description of the person depicted. One is potentially evidence gathering. The other can become a form of public shaming.</p><p>And public shaming has a cost. If a person already believes that institutions regard him as worthless, if he already feels humiliated collecting treatment, if strangers photograph him and hundreds of neighbours discuss whether he is a ‘scruff’, then it should not surprise anyone if disengagement, isolation and further drug use follow. People sometimes ask why addicts do not seek help while simultaneously creating a social environment in which admitting addiction results in contempt. They demand recovery while reinforcing shame. They demand engagement while making the person feel despised. They demand that somebody rejoin society while making it clear that society would rather not look at them. Those positions are difficult to reconcile.</p><p>There is also a tendency to present compassion as naïveté. Those who have defended the man have been dismissed as ‘Karens’ or ‘do gooders’, as though refusing to join in public degradation demonstrates some failure to understand the realities of addiction. The opposite may be true. It requires very little sophistication to dislike someone behaving badly in public. It requires considerably more maturity to condemn the behaviour without enjoying the destruction of the person.</p><p>Compassion does not mean giving unlimited money to somebody with an addiction. It does not mean ignoring theft. It does not mean expecting retail workers to endure abuse. It does not mean pretending crack cocaine is harmless. It means retaining the ability to distinguish a human being from his worst behaviour. That distinction is central to every serious approach to rehabilitation.</p><p>If society genuinely wants people to recover from addiction, then those people must eventually be able to imagine themselves as something other than an addict. If every interaction reinforces that they are disgusting, worthless and permanently defined by their dependency, society should not be surprised when they behave as though there is little left to recover.</p><p>Rochdale Council lists homelessness support, drug and alcohol treatment and specialist services including Turning Point. Those services are important, but complex cases require coordination. A homeless person with a major physical disability and drug dependency may simultaneously require healthcare, treatment, medication management, benefits assistance, housing support and persistent outreach. That is difficult work. Writing ‘absolute scruff’ beneath a photograph is considerably easier. Perhaps that is part of its appeal. It allows people to experience the satisfaction of condemning a social problem without undertaking any of the difficult work involved in solving it.</p><p>There is a legitimate debate to be had about public drug use in Rochdale. There is a legitimate debate about homelessness, shoplifting, antisocial behaviour, policing, treatment capacity and the availability of supported accommodation. Those are serious subjects. Wheelchair jokes are not. Photographing a visibly vulnerable disabled man for the purpose of ridicule is not. Describing somebody at the lowest point of his life as though he were vermin contributes nothing whatsoever to the safety or wellbeing of Rochdale.</p><p>Residents are entitled to expect streets that are safe and usable. Tesco staff are entitled to work without abuse. Children should not have to encounter dangerous drug paraphernalia. Police should deal with offences where offences occur. But none of those propositions requires cruelty.</p><p>The question for Rochdale is not whether this man is admirable. He may not be. The question is whether a civilised community applies standards of dignity only to people whose lives are already in order. Most of the people commenting about him will eventually put their phones down and return home. They will have a bathroom, a bed, heating, a front door and somewhere to make their mistakes privately. He will still be outside. That difference should produce some humility.</p><p>If a community cannot look at a homeless, addicted, disabled man without turning his circumstances into entertainment, then there is more than one social problem on display. One is sitting on the pavement. The other is holding the camera.</p>
+</div>
+
+<section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
+<h3 style="margin:0 0 8px">Legal and editorial note</h3>
+<p>This article was compiled from identified public sources and may be updated when further verified information becomes available.</p>
+<p><strong>Right to reply:</strong> Right to reply: Tesco, Rochdale Borough Council, relevant treatment providers and anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.</p>
+<p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/accessibility.html">Accessibility</a> · <a href="#" data-cookie-settings>Cookie settings</a></p>
+</section>
+
+<section class="comments-section" id="comments-root" data-slug="homelessness-addiction-and-the-cruelty-of-public-condemnation-whitworth-road" data-category="community"></section>
+</div>
+<aside class="article-sidebar">
+<div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
+<div class="sidebar-box"><h3>Related local stories</h3><a class="related-story" href="81-year-old-man-left-outside-rochdale-infirmary-ten-hours.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/get-together-after-serving.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Is this how the NHS treats its own? 81-year-old man left outside Rochdale Infirmary for ten hours</span></a><a class="related-story" href="rochdale-men-walking-and-talking-group-mental-health.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-men-walking-and-talking-group-mental-health.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">One man became one walk – now Rochdale's Men Walking and Talking group hopes others will join him</span></a><a class="related-story" href="rochdale-businesses-urged-to-back-denehurst-house-in-30-a-month-veterans-challen.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-businesses-urged-to-back-denehurst-house-in-30-a-month-veterans-challen-canonical.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale businesses urged to back Denehurst House in £30-a-month veterans challenge</span></a><a class="related-story" href="jen-daker-rochdale-personal-trainer-hybrid-hut-fitness.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/jen-daker-supplied-photo.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">From teaching assistant to PT: how Rochdale mum Jen Daker found the strongest version of herself</span></a></div>
+</aside>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener("click", function(event) {
+var trigger = event.target.closest("[data-share]");
+if (!trigger) return;
+var action = trigger.dataset.share;
+var url = trigger.dataset.url;
+if (action === "copy") {
+navigator.clipboard.writeText(url).catch(function() {});
+}
+if (action === "facebook") {
+window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
+}
+if (action === "whatsapp") {
+window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
+}
+if (action === "x") {
+window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
+}
+if (action === "bluesky") {
+window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
+}
+if (action === "email") {
+window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);
+}
+});
+</script>
+<script defer src="/assets/js/article-comments.js"></script>
+<script defer src="/assets/js/cookie-consent.js"></script>
+<script defer src="/assets/ads.js"></script>
 </body>
 </html>
