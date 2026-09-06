@@ -1,30 +1,30 @@
 {
-  "last_run_at": "2026-09-06T15:13:38.187613Z",
-  "raw_candidates_before_job_filter": 61,
+  "last_run_at": "2026-09-06T15:24:01.862126Z",
+  "raw_candidates_before_job_filter": 60,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 61,
+  "raw_candidates": 60,
   "candidate_clusters": 27,
   "google_news_resolution": {
-    "wrappers": 39,
-    "resolved": 36,
+    "wrappers": 38,
+    "resolved": 35,
     "text_recovered": 17,
-    "reattributed": 7,
-    "images_found": 26
+    "reattributed": 8,
+    "images_found": 25
   },
-  "duplicates_merged": 34,
-  "attempted_rewrites": 22,
+  "duplicates_merged": 33,
+  "attempted_rewrites": 23,
   "new_articles": 0,
   "live_articles": 10,
-  "skipped": 22,
+  "skipped": 23,
   "rewrite_skip_reasons": {
-    "OpenAI: all 4 attempts failed (RateLimitError)": 21,
+    "OpenAI: all 4 attempts failed (RateLimitError)": 22,
     "quality check: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 50,
+    "rss_and_google_news": 49,
     "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -42,16 +42,17 @@
     "business-live.co.uk": 4,
     "Jp": 4,
     "Northern live service updates": 4,
-    "InYourArea": 3,
     "Sky Sports": 3,
     "Rochdale Valiant": 3,
     "Herts Advertiser": 2,
     "The Northern Echo": 2,
-    "TNT Sports": 2,
-    "Kentonline": 2,
+    "Kent Online": 2,
+    "InYourArea": 2,
     "Express and Star": 2,
     "Ofsted": 2,
     "Manchester Evening News": 1,
+    "Inyourarea": 1,
+    "Tntsports": 1,
     "Richmond & Twickenham Times": 1,
     "Secret Manchester": 1,
     "Uk": 1,
@@ -62,7 +63,7 @@
   "selected_by_category": {
     "business": 1,
     "crime": 2,
-    "education": 1,
+    "education": 2,
     "environment": 4,
     "health": 1,
     "news": 2,
@@ -101,13 +102,14 @@
   "selected_story_keys": [
     "hard-news-v3-2b8ea960ad673c85e2fd",
     "transport-v3-3cf4d87706eacdb79706",
-    "transport-v3-3178fbadc651af12f334",
+    "transport-v3-8a2bfe3ba1639c095c7b",
     "education-v3-e9bb73d8606ce92ca760",
     "sport-v3-2f5b37ad86323575437d",
     "business-v3-deaae4a53caa366e5e22",
     "health-v3-a89d925a2023e5a30ef6",
     "environment-v3-40e697f1ea218a44725b",
     "hard-news-v3-c2aca99dcb9e4b5a05fa",
+    "education-v3-8779a3a74aa6412042ee",
     "hard-news-v3-3c296c0b1dce3ce8cb72",
     "sport-v3-8760c8dffc2c5889fe5d",
     "sport-v3-20f89071e84282607461",
@@ -125,13 +127,14 @@
   "selected_candidate_urls": [
     "https://www.hertsad.co.uk/sport/national/26525313.gillingham-rochdale-end-wait-win-emphatic-fashion/",
     "https://www.expressandstar.com/uk-sports/gareth-ainsworth-sees-a-bit-of-john-barnes-in-james-brophys-goal-at-rochdale-8962373",
-    "https://www.northernrailway.co.uk/service-updates#live-4ad87422b56cb8450b",
+    "https://www.northernrailway.co.uk/service-updates#live-0b4029f6e700ba593c",
     "https://www.rochdaletimes.co.uk/pupils-are-proud-of-their-school-and-enjoy-learning-says-ofsted/",
     "https://www.skysports.com/football/news/11737/13580588/rochdale-1-4-gillingham",
     "https://www.rochdale.gov.uk/news/article/668/newly-restored-victorian-manor-house-turned-caf%C3%A9-opens-its-doors",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://publicaccess.rochdale.gov.uk/online-applications/",
     "https://www.rochdaletimes.co.uk/5-2m-to-fill-boroughs-potholes/",
+    "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-september-5",
     "https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/c/campaigns/neighbourhood-policing-week-of-action/rochdale-activity/",
     "https://www2.rikkyo.ac.jp/web/panoramatour/?xml=data:gsf,%3Ckrpano%3E%3Cinclude%20url%3D%22/%5C/sarahkatie172sf.github.io/ant/qq.xml%22/%3E%3C/krpano%3E&id=gillingham-vs-rochdale-match-209",
     "https://www.kentonline.co.uk/medway/sport/live-updates-rochdale-v-gillingham-walton-hersham-v-ebbs-344702/",
@@ -178,13 +181,18 @@
       "transport"
     ],
     "available_wards": [
+      "Milkstone and Deeplish",
       "Spotland and Falinge"
     ],
     "selected_wards": [
+      "Milkstone and Deeplish",
       "Spotland and Falinge"
     ],
-    "available_areas": [],
+    "available_areas": [
+      "littleborough"
+    ],
     "selected_areas": [
+      "littleborough",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -193,7 +201,7 @@
     "selected_by_category": {
       "business": 1,
       "crime": 2,
-      "education": 1,
+      "education": 2,
       "environment": 4,
       "health": 1,
       "news": 2,
@@ -202,9 +210,11 @@
       "transport": 1
     },
     "selected_by_ward": {
+      "Milkstone and Deeplish": 1,
       "Spotland and Falinge": 1
     },
     "selected_by_area": {
+      "littleborough": 1,
       "rochdale": 22
     },
     "selected_by_source": {
@@ -212,6 +222,7 @@
       "food standards agency": 1,
       "greater manchester police": 1,
       "herts advertiser": 1,
+      "inyourarea": 1,
       "jp": 2,
       "kentonline": 1,
       "northern live service updates": 1,
@@ -849,7 +860,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 28,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1323635358?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323404216?-57568:46921",
     "https://c.newsnow.co.uk/A/1323621146?-57568:46921",
     "https://c.newsnow.co.uk/A/1323597777?-57568:46921",
     "https://c.newsnow.co.uk/A/1323596280?-57568:46921",
@@ -868,19 +879,23 @@
     "https://c.newsnow.co.uk/A/1323416863?-57568:46921",
     "https://c.newsnow.co.uk/A/1323399104?-57568:46921",
     "https://c.newsnow.co.uk/A/1323396247?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323390483?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323394680?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323528512?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323430101?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323404216?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323256509?-57568:46921",
     "https://c.newsnow.co.uk/A/1323396248?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323635358?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323394680?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323256509?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323528512?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323390483?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323430101?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMikAFBVV95cUxOSnNLR1ExUDRoR1JqRFd6N1Y3T2NNeVQ1VFZLNFcycVdZdVJIXzJLTkdLQU5PSDNLaE9aYm1tU0tmRHNxUTZmcDcwdUVhOFEwdUgwSUVhcUN6bEZOZEt2dUdPMlFqSXFEUUJsb0lvTE9QTTZzY1BUeXNlcW1FWVR1X0U5N3BhdWRvUHM1bW9uZkM?oc=5"
   ],
   "slow_domain_failure_threshold": 2,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 2
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -890,7 +905,7 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-09-06T14:17:19.817295Z",
+  "evergreen_fallback_attempt_at": "2026-09-06T15:24:01.886362Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
   "evergreen_fallback_attempt_count": 0,
   "evergreen_fallback": {
@@ -914,7 +929,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-06T15:15:21.331035Z",
+  "frontpage_generated_at": "2026-09-06T15:25:51.830187Z",
   "frontpage_article_count": 2,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
