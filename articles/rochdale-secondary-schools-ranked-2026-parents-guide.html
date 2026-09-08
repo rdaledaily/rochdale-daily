@@ -1,57 +1,41 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="index,follow,max-image-preview:large">
-  <title>Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11 | Rochdale Daily</title>
-  <meta name="description" content="A parent&#x27;s guide to the borough&#x27;s 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision,...">
-  <link rel="canonical" href="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
-  <style>@import url('/assets/css/site.css');
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<title>Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11 | Rochdale Daily</title>
+<meta name="description" content="A parent's guide to the borough's 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision,...">
+<link rel="canonical" href="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
+<style>@import url('/assets/css/site.css');
 
 /*
- * Article-page responsive safety layer.
- *
- * Static article pages are generated with this stylesheet embedded in the
- * document. The full site stylesheet remains the single source of truth and
- * is imported above; these rules only harden article pages against mobile
- * overflow and oversized desktop geometry.
- */
+* Article-page responsive safety layer.
+*
+* Static article pages are generated with this stylesheet embedded in the
+* document. The full site stylesheet remains the single source of truth and
+* is imported above; these rules only harden article pages against mobile
+* overflow and oversized desktop geometry.
+*/
 html,
 body {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+width: 100%;
+max-width: 100%;
+min-width: 0;
 }
 
 body {
-  overflow-x: hidden;
-}
-
-.utility,
-.masthead,
-.primary-nav,
-.breaking-bar,
-.page-shell,
-.site-footer {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.wrap,
-.article-body,
-.article-layout,
-.article-layout > *,
-.article-sidebar,
-.article-hero-image,
-.ad-slot,
-.sidebar-box {
-  min-width: 0;
-  max-width: 100%;
+overflow-x: hidden;
+}.utility,.masthead,.primary-nav,.breaking-bar,.page-shell,.site-footer {
+width: 100%;
+max-width: 100%;
+min-width: 0;
+}.wrap,.article-body,.article-layout,.article-layout > *,.article-sidebar,.article-hero-image,.ad-slot,.sidebar-box {
+min-width: 0;
+max-width: 100%;
 }
 
 img,
@@ -60,232 +44,179 @@ video,
 iframe,
 canvas,
 svg {
-  max-width: 100%;
-}
-
-.article-body,
-.article-body p,
-.article-body h1,
-.article-body h2,
-.article-body h3,
-.article-standfirst,
-.article-byline,
-.sidebar-box,
-.related-title {
-  overflow-wrap: anywhere;
-  word-break: normal;
+max-width: 100%;
+}.article-body,.article-body p,.article-body h1,.article-body h2,.article-body h3,.article-standfirst,.article-byline,.sidebar-box,.related-title {
+overflow-wrap: anywhere;
+word-break: normal;
 }
 
 /* A fixed 300px MREC is safe on most phones, but must still shrink on a
-   narrow viewport rather than making the whole document wider. */
-.ad-slot-mrec {
-  width: min(300px, 100%);
-  max-width: 100%;
+narrow viewport rather than making the whole document wider. */.ad-slot-mrec {
+width: min(300px, 100%);
+max-width: 100%;
 }
 
 /* Long source URLs, embeds and preformatted material must never dictate the
-   width of the page. */
-.article-body table,
-.article-body pre,
-.article-body code,
-.article-body iframe,
-.article-body blockquote {
-  max-width: 100%;
+width of the page. */.article-body table,.article-body pre,.article-body code,.article-body iframe,.article-body blockquote {
+max-width: 100%;
+}.article-body pre {
+overflow-x: auto;
 }
 
-.article-body pre {
-  overflow-x: auto;
+@media (max-width: 860px) {.article-layout {
+grid-template-columns: minmax(0, 1fr);
+gap: 24px;
+}.article-sidebar {
+position: static;
+width: 100%;
+}
 }
 
-@media (max-width: 860px) {
-  .article-layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-
-  .article-sidebar {
-    position: static;
-    width: 100%;
-  }
+@media (max-width: 620px) {.wrap {
+width: calc(100% - 24px);
+max-width: 100%;
+}.masthead-row {
+min-height: 96px;
+grid-template-columns: minmax(0, 1fr) auto;
+gap: 8px;
+}.brand,.masthead-actions {
+min-width: 0;
+max-width: 100%;
+}.brand-logo {
+width: min(215px, 58vw);
+max-width: 100%;
+}.article-body {
+width: 100%;
+padding: 20px 16px 36px;
+}.article-body h1 {
+font-size: clamp(30px, 9vw, 40px);
+line-height: 1.04;
+letter-spacing: -0.4px;
+}.article-standfirst {
+font-size: 17px;
+line-height: 1.42;
+}.article-share {
+gap: 8px;
+flex-wrap: wrap;
+}.share-icon-button {
+width: 42px;
+height: 42px;
+}.ad-slot-leaderboard,.ad-slot-incontent,.ad-slot-mrec,.ad-slot.ad-live,.ad-slot.ad-live > a,.ad-slot.ad-live img {
+width: 100%;
+max-width: 100%;
+height: auto;
+}.article-hero-image img {
+width: 100%;
+height: auto;
+}
 }
 
-@media (max-width: 620px) {
-  .wrap {
-    width: calc(100% - 24px);
-    max-width: 100%;
-  }
-
-  .masthead-row {
-    min-height: 96px;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-  }
-
-  .brand,
-  .masthead-actions {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .brand-logo {
-    width: min(215px, 58vw);
-    max-width: 100%;
-  }
-
-  .article-body {
-    width: 100%;
-    padding: 20px 16px 36px;
-  }
-
-  .article-body h1 {
-    font-size: clamp(30px, 9vw, 40px);
-    line-height: 1.04;
-    letter-spacing: -0.4px;
-  }
-
-  .article-standfirst {
-    font-size: 17px;
-    line-height: 1.42;
-  }
-
-  .article-share {
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .share-icon-button {
-    width: 42px;
-    height: 42px;
-  }
-
-  .ad-slot-leaderboard,
-  .ad-slot-incontent,
-  .ad-slot-mrec,
-  .ad-slot.ad-live,
-  .ad-slot.ad-live > a,
-  .ad-slot.ad-live img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-  }
-
-  .article-hero-image img {
-    width: 100%;
-    height: auto;
-  }
+@media (max-width: 390px) {.article-body {
+padding-inline: 14px;
+}.article-body h1 {
+font-size: clamp(28px, 8.5vw, 36px);
+}.brand-logo {
+width: min(200px, 56vw);
 }
-
-@media (max-width: 390px) {
-  .article-body {
-    padding-inline: 14px;
-  }
-
-  .article-body h1 {
-    font-size: clamp(28px, 8.5vw, 36px);
-  }
-
-  .brand-logo {
-    width: min(200px, 56vw);
-  }
 }
 </style>
 
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Rochdale Daily">
-  <meta name="author" content="Rochdale Daily Newsdesk">
-  <meta name="keywords" content="Rochdale, Education, local news">
-  <meta property="og:title" content="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11">
-  <meta property="og:description" content="A parent&#x27;s guide to the borough&#x27;s 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision,...">
-  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/falinge_park_high_school.jpg">
-  <meta property="og:image:alt" content="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11">
-  <meta property="og:url" content="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html">
-  <meta property="article:published_time" content="2026-08-06T22:18:00Z">
-  <meta property="article:modified_time" content="2026-08-06T22:18:00Z">
-  <meta property="article:section" content="Education">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11">
-  <meta name="twitter:description" content="A parent&#x27;s guide to the borough&#x27;s 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision,...">
-  <meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/cards/falinge_park_high_school.jpg">
-  <meta name="twitter:image:alt" content="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11">
-  <meta name="news_keywords" content="Rochdale, Education, local news">
-  <meta property="article:tag" content="Rochdale">
-  <meta property="article:tag" content="Education">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Rochdale Daily">
+<meta name="author" content="Rochdale Daily Newsdesk">
+<meta name="keywords" content="Rochdale, Education, local news">
+<meta property="og:title" content="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11">
+<meta property="og:description" content="A parent's guide to the borough's 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision,...">
+<meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/falinge_park_high_school.jpg">
+<meta property="og:image:alt" content="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11">
+<meta property="og:url" content="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html">
+<meta property="article:published_time" content="2026-08-06T22:18:00Z">
+<meta property="article:modified_time" content="2026-08-06T22:18:00Z">
+<meta property="article:section" content="Education">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11">
+<meta name="twitter:description" content="A parent's guide to the borough's 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision,...">
+<meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/cards/falinge_park_high_school.jpg">
+<meta name="twitter:image:alt" content="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11">
+<meta name="news_keywords" content="Rochdale, Education, local news">
+<meta property="article:tag" content="Rochdale">
+<meta property="article:tag" content="Education">
 
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html#article", "headline": "Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11", "description": "A parent's guide to the borough's 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision,...", "image": [{"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/cards/falinge_park_high_school.jpg", "caption": "Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11", "creditText": "Rochdale Daily"}], "datePublished": "2026-08-06T22:18:00Z", "dateModified": "2026-08-06T22:18:00Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Education", "wordCount": 2825, "keywords": "Rochdale, Education, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html"}, "contentLocation": {"@type": "Place", "name": "Rochdale"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Education", "item": "https://rochdaledaily.co.uk/#education"}, {"@type": "ListItem", "position": 3, "name": "Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11", "item": "https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html"}]}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsArticle", "@id": "https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html#article", "headline": "Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11", "description": "A parent's guide to the borough's 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision,...", "image": [{"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/cards/falinge_park_high_school.jpg", "caption": "Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11", "creditText": "Rochdale Daily"}], "datePublished": "2026-08-06T22:18:00Z", "dateModified": "2026-08-06T22:18:00Z", "inLanguage": "en-GB", "isAccessibleForFree": true, "articleSection": "Education", "wordCount": 2825, "keywords": "Rochdale, Education, local news", "author": {"@type": "Organization", "name": "Rochdale Daily Newsdesk", "url": "https://rochdaledaily.co.uk/about.html"}, "publisher": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html"}, "contentLocation": {"@type": "Place", "name": "Rochdale"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Rochdale Daily", "item": "https://rochdaledaily.co.uk/"}, {"@type": "ListItem", "position": 2, "name": "Education", "item": "https://rochdaledaily.co.uk/#education"}, {"@type": "ListItem", "position": 3, "name": "Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11", "item": "https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html"}]}]}</script>
 </head>
 <body>
-  <header class="masthead">
-    <div class="wrap masthead-row">
-      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">
-        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
-      </a>
-      <div class="masthead-actions">
-        <a class="header-button" href="../index.html">All stories</a>
-      </div>
-    </div>
-  </header>
+<header class="masthead">
+<div class="wrap masthead-row">
+<a class="brand" href="../index.html" aria-label="Rochdale Daily home">
+<img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
+</a>
+<div class="masthead-actions">
+<a class="header-button" href="../index.html">All stories</a>
+</div>
+</div>
+</header>
 
-  <div class="modal-card" style="margin:24px auto;box-shadow:none">
-    <div class="article-body">
-      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>
-      <div class="article-layout">
-        <div class="article-main">
-          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/education.html">Education</a></nav>
-          <span class="story-kicker">Education</span>
-          <h1>Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11</h1>
-          <p class="article-standfirst">A parent&#x27;s guide to the borough&#x27;s 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision, pastoral support and enrichment.</p>
-          
-          <div class="article-byline">By Rochdale Daily</div>
-          <div class="article-share" aria-label="Share this article"><button class="share-icon-button brand-copy" type="button" data-share="copy" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" aria-label="Copy article link"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg><span class="visually-hidden">Copy link</span></button><button class="share-icon-button brand-facebook" type="button" data-share="facebook" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span class="visually-hidden">Facebook</span></button><button class="share-icon-button brand-whatsapp" type="button" data-share="whatsapp" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" data-title="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" aria-label="Share on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span class="visually-hidden">WhatsApp</span></button><button class="share-icon-button brand-x" type="button" data-share="x" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" data-title="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" aria-label="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span class="visually-hidden">X</span></button><button class="share-icon-button brand-bluesky" type="button" data-share="bluesky" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" data-title="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" aria-label="Share on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24 .213 24 3.883c0 .732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"/></svg><span class="visually-hidden">Bluesky</span></button><button class="share-icon-button brand-email" type="button" data-share="email" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" data-title="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" aria-label="Share by email"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg><span class="visually-hidden">Email</span></button></div>
-          <figure class="article-hero-image"><img src="https://rochdaledaily.co.uk/assets/img/cards/falinge_park_high_school.jpg" alt="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" loading="eager" fetchpriority="high"><figcaption class="article-image-credit">Image: <a href="https://rochdaledaily.co.uk/" target="_blank" rel="noopener noreferrer">Rochdale Daily</a></figcaption></figure>
-          <div class="article-copy"><p>Choosing a secondary school is one of the biggest decisions a parent makes.</p><p>But deciding which school is &quot;best&quot; is considerably more complicated than looking at a GCSE league table.</p><p>A school could achieve excellent examination results while struggling with attendance. Another might have lower attainment but exceptional pastoral support, SEND provision and behaviour. A third might excel at getting pupils into college, apprenticeships or employment.</p><div class="ad-slot ad-slot-incontent" data-ad-slot="article-incontent" role="presentation" aria-hidden="true"></div></p><p>So Rochdale Daily has taken a broader look.</p><p>We have examined the latest publicly available information for the 13 mainstream secondary schools listed by Rochdale Borough Council, considering: Attainment 8; grade 5+ in English and mathematics; EBacc participation and performance; post-16 destinations; attendance; suspensions and behaviour; Ofsted findings; pastoral support; SEND provision; personal development; and extra-curricular opportunities.</p><p>The result is intended as a parent&#x27;s guide rather than an official government league table.</p><p>There is also an important gap in the national data.</p><p>Why there is no Progress 8 score this year</p><p>Progress 8 would ordinarily be one of the most useful measures because it asks how much progress pupils make between primary school and GCSEs rather than simply how high their final grades are.</p><p>But the Department for Education cannot calculate Progress 8 for either 2024/25 or 2025/26 because pupils in those cohorts did not have the necessary Key Stage 2 assessment baseline following Covid disruption.</p><p>That means this year&#x27;s Attainment 8 figures measure where pupils finished — not how far the school moved them from their starting point. That distinction matters.</p><p>Nationally, state-school pupils achieved an average Attainment 8 score of 46, while 45.4% achieved grade 5 or better in both English and mathematics. Across Rochdale, those figures were 40.6 and 35% respectively.</p><p>1. Hollingworth Academy, Milnrow — best academic performer</p><p>Hollingworth sits at the top primarily because its latest examination performance is significantly ahead of the Rochdale average. Its 2025 figures show an Attainment 8 score of 51.1, with 59.8% achieving grade 5+ in English and maths and an EBacc average point score of 4.48.</p><p>That means Hollingworth&#x27;s Attainment 8 score was more than 10 points above the Rochdale average of 40.6 and also above the national state-school average of 46. The school&#x27;s own 2025 figures similarly report an Attainment 8 score of around 51 and 60% achieving strong passes in English and maths.</p><p>There is, however, an interesting weakness. Only 22.2% entered the EBacc, compared with 40.5% nationally. And its published destination data for the 2023 leavers shows 84% of disadvantaged pupils continuing in education, apprenticeship or employment, compared with 94% of non-disadvantaged pupils nationally.</p><p>So although Hollingworth comfortably leads academically, parents should not interpret first place as meaning it dominates every measure.</p><p>Strengths: GCSE attainment, English and mathematics, broad academic performance. Watch: EBacc entry and destination gap among disadvantaged pupils.</p><p>2. Oulder Hill Leadership Academy — strongest all-round improvement story</p><p>Oulder Hill deserves to be near the top because the picture today is substantially different from that of its predecessor school. Its latest 2025 data gives an Attainment 8 score of 44.4, with 46.2% achieving grade 5+ in English and maths — the latter above both the Rochdale average and around the national level.</p><p>The more important finding comes from Ofsted. Following its January 2025 inspection, inspectors judged the quality of education, behaviour and attitudes, personal development, and leadership and management all Good.</p><p>That&#x27;s particularly significant because the predecessor Oulder Hill Community School had previously been judged Inadequate before conversion to the Star Academies trust. Ofsted also confirmed that the school meets requirements for giving pupils access to information about technical education and apprenticeships.</p><p>Oulder Hill therefore performs particularly well in this ranking because it combines respectable attainment with strong independent inspection findings on behaviour, personal development and leadership.</p><p>Strengths: Behaviour, personal development, improving academic results, careers provision. Watch: Academic attainment remains below the national Attainment 8 average.</p><p>3. Wardle Academy — strong pastoral and academic balance</p><p>Wardle&#x27;s 2025 Attainment 8 score was 44.1, above Rochdale&#x27;s 40.6 average although still just below England&#x27;s 46. Around 39.1% achieved grade 5+ in English and mathematics, also above the Rochdale borough figure of 35%.</p><p>But Wardle gets additional credit because the evidence isn&#x27;t purely academic. The school was rated Good at its most recent Ofsted inspection, with inspectors reporting that pupils feel safe and happy and highlighting the strong relationships between pupils and staff and the school&#x27;s pastoral approach.</p><p>Wardle also has specialist resourced SEND provision, something that may matter far more than league-table position for families of children with additional needs.</p><p>Strengths: Good Ofsted judgement, pastoral support, SEND provision, above-borough academic attainment. Watch: Results are solid rather than exceptional nationally.</p><p>4. St Cuthbert&#x27;s RC High School — outstanding post-school destination performance</p><p>St Cuthbert&#x27;s latest published results show an Attainment 8 score of 39.66, with 27.31% achieving grade 5+ in English and maths, 19% EBacc entry and an EBacc average point score of 3.36. Those academic results place the school below Rochdale&#x27;s overall averages.</p><p>But one number changes the picture considerably. The school reports 93.69% of pupils staying in education or entering employment after Key Stage 4.</p><p>That is precisely why simply ranking schools by GCSEs can mislead parents. St Cuthbert&#x27;s examination figures are not among the borough&#x27;s strongest, yet almost 94% of its leavers are progressing onwards.</p><p>Strengths: Post-16 destinations. Watch: GCSE attainment and strong passes in English and mathematics.</p><p>5. Cardinal Langley RC High School, Middleton — excellent destinations despite weaker 2025 attainment</p><p>Cardinal Langley&#x27;s latest published government figures show an Attainment 8 score of 40.9, with 31.8% achieving grade 5+ in English and maths, 29.5% EBacc entry, an EBacc average point score of 3.46 — and 94% of leavers progressing to education, employment or an apprenticeship.</p><p>That 94% destination figure is excellent. The academic picture is more mixed: Attainment 8 is around the Rochdale average while English and mathematics strong passes remain below both borough and national levels.</p><p>Its position therefore reflects a strong record of getting pupils into their next destination even where the latest GCSE headline statistics are less remarkable.</p><p>Strengths: Destinations, post-16 progression. Watch: English and mathematics attainment.</p><p>6. Holy Family RC &amp; CE College, Heywood — strong ethos and pastoral environment</p><p>Holy Family is particularly difficult to judge solely through a numerical league table because some of the most compelling evidence concerns school culture. Its most recent established Ofsted judgement is Good, while its denominational inspection rated the college Outstanding.</p><p>The school describes itself as an oversubscribed joint Roman Catholic and Church of England college and places a particularly strong emphasis on pastoral care, personal development and Christian ethos. For parents prioritising school environment alongside results, Holy Family deserves to sit toward the upper half of the table.</p><p>Strengths: Pastoral environment, ethos, inspection record. Watch: Parents should compare the latest individual GCSE subject outcomes when making an academic comparison with the schools above.</p><p>7. Dixons Middleton Academy — middle of the pack academically, Good Ofsted</p><p>Dixons Middleton recorded an Attainment 8 score of 40.3, with 33.6% achieving grade 5+ in English and maths, 42.9% EBacc entry and an EBacc average point score of 3.57.</p><p>The EBacc entry rate is notable because it exceeds the Rochdale borough average and is around the national level. The school is rated Good by Ofsted, and its latest published destinations data indicates approximately 90% continuing into education, employment or apprenticeships.</p><p>The wider picture isn&#x27;t perfect. Historical Parent View data collected around the 2024 inspection showed considerable disagreement among parents over behaviour and communication, although Parent View samples are voluntary and should never be treated like a representative opinion poll.</p><p>Strengths: EBacc participation, Good Ofsted judgement. Watch: Overall attainment and English/maths strong passes.</p><p>8. Falinge Park High School — around borough average with notable challenges</p><p>Government data for the predecessor establishment recorded an Attainment 8 score of 40.5, with 36.1% achieving grade 5+ in English and maths, 24.8% EBacc entry and an EBacc average point score of 3.37. Those figures are remarkably close to Rochdale&#x27;s overall results.</p><p>But Falinge serves a particularly challenging intake. Among disadvantaged pupils, Attainment 8 was 36.6, while 30.3% achieved strong passes in English and mathematics.</p><p>Interestingly, pupils with English as an additional language actually outperformed the school&#x27;s overall cohort on several measures: EAL pupils recorded an Attainment 8 score of 42.6 compared with 40.5 overall. That is an important achievement which a simplistic league table would completely miss.</p><p>The school has since converted to academy status, meaning some current government tables show no comparable data under the new establishment record.</p><p>Strengths: Outcomes for EAL pupils. Watch: Overall attainment and disadvantaged-pupil gap.</p><p>9. Newhouse Academy, Heywood — behaviour stronger than academic outcomes</p><p>Newhouse recorded an Attainment 8 score of 38.9, with 29.7% achieving grade 5+ in English and maths, 30.8% EBacc entry and an EBacc average point score of 3.26. That places academic performance below both Rochdale and national averages.</p><p>Its Ofsted picture is more encouraging. Although its 2023 inspection resulted in Requires Improvement overall, inspectors judged behaviour and attitudes, personal development, and leadership and management all Good. The school also underwent a monitoring visit in June 2025.</p><p>Newhouse has a substantial pastoral and attendance operation, including dedicated pastoral managers and an education welfare officer, with pupils&#x27; attendance monitored weekly. This is therefore another school where the headline GCSE statistics don&#x27;t tell the full story.</p><p>Strengths: Behaviour, personal development, pastoral and attendance infrastructure. Watch: Academic attainment remains below borough averages.</p><p>10. Matthew Moss High School — academic outcomes currently below borough average</p><p>Matthew Moss recorded an Attainment 8 score of 39.3, with 34.3% achieving grade 5+ in English and maths, 26% EBacc entry and an EBacc average point score of 3.37. These figures put the school slightly below Rochdale&#x27;s overall attainment measures.</p><p>Its disadvantaged cohort recorded an Attainment 8 score of 34.7, with 27.5% obtaining grade 5+ in English and mathematics.</p><p>The gender difference is also substantial: girls achieved an Attainment 8 score of 42.3, compared with 36 for boys. That is potentially one of the more interesting findings in the borough and deserves further investigation.</p><p>Strengths: Some stronger performance among girls and EAL pupils. Watch: Overall attainment and attainment among disadvantaged pupils and boys.</p><p>11. Kingsway Park High School — results weak, enrichment exceptionally interesting</p><p>On GCSE figures alone, Kingsway Park would sit near the bottom. Latest government figures show an Attainment 8 score of 35.3, with around 18% achieving grade 5+ in English and maths, 18.7% EBacc entry, an EBacc average point score of 2.87 — and 91% progressing to a recognised destination.</p><p>But Kingsway Park is perhaps the clearest demonstration of why this ranking goes beyond GCSE results. The school has developed an unusually extensive enrichment programme aimed particularly at children living in poverty, with reported activities including Brazilian jiu-jitsu, football, boxing, lacrosse, windsurfing, theatre, free music tuition and instruments for pupils. The school has also operated practical support including a food bank and assistance for families experiencing hardship.</p><p>Headteacher Simon Ward has spoken openly about tackling behaviour problems and attempting to provide opportunities pupils might otherwise never experience.</p><p>That does not erase weak examination performance. But it means describing Kingsway Park simply as one of Rochdale&#x27;s &quot;worst schools&quot; would be unfair and potentially meaningless to a parent whose priority is enrichment, belonging or pastoral support.</p><p>Strengths: Enrichment, pastoral intervention, opportunities for disadvantaged children. Watch: GCSE attainment remains substantially below borough and national levels.</p><p>12. St Anne&#x27;s CE Academy, Middleton — strong personal-development offer but academic comparison remains difficult</p><p>St Anne&#x27;s was judged Good across all criteria by Ofsted in 2024. The academy describes a broad programme of extra-curricular activities alongside updated science and IT facilities and a nurturing Christian environment open to pupils of all faiths and backgrounds. This gives it a stronger qualitative picture than a purely exam-based comparison might suggest.</p><p>Strengths: Ofsted, enrichment, personal development and ethos. Watch: Comparable current GCSE data should be considered alongside the qualitative strengths before parents make a decision.</p><p>Edgar Wood Academy — not fairly rankable yet</p><p>Edgar Wood deserves a separate category. It is a relatively new school and the 2025 government performance tables show no Key Stage 4 cohort available for meaningful comparison. Trying to put it 13th simply because GCSE data doesn&#x27;t exist would therefore be ridiculous.</p><p>The important evidence instead comes from Ofsted. The academy was inspected again in June 2026, following an earlier monitoring visit in May 2025. Because it is still developing and only recently reached the point at which older pupils move through the school, Rochdale Daily considers it unranked rather than last. That distinction matters.</p><p>What the league table tells us</p><p>There isn&#x27;t actually one &quot;best school&quot; for every child.</p><p>If GCSE results are your priority, Hollingworth Academy is currently the clear standout: its 51.1 Attainment 8 score and approximately 60% strong-pass rate in English and mathematics are comfortably ahead of the borough averages.</p><p>If behaviour and personal development matter, Oulder Hill, Wardle, Newhouse and St Anne&#x27;s have particularly useful independent inspection evidence.</p><p>If SEND provision is critical, parents should look beyond league tables altogether. Wardle, for example, has dedicated resourced provision. SEND arrangements differ significantly between schools and between individual children&#x27;s needs.</p><p>If destinations matter, St Cuthbert&#x27;s and Cardinal Langley both report approximately 94% progressing into education, employment or other recognised destinations.</p><p>If extracurricular opportunity matters, Kingsway Park&#x27;s enrichment offer stands out despite comparatively weak academic figures.</p><p>And what about attendance and suspensions?</p><p>These deserve particular attention. Across Rochdale as a whole, secondary-school suspension levels have been sufficiently high to warrant concern, but using borough-wide numbers to label an individual school would be unfair.</p><p>Suspensions can also be counter-intuitive. A school recording more suspensions may genuinely have worse behaviour. But it may instead have a stricter behaviour policy and suspend pupils for conduct another school manages internally. Likewise, low suspensions don&#x27;t automatically prove excellent behaviour.</p><p>That is why Rochdale Daily considers suspension data alongside Ofsted&#x27;s behaviour and attitudes judgement, attendance, persistent absence and other evidence rather than awarding points simply for having fewer suspensions.</p><p>Attendance has similar complications. Schools serving communities experiencing severe deprivation, unstable housing, chronic illness or high levels of additional need can face greater attendance problems that are not entirely within the school&#x27;s control. It remains an important measure — but it requires context.</p><p>Rochdale remains behind nationally on attainment</p><p>The wider borough picture shouldn&#x27;t be ignored. Across Rochdale, the averages are: Attainment 8, 40.6; grade 5+ English and maths, 35%; EBacc entry, 30.2%; EBacc average point score, 3.47. National state-school figures are: Attainment 8, 46; grade 5+ English and maths, 45.4%; EBacc entry, 40.5%; EBacc average point score, 4.09.</p><p>So although individual schools are doing exceptionally well, Rochdale as a borough continues to have a substantial secondary-attainment gap with England overall. That is arguably the biggest education story of all.</p><p>Rochdale Daily&#x27;s overall guide</p><p>1. Hollingworth Academy — strongest academics. 2. Oulder Hill Leadership Academy — strongest recent all-round inspection picture. 3. Wardle Academy — strong academic/pastoral balance. 4. St Cuthbert&#x27;s RC High School — excellent destinations. 5. Cardinal Langley RC High School — strong destinations. 6. Holy Family RC &amp; CE College — strong ethos and pastoral environment. 7. Dixons Middleton Academy — solid all-round performer. 8. Falinge Park High School — around borough average, noteworthy EAL outcomes. 9. Newhouse Academy — improving with good behaviour and personal development findings. 10. Matthew Moss High School — below-average current attainment. 11. Kingsway Park High School — weak attainment but exceptional enrichment story. 12. St Anne&#x27;s CE Academy — Good inspection and broad enrichment; insufficient comparable attainment evidence for a higher position. Unranked: Edgar Wood Academy — too new for a fair full academic comparison.</p><p>A word to parents</p><p>A league table should be the beginning of choosing a school, not the end.</p><p>A child with SEND may thrive somewhere completely different from the highest-scoring GCSE school. A child struggling emotionally may benefit more from exceptional pastoral support. An academically driven pupil may be better suited to a school with particularly strong examination outcomes and curriculum breadth. A child who needs confidence may flourish because of sport, music, drama or enrichment.</p><p>Parents should therefore look at results, behaviour, attendance, pastoral care, SEND provision, destinations, enrichment — and how their own child feels inside the school. That gives a much more meaningful picture than a GCSE percentage alone.</p><p>Sources and methodology: Rochdale Daily&#x27;s analysis uses the Department for Education&#x27;s 2025 school performance tables, latest available Ofsted inspections and monitoring visits, Rochdale Borough Council&#x27;s official secondary-school list, schools&#x27; statutory published information and publicly available destination, SEND, pastoral and enrichment information. Where directly comparable current information was unavailable, this is stated rather than estimated. Progress 8 has deliberately not been used for 2025 because the Department for Education says it cannot be calculated for the current cohorts due to the absence of Key Stage 2 baseline assessments following Covid disruption.</p>
-          <details class="article-sources"><summary>Sources</summary><ul><li><a href="https://www.compare-school-performance.service.gov.uk/" target="_blank" rel="nofollow noopener noreferrer">Open source 1</a></li></ul></details></div>
-          
-          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
-            <h3 style="margin:0 0 8px">Legal and editorial note</h3>
-            <p>This guide reflects Rochdale Daily&#x27;s editorial assessment of publicly available data, including Department for Education performance tables, Ofsted inspection reports and schools&#x27; own published information. It is not an official ranking. Figures relate to the most recent published data at the time of writing and may not reflect subsequent results or inspections. Parents should verify current information directly with schools before making decisions.</p>
-            <p><strong>Right to reply:</strong> Any school referenced may request a correction or right of reply by emailing news@rochdaledaily.co.uk.</p>
-            <p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>
-          </section>
-          
-          <section class="comments-section" id="comments-root" data-slug="rochdale-secondary-schools-ranked-2026-parents-guide" data-category="education"></section>
-        </div>
-        <aside class="article-sidebar">
-          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
-          <div class="sidebar-box"><h3>Related local stories</h3><a class="related-story" href="rochdale-foodbank-morrisons-kingsway-food-drive-368-kilos.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-exchange-shopping-centre.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Shoppers donate 368 kilos of food at Rochdale Foodbank&#x27;s Morrisons Kingsway drive</span></a><a class="related-story" href="mbf-cleaning-sponsors-rochdale-foodbank-van.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/mbf-cleaning-sponsors-rochdale-foodbank-van-generated-card.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">MBF Cleaning sponsors Rochdale Foodbank van to support deliveries across the borough</span></a><a class="related-story" href="gtas-veterans-charity-appeal-support-rochdale.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/get-together-after-serving.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Veterans charity says demand for support is growing after emotional day for volunteers</span></a><a class="related-story" href="gcse-results-day-guide-rochdale-parents-2026.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/results_day.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">GCSE results day 2026: What Rochdale parents need to know – and why one set of grades doesn&#x27;t define a future</span></a></div>
-        </aside>
-      </div>
-    </div>
-  </div>
+<div class="modal-card" style="margin:24px auto;box-shadow:none">
+<div class="article-body">
+<div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>
+<div class="article-layout">
+<div class="article-main">
+<nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/education.html">Education</a></nav>
+<span class="story-kicker">Education</span>
+<h1>Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11</h1>
+<p class="article-standfirst">A parent's guide to the borough's 13 mainstream secondary schools - looking beyond GCSE league tables to behaviour, destinations, SEND provision, pastoral support and enrichment.</p>
 
-  <script>
-    document.addEventListener("click", function(event) {
-      var trigger = event.target.closest("[data-share]");
-      if (!trigger) return;
-      var action = trigger.dataset.share;
-      var url = trigger.dataset.url;
-      if (action === "copy") {
-        navigator.clipboard.writeText(url).catch(function() {});
-      }
-      if (action === "facebook") {
-        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "whatsapp") {
-        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "x") {
-        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "bluesky") {
-        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
-      }
-      if (action === "email") {
-        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);
-      }
-    });
-      </script>
-  <script defer src="/assets/js/article-comments.js"></script>
-  <script defer src="/assets/js/cookie-consent.js"></script>
-  <script defer src="/assets/ads.js"></script>
+<div class="article-byline">By Rochdale Daily</div>
+<div class="article-share" aria-label="Share this article"><button class="share-icon-button brand-copy" type="button" data-share="copy" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" aria-label="Copy article link"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg><span class="visually-hidden">Copy link</span></button><button class="share-icon-button brand-facebook" type="button" data-share="facebook" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0.955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span class="visually-hidden">Facebook</span></button><button class="share-icon-button brand-whatsapp" type="button" data-share="whatsapp" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" data-title="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" aria-label="Share on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0.16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span class="visually-hidden">WhatsApp</span></button><button class="share-icon-button brand-x" type="button" data-share="x" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" data-title="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" aria-label="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span class="visually-hidden">X</span></button><button class="share-icon-button brand-bluesky" type="button" data-share="bluesky" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" data-title="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" aria-label="Share on Bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24.213 24 3.883c0.732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"/></svg><span class="visually-hidden">Bluesky</span></button><button class="share-icon-button brand-email" type="button" data-share="email" data-url="https://rochdaledaily.co.uk/articles/rochdale-secondary-schools-ranked-2026-parents-guide.html" data-title="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" aria-label="Share by email"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg><span class="visually-hidden">Email</span></button></div>
+<figure class="article-hero-image"><img src="https://rochdaledaily.co.uk/assets/img/cards/falinge_park_high_school.jpg" alt="Every secondary school in Rochdale ranked: GCSEs, behaviour, attendance, Ofsted and what happens after Year 11" loading="eager" fetchpriority="high"><figcaption class="article-image-credit">Image: <a href="https://rochdaledaily.co.uk/" target="_blank" rel="noopener noreferrer">Rochdale Daily</a></figcaption></figure>
+<div class="article-copy"><p>Choosing a secondary school is one of the biggest decisions a parent makes.</p><p>But deciding which school is "best" is considerably more complicated than looking at a GCSE league table.</p><p>A school could achieve excellent examination results while struggling with attendance. Another might have lower attainment but exceptional pastoral support, SEND provision and behaviour. A third might excel at getting pupils into college, apprenticeships or employment.</p><div class="ad-slot ad-slot-incontent" data-ad-slot="article-incontent" role="presentation" aria-hidden="true"></div></p><p>So Rochdale Daily has taken a broader look.</p><p>We have examined the latest publicly available information for the 13 mainstream secondary schools listed by Rochdale Borough Council, considering: Attainment 8; grade 5+ in English and mathematics; EBacc participation and performance; post-16 destinations; attendance; suspensions and behaviour; Ofsted findings; pastoral support; SEND provision; personal development; and extra-curricular opportunities.</p><p>The result is intended as a parent's guide rather than an official government league table.</p><p>There is also an important gap in the national data.</p><p>Why there is no Progress 8 score this year</p><p>Progress 8 would ordinarily be one of the most useful measures because it asks how much progress pupils make between primary school and GCSEs rather than simply how high their final grades are.</p><p>But the Department for Education cannot calculate Progress 8 for either 2024/25 or 2025/26 because pupils in those cohorts did not have the necessary Key Stage 2 assessment baseline following Covid disruption.</p><p>That means this year's Attainment 8 figures measure where pupils finished — not how far the school moved them from their starting point. That distinction matters.</p><p>Nationally, state-school pupils achieved an average Attainment 8 score of 46, while 45.4% achieved grade 5 or better in both English and mathematics. Across Rochdale, those figures were 40.6 and 35% respectively.</p><p>1. Hollingworth Academy, Milnrow — best academic performer</p><p>Hollingworth sits at the top primarily because its latest examination performance is significantly ahead of the Rochdale average. Its 2025 figures show an Attainment 8 score of 51.1, with 59.8% achieving grade 5+ in English and maths and an EBacc average point score of 4.48.</p><p>That means Hollingworth's Attainment 8 score was more than 10 points above the Rochdale average of 40.6 and also above the national state-school average of 46. The school's own 2025 figures similarly report an Attainment 8 score of around 51 and 60% achieving strong passes in English and maths.</p><p>There is, however, an interesting weakness. Only 22.2% entered the EBacc, compared with 40.5% nationally. And its published destination data for the 2023 leavers shows 84% of disadvantaged pupils continuing in education, apprenticeship or employment, compared with 94% of non-disadvantaged pupils nationally.</p><p>So although Hollingworth comfortably leads academically, parents should not interpret first place as meaning it dominates every measure.</p><p>Strengths: GCSE attainment, English and mathematics, broad academic performance. Watch: EBacc entry and destination gap among disadvantaged pupils.</p><p>2. Oulder Hill Leadership Academy — strongest all-round improvement story</p><p>Oulder Hill deserves to be near the top because the picture today is substantially different from that of its predecessor school. Its latest 2025 data gives an Attainment 8 score of 44.4, with 46.2% achieving grade 5+ in English and maths — the latter above both the Rochdale average and around the national level.</p><p>The more important finding comes from Ofsted. Following its January 2025 inspection, inspectors judged the quality of education, behaviour and attitudes, personal development, and leadership and management all Good.</p><p>That's particularly significant because the predecessor Oulder Hill Community School had previously been judged Inadequate before conversion to the Star Academies trust. Ofsted also confirmed that the school meets requirements for giving pupils access to information about technical education and apprenticeships.</p><p>Oulder Hill therefore performs particularly well in this ranking because it combines respectable attainment with strong independent inspection findings on behaviour, personal development and leadership.</p><p>Strengths: Behaviour, personal development, improving academic results, careers provision. Watch: Academic attainment remains below the national Attainment 8 average.</p><p>3. Wardle Academy — strong pastoral and academic balance</p><p>Wardle's 2025 Attainment 8 score was 44.1, above Rochdale's 40.6 average although still just below England's 46. Around 39.1% achieved grade 5+ in English and mathematics, also above the Rochdale borough figure of 35%.</p><p>But Wardle gets additional credit because the evidence isn't purely academic. The school was rated Good at its most recent Ofsted inspection, with inspectors reporting that pupils feel safe and happy and highlighting the strong relationships between pupils and staff and the school's pastoral approach.</p><p>Wardle also has specialist resourced SEND provision, something that may matter far more than league-table position for families of children with additional needs.</p><p>Strengths: Good Ofsted judgement, pastoral support, SEND provision, above-borough academic attainment. Watch: Results are solid rather than exceptional nationally.</p><p>4. St Cuthbert's RC High School — outstanding post-school destination performance</p><p>St Cuthbert's latest published results show an Attainment 8 score of 39.66, with 27.31% achieving grade 5+ in English and maths, 19% EBacc entry and an EBacc average point score of 3.36. Those academic results place the school below Rochdale's overall averages.</p><p>But one number changes the picture considerably. The school reports 93.69% of pupils staying in education or entering employment after Key Stage 4.</p><p>That is precisely why simply ranking schools by GCSEs can mislead parents. St Cuthbert's examination figures are not among the borough's strongest, yet almost 94% of its leavers are progressing onwards.</p><p>Strengths: Post-16 destinations. Watch: GCSE attainment and strong passes in English and mathematics.</p><p>5. Cardinal Langley RC High School, Middleton — excellent destinations despite weaker 2025 attainment</p><p>Cardinal Langley's latest published government figures show an Attainment 8 score of 40.9, with 31.8% achieving grade 5+ in English and maths, 29.5% EBacc entry, an EBacc average point score of 3.46 — and 94% of leavers progressing to education, employment or an apprenticeship.</p><p>That 94% destination figure is excellent. The academic picture is more mixed: Attainment 8 is around the Rochdale average while English and mathematics strong passes remain below both borough and national levels.</p><p>Its position therefore reflects a strong record of getting pupils into their next destination even where the latest GCSE headline statistics are less remarkable.</p><p>Strengths: Destinations, post-16 progression. Watch: English and mathematics attainment.</p><p>6. Holy Family RC & CE College, Heywood — strong ethos and pastoral environment</p><p>Holy Family is particularly difficult to judge solely through a numerical league table because some of the most compelling evidence concerns school culture. Its most recent established Ofsted judgement is Good, while its denominational inspection rated the college Outstanding.</p><p>The school describes itself as an oversubscribed joint Roman Catholic and Church of England college and places a particularly strong emphasis on pastoral care, personal development and Christian ethos. For parents prioritising school environment alongside results, Holy Family deserves to sit toward the upper half of the table.</p><p>Strengths: Pastoral environment, ethos, inspection record. Watch: Parents should compare the latest individual GCSE subject outcomes when making an academic comparison with the schools above.</p><p>7. Dixons Middleton Academy — middle of the pack academically, Good Ofsted</p><p>Dixons Middleton recorded an Attainment 8 score of 40.3, with 33.6% achieving grade 5+ in English and maths, 42.9% EBacc entry and an EBacc average point score of 3.57.</p><p>The EBacc entry rate is notable because it exceeds the Rochdale borough average and is around the national level. The school is rated Good by Ofsted, and its latest published destinations data indicates approximately 90% continuing into education, employment or apprenticeships.</p><p>The wider picture isn't perfect. Historical Parent View data collected around the 2024 inspection showed considerable disagreement among parents over behaviour and communication, although Parent View samples are voluntary and should never be treated like a representative opinion poll.</p><p>Strengths: EBacc participation, Good Ofsted judgement. Watch: Overall attainment and English/maths strong passes.</p><p>8. Falinge Park High School — around borough average with notable challenges</p><p>Government data for the predecessor establishment recorded an Attainment 8 score of 40.5, with 36.1% achieving grade 5+ in English and maths, 24.8% EBacc entry and an EBacc average point score of 3.37. Those figures are remarkably close to Rochdale's overall results.</p><p>But Falinge serves a particularly challenging intake. Among disadvantaged pupils, Attainment 8 was 36.6, while 30.3% achieved strong passes in English and mathematics.</p><p>Interestingly, pupils with English as an additional language actually outperformed the school's overall cohort on several measures: EAL pupils recorded an Attainment 8 score of 42.6 compared with 40.5 overall. That is an important achievement which a simplistic league table would completely miss.</p><p>The school has since converted to academy status, meaning some current government tables show no comparable data under the new establishment record.</p><p>Strengths: Outcomes for EAL pupils. Watch: Overall attainment and disadvantaged-pupil gap.</p><p>9. Newhouse Academy, Heywood — behaviour stronger than academic outcomes</p><p>Newhouse recorded an Attainment 8 score of 38.9, with 29.7% achieving grade 5+ in English and maths, 30.8% EBacc entry and an EBacc average point score of 3.26. That places academic performance below both Rochdale and national averages.</p><p>Its Ofsted picture is more encouraging. Although its 2023 inspection resulted in Requires Improvement overall, inspectors judged behaviour and attitudes, personal development, and leadership and management all Good. The school also underwent a monitoring visit in June 2025.</p><p>Newhouse has a substantial pastoral and attendance operation, including dedicated pastoral managers and an education welfare officer, with pupils' attendance monitored weekly. This is therefore another school where the headline GCSE statistics don't tell the full story.</p><p>Strengths: Behaviour, personal development, pastoral and attendance infrastructure. Watch: Academic attainment remains below borough averages.</p><p>10. Matthew Moss High School — academic outcomes currently below borough average</p><p>Matthew Moss recorded an Attainment 8 score of 39.3, with 34.3% achieving grade 5+ in English and maths, 26% EBacc entry and an EBacc average point score of 3.37. These figures put the school slightly below Rochdale's overall attainment measures.</p><p>Its disadvantaged cohort recorded an Attainment 8 score of 34.7, with 27.5% obtaining grade 5+ in English and mathematics.</p><p>The gender difference is also substantial: girls achieved an Attainment 8 score of 42.3, compared with 36 for boys. That is potentially one of the more interesting findings in the borough and deserves further investigation.</p><p>Strengths: Some stronger performance among girls and EAL pupils. Watch: Overall attainment and attainment among disadvantaged pupils and boys.</p><p>11. Kingsway Park High School — results weak, enrichment exceptionally interesting</p><p>On GCSE figures alone, Kingsway Park would sit near the bottom. Latest government figures show an Attainment 8 score of 35.3, with around 18% achieving grade 5+ in English and maths, 18.7% EBacc entry, an EBacc average point score of 2.87 — and 91% progressing to a recognised destination.</p><p>But Kingsway Park is perhaps the clearest demonstration of why this ranking goes beyond GCSE results. The school has developed an unusually extensive enrichment programme aimed particularly at children living in poverty, with reported activities including Brazilian jiu-jitsu, football, boxing, lacrosse, windsurfing, theatre, free music tuition and instruments for pupils. The school has also operated practical support including a food bank and assistance for families experiencing hardship.</p><p>Headteacher Simon Ward has spoken openly about tackling behaviour problems and attempting to provide opportunities pupils might otherwise never experience.</p><p>That does not erase weak examination performance. But it means describing Kingsway Park simply as one of Rochdale's "worst schools" would be unfair and potentially meaningless to a parent whose priority is enrichment, belonging or pastoral support.</p><p>Strengths: Enrichment, pastoral intervention, opportunities for disadvantaged children. Watch: GCSE attainment remains substantially below borough and national levels.</p><p>12. St Anne's CE Academy, Middleton — strong personal-development offer but academic comparison remains difficult</p><p>St Anne's was judged Good across all criteria by Ofsted in 2024. The academy describes a broad programme of extra-curricular activities alongside updated science and IT facilities and a nurturing Christian environment open to pupils of all faiths and backgrounds. This gives it a stronger qualitative picture than a purely exam-based comparison might suggest.</p><p>Strengths: Ofsted, enrichment, personal development and ethos. Watch: Comparable current GCSE data should be considered alongside the qualitative strengths before parents make a decision.</p><p>Edgar Wood Academy — not fairly rankable yet</p><p>Edgar Wood deserves a separate category. It is a relatively new school and the 2025 government performance tables show no Key Stage 4 cohort available for meaningful comparison. Trying to put it 13th simply because GCSE data doesn't exist would therefore be ridiculous.</p><p>The important evidence instead comes from Ofsted. The academy was inspected again in June 2026, following an earlier monitoring visit in May 2025. Because it is still developing and only recently reached the point at which older pupils move through the school, Rochdale Daily considers it unranked rather than last. That distinction matters.</p><p>What the league table tells us</p><p>There isn't actually one "best school" for every child.</p><p>If GCSE results are your priority, Hollingworth Academy is currently the clear standout: its 51.1 Attainment 8 score and approximately 60% strong-pass rate in English and mathematics are comfortably ahead of the borough averages.</p><p>If behaviour and personal development matter, Oulder Hill, Wardle, Newhouse and St Anne's have particularly useful independent inspection evidence.</p><p>If SEND provision is critical, parents should look beyond league tables altogether. Wardle, for example, has dedicated resourced provision. SEND arrangements differ significantly between schools and between individual children's needs.</p><p>If destinations matter, St Cuthbert's and Cardinal Langley both report approximately 94% progressing into education, employment or other recognised destinations.</p><p>If extracurricular opportunity matters, Kingsway Park's enrichment offer stands out despite comparatively weak academic figures.</p><p>And what about attendance and suspensions?</p><p>These deserve particular attention. Across Rochdale as a whole, secondary-school suspension levels have been sufficiently high to warrant concern, but using borough-wide numbers to label an individual school would be unfair.</p><p>Suspensions can also be counter-intuitive. A school recording more suspensions may genuinely have worse behaviour. But it may instead have a stricter behaviour policy and suspend pupils for conduct another school manages internally. Likewise, low suspensions don't automatically prove excellent behaviour.</p><p>That is why Rochdale Daily considers suspension data alongside Ofsted's behaviour and attitudes judgement, attendance, persistent absence and other evidence rather than awarding points simply for having fewer suspensions.</p><p>Attendance has similar complications. Schools serving communities experiencing severe deprivation, unstable housing, chronic illness or high levels of additional need can face greater attendance problems that are not entirely within the school's control. It remains an important measure — but it requires context.</p><p>Rochdale remains behind nationally on attainment</p><p>The wider borough picture shouldn't be ignored. Across Rochdale, the averages are: Attainment 8, 40.6; grade 5+ English and maths, 35%; EBacc entry, 30.2%; EBacc average point score, 3.47. National state-school figures are: Attainment 8, 46; grade 5+ English and maths, 45.4%; EBacc entry, 40.5%; EBacc average point score, 4.09.</p><p>So although individual schools are doing exceptionally well, Rochdale as a borough continues to have a substantial secondary-attainment gap with England overall. That is arguably the biggest education story of all.</p><p>Rochdale Daily's overall guide</p><p>1. Hollingworth Academy — strongest academics. 2. Oulder Hill Leadership Academy — strongest recent all-round inspection picture. 3. Wardle Academy — strong academic/pastoral balance. 4. St Cuthbert's RC High School — excellent destinations. 5. Cardinal Langley RC High School — strong destinations. 6. Holy Family RC & CE College — strong ethos and pastoral environment. 7. Dixons Middleton Academy — solid all-round performer. 8. Falinge Park High School — around borough average, noteworthy EAL outcomes. 9. Newhouse Academy — improving with good behaviour and personal development findings. 10. Matthew Moss High School — below-average current attainment. 11. Kingsway Park High School — weak attainment but exceptional enrichment story. 12. St Anne's CE Academy — Good inspection and broad enrichment; insufficient comparable attainment evidence for a higher position. Unranked: Edgar Wood Academy — too new for a fair full academic comparison.</p><p>A word to parents</p><p>A league table should be the beginning of choosing a school, not the end.</p><p>A child with SEND may thrive somewhere completely different from the highest-scoring GCSE school. A child struggling emotionally may benefit more from exceptional pastoral support. An academically driven pupil may be better suited to a school with particularly strong examination outcomes and curriculum breadth. A child who needs confidence may flourish because of sport, music, drama or enrichment.</p><p>Parents should therefore look at results, behaviour, attendance, pastoral care, SEND provision, destinations, enrichment — and how their own child feels inside the school. That gives a much more meaningful picture than a GCSE percentage alone.</p><p>Sources and methodology: Rochdale Daily's analysis uses the Department for Education's 2025 school performance tables, latest available Ofsted inspections and monitoring visits, Rochdale Borough Council's official secondary-school list, schools' statutory published information and publicly available destination, SEND, pastoral and enrichment information. Where directly comparable current information was unavailable, this is stated rather than estimated. Progress 8 has deliberately not been used for 2025 because the Department for Education says it cannot be calculated for the current cohorts due to the absence of Key Stage 2 baseline assessments following Covid disruption.</p>
+<details class="article-sources"><summary>Sources</summary><ul><li><a href="https://www.compare-school-performance.service.gov.uk/" target="_blank" rel="nofollow noopener noreferrer">Open source 1</a></li></ul></details></div>
+
+<section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">
+<h3 style="margin:0 0 8px">Legal and editorial note</h3>
+<p>This guide reflects Rochdale Daily's editorial assessment of publicly available data, including Department for Education performance tables, Ofsted inspection reports and schools' own published information. It is not an official ranking. Figures relate to the most recent published data at the time of writing and may not reflect subsequent results or inspections. Parents should verify current information directly with schools before making decisions.</p>
+<p><strong>Right to reply:</strong> Any school referenced may request a correction or right of reply by emailing news@rochdaledaily.co.uk.</p>
+<p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/accessibility.html">Accessibility</a> · <a href="#" data-cookie-settings>Cookie settings</a></p>
+</section>
+
+<section class="comments-section" id="comments-root" data-slug="rochdale-secondary-schools-ranked-2026-parents-guide" data-category="education"></section>
+</div>
+<aside class="article-sidebar">
+<div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>
+<div class="sidebar-box"><h3>Related local stories</h3><a class="related-story" href="rochdale-foodbank-morrisons-kingsway-food-drive-368-kilos.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-exchange-shopping-centre.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Shoppers donate 368 kilos of food at Rochdale Foodbank's Morrisons Kingsway drive</span></a><a class="related-story" href="mbf-cleaning-sponsors-rochdale-foodbank-van.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/mbf-cleaning-sponsors-rochdale-foodbank-van-generated-card.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">MBF Cleaning sponsors Rochdale Foodbank van to support deliveries across the borough</span></a><a class="related-story" href="gtas-veterans-charity-appeal-support-rochdale.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/get-together-after-serving.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Veterans charity says demand for support is growing after emotional day for volunteers</span></a><a class="related-story" href="gcse-results-day-guide-rochdale-parents-2026.html"><img src="https://rochdaledaily.co.uk/assets/img/cards/results_day.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">GCSE results day 2026: What Rochdale parents need to know – and why one set of grades doesn't define a future</span></a></div>
+</aside>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener("click", function(event) {
+var trigger = event.target.closest("[data-share]");
+if (!trigger) return;
+var action = trigger.dataset.share;
+var url = trigger.dataset.url;
+if (action === "copy") {
+navigator.clipboard.writeText(url).catch(function() {});
+}
+if (action === "facebook") {
+window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
+}
+if (action === "whatsapp") {
+window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
+}
+if (action === "x") {
+window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");
+}
+if (action === "bluesky") {
+window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");
+}
+if (action === "email") {
+window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);
+}
+});
+</script>
+<script defer src="/assets/js/article-comments.js"></script>
+<script defer src="/assets/js/cookie-consent.js"></script>
+<script defer src="/assets/ads.js"></script>
 </body>
 </html>
