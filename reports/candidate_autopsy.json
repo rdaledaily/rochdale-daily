@@ -1,36 +1,36 @@
 {
-  "examined_at": "2026-09-07T13:00:37.747938Z",
+  "examined_at": "2026-09-08T11:43:56.435082Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 102,
+  "candidates_examined": 106,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 66,
-    "would publish": 35,
+    "age": 69,
+    "would publish": 36,
     "not local": 1
   },
-  "would_publish": 35,
+  "would_publish": 36,
   "age_gate_sensitivity": {
-    "6h": 5,
-    "14h": 7,
-    "24h": 11,
-    "48h": 36,
-    "72h": 69,
-    "168h": 102
+    "6h": 14,
+    "14h": 17,
+    "24h": 27,
+    "48h": 37,
+    "72h": 80,
+    "168h": 106
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 63 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Place North West: Rochdale signals Middleton intent with plan to buy Warwick Mill - Plac",
-      "Roch Valley Radio Local News: East Lancashire Railway welcomes its first female steam locomotive dri"
+      "BBC Manchester: Steve Coogan on Warwick Mill deal and Middleton regeneration",
+      "Roch Valley Radio: Rochdale council agrees deal to buy Middleton's Warwick Mill - Roch Va"
     ],
     "not local": [
       "Ofsted: Ofsted publishes inspection report for Little Oaks Heywood"
     ],
     "age": [
-      "TfGM Travel Alerts: Travel alerts",
-      "Kentonline: Live updates: Rochdale v Gillingham, Walton & Hersham v Ebbsfleet, Mai",
-      "Jp: (LIVE^NOW) Rochdale v Gillingham 𝐋𝐈𝐕𝐄 Ｓｔｒｅａｍｓ ＯＮ Ｔｖ Ｃｈａｎｎｅｌ free 03.09"
+      "Transfermarkt: Rochdale AFC - transfermarkt.co.uk",
+      "Online Bookmakers: Walsall vs. Rochdale 12 September 2026 | H2H, Betting Tips & Odds - on",
+      "Rochdale Times: £5.2m to fill borough’s potholes - Rochdale Times"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
