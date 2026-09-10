@@ -674,12 +674,27 @@ def style_only(issues: list[str]) -> bool:
 def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[str]:
     clean = normalise_draft(draft)
     if not clean:
+        # Always terminal: an empty result is nothing to publish, not an opinion.
         return ["The model did not return an article object."]
-    if not bool(clean.get("publishable")):
-        return ["The model marked the story unpublishable."]
-    rejection = gate_rejection(clean)
-    if rejection:
-        return rejection
+
+    # The model's THREE self-classification vetoes -- publishable, content_class,
+    # is_about_rochdale_borough -- are the model grading its own homework. They
+    # were reliable with GPT-4o-mini; Llama vetoes genuine local news out of
+    # self-doubt, killing real stories ("Future of Middleton...", the hospital
+    # strikes). These are only a SECOND layer: the deterministic Python gates
+    # (careers/listing filter in rewrite_candidate, locality and denied-source
+    # checks during collection) already vetted this candidate before the model
+    # ever saw it, and the objective checks below (grounding, verbatim, length,
+    # headline) still run. So when the model is weak, we stop trusting its
+    # self-veto and let those independent gates decide. Set
+    # TRUST_MODEL_SELF_CLASSIFICATION=false for Cloudflare/Llama.
+    trust_self = os.getenv("TRUST_MODEL_SELF_CLASSIFICATION", "true").strip().lower() not in {"0", "false", "no", "off"}
+    if trust_self:
+        if not bool(clean.get("publishable")):
+            return ["The model marked the story unpublishable."]
+        rejection = gate_rejection(clean)
+        if rejection:
+            return rejection
 
     title = clean.get("title") or ""
     excerpt = clean.get("excerpt") or ""
