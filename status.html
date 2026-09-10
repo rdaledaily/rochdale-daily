@@ -7,6 +7,8 @@
   <meta name="robots" content="noindex,nofollow">
   <title>API status | Rochdale Daily</title>
   <style>
+@import url("/assets/css/rd-tokens.css");
+
     :root {
       --accent: #22d3ee; --navy: #0b1f3a; --ink: #eef3f9; --muted: #93a6bd;
       --line: #1e3550; --soft: #12263d; --paper: #0d1c2e; --card: #112741;
@@ -14,10 +16,10 @@
     }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--paper); color: var(--ink);
-      font-family: Roboto, Arial, Helvetica, sans-serif; line-height: 1.5; }
+      font-family:var(--font-body); line-height: 1.5; }
     .wrap { width: min(1000px, calc(100% - 28px)); margin-inline: auto; }
     header { background: var(--navy); border-bottom: 3px solid var(--accent); padding: 16px 0; }
-    header .title { font-family: Georgia, serif; font-size: 24px; color: #fff; }
+    header .title { font-family:var(--font-display); font-size: 24px; color: #fff; }
     header .sub { color: var(--muted); font-size: 13px; }
     h1 { font-size: 22px; margin: 22px 0 6px; }
     .lede { color: var(--muted); font-size: 14px; margin: 0 0 18px; max-width: 68ch; }
@@ -29,7 +31,7 @@
     .ep.good { border-left-color: var(--good); }
     .ep.bad { border-left-color: var(--bad); }
     .ep.warn { border-left-color: var(--warn); }
-    .ep h2 { margin: 0 0 4px; font-size: 17px; font-family: "Roboto Condensed", Arial, sans-serif; }
+    .ep h2 { margin: 0 0 4px; font-size: 17px; font-family:var(--font-display); }
     .ep .path { color: var(--muted); font-size: 12px; font-family: ui-monospace, Menlo, Consolas, monospace; }
     .verdict { margin: 8px 0 0; font-size: 14px; }
     .verdict b { color: var(--ink); }
