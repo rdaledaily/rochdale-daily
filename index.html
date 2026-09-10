@@ -1149,7 +1149,9 @@
   <link rel="alternate" type="application/rss+xml" title="Rochdale Daily RSS" href="/rss.xml">
   
   
-  
+  <!-- LATEST_ITEMLIST_START -->
+  <script type="application/ld+json" id="latest-news-itemlist">{"@context":"https://schema.org","@type":"ItemList","name":"Latest news from Rochdale Daily","itemListOrder":"https://schema.org/ItemListOrderDescending","numberOfItems":1,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"NewsArticle","headline":"Gillingham manager Gareth Ainsworth sees room for improvement despite 4-1 win at Rochdale","url":"https://rochdaledaily.co.uk/articles/gillingham-manager-gareth-ainsworth-sees-room-for-improvement-despite-4-1-win-at.html","datePublished":"2026-09-10T04:00:00Z"}}]}</script>
+  <!-- LATEST_ITEMLIST_END -->
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -1322,7 +1324,15 @@
             <div class="mobile-sections" id="mobile-sections"></div>
             <div class="news-grid" id="news-grid">
             <!-- STATIC_LATEST_START -->
-              <p class="feed-empty static-latest-empty">Latest verified local stories are being refreshed.</p>
+              <article class="news-card static-latest-card">
+                <a class="story-link" href="/articles/gillingham-manager-gareth-ainsworth-sees-room-for-improvement-despite-4-1-win-at.html">
+                  <div class="story-image-wrap"><img src="/assets/img/cards/gillingham-manager-gareth-ainsworth-sees-room-for-improvement-despite-4-1-win-at-generated-card.jpg" alt="" loading="lazy" decoding="async"></div>
+                  <span class="story-kicker">Sport</span>
+                  <h3 class="card-headline">Gillingham manager Gareth Ainsworth sees room for improvement despite 4-1 win at Rochdale</h3>
+                  <p class="card-summary">Gillingham manager Gareth Ainsworth is delighted with his team's 4-1 win at Rochdale, but sees room for improvement.</p>
+                  <div class="story-meta">Rochdale · <time datetime="2026-09-10T04:00:00Z">10 Sep 2026</time></div>
+                </a>
+              </article>
             <!-- STATIC_LATEST_END -->
             </div>
             <aside class="side-rail">
@@ -1377,7 +1387,7 @@
       <section class="section" id="more-local-news" aria-labelledby="more-local-news-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 class="section-title" id="more-local-news-title">More local news from the past 7 days</h2>
+            <h2 class="section-title" id="more-local-news-title">The past week</h2>
             <a class="section-link" href="/archive.html">Browse the archive</a>
           </div>
           <p style="margin:0 0 14px;color:var(--muted);font-size:15px">Further local reporting from the past week. Latest news above remains limited to verified current stories from the last 14 hours.</p>
@@ -1405,17 +1415,13 @@
       </section>
 <!-- WEEKLY_LOCAL_NEWS_END -->
 
-      <section class="section" id="news-by-ward" aria-labelledby="news-by-ward-title">
-        <div class="wrap">
-          <div class="section-head">
-            <h2 class="section-title" id="news-by-ward-title">News by ward</h2>
-            <a class="section-link" href="/wards/">All wards</a>
-          </div>
-          <p style="margin:0 0 14px;color:var(--muted);font-size:15px">Choose your ward for local stories and how the councillors representing you have voted.</p>
-          <div class="ward-picker">
-            <label class="hidden" for="ward-select">Choose a ward</label>
-            <select id="ward-select">
-              <option value="">Choose a ward&#8230;</option>
+      <!-- The ward list lives here as data only. The desktop "News by ward"
+           section that used to sit at this point was a heading, one sentence and
+           a dropdown: too little to be a section and it broke the flow between
+           the news and What's On. Ward navigation is in the main nav ("News by
+           ward"), on every ward page, and in the mobile feed, which reads its
+           options from this template so the list is still defined once. -->
+      <template id="ward-options"><option value="">Choose a ward&#8230;</option>
               <option value="/wards/balderstone-and-kirkholt.html">Balderstone and Kirkholt</option>
               <option value="/wards/bamford.html">Bamford</option>
               <option value="/wards/castleton.html">Castleton</option>
@@ -1435,16 +1441,12 @@
               <option value="/wards/spotland-and-falinge.html">Spotland and Falinge</option>
               <option value="/wards/wardle-shore-and-west-littleborough.html">Wardle, Shore and West Littleborough</option>
               <option value="/wards/west-heywood.html">West Heywood</option>
-              <option value="/wards/west-middleton.html">West Middleton</option>
-            </select>
-          </div>
-        </div>
-      </section>
+              <option value="/wards/west-middleton.html">West Middleton</option></template>
 
       <section class="whats-on" id="whats-on" aria-labelledby="whats-on-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 class="section-title" id="whats-on-title">What’s on this week</h2>
+            <h2 class="section-title" id="whats-on-title">What’s on</h2>
             <a class="section-link" href="mailto:events@rochdaledaily.co.uk?subject=Event%20listing">List your event</a>
           </div>
           <div class="event-filters" id="event-filters">
@@ -2827,7 +2829,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
        from the desktop select at render time, so the ward list stays defined
        in exactly one place; adding a ward there updates both layouts. */
     function mobileWardMarkup() {
-      const source = document.querySelector("#news-by-ward select");
+      const source = document.getElementById("ward-options");
       if (!source) return "";
       return `
         <section class="m-section" id="m-ward" aria-labelledby="m-ward-title">
