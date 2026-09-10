@@ -95,6 +95,8 @@
 
   function render() {
     if (!payload || !payload.poll || !payload.state || !payload.results) return;
+    var hostEl = document.getElementById("community-poll");
+    if (hostEl) hostEl.hidden = false;
 
     var poll = payload.poll;
     var state = payload.state;
@@ -215,7 +217,14 @@
     var url = API + "?voter_id=" + encodeURIComponent(voterId()) + "&_=" + Date.now();
     request("GET", url, null, function (ok, data) {
       if (!ok || !data || !data.poll || !data.state || !data.results) {
-        if (firstLoad) showError("The community poll is temporarily unavailable. Please try again shortly.");
+        /* No live poll, or the API is down: either way there is nothing for a
+           reader to do here. An empty section with an apology is not content.
+           Remove the section entirely; it comes back when a poll is live. */
+        if (firstLoad) {
+          var host = document.getElementById("community-poll");
+          if (host && host.parentNode) host.parentNode.removeChild(host);
+          if (refreshTimer) window.clearInterval(refreshTimer);
+        }
         return;
       }
       payload = data;
