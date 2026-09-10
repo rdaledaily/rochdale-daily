@@ -1,0 +1,499 @@
+/* Rochdale Daily — global newspaper compatibility layer
+ *
+ * This file exists while older static/generator templates are being retired.
+ * It deliberately uses only the semantic tokens defined by rd-tokens.css and
+ * carries enough specificity to stop old page-local CSS from recreating the
+ * former app-style/gold shells. New components should be authored in
+ * editorial-theme.css, not here.
+ */
+
+html,
+body {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  font-family: var(--font-body) !important;
+}
+
+.wrap {
+  width: min(var(--max), calc(100% - 40px)) !important;
+  margin-inline: auto !important;
+}
+
+/* One publication masthead everywhere. */
+.masthead {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line) !important;
+  box-shadow: none !important;
+}
+
+.masthead-row {
+  min-height: 112px !important;
+  align-items: center !important;
+  gap: 24px !important;
+}
+
+.masthead .brand,
+.masthead .brand:link,
+.masthead .brand:visited,
+.masthead > .wrap > a,
+.masthead-row > a {
+  color: var(--ink) !important;
+  text-decoration: none !important;
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.02em !important;
+}
+
+.masthead .brand > span,
+.masthead .brand-text-fallback > span {
+  color: var(--brand-accent) !important;
+}
+
+.brand-logo {
+  width: clamp(245px, 28vw, 330px) !important;
+  height: auto !important;
+  object-fit: contain !important;
+  filter: none !important;
+}
+
+.brand-text-fallback {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.04em !important;
+}
+
+.masthead-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.header-button,
+.masthead .header-button {
+  border: 1px solid var(--brand-navy) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--brand-navy) !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase !important;
+  padding: 10px 14px !important;
+}
+
+.header-button.solid,
+.masthead .header-button.solid {
+  background: var(--brand-navy) !important;
+  color: var(--on-dark) !important;
+}
+
+.masthead-search {
+  border: 1px solid var(--line-strong) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  box-shadow: none !important;
+}
+
+/* The edition bar is a newspaper rule, never a black app nav. */
+.primary-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 90 !important;
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border: 0 !important;
+  border-bottom: 2px solid var(--brand-navy) !important;
+  box-shadow: none !important;
+}
+
+.nav-row {
+  min-height: 45px !important;
+}
+
+.nav-list a,
+.nav-list button,
+.menu-search {
+  min-height: 45px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--ink) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: .025em !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+}
+
+.nav-list a:hover,
+.nav-list button:hover,
+.nav-list .active,
+.nav-list [aria-current="page"],
+.menu-search:hover {
+  background: transparent !important;
+  color: var(--brand-accent) !important;
+  box-shadow: inset 0 -3px 0 var(--brand-accent) !important;
+}
+
+.menu-toggle {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--ink) !important;
+}
+
+/* Editorial hierarchy rather than floating application cards. */
+.page-shell,
+.section,
+main {
+  background-color: var(--paper) !important;
+}
+
+.section-head {
+  border: 0 !important;
+  border-top: 3px solid var(--brand-navy) !important;
+  border-bottom: 1px solid var(--line) !important;
+  padding: 10px 0 11px !important;
+  margin-bottom: 22px !important;
+}
+
+.section-title {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  font-size: clamp(29px, 3vw, 39px) !important;
+  font-weight: 800 !important;
+  line-height: 1.03 !important;
+  letter-spacing: -.025em !important;
+  text-transform: none !important;
+}
+
+.section-link,
+.story-kicker {
+  color: var(--brand-accent) !important;
+  font-family: var(--font-ui) !important;
+}
+
+.lead-story,
+.secondary-story,
+.news-card,
+.event-card,
+.support-card,
+.directory-card,
+.rail-box,
+.sidebar-box {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.lead-story,
+.secondary-story,
+.news-card,
+.event-card,
+.support-card,
+.directory-card {
+  background: transparent !important;
+}
+
+.lead-headline,
+.secondary-headline,
+.card-headline,
+.news-card h2,
+.news-card h3,
+.event-card h3 {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  letter-spacing: -.025em !important;
+}
+
+.read-more-button {
+  border: 0 !important;
+  border-bottom: 1px solid currentColor !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--brand-accent) !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+}
+
+.latest-panel,
+.rail-box,
+.sidebar-box {
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 3px solid var(--brand-navy) !important;
+  box-shadow: none !important;
+}
+
+.latest-panel {
+  border-top: 0 !important;
+  border-left: 1px solid var(--line) !important;
+}
+
+.panel-title,
+.rail-title,
+.sidebar-box h3 {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  text-transform: none !important;
+}
+
+/* Generated /news section pages. */
+.cat-wrap {
+  width: min(1100px, calc(100% - 40px)) !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 42px 0 64px !important;
+  background: var(--paper) !important;
+}
+
+.cat-wrap > h1 {
+  margin: 0 0 12px !important;
+  padding-top: 10px !important;
+  border-top: 4px solid var(--brand-navy) !important;
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  font-size: clamp(36px, 5vw, 58px) !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: -.035em !important;
+}
+
+.cat-standfirst {
+  max-width: 65ch !important;
+  color: var(--ink-soft) !important;
+  font-size: 18px !important;
+  line-height: 1.55 !important;
+  margin-bottom: 26px !important;
+}
+
+.cat-nav {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0 !important;
+  margin: 0 0 28px !important;
+  border-top: 1px solid var(--line) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+.cat-nav a {
+  padding: 10px 12px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--ink-soft) !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: .03em !important;
+  text-transform: uppercase !important;
+}
+
+.cat-nav a:first-child {
+  padding-left: 0 !important;
+}
+
+.cat-nav a:hover,
+.cat-nav a[aria-current] {
+  background: transparent !important;
+  color: var(--brand-accent) !important;
+  box-shadow: inset 0 -3px 0 var(--brand-accent) !important;
+}
+
+.cat-grid {
+  gap: 28px 24px !important;
+}
+
+.cat-card {
+  border: 0 !important;
+  border-bottom: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.cat-card .cat-body {
+  padding: 12px 0 20px !important;
+}
+
+.cat-card h3 {
+  margin: 5px 0 8px !important;
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.02em !important;
+}
+
+.cat-card h3 a {
+  color: var(--ink) !important;
+}
+
+.cat-card p {
+  color: var(--muted) !important;
+  line-height: 1.5 !important;
+}
+
+.cat-meta {
+  color: var(--muted) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: .05em !important;
+}
+
+/* Trust/legal/static pages may keep their own content layout, not their own brand. */
+.trust-wrap {
+  background: var(--paper) !important;
+}
+
+.trust-kicker {
+  color: var(--brand-accent) !important;
+  border-color: var(--brand-accent) !important;
+  font-family: var(--font-ui) !important;
+}
+
+.trust-wrap h1,
+.trust-wrap h2,
+.trust-wrap h3 {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  text-transform: none !important;
+}
+
+.trust-wrap h2 {
+  border-top-color: var(--brand-navy) !important;
+}
+
+.trust-standfirst,
+.trust-wrap p,
+.trust-wrap li {
+  color: var(--ink-soft) !important;
+}
+
+.trust-note,
+.trust-index {
+  border-color: var(--line) !important;
+  border-radius: 0 !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+}
+
+.trust-note {
+  border-left: 5px solid var(--brand-accent) !important;
+}
+
+.trust-contact {
+  border: 0 !important;
+  border-top: 4px solid var(--brand-navy) !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+}
+
+.trust-contact h3,
+.trust-contact p {
+  color: var(--ink) !important;
+}
+
+.trust-contact a,
+.trust-wrap a {
+  color: var(--brand-accent-dark) !important;
+}
+
+/* One footer treatment, including old pages whose footer is inline-styled. */
+.site-footer,
+body > footer {
+  background: var(--brand-navy) !important;
+  color: var(--on-dark) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.site-footer a,
+body > footer a {
+  color: var(--on-dark-mut) !important;
+}
+
+.site-footer a:hover,
+body > footer a:hover {
+  color: var(--on-dark) !important;
+}
+
+.site-footer strong,
+body > footer strong,
+.footer-brand,
+.footer-col h3 {
+  color: var(--on-dark) !important;
+}
+
+.footer-brand {
+  font-family: var(--font-display) !important;
+  text-transform: none !important;
+}
+
+/* Square editorial controls throughout. */
+.filter-button,
+.event-filter,
+.dem-tab,
+.rail-input,
+.ward-picker select,
+.dem-ward-pick select,
+.newsletter-row input,
+.newsletter-row button,
+.ae-field input,
+.ae-field textarea,
+.ae-field select {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 760px) {
+  .wrap,
+  .cat-wrap {
+    width: min(100% - 24px, var(--max)) !important;
+  }
+
+  .masthead-row {
+    min-height: 88px !important;
+    gap: 10px !important;
+  }
+
+  .brand-logo {
+    width: min(225px, 58vw) !important;
+  }
+
+  .primary-nav {
+    position: relative !important;
+  }
+
+  .nav-list a,
+  .nav-list button,
+  .menu-search {
+    min-height: 42px !important;
+    padding-inline: 10px !important;
+    font-size: 12px !important;
+  }
+
+  .cat-wrap {
+    padding-top: 28px !important;
+  }
+
+  .cat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .latest-panel {
+    border-left: 0 !important;
+    border-top: 3px solid var(--brand-navy) !important;
+    padding-left: 0 !important;
+  }
+}
