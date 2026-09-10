@@ -23,7 +23,8 @@ stage_newsroom() {
     newsroom_candidates.json google_news_resolution_report.json google_news_resolutions.json live_source_state.json \
     image_coverage_report.json image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json assets/img/cards \
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json \
-    archive.html search.html archive-index.json rss.xml index.html 2>/dev/null || true
+    archive.html search.html archive-index.json rss.xml index.html \
+      news/ corrections-log.html heywood.html milnrow.html 2>/dev/null || true
 }
 
 finalise_cards_policy() {
