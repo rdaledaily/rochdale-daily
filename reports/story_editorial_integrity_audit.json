@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 137,
-  "published_count": 137,
+  "article_count": 146,
+  "published_count": 146,
   "category_change_count": 18,
-  "image_change_count": 10,
+  "image_change_count": 14,
   "category_changes": [
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -134,6 +134,54 @@
     }
   ],
   "image_changes": [
+    {
+      "slug": "sport-england-objects-to-sports-hub-plans-in-middleton",
+      "title": "Sport England Objects to Sports Hub Plans in Middleton",
+      "category": "sport",
+      "reason": "weak filename image match score 8252; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/sport-england-objects-to-sports-hub-plans-in-middleton-generated-card.jpg"
+    },
+    {
+      "slug": "middleton-regeneration-plans-unveiled-at-arena-event",
+      "title": "Middleton Regeneration Plans Unveiled at Arena Event",
+      "category": "business",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/middleton-regeneration-plans-unveiled-at-arena-event.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/middleton-regeneration-plans-unveiled-at-arena-event-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-featured-in-boreham-wood-football-match-post",
+      "title": "Rochdale Featured in Boreham Wood Football Match Post",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-featured-in-boreham-wood-football-match-post-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-board-of-directors-issues-message-to-supporters-amid-disappointing-star",
+      "title": "Rochdale Board of Directors Issues Message to Supporters Amid Disappointing Start",
+      "category": "sport",
+      "reason": "weak filename image match score 8128; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/fixtures.jpg",
+        "img": "assets/img/cards/fixtures.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-board-of-directors-issues-message-to-supporters-amid-disappointing-star-generated-card.jpg"
+    },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
       "title": "Rock Classics by Candlelight, Rochdale",
