@@ -49,7 +49,7 @@
       "}" +
       "#news-grid .latest-news-ad:not(.ad-live)::before{" +
         "content:\"Advertisement\";" +
-        "font:700 11px/1 Arial,sans-serif;" +
+        "font:700 11px/1 var(--font-body);" +
         "letter-spacing:.12em;" +
         "text-transform:uppercase;" +
         "color:#777;" +
@@ -71,7 +71,7 @@
         "border:2px solid var(--accent,#0e7490)!important;" +
         "background:#fff!important;" +
         "color:var(--accent,#0e7490)!important;" +
-        "font-family:\"Roboto Condensed\",Arial,sans-serif!important;" +
+        "font-family:var(--font-display)!important;" +
         "font-size:16px!important;" +
         "line-height:1.2!important;" +
         "font-weight:900!important;" +
@@ -233,7 +233,7 @@
         "#support .rd-support-heading{width:100%;margin:0!important;font:inherit;}" +
         "#support .section-head{margin:0!important;}" +
         "#support .section-head>.section-link{display:none;}" +
-        "#support .rd-support-tab{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--line,#dcdcdc);border-left:5px solid var(--accent,#0e7490);background:#fff;color:var(--ink,#1a1a1a);font-family:\"Roboto Condensed\",Arial,sans-serif;font-size:18px;font-weight:900;text-align:left;text-transform:uppercase;box-shadow:0 2px 10px rgba(0,0,0,.06);}" +
+        "#support .rd-support-tab{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--line,#dcdcdc);border-left:5px solid var(--accent,#0e7490);background:#fff;color:var(--ink,#1a1a1a);font-family:var(--font-display);font-size:18px;font-weight:900;text-align:left;text-transform:uppercase;box-shadow:0 2px 10px rgba(0,0,0,.06);}" +
         "#support .rd-support-tab:hover,#support .rd-support-tab:focus-visible{background:#f5f7f8;}" +
         "#support .rd-support-arrow{font-size:24px;line-height:1;transition:transform .18s ease;color:var(--accent,#0e7490);}" +
         "#support .rd-support-tab[aria-expanded=\"true\"] .rd-support-arrow{transform:rotate(180deg);}" +
@@ -282,7 +282,7 @@
         "#rd-small-ad-inventory{padding:28px 0;background:#fff;border-top:1px solid var(--line,#dcdcdc);}" +
         "#rd-small-ad-inventory[hidden]{display:none!important;}" +
         "#rd-small-ad-inventory .rd-small-ad-wrap{width:min(var(--max,1220px),calc(100% - 30px));margin:0 auto;}" +
-        "#rd-small-ad-inventory h2{margin:0 0 14px;font-family:\"Roboto Condensed\",Arial,sans-serif;font-size:18px;line-height:1.2;font-weight:900;text-transform:uppercase;}" +
+        "#rd-small-ad-inventory h2{margin:0 0 14px;font-family:var(--font-display);font-size:18px;line-height:1.2;font-weight:900;text-transform:uppercase;}" +
         "#rd-small-ad-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:stretch;}" +
         ".rd-small-ad-slot:not(.ad-live){display:none!important;}" +
         ".rd-small-ad-slot.ad-live{display:flex;align-items:center;justify-content:center;min-width:0;min-height:92px;padding:5px;background:#f7f7f7;border:1px solid #ddd;overflow:hidden;}" +
