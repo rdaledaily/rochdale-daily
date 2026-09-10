@@ -192,72 +192,111 @@
 (function () {
   "use strict";
 
-  function initSupportTab() {
-    var section = document.getElementById("support");
-    if (!section || section.dataset.rdSupportTab === "1") return;
+  /* Disclosure sections. Democracy and Community support are reference
+     material rather than news, so they sit folded with a plain instruction on
+     the tab -- "Open to explore", "Open for resources" -- and unfold on a
+     click. The same code drives both so they look and behave identically.
 
-    var content = section.querySelector(":scope > .wrap");
-    var heading = section.querySelector("#support-title");
-    if (!content || !heading) return;
+     Two things the old Community-support-only version got wrong, both fixed:
+       - it hid the content with the `hidden` attribute, which any stylesheet
+         rule with display:grid overrides, so the "closed" tab sat above fully
+         visible content;
+       - Democracy had no tab at all, just four buttons over an empty panel. */
+  var DISCLOSURES = [
+    { id: "support",   heading: "support-title",   label: "Community support", hint: "Open for resources" },
+    { id: "democracy", heading: "democracy-title", label: "Democracy",         hint: "Open to explore" }
+  ];
 
-    section.dataset.rdSupportTab = "1";
-    section.classList.add("rd-support-collapsible");
+  function installDisclosureStyle() {
+    if (document.getElementById("rd-disclosure-style")) return;
+    var style = document.createElement("style");
+    style.id = "rd-disclosure-style";
+    style.textContent =
+      ".rd-disclosure{padding:0!important;background:transparent!important;}" +
+      ".rd-disclosure .rd-disclosure-heading{width:100%;margin:0!important;font:inherit;}" +
+      ".rd-disclosure .section-head{margin:0!important;}" +
+      ".rd-disclosure .section-head>.section-link{display:none;}" +
+      ".rd-disclosure.rd-open .section-head>.section-link{display:inline-flex;}" +
+      ".rd-disclosure-tab{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;" +
+        "border:1px solid var(--line,#dcdcdc);border-left:5px solid var(--accent,#0e7490);background:var(--card,#fff);color:var(--ink,#141414);" +
+        "font-family:var(--font-display,inherit);font-size:20px;font-weight:800;letter-spacing:.01em;text-transform:uppercase;cursor:pointer;text-align:left;}" +
+      ".rd-disclosure-tab:hover,.rd-disclosure-tab:focus-visible{background:#f5f7f8;}" +
+      ".rd-disclosure-hint{margin-left:auto;display:inline-flex;align-items:center;gap:10px;font-family:var(--font-ui,inherit);font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--accent,#0e7490);white-space:nowrap;}" +
+      ".rd-disclosure-arrow{font-size:22px;line-height:1;transition:transform .18s ease;}" +
+      ".rd-disclosure-tab[aria-expanded=\"true\"] .rd-disclosure-arrow{transform:rotate(180deg);}" +
+      /* The important bit: `hidden` must beat display:grid/flex from any sheet. */
+      ".rd-disclosure .rd-disclosure-body[hidden]{display:none!important;}" +
+      ".rd-disclosure.rd-open .rd-disclosure-body{padding-top:22px;}" +
+      "@media(max-width:820px){.rd-disclosure-tab{padding:12px 15px;font-size:16px}.rd-disclosure-hint{font-size:11px}}" +
+      "@media(prefers-reduced-motion:reduce){.rd-disclosure-arrow{transition:none}}";
+    document.head.appendChild(style);
+  }
 
+  function initDisclosure(spec) {
+    var section = document.getElementById(spec.id);
+    if (!section || section.dataset.rdDisclosure === "1") return;
+    var wrap = section.querySelector(":scope > .wrap");
+    var heading = document.getElementById(spec.heading);
+    if (!wrap || !heading) return;
     var sectionHead = heading.closest(".section-head");
     if (!sectionHead) return;
 
+    section.dataset.rdDisclosure = "1";
+    section.classList.add("rd-disclosure");
+    installDisclosureStyle();
+
+    /* Everything in the wrap except the head becomes the body. */
+    var body = document.createElement("div");
+    body.className = "rd-disclosure-body";
+    body.id = spec.id + "-disclosure-body";
+    Array.prototype.slice.call(wrap.children).forEach(function (child) {
+      if (child !== sectionHead) body.appendChild(child);
+    });
+    wrap.appendChild(body);
+    body.hidden = true;
+
     var toggle = document.createElement("button");
     toggle.type = "button";
-    toggle.className = "rd-support-tab";
+    toggle.className = "rd-disclosure-tab";
     toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-controls", "community-support-content");
-    toggle.innerHTML = '<span>Community support</span><span class="rd-support-arrow" aria-hidden="true">&#9662;</span>';
+    toggle.setAttribute("aria-controls", body.id);
+    toggle.innerHTML =
+      "<span>" + spec.label + "</span>" +
+      '<span class="rd-disclosure-hint"><span class="rd-disclosure-hint-text">' + spec.hint + "</span>" +
+      '<span class="rd-disclosure-arrow" aria-hidden="true">&#9662;</span></span>';
 
-    /* Keep the real h2 in the accessibility tree and make the heading itself
-       own the disclosure control. The h3 support-card headings therefore retain
-       a navigable h2 parent for screen-reader heading navigation. */
+    /* Keep the real h2 in the accessibility tree; the heading owns the control. */
     heading.textContent = "";
-    heading.classList.add("rd-support-heading");
+    heading.classList.add("rd-disclosure-heading");
     heading.appendChild(toggle);
 
-    content.id = "community-support-content";
-    Array.prototype.slice.call(content.children).forEach(function (child) {
-      if (child !== sectionHead) child.hidden = true;
-    });
-
-    if (!document.getElementById("community-support-tab-style")) {
-      var style = document.createElement("style");
-      style.id = "community-support-tab-style";
-      style.textContent =
-        "#support.rd-support-collapsible{padding:0!important;background:transparent!important;}" +
-        "#support .rd-support-heading{width:100%;margin:0!important;font:inherit;}" +
-        "#support .section-head{margin:0!important;}" +
-        "#support .section-head>.section-link{display:none;}" +
-        "#support .rd-support-tab{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--line,#dcdcdc);border-left:5px solid var(--accent,#0e7490);background:#fff;color:var(--ink,#1a1a1a);font-family:var(--font-display);font-size:18px;font-weight:900;text-align:left;text-transform:uppercase;box-shadow:0 2px 10px rgba(0,0,0,.06);}" +
-        "#support .rd-support-tab:hover,#support .rd-support-tab:focus-visible{background:#f5f7f8;}" +
-        "#support .rd-support-arrow{font-size:24px;line-height:1;transition:transform .18s ease;color:var(--accent,#0e7490);}" +
-        "#support .rd-support-tab[aria-expanded=\"true\"] .rd-support-arrow{transform:rotate(180deg);}" +
-        "#community-support-content{padding-top:0;padding-bottom:0;}" +
-        "#support.rd-support-open #community-support-content{padding-top:22px;padding-bottom:22px;}" +
-        "#support.rd-support-open .section-head>.section-link{display:inline-flex;}" +
-        "@media(max-width:820px){#support .rd-support-tab{padding:12px 15px;font-size:16px}}";
-      document.head.appendChild(style);
+    function setOpen(open) {
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      section.classList.toggle("rd-open", open);
+      body.hidden = !open;
+      toggle.querySelector(".rd-disclosure-hint-text").textContent = open ? "Close" : spec.hint;
+      if (open) section.dispatchEvent(new CustomEvent("rd:disclosure-open", { bubbles: true }));
     }
-
     toggle.addEventListener("click", function () {
-      var willOpen = toggle.getAttribute("aria-expanded") !== "true";
-      toggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
-      section.classList.toggle("rd-support-open", willOpen);
-      Array.prototype.slice.call(content.children).forEach(function (child) {
-        if (child !== sectionHead) child.hidden = !willOpen;
-      });
+      setOpen(toggle.getAttribute("aria-expanded") !== "true");
     });
+    /* A hash link straight to the section (the nav's "Democracy" and
+       "Community") should land on it open, not on a closed tab. */
+    function openIfTargeted() {
+      if (window.location.hash === "#" + spec.id) setOpen(true);
+    }
+    openIfTargeted();
+    window.addEventListener("hashchange", openIfTargeted);
+  }
+
+  function initDisclosures() {
+    DISCLOSURES.forEach(initDisclosure);
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initSupportTab, { once: true });
+    document.addEventListener("DOMContentLoaded", initDisclosures, { once: true });
   } else {
-    initSupportTab();
+    initDisclosures();
   }
 })();
 
