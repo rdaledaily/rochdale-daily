@@ -41,12 +41,14 @@ jobs:
       # facts and paraphrases better -- clearing the grounding and verbatim gates
       # far more often (council, GMP and court stories especially). OPENAI_API_KEY
       # holds a Groq API key from console.groq.com (free; sign in with Google or
-      # GitHub, no card, no cloud project). LLM_RESPONSE_FORMAT=json_object is
-      # supported by Groq; if a run logs a response_format error, set it to "none".
-      # To return to Cloudflare Llama, restore the api.cloudflare.com base URL and
-      # the @cf/meta/llama model and point OPENAI_API_KEY back at the Cloudflare token.
+      # GitHub, no card, no cloud project). LLM_RESPONSE_FORMAT=none because Groq's
+      # json_object mode 400s unless the literal word "json" appears in the messages,
+      # which this pipeline's json.dumps payload does not contain; the prompt already
+      # asks for a JSON object and extract_json_object() parses the reply, so "none"
+      # is safe. To return to Cloudflare Llama, restore the api.cloudflare.com base
+      # URL and the @cf/meta/llama model and point OPENAI_API_KEY back at that token.
       OPENAI_BASE_URL: "https://api.groq.com/openai/v1"
-      LLM_RESPONSE_FORMAT: "json_object"
+      LLM_RESPONSE_FORMAT: "none"
       # Llama self-vetoes genuine local news; the deterministic Python gates
       # (locality, careers/listing, denied sources) already protect the paper,
       # so its self-classification is advisory here, not a veto.
@@ -232,12 +234,14 @@ jobs:
       # facts and paraphrases better -- clearing the grounding and verbatim gates
       # far more often (council, GMP and court stories especially). OPENAI_API_KEY
       # holds a Groq API key from console.groq.com (free; sign in with Google or
-      # GitHub, no card, no cloud project). LLM_RESPONSE_FORMAT=json_object is
-      # supported by Groq; if a run logs a response_format error, set it to "none".
-      # To return to Cloudflare Llama, restore the api.cloudflare.com base URL and
-      # the @cf/meta/llama model and point OPENAI_API_KEY back at the Cloudflare token.
+      # GitHub, no card, no cloud project). LLM_RESPONSE_FORMAT=none because Groq's
+      # json_object mode 400s unless the literal word "json" appears in the messages,
+      # which this pipeline's json.dumps payload does not contain; the prompt already
+      # asks for a JSON object and extract_json_object() parses the reply, so "none"
+      # is safe. To return to Cloudflare Llama, restore the api.cloudflare.com base
+      # URL and the @cf/meta/llama model and point OPENAI_API_KEY back at that token.
       OPENAI_BASE_URL: "https://api.groq.com/openai/v1"
-      LLM_RESPONSE_FORMAT: "json_object"
+      LLM_RESPONSE_FORMAT: "none"
       # Llama self-vetoes genuine local news; the deterministic Python gates
       # (locality, careers/listing, denied sources) already protect the paper,
       # so its self-classification is advisory here, not a veto.
