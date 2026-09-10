@@ -95,20 +95,35 @@ a.up{background:#eee;color:var(--ink);border:1px solid var(--line)}
   <input type="url" id="crediturl">
 
   <h2 style="margin-top:18px">Publish</h2>
+  <label for="token">Newsdesk password <small>— your EVENTS_ADMIN_TOKEN, remembered on this device only</small></label>
+  <input type="password" id="token" autocomplete="off" placeholder="paste once; it stays in this browser">
   <ul id="problems"></ul>
   <div class="btnrow">
-    <button id="make">Build the article file</button>
-    <button id="copy" disabled>Copy JSON</button>
-    <button id="dl" disabled>Download file</button>
-    <a class="up" href="https://github.com/rdaledaily/rochdale-daily/upload/main/" target="_blank" rel="noopener">Open the upload page ↗</a>
+    <button id="send">Publish it</button>
+    <button id="make">Build file (no login)</button>
   </div>
-  <textarea id="out" readonly spellcheck="false" placeholder="The pending_manual file appears here."></textarea>
-  <div class="steps">
-    <b>The whole process:</b> fill in → Build → Download → drag the file onto the
-    upload page (repo root, not a folder) → commit. The pending-manual workflow
-    merges and publishes it by itself; the image and homepage follow on the next
-    render. Nothing on this page leaves your browser.
+  <div id="result" class="hint"></div>
+  <div class="steps" id="mainsteps">
+    <b>The whole process:</b> fill the story in, choose an image, type your
+    newsdesk password once, and press <b>Publish it</b>. It goes straight to the
+    paper's queue and publishes on the next run — image, category and homepage
+    all handled. No GitHub, no upload page. The password stays in this browser
+    and nothing else leaves it.
   </div>
+
+  <details style="margin-top:12px">
+    <summary style="cursor:pointer;font-size:13px;color:var(--muted)">If publishing ever fails — the manual fallback</summary>
+    <div class="btnrow" style="margin-top:8px">
+      <button id="copy" disabled>Copy JSON</button>
+      <button id="dl" disabled>Download file</button>
+      <a class="up" href="https://github.com/rdaledaily/rochdale-daily/upload/main/" target="_blank" rel="noopener">Open the upload page ↗</a>
+    </div>
+    <textarea id="out" readonly spellcheck="false" placeholder="Press “Build file” and the pending_manual file appears here."></textarea>
+    <p class="hint">Press <b>Build file</b>, download it, then drag it onto the
+    upload page (repo root, not a folder) while signed in to GitHub as the
+    account that owns the repo. Only needed if the Publish button can't reach
+    the site.</p>
+  </details>
 </section>
 
 </main></div>
@@ -253,9 +268,10 @@ function offsetISO(localValue){
   return localValue + ":00" + sign + hh + ":" + mm;
 }
 let currentSlug = "";
-$("make").addEventListener("click", () => {
+/* Build the article record from the form, or null if it can't publish. */
+function buildEntry(){
   const list = problems();
-  if (!render(list)) { $("out").value = ""; $("copy").disabled = $("dl").disabled = true; return; }
+  if (!render(list)) return null;
   const title = cleanText($("title").value);
   const slug = slugify(title);
   currentSlug = slug;
@@ -290,6 +306,49 @@ $("make").addEventListener("click", () => {
   if (sname) entry.source_name = sname;
   if (surl) entry.source_url = surl;
   if (sname) entry.legal_disclaimer = "This article was compiled from information published by " + sname + ".";
+  return entry;
+}
+
+/* ---- remember the newsdesk password on this device only ---- */
+try { const saved = localStorage.getItem("rd_newsdesk_token"); if (saved) $("token").value = saved; } catch(_){}
+$("token").addEventListener("change", () => {
+  try { localStorage.setItem("rd_newsdesk_token", $("token").value.trim()); } catch(_){}
+});
+
+/* ---- Publish it: POST straight to the newsdesk queue ---- */
+$("send").addEventListener("click", async () => {
+  const result = $("result");
+  const token = $("token").value.trim();
+  if (!token){ result.innerHTML = '<span class="bad">Enter your newsdesk password first.</span>'; return; }
+  const entry = buildEntry();
+  if (!entry){ result.innerHTML = '<span class="bad">Fix the problems listed above, then publish.</span>'; return; }
+  $("send").disabled = true; result.textContent = "Sending…";
+  try {
+    const r = await fetch("/api/newsdesk", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-token": token },
+      body: JSON.stringify({ ...entry, published_at: entry.published_at })
+    });
+    const data = await r.json().catch(() => ({}));
+    if (r.ok){
+      result.innerHTML = '<span class="good">✓ Queued. It publishes on the next newsdesk run (within ~15 minutes). You can compose another.</span>';
+      ["title","excerpt","body","sname","surl","credit","crediturl"].forEach(id => $(id).value = "");
+      chosen = ""; $("preview").hidden = true; $("imgstatus").textContent = "No image chosen yet.";
+    } else if (r.status === 401){
+      result.innerHTML = '<span class="bad">Password rejected. Check it matches your EVENTS_ADMIN_TOKEN.</span>';
+    } else {
+      result.innerHTML = '<span class="bad">' + (data.error || ("Failed: " + r.status)) + " — use the manual fallback below if this persists.</span>";
+    }
+  } catch(err){
+    result.innerHTML = '<span class="warn">Could not reach the site (' + String(err).slice(0,60) + "). Use the manual fallback below.</span>";
+  } finally {
+    $("send").disabled = false;
+  }
+});
+
+$("make").addEventListener("click", () => {
+  const entry = buildEntry();
+  if (!entry){ $("out").value = ""; $("copy").disabled = $("dl").disabled = true; return; }
   $("out").value = JSON.stringify([entry], null, 2) + "\n";
   $("copy").disabled = $("dl").disabled = false;
 });
