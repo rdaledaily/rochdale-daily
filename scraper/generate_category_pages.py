@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -71,11 +72,23 @@ def read_json(path: Path, default):
         return default
 
 
+TOKEN_IMPORT_PATTERN = re.compile(
+    r'@import\s+url\(\s*[\'"]?/?assets/css/rd-tokens\.css[\'"]?\s*\)\s*;\s*', re.I
+)
+
+
 def load_css() -> str:
+    """site.css for inlining, with the token @import lifted out.
+
+    The tokens are linked in the head instead. Inside an inline <style> an
+    @import is only found once that block is parsed, so these section pages
+    would block on a second round trip before they had a colour or a font.
+    """
     try:
-        return CSS_PATH.read_text(encoding="utf-8")
+        css = CSS_PATH.read_text(encoding="utf-8")
     except OSError:
         return ""
+    return TOKEN_IMPORT_PATTERN.sub("", css, count=1)
 
 
 def parse_iso(value) -> datetime:
@@ -117,6 +130,11 @@ def chrome_head(title: str, description: str, canonical: str, css: str, json_ld:
         f'<title>{esc(title)} | Rochdale Daily</title>'
         f'<meta name="description" content="{esc(description)}">'
         f'<link rel="canonical" href="{esc(canonical)}">'
+        '<link rel="preconnect" href="https://fonts.googleapis.com">'
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+        '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700'
+        '&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">'
+        '<link rel="stylesheet" href="/assets/css/rd-tokens.css">'
         '<meta property="og:type" content="website"><meta property="og:site_name" content="Rochdale Daily">'
         f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}">'
         f'<meta property="og:url" content="{esc(canonical)}">'
