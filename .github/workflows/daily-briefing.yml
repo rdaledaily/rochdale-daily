@@ -1,0 +1,85 @@
+name: Rochdale Daily briefing
+
+# Appointment publishing: the Morning Briefing at 9am and the Evening Wrap-Up
+# at 6pm, every day, so the borough can set its watch by the paper.
+#
+# GitHub's scheduler only speaks UTC, and Britain does not. Firing on BOTH
+# candidate hours and letting daily_briefing.py check the real Europe/London
+# clock is what keeps the briefing at 9am through BST *and* GMT -- an
+# appointment that slips an hour when the clocks change is not an appointment.
+# The slot that is not due simply exits without writing anything.
+#
+# The script writes a pending_manual_*.json; committing it triggers the existing
+# publish-pending-manual workflow, so briefings go out through exactly the same
+# route as any editor-written article. No new publishing lane.
+
+on:
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: "Force a slot now (morning or evening). Leave blank for scheduled behaviour."
+        required: false
+        default: ""
+  schedule:
+    - cron: "0 8,9 * * *"    # 9am London, BST and GMT respectively
+    - cron: "0 17,18 * * *"  # 6pm London, BST and GMT respectively
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-daily-briefing
+  cancel-in-progress: false
+
+jobs:
+  briefing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build the briefing due at this hour
+        run: |
+          if [ -n "${{ github.event.inputs.slot }}" ]; then
+            python scraper/daily_briefing.py --slot "${{ github.event.inputs.slot }}" --force
+          else
+            # Each call self-gates on the London clock; at most one writes a file.
+            python scraper/daily_briefing.py --slot morning
+            python scraper/daily_briefing.py --slot evening
+          fi
+
+      - name: Publish it
+        run: |
+          if ! ls pending_manual_briefing_*.json >/dev/null 2>&1; then
+            echo "No briefing due this hour."
+            exit 0
+          fi
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add pending_manual_briefing_*.json
+          git commit -m "Publish the scheduled Rochdale Daily briefing
+
+          Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01R6dJYBJEAHJKdSkgJUkgHz"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main \
+              && git push origin HEAD:main \
+              && { echo "briefing queued for publication"; exit 0; }
+            sleep $((attempt * 6))
+          done
+          echo "::error::could not push the briefing"
+          exit 1
