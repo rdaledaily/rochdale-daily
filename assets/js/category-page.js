@@ -34,7 +34,6 @@
   const els = {
     title: document.getElementById('page-title'),
     standfirst: document.getElementById('page-standfirst'),
-    routeNote: document.getElementById('route-note'),
     results: document.getElementById('story-results'),
     summary: document.getElementById('results-summary'),
     loading: document.getElementById('loading-state'),
@@ -134,15 +133,22 @@
     return `/post.html?id=${encodeURIComponent(id)}`;
   }
 
+  function buildFilterHref(category, area) {
+    const query = new URLSearchParams();
+    const normalCategory = normaliseSlug(category);
+    const normalArea = normaliseSlug(area);
+    if (normalCategory && normalCategory !== 'news') query.set('type', normalCategory);
+    if (normalArea) query.set('area', normalArea);
+    const suffix = query.toString();
+    return suffix ? `/category.html?${suffix}` : '/category.html';
+  }
+
   function preferredRoute() {
     if (selectedCategory && !selectedArea && STATIC_CATEGORY_ROUTES.has(selectedCategory)) {
       return `/news/${selectedCategory}.html`;
     }
     if (!selectedCategory && !selectedArea) return '/category.html';
-    const query = new URLSearchParams();
-    if (selectedCategory) query.set('type', selectedCategory);
-    if (selectedArea) query.set('area', selectedArea);
-    return `/category.html?${query.toString()}`;
+    return buildFilterHref(selectedCategory, selectedArea);
   }
 
   function setCanonical(url) {
@@ -188,25 +194,17 @@
 
     document.querySelectorAll('[data-filter-category]').forEach(link => {
       const value = normaliseSlug(link.dataset.filterCategory);
+      link.href = buildFilterHref(value, selectedArea);
       if (value === selectedCategory || (!selectedCategory && value === 'news')) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     });
+
     document.querySelectorAll('[data-filter-area]').forEach(link => {
       const value = normaliseSlug(link.dataset.filterArea);
-      if (value === selectedArea) link.setAttribute('aria-current', 'page');
+      link.href = buildFilterHref(selectedCategory, value);
+      if ((!value && !selectedArea) || (value && value === selectedArea)) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     });
-
-    const preferred = preferredRoute();
-    if (els.routeNote && preferred.startsWith('/news/')) {
-      els.routeNote.replaceChildren();
-      els.routeNote.append('This legacy address remains fully readable. The permanent section page is ');
-      const link = document.createElement('a');
-      link.href = preferred;
-      link.textContent = `/news/${selectedCategory}.html`;
-      els.routeNote.append(link, '.');
-      els.routeNote.hidden = false;
-    }
   }
 
   function createMedia(story, className) {
@@ -321,9 +319,9 @@
 
   function render() {
     if (!els.results) return;
-    els.loading.hidden = true;
-    els.error.hidden = true;
-    els.empty.hidden = filteredStories.length > 0;
+    if (els.loading) els.loading.hidden = true;
+    if (els.error) els.error.hidden = true;
+    if (els.empty) els.empty.hidden = filteredStories.length > 0;
     els.results.replaceChildren();
 
     const total = filteredStories.length;
@@ -366,6 +364,7 @@
       console.error('Rochdale Daily category route failed to load', error);
       if (els.loading) els.loading.hidden = true;
       if (els.error) els.error.hidden = false;
+      if (els.empty) els.empty.hidden = true;
       if (els.results) els.results.replaceChildren();
       if (els.summary) els.summary.textContent = '';
       if (els.loadWrap) els.loadWrap.hidden = true;
