@@ -23,13 +23,17 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
-      OPENAI_MODEL: "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-      # Free Llama on Cloudflare Workers AI, via its OpenAI-compatible endpoint.
-      # OPENAI_API_KEY holds the Cloudflare API token; the account id fills the
-      # base URL below. LLM_RESPONSE_FORMAT=json_object because Llama does not
-      # accept OpenAI's strict json_schema mode. To go back to paid OpenAI,
-      # clear OPENAI_BASE_URL and set OPENAI_MODEL to an OpenAI model.
-      OPENAI_BASE_URL: "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/ai/v1"
+      OPENAI_MODEL: "openai/gpt-oss-120b"
+      # Free Groq, via its OpenAI-compatible endpoint. gpt-oss-120b is a much
+      # larger, reasoning-capable writer than Llama-70b, so it keeps the specific
+      # facts and paraphrases better -- clearing the grounding and verbatim gates
+      # far more often (council, GMP and court stories especially). OPENAI_API_KEY
+      # holds a Groq API key from console.groq.com (free; sign in with Google or
+      # GitHub, no card, no cloud project). LLM_RESPONSE_FORMAT=json_object is
+      # supported by Groq; if a run logs a response_format error, set it to "none".
+      # To return to Cloudflare Llama, restore the api.cloudflare.com base URL and
+      # the @cf/meta/llama model and point OPENAI_API_KEY back at the Cloudflare token.
+      OPENAI_BASE_URL: "https://api.groq.com/openai/v1"
       LLM_RESPONSE_FORMAT: "json_object"
       # Llama self-vetoes genuine local news; the deterministic Python gates
       # (locality, careers/listing, denied sources) already protect the paper,
