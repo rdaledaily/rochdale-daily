@@ -1,0 +1,154 @@
+name: Rochdale Daily newsdesk drain
+
+# Brings the editor's composed articles from the live newsdesk queue into the
+# repo, so they go through the FULL publishing pipeline (image matching,
+# category pages, SEO) rather than being served as a lighter side channel.
+#
+# Reads /api/newsdesk?queue=pending with the admin token, writes each queued
+# article as a pending_manual_<id>.json, commits them -- which triggers the
+# existing publish-pending-manual workflow -- then calls the API back to drain
+# the items it committed. The commit is the point of no return: an item is
+# drained only after its file is safely in main, so a failure here re-offers it
+# next run rather than losing it.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-newsdesk-drain
+  cancel-in-progress: false
+
+jobs:
+  drain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      SITE_BASE: "https://rochdaledaily.co.uk"
+      NEWSDESK_ADMIN_TOKEN: ${{ secrets.EVENTS_ADMIN_TOKEN }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Guard on the secret
+        run: |
+          if [ -z "${NEWSDESK_ADMIN_TOKEN:-}" ]; then
+            echo "EVENTS_ADMIN_TOKEN is not set as a repository secret; nothing to do."
+            echo "Add it (same value as the Cloudflare EVENTS_ADMIN_TOKEN) to enable the newsdesk queue."
+            exit 0
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Drain the newsdesk queue into pending manual files
+        if: env.NEWSDESK_ADMIN_TOKEN != ''
+        id: drain
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request, pathlib
+
+          base = os.environ["SITE_BASE"].rstrip("/")
+          token = os.environ["NEWSDESK_ADMIN_TOKEN"]
+
+          def call(method, payload=None):
+              data = json.dumps(payload).encode() if payload is not None else None
+              req = urllib.request.Request(
+                  f"{base}/api/newsdesk" + ("" if payload is not None else "?queue=pending"),
+                  data=data, method=method,
+                  headers={"x-admin-token": token, "Content-Type": "application/json"},
+              )
+              with urllib.request.urlopen(req, timeout=30) as resp:
+                  return json.loads(resp.read().decode())
+
+          try:
+              queue = call("GET")
+          except Exception as error:
+              print(f"could not read the newsdesk queue: {error}")
+              raise SystemExit(0)
+
+          pending = queue.get("pending") or []
+          if not pending:
+              print("newsdesk queue empty")
+              raise SystemExit(0)
+
+          written = []
+          for entry in pending:
+              article = entry.get("article")
+              if not article or not article.get("title") or not article.get("body"):
+                  continue
+              slug = "".join(c for c in str(article.get("slug") or "article") if c.isalnum() or c == "-")[:80] or "article"
+              path = pathlib.Path(f"pending_manual_newsdesk_{slug}.json")
+              path.write_text(json.dumps([article], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              written.append(entry["id"])
+              print(f"wrote {path}")
+
+          pathlib.Path("newsdesk_drained_ids.json").write_text(json.dumps(written), encoding="utf-8")
+          print(f"prepared {len(written)} article(s)")
+          PY
+
+      - name: Commit the pending manual files
+        if: env.NEWSDESK_ADMIN_TOKEN != ''
+        id: commit
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add pending_manual_newsdesk_*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo 'committed=false' >> "$GITHUB_OUTPUT"
+            echo 'nothing to commit'
+            exit 0
+          fi
+          git commit -m "Queue newsdesk articles for publication
+
+          Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01R6dJYBJEAHJKdSkgJUkgHz"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && { echo 'committed=true' >> "$GITHUB_OUTPUT"; exit 0; }
+            sleep $((attempt * 7))
+          done
+          echo "::error::newsdesk drain could not push"
+          exit 1
+
+      - name: Clear the drained items from the queue
+        if: steps.commit.outputs.committed == 'true'
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request, pathlib
+
+          base = os.environ["SITE_BASE"].rstrip("/")
+          token = os.environ["NEWSDESK_ADMIN_TOKEN"]
+          ids = json.loads(pathlib.Path("newsdesk_drained_ids.json").read_text())
+          if not ids:
+              raise SystemExit(0)
+          req = urllib.request.Request(
+              f"{base}/api/newsdesk",
+              data=json.dumps({"action": "drain", "ids": ids}).encode(),
+              method="POST",
+              headers={"x-admin-token": token, "Content-Type": "application/json"},
+          )
+          with urllib.request.urlopen(req, timeout=30) as resp:
+              print(resp.read().decode())
+          PY
+
+      - name: Tidy the drain marker
+        if: always()
+        run: |
+          git rm --cached newsdesk_drained_ids.json 2>/dev/null || true
+          rm -f newsdesk_drained_ids.json
+          # The pending_manual files are consumed and removed by
+          # publish-pending-manual; nothing else to clean here.
+
+      - name: Hand off to the manual publisher
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish-pending-manual.yml --ref main || true
