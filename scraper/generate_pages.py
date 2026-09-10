@@ -114,12 +114,11 @@ def modernise_archived_masthead(pages_dir: Path, skip: set[str]) -> int:
     return updated
 
 
-# Matches the @import of the token file in any quoting style CSS allows.
-TOKEN_IMPORT_PATTERN = re.compile(
-    r'@import\s+url\(\s*[\'"]?/?assets/css/rd-tokens\.css[\'"]?\s*\)\s*;\s*',
-    re.I,
+# Any leading @import in the inlined stylesheet, in any quoting style.
+LEADING_IMPORT_PATTERN = re.compile(
+    r'^\s*(?:/\*.*?\*/\s*)*@import\s+url\(\s*[\'"]?(/?assets/css/[a-z0-9_-]+\.css)[\'"]?\s*\)\s*;\s*',
+    re.I | re.S,
 )
-TOKEN_STYLESHEET_LINK = '<link rel="stylesheet" href="/assets/css/rd-tokens.css">'
 # Linked directly rather than injected by cookie-consent.js, so article pages
 # never paint without the editorial layer and never depend on a cached script.
 # It goes AFTER the inline <style>: on equal specificity the later sheet wins,
@@ -128,30 +127,44 @@ EDITORIAL_STYLESHEET_LINK = ('<link rel="stylesheet" href="/assets/css/editorial
                             'data-rd-asset="/assets/css/editorial-theme.css">')
 
 
-def load_site_css() -> str:
-    """site.css, inlined into every generated page.
+def load_site_css() -> tuple[str, str]:
+    """The stylesheet inlined into every generated page, plus the <link> tags
+    for anything it imported.
 
-    The token file is lifted out of the inlined copy and linked in the <head>
-    instead. An @import inside an inline <style> is invisible to the browser's
-    preload scanner -- it is only discovered once that style block is parsed,
-    so every article page would block on a second round trip before it had a
-    single colour or font. A <link> is found in the first pass over the HTML
-    and fetched in parallel. Same tokens, one less serial request, no flash of
-    unstyled text.
+    In production CSS_SOURCE_PATH is assets/css/article-inline.css, which
+    begins with @import url('/assets/css/site.css'); site.css in turn begins
+    with @import of rd-tokens.css. Inside an inline <style> those imports are
+    invisible to the browser's preload scanner -- each is only discovered once
+    the previous sheet has been parsed -- so an article page blocked on TWO
+    serial round trips before it had a colour or a font. The imports are lifted
+    out here and emitted as <link> tags ahead of the <style>, in the same
+    order, so the cascade is unchanged and the browser fetches everything in
+    its first pass over the HTML. rd-tokens.css is always linked first because
+    every other sheet depends on it.
     """
     if not CSS_SOURCE_PATH.exists():
         print(f'WARNING: {CSS_SOURCE_PATH} not found; generated pages will be unstyled.')
-        return ''
+        return '', '<link rel="stylesheet" href="/assets/css/rd-tokens.css">'
     css = CSS_SOURCE_PATH.read_text(encoding='utf-8')
-    stripped = TOKEN_IMPORT_PATTERN.sub('', css, count=1)
-    if stripped == css and 'rd-tokens.css' in css:
-        # The import is present but written in a shape this pattern misses.
-        # Leaving it inline is slow-but-correct; say so rather than fail quietly.
-        print('WARNING: rd-tokens.css @import left inline; check site.css formatting.')
-    return stripped
+    hrefs: list[str] = []
+    while True:
+        match = LEADING_IMPORT_PATTERN.match(css)
+        if not match:
+            break
+        href = '/' + match.group(1).lstrip('/')
+        if href not in hrefs:
+            hrefs.append(href)
+        css = css[match.end():]
+    if '/assets/css/rd-tokens.css' in hrefs:
+        hrefs.remove('/assets/css/rd-tokens.css')
+    hrefs.insert(0, '/assets/css/rd-tokens.css')
+    if '@import' in css:
+        print('WARNING: an @import remains inline in the article stylesheet; check its formatting.')
+    links = '\n  '.join(f'<link rel="stylesheet" href="{href}">' for href in hrefs)
+    return css, links
 
 
-SITE_CSS = load_site_css()
+SITE_CSS, TOKEN_STYLESHEET_LINK = load_site_css()
 SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}
 SOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'}
 CATEGORY_LABELS = {'crime': 'Crime', 'traffic': 'Traffic', 'transport': 'Transport', 'politics': 'Politics', 'education': 'Education', 'sport': 'Sport', 'events': 'Events', 'business': 'Business', 'community': 'Community', 'health': 'Health', 'showbiz': 'Showbiz', 'environment': 'Environment', 'news': 'News'}
