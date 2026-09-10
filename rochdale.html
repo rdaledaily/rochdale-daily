@@ -9,8 +9,10 @@
   <title>Rochdale Daily | Independent local news</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800;900&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
+@import url("/assets/css/rd-tokens.css");
+
     :root {
       --yellow: #f5c400;
       --yellow-deep: #d4a900;
@@ -33,7 +35,7 @@
       margin: 0;
       background: #ececec;
       color: var(--ink);
-      font-family: Roboto, Arial, Helvetica, sans-serif;
+      font-family:var(--font-body);
       line-height: 1.45;
     }
     body.modal-open { overflow: hidden; }
@@ -187,7 +189,7 @@
       color: #fff;
       padding: 0 15px;
       text-decoration: none;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-size: 14px;
       font-weight: 900;
       text-transform: uppercase;
@@ -212,7 +214,7 @@
       place-items: center;
       background: var(--red-dark);
       padding: 0 18px;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-weight: 900;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -281,7 +283,7 @@
     }
     .section-title {
       margin: 0;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-size: clamp(27px, 4vw, 38px);
       font-weight: 900;
       line-height: 1;
@@ -335,7 +337,7 @@
       display: inline-block;
       margin: 11px 0 5px;
       color: var(--red);
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-size: 12px;
       font-weight: 900;
       letter-spacing: .6px;
@@ -344,7 +346,7 @@
     .lead-headline, .secondary-headline, .card-headline {
       margin: 0;
       color: #171717;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-weight: 900;
       line-height: 1.05;
       letter-spacing: -.45px;
@@ -361,7 +363,7 @@
       margin: 0 0 8px;
       border-bottom: 5px solid var(--yellow);
       padding-bottom: 8px;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-size: 24px;
       font-weight: 900;
       text-transform: uppercase;
@@ -375,7 +377,7 @@
       padding: 13px 0;
       color: #202020;
       text-align: left;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-size: 17px;
       font-weight: 800;
       line-height: 1.18;
@@ -385,7 +387,7 @@
       display: block;
       margin-top: 5px;
       color: #777;
-      font-family: Roboto, Arial, sans-serif;
+      font-family:var(--font-body);
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
@@ -448,7 +450,7 @@
     }
     .event-card h3 {
       margin: 5px 0 8px;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-size: 23px;
       line-height: 1.05;
     }
@@ -471,7 +473,7 @@
     .service-card.red { border-top-color: var(--red); }
     .service-card h3 {
       margin: 0 0 8px;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-size: 22px;
       line-height: 1.05;
       text-transform: uppercase;
@@ -500,7 +502,7 @@
     .advertise h2 {
       margin: 0 0 8px;
       color: var(--yellow);
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family:var(--font-display);
       font-size: 34px;
       text-transform: uppercase;
     }
@@ -525,7 +527,7 @@
       grid-template-columns: 1.2fr repeat(3,minmax(140px,.7fr));
       gap: 30px;
     }
-    .footer-title { color: var(--yellow); font-family: "Roboto Condensed", Arial, sans-serif; font-size: 24px; font-weight: 900; }
+    .footer-title { color: var(--yellow); font-family:var(--font-display); font-size: 24px; font-weight: 900; }
     .footer-heading { margin: 0 0 10px; color: #fff; font-size: 13px; text-transform: uppercase; }
     .footer-list { list-style: none; padding: 0; margin: 0; }
     .footer-list li { margin: 7px 0; }
@@ -570,7 +572,7 @@
     .modal-head { position: sticky; top: 0; z-index: 2; display: flex; justify-content: flex-end; background: #111; }
     .modal-close { border: 0; background: var(--yellow); color: #111; padding: 11px 16px; font-weight: 900; text-transform: uppercase; }
     .modal-content { padding: clamp(22px,5vw,52px); }
-    .modal-content h1 { margin: 0 0 12px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: clamp(34px,6vw,58px); line-height: 1; }
+    .modal-content h1 { margin: 0 0 12px; font-family:var(--font-display); font-size: clamp(34px,6vw,58px); line-height: 1; }
     .modal-content .modal-summary { color: #555; font-size: 18px; }
     .modal-content p { font-size: 17px; line-height: 1.65; }
     .report-panel {
@@ -579,7 +581,7 @@
       background: #fff7f8;
       padding: 18px;
     }
-    .report-panel h2 { margin: 0 0 8px; color: var(--red); font-family: "Roboto Condensed", Arial, sans-serif; text-transform: uppercase; }
+    .report-panel h2 { margin: 0 0 8px; color: var(--red); font-family:var(--font-display); text-transform: uppercase; }
     .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
     .report-links a { background: #111; color: #fff; padding: 9px 11px; text-decoration: none; font-size: 12px; font-weight: 900; text-transform: uppercase; }
 
