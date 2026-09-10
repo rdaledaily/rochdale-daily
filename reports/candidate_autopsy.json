@@ -1,32 +1,38 @@
 {
-  "examined_at": "2026-09-09T11:50:10.894497Z",
+  "examined_at": "2026-09-10T11:48:23.032121Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 103,
+  "candidates_examined": 80,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 53,
-    "would publish": 50
+    "age": 37,
+    "would publish": 36,
+    "duplicate of published story": 7
   },
-  "would_publish": 50,
+  "would_publish": 36,
   "age_gate_sensitivity": {
-    "6h": 7,
-    "14h": 13,
-    "24h": 21,
-    "48h": 50,
-    "72h": 60,
-    "168h": 103
+    "6h": 4,
+    "14h": 8,
+    "24h": 24,
+    "48h": 43,
+    "72h": 69,
+    "168h": 80
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 63 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Manchester Evening News: Campers in Rochdale issued warning after Frank the horse found close t",
-      "Manchester Evening News: Campers in Rochdale issued warning after Frank the horse found close t"
+      "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "DESIblitz: PAK Film Festival Honoured by Rochdale Mayor after UK Cinema Tour - DE",
+      "Rochdale Borough Council RSS: Council poised to purchase major Middleton landmark – Rochdale Borough"
+    ],
+    "duplicate of published story": [
+      "Kent Online: Ainsworth sees room for improvement despite Gillingham’s Rochdale rout",
+      "Fan Banter: Rochdale board of directors issues message to supporters after disappo",
+      "Rochdale AFC: A Message From The Board - rochdaleafc.co.uk"
     ],
     "age": [
-      "Place North West: Rochdale signals Middleton intent with plan to buy Warwick Mill - Plac",
-      "Roch Valley Radio Local News: East Lancashire Railway welcomes its first female steam locomotive dri",
-      "Ofsted: Ofsted publishes inspection report for Little Oaks Heywood"
+      "BBC Manchester: Harpurhey man in critical condition after explosion at house",
+      "facebook.com: Manchester Evening News. . Live on Rochdale Road in Harpurhey at the s",
+      "BBC Manchester: Steve Coogan on Warwick Mill deal and Middleton regeneration"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
