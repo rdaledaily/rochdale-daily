@@ -1,3 +1,6 @@
+/* Fonts, palette and spacing come from the one token file, imported
+   here so this stylesheet can never be loaded without them. */
+@import url("/assets/css/rd-tokens.css");
 /* Rochdale Daily: Mobile Hamburger Menu (namespaced with .rd-) */
 /* Safe to load AFTER your existing styles. */
 
@@ -13,7 +16,7 @@
 
 /* Logo placeholder (use your image/logo styles if you have them) */
 .rd-logo {
-  font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+  font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: 1px;
   color: #ffffff;
