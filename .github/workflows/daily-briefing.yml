@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       slot:
-        description: "Force a slot now (morning or evening). Leave blank for scheduled behaviour."
+        description: "Which briefing: morning, evening, or leave blank for the most recent one. A manual run always publishes."
         required: false
         default: ""
   schedule:
@@ -55,10 +55,13 @@ jobs:
 
       - name: Build the briefing due at this hour
         run: |
-          if [ -n "${{ github.event.inputs.slot }}" ]; then
-            python scraper/daily_briefing.py --slot "${{ github.event.inputs.slot }}" --force
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # A person pressed the button: always produce a briefing. Blank
+            # means "the most recent one"; morning/evening forces that slot.
+            slot="$(echo "${{ github.event.inputs.slot }}" | tr '[:upper:]' '[:lower:]' | tr -d ' ')"
+            python scraper/daily_briefing.py --slot "${slot:-auto}" --force
           else
-            # Each call self-gates on the London clock; at most one writes a file.
+            # Scheduled: each call self-gates on the London clock; at most one writes a file.
             python scraper/daily_briefing.py --slot morning
             python scraper/daily_briefing.py --slot evening
           fi
