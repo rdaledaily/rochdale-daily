@@ -12,6 +12,8 @@ on:
       - "post.html"
       - "assets/css/rd-tokens.css"
       - "assets/css/newspaper-global.css"
+      - "assets/css/public-families.css"
+      - "assets/css/editorial-theme.css"
       - "assets/css/legacy-routing-pages.css"
       - "assets/js/category-page.js"
       - "assets/js/post-page.js"
@@ -122,6 +124,7 @@ jobs:
             scraper/enforce_cards_only_images.py \
             scraper/repair_generated_article_images.py \
             scraper/guarantee_article_images.py \
+            scraper/normalise_public_theme.py \
             scraper/scraper.py
       - name: Check route JavaScript syntax
         run: |
@@ -176,6 +179,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_model_bridge.py -v
           python scraper/test_workflow_architecture.py
           python scraper/test_legacy_routing_pages.py
+          python scraper/normalise_public_theme.py --check
       - name: Enforce cards-only canonical article images
         run: python scraper/enforce_cards_only_images.py --articles articles.json --check
       - name: Verify scraper imports cleanly
