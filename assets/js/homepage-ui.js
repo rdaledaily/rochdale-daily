@@ -175,7 +175,11 @@
       });
     });
     if (changed) {
-      visible = INITIAL;
+      /* The grid is re-rendered by the one-minute feed refresh and by every
+         filter change. Resetting to 12 here meant a reader who pressed Read
+         more saw their extra stories vanish again within the minute -- which
+         reads as "the button does nothing". Keep whatever they have opened;
+         apply() bounds it to the cards that exist. */
       if (!grid.contains(advert)) grid.appendChild(advert);
       if (!grid.contains(button)) grid.appendChild(button);
       apply();
