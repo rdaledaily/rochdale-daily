@@ -5,7 +5,13 @@
   var KEY = "rd-cookie-choice";
   var ACCEPTED = "optional-accepted";
   var DECLINED = "essential-only";
-  var ASSET_VERSION = "20260910-editorial-cohesion-1";
+  /* Bump this EVERY time editorial-theme.css or any script loaded through
+     addStyle/addScript changes. The version rides on the URL as ?v=, so a
+     browser that cached the previous copy is forced to fetch the new one.
+     It was left at -1 through several stylesheet uploads on 10 Sep, so a
+     browser that visited in the morning could keep serving that morning's
+     stylesheet -- without the river or filter-bar rules -- all day. */
+  var ASSET_VERSION = "20260910-editorial-cohesion-2";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
