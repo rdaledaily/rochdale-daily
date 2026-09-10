@@ -72,12 +72,26 @@ function json(body, status = 200, seconds = 300) {
   });
 }
 
+/* Every upstream call is bounded. Before this, one slow Parliament endpoint
+   held the entire response open until the Worker was killed, and the reader
+   saw an empty Democracy panel -- which is exactly what happened on 10 Sep
+   2026. Five seconds is generous for these APIs; a section that misses it is
+   reported as failed and the others still render. */
+const UPSTREAM_TIMEOUT_MS = 5000;
+
+function bounded() {
+  return typeof AbortSignal !== "undefined" && AbortSignal.timeout
+    ? AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
+    : undefined;
+}
+
 /** Fetch JSON, recording the outcome so ?debug=1 can explain an empty section. */
 async function getJson(url, log, label, seconds) {
   try {
     const response = await fetch(url, {
       headers: { accept: "application/json", "user-agent": UA },
       cf: { cacheTtl: seconds, cacheEverything: true },
+      signal: bounded(),
     });
     if (!response.ok) {
       log.push({ label, url, status: response.status, ok: false });
@@ -97,6 +111,7 @@ async function getText(url, log, label, seconds) {
     const response = await fetch(url, {
       headers: { accept: "application/rss+xml, application/xml, text/xml, text/html", "user-agent": UA },
       cf: { cacheTtl: seconds, cacheEverything: true },
+      signal: bounded(),
     });
     if (!response.ok) {
       log.push({ label, url, status: response.status, ok: false });
@@ -401,10 +416,47 @@ async function loadCouncil(log) {
  * Handler
  * ------------------------------------------------------------------ */
 
+const EDGE_TTL_SECONDS = 1800;         // how long a built panel is fresh
+const EDGE_STALE_SECONDS = 24 * 3600;  // how long a stale one may still be served
+
+async function buildPanel(url) {
+  const debug = url.searchParams.get("debug") === "1";
+  const only = url.searchParams.get("section");
+  return assemble(debug, only);
+}
+
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const debug = url.searchParams.get("debug") === "1";
-  const only = url.searchParams.get("section");
+
+  /* One cache entry per section selection; debug requests bypass it so a
+     failing upstream can always be inspected live. */
+  const cacheKey = new Request(new URL(`/api/democracy?section=${url.searchParams.get("section") || "all"}`, url).toString());
+  const cache = typeof caches !== "undefined" ? caches.default : null;
+
+  if (!debug && cache) {
+    const hit = await cache.match(cacheKey);
+    if (hit) {
+      const builtAt = Number(hit.headers.get("x-rd-built") || 0);
+      const age = (Date.now() - builtAt) / 1000;
+      if (age > EDGE_TTL_SECONDS && context.waitUntil) {
+        /* Serve what we have now; rebuild for the next reader. */
+        context.waitUntil(buildPanel(url).then((fresh) => cache.put(cacheKey, fresh.clone())).catch(() => {}));
+      }
+      const headers = new Headers(hit.headers);
+      headers.set("x-rd-cache", age > EDGE_TTL_SECONDS ? "stale" : "hit");
+      return new Response(hit.body, { status: hit.status, headers });
+    }
+  }
+
+  const fresh = await buildPanel(url);
+  if (!debug && cache && fresh.ok && context.waitUntil) {
+    context.waitUntil(cache.put(cacheKey, fresh.clone()));
+  }
+  return fresh;
+}
+
+async function assemble(debug, only) {
   const log = [];
 
   const wanted = (name) => !only || only === name;
@@ -437,5 +489,10 @@ export async function onRequest(context) {
   if (debug) body.upstream = log;
 
   const failed = log.some((entry) => !entry.ok);
-  return json(body, 200, failed ? CACHE.error : CACHE.petitions);
+  const response = json(body, 200, failed ? CACHE.error : CACHE.petitions);
+  /* Stamp the build time and let the edge keep a stale copy for a day, so a
+     Parliament outage degrades to "slightly old" rather than "empty". */
+  response.headers.set("x-rd-built", String(Date.now()));
+  response.headers.set("cache-control", `public, max-age=${failed ? CACHE.error : CACHE.petitions}, s-maxage=${EDGE_STALE_SECONDS}`);
+  return response;
 }
