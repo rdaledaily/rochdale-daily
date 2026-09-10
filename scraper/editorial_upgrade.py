@@ -4,6 +4,7 @@ import html
 import json
 import os
 import re
+import time
 from collections import Counter
 from typing import Any
 
@@ -518,6 +519,72 @@ def extract_json_object(content: str) -> str:
     return text
 
 
+def _int_env(name: str, default: int) -> int:
+    """Positive integer from the environment, or the default."""
+    try:
+        value = int(str(os.getenv(name, "")).strip())
+    except (TypeError, ValueError):
+        return default
+    return value if value > 0 else default
+
+
+def _looks_like_json(text: str) -> bool:
+    candidate = extract_json_object(text)
+    return candidate.startswith("{") and candidate.endswith("}")
+
+
+def rate_limit_delay(exc: Exception) -> float | None:
+    """Seconds the provider asks us to wait, or None if this is not a rate limit.
+
+    Free tiers meter tokens per minute and say exactly how long to wait
+    ("Please try again in 8.4375s"). Honouring that is the difference between
+    pacing the paper and losing the story.
+    """
+    status = getattr(exc, "status_code", None) or getattr(
+        getattr(exc, "response", None), "status_code", None
+    )
+    text = str(exc)
+    lowered = text.lower()
+    if status != 429 and "rate_limit" not in lowered and "rate limit" not in lowered:
+        return None
+    match = re.search(r"try again in\s*([0-9]*\.?[0-9]+)\s*(ms|s)\b", text, re.I)
+    if match:
+        value = float(match.group(1))
+        seconds = value / 1000.0 if match.group(2).lower() == "ms" else value
+        return max(seconds, 0.1)
+    return 5.0
+
+
+def create_with_rate_limit_retry(
+    client: Any, request_kwargs: dict[str, Any], logger: Any = None
+) -> Any:
+    """Call the model, waiting out rate limits without spending an attempt.
+
+    A tokens-per-minute limit is a pacing signal, not a rewrite failure. Burning
+    one of the four editorial attempts on it means a perfectly good story is
+    dropped because the paper was briefly talking too fast. Sleep the advised
+    time instead, and keep the attempts for genuine quality problems.
+    """
+    waits = 0
+    max_waits = _int_env("LLM_RATE_LIMIT_RETRIES", 6)
+    while True:
+        try:
+            return client.chat.completions.create(**request_kwargs)
+        except Exception as exc:  # noqa: BLE001 - provider exception types vary
+            delay = rate_limit_delay(exc)
+            if delay is None or waits >= max_waits:
+                raise
+            waits += 1
+            if logger is not None:
+                logger.info(
+                    "Rate limited by the model provider; waiting %.1fs then retrying (%d/%d).",
+                    delay,
+                    waits,
+                    max_waits,
+                )
+            time.sleep(min(delay + 0.25, 30.0))
+
+
 def normalise_draft(draft: Any) -> dict[str, Any]:
     if not isinstance(draft, dict):
         return {}
@@ -957,16 +1024,28 @@ def request_article(
                     {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
                 ],
                 "temperature": 0.18,
-                "max_tokens": 3000,
+                # Providers meter a request as input tokens PLUS this reservation,
+                # so an oversized cap spends a free tier's tokens-per-minute budget
+                # on output that is never written. Articles run to a few hundred
+                # words; LLM_MAX_TOKENS raises it again if a model needs room.
+                "max_tokens": _int_env("LLM_MAX_TOKENS", 2000),
             }
             if mode == "json_schema":
                 request_kwargs["response_format"] = {"type": "json_schema", "json_schema": schema}
             elif mode == "json_object":
                 request_kwargs["response_format"] = {"type": "json_object"}
             # mode == "none": send no response_format at all.
-            response = client.chat.completions.create(**request_kwargs)
-            content = response.choices[0].message.content or "{}"
-            draft = normalise_draft(json.loads(extract_json_object(content)))
+            response = create_with_rate_limit_retry(client, request_kwargs, logger)
+            message = response.choices[0].message
+            content = (getattr(message, "content", "") or "").strip()
+            # Reasoning models (Groq's gpt-oss especially) sometimes return an
+            # empty `content` and leave the answer in `reasoning`. Read it rather
+            # than losing a good story to an empty reply.
+            if not _looks_like_json(content):
+                reasoning = (getattr(message, "reasoning", "") or "").strip()
+                if _looks_like_json(reasoning):
+                    content = reasoning
+            draft = normalise_draft(json.loads(extract_json_object(content) or "{}"))
         except Exception as exc:
             api_failures += 1
             last_api_error = type(exc).__name__
