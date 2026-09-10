@@ -114,11 +114,37 @@ def modernise_archived_masthead(pages_dir: Path, skip: set[str]) -> int:
     return updated
 
 
+# Matches the @import of the token file in any quoting style CSS allows.
+TOKEN_IMPORT_PATTERN = re.compile(
+    r'@import\s+url\(\s*[\'"]?/?assets/css/rd-tokens\.css[\'"]?\s*\)\s*;\s*',
+    re.I,
+)
+TOKEN_STYLESHEET_LINK = '<link rel="stylesheet" href="/assets/css/rd-tokens.css">'
+
+
 def load_site_css() -> str:
-    if CSS_SOURCE_PATH.exists():
-        return CSS_SOURCE_PATH.read_text(encoding='utf-8')
-    print(f'WARNING: {CSS_SOURCE_PATH} not found; generated pages will be unstyled.')
-    return ''
+    """site.css, inlined into every generated page.
+
+    The token file is lifted out of the inlined copy and linked in the <head>
+    instead. An @import inside an inline <style> is invisible to the browser's
+    preload scanner -- it is only discovered once that style block is parsed,
+    so every article page would block on a second round trip before it had a
+    single colour or font. A <link> is found in the first pass over the HTML
+    and fetched in parallel. Same tokens, one less serial request, no flash of
+    unstyled text.
+    """
+    if not CSS_SOURCE_PATH.exists():
+        print(f'WARNING: {CSS_SOURCE_PATH} not found; generated pages will be unstyled.')
+        return ''
+    css = CSS_SOURCE_PATH.read_text(encoding='utf-8')
+    stripped = TOKEN_IMPORT_PATTERN.sub('', css, count=1)
+    if stripped == css and 'rd-tokens.css' in css:
+        # The import is present but written in a shape this pattern misses.
+        # Leaving it inline is slow-but-correct; say so rather than fail quietly.
+        print('WARNING: rd-tokens.css @import left inline; check site.css formatting.')
+    return stripped
+
+
 SITE_CSS = load_site_css()
 SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}
 SOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'}
@@ -316,6 +342,37 @@ def insert_incontent_ad(content_html: str) -> str:
 
 def report_box_markup() -> str:
     return '<section class="report-box" style="margin-top:28px">\n        <h3>Report what you know</h3>\n        <p>This article is marked as a police matter. Send information directly through an official reporting channel.</p>\n        <div class="report-actions">\n          <a class="report-action" href="https://crimestoppers-uk.org/give-information/forms/give-information-anonymously" target="_blank" rel="noopener"><span>Crimestoppers &mdash; anonymous</span><span>0800 555 111</span></a>\n          <a class="report-action" href="https://www.gmp.police.uk/ro/report/" target="_blank" rel="noopener"><span>Greater Manchester Police online report</span><span>Open</span></a>\n          <a class="report-action" href="tel:999"><span>Emergency, immediate danger or crime in progress</span><span>999</span></a>\n        </div>\n        <p class="report-note">Do not send evidence or urgent reports to Rochdale Daily instead of the police.</p>\n      </section>'
+
+NO_COMMENT_CATEGORIES = {"crime"}
+
+
+def comments_markup(article: dict[str, Any], slug: str, category: str) -> str:
+    """Reader comments, except where they would be a liability.
+
+    Crime coverage is excluded outright. Comments under an arrest or a charge
+    invite people to name suspects and victims, speculate on guilt and post
+    material that is contempt of court, and the publisher carries that risk.
+    Every other section is open: participation is the point, crime is the
+    exception.
+    """
+    if str(category or "").strip().lower() in NO_COMMENT_CATEGORIES or article.get("police_matter"):
+        return (
+            '<section class="comments-closed">'
+            "<p>Comments are closed on crime and court reporting. "
+            "If you have information about this story, "
+            '<a href="/contact.html">contact the newsdesk</a>.</p>'
+            "</section>"
+        )
+    return (
+        f'<section class="comments-section" id="comments-root" '
+        f'data-slug="{esc(slug)}" data-category="{esc(category)}"></section>'
+    )
+
+
+def read_next_markup(article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
+    """End-of-story recirculation. Overridden by generate_newspaper_pages."""
+    return ""
+
 
 def related_stories_markup(article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
     category = str(article.get('category') or 'news').lower()
@@ -568,7 +625,7 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
             "This is a developing story. We'll publish more details as they emerge."
             '</p>'
         )
-    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="index,follow,max-image-preview:large">\n  <title>{esc(title)} | Rochdale Daily</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">\n  <style>{SITE_CSS}</style>\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(article.get("last_updated_at") or article.get("scraped_at") or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n  <meta name="twitter:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta name="news_keywords" content="{esc(seo_keywords(article))}">\n{article_tag_markup(article)}\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  <header class="masthead">\n    <div class="wrap masthead-row">\n      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">\n        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>\n      </a>\n      <div class="masthead-actions">\n        <a class="header-button" href="../index.html">All stories</a>\n      </div>\n    </div>\n  </header>\n\n  <div class="modal-card" style="margin:24px auto;box-shadow:none">\n    <div class="article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/{esc(category)}.html">{esc(category_label(category))}</a></nav>\n          <span class="story-kicker">{esc(category_label(category))}</span>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          {developing_note}\n          <div class="article-byline">By {byline}</div>\n          {share_icons_markup(canonical_url, title)}\n          {hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">\n            <h3 style="margin:0 0 8px">Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n          <section class="comments-section" id="comments-root" data-slug="{esc(slug)}" data-category="{esc(category)}"></section>\n        </div>\n        <aside class="article-sidebar">\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>\n          {related_stories_markup(article, all_articles)}\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n      </script>\n  <script defer src="/assets/js/article-comments.js"></script>\n  <script defer src="/assets/js/cookie-consent.js"></script>\n  <script defer src="/assets/ads.js"></script>\n</body>\n</html>\n'''
+    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="index,follow,max-image-preview:large">\n  <title>{esc(title)} | Rochdale Daily</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">\n  {TOKEN_STYLESHEET_LINK}\n  <style>{SITE_CSS}</style>\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(article.get("last_updated_at") or article.get("scraped_at") or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n  <meta name="twitter:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta name="news_keywords" content="{esc(seo_keywords(article))}">\n{article_tag_markup(article)}\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  <header class="masthead">\n    <div class="wrap masthead-row">\n      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">\n        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>\n      </a>\n      <div class="masthead-actions">\n        <a class="header-button" href="../index.html">All stories</a>\n      </div>\n    </div>\n  </header>\n\n  <div class="modal-card" style="margin:24px auto;box-shadow:none">\n    <div class="article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/{esc(category)}.html">{esc(category_label(category))}</a></nav>\n          <span class="story-kicker">{esc(category_label(category))}</span>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          {developing_note}\n          <div class="article-byline">By {byline}</div>\n          {share_icons_markup(canonical_url, title)}\n          {hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          {read_next_markup(article, all_articles)}\n          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">\n            <h3 style="margin:0 0 8px">Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n          {comments_markup(article, slug, category)}\n        </div>\n        <aside class="article-sidebar">\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>\n          {related_stories_markup(article, all_articles)}\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n      </script>\n  <script defer src="/assets/js/article-comments.js"></script>\n  <script defer src="/assets/js/read-next.js"></script>\n  <script defer src="/assets/js/cookie-consent.js"></script>\n  <script defer src="/assets/ads.js"></script>\n</body>\n</html>\n'''
 
 def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
     if not ARTICLES_JSON.exists():
@@ -641,22 +698,22 @@ def write_corrections_log(articles: list[dict[str, Any]]) -> int:
   <link rel="canonical" href="{esc(SITE_BASE_URL)}/corrections-log.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/site.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
+  {TOKEN_STYLESHEET_LINK}\n  <link rel="stylesheet" href="/assets/css/site.css">
   <style>
     .trust-wrap{{max-width:760px;margin:0 auto;padding:36px 20px 64px}}
-    .trust-kicker{{font-family:"Roboto Condensed",Arial,sans-serif;font-size:13px;font-weight:800;
+    .trust-kicker{{font-family:var(--font-display);font-size:13px;font-weight:800;
       letter-spacing:.14em;text-transform:uppercase;color:#8a6d00;border-bottom:4px solid #f5c400;
       display:inline-block;padding-bottom:6px;margin-bottom:14px}}
-    .trust-wrap h1{{font-family:"Roboto Condensed",Arial,sans-serif;font-size:clamp(30px,5vw,44px);
+    .trust-wrap h1{{font-family:var(--font-display);font-size:clamp(30px,5vw,44px);
       line-height:1.05;letter-spacing:-.01em;margin:0 0 10px}}
     .trust-standfirst{{font-size:19px;line-height:1.55;color:#333;margin:0 0 26px}}
     .trust-wrap p{{font-size:16px;line-height:1.65;color:#1c1c1c}}
     .log-list{{list-style:none;margin:26px 0 0;padding:0}}
     .log-entry{{border-top:3px solid #111;padding:18px 0 22px}}
-    .log-date{{display:block;font-family:"Roboto Condensed",Arial,sans-serif;font-size:13px;font-weight:800;
+    .log-date{{display:block;font-family:var(--font-display);font-size:13px;font-weight:800;
       letter-spacing:.1em;text-transform:uppercase;color:#8a6d00;margin-bottom:6px}}
-    .log-title{{font-family:"Roboto Condensed",Arial,sans-serif;font-size:20px;font-weight:700;color:#111;
+    .log-title{{font-family:var(--font-display);font-size:20px;font-weight:700;color:#111;
       text-decoration:none;line-height:1.25}}
     .log-title:hover{{text-decoration:underline}}
     .log-note{{margin:8px 0 0;font-size:16px;line-height:1.6;color:#1c1c1c}}
@@ -667,8 +724,8 @@ def write_corrections_log(articles: list[dict[str, Any]]) -> int:
 <body>
   <header class="masthead">
     <div class="wrap masthead-row" style="max-width:760px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
-      <a class="brand" href="/" aria-label="Rochdale Daily home" style="color:#fff;text-decoration:none;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em">ROCHDALE <span style="color:#f5c400">DAILY</span></a>
-      <a href="/" style="color:#f5c400;text-decoration:none;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:700;font-size:13px;text-transform:uppercase">All stories</a>
+      <a class="brand" href="/" aria-label="Rochdale Daily home" style="color:#fff;text-decoration:none;font-family:var(--font-display);font-weight:800;font-size:22px;letter-spacing:.04em">ROCHDALE <span style="color:#f5c400">DAILY</span></a>
+      <a href="/" style="color:#f5c400;text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:13px;text-transform:uppercase">All stories</a>
     </div>
   </header>
   <main class="trust-wrap">
