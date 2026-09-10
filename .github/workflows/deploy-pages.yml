@@ -3,8 +3,9 @@ name: Deploy Rochdale Daily to GitHub Pages
 on:
   push:
     branches: [main]
-    # Deploy only when canonical public output changes. Code-only/admin commits
-    # must not race a pending manual publisher and fail the publication invariant.
+    # Deploy when canonical public output or shared front-end assets change.
+    # Keeping the workflow file itself in this list ensures deployment-rule
+    # fixes publish the latest complete site snapshot immediately.
     paths:
       - articles.json
       - 'articles/**'
@@ -17,9 +18,12 @@ on:
       - search.html
       - archive-index.json
       - 'assets/img/cards/**'
+      - 'assets/css/**'
+      - 'assets/js/**'
       - 'wards/**'
       - weather.json
       - councillor_photos.json
+      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
