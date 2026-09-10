@@ -9,7 +9,7 @@ export async function onRequest(context) {
   const source = await response.text();
   const loader = `\n;(function(){
     var scripts = [
-      '/assets/whats-on-community-fix.js?v=20260808-1',
+      '/assets/whats-on-community-fix.js?v=20260910-1',
       '/assets/democracy-hover.js?v=20260812-1'
     ];
     scripts.forEach(function(src){
