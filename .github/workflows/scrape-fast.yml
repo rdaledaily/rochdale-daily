@@ -43,6 +43,10 @@ jobs:
       # clear OPENAI_BASE_URL and set OPENAI_MODEL to an OpenAI model.
       OPENAI_BASE_URL: "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/ai/v1"
       LLM_RESPONSE_FORMAT: "json_object"
+      # Llama self-vetoes genuine local news; the deterministic Python gates
+      # (locality, careers/listing, denied sources) already protect the paper,
+      # so its self-classification is advisory here, not a veto.
+      TRUST_MODEL_SELF_CLASSIFICATION: "false"
       AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "48"
       PUBLISH_MAX_NEWS_AGE_HOURS: "48"
@@ -226,6 +230,10 @@ jobs:
       # clear OPENAI_BASE_URL and set OPENAI_MODEL to an OpenAI model.
       OPENAI_BASE_URL: "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/ai/v1"
       LLM_RESPONSE_FORMAT: "json_object"
+      # Llama self-vetoes genuine local news; the deterministic Python gates
+      # (locality, careers/listing, denied sources) already protect the paper,
+      # so its self-classification is advisory here, not a veto.
+      TRUST_MODEL_SELF_CLASSIFICATION: "false"
       AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "72"
       PUBLISH_MAX_NEWS_AGE_HOURS: "48"
