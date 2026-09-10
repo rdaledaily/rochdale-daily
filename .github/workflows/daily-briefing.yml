@@ -26,6 +26,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # to start the publisher: pushes made with GITHUB_TOKEN never trigger other workflows
 
 concurrency:
   group: rd-daily-briefing
@@ -63,9 +64,11 @@ jobs:
           fi
 
       - name: Publish it
+        id: publish
         run: |
           if ! ls pending_manual_briefing_*.json >/dev/null 2>&1; then
             echo "No briefing due this hour."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "Rochdale Daily Bot"
@@ -78,8 +81,20 @@ jobs:
           for attempt in 1 2 3 4 5; do
             git pull --rebase --autostash origin main \
               && git push origin HEAD:main \
-              && { echo "briefing queued for publication"; exit 0; }
+              && { echo "briefing queued for publication"; echo "committed=true" >> "$GITHUB_OUTPUT"; exit 0; }
             sleep $((attempt * 6))
           done
           echo "::error::could not push the briefing"
           exit 1
+
+      # A push made with the workflow's own token does not fire push-triggered
+      # workflows (GitHub's recursion guard), so the pending file would sit in
+      # the repo until something else drained the queue. Start the publisher
+      # explicitly, exactly as newsdesk-drain.yml does.
+      - name: Start the publisher
+        if: steps.publish.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run publish-pending-manual.yml --ref main
+          echo "publish-pending-manual dispatched"
