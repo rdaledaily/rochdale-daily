@@ -131,9 +131,10 @@
   }
 
   function pollLoadError() {
+    /* Same rule as the poll script itself: if there is nothing to show, show
+       nothing. Readers do not need to know a poll module failed to load. */
     var poll = document.getElementById("community-poll");
-    if (!poll) return;
-    poll.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">The community poll could not be loaded. Please refresh the page and try again.</p></div>';
+    if (poll && poll.parentNode) poll.parentNode.removeChild(poll);
   }
 
   function loadHomepageEnhancements() {
@@ -141,18 +142,19 @@
     addStyle("/assets/css/community-poll.css");
     addScript("/assets/js/homepage-ui.js");
 
-    var ward = document.getElementById("news-by-ward");
-    if (!ward || document.getElementById("community-poll")) return;
+    var anchor = document.getElementById("news-by-ward")
+      || (document.getElementById("latest-news-title") && document.getElementById("latest-news-title").closest("section"));
+    if (!anchor || document.getElementById("community-poll")) return;
     var section = document.createElement("section");
     section.id = "community-poll";
     section.setAttribute("aria-label", "Rochdale Daily community poll");
-    section.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">Loading live community poll…</p></div>';
-    ward.insertAdjacentElement("afterend", section);
+    section.hidden = true;  /* revealed by the poll script only when a poll is live */
+    anchor.insertAdjacentElement("afterend", section);
     addScript("/assets/js/community-poll-v2.js", pollLoadError);
 
     window.setTimeout(function () {
       var current = document.getElementById("community-poll");
-      if (current && current.textContent.indexOf("Loading live community poll") !== -1) pollLoadError();
+      if (current && current.hidden) pollLoadError();
     }, 15000);
   }
 
