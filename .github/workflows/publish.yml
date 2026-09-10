@@ -33,8 +33,14 @@ on:
       - scraper/enforce_cards_only_images.py
       - scraper/enforce_frontpage_freshness.py
       - scraper/enforce_live_homepage_window.py
+      - scraper/normalise_public_theme.py
+      - assets/css/rd-tokens.css
       - assets/css/site.css
       - assets/css/article-inline.css
+      - assets/css/newspaper-global.css
+      - assets/css/public-families.css
+      - assets/css/editorial-theme.css
+      - assets/css/legacy-routing-pages.css
       - .github/workflows/publish.yml
   workflow_dispatch:
 
@@ -109,6 +115,10 @@ jobs:
           python scraper/content_hygiene.py
           python scraper/enforce_cards_only_images.py --articles articles.json --check
           python scraper/verify_manual_publication.py
+          # Theme enforcement is part of publication, not a later cosmetic job.
+          # Every generated reader page is normalised before anything is staged.
+          python scraper/normalise_public_theme.py
+          python scraper/normalise_public_theme.py --check
       - name: Commit rebuilt canonical site
         id: commit
         shell: bash
@@ -151,6 +161,8 @@ jobs:
             python scraper/content_hygiene.py
             python scraper/enforce_cards_only_images.py --articles articles.json --check
             python scraper/verify_manual_publication.py
+            python scraper/normalise_public_theme.py
+            python scraper/normalise_public_theme.py --check
           }
 
           stage_publish
