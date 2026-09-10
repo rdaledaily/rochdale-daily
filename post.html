@@ -1,59 +1,167 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Article • Rochdale Daily</title>
-<meta name="description" content="Read the latest local story.">
-<link rel="preload" as="image" href="assets/img/logo.svg">
-<link rel="preload" as="fetch" href="articles.json" crossorigin="anonymous">
-<link rel="stylesheet" href="assets/css/styles.min.css">
-<link rel="stylesheet" href="assets/css/menu.css">
-<script src="assets/js/menu.js" defer></script>
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d2137">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="description" content="Read local reporting from Rochdale Daily.">
+  <meta property="og:type" content="article">
+  <title>Article | Rochdale Daily</title>
 
-<link rel="icon" href="assets/img/logo.svg">
-<meta name="robots" content="index,follow">
-<script>window.__GA4_ID__=null</script>
+  <link rel="icon" href="/assets/img/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/rd-tokens.css">
+  <link rel="stylesheet" href="/assets/css/legacy-routing-pages.css">
+
+  <script src="/assets/js/menu.js" defer></script>
+  <script src="/assets/js/post-page.js" defer></script>
+  <script src="/assets/js/cookie-consent.js" defer></script>
 </head>
-<body data-page="post">
-<header class="header">
-  <div class="container topbar">
-    <div class="left"><span id="clock">--:--</span></div>
-    <div class="center"><span class="weather" id="weather">Loading weather…</span></div>
-    <div class="right"><div class="search"><input id="search" type="search" placeholder="Search Rochdale Daily…" aria-label="Search"><div class="results" aria-live="polite"></div></div></div>
-  </div>
-  <div class="container logo-row">
-    <a class="logo" href="/"><img src="assets/img/logo.svg" alt="Rochdale Daily"></a>
-    <nav class="nav" aria-label="Primary">
-      <a href="/">Home</a>
-      <a href="category.html?area=Rochdale">Rochdale</a>
-      <a href="category.html?area=Heywood">Heywood</a>
-      <a href="category.html?area=Littleborough">Littleborough</a>
-      <a href="category.html?area=Milnrow">Milnrow</a>
-      <a href="category.html?type=crime">Crime</a>
-      <a href="category.html?type=politics">Politics</a>
-      <a href="category.html?type=education">Education</a>
-      <a href="category.html?type=announcements">Announcements</a>
-      <a href="category.html?type=appeals">Appeals</a>
-    </nav>
-  </div>
-  <div class="ticker"><div class="container"><div class="wrap"><div class="items"></div></div></div></div>
-</header>
+<body class="legacy-route-page legacy-post">
+  <a class="rd-skip-link" href="#main-content">Skip to article</a>
 
-<main class="container">
-  <article class="card post" style="overflow:visible">
-    <img id="p-img" src="" alt="" />
-    <div class="body">
-      <div id="p-meta" class="meta"></div>
-      <h1 id="p-title" style="margin:6px 0 12px"></h1>
-      <div id="p-body"></div>
-      <div id="p-quotes" style="margin-top:12px"></div>
-      <div class="filters" style="margin-top:16px"><a href="javascript:history.back()">← Back</a></div>
+  <header>
+    <div class="rd-utility">
+      <div class="rd-shell">
+        <span><strong>Rochdale Daily</strong> · Independent local news</span>
+        <span class="rd-utility-secondary">Rochdale borough, Greater Manchester</span>
+      </div>
     </div>
-  </article>
-</main>
 
-<footer class="footer"><div class="container inner">
-  <div>© 2025 Rochdale Daily</div>
-  <div>Contact: <a href="mailto:tips@rochdaledaily.co.uk">tips@rochdaledaily.co.uk</a></div>
-  <div>Made fast on Cloudflare</div>
-</div></footer>
-<script src="assets/js/app.min.js" defer></script>
-</body></html>
+    <div class="rd-masthead">
+      <div class="rd-shell rd-masthead-row">
+        <a class="rd-brand" href="/" aria-label="Rochdale Daily home">
+          <img src="/assets/img/logo.svg" alt="Rochdale Daily">
+        </a>
+        <div class="rd-edition">
+          <strong>Local reporting for the borough</strong>
+          News · public service · accountability
+        </div>
+      </div>
+    </div>
+
+    <nav class="rd-primary-nav" aria-label="Primary navigation">
+      <div class="rd-shell rd-nav-row">
+        <button class="rd-menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
+          <span class="rd-menu-icon" aria-hidden="true"></span>
+          Menu
+        </button>
+        <ul class="rd-nav-list" id="primary-menu">
+          <li><a href="/">Home</a></li>
+          <li><a href="/news/news.html">Latest</a></li>
+          <li><a href="/news/crime.html">Crime</a></li>
+          <li><a href="/news/politics.html">Politics</a></li>
+          <li><a href="/news/business.html">Business</a></li>
+          <li><a href="/news/sport.html">Sport</a></li>
+          <li><a href="/news/community.html">Community</a></li>
+          <li><a href="/news/traffic.html">Traffic</a></li>
+          <li><a href="/archive.html">Archive</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="rd-main" id="main-content">
+    <div class="rd-shell">
+      <section class="rd-state" id="loading-state" aria-live="polite">
+        <h2>Loading article…</h2>
+        <p>Reading the published story from the Rochdale Daily archive.</p>
+      </section>
+
+      <section class="rd-state" id="error-state" hidden>
+        <h2>This article could not be opened</h2>
+        <p id="error-detail">The article may have moved, been withdrawn or the archive may be temporarily unavailable.</p>
+        <p class="rd-route-note"><a href="/archive.html">Search the full archive</a> · <a href="/">Return to the homepage</a></p>
+      </section>
+
+      <article id="legacy-article" hidden>
+        <nav class="rd-breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="/category.html">News</a>
+          <span aria-hidden="true">/</span>
+          <span>Article</span>
+        </nav>
+
+        <header class="rd-article-header">
+          <a class="rd-kicker" id="article-kicker" href="/news/news.html">News</a>
+          <h1 class="rd-article-title" id="article-title"></h1>
+          <p class="rd-article-dek" id="article-dek"></p>
+          <div class="rd-article-meta">
+            <span>By <strong id="article-byline">Rochdale Daily</strong></span>
+            <span id="article-published"></span>
+            <span id="article-updated" hidden></span>
+          </div>
+        </header>
+
+        <figure class="rd-article-hero" id="article-hero" hidden>
+          <img id="article-image" src="" alt="">
+          <figcaption id="article-image-caption" hidden></figcaption>
+        </figure>
+
+        <div class="rd-article-layout">
+          <div>
+            <div class="rd-article-body" id="article-body"></div>
+
+            <section class="rd-source-box" id="article-sources" hidden>
+              <h2>Sources</h2>
+              <ul class="rd-source-list" id="article-source-list"></ul>
+            </section>
+
+            <aside class="editorial-legal-note" id="article-legal" aria-label="Editorial transparency" hidden>
+              <h3>Editorial transparency</h3>
+              <p id="article-legal-text"></p>
+              <p id="article-reply-text"></p>
+            </aside>
+          </div>
+
+          <aside class="rd-article-rail" aria-label="Article actions">
+            <h2 class="rd-rail-title">Rochdale Daily</h2>
+            <p class="rd-rail-copy">You are reading a maintained legacy article address. The story itself is loaded from the same published archive as the rest of the site.</p>
+            <a class="rd-primary-action" id="permanent-link" href="/" hidden>Open permanent article URL</a>
+            <button class="rd-secondary-action" id="share-article" type="button">Share this article</button>
+            <a class="rd-secondary-action" href="/archive.html">Search the archive</a>
+            <p class="rd-route-note" id="share-status" aria-live="polite"></p>
+          </aside>
+        </div>
+
+        <section class="rd-related" id="related-stories" hidden>
+          <h2>Related stories</h2>
+          <div class="rd-related-grid" id="related-grid"></div>
+        </section>
+
+        <section class="comments-section" id="comments-root" hidden aria-label="Comments"></section>
+      </article>
+
+      <section class="rd-related" id="recent-stories" hidden>
+        <h2>Recent stories</h2>
+        <div class="rd-related-grid" id="recent-grid"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="rd-footer">
+    <div class="rd-shell rd-footer-grid">
+      <div>
+        <strong>Rochdale Daily</strong>
+        <p>Independent local reporting for Rochdale borough. © 2026 Rochdale Daily.</p>
+      </div>
+      <div class="rd-footer-links">
+        <strong>Read</strong>
+        <a href="/">Homepage</a>
+        <a href="/archive.html">Archive</a>
+        <a href="/news/community.html">Community</a>
+      </div>
+      <div class="rd-footer-links">
+        <strong>About</strong>
+        <a href="/about.html">About Rochdale Daily</a>
+        <a href="/accessibility.html">Accessibility</a>
+        <a href="mailto:tips@rochdaledaily.co.uk">Send a news tip</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
