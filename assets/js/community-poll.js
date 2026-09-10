@@ -1,195 +1,240 @@
-(() => {
-  const host = document.getElementById("community-poll");
-  if (!host) return;
+(function () {
+  "use strict";
 
-  const API = "/api/poll";
-  const TOKEN_KEY = "rd-community-poll-voter";
-  const VOTE_KEY_PREFIX = "rd-community-poll-vote:";
-  let payload = null;
-  let selectedOption = "";
-  let timer = null;
+  var host = document.getElementById("community-poll");
+  if (!host || host.getAttribute("data-poll-v2") === "1") return;
+  host.setAttribute("data-poll-v2", "1");
 
-  function voterId() {
-    let value = localStorage.getItem(TOKEN_KEY);
-    if (!value) {
-      const bytes = crypto.getRandomValues(new Uint8Array(24));
-      value = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
-      localStorage.setItem(TOKEN_KEY, value);
-    }
-    return value;
-  }
+  var API = "/api/poll";
+  var TOKEN_KEY = "rd-community-poll-voter";
+  var payload = null;
+  var selected = "";
+  var busy = false;
+  var message = "";
+  var refreshTimer = null;
 
   function esc(value) {
-    return String(value ?? "").replace(/[&<>"]/g, char => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;",
-    })[char]);
+    return String(value == null ? "" : value).replace(/[&<>\"]/g, function (character) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[character];
+    });
   }
 
-  function timeLeft(endValue) {
-    const distance = Date.parse(endValue) - Date.now();
-    if (distance <= 0) return "Voting closed";
-    const days = Math.floor(distance / 86400000);
-    const hours = Math.floor((distance % 86400000) / 3600000);
-    const minutes = Math.floor((distance % 3600000) / 60000);
-    if (days) return `${days} day${days === 1 ? "" : "s"}, ${hours} hour${hours === 1 ? "" : "s"} left`;
-    if (hours) return `${hours} hour${hours === 1 ? "" : "s"}, ${minutes} min left`;
-    return `${Math.max(1, minutes)} min left`;
+  function storageGet(key) {
+    try { return window.localStorage.getItem(key) || ""; } catch (error) { return ""; }
   }
 
-  function ago(at) {
-    const seconds = Math.max(0, Math.floor((Date.now() - Number(at)) / 1000));
-    if (seconds < 45) return "Just now";
-    if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hr ago`;
-    return `${Math.floor(seconds / 86400)} day ago`;
+  function storageSet(key, value) {
+    try { window.localStorage.setItem(key, value); } catch (error) { /* no-op */ }
   }
 
-  function storedVote(pollId, results) {
-    const value = localStorage.getItem(VOTE_KEY_PREFIX + pollId) || "";
-    if (!value) return "";
+  function voterId() {
+    var id = storageGet(TOKEN_KEY);
+    if (id && /^[a-zA-Z0-9_-]{20,120}$/.test(id)) return id;
 
-    // Old test versions of the poll wrote a local vote before the shared
-    // backend had recorded anything. Do not let that stale browser value turn
-    // a brand-new zero-vote poll into a results-only display.
-    const matching = results && results.options
-      ? results.options.find(option => option.id === value)
-      : null;
-    if (!matching || Number(matching.votes || 0) < 1) {
-      localStorage.removeItem(VOTE_KEY_PREFIX + pollId);
-      return "";
+    var bytes = new Uint8Array(24);
+    if (window.crypto && window.crypto.getRandomValues) {
+      window.crypto.getRandomValues(bytes);
+      var parts = [];
+      for (var i = 0; i < bytes.length; i += 1) {
+        var hex = bytes[i].toString(16);
+        parts.push(hex.length < 2 ? "0" + hex : hex);
+      }
+      id = parts.join("");
+    } else {
+      id = String(Date.now()) + "_" + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
     }
-    return value;
+
+    storageSet(TOKEN_KEY, id);
+    return id;
+  }
+
+  function timeLeft(value) {
+    var milliseconds = Date.parse(value) - Date.now();
+    if (!isFinite(milliseconds) || milliseconds <= 0) return "Voting closed";
+    var days = Math.floor(milliseconds / 86400000);
+    var hours = Math.floor((milliseconds % 86400000) / 3600000);
+    var minutes = Math.floor((milliseconds % 3600000) / 60000);
+    if (days) return days + " day" + (days === 1 ? "" : "s") + ", " + hours + " hour" + (hours === 1 ? "" : "s") + " left";
+    if (hours) return hours + " hour" + (hours === 1 ? "" : "s") + ", " + minutes + " min left";
+    return Math.max(1, minutes) + " min left";
+  }
+
+  function findResult(results, optionId) {
+    var options = results.options || [];
+    for (var i = 0; i < options.length; i += 1) {
+      if (String(options[i].id) === String(optionId)) return options[i];
+    }
+    return { votes: 0, percentage: 0 };
+  }
+
+  function applyOptimisticVote(optionId) {
+    if (!payload || !payload.results || !optionId) return;
+    var result = findResult(payload.results, optionId);
+    if (result._localVoteApplied) return;
+    result.votes = Number(result.votes || 0) + 1;
+    result._localVoteApplied = true;
+    payload.results.total = Number(payload.results.total || 0) + 1;
+    for (var i = 0; i < payload.results.options.length; i += 1) {
+      var item = payload.results.options[i];
+      item.percentage = payload.results.total
+        ? Math.round((Number(item.votes || 0) / payload.results.total) * 1000) / 10
+        : 0;
+    }
   }
 
   function leaderText(results) {
-    if (!results.total || !results.options.length) return "Be the first to vote";
-    const first = results.options[0];
-    const second = results.options[1];
-    const margin = second ? first.votes - second.votes : first.votes;
-    if (margin === 0) return "The lead is tied";
-    return `${first.label} leads by ${margin} vote${margin === 1 ? "" : "s"}`;
+    if (!results || !results.total) return "Be the first to vote";
+    var sorted = (results.options || []).slice().sort(function (a, b) {
+      return Number(b.votes || 0) - Number(a.votes || 0);
+    });
+    if (!sorted.length) return "Be the first to vote";
+    var margin = Number(sorted[0].votes || 0) - Number(sorted[1] ? sorted[1].votes || 0 : 0);
+    if (!margin) return "The lead is tied";
+    return sorted[0].label + " leads by " + margin + " vote" + (margin === 1 ? "" : "s");
   }
 
   function render() {
-    if (!payload) return;
-    const { poll, state, results } = payload;
-    const chosen = storedVote(poll.id, results);
-    const canVote = state.open && !chosen;
-    const totalCopy = `${results.total.toLocaleString("en-GB")} vote${results.total === 1 ? "" : "s"}`;
-    const byId = new Map(results.options.map(option => [option.id, option]));
+    if (!payload || !payload.poll || !payload.state || !payload.results) return;
+    var hostEl = document.getElementById("community-poll");
+    if (hostEl) hostEl.hidden = false;
 
-    const options = poll.options.map(option => {
-      const result = byId.get(option.id) || { votes: 0, percentage: 0 };
-      const selected = selectedOption === option.id;
-      const chosenClass = chosen === option.id ? " is-chosen" : "";
+    var poll = payload.poll;
+    var state = payload.state;
+    var results = payload.results;
+    var chosen = payload.voted_for ? String(payload.voted_for) : "";
+    var canVote = state.open && !chosen;
+    var rows = "";
+
+    for (var i = 0; i < poll.options.length; i += 1) {
+      var option = poll.options[i];
+      var result = findResult(results, option.id);
+      var active = selected === String(option.id);
+      var votes = Number(result.votes || 0);
+      var percentage = Number(result.percentage || 0);
+
       if (canVote) {
-        return `
-          <button class="rd-poll-choice${selected ? " is-selected" : ""}"
-                  type="button"
-                  data-poll-option="${esc(option.id)}"
-                  aria-pressed="${selected ? "true" : "false"}">
-            <span class="rd-poll-radio" aria-hidden="true"></span>
-            <span class="rd-poll-choice-copy">
-              <strong>${esc(option.label)}</strong>
-              <span class="rd-poll-choice-result">${result.percentage}% (${result.votes})</span>
-              <span class="rd-poll-track" aria-hidden="true"><span style="width:${Math.max(result.percentage, result.votes ? 1 : 0)}%"></span></span>
-            </span>
-          </button>`;
+        rows += '<button type="button" class="rd-poll-choice' + (active ? ' is-selected' : '') + '" data-poll-option="' + esc(option.id) + '" aria-pressed="' + (active ? 'true' : 'false') + '">' +
+          '<span class="rd-poll-radio" aria-hidden="true"></span>' +
+          '<span class="rd-poll-choice-copy"><strong>' + esc(option.label) + '</strong>' +
+          '<span class="rd-poll-choice-result">' + percentage + '% (' + votes + ')</span>' +
+          '<span class="rd-poll-track" aria-hidden="true"><span style="width:' + Math.max(percentage, votes ? 1 : 0) + '%"></span></span></span>' +
+          '</button>';
+      } else {
+        rows += '<div class="rd-poll-result' + (chosen === String(option.id) ? ' is-chosen' : '') + '">' +
+          '<div class="rd-poll-result-head"><span>' + (chosen === String(option.id) ? '<span class="rd-poll-leader">Your vote</span>' : '') + esc(option.label) + '</span>' +
+          '<strong>' + percentage + '% <small>(' + votes + ')</small></strong></div>' +
+          '<div class="rd-poll-track" aria-hidden="true"><span style="width:' + Math.max(percentage, votes ? 1 : 0) + '%"></span></div></div>';
       }
-      return `
-        <div class="rd-poll-result${chosenClass}">
-          <div class="rd-poll-result-head">
-            <span>${chosen === option.id ? '<span class="rd-poll-leader">Your vote</span>' : ""}${esc(option.label)}</span>
-            <strong>${result.percentage}% <small>(${result.votes})</small></strong>
-          </div>
-          <div class="rd-poll-track" aria-hidden="true"><span style="width:${Math.max(result.percentage, result.votes ? 1 : 0)}%"></span></div>
-        </div>`;
-    }).join("");
+    }
 
-    const activity = results.recent?.length
-      ? `<div class="rd-poll-activity"><strong>Latest votes</strong>${results.recent.slice(0, 3).map(item => `<span>${ago(item.at)} — ${esc(item.label)}</span>`).join("")}</div>`
-      : "";
+    var total = Number(results.total || 0);
+    host.innerHTML = '<div class="rd-poll-shell">' +
+      '<div class="rd-poll-topline"><span class="rd-poll-kicker">Rochdale Daily community poll</span><span class="rd-poll-countdown">' + esc(timeLeft(state.ends_at)) + '</span></div>' +
+      '<div class="rd-poll-grid"><div class="rd-poll-main"><h2>' + esc(poll.title) + '</h2><p class="rd-poll-intro">' + esc(poll.description) + '</p>' +
+      '<div class="rd-poll-options">' + rows + '</div>' +
+      '<p class="rd-poll-message" role="status" aria-live="assertive">' + esc(message) + '</p>' +
+      '<div class="rd-poll-actions">' + (canVote ? '<button class="rd-poll-vote" type="button"' + (busy ? ' disabled' : '') + '>' + (busy ? 'Submitting…' : 'Vote now') + '</button>' : '') + '</div></div>' +
+      '<aside class="rd-poll-summary"><span class="rd-poll-total">' + total.toLocaleString("en-GB") + ' vote' + (total === 1 ? '' : 's') + '</span><strong>' + esc(leaderText(results)) + '</strong></aside></div>' +
+      '<p class="rd-poll-note">' + esc(poll.source_note || "Informal reader poll.") + '</p></div>';
 
-    host.innerHTML = `
-      <div class="rd-poll-shell">
-        <div class="rd-poll-topline">
-          <span class="rd-poll-kicker">Rochdale Daily community poll</span>
-          <span class="rd-poll-countdown" data-poll-countdown>${esc(timeLeft(state.ends_at))}</span>
-        </div>
-        <div class="rd-poll-grid">
-          <div class="rd-poll-main">
-            <h2>${esc(poll.title)}</h2>
-            <p class="rd-poll-intro">${esc(poll.description)}</p>
-            <div class="rd-poll-options" aria-live="polite">${options}</div>
-            <p class="rd-poll-message" role="status" aria-live="polite"></p>
-            <div class="rd-poll-actions">
-              ${canVote ? '<button class="rd-poll-vote" type="button">Vote now</button>' : ""}
-            </div>
-          </div>
-          <aside class="rd-poll-summary">
-            <span class="rd-poll-total">${totalCopy}</span>
-            <strong>${esc(leaderText(results))}</strong>
-            ${activity}
-          </aside>
-        </div>
-        <p class="rd-poll-note">${esc(poll.source_note || "Informal reader poll.")}</p>
-      </div>`;
-
-    host.querySelectorAll("[data-poll-option]").forEach(button => {
-      button.addEventListener("click", () => {
-        selectedOption = button.dataset.pollOption || "";
+    var buttons = host.querySelectorAll("[data-poll-option]");
+    for (var j = 0; j < buttons.length; j += 1) {
+      buttons[j].addEventListener("click", function () {
+        selected = this.getAttribute("data-poll-option") || "";
+        message = "";
         render();
       });
-    });
+    }
 
-    const voteButton = host.querySelector(".rd-poll-vote");
-    if (voteButton) voteButton.addEventListener("click", submitVote);
+    var voteButton = host.querySelector(".rd-poll-vote");
+    if (voteButton) voteButton.addEventListener("click", submit);
   }
 
-  async function submitVote() {
-    const message = host.querySelector(".rd-poll-message");
-    const button = host.querySelector(".rd-poll-vote");
-    if (!selectedOption) {
-      message.textContent = "Choose an eatery before voting.";
+  function showError(text) {
+    host.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">' + esc(text) + '</p></div>';
+  }
+
+  function request(method, url, body, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.setRequestHeader("Accept", "application/json");
+    if (method === "POST") xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.timeout = 12000;
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) return;
+      var data = null;
+      try { data = JSON.parse(xhr.responseText || "null"); } catch (error) { data = null; }
+      callback(xhr.status >= 200 && xhr.status < 300, data, xhr.status);
+    };
+    xhr.onerror = function () { callback(false, null, 0); };
+    xhr.ontimeout = function () { callback(false, null, 0); };
+    xhr.send(body ? JSON.stringify(body) : null);
+  }
+
+  function submit() {
+    if (!selected) {
+      message = "Choose an option before voting.";
+      render();
       return;
     }
-    button.disabled = true;
-    button.textContent = "Submitting…";
-    try {
-      const response = await fetch(API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ poll_id: payload.poll.id, option_id: selectedOption, voter_id: voterId() }),
-      });
-      const data = await response.json();
-      if (!response.ok && !data.results) throw new Error(data.error || "Vote could not be recorded.");
-      if (data.voted_for) localStorage.setItem(VOTE_KEY_PREFIX + payload.poll.id, data.voted_for);
-      payload = { poll: data.poll || payload.poll, state: data.state || payload.state, results: data.results || payload.results };
+    if (busy) return;
+
+    busy = true;
+    message = "";
+    render();
+
+    var submittedOption = selected;
+    request("POST", API, {
+      poll_id: payload.poll.id,
+      option_id: submittedOption,
+      voter_id: voterId()
+    }, function (ok, data) {
+      busy = false;
+
+      if (!data) {
+        message = "The vote service did not respond. Please try again.";
+        render();
+        return;
+      }
+
+      if (data.poll && data.state && data.results) payload = data;
+
+      if (ok || data.voted_for) {
+        payload.voted_for = String(data.voted_for || submittedOption);
+        applyOptimisticVote(payload.voted_for);
+        selected = "";
+        message = ok ? "Your vote has been counted." : (data.error || "Your existing vote is shown below.");
+        render();
+        return;
+      }
+
+      message = data.error || "Your vote could not be recorded.";
       render();
-      const updatedMessage = host.querySelector(".rd-poll-message");
-      if (updatedMessage) updatedMessage.textContent = response.ok ? "Your vote has been counted." : (data.error || "You have already voted.");
-    } catch (error) {
-      button.disabled = false;
-      button.textContent = "Vote now";
-      message.textContent = error.message || "The poll is temporarily unavailable.";
-    }
+    });
   }
 
-  async function refresh(quiet = false) {
-    try {
-      const response = await fetch(API, { headers: { "Accept": "application/json" }, cache: "no-store" });
-      if (!response.ok) throw new Error("Poll unavailable");
-      payload = await response.json();
-      render();
-    } catch {
-      if (!quiet) host.innerHTML = '<div class="rd-poll-shell"><p class="rd-poll-error">The community poll is temporarily unavailable. Please try again shortly.</p></div>';
-    }
+  function load(firstLoad) {
+    var url = API + "?voter_id=" + encodeURIComponent(voterId()) + "&_=" + Date.now();
+    request("GET", url, null, function (ok, data) {
+      if (!ok || !data || !data.poll || !data.state || !data.results) {
+        /* No live poll, or the API is down: either way there is nothing for a
+           reader to do here. An empty section with an apology is not content.
+           Remove the section entirely; it comes back when a poll is live. */
+        if (firstLoad) {
+          var host = document.getElementById("community-poll");
+          if (host && host.parentNode) host.parentNode.removeChild(host);
+          if (refreshTimer) window.clearInterval(refreshTimer);
+        }
+        return;
+      }
+      payload = data;
+      if (!busy) render();
+    });
   }
 
-  refresh();
-  timer = window.setInterval(() => refresh(true), 20000);
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) refresh(true);
+  load(true);
+  refreshTimer = window.setInterval(function () { load(false); }, 20000);
+  window.addEventListener("beforeunload", function () {
+    if (refreshTimer) window.clearInterval(refreshTimer);
   });
-  window.addEventListener("beforeunload", () => window.clearInterval(timer));
 })();
