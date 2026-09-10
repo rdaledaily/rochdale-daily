@@ -23,7 +23,14 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
-      OPENAI_MODEL: "gpt-4o-mini"
+      OPENAI_MODEL: "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+      # Free Llama on Cloudflare Workers AI, via its OpenAI-compatible endpoint.
+      # OPENAI_API_KEY holds the Cloudflare API token; the account id fills the
+      # base URL below. LLM_RESPONSE_FORMAT=json_object because Llama does not
+      # accept OpenAI's strict json_schema mode. To go back to paid OpenAI,
+      # clear OPENAI_BASE_URL and set OPENAI_MODEL to an OpenAI model.
+      OPENAI_BASE_URL: "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/ai/v1"
+      LLM_RESPONSE_FORMAT: "json_object"
       AI_REWRITE_REQUIRED: "true"
       MAX_NEWS_AGE_HOURS: "48"
       PUBLISH_MAX_NEWS_AGE_HOURS: "48"
