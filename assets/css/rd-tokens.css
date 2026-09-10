@@ -9,12 +9,17 @@
  * any colour change only landed on whichever of the six :root blocks you
  * happened to edit.
  *
- * Every stylesheet and page now imports THIS file and nothing defines a raw
- * colour of its own. Change a value here and it changes everywhere, once.
+ * Every stylesheet and page now imports THIS file. The compatibility layer
+ * below makes the current newspaper shell authoritative even on legacy pages
+ * that still carry page-local presentation rules. New component work belongs
+ * in editorial-theme.css; newspaper-global.css exists only to stop old shells
+ * from overriding the publication identity while those templates are retired.
  *
  * Naming rule: tokens are named for their ROLE, never their colour. The old
  * "--yellow" holding a cyan value is exactly the trap that caused the drift.
  */
+
+@import url("/assets/css/newspaper-global.css");
 
 :root {
   /* ---------------------------------------------------------------- brand */
