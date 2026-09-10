@@ -1095,3 +1095,60 @@ body.is-advancing { opacity: .55; transition: opacity .18s ease; }
   border-top: 1px solid var(--line);
   font-size: var(--text-sm); color: var(--muted);
 }
+
+/* ==========================================================================
+   Filter bar — two axes, clearly separate from navigation.
+
+   The main nav used to carry category filters, township filters, a page anchor
+   and an external link in one undifferentiated row, so a reader could not tell
+   what a click would do, and at 1440px the row clipped and the townships were
+   simply unreachable. Filters now live here, labelled by axis and scrollable
+   so nothing can ever be cut off again.
+   ========================================================================== */
+.filter-bar { display: grid; gap: var(--space-2); margin-bottom: var(--space-5); }
+.filter-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--space-3); }
+.filter-label {
+  font-family: var(--font-ui); font-size: var(--text-xs); font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+  white-space: nowrap;
+}
+.category-toolbar, .area-toolbar {
+  display: flex; gap: var(--space-2); overflow-x: auto; padding-bottom: 2px;
+  scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+}
+.category-toolbar::-webkit-scrollbar, .area-toolbar::-webkit-scrollbar { height: 4px; }
+.category-toolbar::-webkit-scrollbar-thumb, .area-toolbar::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 2px; }
+.filter-bar .filter-button {
+  flex: 0 0 auto; min-height: 40px; padding: 8px 14px;
+  font-family: var(--font-ui); font-size: var(--text-sm); font-weight: 600;
+  color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px; cursor: pointer;
+  white-space: nowrap;
+}
+.filter-bar .filter-button:hover { border-color: var(--brand-accent); color: var(--brand-accent); }
+.filter-bar .filter-button.active {
+  background: var(--brand-navy); border-color: var(--brand-navy); color: var(--on-dark);
+}
+
+/* Navigation is now destinations only, so it can wrap instead of clipping. */
+.nav-list { flex-wrap: wrap; }
+
+@media (max-width: 620px) {
+  .filter-row { grid-template-columns: 1fr; gap: var(--space-1); }
+  .filter-label { font-size: 10px; }
+}
+
+/* ---------------------------------------------------------- cookie banner
+   The full policy filled two thirds of the first screen a new reader ever saw,
+   which cost more readers than any feature on the page could win back. Same
+   choices, same consent, far less of their screen. */
+.cookie-short { display: none; }
+@media (max-width: 820px) {
+  .cookie { padding: var(--space-3) 0; }
+  .cookie-long { display: none; }
+  .cookie-short { display: block; font-size: 13px; line-height: 1.45; }
+  .cookie-short a { color: var(--brand-accent-lift); }
+  .cookie-row { flex-direction: column; align-items: stretch; gap: var(--space-3); }
+  .cookie-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+  .cookie-actions button { width: 100%; min-height: 44px; }
+}
