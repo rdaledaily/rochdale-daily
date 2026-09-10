@@ -90,7 +90,15 @@ def clean_url(value: str) -> str:
         return value
 
 
-def clean_text(value: str) -> str:
+def _clean_text_once(value: str) -> str:
+    """Run one hygiene transformation pass without trimming the outer string.
+
+    Some source material arrives HTML-encoded more than once (for example
+    ``&amp;amp;`` or an encoded emoji entity). A single pass can therefore reveal
+    something that only the *next* pass knows how to remove. Keeping the pass
+    itself small lets :func:`clean_text` converge the whole transformation to a
+    fixed point instead of making the publisher depend on running --fix twice.
+    """
     text = html.unescape(value)
     text = MODEL_ANCHOR.sub("", text)
     text = MODEL_LINK.sub("", text)
@@ -105,6 +113,23 @@ def clean_text(value: str) -> str:
     text = re.sub(r"(?:<p>\s*</p>)+", "", text, flags=re.I)
     text = re.sub(r"\n[ \t]+", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
+    return text
+
+
+def clean_text(value: str) -> str:
+    """Return fully-normalised reader-facing text in one idempotent call.
+
+    The cleaner deliberately converges instead of assuming source text has only
+    one encoding layer. Eight passes is far beyond legitimate nested encoding
+    seen in the archive, while still providing a hard bound for malformed
+    input. A second call to ``clean_text`` must therefore be a no-op.
+    """
+    text = value
+    for _ in range(8):
+        cleaned = _clean_text_once(text)
+        if cleaned == text:
+            break
+        text = cleaned
     return text.strip() if value.strip() else text
 
 
