@@ -9,7 +9,7 @@
   <link rel="canonical" href="https://rochdaledaily.co.uk/feel-good-live.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/site.css">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Rochdale Daily">
@@ -29,13 +29,13 @@
     .live-hero-inner{max-width:716px;margin:0 auto}
     .live-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);
       border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:6px 14px;
-      font-family:"Roboto Condensed",Arial,sans-serif;font-weight:800;font-size:13px;
+      font-family:var(--font-display);font-weight:800;font-size:13px;
       letter-spacing:.12em;text-transform:uppercase}
     .live-dot{width:10px;height:10px;border-radius:50%;background:var(--live-red);flex:none}
     .live-pill.is-live .live-dot{animation:livepulse 1.6s ease-in-out infinite}
     @keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(210,31,44,.65)}50%{box-shadow:0 0 0 7px rgba(210,31,44,0)}}
     @media (prefers-reduced-motion: reduce){.live-pill.is-live .live-dot{animation:none}}
-    .live-hero h1{font-family:"Roboto Condensed",Arial,sans-serif;font-size:clamp(30px,5.4vw,46px);
+    .live-hero h1{font-family:var(--font-display);font-size:clamp(30px,5.4vw,46px);
       line-height:1.04;letter-spacing:-.01em;margin:14px 0 8px;color:#fff}
     .live-standfirst{font-size:18px;line-height:1.5;color:#dbe7ff;margin:0 0 14px;max-width:60ch}
     .live-hero a.live-guide-link{color:var(--live-cyan);font-weight:700;text-decoration:none;border-bottom:2px solid var(--live-cyan)}
@@ -46,9 +46,9 @@
     .live-entry::before{content:"";position:absolute;left:-9px;top:2px;width:15px;height:15px;
       border-radius:50%;background:var(--live-blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--live-blue)}
     .live-entry:first-child::before{background:var(--live-red);box-shadow:0 0 0 2px var(--live-red)}
-    .live-time{font-family:"Roboto Condensed",Arial,sans-serif;font-weight:800;font-size:14px;
+    .live-time{font-family:var(--font-display);font-weight:800;font-size:14px;
       letter-spacing:.08em;color:var(--live-blue);text-transform:uppercase}
-    .live-entry h2{font-family:"Roboto Condensed",Arial,sans-serif;font-size:21px;line-height:1.25;margin:6px 0 4px}
+    .live-entry h2{font-family:var(--font-display);font-size:21px;line-height:1.25;margin:6px 0 4px}
     .live-entry p{font-size:16px;line-height:1.62;color:#1c1c1c;margin:8px 0 0}
     .live-empty{margin:34px 0 0;padding:18px;border:1px dashed #b9c6dc;color:#4a5a74;font-size:15px}
     .live-ended{margin:26px 0 0;padding:14px 18px;background:#eef2f9;border-left:6px solid var(--live-navy);
@@ -62,8 +62,8 @@
 <body>
   <header class="masthead">
     <div class="wrap masthead-row" style="max-width:760px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
-      <a class="brand" href="/" aria-label="Rochdale Daily home" style="color:#fff;text-decoration:none;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em">ROCHDALE <span style="color:#f5c400">DAILY</span></a>
-      <a href="/" style="color:#f5c400;text-decoration:none;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:700;font-size:13px;text-transform:uppercase">All stories</a>
+      <a class="brand" href="/" aria-label="Rochdale Daily home" style="color:#fff;text-decoration:none;font-family:var(--font-display);font-weight:800;font-size:22px;letter-spacing:.04em">ROCHDALE <span style="color:#f5c400">DAILY</span></a>
+      <a href="/" style="color:#f5c400;text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:13px;text-transform:uppercase">All stories</a>
     </div>
   </header>
 
