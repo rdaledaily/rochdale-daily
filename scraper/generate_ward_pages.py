@@ -153,6 +153,19 @@ def councillor_card(person, photos):
     )
 
 
+def paste_friendly(page):
+    """Break the page onto many short lines instead of a handful of enormous ones.
+
+    The editor works through GitHub's web editor, which mishandles single lines
+    of 10-20k characters (heywood.html was one). Newlines between block
+    elements change nothing the browser renders and make the file pasteable.
+    """
+    page = re.sub(r"(</(?:article|section|header|footer|main|ul|li|p|h[1-6]|div|nav|style|head)>)", r"\1\n", page)
+    page = re.sub(r"(<(?:article|section|main|ul|div|nav|h[1-6])\b[^>]*>)", r"\n\1", page)
+    page = re.sub(r"(<body[^>]*>|<head>|<html[^>]*>|<!DOCTYPE html>)", r"\1\n", page)
+    return re.sub(r"\n{3,}", "\n\n", page).strip() + "\n"
+
+
 def archive_card(item):
     when = str(item.get("published_at") or "")[:10]
     return (
@@ -224,7 +237,7 @@ def write_place_pages(wards, articles, votes, photos, css):
             + '<p>Only votes taken by name are listed. Rochdale Daily never infers an individual vote where the minutes do not name the councillor.</p>'
             + FOOT
         )
-        (PLACE_OUTPUT_DIR / filename).write_text(page, encoding="utf-8")
+        (PLACE_OUTPUT_DIR / filename).write_text(paste_friendly(page), encoding="utf-8")
         written += 1
         print(f"  {filename}: {len(live)} live, {len(older)} archive, {len(people)} councillors")
     return written
@@ -271,16 +284,18 @@ def main():
             + f'<h2 class="ward-h2">Ward news</h2><div class="ward-grid">{"".join(story_card(article) for article in stories) or "<p>No stories filed for this ward yet.</p>"}</div>'
             + FOOT
         )
-        (OUTPUT_DIR / f"{slugify(ward)}.html").write_text(page, encoding="utf-8")
+        (OUTPUT_DIR / f"{slugify(ward)}.html").write_text(paste_friendly(page), encoding="utf-8")
 
     rows = "".join(
         f'<p><a href="/wards/{slugify(ward)}.html">{esc(ward)}</a></p>' for ward in sorted(wards)
     )
     (OUTPUT_DIR / "index.html").write_text(
-        chrome_head("News by ward", "Every Rochdale borough ward.", f"{SITE}/wards/", css)
-        + "<h1>News by ward</h1>"
-        + rows
-        + FOOT,
+        paste_friendly(
+            chrome_head("News by ward", "Every Rochdale borough ward.", f"{SITE}/wards/", css)
+            + "<h1>News by ward</h1>"
+            + rows
+            + FOOT
+        ),
         encoding="utf-8",
     )
 
