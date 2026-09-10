@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import re
 from collections import Counter
 from typing import Any
@@ -496,6 +497,27 @@ def article_word_count(article: dict[str, Any]) -> int:
     return len(re.findall(r"\b[\w’'-]+\b", body))
 
 
+def extract_json_object(content: str) -> str:
+    """Pull the JSON object out of a model response.
+
+    OpenAI's strict json_schema mode returns bare JSON, but weaker providers in
+    json_object or free-form mode (Cloudflare Workers AI / Llama especially)
+    sometimes wrap it in a ```json fence or a line of preamble. Strip the fence
+    and take the outermost {...}. If nothing object-like is found, return the
+    original so the caller's json.loads fails and the attempt retries, exactly
+    as before.
+    """
+    text = str(content or "").strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```(?:json)?\s*", "", text)
+        text = re.sub(r"\s*```$", "", text).strip()
+    start = text.find("{")
+    end = text.rfind("}")
+    if start != -1 and end != -1 and end > start:
+        return text[start:end + 1]
+    return text
+
+
 def normalise_draft(draft: Any) -> dict[str, Any]:
     if not isinstance(draft, dict):
         return {}
@@ -901,17 +923,35 @@ def request_article(
                 "trends or consequences that the sources do not state."
             )
         try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
+            # OpenAI supports strict json_schema output; most other
+            # OpenAI-compatible providers (Cloudflare Workers AI / Llama, Groq,
+            # Gemini's compat layer) do not, and reject that response_format
+            # outright -- which would turn a provider switch into a total
+            # rewrite outage. LLM_RESPONSE_FORMAT lets the caller pick the mode
+            # the endpoint actually accepts: "json_schema" (OpenAI, default),
+            # "json_object" (Cloudflare et al -- the schema still steers the
+            # model via the system prompt, and normalise_draft + the quality
+            # gate validate the result), or "none" for the most permissive
+            # endpoints. Whatever comes back is JSON-parsed and gated exactly
+            # the same way, so a weaker output mode costs quality, never safety.
+            mode = os.getenv("LLM_RESPONSE_FORMAT", "json_schema").strip().lower()
+            request_kwargs = {
+                "model": model,
+                "messages": [
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
                 ],
-                response_format={"type": "json_schema", "json_schema": schema},
-                temperature=0.18,
-                max_tokens=3000,
-            )
-            draft = normalise_draft(json.loads(response.choices[0].message.content or "{}"))
+                "temperature": 0.18,
+                "max_tokens": 3000,
+            }
+            if mode == "json_schema":
+                request_kwargs["response_format"] = {"type": "json_schema", "json_schema": schema}
+            elif mode == "json_object":
+                request_kwargs["response_format"] = {"type": "json_object"}
+            # mode == "none": send no response_format at all.
+            response = client.chat.completions.create(**request_kwargs)
+            content = response.choices[0].message.content or "{}"
+            draft = normalise_draft(json.loads(extract_json_object(content)))
         except Exception as exc:
             api_failures += 1
             last_api_error = type(exc).__name__
