@@ -275,7 +275,11 @@ def already_published(slug: str) -> bool:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--slot", choices=sorted(SLOTS), required=True)
+    parser.add_argument(
+        "--slot", choices=sorted(SLOTS) + ["auto"], required=True,
+        help="morning, evening, or auto (the most recent slot by the London clock; "
+             "for manual runs, so pressing the button always produces a briefing).",
+    )
     parser.add_argument(
         "--force", action="store_true",
         help="Build even if it is not the scheduled local hour (for testing).",
@@ -283,6 +287,16 @@ def main() -> None:
     args = parser.parse_args()
 
     now_local = datetime.now(timezone.utc).astimezone(LONDON)
+    if args.slot == "auto":
+        # The briefing a reader would expect to find right now: the evening
+        # edition from 6pm onwards, otherwise the morning edition from 9am,
+        # otherwise (small hours) last night's evening edition.
+        args.slot = "evening" if now_local.hour >= 18 or now_local.hour < 9 else "morning"
+        if now_local.hour < 9:
+            now_local = now_local - timedelta(days=1)
+            now_local = now_local.replace(hour=18, minute=0, second=0, microsecond=0)
+        args.force = True
+        print(f"auto: building the {args.slot} briefing for {now_local:%A %d %B}")
     wanted_hour = SLOTS[args.slot][0]
 
     # GitHub cron only speaks UTC, so the workflow fires on both candidate hours
