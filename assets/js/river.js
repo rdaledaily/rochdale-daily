@@ -76,7 +76,7 @@
     el.href = item.url || ("/articles/" + item.slug + ".html");
     el.innerHTML =
       '<span class="river-meta">' + esc(item.category || "News") +
-      " &middot; " + esc(ago(item._t)) + "</span>" +
+      (item._fresh ? " &middot; " + esc(ago(item._t)) : "") + "</span>" +
       '<span class="river-title"></span>' +
       (item.description ? '<span class="river-standfirst"></span>' : "");
     el.querySelector(".river-title").textContent = item.title || "Local news";
@@ -98,15 +98,54 @@
     return el;
   }
 
+  /* Day dividers give the river a spine. Without them a thousand stories are
+     a flat list with "6 days ago" on each; with them it reads as a dated log
+     the way a printed archive does. */
+  function dayKey(ts) {
+    if (!ts) return "";
+    var d = new Date(ts);
+    return d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+  }
+  function dayLabel(ts) {
+    var d = new Date(ts), now = new Date();
+    var one = 86400000;
+    var startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    var startThat = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+    var diff = Math.round((startToday - startThat) / one);
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Yesterday";
+    var opts = { weekday: "long", day: "numeric", month: "long" };
+    if (d.getFullYear() !== now.getFullYear()) opts.year = "numeric";
+    return d.toLocaleDateString("en-GB", opts);
+  }
+  function divider(ts) {
+    var el = document.createElement("h3");
+    el.className = "river-day";
+    el.textContent = dayLabel(ts);
+    return el;
+  }
+
+  var lastDay = "";
+  var anyFresh = false;
+
   function renderBatch() {
     if (loading || cursor >= items.length) return;
     loading = true;
     var frag = document.createDocumentFragment();
     var end = Math.min(cursor + BATCH, items.length);
     for (var i = cursor; i < end; i += 1) {
+      /* The "up to date" line only makes sense if there was fresh news above
+         it. When the river opens straight into the archive, a plain day
+         heading says everything that needs saying. */
       if (!markerPlaced && !items[i]._fresh) {
-        frag.appendChild(marker());
+        if (anyFresh) frag.appendChild(marker());
         markerPlaced = true;
+      }
+      if (items[i]._fresh) anyFresh = true;
+      var key = dayKey(items[i]._t);
+      if (key && key !== lastDay) {
+        frag.appendChild(divider(items[i]._t));
+        lastDay = key;
       }
       frag.appendChild(card(items[i]));
     }
