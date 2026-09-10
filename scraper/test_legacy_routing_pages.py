@@ -28,6 +28,7 @@ class LegacyRoutingPagesTests(unittest.TestCase):
             self.assertIn('/assets/css/legacy-routing-pages.css', html)
             self.assertIn('/assets/js/menu.js', html)
             self.assertIn('/assets/js/cookie-consent.js', html)
+            self.assertIn('/assets/img/logo.png', html)
             self.assertIn('class="rd-masthead"', html)
             self.assertIn('class="rd-primary-nav"', html)
             self.assertIn('class="rd-footer"', html)
@@ -41,7 +42,7 @@ class LegacyRoutingPagesTests(unittest.TestCase):
             "assets/js/category-page.js",
             "assets/js/post-page.js",
             "assets/js/article-comments.js",
-            "assets/img/logo.svg",
+            "assets/img/logo.png",
             "articles.json",
         }
         for relative_path in paths:
