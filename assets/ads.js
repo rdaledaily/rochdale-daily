@@ -119,7 +119,7 @@
     container.innerHTML =
       '<a href="' + esc(clickUrl(base, ad)) + '" rel="sponsored noopener" target="_blank" ' +
       'style="display:block;position:relative;line-height:0;text-align:center">' + picture +
-      '<span style="position:absolute;top:0;left:0;background:#111;color:#fff;font:700 9px/1 Arial,sans-serif;' +
+      '<span style="position:absolute;top:0;left:0;background:#111;color:#fff;font:700 9px/1 var(--font-body);' +
       'letter-spacing:.08em;text-transform:uppercase;padding:3px 6px">Advertisement</span></a>';
     container.removeAttribute("aria-hidden");
     container.setAttribute("role", "complementary");
