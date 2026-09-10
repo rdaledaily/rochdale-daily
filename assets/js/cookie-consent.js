@@ -5,7 +5,7 @@
   var KEY = "rd-cookie-choice";
   var ACCEPTED = "optional-accepted";
   var DECLINED = "essential-only";
-  var ASSET_VERSION = "20260830-trust-pages-1";
+  var ASSET_VERSION = "20260910-editorial-cohesion-1";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -50,6 +50,15 @@
     script.setAttribute("data-rd-asset", src);
     if (typeof onError === "function") script.addEventListener("error", onError);
     document.body.appendChild(script);
+  }
+
+  function loadEditorialTheme() {
+    /* Homepage and generated article pages currently carry different generations
+       of inline CSS. This shared final layer gives both the same publication
+       system without touching the breaking/traffic ticker implementation. */
+    if (document.getElementById("news-grid") || document.querySelector(".article-main")) {
+      addStyle("/assets/css/editorial-theme.css");
+    }
   }
 
   function upgradeTrustPage() {
@@ -142,6 +151,7 @@
   }
 
   function init() {
+    loadEditorialTheme();
     upgradeTrustPage();
     var banner = build();
     var accept = document.getElementById("cookie-accept");
