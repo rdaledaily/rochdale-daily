@@ -41,10 +41,18 @@
 /assets/img/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
-# CSS is shared by many pages. Keep a modest TTL because filenames are not yet
-# content-hashed, so design changes still reach readers promptly.
+# CSS and JS filenames are not content-hashed, so the browser must ask before
+# reusing a copy. max-age=0 + must-revalidate means every page load sends a
+# conditional request and gets a 304 (a few hundred bytes) unless the file has
+# changed. The previous rule -- max-age=3600, stale-while-revalidate=86400 --
+# let a browser keep serving an hour-old copy, and then a DAY-old copy while it
+# refreshed in the background. On 10 Sep that meant new homepage markup (HTML is
+# no-store) painted with the morning's stylesheet: the river rendered as bare
+# text and the filter bar had no styling for anyone who had visited earlier.
+# The cache-buster in cookie-consent.js could not help because that file sat
+# under the same rule. Return to long TTLs only once filenames carry a hash.
 /assets/css/*
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 # Advertising behaviour can change independently of editorial deployments, so
 # keep the ad loader uncached. The remaining shared site JavaScript is versioned
@@ -54,7 +62,7 @@
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
 /assets/js/*
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /articles/*
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
