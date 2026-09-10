@@ -14,9 +14,9 @@
     .editorial-legal-note h3{margin:0 0 4px!important;font-size:12px!important;line-height:1.2!important;color:#555!important;text-transform:uppercase!important;letter-spacing:.35px!important}
     .editorial-legal-note p{margin:3px 0!important}.editorial-legal-note p:last-child{margin-top:5px!important;font-size:10px!important}.editorial-legal-note a{color:#555!important}
     .comments-section{margin-top:12px;padding:22px;border:2px solid #8bdce8;border-radius:12px;background:linear-gradient(180deg,#f0fcfe 0,#fff 170px);box-shadow:0 8px 24px rgba(14,116,144,.09)}
-    .comments-section h2{font-family:"Roboto Condensed",Arial,sans-serif;text-transform:uppercase;font-size:25px;margin:0 0 4px;color:#123743}
+    .comments-section h2{font-family:var(--font-display);text-transform:uppercase;font-size:25px;margin:0 0 4px;color:#123743}
     .comments-invite{margin:0 0 18px;padding:14px 16px;background:#dff8fc;border-left:5px solid #0e7490;border-radius:0 8px 8px 0}
-    .comments-invite strong{display:block;font-family:"Roboto Condensed",Arial,sans-serif;font-size:18px;color:#0b5265;margin-bottom:3px}.comments-invite span{font-size:14px;color:#334e57}
+    .comments-invite strong{display:block;font-family:var(--font-display);font-size:18px;color:#0b5265;margin-bottom:3px}.comments-invite span{font-size:14px;color:#334e57}
     .comments-note{color:#5f6b78;font-size:13px;margin:0 0 18px}
     .comments-closed,.comment-auth{background:#f2f2f2;border:1px solid #d8d8d8;padding:16px;font-size:14px}
     .comment{background:#fff;border:1px solid #cbdde1;padding:14px 16px;margin-bottom:12px;display:flex;gap:14px;border-radius:7px}
