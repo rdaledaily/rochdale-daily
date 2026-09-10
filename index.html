@@ -25,41 +25,16 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700;800&family=Roboto:wght@400;500;700;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- The paper's single source of truth for colour, type and spacing.
+       Every page loads this; nothing defines a raw palette of its own. -->
+  <link rel="stylesheet" href="/assets/css/rd-tokens.css">
   <style>
-    :root {
-      /* Accent is cyan. The masthead is navy with the logo knocked out white,
-         so a warm accent no longer has a gold surface to belong to, and gold
-         competed with the red breaking strap for urgency. */
-      --yellow: #0e7490;
-      --yellow-dark: #0b5f75;
-      --black: #060d16;
-      --ink: #1a1a1a;
-      --muted: #5f6b78;
-      --line: #dcdcdc;
-      --soft: #f2f2f2;
-      --paper: #ffffff;
-      --card: #ffffff;
-      --deep: #f4f4f4;
-      --accent: #0e7490;
-      --navy: #0b1f3a;
-      --cyan: #22d3ee;
-      /* Weather glyph keeps its own token. It reads as a physical thing (sun,
-         rain, snow), not as brand accent, so it must not follow --accent. */
-      --sun: #f5c400;
-      /* Traffic warning amber. Kept off --accent on purpose: this signals
-         a hazard, so it must not follow a brand palette change. */
-      --traffic: #f5c400;
-      --traffic-dark: #c79d00;
-      --red: #c8102e;
-      --red-bright: #ff5c6b;
-      --blue: #3d8bd6;
-      --green: #23a06a;
-      --max: 1220px;
-      /* Editorial serif for headlines - the strongest single "newspaper" signal. */
-      --display: "Source Serif 4", Georgia, "Times New Roman", serif;
-      --shadow: 0 8px 26px rgba(0,0,0,.42);
-    }
+    /* The palette, type scale and spacing now live in
+       /assets/css/rd-tokens.css, loaded above. This page used to carry its
+       own private copy whose values had drifted away from every other
+       page's -- that is why the front page and the articles never quite
+       matched. Add page-specific tokens here if ever needed; never colours. */
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -67,7 +42,7 @@
       margin: 0;
       background: var(--deep);
       color: var(--ink);
-      font-family: Roboto, Arial, Helvetica, sans-serif;
+      font-family: var(--font-body);
       line-height: 1.45;
     }
     body.modal-open { overflow: hidden; }
@@ -152,7 +127,7 @@
     }
     .brand-text-fallback {
       color: #050505;
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: var(--font-body);
       font-size: clamp(34px, 5vw, 68px);
       font-weight: 900;
       line-height: .9;
@@ -239,7 +214,7 @@
       border-right: 1px solid #333;
       background: transparent;
       color: #fff;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-size: 14px;
       font-weight: 800;
       text-transform: uppercase;
@@ -281,7 +256,7 @@
       color: #fff;
       text-decoration: none;
       padding: 0 11px;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-size: 14px;
       font-weight: 800;
       text-transform: uppercase;
@@ -305,7 +280,7 @@
          ragged and the scrolling copy starting at different points. */
       min-width: 138px;
       padding: 0 17px;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-weight: 900;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -413,7 +388,7 @@
     }
     .section-title {
       margin: 0;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-size: clamp(25px, 4vw, 36px);
       font-weight: 900;
       line-height: 1;
@@ -458,7 +433,7 @@
     .story-kicker {
       display: inline-block;
       color: var(--accent);
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-size: 12px;
       font-weight: 900;
       margin: 11px 0 5px;
@@ -486,7 +461,7 @@
     .latest-panel { border-left: 1px solid var(--line); padding-left: 20px; }
     .panel-title {
       margin: 0 0 8px;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-size: 24px;
       font-weight: 900;
       text-transform: uppercase;
@@ -510,7 +485,7 @@
     }
     .ward-picker select { border: 2px solid var(--line); background: var(--card); color: var(--ink);
       padding: 12px 14px; font-size: 16px; min-height: 48px; width: 100%; max-width: 420px;
-      font-family: Roboto, Arial, sans-serif; }
+      font-family: var(--font-body); }
 
     .filter-button {
       border: 1px solid var(--line);
@@ -556,7 +531,7 @@
       padding: 9px 13px;
       background: var(--red);
       color: #fff;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-size: 12px;
       font-weight: 900;
       line-height: 1;
@@ -584,7 +559,7 @@
     .rail-box.red { border-top-color: var(--accent); background: var(--card); border-left: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .rail-title {
       margin: 0 0 12px;
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-size: 23px;
       line-height: 1;
       font-weight: 900;
@@ -635,7 +610,7 @@
     .report-box h3 {
       margin: 0 0 6px;
       color: var(--red-bright);
-      font-family: "Roboto Condensed", Arial, sans-serif;
+      font-family: var(--font-display);
       font-size: 27px;
       line-height: 1;
       text-transform: uppercase;
@@ -665,7 +640,7 @@
       padding: 15px 18px; cursor: pointer; border-left: 5px solid var(--accent);
     }
     .add-event-head h3 {
-      margin: 0; font-family: "Roboto Condensed", Arial, sans-serif;
+      margin: 0; font-family: var(--font-display);
       font-size: 21px; text-transform: uppercase; letter-spacing: .3px;
     }
     .add-event-head p { margin: 3px 0 0; font-size: 13px; color: var(--muted); }
@@ -717,9 +692,9 @@
     .event-card img { aspect-ratio: 16/9; object-fit: cover; }
     .event-body { padding: 14px; }
     .event-date {
-      color: var(--accent); font-family: "Roboto Condensed", Arial, sans-serif; font-size: 13px; font-weight: 900; text-transform: uppercase;
+      color: var(--accent); font-family: var(--font-display); font-size: 13px; font-weight: 900; text-transform: uppercase;
     }
-    .event-card h3 { margin: 4px 0 8px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 22px; line-height: 1.05; }
+    .event-card h3 { margin: 4px 0 8px; font-family: var(--font-display); font-size: 22px; line-height: 1.05; }
     .event-facts { display: grid; gap: 3px; font-size: 12px; color: var(--muted); }
     .event-cta {
       display: inline-block; margin-top: 11px; border-bottom: 3px solid var(--yellow-dark); font-size: 12px; font-weight: 900; text-decoration: none; text-transform: uppercase;
@@ -729,7 +704,7 @@
        change of palette (including a move to a light background) carries this
        section with it instead of leaving it stranded in the old scheme. */
     .dem-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 14px; }
-    .dem-tab { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 12px;
+    .dem-tab { font-family: var(--font-display); font-size: 12px;
       font-weight: 900; letter-spacing: .6px; text-transform: uppercase; cursor: pointer;
       background: transparent; border: 1px solid var(--line); color: var(--muted);
       padding: 9px 14px; }
@@ -738,14 +713,14 @@
     .dem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
     .dem-card { background: var(--card); border: 1px solid var(--line);
       border-left: 4px solid var(--accent); padding: 14px 15px; }
-    .dem-card h3 { margin: 0 0 8px; font-family: "Roboto Condensed", Arial, sans-serif;
+    .dem-card h3 { margin: 0 0 8px; font-family: var(--font-display);
       font-size: 17px; line-height: 1.2; }
     .dem-card h3 a { color: var(--ink); text-decoration: none; }
     .dem-card h3 a:hover { text-decoration: underline; text-underline-offset: 3px; }
     .dem-card p { margin: 0 0 10px; color: var(--muted); font-size: 13px; line-height: 1.45; }
     /* The borough figure is the reason this panel exists, so it is the largest
        thing on the card - not the national total every other outlet reports. */
-    .dem-figure { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 30px;
+    .dem-figure { font-family: var(--font-display); font-size: 30px;
       font-weight: 900; color: var(--accent); line-height: 1; }
     .dem-figure span { display: block; font-size: 11px; font-weight: 700; letter-spacing: .5px;
       text-transform: uppercase; color: var(--muted); margin-top: 3px; }
@@ -759,7 +734,7 @@
       text-transform: uppercase; background: var(--soft); color: var(--accent); padding: 3px 6px; }
     .dem-mp { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
     .dem-mp img { width: 52px; height: 52px; object-fit: cover; border: 1px solid var(--line); }
-    .dem-mp .who { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 18px; font-weight: 900; }
+    .dem-mp .who { font-family: var(--font-display); font-size: 18px; font-weight: 900; }
     .dem-list { list-style: none; margin: 0; padding: 0; }
     .dem-list li { border-top: 1px solid var(--line); padding: 8px 0; font-size: 13px; }
     .dem-list li:first-child { border-top: 0; }
@@ -769,12 +744,12 @@
     .dem-empty { background: var(--card); border: 1px solid var(--line);
       border-left: 4px solid var(--line); padding: 16px; color: var(--muted); font-size: 14px; }
     .dem-ward-pick { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; flex-wrap: wrap; }
-    .dem-ward-pick label { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 900;
+    .dem-ward-pick label { font-family: var(--font-display); font-weight: 900;
       text-transform: uppercase; font-size: 13px; letter-spacing: .04em; }
     .dem-ward-pick select { border: 2px solid var(--line); background: var(--card); color: var(--ink);
       padding: 10px 12px; font-size: 15px; min-height: 44px; min-width: 240px; }
     .dem-vote { display: flex; gap: 8px; align-items: baseline; }
-    .dem-vote-side { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 900;
+    .dem-vote-side { font-family: var(--font-display); font-weight: 900;
       text-transform: uppercase; font-size: 11px; letter-spacing: .06em; padding: 2px 7px; flex: 0 0 auto; }
     .dem-vote-for { background: #137a45; color: #fff; }
     .dem-vote-against { background: var(--red); color: #fff; }
@@ -793,7 +768,7 @@
     .support-card.older { border-top-color: #b98ad6; }
     .support-card.animal { border-top-color: #5cc9a7; }
     .support-card.cats { border-top-color: #d98ab5; }
-    .support-card h3 { margin: 0 0 7px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 22px; line-height: 1.1; }
+    .support-card h3 { margin: 0 0 7px; font-family: var(--font-display); font-size: 22px; line-height: 1.1; }
     .support-card p { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
     .support-card a { font-size: 12px; font-weight: 900; text-transform: uppercase; text-decoration-thickness: 3px; text-decoration-color: var(--yellow); text-underline-offset: 4px; }
     /* Helpline rows. These carry the numbers a reader in trouble actually
@@ -802,7 +777,7 @@
     .support-lines { list-style: none; margin: 0 0 10px; padding: 0; }
     .support-lines li { margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--line); }
     .support-lines li:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
-    .support-lines a { display: inline-block; font-family: "Roboto Condensed", Arial, sans-serif;
+    .support-lines a { display: inline-block; font-family: var(--font-display);
       font-size: 18px; font-weight: 800; letter-spacing: .2px; text-transform: none;
       color: var(--accent); text-decoration: none; }
     .support-lines a:hover, .support-lines a:focus { text-decoration: underline;
@@ -814,19 +789,19 @@
     .directory-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     .directory-card { border: 1px solid var(--line); padding: 15px; }
     .directory-card .sponsored { font-size: 9px; color: var(--muted); font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
-    .directory-card h3 { margin: 5px 0 6px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 19px; }
+    .directory-card h3 { margin: 5px 0 6px; font-family: var(--font-display); font-size: 19px; }
     .directory-card p { margin: 0; color: var(--muted); font-size: 12px; }
     .directory-card a { display: inline-block; margin-top: 9px; font-size: 11px; font-weight: 900; text-transform: uppercase; }
     .advertise-panel { background: var(--yellow); padding: 20px; border: 2px solid #0b1524; color: #0b1524; }
     .advertise-panel h3, .advertise-panel p, .advertise-panel a, .advertise-panel strong { color: #0b1524; }
-    .advertise-panel h3 { margin: 0 0 7px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 27px; text-transform: uppercase; line-height: 1; }
+    .advertise-panel h3 { margin: 0 0 7px; font-family: var(--font-display); font-size: 27px; text-transform: uppercase; line-height: 1; }
     .advertise-panel p { margin: 0 0 14px; font-size: 13px; }
 
     .site-footer { background: #111; color: #fff; border-top: 6px solid var(--yellow); padding: 36px 0 22px; }
     .footer-grid { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 28px; }
-    .footer-brand { font-family: "Roboto Condensed", Arial, sans-serif; color: var(--yellow); font-size: 30px; font-weight: 900; text-transform: uppercase; line-height: 1; }
+    .footer-brand { font-family: var(--font-display); color: var(--yellow); font-size: 30px; font-weight: 900; text-transform: uppercase; line-height: 1; }
     .footer-copy { color: #bfbfbf; font-size: 13px; max-width: 330px; }
-    .footer-col h3 { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 16px; text-transform: uppercase; margin: 0 0 10px; color: var(--yellow); }
+    .footer-col h3 { font-family: var(--font-display); font-size: 16px; text-transform: uppercase; margin: 0 0 10px; color: var(--yellow); }
     .footer-col ul { list-style: none; padding: 0; margin: 0; }
     .footer-col li { margin: 7px 0; }
     .footer-col a { color: #ddd; text-decoration: none; font-size: 13px; }
@@ -842,10 +817,10 @@
     .modal-close { position: sticky; float: right; top: 10px; margin: 10px 10px 0 0; z-index: 2; width: 42px; height: 42px; border: 0; background: #111; color: #fff; font-size: 24px; }
     .modal-image { aspect-ratio: 16/8; object-fit: cover; }
     .article-body { padding: 26px clamp(20px, 5vw, 56px) 42px; }
-    .article-body h1 { margin: 8px 0 13px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: clamp(36px, 6vw, 58px); line-height: 1; letter-spacing: -.8px; }
+    .article-body h1 { margin: 8px 0 13px; font-family: var(--font-display); font-size: clamp(36px, 6vw, 58px); line-height: 1; letter-spacing: -.8px; }
     .article-standfirst { color: var(--muted); font-size: 19px; }
     .article-byline { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 0; margin: 18px 0; font-size: 12px; font-weight: 700; }
-    .article-copy { font-family: Georgia, "Times New Roman", serif; font-size: 18px; line-height: 1.7; }
+    .article-copy { font-family: var(--font-body); font-size: 18px; line-height: 1.7; }
     .article-copy p { margin: 0 0 1.15em; }
     .article-share { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
     .article-share button { border: 1px solid var(--line); background: var(--card); padding: 8px 11px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
@@ -867,7 +842,7 @@
     .ad-slot {
       display: flex; align-items: center; justify-content: center; text-align: center;
       background: var(--soft); border: 1px dashed var(--line); color: var(--muted);
-      font-family: "Roboto Condensed", Arial, sans-serif; font-size: 11px; font-weight: 700;
+      font-family: var(--font-display); font-size: 11px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .06em; margin: 0 auto;
     }
     .ad-slot-leaderboard { width: 100%; max-width: 728px; height: 90px; margin: 22px auto; }
@@ -904,11 +879,11 @@
     .ad-slot-incontent::after { content: "Ad — 300×250"; }
 
     .sidebar-box { border: 1px solid var(--line); padding: 18px; }
-    .sidebar-box h3 { margin: 0 0 12px; font-family: "Roboto Condensed", Arial, sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 3px solid var(--yellow); padding-bottom: 8px; }
+    .sidebar-box h3 { margin: 0 0 12px; font-family: var(--font-display); font-size: 14px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 3px solid var(--yellow); padding-bottom: 8px; }
     .related-story { display: flex; gap: 10px; margin-bottom: 12px; text-decoration: none; color: inherit; cursor: pointer; }
     .related-story:last-child { margin-bottom: 0; }
     .related-story img { width: 72px; height: 54px; object-fit: cover; flex-shrink: 0; }
-    .related-story .related-title { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 14px; line-height: 1.25; font-weight: 700; }
+    .related-story .related-title { font-family: var(--font-display); font-size: 14px; line-height: 1.25; font-weight: 700; }
 
 
     .search-overlay {
@@ -925,7 +900,7 @@
     .search-panel button {
       border: 0; background: var(--yellow); color: #fff; font-weight: 900;
       padding: 0 18px; min-height: 48px; font-size: 15px; text-transform: uppercase;
-      font-family: "Roboto Condensed", Arial, sans-serif; letter-spacing: .04em; cursor: pointer;
+      font-family: var(--font-display); letter-spacing: .04em; cursor: pointer;
     }
     .search-results { margin-top: 16px; max-height: 55vh; overflow: auto; }
     .search-result { display: block; width: 100%; text-align: left; border: 0; border-top: 1px solid var(--line); background: transparent; color: var(--ink); padding: 12px 0; font-weight: 800; }
@@ -1032,7 +1007,7 @@
       .mobile-jump button {
         border: 1px solid var(--line); background: transparent; color: var(--ink);
         padding: 9px 12px; font-size: 12px; font-weight: 900; text-transform: uppercase;
-        font-family: "Roboto Condensed", Arial, sans-serif; cursor: pointer; border-radius: 999px;
+        font-family: var(--font-display); cursor: pointer; border-radius: 999px;
       }
       .mobile-jump button.primary { background: var(--accent); border-color: var(--accent); color: #04222a; }
       .m-section { margin: 0 0 26px; }
@@ -1041,12 +1016,12 @@
         gap: 12px; border-top: 3px solid var(--ink); padding-top: 8px; margin-bottom: 10px;
       }
       .m-section-title {
-        font-family: "Roboto Condensed", Arial, sans-serif; font-size: 19px;
+        font-family: var(--font-display); font-size: 19px;
         text-transform: uppercase; letter-spacing: .02em; margin: 0;
       }
       .m-section-more {
         border: 0; background: transparent; padding: 0; cursor: pointer;
-        font-family: "Roboto Condensed", Arial, sans-serif; font-size: 12px; font-weight: 900;
+        font-family: var(--font-display); font-size: 12px; font-weight: 900;
         text-transform: uppercase; color: var(--accent); white-space: nowrap;
       }
       .m-section .news-card { margin-bottom: 14px; }
@@ -1105,7 +1080,7 @@
     .card-comments{display:inline-flex;align-items:center;gap:5px;margin-top:8px;color:var(--muted);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px}
     .card-comments svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
     .comments-section{margin-top:30px;padding-top:22px;border-top:3px solid var(--accent)}
-    .comments-section h2{font-family:"Roboto Condensed",Arial,sans-serif;text-transform:uppercase;font-size:22px;margin:0 0 4px}
+    .comments-section h2{font-family: var(--font-display);text-transform:uppercase;font-size:22px;margin:0 0 4px}
     .comments-note{color:var(--muted);font-size:13px;margin:0 0 18px}
     .comments-closed{background:var(--soft);border:1px solid var(--line);padding:16px;font-size:14px}
     .comment{background:var(--card);border:1px solid var(--line);padding:14px 16px;margin-bottom:12px;display:flex;gap:14px}
@@ -1222,24 +1197,19 @@
     <div class="wrap nav-row">
       <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">MENU</button>
       <button class="menu-search" id="search-open-mobile" type="button" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span>SEARCH</span></button>
+      <!-- Destinations only. Everything here goes somewhere; nothing here
+           silently filters the page. The category and area filters now live in
+           the labelled control above the news grid, so a reader can tell at a
+           glance what a click will do. -->
       <ul class="nav-list" id="main-nav">
-        <li><button class="active" type="button" data-category="all">Home</button></li>
-        <li><button type="button" data-category="news">News</button></li>
-        <li><button type="button" data-category="crime">Crime</button></li>
-        <li><button type="button" data-category="politics">Politics</button></li>
+        <li><button class="active" type="button" data-category="all" data-reset="1">Home</button></li>
         <li><a href="#whats-on">What’s On</a></li>
-        <li><button type="button" data-category="traffic">Traffic & Travel</button></li>
-        <li><button type="button" data-category="sport">Sport</button></li>
-        <li><button type="button" data-category="business">Business</button></li>
-        <li><button type="button" data-category="health">Health</button></li>
+        <li><a href="/wards/">News by ward</a></li>
         <li><a href="/showbiz/">Showbiz</a></li>
-        <li><button type="button" data-category="environment">Environment</button></li>
-        <li><button type="button" data-area="all">All areas</button></li>
-        <li><button type="button" data-area="rochdale-township">Rochdale</button></li>
-        <li><button type="button" data-area="heywood-township">Heywood</button></li>
-        <li><button type="button" data-area="middleton-township">Middleton</button></li>
-        <li><button type="button" data-area="pennines-township">Pennines</button></li>
-        <li><button type="button" data-area="whitworth">Whitworth</button></li>
+        <li><a href="#democracy">Democracy</a></li>
+        <li><a href="#support">Community</a></li>
+        <li><a href="#advertise">Local services</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
   </nav>
@@ -1304,7 +1274,7 @@
   </article>
             <div class="secondary-stack" id="secondary-stories"></div>
             <aside class="latest-panel" aria-label="Latest updates">
-              <h2 class="panel-title">Latest</h2>
+              <h2 class="panel-title">Just in</h2>
               <ol class="latest-list" id="latest-list"></ol>
             </aside>
           </div>
@@ -1314,11 +1284,16 @@
       <section class="section" aria-labelledby="latest-news-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 class="section-title" id="latest-news-title">Latest news</h2>
+            <h2 class="section-title" id="latest-news-title">Browse the news</h2>
             <span class="feed-status" id="feed-status" aria-live="polite">Latest verified local stories</span>
             <button class="section-link" id="reset-filters" type="button" style="border-left:0;border-right:0;border-top:0;background:transparent;padding:0;">Show all</button>
           </div>
-          <div class="category-toolbar" id="category-toolbar" aria-label="Filter stories">
+          <!-- Two axes, each labelled and each scrollable, so neither can clip
+               and it is obvious they combine rather than replace each other. -->
+          <div class="filter-bar">
+            <div class="filter-row">
+              <span class="filter-label" id="filter-section-label">Section</span>
+              <div class="category-toolbar" id="category-toolbar" role="group" aria-labelledby="filter-section-label">
             <button class="filter-button active" type="button" data-category="all">All</button>
             <button class="filter-button" type="button" data-category="news">News</button>
             <button class="filter-button" type="button" data-category="crime">Crime</button>
@@ -1329,6 +1304,19 @@
             <button class="filter-button" type="button" data-category="health">Health</button>
             <button class="filter-button" type="button" data-category="showbiz">Showbiz</button>
             <button class="filter-button" type="button" data-category="environment">Environment</button>
+              </div>
+            </div>
+            <div class="filter-row">
+              <span class="filter-label" id="filter-area-label">Area</span>
+              <div class="area-toolbar" id="area-toolbar" role="group" aria-labelledby="filter-area-label">
+                <button class="filter-button active" type="button" data-area="all">All areas</button>
+                <button class="filter-button" type="button" data-area="rochdale-township">Rochdale</button>
+                <button class="filter-button" type="button" data-area="heywood-township">Heywood</button>
+                <button class="filter-button" type="button" data-area="middleton-township">Middleton</button>
+                <button class="filter-button" type="button" data-area="pennines-township">Pennines</button>
+                <button class="filter-button" type="button" data-area="whitworth">Whitworth</button>
+              </div>
+            </div>
           </div>
           <div class="news-layout">
             <div class="mobile-jump" id="mobile-jump" aria-label="Jump to a section"></div>
@@ -1398,7 +1386,7 @@
       <section class="section" id="more-local-news" aria-labelledby="more-local-news-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 class="section-title" id="more-local-news-title">More local news from the past 7 days</h2>
+            <h2 class="section-title" id="more-local-news-title">The past week</h2>
             <a class="section-link" href="/archive.html">Browse the archive</a>
           </div>
           <p style="margin:0 0 14px;color:var(--muted);font-size:15px">Further local reporting from the past week. Latest news above remains limited to verified current stories from the last 14 hours.</p>
@@ -1696,6 +1684,20 @@
     </main>
   </div>
 
+  <!-- The river. Last on the page by necessity: it never ends, so nothing may
+       sit below it. Fresh news first, then an honest marker, then the archive. -->
+  <section class="section river" id="river" hidden aria-labelledby="river-title">
+    <div class="wrap">
+      <div class="river-head">
+        <h2 id="river-title">More from the borough</h2>
+        <p>Newest first</p>
+      </div>
+      <div class="river-stream"></div>
+      <div class="river-sentinel" aria-hidden="true"></div>
+      <div class="river-status" role="status" hidden></div>
+    </div>
+  </section>
+
   <footer class="site-footer">
     <div class="wrap">
       <div class="footer-grid">
@@ -1741,7 +1743,8 @@
 
   <div class="cookie" id="cookie-banner" role="region" aria-label="Cookie choices">
     <div class="wrap cookie-row">
-      <p><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. Choose “Accept optional cookies” to allow them, or “Essential only” to continue without them. You can change your choice at any time using Cookie settings.</p>
+      <p class="cookie-short"><strong>Cookie choices:</strong> Essential cookies keep the site working. Optional analytics and advertising cookies only with your consent. <a href="/privacy.html">Read more</a>.</p>
+      <p class="cookie-long"><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. Choose “Accept optional cookies” to allow them, or “Essential only” to continue without them. You can change your choice at any time using Cookie settings.</p>
       <div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div>
     </div>
   </div>
@@ -2299,6 +2302,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
           renderNewsGrid();
           renderMobileSections();
           renderEvents();
+          applyFilterFromUrl();
 
           const crimeHeadlines = stories
             .filter(story => story.category === "crime")
@@ -3096,16 +3100,54 @@ function shareIconMarkup(action, label) {
       if (lastFocusedElement) lastFocusedElement.focus();
     }
 
-    function applyFilter(category = activeCategory, area = activeArea) {
+    const KNOWN_AREAS = new Set(["all", "rochdale-township", "heywood-township", "middleton-township", "pennines-township", "whitworth"]);
+
+    function syncFilterUrl() {
+      /* Put the filter state in the address bar so a reader can share or
+         bookmark "Heywood crime" and land on exactly that, and so the old
+         township pages can point here. replaceState: no history spam. */
+      if (!window.history || !window.history.replaceState) return;
+      const url = new URL(window.location.href);
+      if (activeCategory && activeCategory !== "all") url.searchParams.set("section", activeCategory);
+      else url.searchParams.delete("section");
+      if (activeArea && activeArea !== "all") url.searchParams.set("area", activeArea);
+      else url.searchParams.delete("area");
+      window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+    }
+
+    function applyFilter(category = activeCategory, area = activeArea, options = {}) {
       activeCategory = category;
       activeArea = area;
       document.querySelectorAll("[data-category]").forEach(button => {
         if (button.matches("button")) button.classList.toggle("active", button.dataset.category === activeCategory);
       });
+      /* The area axis had no active state at all: click "Heywood" and the
+         "All areas" pill stayed lit. Same treatment as the section axis. */
+      document.querySelectorAll("button[data-area]").forEach(button => {
+        button.classList.toggle("active", button.dataset.area === activeArea);
+      });
       renderNewsGrid();
       renderMobileSections();
       decorateCommentCounts();
-      document.getElementById("latest-news-title").scrollIntoView({ behavior: "smooth", block: "start" });
+      syncFilterUrl();
+      if (!options.silent) {
+        document.getElementById("latest-news-title").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function applyFilterFromUrl() {
+      /* Honour ?section= and ?area= on arrival. Unknown values are ignored
+         rather than producing an empty grid. */
+      let params;
+      try { params = new URLSearchParams(window.location.search); } catch { return false; }
+      const section = (params.get("section") || "").toLowerCase();
+      const area = (params.get("area") || "").toLowerCase();
+      const knownSections = new Set(Array.from(document.querySelectorAll("button[data-category]")).map(b => b.dataset.category));
+      const wantSection = knownSections.has(section) ? section : "all";
+      const wantArea = KNOWN_AREAS.has(area) ? area : "all";
+      if (wantSection === "all" && wantArea === "all") return false;
+      applyFilter(wantSection, wantArea, { silent: false });
+      return true;
     }
 
     function showToast(message) {
@@ -3457,9 +3499,24 @@ function shareIconMarkup(action, label) {
         condition.textContent = presentation.label;
         document.getElementById("weather-compact").setAttribute("aria-label", `Current Rochdale weather: ${presentation.label}, ${temperature.textContent}`);
       } catch (error) {
-        icon.textContent = "◌";
-        temperature.textContent = "--°C";
-        condition.textContent = "Weather unavailable";
+        /* Fall back to the Met Office data the pipeline already writes, and if
+           that is missing too, hide the widget rather than printing "--°C ·
+           Weather unavailable" across the masthead of every page. A broken
+           readout looks like a broken newspaper. */
+        try {
+          const local = await fetch("/weather.json", { cache: "no-store" });
+          if (!local.ok) throw new Error("no local forecast");
+          const forecast = await local.json();
+          const today = (forecast.days || [])[0] || {};
+          const degrees = Number(today.temperature_c);
+          if (!Number.isFinite(degrees)) throw new Error("no reading");
+          icon.textContent = today.icon || "◌";
+          temperature.textContent = `${Math.round(degrees)}°C`;
+          condition.textContent = today.condition || "";
+        } catch (fallbackError) {
+          const box = document.getElementById("weather-compact");
+          if (box) box.hidden = true;
+        }
       }
     }
 
@@ -4465,5 +4522,6 @@ function shareIconMarkup(action, label) {
       });
     })();
   </script>
+  <script defer src="/assets/js/river.js"></script>
 </body>
 </html>
