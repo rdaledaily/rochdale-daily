@@ -49,6 +49,13 @@ jobs:
       # URL and the @cf/meta/llama model and point OPENAI_API_KEY back at that token.
       OPENAI_BASE_URL: "https://api.groq.com/openai/v1"
       LLM_RESPONSE_FORMAT: "none"
+      # Free-tier pacing. Groq allows 8,000 tokens/minute on gpt-oss-120b and
+      # meters a request as input PLUS the max_tokens reservation, so a smaller
+      # reservation fits more stories in the same minute. On a rate limit the
+      # pipeline now waits the time the provider states and retries, instead of
+      # spending one of the four editorial attempts on a pacing signal.
+      LLM_MAX_TOKENS: "2000"
+      LLM_RATE_LIMIT_RETRIES: "6"
       # Llama self-vetoes genuine local news; the deterministic Python gates
       # (locality, careers/listing, denied sources) already protect the paper,
       # so its self-classification is advisory here, not a veto.
@@ -65,8 +72,8 @@ jobs:
       FRONTPAGE_FRESH_HOURS: "36"
       # The fast lane runs continuously. Keep each pass deliberately bounded;
       # the deeper browser lane retains the broad recovery budget four times/day.
-      MAX_AI_ARTICLES_PER_RUN: "24"
-      MAX_AI_ARTICLES_INITIAL: "32"
+      MAX_AI_ARTICLES_PER_RUN: "8"
+      MAX_AI_ARTICLES_INITIAL: "10"
       RESPECT_ROBOTS: "true"
       REQUEST_TIMEOUT: "4"
       GOOGLE_NEWS_REQUEST_DELAY_SECONDS: "0.35"
@@ -90,8 +97,8 @@ jobs:
       DISCOVERY_PAGE_LIMIT: "1"
       DISCOVERY_WORKERS: "12"
       DISCOVERY_LINK_WORKERS: "12"
-      AI_WORKERS: "8"
-      MIN_BALANCED_SELECTION_LIMIT: "18"
+      AI_WORKERS: "1"
+      MIN_BALANCED_SELECTION_LIMIT: "8"
       MAX_SELECTED_PER_SOURCE: "5"
       MAX_SELECTED_PER_CATEGORY: "14"
       HTTP_POOL_CONNECTIONS: "32"
@@ -242,6 +249,13 @@ jobs:
       # URL and the @cf/meta/llama model and point OPENAI_API_KEY back at that token.
       OPENAI_BASE_URL: "https://api.groq.com/openai/v1"
       LLM_RESPONSE_FORMAT: "none"
+      # Free-tier pacing. Groq allows 8,000 tokens/minute on gpt-oss-120b and
+      # meters a request as input PLUS the max_tokens reservation, so a smaller
+      # reservation fits more stories in the same minute. On a rate limit the
+      # pipeline now waits the time the provider states and retries, instead of
+      # spending one of the four editorial attempts on a pacing signal.
+      LLM_MAX_TOKENS: "2000"
+      LLM_RATE_LIMIT_RETRIES: "6"
       # Llama self-vetoes genuine local news; the deterministic Python gates
       # (locality, careers/listing, denied sources) already protect the paper,
       # so its self-classification is advisory here, not a veto.
@@ -255,8 +269,8 @@ jobs:
       FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "45"
       FRONTPAGE_FRESH_HOURS: "36"
-      MAX_AI_ARTICLES_PER_RUN: "60"
-      MAX_AI_ARTICLES_INITIAL: "100"
+      MAX_AI_ARTICLES_PER_RUN: "12"
+      MAX_AI_ARTICLES_INITIAL: "14"
       REQUEST_TIMEOUT: "10"
       GOOGLE_NEWS_REQUEST_DELAY_SECONDS: "0.5"
       GOOGLE_SEARCH_QUERY_LIMIT: "68"
@@ -265,8 +279,8 @@ jobs:
       DISCOVERY_PAGE_LIMIT: "3"
       DISCOVERY_WORKERS: "16"
       DISCOVERY_LINK_WORKERS: "16"
-      AI_WORKERS: "8"
-      MIN_BALANCED_SELECTION_LIMIT: "40"
+      AI_WORKERS: "1"
+      MIN_BALANCED_SELECTION_LIMIT: "12"
       MAX_SELECTED_PER_SOURCE: "10"
       MAX_SELECTED_PER_CATEGORY: "30"
       MIN_LIVE_STORIES: "24"
