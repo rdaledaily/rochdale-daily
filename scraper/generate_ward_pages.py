@@ -39,15 +39,38 @@ def read(path, default):
         return default
 
 
+TOKEN_IMPORT_PATTERN = re.compile(
+    r'@import\s+url\(\s*[\'"]?/?assets/css/rd-tokens\.css[\'"]?\s*\)\s*;\s*', re.I
+)
+
+# Ward pages are a primary destination in the new navigation, so they have to
+# look like the rest of the paper rather than falling back to the browser's
+# default sans. These pages never load editorial-theme.css, so the tokens and
+# the two faces are linked here explicitly.
+HEAD_ASSETS = (
+    '<link rel="preconnect" href="https://fonts.googleapis.com">'
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700'
+    '&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">'
+    '<link rel="stylesheet" href="/assets/css/rd-tokens.css">'
+)
+
+
 def load_css():
+    """site.css for inlining, with the token @import lifted into a <link>.
+
+    An @import inside an inline <style> is invisible to the preload scanner, so
+    it costs a serial round trip before the page has a colour or a font.
+    """
     try:
-        return CSS_PATH.read_text(encoding="utf-8")
+        css = CSS_PATH.read_text(encoding="utf-8")
     except OSError:
         return ""
+    return TOKEN_IMPORT_PATTERN.sub("", css, count=1)
 
 
 def chrome_head(title, description, canonical, css):
-    return f'''<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><title>{esc(title)} | Rochdale Daily</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}"><style>{css}
+    return f'''<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><title>{esc(title)} | Rochdale Daily</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}">{HEAD_ASSETS}<style>{css}
 .ward-wrap{{max-width:1000px;margin:0 auto;padding:28px 20px 60px}}.ward-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}}.ward-card{{border:1px solid #ddd;padding:15px;background:#fff}}.ward-card h3{{font-size:18px;margin:10px 0 6px}}.ward-meta{{font-size:12px;color:#667;text-transform:uppercase}}.ward-h2{{border-top:3px solid #111;padding-top:8px;margin-top:34px}}.cllr-photo{{width:100%;aspect-ratio:4/3;object-fit:cover;background:#eceff1;display:block}}.cllr-placeholder{{width:100%;aspect-ratio:4/3;background:#eceff1;display:grid;place-items:center;font-size:46px;font-weight:800;color:#89939d}}.dem-vote-side{{font-weight:800}}.dem-vote-for{{color:#18733a}}.dem-vote-against{{color:#a51d25}}.dem-vote-abstain{{color:#695b00}}</style></head><body><header class="masthead"><div class="wrap masthead-row"><a class="brand" href="/index.html">ROCHDALE DAILY</a> <a href="/wards/">All wards</a></div></header><main class="ward-wrap">'''
 
 
