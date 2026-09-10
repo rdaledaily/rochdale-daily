@@ -18,6 +18,36 @@ CSS_PATH = ROOT / "assets" / "css" / "site.css"
 OUTPUT_DIR = ROOT / "wards"
 SITE = "https://rochdaledaily.co.uk"
 MAX_STORIES = 12
+ARCHIVE_INDEX_PATH = ROOT / "archive-index.json"
+PLACE_OUTPUT_DIR = ROOT
+
+# Root-level place pages. heywood.html and milnrow.html began life as early
+# prototypes pointing at a stylesheet that no longer existed, so they rendered
+# unstyled. They are real places people search for, so they are now generated
+# here from the same data as the ward pages: a township page draws on every
+# ward inside it. The archive has no area tag, so older stories are matched on
+# the place name appearing in the headline or standfirst -- a story with
+# "Heywood" in its headline is a Heywood story.
+PLACE_PAGES = {
+    "heywood.html": {
+        "name": "Heywood",
+        "kind": "TOWNSHIP",
+        "wards": ["North Heywood", "West Heywood"],
+        "keywords": ["heywood", "darnhill", "hopwood"],
+        "filter_area": "heywood-township",
+        "description": "Heywood news from Rochdale Daily, with the councillors for North Heywood and West Heywood and what they have voted on.",
+    },
+    "milnrow.html": {
+        "name": "Milnrow and Newhey",
+        "kind": "WARD",
+        "wards": ["Milnrow and Newhey"],
+        "keywords": ["milnrow", "newhey"],
+        "filter_area": "pennines-township",
+        "description": "Milnrow and Newhey news from Rochdale Daily, with the ward's councillors and what they have voted on.",
+    },
+}
+MAX_PLACE_STORIES = 18
+MAX_ARCHIVE_STORIES = 30
 
 SIDE_LABEL = {"for": "Voted for", "against": "Voted against", "abstain": "Abstained"}
 SIDE_CLASS = {"for": "dem-vote-for", "against": "dem-vote-against", "abstain": "dem-vote-abstain"}
@@ -123,6 +153,83 @@ def councillor_card(person, photos):
     )
 
 
+def archive_card(item):
+    when = str(item.get("published_at") or "")[:10]
+    return (
+        f'<article class="ward-card"><div class="ward-meta">{esc(item.get("category") or "")}'
+        f'{" · " + esc(when) if when else ""}</div>'
+        f'<h3><a href="{esc(item.get("url") or "/articles/" + str(item.get("slug") or "") + ".html")}">{esc(item.get("title"))}</a></h3>'
+        f'<p>{esc((item.get("description") or "")[:150])}</p></article>'
+    )
+
+
+def mentions_place(item, keywords):
+    haystack = f'{item.get("title") or ""} {item.get("description") or ""} {item.get("excerpt") or ""}'.lower()
+    return any(word in haystack for word in keywords)
+
+
+def write_place_pages(wards, articles, votes, photos, css):
+    """Root-level township / place pages built from their wards' data."""
+    archive = read(ARCHIVE_INDEX_PATH, [])
+    if not isinstance(archive, list):
+        archive = []
+    written = 0
+    for filename, place in PLACE_PAGES.items():
+        areas = set()
+        people = []
+        for ward in place["wards"]:
+            config = wards.get(ward) or {}
+            areas.update(area.lower() for area in config.get("areas", []))
+            for person in (votes.get("wards") or {}).get(ward, []):
+                people.append((ward, person))
+
+        # Live stories: tagged with one of the place's areas, or naming the
+        # place in the headline. Newest first, no duplicates.
+        seen = set()
+        live = []
+        for article in articles:
+            slug = str(article.get("slug") or "")
+            if not slug or slug in seen:
+                continue
+            tagged = str(article.get("area") or "").lower() in areas
+            if tagged or mentions_place(article, place["keywords"]):
+                seen.add(slug)
+                live.append(article)
+        live = live[:MAX_PLACE_STORIES]
+
+        older = [item for item in archive
+                 if str(item.get("slug") or "") not in seen and mentions_place(item, place["keywords"])]
+        older = older[:MAX_ARCHIVE_STORIES]
+
+        councillors = "".join(
+            councillor_card(person, photos).replace(
+                '<div class="ward-meta">', f'<div class="ward-meta">{esc(ward)} · ', 1)
+            for ward, person in people
+        )
+        ward_links = " · ".join(
+            f'<a href="/wards/{slugify(ward)}.html">{esc(ward)}</a>' for ward in place["wards"]
+        )
+        filter_link = f'/index.html?area={place["filter_area"]}'
+        name = place["name"]
+
+        page = (
+            chrome_head(f"{name} news", place["description"], f"{SITE}/{filename}", css)
+            + f'<span>{esc(place["kind"])}</span><h1>{esc(name)}</h1>'
+            + f'<p>Ward pages: {ward_links}. Or <a href="{esc(filter_link)}">filter the front page</a> to this area.</p>'
+            + f'<h2 class="ward-h2">Latest {esc(name)} news</h2><div class="ward-grid">'
+            + ("".join(story_card(article) for article in live) or f"<p>No live stories for {esc(name)} at the moment.</p>")
+            + '</div>'
+            + (f'<h2 class="ward-h2">From the archive</h2><div class="ward-grid">{"".join(archive_card(item) for item in older)}</div>' if older else "")
+            + f'<h2 class="ward-h2">Your councillors</h2><div class="ward-grid">{councillors or "<p>No councillors on record.</p>"}</div>'
+            + '<p>Only votes taken by name are listed. Rochdale Daily never infers an individual vote where the minutes do not name the councillor.</p>'
+            + FOOT
+        )
+        (PLACE_OUTPUT_DIR / filename).write_text(page, encoding="utf-8")
+        written += 1
+        print(f"  {filename}: {len(live)} live, {len(older)} archive, {len(people)} councillors")
+    return written
+
+
 def main():
     wards = read(WARD_MAP_PATH, {}).get("wards", {})
     raw = read(ARTICLES_PATH, [])
@@ -177,9 +284,11 @@ def main():
         encoding="utf-8",
     )
 
+    place_count = write_place_pages(wards, articles, votes, photos, css)
+
     councillor_count = sum(len((votes.get("wards") or {}).get(ward, [])) for ward in wards)
     matched = councillor_count - len(missing)
-    print(f"Generated {len(wards)} ward pages; local councillor portraits matched {matched}/{councillor_count}.")
+    print(f"Generated {len(wards)} ward pages and {place_count} place pages; local councillor portraits matched {matched}/{councillor_count}.")
     if missing:
         print("Unmatched councillors:")
         for row in missing:
