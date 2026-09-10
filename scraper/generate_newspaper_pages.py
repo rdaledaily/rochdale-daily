@@ -184,6 +184,164 @@ def _related_score(current, candidate):
     return (score, published)
 
 
+
+from datetime import timezone as _tz
+_EPOCH = __import__('datetime').datetime(1970, 1, 1, tzinfo=_tz.utc)
+
+
+# --------------------------------------------------------------------------
+# End-of-story recirculation.
+#
+# The reader has just finished. That is the moment they are most likely to read
+# another story, and it was being spent on a legal note with the only onward
+# links ~7,900px further down on a phone, capped at four.
+#
+# Ward first: only 43 of 146 stories carry a formal ward, but every story
+# carries an `area` tag, so the area itself is the locality key. The ward page
+# is linked only where ward_areas.json actually maps that area to one.
+# --------------------------------------------------------------------------
+
+_WARD_BY_AREA: dict[str, str] | None = None
+
+
+def _ward_lookup() -> dict[str, str]:
+    global _WARD_BY_AREA
+    if _WARD_BY_AREA is None:
+        mapping: dict[str, str] = {}
+        try:
+            import json as _json
+            from pathlib import Path as _Path
+            raw = _json.loads((_Path(__file__).resolve().parent.parent / "ward_areas.json").read_text(encoding="utf-8"))
+            for ward, config in (raw.get("wards") or {}).items():
+                for area in (config.get("areas") or []):
+                    mapping[str(area).strip().lower()] = ward
+        except Exception:
+            mapping = {}
+        _WARD_BY_AREA = mapping
+    return _WARD_BY_AREA
+
+
+def _area_key(article) -> str:
+    return str(article.get("area") or "").strip().lower()
+
+
+def _area_label(area: str) -> str:
+    if not area:
+        return ""
+    return area.replace("-", " ").replace(" and ", " & ").title()
+
+
+def _area_destination(area: str) -> str:
+    """Ward page when the area really maps to one, else the archive."""
+    ward = _ward_lookup().get(area)
+    if not ward:
+        return ""
+    slug = "".join(ch if ch.isalnum() else "-" for ch in ward.lower()).strip("-")
+    while "--" in slug:
+        slug = slug.replace("--", "-")
+    return f"/wards/{slug}.html"
+
+
+def _recirc_pool(article, all_articles):
+    slug = article.get("slug")
+    return [
+        candidate for candidate in all_articles
+        if candidate.get("slug") != slug
+        and str(candidate.get("status") or "published") == "published"
+        and not candidate.get("requires_approval")
+        and not fp.is_event(candidate)
+        and candidate.get("title")
+        and candidate.get("slug")
+    ]
+
+
+def _newest_first(items):
+    return sorted(
+        items,
+        key=lambda c: generate_pages.parse_iso(generate_pages.first_published_at(c)) or _EPOCH,
+        reverse=True,
+    )
+
+
+def _recirc_card(item, kicker=""):
+    title = generate_pages.esc(item.get("title") or "Local news update")
+    item_slug = generate_pages.esc(item.get("slug") or "")
+    image = generate_pages.esc(generate_pages.absolute_url(item.get("image_url") or ""))
+    label = generate_pages.esc(_area_label(_area_key(item)) or "Rochdale borough")
+    media = f'<img src="{image}" alt="" loading="lazy" decoding="async">' if image else ""
+    kick = f'<span class="rn-kicker">{generate_pages.esc(kicker)}</span>' if kicker else ""
+    return (
+        f'<a class="rn-card" href="{item_slug}.html">{media}'
+        f'<span class="rn-text">{kick}<span class="rn-title">{title}</span>'
+        f'<span class="rn-meta">{label}</span></span></a>'
+    )
+
+
+def _recirc_list(items, heading, destination=""):
+    if not items:
+        return ""
+    links = "".join(
+        f'<a class="rn-item" href="{generate_pages.esc(item.get("slug"))}.html">'
+        f'{generate_pages.esc(item.get("title"))}</a>'
+        for item in items
+    )
+    more = (
+        f'<a class="rn-more" href="{destination}">See all &rsaquo;</a>' if destination else ""
+    )
+    return (
+        f'<div class="rn-col"><h3 class="rn-heading">{generate_pages.esc(heading)}{more}</h3>{links}</div>'
+    )
+
+
+def _newsroom_read_next_markup(article, all_articles):
+    pool = _recirc_pool(article, all_articles)
+    if not pool:
+        return ""
+
+    area = _area_key(article)
+    category = str(article.get("category") or "").strip().lower()
+
+    same_area = _newest_first([c for c in pool if _area_key(c) == area and area])
+    same_cat = _newest_first([c for c in pool if str(c.get("category") or "").lower() == category and category])
+    newest = _newest_first(pool)
+
+    # Ward first, then section, then simply the freshest thing they have not read.
+    lead = (same_area or same_cat or newest)[0]
+    used = {lead.get("slug")}
+
+    area_rest = [c for c in same_area if c.get("slug") not in used][:5]
+    used.update(c.get("slug") for c in area_rest)
+    cat_rest = [c for c in same_cat if c.get("slug") not in used][:5]
+    used.update(c.get("slug") for c in cat_rest)
+
+    # If this story has no locality of its own, fill the first column with the
+    # freshest news rather than showing an empty box.
+    if not area_rest:
+        area_rest = [c for c in newest if c.get("slug") not in used][:5]
+        used.update(c.get("slug") for c in area_rest)
+        area_heading, area_dest = "Latest from the borough", "/archive.html"
+    else:
+        area_heading = f"More from {_area_label(area)}"
+        area_dest = _area_destination(area)
+
+    columns = _recirc_list(area_rest, area_heading, area_dest)
+    if cat_rest:
+        columns += _recirc_list(
+            cat_rest,
+            f"More {generate_pages.category_label(category)}",
+            f"/news/{generate_pages.esc(category)}.html",
+        )
+
+    return (
+        '<section class="read-next" aria-labelledby="read-next-title">'
+        '<h2 class="rn-lead-heading" id="read-next-title">Read next</h2>'
+        + _recirc_card(lead, generate_pages.category_label(lead.get("category") or "news"))
+        + f'<div class="rn-cols">{columns}</div>'
+        + '<a class="rn-all" href="/archive.html">Browse all Rochdale Daily stories &rsaquo;</a>'
+        + "</section>"
+    )
+
+
 def _newsroom_related_stories_markup(article, all_articles):
     slug = article.get("slug")
     related = [
@@ -194,7 +352,7 @@ def _newsroom_related_stories_markup(article, all_articles):
         and not fp.is_event(candidate)
     ]
     related.sort(key=lambda candidate: _related_score(article, candidate), reverse=True)
-    related = related[:4]
+    related = related[:6]
     if not related:
         return ""
 
@@ -304,6 +462,7 @@ def main() -> None:
     fp._article_rank = _newsroom_rank
     fp.select_frontpage = _newsroom_select_frontpage
     generate_pages.related_stories_markup = _newsroom_related_stories_markup
+    generate_pages.read_next_markup = _newsroom_read_next_markup
     generate_pages.main()
 
 
