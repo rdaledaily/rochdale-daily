@@ -1,0 +1,520 @@
+/* Rochdale Daily — public page family normalisation
+ *
+ * rd-tokens.css is the publication boundary. Older public pages still carry
+ * local layout CSS, but they are not allowed to carry a second brand. This
+ * layer maps those remaining page families onto the same paper, ink, rules,
+ * masthead and controls used by the editorial theme.
+ *
+ * Keep functional signal colours (breaking news, traffic, vote outcomes) in
+ * their own components. Everything here is publication identity.
+ */
+
+/* Legacy variable names are aliases at BODY scope as well as :root. That
+ * deliberately outranks old page-local :root blocks loaded later in the head,
+ * so a forgotten --yellow/#navy palette can no longer resurrect an old skin. */
+body {
+  --yellow: var(--brand-accent) !important;
+  --yellow-dark: var(--brand-accent-dark) !important;
+  --yellow-deep: var(--brand-accent-dark) !important;
+  --navy: var(--brand-navy) !important;
+  --cyan: var(--brand-accent-lift) !important;
+  --black: var(--brand-navy-deep) !important;
+  --accent: var(--brand-accent) !important;
+  --accent-dark: var(--brand-accent-dark) !important;
+  --paper: #fffdf8 !important;
+  --soft: var(--surface) !important;
+  --deep: var(--surface-2) !important;
+  --ink: #16202b !important;
+  --muted: #5d6874 !important;
+  --line: #dbd6cb !important;
+  --display: var(--font-display) !important;
+  --sans: var(--font-body) !important;
+  --utility: var(--font-ui) !important;
+}
+
+/* ---------------------------------------------------------------- Archive */
+body.archive-page {
+  --archive-paper: var(--paper) !important;
+  --archive-ink: var(--ink) !important;
+  --archive-muted: var(--muted) !important;
+  --archive-line: var(--line) !important;
+  --archive-soft-line: var(--line) !important;
+  --archive-accent: var(--brand-accent) !important;
+}
+
+.site-header,
+.archive-page .site-header {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line) !important;
+  box-shadow: none !important;
+}
+
+.archive-header-inner {
+  width: min(var(--max), calc(100% - 40px)) !important;
+  max-width: var(--max) !important;
+  min-height: 112px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.archive-header-inner .brand-logo {
+  width: clamp(245px, 28vw, 330px) !important;
+  max-height: none !important;
+  filter: none !important;
+}
+
+main.archive-wrap {
+  width: min(1100px, calc(100% - 40px)) !important;
+  max-width: 1100px !important;
+  background: var(--paper) !important;
+  padding-top: 38px !important;
+}
+
+.archive-masthead {
+  border-top: 4px solid var(--brand-navy) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+.archive-kicker,
+.archive-category {
+  color: var(--brand-accent) !important;
+  font-family: var(--font-ui) !important;
+}
+
+.archive-masthead h1,
+.archive-title,
+.archive-day-date {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+}
+
+.archive-deck,
+.archive-description,
+.archive-item-meta,
+.archive-summary,
+.archive-sections-label {
+  color: var(--muted) !important;
+}
+
+.archive-tools,
+.archive-day,
+.archive-item {
+  border-color: var(--line) !important;
+}
+
+.archive-input,
+.archive-select {
+  border: 1px solid var(--line-strong) !important;
+  border-radius: 0 !important;
+  background: var(--card) !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+}
+
+.archive-section-button {
+  color: var(--muted) !important;
+  font-family: var(--font-ui) !important;
+}
+
+.archive-section-button:hover,
+.archive-section-button.is-active {
+  color: var(--ink) !important;
+  border-bottom-color: var(--brand-accent) !important;
+}
+
+.load-more {
+  border: 1px solid var(--brand-navy) !important;
+  border-radius: 0 !important;
+  background: var(--brand-navy) !important;
+  color: var(--on-dark) !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+}
+
+/* ----------------------------------------------------------- Ward/place */
+.ward-wrap {
+  width: min(1100px, calc(100% - 40px)) !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 38px 0 64px !important;
+  background: var(--paper) !important;
+}
+
+.ward-wrap > span {
+  color: var(--brand-accent) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+
+.ward-wrap > h1 {
+  margin: 7px 0 12px !important;
+  padding-top: 10px !important;
+  border-top: 4px solid var(--brand-navy) !important;
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  font-size: clamp(38px, 5vw, 60px) !important;
+  line-height: 1 !important;
+  letter-spacing: -.035em !important;
+}
+
+.ward-h2 {
+  border-top: 3px solid var(--brand-navy) !important;
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  text-transform: none !important;
+}
+
+.ward-grid {
+  gap: 22px !important;
+}
+
+.ward-card {
+  border: 0 !important;
+  border-top: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 15px 0 22px !important;
+  box-shadow: none !important;
+}
+
+.ward-card h3 {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  line-height: 1.12 !important;
+}
+
+.ward-card p,
+.ward-meta {
+  color: var(--muted) !important;
+}
+
+.ward-meta {
+  font-family: var(--font-ui) !important;
+  letter-spacing: .04em !important;
+}
+
+.cllr-photo,
+.cllr-placeholder {
+  border-radius: 0 !important;
+  background: var(--surface) !important;
+}
+
+/* ------------------------------------------------------- Residents' Corner */
+.mast {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line) !important;
+  padding: 0 !important;
+}
+
+.mast .mast-row {
+  min-height: 96px !important;
+}
+
+.mast .brand {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  font-size: clamp(27px, 4vw, 38px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.035em !important;
+}
+
+.mast .back {
+  color: var(--brand-accent-dark) !important;
+  font-family: var(--font-ui) !important;
+}
+
+.mast + .hero {
+  background: var(--paper) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+.mast + .hero .eyebrow {
+  color: var(--brand-accent) !important;
+  font-family: var(--font-ui) !important;
+}
+
+.mast + .hero h1,
+.mast ~ main .panel-head h2,
+.mast ~ main .choice strong {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+}
+
+.mast ~ main {
+  background: var(--paper) !important;
+}
+
+.mast ~ main .panel,
+.mast ~ main .choice,
+.mast ~ main .privacy {
+  border-color: var(--line) !important;
+  border-radius: 0 !important;
+  background: var(--paper) !important;
+  box-shadow: none !important;
+}
+
+.mast ~ main .choice:hover,
+.mast ~ main .choice.active {
+  border-color: var(--brand-accent) !important;
+  box-shadow: inset 0 -3px 0 var(--brand-accent) !important;
+  transform: none !important;
+}
+
+.mast ~ main input,
+.mast ~ main select,
+.mast ~ main textarea {
+  border-color: var(--line-strong) !important;
+  border-radius: 0 !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+}
+
+.mast ~ main .conditional {
+  background: var(--surface) !important;
+  border-left-color: var(--brand-accent) !important;
+}
+
+.mast ~ main .submit {
+  border-radius: 0 !important;
+  background: var(--brand-navy) !important;
+  color: var(--on-dark) !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+}
+
+/* ---------------------------------------------------------- Trust pages */
+body.trust-newspaper-body {
+  --trust-yellow: var(--brand-accent) !important;
+  --trust-ink: var(--ink) !important;
+  --trust-muted: var(--muted) !important;
+  --trust-rule: var(--line) !important;
+  --trust-paper: var(--paper) !important;
+  --trust-soft: var(--surface) !important;
+  background: var(--paper) !important;
+}
+
+.trust-newspaper-header {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+.trust-newspaper-brand {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+}
+
+.trust-newspaper-edition {
+  border: 1px solid var(--brand-navy) !important;
+  color: var(--brand-navy) !important;
+}
+
+.trust-newspaper-nav {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border: 0 !important;
+  border-bottom: 2px solid var(--brand-navy) !important;
+}
+
+.trust-newspaper-nav a {
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--ink) !important;
+  text-transform: none !important;
+}
+
+.trust-newspaper-nav a:hover,
+.trust-newspaper-nav a:focus-visible,
+.trust-newspaper-nav a[aria-current="page"] {
+  background: transparent !important;
+  color: var(--brand-accent) !important;
+  box-shadow: inset 0 -3px 0 var(--brand-accent) !important;
+}
+
+.trust-newspaper-body .trust-kicker,
+.trust-newspaper-body .trust-contact h3,
+.trust-newspaper-body .trust-contact a {
+  color: var(--brand-accent) !important;
+  border-color: var(--brand-accent) !important;
+}
+
+.trust-newspaper-body .trust-wrap > h1,
+.trust-newspaper-body .trust-wrap h2 {
+  border-color: var(--brand-navy) !important;
+}
+
+.trust-newspaper-body .trust-note,
+.trust-newspaper-body .trust-index {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+  border-left-color: var(--brand-accent) !important;
+}
+
+.trust-newspaper-body .trust-contact {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-top-color: var(--brand-navy) !important;
+}
+
+.trust-newspaper-footer {
+  background: var(--brand-navy) !important;
+  color: var(--on-dark-mut) !important;
+}
+
+.trust-newspaper-footer a {
+  color: var(--on-dark-mut) !important;
+}
+
+/* -------------------------------------------------------- Utility pages */
+body.utility-page-body {
+  --rd-yellow: var(--brand-accent) !important;
+  --rd-ink: var(--ink) !important;
+  --rd-muted: var(--muted) !important;
+  --rd-rule: var(--line) !important;
+  --rd-paper: var(--paper) !important;
+  --rd-soft: var(--surface) !important;
+  background: var(--paper) !important;
+}
+
+.utility-masthead {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+.utility-brand {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+}
+
+.utility-edition {
+  border: 1px solid var(--brand-navy) !important;
+  color: var(--brand-navy) !important;
+}
+
+.utility-nav {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border: 0 !important;
+  border-bottom: 2px solid var(--brand-navy) !important;
+}
+
+.utility-nav a {
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--ink) !important;
+  text-transform: none !important;
+}
+
+.utility-nav a:hover,
+.utility-nav a:focus-visible,
+.utility-nav a[aria-current="page"] {
+  background: transparent !important;
+  color: var(--brand-accent) !important;
+  box-shadow: inset 0 -3px 0 var(--brand-accent) !important;
+}
+
+.utility-shell {
+  background: var(--paper) !important;
+}
+
+.utility-hero,
+.utility-section__head {
+  border-color: var(--brand-navy) !important;
+}
+
+.utility-kicker,
+.contact-card__label,
+.ward-link__number {
+  color: var(--brand-accent) !important;
+}
+
+.utility-title,
+.utility-deck,
+.utility-section__head h2,
+.contact-card h2,
+.contact-card h3,
+.ward-link__name {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+}
+
+.utility-crumb a,
+.contact-card__address,
+.ward-link__action {
+  border-color: var(--brand-accent) !important;
+  text-decoration-color: var(--brand-accent) !important;
+}
+
+.contact-feature {
+  background: var(--brand-navy) !important;
+  color: var(--on-dark) !important;
+}
+
+.contact-feature__side {
+  background: var(--brand-navy-deep) !important;
+}
+
+.contact-feature a {
+  color: var(--brand-accent-lift) !important;
+}
+
+.utility-footer {
+  background: var(--brand-navy) !important;
+  color: var(--on-dark-mut) !important;
+}
+
+.utility-footer a {
+  color: var(--on-dark-mut) !important;
+}
+
+/* --------------------------------------------------------------- 404 */
+body > .bar:first-child {
+  height: 5px !important;
+  background: var(--brand-navy) !important;
+  border-bottom: 2px solid var(--brand-accent) !important;
+}
+
+body > .bar:first-child + .wrap h1 {
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+}
+
+body > .bar:first-child + .wrap .btn {
+  background: var(--brand-navy) !important;
+  color: var(--on-dark) !important;
+  border-radius: 0 !important;
+  font-family: var(--font-ui) !important;
+}
+
+@media (max-width: 760px) {
+  .archive-header-inner,
+  .ward-wrap {
+    width: min(100% - 24px, var(--max)) !important;
+  }
+
+  .archive-header-inner {
+    min-height: 88px !important;
+  }
+
+  main.archive-wrap {
+    width: calc(100% - 24px) !important;
+  }
+
+  .mast .mast-row {
+    min-height: 82px !important;
+  }
+
+  .mast .brand {
+    font-size: 28px !important;
+  }
+}
