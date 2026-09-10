@@ -2965,7 +2965,15 @@ def main() -> int:
     skipped = 0
 
     def process_candidate(candidate: Candidate) -> dict[str, Any] | None:
-        worker_client = OpenAI(api_key=api_key) if api_key else None
+        # The rewrite engine is provider-agnostic over the OpenAI protocol.
+        # Set OPENAI_BASE_URL to point the same client at any OpenAI-compatible
+        # endpoint -- Cloudflare Workers AI (free Llama), Groq, Gemini's compat
+        # layer -- with no other change. The key in OPENAI_API_KEY is then that
+        # provider's token. Left unset, it is ordinary OpenAI as before.
+        worker_client = None
+        if api_key:
+            base_url = os.getenv('OPENAI_BASE_URL', '').strip()
+            worker_client = OpenAI(api_key=api_key, base_url=base_url) if base_url else OpenAI(api_key=api_key)
         return rewrite_candidate(candidate, worker_client)
     with ThreadPoolExecutor(max_workers=max(1, AI_WORKERS)) as executor:
         future_map = {executor.submit(process_candidate, candidate): candidate for candidate in selected_candidates}
