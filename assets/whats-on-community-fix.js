@@ -1,7 +1,12 @@
 /* Rochdale Daily What's On community-event compatibility layer.
-   Keeps approved reader submissions merged after the one-minute news refresh,
-   lets "All upcoming" render the full approved event list, and keeps the
-   Events section collapsed until a reader explicitly opens it. */
+   Keeps approved reader submissions merged after the one-minute news refresh
+   and lets "All upcoming" render the full approved event list.
+
+   It used to collapse the whole Events section behind a click on the heading
+   (added 8 Aug). That hid every event from every reader who did not know the
+   heading was a button -- on 10 Sep the section showed nothing but the "Add
+   an event" box while eight upcoming events sat behind it. The disclosure is
+   gone; the events are simply shown. */
 (function () {
   "use strict";
 
@@ -109,61 +114,8 @@
   }
 
   function initialiseEventsDisclosure() {
-    var grid = document.getElementById("events-grid");
-    if (!grid) return false;
-
-    var section = grid.closest("section") || grid.parentElement;
-    if (!section) return false;
-    if (section.getAttribute("data-events-disclosure-ready") === "true") return true;
-
-    var heading = section.querySelector("h1, h2, h3, .section-title");
-    if (!heading) return false;
-
-    var filterNodes = Array.prototype.slice.call(section.querySelectorAll("[data-event-filter]"));
-    var filterContainers = [];
-    filterNodes.forEach(function (node) {
-      var parent = node.parentElement;
-      if (parent && filterContainers.indexOf(parent) === -1) filterContainers.push(parent);
-    });
-
-    section.setAttribute("data-events-disclosure-ready", "true");
-    heading.setAttribute("role", "button");
-    heading.setAttribute("tabindex", "0");
-    heading.setAttribute("aria-controls", "events-grid");
-    heading.setAttribute("aria-expanded", "false");
-    heading.style.cursor = "pointer";
-    heading.style.userSelect = "none";
-
-    var indicator = document.createElement("span");
-    indicator.setAttribute("aria-hidden", "true");
-    indicator.textContent = "  ▾";
-    indicator.style.fontFamily = "Arial, sans-serif";
-    indicator.style.fontSize = ".7em";
-    heading.appendChild(indicator);
-
-    function setOpen(open) {
-      grid.style.display = open ? "" : "none";
-      grid.setAttribute("aria-hidden", open ? "false" : "true");
-      filterContainers.forEach(function (container) {
-        container.style.display = open ? "" : "none";
-      });
-      heading.setAttribute("aria-expanded", open ? "true" : "false");
-      indicator.textContent = open ? "  ▴" : "  ▾";
-    }
-
-    function toggle() {
-      setOpen(heading.getAttribute("aria-expanded") !== "true");
-    }
-
-    heading.addEventListener("click", toggle);
-    heading.addEventListener("keydown", function (event) {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        toggle();
-      }
-    });
-
-    setOpen(false);
+    /* Intentionally does nothing. See the header comment. If a disclosure is
+       ever wanted again it must default to OPEN, not closed. */
     return true;
   }
 
