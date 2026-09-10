@@ -75,21 +75,22 @@ function renderPage(entry) {
 <meta name="twitter:title" content="${title}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700;800&family=Roboto:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/rd-tokens.css">
 <style>
 :root{--ink:#202020;--muted:#666;--line:#d8d8d8;--paper:#fff;--red:#c8102e;--navy:#0b1f3a;--cyan:#22d3ee;--max:760px}
 *{box-sizing:border-box}
-body{margin:0;background:#e9e9e9;color:var(--ink);font-family:Roboto,Arial,Helvetica,sans-serif;line-height:1.5}
+body{margin:0;background:#e9e9e9;color:var(--ink);font-family:var(--font-body);line-height:1.5}
 a{color:inherit}
 img{display:block;width:100%;height:auto}
 .wrap{width:min(var(--max),calc(100% - 30px));margin-inline:auto}
 header.masthead{background:var(--navy);color:#fff;padding:14px 0}
-header.masthead a{text-decoration:none;font-family:"Roboto Condensed",Arial,sans-serif;font-weight:800;letter-spacing:.5px;font-size:22px;text-transform:uppercase}
+header.masthead a{text-decoration:none;font-family:var(--font-display);font-weight:800;letter-spacing:.5px;font-size:22px;text-transform:uppercase}
 header.masthead .tag{color:var(--cyan);font-size:12px;font-weight:700;letter-spacing:1.5px;display:block;margin-top:2px;text-transform:uppercase}
 main{background:var(--paper);padding:26px 0 34px;margin:18px auto;border:1px solid var(--line);width:min(var(--max),calc(100% - 30px))}
 main>.inner{width:calc(100% - 44px);margin-inline:auto}
-.kicker{display:inline-block;background:var(--red);color:#fff;font-family:"Roboto Condensed",Arial,sans-serif;font-weight:800;font-size:13px;letter-spacing:1.5px;padding:5px 11px;text-transform:uppercase}
-h1{font-family:"Source Serif 4",Georgia,serif;font-weight:700;font-size:clamp(27px,5vw,40px);line-height:1.15;margin:14px 0 10px}
+.kicker{display:inline-block;background:var(--red);color:#fff;font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:1.5px;padding:5px 11px;text-transform:uppercase}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(27px,5vw,40px);line-height:1.15;margin:14px 0 10px}
 .meta{color:var(--muted);font-size:14px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:18px}
 .developing{background:#fff8e1;border-left:4px solid #f5c400;padding:12px 14px;margin:0 0 20px;font-size:15px}
 .attribution{font-weight:700;margin:0 0 10px}
@@ -151,7 +152,7 @@ function notFound() {
     `<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><title>Story not found | ${BRAND}</title>
-<style>body{font-family:Roboto,Arial,sans-serif;margin:0;background:#e9e9e9;color:#202020}
+<style>body{font-family:var(--font-body);margin:0;background:#e9e9e9;color:#202020}
 .b{width:min(560px,calc(100% - 30px));margin:70px auto;background:#fff;border:1px solid #d8d8d8;padding:30px}
 a{color:#0057a8}</style></head><body><div class="b">
 <h1>That breaking update has moved on</h1>
