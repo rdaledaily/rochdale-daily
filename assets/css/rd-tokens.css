@@ -1,0 +1,134 @@
+/* Rochdale Daily — design tokens. THE single source of truth.
+ *
+ * Why this file exists: the paper was running three palettes at once. The
+ * homepage carried its own private :root inline (accent #0e7490), the shared
+ * editorial-theme.css defined the SAME token names with different values
+ * (accent #176d7d), and site.css still held the retired gold (#f5c400). Fifteen
+ * of the twenty shared tokens disagreed, down to the paper colour itself. A
+ * reader moving from the front page to an article crossed between designs, and
+ * any colour change only landed on whichever of the six :root blocks you
+ * happened to edit.
+ *
+ * Every stylesheet and page now imports THIS file and nothing defines a raw
+ * colour of its own. Change a value here and it changes everywhere, once.
+ *
+ * Naming rule: tokens are named for their ROLE, never their colour. The old
+ * "--yellow" holding a cyan value is exactly the trap that caused the drift.
+ */
+
+:root {
+  /* ---------------------------------------------------------------- brand */
+  /* The masthead navy and the serif wordmark are the paper's identity; they
+     stay. The accent is settled at one deeper teal that holds WCAG AA on the
+     paper white AND stays legible as a kicker on the navy lead card, which
+     neither of the two previous teals managed at both. */
+  --brand-navy:        #0d2137;
+  --brand-navy-deep:   #081726;
+  --brand-accent:      #0f6e80;
+  --brand-accent-dark: #0b5464;
+  --brand-accent-lift: #4cc6d9;  /* accent on dark ground only */
+
+  /* ------------------------------------------------------------- surfaces */
+  /* A faint warm cast reads as newsprint rather than screen-white. The old
+     homepage was pure #ffffff and every other page was #fffefa; picking one
+     ends the mismatch you could see when moving between pages. */
+  --paper:      #fffdf8;
+  --card:       #ffffff;
+  --surface:    #f5f3ed;
+  --surface-2:  #eae6dc;
+  --line:       #dbd6cb;
+  --line-strong:#b9b2a4;
+
+  /* ------------------------------------------------------------------ ink */
+  --ink:        #16202b;
+  --ink-soft:   #3b4753;
+  --muted:      #5d6874;
+  --on-dark:    #f7f5f0;
+  --on-dark-mut:#b9c2cc;
+
+  /* -------------------------------------------------------------- signals */
+  /* Deliberately NOT derived from the brand accent. These mean "urgent" and
+     "hazard"; a rebrand must never quietly restyle a road warning. */
+  --breaking:   #c8102e;
+  --breaking-d: #9d0c24;
+  --hazard:     #f5c400;
+  --hazard-dark:#c79d00;
+  --sun:        #f5c400;
+  --positive:   #1c7f56;
+  --info:       #2f6fb0;
+
+  /* ------------------------------------------------------------ typefaces */
+  /* Trust, not costume. The previous stack -- a Georgia-ish serif for headlines
+     with condensed caps everywhere -- is the house style of every AI content
+     farm imitating a broadsheet, which is precisely why it read as untrustworthy.
+     Libre Franklin descends from Franklin Gothic, drawn for newspapers in 1902
+     and still the voice of American news design; Inter is the most legible
+     screen face going and holds at phone sizes, which is where this paper is
+     actually read. */
+  --font-display: "Libre Franklin", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-ui:      "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-body:    Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+
+  /* ----------------------------------------------------------- type scale */
+  /* Fluid, so headlines stop needing a hand-written font-size at every
+     breakpoint (which is how the mobile lead headline ended up at 37px inside
+     a 110px column). */
+  --text-xs:   0.75rem;
+  --text-sm:   0.8125rem;
+  --text-base: 1rem;
+  --text-md:   clamp(1.05rem, 0.99rem + 0.3vw, 1.2rem);
+  --text-lg:   clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --text-xl:   clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --text-2xl:  clamp(1.85rem, 1.5rem + 1.8vw, 2.75rem);
+  --text-3xl:  clamp(2.2rem, 1.6rem + 3vw, 3.75rem);
+
+  --leading-tight: 1.08;
+  --leading-snug:  1.22;
+  --leading-body:  1.6;
+
+  /* -------------------------------------------------------------- spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* ---------------------------------------------------------------- shell */
+  --max: 1220px;
+  --radius:    2px;   /* newspapers are square; a hint only */
+  --radius-lg: 4px;
+  --shadow-sm: 0 1px 2px rgba(13, 33, 55, .08);
+  --shadow:    0 6px 20px rgba(13, 33, 55, .12);
+  --shadow-lg: 0 14px 38px rgba(13, 33, 55, .18);
+
+  /* -------------------------------------------- legacy aliases (transitional)
+     Older stylesheets still reference these names. They are aliases now, not
+     independent values, so nothing can drift away from the palette again.
+     Retire them as each stylesheet is migrated; do not add new uses. */
+  --accent:      var(--brand-accent);
+  --accent-dark: var(--brand-accent-dark);
+  --yellow:      var(--brand-accent);      /* held a CYAN value for months */
+  --yellow-dark: var(--brand-accent-dark);
+  --navy:        var(--brand-navy);
+  --cyan:        var(--brand-accent-lift);
+  --black:       var(--brand-navy-deep);
+  --red:         var(--breaking);
+  --red-bright:  var(--breaking);
+  --traffic:     var(--hazard);
+  --traffic-dark:var(--hazard-dark);
+  --soft:        var(--surface);
+  --deep:        var(--surface-2);
+  --green:       var(--positive);
+  --blue:        var(--info);
+  --display:     var(--font-display);
+  --sans:        var(--font-body);   /* referenced by editorial-theme; was undefined */
+  /* --utility was defined inside editorial-theme.css's own :root and was lost
+     when the tokens moved here, leaving 28 rules with no font-family at all.
+     It held "Roboto Condensed" -- the condensed newspaper face we are moving
+     away from -- so it now points at the UI face rather than being restored. */
+  --utility:     var(--font-ui);
+  --shadow-legacy: var(--shadow);
+}
