@@ -19,10 +19,19 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Reassemble and verify supplied ZIP
+      - name: Repair staging byte, reassemble and verify supplied ZIP
         shell: bash
         run: |
           set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('.rd-zip-upload/chunk-08')
+          s = p.read_text()
+          assert len(s) == 16000, len(s)
+          assert s[5252] == 'p', repr(s[5252])
+          s = s[:5252] + 'P' + s[5253:]
+          p.write_text(s)
+          PY
           cat .rd-zip-upload/chunk-* > /tmp/rochdale-daily-universal-chrome.b64
           base64 -d /tmp/rochdale-daily-universal-chrome.b64 > /tmp/rochdale-daily-universal-chrome.zip
           echo '0cdcc74e3c2112d7fb1e34a9f4e20c8e1d7ce7e9500ced04e38059b59abf5626  /tmp/rochdale-daily-universal-chrome.zip' | sha256sum -c -
