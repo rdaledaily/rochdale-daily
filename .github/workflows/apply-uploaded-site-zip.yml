@@ -1,0 +1,109 @@
+name: Apply supplied Rochdale Daily site ZIP
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.rd-zip-upload/READY'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: supplied-site-zip
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Apply supplied replacement files
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f .rd-zip-upload/READY ]; then
+            echo "No payload marker present; nothing to apply."
+            exit 0
+          fi
+
+          cat .rd-zip-upload/chunk-* > /tmp/rochdale-daily-upload.b64
+          base64 -d /tmp/rochdale-daily-upload.b64 > /tmp/rochdale-daily-upload.zip
+          echo "0cdcc74e3c2112d7fb1e34a9f4e20c8e1d7ce7e9500ced04e38059b59abf5626  /tmp/rochdale-daily-upload.zip" | sha256sum -c -
+
+          python3 - <<'PY'
+          import pathlib
+          import zipfile
+
+          archive = pathlib.Path('/tmp/rochdale-daily-upload.zip')
+          root = pathlib.Path('.').resolve()
+          expected = [
+              'assets/css/site.css',
+              'assets/css/utility-pages.css',
+              'assets/css/archive.css',
+              'assets/css/trust-pages.css',
+              'assets/js/cookie-consent.js',
+              'assets/js/community-poll.js',
+              'scraper/generate_pages.py',
+              'scraper/generate_ward_pages.py',
+              'scraper/generate_category_pages.py',
+              '404.html',
+              'about.html',
+              'accessibility.html',
+              'contact.html',
+              'corrections-and-complaints.html',
+              'editor.html',
+              'editorial-standards.html',
+              'feel-good-live.html',
+              'food-banks.html',
+              'privacy.html',
+              'residents-corner.html',
+              'rochdale.html',
+              'terms.html',
+          ]
+
+          with zipfile.ZipFile(archive) as zf:
+              names = set(zf.namelist())
+              missing = [name for name in expected if name not in names]
+              if missing:
+                  raise SystemExit('ZIP is missing expected replacement files: ' + ', '.join(missing))
+              for name in expected:
+                  target = root / name
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(zf.read(name))
+          PY
+
+          python3 -m py_compile scraper/generate_pages.py scraper/generate_ward_pages.py scraper/generate_category_pages.py
+          rm -rf scraper/__pycache__ .rd-zip-upload
+
+          git config user.name "Rochdale Daily Site Update"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add -A -- \
+            assets/css/site.css \
+            assets/css/utility-pages.css \
+            assets/css/archive.css \
+            assets/css/trust-pages.css \
+            assets/js/cookie-consent.js \
+            assets/js/community-poll.js \
+            scraper/generate_pages.py \
+            scraper/generate_ward_pages.py \
+            scraper/generate_category_pages.py \
+            404.html about.html accessibility.html contact.html \
+            corrections-and-complaints.html editor.html editorial-standards.html \
+            feel-good-live.html food-banks.html privacy.html residents-corner.html \
+            rochdale.html terms.html .rd-zip-upload
+
+          if git diff --cached --quiet; then
+            echo "Supplied files already match main."
+            exit 0
+          fi
+
+          git commit -m "Replace site files from supplied universal chrome ZIP"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
