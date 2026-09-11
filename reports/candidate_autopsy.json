@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-09-10T11:48:23.032121Z",
+  "examined_at": "2026-09-11T11:47:51.099668Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 80,
+  "candidates_examined": 85,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 37,
-    "would publish": 36,
-    "duplicate of published story": 7
+    "age": 55,
+    "would publish": 27,
+    "duplicate of published story": 3
   },
-  "would_publish": 36,
+  "would_publish": 27,
   "age_gate_sensitivity": {
-    "6h": 4,
-    "14h": 8,
-    "24h": 24,
-    "48h": 43,
-    "72h": 69,
-    "168h": 80
+    "6h": 0,
+    "14h": 0,
+    "24h": 8,
+    "48h": 30,
+    "72h": 49,
+    "168h": 85
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "DESIblitz: PAK Film Festival Honoured by Rochdale Mayor after UK Cinema Tour - DE",
-      "Rochdale Borough Council RSS: Council poised to purchase major Middleton landmark – Rochdale Borough"
+      "facebook.com: 🚨 Armed police storm Rochdale after man seen 'driving with gun' - face",
+      "Bescot Banter: Rochdale Clash Confirmed as Walsall's Dedicated South Asian Heritage F"
     ],
     "duplicate of published story": [
-      "Kent Online: Ainsworth sees room for improvement despite Gillingham’s Rochdale rout",
+      "Kentonline: Ainsworth sees room for improvement despite Gillingham’s Rochdale rout",
       "Fan Banter: Rochdale board of directors issues message to supporters after disappo",
       "Rochdale AFC: A Message From The Board - rochdaleafc.co.uk"
     ],
     "age": [
-      "BBC Manchester: Harpurhey man in critical condition after explosion at house",
-      "facebook.com: Manchester Evening News. . Live on Rochdale Road in Harpurhey at the s",
-      "BBC Manchester: Steve Coogan on Warwick Mill deal and Middleton regeneration"
+      "Yahoo: Campers in Rochdale issued warning after Frank the horse found close t",
+      "rochdaleafc.co.uk: Tickets On Sale For Fleetwood Trip - rochdaleafc.co.uk",
+      "Manchester Evening News: Campers in Rochdale issued warning after Frank the horse found close t"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
