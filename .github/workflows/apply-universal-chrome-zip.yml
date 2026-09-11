@@ -32,7 +32,7 @@ jobs:
           s = s[:5252] + 'P' + s[5253:]
           p.write_text(s)
           PY
-          cat .rd-zip-upload/chunk-* > /tmp/rochdale-daily-universal-chrome.b64
+          cat .rd-zip-upload/chunk-{00..09} > /tmp/rochdale-daily-universal-chrome.b64
           base64 -d /tmp/rochdale-daily-universal-chrome.b64 > /tmp/rochdale-daily-universal-chrome.zip
           echo '0cdcc74e3c2112d7fb1e34a9f4e20c8e1d7ce7e9500ced04e38059b59abf5626  /tmp/rochdale-daily-universal-chrome.zip' | sha256sum -c -
           unzip -t /tmp/rochdale-daily-universal-chrome.zip
