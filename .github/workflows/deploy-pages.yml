@@ -5,7 +5,7 @@ on:
     branches: [main]
     # Deploy when canonical public output or shared front-end assets change.
     # Keeping the workflow file itself in this list ensures deployment-rule
-    # fixes publish the latest complete site snapshot immediately.
+    # fixes and explicit publish triggers deploy the latest complete snapshot.
     paths:
       - articles.json
       - 'articles/**'
