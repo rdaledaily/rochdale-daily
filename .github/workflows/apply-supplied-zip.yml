@@ -1,0 +1,126 @@
+name: Apply supplied Rochdale Daily ZIP
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-supplied-zip.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: supplied-zip-apply
+  cancel-in-progress: false
+
+jobs:
+  apply-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Reconstruct, verify and apply supplied ZIP
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, shutil, tempfile, zipfile
+
+          root = Path('.')
+          stage = root / '.rd-zip-upload'
+          chunks = []
+          for i in range(10):
+              p = stage / f'chunk-{i:02d}'
+              if not p.exists():
+                  raise SystemExit(f'Missing staging chunk: {p}')
+              text = p.read_text(encoding='utf-8')
+              expected_len = 8680 if i == 9 else 16000
+              if len(text) != expected_len:
+                  raise SystemExit(f'Wrong length for {p}: {len(text)} != {expected_len}')
+              if i == 8:
+                  if text[5252] != 'p':
+                      raise SystemExit(f'chunk-08 corruption is not the expected p at offset 5252; refusing to guess')
+                  text = text[:5252] + 'P' + text[5253:]
+              chunks.append(text)
+
+          encoded = ''.join(chunks)
+          archive = base64.b64decode(encoded, validate=True)
+          digest = hashlib.sha256(archive).hexdigest()
+          expected = '0cdcc74e3c2112d7fb1e34a9f4e20c8e1d7ce7e9500ced04e38059b59abf5626'
+          if digest != expected:
+              raise SystemExit(f'ZIP checksum mismatch: {digest} != {expected}. Nothing applied.')
+
+          allowed = {
+              '404.html',
+              'about.html',
+              'accessibility.html',
+              'assets/css/archive.css',
+              'assets/css/site.css',
+              'assets/css/trust-pages.css',
+              'assets/css/utility-pages.css',
+              'assets/js/community-poll.js',
+              'assets/js/cookie-consent.js',
+              'contact.html',
+              'corrections-and-complaints.html',
+              'editor.html',
+              'editorial-standards.html',
+              'feel-good-live.html',
+              'food-banks.html',
+              'privacy.html',
+              'residents-corner.html',
+              'rochdale.html',
+              'scraper/generate_category_pages.py',
+              'scraper/generate_pages.py',
+              'scraper/generate_ward_pages.py',
+              'terms.html',
+          }
+
+          with tempfile.TemporaryDirectory() as td:
+              zp = Path(td) / 'site.zip'
+              zp.write_bytes(archive)
+              with zipfile.ZipFile(zp) as z:
+                  names = {n for n in z.namelist() if not n.endswith('/') and n != 'README-WHERE-FILES-GO.txt'}
+                  if names != allowed:
+                      raise SystemExit(f'Archive file set differs from approved 22 paths: {sorted(names ^ allowed)}')
+                  for name in sorted(allowed):
+                      target = root / name
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      target.write_bytes(z.read(name))
+
+          # Staging files are transport only; remove them from the finished repository.
+          shutil.rmtree(stage)
+          print('Verified ZIP SHA-256:', digest)
+          print('Applied exactly', len(allowed), 'replacement files.')
+          PY
+
+      - name: Commit exact replacements to main
+        shell: bash
+        run: |
+          git config user.name 'Rochdale Daily automation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet && { echo 'No file changes to commit'; exit 0; }
+          git commit -m 'Replace site files from verified universal chrome ZIP'
+          git push origin HEAD:main
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload exact updated site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy exact updated site
+        id: deployment
+        uses: actions/deploy-pages@v4
