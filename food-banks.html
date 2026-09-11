@@ -25,7 +25,7 @@
       font-family:var(--font-body); line-height: 1.5; }
     a { color: var(--accent); }
     .wrap { width: min(var(--max), calc(100% - 30px)); margin-inline: auto; }
-    .masthead { background: var(--navy); border-bottom: 3px solid var(--cyan); padding: 22px 0; }
+    
     .brand { font-family:var(--font-display); font-size: clamp(28px, 5vw, 48px);
       font-weight: 900; letter-spacing: -.05em; line-height: .9; color: #fff; text-decoration: none; }
     .crumb { padding: 14px 0; font-size: 14px; color: var(--muted); }
@@ -59,17 +59,23 @@
     .backlink { display: inline-block; margin: 8px 0 30px; background: var(--accent);
       color: var(--navy); font-weight: 900; text-transform: uppercase; font-size: 13px;
       padding: 11px 18px; text-decoration: none; }
-    footer { background: #111; border-top: 6px solid var(--accent); padding: 24px 0; }
+    footer { background: var(--brand-navy); border-top: 0; padding: 24px 0; }
     footer .brandline { font-family:var(--font-display); color: var(--accent);
       font-size: 24px; font-weight: 900; text-transform: uppercase; }
     footer p { color: #bfbfbf; font-size: 13px; max-width: 60ch; }
   </style>
-  <!-- Universal Rochdale Daily newspaper theme -->
-  <link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-universal="editorial">
+  <link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-asset="/assets/css/editorial-theme.css">
 </head>
 <body>
   <header class="masthead">
-    <div class="wrap"><a class="brand" href="index.html">ROCHDALE DAILY</a></div>
+    <div class="wrap masthead-row">
+      <a class="brand" href="/index.html" aria-label="Rochdale Daily home">
+        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
+      </a>
+      <div class="masthead-actions">
+        <a class="header-button" href="/index.html">All stories</a>
+      </div>
+    </div>
   </header>
 
   <div class="wrap">

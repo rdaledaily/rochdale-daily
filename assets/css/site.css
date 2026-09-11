@@ -58,8 +58,10 @@
     .weather-condition::before { content: "·"; margin-right: 7px; color: #777; }
 
     .masthead {
-      background: var(--yellow);
-      border-bottom: 1px solid #c79d00;
+      /* One masthead for the whole paper: paper-white, hairline rule, logo.
+         Was var(--yellow), which had drifted to teal, with a gold rule. */
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
     }
     .masthead-row {
       min-height: 166px;
@@ -104,9 +106,9 @@
     .header-button:hover { transform: translateY(-1px); }
 
     .primary-nav {
-      background: var(--black);
-      color: #fff;
-      border-bottom: 4px solid var(--yellow);
+      background: var(--paper);
+      color: var(--ink);
+      border-bottom: 2px solid var(--navy);
       position: sticky;
       top: 0;
       z-index: 90;
@@ -478,7 +480,7 @@
     .advertise-panel h3 { margin: 0 0 7px; font-family: var(--font-display); font-size: 27px; text-transform: uppercase; line-height: 1; }
     .advertise-panel p { margin: 0 0 14px; font-size: 13px; }
 
-    .site-footer { background: #111; color: #fff; border-top: 6px solid var(--yellow); padding: 36px 0 22px; }
+    .site-footer { background: var(--brand-navy); color: #fff; border-top: 0; padding: 36px 0 22px; }
     .footer-grid { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 28px; }
     .footer-brand { font-family: var(--font-display); color: var(--yellow); font-size: 30px; font-weight: 900; text-transform: uppercase; line-height: 1; }
     .footer-copy { color: #bfbfbf; font-size: 13px; max-width: 330px; }

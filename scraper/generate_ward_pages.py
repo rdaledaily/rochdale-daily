@@ -46,6 +46,16 @@ PLACE_PAGES = {
         "description": "Milnrow and Newhey news from Rochdale Daily, with the ward's councillors and what they have voted on.",
     },
 }
+# The borough's four townships and their wards (the council's own grouping).
+# Used only to organise the index; ward data is unchanged.
+TOWNSHIPS = {
+    "Rochdale": ["Balderstone and Kirkholt", "Bamford", "Castleton", "Central Rochdale", "Healey",
+                 "Kingsway", "Milkstone and Deeplish", "Norden", "Smallbridge and Firgrove", "Spotland and Falinge"],
+    "Heywood": ["North Heywood", "West Heywood", "Hopwood Hall"],
+    "Middleton": ["East Middleton", "North Middleton", "South Middleton", "West Middleton"],
+    "Pennines": ["Littleborough Lakeside", "Milnrow and Newhey", "Wardle, Shore and West Littleborough"],
+}
+
 MAX_PLACE_STORIES = 18
 MAX_ARCHIVE_STORIES = 30
 
@@ -99,17 +109,42 @@ def load_css():
     return TOKEN_IMPORT_PATTERN.sub("", css, count=1)
 
 
-def chrome_head(title, description, canonical, css):
-    return f'''<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><title>{esc(title)} | Rochdale Daily</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}">{HEAD_ASSETS}<style>{css}
-.ward-wrap{{max-width:1000px;margin:0 auto;padding:28px 20px 60px}}.ward-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}}.ward-card{{border:1px solid #ddd;padding:15px;background:#fff}}.ward-card h3{{font-size:18px;margin:10px 0 6px}}.ward-meta{{font-size:12px;color:#667;text-transform:uppercase}}.ward-h2{{border-top:3px solid #111;padding-top:8px;margin-top:34px}}.cllr-photo{{width:100%;aspect-ratio:4/3;object-fit:cover;background:#eceff1;display:block}}.cllr-placeholder{{width:100%;aspect-ratio:4/3;background:#eceff1;display:grid;place-items:center;font-size:46px;font-weight:800;color:#89939d}}.dem-vote-side{{font-weight:800}}.dem-vote-for{{color:#18733a}}.dem-vote-against{{color:#a51d25}}.dem-vote-abstain{{color:#695b00}}</style></head><body><header class="masthead"><div class="wrap masthead-row"><a class="brand" href="/index.html">ROCHDALE DAILY</a> <a href="/wards/">All wards</a></div></header><main class="ward-wrap">'''
+MASTHEAD = '<header class="masthead"><div class="wrap masthead-row"><a class="brand" href="/index.html" aria-label="Rochdale Daily home"><img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById(\'brand-text-fallback\').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span></a><div class="masthead-actions">{actions}</div></div></header>'
+EDITORIAL_LINK = '<link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-asset="/assets/css/editorial-theme.css">'
+SHARED_CSS = '.rd-page{max-width:1080px;margin:0 auto;padding:28px 20px 64px}.rd-kicker{display:inline-block;margin:0 0 6px;font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.rd-page h1{margin:0 0 10px;font-family:var(--font-display);font-size:clamp(32px,5vw,50px);line-height:1.02;letter-spacing:-.02em;color:var(--ink)}.rd-lede{margin:0 0 26px;max-width:720px;color:var(--muted);font-size:17px;line-height:1.5}.rd-h2{margin:34px 0 14px;padding-top:10px;border-top:3px solid var(--ink);font-family:var(--font-display);font-size:24px;letter-spacing:-.01em}.rd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}.rd-card{display:flex;flex-direction:column;gap:6px;padding:16px;background:var(--card,#fff);border:1px solid var(--line);border-top:3px solid var(--ink)}.rd-card h3{margin:0;font-family:var(--font-display);font-size:19px;line-height:1.2}.rd-card h3 a{color:var(--ink);text-decoration:none}.rd-card h3 a:hover{text-decoration:underline;text-underline-offset:3px}.rd-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.rd-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--surface-2,#eceff1);margin:-16px -16px 8px;width:calc(100% + 32px)}.rd-meta{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.rd-links{margin:0 0 8px;color:var(--muted);font-size:15px}.rd-links a{color:var(--accent);font-weight:600}.site-footer{margin-top:40px;background:var(--brand-navy,#0b1f3a);color:#dfe6ee;padding:28px 0}.site-footer .footer-brand{margin:0 0 6px;font-family:var(--font-display);font-size:22px;font-weight:800;color:#fff;text-transform:none}.site-footer .footer-note{margin:0;font-size:14px;line-height:1.6}.site-footer a{color:#fff}@media(max-width:600px){.rd-page{padding:20px 16px 48px}}'
+FOOTER = '<footer class="site-footer"><div class="wrap"><p class="footer-brand">Rochdale Daily</p><p class="footer-note">Independent local news for the Rochdale borough. <a href="/editorial-standards.html">Editorial standards</a> · <a href="/corrections-and-complaints.html">Corrections</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p></div></footer><script defer src="/assets/js/cookie-consent.js"></script>'
+
+# Ward pages are a primary destination in the navigation, so they carry the
+# same masthead, editorial layer and footer as every article page. Before this
+# they had a text wordmark on a teal bar and a bare list of links, which read
+# as an unstyled page next to the rest of the paper.
+def chrome_head(title, description, canonical, css, back_href="/wards/", back_label="All wards"):
+    actions = ('<a class="header-button" href="/index.html">All stories</a>'
+               + '<a class="header-button" href="' + esc(back_href) + '">' + esc(back_label) + '</a>')
+    extra = (
+        '.cllr-photo{display:block;width:calc(100% + 32px);aspect-ratio:4/3;object-fit:cover;background:var(--surface-2,#eceff1);margin:-16px -16px 8px}'
+        '.cllr-placeholder{aspect-ratio:4/3;background:var(--surface-2,#eceff1);display:grid;place-items:center;font-size:44px;font-weight:800;color:var(--muted);margin:-16px -16px 8px}'
+        '.dem-vote-side{font-weight:800}.dem-vote-for{color:var(--positive,#18733a)}.dem-vote-against{color:var(--breaking,#a51d25)}.dem-vote-abstain{color:#695b00}'
+    )
+    return (
+        '<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow">'
+        '<title>' + esc(title) + ' | Rochdale Daily</title><meta name="description" content="' + esc(description) + '">'
+        '<link rel="canonical" href="' + esc(canonical) + '">' + HEAD_ASSETS
+        + '<style>' + css + '\n' + SHARED_CSS + extra + '</style>'
+        + EDITORIAL_LINK + '</head><body>'
+        + MASTHEAD.replace('{actions}', actions)
+        + '<main class="rd-page">'
+    )
 
 
-FOOT = '</main><footer style="background:#111;color:#ccc;padding:26px 20px"><strong>Rochdale Daily</strong> — independent local news for the Rochdale borough.</footer></body></html>'
+
+FOOT = '</main>' + FOOTER + '</body></html>'
 
 
 def story_card(article):
     return (
-        f'<article class="ward-card"><div class="ward-meta">{esc(str(article.get("area") or "").title())}</div>'
+        f'<article class="rd-card"><div class="rd-meta">{esc(str(article.get("area") or "").title())}</div>'
         f'<h3><a href="/articles/{esc(article.get("slug"))}.html">{esc(article.get("title"))}</a></h3>'
         f'<p>{esc((article.get("excerpt") or "")[:150])}</p></article>'
     )
@@ -148,8 +183,8 @@ def councillor_card(person, photos):
         body = '<p>No recorded vote has named this councillor yet.</p>'
 
     return (
-        f'<article class="ward-card">{portrait}<h3>{esc(name)}</h3>'
-        f'<div class="ward-meta">{esc(person.get("party"))}</div>{body}</article>'
+        f'<article class="rd-card">{portrait}<h3>{esc(name)}</h3>'
+        f'<div class="rd-meta">{esc(person.get("party"))}</div>{body}</article>'
     )
 
 
@@ -169,7 +204,7 @@ def paste_friendly(page):
 def archive_card(item):
     when = str(item.get("published_at") or "")[:10]
     return (
-        f'<article class="ward-card"><div class="ward-meta">{esc(item.get("category") or "")}'
+        f'<article class="rd-card"><div class="rd-meta">{esc(item.get("category") or "")}'
         f'{" · " + esc(when) if when else ""}</div>'
         f'<h3><a href="{esc(item.get("url") or "/articles/" + str(item.get("slug") or "") + ".html")}">{esc(item.get("title"))}</a></h3>'
         f'<p>{esc((item.get("description") or "")[:150])}</p></article>'
@@ -216,7 +251,7 @@ def write_place_pages(wards, articles, votes, photos, css):
 
         councillors = "".join(
             councillor_card(person, photos).replace(
-                '<div class="ward-meta">', f'<div class="ward-meta">{esc(ward)} · ', 1)
+                '<div class="rd-meta">', f'<div class="rd-meta">{esc(ward)} · ', 1)
             for ward, person in people
         )
         ward_links = " · ".join(
@@ -227,13 +262,13 @@ def write_place_pages(wards, articles, votes, photos, css):
 
         page = (
             chrome_head(f"{name} news", place["description"], f"{SITE}/{filename}", css)
-            + f'<span>{esc(place["kind"])}</span><h1>{esc(name)}</h1>'
-            + f'<p>Ward pages: {ward_links}. Or <a href="{esc(filter_link)}">filter the front page</a> to this area.</p>'
-            + f'<h2 class="ward-h2">Latest {esc(name)} news</h2><div class="ward-grid">'
+            + f'<span class="rd-kicker">{esc(place["kind"].title())}</span><h1>{esc(name)}</h1>'
+            + f'<p class="rd-links">Ward pages: {ward_links}. Or <a href="{esc(filter_link)}">filter the front page</a> to this area.</p>'
+            + f'<h2 class="rd-h2">Latest {esc(name)} news</h2><div class="rd-grid">'
             + ("".join(story_card(article) for article in live) or f"<p>No live stories for {esc(name)} at the moment.</p>")
             + '</div>'
-            + (f'<h2 class="ward-h2">From the archive</h2><div class="ward-grid">{"".join(archive_card(item) for item in older)}</div>' if older else "")
-            + f'<h2 class="ward-h2">Your councillors</h2><div class="ward-grid">{councillors or "<p>No councillors on record.</p>"}</div>'
+            + (f'<h2 class="rd-h2">From the archive</h2><div class="rd-grid">{"".join(archive_card(item) for item in older)}</div>' if older else "")
+            + f'<h2 class="rd-h2">Your councillors</h2><div class="rd-grid">{councillors or "<p>No councillors on record.</p>"}</div>'
             + '<p>Only votes taken by name are listed. Rochdale Daily never infers an individual vote where the minutes do not name the councillor.</p>'
             + FOOT
         )
@@ -278,22 +313,47 @@ def main():
                 f"{SITE}/wards/{slugify(ward)}.html",
                 css,
             )
-            + f'<span>WARD</span><h1>{esc(ward)}</h1>{note}'
-            + f'<h2 class="ward-h2">Your councillors</h2><div class="ward-grid">{councillors}</div>'
+            + f'<span class="rd-kicker">Ward</span><h1>{esc(ward)}</h1>' + (f'<p class="rd-lede">{esc(config.get("note"))}</p>' if config.get('note') else '')
+            + f'<h2 class="rd-h2">Your councillors</h2><div class="rd-grid">{councillors}</div>'
             + '<p>Only votes taken by name are listed. Rochdale Daily never infers an individual vote where the minutes do not name the councillor.</p>'
-            + f'<h2 class="ward-h2">Ward news</h2><div class="ward-grid">{"".join(story_card(article) for article in stories) or "<p>No stories filed for this ward yet.</p>"}</div>'
+            + f'<h2 class="rd-h2">Ward news</h2><div class="rd-grid">{"".join(story_card(article) for article in stories) or "<p>No stories filed for this ward yet.</p>"}</div>'
             + FOOT
         )
         (OUTPUT_DIR / f"{slugify(ward)}.html").write_text(paste_friendly(page), encoding="utf-8")
 
-    rows = "".join(
-        f'<p><a href="/wards/{slugify(ward)}.html">{esc(ward)}</a></p>' for ward in sorted(wards)
+    grouped = {name: [w for w in members if w in wards] for name, members in TOWNSHIPS.items()}
+    placed = {w for members in grouped.values() for w in members}
+    leftovers = sorted(w for w in wards if w not in placed)
+    if leftovers:
+        grouped["Other"] = leftovers
+
+    def ward_card(ward):
+        config = wards.get(ward) or {}
+        areas = {area.lower() for area in config.get("areas", [])}
+        n_stories = sum(1 for a in articles if str(a.get("area") or "").lower() in areas)
+        n_people = len((votes.get("wards") or {}).get(ward, []))
+        bits = []
+        if n_stories:
+            bits.append(f"{n_stories} live {'story' if n_stories == 1 else 'stories'}")
+        if n_people:
+            bits.append(f"{n_people} councillor{'' if n_people == 1 else 's'}")
+        return (
+            f'<article class="rd-card"><h3><a href="/wards/{slugify(ward)}.html">{esc(ward)}</a></h3>'
+            f'<p class="rd-meta">{esc(" · ".join(bits) or "Ward page")}</p></article>'
+        )
+
+    sections = "".join(
+        f'<h2 class="rd-h2">{esc(township)}</h2><div class="rd-grid">{"".join(ward_card(w) for w in members)}</div>'
+        for township, members in grouped.items() if members
     )
     (OUTPUT_DIR / "index.html").write_text(
         paste_friendly(
-            chrome_head("News by ward", "Every Rochdale borough ward.", f"{SITE}/wards/", css)
-            + "<h1>News by ward</h1>"
-            + rows
+            chrome_head("News by ward", "Every Rochdale borough ward: local stories and how its councillors have voted.",
+                        f"{SITE}/wards/", css, back_href="/index.html", back_label="Front page")
+            + '<span class="rd-kicker">Democracy</span><h1>News by ward</h1>'
+            + '<p class="rd-lede">Choose your ward for the stories filed there and the recorded votes of the councillors who represent you. '
+              'Heywood and Milnrow also have their own pages: <a href="/heywood.html">Heywood</a>, <a href="/milnrow.html">Milnrow and Newhey</a>.</p>'
+            + sections
             + FOOT
         ),
         encoding="utf-8",

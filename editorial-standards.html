@@ -14,13 +14,13 @@
   <style>
     .trust-wrap{max-width:760px;margin:0 auto;padding:36px 20px 64px}
     .trust-kicker{font-family:var(--font-display);font-size:13px;font-weight:800;
-      letter-spacing:.14em;text-transform:uppercase;color:#8a6d00;border-bottom:4px solid #f5c400;
+      letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border-bottom:4px solid var(--accent);
       display:inline-block;padding-bottom:6px;margin-bottom:14px}
     .trust-wrap h1{font-family:var(--font-display);font-size:clamp(30px,5vw,44px);
       line-height:1.05;letter-spacing:-.01em;margin:0 0 10px}
     .trust-standfirst{font-size:19px;line-height:1.55;color:#333;margin:0 0 26px}
     .trust-wrap h2{font-family:var(--font-display);font-size:22px;text-transform:uppercase;
-      letter-spacing:.02em;margin:38px 0 10px;padding-top:22px;border-top:3px solid #111}
+      letter-spacing:.02em;margin:38px 0 10px;padding-top:22px;border-top:3px solid var(--ink)}
     .trust-wrap h3{font-family:var(--font-display);font-size:17px;margin:22px 0 6px}
     .trust-wrap p, .trust-wrap li{font-size:16px;line-height:1.65;color:#1c1c1c}
     .trust-wrap ul{padding-left:22px}
@@ -34,18 +34,22 @@
     .trust-meta{font-size:13px;color:#666;border-top:1px solid #ddd;padding-top:14px;margin-top:40px}
     .trust-index{font-size:14px;background:#f6f6f6;border:1px solid #ddd;padding:14px 18px;margin:0 0 6px}
     .trust-index a{color:#111}
-    .masthead{background:#111}
+    
     .masthead .wrap{max-width:760px}
   </style>
+  <link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-asset="/assets/css/editorial-theme.css">
   <!-- Universal Rochdale Daily newspaper theme -->
   <link rel="stylesheet" href="/assets/css/rd-tokens.css" data-rd-universal="tokens">
-  <link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-universal="editorial">
 </head>
 <body>
   <header class="masthead">
-    <div class="wrap masthead-row" style="max-width:760px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
-      <a class="brand" href="/" aria-label="Rochdale Daily home" style="color:#fff;text-decoration:none;font-family:var(--font-display);font-weight:800;font-size:22px;letter-spacing:.04em">ROCHDALE <span style="color:#f5c400">DAILY</span></a>
-      <a href="/" style="color:#f5c400;text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:13px;text-transform:uppercase">All stories</a>
+    <div class="wrap masthead-row">
+      <a class="brand" href="/index.html" aria-label="Rochdale Daily home">
+        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
+      </a>
+      <div class="masthead-actions">
+        <a class="header-button" href="/index.html">All stories</a>
+      </div>
     </div>
   </header>
   <main class="trust-wrap">
@@ -137,7 +141,7 @@
     </div>
     <p class="trust-meta">Version 1.0 — July 2026. These standards are reviewed at least annually and whenever the law or our methods change.</p>
   </main>
-  <footer style="background:#111;color:#cfcfcf;padding:26px 20px;font-size:13px">
+  <footer style="background:var(--brand-navy);color:#dfe6ee;padding:26px 20px;font-size:13px">
     <div style="max-width:760px;margin:0 auto">
       <p style="margin:0 0 8px"><strong style="color:#fff">Rochdale Daily</strong> — independent local news for the Rochdale borough.</p>
       <p style="margin:0">

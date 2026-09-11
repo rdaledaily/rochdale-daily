@@ -8,20 +8,33 @@
   <style>
 @import url("/assets/css/rd-tokens.css");
 
-    body{font-family:var(--font-display);background:#fff;color:#111;margin:0}
-    .bar{background:#111;height:56px}
-    .wrap{max-width:640px;margin:0 auto;padding:48px 20px;text-align:center}
-    h1{font-size:44px;letter-spacing:-.03em;margin:.2em 0}
-    p{font-size:18px;color:#444;line-height:1.5}
-    a.btn{display:inline-block;margin-top:18px;padding:12px 22px;background:#111;color:#fff;
-      text-decoration:none;font-family:var(--font-body);font-weight:700;font-size:14px;text-transform:uppercase}
+    body{font-family:var(--font-body);background:var(--surface);color:var(--ink);margin:0}
+    .masthead{background:var(--paper);border-bottom:1px solid var(--line)}
+    .masthead .wrap{box-sizing:border-box;max-width:1180px;margin:0 auto;padding:14px 0;display:flex;align-items:center;justify-content:space-between;text-align:left}
+    .brand-logo{display:block;width:clamp(200px,28vw,300px);height:auto}
+    .brand-text-fallback{font-family:var(--font-display);font-weight:800;font-size:24px;color:var(--ink)}
+    .header-button{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:8px 12px}
+    .notfound{max-width:640px;margin:0 auto;padding:48px 20px;text-align:center}
+    h1{font-family:var(--font-display);font-size:44px;letter-spacing:-.03em;margin:.2em 0}
+    p{font-size:18px;color:var(--muted);line-height:1.5}
+    a.btn{display:inline-block;margin-top:18px;padding:12px 22px;background:var(--brand-navy);color:#fff;
+      text-decoration:none;font-family:var(--font-ui);font-weight:700;font-size:14px;text-transform:uppercase}
   </style>
   <!-- Universal Rochdale Daily newspaper theme -->
   <link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-universal="editorial">
 </head>
 <body>
-  <div class="bar"></div>
-  <div class="wrap">
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="/index.html" aria-label="Rochdale Daily home">
+        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
+      </a>
+      <div class="masthead-actions">
+        <a class="header-button" href="/index.html">All stories</a>
+      </div>
+    </div>
+  </header>
+  <div class="notfound">
     <h1>Page not found</h1>
     <p>The page you're looking for doesn't exist or may have been removed.
        Stories are sometimes withdrawn for editorial or legal reasons.</p>

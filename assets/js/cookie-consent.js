@@ -74,40 +74,10 @@
     addStyle("/assets/css/trust-pages.css");
     document.body.classList.add("trust-newspaper-body");
 
-    var oldHeader = document.querySelector("body > header.masthead");
-    if (oldHeader) {
-      var header = document.createElement("header");
-      header.className = "trust-newspaper-header";
-      header.innerHTML =
-        '<div class="trust-newspaper-header__inner">' +
-          '<a class="trust-newspaper-brand" href="/" aria-label="Rochdale Daily home">ROCHDALE DAILY</a>' +
-          '<a class="trust-newspaper-edition" href="/archive.html">Browse the archive</a>' +
-        '</div>';
-
-      var nav = document.createElement("nav");
-      nav.className = "trust-newspaper-nav";
-      nav.setAttribute("aria-label", "Main navigation");
-      nav.innerHTML =
-        '<div class="trust-newspaper-nav__inner">' +
-          '<a href="/">Latest</a>' +
-          '<a href="/wards/">News by ward</a>' +
-          '<a href="/archive.html">Archive</a>' +
-          '<a href="/about.html">About</a>' +
-          '<a href="/editorial-standards.html">Standards</a>' +
-          '<a href="/corrections-and-complaints.html">Corrections</a>' +
-          '<a href="/contact.html">Contact</a>' +
-        '</div>';
-
-      oldHeader.replaceWith(header);
-      header.insertAdjacentElement("afterend", nav);
-
-      var path = window.location.pathname.replace(/\/$/, "");
-      [].slice.call(nav.querySelectorAll("a")).forEach(function (link) {
-        var href = link.getAttribute("href").replace(/\/$/, "");
-        if (href && path === href) link.setAttribute("aria-current", "page");
-      });
-    }
-
+    /* The header used to be rebuilt here into a gold wordmark bar with a black
+       nav -- a second masthead that made the trust pages look like a different
+       site. The standard masthead in the page is kept. The footer is still
+       normalised, because these pages carry an inline black footer. */
     var footer = document.querySelector("body > footer");
     if (footer) {
       footer.className = "trust-newspaper-footer";

@@ -722,29 +722,33 @@ def write_corrections_log(articles: list[dict[str, Any]]) -> int:
   <style>
     .trust-wrap{{max-width:760px;margin:0 auto;padding:36px 20px 64px}}
     .trust-kicker{{font-family:var(--font-display);font-size:13px;font-weight:800;
-      letter-spacing:.14em;text-transform:uppercase;color:#8a6d00;border-bottom:4px solid #f5c400;
+      letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border-bottom:4px solid var(--accent);
       display:inline-block;padding-bottom:6px;margin-bottom:14px}}
     .trust-wrap h1{{font-family:var(--font-display);font-size:clamp(30px,5vw,44px);
       line-height:1.05;letter-spacing:-.01em;margin:0 0 10px}}
     .trust-standfirst{{font-size:19px;line-height:1.55;color:#333;margin:0 0 26px}}
     .trust-wrap p{{font-size:16px;line-height:1.65;color:#1c1c1c}}
     .log-list{{list-style:none;margin:26px 0 0;padding:0}}
-    .log-entry{{border-top:3px solid #111;padding:18px 0 22px}}
+    .log-entry{{border-top:3px solid var(--ink);padding:18px 0 22px}}
     .log-date{{display:block;font-family:var(--font-display);font-size:13px;font-weight:800;
-      letter-spacing:.1em;text-transform:uppercase;color:#8a6d00;margin-bottom:6px}}
+      letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}}
     .log-title{{font-family:var(--font-display);font-size:20px;font-weight:700;color:#111;
       text-decoration:none;line-height:1.25}}
     .log-title:hover{{text-decoration:underline}}
     .log-note{{margin:8px 0 0;font-size:16px;line-height:1.6;color:#1c1c1c}}
     .trust-meta{{font-size:13px;color:#666;border-top:1px solid #ddd;padding-top:14px;margin-top:40px}}
-    .masthead{{background:#111}}
+    
   </style>
 </head>
 <body>
   <header class="masthead">
-    <div class="wrap masthead-row" style="max-width:760px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
-      <a class="brand" href="/" aria-label="Rochdale Daily home" style="color:#fff;text-decoration:none;font-family:var(--font-display);font-weight:800;font-size:22px;letter-spacing:.04em">ROCHDALE <span style="color:#f5c400">DAILY</span></a>
-      <a href="/" style="color:#f5c400;text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:13px;text-transform:uppercase">All stories</a>
+    <div class="wrap masthead-row">
+      <a class="brand" href="/index.html" aria-label="Rochdale Daily home">
+        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
+      </a>
+      <div class="masthead-actions">
+        <a class="header-button" href="/index.html">All stories</a>
+      </div>
     </div>
   </header>
   <main class="trust-wrap">
@@ -755,7 +759,7 @@ def write_corrections_log(articles: list[dict[str, Any]]) -> int:
     {body}
     <p class="trust-meta">This page is regenerated automatically each publishing run and currently records {count} correction(s). It covers articles in the live archive; older corrected articles keep their correction notices on the article page itself.</p>
   </main>
-  <footer style="background:#111;color:#cfcfcf;padding:26px 20px;font-size:13px">
+  <footer style="background:var(--brand-navy);color:#dfe6ee;padding:26px 20px;font-size:13px">
     <div style="max-width:760px;margin:0 auto">
       <p style="margin:0 0 8px"><strong style="color:#fff">Rochdale Daily</strong> — independent local news for the Rochdale borough.</p>
       <p style="margin:0">
