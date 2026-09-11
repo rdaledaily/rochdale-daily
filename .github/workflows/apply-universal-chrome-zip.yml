@@ -1,0 +1,88 @@
+name: Apply supplied universal chrome ZIP
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-universal-chrome-zip.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Reassemble and verify supplied ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .rd-zip-upload/chunk-* > /tmp/rochdale-daily-universal-chrome.b64
+          base64 -d /tmp/rochdale-daily-universal-chrome.b64 > /tmp/rochdale-daily-universal-chrome.zip
+          echo '0cdcc74e3c2112d7fb1e34a9f4e20c8e1d7ce7e9500ced04e38059b59abf5626  /tmp/rochdale-daily-universal-chrome.zip' | sha256sum -c -
+          unzip -t /tmp/rochdale-daily-universal-chrome.zip
+
+      - name: Replace supplied repository files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/rd-universal-chrome
+          mkdir -p /tmp/rd-universal-chrome
+          unzip -q /tmp/rochdale-daily-universal-chrome.zip -d /tmp/rd-universal-chrome
+          files=(
+            '404.html'
+            'about.html'
+            'accessibility.html'
+            'assets/css/archive.css'
+            'assets/css/site.css'
+            'assets/css/trust-pages.css'
+            'assets/css/utility-pages.css'
+            'assets/js/community-poll.js'
+            'assets/js/cookie-consent.js'
+            'contact.html'
+            'corrections-and-complaints.html'
+            'editor.html'
+            'editorial-standards.html'
+            'feel-good-live.html'
+            'food-banks.html'
+            'privacy.html'
+            'residents-corner.html'
+            'rochdale.html'
+            'scraper/generate_category_pages.py'
+            'scraper/generate_pages.py'
+            'scraper/generate_ward_pages.py'
+            'terms.html'
+          )
+          test "${#files[@]}" -eq 22
+          for f in "${files[@]}"; do
+            test -f "/tmp/rd-universal-chrome/$f"
+            mkdir -p "$(dirname "$f")"
+            cp "/tmp/rd-universal-chrome/$f" "$f"
+          done
+          rm -rf .rd-zip-upload
+          rm -f .github/workflows/apply-universal-chrome-zip.yml
+
+      - name: Commit replacement to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Rochdale Daily automation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git status --short
+          git commit -m 'Replace site files from supplied universal chrome ZIP'
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git fetch origin main
+            git rebase origin/main
+          done
+          echo 'Unable to push replacement commit after retries' >&2
+          exit 1
