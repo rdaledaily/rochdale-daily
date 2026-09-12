@@ -21,6 +21,7 @@
 
 @import url("/assets/css/newspaper-global.css");
 @import url("/assets/css/public-families.css");
+@import url("/assets/css/newsletter-component.css");
 
 :root {
   /* ---------------------------------------------------------------- brand */
@@ -63,7 +64,7 @@
   --positive:   #1c7f56;
   --info:       #2f6fb0;
 
-  /* ------------------------------------------------------------ typefaces */
+  /* -------------------------------------------------------------- typefaces */
   /* Trust, not costume. The previous stack -- a Georgia-ish serif for headlines
      with condensed caps everywhere -- is the house style of every AI content
      farm imitating a broadsheet, which is precisely why it read as untrustworthy.
@@ -85,8 +86,8 @@
   --text-md:   clamp(1.05rem, 0.99rem + 0.3vw, 1.2rem);
   --text-lg:   clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
   --text-xl:   clamp(1.5rem, 1.3rem + 1vw, 2rem);
-  --text-2xl:  clamp(1.85rem, 1.5rem + 1.8vw, 2.75rem);
-  --text-3xl:  clamp(2.2rem, 1.6rem + 3vw, 3.75rem);
+  --text-2xl: clamp(1.85rem, 1.5rem + 1.8vw, 2.75rem);
+  --text-3xl: clamp(2.2rem, 1.6rem + 3vw, 3.75rem);
 
   --leading-tight: 1.08;
   --leading-snug:  1.22;
