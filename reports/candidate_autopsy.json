@@ -1,20 +1,19 @@
 {
-  "examined_at": "2026-09-11T11:47:51.099668Z",
+  "examined_at": "2026-09-12T11:14:43.661474Z",
   "reservoir_retention_hours": 96,
   "candidates_examined": 85,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 55,
-    "would publish": 27,
-    "duplicate of published story": 3
+    "age": 76,
+    "would publish": 9
   },
-  "would_publish": 27,
+  "would_publish": 9,
   "age_gate_sensitivity": {
     "6h": 0,
     "14h": 0,
-    "24h": 8,
-    "48h": 30,
-    "72h": 49,
+    "24h": 0,
+    "48h": 9,
+    "72h": 31,
     "168h": 85
   },
   "gates_unavailable": [],
@@ -24,15 +23,10 @@
       "facebook.com: 🚨 Armed police storm Rochdale after man seen 'driving with gun' - face",
       "Bescot Banter: Rochdale Clash Confirmed as Walsall's Dedicated South Asian Heritage F"
     ],
-    "duplicate of published story": [
-      "Kentonline: Ainsworth sees room for improvement despite Gillingham’s Rochdale rout",
-      "Fan Banter: Rochdale board of directors issues message to supporters after disappo",
-      "Rochdale AFC: A Message From The Board - rochdaleafc.co.uk"
-    ],
     "age": [
-      "Yahoo: Campers in Rochdale issued warning after Frank the horse found close t",
-      "rochdaleafc.co.uk: Tickets On Sale For Fleetwood Trip - rochdaleafc.co.uk",
-      "Manchester Evening News: Campers in Rochdale issued warning after Frank the horse found close t"
+      "Desiblitz: PAK Film Festival Honoured by Rochdale Mayor after UK Cinema Tour - de",
+      "Rochdale Borough Council RSS: Council poised to purchase major Middleton landmark – Rochdale Borough",
+      "Rochdale Times: Sports hub plan must tackle concerns over playing fields - Rochdale Ti"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
