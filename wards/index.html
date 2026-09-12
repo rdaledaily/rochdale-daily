@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-GB" data-rd-theme="newspaper">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><title>News by ward | Rochdale Daily</title><meta name="description" content="Every Rochdale borough ward."><link rel="canonical" href="https://rochdaledaily.co.uk/wards/"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/css/rd-tokens.css"><style>/* Palette, type scale and spacing come from the one token file.
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><title>News by ward | Rochdale Daily</title><meta name="description" content="Every Rochdale borough ward: local stories and how its councillors have voted."><link rel="canonical" href="https://rochdaledaily.co.uk/wards/"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/css/rd-tokens.css"><style>/* Palette, type scale and spacing come from the one token file.
    Nothing below may declare a raw colour. */
 * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -59,8 +59,10 @@
     .weather-condition::before { content: "·"; margin-right: 7px; color: #777; }
 
     .masthead {
-      background: var(--yellow);
-      border-bottom: 1px solid #c79d00;
+      /* One masthead for the whole paper: paper-white, hairline rule, logo.
+         Was var(--yellow), which had drifted to teal, with a gold rule. */
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
     }
     .masthead-row {
       min-height: 166px;
@@ -105,9 +107,9 @@
     .header-button:hover { transform: translateY(-1px); }
 
     .primary-nav {
-      background: var(--black);
-      color: #fff;
-      border-bottom: 4px solid var(--yellow);
+      background: var(--paper);
+      color: var(--ink);
+      border-bottom: 2px solid var(--navy);
       position: sticky;
       top: 0;
       z-index: 90;
@@ -479,7 +481,7 @@
     .advertise-panel h3 { margin: 0 0 7px; font-family: var(--font-display); font-size: 27px; text-transform: uppercase; line-height: 1; }
     .advertise-panel p { margin: 0 0 14px; font-size: 13px; }
 
-    .site-footer { background: #111; color: #fff; border-top: 6px solid var(--yellow); padding: 36px 0 22px; }
+    .site-footer { background: var(--brand-navy); color: #fff; border-top: 0; padding: 36px 0 22px; }
     .footer-grid { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 28px; }
     .footer-brand { font-family: var(--font-display); color: var(--yellow); font-size: 30px; font-weight: 900; text-transform: uppercase; line-height: 1; }
     .footer-copy { color: #bfbfbf; font-size: 13px; max-width: 330px; }
@@ -713,37 +715,138 @@
 .article-image-credit{margin-top:6px;font-size:12px;color:#6a6a6a}
 .article-image-credit a{color:inherit}
 
-.ward-wrap{max-width:1000px;margin:0 auto;padding:28px 20px 60px}.ward-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.ward-card{border:1px solid #ddd;padding:15px;background:#fff}.ward-card h3{font-size:18px;margin:10px 0 6px}.ward-meta{font-size:12px;color:#667;text-transform:uppercase}.ward-h2{border-top:3px solid #111;padding-top:8px;margin-top:34px}.cllr-photo{width:100%;aspect-ratio:4/3;object-fit:cover;background:#eceff1;display:block}.cllr-placeholder{width:100%;aspect-ratio:4/3;background:#eceff1;display:grid;place-items:center;font-size:46px;font-weight:800;color:#89939d}.dem-vote-side{font-weight:800}.dem-vote-for{color:#18733a}.dem-vote-against{color:#a51d25}.dem-vote-abstain{color:#695b00}</style>
-  <!-- Universal Rochdale Daily newspaper theme -->
-  <link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-universal="editorial">
-</head>
+.rd-page{max-width:1080px;margin:0 auto;padding:28px 20px 64px}.rd-kicker{display:inline-block;margin:0 0 6px;font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.rd-page h1{margin:0 0 10px;font-family:var(--font-display);font-size:clamp(32px,5vw,50px);line-height:1.02;letter-spacing:-.02em;color:var(--ink)}.rd-lede{margin:0 0 26px;max-width:720px;color:var(--muted);font-size:17px;line-height:1.5}.rd-h2{margin:34px 0 14px;padding-top:10px;border-top:3px solid var(--ink);font-family:var(--font-display);font-size:24px;letter-spacing:-.01em}.rd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}.rd-card{display:flex;flex-direction:column;gap:6px;padding:16px;background:var(--card,#fff);border:1px solid var(--line);border-top:3px solid var(--ink)}.rd-card h3{margin:0;font-family:var(--font-display);font-size:19px;line-height:1.2}.rd-card h3 a{color:var(--ink);text-decoration:none}.rd-card h3 a:hover{text-decoration:underline;text-underline-offset:3px}.rd-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.rd-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--surface-2,#eceff1);margin:-16px -16px 8px;width:calc(100% + 32px)}.rd-meta{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.rd-links{margin:0 0 8px;color:var(--muted);font-size:15px}.rd-links a{color:var(--accent);font-weight:600}.site-footer{margin-top:40px;background:var(--brand-navy,#0b1f3a);color:#dfe6ee;padding:28px 0}.site-footer .footer-brand{margin:0 0 6px;font-family:var(--font-display);font-size:22px;font-weight:800;color:#fff;text-transform:none}.site-footer .footer-note{margin:0;font-size:14px;line-height:1.6}.site-footer a{color:#fff}@media(max-width:600px){.rd-page{padding:20px 16px 48px}}.cllr-photo{display:block;width:calc(100% + 32px);aspect-ratio:4/3;object-fit:cover;background:var(--surface-2,#eceff1);margin:-16px -16px 8px}.cllr-placeholder{aspect-ratio:4/3;background:var(--surface-2,#eceff1);display:grid;place-items:center;font-size:44px;font-weight:800;color:var(--muted);margin:-16px -16px 8px}.dem-vote-side{font-weight:800}.dem-vote-for{color:var(--positive,#18733a)}.dem-vote-against{color:var(--breaking,#a51d25)}.dem-vote-abstain{color:#695b00}</style>
+<link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-asset="/assets/css/editorial-theme.css"></head>
 <body>
 <header class="masthead">
-<div class="wrap masthead-row"><a class="brand" href="/index.html">ROCHDALE DAILY</a> <a href="/wards/">All wards</a></div>
+<div class="wrap masthead-row"><a class="brand" href="/index.html" aria-label="Rochdale Daily home"><img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span></a>
+<div class="masthead-actions"><a class="header-button" href="/index.html">All stories</a><a class="header-button" href="/index.html">Front page</a></div>
+</div>
 </header>
 
-<main class="ward-wrap">
+<main class="rd-page"><span class="rd-kicker">Democracy</span>
 <h1>News by ward</h1>
-<p><a href="/wards/balderstone-and-kirkholt.html">Balderstone and Kirkholt</a></p>
-<p><a href="/wards/bamford.html">Bamford</a></p>
-<p><a href="/wards/castleton.html">Castleton</a></p>
-<p><a href="/wards/central-rochdale.html">Central Rochdale</a></p>
-<p><a href="/wards/east-middleton.html">East Middleton</a></p>
-<p><a href="/wards/healey.html">Healey</a></p>
-<p><a href="/wards/hopwood-hall.html">Hopwood Hall</a></p>
-<p><a href="/wards/kingsway.html">Kingsway</a></p>
-<p><a href="/wards/littleborough-lakeside.html">Littleborough Lakeside</a></p>
-<p><a href="/wards/milkstone-and-deeplish.html">Milkstone and Deeplish</a></p>
-<p><a href="/wards/milnrow-and-newhey.html">Milnrow and Newhey</a></p>
-<p><a href="/wards/norden.html">Norden</a></p>
-<p><a href="/wards/north-heywood.html">North Heywood</a></p>
-<p><a href="/wards/north-middleton.html">North Middleton</a></p>
-<p><a href="/wards/smallbridge-and-firgrove.html">Smallbridge and Firgrove</a></p>
-<p><a href="/wards/south-middleton.html">South Middleton</a></p>
-<p><a href="/wards/spotland-and-falinge.html">Spotland and Falinge</a></p>
-<p><a href="/wards/wardle-shore-and-west-littleborough.html">Wardle, Shore and West Littleborough</a></p>
-<p><a href="/wards/west-heywood.html">West Heywood</a></p>
-<p><a href="/wards/west-middleton.html">West Middleton</a></p>
+<p class="rd-lede">Choose your ward for the stories filed there and the recorded votes of the councillors who represent you. Heywood and Milnrow also have their own pages: <a href="/heywood.html">Heywood</a>, <a href="/milnrow.html">Milnrow and Newhey</a>.</p>
+
+<h2 class="rd-h2">Rochdale</h2>
+
+<div class="rd-grid">
+<article class="rd-card">
+<h3><a href="/wards/balderstone-and-kirkholt.html">Balderstone and Kirkholt</a></h3>
+<p class="rd-meta">3 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/bamford.html">Bamford</a></h3>
+<p class="rd-meta">2 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/castleton.html">Castleton</a></h3>
+<p class="rd-meta">2 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/central-rochdale.html">Central Rochdale</a></h3>
+<p class="rd-meta">3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/healey.html">Healey</a></h3>
+<p class="rd-meta">3 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/kingsway.html">Kingsway</a></h3>
+<p class="rd-meta">3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/milkstone-and-deeplish.html">Milkstone and Deeplish</a></h3>
+<p class="rd-meta">1 live story · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/norden.html">Norden</a></h3>
+<p class="rd-meta">6 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/smallbridge-and-firgrove.html">Smallbridge and Firgrove</a></h3>
+<p class="rd-meta">3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/spotland-and-falinge.html">Spotland and Falinge</a></h3>
+<p class="rd-meta">2 live stories · 3 councillors</p>
+</article>
+</div>
+
+<h2 class="rd-h2">Heywood</h2>
+
+<div class="rd-grid">
+<article class="rd-card">
+<h3><a href="/wards/north-heywood.html">North Heywood</a></h3>
+<p class="rd-meta">11 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/west-heywood.html">West Heywood</a></h3>
+<p class="rd-meta">11 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/hopwood-hall.html">Hopwood Hall</a></h3>
+<p class="rd-meta">3 councillors</p>
+</article>
+</div>
+
+<h2 class="rd-h2">Middleton</h2>
+
+<div class="rd-grid">
+<article class="rd-card">
+<h3><a href="/wards/east-middleton.html">East Middleton</a></h3>
+<p class="rd-meta">3 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/north-middleton.html">North Middleton</a></h3>
+<p class="rd-meta">3 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/south-middleton.html">South Middleton</a></h3>
+<p class="rd-meta">3 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/west-middleton.html">West Middleton</a></h3>
+<p class="rd-meta">3 live stories · 3 councillors</p>
+</article>
+</div>
+
+<h2 class="rd-h2">Pennines</h2>
+
+<div class="rd-grid">
+<article class="rd-card">
+<h3><a href="/wards/littleborough-lakeside.html">Littleborough Lakeside</a></h3>
+<p class="rd-meta">7 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/milnrow-and-newhey.html">Milnrow and Newhey</a></h3>
+<p class="rd-meta">5 live stories · 3 councillors</p>
+</article>
+
+<article class="rd-card">
+<h3><a href="/wards/wardle-shore-and-west-littleborough.html">Wardle, Shore and West Littleborough</a></h3>
+<p class="rd-meta">7 live stories · 3 councillors</p>
+</article>
+</div>
 </main>
-<footer style="background:#111;color:#ccc;padding:26px 20px"><strong>Rochdale Daily</strong> — independent local news for the Rochdale borough.</footer>
-</body></html>
+<footer class="site-footer">
+<div class="wrap"><p class="footer-brand">Rochdale Daily</p>
+<p class="footer-note">Independent local news for the Rochdale borough. <a href="/editorial-standards.html">Editorial standards</a> · <a href="/corrections-and-complaints.html">Corrections</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p>
+</div>
+</footer>
+<script defer src="/assets/js/cookie-consent.js"></script></body></html>

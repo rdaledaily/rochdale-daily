@@ -59,8 +59,10 @@
     .weather-condition::before { content: "·"; margin-right: 7px; color: #777; }
 
     .masthead {
-      background: var(--yellow);
-      border-bottom: 1px solid #c79d00;
+      /* One masthead for the whole paper: paper-white, hairline rule, logo.
+         Was var(--yellow), which had drifted to teal, with a gold rule. */
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
     }
     .masthead-row {
       min-height: 166px;
@@ -105,9 +107,9 @@
     .header-button:hover { transform: translateY(-1px); }
 
     .primary-nav {
-      background: var(--black);
-      color: #fff;
-      border-bottom: 4px solid var(--yellow);
+      background: var(--paper);
+      color: var(--ink);
+      border-bottom: 2px solid var(--navy);
       position: sticky;
       top: 0;
       z-index: 90;
@@ -479,7 +481,7 @@
     .advertise-panel h3 { margin: 0 0 7px; font-family: var(--font-display); font-size: 27px; text-transform: uppercase; line-height: 1; }
     .advertise-panel p { margin: 0 0 14px; font-size: 13px; }
 
-    .site-footer { background: #111; color: #fff; border-top: 6px solid var(--yellow); padding: 36px 0 22px; }
+    .site-footer { background: var(--brand-navy); color: #fff; border-top: 0; padding: 36px 0 22px; }
     .footer-grid { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 28px; }
     .footer-brand { font-family: var(--font-display); color: var(--yellow); font-size: 30px; font-weight: 900; text-transform: uppercase; line-height: 1; }
     .footer-copy { color: #bfbfbf; font-size: 13px; max-width: 330px; }
@@ -713,185 +715,189 @@
 .article-image-credit{margin-top:6px;font-size:12px;color:#6a6a6a}
 .article-image-credit a{color:inherit}
 
-.ward-wrap{max-width:1000px;margin:0 auto;padding:28px 20px 60px}.ward-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.ward-card{border:1px solid #ddd;padding:15px;background:#fff}.ward-card h3{font-size:18px;margin:10px 0 6px}.ward-meta{font-size:12px;color:#667;text-transform:uppercase}.ward-h2{border-top:3px solid #111;padding-top:8px;margin-top:34px}.cllr-photo{width:100%;aspect-ratio:4/3;object-fit:cover;background:#eceff1;display:block}.cllr-placeholder{width:100%;aspect-ratio:4/3;background:#eceff1;display:grid;place-items:center;font-size:46px;font-weight:800;color:#89939d}.dem-vote-side{font-weight:800}.dem-vote-for{color:#18733a}.dem-vote-against{color:#a51d25}.dem-vote-abstain{color:#695b00}</style>
-  <!-- Universal Rochdale Daily newspaper theme -->
-  <link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-universal="editorial">
-</head>
+.rd-page{max-width:1080px;margin:0 auto;padding:28px 20px 64px}.rd-kicker{display:inline-block;margin:0 0 6px;font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.rd-page h1{margin:0 0 10px;font-family:var(--font-display);font-size:clamp(32px,5vw,50px);line-height:1.02;letter-spacing:-.02em;color:var(--ink)}.rd-lede{margin:0 0 26px;max-width:720px;color:var(--muted);font-size:17px;line-height:1.5}.rd-h2{margin:34px 0 14px;padding-top:10px;border-top:3px solid var(--ink);font-family:var(--font-display);font-size:24px;letter-spacing:-.01em}.rd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}.rd-card{display:flex;flex-direction:column;gap:6px;padding:16px;background:var(--card,#fff);border:1px solid var(--line);border-top:3px solid var(--ink)}.rd-card h3{margin:0;font-family:var(--font-display);font-size:19px;line-height:1.2}.rd-card h3 a{color:var(--ink);text-decoration:none}.rd-card h3 a:hover{text-decoration:underline;text-underline-offset:3px}.rd-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.rd-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--surface-2,#eceff1);margin:-16px -16px 8px;width:calc(100% + 32px)}.rd-meta{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.rd-links{margin:0 0 8px;color:var(--muted);font-size:15px}.rd-links a{color:var(--accent);font-weight:600}.site-footer{margin-top:40px;background:var(--brand-navy,#0b1f3a);color:#dfe6ee;padding:28px 0}.site-footer .footer-brand{margin:0 0 6px;font-family:var(--font-display);font-size:22px;font-weight:800;color:#fff;text-transform:none}.site-footer .footer-note{margin:0;font-size:14px;line-height:1.6}.site-footer a{color:#fff}@media(max-width:600px){.rd-page{padding:20px 16px 48px}}.cllr-photo{display:block;width:calc(100% + 32px);aspect-ratio:4/3;object-fit:cover;background:var(--surface-2,#eceff1);margin:-16px -16px 8px}.cllr-placeholder{aspect-ratio:4/3;background:var(--surface-2,#eceff1);display:grid;place-items:center;font-size:44px;font-weight:800;color:var(--muted);margin:-16px -16px 8px}.dem-vote-side{font-weight:800}.dem-vote-for{color:var(--positive,#18733a)}.dem-vote-against{color:var(--breaking,#a51d25)}.dem-vote-abstain{color:#695b00}</style>
+<link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-asset="/assets/css/editorial-theme.css"></head>
 <body>
 <header class="masthead">
-<div class="wrap masthead-row"><a class="brand" href="/index.html">ROCHDALE DAILY</a> <a href="/wards/">All wards</a></div>
+<div class="wrap masthead-row"><a class="brand" href="/index.html" aria-label="Rochdale Daily home"><img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span></a>
+<div class="masthead-actions"><a class="header-button" href="/index.html">All stories</a><a class="header-button" href="/wards/">All wards</a></div>
+</div>
 </header>
 
-<main class="ward-wrap"><span>WARD</span>
+<main class="rd-page"><span class="rd-kicker">Ward</span>
 <h1>Milnrow and Newhey</h1>
-<p>Ward pages: <a href="/wards/milnrow-and-newhey.html">Milnrow and Newhey</a>. Or <a href="/index.html?area=pennines-township">filter the front page</a> to this area.</p>
+<p class="rd-links">Ward pages: <a href="/wards/milnrow-and-newhey.html">Milnrow and Newhey</a>. Or <a href="/index.html?area=pennines-township">filter the front page</a> to this area.</p>
 
-<h2 class="ward-h2">Latest Milnrow and Newhey news</h2>
+<h2 class="rd-h2">Latest Milnrow and Newhey news</h2>
 
-<div class="ward-grid">
-<article class="ward-card">
-<div class="ward-meta">Milnrow</div>
+<div class="rd-grid">
+<article class="rd-card">
+<div class="rd-meta">Milnrow</div>
 
 <h3><a href="/articles/john-milne-table-table-milnrow-closing-september-3.html">Milnrow&#x27;s John Milne Table Table to close on September 3</a></h3>
 <p>John Milne Table Table in Milnrow will close on 3 September, with the restaurant thanking generations of customers for their support and inviting gues</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Rochdale</div>
+<article class="rd-card">
+<div class="rd-meta">Rochdale</div>
 
 <h3><a href="/articles/driver-arrested-after-stolen-vehicle-recovered-on-milnrow-road-rochdale.html">Driver arrested after stolen vehicle recovered on Milnrow Road in Rochdale</a></h3>
 <p>A driver has been arrested after Rochdale neighbourhood officers stopped a vehicle on Milnrow Road that police say had been reported stolen from North</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Rochdale</div>
+<article class="rd-card">
+<div class="rd-meta">Rochdale</div>
 
 <h3><a href="/articles/milnrow-newhey-dog-fouling-parvovirus-warning.html">Residents urge dog owners to clean up after pets amid fouling concerns in Milnrow and Newhey</a></h3>
 <p>Residents in Milnrow and Newhey are calling on dog owners to pick up after their pets following complaints about dog mess being left in public areas, </p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Newhey</div>
+<article class="rd-card">
+<div class="rd-meta">Newhey</div>
 
 <h3><a href="/articles/newhey-gardening-gang-volunteers-churchyard-clean-up.html">Newhey Gardening Gang volunteers transform churchyard in latest community clean-up</a></h3>
 <p>Volunteers from Newhey&#x27;s Gardening Gang have completed another major session in the local churchyard, cutting grass, tending shrub beds and cremation </p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Milnrow</div>
+<article class="rd-card">
+<div class="rd-meta">Milnrow</div>
 
 <h3><a href="/articles/rainbow-health-group-open-day-new-clinic-august-2026.html">Rainbow Health Group invites residents to open day at new clinic after 17 years on Hornby Street</a></h3>
 <p>The health and wellbeing clinic is moving to a new home after 17 years, and is welcoming the community to an open day this Saturday - with the Mayor a</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Newhey</div>
+<article class="rd-card">
+<div class="rd-meta">Newhey</div>
 
 <h3><a href="/articles/elderly-lady-found-after-incredible-community-effort-newhey.html">Elderly lady found after incredible community effort</a></h3>
 <p>A woman in her 70s who went missing in Newhey has been found after hundreds of residents joined Greater Manchester Police in an extraordinary communit</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Rochdale</div>
+<article class="rd-card">
+<div class="rd-meta">Rochdale</div>
 
 <h3><a href="/articles/every-gp-practice-rochdale-ranked-2026-patient-survey.html">Every GP practice in Rochdale ranked by patients in the 2026 survey</a></h3>
 <p>The latest GP Patient Survey shows a wide gap in reported patient experience between practices across Rochdale, Heywood, Middleton, Littleborough and </p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Milnrow</div>
+<article class="rd-card">
+<div class="rd-meta">Milnrow</div>
 
 <h3><a href="/articles/milnrow-author-jane-somers-childrens-books-grief.html">Milnrow author helping children cope with grief through heartfelt storybooks</a></h3>
 <p>Milnrow author Jane Somers is helping children understand bereavement and pet loss through two beautifully illustrated storybooks, while donating hund</p>
 </article>
 </div>
 
-<h2 class="ward-h2">From the archive</h2>
+<h2 class="rd-h2">From the archive</h2>
 
-<div class="ward-grid">
-<article class="ward-card">
-<div class="ward-meta">Transport · 2026-09-04</div>
+<div class="rd-grid">
+<article class="rd-card">
+<div class="rd-meta">Transport · 2026-09-04</div>
 
 <h3><a href="/articles/road-closures-announced-for-remembrance-sunday-events-in-littleborough-middleton.html">Road Closures Announced for Remembrance Sunday Events in Littleborough, Middleton and Milnrow on 8 November 2026</a></h3>
 <p>Rochdale Borough Council has announced temporary road closures for Remembrance Sunday events in Littleborough, Middleton, and Milnrow on 8 November...</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Traffic · 2026-09-02</div>
+<article class="rd-card">
+<div class="rd-meta">Traffic · 2026-09-02</div>
 
 <h3><a href="/articles/road-closures-for-heywood-remembrance-sunday-on-8-november-2026.html">Road Closures Announced for Remembrance Sunday Events in Heywood, Milnrow, Littleborough, and Middleton on 8 November 2026</a></h3>
 <p>Temporary road closures will be in effect across Heywood, Littleborough, Middleton, and Milnrow on 8 November 2026 for Remembrance Sunday events, as..</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Crime · 2026-08-29</div>
+<article class="rd-card">
+<div class="rd-meta">Crime · 2026-08-29</div>
 
 <h3><a href="/articles/police-investigate-alleged-rape-of-young-man-in-rochdale.html">Police Investigate Alleged Rape of Young Man in Rochdale</a></h3>
 <p>Greater Manchester Police are appealing for information following the alleged rape of a young man on Milnrow Road in Rochdale on August 16. CCTV image</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Crime · 2026-08-13</div>
+<article class="rd-card">
+<div class="rd-meta">Crime · 2026-08-13</div>
 
 <h3><a href="/articles/police-no-longer-treat-death-of-woman-found-at-milnrow-farm-as-murder.html">Police No Longer Treat Death of Woman Found at Milnrow Farm as Murder</a></h3>
 <p>Police have confirmed that they are no longer treating the death of a woman discovered after a fire at Higher Tunshill Farm in Milnrow as a murder...</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Community · 2026-08-04</div>
+<article class="rd-card">
+<div class="rd-meta">Community · 2026-08-04</div>
 
 <h3><a href="/articles/christine-found-safe-after-newhey-community-search.html">Elderly lady found after incredible community effort</a></h3>
 <p>A woman in her 70s who went missing in Newhey has been found after hundreds of residents joined Greater Manchester Police in an extraordinary communit</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Community · 2026-08-04</div>
+<article class="rd-card">
+<div class="rd-meta">Community · 2026-08-04</div>
 
 <h3><a href="/articles/christine-found-safe-newhey-community-effort.html">Elderly lady found after incredible community effort</a></h3>
 <p>A woman in her 70s who went missing in Newhey has been found after hundreds of residents joined Greater Manchester Police in an extraordinary communit</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">News · 2026-08-04</div>
+<article class="rd-card">
+<div class="rd-meta">News · 2026-08-04</div>
 
 <h3><a href="/articles/police-concerned-for-missing-75-year-old-woman-last-seen-near-milnrow-golf-club.html">Police Concerned for Missing 75-Year-Old Woman Last Seen Near Milnrow Golf Club</a></h3>
 <p>Police are increasingly concerned for a missing woman, aged 75, who was last seen near Milnrow golf club. Authorities are appealing for information...</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Crime · 2026-07-25</div>
+<article class="rd-card">
+<div class="rd-meta">Crime · 2026-07-25</div>
 
 <h3><a href="/articles/police-investigate-two-linked-sexual-assaults-in-milnrow.html">Police Investigate Two Linked Sexual Assaults in Milnrow</a></h3>
 <p>Police are investigating two sexual assaults that occurred in Rochdale, which they believe may be connected. The incidents took place recently,...</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Sport · 2026-07-16</div>
+<article class="rd-card">
+<div class="rd-meta">Sport · 2026-07-16</div>
 
 <h3><a href="/articles/transport-disruption-reported-in-milnrow-following-incident.html">Milnrow Football Club Announces New Training Schedule</a></h3>
 <p>Traffic disruptions have been reported in Milnrow due to an ongoing incident. Drivers are advised to seek alternative routes.</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Crime · 2026-07-14</div>
+<article class="rd-card">
+<div class="rd-meta">Crime · 2026-07-14</div>
 
 <h3><a href="/articles/police-update-following-woman-s-death-at-higher-tunshill-farm-in-milnrow.html">Police Update Following Woman</a></h3>
 <p>Police have issued a significant update regarding the death of a woman at Higher Tunshill Farm in Milnrow. Investigations are ongoing as authorities..</p>
 </article>
 
-<article class="ward-card">
-<div class="ward-meta">Crime · 2026-07-09</div>
+<article class="rd-card">
+<div class="rd-meta">Crime · 2026-07-09</div>
 
 <h3><a href="/articles/man-arrested-after-woman-dies-in-milnrow-farm-fire.html">Man Arrested Following Death of Woman in Milnrow Farm Fire</a></h3>
 <p>A man has been arrested on suspicion of murder after a woman was found dead in a fire at a farm in Milnrow. The incident occurred on July 3 at Higher.</p>
 </article>
 </div>
 
-<h2 class="ward-h2">Your councillors</h2>
+<h2 class="rd-h2">Your councillors</h2>
 
-<div class="ward-grid">
-<article class="ward-card"><img class="cllr-photo" src="/assets/img/cards/andy_kelly.jpg" alt="Portrait of Andy Kelly" loading="lazy">
+<div class="rd-grid">
+<article class="rd-card"><img class="cllr-photo" src="/assets/img/cards/andy_kelly.jpg" alt="Portrait of Andy Kelly" loading="lazy">
 <h3>Andy Kelly</h3>
 
-<div class="ward-meta">Milnrow and Newhey · Liberal Democrats</div>
+<div class="rd-meta">Milnrow and Newhey · Liberal Democrats</div>
 <p>No recorded vote has named this councillor yet.</p>
 </article>
 
-<article class="ward-card"><img class="cllr-photo" src="/assets/img/cards/anthony_gilbert.jpg" alt="Portrait of Anthony Gilbert" loading="lazy">
+<article class="rd-card"><img class="cllr-photo" src="/assets/img/cards/anthony_gilbert.jpg" alt="Portrait of Anthony Gilbert" loading="lazy">
 <h3>Anthony Gilbert</h3>
 
-<div class="ward-meta">Milnrow and Newhey · Reform UK</div>
+<div class="rd-meta">Milnrow and Newhey · Reform UK</div>
 <p>No recorded vote has named this councillor yet.</p>
 </article>
 
-<article class="ward-card"><img class="cllr-photo" src="/assets/img/cards/david_bamford.jpg" alt="Portrait of David Bamford" loading="lazy">
+<article class="rd-card"><img class="cllr-photo" src="/assets/img/cards/david_bamford.jpg" alt="Portrait of David Bamford" loading="lazy">
 <h3>David Bamford</h3>
 
-<div class="ward-meta">Milnrow and Newhey · Liberal Democrats</div>
+<div class="rd-meta">Milnrow and Newhey · Liberal Democrats</div>
 <p>No recorded vote has named this councillor yet.</p>
 </article>
 </div>
 <p>Only votes taken by name are listed. Rochdale Daily never infers an individual vote where the minutes do not name the councillor.</p>
 </main>
-<footer style="background:#111;color:#ccc;padding:26px 20px"><strong>Rochdale Daily</strong> — independent local news for the Rochdale borough.</footer>
-</body></html>
+<footer class="site-footer">
+<div class="wrap"><p class="footer-brand">Rochdale Daily</p>
+<p class="footer-note">Independent local news for the Rochdale borough. <a href="/editorial-standards.html">Editorial standards</a> · <a href="/corrections-and-complaints.html">Corrections</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p>
+</div>
+</footer>
+<script defer src="/assets/js/cookie-consent.js"></script></body></html>
