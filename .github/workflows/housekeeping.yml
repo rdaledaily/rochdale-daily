@@ -8,6 +8,14 @@ name: Rochdale Daily housekeeping
 #  * scripts whose workflows were retired, and one-shot repair scripts that
 #    have already done their single job.
 #  * a stale apply note describing a workflow that no longer exists.
+#  * the Feel Good Festival live page and feed (event over on 8 August; the
+#    front-page function's injection of it expired on 9 August), the showbiz
+#    landing page (section retired; it was a stray copy of the homepage) and
+#    the update log.
+#
+# Workflow files cannot be deleted from inside a workflow (GitHub refuses
+# changes under .github/workflows made with the job token), so the retired
+# one-off workflows are listed at the end of this file for hand deletion.
 #
 # It refuses to delete anything still referenced by a workflow, a script or a
 # shell file, so it cannot quietly break the pipeline. Safe to re-run: files
@@ -65,6 +73,10 @@ jobs:
           scraper/repair_archive_ads.py
           scraper/repair_event_records.py
           scraper/restore_archive.py
+          UPDATE_LOG.txt
+          feel-good-live.html
+          feel-good-live.json
+          showbiz/index.html
           "
 
           removed=0
@@ -78,14 +90,22 @@ jobs:
               continue
             fi
 
-            stem=$(basename "$target")
-            stem=${stem%.py}
+            case "$target" in
+              *.py) needle=$(basename "$target" .py) ;;   # scripts are imported by module name
+              *)    needle="$target" ;;                    # everything else by its exact path
+            esac
 
             # Anything still named by a workflow, script or shell file stays put.
+            # Two files list retired pages only as OPTIONAL paths and skip them
+            # when absent (normalise_public_theme.py, check_data_files.py); they
+            # are not dependencies and are ignored here.
             if grep -rl --include='*.yml' --include='*.yaml' --include='*.py' --include='*.sh' \
-                 -- "$stem" . 2>/dev/null \
+                 -- "$needle" . 2>/dev/null \
                  | grep -v '^\./\.git/' \
                  | grep -v '^\./\.github/workflows/housekeeping\.yml$' \
+                 | grep -v '^\./\.github/workflows/apply-supplied-zip\.yml$' \
+                 | grep -v '^\./scraper/normalise_public_theme\.py$' \
+                 | grep -v '^\./scraper/check_data_files\.py$' \
                  | grep -v "^\./$target$" \
                  | grep -q .; then
               echo "REFUSED  $target is still referenced somewhere"
@@ -113,10 +133,19 @@ jobs:
           git config user.name "Rochdale Daily Bot"
           git config user.email "bot@rochdaledaily.co.uk"
           if git diff --cached --quiet; then echo 'nothing to remove'; exit 0; fi
-          git commit -m "Remove retired trigger notes and dead scripts"
+          git commit -m "Remove retired trigger notes, dead scripts and finished one-off pages"
           for attempt in 1 2 3 4 5; do
             git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
             sleep $((attempt * 7))
           done
           echo "::error::housekeeping could not push after five attempts"
           exit 1
+
+# ---------------------------------------------------------------------------
+# Retired workflows to delete BY HAND (Actions cannot remove workflow files):
+#   .github/workflows/apply-supplied-zip.yml          one-off, job done 11 Sep
+#   .github/workflows/remove-evening-wrapups-once.yml one-off, job done 13 Sep
+#   .github/workflows/showbiz-integrate.yml           section retired
+#   .github/workflows/gmp-watch.yml                   blind from GitHub runners; switched off by decision
+# and, once it has been run, this file too.
+# ---------------------------------------------------------------------------
