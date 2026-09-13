@@ -985,6 +985,63 @@
       .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
+    /* Travel camera.
+       The M62 between J21 and J19 at Castleton, the stretch that decides most
+       Rochdale commutes. Measured 13 September 2026: opencctv.org answers with
+       x-frame-options: SAMEORIGIN, so an iframe of its player renders an empty
+       white box on this domain in every browser. The same camera is published
+       by National Highways as a plain 720x576 JPEG that does load cross-origin
+       from rochdaledaily.co.uk, so this panel points at the source instead: no
+       third-party script, no map UI, no dependency on an aggregator's URLs. */
+    .travel-grid {
+      display: grid; gap: 22px; align-items: start;
+      /* The camera is 4:3, so a wide column makes a very tall black box that
+         dwarfs the text beside it. 1.1fr keeps the picture legible without
+         cropping it (no object-fit: cover here -- a traffic camera loses its
+         point when the edges of the road are trimmed off). */
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    }
+    .camera-figure { margin: 0; }
+    .camera-frame {
+      position: relative; width: 100%; aspect-ratio: 720 / 576;
+      max-height: 62vh; background: #0b1524; overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .camera-frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .camera-frame:not([data-state="live"]) img { visibility: hidden; }
+    .camera-message {
+      display: none; position: absolute; inset: 0; margin: 0;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 22px; color: #e8eef5; font-size: 14px; line-height: 1.55;
+    }
+    .camera-frame:not([data-state="live"]) .camera-message { display: flex; }
+    .camera-badge {
+      position: absolute; top: 10px; left: 10px; z-index: 2;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(11, 21, 36, .82); color: #fff;
+      font-family: var(--font-display); font-size: 11px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: .04em;
+      padding: 6px 11px; border-radius: 999px;
+    }
+    .camera-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #35d07f;
+      box-shadow: 0 0 0 0 rgba(53, 208, 127, .7); animation: camera-pulse 2.4s infinite;
+    }
+    .camera-frame:not([data-state="live"]) .camera-dot { background: #b9c4d1; animation: none; }
+    @keyframes camera-pulse {
+      70% { box-shadow: 0 0 0 7px rgba(53, 208, 127, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(53, 208, 127, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) { .camera-dot { animation: none; } }
+    .camera-caption { margin: 11px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .camera-caption strong { color: var(--ink); }
+    .camera-caption a { color: var(--accent); }
+    .travel-aside .rail-copy { margin: 0 0 14px; }
+    @media (max-width: 900px) {
+      .travel-grid { grid-template-columns: 1fr; gap: 18px; }
+      .camera-frame { max-height: none; }
+    }
+
     /* Mobile section layout.
        Below 820px the flat news grid became a single column of every story on
        the homepage - about sixty cards - so anything after it (What's on, Add
@@ -1258,6 +1315,42 @@
     </div>
 
     <main id="main-content">
+      <!-- Travel. First section under the masthead, below the leaderboard ad
+           so the advert is still the first thing on screen. Moving it is one
+           cut and paste of this whole <section>. -->
+      <section class="section" id="travel" aria-labelledby="travel-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 class="section-title" id="travel-title">Travel</h2>
+            <a class="section-link" href="/news/traffic.html">All traffic and travel</a>
+          </div>
+          <div class="travel-grid">
+            <figure class="camera-figure">
+              <div class="camera-frame" id="camera-frame" data-state="loading">
+                <span class="camera-badge"><span class="camera-dot" aria-hidden="true"></span><span id="camera-state">Connecting</span></span>
+                <img id="camera-image" width="720" height="576" decoding="async"
+                     alt="Live traffic camera looking along the M62 between junctions 21 and 19 at Castleton, Rochdale">
+                <p class="camera-message" id="camera-message" role="status" aria-live="polite">Connecting to the camera…</p>
+              </div>
+              <figcaption class="camera-caption">
+                <strong>M62 between junctions 21 and 19, at Castleton.</strong>
+                Refreshes about once a minute while this section is on screen. <span id="camera-updated"></span><br>
+                Camera image by <a href="https://nationalhighways.co.uk/" target="_blank" rel="noopener">National Highways</a>, used under the
+                <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>.
+              </figcaption>
+            </figure>
+            <div class="travel-aside">
+              <p class="rail-copy">This is the stretch of motorway most Rochdale journeys depend on. The picture is the live view from the road operator's own camera, not a recording — if it looks clear, it is clear.</p>
+              <div class="report-actions">
+                <a class="report-action" href="https://nationalhighways.co.uk/travel-updates/" target="_blank" rel="noopener"><span>Motorway incidents and closures</span><span>National Highways</span></a>
+                <a class="report-action" href="https://tfgm.com/travel-updates" target="_blank" rel="noopener"><span>Buses, trams and local roads</span><span>Bee Network</span></a>
+                <a class="report-action" href="/news/traffic.html"><span>Rochdale traffic reporting</span><span>Open</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="section" aria-labelledby="top-stories-title">
         <div class="wrap">
           <div class="section-head">
@@ -1340,7 +1433,7 @@
                   <div class="story-image-wrap"><img src="/assets/img/cards/maggie-s-oldham-to-host-annual-culture-crawl-from-oldham-to-rochdale-on-septembe-generated-card.jpg" alt="" loading="lazy" decoding="async"></div>
                   <span class="story-kicker">Community</span>
                   <h3 class="card-headline">Maggie’s Oldham to Host Annual Culture Crawl from Oldham to Rochdale</h3>
-                  <p class="card-summary">Maggie’s Oldham invites locals to participate in its annual Culture Crawl, a 10k walk from Oldham to Rochdale, on September 26, raising funds for cancer support services.</p>
+                  <p class="card-summary">Maggie’s Oldham invites locals to participate in the annual Culture Crawl on Saturday, September 26, raising funds for cancer support while exploring local history and culture between Oldham and Rochdale.</p>
                   <div class="story-meta">Rochdale · <time datetime="2026-09-13T11:26:46Z">13 Sep 2026</time></div>
                 </a>
               </article>
@@ -4104,6 +4197,81 @@ function shareIconMarkup(action, label) {
   </script>
   <script defer src="/assets/ads.js"></script>
   <script>
+    /* Live travel camera.
+       Points straight at National Highways rather than at an embed: measured on
+       13 September 2026, opencctv.org sends x-frame-options: SAMEORIGIN, so
+       framing its player from this domain produces an empty box. The JPEG below
+       was tested from rochdaledaily.co.uk and loads cross-origin at 720x576.
+
+       The image is only fetched while the section is actually on screen and the
+       tab is in front. A panel nobody is looking at, polling a public authority
+       once a minute forever, is traffic they did not ask for. A camera that
+       stops answering says so; it is never left showing a stale frame as if it
+       were current. */
+    (function () {
+      var SOURCE = "https://public.highwaystrafficcameras.co.uk/cctvpublicaccess/images/31642.jpg";
+      var INTERVAL_MS = 60000;
+      var frame = document.getElementById("camera-frame");
+      var image = document.getElementById("camera-image");
+      var state = document.getElementById("camera-state");
+      var message = document.getElementById("camera-message");
+      var updated = document.getElementById("camera-updated");
+      if (!frame || !image || !state || !message) { return; }
+
+      var onScreen = false;
+      var inFlight = false;
+      var lastLoad = 0;
+
+      function stamp(date) {
+        try {
+          return date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+        } catch (error) {
+          return date.getHours() + ":" + ("0" + date.getMinutes()).slice(-2);
+        }
+      }
+
+      image.addEventListener("load", function () {
+        inFlight = false;
+        lastLoad = Date.now();
+        frame.setAttribute("data-state", "live");
+        state.textContent = "Live";
+        if (updated) { updated.textContent = "Updated " + stamp(new Date()) + "."; }
+      });
+
+      image.addEventListener("error", function () {
+        inFlight = false;
+        frame.setAttribute("data-state", "offline");
+        state.textContent = "Offline";
+        message.textContent = lastLoad
+          ? "The camera stopped responding. The last picture came through at " + stamp(new Date(lastLoad)) + ". Trying again shortly."
+          : "The camera is not responding at the moment. Trying again shortly.";
+      });
+
+      function refresh() {
+        if (inFlight || !onScreen || document.visibilityState === "hidden") { return; }
+        inFlight = true;
+        // Cache-busted: the publisher sends a long-lived image and the browser
+        // would otherwise show the first frame forever.
+        image.src = SOURCE + "?t=" + Date.now();
+      }
+
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (entries) {
+          onScreen = entries.some(function (entry) { return entry.isIntersecting; });
+          if (onScreen) { refresh(); }
+        }, { rootMargin: "200px" }).observe(frame);
+      } else {
+        onScreen = true;
+        refresh();
+      }
+
+      document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible" && Date.now() - lastLoad > INTERVAL_MS) { refresh(); }
+      });
+
+      setInterval(refresh, INTERVAL_MS);
+    })();
+
     /* Traffic ticker. Reuses the breaking bar's layout classes but runs its own
        animation loop against its own element IDs, so the existing breaking
        ticker code is untouched.
