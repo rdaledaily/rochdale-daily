@@ -1,28 +1,20 @@
 name: Rochdale Daily briefing
 
-# Appointment publishing: the Morning Briefing at 9am and the Evening Wrap-Up
-# at 6pm, every day, so the borough can set its watch by the paper.
+# Appointment publishing: the Morning Briefing at 9am every day.
 #
 # GitHub's scheduler only speaks UTC, and Britain does not. Firing on BOTH
 # candidate hours and letting daily_briefing.py check the real Europe/London
-# clock is what keeps the briefing at 9am through BST *and* GMT -- an
-# appointment that slips an hour when the clocks change is not an appointment.
-# The slot that is not due simply exits without writing anything.
+# clock keeps the briefing at 9am through BST and GMT.
+# The candidate hour that is not due simply exits without writing anything.
 #
 # The script writes a pending_manual_*.json; committing it triggers the existing
 # publish-pending-manual workflow, so briefings go out through exactly the same
-# route as any editor-written article. No new publishing lane.
+# route as any editor-written article.
 
 on:
   workflow_dispatch:
-    inputs:
-      slot:
-        description: "Which briefing: morning, evening, or leave blank for the most recent one. A manual run always publishes."
-        required: false
-        default: ""
   schedule:
     - cron: "0 8,9 * * *"    # 9am London, BST and GMT respectively
-    - cron: "0 17,18 * * *"  # 6pm London, BST and GMT respectively
 
 permissions:
   contents: write
@@ -53,17 +45,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build the briefing due at this hour
+      - name: Build the Morning Briefing due at this hour
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # A person pressed the button: always produce a briefing. Blank
-            # means "the most recent one"; morning/evening forces that slot.
-            slot="$(echo "${{ github.event.inputs.slot }}" | tr '[:upper:]' '[:lower:]' | tr -d ' ')"
-            python scraper/daily_briefing.py --slot "${slot:-auto}" --force
+            # A person pressed the button: publish today's Morning Briefing now.
+            python scraper/daily_briefing.py --slot morning --force
           else
-            # Scheduled: each call self-gates on the London clock; at most one writes a file.
+            # Scheduled: the script self-gates on the London clock.
             python scraper/daily_briefing.py --slot morning
-            python scraper/daily_briefing.py --slot evening
           fi
 
       - name: Publish it
