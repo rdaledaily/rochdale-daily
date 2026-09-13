@@ -38,27 +38,60 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Remove every Evening Wrap-Up
-        run: python scraper/remove_story.py --title-patterns "evening wrap-up"
-
-      - name: Commit cleanup
+      - name: Apply and commit race-safe cleanup
+        shell: bash
         run: |
           set -euo pipefail
           git config user.name "Rochdale Daily Bot"
           git config user.email "bot@rochdaledaily.co.uk"
-          git add story_blocklist.json articles.json event_dates.json articles sitemap.xml news-sitemap.xml index.html 2>/dev/null || true
+
+          apply_cleanup() {
+            python scraper/remove_story.py --title-patterns "evening wrap-up"
+          }
+
+          stage_cleanup() {
+            git add story_blocklist.json articles.json event_dates.json articles sitemap.xml news-sitemap.xml index.html 2>/dev/null || true
+          }
+
+          apply_cleanup
+          stage_cleanup
           if git diff --cached --quiet; then
             echo "No matching live Evening Wrap-Up remained to commit."
-            exit 0
-          fi
-          git commit -m "Remove published Evening Wrap-Ups"
-          for attempt in 1 2 3 4 5; do
-            if git pull --rebase --autostash origin main && git push origin HEAD:main; then
-              exit 0
+          else
+            git commit -m "Remove published Evening Wrap-Ups"
+            if ! git push origin HEAD:main; then
+              for attempt in 1 2 3 4 5; do
+                echo "main moved; reapplying cleanup on newest canonical state (${attempt}/5)."
+                git fetch origin main
+                git reset --hard origin/main
+                git clean -fd
+                apply_cleanup
+                stage_cleanup
+                if git diff --cached --quiet; then
+                  break
+                fi
+                git commit -m "Reapply Evening Wrap-Up cleanup"
+                if git push origin HEAD:main; then
+                  break
+                fi
+                sleep $((attempt * 6))
+              done
             fi
-            sleep $((attempt * 6))
-          done
-          exit 1
+          fi
+
+          # Final verification against the newest main. If another writer moved
+          # main after our push, reapply once more so the stale briefing cannot
+          # be resurrected by a concurrent newsroom job.
+          git fetch origin main
+          git reset --hard origin/main
+          git clean -fd
+          if grep -qi 'Evening Wrap-Up' articles.json; then
+            echo "Evening Wrap-Up was reintroduced; applying final cleanup."
+            apply_cleanup
+            stage_cleanup
+            git commit -m "Final removal of Evening Wrap-Up"
+            git push origin HEAD:main
+          fi
 
       - name: Deploy cleaned site
         env:
