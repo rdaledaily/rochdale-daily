@@ -1,4 +1,4 @@
-"""Rochdale Daily — the 9am Morning Briefing and the 6pm Evening Wrap-Up.
+"""Rochdale Daily — the 9am Morning Briefing.
 
 Appointment publishing. The point is not the prose, it is that the borough can
 set its watch by it: the same thing, in the same place, at the same time, every
@@ -13,10 +13,9 @@ Two deliberate design decisions:
    or missing because a free-tier rate limit was in the way, which for an
    appointment product matters more than any turn of phrase.
 
-2. IT TELLS THE TRUTH ON A QUIET DAY. If nothing has been published in the
-   window it says so plainly and points at what is still live, rather than
-   padding to look busy. A briefing that cries wolf every morning is worth
-   less than one that occasionally says "quiet night".
+2. IT TELLS THE TRUTH ON A QUIET DAY. If nothing has been published overnight
+   it says so plainly and points at what is still live, rather than padding to
+   look busy.
 
 Output is a pending_manual_*.json, which the existing publish-pending-manual
 workflow merges exactly like any other editor-written article.
@@ -44,7 +43,6 @@ WEATHER = ROOT / "weather.json"
 SLOTS = {
     # slot: (local hour it must run at, title, window start hour)
     "morning": (9, "Morning Briefing", 18),   # since 6pm yesterday
-    "evening": (18, "Evening Wrap-Up", 9),    # since 9am today
 }
 
 CARD_CANDIDATES = [
@@ -98,13 +96,9 @@ def slugify(value):
 def window_start(slot: str, now_local: datetime) -> datetime:
     """The start of the period this briefing covers."""
     start_hour = SLOTS[slot][2]
-    if slot == "morning":
-        base = (now_local - timedelta(days=1)).replace(
-            hour=start_hour, minute=0, second=0, microsecond=0
-        )
-    else:
-        base = now_local.replace(hour=start_hour, minute=0, second=0, microsecond=0)
-    return base
+    return (now_local - timedelta(days=1)).replace(
+        hour=start_hour, minute=0, second=0, microsecond=0
+    )
 
 
 def area_label(value):
@@ -135,9 +129,9 @@ def weather_line(now_local):
 
 
 def events_section(now_local, slot):
-    """What is on today (morning) or tomorrow (evening)."""
+    """What is on today."""
     data = load(FRONTPAGE, {})
-    target = now_local.date() if slot == "morning" else (now_local + timedelta(days=1)).date()
+    target = now_local.date()
     hits = []
     for event in data.get("events") or []:
         start = parse_iso(event.get("event_start_at"))
@@ -148,7 +142,6 @@ def events_section(now_local, slot):
         hits.append(event)
     if not hits:
         return ""
-    label = "On today" if slot == "morning" else "On tomorrow"
     items = "".join(
         '<li><a href="/articles/{slug}.html">{title}</a>{place}</li>'.format(
             slug=esc(event.get("slug")),
@@ -157,7 +150,7 @@ def events_section(now_local, slot):
         )
         for event in hits[:5]
     )
-    return f"<h2>{label}</h2><ul>{items}</ul>"
+    return f"<h2>On today</h2><ul>{items}</ul>"
 
 
 def story_items(stories):
@@ -200,7 +193,7 @@ def build(slot: str, now_local: datetime):
 
     date_text = now_local.strftime("%A %-d %B %Y") if hasattr(now_local, "strftime") else ""
     title = f"{title_word}: {date_text}"
-    since = "since yesterday evening" if slot == "morning" else "today"
+    since = "since yesterday evening"
 
     if fresh:
         count = len(fresh)
@@ -209,8 +202,7 @@ def build(slot: str, now_local: datetime):
         )
         body = f"<p>{esc(lead)}</p><h2>The stories</h2><ul>{story_items(fresh[:12])}</ul>"
     else:
-        # The honest quiet-day version. No padding, no invented urgency.
-        lead = f"A quiet {'night' if slot == 'morning' else 'day'} in the borough &mdash; nothing new published {since}."
+        lead = f"A quiet night in the borough &mdash; nothing new published {since}."
         live = published[:5]
         body = f"<p>{lead}</p>"
         if live:
@@ -221,9 +213,8 @@ def build(slot: str, now_local: datetime):
     body += (
         '<p class="brief-foot">The '
         + esc(title_word)
-        + " is published every day at "
-        + ("9am" if slot == "morning" else "6pm")
-        + '. Got a story? <a href="/contact.html">Tell the newsdesk</a>.</p>'
+        + ' is published every day at 9am. Got a story? '
+        + '<a href="/contact.html">Tell the newsdesk</a>.</p>'
     )
 
     slug = slugify(f"{title_word}-{now_local.strftime('%-d-%B-%Y')}")
@@ -277,31 +268,23 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--slot", choices=sorted(SLOTS) + ["auto"], required=True,
-        help="morning, evening, or auto (the most recent slot by the London clock; "
-             "for manual runs, so pressing the button always produces a briefing).",
+        help="morning or auto; both produce the Morning Briefing.",
     )
     parser.add_argument(
         "--force", action="store_true",
-        help="Build even if it is not the scheduled local hour (for testing).",
+        help="Build even if it is not the scheduled local hour (for testing or a manual run).",
     )
     args = parser.parse_args()
 
     now_local = datetime.now(timezone.utc).astimezone(LONDON)
     if args.slot == "auto":
-        # The briefing a reader would expect to find right now: the evening
-        # edition from 6pm onwards, otherwise the morning edition from 9am,
-        # otherwise (small hours) last night's evening edition.
-        args.slot = "evening" if now_local.hour >= 18 or now_local.hour < 9 else "morning"
-        if now_local.hour < 9:
-            now_local = now_local - timedelta(days=1)
-            now_local = now_local.replace(hour=18, minute=0, second=0, microsecond=0)
+        args.slot = "morning"
         args.force = True
-        print(f"auto: building the {args.slot} briefing for {now_local:%A %d %B}")
+        print(f"auto: building the morning briefing for {now_local:%A %d %B}")
     wanted_hour = SLOTS[args.slot][0]
 
     # GitHub cron only speaks UTC, so the workflow fires on both candidate hours
-    # and this gate keeps the briefing at 9am/6pm LOCAL through BST and GMT
-    # alike. An appointment that moves by an hour in October is not one.
+    # and this gate keeps the briefing at 9am LOCAL through BST and GMT alike.
     if not args.force and now_local.hour != wanted_hour:
         print(
             f"Not the {args.slot} slot in Europe/London "
