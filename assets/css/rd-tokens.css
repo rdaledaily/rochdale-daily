@@ -17,7 +17,28 @@
  *
  * Naming rule: tokens are named for their ROLE, never their colour. The old
  * "--yellow" holding a cyan value is exactly the trap that caused the drift.
+ *
+ * ---------------------------------------------------------------------------
+ * BROADSHEET PORT, 13 September 2026
+ *
+ * Values below are taken from the design canvas, measured rather than eyeballed:
+ * the page ground, the hairline, the ink ramp and the type scale were read off
+ * the rendered artboard with getComputedStyle. Because every page imports this
+ * file, changing values here restyles all 24 page types and the 1,250 archive
+ * pages at once. No token name has been removed and no class has been renamed,
+ * so nothing that JavaScript or the generators reference can break.
+ *
+ * The one thing to understand before editing: the previous palette was cool
+ * (navy/teal on near-white). This one is warm (ink-brown on newsprint cream).
+ * Mixing the two is what made the site feel unresolved before, so a stray
+ * #0f6e80 or #ffffff now reads as a mistake rather than a variation.
  */
+
+/* Fonts are loaded HERE rather than in eighteen separate <link> tags. Every
+   page already imports this file, so one change dresses the whole paper and
+   there is no page left behind on the old faces. Must stay above the other
+   @import rules and any declaration: CSS ignores an @import that follows one. */
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
 
 @import url("/assets/css/newspaper-global.css");
 @import url("/assets/css/public-families.css");
@@ -25,91 +46,111 @@
 
 :root {
   /* ---------------------------------------------------------------- brand */
-  /* The masthead navy and the serif wordmark are the paper's identity; they
-     stay. The accent is settled at one deeper teal that holds WCAG AA on the
-     paper white AND stays legible as a kicker on the navy lead card, which
-     neither of the two previous teals managed at both. */
-  --brand-navy:        #0d2137;
-  --brand-navy-deep:   #081726;
-  --brand-accent:      #0f6e80;
-  --brand-accent-dark: #0b5464;
-  --brand-accent-lift: #4cc6d9;  /* accent on dark ground only */
+  /* The identity moves off navy-and-teal onto the newsprint palette: warm ink
+     on cream, with a single brown accent. --brand-navy is kept as a token name
+     because 24 page types and several generators reference it; it now holds the
+     ink brown so a legacy rule that paints a band with it produces a dark
+     newsprint band rather than a leftover blue one. */
+  --brand-navy:        #2b2824;
+  --brand-navy-deep:   #1c1a17;
+  --brand-accent:      #6b5a46;
+  --brand-accent-dark: #52442f;
+  --brand-accent-lift: #c9b79a;  /* accent on dark ground only */
 
   /* ------------------------------------------------------------- surfaces */
-  /* A faint warm cast reads as newsprint rather than screen-white. The old
-     homepage was pure #ffffff and every other page was #fffefa; picking one
-     ends the mismatch you could see when moving between pages. */
-  --paper:      #fffdf8;
-  --card:       #ffffff;
-  --surface:    #f5f3ed;
-  --surface-2:  #eae6dc;
-  --line:       #dbd6cb;
-  --line-strong:#b9b2a4;
+  /* #f6f5f1 is the page. #fffdf7 is anything that should lift off it — a card,
+     the newsletter box. The gap between them is deliberately small: a broadsheet
+     separates with rules, not with shadows and boxes. */
+  --paper:      #f6f5f1;
+  --card:       #fffdf7;
+  --surface:    #f0efe9;
+  --surface-2:  #e6e3db;
+  --line:       #dcdad4;
+  --line-strong:#b4b0a6;
 
   /* ------------------------------------------------------------------ ink */
-  --ink:        #16202b;
-  --ink-soft:   #3b4753;
-  --muted:      #5d6874;
-  --on-dark:    #f7f5f0;
-  --on-dark-mut:#b9c2cc;
+  --ink:        #2b2824;
+  --ink-soft:   #5b5952;
+  --muted:      #8a8780;
+  --on-dark:    #f6f5f1;
+  --on-dark-mut:#c2bdb2;
 
   /* -------------------------------------------------------------- signals */
   /* Deliberately NOT derived from the brand accent. These mean "urgent" and
-     "hazard"; a rebrand must never quietly restyle a road warning. */
-  --breaking:   #c8102e;
-  --breaking-d: #9d0c24;
-  --hazard:     #f5c400;
-  --hazard-dark:#c79d00;
-  --sun:        #f5c400;
-  --positive:   #1c7f56;
-  --info:       #2f6fb0;
+     "hazard"; a rebrand must never quietly restyle a road warning.
+     Breaking moves from pillar-box #c8102e to a brick red that sits on cream
+     without vibrating. It is still the loudest thing on the page, which is the
+     whole job. Hazard stays amber and is deliberately NOT the breaking colour:
+     a traffic warning and a breaking story must never look identical. */
+  --breaking:   #8c3a25;
+  --breaking-d: #6e2c1c;
+  --hazard:     #c98a12;
+  --hazard-dark:#9c6a0b;
+  --sun:        #c98a12;
+  --positive:   #3f6b4a;
+  --info:       #2f5578;
 
   /* -------------------------------------------------------------- typefaces */
-  /* Trust, not costume. The previous stack -- a Georgia-ish serif for headlines
-     with condensed caps everywhere -- is the house style of every AI content
-     farm imitating a broadsheet, which is precisely why it read as untrustworthy.
-     Libre Franklin descends from Franklin Gothic, drawn for newspapers in 1902
-     and still the voice of American news design; Inter is the most legible
-     screen face going and holds at phone sizes, which is where this paper is
-     actually read. */
-  --font-display: "Libre Franklin", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-ui:      "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
-  --font-body:    Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  /* Reversal, made knowingly. In September the paper moved OFF a serif because
+     Source Serif + Georgia + condensed caps read as a content farm imitating a
+     broadsheet. That diagnosis was about execution, not about serifs: the
+     giveaway was the pastiche, not the letterforms. Libre Baskerville is a
+     transitional serif drawn for screen text, and here it is paired with one
+     grotesque and a hairline grid rather than with condensed capitals, which is
+     what a real newspaper actually does.
+     Instrument Sans replaces Inter for UI and body: a slightly narrower
+     grotesque that holds at 11px label sizes, which is where most of this
+     design's furniture lives. */
+  --font-display: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  --font-ui:      "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body:    "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
 
   /* ----------------------------------------------------------- type scale */
   /* Fluid, so headlines stop needing a hand-written font-size at every
      breakpoint (which is how the mobile lead headline ended up at 37px inside
-     a 110px column). */
-  --text-xs:   0.75rem;
+     a 110px column). Values match the canvas: the lead runs to 52px on a wide
+     screen, card headlines sit at 18-19px, furniture at 10-11.5px. */
+  --text-xs:   0.6875rem;  /* 11px — kickers, meta, labels */
   --text-sm:   0.8125rem;
-  --text-base: 1rem;
-  --text-md:   clamp(1.05rem, 0.99rem + 0.3vw, 1.2rem);
-  --text-lg:   clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-  --text-xl:   clamp(1.5rem, 1.3rem + 1vw, 2rem);
-  --text-2xl: clamp(1.85rem, 1.5rem + 1.8vw, 2.75rem);
-  --text-3xl: clamp(2.2rem, 1.6rem + 3vw, 3.75rem);
+  --text-base: 0.9375rem;
+  --text-md:   clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --text-xl:   clamp(1.25rem, 1.1rem + 0.75vw, 1.625rem);
+  --text-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  --text-3xl: clamp(2rem, 1.4rem + 2.75vw, 3.25rem);
 
-  --leading-tight: 1.08;
-  --leading-snug:  1.22;
-  --leading-body:  1.6;
+  /* A serif needs more line than a grotesque at the same size. */
+  --leading-tight: 1.12;
+  --leading-snug:  1.24;
+  --leading-body:  1.62;
+
+  /* Furniture — kickers, section labels, bylines — is the sans in small caps
+     with wide tracking. One token so it cannot drift per component. */
+  --track-label: 0.14em;
+  --track-kicker: 0.18em;
 
   /* -------------------------------------------------------------- spacing */
+  /* The canvas gutters at 26px between columns, which is the rhythm the
+     hairlines sit on. --space-5 is that gutter. */
   --space-1: 4px;
   --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
+  --space-3: 13px;
+  --space-4: 18px;
+  --space-5: 26px;
+  --space-6: 34px;
   --space-7: 48px;
   --space-8: 64px;
 
   /* ---------------------------------------------------------------- shell */
-  --max: 1220px;
-  --radius:    2px;   /* newspapers are square; a hint only */
-  --radius-lg: 4px;
-  --shadow-sm: 0 1px 2px rgba(13, 33, 55, .08);
-  --shadow:    0 6px 20px rgba(13, 33, 55, .12);
-  --shadow-lg: 0 14px 38px rgba(13, 33, 55, .18);
+  --max: 1240px;
+  --radius:    0px;   /* a broadsheet has no rounded corners */
+  --radius-lg: 2px;
+  /* Shadows are how the old card design separated things. This one separates
+     with rules, so the shadows are reduced to almost nothing rather than
+     removed outright — a few components still call them and would collapse. */
+  --shadow-sm: 0 1px 0 rgba(43, 40, 36, .06);
+  --shadow:    0 1px 2px rgba(43, 40, 36, .10);
+  --shadow-lg: 0 8px 24px rgba(43, 40, 36, .14);
 
   /* -------------------------------------------- legacy aliases (transitional)
      Older stylesheets still reference these names. They are aliases now, not
@@ -139,4 +180,75 @@
      away from -- so it now points at the UI face rather than being restored. */
   --utility:     var(--font-ui);
   --shadow-legacy: var(--shadow);
+
+  /* Broadsheet additions. New names only — nothing above was renamed. */
+  --rule-hair:   1px solid var(--line);
+  --rule-ink:    1px solid var(--ink);
+  --gutter:      var(--space-5);
 }
+
+/* ---------------------------------------------------------------------------
+ * Shell corrections that the palette alone cannot make.
+ *
+ * These live here, in the token file, for one practical reason: Sarah uploads
+ * files one at a time through the GitHub web interface, and a rule split across
+ * four stylesheets is four uploads and four chances for one to land stale. They
+ * are deliberately few, and every one of them is a consequence of the palette
+ * change rather than new component design.
+ * ------------------------------------------------------------------------- */
+
+/* The page ground. Several older shells set body { background: #fff } locally;
+   on a cream palette that leaves a white rectangle behind the content. */
+body { background: var(--paper); color: var(--ink); }
+
+/* Headlines carry the serif; furniture carries the sans. Scoped to the classes
+   that already exist so no markup changes. */
+.lead-headline,
+.secondary-headline,
+.card-headline,
+.section-title,
+.rail-title,
+.article-title,
+.m-section-title,
+.card-headline a,
+h1.article-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.012em;
+}
+
+/* Kickers, bylines, section labels: small, tracked, upper. */
+.story-kicker,
+.breaking-label,
+.section-link,
+.story-meta,
+.camera-badge,
+.air-badge {
+  font-family: var(--font-ui);
+  letter-spacing: var(--track-label);
+}
+.story-kicker { text-transform: uppercase; font-size: var(--text-xs); letter-spacing: var(--track-kicker); }
+
+/* Separate with rules, not with boxes. The card look is what made the front
+   page read as a feed; a hairline above each story is what makes a column read
+   as a newspaper. */
+.news-card,
+.weekly-local-card,
+.static-latest-card {
+  background: transparent;
+  border: 0;
+  border-top: var(--rule-hair);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Section heads sit under a heavier ink rule, the way a printed section front
+   announces itself. */
+.section-head {
+  border-bottom: var(--rule-ink);
+}
+
+/* Breaking and traffic bars inherit the new signal colours automatically, but
+   both set their own dark ink locally in places. Stated once here. */
+.breaking-bar { background: var(--breaking); color: #fdf8f4; }
+.traffic-bar  { background: var(--hazard);   color: #221a06; }
