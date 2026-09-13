@@ -1,36 +1,37 @@
 {
-  "last_run_at": "2026-09-13T18:39:10.597080Z",
-  "raw_candidates_before_job_filter": 68,
+  "last_run_at": "2026-09-13T18:52:17.382821Z",
+  "raw_candidates_before_job_filter": 72,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 68,
+  "raw_candidates": 72,
   "candidate_clusters": 28,
   "google_news_resolution": {
-    "wrappers": 38,
+    "wrappers": 34,
     "resolved": 1,
     "text_recovered": 0,
     "reattributed": 0,
     "images_found": 1
   },
-  "duplicates_merged": 40,
-  "attempted_rewrites": 11,
-  "new_articles": 4,
-  "live_articles": 12,
-  "skipped": 7,
+  "duplicates_merged": 44,
+  "attempted_rewrites": 13,
+  "new_articles": 7,
+  "live_articles": 15,
+  "skipped": 6,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 3,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
     "quality check: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
+    "Write at least 104 body words using only facts already present in the sources; the draft currently has 101.": 1,
     "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 53,
-    "website_discovery": 3,
+    "website_discovery": 6,
     "aggregator_discovery": 1,
-    "live_service_pages": 7,
+    "live_service_pages": 8,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -40,23 +41,22 @@
   "collector_errors": {},
   "source_counts": {
     "Roch Valley Radio": 8,
+    "Rochdale Times": 7,
     "Express and Star": 6,
+    "Northern live service updates": 6,
     "Manchester Evening News": 5,
-    "Northern live service updates": 5,
     "rochdaleafc.co.uk": 4,
     "lboro.ac.uk": 4,
-    "Rochdale Times": 3,
     "Urbanista Magazine": 3,
     "TNT Sports": 3,
     "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
     "Ofsted": 3,
     "Ilford Recorder": 2,
-    "bbc.com": 2,
+    "BBC": 2,
     "InYourArea": 2,
     "Bee Network live travel alerts": 2,
     "BBC Manchester": 1,
-    "The Northern Echo": 1,
     "Sky Sports": 1,
     "Ipswich Star": 1,
     "Saddleworth Independent": 1,
@@ -67,7 +67,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "business": 1,
+    "business": 2,
     "community": 1,
     "crime": 2,
     "education": 1,
@@ -76,14 +76,17 @@
     "news": 1,
     "politics": 1,
     "traffic": 1,
-    "transport": 1
+    "transport": 2
   },
   "published_by_category": {
+    "business": 1,
     "community": 1,
     "crime": 1,
     "environment": 2,
     "events": 7,
-    "news": 1
+    "news": 1,
+    "politics": 1,
+    "transport": 1
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -113,12 +116,14 @@
     "transport-v3-c7527cef8269ad2bb090",
     "hard-news-v3-70f89a20e2fdf50d4d32",
     "education-v3-5e9e4007c7fa4051e291",
-    "business-v3-57b327d125952368a1a0",
+    "business-v3-93568284ba93bfd2519f",
     "community-v3-1574bed55a8bf0c02626",
     "health-v3-360887110cf5adeea178",
     "environment-v3-179565d99666bfca4730",
     "hard-news-v3-1a4a29dbf5a07f3b37ae",
-    "hard-news-v3-75bd1de67a63781752e3"
+    "hard-news-v3-75bd1de67a63781752e3",
+    "business-v3-57b327d125952368a1a0",
+    "transport-v3-def331a7ed572b345ae2"
   ],
   "selected_candidate_urls": [
     "https://www.expressandstar.com/sport/football/walsall-fc/lee-grant-urges-walsall-to-start-translating-draws-into-wins-after-rochdale-stalemate-9031673",
@@ -126,12 +131,14 @@
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-c265010e8c9732392e",
     "https://www.rochvalleyradio.com/news/local-news/festival-of-remembrance-to-be-held-at-rochdale-town-hall/",
     "https://rochdaleafc.co.uk/watson-on-returning-players-flint-addition/",
-    "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/hundreds-queue-hours-bag-45p-34608751",
+    "https://www.rochdaletimes.co.uk/rochdale-firm-launching-aerospace-technology-for-the-future/",
     "https://saddind.co.uk/maggies-calls-for-walkers-to-help-people-with-cancer-in-oldham-and-rochdale/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://www.rochvalleyradio.com/news/local-news/man-arrested-after-tents-found-at-old-middleton-cemetery/",
     "https://urbanistamagazine.uk/omd-live-in-rochdale-review-a-47-year-homecoming-with-peter-hook-the-light-and-a-certain-ratio/",
-    "https://www.rochvalleyradio.com/news/local-news/man-charged-with-firearm-and-driving-offences-after-heywood-police-pursuit/"
+    "https://www.rochvalleyradio.com/news/local-news/man-charged-with-firearm-and-driving-offences-after-heywood-police-pursuit/",
+    "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/hundreds-queue-hours-bag-45p-34608751",
+    "https://www.rochdaletimes.co.uk/double-treat-for-towns-fish-and-chip-lovers/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -181,7 +188,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 1,
+      "business": 2,
       "community": 1,
       "crime": 2,
       "education": 1,
@@ -190,13 +197,13 @@
       "news": 1,
       "politics": 1,
       "traffic": 1,
-      "transport": 1
+      "transport": 2
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "heywood": 1,
       "middleton": 2,
-      "rochdale": 8
+      "rochdale": 10
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
@@ -204,6 +211,7 @@
       "food standards agency": 1,
       "manchester evening news": 2,
       "roch valley radio local news": 3,
+      "rochdale times": 2,
       "rochdaleafc.co.uk": 1,
       "saddleworth independent": 1,
       "urbanista magazine": 1
@@ -827,9 +835,9 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 32,
+  "robots_denied_count": 34,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
     "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://c.newsnow.co.uk/A/1324199534?-57568:46921",
@@ -848,17 +856,19 @@
     "https://c.newsnow.co.uk/A/1323886061?-57568:46921",
     "https://c.newsnow.co.uk/A/1323884174?-57568:46921",
     "https://c.newsnow.co.uk/A/1323860566?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
     "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323719164?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
     "https://c.newsnow.co.uk/A/1323709892?-57568:46921",
     "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323719164?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOTVFmaDRyZXJpcm9HZlBmWUlUN0F4ZTlBa191QnF5MjlGaTlwa2o4el9hTXZLZU1VTmxnOTFUeGpHdFhOZTV5aVdneW91NTBnejJqQ1ZEQ3ZKbnJiZ1B0OFdRVjV1YVBSN0hDMUhGTW5RMWQxQnEwR3l6cGw0UjVQUV9BT1NDN3ZWMlU5U2lVS29CaGNaTGlWS1g4Szk1Ul9yZUltaW1iRlU?oc=5",
+    "https://news.google.com/rss/articles/CBMilwFBVV95cUxQcU56eS1mNUd0R0FQY1JjLWZYSWpmTlczUG5tME5NTE83V2pVMDZUdEYzS1VldlI3RFdSblFMdjI0czZfUHQ5UUpzLW9FWDFzdllKa3h3UUF6VVNOV0h2S2VIWExjZVlqLUdFZEJGRm5XbkZLREx3dFE1ZkZkOW1YOVlBeW9KdXNCdEpXY2NFQlI5VGdvLXlR?oc=5",
     "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPeVo0cEZTUE1RVTQzNGZQTEdXcXRSTzBjYnpIYk94b3djSHlqMHlLcEw0NU1wX3QtTjRvNFhCTGx5R0Z3cGUyQklkSEhqZ0x5TzNpeGJnMFppQTF1MzR3R1N3NUp4bmRaU1laNVhvYzlaRG5EMWRSZ3lEejBlVWNYUTdlazdSMjQ0N2szcDNyU2duaFUzNTdBR0pKaEZfaXBYekxOX3huMXF2dkdDN0x2LXd1d0pHaGo2eTM4T29yMHY1Qy1fZTFxNHJJa3EtTk4wdTc4?oc=5",
     "https://news.google.com/rss/articles/CBMinwFBVV95cUxNRW1HWU9uc0Q1QklEd2wxTEZrQjVkWW40ZWpXczdiclgwaG02Y2VmV2NVOU93VTdPMVRob1RvU1NGc2NZS3pyYmFLbno2MjR0Y2RiQlk4U2NhUC1nMjFqNWpwZFBmVFlLUnRJaU1ubFp1Vy00b2tZQzNiU3pkay1rSUZKd0IyaEl5Y3VicUxRMzJyUGNXN215TFBjUVZPck0?oc=5",
+    "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOTVFmaDRyZXJpcm9HZlBmWUlUN0F4ZTlBa191QnF5MjlGaTlwa2o4el9hTXZLZU1VTmxnOTFUeGpHdFhOZTV5aVdneW91NTBnejJqQ1ZEQ3ZKbnJiZ1B0OFdRVjV1YVBSN0hDMUhGTW5RMWQxQnEwR3l6cGw0UjVQUV9BT1NDN3ZWMlU5U2lVS29CaGNaTGlWS1g4Szk1Ul9yZUltaW1iRlU?oc=5",
+    "https://news.google.com/rss/articles/CBMiggFBVV95cUxPcXBfOGpYS1VsV2lZRjVLbkJTQUFoeFhBemNmYU9TWnlJWEpKTzZBRmNIaU9fWE9SS20zZGplTXlpSXprVV9UUEkxX2h1V3Jha3RnS0ZscDRCdGpVajUtOFB6V3lGcnBxVE52TU4zS1RGS2ZPcmgzeDA5djZQOThJUkFR?oc=5",
     "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOUjdMYktLeklMaFk0dnFaVTNJZ085dmRSMllpT3FPOE43Y2ZNRnp1SUw5RkVUcGExak1nWEpLRkxrQzVfdjlzVHNOczZEVmY0X2hET1FPN1BLai1oVU1UNFhuV2RMMXAxZkVZeE9qTGdhdHlBblJpbHlVZXhBa21zWHJMRnY4QS05TkZzcGx5RTFVdkhPWEZ6czZEX1lrUzd2X1FJaUtZdWc1NHZMV2pqbG1IQVpFQWliR1lKZFpqZGp3T1pVSkp5QTM0ZWVZQ29DenNWN1owMEY4UHZjMFV3UXp3?oc=5",
     "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPangyZTljVkVwZy1INmVkYkh0enlrUVdXZmJBTTUyTUJwem1MQlZJeVdkVEx6bmhBM0xWYzZONHdfVjhZUVVyVGRsdDh4M1JKbG1KNHdQUzExV1VpOUkwdEtLbnBtMlFDOGpfcGFhd05jeXE0ZzNqQjVUcUpPV0pRYXllRjU2V0s2cFZEVVY0a2lhRzduSkV0N2t0ZjJYUTA5MndSR0U5Y1dTQzE5VHNhdkZNVlExR0FEbVFxT3o2aEY?oc=5"
   ],
@@ -898,8 +908,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-13T18:46:15.922109Z",
-  "frontpage_article_count": 3,
+  "frontpage_generated_at": "2026-09-13T18:56:06.188179Z",
+  "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -908,7 +918,9 @@
       "crime",
       "environment",
       "news",
-      "sport"
+      "politics",
+      "sport",
+      "transport"
     ],
     "selected_categories": [
       "business",
@@ -916,7 +928,9 @@
       "crime",
       "environment",
       "news",
-      "sport"
+      "politics",
+      "sport",
+      "transport"
     ],
     "available_wards": [
       "Healey"
@@ -939,45 +953,49 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1,
+      "business": 1,
       "crime": 1,
-      "community": 1
+      "transport": 1,
+      "politics": 1,
+      "community": 1,
+      "environment": 1
     },
     "selected_by_ward": {
-      "Healey": 1,
-      "borough-wide": 2
+      "borough-wide": 5,
+      "Healey": 1
     },
     "selected_by_area": {
       "healey": 1,
       "heywood": 1,
-      "middleton": 1,
-      "rochdale": 5
+      "middleton": 2,
+      "rochdale": 6
     },
     "selected_by_source": {
-      "rochdale borough council": 1,
-      "source": 1,
-      "saddleworth independent": 1
+      "rochdale times": 2,
+      "source": 2,
+      "saddleworth independent": 1,
+      "rochdale borough council": 1
     },
-    "pool_size": 8,
-    "primary_pool_size": 5,
-    "fallback_stories_used": 3,
+    "pool_size": 10,
+    "primary_pool_size": 8,
+    "fallback_stories_used": 2,
     "selection_window_days": 4,
-    "frontpage_count": 3,
+    "frontpage_count": 6,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 2,
-    "fresh_under_homepage_window": 3,
-    "short_briefs_selected": 2,
+    "fresh_under_24h": 4,
+    "fresh_under_homepage_window": 6,
+    "short_briefs_selected": 3,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
   "ticket_events_collected_this_run": 7,
-  "events_removed_other_source": 8,
+  "events_removed_other_source": 7,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 7,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 150,
+  "event_dates_corrected_from_ledger": 3,
+  "duplicate_articles_after_postprocessing": 153,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
