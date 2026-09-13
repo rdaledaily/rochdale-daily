@@ -1,24 +1,25 @@
 {
-  "last_run_at": "2026-09-13T19:15:12.103371Z",
-  "raw_candidates_before_job_filter": 71,
+  "last_run_at": "2026-09-13T19:27:46.618821Z",
+  "raw_candidates_before_job_filter": 69,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 71,
+  "raw_candidates": 69,
   "candidate_clusters": 28,
   "google_news_resolution": {
-    "wrappers": 34,
+    "wrappers": 39,
     "resolved": 1,
     "text_recovered": 0,
     "reattributed": 0,
     "images_found": 1
   },
-  "duplicates_merged": 43,
+  "duplicates_merged": 41,
   "attempted_rewrites": 11,
-  "new_articles": 6,
-  "live_articles": 17,
-  "skipped": 5,
+  "new_articles": 5,
+  "live_articles": 16,
+  "skipped": 6,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 3,
     "quality check: Rewrite the long verbatim source passage.": 1,
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1,
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
@@ -27,8 +28,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 52,
-    "website_discovery": 6,
+    "rss_and_google_news": 53,
+    "website_discovery": 3,
     "aggregator_discovery": 1,
     "live_service_pages": 8,
     "facebook_official": 0,
@@ -40,22 +41,23 @@
   "collector_errors": {},
   "source_counts": {
     "Roch Valley Radio": 8,
-    "Rochdale Times": 7,
     "Express and Star": 6,
     "Northern live service updates": 6,
     "Manchester Evening News": 5,
+    "Rochdale Times": 4,
     "Rochdale AFC": 4,
-    "lboro.ac.uk": 4,
+    "Loughborough University": 4,
     "Urbanista Magazine": 3,
     "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
     "Ofsted": 3,
     "Ilford Recorder": 2,
-    "bbc.com": 2,
+    "BBC": 2,
     "TNT Sports": 2,
     "InYourArea": 2,
     "Bee Network live travel alerts": 2,
     "BBC Manchester": 1,
+    "The Northern Echo": 1,
     "Sky Sports": 1,
     "Ipswich Star": 1,
     "Saddleworth Independent": 1,
@@ -77,14 +79,15 @@
     "transport": 2
   },
   "published_by_category": {
-    "business": 3,
+    "business": 1,
     "community": 1,
     "crime": 2,
     "environment": 1,
     "events": 7,
     "news": 1,
     "politics": 1,
-    "traffic": 1
+    "traffic": 1,
+    "transport": 1
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -828,12 +831,11 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 33,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323709892?-57568:46921",
     "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://c.newsnow.co.uk/A/1324199534?-57568:46921",
     "https://c.newsnow.co.uk/A/1324134804?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
     "https://c.newsnow.co.uk/A/1324128249?-57568:46921",
     "https://c.newsnow.co.uk/A/1324109596?-57568:46921",
     "https://c.newsnow.co.uk/A/1324089802?-57568:46921",
@@ -848,12 +850,13 @@
     "https://c.newsnow.co.uk/A/1323886061?-57568:46921",
     "https://c.newsnow.co.uk/A/1323884174?-57568:46921",
     "https://c.newsnow.co.uk/A/1323860566?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
     "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323719164?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323709892?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
     "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323719164?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMieEFVX3lxTFBaZXR2cFNtUl9kc1hoSWd3bmVVMlBjVmREMXRScEZxM3l2NlFPVzI3SktYTTJVYWVRdXZsbHRicnlwWkpQVVliWnFPNnppWDl0SHR6U0czY1NsWXd6TTk0Y3lUaXY4NEo4QUVzeXlCcndGenRLcW0zOQ?oc=5",
     "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPeVo0cEZTUE1RVTQzNGZQTEdXcXRSTzBjYnpIYk94b3djSHlqMHlLcEw0NU1wX3QtTjRvNFhCTGx5R0Z3cGUyQklkSEhqZ0x5TzNpeGJnMFppQTF1MzR3R1N3NUp4bmRaU1laNVhvYzlaRG5EMWRSZ3lEejBlVWNYUTdlazdSMjQ0N2szcDNyU2duaFUzNTdBR0pKaEZfaXBYekxOX3huMXF2dkdDN0x2LXd1d0pHaGo2eTM4T29yMHY1Qy1fZTFxNHJJa3EtTk4wdTc4?oc=5",
@@ -898,7 +901,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-13T19:19:06.753075Z",
+  "frontpage_generated_at": "2026-09-13T19:29:16.096898Z",
   "frontpage_article_count": 7,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -909,8 +912,7 @@
       "environment",
       "news",
       "politics",
-      "traffic",
-      "transport"
+      "traffic"
     ],
     "selected_categories": [
       "business",
@@ -919,8 +921,7 @@
       "environment",
       "news",
       "politics",
-      "traffic",
-      "transport"
+      "traffic"
     ],
     "available_wards": [
       "Healey"
@@ -943,9 +944,8 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 1,
+      "business": 2,
       "crime": 2,
-      "transport": 1,
       "politics": 1,
       "community": 1,
       "environment": 1
@@ -961,9 +961,8 @@
       "rochdale": 4
     },
     "selected_by_source": {
-      "rochdale times": 1,
+      "rochdale times": 2,
       "source": 3,
-      "manchester evening news": 1,
       "saddleworth independent": 1,
       "rochdale borough council": 1
     },
@@ -975,7 +974,7 @@
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 3,
     "fresh_under_homepage_window": 6,
-    "short_briefs_selected": 2,
+    "short_briefs_selected": 1,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -985,9 +984,9 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 7,
-  "event_dates_corrected_from_ledger": 3,
+  "event_dates_corrected_from_ledger": 0,
   "duplicate_articles_after_postprocessing": 145,
-  "blocked_articles_removed": 0,
+  "blocked_articles_removed": 2,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
