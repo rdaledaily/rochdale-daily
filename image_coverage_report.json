@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 10,
-    "cards_library": 0,
-    "cards_generated": 5,
+    "kept_cards": 9,
+    "cards_library": 1,
+    "cards_generated": 8,
     "skipped": 0
   },
   "items": [
@@ -23,7 +23,7 @@
     },
     {
       "slug": "nema-launches-next-generation-aerospace-technology-from-rochdale",
-      "result": "kept-cards",
+      "result": "cards-generated",
       "image_url": "assets/img/cards/nema-launches-next-generation-aerospace-technology-from-rochdale-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -36,11 +36,11 @@
       "match_score": 8378
     },
     {
-      "slug": "orchestral-manoeuvres-in-the-dark-perform-first-concert-in-rochdale-after-47-yea",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/orchestral-manoeuvres-in-the-dark-perform-first-concert-in-rochdale-after-47-yea-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
+      "slug": "orchestral-manoeuvres-in-the-dark-perform-first-rochdale-concert-after-47-years",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_town_hall_square.jpg",
+      "matched_filename": "rochdale_town_hall_square.jpg",
+      "match_score": 6502
     },
     {
       "slug": "mother-hubbard-opens-in-middleton-shopping-centre-attracts-large-crowds",
@@ -48,6 +48,13 @@
       "image_url": "assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.jpg",
       "matched_filename": "mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.jpg",
       "match_score": 21573
+    },
+    {
+      "slug": "rochdale-secures-hard-earned-point-in-0-0-draw-against-walsall",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/rochdale-secures-hard-earned-point-in-0-0-draw-against-walsall-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "festival-of-remembrance-scheduled-for-rochdale-town-hall-on-16-october",
@@ -64,6 +71,13 @@
       "match_score": null
     },
     {
+      "slug": "st-luke-s-church-in-deeplish-to-hold-holy-communion-service-on-september-13",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/st-luke-s-church-in-deeplish-to-hold-holy-communion-service-on-september-13.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "denehurst-house-caf-in-rochdale-provides-support-for-veterans",
       "result": "kept-cards",
       "image_url": "assets/img/cards/denehurst-house-caf-in-rochdale-provides-support-for-veterans-generated-card.jpg",
@@ -74,6 +88,13 @@
       "slug": "safety-improvements-on-grimshaw-lane-in-middleton-spark-local-objections",
       "result": "kept-cards",
       "image_url": "assets/img/cards/safety-improvements-on-grimshaw-lane-in-middleton-spark-local-objections-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "temporary-one-way-system-on-dane-street-from-26-september-2026",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/deb168a1cb7b8740f3.jpg",
       "matched_filename": "",
       "match_score": null
     },
