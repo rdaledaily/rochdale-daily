@@ -108,12 +108,20 @@ body {
   background: var(--paper) !important;
   color: var(--ink) !important;
   border: 0 !important;
-  border-bottom: 2px solid var(--brand-navy) !important;
+  /* Hairline above, ink rule below — the design's nav sits between two rules
+     rather than on a 2px band. */
+  border-top: 1px solid var(--line) !important;
+  border-bottom: 1px solid var(--ink) !important;
   box-shadow: none !important;
 }
 
 .nav-row {
   min-height: 45px !important;
+  /* Centred, because the masthead above it is centred; a left-ranged row under
+     a centred wordmark reads as a misalignment. The <=620px rule re-ranges it
+     to flex-start for the MENU/SEARCH controls, so the phone dropdown is
+     unaffected. */
+  justify-content: center !important;
 }
 
 .nav-list a,
@@ -125,10 +133,19 @@ body {
   background: transparent !important;
   color: var(--ink) !important;
   font-family: var(--font-ui) !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  letter-spacing: .025em !important;
-  text-transform: none !important;
+  /* Measured off the design canvas: 11.5px / 600 / 0.1em, uppercase. Small and
+     widely tracked is what stops a row of section names reading as a line of
+     body links. 13px at .025em was the old treatment.
+     This rule lives HERE and not in editorial-theme.css for a reason worth
+     knowing: newspaper-global.css is imported by rd-tokens.css, which is itself
+     imported three times over — by editorial-theme.css, by community-poll.css
+     and by the page's own <link>. Whichever of those loads last wins, so a nav
+     rule written in editorial-theme.css is overruled by the copy of this file
+     that community-poll.css drags in behind it. Edit the nav here. */
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .1em !important;
   box-shadow: none !important;
 }
 
