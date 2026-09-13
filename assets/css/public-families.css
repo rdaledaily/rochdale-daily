@@ -21,12 +21,16 @@ body {
   --black: var(--brand-navy-deep) !important;
   --accent: var(--brand-accent) !important;
   --accent-dark: var(--brand-accent-dark) !important;
-  --paper: #fffdf8 !important;
   --soft: var(--surface) !important;
   --deep: var(--surface-2) !important;
-  --ink: #16202b !important;
-  --muted: #5d6874 !important;
-  --line: #dbd6cb !important;
+  /* --paper, --ink, --muted and --line used to be re-declared HERE, at body
+     scope, with literal values and !important. They are canonical token names,
+     not legacy aliases, so this block was quietly outranking rd-tokens.css for
+     the four tokens that matter most: the paper colour, the ink, the meta grey
+     and the hairline. A palette change in the "single source of truth" could
+     not reach any of them. Removed -- the :root values now apply, which is the
+     whole point of the token file. Legacy ALIASES above are still pinned here
+     on purpose; canonical names must never be. */
   --display: var(--font-display) !important;
   --sans: var(--font-body) !important;
   --utility: var(--font-ui) !important;
