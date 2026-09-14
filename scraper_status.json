@@ -1,35 +1,37 @@
 {
-  "last_run_at": "2026-09-14T12:47:39.108015Z",
-  "raw_candidates_before_job_filter": 74,
+  "last_run_at": "2026-09-14T12:57:05.242816Z",
+  "raw_candidates_before_job_filter": 73,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 73,
+  "raw_candidates": 72,
   "candidate_clusters": 29,
   "google_news_resolution": {
-    "wrappers": 29,
+    "wrappers": 33,
     "resolved": 27,
-    "text_recovered": 14,
-    "reattributed": 0,
-    "images_found": 16
+    "text_recovered": 13,
+    "reattributed": 3,
+    "images_found": 15
   },
-  "duplicates_merged": 44,
+  "duplicates_merged": 43,
   "attempted_rewrites": 18,
-  "new_articles": 4,
+  "new_articles": 6,
   "live_articles": 17,
-  "skipped": 14,
+  "skipped": 12,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 10,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
+    "editorial gate: REJECTED_NON_LOCAL": 8,
     "quality check: Rewrite the long verbatim source passage.": 1,
-    "editorial gate: REJECTED_NON_NEWS": 1
+    "editorial gate: REJECTED_NON_NEWS": 1,
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 2
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 2,
+    "Tighten the report to fewer than 135 body words. The source material only supports a short report; cut every sentence th": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 50,
-    "website_discovery": 4,
+    "website_discovery": 3,
     "aggregator_discovery": 0,
     "live_service_pages": 15,
     "facebook_official": 0,
@@ -41,25 +43,25 @@
   "collector_errors": {},
   "source_counts": {
     "Northern live service updates": 12,
+    "Rochdale Borough Council": 8,
     "Rochdale AFC": 8,
-    "Rochdale Times": 7,
-    "Rochdale Borough Council": 7,
-    "Express and Star": 7,
-    "manchestereveningnews.co.uk": 6,
+    "Manchester Evening News": 6,
+    "Express and Star": 6,
+    "Rochdale Times": 4,
     "Ofsted": 4,
     "Urbanista Magazine": 3,
-    "TNT Sports": 3,
+    "Tntsports": 3,
+    "Rochdale Valiant": 3,
     "Bee Network live travel alerts": 3,
     "Ilford Recorder": 2,
-    "oita-trinita.co.jp": 2,
+    "大分トリニータオフィシャルサイト": 2,
     "The Northern Echo": 1,
     "Sky Sports": 1,
     "Yahoo Sports UK": 1,
     "Ipswich Star": 1,
-    "saddind.co.uk": 1,
+    "Saddleworth Independent": 1,
     "Ireland Live": 1,
     "Warrington Guardian": 1,
-    "Rochdale Valiant": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -836,7 +838,6 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
     "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
     "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
     "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
@@ -856,21 +857,18 @@
     "https://c.newsnow.co.uk/A/1323886061?-57568:46921",
     "https://c.newsnow.co.uk/A/1323884174?-57568:46921",
     "https://c.newsnow.co.uk/A/1323860566?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
     "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
     "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
     "https://c.newsnow.co.uk/A/1324291946?-57568:46921",
     "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 2,
-  "slow_domains_circuit_broken_this_run": [
-    "stcuthberts.com"
-  ],
-  "slow_domain_failure_counts": {
-    "stcuthberts.com": 2
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -904,7 +902,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-14T12:49:14.068544Z",
+  "frontpage_generated_at": "2026-09-14T12:58:39.163285Z",
   "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
