@@ -1,30 +1,32 @@
 {
-  "last_run_at": "2026-09-14T03:38:02.617307Z",
+  "last_run_at": "2026-09-14T03:47:32.384402Z",
   "raw_candidates_before_job_filter": 75,
   "job_or_career_posts_rejected": 0,
   "raw_candidates": 75,
-  "candidate_clusters": 26,
+  "candidate_clusters": 27,
   "google_news_resolution": {
     "wrappers": 38,
     "resolved": 38,
     "text_recovered": 23,
-    "reattributed": 2,
-    "images_found": 30
+    "reattributed": 0,
+    "images_found": 24
   },
-  "duplicates_merged": 49,
-  "attempted_rewrites": 18,
+  "duplicates_merged": 48,
+  "attempted_rewrites": 19,
   "new_articles": 6,
   "live_articles": 21,
-  "skipped": 12,
+  "skipped": 13,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 9,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
-    "quality check: Rewrite the long verbatim source passage.": 1
+    "editorial gate: REJECTED_NON_LOCAL": 8,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
+    "quality check: Rewrite the long verbatim source passage.": 1,
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 179.": 1,
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 183.": 1,
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
@@ -55,7 +57,7 @@
     "Ofsted": 3,
     "Ilford Recorder": 2,
     "BBC": 2,
-    "Inyourarea": 2,
+    "InYourArea": 2,
     "Roch Valley Radio Local News": 2,
     "BBC Manchester": 1,
     "Sky Sports": 1,
@@ -74,7 +76,7 @@
     "health": 1,
     "news": 2,
     "sport": 5,
-    "transport": 2
+    "transport": 3
   },
   "published_by_category": {
     "business": 2,
@@ -113,7 +115,7 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-dfd967e0780486614eee",
-    "transport-v3-2bfca83c568dfaa201ef",
+    "transport-v3-333e4bfde9157d62c7ac",
     "education-v3-5e9e4007c7fa4051e291",
     "sport-v3-1435fb5be33b4641272c",
     "community-v3-cc1ff3664eb23c099723",
@@ -123,6 +125,7 @@
     "community-v3-2d4e7326b1a19efcd782",
     "environment-v3-e9fe391a32f7de520a31",
     "hard-news-v3-75bd1de67a63781752e3",
+    "transport-v3-2bfca83c568dfaa201ef",
     "sport-v3-e441b91dab2585577803",
     "transport-v3-def331a7ed572b345ae2",
     "hard-news-v3-1a4a29dbf5a07f3b37ae",
@@ -133,7 +136,7 @@
   ],
   "selected_candidate_urls": [
     "https://www.expressandstar.com/sport/football/walsall-fc/lee-grant-urges-walsall-to-start-translating-draws-into-wins-after-rochdale-stalemate-9031673?__cf_chl_rt_tk=ddYAnQDwHmlXR.ZCXlLojyQvH5eGZselXKNhNEwUPhg-1789338537-1.0.1.1-7FGo6UxRKBJ3l6BWxWsFaskuAEdsvXC7.8Fm8KOR.NU",
-    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-c265010e8c9732392e",
+    "https://www.northernrailway.co.uk/service-updates#live-a1770c26be4ab7353e",
     "https://rochdaleafc.co.uk/watson-on-returning-players-flint-addition/",
     "https://www.tntsports.co.uk/football/league-two/2026-2027/live-walsall-rochdale_mtc21887931/live-stats.shtml",
     "https://www.rochvalleyradio.com/news/local-news/festival-of-remembrance-to-be-held-at-rochdale-town-hall/",
@@ -143,6 +146,7 @@
     "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-september-12",
     "https://www.rochdale.gov.uk/directory-record/2600/dane-street-roadworks-in-rochdale-from-26-september-2026",
     "https://www.rochvalleyradio.com/news/local-news/man-charged-with-firearm-and-driving-offences-after-heywood-police-pursuit/",
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-c265010e8c9732392e",
     "https://rochdaleafc.co.uk/something-to-build-on-flint/",
     "https://www.rochdaletimes.co.uk/double-treat-for-towns-fish-and-chip-lovers/",
     "https://urbanistamagazine.uk/omd-live-in-rochdale-review-a-47-year-homecoming-with-peter-hook-the-light-and-a-certain-ratio/",
@@ -189,11 +193,13 @@
       "Spotland and Falinge"
     ],
     "available_areas": [
-      "heywood"
+      "heywood",
+      "smithy_bridge"
     ],
     "selected_areas": [
       "heywood",
-      "rochdale"
+      "rochdale",
+      "smithy_bridge"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
@@ -206,7 +212,7 @@
       "health": 1,
       "news": 2,
       "sport": 5,
-      "transport": 2
+      "transport": 3
     },
     "selected_by_ward": {
       "Milkstone and Deeplish": 1,
@@ -214,13 +220,15 @@
     },
     "selected_by_area": {
       "heywood": 1,
-      "rochdale": 17
+      "rochdale": 17,
+      "smithy_bridge": 1
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "express and star": 2,
       "food standards agency": 1,
       "inyourarea": 1,
+      "northern live service updates": 1,
       "roch valley radio": 2,
       "rochdale afc": 3,
       "rochdale borough council": 1,
@@ -852,7 +860,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
     "https://c.newsnow.co.uk/A/1324199534?-57568:46921",
     "https://c.newsnow.co.uk/A/1324134804?-57568:46921",
     "https://c.newsnow.co.uk/A/1324128249?-57568:46921",
@@ -871,18 +879,22 @@
     "https://c.newsnow.co.uk/A/1323860566?-57568:46921",
     "https://c.newsnow.co.uk/A/1323858649?-57568:46921",
     "https://c.newsnow.co.uk/A/1323849467?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
     "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 2,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 8
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -916,7 +928,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-14T03:39:17.073666Z",
+  "frontpage_generated_at": "2026-09-14T03:49:13.413493Z",
   "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
