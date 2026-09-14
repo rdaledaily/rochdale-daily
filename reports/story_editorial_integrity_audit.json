@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 147,
-  "published_count": 147,
-  "category_change_count": 18,
-  "image_change_count": 13,
+  "article_count": 150,
+  "published_count": 150,
+  "category_change_count": 19,
+  "image_change_count": 14,
   "category_changes": [
+    {
+      "slug": "festival-of-remembrance-scheduled-for-16-october-at-rochdale-town-hall",
+      "title": "Festival of Remembrance Scheduled for 16 October at Rochdale Town Hall",
+      "from": "politics",
+      "to": "events",
+      "reason": "headline strongly identifies events"
+    },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
       "title": "REFORM UK DELIVERS: PEOPLE POWER BACKED BY REFORM SCRAPS DISASTROUS ROAD CLOSURES!",
@@ -136,7 +143,7 @@
   "image_changes": [
     {
       "slug": "failsworth-tram-stop-lift-out-of-service-due-to-replacement-works",
-      "title": "Failsworth Tram Stop Lift Out of Service Due to Replacement Works",
+      "title": "Failsworth Tram Stop Lift Out of Service Until Further Notice",
       "category": "transport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -160,15 +167,27 @@
     },
     {
       "slug": "mother-hubbard-opens-in-middleton-shopping-centre-attracts-large-crowds",
-      "title": "Mother Hubbard Opens in Middleton Shopping Centre, Attracting Large Crowds",
-      "category": "transport",
+      "title": "Mother Hubbard Opens in Middleton, Boosting Local Fish and Chip Trade",
+      "category": "business",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.jpg",
-        "img": "assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.jpg",
+        "image_url": "assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracts-large-crowds.jpg",
+        "img": "assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracts-large-crowds.jpg",
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracts-large-crowds-generated-card.jpg"
+    },
+    {
+      "slug": "festival-of-remembrance-scheduled-for-16-october-at-rochdale-town-hall",
+      "title": "Festival of Remembrance Scheduled for 16 October at Rochdale Town Hall",
+      "category": "events",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/festival-of-remembrance-scheduled-for-16-october-at-rochdale-town-hall.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/festival-of-remembrance-scheduled-for-16-october-at-rochdale-town-hall-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
