@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-09-14T07:08:20.451168Z",
+  "last_run_at": "2026-09-14T07:17:17.992647Z",
   "raw_candidates_before_job_filter": 72,
   "job_or_career_posts_rejected": 0,
   "raw_candidates": 72,
@@ -8,23 +8,22 @@
     "wrappers": 39,
     "resolved": 38,
     "text_recovered": 20,
-    "reattributed": 0,
-    "images_found": 24
+    "reattributed": 1,
+    "images_found": 21
   },
   "duplicates_merged": 47,
   "attempted_rewrites": 18,
-  "new_articles": 6,
+  "new_articles": 3,
   "live_articles": 17,
-  "skipped": 12,
+  "skipped": 15,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 8,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
-    "quality check: Rewrite the long verbatim source passage.": 1,
-    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
+    "editorial gate: REJECTED_NON_LOCAL": 11,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
+    "quality check: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 2,
+    "Avoid a generic label followed by a colon in the headline.": 1,
     "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
@@ -59,7 +58,7 @@
     "The Northern Echo": 1,
     "Sky Sports": 1,
     "Yahoo Sports UK": 1,
-    "Ipswich Star": 1,
+    "Ipswichstar": 1,
     "Saddleworth Independent": 1,
     "Ireland Live": 1,
     "Rochdale Borough Council": 1,
@@ -851,13 +850,12 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
     "https://c.newsnow.co.uk/A/1324199534?-57568:46921",
     "https://c.newsnow.co.uk/A/1324134804?-57568:46921",
     "https://c.newsnow.co.uk/A/1324128249?-57568:46921",
     "https://c.newsnow.co.uk/A/1324109596?-57568:46921",
     "https://c.newsnow.co.uk/A/1324089802?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
     "https://c.newsnow.co.uk/A/1324080654?-57568:46921",
     "https://c.newsnow.co.uk/A/1324007833?-57568:46921",
     "https://c.newsnow.co.uk/A/1323994226?-57568:46921",
@@ -871,17 +869,23 @@
     "https://c.newsnow.co.uk/A/1323860566?-57568:46921",
     "https://c.newsnow.co.uk/A/1323858649?-57568:46921",
     "https://c.newsnow.co.uk/A/1323849467?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
     "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
     "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
     "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
     "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 2,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 3,
+    "rochdaleafccommunity.org": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -915,7 +919,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-14T07:09:37.532015Z",
+  "frontpage_generated_at": "2026-09-14T07:18:54.395657Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
