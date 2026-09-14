@@ -1,17 +1,17 @@
 {
-  "last_run_at": "2026-09-14T04:55:13.689268Z",
-  "raw_candidates_before_job_filter": 80,
+  "last_run_at": "2026-09-14T05:05:05.786768Z",
+  "raw_candidates_before_job_filter": 78,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 80,
+  "raw_candidates": 78,
   "candidate_clusters": 27,
   "google_news_resolution": {
     "wrappers": 39,
-    "resolved": 39,
+    "resolved": 38,
     "text_recovered": 24,
     "reattributed": 5,
-    "images_found": 25
+    "images_found": 24
   },
-  "duplicates_merged": 53,
+  "duplicates_merged": 51,
   "attempted_rewrites": 18,
   "new_articles": 7,
   "live_articles": 20,
@@ -19,15 +19,15 @@
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 9,
     "quality check: Rewrite the long verbatim source passage.": 1,
-    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 2
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 2
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 54,
+    "rss_and_google_news": 52,
     "website_discovery": 8,
     "aggregator_discovery": 1,
     "live_service_pages": 13,
@@ -41,29 +41,33 @@
   "source_counts": {
     "Northern live service updates": 10,
     "Roch Valley Radio": 7,
-    "Rochdale Times": 6,
     "Rochdale AFC": 6,
     "Express and Star": 6,
     "Manchester Evening News": 5,
     "Loughborough University": 4,
-    "urbanistamagazine.uk": 3,
     "TNT Sports": 3,
-    "Rochdale Borough Council": 3,
+    "Rochdale Times": 3,
     "Rochdale Valiant": 3,
     "Bee Network live travel alerts": 3,
     "Ofsted": 3,
-    "Ilfordrecorder": 2,
+    "urbanistamagazine.uk": 2,
     "BBC": 2,
     "InYourArea": 2,
+    "Rochdale Borough Council": 2,
     "Roch Valley Radio Local News": 2,
     "BBC Manchester": 1,
-    "Thenorthernecho": 1,
-    "Skysports": 1,
-    "Ipswich Star": 1,
+    "Ilfordrecorder": 1,
+    "The Northern Echo": 1,
+    "Ilford Recorder": 1,
+    "Sky Sports": 1,
+    "Ipswichstar": 1,
     "Saddleworth Independent": 1,
     "Ireland Live": 1,
+    "rochdale.gov.uk": 1,
     "Greater Manchester Police": 1,
     "East Renfrewshire News": 1,
+    "Urbanista Magazine": 1,
+    "rochdaletimes.co.uk": 1,
     "Bbc": 1,
     "Food Standards Agency": 1
   },
@@ -122,7 +126,7 @@
     "environment-v3-5d31a388bb8dd4e83de5",
     "hard-news-v3-84ce35b7c23bd8630c2e",
     "community-v3-2d4e7326b1a19efcd782",
-    "environment-v3-e9fe391a32f7de520a31",
+    "environment-v3-14ccf831bfc01dabe1e6",
     "hard-news-v3-75bd1de67a63781752e3",
     "transport-v3-2bfca83c568dfaa201ef",
     "sport-v3-e441b91dab2585577803",
@@ -142,7 +146,7 @@
     "https://www.rochdaletimes.co.uk/rochdale-firm-launching-aerospace-technology-for-the-future/",
     "https://www.rochdalevaliant.uk/",
     "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-september-12",
-    "https://www.rochdale.gov.uk/directory-record/2600/dane-street-roadworks-in-rochdale-from-26-september-2026",
+    "https://www.rochdale.gov.uk/directory-record/2601/rochdale-road-roadworks-in-milnrow-from-12-september-2026",
     "https://www.rochvalleyradio.com/news/local-news/man-charged-with-firearm-and-driving-offences-after-heywood-police-pursuit/",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-c265010e8c9732392e",
     "https://rochdaleafc.co.uk/something-to-build-on-flint/",
@@ -183,18 +187,20 @@
     ],
     "available_wards": [
       "Milkstone and Deeplish",
-      "Spotland and Falinge"
+      "Milnrow and Newhey"
     ],
     "selected_wards": [
       "Milkstone and Deeplish",
-      "Spotland and Falinge"
+      "Milnrow and Newhey"
     ],
     "available_areas": [
       "heywood",
+      "milnrow",
       "smithy_bridge"
     ],
     "selected_areas": [
       "heywood",
+      "milnrow",
       "rochdale",
       "smithy_bridge"
     ],
@@ -213,11 +219,12 @@
     },
     "selected_by_ward": {
       "Milkstone and Deeplish": 1,
-      "Spotland and Falinge": 1
+      "Milnrow and Newhey": 1
     },
     "selected_by_area": {
       "heywood": 1,
-      "rochdale": 16,
+      "milnrow": 1,
+      "rochdale": 15,
       "smithy_bridge": 1
     },
     "selected_by_source": {
@@ -856,13 +863,14 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
     "https://c.newsnow.co.uk/A/1324199534?-57568:46921",
     "https://c.newsnow.co.uk/A/1324134804?-57568:46921",
     "https://c.newsnow.co.uk/A/1324128249?-57568:46921",
     "https://c.newsnow.co.uk/A/1324109596?-57568:46921",
     "https://c.newsnow.co.uk/A/1324089802?-57568:46921",
     "https://c.newsnow.co.uk/A/1324080654?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
     "https://c.newsnow.co.uk/A/1324007833?-57568:46921",
     "https://c.newsnow.co.uk/A/1323994226?-57568:46921",
     "https://c.newsnow.co.uk/A/1323982397?-57568:46921",
@@ -875,12 +883,11 @@
     "https://c.newsnow.co.uk/A/1323860566?-57568:46921",
     "https://c.newsnow.co.uk/A/1323858649?-57568:46921",
     "https://c.newsnow.co.uk/A/1323849467?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324255830?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
     "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
@@ -920,8 +927,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-14T04:56:53.860775Z",
-  "frontpage_article_count": 10,
+  "frontpage_generated_at": "2026-09-14T05:06:46.395365Z",
+  "frontpage_article_count": 9,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -950,23 +957,27 @@
     ],
     "available_wards": [
       "Healey",
-      "Milkstone and Deeplish"
+      "Milkstone and Deeplish",
+      "Milnrow and Newhey"
     ],
     "selected_wards": [
       "Healey",
-      "Milkstone and Deeplish"
+      "Milkstone and Deeplish",
+      "Milnrow and Newhey"
     ],
     "available_areas": [
       "deeplish",
       "healey",
       "heywood",
-      "middleton"
+      "middleton",
+      "milnrow"
     ],
     "selected_areas": [
       "deeplish",
       "healey",
       "heywood",
       "middleton",
+      "milnrow",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -975,7 +986,6 @@
     "selected_by_category": {
       "news": 1,
       "crime": 1,
-      "traffic": 1,
       "transport": 1,
       "politics": 1,
       "business": 2,
@@ -984,7 +994,7 @@
       "sport": 1
     },
     "selected_by_ward": {
-      "borough-wide": 9,
+      "borough-wide": 8,
       "Healey": 1
     },
     "selected_by_area": {
@@ -992,15 +1002,16 @@
       "healey": 1,
       "heywood": 1,
       "middleton": 2,
-      "rochdale": 9
+      "milnrow": 1,
+      "rochdale": 8
     },
     "selected_by_source": {
       "rochdale valiant": 1,
       "source": 2,
-      "rochdale borough council": 2,
       "bee network live travel alerts": 1,
       "rochdaletimes": 1,
       "saddleworth independent": 1,
+      "rochdale borough council": 1,
       "rochdale afc": 1,
       "rochdale times": 1
     },
@@ -1008,11 +1019,11 @@
     "primary_pool_size": 14,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 10,
+    "frontpage_count": 9,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 5,
     "fresh_under_homepage_window": 7,
-    "short_briefs_selected": 4,
+    "short_briefs_selected": 3,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
