@@ -1,13 +1,28 @@
 /* Rochdale Daily newsletter component
- * Kept separate because the global compatibility layer deliberately forces
- * ordinary .section blocks onto paper-white. The newsletter is the exception:
- * one compact branded signup block with explicit mobile behaviour.
+ *
+ * Kept separate because it needs ID-strength selectors: the global
+ * compatibility layer forces ordinary .section blocks onto paper, and this
+ * block used to be the deliberate exception -- a navy slab across the middle
+ * of the page.
+ *
+ * BROADSHEET PORT, 15 September 2026: it is no longer an exception. The canvas
+ * has no full-width newsletter band at all; the signup lives in the right rail
+ * and on every article page. The band is kept because it carries the podcast
+ * notice and a second door to the same list costs nothing, but a dark slab
+ * halfway down a paper page was the last thing on the homepage still arguing
+ * with the palette. It is now the same ground as everything else, closed top
+ * and bottom by the double rule the canvas uses to separate sections.
+ *
+ * The layout and the mobile behaviour below are untouched.
  */
 
 #newsletter.newsletter-band {
-  background-color: var(--brand-navy) !important;
-  color: var(--on-dark) !important;
+  background-color: transparent !important;
+  color: var(--ink) !important;
+  border-top: 3px double var(--ink) !important;
+  border-bottom: 3px double var(--ink) !important;
   padding: 28px 0 !important;
+  margin-block: 34px !important;
 }
 
 #newsletter .newsletter-inner {
@@ -16,18 +31,22 @@
 }
 
 #newsletter .story-kicker {
-  color: var(--brand-accent-lift) !important;
+  color: var(--breaking) !important;
   margin-top: 0 !important;
 }
 
 #newsletter .section-title {
-  color: var(--on-dark) !important;
+  color: var(--ink) !important;
+  font-family: var(--font-display) !important;
+  font-size: clamp(26px, 3vw, 34px) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
   margin: 4px 0 8px !important;
 }
 
 #newsletter .newsletter-copy p,
 #newsletter .newsletter-consent {
-  color: var(--on-dark-mut) !important;
+  color: var(--ink-soft) !important;
 }
 
 #newsletter .newsletter-copy p {
@@ -35,13 +54,19 @@
 }
 
 #newsletter .newsletter-podcast {
-  color: var(--on-dark) !important;
+  color: var(--ink) !important;
   margin-bottom: 0 !important;
 }
 
 #newsletter .newsletter-pill {
-  color: var(--on-dark) !important;
-  border-color: rgba(247,245,240,.45) !important;
+  color: var(--breaking) !important;
+  border: 1px solid var(--breaking) !important;
+  border-radius: 0 !important;
+  font-family: var(--font-ui) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
 }
 
 #newsletter .newsletter-consent {
@@ -49,7 +74,32 @@
 }
 
 #newsletter .newsletter-consent a {
-  color: var(--on-dark) !important;
+  color: var(--accent-dark) !important;
+}
+
+/* The field and the button, matching the rail box so the two doors to the
+   same list look like the same door. */
+#newsletter .newsletter-row input {
+  border: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  background: var(--card) !important;
+  color: var(--ink) !important;
+}
+
+#newsletter .newsletter-row button {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+
+#newsletter .newsletter-row button:hover {
+  background: var(--accent) !important;
 }
 
 #newsletter .newsletter-row {
