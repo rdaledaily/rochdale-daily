@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-09-14T13:20:30.157541Z",
+  "examined_at": "2026-09-15T12:06:11.760774Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 79,
+  "candidates_examined": 91,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "would publish": 33,
-    "age": 33,
-    "duplicate of published story": 13
+    "age": 63,
+    "would publish": 19,
+    "duplicate of published story": 9
   },
-  "would_publish": 33,
+  "would_publish": 19,
   "age_gate_sensitivity": {
-    "6h": 11,
-    "14h": 15,
-    "24h": 17,
-    "48h": 46,
-    "72h": 66,
-    "168h": 79
+    "6h": 0,
+    "14h": 0,
+    "24h": 14,
+    "48h": 28,
+    "72h": 62,
+    "168h": 91
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 64 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Rochdale AFC: Fan Gallery | Walsall (A) - Rochdale AFC",
-      "manchestereveningnews.co.uk: M62 traffic LIVE updates as drivers face five-mile queues near Rochdal"
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
+      "Rochdale Borough Council: Union Street, roadworks in Rochdale from 17 November 2026 - Rochdale B"
     ],
     "duplicate of published story": [
-      "Bee Network live travel alerts: Updated: 13/09/2026 at 2:47pm Live Failsworth Tram Stop - Lift out of ",
-      "Ofsted: Ofsted publishes inspection report for Cardinal Langley Roman Catholic",
-      "Rochdale Valiant: Rochdale Valiant: News and Media"
+      "Bee Network live travel alerts: Updated: 14/09/2026 at 4:03pm Live Failsworth Tram Stop - Lift out of ",
+      "Bbc: Man crashed into Rochdale pub after police chase inquest hears",
+      "Express and Star: Walsall defender Mason Hancock named in League Two team of the week af"
     ],
     "age": [
-      "Roch Valley Radio: Festival of Remembrance to be held at Rochdale Town Hall - Roch Valley",
-      "Roch Valley Radio: Man charged with firearm and driving offences after Heywood police pur",
-      "Greater Manchester Police: Man charged for possession of a firearm and driving offences in Rochda"
+      "Saddleworth Independent: Maggie’s calls for walkers to help people with cancer in Oldham and Ro",
+      "urbanistamagazine.uk: OMD Live in Rochdale Review: A 47-Year Homecoming with Peter Hook & Th",
+      "Rochdale Times: Double treat for town’s fish and chip lovers - Rochdale Times"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
