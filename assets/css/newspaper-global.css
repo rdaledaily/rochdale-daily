@@ -1615,3 +1615,358 @@ body > footer strong,
 /* The clock is hidden, and the divider that used to separate it from the
    weather was left printing a rule with nothing after it. */
 .utility-left > .utility-divider ~ .utility-divider { display: none !important; }
+
+
+/* ===========================================================================
+ * THE ARTICLE PAGE, PORTED FROM THE CANVAS — 15 September 2026
+ *
+ * Applies to every generated article page and, because these are class rules
+ * rather than template markup, to the archived pages too: they carry the same
+ * .article-layout / .article-main / .article-sidebar classes even though they
+ * are never regenerated. That is the whole reason the port is done in CSS
+ * wherever it can be.
+ * ======================================================================== */
+
+.article-body { padding-top: 26px !important; }
+
+.article-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+  gap: 0 !important;
+  align-items: start !important;
+}
+
+.article-main {
+  min-width: 0 !important;
+  padding: 0 30px 30px 0 !important;
+  border-right: 1px solid var(--line) !important;
+}
+
+.article-sidebar {
+  min-width: 0 !important;
+  padding: 0 0 30px 26px !important;
+  border-left: 1px solid var(--line) !important;
+  display: grid !important;
+  gap: 26px !important;
+  align-content: start !important;
+  background: transparent !important;
+}
+
+/* --- Breadcrumb ---------------------------------------------------------
+   News / Crime, with the status chip on the same line. This replaced a
+   breadcrumb AND a separate kicker directly beneath it, which said the
+   category twice before the headline. */
+.article-breadcrumb {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  align-items: center !important;
+  margin: 0 0 16px !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-soft) !important;
+}
+.article-breadcrumb a { color: var(--ink-soft) !important; }
+.article-breadcrumb a + span[aria-hidden] { color: var(--line) !important; }
+.article-breadcrumb a:last-of-type { color: var(--accent) !important; }
+.article-breadcrumb .kicker-chip { padding: 3px 8px !important; font-size: 10px !important; }
+/* The old kicker under the breadcrumb is now redundant. */
+.article-main > .story-kicker { display: none !important; }
+
+.article-main h1 {
+  margin: 0 0 18px !important;
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  font-size: clamp(30px, 4vw, 50px) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.015em !important;
+  color: var(--ink) !important;
+}
+
+/* The standfirst is the canvas's one italic serif line. It is what separates
+   a news page from a blog post at a glance. */
+.article-standfirst {
+  margin: 0 0 20px !important;
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
+  font-size: 19px !important;
+  line-height: 1.5 !important;
+  color: var(--ink) !important;
+  font-weight: 400 !important;
+}
+
+/* --- Byline rule --------------------------------------------------------- */
+.article-byline {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px 18px !important;
+  align-items: center !important;
+  padding: 12px 0 !important;
+  margin: 0 0 22px !important;
+  border-top: 1px solid var(--ink) !important;
+  border-bottom: 1px solid var(--line) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11.5px !important;
+  font-weight: 400 !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-soft) !important;
+}
+.article-byline .share-icons,
+.article-byline .share-row { margin: 0 !important; display: flex !important; gap: 6px !important; }
+.article-byline .share-icon-button {
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--accent) !important;
+  padding: 0 4px !important;
+}
+
+/* --- Developing note ----------------------------------------------------- */
+.developing-note {
+  margin: 0 0 20px !important;
+  padding: 12px 16px !important;
+  border: 0 !important;
+  border-left: 3px solid var(--breaking) !important;
+  background: var(--surface) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+/* --- Hero and body ------------------------------------------------------- */
+.article-main figure,
+.article-main .article-hero {
+  margin: 0 0 10px !important;
+}
+.article-main figure img,
+.article-main .article-hero img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  border: 1px solid var(--line) !important;
+}
+.article-main figcaption {
+  margin: 0 0 26px !important;
+  font-family: var(--font-ui) !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: var(--muted) !important;
+}
+
+/* 66ch, because a 600px column of 17px type runs to about 85 characters and
+   the eye loses the start of the next line past roughly 75. */
+.article-copy {
+  font-family: var(--font-body) !important;
+  font-size: 17px !important;
+  line-height: 1.65 !important;
+  color: var(--ink) !important;
+  max-width: 66ch !important;
+}
+.article-copy p { margin: 0 0 18px !important; }
+.article-copy h2 {
+  margin: 28px 0 12px !important;
+  font-family: var(--font-display) !important;
+  font-size: 23px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0 !important;
+}
+.article-copy h3 {
+  margin: 24px 0 10px !important;
+  font-family: var(--font-display) !important;
+  font-size: 19px !important;
+  font-weight: 700 !important;
+}
+.article-copy a { color: var(--accent-dark) !important; }
+.article-copy blockquote {
+  margin: 22px 0 !important;
+  padding: 0 0 0 20px !important;
+  border-left: 3px solid var(--line) !important;
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
+  font-size: 19px !important;
+  line-height: 1.5 !important;
+  color: var(--ink) !important;
+}
+
+/* --- Report what you know, in the body column ---------------------------- */
+.article-report {
+  border: 1px solid var(--ink) !important;
+  padding: 20px !important;
+  background: transparent !important;
+}
+.article-report .report-title {
+  margin: 0 0 8px !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  color: var(--breaking) !important;
+}
+.article-report p {
+  margin: 0 0 14px !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: var(--ink-soft) !important;
+}
+.report-chips { display: flex !important; flex-wrap: wrap !important; gap: 10px !important; }
+.report-chip {
+  padding: 9px 14px !important;
+  border: 1px solid var(--line) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 12px !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--ink) !important;
+}
+.report-chip.primary { border-color: var(--ink) !important; }
+.report-chip:hover { border-color: var(--accent) !important; color: var(--accent) !important; }
+
+/* --- Legal note ----------------------------------------------------------
+   Was a grey box with hardcoded #c9c9c9 and #f6f6f6 — two literals of a
+   palette retired twice over, and a box that shouted louder than the story.
+   The canvas gives it a hairline and muted type, which is what a standing
+   notice should look like. */
+.editorial-legal-note {
+  margin-top: 26px !important;
+  padding: 14px 0 0 !important;
+  border: 0 !important;
+  border-top: 1px solid var(--line) !important;
+  background: transparent !important;
+  font-size: 12.5px !important;
+  line-height: 1.65 !important;
+  color: var(--muted) !important;
+}
+.editorial-legal-note h3 {
+  margin: 0 0 8px !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-soft) !important;
+}
+.editorial-legal-note p { margin: 0 0 8px !important; }
+.editorial-legal-note a { color: var(--accent) !important; }
+.editorial-legal-note .legal-links { margin: 10px 0 0 !important; font-size: 12px !important; }
+
+/* --- Sidebar ------------------------------------------------------------- */
+.article-sidebar .sidebar-box {
+  border: 0 !important;
+  border-top: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+.article-sidebar .sidebar-box h3,
+.article-sidebar .rail-title {
+  margin: 0 0 12px !important;
+  padding-bottom: 7px !important;
+  border-bottom: 1px solid var(--ink) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  color: var(--ink) !important;
+}
+.article-sidebar .related-story {
+  display: block !important;
+  padding: 12px 0 !important;
+  border-bottom: 1px dotted var(--line) !important;
+  font-family: var(--font-display) !important;
+  font-size: 16px !important;
+  line-height: 1.3 !important;
+  color: var(--ink) !important;
+}
+.article-sidebar .related-story:last-child { border-bottom: 0 !important; }
+/* The canvas's sidebar list is text only. Six thumbnails down a 310px rail
+   competed with the story's own photograph and pushed the newsletter box and
+   the advert below the end of the article. */
+.article-sidebar .related-story img { display: none !important; }
+.article-sidebar .related-title { display: block !important; }
+
+@media (max-width: 900px) {
+  .article-layout { grid-template-columns: minmax(0, 1fr) !important; }
+  .article-main {
+    padding: 0 0 26px !important;
+    border-right: 0 !important;
+  }
+  .article-sidebar {
+    padding: 22px 0 30px !important;
+    border-left: 0 !important;
+    border-top: 3px double var(--ink) !important;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+  }
+}
+@media (max-width: 620px) {
+  .article-sidebar { grid-template-columns: 1fr !important; }
+  .article-copy { font-size: 16.5px !important; }
+}
+
+/* --- Corrections box -----------------------------------------------------
+   Brick, not gold. A correction is the paper marking its own record, so it
+   gets the same brick the breaking chip uses rather than a warning yellow
+   borrowed from a palette that was retired twice over. Stated here because
+   the archived pages carry this class too and are never regenerated. */
+.article-corrections {
+  margin-top: 24px !important;
+  padding: 16px 18px !important;
+  border: 1px solid var(--line) !important;
+  border-left: 4px solid var(--breaking) !important;
+  border-radius: 0 !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+}
+.article-corrections h3 {
+  margin: 0 0 8px !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  color: var(--breaking) !important;
+}
+.article-corrections p {
+  margin: 0 0 8px !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: var(--ink-soft) !important;
+}
+.article-corrections a { color: var(--accent-dark) !important; }
+.article-corrections .corrections-footnote {
+  margin: 10px 0 0 !important;
+  font-size: 12.5px !important;
+  color: var(--muted) !important;
+}
+
+/* Chips and rail rows are not body links; the underline made them read as
+   prose that happened to be inside a border. */
+.report-chip,
+.front-rail .report-action,
+.article-sidebar .related-story,
+.front-just-in .latest-item > a { text-decoration: none !important; }
+
+/* Share row. The circular buttons were an application affordance; the canvas
+   puts share on the byline rule as plain marks in the accent. Stated globally
+   because the archived pages carry the same class outside .article-byline. */
+.share-icon-button {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--accent) !important;
+  padding: 0 5px !important;
+  width: auto !important;
+  height: auto !important;
+}
+.share-icon-button svg { width: 15px !important; height: 15px !important; }
+.share-icon-button:hover { color: var(--ink) !important; background: transparent !important; }
+
+/* The edition bar injected into archived pages is not sticky: those pages are
+   read top to bottom and a bar that follows the reader down a 1,200-word
+   story is taking space the story needs. */
+.primary-nav.archived-nav { position: static !important; }
