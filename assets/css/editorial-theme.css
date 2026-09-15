@@ -1,6 +1,6 @@
 /* Palette, type scale and spacing come from the one token file.
    Nothing below may declare a raw colour. */
-@import url("/assets/css/rd-tokens.css");
+@import url("/assets/css/rd-tokens.css?v=20260915d");
 
 /* Rochdale Daily — Editorial Cohesion Refresh
    ===========================================
@@ -900,12 +900,19 @@ body:has(.article-main) .article-body { padding: 40px 0 64px; }
 
 /* ---------- Headline safety ----------
    A single long word ("Gillingham", "Littleborough") set at display size will
-   overflow any narrow column. Wrapping is cheaper than discovering it on a
-   phone. */
+   overflow any narrow column, and wrapping is cheaper than discovering it on a
+   phone. But `anywhere` plus `hyphens: auto` is too strong a cure: it breaks
+   ordinary words at any point and inserts hyphens, so the front page printed
+   "Inquest reveals details of fatal crash into Heywoo/d pub after po/lice
+   chase". A broadsheet does not hyphenate its front-page headline.
+
+   `break-word` only breaks a word that genuinely cannot fit on a line of its
+   own, which is the case this rule was written for, and `hyphens: manual`
+   honours a soft hyphen an editor types deliberately while adding none. */
 .lead-headline, .secondary-headline, .card-headline,
 .panel-title, .section-title {
-  overflow-wrap: anywhere;
-  hyphens: auto;
+  overflow-wrap: break-word;
+  hyphens: manual;
 }
 
 /* ==========================================================================
@@ -1249,9 +1256,13 @@ body.is-advancing { opacity: .55; transition: opacity .18s ease; }
    Footprint note: the booked creatives are 728x90, so at 970 wide they render
    970x120, not 970x90. A 728-wide image cannot be 970 wide and 90 tall at the
    same time; a true 970x90 needs 970x90 artwork from the advertiser. */
+/* 15 Sep: the cap is gone. 970 was the canvas's nominal slot size, but on the
+   page it left the leaderboard 270px narrower than every rule beneath it, so
+   the paper appeared to start below the advert. The band is the paper's width
+   and the creative sits centred inside it at its own size. */
 .ad-slot.ad-live[data-ad-slot="home-leaderboard"],
 .ad-slot[data-ad-slot="home-leaderboard"] {
-  max-width: 970px;
+  max-width: 100%;
   margin-inline: auto;
 }
 
