@@ -1970,3 +1970,609 @@ body > footer strong,
    read top to bottom and a bar that follows the reader down a 1,200-word
    story is taking space the story needs. */
 .primary-nav.archived-nav { position: static !important; }
+
+
+/* ===========================================================================
+ * SECTION PAGES, PORTED FROM THE CANVAS — 15 September 2026
+ * What's on, Democracy, Community support, Local services.
+ *
+ * The canvas gives all four the same two components, so they are written once
+ * here rather than four times:
+ *
+ *   1. A page head — kicker, serif title, standfirst — closed by a 3px double
+ *      rule. The same rule the edition bar uses, so a section opening reads as
+ *      a new page of the same paper.
+ *   2. A hairline card grid, where the 1px GAP is the rule: cells sit on a
+ *      --line ground and paint themselves --paper, so every card is separated
+ *      by exactly one hairline however the grid wraps. Borders on each card
+ *      would double up between neighbours and leave ragged ends on the last
+ *      row; this cannot.
+ * ======================================================================== */
+
+/* --- Section and page heads ---------------------------------------------- */
+.section-head {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px 16px !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  border: 0 !important;
+  border-bottom: 3px double var(--ink) !important;
+  padding: 0 0 14px !important;
+  margin: 0 0 22px !important;
+}
+
+.section-head .section-title {
+  font-family: var(--font-display) !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+}
+
+.section-head .section-link,
+.section-head .feed-status {
+  font-family: var(--font-ui) !important;
+  font-size: 11.5px !important;
+  font-weight: 400 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: var(--accent) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+.section-head .feed-status { color: var(--muted) !important; }
+
+/* The full-page variant: a standalone destination opens at the canvas's
+   clamp(32px, 4.4vw, 52px) with a kicker above and a standfirst below. */
+.page-head {
+  display: block !important;
+  border-bottom: 3px double var(--ink) !important;
+  padding: 0 0 20px !important;
+  margin: 0 0 26px !important;
+}
+.page-head .page-kicker {
+  margin: 0 0 10px !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  color: var(--accent) !important;
+}
+.page-head h1,
+.page-head .section-title {
+  margin: 0 !important;
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  font-size: clamp(32px, 4.4vw, 52px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -.015em !important;
+  color: var(--ink) !important;
+}
+.page-head .page-standfirst {
+  margin: 12px 0 0 !important;
+  font-family: var(--font-body) !important;
+  font-size: 14.5px !important;
+  line-height: 1.6 !important;
+  color: var(--ink-soft) !important;
+  max-width: 56ch !important;
+}
+
+/* Section intros that sit under a head rather than inside it. */
+.support-intro,
+.dem-status,
+.directory-intro {
+  margin: 0 0 20px !important;
+  font-size: 14.5px !important;
+  line-height: 1.6 !important;
+  color: var(--ink-soft) !important;
+  max-width: 56ch !important;
+}
+
+/* --- Filter and tab chips ------------------------------------------------ */
+.event-filter,
+.dem-tab {
+  padding: 6px 12px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--ink-soft) !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11.5px !important;
+  font-weight: 400 !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+}
+.event-filter:hover,
+.dem-tab:hover { border-color: var(--line-strong) !important; color: var(--ink) !important; }
+.event-filter.active,
+.dem-tab[aria-selected="true"] {
+  border-color: var(--ink) !important;
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+}
+.event-filters,
+.dem-tabs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 9px !important;
+  margin: 0 0 20px !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+
+/* --- The hairline card grid ---------------------------------------------- */
+.events-grid,
+.support-grid,
+.directory-grid,
+.dem-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  gap: 1px !important;
+  /* The rules are drawn by each CELL, not by a coloured ground behind the
+     grid. A --line background here is the obvious way to do it and it is
+     wrong: when the last row is partial, the empty track paints as a solid
+     grey block the width of the missing cards. Measured on the events grid,
+     which ends on seven cards in a four-column row. Each cell instead casts a
+     1px shadow right and down into the gap, and overflow:hidden clips the
+     outermost ones onto the frame. */
+  background: transparent !important;
+  border: 1px solid var(--line) !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+}
+.directory-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important; }
+
+.events-grid > *,
+.support-grid > *,
+.directory-grid > *,
+.dem-grid > * {
+  background: var(--paper) !important;
+  box-shadow: 1px 0 0 var(--line), 0 1px 0 var(--line) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 20px !important;
+  margin: 0 !important;
+  display: grid !important;
+  gap: 8px !important;
+  align-content: start !important;
+  min-width: 0 !important;
+}
+.directory-grid > * { padding: 18px !important; gap: 6px !important; }
+
+/* Card type, shared by all four grids. */
+.events-grid h3,
+.support-grid h3,
+.directory-grid h3,
+.dem-grid h3 {
+  margin: 0 !important;
+  font-family: var(--font-display) !important;
+  font-size: 19px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0 !important;
+  color: var(--ink) !important;
+}
+.directory-grid h3 { font-size: 17px !important; }
+
+.events-grid p,
+.support-grid p,
+.directory-grid p,
+.dem-grid p {
+  margin: 0 !important;
+  font-family: var(--font-body) !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  color: var(--ink-soft) !important;
+}
+.directory-grid p { font-size: 13px !important; line-height: 1.5 !important; }
+
+.events-grid a,
+.support-grid a,
+.directory-grid a,
+.dem-grid a {
+  font-family: var(--font-ui) !important;
+  font-size: 11.5px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  color: var(--accent) !important;
+  justify-self: start !important;
+}
+
+/* The date line on an event, and the sponsored label on a directory listing:
+   the canvas's small tracked caps above the headline. */
+.event-date {
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  color: var(--accent) !important;
+}
+.directory-card .sponsored,
+.directory-grid .sponsored {
+  font-family: var(--font-ui) !important;
+  font-size: 10px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+}
+
+/* Location and area, under the summary. */
+.event-facts {
+  display: grid !important;
+  gap: 3px !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+}
+.event-facts strong { font-weight: 400 !important; }
+
+/* No picture on an event card. The canvas has none, and in practice the
+   picture was almost always the stock category card, so twelve listings came
+   out as twelve copies of the same photograph. */
+.events-grid > * > img,
+.event-card > img { display: none !important; }
+.event-card .event-body {
+  display: contents !important;
+}
+
+/* The event grid's own empty state must span the grid rather than sit in one
+   cell, or "no events match" appears as a card among the hairlines. */
+.events-grid .no-results,
+.dem-grid .no-results {
+  grid-column: 1 / -1 !important;
+  color: var(--ink-soft) !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+
+/* Democracy's licence note and the community-support caveat are standing
+   notices, not body copy. */
+.dem-note,
+.support-note,
+.directory-note {
+  margin: 14px 0 0 !important;
+  padding: 12px 0 0 !important;
+  border-top: 1px solid var(--line) !important;
+  font-size: 11.5px !important;
+  line-height: 1.55 !important;
+  color: var(--muted) !important;
+}
+
+@media (max-width: 620px) {
+  .events-grid,
+  .support-grid,
+  .directory-grid,
+  .dem-grid { grid-template-columns: 1fr !important; }
+  .page-head .page-standfirst { font-size: 14px !important; }
+}
+
+
+/* --- "Browse the news" grid ----------------------------------------------
+   The canvas runs the feed as the same hairline card grid the section pages
+   use — minmax(240px, 1fr), one rule between neighbours, and NO photograph on
+   any card. The picture on the front page belongs to the lead story alone.
+ *
+   This is the largest single visual change in the port, so it is worth being
+   plain about why the canvas is right here. The card images are drawn from
+   the stock category library, so a feed of sixty stories printed the same
+   handful of photographs over and over; the council crest at full card width
+   above a headline was the clearest example. A grid of headlines and
+   standfirsts carries more stories per screen and says nothing false about
+   any of them.
+ *
+   If you want the pictures back it is the one rule below marked REVERSIBLE:
+   delete it and the cards return to 16:9 images, with no other change. */
+.news-grid,
+.weekly-news-grid {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+  gap: 1px !important;
+  background: transparent !important;
+  border: 1px solid var(--line) !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+}
+
+.news-grid > .news-card,
+.weekly-news-grid > .news-card {
+  background: var(--paper) !important;
+  box-shadow: 1px 0 0 var(--line), 0 1px 0 var(--line) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+}
+
+.news-grid .story-link,
+.weekly-news-grid .story-link {
+  display: grid !important;
+  gap: 8px !important;
+  align-content: start !important;
+  padding: 18px !important;
+  min-width: 0 !important;
+  height: 100% !important;
+}
+.news-grid .news-card:hover .story-link,
+.weekly-news-grid .news-card:hover .story-link { background: var(--card) !important; }
+
+/* REVERSIBLE — delete these two lines to bring card photographs back. */
+.news-grid .story-image-wrap,
+.weekly-news-grid .story-image-wrap { display: none !important; }
+
+.news-grid .story-kicker,
+.weekly-news-grid .story-kicker {
+  margin: 0 !important;
+  font-size: 10.5px !important;
+  letter-spacing: .14em !important;
+}
+
+.news-grid .card-headline,
+.weekly-news-grid .card-headline {
+  margin: 0 !important;
+  font-family: var(--font-display) !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  line-height: 1.26 !important;
+  letter-spacing: 0 !important;
+}
+
+.news-grid .card-summary,
+.weekly-news-grid .card-summary {
+  margin: 0 !important;
+  font-family: var(--font-body) !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  color: var(--ink-soft) !important;
+}
+
+/* The tag row and the comment count become one meta line, as the canvas has
+   it: place, date, comments. The "Read More" button goes — the whole card is
+   already the link, and a second call to action inside it was noise. */
+.news-grid .tag-row,
+.weekly-news-grid .tag-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 4px 8px !important;
+  margin: 0 !important;
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+}
+.news-grid .tag,
+.weekly-news-grid .tag {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  font: inherit !important;
+  color: inherit !important;
+}
+/* Crime and demonstration tags keep a mark: they qualify the story rather
+   than locate it. */
+.news-grid .tag.crime,
+.news-grid .tag.demo,
+.weekly-news-grid .tag.crime,
+.weekly-news-grid .tag.demo {
+  color: var(--breaking) !important;
+}
+.news-grid .read-more-button,
+.weekly-news-grid .read-more-button { display: none !important; }
+
+.news-grid .card-comments,
+.weekly-news-grid .card-comments {
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+  font-weight: 700 !important;
+}
+.news-grid .card-comments svg,
+.weekly-news-grid .card-comments svg { display: none !important; }
+
+.news-grid .ongoing-badge,
+.weekly-news-grid .ongoing-badge {
+  justify-self: start !important;
+  padding: 1px 6px !important;
+  border-radius: 0 !important;
+  background: var(--breaking) !important;
+  color: var(--on-dark) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 9px !important;
+  font-weight: 600 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+
+/* No `display` rule here at all, deliberately. Below 820px index.html hides
+   the feed grid and .mobile-sections replaces it with capped per-category
+   blocks. Forcing display on this selector un-hid it and a phone then rendered
+   all 129 cards AND the mobile sections: the page went from 14,947px to
+   45,992px tall, measured. Even `:not([hidden])` is enough to win, because it
+   is later in the cascade and more specific than the media query doing the
+   hiding. index.html already sets display:grid on this class, and the runtime
+   layer sets it again above 821px, so nothing here needs to. */
+
+@media (max-width: 620px) {
+  .news-grid,
+  .weekly-news-grid { grid-template-columns: 1fr !important; }
+}
+
+
+/* --- Newsletter band -----------------------------------------------------
+   The canvas has no full-width newsletter band; the rail box does that job.
+   The band is kept because it carries the podcast notice and because two
+   entry points to one list costs nothing, but it stops being a dark slab
+   across the middle of a paper page. */
+.newsletter-band {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border: 0 !important;
+  border-top: 3px double var(--ink) !important;
+  border-bottom: 3px double var(--ink) !important;
+  padding-block: 28px !important;
+  margin-block: 34px !important;
+}
+.newsletter-band .section-title {
+  color: var(--ink) !important;
+  font-size: clamp(26px, 3vw, 34px) !important;
+}
+.newsletter-band .story-kicker { color: var(--breaking) !important; }
+.newsletter-band p,
+.newsletter-band label { color: var(--ink-soft) !important; }
+.newsletter-band .section-head {
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 0 8px !important;
+}
+.newsletter-band input {
+  border: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  background: var(--card) !important;
+  color: var(--ink) !important;
+}
+.newsletter-band button[type="submit"],
+.newsletter-band .newsletter-row button {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 600 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+.newsletter-band button[type="submit"]:hover { background: var(--accent) !important; }
+.newsletter-band a { color: var(--accent-dark) !important; }
+/* The podcast sign is a standing note, not a headline. */
+.newsletter-band .podcast-note,
+.newsletter-band .coming-soon {
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+}
+
+/* The "Read more" control under the feed. */
+.latest-news-more,
+#latest-news-more {
+  border: 1px solid var(--ink) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  padding: 11px 22px !important;
+}
+.latest-news-more:hover,
+#latest-news-more:hover { background: var(--ink) !important; color: var(--paper) !important; }
+
+/* The feed's layout reserved a 315px right rail whose only occupant is
+   .mobile-sections, which is display:none above 820px. Measured at 1440: the
+   track was 315px wide and 0px tall, so the grid ran in 891px of a 1240px
+   frame and fitted four cards where five fit. One column on desktop; the
+   mobile block still gets its own row below 820px because the rail collapses
+   to a second row rather than a second column. */
+.news-layout { grid-template-columns: minmax(0, 1fr) !important; gap: 0 !important; }
+
+
+/* --- Grid children: one column, always -----------------------------------
+   editorial-theme.css lays an .event-card out as `120px minmax(0,1fr)` below
+   820px — a two-column card from the old design. Inside the hairline grid the
+   columns are already narrow, so that put the date and the venue in a 120px
+   gutter and the headline in what was left: measured at 390px it wrapped
+   "Ellie Sax - Endless Summer Tour 2026" across four lines beside an empty
+   column. The cards stack. */
+.events-grid > *,
+.support-grid > *,
+.directory-grid > *,
+.dem-grid > *,
+.news-grid > *,
+.weekly-news-grid > * {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: none !important;
+}
+
+/* --- Mobile section cards ------------------------------------------------
+   Below 820px the feed grid is replaced by .mobile-sections, which the canvas
+   does not draw at all. Rather than invent a treatment, these take the "Just
+   in" shape — a 56px square beside the headline — because that is the canvas's
+   own answer to "a list of stories in a narrow column", and a full-width
+   photograph on each of eighteen cards is what made the phone page scroll for
+   a minute before reaching What's on. */
+.m-section .news-card {
+  border: 0 !important;
+  border-bottom: 1px dotted var(--line) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.m-section .news-card:last-child { border-bottom: 0 !important; }
+
+.m-section .news-card .story-link {
+  display: grid !important;
+  grid-template-columns: 56px minmax(0, 1fr) !important;
+  column-gap: 12px !important;
+  row-gap: 5px !important;
+  align-items: start !important;
+  padding: 13px 0 !important;
+}
+.m-section .news-card .story-image-wrap {
+  display: block !important;
+  grid-column: 1 !important;
+  /* Down the whole card, not just the first row. grid-area:thumb pinned it to
+     row 1, so the square sat beside the kicker with the headline starting on
+     the row below it. */
+  grid-row: 1 / -1 !important;
+  width: 56px !important;
+  height: 56px !important;
+  aspect-ratio: auto !important;
+  border: 1px solid var(--line) !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+}
+.m-section .news-card .story-image-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+.m-section .news-card .story-kicker,
+.m-section .news-card .card-headline,
+.m-section .news-card .card-summary,
+.m-section .news-card .tag-row,
+.m-section .news-card .ongoing-badge { grid-column: 2 !important; margin: 0 !important; }
+
+.m-section .news-card .story-kicker { font-size: 10.5px !important; letter-spacing: .14em !important; }
+.m-section .news-card .card-headline {
+  font-family: var(--font-display) !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0 !important;
+}
+/* The standfirst goes on a phone list: at 16px headline and 56px thumb there
+   is no room for three more lines per card, and the headline is the decision. */
+.m-section .news-card .card-summary { display: none !important; }
+.m-section .news-card .tag-row {
+  font-family: var(--font-ui) !important;
+  font-size: 11px !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--muted) !important;
+}
+.m-section .news-card .read-more-button { display: none !important; }
