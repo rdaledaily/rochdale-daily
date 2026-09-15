@@ -14,12 +14,35 @@
 
   var style = document.createElement("style");
   style.id = "latest-news-desktop-layout";
+  /* Rewritten for the broadsheet canvas, 15 Sep 2026.
+   *
+   * This block is the reason a stylesheet could not fix the feed grid: it is
+   * injected into <head> at runtime, so it lands after every linked sheet, and
+   * it selects on #news-grid.rd-latest-horizontal with !important. A rule
+   * written in newspaper-global.css for .news-grid lost to it silently -- the
+   * background and the column template applied, the gap did not, which is how
+   * the grid came back as four 293px columns on a 22px gutter instead of the
+   * canvas's hairline ground. If the feed grid ever looks wrong again, look
+   * here before the stylesheets.
+   *
+   * Colours are tokens now. This carried #f3f3f3, #d6d6d6, #777, #fff and
+   * "var(--accent,#0e7490)" -- a fallback to the cyan retired two palettes
+   * ago, which would have painted the Read more control cyan on any page
+   * where the token failed to load. */
   style.textContent =
     "@media (min-width:821px){" +
+      /* auto-fill rather than a fixed four, so the count follows the width and
+         the 1080px special case below is no longer needed. The 1px gap IS the
+         rule: cells paint themselves --paper over a --line ground. */
       "#news-grid.rd-latest-horizontal{" +
         "display:grid!important;" +
-        "grid-template-columns:repeat(4,minmax(0,1fr))!important;" +
-        "gap:22px!important;" +
+        "grid-template-columns:repeat(auto-fill,minmax(240px,1fr))!important;" +
+        "gap:1px!important;" +
+        /* transparent, not --line: a coloured ground paints the empty tracks
+           of a partial last row as a solid grey block. Cells cast the rules. */
+        "background:transparent!important;" +
+        "border:1px solid var(--line)!important;" +
+        "overflow:hidden!important;" +
         "align-items:stretch!important;" +
       "}" +
       "#news-grid.rd-latest-horizontal>article," +
@@ -28,6 +51,8 @@
         "width:auto!important;" +
         "max-width:none!important;" +
         "margin:0!important;" +
+        "background:var(--paper)!important;" +
+        "box-shadow:1px 0 0 var(--line),0 1px 0 var(--line)!important;" +
       "}" +
       "#news-grid.rd-latest-horizontal>.rd-latest-hidden{" +
         "display:none!important;" +
@@ -41,18 +66,18 @@
         "min-width:0!important;" +
         "min-height:180px;" +
         "max-height:280px;" +
-        "margin:8px 0 0!important;" +
-        "background:#f3f3f3;" +
-        "border:1px solid #d6d6d6;" +
+        "margin:0!important;" +
+        "background:var(--paper)!important;" +
+        "border:0!important;" +
         "overflow:hidden;" +
         "position:relative;" +
       "}" +
       "#news-grid .latest-news-ad:not(.ad-live)::before{" +
         "content:\"Advertisement\";" +
-        "font:700 11px/1 var(--font-body);" +
-        "letter-spacing:.12em;" +
+        "font:600 10px/1 var(--font-ui);" +
+        "letter-spacing:.14em;" +
         "text-transform:uppercase;" +
-        "color:#777;" +
+        "color:var(--muted);" +
       "}" +
       "#news-grid .latest-news-more{" +
         "grid-column:1/-1!important;" +
@@ -61,30 +86,29 @@
         "display:block!important;" +
         "width:auto!important;" +
         "height:auto!important;" +
-        "min-width:180px!important;" +
+        "min-width:0!important;" +
         "min-height:0!important;" +
-        "max-width:280px!important;" +
+        "max-width:320px!important;" +
         "margin:0 auto!important;" +
-        "padding:12px 24px!important;" +
+        "padding:11px 22px!important;" +
         "position:static!important;" +
         "inset:auto!important;" +
-        "border:2px solid var(--accent,#0e7490)!important;" +
-        "background:#fff!important;" +
-        "color:var(--accent,#0e7490)!important;" +
-        "font-family:var(--font-display)!important;" +
-        "font-size:16px!important;" +
+        "border:1px solid var(--ink)!important;" +
+        "border-radius:0!important;" +
+        "background:var(--paper)!important;" +
+        "color:var(--ink)!important;" +
+        "font-family:var(--font-ui)!important;" +
+        "font-size:12px!important;" +
         "line-height:1.2!important;" +
-        "font-weight:900!important;" +
+        "font-weight:600!important;" +
+        "letter-spacing:.14em!important;" +
         "text-transform:uppercase!important;" +
         "cursor:pointer;" +
       "}" +
       "#news-grid .latest-news-more:hover,#news-grid .latest-news-more:focus-visible{" +
-        "background:var(--accent,#0e7490)!important;" +
-        "color:#fff!important;" +
+        "background:var(--ink)!important;" +
+        "color:var(--paper)!important;" +
       "}" +
-    "}" +
-    "@media (min-width:821px) and (max-width:1080px){" +
-      "#news-grid.rd-latest-horizontal{grid-template-columns:repeat(3,minmax(0,1fr))!important;}" +
     "}";
   document.head.appendChild(style);
 
@@ -221,17 +245,23 @@
       ".rd-disclosure .section-head{margin:0!important;}" +
       ".rd-disclosure .section-head>.section-link{display:none;}" +
       ".rd-disclosure.rd-open .section-head>.section-link{display:inline-flex;}" +
-      ".rd-disclosure-tab{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;" +
-        "border:1px solid var(--line,#dcdcdc);border-left:5px solid var(--accent,#0e7490);background:var(--card,#fff);color:var(--ink,#141414);" +
-        "font-family:var(--font-display,inherit);font-size:20px;font-weight:800;letter-spacing:.01em;text-transform:uppercase;cursor:pointer;text-align:left;}" +
-      ".rd-disclosure-tab:hover,.rd-disclosure-tab:focus-visible{background:#f5f7f8;}" +
-      ".rd-disclosure-hint{margin-left:auto;display:inline-flex;align-items:center;gap:10px;font-family:var(--font-ui,inherit);font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--accent,#0e7490);white-space:nowrap;}" +
+      /* The canvas heads a section with a serif title over a double rule, not
+         with a boxed tab, so the tab keeps its job (it is still the control
+         that opens the fold) and loses the box. Every fallback here used to
+         be a colour from a retired palette -- #0e7490 cyan, #dcdcdc, #fff,
+         #141414, #f5f7f8 -- which would have painted the section headings
+         cyan on any page where rd-tokens.css failed to load. */
+      ".rd-disclosure-tab{width:100%;display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:0 0 14px;" +
+        "border:0;border-bottom:3px double var(--ink);background:transparent;color:var(--ink);" +
+        "font-family:var(--font-display);font-size:26px;font-weight:700;line-height:1.15;letter-spacing:0;text-transform:none;cursor:pointer;text-align:left;}" +
+      ".rd-disclosure-tab:hover,.rd-disclosure-tab:focus-visible{background:transparent;color:var(--accent);}" +
+      ".rd-disclosure-hint{margin-left:auto;display:inline-flex;align-items:center;gap:10px;font-family:var(--font-ui);font-size:11.5px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);white-space:nowrap;}" +
       ".rd-disclosure-arrow{font-size:22px;line-height:1;transition:transform .18s ease;}" +
       ".rd-disclosure-tab[aria-expanded=\"true\"] .rd-disclosure-arrow{transform:rotate(180deg);}" +
       /* The important bit: `hidden` must beat display:grid/flex from any sheet. */
       ".rd-disclosure .rd-disclosure-body[hidden]{display:none!important;}" +
       ".rd-disclosure.rd-open .rd-disclosure-body{padding-top:22px;}" +
-      "@media(max-width:820px){.rd-disclosure-tab{padding:12px 15px;font-size:16px}.rd-disclosure-hint{font-size:11px}}" +
+      "@media(max-width:820px){.rd-disclosure-tab{padding:0 0 12px;font-size:21px}.rd-disclosure-hint{font-size:10.5px}}" +
       "@media(prefers-reduced-motion:reduce){.rd-disclosure-arrow{transition:none}}";
     document.head.appendChild(style);
   }
@@ -322,13 +352,13 @@
       var style = document.createElement("style");
       style.id = "rd-small-ad-inventory-style";
       style.textContent =
-        "#rd-small-ad-inventory{padding:28px 0;background:#fff;border-top:1px solid var(--line,#dcdcdc);}" +
+        "#rd-small-ad-inventory{padding:28px 0;background:transparent;border-top:3px double var(--ink);}" +
         "#rd-small-ad-inventory[hidden]{display:none!important;}" +
-        "#rd-small-ad-inventory .rd-small-ad-wrap{width:min(var(--max,1220px),calc(100% - 30px));margin:0 auto;}" +
-        "#rd-small-ad-inventory h2{margin:0 0 14px;font-family:var(--font-display);font-size:18px;line-height:1.2;font-weight:900;text-transform:uppercase;}" +
+        "#rd-small-ad-inventory .rd-small-ad-wrap{width:min(var(--max,1240px),calc(100% - 48px));margin:0 auto;}" +
+        "#rd-small-ad-inventory h2{margin:0 0 14px;font-family:var(--font-ui);font-size:11.5px;line-height:1.2;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}" +
         "#rd-small-ad-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:stretch;}" +
         ".rd-small-ad-slot:not(.ad-live){display:none!important;}" +
-        ".rd-small-ad-slot.ad-live{display:flex;align-items:center;justify-content:center;min-width:0;min-height:92px;padding:5px;background:#f7f7f7;border:1px solid #ddd;overflow:hidden;}" +
+        ".rd-small-ad-slot.ad-live{display:flex;align-items:center;justify-content:center;min-width:0;min-height:92px;padding:5px;background:var(--card);border:1px solid var(--line);overflow:hidden;}" +
         ".rd-small-ad-slot.ad-live>a{width:100%;}" +
         ".rd-small-ad-slot.ad-live img{width:100%!important;height:auto!important;max-height:120px!important;object-fit:contain!important;}" +
         "@media(max-width:1050px){#rd-small-ad-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}" +
