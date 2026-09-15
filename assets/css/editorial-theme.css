@@ -192,10 +192,47 @@ body {
 }
 
 /* ---------- Story hierarchy ---------- */
+/* Front page: three columns on one grid, separated by hairline rules.
+   The design sets four equal columns and lets Top stories span two, so the
+   centre is exactly twice either rail. Gap is 0 on purpose - the columns are
+   separated by a 1px rule with 26px of air either side, the way a printed page
+   is, not by whitespace alone. */
 .lead-grid {
-  grid-template-columns: minmax(0, 1.65fr) minmax(235px, .78fr) minmax(250px, .72fr);
-  gap: 26px;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 0;
+  align-items: start;
 }
+.front-col { min-width: 0; }
+.front-just-in { padding: 0 26px 26px 0; border-right: 1px solid var(--line); }
+.front-main    { padding: 0 26px 26px; }
+.front-rail    {
+  padding: 0 0 26px 26px;
+  border-left: 1px solid var(--line);
+  display: grid; gap: 34px; align-content: start;
+}
+/* .latest-panel carried a left rule and left padding from when it sat on the
+   right of the page. It is the left column now; .front-just-in owns the rule. */
+.front-just-in.latest-panel { border-left: 0; padding-left: 0; }
+
+/* The weather panel moved here from the lower side rail, so it needs the rail's
+   flat treatment rather than the boxed card it used to be. */
+.front-rail .weather-box { border-top: 0; background: transparent; padding: 0; }
+
+/* Rail furniture: a small tracked label over an ink rule, the way each block is
+   headed in the design. */
+.front-rail .rail-title {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  margin: 0 0 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--ink);
+}
+.rail-block { margin: 0; }
+.camera-credit { margin: 10px 0 0; font-size: 11px; line-height: 1.5; color: var(--muted); }
+.camera-credit a { color: var(--accent); }
 .lead-story,
 .secondary-story,
 .news-card,
@@ -708,12 +745,14 @@ body:has(.article-main) .article-body { padding: 40px 0 64px; }
 
 /* ---------- Mobile: same design language, shorter scroll ---------- */
 @media (max-width: 1050px) {
-  .lead-grid { grid-template-columns: minmax(0, 1.5fr) minmax(250px, .8fr); }
-  .latest-panel {
+  /* Below 1050 the rail drops under the news rather than squeezing the lead
+     headline into a column too narrow to set it. */
+  .lead-grid { grid-template-columns: 1fr 2fr; }
+  .front-rail {
     grid-column: 1 / -1;
-    border-left: 0;
-    border-top: 1px solid var(--line);
-    padding: 18px 0 0;
+    border-left: 0; padding-left: 0;
+    border-top: 1px solid var(--line); padding-top: 26px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .latest-list { gap: 0 20px; }
 }
@@ -724,6 +763,14 @@ body:has(.article-main) .article-body { padding: 40px 0 64px; }
      had a 250px hard minimum. On a 390px phone that left 92px for the lead
      column and a 39px headline overflowed straight across the photo. */
   .lead-grid, .news-layout, .directory-wrap { grid-template-columns: 1fr; }
+  /* One column: the news first, then Just in, then the rail. */
+  .front-main { order: 1; padding: 0 0 26px; }
+  .front-just-in {
+    order: 2;
+    border-right: 0; padding-right: 0;
+    border-top: 1px solid var(--line); padding-top: 18px;
+  }
+  .front-rail { order: 3; grid-template-columns: 1fr; padding-top: 18px; }
   .secondary-stack { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 
   .wrap { width: min(var(--max), calc(100% - 28px)); }
@@ -1192,4 +1239,18 @@ body.is-advancing { opacity: .55; transition: opacity .18s ease; }
   .cookie-row { flex-direction: column; align-items: stretch; gap: var(--space-3); }
   .cookie-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
   .cookie-actions button { width: 100%; min-height: 44px; }
+}
+
+
+/* Homepage leaderboard: the design draws this slot at 970 wide, centred.
+   site.css sets .ad-slot.ad-live to width:100%/max-width:100% once a creative
+   renders, which is why capping it from index.html's inline block did nothing -
+   that rule loads later and ties on specificity. Matching .ad-live here wins.
+   Footprint note: the booked creatives are 728x90, so at 970 wide they render
+   970x120, not 970x90. A 728-wide image cannot be 970 wide and 90 tall at the
+   same time; a true 970x90 needs 970x90 artwork from the advertiser. */
+.ad-slot.ad-live[data-ad-slot="home-leaderboard"],
+.ad-slot[data-ad-slot="home-leaderboard"] {
+  max-width: 970px;
+  margin-inline: auto;
 }
