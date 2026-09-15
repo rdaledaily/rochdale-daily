@@ -11,7 +11,7 @@
      It was left at -1 through several stylesheet uploads on 10 Sep, so a
      browser that visited in the morning could keep serving that morning's
      stylesheet -- without the river or filter-bar rules -- all day. */
-  var ASSET_VERSION = "20260910-editorial-cohesion-2";
+  var ASSET_VERSION = "20260915-broadsheet-stage3";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -31,9 +31,19 @@
     banner.id = "cookie-banner";
     banner.setAttribute("role", "region");
     banner.setAttribute("aria-label", "Cookie choices");
+    /* Two versions of the same notice. editorial-theme.css has carried the
+       .cookie-long / .cookie-short rules since 10 Sep, but this function only
+       ever emitted one <p>, so the shortening never had anything to act on:
+       on a 390px phone the full paragraph ran to eight lines and took roughly
+       half the first screen before a reader saw a headline. The short version
+       says the same thing and links to the same page.
+
+       The Cookie settings link was hardcoded #f5c400 — the gold that was
+       retired two palettes ago, and the last literal of it in the shell. */
     banner.innerHTML =
       '<div class="wrap cookie-row">' +
-      '<p><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. You can change your choice at any time using <a href="/privacy.html#cookies" style="color:#f5c400">Cookie settings</a>.</p>' +
+      '<p class="cookie-long"><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. You can change your choice at any time using <a href="/privacy.html#cookies">Cookie settings</a>.</p>' +
+      '<p class="cookie-short"><strong>Cookie choices:</strong> Optional cookies stay off unless you allow them. <a href="/privacy.html#cookies">What we use and why</a>.</p>' +
       '<div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div></div>';
     document.body.appendChild(banner);
     return banner;
