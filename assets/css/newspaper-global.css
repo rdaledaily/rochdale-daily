@@ -2576,3 +2576,110 @@ body > footer strong,
   color: var(--muted) !important;
 }
 .m-section .news-card .read-more-button { display: none !important; }
+
+
+/* ===========================================================================
+ * CORRECTIONS FROM THE FIRST LIVE LOOK — 15 September 2026
+ *
+ * Measured on rochdaledaily.co.uk with the browser cache neutralised, because
+ * the page as served was still running the 13 September stylesheet: the origin
+ * had 374 rules and the copy in use had 69. Everything below is a real
+ * difference from the canvas, not a cache artefact.
+ * ======================================================================== */
+
+/* --- Every rule stops at the paper ---------------------------------------
+   The utility bar, the edition bar and the breaking bar are full-bleed
+   elements with a .wrap inside, so their borders ran the whole width of the
+   window while the strapline hairlines and the leaderboard stopped at 1240px.
+   The canvas draws the entire masthead block inside one 1240px frame, so the
+   rules are moved onto the .wrap and the outer element carries none. */
+.utility,
+.primary-nav,
+.breaking-bar,
+.traffic-bar {
+  border: 0 !important;
+}
+.utility > .wrap { border-bottom: 1px solid var(--ink) !important; }
+.primary-nav > .wrap {
+  border-top: 1px solid var(--ink) !important;
+  border-bottom: 3px double var(--ink) !important;
+}
+.breaking-bar > .wrap,
+.traffic-bar > .wrap { border-bottom: 1px solid var(--line) !important; }
+/* The masthead's own hairline goes with them. */
+.masthead { border-top: 0 !important; }
+.masthead > .wrap { border-top: 1px solid var(--line) !important; }
+
+/* The nav padding moved with the border, or the double rule would sit tight
+   against the section names. */
+.primary-nav { padding-block: 0 !important; }
+.primary-nav > .wrap { padding-block: 9px !important; }
+.utility > .wrap { padding-block: 10px !important; }
+
+/* --- Headlines do not hyphenate -------------------------------------------
+   Stated again here because editorial-theme.css's copy of this rule lands
+   last on pages that do not inject community-poll.css — every article page,
+   and all 1,130 archived ones. */
+.lead-headline,
+.secondary-headline,
+.card-headline,
+.latest-title,
+.article-main h1,
+.panel-title,
+.section-title,
+.rn-title,
+.rn-item {
+  overflow-wrap: break-word !important;
+  hyphens: manual !important;
+  word-break: normal !important;
+}
+
+/* --- Lead headline size ---------------------------------------------------
+   The canvas sets clamp(28px, 3.6vw, 44px). Measured in place, 44px in the
+   568px centre column ran the live headline to three lines and read as a
+   poster rather than a front page, so the top of the range comes down to 38px
+   and the vw term with it. The headline is still, by a wide margin, the
+   largest thing on the page. */
+.lead-story .lead-headline {
+  font-size: clamp(26px, 2.7vw, 38px) !important;
+  line-height: 1.14 !important;
+}
+
+/* --- The leaderboard is the paper's width -------------------------------- */
+.ad-slot[data-ad-slot="home-leaderboard"],
+.ad-slot.ad-live[data-ad-slot="home-leaderboard"] {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* --- The category is a label ---------------------------------------------
+   Tracked caps alone still read as the first words of the headline, which is
+   how "traffic Roadworks Scheduled on Withington Street" happened. A boxed
+   label cannot be read as part of the sentence. Kept small and in outline so
+   it stays furniture rather than competing with the status chips, which are
+   solid brick and mean something different. */
+.story-kicker,
+.latest-kicker,
+.lead-kickers .lead-section,
+.event-date {
+  display: inline-block !important;
+  align-self: start !important;
+  justify-self: start !important;
+  padding: 2px 7px !important;
+  border: 1px solid var(--accent) !important;
+  border-radius: 0 !important;
+  font-size: 9.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: .14em !important;
+  line-height: 1.5 !important;
+  color: var(--accent) !important;
+  background: transparent !important;
+}
+/* Inside the lead's kicker row the label sits beside the chip and the place,
+   so it needs no extra margin. */
+.lead-kickers .lead-section { margin: 0 !important; }
+.event-date { border-color: var(--line-strong) !important; color: var(--ink-soft) !important; }
+
+/* The rail and mobile lists carry the label too, at the same size. */
+.front-just-in .latest-kicker,
+.m-section .news-card .story-kicker { font-size: 9px !important; letter-spacing: .12em !important; }
