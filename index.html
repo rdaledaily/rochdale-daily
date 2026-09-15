@@ -1216,6 +1216,11 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
+  <!-- Skin rails. They live in the margin either side of the 1240px frame, so
+       they only exist above 1400px, and data-ad-optional means they take no
+       space at all until one is actually booked. Neither is sold today. -->
+  <div class="skin-ad skin-ad-left" data-ad-slot="home-skin-left" data-ad-optional hidden aria-hidden="true"></div>
+  <div class="skin-ad skin-ad-right" data-ad-slot="home-skin-right" data-ad-optional hidden aria-hidden="true"></div>
 
   <div class="utility">
     <div class="wrap utility-row">
@@ -1231,13 +1236,13 @@
         <span class="utility-divider" aria-hidden="true"></span>
         <time class="time-stamp" id="current-time" aria-label="Current time in Rochdale">--:--</time>
       </div>
+      <!-- Two reader actions, as the canvas has it. The six destinations that
+           used to sit here are all in the edition bar below, so nothing is
+           lost by clearing them out — and a utility rule carrying eight items
+           was what pushed the bar into horizontal scroll on a phone. -->
       <div class="utility-links">
-        <a href="/wards/">News by ward</a>
-        <a href="#democracy">Democracy</a>
-        <a href="#support">Community support</a>
-        <a href="#whats-on">What’s on</a>
-        <a href="contact.html">Contact</a>
-        <a href="#advertise">Advertise</a>
+        <a class="utility-tip" href="mailto:news@rochdaledaily.co.uk?subject=News%20tip">Send a news tip</a>
+        <a href="#newsletter">Newsletter</a>
       </div>
     </div>
   </div>
@@ -1333,6 +1338,11 @@
             <aside class="front-col front-just-in latest-panel" aria-label="Latest updates">
               <h2 class="panel-title">Just in</h2>
               <ol class="latest-list" id="latest-list"></ol>
+              <div class="ad-slot rail-sponsored" data-ad-slot="home-justin-mpu" data-ad-optional hidden aria-hidden="true"></div>
+              <!-- States the rule the column actually obeys. Without it a
+                   reader who knows a story broke three days ago reads its
+                   absence here as the paper having missed it. -->
+              <p class="just-in-note">Just in is limited to verified current stories from the last 14 hours.</p>
             </aside>
 
             <div class="front-col front-main">
@@ -1344,14 +1354,27 @@
                 <h1 class="section-title" id="top-stories-title">Top stories</h1>
                 <a class="section-link" href="mailto:news@rochdaledaily.co.uk?subject=News%20tip">Send a news tip</a>
               </div>
+            <!-- The pre-rendered lead. It is replaced by the live one as soon
+                 as the feed lands, but it is what a reader sees first and what
+                 a crawler reads, so it carries the canvas's structure too:
+                 kickers, headline, rule, then the standfirst beside the
+                 photograph — never the photograph first. -->
             <article class="lead-story" id="lead-story" data-content-slot="lead">
     <a href="/articles/mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.html" class="story-link">
-      <div class="story-image-wrap"><img src="/assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.jpg" alt="Mother Hubbard Opens in Middleton Shopping Centre, Attracting Large Crowds" loading="eager" decoding="async"></div>
-      <span class="story-kicker">Transport</span>
+      <div class="lead-kickers">
+        <span class="lead-section">Transport</span>
+        <span class="lead-place">Middleton</span>
+      </div>
       <h2 class="lead-headline">Mother Hubbard Opens in Middleton Shopping Centre, Attracting Large Crowds</h2>
-      <p class="story-summary">Mother Hubbard has opened a new branch in Middleton Shopping Centre, offering a special promotion that attracted large crowds, while nearby Middleton Fish Bar also experienced a surge in customers.</p>
-      <div class="story-meta">By Rochdale Daily Newsdesk · 13 Sep 2026 · 09:57 UTC</div>
-      <span class="read-more-button" aria-hidden="true">Read More →</span>
+      <div class="lead-rule" aria-hidden="true"></div>
+      <div class="lead-body">
+        <div class="lead-text">
+          <p class="story-summary">Mother Hubbard has opened a new branch in Middleton Shopping Centre, offering a special promotion that attracted large crowds, while nearby Middleton Fish Bar also experienced a surge in customers.</p>
+          <div class="story-meta card-meta"><span>By Rochdale Daily Newsdesk</span><span>13 Sep 2026</span></div>
+          <span class="read-more-button" aria-hidden="true">Read the full report →</span>
+        </div>
+        <div class="story-image-wrap"><img src="/assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.jpg" alt="Mother Hubbard Opens in Middleton Shopping Centre, Attracting Large Crowds" loading="eager" decoding="async"></div>
+      </div>
     </a>
   </article>
               <div class="secondary-stack" id="secondary-stories"></div>
@@ -1366,16 +1389,6 @@
                 <p class="rail-copy" id="weather-forecast-intro">Daytime highs.</p>
                 <div class="weather-days" id="weather-days"></div>
                 <p class="weather-note" id="weather-note"></p>
-              </section>
-              <section class="report-box rail-block" aria-labelledby="report-title">
-                <h3 id="report-title">Report what you know</h3>
-                <p class="rail-copy">Information can help an appeal even when it seems small. Use the correct channel below.</p>
-                <div class="report-actions">
-                  <a class="report-action" href="https://crimestoppers-uk.org/give-information/forms/give-information-anonymously" target="_blank" rel="noopener"><span>Crimestoppers — anonymous</span><span>0800 555 111</span></a>
-                  <a class="report-action" href="https://www.gmp.police.uk/ro/report/" target="_blank" rel="noopener"><span>Report online to GMP</span><span>Open</span></a>
-                  <a class="report-action" href="tel:999"><span>Emergency or crime in progress</span><span>999</span></a>
-                </div>
-                <p class="report-note">Rochdale Daily does not receive reports submitted through these official links.</p>
               </section>
               <section class="rail-block" id="travel" aria-labelledby="travel-title">
                 <h2 class="rail-title" id="travel-title">Travel</h2>
@@ -1395,6 +1408,41 @@
                 </div>
                 <p class="camera-credit">Camera image by <a href="https://nationalhighways.co.uk/" target="_blank" rel="noopener">National Highways</a>, used under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>.</p>
               </section>
+
+              <div class="ad-slot rail-sponsored" data-ad-slot="home-rail-mpu" data-ad-optional hidden aria-hidden="true"></div>
+
+              <!-- The newsletter band further down the page stays where it is;
+                   this is the rail's own compact form. Its ids are distinct
+                   (rail-newsletter-*) so the two forms cannot collide, and both
+                   post through the same handler. -->
+              <section class="rail-newsletter rail-block" aria-labelledby="rail-newsletter-title">
+                <div class="rail-newsletter-kicker">Newsletter</div>
+                <h3 id="rail-newsletter-title">The borough in your inbox</h3>
+                <p>Verified Rochdale news, what's on and the decisions that affect your street. No spam, no selling your address, unsubscribe any time.</p>
+                <form id="rail-newsletter-form" novalidate>
+                  <label class="visually-hidden" for="rail-newsletter-email">Email address</label>
+                  <input id="rail-newsletter-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" required>
+                  <button type="submit">Sign up</button>
+                  <!-- The canvas draws this box with no consent control. The
+                       full band lower down the page keeps its tick box; here
+                       the notice sits beside the button, so the act of
+                       submitting is the consent and the reader is told what
+                       they are consenting to before they do it. -->
+                  <p class="rail-newsletter-status" id="rail-newsletter-note">By signing up you agree to our <a href="/privacy.html">privacy policy</a>. Unsubscribe any time.</p>
+                  <p class="rail-newsletter-status" id="rail-newsletter-status" role="status" aria-live="polite"></p>
+                </form>
+              </section>
+
+              <section class="report-box rail-block" aria-labelledby="report-title">
+                <h2 class="rail-title" id="report-title">Report what you know</h2>
+                <p class="rail-copy">Information can help an appeal even when it seems small. Use the correct channel below.</p>
+                <div class="report-actions">
+                  <a class="report-action" href="tel:999"><span>Emergency or crime in progress</span><strong>999</strong></a>
+                  <a class="report-action" href="https://crimestoppers-uk.org/give-information/forms/give-information-anonymously" target="_blank" rel="noopener"><span>Crimestoppers — anonymous</span><strong>0800 555 111</strong></a>
+                  <a class="report-action" href="https://www.gmp.police.uk/ro/report/" target="_blank" rel="noopener"><span>Report online to GMP</span><span>→</span></a>
+                </div>
+                <p class="report-note">Rochdale Daily does not receive reports submitted through these official links.</p>
+              </section>
             </aside>
           </div>
         </div>
@@ -1402,9 +1450,10 @@
 
       <section class="section" aria-labelledby="latest-news-title">
         <div class="wrap">
-          <div class="section-head">
+          <div class="section-head browse-head">
             <h2 class="section-title" id="latest-news-title">Browse the news</h2>
             <span class="feed-status" id="feed-status" aria-live="polite">Latest verified local stories</span>
+            <a class="section-link" href="/archive.html">Browse the archive →</a>
             <button class="section-link" id="reset-filters" type="button" style="border-left:0;border-right:0;border-top:0;background:transparent;padding:0;">Show all</button>
           </div>
           <!-- Two axes, each labelled and each scrollable, so neither can clip
@@ -2155,9 +2204,12 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
       const timestamp = new Date(value).getTime();
       if (!Number.isFinite(timestamp)) return "Date unavailable";
       const minutes = Math.max(0, Math.round((Date.now() - timestamp) / 60000));
-      if (minutes < 60) return `${minutes || 1} min ago`;
-      if (minutes < 1440) return `${Math.round(minutes / 60)} hr ago`;
-      if (minutes < 10080) return `${Math.round(minutes / 1440)} days ago`;
+      // Compact units, as the canvas sets them — "12m ago", "3h ago", "2d
+      // ago" — and singular where the number is one. This printed "1 days
+      // ago" for a whole day of every story's life.
+      if (minutes < 60) return `${minutes || 1}m ago`;
+      if (minutes < 1440) return `${Math.round(minutes / 60)}h ago`;
+      if (minutes < 10080) return `${Math.round(minutes / 1440)}d ago`;
       return new Intl.DateTimeFormat("en-GB", {
         day: "numeric",
         month: "short",
@@ -2551,6 +2603,19 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
       return `<a href="articles/${story.slug}.html" class="${className}">${content}</a>`;
     }
 
+    /* A status chip only where the story record actually supports one.
+       The canvas draws LIVE, UPDATED and EXCLUSIVE chips; only the first two
+       correspond to something the pipeline knows — isOngoing is set when an
+       incident is being updated in place under the one-story-per-incident
+       rule, and updateCount says how many times. EXCLUSIVE is a claim about
+       sourcing that nothing in the record can substantiate, so it is not
+       drawn. A chip that decorates rather than reports is worse than none. */
+    function statusChip(story) {
+      if (!story || !story.isOngoing) return "";
+      const many = Number(story.updateCount || 0) > 1;
+      return `<span class="kicker-chip">${many ? "Updated" : "Live"}</span>`;
+    }
+
     function renderTopStories() {
       const leadElement = document.getElementById("lead-story");
       const secondaryElement = document.getElementById("secondary-stories");
@@ -2579,27 +2644,43 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         return;
       }
 
+      // The lead, in the canvas's order: kickers, headline, rule, then the
+      // standfirst BESIDE the photograph. The picture used to come first,
+      // which pushed the headline down the page and made the front read as a
+      // gallery rather than a front page.
       const lead = stories[0];
       leadElement.dataset.contentSlot = "lead";
       leadElement.innerHTML = storyButton(lead, `
-        ${imageMarkup(lead)}
-        ${lead.isOngoing ? '<span class="ongoing-badge">ONGOING</span>' : ''}
-        <span class="story-kicker">${lead.kicker}</span>
+        <div class="lead-kickers">
+          ${statusChip(lead)}
+          <span class="lead-section">${lead.kicker}</span>
+          ${lead.area ? `<span class="lead-place">${areaLabel(lead.area)}</span>` : ''}
+        </div>
         <h2 class="lead-headline">${lead.title}</h2>
-        <p class="story-summary">${lead.summary}</p>
-        <div class="story-meta">By ${lead.byline} · ${lead.timeLabel}</div>
-        <span class="read-more-button" aria-hidden="true">Read More →</span>
+        <div class="lead-rule" aria-hidden="true"></div>
+        <div class="lead-body">
+          <div class="lead-text">
+            <p class="story-summary">${lead.summary}</p>
+            <div class="story-meta card-meta"><span>By ${lead.byline}</span><span>${lead.timeLabel}</span></div>
+            <span class="read-more-button" aria-hidden="true">Read the full report →</span>
+          </div>
+          ${imageMarkup(lead)}
+        </div>
       `);
 
-      secondaryElement.innerHTML = stories.slice(1, 3).map((story, index) => `
+      // Three under the lead, not two: the canvas rules the space below the
+      // lead into thirds, and two stories across three columns left a gap the
+      // eye reads as a missing story.
+      secondaryElement.innerHTML = stories.slice(1, 4).map((story, index) => `
         <article class="secondary-story" data-content-slot="secondary-${index + 1}">
           ${storyButton(story, `
-            ${imageMarkup(story)}
-            ${story.isOngoing ? '<span class="ongoing-badge">ONGOING</span>' : ''}
-            <span class="story-kicker black">${story.kicker}</span>
+            <div class="lead-kickers">
+              ${statusChip(story)}
+              <span class="lead-section">${story.kicker}</span>
+            </div>
             <h2 class="secondary-headline">${story.title}</h2>
-            <div class="story-meta">${story.timeLabel}</div>
-            <span class="read-more-button" aria-hidden="true">Read More →</span>
+            <p class="story-summary">${story.summary}</p>
+            <div class="card-meta"><span>${areaLabel(story.area)}</span><span>· ${story.timeLabel}</span></div>
           `)}
         </article>
       `).join("");
@@ -2608,7 +2689,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
       // headline and a meta line. The thumbnail falls back to the category stock
       // card so a story with no picture still lines up with the others rather
       // than leaving a ragged column.
-      latestElement.innerHTML = stories.slice(3, 9).map(story => {
+      latestElement.innerHTML = stories.slice(4, 10).map(story => {
         // story.title / .area / .timeLabel are escaped once when the story model
         // is built, so they go in as they are; the image is attribute-escaped
         // through safeUrl and the category through escapeHtmlText.
@@ -3657,6 +3738,38 @@ function shareIconMarkup(action, label) {
        empty bordered box captioned "unavailable" is clutter in a 330px rail. */
     const SUN_CONDITIONS = ["Sunny", "Clear", "Partly cloudy"];
 
+    /* Line icons rather than the ☁ and ☂ glyphs the panel used to print.
+       Those are text characters: the font decides how they look, they carried
+       the surrounding colour, and on the warm palette they rendered as brown
+       blobs at a size nobody could read. These are four SVG paths drawn to the
+       canvas's stroke weight, and the condition is still announced in words to
+       a screen reader, so nothing rests on the picture alone.
+
+       Buckets are matched on what the Met Office actually sends — "Cloudy",
+       "Light rain shower", "Light rain" and so on — with sun as the default
+       for clear conditions and heavier rain given its own longer strokes. */
+    const WEATHER_ICONS = {
+      sun: '<circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>',
+      cloud: '<path d="M7 18a4 4 0 1 1 .6-7.96A5 5 0 0 1 17 11a3.5 3.5 0 0 1-.5 6.98H7z"/>',
+      shower: '<path d="M7 15a4 4 0 1 1 .6-7.96A5 5 0 0 1 17 8a3.5 3.5 0 0 1-.5 6.98H7z"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2"/>',
+      rain: '<path d="M7 14a4 4 0 1 1 .6-7.96A5 5 0 0 1 17 7a3.5 3.5 0 0 1-.5 6.98H7z"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>'
+    };
+    const WEATHER_ICON_COLOUR = {
+      sun: "var(--accent)",
+      cloud: "var(--muted)",
+      shower: "var(--accent)",
+      rain: "var(--info)"
+    };
+
+    function weatherIconKey(condition) {
+      const text = String(condition || "").toLowerCase();
+      if (/thunder|heavy rain|heavy shower|sleet|snow|hail/.test(text)) return "rain";
+      if (/shower|drizzle|rain/.test(text)) return "shower";
+      if (/cloud|overcast|fog|mist|haze/.test(text)) return "cloud";
+      if (SUN_CONDITIONS.some(c => text.includes(c.toLowerCase()))) return "sun";
+      return "cloud";
+    }
+
     function forecastRow(day, isToday) {
       const row = document.createElement("div");
       row.className = isToday ? "weather-day today" : "weather-day";
@@ -3665,21 +3778,32 @@ function shareIconMarkup(action, label) {
       dow.className = "weather-dow";
       dow.textContent = day.weekday || "";
 
-      const glyph = document.createElement("span");
-      glyph.className = SUN_CONDITIONS.includes(day.condition)
-        ? "weather-glyph sun"
-        : "weather-glyph";
+      const key = weatherIconKey(day.condition);
+      const glyph = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      glyph.setAttribute("width", "18");
+      glyph.setAttribute("height", "18");
+      glyph.setAttribute("viewBox", "0 0 24 24");
+      glyph.setAttribute("fill", "none");
+      glyph.setAttribute("stroke", WEATHER_ICON_COLOUR[key]);
+      glyph.setAttribute("stroke-width", "1.8");
       glyph.setAttribute("aria-hidden", "true");
-      glyph.textContent = day.icon || "◌";
+      glyph.setAttribute("focusable", "false");
+      glyph.classList.add("weather-glyph");
+      // Static path data from the table above; no feed value reaches it.
+      glyph.innerHTML = WEATHER_ICONS[key];
 
+      // Kept in the DOM for screen readers and for the title, but not drawn:
+      // seven condition names will not fit across a 310px rail, and the canvas
+      // does not print them.
       const condition = document.createElement("span");
-      condition.className = "weather-cond";
+      condition.className = "weather-cond visually-hidden";
       condition.textContent = day.condition || "";
 
       const temperature = document.createElement("span");
-      temperature.className = "weather-temp";
+      temperature.className = "weather-temp weather-day-temp";
       temperature.textContent = `${Math.round(Number(day.temperature_c))}°`;
 
+      row.title = `${day.weekday || ""}: ${day.condition || ""} ${Math.round(Number(day.temperature_c))}°C`.trim();
       row.append(dow, glyph, condition, temperature);
       return row;
     }
@@ -3935,7 +4059,10 @@ function shareIconMarkup(action, label) {
     }
 
     function decorateCommentCounts() {
-      document.querySelectorAll(".news-card, .lead-story, .secondary-story").forEach(card => {
+      // .latest-item added 15 Sep: the canvas carries the count on every card
+      // including the Just in column, and that column is where a reader is
+      // most likely to be deciding which of four stories to open.
+      document.querySelectorAll(".news-card, .lead-story, .secondary-story, .latest-item").forEach(card => {
         const link = card.querySelector('a[href^="articles/"]');
         if (!link) return;
         // Crime articles refuse comments server-side, so a count on one would
@@ -3958,11 +4085,25 @@ function shareIconMarkup(action, label) {
         // Always shown, including zero: the label doubles as an invitation to
         // be the first to comment, and a card that never carries the line at
         // all gives a reader no clue the article can be commented on.
-        const label = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-5.5A8 8 0 1 1 21 12z"/></svg>${n} comment${n === 1 ? "" : "s"}`;
+        const plain = `${n} comment${n === 1 ? "" : "s"}`;
+        // In the Just in column the count is part of the one meta line rather
+        // than a separate element with its own icon — the canvas sets it as
+        // bold text after the place and the time, and a 56px card has no room
+        // for a second row.
+        const compact = card.classList.contains("latest-item");
+        const label = compact
+          ? ` · <strong class="latest-comments">${plain}</strong>`
+          : `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-5.5A8 8 0 1 1 21 12z"/></svg>${plain}`;
         if (existing) { existing.innerHTML = label; return; }
         const el = document.createElement("span");
         el.className = "card-comments";
         el.innerHTML = label;
+        if (compact) {
+          const meta = card.querySelector(".latest-time");
+          if (!meta) return;
+          meta.appendChild(el);
+          return;
+        }
         (card.querySelector(".card-meta") || card).appendChild(el);
       });
     }
@@ -4710,6 +4851,27 @@ function shareIconMarkup(action, label) {
         status.textContent = "Signing you up\u2026";
         try {
           var res = await fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, consent: true, website: website, source: "homepage" }) });
+          var data = await res.json().catch(function () { return {}; });
+          if (res.ok && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); }
+          else { status.textContent = data.error || "Something went wrong. Please try again."; }
+        } catch (err) { status.textContent = "Something went wrong. Please try again."; }
+      });
+    })();
+
+    /* The rail box posts to the same endpoint with the same payload shape, so
+       there is one subscriber list and one place to change if the provider
+       ever does. source distinguishes the two for reporting. */
+    (function () {
+      var form = document.getElementById("rail-newsletter-form");
+      if (!form) return;
+      var status = document.getElementById("rail-newsletter-status");
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        var email = (document.getElementById("rail-newsletter-email").value || "").trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { status.textContent = "Please enter a valid email address."; return; }
+        status.textContent = "Signing you up…";
+        try {
+          var res = await fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, consent: true, website: "", source: "homepage-rail" }) });
           var data = await res.json().catch(function () { return {}; });
           if (res.ok && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); }
           else { status.textContent = data.error || "Something went wrong. Please try again."; }
