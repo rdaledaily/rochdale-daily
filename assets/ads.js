@@ -61,7 +61,16 @@
     "article-leaderboard": 120,
     "home-billboard": 280,
     "article-incontent": 280,
-    "article-mrec": 620
+    "article-mrec": 620,
+    // Added 15 Sep 2026 with the broadsheet front. The two skins are the
+    // 160x600 rails either side of the page frame; the two MPUs are the
+    // 300x250 in the "Just in" column and the sponsored box in the right
+    // rail. None of the four is sold yet, and all four carry
+    // data-ad-optional so they occupy no space at all until one is.
+    "home-skin-left": 600,
+    "home-skin-right": 600,
+    "home-rail-mpu": 250,
+    "home-justin-mpu": 250
   };
 
   // Horizontal slots run the full width of the page column. A 970px creative
@@ -168,12 +177,24 @@
       if (!slot) return;
       var candidates = placements.filter(function (p) { return p.slot === slot; });
       if (!candidates.length) {
-        // Leaves the placeholder in place. Logged because a slot silently
-        // staying empty is indistinguishable from a rendering fault, and that
-        // cost a lot of time to tell apart.
+        // A slot marked optional takes no space when it is unsold. The page
+        // is laid out so these four can disappear without leaving a hole, and
+        // a dashed "160 x 600" box on a page nobody has bought advertises
+        // only that nobody has bought it.
+        if (container.hasAttribute("data-ad-optional")) {
+          container.hidden = true;
+          container.setAttribute("aria-hidden", "true");
+        }
+        // Logged either way, because a slot silently staying empty is
+        // indistinguishable from a rendering fault, and that cost a lot of
+        // time to tell apart.
         if (window.console) console.warn("[ads] no placement for slot:", slot);
         return;
       }
+      // A slot that was hidden on an earlier pass and has since been booked
+      // must come back: init() runs again after the homepage injects markup.
+      container.hidden = false;
+      container.removeAttribute("aria-hidden");
       try {
         renderBanner(container, pickWeighted(candidates), base, sample);
       } catch (error) {
