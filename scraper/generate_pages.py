@@ -91,27 +91,84 @@ SEND_US_A_STORY_MARKUP = re.compile(
 )
 
 
+# Archived pages open with the masthead and nothing above or below it, so a
+# reader arriving from a search result has the wordmark and no way into the
+# rest of the paper. There are 1,130 of them and they are never regenerated,
+# so the navigation is injected in place, the same way the wordmark itself was.
+ARCHIVED_MASTHEAD_ANCHOR = '<header class="masthead">'
+ARCHIVED_SHELL_MARKER = 'data-rd-archived-shell'
+
+
 def modernise_archived_masthead(pages_dir: Path, skip: set[str]) -> int:
     """Bring archived pages' mastheads in line with the current template.
 
-    Applies two rewrites to pages absent from the current archive: swap the
-    text-only wordmark for the logo image with hidden fallback, and remove
-    the retired "Send us a story" button. Both are exact/no-op safe, so
-    already-modernised pages are left untouched on later runs.
+    Applies three rewrites to pages absent from the current archive: swap the
+    text-only wordmark for the logo image with hidden fallback, remove the
+    retired "Send us a story" button, and put the utility bar and edition bar
+    above the masthead so the page is navigable. All three are exact/no-op
+    safe, so already-modernised pages are left untouched on later runs -- the
+    shell injection is guarded on its own marker attribute rather than on the
+    markup, so a future change to the nav does not duplicate it.
     """
     updated = 0
     if not pages_dir.exists():
         return updated
+    shell = archived_shell_markup()
     for path in pages_dir.glob('*.html'):
         if path.stem in skip:
             continue
         original = path.read_text(encoding='utf-8')
         cleaned = original.replace(ARCHIVED_MASTHEAD_OLD, ARCHIVED_MASTHEAD_NEW)
         cleaned = SEND_US_A_STORY_MARKUP.sub('', cleaned)
+        # Utility bar above the masthead, edition bar below it -- the canvas
+        # order. Both halves go in together or neither does, and only where the
+        # page has a masthead and a </header> to hang them on.
+        if (ARCHIVED_SHELL_MARKER not in cleaned
+                and ARCHIVED_MASTHEAD_ANCHOR in cleaned
+                and '</header>' in cleaned):
+            cleaned = cleaned.replace(
+                ARCHIVED_MASTHEAD_ANCHOR, shell[0] + '\n\n  ' + ARCHIVED_MASTHEAD_ANCHOR, 1
+            )
+            cleaned = cleaned.replace('</header>', '</header>\n\n  ' + shell[1], 1)
         if cleaned != original:
             path.write_text(cleaned, encoding='utf-8')
             updated += 1
     return updated
+
+
+def archived_shell_markup() -> tuple[str, str]:
+    """The utility bar and the edition bar, as two pieces for injection either
+    side of an archived page's existing masthead.
+
+    Deliberately NOT the same string as site_shell_markup(): that one carries
+    the masthead, which an archived page already has, and a date, which would
+    freeze at whatever day the page was last rewritten. This one states no
+    date at all rather than a stale one.
+    """
+    utility = f'''<div class="utility" {ARCHIVED_SHELL_MARKER}>
+    <div class="wrap utility-row">
+      <div class="utility-left"><span class="date-stamp">Rochdale Daily &mdash; archive</span></div>
+      <div class="utility-links">
+        <a class="utility-tip" href="mailto:news@rochdaledaily.co.uk?subject=News%20tip">Send a news tip</a>
+        <a href="/#newsletter">Newsletter</a>
+      </div>
+    </div>
+  </div>'''
+    edition = '''<nav class="primary-nav archived-nav" aria-label="Main navigation">
+    <div class="wrap nav-row">
+      <ul class="nav-list">
+        <li><a href="/">News</a></li>
+        <li><a href="/wards/">Your area</a></li>
+        <li><a href="/#whats-on">What&rsquo;s On</a></li>
+        <li><a href="/#democracy">Democracy</a></li>
+        <li><a href="/#support">Community support</a></li>
+        <li><a href="/#advertise">Local services</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+      <a class="menu-search" href="/search.html" aria-label="Search Rochdale Daily"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span>Search</span></a>
+    </div>
+  </nav>'''
+    return utility, edition
 
 
 # Any leading @import in the inlined stylesheet, in any quoting style.
@@ -255,14 +312,16 @@ def corrections_markup(article: dict[str, Any]) -> str:
             else "<strong>This article has been amended.</strong> "
         )
         items.append(f"<p>{prefix}{esc(item['note'])}</p>")
+    # The gold (#f5c400, #e5d089, #fdf6dc) came from a palette retired two
+    # rounds ago and was written straight into the markup, so this box stayed
+    # yellow on a page that had gone brick and cream around it. Styling moved
+    # to newspaper-global.css, which also reaches the archived pages that
+    # already carry this class and are never regenerated.
     return (
-        '<section class="article-corrections" '
-        'style="margin-top:24px;padding:18px;border-left:8px solid #f5c400;'
-        'border:1px solid #e5d089;border-left-width:8px;border-left-color:#f5c400;'
-        'background:#fdf6dc">'
-        '<h3 style="margin:0 0 8px">Corrections and clarifications</h3>'
+        '<section class="article-corrections">'
+        '<h3>Corrections and clarifications</h3>'
         + "".join(items)
-        + '<p style="margin:10px 0 0;font-size:13px">'
+        + '<p class="corrections-footnote">'
         'All significant corrections are recorded in our '
         '<a href="/corrections-log.html">public corrections log</a>. '
         'Spotted an error? See '
@@ -359,8 +418,91 @@ def insert_incontent_ad(content_html: str) -> str:
     rebuilt = '</p>'.join(parts)
     return rebuilt
 
+def edition_date() -> str:
+    """Today's date, as the utility bar prints it. Written at generation time
+    rather than by script: article pages do not load the homepage bundle, so
+    the id="current-date" span it fills was simply blank on all of them."""
+    now = datetime.now(timezone.utc)
+    return f"{now.strftime('%A')} {now.day} {now.strftime('%B %Y')}"
+
+
+def site_shell_markup(home_href: str = '/') -> str:
+    """The utility bar, masthead and edition bar that head every page.
+
+    Article pages used to carry a masthead of their own -- the wordmark and an
+    "All stories" button, and nothing else. That is the last survivor of the
+    five-mastheads problem: a reader who opened a story from the front page
+    lost the navigation entirely and had one link back. The canvas draws the
+    same shell above every artboard, so it is emitted here once and shared by
+    every generated page type.
+
+    The breaking ticker is deliberately NOT included. It is fed by JavaScript
+    that only the homepage runs, and an empty brick chip on 1,250 article
+    pages would be furniture that never says anything.
+    """
+    return f'''<div class="utility">
+    <div class="wrap utility-row">
+      <div class="utility-left">
+        <span class="date-stamp">{esc(edition_date())}</span>
+      </div>
+      <div class="utility-links">
+        <a class="utility-tip" href="mailto:news@rochdaledaily.co.uk?subject=News%20tip">Send a news tip</a>
+        <a href="{esc(home_href)}#newsletter">Newsletter</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="masthead">
+    <div class="wrap masthead-row">
+      <a class="brand" href="{esc(home_href)}" aria-label="Rochdale Daily home">
+        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily &mdash; independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>
+      </a>
+      <p class="masthead-tagline"><span class="masthead-tagline-rule" aria-hidden="true"></span><span>Independent news, traffic, crime, politics, community reporting and events for Rochdale borough</span><span class="masthead-tagline-rule" aria-hidden="true"></span></p>
+    </div>
+  </header>
+
+  <nav class="primary-nav" aria-label="Main navigation">
+    <div class="wrap nav-row">
+      <ul class="nav-list">
+        <li><a href="{esc(home_href)}">News</a></li>
+        <li><a href="/wards/">Your area</a></li>
+        <li><a href="{esc(home_href)}#whats-on">What&rsquo;s On</a></li>
+        <li><a href="{esc(home_href)}#democracy">Democracy</a></li>
+        <li><a href="{esc(home_href)}#support">Community support</a></li>
+        <li><a href="{esc(home_href)}#advertise">Local services</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+      <a class="menu-search" href="/search.html" aria-label="Search Rochdale Daily"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span>Search</span></a>
+    </div>
+  </nav>'''
+
+
+def newsletter_box_markup(form_id: str = 'article-newsletter') -> str:
+    """The rail newsletter box, as the canvas draws it on every page that has
+    a sidebar. Posts to the same /api/newsletter as the homepage band, so
+    there is one list. The consent notice sits beside the button because the
+    canvas has no tick box here; the act of submitting is the consent and the
+    reader is told what they are consenting to before they do it."""
+    fid = esc(form_id)
+    return f'''<section class="rail-newsletter" aria-labelledby="{fid}-title">
+            <div class="rail-newsletter-kicker">Newsletter</div>
+            <h3 id="{fid}-title">The borough in your inbox</h3>
+            <p>Verified Rochdale news, what&rsquo;s on and the decisions that affect your street.</p>
+            <form id="{fid}-form" novalidate>
+              <label class="visually-hidden" for="{fid}-email">Email address</label>
+              <input id="{fid}-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" required>
+              <button type="submit">Sign up</button>
+              <p class="rail-newsletter-status">By signing up you agree to our <a href="/privacy.html">privacy policy</a>. Unsubscribe any time.</p>
+              <p class="rail-newsletter-status" id="{fid}-status" role="status" aria-live="polite"></p>
+            </form>
+          </section>'''
+
+
 def report_box_markup() -> str:
-    return '<section class="report-box" style="margin-top:28px">\n        <h3>Report what you know</h3>\n        <p>This article is marked as a police matter. Send information directly through an official reporting channel.</p>\n        <div class="report-actions">\n          <a class="report-action" href="https://crimestoppers-uk.org/give-information/forms/give-information-anonymously" target="_blank" rel="noopener"><span>Crimestoppers &mdash; anonymous</span><span>0800 555 111</span></a>\n          <a class="report-action" href="https://www.gmp.police.uk/ro/report/" target="_blank" rel="noopener"><span>Greater Manchester Police online report</span><span>Open</span></a>\n          <a class="report-action" href="tel:999"><span>Emergency, immediate danger or crime in progress</span><span>999</span></a>\n        </div>\n        <p class="report-note">Do not send evidence or urgent reports to Rochdale Daily instead of the police.</p>\n      </section>'
+    """Report what you know, as the canvas sets it: an ink-bordered box with
+    the channels as chips rather than a list of rows. The rows belong in a
+    310px rail; in the 600px body column they left most of the line empty."""
+    return '<section class="report-box article-report" style="margin-top:28px">\n        <h2 class="report-title">Report what you know</h2>\n        <p>This article is marked as a police matter. Send information directly through an official reporting channel, not to Rochdale Daily.</p>\n        <div class="report-chips">\n          <a class="report-chip primary" href="tel:999">Emergency &middot; 999</a>\n          <a class="report-chip" href="https://crimestoppers-uk.org/give-information/forms/give-information-anonymously" target="_blank" rel="noopener">Crimestoppers &middot; 0800 555 111</a>\n          <a class="report-chip" href="https://www.gmp.police.uk/ro/report/" target="_blank" rel="noopener">Report to GMP</a>\n        </div>\n      </section>'
 
 NO_COMMENT_CATEGORIES = {"crime"}
 
@@ -410,7 +552,7 @@ def related_stories_markup(article: dict[str, Any], all_articles: list[dict[str,
         item_slug = esc(item.get('slug') or item.get('id') or '')
         image = esc(absolute_url(item.get('image_url') or ''))
         items.append(f'<a class="related-story" href="{item_slug}.html"><img src="{image}" alt="" loading="lazy"><span class="related-title">{title}</span></a>')
-    return f'<div class="sidebar-box"><h3>More in {esc(category_label(category))}</h3>' + ''.join(items) + '</div>'
+    return f'<div class="sidebar-box"><h3 class="rail-title">More on this</h3>' + ''.join(items) + '</div>'
 
 
 def visible_word_count(article: dict[str, Any]) -> int:
@@ -638,13 +780,37 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     # separate, deliberately short format and never carry the note.
     developing_note = ''
     if str(article.get('source_kind') or 'article') != 'event' and visible_word_count(article) < 200:
+        # The colours moved out of the markup. #b3001b and #fbeaec were the old
+        # red palette, hardcoded here, so this note stayed red on a page that
+        # had gone brick and cream around it.
         developing_note = (
-            '<p class="developing-note" style="margin:12px 0;padding:12px 16px;'
-            'border-left:4px solid #b3001b;background:#fbeaec;font-weight:600">'
+            '<p class="developing-note">'
             "This is a developing story. We'll publish more details as they emerge."
             '</p>'
         )
-    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="index,follow,max-image-preview:large">\n  <title>{esc(title)} | Rochdale Daily</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">\n  {TOKEN_STYLESHEET_LINK}\n  <style>{SITE_CSS}</style>\n  {EDITORIAL_STYLESHEET_LINK}\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(article.get("last_updated_at") or article.get("scraped_at") or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n  <meta name="twitter:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta name="news_keywords" content="{esc(seo_keywords(article))}">\n{article_tag_markup(article)}\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  <header class="masthead">\n    <div class="wrap masthead-row">\n      <a class="brand" href="../index.html" aria-label="Rochdale Daily home">\n        <img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span>\n      </a>\n      <div class="masthead-actions">\n        <a class="header-button" href="../index.html">All stories</a>\n      </div>\n    </div>\n  </header>\n\n  <div class="modal-card" style="margin:24px auto;box-shadow:none">\n    <div class="article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">›</span><a href="/news/{esc(category)}.html">{esc(category_label(category))}</a></nav>\n          <span class="story-kicker">{esc(category_label(category))}</span>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          {developing_note}\n          <div class="article-byline">By {byline}</div>\n          {share_icons_markup(canonical_url, title)}\n          {hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          {read_next_markup(article, all_articles)}\n          <section class="editorial-legal-note" style="margin-top:24px;padding:18px;border:1px solid #c9c9c9;background:#f6f6f6">\n            <h3 style="margin:0 0 8px">Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p style="margin:10px 0 0;font-size:13px"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n          {comments_markup(article, slug, category)}\n        </div>\n        <aside class="article-sidebar">\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" role="presentation" aria-hidden="true"></div>\n          {related_stories_markup(article, all_articles)}\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n      </script>\n  <script defer src="/assets/js/article-comments.js"></script>\n  <script defer src="/assets/js/read-next.js"></script>\n  <script defer src="/assets/js/cookie-consent.js"></script>\n  <script defer src="/assets/ads.js"></script>\n</body>\n</html>\n'''
+
+    # The canvas marks an ongoing incident with a brick chip on the breadcrumb
+    # row. It is drawn only where the record actually says so: under the
+    # one-live-story-per-incident rule an ongoing story is updated in place, so
+    # the chip reports a fact rather than decorating the page.
+    ongoing_chip = ''
+    if article.get('is_ongoing'):
+        # ongoing_label is the pipeline's own wording for this incident where
+        # it has one (15 of the 153 live records carry both fields).
+        ongoing_chip = f'<span class="kicker-chip">{esc(article.get("ongoing_label") or "Ongoing")}</span>'
+
+    # Published date on the byline rule, as the canvas sets it. Falls back to
+    # the raw stamp rather than inventing one if it will not parse.
+    # parse_iso returns datetime.min on failure, which would print "1 Jan 1"
+    # on the byline of every story with a malformed stamp. Year 1970 is the
+    # guard: below it there is no real timestamp, so print nothing rather than
+    # a date the paper cannot stand behind.
+    byline_dt = parse_iso(published)
+    byline_date = ''
+    if byline_dt.year > 1970:
+        byline_date = f"{byline_dt.day} {byline_dt.strftime('%b %Y')} · {byline_dt.strftime('%H:%M')} UTC"
+    byline_date_span = f'<span>{esc(byline_date)}</span>' if byline_date else ''
+    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="index,follow,max-image-preview:large">\n  <title>{esc(title)} | Rochdale Daily</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  {TOKEN_STYLESHEET_LINK}\n  <style>{SITE_CSS}</style>\n  {EDITORIAL_STYLESHEET_LINK}\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(article.get("last_updated_at") or article.get("scraped_at") or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n  <meta name="twitter:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta name="news_keywords" content="{esc(seo_keywords(article))}">\n{article_tag_markup(article)}\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  {site_shell_markup("../index.html")}\n\n  <div class="page-shell">\n    <div class="wrap article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">News</a><span aria-hidden="true">/</span><a href="/news/{esc(category)}.html">{esc(category_label(category))}</a>{ongoing_chip}</nav>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          <div class="article-byline">\n            <span>By {byline}</span>\n            {byline_date_span}\n            {share_icons_markup(canonical_url, title)}\n          </div>\n          {developing_note}\n          {hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          {read_next_markup(article, all_articles)}\n          <section class="editorial-legal-note">\n            <h3>Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p class="legal-links"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n          {comments_markup(article, slug, category)}\n        </div>\n        <aside class="article-sidebar">\n          {related_stories_markup(article, all_articles)}\n          {newsletter_box_markup("article-newsletter")}\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" data-ad-optional hidden aria-hidden="true"></div>\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n\n    // The sidebar newsletter box. Same endpoint and same payload shape as the\n    // homepage, so there is one subscriber list; source says which box it came\n    // from. Guarded on the element so a page rendered without the box is fine.\n    (function () {{\n      var form = document.getElementById("article-newsletter-form");\n      if (!form) return;\n      var status = document.getElementById("article-newsletter-status");\n      form.addEventListener("submit", function (event) {{\n        event.preventDefault();\n        var email = (document.getElementById("article-newsletter-email").value || "").trim();\n        if (!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{{2,}}$/.test(email)) {{ status.textContent = "Please enter a valid email address."; return; }}\n        status.textContent = "Signing you up\\u2026";\n        fetch("/api/newsletter", {{ method: "POST", headers: {{ "Content-Type": "application/json" }}, body: JSON.stringify({{ email: email, consent: true, website: "", source: "article" }}) }})\n          .then(function (res) {{ return res.json().catch(function () {{ return {{}}; }}); }})\n          .then(function (data) {{\n            if (data && data.ok) {{ status.textContent = data.message || "Thanks. You're on the list."; form.reset(); }}\n            else {{ status.textContent = (data && data.error) || "Something went wrong. Please try again."; }}\n          }})\n          .catch(function () {{ status.textContent = "Something went wrong. Please try again."; }});\n      }});\n    }})();\n      </script>\n  <script defer src="/assets/js/article-comments.js"></script>\n  <script defer src="/assets/js/read-next.js"></script>\n  <script defer src="/assets/js/cookie-consent.js"></script>\n  <script defer src="/assets/ads.js"></script>\n</body>\n</html>\n'''
 
 def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
     if not ARTICLES_JSON.exists():
@@ -763,11 +929,11 @@ def write_corrections_log(articles: list[dict[str, Any]]) -> int:
     <div style="max-width:760px;margin:0 auto">
       <p style="margin:0 0 8px"><strong style="color:#fff">Rochdale Daily</strong> — independent local news for the Rochdale borough.</p>
       <p style="margin:0">
-        <a href="/about.html" style="color:#f5c400;text-decoration:none">About</a> &nbsp;·&nbsp;
-        <a href="/editorial-standards.html" style="color:#f5c400;text-decoration:none">Editorial standards</a> &nbsp;·&nbsp;
-        <a href="/corrections-and-complaints.html" style="color:#f5c400;text-decoration:none">Corrections &amp; complaints</a> &nbsp;·&nbsp;
-        <a href="/contact.html" style="color:#f5c400;text-decoration:none">Contact</a> &nbsp;&middot;&nbsp;
-        <a href="/privacy.html" style="color:#f5c400;text-decoration:none">Privacy</a>
+        <a href="/about.html">About</a> &nbsp;·&nbsp;
+        <a href="/editorial-standards.html">Editorial standards</a> &nbsp;·&nbsp;
+        <a href="/corrections-and-complaints.html">Corrections &amp; complaints</a> &nbsp;·&nbsp;
+        <a href="/contact.html">Contact</a> &nbsp;&middot;&nbsp;
+        <a href="/privacy.html">Privacy</a>
       </p>
     </div>
   </footer>
