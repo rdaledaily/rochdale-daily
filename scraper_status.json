@@ -1,35 +1,37 @@
 {
-  "last_run_at": "2026-09-15T19:44:27.291357Z",
-  "raw_candidates_before_job_filter": 107,
+  "last_run_at": "2026-09-15T20:02:36.361306Z",
+  "raw_candidates_before_job_filter": 101,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 106,
+  "raw_candidates": 100,
   "candidate_clusters": 36,
   "google_news_resolution": {
-    "wrappers": 25,
-    "resolved": 11,
+    "wrappers": 42,
+    "resolved": 15,
     "text_recovered": 2,
     "reattributed": 0,
-    "images_found": 11
+    "images_found": 3
   },
-  "duplicates_merged": 70,
-  "attempted_rewrites": 25,
+  "duplicates_merged": 64,
+  "attempted_rewrites": 24,
   "new_articles": 10,
-  "live_articles": 19,
-  "skipped": 15,
+  "live_articles": 20,
+  "skipped": 14,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 10,
+    "editorial gate: REJECTED_NON_LOCAL": 9,
     "editorial gate: REJECTED_NON_NEWS": 2,
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
     "quality check: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 2
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 2,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Write at least 160 body words using only facts already present in the sources; the draft currently has 156.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 74,
-    "website_discovery": 11,
+    "rss_and_google_news": 73,
+    "website_discovery": 6,
     "aggregator_discovery": 2,
     "live_service_pages": 15,
     "facebook_official": 0,
@@ -40,8 +42,8 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 23,
     "Rochdale Borough Council": 23,
+    "Rochdale Times": 18,
     "Northern live service updates": 12,
     "Rochdale AFC": 11,
     "Roch Valley Radio": 10,
@@ -52,7 +54,7 @@
     "BBC Manchester": 2,
     "Rochdale Borough Council RSS": 2,
     "Manchester Evening News": 2,
-    "transfermarkt.com": 2,
+    "Transfermarkt": 1,
     "Express and Star": 1,
     "Bbc": 1,
     "Ispreview": 1,
@@ -62,20 +64,20 @@
     "education": 1,
     "environment": 5,
     "health": 1,
-    "news": 4,
+    "news": 3,
     "politics": 3,
     "sport": 7,
     "traffic": 1,
     "transport": 3
   },
   "published_by_category": {
-    "business": 2,
+    "business": 1,
     "crime": 1,
     "education": 1,
+    "environment": 2,
     "events": 6,
     "news": 3,
-    "politics": 1,
-    "sport": 2,
+    "sport": 3,
     "traffic": 3
   },
   "openai_enabled": true,
@@ -109,49 +111,47 @@
     "health-v3-ea813f1bd390c90ab713",
     "environment-v3-e9418cad98334807d13b",
     "hard-news-v3-bba350c953b367279aff",
-    "hard-news-v3-8556bc19e91bbda3b64d",
     "environment-v3-521ea2f73aa58504e42e",
     "transport-v3-a67b6e5633543041a0df",
     "sport-v3-f212231375b75f9b9051",
     "hard-news-v3-636e6f1df8f20c76a606",
     "hard-news-v3-84ce35b7c23bd8630c2e",
+    "hard-news-v3-390b649fab20f2519e3f",
     "sport-v3-36fbf66edff3420f6a94",
     "hard-news-v3-4bff49301459f12af48f",
     "environment-v3-1590bdf36ba4263c9799",
     "environment-v3-cdbf4d1cbe1e948e23cb",
-    "hard-news-v3-390b649fab20f2519e3f",
+    "transport-v3-5b8c140f9617a641c13e",
     "sport-v3-ce2ea01062730823fe74",
     "environment-v3-eddbe43d17d709579c2b",
-    "transport-v3-5b8c140f9617a641c13e",
-    "sport-v3-9e992d397a1a86e8c199",
     "sport-v3-2c203399deab9fb7e94e",
+    "sport-v3-9e992d397a1a86e8c199",
     "sport-v3-22c44a97a1f0115b3334"
   ],
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/m62-traffic-live-updates-drivers-34614512",
-    "https://www.northernrailway.co.uk/service-updates#live-c3c8837bd35f22b169",
+    "https://www.northernrailway.co.uk/service-updates#live-49edc23fe4779ce246",
     "https://www.rochdale.gov.uk/news/article/675/council-urges-families-to-apply-on-time-for-secondary-school-places",
     "https://www.rochvalleyradio.com/news/local-news/barratt-homes-donates-32-roald-dahl-books-to-bury-school/",
     "https://rochdaleafc.co.uk/dale-pegged-back-late-on/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://www.rochdaletimes.co.uk/wedding-venue-plan-refused-over-harm-development-could-cause/",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/woman-who-alleges-raped-abused-34621985",
-    "https://www.rochvalleyradio.com/news/local-news/littleborough-and-wardle-brass-bands-prepare-for-national-finals/",
     "https://www.rochdale.gov.uk/directory-record/2594/withington-street-and-nearby-streets-roadworks-in-heywood-on-30-october-2026",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-20e1d64db61b248a74",
     "https://www.expressandstar.com/sport/football/walsall-fc/walsall-defender-named-in-league-two-team-of-the-week-after-rochdale-draw-9047811",
     "https://www.ispreview.co.uk/index.php/2026/09/zen-internet-expand-wi-fi-7-routers-and-launch-2-5gbps-broadband-via-ms3s-uk-fibre.html",
     "https://www.rochdalevaliant.uk/",
+    "https://www.rochvalleyradio.com/news/local-news/wildlife-mural-created-in-middleton-as-part-of-kenya-arts-exchange/",
     "https://rochdaleafc.co.uk/christmas-with-ricky-asa/",
     "https://www.rochdale.gov.uk/news/article/673/council-widens-cost-of-living-support-with-15-million-cash-injection",
     "https://www.rochdale.gov.uk/news/article/674/international-exchange-middleton-goes-wild-for-nature-inspired-mural",
     "https://www.rochdaletimes.co.uk/stunning-climate-change-mural-brightens-up-landmark/",
-    "https://www.rochvalleyradio.com/news/local-news/wildlife-mural-created-in-middleton-as-part-of-kenya-arts-exchange/",
+    "https://www.rochvalleyradio.com/news/local-news/east-lancashire-railway-to-introduce-bsl-interpreter-on-santa-specials/",
     "https://rochdaleafc.co.uk/have-your-say-on-bowlee/",
     "https://www.rochdaletimes.co.uk/event-helps-boroughs-businesses-land-public-sector-contracts/",
-    "https://www.rochvalleyradio.com/news/local-news/east-lancashire-railway-to-introduce-bsl-interpreter-on-santa-specials/",
-    "https://rochdaleafc.co.uk/fan-gallery-walsall-a/",
     "https://www.rochvalleyradio.com/news/local-news/thousands-set-for-bury-bid-10k-as-running-festival-returns/",
+    "https://rochdaleafc.co.uk/fan-gallery-walsall-a/",
     "https://rochdaleafc.co.uk/oldham-tickets-on-sale-now/"
   ],
   "x_social_records": 0,
@@ -183,24 +183,18 @@
       "traffic",
       "transport"
     ],
-    "available_wards": [
-      "Wardle, Shore and West Littleborough"
-    ],
-    "selected_wards": [
-      "Wardle, Shore and West Littleborough"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
     "available_areas": [
       "heywood",
       "middleton",
-      "smithy_bridge",
-      "wardle"
+      "smithy_bridge"
     ],
     "selected_areas": [
       "heywood",
       "middleton",
       "rochdale",
-      "smithy_bridge",
-      "wardle"
+      "smithy_bridge"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
@@ -209,21 +203,18 @@
       "education": 1,
       "environment": 5,
       "health": 1,
-      "news": 4,
+      "news": 3,
       "politics": 3,
       "sport": 7,
       "traffic": 1,
       "transport": 3
     },
-    "selected_by_ward": {
-      "Wardle, Shore and West Littleborough": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
       "heywood": 1,
       "middleton": 4,
       "rochdale": 18,
-      "smithy_bridge": 1,
-      "wardle": 1
+      "smithy_bridge": 1
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
@@ -232,7 +223,7 @@
       "ispreview": 1,
       "manchester evening news": 2,
       "northern live service updates": 1,
-      "roch valley radio local news": 5,
+      "roch valley radio local news": 4,
       "rochdale afc": 5,
       "rochdale borough council": 2,
       "rochdale borough council rss": 2,
@@ -858,8 +849,12 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 29,
+  "robots_denied_count": 31,
   "robots_denied_urls": [
+    "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324443984?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324436673?-57568:46921",
     "https://c.newsnow.co.uk/A/1324419876?-57568:46921",
     "https://c.newsnow.co.uk/A/1324413253?-57568:46921",
     "https://c.newsnow.co.uk/A/1324390676?-57568:46921",
@@ -877,22 +872,24 @@
     "https://c.newsnow.co.uk/A/1323994226?-57568:46921",
     "https://c.newsnow.co.uk/A/1323982397?-57568:46921",
     "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324010052?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324453308?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324443984?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324436673?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324453308?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMiswFBVV95cUxNYVI1eWhJZFR1TVYzc1JDdVk0T2dtWi02anpEMlYySzQxRTJxaDRGeDdFaTNEbU1veFEzSG5MaHRDMmMzU0xoQVlwMHBKTjZhMy04LTVZZzhKTDhkY2U3eEIzamRJWXktQnA1dDBlTHNaUlpXcW8xdS1jVE5uaG1tbzhGVmhGQTJrWDN3dDBJdVJYRlJnTFk5UGJYT3p0U0NfS194SXhFSWtMQVpyeVZQdGlWWQ?oc=5",
-    "https://news.google.com/rss/articles/CBMitgFBVV95cUxNSXF0VW5LQ0NBLW9mZzUxT2hieVoxakMxOE4ydlY4bUxIcDRvU1RYWU5hWXF4SmtST0ZTbEdZZVVzcmxMSWFhQXFiU0VxS2lOUGdkWnh0TzdPM1ZFckZWOURhd1gxQ0VGWnVGaWZlMmVZU0M4a01Cai05QWtFbVRoQjNwZlRYazhqQnJzbC1yVEFTekFMa0dOYXJGMzd4R1dVZVgyVEgwemFOOWtOM1NsM1NoQkV5QQ?oc=5"
+    "https://news.google.com/rss/articles/CBMimAFBVV95cUxPYjN3WVBxandybUZ2c29Ka3hzVDZrVkN2S1hRUjVzQ0F3YWtoU252eVJnSWVWYnRqVUJoMmRRVkpGMVRRTFkwRFBXQm93dXJDaFFkRXNOQ0pNdFMtRE9nWlc2SkFEWTFxSjVkeG5GZ2pxM2Z1cml4eXhUZFNVUHppWm5mLWlkZXNnY01UZDJFSkJiRXZiaWFISg?oc=5",
+    "https://news.google.com/rss/articles/CBMitgFBVV95cUxNSXF0VW5LQ0NBLW9mZzUxT2hieVoxakMxOE4ydlY4bUxIcDRvU1RYWU5hWXF4SmtST0ZTbEdZZVVzcmxMSWFhQXFiU0VxS2lOUGdkWnh0TzdPM1ZFckZWOURhd1gxQ0VGWnVGaWZlMmVZU0M4a01Cai05QWtFbVRoQjNwZlRYazhqQnJzbC1yVEFTekFMa0dOYXJGMzd4R1dVZVgyVEgwemFOOWtOM1NsM1NoQkV5QQ?oc=5",
+    "https://news.google.com/rss/articles/CBMipAFBVV95cUxPY3RPOHJIWnctVWNHemFuMDlQdGY3WEE5MkQxbEZZN25Ud3FvSDRNQktKNldnUXRETkVadnJpcmp1NWVMM0xqRFhiaGdrZ0VDZlJoV1J2WUhaSGRDNTBmSU1LdWhJdWNXaVZLeFhhSzNxYjRndzZCUXBqRnFhVk5uZGk1WTA2MVM1NWE4Q2szRHZnd2tTdkFkLWdYNEgyY1JnYnhQWg?oc=5",
+    "https://news.google.com/rss/articles/CBMijAFBVV95cUxPUGN1c1c4V1ZROEgwSWpxY1J1WjhhdWtMMjlOeVRCQ3ctbXA2NVIwcTI2d2ctWFhNMDNTVmNESWo2YkJQRUNWZWNLY2kwYTVIU28xT3BlRmgxMEx3NDdEZnJVdVM2WVlCdHBVTEtmdUV1dGxORGlsSVAwbUVNTGVTYklVY1h2bzZyazNmYg?oc=5"
   ],
   "slow_domain_failure_threshold": 2,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 9
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -926,9 +923,9 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-15T19:45:47.055028Z",
-  "frontpage_article_count": 12,
-  "frontpage_minimum_met": true,
+  "frontpage_generated_at": "2026-09-15T20:03:45.539729Z",
+  "frontpage_article_count": 11,
+  "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
       "business",
@@ -968,7 +965,7 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "news": 3,
-      "traffic": 3,
+      "traffic": 2,
       "politics": 1,
       "education": 1,
       "sport": 2,
@@ -976,7 +973,7 @@
     },
     "selected_by_ward": {
       "Wardle, Shore and West Littleborough": 1,
-      "borough-wide": 11
+      "borough-wide": 10
     },
     "selected_by_area": {
       "heywood": 2,
@@ -985,13 +982,14 @@
       "wardle": 1
     },
     "selected_by_source": {
-      "source": 2,
+      "source": 1,
       "manchester evening news": 1,
+      "rochdale borough council rss": 1,
       "ofsted": 1,
       "rochdale afc": 2,
       "ispreview": 1,
       "rochdale valiant": 1,
-      "rochdale times": 2,
+      "rochdale times": 1,
       "bbc manchester": 1,
       "rochdale borough council": 1
     },
@@ -999,12 +997,12 @@
     "primary_pool_size": 12,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 12,
+    "frontpage_count": 11,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 2,
-    "fresh_under_homepage_window": 11,
+    "fresh_under_homepage_window": 10,
     "short_briefs_selected": 10,
-    "frontpage_minimum_met": true
+    "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",

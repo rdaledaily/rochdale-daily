@@ -1,15 +1,15 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 8,
+    "kept_cards": 10,
     "cards_library": 0,
-    "cards_generated": 9,
+    "cards_generated": 8,
     "skipped": 0
   },
   "items": [
     {
       "slug": "zen-internet-launches-2-5gbps-broadband-and-wi-fi-7-routers",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/zen-internet-launches-2-5gbps-broadband-and-wi-fi-7-routers-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -17,7 +17,7 @@
     {
       "slug": "littleborough-and-wardle-brass-bands-prepare-for-national-finals-on-20-september",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/littleborough-and-wardle-brass-bands-prepare-for-national-finals-on-20-september.jpg",
+      "image_url": "",
       "matched_filename": "",
       "match_score": null
     },
@@ -31,9 +31,16 @@
     {
       "slug": "new-climate-change-mural-unveiled-in-middleton-town-centre",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/new-climate-change-mural-unveiled-in-middleton-town-centre.jpg",
+      "image_url": "assets/img/generated/dd5a5b794b60be3e0f.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "new-climate-change-mural-unveiled-in-middleton-town-centre",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/new-climate-change-mural-unveiled-in-middleton-town-centre.jpg",
+      "matched_filename": "new-climate-change-mural-unveiled-in-middleton-town-centre.jpg",
+      "match_score": 21408
     },
     {
       "slug": "rochdale-afc-invites-community-feedback-on-bowlee-development",
