@@ -1346,3 +1346,44 @@ body.is-advancing { opacity: .55; transition: opacity .18s ease; }
   color: var(--accent);
   white-space: nowrap;
 }
+
+
+/* Weather in the rail is the design's seven-column strip: day, glyph, degrees,
+   one column per day. It was seven full-width rows carrying the condition text
+   as well, which is a different component in the same space — and at 310px the
+   rail could not hold "Light rain shower" beside a temperature anyway. */
+.front-rail .weather-days {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+.front-rail .weather-day {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.front-rail .weather-day.today { border: 0; background: transparent; }
+/* The condition words do not fit a 40px column and the glyph already says it. */
+.front-rail .weather-cond { display: none; }
+.front-rail .weather-glyph { font-size: 17px; line-height: 1; color: var(--accent); }
+.front-rail .weather-temp { color: var(--ink); font-weight: 600; font-size: 11px; }
+.front-rail .weather-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.front-rail .weather-place { font-family: var(--font-ui); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.front-rail .rail-copy, .front-rail .weather-note { font-size: 11.5px; color: var(--muted); margin: 8px 0 0; }
+
+/* The report box is a rail block now, not a boxed card. */
+.front-rail .report-box { border: 0; background: transparent; padding: 0; }
+.front-rail .report-box h3 {
+  margin: 0 0 10px; padding-bottom: 7px; border-bottom: 1px solid var(--ink);
+  font-family: var(--font-ui); font-size: 11.5px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--ink);
+}
