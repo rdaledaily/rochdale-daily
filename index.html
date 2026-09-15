@@ -2954,6 +2954,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
             <p class="card-summary">${story.summary}</p>
             <div class="tag-row">
               <span class="tag">${areaLabel(story.area)}</span>
+              <span class="tag">· ${story.timeLabel}</span>
               ${story.policeMatter ? '<span class="tag crime">Report information</span>' : ''}
               ${story.demo ? '<span class="tag demo">Example content</span>' : ''}
             </div>
@@ -3007,6 +3008,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
             <p class="card-summary">${story.summary}</p>
             <div class="tag-row">
               <span class="tag">${areaLabel(story.area)}</span>
+              <span class="tag">· ${story.timeLabel}</span>
               ${story.policeMatter ? '<span class="tag crime">Report information</span>' : ''}
               ${story.demo ? '<span class="tag demo">Example content</span>' : ''}
             </div>
@@ -4104,7 +4106,10 @@ function shareIconMarkup(action, label) {
           meta.appendChild(el);
           return;
         }
-        (card.querySelector(".card-meta") || card).appendChild(el);
+        // .tag-row is the news card's meta line; .card-meta is the front
+        // page's. Falling through to the card itself put the count outside
+        // the link, on a line of its own.
+        (card.querySelector(".card-meta") || card.querySelector(".tag-row") || card).appendChild(el);
       });
     }
 
