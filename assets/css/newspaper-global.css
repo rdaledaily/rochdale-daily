@@ -545,15 +545,27 @@ body > footer strong,
  * worse paper), so the row is 1fr | auto | 1fr with the wordmark in the middle.
  * ------------------------------------------------------------------------- */
 .masthead-row {
-  grid-template-columns: 1fr auto 1fr !important;
-  grid-template-areas: ". brand actions" ". tagline ." !important;
+  /* One centred column, with the search lifted OUT of the flow.
+     A 1fr | auto | 1fr grid looked right at 1500px and drifted left below it:
+     the search button is ~290px wide and cannot shrink, so its 1fr track grew
+     past the empty one opposite and pushed the wordmark off centre. Taking the
+     actions out of the grid means the logo is centred on the page at every
+     width, which is the whole point of a centred masthead. */
+  position: relative !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas: "brand" "tagline" !important;
   align-items: center !important;
   justify-items: center !important;
   row-gap: 14px !important;
   padding-block: 26px 20px !important;
 }
 .masthead-row > .brand { grid-area: brand !important; justify-self: center !important; }
-.masthead-row > .masthead-actions { grid-area: actions !important; justify-self: end !important; }
+.masthead-row > .masthead-actions {
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
 .masthead .brand-logo {
   height: clamp(96px, 13vw, 180px) !important;
   width: auto !important;
@@ -580,11 +592,19 @@ body > footer strong,
 }
 @media (max-width: 820px) {
   .masthead-row {
-    grid-template-columns: 1fr auto !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
     grid-template-areas: "brand actions" "tagline tagline" !important;
     justify-items: start !important;
   }
   .masthead-row > .brand { justify-self: start !important; }
+  /* Back into the flow on small screens, where the row is left-ranged and the
+     search has already collapsed to an icon. */
+  .masthead-row > .masthead-actions {
+    position: static !important;
+    transform: none !important;
+    grid-area: actions !important;
+    justify-self: end !important;
+  }
   /* The strapline is a full sentence; on a phone it costs three lines of the
      first screen for something the masthead already says. */
   .masthead-tagline { display: none !important; }
