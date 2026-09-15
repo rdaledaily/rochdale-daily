@@ -369,7 +369,7 @@ def _newsroom_related_stories_markup(article, all_articles):
             f'<a class="related-story" href="{item_slug}.html">'
             f'{image_markup}<span class="related-title">{title}</span></a>'
         )
-    return '<div class="sidebar-box"><h3>Related local stories</h3>' + "".join(items) + "</div>"
+    return '<div class="sidebar-box"><h3 class="rail-title">More on this</h3>' + "".join(items) + "</div>"
 
 
 def _newsroom_select_frontpage(articles, now=None):
