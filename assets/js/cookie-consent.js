@@ -11,7 +11,7 @@
      It was left at -1 through several stylesheet uploads on 10 Sep, so a
      browser that visited in the morning could keep serving that morning's
      stylesheet -- without the river or filter-bar rules -- all day. */
-  var ASSET_VERSION = "20260915-broadsheet-stage3";
+  var ASSET_VERSION = "20260915-broadsheet-stage5";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
