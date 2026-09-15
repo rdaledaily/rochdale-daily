@@ -966,8 +966,10 @@
     .hidden { display: none !important; }
 
     @media (max-width: 1050px) {
-      .lead-grid { grid-template-columns: minmax(0, 1.55fr) minmax(260px, .8fr); }
-      .latest-panel { grid-column: 1 / -1; border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 15px; }
+      /* The front grid lives in editorial-theme.css now, which loads later and
+         would win anyway. These two lines described the OLD two-column front and
+         forced the left column to span the whole row at tablet widths. */
+      .latest-panel { padding-top: 15px; }
       .latest-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 18px; }
       .events-grid, .support-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .directory-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1315,41 +1317,6 @@
     </div>
 
     <main id="main-content">
-      <!-- Travel. First section under the masthead, below the leaderboard ad
-           so the advert is still the first thing on screen. Moving it is one
-           cut and paste of this whole <section>. -->
-      <section class="section" id="travel" aria-labelledby="travel-title">
-        <div class="wrap">
-          <div class="section-head">
-            <h2 class="section-title" id="travel-title">Travel</h2>
-            <a class="section-link" href="/news/traffic.html">All traffic and travel</a>
-          </div>
-          <div class="travel-grid">
-            <figure class="camera-figure">
-              <div class="camera-frame" id="camera-frame" data-state="loading">
-                <span class="camera-badge"><span class="camera-dot" aria-hidden="true"></span><span id="camera-state">Connecting</span></span>
-                <img id="camera-image" width="720" height="576" decoding="async"
-                     alt="Live traffic camera looking along the M62 between junctions 21 and 19 at Castleton, Rochdale">
-                <p class="camera-message" id="camera-message" role="status" aria-live="polite">Connecting to the camera…</p>
-              </div>
-              <figcaption class="camera-caption">
-                <strong>M62 between junctions 21 and 19, at Castleton.</strong>
-                Refreshes about once a minute while this section is on screen. <span id="camera-updated"></span><br>
-                Camera image by <a href="https://nationalhighways.co.uk/" target="_blank" rel="noopener">National Highways</a>, used under the
-                <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>.
-              </figcaption>
-            </figure>
-            <div class="travel-aside">
-              <p class="rail-copy">This is the stretch of motorway most Rochdale journeys depend on. The picture is the live view from the road operator's own camera, not a recording — if it looks clear, it is clear.</p>
-              <div class="report-actions">
-                <a class="report-action" href="https://nationalhighways.co.uk/travel-updates/" target="_blank" rel="noopener"><span>Motorway incidents and closures</span><span>National Highways</span></a>
-                <a class="report-action" href="https://tfgm.com/travel-updates" target="_blank" rel="noopener"><span>Buses, trams and local roads</span><span>Bee Network</span></a>
-                <a class="report-action" href="/news/traffic.html"><span>Rochdale traffic reporting</span><span>Open</span></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section class="section" aria-labelledby="top-stories-title">
         <div class="wrap">
@@ -1357,7 +1324,21 @@
             <h1 class="section-title" id="top-stories-title">Top stories</h1>
             <a class="section-link" href="mailto:news@rochdaledaily.co.uk?subject=News%20tip">Send a news tip</a>
           </div>
+          <!-- Front page: three columns separated by hairline rules —
+               Just in | Top stories (two columns wide) | the rail.
+               Every id the homepage JavaScript writes into is unchanged
+               (#latest-list, #secondary-stories, #lead-story, #weather-box,
+               #camera-frame); only their position moved. .latest-panel stays on
+               the left column because the script calls closest(".latest-panel").
+               The weather panel was down in the lower side rail, which is why it
+               looked missing: it is a front-page rail block now. -->
           <div class="lead-grid">
+            <aside class="front-col front-just-in latest-panel" aria-label="Latest updates">
+              <h2 class="panel-title">Just in</h2>
+              <ol class="latest-list" id="latest-list"></ol>
+            </aside>
+
+            <div class="front-col front-main">
             <article class="lead-story" id="lead-story" data-content-slot="lead">
     <a href="/articles/mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.html" class="story-link">
       <div class="story-image-wrap"><img src="/assets/img/cards/mother-hubbard-opens-in-middleton-shopping-centre-attracting-large-crowds.jpg" alt="Mother Hubbard Opens in Middleton Shopping Centre, Attracting Large Crowds" loading="eager" decoding="async"></div>
@@ -1368,10 +1349,37 @@
       <span class="read-more-button" aria-hidden="true">Read More →</span>
     </a>
   </article>
-            <div class="secondary-stack" id="secondary-stories"></div>
-            <aside class="latest-panel" aria-label="Latest updates">
-              <h2 class="panel-title">Just in</h2>
-              <ol class="latest-list" id="latest-list"></ol>
+              <div class="secondary-stack" id="secondary-stories"></div>
+            </div>
+
+            <aside class="front-col front-rail" aria-label="Weather and travel">
+              <section class="weather-box" id="weather-box" aria-labelledby="weather-forecast-title" hidden>
+                <div class="weather-head">
+                  <h2 class="rail-title" id="weather-forecast-title">Weather this week</h2>
+                  <span class="weather-place">Rochdale</span>
+                </div>
+                <p class="rail-copy" id="weather-forecast-intro">Daytime highs.</p>
+                <div class="weather-days" id="weather-days"></div>
+                <p class="weather-note" id="weather-note"></p>
+              </section>
+              <section class="rail-block" id="travel" aria-labelledby="travel-title">
+                <h2 class="rail-title" id="travel-title">Travel</h2>
+                <figure class="camera-figure">
+                  <div class="camera-frame" id="camera-frame" data-state="loading">
+                    <span class="camera-badge"><span class="camera-dot" aria-hidden="true"></span><span id="camera-state">Connecting</span></span>
+                    <img id="camera-image" width="720" height="576" decoding="async"
+                         alt="Live traffic camera looking along the M62 between junctions 21 and 19 at Castleton, Rochdale">
+                    <p class="camera-message" id="camera-message" role="status" aria-live="polite">Connecting to the camera…</p>
+                  </div>
+                  <figcaption class="camera-caption">The live view from the road operator's own camera, not a recording — if it looks clear, it is clear. Refreshes about once a minute. <span id="camera-updated"></span></figcaption>
+                </figure>
+                <div class="report-actions">
+                  <a class="report-action" href="https://nationalhighways.co.uk/travel-updates/" target="_blank" rel="noopener"><span>Motorway incidents</span><span>Nat. Highways</span></a>
+                  <a class="report-action" href="https://tfgm.com/travel-updates" target="_blank" rel="noopener"><span>Buses and trams</span><span>Bee Network</span></a>
+                  <a class="report-action" href="/news/traffic.html"><span>All traffic and travel</span><span>→</span></a>
+                </div>
+                <p class="camera-credit">Camera image by <a href="https://nationalhighways.co.uk/" target="_blank" rel="noopener">National Highways</a>, used under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>.</p>
+              </section>
             </aside>
           </div>
         </div>
@@ -1476,15 +1484,6 @@
             </div>
             <aside class="side-rail">
 
-              <section class="weather-box" id="weather-box" aria-labelledby="weather-forecast-title" hidden>
-                <div class="weather-head">
-                  <h2 class="rail-title" id="weather-forecast-title">Weather</h2>
-                  <span class="weather-place">Rochdale</span>
-                </div>
-                <p class="rail-copy" id="weather-forecast-intro">Daytime highs.</p>
-                <div class="weather-days" id="weather-days"></div>
-                <p class="weather-note" id="weather-note"></p>
-              </section>
 
               <section class="report-box" aria-labelledby="report-title">
                 <h3 id="report-title">Report what you know</h3>
