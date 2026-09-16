@@ -1,34 +1,35 @@
 {
-  "last_run_at": "2026-09-16T17:17:09.248648Z",
-  "raw_candidates_before_job_filter": 103,
+  "last_run_at": "2026-09-16T17:28:55.036310Z",
+  "raw_candidates_before_job_filter": 102,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 103,
+  "raw_candidates": 102,
   "candidate_clusters": 31,
   "google_news_resolution": {
-    "wrappers": 28,
-    "resolved": 4,
+    "wrappers": 21,
+    "resolved": 1,
     "text_recovered": 0,
     "reattributed": 0,
-    "images_found": 4
+    "images_found": 1
   },
-  "duplicates_merged": 72,
-  "attempted_rewrites": 20,
-  "new_articles": 9,
-  "live_articles": 14,
-  "skipped": 11,
+  "duplicates_merged": 71,
+  "attempted_rewrites": 21,
+  "new_articles": 8,
+  "live_articles": 16,
+  "skipped": 13,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 7,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
     "quality check: Rewrite the long verbatim source passage.": 1,
-    "editorial gate: REJECTED_NON_NEWS": 1
+    "editorial gate: REJECTED_NON_NEWS": 1,
+    "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 3
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 71,
+    "rss_and_google_news": 70,
     "website_discovery": 10,
     "aggregator_discovery": 2,
     "live_service_pages": 15,
@@ -44,7 +45,7 @@
     "Rochdale Times": 17,
     "Northern live service updates": 12,
     "Roch Valley Radio": 9,
-    "Rochdale AFC": 7,
+    "Rochdale AFC": 6,
     "Manchester Evening News": 5,
     "Roch Valley Radio Local News": 5,
     "Ofsted": 4,
@@ -66,18 +67,17 @@
     "health": 1,
     "news": 1,
     "politics": 2,
-    "sport": 5,
+    "sport": 6,
     "traffic": 1,
     "transport": 3
   },
   "published_by_category": {
     "business": 1,
     "crime": 2,
-    "environment": 1,
+    "environment": 3,
     "events": 6,
     "news": 1,
-    "politics": 1,
-    "sport": 2
+    "sport": 3
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -107,7 +107,7 @@
     "transport-v3-4adca62cf5237a9027bc",
     "hard-news-v3-fdfe5803311b0ae30d89",
     "education-v3-7adb08189e9d4ecf8b15",
-    "sport-v3-e576f7fb485b3244a246",
+    "sport-v3-e0feb2c79eb1b4158fce",
     "business-v3-da82763d3291c49eab52",
     "health-v3-20e51d191bf6a2362b1b",
     "environment-v3-de3a1f0b0acc85a26981",
@@ -115,13 +115,14 @@
     "transport-v3-259179c5bf72e45078c8",
     "hard-news-v3-390b649fab20f2519e3f",
     "hard-news-v3-bba350c953b367279aff",
-    "sport-v3-6c843f13500a2fecad6a",
+    "sport-v3-e576f7fb485b3244a246",
     "environment-v3-e9418cad98334807d13b",
     "transport-v3-5b8c140f9617a641c13e",
     "environment-v3-1590bdf36ba4263c9799",
-    "sport-v3-82ad8ba97de10b552190",
+    "sport-v3-6c843f13500a2fecad6a",
     "sport-v3-499baa7f755fa45fd3fd",
-    "sport-v3-2c203399deab9fb7e94e"
+    "sport-v3-2c203399deab9fb7e94e",
+    "sport-v3-82ad8ba97de10b552190"
   ],
   "selected_candidate_urls": [
     "https://www.theoldhamtimes.co.uk/news/26551974.man-set-sell-2-4-million-fake-clothes-rochdale/",
@@ -129,7 +130,7 @@
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-6daa827142c3cf2897",
     "https://www.rochdale.gov.uk/news/article/675/council-urges-families-to-apply-on-time-for-secondary-school-places",
     "https://www.rochvalleyradio.com/news/local-news/barratt-homes-donates-32-roald-dahl-books-to-bury-school/",
-    "https://rochdaleafc.co.uk/oldham-tickets-on-sale-now/",
+    "https://rochdaleafc.co.uk/important-info-ahead-of-saturdays-game/",
     "https://www.rochdale.gov.uk/news/article/676/hat-trick-of-announcements-as-middleton-s-regeneration-moves-up-a-gear",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://www.rochdaletimes.co.uk/petition-to-stop-residents-losing-popular-kick-pitch/",
@@ -137,13 +138,14 @@
     "https://www.northernrailway.co.uk/service-updates#live-49edc23fe4779ce246",
     "https://www.rochvalleyradio.com/news/local-news/wildlife-mural-created-in-middleton-as-part-of-kenya-arts-exchange/",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/woman-who-alleges-raped-abused-34621985",
-    "https://rochdaleafc.co.uk/rochdale-afc-sleep-out-returns/",
+    "https://rochdaleafc.co.uk/oldham-tickets-on-sale-now/",
     "https://www.rochdaletimes.co.uk/wedding-venue-plan-refused-over-harm-development-could-cause/",
     "https://www.rochvalleyradio.com/news/local-news/east-lancashire-railway-to-introduce-bsl-interpreter-on-santa-specials/",
     "https://www.rochdale.gov.uk/news/article/674/international-exchange-middleton-goes-wild-for-nature-inspired-mural",
-    "https://rochdaleafc.co.uk/dale-pegged-back-late-on/",
+    "https://rochdaleafc.co.uk/rochdale-afc-sleep-out-returns/",
     "https://www.rochdaletimes.co.uk/council-spreads-cost-of-living-support-with-15-million-cash-injection/",
-    "https://www.rochvalleyradio.com/news/local-news/thousands-set-for-bury-bid-10k-as-running-festival-returns/"
+    "https://www.rochvalleyradio.com/news/local-news/thousands-set-for-bury-bid-10k-as-running-festival-returns/",
+    "https://rochdaleafc.co.uk/dale-pegged-back-late-on/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -204,7 +206,7 @@
       "health": 1,
       "news": 1,
       "politics": 2,
-      "sport": 5,
+      "sport": 6,
       "traffic": 1,
       "transport": 3
     },
@@ -213,7 +215,7 @@
       "boarshaw": 1,
       "heywood": 1,
       "middleton": 3,
-      "rochdale": 14,
+      "rochdale": 15,
       "smithy_bridge": 1
     },
     "selected_by_source": {
@@ -224,7 +226,7 @@
       "manchester evening news": 1,
       "northern live service updates": 1,
       "roch valley radio local news": 4,
-      "rochdale afc": 3,
+      "rochdale afc": 4,
       "rochdale borough council rss": 3,
       "rochdale times": 3,
       "theoldhamtimes": 1
@@ -848,9 +850,9 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 31,
+  "robots_denied_count": 32,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
     "https://c.newsnow.co.uk/A/1324539294?-57568:46921",
     "https://c.newsnow.co.uk/A/1324500343?-57568:46921",
     "https://c.newsnow.co.uk/A/1324453308?-57568:46921",
@@ -869,14 +871,15 @@
     "https://c.newsnow.co.uk/A/1324109596?-57568:46921",
     "https://c.newsnow.co.uk/A/1324089802?-57568:46921",
     "https://c.newsnow.co.uk/A/1324080654?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324541855?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324541855?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
     "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324029846?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
+    "https://news.google.com/rss/articles/CBMic0FVX3lxTFBTRk15Zm0xN0pGRk45dnlEVmRydVBMWWpRRWlsT09rRjQ5T0tXQTRTVnk5clFSYjVBR2UyMG5NSHd6RjVhQll3ZkRKT3VuWlA4QjVxMFRVRTZjY3o0ejRRUy13eHR6Qk1uRGhKZGFGRUd3c1k?oc=5",
     "https://news.google.com/rss/articles/CBMitgFBVV95cUxNSXF0VW5LQ0NBLW9mZzUxT2hieVoxakMxOE4ydlY4bUxIcDRvU1RYWU5hWXF4SmtST0ZTbEdZZVVzcmxMSWFhQXFiU0VxS2lOUGdkWnh0TzdPM1ZFckZWOURhd1gxQ0VGWnVGaWZlMmVZU0M4a01Cai05QWtFbVRoQjNwZlRYazhqQnJzbC1yVEFTekFMa0dOYXJGMzd4R1dVZVgyVEgwemFOOWtOM1NsM1NoQkV5QQ?oc=5",
     "https://news.google.com/rss/articles/CBMimAFBVV95cUxPYjN3WVBxandybUZ2c29Ka3hzVDZrVkN2S1hRUjVzQ0F3YWtoU252eVJnSWVWYnRqVUJoMmRRVkpGMVRRTFkwRFBXQm93dXJDaFFkRXNOQ0pNdFMtRE9nWlc2SkFEWTFxSjVkeG5GZ2pxM2Z1cml4eXhUZFNVUHppWm5mLWlkZXNnY01UZDJFSkJiRXZiaWFISg?oc=5",
     "https://news.google.com/rss/articles/CBMipAFBVV95cUxPY3RPOHJIWnctVWNHemFuMDlQdGY3WEE5MkQxbEZZN25Ud3FvSDRNQktKNldnUXRETkVadnJpcmp1NWVMM0xqRFhiaGdrZ0VDZlJoV1J2WUhaSGRDNTBmSU1LdWhJdWNXaVZLeFhhSzNxYjRndzZCUXBqRnFhVk5uZGk1WTA2MVM1NWE4Q2szRHZnd2tTdkFkLWdYNEgyY1JnYnhQWg?oc=5",
@@ -884,11 +887,10 @@
   ],
   "slow_domain_failure_threshold": 2,
   "slow_domains_circuit_broken_this_run": [
-    "yourtrustrochdale.co.uk"
+    "rochdaleafc.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 7,
-    "rochdaleafc.co.uk": 1
+    "rochdaleafc.co.uk": 8
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -923,8 +925,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-16T17:20:05.858787Z",
-  "frontpage_article_count": 8,
+  "frontpage_generated_at": "2026-09-16T17:29:49.978750Z",
+  "frontpage_article_count": 9,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -932,7 +934,6 @@
       "crime",
       "environment",
       "news",
-      "politics",
       "sport"
     ],
     "selected_categories": [
@@ -940,7 +941,6 @@
       "crime",
       "environment",
       "news",
-      "politics",
       "sport"
     ],
     "available_wards": [
@@ -968,42 +968,41 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 2,
+      "environment": 3,
       "crime": 1,
-      "politics": 1,
-      "sport": 2,
+      "sport": 3,
       "business": 1,
       "news": 1
     },
     "selected_by_ward": {
       "Healey": 1,
-      "borough-wide": 6,
+      "borough-wide": 7,
       "Wardle, Shore and West Littleborough": 1
     },
     "selected_by_area": {
       "boarshaw": 1,
       "healey": 1,
       "middleton": 1,
-      "rochdale": 4,
+      "rochdale": 5,
       "wardle": 1
     },
     "selected_by_source": {
       "rochdale borough council (healey dell nature reserve and tea rooms)": 1,
       "theoldhamtimes": 1,
-      "source": 2,
-      "rochdale afc": 2,
+      "rochdale afc": 3,
       "ispreview": 1,
-      "rochdale borough council rss": 1
+      "rochdale borough council rss": 2,
+      "source": 1
     },
-    "pool_size": 8,
-    "primary_pool_size": 8,
+    "pool_size": 9,
+    "primary_pool_size": 9,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 8,
+    "frontpage_count": 9,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 4,
-    "fresh_under_homepage_window": 8,
-    "short_briefs_selected": 4,
+    "fresh_under_24h": 5,
+    "fresh_under_homepage_window": 9,
+    "short_briefs_selected": 5,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1014,7 +1013,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 7,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 144,
+  "duplicate_articles_after_postprocessing": 145,
   "blocked_articles_removed": 2,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
