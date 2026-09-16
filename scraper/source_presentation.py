@@ -132,14 +132,38 @@ def clean_candidate_public_text(candidate: Any) -> Any:
     return candidate
 
 
+CHARGED_WITH_RE = re.compile(r"\bcharged\s+with\b", re.IGNORECASE)
+
 COURT_POLICE_IMAGE_RE = re.compile(
     r"\b(sentenced|jailed|convicted|charged|arrested|imprisoned|prison|court|offences?)\b",
     re.IGNORECASE,
 )
 
 
+def _set_standard_police_image(article: dict[str, Any], reason: str) -> dict[str, Any]:
+    article["image_url"] = "assets/img/cards/police.jpg"
+    article["image_credit"] = "Rochdale Daily"
+    article["image_credit_url"] = "https://rochdaledaily.co.uk/"
+    article["image_status"] = "standard-police-image"
+    article["image_placeholder_reason"] = reason
+    return article
+
+
 def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
     title = str(article.get("title") or "")
+    article_text = " ".join(
+        str(article.get(field) or "")
+        for field in ("title", "excerpt", "summary", "content_html")
+    )
+
+    # Editorial hard rule: reports containing the exact phrase "charged with"
+    # always use the standard police image, regardless of the current image.
+    if CHARGED_WITH_RE.search(article_text):
+        return _set_standard_police_image(
+            article,
+            'Standard police image used because article contains "charged with"',
+        )
+
     category = str(article.get("category") or "").casefold()
     police_matter = bool(article.get("police_matter")) or category == "crime"
     current = str(article.get("image_url") or "")
@@ -150,11 +174,10 @@ def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
         or str(article.get("image_status") or "") in {"area-category-card", "category-fallback"}
     )
     if police_matter and fallback and COURT_POLICE_IMAGE_RE.search(title):
-        article["image_url"] = "assets/img/cards/police.jpg"
-        article["image_credit"] = "Rochdale Daily"
-        article["image_credit_url"] = "https://rochdaledaily.co.uk/"
-        article["image_status"] = "standard-police-image"
-        article["image_placeholder_reason"] = "Standard police image used for court or sentencing report"
+        return _set_standard_police_image(
+            article,
+            "Standard police image used for court or sentencing report",
+        )
     return article
 
 
