@@ -132,7 +132,10 @@ def clean_candidate_public_text(candidate: Any) -> Any:
     return candidate
 
 
-CHARGED_WITH_RE = re.compile(r"\bcharged\s+with\b", re.IGNORECASE)
+HARD_POLICE_IMAGE_RE = re.compile(
+    r"\b(?:charged\s+with|pleads\s+guilty)\b",
+    re.IGNORECASE,
+)
 
 COURT_POLICE_IMAGE_RE = re.compile(
     r"\b(sentenced|jailed|convicted|charged|arrested|imprisoned|prison|court|offences?)\b",
@@ -156,12 +159,13 @@ def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
         for field in ("title", "excerpt", "summary", "content_html")
     )
 
-    # Editorial hard rule: reports containing the exact phrase "charged with"
-    # always use the standard police image, regardless of the current image.
-    if CHARGED_WITH_RE.search(article_text):
+    # Editorial hard rule: these exact phrases always use the standard police
+    # image, regardless of the current image choice.
+    hard_match = HARD_POLICE_IMAGE_RE.search(article_text)
+    if hard_match:
         return _set_standard_police_image(
             article,
-            'Standard police image used because article contains "charged with"',
+            f'Standard police image used because article contains "{hard_match.group(0)}"',
         )
 
     category = str(article.get("category") or "").casefold()
