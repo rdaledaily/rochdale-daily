@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-09-15T12:06:11.760774Z",
+  "examined_at": "2026-09-16T12:01:44.712494Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 91,
+  "candidates_examined": 96,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 63,
-    "would publish": 19,
-    "duplicate of published story": 9
+    "age": 60,
+    "would publish": 32,
+    "duplicate of published story": 4
   },
-  "would_publish": 19,
+  "would_publish": 32,
   "age_gate_sensitivity": {
     "6h": 0,
     "14h": 0,
-    "24h": 14,
-    "48h": 28,
-    "72h": 62,
-    "168h": 91
+    "24h": 18,
+    "48h": 36,
+    "72h": 52,
+    "168h": 96
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 64 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "Rochdale Borough Council: Union Street, roadworks in Rochdale from 17 November 2026 - Rochdale B"
+      "Bee Network live travel alerts: Updated: 15/09/2026 at 7:23pm Live Failsworth Tram Stop - Lift out of ",
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "duplicate of published story": [
-      "Bee Network live travel alerts: Updated: 14/09/2026 at 4:03pm Live Failsworth Tram Stop - Lift out of ",
-      "Bbc: Man crashed into Rochdale pub after police chase inquest hears",
-      "Express and Star: Walsall defender Mason Hancock named in League Two team of the week af"
+      "Ispreview: Zen Internet expand Wi-Fi 7 routers and launch 2.5Gbps broadband via M",
+      "Roch Valley Radio: Littleborough and Wardle brass bands prepare for national finals - Roc",
+      "Roch Valley Radio Local News: Littleborough and Wardle brass bands prepare for national finals"
     ],
     "age": [
-      "Saddleworth Independent: Maggie’s calls for walkers to help people with cancer in Oldham and Ro",
-      "urbanistamagazine.uk: OMD Live in Rochdale Review: A 47-Year Homecoming with Peter Hook & Th",
-      "Rochdale Times: Double treat for town’s fish and chip lovers - Rochdale Times"
+      "Manchester Evening News: M62 traffic LIVE updates as drivers face five-mile queues near Rochdal",
+      "Rochdale Borough Council: Council widens cost of living support with £15 million cash injection ",
+      "Ofsted: Ofsted publishes inspection report for Cardinal Langley Roman Catholic"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
