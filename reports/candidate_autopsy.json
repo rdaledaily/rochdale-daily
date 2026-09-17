@@ -1,38 +1,44 @@
 {
-  "examined_at": "2026-09-16T12:01:44.712494Z",
+  "examined_at": "2026-09-17T12:04:12.390326Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 96,
+  "candidates_examined": 93,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 60,
-    "would publish": 32,
-    "duplicate of published story": 4
+    "age": 46,
+    "would publish": 39,
+    "not local": 5,
+    "duplicate of published story": 3
   },
-  "would_publish": 32,
+  "would_publish": 39,
   "age_gate_sensitivity": {
     "6h": 0,
-    "14h": 0,
+    "14h": 5,
     "24h": 18,
-    "48h": 36,
-    "72h": 52,
-    "168h": 96
+    "48h": 47,
+    "72h": 66,
+    "168h": 93
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 64 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 15/09/2026 at 7:23pm Live Failsworth Tram Stop - Lift out of ",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
+      "Food Standards Agency: 63 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
+      "Bee Network live travel alerts: Updated: 16/09/2026 at 5:18pm Live Failsworth Tram Stop - Lift out of "
+    ],
+    "not local": [
+      "rochdaleafc.co.uk: Important Info Ahead Of Saturday’s Game - rochdaleafc.co.uk",
+      "rochdaleafc.co.uk: Dale Unveil The New HY Lounge - rochdaleafc.co.uk",
+      "rochdaleafc.co.uk: Dale Pegged Back Late On - rochdaleafc.co.uk"
     ],
     "duplicate of published story": [
+      "Rochdale AFC: Rochdale AFC Sleep Out Returns - Rochdale AFC",
       "Ispreview: Zen Internet expand Wi-Fi 7 routers and launch 2.5Gbps broadband via M",
-      "Roch Valley Radio: Littleborough and Wardle brass bands prepare for national finals - Roc",
       "Roch Valley Radio Local News: Littleborough and Wardle brass bands prepare for national finals"
     ],
     "age": [
-      "Manchester Evening News: M62 traffic LIVE updates as drivers face five-mile queues near Rochdal",
-      "Rochdale Borough Council: Council widens cost of living support with £15 million cash injection ",
-      "Ofsted: Ofsted publishes inspection report for Cardinal Langley Roman Catholic"
+      "Rochdale Borough Council RSS: International exchange: Middleton goes wild for nature inspired mural ",
+      "Rochdale Times: Council spreads cost-of -living support with £15 million cash injectio",
+      "Rochdale Times: Council spreads cost-of -living support with £15 million cash injectio"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
