@@ -1,7 +1,7 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 6,
+    "kept_cards": 9,
     "cards_library": 0,
     "cards_generated": 11,
     "skipped": 0
@@ -15,9 +15,23 @@
       "match_score": null
     },
     {
+      "slug": "heywood-police-conduct-traffic-enforcement-operation-stopping-over-60-vehicles",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/traffic.jpg",
+      "matched_filename": "traffic.jpg",
+      "match_score": 15127
+    },
+    {
+      "slug": "middleton-s-regeneration-efforts-strengthened-by-key-announcements",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/middleton-s-regeneration-efforts-strengthened-by-key-announcements-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "ignite-fire-festival-returns-to-rochdale-from-20-to-22-november-2026",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/ignite-fire-festival-returns-to-rochdale-from-20-to-22-november-2026-canonical.jpg",
+      "image_url": "assets/img/generated/dd00e2c74417a5e6f6.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -31,9 +45,16 @@
     {
       "slug": "tickets-now-available-for-rochdale-afc-s-huddersfield-trophy-match",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/f9496756756ae3f4cc.jpg",
+      "image_url": "assets/img/cards/tickets-now-available-for-rochdale-afc-s-huddersfield-trophy-match-canonical.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rochdale-town-hall-features-in-new-bbc-legal-drama-the-split-up",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 15378
     },
     {
       "slug": "are-there-really-fairies-in-healey-dell",
@@ -86,7 +107,7 @@
     },
     {
       "slug": "taxi-drivers-in-rochdale-to-benefit-from-2-million-green-vehicle-fund",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/taxi-drivers-in-rochdale-to-benefit-from-2-million-green-vehicle-fund-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
