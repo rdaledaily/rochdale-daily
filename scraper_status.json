@@ -1,36 +1,40 @@
 {
-  "last_run_at": "2026-09-18T14:12:21.439152Z",
-  "raw_candidates_before_job_filter": 99,
+  "last_run_at": "2026-09-18T14:23:26.264512Z",
+  "raw_candidates_before_job_filter": 94,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 99,
+  "raw_candidates": 94,
   "candidate_clusters": 37,
   "google_news_resolution": {
-    "wrappers": 54,
+    "wrappers": 51,
     "resolved": 2,
     "text_recovered": 0,
     "reattributed": 1,
     "images_found": 1
   },
-  "duplicates_merged": 62,
-  "attempted_rewrites": 16,
-  "new_articles": 6,
+  "duplicates_merged": 57,
+  "attempted_rewrites": 15,
+  "new_articles": 5,
   "live_articles": 21,
   "skipped": 10,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 6,
+    "editorial gate: REJECTED_NON_LOCAL": 4,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
     "quality check: Rewrite the long verbatim source passage.": 1,
     "editorial gate: REJECTED_NON_NEWS": 1,
-    "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 1,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
+    "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
+    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 75,
+    "rss_and_google_news": 72,
     "website_discovery": 5,
     "aggregator_discovery": 1,
-    "live_service_pages": 12,
+    "live_service_pages": 10,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -39,14 +43,14 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale AFC": 21,
+    "Rochdale AFC": 20,
     "Rochdale Times": 17,
-    "Rochdale Borough Council": 12,
+    "Rochdale Borough Council": 11,
     "Yahoo": 11,
     "InYourArea": 10,
-    "Northern live service updates": 9,
+    "Northern live service updates": 7,
     "Ofsted": 5,
-    "About Manchester": 4,
+    "About Manchester": 3,
     "Bee Network live travel alerts": 3,
     "Rochdale Borough Council RSS": 1,
     "Queens Chronicle": 1,
@@ -64,7 +68,7 @@
     "politics": 1,
     "sport": 7,
     "traffic": 1,
-    "transport": 3
+    "transport": 2
   },
   "published_by_category": {
     "business": 2,
@@ -109,7 +113,6 @@
     "sport-v3-3f89b4f8ceb6252c4939",
     "health-v3-e43b91d6a3e3ee615cba",
     "environment-v3-4a0acc539c31e77ec4f5",
-    "transport-v3-a9cd2583114372bf7bdf",
     "sport-v3-7bb744667a4de83e2df1",
     "transport-v3-f43eab39bfd3a9db7669",
     "sport-v3-6d27c2295bdeb68390ac",
@@ -127,7 +130,6 @@
     "https://rochdaleafc.co.uk/a-joint-message-from-dale-oldham-athletic/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://publicaccess.rochdale.gov.uk/online-applications/",
-    "https://www.northernrailway.co.uk/service-updates#live-22eb09d85d157cff8a",
     "https://www.rochdaletimes.co.uk/rochdale-mp-makes-history-in-the-commons/",
     "https://tfgm.com/travel-updates/travel-alerts?no-script=true",
     "https://rochdaleafc.co.uk/admission-details-for-tranmere-away/",
@@ -168,13 +170,11 @@
     "available_wards": [],
     "selected_wards": [],
     "available_areas": [
-      "middleton",
-      "smithy_bridge"
+      "middleton"
     ],
     "selected_areas": [
       "middleton",
-      "rochdale",
-      "smithy_bridge"
+      "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
@@ -187,18 +187,16 @@
       "politics": 1,
       "sport": 7,
       "traffic": 1,
-      "transport": 3
+      "transport": 2
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "middleton": 1,
-      "rochdale": 14,
-      "smithy_bridge": 1
+      "rochdale": 14
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "food standards agency": 1,
-      "northern live service updates": 1,
       "rochdale afc": 6,
       "rochdale borough council rss": 1,
       "rochdale times": 3,
@@ -827,7 +825,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 41,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324741827?-57568:46921",
     "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
     "https://c.newsnow.co.uk/A/1324667291?-57568:46921",
     "https://c.newsnow.co.uk/A/1324646496?-57568:46921",
@@ -846,32 +844,36 @@
     "https://c.newsnow.co.uk/A/1324390676?-57568:46921",
     "https://c.newsnow.co.uk/A/1324346403?-57568:46921",
     "https://c.newsnow.co.uk/A/1324335931?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://c.newsnow.co.uk/A/1324126377?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324741827?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMid0FVX3lxTFBYcnp2WTdwd1pWaEkxeDBQVHE0VC1Yb2VxeGwyT3NSTEZoNGRNMWpveU9idHg1T1VPU0I4VWpSSVhhbkFEMGNBcTJjTHFHdEpWazh4VkdUM0RmZzBjQnBYN2RNWTh5Y0czNHBub2hMNVV4TjhmbjI4?oc=5",
     "https://news.google.com/rss/articles/CBMirwFBVV95cUxQTmdzRHFkdmxEc2l1ck0yRWZZRkI4RlF6XzFtbjk1TXhUVzJHYXMwYlhvM3B1SjZQTVlteFJsb0pvOGtQTUgzbGpNRkdJXy12U0hiQ2h3TlZBRUZ6RTY2X3h2dG95aEtkaHpDVTcxUENhN2ZPcmpRTHE1dGNsNUtZMDZiY1o5Y0FYaEoyaWFrOXptNGNkZl9lS0RCYTVoRFR4WFNGMWZUdklkWm9qMmx3?oc=5",
     "https://news.google.com/rss/articles/CBMigwFBVV95cUxOVWJYUTMwUER2bkNGWDFKTDRIV3poUE5RcnpiZS1wZTFuOEhDcVVEckJkM1ZyWWxJMVJQRWpwdVVNXzRMd21BN2NvbDgyZldpamcyWDZSUmZFR3BVWW41UEczalZtTVBoUTVxUjRJOVhXaWdlS3Q4Y1RHVE9zLUk1d09vdw?oc=5",
     "https://news.google.com/rss/articles/CBMiggFBVV95cUxQalcyZEZnUWVVN3llaVMxN0dOZXVuaVU2Tl9Vd2Z5alphNEl2MnVSaEROZXJOX2o4UTFLc2RZaHhteDVWN1hlX0lJd2lMc0J0bzQzOFdHU1VxTmJBUW96OWRzbmlaV2JTOHZqUTItVHVPLWJmWVNIYzQyajhLVVZCdUhn?oc=5",
+    "https://news.google.com/rss/articles/CBMid0FVX3lxTFBYcnp2WTdwd1pWaEkxeDBQVHE0VC1Yb2VxeGwyT3NSTEZoNGRNMWpveU9idHg1T1VPU0I4VWpSSVhhbkFEMGNBcTJjTHFHdEpWazh4VkdUM0RmZzBjQnBYN2RNWTh5Y0czNHBub2hMNVV4TjhmbjI4?oc=5",
+    "https://news.google.com/rss/articles/CBMijgFBVV95cUxNTktDUU1KUnh6QzFXOG1RQ2pfbF9hdGpURnBpSThKRDBiaW94NmtyT3dwTTZDdEJabEZMVmQtM0t1U2UzcG5uT0dsX1dYTHdUVEVJM1Fpa3ZDMk03Z0YwM21sbUFzQzJEOTFaNzhwdGdLdUdQLWVSQThrVEhlX1dIZTdsY0hxWkxWTlJ1RG13?oc=5",
     "https://news.google.com/rss/articles/CBMitAFBVV95cUxQeXdROHg2YlVVbkxmU0d5SU82THFRYVNBLU1ZVTFXU3lEOTZ1RGpxY3MzZXJNVnBDeFFnRnpETDhlczBYUWpLUVA2WGw5V05jcl9xZ093NXctczVDUWJiT0VQNTJOZ2tHTlg1SHcxQ2xHTlpMNEhveE1GSGVzQUxNY2JxaFVKZ1RGcUlRZjFqVnJtMEM1SGc0TkM1a2M4c0Y1UUU2andjVlNVX1dyeDlsN2Zpdjc?oc=5",
     "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNU1NFUXIwcVlZWDF1bWxOTGJTU1RJZVdha2VHSEJUeFlpTEhYd1JzSklGTVcydkRYZzNFWWQ5ZHF4a09mMzRsOUhKVG91TVVXckFQQVlMczBLZUJ1WDh2SXIyT1J5R0o4LXpnS2RYc2t5OUlINjB4YXFqMU5tbzRubzNIcEtKSmt4OF9n?oc=5",
     "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNSTI1QmgxalFnTzFpd3hoTVhqd2c5aFdLQWpuNWtwSEtJa2NTX3JkZVBNNkl0NEZNYnRBclc2Y05rSWVJS0VxOXRLUmszeTdDeUVQQVR0MllXcThWRlV3WXZZSHlyWFRvZnBhUlpGRjdGRjFVYXJsLWkxR0xFRVNnVEJZcV9JSUw4eWV3VGkxdDBqVG94a3R4ajI4MXA4c0tmSFNqMnJyc0lnWXc0QWJoZjhyNDhHcE51Z09J?oc=5",
     "https://news.google.com/rss/articles/CBMiugFBVV95cUxOdGVYS2tEdk5mamZDWmQ3ekdBZTVlTlk5aGhxU1k0dzlsdTFwbHFxQUU1aTJxZk04bUI0c1R0Z3RUQVU1ZnhEd215LXZFZFFuWVpUMmNyZ0ptc1ZFdW5hbll0NVhUNGFNSkdwZGFSQUljRjhCbkwtY2ZiMDl1QWRPdTRKbzh5X2M2T0x6aktRb2oxQVZQeWxmYmZwVkF3bzZFVXV0VFNnV1NXTmxHTzctN2NZa2FyZ2w2VUE?oc=5",
-    "https://news.google.com/rss/articles/CBMijgFBVV95cUxNTktDUU1KUnh6QzFXOG1RQ2pfbF9hdGpURnBpSThKRDBiaW94NmtyT3dwTTZDdEJabEZMVmQtM0t1U2UzcG5uT0dsX1dYTHdUVEVJM1Fpa3ZDMk03Z0YwM21sbUFzQzJEOTFaNzhwdGdLdUdQLWVSQThrVEhlX1dIZTdsY0hxWkxWTlJ1RG13?oc=5",
+    "https://news.google.com/rss/articles/CBMifkFVX3lxTFBBWTNnaDZxQWlQQUoya1puQ1MtMWpaVVNqalY4SDBhMmxBQzR4c1Z6SmJILU1GTDJCeVIwdVVZN052SU84SVg5cDRISDkxeUI3X3AtSzY1VW9sNkdkMlFFUnVVUmltYjFPY0RmT2thb1ZoVzZQSENkM29WRko2QQ?oc=5",
     "https://news.google.com/rss/articles/CBMib0FVX3lxTFBDVXR6ZnFwUmtFN1IzTFJKdXp0SExQN0VrbDZvNjVFNGpVdXV6VHJFWTJKUW9yU3pqQWtnTzI0NVNRNDB3UERxUl9MTldTUzhQNjkteUVXaWpGcm5qX19jNl9ZbGk1cFduM0VaalUtZw?oc=5",
     "https://news.google.com/rss/articles/CBMie0FVX3lxTFBBUUJtSGptWDV3Nk83R1MzSENBWWxkLTUzYW1XYzVCaV9CTVEtcldKV3V3WU5PVF9QZHNqUUpiMXY0TGNBYlVDVG5nMVpKTDk1UklMUmhhaF9KQVVzU3oxdlFZSGZRbVltNE9zLTRnUDlVMDRrT3lPM2ZGSQ?oc=5",
-    "https://news.google.com/rss/articles/CBMifkFVX3lxTFBBWTNnaDZxQWlQQUoya1puQ1MtMWpaVVNqalY4SDBhMmxBQzR4c1Z6SmJILU1GTDJCeVIwdVVZN052SU84SVg5cDRISDkxeUI3X3AtSzY1VW9sNkdkMlFFUnVVUmltYjFPY0RmT2thb1ZoVzZQSENkM29WRko2QQ?oc=5",
     "https://news.google.com/rss/articles/CBMic0FVX3lxTFBTRk15Zm0xN0pGRk45dnlEVmRydVBMWWpRRWlsT09rRjQ5T0tXQTRTVnk5clFSYjVBR2UyMG5NSHd6RjVhQll3ZkRKT3VuWlA4QjVxMFRVRTZjY3o0ejRRUy13eHR6Qk1uRGhKZGFGRUd3c1k?oc=5",
     "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE92aGdRbXdVQUp1d1RsY2Y5eDZHQk1zcml0dlVMSWl2TzAzb2NIYUl3UUVuSkxWOEFRenVJSERhVDNRRU5iQTlMeUxFNGd6Q25QOGhqaTFMRFhlNlByeFFjaE1uVHgyM0E?oc=5"
   ],
   "slow_domain_failure_threshold": 2,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 5
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -905,7 +907,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-18T14:14:01.181745Z",
+  "frontpage_generated_at": "2026-09-18T14:25:05.980894Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
