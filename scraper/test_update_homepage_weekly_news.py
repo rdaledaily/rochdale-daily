@@ -90,6 +90,13 @@ class WeeklySelectionTests(unittest.TestCase):
 
 
 class WeeklyMarkupTests(unittest.TestCase):
+    def test_inserts_before_current_ward_options_template(self):
+        html = '<main>\n      <template id="ward-options"><option>Choose a ward</option></template>\n</main>'
+        rows = [row("recent", 20)]
+        updated, changed = update_html(html, rows)
+        self.assertTrue(changed)
+        self.assertLess(updated.index(START), updated.index('id="ward-options"'))
+
     def test_inserts_before_ward_section_and_is_idempotent(self):
         html = '<main>\n      <section class="section" id="news-by-ward" aria-labelledby="news-by-ward-title"></section>\n</main>'
         rows = [row("recent", 20)]

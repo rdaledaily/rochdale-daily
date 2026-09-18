@@ -32,7 +32,10 @@ MAX_STORIES = 6
 MAX_AGE_DAYS = 7
 CURRENT_EDITION_HOURS = 14
 MIN_CURRENT_EDITION_FOR_WEEKLY = 6
-INSERT_BEFORE = '      <section class="section" id="news-by-ward" aria-labelledby="news-by-ward-title">'
+INSERT_BEFORE_ANCHORS = (
+    '      <template id="ward-options">',
+    '      <section class="section" id="news-by-ward" aria-labelledby="news-by-ward-title">',
+)
 
 
 def frontpage_rows(path: Path = FRONTPAGE) -> list[dict]:
@@ -196,9 +199,11 @@ def update_html(text: str, rows: list[dict]) -> tuple[str, bool]:
         updated = before + block + after
         return updated, updated != text
 
-    if text.count(INSERT_BEFORE) != 1:
-        raise SystemExit("Homepage ward-section anchor missing or ambiguous; refusing broad HTML rewrite")
-    updated = text.replace(INSERT_BEFORE, block + "\n\n" + INSERT_BEFORE, 1)
+    anchors = [anchor for anchor in INSERT_BEFORE_ANCHORS if text.count(anchor) == 1]
+    if len(anchors) != 1:
+        raise SystemExit("Homepage weekly-news insertion anchor missing or ambiguous; refusing broad HTML rewrite")
+    anchor = anchors[0]
+    updated = text.replace(anchor, block + "\n\n" + anchor, 1)
     return updated, True
 
 
