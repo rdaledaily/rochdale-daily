@@ -1,44 +1,44 @@
 {
-  "examined_at": "2026-09-17T12:04:12.390326Z",
+  "examined_at": "2026-09-18T11:48:01.097330Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 93,
+  "candidates_examined": 104,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 46,
-    "would publish": 39,
-    "not local": 5,
-    "duplicate of published story": 3
+    "age": 60,
+    "would publish": 33,
+    "not local": 6,
+    "duplicate of published story": 5
   },
-  "would_publish": 39,
+  "would_publish": 33,
   "age_gate_sensitivity": {
     "6h": 0,
-    "14h": 5,
-    "24h": 18,
-    "48h": 47,
-    "72h": 66,
-    "168h": 93
+    "14h": 2,
+    "24h": 17,
+    "48h": 44,
+    "72h": 72,
+    "168h": 104
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 63 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "Bee Network live travel alerts: Updated: 16/09/2026 at 5:18pm Live Failsworth Tram Stop - Lift out of "
+      "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "Bee Network live travel alerts: Updated: 17/09/2026 at 11:53am Live Failsworth Tram Stop - Lift out of",
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "not local": [
-      "rochdaleafc.co.uk: Important Info Ahead Of Saturday’s Game - rochdaleafc.co.uk",
-      "rochdaleafc.co.uk: Dale Unveil The New HY Lounge - rochdaleafc.co.uk",
-      "rochdaleafc.co.uk: Dale Pegged Back Late On - rochdaleafc.co.uk"
+      "rochdaleafc.co.uk: Watson On Returning Players & Flint Addition - rochdaleafc.co.uk",
+      "rochdaleafc.co.uk: Watson On Returning Players & Flint Addition - rochdaleafc.co.uk",
+      "rochdaleafc.co.uk: TVOS Preview | Oldham Athletic (H) - rochdaleafc.co.uk"
     ],
     "duplicate of published story": [
-      "Rochdale AFC: Rochdale AFC Sleep Out Returns - Rochdale AFC",
-      "Ispreview: Zen Internet expand Wi-Fi 7 routers and launch 2.5Gbps broadband via M",
-      "Roch Valley Radio Local News: Littleborough and Wardle brass bands prepare for national finals"
+      "Ofsted: Ofsted publishes inspection report for Tiddlywinks Day Nursery",
+      "Ofsted: Ofsted publishes inspection report for Willow View School",
+      "Rochdale AFC: Tickets On Sale For Huddersfield Trophy Trip - Rochdale AFC"
     ],
     "age": [
-      "Rochdale Borough Council RSS: International exchange: Middleton goes wild for nature inspired mural ",
-      "Rochdale Times: Council spreads cost-of -living support with £15 million cash injectio",
-      "Rochdale Times: Council spreads cost-of -living support with £15 million cash injectio"
+      "BBC Manchester: Prestwich road closed by third sinkhole in 10 years",
+      "Rochdale AFC: Rochdale AFC Sleep Out Returns - Rochdale AFC",
+      "Rochdale AFC: Update Your Fanbase App - Rochdale AFC"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
