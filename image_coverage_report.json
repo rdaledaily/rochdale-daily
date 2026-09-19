@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 21,
-    "cards_library": 0,
-    "cards_generated": 5,
+    "kept_cards": 19,
+    "cards_library": 1,
+    "cards_generated": 6,
     "skipped": 0
   },
   "items": [
@@ -13,13 +13,6 @@
       "image_url": "assets/img/cards/are-there-really-fairies-in-healey-dell.jpg",
       "matched_filename": "",
       "match_score": null
-    },
-    {
-      "slug": "rochdale-secures-2-0-victory-over-oldham-in-league-two-derby",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/rochdale_fc.jpg",
-      "matched_filename": "rochdale_fc.jpg",
-      "match_score": 8251
     },
     {
       "slug": "kashmir-youth-project-marks-year-of-community-achievements-in-rochdale",
@@ -37,10 +30,17 @@
     },
     {
       "slug": "st-luke-s-church-in-deeplish-to-hold-outdoor-service-on-september-20",
-      "result": "kept-cards",
+      "result": "kept-existing",
       "image_url": "assets/img/cards/st-luke-s-church-in-deeplish-to-hold-outdoor-service-on-september-20.jpg",
-      "matched_filename": "st-luke-s-church-in-deeplish-to-hold-outdoor-service-on-september-20.jpg",
-      "match_score": 15505
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-secures-2-0-victory-over-oldham-in-league-two-derby",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 15252
     },
     {
       "slug": "rochdale-to-face-oldham-athletic-in-league-two-match-on-saturday",
@@ -101,7 +101,7 @@
     {
       "slug": "rochdale-afc-and-oldham-athletic-release-joint-statement",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-afc-and-oldham-athletic-release-joint-statement-canonical.jpg",
+      "image_url": "assets/img/generated/698d956d6b074a0bd5.jpg",
       "matched_filename": "",
       "match_score": null
     },
