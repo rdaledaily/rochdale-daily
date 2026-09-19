@@ -1,11 +1,25 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 157,
-  "published_count": 157,
-  "category_change_count": 18,
-  "image_change_count": 22,
+  "article_count": 160,
+  "published_count": 160,
+  "category_change_count": 20,
+  "image_change_count": 21,
   "category_changes": [
+    {
+      "slug": "traffic-advisory-for-rochdale-afc-match-on-saturday",
+      "title": "Traffic Advisory for Rochdale AFC Match on Saturday",
+      "from": "transport",
+      "to": "sport",
+      "reason": "headline strongly identifies sport"
+    },
+    {
+      "slug": "ignite-fire-festival-returns-to-rochdale-from-november-20-22-2026",
+      "title": "Ignite Fire Festival Returns to Rochdale from November 20-22, 2026",
+      "from": "politics",
+      "to": "events",
+      "reason": "headline strongly identifies events"
+    },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
       "title": "REFORM UK DELIVERS: PEOPLE POWER BACKED BY REFORM SCRAPS DISASTROUS ROAD CLOSURES!",
@@ -159,6 +173,18 @@
       "after": "assets/img/cards/police-investigate-social-media-threats-following-recent-stabbing-in-rochdale-generated-card.jpg"
     },
     {
+      "slug": "traffic-advisory-for-rochdale-afc-match-on-saturday",
+      "title": "Traffic Advisory for Rochdale AFC Match on Saturday",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/traffic-advisory-for-rochdale-afc-match-on-saturday-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-borough-council-launches-resilient-roch-flood-resilience-programme",
       "title": "Rochdale Borough Council Launches Resilient Roch Flood Resilience Programme",
       "category": "environment",
@@ -195,28 +221,16 @@
       "after": "assets/img/cards/rochdale-afc-u18-transfers-update-as-of-september-2026-generated-card.jpg"
     },
     {
-      "slug": "rochdale-afc-and-oldham-athletic-release-joint-statement",
-      "title": "Rochdale AFC and Oldham Athletic Release Joint Statement",
+      "slug": "rochdale-fc-transactions-update-available-on-yahoo-sports",
+      "title": "Rochdale FC Transactions Update Available on Yahoo Sports",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
+        "image_url": "assets/img/cards/rochdale_fc.jpg",
+        "img": "assets/img/cards/rochdale_fc.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/rochdale-afc-and-oldham-athletic-release-joint-statement-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-afc-faces-accrington-stanley-in-league-two-clash",
-      "title": "Rochdale AFC Faces Accrington Stanley in League Two Clash",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-afc-faces-accrington-stanley-in-league-two-clash-generated-card.jpg"
+      "after": "assets/img/cards/rochdale-fc-transactions-update-available-on-yahoo-sports-generated-card.jpg"
     },
     {
       "slug": "rochdale-mp-paul-waugh-highlights-local-achievements-as-minister-for-early-educa",
@@ -265,18 +279,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/heywood-police-conduct-traffic-enforcement-operation-stopping-over-60-vehicles-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-to-host-oldham-athletic-in-league-two-match",
-      "title": "Rochdale vs Oldham Athletic: Live Stream and TV Details Confirmed",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/match.jpg",
-        "img": "assets/img/cards/match.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-to-host-oldham-athletic-in-league-two-match-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
