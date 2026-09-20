@@ -1,38 +1,37 @@
 {
-  "last_run_at": "2026-09-20T20:02:18.334121Z",
-  "raw_candidates_before_job_filter": 68,
+  "last_run_at": "2026-09-20T20:10:50.223892Z",
+  "raw_candidates_before_job_filter": 70,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 68,
+  "raw_candidates": 70,
   "candidate_clusters": 31,
   "google_news_resolution": {
     "wrappers": 49,
     "resolved": 49,
     "text_recovered": 28,
-    "reattributed": 16,
+    "reattributed": 11,
     "images_found": 33
   },
-  "duplicates_merged": 37,
+  "duplicates_merged": 39,
   "attempted_rewrites": 20,
-  "new_articles": 7,
-  "live_articles": 18,
-  "skipped": 13,
+  "new_articles": 8,
+  "live_articles": 19,
+  "skipped": 12,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 8,
+    "editorial gate: REJECTED_NON_LOCAL": 7,
     "quality gate after 4 repairs: The model marked the story unpublishable.": 3,
     "quality check: Rewrite the long verbatim source passage.": 1,
     "editorial gate: REJECTED_NON_NEWS": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 56,
+    "rss_and_google_news": 55,
     "website_discovery": 4,
     "aggregator_discovery": 0,
-    "live_service_pages": 3,
+    "live_service_pages": 6,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -42,14 +41,15 @@
   "collector_errors": {},
   "source_counts": {
     "Rochdale AFC": 7,
-    "Rochdale Times": 7,
+    "Rochdale Times": 6,
     "Oldham Times": 5,
     "Roch Valley Radio": 4,
     "Ofsted": 4,
     "InYourArea": 3,
     "Rochdale Borough Council": 3,
-    "Peterborough Matters": 3,
+    "Peterboroughmatters": 3,
     "Herts Advertiser": 3,
+    "Bee Network live travel alerts": 3,
     "Northern live service updates": 3,
     "London Now": 2,
     "Shropshire Star": 2,
@@ -66,7 +66,7 @@
     "Freetips": 1,
     "Uk": 1,
     "The Bury Times": 1,
-    "County Times": 1,
+    "Countytimes": 1,
     "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
@@ -85,7 +85,7 @@
     "environment": 3,
     "events": 6,
     "politics": 1,
-    "sport": 3,
+    "sport": 4,
     "traffic": 1
   },
   "openai_enabled": true,
@@ -845,7 +845,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 28,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
     "https://c.newsnow.co.uk/A/1324865947?-57568:46921",
     "https://c.newsnow.co.uk/A/1324836333?-57568:46921",
     "https://c.newsnow.co.uk/A/1324771282?-57568:46921",
@@ -864,13 +864,13 @@
     "https://c.newsnow.co.uk/A/1324443984?-57568:46921",
     "https://c.newsnow.co.uk/A/1324436673?-57568:46921",
     "https://c.newsnow.co.uk/A/1324419876?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
     "https://c.newsnow.co.uk/A/1324890953?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
     "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMigAFBVV95cUxPQmdmSVRpSFcwTXdqZmViVFlYbjBpcWQzWlZiS3RLUTJtUmc0Q2d0TEo2bkY1ako2RGcxcGNpUWtqVXNSQUc3cEtsVmhRMlBncTFvUnFpc2FONHVCbHFQbkduOHRQR3pqeHhTUDNRNy04Qk8tdUZDRTlVcG5YSGZJdw?oc=5"
   ],
@@ -910,7 +910,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-20T20:03:59.385285Z",
+  "frontpage_generated_at": "2026-09-20T20:11:43.365455Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -934,13 +934,11 @@
     ],
     "available_wards": [
       "Central Rochdale",
-      "Milkstone and Deeplish",
-      "Spotland and Falinge"
+      "Milkstone and Deeplish"
     ],
     "selected_wards": [
       "Central Rochdale",
-      "Milkstone and Deeplish",
-      "Spotland and Falinge"
+      "Milkstone and Deeplish"
     ],
     "available_areas": [
       "deeplish",
@@ -967,8 +965,7 @@
       "community": 2
     },
     "selected_by_ward": {
-      "borough-wide": 8,
-      "Spotland and Falinge": 1,
+      "borough-wide": 9,
       "Central Rochdale": 1
     },
     "selected_by_area": {
@@ -995,7 +992,7 @@
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 4,
     "fresh_under_homepage_window": 10,
-    "short_briefs_selected": 4,
+    "short_briefs_selected": 5,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
