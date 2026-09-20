@@ -1,38 +1,48 @@
 {
-  "examined_at": "2026-09-19T11:31:05.176376Z",
+  "examined_at": "2026-09-20T11:47:45.539352Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 109,
+  "candidates_examined": 142,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "would publish": 48,
-    "age": 46,
-    "duplicate of published story": 15
+    "would publish": 62,
+    "age": 59,
+    "duplicate of published story": 17,
+    "job or career post": 3,
+    "not local": 1
   },
-  "would_publish": 48,
+  "would_publish": 62,
   "age_gate_sensitivity": {
-    "6h": 6,
-    "14h": 9,
-    "24h": 24,
-    "48h": 63,
-    "72h": 85,
-    "168h": 109
+    "6h": 4,
+    "14h": 4,
+    "24h": 54,
+    "48h": 83,
+    "72h": 120,
+    "168h": 142
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "InYourArea: Rochdale Faith News: Saturday, September 19 - InYourArea",
+      "Food Standards Agency: 61 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "Uk: publicaccess.rochdale.gov.uk",
+      "Rochdale Times: Bonfire Night returns to park with a bang - Rochdale Times"
+    ],
+    "not local": [
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "duplicate of published story": [
-      "Roch Valley Radio Local News: Heywood’s ‘Willy Wonka’ moment as gala photos look very different to f",
-      "Radio Times: What channel is Rochdale v Oldham Athletic League Two match on? TV cov",
-      "Oldham Times: Manager Micky Mellon hails Oldham-Rochdale derby as ‘a cracking’ footb"
+      "Fansnetwork: Refwatch - Rochdale v Oldham Athletic - FansNetwork.co.uk",
+      "Rochdale Times: Former church site to be turned into homes - Rochdale Times",
+      "Rochdale Times: Former church site to be turned into homes - Rochdale Times"
+    ],
+    "job or career post": [
+      "Shropshirestar: Ian Watson praises Rochdale players after beating Oldham - shropshires",
+      "Express and Star: Ian Watson praises Rochdale players after beating Oldham - Express and",
+      "Oldham Times: Manager Micky Mellon apologies to Oldham Athletic fans following defea"
     ],
     "age": [
-      "Aboutmanchester: Revised plans submitted for Rochdale wind farm - aboutmanchester.co.uk",
-      "Ofsted: Ofsted publishes inspection report for Tiddlywinks Day Nursery",
-      "Ofsted: Ofsted publishes inspection report for Willow View School"
+      "Yahoo: Accrington Stanley vs. Rochdale: Live game updates, stats, play-by-pla",
+      "Yahoo: Shrewsbury Town vs. Rochdale: Live game updates, stats, play-by-play -",
+      "Yahoo: Cheltenham Town vs. Rochdale: Live game updates, stats, play-by-play -"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
