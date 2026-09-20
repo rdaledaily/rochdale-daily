@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 151,
-  "published_count": 151,
+  "article_count": 150,
+  "published_count": 150,
   "category_change_count": 18,
-  "image_change_count": 16,
+  "image_change_count": 17,
   "category_changes": [
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -135,6 +135,18 @@
   ],
   "image_changes": [
     {
+      "slug": "bonfire-night-event-scheduled-for-bowlee-community-park-in-middleton-on-november",
+      "title": "Bonfire Night Event Scheduled for Bowlee Community Park in Middleton on November 2",
+      "category": "politics",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/bowlee_community_park.jpg",
+        "img": "assets/img/cards/bowlee_community_park.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/bonfire-night-event-scheduled-for-bowlee-community-park-in-middleton-on-november-generated-card.jpg"
+    },
+    {
       "slug": "dajaune-brown-scores-first-goal-for-rochdale-afc-on-derby-day",
       "title": "Dajaune Brown Celebrates First Goal for Rochdale AFC on Derby Day",
       "category": "sport",
@@ -147,14 +159,26 @@
       "after": "assets/img/cards/dajaune-brown-scores-first-goal-for-rochdale-afc-on-derby-day-generated-card.jpg"
     },
     {
+      "slug": "rochdale-secures-2-0-victory-over-oldham-in-league-two-derby",
+      "title": "Rochdale AFC Secures 2-0 Victory Over Oldham Athletic",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-secures-2-0-victory-over-oldham-in-league-two-derby-generated-card.jpg"
+    },
+    {
       "slug": "heywood-community-gala-faces-criticism-over-discrepancies-between-advert-and-rea",
       "title": "Heywood Community Gala Photos Spark Comparisons to Glasgow's Willy Wonka Experience",
       "category": "crime",
-      "reason": "sensitive story image lacks explicit source/editorial provenance",
+      "reason": "uncanonical img fallback exists while image_url is empty",
       "before": {
-        "image_url": "assets/img/cards/heywood-community-gala-faces-criticism-over-discrepancies-between-advert-and-rea.jpg",
+        "image_url": "",
         "img": "assets/img/cards/heywood-community-gala-faces-criticism-over-discrepancies-between-advert-and-rea.jpg",
-        "status": "cards-library-photo"
+        "status": "source-photo-cached"
       },
       "after": "assets/img/cards/heywood-community-gala-faces-criticism-over-discrepancies-between-advert-and-rea-generated-card.jpg"
     },
@@ -193,18 +217,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/why-does-rochdale-say-cruckle-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-afc-u18-transfers-update-as-of-september-2026",
-      "title": "Rochdale AFC U18 Transfers Update as of September 2026",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-afc-u18-transfers-update-as-of-september-2026-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
