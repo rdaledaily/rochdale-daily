@@ -1,37 +1,37 @@
 {
-  "last_run_at": "2026-09-20T04:21:16.193437Z",
-  "raw_candidates_before_job_filter": 97,
+  "last_run_at": "2026-09-20T04:31:02.845033Z",
+  "raw_candidates_before_job_filter": 103,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 96,
+  "raw_candidates": 102,
   "candidate_clusters": 45,
   "google_news_resolution": {
-    "wrappers": 80,
+    "wrappers": 70,
     "resolved": 68,
-    "text_recovered": 45,
-    "reattributed": 25,
-    "images_found": 48
+    "text_recovered": 43,
+    "reattributed": 18,
+    "images_found": 46
   },
-  "duplicates_merged": 51,
+  "duplicates_merged": 57,
   "attempted_rewrites": 29,
-  "new_articles": 13,
-  "live_articles": 29,
-  "skipped": 16,
+  "new_articles": 12,
+  "live_articles": 28,
+  "skipped": 17,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 12,
+    "editorial gate: REJECTED_NON_LOCAL": 9,
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 3,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
     "editorial gate: REJECTED_NON_NEWS": 2,
-    "quality check: Rewrite the long verbatim source passage.": 1,
-    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
+    "quality check: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 2,
     "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 2,
-    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 83,
-    "website_discovery": 3,
+    "rss_and_google_news": 84,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 6,
     "facebook_official": 0,
@@ -42,16 +42,16 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 11,
-    "Inyourarea": 11,
+    "Rochdale Times": 16,
+    "InYourArea": 11,
     "Rochdale AFC": 10,
-    "Oldham Times": 5,
     "Rochdale Borough Council": 5,
-    "Herts Advertiser": 4,
+    "Roch Valley Radio": 4,
+    "The Oldham Times": 4,
     "Bee Network live travel alerts": 4,
     "Ofsted": 4,
-    "Roch Valley Radio": 3,
     "Local Government Association": 3,
+    "Herts Advertiser": 3,
     "London Now": 2,
     "Whoscored": 2,
     "Skysports": 2,
@@ -59,8 +59,8 @@
     "Id": 2,
     "Radio Times": 2,
     "Bet365": 2,
-    "Aboutmanchester": 2,
-    "Oldham Athletic AFC": 2,
+    "About Manchester": 2,
+    "Oldhamathletic": 2,
     "Peterboroughmatters": 2,
     "Oxford Mail": 2,
     "County Times": 2,
@@ -68,6 +68,8 @@
     "Northern live service updates": 2,
     "The Northern Echo": 1,
     "Fansnetwork": 1,
+    "tntsports.co.uk": 1,
+    "theoldhamtimes.co.uk": 1,
     "Witney Gazette": 1,
     "Uk": 1,
     "The Bury Times": 1,
@@ -76,8 +78,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "community": 1,
-    "crime": 3,
+    "crime": 4,
     "environment": 8,
     "health": 1,
     "politics": 2,
@@ -93,7 +94,7 @@
     "events": 6,
     "health": 2,
     "politics": 2,
-    "sport": 8,
+    "sport": 7,
     "traffic": 2
   },
   "openai_enabled": true,
@@ -124,7 +125,6 @@
     "transport-v3-05e1e89f70acc2e61a64",
     "hard-news-v3-f4c45146d5bc77d8e59c",
     "sport-v3-334ec4ec15d908eced9f",
-    "community-v3-aab041d7353eac569b3b",
     "health-v3-f0837348bd912646c809",
     "environment-v3-06aa926d19110765d466",
     "hard-news-v3-e41eedff3960c4dd28ff",
@@ -134,6 +134,7 @@
     "sport-v3-ebd6de7d945985bbdbf2",
     "sport-v3-94aac16e083434f317bd",
     "environment-v3-4b42e687b5d2cc6ce259",
+    "hard-news-v3-805e1529948bab21c6a6",
     "sport-v3-279e140da701f55716aa",
     "sport-v3-0f6e102c02584be43196",
     "environment-v3-bd6190a2973181eaeaa4",
@@ -155,7 +156,6 @@
     "https://www.northernrailway.co.uk/service-updates#live-09ac77d4edc1cef65d",
     "https://www.rochdale.gov.uk/news/article/678/young-people-set-to-benefit-from-expanded-youth-services-thanks-to-new-funding",
     "https://www.skysports.com/football/news/11730/13588918/rochdale-2-0-oldham",
-    "https://www.rochvalleyradio.com/news/local-news/heywoods-willy-wonka-moment-as-gala-photos-look-very-different-to-flashy-advert/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://www.rochdaletimes.co.uk/former-church-site-to-be-turned-into-homes/",
     "https://www.rochdaletimes.co.uk/police-step-in-over-social-media-threats/",
@@ -165,6 +165,7 @@
     "https://news.bet365.com/en-gb/article/football-rochdale-oldham-athletic-prediction-and-tips/2026091710062788714",
     "https://www.betshoot.com/football/19727704-Rochdale-vs-Oldham-Athletic-prediction/",
     "https://www.oldhamathletic.co.uk/news/2026/september/19/norburn-after-rochdale-defeat/",
+    "https://www.rochvalleyradio.com/news/local-news/heywoods-willy-wonka-moment-as-gala-photos-look-very-different-to-flashy-advert/",
     "https://rochdaleafc.co.uk/it-was-for-the-fans-watson/",
     "https://www.transfermarkt.com/afc-rochdale-u18/wertvollstezugaenge/verein/15009/page/2",
     "https://publicaccess.rochdale.gov.uk/online-applications/",
@@ -190,7 +191,6 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "community",
       "crime",
       "environment",
       "health",
@@ -200,7 +200,6 @@
       "transport"
     ],
     "selected_categories": [
-      "community",
       "crime",
       "environment",
       "health",
@@ -230,8 +229,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "community": 1,
-      "crime": 3,
+      "crime": 4,
       "environment": 8,
       "health": 1,
       "politics": 2,
@@ -889,7 +887,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 30,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324836333?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
     "https://c.newsnow.co.uk/A/1324763245?-57568:46921",
     "https://c.newsnow.co.uk/A/1324741827?-57568:46921",
     "https://c.newsnow.co.uk/A/1324667291?-57568:46921",
@@ -908,17 +906,17 @@
     "https://c.newsnow.co.uk/A/1324413253?-57568:46921",
     "https://c.newsnow.co.uk/A/1324390676?-57568:46921",
     "https://c.newsnow.co.uk/A/1324346403?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324771282?-57568:46921",
     "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324836333?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324771282?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMirwFBVV95cUxQTmdzRHFkdmxEc2l1ck0yRWZZRkI4RlF6XzFtbjk1TXhUVzJHYXMwYlhvM3B1SjZQTVlteFJsb0pvOGtQTUgzbGpNRkdJXy12U0hiQ2h3TlZBRUZ6RTY2X3h2dG95aEtkaHpDVTcxUENhN2ZPcmpRTHE1dGNsNUtZMDZiY1o5Y0FYaEoyaWFrOXptNGNkZl9lS0RCYTVoRFR4WFNGMWZUdklkWm9qMmx3?oc=5",
     "https://news.google.com/rss/articles/CBMigAFBVV95cUxPQmdmSVRpSFcwTXdqZmViVFlYbjBpcWQzWlZiS3RLUTJtUmc0Q2d0TEo2bkY1ako2RGcxcGNpUWtqVXNSQUc3cEtsVmhRMlBncTFvUnFpc2FONHVCbHFQbkduOHRQR3pqeHhTUDNRNy04Qk8tdUZDRTlVcG5YSGZJdw?oc=5",
-    "https://news.google.com/rss/articles/CBMifkFVX3lxTE0tLXV2LWMzanlNbEZucVhiRlk2Q1ZaZHlxcGhaNGtHVTl2cDZDRkNEQWtVYWpQU1VqdHhfeVRxTEFaQnFKWXNTUmM0U1lCSmlONURTNEl2dFFLWWdnUlhua1dZMFZpblpQREViUExBaWV3eDYtSFUwOFg0X0xPUQ?oc=5"
+    "https://news.google.com/rss/articles/CBMifkFVX3lxTE0tLXV2LWMzanlNbEZucVhiRlk2Q1ZaZHlxcGhaNGtHVTl2cDZDRkNEQWtVYWpQU1VqdHhfeVRxTEFaQnFKWXNTUmM0U1lCSmlONURTNEl2dFFLWWdnUlhua1dZMFZpblpQREViUExBaWV3eDYtSFUwOFg0X0xPUQ?oc=5",
+    "https://news.google.com/rss/articles/CBMirwFBVV95cUxQTmdzRHFkdmxEc2l1ck0yRWZZRkI4RlF6XzFtbjk1TXhUVzJHYXMwYlhvM3B1SjZQTVlteFJsb0pvOGtQTUgzbGpNRkdJXy12U0hiQ2h3TlZBRUZ6RTY2X3h2dG95aEtkaHpDVTcxUENhN2ZPcmpRTHE1dGNsNUtZMDZiY1o5Y0FYaEoyaWFrOXptNGNkZl9lS0RCYTVoRFR4WFNGMWZUdklkWm9qMmx3?oc=5"
   ],
   "slow_domain_failure_threshold": 2,
   "slow_domains_circuit_broken_this_run": [],
@@ -956,7 +954,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-20T04:22:48.101160Z",
+  "frontpage_generated_at": "2026-09-20T04:32:30.755400Z",
   "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1014,15 +1012,15 @@
       "traffic": 2,
       "politics": 2,
       "education": 1,
-      "sport": 1,
-      "community": 1
+      "community": 1,
+      "sport": 1
     },
     "selected_by_ward": {
       "borough-wide": 6,
       "Milkstone and Deeplish": 1,
-      "Spotland and Falinge": 1,
       "Central Rochdale": 2,
-      "Smallbridge and Firgrove": 1
+      "Smallbridge and Firgrove": 1,
+      "Spotland and Falinge": 1
     },
     "selected_by_area": {
       "deeplish": 1,
@@ -1037,8 +1035,8 @@
       "rochdale borough council": 1,
       "aboutmanchester": 1,
       "inyourarea": 2,
-      "the oldham times": 1,
-      "rochdale borough council (healey dell nature reserve and tea rooms)": 1
+      "rochdale borough council (healey dell nature reserve and tea rooms)": 1,
+      "the oldham times": 1
     },
     "pool_size": 22,
     "primary_pool_size": 22,
