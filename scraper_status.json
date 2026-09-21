@@ -1,34 +1,34 @@
 {
-  "last_run_at": "2026-09-21T04:34:17.253943Z",
-  "raw_candidates_before_job_filter": 69,
+  "last_run_at": "2026-09-21T04:43:14.933662Z",
+  "raw_candidates_before_job_filter": 65,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 69,
+  "raw_candidates": 65,
   "candidate_clusters": 29,
   "google_news_resolution": {
     "wrappers": 46,
     "resolved": 46,
     "text_recovered": 26,
-    "reattributed": 8,
-    "images_found": 30
+    "reattributed": 7,
+    "images_found": 31
   },
-  "duplicates_merged": 40,
+  "duplicates_merged": 36,
   "attempted_rewrites": 18,
-  "new_articles": 8,
+  "new_articles": 7,
   "live_articles": 19,
-  "skipped": 10,
+  "skipped": 11,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 7,
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 2,
     "quality check: Rewrite the long verbatim source passage.": 1,
-    "editorial gate: REJECTED_NON_NEWS": 1,
-    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
+    "editorial gate: REJECTED_NON_NEWS": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 2
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 53,
+    "rss_and_google_news": 49,
     "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 7,
@@ -41,19 +41,19 @@
   "collector_errors": {},
   "source_counts": {
     "Rochdale AFC": 7,
-    "Rochdale Times": 7,
     "Northern live service updates": 5,
     "Roch Valley Radio": 4,
     "Oldham Times": 4,
     "Ofsted": 4,
     "InYourArea": 3,
     "Rochdale Borough Council": 3,
-    "Hertsad": 3,
+    "Herts Advertiser": 3,
     "Peterborough Matters": 3,
+    "Rochdale Times": 3,
     "London Now": 2,
-    "Shropshire Star": 2,
+    "Shropshirestar": 2,
     "Sky Sports": 2,
-    "radiotimes.com": 2,
+    "Radio Times": 2,
     "Id": 2,
     "Oxford Mail": 2,
     "Bee Network live travel alerts": 2,
@@ -837,7 +837,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 29,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324890953?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
     "https://c.newsnow.co.uk/A/1324865947?-57568:46921",
     "https://c.newsnow.co.uk/A/1324836333?-57568:46921",
     "https://c.newsnow.co.uk/A/1324771282?-57568:46921",
@@ -857,12 +857,12 @@
     "https://c.newsnow.co.uk/A/1324436673?-57568:46921",
     "https://c.newsnow.co.uk/A/1324419876?-57568:46921",
     "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
     "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
     "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
     "https://c.newsnow.co.uk/A/1323716587?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324890953?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMigAFBVV95cUxPQmdmSVRpSFcwTXdqZmViVFlYbjBpcWQzWlZiS3RLUTJtUmc0Q2d0TEo2bkY1ako2RGcxcGNpUWtqVXNSQUc3cEtsVmhRMlBncTFvUnFpc2FONHVCbHFQbkduOHRQR3pqeHhTUDNRNy04Qk8tdUZDRTlVcG5YSGZJdw?oc=5",
     "https://news.google.com/rss/articles/CBMilwFBVV95cUxOSF9ocXBPTzFOaV9JcDdkRHV5SDFHNzQzTFNXTFluRmxJVXdLZDlTSjdBcjcwQlRuVXBuYnB3RzJUaTR0a3FwbTF6UjdBUE4zY19ZeG9BZ2lxelliQjg1R2JFRWtvbHp1UjlKSEoya0I5Q3N5cWh5TFcwNTZ5OFNNTGJRQkttUVF4clBvUllGWElFcDVqeGw4?oc=5"
@@ -903,7 +903,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-21T04:35:35.417312Z",
+  "frontpage_generated_at": "2026-09-21T04:44:53.384916Z",
   "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
