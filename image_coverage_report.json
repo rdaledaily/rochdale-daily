@@ -1,12 +1,19 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 12,
-    "cards_library": 1,
-    "cards_generated": 3,
+    "kept_cards": 13,
+    "cards_library": 0,
+    "cards_generated": 4,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "mark-street-roadworks-scheduled-for-24-october-2026",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/32b646c452e3acc2ff.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
     {
       "slug": "final-opportunity-to-view-hidden-documents-and-artefacts-in-rochdale",
       "result": "kept-cards",
@@ -44,7 +51,7 @@
     },
     {
       "slug": "nantwich-town-women-defeat-rochdale-women-3-1-in-wfa-cup",
-      "result": "cards-library",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "rochdale_afc.jpg",
       "match_score": 8252
