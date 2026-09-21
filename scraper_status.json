@@ -1,35 +1,35 @@
 {
-  "last_run_at": "2026-09-21T19:29:00.558796Z",
-  "raw_candidates_before_job_filter": 63,
+  "last_run_at": "2026-09-21T19:39:15.224544Z",
+  "raw_candidates_before_job_filter": 70,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 63,
+  "raw_candidates": 70,
   "candidate_clusters": 30,
   "google_news_resolution": {
-    "wrappers": 27,
-    "resolved": 18,
+    "wrappers": 33,
+    "resolved": 24,
     "text_recovered": 3,
     "reattributed": 6,
     "images_found": 9
   },
-  "duplicates_merged": 33,
+  "duplicates_merged": 40,
   "attempted_rewrites": 19,
   "new_articles": 7,
-  "live_articles": 21,
+  "live_articles": 20,
   "skipped": 12,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 9,
+    "editorial gate: REJECTED_NON_LOCAL": 8,
     "quality check: Rewrite the long verbatim source passage.": 1,
     "editorial gate: REJECTED_NON_NEWS": 1,
-    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 1,
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
-    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1
+    "Tighten the report to fewer than 118 body words. The source material only supports a short report; cut every sentence th": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 39,
+    "rss_and_google_news": 46,
     "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 14,
@@ -43,10 +43,10 @@
   "source_counts": {
     "Rochdale Times": 14,
     "Northern live service updates": 12,
+    "Oldham Evening Chronicle": 9,
     "Rochdale AFC": 7,
     "Rochdale Borough Council": 4,
     "Ofsted": 4,
-    "Oldham Evening Chronicle": 3,
     "Ie": 3,
     "Manchester Evening News": 2,
     "Liverpool FC": 2,
@@ -58,6 +58,7 @@
     "Freetips": 1,
     "APWin": 1,
     "Uk": 1,
+    "Total Rugby League": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -66,9 +67,9 @@
     "environment": 3,
     "health": 1,
     "news": 1,
-    "sport": 7,
+    "sport": 8,
     "traffic": 1,
-    "transport": 2
+    "transport": 1
   },
   "published_by_category": {
     "community": 1,
@@ -76,7 +77,7 @@
     "events": 6,
     "news": 1,
     "politics": 1,
-    "sport": 7,
+    "sport": 6,
     "traffic": 1,
     "transport": 1
   },
@@ -114,10 +115,10 @@
     "environment-v3-31644c131dba50251888",
     "sport-v3-c1bd17abbeee7e2448f0",
     "sport-v3-9927626c0a0c2f814338",
-    "transport-v3-768eda23025ca9d95e66",
     "sport-v3-10d5f8a2a58c50e7d50d",
     "sport-v3-5523111512313c255c98",
     "sport-v3-7f1914b6a2428ac2f6d9",
+    "sport-v3-d25e5c849a677593758c",
     "sport-v3-6cfb6d52911c8db43ef4",
     "environment-v3-f5f7f74f40cd43843699",
     "education-v3-1bb095223c5b4f255d84",
@@ -135,10 +136,10 @@
     "https://www.rochdaletimes.co.uk/flats-plan-thrown-out-over-bin-collections/",
     "https://www.beinsports.com/en-us/soccer/league-two/rochdale-vs-crewe-alexandra-2027-01-16",
     "https://www.beinsports.com/en-nz/football/league-two/fleetwood-town-vs-rochdale-2026-09-26",
-    "https://insights.betfred.com/football/match/england/03-10-2026/rochdale-v-swindon/",
     "https://www.fansnetwork.co.uk/football/rochdale/news/66880/refwatch--rochdale-v-oldham-athletic",
     "https://www.freetips.com/football/rochdale-vs-liverpool-u21-tips-20260920-0011/",
     "https://www.nantwichtownfc.co.uk/match-report-rochdale-women-1-3-nantwich-town-women/",
+    "https://www.totalrl.com/meet-the-dutch-internationals-gaining-experience-with-rochdale-hornets/",
     "https://ca.sports.yahoo.com/soccer/league-two/walsall-rochdale-13597752/",
     "https://democracy.rochdale.gov.uk/documents/s123598/Append.%201.pdf",
     "https://rochdaleafc.co.uk/tvos-preview-efl-trophy-edition/",
@@ -199,9 +200,9 @@
       "environment": 3,
       "health": 1,
       "news": 1,
-      "sport": 7,
+      "sport": 8,
       "traffic": 1,
-      "transport": 2
+      "transport": 1
     },
     "selected_by_ward": {
       "Central Rochdale": 1
@@ -215,7 +216,6 @@
     "selected_by_source": {
       "bein sports": 1,
       "beinsports": 1,
-      "betfred": 1,
       "fansnetwork": 1,
       "food standards agency": 1,
       "freetips": 1,
@@ -225,6 +225,7 @@
       "oldham evening chronicle": 1,
       "rochdale afc": 4,
       "rochdale times": 2,
+      "total rugby league": 1,
       "uk": 2,
       "yahoo": 1
     }
@@ -849,7 +850,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 29,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324980823?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
     "https://c.newsnow.co.uk/A/1324980119?-57568:46921",
     "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1324945246?-57568:46921",
@@ -869,12 +870,12 @@
     "https://c.newsnow.co.uk/A/1324539294?-57568:46921",
     "https://c.newsnow.co.uk/A/1324500343?-57568:46921",
     "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324980823?-57568:46921",
     "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMilwFBVV95cUxOSF9ocXBPTzFOaV9JcDdkRHV5SDFHNzQzTFNXTFluRmxJVXdLZDlTSjdBcjcwQlRuVXBuYnB3RzJUaTR0a3FwbTF6UjdBUE4zY19ZeG9BZ2lxelliQjg1R2JFRWtvbHp1UjlKSEoya0I5Q3N5cWh5TFcwNTZ5OFNNTGJRQkttUVF4clBvUllGWElFcDVqeGw4?oc=5",
     "https://news.google.com/rss/articles/CBMirAFBVV95cUxQVFk2cjllUVZCbnVOdzhMYXBUUThhOW5WUnJVOGNIeFp4dXNlWUxqeUQ1RlU5Q3p2b2J3Zml3a3E5TVVhQ1lBQ2tERjBDZmNHWnVfdW5hdDVJS1Z4d0RZcG9BRl9wcEhmQ1VHV3RNSnlteDJ5blJ5YUNYMmkzWVNOREdkZGJZQnBFcVpUUXJyTTBGYjBvRlkyYld2bVhLdjBSa1pXT0NSQnJkbmFE?oc=5"
@@ -915,7 +916,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-21T19:30:39.895829Z",
+  "frontpage_generated_at": "2026-09-21T19:40:54.493436Z",
   "frontpage_article_count": 9,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -973,7 +974,7 @@
     "selected_by_area": {
       "healey": 1,
       "middleton": 1,
-      "rochdale": 11
+      "rochdale": 10
     },
     "selected_by_source": {
       "rochdale times": 3,
@@ -983,8 +984,8 @@
       "rochdale borough council — healey dell nature reserve and tea rooms": 1,
       "nantwich town football club": 1
     },
-    "pool_size": 13,
-    "primary_pool_size": 13,
+    "pool_size": 12,
+    "primary_pool_size": 12,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 9,
@@ -1002,7 +1003,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 7,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 149,
+  "duplicate_articles_after_postprocessing": 148,
   "blocked_articles_removed": 2,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
