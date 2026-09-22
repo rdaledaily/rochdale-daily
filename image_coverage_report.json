@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 20,
+    "kept_cards": 21,
     "cards_library": 1,
-    "cards_generated": 4,
+    "cards_generated": 5,
     "skipped": 0
   },
   "items": [
@@ -15,8 +15,15 @@
       "match_score": null
     },
     {
-      "slug": "rochdale-cultural-organisations-to-receive-share-of-15-million-funding",
+      "slug": "inquest-jury-finds-no-misconduct-by-police-in-fatal-high-speed-chase-in-rochdale",
       "result": "kept-cards",
+      "image_url": "assets/img/cards/police.jpg",
+      "matched_filename": "police.jpg",
+      "match_score": 15126
+    },
+    {
+      "slug": "rochdale-cultural-organisations-to-receive-share-of-15-million-funding",
+      "result": "cards-generated",
       "image_url": "assets/img/cards/rochdale-cultural-organisations-to-receive-share-of-15-million-funding-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -62,6 +69,13 @@
       "image_url": "assets/img/cards/rochdale-health-and-wellbeing-board-development-session-scheduled-for-23rd-septe-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "atom-valley-northern-gateway-mayoral-development-corporation-meeting-scheduled-f",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/Northern-Gateway.png",
+      "matched_filename": "Northern-Gateway.png",
+      "match_score": 15256
     },
     {
       "slug": "mark-street-roadworks-scheduled-for-24-october-2026",
