@@ -1,19 +1,12 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 20,
+    "kept_cards": 21,
     "cards_library": 2,
-    "cards_generated": 7,
+    "cards_generated": 5,
     "skipped": 0
   },
   "items": [
-    {
-      "slug": "st-chad-s-church-to-host-early-doors-club-concerts-in-rochdale",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/st_chads_church_.jpg",
-      "matched_filename": "st_chads_church_.jpg",
-      "match_score": 15375
-    },
     {
       "slug": "why-does-rochdale-say-cruckle",
       "result": "kept-cards",
@@ -27,6 +20,13 @@
       "image_url": "assets/img/cards/rochdale-residents-invited-to-join-great-british-dog-walk-for-hearing-dogs-chari-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rochdale-to-face-liverpool-academy-in-efl-trophy-match-tonight",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 15125
     },
     {
       "slug": "rochdale-borough-council-announces-staffing-savings-for-2026-27-to-2028-29",
@@ -72,7 +72,7 @@
     },
     {
       "slug": "rochdale-borough-council-publishes-new-document-on-local-governance",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-borough-council-publishes-new-document-on-local-governance-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -93,17 +93,10 @@
     },
     {
       "slug": "rochdale-borough-council-to-hold-health-and-wellbeing-board-development-session",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/rochdale-borough-council-to-hold-health-and-wellbeing-board-development-session-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "rochdale-health-and-wellbeing-board-development-session-scheduled-for-23rd-septe",
-      "result": "kept-cards",
+      "result": "cards-library",
       "image_url": "assets/img/cards/Northern-Gateway.png",
       "matched_filename": "Northern-Gateway.png",
-      "match_score": 15256
+      "match_score": 8256
     },
     {
       "slug": "rochdale-council-approves-landowner-and-developer-engagement-strategy",
@@ -111,6 +104,13 @@
       "image_url": "assets/img/cards/developer.jpg",
       "matched_filename": "developer.jpg",
       "match_score": 15129
+    },
+    {
+      "slug": "atom-valley-northern-gateway-mayoral-development-corporation-meeting-scheduled-f",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/Northern-Gateway.png",
+      "matched_filename": "Northern-Gateway.png",
+      "match_score": 15256
     },
     {
       "slug": "mark-street-roadworks-scheduled-for-24-october-2026",
@@ -163,13 +163,6 @@
     },
     {
       "slug": "rochdale-afc-to-host-liverpool-under-21s-in-efl-trophy-match",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/rochdale_afc.jpg",
-      "matched_filename": "rochdale_afc.jpg",
-      "match_score": 15252
-    },
-    {
-      "slug": "rochdale-to-face-liverpool-academy-in-efl-trophy-match-at-crown-oil-arena",
       "result": "cards-library",
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "rochdale_afc.jpg",
