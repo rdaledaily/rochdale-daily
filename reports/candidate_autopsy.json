@@ -1,48 +1,38 @@
 {
-  "examined_at": "2026-09-21T13:20:08.775551Z",
+  "examined_at": "2026-09-22T12:02:15.712641Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 132,
+  "candidates_examined": 156,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 63,
-    "would publish": 52,
-    "duplicate of published story": 12,
-    "job or career post": 4,
-    "not local": 1
+    "age": 92,
+    "would publish": 51,
+    "duplicate of published story": 13
   },
-  "would_publish": 52,
+  "would_publish": 51,
   "age_gate_sensitivity": {
-    "6h": 9,
-    "14h": 12,
-    "24h": 16,
-    "48h": 69,
-    "72h": 94,
-    "168h": 132
+    "6h": 13,
+    "14h": 18,
+    "24h": 46,
+    "48h": 64,
+    "72h": 125,
+    "168h": 156
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 61 Rochdale food businesses currently rated 0 or 1 for hygiene",
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "Rochdale AFC: Christmas Party Night At The COA - rochdaleafc.co.uk"
-    ],
-    "not local": [
-      "rochdaleafc.co.uk: TVOS Preview | EFL Trophy Edition - rochdaleafc.co.uk"
+      "Bee Network live travel alerts: Updated: 22/09/2026 at 7:25am Live Failsworth Tram Stop - Lift out of "
     ],
     "duplicate of published story": [
-      "Oldham Evening Chronicle: M62 crash causes 90-minute delays as queues stretch towards Rochdale -",
-      "Freetips: Rochdale vs Liverpool U21 Tips & Predictions – Home Advantage in the E",
-      "Fansnetwork: Refwatch - Rochdale v Oldham Athletic - fansnetwork.co.uk"
-    ],
-    "job or career post": [
-      "Shropshirestar: Ian Watson praises Rochdale players after beating Oldham - shropshires",
-      "Express and Star: Ian Watson praises Rochdale players after beating Oldham - Express and",
-      "Ie: Ian Watson praises Rochdale players after beating Oldham - ireland-liv"
+      "Hopwood Hall College: College ushers in new era as it unveils bold vision for the future - H",
+      "Transfermarkt: Rochdale AFC - Liverpool FC U21, 22/09/2026 - EFL Trophy - Match sheet",
+      "Yeni Safak English: Huddersfield Rochdale 06 October 2026 Live Score and Match Summary - Y"
     ],
     "age": [
-      "Id: Rochdale Hosts Oldham Athletic in League Two Derby Match - SuaraGarut.",
-      "Rochdale Times: Kashmir Youth Project celebrates a year of community impact - Rochdale",
-      "Rochdale Times: Kashmir Youth Project celebrates a year of community impact - Rochdale"
+      "APWin: Rochdale vs Liverpool U21 - Watch Online for Free - APWin",
+      "Rochdale Times: Bonfire Night returns to park with a bang - Rochdale Times",
+      "Beinsports: Rochdale vs Crewe Alexandra - beinsports.com"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
