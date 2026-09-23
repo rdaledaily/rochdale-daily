@@ -1,18 +1,11 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 160,
-  "published_count": 160,
-  "category_change_count": 21,
-  "image_change_count": 19,
+  "article_count": 161,
+  "published_count": 161,
+  "category_change_count": 20,
+  "image_change_count": 23,
   "category_changes": [
-    {
-      "slug": "st-chad-s-church-to-host-early-doors-club-live-music-events-in-rochdale",
-      "title": "St Chad's Church to Host Early Doors Club Live Music Events in Rochdale",
-      "from": "news",
-      "to": "events",
-      "reason": "headline strongly identifies events"
-    },
     {
       "slug": "inquest-finds-will-place-died-after-drink-driving-crash-in-heywood",
       "title": "Inquest Finds Drink-Driving Contributed to Heywood Man's Fatal Crash",
@@ -21,9 +14,9 @@
       "reason": "headline strongly identifies traffic"
     },
     {
-      "slug": "rochdale-borough-council-meeting-attendance-report-published",
-      "title": "Rochdale Borough Council Introduces New Anti-Social Behaviour Policy",
-      "from": "news",
+      "slug": "rochdale-borough-council-publishes-sustainable-development-goals-results",
+      "title": "Rochdale Borough Council Publishes Updated Anti-Social Behaviour Policy",
+      "from": "environment",
       "to": "community",
       "reason": "headline strongly identifies community"
     },
@@ -156,6 +149,18 @@
   ],
   "image_changes": [
     {
+      "slug": "peacocks-clothing-store-signs-long-term-lease-at-rochdale-riverside",
+      "title": "Peacocks Clothing Store Signs Long-Term Lease at Rochdale Riverside",
+      "category": "business",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_riverside.jpg",
+        "img": "assets/img/cards/rochdale_riverside.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/peacocks-clothing-store-signs-long-term-lease-at-rochdale-riverside-generated-card.jpg"
+    },
+    {
       "slug": "former-prisoner-calls-for-support-in-early-release-scheme",
       "title": "Ex-Prisoner Jamie Dale Advocates for Support in Early Release Scheme",
       "category": "news",
@@ -166,6 +171,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/former-prisoner-calls-for-support-in-early-release-scheme-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-football-club-faces-salford-city-in-league-two-match",
+      "title": "Rochdale Football Club Faces Newport County in League Two Match",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-football-club-faces-salford-city-in-league-two-match-generated-card.jpg"
     },
     {
       "slug": "rochdale-football-club-to-face-walsall-in-league-two-match",
@@ -180,16 +197,28 @@
       "after": "assets/img/cards/rochdale-football-club-to-face-walsall-in-league-two-match-generated-card.jpg"
     },
     {
-      "slug": "st-chad-s-church-to-host-early-doors-club-live-music-events-in-rochdale",
-      "title": "St Chad's Church to Host Early Doors Club Live Music Events in Rochdale",
-      "category": "events",
+      "slug": "st-chad-s-church-to-host-early-doors-club-concerts-in-rochdale",
+      "title": "St Chad's Church to Host Early Doors Club Concerts in Rochdale",
+      "category": "news",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
         "image_url": "assets/img/cards/st_chads_church_.jpg",
         "img": "assets/img/cards/st_chads_church_.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/st-chad-s-church-to-host-early-doors-club-live-music-events-in-rochdale-generated-card.jpg"
+      "after": "assets/img/cards/st-chad-s-church-to-host-early-doors-club-concerts-in-rochdale-generated-card.jpg"
+    },
+    {
+      "slug": "hopwood-hall-college-unveils-ambitious-five-year-vision-at-rochdale-town-hall",
+      "title": "Hopwood Hall College Launches Five-Year Strategy to Transform Lives through Education",
+      "category": "education",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/hopwood_hall_college.jpg",
+        "img": "assets/img/cards/hopwood_hall_college.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/hopwood-hall-college-unveils-ambitious-five-year-vision-at-rochdale-town-hall-generated-card.jpg"
     },
     {
       "slug": "inquest-finds-will-place-died-after-drink-driving-crash-in-heywood",
@@ -262,6 +291,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/tram-services-suspended-between-shaw-and-rochdale-due-to-police-incident-generated-card.jpg"
+    },
+    {
+      "slug": "ian-henderson-scores-chip-goal-for-rochdale-against-liverpool-in-jersey-mike-s-t",
+      "title": "Rochdale Draws 3-3 with Liverpool U21 in EFL Trophy Penalty Shootout",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout.jpg",
+        "img": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/ian-henderson-scores-chip-goal-for-rochdale-against-liverpool-in-jersey-mike-s-t-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
