@@ -1,19 +1,12 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 23,
-    "cards_library": 1,
-    "cards_generated": 9,
+    "kept_cards": 22,
+    "cards_library": 2,
+    "cards_generated": 8,
     "skipped": 0
   },
   "items": [
-    {
-      "slug": "ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde",
-      "result": "kept-existing",
-      "image_url": "assets/img/generated/f0f08b832888a5dd09.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
     {
       "slug": "rochdale-football-club-faces-walsall-in-league-two-match",
       "result": "kept-cards",
@@ -27,6 +20,13 @@
       "image_url": "assets/img/cards/match.jpg",
       "matched_filename": "match.jpg",
       "match_score": 8125
+    },
+    {
+      "slug": "rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/rochdale_afc.jpg",
+      "matched_filename": "rochdale_afc.jpg",
+      "match_score": 8252
     },
     {
       "slug": "st-chad-s-church-to-host-launch-of-early-doors-club-concerts-in-rochdale",
@@ -114,10 +114,10 @@
     },
     {
       "slug": "rochdale-planning-committee-meeting-scheduled-for-30th-september-2026",
-      "result": "cards-library",
-      "image_url": "assets/img/cards/Northern-Gateway.png",
-      "matched_filename": "Northern-Gateway.png",
-      "match_score": 8256
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/developer.jpg",
+      "matched_filename": "developer.jpg",
+      "match_score": 15129
     },
     {
       "slug": "rochdale-health-and-wellbeing-board-to-hold-development-session-on-23rd-septembe",
@@ -127,13 +127,6 @@
       "match_score": 8256
     },
     {
-      "slug": "rochdale-council-approves-landowner-and-developer-engagement-strategy",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/developer.jpg",
-      "matched_filename": "developer.jpg",
-      "match_score": 15129
-    },
-    {
       "slug": "mark-street-roadworks-scheduled-for-24-october-2026",
       "result": "kept-existing",
       "image_url": "assets/img/cards/mark-street-roadworks-scheduled-for-24-october-2026-canonical.jpg",
@@ -141,9 +134,9 @@
       "match_score": null
     },
     {
-      "slug": "final-opportunity-to-view-hidden-documents-and-artefacts-in-rochdale",
+      "slug": "final-chance-to-view-hidden-documents-and-artefacts-in-rochdale",
       "result": "cards-generated",
-      "image_url": "assets/img/cards/final-opportunity-to-view-hidden-documents-and-artefacts-in-rochdale-generated-card.jpg",
+      "image_url": "assets/img/cards/final-chance-to-view-hidden-documents-and-artefacts-in-rochdale-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -183,18 +176,18 @@
       "match_score": null
     },
     {
-      "slug": "ian-watson-praises-rochdale-afc-s-performance-in-trophy-tie-against-liverpool-un",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/ian-watson-praises-rochdale-afc-s-performance-in-trophy-tie-against-liverpool-un.jpg",
-      "matched_filename": "",
-      "match_score": null
+      "slug": "ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde.png",
+      "matched_filename": "ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde.png",
+      "match_score": 20880
     },
     {
-      "slug": "plans-for-flats-at-24a-baron-street-rejected-over-bin-collection-issues",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/plans-for-flats-at-24a-baron-street-rejected-over-bin-collection-issues.jpg",
-      "matched_filename": "plans-for-flats-at-24a-baron-street-rejected-over-bin-collection-issues.jpg",
-      "match_score": 21871
+      "slug": "rochdale-council-rejects-plans-for-seven-flats-on-baron-street-over-bin-collecti",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/rochdale-council-rejects-plans-for-seven-flats-on-baron-street-over-bin-collecti-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "m62-crash-causes-90-minute-delays-towards-rochdale",
