@@ -25,6 +25,8 @@ stage_newsroom() {
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json \
     archive.html search.html archive-index.json rss.xml index.html \
       news/ corrections-log.html heywood.html milnrow.html 2>/dev/null || true
+  # The theme normaliser can touch legacy pages outside the generated routes.
+  git add -u -- '*.html'
 }
 
 finalise_cards_policy() {
@@ -46,6 +48,8 @@ finalise_cards_policy() {
   python scraper/generate_rss.py
   python scraper/generate_image_sitemap.py
   python scraper/enforce_cards_only_images.py --articles articles.json --check
+  python scraper/normalise_public_theme.py
+  python scraper/normalise_public_theme.py --check
 }
 
 # Race recovery must be local and bounded. The expensive network image-repair
@@ -82,6 +86,8 @@ rebuild_from_merged_feed() {
   python scraper/content_hygiene.py --fix
   python scraper/content_hygiene.py
   python scraper/enforce_cards_only_images.py --articles articles.json --check
+  python scraper/normalise_public_theme.py
+  python scraper/normalise_public_theme.py --check
   python scraper/verify_manual_publication.py
   python scraper/check_scraper_health.py
 }
