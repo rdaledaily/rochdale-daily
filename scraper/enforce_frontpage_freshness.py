@@ -359,6 +359,28 @@ def main() -> None:
     ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins
     ordered = ordered[:FRONTPAGE_TARGET]
 
+    # The health check requires a genuinely recent story in the first three
+    # whenever one is available. Older editor pins and stories refreshed by a
+    # scrape can otherwise occupy all three slots despite a newer publication.
+    top_cutoff = now - timedelta(hours=int(os.getenv("SCRAPER_HEALTH_TOP_FRESH_HOURS", "6")))
+
+    def top_fresh(article: dict[str, Any]) -> bool:
+        return bool(
+            (first_published(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_cutoff
+            or is_recent_live_update(article, top_cutoff)
+        )
+
+    if ordered and not any(top_fresh(article) for article in ordered[:3]):
+        recent = next((article for article in ordered[3:] if top_fresh(article)), None)
+        if recent is None:
+            recent = next(
+                (article for article in reservoir_candidates if top_fresh(article)), None
+            )
+        if recent is not None:
+            ordered = [article for article in ordered if _identity(article) != _identity(recent)]
+            ordered.insert(min(2, len(ordered)), recent)
+            ordered = ordered[:FRONTPAGE_TARGET]
+
     for index, article in enumerate(ordered):
         article["frontpage_rank"] = index
         article["frontpage_priority"] = max(1, 1000 - index)
