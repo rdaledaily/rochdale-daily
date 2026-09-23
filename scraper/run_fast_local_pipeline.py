@@ -236,16 +236,24 @@ def configure_sources() -> None:
 
 
 def configure_runtime_depth() -> None:
-    """Keep the fast lane fast, but not so shallow that it misses the news."""
-    core.REQUEST_TIMEOUT = max(int(core.REQUEST_TIMEOUT), 8)
-    core.DISCOVERY_LINKS_PER_SOURCE = max(int(core.DISCOVERY_LINKS_PER_SOURCE), 24)
-    core.RSS_ITEMS_PER_SOURCE = max(int(core.RSS_ITEMS_PER_SOURCE), 75)
-    core.DISCOVERY_PAGE_LIMIT = max(int(core.DISCOVERY_PAGE_LIMIT), 2)
-    core.MIN_BALANCED_SELECTION_LIMIT = max(int(core.MIN_BALANCED_SELECTION_LIMIT), 40)
-    if hasattr(core, "SLOW_DOMAIN_FAILURE_THRESHOLD"):
-        core.SLOW_DOMAIN_FAILURE_THRESHOLD = max(int(core.SLOW_DOMAIN_FAILURE_THRESHOLD), 2)
-    if hasattr(core, "SLOW_DOMAIN_BENCH_HOURS"):
-        core.SLOW_DOMAIN_BENCH_HOURS = min(int(core.SLOW_DOMAIN_BENCH_HOURS), 6)
+    """Respect the workload budget selected by each production workflow.
+
+    The fast and deep lanes intentionally use different limits in GitHub Actions.
+    Do not raise those environment-driven values here: doing so silently turns the
+    bounded fast lane back into a broad crawl and can also inflate the deep lane
+    until it hits its workflow timeout.
+    """
+    core.log.info(
+        "Runtime budget: timeout=%ss discovery_links=%s rss_items=%s pages=%s "
+        "balanced_limit=%s slow_failure_threshold=%s slow_bench_hours=%s",
+        core.REQUEST_TIMEOUT,
+        core.DISCOVERY_LINKS_PER_SOURCE,
+        core.RSS_ITEMS_PER_SOURCE,
+        core.DISCOVERY_PAGE_LIMIT,
+        core.MIN_BALANCED_SELECTION_LIMIT,
+        getattr(core, "SLOW_DOMAIN_FAILURE_THRESHOLD", "n/a"),
+        getattr(core, "SLOW_DOMAIN_BENCH_HOURS", "n/a"),
+    )
 
 
 def configure_source_quality_gate() -> None:
