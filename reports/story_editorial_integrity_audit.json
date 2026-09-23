@@ -1,17 +1,31 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 162,
-  "published_count": 162,
-  "category_change_count": 19,
-  "image_change_count": 24,
+  "article_count": 160,
+  "published_count": 160,
+  "category_change_count": 21,
+  "image_change_count": 19,
   "category_changes": [
+    {
+      "slug": "st-chad-s-church-to-host-early-doors-club-live-music-events-in-rochdale",
+      "title": "St Chad's Church to Host Early Doors Club Live Music Events in Rochdale",
+      "from": "news",
+      "to": "events",
+      "reason": "headline strongly identifies events"
+    },
     {
       "slug": "inquest-finds-will-place-died-after-drink-driving-crash-in-heywood",
       "title": "Inquest Finds Drink-Driving Contributed to Heywood Man's Fatal Crash",
       "from": "sport",
       "to": "traffic",
       "reason": "headline strongly identifies traffic"
+    },
+    {
+      "slug": "rochdale-borough-council-meeting-attendance-report-published",
+      "title": "Rochdale Borough Council Introduces New Anti-Social Behaviour Policy",
+      "from": "news",
+      "to": "community",
+      "reason": "headline strongly identifies community"
     },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -154,20 +168,8 @@
       "after": "assets/img/cards/former-prisoner-calls-for-support-in-early-release-scheme-generated-card.jpg"
     },
     {
-      "slug": "will-wight-scores-solo-goal-for-liverpool-u21s-against-rochdale",
-      "title": "Will Wight Scores Solo Goal for Liverpool U21s Against Rochdale",
-      "category": "sport",
-      "reason": "weak filename image match score 8125; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/match.jpg",
-        "img": "assets/img/cards/match.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/will-wight-scores-solo-goal-for-liverpool-u21s-against-rochdale-generated-card.jpg"
-    },
-    {
       "slug": "rochdale-football-club-to-face-walsall-in-league-two-match",
-      "title": "Rochdale Football Club Faces Walsall in League Two Match",
+      "title": "Rochdale to Face Walsall in League Two Match on September 22",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -178,28 +180,16 @@
       "after": "assets/img/cards/rochdale-football-club-to-face-walsall-in-league-two-match-generated-card.jpg"
     },
     {
-      "slug": "rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout",
-      "title": "Rochdale Draws 3-3 with Liverpool U21 in EFL Trophy Match at Crown Oil Arena",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-match-at-crown-oil-arena.jpg",
-        "img": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-match-at-crown-oil-arena.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout-generated-card.jpg"
-    },
-    {
-      "slug": "st-chad-s-church-to-host-launch-of-early-doors-club-concerts-in-rochdale",
-      "title": "St Chad's Church to Host Early Doors Club Concerts in Rochdale",
-      "category": "news",
+      "slug": "st-chad-s-church-to-host-early-doors-club-live-music-events-in-rochdale",
+      "title": "St Chad's Church to Host Early Doors Club Live Music Events in Rochdale",
+      "category": "events",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
         "image_url": "assets/img/cards/st_chads_church_.jpg",
         "img": "assets/img/cards/st_chads_church_.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/st-chad-s-church-to-host-launch-of-early-doors-club-concerts-in-rochdale-generated-card.jpg"
+      "after": "assets/img/cards/st-chad-s-church-to-host-early-doors-club-live-music-events-in-rochdale-generated-card.jpg"
     },
     {
       "slug": "inquest-finds-will-place-died-after-drink-driving-crash-in-heywood",
@@ -272,42 +262,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/tram-services-suspended-between-shaw-and-rochdale-due-to-police-incident-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-to-face-huddersfield-in-efl-trophy-on-6-october-2026",
-      "title": "Rochdale to Face Huddersfield in EFL Trophy on 6 October 2026",
-      "category": "sport",
-      "reason": "weak filename image match score 8125; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/match.jpg",
-        "img": "assets/img/cards/match.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-to-face-huddersfield-in-efl-trophy-on-6-october-2026-generated-card.jpg"
-    },
-    {
-      "slug": "ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde",
-      "title": "Rochdale AFC to Host Liverpool Under-21s in EFL Trophy Match",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde.png",
-        "img": "assets/img/cards/ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde.png",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde-generated-card.jpg"
-    },
-    {
-      "slug": "m62-crash-causes-90-minute-delays-towards-rochdale",
-      "title": "M62 Crash Causes 90-Minute Delays Towards Rochdale",
-      "category": "traffic",
-      "reason": "weak filename image match score 8127; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/traffic.jpg",
-        "img": "assets/img/cards/traffic.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/m62-crash-causes-90-minute-delays-towards-rochdale-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
