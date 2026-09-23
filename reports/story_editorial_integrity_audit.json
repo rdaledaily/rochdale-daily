@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 157,
-  "published_count": 157,
-  "category_change_count": 18,
-  "image_change_count": 16,
+  "article_count": 162,
+  "published_count": 162,
+  "category_change_count": 19,
+  "image_change_count": 24,
   "category_changes": [
+    {
+      "slug": "inquest-finds-will-place-died-after-drink-driving-crash-in-heywood",
+      "title": "Inquest Finds Drink-Driving Contributed to Heywood Man's Fatal Crash",
+      "from": "sport",
+      "to": "traffic",
+      "reason": "headline strongly identifies traffic"
+    },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
       "title": "REFORM UK DELIVERS: PEOPLE POWER BACKED BY REFORM SCRAPS DISASTROUS ROAD CLOSURES!",
@@ -135,8 +142,80 @@
   ],
   "image_changes": [
     {
+      "slug": "former-prisoner-calls-for-support-in-early-release-scheme",
+      "title": "Ex-Prisoner Jamie Dale Advocates for Support in Early Release Scheme",
+      "category": "news",
+      "reason": "weak filename image match score 8132; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/homelessness.png",
+        "img": "assets/img/cards/homelessness.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/former-prisoner-calls-for-support-in-early-release-scheme-generated-card.jpg"
+    },
+    {
+      "slug": "will-wight-scores-solo-goal-for-liverpool-u21s-against-rochdale",
+      "title": "Will Wight Scores Solo Goal for Liverpool U21s Against Rochdale",
+      "category": "sport",
+      "reason": "weak filename image match score 8125; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/will-wight-scores-solo-goal-for-liverpool-u21s-against-rochdale-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-football-club-to-face-walsall-in-league-two-match",
+      "title": "Rochdale Football Club Faces Walsall in League Two Match",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-football-club-to-face-walsall-in-league-two-match-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout",
+      "title": "Rochdale Draws 3-3 with Liverpool U21 in EFL Trophy Match at Crown Oil Arena",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-match-at-crown-oil-arena.jpg",
+        "img": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-match-at-crown-oil-arena.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout-generated-card.jpg"
+    },
+    {
+      "slug": "st-chad-s-church-to-host-launch-of-early-doors-club-concerts-in-rochdale",
+      "title": "St Chad's Church to Host Early Doors Club Concerts in Rochdale",
+      "category": "news",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/st_chads_church_.jpg",
+        "img": "assets/img/cards/st_chads_church_.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/st-chad-s-church-to-host-launch-of-early-doors-club-concerts-in-rochdale-generated-card.jpg"
+    },
+    {
       "slug": "inquest-finds-will-place-died-after-drink-driving-crash-in-heywood",
-      "title": "Inquest Jury Finds No Misconduct by Police in Fatal High-Speed Chase in Rochdale",
+      "title": "Inquest Finds Drink-Driving Contributed to Heywood Man's Fatal Crash",
+      "category": "traffic",
+      "reason": "weak filename image match score 8385; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/greater_manchester_police.jpg",
+        "img": "assets/img/cards/greater_manchester_police.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/inquest-finds-will-place-died-after-drink-driving-crash-in-heywood-generated-card.jpg"
+    },
+    {
+      "slug": "inquest-jury-clears-police-following-fatal-high-speed-chase-in-rochdale",
+      "title": "Inquest Jury Clears Police Following Fatal High-Speed Chase in Rochdale",
       "category": "traffic",
       "reason": "sensitive story image lacks explicit source/editorial provenance",
       "before": {
@@ -144,7 +223,19 @@
         "img": "assets/img/cards/police.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/inquest-finds-will-place-died-after-drink-driving-crash-in-heywood-generated-card.jpg"
+      "after": "assets/img/cards/inquest-jury-clears-police-following-fatal-high-speed-chase-in-rochdale-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-planning-committee-meeting-scheduled-for-30th-september-2026",
+      "title": "Rochdale Council Approves Landowner and Developer Engagement Strategy",
+      "category": "business",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/developer.jpg",
+        "img": "assets/img/cards/developer.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-planning-committee-meeting-scheduled-for-30th-september-2026-generated-card.jpg"
     },
     {
       "slug": "rochdale-health-and-wellbeing-board-to-hold-development-session-on-23rd-septembe",
@@ -157,18 +248,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-health-and-wellbeing-board-to-hold-development-session-on-23rd-septembe-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-council-approves-landowner-and-developer-engagement-strategy",
-      "title": "Rochdale Council Approves Landowner and Developer Engagement Strategy",
-      "category": "environment",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/developer.jpg",
-        "img": "assets/img/cards/developer.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-council-approves-landowner-and-developer-engagement-strategy-generated-card.jpg"
     },
     {
       "slug": "dutch-internationals-join-rochdale-hornets-for-development-experience",
@@ -193,6 +272,30 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/tram-services-suspended-between-shaw-and-rochdale-due-to-police-incident-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-to-face-huddersfield-in-efl-trophy-on-6-october-2026",
+      "title": "Rochdale to Face Huddersfield in EFL Trophy on 6 October 2026",
+      "category": "sport",
+      "reason": "weak filename image match score 8125; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-to-face-huddersfield-in-efl-trophy-on-6-october-2026-generated-card.jpg"
+    },
+    {
+      "slug": "ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde",
+      "title": "Rochdale AFC to Host Liverpool Under-21s in EFL Trophy Match",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde.png",
+        "img": "assets/img/cards/ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde-generated-card.jpg"
     },
     {
       "slug": "m62-crash-causes-90-minute-delays-towards-rochdale",
