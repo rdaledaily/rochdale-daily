@@ -1,17 +1,17 @@
 {
-  "last_run_at": "2026-09-24T17:24:49.459546Z",
-  "raw_candidates_before_job_filter": 108,
+  "last_run_at": "2026-09-24T17:34:52.958521Z",
+  "raw_candidates_before_job_filter": 105,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 108,
-  "candidate_clusters": 51,
+  "raw_candidates": 105,
+  "candidate_clusters": 50,
   "google_news_resolution": {
-    "wrappers": 69,
-    "resolved": 65,
+    "wrappers": 66,
+    "resolved": 63,
     "text_recovered": 21,
-    "reattributed": 17,
-    "images_found": 30
+    "reattributed": 22,
+    "images_found": 29
   },
-  "duplicates_merged": 57,
+  "duplicates_merged": 55,
   "attempted_rewrites": 9,
   "new_articles": 3,
   "live_articles": 24,
@@ -22,12 +22,10 @@
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 87,
+    "rss_and_google_news": 84,
     "website_discovery": 1,
     "aggregator_discovery": 1,
     "live_service_pages": 14,
@@ -39,37 +37,38 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Borough Council": 24,
+    "rochdale.gov.uk": 13,
     "Northern live service updates": 12,
-    "Rochdale Times": 7,
+    "Rochdale Borough Council": 11,
     "Rochdale AFC": 5,
     "Id": 5,
-    "Liverpool FC": 5,
+    "Liverpoolfc": 5,
+    "Rochdale Times": 5,
     "Yahoo": 4,
     "Ofsted": 4,
     "Sky Sports": 3,
     "Bee Network live travel alerts": 3,
     "Rochdale Borough Council RSS": 2,
     "Retail Times": 2,
-    "FashionNetwork - The World's Fashion Business News": 2,
-    "Propertyweek": 2,
+    "Property Week": 2,
     "Shetland Times": 2,
-    "The Oldham Times": 2,
+    "Oldham Times": 2,
     "BBC": 2,
     "ESPN": 2,
     "Tribuna": 2,
     "Goal": 2,
     "Yahoo Sports": 2,
     "Thebusinessdesk": 2,
+    "Fashionnetwork": 1,
     "Completely Retail News": 1,
     "BE News": 1,
-    "facebook.com": 1,
     "The Liverpool Offside": 1,
     "Fansnetwork": 1,
     "Transfermarkt": 1,
     "Place North West": 1,
     "Manchester Evening News": 1,
     "Uk": 1,
+    "facebook.com": 1,
     "Rochdale Hornets": 1,
     "Retailtimes": 1,
     "Food Standards Agency": 1
@@ -199,9 +198,10 @@
       "food standards agency": 1,
       "manchester evening news": 1,
       "northern live service updates": 1,
-      "rochdale borough council": 2,
+      "oldham times": 1,
+      "rochdale borough council": 1,
       "rochdale times": 1,
-      "the oldham times": 1
+      "rochdale.gov.uk": 1
     }
   },
   "official_ward_count": 20,
@@ -824,7 +824,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://c.newsnow.co.uk/A/1325285649?-57568:46921",
     "https://c.newsnow.co.uk/A/1325269437?-57568:46921",
     "https://c.newsnow.co.uk/A/1325249049?-57568:46921",
@@ -843,18 +843,22 @@
     "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1324945246?-57568:46921",
     "https://c.newsnow.co.uk/A/1324890953?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
     "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
     "https://c.newsnow.co.uk/A/1325296594?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
     "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "liverpoolfc.com"
+  ],
+  "slow_domain_failure_counts": {
+    "liverpoolfc.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -888,9 +892,9 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-24T17:26:01.283161Z",
-  "frontpage_article_count": 12,
-  "frontpage_minimum_met": true,
+  "frontpage_generated_at": "2026-09-24T17:36:19.613093Z",
+  "frontpage_article_count": 11,
+  "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
       "business",
@@ -949,10 +953,10 @@
       "health": 1,
       "environment": 1,
       "news": 1,
-      "sport": 2
+      "sport": 1
     },
     "selected_by_ward": {
-      "borough-wide": 10,
+      "borough-wide": 9,
       "Milnrow and Newhey": 1,
       "Healey": 1
     },
@@ -973,19 +977,18 @@
       "john roby, traditions of lancashire (the fairies' chapel, c.1830)": 1,
       "rochdale borough council rss": 1,
       "retailtimes": 1,
-      "rochdale afc": 1,
-      "bbc news": 1
+      "rochdale afc": 1
     },
     "pool_size": 18,
     "primary_pool_size": 18,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 12,
+    "frontpage_count": 11,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 6,
-    "fresh_under_homepage_window": 10,
+    "fresh_under_homepage_window": 9,
     "short_briefs_selected": 6,
-    "frontpage_minimum_met": true
+    "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
