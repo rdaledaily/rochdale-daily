@@ -1,32 +1,30 @@
 {
-  "last_run_at": "2026-09-24T10:27:54.132393Z",
-  "raw_candidates_before_job_filter": 103,
+  "last_run_at": "2026-09-24T10:38:20.593597Z",
+  "raw_candidates_before_job_filter": 106,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 103,
-  "candidate_clusters": 53,
+  "raw_candidates": 106,
+  "candidate_clusters": 54,
   "google_news_resolution": {
     "wrappers": 73,
     "resolved": 71,
     "text_recovered": 16,
-    "reattributed": 26,
+    "reattributed": 22,
     "images_found": 28
   },
-  "duplicates_merged": 50,
-  "attempted_rewrites": 4,
-  "new_articles": 1,
-  "live_articles": 23,
+  "duplicates_merged": 52,
+  "attempted_rewrites": 5,
+  "new_articles": 2,
+  "live_articles": 24,
   "skipped": 3,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 2,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 83,
+    "rss_and_google_news": 86,
     "website_discovery": 0,
     "aggregator_discovery": 1,
     "live_service_pages": 14,
@@ -42,19 +40,20 @@
     "Northern live service updates": 12,
     "Id": 6,
     "Yahoo": 6,
+    "Rochdale AFC": 5,
     "Rochdale Times": 5,
-    "Rochdale AFC": 4,
-    "Liverpoolfc": 4,
+    "Liverpool FC": 4,
     "Ofsted": 4,
     "Thebusinessdesk": 3,
     "Property Week": 3,
     "ESPN": 3,
     "InYourArea": 3,
     "Bet365": 3,
-    "Fashionnetwork": 2,
+    "Manchester Evening News": 3,
+    "FashionNetwork - The World's Fashion Business News": 2,
     "Completely Retail News": 2,
     "BE News": 2,
-    "Shetlandtimes": 2,
+    "Shetland Times": 2,
     "Tribuna": 2,
     "Sky Sports": 2,
     "Bee Network live travel alerts": 2,
@@ -63,7 +62,6 @@
     "Fansnetwork": 1,
     "Transfermarkt": 1,
     "Place North West": 1,
-    "Uk": 1,
     "Rochdale Hornets": 1,
     "Retailtimes": 1,
     "Food Standards Agency": 1
@@ -71,11 +69,13 @@
   "selected_by_category": {
     "environment": 1,
     "health": 1,
+    "sport": 1,
     "transport": 2
   },
   "published_by_category": {
     "business": 1,
     "community": 2,
+    "crime": 1,
     "education": 1,
     "environment": 3,
     "events": 6,
@@ -108,12 +108,14 @@
   ],
   "selected_story_keys": [
     "transport-v3-9ea5d7d836930ea36a00",
+    "sport-v3-4a9b78037d549ca9d460",
     "health-v3-fffc2cff4b0e91e82694",
     "environment-v3-4f20cc4db09611e02b50",
     "transport-v3-6b04b2f9dc76d77605b2"
   ],
   "selected_candidate_urls": [
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-e83a6a65e565447d96",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/violence-milnrow-cricket-club-mum-34663639",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://democracy.rochdale.gov.uk/documents/s122898/Append.%201%20for%20ASB%20Policy%20and%20Enforcement%20Policy.pdf",
     "https://www.northernrailway.co.uk/service-updates#live-ec9d60d4c70fe89e21"
@@ -130,19 +132,27 @@
     "available_categories": [
       "environment",
       "health",
+      "sport",
       "transport"
     ],
     "selected_categories": [
       "environment",
       "health",
+      "sport",
       "transport"
     ],
-    "available_wards": [],
-    "selected_wards": [],
+    "available_wards": [
+      "Milnrow and Newhey"
+    ],
+    "selected_wards": [
+      "Milnrow and Newhey"
+    ],
     "available_areas": [
+      "milnrow",
       "smithy_bridge"
     ],
     "selected_areas": [
+      "milnrow",
       "rochdale",
       "smithy_bridge"
     ],
@@ -152,16 +162,21 @@
     "selected_by_category": {
       "environment": 1,
       "health": 1,
+      "sport": 1,
       "transport": 2
     },
-    "selected_by_ward": {},
+    "selected_by_ward": {
+      "Milnrow and Newhey": 1
+    },
     "selected_by_area": {
+      "milnrow": 1,
       "rochdale": 3,
       "smithy_bridge": 1
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "food standards agency": 1,
+      "manchester evening news": 1,
       "northern live service updates": 1,
       "rochdale borough council": 1
     }
@@ -786,7 +801,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://c.newsnow.co.uk/A/1325238615?-57568:46921",
     "https://c.newsnow.co.uk/A/1325235891?-57568:46921",
     "https://c.newsnow.co.uk/A/1325226399?-57568:46921",
@@ -801,17 +816,17 @@
     "https://c.newsnow.co.uk/A/1324980119?-57568:46921",
     "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1324945246?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
     "https://c.newsnow.co.uk/A/1324890953?-57568:46921",
     "https://c.newsnow.co.uk/A/1324865947?-57568:46921",
     "https://c.newsnow.co.uk/A/1324836333?-57568:46921",
     "https://c.newsnow.co.uk/A/1324771282?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325249049?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
     "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325249049?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
@@ -850,13 +865,14 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-24T10:29:48.794792Z",
-  "frontpage_article_count": 11,
-  "frontpage_minimum_met": false,
+  "frontpage_generated_at": "2026-09-24T10:40:16.692308Z",
+  "frontpage_article_count": 12,
+  "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
       "business",
       "community",
+      "crime",
       "education",
       "environment",
       "health",
@@ -867,6 +883,7 @@
     "selected_categories": [
       "business",
       "community",
+      "crime",
       "education",
       "environment",
       "health",
@@ -876,27 +893,32 @@
     ],
     "available_wards": [
       "Healey",
+      "Milnrow and Newhey",
       "Spotland and Falinge"
     ],
     "selected_wards": [
       "Healey",
+      "Milnrow and Newhey",
       "Spotland and Falinge"
     ],
     "available_areas": [
       "healey",
       "heywood",
-      "middleton"
+      "middleton",
+      "milnrow"
     ],
     "selected_areas": [
       "healey",
       "heywood",
       "middleton",
+      "milnrow",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "crime": 1,
       "politics": 1,
       "education": 1,
       "business": 1,
@@ -907,6 +929,7 @@
       "sport": 2
     },
     "selected_by_ward": {
+      "Milnrow and Newhey": 1,
       "borough-wide": 10,
       "Healey": 1
     },
@@ -914,9 +937,11 @@
       "healey": 1,
       "heywood": 1,
       "middleton": 1,
+      "milnrow": 1,
       "rochdale": 14
     },
     "selected_by_source": {
+      "manchester evening news": 1,
       "retailtimes": 1,
       "ofsted": 1,
       "benews.co.uk": 1,
@@ -928,16 +953,16 @@
       "bbc manchester": 1,
       "bbc news": 1
     },
-    "pool_size": 17,
-    "primary_pool_size": 17,
+    "pool_size": 18,
+    "primary_pool_size": 18,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 11,
+    "frontpage_count": 12,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 5,
-    "fresh_under_homepage_window": 9,
+    "fresh_under_24h": 6,
+    "fresh_under_homepage_window": 10,
     "short_briefs_selected": 5,
-    "frontpage_minimum_met": false
+    "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
@@ -947,7 +972,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 7,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 153,
+  "duplicate_articles_after_postprocessing": 154,
   "blocked_articles_removed": 2,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
