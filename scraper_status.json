@@ -1,19 +1,19 @@
 {
-  "last_run_at": "2026-09-24T16:35:18.680928Z",
+  "last_run_at": "2026-09-24T16:46:05.990277Z",
   "raw_candidates_before_job_filter": 112,
   "job_or_career_posts_rejected": 0,
   "raw_candidates": 112,
-  "candidate_clusters": 53,
+  "candidate_clusters": 54,
   "google_news_resolution": {
-    "wrappers": 72,
-    "resolved": 69,
+    "wrappers": 76,
+    "resolved": 70,
     "text_recovered": 19,
-    "reattributed": 18,
+    "reattributed": 13,
     "images_found": 28
   },
-  "duplicates_merged": 59,
-  "attempted_rewrites": 9,
-  "new_articles": 3,
+  "duplicates_merged": 58,
+  "attempted_rewrites": 10,
+  "new_articles": 4,
   "live_articles": 25,
   "skipped": 6,
   "rewrite_skip_reasons": {
@@ -22,12 +22,14 @@
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 90,
+    "rss_and_google_news": 92,
     "website_discovery": 1,
-    "aggregator_discovery": 2,
+    "aggregator_discovery": 0,
     "live_service_pages": 14,
     "facebook_official": 0,
     "x_official": 0,
@@ -37,7 +39,7 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Borough Council": 25,
+    "Rochdale Borough Council": 26,
     "Northern live service updates": 12,
     "Rochdale Times": 7,
     "Rochdale AFC": 5,
@@ -51,11 +53,11 @@
     "Rochdale Borough Council RSS": 2,
     "Retail Times": 2,
     "FashionNetwork - The World's Fashion Business News": 2,
-    "Propertyweek": 2,
+    "Property Week": 2,
     "Shetland Times": 2,
     "Oldham Times": 2,
     "BBC": 2,
-    "Espn": 2,
+    "ESPN": 2,
     "Tribuna": 2,
     "Goal": 2,
     "Yahoo Sports": 2,
@@ -68,15 +70,14 @@
     "Place North West": 1,
     "Manchester Evening News": 1,
     "Uk": 1,
+    "facebook.com": 1,
     "Rochdale Hornets": 1,
-    "Retailtimes": 1,
-    "Businessmole": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "environment": 1,
     "health": 2,
-    "politics": 2,
+    "politics": 3,
     "sport": 2,
     "transport": 2
   },
@@ -121,6 +122,7 @@
     "sport-v3-c478dec282440cd1cd2b",
     "health-v3-fffc2cff4b0e91e82694",
     "environment-v3-4f20cc4db09611e02b50",
+    "hard-news-v3-8ee77dbc0008638943dd",
     "sport-v3-4a9b78037d549ca9d460",
     "transport-v3-6b04b2f9dc76d77605b2",
     "health-v3-48cf5a1f139199c44662",
@@ -132,6 +134,7 @@
     "https://www.theoldhamtimes.co.uk/sport/26573456.fans-view---derby-disappointment-oldham-athletic/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://democracy.rochdale.gov.uk/documents/s122898/Append.%201%20for%20ASB%20Policy%20and%20Enforcement%20Policy.pdf",
+    "https://retailtimes.co.uk/peacocks-signs-at-rochdale-riverside-as-retail-destination-reports-15-3-footfall-rise/",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/violence-milnrow-cricket-club-mum-34663639",
     "https://www.northernrailway.co.uk/service-updates#live-7209f4aa1c9111ffcd",
     "https://www.businessmole.com/rochdale-showcases-collaborative-approach-to-health-and-social-care-at-european-conference/",
@@ -161,9 +164,11 @@
       "transport"
     ],
     "available_wards": [
+      "Central Rochdale",
       "Milnrow and Newhey"
     ],
     "selected_wards": [
+      "Central Rochdale",
       "Milnrow and Newhey"
     ],
     "available_areas": [
@@ -181,16 +186,17 @@
     "selected_by_category": {
       "environment": 1,
       "health": 2,
-      "politics": 2,
+      "politics": 3,
       "sport": 2,
       "transport": 2
     },
     "selected_by_ward": {
+      "Central Rochdale": 1,
       "Milnrow and Newhey": 1
     },
     "selected_by_area": {
       "milnrow": 1,
-      "rochdale": 7,
+      "rochdale": 8,
       "smithy_bridge": 1
     },
     "selected_by_source": {
@@ -200,6 +206,7 @@
       "manchester evening news": 1,
       "northern live service updates": 1,
       "oldham times": 1,
+      "retailtimes": 1,
       "rochdale borough council": 2,
       "rochdale times": 1
     }
@@ -822,9 +829,9 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 27,
+  "robots_denied_count": 28,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325285649?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
     "https://c.newsnow.co.uk/A/1325269437?-57568:46921",
     "https://c.newsnow.co.uk/A/1325249049?-57568:46921",
     "https://c.newsnow.co.uk/A/1325238615?-57568:46921",
@@ -843,18 +850,23 @@
     "https://c.newsnow.co.uk/A/1324945246?-57568:46921",
     "https://c.newsnow.co.uk/A/1324890953?-57568:46921",
     "https://c.newsnow.co.uk/A/1324865947?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
     "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://www.linkedin.com/company/groundnews"
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325285649?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://www.linkedin.com/company/groundnews",
+    "https://news.google.com/rss/articles/CBMisgFBVV95cUxQaXAyQjZLbzZlaklQRVRqai1tQmRva3dmMjBlY045SG9idlBiQ2lFRDAtekpaUlNYUHl5LXpVYWxrX3hkYVVNYjBXQzc2YWo2dnZTZ0FfalB2Yzhnc3htNHdMU3RzeGlHNU9Lc2NTSjZDbE1PZ21LUU0yaU9uTjRIcUFDLWsxWG1qR241eVdZZFhDazNDUWxVcHlmTTNobl8tOFRJdmw5aWtJTFc3dU1OV0JB?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "businessmole.com"
+  ],
+  "slow_domain_failure_counts": {
+    "businessmole.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -888,7 +900,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-24T16:36:58.302139Z",
+  "frontpage_generated_at": "2026-09-24T16:48:01.828300Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
