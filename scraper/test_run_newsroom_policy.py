@@ -44,6 +44,26 @@ def main() -> None:
         assert "-site:rochdaletimes.co.uk" not in query
         assert "-site:rochdaleonline.co.uk" not in query
 
+    # Retrospective/archive pages must never be promoted as fresh hard news,
+    # even when a search aggregator supplies a current timestamp.
+    history_candidate = SimpleNamespace(
+        source_url="https://www.politics.co.uk/history/galloway-wins-landslide-victory-in-chaotic-rochdale-by-election/",
+        source_published_at="2026-09-22T00:21:50Z",
+    )
+    assert policy.pipeline._source_is_temporally_suspect(history_candidate)
+
+    old_year_candidate = SimpleNamespace(
+        source_url="https://example.com/2024/03/old-result/",
+        source_published_at="2026-09-22T00:21:50Z",
+    )
+    assert policy.pipeline._source_is_temporally_suspect(old_year_candidate)
+
+    current_candidate = SimpleNamespace(
+        source_url="https://example.com/2026/09/current-result/",
+        source_published_at="2026-09-22T00:21:50Z",
+    )
+    assert not policy.pipeline._source_is_temporally_suspect(current_candidate)
+
     competitor = SimpleNamespace(
         source_url="https://rochdaletimes.co.uk/news/example",
         image_candidate_url="https://rochdaletimes.co.uk/images/example.jpg",
