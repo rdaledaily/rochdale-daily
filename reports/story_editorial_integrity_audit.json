@@ -1,24 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 156,
-  "published_count": 156,
+  "article_count": 153,
+  "published_count": 153,
   "category_change_count": 20,
-  "image_change_count": 20,
+  "image_change_count": 17,
   "category_changes": [
+    {
+      "slug": "peacocks-to-open-new-store-at-rochdale-riverside-in-october",
+      "title": "Peacocks to Open New Store at Rochdale Riverside in October",
+      "from": "politics",
+      "to": "business",
+      "reason": "headline strongly identifies business"
+    },
     {
       "slug": "rochdale-borough-council-introduces-new-anti-social-behaviour-policy",
       "title": "Rochdale Borough Council Introduces New Anti-Social Behaviour Policy",
       "from": "health",
       "to": "community",
       "reason": "headline strongly identifies community"
-    },
-    {
-      "slug": "inquest-finds-will-place-died-after-drink-driving-crash-in-heywood",
-      "title": "Inquest Finds Drink-Driving Contributed to Heywood Man's Fatal Crash",
-      "from": "sport",
-      "to": "traffic",
-      "reason": "headline strongly identifies traffic"
     },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -149,6 +149,18 @@
   ],
   "image_changes": [
     {
+      "slug": "peacocks-to-open-new-store-at-rochdale-riverside-in-october",
+      "title": "Peacocks to Open New Store at Rochdale Riverside in October",
+      "category": "business",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_riverside.jpg",
+        "img": "assets/img/cards/rochdale_riverside.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/peacocks-to-open-new-store-at-rochdale-riverside-in-october-generated-card.jpg"
+    },
+    {
       "slug": "who-or-what-is-the-healey-dwarf-tracing-the-legend-from-roby-to-the-heritage-cen",
       "title": "Who — or what — is the Healey Dwarf? Tracing the legend from Roby to the Heritage Centre",
       "category": "environment",
@@ -219,54 +231,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout-generated-card.jpg"
-    },
-    {
-      "slug": "hopwood-hall-college-unveils-ambitious-five-year-vision-at-rochdale-town-hall",
-      "title": "Hopwood Hall College Launches Five-Year Strategy to Transform Education and Community",
-      "category": "education",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/hopwood_hall_college.jpg",
-        "img": "assets/img/cards/hopwood_hall_college.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/hopwood-hall-college-unveils-ambitious-five-year-vision-at-rochdale-town-hall-generated-card.jpg"
-    },
-    {
-      "slug": "inquest-finds-will-place-died-after-drink-driving-crash-in-heywood",
-      "title": "Inquest Finds Drink-Driving Contributed to Heywood Man's Fatal Crash",
-      "category": "traffic",
-      "reason": "weak filename image match score 8385; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/greater_manchester_police.jpg",
-        "img": "assets/img/cards/greater_manchester_police.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/inquest-finds-will-place-died-after-drink-driving-crash-in-heywood-generated-card.jpg"
-    },
-    {
-      "slug": "inquest-jury-clears-police-following-fatal-high-speed-chase-in-rochdale",
-      "title": "Inquest Jury Clears Police Following Fatal High-Speed Chase in Rochdale",
-      "category": "traffic",
-      "reason": "sensitive story image lacks explicit source/editorial provenance",
-      "before": {
-        "image_url": "assets/img/cards/police.jpg",
-        "img": "assets/img/cards/police.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/inquest-jury-clears-police-following-fatal-high-speed-chase-in-rochdale-generated-card.jpg"
-    },
-    {
-      "slug": "ben-white-joins-rochdale-hornets-as-new-halfback",
-      "title": "Ben White Signs with Rochdale Hornets to Strengthen Championship Squad",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_hornets.jpg",
-        "img": "assets/img/cards/rochdale_hornets.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/ben-white-joins-rochdale-hornets-as-new-halfback-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
