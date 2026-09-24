@@ -1153,14 +1153,31 @@ def resolve_google_candidate_to_publisher(candidate: Candidate) -> bool:
     if not real_url or is_disallowed_image_source(real_url):
         return False
     image = rss_image(match)
-    if not image:
-        try:
-            image = page_metadata(real_url).get('image', '')
-        except Exception as exc:
-            log.debug('Publisher image lookup failed for %s: %s', real_url, exc)
-            image = ''
+    meta: dict[str, str] = {}
+    try:
+        meta = page_metadata(real_url)
+    except Exception as exc:
+        log.debug('Publisher metadata lookup failed for %s: %s', real_url, exc)
+
+    # A Google News RSS timestamp is a discovery/index signal, not proof that
+    # the publisher article itself is new. Resurfaced archive/history pages can
+    # receive a fresh Google timestamp years after the event. Once we resolve a
+    # wrapper to the publisher, replace Google's timestamp with the publisher's
+    # own publication date (page metadata first, publisher feed second). If the
+    # publisher supplies no verifiable date, fail closed rather than presenting
+    # an old page as fresh news.
+    publisher_published = parse_datetime(meta.get('published')) or entry_datetime(match)
+
     candidate.google_news_url = candidate.source_url
     candidate.source_url = real_url
+    candidate.source_published_at = iso_utc(publisher_published) if publisher_published else ''
+    if meta.get('title'):
+        candidate.source_title = strip_markdown(meta['title'])
+    if meta.get('description'):
+        candidate.source_summary = strip_markdown(meta['description'])
+    if meta.get('body_excerpt'):
+        candidate.source_body_excerpt = normalise_ws(meta['body_excerpt'])[:5000]
+    image = image or meta.get('image', '')
     if image:
         candidate.image_candidate_url = image
     log.info(
@@ -1263,8 +1280,17 @@ def collect_rss_candidates() -> list[Candidate]:
             )
             if source.get('aggregator') == 'google':
                 # Discovery-only: recover the real publisher article + image
-                # from the <source> identity instead of the wrapper.
-                resolve_google_candidate_to_publisher(candidate)
+                # from the <source> identity instead of the wrapper. Crucially,
+                # re-check freshness after resolution because Google's RSS date
+                # can describe re-indexing rather than original publication.
+                resolved = resolve_google_candidate_to_publisher(candidate)
+                if resolved and not is_fresh(parse_datetime(candidate.source_published_at)):
+                    log.info(
+                        'Rejected Google News result after publisher-date verification: %s | %s',
+                        candidate.source_title,
+                        candidate.source_url,
+                    )
+                    continue
             candidates.append(candidate)
     return candidates
 
