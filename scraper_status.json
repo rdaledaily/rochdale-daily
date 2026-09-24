@@ -1,31 +1,33 @@
 {
-  "last_run_at": "2026-09-24T06:53:53.974211Z",
-  "raw_candidates_before_job_filter": 116,
+  "last_run_at": "2026-09-24T07:04:14.445253Z",
+  "raw_candidates_before_job_filter": 111,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 116,
+  "raw_candidates": 111,
   "candidate_clusters": 58,
   "google_news_resolution": {
-    "wrappers": 73,
-    "resolved": 52,
-    "text_recovered": 9,
-    "reattributed": 15,
-    "images_found": 17
+    "wrappers": 82,
+    "resolved": 59,
+    "text_recovered": 10,
+    "reattributed": 17,
+    "images_found": 18
   },
-  "duplicates_merged": 58,
-  "attempted_rewrites": 4,
+  "duplicates_merged": 53,
+  "attempted_rewrites": 3,
   "new_articles": 1,
-  "live_articles": 27,
-  "skipped": 3,
+  "live_articles": 26,
+  "skipped": 2,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
+    "editorial gate: REJECTED_NON_LOCAL": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 92,
-    "website_discovery": 5,
+    "website_discovery": 0,
     "aggregator_discovery": 0,
     "live_service_pages": 14,
     "facebook_official": 0,
@@ -36,11 +38,11 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Borough Council": 23,
-    "Rochdale Times": 14,
+    "Rochdale Borough Council": 24,
     "Northern live service updates": 12,
     "Id": 10,
-    "Liverpool FC": 8,
+    "Rochdale Times": 9,
+    "Liverpool FC": 6,
     "Yahoo": 4,
     "Ofsted": 4,
     "Property Week": 3,
@@ -52,29 +54,28 @@
     "BE News": 2,
     "BBC": 2,
     "ESPN": 2,
+    "Tribuna": 2,
     "Bet365": 2,
     "Sky Sports": 2,
     "Yahoo Sports": 2,
     "Place North West": 2,
     "Bee Network live travel alerts": 2,
     "Rochdale Borough Council RSS": 1,
-    "Hopwood Hall College": 1,
     "Espn": 1,
-    "Tribuna": 1,
     "The Liverpool Offside": 1,
     "Fansnetwork": 1,
     "Transfermarkt": 1,
+    "BBC News": 1,
     "Rochdale Hornets": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "business": 1,
     "environment": 1,
     "health": 1,
     "transport": 1
   },
   "published_by_category": {
-    "business": 3,
+    "business": 2,
     "community": 2,
     "education": 1,
     "environment": 3,
@@ -108,13 +109,11 @@
   ],
   "selected_story_keys": [
     "transport-v3-9ea5d7d836930ea36a00",
-    "business-v3-71b30aaae862485c9ff9",
     "health-v3-fffc2cff4b0e91e82694",
     "environment-v3-4f20cc4db09611e02b50"
   ],
   "selected_candidate_urls": [
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-e83a6a65e565447d96",
-    "https://www.rochdaletimes.co.uk/office-space-to-be-turned-into-town-centre-flats/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://democracy.rochdale.gov.uk/documents/s122898/Append.%201%20for%20ASB%20Policy%20and%20Enforcement%20Policy.pdf"
   ],
@@ -128,45 +127,37 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "business",
       "environment",
       "health",
       "transport"
     ],
     "selected_categories": [
-      "business",
       "environment",
       "health",
       "transport"
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [
-      "middleton"
-    ],
+    "available_areas": [],
     "selected_areas": [
-      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 1,
       "environment": 1,
       "health": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "middleton": 1,
       "rochdale": 3
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "food standards agency": 1,
-      "rochdale borough council": 1,
-      "rochdale times": 1
+      "rochdale borough council": 1
     }
   },
   "official_ward_count": 20,
@@ -787,15 +778,18 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 28,
+  "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325226399?-57568:46921",
     "https://c.newsnow.co.uk/A/1325190317?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
     "https://c.newsnow.co.uk/A/1325179318?-57568:46921",
     "https://c.newsnow.co.uk/A/1325156923?-57568:46921",
     "https://c.newsnow.co.uk/A/1325122674?-57568:46921",
     "https://c.newsnow.co.uk/A/1325083511?-57568:46921",
     "https://c.newsnow.co.uk/A/1325052013?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://c.newsnow.co.uk/A/1325024731?-57568:46921",
     "https://c.newsnow.co.uk/A/1324980823?-57568:46921",
     "https://c.newsnow.co.uk/A/1324980119?-57568:46921",
@@ -807,20 +801,20 @@
     "https://c.newsnow.co.uk/A/1324771282?-57568:46921",
     "https://c.newsnow.co.uk/A/1324763245?-57568:46921",
     "https://c.newsnow.co.uk/A/1324741827?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324667291?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325235891?-57568:46921",
     "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
     "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325226399?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNTGtDUFVrUkdsVXQyeVNUVEI2Z3o1WVJsVjdvSjJ5NzFhbXE5VzZNM0ItaS1LakJXcHhyX3RUdi1PUWFwQVpZRWs4RVB0MmV0bjVLYWdYd3dPSlVFYVhHNUozeDBydFNEaGMyckRhazFydk1EcDM5MFVTSjF2c1doVGs4dXVYT0hQ?oc=5"
+    "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "hopwood.ac.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "hopwood.ac.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -854,7 +848,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-24T06:55:24.341071Z",
+  "frontpage_generated_at": "2026-09-24T07:05:23.165763Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
