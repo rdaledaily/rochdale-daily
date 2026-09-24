@@ -29,6 +29,11 @@ PUBLISH_MAX_NEWS_AGE_HOURS = max(
     int(os.getenv("PUBLISH_MAX_NEWS_AGE_HOURS", "14")),
 )
 SEARCH_RECENCY_RE = re.compile(r"\bwhen:\d+[hd]\b", re.I)
+BACKGROUND_ONLY_PATH_RE = re.compile(
+    r"/(?:history|history-themes|archive|archives|on-this-day|timeline)(?:/|$)",
+    re.I,
+)
+URL_YEAR_RE = re.compile(r"/(20\d{2})(?:/|$)")
 
 
 EXTRA_FRESH_SEARCHES = [
@@ -233,6 +238,26 @@ def configure_adaptive_editorial_length() -> None:
     core.log.info("Production rewrite path now uses evidence-proportional article length budgets.")
 
 
+def _source_is_temporally_suspect(candidate) -> bool:
+    """Reject retrospective/archive pages masquerading as current hard news.
+
+    Search aggregators can resurface old pages with a fresh indexing timestamp.
+    A history/archive route is background material, not a fresh event. Likewise,
+    if a URL itself carries a year older than the claimed source publication
+    year, do not let the newer timestamp overwrite the page's historical age.
+    """
+    source_url = str(getattr(candidate, "source_url", "") or "")
+    path = urlparse(source_url).path or ""
+    if BACKGROUND_ONLY_PATH_RE.search(path):
+        return True
+
+    published = core.parse_datetime(getattr(candidate, "source_published_at", ""))
+    if published is None:
+        return False
+    years = [int(value) for value in URL_YEAR_RE.findall(path)]
+    return any(year < published.year for year in years)
+
+
 def _looks_like_commercial_landing_page(candidate) -> bool:
     """Reject advertising/SEO service pages while retaining genuine business news."""
     source_kind = str(getattr(candidate, "source_kind", "") or "").casefold()
@@ -351,6 +376,14 @@ def configure_editorial_newsworthiness_gate() -> None:
     original = core.candidate_is_rewrite_eligible
 
     def newsworthy(candidate, existing_by_story):
+        if _source_is_temporally_suspect(candidate):
+            core.log.info(
+                "Rejected retrospective/archive source from fresh-news publication: %s | %s",
+                getattr(candidate, "source_title", ""),
+                getattr(candidate, "source_url", ""),
+            )
+            return False
+
         live_material_update = _same_source_live_update(candidate, existing_by_story)
         if not _candidate_within_publish_window(candidate) and not live_material_update:
             core.log.info(
