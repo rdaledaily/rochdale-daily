@@ -721,6 +721,7 @@ INTEGRITY_ISSUE_MARKERS = (
     "Ground the report more clearly",       # not grounded in the sources
     "long verbatim source passage",         # copyright
     "Carry the specific detail through",    # source has facts the draft dropped
+    "unsupported calendar year",            # model invented a date/year not in evidence
     GATE_REJECTION_PREFIX,                  # advert, listing, out-of-borough
 )
 
@@ -799,6 +800,20 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
         )
     if GENERIC_COPY_RE.search(combined):
         issues.append("Remove publishing-process language and report the story itself.")
+
+    # Publication/index timestamps are metadata, not event dates. A recurring
+    # failure mode was the model turning a fresh aggregator timestamp into a
+    # claim that an old event happened this year. Any calendar year introduced
+    # by the draft must therefore be present in the actual source prose.
+    source_years = set(re.findall(r"\b20\d{2}\b", plain_text(source_text)))
+    output_years = set(re.findall(r"\b20\d{2}\b", combined))
+    unsupported_years = sorted(output_years - source_years)
+    if unsupported_years:
+        issues.append(
+            "Remove unsupported calendar year(s) "
+            + ", ".join(unsupported_years)
+            + "; source publication timestamps are not event dates."
+        )
 
     body_only = plain_text(" ".join(paragraphs))
     if EVASIVE_RE.search(body_only):
@@ -979,6 +994,12 @@ def request_article(
                 "what happens next",
             ],
             "seo": "Natural descriptive headline; no keyword stuffing or clickbait.",
+            "temporal_accuracy": (
+                "source_published_at is publication/index metadata only. Never infer "
+                "that the reported event happened on that date. State an event date "
+                "only when the source prose explicitly supports it; retrospective "
+                "material must never be rewritten as a current event."
+            ),
             "house_style": STYLE_VERSION,
             "retain_local_impact_context": True,
         },
