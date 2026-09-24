@@ -1,17 +1,17 @@
 {
-  "last_run_at": "2026-09-24T10:48:12.503245Z",
-  "raw_candidates_before_job_filter": 108,
+  "last_run_at": "2026-09-24T10:57:33.627301Z",
+  "raw_candidates_before_job_filter": 110,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 108,
-  "candidate_clusters": 54,
+  "raw_candidates": 110,
+  "candidate_clusters": 55,
   "google_news_resolution": {
-    "wrappers": 78,
-    "resolved": 71,
+    "wrappers": 75,
+    "resolved": 73,
     "text_recovered": 17,
-    "reattributed": 27,
+    "reattributed": 23,
     "images_found": 28
   },
-  "duplicates_merged": 54,
+  "duplicates_merged": 55,
   "attempted_rewrites": 5,
   "new_articles": 1,
   "live_articles": 24,
@@ -24,7 +24,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 88,
+    "rss_and_google_news": 90,
     "website_discovery": 0,
     "aggregator_discovery": 1,
     "live_service_pages": 14,
@@ -40,10 +40,10 @@
     "Northern live service updates": 12,
     "rochdale.gov.uk": 8,
     "Id": 6,
+    "Rochdale AFC": 5,
     "Manchester Evening News": 5,
+    "Liverpool FC": 5,
     "Rochdale Times": 5,
-    "Rochdale AFC": 4,
-    "Liverpoolfc": 4,
     "Yahoo": 4,
     "Ofsted": 4,
     "Thebusinessdesk": 3,
@@ -802,9 +802,9 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 28,
+  "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
     "https://c.newsnow.co.uk/A/1325238615?-57568:46921",
     "https://c.newsnow.co.uk/A/1325235891?-57568:46921",
     "https://c.newsnow.co.uk/A/1325226399?-57568:46921",
@@ -824,18 +824,23 @@
     "https://c.newsnow.co.uk/A/1324836333?-57568:46921",
     "https://c.newsnow.co.uk/A/1324771282?-57568:46921",
     "https://c.newsnow.co.uk/A/1325249049?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://c.newsnow.co.uk/A/1324025217?-57568:46921",
-    "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMisAFBVV95cUxOcDVHVjY1cEF1QU1fcDkzZFdkOS1wZWhvNjVRM096V05KSHhxQkxIaV9mMUIyMU9sLTAzd1dLNE1KUG9Jd0JRUklQcXh4Y3QyclE3U0Nzazd3WFJTd3R2RXUtaXBBMUxaYjM3bWtMeGFSWXVhaTRPZ2lOeGZqbGVrc0lsZTAzMHh2Q2pGaTBQa0ZjZ0ZMZnNuZWdxNmRaRjBxc3FIS2Rjbjl5QllVaXRHVtIBtgFBVV95cUxPR1h4N0pmbHd0WVNjQXdHeTF6N2JwMmtxbUhyOXdrTldmdnZLQVFNazRlUEw1aXlLNEhZWEpNQmV2TEM2c1o2bEFpNEpVM2dRMEFYd0JQRUVhZl9NR3NETmxfZkc1dkEyeHFyMlNqc0tfd04xdWVLVTJ3RlNhSGtOT1lsb3VuRmE4dFhhdVVwVGtvQTlvaDNuTGV2WktaMTJCQWlxRnlFdlBjU1A1Wlh1MHkyTVNrdw?oc=5"
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
+    "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaletimes.co.uk",
+    "thebusinessdesk.com"
+  ],
+  "slow_domain_failure_counts": {
+    "thebusinessdesk.com": 1,
+    "rochdaletimes.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -869,7 +874,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-24T10:49:51.836308Z",
+  "frontpage_generated_at": "2026-09-24T10:58:48.966321Z",
   "frontpage_article_count": 12,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
