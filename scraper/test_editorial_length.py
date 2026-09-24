@@ -173,3 +173,31 @@ issues = quality_issues(
 assert not any("Align the headline" in issue for issue in issues), issues
 
 print("Category, dangling-date and headline-coherence tests passed.")
+
+# A source publication timestamp must never be promoted into an invented event
+# year. The model may only state calendar years that appear in the source prose.
+temporal_source = (
+    "On 29 February 2024 George Galloway won the Rochdale by-election. "
+    "The source is a retrospective account of that result."
+)
+temporal_draft = {
+    "publishable": True,
+    "title": "George Galloway wins Rochdale by-election",
+    "excerpt": "George Galloway won the Rochdale by-election after a campaign in the constituency.",
+    "paragraphs": [
+        "George Galloway won the Rochdale by-election in 2026 after a campaign in the constituency.",
+        "The report describes the result and the candidates who contested the seat.",
+        "The by-election followed the vacancy in the Rochdale constituency.",
+        "The source records the result as part of a retrospective account.",
+    ],
+}
+issues = quality_issues(temporal_draft, temporal_source)
+assert any("unsupported calendar year" in issue for issue in issues), issues
+
+temporal_draft["paragraphs"][0] = (
+    "George Galloway won the Rochdale by-election in 2024 after a campaign in the constituency."
+)
+issues = quality_issues(temporal_draft, temporal_source)
+assert not any("unsupported calendar year" in issue for issue in issues), issues
+
+print("Temporal grounding tests passed.")
