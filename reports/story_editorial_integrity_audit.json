@@ -1,14 +1,14 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 152,
-  "published_count": 152,
+  "article_count": 151,
+  "published_count": 151,
   "category_change_count": 20,
   "image_change_count": 18,
   "category_changes": [
     {
       "slug": "rochdale-libraries-collaborate-with-charity-to-provide-free-school-uniforms",
-      "title": "Rochdale Libraries Collaborate with Charity to Provide Free School Uniforms",
+      "title": "Rochdale Libraries Partner with Charity to Provide Free School Uniforms",
       "from": "politics",
       "to": "education",
       "reason": "headline strongly identifies education"
@@ -149,6 +149,18 @@
   ],
   "image_changes": [
     {
+      "slug": "fleetwood-town-to-host-rochdale-in-league-two-clash-on-saturday",
+      "title": "Fleetwood Town to Host Rochdale in League Two Clash on Saturday",
+      "category": "sport",
+      "reason": "weak filename image match score 8125; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/fleetwood-town-to-host-rochdale-in-league-two-clash-on-saturday-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-afc-to-face-fleetwood-town-at-highbury-stadium",
       "title": "Rochdale AFC to Face Fleetwood Town at Highbury Stadium",
       "category": "sport",
@@ -231,18 +243,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/peacocks-to-open-new-store-at-rochdale-riverside-in-october-generated-card.jpg"
-    },
-    {
-      "slug": "who-or-what-is-the-healey-dwarf-tracing-the-legend-from-roby-to-the-heritage-cen",
-      "title": "Who — or what — is the Healey Dwarf? Tracing the legend from Roby to the Heritage Centre",
-      "category": "environment",
-      "reason": "weak filename image match score 8251; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/healey-dell.jpg",
-        "img": "assets/img/cards/healey-dell.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/who-or-what-is-the-healey-dwarf-tracing-the-legend-from-roby-to-the-heritage-cen-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
