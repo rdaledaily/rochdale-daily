@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 152,
-  "published_count": 152,
-  "category_change_count": 20,
-  "image_change_count": 19,
+  "article_count": 149,
+  "published_count": 149,
+  "category_change_count": 19,
+  "image_change_count": 18,
   "category_changes": [
     {
       "slug": "peacocks-to-open-new-store-at-rochdale-riverside-in-october",
@@ -12,13 +12,6 @@
       "from": "politics",
       "to": "business",
       "reason": "headline strongly identifies business"
-    },
-    {
-      "slug": "rochdale-borough-council-introduces-new-anti-social-behaviour-policy",
-      "title": "Rochdale Borough Council Introduces New Anti-Social Behaviour Policy",
-      "from": "health",
-      "to": "community",
-      "reason": "headline strongly identifies community"
     },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -149,6 +142,18 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-to-face-crewe-alexandra-in-league-two-match",
+      "title": "Rochdale to Face Crewe Alexandra in League Two Match",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-to-face-crewe-alexandra-in-league-two-match-generated-card.jpg"
+    },
+    {
       "slug": "driver-arrested-after-five-year-old-boy-hit-by-car-in-heywood",
       "title": "Driver Arrested After Five-Year-Old Boy Hit by Car in Heywood",
       "category": "crime",
@@ -231,30 +236,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/peacocks-clothing-store-signs-long-term-lease-at-rochdale-riverside-generated-card.jpg"
-    },
-    {
-      "slug": "former-prisoner-calls-for-support-in-early-release-scheme",
-      "title": "Ex-Prisoner Jamie Dale Advocates for Support in Early Release Scheme",
-      "category": "news",
-      "reason": "weak filename image match score 8132; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/homelessness.png",
-        "img": "assets/img/cards/homelessness.png",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/former-prisoner-calls-for-support-in-early-release-scheme-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-football-club-faces-salford-city-in-league-two-match",
-      "title": "Rochdale Football Club Faces Newport County in League Two Match",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/match.jpg",
-        "img": "assets/img/cards/match.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-football-club-faces-salford-city-in-league-two-match-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
