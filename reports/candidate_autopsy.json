@@ -1,38 +1,42 @@
 {
-  "examined_at": "2026-09-24T12:11:30.099771Z",
+  "examined_at": "2026-09-25T12:12:15.044426Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 140,
+  "candidates_examined": 149,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "would publish": 63,
-    "age": 59,
-    "duplicate of published story": 18
+    "age": 99,
+    "would publish": 34,
+    "duplicate of published story": 15,
+    "not local": 1
   },
-  "would_publish": 63,
+  "would_publish": 34,
   "age_gate_sensitivity": {
-    "6h": 10,
-    "14h": 10,
-    "24h": 24,
-    "48h": 81,
-    "72h": 121,
-    "168h": 140
+    "6h": 11,
+    "14h": 17,
+    "24h": 28,
+    "48h": 50,
+    "72h": 109,
+    "168h": 149
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "Manchester Evening News: Cops descend on cricket club after mum, 39, turns on staff as her kids"
+      "Rochdale AFC: Experience Matchday Hospitality In The Pioneers Lounge - Rochdale AFC",
+      "Rochdale Times: Putting the brakes on town’s illegal drivers - Rochdale Times"
     ],
     "duplicate of published story": [
-      "Bee Network live travel alerts: Updated: 24/09/2026 at 6:48am Live Failsworth Tram Stop - Lift out of ",
-      "Retailtimes: Peacocks signs at Rochdale Riverside as retail destination reports 15.",
-      "Ofsted: Ofsted publishes inspection report for Little Miracles Daycare"
+      "Bee Network live travel alerts: Updated: 25/09/2026 at 8:55am Live Failsworth Tram Stop - Lift out of ",
+      "Rochdale Borough Council: Libraries team up with charity to help families access free school uni",
+      "Ofsted: Ofsted publishes inspection report for Laroche Day Care Nursery"
+    ],
+    "not local": [
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "age": [
-      "Bet365: Rochdale v Liverpool U21 Prediction: Dale 9/10 to make winning start i",
-      "TfGM Travel Alerts: Travel alerts",
-      "TfGM Travel Alerts: Travel alerts"
+      "Rochdale Times: College unveils strategy to change lives through education - Rochdale ",
+      "Uk: Sustainability Impact Assessment - democracy.rochdale.gov.uk",
+      "Uk: Decision - Station Gardens - democracy.rochdale.gov.uk"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
