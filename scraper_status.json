@@ -1,19 +1,19 @@
 {
-  "last_run_at": "2026-09-25T08:18:26.036484Z",
-  "raw_candidates_before_job_filter": 81,
+  "last_run_at": "2026-09-25T08:30:37.085161Z",
+  "raw_candidates_before_job_filter": 73,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 81,
+  "raw_candidates": 73,
   "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 45,
+    "wrappers": 39,
     "resolved": 36,
-    "text_recovered": 21,
-    "reattributed": 5,
-    "images_found": 24
+    "text_recovered": 22,
+    "reattributed": 6,
+    "images_found": 25
   },
-  "duplicates_merged": 43,
-  "attempted_rewrites": 6,
-  "new_articles": 1,
+  "duplicates_merged": 35,
+  "attempted_rewrites": 7,
+  "new_articles": 2,
   "live_articles": 20,
   "skipped": 5,
   "rewrite_skip_reasons": {
@@ -21,11 +21,13 @@
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 170.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 68,
-    "website_discovery": 3,
+    "rss_and_google_news": 62,
+    "website_discovery": 1,
     "aggregator_discovery": 2,
     "live_service_pages": 2,
     "facebook_official": 0,
@@ -37,10 +39,9 @@
   "collector_errors": {},
   "source_counts": {
     "Rochdale Borough Council": 19,
-    "Rochdale Times": 7,
-    "Manchester Evening News": 6,
+    "BBC": 5,
+    "manchestereveningnews.co.uk": 5,
     "Ofsted": 5,
-    "BBC": 4,
     "The Bury Times": 4,
     "facebook.com": 3,
     "Bee Network live travel alerts": 3,
@@ -51,16 +52,16 @@
     "Opta Analyst": 2,
     "Fansnetwork": 2,
     "InYourArea": 2,
-    "TfGM Travel Alerts": 2,
     "FashionNetwork - The World's Fashion Business News": 1,
     "Completely Retail News": 1,
     "BE News": 1,
     "Liverpoolfc": 1,
     "Rochdale AFC": 1,
-    "Yahoo Sports": 1,
+    "Yahoo": 1,
     "Oldham Times": 1,
     "Thebusinessdesk": 1,
     "Place North West": 1,
+    "Manchester Evening News": 1,
     "Uk": 1,
     "Rochdale Hornets": 1,
     "Retailtimes": 1,
@@ -68,6 +69,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "education": 1,
     "health": 1,
     "sport": 3,
     "transport": 2
@@ -109,6 +111,7 @@
   ],
   "selected_story_keys": [
     "transport-v3-103cc7fe6789a18f6606",
+    "education-v3-ebc6c251042141723f42",
     "sport-v3-ff095a4ec079a1b9640e",
     "health-v3-a5ca11be6dd9c26bcfe3",
     "sport-v3-ee259498c38ae615818c",
@@ -117,6 +120,7 @@
   ],
   "selected_candidate_urls": [
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-0e356184f58c15e211",
+    "https://reports.ofsted.gov.uk/provider/16/EY554762",
     "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQby1iMHRGdU1pUkR2bjY1UXA1My1zajZna1hqWjY4bmZRTFhxNGVxLVl5Z25uREowOG1ublRGNGQ5T3NMaVpfMjJqaWFrWVJwY1h4eUJOQmVkbFJ2cThBcU9yLVZ2TE1lMFZCaWhUR29pWVR5bkIwQUFrdE83VTBZbl9NT1V5SWU0R1pPMW5zNWNGVnJvckRlMzZUa1owVDRFV3VONnh4cEk0cng3ZTJuQWx1aC05a1VlS2trai1tZTgyR2tqZ19yY3I0a2VqVXlsd0FXRWxNYXlmcUtIVm1LX2FyNkF0Zw?oc=5",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://www.beinsports.com/en-mena/football/league-two/rochdale-vs-crewe-alexandra-2027-01-16",
@@ -133,11 +137,13 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "education",
       "health",
       "sport",
       "transport"
     ],
     "selected_categories": [
+      "education",
       "health",
       "sport",
       "transport"
@@ -159,6 +165,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "education": 1,
       "health": 1,
       "sport": 3,
       "transport": 2
@@ -168,7 +175,7 @@
     },
     "selected_by_area": {
       "heywood": 1,
-      "rochdale": 5
+      "rochdale": 6
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
@@ -176,6 +183,7 @@
       "facebook.com": 1,
       "food standards agency": 1,
       "northern live service updates": 1,
+      "ofsted": 1,
       "yahoo": 1
     }
   },
@@ -799,7 +807,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 28,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://c.newsnow.co.uk/A/1325340244?-57568:46921",
     "https://c.newsnow.co.uk/A/1325296594?-57568:46921",
     "https://c.newsnow.co.uk/A/1325285649?-57568:46921",
@@ -819,12 +827,12 @@
     "https://c.newsnow.co.uk/A/1324980119?-57568:46921",
     "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
     "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324237074?-57568:46921",
     "https://c.newsnow.co.uk/A/1325346199?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324286902?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324235469?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQby1iMHRGdU1pUkR2bjY1UXA1My1zajZna1hqWjY4bmZRTFhxNGVxLVl5Z25uREowOG1ublRGNGQ5T3NMaVpfMjJqaWFrWVJwY1h4eUJOQmVkbFJ2cThBcU9yLVZ2TE1lMFZCaWhUR29pWVR5bkIwQUFrdE83VTBZbl9NT1V5SWU0R1pPMW5zNWNGVnJvckRlMzZUa1owVDRFV3VONnh4cEk0cng3ZTJuQWx1aC05a1VlS2trai1tZTgyR2tqZ19yY3I0a2VqVXlsd0FXRWxNYXlmcUtIVm1LX2FyNkF0Zw?oc=5"
   ],
@@ -864,7 +872,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-25T08:21:48.244413Z",
+  "frontpage_generated_at": "2026-09-25T08:32:21.059790Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -942,11 +950,11 @@
       "manchester evening news": 1,
       "rochdale borough council": 2,
       "bee network live travel alerts": 1,
-      "rochdale times": 1,
+      "ofsted": 1,
       "businessmole": 1,
       "bbc": 1,
       "retailtimes": 1,
-      "ofsted": 1
+      "rochdale times": 1
     },
     "pool_size": 14,
     "primary_pool_size": 14,
@@ -966,9 +974,9 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 7,
-  "event_dates_corrected_from_ledger": 3,
+  "event_dates_corrected_from_ledger": 0,
   "duplicate_articles_after_postprocessing": 150,
-  "blocked_articles_removed": 0,
+  "blocked_articles_removed": 2,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
