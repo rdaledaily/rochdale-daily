@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 150,
-  "published_count": 150,
-  "category_change_count": 19,
-  "image_change_count": 18,
+  "article_count": 151,
+  "published_count": 151,
+  "category_change_count": 20,
+  "image_change_count": 17,
   "category_changes": [
+    {
+      "slug": "rochdale-libraries-collaborate-with-charity-to-provide-free-school-uniforms",
+      "title": "Rochdale Libraries Collaborate with Charity to Provide Free School Uniforms",
+      "from": "politics",
+      "to": "education",
+      "reason": "headline strongly identifies education"
+    },
     {
       "slug": "peacocks-to-open-new-store-at-rochdale-riverside-in-october",
       "title": "Peacocks to Open New Store at Rochdale Riverside as Footfall Increases by 15.3%",
@@ -143,7 +150,7 @@
   "image_changes": [
     {
       "slug": "rochdale-to-face-crewe-alexandra-in-league-two-match",
-      "title": "Rochdale to Face Crewe Alexandra in League Two Match",
+      "title": "Rochdale to Play Crewe Alexandra in League Two Match",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -224,18 +231,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/who-or-what-is-the-healey-dwarf-tracing-the-legend-from-roby-to-the-heritage-cen-generated-card.jpg"
-    },
-    {
-      "slug": "peacocks-clothing-store-signs-long-term-lease-at-rochdale-riverside",
-      "title": "Peacocks Signs Lease at Rochdale Riverside, Boosting Occupancy to 92%",
-      "category": "business",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_riverside.jpg",
-        "img": "assets/img/cards/rochdale_riverside.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/peacocks-clothing-store-signs-long-term-lease-at-rochdale-riverside-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
