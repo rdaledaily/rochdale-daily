@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 151,
-  "published_count": 151,
+  "article_count": 152,
+  "published_count": 152,
   "category_change_count": 20,
-  "image_change_count": 18,
+  "image_change_count": 19,
   "category_changes": [
     {
       "slug": "rochdale-libraries-collaborate-with-charity-to-provide-free-school-uniforms",
@@ -159,6 +159,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/fleetwood-town-to-host-rochdale-in-league-two-clash-on-saturday-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-council-publishes-plans-for-edenfield-road-alley-improvements",
+      "title": "Rochdale Council Publishes Plans for Edenfield Road Alley Improvements",
+      "category": "environment",
+      "reason": "weak filename image match score 6377; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/the_rochdale_local_plan.jpg",
+        "img": "assets/img/cards/the_rochdale_local_plan.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-publishes-plans-for-edenfield-road-alley-improvements-generated-card.jpg"
     },
     {
       "slug": "rochdale-afc-to-face-fleetwood-town-at-highbury-stadium",
