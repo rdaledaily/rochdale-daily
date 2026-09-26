@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 152,
-  "published_count": 152,
-  "category_change_count": 20,
-  "image_change_count": 19,
+  "article_count": 151,
+  "published_count": 151,
+  "category_change_count": 19,
+  "image_change_count": 18,
   "category_changes": [
     {
       "slug": "rochdale-libraries-collaborate-with-charity-to-provide-free-school-uniforms",
@@ -12,13 +12,6 @@
       "from": "politics",
       "to": "education",
       "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "peacocks-to-open-new-store-at-rochdale-riverside-in-october",
-      "title": "Peacocks to Open New Store at Rochdale Riverside as Footfall Increases by 15.3%",
-      "from": "politics",
-      "to": "business",
-      "reason": "headline strongly identifies business"
     },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -149,6 +142,42 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-vs-oldham-match-draws-6-121-fans-to-spotland",
+      "title": "Rochdale vs Oldham Derby Attracts Over 6,000 Fans to Spotland",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-vs-oldham-match-draws-6-121-fans-to-spotland-generated-card.jpg"
+    },
+    {
+      "slug": "why-rochdale-says-cruckle",
+      "title": "Why Rochdale says “cruckle”",
+      "category": "community",
+      "reason": "weak filename image match score 3252; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_away.jpg",
+        "img": "assets/img/cards/rochdale_away.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/why-rochdale-says-cruckle-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-afc-set-to-face-fleetwood-town-in-league-two-clash",
+      "title": "Rochdale AFC Set to Face Fleetwood Town in League Two Clash",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-set-to-face-fleetwood-town-in-league-two-clash-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-borough-council-approves-additional-roof-works-at-touchstones",
       "title": "Rochdale Borough Council Approves Additional Roof Works at Touchstones",
       "category": "environment",
@@ -207,54 +236,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/driver-arrested-after-five-year-old-boy-hit-by-car-in-heywood-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-town-hall-renovation-wins-prestigious-award",
-      "title": "Rochdale Town Hall Renovation Wins Europa Nostra Award",
-      "category": "education",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-        "img": "assets/img/cards/rochdale-town-hall.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-town-hall-renovation-wins-prestigious-award-generated-card.jpg"
-    },
-    {
-      "slug": "failsworth-tram-stop-lift-out-of-service-due-to-replacement-works",
-      "title": "Failsworth Tram Stop Lift Out of Service Due to Replacement Works",
-      "category": "transport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/tram.jpg",
-        "img": "assets/img/cards/tram.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/failsworth-tram-stop-lift-out-of-service-due-to-replacement-works-generated-card.jpg"
-    },
-    {
-      "slug": "mother-arrested-after-violent-incident-at-milnrow-cricket-club",
-      "title": "Mother Arrested After Violent Incident at Milnrow Cricket Club",
-      "category": "crime",
-      "reason": "sensitive story image lacks explicit source/editorial provenance",
-      "before": {
-        "image_url": "assets/img/cards/cricket.jpg",
-        "img": "assets/img/cards/cricket.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/mother-arrested-after-violent-incident-at-milnrow-cricket-club-generated-card.jpg"
-    },
-    {
-      "slug": "peacocks-to-open-new-store-at-rochdale-riverside-in-october",
-      "title": "Peacocks to Open New Store at Rochdale Riverside as Footfall Increases by 15.3%",
-      "category": "business",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_riverside.jpg",
-        "img": "assets/img/cards/rochdale_riverside.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/peacocks-to-open-new-store-at-rochdale-riverside-in-october-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
