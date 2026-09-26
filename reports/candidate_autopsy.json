@@ -1,42 +1,38 @@
 {
-  "examined_at": "2026-09-25T12:12:15.044426Z",
+  "examined_at": "2026-09-26T11:46:00.728446Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 149,
+  "candidates_examined": 128,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 99,
-    "would publish": 34,
-    "duplicate of published story": 15,
-    "not local": 1
+    "age": 83,
+    "would publish": 32,
+    "duplicate of published story": 13
   },
-  "would_publish": 34,
+  "would_publish": 32,
   "age_gate_sensitivity": {
-    "6h": 11,
-    "14h": 17,
-    "24h": 28,
-    "48h": 50,
-    "72h": 109,
-    "168h": 149
+    "6h": 8,
+    "14h": 9,
+    "24h": 16,
+    "48h": 45,
+    "72h": 67,
+    "168h": 128
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Rochdale AFC: Experience Matchday Hospitality In The Pioneers Lounge - Rochdale AFC",
-      "Rochdale Times: Putting the brakes on town’s illegal drivers - Rochdale Times"
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
+      "Uk: publicaccess.rochdale.gov.uk"
     ],
     "duplicate of published story": [
-      "Bee Network live travel alerts: Updated: 25/09/2026 at 8:55am Live Failsworth Tram Stop - Lift out of ",
-      "Rochdale Borough Council: Libraries team up with charity to help families access free school uni",
-      "Ofsted: Ofsted publishes inspection report for Laroche Day Care Nursery"
-    ],
-    "not local": [
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
+      "Bee Network live travel alerts: Updated: 26/09/2026 at 10:44am Live Failsworth Tram Stop - Lift out of",
+      "Uk: Decision - Touchstones Additional Roof Works - democracy.rochdale.gov.",
+      "Rochdale Borough Council: Libraries team up with charity to help families access free school uni"
     ],
     "age": [
-      "Rochdale Times: College unveils strategy to change lives through education - Rochdale ",
-      "Uk: Sustainability Impact Assessment - democracy.rochdale.gov.uk",
-      "Uk: Decision - Station Gardens - democracy.rochdale.gov.uk"
+      "Oldham Times: Long Distance Latic - A delayed train was just the start of weekend wo",
+      "Manchester Evening News: Violence erupts at Milnrow cricket club as mum, 39, goes on the rampag",
+      "Manchester Evening News: Violence erupts at Milnrow cricket club as mum, 39, goes on the rampag"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
