@@ -1,17 +1,17 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 147,
-  "published_count": 147,
+  "article_count": 149,
+  "published_count": 149,
   "category_change_count": 19,
-  "image_change_count": 18,
+  "image_change_count": 20,
   "category_changes": [
     {
-      "slug": "rochdale-town-hall-to-host-festival-of-remembrance-on-october-16",
-      "title": "Festival of Remembrance to Honour Armed Forces Personnel at Rochdale Town Hall on October 16",
-      "from": "politics",
-      "to": "events",
-      "reason": "headline strongly identifies events"
+      "slug": "train-services-disrupted-between-leeds-and-manchester-victoria-due-to-cable-thef",
+      "title": "Train Services Disrupted Between Leeds and Manchester Victoria Due to Cable Theft",
+      "from": "transport",
+      "to": "crime",
+      "reason": "headline strongly identifies crime"
     },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -142,13 +142,37 @@
   ],
   "image_changes": [
     {
-      "slug": "rochdale-town-hall-to-host-festival-of-remembrance-on-october-16",
-      "title": "Festival of Remembrance to Honour Armed Forces Personnel at Rochdale Town Hall on October 16",
-      "category": "events",
+      "slug": "train-services-disrupted-between-leeds-and-manchester-victoria-due-to-cable-thef",
+      "title": "Train Services Disrupted Between Leeds and Manchester Victoria Due to Cable Theft",
+      "category": "crime",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "image_url": "assets/img/cards/train.jpg",
+        "img": "assets/img/cards/train.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/train-services-disrupted-between-leeds-and-manchester-victoria-due-to-cable-thef-generated-card.jpg"
+    },
+    {
+      "slug": "new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood",
+      "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Enhance Child Safety at Schools",
+      "category": "politics",
+      "reason": "weak filename image match score 8260; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/parking_restrictions.jpg",
+        "img": "assets/img/cards/parking_restrictions.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-town-hall-to-host-festival-of-remembrance-on-october-16",
+      "title": "Murder Inquiry Launched After Woman Found Dead on Tweedale Street, Rochdale",
+      "category": "crime",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/murder.jpg",
+        "img": "assets/img/cards/murder.jpg",
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-town-hall-to-host-festival-of-remembrance-on-october-16-generated-card.jpg"
