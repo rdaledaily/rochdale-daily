@@ -1,38 +1,42 @@
 {
-  "examined_at": "2026-09-26T11:46:00.728446Z",
+  "examined_at": "2026-09-27T12:26:06.792845Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 128,
+  "candidates_examined": 160,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 83,
-    "would publish": 32,
-    "duplicate of published story": 13
+    "would publish": 99,
+    "age": 53,
+    "duplicate of published story": 7,
+    "job or career post": 1
   },
-  "would_publish": 32,
+  "would_publish": 99,
   "age_gate_sensitivity": {
-    "6h": 8,
-    "14h": 9,
-    "24h": 16,
-    "48h": 45,
-    "72h": 67,
-    "168h": 128
+    "6h": 4,
+    "14h": 10,
+    "24h": 86,
+    "48h": 107,
+    "72h": 136,
+    "168h": 160
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
+      "Bee Network live travel alerts: Updated: 27/09/2026 at 10:29am Live Failsworth Tram Stop - Lift out of",
       "Uk: publicaccess.rochdale.gov.uk"
     ],
     "duplicate of published story": [
-      "Bee Network live travel alerts: Updated: 26/09/2026 at 10:44am Live Failsworth Tram Stop - Lift out of",
-      "Uk: Decision - Touchstones Additional Roof Works - democracy.rochdale.gov.",
-      "Rochdale Borough Council: Libraries team up with charity to help families access free school uni"
+      "bbc.com: League Two: Fleetwood Town 1-2 Rochdale - bbc.com",
+      "Roch Valley Radio: Middleton writer says horror fiction has supported her recovery from a",
+      "BBC News: League Two: Fleetwood Town 1-2 Rochdale - bbc.co.uk"
+    ],
+    "job or career post": [
+      "Roch Valley Radio: Community Medics seeks volunteer first aiders aged 16 and over in Roch"
     ],
     "age": [
-      "Oldham Times: Long Distance Latic - A delayed train was just the start of weekend wo",
-      "Manchester Evening News: Violence erupts at Milnrow cricket club as mum, 39, goes on the rampag",
-      "Manchester Evening News: Violence erupts at Milnrow cricket club as mum, 39, goes on the rampag"
+      "Rochdale Times: New homes offer children high-quality care - Rochdale Times",
+      "Uk: EDENFIELD ROAD ALLEY No 171 T1 T2 EDENFIELD ROAD ALLEY No 171 T1 T2 - ",
+      "Rochdale AFC: Experience Matchday Hospitality In The Pioneers Lounge - rochdaleafc.c"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
