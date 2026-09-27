@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 147,
-  "published_count": 147,
+  "article_count": 149,
+  "published_count": 149,
   "category_change_count": 19,
-  "image_change_count": 16,
+  "image_change_count": 19,
   "category_changes": [
     {
       "slug": "rochdale-libraries-collaborate-with-charity-to-provide-free-school-uniforms",
@@ -141,6 +141,42 @@
     }
   ],
   "image_changes": [
+    {
+      "slug": "who-or-what-is-the-healey-dwarf",
+      "title": "Who — or what — is the Healey Dwarf?",
+      "category": "environment",
+      "reason": "weak filename image match score 4751; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/healey-dell.jpg",
+        "img": "assets/img/cards/healey-dell.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/who-or-what-is-the-healey-dwarf-generated-card.jpg"
+    },
+    {
+      "slug": "middleton-writer-uses-horror-fiction-to-aid-recovery-from-alcohol-addiction",
+      "title": "Middleton Writer Uses Horror Fiction to Aid Recovery from Alcohol Addiction",
+      "category": "health",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/middleton-writer-uses-horror-fiction-to-aid-recovery-from-alcohol-addiction.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/middleton-writer-uses-horror-fiction-to-aid-recovery-from-alcohol-addiction-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium",
+      "title": "Rochdale Secures 2-1 Victory Against Fleetwood Town at Highbury Stadium",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium.png",
+        "img": "assets/img/cards/rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium-generated-card.jpg"
+    },
     {
       "slug": "peacocks-signs-long-term-lease-at-rochdale-riverside-amid-15-3-footfall-increase",
       "title": "Peacocks Signs Long-Term Lease at Rochdale Riverside Amid 15.3% Footfall Increase",
