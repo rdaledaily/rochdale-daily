@@ -1,17 +1,17 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 149,
-  "published_count": 149,
+  "article_count": 147,
+  "published_count": 147,
   "category_change_count": 19,
   "image_change_count": 19,
   "category_changes": [
     {
-      "slug": "rochdale-libraries-collaborate-with-charity-to-provide-free-school-uniforms",
-      "title": "Rochdale Libraries Partner with Charity to Provide Free School Uniforms",
+      "slug": "rochdale-town-hall-to-host-festival-of-remembrance-on-october-16",
+      "title": "Festival of Remembrance to Honour Armed Forces Personnel at Rochdale Town Hall on October 16",
       "from": "politics",
-      "to": "education",
-      "reason": "headline strongly identifies education"
+      "to": "events",
+      "reason": "headline strongly identifies events"
     },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
@@ -142,8 +142,20 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-town-hall-to-host-festival-of-remembrance-on-october-16",
+      "title": "Festival of Remembrance to Honour Armed Forces Personnel at Rochdale Town Hall on October 16",
+      "category": "events",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-town-hall-to-host-festival-of-remembrance-on-october-16-generated-card.jpg"
+    },
+    {
       "slug": "who-or-what-is-the-healey-dwarf",
-      "title": "Who — or what",
+      "title": "Who",
       "category": "environment",
       "reason": "weak filename image match score 4751; neutral card is safer",
       "before": {
@@ -236,18 +248,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-borough-council-approves-additional-roof-works-at-touchstones-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-council-publishes-plans-for-edenfield-road-alley-improvements",
-      "title": "Rochdale Council Proposes Changes to Edenfield Road Alleyway",
-      "category": "environment",
-      "reason": "weak filename image match score 6377; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/the_rochdale_local_plan.jpg",
-        "img": "assets/img/cards/the_rochdale_local_plan.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-council-publishes-plans-for-edenfield-road-alley-improvements-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
