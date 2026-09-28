@@ -1,19 +1,19 @@
 {
-  "last_run_at": "2026-09-28T06:25:38.350674Z",
-  "raw_candidates_before_job_filter": 161,
+  "last_run_at": "2026-09-28T06:34:06.391947Z",
+  "raw_candidates_before_job_filter": 163,
   "job_or_career_posts_rejected": 9,
-  "raw_candidates": 152,
+  "raw_candidates": 154,
   "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 89,
+    "wrappers": 82,
     "resolved": 69,
     "text_recovered": 28,
-    "reattributed": 20,
-    "images_found": 38
+    "reattributed": 27,
+    "images_found": 37
   },
-  "duplicates_merged": 105,
-  "attempted_rewrites": 10,
-  "new_articles": 2,
+  "duplicates_merged": 107,
+  "attempted_rewrites": 11,
+  "new_articles": 3,
   "live_articles": 21,
   "skipped": 8,
   "rewrite_skip_reasons": {
@@ -23,10 +23,12 @@
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 152,
+    "rss_and_google_news": 154,
     "website_discovery": 2,
     "aggregator_discovery": 2,
     "live_service_pages": 2,
@@ -38,51 +40,51 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Roch Valley Radio": 58,
+    "rochvalleyradio.com": 58,
     "Rochdale Times": 9,
     "Rochdale AFC": 6,
     "I Love Manchester": 5,
+    "BBC": 4,
     "Metro": 4,
-    "Fosse 107": 4,
+    "Fosse107": 4,
     "Id": 4,
     "The Daily Dazzling Dawn": 4,
     "Sky News": 3,
-    "bbc.com": 3,
     "Co": 3,
     "Lv": 2,
     "The Sunday Guardian": 2,
     "Net": 2,
-    "Great Driffield Radio": 2,
-    "Hampshirechronicle": 2,
+    "Greatdriffieldradio": 2,
+    "Hampshire Chronicle": 2,
     "Radio Royal": 2,
-    "The Northern Echo": 2,
+    "Thenorthernecho": 2,
     "Alloa Advertiser": 2,
     "TNT Sports": 2,
+    "Roch Valley Radio": 2,
     "InYourArea": 2,
     "Rochdale Borough Council": 2,
     "TfGM Travel Alerts": 2,
     "Bee Network live travel alerts": 2,
     "Ofsted": 2,
     "Premier Construction News": 1,
-    "Skysports": 1,
+    "Sky Sports": 1,
     "Lancaster Guardian": 1,
-    "hexham-courant.co.uk": 1,
-    "Thetottenhamindependent": 1,
+    "Hexham Courant": 1,
+    "Tottenham Independent": 1,
     "Yahoo Sports": 1,
-    "Stowmarket Mercury": 1,
+    "Stowmarketmercury": 1,
     "Somerset County Gazette": 1,
     "Lancashire Telegraph": 1,
     "Ireland Live": 1,
     "Uk": 1,
     "Greater Manchester Police": 1,
-    "BBC": 1,
     "Manx Radio Motorsport": 1,
     "Oldham Times": 1,
     "Manchester Evening News": 1,
     "Wimbledon Times": 1,
     "County Times": 1,
-    "Ilovemanchester": 1,
     "Sundayguardianlive": 1,
+    "Ilovemanchester": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -92,15 +94,17 @@
     "environment": 1,
     "health": 1,
     "news": 2,
+    "traffic": 1,
     "transport": 2
   },
   "published_by_category": {
     "community": 3,
     "crime": 2,
+    "education": 1,
     "environment": 2,
     "events": 6,
     "health": 1,
-    "politics": 2,
+    "politics": 1,
     "sport": 4,
     "transport": 1
   },
@@ -128,6 +132,7 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-d605475e17aa716c6f1e",
+    "transport-v3-10f0d004edb9291edb07",
     "transport-v3-d63c7350a6d7764c7cfb",
     "education-v3-37b2cf2542c24ad73004",
     "community-v3-e241df188631cd38f037",
@@ -140,6 +145,7 @@
   ],
   "selected_candidate_urls": [
     "https://sundayguardianlive.com/world/greater-manchester-police-launch-murder-inquiry-after-woman-found-dead-at-tweedale-street-property-in-rochdale-uk-crime-news-294051/amp/",
+    "https://www.rochvalleyradio.com/news-features/4/crime/771/our-town-cannot-become-a-no-go-zone-says-councillor-as-middleton-residents-report-disorder",
     "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true",
     "https://www.rochdaletimes.co.uk/new-drive-to-keep-children-safe-on-the-school-run/",
     "https://www.rochvalleyradio.com/news-features/141/local-sport/770/richard-kenyon-to-lead-lancashire-cricket-review-when-he-joins-on-5-october",
@@ -166,6 +172,7 @@
       "environment",
       "health",
       "news",
+      "traffic",
       "transport"
     ],
     "selected_categories": [
@@ -175,6 +182,7 @@
       "environment",
       "health",
       "news",
+      "traffic",
       "transport"
     ],
     "available_wards": [
@@ -183,8 +191,11 @@
     "selected_wards": [
       "Central Rochdale"
     ],
-    "available_areas": [],
+    "available_areas": [
+      "middleton"
+    ],
     "selected_areas": [
+      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -197,20 +208,22 @@
       "environment": 1,
       "health": 1,
       "news": 2,
+      "traffic": 1,
       "transport": 2
     },
     "selected_by_ward": {
       "Central Rochdale": 1
     },
     "selected_by_area": {
+      "middleton": 1,
       "rochdale": 10
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "food standards agency": 1,
       "manchester evening news": 1,
-      "roch valley radio": 3,
       "rochdale times": 1,
+      "rochvalleyradio.com": 4,
       "sundayguardianlive": 1,
       "tfgm travel alerts": 1,
       "uk": 1
@@ -834,10 +847,10 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 29,
+  "robots_denied_count": 31,
   "robots_denied_urls": [
     "https://t.co",
-    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1325503389?-57568:46921",
     "https://c.newsnow.co.uk/A/1325462478?-57568:46921",
     "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
@@ -857,14 +870,16 @@
     "https://c.newsnow.co.uk/A/1325226399?-57568:46921",
     "https://c.newsnow.co.uk/A/1325190317?-57568:46921",
     "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
     "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1325514022?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
-    "https://t.co/BBXTaw3NEZ"
+    "https://t.co/BBXTaw3NEZ",
+    "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOT3VKdVJOb2ZtYV80cGpQOXpIVmlFQjg4ZlNVa0NNU0ZjeDI1MjhXWDZkN1Y5clI5WHZQcE82Y3FVbDR3REd6Z3ZuOFI0MXJlU2liTmdVb2JGQkRfZHVvdlJJMEE3ZWl5RnoxS0tKUEZRSlUzVWdNVkFPLTBHOVRmVHNYZUhqWTl5RmlWOU1oZ250NElRa2tEYVpacjdURjRWWGNsZk8tMVdpTzI3bVpHZHV0UjFaT1dlM2o1SnVkc0IxeDF6OEJ2MWFiaWVkeHJMOG12R3ZrZWJfU2s3U2h4bnpR?oc=5",
+    "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNWnMwWDJMci1VVUpTWXpuMTc2X1VoWUliVExjcXZuaC1qbFJpTlNXRF8wcll3eGowQ2h1dXNvcTE0cW5tQmJMenVvZG5uSElMTjlvLUJWZkJMN2djenlGcmNpOFFSMW1RaGt4cTRGVm5QM3hXZGg0eG5Mc29wTWo1U1NIcXpJVG13S3NQY3NpSUIwSlVpUEYtT3RORE1lQTBUb1hsWXJEcndnSkxJa1FZQ3R3Mm5NeWNQbGpVYWNSX1FGLTNxUWpEZEQ5ZnY3ekJZRGc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -902,7 +917,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-28T06:26:45.835203Z",
+  "frontpage_generated_at": "2026-09-28T06:35:50.275426Z",
   "frontpage_article_count": 8,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
