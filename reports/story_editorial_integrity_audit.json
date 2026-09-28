@@ -1,8 +1,8 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 151,
-  "published_count": 151,
+  "article_count": 152,
+  "published_count": 152,
   "category_change_count": 20,
   "image_change_count": 22,
   "category_changes": [
@@ -15,7 +15,7 @@
     },
     {
       "slug": "new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood",
-      "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Enhance School Safety",
+      "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Protect Children on School Runs",
       "from": "politics",
       "to": "education",
       "reason": "headline strongly identifies education"
@@ -149,14 +149,26 @@
   ],
   "image_changes": [
     {
-      "slug": "matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing",
-      "title": "Matthew Moss Food Club Celebrates 10th Anniversary of The Bread and Butter Thing",
-      "category": "community",
+      "slug": "councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent",
+      "title": "Councillor Calls for Urgent Meeting Over Disorder Reports in Middleton Town Centre",
+      "category": "crime",
       "reason": "uncanonical img fallback exists while image_url is empty",
       "before": {
         "image_url": "",
-        "img": "assets/img/cards/matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing.jpg",
+        "img": "assets/img/cards/councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent.png",
         "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent-generated-card.jpg"
+    },
+    {
+      "slug": "matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing",
+      "title": "Matthew Moss Food Club Celebrates 10th Anniversary of The Bread and Butter Thing",
+      "category": "community",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing.jpg",
+        "img": "assets/img/cards/matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing.jpg",
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing-generated-card.jpg"
     },
@@ -174,7 +186,7 @@
     },
     {
       "slug": "new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood",
-      "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Enhance School Safety",
+      "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Protect Children on School Runs",
       "category": "education",
       "reason": "weak filename image match score 8260; neutral card is safer",
       "before": {
@@ -279,18 +291,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-vs-oldham-match-draws-6-121-fans-to-spotland-generated-card.jpg"
-    },
-    {
-      "slug": "why-rochdale-says-cruckle",
-      "title": "Why Rochdale says “cruckle”",
-      "category": "community",
-      "reason": "weak filename image match score 3252; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_away.jpg",
-        "img": "assets/img/cards/rochdale_away.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/why-rochdale-says-cruckle-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
