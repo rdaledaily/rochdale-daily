@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 152,
-  "published_count": 152,
+  "article_count": 153,
+  "published_count": 153,
   "category_change_count": 19,
-  "image_change_count": 21,
+  "image_change_count": 22,
   "category_changes": [
     {
       "slug": "new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood",
@@ -157,11 +157,11 @@
       "slug": "hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports",
       "title": "Hopwood Hall College Introduces New Student Uniforms from Rochdale's ICON Sports",
       "category": "education",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports.jpg",
         "img": "assets/img/cards/hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports.jpg",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports-generated-card.jpg"
     },
@@ -169,13 +169,25 @@
       "slug": "rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety",
       "title": "Rochdale Council Launches Increased Parking Patrols Outside Schools",
       "category": "politics",
+      "reason": "education visual (school) does not match politics story",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety.png",
+        "img": "assets/img/cards/rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-afc-women-secure-2-1-victory-against-altrincham-women",
+      "title": "Rochdale AFC Women Secure 2-1 Victory Against Altrincham Women",
+      "category": "sport",
       "reason": "uncanonical img fallback exists while image_url is empty",
       "before": {
         "image_url": "",
-        "img": "assets/img/cards/rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety.png",
+        "img": "assets/img/cards/rochdale-afc-women-secure-2-1-victory-against-altrincham-women.jpg",
         "status": "source-photo-cached"
       },
-      "after": "assets/img/cards/rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety-generated-card.jpg"
+      "after": "assets/img/cards/rochdale-afc-women-secure-2-1-victory-against-altrincham-women-generated-card.jpg"
     },
     {
       "slug": "councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent",
