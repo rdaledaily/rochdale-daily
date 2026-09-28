@@ -1,11 +1,25 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 149,
-  "published_count": 149,
-  "category_change_count": 18,
-  "image_change_count": 20,
+  "article_count": 151,
+  "published_count": 151,
+  "category_change_count": 20,
+  "image_change_count": 22,
   "category_changes": [
+    {
+      "slug": "train-services-disrupted-between-leeds-and-manchester-victoria-due-to-cable-thef",
+      "title": "Train Services Disrupted Between Leeds and Manchester Victoria Due to Cable Theft",
+      "from": "transport",
+      "to": "crime",
+      "reason": "headline strongly identifies crime"
+    },
+    {
+      "slug": "new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood",
+      "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Enhance School Safety",
+      "from": "politics",
+      "to": "education",
+      "reason": "headline strongly identifies education"
+    },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
       "title": "REFORM UK DELIVERS: PEOPLE POWER BACKED BY REFORM SCRAPS DISASTROUS ROAD CLOSURES!",
@@ -135,6 +149,18 @@
   ],
   "image_changes": [
     {
+      "slug": "matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing",
+      "title": "Matthew Moss Food Club Celebrates 10th Anniversary of The Bread and Butter Thing",
+      "category": "community",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/matthew-moss-food-club-celebrates-10th-anniversary-of-the-bread-and-butter-thing-generated-card.jpg"
+    },
+    {
       "slug": "train-services-disrupted-between-leeds-and-manchester-victoria-due-to-cable-thef",
       "title": "Train Services Disrupted Between Leeds and Manchester Victoria Due to Cable Theft",
       "category": "crime",
@@ -148,8 +174,8 @@
     },
     {
       "slug": "new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood",
-      "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Enhance Child Safety at Schools",
-      "category": "politics",
+      "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Enhance School Safety",
+      "category": "education",
       "reason": "weak filename image match score 8260; neutral card is safer",
       "before": {
         "image_url": "assets/img/cards/parking_restrictions.jpg",
@@ -159,8 +185,20 @@
       "after": "assets/img/cards/new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood-generated-card.jpg"
     },
     {
+      "slug": "vale-of-lune-secures-32-28-victory-against-rochdale-in-season-opener",
+      "title": "Vale of Lune Secures 32-28 Victory Against Rochdale in Season Opener",
+      "category": "sport",
+      "reason": "weak filename image match score 8125; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/vale-of-lune-secures-32-28-victory-against-rochdale-in-season-opener-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-town-hall-to-host-festival-of-remembrance-on-october-16",
-      "title": "Murder Inquiry Launched After Woman Found Dead on Tweedale Street in Rochdale",
+      "title": "Murder Inquiry Launched After Woman Found Dead on Tweedale Street, Rochdale",
       "category": "crime",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
