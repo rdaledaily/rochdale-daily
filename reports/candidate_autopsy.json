@@ -1,42 +1,42 @@
 {
-  "examined_at": "2026-09-27T12:26:06.792845Z",
+  "examined_at": "2026-09-28T14:27:37.148266Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 160,
+  "candidates_examined": 170,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "would publish": 99,
-    "age": 53,
-    "duplicate of published story": 7,
+    "would publish": 95,
+    "age": 63,
+    "duplicate of published story": 11,
     "job or career post": 1
   },
-  "would_publish": 99,
+  "would_publish": 95,
   "age_gate_sensitivity": {
     "6h": 4,
-    "14h": 10,
-    "24h": 86,
+    "14h": 5,
+    "24h": 17,
     "48h": 107,
-    "72h": 136,
-    "168h": 160
+    "72h": 127,
+    "168h": 170
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 27/09/2026 at 10:29am Live Failsworth Tram Stop - Lift out of",
-      "Uk: publicaccess.rochdale.gov.uk"
+      "Rochdale Times: Landmark pub on the market for £425,000 - Rochdale Times",
+      "TfGM Travel Alerts: Travel alerts"
     ],
     "duplicate of published story": [
-      "bbc.com: League Two: Fleetwood Town 1-2 Rochdale - bbc.com",
-      "Roch Valley Radio: Middleton writer says horror fiction has supported her recovery from a",
-      "BBC News: League Two: Fleetwood Town 1-2 Rochdale - bbc.co.uk"
+      "Roch Valley Radio: “Our town cannot become a no-go zone” says councillor as Middleton res",
+      "Roch Valley Radio: Matthew Moss food club marks The Bread and Butter Thing’s 10th anniver",
+      "Sundayguardianlive: Greater Manchester Police Launch Murder Inquiry After Woman Found Dead"
     ],
     "job or career post": [
       "Roch Valley Radio: Community Medics seeks volunteer first aiders aged 16 and over in Roch"
     ],
     "age": [
-      "Rochdale Times: New homes offer children high-quality care - Rochdale Times",
-      "Uk: EDENFIELD ROAD ALLEY No 171 T1 T2 EDENFIELD ROAD ALLEY No 171 T1 T2 - ",
-      "Rochdale AFC: Experience Matchday Hospitality In The Pioneers Lounge - rochdaleafc.c"
+      "About Manchester: Murder investigation sees two arrested after man dies in Rochdale - Ab",
+      "Lv: Man dies after Rochdale 'incident' - as murder investigation launched ",
+      "Greater Manchester Police: Murder investigation launched following death of man in Rochdale - Gre"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
