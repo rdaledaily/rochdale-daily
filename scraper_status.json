@@ -1,33 +1,33 @@
 {
-  "last_run_at": "2026-09-28T04:55:32.094500Z",
-  "raw_candidates_before_job_filter": 151,
+  "last_run_at": "2026-09-28T05:05:36.070328Z",
+  "raw_candidates_before_job_filter": 155,
   "job_or_career_posts_rejected": 9,
-  "raw_candidates": 142,
-  "candidate_clusters": 44,
+  "raw_candidates": 146,
+  "candidate_clusters": 45,
   "google_news_resolution": {
-    "wrappers": 73,
-    "resolved": 65,
+    "wrappers": 65,
+    "resolved": 62,
     "text_recovered": 27,
     "reattributed": 21,
-    "images_found": 36
+    "images_found": 37
   },
-  "duplicates_merged": 98,
-  "attempted_rewrites": 10,
-  "new_articles": 3,
+  "duplicates_merged": 101,
+  "attempted_rewrites": 11,
+  "new_articles": 2,
   "live_articles": 21,
-  "skipped": 7,
+  "skipped": 9,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 6,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 144,
-    "website_discovery": 0,
+    "website_discovery": 4,
     "aggregator_discovery": 2,
     "live_service_pages": 2,
     "facebook_official": 0,
@@ -38,18 +38,19 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Roch Valley Radio": 52,
-    "Rochdale Times": 9,
+    "Roch Valley Radio": 51,
+    "Rochdale Times": 13,
     "I Love Manchester": 6,
     "Rochdale AFC": 6,
     "BBC": 4,
     "Metro": 4,
     "Id": 4,
     "The Daily Dazzling Dawn": 4,
-    "Sundayguardianlive": 3,
+    "Sky": 3,
     "Fosse 107": 3,
     "Co": 3,
     "Lv": 2,
+    "Sundayguardianlive": 2,
     "Net": 2,
     "Great Driffield Radio": 2,
     "Hampshire Chronicle": 2,
@@ -59,11 +60,9 @@
     "TNT Sports": 2,
     "InYourArea": 2,
     "Rochdale Borough Council": 2,
-    "Sky": 2,
     "Bee Network live travel alerts": 2,
     "Ofsted": 2,
     "BBC Manchester": 1,
-    "Sky News": 1,
     "Premier Construction News": 1,
     "Sky Sports": 1,
     "Lancaster Guardian": 1,
@@ -75,7 +74,9 @@
     "ireland-live.ie": 1,
     "Uk": 1,
     "Greater Manchester Police": 1,
+    "The Sunday Guardian": 1,
     "Oldham Times": 1,
+    "Manchester Evening News": 1,
     "Wimbledon Times": 1,
     "County Times": 1,
     "Ilovemanchester": 1,
@@ -87,7 +88,7 @@
     "education": 1,
     "environment": 1,
     "health": 1,
-    "news": 1,
+    "news": 2,
     "sport": 1,
     "transport": 2
   },
@@ -132,6 +133,7 @@
     "health-v3-44a2b1afcdd2852390b7",
     "environment-v3-c346c11b548508a39879",
     "hard-news-v3-dce6d31c2a72d9dd2c38",
+    "hard-news-v3-10f88b696c57ce70340d",
     "transport-v3-c24cb6ed33cc716af996",
     "community-v3-105ecccfe39fe85f4087"
   ],
@@ -144,6 +146,7 @@
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://publicaccess.rochdale.gov.uk/online-applications/",
     "https://www.rochvalleyradio.com/news-features/149/education/768/matthew-moss-food-club-marks-the-bread-and-butter-thing-s-10th-anniversary",
+    "https://www.manchestereveningnews.co.uk/all-about/rochdale-town-centre",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-a013f4624be21e8271",
     "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/769/prestwich-neurodiversity-support-group-marks-its-first-year"
   ],
@@ -176,8 +179,12 @@
       "sport",
       "transport"
     ],
-    "available_wards": [],
-    "selected_wards": [],
+    "available_wards": [
+      "Central Rochdale"
+    ],
+    "selected_wards": [
+      "Central Rochdale"
+    ],
     "available_areas": [],
     "selected_areas": [
       "rochdale"
@@ -191,18 +198,21 @@
       "education": 1,
       "environment": 1,
       "health": 1,
-      "news": 1,
+      "news": 2,
       "sport": 1,
       "transport": 2
     },
-    "selected_by_ward": {},
+    "selected_by_ward": {
+      "Central Rochdale": 1
+    },
     "selected_by_area": {
-      "rochdale": 10
+      "rochdale": 11
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "food standards agency": 1,
       "lancasterguardian": 1,
+      "manchester evening news": 1,
       "roch valley radio": 3,
       "rochdale times": 1,
       "sundayguardianlive": 1,
@@ -831,7 +841,7 @@
   "robots_denied_count": 29,
   "robots_denied_urls": [
     "https://t.co",
-    "https://c.newsnow.co.uk/A/1325514022?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1325503389?-57568:46921",
     "https://c.newsnow.co.uk/A/1325462478?-57568:46921",
     "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
@@ -843,6 +853,7 @@
     "https://c.newsnow.co.uk/A/1325346199?-57568:46921",
     "https://c.newsnow.co.uk/A/1325340244?-57568:46921",
     "https://c.newsnow.co.uk/A/1325296594?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
     "https://c.newsnow.co.uk/A/1325285649?-57568:46921",
     "https://c.newsnow.co.uk/A/1325269437?-57568:46921",
     "https://c.newsnow.co.uk/A/1325249049?-57568:46921",
@@ -850,14 +861,13 @@
     "https://c.newsnow.co.uk/A/1325235891?-57568:46921",
     "https://c.newsnow.co.uk/A/1325226399?-57568:46921",
     "https://c.newsnow.co.uk/A/1325190317?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
     "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
     "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325514022?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
+    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://t.co/BBXTaw3NEZ"
   ],
   "slow_domain_failure_threshold": 1,
@@ -896,7 +906,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-28T04:57:16.783377Z",
+  "frontpage_generated_at": "2026-09-28T05:07:06.160406Z",
   "frontpage_article_count": 8,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -949,17 +959,17 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "community": 1,
-      "crime": 1,
       "transport": 1,
+      "crime": 1,
       "politics": 1,
       "sport": 2,
+      "community": 1,
       "health": 1,
       "environment": 1
     },
     "selected_by_ward": {
-      "Hopwood Hall": 1,
       "borough-wide": 6,
+      "Hopwood Hall": 1,
       "Healey": 1
     },
     "selected_by_area": {
@@ -971,11 +981,11 @@
       "spotland": 1
     },
     "selected_by_source": {
-      "source": 2,
-      "the sunday guardian": 1,
       "northern live service updates": 1,
+      "sundayguardianlive": 1,
       "rochdale times": 1,
       "lancasterguardian": 1,
+      "source": 2,
       "john roby, traditions of lancashire (project gutenberg)": 1,
       "yahoo sports": 1
     },
