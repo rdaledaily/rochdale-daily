@@ -1,33 +1,33 @@
 {
-  "last_run_at": "2026-09-28T15:46:17.437055Z",
-  "raw_candidates_before_job_filter": 152,
+  "last_run_at": "2026-09-28T15:57:34.123512Z",
+  "raw_candidates_before_job_filter": 145,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 146,
-  "candidate_clusters": 42,
+  "raw_candidates": 139,
+  "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 60,
-    "resolved": 49,
-    "text_recovered": 27,
-    "reattributed": 13,
-    "images_found": 33
+    "wrappers": 57,
+    "resolved": 45,
+    "text_recovered": 22,
+    "reattributed": 11,
+    "images_found": 28
   },
-  "duplicates_merged": 104,
+  "duplicates_merged": 96,
   "attempted_rewrites": 10,
-  "new_articles": 3,
+  "new_articles": 1,
   "live_articles": 20,
-  "skipped": 7,
+  "skipped": 9,
   "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 5,
     "editorial gate: REJECTED_NON_LOCAL": 3,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 2
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 138,
+    "rss_and_google_news": 131,
     "website_discovery": 7,
     "aggregator_discovery": 1,
     "live_service_pages": 3,
@@ -39,19 +39,21 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "rochvalleyradio.com": 66,
-    "Rochdale Times": 17,
+    "rochvalleyradio.com": 67,
     "Rochdale AFC": 7,
     "Id": 5,
+    "Rochdale Times": 5,
     "Co": 4,
     "Sky News": 3,
     "The Sunday Guardian": 3,
+    "Radio Royal": 3,
     "Wimbledon Times": 3,
+    "manchestereveningnews.co.uk": 2,
     "Premier Construction News": 2,
     "Herts Advertiser": 2,
     "Hampshire Chronicle": 2,
     "The Northern Echo": 2,
-    "Radio Royal": 2,
+    "rochdaletimes.co.uk": 2,
     "Alloa Advertiser": 2,
     "Place North West": 2,
     "TfGM Travel Alerts": 2,
@@ -59,19 +61,18 @@
     "Ofsted": 2,
     "Fosse 107": 1,
     "Sky Sports": 1,
+    "Yahoo Sports": 1,
+    "Dorset Echo": 1,
     "Beyond Radio": 1,
     "Lancaster Guardian": 1,
-    "Tottenham Independent": 1,
-    "Yahoo": 1,
     "Stowmarket Mercury": 1,
     "Somerset County Gazette": 1,
     "Lancashire Telegraph": 1,
-    "Ie": 1,
+    "Ireland Live": 1,
     "Uk": 1,
     "Rochdale Borough Council": 1,
     "Greater Manchester Police": 1,
     "Manchester Evening News": 1,
-    "County Times": 1,
     "Sundayguardianlive": 1,
     "Northern live service updates": 1,
     "Food Standards Agency": 1
@@ -129,9 +130,9 @@
     "environment-v3-f752f5b02c90c17d456a"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/four-arrests-and-1m-drugs-seizure-in-rochdale/",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/four-arrests-as-police-seize-34683077",
     "https://www.rochvalleyradio.com/news-features/5/traffic-and-travel/773/rochdale-council-increases-parking-patrols-outside-schools",
-    "https://www.northernrailway.co.uk/service-updates#live-ea214e3448f26e2351",
+    "https://www.northernrailway.co.uk/service-updates#live-659bc3b2b20f1299d2",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://www.rochvalleyradio.com/news-features/149/education/776/hopwood-hall-college-introduces-uniforms-made-by-rochdale-business",
     "https://www.rochvalleyradio.com/news-features/179/culture/777/dr-helen-palmer-appointed-chair-of-rochdale-creates",
@@ -166,10 +167,12 @@
       "transport"
     ],
     "available_wards": [
-      "Hopwood Hall"
+      "Hopwood Hall",
+      "Kingsway"
     ],
     "selected_wards": [
-      "Hopwood Hall"
+      "Hopwood Hall",
+      "Kingsway"
     ],
     "available_areas": [
       "middleton",
@@ -192,7 +195,8 @@
       "transport": 2
     },
     "selected_by_ward": {
-      "Hopwood Hall": 2
+      "Hopwood Hall": 2,
+      "Kingsway": 1
     },
     "selected_by_area": {
       "middleton": 1,
@@ -201,8 +205,8 @@
     },
     "selected_by_source": {
       "food standards agency": 1,
+      "manchestereveningnews.co.uk": 1,
       "northern live service updates": 1,
-      "rochdale times": 1,
       "rochvalleyradio.com": 5,
       "tfgm travel alerts": 1,
       "uk": 1
@@ -826,15 +830,14 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 31,
+  "robots_denied_count": 30,
   "robots_denied_urls": [
     "https://t.co",
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
     "https://c.newsnow.co.uk/A/1325583443?-57568:46921",
     "https://c.newsnow.co.uk/A/1325573802?-57568:46921",
     "https://c.newsnow.co.uk/A/1325549784?-57568:46921",
     "https://c.newsnow.co.uk/A/1325514022?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1325503389?-57568:46921",
     "https://c.newsnow.co.uk/A/1325462478?-57568:46921",
     "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
@@ -849,16 +852,16 @@
     "https://c.newsnow.co.uk/A/1325285649?-57568:46921",
     "https://c.newsnow.co.uk/A/1325269437?-57568:46921",
     "https://c.newsnow.co.uk/A/1325249049?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1324471346?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
     "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324712099?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://t.co/BBXTaw3NEZ",
-    "https://news.google.com/rss/articles/CBMiswFBVV95cUxNWGdSbXZfUzFoT1lXVWZOTjg0bzl6NWtyTThTczZZZ1pXVE9CWGRJYVRSSE9rZUhwLVpiYmRwdDVTei1UdzBFR05sOEMwN0pDOF9lbVpWcGNTdXFnSWo3YlZRenhEa09IS2poenlVamVCNkV2OWw1MkRjNTlTekNBdHVTUndZcFNqN1NHTzRJd2pKbmxtLVRXZDJBaW9VdHJMMkhxaUdxZlY1dWxCXzE5cndaTQ?oc=5",
-    "https://news.google.com/rss/articles/CBMi_wFBVV95cUxPeE9JZnNaNTFKemlWX3RUODlieUV2RzNUV2h5UHdCWUt5SDc5MHZ2SlFtTTJZb3UwM08yY2pNRUI0LXJmRVJQWkVzSWswZDFEcG5FcVZJbDRxRHNLeUhyclZRLV9VYW5jUTZ4MVBDVnJZYUc4dmpzTzkzekZ3a3BQMlAyMVo5REtWY3JrOVRIWE5UV1MzcE9HeXlCeUl6WElPMUlrM1o3RUJvcFd4Tm4xRktWcWVES1pBZWZxUGhVS2dkeU9YWXkyWEZfaXFXVVpaT0tCeTZwYXNGX1VIR3RJSFU1ZTV3QXJsUW5CcWc3U2pCeGE4U3hzSEN1TDlkSmc?oc=5"
+    "https://news.google.com/rss/articles/CBMiswFBVV95cUxNWGdSbXZfUzFoT1lXVWZOTjg0bzl6NWtyTThTczZZZ1pXVE9CWGRJYVRSSE9rZUhwLVpiYmRwdDVTei1UdzBFR05sOEMwN0pDOF9lbVpWcGNTdXFnSWo3YlZRenhEa09IS2poenlVamVCNkV2OWw1MkRjNTlTekNBdHVTUndZcFNqN1NHTzRJd2pKbmxtLVRXZDJBaW9VdHJMMkhxaUdxZlY1dWxCXzE5cndaTQ?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -896,7 +899,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-28T15:49:59.676496Z",
+  "frontpage_generated_at": "2026-09-28T15:59:49.970661Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
