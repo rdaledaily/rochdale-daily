@@ -1,8 +1,8 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 150,
-  "published_count": 150,
+  "article_count": 152,
+  "published_count": 152,
   "category_change_count": 19,
   "image_change_count": 21,
   "category_changes": [
@@ -142,16 +142,40 @@
   ],
   "image_changes": [
     {
-      "slug": "four-arrested-and-1-million-worth-of-drugs-seized-in-rochdale",
-      "title": "Four Arrested and £1 Million Worth of Drugs Seized in Rochdale",
-      "category": "crime",
-      "reason": "weak filename image match score 8133; neutral card is safer",
+      "slug": "wonders-of-our-universe-the-next-chapter",
+      "title": "Wonders Of Our Universe. The Next Chapter",
+      "category": "events",
+      "reason": "weak filename image match score 6252; neutral card is safer",
       "before": {
-        "image_url": "assets/img/cards/investigation.jpg",
-        "img": "assets/img/cards/investigation.jpg",
+        "image_url": "assets/img/cards/rochdale_fans.jpg",
+        "img": "assets/img/cards/rochdale_fans.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/four-arrested-and-1-million-worth-of-drugs-seized-in-rochdale-generated-card.jpg"
+      "after": "assets/img/cards/wonders-of-our-universe-the-next-chapter-generated-card.jpg"
+    },
+    {
+      "slug": "hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports",
+      "title": "Hopwood Hall College Introduces New Student Uniforms from Rochdale's ICON Sports",
+      "category": "education",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety",
+      "title": "Rochdale Council Launches Increased Parking Patrols Outside Schools",
+      "category": "politics",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety.png",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/rochdale-council-increases-parking-patrols-outside-schools-to-enhance-safety-generated-card.jpg"
     },
     {
       "slug": "councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent",
@@ -248,30 +272,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/middleton-writer-uses-horror-fiction-to-aid-recovery-from-alcohol-addiction-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium",
-      "title": "Rochdale Secures 2-1 Victory Against Fleetwood Town at Highbury Stadium",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium.png",
-        "img": "assets/img/cards/rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium.png",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium-generated-card.jpg"
-    },
-    {
-      "slug": "peacocks-signs-long-term-lease-at-rochdale-riverside-amid-15-3-footfall-increase",
-      "title": "Peacocks Signs Long-Term Lease at Rochdale Riverside Amid 15.3% Footfall Increase",
-      "category": "politics",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_riverside.jpg",
-        "img": "assets/img/cards/rochdale_riverside.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/peacocks-signs-long-term-lease-at-rochdale-riverside-amid-15-3-footfall-increase-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
