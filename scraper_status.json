@@ -1,35 +1,37 @@
 {
-  "last_run_at": "2026-09-28T23:05:28.783278Z",
-  "raw_candidates_before_job_filter": 147,
+  "last_run_at": "2026-09-28T23:16:40.595102Z",
+  "raw_candidates_before_job_filter": 148,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 140,
+  "raw_candidates": 141,
   "candidate_clusters": 45,
   "google_news_resolution": {
-    "wrappers": 42,
-    "resolved": 42,
-    "text_recovered": 16,
+    "wrappers": 43,
+    "resolved": 43,
+    "text_recovered": 17,
     "reattributed": 6,
-    "images_found": 22
+    "images_found": 23
   },
-  "duplicates_merged": 95,
+  "duplicates_merged": 96,
   "attempted_rewrites": 21,
-  "new_articles": 8,
+  "new_articles": 7,
   "live_articles": 26,
-  "skipped": 13,
+  "skipped": 14,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 6,
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
     "editorial gate: REJECTED_NON_NEWS": 2,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1,
+    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 161.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 141,
+    "rss_and_google_news": 142,
     "website_discovery": 0,
     "aggregator_discovery": 0,
     "live_service_pages": 3,
@@ -57,6 +59,7 @@
     "Lancaster Guardian": 1,
     "Yahoo Sports": 1,
     "Yeni Şafak English": 1,
+    "Oldham Times": 1,
     "Uk": 1,
     "Rochdale Borough Council": 1,
     "Greater Manchester Police": 1,
@@ -860,7 +863,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
     "https://c.newsnow.co.uk/A/1325607146?-57568:46921",
     "https://c.newsnow.co.uk/A/1325606879?-57568:46921",
     "https://c.newsnow.co.uk/A/1325599683?-57568:46921",
@@ -879,18 +882,22 @@
     "https://c.newsnow.co.uk/A/1325346199?-57568:46921",
     "https://c.newsnow.co.uk/A/1325340244?-57568:46921",
     "https://c.newsnow.co.uk/A/1325296594?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325608782?-57568:46921",
     "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325608782?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
     "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5vdFRNZ2YzdVVCbDFlbVFvTDBRNEkzWXVCNlp2VUpERm82VWVoRVVYdmtDZVFUTzN5WmU3cl9TSW5ZN2tPZ1VXQ0dGUXZtdEZsb1JGd2pMMlBwS1k?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "investinrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "investinrochdale.co.uk": 8
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -924,8 +931,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-28T23:07:16.746581Z",
-  "frontpage_article_count": 16,
+  "frontpage_generated_at": "2026-09-28T23:18:29.661622Z",
+  "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -981,7 +988,7 @@
       "traffic": 1,
       "politics": 2,
       "education": 1,
-      "sport": 3,
+      "sport": 2,
       "business": 2,
       "community": 1,
       "health": 1,
@@ -989,7 +996,7 @@
     },
     "selected_by_ward": {
       "Hopwood Hall": 3,
-      "borough-wide": 10,
+      "borough-wide": 9,
       "Kingsway": 2,
       "Healey": 1
     },
@@ -1008,17 +1015,16 @@
       "rochdale times": 1,
       "lancasterguardian": 1,
       "placenorthwest": 1,
-      "northern live service updates": 1,
-      "yahoo sports": 1
+      "northern live service updates": 1
     },
     "pool_size": 17,
     "primary_pool_size": 17,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 16,
+    "frontpage_count": 15,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 9,
-    "fresh_under_homepage_window": 15,
+    "fresh_under_homepage_window": 14,
     "short_briefs_selected": 7,
     "frontpage_minimum_met": true
   },
