@@ -1,18 +1,11 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 152,
-  "published_count": 152,
-  "category_change_count": 20,
-  "image_change_count": 22,
+  "article_count": 150,
+  "published_count": 150,
+  "category_change_count": 19,
+  "image_change_count": 21,
   "category_changes": [
-    {
-      "slug": "train-services-disrupted-between-leeds-and-manchester-victoria-due-to-cable-thef",
-      "title": "Train Services Disrupted Between Leeds and Manchester Victoria Due to Cable Theft",
-      "from": "transport",
-      "to": "crime",
-      "reason": "headline strongly identifies crime"
-    },
     {
       "slug": "new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood",
       "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Protect Children on School Runs",
@@ -149,14 +142,26 @@
   ],
   "image_changes": [
     {
+      "slug": "four-arrested-and-1-million-worth-of-drugs-seized-in-rochdale",
+      "title": "Four Arrested and £1 Million Worth of Drugs Seized in Rochdale",
+      "category": "crime",
+      "reason": "weak filename image match score 8133; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/investigation.jpg",
+        "img": "assets/img/cards/investigation.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/four-arrested-and-1-million-worth-of-drugs-seized-in-rochdale-generated-card.jpg"
+    },
+    {
       "slug": "councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent",
       "title": "Councillor Calls for Urgent Meeting Over Disorder Reports in Middleton Town Centre",
       "category": "crime",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "sensitive story image lacks explicit source/editorial provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent.png",
         "img": "assets/img/cards/councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent.png",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/councillor-calls-for-urgent-meeting-over-disorder-reports-in-middleton-town-cent-generated-card.jpg"
     },
@@ -267,30 +272,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/peacocks-signs-long-term-lease-at-rochdale-riverside-amid-15-3-footfall-increase-generated-card.jpg"
-    },
-    {
-      "slug": "operation-luka-records-566-disruptions-in-child-safeguarding-efforts-across-grea",
-      "title": "Operation Luka Records 566 Disruptions in Child Safeguarding Efforts Across Greater Manchester",
-      "category": "crime",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/operation-luka-records-566-disruptions-in-child-safeguarding-efforts-across-grea.jpg",
-        "img": "assets/img/cards/operation-luka-records-566-disruptions-in-child-safeguarding-efforts-across-grea.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/operation-luka-records-566-disruptions-in-child-safeguarding-efforts-across-grea-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-vs-oldham-match-draws-6-121-fans-to-spotland",
-      "title": "Rochdale vs Oldham Derby Attracts Over 6,000 Fans to Spotland",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/match.jpg",
-        "img": "assets/img/cards/match.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-vs-oldham-match-draws-6-121-fans-to-spotland-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
