@@ -1,35 +1,36 @@
 {
-  "last_run_at": "2026-09-29T00:33:31.301886Z",
-  "raw_candidates_before_job_filter": 122,
+  "last_run_at": "2026-09-29T00:44:22.312876Z",
+  "raw_candidates_before_job_filter": 123,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 115,
+  "raw_candidates": 116,
   "candidate_clusters": 44,
   "google_news_resolution": {
-    "wrappers": 30,
+    "wrappers": 31,
     "resolved": 29,
     "text_recovered": 17,
-    "reattributed": 10,
+    "reattributed": 11,
     "images_found": 23
   },
-  "duplicates_merged": 71,
-  "attempted_rewrites": 19,
-  "new_articles": 7,
-  "live_articles": 26,
-  "skipped": 12,
+  "duplicates_merged": 72,
+  "attempted_rewrites": 18,
+  "new_articles": 8,
+  "live_articles": 27,
+  "skipped": 10,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 5,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 4,
-    "editorial gate: REJECTED_NON_NEWS": 2,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
+    "editorial gate: REJECTED_NON_LOCAL": 4,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 3,
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
+    "editorial gate: REJECTED_NON_NEWS": 1,
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
     "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 186.": 1
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 176.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 118,
+    "rss_and_google_news": 119,
     "website_discovery": 0,
     "aggregator_discovery": 0,
     "live_service_pages": 2,
@@ -50,6 +51,7 @@
     "BBC": 2,
     "Alloaadvertiser": 2,
     "Rochdaletimes": 2,
+    "Rochdale Borough Council": 2,
     "Bee Network live travel alerts": 2,
     "Ofsted": 2,
     "Beyond Radio": 1,
@@ -57,9 +59,8 @@
     "Cumnock Chronicle": 1,
     "Yahoo Sports": 1,
     "Yeni Şafak English": 1,
-    "Oldham Times": 1,
+    "The Oldham Times": 1,
     "Uk": 1,
-    "Rochdale Borough Council": 1,
     "Greater Manchester Police": 1
   },
   "selected_by_category": {
@@ -70,14 +71,14 @@
     "environment": 2,
     "health": 1,
     "news": 1,
-    "sport": 2,
+    "sport": 1,
     "traffic": 1,
     "transport": 1
   },
   "published_by_category": {
     "business": 2,
     "community": 2,
-    "crime": 5,
+    "crime": 6,
     "education": 1,
     "environment": 2,
     "events": 7,
@@ -123,7 +124,6 @@
     "hard-news-v3-6de5f69d9b2f5e3a046c",
     "education-v3-13a30a5f22748e5899ed",
     "community-v3-eb083aba3514bd7238e7",
-    "sport-v3-4f631c52702ce293f671",
     "hard-news-v3-834c3cf9225ebc0dd03d",
     "hard-news-v3-33ad2bfa95dfb340c9c4",
     "environment-v3-f752f5b02c90c17d456a"
@@ -144,7 +144,6 @@
     "https://www.rochdaletimes.co.uk/aladdin-brings-panto-fun-to-revamped-heywood-civic/",
     "https://rochdaleafc.co.uk/crewe-admission-details/",
     "https://www.rochvalleyradio.com/news-features/156/lifestyle-music/778/greater-manchester-s-17-piece-not-quite-big-band-will-play-a-headline-show-at-rochdale-town-hall",
-    "https://rochdaleafc.co.uk/at-home-this-saturday/",
     "https://www.rochvalleyradio.com/news-features/149/education/776/hopwood-hall-college-introduces-uniforms-made-by-rochdale-business",
     "https://www.rochvalleyradio.com/news-features/4/crime/775/four-arrested-as-police-seize-suspected-drugs-worth-over-1m-in-rochdale",
     "https://www.rochvalleyradio.com/news-features/140/business/772/kingsway-hotel-in-rochdale-on-market-for-425-000"
@@ -208,7 +207,7 @@
       "environment": 2,
       "health": 1,
       "news": 1,
-      "sport": 2,
+      "sport": 1,
       "traffic": 1,
       "transport": 1
     },
@@ -217,7 +216,7 @@
       "Kingsway": 3
     },
     "selected_by_area": {
-      "rochdale": 18,
+      "rochdale": 17,
       "smithy_bridge": 1
     },
     "selected_by_source": {
@@ -225,11 +224,11 @@
       "food standards agency": 1,
       "greater manchester police": 1,
       "northern live service updates": 1,
-      "oldham times": 1,
       "roch valley radio": 8,
-      "rochdale afc": 4,
+      "rochdale afc": 3,
       "rochdale borough council": 1,
-      "rochdale times": 1
+      "rochdale times": 1,
+      "the oldham times": 1
     }
   },
   "official_ward_count": 20,
@@ -852,7 +851,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1325607146?-57568:46921",
     "https://c.newsnow.co.uk/A/1325606879?-57568:46921",
     "https://c.newsnow.co.uk/A/1325599683?-57568:46921",
@@ -871,22 +870,18 @@
     "https://c.newsnow.co.uk/A/1325346199?-57568:46921",
     "https://c.newsnow.co.uk/A/1325340244?-57568:46921",
     "https://c.newsnow.co.uk/A/1325296594?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325608782?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5vdFRNZ2YzdVVCbDFlbVFvTDBRNEkzWXVCNlp2VUpERm82VWVoRVVYdmtDZVFUTzN5WmU3cl9TSW5ZN2tPZ1VXQ0dGUXZtdEZsb1JGd2pMMlBwS1k?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "northernrailway.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "northernrailway.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -920,8 +915,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-29T00:35:24.283199Z",
-  "frontpage_article_count": 16,
+  "frontpage_generated_at": "2026-09-29T00:46:14.581391Z",
+  "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -971,7 +966,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 4,
+      "crime": 5,
       "traffic": 1,
       "politics": 2,
       "education": 1,
@@ -982,7 +977,7 @@
     },
     "selected_by_ward": {
       "Hopwood Hall": 3,
-      "borough-wide": 10,
+      "borough-wide": 11,
       "Kingsway": 2,
       "Healey": 1
     },
@@ -991,28 +986,29 @@
       "heywood": 2,
       "hopwood": 1,
       "middleton": 2,
-      "rochdale": 11
+      "rochdale": 12
     },
     "selected_by_source": {
       "source": 8,
+      "greater manchester police": 1,
       "rochdale borough council": 1,
       "rochdale afc": 1,
       "rochdale borough council (healey dell nature reserve and tea rooms)": 1,
-      "sundayguardianlive": 1,
       "rochdale times": 1,
       "place north west": 1,
-      "northern live service updates": 1,
-      "lancasterguardian": 1
+      "sundayguardianlive": 1,
+      "lancasterguardian": 1,
+      "northern live service updates": 1
     },
-    "pool_size": 18,
-    "primary_pool_size": 18,
+    "pool_size": 19,
+    "primary_pool_size": 19,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 16,
+    "frontpage_count": 17,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 11,
-    "fresh_under_homepage_window": 16,
-    "short_briefs_selected": 9,
+    "fresh_under_24h": 12,
+    "fresh_under_homepage_window": 17,
+    "short_briefs_selected": 10,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1023,7 +1019,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 8,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 155,
+  "duplicate_articles_after_postprocessing": 156,
   "blocked_articles_removed": 2,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
