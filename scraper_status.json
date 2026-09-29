@@ -1,33 +1,34 @@
 {
-  "last_run_at": "2026-09-29T17:24:17.012374Z",
-  "raw_candidates_before_job_filter": 162,
+  "last_run_at": "2026-09-29T17:34:53.254926Z",
+  "raw_candidates_before_job_filter": 163,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 162,
-  "candidate_clusters": 48,
+  "raw_candidates": 163,
+  "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 139,
-    "resolved": 54,
+    "wrappers": 138,
+    "resolved": 50,
     "text_recovered": 12,
     "reattributed": 7,
-    "images_found": 13
+    "images_found": 12
   },
-  "duplicates_merged": 114,
+  "duplicates_merged": 116,
   "attempted_rewrites": 13,
-  "new_articles": 7,
+  "new_articles": 6,
   "live_articles": 29,
-  "skipped": 6,
+  "skipped": 7,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 4,
+    "editorial gate: REJECTED_NON_LOCAL": 5,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
+    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
     "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 153,
+    "rss_and_google_news": 154,
     "website_discovery": 0,
     "aggregator_discovery": 1,
     "live_service_pages": 5,
@@ -39,21 +40,19 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Roch Valley Radio": 86,
-    "Rochdale Times": 23,
-    "Manchester Evening News": 18,
+    "Roch Valley Radio": 85,
+    "Manchester Evening News": 23,
+    "Rochdale Times": 21,
     "Rochdale Borough Council": 4,
     "The Bury Times": 3,
+    "theoldhamtimes.co.uk": 3,
     "Place North West": 3,
     "Greater Manchester Police": 3,
     "Northern live service updates": 3,
     "BBC": 2,
     "The Oldham Times": 2,
-    "theoldhamtimes.co.uk": 2,
     "Bee Network live travel alerts": 2,
     "Ofsted": 2,
-    "Oldham Times": 1,
-    "The Sunday Guardian": 1,
     "Beyond Radio": 1,
     "Investing.com UK": 1,
     "THIIS Magazine": 1,
@@ -75,12 +74,12 @@
     "business": 2,
     "community": 3,
     "crime": 5,
-    "education": 1,
-    "environment": 2,
+    "education": 2,
+    "environment": 1,
     "events": 7,
     "health": 1,
-    "politics": 2,
-    "sport": 3,
+    "politics": 1,
+    "sport": 4,
     "traffic": 3
   },
   "openai_enabled": true,
@@ -836,7 +835,9 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 31,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
     "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
     "https://c.newsnow.co.uk/A/1325646502?-57568:46921",
     "https://c.newsnow.co.uk/A/1325641629?-57568:46921",
@@ -854,13 +855,11 @@
     "https://c.newsnow.co.uk/A/1325455615?-57568:46921",
     "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
     "https://c.newsnow.co.uk/A/1325454503?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325446307?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325549784?-57568:46921",
     "https://c.newsnow.co.uk/A/1325707030?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325549784?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMi3AFBVV95cUxObTJMNS1YVGo0anJlR0xTUHBxd2FpR0t3QVFGSHpVaTFXNTA0ZVBuZzVkNUZYeUtXelc2bFQwd3M3RlZlX1V5NmRmSEFISEtLZG9DUG9vUncyeHRBTzJZaEFvQXA1Y29HRnJINjhVdDYxNExRcUZvcDFGd1RGZ0c3YmdkQUVPOWJva0xfZmdpU1dVRHlaa25qMzZ6dk1Fdk03allxeFUxMG02VFJpMHdRX3ZYQUEyVG5lYUdSd2ZsbDJhU1ROV3VoVjlhLWJrZkFBalhuaDFJd2d1czh3?oc=5",
@@ -869,14 +868,8 @@
     "https://news.google.com/rss/articles/CBMiugFBVV95cUxPa3ZpZG1ERTNqZC1xWlBuUGhFb0w3SlhVVHltNkhMR3ZQZVFEb2tNYlJ4WThlQ0FIalZIRFFkRTc4bWJFWUN5M0FtT3E2OUlJbVVzQ3BtNjZ6dXFZdGNBWXMzR25CUkVXQ1pPRERjQms0TEJXZmVBZnprU3dESHdyZXByMTRPUlBnSlN3RURZODBCb3AyRWJLZWxSa1ZSaFJzTGtmdFhCM2ExazE1a1NaaUE4R1ZBS1lNWmc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org",
-    "yourtrustrochdale.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 3,
-    "rochdaleafccommunity.org": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -910,7 +903,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-29T17:26:08.007705Z",
+  "frontpage_generated_at": "2026-09-29T17:36:48.541606Z",
   "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -937,11 +930,13 @@
       "traffic"
     ],
     "available_wards": [
+      "Central Rochdale",
       "Healey",
       "Hopwood Hall",
       "Kingsway"
     ],
     "selected_wards": [
+      "Central Rochdale",
       "Healey",
       "Hopwood Hall",
       "Kingsway"
@@ -963,9 +958,9 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "crime": 4,
       "traffic": 3,
-      "crime": 3,
-      "politics": 2,
+      "politics": 1,
       "education": 2,
       "sport": 3,
       "business": 2,
@@ -974,30 +969,31 @@
       "environment": 1
     },
     "selected_by_ward": {
-      "borough-wide": 14,
+      "Central Rochdale": 1,
+      "borough-wide": 13,
       "Hopwood Hall": 3,
       "Healey": 1,
       "Kingsway": 1
     },
     "selected_by_area": {
       "healey": 1,
-      "heywood": 3,
+      "heywood": 2,
       "hopwood": 2,
       "middleton": 3,
-      "rochdale": 12
+      "rochdale": 13
     },
     "selected_by_source": {
-      "manchester evening news": 1,
+      "manchester evening news": 2,
       "greater manchester police": 2,
-      "rochdale times": 2,
+      "source": 6,
+      "rochdale times": 1,
       "rochdale afc": 2,
       "the oldham times": 1,
       "journal of linguistic geography (dann et al., 2024) — geospatial study of greater manchester folk‑linguistic terms": 1,
       "thiis magazine": 1,
       "rochdale borough council (healey dell nature reserve and tea rooms)": 1,
-      "source": 6,
-      "rochdale borough council": 1,
-      "place north west": 1
+      "place north west": 1,
+      "rochdale borough council": 1
     },
     "pool_size": 21,
     "primary_pool_size": 21,
@@ -1005,8 +1001,8 @@
     "selection_window_days": 2,
     "frontpage_count": 19,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 6,
-    "fresh_under_homepage_window": 18,
+    "fresh_under_24h": 7,
+    "fresh_under_homepage_window": 19,
     "short_briefs_selected": 9,
     "frontpage_minimum_met": true
   },
