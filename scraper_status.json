@@ -1,17 +1,17 @@
 {
-  "last_run_at": "2026-09-29T23:16:16.146027Z",
-  "raw_candidates_before_job_filter": 141,
+  "last_run_at": "2026-09-29T23:27:14.682027Z",
+  "raw_candidates_before_job_filter": 142,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 141,
+  "raw_candidates": 142,
   "candidate_clusters": 45,
   "google_news_resolution": {
-    "wrappers": 115,
-    "resolved": 113,
-    "text_recovered": 12,
-    "reattributed": 1,
-    "images_found": 12
+    "wrappers": 95,
+    "resolved": 93,
+    "text_recovered": 15,
+    "reattributed": 2,
+    "images_found": 15
   },
-  "duplicates_merged": 96,
+  "duplicates_merged": 97,
   "attempted_rewrites": 14,
   "new_articles": 4,
   "live_articles": 28,
@@ -23,11 +23,14 @@
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 134,
-    "website_discovery": 0,
+    "rss_and_google_news": 130,
+    "website_discovery": 5,
     "aggregator_discovery": 1,
     "live_service_pages": 3,
     "facebook_official": 0,
@@ -38,14 +41,14 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Roch Valley Radio": 71,
-    "Rochdale Times": 20,
-    "Manchester Evening News": 18,
+    "Roch Valley Radio": 68,
+    "Rochdale Times": 25,
+    "Manchester Evening News": 17,
     "Oldham Times": 5,
     "Rochdale Borough Council": 4,
-    "The Bury Times": 3,
     "Place North West": 3,
     "Greater Manchester Police": 3,
+    "The Bury Times": 2,
     "Bee Network live travel alerts": 2,
     "Ofsted": 2,
     "Total Rugby League": 1,
@@ -55,6 +58,7 @@
     "Investing.com UK": 1,
     "Uk": 1,
     "About Manchester": 1,
+    "Bury Times": 1,
     "Theoldhamtimes": 1,
     "Northern live service updates": 1,
     "Food Standards Agency": 1
@@ -62,10 +66,10 @@
   "selected_by_category": {
     "business": 1,
     "crime": 4,
-    "environment": 3,
+    "environment": 2,
     "health": 1,
     "sport": 1,
-    "traffic": 2,
+    "traffic": 3,
     "transport": 2
   },
   "published_by_category": {
@@ -110,10 +114,10 @@
     "business-v3-e89a8791642e18b1a635",
     "health-v3-7e03d0de0ce54d252318",
     "environment-v3-68e801c1bfe6496b6a54",
+    "transport-v3-a2112563101eed90a597",
     "hard-news-v3-316b41cff7fda6c17fb0",
     "transport-v3-ef068fd6b96517600baf",
     "hard-news-v3-284edcb911561638eac7",
-    "environment-v3-e8fcd6aa233a56599dc4",
     "environment-v3-310f95ba0cd95f02a227",
     "hard-news-v3-887a689fa77a28891028",
     "transport-v3-4414a13487ad1cc8af8d"
@@ -121,15 +125,15 @@
   "selected_candidate_urls": [
     "https://www.rochvalleyradio.com/news-features/3/politics/785/panorama-of-protests-outside-labour-conference",
     "https://www.rochvalleyradio.com/news-features/139/news/783/analysis-did-andy-burnham-s-speech-bring-anything-new",
-    "https://www.northernrailway.co.uk/service-updates#live-45671410b94041280b",
+    "https://www.northernrailway.co.uk/service-updates#live-4a67a49fee7f2da4a7",
     "https://www.totalrl.com/samy-kibula-to-bring-vital-experience-to-rochdale-hornets/",
     "https://www.rochdaletimes.co.uk/clothing-manufacturer-creates-stylish-new-look-for-students/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
     "https://www.rochdaletimes.co.uk/care-home-plan-to-be-decided-after-20-objections-lodged/",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/suspected-killer-named-after-man-34687981",
     "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/september/serious-collision-investigation-unit-appealing-for-information-after-collision-in-heywood/",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-231972eb2eb70a947d",
     "https://www.burytimes.co.uk/news/26590270.man-charged-manslaughter-rochdale-death/",
-    "https://thiis.co.uk/medequip-awarded-oldham-rochdale-stockport-and-tameside-community-equipment-loan-service-contract/",
     "https://publicaccess.rochdale.gov.uk/online-applications/",
     "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/september/six-months-of-meticulous-detective-work-leads-to-four-arrests-and-1m-drugs-seizure-in-rochdale/",
     "https://www.rochvalleyradio.com/news/live/follow-live-as-andy-burnham-addresses-labour-party-conference"
@@ -162,9 +166,11 @@
       "transport"
     ],
     "available_wards": [
+      "Central Rochdale",
       "Hopwood Hall"
     ],
     "selected_wards": [
+      "Central Rochdale",
       "Hopwood Hall"
     ],
     "available_areas": [
@@ -182,13 +188,14 @@
     "selected_by_category": {
       "business": 1,
       "crime": 4,
-      "environment": 3,
+      "environment": 2,
       "health": 1,
       "sport": 1,
-      "traffic": 2,
+      "traffic": 3,
       "transport": 2
     },
     "selected_by_ward": {
+      "Central Rochdale": 1,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
@@ -198,13 +205,13 @@
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
+      "bury times": 1,
       "food standards agency": 1,
       "greater manchester police": 2,
+      "manchester evening news": 1,
       "northern live service updates": 1,
       "roch valley radio": 3,
       "rochdale times": 2,
-      "the bury times": 1,
-      "thiis magazine": 1,
       "total rugby league": 1,
       "uk": 1
     }
@@ -829,7 +836,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325549784?-57568:46921",
     "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
     "https://c.newsnow.co.uk/A/1325646502?-57568:46921",
     "https://c.newsnow.co.uk/A/1325641629?-57568:46921",
@@ -848,12 +855,12 @@
     "https://c.newsnow.co.uk/A/1325455615?-57568:46921",
     "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
     "https://c.newsnow.co.uk/A/1325454503?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
     "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325549784?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
     "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
     "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325707030?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
@@ -893,7 +900,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-29T23:18:10.891217Z",
+  "frontpage_generated_at": "2026-09-29T23:29:06.701584Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
