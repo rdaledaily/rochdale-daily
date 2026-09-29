@@ -1,9 +1,9 @@
 {
-  "last_run_at": "2026-09-29T02:15:50.220430Z",
-  "raw_candidates_before_job_filter": 126,
+  "last_run_at": "2026-09-29T02:28:11.536639Z",
+  "raw_candidates_before_job_filter": 127,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 119,
-  "candidate_clusters": 43,
+  "raw_candidates": 120,
+  "candidate_clusters": 42,
   "google_news_resolution": {
     "wrappers": 34,
     "resolved": 30,
@@ -11,18 +11,21 @@
     "reattributed": 8,
     "images_found": 24
   },
-  "duplicates_merged": 76,
+  "duplicates_merged": 78,
   "attempted_rewrites": 14,
-  "new_articles": 6,
+  "new_articles": 5,
   "live_articles": 27,
-  "skipped": 8,
+  "skipped": 9,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 5,
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
+    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 122,
@@ -32,7 +35,7 @@
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
-    "food_hygiene": 0,
+    "food_hygiene": 1,
     "inspection_registers": 2
   },
   "collector_errors": {},
@@ -55,7 +58,8 @@
     "Yahoo Sports": 1,
     "Investing.com UK": 1,
     "Uk": 1,
-    "Greater Manchester Police": 1
+    "Greater Manchester Police": 1,
+    "Food Standards Agency": 1
   },
   "selected_by_category": {
     "business": 1,
@@ -70,11 +74,11 @@
   },
   "published_by_category": {
     "business": 1,
-    "community": 1,
+    "community": 2,
     "crime": 6,
     "education": 1,
     "environment": 2,
-    "events": 8,
+    "events": 7,
     "politics": 2,
     "sport": 5,
     "traffic": 1
@@ -832,7 +836,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325607146?-57568:46921",
     "https://c.newsnow.co.uk/A/1325606879?-57568:46921",
     "https://c.newsnow.co.uk/A/1325599683?-57568:46921",
@@ -851,13 +855,13 @@
     "https://c.newsnow.co.uk/A/1325346199?-57568:46921",
     "https://c.newsnow.co.uk/A/1325340244?-57568:46921",
     "https://c.newsnow.co.uk/A/1325296594?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325608782?-57568:46921",
     "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
     "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324821184?-57568:46921",
     "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325608782?-57568:46921",
     "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5vdFRNZ2YzdVVCbDFlbVFvTDBRNEkzWXVCNlp2VUpERm82VWVoRVVYdmtDZVFUTzN5WmU3cl9TSW5ZN2tPZ1VXQ0dGUXZtdEZsb1JGd2pMMlBwS1k?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
@@ -896,7 +900,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-29T02:20:14.641594Z",
+  "frontpage_generated_at": "2026-09-29T02:29:39.238177Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -999,9 +1003,9 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 8,
-  "event_dates_corrected_from_ledger": 3,
+  "event_dates_corrected_from_ledger": 0,
   "duplicate_articles_after_postprocessing": 156,
-  "blocked_articles_removed": 0,
+  "blocked_articles_removed": 2,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
