@@ -1,32 +1,33 @@
 {
-  "last_run_at": "2026-09-29T07:05:31.204135Z",
-  "raw_candidates_before_job_filter": 140,
+  "last_run_at": "2026-09-29T07:16:35.268361Z",
+  "raw_candidates_before_job_filter": 157,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 133,
-  "candidate_clusters": 46,
+  "raw_candidates": 150,
+  "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 33,
-    "resolved": 26,
-    "text_recovered": 18,
+    "wrappers": 41,
+    "resolved": 29,
+    "text_recovered": 21,
     "reattributed": 11,
-    "images_found": 23
+    "images_found": 26
   },
-  "duplicates_merged": 87,
-  "attempted_rewrites": 5,
+  "duplicates_merged": 103,
+  "attempted_rewrites": 6,
   "new_articles": 2,
   "live_articles": 28,
-  "skipped": 3,
+  "skipped": 4,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 2,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 130,
+    "rss_and_google_news": 147,
     "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 2,
@@ -38,9 +39,9 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Roch Valley Radio": 84,
-    "Manchester Evening News": 7,
-    "Rochdale Times": 5,
+    "Roch Valley Radio": 83,
+    "Rochdale Times": 20,
+    "Manchester Evening News": 12,
     "Id": 4,
     "Rochdale Borough Council": 4,
     "The Sunday Guardian": 3,
@@ -48,7 +49,6 @@
     "Placenorthwest": 3,
     "theoldhamtimes.co.uk": 2,
     "The Oldham Times": 2,
-    "rochdaletimes.co.uk": 2,
     "Greater Manchester Police": 2,
     "Bee Network live travel alerts": 2,
     "Ofsted": 2,
@@ -63,7 +63,7 @@
   },
   "selected_by_category": {
     "business": 1,
-    "crime": 1,
+    "crime": 2,
     "health": 1,
     "traffic": 1,
     "transport": 1
@@ -102,18 +102,20 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-887a689fa77a28891028",
-    "transport-v3-14b558fb5a634b3ec595",
+    "hard-news-v3-ecdf480528d5a99d46f9",
+    "transport-v3-0a39a244cae1749b3eae",
     "transport-v3-1c837b4bc68e5d1054a3",
     "business-v3-9438b35b6a73090e4efb",
-    "health-v3-7e03d0de0ce54d252318"
+    "health-v3-7e03d0de0ce54d252318",
+    "hard-news-v3-887a689fa77a28891028"
   ],
   "selected_candidate_urls": [
-    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/september/six-months-of-meticulous-detective-work-leads-to-four-arrests-and-1m-drugs-seizure-in-rochdale/",
     "https://www.rochvalleyradio.com/news-features/4/crime/781/man-sentenced-to-three-and-a-half-years-for-terrorism-related-offences",
+    "https://www.rochdaletimes.co.uk/teenagers-seriously-injured-in-e-bike-crash/",
     "https://www.northernrailway.co.uk/service-updates#live-2ff811ca61a9b632f2",
     "https://www.bbc.com/news/articles/c60relxrdx9qo?xtor=AL-72-%5Bpartner%5D-%5Byahoo.north.america%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D",
-    "https://ratings.food.gov.uk/open-data#rochdale-2026-09"
+    "https://ratings.food.gov.uk/open-data#rochdale-2026-09",
+    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/september/six-months-of-meticulous-detective-work-leads-to-four-arrests-and-1m-drugs-seizure-in-rochdale/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -156,7 +158,7 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "business": 1,
-      "crime": 1,
+      "crime": 2,
       "health": 1,
       "traffic": 1,
       "transport": 1
@@ -165,7 +167,7 @@
       "Kingsway": 1
     },
     "selected_by_area": {
-      "rochdale": 4,
+      "rochdale": 5,
       "smithy_bridge": 1
     },
     "selected_by_source": {
@@ -173,7 +175,8 @@
       "food standards agency": 1,
       "greater manchester police": 1,
       "northern live service updates": 1,
-      "roch valley radio": 1
+      "roch valley radio": 1,
+      "rochdale times": 1
     }
   },
   "official_ward_count": 20,
@@ -794,9 +797,9 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 27,
+  "robots_denied_count": 28,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325641629?-57568:46921",
     "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
     "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
     "https://c.newsnow.co.uk/A/1325608782?-57568:46921",
@@ -815,13 +818,14 @@
     "https://c.newsnow.co.uk/A/1325368428?-57568:46921",
     "https://c.newsnow.co.uk/A/1325360496?-57568:46921",
     "https://c.newsnow.co.uk/A/1325346199?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325641629?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
     "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
     "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
+    "https://news.google.com/rss/articles/CBMiugFBVV95cUxOazZmbnlLak4telBvWnVnVk5WZHR5alpDSGh2X3AyMzRHQW9oWm1hODBZVFgta2pPNjFVODN4MFE2clZtTVhpYlNJT0NybWxvNGNUb2hjSHhRbjFUXy1vWndGX1lpcUhYQXc4RmFtUHNPT0N4RFR4MjJhZzIyYWtiWEN6LWJvb1NhZDBmaml6TEJRbWRWVDFrcTd3V2tqd1VVcGNzTW5sTkR6N29oVF8yQ0NGdVlGX1hTN2fSAb8BQVVfeXFMTXdBdmhURWxWZ29NLUoycTVUYVFtNXF3U1hvc0F2em9hQ1NSc3pFdmpWS09WRFAzMDBWVFlJMlBDY1BhS3JzVXFFU2lXOFhVWFFTc25Xck4tQzBwVUd4WFRSR0FsX2RWN0M2MlBLS0VlVzdDQW1YMjNYNlhfVUZtYW1OMDF6R2E0VW9lcENvVWFiTTdGTjhnakN3b1daSGQteVlySlpTN3VoNVpTX1lyTG84Y0tyQWtNZTA1cDgzYTQ?oc=5",
     "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5vdFRNZ2YzdVVCbDFlbVFvTDBRNEkzWXVCNlp2VUpERm82VWVoRVVYdmtDZVFUTzN5WmU3cl9TSW5ZN2tPZ1VXQ0dGUXZtdEZsb1JGd2pMMlBwS1k?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
@@ -860,7 +864,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-29T07:07:21.804149Z",
+  "frontpage_generated_at": "2026-09-29T07:18:26.800292Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
