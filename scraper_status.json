@@ -1,26 +1,26 @@
 {
-  "last_run_at": "2026-09-29T09:58:46.528433Z",
-  "raw_candidates_before_job_filter": 165,
+  "last_run_at": "2026-09-29T10:08:56.468104Z",
+  "raw_candidates_before_job_filter": 168,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 158,
+  "raw_candidates": 161,
   "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 49,
+    "wrappers": 52,
     "resolved": 48,
-    "text_recovered": 21,
+    "text_recovered": 20,
     "reattributed": 9,
-    "images_found": 26
+    "images_found": 25
   },
-  "duplicates_merged": 111,
+  "duplicates_merged": 114,
   "attempted_rewrites": 12,
-  "new_articles": 6,
-  "live_articles": 32,
-  "skipped": 6,
+  "new_articles": 4,
+  "live_articles": 31,
+  "skipped": 8,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 3,
+    "editorial gate: REJECTED_NON_LOCAL": 4,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "editorial gate: REJECTED_NON_NEWS": 1,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
+    "editorial gate: REJECTED_NON_NEWS": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
@@ -28,7 +28,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 155,
+    "rss_and_google_news": 158,
     "website_discovery": 2,
     "aggregator_discovery": 2,
     "live_service_pages": 3,
@@ -42,14 +42,14 @@
   "source_counts": {
     "Roch Valley Radio": 88,
     "Rochdale Times": 18,
-    "Manchester Evening News": 13,
+    "manchestereveningnews.co.uk": 16,
     "Id": 4,
     "Rochdale Borough Council": 4,
     "The Sunday Guardian": 3,
-    "Place North West": 3,
+    "Placenorthwest": 3,
     "Greater Manchester Police": 3,
     "Bee Network live travel alerts": 3,
-    "BBC News": 2,
+    "BBC": 2,
     "Oldham Times": 2,
     "TfGM Travel Alerts": 2,
     "Ofsted": 2,
@@ -78,12 +78,12 @@
     "business": 1,
     "community": 4,
     "crime": 5,
-    "education": 2,
-    "environment": 1,
+    "education": 1,
+    "environment": 2,
     "events": 7,
     "health": 1,
     "politics": 2,
-    "sport": 6,
+    "sport": 5,
     "traffic": 3
   },
   "openai_enabled": true,
@@ -834,7 +834,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
     "https://c.newsnow.co.uk/A/1325641629?-57568:46921",
     "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
     "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
@@ -853,18 +853,22 @@
     "https://c.newsnow.co.uk/A/1325446307?-57568:46921",
     "https://c.newsnow.co.uk/A/1325368428?-57568:46921",
     "https://c.newsnow.co.uk/A/1325360496?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
     "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1325646502?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaletimes.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaletimes.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -898,7 +902,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-29T10:00:44.745267Z",
+  "frontpage_generated_at": "2026-09-29T10:10:13.370739Z",
   "frontpage_article_count": 22,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -951,14 +955,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "traffic": 3,
+      "health": 1,
       "crime": 5,
+      "traffic": 3,
       "politics": 2,
       "education": 2,
       "sport": 3,
       "business": 1,
       "community": 4,
-      "health": 1,
       "environment": 1
     },
     "selected_by_ward": {
@@ -975,17 +979,17 @@
       "rochdale": 15
     },
     "selected_by_source": {
-      "manchestereveningnews.co.uk": 1,
+      "thiis magazine": 1,
       "source": 7,
-      "greater manchester police": 2,
+      "manchestereveningnews.co.uk": 1,
       "rochdale times": 2,
       "rochdale afc": 2,
       "place north west": 1,
       "journal of linguistic geography (dann et al., 2024) — geospatial study of greater manchester folk‑linguistic terms": 1,
-      "thiis magazine": 1,
       "rochdale borough council (healey dell nature reserve and tea rooms)": 1,
-      "rochdale borough council": 1,
+      "greater manchester police": 2,
       "oldham times": 1,
+      "rochdale borough council": 1,
       "sundayguardianlive": 1,
       "northern live service updates": 1
     },
