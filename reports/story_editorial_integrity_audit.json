@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 155,
-  "published_count": 155,
-  "category_change_count": 19,
-  "image_change_count": 24,
+  "article_count": 159,
+  "published_count": 159,
+  "category_change_count": 20,
+  "image_change_count": 26,
   "category_changes": [
+    {
+      "slug": "police-appeal-for-information-following-collision-in-heywood",
+      "title": "Police Appeal for Information Following Collision in Heywood",
+      "from": "crime",
+      "to": "traffic",
+      "reason": "headline strongly identifies traffic"
+    },
     {
       "slug": "new-campaign-launched-to-enhance-child-safety-during-school-runs-in-heywood",
       "title": "Rochdale Council Launches 'Stop Means Stop' Campaign to Protect Children on School Runs",
@@ -142,6 +149,30 @@
   ],
   "image_changes": [
     {
+      "slug": "two-boys-seriously-injured-in-e-bike-crash-on-windermere-road-middleton",
+      "title": "Two Boys Seriously Injured in E-Bike Crash on Windermere Road, Middleton",
+      "category": "traffic",
+      "reason": "weak filename image match score 8377; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/taken_to_hospital.jpg",
+        "img": "assets/img/cards/taken_to_hospital.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/two-boys-seriously-injured-in-e-bike-crash-on-windermere-road-middleton-generated-card.jpg"
+    },
+    {
+      "slug": "police-appeal-for-information-following-collision-in-heywood",
+      "title": "Police Appeal for Information Following Collision in Heywood",
+      "category": "traffic",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/police_appeal.jpg",
+        "img": "assets/img/cards/police_appeal.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/police-appeal-for-information-following-collision-in-heywood-generated-card.jpg"
+    },
+    {
       "slug": "wonders-of-our-universe-the-next-chapter",
       "title": "Wonders Of Our Universe. The Next Chapter",
       "category": "events",
@@ -157,11 +188,11 @@
       "slug": "not-quite-big-band-to-perform-at-rochdale-town-hall-on-7-november",
       "title": "Not Quite Big Band to Perform at Rochdale Town Hall on 7 November",
       "category": "community",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/not-quite-big-band-to-perform-at-rochdale-town-hall-on-7-november.png",
         "img": "assets/img/cards/not-quite-big-band-to-perform-at-rochdale-town-hall-on-7-november.png",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/not-quite-big-band-to-perform-at-rochdale-town-hall-on-7-november-generated-card.jpg"
     },
@@ -169,13 +200,25 @@
       "slug": "hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports",
       "title": "Hopwood Hall College Introduces New Student Uniforms from Rochdale Business",
       "category": "education",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports.jpg",
         "img": "assets/img/cards/hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports.jpg",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/hopwood-hall-college-introduces-new-student-uniforms-from-rochdale-s-icon-sports-generated-card.jpg"
+    },
+    {
+      "slug": "four-arrests-and-1-million-drug-seizure-in-rochdale-following-six-month-investig",
+      "title": "Four Arrests and £1 Million Drug Seizure in Rochdale Following Six-Month Investigation",
+      "category": "crime",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/investigation.jpg",
+        "img": "assets/img/cards/investigation.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/four-arrests-and-1-million-drug-seizure-in-rochdale-following-six-month-investig-generated-card.jpg"
     },
     {
       "slug": "rochdale-afc-u17-team-to-compete-in-pdl-cup-against-stockport",
@@ -296,18 +339,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-town-hall-to-host-festival-of-remembrance-on-october-16-generated-card.jpg"
-    },
-    {
-      "slug": "who-or-what-is-the-healey-dwarf",
-      "title": "Who",
-      "category": "environment",
-      "reason": "weak filename image match score 4751; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/healey-dell.jpg",
-        "img": "assets/img/cards/healey-dell.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/who-or-what-is-the-healey-dwarf-generated-card.jpg"
     },
     {
       "slug": "rock-classics-by-candlelight-rochdale",
