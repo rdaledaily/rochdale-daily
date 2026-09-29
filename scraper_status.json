@@ -1,29 +1,30 @@
 {
-  "last_run_at": "2026-09-29T04:05:14.724596Z",
+  "last_run_at": "2026-09-29T04:13:13.201947Z",
   "raw_candidates_before_job_filter": 136,
   "job_or_career_posts_rejected": 7,
   "raw_candidates": 129,
   "candidate_clusters": 42,
   "google_news_resolution": {
     "wrappers": 43,
-    "resolved": 39,
-    "text_recovered": 19,
-    "reattributed": 8,
-    "images_found": 24
+    "resolved": 37,
+    "text_recovered": 18,
+    "reattributed": 6,
+    "images_found": 23
   },
   "duplicates_merged": 87,
   "attempted_rewrites": 12,
-  "new_articles": 5,
+  "new_articles": 6,
   "live_articles": 27,
-  "skipped": 7,
+  "skipped": 6,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 3,
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 2
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 131,
@@ -42,22 +43,21 @@
     "Rochdale Times": 11,
     "Manchester Evening News": 6,
     "Id": 4,
+    "Oldham Times": 4,
     "Rochdale Borough Council": 4,
     "The Sunday Guardian": 3,
+    "BBC": 3,
     "Place North West": 3,
-    "Transfermarkt": 2,
-    "BBC News": 2,
-    "Alloa Advertiser": 2,
-    "Oldham Times": 2,
     "Bee Network live travel alerts": 2,
     "Ofsted": 2,
+    "Ca": 1,
     "Beyond Radio": 1,
     "Lancaster Guardian": 1,
     "Yahoo Sports": 1,
+    "Transfermarkt": 1,
     "Investing.com UK": 1,
     "Uk": 1,
     "Greater Manchester Police": 1,
-    "bbc.com": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -197,7 +197,7 @@
       "smithy_bridge": 1
     },
     "selected_by_source": {
-      "bbc news": 1,
+      "bbc": 1,
       "food standards agency": 1,
       "greater manchester police": 1,
       "northern live service updates": 1,
@@ -826,7 +826,8 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325608782?-57568:46921",
     "https://c.newsnow.co.uk/A/1325607146?-57568:46921",
     "https://c.newsnow.co.uk/A/1325606879?-57568:46921",
     "https://c.newsnow.co.uk/A/1325599683?-57568:46921",
@@ -844,23 +845,18 @@
     "https://c.newsnow.co.uk/A/1325346199?-57568:46921",
     "https://c.newsnow.co.uk/A/1325340244?-57568:46921",
     "https://c.newsnow.co.uk/A/1325296594?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325285649?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
-    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325608782?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324965386?-57568:46921",
     "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
+    "https://c.newsnow.co.uk/A/1324922949?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
     "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5vdFRNZ2YzdVVCbDFlbVFvTDBRNEkzWXVCNlp2VUpERm82VWVoRVVYdmtDZVFUTzN5WmU3cl9TSW5ZN2tPZ1VXQ0dGUXZtdEZsb1JGd2pMMlBwS1k?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "yourtrustrochdale.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -894,7 +890,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-29T04:06:36.780579Z",
+  "frontpage_generated_at": "2026-09-29T04:14:40.867845Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
