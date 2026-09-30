@@ -1,34 +1,31 @@
 {
-  "last_run_at": "2026-09-30T16:08:34.866985Z",
-  "raw_candidates_before_job_filter": 113,
+  "last_run_at": "2026-09-30T16:18:43.889104Z",
+  "raw_candidates_before_job_filter": 109,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 113,
+  "raw_candidates": 109,
   "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 57,
-    "resolved": 50,
-    "text_recovered": 17,
+    "wrappers": 78,
+    "resolved": 65,
+    "text_recovered": 16,
     "reattributed": 2,
-    "images_found": 17
+    "images_found": 16
   },
-  "duplicates_merged": 75,
+  "duplicates_merged": 71,
   "attempted_rewrites": 5,
-  "new_articles": 2,
-  "live_articles": 23,
-  "skipped": 3,
+  "new_articles": 3,
+  "live_articles": 22,
+  "skipped": 2,
   "rewrite_skip_reasons": {
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "editorial gate: REJECTED_NON_LOCAL": 1,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
+    "editorial gate: REJECTED_NON_LOCAL": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {
-    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 102,
-    "website_discovery": 5,
+    "rss_and_google_news": 101,
+    "website_discovery": 2,
     "aggregator_discovery": 1,
     "live_service_pages": 2,
     "facebook_official": 0,
@@ -39,24 +36,24 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Roch Valley Radio": 29,
-    "Rochdale Times": 26,
+    "Roch Valley Radio": 30,
+    "Rochdale Times": 21,
     "Manchester Evening News": 15,
     "Oldham Times": 7,
     "BBC": 4,
     "Partnerships Bulletin": 4,
-    "Rochdale Borough Council": 4,
     "Retail & Leisure International": 3,
     "The Bury Times": 3,
+    "Rochdale Borough Council": 3,
     "Pharmacy Business": 2,
     "InYourArea": 2,
     "Greater Manchester Police": 2,
+    "TfGM Travel Alerts": 2,
     "Bee Network live travel alerts": 2,
     "Ofsted": 2,
     "BBC Manchester": 1,
     "Totalrl": 1,
     "Wilts and Gloucestershire Standard": 1,
-    "THIIS Magazine": 1,
     "Uk": 1,
     "About Manchester": 1,
     "Theoldhamtimes": 1,
@@ -78,7 +75,7 @@
     "health": 1,
     "news": 1,
     "sport": 2,
-    "traffic": 3
+    "traffic": 2
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -793,7 +790,6 @@
   "robots_denied_count": 28,
   "robots_denied_urls": [
     "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325750970?-57568:46921",
     "https://c.newsnow.co.uk/A/1325707030?-57568:46921",
     "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
@@ -812,18 +808,23 @@
     "https://c.newsnow.co.uk/A/1325503389?-57568:46921",
     "https://c.newsnow.co.uk/A/1325462478?-57568:46921",
     "https://c.newsnow.co.uk/A/1325459906?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325770645?-57568:46921",
     "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
     "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325770645?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325790703?-57568:46921",
     "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325790703?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPRmt1VUlxWjhjSlNBZWNCVUptVFlvc3owT0hJQWlaVm1UMFRZZUFYQlhfOEdndEU3LTZvQnFKTmZob19qdlUwTmlSMDN4bElWcGJZbURqbzJvVEpXMk5pUFBkR29MYjk3U0Y4ZEVTS2ZxODVTaTNReUJEbnl2UWlzalBCb0ZJTUFBS3Z3?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 2
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -857,7 +858,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-30T16:10:23.535662Z",
+  "frontpage_generated_at": "2026-09-30T16:20:31.067535Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -931,7 +932,7 @@
       "heywood": 1,
       "hopwood": 1,
       "middleton": 2,
-      "rochdale": 10
+      "rochdale": 9
     },
     "selected_by_source": {
       "rochdale times": 4,
@@ -944,8 +945,8 @@
       "retail & leisure international": 1,
       "source": 1
     },
-    "pool_size": 15,
-    "primary_pool_size": 15,
+    "pool_size": 14,
+    "primary_pool_size": 14,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 13,
@@ -963,7 +964,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 8,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 153,
+  "duplicate_articles_after_postprocessing": 152,
   "blocked_articles_removed": 2,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
