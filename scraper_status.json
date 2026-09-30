@@ -1,8 +1,8 @@
 {
-  "last_run_at": "2026-09-30T05:21:54.169201Z",
-  "raw_candidates_before_job_filter": 141,
+  "last_run_at": "2026-09-30T05:32:02.405673Z",
+  "raw_candidates_before_job_filter": 142,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 141,
+  "raw_candidates": 142,
   "candidate_clusters": 42,
   "google_news_resolution": {
     "wrappers": 30,
@@ -11,16 +11,15 @@
     "reattributed": 2,
     "images_found": 20
   },
-  "duplicates_merged": 99,
+  "duplicates_merged": 100,
   "attempted_rewrites": 8,
-  "new_articles": 3,
+  "new_articles": 4,
   "live_articles": 29,
-  "skipped": 5,
+  "skipped": 4,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 2,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "quality gate after 4 repairs: The model marked the story unpublishable.": 1,
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
@@ -28,7 +27,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 130,
+    "rss_and_google_news": 131,
     "website_discovery": 5,
     "aggregator_discovery": 1,
     "live_service_pages": 2,
@@ -52,8 +51,9 @@
     "Ofsted": 2,
     "Total Rugby League": 1,
     "Beyond Radio": 1,
-    "Wiltsglosstandard": 1,
+    "Swindonadvertiser": 1,
     "Investing.com UK": 1,
+    "THIIS Magazine": 1,
     "Uk": 1,
     "About Manchester": 1,
     "Theoldhamtimes": 1,
@@ -803,7 +803,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325549784?-57568:46921",
     "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
     "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
     "https://c.newsnow.co.uk/A/1325646502?-57568:46921",
@@ -822,18 +822,24 @@
     "https://c.newsnow.co.uk/A/1325455615?-57568:46921",
     "https://c.newsnow.co.uk/A/1325454602?-57568:46921",
     "https://c.newsnow.co.uk/A/1325454503?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325549784?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325707030?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325707030?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafccommunity.org",
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafccommunity.org": 7,
+    "yourtrustrochdale.co.uk": 2
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -867,7 +873,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-09-30T05:23:45.621597Z",
+  "frontpage_generated_at": "2026-09-30T05:33:32.366950Z",
   "frontpage_article_count": 12,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
