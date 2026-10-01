@@ -1,42 +1,42 @@
 {
-  "examined_at": "2026-09-30T12:59:47.510917Z",
+  "examined_at": "2026-10-01T13:53:09.547570Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 194,
+  "candidates_examined": 116,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 136,
-    "would publish": 42,
-    "duplicate of published story": 15,
+    "age": 67,
+    "would publish": 37,
+    "duplicate of published story": 11,
     "not local": 1
   },
-  "would_publish": 42,
+  "would_publish": 37,
   "age_gate_sensitivity": {
-    "6h": 3,
-    "14h": 5,
-    "24h": 15,
-    "48h": 58,
-    "72h": 82,
-    "168h": 194
+    "6h": 11,
+    "14h": 16,
+    "24h": 29,
+    "48h": 49,
+    "72h": 91,
+    "168h": 116
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 62 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "InYourArea: What's On Rochdale: Shakespeare, opera, and moving exhibitions - InYou",
-      "Rochdale Times: Oktoberfest fears as anti-social behaviour continues in town centre - "
+      "Greater Manchester Police: Seven arrested and cannabis farms shut down in huge day of action tack",
+      "Sportsmole: Preview: Rochdale vs Swindon Town - prediction, team news, lineups - S",
+      "Sports Mole: Preview: Rochdale vs Swindon Town - prediction, team news, lineups - S"
     ],
     "duplicate of published story": [
-      "Retail & Leisure International: Peacocks Signs at Rochdale Riverside",
-      "Roch Valley Radio: Day 1 of High Court trial over Hopwood Hall - Roch Valley Radio",
-      "Swindonadvertiser: Hope for key attacker to be back available for Swindon ahead of Rochda"
+      "fansnetwork.co.uk: Refwatch - Rochdale v Swindon Town - fansnetwork.co.uk",
+      "placenorthwest.co.uk: Rochdale victorious in Hopwood Hall dispute - placenorthwest.co.uk",
+      "Ofsted: Ofsted publishes inspection report for Galvin, Alice Marie"
     ],
     "not local": [
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "age": [
-      "Rochdale Times: Aladdin brings panto fun to revamped Heywood Civic - Rochdale Times",
-      "Rochdale AFC: Crewe Admission Details - rochdaleafc.co.uk",
-      "Roch Valley Radio: Rochdale Council increases parking patrols outside schools"
+      "Roch Valley Radio: Follow LIVE as Andy Burnham addresses Labour Party Conference - Roch V",
+      "Rochdale Times: Clothing manufacturer creates stylish new look for students - Rochdale",
+      "Total Rugby League: Samy Kibula to bring vital experience to Rochdale Hornets - Total Rugb"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
