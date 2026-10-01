@@ -1,35 +1,33 @@
 {
-  "last_run_at": "2026-10-01T18:13:48.570940Z",
+  "last_run_at": "2026-10-01T18:24:30.412036Z",
   "raw_candidates_before_job_filter": 120,
   "job_or_career_posts_rejected": 0,
   "raw_candidates": 120,
   "candidate_clusters": 44,
   "google_news_resolution": {
-    "wrappers": 95,
-    "resolved": 47,
-    "text_recovered": 17,
-    "reattributed": 2,
-    "images_found": 19
+    "wrappers": 93,
+    "resolved": 46,
+    "text_recovered": 16,
+    "reattributed": 0,
+    "images_found": 18
   },
   "duplicates_merged": 76,
   "attempted_rewrites": 7,
-  "new_articles": 3,
-  "live_articles": 23,
-  "skipped": 4,
+  "new_articles": 4,
+  "live_articles": 24,
+  "skipped": 3,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 2,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2
+    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 106,
+    "rss_and_google_news": 108,
     "website_discovery": 0,
     "aggregator_discovery": 0,
-    "live_service_pages": 10,
+    "live_service_pages": 8,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -40,23 +38,23 @@
   "source_counts": {
     "Rochdale Times": 23,
     "Roch Valley Radio": 20,
+    "Manchester Evening News": 10,
     "BBC": 10,
-    "Northern live service updates": 8,
-    "Manchester Evening News": 6,
-    "Rochdale Borough Council": 6,
+    "Northern live service updates": 6,
     "About Manchester": 5,
+    "Rochdale Borough Council": 5,
     "Wilts and Gloucestershire Standard": 3,
     "Gazette and Herald": 3,
-    "InYourArea": 3,
     "Partnerships Bulletin": 3,
     "Ofsted": 3,
     "Pharmacy Business": 2,
     "Retail & Leisure International": 2,
     "TNT Sports": 2,
-    "Yenisafak": 2,
+    "Yeni Şafak English": 2,
     "APWin": 2,
+    "InYourArea": 2,
     "QSR Media UK": 2,
-    "Retail Times": 2,
+    "retailtimes.co.uk": 2,
     "Oldham Times": 2,
     "Bee Network live travel alerts": 2,
     "Swindon Advertiser": 1,
@@ -72,15 +70,16 @@
   "selected_by_category": {
     "crime": 1,
     "education": 1,
-    "environment": 2,
+    "environment": 1,
     "news": 1,
     "sport": 1,
+    "traffic": 1,
     "transport": 1
   },
   "published_by_category": {
     "business": 1,
     "community": 1,
-    "crime": 1,
+    "crime": 2,
     "education": 4,
     "environment": 5,
     "events": 7,
@@ -111,21 +110,21 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-6c58faebdc5ac812cdf4",
+    "transport-v3-a83a1034780f73aea9ab",
     "transport-v3-cf1f8cade407fbe463d9",
     "education-v3-bff4c21535d8438ec10b",
     "sport-v3-bcb2f0e42bf464f38027",
     "environment-v3-175c6d261f3fd707ad32",
-    "hard-news-v3-6eb57b556ff9b288b40f",
-    "environment-v3-2af4a840ef6fe8700645"
+    "hard-news-v3-6eb57b556ff9b288b40f"
   ],
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/seven-arrested-three-cannabis-farms-34701782",
-    "https://www.northernrailway.co.uk/service-updates#live-9bd98f17c2d733a632",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gmp-officer-drove-at-excessive-34702616",
+    "https://www.northernrailway.co.uk/service-updates#live-2536850b0376f05347",
     "https://reports.ofsted.gov.uk/provider/17/2847609",
     "https://www.sportsmole.co.uk/football/swindon-town/preview/rochdale-vs-swindon-prediction-team-news-lineups_606059.html",
     "https://www.rochdaletimes.co.uk/higher-education-class-of-2026-celebrated-with-moving-graduation-ceremony/",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/aldi-morrisons-tesco-rochdale-canal-34698227",
-    "https://qsrmedia.co.uk/franchising/news/zambrero-opens-first-development-agent-supported-uk-site-in-rochdale"
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/aldi-morrisons-tesco-rochdale-canal-34698227"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -142,6 +141,7 @@
       "environment",
       "news",
       "sport",
+      "traffic",
       "transport"
     ],
     "selected_categories": [
@@ -150,14 +150,15 @@
       "environment",
       "news",
       "sport",
+      "traffic",
       "transport"
     ],
     "available_wards": [
-      "Central Rochdale",
+      "Kingsway",
       "Milnrow and Newhey"
     ],
     "selected_wards": [
-      "Central Rochdale",
+      "Kingsway",
       "Milnrow and Newhey"
     ],
     "available_areas": [
@@ -173,13 +174,14 @@
     "selected_by_category": {
       "crime": 1,
       "education": 1,
-      "environment": 2,
+      "environment": 1,
       "news": 1,
       "sport": 1,
+      "traffic": 1,
       "transport": 1
     },
     "selected_by_ward": {
-      "Central Rochdale": 1,
+      "Kingsway": 1,
       "Milnrow and Newhey": 1
     },
     "selected_by_area": {
@@ -187,10 +189,9 @@
       "smithy_bridge": 1
     },
     "selected_by_source": {
-      "manchester evening news": 2,
+      "manchester evening news": 3,
       "northern live service updates": 1,
       "ofsted": 1,
-      "qsr media uk": 1,
       "rochdale times": 1,
       "sportsmole": 1
     }
@@ -815,7 +816,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 32,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
     "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
     "https://c.newsnow.co.uk/A/1325907787?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902926?-57568:46921",
@@ -834,13 +835,13 @@
     "https://c.newsnow.co.uk/A/1325750970?-57568:46921",
     "https://c.newsnow.co.uk/A/1325707030?-57568:46921",
     "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
     "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
     "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
     "https://c.newsnow.co.uk/A/1325913212?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMiswFBVV95cUxNUnlDSWxqTDMtNVgxQXlFMk5wRnJUS19oNVExVXFlTnFULWoxcTFaZE5VdXU4TzhoS2RkdzFqU1dxQjJwZWdRd3YyX0lnUHcxT0JfamR0R0NhdWhWU2hNUk9aMG5iQy1yNHlxc01RdDFHVmY5MmZMYnliSTVwNnpDZW5XRG40Wjdmem9TSGtTNzNLZmxHeFRQcUp3cXR6dWhRTkNtZHgyMUJ6NTFwOTk1c2pFd9IBuAFBVV95cUxQYmxlNms1Mm83VDVMTTBUY3VoYmU3LWNRZXY5VTFmMjlkOFJIVHJJcmNtVWlqLVQ4ZWNVaUtDaHdUbjBaUFFXR0tGMVhZRVVVWC0yNzJ5WUpPZnkyUXJvcGhDc1Y2UlR4ejBOckVYWTVJeEpGZHFSWlJEdWZ1VWNrTGxHVUJGUkpPTUJkRi1JTjhMM1FIS1VuMVhnbUVtdldITVR2ZnItWlNud05RR0xjVk0wYVI5M3RN?oc=5",
     "https://news.google.com/rss/articles/CBMipAFBVV95cUxNbS12amVyajlLMUh2YWZrMjRqTDFBTXpub3NHTTUySmE1MnNfQXo2MWpiaWNxbWdWOS1iRTh2cTdXeWk1eWpZeW5OTllmQXdHaXpsRGFsNXY2TkdOcnV6QTIycWR3ekZjazktUXFJNERMNmExMGhQSGtKN0VBVmpndDJVVnFIRWRJeHQxNjhpRTM2Vkw4WFRMcjZIbi14bmRUTkZhNg?oc=5",
@@ -849,8 +850,12 @@
     "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPQjg2N3k4dDdaMUdVbkgyVlZJd1d1bmp4cGllemt2dFY1cVpWTVN3LWJiX3VlNE85amJFRmFmcHg5THZlaXpJVUkxc0NJQklUQ3pXbVlOYTZvSlpZM0poMnVtUzh3cmVJSnhBdXlGblYwTmQ5aG5uR1ZZSVkxLUZjbDZzUW81ZUlER0FZM3JxaFJYaVl6NWhOVk1oVzg0Z0ljMXR0UWxMQVpPT3JHaHdJYjRYVlFUN0hySUNN?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 2
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -884,7 +889,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-01T18:15:33.889884Z",
+  "frontpage_generated_at": "2026-10-01T18:26:16.201554Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -910,15 +915,13 @@
       "Central Rochdale",
       "Healey",
       "Hopwood Hall",
-      "Norden",
-      "Spotland and Falinge"
+      "Norden"
     ],
     "selected_wards": [
       "Central Rochdale",
       "Healey",
       "Hopwood Hall",
-      "Norden",
-      "Spotland and Falinge"
+      "Norden"
     ],
     "available_areas": [
       "darnhill",
