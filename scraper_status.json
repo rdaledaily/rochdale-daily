@@ -1,24 +1,24 @@
 {
-  "last_run_at": "2026-10-01T15:35:48.058928Z",
-  "raw_candidates_before_job_filter": 84,
+  "last_run_at": "2026-10-01T15:47:18.032288Z",
+  "raw_candidates_before_job_filter": 98,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 84,
-  "candidate_clusters": 45,
+  "raw_candidates": 98,
+  "candidate_clusters": 44,
   "google_news_resolution": {
-    "wrappers": 60,
-    "resolved": 36,
-    "text_recovered": 19,
-    "reattributed": 10,
-    "images_found": 20
+    "wrappers": 74,
+    "resolved": 50,
+    "text_recovered": 16,
+    "reattributed": 0,
+    "images_found": 19
   },
-  "duplicates_merged": 39,
-  "attempted_rewrites": 7,
-  "new_articles": 4,
-  "live_articles": 24,
+  "duplicates_merged": 54,
+  "attempted_rewrites": 8,
+  "new_articles": 5,
+  "live_articles": 25,
   "skipped": 3,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 2,
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
@@ -26,7 +26,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 78,
+    "rss_and_google_news": 92,
     "website_discovery": 0,
     "aggregator_discovery": 0,
     "live_service_pages": 2,
@@ -38,13 +38,13 @@
   },
   "collector_errors": {},
   "source_counts": {
+    "Rochdale Times": 24,
     "Manchester Evening News": 11,
     "BBC": 8,
     "Roch Valley Radio": 6,
-    "Rochdaletimes": 5,
-    "aboutmanchester.co.uk": 5,
-    "rochdaletimes.co.uk": 4,
+    "About Manchester": 5,
     "Rochdale Borough Council": 4,
+    "Wilts and Gloucestershire Standard": 3,
     "Partnerships Bulletin": 3,
     "Ofsted": 3,
     "Pharmacy Business": 2,
@@ -54,21 +54,18 @@
     "InYourArea": 2,
     "QSR Media UK": 2,
     "Retail Times": 2,
-    "democracy.rochdale.gov.uk": 2,
     "Oldham Times": 2,
     "Bee Network live travel alerts": 2,
     "BBC Manchester": 1,
-    "Lancashire Telegraph": 1,
-    "gazetteandherald.co.uk": 1,
+    "Gazette and Herald": 1,
     "Swindon Advertiser": 1,
-    "wiltsglosstandard.co.uk": 1,
     "Transfermarkt": 1,
-    "Wiltsglosstandard": 1,
     "Yahoo": 1,
     "Sports Mole": 1,
-    "FansNetwork.co.uk": 1,
+    "fansnetwork.co.uk": 1,
     "APWin": 1,
-    "Place North West": 1,
+    "Netweather": 1,
+    "placenorthwest.co.uk": 1,
     "publicaccess.rochdale.gov.uk": 1,
     "Greater Manchester Police": 1,
     "Food Standards Agency": 1
@@ -77,12 +74,13 @@
     "crime": 2,
     "education": 1,
     "environment": 3,
-    "news": 1
+    "news": 1,
+    "sport": 1
   },
   "published_by_category": {
     "business": 1,
     "community": 1,
-    "crime": 1,
+    "crime": 2,
     "education": 4,
     "environment": 5,
     "events": 7,
@@ -114,6 +112,7 @@
   "selected_story_keys": [
     "hard-news-v3-6c58faebdc5ac812cdf4",
     "education-v3-bff4c21535d8438ec10b",
+    "sport-v3-bcb2f0e42bf464f38027",
     "environment-v3-175c6d261f3fd707ad32",
     "hard-news-v3-98597c96e80105525c9f",
     "environment-v3-2af4a840ef6fe8700645",
@@ -123,6 +122,7 @@
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/seven-arrested-three-cannabis-farms-34701782",
     "https://reports.ofsted.gov.uk/provider/17/2847609",
+    "https://www.sportsmole.co.uk/football/swindon-town/preview/rochdale-vs-swindon-prediction-team-news-lineups_606059.html",
     "https://www.rochdaletimes.co.uk/higher-education-class-of-2026-celebrated-with-moving-graduation-ceremony/",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/aldi-morrisons-tesco-rochdale-canal-34698227",
     "https://qsrmedia.co.uk/franchising/news/zambrero-opens-first-development-agent-supported-uk-site-in-rochdale",
@@ -142,13 +142,15 @@
       "crime",
       "education",
       "environment",
-      "news"
+      "news",
+      "sport"
     ],
     "selected_categories": [
       "crime",
       "education",
       "environment",
-      "news"
+      "news",
+      "sport"
     ],
     "available_wards": [
       "Central Rochdale",
@@ -172,14 +174,15 @@
       "crime": 2,
       "education": 1,
       "environment": 3,
-      "news": 1
+      "news": 1,
+      "sport": 1
     },
     "selected_by_ward": {
       "Central Rochdale": 1,
       "Milnrow and Newhey": 1
     },
     "selected_by_area": {
-      "rochdale": 6,
+      "rochdale": 7,
       "whitworth": 1
     },
     "selected_by_source": {
@@ -188,7 +191,8 @@
       "netweather": 1,
       "ofsted": 1,
       "qsr media uk": 1,
-      "rochdale times": 1
+      "rochdale times": 1,
+      "sportsmole": 1
     }
   },
   "official_ward_count": 20,
@@ -809,9 +813,9 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 30,
+  "robots_denied_count": 31,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
     "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
     "https://c.newsnow.co.uk/A/1325907787?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902926?-57568:46921",
@@ -825,19 +829,20 @@
     "https://c.newsnow.co.uk/A/1325829510?-57568:46921",
     "https://c.newsnow.co.uk/A/1325815783?-57568:46921",
     "https://c.newsnow.co.uk/A/1325815782?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325790703?-57568:46921",
     "https://c.newsnow.co.uk/A/1325770645?-57568:46921",
     "https://c.newsnow.co.uk/A/1325750970?-57568:46921",
     "https://c.newsnow.co.uk/A/1325707030?-57568:46921",
     "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
     "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
     "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
     "https://c.newsnow.co.uk/A/1325913212?-57568:46921",
     "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
+    "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPQjg2N3k4dDdaMUdVbkgyVlZJd1d1bmp4cGllemt2dFY1cVpWTVN3LWJiX3VlNE85amJFRmFmcHg5THZlaXpJVUkxc0NJQklUQ3pXbVlOYTZvSlpZM0poMnVtUzh3cmVJSnhBdXlGblYwTmQ5aG5uR1ZZSVkxLUZjbDZzUW81ZUlER0FZM3JxaFJYaVl6NWhOVk1oVzg0Z0ljMXR0UWxMQVpPT3JHaHdJYjRYVlFUN0hySUNN?oc=5",
     "https://news.google.com/rss/articles/CBMiswFBVV95cUxNUnlDSWxqTDMtNVgxQXlFMk5wRnJUS19oNVExVXFlTnFULWoxcTFaZE5VdXU4TzhoS2RkdzFqU1dxQjJwZWdRd3YyX0lnUHcxT0JfamR0R0NhdWhWU2hNUk9aMG5iQy1yNHlxc01RdDFHVmY5MmZMYnliSTVwNnpDZW5XRG40Wjdmem9TSGtTNzNLZmxHeFRQcUp3cXR6dWhRTkNtZHgyMUJ6NTFwOTk1c2pFd9IBuAFBVV95cUxQYmxlNms1Mm83VDVMTTBUY3VoYmU3LWNRZXY5VTFmMjlkOFJIVHJJcmNtVWlqLVQ4ZWNVaUtDaHdUbjBaUFFXR0tGMVhZRVVVWC0yNzJ5WUpPZnkyUXJvcGhDc1Y2UlR4ejBOckVYWTVJeEpGZHFSWlJEdWZ1VWNrTGxHVUJGUkpPTUJkRi1JTjhMM1FIS1VuMVhnbUVtdldITVR2ZnItWlNud05RR0xjVk0wYVI5M3RN?oc=5",
     "https://news.google.com/rss/articles/CBMipAFBVV95cUxNbS12amVyajlLMUh2YWZrMjRqTDFBTXpub3NHTTUySmE1MnNfQXo2MWpiaWNxbWdWOS1iRTh2cTdXeWk1eWpZeW5OTllmQXdHaXpsRGFsNXY2TkdOcnV6QTIycWR3ekZjazktUXFJNERMNmExMGhQSGtKN0VBVmpndDJVVnFIRWRJeHQxNjhpRTM2Vkw4WFRMcjZIbi14bmRUTkZhNg?oc=5",
     "https://news.google.com/rss/articles/CBMipAFBVV95cUxQM1NRVDFqdW14bjkzZEdFNUxWQTlyRXdGWUd4MFhEOTEyYjNjd1h5WUVrVnEtdTRWR1gzQ1lkdElEU00zNFBTcHhCa245bUJVcjEzWm5ZVXlOelAzUDdJeXg4aVMwaGRsS0M2a0dqLVBhM3lsMjVXYUhQVWNFT3dHVUhOWUxaeFhuTE1vbm5HdENoVG1BN0pIQW8yYlc4aXNyaWVaQw?oc=5"
@@ -878,8 +883,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-01T15:37:34.070394Z",
-  "frontpage_article_count": 16,
+  "frontpage_generated_at": "2026-10-01T15:49:03.480756Z",
+  "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -933,14 +938,13 @@
     "selected_by_category": {
       "crime": 1,
       "education": 4,
-      "sport": 1,
       "business": 2,
       "community": 1,
       "environment": 5,
       "news": 2
     },
     "selected_by_ward": {
-      "borough-wide": 9,
+      "borough-wide": 8,
       "Central Rochdale": 2,
       "Norden": 1,
       "Hopwood Hall": 3,
@@ -951,13 +955,12 @@
       "hopwood": 1,
       "middleton": 1,
       "norden": 2,
-      "rochdale": 11,
+      "rochdale": 10,
       "whitworth": 1
     },
     "selected_by_source": {
       "lancashiretelegraph": 1,
       "ofsted": 1,
-      "tnt sports": 1,
       "qsr media uk": 1,
       "dann et al., 'broad, strong, and soft: using geospatial analysis to understand folk‑linguistic terminology' (journal of linguistic geography, 2024)": 1,
       "manchester evening news": 1,
@@ -970,15 +973,15 @@
       "partnerships bulletin": 1,
       "rochdale borough council (healey dell nature reserve and tea rooms)": 1
     },
-    "pool_size": 17,
-    "primary_pool_size": 17,
+    "pool_size": 16,
+    "primary_pool_size": 16,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 16,
+    "frontpage_count": 15,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 9,
     "fresh_under_homepage_window": 15,
-    "short_briefs_selected": 6,
+    "short_briefs_selected": 5,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
