@@ -1,32 +1,33 @@
 {
-  "last_run_at": "2026-10-01T16:39:17.596325Z",
-  "raw_candidates_before_job_filter": 99,
+  "last_run_at": "2026-10-01T16:50:04.713624Z",
+  "raw_candidates_before_job_filter": 115,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 99,
-  "candidate_clusters": 44,
+  "raw_candidates": 115,
+  "candidate_clusters": 45,
   "google_news_resolution": {
-    "wrappers": 64,
-    "resolved": 37,
-    "text_recovered": 18,
-    "reattributed": 5,
-    "images_found": 23
+    "wrappers": 80,
+    "resolved": 49,
+    "text_recovered": 16,
+    "reattributed": 2,
+    "images_found": 20
   },
-  "duplicates_merged": 55,
-  "attempted_rewrites": 7,
-  "new_articles": 3,
-  "live_articles": 23,
-  "skipped": 4,
+  "duplicates_merged": 70,
+  "attempted_rewrites": 8,
+  "new_articles": 5,
+  "live_articles": 24,
+  "skipped": 3,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 1,
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1,
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
+    "editorial gate: REJECTED_NON_LOCAL": 2,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 168.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 81,
+    "rss_and_google_news": 97,
     "website_discovery": 0,
     "aggregator_discovery": 0,
     "live_service_pages": 14,
@@ -38,24 +39,23 @@
   },
   "collector_errors": {},
   "source_counts": {
+    "Rochdale Times": 25,
     "Manchester Evening News": 12,
     "Northern live service updates": 12,
     "BBC": 10,
     "Roch Valley Radio": 6,
-    "Rochdaletimes": 5,
+    "Rochdale Borough Council": 6,
     "About Manchester": 5,
-    "rochdaletimes.co.uk": 4,
-    "Rochdale Borough Council": 4,
     "Gazette and Herald": 3,
-    "InYourArea": 3,
     "Partnerships Bulletin": 3,
     "Ofsted": 3,
-    "Pharmacy Business": 2,
+    "Biz": 2,
     "Retail & Leisure International": 2,
-    "swindonadvertiser.co.uk": 2,
+    "Swindon Advertiser": 2,
     "TNT Sports": 2,
     "Yeni Şafak English": 2,
     "APWin": 2,
+    "InYourArea": 2,
     "QSR Media UK": 2,
     "Retail Times": 2,
     "Oldham Times": 2,
@@ -64,10 +64,9 @@
     "Yahoo": 1,
     "Sports Mole": 1,
     "FansNetwork.co.uk": 1,
-    "Netweather": 1,
-    "placenorthwest.co.uk": 1,
+    "Place North West": 1,
     "publicaccess.rochdale.gov.uk": 1,
-    "gmp.police.uk": 1,
+    "Greater Manchester Police": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -75,12 +74,13 @@
     "education": 1,
     "environment": 2,
     "news": 1,
-    "sport": 1
+    "sport": 1,
+    "transport": 1
   },
   "published_by_category": {
     "business": 1,
     "community": 1,
-    "crime": 1,
+    "crime": 2,
     "education": 4,
     "environment": 5,
     "events": 7,
@@ -111,6 +111,7 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-6c58faebdc5ac812cdf4",
+    "transport-v3-cf1f8cade407fbe463d9",
     "education-v3-bff4c21535d8438ec10b",
     "sport-v3-bcb2f0e42bf464f38027",
     "environment-v3-175c6d261f3fd707ad32",
@@ -120,6 +121,7 @@
   ],
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/seven-arrested-three-cannabis-farms-34701782",
+    "https://www.northernrailway.co.uk/service-updates#live-2d2b3df9bc0e9d0810",
     "https://reports.ofsted.gov.uk/provider/17/2847609",
     "https://www.sportsmole.co.uk/football/swindon-town/preview/rochdale-vs-swindon-prediction-team-news-lineups_606059.html",
     "https://www.rochdaletimes.co.uk/higher-education-class-of-2026-celebrated-with-moving-graduation-ceremony/",
@@ -141,14 +143,16 @@
       "education",
       "environment",
       "news",
-      "sport"
+      "sport",
+      "transport"
     ],
     "selected_categories": [
       "crime",
       "education",
       "environment",
       "news",
-      "sport"
+      "sport",
+      "transport"
     ],
     "available_wards": [
       "Central Rochdale",
@@ -159,10 +163,12 @@
       "Milnrow and Newhey"
     ],
     "available_areas": [
+      "smithy_bridge",
       "whitworth"
     ],
     "selected_areas": [
       "rochdale",
+      "smithy_bridge",
       "whitworth"
     ],
     "uncovered_categories": [],
@@ -173,7 +179,8 @@
       "education": 1,
       "environment": 2,
       "news": 1,
-      "sport": 1
+      "sport": 1,
+      "transport": 1
     },
     "selected_by_ward": {
       "Central Rochdale": 1,
@@ -181,11 +188,13 @@
     },
     "selected_by_area": {
       "rochdale": 6,
+      "smithy_bridge": 1,
       "whitworth": 1
     },
     "selected_by_source": {
       "lancashiretelegraph": 1,
       "manchester evening news": 2,
+      "northern live service updates": 1,
       "ofsted": 1,
       "qsr media uk": 1,
       "rochdale times": 1,
@@ -812,7 +821,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 31,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
     "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
     "https://c.newsnow.co.uk/A/1325907787?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902926?-57568:46921",
@@ -831,26 +840,22 @@
     "https://c.newsnow.co.uk/A/1325750970?-57568:46921",
     "https://c.newsnow.co.uk/A/1325707030?-57568:46921",
     "https://c.newsnow.co.uk/A/1325675234?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325913212?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325594479?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
     "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325512618?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325913212?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325635739?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPQjg2N3k4dDdaMUdVbkgyVlZJd1d1bmp4cGllemt2dFY1cVpWTVN3LWJiX3VlNE85amJFRmFmcHg5THZlaXpJVUkxc0NJQklUQ3pXbVlOYTZvSlpZM0poMnVtUzh3cmVJSnhBdXlGblYwTmQ5aG5uR1ZZSVkxLUZjbDZzUW81ZUlER0FZM3JxaFJYaVl6NWhOVk1oVzg0Z0ljMXR0UWxMQVpPT3JHaHdJYjRYVlFUN0hySUNN?oc=5",
     "https://news.google.com/rss/articles/CBMiswFBVV95cUxNUnlDSWxqTDMtNVgxQXlFMk5wRnJUS19oNVExVXFlTnFULWoxcTFaZE5VdXU4TzhoS2RkdzFqU1dxQjJwZWdRd3YyX0lnUHcxT0JfamR0R0NhdWhWU2hNUk9aMG5iQy1yNHlxc01RdDFHVmY5MmZMYnliSTVwNnpDZW5XRG40Wjdmem9TSGtTNzNLZmxHeFRQcUp3cXR6dWhRTkNtZHgyMUJ6NTFwOTk1c2pFd9IBuAFBVV95cUxQYmxlNms1Mm83VDVMTTBUY3VoYmU3LWNRZXY5VTFmMjlkOFJIVHJJcmNtVWlqLVQ4ZWNVaUtDaHdUbjBaUFFXR0tGMVhZRVVVWC0yNzJ5WUpPZnkyUXJvcGhDc1Y2UlR4ejBOckVYWTVJeEpGZHFSWlJEdWZ1VWNrTGxHVUJGUkpPTUJkRi1JTjhMM1FIS1VuMVhnbUVtdldITVR2ZnItWlNud05RR0xjVk0wYVI5M3RN?oc=5",
     "https://news.google.com/rss/articles/CBMipAFBVV95cUxNbS12amVyajlLMUh2YWZrMjRqTDFBTXpub3NHTTUySmE1MnNfQXo2MWpiaWNxbWdWOS1iRTh2cTdXeWk1eWpZeW5OTllmQXdHaXpsRGFsNXY2TkdOcnV6QTIycWR3ekZjazktUXFJNERMNmExMGhQSGtKN0VBVmpndDJVVnFIRWRJeHQxNjhpRTM2Vkw4WFRMcjZIbi14bmRUTkZhNg?oc=5",
-    "https://news.google.com/rss/articles/CBMipAFBVV95cUxQM1NRVDFqdW14bjkzZEdFNUxWQTlyRXdGWUd4MFhEOTEyYjNjd1h5WUVrVnEtdTRWR1gzQ1lkdElEU00zNFBTcHhCa245bUJVcjEzWm5ZVXlOelAzUDdJeXg4aVMwaGRsS0M2a0dqLVBhM3lsMjVXYUhQVWNFT3dHVUhOWUxaeFhuTE1vbm5HdENoVG1BN0pIQW8yYlc4aXNyaWVaQw?oc=5"
+    "https://news.google.com/rss/articles/CBMipAFBVV95cUxQM1NRVDFqdW14bjkzZEdFNUxWQTlyRXdGWUd4MFhEOTEyYjNjd1h5WUVrVnEtdTRWR1gzQ1lkdElEU00zNFBTcHhCa245bUJVcjEzWm5ZVXlOelAzUDdJeXg4aVMwaGRsS0M2a0dqLVBhM3lsMjVXYUhQVWNFT3dHVUhOWUxaeFhuTE1vbm5HdENoVG1BN0pIQW8yYlc4aXNyaWVaQw?oc=5",
+    "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPQjg2N3k4dDdaMUdVbkgyVlZJd1d1bmp4cGllemt2dFY1cVpWTVN3LWJiX3VlNE85amJFRmFmcHg5THZlaXpJVUkxc0NJQklUQ3pXbVlOYTZvSlpZM0poMnVtUzh3cmVJSnhBdXlGblYwTmQ5aG5uR1ZZSVkxLUZjbDZzUW81ZUlER0FZM3JxaFJYaVl6NWhOVk1oVzg0Z0ljMXR0UWxMQVpPT3JHaHdJYjRYVlFUN0hySUNN?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 2
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -884,7 +889,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-01T16:41:18.281612Z",
+  "frontpage_generated_at": "2026-10-01T16:51:53.651739Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
