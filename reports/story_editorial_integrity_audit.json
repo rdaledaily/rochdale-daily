@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 159,
-  "published_count": 159,
-  "category_change_count": 18,
+  "article_count": 160,
+  "published_count": 160,
+  "category_change_count": 19,
   "image_change_count": 19,
   "category_changes": [
+    {
+      "slug": "littleborough-cricket-club-bonfire-2026",
+      "title": "Littleborough Cricket Club Bonfire 2026",
+      "from": "events",
+      "to": "sport",
+      "reason": "headline strongly identifies sport"
+    },
     {
       "slug": "hopwood-triangle-road-closures-scrapped-heywood-township-vote",
       "title": "REFORM UK DELIVERS: PEOPLE POWER BACKED BY REFORM SCRAPS DISASTROUS ROAD CLOSURES!",
@@ -135,6 +142,18 @@
   ],
   "image_changes": [
     {
+      "slug": "littleborough-cricket-club-bonfire-2026",
+      "title": "Littleborough Cricket Club Bonfire 2026",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/cricket.jpg",
+        "img": "assets/img/cards/cricket.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/littleborough-cricket-club-bonfire-2026-generated-card.jpg"
+    },
+    {
       "slug": "brass-and-bubl-a-christmas-special",
       "title": "Brass and Bublé: A Christmas Special",
       "category": "events",
@@ -150,25 +169,13 @@
       "slug": "seven-arrested-during-cannabis-farm-raids-in-rochdale",
       "title": "Seven Arrested During Cannabis Farm Raids in Rochdale",
       "category": "crime",
-      "reason": "weak filename image match score 8126; neutral card is safer",
+      "reason": "weak filename image match score 8385; neutral card is safer",
       "before": {
-        "image_url": "assets/img/cards/police.jpg",
-        "img": "assets/img/cards/police.jpg",
+        "image_url": "assets/img/cards/greater_manchester_police.jpg",
+        "img": "assets/img/cards/greater_manchester_police.jpg",
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/seven-arrested-during-cannabis-farm-raids-in-rochdale-generated-card.jpg"
-    },
-    {
-      "slug": "seven-arrested-and-cannabis-farms-shut-down-in-rochdale-police-operation",
-      "title": "Seven Arrested and Cannabis Farms Shut Down in Rochdale Police Operation",
-      "category": "crime",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/police.jpg",
-        "img": "assets/img/cards/police.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/seven-arrested-and-cannabis-farms-shut-down-in-rochdale-police-operation-generated-card.jpg"
     },
     {
       "slug": "why-rochdale-says-cruckle",
