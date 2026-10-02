@@ -1,42 +1,48 @@
 {
-  "examined_at": "2026-10-01T13:53:09.547570Z",
+  "examined_at": "2026-10-02T13:09:34.274737Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 116,
+  "candidates_examined": 140,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 67,
-    "would publish": 37,
-    "duplicate of published story": 11,
-    "not local": 1
+    "age": 61,
+    "would publish": 51,
+    "duplicate of published story": 24,
+    "not local": 3,
+    "job or career post": 1
   },
-  "would_publish": 37,
+  "would_publish": 51,
   "age_gate_sensitivity": {
-    "6h": 11,
-    "14h": 16,
-    "24h": 29,
-    "48h": 49,
-    "72h": 91,
-    "168h": 116
+    "6h": 16,
+    "14h": 19,
+    "24h": 41,
+    "48h": 79,
+    "72h": 101,
+    "168h": 140
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Greater Manchester Police: Seven arrested and cannabis farms shut down in huge day of action tack",
-      "Sportsmole: Preview: Rochdale vs Swindon Town - prediction, team news, lineups - S",
-      "Sports Mole: Preview: Rochdale vs Swindon Town - prediction, team news, lineups - S"
-    ],
-    "duplicate of published story": [
-      "fansnetwork.co.uk: Refwatch - Rochdale v Swindon Town - fansnetwork.co.uk",
-      "placenorthwest.co.uk: Rochdale victorious in Hopwood Hall dispute - placenorthwest.co.uk",
-      "Ofsted: Ofsted publishes inspection report for Galvin, Alice Marie"
+      "TfGM Travel Alerts: Travel alerts",
+      "TfGM Travel Alerts: Travel alerts",
+      "The72: 'Beautiful': Derby County prospect rediscovering dangerous best in Lea"
     ],
     "not local": [
+      "rochvalleyradio.com: Paul Waugh MP joins the Friday Breakfast Show - rochvalleyradio.com",
+      "rochdaleafc.co.uk: Dale Enter U17 PDL Cup - rochdaleafc.co.uk",
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
+    "duplicate of published story": [
+      "Rochdale AFC: Preview | Swindon Town (H) - Rochdale AFC",
+      "lexpress-franchise.com: Zambrero opens first Development Agent-supported UK site in Rochdale -",
+      "Roch Valley Radio: Letter to the editor from a Hopwood Hall volunteer on High Court rulin"
+    ],
+    "job or career post": [
+      "Retail Times: Zambrero marks UK franchise milestone with first Development Agent-sup"
+    ],
     "age": [
-      "Roch Valley Radio: Follow LIVE as Andy Burnham addresses Labour Party Conference - Roch V",
-      "Rochdale Times: Clothing manufacturer creates stylish new look for students - Rochdale",
-      "Total Rugby League: Samy Kibula to bring vital experience to Rochdale Hornets - Total Rugb"
+      "Pharmacy Business: Rochdale Police Raids Uncover £1m of Suspected Illicit Drugs - Pharmac",
+      "Rochdale Times: Could your employer or business help make a child’s Christmas? - Rochd",
+      "Tntsports: Rochdale - Swindon Town Live - League Two: Football Scores & Highlight"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
