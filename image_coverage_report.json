@@ -1,12 +1,19 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 24,
+    "kept_cards": 25,
     "cards_library": 0,
     "cards_generated": 6,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "are-there-really-fairies-in-healey-dell",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/are-there-really-fairies-in-healey-dell.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
     {
       "slug": "rochdale-entrepreneur-launches-gift-guide-for-outdoor-enthusiasts",
       "result": "kept-cards",
@@ -142,10 +149,10 @@
     },
     {
       "slug": "high-court-rules-against-hopwood-depree-in-ownership-dispute-over-hopwood-hall",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/high-court-rules-against-hopwood-depree-in-ownership-dispute-over-hopwood-hall-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall.jpg",
+      "matched_filename": "high-court-trial-begins-over-ownership-of-hopwood-hall.jpg",
+      "match_score": 21404
     },
     {
       "slug": "rochdale-council-refuses-planning-permission-for-new-home-at-standrings-house",
