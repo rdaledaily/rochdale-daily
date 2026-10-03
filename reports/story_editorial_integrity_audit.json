@@ -1,8 +1,8 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 157,
-  "published_count": 157,
+  "article_count": 155,
+  "published_count": 155,
   "category_change_count": 22,
   "image_change_count": 20,
   "category_changes": [
@@ -166,13 +166,25 @@
       "slug": "plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition",
       "title": "Plans for Scout Moor Wind Farm Reduced to 12 Turbines Amid Local Opposition",
       "category": "environment",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition.jpg",
+        "img": "assets/img/cards/plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition-generated-card.jpg"
+    },
+    {
+      "slug": "turner-brothers-factory-in-rochdale-set-for-cleanup-and-redevelopment",
+      "title": "Turner Brothers Factory in Rochdale Set for Cleanup Ahead of Redevelopment",
+      "category": "environment",
       "reason": "uncanonical img fallback exists while image_url is empty",
       "before": {
         "image_url": "",
-        "img": "assets/img/cards/plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition.jpg",
+        "img": "assets/img/cards/turner-brothers-factory-in-rochdale-set-for-cleanup-and-redevelopment.jpg",
         "status": "source-photo-cached"
       },
-      "after": "assets/img/cards/plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition-generated-card.jpg"
+      "after": "assets/img/cards/turner-brothers-factory-in-rochdale-set-for-cleanup-and-redevelopment-generated-card.jpg"
     },
     {
       "slug": "rochdale-to-host-swindon-town-in-league-two-match-on-3-october-2026",
@@ -257,18 +269,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-brothers-selected-to-compete-for-great-britain-at-mma-world-championshi-generated-card.jpg"
-    },
-    {
-      "slug": "ian-holloway-discusses-fitness-and-away-form-ahead-of-rochdale-afc-match",
-      "title": "Ian Holloway Discusses Fitness and Away Form Ahead of Rochdale AFC Match",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/ian-holloway-discusses-fitness-and-away-form-ahead-of-rochdale-afc-match-generated-card.jpg"
     },
     {
       "slug": "wonders-of-our-universe-the-next-chapter",
