@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 156,
-  "published_count": 156,
+  "article_count": 157,
+  "published_count": 157,
   "category_change_count": 22,
-  "image_change_count": 19,
+  "image_change_count": 20,
   "category_changes": [
     {
       "slug": "plans-for-heat-network-using-waste-heat-from-baked-beans-and-other-sources-in-gr",
@@ -162,6 +162,18 @@
     }
   ],
   "image_changes": [
+    {
+      "slug": "plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition",
+      "title": "Plans for Scout Moor Wind Farm Reduced to 12 Turbines Amid Local Opposition",
+      "category": "environment",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/plans-for-scout-moor-wind-farm-reduced-to-12-turbines-amid-local-opposition-generated-card.jpg"
+    },
     {
       "slug": "rochdale-to-host-swindon-town-in-league-two-match-on-3-october-2026",
       "title": "Rochdale to Host Swindon Town in League Two Match on 3 October 2026",
