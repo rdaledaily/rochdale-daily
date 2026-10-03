@@ -1,48 +1,42 @@
 {
-  "examined_at": "2026-10-02T13:09:34.274737Z",
+  "examined_at": "2026-10-03T12:00:59.806671Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 140,
+  "candidates_examined": 130,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 61,
-    "would publish": 51,
-    "duplicate of published story": 24,
-    "not local": 3,
+    "age": 66,
+    "would publish": 43,
+    "duplicate of published story": 20,
     "job or career post": 1
   },
-  "would_publish": 51,
+  "would_publish": 43,
   "age_gate_sensitivity": {
-    "6h": 16,
-    "14h": 19,
-    "24h": 41,
-    "48h": 79,
+    "6h": 4,
+    "14h": 8,
+    "24h": 17,
+    "48h": 64,
     "72h": 101,
-    "168h": 140
+    "168h": 130
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
       "TfGM Travel Alerts: Travel alerts",
-      "TfGM Travel Alerts: Travel alerts",
-      "The72: 'Beautiful': Derby County prospect rediscovering dangerous best in Lea"
-    ],
-    "not local": [
-      "rochvalleyradio.com: Paul Waugh MP joins the Friday Breakfast Show - rochvalleyradio.com",
-      "rochdaleafc.co.uk: Dale Enter U17 PDL Cup - rochdaleafc.co.uk",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
+      "Rochdale Times: ‘No evidence that the building has been used as offices’ - Rochdale Ti"
     ],
     "duplicate of published story": [
-      "Rochdale AFC: Preview | Swindon Town (H) - Rochdale AFC",
-      "lexpress-franchise.com: Zambrero opens first Development Agent-supported UK site in Rochdale -",
-      "Roch Valley Radio: Letter to the editor from a Hopwood Hall volunteer on High Court rulin"
+      "Transfermarkt: Rochdale AFC - Swindon Town, 03/10/2026 - League Two - Match sheet - t",
+      "Rochdale AFC: Behind The Sign | Swindon Prep, Youth Team Game, Pioneers Lounge",
+      "Wilts and Gloucestershire Standard: Ex-Swindon player to miss reunion as Rochdale without multiple key men"
     ],
     "job or career post": [
-      "Retail Times: Zambrero marks UK franchise milestone with first Development Agent-sup"
+      "L’Express Franchise: Zambrero opens first Development Agent-supported UK site in Rochdale -"
     ],
     "age": [
-      "Pharmacy Business: Rochdale Police Raids Uncover £1m of Suspected Illicit Drugs - Pharmac",
-      "Rochdale Times: Could your employer or business help make a child’s Christmas? - Rochd",
-      "Tntsports: Rochdale - Swindon Town Live - League Two: Football Scores & Highlight"
+      "Rochdale AFC: Your Guide To Saturday’s Game",
+      "Fansnetwork: Refwatch - Rochdale v Swindon Town - FansNetwork.co.uk",
+      "Fansnetwork: Refwatch - Rochdale v Swindon Town - FansNetwork.co.uk"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
