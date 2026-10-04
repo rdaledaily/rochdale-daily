@@ -1,42 +1,44 @@
 {
-  "examined_at": "2026-10-03T12:00:59.806671Z",
+  "examined_at": "2026-10-04T12:50:51.675408Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 130,
+  "candidates_examined": 167,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 66,
-    "would publish": 43,
-    "duplicate of published story": 20,
-    "job or career post": 1
+    "age": 85,
+    "would publish": 70,
+    "duplicate of published story": 8,
+    "not local": 4
   },
-  "would_publish": 43,
+  "would_publish": 70,
   "age_gate_sensitivity": {
-    "6h": 4,
-    "14h": 8,
-    "24h": 17,
-    "48h": 64,
-    "72h": 101,
-    "168h": 130
+    "6h": 7,
+    "14h": 13,
+    "24h": 56,
+    "48h": 82,
+    "72h": 124,
+    "168h": 167
   },
   "gates_unavailable": [],
   "examples": {
-    "would publish": [
+    "not local": [
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "TfGM Travel Alerts: Travel alerts",
-      "Rochdale Times: ‘No evidence that the building has been used as offices’ - Rochdale Ti"
+      "Radio Times: What channel is Croatia v England Nations League match on? TV coverage",
+      "Radio Times: What channel is Salford City v Fleetwood Town League Two match on? TV "
     ],
     "duplicate of published story": [
-      "Transfermarkt: Rochdale AFC - Swindon Town, 03/10/2026 - League Two - Match sheet - t",
-      "Rochdale AFC: Behind The Sign | Swindon Prep, Youth Team Game, Pioneers Lounge",
-      "Wilts and Gloucestershire Standard: Ex-Swindon player to miss reunion as Rochdale without multiple key men"
+      "Rochdale Valiant: Rochdale Valiant: News and Media",
+      "Rochdale Valiant: Rochdale Valiant: News and Media",
+      "Rochdale Valiant: Rochdale Valiant: News and Media"
     ],
-    "job or career post": [
-      "L’Express Franchise: Zambrero opens first Development Agent-supported UK site in Rochdale -"
+    "would publish": [
+      "TfGM Travel Alerts: Travel alerts",
+      "TfGM Travel Alerts: Travel alerts",
+      "Bee Network live travel alerts: Updated: 03/10/2026 at 11:07am Live Failsworth Tram Stop - Lifts out o"
     ],
     "age": [
-      "Rochdale AFC: Your Guide To Saturday’s Game",
-      "Fansnetwork: Refwatch - Rochdale v Swindon Town - FansNetwork.co.uk",
-      "Fansnetwork: Refwatch - Rochdale v Swindon Town - FansNetwork.co.uk"
+      "Rochdale Times: MP continues drive for buses at Labour Party Conference - Rochdale Tim",
+      "The72: 'Beautiful': Derby County prospect rediscovering dangerous best in Lea",
+      "Wilts and Gloucestershire Standard: Ex-Swindon player to miss reunion as Rochdale without multiple key men"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
