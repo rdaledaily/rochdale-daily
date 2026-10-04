@@ -1,31 +1,31 @@
 {
-  "checked_at": "2026-10-03T18:49:35.322259Z",
+  "checked_at": "2026-10-04T01:58:50.620680Z",
   "daily_target": 60,
   "daily_floor": 12,
-  "published_last_24h": 5,
-  "published_last_7d": 65,
+  "published_last_24h": 8,
+  "published_last_7d": 61,
   "rolling_days": 7,
-  "rolling_mean_per_day": 9.29,
-  "shortfall_against_target_per_day": 55,
+  "rolling_mean_per_day": 8.71,
+  "shortfall_against_target_per_day": 52,
   "published_per_day": {
-    "2026-09-27": 7,
     "2026-09-28": 14,
     "2026-09-29": 7,
     "2026-09-30": 6,
     "2026-10-01": 15,
     "2026-10-02": 11,
-    "2026-10-03": 5
+    "2026-10-03": 8,
+    "2026-10-04": 0
   },
-  "live_feed_records": 153,
+  "live_feed_records": 156,
   "live_feed_routes": {
+    "ai-grounded-rewrite": 15,
     "evergreen_fallback": 2,
-    "ai-grounded-rewrite": 12,
     "editorial": 112,
     "editorial-live-seed": 4
   },
   "status": "failed",
   "failures": [
-    "only 5 news stories published in the last 24 hours, below the floor of 12 (newsroom target 60/day)",
-    "rolling average is 9.3 stories/day, below the floor of 12 (newsroom target 60/day)"
+    "only 8 news stories published in the last 24 hours, below the floor of 12 (newsroom target 60/day)",
+    "rolling average is 8.7 stories/day, below the floor of 12 (newsroom target 60/day)"
   ]
 }
