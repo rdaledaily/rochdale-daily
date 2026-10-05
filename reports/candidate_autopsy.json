@@ -1,44 +1,44 @@
 {
-  "examined_at": "2026-10-04T12:50:51.675408Z",
+  "examined_at": "2026-10-05T15:15:36.955435Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 167,
+  "candidates_examined": 145,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 85,
-    "would publish": 70,
-    "duplicate of published story": 8,
-    "not local": 4
+    "would publish": 72,
+    "age": 61,
+    "duplicate of published story": 9,
+    "not local": 3
   },
-  "would_publish": 70,
+  "would_publish": 72,
   "age_gate_sensitivity": {
-    "6h": 7,
-    "14h": 13,
-    "24h": 56,
-    "48h": 82,
-    "72h": 124,
-    "168h": 167
+    "6h": 10,
+    "14h": 20,
+    "24h": 23,
+    "48h": 84,
+    "72h": 114,
+    "168h": 145
   },
   "gates_unavailable": [],
   "examples": {
-    "not local": [
+    "would publish": [
+      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "Radio Times: What channel is Croatia v England Nations League match on? TV coverage",
-      "Radio Times: What channel is Salford City v Fleetwood Town League Two match on? TV "
+      "Bee Network live travel alerts: Updated: 05/10/2026 at 2:12pm Live Failsworth Tram Stop - Lifts out of"
+    ],
+    "not local": [
+      "rochdaleafc.co.uk: Dale Defeated At Stockport - rochdaleafc.co.uk",
+      "Radio Times: What channel is Wales v Denmark Nations League match on? TV coverage, ",
+      "rochdaleafc.co.uk: Stuck To Our Game Plan - Tasker - rochdaleafc.co.uk"
     ],
     "duplicate of published story": [
-      "Rochdale Valiant: Rochdale Valiant: News and Media",
-      "Rochdale Valiant: Rochdale Valiant: News and Media",
-      "Rochdale Valiant: Rochdale Valiant: News and Media"
-    ],
-    "would publish": [
-      "TfGM Travel Alerts: Travel alerts",
-      "TfGM Travel Alerts: Travel alerts",
-      "Bee Network live travel alerts: Updated: 03/10/2026 at 11:07am Live Failsworth Tram Stop - Lifts out o"
+      "Greater Manchester Police: Four charges have been secured following a series of warrants that wer",
+      "Roch Valley Radio: Rochdale AFC 1 - 0 Swindon Town - rochvalleyradio.com",
+      "Rochdale Times: New governor will help ease pressure on gas network - Rochdale Times"
     ],
     "age": [
-      "Rochdale Times: MP continues drive for buses at Labour Party Conference - Rochdale Tim",
-      "The72: 'Beautiful': Derby County prospect rediscovering dangerous best in Lea",
-      "Wilts and Gloucestershire Standard: Ex-Swindon player to miss reunion as Rochdale without multiple key men"
+      "Swindon Advertiser: Gut punch for valiant ten-man Swindon as they lose late at Rochdale - ",
+      "大分トリニータオフィシャルサイト: [LIVESTREAM!!]### Rochdale vs Swindon Town 𝐋𝐈𝐕𝐄 𝐒𝐭𝐫𝐞𝐚𝐦 Ｔｖ Ｃｈａｎｎｅｌ 04 O",
+      "Jp: [[[LIVESTREAM>>>]]>] Swindon Town vs Rochdale Live free streams 04 Oct"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
