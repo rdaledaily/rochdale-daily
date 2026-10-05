@@ -1,24 +1,25 @@
 {
-  "last_run_at": "2026-10-05T13:09:21.592079Z",
-  "raw_candidates_before_job_filter": 93,
+  "last_run_at": "2026-10-05T13:19:04.267145Z",
+  "raw_candidates_before_job_filter": 100,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 93,
+  "raw_candidates": 100,
   "candidate_clusters": 34,
   "google_news_resolution": {
-    "wrappers": 68,
-    "resolved": 48,
+    "wrappers": 56,
+    "resolved": 44,
     "text_recovered": 33,
     "reattributed": 9,
     "images_found": 36
   },
-  "duplicates_merged": 59,
-  "attempted_rewrites": 6,
-  "new_articles": 3,
-  "live_articles": 21,
-  "skipped": 3,
+  "duplicates_merged": 66,
+  "attempted_rewrites": 7,
+  "new_articles": 2,
+  "live_articles": 20,
+  "skipped": 5,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
+    "editorial gate: REJECTED_NON_LOCAL": 3,
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
@@ -27,9 +28,9 @@
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 74,
-    "website_discovery": 0,
+    "website_discovery": 6,
     "aggregator_discovery": 1,
-    "live_service_pages": 16,
+    "live_service_pages": 17,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -38,23 +39,24 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 12,
+    "Rochdale Times": 16,
     "Northern live service updates": 12,
     "Manchester Evening News": 6,
     "Rochdale AFC": 5,
     "facebook.com": 5,
+    "Bee Network live travel alerts": 5,
     "Express and Star": 4,
     "Herts Advertiser": 4,
     "Lancashire Telegraph": 4,
-    "Bee Network live travel alerts": 4,
     "Oldham Times": 3,
-    "大分トリニータオフィシャルサイト": 3,
     "Countytimes": 3,
     "Wirral Globe": 2,
+    "大分トリニータオフィシャルサイト": 2,
     "Oxfordmail": 2,
     "Rochdale Borough Council": 2,
     "Somerset County Gazette": 2,
     "Surreycomet": 2,
+    "TfGM Travel Alerts": 2,
     "Alloa Advertiser": 1,
     "The Wiltshire Gazette and Herald": 1,
     "The Northern Echo": 1,
@@ -65,6 +67,7 @@
     "Free Press Series": 1,
     "Yahoo": 1,
     "Swindon Advertiser": 1,
+    "Wilts and Gloucestershire Standard": 1,
     "Bridgwater Mercury": 1,
     "Ireland Live News": 1,
     "Uk": 1,
@@ -78,12 +81,12 @@
     "crime": 2,
     "environment": 2,
     "health": 1,
-    "transport": 1
+    "transport": 2
   },
   "published_by_category": {
     "business": 2,
     "community": 1,
-    "crime": 2,
+    "crime": 1,
     "education": 2,
     "environment": 2,
     "events": 8,
@@ -114,17 +117,19 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-d2187c5ef9a56d70ca18",
-    "transport-v3-f0783ee165e16e016794",
+    "transport-v3-44383d39bc7b23c977c4",
     "health-v3-94c4769acd1416d2415b",
     "environment-v3-6f1dd1dbb0fea49f001e",
+    "transport-v3-a26286a429b3394ae669",
     "hard-news-v3-d54cc9d795e3135e9ca6",
     "environment-v3-52a830380a9b702a4260"
   ],
   "selected_candidate_urls": [
     "https://www.theoldhamtimes.co.uk/news/26606435.four-men-charged-supplying-drugs-medicine-products/",
-    "https://www.northernrailway.co.uk/service-updates#live-f37141533f1fbe63bc",
+    "https://www.northernrailway.co.uk/service-updates#live-c2adc0c481370be62d",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.rochdaletimes.co.uk/adult-gaming-centre-plan-for-subway-after-nail-bar-bid-is-pulled/",
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-726563cc3590d39566",
     "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/september/four-charges-have-been-secured-following-a-series-of-warrants-that-were-executed-in-rochdale/",
     "https://publicaccess.rochdale.gov.uk/online-applications/"
   ],
@@ -171,17 +176,18 @@
       "crime": 2,
       "environment": 2,
       "health": 1,
-      "transport": 1
+      "transport": 2
     },
     "selected_by_ward": {
       "Kingsway": 1
     },
     "selected_by_area": {
       "middleton": 1,
-      "rochdale": 4,
+      "rochdale": 5,
       "smithy_bridge": 1
     },
     "selected_by_source": {
+      "bee network live travel alerts": 1,
       "food standards agency": 1,
       "greater manchester police": 1,
       "northern live service updates": 1,
@@ -810,7 +816,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 30,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326183847?-57568:46921",
     "https://c.newsnow.co.uk/A/1326183650?-57568:46921",
     "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
     "https://c.newsnow.co.uk/A/1326175510?-57568:46921",
@@ -829,25 +835,21 @@
     "https://c.newsnow.co.uk/A/1325902926?-57568:46921",
     "https://c.newsnow.co.uk/A/1325892921?-57568:46921",
     "https://c.newsnow.co.uk/A/1325877917?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902766?-57568:46921",
     "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
     "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326183847?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
     "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMingFBVV95cUxPdE9KdWhtbEpJeVlsSWtocWVNOFdfYlh1SERISE1UNjhCeHU0SEVNUnJZZmV4X0huSkhSZmNjaEZxbXBENnNaTWtkOUNfZXh0bko5ZkJqYk5rYUhyS0pWb191NUFpMHdfQnZGNzEtbkNPV0liUUkxR09GTzB2dXJxUWZid2VnMFZHZ05wMFgxNUJqVm5UZnp2SmVqVGxjdw?oc=5",
     "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPTnl0cUF0UW1ES25sakF5M1MyQ1pjMjdYUWdkRnhkOWxlSmtxVng4bHBjVDNqQ28zUmxhNDNKdFZHSm5La1BlTzVWMElkV3pCN296dzVBRlB4Unk4VU81cEo4ZEFxbjBEMkNuLXhfeFBPWUM0aEVfVlZVNGZmZ2EteHgzUEtXaC1MUkZkTjVWQWpMQ0JLZm5kZFQ5WG0zSmhOck5ZRFU2dWliNWxKRFdxQUVBUWhDX1FOYkZRWTZIMjk1dWRna3FfaUZKeVpyWVAtM1FUMVltbUllQnc4YVNLM0NhOHoyQQ?oc=5",
     "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPdGU0NXpZaUREbXFjbEZTcm5vMDIzTzJha2x1NGZLY2RXY3ZiX2lNcmJ1bXBQOW11VTFlMXBxbk0wMmQ5RGFXTFp0OVlMblNJOUpHUmVJaU9NalhreGFPVVl0TWktbUpxdnJ2bXZXT3hYdWRKRTFZYld6T19kdkdmY3A4eFJHSmtPNFVTdjE5bC1jT1ZWZGN3c2JPTHQ4aVh0WWxmdTE4T1NlNW1qOFU3NDFYNlBpTDdiZDZoWlJqSzhsdw?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "edgarwood.org"
-  ],
-  "slow_domain_failure_counts": {
-    "edgarwood.org": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -881,7 +883,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-05T13:10:46.856943Z",
+  "frontpage_generated_at": "2026-10-05T13:20:47.487537Z",
   "frontpage_article_count": 9,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
