@@ -1,32 +1,34 @@
 {
-  "last_run_at": "2026-10-05T16:47:16.072099Z",
-  "raw_candidates_before_job_filter": 82,
+  "last_run_at": "2026-10-05T16:57:08.916596Z",
+  "raw_candidates_before_job_filter": 88,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 82,
-  "candidate_clusters": 35,
+  "raw_candidates": 88,
+  "candidate_clusters": 37,
   "google_news_resolution": {
-    "wrappers": 41,
+    "wrappers": 38,
     "resolved": 20,
     "text_recovered": 11,
-    "reattributed": 8,
+    "reattributed": 10,
     "images_found": 14
   },
-  "duplicates_merged": 47,
-  "attempted_rewrites": 8,
-  "new_articles": 4,
+  "duplicates_merged": 51,
+  "attempted_rewrites": 10,
+  "new_articles": 3,
   "live_articles": 22,
-  "skipped": 4,
+  "skipped": 7,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 3,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
+    "editorial gate: REJECTED_NON_LOCAL": 5,
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 2
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Write at least 177 body words using only facts already present in the sources; the draft currently has 176.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 58,
+    "rss_and_google_news": 64,
     "website_discovery": 6,
     "aggregator_discovery": 1,
     "live_service_pages": 15,
@@ -42,15 +44,17 @@
     "Northern live service updates": 11,
     "Roch Valley Radio": 8,
     "Manchester Evening News": 5,
+    "About Manchester": 4,
     "Bee Network live travel alerts": 4,
     "facebook.com": 3,
     "The Oldham Times": 3,
     "rochdaleafc.co.uk": 3,
     "Wirral Globe": 2,
     "Rochdale AFC": 2,
+    "Birkenhead News": 2,
     "Wilts and Gloucestershire Standard": 2,
     "Rochdale Borough Council": 2,
-    "Surrey Comet": 2,
+    "Surreycomet": 2,
     "TfGM Travel Alerts": 2,
     "Alloa Advertiser": 1,
     "gazetteandherald.co.uk": 1,
@@ -58,12 +62,12 @@
     "Sky Sports": 1,
     "Free Press Series": 1,
     "Yahoo": 1,
-    "Swindon Advertiser": 1,
+    "swindonadvertiser.co.uk": 1,
     "fansnetwork.co.uk": 1,
+    "APWin": 1,
     "Ireland Live News": 1,
     "Uk": 1,
     "Greater Manchester Police": 1,
-    "About Manchester": 1,
     "Runcorn and Widnes World": 1,
     "County Times": 1,
     "Theoldhamtimes": 1,
@@ -72,17 +76,18 @@
   },
   "selected_by_category": {
     "crime": 2,
-    "environment": 2,
+    "environment": 3,
     "health": 1,
     "news": 1,
+    "traffic": 1,
     "transport": 2
   },
   "published_by_category": {
-    "business": 3,
+    "business": 2,
     "community": 1,
     "crime": 2,
     "education": 2,
-    "environment": 2,
+    "environment": 3,
     "events": 8,
     "news": 1,
     "sport": 3
@@ -111,21 +116,25 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-d2187c5ef9a56d70ca18",
+    "transport-v3-42cd83b4e862c382e26f",
     "transport-v3-a26286a429b3394ae669",
     "health-v3-94c4769acd1416d2415b",
-    "environment-v3-6f1dd1dbb0fea49f001e",
+    "environment-v3-82b1c1de28cc1ef74676",
     "hard-news-v3-03c477c50c0891267f95",
     "transport-v3-e0c02563cf79bcbc6194",
+    "environment-v3-6f1dd1dbb0fea49f001e",
     "hard-news-v3-d54cc9d795e3135e9ca6",
     "environment-v3-52a830380a9b702a4260"
   ],
   "selected_candidate_urls": [
     "https://www.theoldhamtimes.co.uk/news/26606435.four-men-charged-supplying-drugs-medicine-products/",
+    "https://www.rochvalleyradio.com/news-features/4/crime/799/middleton-vehicle-stop-leads-police-to-suspected-cocaine-worth-2m-and-three-cannabis-farms",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-726563cc3590d39566",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.rochdaletimes.co.uk/adult-gaming-centre-plan-for-subway-after-nail-bar-bid-is-pulled/",
+    "https://www.birkenhead.news/anselmians-claim-impressive-win-at-rochdale/",
     "https://www.rochdalevaliant.uk/2026_10_04_archive.html",
     "https://www.northernrailway.co.uk/service-updates#live-7a9d60bb5540c530c6",
+    "https://www.rochdaletimes.co.uk/adult-gaming-centre-plan-for-subway-after-nail-bar-bid-is-pulled/",
     "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/september/four-charges-have-been-secured-following-a-series-of-warrants-that-were-executed-in-rochdale/",
     "https://publicaccess.rochdale.gov.uk/online-applications/"
   ],
@@ -143,6 +152,7 @@
       "environment",
       "health",
       "news",
+      "traffic",
       "transport"
     ],
     "selected_categories": [
@@ -150,6 +160,7 @@
       "environment",
       "health",
       "news",
+      "traffic",
       "transport"
     ],
     "available_wards": [
@@ -172,9 +183,10 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "crime": 2,
-      "environment": 2,
+      "environment": 3,
       "health": 1,
       "news": 1,
+      "traffic": 1,
       "transport": 2
     },
     "selected_by_ward": {
@@ -182,14 +194,16 @@
     },
     "selected_by_area": {
       "middleton": 1,
-      "rochdale": 6,
+      "rochdale": 8,
       "smithy_bridge": 1
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
+      "birkenhead news": 1,
       "food standards agency": 1,
       "greater manchester police": 1,
       "northern live service updates": 1,
+      "roch valley radio": 1,
       "rochdale times": 1,
       "rochdale valiant": 1,
       "theoldhamtimes": 1,
@@ -814,9 +828,10 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 30,
+  "robots_denied_count": 31,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326215028?-57568:46921",
     "https://c.newsnow.co.uk/A/1326183847?-57568:46921",
     "https://c.newsnow.co.uk/A/1326183650?-57568:46921",
     "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
@@ -834,18 +849,18 @@
     "https://c.newsnow.co.uk/A/1325913212?-57568:46921",
     "https://c.newsnow.co.uk/A/1325907787?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902926?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325892921?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
     "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902766?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326224235?-57568:46921",
     "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326215028?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
+    "https://news.google.com/rss/articles/CBMingFBVV95cUxPdE9KdWhtbEpJeVlsSWtocWVNOFdfYlh1SERISE1UNjhCeHU0SEVNUnJZZmV4X0huSkhSZmNjaEZxbXBENnNaTWtkOUNfZXh0bko5ZkJqYk5rYUhyS0pWb191NUFpMHdfQnZGNzEtbkNPV0liUUkxR09GTzB2dXJxUWZid2VnMFZHZ05wMFgxNUJqVm5UZnp2SmVqVGxjdw?oc=5",
     "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPTnl0cUF0UW1ES25sakF5M1MyQ1pjMjdYUWdkRnhkOWxlSmtxVng4bHBjVDNqQ28zUmxhNDNKdFZHSm5La1BlTzVWMElkV3pCN296dzVBRlB4Unk4VU81cEo4ZEFxbjBEMkNuLXhfeFBPWUM0aEVfVlZVNGZmZ2EteHgzUEtXaC1MUkZkTjVWQWpMQ0JLZm5kZFQ5WG0zSmhOck5ZRFU2dWliNWxKRFdxQUVBUWhDX1FOYkZRWTZIMjk1dWRna3FfaUZKeVpyWVAtM1FUMVltbUllQnc4YVNLM0NhOHoyQQ?oc=5",
     "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPdGU0NXpZaUREbXFjbEZTcm5vMDIzTzJha2x1NGZLY2RXY3ZiX2lNcmJ1bXBQOW11VTFlMXBxbk0wMmQ5RGFXTFp0OVlMblNJOUpHUmVJaU9NalhreGFPVVl0TWktbUpxdnJ2bXZXT3hYdWRKRTFZYld6T19kdkdmY3A4eFJHSmtPNFVTdjE5bC1jT1ZWZGN3c2JPTHQ4aVh0WWxmdTE4T1NlNW1qOFU3NDFYNlBpTDdiZDZoWlJqSzhsdw?oc=5",
-    "https://news.google.com/rss/articles/CBMingFBVV95cUxPdE9KdWhtbEpJeVlsSWtocWVNOFdfYlh1SERISE1UNjhCeHU0SEVNUnJZZmV4X0huSkhSZmNjaEZxbXBENnNaTWtkOUNfZXh0bko5ZkJqYk5rYUhyS0pWb191NUFpMHdfQnZGNzEtbkNPV0liUUkxR09GTzB2dXJxUWZid2VnMFZHZ05wMFgxNUJqVm5UZnp2SmVqVGxjdw?oc=5"
+    "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNTFhXRm1aSmpwRDhZWjV3Z0FXbFctT3hOMlBxNFUyTmZuc01CTXJDSnRNaHRpTVhWdHRDbThZbTF4b1ZESU85a3c5R1B0SlNQOHFVS0oxN1RQSzJ0RVlDd2ZPdDl2MGZrTlRYelJvREIzVXptMW9fbkZaX1NDTXBQbmxuQjFNQ1R4ZGpoM19JOGZPT2xMY2N2bEFCb0FXYmJxQmo1TjAxbUVHbXN6TW1XLVdpcjZHRnVwT3JCbDIzeUlWWVlhckVUblJSNHYwU20tUExUd1pCWF9oZ3NwRGJ3bzlB?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -883,7 +898,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-05T16:49:02.390667Z",
+  "frontpage_generated_at": "2026-10-05T16:58:55.156837Z",
   "frontpage_article_count": 9,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
