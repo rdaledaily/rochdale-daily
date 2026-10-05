@@ -1,16 +1,30 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 16,
+    "kept_cards": 17,
     "cards_library": 0,
-    "cards_generated": 2,
+    "cards_generated": 3,
     "skipped": 0
   },
   "items": [
     {
-      "slug": "plans-submitted-for-adult-gaming-centre-at-subway-in-middleton",
+      "slug": "four-charges-secured-following-police-warrants-in-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/police.jpg",
+      "matched_filename": "police.jpg",
+      "match_score": 15126
+    },
+    {
+      "slug": "planning-application-submitted-for-adult-gaming-centre-at-subway-in-middleton",
       "result": "cards-generated",
-      "image_url": "assets/img/cards/plans-submitted-for-adult-gaming-centre-at-subway-in-middleton-generated-card.jpg",
+      "image_url": "assets/img/cards/planning-application-submitted-for-adult-gaming-centre-at-subway-in-middleton-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-afc-secures-1-0-victory-against-swindon-town",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-afc-secures-1-0-victory-against-swindon-town.jpg",
       "matched_filename": "",
       "match_score": null
     },
