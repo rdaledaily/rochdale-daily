@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 152,
-  "published_count": 152,
+  "article_count": 155,
+  "published_count": 155,
   "category_change_count": 19,
-  "image_change_count": 20,
+  "image_change_count": 22,
   "category_changes": [
     {
       "slug": "littleborough-cricket-club-bonfire-2026",
@@ -141,6 +141,30 @@
     }
   ],
   "image_changes": [
+    {
+      "slug": "new-years-eve-with-the-j-ger-maestros",
+      "title": "New Years Eve with the Jäger Maestros",
+      "category": "events",
+      "reason": "weak filename image match score 8127; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/cricket.jpg",
+        "img": "assets/img/cards/cricket.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/new-years-eve-with-the-j-ger-maestros-generated-card.jpg"
+    },
+    {
+      "slug": "littleborough-dancers-achieve-eight-first-places-at-ibiza-championships",
+      "title": "Littleborough Dancers Achieve Eight First Places at Ibiza Championships",
+      "category": "business",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/littleborough-dancers-achieve-eight-first-places-at-ibiza-championships.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/littleborough-dancers-achieve-eight-first-places-at-ibiza-championships-generated-card.jpg"
+    },
     {
       "slug": "rochdale-s-chernobyl-to-undergo-clean-up-as-redevelopment-plans-progress",
       "title": "'Rochdale's Chernobyl' to Undergo Clean-Up Ahead of Redevelopment",
