@@ -1,35 +1,36 @@
 {
-  "last_run_at": "2026-10-06T04:35:06.571627Z",
-  "raw_candidates_before_job_filter": 87,
+  "last_run_at": "2026-10-06T04:44:37.808571Z",
+  "raw_candidates_before_job_filter": 71,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 87,
+  "raw_candidates": 71,
   "candidate_clusters": 37,
   "google_news_resolution": {
-    "wrappers": 59,
-    "resolved": 47,
+    "wrappers": 58,
+    "resolved": 49,
     "text_recovered": 13,
     "reattributed": 5,
     "images_found": 15
   },
-  "duplicates_merged": 50,
-  "attempted_rewrites": 8,
-  "new_articles": 2,
+  "duplicates_merged": 34,
+  "attempted_rewrites": 7,
+  "new_articles": 1,
   "live_articles": 21,
   "skipped": 6,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 4,
+    "editorial gate: REJECTED_NON_LOCAL": 2,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "editorial gate: REJECTED_NON_NEWS": 1
+    "editorial gate: REJECTED_NON_NEWS": 1,
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 166.": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 73,
-    "website_discovery": 4,
+    "rss_and_google_news": 61,
+    "website_discovery": 0,
     "aggregator_discovery": 1,
     "live_service_pages": 7,
     "facebook_official": 0,
@@ -40,28 +41,25 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Roch Valley Radio": 17,
-    "Rochdale Times": 13,
+    "Roch Valley Radio": 14,
     "Rochdale AFC": 11,
+    "Oldham Times": 6,
     "About Manchester": 4,
     "Bee Network live travel alerts": 4,
     "Alloa Advertiser": 3,
     "Manchester Evening News": 3,
     "Swindon Advertiser": 3,
-    "The Oldham Times": 3,
     "Northern live service updates": 3,
-    "Wirral Globe": 2,
+    "Wirralglobe": 2,
     "facebook.com": 2,
     "BBC": 2,
-    "birkenhead.news": 2,
-    "theoldhamtimes.co.uk": 2,
+    "Birkenhead News": 2,
     "The Wiltshire Gazette and Herald": 1,
     "transfermarkt.us": 1,
-    "Wiltshire Times": 1,
+    "Wiltshiretimes": 1,
     "Yahoo": 1,
     "Fansnetwork": 1,
     "APWin": 1,
-    "Oldham Times": 1,
     "Uk": 1,
     "Rochdale Borough Council": 1,
     "Greater Manchester Police": 1,
@@ -73,7 +71,7 @@
     "crime": 2,
     "environment": 1,
     "health": 1,
-    "sport": 2,
+    "sport": 1,
     "traffic": 1,
     "transport": 1
   },
@@ -117,8 +115,7 @@
     "sport-v3-1e44e27db5bc73f10dee",
     "health-v3-da476ce6df9ee0fc3733",
     "environment-v3-82b1c1de28cc1ef74676",
-    "hard-news-v3-d54cc9d795e3135e9ca6",
-    "sport-v3-dd1aee9edd6a6160474e"
+    "hard-news-v3-d54cc9d795e3135e9ca6"
   ],
   "selected_candidate_urls": [
     "https://www.rochvalleyradio.com/news-features/142/community/800/christmas-parade-to-return-to-the-rock-in-bury-this-november",
@@ -127,8 +124,7 @@
     "https://rochdaleafc.co.uk/tickets-on-sale-for-huddersfield-trophy-trip/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.birkenhead.news/anselmians-claim-impressive-win-at-rochdale/",
-    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/september/four-charges-have-been-secured-following-a-series-of-warrants-that-were-executed-in-rochdale/",
-    "https://rochdaleafc.co.uk/preview-huddersfield-town-a/"
+    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/september/four-charges-have-been-secured-following-a-series-of-warrants-that-were-executed-in-rochdale/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -168,20 +164,20 @@
       "crime": 2,
       "environment": 1,
       "health": 1,
-      "sport": 2,
+      "sport": 1,
       "traffic": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 8
+      "rochdale": 7
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "birkenhead.news": 1,
       "food standards agency": 1,
       "greater manchester police": 1,
-      "rochdale afc": 2,
+      "rochdale afc": 1,
       "rochvalleyradio.com": 2
     }
   },
@@ -803,9 +799,9 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 29,
+  "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
     "https://c.newsnow.co.uk/A/1326224235?-57568:46921",
     "https://c.newsnow.co.uk/A/1326215028?-57568:46921",
     "https://c.newsnow.co.uk/A/1326183847?-57568:46921",
@@ -824,16 +820,14 @@
     "https://c.newsnow.co.uk/A/1325913212?-57568:46921",
     "https://c.newsnow.co.uk/A/1325907787?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902926?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326261833?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325640136?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902766?-57568:46921",
-    "https://www.linkedin.com/company/groundnews",
-    "https://news.google.com/rss/articles/CBMid0FVX3lxTE5ycXZYUjRGMU9ncUxCaXNpX0dPZ2VhMFp0MHdBWW5fVHN6V0tYdkhqeG5Za1gxR3gwNUxIRzFqNjFMNFoyaU1kUV9LWXhORnhzemNXOHJlejhja0JqbkZMQ1JxeXpSc2xIN3h4R3A1YlJHVW1CaU40?oc=5",
-    "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBiNy1yc0xEejQ0ZW5uZTV4bDVpOXBGNlM1STlWTGF2WWZOd0Z6Ynp3d3ZuR0RjakdFUU8yWUhmZUxtNmV3Y2pCdVdFWThON0prWkd4TkZ5ZDI0Sml5MS1Zejh2cG9jQQ?oc=5"
+    "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326261833?-57568:46921",
+    "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -871,7 +865,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-06T04:36:35.794947Z",
+  "frontpage_generated_at": "2026-10-06T04:46:24.537772Z",
   "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -917,11 +911,11 @@
       "transport": 2,
       "crime": 2,
       "education": 1,
-      "sport": 2,
       "business": 1,
       "community": 1,
       "environment": 1,
-      "news": 1
+      "news": 1,
+      "sport": 2
     },
     "selected_by_ward": {
       "borough-wide": 11
@@ -936,12 +930,12 @@
       "source": 1,
       "bee network live travel alerts": 1,
       "rochdale times": 2,
-      "birkenhead news": 1,
       "the english dialect dictionary (joseph wright) — archive.org": 1,
       "uk": 1,
       "rochdale valiant": 1,
       "greater manchester police": 1,
-      "wilts and gloucestershire standard": 1
+      "wilts and gloucestershire standard": 1,
+      "birkenhead news": 1
     },
     "pool_size": 13,
     "primary_pool_size": 13,
