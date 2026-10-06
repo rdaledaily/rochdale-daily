@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 155,
-  "published_count": 155,
-  "category_change_count": 19,
+  "article_count": 157,
+  "published_count": 157,
+  "category_change_count": 20,
   "image_change_count": 22,
   "category_changes": [
+    {
+      "slug": "rochdale-masters-mayfield-movers-45-mile-charity-walk",
+      "title": "Rochdale Masters and Mayfield Movers take on 45-mile charity walk",
+      "from": "sport",
+      "to": "community",
+      "reason": "headline strongly identifies community"
+    },
     {
       "slug": "littleborough-cricket-club-bonfire-2026",
       "title": "Littleborough Cricket Club Bonfire 2026",
@@ -157,11 +164,11 @@
       "slug": "littleborough-dancers-achieve-eight-first-places-at-ibiza-championships",
       "title": "Littleborough Dancers Achieve Eight First Places at Ibiza Championships",
       "category": "business",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/littleborough-dancers-achieve-eight-first-places-at-ibiza-championships.jpg",
         "img": "assets/img/cards/littleborough-dancers-achieve-eight-first-places-at-ibiza-championships.jpg",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/littleborough-dancers-achieve-eight-first-places-at-ibiza-championships-generated-card.jpg"
     },
