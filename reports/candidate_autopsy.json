@@ -1,44 +1,43 @@
 {
-  "examined_at": "2026-10-05T15:15:36.955435Z",
+  "examined_at": "2026-10-06T13:36:43.938127Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 145,
+  "candidates_examined": 151,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "would publish": 72,
-    "age": 61,
-    "duplicate of published story": 9,
-    "not local": 3
+    "age": 99,
+    "would publish": 37,
+    "duplicate of published story": 13,
+    "not local": 2
   },
-  "would_publish": 72,
+  "would_publish": 37,
   "age_gate_sensitivity": {
-    "6h": 10,
-    "14h": 20,
-    "24h": 23,
-    "48h": 84,
-    "72h": 114,
-    "168h": 145
+    "6h": 3,
+    "14h": 15,
+    "24h": 25,
+    "48h": 52,
+    "72h": 112,
+    "168h": 151
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "Bee Network live travel alerts: Updated: 05/10/2026 at 2:12pm Live Failsworth Tram Stop - Lifts out of"
-    ],
-    "not local": [
-      "rochdaleafc.co.uk: Dale Defeated At Stockport - rochdaleafc.co.uk",
-      "Radio Times: What channel is Wales v Denmark Nations League match on? TV coverage, ",
-      "rochdaleafc.co.uk: Stuck To Our Game Plan - Tasker - rochdaleafc.co.uk"
+      "Bee Network live travel alerts: Updated: 05/10/2026 at 6:13pm Live Failsworth Tram Stop - Lifts out of",
+      "Inyourarea: What's On Rochdale: Top comic Adam Rowe headlines Heywood and eerie Di"
     ],
     "duplicate of published story": [
-      "Greater Manchester Police: Four charges have been secured following a series of warrants that wer",
-      "Roch Valley Radio: Rochdale AFC 1 - 0 Swindon Town - rochvalleyradio.com",
-      "Rochdale Times: New governor will help ease pressure on gas network - Rochdale Times"
+      "Thebusinessdesk: Work starts on new urban logistics unit at Heywood’s Birch Business Pa",
+      "Roch Valley Radio: Littleborough dancers take eight first places at Ibiza championships",
+      "Theoldhamtimes: 'Rochdale's Chernobyl' set for clean-up in major redevelopment milesto"
+    ],
+    "not local": [
+      "rochdaleafc.co.uk: Watson Nominated For Manager Of The Month - rochdaleafc.co.uk",
+      "Radio Times: What channel is Wales v Denmark Nations League match on? TV coverage, "
     ],
     "age": [
-      "Swindon Advertiser: Gut punch for valiant ten-man Swindon as they lose late at Rochdale - ",
-      "大分トリニータオフィシャルサイト: [LIVESTREAM!!]### Rochdale vs Swindon Town 𝐋𝐈𝐕𝐄 𝐒𝐭𝐫𝐞𝐚𝐦 Ｔｖ Ｃｈａｎｎｅｌ 04 O",
-      "Jp: [[[LIVESTREAM>>>]]>] Swindon Town vs Rochdale Live free streams 04 Oct"
+      "Rochdale Times: New governor will help ease pressure on gas network - Rochdale Times",
+      "BBC News: Huddersfield Town vs Rochdale: EFL Trophy stats & head-to-head - bbc.c",
+      "Alloaadvertiser: Ian Holloway praises injury-hit Swindon’s effort after late loss at Ro"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
