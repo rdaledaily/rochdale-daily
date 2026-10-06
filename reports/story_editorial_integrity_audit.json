@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 151,
-  "published_count": 151,
+  "article_count": 152,
+  "published_count": 152,
   "category_change_count": 19,
-  "image_change_count": 19,
+  "image_change_count": 20,
   "category_changes": [
     {
       "slug": "littleborough-cricket-club-bonfire-2026",
@@ -142,6 +142,18 @@
   ],
   "image_changes": [
     {
+      "slug": "train-services-disrupted-on-leeds-to-manchester-route",
+      "title": "Train Services Disrupted on Leeds to Manchester Route",
+      "category": "transport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/train.jpg",
+        "img": "assets/img/cards/train.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/train-services-disrupted-on-leeds-to-manchester-route-generated-card.jpg"
+    },
+    {
       "slug": "failsworth-tram-stop-lift-out-of-service-during-replacement-works",
       "title": "Failsworth Tram Stop Lift Out of Service During Replacement Works",
       "category": "transport",
@@ -169,11 +181,11 @@
       "slug": "police-seize-2-million-worth-of-suspected-cocaine-and-cannabis-farms-in-middleto",
       "title": "Police Seize £2 Million Worth of Suspected Cocaine and Cannabis Farms in Middleton",
       "category": "crime",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/police-seize-2-million-worth-of-suspected-cocaine-and-cannabis-farms-in-middleto.jpg",
         "img": "assets/img/cards/police-seize-2-million-worth-of-suspected-cocaine-and-cannabis-farms-in-middleto.jpg",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/police-seize-2-million-worth-of-suspected-cocaine-and-cannabis-farms-in-middleto-generated-card.jpg"
     },
@@ -193,11 +205,11 @@
       "slug": "rochdale-afc-secures-1-0-victory-against-swindon-town",
       "title": "Rochdale AFC Secures 1-0 Victory Against Swindon Town",
       "category": "sport",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/rochdale-afc-secures-1-0-victory-against-swindon-town.jpg",
         "img": "assets/img/cards/rochdale-afc-secures-1-0-victory-against-swindon-town.jpg",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-afc-secures-1-0-victory-against-swindon-town-generated-card.jpg"
     },
