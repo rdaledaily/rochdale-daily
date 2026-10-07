@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 159,
-  "published_count": 159,
+  "article_count": 160,
+  "published_count": 160,
   "category_change_count": 21,
-  "image_change_count": 23,
+  "image_change_count": 24,
   "category_changes": [
     {
       "slug": "construction-begins-on-new-103-770-sq-ft-warehouse-at-birch-business-park-in-hey",
@@ -166,6 +166,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-sixth-form-college-to-host-open-events-for-prospective-students-generated-card.jpg"
+    },
+    {
+      "slug": "man-charged-with-drug-offences-in-middleton",
+      "title": "Man Charged with Drug Offences in Middleton",
+      "category": "crime",
+      "reason": "weak filename image match score 8385; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/greater_manchester_police.jpg",
+        "img": "assets/img/cards/greater_manchester_police.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/man-charged-with-drug-offences-in-middleton-generated-card.jpg"
     },
     {
       "slug": "new-years-eve-with-the-j-ger-maestros",
