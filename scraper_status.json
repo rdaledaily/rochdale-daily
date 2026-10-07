@@ -1,31 +1,34 @@
 {
-  "last_run_at": "2026-10-07T14:38:44.045179Z",
-  "raw_candidates_before_job_filter": 92,
+  "last_run_at": "2026-10-07T14:48:48.060369Z",
+  "raw_candidates_before_job_filter": 94,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 92,
-  "candidate_clusters": 39,
+  "raw_candidates": 94,
+  "candidate_clusters": 40,
   "google_news_resolution": {
-    "wrappers": 52,
-    "resolved": 47,
-    "text_recovered": 13,
-    "reattributed": 9,
-    "images_found": 16
+    "wrappers": 42,
+    "resolved": 38,
+    "text_recovered": 16,
+    "reattributed": 10,
+    "images_found": 22
   },
-  "duplicates_merged": 53,
-  "attempted_rewrites": 5,
+  "duplicates_merged": 54,
+  "attempted_rewrites": 6,
   "new_articles": 2,
   "live_articles": 24,
-  "skipped": 3,
+  "skipped": 4,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 2,
-    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
+    "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 81,
-    "website_discovery": 4,
+    "rss_and_google_news": 80,
+    "website_discovery": 7,
     "aggregator_discovery": 1,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -37,11 +40,11 @@
   "collector_errors": {},
   "source_counts": {
     "Roch Valley Radio": 23,
-    "Rochdale AFC": 10,
-    "Rochdale Times": 9,
+    "Rochdale Times": 14,
+    "Rochdale AFC": 9,
     "Manchester Evening News": 6,
+    "Id": 5,
     "InYourArea": 4,
-    "Id": 4,
     "Bee Network live travel alerts": 4,
     "Bdaily": 3,
     "Thebusinessdesk": 3,
@@ -53,15 +56,14 @@
     "Bet365": 2,
     "Rochdale Borough Council": 2,
     "TfGM Travel Alerts": 2,
-    "Rochdale Valiant": 2,
     "Transfermarkt": 1,
-    "Unisba Media": 1,
     "Greater Manchester Police": 1,
     "Theoldhamtimes": 1,
     "Food Standards Agency": 1,
     "Ofsted": 1
   },
   "selected_by_category": {
+    "business": 1,
     "crime": 1,
     "environment": 1,
     "health": 1,
@@ -104,6 +106,7 @@
   "selected_story_keys": [
     "hard-news-v3-934ec123f169f87f1c4d",
     "transport-v3-b2d3fcadecd750d014de",
+    "business-v3-d948be7f94c0743feec9",
     "health-v3-0ceb3be1fa4d969fb889",
     "environment-v3-39cb705ba57ba0ccbd80",
     "transport-v3-961d3a8b425c9aa21d29"
@@ -111,6 +114,7 @@
   "selected_candidate_urls": [
     "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/man-charged-with-drug-offences-in-middleton/?__cf_chl_rt_tk=_u.KzvCwvxbX3UIlueg0LJnWe9ahPyT3wN18ZW9zE5o-1791315588-1.0.1.1-q2feT9A8WcJaSIQCvjZoXAjprayq3LkfCHJ0EryMIRw",
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-f87d6c83022aa2ad86",
+    "https://www.rochdaletimes.co.uk/former-takeaway-penalised-for-deliberate-tax-default/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdales-250-bus-ride-best-34691351",
     "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true"
@@ -125,12 +129,14 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "business",
       "crime",
       "environment",
       "health",
       "transport"
     ],
     "selected_categories": [
+      "business",
       "crime",
       "environment",
       "health",
@@ -153,6 +159,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "business": 1,
       "crime": 1,
       "environment": 1,
       "health": 1,
@@ -163,13 +170,14 @@
     },
     "selected_by_area": {
       "middleton": 1,
-      "rochdale": 4
+      "rochdale": 5
     },
     "selected_by_source": {
       "bee network live travel alerts": 1,
       "food standards agency": 1,
       "greater manchester police": 1,
       "manchester evening news": 1,
+      "rochdale times": 1,
       "tfgm travel alerts": 1
     }
   },
@@ -793,7 +801,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1326387972?-57568:46921",
     "https://c.newsnow.co.uk/A/1326387971?-57568:46921",
     "https://c.newsnow.co.uk/A/1326336191?-57568:46921",
@@ -813,23 +821,17 @@
     "https://c.newsnow.co.uk/A/1326125684?-57568:46921",
     "https://c.newsnow.co.uk/A/1326087849?-57568:46921",
     "https://c.newsnow.co.uk/A/1326409461?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325590327?-57568:46921",
     "https://c.newsnow.co.uk/A/1325902766?-57568:46921",
-    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661803?-57568:46921",
     "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325911539?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325708529?-57568:46921",
+    "https://c.newsnow.co.uk/A/1325661195?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "falingepark.com",
-    "stcuthberts.com"
-  ],
-  "slow_domain_failure_counts": {
-    "falingepark.com": 1,
-    "stcuthberts.com": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -863,7 +865,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-07T14:45:20.835604Z",
+  "frontpage_generated_at": "2026-10-07T14:53:14.522721Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -975,11 +977,11 @@
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
   "ticket_events_collected_this_run": 11,
-  "events_removed_other_source": 8,
+  "events_removed_other_source": 7,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 11,
-  "event_dates_corrected_from_ledger": 0,
+  "event_dates_corrected_from_ledger": 3,
   "duplicate_articles_after_postprocessing": 157,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
