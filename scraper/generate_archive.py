@@ -71,7 +71,7 @@ def build_index() -> list[dict[str, str]]:
     return records
 
 
-def render(records: list[dict[str, str]]) -> str:
+def render(records: list[dict[str, str]], search_only: bool = False) -> str:
     records_json = json.dumps(records, ensure_ascii=False, separators=(",", ":")).replace(
         "</", "<\\/"
     )
@@ -83,6 +83,8 @@ def render(records: list[dict[str, str]]) -> str:
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>News Archive | Rochdale Daily</title>
 <meta name="description" content="Search the complete Rochdale Daily news archive by subject, section, month and year.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://rochdaledaily.co.uk/archive.html">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/archive.css">
 </head>
@@ -149,9 +151,10 @@ def main() -> int:
     INDEX_PATH.write_text(
         json.dumps(records, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    page = render(records)
+    page = render(records, search_only=False)
     ARCHIVE_PATH.write_text(page, encoding="utf-8")
-    SEARCH_PATH.write_text(page, encoding="utf-8")
+    search_page = page.replace('<meta name="robots" content="index,follow,max-image-preview:large">', '<meta name="robots" content="noindex,follow,max-image-preview:large">').replace('<link rel="canonical" href="https://rochdaledaily.co.uk/archive.html">', '<link rel="canonical" href="https://rochdaledaily.co.uk/archive.html">')
+    SEARCH_PATH.write_text(search_page, encoding="utf-8")
     print(f"Archive indexed {len(records)} retained article pages.")
     return 0
 
