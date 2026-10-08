@@ -1,11 +1,25 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 157,
-  "published_count": 157,
-  "category_change_count": 21,
-  "image_change_count": 20,
+  "article_count": 165,
+  "published_count": 165,
+  "category_change_count": 23,
+  "image_change_count": 21,
   "category_changes": [
+    {
+      "slug": "east-lancashire-railway-volunteer-open-day-october-2026",
+      "title": "East Lancashire Railway to host first Event, Catering and Retail Volunteer Open Day",
+      "from": "community",
+      "to": "events",
+      "reason": "headline strongly identifies events"
+    },
+    {
+      "slug": "sculpt-edit-wellness-clinic-launch-founder-amy",
+      "title": "Sculpt & Edit launches wellness clinic after founder builds business from scratch",
+      "from": "business",
+      "to": "health",
+      "reason": "headline strongly identifies health"
+    },
     {
       "slug": "construction-begins-on-new-103-770-sq-ft-industrial-unit-at-birch-business-park",
       "title": "Construction Begins on New 103,770 sq ft Industrial Unit at Birch Business Park, Heywood",
@@ -156,6 +170,18 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-engineer-develops-ai-prototype-for-captioning-phone-conversations",
+      "title": "Rochdale Engineer Develops AI Prototype for Captioning Phone Conversations",
+      "category": "education",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/rochdale-engineer-develops-ai-prototype-for-captioning-phone-conversations.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/rochdale-engineer-develops-ai-prototype-for-captioning-phone-conversations-generated-card.jpg"
+    },
+    {
       "slug": "rail-regulator-rejects-plans-for-rochdale-to-london-euston-train-services",
       "title": "Rail Regulator Rejects Plans for Rochdale to London Euston Train Services",
       "category": "transport",
@@ -178,6 +204,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/mossylea-housing-development-in-middleton-shortlisted-for-two-national-awards-generated-card.jpg"
+    },
+    {
+      "slug": "construction-begins-on-new-103-770-sq-ft-industrial-unit-at-birch-business-park",
+      "title": "Construction Begins on New 103,770 sq ft Industrial Unit at Birch Business Park, Heywood",
+      "category": "business",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/construction-begins-on-new-103-770-sq-ft-industrial-unit-at-birch-business-park.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/construction-begins-on-new-103-770-sq-ft-industrial-unit-at-birch-business-park-generated-card.jpg"
     },
     {
       "slug": "high-court-trial-begins-over-ownership-of-hopwood-hall",
@@ -214,18 +252,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/former-rochdale-takeaway-penalised-for-deliberate-tax-default-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-sixth-form-college-to-host-open-events-for-prospective-students",
-      "title": "Rochdale Sixth Form College to Host Open Events for Prospective Students",
-      "category": "education",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale-sixth-form-college-to-host-open-events-for-prospective-students.jpg",
-        "img": "assets/img/cards/rochdale-sixth-form-college-to-host-open-events-for-prospective-students.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-sixth-form-college-to-host-open-events-for-prospective-students-generated-card.jpg"
     },
     {
       "slug": "new-years-eve-with-the-j-ger-maestros",
