@@ -1075,7 +1075,26 @@ def main() -> None:
         build_category_pages()
     except Exception as exc:  # never let a hub page failure block the paper
         print(f'Category pages skipped: {type(exc).__name__}: {exc}')
-    write_sitemap(slugs_with_dates)
+
+    # Keep the full historical article archive discoverable. The normal XML
+    # sitemap is not the Google News sitemap: older stories should remain in
+    # Search as long as their pages are live and indexable. Only explicit
+    # noindex pages (including legacy canonical redirects) are excluded.
+    sitemap_by_slug = {slug: lastmod for slug, lastmod in slugs_with_dates}
+    for path in OUTPUT_DIR.glob('*.html'):
+        slug = path.stem
+        if slug in sitemap_by_slug:
+            continue
+        try:
+            html = path.read_text(encoding='utf-8', errors='ignore')
+        except OSError:
+            continue
+        if re.search(r'<meta\\s+name=["\\\']robots["\\\'][^>]*content=["\\\'][^"\\\']*noindex', html, re.I):
+            continue
+        lastmod = archive_page_lastmod(path)
+        sitemap_by_slug[slug] = lastmod
+    sitemap_articles = sorted(sitemap_by_slug.items())
+    write_sitemap(sitemap_articles)
     print(
         f"Generated {written} live article page(s) "
         f"({updated_existing} existing pages refreshed), "
