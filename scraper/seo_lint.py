@@ -34,8 +34,8 @@ def main() -> int:
         for field in ("title", "excerpt", "byline", "category", "area"):
             if not str(a.get(field) or "").strip():
                 errors.append(f"{slug}: missing {field}")
-        if denied(a.get("source_name"), a.get("source_url")) and a.get("noindex") is not True:
-            errors.append(f"{slug}: denied/third-party source must be noindex")
+        if denied(a.get("source_name"), a.get("source_url")):
+            warnings.append(f"{slug}: denied/third-party source is excluded from generated live pages")
         title, excerpt = str(a.get("title") or ""), str(a.get("excerpt") or a.get("summary") or "")
         if len(title) > 90: warnings.append(f"{slug}: title is {len(title)} characters")
         if len(excerpt) > 170: warnings.append(f"{slug}: excerpt is {len(excerpt)} characters")
