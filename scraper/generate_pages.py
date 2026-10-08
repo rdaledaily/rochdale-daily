@@ -244,6 +244,8 @@ CATEGORY_HUB_SLUGS = {'whats-on': 'events', 'whatson': 'events'}
 LEGACY_CANONICAL_REDIRECTS = {
     'rochdale-businesses-urged-to-back-denehurst-house-in-30-a-month-veterans-challen': 'rochdale-100-businesses-challenge-denehurst-house-veterans',
     'partial-solar-eclipse-rochdale-12-august-2026': 'rochdale-partial-solar-eclipse-12-august-2026',
+    'who-or-what-is-the-healey-dwarf': 'who-or-what-is-the-healey-dwarf-tracing-the-legend-from-roby-to-the-heritage-cen',
+    'why-does-rochdale-say-cruckle': 'why-rochdale-says-cruckle',
 }
 
 def category_url(category: str) -> str:
