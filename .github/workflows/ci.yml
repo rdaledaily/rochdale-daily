@@ -182,6 +182,8 @@ jobs:
           python scraper/normalise_public_theme.py --check
       - name: Enforce cards-only canonical article images
         run: python scraper/enforce_cards_only_images.py --articles articles.json --check
+      - name: SEO feed quality gate
+        run: python scraper/seo_lint.py
       - name: Verify scraper imports cleanly
         run: |
           cd scraper
