@@ -1,12 +1,19 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 30,
+    "kept_cards": 31,
     "cards_library": 0,
     "cards_generated": 8,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "train-services-disrupted-on-leeds-to-manchester-route",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/train.jpg",
+      "matched_filename": "train.jpg",
+      "match_score": 15125
+    },
     {
       "slug": "reel-cinema-rochdale-polar-express-pyjama-party",
       "result": "kept-cards",
@@ -113,13 +120,6 @@
       "match_score": null
     },
     {
-      "slug": "man-arrested-suspicion-murder-curzon-road-rochdale-october-2026",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/police.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
       "slug": "mylos-steak-grill-sandbrook-park-rochdale",
       "result": "kept-existing",
       "image_url": "assets/img/cards/mylos-steak-grill-sandbrook-park-rochdale.jpg",
@@ -153,6 +153,13 @@
       "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "police.jpg",
       "match_score": 15126
+    },
+    {
+      "slug": "man-arrested-suspicion-murder-curzon-road-rochdale-october-2026",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/police.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "birtle-view-nursery-opening-rochdale",
