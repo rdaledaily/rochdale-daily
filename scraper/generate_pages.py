@@ -409,10 +409,6 @@ def article_should_noindex(article: dict[str, Any]) -> bool:
     if article.get("noindex") is True:
         return True
     source_kind = str(article.get("source_kind") or "").strip().lower()
-    event_end = parse_iso(article.get("event_end_at"))
-    if source_kind in {"event", "listing"} and event_end != datetime.min.replace(tzinfo=timezone.utc):
-        if event_end < datetime.now(timezone.utc):
-            return True
     if source_is_denied(str(article.get("source_name") or ""), str(article.get("source_url") or "")):
         return True
     return False
