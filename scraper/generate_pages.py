@@ -983,7 +983,8 @@ def write_sitemap(slugs_with_dates: list[tuple[str, str]]) -> None:
     now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     entries = [f'  <url><loc>{esc(SITE_BASE_URL)}/</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>',
                f'  <url><loc>{esc(SITE_BASE_URL)}/corrections-log.html</loc><changefreq>daily</changefreq></url>',
-               f'  <url><loc>{esc(SITE_BASE_URL)}/news/</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>']
+               f'  <url><loc>{esc(SITE_BASE_URL)}/news/</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>',
+               f'  <url><loc>{esc(SITE_BASE_URL)}/archive.html</loc><changefreq>daily</changefreq></url>']
     for category_slug in category_page_slugs_for_sitemap():
         entries.append(f'  <url><loc>{esc(SITE_BASE_URL)}/news/{esc(category_slug)}.html</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>')
     for slug, lastmod in slugs_with_dates:
