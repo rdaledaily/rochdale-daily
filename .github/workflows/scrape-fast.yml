@@ -178,6 +178,30 @@ jobs:
             gh workflow run daily-briefing.yml --ref main
             echo "dispatched the Morning Briefing"
           fi
+      # The independent Facebook loop covers 10-minute checks. The newsroom
+      # lane provides a second recovery path if GitHub cancels/loses its chain
+      # and scheduled events are delayed. An active publisher is never replaced.
+      - name: Recover Facebook publisher if it has stopped
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! active="$(gh run list --workflow facebook-publisher.yml --limit 20 \
+            --json status \
+            --jq '[.[] | select(.status != "completed")] | length')"; then
+            echo "::warning::Could not inspect the Facebook publisher; leaving its schedule unchanged."
+            exit 0
+          fi
+          if [ "${active:-0}" -gt 0 ]; then
+            echo "Facebook publisher is already running or queued."
+            exit 0
+          fi
+          if gh workflow run facebook-publisher.yml --ref main -f chain=0; then
+            echo "Recovered the missing Facebook publisher loop."
+          else
+            echo "::warning::Could not restart Facebook publisher; its cron recovery remains enabled."
+          fi
+
       - name: Keep the fast lane running
         # Four rails stop a runaway/starving chain: a depth cap, a check that no
         # other fast run is active, a check that the canonical publisher is
