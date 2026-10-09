@@ -1,34 +1,36 @@
 {
-  "last_run_at": "2026-10-09T10:12:13.346117Z",
-  "raw_candidates_before_job_filter": 168,
-  "job_or_career_posts_rejected": 0,
-  "raw_candidates": 168,
-  "candidate_clusters": 40,
+  "last_run_at": "2026-10-09T10:23:48.218975Z",
+  "raw_candidates_before_job_filter": 175,
+  "job_or_career_posts_rejected": 1,
+  "raw_candidates": 174,
+  "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 68,
-    "resolved": 60,
-    "text_recovered": 28,
+    "wrappers": 59,
+    "resolved": 52,
+    "text_recovered": 35,
     "reattributed": 6,
-    "images_found": 29
+    "images_found": 35
   },
-  "duplicates_merged": 128,
+  "duplicates_merged": 135,
   "attempted_rewrites": 8,
-  "new_articles": 5,
-  "live_articles": 47,
-  "skipped": 3,
+  "new_articles": 4,
+  "live_articles": 46,
+  "skipped": 4,
   "rewrite_skip_reasons": {
+    "editorial gate: REJECTED_NON_LOCAL": 2,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "editorial gate: REJECTED_NON_NEWS": 1,
-    "editorial gate: REJECTED_NON_LOCAL": 1
+    "editorial gate: REJECTED_NON_NEWS": 1
   },
   "rewrite_skips_unattributed": 0,
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 189 body words using only facts already present in the sources; the draft currently has 179.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 149,
-    "website_discovery": 0,
+    "rss_and_google_news": 148,
+    "website_discovery": 7,
     "aggregator_discovery": 0,
-    "live_service_pages": 15,
+    "live_service_pages": 16,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -39,8 +41,8 @@
   "source_counts": {
     "Roch Valley Radio": 67,
     "Manchester Evening News": 18,
-    "Rochdale Times": 15,
-    "Northern live service updates": 11,
+    "Rochdale Times": 18,
+    "Northern live service updates": 12,
     "About Manchester": 7,
     "Facebook": 5,
     "InYourArea": 5,
@@ -50,6 +52,7 @@
     "The Guardian": 3,
     "London Now": 3,
     "Yahoo News Australia": 3,
+    "Rochdale Valiant": 3,
     "Ofsted": 3,
     "Id": 2,
     "Betfred Insights": 2,
@@ -57,7 +60,6 @@
     "BBC Manchester": 1,
     "Aol": 1,
     "Xyz": 1,
-    "TNT Sports": 1,
     "Yahoo": 1,
     "Squawka": 1,
     "Transfermarkt": 1,
@@ -86,7 +88,7 @@
     "politics": 2,
     "sport": 3,
     "traffic": 2,
-    "transport": 2
+    "transport": 1
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -113,7 +115,7 @@
   "selected_story_keys": [
     "hard-news-v3-d54cc9d795e3135e9ca6",
     "transport-v3-274ef74afb04db621f29",
-    "transport-v3-348afe252268889ddb73",
+    "transport-v3-1225f2b95b69d8e1c77a",
     "hard-news-v3-a0c8b0f54113daf10fd9",
     "education-v3-bab18c3cbc1ee45972d5",
     "business-v3-7e179f688e6134d345cc",
@@ -123,7 +125,7 @@
   "selected_candidate_urls": [
     "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/man-arrested-and-investigation-underway-following-incident-in-rochdale/",
     "https://www.rochvalleyradio.com/news-features/139/news/903/rspca-appeals-after-french-bulldog-found-dead-in-chadderton-canal",
-    "https://www.northernrailway.co.uk/service-updates#live-489be52eebbb2a8b3e",
+    "https://www.northernrailway.co.uk/service-updates#live-d584acc056f0ead501",
     "https://www.rochdaletimes.co.uk/council-urged-to-call-time-on-rules-which-stop-former-pubs-reopening/",
     "https://reports.ofsted.gov.uk/provider/21/105768",
     "https://www.theguardian.com/business/2026/oct/08/wrexham-rochdale-train-services-rejected-west-coast-line-blackpool-london",
@@ -817,7 +819,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 28,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1326529023?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
     "https://c.newsnow.co.uk/A/1326598383?-57568:46921",
     "https://c.newsnow.co.uk/A/1326527770?-57568:46921",
     "https://c.newsnow.co.uk/A/1326524098?-57568:46921",
@@ -836,19 +838,23 @@
     "https://c.newsnow.co.uk/A/1326336191?-57568:46921",
     "https://c.newsnow.co.uk/A/1326308179?-57568:46921",
     "https://c.newsnow.co.uk/A/1326284194?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326525501?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326132458?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326529023?-57568:46921",
     "https://c.newsnow.co.uk/A/1326537176?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326387972?-57568:46921",
     "https://c.newsnow.co.uk/A/1326605372?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326525501?-57568:46921",
     "https://c.newsnow.co.uk/A/1326546872?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326387972?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326132458?-57568:46921",
     "https://www.linkedin.com/company/groundnews",
     "https://news.google.com/rss/articles/CBMiowFBVV95cUxQSFl3Y1M0NFUyMXlFRThrOEtEbkNmbTVPc0RBYjVlcXRFOHc4Y0oxYjVSNmRydGJKb2VzWVFOOEU5ejM5dDRITU5wQ0JERC1UbkxaVnNwZ2F1U19WcVV1WGo0Vk1CYklhNlNBZ1JiR2ZDMUxFemJxRGFIYWxHWlZReTVqS2lKbS04QTIyUDFuM1NRSVVqRVJqUEwwVXBVblBIMFI4?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "publicaccess.rochdale.gov.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "publicaccess.rochdale.gov.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -882,7 +888,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-09T10:14:54.146612Z",
+  "frontpage_generated_at": "2026-10-09T10:25:15.696075Z",
   "frontpage_article_count": 37,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -975,7 +981,7 @@
       "hopwood": 1,
       "littleborough": 1,
       "middleton": 1,
-      "rochdale": 22,
+      "rochdale": 21,
       "syke": 2
     },
     "selected_by_source": {
@@ -1012,15 +1018,15 @@
       "about manchester": 1,
       "ministry of housing, communities & local government": 1
     },
-    "pool_size": 41,
-    "primary_pool_size": 41,
+    "pool_size": 40,
+    "primary_pool_size": 40,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 37,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 32,
     "fresh_under_homepage_window": 35,
-    "short_briefs_selected": 20,
+    "short_briefs_selected": 19,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
