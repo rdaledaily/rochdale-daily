@@ -19,30 +19,40 @@ def recent(value):
     except (TypeError,ValueError):
         return False
 
-def enrich(rows, capture=prepare):
+def enrich(rows, capture=prepare, reviewer=verify):
+    """Capture once, but retry unverified claims against already captured text.
+
+    The previous implementation skipped every article with evidence_sources,
+    leaving an unverified draft permanently unable to publish on subsequent runs.
+    """
     updated=0
     for row in rows:
         if not isinstance(row,dict) or row.get("manual_article") or row.get("sponsored"):
             continue
         if not (recent(row.get("first_published_at") or row.get("published_at")) and recent(row.get("ingested_at"))):
             continue
-        if row.get("evidence_sources") or not is_primary(row.get("source_url")):
+        if row.get("primary_source_verified") and not evidence_issues(row):
             continue
-        try:
-            captured=capture(row)
-            row["evidence_sources"]=captured["evidence_sources"]
-            row["evidence_candidates"]=captured["evidence_candidates"]
-            verdict=verify(row)
-            row["verification_reasons"]=verdict.get("reasons",[])
-            if verdict.get("approved"):
-                row["verified_claims"]=[{"claim":c["claim"],"source_url":c["source_url"],"supporting_excerpt":c["supporting_excerpt"]} for c in verdict["claims"]]
-                row["primary_source_verified"]=True
-            else:
-                row["primary_source_verified"]=False
-            updated+=1
-        except Exception as exc:
-            # Fail closed later; do not expose arbitrary source response data.
-            row["evidence_capture_error"]=type(exc).__name__
+        if not row.get("evidence_sources"):
+            if not is_primary(row.get("source_url")):
+                row["verification_reasons"]=["Original URL is not an approved primary source; editorial review required"]
+                continue
+            try:
+                captured=capture(row)
+                row["evidence_sources"]=captured["evidence_sources"]
+                row["evidence_candidates"]=captured.get("evidence_candidates",{})
+            except Exception as exc:
+                row["evidence_capture_error"]=type(exc).__name__
+                row["verification_reasons"]=["Primary source could not be captured"]
+                continue
+        verdict=reviewer(row)
+        row["verification_reasons"]=verdict.get("reasons",[])
+        if verdict.get("approved"):
+            row["verified_claims"]=[{"claim":c["claim"],"source_url":c["source_url"],"supporting_excerpt":c["supporting_excerpt"]} for c in verdict["claims"]]
+            row["primary_source_verified"]=True
+        else:
+            row["primary_source_verified"]=False
+        updated+=1
     return updated
 
 def main():
