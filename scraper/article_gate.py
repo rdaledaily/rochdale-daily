@@ -512,6 +512,19 @@ def normalise_article(
     if "police_matter" not in article:
         article["police_matter"] = False
 
+    # Forward-only editorial quality gate. Historical articles remain intact.
+    # Automated stories newly ingested after activation are held rather than
+    # published when conservative evidence checks identify a major issue.
+    if not article.get("sponsored") and not article.get("manual_article"):
+        from editorial_review import review_flags
+        activated = _parse_iso("2026-10-09T16:00:00Z")
+        ingested = _parse_iso(article.get("ingested_at"))
+        if ingested is not None and ingested >= activated:
+            flags = review_flags(article)
+            if flags:
+                notes.append(f"HELD '{ident}' for editorial review: {'; '.join(flags)}")
+                return None
+
     if expire_ongoing(article):
         notes.append(f"'{ident}': cleared stale ONGOING label")
 
