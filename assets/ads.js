@@ -175,6 +175,9 @@
       if (container.classList.contains("ad-live")) return;
       var slot = slotNameFor(container);
       if (!slot) return;
+      // Homepage top/bottom inventory is managed by the unified equal rotation.
+      // Avoid double-rendering and duplicate impression counts.
+      if ((slot === 'home-leaderboard' || slot === 'home-billboard') && document.querySelector('script[src*="banner-rotation.js"]')) return;
       var candidates = placements.filter(function (p) { return p.slot === slot; });
       if (!candidates.length) {
         // A slot marked optional takes no space when it is unsold. The page
