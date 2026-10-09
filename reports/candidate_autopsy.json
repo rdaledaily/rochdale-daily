@@ -1,42 +1,46 @@
 {
-  "examined_at": "2026-10-08T14:01:04.190877Z",
+  "examined_at": "2026-10-09T13:44:55.192656Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 96,
+  "candidates_examined": 116,
   "publish_age_gate_hours": 48,
   "first_blocking_gate": {
-    "age": 58,
-    "would publish": 27,
-    "duplicate of published story": 10,
-    "not local": 1
+    "age": 49,
+    "would publish": 38,
+    "duplicate of published story": 27,
+    "not local": 1,
+    "job or career post": 1
   },
-  "would_publish": 27,
+  "would_publish": 38,
   "age_gate_sensitivity": {
-    "6h": 2,
-    "14h": 6,
-    "24h": 18,
-    "48h": 38,
-    "72h": 68,
-    "168h": 96
+    "6h": 10,
+    "14h": 11,
+    "24h": 37,
+    "48h": 67,
+    "72h": 87,
+    "168h": 116
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 07/10/2026 at 11:39am Live Failsworth Tram Stop - Lifts out o",
-      "Rochdale Times: Police target crime gang’s ‘spider web of criminality’ - Rochdale Time"
+      "Manchester Evening News: Police issue update in Rochdale murder investigation after John , 56, ",
+      "InYourArea: What's On Rochdale: Stellar set from Liam Fender, a buzzing Bavarian O"
     ],
     "not local": [
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "duplicate of published story": [
-      "Roch Valley Radio: Deaf Rochdale engineer develops AI prototype to caption phone conversa",
-      "Manchester Evening News: Plan for trains between Rochdale and London Euston rejected by rail re",
-      "Roch Valley Radio: Middleton housing development shortlisted for two national awards"
+      "Rochdale Borough Council: On record: Rochdale’s new album celebrates town’s music history – Roch",
+      "Ofsted: Ofsted publishes inspection report for Greenbank Primary School",
+      "Ofsted: Ofsted publishes inspection report for Meadows School"
+    ],
+    "job or career post": [
+      "Rochdale Times: Friends realise dream with bridal boutique launch - Rochdale Times"
     ],
     "age": [
-      "Rochdale Times: Rugby club is making great strides to help good causes - Rochdale Time",
-      "Transfermarkt: Rochdale AFC U18 - Transfermarkt",
-      "Uk: publicaccess.rochdale.gov.uk"
+      "Roch Valley Radio: Prestwich Travel Hub to open this autumn with parking charges proposed",
+      "Rochdale Borough Council: Schools Forum Report Proposal for Investment of Central Schools Servic",
+      "Rochdale AFC: Dale Supporting Play Safe Campaign This Weekend - Rochdale AFC"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
