@@ -1,0 +1,28 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manage your banner | Rochdale Daily</title><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><style>body{background:#f5f8fa;font:16px/1.5 system-ui;color:#123447}main{max-width:680px;margin:30px auto;padding:28px;background:#fff;border-radius:10px}label{display:block;font-weight:700;margin-top:12px}input{box-sizing:border-box;width:100%;padding:10px;font:inherit}button{background:#0e7490;color:#fff;border:0;border-radius:5px;padding:12px 18px;margin-top:20px;cursor:pointer}small{color:#52606b}</style></head><body><main><a href="/">← Rochdale Daily</a><h1>Manage your banner</h1><p>Edit your top or bottom banner wording, background colour or logo. Changes are reviewed before publication.</p><p id="stats">Loading booking…</p><form id="edit" hidden>
+<label for="top">Top banner text (max 85)</label><input id="top" maxlength="85" required>
+<label for="bottom">Bottom banner text (max 125)</label><input id="bottom" maxlength="125" required>
+<label for="colour">Background colour</label><input id="colour" type="color" value="#103349">
+<label for="logo">Replace logo (optional, PNG/JPG/WebP up to 200 KB)</label><input id="logo" type="file" accept="image/png,image/jpeg,image/webp">
+<button type="submit">Save changes for review</button></form><p role="status" id="message"></p><small>For advertising enquiries: <a href="mailto:advertising@rochdaledaily.co.uk">advertising@rochdaledaily.co.uk</a></small></main>
+<script>
+(async()=>{
+const q=new URLSearchParams(location.search),id=q.get('id'),key=q.get('key');
+const msg=document.getElementById('message'),stats=document.getElementById('stats'),form=document.getElementById('edit');
+if(!id||!key){msg.textContent='Open your private edit link to manage your banner.';return;}
+try{
+const r=await fetch('/api/banner-claims?id='+encodeURIComponent(id)+'&key='+encodeURIComponent(key),{cache:'no-store'});
+const d=await r.json();if(!r.ok)throw Error(d.error||'Unable to load banner');
+document.getElementById('top').value=d.top;document.getElementById('bottom').value=d.bottom;document.getElementById('colour').value=d.colour||'#103349';form.hidden=false;
+const rr=await fetch('/api/banner-live?report=1&id='+encodeURIComponent(id)+'&key='+encodeURIComponent(key));const report=await rr.json();
+stats.textContent='Booking: '+d.month+' · Status: '+d.status+' · Impressions: '+(report.impressions||0)+' · Clicks: '+(report.clicks||0)+' · CTR: '+(report.ctr||0)+'% (approximate; not unique visitors)';
+}catch(e){stats.textContent='';msg.textContent=e.message;return}
+form.addEventListener('submit',async e=>{
+e.preventDefault();msg.textContent='Saving…';
+const f=document.getElementById('logo').files[0];let logo='';
+if(f){if(f.size>200000||!['image/png','image/jpeg','image/webp'].includes(f.type)){msg.textContent='Logo must be PNG/JPG/WebP and below 200 KB';return;}
+logo=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(f)})}
+const body={action:'edit',id,token:key,top:document.getElementById('top').value,bottom:document.getElementById('bottom').value,colour:document.getElementById('colour').value};if(logo)body.logo=logo;
+try{const r=await fetch('/api/banner-claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw Error(d.error);msg.textContent=d.message+' Refresh to check booking status.'}catch(err){msg.textContent=err.message||'Update failed'}
+});
+})();
+</script></body></html>
