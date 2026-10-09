@@ -23,6 +23,45 @@
 
   window.rdCookieConsent = function () { return read() === ACCEPTED; };
 
+  /* Google Analytics 4. Loaded only after a reader chooses "Accept optional",
+     never before: privacy.html promises that nothing optional is set until
+     then, and UK rules (PECR) require consent for analytics cookies. A reader
+     who has not chosen, or chose "Essential only", sends nothing to Google --
+     the script is not even requested. */
+  var GA_ID = "G-RFMB1JYN6T";
+  var analyticsLoaded = false;
+
+  function loadAnalytics() {
+    if (analyticsLoaded) return;
+    analyticsLoaded = true;
+    window["ga-disable-" + GA_ID] = false;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", GA_ID);
+    var script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+    script.setAttribute("data-rd-analytics", GA_ID);
+    document.head.appendChild(script);
+  }
+
+  /* Withdrawing consent must take effect at once, not on the next visit: stop
+     any further hits on this page and remove the cookies Analytics set. */
+  function stopAnalytics() {
+    window["ga-disable-" + GA_ID] = true;
+    var host = window.location.hostname;
+    var domains = ["", host, "." + host, "." + host.replace(/^www\./, "")];
+    document.cookie.split(";").forEach(function (pair) {
+      var name = pair.split("=")[0].trim();
+      if (name !== "_ga" && name.indexOf("_ga_") !== 0) return;
+      domains.forEach(function (domain) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/" +
+          (domain ? "; domain=" + domain : "");
+      });
+    });
+  }
+
   function build() {
     var existing = document.getElementById("cookie-banner");
     if (existing) return existing;
@@ -147,6 +186,8 @@
 
     function close(choice) {
       save(choice);
+      if (choice === ACCEPTED) loadAnalytics();
+      else stopAnalytics();
       banner.classList.remove("show");
       var link = document.getElementById("cookie-settings-link");
       if (link) link.focus();
@@ -166,6 +207,7 @@
     links.forEach(function (link) { link.addEventListener("click", open); });
 
     if (!read()) banner.classList.add("show");
+    if (read() === ACCEPTED) loadAnalytics();
     loadHomepageEnhancements();
   }
 
