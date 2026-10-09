@@ -96,6 +96,13 @@ jobs:
             python scraper/generate_rss.py
             python scraper/generate_image_sitemap.py
 
+            # Regenerated pages come out without the universal theme stamp. The
+            # news lanes add it in their final step; this rebuild did not, so on
+            # 9 October 2026 it committed 78 article pages without the stamp and
+            # the pipeline tests failed on the next push until a news lane ran.
+            python scraper/normalise_public_theme.py
+            python scraper/normalise_public_theme.py --check
+
             git add -A
             git commit -m "Audit story classifications and image integrity"
 
