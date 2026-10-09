@@ -1,25 +1,25 @@
 {
-  "last_run_at": "2026-10-09T12:08:55.266196Z",
-  "raw_candidates_before_job_filter": 177,
-  "job_or_career_posts_rejected": 1,
-  "raw_candidates": 176,
+  "last_run_at": "2026-10-09T12:22:08.950891Z",
+  "raw_candidates_before_job_filter": 175,
+  "job_or_career_posts_rejected": 0,
+  "raw_candidates": 175,
   "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 54,
-    "resolved": 47,
-    "text_recovered": 35,
+    "wrappers": 62,
+    "resolved": 54,
+    "text_recovered": 28,
     "reattributed": 6,
-    "images_found": 36
+    "images_found": 29
   },
-  "duplicates_merged": 138,
-  "attempted_rewrites": 6,
-  "new_articles": 2,
+  "duplicates_merged": 137,
+  "attempted_rewrites": 3,
+  "new_articles": 0,
   "live_articles": 44,
-  "skipped": 4,
+  "skipped": 3,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
-    "editorial gate: REJECTED_NON_NEWS": 1
+    "editorial gate: REJECTED_NON_NEWS": 1,
+    "editorial gate: REJECTED_NON_LOCAL": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger": {
@@ -28,8 +28,8 @@
       "published": 2,
       "rejected": 4
     },
-    "held_back_this_run": 0,
-    "held_already_published": 0,
+    "held_back_this_run": 2,
+    "held_already_published": 2,
     "held_rejected": 0,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -39,9 +39,9 @@
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 155,
-    "website_discovery": 4,
+    "website_discovery": 3,
     "aggregator_discovery": 0,
-    "live_service_pages": 14,
+    "live_service_pages": 13,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -52,9 +52,9 @@
   "source_counts": {
     "Roch Valley Radio": 67,
     "Manchester Evening News": 20,
-    "Rochdale Times": 18,
+    "Rochdale Times": 15,
     "Rochdale Borough Council": 13,
-    "Northern live service updates": 10,
+    "Northern live service updates": 9,
     "Facebook": 5,
     "InYourArea": 5,
     "Bee Network live travel alerts": 4,
@@ -63,6 +63,7 @@
     "The Guardian": 3,
     "London Now": 3,
     "Yahoo News Australia": 3,
+    "Rochdale Valiant": 3,
     "Ofsted": 3,
     "Id": 2,
     "Betfred Insights": 2,
@@ -79,12 +80,9 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1,
     "environment": 1,
     "health": 1,
-    "politics": 1,
-    "traffic": 1,
-    "transport": 1
+    "traffic": 1
   },
   "published_by_category": {
     "business": 6,
@@ -122,18 +120,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-543f1f12c7256bf021a4",
     "transport-v3-274ef74afb04db621f29",
-    "transport-v3-a40df113a16a8e6c0db9",
-    "community-v3-30f8576c9a4149d51790",
     "health-v3-6730d68fcf2d21f5ae31",
     "environment-v3-0c43437533748d001a11"
   ],
   "selected_candidate_urls": [
-    "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/man-arrested-and-investigation-underway-following-incident-in-rochdale/",
     "https://www.rochvalleyradio.com/news-features/139/news/903/rspca-appeals-after-french-bulldog-found-dead-in-chadderton-canal",
-    "https://www.northernrailway.co.uk/service-updates#live-e48b4667c1e52030fa",
-    "https://www.rochdale.gov.uk/news/article/682/on-record-rochdale-s-new-album-celebrates-town-s-music-history",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.rochdale.gov.uk/events/event/1492/a-christmas-celebration-with-the-brighouse-and-rastrick-band"
   ],
@@ -147,52 +139,37 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime",
       "environment",
       "health",
-      "politics",
-      "traffic",
-      "transport"
+      "traffic"
     ],
     "selected_categories": [
-      "crime",
       "environment",
       "health",
-      "politics",
-      "traffic",
-      "transport"
+      "traffic"
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [
-      "smithy_bridge"
-    ],
+    "available_areas": [],
     "selected_areas": [
-      "rochdale",
-      "smithy_bridge"
+      "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1,
       "environment": 1,
       "health": 1,
-      "politics": 1,
-      "traffic": 1,
-      "transport": 1
+      "traffic": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 5,
-      "smithy_bridge": 1
+      "rochdale": 3
     },
     "selected_by_source": {
       "food standards agency": 1,
-      "greater manchester police": 1,
-      "northern live service updates": 1,
       "roch valley radio": 1,
-      "rochdale borough council": 2
+      "rochdale borough council": 1
     }
   },
   "official_ward_count": 20,
@@ -815,7 +792,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1326613041?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326537176?-57568:46921",
     "https://c.newsnow.co.uk/A/1326605372?-57568:46921",
     "https://c.newsnow.co.uk/A/1326598383?-57568:46921",
     "https://c.newsnow.co.uk/A/1326527770?-57568:46921",
@@ -834,18 +811,22 @@
     "https://c.newsnow.co.uk/A/1326387971?-57568:46921",
     "https://c.newsnow.co.uk/A/1326336191?-57568:46921",
     "https://c.newsnow.co.uk/A/1326308179?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326537176?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326525501?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326546872?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326613041?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326132458?-57568:46921",
     "https://c.newsnow.co.uk/A/1326529023?-57568:46921",
     "https://c.newsnow.co.uk/A/1326387972?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326525501?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326546872?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326132458?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "investinrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "investinrochdale.co.uk": 8
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -879,7 +860,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-09T12:11:51.983883Z",
+  "frontpage_generated_at": "2026-10-09T12:24:45.419693Z",
   "frontpage_article_count": 37,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
