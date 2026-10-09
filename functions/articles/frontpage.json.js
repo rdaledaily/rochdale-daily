@@ -171,6 +171,27 @@ async function loadBreaking(env, requestUrl, now) {
   }
 }
 
+// Paid-for advertisement features are published as articles, and this feed is
+// ordered newest-first, so a freshly published one would otherwise sit among
+// the top stories. The homepage draws its lead, top stories and latest panel
+// from the first nine entries: sponsored pieces are held below that line. They
+// stay in the feed, in order, from position ten onwards.
+const SPONSORED_FLOOR = 9;
+
+function demoteSponsored(list, floor) {
+  const top = [];
+  const held = [];
+  const rest = [];
+  for (const article of list) {
+    if (top.length < floor) {
+      (article && article.sponsored === true ? held : top).push(article);
+    } else {
+      rest.push(article);
+    }
+  }
+  return [...top, ...held, ...rest];
+}
+
 function storyTime(article) {
   const value = article?.first_published_at || article?.published_at || article?.last_updated_at || '';
   const parsed = Date.parse(value);
@@ -215,6 +236,7 @@ export async function onRequest(context) {
   const blocklist = await loadBlocklist(env, request.url);
   let articles = data.articles.filter(a => a && a.id !== 'feel-good-festival-2026-live' && !isBlocked(a, blocklist));
   articles.sort((a, b) => storyTime(b) - storyTime(a));
+  articles = demoteSponsored(articles, SPONSORED_FLOOR);
 
   // Breaking entries go above the sorted feed but below a running live blog.
   // The blocklist applies to them too: a story you have taken down must not
