@@ -48,7 +48,7 @@ const AREA_LABELS = {
   deeplish:"Deeplish"
 };
 function earnedBadge(area) {
-  const label=AREA_LABELS[String(area||"").replace(/_/g,"-")];
+  const label=AREA_LABELS[String(area||"").trim().toLowerCase().replace(/_/g,"-")];
   return label ? `${label}'s Most Informed` : "";
 }
 async function awardAreaBadge(kv, username, area) {
@@ -56,7 +56,7 @@ async function awardAreaBadge(kv, username, area) {
   if(!badge) return;
   const readKey=`reader:area:${username}:${area}`;
   const progress=(await kv.get(readKey,{type:"json"}))||{};
-  if (!Array.isArray(progress.slugs) || progress.slugs.length < 3 || Number(progress.likes||0) < 3) return;
+  if (!Array.isArray(progress.slugs) || new Set(progress.slugs).size < 3 || Number(progress.likes||0) < 3) return;
   const user=await kv.get(`user:${username}`,{type:"json"});
   if(!user) return;
   user.badges=Array.isArray(user.badges)?user.badges:[];
