@@ -197,6 +197,8 @@ jobs:
         run: python scraper/enforce_cards_only_images.py --articles articles.json --check
       - name: SEO feed quality gate
         run: python scraper/seo_lint.py
+      - name: Reader loyalty UI/API contract smoke tests
+        run: python scraper/test_reader_loyalty_contract.py
       - name: Verify scraper imports cleanly
         run: |
           cd scraper
