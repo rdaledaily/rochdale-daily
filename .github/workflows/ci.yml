@@ -116,6 +116,7 @@ jobs:
             scraper/run_newsroom_policy.py \
             scraper/councillor_photos.py \
             scraper/food_hygiene.py \
+            scraper/primary_data.py \
             scraper/frontpage_pipeline.py \
             scraper/enforce_frontpage_freshness.py \
             scraper/merge_feeds.py \
@@ -179,6 +180,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_prune_dead_related_links.py
           PYTHONPATH=scraper python scraper/test_deterministic_draft_gate.py
           PYTHONPATH=scraper python scraper/test_daily_briefing.py
+          PYTHONPATH=scraper python scraper/test_primary_data.py
           PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
           python scraper/test_ensure_article_images.py
           python scraper/test_councillor_photos.py
