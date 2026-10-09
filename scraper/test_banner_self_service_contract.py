@@ -17,7 +17,8 @@ class BannerContracts(unittest.TestCase):
         self.assertIn("action:'edit'",self.manage)
         self.assertIn("tokenHash",self.intake)
     def test_equal_rotation_and_ten_slots(self):
-        self.assertIn("const MAX=8",self.intake)
+        # Verify the enforced eight-slot cap, not an obsolete variable name.
+        self.assertGreaterEqual(self.intake.count("length>=8"), 2)
         self.assertIn('Math.floor(Math.random()*pool.length)',self.rotation)
         self.assertIn("banner-rotation.js",self.home)
     def test_tracking_is_per_ad(self):
