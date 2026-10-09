@@ -21,6 +21,8 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from ensure_manual_frontpage import demote_sponsored
+
 FRONTPAGE = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
 ARTICLES = Path(os.getenv("ARTICLES_JSON", "articles.json"))
 FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
@@ -359,12 +361,21 @@ def main() -> None:
     ordered = fresh_pins + fresh_substantive + recent_live + fresh_utility + stale_pins
     ordered = ordered[:FRONTPAGE_TARGET]
 
+    # A paid-for advertisement feature is always newly published, so it sorts
+    # to the top of the fresh stories. Hold it below the top-story positions
+    # here, before the top-three rule runs, or it fills those slots, counts as
+    # the recent story, and is then moved down by the manual front-page guard,
+    # leaving no recent news in the top three at all.
+    ordered = demote_sponsored(ordered)
+
     # The health check requires a genuinely recent story in the first three
     # whenever one is available. Older editor pins and stories refreshed by a
     # scrape can otherwise occupy all three slots despite a newer publication.
     top_cutoff = now - timedelta(hours=int(os.getenv("SCRAPER_HEALTH_TOP_FRESH_HOURS", "6")))
 
     def top_fresh(article: dict[str, Any]) -> bool:
+        if article.get("sponsored") is True:
+            return False
         return bool(
             (first_published(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_cutoff
             or is_recent_live_update(article, top_cutoff)

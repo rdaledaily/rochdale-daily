@@ -172,5 +172,46 @@ class RestoredOlderStoriesStayBelowTheTopThree(unittest.TestCase):
         self.assertGreaterEqual(slugs.index("ad-new"), 9)
 
 
+class FreshnessPassIgnoresSponsoredForTheTopThree(unittest.TestCase):
+    """Measured 9 October 2026, fast-lane runs #4684 to #4688, all failed.
+
+    The freshness pass sorted the newly published adverts into positions two
+    and three and accepted them as the recent story the top three needs. The
+    manual guard then moved them down, the top three held no recent news, and
+    the health check stopped every run that had a new story to publish.
+    """
+
+    def test_recent_news_is_promoted_and_adverts_stay_below_nine(self):
+        import enforce_frontpage_freshness as fresh
+
+        lead = story("lead", 20 * 60)
+        older = [story(f"older-{i}", 9 * 60 + i) for i in range(10)]
+        recent = story("recent-news", 9 * 60 + 30)
+        recent.update(live_story=True, is_ongoing=True, live_updates=[{
+            "timestamp": (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat().replace("+00:00", "Z"),
+            "text": "Update."}])
+        ads = [story(f"ad-{i}", 30 + i, sponsored=True) for i in range(3)]
+        for row in [lead, recent] + older:
+            row["category"] = "news"
+        feed = [lead] + older + [recent] + ads
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "articles").mkdir()
+            saved = (fresh.FRONTPAGE, fresh.ARTICLES)
+            fresh.FRONTPAGE = root / "articles" / "frontpage.json"
+            fresh.ARTICLES = root / "articles.json"
+            try:
+                fresh.ARTICLES.write_text(json.dumps(feed), encoding="utf-8")
+                fresh.FRONTPAGE.write_text(json.dumps({"articles": feed}), encoding="utf-8")
+                fresh.main()
+                rows = json.loads(fresh.FRONTPAGE.read_text(encoding="utf-8"))["articles"]
+            finally:
+                fresh.FRONTPAGE, fresh.ARTICLES = saved
+        slugs = [row["slug"] for row in rows]
+        self.assertFalse([s for s in slugs[:9] if s.startswith("ad-")], slugs[:9])
+        self.assertEqual(sorted(s for s in slugs if s.startswith("ad-")), ["ad-0", "ad-1", "ad-2"])
+        self.assertIn("recent-news", slugs[:3], slugs[:5])
+
+
 if __name__ == "__main__":
     unittest.main()
