@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 186,
-  "published_count": 186,
-  "category_change_count": 27,
-  "image_change_count": 24,
+  "article_count": 194,
+  "published_count": 194,
+  "category_change_count": 28,
+  "image_change_count": 22,
   "category_changes": [
+    {
+      "slug": "sponsored-the-physiotherapy-clinic-rochdale-bamford",
+      "title": "Sponsored: The Physiotherapy Clinic offers physiotherapy, Pilates and home visits in Rochdale",
+      "from": "business",
+      "to": "health",
+      "reason": "headline strongly identifies health"
+    },
     {
       "slug": "rbh-football-team-housing-association-charity-cup-2026",
       "title": "RBH football team takes part in Housing Association Charity Cup 2026",
@@ -198,14 +205,26 @@
   ],
   "image_changes": [
     {
-      "slug": "kenion-street-album-showcases-local-artists-on-national-radio",
-      "title": "Kenion Street Album Showcases Local Artists on National Radio",
-      "category": "news",
-      "reason": "cached/library image lacks canonical/source provenance",
+      "slug": "new-years-eve-with-the-j-ger-maestro",
+      "title": "New Years Eve with the Jäger Maestro",
+      "category": "events",
+      "reason": "weak filename image match score 8127; neutral card is safer",
       "before": {
-        "image_url": "assets/img/cards/kenion-street-album-showcases-local-artists-on-national-radio.jpg",
-        "img": "assets/img/cards/kenion-street-album-showcases-local-artists-on-national-radio.jpg",
+        "image_url": "assets/img/cards/cricket.jpg",
+        "img": "assets/img/cards/cricket.jpg",
         "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/new-years-eve-with-the-j-ger-maestro-generated-card.jpg"
+    },
+    {
+      "slug": "kenion-street-album-showcases-local-artists-on-national-radio",
+      "title": "Rochdale's 'Kenion Street' Album Celebrates Local Music Heritage",
+      "category": "community",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/kenion-street-album-showcases-local-artists-on-national-radio.jpg",
+        "status": "source-photo-cached"
       },
       "after": "assets/img/cards/kenion-street-album-showcases-local-artists-on-national-radio-generated-card.jpg"
     },
@@ -292,42 +311,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/construction-begins-on-new-103-770-sq-ft-industrial-unit-at-birch-business-park-generated-card.jpg"
-    },
-    {
-      "slug": "high-court-trial-begins-over-ownership-of-hopwood-hall",
-      "title": "High Court Rules Against Hopwood DePree in Ownership Dispute Over Hopwood Hall",
-      "category": "education",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall.jpg",
-        "img": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-afc-to-support-play-safe-campaign-this-weekend",
-      "title": "Rochdale AFC to Support Play Safe Campaign This Weekend",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-afc-to-support-play-safe-campaign-this-weekend-generated-card.jpg"
-    },
-    {
-      "slug": "new-years-eve-with-the-j-ger-maestros",
-      "title": "New Years Eve with the Jäger Maestros",
-      "category": "events",
-      "reason": "weak filename image match score 8127; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/cricket.jpg",
-        "img": "assets/img/cards/cricket.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/new-years-eve-with-the-j-ger-maestros-generated-card.jpg"
     },
     {
       "slug": "littleborough-cricket-club-bonfire-2026",
