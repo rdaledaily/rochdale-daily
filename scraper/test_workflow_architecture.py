@@ -81,6 +81,19 @@ def main() -> int:
         assert 'USE_SOURCE_IMAGES: "true"' in text(name), name
         assert "python scraper/run_newsroom_policy.py" in text(name), name
 
+    # Every workflow that regenerates article pages and pushes them must apply
+    # the universal theme first, either itself or through the shared publish
+    # script. The integrity audit did neither and committed 78 unstamped pages
+    # on 9 October 2026, failing the theme check for every later push.
+    for workflow in sorted(WORKFLOWS.glob("*.yml")):
+        body = workflow.read_text(encoding="utf-8")
+        regenerates = "generate_newspaper_pages.py" in body or "generate_pages.py" in body
+        pushes = "git push" in body or "publish_newsroom_snapshot.sh" in body
+        if regenerates and pushes:
+            assert (
+                "normalise_public_theme.py" in body or "publish_newsroom_snapshot.sh" in body
+            ), f"{workflow.name} regenerates pages and pushes without normalising the theme"
+
     print("Workflow architecture checks passed.")
     return 0
 
