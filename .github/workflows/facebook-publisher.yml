@@ -7,6 +7,7 @@ on:
   # Automatic posting paused: the Facebook Page access token expired on 13 Aug 2026.
   # Re-enable the ten-minute schedule only after a successful authenticated test.
   # Token-renewal test: single publish attempt; schedule remains disabled.
+  # Diagnostic follow-up: capture Meta error code without displaying secrets.
   push:
     branches: [main]
     paths:
