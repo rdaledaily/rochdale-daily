@@ -208,7 +208,14 @@ def graph_post(page_id: str, token: str, message: str, link: str, version: str) 
         raw = exc.read().decode("utf-8", errors="replace")
         try:
             detail = json.loads(raw)
-            message_text = detail.get("error", {}).get("message") or f"HTTP {exc.code}"
+            error_detail = detail.get("error", {})
+            message_text = error_detail.get("message") or f"HTTP {exc.code}"
+            diagnostics = [f"HTTP {exc.code}", f"code={error_detail.get('code', 'unknown')}"]
+            if error_detail.get("error_subcode") is not None:
+                diagnostics.append(f"subcode={error_detail['error_subcode']}")
+            if error_detail.get("type"):
+                diagnostics.append(f"type={error_detail['type']}")
+            message_text += " (" + ", ".join(diagnostics) + ")"
         except json.JSONDecodeError:
             message_text = f"HTTP {exc.code}"
         raise RuntimeError(f"Facebook Graph API rejected the post: {message_text}") from exc
