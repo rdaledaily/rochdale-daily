@@ -517,11 +517,12 @@ def normalise_article(
     # published when conservative evidence checks identify a major issue.
     if not article.get("sponsored") and not article.get("manual_article"):
         from editorial_review import review_flags
+        from claim_evidence import evidence_issues
         activated = _parse_iso("2026-10-09T16:00:00Z")
         ingested = _parse_iso(article.get("ingested_at"))
         published = _parse_iso(article.get("first_published_at"))
         if ingested is not None and published is not None and ingested >= activated and published >= activated:
-            flags = review_flags(article)
+            flags = review_flags(article) + evidence_issues(article)
             if flags:
                 notes.append(f"REJECTED '{ident}' by forward editorial guard: {'; '.join(flags)}")
                 return None
