@@ -60,6 +60,7 @@ finalise_cards_policy() {
 rebuild_from_merged_feed() {
   python -m json.tool articles.json > /dev/null
   python scraper/frontpage_manual_publish.py
+  PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
   python scraper/article_gate.py articles.json
   python scraper/content_hygiene.py --fix
   python scraper/enforce_cards_only_images.py --articles articles.json
