@@ -41,9 +41,21 @@ FRONTPAGE = ROOT / "articles" / "frontpage.json"
 WEATHER = ROOT / "weather.json"
 
 SLOTS = {
-    # slot: (local hour it must run at, title, window start hour)
+    # slot: (local hour it is due from, title, window start hour)
     "morning": (9, "Morning Briefing", 18),   # since 6pm yesterday
 }
+
+# The briefing is due from 9am and is still worth publishing until noon. After
+# that a "morning" briefing would be wrong on its face, so it is skipped and the
+# miss is reported rather than published late.
+#
+# Measured 9 October 2026: GitHub started all 34 of this workflow's scheduled
+# runs between 12:04 and 19:27 UTC, never at the 08:00/09:00 UTC asked for. The
+# old gate required the local hour to be exactly 9, so every run exited with
+# "nothing to do" and no Morning Briefing was ever published. The fast news lane
+# now starts this workflow itself once the briefing is due (see scrape-fast.yml),
+# because that lane really does run all morning.
+LATEST_LOCAL_HOUR = 12
 
 CARD_CANDIDATES = [
     "assets/img/cards/rochdale-town-hall.jpg",
@@ -180,6 +192,8 @@ def build(slot: str, now_local: datetime):
         story for story in as_list(load(ARTICLES, []))
         if str(story.get("status") or "published") == "published"
         and not str(story.get("id") or "").startswith("briefing-")
+        # A paid-for advertisement feature is not one of the day's stories.
+        and story.get("sponsored") is not True
     ]
     fresh = []
     for story in published:
@@ -264,6 +278,15 @@ def already_published(slug: str) -> bool:
     return bool(list(ROOT.glob(f"pending_manual_briefing_{slug}.json")))
 
 
+def is_due(slot: str, now_local: datetime) -> bool:
+    """True from the slot's hour until LATEST_LOCAL_HOUR, London time."""
+    return SLOTS[slot][0] <= now_local.hour < LATEST_LOCAL_HOUR
+
+
+def todays_slug(slot: str, now_local: datetime) -> str:
+    return slugify(f"{SLOTS[slot][1]}-{now_local.strftime('%-d-%B-%Y')}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -274,21 +297,33 @@ def main() -> None:
         "--force", action="store_true",
         help="Build even if it is not the scheduled local hour (for testing or a manual run).",
     )
+    parser.add_argument(
+        "--check-due", action="store_true",
+        help="Write nothing. Exit 0 if today's briefing is due and not yet published, 3 otherwise.",
+    )
     args = parser.parse_args()
 
     now_local = datetime.now(timezone.utc).astimezone(LONDON)
+    if args.check_due:
+        slot = "morning" if args.slot == "auto" else args.slot
+        if not is_due(slot, now_local):
+            print(f"Briefing not due (London {now_local:%H:%M}; due {SLOTS[slot][0]:02d}:00 to {LATEST_LOCAL_HOUR:02d}:00).")
+            raise SystemExit(3)
+        if already_published(todays_slug(slot, now_local)):
+            print("Today's briefing is already published or queued.")
+            raise SystemExit(3)
+        print(f"Today's briefing is due and not yet published (London {now_local:%H:%M}).")
+        return
     if args.slot == "auto":
         args.slot = "morning"
         args.force = True
         print(f"auto: building the morning briefing for {now_local:%A %d %B}")
-    wanted_hour = SLOTS[args.slot][0]
-
-    # GitHub cron only speaks UTC, so the workflow fires on both candidate hours
-    # and this gate keeps the briefing at 9am LOCAL through BST and GMT alike.
-    if not args.force and now_local.hour != wanted_hour:
+    # GitHub cron only speaks UTC and starts late, so the gate is a window in
+    # LOCAL time, not one exact hour: 9am to noon through BST and GMT alike.
+    if not args.force and not is_due(args.slot, now_local):
         print(
             f"Not the {args.slot} slot in Europe/London "
-            f"(local hour {now_local.hour}, want {wanted_hour}); nothing to do."
+            f"(local {now_local:%H:%M}, due {SLOTS[args.slot][0]:02d}:00 to {LATEST_LOCAL_HOUR:02d}:00); nothing to do."
         )
         return
 

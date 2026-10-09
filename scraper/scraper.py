@@ -2498,6 +2498,10 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         category_evidence,
         draft_category or candidate.category or 'news',
     )
+    if deterministic and candidate.category in PUBLISHED_CATEGORIES:
+        # The collector knows what its own structured data is. Scoring the
+        # roundup's vocabulary ("food businesses") filed it under business.
+        category = candidate.category
     area = str(draft.get('area') or candidate.area)
     if category not in PUBLISHED_CATEGORIES:
         category = 'news'
@@ -2538,7 +2542,17 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'excerpt': excerpt,
         'paragraphs': paragraphs,
     }
-    final_issues = draft_quality_issues(final_draft, source_text, candidate)
+    # The quality gate checks a MODEL's rewrite against its sources: years the
+    # sources never mention, passages copied word for word, facts dropped. A
+    # deterministic draft was never rewritten. Its prose is the published FSA
+    # record, so every one of those checks misfires on it: the inspection dates
+    # are "unsupported years" because the candidate carries only a 900-character
+    # summary as source text, and the summary itself is a "verbatim passage".
+    # Measured 9 October 2026: the October roundup (65 businesses) was rejected
+    # three times for "unsupported calendar year(s) 2025" and then held for the
+    # month. Its correctness is guarded where it is generated, in
+    # food_hygiene.py and test_food_hygiene.py, not here.
+    final_issues = [] if deterministic else draft_quality_issues(final_draft, source_text, candidate)
     if final_issues:
         # Integrity failures still spike the story. House-style failures no
         # longer do: this second gate was binning drafts the repair loop had
