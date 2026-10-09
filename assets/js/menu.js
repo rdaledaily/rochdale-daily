@@ -58,6 +58,7 @@
       });
     }catch(_){}
   }
+  window.RochdaleDailyChime = () => { if (enabled) chime(); };
   button.addEventListener('click',()=>{
     enabled=!enabled;
     try{localStorage.setItem('rd_welcome_sound',enabled?'yes':'no');}catch(_){}
