@@ -4,8 +4,8 @@ name: Post Rochdale Daily article to Facebook
 # secrets can be used without exposing them locally.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/10 * * * *"
+  # Automatic posting paused: the Facebook Page access token expired on 13 Aug 2026.
+  # Re-enable the ten-minute schedule only after a successful authenticated test.
   push:
     branches: [main]
     paths:
