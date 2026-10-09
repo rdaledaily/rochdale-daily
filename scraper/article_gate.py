@@ -524,7 +524,12 @@ def normalise_article(
         if ingested is not None and published is not None and ingested >= activated and published >= activated:
             flags = review_flags(article) + evidence_issues(article)
             if flags:
-                notes.append(f"REJECTED '{ident}' by forward editorial guard: {'; '.join(flags)}")
+                from editorial_review_queue import record
+                try:
+                    location = record(article, flags)
+                    notes.append(f"REJECTED '{ident}' by forward editorial guard; review saved at {location}: {'; '.join(flags)}")
+                except OSError as exc:
+                    notes.append(f"REJECTED '{ident}' by forward editorial guard; review storage failed: {exc}")
                 return None
 
     if expire_ongoing(article):
