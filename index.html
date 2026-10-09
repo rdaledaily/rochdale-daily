@@ -4271,7 +4271,7 @@ function shareIconMarkup(action, label) {
       decorateCommentCounts();
 
       root.innerHTML = `<h2>Comments (${comments.length})</h2>
-        <p class="comments-note">Comments are published straight away. Be civil, stick to the story, and remember real people live here.</p>
+        <p class="comments-note"><strong>Have your say:</strong> What should your neighbours know? Add your experience, ask a question or respond to another reader. Comments are published immediately; be civil and avoid unverified allegations.</p>
         <div id="comment-compose"></div>
         <div id="comment-list">${comments.map(commentMarkup).join("") ||
           `<p class="comments-note">No comments yet. Be the first.</p>`}</div>`;
@@ -4293,7 +4293,7 @@ function shareIconMarkup(action, label) {
           <span class="upvote-count">${c.likeCount}</span>
         </button>
         <div class="comment-main">
-          <div class="comment-user">${escapeHtml(c.username)}<span class="comment-time">${commentAgo(c.postedAt)}</span></div>
+          <div class="comment-user">${escapeHtml(c.username)}<span class="comment-time">${commentAgo(c.postedAt)}</span>${Array.isArray(c.badges)?c.badges.map(b=>`<span class="rd-area-badge" title="Earned through local contributions">${escapeHtml(b)}</span>`).join(""):""}</div>
           <p class="comment-body">${escapeHtml(c.body)}</p>
           <div class="comment-actions"><button class="comment-report" data-report="${escapeHtml(c.id)}">Report</button></div>
         </div>
@@ -5014,5 +5014,7 @@ function shareIconMarkup(action, label) {
     })();
   </script>
   <script defer src="/assets/js/river.js"></script>
+<style>.rd-area-badge{display:inline-block;margin:3px 6px;padding:3px 7px;border-radius:12px;background:#e7f4fd;color:#135778;font:700 11px system-ui;text-transform:none}</style>
+<script src="/assets/js/menu.js" defer></script>
 </body>
 </html>
