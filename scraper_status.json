@@ -1,36 +1,36 @@
 {
-  "last_run_at": "2026-10-09T06:54:58.751169Z",
-  "raw_candidates_before_job_filter": 150,
+  "last_run_at": "2026-10-09T07:08:39.845590Z",
+  "raw_candidates_before_job_filter": 154,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 149,
+  "raw_candidates": 153,
   "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 56,
-    "resolved": 50,
-    "text_recovered": 32,
+    "wrappers": 57,
+    "resolved": 51,
+    "text_recovered": 33,
     "reattributed": 5,
-    "images_found": 32
+    "images_found": 33
   },
-  "duplicates_merged": 108,
-  "attempted_rewrites": 9,
-  "new_articles": 5,
+  "duplicates_merged": 112,
+  "attempted_rewrites": 7,
+  "new_articles": 4,
   "live_articles": 44,
-  "skipped": 4,
+  "skipped": 3,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 3,
+    "editorial gate: REJECTED_NON_LOCAL": 2,
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 148.": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 134,
+    "rss_and_google_news": 136,
     "website_discovery": 6,
     "aggregator_discovery": 0,
-    "live_service_pages": 6,
+    "live_service_pages": 8,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -40,17 +40,18 @@
   "collector_errors": {},
   "source_counts": {
     "Roch Valley Radio": 58,
+    "Manchester Evening News": 17,
     "Rochdale Times": 17,
-    "Manchester Evening News": 16,
     "About Manchester": 7,
     "Facebook": 5,
+    "Rochdale Borough Council": 5,
     "Bee Network live travel alerts": 5,
-    "Rochdale Borough Council": 4,
     "Oldham Times": 3,
     "The Guardian": 3,
     "London Now": 3,
     "Yahoo News Australia": 3,
     "InYourArea": 3,
+    "Northern live service updates": 3,
     "Ofsted": 3,
     "BBC Manchester": 2,
     "Id": 2,
@@ -63,7 +64,6 @@
     "Yahoo": 1,
     "Transfermarkt": 1,
     "Fansnetwork": 1,
-    "Northern live service updates": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -72,8 +72,7 @@
     "environment": 1,
     "health": 1,
     "news": 1,
-    "traffic": 1,
-    "transport": 2
+    "transport": 1
   },
   "published_by_category": {
     "business": 8,
@@ -112,24 +111,20 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-d54cc9d795e3135e9ca6",
-    "transport-v3-db4ba38e35188503b514",
     "transport-v3-348afe252268889ddb73",
     "business-v3-7e179f688e6134d345cc",
     "health-v3-6730d68fcf2d21f5ae31",
     "environment-v3-41b70a5743a1b4581dd6",
     "hard-news-v3-59f37ac96792e9a33ff5",
-    "transport-v3-0b7bafd3da7fffd60add",
     "business-v3-062171e1c4b12204d1ac"
   ],
   "selected_candidate_urls": [
     "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/man-arrested-and-investigation-underway-following-incident-in-rochdale/",
-    "https://www.rochvalleyradio.com/news-features/4/crime/841/tributes-have-been-paid-to-a-man-named-locally-as-john-mcgarry-following-a-death-in-kirkholt-that-prompted-a-murder-inve",
     "https://www.northernrailway.co.uk/service-updates#live-489be52eebbb2a8b3e",
     "https://www.theguardian.com/business/2026/oct/08/wrexham-rochdale-train-services-rejected-west-coast-line-blackpool-london",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.rochdale.gov.uk/directory-record/2587/constantine-road-roadworks-in-rochdale-from-9-october-2026",
     "https://aboutmanchester.co.uk/on-record-rochdales-new-album-celebrates-towns-music-history/",
-    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-f87d6c83022aa2ad86",
     "https://www.rochvalleyradio.com/news-features/3/politics/859/bury-north-mp-visits-award-winning-site-manager-at-walmersley-housing-development"
   ],
   "x_social_records": 0,
@@ -147,7 +142,6 @@
       "environment",
       "health",
       "news",
-      "traffic",
       "transport"
     ],
     "selected_categories": [
@@ -156,7 +150,6 @@
       "environment",
       "health",
       "news",
-      "traffic",
       "transport"
     ],
     "available_wards": [],
@@ -177,21 +170,19 @@
       "environment": 1,
       "health": 1,
       "news": 1,
-      "traffic": 1,
-      "transport": 2
+      "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 8,
+      "rochdale": 6,
       "smithy_bridge": 1
     },
     "selected_by_source": {
       "about manchester": 1,
-      "bee network live travel alerts": 1,
       "food standards agency": 1,
       "greater manchester police": 1,
       "northern live service updates": 1,
-      "roch valley radio": 2,
+      "roch valley radio": 1,
       "rochdale borough council": 1,
       "the guardian": 1
     }
@@ -816,7 +807,8 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1326537176?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326524098?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
     "https://c.newsnow.co.uk/A/1326520535?-57568:46921",
     "https://c.newsnow.co.uk/A/1326520514?-57568:46921",
     "https://c.newsnow.co.uk/A/1326513797?-57568:46921",
@@ -836,10 +828,9 @@
     "https://c.newsnow.co.uk/A/1326272923?-57568:46921",
     "https://c.newsnow.co.uk/A/1326261833?-57568:46921",
     "https://c.newsnow.co.uk/A/1326527770?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326529023?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326537176?-57568:46921",
     "https://c.newsnow.co.uk/A/1326132458?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326524098?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326529023?-57568:46921",
     "https://c.newsnow.co.uk/A/1326525501?-57568:46921",
     "https://c.newsnow.co.uk/A/1326546872?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
@@ -880,7 +871,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-09T06:57:37.076731Z",
+  "frontpage_generated_at": "2026-10-09T07:11:16.094059Z",
   "frontpage_article_count": 35,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
