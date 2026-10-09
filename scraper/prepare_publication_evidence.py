@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from claim_evidence import is_primary, evidence_issues
 from source_evidence_capture import prepare
+from independent_fact_review import verify
 
 CUTOFF=datetime.fromisoformat("2026-10-09T16:00:00+00:00")
 def recent(value):
@@ -31,7 +32,13 @@ def enrich(rows, capture=prepare):
             captured=capture(row)
             row["evidence_sources"]=captured["evidence_sources"]
             row["evidence_candidates"]=captured["evidence_candidates"]
-            row["primary_source_verified"]=False
+            verdict=verify(row)
+            row["verification_reasons"]=verdict.get("reasons",[])
+            if verdict.get("approved"):
+                row["verified_claims"]=[{"claim":c["claim"],"source_url":c["source_url"],"supporting_excerpt":c["supporting_excerpt"]} for c in verdict["claims"]]
+                row["primary_source_verified"]=True
+            else:
+                row["primary_source_verified"]=False
             updated+=1
         except Exception as exc:
             # Fail closed later; do not expose arbitrary source response data.
@@ -48,6 +55,6 @@ def main():
         temp=path.with_suffix(".json.evidence-tmp")
         temp.write_text(json.dumps(rows,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
         temp.replace(path)
-    print(f"Prepared source evidence for {count} recent articles; claims still require verification.")
+    print(f"Prepared and reviewed {count} recent articles; unverified articles fail closed.")
 
 if __name__=="__main__":main()
