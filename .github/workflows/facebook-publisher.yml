@@ -4,6 +4,11 @@ name: Post Rochdale Daily article to Facebook
 # secrets can be used without exposing them locally.
 on:
   workflow_dispatch:
+    inputs:
+      chain:
+        description: "Self-dispatch depth (leave at 0 for manual starts)"
+        required: false
+        default: "0"
   schedule:
     - cron: "*/10 * * * *"
   push:
@@ -13,19 +18,23 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 # Official Page publishing only: no likes, comments, follows, messages or
 # human-behaviour simulation. Newer runs supersede stale queued checks.
 concurrency:
   group: facebook-page-publisher
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   publish-one:
     if: github.event_name != 'push' || contains(github.event.head_commit.message, '[facebook-test]')
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
+      - name: Record publisher cycle start
+        run: date +%s > "$RUNNER_TEMP/facebook_cycle_start"
+
       - name: Check out current newspaper
         uses: actions/checkout@v4
         with:
@@ -115,3 +124,47 @@ jobs:
               print('Remaining queue:', d.get('remaining_unposted'))
           PY
           fi
+  
+      # GitHub's cron scheduler can delay or silently omit frequent runs. Keep
+      # an independent 10-minute chain alive; cron remains a recovery seed.
+      # The existing state branch, cooldown and queue filter prevent duplicates
+      # when cron and a self-dispatched run overlap.
+      - name: Schedule the next Facebook check
+        if: always()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHAIN_DEPTH: ${{ github.event.inputs.chain || '0' }}
+          RUN_ID: ${{ github.run_id }}
+          MIN_CYCLE_SECONDS: "600"
+        run: |
+          set -euo pipefail
+          depth="${CHAIN_DEPTH:-0}"
+          case "$depth" in ''|*[!0-9]*) depth=0 ;; esac
+          if [ "$depth" -ge 10000 ]; then
+            echo "Self-dispatch depth cap reached; the cron recovery seed will restart the publisher."
+            exit 0
+          fi
+
+          started="$(cat "$RUNNER_TEMP/facebook_cycle_start" 2>/dev/null || date +%s)"
+          now="$(date +%s)"
+          elapsed=$(( now - started ))
+          if [ "$elapsed" -lt "$MIN_CYCLE_SECONDS" ]; then
+            echo "Waiting $(( MIN_CYCLE_SECONDS - elapsed )) seconds until next 10-minute check."
+            sleep "$(( MIN_CYCLE_SECONDS - elapsed ))"
+          fi
+
+          # Do not queue unnecessary successors if cron/manual dispatch already
+          # queued one. One publisher at a time also serialises state writes.
+          active="$(gh run list --workflow facebook-publisher.yml --limit 30 \
+            --json databaseId,status \
+            --jq "[.[] | select(.status != \"completed\") | select(.databaseId != $RUN_ID)] | length" \
+            || echo 0)"
+          if [ "${active:-0}" -gt 0 ]; then
+            echo "Another Facebook publisher is pending or running; yielding this chain."
+            exit 0
+          fi
+
+          gh workflow run facebook-publisher.yml --ref main -f chain="$((depth + 1))"
+          echo "Dispatched next Facebook check."
+
