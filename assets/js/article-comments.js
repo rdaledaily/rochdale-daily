@@ -1,4 +1,11 @@
 (() => {
+  if (!document.getElementById('rd-sound-toggle') && !document.querySelector('script[data-rd-chime]')) {
+    const loader = document.createElement('script');
+    loader.src = '/assets/js/menu.js';
+    loader.defer = true;
+    loader.dataset.rdChime = '1';
+    document.body.appendChild(loader);
+  }
   const root = document.getElementById('comments-root');
   if (!root) return;
 
