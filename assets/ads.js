@@ -205,10 +205,129 @@
     });
 
     var listings = (data.directory || []).filter(function (d) { return isActive(d, today); });
+    var grid = document.querySelector(".directory-grid");
+    if (grid && listings.length) {
+      // Sold listings replace the six "example" cards outright. The page
+      // markup only knows six fixed trades; the directory is whatever has
+      // been booked in adverts.json, so it is built from that file alone.
+      if (!grid.hasAttribute("data-directory-live")) renderDirectoryList(grid, listings, base, sample);
+      return;
+    }
     document.querySelectorAll("[data-ad-directory]").forEach(function (card) {
       var category = card.getAttribute("data-category") || "";
       var sold = listings.filter(function (d) { return d.category === category; });
       if (sold.length) renderDirectory(card, pickWeighted(sold), base, sample);
+    });
+  }
+
+  // ---- Local services directory -------------------------------------------
+  // Every in-date listing in adverts.json "directory" gets a card: optional
+  // logo tile, trade, name, phone, and a tracked link. Twelve are shown, in a
+  // fresh random order on every page view so no advertiser owns the top row;
+  // "Show all" reveals the rest, sorted by trade. Email addresses are never
+  // read from or written to adverts.json - that file is public.
+  var DIRECTORY_FIRST = 12;
+
+  function directoryStyles() {
+    if (document.getElementById("rd-directory-style")) return;
+    var style = document.createElement("style");
+    style.id = "rd-directory-style";
+    style.textContent =
+      ".directory-card.dir-live{display:flex!important;flex-direction:column;padding:0;background:var(--raised,#fff)}" +
+      ".dir-live .dir-logo{height:104px;display:flex;align-items:center;justify-content:center;padding:12px;border-bottom:1px solid var(--line,#dcdad4)}" +
+      ".dir-live .dir-logo img{max-width:100%;max-height:80px;width:auto;height:auto;display:block}" +
+      ".dir-live .dir-body{padding:14px 15px 15px;display:flex;flex-direction:column;flex:1}" +
+      ".dir-live .sponsored,.dir-live .dir-trade{display:block}" +
+      ".dir-live .dir-trade{margin-top:6px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted,#8a8780)}" +
+      ".dir-live h3{margin:4px 0 8px;font-size:17px;line-height:1.25;overflow-wrap:anywhere}" +
+      ".dir-live .dir-links{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px 16px}" +
+      ".dir-live .dir-links a{margin:0;min-height:44px;display:inline-flex;align-items:center}" +
+      ".directory-card.dir-live[hidden]{display:none!important}" +
+      ".dir-more{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:4px}" +
+      ".dir-more button{font:inherit;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;" +
+      "min-height:44px;padding:0 18px;background:transparent;color:inherit;border:1px solid currentColor}" +
+      ".dir-more span{font-size:12px;color:var(--muted,#8a8780)}";
+    document.head.appendChild(style);
+  }
+
+  function safeColour(value) {
+    return /^#[0-9a-fA-F]{3,8}$/.test(String(value || "")) ? String(value) : "#ffffff";
+  }
+
+  function linkLabel(url) {
+    return /(^|\.)facebook\.com$/i.test((String(url).match(/^https?:\/\/([^\/?#]+)/i) || [])[1] || "")
+      ? "Facebook page" : "Visit website";
+  }
+
+  function directoryCard(listing, base) {
+    var html = "";
+    if (listing.logo) {
+      html += '<div class="dir-logo" style="background:' + safeColour(listing.logo_bg) + '">' +
+        '<img src="' + esc(listing.logo) + '" alt="' + esc(listing.name) + ' logo" loading="lazy" ' +
+        'onerror="this.parentNode.style.display=\'none\'"></div>';
+    }
+    html += '<div class="dir-body"><span class="sponsored">Sponsored listing</span>' +
+      '<span class="dir-trade">' + esc(listing.category) + "</span>" +
+      "<h3>" + esc(listing.name) + "</h3>" +
+      (listing.blurb ? "<p>" + esc(listing.blurb) + "</p>" : "") +
+      '<div class="dir-links">';
+    if (listing.phone) {
+      html += '<a href="tel:' + esc(String(listing.phone).replace(/\s+/g, "")) + '">' + esc(listing.phone) + "</a>";
+    }
+    if (listing.url) {
+      html += '<a href="' + esc(clickUrl(base, listing)) + '" rel="sponsored noopener" target="_blank">' +
+        linkLabel(listing.url) + "</a>";
+    }
+    return html + "</div></div>";
+  }
+
+  function shuffled(items) {
+    var copy = items.slice();
+    for (var i = copy.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var swap = copy[i]; copy[i] = copy[j]; copy[j] = swap;
+    }
+    return copy;
+  }
+
+  function renderDirectoryList(grid, listings, base, sample) {
+    directoryStyles();
+    var order = shuffled(listings);
+    var first = order.slice(0, DIRECTORY_FIRST);
+    var rest = order.slice(DIRECTORY_FIRST).sort(function (a, b) {
+      return String(a.category).localeCompare(String(b.category)) || String(a.name).localeCompare(String(b.name));
+    });
+    grid.innerHTML = "";
+    grid.setAttribute("data-directory-live", "true");
+
+    function add(listing, hidden) {
+      var card = document.createElement("article");
+      card.className = "directory-card dir-live ad-live";
+      card.setAttribute("data-directory-id", listing.id);
+      card.innerHTML = directoryCard(listing, base);
+      card.hidden = hidden;
+      grid.appendChild(card);
+      // Count a view only for a card the reader could actually see.
+      if (!hidden) beacon(base, listing, "directory", sample);
+      return card;
+    }
+
+    first.forEach(function (listing) { add(listing, false); });
+    var hiddenCards = rest.map(function (listing) { return { card: add(listing, true), listing: listing }; });
+    if (!hiddenCards.length) return;
+
+    var more = document.createElement("div");
+    more.className = "dir-more";
+    more.innerHTML = '<button type="button" aria-expanded="false">Show all ' + listings.length +
+      ' local services</button><span>Showing ' + first.length + " of " + listings.length +
+      ". The order changes on every visit.</span>";
+    grid.appendChild(more);
+    more.querySelector("button").addEventListener("click", function () {
+      hiddenCards.forEach(function (item) {
+        item.card.hidden = false;
+        beacon(base, item.listing, "directory", sample);
+      });
+      more.remove();
     });
   }
 
