@@ -133,6 +133,12 @@ def test_zero_new_is_starvation_when_collection_failed() -> None:
     )
 
 
+def test_sponsored_advertisement_is_not_counted_as_available_news() -> None:
+    advert = base_article(sponsored=True, manual_article=True, category="business")
+    assert not mod.is_eligible_news_article(advert)
+    assert not mod.is_frontpage_eligible_news_article(advert, NOW)
+
+
 if __name__ == "__main__":
     failures = 0
     for test in (
@@ -147,6 +153,7 @@ if __name__ == "__main__":
         test_zero_new_after_editorial_rejections_is_not_starvation_when_page_is_fresh,
         test_zero_new_is_starvation_when_fresh_supply_is_short,
         test_zero_new_is_starvation_when_collection_failed,
+        test_sponsored_advertisement_is_not_counted_as_available_news,
     ):
         try:
             test()

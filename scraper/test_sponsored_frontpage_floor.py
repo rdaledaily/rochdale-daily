@@ -118,5 +118,59 @@ onRequest({ request: new Request('https://example.test/articles/frontpage.json')
         self.assertEqual(len(slugs), 14)
 
 
+class RestoredOlderStoriesStayBelowTheTopThree(unittest.TestCase):
+    """Measured 9 October 2026, fast-lane runs #4684 and #4685.
+
+    Ten sponsored articles crowded four day-old editor stories off the page.
+    The guard restored those four directly under the lead, which pushed the
+    morning's news out of the top three, and the health check then failed
+    every run that had a new story to publish.
+    """
+
+    def run_guard(self, frontpage: list[dict], feed: list[dict]) -> list[str]:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "articles").mkdir()
+            saved = (guard.FRONTPAGE, guard.ARTICLES, guard.TARGET, guard.FRESH_HOURS)
+            guard.FRONTPAGE = root / "articles" / "frontpage.json"
+            guard.ARTICLES = root / "articles.json"
+            guard.TARGET, guard.FRESH_HOURS = 30, 36
+            try:
+                guard.ARTICLES.write_text(json.dumps(feed), encoding="utf-8")
+                guard.FRONTPAGE.write_text(json.dumps({"articles": frontpage}), encoding="utf-8")
+                self.assertEqual(guard.main(), 0)
+                rows = json.loads(guard.FRONTPAGE.read_text(encoding="utf-8"))["articles"]
+            finally:
+                guard.FRONTPAGE, guard.ARTICLES, guard.TARGET, guard.FRESH_HOURS = saved
+        return [row["slug"] for row in rows]
+
+    def test_day_old_restored_stories_do_not_displace_the_top_three(self):
+        lead = story("lead", 20 * 60, manual=True)
+        news = [story(f"news-{i}", 200 + i) for i in range(8)]
+        ads = [story(f"ad-{i}", 30 + i, sponsored=True) for i in range(10)]
+        crowded_out = [story(f"old-editor-{i}", 19 * 60 + i, manual=True) for i in range(4)]
+        slugs = self.run_guard([lead] + news + ads, [lead] + news + ads + crowded_out)
+        self.assertEqual(slugs[:3], ["lead", "news-0", "news-1"])
+        self.assertEqual(slugs[3:7], [f"old-editor-{i}" for i in range(4)], "restored, and still in the top nine")
+        self.assertFalse([s for s in slugs[:9] if s.startswith("ad-")])
+        self.assertEqual(len(slugs), 23, "nothing is dropped")
+
+    def test_a_story_published_in_the_last_few_hours_still_goes_under_the_lead(self):
+        lead = story("lead", 20 * 60, manual=True)
+        news = [story(f"news-{i}", 200 + i) for i in range(8)]
+        fresh = story("new-editor-story", 15, manual=True)
+        slugs = self.run_guard([lead] + news, [lead] + news + [fresh])
+        self.assertEqual(slugs[:3], ["lead", "new-editor-story", "news-0"])
+
+    def test_a_restored_sponsored_article_does_not_use_up_a_top_slot(self):
+        lead = story("lead", 20 * 60, manual=True)
+        news = [story(f"news-{i}", 200 + i) for i in range(10)]
+        ad = story("ad-new", 5, sponsored=True)
+        old = story("old-editor", 19 * 60, manual=True)
+        slugs = self.run_guard([lead] + news, [lead] + news + [ad, old])
+        self.assertEqual(slugs[:4], ["lead", "news-0", "news-1", "old-editor"])
+        self.assertGreaterEqual(slugs.index("ad-new"), 9)
+
+
 if __name__ == "__main__":
     unittest.main()

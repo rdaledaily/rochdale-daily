@@ -23,6 +23,11 @@ ARTICLES = Path(os.getenv("ARTICLES_JSON", "articles.json"))
 FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
 TARGET = int(os.getenv("FRONTPAGE_TARGET_ARTICLES", "30"))
 SPONSORED_FLOOR = 9
+# A restored story older than this is no longer breaking: it is put back on the
+# page below the top three, not above fresher news. Matches the newsroom health
+# check, which fails a run when fresh news exists but none is in the top three.
+TOP_STORY_FRESH_HOURS = int(os.getenv("SCRAPER_HEALTH_TOP_FRESH_HOURS", "6"))
+TOP_STORY_SLOTS = 3
 
 
 def read_json(path: Path, default: Any) -> Any:
@@ -144,20 +149,35 @@ def main() -> int:
         inserted: set[str] = set()
 
     # Put restored manual stories high enough on the page to be genuinely
-    # discoverable, while leaving the already-selected lead untouched.
+    # discoverable, while leaving the already-selected lead untouched. Only a
+    # story first published in the last few hours goes directly under the lead.
+    # An older one that was crowded off the page is restored below the top
+    # three, so it cannot push fresh news out of the top-story positions.
+    top_cutoff = now - timedelta(hours=TOP_STORY_FRESH_HOURS)
+    restored_new: list[dict[str, Any]] = []
+    restored_older: list[dict[str, Any]] = []
     for row in missing:
         key = identity(row)
-        if key and key not in inserted:
-            ordered.append(row)
-            inserted.add(key)
+        if not key or key in inserted:
+            continue
+        published = first_published(row)
+        is_new = bool(published and published >= top_cutoff) or active_pin(row, now)
+        (restored_new if is_new else restored_older).append(row)
+        inserted.add(key)
 
+    ordered.extend(restored_new)
+    remaining = []
     for row in existing:
         key = identity(row)
         if key and key in inserted:
             continue
-        ordered.append(row)
+        remaining.append(row)
         if key:
             inserted.add(key)
+    keep_top = max(0, TOP_STORY_SLOTS - len([r for r in ordered if r.get("sponsored") is not True]))
+    ordered.extend(remaining[:keep_top])
+    ordered.extend(restored_older)
+    ordered.extend(remaining[keep_top:])
 
     protected = {identity(row) for row in candidates if identity(row)}
     if existing and identity(existing[0]):

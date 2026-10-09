@@ -112,6 +112,11 @@ def is_eligible_news_article(article: Any) -> bool:
         return False
     if article.get("exclude_from_frontpage") is True:
         return False
+    # A paid-for advertisement feature is not news. It is held below the top
+    # nine homepage positions, so it must not be counted as fresh news that
+    # ought to be in the top three.
+    if article.get("sponsored") is True:
+        return False
     if str(article.get("source_kind") or "").lower() == "event":
         return False
     if str(article.get("category") or "").lower() == "events":
