@@ -87,6 +87,16 @@ def note_rewrite_skip(reason: str) -> None:
     key = re.sub(r'\s+', ' ', key).strip()[:120] or 'unspecified'
     with _REWRITE_SKIP_LOCK:
         REWRITE_SKIP_REASONS[key] += 1
+    # The tally above says how often a reason occurred but not to WHICH story.
+    # Each rewrite runs start-to-finish on one worker thread, so a thread-local
+    # list attributes the reason to the candidate being processed. The rewrite
+    # ledger uses it to remember the verdict instead of asking again next run.
+    captured = getattr(_REWRITE_SKIP_CAPTURE, 'reasons', None)
+    if captured is not None:
+        captured.append(key)
+
+
+_REWRITE_SKIP_CAPTURE = threading.local()
 
 # Stories that ran despite a house-style failure. This is the ledger that keeps
 # the relaxed gate honest: if a check appears here constantly it is either
@@ -2781,6 +2791,223 @@ def request_grounded_draft(
     )
 
 
+# ---------------------------------------------------------------------------
+# Rewrite ledger: one rewrite per piece of source material.
+#
+# Measured 2-8 October 2026: 5,347 rewrite attempts across 692 runs covered only
+# 175 distinct source links and produced 46 new stories. Two causes:
+#
+#   * dedupe_article_records() recomputes every stored article's story_key from
+#     the REWRITTEN text on every run, so a candidate's key (computed from the
+#     source headline) never matched the article it had already produced. Each
+#     published story therefore looked brand new and was rewritten again on
+#     every run for as long as its source stayed inside the publish window.
+#   * a candidate the gates turned down left no trace, so it was sent back to
+#     the model every run and turned down again ("not local" 2,337 times).
+#
+# The ledger records the outcome of every attempt against the candidate's own
+# source URL - an identity no later step rewrites. A candidate is attempted
+# again only when it brings a source URL the ledger has never seen, when its
+# last attempt was a provider failure, or - for a rejection, because one model
+# verdict is not proof - until it has been turned down
+# REWRITE_REJECTION_ATTEMPT_LIMIT times running. Nothing is published through this
+# code: it only ever REMOVES work, and every story it holds back is named with
+# its reason in scraper_status.json so a wrongly held story is visible.
+# ---------------------------------------------------------------------------
+REWRITE_LEDGER_FILE = ROOT / 'rewrite_ledger.json'
+REWRITE_LEDGER_RETENTION_HOURS = max(100, int(os.getenv('REWRITE_LEDGER_RETENTION_HOURS', '192')))
+REWRITE_REJECTION_ATTEMPT_LIMIT = max(1, int(os.getenv('REWRITE_REJECTION_ATTEMPT_LIMIT', '3')))
+_REWRITE_LEDGER: dict[str, dict[str, Any]] | None = None
+_REWRITE_LEDGER_LOCK = threading.Lock()
+REWRITE_LEDGER_HELD: dict[str, dict[str, Any]] = {}
+
+
+def candidate_identity(candidate: Any) -> str:
+    """Stable identity of a candidate: its own source URL, fragment included.
+
+    canonicalise_url() drops the fragment, which is right for ordinary pages
+    but wrong for live service pages, where every alert shares one page URL and
+    the fragment (#live-<hash>) is the only thing telling two alerts apart.
+    """
+    raw = str(getattr(candidate, 'source_url', '') or '').strip()
+    if not raw:
+        return ''
+    fragment = urlparse(raw).fragment.strip()
+    base = canonicalise_url(raw).rstrip('/')
+    return f'{base}#{fragment}' if fragment else base
+
+
+def _identity_of_url(url: str) -> str:
+    return candidate_identity(type('_U', (), {'source_url': url})())
+
+
+def candidate_source_identities(candidate: Any) -> set[str]:
+    urls = {candidate_identity(candidate)}
+    for item in getattr(candidate, 'related_sources', None) or []:
+        if isinstance(item, dict) and item.get('url'):
+            urls.add(_identity_of_url(str(item['url'])))
+    urls.discard('')
+    return urls
+
+
+def candidate_text_fingerprint(candidate: Any) -> str:
+    text = normalise_ws(' '.join(
+        str(getattr(candidate, name, '') or '')
+        for name in ('source_title', 'source_summary', 'source_body_excerpt')
+    )).casefold()
+    return hashlib.sha256(text.encode('utf-8')).hexdigest()[:16]
+
+
+def reset_rewrite_ledger() -> None:
+    """Forget the in-memory ledger so the next use reloads it from disk."""
+    global _REWRITE_LEDGER
+    with _REWRITE_LEDGER_LOCK:
+        _REWRITE_LEDGER = None
+        REWRITE_LEDGER_HELD.clear()
+
+
+def load_rewrite_ledger() -> dict[str, dict[str, Any]]:
+    global _REWRITE_LEDGER
+    with _REWRITE_LEDGER_LOCK:
+        if _REWRITE_LEDGER is not None:
+            return _REWRITE_LEDGER
+        entries: dict[str, dict[str, Any]] = {}
+        try:
+            payload = json.loads(REWRITE_LEDGER_FILE.read_text(encoding='utf-8'))
+            raw = payload.get('entries', {}) if isinstance(payload, dict) else {}
+            if isinstance(raw, dict):
+                entries = {str(k): dict(v) for k, v in raw.items() if isinstance(v, dict)}
+        except (OSError, ValueError):
+            # A missing or unreadable ledger must never stop the newsroom: the
+            # worst case is one run of the old behaviour, after which it is rebuilt.
+            entries = {}
+        cutoff = utc_now() - timedelta(hours=REWRITE_LEDGER_RETENTION_HOURS)
+        kept = {}
+        for key, entry in entries.items():
+            seen = parse_datetime(entry.get('last_attempt_at'))
+            if seen is not None and seen >= cutoff:
+                kept[key] = entry
+        _REWRITE_LEDGER = kept
+        return _REWRITE_LEDGER
+
+
+def save_rewrite_ledger() -> None:
+    ledger = load_rewrite_ledger()
+    with _REWRITE_LEDGER_LOCK:
+        payload = {
+            'schema_version': 1,
+            'updated_at': iso_utc(utc_now()),
+            'retention_hours': REWRITE_LEDGER_RETENTION_HOURS,
+            'rejection_attempt_limit': REWRITE_REJECTION_ATTEMPT_LIMIT,
+            'count': len(ledger),
+            'entries': {key: ledger[key] for key in sorted(ledger)},
+        }
+    write_json_atomic(REWRITE_LEDGER_FILE, payload)
+
+
+def rewrite_outcome_for_reason(reason: str) -> str:
+    """Classify a skip reason: 'failed' is the provider's fault and retryable."""
+    low = str(reason or '').casefold()
+    if low.startswith('openai') or low.startswith('worker crashed'):
+        return 'failed'
+    return 'rejected'
+
+
+def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> None:
+    """Remember what happened to this candidate's source material."""
+    identity = candidate_identity(candidate)
+    if not identity:
+        return
+    ledger = load_rewrite_ledger()
+    now = iso_utc(utc_now())
+    with _REWRITE_LEDGER_LOCK:
+        entry = ledger.get(identity) or {'first_attempt_at': now, 'attempts': 0, 'urls': []}
+        new_material = bool(candidate_source_identities(candidate) - set(entry.get('urls') or []))
+        if new_material or entry.get('outcome') != outcome:
+            # Fresh material, or a different kind of outcome, starts a new count:
+            # the rejection limit is per body of evidence, not per story.
+            entry['attempts'] = 0
+        entry['attempts'] = int(entry.get('attempts') or 0) + 1
+        entry['last_attempt_at'] = now
+        entry['outcome'] = outcome
+        entry['reason'] = str(reason or '')[:160]
+        entry['title'] = normalise_ws(str(getattr(candidate, 'source_title', '') or ''))[:140]
+        entry['source_name'] = str(getattr(candidate, 'source_name', '') or '')[:80]
+        entry['category'] = str(getattr(candidate, 'category', '') or '')
+        entry['text_fingerprint'] = candidate_text_fingerprint(candidate)
+        entry['urls'] = sorted(set(entry.get('urls') or []) | candidate_source_identities(candidate))
+        ledger[identity] = entry
+
+
+def rewrite_ledger_block_reason(candidate: Any) -> str:
+    """Why the ledger holds this candidate back, or '' when it may be attempted."""
+    identity = candidate_identity(candidate)
+    if not identity:
+        return ''
+    entry = load_rewrite_ledger().get(identity)
+    if not entry:
+        return ''
+    outcome = str(entry.get('outcome') or '')
+    if outcome == 'failed':
+        return ''
+    if candidate_source_identities(candidate) - set(entry.get('urls') or []):
+        return ''
+    reason = str(entry.get('reason') or '')
+    if outcome == 'published':
+        return 'already published from this source material'
+    if int(entry.get('attempts') or 0) < REWRITE_REJECTION_ATTEMPT_LIMIT:
+        return ''
+    return f'already rejected: {reason}' if reason else 'already rejected'
+
+
+def source_material_changed_since_last_attempt(candidate: Any) -> bool:
+    """True when the source text differs from what the last attempt was given.
+
+    Used by the live-update bypass, which previously compared the source with
+    the PUBLISHED copy: any figure the rewrite left out counted as "new facts"
+    for ever, so an unchanged page was rewritten on every run.
+    """
+    entry = load_rewrite_ledger().get(candidate_identity(candidate))
+    if not entry:
+        return True
+    if str(entry.get('outcome') or '') == 'failed':
+        return True
+    return str(entry.get('text_fingerprint') or '') != candidate_text_fingerprint(candidate)
+
+
+def _note_ledger_hold(candidate: Any, why: str) -> None:
+    identity = candidate_identity(candidate)
+    entry = load_rewrite_ledger().get(identity) or {}
+    with _REWRITE_LEDGER_LOCK:
+        REWRITE_LEDGER_HELD[identity] = {
+            'url': identity,
+            'title': normalise_ws(str(getattr(candidate, 'source_title', '') or ''))[:140],
+            'source_name': str(getattr(candidate, 'source_name', '') or '')[:80],
+            'held_because': why,
+            'outcome': str(entry.get('outcome') or ''),
+            'attempts': int(entry.get('attempts') or 0),
+            'last_attempt_at': str(entry.get('last_attempt_at') or ''),
+        }
+
+
+def existing_article_for_candidate(candidate: Any, existing_by_story: dict[str, dict[str, Any]]) -> dict[str, Any] | None:
+    """Find the stored article a candidate already produced, by source URL.
+
+    The story-key lookup cannot do this for automated stories (see the ledger
+    note above), so match on the URLs the article itself records.
+    """
+    wanted = candidate_identity(candidate)
+    if not wanted:
+        return None
+    for article in existing_by_story.values():
+        if not isinstance(article, dict):
+            continue
+        urls = [article.get('source_url')] + list(article.get('source_urls') or [])
+        if any(url and _identity_of_url(str(url)) == wanted for url in urls):
+            return article
+    return None
+
+
 def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[str, dict[str, Any]]) -> bool:
     """Decide whether a clustered candidate earns one of the run's rewrite slots.
 
@@ -2807,7 +3034,19 @@ def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[
         # count. Filter them before selection instead of after.
         return False
     candidate.story_key = candidate.story_key or build_story_key(candidate)
+    held = rewrite_ledger_block_reason(candidate)
+    if held:
+        _note_ledger_hold(candidate, held)
+        return False
     existing_article = existing_by_story.get(candidate.story_key)
+    if existing_article is None:
+        # Stored keys are recomputed from the rewritten text, so fall back to
+        # the article's own source URLs before deciding this story is new.
+        existing_article = existing_article_for_candidate(candidate, existing_by_story)
+        if existing_article is not None and existing_article.get('story_key'):
+            # Adopt the stored key so a legitimate re-attempt (new source URL)
+            # keeps the published slug, id and first-publication time.
+            candidate.story_key = str(existing_article['story_key'])
     if existing_article is None:
         return True
     if existing_article.get('editorial_lock'):
@@ -2951,6 +3190,8 @@ def main() -> int:
         log.info('Skipping %d domain(s) benched by earlier runs: %s',
                  len(BENCHED_DOMAINS), ', '.join(sorted(BENCHED_DOMAINS)))
     log.info('Starting Rochdale Daily 15-minute pipeline')
+    reset_rewrite_ledger()
+    load_rewrite_ledger()
     existing = recent_existing_articles()
     # Build the "already published" lookup from each article's STORED story key,
     # not a freshly recomputed one. Recomputing from current (mutable) content
@@ -2988,8 +3229,11 @@ def main() -> int:
     log.info('Balanced selection: %d eligible -> %d selected; categories=%s; wards=%s', len(eligible_candidates), len(selected_candidates), selection_diagnostics.get('selected_categories', []), selection_diagnostics.get('selected_wards', []))
     new_articles: list[dict[str, Any]] = []
     skipped = 0
+    attempt_reasons: dict[int, list[str]] = {}
+    article_candidates: list[tuple[dict[str, Any], Candidate]] = []
 
     def process_candidate(candidate: Candidate) -> dict[str, Any] | None:
+        _REWRITE_SKIP_CAPTURE.reasons = attempt_reasons.setdefault(id(candidate), [])
         # The rewrite engine is provider-agnostic over the OpenAI protocol.
         # Set OPENAI_BASE_URL to point the same client at any OpenAI-compatible
         # endpoint -- Cloudflare Workers AI (free Llama), Groq, Gemini's compat
@@ -3011,11 +3255,16 @@ def main() -> int:
             except Exception as exc:
                 log.exception('Rewrite failed for %s: %s', candidate.source_url, exc)
                 note_rewrite_skip(f'worker crashed: {type(exc).__name__}')
+                record_rewrite_attempt(candidate, 'failed', f'worker crashed: {type(exc).__name__}')
                 skipped += 1
                 continue
             if article:
                 new_articles.append(article)
+                article_candidates.append((article, candidate))
             else:
+                reasons = attempt_reasons.get(id(candidate)) or []
+                reason = reasons[-1] if reasons else 'no article produced (reason not reported)'
+                record_rewrite_attempt(candidate, rewrite_outcome_for_reason(reason), reason)
                 # Every return-None path inside rewrite_candidate records its own
                 # reason, so this only counts. If skipped ever exceeds the sum of
                 # rewrite_skip_reasons in scraper_status.json, a path is still
@@ -3101,6 +3350,31 @@ def main() -> int:
         reverse=True,
     )
     write_json_atomic(OUTPUT_FILE, published)
+    # An article can be produced and still not reach the feed (locality check
+    # after rewrite, the word floor). Record what actually happened, so the
+    # ledger never calls something published that readers cannot see.
+    published_identities: set[str] = set()
+    published_refs: set[str] = set()
+    for item in published:
+        for url in [item.get('source_url')] + list(item.get('source_urls') or []):
+            if url:
+                published_identities.add(_identity_of_url(str(url)))
+        for ref in (item.get('id'), item.get('slug')):
+            if ref:
+                published_refs.add(str(ref))
+    for article, candidate in article_candidates:
+        in_feed = (
+            candidate_identity(candidate) in published_identities
+            or str(article.get('id') or '') in published_refs
+            or str(article.get('slug') or '') in published_refs
+        )
+        if in_feed:
+            record_rewrite_attempt(candidate, 'published', '')
+        else:
+            record_rewrite_attempt(candidate, 'rejected', 'not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check')
+    save_rewrite_ledger()
+    ledger_snapshot = load_rewrite_ledger()
+    ledger_outcomes = Counter(str(entry.get('outcome') or 'unknown') for entry in ledger_snapshot.values())
     source_counts: dict[str, int] = {}
     for candidate in raw_candidates:
         source_counts[candidate.source_name] = source_counts.get(candidate.source_name, 0) + 1
@@ -3112,7 +3386,7 @@ def main() -> int:
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
     save_benched_domains(BENCHED_DOMAINS)
-    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'rewrite_skips_unattributed': max(0, skipped - sum(REWRITE_SKIP_REASONS.values())), 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
+    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'rewrite_skips_unattributed': max(0, skipped - sum(REWRITE_SKIP_REASONS.values())), 'rewrite_ledger': {'entries': len(ledger_snapshot), 'by_outcome': dict(sorted(ledger_outcomes.items())), 'held_back_this_run': len(REWRITE_LEDGER_HELD), 'held_already_published': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') == 'published'), 'held_rejected': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), 'rejection_attempt_limit': REWRITE_REJECTION_ATTEMPT_LIMIT, 'retention_hours': REWRITE_LEDGER_RETENTION_HOURS}, 'rewrite_ledger_held_rejected': sorted((row for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), key=lambda row: row.get('last_attempt_at') or '', reverse=True)[:60], 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
 if __name__ == '__main__':
