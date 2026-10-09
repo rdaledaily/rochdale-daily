@@ -1,20 +1,20 @@
 {
-  "last_run_at": "2026-10-09T08:33:50.867367Z",
-  "raw_candidates_before_job_filter": 152,
-  "job_or_career_posts_rejected": 1,
-  "raw_candidates": 151,
-  "candidate_clusters": 39,
+  "last_run_at": "2026-10-09T08:45:11.255748Z",
+  "raw_candidates_before_job_filter": 157,
+  "job_or_career_posts_rejected": 0,
+  "raw_candidates": 157,
+  "candidate_clusters": 40,
   "google_news_resolution": {
-    "wrappers": 58,
-    "resolved": 51,
-    "text_recovered": 32,
+    "wrappers": 65,
+    "resolved": 59,
+    "text_recovered": 26,
     "reattributed": 5,
-    "images_found": 32
+    "images_found": 28
   },
-  "duplicates_merged": 112,
-  "attempted_rewrites": 6,
-  "new_articles": 4,
-  "live_articles": 44,
+  "duplicates_merged": 117,
+  "attempted_rewrites": 7,
+  "new_articles": 5,
+  "live_articles": 45,
   "skipped": 2,
   "rewrite_skip_reasons": {
     "quality check: Remove unsupported calendar year(s) 2025; source publication timestamps are not event dates.": 1,
@@ -22,13 +22,13 @@
   },
   "rewrite_skips_unattributed": 0,
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Write at least 189 body words using only facts already present in the sources; the draft currently has 170.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 135,
-    "website_discovery": 4,
+    "rss_and_google_news": 143,
+    "website_discovery": 1,
     "aggregator_discovery": 0,
     "live_service_pages": 9,
     "facebook_official": 0,
@@ -39,13 +39,13 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Roch Valley Radio": 58,
-    "Rochdale Times": 17,
-    "Manchester Evening News": 16,
+    "Roch Valley Radio": 67,
+    "Manchester Evening News": 15,
+    "Rochdale Times": 14,
     "About Manchester": 7,
     "Facebook": 5,
+    "Rochdale Borough Council": 5,
     "Northern live service updates": 5,
-    "Rochdale Borough Council": 4,
     "Bee Network live travel alerts": 4,
     "Oldham Times": 3,
     "The Guardian": 3,
@@ -63,8 +63,8 @@
     "Yahoo": 1,
     "Squawka": 1,
     "Transfermarkt": 1,
-    "AOL.ca": 1,
     "Fansnetwork": 1,
+    "Rochdale Valiant": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -73,6 +73,7 @@
     "education": 1,
     "environment": 1,
     "health": 1,
+    "traffic": 1,
     "transport": 1
   },
   "published_by_category": {
@@ -86,7 +87,7 @@
     "politics": 1,
     "sport": 3,
     "traffic": 2,
-    "transport": 1
+    "transport": 2
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -112,6 +113,7 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-d54cc9d795e3135e9ca6",
+    "transport-v3-274ef74afb04db621f29",
     "transport-v3-348afe252268889ddb73",
     "education-v3-bab18c3cbc1ee45972d5",
     "business-v3-7e179f688e6134d345cc",
@@ -120,6 +122,7 @@
   ],
   "selected_candidate_urls": [
     "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/man-arrested-and-investigation-underway-following-incident-in-rochdale/",
+    "https://www.rochvalleyradio.com/news-features/139/news/903/rspca-appeals-after-french-bulldog-found-dead-in-chadderton-canal",
     "https://www.northernrailway.co.uk/service-updates#live-489be52eebbb2a8b3e",
     "https://reports.ofsted.gov.uk/provider/21/105768",
     "https://www.theguardian.com/business/2026/oct/08/wrexham-rochdale-train-services-rejected-west-coast-line-blackpool-london",
@@ -141,6 +144,7 @@
       "education",
       "environment",
       "health",
+      "traffic",
       "transport"
     ],
     "selected_categories": [
@@ -149,6 +153,7 @@
       "education",
       "environment",
       "health",
+      "traffic",
       "transport"
     ],
     "available_wards": [],
@@ -169,11 +174,12 @@
       "education": 1,
       "environment": 1,
       "health": 1,
+      "traffic": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 5,
+      "rochdale": 6,
       "smithy_bridge": 1
     },
     "selected_by_source": {
@@ -181,6 +187,7 @@
       "greater manchester police": 1,
       "northern live service updates": 1,
       "ofsted": 1,
+      "roch valley radio": 1,
       "rochdale borough council": 1,
       "the guardian": 1
     }
@@ -805,7 +812,9 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 27,
   "robots_denied_urls": [
+    "https://c.newsnow.co.uk/A/1326525501?-57568:46921",
     "https://c.newsnow.co.uk/A/1326527770?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326524098?-57568:46921",
     "https://c.newsnow.co.uk/A/1326520535?-57568:46921",
     "https://c.newsnow.co.uk/A/1326520514?-57568:46921",
     "https://c.newsnow.co.uk/A/1326513797?-57568:46921",
@@ -817,20 +826,18 @@
     "https://c.newsnow.co.uk/A/1326488201?-57568:46921",
     "https://c.newsnow.co.uk/A/1326482978?-57568:46921",
     "https://c.newsnow.co.uk/A/1326409461?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326387972?-57568:46921",
     "https://c.newsnow.co.uk/A/1326387971?-57568:46921",
     "https://c.newsnow.co.uk/A/1326336191?-57568:46921",
     "https://c.newsnow.co.uk/A/1326308179?-57568:46921",
     "https://c.newsnow.co.uk/A/1326284194?-57568:46921",
     "https://c.newsnow.co.uk/A/1326272923?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326261833?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326525501?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326598383?-57568:46921",
     "https://c.newsnow.co.uk/A/1326537176?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326387972?-57568:46921",
     "https://c.newsnow.co.uk/A/1326132458?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
     "https://c.newsnow.co.uk/A/1326529023?-57568:46921",
     "https://c.newsnow.co.uk/A/1326546872?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326176421?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326524098?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
@@ -845,9 +852,9 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-10-08T08:02:16.997458Z",
+  "evergreen_fallback_attempt_at": "2026-10-09T08:45:11.269346Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
-  "evergreen_fallback_attempt_count": 2,
+  "evergreen_fallback_attempt_count": 4,
   "evergreen_fallback": {
     "enabled": true,
     "thin_threshold": 6,
@@ -855,10 +862,10 @@
     "cooldown_hours": 24,
     "publishing_window": "09:00-20:00 Europe/London",
     "last_trigger_reason": "thin_news_supply",
-    "qualifying_count": 2,
-    "last_topic_id": "rochdale-cruckle",
-    "last_article_slug": "why-rochdale-says-cruckle",
-    "last_published_at": "2026-10-08T08:02:16Z"
+    "qualifying_count": 4,
+    "last_topic_id": "fairies-chapel-healey-dell",
+    "last_article_slug": "are-there-really-fairies-in-healey-dell",
+    "last_published_at": "2026-10-09T08:45:11Z"
   },
   "local_publishers_discovery_enabled": [
     "rochdaleobserver.co.uk",
@@ -869,8 +876,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-09T08:36:27.342814Z",
-  "frontpage_article_count": 36,
+  "frontpage_generated_at": "2026-10-09T08:47:11.072308Z",
+  "frontpage_article_count": 37,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -941,26 +948,26 @@
       "sport": 1,
       "business": 6,
       "community": 8,
-      "environment": 1,
+      "environment": 2,
       "news": 9
     },
     "selected_by_ward": {
       "borough-wide": 28,
       "Castleton": 2,
+      "Healey": 2,
       "Hopwood Hall": 2,
       "Bamford": 1,
       "North Middleton": 1,
-      "Balderstone and Kirkholt": 1,
-      "Healey": 1
+      "Balderstone and Kirkholt": 1
     },
     "selected_by_area": {
       "burnley": 1,
-      "healey": 1,
+      "healey": 2,
       "heywood": 5,
       "hopwood": 1,
       "middleton": 1,
-      "rochdale": 23,
-      "syke": 1
+      "rochdale": 22,
+      "syke": 2
     },
     "selected_by_source": {
       "ofsted": 1,
@@ -971,20 +978,21 @@
       "faisal rana, mayor of rochdale; rochdale sixth form college": 1,
       "rochdale golf club; woodhall spa golf club": 1,
       "elsie blundell mp; cash access uk": 1,
-      "rochdale boroughwide housing": 1,
-      "rochdale borough council; syke conservation area appraisal; historic england": 1,
+      "andy’s man club": 1,
+      "rochdale borough council — healey dell nature reserve and tea rooms": 1,
       "lobden golf club / event organisers": 1,
       "source": 4,
       "office of the mayor of rochdale / ofsted": 1,
       "mayor faisal rana; rochdale development agency": 1,
-      "andy’s man club": 1,
+      "heywood army cadet detachment": 1,
+      "rochdale borough council; syke conservation area appraisal; historic england": 1,
       "reel cinema rochdale": 1,
       "rochdale times": 1,
       "pionero lounge": 1,
-      "heywood army cadet detachment": 1,
+      "syke community base": 1,
       "house of commons home affairs committee": 1,
       "rochdale borough council planning register": 1,
-      "syke community base": 1,
+      "rochdale boroughwide housing": 1,
       "rochdale foodbank": 1,
       "rochdale borough council; rochdale creates": 1,
       "christ church healey": 1,
@@ -995,14 +1003,14 @@
       "about manchester": 1,
       "ministry of housing, communities & local government": 1
     },
-    "pool_size": 39,
-    "primary_pool_size": 39,
+    "pool_size": 40,
+    "primary_pool_size": 40,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 36,
+    "frontpage_count": 37,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 30,
-    "fresh_under_homepage_window": 35,
+    "fresh_under_24h": 31,
+    "fresh_under_homepage_window": 36,
     "short_briefs_selected": 20,
     "frontpage_minimum_met": true
   },
@@ -1014,7 +1022,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 11,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 185,
+  "duplicate_articles_after_postprocessing": 186,
   "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
