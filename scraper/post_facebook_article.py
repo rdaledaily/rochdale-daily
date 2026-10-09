@@ -168,6 +168,31 @@ def rate_limit_reason(
     return ""
 
 
+def resolve_page_id(token: str, version: str) -> str:
+    """Resolve the real Graph API Page ID from the token, not a Facebook URL ID."""
+    query = urllib.parse.urlencode({"fields": "id,name", "access_token": token})
+    endpoint = f"https://graph.facebook.com/{version}/me?{query}"
+    try:
+        with urllib.request.urlopen(endpoint, timeout=25) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        try:
+            msg = json.loads(exc.read().decode("utf-8")).get("error", {}).get("message", "")
+        except (ValueError, KeyError):
+            msg = ""
+        raise RuntimeError(f"Cannot verify Facebook Page token: {msg or 'HTTP ' + str(exc.code)}") from exc
+    except (urllib.error.URLError, ValueError) as exc:
+        raise RuntimeError("Cannot verify Facebook Page identity") from exc
+    page_name = str(payload.get("name") or "").strip()
+    page_id = str(payload.get("id") or "").strip()
+    if page_name.casefold() != "rochdale daily" or not page_id.isdigit():
+        raise RuntimeError(
+            "Token does not identify the Rochdale Daily Page. In Meta Graph API Explorer "
+            "select the Rochdale Daily Page token, not a personal User token."
+        )
+    return page_id
+
+
 def graph_post(page_id: str, token: str, message: str, link: str, version: str) -> str:
     endpoint = f"https://graph.facebook.com/{version}/{urllib.parse.quote(page_id)}/feed"
     body = urllib.parse.urlencode({
@@ -215,8 +240,8 @@ def main() -> int:
     if not ARTICLES_PATH.exists():
         print("articles.json not found", file=sys.stderr)
         return 2
-    if not dry_run and (not token or not page_id):
-        print("FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_PAGE_ID are required", file=sys.stderr)
+    if not dry_run and not token:
+        print("FACEBOOK_PAGE_ACCESS_TOKEN is required", file=sys.stderr)
         return 2
     if queue_order not in {"oldest", "newest"}:
         print("FACEBOOK_QUEUE_ORDER must be oldest or newest", file=sys.stderr)
@@ -279,6 +304,7 @@ def main() -> int:
         if dry_run:
             post_id = "dry-run"
         else:
+            page_id = resolve_page_id(token, graph_version)
             post_id = graph_post(page_id, token, message, url, graph_version)
     except RuntimeError as exc:
         result = {
