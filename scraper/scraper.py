@@ -69,6 +69,7 @@ from search_queries import build_search_query_specs
 from google_news_resolver import is_google_wrapper, resolve_wrappers
 from locations import LOCATION_BY_SLUG
 from food_hygiene import fetch_current_low_ratings, roundup_article_fields, roundup_paragraphs
+import primary_data
 from register_watch import cqc_candidates as register_cqc_candidates, load_state as register_load_state, ofsted_candidates as register_ofsted_candidates, save_state as register_save_state
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_FILE = ROOT / 'articles.json'
@@ -1893,7 +1894,13 @@ def collect_environment_agency_flood_candidates() -> list[Candidate]:
         area_name = strip_markdown(item.get('eaAreaName') or item.get('description') or item.get('floodArea', {}).get('label') or 'Rochdale flood alert')
         message = strip_markdown(item.get('message') or item.get('description') or '')
         title = f"{item.get('severity', 'Flood alert')}: {area_name}"
-        source_url = str(item.get('@id') or endpoint).replace('http://', 'https://')
+        # The API record is JSON, which the evidence guard cannot read. The
+        # Environment Agency publishes the same warning as an ordinary page.
+        flood_area = re.sub(r'[^A-Za-z0-9]', '', str(item.get('floodAreaID') or ''))
+        if flood_area:
+            source_url = f'https://check-for-flooding.service.gov.uk/target-area/{flood_area}#{changed.strftime("%Y%m%dT%H%M")}'
+        else:
+            source_url = str(item.get('@id') or endpoint).replace('http://', 'https://')
         text = f'{title} {message}'
         if not is_local(text, 'Environment Agency flood-monitoring API', source_url):
             continue
@@ -1948,6 +1955,47 @@ def collect_register_candidates() -> list[Candidate]:
             register_save_state(REGISTER_STATE_FILE, seen)
         except Exception as exc:
             log.warning('register state could not be saved: %s', exc)
+    return candidates
+
+PRIMARY_DATA_STATE_FILE = ROOT / 'reports' / 'primary_data_state.json'
+PRIMARY_DATA_REPORT: dict[str, Any] = {}
+
+def collect_primary_data_candidates() -> list[Candidate]:
+    """Official records on a rota: roadworks, insolvency notices, written answers, GMCA decisions, ONS housing.
+
+    primary_data.py decides which sources are due and how many stories each
+    may offer today; this wrapper only turns its records into candidates and
+    keeps the state file. Each record's source_url is an official page on an
+    approved host, which the pipeline fetches, rewrites from and fact-checks
+    against. The per-source report is written to scraper_status.json so a
+    source that stops yielding is visible, not silent.
+    """
+    PRIMARY_DATA_REPORT.clear()
+    if os.getenv('PRIMARY_DATA_ENABLED', 'true').lower() != 'true':
+        PRIMARY_DATA_REPORT['status'] = 'disabled'
+        return []
+    state = primary_data.load_state(PRIMARY_DATA_STATE_FILE)
+    records, report = primary_data.collect(SESSION.get, state, utc_now())
+    PRIMARY_DATA_REPORT.update(report)
+    try:
+        primary_data.save_state(PRIMARY_DATA_STATE_FILE, state)
+    except Exception as exc:
+        log.warning('primary data state could not be saved: %s', exc)
+    candidates: list[Candidate] = []
+    for record in records:
+        area = record['area'] if record['area'] in AREA_KEYWORDS else 'rochdale'
+        category = record['category'] if record['category'] in PUBLISHED_CATEGORIES else 'news'
+        candidates.append(Candidate(
+            source_name=record['source_name'],
+            source_url=record['source_url'],
+            source_title=record['source_title'],
+            source_summary=record['source_summary'],
+            source_published_at=record['source_published_at'],
+            area=area,
+            category=category,
+            source_body_excerpt=record['source_summary'],
+            source_kind='primary_data',
+        ))
     return candidates
 
 def collect_food_hygiene_candidates() -> list[Candidate]:
@@ -3224,7 +3272,7 @@ def main() -> int:
     collector_errors: dict[str, str] = {}
     x_social_records = collect_x_social_records()
     facebook_social_records = collect_facebook_social_records()
-    batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors), 'food_hygiene': safe_collect('food_hygiene', collect_food_hygiene_candidates, collector_counts, collector_errors), 'inspection_registers': safe_collect('inspection_registers', collect_register_candidates, collector_counts, collector_errors)}
+    batches = {'rss_and_google_news': safe_collect('rss_and_google_news', collect_rss_candidates, collector_counts, collector_errors), 'website_discovery': safe_collect('website_discovery', collect_discovery_candidates, collector_counts, collector_errors), 'aggregator_discovery': safe_collect('aggregator_discovery', collect_aggregator_candidates, collector_counts, collector_errors), 'live_service_pages': safe_collect('live_service_pages', collect_live_page_candidates, collector_counts, collector_errors), 'facebook_events': [], 'facebook_official': safe_collect('facebook_official', collect_facebook_candidates, collector_counts, collector_errors), 'x_official': safe_collect('x_official', collect_x_candidates, collector_counts, collector_errors), 'environment_agency': safe_collect('environment_agency', collect_environment_agency_flood_candidates, collector_counts, collector_errors), 'food_hygiene': safe_collect('food_hygiene', collect_food_hygiene_candidates, collector_counts, collector_errors), 'inspection_registers': safe_collect('inspection_registers', collect_register_candidates, collector_counts, collector_errors), 'primary_data': safe_collect('primary_data', collect_primary_data_candidates, collector_counts, collector_errors)}
     raw_candidates_all = [candidate for batch in batches.values() for candidate in batch]
     rejected_job_candidates = [candidate for candidate in raw_candidates_all if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
     raw_candidates = [candidate for candidate in raw_candidates_all if not (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
@@ -3400,7 +3448,7 @@ def main() -> int:
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
     save_benched_domains(BENCHED_DOMAINS)
-    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'rewrite_skips_unattributed': max(0, skipped - sum(REWRITE_SKIP_REASONS.values())), 'rewrite_ledger': {'entries': len(ledger_snapshot), 'by_outcome': dict(sorted(ledger_outcomes.items())), 'held_back_this_run': len(REWRITE_LEDGER_HELD), 'held_already_published': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') == 'published'), 'held_rejected': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), 'rejection_attempt_limit': REWRITE_REJECTION_ATTEMPT_LIMIT, 'retention_hours': REWRITE_LEDGER_RETENTION_HOURS}, 'rewrite_ledger_held_rejected': sorted((row for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), key=lambda row: row.get('last_attempt_at') or '', reverse=True)[:60], 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
+    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'primary_data': dict(PRIMARY_DATA_REPORT), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'rewrite_skips_unattributed': max(0, skipped - sum(REWRITE_SKIP_REASONS.values())), 'rewrite_ledger': {'entries': len(ledger_snapshot), 'by_outcome': dict(sorted(ledger_outcomes.items())), 'held_back_this_run': len(REWRITE_LEDGER_HELD), 'held_already_published': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') == 'published'), 'held_rejected': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), 'rejection_attempt_limit': REWRITE_REJECTION_ATTEMPT_LIMIT, 'retention_hours': REWRITE_LEDGER_RETENTION_HOURS}, 'rewrite_ledger_held_rejected': sorted((row for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), key=lambda row: row.get('last_attempt_at') or '', reverse=True)[:60], 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
 if __name__ == '__main__':

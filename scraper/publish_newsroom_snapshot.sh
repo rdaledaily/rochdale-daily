@@ -25,6 +25,15 @@ stage_newsroom() {
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json \
     archive.html search.html archive-index.json rss.xml index.html \
       news/ corrections-log.html heywood.html milnrow.html 2>/dev/null || true
+  # State files that exist only once their collector has run. They are added on
+  # their own: one missing path makes a single `git add` stage nothing at all.
+  # Without them every fresh checkout forgets which official records it has
+  # already offered (register_state.json was never committed until now).
+  for state_file in reports/primary_data_state.json reports/register_state.json; do
+    if [ -f "${state_file}" ]; then
+      git add -- "${state_file}" 2>/dev/null || true
+    fi
+  done
   # The theme normaliser can touch legacy pages outside the generated routes.
   git add -u -- '*.html'
 }
