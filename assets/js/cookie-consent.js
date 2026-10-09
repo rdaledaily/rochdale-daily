@@ -28,7 +28,7 @@
      then, and UK rules (PECR) require consent for analytics cookies. A reader
      who has not chosen, or chose "Essential only", sends nothing to Google --
      the script is not even requested. */
-  var GA_ID = "G-RFMB1JYN6T";
+  var GA_ID = "G-FGW8TMCXBD";
   var analyticsLoaded = false;
 
   function loadAnalytics() {
