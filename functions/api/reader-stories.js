@@ -40,7 +40,7 @@ export async function onRequestPost({request,env}){
   const slug='paid-reader-'+row.id.replace(/[^a-z0-9-]/g,'').slice(0,55);
   const now=new Date().toISOString();
   const story={
-    id:row.id,slug,title:row.title,body:'Paid reader submission.\\n\\n'+row.body,
+    id:row.id,slug,title:row.title,body:'Paid reader submission.\n\n'+row.body,
     byline:row.byline,area:row.area,category:row.category,
     source_name:'Paid reader submission',source_kind:'paid_reader_submission',
     image_url:'/assets/img/cards/rochdale_riverside.jpg',
@@ -49,7 +49,7 @@ export async function onRequestPost({request,env}){
     legal_disclaimer:'Paid reader submission. Submitted by a reader and published after editorial review. This is not independent Rochdale Daily reporting.',
   };
   const file='manual_articles.d/paid-readers/'+slug+'.json';
-  const encoded=btoa(unescape(encodeURIComponent(JSON.stringify(story,null,2)+'\\n')));
+  const encoded=btoa(unescape(encodeURIComponent(JSON.stringify(story,null,2)+'\n')));
   const result=await fetch('https://api.github.com/repos/rdaledaily/rochdale-daily/contents/'+file,{
     method:'PUT',headers:{Authorization:'Bearer '+env.STORIES_GITHUB_TOKEN,Accept:'application/vnd.github+json','Content-Type':'application/json','User-Agent':'RochdaleDailyStoryPublisher'},
     body:JSON.stringify({message:'Publish reviewed paid reader submission '+row.id,content:encoded,branch:'main'})
