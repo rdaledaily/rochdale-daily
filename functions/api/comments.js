@@ -45,7 +45,7 @@ const AREA_LABELS = {
   milnrow:"Milnrow",newhey:"Newhey",wardle:"Wardle",whitworth:"Whitworth",
   spotland:"Spotland",falinge:"Falinge",kirkholt:"Kirkholt",balderstone:"Balderstone",
   alkrington:"Alkrington",smallbridge:"Smallbridge",firgrove:"Firgrove",
-  deeplish:"Deeplish",norden:"Norden"
+  deeplish:"Deeplish"
 };
 function earnedBadge(area) {
   const label=AREA_LABELS[String(area||"").replace(/_/g,"-")];
@@ -676,10 +676,10 @@ export async function onRequestPost({ request, env }) {
 
     // Only a new like counts against the allowance; taking one back does not,
     // so nobody is penalised for changing their mind.
-    if (liked && target.area && earnedBadge(target.area)) {
+    if (target.area && earnedBadge(target.area)) {
       const key=`reader:area:${target.usernameLower}:${target.area}`;
       const progress=(await kv.get(key,{type:"json"}))||{slugs:[],likes:0};
-      progress.likes=Number(progress.likes||0)+1;
+      progress.likes=Math.max(0,Number(progress.likes||0)+(liked?1:-1));
       await kv.put(key,JSON.stringify(progress));
       await awardAreaBadge(kv,target.usernameLower,target.area);
     }
