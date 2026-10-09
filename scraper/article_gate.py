@@ -519,7 +519,8 @@ def normalise_article(
         from editorial_review import review_flags
         activated = _parse_iso("2026-10-09T16:00:00Z")
         ingested = _parse_iso(article.get("ingested_at"))
-        if ingested is not None and ingested >= activated:
+        published = _parse_iso(article.get("first_published_at"))
+        if ingested is not None and published is not None and ingested >= activated and published >= activated:
             flags = review_flags(article)
             if flags:
                 notes.append(f"HELD '{ident}' for editorial review: {'; '.join(flags)}")
