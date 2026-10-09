@@ -113,7 +113,10 @@ def eligible(article: Any, max_age_hours: int) -> bool:
         return False
     published = parse_dt(article.get("first_published_at") or article.get("published_at"))
     now = datetime.now(timezone.utc)
-    if published != datetime.max.replace(tzinfo=timezone.utc) and published > now:
+    # Missing publication timestamps must not cause archive stories to be reposted.
+    if published == datetime.max.replace(tzinfo=timezone.utc):
+        return False
+    if published > now:
         return False
     if max_age_hours > 0 and published != datetime.max.replace(tzinfo=timezone.utc):
         if published < now - timedelta(hours=max_age_hours):
@@ -269,6 +272,8 @@ def main() -> int:
     excerpt = clean_excerpt(article)
     url = canonical_url(article)
     message = title if not excerpt else f"{title}\n\n{excerpt}"
+    if article.get("paid_submission") or article.get("source_kind") == "paid_reader_submission":
+        message = "Paid reader submission · Advertisement\n\n" + message
 
     try:
         if dry_run:
