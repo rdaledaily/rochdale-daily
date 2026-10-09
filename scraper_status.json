@@ -1,30 +1,30 @@
 {
-  "last_run_at": "2026-10-09T13:39:31.718679Z",
-  "raw_candidates_before_job_filter": 163,
-  "job_or_career_posts_rejected": 1,
-  "raw_candidates": 162,
+  "last_run_at": "2026-10-09T13:53:11.405808Z",
+  "raw_candidates_before_job_filter": 166,
+  "job_or_career_posts_rejected": 0,
+  "raw_candidates": 166,
   "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 54,
-    "resolved": 47,
-    "text_recovered": 35,
+    "wrappers": 62,
+    "resolved": 54,
+    "text_recovered": 28,
     "reattributed": 6,
-    "images_found": 36
+    "images_found": 29
   },
-  "duplicates_merged": 124,
-  "attempted_rewrites": 1,
+  "duplicates_merged": 128,
+  "attempted_rewrites": 2,
   "new_articles": 0,
   "live_articles": 44,
-  "skipped": 1,
+  "skipped": 2,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 1
+    "editorial gate: REJECTED_NON_LOCAL": 2
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger": {
-    "entries": 8,
+    "entries": 9,
     "by_outcome": {
       "published": 2,
-      "rejected": 6
+      "rejected": 7
     },
     "held_back_this_run": 4,
     "held_already_published": 2,
@@ -55,7 +55,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 145,
+    "rss_and_google_news": 148,
     "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 9,
@@ -69,7 +69,7 @@
   "source_counts": {
     "Roch Valley Radio": 61,
     "Manchester Evening News": 19,
-    "Rochdale Times": 14,
+    "Rochdale Times": 15,
     "Rochdale Borough Council": 13,
     "Facebook": 5,
     "InYourArea": 5,
@@ -80,6 +80,7 @@
     "The Guardian": 3,
     "London Now": 3,
     "Yahoo News Australia": 3,
+    "Rochdale Valiant": 3,
     "Ofsted": 3,
     "Id": 2,
     "Betfred Insights": 2,
@@ -97,7 +98,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "transport": 1
+    "transport": 2
   },
   "published_by_category": {
     "business": 6,
@@ -135,9 +136,11 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "transport-v3-47b67733317dfadf063b",
     "transport-v3-3f85d9ff87c4e90e4f1d"
   ],
   "selected_candidate_urls": [
+    "https://www.northernrailway.co.uk/service-updates#live-bd2481d3528358b591",
     "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true"
   ],
   "x_social_records": 0,
@@ -157,21 +160,26 @@
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [],
+    "available_areas": [
+      "smithy_bridge"
+    ],
     "selected_areas": [
-      "rochdale"
+      "rochdale",
+      "smithy_bridge"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "transport": 1
+      "transport": 2
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 1
+      "rochdale": 1,
+      "smithy_bridge": 1
     },
     "selected_by_source": {
+      "northern live service updates": 1,
       "tfgm travel alerts": 1
     }
   },
@@ -814,12 +822,12 @@
     "https://c.newsnow.co.uk/A/1326336191?-57568:46921",
     "https://c.newsnow.co.uk/A/1326308179?-57568:46921",
     "https://c.newsnow.co.uk/A/1326284194?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326387972?-57568:46921",
     "https://c.newsnow.co.uk/A/1326605372?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326537176?-57568:46921",
-    "https://c.newsnow.co.uk/A/1326529023?-57568:46921",
     "https://c.newsnow.co.uk/A/1326525501?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326529023?-57568:46921",
     "https://c.newsnow.co.uk/A/1326613041?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326387972?-57568:46921",
+    "https://c.newsnow.co.uk/A/1326537176?-57568:46921",
     "https://c.newsnow.co.uk/A/1326546872?-57568:46921",
     "https://www.linkedin.com/company/groundnews"
   ],
@@ -859,7 +867,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-09T13:42:08.634465Z",
+  "frontpage_generated_at": "2026-10-09T13:55:50.260643Z",
   "frontpage_article_count": 37,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {

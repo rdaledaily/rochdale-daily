@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-09T13:39:31.717810Z",
+  "updated_at": "2026-10-09T13:53:11.404892Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 8,
+  "count": 9,
   "entries": {
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10": {
       "first_attempt_at": "2026-10-09T12:08:37.100774Z",
@@ -21,12 +21,12 @@
     },
     "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true": {
       "first_attempt_at": "2026-10-09T13:39:18.926514Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true",
         "https://tfgm.com/travel-updates/travel-alerts?no-script=true"
       ],
-      "last_attempt_at": "2026-10-09T13:39:18.926514Z",
+      "last_attempt_at": "2026-10-09T13:52:58.643839Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Travel alerts",
@@ -61,6 +61,20 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "653f5b5fcbcad099"
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-bd2481d3528358b591": {
+      "first_attempt_at": "2026-10-09T13:52:58.278778Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-bd2481d3528358b591"
+      ],
+      "last_attempt_at": "2026-10-09T13:52:58.278778Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "d6f1910b08c75db7"
     },
     "https://www.northernrailway.co.uk/service-updates#live-e48b4667c1e52030fa": {
       "first_attempt_at": "2026-10-09T12:08:40.629604Z",
