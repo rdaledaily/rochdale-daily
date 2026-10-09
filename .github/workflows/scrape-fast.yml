@@ -164,6 +164,20 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref main
+      - name: Start the Morning Briefing when it is due
+        # GitHub starts the briefing's own 9am schedule four to ten hours late
+        # (34 of 34 scheduled runs, 10 September to 9 October 2026), so it never
+        # published. This lane does run all morning, so it is the clock: from
+        # 9am London, the first run to finish starts the briefing workflow. That
+        # workflow refuses to build a second briefing for the same day.
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if python3 scraper/daily_briefing.py --slot morning --check-due; then
+            gh workflow run daily-briefing.yml --ref main
+            echo "dispatched the Morning Briefing"
+          fi
       - name: Keep the fast lane running
         # Four rails stop a runaway/starving chain: a depth cap, a check that no
         # other fast run is active, a check that the canonical publisher is
@@ -332,3 +346,25 @@ jobs:
           path: /tmp/rochdale-daily-editorial-review/
           if-no-files-found: ignore
           retention-days: 30
+      - name: Restart the fast lane
+        # The fast lane stops chaining while this deep run is active, because it
+        # sees another run of this workflow in progress. Nothing restarted it
+        # afterwards, so the paper waited for the hourly tick, which GitHub
+        # starts hours late. Measured 2 to 9 October 2026: 17 of 21 idle gaps
+        # longer than 20 minutes began when a deep run ended, 50 idle hours in
+        # 171, the longest 6 hours 26 minutes on a weekday morning.
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          active=$(gh run list --workflow scrape-fast.yml --limit 15 \
+            --json databaseId,status \
+            --jq "[.[] | select(.status != \"completed\") | select(.databaseId != $RUN_ID)] | length" \
+            || echo 0)
+          if [ "${active:-0}" -gt 0 ]; then
+            echo "a fast run is already queued or in progress; nothing to restart"
+            exit 0
+          fi
+          gh workflow run scrape-fast.yml --ref main -f chain=1
+          echo "restarted the fast lane after the deep run"

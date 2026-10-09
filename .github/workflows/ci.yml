@@ -177,6 +177,8 @@ jobs:
           PYTHONPATH=scraper python scraper/test_sponsored_frontpage_floor.py
           PYTHONPATH=scraper python scraper/test_generated_card_style.py
           PYTHONPATH=scraper python scraper/test_prune_dead_related_links.py
+          PYTHONPATH=scraper python scraper/test_deterministic_draft_gate.py
+          PYTHONPATH=scraper python scraper/test_daily_briefing.py
           PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
           python scraper/test_ensure_article_images.py
           python scraper/test_councillor_photos.py
