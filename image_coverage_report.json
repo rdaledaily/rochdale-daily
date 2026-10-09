@@ -1,19 +1,12 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 31,
-    "cards_library": 0,
-    "cards_generated": 9,
+    "kept_cards": 30,
+    "cards_library": 1,
+    "cards_generated": 12,
     "skipped": 0
   },
   "items": [
-    {
-      "slug": "train-services-disrupted-due-to-engineering-works-between-preston-and-blackburn",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/train.jpg",
-      "matched_filename": "train.jpg",
-      "match_score": 15125
-    },
     {
       "slug": "reel-cinema-rochdale-polar-express-pyjama-party",
       "result": "kept-cards",
@@ -127,6 +120,13 @@
       "match_score": null
     },
     {
+      "slug": "rochdale-s-new-album-celebrates-the-town-s-musical-heritage",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/rochdale-s-new-album-celebrates-the-town-s-musical-heritage-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "man-arrested-suspicion-murder-curzon-road-rochdale-october-2026",
       "result": "kept-existing",
       "image_url": "assets/img/cards/police.jpg",
@@ -162,7 +162,7 @@
       "match_score": null
     },
     {
-      "slug": "nine-charged-with-49-offences-following-police-operation-in-rochdale-and-heywood",
+      "slug": "nine-suspects-charged-with-49-offences-following-police-operation-in-rochdale",
       "result": "kept-cards",
       "image_url": "assets/img/cards/police.jpg",
       "matched_filename": "police.jpg",
@@ -174,6 +174,13 @@
       "image_url": "assets/img/cards/bury_road.jpg",
       "matched_filename": "bury_road.jpg",
       "match_score": null
+    },
+    {
+      "slug": "rochdale-to-face-grimsby-town-on-20th-october-2026",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 8125
     },
     {
       "slug": "why-rochdale-says-cruckle",
@@ -242,6 +249,20 @@
       "slug": "590-bus-service-from-rochdale-to-halifax-showcases-scenic-pennine-journey",
       "result": "kept-cards",
       "image_url": "assets/img/cards/590-bus-service-from-rochdale-to-halifax-showcases-scenic-pennine-journey-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-sleepout-2026-petrus",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/homelessness.png",
+      "matched_filename": "homelessness.png",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-masters-mayfield-movers-45-mile-charity-walk",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/match.jpg",
       "matched_filename": "",
       "match_score": null
     },
