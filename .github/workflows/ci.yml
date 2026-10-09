@@ -197,6 +197,8 @@ jobs:
         run: python scraper/enforce_cards_only_images.py --articles articles.json --check
       - name: SEO feed quality gate
         run: python scraper/seo_lint.py
+      - name: Banner self-service contracts
+        run: python scraper/test_banner_self_service_contract.py
       - name: New story notification smoke tests
         run: python scraper/test_new_story_alerts.py
       - name: Reader loyalty UI/API contract smoke tests
