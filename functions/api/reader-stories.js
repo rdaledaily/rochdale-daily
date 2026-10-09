@@ -2,6 +2,7 @@
 const reply=(v,s=200)=>new Response(JSON.stringify(v),{status:s,headers:{"Content-Type":"application/json","Cache-Control":"no-store"}});
 const tidy=(v,n)=>String(v||"").trim().slice(0,n);
 function prohibited(s){return /\b(murder|homicide|killed|killer|rape|raped|sexual assault|sexually assaulted|molest|grooming|sexuality|sexual orientation|gay|lesbian|bisexual|transgender|transsexual|queer|crime|criminal|arrested|charged|convicted|sentenced|theft|burglary|robbery|fraud|assault|stabbing|drugs|prosecution|court case|police investigation|fuck|fucking|shit|bitch|cunt|bastard|wanker|bollocks|motherfucker)\b/i.test(s)}
+const ALLOWED_CATEGORIES=new Set(['community','events','business','education','sport','health','environment','news']);
 const validEmail=x=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x);
 function isAdmin(req,env){return Boolean(env.EVENTS_ADMIN_TOKEN&&req.headers.get('x-admin-token')===env.EVENTS_ADMIN_TOKEN)}
 async function read(kv){const a=await kv.get('stories:paid:submissions',{type:'json'});return Array.isArray(a)?a:[]}
@@ -12,14 +13,14 @@ export async function onRequestPost({request,env}){
  let x;try{x=await request.json()}catch{return reply({error:'Invalid request'},400)}
  const action=tidy(x.action||'submit',20),records=await read(kv);
  if(action==='submit'){
-  const title=tidy(x.title,130),body=tidy(x.body,9000),byline=tidy(x.byline,100),email=tidy(x.email,150),area=tidy(x.area,90),source=tidy(x.source,500),choice=tidy(x.imageChoice,10);
-  if(title.length<15||body.length<250||!byline||!validEmail(email)||!area||!['upload','gallery'].includes(choice)||(!source&&body.length<500))return reply({error:'Complete all fields. Your story must be at least 250 characters and have a meaningful headline.'},400);
+  const title=tidy(x.title,130),body=tidy(x.body,9000),byline=tidy(x.byline,100),email=tidy(x.email,150),area=tidy(x.area,90),category=tidy(x.category,40).toLowerCase(),source=tidy(x.source,500),choice=tidy(x.imageChoice,10);
+  if(title.length<15||body.length<250||!byline||!validEmail(email)||!area||!ALLOWED_CATEGORIES.has(category)||!['upload','gallery'].includes(choice)||(!source&&body.length<500))return reply({error:'Complete all fields. Your story must be at least 250 characters and have a meaningful headline.'},400);
   if(prohibited([title,body,source,byline].join(' ')))return reply({error:'This topic or wording is not eligible for paid reader submissions.'},422);
   if(choice==='upload'&&!validImage(x.image))return reply({error:'Upload a PNG, JPG or WebP image smaller than 250 KB.'},400);
   if(records.filter(r=>r.status==='pending'||r.status==='awaiting_payment').length>=100)return reply({error:'Submission queue is full'},503);
   const id='reader-'+crypto.randomUUID(),now=new Date().toISOString();
   if(choice==='upload')await kv.put('stories:paid:image:'+id,x.image);
-  records.push({id,title,body,byline,email,area,source,imageChoice:choice,status:'awaiting_payment',submittedAt:now,paymentConfirmed:false,editorialApproved:false,label:'Paid reader submission'});
+  records.push({id,title,body,byline,email,area,category,source,commentsEnabled:true,imageChoice:choice,status:'awaiting_payment',submittedAt:now,paymentConfirmed:false,editorialApproved:false,label:'Paid reader submission'});
   await kv.put('stories:paid:submissions',JSON.stringify(records));
   return reply({reference:id,paymentUrl:'https://pay.sumup.com/b2c/QD70LX24',message:'Submission saved for moderation. Pay £5 with SumUp and quote this reference. Payment never guarantees publication.'},201);
  }
@@ -29,7 +30,7 @@ export async function onRequestPost({request,env}){
  else if(action==='reject'){row.status='rejected';row.rejectReason=tidy(x.reason,400);}
  else if(action==='approve'){
   if(!row.paymentConfirmed)return reply({error:'Verify the £5 payment first'},409);
-  if(prohibited([row.title,row.body,row.byline,row.source].join(' ')))return reply({error:'Submission violates editorial exclusions'},422);
+  if(!ALLOWED_CATEGORIES.has(row.category)||prohibited([row.title,row.body,row.byline,row.source].join(' ')))return reply({error:'Submission violates editorial exclusions'},422);
   row.status='approved_for_manual_publication';row.editorialApproved=true;
  }else return reply({error:'Unknown action'},400);
  row.reviewedAt=new Date().toISOString();
