@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-09T15:01:29.042649Z",
+  "updated_at": "2026-10-09T15:12:23.206747Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 13,
+  "count": 14,
   "entries": {
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10": {
       "first_attempt_at": "2026-10-09T12:08:37.100774Z",
@@ -36,12 +36,12 @@
     },
     "https://tfgm.com/travel-updates/travel-alerts?no-script=true": {
       "first_attempt_at": "2026-10-09T14:19:20.312055Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true",
         "https://tfgm.com/travel-updates/travel-alerts?no-script=true"
       ],
-      "last_attempt_at": "2026-10-09T15:01:16.041572Z",
+      "last_attempt_at": "2026-10-09T15:12:16.591044Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Travel alerts",
@@ -62,6 +62,20 @@
       "source_name": "Greater Manchester Police",
       "category": "crime",
       "text_fingerprint": "ac8184950dea95fb"
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-366e6e1ac7093b309b": {
+      "first_attempt_at": "2026-10-09T15:12:15.781676Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-366e6e1ac7093b309b"
+      ],
+      "last_attempt_at": "2026-10-09T15:12:15.781676Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "8c9ea0ca026f3be0"
     },
     "https://www.northernrailway.co.uk/service-updates#live-5035d62b28447a1f17": {
       "first_attempt_at": "2026-10-09T13:18:39.565908Z",
