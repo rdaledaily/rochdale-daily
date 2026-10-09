@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-09T14:43:23.451832Z",
+  "updated_at": "2026-10-09T15:01:29.042649Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 12,
+  "count": 13,
   "entries": {
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10": {
       "first_attempt_at": "2026-10-09T12:08:37.100774Z",
@@ -36,12 +36,12 @@
     },
     "https://tfgm.com/travel-updates/travel-alerts?no-script=true": {
       "first_attempt_at": "2026-10-09T14:19:20.312055Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true",
         "https://tfgm.com/travel-updates/travel-alerts?no-script=true"
       ],
-      "last_attempt_at": "2026-10-09T14:19:20.312055Z",
+      "last_attempt_at": "2026-10-09T15:01:16.041572Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Travel alerts",
@@ -132,6 +132,20 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "7ad0563e955fda4b"
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-f4909405d152c92331": {
+      "first_attempt_at": "2026-10-09T15:01:13.728518Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-f4909405d152c92331"
+      ],
+      "last_attempt_at": "2026-10-09T15:01:13.728518Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "78949e516518e6d1"
     },
     "https://www.rochdale.gov.uk/events/event/1492/a-christmas-celebration-with-the-brighouse-and-rastrick-band": {
       "first_attempt_at": "2026-10-09T12:08:40.626306Z",
