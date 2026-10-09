@@ -20,7 +20,7 @@ git_fetch() {
 
 stage_newsroom() {
   git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
-    newsroom_candidates.json google_news_resolution_report.json google_news_resolutions.json live_source_state.json \
+    newsroom_candidates.json rewrite_ledger.json google_news_resolution_report.json google_news_resolutions.json live_source_state.json \
     image_coverage_report.json image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json assets/img/cards \
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json \
     archive.html search.html archive-index.json rss.xml index.html \
@@ -113,7 +113,7 @@ recovery_dir="$(mktemp -d)"
 trap 'rm -rf "${recovery_dir}"' EXIT
 
 git show "${local_snapshot_commit}:articles.json" > "${recovery_dir}/local_articles.json"
-for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json live_source_state.json google_news_resolutions.json; do
+for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json rewrite_ledger.json live_source_state.json google_news_resolutions.json; do
   if git cat-file -e "${local_snapshot_commit}:${optional}" 2>/dev/null; then
     git show "${local_snapshot_commit}:${optional}" > "${recovery_dir}/${optional}"
   fi
@@ -134,7 +134,7 @@ for attempt in 1 2; do
 
   cp articles.json "${recovery_dir}/remote_articles.json"
   python scraper/merge_feeds.py "${recovery_dir}/remote_articles.json" "${recovery_dir}/local_articles.json" articles.json
-  for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json live_source_state.json google_news_resolutions.json; do
+  for optional in weather.json event_dates.json scraper_status.json newsroom_candidates.json rewrite_ledger.json live_source_state.json google_news_resolutions.json; do
     if [ -f "${recovery_dir}/${optional}" ]; then
       cp "${recovery_dir}/${optional}" "${optional}"
     fi
