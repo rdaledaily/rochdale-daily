@@ -513,7 +513,7 @@ def normalise_article(
         article["police_matter"] = False
 
     # Forward-only editorial quality gate. Historical articles remain intact.
-    # Automated stories newly ingested after activation are held rather than
+    # Automated stories newly ingested after activation are rejected rather than
     # published when conservative evidence checks identify a major issue.
     if not article.get("sponsored") and not article.get("manual_article"):
         from editorial_review import review_flags
@@ -523,7 +523,7 @@ def normalise_article(
         if ingested is not None and published is not None and ingested >= activated and published >= activated:
             flags = review_flags(article)
             if flags:
-                notes.append(f"HELD '{ident}' for editorial review: {'; '.join(flags)}")
+                notes.append(f"REJECTED '{ident}' by forward editorial guard: {'; '.join(flags)}")
                 return None
 
     if expire_ongoing(article):
