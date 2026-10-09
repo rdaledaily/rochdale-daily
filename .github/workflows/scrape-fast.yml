@@ -324,3 +324,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref main
+      - name: Preserve final rejected drafts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-editorial-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: /tmp/rochdale-daily-editorial-review/
+          if-no-files-found: ignore
+          retention-days: 30
