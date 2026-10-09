@@ -395,11 +395,16 @@ def configure_editorial_newsworthiness_gate() -> None:
             return False
 
         eligible = original(candidate, existing_by_story)
+        if not eligible and live_material_update and not core.source_material_changed_since_last_attempt(candidate):
+            # The page has not changed since the last attempt, so the "new
+            # facts" are only details the published copy chose to leave out.
+            live_material_update = False
         if not eligible and live_material_update:
             core.log.info(
                 "LIVE same-source material update bypassed duplicate rejection: %s",
                 getattr(candidate, "source_url", ""),
             )
+            core.REWRITE_LEDGER_HELD.pop(core.candidate_identity(candidate), None)
             eligible = True
         if not eligible:
             return False
