@@ -325,35 +325,186 @@ def wrap(draw: ImageDraw.ImageDraw, text: str, fnt: ImageFont.ImageFont, width: 
     return lines
 
 
+# ---------------------------------------------------------------------------
+# Generated cards, in the paper's own dress.
+#
+# The card used to be a near-black slab with a cyan bar and DejaVu Sans, a
+# leftover from the cyan/navy palette the site dropped in September 2026. On a
+# warm paper page set in Libre Baskerville it looked like it had come from a
+# different website. It is now drawn from the same values as
+# assets/css/rd-tokens.css and the same two typefaces, which ship in
+# assets/fonts so the card is identical on every machine that draws it.
+#
+# Changing CARD_STYLE redraws every existing generated card once (see
+# restyle_generated_cards), so the whole archive changes with it.
+# ---------------------------------------------------------------------------
+CARD_STYLE = "broadsheet-v1"
+CARD_STYLE_STAMP = CARDS_DIR / ".generated-card-style"
+FONT_DIR = Path("assets/fonts")
+CARD_PAPER = (246, 245, 241)     # --paper  #f6f5f1
+CARD_INK = (43, 40, 36)          # --ink    #2b2824
+CARD_INK_SOFT = (91, 89, 82)     # --ink-soft #5b5952
+CARD_LINE = (220, 218, 212)      # --line   #dcdad4
+CARD_ACCENT = (107, 90, 70)      # warm accent #6b5a46
+CARD_MARGIN = 84
+
+
+def card_font(kind: str, size: int) -> ImageFont.ImageFont:
+    """The site's own faces: Libre Baskerville for headlines, Instrument Sans for furniture."""
+    name, weight = (
+        ("LibreBaskerville-wght.ttf", 700) if kind == "serif" else ("InstrumentSans-wdth-wght.ttf", 600)
+    )
+    for base in (Path.cwd() / FONT_DIR, Path(__file__).resolve().parents[1] / FONT_DIR):
+        path = base / name
+        if not path.is_file():
+            continue
+        try:
+            loaded = ImageFont.truetype(str(path), size=size)
+            axes = loaded.get_variation_axes()
+            loaded.set_variation_by_axes([
+                weight if "eight" in str(axis.get("name")) else axis.get("default") for axis in axes
+            ])
+            return loaded
+        except (OSError, AttributeError, ValueError):
+            continue
+    return font(size, bold=True)
+
+
+def draw_tracked(draw: ImageDraw.ImageDraw, xy: tuple[float, float], text: str,
+                 fnt: ImageFont.ImageFont, fill: tuple[int, int, int], tracking: float,
+                 anchor_right: bool = False) -> float:
+    """Draw letter-spaced capitals; returns the width drawn."""
+    widths = [draw.textlength(char, font=fnt) for char in text]
+    total = sum(widths) + tracking * max(0, len(text) - 1)
+    x, y = xy
+    if anchor_right:
+        x -= total
+    for char, width in zip(text, widths):
+        draw.text((x, y), char, fill=fill, font=fnt)
+        x += width + tracking
+    return total
+
+
+def fit_headline(draw: ImageDraw.ImageDraw, text: str, width: int) -> tuple[ImageFont.ImageFont, list[str], int]:
+    """Largest size at which the headline fits in four lines without being cut."""
+    words = clean(text).split()
+    for size in (64, 58, 52, 46, 42):
+        fnt = card_font("serif", size)
+        lines: list[str] = []
+        current = ""
+        for word in words:
+            trial = word if not current else f"{current} {word}"
+            if draw.textlength(trial, font=fnt) <= width:
+                current = trial
+            else:
+                if current:
+                    lines.append(current)
+                current = word
+        if current:
+            lines.append(current)
+        if len(lines) <= 4:
+            return fnt, lines, size
+    # Still too long at the smallest size: cut at four lines, honestly marked.
+    last = lines[3]
+    while last and draw.textlength(last + "…", font=fnt) > width:
+        last = last[:-1]
+    return fnt, lines[:3] + [last.rstrip() + "…"], size
+
+
+def draw_generated_card(target: Path, title: str, category: str, sponsored: bool = False) -> None:
+    """Draw one photo-free card: paper ground, ruled head, serif headline, masthead foot."""
+    canvas = Image.new("RGB", (WIDTH, HEIGHT), CARD_PAPER)
+    draw = ImageDraw.Draw(canvas)
+    left, right = CARD_MARGIN, WIDTH - CARD_MARGIN
+
+    headline = clean(title) or "Rochdale Daily"
+    if headline.lower().startswith("sponsored:"):
+        sponsored = True
+        headline = headline.split(":", 1)[1].strip() or headline
+    kicker = "SPONSORED" if sponsored else (clean(category) or "news").upper()
+
+    # Section head: the same thin-over-thick double rule the pages use.
+    draw.rectangle((left, 70, right, 70), fill=CARD_INK)
+    draw.rectangle((left, 75, right, 77), fill=CARD_INK)
+    label = card_font("sans", 24)
+    draw_tracked(draw, (left, 100), kicker, label, CARD_ACCENT, 4.2)
+
+    fnt, lines, size = fit_headline(draw, headline, right - left)
+    leading = int(size * 1.26)
+    block = leading * len(lines)
+    top, bottom = 150, HEIGHT - 122
+    y = top + max(0, (bottom - top - block) // 2) - int(size * 0.08)
+    for line in lines:
+        draw.text((left, y), line, fill=CARD_INK, font=fnt)
+        y += leading
+
+    draw.rectangle((left, HEIGHT - 104, right, HEIGHT - 104), fill=CARD_LINE)
+    foot = card_font("sans", 22)
+    draw_tracked(draw, (left, HEIGHT - 82), "ROCHDALE DAILY", foot, CARD_INK, 4.6)
+    draw_tracked(draw, (right, HEIGHT - 82), "ROCHDALEDAILY.CO.UK", foot, CARD_INK_SOFT, 3.2, anchor_right=True)
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(target, format="JPEG", quality=88, optimize=True)
+
+
 def make_generated_card(article: dict[str, Any], root: Path) -> str:
     """Create a photo-free fallback card inside assets/img/cards."""
     slug = slug_for(article)
     target = root / CARDS_DIR / f"{slug}-generated-card.jpg"
-    target.parent.mkdir(parents=True, exist_ok=True)
-
-    canvas = Image.new("RGB", (WIDTH, HEIGHT), (13, 19, 28))
-    draw = ImageDraw.Draw(canvas)
-    cyan = (37, 164, 201)
-    white = (248, 250, 252)
-    muted = (184, 197, 211)
-
-    draw.rectangle((0, 0, WIDTH, 18), fill=cyan)
-    kicker_font = font(34, bold=True)
-    title_font = font(66, bold=True)
-    small_font = font(30)
-
-    category = clean(article.get("category") or "news").upper()
-    area = clean(article.get("area") or "Rochdale")
-    draw.text((72, 72), category, fill=cyan, font=kicker_font)
-
-    y = 145
-    for line in wrap(draw, clean(article.get("title") or "Rochdale Daily"), title_font, WIDTH - 144):
-        draw.text((72, y), line, fill=white, font=title_font)
-        y += 78
-
-    draw.text((72, HEIGHT - 100), f"{area}  •  Rochdale Daily", fill=muted, font=small_font)
-    canvas.save(target, format="JPEG", quality=90, optimize=True)
+    draw_generated_card(
+        target,
+        clean(article.get("title") or "Rochdale Daily"),
+        clean(article.get("category") or "news"),
+        sponsored=article.get("sponsored") is True,
+    )
     return target.relative_to(root).as_posix()
+
+
+def restyle_generated_cards(root: Path, rows: list[Any]) -> dict[str, int]:
+    """Redraw every existing generated card once when the card style changes.
+
+    A generated card is otherwise drawn once and kept for ever, so a new style
+    would only ever reach new stories while 500-odd archive pages kept the old
+    one. The headline and section come from the live feed, then the archive
+    index. A card with no article behind it in either cannot be redrawn - there
+    is no headline to draw - and is counted, not guessed at.
+    """
+    stamp = root / CARD_STYLE_STAMP
+    try:
+        if stamp.read_text(encoding="utf-8").strip() == CARD_STYLE:
+            return {"redrawn": 0, "no_article": 0, "already_current": 1}
+    except OSError:
+        pass
+
+    known: dict[str, dict[str, Any]] = {}
+    try:
+        archive = json.loads((root / "archive-index.json").read_text(encoding="utf-8"))
+        for entry in archive if isinstance(archive, list) else []:
+            if isinstance(entry, dict) and entry.get("slug"):
+                known[str(entry["slug"])] = entry
+    except (OSError, ValueError):
+        pass
+    for row in rows:
+        if isinstance(row, dict) and slug_for(row):
+            known[slug_for(row)] = row  # the live record is the fresher of the two
+
+    redrawn = no_article = 0
+    for path in sorted((root / CARDS_DIR).glob("*-generated-card.jpg")):
+        entry = known.get(path.name[: -len("-generated-card.jpg")])
+        if entry is None:
+            no_article += 1
+            continue
+        draw_generated_card(
+            path,
+            clean(entry.get("title") or "Rochdale Daily"),
+            clean(entry.get("category") or "news"),
+            sponsored=entry.get("sponsored") is True,
+        )
+        redrawn += 1
+    stamp.parent.mkdir(parents=True, exist_ok=True)
+    stamp.write_text(CARD_STYLE + "\n", encoding="utf-8")
+    print(f"Generated-card restyle ({CARD_STYLE}): {redrawn} redrawn; {no_article} have no article and were left.")
+    return {"redrawn": redrawn, "no_article": no_article, "already_current": 0}
 
 
 def set_curated(article: dict[str, Any], root: Path, chosen: Path) -> None:
@@ -435,6 +586,8 @@ def main(argv: list[str] | None = None) -> int:
     rows = data if isinstance(data, list) else data.get("articles", [])
     if not isinstance(rows, list):
         raise SystemExit("Article feed must contain a JSON list")
+
+    restyle = restyle_generated_cards(root, rows)
 
     stats = {"kept_cards": 0, "cards_library": 0, "cards_generated": 0, "skipped": 0}
     report: list[dict[str, Any]] = []
