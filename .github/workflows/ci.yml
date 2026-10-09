@@ -127,7 +127,9 @@ jobs:
             scraper/normalise_public_theme.py \
             scraper/scraper.py \
             scraper/editorial_review.py \
-            scraper/claim_evidence.py
+            scraper/claim_evidence.py \
+            scraper/source_evidence_capture.py \
+            scraper/editorial_review_queue.py
       - name: Check route JavaScript syntax
         run: |
           node --check assets/js/category-page.js
@@ -160,6 +162,8 @@ jobs:
           python scraper/test_article_gate.py
           PYTHONPATH=scraper python scraper/test_editorial_review.py
           PYTHONPATH=scraper python scraper/test_claim_evidence.py
+          PYTHONPATH=scraper python scraper/test_source_evidence_capture.py
+          PYTHONPATH=scraper python scraper/test_editorial_review_queue.py
           python scraper/test_resolve_google_news_sources.py
           PYTHONPATH=scraper python scraper/test_google_news_resolver.py
           PYTHONPATH=scraper python scraper/test_run_newsroom_policy.py
