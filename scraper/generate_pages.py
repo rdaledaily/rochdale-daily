@@ -42,6 +42,53 @@ LEGACY_COMMENT_MARKUP = [
 ]
 
 
+RELATED_STORY_LINK = re.compile(
+    r'<a\b[^>]*\bclass="related-story"[^>]*\bhref="(?P<href>[^"]+)"[^>]*>.*?</a>\s*', re.S
+)
+
+
+def prune_dead_related_links(pages_dir: Path, skip: set[str]) -> tuple[int, int]:
+    """Remove related-story cards that point at a page which no longer exists.
+
+    Archived pages are never rewritten, so when a story is taken down or its
+    page is otherwise removed, every archived page that listed it under
+    "related" keeps a card for it: a headline and thumbnail that lead to a
+    404. Measured 9 October 2026: 44 such cards on 42 archived pages, twelve
+    missing targets. Only same-folder links to a missing .html file are
+    removed; every other link is left exactly as it is.
+
+    Returns (pages changed, cards removed).
+    """
+    if not pages_dir.exists():
+        return 0, 0
+    existing = {path.name for path in pages_dir.glob('*.html')}
+    changed = 0
+    removed = 0
+
+    for path in pages_dir.glob('*.html'):
+        if path.stem in skip:
+            continue
+        original = path.read_text(encoding='utf-8')
+        if 'class="related-story"' not in original:
+            continue
+        dropped = 0
+
+        def keep_or_drop(match: re.Match[str]) -> str:
+            nonlocal dropped
+            target = match.group('href').split('#', 1)[0].split('?', 1)[0]
+            if '/' in target or not target.endswith('.html') or target in existing:
+                return match.group(0)
+            dropped += 1
+            return ''
+
+        cleaned = RELATED_STORY_LINK.sub(keep_or_drop, original)
+        if dropped:
+            path.write_text(cleaned, encoding='utf-8')
+            changed += 1
+            removed += dropped
+    return changed, removed
+
+
 def scrub_legacy_comment_markup(pages_dir: Path, skip: set[str]) -> int:
     """Strip the retired Facebook comments block from archived pages.
 
@@ -1067,6 +1114,7 @@ def main() -> None:
     live_slugs = {slug for slug, _ in slugs_with_dates}
     scrubbed = scrub_legacy_comment_markup(OUTPUT_DIR, live_slugs)
     remastheaded = modernise_archived_masthead(OUTPUT_DIR, live_slugs)
+    related_pages, related_removed = prune_dead_related_links(OUTPUT_DIR, live_slugs)
     corrections_logged = write_corrections_log(articles)
     archived = sum(1 for path in OUTPUT_DIR.glob('*.html') if path.stem not in live_slugs)
     # Category hub pages are rebuilt here, inside the step every lane already
@@ -1103,6 +1151,7 @@ def main() -> None:
         f"{deleted_takedowns} blocklisted page(s) deleted, "
         f"{scrubbed} archived page(s) scrubbed of legacy comment markup; "
         f"{remastheaded} archived page(s) updated to the current masthead; "
+        f"{related_removed} dead related-story link(s) removed from {related_pages} archived page(s); "
         f"corrections log has {corrections_logged} entrie(s); "
         f"sitemap has {len(slugs_with_dates) + 2} URL(s)."
     )
