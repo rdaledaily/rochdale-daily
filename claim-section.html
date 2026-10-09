@@ -1,10 +1,39 @@
 <!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claim this advertising section | Rochdale Daily</title><meta name="robots" content="noindex,follow">
-<style>body{margin:0;background:#f7f9fb;color:#173047;font:16px/1.55 system-ui}main{max-width:640px;margin:5vh auto;padding:32px;background:#fff;border:1px solid #d6e0e8;border-radius:12px}a{color:#0c6b80}.pay{display:inline-block;background:#0e7490;color:white;padding:14px 24px;border-radius:5px;font-weight:700;text-decoration:none;margin:12px 0}small{color:#52606b}</style>
-</head><body><main><a href="/">← Rochdale Daily</a><h1>Claim this section</h1>
-<p>Advertise your local business in Rochdale Daily's sponsored section. Sponsorship is clearly distinguished from independent journalism.</p>
-<p>Continue to SumUp's secure payment page to see the payment details before completing your purchase.</p>
-<a class="pay" href="https://pay.sumup.com/b2c/QHM2PP0L" rel="noopener noreferrer">Continue to SumUp checkout ↗</a>
-<p><small>Once you've paid, email <a href="mailto:advertising@rochdaledaily.co.uk?subject=Paid%20section%20claim">advertising@rochdaledaily.co.uk</a> with your business name and payment reference so we can arrange placement. Payment does not instantly publish an advert; placement is confirmed by the newsdesk.</small></p>
-</main></body></html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Submit your banner | Rochdale Daily</title><meta name="robots" content="noindex,follow"><style>body{margin:0;background:#f4f7f9;color:#123447;font:16px/1.55 system-ui}main{max-width:700px;margin:32px auto;padding:28px;background:#fff;border:1px solid #cedce3;border-radius:12px}a{color:#0a718e}label{display:block;font-weight:700;margin-top:16px}input,textarea{box-sizing:border-box;width:100%;padding:11px;border:1px solid #8faebb;border-radius:5px;font:inherit}button{background:#0e7490;border:0;border-radius:6px;color:white;font:700 16px system-ui;padding:14px 22px;cursor:pointer;margin-top:20px}button:disabled{opacity:.55}.hint{color:#4d6271;font-size:13px}.notice{background:#eaf8fc;border-left:4px solid #0e7490;padding:12px}.error{color:#ac253c}#status{margin-top:12px}</style></head><body><main>
+<a href="/">← Rochdale Daily</a><h1>Claim a banner placement</h1>
+<p>Advertise in the <strong>top and bottom banners</strong> on Rochdale Daily, alongside existing advertisers including WeCovered and E-Moon.</p>
+<div class="notice"><strong>How it works:</strong> We accept a maximum of <strong>10 advertisers per calendar month</strong> in this banner programme. All approved participating businesses receive <strong>equal rotation</strong> in both banner positions. This means equal selection probability, not a guaranteed number of views. Availability and creative suitability are confirmed before publication.</div>
+<p><strong>Step 1:</strong> Submit your business details, logo and banner text. <strong>Step 2:</strong> Continue to SumUp to pay. <strong>Step 3:</strong> We match payment to your reference, review the materials and confirm your booking by email. Submitting or paying does not automatically publish an advert.</p>
+<form id="bannerForm">
+<label for="name">Business name</label><input id="name" maxlength="100" required>
+<label for="email">Business email</label><input id="email" type="email" maxlength="150" required>
+<label for="website">Website link for people clicking your advert</label><input id="website" type="url" placeholder="https://yourbusiness.co.uk" required>
+<label for="logo">Upload your business logo</label><input id="logo" type="file" accept="image/png,image/jpeg,image/webp" required>
+<p class="hint">PNG, JPG or WebP only; maximum 200 KB. A transparent logo works best. We format the final banner for desktop and mobile.</p>
+<label for="top">Top banner wording</label><input id="top" maxlength="85" placeholder="e.g. Expert local home insurance" required><p class="hint">Up to 85 characters. Keep it concise and clear.</p>
+<label for="bottom">Bottom banner wording</label><input id="bottom" maxlength="125" placeholder="e.g. Get a quote today from your local specialists" required><p class="hint">Up to 125 characters.</p>
+<label for="month">Booking month</label><input id="month" type="month" required>
+<button id="send" type="submit">Submit artwork and continue to payment</button>
+<p id="status" role="status" aria-live="polite"></p>
+</form>
+<p class="hint">Payment is collected on SumUp's secure page. We do not store card details. Please retain the submission reference displayed after upload and quote it when paying or contacting the advertising team at <a href="mailto:advertising@rochdaledaily.co.uk">advertising@rochdaledaily.co.uk</a>.</p>
+</main><script>
+(function(){
+const form=document.getElementById('bannerForm'),status=document.getElementById('status'),button=document.getElementById('send');
+const m=document.getElementById('month');m.value=new Date().toISOString().slice(0,7);m.min=m.value;
+form.addEventListener('submit',async e=>{
+e.preventDefault();button.disabled=true;status.className='';status.textContent='Uploading your artwork…';
+try{
+ const file=document.getElementById('logo').files[0];
+ if(!file||file.size>200000||!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('Choose a PNG, JPG or WebP logo smaller than 200 KB.');
+ const logo=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('Cannot read logo'));reader.readAsDataURL(file)});
+ const payload={name:document.getElementById('name').value.trim(),email:document.getElementById('email').value.trim(),website:document.getElementById('website').value.trim(),top:document.getElementById('top').value.trim(),bottom:document.getElementById('bottom').value.trim(),month:m.value,logo};
+ const r=await fetch('/api/banner-claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+ const result=await r.json();if(!r.ok)throw Error(result.error||'Submission could not be saved.');
+ status.textContent='Submission received. Reference: '+result.reference+'. Save this reference. Your secure SumUp payment link is ready:';
+ const link=document.createElement('a');link.href='https://pay.sumup.com/b2c/QHM2PP0L';link.target='_blank';link.rel='noopener noreferrer';link.textContent=' Continue to SumUp payment →';link.style.fontWeight='700';status.appendChild(link);
+ button.textContent='Artwork submitted';form.querySelectorAll('input').forEach(x=>x.disabled=true);
+}catch(err){status.className='error';status.textContent=err.message||'Could not upload your details';button.disabled=false}
+});
+})();
+</script></body></html>
