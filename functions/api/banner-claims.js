@@ -22,7 +22,7 @@ export async function onRequestPost({request,env}) {
  if(action==='submit'){
   const fields=validated(d);if(!fields)return json({error:'Check all fields, logo (max 200 KB), and background colour'},400);
   // Cap counts bookings being processed too, to avoid overselling.
-  if(rows.filter(r=>r.month===fields.month&&['pending','approved'].includes(r.status)).length>=10)return json({error:'This month has reached 10 banner requests. Choose another month.'},409);
+  if(rows.filter(r=>r.month===fields.month&&['pending','approved'].includes(r.status)).length>=8)return json({error:'All eight new-advertiser spaces are reserved for this month (two existing sponsors also rotate). Choose another month.'},409);
   const id='ban-'+crypto.randomUUID(),token=crypto.randomUUID()+crypto.randomUUID();
   await kv.put('banners:logo:'+id,d.logo);
   rows.push({id,...fields,tokenHash:await hash(token),status:'pending',createdAt:new Date().toISOString()});
@@ -42,7 +42,7 @@ export async function onRequestPost({request,env}) {
  if(action==='approve'||action==='reject'){
   if(!admin(request,env))return json({error:'Unauthorised'},401);
   const row=rows.find(r=>r.id===d.id);if(!row)return json({error:'Not found'},404);
-  if(action==='approve'&&rows.filter(r=>r.month===row.month&&r.status==='approved'&&r.id!==row.id).length>=10)return json({error:'Month already full'},409);
+  if(action==='approve'&&rows.filter(r=>r.month===row.month&&r.status==='approved'&&r.id!==row.id).length>=8)return json({error:'Month already full'},409);
   row.status=action==='approve'?'approved':'rejected';row.reviewedAt=new Date().toISOString();
   await kv.put('banners:claims',JSON.stringify(rows));return json({ok:true,status:row.status});
  }
