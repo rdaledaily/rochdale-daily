@@ -88,6 +88,8 @@ def eligible_articles(rows: list[dict], now: datetime) -> list[tuple[datetime, d
         if not isinstance(article, dict): continue
         if str(article.get("status", "published")).lower() not in {"", "published"}: continue
         if article.get("hidden") is True or article.get("noindex") is True: continue
+        # Paid-for advertisement features are not news and are never submitted as news.
+        if article.get("sponsored") is True: continue
         if str(article.get("source_kind") or "").lower() in {"event", "listing"}: continue
         if is_utility_not_news(article): continue
         slug = str(article.get("slug") or "").strip().strip("/")

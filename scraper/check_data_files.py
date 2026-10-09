@@ -129,6 +129,17 @@ def check_manual_articles() -> None:
         for field in ("title", "body", "excerpt"):
             check_text(where, field, entry.get(field))
 
+        # A paid-for piece must say so where a reader cannot miss it. UK
+        # advertising rules require it, and the paper's own advertising page
+        # promises it. The flag alone is invisible, so the label is checked.
+        if entry.get("sponsored") is True:
+            if not str(entry.get("title") or "").lower().startswith("sponsored"):
+                fail(where, 'sponsored article: the title must begin with "Sponsored"')
+            if "sponsored" not in str(entry.get("byline") or "").lower():
+                fail(where, 'sponsored article: the byline must say "Sponsored content"')
+            if "advertisement" not in str(entry.get("legal_disclaimer") or "").lower():
+                fail(where, "sponsored article: legal_disclaimer must state it is an advertisement feature")
+
         category = str(entry.get("category") or "").lower()
         if category and category not in VALID_CATEGORIES:
             note(where, f'category "{category}" is not recognised and will become "news"')

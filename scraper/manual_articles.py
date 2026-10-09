@@ -171,6 +171,12 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         record["frontpage_until"] = _clean(entry.get("frontpage_until"))
     if entry.get("exclude_from_frontpage") is True:
         record["exclude_from_frontpage"] = True
+    if entry.get("sponsored") is True:
+        # A paid-for advertisement feature. The flag travels with the record so
+        # the news sitemap can leave it out: paid content must never be
+        # submitted to Google News as journalism. The reader-facing label lives
+        # in the headline, byline and disclaimer the entry itself carries.
+        record["sponsored"] = True
 
     return record
 
