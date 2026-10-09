@@ -22,6 +22,7 @@ FRONTPAGE = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
 ARTICLES = Path(os.getenv("ARTICLES_JSON", "articles.json"))
 FRESH_HOURS = int(os.getenv("FRONTPAGE_FRESH_HOURS", "14"))
 TARGET = int(os.getenv("FRONTPAGE_TARGET_ARTICLES", "30"))
+SPONSORED_FLOOR = 9
 
 
 def read_json(path: Path, default: Any) -> Any:
@@ -93,6 +94,27 @@ def eligible_manual(article: Any, now: datetime, cutoff: datetime) -> bool:
     return bool((published and published >= cutoff) or active_pin(article, now))
 
 
+def demote_sponsored(rows: list[dict[str, Any]], floor: int = SPONSORED_FLOOR) -> list[dict[str, Any]]:
+    """Hold paid-for advertisement features below the top-story positions.
+
+    The homepage builds its lead, top stories and latest panel from the first
+    nine entries. A sponsored piece is an editor-published manual article, so
+    without this it is restored directly under the lead. It stays in the feed,
+    in its original order, from position ten onwards. The same rule is applied
+    at request time in functions/articles/frontpage.json.js, which is the
+    order readers actually receive.
+    """
+    top: list[dict[str, Any]] = []
+    held: list[dict[str, Any]] = []
+    rest: list[dict[str, Any]] = []
+    for row in rows:
+        if len(top) < floor:
+            (held if row.get("sponsored") is True else top).append(row)
+        else:
+            rest.append(row)
+    return top + held + rest
+
+
 def main() -> int:
     payload = read_json(FRONTPAGE, {})
     rows = payload.get("articles") if isinstance(payload, dict) else None
@@ -150,6 +172,8 @@ def main() -> int:
             if identity(ordered[index]) not in protected:
                 ordered.pop(index)
             index -= 1
+
+    ordered = demote_sponsored(ordered)
 
     for index, article in enumerate(ordered):
         article["frontpage_rank"] = index
