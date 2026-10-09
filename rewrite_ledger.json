@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-09T14:07:07.590180Z",
+  "updated_at": "2026-10-09T14:19:27.354289Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 10,
+  "count": 11,
   "entries": {
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10": {
       "first_attempt_at": "2026-10-09T12:08:37.100774Z",
@@ -27,6 +27,21 @@
         "https://tfgm.com/travel-updates/travel-alerts?no-script=true"
       ],
       "last_attempt_at": "2026-10-09T14:06:54.808540Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Travel alerts",
+      "source_name": "TfGM Travel Alerts",
+      "category": "transport",
+      "text_fingerprint": "df474cc39eaee78c"
+    },
+    "https://tfgm.com/travel-updates/travel-alerts?no-script=true": {
+      "first_attempt_at": "2026-10-09T14:19:20.312055Z",
+      "attempts": 1,
+      "urls": [
+        "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true",
+        "https://tfgm.com/travel-updates/travel-alerts?no-script=true"
+      ],
+      "last_attempt_at": "2026-10-09T14:19:20.312055Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Travel alerts",
