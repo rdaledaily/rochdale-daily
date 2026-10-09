@@ -228,6 +228,43 @@ def check_adverts() -> None:
                 note(where, "url is still a placeholder (booking is not live)")
     note(path.name, f"{live} live placement(s)")
 
+    # Directory listings. ads.js builds the Local services directory from this
+    # list alone, so a duplicate id splits one advertiser's click count in two,
+    # a missing logo file shows an empty tile, and an email address here would
+    # be published to every reader: adverts.json is a public file.
+    directory = data.get("directory") or []
+    if not isinstance(directory, list):
+        fail(path.name, '"directory" must be a list')
+        return
+    seen_ids: set[str] = set()
+    listed = 0
+    for index, item in enumerate(directory):
+        if not isinstance(item, dict):
+            fail(f"{path.name} directory[{index}]", "listing is not an object")
+            continue
+        ident = str(item.get("id") or "")
+        where = f"{path.name} directory ({ident or index})"
+        if ident.startswith("template-"):
+            continue
+        listed += 1
+        for field in ("id", "category", "name", "start", "end"):
+            if not item.get(field):
+                fail(where, f"missing {field}")
+        if ident in seen_ids:
+            fail(where, "duplicate id: clicks for two listings would be counted as one")
+        seen_ids.add(ident)
+        if not item.get("url") and not item.get("phone"):
+            fail(where, "has neither url nor phone: the card would give readers nothing to act on")
+        logo = str(item.get("logo") or "")
+        if logo and not (REPO_ROOT / logo.lstrip("/")).is_file():
+            fail(where, f"logo file does not exist: {logo}")
+        url = str(item.get("url") or "")
+        if url and not url.startswith(("https://", "http://", "tel:")):
+            fail(where, f"url must start with https://: {url}")
+        if "@" in json.dumps({k: v for k, v in item.items() if k != "url"}):
+            fail(where, "contains an email address: adverts.json is public, keep advertiser emails out of it")
+    note(path.name, f"{listed} directory listing(s)")
+
 
 def check_simple(name: str, expect_list: bool = True, key: str | None = None) -> None:
     path = REPO_ROOT / name
