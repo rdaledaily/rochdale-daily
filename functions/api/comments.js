@@ -38,6 +38,34 @@
 // commonest way a local publisher ends up before a court.
 const CLOSED_CATEGORIES = new Set(["crime"]);
 
+
+const AREA_LABELS = {
+  norden:"Norden",bamford:"Bamford",castleton:"Castleton",healey:"Healey",
+  rochdale:"Rochdale",heywood:"Heywood",middleton:"Middleton",littleborough:"Littleborough",
+  milnrow:"Milnrow",newhey:"Newhey",wardle:"Wardle",whitworth:"Whitworth",
+  spotland:"Spotland",falinge:"Falinge",kirkholt:"Kirkholt",balderstone:"Balderstone",
+  alkrington:"Alkrington",smallbridge:"Smallbridge",firgrove:"Firgrove",
+  deeplish:"Deeplish",norden:"Norden"
+};
+function earnedBadge(area) {
+  const label=AREA_LABELS[String(area||"").replace(/_/g,"-")];
+  return label ? `${label}'s Most Informed` : "";
+}
+async function awardAreaBadge(kv, username, area) {
+  const badge=earnedBadge(area);
+  if(!badge) return;
+  const readKey=`reader:area:${username}:${area}`;
+  const progress=(await kv.get(readKey,{type:"json"}))||{};
+  if (!Array.isArray(progress.slugs) || progress.slugs.length < 3 || Number(progress.likes||0) < 3) return;
+  const user=await kv.get(`user:${username}`,{type:"json"});
+  if(!user) return;
+  user.badges=Array.isArray(user.badges)?user.badges:[];
+  if (!user.badges.includes(badge)) {
+    user.badges.push(badge);
+    await kv.put(`user:${username}`,JSON.stringify(user));
+  }
+}
+
 const COMMENTS_PER_ARTICLE = 200;   // ring buffer per article
 const MAX_BODY_CHARS = 1500;
 const MIN_BODY_CHARS = 2;
@@ -301,7 +329,7 @@ async function articleCategories(kv, origin) {
       const items = Array.isArray(payload) ? payload : (payload.articles || []);
       for (const item of items) {
         const slug = clean(item.slug || item.id);
-        if (slug) map[slug] = clean(item.category).toLowerCase() || "news";
+        if (slug) { map[slug] = clean(item.category).toLowerCase() || "news"; map[`area:${slug}`] = clean(item.area).toLowerCase() || ""; }
       }
     } catch { /* fall through with whatever was gathered */ }
   }
@@ -322,7 +350,7 @@ async function commentingAllowed(kv, origin, slug) {
   if (CLOSED_CATEGORIES.has(category)) {
     return { ok: false, reason: "Comments are closed on crime reports." };
   }
-  return { ok: true, category };
+  return { ok: true, category, area: map[`area:${slug}`] || '' };
 }
 
 /* ------------------------------------------------------------------ *
@@ -440,7 +468,7 @@ export async function onRequestGet({ request, env }) {
     closed: !gate.ok,
     closedReason: gate.ok ? "" : gate.reason,
     count: list.length,
-    comments: list.map(c => publicComment(c, viewerName)),
+    comments: await Promise.all(list.map(async c => { const out=publicComment(c,viewerName); const author=await kv.get(`user:${c.usernameLower}`,{type:"json"}); out.badges=Array.isArray(author?.badges)?author.badges.slice(0,5):[]; return out; })),
   // Per-reader like state means this response must not be shared by a cache.
   }, 200, viewerName ? "no-store" : "public, max-age=30");
 }
@@ -582,6 +610,16 @@ export async function onRequestPost({ request, env }) {
       likes: [],
     };
 
+    const area=gate.area;
+    comment.area=area;
+    if (earnedBadge(area)) {
+      const key=`reader:area:${user.usernameLower}:${area}`;
+      const progress=(await kv.get(key,{type:"json"}))||{slugs:[],likes:0};
+      progress.slugs=Array.isArray(progress.slugs)?progress.slugs:[];
+      if (!progress.slugs.includes(slug)) progress.slugs.push(slug);
+      await kv.put(key,JSON.stringify(progress));
+      await awardAreaBadge(kv,user.usernameLower,area);
+    }
     const listKey = `comments:${slug}`;
     const list = await readList(kv, listKey);
     list.unshift(comment);
@@ -638,6 +676,13 @@ export async function onRequestPost({ request, env }) {
 
     // Only a new like counts against the allowance; taking one back does not,
     // so nobody is penalised for changing their mind.
+    if (liked && target.area && earnedBadge(target.area)) {
+      const key=`reader:area:${target.usernameLower}:${target.area}`;
+      const progress=(await kv.get(key,{type:"json"}))||{slugs:[],likes:0};
+      progress.likes=Number(progress.likes||0)+1;
+      await kv.put(key,JSON.stringify(progress));
+      await awardAreaBadge(kv,target.usernameLower,target.area);
+    }
     if (liked) {
       limiter.hits.push(now);
       await writeLimiter(kv, limiterKey, limiter);
