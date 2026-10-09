@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 185,
-  "published_count": 185,
+  "article_count": 186,
+  "published_count": 186,
   "category_change_count": 27,
-  "image_change_count": 24,
+  "image_change_count": 25,
   "category_changes": [
     {
       "slug": "rbh-football-team-housing-association-charity-cup-2026",
@@ -234,6 +234,18 @@
       "after": "assets/img/cards/rochdale-to-face-grimsby-town-on-20th-october-2026-generated-card.jpg"
     },
     {
+      "slug": "man-arrested-following-incident-in-rochdale",
+      "title": "Man Arrested Following Incident in Rochdale",
+      "category": "crime",
+      "reason": "weak filename image match score 8385; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/greater_manchester_police.jpg",
+        "img": "assets/img/cards/greater_manchester_police.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/man-arrested-following-incident-in-rochdale-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-engineer-develops-ai-prototype-for-captioning-phone-conversations",
       "title": "Rochdale Engineer Develops AI Prototype for Captioning Phone Conversations",
       "category": "business",
@@ -247,7 +259,7 @@
     },
     {
       "slug": "rail-regulator-rejects-plans-for-rochdale-to-london-euston-train-services",
-      "title": "Plans for Direct Train Services from Rochdale to London Rejected by Rail Regulator",
+      "title": "Train Services from Rochdale to London Rejected by Rail Regulator",
       "category": "transport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
