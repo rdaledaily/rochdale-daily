@@ -33,7 +33,7 @@ export async function onRequestPost({request,env}) {
   if(rows.filter(r=>r.month===fields.month&&['pending','approved'].includes(r.status)).length>=8)return json({error:'All eight new-advertiser spaces are reserved for this month (two existing sponsors also rotate). Choose another month.'},409);
   const id='ban-'+crypto.randomUUID(),token=crypto.randomUUID()+crypto.randomUUID();
   await kv.put('banners:logo:'+id,d.logo);
-  rows.push({id,...fields,priceGBP:BANNER_PRICE_GBP,paymentStatus:'unpaid',tokenHash:await hash(token),status:'pending',createdAt:new Date().toISOString()});
+  rows.push({id,...fields,priceGBP:BANNER_PRICE_GBP,paymentStatus:'unpaid',revision:1,tokenHash:await hash(token),status:'pending',createdAt:new Date().toISOString()});
   await kv.put('banners:claims',JSON.stringify(rows));
   return json({reference:id,priceGBP:BANNER_PRICE_GBP,paymentStatus:'unpaid',editToken:token,editUrl:'/manage-banner.html?id='+encodeURIComponent(id)+'&key='+encodeURIComponent(token)},201);
  }
@@ -43,7 +43,8 @@ export async function onRequestPost({request,env}) {
   const fields=validated({...row,...d,month:row.month},true);if(!fields)return json({error:'Invalid banner details'},400);
   if(row.status==='rejected')return json({error:'Please contact the newsdesk about this booking'},403);
   if(d.logo)await kv.put('banners:logo:'+id,d.logo);
-  Object.assign(row,fields,{status:'pending',updatedAt:new Date().toISOString()});
+  // All creative edits require a fresh artwork review, even on a previously approved, paid banner.
+  Object.assign(row,fields,{status:'pending',revision:Number(row.revision||1)+1,artworkReviewedAt:null,artworkReviewedRevision:null,updatedAt:new Date().toISOString()});
   await kv.put('banners:claims',JSON.stringify(rows));
   return json({ok:true,message:'Changes saved and sent for editorial review'});
  }
@@ -59,10 +60,24 @@ export async function onRequestPost({request,env}) {
   await kv.put('banners:claims',JSON.stringify(rows));
   return json({ok:true,paymentStatus:'paid'});
  }
+ if(action==='review-artwork'){
+  if(!admin(request,env))return json({error:'Unauthorised'},401);
+  const row=rows.find(r=>r.id===tidy(d.id,100));if(!row)return json({error:'Not found'},404);
+  if(row.status!=='pending')return json({error:'Only pending artwork can be reviewed'},409);
+  const revision=Number(row.revision||1);
+  if(!Number.isInteger(d.revision)||d.revision!==revision)return json({error:'Artwork changed. Reload and review the current version.'},409);
+  if(!validated(row,true)||!checkLogo(await kv.get('banners:logo:'+row.id)))return json({error:'Artwork is missing or invalid'},409);
+  row.artworkReviewedAt=new Date().toISOString();
+  row.artworkReviewedRevision=revision;
+  await kv.put('banners:claims',JSON.stringify(rows));
+  return json({ok:true,artworkReviewedRevision:revision,artworkReviewedAt:row.artworkReviewedAt});
+ }
  if(action==='approve'||action==='reject'){
   if(!admin(request,env))return json({error:'Unauthorised'},401);
   const row=rows.find(r=>r.id===d.id);if(!row)return json({error:'Not found'},404);
+  if(action==='approve'&&row.status!=='pending')return json({error:'Only pending banners can be approved'},409);
   if(action==='approve'&&row.paymentStatus!=='paid')return json({error:'Verify payment in the provider before approval'},409);
+  if(action==='approve'&&(!row.artworkReviewedAt||row.artworkReviewedRevision!==Number(row.revision||1)))return json({error:'Preview and review the current artwork before approval'},409);
   if(action==='approve'&&rows.filter(r=>r.month===row.month&&r.status==='approved'&&r.id!==row.id).length>=8)return json({error:'Month already full'},409);
   row.status=action==='approve'?'approved':'rejected';row.reviewedAt=new Date().toISOString();
   await kv.put('banners:claims',JSON.stringify(rows));return json({ok:true,status:row.status});
@@ -72,6 +87,17 @@ export async function onRequestPost({request,env}) {
 export async function onRequestGet({request,env}) {
  const kv=env.EVENTS_KV;if(!kv)return json({error:'Unavailable'},503);
  const u=new URL(request.url),rows=await records(kv);
+ // Pending logos must never be public. Editor fetches through an authenticated request,
+ // then builds a temporary local object URL instead of putting credentials in an image URL.
+ if(u.searchParams.has('preview-logo')){
+  if(!admin(request,env))return json({error:'Unauthorised'},401);
+  const row=rows.find(r=>r.id===u.searchParams.get('id'));if(!row)return json({error:'Not found'},404);
+  const data=await kv.get('banners:logo:'+row.id);
+  if(!checkLogo(data))return json({error:'Logo missing or invalid'},404);
+  const match=/^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/]+={0,2})$/.exec(data);
+  const binary=atob(match[2]);
+  return new Response(Uint8Array.from(binary,x=>x.charCodeAt(0)),{headers:{'Content-Type':'image/'+match[1],'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
+ }
  if(admin(request,env))return json({claims:rows.map(({tokenHash,...r})=>r)});
  const id=u.searchParams.get('id')||'',key=u.searchParams.get('key')||'',row=rows.find(r=>r.id===id);
  if(!row||!key||row.tokenHash!==await hash(key))return json({error:'Unauthorised'},403);
