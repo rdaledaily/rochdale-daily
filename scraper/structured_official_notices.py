@@ -27,6 +27,10 @@ TITLE_LOCATION = re.compile(
     r"\b(?:in|at)\s+(?P<area>Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\b",
     re.I,
 )
+TITLE_TOWN = re.compile(
+    r"\b(?:Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\b",
+    re.I,
+)
 FIELDS = (
     "Area", "Expected start and finish", "Reason", "Restriction and location",
     "Alternative route", "Organised by", "Directions", "Get directions",
@@ -70,10 +74,12 @@ def verified_notice(article: dict) -> bool:
         return False
     road_name = kind.group("road")
     area = extract_field(captured, "Area")
-    title_areas = {m.group("area").casefold() for m in TITLE_LOCATION.finditer(title)}
-    # Fail closed when the headline lacks a named town, names several places,
-    # or contradicts the labelled Area field (e.g. Middleton vs Rochdale).
-    if not area or title_areas != {area.casefold()}:
+    location_clause = title[kind.end():]
+    title_areas = {m.group("area").casefold() for m in TITLE_LOCATION.finditer(location_clause)}
+    mentioned_towns = {m.group(0).casefold() for m in TITLE_TOWN.finditer(location_clause)}
+    # A title may say "in Middleton and Rochdale": the second town does not
+    # repeat a preposition, but must still prevent a single-Area attestation.
+    if not area or title_areas != {area.casefold()} or mentioned_towns != {area.casefold()}:
         return False
     timing = extract_field(captured, "Expected start and finish")
     reason = extract_field(captured, "Reason")
