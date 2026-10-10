@@ -27,6 +27,12 @@ TITLE_LOCATION = re.compile(
     r"\b(?:in|at)\s+(?P<area>Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\b",
     re.I,
 )
+# Examine the entire location clause, not only places preceded by "in".
+# "Roadworks in Middleton and Rochdale" must fail closed, even when the
+# labelled Area field says Middleton. Ignore the street name before the kind.
+ALL_TITLE_TOWNS = re.compile(
+    r"\\b(Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\\b", re.I,
+)
 FIELDS = (
     "Area", "Expected start and finish", "Reason", "Restriction and location",
     "Alternative route", "Organised by", "Directions", "Get directions",
@@ -71,9 +77,13 @@ def verified_notice(article: dict) -> bool:
     road_name = kind.group("road")
     area = extract_field(captured, "Area")
     title_areas = {m.group("area").casefold() for m in TITLE_LOCATION.finditer(title)}
-    # Fail closed when the headline lacks a named town, names several places,
-    # or contradicts the labelled Area field (e.g. Middleton vs Rochdale).
-    if not area or title_areas != {area.casefold()}:
+    all_towns = {
+        town.casefold() for town in ALL_TITLE_TOWNS.findall(title[kind.end():])
+    }
+    # Reject mismatched locations AND an additional town without its own
+    # preposition, e.g. "roadworks in Middleton and Rochdale". The street name
+    # itself is excluded to avoid rejecting a road named after a nearby town.
+    if not area or title_areas != {area.casefold()} or all_towns != {area.casefold()}:
         return False
     timing = extract_field(captured, "Expected start and finish")
     reason = extract_field(captured, "Reason")
