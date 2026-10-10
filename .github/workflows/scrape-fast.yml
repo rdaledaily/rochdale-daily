@@ -48,8 +48,8 @@ jobs:
       FRONTPAGE_FRESH_HOURS: "36"
       # The fast lane runs continuously. Keep each pass deliberately bounded;
       # the deeper browser lane retains the broad recovery budget four times/day.
-      MAX_AI_ARTICLES_PER_RUN: "12"
-      MAX_AI_ARTICLES_INITIAL: "16"
+      MAX_AI_ARTICLES_PER_RUN: "24"
+      MAX_AI_ARTICLES_INITIAL: "30"
       # Bounded HTTP and rate-limit retries allow completed stories to reach
       # publication rather than timing out in the model worker pool.
       OPENAI_REQUEST_TIMEOUT_SECONDS: "30"
@@ -72,16 +72,16 @@ jobs:
       SOCIAL_MAX_PUBLIC_REACTIONS: "12"
       SOCIAL_MAX_OFFICIAL_UPDATES: "4"
       X_RECENT_SEARCH_MAX: "60"
-      DISCOVERY_LINKS_PER_SOURCE: "12"
+      DISCOVERY_LINKS_PER_SOURCE: "24"
       RSS_ITEMS_PER_SOURCE: "45"
       GOOGLE_SEARCH_QUERY_LIMIT: "44"
-      DISCOVERY_PAGE_LIMIT: "1"
+      DISCOVERY_PAGE_LIMIT: "2"
       DISCOVERY_WORKERS: "12"
       DISCOVERY_LINK_WORKERS: "12"
       AI_WORKERS: "8"
-      MIN_BALANCED_SELECTION_LIMIT: "12"
-      MAX_SELECTED_PER_SOURCE: "5"
-      MAX_SELECTED_PER_CATEGORY: "14"
+      MIN_BALANCED_SELECTION_LIMIT: "24"
+      MAX_SELECTED_PER_SOURCE: "12"
+      MAX_SELECTED_PER_CATEGORY: "24"
       HTTP_POOL_CONNECTIONS: "32"
       HTTP_POOL_MAXSIZE: "32"
       MIN_LIVE_STORIES: "12"
