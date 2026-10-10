@@ -232,8 +232,46 @@ def configure_sources() -> None:
         if source["name"] not in existing_names:
             core.DISCOVERY_PAGES.append(dict(source))
 
+    # The legacy /news/local-news/ index now returns 404. Current articles
+    # live under /news-features/ and are linked directly from the homepage.
+    # Recheck the current indexes on every pass rather than trusting old feeds.
+    for source in core.DISCOVERY_PAGES:
+        if source.get("name") == "Roch Valley Radio Local News":
+            source.update(
+                url="https://www.rochvalleyradio.com/",
+                link_pattern=r"/news-features/\\d+/",
+                max_links=24,
+            )
+            source.pop("trusted_local", None)  # Bury coverage is not Rochdale coverage.
+        elif source.get("name") == "Rochdale Times":
+            source.update(
+                url="https://www.rochdaletimes.co.uk/news/",
+                page_limit=2,
+                max_links=24,
+            )
+    # Add current direct section discovery when the MEN RSS endpoint is sparse
+    # or down. The same URLs are deduplicated against its existing RSS feed.
+    if not any(s.get("name") == "Manchester Evening News — Rochdale direct"
+               for s in core.DISCOVERY_PAGES):
+        core.DISCOVERY_PAGES.append({
+            "name": "Manchester Evening News — Rochdale direct",
+            "url": "https://www.manchestereveningnews.co.uk/all-about/rochdale",
+            "default_area": "rochdale",
+            "default_category": "news",
+            "link_pattern": r"/news/greater-manchester-news/",
+            "max_links": 24,
+        })
+    core.DISCOVERY_PAGES[:] = [
+        source for source in core.DISCOVERY_PAGES
+        if source.get("name") != "Roch Valley Radio Notices"
+        # The old /news/notices/ index now adds only stale/404 discovery.
+    ]
     core.DISCOVERY_LISTING_OVERRIDES["Roch Valley Radio Local News"] = [
-        "https://www.rochvalleyradio.com/news/local-news/"
+        "https://www.rochvalleyradio.com/"
+    ]
+    core.DISCOVERY_LISTING_OVERRIDES["Rochdale Times"] = [
+        "https://www.rochdaletimes.co.uk/",
+        "https://www.rochdaletimes.co.uk/news/",
     ]
 
 
@@ -525,9 +563,13 @@ def configure_fresh_selection() -> None:
     """Make every balanced-selection reservation choose the freshest candidate."""
     original = core.balanced_select
 
+    from publisher_intake import select_with_publisher_priority
+
     def freshest_first(items, *args, **kwargs):
         ordered = sorted(list(items), key=_selection_rank, reverse=True)
-        return original(ordered, *args, **kwargs)
+        # Guarantee each of the three named newspapers a fair share of the
+        # finite rewrite budget, without recrawling or reprinting duplicates.
+        return select_with_publisher_priority(ordered, original, *args, **kwargs)
 
     core.balanced_select = freshest_first
 
