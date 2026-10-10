@@ -13,15 +13,27 @@ from claim_evidence import approved_evidence_source, is_primary, norm
 
 HIGH_RISK = re.compile(
     r"\b(charged|arrested|convicted|murder|rape|suicide|died|death|fatal|terrorism|"
-    r"fraud|medical|patient|sexual abuse|sexual exploitation|missing (?:girl|boy|child|"
-    r"person|teen)|court|tribunal|judge|lawsuit|neglect|mistreatment|abuse)\b", re.I
+    r"fraud|medical|patient|sexual abuse|sexual exploitation|court|tribunal|judge|"
+    r"lawsuit|neglect|mistreatment|abuse|jailed|sentenced|sentencing|prison|"
+    r"custody|bail|magistrates|prosecuted|prosecution|found guilty)\b",
+    re.I,
+)
+# Catch non-adjacent and reversed forms like "missing Rochdale teenager",
+# "missing 16-year-old girl" and "girl missing from Rochdale".
+MISSING_MINOR = re.compile(
+    r"\bmissing\b.{0,90}\b(?:girl|boy|child|teen|teenager|youngster|minor|"
+    r"schoolgirl|schoolboy|\d{1,2}(?:[- ]year[- ]old|[- ]years?[- ]old))\b|"
+    r"\b(?:girl|boy|child|teen|teenager|youngster|minor|schoolgirl|schoolboy|"
+    r"\d{1,2}(?:[- ]year[- ]old|[- ]years?[- ]old))\b.{0,90}\bmissing\b",
+    re.I | re.S,
 )
 
 def verify(article, client=None):
     source=article.get("evidence_sources") or []
     if not source or not all(approved_evidence_source(s.get("url")) and len(s.get("captured_text",""))>=60 for s in source):
         return {"approved":False,"reasons":["No captured evidence from an approved source"],"claims":[]}
-    if HIGH_RISK.search(str(article.get("title",""))+" "+str(article.get("content_html",""))):
+    text = str(article.get("title",""))+" "+str(article.get("excerpt",""))+" "+str(article.get("content_html",""))
+    if HIGH_RISK.search(text) or MISSING_MINOR.search(text):
         return {"approved":False,"reasons":["Sensitive story requires human editorial approval"],"claims":[]}
     if client is None:
         if not os.environ.get("OPENAI_API_KEY"):
