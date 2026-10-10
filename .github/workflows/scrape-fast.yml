@@ -334,6 +334,7 @@ jobs:
       - name: Validate article feed
         run: |
           python -m json.tool articles.json > /dev/null
+          PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
           python scraper/article_gate.py articles.json
       - name: Generate complete canonical site
         timeout-minutes: 12
