@@ -107,6 +107,7 @@ jobs:
         timeout-minutes: 7
         run: |
           python -m json.tool articles.json > /dev/null
+          PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
           python scraper/article_gate.py articles.json
           python scraper/repair_merged_bodies.py
           python scraper/councillor_photos.py
@@ -127,6 +128,7 @@ jobs:
           python scraper/generate_image_sitemap.py
           python scraper/content_hygiene.py --fix
           python scraper/content_hygiene.py
+          python scraper/audit_published_news.py
           python scraper/check_scraper_health.py
       - name: Refresh weather
         timeout-minutes: 2
