@@ -156,6 +156,7 @@ jobs:
           python scraper/homepage_discovery_metadata.py
           python scraper/generate_rss.py
           python scraper/generate_image_sitemap.py
+          python scraper/audit_published_news.py
           python scraper/check_scraper_health.py
       - name: Refresh weather
         timeout-minutes: 2
