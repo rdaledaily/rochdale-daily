@@ -352,6 +352,27 @@ SLOW_DOMAIN_FAILURES: dict[str, int] = {}
 SLOW_DOMAIN_FILE = Path('slow_domains.json')
 SLOW_DOMAIN_BENCH_HOURS = max(1, int(os.getenv('SLOW_DOMAIN_BENCH_HOURS', '24')))
 
+# Genuine borough sources must not disappear for half a day after one transient
+# CDN/network failure. Keep short, bounded retries without removing the breaker.
+PRIORITY_LOCAL_SOURCE_DOMAINS = {
+    'rochvalleyradio.com', 'rochdaleafc.co.uk', 'rochdale.gov.uk',
+    'rochdalehornets.co.uk', 'hornetsrugbyleague.co.uk',
+    'actiontogether.org.uk', 'yourtrustrochdale.co.uk',
+    'visitrochdale.com', 'rochdaleafccommunity.org',
+}
+
+
+def _priority_local_domain(domain: str) -> bool:
+    return any(domain == item or domain.endswith('.' + item) for item in PRIORITY_LOCAL_SOURCE_DOMAINS)
+
+
+def _domain_failure_threshold(domain: str) -> int:
+    return max(2, SLOW_DOMAIN_FAILURE_THRESHOLD) if _priority_local_domain(domain) else SLOW_DOMAIN_FAILURE_THRESHOLD
+
+
+def _domain_bench_hours(domain: str) -> int:
+    return min(2, SLOW_DOMAIN_BENCH_HOURS) if _priority_local_domain(domain) else SLOW_DOMAIN_BENCH_HOURS
+
 
 def load_benched_domains() -> dict[str, str]:
     """Domains benched by an earlier run and not yet due for a retry."""
@@ -370,7 +391,7 @@ def load_benched_domains() -> dict[str, str]:
             continue
         if when.tzinfo is None:
             when = when.replace(tzinfo=timezone.utc)
-        if (now - when).total_seconds() < SLOW_DOMAIN_BENCH_HOURS * 3600:
+        if (now - when).total_seconds() < _domain_bench_hours(domain) * 3600:
             still[domain] = benched_at
     return still
 
@@ -380,7 +401,7 @@ def save_benched_domains(previous: dict[str, str]) -> None:
     benched = dict(previous)
     stamp = iso_utc(utc_now())
     for domain, failures in SLOW_DOMAIN_FAILURES.items():
-        if failures >= SLOW_DOMAIN_FAILURE_THRESHOLD:
+        if failures >= _domain_failure_threshold(domain):
             benched.setdefault(domain, stamp)
     try:
         write_json_atomic(SLOW_DOMAIN_FILE, benched)
@@ -809,7 +830,7 @@ def fetch_html(url: str) -> tuple[str, str]:
             SLOW_DOMAIN_SKIPPED_LOGGED.add(domain)
             log.info('Skipping %s: benched by an earlier run after repeated timeouts.', domain)
         raise TimeoutError(f'{domain} is benched after failing in an earlier run')
-    if SLOW_DOMAIN_FAILURES.get(domain, 0) >= SLOW_DOMAIN_FAILURE_THRESHOLD:
+    if SLOW_DOMAIN_FAILURES.get(domain, 0) >= _domain_failure_threshold(domain):
         if domain not in SLOW_DOMAIN_SKIPPED_LOGGED:
             SLOW_DOMAIN_SKIPPED_LOGGED.add(domain)
             log.warning('Skipping further requests to %s for the rest of this run: %d consecutive timeouts/connection failures.', domain, SLOW_DOMAIN_FAILURES[domain])
