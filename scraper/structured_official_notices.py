@@ -100,8 +100,8 @@ def verified_notice(article: dict) -> bool:
     extra_towns = all_towns - {town}
     if extra_towns:
         borough_suffix = re.search(
-            r"\\b" + re.escape(town) +
-            r"\\s*,\\s*rochdale(?:\\s+borough)?\\b",
+            r"\b" + re.escape(town) +
+            r"\s*,\s*rochdale(?:\s+borough)?\b",
             title[kind.end():], flags=re.I,
         )
         if extra_towns != {"rochdale"} or not borough_suffix:
