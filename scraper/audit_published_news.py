@@ -48,12 +48,14 @@ def audit(status: dict, records: list, pages: Path) -> dict:
         src=source_identity(item.get("source_url") or "")
         row=by_slug.get(slug) or by_source.get(src)
         actual_slug=str((row or {}).get("slug") or "")
-        if row and actual_slug and (pages / (actual_slug+".html")).is_file():
-            if actual_slug not in seen:
-                passed.append(actual_slug)
-                seen.add(actual_slug)
+        if row and actual_slug and (pages / (actual_slug+".html")).is_file() and actual_slug not in seen:
+            passed.append(actual_slug)
+            seen.add(actual_slug)
         else:
-            missing.append({"slug":slug,"source_url":str(item.get("source_url") or "")})
+            # Several drafts can legitimately merge into a single published
+            # story, but the extras are not separate published articles.
+            missing.append({"slug":slug,"source_url":str(item.get("source_url") or ""),
+                            "merged_into_existing_page": actual_slug in seen})
     status["draft_rewrites_created"]=len(drafts)
     status["new_articles"]=len(passed)
     status["published_after_editorial_gate"]=len(passed)
