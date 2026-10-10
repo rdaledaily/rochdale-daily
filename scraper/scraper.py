@@ -2164,6 +2164,14 @@ def load_json_list(path: Path) -> list[dict[str, Any]]:
         return []
 
 def recent_existing_articles() -> list[dict[str, Any]]:
+    """Retain the complete published archive; freshness only controls discovery.
+
+    Earlier versions quietly discarded existing stories once they passed
+    MAX_NEWS_AGE_HOURS, even though the front-page builder correctly keeps
+    old news off Latest. This caused published records to disappear from
+    articles.json, while the rewrite ledger still labelled them published.
+    Explicit takedowns, locality, advertisement and quality checks still apply.
+    """
     kept = []
     story_blocklist = load_story_blocklist()
     for article in load_json_list(OUTPUT_FILE):
@@ -2212,8 +2220,10 @@ def recent_existing_articles() -> list[dict[str, Any]]:
         published = parse_datetime(article.get('published_at'))
         source_kind = str(article.get('source_kind') or 'article')
         event_start = parse_datetime(article.get('event_start_at'))
-        keep = is_fresh(published) or (source_kind == 'event' and event_is_current_or_future(event_start)) or (source_kind == 'live' and is_current_uk_day(published))
-        if keep and article_passes_locality(article):
+        # Keep historic articles in the permanent feed. Front-page freshness
+        # and event-date rules are enforced when derived views are generated,
+        # not by deleting the source article record.
+        if article_passes_locality(article):
             article['title'] = strip_markdown(article.get('title'))
             article['excerpt'] = strip_markdown(article.get('excerpt'))
             # Self-heal categories on retained articles: score-based
@@ -3124,6 +3134,62 @@ def existing_article_for_candidate(candidate: Any, existing_by_story: dict[str, 
     return None
 
 
+def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[str, int]:
+    """Unstick source material labelled published but absent from the archive.
+
+    A later gate or overlapping writer can remove a draft after the rewrite
+    worker recorded a successful publication. A published ledger marker must
+    never permanently suppress a story which is absent from articles.json.
+    At most two bounded recovery attempts are made for identical material.
+    The existing full article and takedown gates still decide publication.
+    """
+    ledger = load_rewrite_ledger()
+    present = {
+        _identity_of_url(str(url))
+        for article in articles
+        for url in [article.get('source_url'), *(article.get('source_urls') or [])]
+        if url
+    }
+    blocklist = load_story_blocklist()
+    diagnostics = {'missing_from_feed': 0, 'queued_for_retry': 0,
+                   'recovery_limit_reached': 0, 'deliberately_blocked': 0}
+    changed = False
+    with _REWRITE_LEDGER_LOCK:
+        for identity, entry in ledger.items():
+            if entry.get('outcome') != 'published':
+                continue
+            sources = {
+                _identity_of_url(str(url))
+                for url in [identity, *(entry.get('urls') or [])]
+                if url
+            }
+            if sources & present:
+                continue
+            probe = {
+                'title': entry.get('title') or '',
+                'source_name': entry.get('source_name') or '',
+                'source_url': identity,
+            }
+            if is_blocked_article(probe, blocklist):
+                diagnostics['deliberately_blocked'] += 1
+                continue
+            diagnostics['missing_from_feed'] += 1
+            attempts = int(entry.get('recovery_attempts') or 0)
+            if attempts >= 2:
+                entry['outcome'] = 'rejected'
+                entry['reason'] = 'missing from feed after repeated publication attempts; review required'
+                diagnostics['recovery_limit_reached'] += 1
+            else:
+                entry['outcome'] = 'failed'
+                entry['reason'] = 'recorded published but missing from feed; retry with current checks'
+                entry['recovery_attempts'] = attempts + 1
+                diagnostics['queued_for_retry'] += 1
+            changed = True
+    if changed:
+        save_rewrite_ledger()
+    return diagnostics
+
+
 def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[str, dict[str, Any]]) -> bool:
     """Decide whether a clustered candidate earns one of the run's rewrite slots.
 
@@ -3309,6 +3375,9 @@ def main() -> int:
     reset_rewrite_ledger()
     load_rewrite_ledger()
     existing = recent_existing_articles()
+    ledger_integrity = reconcile_rewrite_ledger_with_feed(existing)
+    if ledger_integrity['missing_from_feed']:
+        log.warning('Ledger/feed mismatch: %s', ledger_integrity)
     # Build the "already published" lookup from each article's STORED story key,
     # not a freshly recomputed one. Recomputing from current (mutable) content
     # let a story whose headline had drifted since publication compute a key
@@ -3514,7 +3583,7 @@ def main() -> int:
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
     save_benched_domains(BENCHED_DOMAINS)
-    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'primary_data': dict(PRIMARY_DATA_REPORT), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'rewrite_skips_unattributed': max(0, skipped - sum(REWRITE_SKIP_REASONS.values())), 'rewrite_ledger': {'entries': len(ledger_snapshot), 'by_outcome': dict(sorted(ledger_outcomes.items())), 'held_back_this_run': len(REWRITE_LEDGER_HELD), 'held_already_published': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') == 'published'), 'held_rejected': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), 'rejection_attempt_limit': REWRITE_REJECTION_ATTEMPT_LIMIT, 'retention_hours': REWRITE_LEDGER_RETENTION_HOURS}, 'rewrite_ledger_held_rejected': sorted((row for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), key=lambda row: row.get('last_attempt_at') or '', reverse=True)[:60], 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
+    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'primary_data': dict(PRIMARY_DATA_REPORT), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count, 'new_articles': len(new_articles), 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'rewrite_skips_unattributed': max(0, skipped - sum(REWRITE_SKIP_REASONS.values())), 'rewrite_ledger_integrity': ledger_integrity, 'rewrite_ledger': {'entries': len(ledger_snapshot), 'by_outcome': dict(sorted(ledger_outcomes.items())), 'held_back_this_run': len(REWRITE_LEDGER_HELD), 'held_already_published': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') == 'published'), 'held_rejected': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), 'rejection_attempt_limit': REWRITE_REJECTION_ATTEMPT_LIMIT, 'retention_hours': REWRITE_LEDGER_RETENTION_HOURS}, 'rewrite_ledger_held_rejected': sorted((row for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), key=lambda row: row.get('last_attempt_at') or '', reverse=True)[:60], 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
 if __name__ == '__main__':
