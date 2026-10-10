@@ -103,12 +103,32 @@ class PublishedStoryIsNotRewrittenAgain(LedgerCase):
         existing = stored(key="manual-article:man-arrested", editorial_lock=True, manual_article=True)
         self.assertFalse(core.candidate_is_rewrite_eligible(candidate(), existing))
 
-    def test_published_outcome_holds_the_candidate_when_no_stored_article_matches(self):
-        """Backstop: even if a later step strips the article's source URLs."""
+    def test_just_published_story_is_held_even_before_its_article_is_committed(self):
         item = candidate()
         core.record_rewrite_attempt(item, "published")
         self.assertFalse(core.candidate_is_rewrite_eligible(candidate(), {}))
         self.assertIn("already published", core.rewrite_ledger_block_reason(candidate()))
+
+    def test_published_story_that_vanished_from_the_feed_is_reopened_exactly_once(self):
+        """Measured 9-10 October 2026: 11 rewritten stories were removed after
+        the scraper by the evidence guard and stayed "published" in the ledger."""
+        item = candidate()
+        core.record_rewrite_attempt(item, "published")
+        entry = core.load_rewrite_ledger()[core.candidate_identity(item)]
+        entry["last_attempt_at"] = core.iso_utc(core.utc_now() - timedelta(hours=2))
+        self.assertTrue(core.candidate_is_rewrite_eligible(candidate(), {}), "vanished: write it again")
+        core.record_rewrite_attempt(candidate(), "published")
+        entry = core.load_rewrite_ledger()[core.candidate_identity(item)]
+        entry["last_attempt_at"] = core.iso_utc(core.utc_now() - timedelta(hours=2))
+        self.assertFalse(core.candidate_is_rewrite_eligible(candidate(), {}), "vanished twice: stop rewriting it")
+
+    def test_published_story_still_in_the_feed_is_never_reopened(self):
+        item = candidate()
+        core.record_rewrite_attempt(item, "published")
+        entry = core.load_rewrite_ledger()[core.candidate_identity(item)]
+        entry["last_attempt_at"] = core.iso_utc(core.utc_now() - timedelta(hours=2))
+        self.assertFalse(core.candidate_is_rewrite_eligible(candidate(), stored()))
+        self.assertFalse(entry.get("reopened"))
 
 
 class RejectionIsRemembered(LedgerCase):

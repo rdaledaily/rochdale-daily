@@ -3070,6 +3070,39 @@ def existing_article_for_candidate(candidate: Any, existing_by_story: dict[str, 
     return None
 
 
+REWRITE_REOPEN_AFTER_MINUTES = 20
+
+
+def reopen_published_story_missing_from_feed(candidate: Any, existing_by_story: dict[str, dict[str, Any]]) -> bool:
+    """Let a story be written again, once, when its published copy has vanished.
+
+    The ledger records "published" when the rewrite succeeds. Steps that run
+    after the scraper can still remove the article. Measured 9-10 October 2026:
+    the evidence guard removed all 11 stories rewritten overnight, the ledger
+    went on calling them published, and none would have been attempted again
+    for eight days. A story marked published that no stored article accounts
+    for is therefore reopened. Only once: if it disappears a second time
+    something downstream is refusing it, and rewriting it on every run is the
+    waste the ledger exists to stop.
+    """
+    identity = candidate_identity(candidate)
+    entry = load_rewrite_ledger().get(identity) if identity else None
+    if not entry or str(entry.get('outcome') or '') != 'published' or entry.get('reopened'):
+        return False
+    last = parse_datetime(entry.get('last_attempt_at'))
+    if last is None or utc_now() - last < timedelta(minutes=REWRITE_REOPEN_AFTER_MINUTES):
+        return False        # the run that wrote it may not have been committed yet
+    if candidate.story_key and candidate.story_key in existing_by_story:
+        return False
+    if existing_article_for_candidate(candidate, existing_by_story) is not None:
+        return False
+    with _REWRITE_LEDGER_LOCK:
+        entry['reopened'] = True
+        entry['outcome'] = 'failed'
+        entry['reason'] = 'published copy is no longer in the feed; reopened once'
+    return True
+
+
 def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[str, dict[str, Any]]) -> bool:
     """Decide whether a clustered candidate earns one of the run's rewrite slots.
 
@@ -3097,6 +3130,8 @@ def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[
         return False
     candidate.story_key = candidate.story_key or build_story_key(candidate)
     held = rewrite_ledger_block_reason(candidate)
+    if held and reopen_published_story_missing_from_feed(candidate, existing_by_story):
+        held = ''
     if held:
         _note_ledger_hold(candidate, held)
         return False

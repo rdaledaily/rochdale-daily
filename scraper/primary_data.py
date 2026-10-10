@@ -106,13 +106,27 @@ def names_borough_place(text: str) -> bool:
 # State and rota
 # --------------------------------------------------------------------------
 
+# Changing this forgets what has been offered, so every source starts again.
+# Bumped on 10 October 2026: while the evidence guard ran, everything these
+# sources offered overnight (five roadworks notices, two Gazette notices, the
+# ONS release) was rewritten and then removed before publication, but had
+# already been marked as offered.
+STATE_EPOCH = "2026-10-10-after-evidence-guard"
+
+
+def _fresh_state() -> dict[str, Any]:
+    return {"epoch": STATE_EPOCH, "sources": {}}
+
+
 def load_state(path: Path) -> dict[str, Any]:
     try:
         data = json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        return {"sources": {}}
+        return _fresh_state()
     if not isinstance(data, dict) or not isinstance(data.get("sources"), dict):
-        return {"sources": {}}
+        return _fresh_state()
+    if data.get("epoch") != STATE_EPOCH:
+        return _fresh_state()
     return data
 
 

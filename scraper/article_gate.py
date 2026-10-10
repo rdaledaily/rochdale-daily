@@ -512,25 +512,23 @@ def normalise_article(
     if "police_matter" not in article:
         article["police_matter"] = False
 
-    # Forward-only editorial quality gate. Historical articles remain intact.
-    # Automated stories newly ingested after activation are rejected rather than
-    # published when conservative evidence checks identify a major issue.
+    # The forward evidence guard was removed on the editor's instruction on
+    # 9 October 2026. From 16:00 UTC that day it rejected every automated story
+    # that did not carry captured text from one of fifteen official hosts with
+    # each claim quoted from it: 12 newsroom runs attempted 10 stories and
+    # published none, because about three quarters of the paper's sources are
+    # other outlets. Stories are published again on the checks that ran before
+    # it (grounded rewrite, locality, blocklist, quality gate). The review
+    # flags below are advisory, as editorial_review.py always described them:
+    # they are written to the run log and never stop a story.
     if not article.get("sponsored") and not article.get("manual_article"):
-        from editorial_review import review_flags
-        from claim_evidence import evidence_issues
-        activated = _parse_iso("2026-10-09T16:00:00Z")
-        ingested = _parse_iso(article.get("ingested_at"))
-        published = _parse_iso(article.get("first_published_at"))
-        if ingested is not None and published is not None and ingested >= activated and published >= activated:
-            flags = review_flags(article) + evidence_issues(article)
-            if flags:
-                from editorial_review_queue import record
-                try:
-                    location = record(article, flags)
-                    notes.append(f"REJECTED '{ident}' by forward editorial guard; review saved at {location}: {'; '.join(flags)}")
-                except OSError as exc:
-                    notes.append(f"REJECTED '{ident}' by forward editorial guard; review storage failed: {exc}")
-                return None
+        try:
+            from editorial_review import review_flags
+            advisory = review_flags(article)
+        except Exception:
+            advisory = []
+        if advisory:
+            notes.append(f"'{ident}': advisory review flags (published): {'; '.join(advisory)}")
 
     if expire_ongoing(article):
         notes.append(f"'{ident}': cleared stale ONGOING label")

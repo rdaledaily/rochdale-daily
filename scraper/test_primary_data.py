@@ -132,7 +132,7 @@ class FakeWeb:
 
 
 def run(state=None, now=NOW, web=None, only=None):
-    state = state if state is not None else {"sources": {}}
+    state = state if state is not None else {"epoch": pd.STATE_EPOCH, "sources": {}}
     records, report = pd.collect(web or FakeWeb(), state, now, only=only)
     return records, report, state
 
@@ -280,7 +280,14 @@ class Rota(unittest.TestCase):
             again, _, _ = run(pd.load_state(path), NOW + timedelta(minutes=30))
             self.assertEqual(again, [])
             path.write_text("{ not json", encoding="utf-8")
-            self.assertEqual(pd.load_state(path), {"sources": {}})
+            self.assertEqual(pd.load_state(path), {"epoch": pd.STATE_EPOCH, "sources": {}})
+
+    def test_state_from_before_the_epoch_is_forgotten_so_lost_stories_are_offered_again(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "state.json"
+            path.write_text(json.dumps({"sources": {"council_roadworks": {"seen": ["2625", "2628"], "last_checked": "2026-10-10T02:48:23Z"}}}), encoding="utf-8")
+            records, _, _ = run(pd.load_state(path), only={"council_roadworks"})
+            self.assertIn("2625", [r["identity"] for r in records])
 
     def test_every_offered_page_is_on_an_approved_official_host(self):
         from claim_evidence import is_primary
