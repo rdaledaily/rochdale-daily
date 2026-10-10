@@ -3152,10 +3152,29 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
     }
     blocklist = load_story_blocklist()
     diagnostics = {'missing_from_feed': 0, 'queued_for_retry': 0,
-                   'recovery_limit_reached': 0, 'deliberately_blocked': 0}
+                   'recovery_limit_reached': 0, 'deliberately_blocked': 0,
+                   'reopened_after_evidence_fix': 0}
     changed = False
     with _REWRITE_LEDGER_LOCK:
         for identity, entry in ledger.items():
+            # Prior runs labelled nine actual rewrites 'published' before the
+            # downstream source-evidence gate discarded them. Eight exhausted
+            # the two retries; reopen those one time when the evidence pipeline
+            # fix deploys, without resetting normal editorial rejections.
+            if (
+                entry.get('outcome') == 'rejected'
+                and str(entry.get('reason') or '').startswith(
+                    'missing from feed after repeated publication attempts'
+                )
+                and entry.get('evidence_recovery_policy') != 1
+            ):
+                entry['outcome'] = 'failed'
+                entry['reason'] = 'one-time recheck after publication evidence fix'
+                entry['recovery_attempts'] = 0
+                entry['evidence_recovery_policy'] = 1
+                diagnostics['reopened_after_evidence_fix'] += 1
+                changed = True
+                continue
             if entry.get('outcome') != 'published':
                 continue
             sources = {
