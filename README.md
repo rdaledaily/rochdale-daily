@@ -77,7 +77,7 @@ The only retained identity protection is for protected children and sexual-offen
 
 ## Source policy
 
-Roch Valley Radio remains an allowed local source. Rochdale Times and Rochdale Online remain blocked.
+Roch Valley Radio, Manchester Evening News and Rochdale Times are always accepted for lawful news discovery and original fact-based reporting. A transient connection failure must not persistently bench these publishers. Their individual stories still require borough relevance, a verifiable date, source-grounded rewriting and duplicate checks. This does not authorise reuse of protected photographs or substantially copied prose. Rochdale Online is also permitted for discovery by the production policy.
 
 The scraper respects `robots.txt`. Sources that cannot be fetched directly may still be discovered through permitted RSS feeds, indexed search results or authorised APIs.
 

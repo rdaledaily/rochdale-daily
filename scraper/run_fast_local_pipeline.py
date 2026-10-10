@@ -274,6 +274,13 @@ def configure_source_quality_gate() -> None:
     core.source_is_denied = denied
 
 
+TRUSTED_NEWS_DESK_SEARCHES = (
+    SearchQuery("source:roch-valley-radio", "site:rochvalleyradio.com/news-features/ (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey)"),
+    SearchQuery("source:manchester-evening-news", "site:manchestereveningnews.co.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey)"),
+    SearchQuery("source:rochdale-times", "site:rochdaletimes.co.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey)"),
+)
+
+
 def configure_searches(now: datetime | None = None) -> None:
     """Guarantee borough breadth inside the 68-query Google News safety ceiling.
 
@@ -293,6 +300,11 @@ def configure_searches(now: datetime | None = None) -> None:
         _append_unique(combined, seen, SearchQuery(f"category:{category}", query, category))
     for ward in SEARCH_WARDS:
         _append_unique(combined, seen, ward_query(ward))
+
+    # Always include the three accepted local news publishers, even when
+    # rotated general-source searches are crowded out by category and ward slots.
+    for spec in TRUSTED_NEWS_DESK_SEARCHES:
+        _append_unique(combined, seen, spec)
 
     # Breaking/high-value desk searches, including EXTRA_FRESH_SEARCHES appended
     # by run_newspaper_pipeline.py before configure() is called.

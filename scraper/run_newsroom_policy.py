@@ -19,11 +19,15 @@ import run_newspaper_pipeline as pipeline
 core = pipeline.core
 
 LOCAL_PUBLISHER_DOMAINS = {
+    "rochvalleyradio.com",
+    "manchestereveningnews.co.uk",
     "rochdaletimes.co.uk",
     "rochdaleonline.co.uk",
     "rochdaleobserver.co.uk",
 }
 LOCAL_PUBLISHER_NAMES = (
+    "roch valley radio",
+    "manchester evening news",
     "rochdale times",
     "rochdale online",
     "rochdale observer",

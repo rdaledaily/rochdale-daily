@@ -20,6 +20,14 @@ def main() -> None:
     policy.install_runtime_policy()
     core = policy.core
 
+    for name, url in (
+        ("Roch Valley Radio", "https://www.rochvalleyradio.com/news-features/139/news/100/example"),
+        ("Manchester Evening News", "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/example"),
+        ("Rochdale Times", "https://www.rochdaletimes.co.uk/example"),
+    ):
+        assert not core.source_is_denied(name, url), name
+        assert core._priority_local_domain(urlparse(url).hostname or ""), name
+        assert core._always_discover_news_domain(urlparse(url).hostname or ""), name
     assert not core.source_is_denied(
         "Rochdale Times",
         "https://rochdaletimes.co.uk/news/example",

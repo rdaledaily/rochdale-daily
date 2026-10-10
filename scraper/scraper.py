@@ -355,11 +355,25 @@ SLOW_DOMAIN_BENCH_HOURS = max(1, int(os.getenv('SLOW_DOMAIN_BENCH_HOURS', '24'))
 # Genuine borough sources must not disappear for half a day after one transient
 # CDN/network failure. Keep short, bounded retries without removing the breaker.
 PRIORITY_LOCAL_SOURCE_DOMAINS = {
-    'rochvalleyradio.com', 'rochdaleafc.co.uk', 'rochdale.gov.uk',
+    'rochvalleyradio.com', 'rochdaletimes.co.uk', 'manchestereveningnews.co.uk',
+    'rochdaleafc.co.uk', 'rochdale.gov.uk',
     'rochdalehornets.co.uk', 'hornetsrugbyleague.co.uk',
     'actiontogether.org.uk', 'yourtrustrochdale.co.uk',
     'visitrochdale.com', 'rochdaleafccommunity.org',
 }
+
+
+# Newsroom discovery priority: these three publishers are never persistently
+# benched because of a transient connection failure. Each run still has the
+# bounded circuit breaker and honours robots.txt / remote access restrictions.
+ALWAYS_DISCOVER_NEWS_DOMAINS = frozenset({
+    'rochvalleyradio.com', 'manchestereveningnews.co.uk', 'rochdaletimes.co.uk',
+})
+
+
+def _always_discover_news_domain(domain: str) -> bool:
+    host = str(domain or '').lower().removeprefix('www.')
+    return any(host == item or host.endswith('.' + item) for item in ALWAYS_DISCOVER_NEWS_DOMAINS)
 
 
 def _priority_local_domain(domain: str) -> bool:
@@ -385,6 +399,8 @@ def load_benched_domains() -> dict[str, str]:
     now = utc_now()
     still: dict[str, str] = {}
     for domain, benched_at in raw.items():
+        if _always_discover_news_domain(domain):
+            continue
         try:
             when = datetime.fromisoformat(str(benched_at).replace('Z', '+00:00'))
         except (TypeError, ValueError):
@@ -398,10 +414,10 @@ def load_benched_domains() -> dict[str, str]:
 
 def save_benched_domains(previous: dict[str, str]) -> None:
     """Record every domain that tripped the breaker, keeping earlier benches."""
-    benched = dict(previous)
+    benched = {domain: when for domain, when in previous.items() if not _always_discover_news_domain(domain)}
     stamp = iso_utc(utc_now())
     for domain, failures in SLOW_DOMAIN_FAILURES.items():
-        if failures >= _domain_failure_threshold(domain):
+        if not _always_discover_news_domain(domain) and failures >= _domain_failure_threshold(domain):
             benched.setdefault(domain, stamp)
     try:
         write_json_atomic(SLOW_DOMAIN_FILE, benched)
@@ -638,7 +654,13 @@ def source_is_denied(source_name: str='', source_url: str='') -> bool:
     """
     name = normalise_ws(source_name).lower()
     domain = domain_of(source_url)
-    if domain == 'rochvalleyradio.com' or 'roch valley radio' in name:
+    # Trusted newsrooms are always eligible as sources. This is NOT permission
+    # to publish unverified, stale, duplicated, or copied article content.
+    if _always_discover_news_domain(domain) or (
+        domain in {'news.google.com', 'google.com', ''}
+        and (name.startswith('roch valley radio') or name.startswith('rochdale times')
+             or name.startswith('manchester evening news'))
+    ):
         return False
     if domain in {'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk', 'autouncle.co.uk', 'tes.com', 'tiktok.com', 'youtube.com', 'youtu.be', 'reddit.com', 'old.reddit.com'}:
         return True
