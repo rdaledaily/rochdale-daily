@@ -59,6 +59,7 @@ finalise_cards_policy() {
   python scraper/enforce_cards_only_images.py --articles articles.json --check
   python scraper/normalise_public_theme.py
   python scraper/normalise_public_theme.py --check
+  python scraper/audit_published_news.py
 }
 
 # Race recovery must be local and bounded. The expensive network image-repair
@@ -99,6 +100,7 @@ rebuild_from_merged_feed() {
   python scraper/normalise_public_theme.py
   python scraper/normalise_public_theme.py --check
   python scraper/verify_manual_publication.py
+  python scraper/audit_published_news.py
   python scraper/check_scraper_health.py
 }
 

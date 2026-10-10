@@ -7,7 +7,7 @@ automated drafts, never rewrite source copy or mint a verification attestation.
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from claim_evidence import is_primary, evidence_issues
+from claim_evidence import approved_evidence_source, is_primary, evidence_issues
 from source_evidence_capture import prepare
 from independent_fact_review import verify
 
@@ -29,13 +29,21 @@ def enrich(rows, capture=prepare, reviewer=verify):
     for row in rows:
         if not isinstance(row,dict) or row.get("manual_article") or row.get("sponsored"):
             continue
-        if not (recent(row.get("first_published_at") or row.get("published_at")) and recent(row.get("ingested_at"))):
+        # Newly rewritten drafts do not have ingested_at until article_gate.
+        # Set it here, before evidence capture, only on recent automated drafts.
+        if not recent(row.get("first_published_at") or row.get("published_at")):
             continue
-        if row.get("primary_source_verified") and not evidence_issues(row):
+        if not row.get("ingested_at"):
+            row["ingested_at"]=datetime.now(timezone.utc).isoformat().replace("+00:00","Z")
+            updated+=1
+        if not recent(row.get("ingested_at")):
+            continue
+        if not evidence_issues(row):
             continue
         if not row.get("evidence_sources"):
-            if not is_primary(row.get("source_url")):
-                row["verification_reasons"]=["Original URL is not an approved primary source; editorial review required"]
+            if not approved_evidence_source(row.get("source_url")):
+                row["verification_reasons"]=["Original URL is not an approved attributable source; editorial review required"]
+                updated+=1
                 continue
             try:
                 captured=capture(row)
@@ -43,14 +51,19 @@ def enrich(rows, capture=prepare, reviewer=verify):
                 row["evidence_candidates"]=captured.get("evidence_candidates",{})
             except Exception as exc:
                 row["evidence_capture_error"]=type(exc).__name__
-                row["verification_reasons"]=["Primary source could not be captured"]
+                row["verification_reasons"]=["Approved source could not be captured"]
+                updated+=1
                 continue
         verdict=reviewer(row)
         row["verification_reasons"]=verdict.get("reasons",[])
         if verdict.get("approved"):
             row["verified_claims"]=[{"claim":c["claim"],"source_url":c["source_url"],"supporting_excerpt":c["supporting_excerpt"]} for c in verdict["claims"]]
-            row["primary_source_verified"]=True
+            row["source_review_verified"]=True
+            # Only verified official material may receive a primary-source label.
+            row["primary_source_verified"]=all(is_primary(x.get("url")) for x in row["evidence_sources"])
+            row["verification_source_type"]="primary" if row["primary_source_verified"] else "attributed-publisher"
         else:
+            row["source_review_verified"]=False
             row["primary_source_verified"]=False
         updated+=1
     return updated
@@ -65,6 +78,6 @@ def main():
         temp=path.with_suffix(".json.evidence-tmp")
         temp.write_text(json.dumps(rows,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
         temp.replace(path)
-    print(f"Prepared and reviewed {count} recent articles; unverified articles fail closed.")
+    print(f"Prepared or reviewed {count} recent articles; unverified articles fail closed.")
 
 if __name__=="__main__":main()
