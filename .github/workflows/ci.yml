@@ -177,6 +177,7 @@ jobs:
           python scraper/test_resolve_google_news_sources.py
           PYTHONPATH=scraper python scraper/test_google_news_resolver.py
           PYTHONPATH=scraper python scraper/test_run_newsroom_policy.py
+          PYTHONPATH=scraper python scraper/test_borough_publisher_discovery.py
           PYTHONPATH=scraper python scraper/test_evergreen_fallback.py
           PYTHONPATH=scraper python scraper/test_rewrite_ledger.py
           PYTHONPATH=scraper python scraper/test_sponsored_frontpage_floor.py
