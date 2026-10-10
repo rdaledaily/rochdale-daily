@@ -68,29 +68,54 @@ class OfficialNoticeRewrites(unittest.TestCase):
         self.assertNotIn("fines",a["content_html"])
         self.assertEqual(evidence_issues(a),[])
 
-    def test_area_must_match_headline_town(self):
-        # A different but otherwise valid borough location must not pass.
-        for source in (
+    def test_borough_parent_location_does_not_block_middleton(self):
+        # Middleton is part of Rochdale Borough. A borough-level Area label
+        # must not incorrectly exclude a Middleton notice or its reverse.
+        record=article(
+            BRANDLEHOW_URL,
             BRANDLEHOW_SOURCE.replace("Area Middleton", "Area Rochdale"),
-            RUGBY_SOURCE.replace("Area Rochdale", "Area Middleton"),
+        )
+        self.assertTrue(verified_notice(record))
+        self.assertIn("in Middleton", record["content_html"])
+        self.assertNotIn("in Rochdale.", record["content_html"])
+        self.assertEqual(evidence_issues(record), [])
+
+        reverse=article(
+            BRANDLEHOW_URL,
             BRANDLEHOW_SOURCE.replace(
                 "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
                 "roadworks in Rochdale on 12 October 2026 | Rochdale Borough Council",
             ),
+        )
+        self.assertTrue(verified_notice(reverse))
+        self.assertIn("in Middleton", reverse["content_html"])
+
+    def test_title_may_name_town_and_borough(self):
+        for name in ("Middleton, Rochdale", "Middleton, Rochdale Borough"):
+            source=BRANDLEHOW_SOURCE.replace(
+                "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
+                "roadworks in "+name+" on 12 October 2026 | Rochdale Borough Council",
+            )
+            record=article(BRANDLEHOW_URL,source)
+            self.assertTrue(verified_notice(record),name)
+            self.assertIn("in Middleton",record["content_html"])
+
+    def test_different_specific_towns_still_rejected(self):
+        for source in (
+            BRANDLEHOW_SOURCE.replace("Area Middleton", "Area Heywood"),
             BRANDLEHOW_SOURCE.replace(
                 "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
-                "roadworks in Middleton and in Rochdale on 12 October 2026 | Rochdale Borough Council",
+                "roadworks in Heywood on 12 October 2026 | Rochdale Borough Council",
             ),
             BRANDLEHOW_SOURCE.replace(
                 "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
                 "roadworks on 12 October 2026 | Rochdale Borough Council",
             ),
         ):
-            url = RUGBY_URL if source.startswith("Rugby Road") else BRANDLEHOW_URL
-            record = article(url, source)
-            before = dict(record)
-            self.assertFalse(verified_notice(record), source[:85])
-            self.assertEqual(record, before, "Failed notice must remain untouched")
+            record=article(BRANDLEHOW_URL,source)
+            before=dict(record)
+            self.assertFalse(verified_notice(record),source[:85])
+            self.assertEqual(record,before)
 
     def test_case_insensitive_matching_area_and_title(self):
         source = BRANDLEHOW_SOURCE.replace(
@@ -103,7 +128,6 @@ class OfficialNoticeRewrites(unittest.TestCase):
     def test_reject_multiple_towns_without_repeated_prepositions(self):
         for old,new in (
             ("roadworks in Middleton", "roadworks in Middleton and Rochdale"),
-            ("roadworks in Middleton", "roadworks in Middleton, Rochdale"),
             ("roadworks in Middleton", "roadworks in Middleton near Heywood"),
             ("roadworks in Middleton", "roadworks in Middleton and in Rochdale"),
         ):
