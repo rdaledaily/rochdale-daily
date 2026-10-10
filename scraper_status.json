@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-10T19:48:07.810663Z",
+  "last_run_at": "2026-10-10T19:59:55.017543Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,38 +27,39 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 99,
+  "raw_candidates_before_job_filter": 97,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 93,
-  "candidate_clusters": 44,
+  "raw_candidates": 91,
+  "candidate_clusters": 45,
   "google_news_resolution": {
-    "wrappers": 24,
+    "wrappers": 23,
     "resolved": 7,
     "text_recovered": 6,
     "reattributed": 0,
     "images_found": 6
   },
-  "duplicates_merged": 49,
+  "duplicates_merged": 46,
   "attempted_rewrites": 12,
-  "new_articles": 8,
-  "live_articles": 142,
-  "skipped": 4,
+  "new_articles": 9,
+  "live_articles": 143,
+  "skipped": 3,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 3,
-    "editorial gate: REJECTED_NON_NEWS": 1
+    "editorial gate: REJECTED_NON_LOCAL": 1,
+    "editorial gate: REJECTED_NON_NEWS": 1,
+    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 7,
-    "queued_for_retry": 1,
-    "recovery_limit_reached": 6,
+    "missing_from_feed": 8,
+    "queued_for_retry": 0,
+    "recovery_limit_reached": 8,
     "deliberately_blocked": 0
   },
   "rewrite_ledger": {
-    "entries": 66,
+    "entries": 67,
     "by_outcome": {
       "failed": 10,
-      "published": 10,
+      "published": 11,
       "rejected": 46
     },
     "held_back_this_run": 7,
@@ -124,12 +125,13 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 140 body words using only facts already present in the sources; the draft currently has 127.": 1
+    "Write at least 140 body words using only facts already present in the sources; the draft currently has 136.": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 82,
-    "website_discovery": 6,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 10,
     "facebook_official": 0,
@@ -142,18 +144,17 @@
   "collector_errors": {},
   "source_counts": {
     "Roch Valley Radio": 36,
-    "Rochdale Times": 11,
+    "Rochdale Times": 12,
     "Manchester Evening News": 7,
     "Northern live service updates": 6,
     "InYourArea": 4,
     "Bee Network live travel alerts": 4,
     "Rochdale Borough Council": 3,
-    "Rochdale AFC": 3,
     "Herts Advertiser": 2,
     "County Times": 2,
     "The Guardian": 2,
+    "Rochdale AFC": 2,
     "Sky Sports": 2,
-    "Rochdale Valiant": 2,
     "Rochdale Borough Council RSS": 1,
     "The Bury Times": 1,
     "AOL.co.uk": 1,
@@ -178,15 +179,15 @@
   "published_by_category": {
     "business": 19,
     "community": 38,
-    "crime": 10,
+    "crime": 11,
     "education": 3,
     "environment": 9,
     "events": 18,
     "health": 5,
-    "news": 20,
-    "politics": 8,
-    "sport": 7,
-    "traffic": 4,
+    "news": 19,
+    "politics": 9,
+    "sport": 6,
+    "traffic": 5,
     "transport": 1
   },
   "openai_enabled": true,
@@ -220,7 +221,7 @@
     "community-v3-94d20a47f5db1de70cbe",
     "health-v3-ca2132d023eff43f157c",
     "environment-v3-69c265f725ba82d64bc6",
-    "hard-news-v3-e728019f0a6857c4f2f8",
+    "hard-news-v3-85504242400d483a99f4",
     "hard-news-v3-8f4314d32478620962bf",
     "hard-news-v3-d6da2acc485f83fe8355",
     "transport-v3-58ddd29aac33946bf2f6"
@@ -234,7 +235,7 @@
     "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-10",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053",
-    "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury",
+    "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/",
     "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-woman-taken-court-rspca-34745511",
     "https://www.rochdale.gov.uk/directory-record/2580/brandlehow-drive-roadworks-in-middleton-on-12-october-2026"
@@ -272,11 +273,13 @@
     ],
     "available_wards": [
       "Balderstone and Kirkholt",
+      "Central Rochdale",
       "Hopwood Hall",
       "Milnrow and Newhey"
     ],
     "selected_wards": [
       "Balderstone and Kirkholt",
+      "Central Rochdale",
       "Hopwood Hall",
       "Milnrow and Newhey"
     ],
@@ -305,6 +308,7 @@
     },
     "selected_by_ward": {
       "Balderstone and Kirkholt": 1,
+      "Central Rochdale": 1,
       "Hopwood Hall": 1,
       "Milnrow and Newhey": 1
     },
@@ -319,10 +323,10 @@
       "manchester evening news": 2,
       "northern live service updates": 1,
       "office for national statistics": 1,
-      "roch valley radio": 2,
+      "roch valley radio": 1,
       "rochdale afc": 1,
       "rochdale borough council": 2,
-      "rochdale times": 1
+      "rochdale times": 2
     }
   },
   "official_ward_count": 20,
@@ -732,8 +736,12 @@
     "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNi03SmRyeDQ1MnA1RzBWeGN0cXF4X0FzM2hBT0lOa0FTRGUzRktOdWU4ZmRfYzdKanpVbTB1d1YtRF9ZWEJUTkxQcjNteWtEUjkydXV6Rzd4ZEdYbnJ2T0JDTWFlVVgyVDRUdFpvRUFVRm5FMjhGSTdESzN6dG0wOGZfdl9Zc01Zd1JoMFZhSWE4N2hPeUdWcGw5eFc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafccommunity.org"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafccommunity.org": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -769,8 +777,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-10T19:50:34.803992Z",
-  "frontpage_article_count": 15,
+  "frontpage_generated_at": "2026-10-10T20:02:58.823925Z",
+  "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -828,13 +836,12 @@
     "selected_by_category": {
       "news": 1,
       "traffic": 1,
-      "politics": 1,
       "education": 1,
       "business": 10,
       "environment": 1
     },
     "selected_by_ward": {
-      "borough-wide": 10,
+      "borough-wide": 9,
       "Castleton": 1,
       "Healey": 1,
       "Bamford": 1,
@@ -851,7 +858,6 @@
     "selected_by_source": {
       "rochdale daily": 1,
       "source": 1,
-      "rochdale times": 1,
       "ofsted": 1,
       "rochdale martial arts academy": 1,
       "rochdale borough council — healey dell nature reserve and tea rooms": 1,
@@ -865,14 +871,14 @@
       "sjf granite & quartz ltd": 1,
       "dsm social media co.": 1
     },
-    "pool_size": 28,
-    "primary_pool_size": 28,
+    "pool_size": 27,
+    "primary_pool_size": 27,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 15,
+    "frontpage_count": 14,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 1,
-    "fresh_under_homepage_window": 15,
+    "fresh_under_homepage_window": 14,
     "short_briefs_selected": 11,
     "frontpage_minimum_met": true
   },
