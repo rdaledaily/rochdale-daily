@@ -3,12 +3,25 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
 <title>Banner bookings | Rochdale Daily editor</title>
-<style>*{box-sizing:border-box}body{margin:0;background:#f1f5f7;color:#173b4c;font:15px/1.6 system-ui}header{background:#103449;color:white;padding:18px 22px}header a{color:white}main{max-width:1000px;margin:auto;padding:20px}section,article{background:white;border:1px solid #c9dae2;border-radius:10px;padding:18px;margin:14px 0}input{font:inherit;padding:10px;border:1px solid #809ca9;border-radius:5px;max-width:100%;width:420px}button{padding:10px 14px;border:0;border-radius:5px;background:#076f8d;color:white;font:700 14px system-ui;cursor:pointer;margin:5px}button:disabled{opacity:.5;cursor:default}.danger{background:#9d364d}.secondary{background:#536b76}.small{font-size:13px;color:#536976}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.meta{overflow-wrap:anywhere}.status{font-weight:800}#message{white-space:pre-wrap}a{color:#086b86}label{display:block;font-weight:700;margin-top:9px}</style>
+<style>*{box-sizing:border-box}body{margin:0;background:#f1f5f7;color:#173b4c;font:15px/1.6 system-ui}header{background:#103449;color:white;padding:18px 22px}header a{color:white}main{max-width:1000px;margin:auto;padding:20px}section,article{background:white;border:1px solid #c9dae2;border-radius:10px;padding:18px;margin:14px 0}input{font:inherit;padding:10px;border:1px solid #809ca9;border-radius:5px;max-width:100%;width:420px}button{padding:10px 14px;border:0;border-radius:5px;background:#076f8d;color:white;font:700 14px system-ui;cursor:pointer;margin:5px}button:disabled{opacity:.5;cursor:default}.danger{background:#9d364d}.secondary{background:#536b76}.small{font-size:13px;color:#536976}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.meta{overflow-wrap:anywhere}.status{font-weight:800}#message{white-space:pre-wrap}a{color:#086b86}label{display:block;font-weight:700;margin-top:9px}
+.creative-info{border-left:4px solid #91b2c1;padding-left:12px;margin:14px 0}
+.creative-info p{margin:5px 0;overflow-wrap:anywhere}
+.swatch{display:inline-block;width:24px;height:24px;border:1px solid #82949b;vertical-align:middle;border-radius:3px}
+.preview{background:#f4f8fa;border:1px solid #bdced7;padding:12px;margin:12px 0}
+.preview h3{margin:8px 0}
+.banner{display:flex;gap:15px;align-items:center;justify-content:center;color:#fff;padding:12px 20px;margin:10px 0;min-height:90px;overflow-wrap:anywhere;position:relative}
+.banner.billboard{padding:22px 24px;min-height:150px}
+.banner img{display:block;object-fit:contain;width:auto;max-width:30%;max-height:80px}
+.banner.billboard img{max-height:150px}
+.banner span{font:700 clamp(15px,2.5vw,26px)/1.2 system-ui;text-align:center}
+.review-actions{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.review-status{font-size:13px;color:#3e5865}
+button:focus-visible{outline:3px solid #ffbb38;outline-offset:2px}</style>
 </head><body>
 <header><strong>Rochdale Daily — Advertiser administration</strong> &nbsp; <a href="/">Back to paper</a></header>
 <main>
 <h1>Banner booking approvals</h1>
-<p>Private editorial workspace. Verify the <strong>£175 payment</strong> in the payment provider and check the amount and transaction reference before marking a request paid. No advert publishes automatically.</p>
+<p>Private editorial workspace. Inspect the submitted top and bottom banner messages, background colour and uploaded logo, then explicitly record artwork review. Also verify the <strong>£175 payment</strong> and transaction reference in the payment provider. Approval is blocked until both steps are complete. No advert publishes automatically.</p>
 <section><label for="token">Administrator token</label><div class="row"><input id="token" type="password" autocomplete="off" placeholder="EVENTS_ADMIN_TOKEN"><button id="load" type="button">Load requests</button></div><p class="small">Access is checked by the server. The token is held in this browser tab only and is never placed in a URL.</p><p id="message" role="status"></p></section>
 <div id="requests"><p class="small">Enter your token to review booking requests.</p></div>
 </main>
@@ -16,6 +29,7 @@
 (function(){
 'use strict';
 const q=id=>document.getElementById(id);let auth='';
+const objectUrls=[];
 async function call(method,body){
  const r=await fetch('/api/banner-claims',{method,cache:'no-store',headers:{'x-admin-token':auth,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
  const data=await r.json();if(!r.ok)throw Error(data.error||'Request failed');return data;
@@ -26,29 +40,97 @@ function btn(label,cls,action){const b=el('button',label,cls);b.type='button';b.
 async function change(action,id,paymentReference){
  try{
   const payload={action,id};if(paymentReference)payload.paymentReference=paymentReference;
-  await call('POST',payload);msg('Updated '+id+' ('+action+').');await load();
+  await call('POST',payload);await load();
+  msg('Updated '+id+' ('+action+').');
  }catch(e){msg(e.message);}
 }
+function banner(text,colour,billboard){
+ const root=el('div',undefined,'banner'+(billboard?' billboard':''));
+ root.style.backgroundColor=/^#[0-9a-fA-F]{6}$/.test(colour)?colour:'#103349';
+ const logo=el('img');logo.alt='Submitted advertiser logo';logo.hidden=true;
+ const words=el('span',text);root.append(logo,words);return {root,logo};
+}
+function imageLoaded(image,url){
+ return new Promise((resolve,reject)=>{
+  image.onload=()=>{image.hidden=false;resolve()};
+  image.onerror=()=>reject(Error('Cannot decode submitted logo image'));
+  image.src=url;
+ });
+}
 function render(items){
- const root=q('requests');root.replaceChildren();
+ const root=q('requests');
+ for(const url of objectUrls)URL.revokeObjectURL(url);
+ objectUrls.length=0;root.replaceChildren();
  if(!items.length){root.append(el('p','No banner requests recorded.'));return;}
  items.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
  for(const item of items){
+  const revision=Number(item.revision||1);
   const card=el('article');
-  const h=el('h2',item.name+' — '+item.month);card.append(h);
+  card.append(el('h2',item.name+' — '+item.month));
   card.append(el('p','Status: '+item.status+' · Payment: '+(item.paymentStatus||'unverified')+' · Price: £'+(item.priceGBP||175),'status'));
-  card.append(el('p','Reference: '+item.id+' · '+item.email,'meta'));
+  card.append(el('p','Reference: '+item.id+' · '+item.email+' · Creative version '+revision,'meta'));
   const website=el('a','Advertiser website');website.href=item.website;website.target='_blank';website.rel='noopener noreferrer';card.append(website);
   if(item.paymentReference)card.append(el('p','Verified payment transaction: '+item.paymentReference,'small'));
-  const actions=el('div',undefined,'row');
-  if(item.status!=='rejected'&&item.paymentStatus!=='paid'){
-   const input=el('input');input.type='text';input.placeholder='Verified SumUp/processor transaction reference';input.maxLength=120;input.setAttribute('aria-label','Payment transaction reference for '+item.name);
-   actions.append(input,btn('Mark payment verified','',()=>{const ref=input.value.trim();if(ref.length<4){msg('Enter a verified transaction reference of at least 4 characters.');return}if(confirm('Have you checked the provider record confirms the correct £175 payment for this booking?'))change('mark-paid',item.id,ref);}));
+
+  const details=el('div',undefined,'creative-info');
+  details.append(el('p','Top banner: '+(item.top||'(missing)')),el('p','Bottom banner: '+(item.bottom||'(missing)')));
+  const colourRow=el('p','Background colour: '+(item.colour||'(missing)')+' ');
+  const swatch=el('span',undefined,'swatch');swatch.style.backgroundColor=/^#[0-9a-fA-F]{6}$/.test(item.colour)?item.colour:'#103349';swatch.setAttribute('aria-label','Banner colour '+item.colour);
+  colourRow.append(swatch);details.append(colourRow);card.append(details);
+
+  const preview=el('div',undefined,'preview');preview.hidden=true;
+  preview.append(el('h3','Submitted banner creative — approval preview'));
+  const top=banner(item.top||'',item.colour,false),bottom=banner(item.bottom||'',item.colour,true);
+  preview.append(el('p','Homepage top banner','small'),top.root,el('p','Homepage bottom banner','small'),bottom.root);
+  card.append(preview);
+  const previewStatus=el('p','Open the authenticated logo preview to review the complete artwork.','review-status');
+  card.append(previewStatus);
+
+  const actions=el('div',undefined,'review-actions');
+  const reviewed=Number(item.artworkReviewedRevision)===revision&&Boolean(item.artworkReviewedAt);
+  let previewReady=false;
+  const reviewButton=btn('Confirm artwork reviewed','secondary',async()=>{
+   if(!previewReady)return;
+   reviewButton.disabled=true;
+   try{
+    const data=await call('POST',{action:'review-artwork',id:item.id,revision});
+    item.artworkReviewedRevision=data.artworkReviewedRevision;item.artworkReviewedAt=data.artworkReviewedAt;
+    previewStatus.textContent='Artwork review recorded for version '+revision+'.';
+    reviewButton.hidden=true;
+    if(approveButton)approveButton.disabled=false;
+   }catch(e){msg(e.message);reviewButton.disabled=false;}
+  });
+  reviewButton.hidden=true;
+  let approveButton=null;
+  if(item.status==='pending'&&item.paymentStatus==='paid'){
+   approveButton=btn('Approve banner','',()=>{if(confirm('Publish this verified and reviewed creative for '+item.month+'?'))change('approve',item.id);});
+   approveButton.disabled=true;
   }
-  if(item.status==='pending'&&item.paymentStatus==='paid')actions.append(btn('Approve banner','',()=>change('approve',item.id)));
+  const viewButton=btn('Load logo and preview banners','secondary',async()=>{
+   viewButton.disabled=true;previewStatus.textContent='Loading private logo…';
+   try{
+    const r=await fetch('/api/banner-claims?preview-logo=1&id='+encodeURIComponent(item.id),{method:'GET',cache:'no-store',headers:{'x-admin-token':auth}});
+    if(!r.ok)throw Error('Logo preview unavailable ('+r.status+'). Check artwork before approval.');
+    const type=r.headers.get('Content-Type')||'';
+    if(!/^image\/(png|jpeg|webp)$/.test(type))throw Error('Unrecognised logo image format');
+    const blob=await r.blob(),url=URL.createObjectURL(blob);
+    objectUrls.push(url);
+    await Promise.all([imageLoaded(top.logo,url),imageLoaded(bottom.logo,url)]);
+    preview.hidden=false;previewReady=true;
+    previewStatus.textContent=reviewed?'Artwork reviewed for version '+revision+'.':'Inspect both banners and click “Confirm artwork reviewed” if suitable.';
+    if(item.status==='pending'&&!reviewed)reviewButton.hidden=false;
+    if(approveButton&&reviewed)approveButton.disabled=false;
+   }catch(e){previewStatus.textContent=e.message;viewButton.disabled=false;}
+  });
+  actions.append(viewButton);
+  if(item.status==='pending')actions.append(reviewButton);
+  if(item.status!=='rejected'&&item.paymentStatus!=='paid'){
+   const input=el('input');input.type='text';input.placeholder='Verified payment transaction reference';input.maxLength=120;input.setAttribute('aria-label','Payment transaction reference for '+item.name);
+   actions.append(input,btn('Mark payment verified','',()=>{const ref=input.value.trim();if(ref.length<4){msg('Enter a verified transaction reference of at least 4 characters.');return;}if(confirm('Have you confirmed the exact £175 payment against this request in the payment provider?'))change('mark-paid',item.id,ref);}));
+  }
+  if(approveButton)actions.append(approveButton);
   if(item.status==='pending')actions.append(btn('Reject','danger',()=>{if(confirm('Reject this request?'))change('reject',item.id);}));
-  card.append(actions);
-  root.append(card);
+  card.append(actions);root.append(card);
  }
 }
 async function load(){try{const data=await call('GET');render(data.claims||[]);msg('Loaded '+(data.claims||[]).length+' booking(s).');}catch(e){msg(e.message);}}
