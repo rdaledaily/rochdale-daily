@@ -31,7 +31,7 @@ TITLE_LOCATION = re.compile(
 # "Roadworks in Middleton and Rochdale" must fail closed, even when the
 # labelled Area field says Middleton. Ignore the street name before the kind.
 ALL_TITLE_TOWNS = re.compile(
-    r"\\b(Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\\b", re.I,
+    r"\b(Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\b", re.I,
 )
 FIELDS = (
     "Area", "Expected start and finish", "Reason", "Restriction and location",
