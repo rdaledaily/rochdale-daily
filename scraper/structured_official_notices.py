@@ -64,6 +64,19 @@ def verified_notice(article: dict) -> bool:
         return False
     road_name = kind.group("road")
     area = extract_field(captured, "Area")
+    # The labelled Area and the title describe the *same* road restriction.
+    # Reject an official record whose title says Middleton but Area says
+    # Rochdale (or whose location is missing/ambiguous), rather than issuing
+    # a contradiction under an incorrectly certified primary-source banner.
+    title_areas = {
+        match.casefold()
+        for match in re.findall(
+            r"\\bin\\s+(Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\\b",
+            title, flags=re.I,
+        )
+    }
+    if len(title_areas) != 1 or area.casefold() not in title_areas:
+        return False
     timing = extract_field(captured, "Expected start and finish")
     reason = extract_field(captured, "Reason")
     restriction = extract_field(captured, "Restriction and location")
