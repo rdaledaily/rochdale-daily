@@ -239,7 +239,7 @@ def configure_sources() -> None:
         if source.get("name") == "Roch Valley Radio Local News":
             source.update(
                 url="https://www.rochvalleyradio.com/",
-                link_pattern=r"/news-features/\\d+/",
+                link_pattern=r"/news-features/\d+/",
                 max_links=24,
             )
             source.pop("trusted_local", None)  # Bury coverage is not Rochdale coverage.
@@ -563,13 +563,14 @@ def configure_fresh_selection() -> None:
     """Make every balanced-selection reservation choose the freshest candidate."""
     original = core.balanced_select
 
-    from publisher_intake import select_with_publisher_priority
-
     def freshest_first(items, *args, **kwargs):
+        # Borough-wide by definition: Rochdale town, Middleton, Heywood,
+        # Littleborough, Milnrow and all other Rochdale borough communities.
+        # Balanced selection retains ward/township coverage and source
+        # diversity. An outlet does not have to repeat "Rochdale" in every
+        # Middleton headline to qualify as geographically relevant.
         ordered = sorted(list(items), key=_selection_rank, reverse=True)
-        # Guarantee each of the three named newspapers a fair share of the
-        # finite rewrite budget, without recrawling or reprinting duplicates.
-        return select_with_publisher_priority(ordered, original, *args, **kwargs)
+        return original(ordered, *args, **kwargs)
 
     core.balanced_select = freshest_first
 
