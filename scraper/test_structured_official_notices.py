@@ -5,6 +5,7 @@ PYTHONPATH=scraper python scraper/test_structured_official_notices.py
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 from claim_evidence import evidence_issues
 from prepare_publication_evidence import enrich
 from structured_official_notices import verified_notice
@@ -112,6 +113,26 @@ class OfficialNoticeRewrites(unittest.TestCase):
         ):
             a=article(BRANDLEHOW_URL,changed)
             self.assertFalse(verified_notice(a))
+
+    def test_every_article_gate_runs_evidence_preparation_first(self):
+        workflows=(
+            ".github/workflows/scrape-fast.yml",
+            ".github/workflows/scrape-kick.yml",
+            ".github/workflows/publish.yml",
+            ".github/workflows/story-integrity-audit.yml",
+        )
+        for name in workflows:
+            content=Path(name).read_text(encoding="utf-8").splitlines()
+            calls=[i for i,line in enumerate(content)
+                   if "python scraper/article_gate.py articles.json" in line
+                   and not line.lstrip().startswith("#")]
+            self.assertTrue(calls, f"Missing article gate in {name}")
+            for i in calls:
+                self.assertEqual(
+                    content[i-1].strip(),
+                    "PYTHONPATH=scraper python scraper/prepare_publication_evidence.py",
+                    f"{name}:{i+1} calls publication gate without evidence preparation",
+                )
 
     def test_prevent_malicious_arbitrary_primary_url(self):
         a=article(
