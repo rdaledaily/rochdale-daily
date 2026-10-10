@@ -10,6 +10,7 @@ from pathlib import Path
 from claim_evidence import approved_evidence_source, is_primary, evidence_issues
 from source_evidence_capture import prepare
 from independent_fact_review import verify
+from structured_official_notices import verified_notice
 
 CUTOFF=datetime.fromisoformat("2026-10-09T16:00:00+00:00")
 def recent(value):
@@ -54,6 +55,13 @@ def enrich(rows, capture=prepare, reviewer=verify):
                 row["verification_reasons"]=["Approved source could not be captured"]
                 updated+=1
                 continue
+        # Council's structured roadworks register has explicit facts for a
+        # narrower, deterministic evidence-backed notice. Correct unsupported
+        # generic AI prose rather than rejecting a valid primary source solely
+        # because the AI invented context or changed its evidence quotations.
+        if verified_notice(row):
+            updated+=1
+            continue
         verdict=reviewer(row)
         row["verification_reasons"]=verdict.get("reasons",[])
         if verdict.get("approved"):

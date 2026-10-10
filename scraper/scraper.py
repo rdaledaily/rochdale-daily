@@ -3153,10 +3153,47 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
     blocklist = load_story_blocklist()
     diagnostics = {'missing_from_feed': 0, 'queued_for_retry': 0,
                    'recovery_limit_reached': 0, 'deliberately_blocked': 0,
-                   'reopened_after_evidence_fix': 0}
+                   'reopened_after_evidence_fix': 0,
+                   'reopened_verified_official_notices': 0}
     changed = False
     with _REWRITE_LEDGER_LOCK:
         for identity, entry in ledger.items():
+            # Recover exactly the council traffic records previously lost to
+            # hallucinated/model-mismatched evidence quotes. A single retry
+            # is allowed after the structured official-record verifier lands.
+            # A blocked story is never reopened.
+            official_notice = (
+                str(identity).startswith((
+                    'https://www.rochdale.gov.uk/directory-record/',
+                    'https://rochdale.gov.uk/directory-record/',
+                ))
+                and ('roadworks' in str(entry.get('title') or '').lower()
+                     or 'temporary prohibition' in str(entry.get('title') or '').lower())
+            )
+            missing_publication = (
+                entry.get('outcome') == 'published'
+                and _identity_of_url(str(identity)) not in present
+            ) or (
+                entry.get('outcome') == 'rejected'
+                and str(entry.get('reason') or '').startswith(
+                    'missing from feed after repeated publication attempts'
+                )
+            )
+            if (official_notice and missing_publication
+                    and entry.get('structured_official_notice_recovery') != 1):
+                probe = {
+                    'title': entry.get('title') or '',
+                    'source_name': entry.get('source_name') or '',
+                    'source_url': identity,
+                }
+                if not is_blocked_article(probe, blocklist):
+                    entry['outcome'] = 'failed'
+                    entry['reason'] = 'retry with exact council fields review'
+                    entry['recovery_attempts'] = 0
+                    entry['structured_official_notice_recovery'] = 1
+                    diagnostics['reopened_verified_official_notices'] += 1
+                    changed = True
+                    continue
             # Prior runs labelled nine actual rewrites 'published' before the
             # downstream source-evidence gate discarded them. Eight exhausted
             # the two retries; reopen those one time when the evidence pipeline
