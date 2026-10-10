@@ -2249,7 +2249,20 @@ def recent_existing_articles() -> list[dict[str, Any]]:
                 if corrected != 'crime':
                     article['police_matter'] = False
             kept.append(article)
-    return dedupe_article_records(kept)
+    # These rows already had their own canonical published identities. A
+    # second fuzzy/semantic deduplication destroys unrelated archive records;
+    # only exact stored identity collisions may be collapsed here.
+    seen_archive_ids: set[str] = set()
+    retained: list[dict[str, Any]] = []
+    for article in kept:
+        identity = str(article.get('slug') or article.get('id') or article.get('source_url') or '')
+        # With no durable identity, retain the record rather than risk loss.
+        if identity and identity in seen_archive_ids:
+            continue
+        if identity:
+            seen_archive_ids.add(identity)
+        retained.append(article)
+    return retained
 
 def _source_image_allowed(candidate: Candidate) -> bool:
     """Return True for a usable publisher-supplied HTTP(S) image."""
@@ -3028,7 +3041,7 @@ def rewrite_outcome_for_reason(reason: str) -> str:
     return 'rejected'
 
 
-def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> None:
+def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '', *, published_slug: str = '') -> None:
     """Remember what happened to this candidate's source material."""
     identity = candidate_identity(candidate)
     if not identity:
@@ -3052,6 +3065,8 @@ def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> No
         entry['last_attempt_at'] = now
         entry['outcome'] = outcome
         entry['reason'] = str(reason or '')[:160]
+        if published_slug:
+            entry['published_slug'] = str(published_slug).strip().lower()
         entry['title'] = normalise_ws(str(getattr(candidate, 'source_title', '') or ''))[:140]
         entry['source_name'] = str(getattr(candidate, 'source_name', '') or '')[:80]
         entry['category'] = str(getattr(candidate, 'category', '') or '')
@@ -3069,6 +3084,13 @@ def rewrite_ledger_block_reason(candidate: Any) -> str:
     if not entry:
         return ''
     outcome = str(entry.get('outcome') or '')
+    # Never allow an editor's slug-only takedown to be bypassed by a
+    # rewritten headline or an extra source URL. New records persist the
+    # published slug, and old records are checked whenever it is available.
+    blocked = load_story_blocklist()
+    published_slug = str(entry.get('published_slug') or '').strip().lower()
+    if published_slug and published_slug in set(blocked.get('slugs') or []):
+        return 'manually removed published slug'
     if outcome == 'failed':
         return ''
     if candidate_source_identities(candidate) - set(entry.get('urls') or []):
@@ -3185,8 +3207,9 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
                     'title': entry.get('title') or '',
                     'source_name': entry.get('source_name') or '',
                     'source_url': identity,
+                    'slug': entry.get('published_slug') or '',
                 }
-                if not is_blocked_article(probe, blocklist):
+                if entry.get('published_slug') and not is_blocked_article(probe, blocklist):
                     entry['outcome'] = 'failed'
                     entry['reason'] = 'retry with exact council fields review'
                     entry['recovery_attempts'] = 0
@@ -3225,8 +3248,12 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
                 'title': entry.get('title') or '',
                 'source_name': entry.get('source_name') or '',
                 'source_url': identity,
+                'slug': entry.get('published_slug') or '',
             }
-            if is_blocked_article(probe, blocklist):
+            # Old ledger records without a stored slug cannot prove that a
+            # manually removed slug was not their previous publication.
+            # Keep them held for editorial inspection rather than reopen.
+            if (not entry.get('published_slug') and blocklist.get('slugs')) or is_blocked_article(probe, blocklist):
                 diagnostics['deliberately_blocked'] += 1
                 continue
             diagnostics['missing_from_feed'] += 1
@@ -3606,23 +3633,25 @@ def main() -> int:
     # An article can be produced and still not reach the feed (locality check
     # after rewrite, the word floor). Record what actually happened, so the
     # ledger never calls something published that readers cannot see.
-    published_identities: set[str] = set()
-    published_refs: set[str] = set()
+    published_identities: dict[str, str] = {}
+    published_refs: dict[str, str] = {}
     for item in published:
+        slug = str(item.get('slug') or '')
         for url in [item.get('source_url')] + list(item.get('source_urls') or []):
             if url:
-                published_identities.add(_identity_of_url(str(url)))
+                published_identities[_identity_of_url(str(url))] = slug
         for ref in (item.get('id'), item.get('slug')):
             if ref:
-                published_refs.add(str(ref))
+                published_refs[str(ref)] = slug
     for article, candidate in article_candidates:
-        in_feed = (
-            candidate_identity(candidate) in published_identities
-            or str(article.get('id') or '') in published_refs
-            or str(article.get('slug') or '') in published_refs
+        published_slug = (
+            published_identities.get(candidate_identity(candidate))
+            or published_refs.get(str(article.get('id') or ''))
+            or published_refs.get(str(article.get('slug') or ''))
         )
+        in_feed = bool(published_slug)
         if in_feed:
-            record_rewrite_attempt(candidate, 'published', '')
+            record_rewrite_attempt(candidate, 'published', '', published_slug=published_slug)
         else:
             record_rewrite_attempt(candidate, 'rejected', 'not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check')
     save_rewrite_ledger()
