@@ -10,6 +10,7 @@ import hashlib
 import ipaddress
 import re
 import socket
+from urllib.robotparser import RobotFileParser
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 import requests
@@ -17,6 +18,32 @@ from bs4 import BeautifulSoup
 from claim_evidence import approved_evidence_source, is_primary, norm
 
 MAX_BYTES=1_000_000
+VERIFIER_USER_AGENT="RochdaleDailyEditorialVerifier/1.0"
+_ROBOTS_CACHE={}
+def publisher_robots_allows(url, client):
+    """Honour publishers' crawl exclusions before capturing their article."""
+    host=urlparse(url).hostname
+    if host in _ROBOTS_CACHE:
+        return _ROBOTS_CACHE[host].can_fetch(VERIFIER_USER_AGENT,url)
+    robots_url="https://"+host+"/robots.txt"
+    safe_host(robots_url)
+    response=client.get(robots_url,timeout=(3,6),allow_redirects=False,
+                        headers={"User-Agent":VERIFIER_USER_AGENT,"Accept":"text/plain"})
+    if response.status_code==404:
+        _ROBOTS_CACHE[host]=RobotFileParser()
+        _ROBOTS_CACHE[host].parse([])
+        return True
+    if response.status_code in (401,403):
+        return False
+    if response.status_code!=200:
+        raise ValueError("Unable to establish publisher robots policy")
+    if len(response.content)>100_000:
+        raise ValueError("Publisher robots policy exceeds safe limit")
+    parser=RobotFileParser()
+    parser.parse(response.text.splitlines())
+    _ROBOTS_CACHE[host]=parser
+    return parser.can_fetch(VERIFIER_USER_AGENT,url)
+
 def safe_host(url):
     p=urlparse(url)
     if not approved_evidence_source(url) or p.port not in (None,443) or p.username or p.password:
@@ -31,8 +58,10 @@ def safe_host(url):
 def fetch_source(url, session=None):
     safe_host(url)
     client=session or requests
+    if not is_primary(url) and not publisher_robots_allows(url,client):
+        raise PermissionError("Publisher robots.txt disallows direct evidence capture")
     response=client.get(url,timeout=(5,12),allow_redirects=False,
-                        headers={"User-Agent":"RochdaleDailyEditorialVerifier/1.0","Accept":"text/html"})
+                        headers={"User-Agent":VERIFIER_USER_AGENT,"Accept":"text/html"})
     response.raise_for_status()
     if response.is_redirect or 300<=response.status_code<400:
         raise ValueError("Redirected sources require separate validation")
