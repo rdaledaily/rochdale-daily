@@ -96,6 +96,23 @@ class OfficialNoticeRewrites(unittest.TestCase):
             self.assertIn("unwarranted",a["content_html"])
             self.assertFalse(a.get("primary_source_verified",False))
 
+    def test_title_and_labelled_area_must_agree(self):
+        # Both values are individually valid borough locations, but disagree.
+        # The conflict must never be certified as a primary source.
+        mismatched=BRANDLEHOW_SOURCE.replace("Area Middleton", "Area Rochdale")
+        a=article(BRANDLEHOW_URL,mismatched)
+        self.assertFalse(verified_notice(a))
+        self.assertFalse(a.get("source_review_verified",False))
+        self.assertIn("unwarranted",a["content_html"])
+
+    def test_title_without_location_or_multiple_locations_rejected(self):
+        for changed in (
+            BRANDLEHOW_SOURCE.replace("roadworks in Middleton", "roadworks at the borough"),
+            BRANDLEHOW_SOURCE.replace("roadworks in Middleton", "roadworks in Middleton and in Rochdale"),
+        ):
+            a=article(BRANDLEHOW_URL,changed)
+            self.assertFalse(verified_notice(a))
+
     def test_prevent_malicious_arbitrary_primary_url(self):
         a=article(
             "https://www.rochdale.gov.uk.evil.example/directory-record/2580/roadworks",
