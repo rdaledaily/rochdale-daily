@@ -44,6 +44,48 @@ def main() -> None:
         "PressReader",
         "https://pressreader.com/example",
     )
+    # A valid independent rewrite is not thrown away just because the
+    # original publisher is named; the source URL remains clickable below it.
+    import json
+    from pathlib import Path
+    from tempfile import TemporaryDirectory
+    import reject_publisher_leaks as source_gate
+    from source_presentation import generic_sources_markup
+
+    with TemporaryDirectory() as temp:
+        root = Path(temp)
+        original_articles, original_pages = source_gate.ARTICLES, source_gate.ARTICLE_PAGES
+        try:
+            source_gate.ARTICLES = root / "articles.json"
+            source_gate.ARTICLE_PAGES = root / "articles"
+            source_gate.ARTICLE_PAGES.mkdir()
+            article = {
+                "slug": "rochdale-community-story",
+                "title": "Rochdale community story",
+                "excerpt": "Manchester Evening News and Roch Valley Radio reported the announcement.",
+                "content_html": "<p>Rochdale Times reported the same facts.</p>",
+                "source_name": "Roch Valley Radio",
+                "source_url": "https://www.rochvalleyradio.com/news-features/3/politics/905/example",
+                "source_urls": ["https://www.manchestereveningnews.co.uk/news/example"],
+                "publication_route": "ai-grounded-rewrite",
+            }
+            blocked = {
+                "slug": "unsafe-copy-route",
+                "title": "Old direct publication",
+                "publication_route": "source-led-fallback",
+            }
+            source_gate.ARTICLES.write_text(json.dumps([article, blocked]), encoding="utf-8")
+            assert source_gate.main() == 0
+            published = json.loads(source_gate.ARTICLES.read_text(encoding="utf-8"))
+            assert [entry["slug"] for entry in published] == ["rochdale-community-story"]
+            assert published[0]["source_url"] == article["source_url"]
+            source_links = generic_sources_markup(published[0])
+            assert "Sources</summary>" in source_links
+            assert "Open source 1</a>" in source_links
+            assert article["source_url"] in source_links
+            assert "Open source 2</a>" in source_links
+        finally:
+            source_gate.ARTICLES, source_gate.ARTICLE_PAGES = original_articles, original_pages
 
     google_sources = core.google_news_sources()
     assert google_sources

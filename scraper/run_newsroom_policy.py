@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Install production-only source and newsroom quality policy.
 
-Local news publishers are valid discovery/corroboration sources. They are not
-allowed to leak into Rochdale Daily's reader-facing copy, and their photographs
-are not automatically republished. The existing mandatory original rewrite,
-source-overlap guard and publisher-leak gate remain the publication controls.
+Local news publishers are valid discovery/corroboration sources, with discreet
+clickable source links at the foot of each report. Publisher names alone must
+not lead to otherwise valid rewritten stories being dropped. Their photographs
+are not automatically republished. The mandatory original rewrite, source-
+overlap and ordinary editorial integrity checks remain publication controls.
 """
 from __future__ import annotations
 
@@ -248,7 +249,7 @@ def _normalise_runtime_status(preserved_evergreen: dict | None = None) -> None:
     ]
     status["local_publishers_discovery_enabled"] = sorted(LOCAL_PUBLISHER_DOMAINS)
     status["local_publisher_public_copy_policy"] = (
-        "May be used for discovery/corroboration and source metadata only; publisher names are blocked from reader-facing copy."
+        "Publisher links remain discreetly clickable in the article Sources section; publisher names in original rewritten prose do not trigger rejection."
     )
     status["publisher_source_image_policy"] = (
         "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork."

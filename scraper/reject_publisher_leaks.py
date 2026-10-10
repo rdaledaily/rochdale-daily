@@ -1,11 +1,12 @@
-"""Fail closed when generated articles are not clean Rochdale Daily copy.
+"""Keep generated reports safe without rejecting them for source attribution.
 
-Publisher names belong in source metadata, not reader-facing copy. Emoji and
-pictographic symbols are also prohibited in generated headlines, standfirsts
-and bodies. Retired source-led fallback routes are rejected outright: they
-existed before OpenAI rewriting became mandatory and may reproduce source
-wording too closely. When a record is rejected, its stale generated HTML page
-is deleted as well so old copied pages cannot remain live outside articles.json.
+The original publisher is credited through discreet clickable links in the
+article's Sources section. Publisher names appearing in an independently
+rewritten report are not grounds for suppressing the entire article.
+
+Retired copy-through publication routes and emoji/pictographs in automated
+copy remain blocked. Only genuinely rejected records have their stale
+generated HTML pages removed.
 """
 from __future__ import annotations
 
@@ -17,34 +18,12 @@ from typing import Any
 ARTICLES = Path("articles.json")
 ARTICLE_PAGES = Path("articles")
 
-NEWS_PUBLISHERS = (
-    "Yahoo News UK",
-    "Yahoo News",
-    "Manchester Evening News",
-    "MEN",
-    "BBC News",
-    "BBC Manchester",
-    "The Independent",
-    "Roch Valley Radio",
-    "About Manchester",
-    "Rochdale Online",
-    "Rochdale Times",
-    "Rochdale Observer",
-)
-
 RETIRED_ROUTES = {
     "source-led-fallback",
     "source-led-emergency-fallback",
     "automatic-attributed-crime-fallback",
     "direct-crime-autopublish",
 }
-
-PATTERN = re.compile(
-    r"\b(?:"
-    + "|".join(sorted((re.escape(name) for name in NEWS_PUBLISHERS), key=len, reverse=True))
-    + r")\b",
-    re.IGNORECASE,
-)
 
 EMOJI_PATTERN = re.compile(
     "["
@@ -119,14 +98,14 @@ def main() -> int:
 
         route = retired_route(article)
         copy = public_copy(article)
-        publisher_match = PATTERN.search(copy)
         emoji_match = EMOJI_PATTERN.search(copy)
-        if route or publisher_match or emoji_match:
+        # A journalist or outlet named in otherwise original reporting does
+        # not make the report a source-copy; URL attribution belongs in the
+        # existing linked Sources section, not an article rejection gate.
+        if route or emoji_match:
             slug = str(article.get("slug") or "")
             if route:
                 reason = f"retired route: {route}"
-            elif publisher_match:
-                reason = f"publisher leak: {publisher_match.group(0)}"
             else:
                 reason = "emoji/pictograph in public copy"
             rejected.append({
@@ -153,7 +132,7 @@ def main() -> int:
 
     print(
         f"publisher_leak_gate: {len(kept)} kept, {len(rejected)} rejected, "
-        f"{deleted_pages} stale pages deleted; source metadata remains intact on kept stories"
+        f"{deleted_pages} stale pages deleted; linked source metadata retained"
     )
     return 0
 
