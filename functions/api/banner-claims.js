@@ -7,6 +7,11 @@ const BANNER_PRICE_GBP=175;
 const validUrl=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)&&!u.username&&!u.password}catch{return false}};
 const emailOK=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 const monthOK=v=>/^20\d\d-(0[1-9]|1[0-2])$/.test(v);
+function firstBookableMonth(){
+ const dateParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'numeric'}).formatToParts(new Date());
+ const year=Number(dateParts.find(x=>x.type==='year').value),month=Number(dateParts.find(x=>x.type==='month').value);
+ const next=new Date(Date.UTC(year,month,1));return next.toISOString().slice(0,7);
+}
 async function hash(v){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 function admin(req,env){return Boolean(env.EVENTS_ADMIN_TOKEN&&req.headers.get('x-admin-token')===env.EVENTS_ADMIN_TOKEN)}
 async function records(kv){const x=await kv.get('banners:claims',{type:'json'});return Array.isArray(x)?x:[]}
@@ -23,6 +28,7 @@ export async function onRequestPost({request,env}) {
  const action=tidy(d.action||'submit',20);const rows=await records(kv);
  if(action==='submit'){
   const fields=validated(d);if(!fields)return json({error:'Check all fields, logo (max 200 KB), and background colour'},400);
+  if(fields.month<firstBookableMonth())return json({error:'Only full future calendar months can be booked at the founding rate. Contact advertising for current-month quotes.'},400);
   // Cap counts bookings being processed too, to avoid overselling.
   if(rows.filter(r=>r.month===fields.month&&['pending','approved'].includes(r.status)).length>=8)return json({error:'All eight new-advertiser spaces are reserved for this month (two existing sponsors also rotate). Choose another month.'},409);
   const id='ban-'+crypto.randomUUID(),token=crypto.randomUUID()+crypto.randomUUID();
