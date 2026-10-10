@@ -3358,7 +3358,19 @@ def main() -> int:
         worker_client = None
         if api_key:
             base_url = os.getenv('OPENAI_BASE_URL', '').strip()
-            worker_client = OpenAI(api_key=api_key, base_url=base_url) if base_url else OpenAI(api_key=api_key)
+            client_options: dict[str, Any] = {'api_key': api_key}
+            if base_url:
+                client_options['base_url'] = base_url
+            # OpenAI's default HTTP timeout is much longer than the fast
+            # newsroom's deadline. Bound requests in that lane so one stalled
+            # provider call does not prevent every successful draft publishing.
+            timeout_setting = os.getenv('OPENAI_REQUEST_TIMEOUT_SECONDS', '').strip()
+            retry_setting = os.getenv('OPENAI_MAX_RETRIES', '').strip()
+            if timeout_setting:
+                client_options['timeout'] = max(1.0, float(timeout_setting))
+            if retry_setting:
+                client_options['max_retries'] = max(0, int(retry_setting))
+            worker_client = OpenAI(**client_options)
         return rewrite_candidate(candidate, worker_client)
     with ThreadPoolExecutor(max_workers=max(1, AI_WORKERS)) as executor:
         future_map = {executor.submit(process_candidate, candidate): candidate for candidate in selected_candidates}

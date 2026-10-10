@@ -10,6 +10,7 @@ overlap and ordinary editorial integrity checks remain publication controls.
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timedelta, timezone
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
@@ -189,6 +190,21 @@ def install_runtime_policy() -> None:
         )
 
     core._source_image_allowed = source_image_allowed
+
+    # The fast lane has an explicit time budget. Aggregator sites such as
+    # NewsNow/Ground News return many links to third-party pages and can spend
+    # the entire 24-minute deadline in outbound metadata fetches. Direct
+    # local publishers, official sources and Google News remain active here;
+    # the scheduled deep-browser lane still processes these aggregator leads.
+    if os.getenv("FAST_NEWS_LANE", "").strip().lower() in {"1", "true", "yes"}:
+        def defer_aggregator_discovery() -> list:
+            core.log.info(
+                "Fast lane: deferring supplementary aggregator outbound crawling "
+                "to deep-browser; direct local and indexed feeds remain active."
+            )
+            return []
+
+        core.collect_aggregator_candidates = defer_aggregator_discovery
 
     original_editorial_quality_issues = core.editorial_quality_issues
 

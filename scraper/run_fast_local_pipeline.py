@@ -320,7 +320,15 @@ def configure_searches(now: datetime | None = None) -> None:
         for spec in build_search_query_specs(max_queries=68, now=synthetic):
             _append_unique(combined, seen, spec)
 
-    core.SEARCH_QUERY_SPECS = combined[:68]
+    # Honour the fast workflow's actual query budget. A hard-coded 68 here
+    # previously overrode GOOGLE_SEARCH_QUERY_LIMIT=36, forcing dozens of
+    # sequential RSS fetches before the newsroom could process any story.
+    # Preserve guaranteed category, ward and accepted-local-publisher slots.
+    guaranteed_slots = (
+        len(CATEGORY_QUERIES) + len(SEARCH_WARDS) + len(TRUSTED_NEWS_DESK_SEARCHES)
+    )
+    search_limit = min(68, max(guaranteed_slots, core.GOOGLE_SEARCH_QUERY_LIMIT))
+    core.SEARCH_QUERY_SPECS = combined[:search_limit]
     core.SEARCH_GROUPS = [spec.query for spec in core.SEARCH_QUERY_SPECS]
     core.log.info(
         "Borough search plan: %d queries; guaranteed categories=%d wards=%d; priority=%d",

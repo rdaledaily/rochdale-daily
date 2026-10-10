@@ -74,6 +74,16 @@ def main() -> int:
     for name in retired:
         assert not (WORKFLOWS / name).exists(), name
 
+    # The quick pass must not inherit the broad aggregator/browser crawl or
+    # unbounded default model timeouts: both previously exhausted its deadline.
+    fast = text("scrape-fast.yml")
+    assert 'FAST_NEWS_LANE: "true"' in fast
+    assert 'OPENAI_REQUEST_TIMEOUT_SECONDS: "30"' in fast
+    assert 'OPENAI_MAX_RETRIES: "0"' in fast
+    assert 'LLM_RATE_LIMIT_RETRIES: "1"' in fast
+    assert 'GOOGLE_SEARCH_QUERY_LIMIT: "44"' in fast
+    assert 'MIN_BALANCED_SELECTION_LIMIT: "12"' in fast
+
     # Automated collection permits source photos through the runtime allowlist
     # policy. The manual publisher does not discover sources and therefore does
     # not need this scraper-only environment switch.
