@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 194,
-  "published_count": 194,
+  "article_count": 195,
+  "published_count": 195,
   "category_change_count": 27,
-  "image_change_count": 21,
+  "image_change_count": 22,
   "category_changes": [
     {
       "slug": "sponsored-the-physiotherapy-clinic-rochdale-bamford",
@@ -197,6 +197,18 @@
     }
   ],
   "image_changes": [
+    {
+      "slug": "overnight-road-closures-planned-at-sudden-junction-from-october-12-to-15",
+      "title": "Overnight Road Closures Planned at Sudden Junction, Rochdale from October 12 to 15",
+      "category": "traffic",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/overnight-road-closures-planned-at-sudden-junction-from-october-12-to-15.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/overnight-road-closures-planned-at-sudden-junction-from-october-12-to-15-generated-card.jpg"
+    },
     {
       "slug": "new-years-eve-with-the-j-ger-maestro",
       "title": "New Years Eve with the Jäger Maestro",
