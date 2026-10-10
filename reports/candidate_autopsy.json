@@ -1,46 +1,41 @@
 {
-  "examined_at": "2026-10-09T13:44:55.192656Z",
+  "examined_at": "2026-10-10T13:02:24.144270Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 116,
-  "publish_age_gate_hours": 48,
+  "candidates_examined": 118,
+  "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 49,
-    "would publish": 38,
-    "duplicate of published story": 27,
-    "not local": 1,
-    "job or career post": 1
+    "age": 95,
+    "would publish": 20,
+    "duplicate of published story": 2,
+    "not local": 1
   },
-  "would_publish": 38,
+  "would_publish": 20,
   "age_gate_sensitivity": {
-    "6h": 10,
-    "14h": 11,
-    "24h": 37,
-    "48h": 67,
-    "72h": 87,
-    "168h": 116
+    "6h": 3,
+    "14h": 9,
+    "24h": 23,
+    "48h": 66,
+    "72h": 94,
+    "168h": 118
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Manchester Evening News: Police issue update in Rochdale murder investigation after John , 56, ",
-      "InYourArea: What's On Rochdale: Stellar set from Liam Fender, a buzzing Bavarian O"
+      "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "InYourArea: Rochdale Faith News: Saturday, October 10 - InYourArea",
+      "Rochdale Borough Council: Rugby Road, temporary prohibition of waiting in Rochdale from 15 Octob"
     ],
     "not local": [
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "duplicate of published story": [
-      "Rochdale Borough Council: On record: Rochdale’s new album celebrates town’s music history – Roch",
-      "Ofsted: Ofsted publishes inspection report for Greenbank Primary School",
-      "Ofsted: Ofsted publishes inspection report for Meadows School"
-    ],
-    "job or career post": [
-      "Rochdale Times: Friends realise dream with bridal boutique launch - Rochdale Times"
+      "Rochdale Borough Council: Todmorden Road, roadworks in Littleborough from 10 October 2026",
+      "Roch Valley Radio: Overnight road closures planned at Rochdale’s Sudden Junction"
     ],
     "age": [
-      "Roch Valley Radio: Prestwich Travel Hub to open this autumn with parking charges proposed",
-      "Rochdale Borough Council: Schools Forum Report Proposal for Investment of Central Schools Servic",
-      "Rochdale AFC: Dale Supporting Play Safe Campaign This Weekend - Rochdale AFC"
+      "Rochdale Times: Album is still banging the drum for town’s music heritage - Rochdale T",
+      "Facebook: 🚨 Police issue update in Rochdale murder investigation after John McGa",
+      "Rochdale Borough Council: On record: Rochdale’s new album celebrates town’s music history – Roch"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
