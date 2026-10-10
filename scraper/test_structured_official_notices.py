@@ -83,6 +83,10 @@ class OfficialNoticeRewrites(unittest.TestCase):
             ),
             BRANDLEHOW_SOURCE.replace(
                 "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
+                "roadworks in Middleton and Rochdale on 12 October 2026 | Rochdale Borough Council",
+            ),
+            BRANDLEHOW_SOURCE.replace(
+                "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
                 "roadworks on 12 October 2026 | Rochdale Borough Council",
             ),
         ):
