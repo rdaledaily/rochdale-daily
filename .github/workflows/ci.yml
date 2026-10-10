@@ -172,6 +172,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_evidence_publication_integration.py
           PYTHONPATH=scraper python scraper/test_evidence_publication_repair.py
           PYTHONPATH=scraper python scraper/test_structured_official_notices.py
+          PYTHONPATH=scraper python scraper/test_workflow_evidence_order.py
           PYTHONPATH=scraper python scraper/test_prepare_publication_evidence.py
           PYTHONPATH=scraper python scraper/test_independent_fact_review.py
           python scraper/test_resolve_google_news_sources.py
