@@ -12,10 +12,10 @@ class EvidenceTests(unittest.TestCase):
     def test_missing_evidence(self):
         self.assertTrue(evidence_issues({"source_url":URL}))
     def test_valid_contract(self):
-        row={"primary_source_verified":True,"evidence_sources":[{"url":URL,"captured_text":TEXT}],"verified_claims":[{"claim":"Council approved community library","source_url":URL,"supporting_excerpt":"Rochdale Borough Council has approved the new community library at its meeting on Friday."}]}
+        row={"primary_source_verified":True,"source_review_verified":True,"evidence_sources":[{"url":URL,"captured_text":TEXT}],"verified_claims":[{"claim":"Council approved community library","source_url":URL,"supporting_excerpt":"Rochdale Borough Council has approved the new community library at its meeting on Friday."}]}
         self.assertEqual(evidence_issues(row),[])
     def test_made_up_quote(self):
-        row={"primary_source_verified":True,"evidence_sources":[{"url":URL,"captured_text":TEXT}],"verified_claims":[{"claim":"Council spent £2m","source_url":URL,"supporting_excerpt":"The council spent two million pounds."}]}
+        row={"primary_source_verified":True,"source_review_verified":True,"evidence_sources":[{"url":URL,"captured_text":TEXT}],"verified_claims":[{"claim":"Council spent £2m","source_url":URL,"supporting_excerpt":"The council spent two million pounds."}]}
         self.assertTrue(evidence_issues(row))
     def test_manual_not_retroactive(self):
         self.assertEqual(evidence_issues({"manual_article":True}),[])
