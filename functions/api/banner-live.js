@@ -8,17 +8,17 @@ export async function onRequestGet({request,env}) {
  const kv=env.EVENTS_KV;if(!kv)return respond({items:[]},503);
  const u=new URL(request.url),claims=await rows(kv),id=u.searchParams.get('id')||'';
  if(u.searchParams.has('logo')) {
-  const row=claims.find(x=>x.id===id&&x.status==='approved');if(!row)return new Response('Not found',{status:404});
+  const row=claims.find(x=>x.id===id&&x.status==='approved'&&x.paymentStatus==='paid');if(!row)return new Response('Not found',{status:404});
   const data=await kv.get('banners:logo:'+id);if(!data)return new Response('Not found',{status:404});
   const match=/^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/]+={0,2})$/.exec(data);if(!match)return new Response('Not found',{status:404});
   const bin=atob(match[2]);return new Response(Uint8Array.from(bin,x=>x.charCodeAt(0)),{headers:{'Content-Type':'image/'+match[1],'Cache-Control':'public, max-age=300','X-Content-Type-Options':'nosniff'}});
  }
  if(u.searchParams.has('click')){
-  const row=claims.find(x=>x.id===id&&x.status==='approved'&&x.month===month());if(!row)return new Response('Not found',{status:404});
+  const row=claims.find(x=>x.id===id&&x.status==='approved'&&x.paymentStatus==='paid'&&x.month===month());if(!row)return new Response('Not found',{status:404});
   await count(kv,id,'clicks');return Response.redirect(row.website,302);
  }
  if(u.searchParams.has('impression')){
-  const row=claims.find(x=>x.id===id&&x.status==='approved'&&x.month===month());if(!row)return new Response(null,{status:204});
+  const row=claims.find(x=>x.id===id&&x.status==='approved'&&x.paymentStatus==='paid'&&x.month===month());if(!row)return new Response(null,{status:204});
   await count(kv,id,'impressions');return new Response(null,{status:204,headers:{'Cache-Control':'no-store'}});
  }
  if(u.searchParams.has('report')){
@@ -30,7 +30,7 @@ export async function onRequestGet({request,env}) {
   const impressions=Number(await kv.get('banner:stats:'+id+':impressions')||0),clicks=Number(await kv.get('banner:stats:'+id+':clicks')||0);
   return respond({impressions,clicks,ctr:impressions?+(100*clicks/impressions).toFixed(2):0,status:row.status});
  }
- return respond({items:claims.filter(x=>x.status==='approved'&&x.month===month()).slice(0,10).map(x=>({
+ return respond({items:claims.filter(x=>x.status==='approved'&&x.paymentStatus==='paid'&&x.month===month()).slice(0,10).map(x=>({
   id:x.id,name:x.name,top:x.top,bottom:x.bottom,colour:x.colour,logo:'/api/banner-live?logo=1&id='+encodeURIComponent(x.id),
   click:'/api/banner-live?click=1&id='+encodeURIComponent(x.id)
  }))});
