@@ -71,7 +71,7 @@ def verified_notice(article: dict) -> bool:
     title_areas = {
         match.casefold()
         for match in re.findall(
-            r"\\bin\\s+(Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\\b",
+            r"\bin\s+(Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\b",
             title, flags=re.I,
         )
     }
