@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-10T17:55:07.004815Z",
+  "last_run_at": "2026-10-10T18:10:46.435233Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,31 +27,32 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 130,
+  "raw_candidates_before_job_filter": 136,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 124,
-  "candidate_clusters": 60,
+  "raw_candidates": 130,
+  "candidate_clusters": 59,
   "google_news_resolution": {
-    "wrappers": 57,
+    "wrappers": 56,
     "resolved": 8,
     "text_recovered": 7,
     "reattributed": 1,
     "images_found": 7
   },
-  "duplicates_merged": 64,
+  "duplicates_merged": 71,
   "attempted_rewrites": 3,
-  "new_articles": 1,
+  "new_articles": 0,
   "live_articles": 40,
-  "skipped": 2,
+  "skipped": 3,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2
+    "editorial gate: REJECTED_NON_LOCAL": 2,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger": {
-    "entries": 59,
+    "entries": 60,
     "by_outcome": {
       "published": 21,
-      "rejected": 38
+      "rejected": 39
     },
     "held_back_this_run": 18,
     "held_already_published": 12,
@@ -115,13 +116,11 @@
       "last_attempt_at": "2026-10-10T16:26:37.188891Z"
     }
   ],
-  "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 113,
-    "website_discovery": 4,
+    "rss_and_google_news": 116,
+    "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 12,
     "facebook_official": 0,
@@ -134,7 +133,7 @@
   "collector_errors": {},
   "source_counts": {
     "Узнай Москву": 37,
-    "Roch Valley Radio": 31,
+    "Roch Valley Radio": 35,
     "Rochdale Times": 11,
     "Manchester Evening News": 8,
     "Northern live service updates": 8,
@@ -142,14 +141,15 @@
     "Bee Network live travel alerts": 4,
     "Rochdale Borough Council": 3,
     "Rochdale AFC": 3,
+    "Rochdale Valiant": 3,
     "The Guardian": 2,
-    "The Northern Echo": 2,
     "Oxford Mail": 2,
     "Rochdale Borough Council RSS": 1,
     "Herts Advertiser": 1,
     "Id": 1,
     "The Bury Times": 1,
     "AOL.co.uk": 1,
+    "The Northern Echo": 1,
     "SuaraGarut.ID": 1,
     "Thurrock Gazette": 1,
     "County Times": 1,
@@ -198,7 +198,7 @@
     "hard-news-v3-a60f8b7f7102078f81c3"
   ],
   "selected_candidate_urls": [
-    "https://www.northernrailway.co.uk/service-updates#live-c0aaf35c5780ac7d47",
+    "https://www.northernrailway.co.uk/service-updates#live-05291ba411e651f465",
     "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury",
     "https://www.rochvalleyradio.com/news-features/3/politics/905/rochdale-manufacturing-centre-completes-base-build-ahead-of-planned-2027-opening"
   ],
@@ -650,8 +650,12 @@
   "robots_denied_count": 0,
   "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 4
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -661,7 +665,7 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-10-10T17:07:38.235063Z",
+  "evergreen_fallback_attempt_at": "2026-10-10T18:10:46.496418Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
   "evergreen_fallback_attempt_count": 1,
   "evergreen_fallback": {
@@ -674,7 +678,7 @@
     "qualifying_count": 1,
     "last_topic_id": "rochdale-cruckle",
     "last_article_slug": "why-rochdale-says-cruckle",
-    "last_published_at": "2026-10-10T17:07:38Z"
+    "last_published_at": "2026-10-10T18:10:46Z"
   },
   "local_publishers_discovery_enabled": [
     "manchestereveningnews.co.uk",
@@ -687,7 +691,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-10T18:01:39.702824Z",
+  "frontpage_generated_at": "2026-10-10T18:13:00.963678Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -806,9 +810,9 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 11,
-  "event_dates_corrected_from_ledger": 3,
+  "event_dates_corrected_from_ledger": 0,
   "duplicate_articles_after_postprocessing": 188,
-  "blocked_articles_removed": 0,
+  "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
