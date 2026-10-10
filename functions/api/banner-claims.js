@@ -2,6 +2,8 @@
 // EVENTS_KV stores private logos and edit tokens; no client can self-publish.
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{"Content-Type":"application/json","Cache-Control":"no-store"}});
 const tidy=(v,n)=>String(v||"").trim().slice(0,n);
+// Fixed launch price for a full future calendar month; payment is verified manually.
+const BANNER_PRICE_GBP=175;
 const validUrl=v=>{try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)&&!u.username&&!u.password}catch{return false}};
 const emailOK=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 const monthOK=v=>/^20\d\d-(0[1-9]|1[0-2])$/.test(v);
@@ -25,9 +27,9 @@ export async function onRequestPost({request,env}) {
   if(rows.filter(r=>r.month===fields.month&&['pending','approved'].includes(r.status)).length>=8)return json({error:'All eight new-advertiser spaces are reserved for this month (two existing sponsors also rotate). Choose another month.'},409);
   const id='ban-'+crypto.randomUUID(),token=crypto.randomUUID()+crypto.randomUUID();
   await kv.put('banners:logo:'+id,d.logo);
-  rows.push({id,...fields,tokenHash:await hash(token),status:'pending',createdAt:new Date().toISOString()});
+  rows.push({id,...fields,priceGBP:BANNER_PRICE_GBP,paymentStatus:'unpaid',tokenHash:await hash(token),status:'pending',createdAt:new Date().toISOString()});
   await kv.put('banners:claims',JSON.stringify(rows));
-  return json({reference:id,editToken:token,editUrl:'/manage-banner.html?id='+encodeURIComponent(id)+'&key='+encodeURIComponent(token)},201);
+  return json({reference:id,priceGBP:BANNER_PRICE_GBP,paymentStatus:'unpaid',editToken:token,editUrl:'/manage-banner.html?id='+encodeURIComponent(id)+'&key='+encodeURIComponent(token)},201);
  }
  if(action==='edit'){
   const id=tidy(d.id,100),token=tidy(d.token,150);const row=rows.find(r=>r.id===id);
@@ -39,9 +41,22 @@ export async function onRequestPost({request,env}) {
   await kv.put('banners:claims',JSON.stringify(rows));
   return json({ok:true,message:'Changes saved and sent for editorial review'});
  }
+ if(action==='mark-paid'){
+  if(!admin(request,env))return json({error:'Unauthorised'},401);
+  const row=rows.find(r=>r.id===tidy(d.id,100));if(!row)return json({error:'Not found'},404);
+  if(row.status==='rejected')return json({error:'Rejected booking cannot be paid'},409);
+  const paymentReference=tidy(d.paymentReference,120);
+  if(paymentReference.length<4)return json({error:'Enter the verified payment transaction reference'},400);
+  // This action must be performed only after checking the exact received amount in the payment provider.
+  row.paymentStatus='paid';row.paymentReference=paymentReference;
+  row.paymentVerifiedAt=new Date().toISOString();row.paymentVerifiedAmountGBP=BANNER_PRICE_GBP;
+  await kv.put('banners:claims',JSON.stringify(rows));
+  return json({ok:true,paymentStatus:'paid'});
+ }
  if(action==='approve'||action==='reject'){
   if(!admin(request,env))return json({error:'Unauthorised'},401);
   const row=rows.find(r=>r.id===d.id);if(!row)return json({error:'Not found'},404);
+  if(action==='approve'&&row.paymentStatus!=='paid')return json({error:'Verify payment in the provider before approval'},409);
   if(action==='approve'&&rows.filter(r=>r.month===row.month&&r.status==='approved'&&r.id!==row.id).length>=8)return json({error:'Month already full'},409);
   row.status=action==='approve'?'approved':'rejected';row.reviewedAt=new Date().toISOString();
   await kv.put('banners:claims',JSON.stringify(rows));return json({ok:true,status:row.status});
