@@ -94,6 +94,14 @@ def main() -> int:
                 "normalise_public_theme.py" in body or "publish_newsroom_snapshot.sh" in body
             ), f"{workflow.name} regenerates pages and pushes without normalising the theme"
 
+    # The fast lane stops chaining while the deep lane or the publisher is
+    # active. Each of them must restart it when it finishes, or the paper waits
+    # hours for GitHub's late hourly tick (50 idle hours in 171, 2-9 October
+    # 2026; a further 2h16m gap after the publisher on 9 October).
+    restart = "gh workflow run scrape-fast.yml --ref main -f chain=1"
+    assert restart in text("publish.yml"), "publisher must restart the fast lane"
+    assert restart in text("scrape-fast.yml").split("\n  deep-browser:", 1)[1], "deep lane must restart the fast lane"
+
     print("Workflow architecture checks passed.")
     return 0
 

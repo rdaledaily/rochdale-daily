@@ -13,6 +13,16 @@
  * the admin token returns every consented address for import. The provider
  * then handles confirmation and unsubscribe. Until then nothing is sent.
  *
+ * Sending (added 10 October 2026): scraper/send_newsletter.py reads the list
+ * through the CSV export and sends the day's Morning Briefing. Two things here
+ * support it:
+ *   ?unsubscribe=<sha256(email)>   no token needed: the link in every email.
+ *                                  GET shows a confirmation page; POST is the
+ *                                  one-click form mail clients send.
+ *   newsletter:last_sent           the London date of the last send, read with
+ *                                  ?last_sent=1 and written with ?mark_sent=DATE
+ *                                  (admin token), so a day is never sent twice.
+ *
  * Consent record per UK GDPR / PECR: we store what was consented to, when,
  * and a salted hash of the requesting IP (not the IP). No other data.
  */
@@ -57,8 +67,45 @@ async function readJson(kv, key, fallback) {
   return value == null ? fallback : value;
 }
 
+const LAST_SENT_KEY = "newsletter:last_sent";
+
+function unsubscribeHash(request) {
+  const value = new URL(request.url).searchParams.get("unsubscribe") || "";
+  return /^[0-9a-f]{64}$/.test(value) ? value : "";
+}
+
+async function removeSubscriber(kv, hash) {
+  await kv.delete(`newsletter:sub:${hash}`);
+  const index = (await readJson(kv, INDEX_KEY, [])).filter((h) => h !== hash);
+  await kv.put(INDEX_KEY, JSON.stringify(index));
+}
+
+function unsubscribedPage() {
+  // Same page whether or not the address was on the list: never reveal membership.
+  const html = '<!doctype html><html lang="en-GB"><head><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">' +
+    '<title>Unsubscribed | Rochdale Daily</title></head>' +
+    '<body style="font-family:Georgia,serif;max-width:560px;margin:64px auto;padding:0 20px;color:#2b2824;line-height:1.5">' +
+    '<h1 style="font-size:28px">You have been unsubscribed</h1>' +
+    '<p>You will not receive the Rochdale Daily newsletter again. Your address has been deleted from our list.</p>' +
+    '<p><a href="/">Back to Rochdale Daily</a></p></body></html>';
+  return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+}
+
 export async function onRequestPost({ request, env }) {
   if (!env.EVENTS_KV) return json({ ok: false, error: "Not configured" }, 503);
+  const leaving = unsubscribeHash(request);
+  if (leaving) {
+    await removeSubscriber(env.EVENTS_KV, leaving);
+    return json({ ok: true });
+  }
+  const markSent = new URL(request.url).searchParams.get("mark_sent") || "";
+  if (markSent) {
+    if (!isAdmin(request, env)) return json({ ok: false, error: "Unauthorised" }, 401);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(markSent)) return json({ ok: false, error: "date required" }, 400);
+    await env.EVENTS_KV.put(LAST_SENT_KEY, markSent);
+    return json({ ok: true, last_sent: markSent });
+  }
   let body;
   try {
     body = await request.json();
@@ -110,8 +157,16 @@ export async function onRequestPost({ request, env }) {
 
 export async function onRequestGet({ request, env }) {
   if (!env.EVENTS_KV) return json({ ok: false, error: "Not configured" }, 503);
+  const leaving = unsubscribeHash(request);
+  if (leaving) {
+    await removeSubscriber(env.EVENTS_KV, leaving);
+    return unsubscribedPage();
+  }
   if (!isAdmin(request, env)) return json({ ok: false, error: "Unauthorised" }, 401);
   const url = new URL(request.url);
+  if (url.searchParams.get("last_sent")) {
+    return json({ ok: true, last_sent: (await env.EVENTS_KV.get(LAST_SENT_KEY)) || "" });
+  }
   const index = await readJson(env.EVENTS_KV, INDEX_KEY, []);
   if (url.searchParams.get("export") !== "csv") return json({ ok: true, count: index.length });
 
@@ -136,9 +191,6 @@ export async function onRequestDelete({ request, env }) {
   const url = new URL(request.url);
   const email = normaliseEmail(url.searchParams.get("email"));
   if (!email) return json({ ok: false, error: "email required" }, 400);
-  const hash = await sha256(email);
-  await env.EVENTS_KV.delete(`newsletter:sub:${hash}`);
-  const index = (await readJson(env.EVENTS_KV, INDEX_KEY, [])).filter((h) => h !== hash);
-  await env.EVENTS_KV.put(INDEX_KEY, JSON.stringify(index));
+  await removeSubscriber(env.EVENTS_KV, await sha256(email));
   return json({ ok: true });
 }
