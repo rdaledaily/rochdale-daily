@@ -152,6 +152,8 @@ LOW_VALUE_SOURCE_NAMES = (
     "jobs24",
     "simplyhired",
     "eat jobs",
+    # Spam publisher repeatedly entering Google News with fake Rochdale-match livestream links.
+    "узнай москву",
 )
 NON_NEWS_PATH_RE = re.compile(
     r"/(?:contact-us|noindex|privacy|terms|cookies?|police-custody-suites|"
