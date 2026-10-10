@@ -80,11 +80,39 @@ def verified_notice(article: dict) -> bool:
     all_towns = {
         town.casefold() for town in ALL_TITLE_TOWNS.findall(title[kind.end():])
     }
-    # Reject mismatched locations AND an additional town without its own
-    # preposition, e.g. "roadworks in Middleton and Rochdale". The street name
-    # itself is excluded to avoid rejecting a road named after a nearby town.
-    if not area or title_areas != {area.casefold()} or all_towns != {area.casefold()}:
+    # "Rochdale" can refer to the *borough*, which contains Middleton,
+    # Heywood, Littleborough, Milnrow and Newhey, rather than just Rochdale
+    # town. Do not misclassify a Middleton story as outside Rochdale Borough.
+    # The title supplies the specific town; the council Area field can use
+    # the broader borough name. Keep different specific towns incompatible.
+    town = next(iter(title_areas), "")
+    area_normalised = area.casefold()
+    if (
+        len(title_areas) != 1 or not area_normalised
+        or (town != area_normalised
+            and "rochdale" not in (town, area_normalised))
+    ):
         return False
+
+    # A second named town is not a single-location notice ("Middleton and
+    # Heywood" or "Middleton and Rochdale"). By contrast "Middleton, Rochdale
+    # Borough" is a valid town/borough address and is not a contradiction.
+    extra_towns = all_towns - {town}
+    if extra_towns:
+        borough_suffix = re.search(
+            r"\\b" + re.escape(town) +
+            r"\\s*,\\s*rochdale(?:\\s+borough)?\\b",
+            title[kind.end():], flags=re.I,
+        )
+        if extra_towns != {"rochdale"} or not borough_suffix:
+            return False
+
+    # Public copy should use the precise town whenever the other label is
+    # the wider Rochdale Borough, avoiding "in Rochdale" for Middleton roads.
+    report_area = (
+        area if area_normalised != "rochdale" else
+        next((a for a in AREA if a.casefold() == town), area)
+    )
     timing = extract_field(captured, "Expected start and finish")
     reason = extract_field(captured, "Reason")
     restriction = extract_field(captured, "Restriction and location")
@@ -107,7 +135,7 @@ def verified_notice(article: dict) -> bool:
     safe = lambda s: escape(s, quote=True)
     p1 = (
         f"Rochdale Borough Council has published a traffic notice for "
-        f"<strong>{safe(road_name)}</strong> in {safe(area)}. "
+        f"<strong>{safe(road_name)}</strong> in {safe(report_area)}. "
         f"The council lists the expected start and finish as "
         f"<strong>{safe(timing)}</strong>."
     )
@@ -154,7 +182,7 @@ def verified_notice(article: dict) -> bool:
     revised.update({
         "title": headline,
         "excerpt": (
-            f"Rochdale Borough Council lists work affecting {road_name} in {area}; "
+            f"Rochdale Borough Council lists work affecting {road_name} in {report_area}; "
             f"expected timings: {timing}."
         ),
         "content_html": "\n".join(f"<p>{p}</p>" for p in (p1, p2, p3)),
