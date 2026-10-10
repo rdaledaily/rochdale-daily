@@ -100,6 +100,18 @@ class OfficialNoticeRewrites(unittest.TestCase):
         record = article(BRANDLEHOW_URL, source)
         self.assertTrue(verified_notice(record))
 
+    def test_reject_multiple_towns_without_repeated_prepositions(self):
+        for old,new in (
+            ("roadworks in Middleton", "roadworks in Middleton and Rochdale"),
+            ("roadworks in Middleton", "roadworks in Middleton, Rochdale"),
+            ("roadworks in Middleton", "roadworks in Middleton near Heywood"),
+            ("roadworks in Middleton", "roadworks in Middleton and in Rochdale"),
+        ):
+            a=article(BRANDLEHOW_URL,BRANDLEHOW_SOURCE.replace(old,new))
+            self.assertFalse(verified_notice(a), new)
+            self.assertFalse(a.get("source_review_verified",False))
+            self.assertIn("unwarranted",a["content_html"])
+
     def test_enrich_calls_deterministic_evidence_no_ai_model(self):
         a=article(BRANDLEHOW_URL,BRANDLEHOW_SOURCE)
         a.pop("evidence_sources")
