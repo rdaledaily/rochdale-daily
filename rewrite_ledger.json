@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-10T18:10:46.430592Z",
+  "updated_at": "2026-10-10T18:20:46.738360Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 60,
+  "count": 61,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/grimsby-town-rochdale-13597512": {
       "first_attempt_at": "2026-10-09T19:38:18.472286Z",
@@ -543,6 +543,20 @@
       "category": "transport",
       "text_fingerprint": "7ad0563e955fda4b"
     },
+    "https://www.northernrailway.co.uk/service-updates#live-f1c25cd64d50085590": {
+      "first_attempt_at": "2026-10-10T18:20:35.163794Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-f1c25cd64d50085590"
+      ],
+      "last_attempt_at": "2026-10-10T18:20:35.163794Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "b7bb1b296402aff5"
+    },
     "https://www.northernrailway.co.uk/service-updates#live-f4909405d152c92331": {
       "first_attempt_at": "2026-10-09T15:01:13.728518Z",
       "attempts": 1,
@@ -780,11 +794,11 @@
     },
     "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury": {
       "first_attempt_at": "2026-10-10T16:02:16.798602Z",
-      "attempts": 12,
+      "attempts": 13,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury"
       ],
-      "last_attempt_at": "2026-10-10T18:10:26.880396Z",
+      "last_attempt_at": "2026-10-10T18:20:35.657038Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "£13 million Millwood Primary School expansion officially opened in Bury",
@@ -822,13 +836,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/3/politics/905/rochdale-manufacturing-centre-completes-base-build-ahead-of-planned-2027-opening": {
       "first_attempt_at": "2026-10-10T08:38:06.665527Z",
-      "attempts": 13,
+      "attempts": 14,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/3/politics/905/rochdale-manufacturing-centre-completes-base-build-ahead-of-planned-2027-opening"
       ],
-      "last_attempt_at": "2026-10-10T18:10:40.664680Z",
+      "last_attempt_at": "2026-10-10T18:20:46.738274Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Rochdale manufacturing centre completes base build ahead of planned 2027 opening",
       "source_name": "Roch Valley Radio",
       "category": "news",
