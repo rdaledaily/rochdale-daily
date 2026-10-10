@@ -28,7 +28,7 @@ CANDIDATES_PATH = ROOT / "newsroom_candidates.json"
 ARTICLES_PATH = ROOT / "articles.json"
 REPORT_PATH = ROOT / "reports" / "candidate_autopsy.json"
 
-PUBLISH_MAX_NEWS_AGE_HOURS = int(os.getenv("PUBLISH_MAX_NEWS_AGE_HOURS", "48"))
+PUBLISH_MAX_NEWS_AGE_HOURS = int(os.getenv("PUBLISH_MAX_NEWS_AGE_HOURS", "24"))
 AGE_WIDTHS = [6, 14, 24, 48, 72, 168]
 
 PUBLISHABLE = "would publish"

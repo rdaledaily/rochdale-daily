@@ -2984,7 +2984,13 @@ def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> No
     now = iso_utc(utc_now())
     with _REWRITE_LEDGER_LOCK:
         entry = ledger.get(identity) or {'first_attempt_at': now, 'attempts': 0, 'urls': []}
-        new_material = bool(candidate_source_identities(candidate) - set(entry.get('urls') or []))
+        new_material = bool(
+            candidate_source_identities(candidate) - set(entry.get('urls') or [])
+            or (
+                entry.get('text_fingerprint')
+                and entry['text_fingerprint'] != candidate_text_fingerprint(candidate)
+            )
+        )
         if new_material or entry.get('outcome') != outcome:
             # Fresh material, or a different kind of outcome, starts a new count:
             # the rejection limit is per body of evidence, not per story.
@@ -3013,6 +3019,11 @@ def rewrite_ledger_block_reason(candidate: Any) -> str:
     if outcome == 'failed':
         return ''
     if candidate_source_identities(candidate) - set(entry.get('urls') or []):
+        return ''
+    # A corrected or substantively updated source deserves reconsideration;
+    # repeated unchanged rejections still exhaust the normal attempt limit.
+    if (entry.get('outcome') == 'rejected' and entry.get('text_fingerprint')
+            and entry['text_fingerprint'] != candidate_text_fingerprint(candidate)):
         return ''
     reason = str(entry.get('reason') or '')
     if outcome == 'published':

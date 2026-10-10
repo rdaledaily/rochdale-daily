@@ -24,7 +24,7 @@ jobs:
     env:
       # Must match the live publish gate, or the report describes a pipeline
       # that is not the one running.
-      PUBLISH_MAX_NEWS_AGE_HOURS: "48"
+      PUBLISH_MAX_NEWS_AGE_HOURS: "24"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4

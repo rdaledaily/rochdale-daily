@@ -26,7 +26,7 @@ from search_queries import SearchQuery
 
 PUBLISH_MAX_NEWS_AGE_HOURS = max(
     1,
-    int(os.getenv("PUBLISH_MAX_NEWS_AGE_HOURS", "14")),
+    int(os.getenv("PUBLISH_MAX_NEWS_AGE_HOURS", "24")),
 )
 SEARCH_RECENCY_RE = re.compile(r"\bwhen:\d+[hd]\b", re.I)
 BACKGROUND_ONLY_PATH_RE = re.compile(
