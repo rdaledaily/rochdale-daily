@@ -68,6 +68,38 @@ class OfficialNoticeRewrites(unittest.TestCase):
         self.assertNotIn("fines",a["content_html"])
         self.assertEqual(evidence_issues(a),[])
 
+    def test_area_must_match_headline_town(self):
+        # A different but otherwise valid borough location must not pass.
+        for source in (
+            BRANDLEHOW_SOURCE.replace("Area Middleton", "Area Rochdale"),
+            RUGBY_SOURCE.replace("Area Rochdale", "Area Middleton"),
+            BRANDLEHOW_SOURCE.replace(
+                "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
+                "roadworks in Rochdale on 12 October 2026 | Rochdale Borough Council",
+            ),
+            BRANDLEHOW_SOURCE.replace(
+                "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
+                "roadworks in Middleton and in Rochdale on 12 October 2026 | Rochdale Borough Council",
+            ),
+            BRANDLEHOW_SOURCE.replace(
+                "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
+                "roadworks on 12 October 2026 | Rochdale Borough Council",
+            ),
+        ):
+            url = RUGBY_URL if source.startswith("Rugby Road") else BRANDLEHOW_URL
+            record = article(url, source)
+            before = dict(record)
+            self.assertFalse(verified_notice(record), source[:85])
+            self.assertEqual(record, before, "Failed notice must remain untouched")
+
+    def test_case_insensitive_matching_area_and_title(self):
+        source = BRANDLEHOW_SOURCE.replace(
+            "roadworks in Middleton on 12 October 2026 | Rochdale Borough Council",
+            "roadworks in MIDDLETON on 12 October 2026 | Rochdale Borough Council",
+        )
+        record = article(BRANDLEHOW_URL, source)
+        self.assertTrue(verified_notice(record))
+
     def test_enrich_calls_deterministic_evidence_no_ai_model(self):
         a=article(BRANDLEHOW_URL,BRANDLEHOW_SOURCE)
         a.pop("evidence_sources")

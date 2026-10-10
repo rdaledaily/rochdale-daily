@@ -21,6 +21,12 @@ STREET = re.compile(
 HEAD = re.compile(
     r"^(.*?)\s+\|\s+Rochdale Borough Council\b", re.I | re.S
 )
+# Only accept an explicit borough location in the captured notice headline.
+# Never treat a valid Area value as enough if its title names another town.
+TITLE_LOCATION = re.compile(
+    r"\b(?:in|at)\s+(?P<area>Rochdale|Middleton|Heywood|Littleborough|Milnrow|Newhey)\b",
+    re.I,
+)
 FIELDS = (
     "Area", "Expected start and finish", "Reason", "Restriction and location",
     "Alternative route", "Organised by", "Directions", "Get directions",
@@ -64,6 +70,11 @@ def verified_notice(article: dict) -> bool:
         return False
     road_name = kind.group("road")
     area = extract_field(captured, "Area")
+    title_areas = {m.group("area").casefold() for m in TITLE_LOCATION.finditer(title)}
+    # Fail closed when the headline lacks a named town, names several places,
+    # or contradicts the labelled Area field (e.g. Middleton vs Rochdale).
+    if not area or title_areas != {area.casefold()}:
+        return False
     timing = extract_field(captured, "Expected start and finish")
     reason = extract_field(captured, "Reason")
     restriction = extract_field(captured, "Restriction and location")
