@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en-GB"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>Banner bookings | Rochdale Daily editor</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f1f5f7;color:#173b4c;font:15px/1.6 system-ui}header{background:#103449;color:white;padding:18px 22px}header a{color:white}main{max-width:1000px;margin:auto;padding:20px}section,article{background:white;border:1px solid #c9dae2;border-radius:10px;padding:18px;margin:14px 0}input{font:inherit;padding:10px;border:1px solid #809ca9;border-radius:5px;max-width:100%;width:420px}button{padding:10px 14px;border:0;border-radius:5px;background:#076f8d;color:white;font:700 14px system-ui;cursor:pointer;margin:5px}button:disabled{opacity:.5;cursor:default}.danger{background:#9d364d}.secondary{background:#536b76}.small{font-size:13px;color:#536976}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.meta{overflow-wrap:anywhere}.status{font-weight:800}#message{white-space:pre-wrap}a{color:#086b86}label{display:block;font-weight:700;margin-top:9px}</style>
+</head><body>
+<header><strong>Rochdale Daily — Advertiser administration</strong> &nbsp; <a href="/">Back to paper</a></header>
+<main>
+<h1>Banner booking approvals</h1>
+<p>Private editorial workspace. Verify the <strong>£175 payment</strong> in the payment provider and check the amount and transaction reference before marking a request paid. No advert publishes automatically.</p>
+<section><label for="token">Administrator token</label><div class="row"><input id="token" type="password" autocomplete="off" placeholder="EVENTS_ADMIN_TOKEN"><button id="load" type="button">Load requests</button></div><p class="small">Access is checked by the server. The token is held in this browser tab only and is never placed in a URL.</p><p id="message" role="status"></p></section>
+<div id="requests"><p class="small">Enter your token to review booking requests.</p></div>
+</main>
+<script>
+(function(){
+'use strict';
+const q=id=>document.getElementById(id);let auth='';
+async function call(method,body){
+ const r=await fetch('/api/banner-claims',{method,cache:'no-store',headers:{'x-admin-token':auth,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
+ const data=await r.json();if(!r.ok)throw Error(data.error||'Request failed');return data;
+}
+function msg(v){q('message').textContent=v;}
+function el(tag,txt,cls){const x=document.createElement(tag);if(txt!==undefined)x.textContent=String(txt);if(cls)x.className=cls;return x;}
+function btn(label,cls,action){const b=el('button',label,cls);b.type='button';b.addEventListener('click',action);return b;}
+async function change(action,id,paymentReference){
+ try{
+  const payload={action,id};if(paymentReference)payload.paymentReference=paymentReference;
+  await call('POST',payload);msg('Updated '+id+' ('+action+').');await load();
+ }catch(e){msg(e.message);}
+}
+function render(items){
+ const root=q('requests');root.replaceChildren();
+ if(!items.length){root.append(el('p','No banner requests recorded.'));return;}
+ items.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+ for(const item of items){
+  const card=el('article');
+  const h=el('h2',item.name+' — '+item.month);card.append(h);
+  card.append(el('p','Status: '+item.status+' · Payment: '+(item.paymentStatus||'unverified')+' · Price: £'+(item.priceGBP||175),'status'));
+  card.append(el('p','Reference: '+item.id+' · '+item.email,'meta'));
+  const website=el('a','Advertiser website');website.href=item.website;website.target='_blank';website.rel='noopener noreferrer';card.append(website);
+  if(item.paymentReference)card.append(el('p','Verified payment transaction: '+item.paymentReference,'small'));
+  const actions=el('div',undefined,'row');
+  if(item.status!=='rejected'&&item.paymentStatus!=='paid'){
+   const input=el('input');input.type='text';input.placeholder='Verified SumUp/processor transaction reference';input.maxLength=120;input.setAttribute('aria-label','Payment transaction reference for '+item.name);
+   actions.append(input,btn('Mark payment verified','',()=>{const ref=input.value.trim();if(ref.length<4){msg('Enter a verified transaction reference of at least 4 characters.');return}if(confirm('Have you checked the provider record confirms the correct £175 payment for this booking?'))change('mark-paid',item.id,ref);}));
+  }
+  if(item.status==='pending'&&item.paymentStatus==='paid')actions.append(btn('Approve banner','',()=>change('approve',item.id)));
+  if(item.status==='pending')actions.append(btn('Reject','danger',()=>{if(confirm('Reject this request?'))change('reject',item.id);}));
+  card.append(actions);
+  root.append(card);
+ }
+}
+async function load(){try{const data=await call('GET');render(data.claims||[]);msg('Loaded '+(data.claims||[]).length+' booking(s).');}catch(e){msg(e.message);}}
+q('load').addEventListener('click',()=>{auth=q('token').value.trim();if(!auth){msg('Enter the administrator token.');return;}q('token').value='';load();});
+})();
+</script></body></html>
