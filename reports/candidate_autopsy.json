@@ -1,41 +1,42 @@
 {
-  "examined_at": "2026-10-10T13:02:24.144270Z",
+  "examined_at": "2026-10-11T13:30:41.984739Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 118,
+  "candidates_examined": 146,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 95,
-    "would publish": 20,
-    "duplicate of published story": 2,
+    "age": 105,
+    "would publish": 34,
+    "duplicate of published story": 6,
     "not local": 1
   },
-  "would_publish": 20,
+  "would_publish": 34,
   "age_gate_sensitivity": {
-    "6h": 3,
-    "14h": 9,
-    "24h": 23,
-    "48h": 66,
-    "72h": 94,
-    "168h": 118
+    "6h": 5,
+    "14h": 13,
+    "24h": 41,
+    "48h": 77,
+    "72h": 118,
+    "168h": 146
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "InYourArea: Rochdale Faith News: Saturday, October 10 - InYourArea",
-      "Rochdale Borough Council: Rugby Road, temporary prohibition of waiting in Rochdale from 15 Octob"
+      "BBC Manchester: Man arrested after woman seriously hurt in three-car M62 crash",
+      "SuaraGarut.ID: M62 Westbound Closure Continues After Rochdale Crash - SuaraGarut.ID"
     ],
     "not local": [
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
     "duplicate of published story": [
-      "Rochdale Borough Council: Todmorden Road, roadworks in Littleborough from 10 October 2026",
-      "Roch Valley Radio: Overnight road closures planned at Rochdale’s Sudden Junction"
+      "Rochdale Times: Overnight closures as Sudden Junction works continue - Rochdale Times",
+      "Rochdale Times: Overnight closures as Sudden Junction works continue - Rochdale Times",
+      "Rochdale Borough Council: Egerton Street, roadworks in Heywood from 20 October 2026"
     ],
     "age": [
-      "Rochdale Times: Album is still banging the drum for town’s music heritage - Rochdale T",
-      "Facebook: 🚨 Police issue update in Rochdale murder investigation after John McGa",
-      "Rochdale Borough Council: On record: Rochdale’s new album celebrates town’s music history – Roch"
+      "Roch Valley Radio: Heywood AODS visit Roch Valley Radio - Roch Valley Radio",
+      "Roch Valley Radio: Free half-term activities and meals offered to eligible children in Bu",
+      "Roch Valley Radio: £13 million Millwood Primary School expansion officially opened in Bur"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
