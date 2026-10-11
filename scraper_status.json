@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-11T18:08:14.622458Z",
+  "last_run_at": "2026-10-11T18:25:33.086655Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,38 +27,66 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 56,
+  "raw_candidates_before_job_filter": 81,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 49,
-  "candidate_clusters": 40,
+  "raw_candidates": 74,
+  "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 18,
-    "resolved": 14,
-    "text_recovered": 12,
-    "reattributed": 2,
-    "images_found": 12
+    "wrappers": 37,
+    "resolved": 24,
+    "text_recovered": 17,
+    "reattributed": 1,
+    "images_found": 18
   },
-  "duplicates_merged": 9,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 32,
+  "attempted_rewrites": 12,
+  "draft_rewrites_created": 9,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
     },
     {
-      "slug": "rochdale-council-to-consider-motion-to-rescind-climate-emergency-targets",
+      "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
       "source_url": "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/"
+    },
+    {
+      "slug": "high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute",
+      "source_url": "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga"
+    },
+    {
+      "slug": "rochdale-house-prices-rise-to-average-of-209-000-in-july-2026",
+      "source_url": "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005/#updated-16-september-2026"
+    },
+    {
+      "slug": "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
+    },
+    {
+      "slug": "milnrow-woman-s-appeal-against-animal-ban-rejected-by-court",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-woman-taken-court-rspca-34745511"
+    },
+    {
+      "slug": "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers",
+      "source_url": "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/"
     },
     {
       "slug": "rochdale-draw-1-1-with-tranmere-to-extend-unbeaten-run-in-league-two",
       "source_url": "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale"
+    },
+    {
+      "slug": "constantine-road-to-close-for-roadworks-from-9-october-2026",
+      "source_url": "https://www.rochdale.gov.uk/directory-record/2627/church-street-roadworks-in-littleborough-from-12-october-2026"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 191,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "new_articles": 2,
+  "live_articles": 193,
+  "skipped": 3,
+  "rewrite_skip_reasons": {
+    "editorial gate: REJECTED_NON_LOCAL": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1,
+    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 3,
@@ -71,41 +99,81 @@
   "rewrite_ledger": {
     "entries": 98,
     "by_outcome": {
-      "failed": 16,
-      "published": 8,
-      "rejected": 74
+      "failed": 12,
+      "published": 14,
+      "rejected": 72
     },
-    "held_back_this_run": 4,
-    "held_already_published": 2,
-    "held_rejected": 2,
+    "held_back_this_run": 10,
+    "held_already_published": 4,
+    "held_rejected": 6,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
     {
-      "url": "https://www.rochdaletimes.co.uk/man-arrested-after-woman-seriously-injured-in-m62-crash",
-      "title": "Man arrested after woman seriously injured in M62 crash - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "url": "https://democracy.rochdale.gov.uk/ieDecisionDetails.aspx?AIId=51847",
+      "title": "Decision - Best Start Family Hubs Programme - Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council",
+      "held_because": "already rejected: not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "outcome": "rejected",
       "attempts": 3,
-      "last_attempt_at": "2026-10-11T17:28:25.636377Z"
+      "last_attempt_at": "2026-10-11T10:46:31.991159Z"
     },
     {
-      "url": "https://sundayguardianlive.com/world/m62-traffic-news-today-westbound-motorway-closed-between-j22-denshaw-j21-rochdale-after-serious-multi-vehicle-crash-check-affected-roads-diversion-routes-expected-clearance-time-more-303367",
-      "title": "M62 Traffic News Today: Westbound Motorway Closed Between J22 Denshaw & J21 Rochdale After Serious Multi-Vehicle Crash; Check Affected Roads",
-      "source_name": "The Sunday Guardian",
-      "held_because": "already rejected: quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "url": "https://rochdaleafc.co.uk/dale-extend-unbeaten-run-with-away-draw",
+      "title": "Dale Defeated At Huddersfield - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
       "outcome": "rejected",
       "attempts": 3,
-      "last_attempt_at": "2026-10-11T11:52:48.558461Z"
+      "last_attempt_at": "2026-10-11T00:53:03.075976Z"
+    },
+    {
+      "url": "https://suaragarut.id/en/tranmere-rochdale-league-two-preview",
+      "title": "Tranmere Rovers Face Rochdale After Contrasting League Two Results - SuaraGarut.ID",
+      "source_name": "Id",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-11T00:23:53.251494Z"
+    },
+    {
+      "url": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-10",
+      "title": "Rochdale Faith News: Saturday, October 10 - InYourArea",
+      "source_name": "InYourArea",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-10T19:58:59.917716Z"
+    },
+    {
+      "url": "https://www.rochdalevaliant.uk/2026",
+      "title": "Rochdale Valiant: News and Media",
+      "source_name": "Rochdale Valiant",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-10T16:26:41.072531Z"
+    },
+    {
+      "url": "https://www.bettingodds.com/football/league-two/10-10-2026/tranmere-rovers-vs-rochdale",
+      "title": "Tranmere Rovers vs Rochdale - Odds, Live Scores and Detailed Stats - BettingOdds.com",
+      "source_name": "Bettingodds",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-10T16:26:37.188891Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 185.": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 188.": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 174.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 44,
-    "website_discovery": 6,
+    "rss_and_google_news": 68,
+    "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -117,38 +185,50 @@
   },
   "collector_errors": {},
   "source_counts": {
+    "Manchester Evening News": 11,
     "Rochdale Times": 11,
-    "Manchester Evening News": 6,
+    "Rochdale Borough Council": 7,
     "Bee Network live travel alerts": 4,
     "InYourArea": 3,
+    "The Sunday Guardian": 3,
+    "SuaraGarut.ID": 3,
     "Roch Valley Radio": 3,
+    "Clacton Gazette": 3,
+    "The Bury Times": 2,
+    "Thurrock Gazette": 2,
     "The Northern Echo": 2,
-    "Id": 2,
-    "Clacton Gazette": 2,
     "Business Live": 2,
+    "Hillingdon Times": 2,
     "TfGM Travel Alerts": 2,
     "BBC Manchester": 1,
-    "The Bury Times": 1,
-    "The Sunday Guardian": 1,
-    "SuaraGarut.ID": 1,
     "Rochdale AFC": 1,
     "Lancashire Telegraph": 1,
+    "Yahoo": 1,
     "Sky Sports": 1,
     "Futbol24": 1,
     "Shropshire Star": 1,
+    "Id": 1,
     "Oxford Mail": 1,
+    "Somerset County Gazette": 1,
+    "County Times": 1,
+    "Roch Valley Radio Local News": 1,
     "Northern live service updates": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "business": 1,
+    "crime": 1,
+    "education": 1,
+    "environment": 1,
     "health": 1,
-    "news": 1,
-    "sport": 1
+    "news": 3,
+    "sport": 2,
+    "traffic": 2
   },
   "published_by_category": {
-    "business": 19,
+    "business": 20,
     "community": 38,
-    "crime": 7,
+    "crime": 10,
     "education": 3,
     "environment": 9,
     "events": 18,
@@ -182,14 +262,32 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "hard-news-v3-e8d95a007aa4a6c27842",
+    "transport-v3-d70990eabc825745a759",
+    "education-v3-1a9e437a5a678147d7ac",
     "sport-v3-52067b4b7b44d19a9a94",
+    "business-v3-ae34b3db596a5762274c",
     "health-v3-595156d8013e606d9f26",
-    "hard-news-v3-85504242400d483a99f4"
+    "environment-v3-69c265f725ba82d64bc6",
+    "hard-news-v3-85504242400d483a99f4",
+    "hard-news-v3-8f4314d32478620962bf",
+    "hard-news-v3-d6da2acc485f83fe8355",
+    "transport-v3-37662c38b1e15943946a",
+    "sport-v3-bbf92ff2eca5d0dd815a"
   ],
   "selected_candidate_urls": [
+    "https://www.expressandstar.com/uk-sports/darrell-clarke-wants-tranmere-to-be-more-clinical-after-rochdale-draw-9279883",
+    "https://www.rochdaletimes.co.uk/man-arrested-after-woman-seriously-injured-in-m62-crash/",
+    "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/",
     "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale",
+    "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005/#updated-16-september-2026",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/"
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053",
+    "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/",
+    "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-woman-taken-court-rspca-34745511",
+    "https://www.rochdale.gov.uk/directory-record/2627/church-street-roadworks-in-littleborough-from-12-october-2026",
+    "https://www.futbol24.com/betting-tips/preview/10-10-2026-tranmere-rovers-rochdale-afc-betting-tip/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -201,48 +299,80 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "business",
+      "crime",
+      "education",
+      "environment",
       "health",
       "news",
-      "sport"
+      "sport",
+      "traffic"
     ],
     "selected_categories": [
+      "business",
+      "crime",
+      "education",
+      "environment",
       "health",
       "news",
-      "sport"
+      "sport",
+      "traffic"
     ],
     "available_wards": [
-      "Central Rochdale"
+      "Central Rochdale",
+      "Hopwood Hall",
+      "Milnrow and Newhey"
     ],
     "selected_wards": [
-      "Central Rochdale"
+      "Central Rochdale",
+      "Hopwood Hall",
+      "Milnrow and Newhey"
     ],
-    "available_areas": [],
+    "available_areas": [
+      "littleborough"
+    ],
     "selected_areas": [
+      "littleborough",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "business": 1,
+      "crime": 1,
+      "education": 1,
+      "environment": 1,
       "health": 1,
-      "news": 1,
-      "sport": 1
+      "news": 3,
+      "sport": 2,
+      "traffic": 2
     },
     "selected_by_ward": {
-      "Central Rochdale": 1
+      "Central Rochdale": 1,
+      "Hopwood Hall": 1,
+      "Milnrow and Newhey": 1
     },
     "selected_by_area": {
-      "rochdale": 3
+      "littleborough": 1,
+      "rochdale": 11
     },
     "selected_by_source": {
+      "express and star": 1,
       "food standards agency": 1,
-      "rochdale times": 1,
+      "futbol24": 1,
+      "manchester evening news": 2,
+      "office for national statistics": 1,
+      "redhill and reigate life": 1,
+      "roch valley radio": 1,
+      "rochdale borough council": 1,
+      "rochdale times": 2,
       "sky sports": 1
     }
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
-  "search_query_count": 44,
+  "search_query_count": 60,
   "search_queries": [
     {
       "label": "category:crime",
@@ -639,18 +769,169 @@
       "person": "",
       "location_slug": "",
       "location_name": ""
+    },
+    {
+      "label": "priority:planning-council",
+      "query": "site:rochdale.gov.uk (planning OR development OR demolition) (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
+      "category": "environment",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:crime-fast",
+      "query": "site:gmp.police.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (arrest OR appeal OR murder OR robbery OR burglary OR assault OR collision OR missing OR wanted) when:2d",
+      "category": "crime",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:crime-web",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (arrested OR jailed OR charged OR police OR stabbing OR shooting OR collision OR crash) when:2d",
+      "category": "crime",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:water",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"water off\" OR \"no water\" OR \"burst main\" OR \"low pressure\" OR \"United Utilities\") when:2d",
+      "category": "news",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:power",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"power cut\" OR outage OR electricity OR \"Electricity North West\") when:2d",
+      "category": "news",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:roads",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (collision OR crash OR \"road closed\" OR \"road closure\" OR incident) when:2d",
+      "category": "traffic",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "priority:environment",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (pollution OR landfill OR flooding OR river OR reservoir OR sewage OR wildlife OR environment) when:2d",
+      "category": "environment",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "fallback:men-rochdale-today",
+      "query": "site:manchestereveningnews.co.uk (Rochdale OR Heywood OR Middleton OR Littleborough) when:1d",
+      "category": "news",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "fallback:gmp-rochdale-today",
+      "query": "site:gmp.police.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) when:1d",
+      "category": "crime",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "fallback:rochdale-council-today",
+      "query": "site:rochdale.gov.uk/news (Rochdale OR Heywood OR Middleton OR Littleborough) when:1d",
+      "category": "news",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "fallback:tfgm-rochdale-today",
+      "query": "(site:news.tfgm.com OR site:tfgm.com) (Rochdale OR Heywood OR Middleton) when:1d",
+      "category": "transport",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "fallback:fire-rochdale-today",
+      "query": "site:manchesterfire.gov.uk/news (Rochdale OR Heywood OR Middleton OR Littleborough) when:1d",
+      "category": "environment",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "fallback:nca-rochdale-today",
+      "query": "site:northerncarealliance.nhs.uk Rochdale when:2d",
+      "category": "health",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "fallback:local-public-posts-today",
+      "query": "(\"GMPRochdale\" OR \"Rochdale Borough Council\" OR \"Bee Network\") (Rochdale OR Heywood OR Middleton OR Littleborough) when:1d",
+      "category": "news",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "official-gmp:1",
+      "query": "site:gmp.police.uk/news/greater-manchester/news/news/ (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
+      "category": "crime",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
+    },
+    {
+      "label": "official-gmp:2",
+      "query": "site:gmp.police.uk \"GMP issue appeal for\" (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
+      "category": "crime",
+      "ward": "",
+      "person": "",
+      "location_slug": "",
+      "location_name": ""
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
-  "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org"
+  "robots_denied_count": 10,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMirAFBVV95cUxNamtsOVJUSmozdWxMUk9IMEQ4OVEwN0ExSXVnN1IzaWJXcThCOEI4cmFuOWZhVC10b2p5aDNlbmdKOHpIRXd1NHV5dm1veHhzR1JJUXR5QmtTU2pQWW9ZUmo4Z0VvRHdSMGVvbGNtMnhuOFNZVVd2Y0hNbnlwSDZxVjEzcnRYbWVtMFEyanY3NVg3aG80V2R5MlUxZnlETHI0cTlRUDBZSEpIdERM?oc=5",
+    "https://news.google.com/rss/articles/CBMirgFBVV95cUxNcGdES0hkZFZmQWoyejc4c0ZqS0tHcXdZUGFXZHlsRGpsVlpZMGxteFpVX2lGX1BaZl9CcWItZDBnQm52dV9OaGxoVmhYbVlBZ3VFMnFTczBVZXZWWkZNOS0wSVRabE5SZ1hNVXRQMFMtbjFseWgweksxTGdzaURteGxSZmpPLVJpVzZxY0RQal94YmR4TmUyNzNkM0tla1d2RWVnbFFBVkwwYVJXdEE?oc=5",
+    "https://news.google.com/rss/articles/CBMisAFBVV95cUxQZUQ4LVNkSlZZbGxQamQzXzN6anY1VHh4cGtNWEpsdkJtQnZtQXBFVXRsQTJ2NkV3RVZjbmRIdksxSEdxemltMFg4bFFxdWFVQmQ4cVNfYk1nZWxuMmpPNGZ3cERkdTJIck1UNW9YT3FQc0FkSVNGcEJNODZFVUdSTTRZbVBiclVPNDdrdTMxMnNJM045ZElGTi15Wm5zTkVpR3ZRdjZ5c2sydF9wTDFKcg?oc=5",
+    "https://news.google.com/rss/articles/CBMisAFBVV95cUxPRFFzUzBMYl9IWnZ5SXpsT0QwalJVSG1zek5LQ2FCcnpkSVoyYWczOFdvM0d6WEt1RHVNMHN0d2tfUC1YZFhwSnpwakNEWjVCXzFUMnRFRlA2QW5kbW01cFFFYmlkcDN6TmpPc18xamRiYWJ0b1FudGh4UllhcldCeXR0MmVNeWJIa0Nzb0txeGYwcjJLME96YW81X1h3TU1qMlRSVmxCUzBjVWxTSGktRA?oc=5",
+    "https://news.google.com/rss/articles/CBMivAFBVV95cUxPR2FGcG1EVW9JOXF2ay11ZS1WajVVX2trWWNxQTRZX1VQVTRBV0gyVUVUUGF6WjNtT2NOMWVIUGhrT0lvLTFIN19JV3NLLW9fcjJVd0pTOEJ4cnpOa0hLWHR1eWhmMEw0TTZNVGxLWUNsQldub2c3NGlZMTFodGctV1FXNlNlbzZRR0draWl1dXRrbzk1NGtiT3J2Zm5nSUQyT3EwcXlMY3N5Nk1mdFNEU19zQk13YnZ2c3ZYRg?oc=5",
+    "https://news.google.com/rss/articles/CBMirwFBVV95cUxOUG04c2oyaFRFV0M5XzhpdWE1WkEyRlNzRkQyV2s3Q0FER1gxU0ZINnQxdnYyWkFSbXFIR05SS2lQOFltcHRJLVg1R1ZfYVJBQ1ZJNHh3LUxDMWowcEU2ZnZGaHJrU0xySUFwSVduV1lRdHh4UHhvODBiSmFFeG5OUjdmUjNNOUVrQlZIVlZwYlp5UmZCVnE3NmZmRF9CSjY5VW9wZlI0dXdtNTVDSVFJ?oc=5",
+    "https://news.google.com/rss/articles/CBMitwFBVV95cUxPaXRiQ0JoM1hIRHZXVmlnRGJrRjg0Vi0xbWxIZXdkbm5zXzNmcGtlMEF4bGtqeGhoODdaci1xUERqTkcxTDY0ck1PTjJCUGszNC11Z0JwYzlFaEtReVRRWnM3dW9YTjFBWXdGRVNwanNGQk5FZEJTRkFVWThWRXF1YTA4dGVCNkxOVUNOUHotYm81ZFJ3Rmw3MWo4WmVkSWFET3plUEVOMmlwM011dVEzNkQ2QXgxNk0?oc=5",
+    "https://news.google.com/rss/articles/CBMiugFBVV95cUxNbXE2Q3Q1M1phYWVab1drbGo4WTMwNkVndzVueENqMU5hNGo0eWJKRktiUHQyNGVTVUJYVEtPS3JRYkhBM1lDb0lCU21mZVdtMkV6bXNyNWNPRnVJQzNrSGFrdDJXMHgxMFZtODRqaFpYOVR0MnRLc214X0tJTXJHZVRTeTRDSThKWmlMY0U4T2kwNG45TlJfWi1FcEF0dEJrVFFUcnNBY2tHaF9nT0dCUEdJTG0yVm13c0E?oc=5",
+    "https://news.google.com/rss/articles/CBMiugFBVV95cUxPWE1TYUwtRW5WM1dERG1pdzJZU3JUbDJvZFFneVdZQlFkNXR6QW0wdzMzOEVCUE1XOWNPbUYwUzA1dzR6cDVEdWo2NlFBLWZZTy04a3pCY3ViZ0NObGQyOVdJY0J4ck5Pd0FYbk5yaHlqSU1VNVpVdl9oMDZsRi1CaTVVa3FtOTJ1N0JhVklYeGR2UFpHOWdLdmNETnJmbjl1QnRVdzh0Z2Nvck9BZjRlQXowSEh2R2J2R2c?oc=5",
+    "https://news.google.com/rss/articles/CBMisAFBVV95cUxNSXVtTTVpM09wcFdPVW94SExkUzZKcnFIUjl0Y2RaVEU3bGFPak9WcFAyalFjaHhPbjJEVU1ia29Ucld5N1dtX0VqUjBSTl90a3RzUU5nOFB6NGxLWDZfRXFHUl95am9yYWRDYS1PRFdRdnd3aFVjRHk5YnJKOGVxVVRsOWpPemg3UWlSY3F5bF80ZUpUT3ZFM3plVVNpYXFuNjZ4TnZYLS1sblMyY0VWVg?oc=5"
   ],
-  "slow_domain_failure_counts": {
-    "rochdaleafccommunity.org": 1
-  },
+  "slow_domain_failure_threshold": 1,
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -660,7 +941,7 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-10-11T17:16:12.887226Z",
+  "evergreen_fallback_attempt_at": "2026-10-11T18:25:33.113746Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
   "evergreen_fallback_attempt_count": 2,
   "evergreen_fallback": {
@@ -673,7 +954,7 @@
     "qualifying_count": 2,
     "last_topic_id": "rochdale-cruckle",
     "last_article_slug": "why-rochdale-says-cruckle",
-    "last_published_at": "2026-10-11T17:16:12Z"
+    "last_published_at": "2026-10-11T18:25:33Z"
   },
   "local_publishers_discovery_enabled": [
     "manchestereveningnews.co.uk",
@@ -686,8 +967,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-11T18:14:29.489068Z",
-  "frontpage_article_count": 5,
+  "frontpage_generated_at": "2026-10-11T18:29:54.009754Z",
+  "frontpage_article_count": 7,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -695,6 +976,8 @@
       "community",
       "crime",
       "news",
+      "politics",
+      "sport",
       "traffic"
     ],
     "selected_categories": [
@@ -702,26 +985,28 @@
       "community",
       "crime",
       "news",
+      "politics",
+      "sport",
       "traffic"
     ],
     "available_wards": [
       "Bamford",
       "Castleton",
+      "Central Rochdale",
       "North Middleton"
     ],
     "selected_wards": [
       "Bamford",
       "Castleton",
+      "Central Rochdale",
       "North Middleton"
     ],
     "available_areas": [
-      "bamford",
       "heywood",
       "littleborough",
       "middleton"
     ],
     "selected_areas": [
-      "bamford",
       "heywood",
       "littleborough",
       "middleton",
@@ -733,33 +1018,37 @@
     "selected_by_category": {
       "news": 2,
       "traffic": 2,
+      "politics": 1,
+      "sport": 1,
       "business": 1
     },
     "selected_by_ward": {
-      "borough-wide": 4,
-      "Bamford": 1
+      "borough-wide": 5,
+      "Bamford": 1,
+      "Central Rochdale": 1
     },
     "selected_by_area": {
-      "bamford": 1,
       "heywood": 2,
       "littleborough": 1,
       "middleton": 1,
-      "rochdale": 7
+      "rochdale": 8
     },
     "selected_by_source": {
       "rochdale daily": 2,
       "rochdale borough council": 2,
+      "rochdale times": 1,
+      "sky sports": 1,
       "rochdale daily editor’s visit": 1
     },
     "pool_size": 12,
-    "primary_pool_size": 5,
-    "fallback_stories_used": 7,
+    "primary_pool_size": 7,
+    "fallback_stories_used": 5,
     "selection_window_days": 4,
-    "frontpage_count": 5,
+    "frontpage_count": 7,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 4,
-    "fresh_under_homepage_window": 5,
-    "short_briefs_selected": 4,
+    "fresh_under_24h": 5,
+    "fresh_under_homepage_window": 7,
+    "short_briefs_selected": 6,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -769,9 +1058,9 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 11,
-  "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 191,
-  "blocked_articles_removed": 0,
+  "event_dates_corrected_from_ledger": 0,
+  "duplicate_articles_after_postprocessing": 193,
+  "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
@@ -781,9 +1070,12 @@
   "category_archive_count": 11,
   "area_archive_count": 24,
   "whats_on_event_count": 11,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 3,
-  "publication_health": "blocked",
+  "published_after_editorial_gate": 2,
+  "published_new_slugs": [
+    "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers",
+    "constantine-road-to-close-for-roadworks-from-9-october-2026"
+  ],
+  "drafts_not_published": 6,
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
