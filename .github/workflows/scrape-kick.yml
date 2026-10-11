@@ -7,6 +7,7 @@ on:
       - "scraper/**"
       - ".github/workflows/scrape-kick.yml"
   workflow_dispatch:
+  # Operational rerun trigger requested on 2026-10-11 after publication-gate removal.
 
 permissions:
   contents: write
