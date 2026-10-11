@@ -90,7 +90,6 @@ jobs:
           # Manual publication keeps the canonical merge/frontpage logic but
           # skips external event refreshes and archive-wide image rescans.
           python scraper/frontpage_manual_publish.py
-          PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
           python scraper/article_gate.py articles.json
           python scraper/councillor_photos.py
           python scraper/patch_democracy_portraits.py
@@ -140,8 +139,7 @@ jobs:
             python -m json.tool articles.json > /dev/null
             python -m json.tool manual_articles.json > /dev/null
             python scraper/frontpage_manual_publish.py
-            PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
-            python scraper/article_gate.py articles.json
+              python scraper/article_gate.py articles.json
             python scraper/councillor_photos.py
             python scraper/patch_democracy_portraits.py
             python scraper/generate_ward_pages.py
