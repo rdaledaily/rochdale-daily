@@ -28,6 +28,9 @@ from search_queries import (
 
 
 MIXED_SOURCE_NAMES = {
+    "Roch Valley Radio",
+    "Roch Valley Radio Local News",
+    "Roch Valley Radio Notices",
     "Greater Manchester Police",
     "Greater Manchester Fire and Rescue Service",
     "TfGM Newsroom",
@@ -222,7 +225,7 @@ def configure_sources() -> None:
         if source.get("name") != "What's Occurrin' Events"
     ]
 
-    for source in core.DISCOVERY_PAGES:
+    for source in [*core.DISCOVERY_PAGES, *core.RSS_SOURCES]:
         if source.get("name") in MIXED_SOURCE_NAMES:
             source.pop("trusted_local", None)
             source["default_area"] = ""
@@ -494,7 +497,16 @@ def configure_pre_rewrite_locality_gate() -> None:
         if core.has_disqualifying_evidence(text, candidate.source_name, candidate.source_url):
             return False
 
-        if candidate.source_name in MIXED_SOURCE_NAMES:
+        host = (urlparse(str(candidate.source_url or "")).hostname or "").lower().removeprefix("www.")
+        is_roch_valley_radio = host == "rochvalleyradio.com" or host.endswith(".rochvalleyradio.com") or str(candidate.source_name).startswith("Roch Valley Radio")
+        if is_roch_valley_radio:
+            # The publisher covers neighbouring towns. Require locality in the
+            # story's own headline/summary, not the outlet name, RSS default
+            # area, or homepage boilerplate captured in a long body excerpt.
+            lead = core.normalise_ws(f"{candidate.source_title} {candidate.source_summary}")
+            if not core.is_local(lead, candidate.source_name, candidate.source_url):
+                return False
+        if candidate.source_name in MIXED_SOURCE_NAMES or is_roch_valley_radio:
             probe = {
                 "title": candidate.source_title,
                 "excerpt": candidate.source_summary,

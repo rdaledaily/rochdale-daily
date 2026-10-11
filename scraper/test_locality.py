@@ -142,6 +142,37 @@ CASES = [
         "gives real geographic context (Wardle village) — from a known "
         "Greater Manchester publisher",
     ),
+    # Multi-town Roch Valley Radio is a known regional publisher, not a
+    # first-party Rochdale organisation. Bury/Bolton-only stories fail; an
+    # explicit Rochdale borough location still passes.
+    (
+        False,
+        "Bury town centre welcomes a new café on The Rock",
+        "Roch Valley Radio",
+        "https://www.rochvalleyradio.com/news-features/138/news/1234",
+        "Roch Valley Radio Bury-only coverage is outside Rochdale Borough",
+    ),
+    (
+        False,
+        "Bolton Council approves new housing scheme",
+        "Roch Valley Radio Local News",
+        "https://www.rochvalleyradio.com/news-features/138/news/1235",
+        "Trusted homepage listings do not grant locality to Bolton news",
+    ),
+    (
+        True,
+        "New services open in Heywood town centre following investment",
+        "Roch Valley Radio",
+        "https://www.rochvalleyradio.com/news-features/138/news/1236",
+        "Genuine Heywood coverage remains eligible",
+    ),
+    (
+        True,
+        "Rochdale residents invited to take part in a community consultation",
+        "Roch Valley Radio",
+        "https://www.rochvalleyradio.com/news-features/138/news/1237",
+        "Direct Rochdale evidence passes without first-party trust",
+    ),
     # ------------------------------------------------------------------
     # New cases: impostor places and rival geography.
     # ------------------------------------------------------------------
@@ -485,3 +516,10 @@ assert not has_disqualifying_evidence(
     source_name="Eventbrite",
 )
 print("Disqualifying-evidence tests passed.")
+
+# Regional publisher identity never substitutes for the article's own locality.
+from locality_rules import source_is_trusted_local, source_is_known_gm_publisher
+assert not source_is_trusted_local("Roch Valley Radio", "https://rochvalleyradio.com/news-features/example")
+assert not source_is_trusted_local("Roch Valley Radio Local News", "")
+assert source_is_known_gm_publisher("Roch Valley Radio", "https://rochvalleyradio.com/news-features/example")
+assert detect_area("Bolton Council approves a new playground", "rochdale", "Roch Valley Radio", "https://rochvalleyradio.com/news-features/example") == ""
