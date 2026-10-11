@@ -81,7 +81,8 @@ def main() -> int:
     assert 'OPENAI_REQUEST_TIMEOUT_SECONDS: "30"' in fast
     assert 'OPENAI_MAX_RETRIES: "0"' in fast
     assert 'LLM_RATE_LIMIT_RETRIES: "1"' in fast
-    assert 'GOOGLE_SEARCH_QUERY_LIMIT: "44"' in fast
+    # Broader but still bounded discovery: 60 indexed searches per fast run.
+    assert 'GOOGLE_SEARCH_QUERY_LIMIT: "60"' in fast
     assert 'MIN_BALANCED_SELECTION_LIMIT: "12"' in fast
 
     # Automated collection permits source photos through the runtime allowlist
