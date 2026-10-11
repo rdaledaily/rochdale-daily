@@ -77,8 +77,7 @@ jobs:
             fi
 
             python -m json.tool articles.json > /dev/null
-            PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
-            python scraper/article_gate.py articles.json
+              python scraper/article_gate.py articles.json
 
             # Rebuild every reader-facing projection from the corrected archive.
             python scraper/repair_merged_bodies.py
