@@ -212,6 +212,8 @@ jobs:
         run: python scraper/seo_lint.py
       - name: Banner self-service contracts
         run: python scraper/test_banner_self_service_contract.py
+      - name: Banner artwork revision and race tests
+        run: node --test scraper/test_banner_artwork_review.mjs
       - name: New story notification smoke tests
         run: python scraper/test_new_story_alerts.py
       - name: Reader loyalty UI/API contract smoke tests

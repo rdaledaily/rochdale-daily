@@ -37,9 +37,9 @@ async function call(method,body){
 function msg(v){q('message').textContent=v;}
 function el(tag,txt,cls){const x=document.createElement(tag);if(txt!==undefined)x.textContent=String(txt);if(cls)x.className=cls;return x;}
 function btn(label,cls,action){const b=el('button',label,cls);b.type='button';b.addEventListener('click',action);return b;}
-async function change(action,id,paymentReference){
+async function change(action,id,paymentReference,revision){
  try{
-  const payload={action,id};if(paymentReference)payload.paymentReference=paymentReference;
+  const payload={action,id};if(paymentReference)payload.paymentReference=paymentReference;if(revision)payload.revision=revision;
   await call('POST',payload);await load();
   msg('Updated '+id+' ('+action+').');
  }catch(e){msg(e.message);}
@@ -103,13 +103,13 @@ function render(items){
   reviewButton.hidden=true;
   let approveButton=null;
   if(item.status==='pending'&&item.paymentStatus==='paid'){
-   approveButton=btn('Approve banner','',()=>{if(confirm('Publish this verified and reviewed creative for '+item.month+'?'))change('approve',item.id);});
+   approveButton=btn('Approve banner','',()=>{if(confirm('Publish this verified and reviewed creative for '+item.month+'?'))change('approve',item.id,null,revision);});
    approveButton.disabled=true;
   }
   const viewButton=btn('Load logo and preview banners','secondary',async()=>{
    viewButton.disabled=true;previewStatus.textContent='Loading private logo…';
    try{
-    const r=await fetch('/api/banner-claims?preview-logo=1&id='+encodeURIComponent(item.id),{method:'GET',cache:'no-store',headers:{'x-admin-token':auth}});
+    const r=await fetch('/api/banner-claims?preview-logo=1&id='+encodeURIComponent(item.id)+'&revision='+encodeURIComponent(revision),{method:'GET',cache:'no-store',headers:{'x-admin-token':auth}});
     if(!r.ok)throw Error('Logo preview unavailable ('+r.status+'). Check artwork before approval.');
     const type=r.headers.get('Content-Type')||'';
     if(!/^image\/(png|jpeg|webp)$/.test(type))throw Error('Unrecognised logo image format');
@@ -129,7 +129,7 @@ function render(items){
    actions.append(input,btn('Mark payment verified','',()=>{const ref=input.value.trim();if(ref.length<4){msg('Enter a verified transaction reference of at least 4 characters.');return;}if(confirm('Have you confirmed the exact £175 payment against this request in the payment provider?'))change('mark-paid',item.id,ref);}));
   }
   if(approveButton)actions.append(approveButton);
-  if(item.status==='pending')actions.append(btn('Reject','danger',()=>{if(confirm('Reject this request?'))change('reject',item.id);}));
+  if(item.status==='pending')actions.append(btn('Reject','danger',()=>{if(confirm('Reject this request?'))change('reject',item.id,null,revision);}));
   card.append(actions);root.append(card);
  }
 }

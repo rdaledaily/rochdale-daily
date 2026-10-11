@@ -8,6 +8,8 @@ import {webcrypto} from 'node:crypto';
 if (!globalThis.crypto)globalThis.crypto=webcrypto;
 const moduleCode=await readFile(new URL('../functions/api/banner-claims.js',import.meta.url),'utf8');
 const {onRequestPost,onRequestGet}=await import('data:text/javascript;base64,'+Buffer.from(moduleCode).toString('base64'));
+const liveCode=await readFile(new URL('../functions/api/banner-live.js',import.meta.url),'utf8');
+const {onRequestGet:liveGet}=await import('data:text/javascript;base64,'+Buffer.from(liveCode).toString('base64'));
 const editorHtml=await readFile(new URL('../editor/banner-bookings.html',import.meta.url),'utf8');
 
 class FakeKV {
@@ -28,15 +30,15 @@ test('pending logo is admin-only; approve requires review of the currently submi
  const {reference:id,editToken}=await submit.json();
  const paid=await post({action:'mark-paid',id,paymentReference:'sumup-test-001'},'test-administrator');
  assert.equal(paid.status,200);
- const premature=await post({action:'approve',id},'test-administrator');
+ const premature=await post({action:'approve',id,revision:1},'test-administrator');
  assert.equal(premature.status,409);
  assert.match((await premature.json()).error,/Preview and review/i);
 
- const noAuth=await get('?preview-logo=1&id='+encodeURIComponent(id));
+ const noAuth=await get('?preview-logo=1&id='+encodeURIComponent(id)+'&revision=1');
  assert.equal(noAuth.status,401);
- const invalidAuth=await get('?preview-logo=1&id='+encodeURIComponent(id),'wrong');
+ const invalidAuth=await get('?preview-logo=1&id='+encodeURIComponent(id)+'&revision=1','wrong');
  assert.equal(invalidAuth.status,401);
- const authorized=await get('?preview-logo=1&id='+encodeURIComponent(id),'test-administrator');
+ const authorized=await get('?preview-logo=1&id='+encodeURIComponent(id)+'&revision=1','test-administrator');
  assert.equal(authorized.status,200);
  assert.equal(authorized.headers.get('Content-Type'),'image/png');
  assert.match(authorized.headers.get('Cache-Control'),/no-store/);
@@ -47,7 +49,7 @@ test('pending logo is admin-only; approve requires review of the currently submi
  const review=await post({action:'review-artwork',id,revision:1},'test-administrator');
  assert.equal(review.status,200);
  assert.equal((await review.json()).artworkReviewedRevision,1);
- const approved=await post({action:'approve',id},'test-administrator');
+ const approved=await post({action:'approve',id,revision:1},'test-administrator');
  assert.equal(approved.status,200);
 
  const edit=await post({action:'edit',id,token:editToken,top:'New headline',bottom:'New second message',colour:'#204060'});
@@ -62,17 +64,61 @@ test('pending logo is admin-only; approve requires review of the currently submi
  assert.equal(row.artworkReviewedRevision,null);
  assert.equal(row.paymentStatus,'paid');
  assert.equal(row.top,'New headline');
- const invalidAfterEdit=await post({action:'approve',id},'test-administrator');
+ const invalidAfterEdit=await post({action:'approve',id,revision:2},'test-administrator');
  assert.equal(invalidAfterEdit.status,409);
  const oldReview=await post({action:'review-artwork',id,revision:1},'test-administrator');
  assert.equal(oldReview.status,409);
  const newReview=await post({action:'review-artwork',id,revision:2},'test-administrator');
  assert.equal(newReview.status,200);
- assert.equal((await post({action:'approve',id},'test-administrator')).status,200);
+ assert.equal((await post({action:'approve',id,revision:2},'test-administrator')).status,200);
 });
 test('editor shows current copy and colour, authenticates logo fetch and disables approval until preview',()=>{
  for(const field of ['item.top','item.bottom','item.colour','preview-logo=1','x-admin-token','review-artwork','previewReady','approveButton.disabled=true','Promise.all([imageLoaded']){
   assert.ok(editorHtml.includes(field),'Missing UI feature: '+field);
  }
  assert.ok(!editorHtml.includes('item.logo='),'Logo must not be present as an inline data URL');
+});
+
+test('revision-bound logos and delayed review cannot overwrite newer creative',async()=>{
+ const kv=new FakeKV(),env={EVENTS_ADMIN_TOKEN:'test-administrator',EVENTS_KV:kv};
+ const post=(body,token)=>onRequestPost({request:request(body,token),env});
+ const admin='test-administrator',bytes=Buffer.from(logo.split(',')[1],'base64');
+ bytes[bytes.length-1]^=1;
+ const secondLogo='data:image/png;base64,'+bytes.toString('base64');
+ const submit=await post({action:'submit',name:'Example Firm',email:'ads@example.co.uk',website:'https://example.co.uk',top:'Local banner',bottom:'Another message',colour:'#132c4e',logo,month:futureMonth()});
+ const {reference:id,editToken}=await submit.json();
+ assert.equal(await kv.get('banners:logo:'+id+':r1'),logo);
+ assert.equal(await kv.get('banners:logo:'+id),null);
+ const get=kv.get.bind(kv);let resume,entered;
+ const held=new Promise(resolve=>resume=resolve),readStarted=new Promise(resolve=>entered=resolve);
+ let paused=false;
+ kv.get=async(key,opts)=>{
+  const value=await get(key,opts);
+  if(key==='banners:logo:'+id+':r1'&&!paused){paused=true;entered();await held;}
+  return value;
+ };
+ const staleReview=post({action:'review-artwork',id,revision:1},admin);
+ await readStarted;
+ const edit=await post({action:'edit',id,token:editToken,top:'New creative',logo:secondLogo});
+ assert.equal(edit.status,200);
+ resume();
+ assert.equal((await staleReview).status,409);
+ const rows=await kv.get('banners:claims',{type:'json'});
+ assert.equal(rows[0].revision,2);
+ assert.equal(rows[0].status,'pending');
+ assert.equal(await kv.get('banners:logo:'+id+':r1'),logo);
+ assert.equal(await kv.get('banners:logo:'+id+':r2'),secondLogo);
+ assert.equal((await post({action:'mark-paid',id,paymentReference:'verified-002'},admin)).status,200);
+ assert.equal((await post({action:'approve',id,revision:1},admin)).status,409);
+ assert.equal((await post({action:'approve',id,revision:2},admin)).status,409);
+ const oldPreview=await onRequestGet({request:getRequest('?preview-logo=1&id='+id+'&revision=1',admin),env});
+ assert.equal(oldPreview.status,409);
+ const newPreview=await onRequestGet({request:getRequest('?preview-logo=1&id='+id+'&revision=2',admin),env});
+ assert.equal(newPreview.status,200);
+ assert.equal((await post({action:'review-artwork',id,revision:2},admin)).status,200);
+ assert.equal((await kv.get('banners:claims',{type:'json'}))[0].artworkReviewedAt,null);
+ assert.equal((await post({action:'approve',id,revision:2},admin)).status,200);
+ const served=await liveGet({request:new Request('https://rochdaledaily.co.uk/api/banner-live?logo=1&id='+id),env});
+ assert.equal(served.status,200);
+ assert.deepEqual(Buffer.from(await served.arrayBuffer()),Buffer.from(secondLogo.split(',')[1],'base64'));
 });
