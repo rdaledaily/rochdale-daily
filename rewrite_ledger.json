@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-11T18:41:20.070134Z",
+  "updated_at": "2026-10-11T19:06:38.757938Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 98,
+  "count": 99,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/grimsby-town-rochdale-13597512": {
       "first_attempt_at": "2026-10-09T19:38:18.472286Z",
@@ -68,13 +68,28 @@
       "text_fingerprint": "e275174ed38320e5",
       "recovery_attempts": 2
     },
+    "https://publicaccess.rochdale.gov.uk/online-applications": {
+      "first_attempt_at": "2026-10-11T19:05:44.690941Z",
+      "attempts": 1,
+      "urls": [
+        "https://publicaccess.rochdale.gov.uk/online-applications"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-11T19:05:44.690941Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council",
+      "category": "environment",
+      "text_fingerprint": "eac2af3f45248033"
+    },
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10": {
       "first_attempt_at": "2026-10-09T12:08:37.100774Z",
       "attempts": 1,
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-11T18:41:20.068743Z",
+      "last_attempt_at": "2026-10-11T19:06:38.756824Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -100,18 +115,19 @@
     },
     "https://rochdaleafc.co.uk/kane-taylor": {
       "first_attempt_at": "2026-10-10T08:38:06.665382Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://rochdaleafc.co.uk/kane-taylor"
       ],
-      "last_attempt_at": "2026-10-10T19:59:05.886912Z",
+      "last_attempt_at": "2026-10-11T19:05:43.388206Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "KANE TAYLOR - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "281815ee54b2819f",
-      "recovery_attempts": 2
+      "recovery_attempts": 2,
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
     "https://rochdaleafc.co.uk/we-need-to-keep-working-watson": {
       "first_attempt_at": "2026-10-10T23:41:20.338884Z",
@@ -196,18 +212,19 @@
     },
     "https://www.bbc.co.uk/news/articles/c6vg0p9pj0pvo": {
       "first_attempt_at": "2026-10-11T12:39:15.340824Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://www.bbc.co.uk/news/articles/c6vg0p9pj0pvo"
       ],
-      "last_attempt_at": "2026-10-11T14:45:28.012885Z",
+      "last_attempt_at": "2026-10-11T19:05:49.829628Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Man arrested after woman seriously hurt in three-car M62 crash",
       "source_name": "BBC Manchester",
       "category": "traffic",
       "text_fingerprint": "78d5f7c4c371fe33",
-      "recovery_attempts": 2
+      "recovery_attempts": 2,
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
     "https://www.bettingodds.com/football/league-two/10-10-2026/tranmere-rovers-vs-rochdale": {
       "first_attempt_at": "2026-10-10T00:08:18.958257Z",
@@ -228,7 +245,7 @@
     },
     "https://www.expressandstar.com/uk-sports/darrell-clarke-wants-tranmere-to-be-more-clinical-after-rochdale-draw-9279883": {
       "first_attempt_at": "2026-10-11T05:21:31.167491Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMitwFBVV95cUxPaXRiQ0JoM1hIRHZXVmlnRGJrRjg0Vi0xbWxIZXdkbm5zXzNmcGtlMEF4bGtqeGhoODdaci1xUERqTkcxTDY0ck1PTjJCUGszNC11Z0JwYzlFaEtReVRRWnM3dW9YTjFBWXdGRVNwanNGQk5FZEJTRkFVWThWRXF1YTA4dGVCNkxOVUNOUHotYm81ZFJ3Rmw3MWo4WmVkSWFET3plUEVOMmlwM011dVEzNkQ2QXgxNk0?oc=5",
         "https://news.google.com/rss/articles/CBMiugFBVV95cUxNbXE2Q3Q1M1phYWVab1drbGo4WTMwNkVndzVueENqMU5hNGo0eWJKRktiUHQyNGVTVUJYVEtPS3JRYkhBM1lDb0lCU21mZVdtMkV6bXNyNWNPRnVJQzNrSGFrdDJXMHgxMFZtODRqaFpYOVR0MnRLc214X0tJTXJHZVRTeTRDSThKWmlMY0U4T2kwNG45TlJfWi1FcEF0dEJrVFFUcnNBY2tHaF9nT0dCUEdJTG0yVm13c0E?oc=5",
@@ -246,7 +263,7 @@
         "https://www.thenorthernecho.co.uk/sport/national/26625659.darrell-clarke-wants-tranmere-more-clinical-rochdale-draw",
         "https://www.thurrockgazette.co.uk/sport/national/26625659.darrell-clarke-wants-tranmere-more-clinical-rochdale-draw"
       ],
-      "last_attempt_at": "2026-10-11T18:40:13.404980Z",
+      "last_attempt_at": "2026-10-11T19:05:45.726633Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Darrell Clarke wants Tranmere to be ‘more clinical’ after Rochdale draw",
@@ -258,13 +275,13 @@
     },
     "https://www.futbol24.com/betting-tips/preview/10-10-2026-tranmere-rovers-rochdale-afc-betting-tip": {
       "first_attempt_at": "2026-10-10T23:40:43.770070Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.futbol24.com/betting-tips/preview/10-10-2026-tranmere-rovers-rochdale-afc-betting-tip"
       ],
-      "last_attempt_at": "2026-10-11T18:40:17.972121Z",
+      "last_attempt_at": "2026-10-11T19:05:42.633312Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The model marked the story unpublishable.",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Tranmere Rovers - Rochdale AFC betting tip & best odds | 10.10.2026 - Futbol24",
       "source_name": "Futbol24",
       "category": "sport",
@@ -322,7 +339,7 @@
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-woman-taken-court-rspca-34745511"
       ],
-      "last_attempt_at": "2026-10-11T18:41:20.068879Z",
+      "last_attempt_at": "2026-10-11T19:06:38.757064Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale woman taken to court as RSPCA officers visit her home after tip-off",
@@ -338,14 +355,14 @@
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
       ],
-      "last_attempt_at": "2026-10-11T18:41:20.069581Z",
+      "last_attempt_at": "2026-10-11T19:06:38.757617Z",
       "outcome": "published",
       "reason": "",
       "title": "Urgent appeal issued over missing girl, 16, last seen in Rochdale",
       "source_name": "Manchester Evening News",
       "category": "environment",
       "text_fingerprint": "0d120c9afc16b76a",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1,
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
@@ -1032,14 +1049,14 @@
       "urls": [
         "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005#updated-16-september-2026"
       ],
-      "last_attempt_at": "2026-10-11T18:41:20.069456Z",
+      "last_attempt_at": "2026-10-11T19:06:38.756960Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale house prices and rents: ONS figures updated 16 September 2026",
       "source_name": "Office for National Statistics",
       "category": "business",
       "text_fingerprint": "f316b480bf1acbf3",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1,
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
@@ -1273,19 +1290,20 @@
     },
     "https://www.rochdaletimes.co.uk/new-support-for-survivors-of-child-sexual-abuse-or-exploitation": {
       "first_attempt_at": "2026-10-10T16:02:44.690184Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNi03SmRyeDQ1MnA1RzBWeGN0cXF4X0FzM2hBT0lOa0FTRGUzRktOdWU4ZmRfYzdKanpVbTB1d1YtRF9ZWEJUTkxQcjNteWtEUjkydXV6Rzd4ZEdYbnJ2T0JDTWFlVVgyVDRUdFpvRUFVRm5FMjhGSTdESzN6dG0wOGZfdl9Zc01Zd1JoMFZhSWE4N2hPeUdWcGw5eFc?oc=5",
         "https://www.rochdaletimes.co.uk/new-support-for-survivors-of-child-sexual-abuse-or-exploitation"
       ],
-      "last_attempt_at": "2026-10-10T23:13:18.777526Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
+      "last_attempt_at": "2026-10-11T19:06:38.757743Z",
+      "outcome": "published",
+      "reason": "",
       "title": "New support for survivors of child sexual abuse or exploitation - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "5d67d30dfb476e39",
-      "recovery_attempts": 2
+      "recovery_attempts": 2,
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
     "https://www.rochdalevaliant.uk/2026": {
       "first_attempt_at": "2026-10-10T16:02:22.651642Z",
@@ -1333,7 +1351,7 @@
     },
     "https://www.rochvalleyradio.com/news-features/139/news/907/disappointment-following-rochdale-london-train-idea-rejected": {
       "first_attempt_at": "2026-10-10T16:02:32.970552Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPdkRlaWxoeDlSMkMtUnBLSHhLY29ROHpxNnJVZWtLUnEzb2ZFY1JQNG5lb2p3bEdMQjBtUnQ2NUpaZEtQVGdQaGdRUVNvVHYyOXRmT1pqd1ZyY2NDNkF1V0tMQzFMMnA1OEg3aGVCOW9QRlJsbDhjUlJCbHRXakxVRkJMaVh0eWxT?oc=5",
         "https://news.google.com/rss/articles/CBMioAFBVV95cUxQU2Q1TnA5dTVvUWkzaGRCano2NnRWMDFsWmg2Vld0MUhjTGxEV05Na3Btam95dmhXNENmLWZjSmo2Z04xdFloNU5QUU9tN1BwdEF3MlNDZEJVdkxVanpCTnVRYWN3N0RCaHlNVU5VNlZ4ZWpVdi0wM1VnRXRRVWRHY1g2dlpXQ2EzOHU1OGFjS2Q0U25fUFM1R1BtWU56MjZV0gGmAUFVX3lxTE41d0tTNllTUUJ3bk1hcHlZTVBNWnluQ2M1d3lTUXl3d21JNG0zSDVGV19NSzhUMmo0ZkpobTlUOHloT3I2dk1ERm1FZ21rajc4bXJPZU9TYm9YRTZnQmJtaWNtaHZ1ZTJXcUppbEdVRk9LdWgyNmRNYzEySEU5Q0JDQ2VNOUVxYk95VFk2dVFqQjFnM2huZ0s4YlpodC11aWdNZ2s0c1E?oc=5",
@@ -1343,12 +1361,12 @@
         "https://www.manchestereveningnews.co.uk/news/disappointment-over-rejection-rochdale-london-34744100",
         "https://www.rochvalleyradio.com/news-features/139/news/907/disappointment-following-rochdale-london-train-idea-rejected"
       ],
-      "last_attempt_at": "2026-10-11T18:40:31.022015Z",
+      "last_attempt_at": "2026-10-11T19:05:49.688799Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "‘Disappointment’ following Rochdale-London train idea rejected",
-      "source_name": "Roch Valley Radio",
-      "category": "news",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "transport",
       "text_fingerprint": "4d5230e68af72a4a",
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
@@ -1358,14 +1376,14 @@
       "urls": [
         "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga"
       ],
-      "last_attempt_at": "2026-10-11T18:41:20.069232Z",
+      "last_attempt_at": "2026-10-11T19:06:38.757413Z",
       "outcome": "published",
       "reason": "",
       "title": "The Hopwood Hall saga",
-      "source_name": "Roch Valley Radio",
+      "source_name": "Roch Valley Radio Local News",
       "category": "news",
       "text_fingerprint": "58e1a6fb3c673ac0",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1,
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
