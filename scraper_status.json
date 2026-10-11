@@ -1,36 +1,38 @@
 {
-  "last_run_at": "2026-10-11T04:30:13.999494Z",
+  "last_run_at": "2026-10-11T04:41:52.774224Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-10-10T22:32:42.273390Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 4,
+      "daily_cap": 4,
+      "offered_today": 4,
+      "listed": 52,
+      "already_seen": 24,
+      "started_long_ago": 0,
+      "too_far_ahead": 21,
+      "undated": 3,
+      "in_window": 4
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 11,
-      "other_notice_types": 6,
-      "already_seen": 5,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-11T04:28:54.461519Z",
+      "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-10-10T22:32:42.273390Z",
-      "interval_hours": 6
-    },
-    "gmca_decisions": {
       "status": "ok",
       "offered": 0,
-      "daily_cap": 1,
+      "daily_cap": 3,
       "offered_today": 0,
-      "listed": 25,
-      "not_decisions": 10,
-      "no_borough_place": 0,
-      "already_seen": 8,
+      "listed": 0,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 0,
       "new": 0
+    },
+    "gmca_decisions": {
+      "status": "not due",
+      "last_checked": "2026-10-11T04:28:54.461519Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -38,48 +40,52 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 94,
+  "raw_candidates_before_job_filter": 91,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 88,
-  "candidate_clusters": 42,
+  "raw_candidates": 85,
+  "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 19,
-    "resolved": 19,
-    "text_recovered": 17,
+    "wrappers": 27,
+    "resolved": 22,
+    "text_recovered": 15,
     "reattributed": 1,
-    "images_found": 17
+    "images_found": 15
   },
-  "duplicates_merged": 46,
-  "attempted_rewrites": 8,
-  "draft_rewrites_created": 6,
+  "duplicates_merged": 42,
+  "attempted_rewrites": 9,
+  "draft_rewrites_created": 7,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
     },
     {
+      "slug": "high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute",
+      "source_url": "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga"
+    },
+    {
       "slug": "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale",
       "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
     },
     {
-      "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
+      "slug": "roadworks-on-egerton-street-in-heywood-to-begin-on-20-october-2026",
+      "source_url": "https://www.rochdale.gov.uk/directory-record/2614/egerton-street-roadworks-in-heywood-from-20-october-2026"
+    },
+    {
+      "slug": "rochdale-council-to-discuss-motion-to-reassess-climate-targets-amid-cost-of-livi",
       "source_url": "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/"
     },
     {
-      "slug": "high-court-rules-against-filmmaker-hopwood-depree-in-hopwood-hall-restoration-di",
-      "source_url": "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga"
-    },
-    {
-      "slug": "rochdale-afc-manager-stresses-focus-ahead-of-trophy-tie",
+      "slug": "rochdale-afc-manager-urges-team-to-maintain-focus-ahead-of-trophy-tie",
       "source_url": "https://rochdaleafc.co.uk/we-need-to-keep-working-watson/"
     },
     {
-      "slug": "rochdale-afc-secures-1-1-draw-against-tranmere-rovers-at-prenton-park",
+      "slug": "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers",
       "source_url": "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 188,
+  "new_articles": 1,
+  "live_articles": 189,
   "skipped": 2,
   "rewrite_skip_reasons": {
     "editorial gate: REJECTED_NON_LOCAL": 2
@@ -94,10 +100,10 @@
     "reopened_verified_official_notices": 0
   },
   "rewrite_ledger": {
-    "entries": 82,
+    "entries": 83,
     "by_outcome": {
       "failed": 12,
-      "published": 10,
+      "published": 11,
       "rejected": 60
     },
     "held_back_this_run": 13,
@@ -227,12 +233,12 @@
   ],
   "published_with_style_issues": {
     "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 182.": 1
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 183.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 81,
-    "website_discovery": 7,
+    "rss_and_google_news": 79,
+    "website_discovery": 2,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -240,18 +246,17 @@
     "environment_agency": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 0
+    "primary_data": 4
   },
   "collector_errors": {},
   "source_counts": {
     "Roch Valley Radio": 33,
-    "Rochdale Times": 15,
+    "Rochdale Times": 10,
     "Manchester Evening News": 7,
+    "Rochdale Borough Council": 7,
     "Bee Network live travel alerts": 5,
     "InYourArea": 4,
     "Business Live": 3,
-    "Rochdale Borough Council": 3,
-    "County Times": 2,
     "The Northern Echo": 2,
     "Sky Sports": 2,
     "TfGM Travel Alerts": 2,
@@ -272,20 +277,21 @@
     "health": 1,
     "news": 3,
     "politics": 1,
-    "sport": 1
+    "sport": 1,
+    "traffic": 1
   },
   "published_by_category": {
     "business": 18,
     "community": 38,
-    "crime": 9,
+    "crime": 8,
     "education": 3,
     "environment": 9,
     "events": 18,
     "health": 5,
-    "news": 19,
+    "news": 20,
     "politics": 9,
     "sport": 8,
-    "traffic": 4,
+    "traffic": 5,
     "transport": 1
   },
   "openai_enabled": true,
@@ -311,6 +317,7 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "transport-v3-cfab4ed7c2a680b64573",
     "hard-news-v3-a60f8b7f7102078f81c3",
     "education-v3-1a9e437a5a678147d7ac",
     "sport-v3-89de3d96a09d292d15e1",
@@ -321,6 +328,7 @@
     "hard-news-v3-e728019f0a6857c4f2f8"
   ],
   "selected_candidate_urls": [
+    "https://www.rochdale.gov.uk/directory-record/2614/egerton-street-roadworks-in-heywood-from-20-october-2026",
     "https://www.rochvalleyradio.com/local/photos/heywood-aods-visit-roch-valley-radio",
     "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/",
     "https://rochdaleafc.co.uk/we-need-to-keep-working-watson/",
@@ -345,7 +353,8 @@
       "health",
       "news",
       "politics",
-      "sport"
+      "sport",
+      "traffic"
     ],
     "selected_categories": [
       "education",
@@ -353,7 +362,8 @@
       "health",
       "news",
       "politics",
-      "sport"
+      "sport",
+      "traffic"
     ],
     "available_wards": [
       "Central Rochdale",
@@ -363,8 +373,11 @@
       "Central Rochdale",
       "Hopwood Hall"
     ],
-    "available_areas": [],
+    "available_areas": [
+      "heywood"
+    ],
     "selected_areas": [
+      "heywood",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -376,13 +389,15 @@
       "health": 1,
       "news": 3,
       "politics": 1,
-      "sport": 1
+      "sport": 1,
+      "traffic": 1
     },
     "selected_by_ward": {
       "Central Rochdale": 1,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
+      "heywood": 1,
       "rochdale": 8
     },
     "selected_by_source": {
@@ -391,6 +406,7 @@
       "redhill and reigate life": 1,
       "roch valley radio": 3,
       "rochdale afc": 1,
+      "rochdale borough council": 1,
       "rochdale times": 1
     }
   },
@@ -802,12 +818,8 @@
     "https://news.google.com/rss/articles/CBMirgFBVV95cUxNcGdES0hkZFZmQWoyejc4c0ZqS0tHcXdZUGFXZHlsRGpsVlpZMGxteFpVX2lGX1BaZl9CcWItZDBnQm52dV9OaGxoVmhYbVlBZ3VFMnFTczBVZXZWWkZNOS0wSVRabE5SZ1hNVXRQMFMtbjFseWgweksxTGdzaURteGxSZmpPLVJpVzZxY0RQal94YmR4TmUyNzNkM0tla1d2RWVnbFFBVkwwYVJXdEE?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "yourtrustrochdale.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 7
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -843,8 +855,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-11T04:33:40.639319Z",
-  "frontpage_article_count": 2,
+  "frontpage_generated_at": "2026-10-11T04:44:55.392925Z",
+  "frontpage_article_count": 3,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -880,12 +892,14 @@
     "available_areas": [
       "bamford",
       "healey",
+      "heywood",
       "littleborough",
       "middleton"
     ],
     "selected_areas": [
       "bamford",
       "healey",
+      "heywood",
       "littleborough",
       "middleton",
       "rochdale"
@@ -894,32 +908,34 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "traffic": 1,
+      "traffic": 2,
       "news": 1
     },
     "selected_by_ward": {
+      "Bamford": 1,
       "borough-wide": 2
     },
     "selected_by_area": {
       "bamford": 1,
       "healey": 1,
+      "heywood": 1,
       "littleborough": 2,
       "middleton": 1,
       "rochdale": 7
     },
     "selected_by_source": {
-      "rochdale borough council": 1,
+      "rochdale borough council": 2,
       "rochdale daily": 1
     },
-    "pool_size": 16,
-    "primary_pool_size": 16,
+    "pool_size": 17,
+    "primary_pool_size": 17,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 2,
+    "frontpage_count": 3,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 2,
-    "fresh_under_homepage_window": 2,
-    "short_briefs_selected": 2,
+    "fresh_under_24h": 3,
+    "fresh_under_homepage_window": 3,
+    "short_briefs_selected": 3,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -930,7 +946,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 11,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 188,
+  "duplicate_articles_after_postprocessing": 189,
   "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -941,9 +957,11 @@
   "category_archive_count": 11,
   "area_archive_count": 24,
   "whats_on_event_count": 11,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "roadworks-on-egerton-street-in-heywood-to-begin-on-20-october-2026"
+  ],
   "drafts_not_published": 6,
-  "publication_health": "blocked",
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
