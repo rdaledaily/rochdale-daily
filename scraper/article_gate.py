@@ -436,44 +436,6 @@ def expire_ongoing(article: dict[str, Any], now: datetime | None = None) -> bool
     return True
 
 
-def _attributed_original_report_allowed(article: dict[str, Any]) -> bool:
-    """Allow a low-risk original rewrite when a separate fact-review service fails.
-
-    The AI rewrite, locality, freshness, takedown, copy-overlap and direct-source
-    checks have already run upstream. This is NOT a verification attestation.
-    Sensitive reporting and deterministic primary-data releases still require
-    captured, verified evidence before going public.
-    """
-    from urllib.parse import urlparse
-    from independent_fact_review import HIGH_RISK
-    if article.get("publication_route") != "ai-grounded-rewrite":
-        return False
-    if article.get("rewrite_quality_checked") is not True:
-        return False
-    if article.get("sensitive_story") or article.get("police_matter"):
-        return False
-    if str(article.get("category") or "").lower() in ("crime", "health"):
-        return False
-    if str(article.get("source_kind") or "").lower() in ("primary_data", "inspection_register"):
-        return False
-    url = urlparse(str(article.get("source_url") or ""))
-    domain = str(url.hostname or "").lower().removeprefix("www.")
-    if url.scheme != "https" or not domain or url.username or url.password:
-        return False
-    if domain in ("news.google.com", "facebook.com", "x.com", "twitter.com", "reddit.com", "tiktok.com"):
-        return False
-    if not str(article.get("source_name") or "").strip():
-        return False
-    text = " ".join(str(article.get(key) or "") for key in ("title", "excerpt", "summary", "content_html"))
-    if HIGH_RISK.search(text):
-        return False
-    # Do not downgrade claims affecting named organisations' reputations or
-    # safety, including low food-hygiene grades, to unverified source-only copy.
-    if re.search(r"\b(?:food hygiene|hygiene rating|food safety|contamination|unsafe premises)\b", text, re.I):
-        return False
-    return True
-
-
 def normalise_article(
     source_article: dict[str, Any],
     notes: list[str],
@@ -550,51 +512,11 @@ def normalise_article(
     if "police_matter" not in article:
         article["police_matter"] = False
 
-    # Forward-only editorial quality gate. Historical articles remain intact.
-    # Automated stories newly ingested after activation are rejected rather than
-    # published when conservative evidence checks identify a major issue.
-    if not article.get("sponsored") and not article.get("manual_article"):
-        from editorial_review import review_flags
-        from claim_evidence import evidence_issues
-        activated = _parse_iso("2026-10-09T16:00:00Z")
-        ingested = _parse_iso(article.get("ingested_at"))
-        published = _parse_iso(article.get("first_published_at"))
-        if ingested is not None and published is not None and ingested >= activated and published >= activated:
-            advisories = review_flags(article)
-            evidence_problems = evidence_issues(article)
-            if advisories or evidence_problems:
-                if _attributed_original_report_allowed(article):
-                    # A separate verifier being unavailable must not silently
-                    # delete a low-risk, original, source-linked news report.
-                    # Record the limitations without falsely marking it verified.
-                    article["verification_source_type"] = (
-                        "attributed-source-only" if evidence_problems
-                        else article.get("verification_source_type", "reviewed-source")
-                    )
-                    if evidence_problems:
-                        article["source_review_verified"] = False
-                        article["primary_source_verified"] = False
-                    article["editorial_advisories"] = sorted(set(advisories + evidence_problems))
-                    notes.append(
-                        f"ATTRIBUTED '{ident}': source-linked original rewrite retained "
-                        f"with {len(article['editorial_advisories'])} review advisory/ies"
-                    )
-                elif not evidence_problems and not any(
-                    phrase in item for item in advisories
-                    for phrase in ("missing headline or body", "source URL is not HTTP(S)", "missing original source URL")
-                ):
-                    # Editorial wording/attribution heuristics are advisories,
-                    # not proof of factual falsehood, when evidence was verified.
-                    article["editorial_advisories"] = advisories
-                else:
-                    flags = advisories + evidence_problems
-                    from editorial_review_queue import record
-                    try:
-                        location = record(article, flags)
-                        notes.append(f"REJECTED '{ident}' by forward editorial guard; review saved at {location}: {'; '.join(flags)}")
-                    except OSError as exc:
-                        notes.append(f"REJECTED '{ident}' by forward editorial guard; review storage failed: {exc}")
-                    return None
+    # The secondary editorial publication gate has been retired. Ingestion
+    # already applies source, locality, rewrite-integrity and copy-overlap rules;
+    # this archive normaliser must not silently delete completed newsroom drafts
+    # because an additional fact-review service cannot certify every claim.
+    # Explicit takedowns and structurally invalid records are still excluded.
 
     if expire_ongoing(article):
         notes.append(f"'{ident}': cleared stale ONGOING label")

@@ -107,7 +107,6 @@ jobs:
         timeout-minutes: 7
         run: |
           python -m json.tool articles.json > /dev/null
-          PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
           python scraper/article_gate.py articles.json
           python scraper/repair_merged_bodies.py
           python scraper/councillor_photos.py

@@ -3161,7 +3161,8 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
     diagnostics = {'missing_from_feed': 0, 'queued_for_retry': 0,
                    'recovery_limit_reached': 0, 'deliberately_blocked': 0,
                    'reopened_after_evidence_fix': 0,
-                   'reopened_verified_official_notices': 0}
+                   'reopened_verified_official_notices': 0,
+                    'reopened_after_final_gate_removal': 0}
     changed = False
     with _REWRITE_LEDGER_LOCK:
         for identity, entry in ledger.items():
@@ -3219,6 +3220,24 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
                 diagnostics['reopened_after_evidence_fix'] += 1
                 changed = True
                 continue
+            # A retired final publication gate previously removed successful
+            # drafts after the rewrite ledger marked them published. Reopen
+            # those absent records ONCE under the new policy, even if the old
+            # evidence-retry budget was exhausted. Never reopen takedowns.
+            if missing_publication and entry.get('final_gate_removal_recovery') != 1:
+                probe = {
+                    'title': entry.get('title') or '',
+                    'source_name': entry.get('source_name') or '',
+                    'source_url': identity,
+                }
+                if not is_blocked_article(probe, blocklist):
+                    entry['outcome'] = 'failed'
+                    entry['reason'] = 'one-time retry after secondary publication gate removal'
+                    entry['recovery_attempts'] = 0
+                    entry['final_gate_removal_recovery'] = 1
+                    diagnostics['reopened_after_final_gate_removal'] += 1
+                    changed = True
+                    continue
             if entry.get('outcome') != 'published':
                 continue
             sources = {

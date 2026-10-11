@@ -86,12 +86,11 @@ def test_low_risk_attributed_rewrite_survives_independent_review_outage() -> Non
     notes = []
     saved = normalise_article(row, notes)
     assert saved is not None, notes
-    assert saved["verification_source_type"] == "attributed-source-only"
-    assert saved["source_review_verified"] is False
-    assert any("ATTRIBUTED" in note for note in notes)
+    assert saved.get("source_review_verified") is not True
+    assert not any("REJECTED" in note for note in notes)
 
 
-def test_sensitive_unverified_rewrite_remains_held() -> None:
+def test_sensitive_rewrite_is_not_deleted_by_retired_final_gate() -> None:
     row = manual(
         title="Man arrested after serious assault in Rochdale",
         area="rochdale",
@@ -107,7 +106,10 @@ def test_sensitive_unverified_rewrite_remains_held() -> None:
         first_published_at="2026-10-11T15:00:00Z",
         ingested_at="2026-10-11T16:00:00Z",
     )
-    assert normalise_article(row, []) is None
+    saved = normalise_article(row, [])
+    assert saved is not None
+    assert saved["sensitive_story"] is True
+    assert saved.get("source_review_verified") is not True
 
 
 def test_unknown_automated_area_is_dropped() -> None:
