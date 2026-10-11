@@ -151,23 +151,32 @@ def test_short_articles_are_not_perpetually_rewritten() -> None:
     print("eligibility: short briefs stable, new material still updates — OK")
 
 
-def test_events_candidates_never_consume_rewrite_slots() -> None:
-    from scraper import Candidate, candidate_is_rewrite_eligible
+def test_event_news_can_be_rewritten_without_republishing_duplicates() -> None:
+    from scraper import Candidate, STYLE_VERSION, candidate_is_rewrite_eligible
 
     event = Candidate(
         source_name="Visit Rochdale",
         source_url="https://www.visitrochdale.com/whats-on/summer-fair",
-        source_title="Summer fair returns to Broadfield Park",
-        source_summary="Family fun day this weekend.",
-        source_published_at="2026-07-10T08:00:00Z",
+        source_title="Summer fair returns to Broadfield Park in Rochdale",
+        source_summary="Family fun day this weekend in Rochdale.",
+        source_published_at="2026-10-11T08:00:00Z",
         area="rochdale",
         category="events",
     )
-    assert not candidate_is_rewrite_eligible(event, {}), (
-        "events candidates are guaranteed skips downstream and must be "
-        "filtered before selection"
+    assert candidate_is_rewrite_eligible(event, {}), (
+        "genuine event reporting must be eligible for an original rewrite"
     )
-    print("eligibility: events candidates excluded before selection — OK")
+    event.story_key = event.story_key or "events-v3-summer-fair"
+    existing = {event.story_key: {
+        "slug": "summer-fair-returns-to-broadfield-park",
+        "source_url": event.source_url,
+        "source_urls": [event.source_url],
+        "editorial_style_version": STYLE_VERSION,
+    }}
+    assert not candidate_is_rewrite_eligible(event, existing), (
+        "an event already reported from the same source must not be rewritten endlessly"
+    )
+    print("eligibility: event reporting admitted, already-published event stable — OK")
 
 
 def test_editorial_lock_still_respected() -> None:
@@ -202,7 +211,7 @@ def main() -> int:
     test_sitemap_includes_archived_pages()
     test_sitemap_omits_lastmod_when_unknown()
     test_short_articles_are_not_perpetually_rewritten()
-    test_events_candidates_never_consume_rewrite_slots()
+    test_event_news_can_be_rewritten_without_republishing_duplicates()
     test_editorial_lock_still_respected()
     print("Archive persistence and URL stability tests passed.")
     return 0
