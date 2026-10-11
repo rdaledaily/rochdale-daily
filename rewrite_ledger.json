@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-11T08:53:28.377578Z",
+  "updated_at": "2026-10-11T09:07:41.526316Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 91,
+  "count": 92,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/grimsby-town-rochdale-13597512": {
       "first_attempt_at": "2026-10-09T19:38:18.472286Z",
@@ -43,12 +43,13 @@
         "https://democracy.rochdale.gov.uk/documents/s123992/Append.%201%20for%20Best%20Start%20Family%20Hubs%20Programme.pdf"
       ],
       "last_attempt_at": "2026-10-11T08:53:28.376519Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Sustainability Impact Assessment - Rochdale Borough Council",
       "source_name": "Rochdale Borough Council",
       "category": "environment",
-      "text_fingerprint": "41b0cdffe63523a0"
+      "text_fingerprint": "41b0cdffe63523a0",
+      "recovery_attempts": 1
     },
     "https://democracy.rochdale.gov.uk/ieDecisionDetails.aspx?AIId=51847": {
       "first_attempt_at": "2026-10-11T08:52:37.091437Z",
@@ -70,7 +71,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-11T08:53:28.375997Z",
+      "last_attempt_at": "2026-10-11T09:07:41.525472Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -114,7 +115,7 @@
       "urls": [
         "https://rochdaleafc.co.uk/we-need-to-keep-working-watson"
       ],
-      "last_attempt_at": "2026-10-11T08:53:28.377301Z",
+      "last_attempt_at": "2026-10-11T09:07:41.526025Z",
       "outcome": "published",
       "reason": "",
       "title": "Watson On Trophy Tie - Rochdale AFC",
@@ -141,14 +142,14 @@
     },
     "https://sundayguardianlive.com/world/m62-traffic-news-today-westbound-motorway-closed-between-j22-denshaw-j21-rochdale-after-serious-multi-vehicle-crash-check-affected-roads-diversion-routes-expected-clearance-time-more-303367": {
       "first_attempt_at": "2026-10-11T06:33:21.072346Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMiywJBVV95cUxPRlBjNU4tYmxkdkxNeFRJTFJyTmNfTTNGbElCejR6ZFhaS0dxaWFfMnkzWk1XYkR1bVhOeE5hZHZSVzdSck1lTkpJczdNTGREN3VyYzJSb2szXzlSV250c0x3dEg5Zmk3TlFCeHg4QXp5YXJYbmFRVFhEVVlCQy1xWHJPZEtEdzdTNmw3anJmWFZNWnFtc2hxbXFBZllSaDBFT0QxaEdXbGZmSTFMMHc0TEt3RlB3bHRVQmRieDVkQ3hhNEZraFYyd1dPM1ZsQ01XRE9nend6ckw3Yy1mWHNWZ3JibjRHdmdZU3d3OGNoU3lic3Zja2dMaU13TWg0YjVYRWVWcWRJamN2MWtYZERUQzhIV3BqaFQtZWQ5d1hPdE5RcXEzd183QjAyX0RnTmVCUWFUeHJZS3hTNXhycTEtbUhRTGdTRlpzak5Z0gHQAkFVX3lxTE9KSVVfc1g3YmR6WTU3YXJiNi1xZlE3REpPTTQ1eDR5bGVveVJnNF80SkpfZzdRcnkzU3QxTGlSQXNzTkIxTkwyR3FuOEZrUmVVX2t0SGE1ZER6dFcwbVQ0bWoyQlJTYWlocGVhRkVCRmI1LXowc0I1M254YkZMSmgtTmVCUm9HQTN1akthb0Z3ZnJoaW5rM3lCUWJOa3A0YklTNG9QSWNQZ0pMZXNWVnBpb01LdGRYZGZYVTBod0RMSkdXa0ZPMXgzWlJNeGRIWWdya2RhWmxmODJEZFFBZ3I3dnJhU3ZXLWgwcnNOWmg3bDF6ZGE0azdWa3ZsSjBOMklNOUo1RXktWFJraF85SVdYeC14OU1RNVUwSlBVT0MyQTZKVHNIYzdrWUtFVHRGUzFHTHU0OFhWaTJxRms5UmFsRnNRYXlVZHV0OW1YMTlvdw?oc=5",
         "https://sundayguardianlive.com/world/m62-traffic-news-today-westbound-motorway-closed-between-j22-denshaw-j21-rochdale-after-serious-multi-vehicle-crash-check-affected-roads-diversion-routes-expected-clearance-time-more-303367"
       ],
-      "last_attempt_at": "2026-10-11T08:53:28.376243Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-11T09:06:51.034817Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "M62 Traffic News Today: Westbound Motorway Closed Between J22 Denshaw & J21 Rochdale After Serious Multi-Vehicle Crash; Check Affected Roads",
       "source_name": "The Sunday Guardian",
       "category": "traffic",
@@ -219,14 +220,14 @@
         "https://www.thenorthernecho.co.uk/sport/national/26625659.darrell-clarke-wants-tranmere-more-clinical-rochdale-draw",
         "https://www.thurrockgazette.co.uk/sport/national/26625659.darrell-clarke-wants-tranmere-more-clinical-rochdale-draw"
       ],
-      "last_attempt_at": "2026-10-11T08:53:28.376601Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-11T09:06:54.463451Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Darrell Clarke wants Tranmere to be ‘more clinical’ after Rochdale draw",
       "source_name": "Express and Star",
       "category": "crime",
       "text_fingerprint": "c3d42c43861a4d74",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.futbol24.com/betting-tips/preview/10-10-2026-tranmere-rovers-rochdale-afc-betting-tip": {
       "first_attempt_at": "2026-10-10T23:40:43.770070Z",
@@ -308,12 +309,12 @@
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
       ],
-      "last_attempt_at": "2026-10-11T08:53:28.376114Z",
+      "last_attempt_at": "2026-10-11T09:07:41.525895Z",
       "outcome": "published",
       "reason": "",
       "title": "Urgent appeal issued over missing girl, 16, last seen in Rochdale",
       "source_name": "Manchester Evening News",
-      "category": "crime",
+      "category": "environment",
       "text_fingerprint": "0d120c9afc16b76a",
       "recovery_attempts": 2
     },
@@ -670,6 +671,20 @@
       "text_fingerprint": "cda7583127614a27",
       "recovery_attempts": 1
     },
+    "https://www.northernrailway.co.uk/service-updates#live-7e21311d9245a48f19": {
+      "first_attempt_at": "2026-10-11T09:06:40.124721Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-7e21311d9245a48f19"
+      ],
+      "last_attempt_at": "2026-10-11T09:06:40.124721Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "d993e99056b6729b"
+    },
     "https://www.northernrailway.co.uk/service-updates#live-8e5f408b2ba9a52324": {
       "first_attempt_at": "2026-10-10T06:02:59.808358Z",
       "attempts": 2,
@@ -953,14 +968,14 @@
         "https://www.surreycomet.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere",
         "https://www.thenorthernecho.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere"
       ],
-      "last_attempt_at": "2026-10-11T08:53:28.376936Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-11T09:06:52.348498Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
       "title": "Rochdale continue fine run with hard-fought draw at Tranmere - Redhill And Reigate Life",
       "source_name": "Redhill And Reigate Life",
       "category": "education",
       "text_fingerprint": "b51d8a662af14ad8",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.rochdale.gov.uk/directory-record/2580/brandlehow-drive-roadworks-in-middleton-on-12-october-2026": {
@@ -1065,13 +1080,13 @@
         "https://www.rochdale.gov.uk/directory-record/2627/church-street-roadworks-in-littleborough-from-12-october-2026",
         "https://www.rochdale.gov.uk/directory-record/2628/todmorden-road-roadworks-in-littleborough-from-10-october-2026"
       ],
-      "last_attempt_at": "2026-10-10T19:17:26.034180Z",
+      "last_attempt_at": "2026-10-11T09:07:41.525604Z",
       "outcome": "published",
       "reason": "",
-      "title": "Todmorden Road, roadworks in Littleborough from 10 October 2026",
+      "title": "Todmorden Road, roadworks in Littleborough from 10 October 2026 - Rochdale Borough Council",
       "source_name": "Rochdale Borough Council",
-      "category": "traffic",
-      "text_fingerprint": "02d9c63fc6ce0a97"
+      "category": "environment",
+      "text_fingerprint": "22e862d5de938a76"
     },
     "https://www.rochdale.gov.uk/events/event/1492/a-christmas-celebration-with-the-brighouse-and-rastrick-band": {
       "first_attempt_at": "2026-10-09T12:08:40.626306Z",
@@ -1128,9 +1143,9 @@
         "https://news.google.com/rss/articles/CBMirwFBVV95cUxPUUZuV3dvMktEb29VQUZPNlFKUlR2b2JWR2s0SzVYajU1TXN4MVF4cWxXVzlwWi1sd1VFMWhRc09neWM1TWhLRkJVQ1JuWHd6cXBSZTZTV1dCZDdlWFUxX3RfVDZfV2FETkwyNUw5MFpJdVJKWmFWM05TanNUMVZ6cWlaQUxnTVYzZlRtU1U1YjZFRXVYOWJ5WFFoRFh3RTlsbWUyN2llLVNfMlZ2Z3kw?oc=5",
         "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis"
       ],
-      "last_attempt_at": "2026-10-11T08:37:39.880883Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-10-11T09:07:41.525711Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Council called on to ‘scrap climate targets and focus on cost-of-living crisis’ - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
@@ -1172,11 +1187,11 @@
     },
     "https://www.rochvalleyradio.com/local/photos/heywood-aods-visit-roch-valley-radio": {
       "first_attempt_at": "2026-10-10T23:40:31.979111Z",
-      "attempts": 40,
+      "attempts": 41,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/heywood-aods-visit-roch-valley-radio"
       ],
-      "last_attempt_at": "2026-10-11T08:52:30.432059Z",
+      "last_attempt_at": "2026-10-11T09:06:40.476575Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Heywood AODS visit",
@@ -1222,21 +1237,22 @@
         "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga"
       ],
       "last_attempt_at": "2026-10-11T08:37:39.881055Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "The Hopwood Hall saga",
       "source_name": "Roch Valley Radio",
       "category": "news",
       "text_fingerprint": "58e1a6fb3c673ac0",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury": {
       "first_attempt_at": "2026-10-10T16:02:16.798602Z",
-      "attempts": 73,
+      "attempts": 74,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury"
       ],
-      "last_attempt_at": "2026-10-11T08:52:30.530373Z",
+      "last_attempt_at": "2026-10-11T09:06:43.531241Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "£13 million Millwood Primary School expansion officially opened in Bury",
@@ -1325,13 +1341,14 @@
         "https://www.edp24.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere",
         "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale"
       ],
-      "last_attempt_at": "2026-10-11T08:53:28.377409Z",
+      "last_attempt_at": "2026-10-11T09:07:41.526072Z",
       "outcome": "published",
       "reason": "",
       "title": "Tranmere 1-1 Rochdale - Sky Sports",
       "source_name": "Sky Sports",
       "category": "sport",
-      "text_fingerprint": "0b2364a1ccf626fa"
+      "text_fingerprint": "0b2364a1ccf626fa",
+      "recovery_attempts": 1
     },
     "https://www.thenorthernecho.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere": {
       "first_attempt_at": "2026-10-11T05:21:30.084346Z",
