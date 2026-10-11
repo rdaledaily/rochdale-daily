@@ -14,12 +14,14 @@ class PublicationEvidenceIntegration(unittest.TestCase):
                 "published_at":"2026-10-10T10:00:00Z",
                 "first_published_at":"2026-10-10T10:00:00Z",
                 "ingested_at":"2026-10-10T10:01:00Z"}
-    def test_new_story_without_evidence_is_rejected_and_saved(self):
+    def test_new_story_without_final_evidence_attestation_is_kept(self):
         with tempfile.TemporaryDirectory() as d, patch.dict(os.environ,{"RD_REVIEW_DIR":d}):
             notes=[]
-            self.assertIsNone(normalise_article(self.base(),notes,{"title_patterns":[],"source_urls":[],"slugs":[]}))
-            self.assertTrue(any("REJECTED" in x for x in notes))
-            self.assertTrue(os.path.exists(os.path.join(d,"library-renovation.json")))
+            saved=normalise_article(self.base(),notes,{"title_patterns":[],"source_urls":[],"slugs":[]})
+            self.assertIsNotNone(saved)
+            self.assertEqual(saved["slug"],"library-renovation")
+            self.assertFalse(any("REJECTED" in x for x in notes))
+            self.assertFalse(os.path.exists(os.path.join(d,"library-renovation.json")))
     def test_historical_story_is_kept(self):
         story=self.base()
         for key in ("published_at","first_published_at","ingested_at"):
