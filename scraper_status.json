@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-11T00:11:39.652584Z",
+  "last_run_at": "2026-10-11T00:24:53.806450Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,31 +27,31 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 89,
+  "raw_candidates_before_job_filter": 86,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 83,
+  "raw_candidates": 80,
   "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 15,
-    "resolved": 15,
-    "text_recovered": 13,
+    "wrappers": 26,
+    "resolved": 21,
+    "text_recovered": 14,
     "reattributed": 1,
-    "images_found": 13
+    "images_found": 14
   },
-  "duplicates_merged": 41,
-  "attempted_rewrites": 12,
-  "draft_rewrites_created": 5,
+  "duplicates_merged": 38,
+  "attempted_rewrites": 11,
+  "draft_rewrites_created": 6,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
     },
     {
-      "slug": "rochdale-council-to-consider-motion-to-rescind-climate-emergency-targets",
+      "slug": "rochdale-council-to-consider-motion-on-climate-targets-amid-cost-of-living-crisi",
       "source_url": "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/"
     },
     {
-      "slug": "high-court-rules-against-hopwood-depree-in-hopwood-hall-restoration-dispute",
+      "slug": "high-court-rules-against-american-filmmaker-in-hopwood-hall-restoration-dispute",
       "source_url": "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga"
     },
     {
@@ -59,41 +59,71 @@
       "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
     },
     {
-      "slug": "rochdale-afc-manager-calls-for-focus-ahead-of-trophy-tie",
+      "slug": "rochdale-afc-manager-emphasises-hard-work-ahead-of-trophy-tie",
       "source_url": "https://rochdaleafc.co.uk/we-need-to-keep-working-watson/"
+    },
+    {
+      "slug": "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers",
+      "source_url": "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/"
     }
   ],
   "new_articles": 0,
   "live_articles": 188,
-  "skipped": 7,
+  "skipped": 5,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 5,
-    "quality gate after 4 repairs: The model marked the story unpublishable.": 1,
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
+    "editorial gate: REJECTED_NON_LOCAL": 4,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 6,
-    "queued_for_retry": 3,
-    "recovery_limit_reached": 3,
+    "missing_from_feed": 5,
+    "queued_for_retry": 1,
+    "recovery_limit_reached": 4,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0
   },
   "rewrite_ledger": {
-    "entries": 81,
+    "entries": 82,
     "by_outcome": {
       "failed": 12,
-      "published": 9,
+      "published": 10,
       "rejected": 60
     },
-    "held_back_this_run": 10,
+    "held_back_this_run": 13,
     "held_already_published": 2,
-    "held_rejected": 8,
+    "held_rejected": 11,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.futbol24.com/betting-tips/preview/10-10-2026-tranmere-rovers-rochdale-afc-betting-tip",
+      "title": "Tranmere Rovers - Rochdale AFC betting tip & best odds | 10.10.2026 - Futbol24",
+      "source_name": "Futbol24",
+      "held_because": "already rejected: quality gate after 4 repairs: The model marked the story unpublishable.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-11T00:10:59.985570Z"
+    },
+    {
+      "url": "https://www.thenorthernecho.co.uk/sport/national/26625659.darrell-clarke-wants-tranmere-more-clinical-rochdale-draw",
+      "title": "Darrell Clarke wants Tranmere to be ‘more clinical’ after Rochdale draw - The Northern Echo",
+      "source_name": "The Northern Echo",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-11T00:10:55.169051Z"
+    },
+    {
+      "url": "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale",
+      "title": "Tranmere 1-1 Rochdale - Sky Sports",
+      "source_name": "Sky Sports",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-11T00:10:53.683437Z"
+    },
     {
       "url": "https://www.rochdaletimes.co.uk/new-support-for-survivors-of-child-sexual-abuse-or-exploitation",
       "title": "New support for survivors of child sexual abuse or exploitation - Rochdale Times",
@@ -167,13 +197,11 @@
       "last_attempt_at": "2026-10-10T16:26:37.434845Z"
     }
   ],
-  "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 77,
-    "website_discovery": 6,
+    "rss_and_google_news": 78,
+    "website_discovery": 2,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -186,16 +214,16 @@
   "collector_errors": {},
   "source_counts": {
     "Roch Valley Radio": 33,
-    "Rochdale Times": 14,
+    "Rochdale Times": 10,
     "Manchester Evening News": 7,
     "Bee Network live travel alerts": 5,
     "InYourArea": 4,
     "Business Live": 3,
     "Rochdale Borough Council": 3,
+    "The Northern Echo": 2,
     "TfGM Travel Alerts": 2,
     "Rochdale Borough Council RSS": 1,
     "The Bury Times": 1,
-    "The Northern Echo": 1,
     "Rochdale AFC": 1,
     "Lancashire Telegraph": 1,
     "Id": 1,
@@ -210,22 +238,21 @@
     "education": 2,
     "environment": 1,
     "health": 1,
-    "news": 3,
+    "news": 4,
     "politics": 1,
-    "sport": 3,
-    "transport": 1
+    "sport": 2
   },
   "published_by_category": {
     "business": 18,
     "community": 38,
-    "crime": 9,
+    "crime": 8,
     "education": 3,
     "environment": 9,
     "events": 18,
     "health": 5,
-    "news": 19,
+    "news": 20,
     "politics": 9,
-    "sport": 7,
+    "sport": 8,
     "traffic": 4,
     "transport": 1
   },
@@ -252,32 +279,30 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-03bdeb7c70d6a813330c",
     "hard-news-v3-a60f8b7f7102078f81c3",
     "education-v3-1a9e437a5a678147d7ac",
-    "sport-v3-11f4f520a74b9ea39079",
+    "sport-v3-89de3d96a09d292d15e1",
     "health-v3-595156d8013e606d9f26",
     "environment-v3-69c265f725ba82d64bc6",
     "hard-news-v3-85504242400d483a99f4",
     "hard-news-v3-8f4314d32478620962bf",
-    "sport-v3-bbf92ff2eca5d0dd815a",
     "education-v3-714a7b704134ca5c3bba",
-    "sport-v3-89de3d96a09d292d15e1",
-    "hard-news-v3-e728019f0a6857c4f2f8"
+    "sport-v3-d594f81d7b6c997e0e50",
+    "hard-news-v3-e728019f0a6857c4f2f8",
+    "hard-news-v3-91f993aa65d1ec8686bc"
   ],
   "selected_candidate_urls": [
-    "https://www.thenorthernecho.co.uk/sport/national/26625659.darrell-clarke-wants-tranmere-more-clinical-rochdale-draw/",
     "https://www.rochvalleyradio.com/local/photos/heywood-aods-visit-roch-valley-radio",
     "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/",
-    "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale",
+    "https://rochdaleafc.co.uk/we-need-to-keep-working-watson/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053",
     "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/",
     "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga",
-    "https://www.futbol24.com/betting-tips/preview/10-10-2026-tranmere-rovers-rochdale-afc-betting-tip/",
     "https://suaragarut.id/en/tranmere-rochdale-league-two-preview",
-    "https://rochdaleafc.co.uk/we-need-to-keep-working-watson/",
-    "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury"
+    "https://rochdaleafc.co.uk/dale-extend-unbeaten-run-with-away-draw/",
+    "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury",
+    "https://www.rochvalleyradio.com/news-features/139/news/907/disappointment-following-rochdale-london-train-idea-rejected"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -294,8 +319,7 @@
       "health",
       "news",
       "politics",
-      "sport",
-      "transport"
+      "sport"
     ],
     "selected_categories": [
       "education",
@@ -303,8 +327,7 @@
       "health",
       "news",
       "politics",
-      "sport",
-      "transport"
+      "sport"
     ],
     "available_wards": [
       "Central Rochdale",
@@ -325,29 +348,25 @@
       "education": 2,
       "environment": 1,
       "health": 1,
-      "news": 3,
+      "news": 4,
       "politics": 1,
-      "sport": 3,
-      "transport": 1
+      "sport": 2
     },
     "selected_by_ward": {
       "Central Rochdale": 1,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
-      "rochdale": 12
+      "rochdale": 11
     },
     "selected_by_source": {
       "food standards agency": 1,
-      "futbol24": 1,
       "id": 1,
       "manchester evening news": 1,
       "redhill and reigate life": 1,
-      "roch valley radio": 3,
-      "rochdale afc": 1,
-      "rochdale times": 1,
-      "sky sports": 1,
-      "the northern echo": 1
+      "roch valley radio": 4,
+      "rochdale afc": 2,
+      "rochdale times": 1
     }
   },
   "official_ward_count": 20,
@@ -757,14 +776,8 @@
     "https://news.google.com/rss/articles/CBMirgFBVV95cUxNcGdES0hkZFZmQWoyejc4c0ZqS0tHcXdZUGFXZHlsRGpsVlpZMGxteFpVX2lGX1BaZl9CcWItZDBnQm52dV9OaGxoVmhYbVlBZ3VFMnFTczBVZXZWWkZNOS0wSVRabE5SZ1hNVXRQMFMtbjFseWgweksxTGdzaURteGxSZmpPLVJpVzZxY0RQal94YmR4TmUyNzNkM0tla1d2RWVnbFFBVkwwYVJXdEE?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org",
-    "yourtrustrochdale.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 2,
-    "rochdaleafccommunity.org": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -800,7 +813,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-11T00:15:08.328506Z",
+  "frontpage_generated_at": "2026-10-11T00:28:44.875533Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -916,7 +929,7 @@
   "whats_on_event_count": 11,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 5,
+  "drafts_not_published": 6,
   "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
