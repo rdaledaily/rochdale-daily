@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-11T16:09:58.858083Z",
+  "last_run_at": "2026-10-11T16:23:36.525270Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,44 +27,46 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 61,
+  "raw_candidates_before_job_filter": 60,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 54,
+  "raw_candidates": 53,
   "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 18,
+    "wrappers": 17,
     "resolved": 13,
     "text_recovered": 11,
     "reattributed": 2,
     "images_found": 11
   },
-  "duplicates_merged": 15,
+  "duplicates_merged": 14,
   "attempted_rewrites": 5,
-  "draft_rewrites_created": 4,
+  "draft_rewrites_created": 5,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
     },
     {
-      "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
+      "slug": "rochdale-council-to-consider-motion-to-rescind-climate-emergency-targets",
       "source_url": "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/"
     },
     {
-      "slug": "rochdale-afc-manager-calls-for-continued-effort-ahead-of-trophy-tie",
+      "slug": "rochdale-afc-manager-stresses-importance-of-hard-work-ahead-of-trophy-tie",
       "source_url": "https://rochdaleafc.co.uk/we-need-to-keep-working-watson/"
     },
     {
-      "slug": "rochdale-draw-1-1-against-tranmere-extending-unbeaten-run-to-five-matches",
+      "slug": "man-arrested-after-woman-seriously-injured-in-m62-crash-near-rochdale",
+      "source_url": "https://www.rochdaletimes.co.uk/man-arrested-after-woman-seriously-injured-in-m62-crash/"
+    },
+    {
+      "slug": "rochdale-draw-1-1-against-tranmere-to-extend-unbeaten-run",
       "source_url": "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale"
     }
   ],
   "new_articles": 0,
   "live_articles": 191,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 4,
@@ -78,8 +80,8 @@
     "entries": 98,
     "by_outcome": {
       "failed": 15,
-      "published": 9,
-      "rejected": 74
+      "published": 10,
+      "rejected": 73
     },
     "held_back_this_run": 5,
     "held_already_published": 2,
@@ -117,11 +119,12 @@
     }
   ],
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 136.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 49,
+    "rss_and_google_news": 48,
     "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -150,7 +153,6 @@
     "SuaraGarut.ID": 1,
     "Rochdale AFC": 1,
     "Lancashire Telegraph": 1,
-    "Exmouth Journal": 1,
     "Sky Sports": 1,
     "Futbol24": 1,
     "Shropshire Star": 1,
@@ -174,7 +176,7 @@
     "news": 19,
     "politics": 9,
     "sport": 8,
-    "traffic": 5,
+    "traffic": 6,
     "transport": 1
   },
   "openai_enabled": true,
@@ -671,8 +673,12 @@
   "robots_denied_count": 0,
   "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 4
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -708,7 +714,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-11T16:15:12.135819Z",
+  "frontpage_generated_at": "2026-10-11T16:27:21.217649Z",
   "frontpage_article_count": 5,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -791,9 +797,9 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 11,
-  "event_dates_corrected_from_ledger": 3,
+  "event_dates_corrected_from_ledger": 0,
   "duplicate_articles_after_postprocessing": 191,
-  "blocked_articles_removed": 0,
+  "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
@@ -805,7 +811,7 @@
   "whats_on_event_count": 11,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 4,
+  "drafts_not_published": 5,
   "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
