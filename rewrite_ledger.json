@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-11T14:20:10.742589Z",
+  "updated_at": "2026-10-11T14:34:40.378931Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 97,
@@ -73,7 +73,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-11T14:20:10.742066Z",
+      "last_attempt_at": "2026-10-11T14:34:40.378572Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -113,13 +113,13 @@
     },
     "https://rochdaleafc.co.uk/we-need-to-keep-working-watson": {
       "first_attempt_at": "2026-10-10T23:41:20.338884Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://rochdaleafc.co.uk/we-need-to-keep-working-watson"
       ],
-      "last_attempt_at": "2026-10-11T14:19:24.368304Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "last_attempt_at": "2026-10-11T14:34:40.378766Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Watson On Trophy Tie - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
@@ -191,13 +191,13 @@
     },
     "https://www.bbc.co.uk/news/articles/c6vg0p9pj0pvo": {
       "first_attempt_at": "2026-10-11T12:39:15.340824Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.bbc.co.uk/news/articles/c6vg0p9pj0pvo"
       ],
-      "last_attempt_at": "2026-10-11T14:20:10.742323Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-11T14:34:12.675785Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Man arrested after woman seriously hurt in three-car M62 crash",
       "source_name": "BBC Manchester",
       "category": "traffic",
@@ -329,13 +329,14 @@
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
       ],
       "last_attempt_at": "2026-10-11T14:08:10.198875Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Urgent appeal issued over missing girl, 16, last seen in Rochdale",
       "source_name": "Manchester Evening News",
       "category": "environment",
       "text_fingerprint": "0d120c9afc16b76a",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-05291ba411e651f465": {
       "first_attempt_at": "2026-10-10T18:10:26.473386Z",
@@ -1032,7 +1033,7 @@
     },
     "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere": {
       "first_attempt_at": "2026-10-10T23:41:20.338914Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMiowFBVV95cUxPWEdZR3JCYkhRWjJXSUR0ZkVnMC1hZmZzdC1DZGgtcnp4RWhPWkNNdmItSElnVTY2N3pSbGJxUWpRay1BU2tFQktUcXI2VjN1OXRmTHN0bUNRVXlsTWlCZFBOa3NMRW1LZXZvRmltUVdBMWdaMFdJQVBXX09hTHh6WFdjT3JORlg4M1NpWDdPeE1uRG5xbU8td0JDSnZxcm9pSFZJ?oc=5",
         "https://news.google.com/rss/articles/CBMirgFBVV95cUxNcGdES0hkZFZmQWoyejc4c0ZqS0tHcXdZUGFXZHlsRGpsVlpZMGxteFpVX2lGX1BaZl9CcWItZDBnQm52dV9OaGxoVmhYbVlBZ3VFMnFTczBVZXZWWkZNOS0wSVRabE5SZ1hNVXRQMFMtbjFseWgweksxTGdzaURteGxSZmpPLVJpVzZxY0RQal94YmR4TmUyNzNkM0tla1d2RWVnbFFBVkwwYVJXdEE?oc=5",
@@ -1045,7 +1046,7 @@
         "https://www.surreycomet.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere",
         "https://www.thenorthernecho.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere"
       ],
-      "last_attempt_at": "2026-10-11T14:19:36.498236Z",
+      "last_attempt_at": "2026-10-11T14:34:15.906992Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
       "title": "Rochdale continue fine run with hard-fought draw at Tranmere - Redhill And Reigate Life",
@@ -1220,7 +1221,7 @@
         "https://news.google.com/rss/articles/CBMirwFBVV95cUxPUUZuV3dvMktEb29VQUZPNlFKUlR2b2JWR2s0SzVYajU1TXN4MVF4cWxXVzlwWi1sd1VFMWhRc09neWM1TWhLRkJVQ1JuWHd6cXBSZTZTV1dCZDdlWFUxX3RfVDZfV2FETkwyNUw5MFpJdVJKWmFWM05TanNUMVZ6cWlaQUxnTVYzZlRtU1U1YjZFRXVYOWJ5WFFoRFh3RTlsbWUyN2llLVNfMlZ2Z3kw?oc=5",
         "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis"
       ],
-      "last_attempt_at": "2026-10-11T14:20:10.742171Z",
+      "last_attempt_at": "2026-10-11T14:34:40.378651Z",
       "outcome": "published",
       "reason": "",
       "title": "Council called on to ‘scrap climate targets and focus on cost-of-living crisis’ - Rochdale Times",
@@ -1418,7 +1419,7 @@
         "https://www.edp24.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere",
         "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale"
       ],
-      "last_attempt_at": "2026-10-11T14:20:10.742408Z",
+      "last_attempt_at": "2026-10-11T14:34:40.378795Z",
       "outcome": "published",
       "reason": "",
       "title": "Tranmere 1-1 Rochdale - Sky Sports",
