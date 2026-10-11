@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-11T19:06:38.757938Z",
+  "updated_at": "2026-10-11T19:20:50.675742Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 99,
+  "count": 101,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/grimsby-town-rochdale-13597512": {
       "first_attempt_at": "2026-10-09T19:38:18.472286Z",
@@ -70,12 +70,12 @@
     },
     "https://publicaccess.rochdale.gov.uk/online-applications": {
       "first_attempt_at": "2026-10-11T19:05:44.690941Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://publicaccess.rochdale.gov.uk/online-applications"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-11T19:05:44.690941Z",
+      "last_attempt_at": "2026-10-11T19:20:02.667626Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Rochdale Borough Council",
@@ -89,7 +89,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-11T19:06:38.756824Z",
+      "last_attempt_at": "2026-10-11T19:20:50.674938Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -115,11 +115,11 @@
     },
     "https://rochdaleafc.co.uk/kane-taylor": {
       "first_attempt_at": "2026-10-10T08:38:06.665382Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaleafc.co.uk/kane-taylor"
       ],
-      "last_attempt_at": "2026-10-11T19:05:43.388206Z",
+      "last_attempt_at": "2026-10-11T19:19:58.129590Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "KANE TAYLOR - Rochdale AFC",
@@ -339,7 +339,7 @@
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-woman-taken-court-rspca-34745511"
       ],
-      "last_attempt_at": "2026-10-11T19:06:38.757064Z",
+      "last_attempt_at": "2026-10-11T19:20:50.675488Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale woman taken to court as RSPCA officers visit her home after tip-off",
@@ -355,7 +355,7 @@
       "urls": [
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
       ],
-      "last_attempt_at": "2026-10-11T19:06:38.757617Z",
+      "last_attempt_at": "2026-10-11T19:20:50.675395Z",
       "outcome": "published",
       "reason": "",
       "title": "Urgent appeal issued over missing girl, 16, last seen in Rochdale",
@@ -1049,7 +1049,7 @@
       "urls": [
         "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005#updated-16-september-2026"
       ],
-      "last_attempt_at": "2026-10-11T19:06:38.756960Z",
+      "last_attempt_at": "2026-10-11T19:20:50.675156Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale house prices and rents: ONS figures updated 16 September 2026",
@@ -1252,6 +1252,21 @@
       "text_fingerprint": "08785eaf24fda46e",
       "recovery_attempts": 1
     },
+    "https://www.rochdaletimes.co.uk/album-is-still-banging-the-drum-for-towns-music-heritage": {
+      "first_attempt_at": "2026-10-11T19:20:14.957849Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/album-is-still-banging-the-drum-for-towns-music-heritage"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-11T19:20:14.957849Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "title": "Album is still banging the drum for town’s music heritage - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "news",
+      "text_fingerprint": "39fd22b83a591ad5"
+    },
     "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis": {
       "first_attempt_at": "2026-10-10T19:59:55.014865Z",
       "attempts": 1,
@@ -1270,15 +1285,30 @@
       "evidence_recovery_policy": 1,
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
+    "https://www.rochdaletimes.co.uk/flagship-training-centre-reaches-construction-milestone": {
+      "first_attempt_at": "2026-10-11T19:20:50.675058Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/flagship-training-centre-reaches-construction-milestone"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-11T19:20:50.675058Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "title": "Flagship training centre reaches construction milestone - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "news",
+      "text_fingerprint": "6ee9497e3defc2b4"
+    },
     "https://www.rochdaletimes.co.uk/man-arrested-after-woman-seriously-injured-in-m62-crash": {
       "first_attempt_at": "2026-10-11T16:09:32.247611Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.bbc.co.uk/news/articles/c6vg0p9pj0pvo",
         "https://www.rochdaletimes.co.uk/man-arrested-after-woman-seriously-injured-in-m62-crash",
         "https://www.rochdaletimes.co.uk/overnight-closures-as-sudden-junction-works-continue"
       ],
-      "last_attempt_at": "2026-10-11T18:40:20.181396Z",
+      "last_attempt_at": "2026-10-11T19:20:09.422781Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Man arrested after woman seriously injured in M62 crash - Rochdale Times",
@@ -1292,12 +1322,13 @@
       "first_attempt_at": "2026-10-10T16:02:44.690184Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMijgFBVV95cUxPTmtmcUUtYjlYQnNpUGo3WUw4LTI2UHdGOVJ2ZV93cENqc1dIcmc2ZngxMEYxTTZLS0NTZGZENFdRLTBDRkt3ZVU0Q1FHa0l4cFZIX1hYcXpjOHUzLUxUdTVLYmQ4RmhGTGNBX0EzV2hQRXp2LU5kOGpNdmRJRS0tSkRWcWJLbXhEa0RqUzhR?oc=5",
         "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNi03SmRyeDQ1MnA1RzBWeGN0cXF4X0FzM2hBT0lOa0FTRGUzRktOdWU4ZmRfYzdKanpVbTB1d1YtRF9ZWEJUTkxQcjNteWtEUjkydXV6Rzd4ZEdYbnJ2T0JDTWFlVVgyVDRUdFpvRUFVRm5FMjhGSTdESzN6dG0wOGZfdl9Zc01Zd1JoMFZhSWE4N2hPeUdWcGw5eFc?oc=5",
         "https://www.rochdaletimes.co.uk/new-support-for-survivors-of-child-sexual-abuse-or-exploitation"
       ],
-      "last_attempt_at": "2026-10-11T19:06:38.757743Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-11T19:20:09.020958Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
       "title": "New support for survivors of child sexual abuse or exploitation - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
@@ -1351,7 +1382,7 @@
     },
     "https://www.rochvalleyradio.com/news-features/139/news/907/disappointment-following-rochdale-london-train-idea-rejected": {
       "first_attempt_at": "2026-10-10T16:02:32.970552Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPdkRlaWxoeDlSMkMtUnBLSHhLY29ROHpxNnJVZWtLUnEzb2ZFY1JQNG5lb2p3bEdMQjBtUnQ2NUpaZEtQVGdQaGdRUVNvVHYyOXRmT1pqd1ZyY2NDNkF1V0tMQzFMMnA1OEg3aGVCOW9QRlJsbDhjUlJCbHRXakxVRkJMaVh0eWxT?oc=5",
         "https://news.google.com/rss/articles/CBMioAFBVV95cUxQU2Q1TnA5dTVvUWkzaGRCano2NnRWMDFsWmg2Vld0MUhjTGxEV05Na3Btam95dmhXNENmLWZjSmo2Z04xdFloNU5QUU9tN1BwdEF3MlNDZEJVdkxVanpCTnVRYWN3N0RCaHlNVU5VNlZ4ZWpVdi0wM1VnRXRRVWRHY1g2dlpXQ2EzOHU1OGFjS2Q0U25fUFM1R1BtWU56MjZV0gGmAUFVX3lxTE41d0tTNllTUUJ3bk1hcHlZTVBNWnluQ2M1d3lTUXl3d21JNG0zSDVGV19NSzhUMmo0ZkpobTlUOHloT3I2dk1ERm1FZ21rajc4bXJPZU9TYm9YRTZnQmJtaWNtaHZ1ZTJXcUppbEdVRk9LdWgyNmRNYzEySEU5Q0JDQ2VNOUVxYk95VFk2dVFqQjFnM2huZ0s4YlpodC11aWdNZ2s0c1E?oc=5",
@@ -1361,12 +1392,12 @@
         "https://www.manchestereveningnews.co.uk/news/disappointment-over-rejection-rochdale-london-34744100",
         "https://www.rochvalleyradio.com/news-features/139/news/907/disappointment-following-rochdale-london-train-idea-rejected"
       ],
-      "last_attempt_at": "2026-10-11T19:05:49.688799Z",
+      "last_attempt_at": "2026-10-11T19:20:14.430254Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "‘Disappointment’ following Rochdale-London train idea rejected",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "transport",
+      "source_name": "Roch Valley Radio",
+      "category": "news",
       "text_fingerprint": "4d5230e68af72a4a",
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
@@ -1376,7 +1407,7 @@
       "urls": [
         "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga"
       ],
-      "last_attempt_at": "2026-10-11T19:06:38.757413Z",
+      "last_attempt_at": "2026-10-11T19:20:50.675230Z",
       "outcome": "published",
       "reason": "",
       "title": "The Hopwood Hall saga",
