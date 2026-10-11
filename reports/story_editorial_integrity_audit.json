@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 191,
-  "published_count": 191,
-  "category_change_count": 27,
-  "image_change_count": 15,
+  "article_count": 196,
+  "published_count": 196,
+  "category_change_count": 28,
+  "image_change_count": 18,
   "category_changes": [
+    {
+      "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
+      "title": "Rochdale Council to Consider Motion to Reassess Climate Targets Amid Cost-of-Living Crisis",
+      "from": "politics",
+      "to": "environment",
+      "reason": "headline strongly identifies environment"
+    },
     {
       "slug": "sponsored-the-physiotherapy-clinic-rochdale-bamford",
       "title": "Sponsored: The Physiotherapy Clinic offers physiotherapy, Pilates and home visits in Rochdale",
@@ -197,6 +204,42 @@
     }
   ],
   "image_changes": [
+    {
+      "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
+      "title": "Rochdale Council to Consider Motion to Reassess Climate Targets Amid Cost-of-Living Crisis",
+      "category": "environment",
+      "reason": "weak filename image match score 8251; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/john_taylor.jpg",
+        "img": "assets/img/cards/john_taylor.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-afc-manager-calls-for-continued-effort-ahead-of-trophy-tie",
+      "title": "Rochdale AFC Manager Calls for Continued Effort Ahead of Trophy Tie",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-manager-calls-for-continued-effort-ahead-of-trophy-tie-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers",
+      "title": "Rochdale Draw 1-1 with Tranmere to Extend Unbeaten Run in League Two",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers-generated-card.jpg"
+    },
     {
       "slug": "overnight-road-closures-planned-at-sudden-junction-from-october-12-to-15",
       "title": "Overnight Road Closures Planned at Sudden Junction, Rochdale from October 12 to 15",
