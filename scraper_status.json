@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-11T14:08:10.201437Z",
+  "last_run_at": "2026-10-11T14:20:10.744372Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -32,15 +32,15 @@
   "raw_candidates": 53,
   "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 29,
-    "resolved": 21,
+    "wrappers": 18,
+    "resolved": 14,
     "text_recovered": 12,
     "reattributed": 2,
     "images_found": 12
   },
   "duplicates_merged": 10,
-  "attempted_rewrites": 7,
-  "draft_rewrites_created": 5,
+  "attempted_rewrites": 6,
+  "draft_rewrites_created": 4,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
@@ -51,30 +51,26 @@
       "source_url": "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/"
     },
     {
-      "slug": "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
+      "slug": "man-arrested-after-woman-seriously-injured-in-m62-crash-near-rochdale",
+      "source_url": "https://www.bbc.co.uk/news/articles/c6vg0p9pj0pvo"
     },
     {
-      "slug": "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers",
-      "source_url": "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/"
-    },
-    {
-      "slug": "rochdale-afc-manager-calls-for-continued-hard-work-ahead-of-trophy-tie",
-      "source_url": "https://rochdaleafc.co.uk/we-need-to-keep-working-watson/"
+      "slug": "rochdale-draw-1-1-with-tranmere-to-extend-unbeaten-run-in-league-two",
+      "source_url": "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale"
     }
   ],
   "new_articles": 0,
   "live_articles": 191,
   "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1,
+    "editorial gate: REJECTED_NON_LOCAL": 1,
     "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 7,
+    "missing_from_feed": 5,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 7,
+    "recovery_limit_reached": 5,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0
@@ -83,12 +79,12 @@
     "entries": 97,
     "by_outcome": {
       "failed": 14,
-      "published": 10,
-      "rejected": 73
+      "published": 9,
+      "rejected": 74
     },
-    "held_back_this_run": 7,
+    "held_back_this_run": 6,
     "held_already_published": 2,
-    "held_rejected": 5,
+    "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -121,15 +117,6 @@
       "last_attempt_at": "2026-10-11T00:53:03.075976Z"
     },
     {
-      "url": "https://suaragarut.id/en/tranmere-rochdale-league-two-preview",
-      "title": "Tranmere Rovers Face Rochdale After Contrasting League Two Results - SuaraGarut.ID",
-      "source_name": "Id",
-      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-10-11T00:23:53.251494Z"
-    },
-    {
       "url": "https://www.futbol24.com/betting-tips/preview/10-10-2026-tranmere-rovers-rochdale-afc-betting-tip",
       "title": "Tranmere Rovers - Rochdale AFC betting tip & best odds | 10.10.2026 - Futbol24",
       "source_name": "Futbol24",
@@ -139,11 +126,13 @@
       "last_attempt_at": "2026-10-11T00:10:59.985570Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 189.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 52,
-    "website_discovery": 2,
+    "rss_and_google_news": 49,
+    "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -167,8 +156,8 @@
     "TfGM Travel Alerts": 2,
     "BBC Manchester": 1,
     "The Bury Times": 1,
-    "The Sunday Guardian": 1,
     "SuaraGarut.ID": 1,
+    "The Sunday Guardian": 1,
     "Rochdale AFC": 1,
     "Lancashire Telegraph": 1,
     "Sky Sports": 1,
@@ -180,7 +169,6 @@
   },
   "selected_by_category": {
     "education": 1,
-    "environment": 1,
     "health": 1,
     "news": 1,
     "sport": 2,
@@ -189,15 +177,15 @@
   "published_by_category": {
     "business": 19,
     "community": 38,
-    "crime": 8,
+    "crime": 7,
     "education": 3,
     "environment": 9,
     "events": 18,
     "health": 5,
     "news": 19,
     "politics": 9,
-    "sport": 8,
-    "traffic": 5,
+    "sport": 7,
+    "traffic": 6,
     "transport": 1
   },
   "openai_enabled": true,
@@ -227,7 +215,6 @@
     "education-v3-1a9e437a5a678147d7ac",
     "sport-v3-52067b4b7b44d19a9a94",
     "health-v3-595156d8013e606d9f26",
-    "environment-v3-69c265f725ba82d64bc6",
     "hard-news-v3-85504242400d483a99f4",
     "sport-v3-89de3d96a09d292d15e1"
   ],
@@ -236,7 +223,6 @@
     "https://www.redhillandreigatelife.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/",
     "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053",
     "https://www.rochdaletimes.co.uk/council-called-on-to-scrap-climate-targets-and-focus-on-cost-of-living-crisis/",
     "https://rochdaleafc.co.uk/we-need-to-keep-working-watson/"
   ],
@@ -251,7 +237,6 @@
   "coverage": {
     "available_categories": [
       "education",
-      "environment",
       "health",
       "news",
       "sport",
@@ -259,7 +244,6 @@
     ],
     "selected_categories": [
       "education",
-      "environment",
       "health",
       "news",
       "sport",
@@ -280,7 +264,6 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "education": 1,
-      "environment": 1,
       "health": 1,
       "news": 1,
       "sport": 2,
@@ -290,12 +273,11 @@
       "Central Rochdale": 1
     },
     "selected_by_area": {
-      "rochdale": 7
+      "rochdale": 6
     },
     "selected_by_source": {
       "bbc manchester": 1,
       "food standards agency": 1,
-      "manchester evening news": 1,
       "redhill and reigate life": 1,
       "rochdale afc": 1,
       "rochdale times": 1,
@@ -711,12 +693,8 @@
     "https://news.google.com/rss/articles/CBMirwFBVV95cUxOUG04c2oyaFRFV0M5XzhpdWE1WkEyRlNzRkQyV2s3Q0FER1gxU0ZINnQxdnYyWkFSbXFIR05SS2lQOFltcHRJLVg1R1ZfYVJBQ1ZJNHh3LUxDMWowcEU2ZnZGaHJrU0xySUFwSVduV1lRdHh4UHhvODBiSmFFeG5OUjdmUjNNOUVrQlZIVlZwYlp5UmZCVnE3NmZmRF9CSjY5VW9wZlI0dXdtNTVDSVFJ?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "yourtrustrochdale.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 5
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -752,7 +730,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-11T14:11:32.944451Z",
+  "frontpage_generated_at": "2026-10-11T14:26:25.036014Z",
   "frontpage_article_count": 5,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -795,9 +773,9 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "news": 2,
+      "business": 1,
       "traffic": 2,
-      "business": 1
+      "news": 2
     },
     "selected_by_ward": {
       "borough-wide": 4,
@@ -811,9 +789,9 @@
       "rochdale": 7
     },
     "selected_by_source": {
-      "rochdale daily": 2,
+      "rochdale daily editor’s visit": 1,
       "rochdale borough council": 2,
-      "rochdale daily editor’s visit": 1
+      "rochdale daily": 2
     },
     "pool_size": 16,
     "primary_pool_size": 16,
@@ -833,9 +811,9 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 11,
-  "event_dates_corrected_from_ledger": 0,
+  "event_dates_corrected_from_ledger": 3,
   "duplicate_articles_after_postprocessing": 191,
-  "blocked_articles_removed": 1,
+  "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
@@ -847,7 +825,7 @@
   "whats_on_event_count": 11,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 5,
+  "drafts_not_published": 4,
   "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
