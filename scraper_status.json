@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-11T23:38:02.541183Z",
+  "last_run_at": "2026-10-11T23:52:20.996710Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,31 +27,27 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 94,
+  "raw_candidates_before_job_filter": 90,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 93,
+  "raw_candidates": 89,
   "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 44,
-    "resolved": 24,
+    "wrappers": 55,
+    "resolved": 28,
     "text_recovered": 16,
     "reattributed": 2,
     "images_found": 17
   },
-  "duplicates_merged": 52,
-  "attempted_rewrites": 2,
-  "draft_rewrites_created": 2,
+  "duplicates_merged": 48,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
-    },
-    {
-      "slug": "train-services-disrupted-due-to-engineering-works-in-rochdale-area",
-      "source_url": "https://www.northernrailway.co.uk/service-updates#live-7cbc09751a24f9c8dc"
     }
   ],
-  "new_articles": 1,
+  "new_articles": 0,
   "live_articles": 204,
   "skipped": 0,
   "rewrite_skip_reasons": {},
@@ -72,8 +68,8 @@
       "published": 21,
       "rejected": 73
     },
-    "held_back_this_run": 28,
-    "held_already_published": 16,
+    "held_back_this_run": 29,
+    "held_already_published": 17,
     "held_rejected": 12,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -192,7 +188,7 @@
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 81,
-    "website_discovery": 8,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -205,7 +201,7 @@
   "collector_errors": {},
   "source_counts": {
     "Manchester Evening News": 19,
-    "Rochdale Times": 15,
+    "Rochdale Times": 11,
     "Rochdale Borough Council": 7,
     "Bee Network live travel alerts": 4,
     "InYourArea": 3,
@@ -219,8 +215,8 @@
     "Id": 2,
     "Business Live": 2,
     "Hillingdon Times": 2,
-    "TfGM Travel Alerts": 2,
     "Roch Valley Radio Local News": 2,
+    "TfGM Travel Alerts": 2,
     "BBC Manchester": 1,
     "Herts Advertiser": 1,
     "County Times": 1,
@@ -239,8 +235,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "health": 1,
-    "transport": 1
+    "health": 1
   },
   "published_by_category": {
     "business": 21,
@@ -279,11 +274,9 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-033f37449476f0630dbf",
     "health-v3-595156d8013e606d9f26"
   ],
   "selected_candidate_urls": [
-    "https://www.northernrailway.co.uk/service-updates#live-7cbc09751a24f9c8dc",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
   ],
   "x_social_records": 0,
@@ -296,12 +289,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "health",
-      "transport"
+      "health"
     ],
     "selected_categories": [
-      "health",
-      "transport"
+      "health"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -313,16 +304,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "health": 1,
-      "transport": 1
+      "health": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 2
+      "rochdale": 1
     },
     "selected_by_source": {
-      "food standards agency": 1,
-      "northern live service updates": 1
+      "food standards agency": 1
     }
   },
   "official_ward_count": 20,
@@ -911,7 +900,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-11T23:41:20.753286Z",
+  "frontpage_generated_at": "2026-10-11T23:55:43.556476Z",
   "frontpage_article_count": 12,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1031,11 +1020,9 @@
   "category_archive_count": 11,
   "area_archive_count": 24,
   "whats_on_event_count": 11,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "train-services-disrupted-due-to-engineering-works-in-rochdale-area"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 1,
-  "publication_health": "partial",
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
