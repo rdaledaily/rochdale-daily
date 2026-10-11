@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 196,
-  "published_count": 196,
-  "category_change_count": 28,
-  "image_change_count": 18,
+  "article_count": 203,
+  "published_count": 203,
+  "category_change_count": 29,
+  "image_change_count": 21,
   "category_changes": [
     {
       "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
@@ -12,6 +12,13 @@
       "from": "politics",
       "to": "environment",
       "reason": "headline strongly identifies environment"
+    },
+    {
+      "slug": "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale",
+      "title": "Urgent Appeal for Missing 16-Year-Old Girl Last Seen in Norden, Rochdale",
+      "from": "crime",
+      "to": "news",
+      "reason": "headline strongly identifies news"
     },
     {
       "slug": "sponsored-the-physiotherapy-clinic-rochdale-bamford",
@@ -205,6 +212,18 @@
   ],
   "image_changes": [
     {
+      "slug": "construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king",
+      "title": "Construction Completed on Sustainable Materials and Manufacturing Centre in Kingsway Business Park",
+      "category": "business",
+      "reason": "weak filename image match score 8251; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/atom_valley.png",
+        "img": "assets/img/cards/atom_valley.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
       "title": "Rochdale Council to Consider Motion to Reassess Climate Targets Amid Cost-of-Living Crisis",
       "category": "environment",
@@ -239,6 +258,30 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers-generated-card.jpg"
+    },
+    {
+      "slug": "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale",
+      "title": "Urgent Appeal for Missing 16-Year-Old Girl Last Seen in Norden, Rochdale",
+      "category": "news",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden.jpg",
+        "img": "assets/img/cards/urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale-generated-card.jpg"
+    },
+    {
+      "slug": "high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute",
+      "title": "High Court Rules Against Filmmaker in Hopwood Hall Restoration Dispute",
+      "category": "news",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute-generated-card.jpg"
     },
     {
       "slug": "overnight-road-closures-planned-at-sudden-junction-from-october-12-to-15",
