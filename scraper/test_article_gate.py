@@ -67,6 +67,49 @@ def test_area_alias_and_unknown_fallback() -> None:
     assert whitworth is not None and whitworth["area"] == "whitworth"
 
 
+def test_low_risk_attributed_rewrite_survives_independent_review_outage() -> None:
+    row = manual(
+        title="Rochdale football club confirms Sunday fixture",
+        slug="rochdale-club-sunday",
+        area="rochdale",
+        category="sport",
+        source_kind="article",
+        source_name="Sky Sports",
+        source_url="https://www.skysports.com/football/news/13592710/example",
+        publication_route="ai-grounded-rewrite",
+        rewrite_quality_checked=True,
+        content_html="<p>Rochdale played a football match and the club confirmed the score.</p>",
+        published_at="2026-10-11T15:00:00Z",
+        first_published_at="2026-10-11T15:00:00Z",
+        ingested_at="2026-10-11T16:00:00Z",
+    )
+    notes = []
+    saved = normalise_article(row, notes)
+    assert saved is not None, notes
+    assert saved["verification_source_type"] == "attributed-source-only"
+    assert saved["source_review_verified"] is False
+    assert any("ATTRIBUTED" in note for note in notes)
+
+
+def test_sensitive_unverified_rewrite_remains_held() -> None:
+    row = manual(
+        title="Man arrested after serious assault in Rochdale",
+        area="rochdale",
+        category="crime",
+        sensitive_story=True,
+        source_kind="article",
+        source_name="Manchester Evening News",
+        source_url="https://www.manchestereveningnews.co.uk/news/greater-manchester-news/example",
+        publication_route="ai-grounded-rewrite",
+        rewrite_quality_checked=True,
+        content_html="<p>Police said a man was arrested after an assault in Rochdale.</p>",
+        published_at="2026-10-11T15:00:00Z",
+        first_published_at="2026-10-11T15:00:00Z",
+        ingested_at="2026-10-11T16:00:00Z",
+    )
+    assert normalise_article(row, []) is None
+
+
 def test_unknown_automated_area_is_dropped() -> None:
     notes: list[str] = []
     fixed = normalise_article(

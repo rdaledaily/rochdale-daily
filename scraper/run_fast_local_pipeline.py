@@ -235,8 +235,21 @@ def configure_sources() -> None:
         if source["name"] not in existing_names:
             core.DISCOVERY_PAGES.append(dict(source))
 
+    # The old /news/local-news/ and /news/notices/ indexes now 404. Crawl
+    # the functioning news homepage and keep strict per-article borough checks
+    # because this publisher also covers Bury and Bolton.
+    core.DISCOVERY_PAGES[:] = [
+        source for source in core.DISCOVERY_PAGES
+        if source.get("name") != "Roch Valley Radio Notices"
+    ]
+    for source in core.DISCOVERY_PAGES:
+        if source.get("name") == "Roch Valley Radio Local News":
+            source["url"] = "https://www.rochvalleyradio.com/"
+            source["link_pattern"] = "/news-features/"
+            source.pop("trusted_local", None)
+            source["default_area"] = ""
     core.DISCOVERY_LISTING_OVERRIDES["Roch Valley Radio Local News"] = [
-        "https://www.rochvalleyradio.com/news/local-news/"
+        "https://www.rochvalleyradio.com/"
     ]
 
 

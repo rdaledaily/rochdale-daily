@@ -2518,10 +2518,6 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         log.info('Rejected careers/vacancy post: %s', candidate.source_url)
         note_rewrite_skip('careers or vacancy post')
         return None
-    if candidate.category == 'events':
-        log.info("Skipping general event candidate because What's Occurrin' Events is the approved event feed: %s", candidate.source_url)
-        note_rewrite_skip('events category: reserved for the approved events feed')
-        return None
 
     source_records = [{
         'name': candidate.source_name,
@@ -3028,6 +3024,9 @@ def rewrite_outcome_for_reason(reason: str) -> str:
     return 'rejected'
 
 
+NEWSROOM_RETRY_POLICY_EPOCH = '2026-10-11-unblock-source-attributed-v1'
+
+
 def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> None:
     """Remember what happened to this candidate's source material."""
     identity = candidate_identity(candidate)
@@ -3044,10 +3043,16 @@ def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> No
                 and entry['text_fingerprint'] != candidate_text_fingerprint(candidate)
             )
         )
-        if new_material or entry.get('outcome') != outcome:
-            # Fresh material, or a different kind of outcome, starts a new count:
-            # the rejection limit is per body of evidence, not per story.
+        policy_retry = (
+            str(entry.get('outcome') or '') == 'rejected'
+            and 'quality gate after' in str(entry.get('reason') or '')
+            and entry.get('policy_epoch') != NEWSROOM_RETRY_POLICY_EPOCH
+        )
+        if new_material or entry.get('outcome') != outcome or policy_retry:
+            # Updated source material or a changed rewrite policy gets a
+            # bounded fresh attempt, not an infinite retry on each run.
             entry['attempts'] = 0
+        entry['policy_epoch'] = NEWSROOM_RETRY_POLICY_EPOCH
         entry['attempts'] = int(entry.get('attempts') or 0) + 1
         entry['last_attempt_at'] = now
         entry['outcome'] = outcome
@@ -3079,6 +3084,8 @@ def rewrite_ledger_block_reason(candidate: Any) -> str:
             and entry['text_fingerprint'] != candidate_text_fingerprint(candidate)):
         return ''
     reason = str(entry.get('reason') or '')
+    if outcome == 'rejected' and 'quality gate after' in reason and entry.get('policy_epoch') != NEWSROOM_RETRY_POLICY_EPOCH:
+        return ''  # One bounded reattempt after today's rewrite-policy fix.
     if outcome == 'published':
         return 'already published from this source material'
     if int(entry.get('attempts') or 0) < REWRITE_REJECTION_ATTEMPT_LIMIT:
@@ -3264,12 +3271,6 @@ def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[
     source material arrives, and that is exactly the new-source-URL check.
     """
     if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate)):
-        return False
-    if candidate.category == 'events':
-        # rewrite_candidate() unconditionally rejects general event
-        # candidates because What's Occurrin' Events is the approved feed,
-        # so selecting them only wastes rewrite slots and inflates the skip
-        # count. Filter them before selection instead of after.
         return False
     candidate.story_key = candidate.story_key or build_story_key(candidate)
     held = rewrite_ledger_block_reason(candidate)
