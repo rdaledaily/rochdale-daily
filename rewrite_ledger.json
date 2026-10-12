@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-12T04:45:00.404720Z",
+  "updated_at": "2026-10-12T04:59:01.170053Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 105,
+  "count": 107,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/grimsby-town-rochdale-13597512": {
       "first_attempt_at": "2026-10-09T19:38:18.472286Z",
@@ -89,7 +89,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-12T04:45:00.404601Z",
+      "last_attempt_at": "2026-10-12T04:59:01.169740Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -615,6 +615,21 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "ba408b8f28320c3d"
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-4f1ed5afcf51f9da5b": {
+      "first_attempt_at": "2026-10-12T04:58:16.147905Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-4f1ed5afcf51f9da5b"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-12T04:58:16.147905Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "c0bd75d563923cbc"
     },
     "https://www.northernrailway.co.uk/service-updates#live-5033db161f6d41a45c": {
       "first_attempt_at": "2026-10-10T08:17:21.204939Z",
@@ -1163,6 +1178,22 @@
       "recovery_attempts": 0,
       "structured_official_notice_recovery": 1
     },
+    "https://www.rochdale.gov.uk/directory-record/2581/nowell-road-and-pershore-road-roadworks-in-middleton-on-26-october-2026": {
+      "first_attempt_at": "2026-10-12T04:59:01.169894Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/directory-record/2581/nowell-road-and-pershore-road-roadworks-in-middleton-on-26-october-2026",
+        "https://www.rochdale.gov.uk/directory-record/2616/thornham-lane-roadworks-in-middleton-from-26-october-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-12T04:59:01.169894Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Nowell Road and Pershore Road, roadworks in Middleton on 26 October 2026",
+      "source_name": "Rochdale Borough Council",
+      "category": "traffic",
+      "text_fingerprint": "af286a0bd63da3ec"
+    },
     "https://www.rochdale.gov.uk/directory-record/2592/well-i-th-lane-roadworks-in-rochdale-from-24-october-2026": {
       "first_attempt_at": "2026-10-12T02:49:40.246313Z",
       "attempts": 1,
@@ -1268,17 +1299,19 @@
       "first_attempt_at": "2026-10-10T19:17:26.034180Z",
       "attempts": 1,
       "urls": [
+        "https://www.rochdale.gov.uk/directory-record/2604/halifax-road-roadworks-in-hurstead-from-26-october-2026",
         "https://www.rochdale.gov.uk/directory-record/2618/various-roads-roadworks-in-rochdale-from-12-october-2026",
         "https://www.rochdale.gov.uk/directory-record/2627/church-street-roadworks-in-littleborough-from-12-october-2026",
         "https://www.rochdale.gov.uk/directory-record/2628/todmorden-road-roadworks-in-littleborough-from-10-october-2026"
       ],
-      "last_attempt_at": "2026-10-11T09:07:41.525604Z",
+      "last_attempt_at": "2026-10-12T04:59:01.169970Z",
       "outcome": "published",
       "reason": "",
       "title": "Todmorden Road, roadworks in Littleborough from 10 October 2026 - Rochdale Borough Council",
       "source_name": "Rochdale Borough Council",
       "category": "environment",
-      "text_fingerprint": "22e862d5de938a76"
+      "text_fingerprint": "22e862d5de938a76",
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
     "https://www.rochdale.gov.uk/events/event/1492/a-christmas-celebration-with-the-brighouse-and-rastrick-band": {
       "first_attempt_at": "2026-10-09T12:08:40.626306Z",
