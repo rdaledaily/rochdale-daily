@@ -1,17 +1,10 @@
 {
-  "last_run_at": "2026-10-12T04:59:01.173232Z",
+  "last_run_at": "2026-10-12T05:13:07.375050Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "ok",
-      "offered": 4,
-      "daily_cap": 4,
-      "offered_today": 4,
-      "listed": 52,
-      "already_seen": 28,
-      "started_long_ago": 0,
-      "too_far_ahead": 16,
-      "undated": 3,
-      "in_window": 5
+      "status": "not due",
+      "last_checked": "2026-10-12T04:57:46.569835Z",
+      "interval_hours": 6
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -19,15 +12,9 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "listed": 0,
-      "unanswered_or_holding": 0,
-      "not_about_the_borough": 0,
-      "already_seen": 0,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-12T04:57:46.569835Z",
+      "interval_hours": 6
     },
     "gmca_decisions": {
       "status": "not due",
@@ -40,35 +27,31 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 99,
+  "raw_candidates_before_job_filter": 98,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 98,
+  "raw_candidates": 97,
   "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 45,
+    "wrappers": 46,
     "resolved": 22,
     "text_recovered": 16,
     "reattributed": 1,
     "images_found": 17
   },
-  "duplicates_merged": 59,
-  "attempted_rewrites": 4,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 58,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
     },
     {
-      "slug": "roadworks-scheduled-on-nowell-road-pershore-road-and-thornham-lane-in-middleton-",
-      "source_url": "https://www.rochdale.gov.uk/directory-record/2581/nowell-road-and-pershore-road-roadworks-in-middleton-on-26-october-2026"
-    },
-    {
       "slug": "constantine-road-to-close-for-roadworks-from-9-october-2026",
-      "source_url": "https://www.rochdale.gov.uk/directory-record/2628/todmorden-road-roadworks-in-littleborough-from-10-october-2026"
+      "source_url": "https://www.rochdale.gov.uk/directory-record/2592/well-i-th-lane-roadworks-in-rochdale-from-24-october-2026"
     }
   ],
-  "new_articles": 2,
+  "new_articles": 1,
   "live_articles": 207,
   "skipped": 1,
   "rewrite_skip_reasons": {
@@ -91,8 +74,8 @@
       "published": 25,
       "rejected": 72
     },
-    "held_back_this_run": 22,
-    "held_already_published": 13,
+    "held_back_this_run": 24,
+    "held_already_published": 15,
     "held_rejected": 9,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -183,8 +166,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 82,
-    "website_discovery": 7,
+    "rss_and_google_news": 83,
+    "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -192,13 +175,13 @@
     "environment_agency": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 4
+    "primary_data": 0
   },
   "collector_errors": {},
   "source_counts": {
     "Manchester Evening News": 19,
     "Rochdale Times": 18,
-    "Rochdale Borough Council": 11,
+    "Rochdale Borough Council": 7,
     "Bee Network live travel alerts": 4,
     "InYourArea": 3,
     "The Sunday Guardian": 3,
@@ -207,12 +190,13 @@
     "Yahoo": 3,
     "Clacton Gazette": 3,
     "The Bury Times": 2,
-    "Herts Advertiser": 2,
     "Thurrock Gazette": 2,
+    "Herts Advertiser": 2,
     "The Northern Echo": 2,
     "Business Live": 2,
     "Hillingdon Times": 2,
     "Roch Valley Radio Local News": 2,
+    "TfGM Travel Alerts": 2,
     "BBC Manchester": 1,
     "County Times": 1,
     "Lancashire Telegraph": 1,
@@ -221,6 +205,7 @@
     "Express and Star": 1,
     "Sky Sports": 1,
     "Futbol24": 1,
+    "APWin": 1,
     "Shropshire Star": 1,
     "Oxford Mail": 1,
     "Somerset County Gazette": 1,
@@ -229,7 +214,6 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "environment": 1,
     "health": 1,
     "traffic": 1,
     "transport": 1
@@ -271,16 +255,14 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-2212db947dbf8911b55c",
+    "transport-v3-a2523a310f46d4454c29",
     "transport-v3-9db54d2fba4470f24069",
-    "health-v3-3f9dfe37ce4d6dcd38de",
-    "transport-v3-9fb9f071d857a47a3259"
+    "health-v3-3f9dfe37ce4d6dcd38de"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdale.gov.uk/directory-record/2581/nowell-road-and-pershore-road-roadworks-in-middleton-on-26-october-2026",
+    "https://www.rochdale.gov.uk/directory-record/2592/well-i-th-lane-roadworks-in-rochdale-from-24-october-2026",
     "https://www.northernrailway.co.uk/service-updates#live-4f1ed5afcf51f9da5b",
-    "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.rochdale.gov.uk/directory-record/2628/todmorden-road-roadworks-in-littleborough-from-10-october-2026"
+    "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -292,13 +274,11 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment",
       "health",
       "traffic",
       "transport"
     ],
     "selected_categories": [
-      "environment",
       "health",
       "traffic",
       "transport"
@@ -306,33 +286,29 @@
     "available_wards": [],
     "selected_wards": [],
     "available_areas": [
-      "littleborough",
-      "middleton"
+      "littleborough"
     ],
     "selected_areas": [
       "littleborough",
-      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1,
       "health": 1,
       "traffic": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "littleborough": 2,
-      "middleton": 1,
-      "rochdale": 1
+      "littleborough": 1,
+      "rochdale": 2
     },
     "selected_by_source": {
       "food standards agency": 1,
       "northern live service updates": 1,
-      "rochdale borough council": 2
+      "rochdale borough council": 1
     }
   },
   "official_ward_count": 20,
@@ -881,11 +857,19 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
+  "robots_denied_count": 1,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMisAFBVV95cUxNSXVtTTVpM09wcFdPVW94SExkUzZKcnFIUjl0Y2RaVEU3bGFPak9WcFAyalFjaHhPbjJEVU1ia29Ucld5N1dtX0VqUjBSTl90a3RzUU5nOFB6NGxLWDZfRXFHUl95am9yYWRDYS1PRFdRdnd3aFVjRHk5YnJKOGVxVVRsOWpPemg3UWlSY3F5bF80ZUpUT3ZFM3plVVNpYXFuNjZ4TnZYLS1sblMyY0VWVg?oc=5"
+  ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk",
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 2,
+    "visitrochdale.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -921,8 +905,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-12T05:01:48.556284Z",
-  "frontpage_article_count": 11,
+  "frontpage_generated_at": "2026-10-12T05:16:27.705483Z",
+  "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -982,11 +966,10 @@
       "transport": 1,
       "politics": 1,
       "business": 2,
-      "news": 2,
-      "sport": 1
+      "news": 2
     },
     "selected_by_ward": {
-      "borough-wide": 8,
+      "borough-wide": 7,
       "Central Rochdale": 1,
       "Kingsway": 1,
       "Bamford": 1
@@ -1004,7 +987,6 @@
       "northern live service updates": 1,
       "rochdale times": 2,
       "manchester evening news": 1,
-      "rochdale afc": 1,
       "rochdale daily editor’s visit": 1,
       "rochdale daily": 1
     },
@@ -1012,11 +994,11 @@
     "primary_pool_size": 19,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 11,
+    "frontpage_count": 10,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 7,
-    "fresh_under_homepage_window": 11,
-    "short_briefs_selected": 8,
+    "fresh_under_homepage_window": 10,
+    "short_briefs_selected": 7,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1038,9 +1020,8 @@
   "category_archive_count": 11,
   "area_archive_count": 24,
   "whats_on_event_count": 11,
-  "published_after_editorial_gate": 2,
+  "published_after_editorial_gate": 1,
   "published_new_slugs": [
-    "roadworks-scheduled-on-nowell-road-pershore-road-and-thornham-lane-in-middleton",
     "constantine-road-to-close-for-roadworks-from-9-october-2026"
   ],
   "drafts_not_published": 1,
