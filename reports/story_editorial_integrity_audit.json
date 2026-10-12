@@ -1,11 +1,25 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 210,
-  "published_count": 210,
-  "category_change_count": 29,
-  "image_change_count": 24,
+  "article_count": 220,
+  "published_count": 220,
+  "category_change_count": 31,
+  "image_change_count": 25,
   "category_changes": [
+    {
+      "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
+      "title": "FIVE YEARS LATER, A COURT SUMMONS: Rochdale residents report historic Council Tax demands as arrears reach £28.4m",
+      "from": "news",
+      "to": "politics",
+      "reason": "headline strongly identifies politics"
+    },
+    {
+      "slug": "rochdale-upperbanks-50-million-loans-council-tax-investigation",
+      "title": "BREAKING INVESTIGATION: £50.3m owed by Rochdale Council companies as £19.5m Council Tax shortfall raises scrutiny",
+      "from": "news",
+      "to": "politics",
+      "reason": "headline strongly identifies politics"
+    },
     {
       "slug": "rochdale-council-to-implement-new-planning-decision-guidelines-from-october-31",
       "title": "Rochdale Council to Implement New Planning Decision Guidelines from October 31",
@@ -212,6 +226,18 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-pioneers-museum-to-host-archive-sessions-on-local-folklore",
+      "title": "Rochdale Pioneers Museum Hosts Archive Sessions on Local Folklore",
+      "category": "community",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_pioneers_museum.jpg",
+        "img": "assets/img/cards/rochdale_pioneers_museum.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-pioneers-museum-to-host-archive-sessions-on-local-folklore-generated-card.jpg"
+    },
+    {
       "slug": "why-rochdale-says-cruckle",
       "title": "Why Rochdale says “cruckle”",
       "category": "community",
@@ -273,7 +299,7 @@
     },
     {
       "slug": "live-updates-from-rochdale-s-league-two-match-against-chesterfield",
-      "title": "Rochdale Football Club Faces Chesterfield in League Two Match",
+      "title": "Rochdale Draw 1-1 with Tranmere to Extend Unbeaten Run in League Two",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
