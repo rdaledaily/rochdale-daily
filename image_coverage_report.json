@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 58,
-    "cards_library": 1,
-    "cards_generated": 94,
+    "kept_cards": 62,
+    "cards_library": 0,
+    "cards_generated": 95,
     "skipped": 0
   },
   "items": [
@@ -11,6 +11,13 @@
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "result": "cards-generated",
       "image_url": "assets/img/cards/66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "bus-services-suspended-between-rochdale-town-centre-and-freehold-following-colli",
+      "result": "kept-existing",
+      "image_url": "assets/img/generated/52a85f3f76646dcff9.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -100,7 +107,7 @@
     },
     {
       "slug": "live-updates-from-rochdale-s-league-two-match-against-chesterfield",
-      "result": "cards-library",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/match.jpg",
       "matched_filename": "match.jpg",
       "match_score": 15125
@@ -223,6 +230,13 @@
       "image_url": "assets/img/cards/sponsored-hi-pilates-club-women-only-reformer-pilates-littleborough-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "new-years-eve-with-the-j-ger-maestro",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/cricket.jpg",
+      "matched_filename": "cricket.jpg",
+      "match_score": 8127
     },
     {
       "slug": "sponsored-sjf-granite-quartz-worktops-littleborough-showroom",
@@ -421,6 +435,13 @@
       "match_score": 8378
     },
     {
+      "slug": "wonders-of-our-universe-the-next-chapter",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale_fans.jpg",
+      "matched_filename": "rochdale_fans.jpg",
+      "match_score": 6252
+    },
+    {
       "slug": "john-milne-table-table-milnrow-closing-september-3",
       "result": "kept-existing",
       "image_url": "assets/img/cards/john-milne-table-table-thank-you.jpg",
@@ -454,6 +475,13 @@
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rock-classics-by-candlelight-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 8378
     },
     {
       "slug": "wellmental-uk-hosts-first-mens-mental-health-fitness-session-in-heywood",
