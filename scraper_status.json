@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-12T08:43:37.437973Z",
+  "last_run_at": "2026-10-12T08:56:38.654717Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,18 +27,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 112,
+  "raw_candidates_before_job_filter": 107,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 111,
-  "candidate_clusters": 38,
+  "raw_candidates": 106,
+  "candidate_clusters": 37,
   "google_news_resolution": {
     "wrappers": 46,
-    "resolved": 24,
-    "text_recovered": 18,
+    "resolved": 23,
+    "text_recovered": 17,
     "reattributed": 1,
-    "images_found": 19
+    "images_found": 18
   },
-  "duplicates_merged": 73,
+  "duplicates_merged": 69,
   "attempted_rewrites": 2,
   "draft_rewrites_created": 1,
   "drafted_articles": [
@@ -64,14 +64,14 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 111,
+    "entries": 112,
     "by_outcome": {
       "failed": 10,
       "published": 24,
-      "rejected": 77
+      "rejected": 78
     },
-    "held_back_this_run": 25,
-    "held_already_published": 15,
+    "held_back_this_run": 24,
+    "held_already_published": 14,
     "held_rejected": 10,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -171,8 +171,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 86,
-    "website_discovery": 9,
+    "rss_and_google_news": 80,
+    "website_discovery": 10,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
     "facebook_official": 0,
@@ -184,11 +184,10 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Manchester Evening News": 21,
+    "Manchester Evening News": 20,
     "Rochdale Times": 19,
     "Northern live service updates": 12,
     "Rochdale Borough Council": 7,
-    "Roch Valley Radio": 5,
     "Bee Network live travel alerts": 4,
     "InYourArea": 3,
     "The Sunday Guardian": 3,
@@ -214,6 +213,7 @@
     "Oxford Mail": 1,
     "Somerset County Gazette": 1,
     "Renfrewshire Gazette": 1,
+    "Rochdale Valiant": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -262,7 +262,7 @@
   ],
   "selected_candidate_urls": [
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.rochvalleyradio.com/news-features/139/news/907/disappointment-following-rochdale-london-train-idea-rejected"
+    "https://www.manchestereveningnews.co.uk/news/disappointment-over-rejection-rochdale-london-34744100"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -300,7 +300,7 @@
     },
     "selected_by_source": {
       "food standards agency": 1,
-      "roch valley radio": 1
+      "manchester evening news": 1
     }
   },
   "official_ward_count": 20,
@@ -849,22 +849,15 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 4,
+  "robots_denied_count": 3,
   "robots_denied_urls": [
     "https://news.google.com/rss/articles/CBMingFBVV95cUxNUExIR3VnYTIwMjRDM240em9wZk9jZU93aVBqcjQ2TktnZDNKTTgyN0VLNEFRYnZlUkc2alFyb1JsNzlxd2N1UHlZOTM0TUNoazYtc1cxVWhndnpqMTRjS194WTkwdEIzbE5DV3JqeWhXamhWejd3ckFBZmVfb0dLdmFaVHFXb0FmZlVnSHRPaFRXM1dMUlloZU16Q1Vmd9IBowFBVV95cUxNMGs0VHY0UThSaXl3RjhYU1p3Wkc5TGktT3BOdFJaZ1pNWFV6bzFNUFR3N0NyNEg4ZDVzOWNOVGJkazA4OGlNS0dUTzBBTzdROGlNSjdqMlRhdGdVLWZkLWE4MUdyNm1HVHctekNWdVBZY09SQnBmU0tHUzRUdEVhb1c4aDRsM2FwTjI2M1hzcnZLNEh1Q19xUTBOMndBc3NHVGpZ?oc=5",
     "https://news.google.com/rss/articles/CBMioAFBVV95cUxQU2Q1TnA5dTVvUWkzaGRCano2NnRWMDFsWmg2Vld0MUhjTGxEV05Na3Btam95dmhXNENmLWZjSmo2Z04xdFloNU5QUU9tN1BwdEF3MlNDZEJVdkxVanpCTnVRYWN3N0RCaHlNVU5VNlZ4ZWpVdi0wM1VnRXRRVWRHY1g2dlpXQ2EzOHU1OGFjS2Q0U25fUFM1R1BtWU56MjZV0gGmAUFVX3lxTE41d0tTNllTUUJ3bk1hcHlZTVBNWnluQ2M1d3lTUXl3d21JNG0zSDVGV19NSzhUMmo0ZkpobTlUOHloT3I2dk1ERm1FZ21rajc4bXJPZU9TYm9YRTZnQmJtaWNtaHZ1ZTJXcUppbEdVRk9LdWgyNmRNYzEySEU5Q0JDQ2VNOUVxYk95VFk2dVFqQjFnM2huZ0s4YlpodC11aWdNZ2s0c1E?oc=5",
-    "https://news.google.com/rss/articles/CBMipgFBVV95cUxONXdLUzZZU1FCd25NYXB5WU1QTVp5bkNjNXd5U1F5d3dtSTRtM0g1RldfTUs4VDJqNGZKaG05VDh5aE9yNnZNREZtRWdta2o3OG1yT2VPU2JvWEU2Z0JibWljbWh2dWUyV3FKaWxHVUZPS3VoMjZkTWMxMkhFOUNCQ0NlTTlFcWJPeVRZNnVRakIxZzNobmdLOGJaaHQtdWlnTWdrNHNR0gGmAUFVX3lxTE41d0tTNllTUUJ3bk1hcHlZTVBNWnluQ2M1d3lTUXl3d21JNG0zSDVGV19NSzhUMmo0ZkpobTlUOHloT3I2dk1ERm1FZ21rajc4bXJPZU9TYm9YRTZnQmJtaWNtaHZ1ZTJXcUppbEdVRk9LdWgyNmRNYzEySEU5Q0JDQ2VNOUVxYk95VFk2dVFqQjFnM2huZ0s4YlpodC11aWdNZ2s0c1E?oc=5",
-    "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOZDc2MExLR3VVeG1mSjRuSVp3VWZnMWNPWkNmcFlDQ3RBRzU1NFlIdm04UTdFOHpKRHU4QV80ZzRhVFlXZjdiandIRXVsV3FRdTBzSHY4dXV4SFRNQUJXSm9MYWhlcHpZVGpWbUNnY25jN0ZESm1rd2Q5SVZfTDV5NUxPVDk5SjcybWRGUWNhdlozQ2hYcnBxUHJJMXAwdnl4akVaVUFNZUo2a3NwVExkQ3oxQy1rWjd4enpz?oc=5"
+    "https://news.google.com/rss/articles/CBMipgFBVV95cUxONXdLUzZZU1FCd25NYXB5WU1QTVp5bkNjNXd5U1F5d3dtSTRtM0g1RldfTUs4VDJqNGZKaG05VDh5aE9yNnZNREZtRWdta2o3OG1yT2VPU2JvWEU2Z0JibWljbWh2dWUyV3FKaWxHVUZPS3VoMjZkTWMxMkhFOUNCQ0NlTTlFcWJPeVRZNnVRakIxZzNobmdLOGJaaHQtdWlnTWdrNHNR0gGmAUFVX3lxTE41d0tTNllTUUJ3bk1hcHlZTVBNWnluQ2M1d3lTUXl3d21JNG0zSDVGV19NSzhUMmo0ZkpobTlUOHloT3I2dk1ERm1FZ21rajc4bXJPZU9TYm9YRTZnQmJtaWNtaHZ1ZTJXcUppbEdVRk9LdWgyNmRNYzEySEU5Q0JDQ2VNOUVxYk95VFk2dVFqQjFnM2huZ0s4YlpodC11aWdNZ2s0c1E?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "news.tfgm.com",
-    "rochdaleafccommunity.org"
-  ],
-  "slow_domain_failure_counts": {
-    "news.tfgm.com": 1,
-    "rochdaleafccommunity.org": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -900,7 +893,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-12T08:47:01.296560Z",
+  "frontpage_generated_at": "2026-10-12T08:58:40.713687Z",
   "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
