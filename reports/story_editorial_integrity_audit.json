@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 203,
-  "published_count": 203,
-  "category_change_count": 29,
-  "image_change_count": 21,
+  "article_count": 204,
+  "published_count": 204,
+  "category_change_count": 28,
+  "image_change_count": 22,
   "category_changes": [
     {
       "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
@@ -12,13 +12,6 @@
       "from": "politics",
       "to": "environment",
       "reason": "headline strongly identifies environment"
-    },
-    {
-      "slug": "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale",
-      "title": "Urgent Appeal for Missing 16-Year-Old Girl Last Seen in Norden, Rochdale",
-      "from": "crime",
-      "to": "news",
-      "reason": "headline strongly identifies news"
     },
     {
       "slug": "sponsored-the-physiotherapy-clinic-rochdale-bamford",
@@ -212,6 +205,18 @@
   ],
   "image_changes": [
     {
+      "slug": "train-services-disrupted-due-to-engineering-works-in-rochdale-area",
+      "title": "Train Services Disrupted Due to Engineering Works in Rochdale Area",
+      "category": "transport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/train.jpg",
+        "img": "assets/img/cards/train.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/train-services-disrupted-due-to-engineering-works-in-rochdale-area-generated-card.jpg"
+    },
+    {
       "slug": "construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king",
       "title": "Construction Completed on Sustainable Materials and Manufacturing Centre in Kingsway Business Park",
       "category": "business",
@@ -275,11 +280,11 @@
       "slug": "high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute",
       "title": "High Court Rules Against Filmmaker in Hopwood Hall Restoration Dispute",
       "category": "news",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
+        "image_url": "assets/img/cards/high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute.jpg",
         "img": "assets/img/cards/high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute.jpg",
-        "status": "source-photo-cached"
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute-generated-card.jpg"
     },
