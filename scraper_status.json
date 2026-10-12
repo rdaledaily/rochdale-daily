@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-10-12T10:53:28.319041Z",
+  "last_run_at": "2026-10-12T11:06:04.742021Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-10-12T04:57:46.569835Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 4,
+      "listed": 51,
+      "already_seen": 30,
+      "started_long_ago": 0,
+      "too_far_ahead": 17,
+      "undated": 3,
+      "in_window": 1
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-10-12T04:57:46.569835Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 0,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,31 +40,39 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 44,
+  "raw_candidates_before_job_filter": 37,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 43,
+  "raw_candidates": 36,
   "candidate_clusters": 37,
   "google_news_resolution": {
-    "wrappers": 9,
-    "resolved": 8,
-    "text_recovered": 8,
-    "reattributed": 1,
-    "images_found": 8
+    "wrappers": 6,
+    "resolved": 5,
+    "text_recovered": 2,
+    "reattributed": 0,
+    "images_found": 3
   },
-  "duplicates_merged": 6,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 1,
+  "duplicates_merged": 0,
+  "attempted_rewrites": 4,
+  "draft_rewrites_created": 3,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
+    },
+    {
+      "slug": "new-support-website-launched-for-survivors-of-child-sexual-abuse-in-rochdale",
+      "source_url": "https://www.rochdaletimes.co.uk/new-support-for-survivors-of-child-sexual-abuse-or-exploitation/"
+    },
+    {
+      "slug": "train-services-disrupted-on-rochdale-to-manchester-route",
+      "source_url": "https://www.northernrailway.co.uk/service-updates#live-fd1c4045482b216846"
     }
   ],
   "new_articles": 0,
-  "live_articles": 212,
-  "skipped": 2,
+  "live_articles": 211,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2
+    "editorial gate: REJECTED_NON_LOCAL": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -67,11 +88,11 @@
     "entries": 121,
     "by_outcome": {
       "failed": 10,
-      "published": 27,
-      "rejected": 84
+      "published": 28,
+      "rejected": 83
     },
-    "held_back_this_run": 25,
-    "held_already_published": 15,
+    "held_back_this_run": 22,
+    "held_already_published": 12,
     "held_rejected": 10,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -171,7 +192,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 18,
+    "rss_and_google_news": 11,
     "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
@@ -185,22 +206,17 @@
   "collector_errors": {},
   "source_counts": {
     "Northern live service updates": 12,
-    "Manchester Evening News": 7,
-    "Rochdale Times": 6,
+    "Rochdale Times": 8,
+    "Rochdale Borough Council": 5,
     "Bee Network live travel alerts": 4,
-    "InYourArea": 2,
-    "TfGM Travel Alerts": 2,
     "Roch Valley Radio Local News": 2,
-    "The Bury Times": 1,
-    "Thurrock Gazette": 1,
-    "Herts Advertiser": 1,
-    "County Times": 1,
-    "The Sunday Guardian": 1,
-    "Id": 1,
-    "mos.ru": 1,
+    "TfGM Travel Alerts": 2,
+    "SuaraGarut.ID": 1,
+    "Business Live": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "crime": 1,
     "health": 1,
     "sport": 1,
     "transport": 1
@@ -242,11 +258,13 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "hard-news-v3-5421e1283e42c7eb99ca",
     "transport-v3-2e3af5964b473e24c59e",
     "sport-v3-52067b4b7b44d19a9a94",
     "health-v3-3f9dfe37ce4d6dcd38de"
   ],
   "selected_candidate_urls": [
+    "https://www.rochdaletimes.co.uk/new-support-for-survivors-of-child-sexual-abuse-or-exploitation/",
     "https://www.northernrailway.co.uk/service-updates#live-fd1c4045482b216846",
     "https://uk.sports.yahoo.com/football/league-two/chesterfield-rochdale-13597644/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
@@ -261,11 +279,13 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "crime",
       "health",
       "sport",
       "transport"
     ],
     "selected_categories": [
+      "crime",
       "health",
       "sport",
       "transport"
@@ -283,18 +303,20 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "crime": 1,
       "health": 1,
       "sport": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 2,
+      "rochdale": 3,
       "smithy_bridge": 1
     },
     "selected_by_source": {
       "food standards agency": 1,
       "northern live service updates": 1,
+      "rochdale times": 1,
       "yahoo": 1
     }
   },
@@ -850,9 +872,11 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org"
+    "rochdaleafccommunity.org",
+    "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 1,
     "rochdaleafccommunity.org": 1
   },
   "men_rochdale_source": {
@@ -890,8 +914,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-12T10:55:30.435841Z",
-  "frontpage_article_count": 13,
+  "frontpage_generated_at": "2026-10-12T11:08:52.482273Z",
+  "frontpage_article_count": 12,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -902,8 +926,7 @@
       "news",
       "politics",
       "sport",
-      "traffic",
-      "transport"
+      "traffic"
     ],
     "selected_categories": [
       "business",
@@ -913,8 +936,7 @@
       "news",
       "politics",
       "sport",
-      "traffic",
-      "transport"
+      "traffic"
     ],
     "available_wards": [
       "Bamford",
@@ -945,7 +967,6 @@
     "selected_by_category": {
       "news": 3,
       "traffic": 3,
-      "transport": 1,
       "sport": 1,
       "business": 2,
       "community": 1,
@@ -953,19 +974,18 @@
     },
     "selected_by_ward": {
       "Kingsway": 2,
-      "borough-wide": 10,
+      "borough-wide": 9,
       "Bamford": 1
     },
     "selected_by_area": {
       "heywood": 1,
       "middleton": 3,
       "norden": 1,
-      "rochdale": 15
+      "rochdale": 13
     },
     "selected_by_source": {
       "rochdale daily": 2,
       "rochdale borough council": 3,
-      "northern live service updates": 1,
       "yahoo": 1,
       "rochdale times": 2,
       "dictionaries of the scots language (dictionary of the scots language entry: kruggle / cruckle)": 1,
@@ -973,15 +993,15 @@
       "the sunday guardian": 1,
       "rochdale daily editor’s visit": 1
     },
-    "pool_size": 20,
-    "primary_pool_size": 20,
+    "pool_size": 18,
+    "primary_pool_size": 18,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 13,
+    "frontpage_count": 12,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 8,
-    "fresh_under_homepage_window": 13,
-    "short_briefs_selected": 7,
+    "fresh_under_24h": 7,
+    "fresh_under_homepage_window": 12,
+    "short_briefs_selected": 6,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -992,7 +1012,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 11,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 212,
+  "duplicate_articles_after_postprocessing": 211,
   "blocked_articles_removed": 1,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1005,7 +1025,7 @@
   "whats_on_event_count": 11,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 1,
+  "drafts_not_published": 3,
   "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
