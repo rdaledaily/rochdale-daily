@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-12T15:17:11.283829Z",
+  "last_run_at": "2026-10-12T15:32:22.545312Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,19 +27,19 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 22,
+  "raw_candidates_before_job_filter": 106,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 21,
-  "candidate_clusters": 31,
+  "raw_candidates": 105,
+  "candidate_clusters": 30,
   "google_news_resolution": {
-    "wrappers": 0,
-    "resolved": 0,
-    "text_recovered": 0,
-    "reattributed": 0,
-    "images_found": 0
+    "wrappers": 55,
+    "resolved": 38,
+    "text_recovered": 34,
+    "reattributed": 3,
+    "images_found": 37
   },
-  "duplicates_merged": 0,
-  "attempted_rewrites": 2,
+  "duplicates_merged": 75,
+  "attempted_rewrites": 3,
   "draft_rewrites_created": 1,
   "drafted_articles": [
     {
@@ -49,9 +49,10 @@
   ],
   "new_articles": 0,
   "live_articles": 210,
-  "skipped": 1,
+  "skipped": 2,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 1
+    "editorial gate: REJECTED_NON_LOCAL": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -64,11 +65,11 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 127,
+    "entries": 128,
     "by_outcome": {
       "failed": 12,
       "published": 28,
-      "rejected": 87
+      "rejected": 88
     },
     "held_back_this_run": 19,
     "held_already_published": 14,
@@ -126,8 +127,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 1,
-    "website_discovery": 4,
+    "rss_and_google_news": 81,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
     "facebook_official": 0,
@@ -139,14 +140,38 @@
   },
   "collector_errors": {},
   "source_counts": {
+    "Rochdale Times": 24,
     "Northern live service updates": 12,
+    "Yahoo": 11,
+    "Manchester Evening News": 10,
+    "Rochdale AFC": 4,
+    "Rochdale Borough Council": 4,
     "Bee Network live travel alerts": 4,
+    "Thurrock Gazette": 3,
+    "The Sunday Guardian": 3,
+    "Id": 3,
+    "Clacton Gazette": 3,
+    "The Bury Times": 2,
+    "Herts Advertiser": 2,
+    "County Times": 2,
+    "The Northern Echo": 2,
+    "SuaraGarut.ID": 2,
     "TfGM Travel Alerts": 2,
     "Roch Valley Radio Local News": 2,
+    "Yahoo News UK": 1,
+    "Lancashire Telegraph": 1,
+    "East London and West Essex Guardian Series": 1,
+    "Warrington Guardian": 1,
+    "Sky Sports": 1,
+    "Shropshire Star": 1,
+    "Oxford Mail": 1,
+    "Somerset County Gazette": 1,
+    "Renfrewshire Gazette": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "health": 1,
+    "news": 1,
     "transport": 1
   },
   "published_by_category": {
@@ -187,11 +212,13 @@
   ],
   "selected_story_keys": [
     "transport-v3-dc44aff336396a74158c",
-    "health-v3-3f9dfe37ce4d6dcd38de"
+    "health-v3-3f9dfe37ce4d6dcd38de",
+    "hard-news-v3-1be4c4ecc3fbeccb17cc"
   ],
   "selected_candidate_urls": [
     "https://www.northernrailway.co.uk/service-updates#live-98aa5e37e7e1740e3a",
-    "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
+    "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
+    "https://www.rochdaletimes.co.uk/hopes-for-extra-rail-services-remain-on-track/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -204,10 +231,12 @@
   "coverage": {
     "available_categories": [
       "health",
+      "news",
       "transport"
     ],
     "selected_categories": [
       "health",
+      "news",
       "transport"
     ],
     "available_wards": [],
@@ -224,16 +253,18 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "health": 1,
+      "news": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 1,
+      "rochdale": 2,
       "smithy_bridge": 1
     },
     "selected_by_source": {
       "food standards agency": 1,
-      "northern live service updates": 1
+      "northern live service updates": 1,
+      "rochdale times": 1
     }
   },
   "official_ward_count": 20,
@@ -782,15 +813,13 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
-  "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org"
+  "robots_denied_count": 1,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMihAFBVV95cUxQU2dyaTBTWlAwUkpPVFdjQ2VhSGU2b2ZCZ19pcGRhVHJIS0dhNHpfc3RYRGFoeHB5S0pwdFVsYWVNVUpfbkl5aVhCRV9xY21wd1VTR1pQTzZLYTZ5WFo1eWtzdUdnODRjV2tVdWFjVFU1Q0E1SHZON1JTNUdpUVpLcnNUdk4?oc=5"
   ],
-  "slow_domain_failure_counts": {
-    "rochdaleafccommunity.org": 1
-  },
+  "slow_domain_failure_threshold": 1,
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -826,7 +855,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-12T15:20:40.647912Z",
+  "frontpage_generated_at": "2026-10-12T15:35:54.576821Z",
   "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
