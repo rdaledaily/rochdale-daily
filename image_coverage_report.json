@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 58,
-    "cards_library": 0,
-    "cards_generated": 95,
+    "kept_cards": 61,
+    "cards_library": 2,
+    "cards_generated": 94,
     "skipped": 0
   },
   "items": [
@@ -37,10 +37,10 @@
     },
     {
       "slug": "man-injured-in-altercation-on-rochdale-road-middleton",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/investigation.jpg",
-      "matched_filename": "investigation.jpg",
-      "match_score": 8133
+      "result": "cards-library",
+      "image_url": "assets/img/cards/police.jpg",
+      "matched_filename": "police.jpg",
+      "match_score": 8126
     },
     {
       "slug": "construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king",
@@ -48,6 +48,13 @@
       "image_url": "assets/img/cards/atom_valley.png",
       "matched_filename": "atom_valley.png",
       "match_score": 8251
+    },
+    {
+      "slug": "live-updates-from-rochdale-s-league-two-match-against-chesterfield",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/match.jpg",
+      "matched_filename": "match.jpg",
+      "match_score": 15125
     },
     {
       "slug": "editor-visit-whitworth-road-starbucks-really-nice",
@@ -58,7 +65,7 @@
     },
     {
       "slug": "rochdale-borough-council-approves-vcfse-accord-for-2026-2035",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/rochdale-borough-council-approves-vcfse-accord-for-2026-2035-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -225,6 +232,13 @@
       "match_score": null
     },
     {
+      "slug": "new-years-eve-with-the-j-ger-maestro",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/cricket.jpg",
+      "matched_filename": "cricket.jpg",
+      "match_score": 8127
+    },
+    {
       "slug": "sponsored-sjf-granite-quartz-worktops-littleborough-showroom",
       "result": "kept-cards",
       "image_url": "assets/img/cards/sponsored-sjf-granite-quartz-worktops-littleborough-showroom-generated-card.jpg",
@@ -367,7 +381,7 @@
     {
       "slug": "constantine-road-to-close-for-roadworks-from-9-october-2026",
       "result": "kept-existing",
-      "image_url": "assets/img/generated/6a4a76d4b5f01b9722.jpg",
+      "image_url": "assets/img/cards/constantine-road-to-close-for-roadworks-from-9-october-2026-canonical.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -421,6 +435,13 @@
       "match_score": 8378
     },
     {
+      "slug": "wonders-of-our-universe-the-next-chapter",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale_fans.jpg",
+      "matched_filename": "rochdale_fans.jpg",
+      "match_score": 6252
+    },
+    {
       "slug": "john-milne-table-table-milnrow-closing-september-3",
       "result": "kept-existing",
       "image_url": "assets/img/cards/john-milne-table-table-thank-you.jpg",
@@ -454,6 +475,13 @@
       "image_url": "assets/img/cards/rochdale_afc.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "rock-classics-by-candlelight-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "rochdale-town-hall.jpg",
+      "match_score": 8378
     },
     {
       "slug": "wellmental-uk-hosts-first-mens-mental-health-fitness-session-in-heywood",
@@ -1051,7 +1079,7 @@
       "match_score": 8378
     },
     {
-      "slug": "oktoberfest-rochdale-2026",
+      "slug": "littleborough-cricket-club-bonfire-2026",
       "result": "kept-cards",
       "image_url": "assets/img/cards/cricket.jpg",
       "matched_filename": "cricket.jpg",
