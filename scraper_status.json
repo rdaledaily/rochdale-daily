@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-12T03:39:22.862445Z",
+  "last_run_at": "2026-10-12T03:52:31.832645Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,30 +27,40 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 92,
+  "raw_candidates_before_job_filter": 90,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 91,
+  "raw_candidates": 89,
   "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 57,
-    "resolved": 27,
+    "wrappers": 67,
+    "resolved": 23,
     "text_recovered": 16,
     "reattributed": 2,
     "images_found": 17
   },
-  "duplicates_merged": 53,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
+  "duplicates_merged": 51,
+  "attempted_rewrites": 5,
+  "draft_rewrites_created": 3,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
+    },
+    {
+      "slug": "milnrow-woman-s-appeal-against-animal-ban-rejected-by-court",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-woman-taken-court-rspca-34745511"
+    },
+    {
+      "slug": "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053"
     }
   ],
-  "new_articles": 0,
+  "new_articles": 2,
   "live_articles": 204,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "skipped": 2,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 1,
@@ -68,22 +78,13 @@
       "published": 22,
       "rejected": 73
     },
-    "held_back_this_run": 25,
-    "held_already_published": 14,
-    "held_rejected": 11,
+    "held_back_this_run": 21,
+    "held_already_published": 12,
+    "held_rejected": 9,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
-    {
-      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-descend-rochdale-street-after-34749696",
-      "title": "Police descend on street after 'altercation' leaves man injured",
-      "source_name": "Manchester Evening News",
-      "held_because": "already rejected: quality gate after 4 repairs: Rewrite the long verbatim source passage.",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-10-11T20:48:04.575471Z"
-    },
     {
       "url": "https://publicaccess.rochdale.gov.uk/online-applications",
       "title": "Rochdale Borough Council",
@@ -92,15 +93,6 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-10-11T20:02:27.743327Z"
-    },
-    {
-      "url": "https://www.rochvalleyradio.com/news-features/139/news/907/disappointment-following-rochdale-london-train-idea-rejected",
-      "title": "‘Disappointment’ following Rochdale-London train idea rejected",
-      "source_name": "Roch Valley Radio",
-      "held_because": "already rejected: quality gate after 4 repairs: Rewrite the long verbatim source passage.",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-10-11T19:20:14.430254Z"
     },
     {
       "url": "https://www.rochdaletimes.co.uk/man-arrested-after-woman-seriously-injured-in-m62-crash",
@@ -175,13 +167,15 @@
       "last_attempt_at": "2026-10-10T16:26:41.072531Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 168 body words using only facts already present in the sources; the draft currently has 150.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 83,
-    "website_discovery": 4,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
-    "live_service_pages": 4,
+    "live_service_pages": 0,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -192,9 +186,8 @@
   "collector_errors": {},
   "source_counts": {
     "Manchester Evening News": 19,
-    "Rochdale Times": 13,
+    "Rochdale Times": 17,
     "Rochdale Borough Council": 7,
-    "Bee Network live travel alerts": 4,
     "InYourArea": 3,
     "The Sunday Guardian": 3,
     "SuaraGarut.ID": 3,
@@ -209,7 +202,6 @@
     "Business Live": 2,
     "Hillingdon Times": 2,
     "Roch Valley Radio Local News": 2,
-    "TfGM Travel Alerts": 2,
     "BBC Manchester": 1,
     "County Times": 1,
     "Lancashire Telegraph": 1,
@@ -224,7 +216,9 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "health": 1
+    "crime": 1,
+    "health": 1,
+    "news": 3
   },
   "published_by_category": {
     "business": 21,
@@ -263,10 +257,18 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "health-v3-3f9dfe37ce4d6dcd38de"
+    "hard-news-v3-c1db1373d8dc6fb1d994",
+    "health-v3-3f9dfe37ce4d6dcd38de",
+    "hard-news-v3-39eba89f887d6f2d7cfe",
+    "hard-news-v3-b52c535c66d5e648ae20",
+    "hard-news-v3-91f993aa65d1ec8686bc"
   ],
   "selected_candidate_urls": [
-    "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-issued-over-missing-34746053",
+    "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-descend-rochdale-street-after-34749696",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-woman-taken-court-rspca-34745511",
+    "https://www.rochvalleyradio.com/news-features/139/news/907/disappointment-following-rochdale-london-train-idea-rejected"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -278,13 +280,21 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "health"
+      "crime",
+      "health",
+      "news"
     ],
     "selected_categories": [
-      "health"
+      "crime",
+      "health",
+      "news"
     ],
-    "available_wards": [],
-    "selected_wards": [],
+    "available_wards": [
+      "Milnrow and Newhey"
+    ],
+    "selected_wards": [
+      "Milnrow and Newhey"
+    ],
     "available_areas": [],
     "selected_areas": [
       "rochdale"
@@ -293,14 +303,20 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "health": 1
+      "crime": 1,
+      "health": 1,
+      "news": 3
     },
-    "selected_by_ward": {},
+    "selected_by_ward": {
+      "Milnrow and Newhey": 1
+    },
     "selected_by_area": {
-      "rochdale": 1
+      "rochdale": 5
     },
     "selected_by_source": {
-      "food standards agency": 1
+      "food standards agency": 1,
+      "manchester evening news": 3,
+      "roch valley radio": 1
     }
   },
   "official_ward_count": 20,
@@ -849,11 +865,26 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
+  "robots_denied_count": 10,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMirwFBVV95cUxQQTVvNzhVUnp4SXNXVmVocEEyb2tzUzUwVDlTcU5UYXRhZGo4RDJmaDQydm9vQ2VLVTFGQjZBdmtqSWM1d0R3RzNaN09aTjhkNVZDX2M2YXV1U2p2V1E2aWs3bHpGcFFDenZKR2ZnY25KUVhxSDlpMXY3eF9iNUpQamdMQjdreDE4dDktQThOYTB3UG80cHlFS0ltU0RMbHJuYXFSRXZSS1h5elNKUVA40gG0AUFVX3lxTFA3Z2FzSU5VVWJQSURlV0w2MGVscGxUMjhCTEhNTGFUZzNBWEo3N1FtVWR2Zy1DbnBfdlJMSkthX0dRaWliZ01RR2REeG9wWHBlQTUwVjRMenhaeHVlSnVkWmk1VTNKTmhEcHNNV3NSN0JQU3dXSkhMX0FOLUFJekZoNWJIZnpadEVaQUljd2tXRVowRlNpX3ZhOTJVdklOR0I3VFJpVi14VEN4Wm5rcVg2NGIzaA?oc=5",
+    "https://news.google.com/rss/articles/CBMitAFBVV95cUxQN2dhc0lOVVViUElEZVdMNjBlbHBsVDI4QkxITUxhVGczQVhKNzdRbVVkdmctQ25wX3ZSTEpLYV9HUWlpYmdNUUdkRHhvcFhwZUE1MFY0THp4Wnh1ZUp1ZFppNVUzSk5oRHBzTVdzUjdCUFN3V0pITF9BTi1BSXpGaDViSGZ6WnRFWkFJY3drV0VaMEZTaV92YTkyVXZJTkdCN1RSaVYteFRDeFpua3FYNjRiM2jSAbQBQVVfeXFMUDdnYXNJTlVVYlBJRGVXTDYwZWxwbFQyOEJMSE1MYVRnM0FYSjc3UW1VZHZnLUNucF92UkxKS2FfR1FpaWJnTVFHZER4b3BYcGVBNTBWNEx6eFp4dWVKdWRaaTVVM0pOaERwc01Xc1I3QlBTd1dKSExfQU4tQUl6Rmg1Ykhmelp0RVpBSWN3a1dFWjBGU2lfdmE5MlV2SU5HQjdUUmlWLXhUQ3habmtxWDY0YjNo?oc=5",
+    "https://news.google.com/rss/articles/CBMisAFBVV95cUxPTGJCRjhFSnJETjJjd2lxZTBaaWo4QXhfY3JEWVdGanlNZFJfczNaWTBqVUlOQzItZWRCVXZQV09CM3o2aFZEMjN0aG9ic0xsSURLRmNiQ0puZFZzRmhqeUlaZjZWSHJnWEVQRWVkMHNrdXFRTUNadWZnZ1RQbnc4S1RFdVlEYzVWSlcyT1dkckNsbDFRSHRRSmZOWHVNdDRtQnR4dl9GYlJyRnpoMDZFV9IBtgFBVV95cUxONDVDeXBSOVhkRXdyUzdycFVFUTRhTmc0RjdRMDI0NHctOGRJOUtwbHlvUGgzb1pfV3RXeTJOR0VGWHBOSVJQWHkzNU0zdXFlYW1lcE5DdTJES3A1UGpRRHk3UnNHb2FxaWwzYjg2Z0xvMFZiOEtJZEowRVVLNnQ2UXMtbWVhdEpKbU5nQWk0TXBQM0ZNVnFUVlg5d2VCYzVOSEdMaEUwWjZmTmtZb1dzVUVFb0pTdw?oc=5",
+    "https://news.google.com/rss/articles/CBMitgFBVV95cUxONDVDeXBSOVhkRXdyUzdycFVFUTRhTmc0RjdRMDI0NHctOGRJOUtwbHlvUGgzb1pfV3RXeTJOR0VGWHBOSVJQWHkzNU0zdXFlYW1lcE5DdTJES3A1UGpRRHk3UnNHb2FxaWwzYjg2Z0xvMFZiOEtJZEowRVVLNnQ2UXMtbWVhdEpKbU5nQWk0TXBQM0ZNVnFUVlg5d2VCYzVOSEdMaEUwWjZmTmtZb1dzVUVFb0pTd9IBtgFBVV95cUxONDVDeXBSOVhkRXdyUzdycFVFUTRhTmc0RjdRMDI0NHctOGRJOUtwbHlvUGgzb1pfV3RXeTJOR0VGWHBOSVJQWHkzNU0zdXFlYW1lcE5DdTJES3A1UGpRRHk3UnNHb2FxaWwzYjg2Z0xvMFZiOEtJZEowRVVLNnQ2UXMtbWVhdEpKbU5nQWk0TXBQM0ZNVnFUVlg5d2VCYzVOSEdMaEUwWjZmTmtZb1dzVUVFb0pTdw?oc=5",
+    "https://news.google.com/rss/articles/CBMitAFBVV95cUxOY2ZLUTdTX2s0WUdLV1pDQ0RzZVdoc0ZFdWlBNThxQ0x2eUVtVGVweG1JNTEwYkh0eTQ1Ry1DZVFCR3hxZEtqQVI1QVdwbHZpcTk0TlFEYzZNRldjNlhZd2x3aEFyYXZmMExUOFNtRGhSTGRiY0ZrcGdFY1hoSXRWbFF5Mzg4WkxNNFhIaDNKaG5fSFFSSEp3cUFSeGxobFExMGVBUzR4Y0x3d2xrNkliMHN2M23SAboBQVVfeXFMTUNXQjVsdGhZTzNFajZtVDFkb0hITS05dm5yakdyekZ3TWFBUklQS0J3V1BlRGJTV2s3NE9qTFgyaThKeTVSQUl0YTBHMHgzbk01cFJVQ2JxanY0MHd4d0ZEMk9peE5hNnRMcnBEMzNEUGpPVVNlNC1ZYVgwWEk5WkpuSjc4RlFQRWJCUGRBeURNVFJ1dzc1OEJBY3REMVJpNlVjdHp2OXJIbF9XNVNhMkplWG1acG44Z19R?oc=5",
+    "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQLUlRcV9lb29zREtZWUtWM0lEWm1jUllUYl9JNG1LVXZKZU53VmwtVm5lcUdLWDFleUJJYjhON0x6dGp5VnNLbXNLMHpDZkMzcWx2WlhpQnV4UURwZzJSeEl6V0RXbXlHUEk2bG5PX25CSHZWTlVsWk1mMjUwVW13aUFmMVQ3ckhyY1Nr?oc=5",
+    "https://news.google.com/rss/articles/CBMingFBVV95cUxNUExIR3VnYTIwMjRDM240em9wZk9jZU93aVBqcjQ2TktnZDNKTTgyN0VLNEFRYnZlUkc2alFyb1JsNzlxd2N1UHlZOTM0TUNoazYtc1cxVWhndnpqMTRjS194WTkwdEIzbE5DV3JqeWhXamhWejd3ckFBZmVfb0dLdmFaVHFXb0FmZlVnSHRPaFRXM1dMUlloZU16Q1Vmd9IBowFBVV95cUxNMGs0VHY0UThSaXl3RjhYU1p3Wkc5TGktT3BOdFJaZ1pNWFV6bzFNUFR3N0NyNEg4ZDVzOWNOVGJkazA4OGlNS0dUTzBBTzdROGlNSjdqMlRhdGdVLWZkLWE4MUdyNm1HVHctekNWdVBZY09SQnBmU0tHUzRUdEVhb1c4aDRsM2FwTjI2M1hzcnZLNEh1Q19xUTBOMndBc3NHVGpZ?oc=5",
+    "https://news.google.com/rss/articles/CBMioAFBVV95cUxQU2Q1TnA5dTVvUWkzaGRCano2NnRWMDFsWmg2Vld0MUhjTGxEV05Na3Btam95dmhXNENmLWZjSmo2Z04xdFloNU5QUU9tN1BwdEF3MlNDZEJVdkxVanpCTnVRYWN3N0RCaHlNVU5VNlZ4ZWpVdi0wM1VnRXRRVWRHY1g2dlpXQ2EzOHU1OGFjS2Q0U25fUFM1R1BtWU56MjZV0gGmAUFVX3lxTE41d0tTNllTUUJ3bk1hcHlZTVBNWnluQ2M1d3lTUXl3d21JNG0zSDVGV19NSzhUMmo0ZkpobTlUOHloT3I2dk1ERm1FZ21rajc4bXJPZU9TYm9YRTZnQmJtaWNtaHZ1ZTJXcUppbEdVRk9LdWgyNmRNYzEySEU5Q0JDQ2VNOUVxYk95VFk2dVFqQjFnM2huZ0s4YlpodC11aWdNZ2s0c1E?oc=5",
+    "https://news.google.com/rss/articles/CBMipgFBVV95cUxONXdLUzZZU1FCd25NYXB5WU1QTVp5bkNjNXd5U1F5d3dtSTRtM0g1RldfTUs4VDJqNGZKaG05VDh5aE9yNnZNREZtRWdta2o3OG1yT2VPU2JvWEU2Z0JibWljbWh2dWUyV3FKaWxHVUZPS3VoMjZkTWMxMkhFOUNCQ0NlTTlFcWJPeVRZNnVRakIxZzNobmdLOGJaaHQtdWlnTWdrNHNR0gGmAUFVX3lxTE41d0tTNllTUUJ3bk1hcHlZTVBNWnluQ2M1d3lTUXl3d21JNG0zSDVGV19NSzhUMmo0ZkpobTlUOHloT3I2dk1ERm1FZ21rajc4bXJPZU9TYm9YRTZnQmJtaWNtaHZ1ZTJXcUppbEdVRk9LdWgyNmRNYzEySEU5Q0JDQ2VNOUVxYk95VFk2dVFqQjFnM2huZ0s4YlpodC11aWdNZ2s0c1E?oc=5",
+    "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOZDc2MExLR3VVeG1mSjRuSVp3VWZnMWNPWkNmcFlDQ3RBRzU1NFlIdm04UTdFOHpKRHU4QV80ZzRhVFlXZjdiandIRXVsV3FRdTBzSHY4dXV4SFRNQUJXSm9MYWhlcHpZVGpWbUNnY25jN0ZESm1rd2Q5SVZfTDV5NUxPVDk5SjcybWRGUWNhdlozQ2hYcnBxUHJJMXAwdnl4akVaVUFNZUo2a3NwVExkQ3oxQy1rWjd4enpz?oc=5"
+  ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "visitrochdale.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -889,7 +920,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-12T03:41:49.237049Z",
+  "frontpage_generated_at": "2026-10-12T03:55:50.803071Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1006,9 +1037,12 @@
   "category_archive_count": 11,
   "area_archive_count": 24,
   "whats_on_event_count": 11,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 2,
+  "published_new_slugs": [
+    "milnrow-woman-s-appeal-against-animal-ban-rejected-by-court",
+    "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale"
+  ],
   "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
