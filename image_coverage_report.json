@@ -2,7 +2,7 @@
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
     "kept_cards": 55,
-    "cards_library": 0,
+    "cards_library": 1,
     "cards_generated": 94,
     "skipped": 0
   },
@@ -20,6 +20,13 @@
       "image_url": "assets/img/cards/train.jpg",
       "matched_filename": "train.jpg",
       "match_score": 15125
+    },
+    {
+      "slug": "man-injured-in-altercation-on-rochdale-road-middleton",
+      "result": "cards-library",
+      "image_url": "assets/img/cards/investigation.jpg",
+      "matched_filename": "investigation.jpg",
+      "match_score": 8133
     },
     {
       "slug": "construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king",
@@ -115,7 +122,7 @@
     {
       "slug": "rochdale-london-train-service-proposal-rejected-by-regulator",
       "result": "kept-existing",
-      "image_url": "assets/img/cards/rochdale-london-train-service-proposal-rejected-by-regulator.jpg",
+      "image_url": "",
       "matched_filename": "",
       "match_score": null
     },
