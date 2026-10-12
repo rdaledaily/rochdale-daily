@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-12T12:58:17.666864Z",
+  "last_run_at": "2026-10-12T13:11:33.812917Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -33,29 +33,21 @@
   "candidate_clusters": 33,
   "google_news_resolution": {
     "wrappers": 64,
-    "resolved": 49,
+    "resolved": 50,
     "text_recovered": 30,
     "reattributed": 4,
     "images_found": 33
   },
   "duplicates_merged": 70,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 3,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
-    },
-    {
-      "slug": "live-updates-from-rochdale-s-league-two-match-against-chesterfield",
-      "source_url": "https://uk.sports.yahoo.com/football/league-two/chesterfield-rochdale-13597644/"
-    },
-    {
-      "slug": "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers",
-      "source_url": "https://www.somersetcountygazette.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/"
     }
   ],
-  "new_articles": 2,
+  "new_articles": 0,
   "live_articles": 211,
   "skipped": 0,
   "rewrite_skip_reasons": {},
@@ -76,9 +68,9 @@
       "published": 28,
       "rejected": 84
     },
-    "held_back_this_run": 21,
-    "held_already_published": 13,
-    "held_rejected": 8,
+    "held_back_this_run": 24,
+    "held_already_published": 15,
+    "held_rejected": 9,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -120,6 +112,15 @@
       "last_attempt_at": "2026-10-12T10:00:50.270712Z"
     },
     {
+      "url": "https://publicaccess.rochdale.gov.uk/online-applications",
+      "title": "Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-11T20:02:27.743327Z"
+    },
+    {
       "url": "https://www.rochdaletimes.co.uk/man-arrested-after-woman-seriously-injured-in-m62-crash",
       "title": "Man arrested after woman seriously injured in M62 crash - Rochdale Times",
       "source_name": "Rochdale Times",
@@ -156,9 +157,7 @@
       "last_attempt_at": "2026-10-11T00:23:53.251494Z"
     }
   ],
-  "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 189.": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 83,
@@ -175,10 +174,10 @@
   "collector_errors": {},
   "source_counts": {
     "Manchester Evening News": 18,
-    "Rochdale Times": 18,
+    "Rochdale Times": 17,
     "Northern live service updates": 12,
     "Yahoo": 8,
-    "Rochdale Borough Council": 6,
+    "Rochdale Borough Council": 7,
     "Id": 4,
     "Bee Network live travel alerts": 4,
     "The Sunday Guardian": 3,
@@ -188,26 +187,23 @@
     "Herts Advertiser": 2,
     "The Northern Echo": 2,
     "SuaraGarut.ID": 2,
+    "Renfrewshire Gazette": 2,
     "Roch Valley Radio Local News": 2,
     "TfGM Travel Alerts": 2,
     "County Times": 1,
     "Lancashire Telegraph": 1,
     "Rochdale AFC": 1,
     "East London and West Essex Guardian Series": 1,
-    "Warrington Guardian": 1,
     "Sky Sports": 1,
     "Futbol24": 1,
     "Exmouth Journal": 1,
     "Shropshire Star": 1,
     "Oxford Mail": 1,
     "Somerset County Gazette": 1,
-    "Renfrewshire Gazette": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1,
-    "health": 1,
-    "sport": 1
+    "health": 1
   },
   "published_by_category": {
     "business": 21,
@@ -246,13 +242,9 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-5383f9126cd90df8432b",
-    "sport-v3-52067b4b7b44d19a9a94",
     "health-v3-3f9dfe37ce4d6dcd38de"
   ],
   "selected_candidate_urls": [
-    "https://www.somersetcountygazette.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere/",
-    "https://uk.sports.yahoo.com/football/league-two/chesterfield-rochdale-13597644/",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
   ],
   "x_social_records": 0,
@@ -265,14 +257,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime",
-      "health",
-      "sport"
+      "health"
     ],
     "selected_categories": [
-      "crime",
-      "health",
-      "sport"
+      "health"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -284,18 +272,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1,
-      "health": 1,
-      "sport": 1
+      "health": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 1
     },
     "selected_by_source": {
-      "food standards agency": 1,
-      "somerset county gazette": 1,
-      "yahoo": 1
+      "food standards agency": 1
     }
   },
   "official_ward_count": 20,
@@ -844,23 +828,14 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
-  "robots_denied_urls": [
-    "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNcEdxQTdGMVdfRXpxb0VJalFkVXBtZVp4TzF5eW93V2tKVFVndEp1b09GcVl0ZDFxSjVuOWRyUDhScXp2MjhjSDVhekFHb2wxRUY5UllfQzJGVkZ5RXk1TGVRb0Q5N0pSN3ZaR3VGTDZIRDc3dXdoWm5HYTJYUDlDWWUyNmtIa0JieEdN?oc=5",
-    "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNeHNOMGNVVmZUakhFNGJkR2hNclJEbmpQTElJR0ZiVnVBZmJFcjlUczVwNGJVQlBKZjNWX1JQR01IaGI2cTE2TFdYN3lJNEJVYXdXcUJGSHlwUjFzdjhrMklRbUdBNFBnYklUTmo1MEd4Q3E5S1djTENITmMxVHFVWUxKQURGd2NBT2ZZ?oc=5",
-    "https://news.google.com/rss/articles/CBMihgFBVV95cUxQaVVGZGxsTmpOWTJlSmI1MnVEUzBfYnM5QWdScWtFNklYVHhDNWt6d1Q2a3NPaGpsRjBLMmRkcDZUODdfc3M3ZVB1SnlZNzhjN0xEOWEwZ3FoVTMxZmIwc0FyVWZ4RU04dHo4YXNZQ1pKRGp3YXlBOXRXZWxvYVE0Q1hXanB6dw?oc=5",
-    "https://news.google.com/rss/articles/CBMihAFBVV95cUxPUGJFSE9ZTVB3MU5weW1HQ1hEbGp5NUhqYWdhWkgzRzFDWU92NlcySEFOY0Rza3pnWURfYkFoamZzV3R0dWRuQWhMY2tsbUJ5UGc0a0Y5U3NmbUtuNkVFMTRBaDREU1dFMUM3NkN3N0JSU0txbVpsdlNLSHZHR0tuS1FyNEc?oc=5",
-    "https://news.google.com/rss/articles/CBMiggFBVV95cUxOdm5SdDVqWkdReE54SmREWTZDejJHVkd0SU8zOG1pcjgtbGJXXzlCTlVDYmFvbmxlLW5UVy1Kcmlfc3BmbndFX3c3WjJVX0ZiZVlYRXJkbzdkR3Bmc0JYV3NLdmVCeEdWTjhGcDFMWmpQX1NxUlE3N1kwbFdmb3dWbEx3?oc=5",
-    "https://news.google.com/rss/articles/CBMie0FVX3lxTFBRUFlRcTVwR2FQSVpQS3hMUFpSc1VFQUdId21yY19NTVdmaDFqSEVGejh5N3RSeUt1bDR6bHh0TWVldHV4YVpaWDhzQ1VRTHFDVDl4R3M3NTNKWGZBUXVfOVA1WHJ3aFgwUTFwTFB3UVh1eHRFLUEyV2c0Zw?oc=5"
-  ],
+  "robots_denied_count": 0,
+  "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org",
-    "rochdaletimes.co.uk"
+    "manchestereveningnews.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "rochdaletimes.co.uk": 2,
-    "rochdaleafccommunity.org": 1
+    "manchestereveningnews.co.uk": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -897,7 +872,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-12T13:01:42.052686Z",
+  "frontpage_generated_at": "2026-10-12T13:14:19.830572Z",
   "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1002,12 +977,9 @@
   "category_archive_count": 11,
   "area_archive_count": 24,
   "whats_on_event_count": 11,
-  "published_after_editorial_gate": 2,
-  "published_new_slugs": [
-    "live-updates-from-rochdale-s-league-two-match-against-chesterfield",
-    "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 1,
-  "publication_health": "partial",
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
