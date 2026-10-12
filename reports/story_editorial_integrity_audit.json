@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 204,
-  "published_count": 204,
+  "article_count": 207,
+  "published_count": 207,
   "category_change_count": 28,
-  "image_change_count": 22,
+  "image_change_count": 24,
   "category_changes": [
     {
       "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
@@ -217,6 +217,18 @@
       "after": "assets/img/cards/train-services-disrupted-due-to-engineering-works-in-rochdale-area-generated-card.jpg"
     },
     {
+      "slug": "man-injured-in-altercation-on-rochdale-road-middleton",
+      "title": "Man Injured in Altercation on Rochdale Road, Middleton",
+      "category": "news",
+      "reason": "weak filename image match score 8133; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/investigation.jpg",
+        "img": "assets/img/cards/investigation.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/man-injured-in-altercation-on-rochdale-road-middleton-generated-card.jpg"
+    },
+    {
       "slug": "construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king",
       "title": "Construction Completed on Sustainable Materials and Manufacturing Centre in Kingsway Business Park",
       "category": "business",
@@ -254,7 +266,7 @@
     },
     {
       "slug": "rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers",
-      "title": "Rochdale Draw 1-1 with Tranmere to Extend Unbeaten Run in League Two",
+      "title": "Rochdale AFC Extends Unbeaten Run with 1-1 Draw Against Tranmere Rovers",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -287,6 +299,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/high-court-rules-against-filmmaker-in-hopwood-hall-restoration-dispute-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-london-train-service-proposal-rejected-by-regulator",
+      "title": "Rochdale-London Train Service Proposal Rejected by Regulator",
+      "category": "transport",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/rochdale-london-train-service-proposal-rejected-by-regulator.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/rochdale-london-train-service-proposal-rejected-by-regulator-generated-card.jpg"
     },
     {
       "slug": "overnight-road-closures-planned-at-sudden-junction-from-october-12-to-15",
