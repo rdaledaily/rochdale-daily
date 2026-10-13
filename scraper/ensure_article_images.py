@@ -289,6 +289,75 @@ def choose_filename_match(article: dict[str, Any], root: Path) -> Path | None:
     return best[digest % len(best)][3]
 
 
+SENSITIVE_PHOTO_RE = re.compile(
+    r"\\b(?:missing (?:person|people|man|woman|boy|girl|child)|"
+    r"disappear(?:ed|ance)|rape|sexual assault|suspected killer|"
+    r"murder investigation|wanted person)\\b",
+    re.IGNORECASE,
+)
+
+
+def high_risk_photo_story(article: dict[str, Any]) -> bool:
+    """Do not infer that an unrelated real person/place illustrates an allegation.
+
+    A real photo is acceptable when it is explicitly bound to this exact article
+    slug. Otherwise retain a transparent headline card until an approved picture
+    is available.
+    """
+    category = clean(article.get("category")).casefold()
+    if category in {"crime", "courts"}:
+        return True
+    title = clean(article.get("title"))
+    return bool(SENSITIVE_PHOTO_RE.search(title))
+
+
+def choose_named_library_photo(article: dict[str, Any], root: Path) -> Path | None:
+    """Use editor-maintained photo aliases and named entities in a story title.
+
+    The existing filename matcher does not know assets/img/cards/aliases.json.
+    This second catalogue already exists in story_image.py and maps established
+    organisational names (e.g. Rochdale AFC) to several editor-supplied files.
+    The match must name the subject in the headline or match the full article
+    slug, not be a generic borough/category photo.
+    """
+    from story_image import find_library_photo
+
+    candidate = find_library_photo(
+        clean(article.get("title")),
+        slug_for(article),
+        clean(article.get("category")),
+        root / CARDS_DIR,
+        slug_only=high_risk_photo_story(article),
+    )
+    if candidate is None:
+        return None
+    try:
+        rel = candidate.relative_to(root).as_posix()
+    except ValueError:
+        return None
+    return candidate if valid_cards_image(root, rel) and not is_generated_card(candidate) else None
+
+
+def choose_exact_story_photo(article: dict[str, Any], root: Path) -> Path | None:
+    """For sensitive news, only a photographed file named for this article."""
+    from story_image import find_library_photo
+
+    candidate = find_library_photo(
+        clean(article.get("title")),
+        slug_for(article),
+        clean(article.get("category")),
+        root / CARDS_DIR,
+        slug_only=True,
+    )
+    if candidate is None:
+        return None
+    try:
+        rel = candidate.relative_to(root).as_posix()
+    except ValueError:
+        return None
+    return candidate if valid_cards_image(root, rel) and not is_generated_card(candidate) else None
+
+
 def font(size: int, *, bold: bool = False) -> ImageFont.ImageFont:
     candidates = [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
@@ -547,7 +616,15 @@ def enforce_article(article: dict[str, Any], root: Path) -> str:
     if existing_meaningful_image(article, root):
         return "kept-existing"
 
-    chosen = choose_filename_match(article, root)
+    # Use the editor's full catalogue, including named alias groups, before
+    # looking for loosely overlapping words in a long article. Both work
+    # automatically; the editor does not need to choose each photo.
+    if high_risk_photo_story(article):
+        chosen = choose_exact_story_photo(article, root)
+    else:
+        chosen = choose_named_library_photo(article, root)
+        if chosen is None:
+            chosen = choose_filename_match(article, root)
     if chosen is not None and valid_cards_image(root, chosen.relative_to(root).as_posix()):
         current = cards_relative(article.get("image_url") or article.get("img"))
         set_curated(article, root, chosen)
