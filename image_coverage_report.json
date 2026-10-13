@@ -2,7 +2,7 @@
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
     "kept_cards": 67,
-    "cards_library": 0,
+    "cards_library": 1,
     "cards_generated": 96,
     "skipped": 0
   },
@@ -34,6 +34,13 @@
       "image_url": "assets/img/cards/rochdale-historic-council-tax-summons-residents-debt-help-2026-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "bury-man-faces-trial-for-alleged-aggravated-burglary-in-rochdale",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/burglary.jpg",
+      "matched_filename": "burglary.jpg",
+      "match_score": 15128
     },
     {
       "slug": "the-children-left-waiting-has-rochdale-cleared-its-1400-case-send-backlog",
@@ -107,7 +114,7 @@
     },
     {
       "slug": "construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king",
-      "result": "kept-cards",
+      "result": "cards-library",
       "image_url": "assets/img/cards/atom_valley.png",
       "matched_filename": "atom_valley.png",
       "match_score": 8251
