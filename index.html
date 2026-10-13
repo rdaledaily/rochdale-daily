@@ -4179,9 +4179,8 @@ function shareIconMarkup(action, label) {
           if (payload && payload.counts) commentCounts = payload.counts;
         }
       } catch (e) { /* comments are additive; never block the page */ }
-      // Decorate regardless. An unreachable API means every article simply has
-      // no comments yet, which is "0 comments" - not a blank card that leaves
-      // the reader unsure whether the article can be commented on at all.
+      // Only surface counts where an article has genuine discussion.
+      // Otherwise the homepage remains uncluttered without implying zero interest.
       decorateCommentCounts();
     }
 
@@ -4209,9 +4208,12 @@ function shareIconMarkup(action, label) {
         const slug = link.getAttribute("href").replace(/^articles\//, "").replace(/\.html$/, "");
         const n = Number(commentCounts[slug] || 0);
         const existing = card.querySelector(".card-comments");
-        // Always shown, including zero: the label doubles as an invitation to
-        // be the first to comment, and a card that never carries the line at
-        // all gives a reader no clue the article can be commented on.
+        // An empty comment counter on every story undermines the front page.
+        // Invite comments on the article itself; show counts only once positive.
+        if (!Number.isFinite(n) || n <= 0) {
+          if (existing) existing.remove();
+          return;
+        }
         const plain = `${n} comment${n === 1 ? "" : "s"}`;
         // In the Just in column the count is part of the one meta line rather
         // than a separate element with its own icon — the canvas sets it as
