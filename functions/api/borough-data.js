@@ -162,22 +162,15 @@ async function crimeInfo(loc,query){
   return {
     ok:true,kind:'crime',location:loc,month:null,dataAvailable:false,
     localStatisticsAvailable:false,force:'Greater Manchester Police',
-    boroughComparison:{
-      area:'Rochdale',periodEnd:'2026-03',crimesPer1000:112.00,
-      greaterManchesterPer1000:110.96,
-      source:'Police.uk Compare your area · ONS recorded crime statistics',
-      url:'https://www.police.uk/pu/your-area/greater-manchester-police/performance/compare-your-area/?tc=PC20',
-      note:'Rolling 12-month recorded crime rate per 1,000 residents, year ending March 2026. Borough-wide historical comparison, not current crime, ward rate or postcode count. Snapshot checked October 2026.'
-    },
     recentCrimeReporting:'/archive.html',
     gmpNews:'https://www.gmp.police.uk/news/news-search/',
-    officialStatistics:'https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/',
+    officialStatistics:'https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/neighbourhood-crime/',
     source:'GMP disclosure and Police.uk data availability',
     sourceLinks:[
       'https://www.gmp.police.uk/SysSiteAssets/foi-media/greater-manchester/disclosure-2026/april/foi-26.016219.i-historical-street-level-crime--stop-search-data-for-years-2023-2024--2025.pdf',
       'https://data.police.uk/changelog/'
     ],
-    disclaimer:'GMP has not provided Police.uk street-level crime data since July 2019. No reliable recent postcode crime count or crime rate can be calculated from that dataset. Recent dated news reports are separate from official statistical totals.'
+    disclaimer:'GMP has not provided Police.uk street-level crime data since July 2019. The GMP neighbourhood workbook is a separate source and its geography remains to be validated before postcode matching. We will not substitute a borough comparison or crimes from other locations for postcode-area results.'
   };
 }
 async function planningInfo(loc){
