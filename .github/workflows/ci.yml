@@ -152,9 +152,9 @@ jobs:
           import re
           from pathlib import Path
           home = Path("index.html").read_text(encoding="utf-8")
-          scripts = re.findall(r'<script\\b([^>]*)>(.*?)</script>', home, re.I | re.S)
+          scripts = re.findall(r'<script\b([^>]*)>(.*?)</script>', home, re.I | re.S)
           for number, (attrs, code) in enumerate(scripts):
-              if re.search(r'\\bsrc\\s*=', attrs, re.I) or "application/ld+json" in attrs.lower():
+              if re.search(r'\bsrc\s*=', attrs, re.I) or "application/ld+json" in attrs.lower():
                   continue
               if code.strip():
                   Path(f"/tmp/rd-inline-{number}.js").write_text(code, encoding="utf-8")
