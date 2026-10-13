@@ -7,6 +7,9 @@
   if (window.__rdNewStoryWatcher) return;
   window.__rdNewStoryWatcher = true;
   const INTERVAL = 90000;
+  const INITIAL_ALERT_WINDOW = 45 * 60 * 1000;
+  const SESSION_KEY = 'rd_new_story_alerted_v1';
+  const MAX_ALERTS_PER_SESSION = 3;
   const FRESH_MS = 36 * 60 * 60 * 1000;
   const MAX_SEEN = 300;
   const KEY = 'rd_new_story_seen_v1';
@@ -15,6 +18,8 @@
   let timer = null;
   let busy = false;
   let lastSound = 0;
+  let sessionAlerts = new Set();
+  try { const v = JSON.parse(sessionStorage.getItem(SESSION_KEY) || '[]'); if (Array.isArray(v)) sessionAlerts = new Set(v.filter(x => typeof x === 'string').slice(-10)); } catch (_) {}
   try {
     const stored = JSON.parse(localStorage.getItem(KEY) || '[]');
     if (Array.isArray(stored)) known = new Set(stored.filter(x => typeof x === 'string').slice(-MAX_SEEN));
@@ -54,6 +59,9 @@
     try { localStorage.setItem(KEY, JSON.stringify(Array.from(known).slice(-MAX_SEEN))); } catch (_) {}
   }
   function alertStory(story) {
+    if (sessionAlerts.size >= MAX_ALERTS_PER_SESSION || sessionAlerts.has(id(story))) return;
+    sessionAlerts.add(id(story));
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(Array.from(sessionAlerts))); } catch (_) {}
     const card = document.createElement('section');
     card.className = 'rd-new-story-alert';
     const close = document.createElement('button');
@@ -62,8 +70,10 @@
     const label = document.createElement('strong'); label.textContent = 'New on Rochdale Daily';
     const link = document.createElement('a'); link.href = url(story); link.textContent = String(story.title);
     card.append(close, label, link);
+    const closeLater = setTimeout(() => card.remove(), 17000);
+    close.addEventListener('click', () => clearTimeout(closeLater));
     stack.prepend(card);
-    while (stack.childElementCount > 3) stack.lastElementChild.remove();
+    while (stack.childElementCount > 2) stack.lastElementChild.remove();
     const now = Date.now();
     if (now - lastSound > 15000 && typeof window.RochdaleDailyChime === 'function') {
       window.RochdaleDailyChime();
@@ -86,7 +96,17 @@
       incoming.forEach(s => known.add(id(s)));
       if (known.size > MAX_SEEN) known = new Set(Array.from(known).slice(-MAX_SEEN));
       save();
-      if (baseline) fresh.slice(-3).forEach(alertStory);
+      if (baseline) {
+        fresh.slice(-2).forEach(alertStory);
+      } else {
+        // A reader should still see a genuinely just-published story on arrival.
+        // Initial suggestions are strictly time-limited, never recycled news.
+        const recent = fresh.filter(s => now - published(s) < INITIAL_ALERT_WINDOW);
+        if (recent.length) {
+          const newest = recent[recent.length - 1];
+          setTimeout(() => { if (document.visibilityState === 'visible') alertStory(newest); }, 6500);
+        }
+      }
       baseline = true;
     } catch (_) { /* offline or temporary feed issue: retry on next interval */ }
     finally { busy = false; }
