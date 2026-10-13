@@ -21,6 +21,19 @@ const read=async (url,timeout=12000)=>{
 };
 const unavailable=(id,source,msg)=>out(id,[node("p",msg||"This data source is not responding. Its official website has the latest information."),link("Open the official source ↗",source)]);
 let archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={},lastEvents=null;
+const brief={};
+const briefNames=[["news","Your local headlines","#stories"],["weather","Forecast","#weather"],["traffic","Travel today","#traffic"],["events","Coming up","#events"],["flood","River and flood watch","#flood"],["services","Local services","#services"]];
+function putBrief(key,value){
+ brief[key]=String(value);
+ const grid=byId("glance-items");if(!grid)return;grid.replaceChildren();
+ for(const [k,title,href] of briefNames){
+  const box=node("div",undefined,"glance-item");
+  box.append(node("strong",title),node("span",brief[k]||"Checking the source…"));
+  box.append(link("See details →",href));grid.append(box);
+ }
+ byId("daily-brief").hidden=false;
+}
+
 const archiveUrl=x=>/^\/articles\/[a-z0-9-]+\.html$/i.test(x.url||"")?x.url:"";
 function match(s){
  const a=norm((s.title||"")+" "+(s.slug||"").replace(/-/g," ")),b=norm(s.description);
@@ -71,6 +84,8 @@ async function newsArchive(loc,id){
   active="local";category="all";search="";page=0;
   byId("news-controls").replaceChildren();byId("news-controls").dataset.ready="";
   news();
+  const localCount=archive.filter(x=>match(x).score>0).length;
+  putBrief("news",localCount+" articles mention your ward or nearby places, out of "+archive.length+" available archive reports.");
   roadworks();
   if(lastEvents)events(lastEvents);
  }catch{unavailable("stories","/archive.html","Full news archive could not load. Open the archive to search directly.");}
@@ -88,7 +103,7 @@ function weather(w){
  if(!Number.isFinite(updated)||Date.now()-updated>36*3600000)host.append(node("p","The last available forecast may be stale. See the Met Office for the latest.","risk"));
  const grid=node("div",undefined,"weather-days");
  (w.days||[]).slice(0,7).forEach(d=>{const box=node("div",undefined,"weather-day");box.append(node("strong",d.weekday||when(d.date)),node("span",d.icon||""),node("b",String(d.temperature_c??"—")+"°C"),node("small",d.condition||""));grid.append(box);});
- host.append(grid,node("p","Rochdale-area forecast, not a hyperlocal measurement.","method"));out("weather",[host]);
+ host.append(grid,node("p","Rochdale-area forecast, not a hyperlocal measurement.","method"));out("weather",[host]);putBrief("weather","Borough-wide forecast shown as local forecast provider is unavailable.");
 }
 function weatherCode(code){
  const c=String(code||"").replace(/_(day|night|polartwilight)$/,"").replace(/_/g," ");
@@ -124,6 +139,7 @@ function preciseWeather(w){
  root.append(node("p","Adapted from MET Norway (CC BY 4.0); model values cover an approximate location and are not exact street-level measurements. Updated "+(when(w.generatedAt)||"date unavailable")+".","method"));
  root.append(link("Forecast source and licence ↗",w.link||"https://api.met.no/"));
  out("weather",[root]);
+ putBrief("weather",(p.temperatureC==null?"Forecast available":Math.round(p.temperatureC)+"°C")+" now · "+weatherCode(p.condition)+(p.windMs!=null?" · wind "+Math.round(p.windMs*3.6)+" km/h":""));
 }
 async function weatherForPostcode(coords){
  try{preciseWeather(await read("/api/borough-data?kind=weather"+coords,17500));}
@@ -138,6 +154,7 @@ function traffic(d,loc){
  const sorted=data.slice().sort((a,b)=>nearby(a)-nearby(b));
  const rows=sorted.slice(0,20).map(x=>({title:String(x.summary||x.description||"Bus disruption").slice(0,180),meta:[nearby(x)<6?"Near this postcode":'Borough-wide notice',x.places?.slice(0,3).join(", "),x.lines?.length?"Services "+x.lines.slice(0,6).join(", "):"",x.end?"Listed until "+when(x.end):""].filter(Boolean).join(" · ")}));
  out("traffic",[node("p",data.length+" bus disruption notices in the borough feed.","news-count"),list(rows),node("p","This feed covers reported bus disruptions, not all road traffic or train cancellations.","method")]);
+ putBrief("traffic",data.filter(x=>nearby(x)<6).length+" nearby bus disruption notices; "+data.length+" across the borough.");
 }
 function events(d){
  lastEvents=d;
@@ -148,6 +165,7 @@ function events(d){
  });
  const rows=scored.slice(0,20).map(x=>({title:x.title||"Event",href:/^[a-z0-9-]+$/i.test(x.slug||"")?"/articles/"+x.slug+".html":undefined,meta:[when(x.event_start_at),x.event_location,x.event_cost].filter(Boolean).join(" · ")}));
  out("events",[node("p",data.length+" approved upcoming community events.","news-count"),list(rows)]);
+ putBrief("events",data.length+" approved upcoming events in Rochdale Daily’s community feed.");
 }
 function flood(d){
  const result=[],warnings=Array.isArray(d.warnings)?d.warnings:[],stations=Array.isArray(d.stations)?d.stations:[];
@@ -157,6 +175,7 @@ function flood(d){
  if(stations.length)result.push(node("h4","Nearby river measuring stations"));
  result.push(list(stations.slice(0,9).map(x=>({title:x.name||x.station,href:x.url,meta:[x.river,x.reading?.value!=null?"Reading: "+x.reading.value+" (unit depends on station)":"No recent measurement",x.reading?.dateTime?when(x.reading.dateTime):""].filter(Boolean).join(" · ")}))));
  out("flood",result);
+ putBrief("flood",!d.warningsAvailable?"Could not check official flood warnings.":warnings.length?warnings.length+" nearby flood alerts or warnings returned.":"No nearby warnings returned by this feed; check the official service.");
 }
 function crime(d){
  const rows=(d.byCategory||[]).map(x=>({title:String(x.category||"").replace(/-/g," "),meta:x.count+" reports"}));
@@ -182,6 +201,7 @@ function services(loc){
  ];
  if(loc.nearbyWhitworth||!loc.ward)rows.shift();
  out("services",[list(rows.map(x=>({title:x[0],href:x[1],meta:x[2]})))]);
+ putBrief("services","Council, bins, schools, trains, NHS and local reporting links.");
 }
 async function safePostcodeLookup(postcode){
   try{return await read("/api/borough-data?kind=area&postcode="+encodeURIComponent(postcode),12000);}
@@ -221,6 +241,7 @@ async function start(e){
  report("Finding your ward and connecting to local information…");
  ["stories","weather","traffic","events","flood","crime","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
  byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();lastEvents=null;
+ for(const k of Object.keys(brief))delete brief[k];byId("daily-brief").hidden=true;
  try{
   const data=await safePostcodeLookup(input);
   if(id!==requestId)return;
