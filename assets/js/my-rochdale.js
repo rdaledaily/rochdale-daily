@@ -198,9 +198,16 @@ function recentCrimeReports(){
   const published=Date.parse(x.published_at||"");
   return Number.isFinite(published)&&published>=cutoff;
  }).sort((a,b)=>(Date.parse(b.published_at)||0)-(Date.parse(a.published_at)||0));
- // Strictly local, with no fallback to unrelated articles elsewhere.
- // Matches are place-name references, NOT a proof of exact postcode distance.
- const local=recent.filter(x=>match(x).score>0);
+ // Crime matching is stricter than general news matching. A story
+ // mentioning a whole town is NOT evidence of a crime near a postcode in a
+ // particular ward of that town. Never backfill with other-area crime news.
+ const tooBroad=new Set(["rochdale","heywood","middleton","littleborough","town centre"]);
+ const specific=[...new Set([norm(area.ward),...aliases.filter(x=>!tooBroad.has(norm(x)))]
+   .filter(x=>x.length>3))];
+ if(norm(area.ward)==="central rochdale")specific.push("rochdale town centre");
+ const exactAreaMention=x=>specific.find(term=>whole(
+   (x.title||"")+" "+(x.description||"")+" "+(x.slug||"").replace(/-/g," "),term))||"";
+ const local=recent.filter(x=>Boolean(exactAreaMention(x)));
  el.append(node("h4","Recently published crime and courts reporting"));
  if(!local.length){
   el.append(node("p","No recent Rochdale Daily crime reports specifically mention "+area.ward+" or its mapped neighbourhoods in the last 90 days.","news-count"));
@@ -210,7 +217,7 @@ function recentCrimeReports(){
  el.append(node("p",local.length+" recent reports mention "+area.ward+" or mapped neighbourhoods. These are location mentions, not verified incident distances.","news-count"));
  el.append(list(local.slice(0,16).map(x=>({
   title:x.title,href:archiveUrl(x),
-  meta:[when(x.published_at),"Mentions "+match(x).matched,x.category].filter(Boolean).join(" · ")
+  meta:[when(x.published_at),"Mentions "+exactAreaMention(x),x.category].filter(Boolean).join(" · ")
  }))));
  if(local.length>16)el.append(node("p",String(local.length-16)+" further matching reports can be found in the news archive.","method"));
  el.append(node("p","Dated reporting, not a complete or live police incident list. An article's area mention is not evidence that its event happened within a fixed distance of your postcode.","method"));
