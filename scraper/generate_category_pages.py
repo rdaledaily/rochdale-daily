@@ -208,7 +208,7 @@ def collection_json_ld(slug: str, stories: list[dict], canonical: str) -> str:
         "@context": "https://schema.org",
         "@type": "CollectionPage",
         "@id": canonical,
-        "name": f"{label} news for the Rochdale borough",
+        "name": "Latest Rochdale borough news" if slug == "news" else f"{label} news across Rochdale borough",
         "description": CATEGORY_DESCRIPTIONS.get(slug, ""),
         "url": canonical,
         "inLanguage": "en-GB",
@@ -221,7 +221,7 @@ def collection_json_ld(slug: str, stories: list[dict], canonical: str) -> str:
 
 def render_category(slug: str, stories: list[dict], slugs: list[str], css: str) -> str:
     label = CATEGORY_LABELS[slug]
-    title = f"{label} news for the Rochdale borough"
+    title = "Latest Rochdale borough news" if slug == "news" else f"{label} news across Rochdale borough"
     description = CATEGORY_DESCRIPTIONS.get(slug, f"{label} news from Rochdale Daily.")
     canonical = f"{SITE}/news/{slug}.html"
     head = chrome_head(title, description, canonical, css, collection_json_ld(slug, stories, canonical))
