@@ -7,6 +7,8 @@ on:
       - 'scraper/probe_gmp_neighbourhood_crime.py'
       - '.github/workflows/gmp-crime-workbook.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '20 8 * * 1'  # Weekly: retry official GMP data source without spamming failed-run email
 
 permissions:
   contents: write
