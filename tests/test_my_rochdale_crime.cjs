@@ -31,4 +31,19 @@ assert.equal(check({ ...article, category: 'Community' }, postcode), false, 'Non
 assert.match(text, /if\(active==="local"\)entries=entries\.filter\(/, 'Local news list must also apply exact crime gating');
 assert.match(text, /No crime articles in our available archive have a verified incident location within one mile/, 'No-data state must be explicit');
 assert.doesNotMatch(text, /const tooBroad=new Set/, 'Old ward-level crime matching must not be restored');
+
+// Official police priorities must be matched to the SAME ward, not a
+// neighbouring ward, and must never be presented as postcode incident counts.
+const priorityData = JSON.parse(fs.readFileSync('assets/data/gmp-ward-policing-priorities.json', 'utf8'));
+const keys = Object.keys(priorityData.wards);
+assert.ok(keys.length >= 7, 'Official GMP priorities available for multiple wards');
+assert.ok(keys.every(w => priorityData.wards[w].url.startsWith('https://www.gmp.police.uk/')), 'Every policing priority cites GMP');
+assert.ok(keys.every(w => /^2026-\d\d-\d\d$/.test(priorityData.wards[w].updated)), 'Every priority has its own updated date');
+assert.notEqual(priorityData.wards['Central Rochdale'], priorityData.wards['Spotland and Falinge'], 'Separate police teams are never interchangeable');
+const census = JSON.parse(fs.readFileSync('assets/data/gmp-postcode-district-crime.json','utf8'));
+assert.equal(census.status,'verification_pending','Ambiguous GMP FOI numbers are not yet safe to publish');
+assert.equal(Object.keys(census.districts).length,0,'No unsupported postcode district crime count is exposed');
+assert.match(text,/data\.wards\?\.\[expectedWard\]/,'GMP team is looked up using the exact selected ward');
+assert.match(text,/No alternative neighbourhood information has been substituted/,'Source failures must not show other areas');
+
 console.log('Postcode crime accuracy checks passed (8 geo/metadata scenarios and local-list protections).');
