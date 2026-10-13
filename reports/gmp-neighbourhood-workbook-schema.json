@@ -1,8 +1,9 @@
 {
   "status": "source_access_blocked",
-  "checkedAt": "2026-10-13T21:46:18.121441+00:00",
+  "checkedAt": "2026-10-13T21:55:09.659482+00:00",
   "sourcePage": "https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/neighbourhood-crime/",
-  "error": "Official spreadsheet could not be fetched by scheduled GitHub Actions.",
+  "currentOfficialWorkbookUrl": "https://www.gmp.police.uk/SysSiteAssets/media/downloads/greater-manchester/stats-and-data/neighbourhood-crime/gmp-neighbourhood-crime-data---greater-manchester-police---aug-19-to-sep-26.xlsx",
+  "error": "GMP's Cloudflare may challenge automated visitors; the newsroom can still inspect a browser-downloaded workbook using --file.",
   "detail": "GMP workbook could not be downloaded from the official site",
-  "nextStep": "Inspect manually or use a permitted official export. Do not substitute other police-force incidents, postcode guesses or borough totals."
-}
+  "nextStep": "Download the linked XLSX in a normal browser and run this inspector with --file path/to/workbook.xlsx. Never invent neighbourhood crime figures from an unavailable feed."
+}\n
