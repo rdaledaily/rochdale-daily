@@ -20,7 +20,7 @@ const read=async (url,timeout=12000)=>{
  finally{clearTimeout(clock)}
 };
 const unavailable=(id,source,msg)=>out(id,[node("p",msg||"This data source is not responding. Its official website has the latest information."),link("Open the official source ↗",source)]);
-let archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={},lastEvents=null;
+let archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={},lastEvents=null,archiveReadyForPostcode=false;
 const brief={};
 const briefNames=[["news","Your local headlines","#stories"],["weather","Forecast","#weather"],["traffic","Travel today","#traffic"],["events","Coming up","#events"],["flood","River and flood watch","#flood"],["services","Local services","#services"]];
 function putBrief(key,value){
@@ -72,6 +72,7 @@ async function newsArchive(loc,id){
   const [records,wardData]=await Promise.all([read("/archive-index.json",17000),read("/ward_areas.json",10000)]);
   if(requestId!==id)return;
   archive=Array.isArray(records)?records.filter(x=>x&&x.title&&archiveUrl(x)):[];
+  archiveReadyForPostcode=true;
   const config=wardData.wards?.[loc.ward]||{},ward=norm(loc.ward);
   aliases=[...(config.areas||[]).map(x=>String(x).replace(/-/g," ")),loc.ward];
   if(ward.includes("heywood"))aliases.push("Heywood");
@@ -89,7 +90,11 @@ async function newsArchive(loc,id){
   roadworks();
   recentCrimeReports();
   if(lastEvents)events(lastEvents);
- }catch{unavailable("stories","/archive.html","Full news archive could not load. Open the archive to search directly.");}
+ }catch{
+  archiveReadyForPostcode=false;
+  unavailable("stories","/archive.html","Full news archive could not load. Open the archive to search directly.");
+  const crimeLatest=byId("crime-latest");if(crimeLatest)crimeLatest.replaceChildren(node("p","Local crime coverage could not be checked because the article archive is unavailable. No other-area crimes will be substituted.","method"));
+ }
 }
 function roadworks(){
  const matches=archive.filter(x=>/traffic|transport/i.test(x.category)&&/roadwork|road closure|temporary closure|bridge works|road works|lane closure/i.test(x.title+" "+x.description));
@@ -179,27 +184,38 @@ function flood(d){
  putBrief("flood",!d.warningsAvailable?"Could not check official flood warnings.":warnings.length?warnings.length+" nearby flood alerts or warnings returned.":"No nearby warnings returned by this feed; check the official service.");
 }
 function recentCrimeReports(){
- const root=byId("crime");if(!root)return;
- const cutoff=Date.now()-90*86400000;
- const all=archive.filter(x=>String(x.category||"").toLowerCase()==="crime"&&archiveUrl(x));
- const recent=all.filter(x=>{const date=Date.parse(x.published_at||"");return Number.isFinite(date)&&date>=cutoff;})
-  .sort((a,b)=>(Date.parse(b.published_at)||0)-(Date.parse(a.published_at)||0));
- const local=recent.filter(x=>match(x).score>0);
- const borough=recent.filter(x=>!local.includes(x));
- const selected=[...local,...borough].slice(0,16);
- const el=byId("crime-latest");
- if(!el)return;
+ const el=byId("crime-latest");if(!el)return;
  el.replaceChildren();
+ // Archive indexing is asynchronous. Never reuse stories left over from a
+ // previous postcode while the new ward/area lookup is in progress.
+ if(!archiveReadyForPostcode||!area.ward){
+  el.append(node("p","Checking for published reports mentioning your neighbourhood…","loading"));
+  return;
+ }
+ const cutoff=Date.now()-90*86400000;
+ const recent=archive.filter(x=>{
+  if(String(x.category||"").toLowerCase()!=="crime"||!archiveUrl(x))return false;
+  const published=Date.parse(x.published_at||"");
+  return Number.isFinite(published)&&published>=cutoff;
+ }).sort((a,b)=>(Date.parse(b.published_at)||0)-(Date.parse(a.published_at)||0));
+ // Strictly local, with no fallback to unrelated articles elsewhere.
+ // Matches are place-name references, NOT a proof of exact postcode distance.
+ const local=recent.filter(x=>match(x).score>0);
  el.append(node("h4","Recently published crime and courts reporting"));
- el.append(node("p",local.length+" reports mention your ward or nearby area; "+recent.length+" across the borough in the last 90 days.","news-count"));
- el.append(list(selected.map(x=>({
-  title:x.title,href:archiveUrl(x),meta:[when(x.published_at),local.includes(x)?"Local-area mention":"Borough-wide report",x.category].filter(Boolean).join(" · ")
+ if(!local.length){
+  el.append(node("p","No recent Rochdale Daily crime reports specifically mention "+area.ward+" or its mapped neighbourhoods in the last 90 days.","news-count"));
+  el.append(node("p","This does not mean no crimes have occurred nearby. Article place-name matching cannot verify distance from an individual postcode, and GMP does not currently provide reliable postcode-level incident data.","method"));
+  return;
+ }
+ el.append(node("p",local.length+" recent reports mention "+area.ward+" or mapped neighbourhoods. These are location mentions, not verified incident distances.","news-count"));
+ el.append(list(local.slice(0,16).map(x=>({
+  title:x.title,href:archiveUrl(x),
+  meta:[when(x.published_at),"Mentions "+match(x).matched,x.category].filter(Boolean).join(" · ")
  }))));
- if(!selected.length)el.append(node("p","No recent reports in the available archive. This does not mean no incidents occurred."));
- const a=link("Explore every crime and courts article →","/archive.html");
- el.append(a);
- el.append(node("p","This is a dated selection from Rochdale Daily's published reporting, not a complete police incident feed. Charges and allegations may change as investigations and court cases progress.","method"));
+ if(local.length>16)el.append(node("p",String(local.length-16)+" further matching reports can be found in the news archive.","method"));
+ el.append(node("p","Dated reporting, not a complete or live police incident list. An article's area mention is not evidence that its event happened within a fixed distance of your postcode.","method"));
 }
+
 function crime(d){
  const introduction=node("p","Greater Manchester Police has not supplied street-level crime data to Police.uk since July 2019. Consequently, a reliable recent postcode crime rate or total cannot be calculated from that service.","risk");
  const more=node("p","The Police.uk national 'latest month' does not mean there are up-to-date GMP street-crime records for Rochdale. GMP publishes its own neighbourhood crime data through 2026; those are aggregated counts, not geolocated individual incidents.","method");
@@ -259,6 +275,7 @@ async function showBoroughIfLookupFails(){
   // A failed postcode resolver must not blank the entire newspaper.
   report("We couldn’t match that postcode just now. Borough-wide news, weather, travel and events are still available.","error");
   byId("location").hidden=true;byId("lookup").querySelector("button").disabled=false;
+  const crimeLatest=byId("crime-latest");if(crimeLatest)crimeLatest.replaceChildren(node("p","Enter a valid postcode to see locally matched reporting. No borough-wide crime stories will be substituted.","method"));
   const fallback={district:"Rochdale",ward:"",latitude:53.615,longitude:-2.155};
   await Promise.allSettled([
     (async()=>{await newsArchive(fallback,requestId);active="all";news();})(),
@@ -281,6 +298,9 @@ async function start(e){
  status.focus({preventScroll:true});
  ["stories","weather","traffic","events","flood","crime","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
  byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();lastEvents=null;
+ archive=[];aliases=[];area={};archiveReadyForPostcode=false;
+ const crimeLatest=byId("crime-latest");
+ if(crimeLatest)crimeLatest.replaceChildren(node("p","Checking for published reports mentioning your neighbourhood…","loading"));
  for(const k of Object.keys(brief))delete brief[k];byId("daily-brief").hidden=true;
  try{
   const data=await safePostcodeLookup(input);
