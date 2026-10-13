@@ -125,14 +125,24 @@ def inspect(content):
         return {"sharedStringCount":len(shared),"sheets":results}
 
 def main():
-    url,content=discover()
-    info=inspect(content)
-    result={"sourcePage":PAGE,"workbookUrl":url,"downloadBytes":len(content),
-            "checkedAt":datetime.now(timezone.utc).isoformat(), **info,
-            "warning":"Schema reconnaissance only. Counts must not be mapped to postcode until geography and units are confirmed."}
+    now=datetime.now(timezone.utc).isoformat()
+    try:
+        url,content=discover()
+        info=inspect(content)
+        result={"status":"schema_available","sourcePage":PAGE,"workbookUrl":url,"downloadBytes":len(content),
+                "checkedAt":now, **info,
+                "warning":"No neighbourhood counts may appear in postcode searches until workbook geography, period and units have been verified."}
+        print("GMP workbook schema inspected:",url,len(content),"bytes")
+        for s in info["sheets"]:
+            print("SHEET",s["sheet"],"ROWS",str(s["head"][:4])[:1200])
+    except Exception as exc:
+        # GMP actively returns HTTP 403 to nonbrowser clients. Do not produce
+        # a broken scheduled workflow or invent crime figures as fallback.
+        result={"status":"source_access_blocked","checkedAt":now,"sourcePage":PAGE,
+                "error":"Official spreadsheet could not be fetched by scheduled GitHub Actions.",
+                "detail":str(exc)[:180],
+                "nextStep":"Inspect manually or use a permitted official export. Do not substitute other police-force incidents, postcode guesses or borough totals."}
+        print("WARNING: GMP source blocked or unavailable:",str(exc)[:180])
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print("GMP workbook:",url,len(content),"bytes")
-    for s in info["sheets"]:
-        print("SHEET",s["sheet"],"ROWS",str(s["head"][:4])[:1250])
 if __name__=="__main__":main()
