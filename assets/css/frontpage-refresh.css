@@ -463,3 +463,67 @@ body.rd-home-refresh button:focus-visible { outline:3px solid #308f9e!important;
 @media(prefers-reduced-motion:reduce){
  body.rd-home-refresh * {scroll-behavior:auto!important;transition:none!important;animation-duration:.01ms!important;}
 }
+
+
+/* Reader conversation is part of the editorial hierarchy.
+   Zero is an invitation, not a fabricated discussion count. */
+body.rd-home-refresh .card-comments,
+body.rd-home-refresh .news-grid .card-comments,
+body.rd-home-refresh .weekly-news-grid .card-comments,
+body.rd-home-refresh .m-section .card-comments,
+body.rd-home-refresh .front-just-in .card-comments {
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  width:max-content;
+  max-width:100%;
+  margin:7px 0 0!important;
+  padding:5px 9px!important;
+  border:1px solid #c6dcdf!important;
+  border-radius:999px!important;
+  background:#eaf6f5!important;
+  color:#145f69!important;
+  font:800 11px/1.35 var(--font-ui)!important;
+  text-transform:none!important;
+  letter-spacing:0!important;
+  white-space:normal!important;
+}
+body.rd-home-refresh .card-comments svg,
+body.rd-home-refresh .news-grid .card-comments svg,
+body.rd-home-refresh .weekly-news-grid .card-comments svg {
+  display:inline-block!important;
+  flex:none!important;
+  width:14px!important;height:14px!important;
+  stroke:currentColor!important;stroke-width:2!important;fill:none!important;
+}
+body.rd-home-refresh .card-comments.invite-discussion {
+  background:#f4f7f7!important;color:#516f78!important;
+  border-color:#dae5e8!important;
+  font-weight:700!important;
+}
+body.rd-home-refresh .story-link:hover .card-comments.has-discussion,
+body.rd-home-refresh .front-just-in .latest-item a:hover .card-comments {
+  background:#d5eeec!important;border-color:#80b8b7!important;
+}
+body.rd-home-refresh .news-grid .tag-row .card-comments,
+body.rd-home-refresh .weekly-news-grid .tag-row .card-comments,
+body.rd-home-refresh .m-section .tag-row .card-comments {
+  flex:0 0 auto!important;
+}
+body.rd-home-refresh .front-just-in .latest-time .card-comments {
+  font-size:10px!important;padding:3px 7px!important;
+}
+@media(max-width:820px){
+  body.rd-home-refresh .m-section .news-card .tag-row .card-comments {
+    grid-column:unset!important;
+  }
+  body.rd-home-refresh .m-section .news-card .tag-row {
+    flex-wrap:wrap!important;
+  }
+}
+/* Keep the functional new-story notification above the page without taking
+   over a phone's first screen or covering article links. */
+body.rd-home-refresh .rd-new-story-stack {top:auto!important;bottom:18px!important;right:18px!important;}
+@media(max-width:620px){
+  body.rd-home-refresh .rd-new-story-stack {bottom:70px!important;right:12px!important;max-width:calc(100vw - 24px)!important;}
+}
