@@ -115,6 +115,9 @@ def run() -> None:
         assert images.high_risk_photo_story({"title": "Suspect charged", "category": "crime"})
         assert not images.high_risk_photo_story(story())
 
+        # Remove the exact-slug source file before testing an independent
+        # library subject match, which should otherwise rightly win.
+        (base / article["image_url"]).unlink()
         selected = story()
         library = base / "assets/img/cards/littleborough_bakery.jpg"
         library.parent.mkdir(parents=True, exist_ok=True)
