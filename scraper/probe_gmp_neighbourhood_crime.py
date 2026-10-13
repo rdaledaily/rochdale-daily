@@ -7,6 +7,8 @@ Uses Python's zip/XML readers, avoiding spreadsheet office software.
 """
 from __future__ import annotations
 import io
+import argparse
+import hashlib
 import json
 import re
 import sys
@@ -21,6 +23,9 @@ from xml.etree import ElementTree as ET
 PAGE = ("https://www.gmp.police.uk/police-forces/greater-manchester-police/"
         "areas/greater-manchester-force-content/sd/stats-and-data/neighbourhood-crime/")
 KNOWN = ("https://www.gmp.police.uk/SysSiteAssets/media/downloads/greater-manchester/"
+         "stats-and-data/neighbourhood-crime/"
+         "gmp-neighbourhood-crime-data---greater-manchester-police---aug-19-to-sep-26.xlsx")
+OLDER = ("https://www.gmp.police.uk/SysSiteAssets/media/downloads/greater-manchester/"
          "stats-and-data/neighbourhood-crime/nieghbourhood-crime-gmp-website---jun-26.xlsx")
 OUT = Path("reports/gmp-neighbourhood-workbook-schema.json")
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
@@ -48,11 +53,9 @@ def discover():
             if "neighbourhood" in href.lower() or "nieghbourhood" in href.lower():
                 candidates.append(urljoin(PAGE,unescape(href)))
     except Exception as ex:print("PAGE DISCOVERY:",str(ex)[:160],file=sys.stderr)
-    candidates.extend([
-        KNOWN.replace("---jun-26.xlsx","---sep-26.xlsx"),
-        KNOWN.replace("---jun-26.xlsx","---aug-26.xlsx"),
-        KNOWN.replace("---jun-26.xlsx","---jul-26.xlsx"),
-        KNOWN])
+    # Current exact link was copied from the official page in a normal
+    # browser on 13 October 2026. The previous scraper guessed the wrong name.
+    candidates.extend([KNOWN, OLDER])
     # We use the first CURRENT page link in source order, otherwise newest
     # filename candidate. Stale files are labelled by their actual content.
     seen=set()
@@ -125,24 +128,39 @@ def inspect(content):
         return {"sharedStringCount":len(shared),"sheets":results}
 
 def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--file",type=Path,help="An officially downloaded GMP XLSX saved locally. This route works even when automated access to the GMP site is challenged.")
+    opts=parser.parse_args()
     now=datetime.now(timezone.utc).isoformat()
     try:
-        url,content=discover()
+        if opts.file:
+            name=opts.file
+            if not name.is_file() or name.suffix.lower()!=".xlsx" or name.stat().st_size>10000000:
+                raise RuntimeError("Supply a local .xlsx from the GMP site, not larger than 10 MB")
+            content=name.read_bytes()
+            url=KNOWN
+            acquisition="browser_download_import"
+        else:
+            url,content=discover()
+            acquisition="automated_official_download"
+        if not content.startswith(b"PK"):
+            raise RuntimeError("Downloaded file is not an XLSX ZIP")
         info=inspect(content)
-        result={"status":"schema_available","sourcePage":PAGE,"workbookUrl":url,"downloadBytes":len(content),
+        result={"status":"schema_available","sourcePage":PAGE,"workbookUrl":url,
+                "acquisition":acquisition,"downloadBytes":len(content),
+                "sha256":hashlib.sha256(content).hexdigest(),
                 "checkedAt":now, **info,
-                "warning":"No neighbourhood counts may appear in postcode searches until workbook geography, period and units have been verified."}
-        print("GMP workbook schema inspected:",url,len(content),"bytes")
+                "warning":"Schema validation only. Neighbourhood crime is a limited subset of offence types. Do not attach counts to a postcode unless the worksheet's precise geography, date and category are verified."}
+        print("GMP workbook schema inspected:",url,len(content),"bytes",acquisition)
         for s in info["sheets"]:
             print("SHEET",s["sheet"],"ROWS",str(s["head"][:4])[:1200])
     except Exception as exc:
-        # GMP actively returns HTTP 403 to nonbrowser clients. Do not produce
-        # a broken scheduled workflow or invent crime figures as fallback.
-        result={"status":"source_access_blocked","checkedAt":now,"sourcePage":PAGE,
-                "error":"Official spreadsheet could not be fetched by scheduled GitHub Actions.",
+        result={"status":"source_access_blocked" if not opts.file else "import_failed",
+                "checkedAt":now,"sourcePage":PAGE,"currentOfficialWorkbookUrl":KNOWN,
+                "error":"GMP's Cloudflare may challenge automated visitors; the newsroom can still inspect a browser-downloaded workbook using --file.",
                 "detail":str(exc)[:180],
-                "nextStep":"Inspect manually or use a permitted official export. Do not substitute other police-force incidents, postcode guesses or borough totals."}
-        print("WARNING: GMP source blocked or unavailable:",str(exc)[:180])
+                "nextStep":"Download the linked XLSX in a normal browser and run this inspector with --file path/to/workbook.xlsx. Never invent neighbourhood crime figures from an unavailable feed."}
+        print("WARNING: GMP workbook unavailable:",str(exc)[:180])
     OUT.parent.mkdir(parents=True,exist_ok=True)
-    OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
 if __name__=="__main__":main()
