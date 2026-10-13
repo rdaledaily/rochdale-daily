@@ -159,6 +159,7 @@ jobs:
           python scraper/test_selection_policy.py
           python scraper/test_search_queries.py
           python scraper/test_rewrite_safety.py
+          PYTHONPATH=scraper python scraper/test_house_style_voice.py
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
           python scraper/test_content_hygiene.py
