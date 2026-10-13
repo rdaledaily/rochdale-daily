@@ -87,6 +87,7 @@ async function newsArchive(loc,id){
   const localCount=archive.filter(x=>match(x).score>0).length;
   putBrief("news",localCount+" articles mention your ward or nearby places, out of "+archive.length+" available archive reports.");
   roadworks();
+  recentCrimeReports();
   if(lastEvents)events(lastEvents);
  }catch{unavailable("stories","/archive.html","Full news archive could not load. Open the archive to search directly.");}
 }
@@ -177,10 +178,35 @@ function flood(d){
  out("flood",result);
  putBrief("flood",!d.warningsAvailable?"Could not check official flood warnings.":warnings.length?warnings.length+" nearby flood alerts or warnings returned.":"No nearby warnings returned by this feed; check the official service.");
 }
+function recentCrimeReports(){
+ const root=byId("crime");if(!root)return;
+ const cutoff=Date.now()-90*86400000;
+ const all=archive.filter(x=>String(x.category||"").toLowerCase()==="crime"&&archiveUrl(x));
+ const recent=all.filter(x=>{const date=Date.parse(x.published_at||"");return Number.isFinite(date)&&date>=cutoff;})
+  .sort((a,b)=>(Date.parse(b.published_at)||0)-(Date.parse(a.published_at)||0));
+ const local=recent.filter(x=>match(x).score>0);
+ const borough=recent.filter(x=>!local.includes(x));
+ const selected=[...local,...borough].slice(0,16);
+ const el=byId("crime-latest");
+ if(!el)return;
+ el.replaceChildren();
+ el.append(node("h4","Recently published crime and courts reporting"));
+ el.append(node("p",local.length+" reports mention your ward or nearby area; "+recent.length+" across the borough in the last 90 days.","news-count"));
+ el.append(list(selected.map(x=>({
+  title:x.title,href:archiveUrl(x),meta:[when(x.published_at),local.includes(x)?"Local-area mention":"Borough-wide report",x.category].filter(Boolean).join(" · ")
+ }))));
+ if(!selected.length)el.append(node("p","No recent reports in the available archive. This does not mean no incidents occurred."));
+ const a=link("Explore every crime and courts article →","/archive.html");
+ el.append(a);
+ el.append(node("p","This is a dated selection from Rochdale Daily's published reporting, not a complete police incident feed. Charges and allegations may change as investigations and court cases progress.","method"));
+}
 function crime(d){
- const rows=(d.byCategory||[]).map(x=>({title:String(x.category||"").replace(/-/g," "),meta:x.count+" reports"}));
- if(d.dataAvailable===false){out("crime",[node("p","No usable records returned for "+String(d.month||"this month")+". This does not mean no crimes occurred.","risk"),link("Consult Police.uk directly ↗",d.link||"https://data.police.uk/")]);return;}
- out("crime",[node("p",String(d.total),"metric"),node("p","Police-recorded reports for "+String(d.month||"latest published month")+", approximately one mile around the postcode.","metric-label"),list(rows)]);
+ const introduction=node("p","Greater Manchester Police has not supplied street-level crime data to Police.uk since July 2019. Consequently, a reliable recent postcode crime rate or total cannot be calculated from that service.","risk");
+ const more=node("p","The Police.uk national 'latest month' does not mean there are up-to-date GMP street-crime records for Rochdale.","method");
+ const sources=node("div");
+ sources.append(link("GMP official statistics ↗",d.officialStatistics||"https://www.gmp.police.uk/"),node("span"," · "),link("Police.uk data notice ↗","https://data.police.uk/changelog/"));
+ out("crime",[introduction,more,sources]);
+ recentCrimeReports();
 }
 function planning(d){
  const data=Array.isArray(d.constraints)?d.constraints:[];
