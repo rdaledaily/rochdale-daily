@@ -38,7 +38,31 @@
      const sel=element('select');sel.setAttribute('aria-label','Lead status for '+lead.business);
      statuses.forEach(s=>{let o=element('option',s);o.value=s;sel.append(o)});sel.value=statuses.includes(lead.status)?lead.status:'new';
      const btn=element('button','Save status');btn.type='button';btn.addEventListener('click',()=>update(lead,sel,btn));
-     controls.append(email,sel,btn);card.append(controls);cards.append(card);
+     controls.append(email,sel,btn);
+     if(lead.status==='agreed'){
+       const pay=element('button','Create Stripe payment link');pay.type='button';
+       pay.addEventListener('click',async()=>{
+         pay.disabled=true;status.textContent='Requesting a hosted payment link…';
+         try{
+           const response=await fetch('/api/advertising-billing',{
+             method:'POST',headers:{'x-admin-token':secret,'Content-Type':'application/json'},
+             body:JSON.stringify({leadId:lead.id}),cache:'no-store'
+           });
+           const result=await response.json();
+           if(!response.ok||!result.ok)throw Error(result.error||'Stripe unavailable');
+           if(!/^https:\/\/checkout\.stripe\.com\//.test(result.checkoutUrl))throw Error('Unexpected payment URL');
+           const box=element('div',undefined,'payment-link');
+           box.append(element('p','Stripe hosted checkout link. Send only after agreeing exact placement and written terms; no payment has yet been taken.'));
+           const input=element('input');input.value=result.checkoutUrl;input.readOnly=true;input.setAttribute('aria-label','Copy Stripe payment link');
+           input.style.width='100%';
+           const copy=element('button','Copy payment link');copy.type='button';
+           copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(result.checkoutUrl);status.textContent='Payment link copied.';}catch{input.select();status.textContent='Copy the selected payment URL.';}});
+           box.append(input,copy);card.append(box);status.textContent='Payment link prepared for '+lead.business+'.';
+         }catch(err){status.textContent=err.message;}finally{pay.disabled=false;}
+       });
+       controls.append(pay);
+     }
+     card.append(controls);cards.append(card);
    });
  }
  async function refresh(){
