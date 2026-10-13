@@ -1,0 +1,128 @@
+<!doctype html><html lang="en-GB"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>Newsroom push alerts | Rochdale Daily</title>
+<style>
+:root{--navy:#10283b;--teal:#136c76;--ink:#173344;--line:#d1dfe3}*{box-sizing:border-box}body{margin:0;background:#f3f7f7;color:var(--ink);font:15px/1.6 system-ui}
+header{background:var(--navy);color:white;padding:18px 25px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+header a{color:#d9e9ed}main{max-width:920px;margin:40px auto 80px;padding:0 19px}h1{font:800 37px Georgia,serif;margin:0 0 12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:27px;margin:20px 0;box-shadow:0 7px 22px #17394a0b}
+label{display:block;font-weight:800;font-size:13px;margin:13px 0 5px}input,select,button{font:inherit}
+input[type="password"],input[type="search"],select{width:100%;padding:11px 13px;background:white;border:1px solid #a7bfc6;border-radius:5px}
+button{border:0;border-radius:5px;background:var(--teal);color:white;padding:12px 17px;font-weight:750;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row button{flex:0 0 auto}
+.note{color:#526b78;font-size:13px}.warning{background:#fdf6e9;border-left:4px solid #a77437;padding:15px 18px}
+.status{padding:11px 14px;background:#edf5f5;border:1px solid var(--line);border-radius:4px;min-height:43px}
+.preview{border:1px solid #ccdfe0;padding:19px;border-radius:5px;background:#fbfdfd;margin-top:14px}
+.preview strong{display:block;color:#126875;font-size:11px;text-transform:uppercase;letter-spacing:.1em}.preview h2{font:700 24px/1.25 Georgia,serif;margin:8px 0}.preview p{margin:8px 0}.preview .url{overflow-wrap:anywhere;font-size:12px}
+.confirm{display:flex;align-items:flex-start;gap:10px;font-size:13px}.confirm input{margin-top:4px;flex:0 0 auto}
+#results{max-height:300px;overflow:auto}.pick{display:block;width:100%;text-align:left;background:white;color:#173344;border-radius:0;border-bottom:1px solid #e0e8eb}.pick:hover{background:#e9f3f4}.pick small{display:block;color:#56707a}
+a{color:var(--teal)}@media(max-width:600px){.card{padding:18px}main{margin:22px auto}.row button{flex:1}}
+</style></head><body>
+<header><strong>ROCHDALE DAILY · Newsroom</strong><div><a href="/editor/advertising-enquiries.html">Advertising leads</a> · <a href="/news-alerts.html">Reader alerts</a> · <a href="/">Paper</a></div></header>
+<main>
+<h1>Publish a push alert</h1>
+<p>Only send important, verified news from the <strong>live article archive</strong>. The reader chose the topic before subscribing. Never send every scraped story or use breaking-news alerts for ordinary promotions.</p>
+<div class="card">
+<label for="token">Existing editor admin token</label><input id="token" type="password" autocomplete="off" placeholder="Use the existing Cloudflare editor token">
+<div class="row" style="margin-top:12px"><button id="connect" type="button">Check push setup</button><button id="clear" type="button" style="background:#495c65">Clear access</button></div>
+<p id="status" class="status" role="status" aria-live="polite">This interface cannot send anything without valid editor authorisation and OneSignal settings.</p>
+</div>
+<div class="card">
+<h2>Choose a published article</h2>
+<label for="search">Search the archive</label><input id="search" type="search" placeholder="Search article headlines by keyword">
+<div id="results" aria-label="Matching published articles"></div>
+<p id="chosen" class="note">No article selected.</p>
+<label for="topic">Notification audience</label>
+<select id="topic">
+<option value="breaking">Breaking and important news</option>
+<option value="traffic">Travel and disruptions</option>
+<option value="community">Community and what's on</option>
+<option value="daily">Daily selected stories</option>
+</select>
+<p class="note">Only readers who explicitly selected that topic are eligible to receive the alert. Every push is tied to the actual published article title and link.</p>
+<div class="row"><button type="button" id="preview" disabled>Preview notification</button></div>
+<div id="preview-panel" hidden class="preview"></div>
+</div>
+<div class="card">
+<h2>Final editorial approval</h2>
+<p class="warning">Sending is irreversible once OneSignal accepts it. Check the article is accurate, the headline is appropriate, there are no unresolved corrections, and the chosen topic matches. A push will not alter the newspaper itself.</p>
+<label class="confirm"><input type="checkbox" id="confirm"> I have read and verified this published article, the topic and the notification preview. Send this one alert now.</label>
+<div class="row" style="margin-top:17px"><button type="button" id="send" disabled style="background:#9a5137">Send verified notification</button></div>
+<p class="note">The sender blocks duplicates for each article and topic, applies a 15-minute global interval and records OneSignal's response. “Accepted” does not establish that a reader saw the alert.</p>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);let secret='',selected=null,previewed=null,archive=[];
+const state=(message)=>{$('status').textContent=message;};
+function request(action){
+ if(!secret)throw Error('Enter the existing editor token first.');
+ if(!selected)throw Error('Select a published article.');
+ return fetch('/api/news-push',{method:'POST',headers:{'x-admin-token':secret,'Content-Type':'application/json'},
+  body:JSON.stringify({action,slug:selected.slug,topic:$('topic').value,confirm:action==='send'&&$('confirm').checked}),cache:'no-store'})
+  .then(async r=>{const d=await r.json();if(!r.ok||!d.ok)throw Error(d.error||'Request rejected');return d;});
+}
+async function loadArchive(){
+ const r=await fetch('/archive-index.json',{cache:'no-store'});if(!r.ok)throw Error('Archive not available');
+ const data=await r.json();archive=Array.isArray(data)?data.filter(x=>x.slug&&x.title&&/^\/articles\/[a-z0-9-]+\.html$/.test(x.url||'')):[];
+}
+function list(){
+ const term=$('search').value.trim().toLowerCase(),root=$('results');root.replaceChildren();
+ if(term.length<3)return;
+ const matches=archive.filter(x=>x.title.toLowerCase().includes(term)).slice(0,20);
+ if(!matches.length){root.textContent='No matching article in the current archive.';return;}
+ for(const story of matches){
+  const btn=document.createElement('button');btn.type='button';btn.className='pick';
+  btn.textContent=story.title;
+  const meta=document.createElement('small');meta.textContent=(story.category||'News')+' · '+(story.published_at||'').slice(0,10);
+  btn.append(meta);btn.addEventListener('click',()=>{
+   selected=story;previewed=null;$('chosen').textContent='Selected: '+story.title;
+   $('search').value=story.title;$('results').replaceChildren();$('preview').disabled=false;
+   $('preview-panel').hidden=true;$('send').disabled=true;$('confirm').checked=false;
+  });root.append(btn);
+ }
+}
+$('search').addEventListener('input',list);
+$('topic').addEventListener('change',()=>{previewed=null;$('preview-panel').hidden=true;$('send').disabled=true;$('confirm').checked=false;});
+$('confirm').addEventListener('change',()=>{$('send').disabled=!(previewed&&$('confirm').checked);});
+$('connect').addEventListener('click',async()=>{
+ secret=$('token').value.trim();state('Checking authorisation and service settings…');
+ try{
+  const res=await fetch('/api/news-push',{headers:{'x-admin-token':secret},cache:'no-store'});
+  const data=await res.json();if(!res.ok||!data.ok)throw Error(data.error||'Authorisation failed');
+  if(!archive.length)await loadArchive();
+  state(data.configured?'Connected. OneSignal sending is configured.':'Editor access confirmed, but OneSignal App ID, REST API key or Cloudflare KV is not yet configured. You can still preview.');
+ }catch(e){state(e.message);}
+});
+$('clear').addEventListener('click',()=>{secret='';selected=null;previewed=null;$('token').value='';$('results').replaceChildren();$('chosen').textContent='No article selected.';$('send').disabled=true;$('preview').disabled=true;$('confirm').checked=false;$('preview-panel').hidden=true;state('Editor access cleared.');});
+$('preview').addEventListener('click',async()=>{
+ const btn=$('preview');btn.disabled=true;state('Checking the live article…');
+ try{
+  const d=await request('preview');previewed=d;
+  const panel=$('preview-panel');panel.replaceChildren();
+  const label=document.createElement('strong');label.textContent='Rochdale Daily · '+d.topic;
+  const h=document.createElement('h2');h.textContent=d.article.title;
+  const p=document.createElement('p');p.textContent=d.article.description;
+  const url=document.createElement('p');url.className='url';url.textContent=d.article.url;
+  const info=document.createElement('p');info.className='note';info.textContent=d.audience;
+  panel.append(label,h,p,url,info);panel.hidden=false;
+  $('send').disabled=!$('confirm').checked||!!d.alreadySent||!d.configured||d.nextAllowedInSeconds>0;
+  state(d.alreadySent?'This article has already been pushed to this topic.':
+    d.nextAllowedInSeconds>0?'Rate limit: wait '+d.nextAllowedInSeconds+' seconds.':
+    d.configured?'Preview ready; confirm before sending.':'Preview ready but OneSignal is not configured yet.');
+ }catch(e){state(e.message);previewed=null;$('send').disabled=true;}
+ finally{btn.disabled=false;}
+});
+$('send').addEventListener('click',async()=>{
+ if(!previewed||!$('confirm').checked||!selected||previewed.article.slug!==selected.slug||previewed.topic!==$('topic').value)return;
+ const btn=$('send');btn.disabled=true;state('Sending the verified notification to the selected subscribers…');
+ try{
+  const d=await request('send');state('OneSignal accepted this push. ID '+d.notificationId+'. '+(d.recipients==null?'Recipient count not yet reported.':d.recipients+' targeted subscriptions.'));
+  previewed=null;$('confirm').checked=false;
+ }catch(e){state(e.message);}
+});
+})();
+</script>
+</body></html>
