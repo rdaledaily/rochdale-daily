@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - manual_articles.json
+      - 'assets/img/cards/**'
+      - scraper/preselect_library_images.py
+      - scraper/licensed_source_images.py
+      - image_permissions.json
       - 'manual_articles.d/**'
       - council_documents.json
       - council_votes.json
@@ -90,6 +94,7 @@ jobs:
           # Manual publication keeps the canonical merge/frontpage logic but
           # skips external event refreshes and archive-wide image rescans.
           python scraper/frontpage_manual_publish.py
+          python scraper/preselect_library_images.py --articles articles.json
           python scraper/article_gate.py articles.json
           python scraper/councillor_photos.py
           python scraper/patch_democracy_portraits.py
@@ -139,6 +144,7 @@ jobs:
             python -m json.tool articles.json > /dev/null
             python -m json.tool manual_articles.json > /dev/null
             python scraper/frontpage_manual_publish.py
+          python scraper/preselect_library_images.py --articles articles.json
               python scraper/article_gate.py articles.json
             python scraper/councillor_photos.py
             python scraper/patch_democracy_portraits.py
