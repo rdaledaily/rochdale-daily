@@ -3313,8 +3313,10 @@ def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[
             known_urls.add(canonicalise_url(existing_article.get('source_url')))
         candidate_url = canonicalise_url(candidate.source_url)
         return bool(candidate_url and candidate_url not in known_urls)
-    if existing_article.get('editorial_style_version') != STYLE_VERSION:
-        return True
+    # A new house-style revision alone must not requeue old reporting.
+    # Preserve published URLs and historical content unless new sources
+    # arrive or an editor explicitly issues a correction. Otherwise a
+    # prompt update can regenerate thousands of old articles needlessly.
     known_urls = {canonicalise_url(url) for url in existing_article.get('source_urls', []) if url}
     primary_url = canonicalise_url(str(existing_article.get('source_url') or ''))
     if primary_url:
