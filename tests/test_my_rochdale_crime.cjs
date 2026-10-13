@@ -29,7 +29,22 @@ assert.equal(check({ ...article, incident_latitude: null }, postcode), false, 'M
 assert.equal(check({ ...article, incident_latitude: '53.620' }, postcode), false, 'Unreviewed coordinates stored as strings should not pass');
 assert.equal(check({ ...article, category: 'Community' }, postcode), false, 'Noncrime stories cannot become incidents');
 assert.match(text, /if\(active==="local"\)entries=entries\.filter\(/, 'Local news list must also apply exact crime gating');
-assert.match(text, /No crime articles in our available archive have a verified incident location within one mile/, 'No-data state must be explicit');
+const page = fs.readFileSync('my-rochdale.html', 'utf8');
+assert.doesNotMatch(page, /id="crime-latest"|id="crime"/, 'No extra crime incidents/counts panel should appear');
+assert.doesNotMatch(text, /function crime\(d\)|function recentCrimeReports\(\)|kind=crime/,
+ 'No irrelevant or unsupported postcode incident feeds should be shown');
+const expectedOrder = ['daily-brief','ward-councillors','stories','policing-focus','weather'];
+const positions = expectedOrder.map(id => page.indexOf('id="' + id + '"'));
+assert.ok(positions.every(x => x >= 0),'All required sections should be present');
+assert.ok(positions.every((x,i)=>i===0 || x>positions[i-1]),
+ 'Briefing -> councillors -> news -> GMP priorities must stay in that order');
+assert.match(text,/new URL\(href,location\.href\)/,
+ 'In-page fragment links resolve against the active My Rochdale page');
+assert.match(text,/\["traffic","Travel today","#traffic"\]/,
+ 'Travel briefing should jump to the travel section');
+assert.match(page,/id="traffic"/,'Travel briefing destination must exist');
+assert.match(text,/if\(loc\.ward\)void wardPolicingEvidence\(loc\.ward,id\)/,
+ 'Priorities load for the selected ward independent of Police.uk crime feed');
 assert.doesNotMatch(text, /const tooBroad=new Set/, 'Old ward-level crime matching must not be restored');
 
 // Official police priorities must be matched to the SAME ward, not a
@@ -46,4 +61,4 @@ assert.equal(Object.keys(census.districts).length,0,'No unsupported postcode dis
 assert.match(text,/data\.wards\?\.\[expectedWard\]/,'GMP team is looked up using the exact selected ward');
 assert.match(text,/No alternative neighbourhood information has been substituted/,'Source failures must not show other areas');
 
-console.log('Postcode crime accuracy checks passed (8 geo/metadata scenarios and local-list protections).');
+console.log('My Rochdale checks passed: location-verified crime, single GMP priorities section, briefing order and travel links.');
