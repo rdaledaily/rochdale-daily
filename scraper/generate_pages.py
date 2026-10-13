@@ -1067,12 +1067,12 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
         except OSError:
             continue
         if re.search(
-            r'<meta\\s+name=["\\\']robots["\\\'][^>]*content=["\\\'][^"\\\']*noindex',
+            r'<meta[^>]+name="robots"[^>]+content="[^"]*noindex',
             content, re.I,
         ):
             continue
         canonical = re.search(
-            r'<link\\s+rel=["\\\']canonical["\\\']\\s+href=["\\\']([^"\\\']+)',
+            r'<link rel="canonical" href="([^"]+)"',
             content, re.I,
         )
         if not canonical or canonical.group(1) != expected or expected in seen:
