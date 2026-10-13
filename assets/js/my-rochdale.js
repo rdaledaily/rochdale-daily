@@ -173,34 +173,110 @@ async function weatherForPostcode(coords){
   catch{unavailable("weather","https://www.metoffice.gov.uk/");}
  }
 }
+function mapAt(lat,lon){
+ if(!Number.isFinite(lat)||!Number.isFinite(lon))return "";
+ // OpenStreetMap location, not a claim that a road closure lies exactly here.
+ return "https://www.openstreetmap.org/?mlat="+lat.toFixed(5)+"&mlon="+lon.toFixed(5)+"#map=16/"+lat.toFixed(5)+"/"+lon.toFixed(5);
+}
+function travelDistance(loc,x){
+ if(!Number.isFinite(x.lat)||!Number.isFinite(x.lon))return null;
+ const rad=v=>v*Math.PI/180,dLat=rad(x.lat-loc.latitude),dLon=rad(x.lon-loc.longitude);
+ const a=Math.sin(dLat/2)**2+Math.cos(rad(loc.latitude))*Math.cos(rad(x.lat))*Math.sin(dLon/2)**2;
+ return 12742*Math.asin(Math.min(1,Math.sqrt(a)));
+}
+function disruptionRow(x,loc){
+ const li=node("li");
+ li.append(node("strong",String(x.summary||x.description||"Travel disruption").slice(0,170)));
+ const km=travelDistance(loc,x);
+ const meta=[km!=null?km.toFixed(1)+" km from postcode (reported coordinate)":"Location not precisely mapped",
+   x.lines?.length?"Services "+x.lines.slice(0,6).join(", "):"",
+   x.stops?.length?"Stops: "+x.stops.slice(0,3).join(", "):"",
+   x.end?"Expected until "+when(x.end):""].filter(Boolean).join(" · ");
+ li.append(node("small",meta));
+ if(x.description)li.append(node("small",String(x.description).slice(0,460)));
+ if(km!=null)li.append(link("View this disruption's reported location on a map ↗",mapAt(x.lat,x.lon)));
+ return li;
+}
 function traffic(d,loc){
  const data=Array.isArray(d.disruptions)?d.disruptions:[];
- const nearby=x=>Number.isFinite(x.lat)&&Number.isFinite(x.lon)?Math.sqrt(Math.pow((x.lat-loc.latitude)*111,2)+Math.pow((x.lon-loc.longitude)*66,2)):999;
- const sorted=data.slice().sort((a,b)=>nearby(a)-nearby(b));
- const rows=sorted.slice(0,20).map(x=>({title:String(x.summary||x.description||"Bus disruption").slice(0,180),meta:[nearby(x)<6?"Near this postcode":'Borough-wide notice',x.places?.slice(0,3).join(", "),x.lines?.length?"Services "+x.lines.slice(0,6).join(", "):"",x.end?"Listed until "+when(x.end):""].filter(Boolean).join(" · ")}));
- out("traffic",[node("p",data.length+" bus disruption notices in the borough feed.","news-count"),list(rows),node("p","This feed covers reported bus disruptions, not all road traffic or train cancellations.","method")]);
- putBrief("traffic",data.filter(x=>nearby(x)<6).length+" nearby bus disruption notices; "+data.length+" across the borough.");
+ const scored=data.map(x=>({...x,_km:travelDistance(loc,x)}));
+ const near=scored.filter(x=>x._km!=null&&x._km<=5).sort((a,b)=>a._km-b._km);
+ const areaNotMapped=scored.filter(x=>x._km===null&&
+   aliases.some(w=>whole([x.summary,x.description,...(x.places||[]),...(x.stops||[])].join(" "),w)));
+ const other=scored.filter(x=>!near.includes(x)&&!areaNotMapped.includes(x));
+ const detail=node("div"),heading=node("p",near.length+" geolocated disruptions within 5 km of your postcode; "+areaNotMapped.length+" other notices mentioning your area.","news-count");
+ const nearUl=node("ul",undefined,"data-list");
+ for(const x of [...near,...areaNotMapped])nearUl.append(disruptionRow(x,loc));
+ detail.append(heading,nearUl);
+ if(!near.length&&!areaNotMapped.length)detail.append(node("p","No local matches in this feed. That does not mean roads or services are disruption-free."));
+ if(other.length){
+   const more=node("details"),title=node("summary","Show "+other.length+" other Greater Rochdale disruption notices");
+   more.append(title);
+   const ul=node("ul",undefined,"data-list");
+   for(const x of other)ul.append(disruptionRow(x,loc));
+   more.append(ul);detail.append(more);
+ }
+ detail.append(node("p","Map links point to coordinates supplied in a bus-disruption notice. Bus feed only, not a full road or train status check.","method"));
+ out("traffic",[detail]);
+ putBrief("traffic",(near.length+areaNotMapped.length)+" local bus disruption notices; "+other.length+" elsewhere in the borough.");
+}
+function eventEntry(x,local){
+ // A community-event approval ID does not guarantee an article page exists.
+ const known=archive.find(a=>String(a.slug)===String(x.slug||""));
+ const valid=known&&archiveUrl(known)?archiveUrl(known):null;
+ const eventPostcode=String(x.event_location||"").match(/\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i)?.[0]||"";
+ const suffix=[when(x.event_start_at),x.event_location,x.event_cost].filter(Boolean).join(" · ");
+ return {title:x.title||"Community event",href:valid,meta:(local?"Area-name match":"Elsewhere in the borough")+" · "+suffix+(eventPostcode?" · "+eventPostcode:"")};
 }
 function events(d){
  lastEvents=d;
  const data=Array.isArray(d.events)?d.events:[];
- const scored=data.slice().sort((a,b)=>{
-  const ma=aliases.some(x=>whole(a.event_location+" "+a.title,x)),mb=aliases.some(x=>whole(b.event_location+" "+b.title,x));
-  return Number(mb)-Number(ma)||Date.parse(a.event_start_at||0)-Date.parse(b.event_start_at||0);
- });
- const rows=scored.slice(0,20).map(x=>({title:x.title||"Event",href:/^[a-z0-9-]+$/i.test(x.slug||"")?"/articles/"+x.slug+".html":undefined,meta:[when(x.event_start_at),x.event_location,x.event_cost].filter(Boolean).join(" · ")}));
- out("events",[node("p",data.length+" approved upcoming community events.","news-count"),list(rows)]);
- putBrief("events",data.length+" approved upcoming events in Rochdale Daily’s community feed.");
+ const matched=data.filter(e=>aliases.some(x=>whole(e.event_location+" "+e.title,x)));
+ const rest=data.filter(e=>!matched.includes(e));
+ const top=node("div");
+ top.append(node("p",matched.length+" approved events with a match to your selected area.","news-count"));
+ if(matched.length)top.append(list(matched.map(x=>eventEntry(x,true))));
+ else top.append(node("p","No approved event submissions currently match your ward or local places. Check the wider borough events below."));
+ if(rest.length){
+  const details=node("details"),summ=node("summary","Explore "+rest.length+" other events across Rochdale borough");
+  details.append(summ,list(rest.map(x=>eventEntry(x,false))));
+  top.append(details);
+ }
+ top.append(node("p","Matching is based on event titles and venue descriptions; it does not establish walking distance. Open the borough calendar for the complete what's-on guide.","method"));
+ out("events",[top]);
+ putBrief("events",matched.length+" events mention your local area; "+rest.length+" more in the borough.");
 }
 function flood(d){
- const result=[],warnings=Array.isArray(d.warnings)?d.warnings:[],stations=Array.isArray(d.stations)?d.stations:[];
- if(!d.warningsAvailable)result.push(node("p","The warning feed could not be checked. Check the official service.","risk"));
- else if(!warnings.length)result.push(node("p","No warnings returned for this vicinity. Do not rely on this page for flood safety."));
- result.push(list(warnings.slice(0,12).map(x=>({title:x.area||"Warning",meta:[x.level,x.message].filter(Boolean).join(" · ")}))));
- if(stations.length)result.push(node("h4","Nearby river measuring stations"));
- result.push(list(stations.slice(0,9).map(x=>({title:x.name||x.station,href:x.url,meta:[x.river,x.reading?.value!=null?"Reading: "+x.reading.value+" (unit depends on station)":"No recent measurement",x.reading?.dateTime?when(x.reading.dateTime):""].filter(Boolean).join(" · ")}))));
+ const warnings=Array.isArray(d.warnings)?d.warnings:[],
+       stations=Array.isArray(d.stations)?d.stations:[];
+ const result=[];
+ const postcodePath=String(area.postcode||"").toLowerCase().trim().replace(/\s+/g,"-");
+ const levels=postcodePath?
+  "https://check-for-flooding.service.gov.uk/river-and-sea-levels/"+encodeURIComponent(postcodePath):
+  "https://check-for-flooding.service.gov.uk/river-and-sea-levels";
+ result.push(link("Check official river levels near "+(area.postcode||"your postcode")+" ↗",levels));
+ if(!d.warningsAvailable)result.push(node("p","The warning feed could not be checked. Use the official service.","risk"));
+ else if(!warnings.length)result.push(node("p","No nearby warnings were returned. This is not a property flood-risk assessment."));
+ if(warnings.length){
+  const ul=list(warnings.slice(0,12).map(w=>({
+    title:w.area||"Flood warning",
+    href:/^https:\/\/environment\.data\.gov\.uk\/flood-monitoring\/id\/floods\//.test(w.url||"")?w.url:levels,
+    meta:[w.level,w.message].filter(Boolean).join(" · ")
+  })));
+  result.push(ul);
+ }
+ if(stations.length)result.push(node("h4","Nearest verified river measurement stations"));
+ const rows=stations.slice(0,10).map(x=>({
+   title:x.name||x.station,
+   href:/^https:\/\/environment\.data\.gov\.uk\/flood-monitoring\/id\/stations\//.test(x.url||"")?x.url:levels,
+   meta:[x.distanceKm!=null?x.distanceKm+" km from postcode":"",
+     x.river,x.reading?.value!=null?"Latest reading: "+x.reading.value+" (see record for units)":"Measurement not currently supplied",
+     x.reading?.dateTime?when(x.reading.dateTime):""].filter(Boolean).join(" · ")
+ }));
+ result.push(list(rows));
  out("flood",result);
- putBrief("flood",!d.warningsAvailable?"Could not check official flood warnings.":warnings.length?warnings.length+" nearby flood alerts or warnings returned.":"No nearby warnings returned by this feed; check the official service.");
+ putBrief("flood",!d.warningsAvailable?"The official warnings feed could not be verified.":
+   warnings.length?warnings.length+" nearby flood warnings returned.":"No nearby warnings reported in this feed; see official postcode results.");
 }
 async function wardPolicingEvidence(expectedWard,expectedRequest){
  const target=byId("crime-local-priorities");if(!target)return;
@@ -234,9 +310,13 @@ async function wardPolicingEvidence(expectedWard,expectedRequest){
 
 function planning(d){
  const data=Array.isArray(d.constraints)?d.constraints:[];
- out("planning",[node("p",data.length+" data entries returned; some designation datasets may be incomplete.","news-count"),list(data.map(x=>({title:x.name||x.dataset||"Planning designation",meta:[x.dataset,x.reference].filter(Boolean).join(" · ")}))),node("p","No results does not prove that a property has no restrictions.","method")]);
+ const rows=data.map(x=>({title:x.name||x.dataset||"Planning designation",
+   href:/^https:\/\/www\.planning\.data\.gov\.uk\/entity\/\d+$/.test(x.url||"")?x.url:"",
+   meta:[String(x.dataset||"").replace(/-/g," "),x.reference,"Official record for the approximate postcode location"].filter(Boolean).join(" · ")}));
+ const intro=node("p",data.length+" government planning records returned for your approximate postcode coordinates.","news-count");
+ const help=node("p","Each record links directly to the source entity. Planning Data does not include every planning application and this is not an official property search.","method");
+ out("planning",[intro,list(rows),help]);
 }
-
 function councillorCard(person){
  const card=node("article",undefined,"councillor-card");
  card.append(node("h3",person.name||"Councillor"),node("p",person.party||"Party not verified","councillor-party"));
