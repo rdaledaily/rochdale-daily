@@ -260,16 +260,33 @@ async function wardPolicingEvidence(expectedWard,expectedRequest){
 }
 
 function crime(d){
- const blocks=[
-   node("p","Greater Manchester Police has not supplied street-level crime data to Police.uk since July 2019. A reliable recent postcode-specific crime total cannot currently be calculated from that dataset.","risk"),
-   node("p","Because the official local data is unavailable, we do not infer that there have been zero crimes and we do not show borough-wide totals or incidents from other postcodes as local results.","method"),
-   link("Official GMP neighbourhood statistics ↗",d.officialStatistics||"https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/")
- ];
- out("crime",blocks);
- recentCrimeReports();
- if(area.ward)void wardPolicingEvidence(area.ward,requestId);
+  // GMP's downloadable Excel workbook is not a postcode-level incident feed.
+  // Keep all essential explanations readable in HTML on this page, including
+  // for readers who cannot open Excel files on a phone.
+  const blocks=[];
+  blocks.push(node("h4","What we can verify for this postcode"));
+  const facts=node("dl",undefined,"crime-facts");
+  [
+    ["Recent police incident totals","Not available for this postcode from Police.uk. GMP has not supplied its street-level data to Police.uk since July 2019."],
+    ["Rochdale Daily crime reports","Only incidents with an editor-verified location within one mile can appear below. Other wards and towns are never used as substitutes."],
+    ["Your ward’s policing priorities","Where published and verified, these appear below from the relevant GMP neighbourhood team. Priorities are not counts of crimes committed."],
+    ["GMP’s neighbourhood crime workbook","The police also publish an Excel file for broader neighbourhood-crime statistics. It is a separate source, not a live postcode incident list. You do not need that spreadsheet to read this page."]
+  ].forEach(([title,desc])=>{
+    const dt=node("dt",title),dd=node("dd",desc);
+    facts.append(dt,dd);
+  });
+  blocks.push(facts);
+  blocks.push(node("p","No source currently supports a reliable, recent count of crimes immediately around every Rochdale postcode. An unavailable count is not the same as zero crimes.","method"));
+  const actions=node("div",undefined,"crime-sources");
+  actions.append(
+    link("Find your GMP neighbourhood team ↗","https://www.gmp.police.uk/area/your-area/"),
+    link("Read GMP’s neighbourhood crime source page ↗",d.officialStatistics||"https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/neighbourhood-crime/")
+  );
+  blocks.push(actions);
+  out("crime",blocks);
+  recentCrimeReports();
+  if(area.ward)void wardPolicingEvidence(area.ward,requestId);
 }
-
 function planning(d){
  const data=Array.isArray(d.constraints)?d.constraints:[];
  out("planning",[node("p",data.length+" data entries returned; some designation datasets may be incomplete.","news-count"),list(data.map(x=>({title:x.name||x.dataset||"Planning designation",meta:[x.dataset,x.reference].filter(Boolean).join(" · ")}))),node("p","No results does not prove that a property has no restrictions.","method")]);
