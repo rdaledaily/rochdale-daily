@@ -20,6 +20,30 @@
 .contact{padding:80px 0;background:#fff}.contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:80px;align-items:start}.contact-ways{background:var(--navy);padding:24px;color:white;margin-top:27px;border-radius:4px}.contact-ways a{color:white;font-weight:750}.contact-ways p{color:#c9d9e0;font-size:.91rem}.contact form{border:1px solid #d2e0e4;background:#fff;border-radius:6px;padding:30px;box-shadow:0 12px 32px rgba(20,55,75,.08)}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.contact label{display:block;font-size:.84rem;font-weight:750;margin:0 0 5px}.contact input,.contact select,.contact textarea{width:100%;font:inherit;font-size:.95rem;border:1px solid #adc0c9;border-radius:4px;padding:12px;color:var(--ink);background:#fff}.contact textarea{resize:vertical}.contact .field{margin-bottom:16px}.contact .privacy{font-size:.79rem;color:var(--muted);line-height:1.5}.contact .privacy label{display:flex;gap:9px;align-items:start;font-size:.82rem;font-weight:500}.contact .privacy input{width:auto;margin-top:4px}.botcheck{position:absolute;left:-10000px;overflow:hidden}.formstatus{font-size:.87rem;min-height:1.8em;margin-top:10px}.formstatus.error{color:#9b2736}.formstatus.ok{color:#145a4b}.footer{background:#0b2233;color:#c6d7df;padding:30px 0}.footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer a{color:#e1eef1}.footer p{font-size:.79rem;max-width:740px}
 @media(max-width:900px){.hero-grid,.reach-grid,.quote-grid,.contact-grid{grid-template-columns:1fr;gap:32px}.hero{padding:55px 0}.proof{max-width:580px}.head-nav{gap:13px}.head-nav a:first-child{display:none}.contact-grid{gap:20px}}
 @media(max-width:670px){.wrap{padding:0 17px}.hero{padding:52px 0}h1{font-size:clamp(2.6rem,11vw,4.1rem)}.hero p{font-size:1rem}.hero-actions .btn{width:100%}.package-grid,.faq-grid,.steps,.why,.formgrid{grid-template-columns:1fr}.package{padding:25px}.package h3,.package .who{min-height:0}.section,.how,.contact{padding:52px 0}.reach,.faq{padding:49px 0}.head-nav a:not(.strong){display:none}.contact form{padding:22px}.quote-band{padding:45px 0}}
+
+/* Published media-price comparisons: independent sources, not rate equivalence */
+.market-benchmark{padding:74px 0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.market-benchmark .intro{max-width:835px}.market-benchmark .intro p{color:var(--muted)}
+.market-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:29px 0}
+.market-proof .market-stat{background:#f3f7f7;border:1px solid #d8e5e7;border-radius:6px;padding:21px;display:flex;flex-direction:column;gap:5px}
+.market-stat .market-name{font-size:.75rem;text-transform:uppercase;font-weight:800;letter-spacing:.08em;color:#476572}
+.market-stat strong{font:750 1.95rem/1.2 Georgia,serif;color:var(--navy)}
+.market-stat p{font-size:.82rem;line-height:1.45;color:var(--muted);margin:0}
+.market-stat.ours{background:#e8f3f1;border-color:#b5d5d1}
+.price-table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+.price-table{border-collapse:collapse;width:100%;min-width:690px;text-align:left;font-size:.91rem}
+.price-table th{background:#10283b;color:white;padding:13px 16px;font-size:.78rem;letter-spacing:.035em;font-weight:800}
+.price-table td{padding:13px 16px;vertical-align:top;border-top:1px solid #e2e9eb}
+.price-table td:nth-child(3){white-space:nowrap;font-weight:800;color:var(--navy)}
+.price-table td:last-child{color:var(--muted);font-size:.85rem}
+.price-table tr.ours{background:#f0f8f6}
+.price-table a{font-weight:750}
+.market-footnote{font-size:.79rem;line-height:1.65;color:var(--muted);max-width:950px;margin:16px 0 0}
+.market-cta{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#eaf2f2;border:1px solid #d2e1e1;border-radius:6px;padding:22px 25px;margin-top:25px}
+.market-cta p{font-size:.88rem;color:var(--muted);margin:5px 0 0}
+.market-cta .btn{flex-shrink:0}
+@media(max-width:670px){.market-benchmark{padding:52px 0}.market-proof{grid-template-columns:1fr;gap:10px}.market-proof .market-stat{padding:17px}.market-cta{flex-direction:column;align-items:stretch;padding:19px}.market-cta .btn{width:100%}}
+
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}.btn:hover{transform:none}}
 @media print{header,.hero-actions,.btn,.contact form,.footer{display:none!important}body{background:#fff}.hero,.quote-band{color:#111;background:#fff}.hero p,.quote-band p{color:#111}.package{break-inside:avoid}}
 </style>
@@ -27,7 +51,7 @@
 <body>
 <header class="site-head">
   <div class="wrap head-row"><a class="brand" href="/">ROCHDALE DAILY<span>Independent local news</span></a>
-  <nav class="head-nav" aria-label="Advertising navigation"><a href="#audience">Our reach</a><a href="#packages">Packages</a><a href="/advertising-media-pack.html">Media pack</a><a class="strong" href="#enquire">Discuss advertising →</a></nav></div>
+  <nav class="head-nav" aria-label="Advertising navigation"><a href="#audience">Our reach</a><a href="#packages">Packages</a><a href="#compare-prices">Compare rates</a><a href="/advertising-media-pack.html">Media pack</a><a class="strong" href="#enquire">Discuss advertising →</a></nav></div>
 </header>
 <main>
 <section class="hero" aria-labelledby="title"><div class="wrap hero-grid">
@@ -86,6 +110,45 @@
   </div>
   <p class="small" style="margin:20px 0 0">All amounts are proposed monthly advertising rates. Any applicable VAT and specific campaign deliverables are confirmed before payment. Availability varies. No minimum impressions, enquiries or sales are guaranteed.</p>
 </div></section>
+
+<section class="market-benchmark" id="compare-prices" aria-labelledby="price-comparison-title">
+ <div class="wrap">
+  <div class="intro">
+   <span class="eyebrow">Open prices · Make an informed choice</span>
+   <h2 id="price-comparison-title">How much does advertising with local media cost?</h2>
+   <p>Every advertiser has a budget. We publish our own rates and show examples of other UK local and regional media prices, so you can see the market before deciding where Rochdale Daily fits into your plans.</p>
+  </div>
+  <div class="market-proof" aria-label="Selected website banner prices">
+   <div class="market-stat ours"><span class="market-name">Rochdale Daily</span><strong>£175/month</strong><p>Shared, rotating homepage banner across two positions.</p></div>
+   <div class="market-stat"><span class="market-name">Rochdale Times</span><strong>£750/month</strong><p>Published rate for a 728 × 90 digital banner in its 2026 media pack.</p></div>
+   <div class="market-stat"><span class="market-name">Business Manchester</span><strong>£120 + VAT/month</strong><p>Published rate for a site-wide leaderboard; adverts may rotate.</p></div>
+  </div>
+  <div class="price-table-scroll" role="region" tabindex="0" aria-label="Published advertising rate comparison; scroll horizontally to see all columns">
+   <table class="price-table">
+    <thead><tr><th scope="col">Publisher</th><th scope="col">Advertising format</th><th scope="col">Published price</th><th scope="col">Package or term</th></tr></thead>
+    <tbody>
+     <tr class="ours"><td><strong>Rochdale Daily</strong></td><td><a href="#banner">Homepage banner</a></td><td>£175/month</td><td>Rotating placement; up to 10 advertisers sharing two positions.</td></tr>
+     <tr><td><a href="https://www.rochdaletimes.co.uk/wp-content/uploads/2026/05/Rochdale-Times-Media-Pack-2026.pdf" target="_blank" rel="noopener noreferrer">Rochdale Times</a></td><td>Digital banner (728 × 90)</td><td>£750/month</td><td>2026 media pack; inventory and rotation are not established as equivalent.</td></tr>
+     <tr><td><a href="https://www.businessmanchester.co.uk/advertise-with-us/" target="_blank" rel="noopener noreferrer">Business Manchester</a></td><td>Site-wide leaderboard</td><td>£120 + VAT/month</td><td>Advertisers may alternate, with equal time stated on its rate card.</td></tr>
+     <tr><td>Business Manchester</td><td>Site-wide sidebar advert</td><td>£60 + VAT/month</td><td>Different ad position and size from a homepage banner.</td></tr>
+     <tr class="ours"><td><strong>Rochdale Daily</strong></td><td><a href="#corporate">Corporate partnership</a></td><td>£1,200/month</td><td>Bespoke display, labelled partnership branding and monthly reporting; agreed by proposal.</td></tr>
+     <tr><td><a href="https://www.rochdaletimes.co.uk/wp-content/uploads/2026/05/Rochdale-Times-Media-Pack-2026.pdf" target="_blank" rel="noopener noreferrer">Rochdale Times</a></td><td>Brand partnership</td><td>£1,000 + VAT/month</td><td>12-month commitment; includes promotional feature, profile, banner, Facebook and newsletter elements.</td></tr>
+     <tr><td><a href="https://ilovemanchester.com/advertise" target="_blank" rel="noopener noreferrer">I Love Manchester</a></td><td>Venue, event or business promotion</td><td>From £49/month</td><td>Entry-level promotion; specific placement is not stated on the public page.</td></tr>
+     <tr><td>I Love Manchester</td><td>Bespoke marketing campaign</td><td>Typically from £2,500</td><td>Tailored to objectives and channels; not necessarily a monthly rate.</td></tr>
+     <tr class="ours"><td><strong>Rochdale Daily</strong></td><td><a href="#directory">Featured directory listing</a></td><td>£75/month</td><td>Paid placement in an appropriate local business category.</td></tr>
+     <tr><td><a href="https://www.rochdaletimes.co.uk/wp-content/uploads/2026/05/Rochdale-Times-Media-Pack-2026.pdf" target="_blank" rel="noopener noreferrer">Rochdale Times</a></td><td>Annual business profile</td><td>£895 + VAT/year</td><td>12-month dedicated company profile; different from a directory listing.</td></tr>
+     <tr><td><a href="https://www.rochdaleonline.co.uk/business/adtracking_advertid-1765-4079/" target="_blank" rel="noopener noreferrer">Rochdale Online</a></td><td>Recruitment advert</td><td>£100 + VAT/30 days</td><td>Job vacancy listing, not a general display advert.</td></tr>
+     <tr><td><a href="https://www.rochvalleyradio.com/local/advertising/rate-card" target="_blank" rel="noopener noreferrer">Roch Valley Radio</a></td><td>Recruitment advert</td><td>From £170 + VAT/28 days</td><td>Entry job-ad package; website display rates require a quote.</td></tr>
+    </tbody>
+   </table>
+  </div>
+  <p class="market-footnote">Sources: advertisers' own published rate cards and pages, checked 13 October 2026. These are advertised prices, not independently verified transaction prices. Publishers offer different audiences, impressions, placement sizes, rotation rules, editorial and promotional services, and booking terms. VAT treatment varies; prices are shown as published, and rates may change. The comparison does not imply that every package is equivalent or that any competitor endorses Rochdale Daily.</p>
+  <div class="market-cta">
+   <div><strong>Prefer one clear quote for your business?</strong><p>Tell us your audience, dates and budget. We'll explain the exact Rochdale Daily placement before you commit.</p></div>
+   <a class="btn dark" href="#enquire">Get an advertising proposal →</a>
+  </div>
+ </div>
+</section>
 <section class="showcase" aria-label="Illustrative advertising placement"><div class="wrap showcase-grid"><div><span class="eyebrow">Picture your business here</span><h2>Your advertising, in a real reading environment.</h2><p>A media partnership should be something a business can picture before signing anything. Our sponsorship and display packages place clearly labelled advertising within agreed newspaper inventory, distinct from the reporting itself.</p><p>The example is illustrative, not a live placement or a promise of exclusivity. We confirm actual positions and campaign dates before payment.</p><a class="btn dark" href="#enquire" data-plan="corporate">Ask for a placement proposal →</a></div><div><div class="mock-paper" aria-hidden="true"><div class="mock-brand">ROCHDALE DAILY</div><div class="mock-ribbon"><span>Advertisement · Example only</span>Your business. Part of the Rochdale conversation.</div><div class="mock-columns"><div><div class="mock-image"></div><div class="mock-title">Local news for the places we call home</div><div class="mock-copy"></div><div class="mock-copy short"></div><div class="mock-copy"></div></div><div class="mock-ad"><span>Sponsored display · Example</span><strong>Your brand could feature here</strong></div></div></div><p class="mock-caption">Illustration of a possible newspaper advertising format. Final locations vary by package and availability.</p></div></div></section>
 <section class="quote-band"><div class="wrap quote-grid">
  <div><span class="eyebrow">Already advertise elsewhere?</span><h2>Think of us as another club in your marketing bag.</h2><p>Print, radio, leaflets and digital news can do different jobs. Tell us where you already advertise, who you want to reach and what you need to see from a campaign. We can recommend a sensible addition, not simply the biggest package.</p></div>
