@@ -228,6 +228,37 @@ function recentCrimeReports(){
    meta:[when(x.published_at),"Verified incident location within one mile"].filter(Boolean).join(" · ")
  }))));
 }
+async function wardPolicingEvidence(expectedWard,expectedRequest){
+ const target=byId("crime-local-priorities");if(!target)return;
+ target.replaceChildren(node("p","Checking published neighbourhood policing priorities…","loading"));
+ try{
+  const data=await read("/assets/data/gmp-ward-policing-priorities.json",11000);
+  if(expectedRequest!==requestId||expectedWard!==area.ward)return;
+  const record=data.wards?.[expectedWard];
+  if(!record){
+   target.replaceChildren(
+    node("h4","Your local policing team"),
+    node("p","A checked neighbourhood-priority summary is not available for this ward. We will not show priorities from another ward."),
+    link("Find your team using your postcode ↗","https://www.gmp.police.uk/area/your-area/")
+   );
+   return;
+  }
+  if(!record.url?.startsWith("https://www.gmp.police.uk/"))throw Error("Unexpected source");
+  const entries=(record.priorities||[]).map(t=>({title:t}));
+  target.replaceChildren(
+   node("h4","Current GMP priorities: "+record.policeArea),
+   node("p","Published police priorities for the selected ward. These are priorities, not local offence totals or proof that a crime occurred nearby.","method"),
+   list(entries),
+   node("p","Official GMP priority update: "+when(record.updated)+" · Source: Greater Manchester Police","method"),
+   link("Check your neighbourhood policing team's latest updates ↗",record.url)
+  );
+ }catch(err){
+  if(expectedRequest===requestId){
+   target.replaceChildren(node("p","We could not check official ward policing priorities. No alternative neighbourhood information has been substituted.","method"),link("Find your team at GMP ↗","https://www.gmp.police.uk/area/your-area/"));
+  }
+ }
+}
+
 function crime(d){
  const blocks=[
    node("p","Greater Manchester Police has not supplied street-level crime data to Police.uk since July 2019. A reliable recent postcode-specific crime total cannot currently be calculated from that dataset.","risk"),
@@ -236,6 +267,7 @@ function crime(d){
  ];
  out("crime",blocks);
  recentCrimeReports();
+ if(area.ward)void wardPolicingEvidence(area.ward,requestId);
 }
 
 function planning(d){
@@ -394,7 +426,7 @@ async function start(e){
           link("Official councillor directory ↗",errorSources.councillors));
       }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");
      };}}));
-  if(id===requestId)report("✓ Results ready for "+loc.ward+": crime and courts, weather, all news, travel and other local services.","success");
+  if(id===requestId)report("✓ Results ready for "+loc.ward+": verified neighbourhood information, local reporting, weather and travel. Police crime counts are shown only where suitable records exist.","success");
  }catch(err){if(id===requestId)await showBoroughIfLookupFails();}
  finally{if(id===requestId){button.disabled=false;button.textContent="Explore my area →";}}
 }
