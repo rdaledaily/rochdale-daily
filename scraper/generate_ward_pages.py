@@ -182,7 +182,7 @@ def councillor_card(person, photos):
     else:
         body = '<p>No individually named vote is currently available for this councillor. This does not establish how they voted at other meetings.</p>'
     profile = str(person.get("profile_url") or "")
-    if re.fullmatch(r"https://democracy\\.rochdale\\.gov\\.uk/mgUserInfo\\.aspx\\?UID=\\d+", profile):
+    if re.fullmatch(r"https://democracy\.rochdale\.gov\.uk/mgUserInfo\.aspx\?UID=\d+", profile):
         official = f'<p><a href="{esc(profile)}" target="_blank" rel="noopener noreferrer">Council contact details and surgeries ↗</a></p>'
     else:
         official = ""
