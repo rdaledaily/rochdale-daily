@@ -25,6 +25,7 @@ export async function onRequestPost({request,env}){
   if(request.headers.get('origin')!==u.origin)return resp({error:'Invalid request origin'},403);
   if(Number(request.headers.get('content-length')||0)>5500)return resp({error:'Request too large'},413);
   let d;try{d=await request.json()}catch{return resp({error:'Invalid form submission'},400)}
+  if(!d||typeof d!=='object'||Array.isArray(d))return resp({error:'Invalid form submission'},400);
   if(admin(request,env)&&d.action==='status'){
     const id=safe(d.id,90),status=safe(d.status,30);
     if(!/^lead-[0-9a-f-]{36}$/.test(id)||!STATUSES.has(status))return resp({error:'Invalid update'},400);
