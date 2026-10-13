@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 222,
-  "published_count": 222,
-  "category_change_count": 31,
-  "image_change_count": 27,
+  "article_count": 226,
+  "published_count": 226,
+  "category_change_count": 32,
+  "image_change_count": 29,
   "category_changes": [
     {
       "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
@@ -26,6 +26,13 @@
       "from": "environment",
       "to": "news",
       "reason": "headline strongly identifies news"
+    },
+    {
+      "slug": "man-arrested-after-woman-seriously-injured-in-m62-crash-near-rochdale",
+      "title": "Man Arrested After Woman Seriously Injured in M62 Crash Near Rochdale",
+      "from": "traffic",
+      "to": "crime",
+      "reason": "headline strongly identifies crime"
     },
     {
       "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
@@ -226,6 +233,30 @@
   ],
   "image_changes": [
     {
+      "slug": "who-or-what-is-the-healey-dwarf",
+      "title": "Who — or what — is the Healey Dwarf?",
+      "category": "environment",
+      "reason": "weak filename image match score 4751; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/healey-dell.jpg",
+        "img": "assets/img/cards/healey-dell.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/who-or-what-is-the-healey-dwarf-generated-card.jpg"
+    },
+    {
+      "slug": "bury-man-faces-trial-for-alleged-aggravated-burglary-in-rochdale",
+      "title": "Bury Man Faces Trial for Alleged Aggravated Burglary in Rochdale",
+      "category": "crime",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/burglary.jpg",
+        "img": "assets/img/cards/burglary.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/bury-man-faces-trial-for-alleged-aggravated-burglary-in-rochdale-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-pioneers-museum-to-host-archive-sessions-on-local-folklore",
       "title": "Rochdale Pioneers Museum Hosts Archive Sessions on Local Folklore",
       "category": "community",
@@ -275,7 +306,7 @@
     },
     {
       "slug": "construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king",
-      "title": "Construction Completed on Sustainable Materials and Manufacturing Centre in Kingsway Business Park",
+      "title": "Sustainable Materials and Manufacturing Centre Completed at Kingsway Business Park in Rochdale",
       "category": "business",
       "reason": "weak filename image match score 8251; neutral card is safer",
       "before": {
