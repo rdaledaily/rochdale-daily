@@ -1,25 +1,18 @@
 #!/usr/bin/env python3
-"""Replace generated Rochdale Daily article cards with real source photographs.
+"""Recover the original publisher's lead photograph when reuse rights are verified.
 
-The normal cards matcher remains the first choice. This pass only touches published
-articles that are still using a generated/placeholder card after that matcher has
-run. It then checks the article's original publisher page for a declared lead image
-(Open Graph, Twitter card, JSON-LD or a prominent article image), caches an accepted
-image locally under ``assets/img/cards`` and keeps the source credit.
+Crawling a publisher page is NOT evidence that its photos may be republished.
+This pass only uses matching image-specific Creative Commons/public-domain terms
+or a separately documented, verified permission. Proper credit and licence link
+are retained on the article, including for commercial use.
 
-For safety this automated repair is limited to source domains that the newsroom has
-explicitly allowed for image reuse. If no suitable image can be obtained, the
-existing generated card is left untouched. The pass is retrospective, so an older
-placeholder can be repaired on any later scraper run.
-
-A successful source photo is renamed to the exact article slug. That is deliberate:
-the ordinary cards matcher then recognises it as the editor-controlled image for
-that story on every future run, rather than replacing it with a generated card and
-forcing another network fetch.
+Runs on real published stories before local-library selection or Commons fallback.
+Unsupported sources keep their generated cards or appropriately curated photos.
 """
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import os
 import re
@@ -28,24 +21,21 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from PIL import Image, UnidentifiedImageError
+
+from ensure_article_images import high_risk_photo_story
+from licensed_source_images import fetch_licensed_source_image, permission_entries
+
 from backfill_article_images import (
     DEFAULT_USER_AGENT,
     atomic_write_json,
     clean,
     load_articles,
     source_urls,
-    update_article,
 )
 
 CARDS_DIR = Path("assets/img/cards")
-DEFAULT_ALLOWED_DOMAINS = (
-    "rochdale.gov.uk,gmp.police.uk,manchesterfire.gov.uk,rochdaleafc.co.uk,"
-    "hornetsrugbyleague.co.uk,tfgm.com,gmca.gov.uk,nationalhighways.co.uk,"
-    "hopwood.ac.uk,northerncarealliance.nhs.uk,penninecare.nhs.uk,"
-    "rochvalleyradio.com,actiontogether.org.uk,yourtrustrochdale.co.uk,"
-    "rochdaletownhall.co.uk,visitrochdale.com,investinrochdale.co.uk,"
-    "media.northernrailway.co.uk"
-)
+DEFAULT_ALLOWED_DOMAINS = ""  # Domain reputation never proves image reuse permission.
 
 
 def host(value: str) -> str:
@@ -110,12 +100,65 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def try_licensed_source_photo(
+    article: dict[str, Any],
+    candidates: list[str],
+    *,
+    timeout: int,
+    permissions: dict[str, dict[str, str]],
+) -> tuple[bool, str]:
+    """Set an approved original-source photograph; do not touch story facts."""
+    for source_url in candidates:
+        try:
+            result = fetch_licensed_source_image(
+                source_url, permissions=permissions, timeout=timeout,
+                user_agent=DEFAULT_USER_AGENT,
+            )
+        except (OSError, ValueError, TimeoutError, ConnectionError) as exc:
+            continue
+        if result is None:
+            continue
+
+        candidate, payload, extension, rights = result
+        try:
+            with Image.open(io.BytesIO(payload)) as image:
+                image.verify()
+        except (OSError, ValueError, UnidentifiedImageError):
+            continue
+
+        target = CARDS_DIR / f"{slug_for(article)}{extension}"
+        if target.is_file():
+            # A genuinely existing editor-supplied same-slug photograph wins;
+            # the source photo must never overwrite an approved edit.
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(payload)
+
+        credit = (rights.get("creator") or "Original source").strip()
+        licence = (rights.get("license_name") or "Used with permission").strip()
+        article["image_url"] = target.as_posix()
+        article["img"] = target.as_posix()
+        article["image_credit"] = f"{credit} / {licence}"
+        article["image_credit_url"] = rights.get("evidence_url") or source_url
+        article["image_license_url"] = rights.get("license_url") or ""
+        article["image_license"] = licence
+        article["source_image_candidate_url"] = candidate.url
+        article["image_status"] = "source-photo-cached"
+        article["image_backfill_method"] = "verified-original-source-photo"
+        article["source_image_reuse_status"] = "verified-source-image-license"
+        article.pop("image_placeholder_reason", None)
+        return True, "licensed-source-photo"
+    return False, "no-cleared-source-image"
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     articles = load_articles(args.articles)
     allowed = allowed_domains()
+    permissions = permission_entries()
     repaired = 0
     eligible = 0
+    skipped_risk = 0
     no_allowed_source = 0
     no_image = 0
     rows: list[dict[str, Any]] = []
@@ -125,97 +168,58 @@ def main(argv: list[str] | None = None) -> int:
             continue
         if not is_generated_or_placeholder(article):
             continue
+        if high_risk_photo_story(article):
+            skipped_risk += 1
+            continue
         if args.limit and eligible >= args.limit:
             break
 
         eligible += 1
-        source_list = article.get("source_urls") or []
-        original_sources = list(source_list) if isinstance(source_list, list) else []
-        primary = clean(article.get("source_url"))
         candidates = source_urls(article)
-        permitted = [url for url in candidates if domain_allowed(url, allowed)]
-        if not permitted:
+        # Configured domain restrictions are optional; a publisher domain alone
+        # is never taken as permission. The individual image must have rights.
+        if allowed:
+            candidates = [url for url in candidates if domain_allowed(url, allowed)]
+        if not candidates:
             no_allowed_source += 1
             rows.append({
                 "slug": clean(article.get("slug")),
-                "result": "no-allowed-source",
-                "sources": candidates,
+                "result": "no-source",
             })
             continue
 
-        before = {
-            "image_url": article.get("image_url"),
-            "img": article.get("img"),
-            "image_credit": article.get("image_credit"),
-            "image_credit_url": article.get("image_credit_url"),
-            "image_status": article.get("image_status"),
-            "image_placeholder_reason": article.get("image_placeholder_reason"),
-        }
-
-        # Temporarily expose only permitted sources to the existing conservative
-        # publisher-image extractor. Restore the article's source list immediately
-        # afterwards; image repair must never rewrite article sourcing.
-        article["source_url"] = permitted[0]
-        article["source_urls"] = permitted
-        updated, reason = update_article(
-            article,
-            output_dir=CARDS_DIR,
-            apply=True,
-            timeout=args.timeout,
-            user_agent=DEFAULT_USER_AGENT,
-            allow_social=False,
-            sleep_seconds=0,
+        updated, reason = try_licensed_source_photo(
+            article, candidates[:3], timeout=args.timeout,
+            permissions=permissions,
         )
-        article["source_url"] = primary
-        if original_sources:
-            article["source_urls"] = original_sources
-        else:
-            article.pop("source_urls", None)
-
         if updated:
-            canonical = canonicalise_download(article)
-            article["image_url"] = canonical
-            article["img"] = canonical
-            article["image_status"] = "source-photo-cached"
-            article["image_backfill_method"] = "publisher-lead-image"
-            article.pop("image_placeholder_reason", None)
             repaired += 1
-            result = "repaired"
         else:
-            # update_article mutates only on success, but restore explicitly so
-            # this script remains safe if its implementation changes later.
-            for key, value in before.items():
-                if value is None:
-                    article.pop(key, None)
-                else:
-                    article[key] = value
             no_image += 1
-            result = reason or "no-image"
-
         rows.append({
             "slug": clean(article.get("slug")),
-            "title": clean(article.get("title")),
-            "result": result,
-            "source": permitted[0],
-            "before": before.get("image_url"),
+            "result": reason,
+            "source": candidates[0],
             "after": article.get("image_url"),
         })
-        print(f"{result:18} {clean(article.get('slug') or article.get('title'))}")
+        print(f"{reason:24} {clean(article.get('slug') or article.get('title'))}")
 
     if repaired:
         atomic_write_json(args.articles, articles)
-
     report = {
         "eligible_placeholders": eligible,
         "repaired_with_source_photo": repaired,
+        "skipped_sensitive_stories": skipped_risk,
         "no_allowed_source": no_allowed_source,
         "no_usable_source_image": no_image,
+        "permission_entries": len(permissions),
         "allowed_domains": sorted(allowed),
         "items": rows,
     }
     args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({k: report[k] for k in (
-        "eligible_placeholders", "repaired_with_source_photo", "no_allowed_source", "no_usable_source_image"
+        "eligible_placeholders", "repaired_with_source_photo",
+        "skipped_sensitive_stories", "no_allowed_source", "no_usable_source_image",
     )}, indent=2))
     return 0
 
