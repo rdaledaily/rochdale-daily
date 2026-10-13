@@ -63,3 +63,21 @@ test('newsletter signup is idempotent and honest when delivery is unconfigured; 
  const response=await api.onRequestGet({request,env});assert.match(await response.text(),/"reader@example.com".*"comma,quote"""/);
  const unauth=await api.onRequestGet({request:new Request(request.url),env});assert.equal(unauth.status,401);
 });
+
+test('My Rochdale internal links and daily briefing anchors have real destinations',()=>{
+ const html=fs.readFileSync('my-rochdale.html','utf8');
+ for(const [,href] of html.matchAll(/href="(\/[^"?#]*)(?:[?#][^"]*)?"/g)){
+  if(href==='/')continue;
+  const file=href.slice(1);assert.ok(fs.existsSync(file)||fs.existsSync(file+'.html'),'Missing internal destination: '+href);
+ }
+ const script=fs.readFileSync('assets/js/my-rochdale.js','utf8');
+ for(const [,id] of script.matchAll(/\["(?:news|weather|traffic|events|flood|services)","[^"]+","#([^"]+)"\]/g))assert.ok(html.includes('id="'+id+'"'),'Missing briefing anchor: '+id);
+});
+test('new story alerts exclude drafts and the current page',()=>{
+ const code=fs.readFileSync('assets/js/new-story-alerts.js','utf8');const a=code.indexOf('  function id('),b=code.indexOf('  function save()',a);
+ const context=vm.createContext({FRESH_MS:36*3600000,location:{pathname:'/articles/current.html'}});vm.runInContext(code.slice(a,b)+'\nthis.eligible=eligible;',context);
+ const now=Date.now(),story={slug:'new-story',title:'Local report',published_at:new Date(now-1000).toISOString(),status:'published'};
+ assert.equal(context.eligible(story,now),true);assert.equal(context.eligible({...story,slug:'current'},now),false);
+ assert.equal(context.eligible({...story,status:'draft'},now),false);assert.equal(context.eligible({...story,status:'pending'},now),false);
+ assert.equal(context.eligible({...story,slug:'../escape'},now),false);
+});

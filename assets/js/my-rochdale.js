@@ -532,7 +532,7 @@ async function showBoroughIfLookupFails(id){
     (async()=>{await newsArchive(fallback,id);if(id!==requestId)return;active="all";news();putBrief("news","Borough-wide archive; your postcode could not be matched.");})(),
     (async()=>{try{const data=await readOwnData("/weather.json","weather",5500);if(id===requestId)weather(data);}catch{if(id===requestId){unavailable("weather","https://www.metoffice.gov.uk/");putBrief("weather","Forecast unavailable. Check the Met Office.");}}})(),
     (async()=>{try{const data=await read("/api/traffic");if(id===requestId)traffic(data,fallback);}catch{if(id===requestId){unavailable("traffic","https://tfgm.com/");putBrief("traffic","Travel feed unavailable. Check Bee Network.");}}})(),
-    (async()=>{try{await eventsForPostcode(id);}catch{if(id===requestId){unavailable("events","/whats-on.html");putBrief("events","Events unavailable. Open What’s On.");}}})()
+    (async()=>{try{await eventsForPostcode(id);}catch{if(id===requestId){unavailable("events","/news/events.html");putBrief("events","Events unavailable. Open What’s On.");}}})()
   ]);
   if(id!==requestId)return;
   services(fallback);
@@ -573,7 +573,7 @@ function officialFallback(kind,loc){
  }else unavailable(kind,errorSources[kind]||"/");
 }
 
-const errorSources={councillors:"https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1",weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/whats-on.html",flood:"https://check-for-flooding.service.gov.uk/",planning:"https://www.planning.data.gov.uk/"};
+const errorSources={councillors:"https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1",weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/news/events.html",flood:"https://check-for-flooding.service.gov.uk/",planning:"https://www.planning.data.gov.uk/"};
 async function start(e){
  e?.preventDefault();
  const input=byId("postcode").value.trim().toUpperCase();
