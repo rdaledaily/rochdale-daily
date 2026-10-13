@@ -1185,7 +1185,7 @@ def main() -> None:
             html = path.read_text(encoding='utf-8', errors='ignore')
         except OSError:
             continue
-        if re.search(r'<meta\\s+name=["\\\']robots["\\\'][^>]*content=["\\\'][^"\\\']*noindex', html, re.I):
+        if re.search(r'<meta[^>]*name="robots"[^>]*content="[^"]*noindex', html, re.I):
             continue
         lastmod = archive_page_lastmod(path)
         sitemap_by_slug[slug] = lastmod
