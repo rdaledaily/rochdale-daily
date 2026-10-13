@@ -102,3 +102,13 @@ test('comment network failures become actionable errors rather than rejected but
  const context=vm.createContext({API:'/api/comments',fetch:async()=>{throw Error('network offline');},AbortController,setTimeout,clearTimeout});vm.runInContext(script.slice(start,end)+'\nthis.api=api;',context);
  const result=await context.api({action:'comment'});assert.equal(result.ok,false);assert.match(result.data.error,/Could not connect/);
 });
+
+test('comment feed errors never masquerade as an empty discussion',async()=>{
+ const script=fs.readFileSync('assets/js/article-comments.js','utf8'),start=script.indexOf('  async function readComments(){'),end=script.indexOf('  let mountVersion=',start);
+ async function run(response){const context=vm.createContext({API:'/api/comments',slug:'local-story',session:null,fetch:async()=>response,AbortController,setTimeout,clearTimeout});vm.runInContext(script.slice(start,end)+'\nthis.read=readComments;',context);return context.read();}
+ await assert.rejects(run({ok:false,json:async()=>({error:'Unavailable'})}));
+ await assert.rejects(run({ok:true,json:async()=>null}));
+ await assert.rejects(run({ok:true,json:async()=>({})}));
+ assert.equal((await run({ok:true,json:async()=>({closed:false,comments:[]})})).comments.length,0);
+ assert.equal((await run({ok:true,json:async()=>({closed:true})})).closed,true);
+});

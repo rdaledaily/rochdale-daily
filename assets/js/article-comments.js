@@ -108,9 +108,29 @@
     root.querySelectorAll('[data-report]').forEach(btn=>btn.addEventListener('click',async()=>{const reason=prompt('Briefly say why this comment should be reviewed:');if(!reason)return;const {ok,data}=await api({action:'report',slug,id:btn.dataset.report,reason});if(ok)alert('Thank you. The comment has been reported.');else message(data.error||'Your report could not be saved. Please try again.','err');}));
   }
 
+  async function readComments(){
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+    try{
+      const headers={Accept:'application/json'};if(session)headers['x-session-token']=session.token;
+      const response=await fetch(`${API}?slug=${encodeURIComponent(slug)}`,{headers,cache:'no-store',signal:controller.signal});
+      const payload=await response.json();
+      if(!response.ok||!payload||typeof payload!=='object'||payload.ok===false||(!Array.isArray(payload.comments)&&payload.closed!==true))throw Error('Comments unavailable');
+      return payload;
+    }finally{clearTimeout(timer);}
+  }
+  let mountVersion=0;
   async function mount(){
+    const version=++mountVersion;
     root.innerHTML='<h2>Comments</h2><p class="comments-note">Loading…</p>';
-    let payload={}; try{const headers={Accept:'application/json'};if(session)headers['x-session-token']=session.token;const r=await fetch(`${API}?slug=${encodeURIComponent(slug)}`,{headers});payload=await r.json();}catch(_){root.innerHTML='<h2>Comments</h2><p class="comments-note">Comments are unavailable just now.</p>';return;}
+    let payload;
+    try{payload=await readComments();}
+    catch(_){
+      if(version!==mountVersion)return;
+      root.innerHTML='<h2>Comments</h2><p class="comments-note" role="status">Comments are unavailable just now. Please try again.</p>';
+      const retry=document.createElement('button');retry.type='button';retry.className='comment-submit';retry.textContent='Retry loading comments';
+      retry.addEventListener('click',()=>mount());root.appendChild(retry);return;
+    }
+    if(version!==mountVersion)return;
     if(payload.closed||category==='crime'){root.innerHTML=`<h2>Comments</h2><div class="comments-closed"><strong>${esc(payload.closedReason||'Comments are closed on this article.')}</strong></div>`;return;}
     const comments=Array.isArray(payload.comments)?payload.comments:[];
     const question=storyQuestion();
