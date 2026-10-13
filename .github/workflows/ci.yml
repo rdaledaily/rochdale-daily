@@ -21,6 +21,7 @@ on:
       - "assets/js/article-comments.js"
       - "assets/js/new-story-alerts.js"
       - "assets/js/my-rochdale.js"
+      - "tests/test_my_rochdale_crime.cjs"
       - "functions/api/borough-data.js"
       - "my-rochdale.html"
       - "assets/js/read-next.js"
@@ -159,6 +160,7 @@ jobs:
           node --check functions/api/onesignal-web-config.js
           node --check OneSignalSDKWorker.js
           node --check assets/js/my-rochdale.js
+          node tests/test_my_rochdale_crime.cjs
           node --check functions/api/borough-data.js
       - name: Verify live homepage inline JavaScript syntax
         run: |
