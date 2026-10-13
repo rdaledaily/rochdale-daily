@@ -58,6 +58,18 @@ export async function onRequestPost({request,env}){
    // A successful checkout is NOT the same as a paid invoice. A paid invoice
    // is recorded as financial evidence, never as artwork approval.
    await kv.put('ads:billing:'+leadId,JSON.stringify({...state,leadId}));
+   if(checkedSub){
+     const previous=(await kv.get('ads:subscription:'+leadId,{type:'json'}))||{};
+     const status=type==='invoice.paid'&&state.currency==='gbp'?'active':
+       type==='invoice.payment_failed'?'past_due':
+       type==='customer.subscription.deleted'?'cancelled':
+       previous.status||'pending';
+     await kv.put('ads:subscription:'+leadId,JSON.stringify({
+       leadId,subscription:checkedSub,status,updatedAt:state.receivedAt,
+       lastPaidInvoice:type==='invoice.paid'?state.invoice:(previous.lastPaidInvoice||''),
+       lastAmountPaidPence:type==='invoice.paid'?state.amountPaidPence:(previous.lastAmountPaidPence||null)
+     }));
+   }
  }
  await kv.put('stripe:seen:'+event.id,'1',{expirationTtl:2592000});
  return response({received:true});
