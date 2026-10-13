@@ -1,0 +1,53 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Advertising enquiries | Rochdale Daily editor</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#eef2f4;color:#173040;font:15px/1.55 system-ui,-apple-system,sans-serif}header{background:#10283b;color:#fff;padding:15px 23px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}header a{color:#d9eef0}main{max-width:1100px;margin:auto;padding:28px 20px 90px}h1{font:800 31px Georgia,serif}p{max-width:80ch}a{color:#126676}input,button,select{font:inherit;padding:10px;border-radius:5px;border:1px solid #abbcc5}button{background:#126c79;color:#fff;border-color:#126c79;cursor:pointer;font-weight:750}button:disabled{opacity:.65;cursor:wait}.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.tools input{min-width:290px;max-width:440px;width:100%}.summary{background:#fff;border:1px solid #cddbe2;border-radius:6px;padding:16px;margin:18px 0}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,470px),1fr));gap:16px}.lead{background:#fff;border:1px solid #d1dfe5;border-radius:6px;padding:22px;word-break:break-word}.lead h2{font-size:19px;margin:0 0 8px}.lead .meta{font-size:12px;color:#607480}.lead .body{white-space:pre-wrap}.lead .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:10px 0}.lead .chip{font-weight:750;font-size:12px;background:#e9f3f4;color:#134e57;padding:4px 8px;border-radius:3px}.lead .actions{border-top:1px solid #dbe3e8;margin-top:18px;padding-top:17px;display:flex;flex-wrap:wrap;gap:8px}.message{font-size:14px;color:#8b2d38}.tips{font-size:13px;color:#516876}.actions a{display:inline-flex;align-items:center;font-weight:750}.actions select{min-width:145px}@media(max-width:600px){.tools input{min-width:0}main{padding:22px 12px}}</style></head><body>
+<header><strong>ROCHDALE DAILY · Advertising newsroom</strong><nav><a href="/editor/banner-bookings.html">Banner approvals</a> &nbsp;·&nbsp; <a href="/advertise.html">Public rate card</a></nav></header>
+<main><h1>Advertising enquiries</h1><p>Private sales pipeline. Use the existing Cloudflare admin token; it remains in this browser tab's memory only. No proposal, payment or advertisement is approved by marking an enquiry as agreed.</p>
+<div class="tools"><label for="token">Admin token</label><input id="token" type="password" autocomplete="off" placeholder="Enter existing admin token" aria-label="Admin token"><button id="load" type="button">Load enquiries</button><button id="hide" type="button">Clear access</button></div>
+<p class="message" id="status" role="status" aria-live="polite"></p>
+<div class="summary" id="summary" hidden></div><div id="cards" class="cards"></div>
+<p class="tips">Records expire automatically after 180 days without a status update. “Agreed” means an advertiser has verbally or contractually agreed, not necessarily paid. Only add a campaign to paid inventory after independently verifying payment and artwork approval. Individual enquiry emails should not be used for unsolicited marketing.</p>
+</main>
+<script>
+(function(){
+ 'use strict';
+ const token=document.getElementById('token'),load=document.getElementById('load'),hide=document.getElementById('hide'),cards=document.getElementById('cards'),status=document.getElementById('status'),summary=document.getElementById('summary');
+ let secret='';
+ const labels={corporate:'Corporate partnership',section:'Section sponsorship',banner:'Homepage banner',directory:'Featured directory'};
+ const prices={corporate:1200,section:350,banner:175,directory:75};
+ const statuses=['new','contacted','quoted','agreed','closed'];
+ const element=function(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
+ const date=function(s){const t=new Date(s);return Number.isNaN(t.valueOf())?String(s):t.toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'});};
+ const req=async function(method,body){const r=await fetch('/api/advertising-enquiries',{method:method,headers:{'x-admin-token':secret,...(body?{'Content-Type':'application/json'}:{})},cache:'no-store',...(body?{body:JSON.stringify(body)}:{})});const j=await r.json();if(!r.ok)throw Error(j.error||'Request failed');return j;};
+ async function update(lead,sel,button){
+   button.disabled=true;status.textContent='Saving lead status…';
+   try{await req('POST',{action:'status',id:lead.id,status:sel.value});status.textContent='Saved '+lead.business+' as '+sel.value+'.';await refresh();}
+   catch(e){status.textContent=e.message;button.disabled=false;}
+ }
+ function render(leads){
+   cards.replaceChildren();summary.hidden=false;
+   const counts=Object.fromEntries(statuses.map(x=>[x,leads.filter(l=>l.status===x).length]));
+   summary.textContent=leads.length+' enquiries · '+statuses.map(x=>x+': '+counts[x]).join(' · ')+'. Prospects are not paid revenue.';
+   if(!leads.length){cards.append(element('p','No advertising enquiries have been submitted yet.'));return;}
+   leads.forEach(function(lead){
+     const card=element('article',undefined,'lead'),heading=element('h2',lead.business),row=element('div',undefined,'row');
+     row.append(element('span',(labels[lead.package]||lead.package)+' · £'+(prices[lead.package]||0)+'/month','chip'),element('span','Status: '+lead.status,'chip'));
+     card.append(heading,row,element('p',lead.name+' · '+lead.email),element('p','Area: '+(lead.area||'Not specified')),element('p',lead.goal,'body'));
+     if(lead.website){try{const u=new URL(lead.website);if(['https:','http:'].includes(u.protocol)){const a=element('a','Advertiser website ↗');a.href=u.href;a.rel='noopener noreferrer';a.target='_blank';card.append(a)}}catch(e){}}
+     card.append(element('p','Submitted '+date(lead.createdAt)+' · '+lead.id,'meta'));
+     const controls=element('div',undefined,'actions'),email=element('a','Reply by email →');email.href='mailto:'+encodeURIComponent(lead.email)+'?subject='+encodeURIComponent('Rochdale Daily advertising enquiry: '+lead.business);
+     const sel=element('select');sel.setAttribute('aria-label','Lead status for '+lead.business);
+     statuses.forEach(s=>{let o=element('option',s);o.value=s;sel.append(o)});sel.value=statuses.includes(lead.status)?lead.status:'new';
+     const btn=element('button','Save status');btn.type='button';btn.addEventListener('click',()=>update(lead,sel,btn));
+     controls.append(email,sel,btn);card.append(controls);cards.append(card);
+   });
+ }
+ async function refresh(){
+   status.textContent='Loading…';load.disabled=true;
+   try{const j=await req('GET');render(j.leads||[]);status.textContent='Last loaded '+new Date().toLocaleTimeString('en-GB')+'.';}
+   catch(e){status.textContent=e.message;summary.hidden=true;cards.replaceChildren();}
+   finally{load.disabled=false;}
+ }
+ load.addEventListener('click',()=>{secret=token.value.trim();if(!secret){status.textContent='Enter the admin token.';return;}refresh();});
+ hide.addEventListener('click',()=>{secret='';token.value='';cards.replaceChildren();summary.hidden=true;status.textContent='Access cleared.';});
+})();
+</script></body></html>
