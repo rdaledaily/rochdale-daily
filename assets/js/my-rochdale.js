@@ -204,8 +204,19 @@ function crime(d){
  const introduction=node("p","Greater Manchester Police has not supplied street-level crime data to Police.uk since July 2019. Consequently, a reliable recent postcode crime rate or total cannot be calculated from that service.","risk");
  const more=node("p","The Police.uk national 'latest month' does not mean there are up-to-date GMP street-crime records for Rochdale.","method");
  const sources=node("div");
+ const comparison=d.boroughComparison;
+ const blocks=[introduction];
+ if(comparison&&comparison.area==="Rochdale"&&comparison.periodEnd==="2026-03"){
+   const card=node("div",undefined,"crime-comparison");
+   card.append(node("p","Official recorded crime comparison · 12 months ending March 2026","metric-label"));
+   card.append(node("p",Number(comparison.crimesPer1000).toFixed(2),"metric"));
+   card.append(node("p","Recorded crimes per 1,000 Rochdale residents; Greater Manchester average: "+Number(comparison.greaterManchesterPer1000).toFixed(2)+". This is the borough, not this postcode or ward.","metric-label"));
+   card.append(link("Read Police.uk's ONS comparison ↗",comparison.url));
+   blocks.push(card);
+ }
  sources.append(link("GMP official statistics ↗",d.officialStatistics||"https://www.gmp.police.uk/"),node("span"," · "),link("Police.uk data notice ↗","https://data.police.uk/changelog/"));
- out("crime",[introduction,more,sources]);
+ blocks.push(more,sources);
+ out("crime",blocks);
  recentCrimeReports();
 }
 function planning(d){
