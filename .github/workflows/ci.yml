@@ -19,6 +19,10 @@ on:
       - "assets/js/post-page.js"
       - "assets/js/menu.js"
       - "assets/js/article-comments.js"
+      - "assets/js/new-story-alerts.js"
+      - "assets/js/read-next.js"
+      - "assets/css/frontpage-refresh.css"
+      - "index.html"
       - "assets/js/cookie-consent.js"
       - "assets/img/logo.png"
       - "assets/img/cards/**"
@@ -140,6 +144,22 @@ jobs:
           node --check assets/js/category-page.js
           node --check assets/js/post-page.js
           node --check assets/js/menu.js
+          node --check assets/js/new-story-alerts.js
+          node --check assets/js/read-next.js
+      - name: Verify live homepage inline JavaScript syntax
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          home = Path("index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r'<script\\b([^>]*)>(.*?)</script>', home, re.I | re.S)
+          for number, (attrs, code) in enumerate(scripts):
+              if re.search(r'\\bsrc\\s*=', attrs, re.I) or "application/ld+json" in attrs.lower():
+                  continue
+              if code.strip():
+                  Path(f"/tmp/rd-inline-{number}.js").write_text(code, encoding="utf-8")
+          PY
+          for script in /tmp/rd-inline-*.js; do [ -f "$script" ] || continue; node --check "$script"; done
       - name: Validate hand-edited data files
         run: |
           python scraper/check_data_files.py
