@@ -112,6 +112,9 @@ jobs:
       - name: Externalise shared article CSS
         run: python3 scraper/externalise_article_css.py
 
+      - name: Build privacy-safe local postcode dashboard fallback
+        run: python3 scraper/generate_my_rochdale_snapshot.py
+
       - name: Verify manual stories survived publication
         run: python3 scraper/verify_manual_publication.py
 
