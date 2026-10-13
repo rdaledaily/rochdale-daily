@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-13T09:49:32.893300Z",
+  "updated_at": "2026-10-13T10:11:32.680419Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 150,
+  "count": 152,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -134,7 +134,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-13T09:49:32.893172Z",
+      "last_attempt_at": "2026-10-13T10:11:32.680036Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -442,14 +442,14 @@
     },
     "https://www.bbc.co.uk/news/articles/cq99zyvk0zego": {
       "first_attempt_at": "2026-10-13T05:54:16.933625Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.bbc.co.uk/news/articles/cq99zyvk0zego"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-13T09:48:36.713798Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "last_attempt_at": "2026-10-13T10:11:32.680274Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Advanced materials testing centre completed",
       "source_name": "Bbc",
       "category": "business",
@@ -2114,6 +2114,21 @@
       "recovery_attempts": 2,
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
+    "https://www.rochdaletimes.co.uk/school-to-limit-online-images-as-ai-manipulation-threat-rises": {
+      "first_attempt_at": "2026-10-13T10:10:46.180430Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/school-to-limit-online-images-as-ai-manipulation-threat-rises"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-13T10:10:46.180430Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "title": "School to limit online images as AI manipulation threat rises - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "news",
+      "text_fingerprint": "6b180564168401ed"
+    },
     "https://www.rochdalevaliant.uk/2026": {
       "first_attempt_at": "2026-10-10T16:02:22.651642Z",
       "attempts": 3,
@@ -2181,6 +2196,21 @@
       "category": "news",
       "text_fingerprint": "4d5230e68af72a4a",
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
+    },
+    "https://www.rochvalleyradio.com/news-features/140/business/990/finalists-announced-for-rochdale-business-awards-2026": {
+      "first_attempt_at": "2026-10-13T10:11:32.680187Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/140/business/990/finalists-announced-for-rochdale-business-awards-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-13T10:11:32.680187Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "title": "Finalists announced for Rochdale Business Awards 2026",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "business",
+      "text_fingerprint": "995eda76123baafd"
     },
     "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga": {
       "first_attempt_at": "2026-10-10T16:02:44.690076Z",
