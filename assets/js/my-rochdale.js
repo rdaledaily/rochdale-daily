@@ -508,6 +508,40 @@ async function showBoroughIfLookupFails(){
   services(fallback);
   ["flood","planning"].forEach(id=>unavailable(id,errorSources[id],"This source requires a successful postcode lookup. Open the official service."));
 }
+async function archiveWhenLiveFeedFails(kind){
+  let rows=archive;
+  if(!rows.length){
+    try{rows=(await savedPublicData()).archive||[];}catch{rows=[];}
+  }
+  const category=kind==="events"?/events/i:/traffic|transport/i;
+  const matches=rows.filter(a=>category.test(String(a.category||""))&&archiveUrl(a)&&
+    aliases.some(w=>whole((a.title||"")+" "+(a.description||""),w)));
+  const items=matches.slice(0,12).map(a=>({title:a.title,href:archiveUrl(a),
+    meta:"Archived report · "+when(a.published_at)+" · Not verified as a current "+(kind==="events"?"event":"road closure")}));
+  const intro=node("p",kind==="events"?
+    "Upcoming-event data could not be checked. These are older reports that mention your selected area, not confirmed upcoming activities.":
+    "Live transport notices could not be checked. These are archived local transport reports, not current disruption alerts.","risk");
+  const key=kind==="events"?"events":"traffic";
+  if(!items.length)intro.textContent+=" No local archive matches are available either.";
+  out(key,[intro,list(items),
+    link(kind==="events"?"Browse the full events section →":"Open the official Bee Network journey planner ↗",
+      kind==="events"?"/archive.html":"https://tfgm.com/plan-a-journey")]);
+  putBrief(kind==="events"?"events":"traffic","Live "+(kind==="events"?"events":"transport")+" feed unavailable; "+items.length+" locally relevant archived reports available.");
+}
+function officialFallback(kind,loc){
+ const pc=String(loc.postcode||"").trim().toLowerCase().replace(/\s+/g,"-");
+ if(kind==="flood"&&pc){
+  out("flood",[node("p","Live river readings could not be verified. Check the official postcode search rather than relying on older data.","risk"),
+   link("Official river levels around "+loc.postcode+" ↗",
+     "https://check-for-flooding.service.gov.uk/river-and-sea-levels/"+encodeURIComponent(pc))]);
+  putBrief("flood","Live flood data unavailable; official postcode link provided.");
+ }else if(kind==="planning"){
+  const coord=Number(loc.latitude).toFixed(3)+", "+Number(loc.longitude).toFixed(3);
+  out("planning",[node("p","Live planning designations could not be checked for "+(loc.postcode||"your area")+". Search the government records by location or consult Rochdale Council.","risk"),
+   node("p","Approximate location: "+coord,"method"),link("Open government Planning Data ↗","https://www.planning.data.gov.uk/")]);
+ }else unavailable(kind,errorSources[kind]||"/");
+}
+
 const errorSources={councillors:"https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1",weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/whats-on.html",flood:"https://check-for-flooding.service.gov.uk/",planning:"https://www.planning.data.gov.uk/"};
 async function start(e){
  e?.preventDefault();
@@ -554,7 +588,11 @@ async function start(e){
        byId("ward-councillors").hidden=false;
        byId("councillor-cards").replaceChildren(node("p","Councillor and voting records could not be loaded. Please consult Rochdale Council's official directory.","method"),
           link("Official councillor directory ↗",errorSources.councillors));
-      }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");
+      }else if(x[0]==="events"||x[0]==="traffic"){
+        await archiveWhenLiveFeedFails(x[0]);
+       }else if(x[0]==="flood"||x[0]==="planning"){
+        officialFallback(x[0],loc);
+       }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");
      };}}));
   if(id===requestId)report("✓ Your day at a glance is ready for "+loc.ward+". Councillors, news and GMP priorities are shown next.","success");
  }catch(err){if(id===requestId)await showBoroughIfLookupFails();}
