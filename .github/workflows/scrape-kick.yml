@@ -101,7 +101,8 @@ jobs:
       - name: Resolve relevant article images, then guarantee a fallback
         timeout-minutes: 6
         run: |
-          python scraper/repair_generated_article_images.py --articles articles.json
+          python scraper/repair_generated_article_images.py --articles articles.json --limit 8
+          python scraper/preselect_library_images.py --articles articles.json
           python scraper/repair_generated_with_commons.py --articles articles.json
           python scraper/ensure_article_images.py --articles articles.json
       - name: Validate and generate complete canonical site
