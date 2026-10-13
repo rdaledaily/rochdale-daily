@@ -81,3 +81,24 @@ test('new story alerts exclude drafts and the current page',()=>{
  assert.equal(context.eligible({...story,status:'draft'},now),false);assert.equal(context.eligible({...story,status:'pending'},now),false);
  assert.equal(context.eligible({...story,slug:'../escape'},now),false);
 });
+
+test('shared newsletter controller requires consent and suppresses double submissions',async()=>{
+ const script=fs.readFileSync('assets/js/menu.js','utf8');const start=script.indexOf('/* Shared newsletter controller'),end=script.indexOf('/* Visible reporting standards',start);
+ const form=new Element('form');form.id='rail-newsletter-form';
+ const email=new Element('input');email.name='email';email.value='reader@example.com';const button=new Element('button');button.type='submit';form.append(email,button);
+ form.querySelector=function(selector){if(selector==='button[type="submit"]')return button;const name=selector.match(/name="([^"]+)"/)?.[1];return this.querySelectorAll('*').find(x=>x.name===name)||null;};
+ button.before=(el)=>form.children.splice(form.children.indexOf(button),0,el);form.reset=()=>{email.value='';};
+ const status=new Element();let handler,calls=0,release;
+ const document={querySelectorAll:()=>[form],getElementById:()=>status,createElement:t=>new Element(t),createTextNode:t=>({textContent:t}),addEventListener:(type,fn,capture)=>{assert.equal(capture,true);handler=fn;}};
+ vm.runInNewContext(script.slice(start,end),{document,fetch:async()=>{calls++;return new Promise(resolve=>{release=resolve;});},AbortController,setTimeout,clearTimeout});
+ const event={target:form,preventDefault(){},stopImmediatePropagation(){this.stopped=true;}};
+ await handler(event);assert.equal(calls,0);assert.match(status.textContent,/tick the box/);assert.ok(event.stopped);
+ form.querySelector('[name="consent"]').checked=true;const pending=handler(event);await handler(event);assert.equal(calls,1);assert.equal(button.disabled,true);
+ release({ok:true,json:async()=>({ok:true,message:'Saved; email delivery is not configured.'})});await pending;
+ assert.equal(button.disabled,false);assert.equal(form.dataset.submitting,undefined);assert.match(status.textContent,/not configured/);
+});
+test('comment network failures become actionable errors rather than rejected button handlers',async()=>{
+ const script=fs.readFileSync('assets/js/article-comments.js','utf8'),start=script.indexOf('  async function api(payload)'),end=script.indexOf('\n  const message=',start);
+ const context=vm.createContext({API:'/api/comments',fetch:async()=>{throw Error('network offline');},AbortController,setTimeout,clearTimeout});vm.runInContext(script.slice(start,end)+'\nthis.api=api;',context);
+ const result=await context.api({action:'comment'});assert.equal(result.ok,false);assert.match(result.data.error,/Could not connect/);
+});
