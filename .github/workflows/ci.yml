@@ -191,6 +191,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_primary_data.py
           PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
           python scraper/test_ensure_article_images.py
+          PYTHONPATH=scraper python scraper/test_licensed_source_images.py
           python scraper/test_councillor_photos.py
           PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
           PYTHONPATH=scraper python scraper/test_update_homepage_static_latest.py
