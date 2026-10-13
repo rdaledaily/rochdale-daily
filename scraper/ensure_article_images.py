@@ -290,9 +290,9 @@ def choose_filename_match(article: dict[str, Any], root: Path) -> Path | None:
 
 
 SENSITIVE_PHOTO_RE = re.compile(
-    r"\\b(?:missing (?:person|people|man|woman|boy|girl|child)|"
+    r"\b(?:missing (?:person|people|man|woman|boy|girl|child)|"
     r"disappear(?:ed|ance)|rape|sexual assault|suspected killer|"
-    r"murder investigation|wanted person)\\b",
+    r"murder investigation|wanted person)\b",
     re.IGNORECASE,
 )
 
