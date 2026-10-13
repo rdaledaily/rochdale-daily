@@ -57,6 +57,32 @@ async function readJson(kv, key, fallback) {
   return value == null ? fallback : value;
 }
 
+
+/* Optional Brevo contact sync. Subscriber consent remains in our KV ledger;
+ * this only joins the configured newsletter list, never sends a campaign.
+ * Do not subscribe someone whom the provider has already suppressed.
+ */
+async function syncBrevo(env,record){
+  if(!env.BREVO_API_KEY||!env.BREVO_LIST_ID)return {configured:false,synced:false};
+  const listId=Number(env.BREVO_LIST_ID);
+  if(!Number.isSafeInteger(listId)||listId<=0)return {configured:false,synced:false};
+  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),6500);
+  try{
+    const r=await fetch('https://api.brevo.com/v3/contacts',{
+      method:'POST',
+      headers:{'api-key':env.BREVO_API_KEY,'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({email:record.email,listIds:[listId],updateEnabled:false}),
+      signal:ctrl.signal
+    });
+    // Provider duplicate/blacklisted contacts must not be reactivated just
+    // because a local user retried the form.
+    if(r.status===201||r.status===204)return {configured:true,synced:true};
+    if(r.status===400||r.status===409)return {configured:true,synced:false,reason:'review_provider_existing_or_suppressed'};
+    return {configured:true,synced:false,reason:'provider_error'};
+  }catch{return {configured:true,synced:false,reason:'provider_unavailable'}}
+  finally{clearTimeout(timer)}
+}
+
 export async function onRequestPost({ request, env }) {
   if (!env.EVENTS_KV) return json({ ok: false, error: "Not configured" }, 503);
   let body;
@@ -103,6 +129,18 @@ export async function onRequestPost({ request, env }) {
     const index = await readJson(kv, INDEX_KEY, []);
     index.unshift(hash);
     await kv.put(INDEX_KEY, JSON.stringify(index.slice(0, MAX_INDEX)));
+  }
+  // Sync only a fresh, explicit consent record, and never reinstate
+  // provider-suppressed contacts. If the provider is offline the secure CSV
+  // export remains available for a compliant, reviewed retry.
+  if (!existing && env.BREVO_API_KEY && env.BREVO_LIST_ID) {
+    const record = await readJson(kv, subKey, null);
+    if (record) {
+      const outcome = await syncBrevo(env, record);
+      record.brevo_sync_status = outcome.synced ? "synced" : (outcome.reason || "not_configured");
+      record.brevo_sync_attempt = new Date().toISOString();
+      await kv.put(subKey, JSON.stringify(record));
+    }
   }
   // Same answer whether new or already subscribed: never reveal membership.
   return json({ ok: true, message: "Thanks. You're on the list." });
