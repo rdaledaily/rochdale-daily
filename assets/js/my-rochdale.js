@@ -35,6 +35,25 @@ function putBrief(key,value){
 }
 
 const archiveUrl=x=>/^\/articles\/[a-z0-9-]+\.html$/i.test(x.url||"")?x.url:"";
+// Crime location protection: a ward/place-name mention is NOT a nearby crime.
+// Only show a reported incident when an editor has verified its incident
+// coordinates and the point is within one mile of the selected postcode.
+// The current archive index has no verified incident coordinates: in that
+// case display no list rather than substitute other areas.
+const CRIME_RADIUS_KM=1.609344;
+function verifiedNearbyCrime(article,postcodeArea){
+ if(String(article.category||"").toLowerCase()!=="crime"||!archiveUrl(article))return false;
+ if(article.incident_verified!==true)return false;
+ const lat=article.incident_latitude,lon=article.incident_longitude;
+ if(typeof lat!=="number"||typeof lon!=="number")return false;
+ if(!Number.isFinite(lat)||!Number.isFinite(lon)||!Number.isFinite(postcodeArea.latitude)||!Number.isFinite(postcodeArea.longitude))return false;
+ if(Math.abs(lat)>90||Math.abs(lon)>180)return false;
+ const radians=d=>d*Math.PI/180;
+ const dLat=radians(lat-postcodeArea.latitude),dLon=radians(lon-postcodeArea.longitude);
+ const h=Math.sin(dLat/2)**2+Math.cos(radians(postcodeArea.latitude))*Math.cos(radians(lat))*Math.sin(dLon/2)**2;
+ return 6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(Math.max(0,1-h)))<=CRIME_RADIUS_KM;
+}
+
 function match(s){
  const a=norm((s.title||"")+" "+(s.slug||"").replace(/-/g," ")),b=norm(s.description);
  let score=0,matched="";
@@ -55,6 +74,8 @@ function news(){
  }
  controls.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.view===active)));
  let entries=archive.map(x=>({...x,_match:match(x)})).filter(x=>active==="all"||x._match.score>0);
+ // Never backfill local crime from ward-wide or town-wide news reporting.
+ if(active==="local")entries=entries.filter(x=>String(x.category||"").toLowerCase()!=="crime"||verifiedNearbyCrime(x,area));
  if(category!=="all")entries=entries.filter(x=>String(x.category).toLowerCase()===category.toLowerCase());
  if(search)entries=entries.filter(x=>norm((x.title||"")+" "+(x.description||"")+" "+x.category).includes(search));
  const recent=(a,b)=>(Date.parse(b.published_at||0)||0)-(Date.parse(a.published_at||0)||0);
@@ -85,7 +106,7 @@ async function newsArchive(loc,id){
   active="local";category="all";search="";page=0;
   byId("news-controls").replaceChildren();byId("news-controls").dataset.ready="";
   news();
-  const localCount=archive.filter(x=>match(x).score>0).length;
+  const localCount=archive.filter(x=>match(x).score>0&&(String(x.category||"").toLowerCase()!=="crime"||verifiedNearbyCrime(x,area))).length;
   putBrief("news",localCount+" articles mention your ward or nearby places, out of "+archive.length+" available archive reports.");
   roadworks();
   recentCrimeReports();
@@ -186,62 +207,37 @@ function flood(d){
 function recentCrimeReports(){
  const el=byId("crime-latest");if(!el)return;
  el.replaceChildren();
- // Archive indexing is asynchronous. Never reuse stories left over from a
- // previous postcode while the new ward/area lookup is in progress.
- if(!archiveReadyForPostcode||!area.ward){
-  el.append(node("p","Checking for published reports mentioning your neighbourhood…","loading"));
-  return;
+ if(!archiveReadyForPostcode||!Number.isFinite(area.latitude)||!Number.isFinite(area.longitude)){
+   el.append(node("p","Location-verified crime reporting cannot currently be checked for this postcode.","method"));
+   return;
  }
  const cutoff=Date.now()-90*86400000;
- const recent=archive.filter(x=>{
-  if(String(x.category||"").toLowerCase()!=="crime"||!archiveUrl(x))return false;
-  const published=Date.parse(x.published_at||"");
-  return Number.isFinite(published)&&published>=cutoff;
+ const candidates=archive.filter(x=>{
+   const published=Date.parse(x.published_at||"");
+   return Number.isFinite(published)&&published>=cutoff&&verifiedNearbyCrime(x,area);
  }).sort((a,b)=>(Date.parse(b.published_at)||0)-(Date.parse(a.published_at)||0));
- // Crime matching is stricter than general news matching. A story
- // mentioning a whole town is NOT evidence of a crime near a postcode in a
- // particular ward of that town. Never backfill with other-area crime news.
- const tooBroad=new Set(["rochdale","heywood","middleton","littleborough","town centre"]);
- const specific=[...new Set([norm(area.ward),...aliases.filter(x=>!tooBroad.has(norm(x)))]
-   .filter(x=>x.length>3))];
- if(norm(area.ward)==="central rochdale")specific.push("rochdale town centre");
- const exactAreaMention=x=>specific.find(term=>whole(
-   (x.title||"")+" "+(x.description||"")+" "+(x.slug||"").replace(/-/g," "),term))||"";
- const local=recent.filter(x=>Boolean(exactAreaMention(x)));
- el.append(node("h4","Recently published crime and courts reporting"));
- if(!local.length){
-  el.append(node("p","No recent Rochdale Daily crime reports specifically mention "+area.ward+" or its mapped neighbourhoods in the last 90 days.","news-count"));
-  el.append(node("p","This does not mean no crimes have occurred nearby. Article place-name matching cannot verify distance from an individual postcode, and GMP does not currently provide reliable postcode-level incident data.","method"));
-  return;
+ el.append(node("h4","Crime reports verified near this postcode"));
+ if(!candidates.length){
+   el.append(node("p","No crime articles in our available archive have a verified incident location within one mile of this postcode in the last 90 days.","news-count"));
+   el.append(node("p","This does not mean no crimes occurred or were reported to police. Our current article archive does not provide verified incident coordinates, so we will not substitute reports from elsewhere.","method"));
+   return;
  }
- el.append(node("p",local.length+" recent reports mention "+area.ward+" or mapped neighbourhoods. These are location mentions, not verified incident distances.","news-count"));
- el.append(list(local.slice(0,16).map(x=>({
-  title:x.title,href:archiveUrl(x),
-  meta:[when(x.published_at),"Mentions "+exactAreaMention(x),x.category].filter(Boolean).join(" · ")
+ el.append(node("p",candidates.length+" location-verified published "+(candidates.length===1?"report":"reports")+" within one mile. This is not an exhaustive record of police incidents.","news-count"));
+ el.append(list(candidates.slice(0,16).map(x=>({
+   title:x.title,href:archiveUrl(x),
+   meta:[when(x.published_at),"Verified incident location within one mile"].filter(Boolean).join(" · ")
  }))));
- if(local.length>16)el.append(node("p",String(local.length-16)+" further matching reports can be found in the news archive.","method"));
- el.append(node("p","Dated reporting, not a complete or live police incident list. An article's area mention is not evidence that its event happened within a fixed distance of your postcode.","method"));
 }
-
 function crime(d){
- const introduction=node("p","Greater Manchester Police has not supplied street-level crime data to Police.uk since July 2019. Consequently, a reliable recent postcode crime rate or total cannot be calculated from that service.","risk");
- const more=node("p","The Police.uk national 'latest month' does not mean there are up-to-date GMP street-crime records for Rochdale. GMP publishes its own neighbourhood crime data through 2026; those are aggregated counts, not geolocated individual incidents.","method");
- const sources=node("div");
- const comparison=d.boroughComparison;
- const blocks=[introduction];
- if(comparison&&comparison.area==="Rochdale"&&comparison.periodEnd==="2026-03"){
-   const card=node("div",undefined,"crime-comparison");
-   card.append(node("p","Official recorded crime comparison · 12 months ending March 2026","metric-label"));
-   card.append(node("p",Number(comparison.crimesPer1000).toFixed(2),"metric"));
-   card.append(node("p","Recorded crimes per 1,000 Rochdale residents; Greater Manchester average: "+Number(comparison.greaterManchesterPer1000).toFixed(2)+". This is the borough, not this postcode or ward.","metric-label"));
-   card.append(link("Read Police.uk's ONS comparison ↗",comparison.url));
-   blocks.push(card);
- }
- sources.append(link("GMP neighbourhood crime figures (2019–2026) ↗","https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/neighbourhood-crime/"),node("span"," · "),link("Police.uk data availability ↗","https://data.police.uk/changelog/"));
- blocks.push(more,sources);
+ const blocks=[
+   node("p","Greater Manchester Police has not supplied street-level crime data to Police.uk since July 2019. A reliable recent postcode-specific crime total cannot currently be calculated from that dataset.","risk"),
+   node("p","Because the official local data is unavailable, we do not infer that there have been zero crimes and we do not show borough-wide totals or incidents from other postcodes as local results.","method"),
+   link("Official GMP neighbourhood statistics ↗",d.officialStatistics||"https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/")
+ ];
  out("crime",blocks);
  recentCrimeReports();
 }
+
 function planning(d){
  const data=Array.isArray(d.constraints)?d.constraints:[];
  out("planning",[node("p",data.length+" data entries returned; some designation datasets may be incomplete.","news-count"),list(data.map(x=>({title:x.name||x.dataset||"Planning designation",meta:[x.dataset,x.reference].filter(Boolean).join(" · ")}))),node("p","No results does not prove that a property has no restrictions.","method")]);
