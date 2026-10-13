@@ -1043,6 +1043,45 @@ def category_page_slugs_for_sitemap() -> list[str]:
         return []
 
 
+def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
+    """Existing useful local hubs, only when their canonical URL matches.
+
+    Ward pages and established town sections serve locality searches. Do not
+    promote noindex pages, old preview duplicates or URLs that are not built.
+    Sitemap inclusion is a crawl hint, not a ranking guarantee.
+    """
+    pages = [root / "wards" / "index.html"]
+    if (root / "wards").is_dir():
+        pages.extend(sorted((root / "wards").glob("*.html")))
+    pages.extend([root / "heywood.html", root / "milnrow.html"])
+    urls: list[str] = []
+    seen: set[str] = set()
+    for path in pages:
+        if not path.is_file():
+            continue
+        relative = path.relative_to(root).as_posix()
+        public_path = "wards/" if relative == "wards/index.html" else relative
+        expected = f"{SITE_BASE_URL}/{public_path}"
+        try:
+            content = path.read_text(encoding="utf-8", errors="ignore")[:10000]
+        except OSError:
+            continue
+        if re.search(
+            r'<meta\\s+name=["\\\']robots["\\\'][^>]*content=["\\\'][^"\\\']*noindex',
+            content, re.I,
+        ):
+            continue
+        canonical = re.search(
+            r'<link\\s+rel=["\\\']canonical["\\\']\\s+href=["\\\']([^"\\\']+)',
+            content, re.I,
+        )
+        if not canonical or canonical.group(1) != expected or expected in seen:
+            continue
+        seen.add(expected)
+        urls.append(expected)
+    return urls
+
+
 def write_sitemap(slugs_with_dates: list[tuple[str, str]]) -> None:
     now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     entries = [f'  <url><loc>{esc(SITE_BASE_URL)}/</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>',
@@ -1051,6 +1090,9 @@ def write_sitemap(slugs_with_dates: list[tuple[str, str]]) -> None:
                f'  <url><loc>{esc(SITE_BASE_URL)}/archive.html</loc><changefreq>daily</changefreq></url>']
     for category_slug in category_page_slugs_for_sitemap():
         entries.append(f'  <url><loc>{esc(SITE_BASE_URL)}/news/{esc(category_slug)}.html</loc><lastmod>{now}</lastmod><changefreq>hourly</changefreq></url>')
+    # Useful township and ward search landing pages were previously omitted.
+    for hub_url in locally_indexable_hub_urls():
+        entries.append(f'  <url><loc>{esc(hub_url)}</loc><changefreq>daily</changefreq></url>')
     for slug, lastmod in slugs_with_dates:
         loc = f'<loc>{esc(SITE_BASE_URL)}/articles/{esc(slug)}.html</loc>'
         if lastmod:
@@ -1153,7 +1195,8 @@ def main() -> None:
         f"{remastheaded} archived page(s) updated to the current masthead; "
         f"{related_removed} dead related-story link(s) removed from {related_pages} archived page(s); "
         f"corrections log has {corrections_logged} entrie(s); "
-        f"sitemap has {len(slugs_with_dates) + 2} URL(s)."
+        f"sitemap includes {len(sitemap_articles)} article URL(s), "
+        "the available category and locality hubs."
     )
 if __name__ == '__main__':
     main()
