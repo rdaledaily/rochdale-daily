@@ -239,6 +239,61 @@ function planning(d){
  const data=Array.isArray(d.constraints)?d.constraints:[];
  out("planning",[node("p",data.length+" data entries returned; some designation datasets may be incomplete.","news-count"),list(data.map(x=>({title:x.name||x.dataset||"Planning designation",meta:[x.dataset,x.reference].filter(Boolean).join(" · ")}))),node("p","No results does not prove that a property has no restrictions.","method")]);
 }
+
+function councillorCard(person){
+ const card=node("article",undefined,"councillor-card");
+ card.append(node("h3",person.name||"Councillor"),node("p",person.party||"Party not verified","councillor-party"));
+ const votes=Array.isArray(person.votes)?person.votes
+   .filter(v=>["for","against","abstain"].includes(v.side)&&/^https:\/\/democracy\.rochdale\.gov\.uk\//.test(v.url||""))
+   .sort((a,b)=>(Date.parse(b.date)||0)-(Date.parse(a.date)||0)): [];
+ if(!votes.length){
+  card.append(node("p","No individually attributed vote in the published records currently available.","vote-note"));
+  card.append(node("p","This does not mean the councillor never voted, opposed the motion or failed to attend.","vote-note"));
+ }else{
+  for(const vote of votes.slice(0,6)){
+   const label={for:"Voted for",against:"Voted against",abstain:"Abstained"}[vote.side];
+   const container=node("div",undefined,"recorded");
+   container.append(node("span",label,"vote-result "+vote.side),
+    link(vote.title||"Council vote",vote.url),
+    node("p",when(vote.date)+" · Official recorded vote","vote-note"));
+   if(vote.description)container.append(node("p",vote.description,"vote-note"));
+   card.append(container);
+  }
+ }
+ return card;
+}
+async function councillors(loc,id){
+ const section=byId("ward-councillors"),cards=byId("councillor-cards"),meetings=byId("council-meetings");
+ if(!section||!cards)return;
+ if(loc.nearbyWhitworth){
+  section.hidden=false;
+  cards.replaceChildren(node("p","Whitworth is represented by Rossendale Borough Council. The Rochdale councillor roster does not apply here."));
+  meetings.replaceChildren(link("Find your Rossendale councillors ↗","https://www.rossendale.gov.uk/"));
+  return;
+ }
+ section.hidden=false;
+ cards.replaceChildren(node("p","Checking the official councillor and voting records…","loading"));
+ const records=await read("/council_votes.json",11000);
+ if(id!==requestId)return;
+ const people=records.wards?.[loc.ward];
+ cards.replaceChildren();
+ if(!Array.isArray(people)||people.length!==3){
+  cards.append(node("p","The councillor roster for this ward could not be verified. Open the council directory to see the current elected members.","method"));
+ }else{
+  for(const person of people)cards.append(councillorCard(person));
+ }
+ meetings.replaceChildren();
+ const h=node("h3","Council decisions and original records");
+ const p=node("p","Not all decisions have individually named voting lists. A council decision is not evidence that all three ward councillors supported it.");
+ meetings.append(h,p);
+ const ul=list([
+   {title:"July 2026 Council: motions, decisions and minutes",href:"https://democracy.rochdale.gov.uk/ieListDocuments.aspx?CId=156&MID=7147",meta:"16 July 2026 · Council decisions; individual votes not inferred"},
+   {title:"2026/27 Budget Council: named individual vote",href:"https://democracy.rochdale.gov.uk/mgAi.aspx?ID=50873",meta:"25 February 2026 · Recorded councillor-by-councillor roll call"},
+   {title:"Council meeting calendar and published minutes",href:"https://democracy.rochdale.gov.uk/ieListMeetings.aspx?CommitteeId=156",meta:"Latest agendas, minutes and future meetings"}
+ ]);
+ meetings.append(ul);
+}
+
 function services(loc){
  const rows=[
   ["Your ward and councillors","/wards/"+norm(loc.ward).replace(/\s+/g,"-")+".html","Ward profile"],
@@ -274,6 +329,7 @@ async function safePostcodeLookup(postcode){
 async function showBoroughIfLookupFails(){
   // A failed postcode resolver must not blank the entire newspaper.
   report("We couldn’t match that postcode just now. Borough-wide news, weather, travel and events are still available.","error");
+  byId("ward-councillors").hidden=true;
   byId("location").hidden=true;byId("lookup").querySelector("button").disabled=false;
   const crimeLatest=byId("crime-latest");if(crimeLatest)crimeLatest.replaceChildren(node("p","Enter a valid postcode to see locally matched reporting. No borough-wide crime stories will be substituted.","method"));
   const fallback={district:"Rochdale",ward:"",latitude:53.615,longitude:-2.155};
@@ -286,7 +342,7 @@ async function showBoroughIfLookupFails(){
   services(fallback);
   ["flood","crime","planning"].forEach(id=>unavailable(id,errorSources[id],"This source requires a successful postcode lookup. Open the official service."));
 }
-const errorSources={weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/whats-on.html",flood:"https://check-for-flooding.service.gov.uk/",crime:"https://data.police.uk/",planning:"https://www.planning.data.gov.uk/"};
+const errorSources={councillors:"https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1",weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/whats-on.html",flood:"https://check-for-flooding.service.gov.uk/",crime:"https://data.police.uk/",planning:"https://www.planning.data.gov.uk/"};
 async function start(e){
  e?.preventDefault();
  const input=byId("postcode").value.trim().toUpperCase();
@@ -297,6 +353,7 @@ async function start(e){
  status.scrollIntoView({behavior:"smooth",block:"center"});
  status.focus({preventScroll:true});
  ["stories","weather","traffic","events","flood","crime","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
+ byId("ward-councillors").hidden=true;
  byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();lastEvents=null;
  archive=[];aliases=[];area={};archiveReadyForPostcode=false;
  const crimeLatest=byId("crime-latest");
@@ -315,6 +372,7 @@ async function start(e){
   services(loc);
   const param="&lat="+Number(loc.latitude).toFixed(3)+"&lon="+Number(loc.longitude).toFixed(3);
   const work=[
+   ["councillors",()=>councillors(loc,id)],
    ["archive",()=>newsArchive(loc,id)],
    ["weather",()=>weatherForPostcode(param)],
    ["traffic",async()=>traffic(await read("/api/traffic"),loc)],
@@ -323,7 +381,13 @@ async function start(e){
    ["crime",async()=>crime(await read("/api/borough-data?kind=crime"+param,16000))],
    ["planning",async()=>planning(await read("/api/borough-data?kind=planning"+param,16000))]
   ];
-  await Promise.allSettled(work.map(async x=>{try{await x[1]();}catch(err){if(id===requestId)unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");}}));
+  await Promise.allSettled(work.map(async x=>{try{await x[1]();}catch(err){if(id===requestId){
+      if(x[0]==="councillors"){
+       byId("ward-councillors").hidden=false;
+       byId("councillor-cards").replaceChildren(node("p","Councillor and voting records could not be loaded. Please consult Rochdale Council's official directory.","method"),
+          link("Official councillor directory ↗",errorSources.councillors));
+      }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");
+     };}}));
   if(id===requestId)report("✓ Results ready for "+loc.ward+": crime and courts, weather, all news, travel and other local services.","success");
  }catch(err){if(id===requestId)await showBoroughIfLookupFails();}
  finally{if(id===requestId){button.disabled=false;button.textContent="Explore my area →";}}
