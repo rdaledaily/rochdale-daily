@@ -18,6 +18,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
 from typing import Any
 from urllib.parse import urlparse
 
@@ -63,6 +64,31 @@ def is_generated_or_placeholder(article: dict[str, Any]) -> bool:
         or status == "cards-generated"
         or clean(article.get("image_placeholder_reason"))
     )
+
+
+def needs_source_photo_check(article: dict[str, Any], now: datetime) -> bool:
+    """Prefer verified original-source images over automated library selections.
+
+    A manual/editorial photo is always authoritative. Older library photos
+    remain untouched; this is for newly published stories, where the source
+    image can be found without revisiting the entire archive each hour.
+    """
+    if is_generated_or_placeholder(article):
+        return True
+    if article.get("manual_article") or article.get("editorial_lock"):
+        return False
+    if clean(article.get("image_status")).lower() != "cards-library-photo":
+        return False
+    if clean(article.get("image_backfill_method")) != "cards-filename-match":
+        return False
+    raw = clean(article.get("first_published_at") or article.get("published_at"))
+    try:
+        published = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    if published.tzinfo is None:
+        published = published.replace(tzinfo=timezone.utc)
+    return now - timedelta(hours=48) <= published <= now + timedelta(minutes=10)
 
 
 def slug_for(article: dict[str, Any]) -> str:
@@ -163,10 +189,13 @@ def main(argv: list[str] | None = None) -> int:
     no_image = 0
     rows: list[dict[str, Any]] = []
 
-    for article in articles:
+    now = datetime.now(timezone.utc)
+    # Newly published articles take priority over retrospective image repairs.
+    candidates_by_age = sorted(articles, key=lambda row: clean(row.get("first_published_at") or row.get("published_at")), reverse=True)
+    for article in candidates_by_age:
         if clean(article.get("status") or "published").lower() != "published":
             continue
-        if not is_generated_or_placeholder(article):
+        if not needs_source_photo_check(article, now):
             continue
         if high_risk_photo_story(article):
             skipped_risk += 1
