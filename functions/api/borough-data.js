@@ -61,15 +61,11 @@ function safeHref(href,domain){
   try{const u=new URL(href);return u.protocol==='https:'&&u.hostname===domain?u.toString():''}catch{return ''}
 }
 async function areaInfo(loc){
-  const result={ok:true,kind:'area',location:loc,source:'Postcodes.io',link:'https://postcodes.io/'};
-  try {
-    const d=await jsonGet(ORIGIN+'/articles.json',{ttl:90});
-    const articles=Array.isArray(d)?d:(Array.isArray(d.articles)?d.articles:[]);
-    result.stories=articles.filter(s=>homeMatch(s,loc.district==='Rochdale'?'Rochdale': 'Whitworth',loc.ward))
-      .slice(0,8).map(s=>({title:tidy(s.title,200),url:storyURL(String(s.slug||'')),area:tidy(s.area,80)}))
-      .filter(s=>s.url);
-  }catch{result.stories=[];result.storyStatus='News feed temporarily unavailable';}
-  return result;
+  // The reader-facing dashboard searches the entire published archive itself.
+  // Do not fetch our own origin's /articles.json from within a Pages Function:
+  // same-zone fetches can fail even when the site is working for browsers.
+  return {ok:true,kind:'area',location:loc,source:'Postcodes.io',link:'https://postcodes.io/',
+    archive:'/archive-index.json',wardMap:'/ward_areas.json'};
 }
 async function localWeather(loc){
   // Approximate location rounded to the nearest ~1km for provider caching
@@ -148,16 +144,26 @@ async function floodInfo(loc){
   };
 }
 async function crimeInfo(loc,query){
+  // The Police.uk API publishes monthly data, usually with a reporting lag.
   const p=new URLSearchParams({lat:String(loc.latitude),lng:String(loc.longitude)});
-  const date=tidy(query.get('date')||'',7);
-  if(/^\d{4}-(0[1-9]|1[0-2])$/.test(date))p.set('date',date);
+  const requested=tidy(query.get('date'),7);
+  let dataMonth=requested;
+  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(requested)){
+    const latest=await jsonGet('https://data.police.uk/api/crime-last-updated',{ttl:86400});
+    dataMonth=tidy(latest.date,10).slice(0,7);
+  }
+  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(dataMonth))throw Error('No published police data month');
+  p.set('date',dataMonth);
   const rows=await jsonGet('https://data.police.uk/api/crimes-street/all-crime?'+p.toString(),{ttl:86400});
   if(!Array.isArray(rows))throw Error('Unexpected police data response');
-  return {ok:true,kind:'crime',location:loc,month:tidy(rows[0]?.month||date||'Latest available',30),
-    total:rows.length,byCategory:categories(rows),
-    radius:'Approximately 1 mile around the postcode coordinate, not the entire ward',
+  // Zero returned records may be incomplete force data. Do not claim a crime-free
+  // area, and do not turn a missing-data month into a public safety assertion.
+  return {ok:true,kind:'crime',location:loc,month:dataMonth,
+    dataAvailable:rows.length>0,total:rows.length>0?rows.length:null,
+    byCategory:categories(rows),
+    radius:'Approximately one mile around the postcode coordinate, not the entire ward',
     source:'Police.uk open data',link:'https://data.police.uk/',
-    disclaimer:'Monthly historical police-recorded reports, not live incidents. Locations are anonymised. Counts can change and do not identify addresses or individuals.'};
+    disclaimer:'Monthly historical police-recorded reports, not live incidents. Locations are anonymised. Empty results can indicate missing force submissions or coverage, not zero crime.'};
 }
 async function planningInfo(loc){
  const p=new URLSearchParams({latitude:String(loc.latitude),longitude:String(loc.longitude),limit:'60'});
