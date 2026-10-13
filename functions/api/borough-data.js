@@ -48,7 +48,17 @@ async function resolvePostcode(value){
     latitude:Number(item.latitude),longitude:Number(item.longitude),nearbyWhitworth};
 }
 async function position(query){
-  if(!query.get('postcode')) return {latitude:53.615,longitude:-2.155,ward:'Rochdale',district:'Rochdale',isApproximate:true};
+  // After one postcode lookup, request other feeds by an approximate (~100m)
+  // coordinate. Avoid repeated third-party postcode calls and full postcodes
+  // appearing in weather, flood, planning or police lookup URLs.
+  const a=query.get('lat'),b=query.get('lon');
+  if(a!==null&&b!==null&&/^-?\d{1,3}(?:\.\d{1,4})?$/.test(a)&&/^-?\d{1,3}(?:\.\d{1,4})?$/.test(b)){
+    const lat=Number(a),lon=Number(b);
+    if(lat>=53.44&&lat<=53.80&&lon>=-2.55&&lon<=-1.94)
+      return {latitude:lat,longitude:lon,ward:'Rochdale area',district:'Rochdale',isApproximate:true};
+    return {error:'Location outside the supported area.'};
+  }
+  if(!query.get('postcode'))return {latitude:53.615,longitude:-2.155,ward:'Rochdale',district:'Rochdale',isApproximate:true};
   return resolvePostcode(query.get('postcode'));
 }
 function coordParams(loc){return 'lat='+encodeURIComponent(loc.latitude)+'&long='+encodeURIComponent(loc.longitude)+'&dist=10';}
