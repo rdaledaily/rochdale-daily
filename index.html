@@ -4210,7 +4210,7 @@ function shareIconMarkup(action, label) {
         const link = card.querySelector('a[href^="articles/"], a[href^="/articles/"]');
         if (!link) return;
         const slug = link.getAttribute("href").split("?")[0]
-          .replace(/^\\/?articles\\//, "").replace(/\\.html$/, "");
+          .replace(/^\/?articles\//, "").replace(/\.html$/, "");
         if (!/^[a-z0-9][a-z0-9-]*$/i.test(slug)) return;
         const story = stories.find(item => String(item.slug) === slug);
         const category = String((story && story.category) || card.dataset.category ||
