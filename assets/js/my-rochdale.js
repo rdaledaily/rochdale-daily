@@ -20,6 +20,33 @@ const read=async (url,timeout=12000)=>{
  finally{clearTimeout(clock)}
 };
 const unavailable=(id,source,msg)=>out(id,[node("p",msg||"This data source is not responding. Its official website has the latest information."),link("Open the official source ↗",source)]);
+
+let snapshotLoad=null;
+function savedPublicData(){
+ if(window.RD_LOCAL_SNAPSHOT)return Promise.resolve(window.RD_LOCAL_SNAPSHOT);
+ if(snapshotLoad)return snapshotLoad;
+ snapshotLoad=new Promise((resolve,reject)=>{
+   const tag=document.createElement("script");
+   tag.src="/assets/data/my-rochdale-snapshot.js";
+   tag.async=true;
+   const timer=setTimeout(()=>{tag.remove();reject(Error("Saved newsroom data timed out"));},12500);
+   tag.onload=()=>{clearTimeout(timer);
+     if(window.RD_LOCAL_SNAPSHOT)resolve(window.RD_LOCAL_SNAPSHOT);
+     else reject(Error("Saved newsroom data missing"));};
+   tag.onerror=()=>{clearTimeout(timer);reject(Error("Saved newsroom script unavailable"));};
+   document.head.append(tag);
+ });
+ return snapshotLoad;
+}
+async function readOwnData(url,field,timeout=5500){
+ try{return await read(url,timeout);}
+ catch(err){
+   const saved=await savedPublicData();
+   if(saved&&saved[field]!=null)return saved[field];
+   throw err;
+ }
+}
+
 let archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={},lastEvents=null,archiveReadyForPostcode=false;
 const brief={};
 const briefNames=[["news","Your local headlines","#stories"],["weather","Forecast","#weather"],["traffic","Travel today","#traffic"],["events","Coming up","#events"],["flood","River and flood watch","#flood"],["services","Local services","#services"]];
@@ -90,7 +117,7 @@ function news(){
 }
 async function newsArchive(loc,id){
  try{
-  const [records,wardData]=await Promise.all([read("/archive-index.json",17000),read("/ward_areas.json",10000)]);
+  const [records,wardData]=await Promise.all([readOwnData("/archive-index.json","archive",5500),readOwnData("/ward_areas.json","wards",5000)]);
   if(requestId!==id)return;
   archive=Array.isArray(records)?records.filter(x=>x&&x.title&&archiveUrl(x)):[];
   archiveReadyForPostcode=true;
@@ -178,7 +205,7 @@ function preciseWeather(w){
 async function weatherForPostcode(coords){
  try{preciseWeather(await read("/api/borough-data?kind=weather"+coords,17500));}
  catch(err){
-  try{weather(await read("/weather.json"));}
+  try{weather(await readOwnData("/weather.json","weather",5500));}
   catch{unavailable("weather","https://www.metoffice.gov.uk/");}
  }
 }
@@ -300,7 +327,7 @@ async function wardPolicingEvidence(expectedWard,expectedRequest){
  const target=byId("crime-local-priorities");if(!target)return;
  target.replaceChildren(node("p","Checking published neighbourhood policing priorities…","loading"));
  try{
-  const data=await read("/assets/data/gmp-ward-policing-priorities.json",11000);
+  const data=await readOwnData("/assets/data/gmp-ward-policing-priorities.json","policing",5500);
   if(expectedRequest!==requestId||expectedWard!==area.ward)return;
   const record=data.wards?.[expectedWard];
   if(!record){
@@ -371,7 +398,7 @@ async function councillors(loc,id){
  }
  section.hidden=false;
  cards.replaceChildren(node("p","Checking the official councillor and voting records…","loading"));
- const records=await read("/council_votes.json",11000);
+ const records=await readOwnData("/council_votes.json","councillors",5500);
  if(id!==requestId)return;
  const people=records.wards?.[loc.ward];
  cards.replaceChildren();
@@ -474,7 +501,7 @@ async function showBoroughIfLookupFails(){
    const fallback={district:"Rochdale",ward:"",latitude:53.615,longitude:-2.155};
   await Promise.allSettled([
     (async()=>{await newsArchive(fallback,requestId);active="all";news();})(),
-    (async()=>{try{weather(await read("/weather.json"));}catch{unavailable("weather","https://www.metoffice.gov.uk/")}})(),
+    (async()=>{try{weather(await readOwnData("/weather.json","weather",5500));}catch{unavailable("weather","https://www.metoffice.gov.uk/")}})(),
     (async()=>{try{traffic(await read("/api/traffic"),fallback);}catch{unavailable("traffic","https://tfgm.com/")}})(),
     (async()=>{try{events(await read("/api/events"));}catch{unavailable("events","/whats-on.html")}})()
   ]);
