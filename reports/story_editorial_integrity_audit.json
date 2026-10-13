@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 226,
-  "published_count": 226,
-  "category_change_count": 32,
-  "image_change_count": 29,
+  "article_count": 229,
+  "published_count": 229,
+  "category_change_count": 31,
+  "image_change_count": 31,
   "category_changes": [
     {
       "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
@@ -26,13 +26,6 @@
       "from": "environment",
       "to": "news",
       "reason": "headline strongly identifies news"
-    },
-    {
-      "slug": "man-arrested-after-woman-seriously-injured-in-m62-crash-near-rochdale",
-      "title": "Man Arrested After Woman Seriously Injured in M62 Crash Near Rochdale",
-      "from": "traffic",
-      "to": "crime",
-      "reason": "headline strongly identifies crime"
     },
     {
       "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
@@ -233,8 +226,32 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-sleep-out-nearly-10000-petrus-rafc-2026",
+      "title": "Rochdale Sleep Out raises almost £10,000 as organisers make final appeal",
+      "category": "community",
+      "reason": "weak filename image match score 8252; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-sleep-out-nearly-10000-petrus-rafc-2026-generated-card.jpg"
+    },
+    {
+      "slug": "finalists-announced-for-rochdale-business-awards-2026",
+      "title": "Finalists Announced for Rochdale Business Awards 2026",
+      "category": "business",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/finalists-announced-for-rochdale-business-awards-2026.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/finalists-announced-for-rochdale-business-awards-2026-generated-card.jpg"
+    },
+    {
       "slug": "who-or-what-is-the-healey-dwarf",
-      "title": "Who — or what — is the Healey Dwarf?",
+      "title": "Who",
       "category": "environment",
       "reason": "weak filename image match score 4751; neutral card is safer",
       "before": {
@@ -305,8 +322,8 @@
       "after": "assets/img/cards/man-injured-in-altercation-on-rochdale-road-middleton-generated-card.jpg"
     },
     {
-      "slug": "construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king",
-      "title": "Sustainable Materials and Manufacturing Centre Completed at Kingsway Business Park in Rochdale",
+      "slug": "completion-of-sustainable-materials-manufacturing-centre-marks-milestone-for-roc",
+      "title": "New Sustainable Materials and Manufacturing Centre Opens in Rochdale",
       "category": "business",
       "reason": "weak filename image match score 8251; neutral card is safer",
       "before": {
@@ -314,7 +331,7 @@
         "img": "assets/img/cards/atom_valley.png",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/construction-completed-on-sustainable-materials-and-manufacturing-centre-in-king-generated-card.jpg"
+      "after": "assets/img/cards/completion-of-sustainable-materials-manufacturing-centre-marks-milestone-for-roc-generated-card.jpg"
     },
     {
       "slug": "rochdale-afc-faces-accrington-stanley-in-league-two-clash",
