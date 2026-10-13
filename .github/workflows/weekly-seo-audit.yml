@@ -1,0 +1,54 @@
+name: Rochdale Daily weekly SEO technical audit
+
+on:
+  schedule:
+    # Monday morning before the reader-search editorial review.
+    - cron: "13 6 * * 1"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scraper/weekly_seo_audit.py'
+      - 'scraper/test_weekly_seo_audit.py'
+      - '.github/workflows/weekly-seo-audit.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-weekly-seo-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test SEO diagnostics
+        run: PYTHONPATH=scraper python scraper/test_weekly_seo_audit.py
+      - name: Analyse search landing pages, article metadata and image integrity
+        run: python scraper/weekly_seo_audit.py
+      - name: Display results
+        run: cat reports/seo-weekly-latest.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve report for the weekly newsroom cycle
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/seo-weekly-latest.json reports/seo-weekly-latest.md
+          if git diff --cached --quiet; then
+            echo "SEO report unchanged."
+            exit 0
+          fi
+          git commit -m "Refresh weekly search quality report"
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 4))
+          done
+          echo "::error::SEO report could not be pushed"
+          exit 1
