@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-13T16:39:23.131113Z",
+  "updated_at": "2026-10-13T17:01:14.646546Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 163,
@@ -150,7 +150,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-13T16:39:23.130622Z",
+      "last_attempt_at": "2026-10-13T17:01:14.646044Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -339,18 +339,20 @@
     },
     "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true": {
       "first_attempt_at": "2026-10-09T13:39:18.926514Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
+        "https://tfgm.com/travel-updates/travel-alerts",
         "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true",
         "https://tfgm.com/travel-updates/travel-alerts?no-script=true"
       ],
-      "last_attempt_at": "2026-10-09T14:06:54.808540Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "last_attempt_at": "2026-10-13T17:01:14.646193Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Travel alerts",
       "source_name": "TfGM Travel Alerts",
       "category": "transport",
-      "text_fingerprint": "df474cc39eaee78c"
+      "text_fingerprint": "badff085b6350d10",
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
     },
     "https://tfgm.com/travel-updates/travel-alerts?no-script=true": {
       "first_attempt_at": "2026-10-09T14:19:20.312055Z",
@@ -1834,13 +1836,13 @@
         "https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005#updated-16-september-2026"
       ],
       "last_attempt_at": "2026-10-11T20:03:03.038967Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Rochdale house prices and rents: ONS figures updated 16 September 2026",
       "source_name": "Office for National Statistics",
       "category": "business",
       "text_fingerprint": "f316b480bf1acbf3",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1,
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "final_gate_removal_recovery": 1
@@ -2073,10 +2075,11 @@
       "first_attempt_at": "2026-10-13T12:55:58.034214Z",
       "attempts": 1,
       "urls": [
-        "https://www.rochdale.gov.uk/news/article/683/fire-festival-set-to-return-to-rochdale-with-spectacular-new-attractions"
+        "https://www.rochdale.gov.uk/news/article/683/fire-festival-set-to-return-to-rochdale-with-spectacular-new-attractions",
+        "https://www.rochdaletimes.co.uk/town-gets-ready-to-ignite-christmas-festivities"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-13T16:39:23.130732Z",
+      "last_attempt_at": "2026-10-13T17:01:14.646364Z",
       "outcome": "published",
       "reason": "",
       "title": "Fire festival set to return to Rochdale with spectacular new attractions – Rochdale Borough Council",
@@ -2264,14 +2267,14 @@
         "https://www.rochdaletimes.co.uk/residents-warned-over-repairs-claims-firm"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-13T16:39:23.131031Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-13T17:00:20.518260Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Residents warned over repairs claims firm - Rochdale Times",
       "source_name": "Rochdale Times",
-      "category": "news",
+      "category": "community",
       "text_fingerprint": "5bd3b4ab67c7f174",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "final_gate_removal_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/school-to-limit-online-images-as-ai-manipulation-threat-rises": {
