@@ -177,6 +177,19 @@
     }, 15000);
   }
 
+  function addNewsAlertsLink() {
+    /* Article pages are generated separately. Add the public opt-in link to
+       their existing navigation, without changing a single article file. */
+    var list = document.querySelector(".primary-nav .nav-list");
+    if (!list || list.querySelector('a[href="/news-alerts.html"]')) return;
+    var item = document.createElement("li");
+    var link = document.createElement("a");
+    link.href = "/news-alerts.html";
+    link.textContent = "News alerts";
+    item.appendChild(link);
+    list.appendChild(item);
+  }
+
   function init() {
     loadEditorialTheme();
     upgradeTrustPage();
@@ -209,6 +222,7 @@
     if (!read()) banner.classList.add("show");
     if (read() === ACCEPTED) loadAnalytics();
     loadHomepageEnhancements();
+    addNewsAlertsLink();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
