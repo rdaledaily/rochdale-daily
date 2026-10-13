@@ -154,26 +154,24 @@ async function floodInfo(loc){
   };
 }
 async function crimeInfo(loc,query){
-  // The Police.uk API publishes monthly data, usually with a reporting lag.
-  const p=new URLSearchParams({lat:String(loc.latitude),lng:String(loc.longitude)});
-  const requested=tidy(query.get('date'),7);
-  let dataMonth=requested;
-  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(requested)){
-    const latest=await jsonGet('https://data.police.uk/api/crime-last-updated',{ttl:86400});
-    dataMonth=tidy(latest.date,10).slice(0,7);
-  }
-  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(dataMonth))throw Error('No published police data month');
-  p.set('date',dataMonth);
-  const rows=await jsonGet('https://data.police.uk/api/crimes-street/all-crime?'+p.toString(),{ttl:86400});
-  if(!Array.isArray(rows))throw Error('Unexpected police data response');
-  // Zero returned records may be incomplete force data. Do not claim a crime-free
-  // area, and do not turn a missing-data month into a public safety assertion.
-  return {ok:true,kind:'crime',location:loc,month:dataMonth,
-    dataAvailable:rows.length>0,total:rows.length>0?rows.length:null,
-    byCategory:categories(rows),
-    radius:'Approximately one mile around the postcode coordinate, not the entire ward',
-    source:'Police.uk open data',link:'https://data.police.uk/',
-    disclaimer:'Monthly historical police-recorded reports, not live incidents. Locations are anonymised. Empty results can indicate missing force submissions or coverage, not zero crime.'};
+  // Important documented force-level absence: GMP has supplied no street-level
+  // data to Police.uk since July 2019 (GMP FOI 26.016219/I, January 2026).
+  // The national "latest month" MUST NOT be labelled Rochdale data.
+  // We intentionally do not count reports from other forces' anonymised map
+  // points near Rochdale as GMP incidents.
+  return {
+    ok:true,kind:'crime',location:loc,month:null,dataAvailable:false,
+    localStatisticsAvailable:false,force:'Greater Manchester Police',
+    recentCrimeReporting:'/archive.html',
+    gmpNews:'https://www.gmp.police.uk/news/news-search/',
+    officialStatistics:'https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/',
+    source:'GMP disclosure and Police.uk data availability',
+    sourceLinks:[
+      'https://www.gmp.police.uk/SysSiteAssets/foi-media/greater-manchester/disclosure-2026/april/foi-26.016219.i-historical-street-level-crime--stop-search-data-for-years-2023-2024--2025.pdf',
+      'https://data.police.uk/changelog/'
+    ],
+    disclaimer:'GMP has not provided Police.uk street-level crime data since July 2019. No reliable recent postcode crime count or crime rate can be calculated from that dataset. Recent dated news reports are separate from official statistical totals.'
+  };
 }
 async function planningInfo(loc){
  const p=new URLSearchParams({latitude:String(loc.latitude),longitude:String(loc.longitude),limit:'60'});
