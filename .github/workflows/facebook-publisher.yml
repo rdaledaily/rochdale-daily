@@ -1,4 +1,4 @@
-name: Post Rochdale Daily article to Facebook
+name: Post Rochdale Daily Facebook news roundups
 
 # Scheduled Page posting runs in GitHub Actions so the repository's saved
 # secrets can be used without exposing them locally.
@@ -10,7 +10,9 @@ on:
         required: false
         default: "0"
   schedule:
-    - cron: "*/10 * * * *"
+    # Hourly recovery seed. A 10-minute continuation chain checks for the four
+    # UK-local roundup windows, but publishes at most once per window.
+    - cron: "27 * * * *"
   push:
     branches: [main]
     paths:
@@ -55,17 +57,19 @@ jobs:
             printf '{\n  "posted": {}\n}\n' > /tmp/facebook_posted.json
           fi
 
-      - name: Publish freshest eligible article
+      - name: Publish a grouped news roundup when a local posting window opens
         env:
           FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
           # Page Graph API ID is resolved from the authenticated Page token.
           FACEBOOK_GRAPH_VERSION: v26.0
           FACEBOOK_STATE_PATH: /tmp/facebook_posted.json
           FACEBOOK_RESULT_PATH: /tmp/facebook_last_result.json
-          FACEBOOK_QUEUE_ORDER: newest
-          FACEBOOK_MAX_ARTICLE_AGE_HOURS: "24"
-          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "10"
-          FACEBOOK_MAX_POSTS_24H: "72"
+          FACEBOOK_MAX_ARTICLE_AGE_HOURS: "48"
+          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "120"
+          # Daily four-window cap is enforced in the Python publisher.
+          FACEBOOK_MAX_POSTS_24H: "0"
+          FACEBOOK_MIN_ARTICLES_PER_ROUNDUP: "2"
+          FACEBOOK_MAX_ARTICLES_PER_ROUNDUP: "5"
         run: python scraper/post_facebook_article.py
 
       - name: Save successful Facebook post to state branch
@@ -114,10 +118,14 @@ jobs:
           print('Facebook publisher status:', d.get('status'))
           if d.get('reason'):
               print('Reason:', d.get('reason'))
-          if d.get('title'):
-              print('Article:', d.get('title'))
+          if d.get('slot'):
+              print('Roundup window:', d.get('slot'))
+          if d.get('article_count'):
+              print('Stories grouped:', d.get('article_count'))
+          for title in d.get('titles') or []:
+              print('Story:', title)
           if d.get('url'):
-              print('URL:', d.get('url'))
+              print('Roundup destination:', d.get('url'))
           if d.get('facebook_post_id'):
               print('Facebook post ID:', d.get('facebook_post_id'))
           if 'remaining_unposted' in d:
@@ -125,8 +133,9 @@ jobs:
           PY
           fi
   
-      # GitHub's cron scheduler can delay or silently omit frequent runs. Keep
-      # an independent 10-minute chain alive; cron remains a recovery seed.
+      # GitHub's cron scheduler can delay or silently omit scheduled checks.
+      # Keep a 10-minute recovery chain, but never publish outside the four
+      # daily UK-time windows. This is checking frequency, not posting frequency.
       # The existing state branch, cooldown and queue filter prevent duplicates
       # when cron and a self-dispatched run overlap.
       - name: Schedule the next Facebook check
