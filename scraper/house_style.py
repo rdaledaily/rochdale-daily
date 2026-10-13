@@ -226,7 +226,7 @@ def style_issues(draft: dict[str, Any], source_kind: str = "") -> list[str]:
 
     # Advisory style feedback only. Never silently change quotes or proper names.
     # Ordinary compound hyphens are not parenthetical dash punctuation.
-    if re.search(r"[—]|(?<=\\s)[–-](?=\\s)", combined):
+    if re.search(r"[—]|(?<=\s)[–-](?=\s)", combined):
         issues.append(
             "Replace dash punctuation with ordinary sentence structure, "
             "while preserving exact quotations and proper names."
