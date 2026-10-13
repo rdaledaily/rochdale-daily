@@ -243,6 +243,9 @@ function planning(d){
 function councillorCard(person){
  const card=node("article",undefined,"councillor-card");
  card.append(node("h3",person.name||"Councillor"),node("p",person.party||"Party not verified","councillor-party"));
+ if(/^https:\/\/democracy\.rochdale\.gov\.uk\/mgUserInfo\.aspx\?UID=\d+$/.test(person.profile_url||"")){
+  card.append(link("Official contact details and surgeries ↗",person.profile_url));
+ }
  const votes=Array.isArray(person.votes)?person.votes
    .filter(v=>["for","against","abstain"].includes(v.side)&&/^https:\/\/democracy\.rochdale\.gov\.uk\//.test(v.url||""))
    .sort((a,b)=>(Date.parse(b.date)||0)-(Date.parse(a.date)||0)): [];
