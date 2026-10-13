@@ -160,6 +160,7 @@ jobs:
           python scraper/test_search_queries.py
           python scraper/test_rewrite_safety.py
           PYTHONPATH=scraper python scraper/test_house_style_voice.py
+          PYTHONPATH=scraper python scraper/test_reader_first_template.py
           PYTHONPATH=scraper python scraper/test_facebook_roundups.py
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
