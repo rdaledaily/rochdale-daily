@@ -20,6 +20,9 @@ on:
       - "assets/js/menu.js"
       - "assets/js/article-comments.js"
       - "assets/js/new-story-alerts.js"
+      - "assets/js/my-rochdale.js"
+      - "functions/api/borough-data.js"
+      - "my-rochdale.html"
       - "assets/js/read-next.js"
       - "assets/css/frontpage-refresh.css"
       - "index.html"
@@ -146,6 +149,8 @@ jobs:
           node --check assets/js/menu.js
           node --check assets/js/new-story-alerts.js
           node --check assets/js/read-next.js
+          node --check assets/js/my-rochdale.js
+          node --check functions/api/borough-data.js
       - name: Verify live homepage inline JavaScript syntax
         run: |
           python - <<'PY'
