@@ -374,22 +374,63 @@ async function councillors(loc,id){
  meetings.append(ul);
 }
 
+function serviceCard(title,href,description,postcode,requiresPostcode){
+ const li=node("li",undefined,"postcode-service");
+ li.append(link(title+" ↗",href));
+ li.append(node("small",description));
+ if(requiresPostcode&&postcode){
+  const info=node("div",undefined,"service-postcode");
+  info.append(node("span","Use "+postcode+" when the official service asks for your postcode."));
+  const copy=node("button","Copy postcode");copy.type="button";copy.className="copy-postcode";
+  copy.setAttribute("aria-label","Copy "+postcode+" for "+title);
+  copy.addEventListener("click",async()=>{
+    try{
+      await navigator.clipboard.writeText(postcode);copy.textContent="Copied ✓";
+    }catch{
+      // Still leave a selectable postcode for older browsers.
+      copy.textContent="Select the postcode shown above";
+    }
+  });
+  info.append(copy);li.append(info);
+ }
+ return li;
+}
 function services(loc){
- const rows=[
-  ["Your ward and councillors","/wards/"+norm(loc.ward).replace(/\s+/g,"-")+".html","Ward profile"],
-  ["Bin collection and recycling","https://www.rochdale.gov.uk/","Find official collection services and schedules"],
-  ["School term dates","https://www.rochdale.gov.uk/","Council school term information"],
-  ["Council roadworks","https://www.rochdale.gov.uk/directory/22/search-for-roadworks-in-rochdale-borough/category/140","Official roadwork directory"],
-  ["Bus and tram travel","https://tfgm.com/","Bee Network updates"],
-  ["Live train departures","https://www.nationalrail.co.uk/live-trains/","National Rail running information"],
-  ["NHS care near you","https://www.nhs.uk/nhs-services/services-near-you/","Hospitals, GPs, dentists and pharmacies"],
-  ["Food hygiene ratings","https://ratings.food.gov.uk/","Restaurants and takeaway inspections"],
-  ["Check official flood warnings","https://check-for-flooding.service.gov.uk/","Environment Agency"],
-  ["Report a local problem","https://www.fixmystreet.com/","Public-service reports"]
+ const pc=String(loc.postcode||"").toUpperCase().trim();
+ const floodPath=pc.toLowerCase().replace(/\s+/g,"-");
+ const localFlood=floodPath?
+  "https://check-for-flooding.service.gov.uk/river-and-sea-levels/"+encodeURIComponent(floodPath):
+  "https://check-for-flooding.service.gov.uk/river-and-sea-levels";
+ const rows=loc.nearbyWhitworth?[
+  ["Your Rossendale council services","https://www.rossendale.gov.uk/","Whitworth falls within Rossendale. Select the service and address on the council website.",false],
+  ["Official river levels near "+pc,localFlood,"A postcode-filtered Environment Agency river-level search.",false]
+ ]:[
+  ["Your councillors for "+loc.ward,"/wards/"+norm(loc.ward).replace(/\s+/g,"-")+".html","Verified council ward page with elected-member details.",false],
+  ["Bin calendar for "+pc,"https://www.rochdale.gov.uk/bins-recycling/bins-collected","Opens the council's actual bin collection calendar. Enter the postcode, then select your address for the exact dates.",true],
+  ["School dates and half-term","https://www.rochdale.gov.uk/schools/school-terms-holiday-dates-closures/2","2026–27 Rochdale school dates. Each school may have different INSET dates.",false],
+  ["Roadworks notices","https://www.rochdale.gov.uk/directory/22/search-for-roadworks-in-rochdale-borough/category/140","Council-maintained roadworks directory; filter by local street. Nearby reports appear above.",false],
+  ["River levels near "+pc,localFlood,"Opens an actual postcode-specific official river-level search.",false]
  ];
- if(loc.nearbyWhitworth||!loc.ward)rows.shift();
- out("services",[list(rows.map(x=>({title:x[0],href:x[1],meta:x[2]})))]);
- putBrief("services","Council, bins, schools, trains, NHS and local reporting links.");
+ rows.push(
+  ["Plan a journey from "+pc,"https://tfgm.com/plan-a-journey","Bee Network journey planner. Enter the postcode as your starting point; this dashboard does not submit it without your action.",true],
+  ["Find NHS pharmacies around "+pc,"https://www.nhs.uk/service-search/pharmacy/find-a-pharmacy/","Official pharmacy search: enter this postcode to find local pharmacies.",true],
+  ["Find NHS hospitals near "+pc,"https://www.nhs.uk/service-search/Hospital","Official hospital locator, based on the postcode you enter.",true],
+  ["Report a problem near your home","https://www.fixmystreet.com/","Report a road or street issue. The service must confirm the street or map location.",true],
+  ["Local food hygiene ratings","https://ratings.food.gov.uk/","Official premises ratings. Search using your local town or postcode.",true]
+ );
+ const root=node("div");
+ if(pc){
+  const intro=node("p","For "+pc+": each link opens the relevant task or location search, not just a council homepage. Where an address is needed, you will still select it on the official service.","news-count");
+  root.append(intro);
+ }
+ const ul=node("ul",undefined,"data-list");
+ for(const [title,href,description,copy] of rows){
+  if(title.startsWith("Your councillors")&&!loc.ward)continue;
+  ul.append(serviceCard(title,href,description,pc,copy));
+ }
+ root.append(ul);
+ out("services",[root]);
+ putBrief("services","Direct links for bin collection, ward councillors, postcode river levels, travel, schools and nearby NHS services.");
 }
 async function safePostcodeLookup(postcode){
   try{return await read("/api/borough-data?kind=area&postcode="+encodeURIComponent(postcode),12000);}
