@@ -2252,18 +2252,21 @@ def recent_existing_articles() -> list[dict[str, Any]]:
     return dedupe_article_records(kept)
 
 def _source_image_allowed(candidate: Candidate) -> bool:
-    """Return True for a usable publisher-supplied HTTP(S) image."""
+    """Publisher metadata is not a licence; only explicit image permissions qualify.
+
+    Most source photos are evaluated by repair_generated_article_images.py
+    using the original page's ImageObject licence after scraping. Do not
+    cache an unlicensed press photograph just because it appears as og:image.
+    """
     if not USE_SOURCE_IMAGES:
         return False
     image_url = str(candidate.image_candidate_url or "").strip()
-    if not image_url:
+    if not image_url or is_disallowed_image_host(image_url):
         return False
-    parsed = urlparse(image_url)
-    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
-        return False
-    # Never cache the Google News logo / social sprites, even if one leaked
-    # into image_candidate_url from an unresolved wrapper page.
-    return not is_disallowed_image_host(image_url)
+    from licensed_source_images import canonical, permission_entries
+    return canonical(image_url) in permission_entries()
+
+
 
 
 def cache_source_image(
@@ -2290,8 +2293,12 @@ def cache_source_image(
     relative_path = f"assets/img/generated/{target_name}"
     target_path = GENERATED_IMAGE_DIR / target_name
 
-    credit = normalise_ws(candidate.source_name) or domain_of(candidate.source_url)
-    credit_url = candidate.source_url
+    from licensed_source_images import canonical, permission_entries
+    evidence = permission_entries().get(canonical(original_image_url), {})
+    credit = str(evidence.get("creator") or normalise_ws(candidate.source_name) or domain_of(candidate.source_url))
+    license_name = str(evidence.get("license_name") or "Used with permission")
+    credit = f"{credit} / {license_name}"
+    credit_url = str(evidence.get("evidence_url") or candidate.source_url)
 
     if target_path.exists() and target_path.stat().st_size > 5000:
         return relative_path, credit, credit_url, original_image_url
