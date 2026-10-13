@@ -4185,73 +4185,66 @@ function shareIconMarkup(action, label) {
       return `${days} day${days === 1 ? "" : "s"} ago`;
     }
 
-    /* ---- counts on grid cards ---- */
+    /* ---- real discussion counts and first-comment invitations ---- */
+    let commentCountsLoaded = false;
     async function loadCommentCounts() {
       try {
-        const res = await fetch(`${COMMENTS_API}?counts=1`, { headers: { Accept: "application/json" } });
+        const res = await fetch(`${COMMENTS_API}?counts=1`, {
+          headers: { Accept: "application/json" }, cache: "no-store"
+        });
         if (res.ok) {
           const payload = await res.json();
-          if (payload && payload.counts) commentCounts = payload.counts;
+          if (payload && payload.ok !== false && payload.counts && typeof payload.counts === "object") {
+            commentCounts = payload.counts;
+            commentCountsLoaded = true;
+          }
         }
-      } catch (e) { /* comments are additive; never block the page */ }
-      // Only surface counts where an article has genuine discussion.
-      // Otherwise the homepage remains uncluttered without implying zero interest.
+      } catch (e) { /* never block the newspaper when comments are offline */ }
       decorateCommentCounts();
     }
 
     function decorateCommentCounts() {
-      // .latest-item added 15 Sep: the canvas carries the count on every card
-      // including the Just in column, and that column is where a reader is
-      // most likely to be deciding which of four stories to open.
       document.querySelectorAll(".news-card, .lead-story, .secondary-story, .latest-item").forEach(card => {
-        const link = card.querySelector('a[href^="articles/"]');
+        // Static crawler-friendly HTML uses /articles/; the live renderer uses
+        // articles/. Both must be supported or counters vanish after rebuilds.
+        const link = card.querySelector('a[href^="articles/"], a[href^="/articles/"]');
         if (!link) return;
-        // Crime articles refuse comments server-side, so a count on one would
-        // promise something the reader cannot do. The category is looked up
-        // from the story itself, not card.dataset: only .news-card carries a
-        // data-category attribute, and the lead and secondary stories - which
-        // is exactly where a big crime story lands - do not.
-        const slugForCategory = link.getAttribute("href")
-          .replace(/^articles\//, "").replace(/\.html$/, "");
-        const story = stories.find(item => String(item.slug) === slugForCategory);
-        const category = String((story && story.category) || card.dataset.category || "").toLowerCase();
-        if (COMMENTS_CLOSED_CATEGORIES.has(category)) {
-          const stale = card.querySelector(".card-comments");
-          if (stale) stale.remove();
-          return;
-        }
-        const slug = link.getAttribute("href").replace(/^articles\//, "").replace(/\.html$/, "");
-        const n = Number(commentCounts[slug] || 0);
+        const slug = link.getAttribute("href").split("?")[0]
+          .replace(/^\\/?articles\\//, "").replace(/\\.html$/, "");
+        if (!/^[a-z0-9][a-z0-9-]*$/i.test(slug)) return;
+        const story = stories.find(item => String(item.slug) === slug);
+        const category = String((story && story.category) || card.dataset.category ||
+          card.querySelector(".story-kicker, .latest-kicker")?.textContent || "").trim().toLowerCase();
         const existing = card.querySelector(".card-comments");
-        // An empty comment counter on every story undermines the front page.
-        // Invite comments on the article itself; show counts only once positive.
-        if (!Number.isFinite(n) || n <= 0) {
+        if (COMMENTS_CLOSED_CATEGORIES.has(category)) {
           if (existing) existing.remove();
           return;
         }
-        const plain = `${n} comment${n === 1 ? "" : "s"}`;
-        // In the Just in column the count is part of the one meta line rather
-        // than a separate element with its own icon — the canvas sets it as
-        // bold text after the place and the time, and a 56px card has no room
-        // for a second row.
+        // Don't claim zero comments when the counter service cannot be reached.
+        if (!commentCountsLoaded) return;
+        const count = Number(commentCounts[slug] ?? 0);
+        if (!Number.isSafeInteger(count) || count < 0) return;
         const compact = card.classList.contains("latest-item");
-        const label = compact
-          ? ` · <strong class="latest-comments">${plain}</strong>`
-          : `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-5.5A8 8 0 1 1 21 12z"/></svg>${plain}`;
-        if (existing) { existing.innerHTML = label; return; }
-        const el = document.createElement("span");
-        el.className = "card-comments";
-        el.innerHTML = label;
-        if (compact) {
-          const meta = card.querySelector(".latest-time");
-          if (!meta) return;
-          meta.appendChild(el);
-          return;
-        }
-        // .tag-row is the news card's meta line; .card-meta is the front
-        // page's. Falling through to the card itself put the count outside
-        // the link, on a line of its own.
-        (card.querySelector(".card-meta") || card.querySelector(".tag-row") || card).appendChild(el);
+        const label = count > 0
+          ? `${count} comment${count === 1 ? "" : "s"}`
+          : "Be first to comment";
+        const accessible = count > 0
+          ? `Read ${count} comment${count === 1 ? "" : "s"} on this story`
+          : "Be the first to comment on this story";
+        const icon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-5.5A8 8 0 1 1 21 12z"/></svg>';
+        // Card links already open the article. The chip is part of that link,
+        // not a nested anchor, so it's accessible on touch and keyboard.
+        const el = existing || document.createElement("span");
+        el.className = "card-comments" + (count ? " has-discussion" : " invite-discussion");
+        el.innerHTML = icon;
+        el.appendChild(document.createTextNode(label));
+        el.setAttribute("aria-label", accessible);
+        if (existing) return;
+        const target = compact
+          ? card.querySelector(".latest-time")
+          : (card.querySelector(".card-meta") || card.querySelector(".tag-row") ||
+             card.querySelector(".story-meta") || link);
+        if (target) target.appendChild(el);
       });
     }
 
