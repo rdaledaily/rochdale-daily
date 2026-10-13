@@ -178,13 +178,17 @@ def councillor_card(person, photos):
         )
 
     if votes:
-        body = f'<p><b>Recorded votes</b></p><ul style="list-style:none;padding:0">{votes}</ul>'
+        body = f'<p><b>Verified individual votes</b></p><ul style="list-style:none;padding:0">{votes}</ul>'
     else:
-        body = '<p>No recorded vote has named this councillor yet.</p>'
-
+        body = '<p>No individually named vote is currently available for this councillor. This does not establish how they voted at other meetings.</p>'
+    profile = str(person.get("profile_url") or "")
+    if re.fullmatch(r"https://democracy\\.rochdale\\.gov\\.uk/mgUserInfo\\.aspx\\?UID=\\d+", profile):
+        official = f'<p><a href="{esc(profile)}" target="_blank" rel="noopener noreferrer">Council contact details and surgeries ↗</a></p>'
+    else:
+        official = ""
     return (
         f'<article class="rd-card">{portrait}<h3>{esc(name)}</h3>'
-        f'<div class="rd-meta">{esc(person.get("party"))}</div>{body}</article>'
+        f'<div class="rd-meta">{esc(person.get("party"))}</div>{official}{body}</article>'
     )
 
 
