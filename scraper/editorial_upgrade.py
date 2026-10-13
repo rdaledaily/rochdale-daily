@@ -9,6 +9,7 @@ from collections import Counter
 from typing import Any
 
 from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
+from reader_usefulness import reader_questions_for
 
 
 
@@ -1002,6 +1003,14 @@ def request_article(
             ),
             "house_style": STYLE_VERSION,
             "retain_local_impact_context": True,
+            "reader_first_questions": reader_questions_for(
+                getattr(candidate, "category", ""), source_kind
+            ),
+            "reader_first_rule": (
+                "Answer only questions that the supplied evidence actually supports. "
+                "Make the result readable, not a stock question-and-answer template. "
+                "Never invent hours, costs, routes, results, quotations or official actions."
+            ),
         },
         "right_to_reply": (
             "Anyone directly affected may request a correction or right of reply by emailing "
