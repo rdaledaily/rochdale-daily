@@ -116,11 +116,20 @@ async function newsArchive(loc,id){
  }
 }
 function roadworks(){
- const matches=archive.filter(x=>/traffic|transport/i.test(x.category)&&/roadwork|road closure|temporary closure|bridge works|road works|lane closure/i.test(x.title+" "+x.description));
- const closer=matches.filter(x=>match(x).score>0),rows=(closer.length?closer:matches).slice(0,10);
- const host=byId("roadworks");host.replaceChildren(list(rows.map(s=>({title:s.title,href:archiveUrl(s),meta:(closer.length?"Local-area article":"Borough report")+" · Published "+when(s.published_at)}))));
- if(!rows.length)host.append(node("p","No roadwork reports available in the searchable archive."));
- host.append(node("p","Articles describe reported works and may not reflect current closures. Check council notices.","method"));
+ const source=archive.filter(x=>/traffic|transport/i.test(x.category)&&
+   /roadwork|road closure|temporary closure|bridge works|road works|lane closure/i.test(x.title+" "+x.description));
+ const local=source.filter(x=>match(x).score>0),rest=source.filter(x=>!local.includes(x));
+ const host=byId("roadworks");host.replaceChildren(node("p",local.length+" roadwork reports mention your postcode area's places.","news-count"));
+ if(local.length){
+  host.append(list(local.slice(0,14).map(s=>({title:s.title,href:archiveUrl(s),
+    meta:"Published "+when(s.published_at)+" · Mentioned "+match(s).matched}))));
+ }else host.append(node("p","No archived roadworks reports name your selected ward or nearby locality."));
+ if(rest.length){
+  const details=node("details"),summary=node("summary","Browse "+rest.length+" other borough roadwork articles");
+  details.append(summary,list(rest.slice(0,20).map(s=>({title:s.title,href:archiveUrl(s),meta:"Borough article · Published "+when(s.published_at)}))));
+  host.append(details);
+ }
+ host.append(node("p","Archive articles are not live closure notices. Consult the council's roadworks directory for current restrictions.","method"));
 }
 function weather(w){
  const host=node("div"),updated=Date.parse(w.generated_at||"");
@@ -220,31 +229,40 @@ function traffic(d,loc){
  out("traffic",[detail]);
  putBrief("traffic",(near.length+areaNotMapped.length)+" local bus disruption notices; "+other.length+" elsewhere in the borough.");
 }
-function eventEntry(x,local){
- // A community-event approval ID does not guarantee an article page exists.
+function eventRow(x,local){
+ const li=node("li",undefined,"local-event");
+ const title=node("details"),summary=node("summary",String(x.title||"Community event"));
+ title.append(summary);
+ const content=node("div",undefined,"event-detail");
+ const pc=String(x.event_location||"").match(/\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i)?.[0]||"";
+ content.append(node("p",[when(x.event_start_at),x.event_location,x.event_cost].filter(Boolean).join(" · ")));
+ if(x.summary)content.append(node("p",String(x.summary).slice(0,800)));
+ if(x.event_start_at)content.append(node("p","Check timings and cancellations with the organiser before travelling.","method"));
  const known=archive.find(a=>String(a.slug)===String(x.slug||""));
- const valid=known&&archiveUrl(known)?archiveUrl(known):null;
- const eventPostcode=String(x.event_location||"").match(/\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i)?.[0]||"";
- const suffix=[when(x.event_start_at),x.event_location,x.event_cost].filter(Boolean).join(" · ");
- return {title:x.title||"Community event",href:valid,meta:(local?"Area-name match":"Elsewhere in the borough")+" · "+suffix+(eventPostcode?" · "+eventPostcode:"")};
+ if(known&&archiveUrl(known))content.append(link("Read the event article →",archiveUrl(known)));
+ const meta=node("small",(local?"Local place-name match":"Elsewhere in the borough")+(pc?" · Venue "+pc:""));
+ li.append(title,meta);title.append(content);
+ return li;
 }
 function events(d){
  lastEvents=d;
  const data=Array.isArray(d.events)?d.events:[];
- const matched=data.filter(e=>aliases.some(x=>whole(e.event_location+" "+e.title,x)));
- const rest=data.filter(e=>!matched.includes(e));
- const top=node("div");
- top.append(node("p",matched.length+" approved events with a match to your selected area.","news-count"));
- if(matched.length)top.append(list(matched.map(x=>eventEntry(x,true))));
- else top.append(node("p","No approved event submissions currently match your ward or local places. Check the wider borough events below."));
+ const matches=data.filter(x=>aliases.some(a=>whole(x.event_location+" "+x.title,a)));
+ const rest=data.filter(x=>!matches.includes(x));
+ const host=node("div");
+ host.append(node("p",matches.length+" approved community events mention your selected area.","news-count"));
+ if(matches.length){
+  const ul=node("ul",undefined,"data-list");
+  matches.forEach(x=>ul.append(eventRow(x,true)));host.append(ul);
+ }else host.append(node("p","No upcoming approved submissions currently mention your ward. Widen the search below to browse the borough."));
  if(rest.length){
-  const details=node("details"),summ=node("summary","Explore "+rest.length+" other events across Rochdale borough");
-  details.append(summ,list(rest.map(x=>eventEntry(x,false))));
-  top.append(details);
+  const other=node("details"),head=node("summary","Show "+rest.length+" other borough events");
+  const ul=node("ul",undefined,"data-list");rest.forEach(x=>ul.append(eventRow(x,false)));
+  other.append(head,ul);host.append(other);
  }
- top.append(node("p","Matching is based on event titles and venue descriptions; it does not establish walking distance. Open the borough calendar for the complete what's-on guide.","method"));
- out("events",[top]);
- putBrief("events",matched.length+" events mention your local area; "+rest.length+" more in the borough.");
+ host.append(node("p","Open an event to view its submitted location and details. Not every approved event has a separate article or independently verified distance.","method"));
+ out("events",[host]);
+ putBrief("events",matches.length+" local-area event submissions; "+rest.length+" other borough events.");
 }
 function flood(d){
  const warnings=Array.isArray(d.warnings)?d.warnings:[],
