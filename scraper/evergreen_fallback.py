@@ -29,6 +29,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 from openai import OpenAI
+from house_style import HUMAN_VOICE_BRIEF
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTICLES_PATH = ROOT / "articles.json"
@@ -231,7 +232,7 @@ CATEGORY: {topic.get('category')}
 
 Research this topic on the live web before writing. Prefer primary and authoritative material: Rochdale Council, UK government, ONS, Ofsted, Historic England, archives, museums, academic/heritage organisations and original records. Use at least two credible source pages. Do not use Rochdale Times, Rochdale Online or Rochdale Observer. For current statistics, planning or inspections, use the newest official data available and state the data period. For folklore, ghosts, fairies, boggarts, tunnels or disputed stories, explicitly distinguish legend/tradition from documented fact. Never invent a quote, witness, date, source, document, inspection result, statistic or planning status. If a claim cannot be verified, say so plainly. For allegations or abuse history, rely on official findings and attribute claims precisely; protect victims and avoid sensationalism.
 
-Write an engaging local-newspaper feature of roughly 500-800 words. No emojis. No clickbait. No model/citation tokens. Do not mention competing local news publishers in the title or body. Do not add a bibliography to the body.
+Follow this original Rochdale Daily editorial voice: {HUMAN_VOICE_BRIEF}\n\nWrite a carefully observed, intellectually readable local feature of roughly 500-800 words. Use rhetorical questions sparingly and humour only when the subject warrants it. Do not manufacture experiences, interviews, impressions or reaction. No emojis. No clickbait. No model/citation tokens. Do not mention competing local news publishers in the title or body. Do not add a bibliography to the body.
 
 Return ONLY one valid JSON object with exactly these keys:
 {{
