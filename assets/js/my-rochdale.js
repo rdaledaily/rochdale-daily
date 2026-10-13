@@ -89,6 +89,48 @@ function weather(w){
  (w.days||[]).slice(0,7).forEach(d=>{const box=node("div",undefined,"weather-day");box.append(node("strong",d.weekday||when(d.date)),node("span",d.icon||""),node("b",String(d.temperature_c??"—")+"°C"),node("small",d.condition||""));grid.append(box);});
  host.append(grid,node("p","Rochdale-area forecast, not a hyperlocal measurement.","method"));out("weather",[host]);
 }
+function weatherCode(code){
+ const c=String(code||"").replace(/_(day|night|polartwilight)$/,"").replace(/_/g," ");
+ return c?c.charAt(0).toUpperCase()+c.slice(1):"Forecast available";
+}
+function preciseWeather(w){
+ const root=node("div");
+ root.append(node("p","Forecast for the approximate postcode area · MET Norway","metric-label"));
+ const p=w.now||{};
+ const today=node("div",undefined,"local-now");
+ const temp=p.temperatureC===null||p.temperatureC===undefined?"—":Math.round(p.temperatureC)+"°C";
+ today.append(node("strong",temp,"metric"),node("p",weatherCode(p.condition)));
+ const facts=node("p",[
+  p.windMs!==null&&p.windMs!==undefined?"Wind "+Math.round(p.windMs*3.6)+" km/h":null,
+  p.humidity!==null&&p.humidity!==undefined?"Humidity "+p.humidity+"%":null,
+  p.precipitationMm!==null&&p.precipitationMm!==undefined?"Rain "+p.precipitationMm+"mm / next "+p.precipitationHours+"h":null
+ ].filter(Boolean).join(" · "),"metric-label");
+ today.append(facts);root.append(today);
+ const grid=node("div",undefined,"weather-days");
+ for(const d of (w.days||[]).slice(0,7)){
+  const el=node("div",undefined,"weather-day");
+  el.append(node("strong",when(d.date)),node("span","◌"),node("b",d.maxTemp!==null?Math.round(d.maxTemp)+"°C":"—"),node("small",d.minTemp!==null?"Low "+Math.round(d.minTemp)+"°C":""),node("small",weatherCode(d.condition)));
+  grid.append(el);
+ }
+ root.append(grid);
+ const hourly=node("div");hourly.append(node("h4","Next hours"));
+ const listNodes=(w.hourly||[]).slice(0,12).map(h=>{
+  const stamp=new Date(h.time).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
+  return {title:stamp+" · "+(h.temperatureC!=null?Math.round(h.temperatureC)+"°C":"—")+" · "+weatherCode(h.condition),
+   meta:[h.windMs!=null?"Wind "+Math.round(h.windMs*3.6)+" km/h":"",h.precipitationMm!=null?"Precipitation "+h.precipitationMm+"mm / "+h.precipitationHours+"h":""].filter(Boolean).join(" · ")};
+ });
+ hourly.append(list(listNodes));root.append(hourly);
+ root.append(node("p","Adapted from MET Norway (CC BY 4.0); model values cover an approximate location and are not exact street-level measurements. Updated "+(when(w.generatedAt)||"date unavailable")+".","method"));
+ root.append(link("Forecast source and licence ↗",w.link||"https://api.met.no/"));
+ out("weather",[root]);
+}
+async function weatherForPostcode(postcode){
+ try{preciseWeather(await read("/api/borough-data?kind=weather&postcode="+encodeURIComponent(postcode),17500));}
+ catch(err){
+  try{weather(await read("/weather.json"));}
+  catch{unavailable("weather","https://www.metoffice.gov.uk/");}
+ }
+}
 function traffic(d,loc){
  const data=Array.isArray(d.disruptions)?d.disruptions:[];
  const nearby=x=>Number.isFinite(x.lat)&&Number.isFinite(x.lon)?Math.sqrt(Math.pow((x.lat-loc.latitude)*111,2)+Math.pow((x.lon-loc.longitude)*66,2)):999;
@@ -160,7 +202,7 @@ async function start(e){
   const param="&postcode="+encodeURIComponent(input);
   const work=[
    ["archive",()=>newsArchive(loc,id)],
-   ["weather",async()=>weather(await read("/weather.json"))],
+   ["weather",()=>weatherForPostcode(input)],
    ["traffic",async()=>traffic(await read("/api/traffic"),loc)],
    ["events",async()=>events(await read("/api/events"))],
    ["flood",async()=>flood(await read("/api/borough-data?kind=flood"+param,19000))],
