@@ -1,6 +1,7 @@
 /**
  * Rochdale Daily Borough Data. Public, read-only, geolocated open data.
- * No user postcode, IP or response content is persisted in KV, logs or analytics.
+ * This handler does not write submitted postcodes to KV or analytics.
+ * Postcodes appear transiently in request URLs and upstream postcode lookups.
  * Research-only procurement and company search requires existing editor token.
  * Never represents official safety alerts, indexed crime coordinates or
  * incomplete contract search results as exhaustive.
@@ -78,24 +79,35 @@ async function floodInfo(loc){
   if(warnings.status==='rejected'&&stations.status==='rejected')throw Error('Flood monitoring unavailable');
   const floods=warnings.status==='fulfilled'&&Array.isArray(warnings.value.items)?warnings.value.items:[];
   const gauges=stations.status==='fulfilled'&&Array.isArray(stations.value.items)?stations.value.items:[];
+  const nearby=gauges.filter(x=>Number.isFinite(Number(x.lat))&&Number.isFinite(Number(x.long))).slice(0,12);
+  const readings=await Promise.allSettled(nearby.slice(0,4).map(async station=>{
+    const stationRef=tidy(station.stationReference,60);
+    if(!/^[a-zA-Z0-9_-]{1,60}$/.test(stationRef))return null;
+    const d=await jsonGet(EA+'/id/stations/'+encodeURIComponent(stationRef)+'/readings?latest',{ttl:600});
+    const r=Array.isArray(d.items)?d.items:[];
+    const level=r.find(x=>Number.isFinite(Number(x.value)));
+    return level?{station:stationRef,value:Number(level.value),dateTime:tidy(level.dateTime,50),measure:tidy(level.measure,250)}:null;
+  }));
+  const levelByRef=new Map(readings.filter(x=>x.status==='fulfilled'&&x.value).map(x=>[x.value.station,x.value]));
   return {ok:true,kind:'flood',location:loc,
     warnings:floods.slice(0,20).map(f=>({
       area:tidy(f.description||f.floodArea?.label||'Area warning',180),
       severity:Number(f.severityLevel)||null,level:tidy(f.severity,90),
       message:tidy(f.message,300),changed:tidy(f.timeMessageChanged||f.timeRaised,50)
     })),
-    stations:gauges.filter(x=>Number.isFinite(Number(x.lat))&&Number.isFinite(Number(x.long))).slice(0,20).map(x=>({
+    stations:nearby.map(x=>({
       name:tidy(x.label,120),river:tidy(x.riverName,80),station:tidy(x.stationReference,60),
-      source:'Environment Agency',url:safeHref(x['@id'],'environment.data.gov.uk')
+      source:'Environment Agency',url:safeHref(x['@id'],'environment.data.gov.uk'),
+      reading:levelByRef.get(tidy(x.stationReference,60))||null
     })),
     warningsAvailable:warnings.status==='fulfilled',stationsAvailable:stations.status==='fulfilled',
     source:'Environment Agency flood-monitoring API (Beta)',link:'https://check-for-flooding.service.gov.uk/',
     disclaimer:'Nearby monitoring locations are not a flood prediction; check official flood warnings before travel.'
   };
 }
-async function crimeInfo(loc){
+async function crimeInfo(loc,query){
   const p=new URLSearchParams({lat:String(loc.latitude),lng:String(loc.longitude)});
-  const date=tidy(new URLSearchParams(locationQuery||'').get('date')||'',7);
+  const date=tidy(query.get('date')||'',7);
   if(/^\d{4}-(0[1-9]|1[0-2])$/.test(date))p.set('date',date);
   const rows=await jsonGet('https://data.police.uk/api/crimes-street/all-crime?'+p.toString(),{ttl:86400});
   if(!Array.isArray(rows))throw Error('Unexpected police data response');
@@ -105,7 +117,6 @@ async function crimeInfo(loc){
     source:'Police.uk open data',link:'https://data.police.uk/',
     disclaimer:'Monthly historical police-recorded reports, not live incidents. Locations are anonymised. Counts can change and do not identify addresses or individuals.'};
 }
-let locationQuery='';
 async function planningInfo(loc){
  const p=new URLSearchParams({latitude:String(loc.latitude),longitude:String(loc.longitude),limit:'60'});
  for(const d of ['conservation-area','listed-building','green-belt','article-4-direction-area','tree-preservation-zone'])p.append('dataset',d);
@@ -165,7 +176,7 @@ export async function onRequestGet({request,env}){
    let response;
    if(kind==='area'||kind==='all')response=await areaInfo(loc);
    if(kind==='flood')response=await floodInfo(loc);
-   if(kind==='crime'){locationQuery=u.searchParams.toString();response=await crimeInfo(loc)}
+   if(kind==='crime')response=await crimeInfo(loc,u.searchParams)
    if(kind==='planning')response=await planningInfo(loc);
    return reply(response);
  }catch(e){return reply(sourceError(kind,e),503)}
