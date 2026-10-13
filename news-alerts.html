@@ -1,0 +1,46 @@
+<!doctype html><html lang="en-GB"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10283b"><meta name="description" content="Choose optional local breaking news, traffic, community and daily Rochdale news alerts. Subscribe or unsubscribe at any time.">
+<title>Local news alerts | Rochdale Daily</title><link rel="canonical" href="https://rochdaledaily.co.uk/news-alerts.html">
+<style>
+:root{--navy:#10283b;--teal:#136c76;--paper:#f6f9f9;--ink:#1a3040;--line:#d6e4e6}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--teal)}.wrap{width:min(1040px,calc(100% - 36px));margin:auto}
+header{background:var(--navy);color:#fff}.top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:75px}.brand{font:800 25px/1.2 Georgia,serif;text-decoration:none;color:white}.brand small{display:block;font:650 10px system-ui;letter-spacing:.14em;color:#c9e0e1;text-transform:uppercase}.back{font-size:13px;color:#dbe9ed;text-decoration:none}
+.hero{background:var(--navy);color:#fff;padding:55px 0 65px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.17em;font-weight:850;color:#eec782}h1,h2{font-family:Georgia,serif}h1{font-size:clamp(36px,7vw,68px);line-height:1.09;letter-spacing:-.05em;margin:15px 0;max-width:730px}.hero p{max-width:720px;font-size:17px;color:#dbe6e9}
+main{padding:36px 0 90px}.layout{display:grid;grid-template-columns:minmax(0,1.32fr) minmax(230px,.8fr);gap:23px;align-items:start}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:28px;box-shadow:0 8px 25px #15394a0b}.card h2{font-size:27px;line-height:1.2;margin:0 0 7px}.intro{color:#536d78;font-size:14px;margin:0 0 23px}.topics{display:grid;gap:10px}
+.choice{display:flex;gap:13px;align-items:flex-start;border:1px solid #d8e5e8;background:#f9fcfc;padding:17px 15px;border-radius:5px;cursor:pointer}
+.choice:hover{border-color:#7eabb1}.choice input{width:20px;height:20px;margin-top:4px;accent-color:var(--teal);flex:none}
+.choice strong{display:block;font-size:16px}.choice small{display:block;color:#526b78;line-height:1.45;margin-top:3px;font-size:13px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:23px}.button{min-height:48px;border-radius:5px;border:0;padding:12px 19px;font:800 14px system-ui;background:var(--teal);color:#fff;cursor:pointer}.button.secondary{background:#fff;border:1px solid #9eb8c0;color:var(--navy)}.button:disabled{opacity:.6;cursor:wait}.button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #2aa0a9;outline-offset:3px}
+#rd-push-status{font-size:14px;min-height:2em;margin:13px 0 0;color:#486772}#rd-push-status[data-state="error"]{color:#9e3339}#rd-push-status[data-state="ok"]{color:#196f59}
+.sidebar h2{font-size:24px}.sidebar p,.sidebar li{font-size:14px;color:#4e6573}.sidebar ul{padding-left:19px}.sidebar li{margin:12px 0}.important{border-left:4px solid var(--teal);background:#eaf2f2;border-radius:3px;padding:14px 17px;font-size:13px;color:#355561;margin-top:18px}
+footer{background:var(--navy);color:#c9dce2;padding:24px 0;font-size:12px}footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}footer a{color:#fff}
+@media(max-width:740px){.layout{grid-template-columns:1fr}.card{padding:21px}.hero{padding:45px 0 52px}.back{font-size:11px}}
+</style></head><body>
+<header><div class="wrap top"><a class="brand" href="/">ROCHDALE DAILY<small>Independent local journalism</small></a><a class="back" href="/">← Back to the newspaper</a></div></header>
+<section class="hero"><div class="wrap"><span class="eyebrow">Keep in touch with your borough</span><h1>Know when Rochdale makes news.</h1><p>Get selected local stories sent straight to your browser, even when you aren't on the website. You choose the subjects and can switch alerts off whenever you like.</p></div></section>
+<main><div class="wrap layout">
+<section class="card"><h2>Choose your alerts</h2><p class="intro">Select the topics you care about. We only ask for notification permission after you press the subscribe button.</p>
+<form id="rd-push-form">
+<div class="topics">
+<label class="choice"><input type="checkbox" name="topic" value="breaking" checked><span><strong>Breaking and important news</strong><small>Major confirmed developments affecting the borough. Selected alerts only, not every new article.</small></span></label>
+<label class="choice"><input type="checkbox" name="topic" value="traffic"><span><strong>Travel and disruptions</strong><small>Significant verified road or public transport information reported by the newsroom.</small></span></label>
+<label class="choice"><input type="checkbox" name="topic" value="community"><span><strong>Community and what's on</strong><small>Useful local events, public service news and stories worth discovering.</small></span></label>
+<label class="choice"><input type="checkbox" name="topic" value="daily"><span><strong>Daily selected stories</strong><small>A limited choice of noteworthy reports, not a stream of every publication.</small></span></label>
+</div>
+<div class="actions"><button class="button" type="submit" id="rd-push-subscribe">Turn on notifications →</button><button class="button secondary" id="rd-push-unsubscribe" type="button">Turn off alerts on this device</button></div>
+<p id="rd-push-status" role="status" aria-live="polite">No push service is contacted until you choose to subscribe or manage your alerts.</p>
+</form>
+<div class="important"><strong>Privacy:</strong> Push notifications are optional. After consent, OneSignal and your browser's notification service handle a device subscription identifier. We do not send your postcode or contact details as notification tags. <a href="/privacy.html#alerts">Read how alerts work</a>.</div>
+</section>
+<aside class="card sidebar"><h2>Good to know</h2><ul>
+<li>Opening an alert takes you directly to the published Rochdale Daily story.</li>
+<li>We do not send push notifications for every story or use them for undisclosed advertising.</li>
+<li>You can return here to change your choices or turn alerts off.</li>
+<li>Some browsers don't allow web push. On iPhone and iPad, add Rochdale Daily to your Home Screen first and open it from there.</li>
+<li>The site's existing on-page <strong>New story</strong> suggestions still work without subscribing.</li></ul>
+<p><a href="/my-rochdale.html">Find stories for your own neighbourhood →</a></p></aside>
+</div></main>
+<footer><div class="wrap"><span>© Rochdale Daily · Independent local journalism</span><span><a href="/">Home</a> · <a href="/privacy.html">Privacy</a> · <a href="/advertise.html">Advertise</a></span></div></footer>
+<script defer src="/assets/js/onesignal-push.js"></script></body></html>
