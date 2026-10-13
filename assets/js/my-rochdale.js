@@ -20,7 +20,7 @@ const read=async (url,timeout=12000)=>{
  finally{clearTimeout(clock)}
 };
 const unavailable=(id,source,msg)=>out(id,[node("p",msg||"This data source is not responding. Its official website has the latest information."),link("Open the official source ↗",source)]);
-let archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={};
+let archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={},lastEvents=null;
 const archiveUrl=x=>/^\/articles\/[a-z0-9-]+\.html$/i.test(x.url||"")?x.url:"";
 function match(s){
  const a=norm((s.title||"")+" "+(s.slug||"").replace(/-/g," ")),b=norm(s.description);
@@ -72,6 +72,7 @@ async function newsArchive(loc,id){
   byId("news-controls").replaceChildren();byId("news-controls").dataset.ready="";
   news();
   roadworks();
+  if(lastEvents)events(lastEvents);
  }catch{unavailable("stories","/archive.html","Full news archive could not load. Open the archive to search directly.");}
 }
 function roadworks(){
@@ -124,8 +125,8 @@ function preciseWeather(w){
  root.append(link("Forecast source and licence ↗",w.link||"https://api.met.no/"));
  out("weather",[root]);
 }
-async function weatherForPostcode(postcode){
- try{preciseWeather(await read("/api/borough-data?kind=weather&postcode="+encodeURIComponent(postcode),17500));}
+async function weatherForPostcode(coords){
+ try{preciseWeather(await read("/api/borough-data?kind=weather"+coords,17500));}
  catch(err){
   try{weather(await read("/weather.json"));}
   catch{unavailable("weather","https://www.metoffice.gov.uk/");}
@@ -139,6 +140,7 @@ function traffic(d,loc){
  out("traffic",[node("p",data.length+" bus disruption notices in the borough feed.","news-count"),list(rows),node("p","This feed covers reported bus disruptions, not all road traffic or train cancellations.","method")]);
 }
 function events(d){
+ lastEvents=d;
  const data=Array.isArray(d.events)?d.events:[];
  const scored=data.slice().sort((a,b)=>{
   const ma=aliases.some(x=>whole(a.event_location+" "+a.title,x)),mb=aliases.some(x=>whole(b.event_location+" "+b.title,x));
@@ -158,7 +160,8 @@ function flood(d){
 }
 function crime(d){
  const rows=(d.byCategory||[]).map(x=>({title:String(x.category||"").replace(/-/g," "),meta:x.count+" reports"}));
- out("crime",[node("p",String(d.total||0),"metric"),node("p","Police-recorded reports for "+String(d.month||"latest published month")+", approximately one mile around the postcode.","metric-label"),list(rows)]);
+ if(d.dataAvailable===false){out("crime",[node("p","No usable records returned for "+String(d.month||"this month")+". This does not mean no crimes occurred.","risk"),link("Consult Police.uk directly ↗",d.link||"https://data.police.uk/")]);return;}
+ out("crime",[node("p",String(d.total),"metric"),node("p","Police-recorded reports for "+String(d.month||"latest published month")+", approximately one mile around the postcode.","metric-label"),list(rows)]);
 }
 function planning(d){
  const data=Array.isArray(d.constraints)?d.constraints:[];
@@ -188,7 +191,7 @@ async function start(e){
  const id=++requestId,button=byId("lookup").querySelector("button");button.disabled=true;
  report("Finding your ward and connecting to local information…");
  ["stories","weather","traffic","events","flood","crime","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
- byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();
+ byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();lastEvents=null;
  try{
   const data=await read("/api/borough-data?kind=area&postcode="+encodeURIComponent(input),12000);
   if(id!==requestId)return;
@@ -199,10 +202,10 @@ async function start(e){
   byId("location").hidden=false;
   report("Showing news and services for "+loc.ward+". Each data source has its own coverage and update schedule.");
   services(loc);
-  const param="&postcode="+encodeURIComponent(input);
+  const param="&lat="+Number(loc.latitude).toFixed(3)+"&lon="+Number(loc.longitude).toFixed(3);
   const work=[
    ["archive",()=>newsArchive(loc,id)],
-   ["weather",()=>weatherForPostcode(input)],
+   ["weather",()=>weatherForPostcode(param)],
    ["traffic",async()=>traffic(await read("/api/traffic"),loc)],
    ["events",async()=>events(await read("/api/events"))],
    ["flood",async()=>flood(await read("/api/borough-data?kind=flood"+param,19000))],
