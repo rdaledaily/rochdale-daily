@@ -128,9 +128,10 @@
  document.querySelectorAll('a[data-plan]').forEach(function(a){a.addEventListener('click',function(){select.value=a.dataset.plan;});});
  form.addEventListener('submit',async function(ev){
    ev.preventDefault();if(!form.reportValidity())return;
-   const d={business:form.business.value.trim(),name:form.name.value.trim(),email:form.email.value.trim(),
-     website:form.website.value.trim(),package:select.value,area:form.area.value.trim(),goal:form.goal.value.trim(),
-     company_fax:form.company_fax.value,privacyAccepted:document.getElementById('privacyAccepted').checked};
+   const get=function(id){return document.getElementById(id).value.trim();};
+   const d={business:get('business'),name:get('name'),email:get('email'),
+     website:get('website'),package:select.value,area:get('area'),goal:get('goal'),
+     company_fax:get('company_fax'),privacyAccepted:document.getElementById('privacyAccepted').checked};
    button.disabled=true;button.textContent='Sending your enquiry…';status.textContent='';status.className='formstatus';
    try{
      const response=await fetch('/api/advertising-enquiries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),credentials:'same-origin'});
