@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-13T10:37:43.760721Z",
+  "last_run_at": "2026-10-13T10:49:49.275632Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,31 +27,27 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 84,
+  "raw_candidates_before_job_filter": 80,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 84,
+  "raw_candidates": 80,
   "candidate_clusters": 33,
   "google_news_resolution": {
-    "wrappers": 35,
-    "resolved": 27,
-    "text_recovered": 11,
+    "wrappers": 50,
+    "resolved": 30,
+    "text_recovered": 7,
     "reattributed": 0,
-    "images_found": 23
+    "images_found": 19
   },
-  "duplicates_merged": 51,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 2,
+  "duplicates_merged": 47,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
-    },
-    {
-      "slug": "finalists-announced-for-rochdale-business-awards-2026",
-      "source_url": "https://www.rochvalleyradio.com/news-features/140/business/990/finalists-announced-for-rochdale-business-awards-2026"
     }
   ],
-  "new_articles": 1,
+  "new_articles": 0,
   "live_articles": 226,
   "skipped": 1,
   "rewrite_skip_reasons": {
@@ -74,8 +70,8 @@
       "published": 40,
       "rejected": 100
     },
-    "held_back_this_run": 22,
-    "held_already_published": 14,
+    "held_back_this_run": 23,
+    "held_already_published": 15,
     "held_rejected": 8,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -158,7 +154,7 @@
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 71,
-    "website_discovery": 8,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -170,7 +166,7 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 23,
+    "Rochdale Times": 19,
     "Yahoo": 12,
     "Roch Valley Radio": 8,
     "Manchester Evening News": 7,
@@ -190,7 +186,6 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "business": 1,
     "health": 1,
     "news": 1
   },
@@ -231,12 +226,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "business-v3-3ccd5f2a515b0b567a07",
     "health-v3-32e5fbcbd5262e293a52",
     "hard-news-v3-0ef4aab2c54dc9e39ea6"
   ],
   "selected_candidate_urls": [
-    "https://www.rochvalleyradio.com/news-features/140/business/990/finalists-announced-for-rochdale-business-awards-2026",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.rochdaletimes.co.uk/school-to-limit-online-images-as-ai-manipulation-threat-rises/"
   ],
@@ -250,12 +243,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "business",
       "health",
       "news"
     ],
     "selected_categories": [
-      "business",
       "health",
       "news"
     ],
@@ -269,17 +260,15 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 1,
       "health": 1,
       "news": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 2
     },
     "selected_by_source": {
       "food standards agency": 1,
-      "roch valley radio local news": 1,
       "rochdale times": 1
     }
   },
@@ -829,8 +818,10 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
+  "robots_denied_count": 1,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMimgFBVV95cUxPUEg2VkdydHB3eVJ3OHN3NEh6Smw2QjJYclZfRlZ5LU1IM2k3emIzMlJqYUNkbGdCbEw0ckVhZlNBQ3JlbTRnX0pTSnlvQTQ0eWFMRWtaTndqUEZfLUxNT2Jubkx1UF96ZHFnQnBNQ0MxeGtZbk5Ga1F5STRjSGlpV2tWSFg0anN2U2JFQU5ZTUtHbWFnd3d6YjBn?oc=5"
+  ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
     "rochdaleafccommunity.org"
@@ -873,7 +864,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-13T10:40:04.950676Z",
+  "frontpage_generated_at": "2026-10-13T10:53:13.500290Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -999,11 +990,9 @@
   "category_archive_count": 11,
   "area_archive_count": 24,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "finalists-announced-for-rochdale-business-awards-2026"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 1,
-  "publication_health": "partial",
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
