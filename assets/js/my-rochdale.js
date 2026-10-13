@@ -180,8 +180,37 @@ function services(loc){
   ["Check official flood warnings","https://check-for-flooding.service.gov.uk/","Environment Agency"],
   ["Report a local problem","https://www.fixmystreet.com/","Public-service reports"]
  ];
- if(loc.nearbyWhitworth)rows.shift();
+ if(loc.nearbyWhitworth||!loc.ward)rows.shift();
  out("services",[list(rows.map(x=>({title:x[0],href:x[1],meta:x[2]})))]);
+}
+async function safePostcodeLookup(postcode){
+  try{return await read("/api/borough-data?kind=area&postcode="+encodeURIComponent(postcode),12000);}
+  catch(err){
+    // The site edge may transiently block/timeout, while the public,
+    // CORS-enabled postcode API is still available directly to the reader.
+    const pc=postcode.toUpperCase().replace(/\s+/g,"");
+    const direct=await read("https://api.postcodes.io/postcodes/"+encodeURIComponent(pc),12000);
+    const row=direct.result||{};
+    const district=String(row.admin_district||""),ward=String(row.admin_ward||"");
+    const nearby=/whitworth/i.test(ward)&&/rossendale/i.test(district);
+    if(district!=="Rochdale"&&!nearby)throw Error("This postcode is outside Rochdale borough and Whitworth.");
+    if(!Number.isFinite(row.latitude)||!Number.isFinite(row.longitude))throw Error("Postcode coordinates are unavailable.");
+    return {location:{postcode:String(row.postcode||postcode),district,ward,latitude:row.latitude,longitude:row.longitude,nearbyWhitworth:nearby}};
+  }
+}
+async function showBoroughIfLookupFails(){
+  // A failed postcode resolver must not blank the entire newspaper.
+  report("Postcode matching is temporarily unavailable. Borough-wide news, weather, travel and events are still available.",true);
+  byId("location").hidden=true;byId("lookup").querySelector("button").disabled=false;
+  const fallback={district:"Rochdale",ward:"",latitude:53.615,longitude:-2.155};
+  await Promise.allSettled([
+    (async()=>{await newsArchive(fallback,requestId);active="all";news();})(),
+    (async()=>{try{weather(await read("/weather.json"));}catch{unavailable("weather","https://www.metoffice.gov.uk/")}})(),
+    (async()=>{try{traffic(await read("/api/traffic"),fallback);}catch{unavailable("traffic","https://tfgm.com/")}})(),
+    (async()=>{try{events(await read("/api/events"));}catch{unavailable("events","/whats-on.html")}})()
+  ]);
+  services(fallback);
+  ["flood","crime","planning"].forEach(id=>unavailable(id,errorSources[id],"This source requires a successful postcode lookup. Open the official service."));
 }
 const errorSources={weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/whats-on.html",flood:"https://check-for-flooding.service.gov.uk/",crime:"https://data.police.uk/",planning:"https://www.planning.data.gov.uk/"};
 async function start(e){
@@ -193,7 +222,7 @@ async function start(e){
  ["stories","weather","traffic","events","flood","crime","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
  byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();lastEvents=null;
  try{
-  const data=await read("/api/borough-data?kind=area&postcode="+encodeURIComponent(input),12000);
+  const data=await safePostcodeLookup(input);
   if(id!==requestId)return;
   const loc=data.location;area=loc;
   byId("area-name").textContent=loc.ward||loc.district;
@@ -213,7 +242,7 @@ async function start(e){
    ["planning",async()=>planning(await read("/api/borough-data?kind=planning"+param,16000))]
   ];
   await Promise.allSettled(work.map(async x=>{try{await x[1]();}catch(err){if(id===requestId)unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");}}));
- }catch(err){if(id===requestId)report("Postcode lookup was unsuccessful. "+String(err.message||"Check the postcode and try again."),true);}
+ }catch(err){if(id===requestId)await showBoroughIfLookupFails();}
  finally{if(id===requestId)button.disabled=false;}
 }
 byId("lookup").addEventListener("submit",start);
