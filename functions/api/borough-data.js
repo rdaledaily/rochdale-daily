@@ -119,7 +119,7 @@ async function crimeInfo(loc,query){
 }
 async function planningInfo(loc){
  const p=new URLSearchParams({latitude:String(loc.latitude),longitude:String(loc.longitude),limit:'60'});
- for(const d of ['conservation-area','listed-building','green-belt','article-4-direction-area','tree-preservation-zone'])p.append('dataset',d);
+ for(const d of ['conservation-area','listed-building','green-belt','article-4-direction-area','tree-preservation-zone','flood-risk-zone'])p.append('dataset',d);
  const raw=await jsonGet('https://www.planning.data.gov.uk/entity.json?'+p.toString(),{ttl:3600});
  const rows=Array.isArray(raw.entities)?raw.entities:[];
  return {ok:true,kind:'planning',location:loc,totalReturned:rows.length,
