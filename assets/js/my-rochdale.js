@@ -10,7 +10,7 @@ const out=(id,nodes)=>{const x=byId(id);if(x)x.replaceChildren(...nodes);};
 const link=(text,href)=>{const a=node("a",text);try{const u=new URL(href,location.origin);if(u.protocol!=="https:"&&u.origin!==location.origin)throw Error();a.href=u.href;if(u.origin!==location.origin){a.target="_blank";a.rel="noopener noreferrer";}}catch{a.removeAttribute("href");}return a;};
 const list=(records)=>{const ul=node("ul",undefined,"data-list");records.forEach(x=>{const li=node("li");li.append(x.href?link(x.title,x.href):node("strong",x.title));if(x.meta)li.append(node("small",x.meta));ul.append(li);});return ul;};
 const status=byId("status");
-const report=(s,bad=false)=>{status.textContent=s;status.classList.toggle("error",bad);};
+const report=(s,state="ready")=>{status.textContent=s;status.classList.toggle("error",state==="error");status.classList.toggle("loading",state==="loading");status.classList.toggle("success",state==="success");status.setAttribute("aria-busy",String(state==="loading"));};
 const when=s=>{const d=Date.parse(s||"");return Number.isFinite(d)?new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";};
 const norm=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
 const whole=(t,x)=>x.length>3&&(" "+norm(t)+" ").includes(" "+norm(x)+" ");
@@ -202,7 +202,7 @@ function recentCrimeReports(){
 }
 function crime(d){
  const introduction=node("p","Greater Manchester Police has not supplied street-level crime data to Police.uk since July 2019. Consequently, a reliable recent postcode crime rate or total cannot be calculated from that service.","risk");
- const more=node("p","The Police.uk national 'latest month' does not mean there are up-to-date GMP street-crime records for Rochdale.","method");
+ const more=node("p","The Police.uk national 'latest month' does not mean there are up-to-date GMP street-crime records for Rochdale. GMP publishes its own neighbourhood crime data through 2026; those are aggregated counts, not geolocated individual incidents.","method");
  const sources=node("div");
  const comparison=d.boroughComparison;
  const blocks=[introduction];
@@ -214,7 +214,7 @@ function crime(d){
    card.append(link("Read Police.uk's ONS comparison ↗",comparison.url));
    blocks.push(card);
  }
- sources.append(link("GMP official statistics ↗",d.officialStatistics||"https://www.gmp.police.uk/"),node("span"," · "),link("Police.uk data notice ↗","https://data.police.uk/changelog/"));
+ sources.append(link("GMP neighbourhood crime figures (2019–2026) ↗","https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/neighbourhood-crime/"),node("span"," · "),link("Police.uk data availability ↗","https://data.police.uk/changelog/"));
  blocks.push(more,sources);
  out("crime",blocks);
  recentCrimeReports();
@@ -257,7 +257,7 @@ async function safePostcodeLookup(postcode){
 }
 async function showBoroughIfLookupFails(){
   // A failed postcode resolver must not blank the entire newspaper.
-  report("Postcode matching is temporarily unavailable. Borough-wide news, weather, travel and events are still available.",true);
+  report("We couldn’t match that postcode just now. Borough-wide news, weather, travel and events are still available.","error");
   byId("location").hidden=true;byId("lookup").querySelector("button").disabled=false;
   const fallback={district:"Rochdale",ward:"",latitude:53.615,longitude:-2.155};
   await Promise.allSettled([
@@ -273,9 +273,12 @@ const errorSources={weather:"https://www.metoffice.gov.uk/",traffic:"https://tfg
 async function start(e){
  e?.preventDefault();
  const input=byId("postcode").value.trim().toUpperCase();
- if(!/^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/.test(input)){report("Enter a full UK postcode, for example OL16 1XU.",true);return;}
+ if(!/^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/.test(input)){report("Enter a full UK postcode, for example OL16 1XU.","error");return;}
  const id=++requestId,button=byId("lookup").querySelector("button");button.disabled=true;
- report("Finding your ward and connecting to local information…");
+ button.textContent="Finding your area…";
+ report("Looking up your postcode and preparing the latest crime reports, weather and news…","loading");
+ status.scrollIntoView({behavior:"smooth",block:"center"});
+ status.focus({preventScroll:true});
  ["stories","weather","traffic","events","flood","crime","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
  byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();lastEvents=null;
  for(const k of Object.keys(brief))delete brief[k];byId("daily-brief").hidden=true;
@@ -287,7 +290,8 @@ async function start(e){
   byId("area-detail").textContent=(loc.nearbyWhitworth?"Whitworth and surrounding communities":"Rochdale borough")+" · Postcode location is approximate.";
   byId("area-postcode").textContent=loc.postcode;
   byId("location").hidden=false;
-  report("Showing news and services for "+loc.ward+". Each data source has its own coverage and update schedule.");
+  report("✓ "+loc.ward+" found. Your local crime reports, weather and news are loading below.","success");
+  byId("location").scrollIntoView({behavior:"smooth",block:"start"});
   services(loc);
   const param="&lat="+Number(loc.latitude).toFixed(3)+"&lon="+Number(loc.longitude).toFixed(3);
   const work=[
@@ -300,8 +304,9 @@ async function start(e){
    ["planning",async()=>planning(await read("/api/borough-data?kind=planning"+param,16000))]
   ];
   await Promise.allSettled(work.map(async x=>{try{await x[1]();}catch(err){if(id===requestId)unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");}}));
+  if(id===requestId)report("✓ Results ready for "+loc.ward+": crime and courts, weather, all news, travel and other local services.","success");
  }catch(err){if(id===requestId)await showBoroughIfLookupFails();}
- finally{if(id===requestId)button.disabled=false;}
+ finally{if(id===requestId){button.disabled=false;button.textContent="Explore my area →";}}
 }
 byId("lookup").addEventListener("submit",start);
 })();
