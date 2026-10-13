@@ -162,5 +162,5 @@ def main():
                 "nextStep":"Download the linked XLSX in a normal browser and run this inspector with --file path/to/workbook.xlsx. Never invent neighbourhood crime figures from an unavailable feed."}
         print("WARNING: GMP workbook unavailable:",str(exc)[:180])
     OUT.parent.mkdir(parents=True,exist_ok=True)
-    OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+    OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 if __name__=="__main__":main()
