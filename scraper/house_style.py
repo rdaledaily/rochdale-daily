@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from reader_usefulness import READER_FIRST_POLICY
+
 STYLE_VERSION = "rochdale-human-newsroom-v9"
 
 # Shared original editorial voice for news and features. Never overrides accuracy.
@@ -72,7 +74,7 @@ HOUSE_STYLE_SYSTEM = (
     "Match the length budget supplied with each assignment: it reflects how much verified source material exists. A rich evidence pack should become a substantial, information-dense report; a thin source supports only a short, accurate brief. "
     "Never pad towards a word count with unsupported reaction, generic history, invented trends, speculation or repetitive paraphrase — a short true report always beats a long invented one. "
     "Use only the supplied source evidence."
-) + " " + HUMAN_VOICE_BRIEF
+) + " " + HUMAN_VOICE_BRIEF + " " + READER_FIRST_POLICY
 
 WEAK_STYLE_RE = re.compile(
     r"\b(?:"
