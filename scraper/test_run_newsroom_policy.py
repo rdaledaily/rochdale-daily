@@ -124,7 +124,8 @@ def main() -> None:
         source_url="https://www.rochdale.gov.uk/news/article/123/example",
         image_candidate_url="https://www.rochdale.gov.uk/images/example.jpg",
     )
-    assert core._source_image_allowed(official)
+    # Being an official publisher does not by itself grant photo reuse rights.
+    assert not core._source_image_allowed(official)
 
     rich_source = " ".join(f"fact{index}" for index in range(420))
     length_issue = (
