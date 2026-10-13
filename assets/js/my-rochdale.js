@@ -7,7 +7,7 @@
 const byId=id=>document.getElementById(id);
 const node=(tag,text,cls)=>{const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x;};
 const out=(id,nodes)=>{const x=byId(id);if(x)x.replaceChildren(...nodes);};
-const link=(text,href)=>{const a=node("a",text);try{const u=new URL(href,location.origin);if(u.protocol!=="https:"&&u.origin!==location.origin)throw Error();a.href=u.href;if(u.origin!==location.origin){a.target="_blank";a.rel="noopener noreferrer";}}catch{a.removeAttribute("href");}return a;};
+const link=(text,href)=>{const a=node("a",text);try{const u=new URL(href,location.href);if(u.protocol!=="https:"&&u.origin!==location.origin)throw Error();a.href=u.href;if(u.origin!==location.origin){a.target="_blank";a.rel="noopener noreferrer";}}catch{a.removeAttribute("href");}return a;};
 const list=(records)=>{const ul=node("ul",undefined,"data-list");records.forEach(x=>{const li=node("li");li.append(x.href?link(x.title,x.href):node("strong",x.title));if(x.meta)li.append(node("small",x.meta));ul.append(li);});return ul;};
 const status=byId("status");
 const report=(s,state="ready")=>{status.textContent=s;status.classList.toggle("error",state==="error");status.classList.toggle("loading",state==="loading");status.classList.toggle("success",state==="success");status.setAttribute("aria-busy",String(state==="loading"));};
@@ -109,12 +109,10 @@ async function newsArchive(loc,id){
   const localCount=archive.filter(x=>match(x).score>0&&(String(x.category||"").toLowerCase()!=="crime"||verifiedNearbyCrime(x,area))).length;
   putBrief("news",localCount+" articles mention your ward or nearby places, out of "+archive.length+" available archive reports.");
   roadworks();
-  recentCrimeReports();
   if(lastEvents)events(lastEvents);
  }catch{
   archiveReadyForPostcode=false;
   unavailable("stories","/archive.html","Full news archive could not load. Open the archive to search directly.");
-  const crimeLatest=byId("crime-latest");if(crimeLatest)crimeLatest.replaceChildren(node("p","Local crime coverage could not be checked because the article archive is unavailable. No other-area crimes will be substituted.","method"));
  }
 }
 function roadworks(){
@@ -204,30 +202,6 @@ function flood(d){
  out("flood",result);
  putBrief("flood",!d.warningsAvailable?"Could not check official flood warnings.":warnings.length?warnings.length+" nearby flood alerts or warnings returned.":"No nearby warnings returned by this feed; check the official service.");
 }
-function recentCrimeReports(){
- const el=byId("crime-latest");if(!el)return;
- el.replaceChildren();
- if(!archiveReadyForPostcode||!Number.isFinite(area.latitude)||!Number.isFinite(area.longitude)){
-   el.append(node("p","Location-verified crime reporting cannot currently be checked for this postcode.","method"));
-   return;
- }
- const cutoff=Date.now()-90*86400000;
- const candidates=archive.filter(x=>{
-   const published=Date.parse(x.published_at||"");
-   return Number.isFinite(published)&&published>=cutoff&&verifiedNearbyCrime(x,area);
- }).sort((a,b)=>(Date.parse(b.published_at)||0)-(Date.parse(a.published_at)||0));
- el.append(node("h4","Crime reports verified near this postcode"));
- if(!candidates.length){
-   el.append(node("p","No crime articles in our available archive have a verified incident location within one mile of this postcode in the last 90 days.","news-count"));
-   el.append(node("p","This does not mean no crimes occurred or were reported to police. Our current article archive does not provide verified incident coordinates, so we will not substitute reports from elsewhere.","method"));
-   return;
- }
- el.append(node("p",candidates.length+" location-verified published "+(candidates.length===1?"report":"reports")+" within one mile. This is not an exhaustive record of police incidents.","news-count"));
- el.append(list(candidates.slice(0,16).map(x=>({
-   title:x.title,href:archiveUrl(x),
-   meta:[when(x.published_at),"Verified incident location within one mile"].filter(Boolean).join(" · ")
- }))));
-}
 async function wardPolicingEvidence(expectedWard,expectedRequest){
  const target=byId("crime-local-priorities");if(!target)return;
  target.replaceChildren(node("p","Checking published neighbourhood policing priorities…","loading"));
@@ -247,7 +221,6 @@ async function wardPolicingEvidence(expectedWard,expectedRequest){
   const entries=(record.priorities||[]).map(t=>({title:t}));
   target.replaceChildren(
    node("h4","Current GMP priorities: "+record.policeArea),
-   node("p","Published police priorities for the selected ward. These are priorities, not local offence totals or proof that a crime occurred nearby.","method"),
    list(entries),
    node("p","Official GMP priority update: "+when(record.updated)+" · Source: Greater Manchester Police","method"),
    link("Check your neighbourhood policing team's latest updates ↗",record.url)
@@ -259,34 +232,6 @@ async function wardPolicingEvidence(expectedWard,expectedRequest){
  }
 }
 
-function crime(d){
-  // GMP's downloadable Excel workbook is not a postcode-level incident feed.
-  // Keep all essential explanations readable in HTML on this page, including
-  // for readers who cannot open Excel files on a phone.
-  const blocks=[];
-  blocks.push(node("h4","What we can verify for this postcode"));
-  const facts=node("dl",undefined,"crime-facts");
-  [
-    ["Recent police incident totals","Not available for this postcode from Police.uk. GMP has not supplied its street-level data to Police.uk since July 2019."],
-    ["Rochdale Daily crime reports","Only incidents with an editor-verified location within one mile can appear below. Other wards and towns are never used as substitutes."],
-    ["Your ward’s policing priorities","Where published and verified, these appear below from the relevant GMP neighbourhood team. Priorities are not counts of crimes committed."],
-    ["GMP’s neighbourhood crime workbook","The police also publish an Excel file for broader neighbourhood-crime statistics. It is a separate source, not a live postcode incident list. You do not need that spreadsheet to read this page."]
-  ].forEach(([title,desc])=>{
-    const dt=node("dt",title),dd=node("dd",desc);
-    facts.append(dt,dd);
-  });
-  blocks.push(facts);
-  blocks.push(node("p","No source currently supports a reliable, recent count of crimes immediately around every Rochdale postcode. An unavailable count is not the same as zero crimes.","method"));
-  const actions=node("div",undefined,"crime-sources");
-  actions.append(
-    link("Find your GMP neighbourhood team ↗","https://www.gmp.police.uk/area/your-area/"),
-    link("Read GMP’s neighbourhood crime source page ↗",d.officialStatistics||"https://www.gmp.police.uk/police-forces/greater-manchester-police/areas/greater-manchester-force-content/sd/stats-and-data/neighbourhood-crime/")
-  );
-  blocks.push(actions);
-  out("crime",blocks);
-  recentCrimeReports();
-  if(area.ward)void wardPolicingEvidence(area.ward,requestId);
-}
 function planning(d){
  const data=Array.isArray(d.constraints)?d.constraints:[];
  out("planning",[node("p",data.length+" data entries returned; some designation datasets may be incomplete.","news-count"),list(data.map(x=>({title:x.name||x.dataset||"Planning designation",meta:[x.dataset,x.reference].filter(Boolean).join(" · ")}))),node("p","No results does not prove that a property has no restrictions.","method")]);
@@ -385,9 +330,9 @@ async function showBoroughIfLookupFails(){
   // A failed postcode resolver must not blank the entire newspaper.
   report("We couldn’t match that postcode just now. Borough-wide news, weather, travel and events are still available.","error");
   byId("ward-councillors").hidden=true;
+  byId("crime-local-priorities").replaceChildren(node("p","Your ward must be identified before local GMP priorities can be displayed. Other areas are never substituted.","method"));
   byId("location").hidden=true;byId("lookup").querySelector("button").disabled=false;
-  const crimeLatest=byId("crime-latest");if(crimeLatest)crimeLatest.replaceChildren(node("p","Enter a valid postcode to see locally matched reporting. No borough-wide crime stories will be substituted.","method"));
-  const fallback={district:"Rochdale",ward:"",latitude:53.615,longitude:-2.155};
+   const fallback={district:"Rochdale",ward:"",latitude:53.615,longitude:-2.155};
   await Promise.allSettled([
     (async()=>{await newsArchive(fallback,requestId);active="all";news();})(),
     (async()=>{try{weather(await read("/weather.json"));}catch{unavailable("weather","https://www.metoffice.gov.uk/")}})(),
@@ -395,9 +340,9 @@ async function showBoroughIfLookupFails(){
     (async()=>{try{events(await read("/api/events"));}catch{unavailable("events","/whats-on.html")}})()
   ]);
   services(fallback);
-  ["flood","crime","planning"].forEach(id=>unavailable(id,errorSources[id],"This source requires a successful postcode lookup. Open the official service."));
+  ["flood","planning"].forEach(id=>unavailable(id,errorSources[id],"This source requires a successful postcode lookup. Open the official service."));
 }
-const errorSources={councillors:"https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1",weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/whats-on.html",flood:"https://check-for-flooding.service.gov.uk/",crime:"https://data.police.uk/",planning:"https://www.planning.data.gov.uk/"};
+const errorSources={councillors:"https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1",weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/whats-on.html",flood:"https://check-for-flooding.service.gov.uk/",planning:"https://www.planning.data.gov.uk/"};
 async function start(e){
  e?.preventDefault();
  const input=byId("postcode").value.trim().toUpperCase();
@@ -407,12 +352,11 @@ async function start(e){
  report("Looking up your postcode and preparing the latest crime reports, weather and news…","loading");
  status.scrollIntoView({behavior:"smooth",block:"center"});
  status.focus({preventScroll:true});
- ["stories","weather","traffic","events","flood","crime","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
+ ["stories","weather","traffic","events","flood","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
  byId("ward-councillors").hidden=true;
  byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();lastEvents=null;
  archive=[];aliases=[];area={};archiveReadyForPostcode=false;
- const crimeLatest=byId("crime-latest");
- if(crimeLatest)crimeLatest.replaceChildren(node("p","Checking for published reports mentioning your neighbourhood…","loading"));
+ byId("crime-local-priorities").replaceChildren(node("p","Checking GMP priorities for your ward…","loading"));
  for(const k of Object.keys(brief))delete brief[k];byId("daily-brief").hidden=true;
  try{
   const data=await safePostcodeLookup(input);
@@ -422,9 +366,13 @@ async function start(e){
   byId("area-detail").textContent=(loc.nearbyWhitworth?"Whitworth and surrounding communities":"Rochdale borough")+" · Postcode location is approximate.";
   byId("area-postcode").textContent=loc.postcode;
   byId("location").hidden=false;
-  report("✓ "+loc.ward+" found. Your local crime reports, weather and news are loading below.","success");
-  byId("location").scrollIntoView({behavior:"smooth",block:"start"});
+  byId("glance-area-label").textContent="Your local briefing · "+(loc.ward||loc.district);
+  report("✓ "+loc.ward+" found. Your day at a glance is loading below.","success");
+  // The first result is the daily briefing. Make it visible immediately,
+  // before slower news, transport and official data requests resolve.
   services(loc);
+  byId("daily-brief").scrollIntoView({behavior:"smooth",block:"start"});
+  if(loc.ward)void wardPolicingEvidence(loc.ward,id);
   const param="&lat="+Number(loc.latitude).toFixed(3)+"&lon="+Number(loc.longitude).toFixed(3);
   const work=[
    ["councillors",()=>councillors(loc,id)],
@@ -433,8 +381,7 @@ async function start(e){
    ["traffic",async()=>traffic(await read("/api/traffic"),loc)],
    ["events",async()=>events(await read("/api/events"))],
    ["flood",async()=>flood(await read("/api/borough-data?kind=flood"+param,19000))],
-   ["crime",async()=>crime(await read("/api/borough-data?kind=crime"+param,16000))],
-   ["planning",async()=>planning(await read("/api/borough-data?kind=planning"+param,16000))]
+      ["planning",async()=>planning(await read("/api/borough-data?kind=planning"+param,16000))]
   ];
   await Promise.allSettled(work.map(async x=>{try{await x[1]();}catch(err){if(id===requestId){
       if(x[0]==="councillors"){
@@ -443,7 +390,7 @@ async function start(e){
           link("Official councillor directory ↗",errorSources.councillors));
       }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");
      };}}));
-  if(id===requestId)report("✓ Results ready for "+loc.ward+": verified neighbourhood information, local reporting, weather and travel. Police crime counts are shown only where suitable records exist.","success");
+  if(id===requestId)report("✓ Your day at a glance is ready for "+loc.ward+". Councillors, news and GMP priorities are shown next.","success");
  }catch(err){if(id===requestId)await showBoroughIfLookupFails();}
  finally{if(id===requestId){button.disabled=false;button.textContent="Explore my area →";}}
 }
