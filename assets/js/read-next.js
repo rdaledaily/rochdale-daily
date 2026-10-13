@@ -35,6 +35,7 @@
   var title = (card.querySelector(".rn-title") || {}).textContent || "Next story";
   var kicker = (card.querySelector(".rn-kicker") || {}).textContent || "";
   if (!href) return;
+  try { const target=new URL(href,location.href);if(target.origin!==location.origin||!/^\/articles\/[a-z0-9-]+(?:\.html)?$/i.test(target.pathname)||target.pathname===location.pathname)return; }catch{return;}
 
   var readNext = document.querySelector(".read-next");
   var article = document.querySelector(".article-main") || document.body;
@@ -100,6 +101,9 @@
   var startX = 0, startY = 0, tracking = false;
 
   article.addEventListener("touchstart", function (event) {
+    tracking=false;
+    if(event.target.closest("a,button,input,textarea,select,[contenteditable]"))return;
+    if(window.getSelection()?.toString())return;
     if (event.touches.length !== 1) return;
     var t = event.touches[0];
     /* Ignore touches that begin at the very edge: that is the OS back gesture
@@ -110,9 +114,11 @@
     tracking = true;
   }, { passive: true });
 
+  article.addEventListener("touchcancel",()=>{tracking=false;},{passive:true});
   article.addEventListener("touchend", function (event) {
     if (!tracking) return;
     tracking = false;
+    if(!event.changedTouches.length||window.getSelection()?.toString())return;
     var t = event.changedTouches[0];
     var dx = t.clientX - startX;
     var dy = t.clientY - startY;
@@ -174,12 +180,15 @@
     window.removeEventListener("scroll", queue);
   });
   const label = document.createElement("span");
-  label.className = "rd-nrp-label"; label.textContent = "Read next · From Rochdale Daily";
+  label.className = "rd-nrp-label"; label.textContent = "Related story · Rochdale Daily";
   const link = document.createElement("a");
   link.href = target.pathname; link.textContent = title;
   const hint = document.createElement("span");
   hint.className = "rd-nrp-end"; hint.textContent = "Continue reading →";
   prompt.append(close,label,link,hint);
+  if(document.getElementById('comments-root')){
+   const discussion=document.createElement('a');discussion.href='#comments-root';discussion.textContent='What does this mean for your area? Join the discussion →';discussion.style.cssText='font:700 12px/1.5 system-ui;margin-top:12px;color:#136c76';prompt.append(discussion);
+  }
   document.body.appendChild(prompt);
 
   let dismissed = false, visibleAtRelated = false, scheduled = false;

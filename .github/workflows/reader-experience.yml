@@ -1,0 +1,38 @@
+name: Reader experience regression checks
+on:
+  pull_request:
+    paths: ['assets/js/**', 'functions/api/newsletter.js', 'my-rochdale.html', 'tests/**', 'scraper/test_new_story_alerts.py', '.github/workflows/reader-experience.yml']
+  push:
+    branches: [main]
+    paths: ['assets/js/**', 'functions/api/newsletter.js', 'my-rochdale.html', 'tests/**', 'scraper/test_new_story_alerts.py', '.github/workflows/reader-experience.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reader-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check reader JavaScript syntax
+        run: |
+          node --check assets/js/my-rochdale.js
+          node --check assets/js/menu.js
+          node --check assets/js/new-story-alerts.js
+          node --check assets/js/read-next.js
+          node --check assets/js/article-comments.js
+          node --input-type=module --check < functions/api/newsletter.js
+      - name: Exercise postcode and newsletter failures
+        run: node --test tests/test_reader_repairs.cjs
+      - name: Preserve crime geography and editorial safeguards
+        run: node tests/test_my_rochdale_crime.cjs
+      - name: Verify reader prompts and comments contracts
+        run: |
+          python scraper/test_new_story_alerts.py
+          python scraper/test_reader_loyalty_contract.py

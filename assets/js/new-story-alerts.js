@@ -38,6 +38,7 @@
   const stack = document.createElement('div');
   stack.className = 'rd-new-story-stack';
   stack.setAttribute('aria-label', 'New local stories');
+  stack.setAttribute('aria-live', 'polite');
   document.body.appendChild(stack);
   function id(story) { return String(story.story_key || story.slug || story.id || '').trim(); }
   function published(story) {
@@ -50,9 +51,9 @@
     return '/articles/' + encodeURIComponent(slug) + '.html';
   }
   function eligible(story, now) {
-    if (!story || typeof story !== 'object' || story.status === 'draft') return false;
+    if (!story || typeof story !== 'object' || (story.status && story.status !== 'published')) return false;
     const t = published(story);
-    return Boolean(id(story) && url(story) && String(story.title || '').trim() &&
+    return Boolean(id(story) && url(story) && url(story).replace(/\.html$/, '') !== location.pathname.replace(/\.html$/, '') && String(story.title || '').trim() &&
       t > 0 && t <= now + 120000 && now - t < FRESH_MS);
   }
   function save() {
@@ -67,10 +68,10 @@
     const close = document.createElement('button');
     close.type = 'button'; close.textContent = '×'; close.setAttribute('aria-label', 'Dismiss new story');
     close.addEventListener('click', () => card.remove());
-    const label = document.createElement('strong'); label.textContent = 'New on Rochdale Daily';
+    const label = document.createElement('strong'); label.textContent = 'New story · Rochdale Daily';
     const link = document.createElement('a'); link.href = url(story); link.textContent = String(story.title);
     card.append(close, label, link);
-    const closeLater = setTimeout(() => card.remove(), 17000);
+    const closeLater = setTimeout(() => { if (!card.matches(':hover') && !card.contains(document.activeElement)) card.remove(); }, 17000);
     close.addEventListener('click', () => clearTimeout(closeLater));
     stack.prepend(card);
     while (stack.childElementCount > 2) stack.lastElementChild.remove();
@@ -83,9 +84,10 @@
   async function poll() {
     if (busy || document.visibilityState === 'hidden') return;
     busy = true;
+    const controller=new AbortController(),deadline=setTimeout(()=>controller.abort(),12000);
     try {
       const response = await fetch('/articles.json?new_story_check=' + Date.now(), {
-        cache: 'no-store', headers: { Accept: 'application/json' }
+        signal:controller.signal, cache: 'no-store', headers: { Accept: 'application/json' }
       });
       if (!response.ok) return;
       const body = await response.json();
@@ -109,7 +111,7 @@
       }
       baseline = true;
     } catch (_) { /* offline or temporary feed issue: retry on next interval */ }
-    finally { busy = false; }
+    finally { clearTimeout(deadline); busy = false; }
   }
   poll();
   timer = setInterval(poll, INTERVAL);

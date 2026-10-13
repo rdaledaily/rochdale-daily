@@ -45,10 +45,10 @@ async function sha256(text) {
 }
 
 function normaliseEmail(value) {
-  const email = String(value || "").trim().toLowerCase().slice(0, 254);
+  const email = String(value || "").trim().toLowerCase();
   // Deliberately simple: one @, a dot in the domain, no whitespace. Provider
   // confirmation is the real validation.
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return "";
+  if (email.length>254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return "";
   return email;
 }
 
@@ -91,6 +91,7 @@ export async function onRequestPost({ request, env }) {
   } catch (err) {
     return json({ ok: false, error: "Invalid request" }, 400);
   }
+  if (!body || typeof body!=="object" || Array.isArray(body)) return json({ok:false,error:"Invalid request"},400);
   // Honeypot: real forms leave this empty; bots fill every field.
   if (String(body.website || "").trim()) return json({ ok: true });
 
@@ -143,20 +144,41 @@ export async function onRequestPost({ request, env }) {
     }
   }
   // Same answer whether new or already subscribed: never reveal membership.
-  return json({ ok: true, message: "Thanks. You're on the list." });
+  const providerConfigured=Boolean(env.BREVO_API_KEY&&Number.isSafeInteger(Number(env.BREVO_LIST_ID))&&Number(env.BREVO_LIST_ID)>0);
+  return json({ ok: true, providerConfigured, message: providerConfigured
+    ? "Your signup has been saved. You can unsubscribe using the link in every newsletter."
+    : "Your signup has been saved. Email delivery is being set up; newsletters are not being sent yet." });
+}
+
+// The per-subscriber ledger is authoritative: concurrent signups can overwrite
+// a shared KV index. List ledger keys so exports never silently omit consent.
+async function subscriberHashes(kv){
+ const hashes=[];let cursor;
+ do{
+  const page=await kv.list({prefix:'newsletter:sub:',limit:1000,...(cursor?{cursor}:{})});
+  for(const key of page.keys||[])if(/^newsletter:sub:[a-f0-9]{64}$/.test(key.name))hashes.push(key.name.slice(15));
+  cursor=page.list_complete?null:page.cursor;
+ }while(cursor);
+ return hashes;
+}
+function csvCell(value){
+ const raw=String(value||'');
+ // Escape quotes, commas and newlines, and prevent spreadsheet formulas.
+ const safe=/^[=+@\-\t\r]/.test(raw)?"'"+raw:raw;
+ return '"'+safe.replace(/"/g,'""')+'"';
 }
 
 export async function onRequestGet({ request, env }) {
   if (!env.EVENTS_KV) return json({ ok: false, error: "Not configured" }, 503);
   if (!isAdmin(request, env)) return json({ ok: false, error: "Unauthorised" }, 401);
   const url = new URL(request.url);
-  const index = await readJson(env.EVENTS_KV, INDEX_KEY, []);
+  const index = await subscriberHashes(env.EVENTS_KV);
   if (url.searchParams.get("export") !== "csv") return json({ ok: true, count: index.length });
 
   const rows = ["email,consented_at,source"];
   for (const hash of index) {
     const record = await readJson(env.EVENTS_KV, `newsletter:sub:${hash}`, null);
-    if (record && record.email) rows.push(`${record.email},${record.consented_at},${record.source}`);
+    if (record && record.email) rows.push([record.email,record.consented_at,record.source].map(csvCell).join(","));
   }
   return new Response(rows.join("\n") + "\n", {
     headers: {
@@ -176,7 +198,7 @@ export async function onRequestDelete({ request, env }) {
   if (!email) return json({ ok: false, error: "email required" }, 400);
   const hash = await sha256(email);
   await env.EVENTS_KV.delete(`newsletter:sub:${hash}`);
-  const index = (await readJson(env.EVENTS_KV, INDEX_KEY, [])).filter((h) => h !== hash);
+  const index = (await subscriberHashes(env.EVENTS_KV)).filter((h) => h !== hash);
   await env.EVENTS_KV.put(INDEX_KEY, JSON.stringify(index));
   return json({ ok: true });
 }

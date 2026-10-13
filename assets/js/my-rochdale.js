@@ -47,7 +47,7 @@ async function readOwnData(url,field,timeout=5500){
  }
 }
 
-let archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={},lastEvents=null,archiveReadyForPostcode=false;
+let publishedEvents=[],archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={},lastEvents=null,archiveReadyForPostcode=false;
 const brief={};
 const briefNames=[["news","Your local headlines","#stories"],["weather","Forecast","#weather"],["traffic","Travel today","#traffic"],["events","Coming up","#events"],["flood","River and flood watch","#flood"],["services","Local services","#services"]];
 function putBrief(key,value){
@@ -117,7 +117,7 @@ function news(){
 }
 async function newsArchive(loc,id){
  try{
-  const [records,wardData]=await Promise.all([readOwnData("/archive-index.json","archive",5500),readOwnData("/ward_areas.json","wards",5000)]);
+  const [records,wardData]=await Promise.all([readOwnData("/archive-index.json","archive",5500),readOwnData("/ward_areas.json","wards",5000).catch(()=>({wards:{}}))]);
   if(requestId!==id)return;
   archive=Array.isArray(records)?records.filter(x=>x&&x.title&&archiveUrl(x)):[];
   archiveReadyForPostcode=true;
@@ -127,8 +127,9 @@ async function newsArchive(loc,id){
   if(ward.includes("middleton"))aliases.push("Middleton");
   if(ward.includes("littleborough"))aliases.push("Littleborough");
   if(ward.includes("milnrow"))aliases.push("Milnrow","Newhey");
-  if(ward.includes("central rochdale"))aliases.push("Town Centre","Rochdale Town Hall");
+  if(ward.includes("central rochdale"))aliases.push("Rochdale Town Centre","Rochdale Town Hall");
   if(loc.nearbyWhitworth)aliases.push("Whitworth");
+  aliases.push(...String(loc.ward||"").split(/,|\band\b/i).map(x=>x.trim()).filter(x=>x.length>3&& !/^central rochdale$|^west littleborough$/i.test(x)));
   aliases=[...new Set(aliases.map(norm).filter(x=>x.length>3))];
   active="local";category="all";search="";page=0;
   byId("news-controls").replaceChildren();byId("news-controls").dataset.ready="";
@@ -138,7 +139,9 @@ async function newsArchive(loc,id){
   roadworks();
   if(lastEvents)events(lastEvents);
  }catch{
+  if(requestId!==id)return;
   archiveReadyForPostcode=false;
+  putBrief("news","News archive unavailable. Open the full archive directly.");
   unavailable("stories","/archive.html","Full news archive could not load. Open the archive to search directly.");
  }
 }
@@ -167,6 +170,9 @@ function weather(w){
  host.append(grid,node("p","Rochdale-area forecast, not a hyperlocal measurement.","method"));out("weather",[host]);putBrief("weather","Borough-wide forecast shown as local forecast provider is unavailable.");
 }
 function weatherCode(code){
+ const labels={clearsky:"Clear sky",partlycloudy:"Partly cloudy",lightrain:"Light rain",heavyrain:"Heavy rain",rainshowers:"Rain showers",lightrainshowers:"Light rain showers",lightsnow:"Light snow",heavysnow:"Heavy snow"};
+ const clean=String(code||"").replace(/_(day|night|polartwilight)$/,"");
+ if(labels[clean])return labels[clean];
  const c=String(code||"").replace(/_(day|night|polartwilight)$/,"").replace(/_/g," ");
  return c?c.charAt(0).toUpperCase()+c.slice(1):"Forecast available";
 }
@@ -202,11 +208,12 @@ function preciseWeather(w){
  out("weather",[root]);
  putBrief("weather",(p.temperatureC==null?"Forecast available":Math.round(p.temperatureC)+"°C")+" now · "+weatherCode(p.condition)+(p.windMs!=null?" · wind "+Math.round(p.windMs*3.6)+" km/h":""));
 }
-async function weatherForPostcode(coords){
- try{preciseWeather(await read("/api/borough-data?kind=weather"+coords,17500));}
+async function weatherForPostcode(coords,id){
+ try{const data=await read("/api/borough-data?kind=weather"+coords,17500);if(id===requestId)preciseWeather(data);}
  catch(err){
-  try{weather(await readOwnData("/weather.json","weather",5500));}
-  catch{unavailable("weather","https://www.metoffice.gov.uk/");}
+  if(id!==requestId)return;
+  try{const data=await readOwnData("/weather.json","weather",5500);if(id===requestId)weather(data);}
+  catch{if(id===requestId){unavailable("weather","https://www.metoffice.gov.uk/");putBrief("weather","Forecast unavailable. Check the Met Office.");}}
  }
 }
 function mapAt(lat,lon){
@@ -273,11 +280,22 @@ function eventRow(x,local){
 }
 function events(d){
  lastEvents=d;
- const data=Array.isArray(d.events)?d.events:[];
+ const records=[...(Array.isArray(d.events)?d.events:[]),...publishedEvents];
+ const today=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+ const seen=new Set();
+ const data=records.filter(x=>{
+  if(!x||x.draft||x.status&&x.status!=="published")return false;
+  const date=Date.parse(x.event_end_at||x.event_start_at||"");
+  if(!Number.isFinite(date)||String(x.event_end_at||x.event_start_at).slice(0,10)<today)return false;
+  const key=norm(x.title)+"|"+String(x.event_start_at).slice(0,10)+"|"+norm(x.event_location);
+  if(seen.has(key))return false;seen.add(key);return true;
+ });
+
+ data.sort((a,b)=>Date.parse(a.event_start_at)-Date.parse(b.event_start_at));
  const matches=data.filter(x=>aliases.some(a=>whole(x.event_location+" "+x.title,a)));
  const rest=data.filter(x=>!matches.includes(x));
  const host=node("div");
- host.append(node("p",matches.length+" approved community events mention your selected area.","news-count"));
+ host.append(node("p",matches.length+" published or approved events mention your selected area.","news-count"));
  if(matches.length){
   const ul=node("ul",undefined,"data-list");
   matches.forEach(x=>ul.append(eventRow(x,true)));host.append(ul);
@@ -287,9 +305,18 @@ function events(d){
   const ul=node("ul",undefined,"data-list");rest.forEach(x=>ul.append(eventRow(x,false)));
   other.append(head,ul);host.append(other);
  }
- host.append(node("p","Open an event to view its submitted location and details. Not every approved event has a separate article or independently verified distance.","method"));
+ host.append(node("p","Open an event to view its published location and details. Not every approved event has a separate article or independently verified distance.","method"));
  out("events",[host]);
- putBrief("events",matches.length+" local-area event submissions; "+rest.length+" other borough events.");
+ putBrief("events",matches.length+" local-area upcoming events; "+rest.length+" other borough events.");
+}
+async function eventsForPostcode(id){
+ const results=await Promise.allSettled([read("/api/events"),read("/articles.json",17000)]);
+ if(id!==requestId)return;
+ publishedEvents=results[1].status==="fulfilled"&&Array.isArray(results[1].value)?results[1].value.filter(x=>x.event_start_at&&x.status==="published"):[];
+ if(results.every(x=>x.status==="rejected"))throw Error("Events unavailable");
+ events(results[0].status==="fulfilled"?results[0].value:{events:[]});
+ if(results.some(x=>x.status==="rejected"))byId("events").append(node("p","One event source could not be checked; this list is incomplete.","method"));
+
 }
 function flood(d){
  const warnings=Array.isArray(d.warnings)?d.warnings:[],
@@ -492,20 +519,24 @@ async function safePostcodeLookup(postcode){
     return {location:{postcode:String(row.postcode||postcode),district,ward,latitude:row.latitude,longitude:row.longitude,nearbyWhitworth:nearby}};
   }
 }
-async function showBoroughIfLookupFails(){
+async function showBoroughIfLookupFails(id){
+  if(id!==requestId)return;
   // A failed postcode resolver must not blank the entire newspaper.
   report("We couldn’t match that postcode just now. Borough-wide news, weather, travel and events are still available.","error");
   byId("ward-councillors").hidden=true;
+  byId("glance-area-label").textContent="Borough-wide briefing · postcode not matched";
   byId("crime-local-priorities").replaceChildren(node("p","Your ward must be identified before local GMP priorities can be displayed. Other areas are never substituted.","method"));
   byId("location").hidden=true;byId("lookup").querySelector("button").disabled=false;
    const fallback={district:"Rochdale",ward:"",latitude:53.615,longitude:-2.155};
   await Promise.allSettled([
-    (async()=>{await newsArchive(fallback,requestId);active="all";news();})(),
-    (async()=>{try{weather(await readOwnData("/weather.json","weather",5500));}catch{unavailable("weather","https://www.metoffice.gov.uk/")}})(),
-    (async()=>{try{traffic(await read("/api/traffic"),fallback);}catch{unavailable("traffic","https://tfgm.com/")}})(),
-    (async()=>{try{events(await read("/api/events"));}catch{unavailable("events","/whats-on.html")}})()
+    (async()=>{await newsArchive(fallback,id);if(id!==requestId)return;active="all";news();putBrief("news","Borough-wide archive; your postcode could not be matched.");})(),
+    (async()=>{try{const data=await readOwnData("/weather.json","weather",5500);if(id===requestId)weather(data);}catch{if(id===requestId){unavailable("weather","https://www.metoffice.gov.uk/");putBrief("weather","Forecast unavailable. Check the Met Office.");}}})(),
+    (async()=>{try{const data=await read("/api/traffic");if(id===requestId)traffic(data,fallback);}catch{if(id===requestId){unavailable("traffic","https://tfgm.com/");putBrief("traffic","Travel feed unavailable. Check Bee Network.");}}})(),
+    (async()=>{try{await eventsForPostcode(id);}catch{if(id===requestId){unavailable("events","/whats-on.html");putBrief("events","Events unavailable. Open What’s On.");}}})()
   ]);
+  if(id!==requestId)return;
   services(fallback);
+  putBrief("flood","Select a supported postcode to check local flood information.");
   ["flood","planning"].forEach(id=>unavailable(id,errorSources[id],"This source requires a successful postcode lookup. Open the official service."));
 }
 async function archiveWhenLiveFeedFails(kind){
@@ -549,12 +580,13 @@ async function start(e){
  if(!/^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/.test(input)){report("Enter a full UK postcode, for example OL16 1XU.","error");return;}
  const id=++requestId,button=byId("lookup").querySelector("button");button.disabled=true;
  button.textContent="Finding your area…";
- report("Looking up your postcode and preparing the latest crime reports, weather and news…","loading");
+ report("Looking up your postcode and preparing local news, GMP priorities and weather…","loading");
  status.scrollIntoView({behavior:"smooth",block:"center"});
  status.focus({preventScroll:true});
  ["stories","weather","traffic","events","flood","planning","services"].forEach(k=>out(k,[node("p","Checking the source…","loading")]));
  byId("ward-councillors").hidden=true;
- byId("news-controls").replaceChildren();byId("roadworks").replaceChildren();lastEvents=null;
+ byId("news-controls").replaceChildren();byId("news-controls").dataset.ready="";byId("roadworks").replaceChildren();lastEvents=null;publishedEvents=[];
+ byId("location").hidden=true;byId("council-meetings").replaceChildren();
  archive=[];aliases=[];area={};archiveReadyForPostcode=false;
  byId("crime-local-priorities").replaceChildren(node("p","Checking GMP priorities for your ward…","loading"));
  for(const k of Object.keys(brief))delete brief[k];byId("daily-brief").hidden=true;
@@ -567,23 +599,27 @@ async function start(e){
   byId("area-postcode").textContent=loc.postcode;
   byId("location").hidden=false;
   byId("glance-area-label").textContent="Your local briefing · "+(loc.ward||loc.district);
-  report("✓ "+loc.ward+" found. Your day at a glance is loading below.","success");
+  report(""+(loc.ward||loc.district)+" found. Your day at a glance is loading below.","success");
   // The first result is the daily briefing. Make it visible immediately,
   // before slower news, transport and official data requests resolve.
   services(loc);
   byId("daily-brief").scrollIntoView({behavior:"smooth",block:"start"});
   if(loc.ward)void wardPolicingEvidence(loc.ward,id);
   const param="&lat="+Number(loc.latitude).toFixed(3)+"&lon="+Number(loc.longitude).toFixed(3);
+  const failed=[];
   const work=[
    ["councillors",()=>councillors(loc,id)],
    ["archive",()=>newsArchive(loc,id)],
-   ["weather",()=>weatherForPostcode(param)],
-   ["traffic",async()=>traffic(await read("/api/traffic"),loc)],
-   ["events",async()=>events(await read("/api/events"))],
-   ["flood",async()=>flood(await read("/api/borough-data?kind=flood"+param,19000))],
-      ["planning",async()=>planning(await read("/api/borough-data?kind=planning"+param,16000))]
+   ["weather",()=>weatherForPostcode(param,id)],
+   ["traffic",async()=>{const data=await read("/api/traffic");if(id===requestId)traffic(data,loc);}],
+   ["events",()=>eventsForPostcode(id)],
+   ["flood",async()=>{const data=await read("/api/borough-data?kind=flood"+param,19000);if(id===requestId)flood(data);}],
+      ["planning",async()=>{const data=await read("/api/borough-data?kind=planning"+param,16000);if(id===requestId)planning(data);}]
   ];
   await Promise.allSettled(work.map(async x=>{try{await x[1]();}catch(err){if(id===requestId){
+      failed.push(x[0]);
+      const briefKey=x[0]==="archive"?"news":x[0];
+      if(briefNames.some(v=>v[0]===briefKey))putBrief(briefKey,"Source unavailable. Open the official service below.");
       if(x[0]==="councillors"){
        byId("ward-councillors").hidden=false;
        byId("councillor-cards").replaceChildren(node("p","Councillor and voting records could not be loaded. Please consult Rochdale Council's official directory.","method"),
@@ -594,8 +630,8 @@ async function start(e){
         officialFallback(x[0],loc);
        }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");
      };}}));
-  if(id===requestId)report("✓ Your day at a glance is ready for "+loc.ward+". Councillors, news and GMP priorities are shown next.","success");
- }catch(err){if(id===requestId)await showBoroughIfLookupFails();}
+  if(id===requestId)report("Your briefing is ready for "+(loc.ward||loc.district)+(failed.length?". Some sources are unavailable; their panels explain where to check.":". Councillors, news and GMP priorities are shown next."),failed.length?"ready":"success");
+ }catch(err){if(id===requestId)await showBoroughIfLookupFails(id);}
  finally{if(id===requestId){button.disabled=false;button.textContent="Explore my area →";}}
 }
 byId("lookup").addEventListener("submit",start);

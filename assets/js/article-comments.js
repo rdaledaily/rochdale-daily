@@ -55,7 +55,12 @@
   const esc = value => String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   const save = value => { session = value; try { value ? localStorage.setItem('rd_comment_session', JSON.stringify(value)) : localStorage.removeItem('rd_comment_session'); } catch (_) {} };
   const ago = iso => { const t = new Date(iso).getTime(); if (!Number.isFinite(t)) return ''; const m = Math.max(0, Math.round((Date.now()-t)/60000)); if (m<1) return 'just now'; if (m<60) return `${m} minute${m===1?'':'s'} ago`; const h=Math.round(m/60); if(h<24)return `${h} hour${h===1?'':'s'} ago`; const d=Math.round(h/24); return `${d} day${d===1?'':'s'} ago`; };
-  async function api(payload){ const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); let data={}; try{data=await r.json();}catch(_){} return {ok:r.ok,data}; }
+  async function api(payload){
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+    try{const r=await fetch(API,{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let data={};try{data=await r.json();}catch(_){}return {ok:r.ok&&data.ok!==false,data};}
+    catch(error){return {ok:false,data:{error:error.name==='AbortError'?'The request timed out. Please try again.':'Could not connect. Please try again.'}};}
+    finally{clearTimeout(timer);}
+  }
   const message=(text,kind)=>{const el=document.getElementById('comment-msg');if(!el)return;el.textContent=text;el.className=`comment-msg ${kind}`;};
 
   function storyQuestion(){
@@ -100,7 +105,7 @@
     const auth=async e=>{const b=e.currentTarget;b.disabled=true;const payload={action:mode,username:document.getElementById('auth-user').value,password:document.getElementById('auth-pass').value};if(mode==='register')payload.email=document.getElementById('auth-email').value;const {ok,data}=await api(payload);b.disabled=false;if(!ok){message((data.errors||[data.error||'That did not work.']).join(' '),'err');return;}save({token:data.token,username:data.username});mount();};
     tabIn?.addEventListener('click',()=>{mode='login';tabIn.classList.add('on');tabUp.classList.remove('on');draw();});tabUp?.addEventListener('click',()=>{mode='register';tabUp.classList.add('on');tabIn.classList.remove('on');draw();});if(fields)draw();
     root.querySelectorAll('[data-upvote]').forEach(btn=>btn.addEventListener('click',async()=>{if(!session){message('Sign in to upvote comments.','err');return;}const {ok}=await api({action:'like',token:session.token,slug,id:btn.dataset.upvote});if(ok)mount();else message('Unable to like this comment.','err');}));
-    root.querySelectorAll('[data-report]').forEach(btn=>btn.addEventListener('click',async()=>{const reason=prompt('Briefly say why this comment should be reviewed:');if(!reason)return;await api({action:'report',slug,id:btn.dataset.report,reason});alert('Thank you. The comment has been reported.');}));
+    root.querySelectorAll('[data-report]').forEach(btn=>btn.addEventListener('click',async()=>{const reason=prompt('Briefly say why this comment should be reviewed:');if(!reason)return;const {ok,data}=await api({action:'report',slug,id:btn.dataset.report,reason});if(ok)alert('Thank you. The comment has been reported.');else message(data.error||'Your report could not be saved. Please try again.','err');}));
   }
 
   async function mount(){

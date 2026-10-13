@@ -27,6 +27,13 @@
    cards.replaceChildren();summary.hidden=false;
    const counts=Object.fromEntries(statuses.map(x=>[x,leads.filter(l=>l.status===x).length]));
    summary.textContent=leads.length+' enquiries · '+statuses.map(x=>x+': '+counts[x]).join(' · ')+'. Prospects are not paid revenue.';
+   const target=element('section');target.append(element('h2','The £12,000/month sales target'));
+   const table=element('table');table.style.cssText='width:100%;text-align:left;border-collapse:collapse';
+   const head=element('tr');['Package','Customers needed','Agreed proposals','Monthly target'].forEach(x=>head.append(element('th',x)));table.append(head);
+   for(const [plan,needed] of Object.entries({corporate:5,section:10,banner:10,directory:10})){
+     const row=element('tr');[labels[plan],String(needed),String(leads.filter(x=>x.package===plan&&x.status==='agreed').length),'£'+(needed*prices[plan]).toLocaleString('en-GB')].forEach(x=>{const cell=element('td',x);cell.style.padding='8px 5px';row.append(cell);});table.append(row);
+   }
+   target.append(table,element('p','35 retained customers at these rates total £12,000 a month. Agreed proposals are pipeline progress, not paid subscriptions or revenue. Reconcile active subscriptions and actual receipts in Stripe.'));summary.append(target);
    if(!leads.length){cards.append(element('p','No advertising enquiries have been submitted yet.'));return;}
    leads.forEach(function(lead){
      const card=element('article',undefined,'lead'),heading=element('h2',lead.business),row=element('div',undefined,'row');

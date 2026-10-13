@@ -191,21 +191,22 @@
  const form=document.getElementById('enquiryForm'),status=document.getElementById('formStatus'),button=document.getElementById('submit'),select=document.getElementById('package');
  document.querySelectorAll('a[data-plan]').forEach(function(a){a.addEventListener('click',function(){select.value=a.dataset.plan;});});
  form.addEventListener('submit',async function(ev){
-   ev.preventDefault();if(!form.reportValidity())return;
+   ev.preventDefault();if(button.disabled||!form.reportValidity())return;
    const get=function(id){return document.getElementById(id).value.trim();};
    const d={business:get('business'),name:get('name'),email:get('email'),
      website:get('website'),package:select.value,area:get('area'),goal:get('goal'),
      company_fax:get('company_fax'),privacyAccepted:document.getElementById('privacyAccepted').checked};
    button.disabled=true;button.textContent='Sending your enquiry…';status.textContent='';status.className='formstatus';
+   const controller=new AbortController(),deadline=setTimeout(()=>controller.abort(),15000);
    try{
-     const response=await fetch('/api/advertising-enquiries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),credentials:'same-origin'});
+     const response=await fetch('/api/advertising-enquiries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),credentials:'same-origin',signal:controller.signal});
      const data=await response.json();if(!response.ok||!data.ok)throw Error(data.error||'The form is temporarily unavailable.');
      form.reset();status.className='formstatus ok';status.textContent='Thank you. Your enquiry has been saved. Reference: '+data.reference+'. No payment has been taken.';
    }catch(err){
      status.className='formstatus error';
      status.textContent=(err.message||'We could not send your enquiry.')+' Please email advertising@rochdaledaily.co.uk instead.';
      const link=document.createElement('a');link.href='mailto:advertising@rochdaledaily.co.uk?subject='+encodeURIComponent('Advertising enquiry from '+d.business)+'&body='+encodeURIComponent('Name: '+d.name+'\nBusiness: '+d.business+'\nEmail: '+d.email+'\nPackage: '+d.package+'\nArea: '+d.area+'\nWebsite: '+d.website+'\nGoals: '+d.goal);link.textContent=' Open a pre-filled email →';status.appendChild(link);
-   }finally{button.disabled=false;button.textContent='Request a proposal →';}
+   }finally{clearTimeout(deadline);button.disabled=false;button.textContent='Request a proposal →';}
  });
 })();
 </script>
