@@ -821,6 +821,9 @@ def hero_image_markup(article: dict[str, Any], image_url: str) -> str:
     if not image_url:
         return ""
     alt = image_alt_text(article, image_url)
+    license_url = str(article.get("image_license_url") or "").strip()
+    if not license_url.startswith(("https://creativecommons.org/", "http://creativecommons.org/")):
+        license_url = ""
 
     caption = ""
     if credit and credit != "Rochdale Daily category image":
@@ -829,7 +832,9 @@ def hero_image_markup(article: dict[str, Any], image_url: str) -> str:
                 '<figcaption class="article-image-credit">'
                 'Image: <a href="' + esc(credit_url) + '" target="_blank" '
                 'rel="noopener noreferrer">' + esc(credit) + '</a>'
-                '</figcaption>'
+                + (' · <a href="' + esc(license_url) + '" target="_blank" '
+                   'rel="noopener noreferrer">Image licence</a>' if license_url else '')
+                + '</figcaption>'
             )
         else:
             caption = (
