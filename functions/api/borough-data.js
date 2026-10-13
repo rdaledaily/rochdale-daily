@@ -62,6 +62,11 @@ async function position(query){
   return resolvePostcode(query.get('postcode'));
 }
 function coordParams(loc){return 'lat='+encodeURIComponent(loc.latitude)+'&long='+encodeURIComponent(loc.longitude)+'&dist=10';}
+function kmDistance(a,b){
+ const r=Math.PI/180,lat1=a.lat*r,lat2=b.lat*r,dl=(b.long-a.long)*r,dp=(b.lat-a.lat)*r;
+ const sin=Math.sin(dp/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dl/2)**2;
+ return 12742*Math.asin(Math.min(1,Math.sqrt(sin)));
+}
 function categories(records){
   const counts=new Map();
   for(const r of records)counts.set(r.category||'other',1+(counts.get(r.category||'other')||0));
@@ -127,7 +132,10 @@ async function floodInfo(loc){
   if(warnings.status==='rejected'&&stations.status==='rejected')throw Error('Flood monitoring unavailable');
   const floods=warnings.status==='fulfilled'&&Array.isArray(warnings.value.items)?warnings.value.items:[];
   const gauges=stations.status==='fulfilled'&&Array.isArray(stations.value.items)?stations.value.items:[];
-  const nearby=gauges.filter(x=>Number.isFinite(Number(x.lat))&&Number.isFinite(Number(x.long))).slice(0,12);
+  const nearby=gauges.filter(x=>Number.isFinite(Number(x.lat))&&Number.isFinite(Number(x.long)))
+    .map(x=>({...x,distanceKm:kmDistance({lat:loc.latitude,long:loc.longitude},{lat:Number(x.lat),long:Number(x.long)})}))
+    .filter(x=>Number.isFinite(x.distanceKm)&&x.distanceKm<=10)
+    .sort((x,y)=>x.distanceKm-y.distanceKm).slice(0,12);
   const readings=await Promise.allSettled(nearby.slice(0,4).map(async station=>{
     const stationRef=tidy(station.stationReference,60);
     if(!/^[a-zA-Z0-9_-]{1,60}$/.test(stationRef))return null;
@@ -141,11 +149,16 @@ async function floodInfo(loc){
     warnings:floods.slice(0,20).map(f=>({
       area:tidy(f.description||f.floodArea?.label||'Area warning',180),
       severity:Number(f.severityLevel)||null,level:tidy(f.severity,90),
-      message:tidy(f.message,300),changed:tidy(f.timeMessageChanged||f.timeRaised,50)
+      message:tidy(f.message,300),changed:tidy(f.timeMessageChanged||f.timeRaised,50),
+      url:(()=>{try{const u=new URL(f['@id']||'');return u.hostname==='environment.data.gov.uk'?
+        'https://environment.data.gov.uk'+u.pathname:''}catch{return ''}})()
     })),
     stations:nearby.map(x=>({
       name:tidy(x.label,120),river:tidy(x.riverName,80),station:tidy(x.stationReference,60),
-      source:'Environment Agency',url:safeHref(x['@id'],'environment.data.gov.uk'),
+      source:'Environment Agency',
+      url:/^[a-zA-Z0-9_-]{1,60}$/.test(String(x.stationReference||'')) ?
+        'https://environment.data.gov.uk/flood-monitoring/id/stations/'+encodeURIComponent(x.stationReference) : '',
+      distanceKm:Math.round(x.distanceKm*10)/10,
       reading:levelByRef.get(tidy(x.stationReference,60))||null
     })),
     warningsAvailable:warnings.status==='fulfilled',stationsAvailable:stations.status==='fulfilled',
@@ -179,7 +192,12 @@ async function planningInfo(loc){
  const raw=await jsonGet('https://www.planning.data.gov.uk/entity.json?'+p.toString(),{ttl:3600});
  const rows=Array.isArray(raw.entities)?raw.entities:[];
  return {ok:true,kind:'planning',location:loc,totalReturned:rows.length,
-   constraints:rows.slice(0,40).map(x=>({name:tidy(x.name||x.reference||x.dataset,150),dataset:tidy(x.dataset,80),reference:tidy(x.reference,60)})),
+   constraints:rows.slice(0,40).map(x=>({
+     name:tidy(x.name||x.reference||x.dataset,150),
+     dataset:tidy(x.dataset,80),reference:tidy(x.reference,60),
+     url:Number.isSafeInteger(Number(x.entity))&&Number(x.entity)>0?
+       'https://www.planning.data.gov.uk/entity/'+Number(x.entity):''
+   })),
    source:'Planning Data (MHCLG)',link:'https://www.planning.data.gov.uk/',
    disclaimer:'Constraints at the approximate postcode coordinate, not an authoritative property search. Dataset coverage varies; no result does not mean no restriction.'};
 }
