@@ -13,7 +13,7 @@ const reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers
 const admin=(r,env)=>Boolean(env.EVENTS_ADMIN_TOKEN&&r.headers.get('x-admin-token')===env.EVENTS_ADMIN_TOKEN);
 const tidy=(value,max=80)=>String(value||'').trim().slice(0,max);
 const limited=(n,min,max)=>Math.max(min,Math.min(max,n));
-const CATEGORIES=new Set(['all','flood','crime','planning','area','contracts','companies']);
+const CATEGORIES=new Set(['all','flood','crime','planning','area','contracts','companies','weather']);
 async function jsonGet(url,options={}){
   const timer=new AbortController();const abort=setTimeout(()=>timer.abort(),7000);
   try{
@@ -71,6 +71,48 @@ async function areaInfo(loc){
   }catch{result.stories=[];result.storyStatus='News feed temporarily unavailable';}
   return result;
 }
+async function localWeather(loc){
+  // Approximate location rounded to the nearest ~1km for provider caching
+  // and to avoid disclosing the user's full postcode to the forecast supplier.
+  const lat=Number(loc.latitude.toFixed(2)),lon=Number(loc.longitude.toFixed(2));
+  const u='https://api.met.no/weatherapi/locationforecast/2.0/compact?'+new URLSearchParams({lat:String(lat),lon:String(lon)});
+  const d=await jsonGet(u,{ttl:3600,headers:{'User-Agent':'RochdaleDaily/1.0 (https://rochdaledaily.co.uk/contact.html)'}});
+  const timeSeries=Array.isArray(d?.properties?.timeseries)?d.properties.timeseries:[];
+  if(timeSeries.length===0)throw Error('No forecast periods returned');
+  const londonDate=t=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(t));
+  const now=Date.now();
+  const forecast=timeSeries.map(x=>{
+    const inst=x.data?.instant?.details||{};
+    const near=x.data?.next_1_hours||x.data?.next_6_hours||{};
+    return {
+      time:tidy(x.time,40),
+      temperatureC:Number.isFinite(inst.air_temperature)?inst.air_temperature:null,
+      windMs:Number.isFinite(inst.wind_speed)?inst.wind_speed:null,
+      humidity:Number.isFinite(inst.relative_humidity)?inst.relative_humidity:null,
+      precipitationMm:Number.isFinite(near.details?.precipitation_amount)?near.details.precipitation_amount:null,
+      precipitationHours:x.data?.next_1_hours?1:x.data?.next_6_hours?6:null,
+      condition:tidy(near.summary?.symbol_code,40)
+    };
+  }).filter(x=>Date.parse(x.time)>=now-3600000);
+  const daily=new Map();
+  for(const p of forecast){
+    const day=londonDate(p.time);
+    if(!daily.has(day))daily.set(day,{date:day,minTemp:null,maxTemp:null,condition:'',hourlyPoints:0});
+    const a=daily.get(day);a.hourlyPoints++;
+    if(p.temperatureC!==null){a.minTemp=a.minTemp===null?p.temperatureC:Math.min(a.minTemp,p.temperatureC);a.maxTemp=a.maxTemp===null?p.temperatureC:Math.max(a.maxTemp,p.temperatureC)}
+    if(!a.condition&&p.condition)a.condition=p.condition;
+  }
+  return {
+    ok:true,kind:'weather',location:loc,generatedAt:tidy(d.properties?.meta?.updated_at,40),
+    now:forecast[0]||null,hourly:forecast.slice(0,24),
+    days:[...daily.values()].slice(0,7),
+    source:'MET Norway Locationforecast 2.0',
+    link:'https://api.met.no/weatherapi/locationforecast/2.0/documentation',
+    licence:'https://creativecommons.org/licenses/by/4.0/',
+    disclaimer:'Approximate postcode-area model forecast. Temperatures, wind and rain can differ by street, elevation and timing. Compiled and rounded by Rochdale Daily from MET Norway data under CC BY 4.0.'
+  };
+}
+
 async function floodInfo(loc){
   const [warnings,stations]=await Promise.allSettled([
     jsonGet(EA+'/id/floods?'+coordParams(loc)+'&_limit=30',{ttl:120}),
@@ -176,6 +218,7 @@ export async function onRequestGet({request,env}){
    let response;
    if(kind==='area'||kind==='all')response=await areaInfo(loc);
    if(kind==='flood')response=await floodInfo(loc);
+   if(kind==='weather')response=await localWeather(loc);
    if(kind==='crime')response=await crimeInfo(loc,u.searchParams)
    if(kind==='planning')response=await planningInfo(loc);
    return reply(response);
