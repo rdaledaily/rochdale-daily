@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
-"""Post one previously-unposted Rochdale Daily article to a Facebook Page.
+"""Post a few recent Rochdale Daily stories together in a Facebook Page roundup.
 
-This publisher is intentionally conservative: it only creates Page feed posts for
-fresh Rochdale Daily articles. It does not automate likes, comments, follows,
+This publisher only creates four locally timed grouped Page posts at most per day
+for fresh Rochdale Daily articles. It does not automate likes, comments, follows,
 messages, audience manipulation, or behaviour intended to mimic a person.
 
 Required environment variables:
   FACEBOOK_PAGE_ACCESS_TOKEN
-  FACEBOOK_PAGE_ID
 
 Optional:
   FACEBOOK_GRAPH_VERSION (default: v26.0)
   FACEBOOK_STATE_PATH (default: facebook/facebook_posted.json)
   FACEBOOK_RESULT_PATH (default: facebook/facebook_last_result.json)
-  FACEBOOK_QUEUE_ORDER (oldest|newest, default: newest)
-  FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 24; 0 disables age filtering)
-  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 30)
-  FACEBOOK_MAX_POSTS_24H (default: 20; 0 disables the cap)
+  FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 48; 0 disables age filtering)
+  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 120)
+  FACEBOOK_MAX_POSTS_24H (default: 0; 0 disables the cap)
+  FACEBOOK_MIN_ARTICLES_PER_ROUNDUP (default: 2)
+  FACEBOOK_MAX_ARTICLES_PER_ROUNDUP (default: 5)
   FACEBOOK_DRY_RUN (1/true/yes to avoid the Graph API call)
 """
 from __future__ import annotations
 
+import html
 import json
 import os
 import sys
@@ -30,10 +31,22 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTICLES_PATH = ROOT / "articles.json"
 SITE_BASE = "https://rochdaledaily.co.uk/articles/"
+HOMEPAGE_URL = "https://rochdaledaily.co.uk/"
+LONDON = ZoneInfo("Europe/London")
+
+# Four local-time roundup windows, with several fresh stories in one post.
+# An available job can publish once during each window, never overnight.
+ROUNDUP_WINDOWS = (
+    (8, 12, "morning", "Morning news from Rochdale Daily"),
+    (12, 16, "lunchtime", "Lunchtime news from Rochdale Daily"),
+    (16, 20, "afternoon", "Afternoon news from Rochdale Daily"),
+    (20, 24, "evening", "Evening news from Rochdale Daily"),
+)
 
 
 def env(name: str, default: str = "") -> str:
@@ -124,6 +137,60 @@ def eligible(article: Any, max_age_hours: int) -> bool:
     return True
 
 
+def roundup_slot(now: datetime) -> tuple[str, str] | None:
+    """Return the unique local-day slot and a human-readable label."""
+    local = now.astimezone(LONDON)
+    for start, end, name, caption in ROUNDUP_WINDOWS:
+        if start <= local.hour < end:
+            return f"{local.date().isoformat()}:{name}", caption
+    return None
+
+
+def roundup_posts_today(posted: dict[str, Any], now: datetime) -> int:
+    """Count distinct Facebook posts, not the articles contained in a roundup."""
+    local_day = now.astimezone(LONDON).date()
+    ids: set[str] = set()
+    for key, entry in posted.items():
+        if not isinstance(entry, dict):
+            continue
+        when = parse_dt(entry.get("posted_at"))
+        if when == datetime.max.replace(tzinfo=timezone.utc):
+            continue
+        if when.astimezone(LONDON).date() != local_day:
+            continue
+        ids.add(str(entry.get("facebook_post_id") or key))
+    return len(ids)
+
+
+def format_roundup(articles: list[dict[str, Any]], caption: str) -> str:
+    """One readable Facebook post and one clear route back to the newspaper."""
+    lines = [caption, "", "A few stories from across the borough:"]
+    for article in articles:
+        title = html.unescape(" ".join(str(article.get("title") or "").split()))
+        # Keep original headlines in the paper, but avoid dash punctuation here.
+        title = title.replace(" — ", ": ").replace(" – ", ": ").replace(" - ", ": ")
+        lines.append("")
+        lines.append("• " + title)
+    lines.extend(["", "Read the full reports at rochdaledaily.co.uk."])
+    return "\n".join(lines)
+
+
+def roundup_eligible(article: Any, max_age_hours: int) -> bool:
+    if not eligible(article, max_age_hours):
+        return False
+    if article.get("sponsored") or article.get("paid_submission"):
+        return False
+    if article.get("briefing_slot"):
+        return False
+    if str(article.get("publication_route") or "").lower() == "daily-briefing":
+        return False
+    if str(article.get("source_kind") or "").lower() in {
+        "paid_reader_submission", "advertisement", "utility", "weather",
+    }:
+        return False
+    return True
+
+
 def load_json(path: Path, fallback: Any) -> Any:
     if not path.exists():
         return fallback
@@ -139,14 +206,17 @@ def write_json(path: Path, payload: Any) -> None:
 
 
 def recent_post_times(posted: dict[str, Any]) -> list[datetime]:
-    times: list[datetime] = []
-    for value in posted.values():
+    """One timestamp per Facebook post, even when five articles share it."""
+    unique: dict[str, datetime] = {}
+    for key, value in posted.items():
         if not isinstance(value, dict):
             continue
         parsed = parse_dt(value.get("posted_at"))
-        if parsed != datetime.max.replace(tzinfo=timezone.utc):
-            times.append(parsed)
-    return times
+        if parsed == datetime.max.replace(tzinfo=timezone.utc):
+            continue
+        identifier = str(value.get("facebook_post_id") or key)
+        unique[identifier] = parsed
+    return list(unique.values())
 
 
 def rate_limit_reason(
@@ -234,15 +304,28 @@ def graph_post(page_id: str, token: str, message: str, link: str, version: str) 
 
 def main() -> int:
     token = env("FACEBOOK_PAGE_ACCESS_TOKEN")
-    page_id = env("FACEBOOK_PAGE_ID")
     graph_version = env("FACEBOOK_GRAPH_VERSION", "v26.0")
     state_path = Path(env("FACEBOOK_STATE_PATH", str(ROOT / "facebook/facebook_posted.json")))
     result_path = Path(env("FACEBOOK_RESULT_PATH", str(ROOT / "facebook/facebook_last_result.json")))
-    queue_order = env("FACEBOOK_QUEUE_ORDER", "newest").lower()
     dry_run = truthy("FACEBOOK_DRY_RUN")
-    max_age_hours = int_env("FACEBOOK_MAX_ARTICLE_AGE_HOURS", 24)
-    min_interval_minutes = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 30)
-    max_posts_24h = int_env("FACEBOOK_MAX_POSTS_24H", 20)
+    max_age_hours = int_env("FACEBOOK_MAX_ARTICLE_AGE_HOURS", 48)
+    min_interval_minutes = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 120)
+    max_posts_24h = int_env("FACEBOOK_MAX_POSTS_24H", 0)
+    max_stories = int_env("FACEBOOK_MAX_ARTICLES_PER_ROUNDUP", 5, minimum=2)
+    min_stories = min(max_stories, int_env("FACEBOOK_MIN_ARTICLES_PER_ROUNDUP", 2, minimum=2))
+    now = datetime.now(timezone.utc)
+
+    def report(status: str, reason: str = "", **details: Any) -> int:
+        result = {
+            "status": status,
+            "checked_at": now.isoformat().replace("+00:00", "Z"),
+            **details,
+        }
+        if reason:
+            result["reason"] = reason
+        write_json(result_path, result)
+        print(f"Facebook roundup: {status}" + (f" ({reason})" if reason else ""))
+        return 0
 
     if not ARTICLES_PATH.exists():
         print("articles.json not found", file=sys.stderr)
@@ -250,109 +333,125 @@ def main() -> int:
     if not dry_run and not token:
         print("FACEBOOK_PAGE_ACCESS_TOKEN is required", file=sys.stderr)
         return 2
-    if queue_order not in {"oldest", "newest"}:
-        print("FACEBOOK_QUEUE_ORDER must be oldest or newest", file=sys.stderr)
-        return 2
 
     articles = load_json(ARTICLES_PATH, [])
     if not isinstance(articles, list):
         print("articles.json must contain a JSON array", file=sys.stderr)
         return 2
 
-    state = load_json(state_path, {"posted": {}})
+    state = load_json(state_path, {"posted": {}, "roundups": {}})
     if not isinstance(state, dict):
-        state = {"posted": {}}
+        state = {"posted": {}, "roundups": {}}
     posted = state.setdefault("posted", {})
     if not isinstance(posted, dict):
         posted = {}
         state["posted"] = posted
+    roundups = state.setdefault("roundups", {})
+    if not isinstance(roundups, dict):
+        roundups = {}
+        state["roundups"] = roundups
+
+    active_slot = roundup_slot(now)
+    if active_slot is None:
+        return report("idle", "Outside the four UK daytime roundup windows")
+    slot_key, caption = active_slot
+    if slot_key in roundups or any(
+        isinstance(row, dict) and row.get("roundup_slot") == slot_key
+        for row in posted.values()
+    ):
+        return report("idle", "This local-time roundup has already been posted", slot=slot_key)
+    if roundup_posts_today(posted, now) >= len(ROUNDUP_WINDOWS):
+        return report("idle", "Four Facebook posts already published today", slot=slot_key)
 
     limit_reason = rate_limit_reason(posted, min_interval_minutes, max_posts_24h)
     if limit_reason:
-        result = {
-            "status": "idle",
-            "reason": limit_reason,
-            "checked_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        }
-        write_json(result_path, result)
-        print(limit_reason)
-        return 0
+        return report("idle", limit_reason, slot=slot_key)
 
-    candidates = [a for a in articles if eligible(a, max_age_hours) and article_key(a) not in posted]
+    candidates = [
+        row for row in articles
+        if roundup_eligible(row, max_age_hours) and article_key(row) not in posted
+    ]
     candidates.sort(
-        key=lambda a: (
-            1 if is_urgent(a) else 0,
-            parse_dt(a.get("first_published_at") or a.get("published_at")),
-            str(a.get("slug") or ""),
+        key=lambda row: (
+            1 if is_urgent(row) else 0,
+            parse_dt(row.get("first_published_at") or row.get("published_at")),
+            str(row.get("slug") or ""),
         ),
-        reverse=(queue_order == "newest"),
+        reverse=True,
     )
+    # Only one rendition of each story or URL per roundup.
+    selected: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for row in candidates:
+        url = canonical_url(row)
+        if url in seen:
+            continue
+        seen.add(url)
+        selected.append(row)
+        if len(selected) == max_stories:
+            break
 
-    if not candidates:
-        result = {
-            "status": "idle",
-            "reason": "No fresh unpublished Facebook queue items remain",
-            "checked_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        }
-        write_json(result_path, result)
-        print("No fresh unposted eligible articles remain.")
-        return 0
+    if len(selected) < min_stories:
+        return report(
+            "idle",
+            f"Only {len(selected)} new stories; waiting to bundle at least {min_stories}",
+            slot=slot_key,
+            remaining_unposted=len(candidates),
+        )
 
-    article = candidates[0]
-    key = article_key(article)
-    title = " ".join(str(article.get("title") or "").split())
-    excerpt = clean_excerpt(article)
-    url = canonical_url(article)
-    message = title if not excerpt else f"{title}\n\n{excerpt}"
-    if article.get("paid_submission") or article.get("source_kind") == "paid_reader_submission":
-        message = "Paid reader submission · Advertisement\n\n" + message
+    message = format_roundup(selected, caption)
+    keys = [article_key(row) for row in selected]
+    titles = [str(row.get("title") or "") for row in selected]
 
     try:
         if dry_run:
             post_id = "dry-run"
         else:
             page_id = resolve_page_id(token, graph_version)
-            post_id = graph_post(page_id, token, message, url, graph_version)
+            post_id = graph_post(page_id, token, message, HOMEPAGE_URL, graph_version)
     except RuntimeError as exc:
         result = {
             "status": "error",
             "reason": str(exc),
-            "article_key": key,
-            "title": title,
-            "url": url,
-            "checked_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "slot": slot_key,
+            "article_keys": keys,
+            "checked_at": now.isoformat().replace("+00:00", "Z"),
         }
         write_json(result_path, result)
         print(str(exc), file=sys.stderr)
         return 1
 
     posted_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    posted[key] = {
-        "facebook_post_id": post_id,
-        "posted_at": posted_at,
-        "title": title,
-        "slug": str(article.get("slug") or ""),
-        "url": url,
-    }
-    state["updated_at"] = posted_at
-    state["page_id"] = page_id
-    write_json(state_path, state)
+    if not dry_run:
+        for row in selected:
+            posted[article_key(row)] = {
+                "facebook_post_id": post_id,
+                "posted_at": posted_at,
+                "title": str(row.get("title") or ""),
+                "slug": str(row.get("slug") or ""),
+                "url": canonical_url(row),
+                "roundup_slot": slot_key,
+            }
+        roundups[slot_key] = {
+            "facebook_post_id": post_id,
+            "posted_at": posted_at,
+            "article_keys": keys,
+        }
+        state["updated_at"] = posted_at
+        write_json(state_path, state)
 
-    result = {
-        "status": "dry-run" if dry_run else "posted",
-        "article_key": key,
-        "title": title,
-        "url": url,
-        "facebook_post_id": post_id,
-        "posted_at": posted_at,
-        "remaining_unposted": max(0, len(candidates) - 1),
-    }
-    write_json(result_path, result)
-    print(f"Facebook post created for: {title}")
-    print(f"Article: {url}")
-    print(f"Facebook post id: {post_id}")
-    print(f"Remaining queue: {max(0, len(candidates) - 1)}")
-    return 0
+    return report(
+        "dry-run" if dry_run else "posted",
+        slot=slot_key,
+        facebook_post_id=post_id,
+        posted_at=posted_at,
+        article_count=len(selected),
+        article_keys=keys,
+        titles=titles,
+        url=HOMEPAGE_URL,
+        remaining_unposted=max(0, len(candidates) - len(selected)),
+        message_preview=message if dry_run else "",
+    )
 
 
 if __name__ == "__main__":
