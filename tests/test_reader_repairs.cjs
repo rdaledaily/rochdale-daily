@@ -24,10 +24,10 @@ class Element{
  querySelector(s){return this.querySelectorAll(s)[0]||null;}querySelectorAll(s){const all=this.children.flatMap(c=>[c,...(c.querySelectorAll?.('*')||[])]);return s==='*'?all:all.filter(c=>s==='button'?c.tagName==='BUTTON':s==='select'?c.tagName==='SELECT':s==='.tab'?c.className==='tab':false);}
  addEventListener(t,f){this.listeners[t]=f;}scrollIntoView(){}focus(){}
 }
-function dashboard(fetcher){
+function dashboard(fetcher,options={}){
  const elements={};for(const [,id] of fs.readFileSync('my-rochdale.html','utf8').matchAll(/id="([^"]+)"/g))elements[id]=new Element();
  elements.lookup.append(new Element('button'));
- const context={window:{RD_LOCAL_SNAPSHOT:{wards:{wards:{}}}},document:{getElementById:id=>elements[id],createElement:t=>new Element(t)},location:{href:'https://rochdaledaily.co.uk/my-rochdale',origin:'https://rochdaledaily.co.uk'},fetch:fetcher,URL,AbortController,setTimeout,clearTimeout,console,Intl};
+ const context={window:{RD_LOCAL_SNAPSHOT:options.snapshot||{wards:{wards:{}}}},document:{getElementById:id=>elements[id],createElement:t=>new Element(t)},location:{href:'https://rochdaledaily.co.uk/my-rochdale',origin:'https://rochdaledaily.co.uk'},fetch:fetcher,URL,AbortController,setTimeout,clearTimeout,console,Intl};
  vm.runInNewContext(fs.readFileSync('assets/js/my-rochdale.js','utf8'),context);
  return {elements,start:async pc=>{elements.postcode.value=pc;await elements.lookup.listeners.submit({preventDefault(){}});}};
 }
@@ -178,4 +178,27 @@ test('local headlines default to newest first while optional relevance order pre
  assert.ok(elements.stories.textContent.indexOf('Old Rochdale Town Hall report')<elements.stories.textContent.indexOf('Latest community report'));
  assert.ok(!elements.stories.textContent.includes('crime allegation'));
  await start('OL16 1XU');assert.ok(elements.stories.textContent.indexOf('Latest community report')<elements.stories.textContent.indexOf('Old Rochdale Town Hall report'));
+});
+
+test('late archived travel fallback cannot overwrite a newer postcode briefing',async()=>{
+ let release,archives=0,traffic=0;
+ const snapshot={then(resolve){release=()=>resolve({archive:[{title:'Old transport fallback for Rochdale Town Hall',description:'Archived notice',slug:'old-travel',url:'/articles/old-travel.html',category:'Transport',published_at:'2024-01-01'}]});}};
+ const {elements,start}=dashboard(async url=>{
+  if(url==='/archive-index.json')return {ok:true,json:async()=>++archives===1?[]:stories};
+  if(url==='/api/traffic'&&++traffic===1)throw Error('old request failed');
+  return fetchOK(url);
+ },{snapshot});
+ const old=start('OL16 1XU');while(!release)await new Promise(resolve=>setImmediate(resolve));
+ await start('OL16 1XU');const latest=elements.traffic.textContent;release();await old;
+ assert.equal(elements.traffic.textContent,latest,'An obsolete archived fallback must not replace current travel results');
+ assert.ok(!elements['glance-items'].textContent.includes('locally relevant archived reports'));
+});
+
+test('local briefing dates use UK time rather than the device timezone',()=>{
+ const script=fs.readFileSync('assets/js/my-rochdale.js','utf8'),start=script.indexOf('const when='),end=script.indexOf('\nconst norm=',start);
+ let zone;
+ class CapturedDate extends Date {toLocaleDateString(locale,options){zone=options.timeZone;return super.toLocaleDateString(locale,options);}}
+ const context=vm.createContext({Date:CapturedDate});vm.runInContext(script.slice(start,end)+'\nthis.when=when;',context);
+ assert.equal(context.when('2024-01-01'),'1 Jan 2024');assert.equal(zone,'Europe/London');
+ assert.equal(context.when(''),'');
 });

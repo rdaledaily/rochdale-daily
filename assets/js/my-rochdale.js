@@ -11,7 +11,7 @@ const link=(text,href)=>{const a=node("a",text);try{const u=new URL(href,locatio
 const list=(records)=>{const ul=node("ul",undefined,"data-list");records.forEach(x=>{const li=node("li");li.append(x.href?link(x.title,x.href):node("strong",x.title));if(x.meta)li.append(node("small",x.meta));ul.append(li);});return ul;};
 const status=byId("status");
 const report=(s,state="ready")=>{status.textContent=s;status.classList.toggle("error",state==="error");status.classList.toggle("loading",state==="loading");status.classList.toggle("success",state==="success");status.setAttribute("aria-busy",String(state==="loading"));};
-const when=s=>{const d=Date.parse(s||"");return Number.isFinite(d)?new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";};
+const when=s=>{const d=Date.parse(s||"");return Number.isFinite(d)?new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"Europe/London"}):"";};
 const norm=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
 const whole=(t,x)=>x.length>3&&(" "+norm(t)+" ").includes(" "+norm(x)+" ");
 const read=async (url,timeout=12000)=>{
@@ -546,11 +546,13 @@ async function showBoroughIfLookupFails(id){
   putBrief("flood","Select a supported postcode to check local flood information.");
   ["flood","planning"].forEach(id=>unavailable(id,errorSources[id],"This source requires a successful postcode lookup. Open the official service."));
 }
-async function archiveWhenLiveFeedFails(kind){
+async function archiveWhenLiveFeedFails(kind,id){
+  if(id!==requestId)return;
   let rows=archive;
   if(!rows.length){
     try{rows=(await savedPublicData()).archive||[];}catch{rows=[];}
   }
+  if(id!==requestId)return;
   const category=kind==="events"?/events/i:/traffic|transport/i;
   const matches=rows.filter(a=>category.test(String(a.category||""))&&archiveUrl(a)&&
     aliases.some(w=>whole((a.title||"")+" "+(a.description||""),w)));
@@ -632,7 +634,7 @@ async function start(e){
        byId("councillor-cards").replaceChildren(node("p","Councillor and voting records could not be loaded. Please consult Rochdale Council's official directory.","method"),
           link("Official councillor directory ↗",errorSources.councillors));
       }else if(x[0]==="events"||x[0]==="traffic"){
-        await archiveWhenLiveFeedFails(x[0]);
+        await archiveWhenLiveFeedFails(x[0],id);
        }else if(x[0]==="flood"||x[0]==="planning"){
         officialFallback(x[0],loc);
        }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");
