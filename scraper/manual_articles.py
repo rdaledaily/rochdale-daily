@@ -71,7 +71,16 @@ def _content_html(entry: dict[str, Any]) -> str:
         for part in re.split(r"\n\s*\n", body)
         if part.strip()
     ]
-    return "".join(f"<p>{part}</p>" for part in paragraphs)
+    # Editor-written research includes plain-text source and series URLs. Link
+    # only HTTPS/HTTP text after escaping the paragraph; never accept raw HTML.
+    def link_urls(match: re.Match[str]) -> str:
+        value = match.group(0)
+        url = value.rstrip(".,;:!?)")
+        suffix = value[len(url):]
+        return f'<a href="{url}" rel="noopener">{url}</a>{suffix}'
+
+    linked = [re.sub(r"https?://[^\s<>\"']+", link_urls, part) for part in paragraphs]
+    return "".join(f"<p>{part}</p>" for part in linked)
 
 
 def _excerpt(entry: dict[str, Any]) -> str:
