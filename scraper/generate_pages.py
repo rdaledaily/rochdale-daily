@@ -284,8 +284,8 @@ def load_site_css() -> tuple[str, str]:
 
 
 SITE_CSS, TOKEN_STYLESHEET_LINK = load_site_css()
-SOURCE_DENY_DOMAINS = {'rochdaletimes.co.uk', 'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}
-SOURCE_DENY_NAMES = {'rochdale times', 'rochdale times paper', 'rochdale online', 'rochdale observer', 'pressreader'}
+SOURCE_DENY_DOMAINS = {'rochdaleonline.co.uk', 'pressreader.com', 'rochdaleobserver.co.uk'}
+SOURCE_DENY_NAMES = {'rochdale online', 'rochdale observer', 'pressreader'}
 CATEGORY_LABELS = {'crime': 'Crime', 'traffic': 'Traffic', 'transport': 'Transport', 'politics': 'Politics', 'education': 'Education', 'sport': 'Sport', 'events': 'Events', 'business': 'Business', 'community': 'Community', 'health': 'Health', 'showbiz': 'Showbiz', 'environment': 'Environment', 'news': 'News'}
 CATEGORY_HUB_SLUGS = {'whats-on': 'events', 'whatson': 'events'}
 LEGACY_CANONICAL_REDIRECTS = {
