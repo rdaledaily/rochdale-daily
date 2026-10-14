@@ -4,7 +4,7 @@
  *
  * Storage layout in EVENTS_KV:
  *   newsletter:sub:<sha256(email)>   {"email","consented_at","source","ip_hash"}
- *   newsletter:index                 JSON array of hashes, newest first (for export)
+ *   newsletter:index                 legacy index; exports use individual records
  *   newsletter:rl:<ipHash>           rolling per-address rate limit
  *
  * Why this exists before an email provider is chosen: the audience is the
@@ -17,7 +17,6 @@
  * and a salted hash of the requesting IP (not the IP). No other data.
  */
 const INDEX_KEY = "newsletter:index";
-const MAX_INDEX = 20000;
 const RL_WINDOW_MS = 10 * 60 * 1000;
 const RL_MAX = 5;
 const CONSENT_TEXT = "Send me the Rochdale Daily newsletter. I can unsubscribe at any time.";
@@ -127,9 +126,9 @@ export async function onRequestPost({ request, env }) {
         ip_hash: ipHash,
       }),
     );
-    const index = await readJson(kv, INDEX_KEY, []);
-    index.unshift(hash);
-    await kv.put(INDEX_KEY, JSON.stringify(index.slice(0, MAX_INDEX)));
+    // Count/export enumerate the consent ledger directly. A redundant shared
+    // index can race, or fail after consent was saved and before provider sync.
+    // Do not let that obsolete bookkeeping turn a saved signup into an error.
   }
   // Sync only a fresh, explicit consent record, and never reinstate
   // provider-suppressed contacts. If the provider is offline the secure CSV

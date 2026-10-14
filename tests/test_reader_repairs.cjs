@@ -153,3 +153,11 @@ test('advertiser website entry accepts normal domains without bypassing form or 
  for(const bad of ['javascript:alert(1)','not a website','user@localshop.co.uk'])assert.equal(context.normalise(bad),bad);
  assert.match(html,/websiteField\.value=normaliseWebsite\(websiteField\.value\);\s*if\(!form\.reportValidity\(\)\)return;/);
 });
+
+test('newsletter signup remains successful when the obsolete shared index cannot be written',async()=>{
+ const api=await newsletter(),kv=kvStore(),put=kv.put;
+ kv.put=async(key,value,options)=>{if(key==='newsletter:index')throw Error('Legacy index write failed');return put(key,value,options);};
+ const response=await api.onRequestPost({request:signup({email:'reader@example.com',consent:true}),env:{EVENTS_KV:kv,EVENTS_IP_SALT:'test'}});
+ assert.equal(response.status,200);assert.equal((await response.json()).ok,true);
+ assert.equal([...kv.m.keys()].filter(k=>k.startsWith('newsletter:sub:')).length,1);
+});
