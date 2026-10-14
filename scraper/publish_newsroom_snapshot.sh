@@ -39,24 +39,13 @@ stage_newsroom() {
 }
 
 finalise_cards_policy() {
-  python scraper/enforce_cards_only_images.py --articles articles.json
-  python scraper/compact_live_updates.py --articles articles.json
-  python scraper/generate_ward_pages.py
-  python scraper/generate_newspaper_pages.py
-  python scraper/enforce_frontpage_freshness.py
-  python scraper/frontpage_source_quality.py
-  python scraper/enforce_live_homepage_window.py
-  python scraper/ensure_manual_frontpage.py
-  python scraper/generate_news_sitemap.py
-  python scraper/generate_archive.py
-  cp archive.html search.html
-  python scraper/update_homepage_static_latest.py
-  python scraper/update_homepage_weekly_news.py
-  python scraper/sync_homepage_top_story.py
-  python scraper/homepage_discovery_metadata.py
-  python scraper/generate_rss.py
-  python scraper/generate_image_sitemap.py
+  # The calling workflows already generated and validated the whole site.
+  # Rebuilding it here spent half the push-recovery budget before the push.
+  python -m json.tool articles.json > /dev/null
+  python scraper/content_hygiene.py --fix
   python scraper/enforce_cards_only_images.py --articles articles.json --check
+  python scraper/verify_manual_publication.py
+  python scraper/content_hygiene.py
   python scraper/normalise_public_theme.py
   python scraper/normalise_public_theme.py --check
   python scraper/audit_published_news.py
@@ -73,13 +62,13 @@ rebuild_from_merged_feed() {
   PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
   python scraper/article_gate.py articles.json
   python scraper/content_hygiene.py --fix
-  python scraper/enforce_cards_only_images.py --articles articles.json
+  python scraper/enforce_cards_only_images.py --articles articles.json --check
   python scraper/compact_live_updates.py --articles articles.json
   python scraper/repair_merged_bodies.py
   python scraper/councillor_photos.py
   python scraper/patch_democracy_portraits.py
   python scraper/generate_ward_pages.py
-  python scraper/generate_newspaper_pages.py
+  PYTHONPATH=scraper python -c "import frontpage_manual_publish as mp; mp.render_main()"
   python scraper/enforce_frontpage_freshness.py
   python scraper/frontpage_source_quality.py
   PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py

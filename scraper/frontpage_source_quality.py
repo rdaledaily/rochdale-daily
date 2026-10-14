@@ -20,6 +20,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 import enforce_frontpage_freshness as freshness
+from locality_rules import TRUSTED_EDITORIAL_SOURCE_DOMAINS
 
 ARTICLES = Path("articles.json")
 FRONTPAGE = Path("articles/frontpage.json")
@@ -101,6 +102,10 @@ def weak_single_source_sports_result(article: dict[str, Any]) -> bool:
     if int(article.get("source_count") or 1) >= 2:
         return False
     hosts = _hosts(article)
+    if any(host.removeprefix("www.") in TRUSTED_EDITORIAL_SOURCE_DOMAINS for host in hosts):
+        # A direct trusted-publisher report resolves an accompanying Google
+        # discovery wrapper; it is not an unverified social-only result.
+        return False
     has_social = bool(hosts & SOCIAL_HOSTS)
     has_google_wrapper = any("news.google.com" in host for host in hosts)
     source_name = str(article.get("source_name") or "").lower()

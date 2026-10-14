@@ -56,6 +56,12 @@ SOURCE_DENY_DOMAINS = {
 }
 SOURCE_DENY_NAMES = set()
 
+# Editorial trust is independent of geography: these publishers can report
+# elsewhere, so their name alone must not establish a Rochdale location.
+TRUSTED_EDITORIAL_SOURCE_DOMAINS = frozenset({
+    "rochvalleyradio.com", "rochdaletimes.co.uk",
+})
+
 TRUSTED_LOCAL_SOURCE_PREFIXES = (
     "Rochdale Borough Council",
     "Rochdale Council",
