@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-14T05:53:45.653161Z",
+  "last_run_at": "2026-10-14T06:06:30.763277Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,18 +27,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 118,
+  "raw_candidates_before_job_filter": 116,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 118,
+  "raw_candidates": 116,
   "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 38,
+    "wrappers": 36,
     "resolved": 11,
     "text_recovered": 7,
     "reattributed": 0,
     "images_found": 9
   },
-  "duplicates_merged": 79,
+  "duplicates_merged": 77,
   "attempted_rewrites": 2,
   "draft_rewrites_created": 2,
   "drafted_articles": [
@@ -155,7 +155,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 91,
+    "rss_and_google_news": 89,
     "website_discovery": 10,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
@@ -170,8 +170,8 @@
   "source_counts": {
     "Roch Valley Radio": 25,
     "Rochdale Times": 23,
-    "Rochdale Borough Council": 12,
     "Northern live service updates": 12,
+    "Rochdale Borough Council": 10,
     "Facebook": 8,
     "Queensland Police News": 5,
     "About Manchester": 4,
@@ -827,8 +827,12 @@
   "robots_denied_count": 0,
   "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 9
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -864,7 +868,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-14T05:56:24.482828Z",
+  "frontpage_generated_at": "2026-10-14T06:09:46.682249Z",
   "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
