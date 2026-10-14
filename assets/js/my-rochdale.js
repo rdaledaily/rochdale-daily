@@ -49,6 +49,7 @@ async function readOwnData(url,field,timeout=5500){
 
 let publishedEvents=[],archive=[],aliases=[],active="local",category="all",search="",page=0,requestId=0,area={},lastEvents=null,archiveReadyForPostcode=false;
 const brief={};
+let newsOrder="recent";
 const briefNames=[["news","Your local headlines","#stories"],["weather","Forecast","#weather"],["traffic","Travel today","#traffic"],["events","Coming up","#events"],["flood","River and flood watch","#flood"],["services","Local services","#services"]];
 function putBrief(key,value){
  brief[key]=String(value);
@@ -97,7 +98,11 @@ function news(){
   inp.oninput=()=>{search=norm(inp.value);page=0;news();};
   const sel=node("select");sel.setAttribute("aria-label","News subject");
   [["all","All subjects"],["News","News"],["Crime","Crime"],["Traffic","Traffic"],["Transport","Transport"],["Politics","Politics"],["Community","Community"],["Events","Events"],["Education","Schools"],["Health","Health"],["Business","Business"],["Sport","Sport"]].forEach(v=>{const op=node("option",v[1]);op.value=v[0];sel.append(op);});
-  sel.onchange=()=>{category=sel.value;page=0;news();};filters.append(inp,sel);controls.append(tabs,filters);controls.dataset.ready="yes";
+  sel.onchange=()=>{category=sel.value;page=0;news();};
+  const order=node("select");order.setAttribute("aria-label","News ordering");
+  [["recent","Newest first"],["relevance","Closest place-name match"]].forEach(v=>{const option=node("option",v[1]);option.value=v[0];order.append(option);});
+  order.value=newsOrder;order.onchange=()=>{newsOrder=order.value;page=0;news();};
+  filters.append(inp,sel,order);controls.append(tabs,filters);controls.dataset.ready="yes";
  }
  controls.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.view===active)));
  let entries=archive.map(x=>({...x,_match:match(x)})).filter(x=>active==="all"||x._match.score>0);
@@ -105,8 +110,10 @@ function news(){
  if(active==="local")entries=entries.filter(x=>String(x.category||"").toLowerCase()!=="crime"||verifiedNearbyCrime(x,area));
  if(category!=="all")entries=entries.filter(x=>String(x.category).toLowerCase()===category.toLowerCase());
  if(search)entries=entries.filter(x=>norm((x.title||"")+" "+(x.description||"")+" "+x.category).includes(search));
- const recent=(a,b)=>(Date.parse(b.published_at||0)||0)-(Date.parse(a.published_at||0)||0);
- entries.sort((a,b)=>active==="local"?(b._match.score-a._match.score||recent(a,b)):recent(a,b));
+ const recent=(a,b)=>(Date.parse(b.published_at||"")||0)-(Date.parse(a.published_at||"")||0);
+ // Local eligibility is unchanged; relevance must not bury current reporting.
+ entries.sort((a,b)=>newsOrder==="relevance"&&active==="local"?
+   (b._match.score-a._match.score||recent(a,b)):(recent(a,b)||b._match.score-a._match.score));
  const shown=entries.slice(0,20*(page+1));
  const ul=list(shown.map(s=>({title:s.title,href:archiveUrl(s),meta:[when(s.published_at),s.category,active==="local"?"Place mention: "+s._match.matched:"Borough archive"].filter(Boolean).join(" · ")})));
  ul.className="story-list";
@@ -131,7 +138,7 @@ async function newsArchive(loc,id){
   if(loc.nearbyWhitworth)aliases.push("Whitworth");
   aliases.push(...String(loc.ward||"").split(/,|\band\b/i).map(x=>x.trim()).filter(x=>x.length>3&& !/^central rochdale$|^west littleborough$/i.test(x)));
   aliases=[...new Set(aliases.map(norm).filter(x=>x.length>3))];
-  active="local";category="all";search="";page=0;
+  active="local";category="all";search="";page=0;newsOrder="recent";
   byId("news-controls").replaceChildren();byId("news-controls").dataset.ready="";
   news();
   const localCount=archive.filter(x=>match(x).score>0&&(String(x.category||"").toLowerCase()!=="crime"||verifiedNearbyCrime(x,area))).length;

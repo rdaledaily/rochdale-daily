@@ -21,7 +21,7 @@ class Element{
  constructor(tag='div'){this.tagName=tag.toUpperCase();this.children=[];this.dataset={};this.attributes={};this.hidden=false;this.value='';this.listeners={};this.className='';this.style={};this.classList={toggle:()=>{},add:()=>{},remove:()=>{}};}
  set textContent(v){this.text=String(v);this.children=[];}get textContent(){return (this.text||'')+this.children.map(c=>c.textContent||'').join(' ');}
  append(...c){this.children.push(...c);}replaceChildren(...c){this.text='';this.children=c;}setAttribute(k,v){this.attributes[k]=v;}removeAttribute(k){delete this.attributes[k];}
- querySelector(s){return this.querySelectorAll(s)[0]||null;}querySelectorAll(s){const all=this.children.flatMap(c=>[c,...(c.querySelectorAll?.('*')||[])]);return s==='*'?all:all.filter(c=>s==='button'?c.tagName==='BUTTON':s==='.tab'?c.className==='tab':false);}
+ querySelector(s){return this.querySelectorAll(s)[0]||null;}querySelectorAll(s){const all=this.children.flatMap(c=>[c,...(c.querySelectorAll?.('*')||[])]);return s==='*'?all:all.filter(c=>s==='button'?c.tagName==='BUTTON':s==='select'?c.tagName==='SELECT':s==='.tab'?c.className==='tab':false);}
  addEventListener(t,f){this.listeners[t]=f;}scrollIntoView(){}focus(){}
 }
 function dashboard(fetcher){
@@ -160,4 +160,22 @@ test('newsletter signup remains successful when the obsolete shared index cannot
  const response=await api.onRequestPost({request:signup({email:'reader@example.com',consent:true}),env:{EVENTS_KV:kv,EVENTS_IP_SALT:'test'}});
  assert.equal(response.status,200);assert.equal((await response.json()).ok,true);
  assert.equal([...kv.m.keys()].filter(k=>k.startsWith('newsletter:sub:')).length,1);
+});
+
+test('local headlines default to newest first while optional relevance order preserves crime safeguards',async()=>{
+ const records=[
+  {title:'Old Rochdale Town Hall report',slug:'old-local',url:'/articles/old-local.html',category:'News',published_at:'2024-01-01'},
+  {title:'Latest community report',description:'Rochdale Town Hall is the venue.',slug:'recent-local',url:'/articles/recent-local.html',category:'Community',published_at:'2026-10-14'},
+  {title:'Rochdale Town Hall crime allegation',slug:'unverified-crime',url:'/articles/unverified-crime.html',category:'Crime',published_at:'2026-10-15'}
+ ];
+ const {elements,start}=dashboard(async url=>url==='/archive-index.json'?{ok:true,json:async()=>records}:fetchOK(url));
+ await start('OL16 1XU');
+ const rendered=elements.stories.textContent;
+ assert.ok(rendered.indexOf('Latest community report')<rendered.indexOf('Old Rochdale Town Hall report'),'Recent local reporting must not be buried under an older title match');
+ assert.ok(!rendered.includes('crime allegation'));
+ const selects=elements['news-controls'].querySelectorAll('select'),order=selects.find(x=>x.attributes['aria-label']==='News ordering');
+ assert.ok(order);order.value='relevance';order.onchange();
+ assert.ok(elements.stories.textContent.indexOf('Old Rochdale Town Hall report')<elements.stories.textContent.indexOf('Latest community report'));
+ assert.ok(!elements.stories.textContent.includes('crime allegation'));
+ await start('OL16 1XU');assert.ok(elements.stories.textContent.indexOf('Latest community report')<elements.stories.textContent.indexOf('Old Rochdale Town Hall report'));
 });
