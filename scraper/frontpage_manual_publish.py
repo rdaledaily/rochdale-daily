@@ -30,11 +30,13 @@ from pathlib import Path
 from typing import Any
 
 import ensure_article_images as images
+import enforce_cards_only_images as cards_policy
 import frontpage_pipeline as pipeline
 
 _original_enforce_article = pipeline.enforce_article
 _original_article_category = pipeline.article_category
 _original_existing_meaningful_image = images.existing_meaningful_image
+_original_cards_enforce_article = cards_policy.enforce_article
 CARDS_PREFIX = "assets/img/cards/"
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
 
@@ -147,6 +149,30 @@ def main() -> int:
     pipeline.enforce_article = _enforce_editorial_only
     pipeline.collect_ticket_events = _reuse_existing_ticket_events
     return pipeline.main()
+
+
+def _cards_without_archive_rescan(article: dict[str, Any], root: Path) -> str:
+    """Retain approved local cards; normalise any invalid publication path."""
+    if cards_policy.canonical_ok(article, root):
+        if article.get("manual_article"):
+            _mark_editorial_photo(article)
+        return "existing-canonical-image-unchanged"
+    return _original_cards_enforce_article(article, root)
+
+
+def render_main() -> None:
+    """Use the manual image boundary during the newspaper's second pass too."""
+    import generate_newspaper_pages as newspaper
+
+    pipeline.collect_ticket_events = _reuse_existing_ticket_events
+    # newspaper.main replaces pipeline.enforce_article with this module's
+    # cards normaliser. Patch that exact boundary rather than an unused alias.
+    previous = newspaper.cards_policy.enforce_article
+    newspaper.cards_policy.enforce_article = _cards_without_archive_rescan
+    try:
+        newspaper.main()
+    finally:
+        newspaper.cards_policy.enforce_article = previous
 
 
 if __name__ == "__main__":

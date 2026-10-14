@@ -102,7 +102,7 @@ jobs:
           # generate_newspaper_pages normally invokes frontpage_pipeline again.
           # Keep its newsroom selection, but reuse the already-approved ticket
           # events instead of crawling up to 30 external event pages a second time.
-          PYTHONPATH=scraper python -c "import frontpage_pipeline as fp, frontpage_manual_publish as mp, generate_newspaper_pages as g; fp.collect_ticket_events = mp._reuse_existing_ticket_events; g.main()"
+          PYTHONPATH=scraper python -c "import frontpage_manual_publish as mp; mp.render_main()"
           python scraper/enforce_frontpage_freshness.py
           python scraper/frontpage_source_quality.py
           PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
@@ -149,7 +149,7 @@ jobs:
             python scraper/councillor_photos.py
             python scraper/patch_democracy_portraits.py
             python scraper/generate_ward_pages.py
-            PYTHONPATH=scraper python -c "import frontpage_pipeline as fp, frontpage_manual_publish as mp, generate_newspaper_pages as g; fp.collect_ticket_events = mp._reuse_existing_ticket_events; g.main()"
+            PYTHONPATH=scraper python -c "import frontpage_manual_publish as mp; mp.render_main()"
             python scraper/enforce_frontpage_freshness.py
             python scraper/frontpage_source_quality.py
             PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
