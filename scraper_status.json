@@ -907,8 +907,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-14T11:35:32.768397Z",
-  "frontpage_article_count": 23,
+  "frontpage_generated_at": "2026-10-14T12:13:17.057983Z",
+  "frontpage_article_count": 42,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -936,6 +936,8 @@
       "transport"
     ],
     "available_wards": [
+      "Balderstone and Kirkholt",
+      "Bamford",
       "Castleton",
       "Central Rochdale",
       "Healey",
@@ -944,6 +946,8 @@
       "Spotland and Falinge"
     ],
     "selected_wards": [
+      "Balderstone and Kirkholt",
+      "Bamford",
       "Castleton",
       "Central Rochdale",
       "Healey",
@@ -952,21 +956,34 @@
       "Spotland and Falinge"
     ],
     "available_areas": [
+      "castleton",
       "healey",
+      "heywood",
+      "kirkholt",
       "littleborough",
-      "milnrow"
+      "middleton",
+      "milnrow",
+      "newhey",
+      "norden"
     ],
     "selected_areas": [
       "healey",
       "littleborough",
       "milnrow",
+      "newhey",
+      "norden",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
-    "uncovered_areas": [],
+    "uncovered_areas": [
+      "castleton",
+      "heywood",
+      "kirkholt",
+      "middleton"
+    ],
     "selected_by_category": {
-      "news": 5,
+      "news": 24,
       "crime": 1,
       "traffic": 2,
       "transport": 1,
@@ -978,19 +995,23 @@
       "environment": 2
     },
     "selected_by_ward": {
-      "borough-wide": 13,
+      "borough-wide": 24,
       "Milnrow and Newhey": 3,
-      "Spotland and Falinge": 1,
-      "Castleton": 2,
+      "Spotland and Falinge": 2,
+      "Castleton": 4,
       "Healey": 1,
+      "Balderstone and Kirkholt": 3,
       "Littleborough Lakeside": 2,
-      "Central Rochdale": 1
+      "Central Rochdale": 2,
+      "Bamford": 1
     },
     "selected_by_area": {
       "healey": 1,
       "littleborough": 2,
       "milnrow": 1,
-      "rochdale": 22
+      "newhey": 1,
+      "norden": 1,
+      "rochdale": 21
     },
     "selected_by_source": {
       "mhclg council tax collection statistics 2025/26 and rochdale council draft accounts": 1,
@@ -1007,32 +1028,32 @@
       "arta 2026 awards announcement": 1,
       "rochdale borough council school calendar and public events listings": 1,
       "traditions of lancashire — john roby (project gutenberg)": 1,
-      "rochdale daily": 3,
-      "spudbros express / about manchester / report to rochdale daily": 1,
+      "rochdale daily": 22,
       "community organiser's invitation supplied to rochdale daily": 1,
+      "spudbros express / about manchester / report to rochdale daily": 1,
       "petrus community / rochdale afc community trust": 1
     },
-    "pool_size": 26,
-    "primary_pool_size": 26,
+    "pool_size": 49,
+    "primary_pool_size": 49,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 23,
+    "frontpage_count": 42,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 17,
-    "fresh_under_homepage_window": 23,
+    "fresh_under_24h": 35,
+    "fresh_under_homepage_window": 42,
     "short_briefs_selected": 7,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 12,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
   "events_removed_other_source": 8,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 12,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 242,
-  "blocked_articles_removed": 1,
+  "duplicate_articles_after_postprocessing": 264,
+  "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
   "online_events_allowed": false,
