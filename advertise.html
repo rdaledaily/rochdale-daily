@@ -171,7 +171,7 @@
    <div class="contact-ways"><strong>Prefer a personal email?</strong><p>We welcome the kind of thoughtful message that explains where you're already advertising and what you're hoping to achieve.</p><a href="mailto:advertising@rochdaledaily.co.uk?subject=Advertising%20enquiry%20for%20Rochdale%20Daily">advertising@rochdaledaily.co.uk →</a></div>
    <p class="small" style="margin-top:19px">See our <a href="/advertising-media-pack.html">printable media pack</a> for a concise version of our packages and geographic coverage.</p>
   </div>
-  <form id="enquiryForm" aria-label="Advertising enquiry">
+  <form id="enquiryForm" aria-label="Advertising enquiry" novalidate>
    <div class="formgrid"><div class="field"><label for="business">Business name *</label><input id="business" name="business" maxlength="110" autocomplete="organization" required></div><div class="field"><label for="name">Your name *</label><input id="name" name="name" maxlength="100" autocomplete="name" required></div></div>
    <div class="formgrid"><div class="field"><label for="email">Work email *</label><input id="email" name="email" type="email" maxlength="160" autocomplete="email" required></div><div class="field"><label for="website">Website (optional)</label><input id="website" name="website" type="url" placeholder="https://" maxlength="300"></div></div>
    <div class="formgrid"><div class="field"><label for="package">I'm interested in *</label><select id="package" name="package"><option value="corporate">Corporate partnership · £1,200/month</option><option value="section">Section sponsorship · £350/month</option><option value="banner">Homepage banner · £175/month</option><option value="directory">Featured local listing · £75/month</option></select></div><div class="field"><label for="area">Area you'd like to reach</label><input id="area" name="area" maxlength="110" placeholder="e.g. Rochdale, Whitworth"></div></div>
@@ -190,8 +190,17 @@
  'use strict';
  const form=document.getElementById('enquiryForm'),status=document.getElementById('formStatus'),button=document.getElementById('submit'),select=document.getElementById('package');
  document.querySelectorAll('a[data-plan]').forEach(function(a){a.addEventListener('click',function(){select.value=a.dataset.plan;});});
+ function normaliseWebsite(value){
+   const raw=String(value||'').trim();
+   // Accept an ordinary business domain without forcing the advertiser to know URL syntax.
+   if(!/^[a-z0-9][a-z0-9.-]*\.[a-z]{2,}(?::\d+)?(?:[/?#][^\s]*)?$/i.test(raw))return raw;
+   const candidate='https://'+raw;
+   try{const url=new URL(candidate);return !url.username&&!url.password?url.href:raw;}catch{return raw;}
+ }
  form.addEventListener('submit',async function(ev){
-   ev.preventDefault();if(button.disabled||!form.reportValidity())return;
+   ev.preventDefault();if(button.disabled)return;
+   const websiteField=document.getElementById('website');websiteField.value=normaliseWebsite(websiteField.value);
+   if(!form.reportValidity())return;
    const get=function(id){return document.getElementById(id).value.trim();};
    const d={business:get('business'),name:get('name'),email:get('email'),
      website:get('website'),package:select.value,area:get('area'),goal:get('goal'),

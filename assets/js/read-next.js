@@ -35,7 +35,7 @@
   var title = (card.querySelector(".rn-title") || {}).textContent || "Next story";
   var kicker = (card.querySelector(".rn-kicker") || {}).textContent || "";
   if (!href) return;
-  try { const target=new URL(href,location.href);if(target.origin!==location.origin||!/^\/articles\/[a-z0-9-]+(?:\.html)?$/i.test(target.pathname)||target.pathname===location.pathname)return; }catch{return;}
+  try { const target=new URL(href,location.href);if(target.origin!==location.origin||!/^\/articles\/[a-z0-9-]+(?:\.html)?$/i.test(target.pathname)||target.pathname.replace(/\.html$/, '')===location.pathname.replace(/\.html$/, ''))return; }catch{return;}
 
   var readNext = document.querySelector(".read-next");
   var article = document.querySelector(".article-main") || document.body;
@@ -44,6 +44,9 @@
   /* ---------------------------------------------------------------- the bar */
   var bar = document.createElement("a");
   bar.className = "next-bar";
+  bar.style.visibility = "hidden";
+  bar.tabIndex = -1;
+  bar.setAttribute("aria-hidden", "true");
   bar.href = href;
   bar.setAttribute("aria-label", "Next story: " + title.trim());
   bar.innerHTML =
@@ -80,6 +83,9 @@
     if (want !== shown) {
       shown = want;
       bar.classList.toggle("is-visible", want);
+      bar.style.visibility = want ? "visible" : "hidden";
+      bar.tabIndex = want ? 0 : -1;
+      bar.setAttribute("aria-hidden", String(!want));
     }
   }
   var ticking = false;
@@ -147,6 +153,7 @@
   try { target = new URL(source.getAttribute("href") || "", location.href); }
   catch (_) { return; }
   if (target.origin !== location.origin || !/^\/articles\/[a-z0-9-]+(?:\.html)?$/i.test(target.pathname)) return;
+  if (target.pathname.replace(/\.html$/, '') === location.pathname.replace(/\.html$/, '')) return;
   const title = (source.querySelector(".rn-title")?.textContent || "").trim();
   if (!title) return;
   const key = "rd_read_next_closed:" + location.pathname;
@@ -169,6 +176,9 @@
 
   const prompt = document.createElement("aside");
   prompt.className = "rd-read-next-prompt";
+  prompt.style.visibility = "hidden";
+  prompt.inert = true;
+  prompt.setAttribute("aria-hidden", "true");
   prompt.setAttribute("aria-label", "Continue reading on Rochdale Daily");
   const close = document.createElement("button");
   close.type = "button"; close.textContent = "×";
@@ -207,6 +217,9 @@
     const stillReading = bounds.bottom > window.innerHeight * .1;
     const shouldShow = progressed && stillReading && !visibleAtRelated && document.visibilityState === "visible";
     prompt.classList.toggle("is-visible",shouldShow);
+    prompt.style.visibility = shouldShow ? "visible" : "hidden";
+    prompt.inert = !shouldShow;
+    prompt.setAttribute("aria-hidden", String(!shouldShow));
     // Don't obscure the cookie consent choices if they're still visible.
     if (shouldShow) {
       const cookie = document.querySelector(".cookie:not([hidden])");

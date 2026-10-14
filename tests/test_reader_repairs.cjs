@@ -1,6 +1,22 @@
 'use strict';
 const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
 const {webcrypto}=require('node:crypto');
+
+// Run the real mobile/desktop prompt code against deterministic article geometry.
+function readingPrompt(mobile, href='/articles/next-story.html'){
+ const handlers={}, created=[];let scroll=0;
+ const title={textContent:'Related local story'},kicker={textContent:'Community'};
+ const card={getAttribute:()=>href,querySelector:s=>s==='.rn-title'?title:kicker};
+ const article={offsetHeight:4000,getBoundingClientRect:()=>({top:100-scroll,bottom:4100-scroll}),addEventListener(){}};
+ const document={visibilityState:'visible',querySelector:s=>s.includes('.rn-card')?card:s==='.read-next'?{}:s==='.article-copy'||s==='.article-main'?article:null,
+  getElementById:()=>null,head:{appendChild(){}},body:{appendChild:x=>created.push(x),classList:{add(){}}},addEventListener(){},
+  createElement:t=>{const el=new Element(t);el.querySelector=()=>({textContent:''});el.remove=()=>{};return el;}};
+ const window={matchMedia:()=>({matches:mobile}),innerHeight:800,innerWidth:mobile?390:1200,get scrollY(){return scroll;},
+  addEventListener:(type,fn)=>{handlers[type]=fn;},removeEventListener(){},requestAnimationFrame:fn=>fn(),getSelection:()=>({toString:()=>''})};
+ vm.runInNewContext(fs.readFileSync('assets/js/read-next.js','utf8'),{document,window,location:{href:'https://rochdaledaily.co.uk/articles/current',pathname:'/articles/current',origin:'https://rochdaledaily.co.uk'},URL,
+  sessionStorage:{getItem:()=>null,setItem(){}},requestAnimationFrame:fn=>fn(),getComputedStyle:()=>({display:'none'})});
+ return {created,scroll:value=>{scroll=value;handlers.scroll?.();}};
+}
 class Element{
  constructor(tag='div'){this.tagName=tag.toUpperCase();this.children=[];this.dataset={};this.attributes={};this.hidden=false;this.value='';this.listeners={};this.className='';this.style={};this.classList={toggle:()=>{},add:()=>{},remove:()=>{}};}
  set textContent(v){this.text=String(v);this.children=[];}get textContent(){return (this.text||'')+this.children.map(c=>c.textContent||'').join(' ');}
@@ -111,4 +127,29 @@ test('comment feed errors never masquerade as an empty discussion',async()=>{
  await assert.rejects(run({ok:true,json:async()=>({})}));
  assert.equal((await run({ok:true,json:async()=>({closed:false,comments:[]})})).comments.length,0);
  assert.equal((await run({ok:true,json:async()=>({closed:true})})).closed,true);
+});
+
+test('off-screen reading prompts are hidden from assistive technology and keyboard navigation',()=>{
+ for(const mobile of [true,false]){
+  const fixture=readingPrompt(mobile),prompt=fixture.created[0];assert.ok(prompt);
+  assert.equal(prompt.style.visibility,'hidden');assert.equal(prompt.attributes['aria-hidden'],'true');
+  if(mobile)assert.equal(prompt.tabIndex,-1);else assert.equal(prompt.inert,true);
+  fixture.scroll(2200);assert.equal(prompt.style.visibility,'visible');assert.equal(prompt.attributes['aria-hidden'],'false');
+  if(mobile)assert.equal(prompt.tabIndex,0);else assert.equal(prompt.inert,false);
+  fixture.scroll(0);assert.equal(prompt.style.visibility,'hidden');assert.equal(prompt.attributes['aria-hidden'],'true');
+ }
+});
+test('reading prompts never link back to the current article through its .html alias',()=>{
+ for(const mobile of [true,false])assert.equal(readingPrompt(mobile,'/articles/current.html').created.length,0);
+});
+
+test('advertiser website entry accepts normal domains without bypassing form or server validation',()=>{
+ const html=fs.readFileSync('advertise.html','utf8'),start=html.indexOf(' function normaliseWebsite('),end=html.indexOf(" form.addEventListener('submit'",start);
+ const context=vm.createContext({URL});vm.runInContext(html.slice(start,end)+'\nthis.normalise=normaliseWebsite;',context);
+ assert.equal(context.normalise(' www.localshop.co.uk '),'https://www.localshop.co.uk/');
+ assert.equal(context.normalise('localshop.co.uk/contact'),'https://localshop.co.uk/contact');
+ assert.equal(context.normalise('https://localshop.co.uk/'),'https://localshop.co.uk/');
+ assert.equal(context.normalise(''),'');
+ for(const bad of ['javascript:alert(1)','not a website','user@localshop.co.uk'])assert.equal(context.normalise(bad),bad);
+ assert.match(html,/websiteField\.value=normaliseWebsite\(websiteField\.value\);\s*if\(!form\.reportValidity\(\)\)return;/);
 });
