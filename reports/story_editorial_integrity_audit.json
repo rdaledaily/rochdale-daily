@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 236,
-  "published_count": 236,
+  "article_count": 240,
+  "published_count": 240,
   "category_change_count": 33,
-  "image_change_count": 39,
+  "image_change_count": 42,
   "category_changes": [
     {
       "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
@@ -36,7 +36,7 @@
     },
     {
       "slug": "rochdale-council-to-implement-new-planning-decision-guidelines-from-october-31",
-      "title": "Rochdale Council to Implement New Planning Decision Guidelines from October 31",
+      "title": "Rochdale Council to Implement New Planning Decision Rules from October 31",
       "from": "environment",
       "to": "news",
       "reason": "headline strongly identifies news"
@@ -264,6 +264,18 @@
       "after": "assets/img/cards/rochdale-upperbanks-50-million-loans-council-tax-investigation-generated-card.jpg"
     },
     {
+      "slug": "rochdale-borough-council-publishes-budget-report-for-2026-27-to-2028-29",
+      "title": "Rochdale Borough Council Publishes Budget Report for 2026/27 to 2028/29",
+      "category": "politics",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-square.jpg",
+        "img": "assets/img/cards/rochdale-town-square.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-borough-council-publishes-budget-report-for-2026-27-to-2028-29-generated-card.jpg"
+    },
+    {
       "slug": "spudbros-opens-new-location-at-eg-station-on-manchester-road-in-rochdale",
       "title": "Spudbros Opens New Location at EG Station on Manchester Road in Rochdale",
       "category": "traffic",
@@ -286,6 +298,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-october-half-term-2026-dates-free-activities-guide-generated-card.jpg"
+    },
+    {
+      "slug": "rossendale-rufc-defeats-rochdale-in-local-derby",
+      "title": "Rossendale RUFC Defeats Rochdale in Local Derby",
+      "category": "sport",
+      "reason": "weak filename image match score 8125; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rossendale-rufc-defeats-rochdale-in-local-derby-generated-card.jpg"
     },
     {
       "slug": "rochdale-sleep-out-nearly-10000-petrus-rafc-2026",
@@ -313,7 +337,7 @@
     },
     {
       "slug": "rochdale-sixth-form-college-students-disciplined-for-ranking-looks-in-online-gro",
-      "title": "Rochdale Sixth Form College Students Disciplined for Ranking Looks in Online Group",
+      "title": "Rochdale Sixth Form College Students Disciplined for Ranking Looks in Controversial Online Group",
       "category": "education",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -360,6 +384,18 @@
       "after": "assets/img/cards/rochdale-afc-confirms-back-to-back-home-matches-generated-card.jpg"
     },
     {
+      "slug": "rochdale-afc-women-exit-fa-cup-after-defeat-to-atherton",
+      "title": "Rochdale AFC Women Exit FA Cup After Defeat to Atherton",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-women-exit-fa-cup-after-defeat-to-atherton-generated-card.jpg"
+    },
+    {
       "slug": "why-rochdale-says-cruckle",
       "title": "Why Rochdale says “cruckle”",
       "category": "community",
@@ -373,7 +409,7 @@
     },
     {
       "slug": "rochdale-council-to-implement-new-planning-decision-guidelines-from-october-31",
-      "title": "Rochdale Council to Implement New Planning Decision Guidelines from October 31",
+      "title": "Rochdale Council to Implement New Planning Decision Rules from October 31",
       "category": "news",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
