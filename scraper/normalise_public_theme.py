@@ -52,9 +52,10 @@ PUBLIC_DIRS = ("articles", "news", "wards", "showbiz")
 DEDICATED_ROUTE_FILES = {"category.html", "post.html"}
 
 TOKEN_HREF = "/assets/css/rd-tokens.css"
+TOKEN_VERSIONED_HREF = TOKEN_HREF + "?v=20261014-font-repair"
 EDITORIAL_HREF = "/assets/css/editorial-theme.css"
 ROUTE_HREF = "/assets/css/legacy-routing-pages.css"
-TOKEN_LINK = f'<link rel="stylesheet" href="{TOKEN_HREF}" data-rd-universal="tokens">'
+TOKEN_LINK = f'<link rel="stylesheet" href="{TOKEN_VERSIONED_HREF}" data-rd-universal="tokens">'
 EDITORIAL_LINK = (
     f'<link rel="stylesheet" href="{EDITORIAL_HREF}" '
     'data-rd-universal="editorial">'
@@ -110,6 +111,13 @@ def normalise_text(path: Path, text: str) -> str:
 
     result = _stamp_html_tag(text)
     result = _normalise_theme_colour(result)
+    # Refresh existing links as well as new ones: returning readers may hold
+    # the malformed token stylesheet in their browser cache for four hours.
+    result = re.sub(
+        r'(?P<prefix>href=["\'])/assets/css/rd-tokens\.css(?:\?[^"\']*)?(?P<quote>["\'])',
+        lambda match: match.group("prefix") + TOKEN_VERSIONED_HREF + match.group("quote"),
+        result,
+    )
 
     # Rebuilt route pages already consume the canonical tokens through their
     # dedicated stylesheet. Merely stamp the HTML contract; do not add a second
