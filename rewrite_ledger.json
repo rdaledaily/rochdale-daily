@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-15T08:43:36.883692Z",
+  "updated_at": "2026-10-15T09:00:23.715809Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 209,
+  "count": 211,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -162,14 +162,14 @@
     },
     "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree": {
       "first_attempt_at": "2026-10-15T07:13:27.903764Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:43:36.882701Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-15T08:59:09.631269Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "More than 350 gather in Rochdale for QTS Group’s first safety Jamboree | RailBusinessDaily",
       "source_name": "Rail Business Daily",
       "category": "events",
@@ -198,7 +198,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-15T08:43:36.882415Z",
+      "last_attempt_at": "2026-10-15T09:00:23.714692Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -788,14 +788,14 @@
         "https://www.rochdaletimes.co.uk/town-gets-ready-to-ignite-christmas-festivities"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:43:36.882946Z",
+      "last_attempt_at": "2026-10-15T09:00:23.715059Z",
       "outcome": "published",
       "reason": "",
       "title": "The magical reason Rochdale town centre will glow brightly next month - InYourArea",
       "source_name": "InYourArea",
       "category": "news",
       "text_fingerprint": "abbde5abd23aa9d4",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "final_gate_removal_recovery": 1
     },
     "https://www.inyourarea.co.uk/news/why-one-rochdale-family-took-a-leap-of-faith-to-change-a-young-life-forever": {
@@ -963,7 +963,7 @@
         "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/rochdale-takeaway-owner-hails-incredible-34761476"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:43:36.883360Z",
+      "last_attempt_at": "2026-10-15T09:00:23.715354Z",
       "outcome": "published",
       "reason": "",
       "title": "Huge queue as SpudBros launch Rochdale store - and delighted schoolgirl wins a trolley dash - Manchester Evening News",
@@ -1420,6 +1420,21 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "3ced5013dfa53a3c"
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-5161773298966c85f2": {
+      "first_attempt_at": "2026-10-15T09:00:23.714852Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-5161773298966c85f2"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-15T09:00:23.714852Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "399a78ff6e2b1ae9"
     },
     "https://www.northernrailway.co.uk/service-updates#live-528eaa9cbf60bbbc31": {
       "first_attempt_at": "2026-10-12T10:29:21.278728Z",
@@ -1899,12 +1914,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-15T08:43:36.882540Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
-      "text_fingerprint": "91049a4e04f7731e"
+      "text_fingerprint": "91049a4e04f7731e",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-ab4f99c0f212126d3f": {
       "first_attempt_at": "2026-10-12T19:16:31.057938Z",
@@ -3347,6 +3364,21 @@
       "source_name": "The Northern Echo",
       "category": "transport",
       "text_fingerprint": "de2912045b673c83"
+    },
+    "https://www.tntsports.co.uk/football/league-two/2026-2027/crewe-alexandra-rochdale_mtc21887992/live-stats.shtml": {
+      "first_attempt_at": "2026-10-15T08:58:57.350799Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.tntsports.co.uk/football/league-two/2026-2027/crewe-alexandra-rochdale_mtc21887992/live-stats.shtml"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-15T08:58:57.350799Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Crewe Alexandra - Rochdale Stats: Football Scores & Results - TNT Sports",
+      "source_name": "TNT Sports",
+      "category": "sport",
+      "text_fingerprint": "7306c7d4e3a49516"
     },
     "https://www.wirralglobe.co.uk/sport/26626484.darrell-clarke-calls-tranmere-more-clinical": {
       "first_attempt_at": "2026-10-12T22:42:56.274466Z",
