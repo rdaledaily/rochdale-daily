@@ -186,14 +186,15 @@ class FreshnessPassIgnoresSponsoredForTheTopThree(unittest.TestCase):
 
         lead = story("lead", 20 * 60)
         older = [story(f"older-{i}", 9 * 60 + i) for i in range(10)]
-        recent = story("recent-news", 9 * 60 + 30)
-        recent.update(live_story=True, is_ongoing=True, live_updates=[{
+        recent = story("recent-news", 2 * 60)
+        rewritten = story("old-rewritten-news", 9 * 60 + 30)
+        rewritten.update(live_story=True, is_ongoing=True, live_updates=[{
             "timestamp": (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat().replace("+00:00", "Z"),
             "text": "Update."}])
         ads = [story(f"ad-{i}", 30 + i, sponsored=True) for i in range(3)]
-        for row in [lead, recent] + older:
+        for row in [lead, recent, rewritten] + older:
             row["category"] = "news"
-        feed = [lead] + older + [recent] + ads
+        feed = [lead] + older + [rewritten, recent] + ads
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "articles").mkdir()
@@ -211,6 +212,7 @@ class FreshnessPassIgnoresSponsoredForTheTopThree(unittest.TestCase):
         self.assertFalse([s for s in slugs[:9] if s.startswith("ad-")], slugs[:9])
         self.assertEqual(sorted(s for s in slugs if s.startswith("ad-")), ["ad-0", "ad-1", "ad-2"])
         self.assertIn("recent-news", slugs[:3], slugs[:5])
+        self.assertNotIn("old-rewritten-news", slugs[:3], slugs[:5])
 
 
 if __name__ == "__main__":
