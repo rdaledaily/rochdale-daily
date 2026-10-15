@@ -1213,8 +1213,8 @@ def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[s
     ]
     update_dates = [
         value for value in (
-            _record_datetime(left, "last_updated_at", "scraped_at", "published_at"),
-            _record_datetime(right, "last_updated_at", "scraped_at", "published_at"),
+            _record_datetime(left, "last_updated_at", "published_at"),
+            _record_datetime(right, "last_updated_at", "published_at"),
         )
         if value is not None
     ]

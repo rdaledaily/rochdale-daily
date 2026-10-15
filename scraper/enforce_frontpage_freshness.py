@@ -7,8 +7,8 @@ that reconstructed reservoir, but only with genuinely eligible stories inside
 the configured freshness window. Old archive copy is never used merely to hit a
 numeric target.
 
-Editor pins and genuinely active live/breaking coverage retain their existing
-special handling.
+Only explicit, unexpired editor pins extend a story's homepage life. Updating
+or merging an older article does not make it newly published.
 """
 from __future__ import annotations
 
@@ -81,12 +81,8 @@ def first_published(article: dict[str, Any]) -> datetime | None:
 
 
 def latest_update(article: dict[str, Any]) -> datetime:
-    return (
-        parse_dt(article.get("last_updated_at"))
-        or parse_dt(article.get("scraped_at"))
-        or first_published(article)
-        or datetime.min.replace(tzinfo=timezone.utc)
-    )
+    """Stable homepage ordering, independent of edits and ingestion times."""
+    return first_published(article) or datetime.min.replace(tzinfo=timezone.utc)
 
 
 def _is_active_live(article: dict[str, Any]) -> bool:
@@ -208,7 +204,7 @@ def is_expired_time_sensitive_preview(article: dict[str, Any], now: datetime) ->
 def is_recent_live_update(article: dict[str, Any], cutoff: datetime) -> bool:
     return (
         _is_active_live(article)
-        and latest_verified_update(article) >= cutoff
+        and latest_update(article) >= cutoff
         and not is_utility_not_lead(article)
     )
 

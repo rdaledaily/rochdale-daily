@@ -2,9 +2,20 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+import copy
+import json
+from pathlib import Path
+import tempfile
+from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
 import generate_newspaper_pages as newsroom
+import enforce_frontpage_freshness as freshness
+import enforce_live_homepage_window as window
+import ensure_manual_frontpage as manual
+from manual_articles import _absorb_scraped_match, _normalise, load_manual_article_records
+import manual_articles as manual_source
+from story_identity import merge_article_records
 
 
 def article(*, category: str, words: int, age_hours: int) -> dict:
@@ -90,7 +101,76 @@ def main() -> None:
         {"timestamp": stale_original.isoformat(), "text": "Original fact."},
         {"timestamp": (after_deadline - timedelta(minutes=15)).isoformat(), "text": "New verified development."},
     ]
-    assert newsroom._keep_on_live_homepage(verified_live, after_deadline, cutoff)
+    # Even an edited live article retains its original age. An editor can
+    # explicitly pin it for a bounded period if it warrants renewed coverage.
+    assert not newsroom._keep_on_live_homepage(verified_live, after_deadline, cutoff)
+    pinned = {**verified_live, "featured": True, "frontpage_until": (after_deadline + timedelta(hours=1)).isoformat()}
+    assert newsroom._keep_on_live_homepage(pinned, after_deadline, cutoff)
+    assert window.keep(pinned, after_deadline, cutoff)
+    pinned["frontpage_until"] = (after_deadline - timedelta(seconds=1)).isoformat()
+    assert not newsroom._keep_on_live_homepage(pinned, after_deadline, cutoff)
+    assert not window.keep(pinned, after_deadline, cutoff)
+
+    # Publishing unrelated stories must not reorder a still-fresh story just
+    # because its edit, scrape or automatic LIVE fields change.
+    stable = article(category="community", words=150, age_hours=8)
+    stable_rank = newsroom._newsroom_rank(stable, now)
+    pipeline_rank = newsroom.fp._article_rank(stable, now)
+    touched = {**stable, "last_updated_at": now.isoformat(), "scraped_at": now.isoformat(), "is_ongoing": True}
+    assert newsroom._newsroom_rank(touched, now) == stable_rank
+    assert newsroom.fp._article_rank(touched, now) == pipeline_rank
+    assert manual.latest_update(touched) == manual.first_published(stable)
+
+    # Exercise the actual final guards repeatedly against archive records with
+    # newly touched timestamps, including an automatically merged live story.
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        feed, archive = root / "frontpage.json", root / "articles.json"
+        fresh = article(category="community", words=150, age_hours=1)
+        fresh.update(id="new", slug="new", title="New local community story")
+        old = article(category="community", words=150, age_hours=72)
+        old.update(id="old", slug="old", title="Older local community story", is_ongoing=True, live_story=True)
+        rows = [fresh, old]
+        archive.write_text(json.dumps(rows))
+        for _ in range(3):
+            edited = copy.deepcopy(old)
+            edited.update(last_updated_at=now.isoformat(), scraped_at=now.isoformat(),
+                          live_updates=[{"timestamp": now.isoformat(), "text": "Rewritten summary"}])
+            feed.write_text(json.dumps({"articles": [edited, fresh]}))
+            with patch.multiple(freshness, FRONTPAGE=feed, ARTICLES=archive, FRESH_HOURS=14), \
+                 patch.multiple(window, FRONTPAGE=feed, FRESH_HOURS=14):
+                freshness.main()
+                window.main()
+            assert [row["id"] for row in json.loads(feed.read_text())["articles"]] == ["new"]
+        assert json.loads(archive.read_text()) == rows
+
+    # Ingestion time is not a modification date, including for manual stories
+    # that absorb attribution from an existing scrape.
+    original = stable["published_at"]
+    without_update = {k: v for k, v in stable.items() if k != "last_updated_at"}
+    merged = merge_article_records(without_update, {**without_update, "scraped_at": now.isoformat()})
+    assert freshness.parse_dt(merged["last_updated_at"]) == freshness.parse_dt(original)
+    manual_record = {**stable, "id": "manual", "slug": "manual", "source_url": "https://example.test/a"}
+    absorbed = _absorb_scraped_match(manual_record, {**without_update, "id": "scraped", "scraped_at": now.isoformat()})
+    assert freshness.parse_dt(absorbed["last_updated_at"]) == freshness.parse_dt(original).replace(microsecond=0)
+
+    # Reproduce the production bug: legacy manual source files without dates
+    # used to receive now on every unrelated publish, overriding archive age.
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        source, archive = root / "manual.json", root / "articles.json"
+        undated = {"id": "legacy", "slug": "legacy", "title": "Legacy editorial story", "body": "Original reporting."}
+        original = "2026-10-12T20:28:42Z"
+        source.write_text(json.dumps([undated]))
+        archive.write_text(json.dumps([{**undated, "manual_article": True, "published_at": original}]))
+        with patch.multiple(manual_source, MANUAL_ARTICLES_PATH=source, MANUAL_ARTICLES_DIR=root / "absent", ARTICLES_FEED_PATH=archive):
+            for offset in (0, 1, 3):
+                rows = load_manual_article_records(now + timedelta(days=offset))
+                assert len(rows) == 1
+                assert rows[0]["published_at"] == rows[0]["first_published_at"] == original
+            archive.write_text("[]")
+            assert load_manual_article_records(now) == []
+        assert _normalise(undated, now) is None
 
     print("Newspaper freshness policy checks passed.")
 

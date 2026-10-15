@@ -5,12 +5,8 @@ This runs *after* page generation. It removes ordinary news older than the
 configured live-homepage window from articles/frontpage.json and from the
 breaking ticker. Archive/category/area/article pages are untouched.
 
-Exceptions are deliberately narrow:
-* a featured story with an explicit, unexpired frontpage_until; or
-* live/breaking/ongoing coverage whose last real update is inside the window.
-
-A fresh scraped_at timestamp alone never revives an old story when a genuine
-last_updated_at/published_at timestamp exists.
+Only an explicit, unexpired editor pin can extend a story's homepage life.
+Edits, source merges and LIVE/ONGOING labels never reset its publication age.
 """
 from __future__ import annotations
 
@@ -40,16 +36,6 @@ def first_published(article: dict[str, Any]) -> datetime | None:
     return parse_dt(article.get("first_published_at") or article.get("published_at"))
 
 
-def last_real_update(article: dict[str, Any]) -> datetime | None:
-    # Do not let routine re-scraping revive an old story. scraped_at is only a
-    # fallback for records that genuinely have no publication/update metadata.
-    return (
-        parse_dt(article.get("last_updated_at"))
-        or parse_dt(article.get("published_at"))
-        or parse_dt(article.get("scraped_at"))
-    )
-
-
 def keep(article: dict[str, Any], now: datetime, cutoff: datetime) -> bool:
     first = first_published(article)
     if first is not None and first >= cutoff:
@@ -59,13 +45,7 @@ def keep(article: dict[str, Any], now: datetime, cutoff: datetime) -> bool:
     if article.get("featured") is True and until is not None and until >= now:
         return True
 
-    active_live = bool(
-        article.get("live_story") is True
-        or article.get("breaking_news") is True
-        or article.get("is_ongoing") is True
-    )
-    update = last_real_update(article)
-    return bool(active_live and update is not None and update >= cutoff)
+    return False
 
 
 def main() -> None:

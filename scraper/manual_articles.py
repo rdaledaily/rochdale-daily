@@ -105,7 +105,13 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
 
     slug = _slugify(entry.get("slug") or title)
     source_url = _clean(entry.get("source_url") or entry.get("url"))
-    published_at = _parse_dt(entry.get("published_at")) or now
+    published_at = _parse_dt(entry.get("first_published_at")) or _parse_dt(entry.get("published_at"))
+    if published_at is None:
+        # A build time is not a publication date. Existing undated entries are
+        # repaired from their canonical record by the loader below; new entries
+        # must supply a date instead of becoming "new" on every publish.
+        print(f"Manual article missing a stable publication date: {slug}")
+        return None
 
     category = _clean(entry.get("category")).lower() or "news"
     if category not in VALID_CATEGORIES:
@@ -254,7 +260,6 @@ def _absorb_scraped_match(
     update_candidates = [
         _parse_dt(manual.get("last_updated_at")),
         _parse_dt(scraped.get("last_updated_at")),
-        _parse_dt(scraped.get("scraped_at")),
         _parse_dt(scraped.get("published_at")),
     ]
     updates = [value for value in update_candidates if value is not None]
@@ -292,6 +297,18 @@ def load_manual_article_records(now: datetime | None = None) -> list[dict[str, A
     records: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
     for entry in entries:
+        if not (_parse_dt(entry.get("first_published_at")) or _parse_dt(entry.get("published_at"))):
+            entry_id = _clean(entry.get("id"))
+            entry_slug = _slugify(entry.get("slug") or entry.get("title") or "")
+            previous_dates = [
+                _parse_dt(item.get("first_published_at")) or _parse_dt(item.get("published_at"))
+                for item in live
+                if (entry_id and _clean(item.get("id")) == entry_id)
+                or (entry_slug and _slugify(item.get("slug")) == entry_slug)
+            ]
+            known_dates = [value for value in previous_dates if value is not None]
+            if known_dates:
+                entry = {**entry, "published_at": _iso(min(known_dates))}
         record = _normalise(entry, reference)
         if record is None:
             continue

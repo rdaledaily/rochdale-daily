@@ -9,7 +9,7 @@ front-page editorial behaviour before delegating to generate_pages.py:
 * source-led fallbacks are judged on their actual text, not rejected by route;
 * the configured live-news freshness window is enforced in the generator itself;
 * older material remains in archive/category/area pages, not the live homepage;
-* explicitly time-limited editor pins and genuinely updated live coverage survive;
+* only explicitly time-limited editor pins extend the original publication window;
 * automated same-day deadline notices and stale sports previews cannot reappear;
 * freshness bands outrank category prestige and stale featured flags;
 * related stories favour the same locality and subject, not category alone.
@@ -58,9 +58,7 @@ def _newsroom_eligible(article) -> bool:
 
 def _newsroom_rank(article, now: datetime):
     first = fp._frontpage_first_published(article) or datetime.min.replace(tzinfo=timezone.utc)
-    latest = freshness_guard.latest_verified_update(article)
-    if latest == datetime.min.replace(tzinfo=timezone.utc):
-        latest = first
+    latest = first
     age_hours = max(0.0, (now - first).total_seconds() / 3600)
 
     if age_hours <= 3:
@@ -93,11 +91,7 @@ def _newsroom_rank(article, now: datetime):
 
     importance += min(6, int(article.get("source_count") or 1))
 
-    update_age_hours = max(0.0, (now - latest).total_seconds() / 3600)
-    if article.get("is_ongoing") and update_age_hours <= 6:
-        importance += 4
-
-    pinned = article.get("featured") is True
+    pinned = freshness_guard.active_pin(article, now)
     return (freshness, pinned, importance, first, latest)
 
 
@@ -122,16 +116,7 @@ def _keep_on_live_homepage(article, reference: datetime, cutoff: datetime) -> bo
     if article.get("featured") is True and until is not None and until >= reference:
         return True
 
-    active_live = bool(
-        article.get("live_story") is True
-        or article.get("breaking_news") is True
-        or article.get("is_ongoing") is True
-    )
-    if not active_live:
-        return False
-
-    latest = freshness_guard.latest_verified_update(article)
-    return latest >= cutoff
+    return False
 
 
 def _normalised_area(article) -> str:

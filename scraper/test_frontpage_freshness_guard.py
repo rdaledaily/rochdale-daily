@@ -43,7 +43,7 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
         }
         self.assertFalse(is_thin_utility_not_frontpage(article))
 
-    def test_recent_live_update_can_outrank_fresh_utility(self) -> None:
+    def test_recent_live_edit_does_not_renew_original_publication_window(self) -> None:
         now = datetime.now(timezone.utc)
         cutoff = now - timedelta(hours=14)
         verified = now - timedelta(minutes=20)
@@ -55,7 +55,7 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
             "live_updates": [{"timestamp": verified.isoformat(), "text": "Police issued a new appeal."}],
             "source_url": "https://www.gmp.police.uk/news/appeal/",
         }
-        self.assertTrue(is_recent_live_update(article, cutoff))
+        self.assertFalse(is_recent_live_update(article, cutoff))
 
     def test_scrape_timestamp_does_not_resurrect_old_machine_live_story(self) -> None:
         now = datetime.now(timezone.utc)
@@ -74,7 +74,7 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
         self.assertEqual(latest_verified_update(article), original)
         self.assertFalse(is_recent_live_update(article, cutoff))
 
-    def test_editorial_live_story_may_use_explicit_last_updated_at(self) -> None:
+    def test_editorial_live_edit_does_not_renew_publication_window(self) -> None:
         now = datetime.now(timezone.utc)
         cutoff = now - timedelta(hours=14)
         article = {
@@ -85,7 +85,7 @@ class FrontpageFreshnessGuardTests(unittest.TestCase):
             "first_published_at": (now - timedelta(days=1)).isoformat(),
             "last_updated_at": (now - timedelta(minutes=10)).isoformat(),
         }
-        self.assertTrue(is_recent_live_update(article, cutoff))
+        self.assertFalse(is_recent_live_update(article, cutoff))
 
     def test_stale_live_story_does_not_get_promoted_forever(self) -> None:
         now = datetime.now(timezone.utc)

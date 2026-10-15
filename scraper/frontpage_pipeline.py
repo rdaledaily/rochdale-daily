@@ -188,7 +188,6 @@ def last_update_date(article: dict[str, Any]) -> datetime | None:
     """Return the latest edit/ingestion time without changing story age."""
     return parse_datetime(
         article.get("last_updated_at")
-        or article.get("scraped_at")
         or article.get("published_at")
     )
 
@@ -1204,20 +1203,11 @@ def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
         or datetime.min.replace(tzinfo=timezone.utc)
     )
 
-    latest_update = parse_datetime(
-        article.get("last_updated_at")
-        or article.get("published_at")
-        or article.get("scraped_at")
-    ) or first_published
+    latest_update = first_published
 
     age_hours = max(
         0.0,
         (now - first_published).total_seconds() / 3600,
-    )
-
-    update_age_hours = max(
-        0.0,
-        (now - latest_update).total_seconds() / 3600,
     )
 
     importance = {
@@ -1240,11 +1230,6 @@ def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
     else:
         importance -= 25
 
-    # Give genuinely recent updates a small boost, but do not let an old
-    # ongoing story permanently dominate the homepage.
-    if article.get("is_ongoing") and update_age_hours <= 6:
-        importance += 4
-
     importance += min(
         6,
         int(article.get("source_count") or 1),
@@ -1266,7 +1251,8 @@ def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
     # Deliberately a boolean, not a numeric weight: a pin is an editorial
     # decision that either applies or does not. Competing pins fall back to the
     # ordinary importance score below.
-    pinned = article.get("featured") is True
+    pin_until = parse_datetime(article.get("frontpage_until"))
+    pinned = bool(article.get("featured") is True and pin_until and pin_until >= now)
 
     return (pinned, importance, latest_update)
 

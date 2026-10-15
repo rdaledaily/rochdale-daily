@@ -54,12 +54,7 @@ def first_published(article: dict[str, Any]) -> datetime | None:
 
 
 def latest_update(article: dict[str, Any]) -> datetime:
-    return (
-        parse_dt(article.get("last_updated_at"))
-        or parse_dt(article.get("published_at"))
-        or parse_dt(article.get("scraped_at"))
-        or datetime.min.replace(tzinfo=timezone.utc)
-    )
+    return first_published(article) or datetime.min.replace(tzinfo=timezone.utc)
 
 
 def identity(article: dict[str, Any]) -> str:
