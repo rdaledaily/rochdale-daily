@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-15T14:53:47.356724Z",
+  "last_run_at": "2026-10-15T15:06:33.401302Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,39 +27,35 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 123,
-  "job_or_career_posts_rejected": 0,
-  "raw_candidates": 123,
-  "candidate_clusters": 42,
+  "raw_candidates_before_job_filter": 128,
+  "job_or_career_posts_rejected": 1,
+  "raw_candidates": 127,
+  "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 76,
-    "resolved": 49,
-    "text_recovered": 14,
+    "wrappers": 54,
+    "resolved": 32,
+    "text_recovered": 26,
     "reattributed": 0,
-    "images_found": 17
+    "images_found": 29
   },
-  "duplicates_merged": 81,
+  "duplicates_merged": 84,
   "attempted_rewrites": 4,
-  "draft_rewrites_created": 3,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
     },
     {
-      "slug": "spudbros-express-rochdale-opening-queues-13-october-2026",
-      "source_url": "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621"
-    },
-    {
-      "slug": "rochdale-to-host-ignite-fire-festival-ahead-of-christmas-lights-switch-on",
-      "source_url": "https://www.rochdaletimes.co.uk/town-gets-ready-to-ignite-christmas-festivities/"
+      "slug": "qts-group-hosts-first-safety-jamboree-in-rochdale-with-over-350-attendees",
+      "source_url": "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree/"
     }
   ],
-  "new_articles": 2,
+  "new_articles": 0,
   "live_articles": 278,
-  "skipped": 1,
+  "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
+    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 2
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -79,8 +75,8 @@
       "rejected": 137
     },
     "held_back_this_run": 28,
-    "held_already_published": 15,
-    "held_rejected": 13,
+    "held_already_published": 16,
+    "held_rejected": 12,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -111,15 +107,6 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-10-15T11:08:36.878620Z"
-    },
-    {
-      "url": "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree",
-      "title": "More than 350 gather in Rochdale for QTS Group’s first safety Jamboree | RailBusinessDaily",
-      "source_name": "Rail Business Daily",
-      "held_because": "already rejected: quality gate after 4 repairs: Rewrite the long verbatim source passage.",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-10-15T09:30:14.247278Z"
     },
     {
       "url": "https://www.inyourarea.co.uk/news/why-one-rochdale-family-took-a-leap-of-faith-to-change-a-young-life-forever",
@@ -206,10 +193,10 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 105,
-    "website_discovery": 4,
+    "rss_and_google_news": 104,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
-    "live_service_pages": 13,
+    "live_service_pages": 15,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -219,15 +206,16 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 39,
+    "Rochdale Times": 38,
     "Roch Valley Radio": 21,
     "Rochdale AFC": 12,
+    "Northern live service updates": 11,
     "Manchester Evening News": 10,
     "Rochdale Borough Council": 10,
-    "Northern live service updates": 9,
     "Bee Network live travel alerts": 4,
     "About Manchester": 3,
     "InYourArea": 3,
+    "Legacy | Obituary": 2,
     "Roch Valley Radio Local News": 2,
     "TfGM Travel Alerts": 2,
     "Rochdale Borough Council RSS": 1,
@@ -235,14 +223,15 @@
     "TNT Sports": 1,
     "Lancashire Telegraph": 1,
     "Yahoo": 1,
+    "Rail Business Daily": 1,
     "Premier Construction News": 1,
     "Firstpost": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "business": 2,
-    "health": 1,
-    "news": 1
+    "events": 1,
+    "health": 1
   },
   "published_by_category": {
     "business": 27,
@@ -250,7 +239,7 @@
     "crime": 14,
     "education": 6,
     "environment": 15,
-    "events": 18,
+    "events": 19,
     "health": 5,
     "news": 38,
     "politics": 9,
@@ -281,15 +270,15 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "events-v3-874cb1d06b3387054663",
     "business-v3-0b2ef722a648fdb4fbbe",
     "health-v3-524bf444a1da14e8897c",
-    "hard-news-v3-b7d5e85b0c767f2e262f",
     "business-v3-d7ab90216f48fe77ece6"
   ],
   "selected_candidate_urls": [
+    "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree/",
     "https://www.rochvalleyradio.com/news-features/140/business/1040/lisa-riley-opens-new-peacocks-store-at-rochdale-riverside",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.rochdaletimes.co.uk/town-gets-ready-to-ignite-christmas-festivities/",
     "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621"
   ],
   "x_social_records": 0,
@@ -303,13 +292,13 @@
   "coverage": {
     "available_categories": [
       "business",
-      "health",
-      "news"
+      "events",
+      "health"
     ],
     "selected_categories": [
       "business",
-      "health",
-      "news"
+      "events",
+      "health"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -322,8 +311,8 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "business": 2,
-      "health": 1,
-      "news": 1
+      "events": 1,
+      "health": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
@@ -332,8 +321,8 @@
     "selected_by_source": {
       "food standards agency": 1,
       "manchester evening news": 1,
-      "roch valley radio local news": 1,
-      "rochdale times": 1
+      "rail business daily": 1,
+      "roch valley radio local news": 1
     }
   },
   "official_ward_count": 20,
@@ -882,8 +871,10 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
+  "robots_denied_count": 1,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOVVdwdmtxdm1pTWs0d1RSdWxabjlVc00tS04xeXY1azVqRFJxRGxJV0lSdzZhSTVqVm45dW5BSldzWWFxYmNWcnFnNGxETmhfWU5LNFlod3RnZHpDTjRnZ0hsYXdXUFNCeU9zeDJsLVduZ1dyUmQ0ZjVyYTAxaHZyME0zOUY0YzhSTjJqTUNnWm13T0tQSDZ4OGt2YjY5RUlQQ1lrV3FmYVE?oc=5"
+  ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
     "rochdaleafccommunity.org"
@@ -926,7 +917,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-15T14:54:25.994277Z",
+  "frontpage_generated_at": "2026-10-15T15:07:08.156521Z",
   "frontpage_article_count": 35,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1062,7 +1053,7 @@
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
   "ticket_events_collected_this_run": 12,
-  "events_removed_other_source": 7,
+  "events_removed_other_source": 8,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 12,
@@ -1078,12 +1069,9 @@
   "category_archive_count": 11,
   "area_archive_count": 25,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 2,
-  "published_new_slugs": [
-    "spudbros-express-rochdale-opening-queues-13-october-2026",
-    "rochdale-to-host-ignite-fire-festival-ahead-of-christmas-lights-switch-on"
-  ],
-  "drafts_not_published": 1,
-  "publication_health": "partial",
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
+  "drafts_not_published": 2,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
