@@ -1,42 +1,38 @@
 {
-  "examined_at": "2026-10-14T12:21:30.355136Z",
+  "examined_at": "2026-10-15T12:06:33.974029Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 147,
+  "candidates_examined": 107,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 122,
-    "would publish": 18,
-    "duplicate of published story": 6,
-    "not local": 1
+    "age": 82,
+    "would publish": 20,
+    "duplicate of published story": 5
   },
-  "would_publish": 18,
+  "would_publish": 20,
   "age_gate_sensitivity": {
-    "6h": 4,
-    "14h": 9,
+    "6h": 7,
+    "14h": 10,
     "24h": 25,
-    "48h": 43,
-    "72h": 79,
-    "168h": 147
+    "48h": 52,
+    "72h": 70,
+    "168h": 107
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 14/10/2026 at 7:24am Live Failsworth Tram Stop - Lift out of ",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
+      "Premier Construction News: Rochdale opens gateway to UK's next generation of advanced manufacturi"
     ],
     "duplicate of published story": [
-      "Rochdale Borough Council: Budget Report and Medium Term Financial Strategy 2026/27 to 2028/29 - ",
-      "Rochdale Borough Council: Madison Square, roadworks in Rochdale from 19 October 2026",
-      "Facebook: Jacket Potato fans rejoice - Spudbros have come to Rochdale! 🥔 🙌 There"
-    ],
-    "not local": [
-      "TfGM Travel Alerts: Travel alerts"
+      "Rochdale Borough Council: Hillcrest Road, roadworks in Rochdale from 26 October 2026",
+      "Machinery Market: Rochdale opens new gateway to advanced manufacturing - Machinery Marke",
+      "InYourArea: The magical reason Rochdale town centre will glow brightly next month "
     ],
     "age": [
-      "Secret Manchester: Started just up the road in Preston, viral sensation SpudBros lands in",
-      "Roch Valley Radio Local News: Finalists announced for Rochdale Business Awards 2026",
-      "Roch Valley Radio Local News: Students told to 'rank their looks' and 'obey' the 'Founding Fathers' "
+      "Squawka: Crewe Alexandra vs Rochdale predictions and betting tips: Points set t",
+      "Rochdale Times: Nominations open for Rochdale Man of the Year - Rochdale Times",
+      "Manchester Evening News: Rochdale takeaway hails 'incredible honour' as it's declared North Wes"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
