@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-15T15:38:10.976289Z",
+  "updated_at": "2026-10-15T20:52:13.794679Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 218,
+  "count": 220,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -13,12 +13,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-12T22:20:25.067369Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Rochdale opens gateway to UK's next generation of advanced manufacturing - Business in the News",
       "source_name": "Businessinthenews",
       "category": "business",
-      "text_fingerprint": "0cce6066df4978c0"
+      "text_fingerprint": "0cce6066df4978c0",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://ca.sports.yahoo.com/soccer/league-two/grimsby-town-rochdale-13597512": {
       "first_attempt_at": "2026-10-09T19:38:18.472286Z",
@@ -162,15 +164,15 @@
     },
     "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree": {
       "first_attempt_at": "2026-10-15T07:13:27.903764Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOVVdwdmtxdm1pTWs0d1RSdWxabjlVc00tS04xeXY1azVqRFJxRGxJV0lSdzZhSTVqVm45dW5BSldzWWFxYmNWcnFnNGxETmhfWU5LNFlod3RnZHpDTjRnZ0hsYXdXUFNCeU9zeDJsLVduZ1dyUmQ0ZjVyYTAxaHZyME0zOUY0YzhSTjJqTUNnWm13T0tQSDZ4OGt2YjY5RUlQQ1lrV3FmYVE?oc=5",
         "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T15:36:59.071318Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "last_attempt_at": "2026-10-15T20:52:13.794203Z",
+      "outcome": "published",
+      "reason": "",
       "title": "More than 350 gather in Rochdale for QTS Group’s first safety Jamboree | RailBusinessDaily",
       "source_name": "Rail Business Daily",
       "category": "events",
@@ -186,13 +188,15 @@
         "https://www.machinery-market.co.uk/news/43628/Rochdale-opens-new-gateway-to-advanced-manufacturing"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T11:09:45.363205Z",
+      "last_attempt_at": "2026-10-15T20:52:13.793981Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale opens gateway to UK's next generation of advanced manufacturing - Industry News",
       "source_name": "Premier Construction News",
-      "category": "environment",
-      "text_fingerprint": "36b8d25ca50d3bc8"
+      "category": "business",
+      "text_fingerprint": "36b8d25ca50d3bc8",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://publicaccess.rochdale.gov.uk/online-applications": {
       "first_attempt_at": "2026-10-11T19:05:44.690941Z",
@@ -215,7 +219,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-15T15:38:10.975682Z",
+      "last_attempt_at": "2026-10-15T20:52:13.793623Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -634,12 +638,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-13T10:11:32.680274Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Advanced materials testing centre completed",
       "source_name": "Bbc",
       "category": "business",
-      "text_fingerprint": "6eea6ce2c3a00595"
+      "text_fingerprint": "6eea6ce2c3a00595",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.bettingodds.com/football/league-two/10-10-2026/tranmere-rovers-vs-rochdale": {
       "first_attempt_at": "2026-10-10T00:08:18.958257Z",
@@ -853,12 +859,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-15T08:05:57.272757Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Rochdale opens new gateway to advanced manufacturing - Machinery Market",
       "source_name": "Machinery Market",
       "category": "business",
-      "text_fingerprint": "2a9956a3c433d206"
+      "text_fingerprint": "2a9956a3c433d206",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.manchester.ac.uk/about/news/major-milestone-for-atom-valley-as-sustainable-materials--manufacturing-centre-base-build-completes": {
       "first_attempt_at": "2026-10-09T17:21:03.267768Z",
@@ -896,6 +904,21 @@
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "6da3ac808c1d29f9"
+    },
+    "https://www.manchestereveningnews.co.uk/news/fate-major-housing-scheme-playing-34771917": {
+      "first_attempt_at": "2026-10-15T20:52:13.793842Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/fate-major-housing-scheme-playing-34771917"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-15T20:52:13.793842Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Fate of major housing scheme on playing fields in Bamford to be decided",
+      "source_name": "Manchester Evening News",
+      "category": "news",
+      "text_fingerprint": "0240a26d69218759"
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-descend-rochdale-street-after-34749696": {
       "first_attempt_at": "2026-10-11T20:02:34.457718Z",
@@ -996,8 +1019,8 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-15T15:38:10.975811Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Huge queue as SpudBros launch Rochdale store - and delighted schoolgirl wins a trolley dash - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "business",
@@ -1012,12 +1035,12 @@
         "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/rochdale-takeaway-owner-hails-incredible-34761476"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T07:33:09.684902Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "last_attempt_at": "2026-10-15T20:52:13.794385Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale takeaway hails 'incredible honour' as it's declared North West's best",
       "source_name": "Manchester Evening News",
-      "category": "news",
+      "category": "business",
       "text_fingerprint": "16f8d851d96bb638"
     },
     "https://www.nantwichtownfc.co.uk/match-report-darwen-fc-women-2-3-nantwich-town-women": {
@@ -2817,12 +2840,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-11T20:48:54.265507Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Flagship training centre reaches construction milestone - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
-      "text_fingerprint": "6ee9497e3defc2b4"
+      "text_fingerprint": "6ee9497e3defc2b4",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/help-uncover-fascinating-and-strange-tales-from-the-past": {
       "first_attempt_at": "2026-10-12T20:34:24.214086Z",
@@ -3110,6 +3135,21 @@
       "source_name": "Roch Valley Radio",
       "category": "politics",
       "text_fingerprint": "326a18137eae2e78"
+    },
+    "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church": {
+      "first_attempt_at": "2026-10-15T20:52:13.793754Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-15T20:52:13.793754Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Nigel Clark of Britpop band Dodgy to perform at Rochdale church",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "news",
+      "text_fingerprint": "41fa230f20f58c7d"
     },
     "https://www.rochvalleyradio.com/news-features/139/news/903/rspca-appeals-after-french-bulldog-found-dead-in-chadderton-canal": {
       "first_attempt_at": "2026-10-09T12:08:40.849379Z",
@@ -3436,12 +3476,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-13T09:34:41.439533Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "New Sustainable Materials & Manufacturing Centre takes shape in Rochdale - The Manufacturer",
       "source_name": "The Manufacturer",
       "category": "environment",
-      "text_fingerprint": "a41e22840033f299"
+      "text_fingerprint": "a41e22840033f299",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.thenorthernecho.co.uk/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere": {
       "first_attempt_at": "2026-10-11T05:21:30.084346Z",
