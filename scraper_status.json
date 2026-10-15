@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-15T14:39:10.283343Z",
+  "last_run_at": "2026-10-15T14:53:47.356724Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,18 +27,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 126,
+  "raw_candidates_before_job_filter": 123,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 126,
-  "candidate_clusters": 41,
+  "raw_candidates": 123,
+  "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 56,
-    "resolved": 36,
-    "text_recovered": 30,
+    "wrappers": 76,
+    "resolved": 49,
+    "text_recovered": 14,
     "reattributed": 0,
-    "images_found": 32
+    "images_found": 17
   },
-  "duplicates_merged": 85,
+  "duplicates_merged": 81,
   "attempted_rewrites": 4,
   "draft_rewrites_created": 3,
   "drafted_articles": [
@@ -47,25 +47,25 @@
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
     },
     {
-      "slug": "rochdale-council-announces-free-bonfire-night-events-for-november-2026",
-      "source_url": "https://www.manchestereveningnews.co.uk/whats-on/family-kids-news/rochdale-bonfire-night-2026-firework-34765383"
-    },
-    {
       "slug": "spudbros-express-rochdale-opening-queues-13-october-2026",
       "source_url": "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621"
+    },
+    {
+      "slug": "rochdale-to-host-ignite-fire-festival-ahead-of-christmas-lights-switch-on",
+      "source_url": "https://www.rochdaletimes.co.uk/town-gets-ready-to-ignite-christmas-festivities/"
     }
   ],
   "new_articles": 2,
-  "live_articles": 277,
+  "live_articles": 278,
   "skipped": 1,
   "rewrite_skip_reasons": {
     "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 2,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 2,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -74,13 +74,13 @@
   "rewrite_ledger": {
     "entries": 218,
     "by_outcome": {
-      "failed": 17,
-      "published": 64,
+      "failed": 16,
+      "published": 65,
       "rejected": 137
     },
     "held_back_this_run": 28,
-    "held_already_published": 14,
-    "held_rejected": 14,
+    "held_already_published": 15,
+    "held_rejected": 13,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -185,15 +185,6 @@
       "last_attempt_at": "2026-10-14T07:11:36.773564Z"
     },
     {
-      "url": "https://www.rochdaletimes.co.uk/residents-warned-over-repairs-claims-firm",
-      "title": "Residents warned over repairs claims firm - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: quality gate after 4 repairs: Rewrite the long verbatim source passage.",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-10-13T22:45:08.811384Z"
-    },
-    {
       "url": "https://www.rochdaletimes.co.uk/new-bid-for-extra-trains-from-rochdale-to-london-is-refused",
       "title": "New bid for extra trains from Rochdale to London is refused - Rochdale Times",
       "source_name": "Rochdale Times",
@@ -215,8 +206,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 104,
-    "website_discovery": 8,
+    "rss_and_google_news": 105,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 13,
     "facebook_official": 0,
@@ -228,15 +219,15 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 41,
+    "Rochdale Times": 39,
     "Roch Valley Radio": 21,
     "Rochdale AFC": 12,
     "Manchester Evening News": 10,
     "Rochdale Borough Council": 10,
     "Northern live service updates": 9,
-    "InYourArea": 4,
     "Bee Network live travel alerts": 4,
     "About Manchester": 3,
+    "InYourArea": 3,
     "Roch Valley Radio Local News": 2,
     "TfGM Travel Alerts": 2,
     "Rochdale Borough Council RSS": 1,
@@ -250,8 +241,8 @@
   },
   "selected_by_category": {
     "business": 2,
-    "events": 1,
-    "health": 1
+    "health": 1,
+    "news": 1
   },
   "published_by_category": {
     "business": 27,
@@ -263,7 +254,7 @@
     "health": 5,
     "news": 38,
     "politics": 9,
-    "sport": 12,
+    "sport": 13,
     "traffic": 10,
     "transport": 4
   },
@@ -290,15 +281,15 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "events-v3-96a8b7587ebb9335d5d8",
     "business-v3-0b2ef722a648fdb4fbbe",
     "health-v3-524bf444a1da14e8897c",
+    "hard-news-v3-b7d5e85b0c767f2e262f",
     "business-v3-d7ab90216f48fe77ece6"
   ],
   "selected_candidate_urls": [
-    "https://www.manchestereveningnews.co.uk/whats-on/family-kids-news/rochdale-bonfire-night-2026-firework-34765383",
     "https://www.rochvalleyradio.com/news-features/140/business/1040/lisa-riley-opens-new-peacocks-store-at-rochdale-riverside",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
+    "https://www.rochdaletimes.co.uk/town-gets-ready-to-ignite-christmas-festivities/",
     "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621"
   ],
   "x_social_records": 0,
@@ -312,20 +303,16 @@
   "coverage": {
     "available_categories": [
       "business",
-      "events",
-      "health"
+      "health",
+      "news"
     ],
     "selected_categories": [
       "business",
-      "events",
-      "health"
+      "health",
+      "news"
     ],
-    "available_wards": [
-      "Milnrow and Newhey"
-    ],
-    "selected_wards": [
-      "Milnrow and Newhey"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
     "available_areas": [],
     "selected_areas": [
       "rochdale"
@@ -335,19 +322,18 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "business": 2,
-      "events": 1,
-      "health": 1
+      "health": 1,
+      "news": 1
     },
-    "selected_by_ward": {
-      "Milnrow and Newhey": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
       "rochdale": 4
     },
     "selected_by_source": {
       "food standards agency": 1,
-      "manchester evening news": 2,
-      "roch valley radio local news": 1
+      "manchester evening news": 1,
+      "roch valley radio local news": 1,
+      "rochdale times": 1
     }
   },
   "official_ward_count": 20,
@@ -899,8 +885,12 @@
   "robots_denied_count": 0,
   "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafccommunity.org"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafccommunity.org": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -936,8 +926,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-15T14:40:01.854026Z",
-  "frontpage_article_count": 36,
+  "frontpage_generated_at": "2026-10-15T14:54:25.994277Z",
+  "frontpage_article_count": 35,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1016,7 +1006,7 @@
       "norden"
     ],
     "selected_by_category": {
-      "news": 26,
+      "news": 25,
       "crime": 2,
       "traffic": 1,
       "transport": 1,
@@ -1026,7 +1016,7 @@
       "environment": 2
     },
     "selected_by_ward": {
-      "borough-wide": 17,
+      "borough-wide": 16,
       "Milnrow and Newhey": 4,
       "Spotland and Falinge": 2,
       "Castleton": 2,
@@ -1043,7 +1033,7 @@
       "middleton": 2,
       "milnrow": 1,
       "newhey": 1,
-      "rochdale": 18
+      "rochdale": 19
     },
     "selected_by_source": {
       "mhclg council tax collection statistics 2025/26 and rochdale council draft accounts": 1,
@@ -1056,16 +1046,16 @@
       "top of the poops / environment agency 2025 event-duration monitoring data": 1,
       "rochdale borough council draft statement of accounts 2025/26": 1,
       "university of manchester archaeological unit — healey dell: an archaeological desk‑based assessment (2004)": 1,
-      "rochdale daily": 23
+      "rochdale daily": 22
     },
-    "pool_size": 49,
-    "primary_pool_size": 49,
+    "pool_size": 50,
+    "primary_pool_size": 50,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 36,
+    "frontpage_count": 35,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 13,
-    "fresh_under_homepage_window": 36,
+    "fresh_under_homepage_window": 35,
     "short_briefs_selected": 3,
     "frontpage_minimum_met": true
   },
@@ -1077,7 +1067,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 12,
   "event_dates_corrected_from_ledger": 4,
-  "duplicate_articles_after_postprocessing": 277,
+  "duplicate_articles_after_postprocessing": 278,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1090,8 +1080,8 @@
   "whats_on_event_count": 12,
   "published_after_editorial_gate": 2,
   "published_new_slugs": [
-    "rochdale-council-announces-free-bonfire-night-events-for-november-2026",
-    "spudbros-express-rochdale-opening-queues-13-october-2026"
+    "spudbros-express-rochdale-opening-queues-13-october-2026",
+    "rochdale-to-host-ignite-fire-festival-ahead-of-christmas-lights-switch-on"
   ],
   "drafts_not_published": 1,
   "publication_health": "partial",
