@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 242,
-  "published_count": 242,
-  "category_change_count": 33,
-  "image_change_count": 45,
+  "article_count": 272,
+  "published_count": 272,
+  "category_change_count": 36,
+  "image_change_count": 47,
   "category_changes": [
     {
       "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
@@ -19,6 +19,27 @@
       "from": "news",
       "to": "politics",
       "reason": "headline strongly identifies politics"
+    },
+    {
+      "slug": "college-bank-seven-sisters-housing-future",
+      "title": "College Bank’s future remains a housing question as residents move from the Seven Sisters",
+      "from": "news",
+      "to": "education",
+      "reason": "headline strongly identifies education"
+    },
+    {
+      "slug": "hollingworth-rise-littleborough-309-homes-school",
+      "title": "Hollingworth Road’s 309 homes: the school land promise needs a delivery explanation",
+      "from": "news",
+      "to": "education",
+      "reason": "headline strongly identifies education"
+    },
+    {
+      "slug": "station-gardens-rochdale-81-homes-tenure",
+      "title": "Station Gardens turns former retail land into 81 homes, but the final tenure mix needs to be public",
+      "from": "news",
+      "to": "business",
+      "reason": "headline strongly identifies business"
     },
     {
       "slug": "ramsbottom-retired-air-traffic-engineer-forget-me-not-alzheimers-society",
@@ -262,6 +283,42 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-upperbanks-50-million-loans-council-tax-investigation-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-council-announces-new-regeneration-projects-for-middleton",
+      "title": "Rochdale Council Announces New Regeneration Projects for Middleton",
+      "category": "business",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_riverside.jpg",
+        "img": "assets/img/cards/rochdale_riverside.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-announces-new-regeneration-projects-for-middleton-generated-card.jpg"
+    },
+    {
+      "slug": "roadworks-on-hillcrest-road-in-rochdale-scheduled-from-26-october-2026",
+      "title": "Hillcrest Road, roadworks in Rochdale from 26 October 2026",
+      "category": "traffic",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/roadworks.jpg",
+        "img": "assets/img/cards/roadworks.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/roadworks-on-hillcrest-road-in-rochdale-scheduled-from-26-october-2026-generated-card.jpg"
+    },
+    {
+      "slug": "nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award",
+      "title": "Nominations Open for Springhill Hospice’s 2026 Man of Rochdale Award",
+      "category": "community",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/springhill_hospice.png",
+        "img": "assets/img/cards/springhill_hospice.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award-generated-card.jpg"
     },
     {
       "slug": "milnrow-crucial-crew-pupils-social-media-safety-cyberbullying",
@@ -612,28 +669,16 @@
       "after": "assets/img/cards/new-years-eve-with-the-j-ger-maestro-generated-card.jpg"
     },
     {
-      "slug": "did-robin-hood-really-come-to-healey-dell",
-      "title": "Did Robin Hood really come to Healey Dell?",
+      "slug": "are-there-really-fairies-in-healey-dell",
+      "title": "Are there really fairies in Healey Dell?",
       "category": "environment",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/healey-dell.jpg",
-        "img": "assets/img/cards/healey-dell.jpg",
+        "image_url": "assets/img/cards/are-there-really-fairies-in-healey-dell.jpg",
+        "img": "assets/img/cards/are-there-really-fairies-in-healey-dell.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/did-robin-hood-really-come-to-healey-dell-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-council-to-consider-motion-to-lift-restrictions-on-former-pubs",
-      "title": "Rochdale Council to Consider Motion to Lift Restrictions on Former Pubs",
-      "category": "politics",
-      "reason": "weak filename image match score -1; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/rochdale-town-square.jpg",
-        "img": "assets/img/cards/rochdale-town-square.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-council-to-consider-motion-to-lift-restrictions-on-former-pubs-generated-card.jpg"
+      "after": "assets/img/cards/are-there-really-fairies-in-healey-dell-generated-card.jpg"
     },
     {
       "slug": "littleborough-cricket-club-bonfire-2026",
