@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-15T05:10:32.519268Z",
+  "updated_at": "2026-10-15T05:25:38.415584Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 198,
@@ -181,7 +181,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-15T05:10:32.518610Z",
+      "last_attempt_at": "2026-10-15T05:25:38.415120Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -876,16 +876,16 @@
     },
     "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621": {
       "first_attempt_at": "2026-10-14T07:58:08.405472Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621",
         "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621.amp",
         "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/rochdale-takeaway-owner-hails-incredible-34761476"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T05:09:22.903997Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "last_attempt_at": "2026-10-15T05:25:38.415233Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Huge queue as SpudBros launch Rochdale store - and delighted schoolgirl wins a trolley dash - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "business",
@@ -2520,16 +2520,16 @@
     },
     "https://www.rochdale.gov.uk/news/article/684/inspiring-cared-for-children-achievements-recognised-by-council": {
       "first_attempt_at": "2026-10-15T03:32:25.035673Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMihgFBVV95cUxOcVlNVURZNks0NXg0ellXeWRiSFc1UWtucGVuUXdWWk14UnZSSFM0V2doOUJydV8yUFY2VWRJakdSS0ZsamJ4VEdoXzVaVzlZVFFQWVFibFB0eWROWjFDTTRmaXJpa1hiMFpqa0o5Y2FCQl8zVmkwMDdwNnlYdWxibFFWVTFlQQ?oc=5",
         "https://www.rochdale.gov.uk/news/article/684/inspiring-cared-for-children-achievements-recognised-by-council",
         "https://www.rochdaletimes.co.uk/inspiring-cared-for-children-celebrate-success"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T05:09:18.251139Z",
+      "last_attempt_at": "2026-10-15T05:24:47.411039Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
       "title": "Inspiring cared for children achievements recognised by council – Rochdale Borough Council",
       "source_name": "Rochdale Borough Council",
       "category": "news",
@@ -2766,13 +2766,15 @@
         "https://www.rochdaletimes.co.uk/rochdale-is-home-to-best-curry-takeaway-for-second-year-in-a-row"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T05:10:32.519055Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-15T05:24:47.771424Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Rochdale is home to best curry takeaway for second year in a row - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "business",
-      "text_fingerprint": "257935779ec20f46"
+      "text_fingerprint": "257935779ec20f46",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/school-to-limit-online-images-as-ai-manipulation-threat-rises": {
       "first_attempt_at": "2026-10-13T10:10:46.180430Z",
