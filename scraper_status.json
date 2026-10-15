@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-15T08:05:57.277828Z",
+  "last_run_at": "2026-10-15T08:43:36.887191Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,28 +27,40 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 126,
+  "raw_candidates_before_job_filter": 125,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 126,
+  "raw_candidates": 125,
   "candidate_clusters": 38,
   "google_news_resolution": {
     "wrappers": 38,
     "resolved": 38,
     "text_recovered": 28,
     "reattributed": 0,
-    "images_found": 33
+    "images_found": 34
   },
-  "duplicates_merged": 88,
-  "attempted_rewrites": 11,
-  "draft_rewrites_created": 8,
+  "duplicates_merged": 87,
+  "attempted_rewrites": 9,
+  "draft_rewrites_created": 7,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
     },
     {
+      "slug": "train-services-disrupted-on-leeds-to-manchester-route",
+      "source_url": "https://www.northernrailway.co.uk/service-updates#live-a65193c297d61633e4"
+    },
+    {
       "slug": "qts-group-hosts-first-safety-jamboree-in-rochdale-with-over-350-attendees",
       "source_url": "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree/"
+    },
+    {
+      "slug": "uk-lawmaker-threatens-visa-bans-over-rochdale-grooming-gang-ringleader",
+      "source_url": "https://www.firstpost.com/world/uk-lawmaker-threatens-flight-visa-bans-if-pakistan-wont-take-back-rochdale-grooming-gang-ringleader-14052629.html"
+    },
+    {
+      "slug": "ignite-fire-festival-and-christmas-lights-switch-on-set-for-november-20-22-in-ro",
+      "source_url": "https://www.inyourarea.co.uk/news/the-magical-reason-rochdale-town-centre-will-glow-brightly-next-month"
     },
     {
       "slug": "ignite-fire-festival-returns-to-rochdale-with-new-attractions",
@@ -57,30 +69,14 @@
     {
       "slug": "spudbros-express-rochdale-opening-queues-13-october-2026",
       "source_url": "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621"
-    },
-    {
-      "slug": "sustainable-materials-manufacturing-centre-opens-at-kingsway-business-park-in-ro",
-      "source_url": "https://www.machinery-market.co.uk/news/43628/Rochdale-opens-new-gateway-to-advanced-manufacturing"
-    },
-    {
-      "slug": "uk-lawmaker-threatens-visa-bans-on-pakistan-over-rochdale-grooming-gang-ringlead",
-      "source_url": "https://www.firstpost.com/world/uk-lawmaker-threatens-flight-visa-bans-if-pakistan-wont-take-back-rochdale-grooming-gang-ringleader-14052629.html"
-    },
-    {
-      "slug": "seventeen-arrested-in-police-operation-targeting-organised-crime-in-rochdale-and",
-      "source_url": "https://www.rochdaletimes.co.uk/police-target-crime-gangs-spider-web-of-criminality/"
-    },
-    {
-      "slug": "nine-charged-with-49-offences-following-police-operation-in-rochdale",
-      "source_url": "https://www.rochdaletimes.co.uk/nine-people-charged-after-day-of-police-action/"
     }
   ],
-  "new_articles": 5,
-  "live_articles": 274,
-  "skipped": 3,
+  "new_articles": 3,
+  "live_articles": 276,
+  "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 2,
-    "editorial gate: REJECTED_NON_LOCAL": 1
+    "editorial gate: REJECTED_NON_LOCAL": 1,
+    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -88,19 +84,19 @@
     "queued_for_retry": 1,
     "recovery_limit_reached": 4,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 1,
+    "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
-    "reopened_after_final_gate_removal": 2
+    "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 208,
+    "entries": 209,
     "by_outcome": {
       "failed": 14,
-      "published": 62,
-      "rejected": 132
+      "published": 64,
+      "rejected": 131
     },
-    "held_back_this_run": 23,
-    "held_already_published": 12,
+    "held_back_this_run": 26,
+    "held_already_published": 15,
     "held_rejected": 11,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -207,12 +203,13 @@
     }
   ],
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 2,
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
+    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 2,
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
+    "Align the headline with the report: most of its key words never appear in the body, so the headline and body describe di": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 100,
+    "rss_and_google_news": 99,
     "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
@@ -226,10 +223,10 @@
   "collector_errors": {},
   "source_counts": {
     "Roch Valley Radio": 33,
-    "Rochdale Times": 31,
-    "Rochdale Borough Council": 17,
+    "Rochdale Times": 29,
+    "Rochdale Borough Council": 16,
     "Northern live service updates": 12,
-    "Manchester Evening News": 7,
+    "Manchester Evening News": 8,
     "InYourArea": 5,
     "Bee Network live travel alerts": 4,
     "Rochdale Borough Council RSS": 2,
@@ -242,32 +239,34 @@
     "TNT Sports": 1,
     "Lancashire Telegraph": 1,
     "Squawka": 1,
+    "Rail Business Daily": 1,
     "Firstpost": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "business": 2,
-    "community": 2,
-    "crime": 2,
+    "business": 1,
+    "community": 1,
+    "crime": 1,
     "environment": 1,
     "events": 1,
     "health": 1,
     "news": 1,
-    "sport": 1
+    "sport": 1,
+    "transport": 1
   },
   "published_by_category": {
     "business": 27,
     "community": 46,
-    "crime": 15,
+    "crime": 14,
     "education": 6,
-    "environment": 14,
-    "events": 19,
+    "environment": 15,
+    "events": 20,
     "health": 5,
     "news": 37,
     "politics": 9,
     "sport": 12,
     "traffic": 10,
-    "transport": 3
+    "transport": 4
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -293,29 +292,25 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-e084a6c083e2226d9cba",
+    "transport-v3-0515f8decf00ed3c3109",
     "sport-v3-50a9442a0c99f80d8bb4",
     "events-v3-874cb1d06b3387054663",
-    "business-v3-d1e5e8aad8ab02d05c6a",
-    "community-v3-afa9b0522a9d30c23d92",
-    "health-v3-524bf444a1da14e8897c",
-    "environment-v3-040b9c0a0f712670816e",
-    "hard-news-v3-b7d5e85b0c767f2e262f",
     "business-v3-d7ab90216f48fe77ece6",
     "community-v3-fb7de020bcf558d2d5be",
-    "hard-news-v3-fe4b351d688db1471441"
+    "health-v3-524bf444a1da14e8897c",
+    "environment-v3-040b9c0a0f712670816e",
+    "hard-news-v3-b7d5e85b0c767f2e262f"
   ],
   "selected_candidate_urls": [
     "https://www.firstpost.com/world/uk-lawmaker-threatens-flight-visa-bans-if-pakistan-wont-take-back-rochdale-grooming-gang-ringleader-14052629.html",
+    "https://www.northernrailway.co.uk/service-updates#live-a65193c297d61633e4",
     "https://www.squawka.com/en/news/crewe-vs-rochdale-predictions-betting-tips-17-10-26/",
     "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree/",
-    "https://www.machinery-market.co.uk/news/43628/Rochdale-opens-new-gateway-to-advanced-manufacturing",
-    "https://www.rochdaletimes.co.uk/police-target-crime-gangs-spider-web-of-criminality/",
-    "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.rochdale.gov.uk/news/article/683/fire-festival-set-to-return-to-rochdale-with-spectacular-new-attractions",
-    "https://www.inyourarea.co.uk/news/the-magical-reason-rochdale-town-centre-will-glow-brightly-next-month",
     "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/huge-queue-spudbros-launch-rochdale-34755621",
     "https://www.inyourarea.co.uk/news/why-one-rochdale-family-took-a-leap-of-faith-to-change-a-young-life-forever",
-    "https://www.rochdaletimes.co.uk/nine-people-charged-after-day-of-police-action/"
+    "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
+    "https://www.rochdale.gov.uk/news/article/683/fire-festival-set-to-return-to-rochdale-with-spectacular-new-attractions",
+    "https://www.inyourarea.co.uk/news/the-magical-reason-rochdale-town-centre-will-glow-brightly-next-month"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -334,7 +329,8 @@
       "events",
       "health",
       "news",
-      "sport"
+      "sport",
+      "transport"
     ],
     "selected_categories": [
       "business",
@@ -344,49 +340,51 @@
       "events",
       "health",
       "news",
-      "sport"
+      "sport",
+      "transport"
     ],
     "available_wards": [
-      "Central Rochdale",
-      "Kingsway"
+      "Central Rochdale"
     ],
     "selected_wards": [
-      "Central Rochdale",
-      "Kingsway"
+      "Central Rochdale"
     ],
-    "available_areas": [],
+    "available_areas": [
+      "smithy_bridge"
+    ],
     "selected_areas": [
-      "rochdale"
+      "rochdale",
+      "smithy_bridge"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 2,
-      "community": 2,
-      "crime": 2,
+      "business": 1,
+      "community": 1,
+      "crime": 1,
       "environment": 1,
       "events": 1,
       "health": 1,
       "news": 1,
-      "sport": 1
+      "sport": 1,
+      "transport": 1
     },
     "selected_by_ward": {
-      "Central Rochdale": 1,
-      "Kingsway": 1
+      "Central Rochdale": 1
     },
     "selected_by_area": {
-      "rochdale": 11
+      "rochdale": 8,
+      "smithy_bridge": 1
     },
     "selected_by_source": {
       "firstpost": 1,
       "food standards agency": 1,
       "inyourarea": 2,
-      "machinery market": 1,
       "manchester evening news": 1,
+      "northern live service updates": 1,
       "rail business daily": 1,
       "rochdale borough council": 1,
-      "rochdale times": 2,
       "squawka": 1
     }
   },
@@ -940,10 +938,14 @@
   "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
+    "rochdaleafccommunity.org",
+    "visitrochdale.com",
+    "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 2
+    "yourtrustrochdale.co.uk": 3,
+    "visitrochdale.com": 1,
+    "rochdaleafccommunity.org": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -980,7 +982,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-15T08:17:38.472999Z",
+  "frontpage_generated_at": "2026-10-15T08:44:15.684493Z",
   "frontpage_article_count": 33,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1060,8 +1062,8 @@
       "norden"
     ],
     "selected_by_category": {
-      "news": 22,
-      "crime": 2,
+      "news": 21,
+      "crime": 3,
       "traffic": 1,
       "politics": 1,
       "education": 1,
@@ -1087,7 +1089,7 @@
       "middleton": 2,
       "milnrow": 1,
       "newhey": 1,
-      "rochdale": 22
+      "rochdale": 23
     },
     "selected_by_source": {
       "mhclg council tax collection statistics 2025/26 and rochdale council draft accounts": 1,
@@ -1100,28 +1102,29 @@
       "rochdale borough council draft statement of accounts 2025/26": 1,
       "manchester evening news": 1,
       "university of manchester archaeological unit — healey dell: an archaeological desk‑based assessment (2004)": 1,
-      "rochdale daily": 20
+      "rochdale daily": 19,
+      "firstpost": 1
     },
-    "pool_size": 53,
-    "primary_pool_size": 53,
+    "pool_size": 54,
+    "primary_pool_size": 54,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 33,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 32,
+    "fresh_under_24h": 31,
     "fresh_under_homepage_window": 33,
-    "short_briefs_selected": 3,
+    "short_briefs_selected": 4,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 12,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 12,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 275,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 276,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1132,15 +1135,13 @@
   "category_archive_count": 11,
   "area_archive_count": 25,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 5,
+  "published_after_editorial_gate": 3,
   "published_new_slugs": [
-    "spudbros-express-rochdale-opening-queues-13-october-2026",
-    "completion-of-sustainable-materials-manufacturing-centre-marks-milestone-for-roc",
-    "morning-briefing-14-october-2026",
-    "seventeen-arrested-in-police-operation-targeting-organised-crime-in-rochdale-and",
-    "rochdale-halloween-2026-events-area-guide"
+    "uk-lawmaker-threatens-visa-bans-over-rochdale-grooming-gang-ringleader",
+    "ignite-fire-festival-rochdale-town-hall-square-november-20-22",
+    "spudbros-express-rochdale-opening-queues-13-october-2026"
   ],
-  "drafts_not_published": 3,
+  "drafts_not_published": 4,
   "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
