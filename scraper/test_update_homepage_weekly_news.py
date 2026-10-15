@@ -46,7 +46,7 @@ class CurrentEditionHealthTests(unittest.TestCase):
         self.assertEqual(current_edition_story_count(rows, NOW), MIN_CURRENT_EDITION_FOR_WEEKLY)
         self.assertTrue(current_edition_healthy(rows, NOW))
 
-    def test_old_verified_live_update_counts_as_current(self):
+    def test_editing_old_live_story_does_not_count_as_new_publication(self):
         old = row("live-story", 36, live_story=True)
         old["live_updates"] = [
             {
@@ -54,7 +54,8 @@ class CurrentEditionHealthTests(unittest.TestCase):
                 "text": "Police issued a new verified appeal.",
             }
         ]
-        self.assertEqual(current_edition_story_count([old], NOW), 1)
+        self.assertEqual(current_edition_story_count([old], NOW), 0)
+        self.assertEqual(current_edition_story_count([old, row("new-story", 1)], NOW), 1)
 
 
 class WeeklySelectionTests(unittest.TestCase):
