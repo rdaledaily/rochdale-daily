@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-15T20:52:13.794679Z",
+  "updated_at": "2026-10-15T21:05:14.507943Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 220,
+  "count": 221,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -164,15 +164,15 @@
     },
     "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree": {
       "first_attempt_at": "2026-10-15T07:13:27.903764Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOVVdwdmtxdm1pTWs0d1RSdWxabjlVc00tS04xeXY1azVqRFJxRGxJV0lSdzZhSTVqVm45dW5BSldzWWFxYmNWcnFnNGxETmhfWU5LNFlod3RnZHpDTjRnZ0hsYXdXUFNCeU9zeDJsLVduZ1dyUmQ0ZjVyYTAxaHZyME0zOUY0YzhSTjJqTUNnWm13T0tQSDZ4OGt2YjY5RUlQQ1lrV3FmYVE?oc=5",
         "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T20:52:13.794203Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-15T21:04:28.278305Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "More than 350 gather in Rochdale for QTS Group’s first safety Jamboree | RailBusinessDaily",
       "source_name": "Rail Business Daily",
       "category": "events",
@@ -219,7 +219,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-15T20:52:13.793623Z",
+      "last_attempt_at": "2026-10-15T21:05:14.507487Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -1019,14 +1019,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-15T15:38:10.975811Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Huge queue as SpudBros launch Rochdale store - and delighted schoolgirl wins a trolley dash - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "business",
       "text_fingerprint": "79119dc1d58c0a09",
-      "recovery_attempts": 2,
-      "final_gate_removal_recovery": 1
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1,
+      "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/rochdale-takeaway-owner-hails-incredible-34761476": {
       "first_attempt_at": "2026-10-15T07:33:09.684902Z",
@@ -1035,13 +1036,15 @@
         "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/rochdale-takeaway-owner-hails-incredible-34761476"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T20:52:13.794385Z",
+      "last_attempt_at": "2026-10-15T21:05:14.507701Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale takeaway hails 'incredible honour' as it's declared North West's best",
       "source_name": "Manchester Evening News",
       "category": "business",
-      "text_fingerprint": "16f8d851d96bb638"
+      "text_fingerprint": "16f8d851d96bb638",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.nantwichtownfc.co.uk/match-report-darwen-fc-women-2-3-nantwich-town-women": {
       "first_attempt_at": "2026-10-15T06:27:19.965628Z",
@@ -3143,13 +3146,15 @@
         "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T20:52:13.793754Z",
+      "last_attempt_at": "2026-10-15T21:05:14.507584Z",
       "outcome": "published",
       "reason": "",
       "title": "Nigel Clark of Britpop band Dodgy to perform at Rochdale church",
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
-      "text_fingerprint": "41fa230f20f58c7d"
+      "text_fingerprint": "41fa230f20f58c7d",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/139/news/903/rspca-appeals-after-french-bulldog-found-dead-in-chadderton-canal": {
       "first_attempt_at": "2026-10-09T12:08:40.849379Z",
@@ -3304,6 +3309,21 @@
       "source_name": "Roch Valley Radio Local News",
       "category": "education",
       "text_fingerprint": "ce4945895a480d1d"
+    },
+    "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1045/springhill-hospice-to-host-free-will-information-clinic-in-rochdale": {
+      "first_attempt_at": "2026-10-15T21:04:27.244870Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1045/springhill-hospice-to-host-free-will-information-clinic-in-rochdale"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-15T21:04:27.244870Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "title": "Springhill Hospice to host free will information clinic in Rochdale",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "community",
+      "text_fingerprint": "6aae8e4aa7b95e22"
     },
     "https://www.rochvalleyradio.com/news-features/163/lifestyle-families/911/free-half-term-activities-and-meals-offered-to-eligible-children-in-bury": {
       "first_attempt_at": "2026-10-10T16:02:16.229064Z",
