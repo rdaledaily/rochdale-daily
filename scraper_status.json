@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-16T19:24:24.483938Z",
+  "last_run_at": "2026-10-16T19:43:05.826881Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,35 +27,39 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 155,
+  "raw_candidates_before_job_filter": 165,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 148,
+  "raw_candidates": 158,
   "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 74,
+    "wrappers": 79,
     "resolved": 55,
-    "text_recovered": 22,
+    "text_recovered": 35,
     "reattributed": 2,
-    "images_found": 25
+    "images_found": 38
   },
-  "duplicates_merged": 106,
-  "attempted_rewrites": 4,
-  "draft_rewrites_created": 2,
+  "duplicates_merged": 116,
+  "attempted_rewrites": 6,
+  "draft_rewrites_created": 3,
   "drafted_articles": [
     {
       "slug": "dodgy-frontman-nigel-clark-to-perform-at-st-chad-s-church-in-rochdale",
       "source_url": "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
     },
     {
+      "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
+      "source_url": "https://www.rochvalleyradio.com/news-features/149/education/1070/rochdale-school-evacuated-and-closed-after-suspected-hoax-call"
+    },
+    {
       "slug": "rochdale-afc-sleep-out-raises-10-000-for-local-charities",
       "source_url": "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/"
     }
   ],
-  "new_articles": 0,
+  "new_articles": 1,
   "live_articles": 312,
-  "skipped": 2,
+  "skipped": 3,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2
+    "editorial gate: REJECTED_NON_LOCAL": 3
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -71,8 +75,8 @@
     "entries": 266,
     "by_outcome": {
       "failed": 25,
-      "published": 84,
-      "rejected": 157
+      "published": 83,
+      "rejected": 158
     },
     "held_back_this_run": 31,
     "held_already_published": 23,
@@ -159,8 +163,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 127,
-    "website_discovery": 10,
+    "rss_and_google_news": 132,
+    "website_discovery": 15,
     "aggregator_discovery": 0,
     "live_service_pages": 17,
     "facebook_official": 0,
@@ -172,27 +176,30 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 34,
+    "Rochdale Times": 40,
     "Manchester Evening News": 22,
-    "Roch Valley Radio": 20,
-    "InYourArea": 15,
-    "Rochdale AFC": 13,
+    "Roch Valley Radio": 21,
+    "InYourArea": 16,
+    "Rochdale AFC": 16,
     "Northern live service updates": 12,
     "Roch Valley Radio Local News": 5,
     "Bee Network live travel alerts": 5,
     "Daily Mirror": 4,
-    "Rochdale Borough Council": 3,
     "Rochdale Valiant": 3,
     "BBC": 2,
-    "The Bury Times": 2,
     "Premier Construction News": 2,
+    "Rochdale Borough Council": 2,
     "TfGM Travel Alerts": 2,
     "Fansnetwork": 1,
+    "The Bury Times": 1,
     "Legacy | Obituary": 1,
+    "Oldham Times": 1,
     "Uknip": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "community": 1,
+    "education": 1,
     "news": 1,
     "politics": 1,
     "sport": 2
@@ -235,13 +242,17 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-a540789c8b02f5ce4682",
+    "hard-news-v3-1fed0a0df6c1468ed4fd",
     "sport-v3-e6fa49c514c23b493201",
+    "community-v3-58303aedb3529e64c87d",
     "hard-news-v3-f2db7f0cf1c672e09a75",
     "sport-v3-fdc4105503c3d832cc9c"
   ],
   "selected_candidate_urls": [
     "https://www.fansnetwork.co.uk/football/rochdale/news/67036/",
+    "https://www.rochvalleyradio.com/news-features/149/education/1070/rochdale-school-evacuated-and-closed-after-suspected-hoax-call",
     "https://rochdaleafc.co.uk/behind-the-sign-sleep-out-bowlee-first-team/",
+    "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1045/springhill-hospice-to-host-free-will-information-clinic-in-rochdale",
     "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church",
     "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/"
   ],
@@ -255,11 +266,15 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "community",
+      "education",
       "news",
       "politics",
       "sport"
     ],
     "selected_categories": [
+      "community",
+      "education",
       "news",
       "politics",
       "sport"
@@ -277,18 +292,20 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "community": 1,
+      "education": 1,
       "news": 1,
       "politics": 1,
       "sport": 2
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "heywood": 1,
-      "rochdale": 3
+      "heywood": 2,
+      "rochdale": 4
     },
     "selected_by_source": {
       "fansnetwork": 1,
-      "roch valley radio local news": 1,
+      "roch valley radio local news": 3,
       "rochdale afc": 2
     }
   },
@@ -838,15 +855,19 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
+  "robots_denied_count": 3,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPbVZ4NmVPcW13TXRjTWFHRDcwV1kwSEdWSjd1UUROTFA5YUlpM29MbGkyS1JidEg2eFppTTdIQ2pvWVlzb1R1WWo3Rzg1VzA0V2dqTEo1Y0syeGFQYXRDR0ZNdnFEVzNqY0MtODliSFJNbjRMSUZOTl9Oc1FweU5GcElyMTZ0TlBDUHNrZ2VqTFp6cXhBcjVkNFJJSUJpemJJcENlbmZvbzcxN1B0Umpvd3ZrMFVUT0pCSGdkU0NlOUpMbmxWZzlPcEN2b0ZHdXE5d01IWG53?oc=5",
+    "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNeFlIZDJMYWdfSjZzWXd5NXFLRklRY3dBMDZzYTFOZDk1WGJrdkk3eUtlc3R6UzUwVFpOMnFld0piSWhUUGc3X3duTjJDV2pZT19tbDVTN0NqOFM2LXhyOTd6RlRGVjBzek9lSzVHTGtTY2gtYldjWURrZi14azRaVDBCU29aTE9NTkJERjNVVTIxSG5FTUFCeWlKOGZFMVF5YWdwM1ZqWndMazdlU3lxOW5KR1F1OXpwSzF6MU5INzk?oc=5",
+    "https://news.google.com/rss/articles/CBMixgFBVV95cUxQWW02ajNSenZUdWs1UXhmYmdDVnprRkZGN2N0ellyeFZKMDNnejlDaXRRMnZ2LWc0WWZ5cUNyS1FEa3NBdHR6dGhVU3JoaHJpYlNWRm9XMGtNcGlfQXdIZWFMaFUwZUNzTXRPd0ZEa0lpX1g5dVQxUGM2QnUxNl9XYklCX1A1LVgyeFZ3cXMweHJ6UW9KZFB0c3Z6Z1otUkVJLU52RGxmRjBQdk5iM0Zrcm5sS196X2VJRXVPRDRQNHR5M2NmY2c?oc=5"
+  ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
     "rochdaleafccommunity.org",
-    "yourtrustrochdale.co.uk"
+    "rochvalleyradio.com"
   ],
   "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 6,
+    "rochvalleyradio.com": 1,
     "rochdaleafccommunity.org": 1
   },
   "men_rochdale_source": {
@@ -884,8 +905,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-16T19:25:43.425227Z",
-  "frontpage_article_count": 33,
+  "frontpage_generated_at": "2026-10-16T19:44:18.756787Z",
+  "frontpage_article_count": 32,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -967,22 +988,22 @@
       "politics": 1,
       "education": 2,
       "sport": 7,
-      "business": 5,
+      "business": 4,
       "environment": 4,
       "news": 4
     },
     "selected_by_ward": {
       "Castleton": 3,
       "borough-wide": 16,
-      "Milnrow and Newhey": 2,
+      "Milnrow and Newhey": 1,
       "Hopwood Hall": 3,
       "Bamford": 2,
-      "Central Rochdale": 1,
-      "Spotland and Falinge": 1,
       "Healey": 2,
       "Kingsway": 1,
+      "Central Rochdale": 1,
+      "Littleborough Lakeside": 1,
       "East Middleton": 1,
-      "Littleborough Lakeside": 1
+      "Spotland and Falinge": 1
     },
     "selected_by_area": {
       "bamford": 1,
@@ -998,35 +1019,35 @@
     },
     "selected_by_source": {
       "councillor dave jones — update supplied to rochdale daily": 1,
-      "rochdale times": 5,
+      "rochdale times": 4,
       "manchester evening news": 2,
       "source": 2,
       "st teresa of calcutta catholic academy trust statement and earlier attributed updates": 1,
-      "rochdale afc": 5,
       "food standards agency": 1,
       "inyourarea": 3,
       "rochdale daily": 2,
       "ofsted": 1,
-      "roch valley radio / lisa riley": 1,
-      "mayoress iram faisal": 1,
-      "traditions of lancashire by john roby (project gutenberg)": 1,
+      "rochdale afc": 5,
       "jolly josh": 1,
-      "greater manchester fire and rescue service": 1,
+      "traditions of lancashire by john roby (project gutenberg)": 1,
       "premier construction news": 1,
+      "greater manchester fire and rescue service": 1,
+      "roch valley radio / lisa riley": 1,
       "university of manchester archaeological unit — healey dell: an archaeological desk‑based assessment (2004)": 1,
       "sjf granite & quartz ltd": 1,
       "get together after serving": 1,
-      "friends of jubilee park": 1
+      "friends of jubilee park": 1,
+      "mayoress iram faisal": 1
     },
     "pool_size": 37,
     "primary_pool_size": 37,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 33,
+    "frontpage_count": 32,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 23,
-    "fresh_under_homepage_window": 32,
-    "short_briefs_selected": 8,
+    "fresh_under_24h": 21,
+    "fresh_under_homepage_window": 31,
+    "short_briefs_selected": 7,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1036,7 +1057,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 7,
+  "event_dates_corrected_from_ledger": 4,
   "duplicate_articles_after_postprocessing": 312,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1048,9 +1069,11 @@
   "category_archive_count": 11,
   "area_archive_count": 26,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat"
+  ],
   "drafts_not_published": 2,
-  "publication_health": "blocked",
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
