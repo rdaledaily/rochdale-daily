@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-16T06:08:27.317131Z",
+  "last_run_at": "2026-10-16T06:27:24.211229Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,20 +27,20 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 135,
+  "raw_candidates_before_job_filter": 139,
   "job_or_career_posts_rejected": 8,
-  "raw_candidates": 127,
+  "raw_candidates": 131,
   "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 62,
-    "resolved": 33,
-    "text_recovered": 8,
+    "wrappers": 46,
+    "resolved": 26,
+    "text_recovered": 22,
     "reattributed": 0,
-    "images_found": 10
+    "images_found": 24
   },
-  "duplicates_merged": 86,
-  "attempted_rewrites": 4,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 90,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
@@ -49,13 +49,9 @@
     {
       "slug": "dodgy-frontman-nigel-clark-to-perform-at-st-chad-s-church-in-rochdale",
       "source_url": "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
-    },
-    {
-      "slug": "ofsted-inspection-report-published-for-little-wonders-nursery-in-rochdale",
-      "source_url": "https://reports.ofsted.gov.uk/provider/16/2535296"
     }
   ],
-  "new_articles": 1,
+  "new_articles": 0,
   "live_articles": 293,
   "skipped": 1,
   "rewrite_skip_reasons": {
@@ -78,8 +74,8 @@
       "published": 64,
       "rejected": 149
     },
-    "held_back_this_run": 26,
-    "held_already_published": 13,
+    "held_back_this_run": 27,
+    "held_already_published": 14,
     "held_rejected": 13,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -203,31 +199,29 @@
       "last_attempt_at": "2026-10-12T17:24:09.440313Z"
     }
   ],
-  "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 111,
-    "website_discovery": 6,
+    "rss_and_google_news": 110,
+    "website_discovery": 12,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
     "food_hygiene": 1,
-    "inspection_registers": 1,
+    "inspection_registers": 0,
     "primary_data": 0
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 33,
+    "Rochdale Times": 40,
     "Roch Valley Radio": 24,
-    "Manchester Evening News": 15,
     "Rochdale AFC": 14,
+    "Manchester Evening News": 13,
     "Northern live service updates": 12,
     "Rochdale Borough Council": 7,
-    "Roch Valley Radio Local News": 4,
+    "Roch Valley Radio Local News": 5,
     "Bee Network live travel alerts": 4,
     "InYourArea": 3,
     "TfGM Travel Alerts": 2,
@@ -236,15 +230,12 @@
     "Legacy | Obituary": 1,
     "Squawka": 1,
     "Rail Business Daily": 1,
-    "Premier Construction News": 1,
     "Machinery Market": 1,
-    "Food Standards Agency": 1,
-    "Ofsted": 1
+    "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "education": 1,
-    "environment": 1,
     "health": 1,
+    "news": 1,
     "transport": 1
   },
   "published_by_category": {
@@ -285,13 +276,11 @@
   ],
   "selected_story_keys": [
     "transport-v3-d82d22cc3f7a81608373",
-    "education-v3-36140224636a2fb473fb",
     "health-v3-37b8a9a8febb575171d0",
-    "environment-v3-9684386f6d54b80cb705"
+    "hard-news-v3-f2db7f0cf1c672e09a75"
   ],
   "selected_candidate_urls": [
     "https://www.northernrailway.co.uk/service-updates#live-02576a18e4b7d6c177",
-    "https://reports.ofsted.gov.uk/provider/16/2535296",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
   ],
@@ -305,23 +294,23 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "education",
-      "environment",
       "health",
+      "news",
       "transport"
     ],
     "selected_categories": [
-      "education",
-      "environment",
       "health",
+      "news",
       "transport"
     ],
     "available_wards": [],
     "selected_wards": [],
     "available_areas": [
+      "heywood",
       "smithy_bridge"
     ],
     "selected_areas": [
+      "heywood",
       "rochdale",
       "smithy_bridge"
     ],
@@ -329,21 +318,20 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "education": 1,
-      "environment": 1,
       "health": 1,
+      "news": 1,
       "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3,
+      "heywood": 1,
+      "rochdale": 1,
       "smithy_bridge": 1
     },
     "selected_by_source": {
       "food standards agency": 1,
       "northern live service updates": 1,
-      "ofsted": 1,
-      "roch valley radio": 1
+      "roch valley radio local news": 1
     }
   },
   "official_ward_count": 20,
@@ -895,14 +883,8 @@
   "robots_denied_count": 0,
   "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "news.tfgm.com",
-    "rochvalleyradio.com"
-  ],
-  "slow_domain_failure_counts": {
-    "news.tfgm.com": 1,
-    "rochvalleyradio.com": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -938,7 +920,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-16T06:09:16.559023Z",
+  "frontpage_generated_at": "2026-10-16T06:28:11.807264Z",
   "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1099,11 +1081,9 @@
   "category_archive_count": 11,
   "area_archive_count": 25,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "ofsted-inspection-report-published-for-little-wonders-nursery-in-rochdale"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 2,
-  "publication_health": "partial",
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
