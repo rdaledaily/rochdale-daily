@@ -1,19 +1,12 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 105,
+    "kept_cards": 107,
     "cards_library": 0,
-    "cards_generated": 119,
+    "cards_generated": 118,
     "skipped": 0
   },
   "items": [
-    {
-      "slug": "the-healey-dell-prophecy-the-lady-eleanor-who-was-said-to-be-maid-wife-and-widow-in-one-da",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/healey-dell.jpg",
-      "matched_filename": "healey-dell.jpg",
-      "match_score": 15251
-    },
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
       "result": "cards-generated",
@@ -22,8 +15,15 @@
       "match_score": null
     },
     {
+      "slug": "the-healey-dell-prophecy-the-lady-eleanor-who-was-said-to-be-maid-wife-and-widow",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/healey-dell.jpg",
+      "matched_filename": "healey-dell.jpg",
+      "match_score": 15251
+    },
+    {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
@@ -1553,6 +1553,13 @@
       "image_url": "assets/img/cards/cricket.jpg",
       "matched_filename": "cricket.jpg",
       "match_score": 15127
+    },
+    {
+      "slug": "monsters-of-rock-halloween-special-2026",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/monsters-of-rock-halloween-special-2026-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "the-black-dyke-band-at-rochdale-town-hall-2027",
