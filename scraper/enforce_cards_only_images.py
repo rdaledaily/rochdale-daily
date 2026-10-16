@@ -17,6 +17,7 @@ import json
 import re
 import shutil
 import sys
+import subprocess
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -134,6 +135,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--articles", type=Path, default=Path("articles.json"))
     parser.add_argument("--report", type=Path, default=Path("cards_image_policy_report.json"))
+    parser.add_argument("--baseline-ref", help="In check mode, warn for unchanged published legacy image paths at this git ref")
     parser.add_argument("--check", action="store_true", help="Validate only; do not modify the feed")
     return parser.parse_args(argv)
 
@@ -147,7 +149,38 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit("Article feed must contain a JSON list")
 
     if args.check:
-        errors = validate(rows, root)
+        checked_rows = rows
+        if args.baseline_ref:
+            # Compare with the checked-out publication snapshot, including after
+            # race recovery. Never exempt new publications or changed images.
+            baseline_text = subprocess.check_output(
+                ["git", "show", f"{args.baseline_ref}:{args.articles.as_posix()}"],
+                text=True,
+            )
+            baseline_payload = json.loads(baseline_text)
+            baseline_rows = baseline_payload if isinstance(baseline_payload, list) else baseline_payload.get("articles", [])
+            def identity(row):
+                return clean(row.get("slug") or row.get("id") or row.get("url"))
+            baseline = {identity(row): row for row in baseline_rows
+                        if isinstance(row, dict) and identity(row)
+                        and clean(row.get("status") or "published").lower() == "published"}
+            checked_rows = []
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                previous = baseline.get(identity(row))
+                unchanged = previous is not None and all(
+                    clean(row.get(key)) == clean(previous.get(key))
+                    for key in ("image_url", "img")
+                )
+                if unchanged and not canonical_ok(row, root):
+                    # Missing/corrupt canonical cards remain errors; only legacy
+                    # path conventions are grandfathered, without rewriting them.
+                    if not cards_rel(row.get("image_url") or row.get("img")):
+                        print(f"::warning::Unchanged legacy image path: {_safe_stem(row)}")
+                        continue
+                checked_rows.append(row)
+        errors = validate(checked_rows, root)
         if errors:
             print("Published articles violating assets/img/cards/ canonical image policy:", file=sys.stderr)
             for error in errors[:100]:
