@@ -1,24 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 306,
-  "published_count": 306,
+  "article_count": 310,
+  "published_count": 310,
   "category_change_count": 42,
-  "image_change_count": 59,
+  "image_change_count": 62,
   "category_changes": [
     {
+      "slug": "rochdale-council-moves-forward-with-hopwood-hall-redevelopment-after-high-court",
+      "title": "Rochdale Council Moves Forward with Hopwood Hall Redevelopment After High Court Ruling",
+      "from": "news",
+      "to": "sport",
+      "reason": "headline strongly identifies sport"
+    },
+    {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
-      "title": "St Cuthbert’s RC High School Evacuated Following Suspected Hoax Bomb Threat",
+      "title": "St Cuthbert’s RC High School Closes Following Bomb Threat",
       "from": "crime",
       "to": "education",
       "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "rochdale-council-plans-major-investments-and-heritage-restoration",
-      "title": "Rochdale Council Plans Major Investments and Heritage Restoration",
-      "from": "environment",
-      "to": "news",
-      "reason": "headline strongly identifies news"
     },
     {
       "slug": "future-of-college-bank-towers-uncertain-as-renovation-could-take-over-a-decade",
@@ -303,6 +303,18 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-council-moves-forward-with-hopwood-hall-redevelopment-after-high-court",
+      "title": "Rochdale Council Moves Forward with Hopwood Hall Redevelopment After High Court Ruling",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_riverside.jpg",
+        "img": "assets/img/cards/rochdale_riverside.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-moves-forward-with-hopwood-hall-redevelopment-after-high-court-generated-card.jpg"
+    },
+    {
       "slug": "the-healey-dell-prophecy-the-lady-eleanor-who-was-said-to-be-maid-wife-and-widow",
       "title": "The Healey Dell prophecy: the Lady Eleanor who was said to be 'maid, wife and widow in one day'",
       "category": "environment",
@@ -313,6 +325,30 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/the-healey-dell-prophecy-the-lady-eleanor-who-was-said-to-be-maid-wife-and-widow-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-council-celebrates-achievements-of-over-200-cared-for-children-at-annua",
+      "title": "Rochdale Council Celebrates Achievements of Over 200 Cared-for Children at Annual Awards",
+      "category": "community",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-celebrates-achievements-of-over-200-cared-for-children-at-annua-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-afc-to-face-crewe-alexandra-in-away-fixture",
+      "title": "Rochdale AFC to Face Crewe Alexandra in Away Fixture",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_fans.jpg",
+        "img": "assets/img/cards/rochdale_fans.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-to-face-crewe-alexandra-in-away-fixture-generated-card.jpg"
     },
     {
       "slug": "rochdale-afc-confirms-fa-cup-first-round-draw-on-october-16",
