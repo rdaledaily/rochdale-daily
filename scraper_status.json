@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-16T16:31:17.746005Z",
+  "last_run_at": "2026-10-16T17:15:40.589137Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,19 +27,19 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 173,
+  "raw_candidates_before_job_filter": 170,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 166,
-  "candidate_clusters": 44,
+  "raw_candidates": 163,
+  "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 67,
-    "resolved": 52,
-    "text_recovered": 34,
+    "wrappers": 62,
+    "resolved": 46,
+    "text_recovered": 30,
     "reattributed": 0,
-    "images_found": 35
+    "images_found": 31
   },
-  "duplicates_merged": 122,
-  "attempted_rewrites": 4,
+  "duplicates_merged": 120,
+  "attempted_rewrites": 3,
   "draft_rewrites_created": 3,
   "drafted_articles": [
     {
@@ -47,20 +47,18 @@
       "source_url": "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
     },
     {
-      "slug": "rochdale-council-moves-forward-with-hopwood-hall-redevelopment-after-high-court-",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/next-steps-historic-hopwood-hall-34777240"
-    },
-    {
       "slug": "rochdale-afc-sleep-out-raises-10-000-for-local-charities",
       "source_url": "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/"
+    },
+    {
+      "slug": "st-cuthbert-s-rc-high-school-closes-following-bomb-threat",
+      "source_url": "https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat/"
     }
   ],
   "new_articles": 1,
   "live_articles": 310,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 2,
@@ -75,8 +73,8 @@
     "entries": 262,
     "by_outcome": {
       "failed": 25,
-      "published": 81,
-      "rejected": 156
+      "published": 82,
+      "rejected": 155
     },
     "held_back_this_run": 31,
     "held_already_published": 23,
@@ -158,13 +156,15 @@
       "last_attempt_at": "2026-10-11T20:02:27.743327Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 145,
-    "website_discovery": 12,
+    "rss_and_google_news": 138,
+    "website_discovery": 15,
     "aggregator_discovery": 0,
-    "live_service_pages": 15,
+    "live_service_pages": 16,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -174,28 +174,30 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 51,
-    "Roch Valley Radio": 24,
-    "Manchester Evening News": 19,
+    "Rochdale Times": 46,
+    "Roch Valley Radio": 21,
+    "Manchester Evening News": 20,
     "InYourArea": 16,
-    "Rochdale AFC": 15,
-    "Northern live service updates": 11,
-    "Daily Mirror": 5,
+    "Rochdale AFC": 16,
+    "Northern live service updates": 12,
     "Roch Valley Radio Local News": 5,
     "Bee Network live travel alerts": 4,
+    "The Mirror": 3,
+    "Rochdale Valiant": 3,
+    "Daily Mirror": 2,
     "FansNetwork.co.uk": 2,
     "BBC": 2,
-    "Oldham Evening Chronicle": 2,
     "The Bury Times": 2,
     "Premier Construction News": 2,
     "Rochdale Borough Council": 2,
     "TfGM Travel Alerts": 2,
     "Legacy | Obituary": 1,
+    "Oldham Evening Chronicle": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "crime": 1,
-    "news": 2,
+    "news": 1,
     "sport": 1
   },
   "published_by_category": {
@@ -237,13 +239,11 @@
   "selected_story_keys": [
     "hard-news-v3-7af559eaf9fa0c5026c6",
     "sport-v3-fdc4105503c3d832cc9c",
-    "hard-news-v3-dce1f9f5bb4a4f089cee",
     "hard-news-v3-f2db7f0cf1c672e09a75"
   ],
   "selected_candidate_urls": [
     "https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat/",
     "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/next-steps-historic-hopwood-hall-34777240",
     "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
   ],
   "x_social_records": 0,
@@ -265,12 +265,8 @@
       "news",
       "sport"
     ],
-    "available_wards": [
-      "Hopwood Hall"
-    ],
-    "selected_wards": [
-      "Hopwood Hall"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
     "available_areas": [
       "heywood"
     ],
@@ -283,18 +279,15 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "crime": 1,
-      "news": 2,
+      "news": 1,
       "sport": 1
     },
-    "selected_by_ward": {
-      "Hopwood Hall": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
       "heywood": 1,
-      "rochdale": 3
+      "rochdale": 2
     },
     "selected_by_source": {
-      "manchester evening news": 1,
       "roch valley radio local news": 1,
       "rochdale afc": 1,
       "rochdale times": 1
@@ -888,7 +881,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-16T16:43:55.115884Z",
+  "frontpage_generated_at": "2026-10-16T17:16:37.139790Z",
   "frontpage_article_count": 32,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -998,11 +991,11 @@
       "littleborough": 1,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 19
+      "rochdale": 18
     },
     "selected_by_source": {
       "manchester evening news": 2,
-      "daily mirror": 1,
+      "rochdale times": 5,
       "source": 2,
       "st teresa of calcutta catholic academy trust statement and earlier attributed updates": 1,
       "rochdale afc": 5,
@@ -1013,7 +1006,6 @@
       "ofsted": 1,
       "roch valley radio / lisa riley": 1,
       "mayoress iram faisal": 1,
-      "rochdale times": 4,
       "jolly josh": 1,
       "greater manchester fire and rescue service": 1,
       "premier construction news": 1,
@@ -1022,8 +1014,8 @@
       "get together after serving": 1,
       "friends of jubilee park": 1
     },
-    "pool_size": 36,
-    "primary_pool_size": 36,
+    "pool_size": 35,
+    "primary_pool_size": 35,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 32,
@@ -1034,13 +1026,13 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_removed_other_source": 9,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 13,
+  "events_removed_other_source": 8,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
+  "event_dates_corrected_from_ledger": 4,
   "duplicate_articles_after_postprocessing": 310,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1054,7 +1046,7 @@
   "whats_on_event_count": 13,
   "published_after_editorial_gate": 1,
   "published_new_slugs": [
-    "rochdale-council-moves-forward-with-hopwood-hall-redevelopment-after-high-court"
+    "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat"
   ],
   "drafts_not_published": 2,
   "publication_health": "partial",
