@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-15T21:51:23.483747Z",
+  "updated_at": "2026-10-15T23:59:51.306368Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 225,
@@ -219,7 +219,7 @@
       "urls": [
         "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
       ],
-      "last_attempt_at": "2026-10-15T21:51:23.482937Z",
+      "last_attempt_at": "2026-10-15T23:59:51.306078Z",
       "outcome": "published",
       "reason": "",
       "title": "66 Rochdale food businesses currently rated 0 or 1 for hygiene",
@@ -398,14 +398,15 @@
         "https://sundayguardianlive.com/world/m62-traffic-news-today-westbound-motorway-closed-between-j22-denshaw-j21-rochdale-after-serious-multi-vehicle-crash-check-affected-roads-diversion-routes-expected-clearance-time-more-303367"
       ],
       "last_attempt_at": "2026-10-12T09:25:04.816414Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "M62 Traffic News Today: Westbound Motorway Closed Between J22 Denshaw & J21 Rochdale After Serious Multi-Vehicle Crash; Check Affected Roads",
       "source_name": "The Sunday Guardian",
       "category": "traffic",
       "text_fingerprint": "c94884575fdbe784",
-      "recovery_attempts": 2,
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
+      "recovery_attempts": 0,
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "final_gate_removal_recovery": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts": {
       "first_attempt_at": "2026-10-12T17:25:01.638674Z",
@@ -1031,12 +1032,12 @@
     },
     "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/rochdale-takeaway-owner-hails-incredible-34761476": {
       "first_attempt_at": "2026-10-15T07:33:09.684902Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/rochdale-takeaway-owner-hails-incredible-34761476"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T21:50:10.754986Z",
+      "last_attempt_at": "2026-10-15T23:58:37.730908Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Rochdale takeaway hails 'incredible honour' as it's declared North West's best",
@@ -2122,14 +2123,14 @@
         "https://www.northernrailway.co.uk/service-updates#live-bec3500d9c9154bd15"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T21:51:23.483071Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-15T23:58:26.222698Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "955e243a366401af",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "final_gate_removal_recovery": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-c03fe10c88bd6b7718": {
@@ -2945,14 +2946,15 @@
         "https://www.rochdaletimes.co.uk/overnight-closures-as-sudden-junction-works-continue"
       ],
       "last_attempt_at": "2026-10-13T07:31:53.641895Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Man arrested after woman seriously injured in M62 crash - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "traffic",
       "text_fingerprint": "6dd502f8b4e2adc6",
-      "recovery_attempts": 2,
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1"
+      "recovery_attempts": 0,
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "final_gate_removal_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/new-bid-for-extra-trains-from-rochdale-to-london-is-refused": {
       "first_attempt_at": "2026-10-12T16:47:30.338008Z",
@@ -3195,7 +3197,7 @@
         "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T21:51:23.483593Z",
+      "last_attempt_at": "2026-10-15T23:59:51.306203Z",
       "outcome": "published",
       "reason": "",
       "title": "Nigel Clark of Britpop band Dodgy to perform at Rochdale church",
@@ -3361,12 +3363,12 @@
     },
     "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1045/springhill-hospice-to-host-free-will-information-clinic-in-rochdale": {
       "first_attempt_at": "2026-10-15T21:04:27.244870Z",
-      "attempts": 4,
+      "attempts": 5,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1045/springhill-hospice-to-host-free-will-information-clinic-in-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T21:50:07.078200Z",
+      "last_attempt_at": "2026-10-15T23:58:36.035109Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Springhill Hospice to host free will information clinic in Rochdale",
