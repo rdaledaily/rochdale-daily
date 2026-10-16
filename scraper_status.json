@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-16T08:37:33.780715Z",
+  "last_run_at": "2026-10-16T08:51:13.288170Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,20 +27,20 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 147,
+  "raw_candidates_before_job_filter": 145,
   "job_or_career_posts_rejected": 8,
-  "raw_candidates": 139,
-  "candidate_clusters": 41,
+  "raw_candidates": 137,
+  "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 52,
+    "wrappers": 51,
     "resolved": 47,
-    "text_recovered": 29,
+    "text_recovered": 30,
     "reattributed": 0,
-    "images_found": 31
+    "images_found": 32
   },
-  "duplicates_merged": 98,
-  "attempted_rewrites": 10,
-  "draft_rewrites_created": 8,
+  "duplicates_merged": 95,
+  "attempted_rewrites": 5,
+  "draft_rewrites_created": 3,
   "drafted_articles": [
     {
       "slug": "66-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
@@ -51,46 +51,25 @@
       "source_url": "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
     },
     {
-      "slug": "high-court-trial-begins-over-ownership-of-hopwood-hall",
-      "source_url": "https://www.rochdaletimes.co.uk/two-days-that-will-decide-the-future-of-hopwood-hall/"
-    },
-    {
-      "slug": "rochdale-fitness-group-to-undertake-100km-run-in-arctic-conditions",
-      "source_url": "https://www.inyourarea.co.uk/news/arctic-bound-rochdale-fitness-group-set-to-tackle-extreme-100km-run"
-    },
-    {
-      "slug": "qts-group-hosts-first-safety-jamboree-in-rochdale-with-over-350-attendees",
-      "source_url": "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree/"
-    },
-    {
       "slug": "rochdale-afc-sleep-out-raises-10-000-for-local-charities",
       "source_url": "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/"
-    },
-    {
-      "slug": "rochdale-afc-manager-urges-team-to-embrace-fearless-mentality",
-      "source_url": "https://rochdaleafc.co.uk/show-no-fear-watson/"
-    },
-    {
-      "slug": "nantwich-town-women-defeat-rochdale-women-3-1-in-wfa-cup",
-      "source_url": "https://www.nantwichtownfc.co.uk/match-report-rochdale-women-1-3-nantwich-town-women/"
     }
   ],
-  "new_articles": 5,
+  "new_articles": 0,
   "live_articles": 301,
   "skipped": 2,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 1,
-    "quality gate after 4 repairs: The model marked the story unpublishable.": 1
+    "editorial gate: REJECTED_NON_LOCAL": 2
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 3,
-    "queued_for_retry": 0,
-    "recovery_limit_reached": 3,
+    "queued_for_retry": 1,
+    "recovery_limit_reached": 2,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
-    "reopened_after_final_gate_removal": 1
+    "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
     "entries": 248,
@@ -99,9 +78,9 @@
       "published": 72,
       "rejected": 151
     },
-    "held_back_this_run": 26,
-    "held_already_published": 16,
-    "held_rejected": 10,
+    "held_back_this_run": 32,
+    "held_already_published": 21,
+    "held_rejected": 11,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -132,6 +111,15 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-10-15T23:58:37.730908Z"
+    },
+    {
+      "url": "https://www.rochdaletimes.co.uk/warning-over-scam-callers-impersonating-police-officers",
+      "title": "Warning over scam callers impersonating police officers - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-15T21:50:06.739112Z"
     },
     {
       "url": "https://www.inyourarea.co.uk/news/the-magical-reason-rochdale-town-centre-will-glow-brightly-next-month",
@@ -198,12 +186,11 @@
     }
   ],
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
-    "Tighten the report to fewer than 118 body words. The source material only supports a short report; cut every sentence th": 1
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 118,
+    "rss_and_google_news": 116,
     "website_discovery": 12,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
@@ -225,20 +212,18 @@
     "InYourArea": 6,
     "Roch Valley Radio Local News": 5,
     "Bee Network live travel alerts": 4,
-    "Rail Business Daily": 2,
     "TfGM Travel Alerts": 2,
     "Rochdale Borough Council RSS": 1,
     "Legacy | Obituary": 1,
-    "Squawka": 1,
+    "Rail Business Daily": 1,
     "Premier Construction News": 1,
     "Machinery Market": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "community": 2,
     "health": 1,
-    "news": 2,
-    "sport": 4,
+    "news": 1,
+    "sport": 2,
     "transport": 1
   },
   "published_by_category": {
@@ -279,26 +264,16 @@
   ],
   "selected_story_keys": [
     "transport-v3-239d7ece91da740b1e42",
-    "sport-v3-a9299321d790049c19d2",
-    "sport-v3-343042e2be941ef70e99",
-    "health-v3-37b8a9a8febb575171d0",
-    "hard-news-v3-dce1f9f5bb4a4f089cee",
-    "hard-news-v3-f2db7f0cf1c672e09a75",
     "sport-v3-53f6a1cc924c6d2ec61f",
-    "sport-v3-39bd25f2afd2500c898f",
-    "community-v3-fc4ae1dbe1744f593677",
+    "health-v3-37b8a9a8febb575171d0",
+    "hard-news-v3-f2db7f0cf1c672e09a75",
     "sport-v3-fdc4105503c3d832cc9c"
   ],
   "selected_candidate_urls": [
     "https://www.northernrailway.co.uk/service-updates#live-13ee2814c95949b7f2",
-    "https://rochdaleafc.co.uk/show-no-fear-watson/",
-    "https://www.inyourarea.co.uk/news/arctic-bound-rochdale-fitness-group-set-to-tackle-extreme-100km-run",
-    "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.rochdaletimes.co.uk/two-days-that-will-decide-the-future-of-hopwood-hall/",
-    "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church",
     "https://www.legacy.com/us/obituaries/name/judith-bergin-obituary?id=62756647",
-    "https://www.nantwichtownfc.co.uk/match-report-rochdale-women-1-3-nantwich-town-women/",
-    "https://news.railbusinessdaily.com/more-than-350-gather-in-rochdale-for-qts-groups-first-safety-jamboree/",
+    "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
+    "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church",
     "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/"
   ],
   "x_social_records": 0,
@@ -311,25 +286,19 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "community",
       "health",
       "news",
       "sport",
       "transport"
     ],
     "selected_categories": [
-      "community",
       "health",
       "news",
       "sport",
       "transport"
     ],
-    "available_wards": [
-      "Hopwood Hall"
-    ],
-    "selected_wards": [
-      "Hopwood Hall"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
     "available_areas": [
       "heywood",
       "smithy_bridge"
@@ -343,30 +312,23 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "community": 2,
       "health": 1,
-      "news": 2,
-      "sport": 4,
+      "news": 1,
+      "sport": 2,
       "transport": 1
     },
-    "selected_by_ward": {
-      "Hopwood Hall": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
       "heywood": 1,
-      "rochdale": 8,
+      "rochdale": 3,
       "smithy_bridge": 1
     },
     "selected_by_source": {
       "food standards agency": 1,
-      "inyourarea": 1,
       "legacy | obituary": 1,
-      "nantwich town football club": 1,
       "northern live service updates": 1,
-      "rail business daily": 1,
       "roch valley radio local news": 1,
-      "rochdale afc": 2,
-      "rochdale times": 1
+      "rochdale afc": 1
     }
   },
   "official_ward_count": 20,
@@ -915,18 +877,14 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 1,
-  "robots_denied_urls": [
-    "https://news.google.com/rss/articles/CBMipAFBVV95cUxQc2kxUFVWdVMzZVVTLWhMNXY3WUkxNHpDUjNKYmFjbzk3cXlzMWtMUVZOMERwZklLWXNQaTVEaElwa285T0U0c1oteVBxM3JlTFJaR0JNSXNuclBPMkFNcHhtdU9vUjBDSzF2TXNqXzU0bng5NTNiVWMzWldxT2duOEJEYlRaTk96ZnJkVFRYWUVUWTBGcjJXeFNhcGhyZjFhRXUtQg?oc=5"
-  ],
+  "robots_denied_count": 0,
+  "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org",
-    "yourtrustrochdale.co.uk"
+    "rochdaleafc.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 7,
-    "rochdaleafccommunity.org": 1
+    "rochdaleafc.co.uk": 3
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -963,7 +921,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-16T08:38:20.003589Z",
+  "frontpage_generated_at": "2026-10-16T08:51:55.060037Z",
   "frontpage_article_count": 27,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1134,15 +1092,9 @@
   "category_archive_count": 11,
   "area_archive_count": 26,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 5,
-  "published_new_slugs": [
-    "high-court-trial-begins-over-ownership-of-hopwood-hall",
-    "rochdale-fitness-group-to-undertake-100km-run-in-arctic-conditions",
-    "qts-group-hosts-first-safety-jamboree-in-rochdale-with-over-350-attendees",
-    "rochdale-afc-manager-urges-team-to-embrace-fearless-mentality",
-    "nantwich-town-women-defeat-rochdale-women-3-1-in-wfa-cup"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 3,
-  "publication_health": "partial",
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
