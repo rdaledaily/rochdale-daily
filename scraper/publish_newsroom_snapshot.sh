@@ -43,7 +43,7 @@ finalise_cards_policy() {
   # Rebuilding it here spent half the push-recovery budget before the push.
   python -m json.tool articles.json > /dev/null
   python scraper/content_hygiene.py --fix
-  python scraper/enforce_cards_only_images.py --articles articles.json --check
+  python scraper/enforce_cards_only_images.py --articles articles.json --check --baseline-ref HEAD
   python scraper/verify_manual_publication.py
   python scraper/content_hygiene.py
   python scraper/normalise_public_theme.py
@@ -62,7 +62,7 @@ rebuild_from_merged_feed() {
   PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
   python scraper/article_gate.py articles.json
   python scraper/content_hygiene.py --fix
-  python scraper/enforce_cards_only_images.py --articles articles.json --check
+  python scraper/enforce_cards_only_images.py --articles articles.json --check --baseline-ref HEAD
   python scraper/compact_live_updates.py --articles articles.json
   python scraper/repair_merged_bodies.py
   python scraper/councillor_photos.py
@@ -85,7 +85,7 @@ rebuild_from_merged_feed() {
   python scraper/generate_image_sitemap.py
   python scraper/content_hygiene.py --fix
   python scraper/content_hygiene.py
-  python scraper/enforce_cards_only_images.py --articles articles.json --check
+  python scraper/enforce_cards_only_images.py --articles articles.json --check --baseline-ref HEAD
   python scraper/normalise_public_theme.py
   python scraper/normalise_public_theme.py --check
   python scraper/verify_manual_publication.py
