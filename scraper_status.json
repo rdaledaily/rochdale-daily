@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-16T15:42:48.828907Z",
+  "last_run_at": "2026-10-16T16:00:42.467282Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,14 +7,9 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 7,
-      "other_notice_types": 2,
-      "already_seen": 5,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-16T15:41:12.751037Z",
+      "interval_hours": 12
     },
     "written_answers": {
       "status": "not due",
@@ -22,15 +17,9 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 7,
-      "not_decisions": 6,
-      "no_borough_place": 0,
-      "already_seen": 1,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-16T15:41:12.751037Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -38,46 +27,53 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 168,
+  "raw_candidates_before_job_filter": 172,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 161,
+  "raw_candidates": 165,
   "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 94,
+    "wrappers": 98,
     "resolved": 62,
     "text_recovered": 20,
     "reattributed": 0,
     "images_found": 21
   },
-  "duplicates_merged": 118,
-  "attempted_rewrites": 5,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 122,
+  "attempted_rewrites": 6,
+  "draft_rewrites_created": 5,
   "drafted_articles": [
     {
-      "slug": "65-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene",
-      "source_url": "https://ratings.food.gov.uk/open-data#rochdale-2026-10"
+      "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
+      "source_url": "https://www.mirror.co.uk/news/uk-news/bomb-st-cuthberts-school-rochdale-37780121"
     },
     {
       "slug": "dodgy-frontman-nigel-clark-to-perform-at-st-chad-s-church-in-rochdale",
       "source_url": "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
     },
     {
-      "slug": "rochdale-afc-sleep-out-raises-10-000-for-local-charity",
+      "slug": "rochdale-afc-manager-urges-team-to-embrace-fearless-mentality",
+      "source_url": "https://rochdaleafc.co.uk/show-no-fear-watson/"
+    },
+    {
+      "slug": "rochdale-afc-sleep-out-raises-10-000-for-local-charities",
       "source_url": "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/"
+    },
+    {
+      "slug": "cozy-market-in-milnrow-shut-down-again-for-selling-illicit-tobacco",
+      "source_url": "https://www.rochdaletimes.co.uk/shop-selling-illegal-goods-is-shut-down-again/"
     }
   ],
-  "new_articles": 1,
+  "new_articles": 3,
   "live_articles": 309,
-  "skipped": 2,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 1,
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
+    "editorial gate: REJECTED_NON_LOCAL": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 3,
+    "missing_from_feed": 2,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 3,
+    "recovery_limit_reached": 2,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -87,11 +83,11 @@
     "entries": 260,
     "by_outcome": {
       "failed": 25,
-      "published": 79,
-      "rejected": 156
+      "published": 80,
+      "rejected": 155
     },
-    "held_back_this_run": 32,
-    "held_already_published": 24,
+    "held_back_this_run": 31,
+    "held_already_published": 23,
     "held_rejected": 8,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -171,12 +167,14 @@
     }
   ],
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1
+    "Align the headline with the report: most of its key words never appear in the body, so the headline and body describe di": 1,
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 144,
-    "website_discovery": 7,
+    "rss_and_google_news": 147,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
     "facebook_official": 0,
@@ -188,14 +186,14 @@
   },
   "collector_errors": {},
   "source_counts": {
-    "Rochdale Times": 45,
-    "Roch Valley Radio": 24,
+    "Rochdale Times": 48,
+    "Roch Valley Radio": 23,
     "Manchester Evening News": 19,
     "InYourArea": 17,
-    "Rochdale AFC": 15,
+    "Rochdale AFC": 17,
     "Northern live service updates": 12,
-    "Daily Mirror": 5,
     "Roch Valley Radio Local News": 5,
+    "Daily Mirror": 4,
     "Bee Network live travel alerts": 4,
     "FansNetwork.co.uk": 2,
     "BBC": 2,
@@ -204,24 +202,24 @@
     "Premier Construction News": 2,
     "Rochdale Borough Council": 2,
     "TfGM Travel Alerts": 2,
+    "Rochdale Valiant": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "crime": 1,
-    "health": 1,
-    "news": 1,
-    "sport": 1,
+    "news": 2,
+    "sport": 2,
     "transport": 1
   },
   "published_by_category": {
-    "business": 29,
+    "business": 31,
     "community": 53,
     "crime": 14,
     "education": 8,
     "environment": 18,
     "events": 20,
-    "health": 5,
-    "news": 37,
+    "health": 4,
+    "news": 36,
     "politics": 10,
     "sport": 20,
     "traffic": 10,
@@ -252,16 +250,18 @@
   "selected_story_keys": [
     "hard-news-v3-1fed0a0df6c1468ed4fd",
     "transport-v3-239d7ece91da740b1e42",
-    "sport-v3-fdc4105503c3d832cc9c",
-    "health-v3-37b8a9a8febb575171d0",
-    "hard-news-v3-f2db7f0cf1c672e09a75"
+    "sport-v3-b0ccea47492e097d2afd",
+    "hard-news-v3-f2db7f0cf1c672e09a75",
+    "hard-news-v3-84ecdb3a39444dec7356",
+    "sport-v3-fdc4105503c3d832cc9c"
   ],
   "selected_candidate_urls": [
     "https://www.mirror.co.uk/news/uk-news/bomb-st-cuthberts-school-rochdale-37780121",
     "https://www.northernrailway.co.uk/service-updates#live-6a92f55de055020be8",
-    "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/",
-    "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
-    "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
+    "https://rochdaleafc.co.uk/show-no-fear-watson/",
+    "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church",
+    "https://www.rochdaletimes.co.uk/shop-selling-illegal-goods-is-shut-down-again/",
+    "https://rochdaleafc.co.uk/rafc-sleep-out-raises-10k/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -274,20 +274,22 @@
   "coverage": {
     "available_categories": [
       "crime",
-      "health",
       "news",
       "sport",
       "transport"
     ],
     "selected_categories": [
       "crime",
-      "health",
       "news",
       "sport",
       "transport"
     ],
-    "available_wards": [],
-    "selected_wards": [],
+    "available_wards": [
+      "Milnrow and Newhey"
+    ],
+    "selected_wards": [
+      "Milnrow and Newhey"
+    ],
     "available_areas": [
       "heywood",
       "smithy_bridge"
@@ -302,23 +304,24 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "crime": 1,
-      "health": 1,
-      "news": 1,
-      "sport": 1,
+      "news": 2,
+      "sport": 2,
       "transport": 1
     },
-    "selected_by_ward": {},
+    "selected_by_ward": {
+      "Milnrow and Newhey": 1
+    },
     "selected_by_area": {
       "heywood": 1,
-      "rochdale": 3,
+      "rochdale": 4,
       "smithy_bridge": 1
     },
     "selected_by_source": {
       "daily mirror": 1,
-      "food standards agency": 1,
       "northern live service updates": 1,
       "roch valley radio local news": 1,
-      "rochdale afc": 1
+      "rochdale afc": 2,
+      "rochdale times": 1
     }
   },
   "official_ward_count": 20,
@@ -867,16 +870,21 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 2,
+  "robots_denied_count": 5,
   "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMiekFVX3lxTE9sLXltWEhXREM0ajBUZHMtZ2VwSl8xTEhIT0plM01BVGpoY0c1MjF0bXRxOHkxc04xYk8yc0FKLTNGaHNiSF92NXNBcURYTTJmWWw4T3dUcW80azhCMVpfRDh0NFBaS0hpdzZkTm1adzMtLWpZNFFtU1NR?oc=5",
+    "https://news.google.com/rss/articles/CBMickFVX3lxTE9nS2wweFh2YUhWZjIyakZTRnpmQld2cnJHT0dIYlBZZm0xcE5CMVFtekxyWnhBZXN3aXZMek1OdmFFXy05VWJmd0k5Uk1DcEpOenhvVlhUaVNocUM5LUVxOWtCdURkQ09IMnVCbzdJYnFLZw?oc=5",
+    "https://news.google.com/rss/articles/CBMihAFBVV95cUxNajZrQ2otTjlOamRiT1dyRHgyUDNYaFhDbjFNbnBJa1VpZnlVS2tnWW5udUt5bE1mZklnWTA0NDUzV3RKdy1jRjlHcUpXcFN3RDJKQVZQTnVCQWdtTmFQWVNyM1MxNzA4emE4WFBuWjBYdVptbXItbDFQOUpFSFF4YUVncUc?oc=5",
     "https://news.google.com/rss/articles/CBMijAFBVV95cUxPR1FMc1RmTmZKdHdkcXFtdy1GS0VraTdzNWF3Y0lvenhFazlfenVnYVpSWFlyM1ItVmZ0S0xfdVRGS1hzbDJ4Y0xtamFFLUMtRDduNlQwMlBHZGozSm5GcGNmWm1KVXZwQ19hSXIxY3E1UjZsMnNPQnR0SWRpU0plVFNqS28za2dMSEdhWdIBjAFBVV95cUxPR1FMc1RmTmZKdHdkcXFtdy1GS0VraTdzNWF3Y0lvenhFazlfenVnYVpSWFlyM1ItVmZ0S0xfdVRGS1hzbDJ4Y0xtamFFLUMtRDduNlQwMlBHZGozSm5GcGNmWm1KVXZwQ19hSXIxY3E1UjZsMnNPQnR0SWRpU0plVFNqS28za2dMSEdhWQ?oc=5",
     "https://news.google.com/rss/articles/CBMioAFBVV95cUxPR3J2M0JtZVFPU0hvUjlUcjlQVWxoLXBXZ3hldTdjSkJBazJRLUxaczNmNkZqNFg2akFzR2syR09uTjJ2QzA5djNtdlB1bFZSaGppU3pIeFRCdUZwU1hFbS11TXpnTkxaUk01Z29MemVvVXFiRmhMb095NlJHbk1pVlZqUzd4ZTdMYzM4MEM5aU1ScWV3eTV6cjItLTdWUnFU?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org"
+    "rochdaleafccommunity.org",
+    "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 3,
     "rochdaleafccommunity.org": 1
   },
   "men_rochdale_source": {
@@ -914,7 +922,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-16T15:44:00.800578Z",
+  "frontpage_generated_at": "2026-10-16T16:01:46.936208Z",
   "frontpage_article_count": 32,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -991,7 +999,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 4,
+      "business": 5,
       "crime": 1,
       "transport": 1,
       "politics": 1,
@@ -999,7 +1007,7 @@
       "sport": 7,
       "community": 7,
       "environment": 4,
-      "news": 5
+      "news": 4
     },
     "selected_by_ward": {
       "Castleton": 2,
@@ -1008,11 +1016,11 @@
       "Central Rochdale": 1,
       "Healey": 2,
       "Bamford": 2,
-      "Kingsway": 1,
       "Spotland and Falinge": 1,
       "Hopwood Hall": 2,
-      "Littleborough Lakeside": 1,
-      "East Middleton": 1
+      "Kingsway": 1,
+      "East Middleton": 1,
+      "Littleborough Lakeside": 1
     },
     "selected_by_area": {
       "bamford": 1,
@@ -1024,7 +1032,7 @@
       "littleborough": 1,
       "middleton": 4,
       "milnrow": 1,
-      "rochdale": 19
+      "rochdale": 20
     },
     "selected_by_source": {
       "food standards agency": 1,
@@ -1038,12 +1046,12 @@
       "traditions of lancashire by john roby (project gutenberg)": 1,
       "rochdale daily": 2,
       "ofsted": 1,
-      "premier construction news": 1,
-      "mayoress iram faisal": 1,
       "rochdale times": 4,
-      "sjf granite & quartz ltd": 1,
+      "mayoress iram faisal": 1,
+      "premier construction news": 1,
       "jolly josh": 1,
       "greater manchester fire and rescue service": 1,
+      "sjf granite & quartz ltd": 1,
       "university of manchester archaeological unit — healey dell: an archaeological desk‑based assessment (2004)": 1,
       "get together after serving": 1,
       "nantwich town football club": 1,
@@ -1055,7 +1063,7 @@
     "selection_window_days": 2,
     "frontpage_count": 32,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 22,
+    "fresh_under_24h": 21,
     "fresh_under_homepage_window": 31,
     "short_briefs_selected": 9,
     "frontpage_minimum_met": true
@@ -1079,9 +1087,11 @@
   "category_archive_count": 11,
   "area_archive_count": 26,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 1,
+  "published_after_editorial_gate": 3,
   "published_new_slugs": [
-    "65-rochdale-food-businesses-currently-rated-0-or-1-for-hygiene"
+    "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
+    "rochdale-afc-manager-urges-team-to-embrace-fearless-mentality",
+    "cozy-market-in-milnrow-shut-down-again-for-selling-illicit-tobacco"
   ],
   "drafts_not_published": 2,
   "publication_health": "partial",
