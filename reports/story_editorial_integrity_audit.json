@@ -1,11 +1,25 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 296,
-  "published_count": 296,
-  "category_change_count": 41,
-  "image_change_count": 53,
+  "article_count": 306,
+  "published_count": 306,
+  "category_change_count": 42,
+  "image_change_count": 59,
   "category_changes": [
+    {
+      "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
+      "title": "St Cuthbert’s RC High School Evacuated Following Suspected Hoax Bomb Threat",
+      "from": "crime",
+      "to": "education",
+      "reason": "headline strongly identifies education"
+    },
+    {
+      "slug": "rochdale-council-plans-major-investments-and-heritage-restoration",
+      "title": "Rochdale Council Plans Major Investments and Heritage Restoration",
+      "from": "environment",
+      "to": "news",
+      "reason": "headline strongly identifies news"
+    },
     {
       "slug": "future-of-college-bank-towers-uncertain-as-renovation-could-take-over-a-decade",
       "title": "Future of College Bank Towers Uncertain as Renovation Could Take Over a Decade",
@@ -26,13 +40,6 @@
       "from": "community",
       "to": "health",
       "reason": "headline strongly identifies health"
-    },
-    {
-      "slug": "rochdale-council-to-decide-on-housing-development-in-bamford-next-week",
-      "title": "Rochdale Council to Decide on Housing Development in Bamford Next Week",
-      "from": "environment",
-      "to": "business",
-      "reason": "headline strongly identifies business"
     },
     {
       "slug": "college-bank-seven-sisters-housing-future",
@@ -296,6 +303,54 @@
   ],
   "image_changes": [
     {
+      "slug": "the-healey-dell-prophecy-the-lady-eleanor-who-was-said-to-be-maid-wife-and-widow",
+      "title": "The Healey Dell prophecy: the Lady Eleanor who was said to be 'maid, wife and widow in one day'",
+      "category": "environment",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/healey-dell.jpg",
+        "img": "assets/img/cards/healey-dell.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/the-healey-dell-prophecy-the-lady-eleanor-who-was-said-to-be-maid-wife-and-widow-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-afc-confirms-fa-cup-first-round-draw-on-october-16",
+      "title": "Rochdale AFC Confirms FA Cup First Round Draw on October 16",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-confirms-fa-cup-first-round-draw-on-october-16-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-council-plans-major-investments-and-heritage-restoration",
+      "title": "Rochdale Council Plans Major Investments and Heritage Restoration",
+      "category": "news",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_town_hall_square.jpg",
+        "img": "assets/img/cards/rochdale_town_hall_square.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-plans-major-investments-and-heritage-restoration-generated-card.jpg"
+    },
+    {
+      "slug": "high-court-trial-begins-over-ownership-of-hopwood-hall",
+      "title": "High Court Trial Begins Over Ownership of Hopwood Hall",
+      "category": "environment",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall.jpg",
+        "img": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-council-safeguarding-community-costs-fireworks-october-2026",
       "title": "Safeguarding concerns, community costs and fireworks raised at Rochdale council meeting",
       "category": "politics",
@@ -321,8 +376,8 @@
     },
     {
       "slug": "rochdale-council-to-decide-on-housing-development-in-bamford-next-week",
-      "title": "Rochdale Council to Decide on Housing Development in Bamford Next Week",
-      "category": "business",
+      "title": "Plans for 45-Home Development in Bamford Face Over 300 Objections",
+      "category": "environment",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
         "image_url": "assets/img/cards/rochdale-town-square.jpg",
@@ -330,6 +385,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-council-to-decide-on-housing-development-in-bamford-next-week-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-afc-manager-urges-team-to-embrace-fearless-mentality",
+      "title": "Rochdale AFC Manager Urges Team to Embrace Fearless Mentality",
+      "category": "sport",
+      "reason": "weak filename image match score 8128; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/fixtures.jpg",
+        "img": "assets/img/cards/fixtures.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-manager-urges-team-to-embrace-fearless-mentality-generated-card.jpg"
     },
     {
       "slug": "rochdale-council-announces-free-bonfire-night-events-for-november-2026",
@@ -378,6 +445,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/did-robin-hood-really-come-to-healey-dell-generated-card.jpg"
+    },
+    {
+      "slug": "nantwich-town-women-defeat-rochdale-women-3-1-in-wfa-cup",
+      "title": "Nantwich Town Women Defeat Rochdale Women 3-1 in WFA Cup",
+      "category": "sport",
+      "reason": "weak filename image match score 8252; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/nantwich-town-women-defeat-rochdale-women-3-1-in-wfa-cup-generated-card.jpg"
     },
     {
       "slug": "rochdale-council-announces-new-regeneration-projects-for-middleton",
