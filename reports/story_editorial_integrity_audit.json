@@ -1,24 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 272,
-  "published_count": 272,
-  "category_change_count": 36,
-  "image_change_count": 47,
+  "article_count": 290,
+  "published_count": 290,
+  "category_change_count": 39,
+  "image_change_count": 50,
   "category_changes": [
     {
-      "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
-      "title": "FIVE YEARS LATER, A COURT SUMMONS: Rochdale residents report historic Council Tax demands as arrears reach £28.4m",
-      "from": "news",
-      "to": "politics",
-      "reason": "headline strongly identifies politics"
+      "slug": "heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen",
+      "title": "Heywood and Middleton North MP Visits Redwood School’s Sixth Form at Phoenix Centre",
+      "from": "politics",
+      "to": "education",
+      "reason": "headline strongly identifies education"
     },
     {
-      "slug": "rochdale-upperbanks-50-million-loans-council-tax-investigation",
-      "title": "BREAKING INVESTIGATION: £50.3m owed by Rochdale Council companies as £19.5m Council Tax shortfall raises scrutiny",
-      "from": "news",
-      "to": "politics",
-      "reason": "headline strongly identifies politics"
+      "slug": "rochdale-council-to-decide-on-housing-development-in-bamford-next-week",
+      "title": "Rochdale Council to Decide on Housing Development in Bamford Next Week",
+      "from": "environment",
+      "to": "business",
+      "reason": "headline strongly identifies business"
     },
     {
       "slug": "college-bank-seven-sisters-housing-future",
@@ -54,6 +54,27 @@
       "from": "community",
       "to": "education",
       "reason": "headline strongly identifies education"
+    },
+    {
+      "slug": "rochdale-to-host-ignite-fire-festival-ahead-of-christmas-lights-switch-on",
+      "title": "Rochdale to Host Ignite Fire Festival Ahead of Christmas Lights Switch-On",
+      "from": "sport",
+      "to": "events",
+      "reason": "headline strongly identifies events"
+    },
+    {
+      "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
+      "title": "FIVE YEARS LATER, A COURT SUMMONS: Rochdale residents report historic Council Tax demands as arrears reach £28.4m",
+      "from": "news",
+      "to": "politics",
+      "reason": "headline strongly identifies politics"
+    },
+    {
+      "slug": "rochdale-upperbanks-50-million-loans-council-tax-investigation",
+      "title": "BREAKING INVESTIGATION: £50.3m owed by Rochdale Council companies as £19.5m Council Tax shortfall raises scrutiny",
+      "from": "news",
+      "to": "politics",
+      "reason": "headline strongly identifies politics"
     },
     {
       "slug": "rochdale-council-to-implement-new-planning-decision-guidelines-from-october-31",
@@ -261,8 +282,8 @@
   ],
   "image_changes": [
     {
-      "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
-      "title": "FIVE YEARS LATER, A COURT SUMMONS: Rochdale residents report historic Council Tax demands as arrears reach £28.4m",
+      "slug": "rochdale-council-safeguarding-community-costs-fireworks-october-2026",
+      "title": "Safeguarding concerns, community costs and fireworks raised at Rochdale council meeting",
       "category": "politics",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
@@ -270,19 +291,43 @@
         "img": "assets/img/cards/rochdale_riverside.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/rochdale-historic-council-tax-summons-residents-debt-help-2026-generated-card.jpg"
+      "after": "assets/img/cards/rochdale-council-safeguarding-community-costs-fireworks-october-2026-generated-card.jpg"
     },
     {
-      "slug": "rochdale-upperbanks-50-million-loans-council-tax-investigation",
-      "title": "BREAKING INVESTIGATION: £50.3m owed by Rochdale Council companies as £19.5m Council Tax shortfall raises scrutiny",
-      "category": "politics",
+      "slug": "rochdale-council-to-decide-on-housing-development-in-bamford-next-week",
+      "title": "Rochdale Council to Decide on Housing Development in Bamford Next Week",
+      "category": "business",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
-        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "image_url": "assets/img/cards/rochdale-town-square.jpg",
+        "img": "assets/img/cards/rochdale-town-square.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/rochdale-upperbanks-50-million-loans-council-tax-investigation-generated-card.jpg"
+      "after": "assets/img/cards/rochdale-council-to-decide-on-housing-development-in-bamford-next-week-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-council-announces-free-bonfire-night-events-for-november-2026",
+      "title": "Rochdale Council Announces Free Bonfire Night Events for November 2026",
+      "category": "transport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-square.jpg",
+        "img": "assets/img/cards/rochdale-town-square.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-announces-free-bonfire-night-events-for-november-2026-generated-card.jpg"
+    },
+    {
+      "slug": "did-robin-hood-really-come-to-healey-dell",
+      "title": "Did Robin Hood really come to Healey Dell?",
+      "category": "environment",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/healey-dell.jpg",
+        "img": "assets/img/cards/healey-dell.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/did-robin-hood-really-come-to-healey-dell-generated-card.jpg"
     },
     {
       "slug": "rochdale-council-announces-new-regeneration-projects-for-middleton",
@@ -298,7 +343,7 @@
     },
     {
       "slug": "roadworks-on-hillcrest-road-in-rochdale-scheduled-from-26-october-2026",
-      "title": "Hillcrest Road, roadworks in Rochdale from 26 October 2026",
+      "title": "Roadworks on Hillcrest Road in Rochdale Scheduled from 26 October 2026",
       "category": "traffic",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -307,18 +352,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/roadworks-on-hillcrest-road-in-rochdale-scheduled-from-26-october-2026-generated-card.jpg"
-    },
-    {
-      "slug": "nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award",
-      "title": "Nominations Open for Springhill Hospice’s 2026 Man of Rochdale Award",
-      "category": "community",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/springhill_hospice.png",
-        "img": "assets/img/cards/springhill_hospice.png",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award-generated-card.jpg"
     },
     {
       "slug": "milnrow-crucial-crew-pupils-social-media-safety-cyberbullying",
@@ -369,6 +402,18 @@
       "after": "assets/img/cards/rochdale-october-half-term-2026-dates-free-activities-guide-generated-card.jpg"
     },
     {
+      "slug": "rochdale-to-host-ignite-fire-festival-ahead-of-christmas-lights-switch-on",
+      "title": "Rochdale to Host Ignite Fire Festival Ahead of Christmas Lights Switch-On",
+      "category": "events",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_away.jpg",
+        "img": "assets/img/cards/rochdale_away.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-to-host-ignite-fire-festival-ahead-of-christmas-lights-switch-on-generated-card.jpg"
+    },
+    {
       "slug": "rossendale-rufc-defeats-rochdale-in-local-derby",
       "title": "Rossendale RUFC Defeats Rochdale in Local Derby",
       "category": "sport",
@@ -393,7 +438,7 @@
       "after": "assets/img/cards/rochdale-sleep-out-nearly-10000-petrus-rafc-2026-generated-card.jpg"
     },
     {
-      "slug": "finalists-announced-for-rochdale-business-awards-2026",
+      "slug": "nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award",
       "title": "Finalists Announced for Rochdale Business Awards 2026",
       "category": "business",
       "reason": "cached/library image lacks canonical/source provenance",
@@ -402,7 +447,7 @@
         "img": "assets/img/cards/finalists-announced-for-rochdale-business-awards-2026.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/finalists-announced-for-rochdale-business-awards-2026-generated-card.jpg"
+      "after": "assets/img/cards/nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award-generated-card.jpg"
     },
     {
       "slug": "rochdale-sixth-form-college-students-disciplined-for-ranking-looks-in-online-gro",
@@ -439,6 +484,30 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/who-or-what-is-the-healey-dwarf-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
+      "title": "FIVE YEARS LATER, A COURT SUMMONS: Rochdale residents report historic Council Tax demands as arrears reach £28.4m",
+      "category": "politics",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_riverside.jpg",
+        "img": "assets/img/cards/rochdale_riverside.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-historic-council-tax-summons-residents-debt-help-2026-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-upperbanks-50-million-loans-council-tax-investigation",
+      "title": "BREAKING INVESTIGATION: £50.3m owed by Rochdale Council companies as £19.5m Council Tax shortfall raises scrutiny",
+      "category": "politics",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-upperbanks-50-million-loans-council-tax-investigation-generated-card.jpg"
     },
     {
       "slug": "rochdale-pioneers-museum-to-host-archive-sessions-on-local-folklore",
@@ -523,18 +592,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/man-injured-in-altercation-on-rochdale-road-middleton-generated-card.jpg"
-    },
-    {
-      "slug": "completion-of-sustainable-materials-manufacturing-centre-marks-milestone-for-roc",
-      "title": "New Sustainable Materials and Manufacturing Centre Opens in Rochdale",
-      "category": "business",
-      "reason": "weak filename image match score 8251; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/atom_valley.png",
-        "img": "assets/img/cards/atom_valley.png",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/completion-of-sustainable-materials-manufacturing-centre-marks-milestone-for-roc-generated-card.jpg"
     },
     {
       "slug": "rochdale-afc-faces-accrington-stanley-in-league-two-clash",
