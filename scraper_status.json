@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-16T00:55:03.255808Z",
+  "last_run_at": "2026-10-16T01:12:53.550218Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -39,7 +39,7 @@
     "images_found": 11
   },
   "duplicates_merged": 78,
-  "attempted_rewrites": 3,
+  "attempted_rewrites": 4,
   "draft_rewrites_created": 2,
   "drafted_articles": [
     {
@@ -53,8 +53,9 @@
   ],
   "new_articles": 0,
   "live_articles": 290,
-  "skipped": 1,
+  "skipped": 2,
   "rewrite_skip_reasons": {
+    "editorial gate: REJECTED_NON_LOCAL": 1,
     "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1
   },
   "rewrite_skips_unattributed": 0,
@@ -68,28 +69,19 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 225,
+    "entries": 226,
     "by_outcome": {
       "failed": 24,
       "published": 60,
-      "rejected": 141
+      "rejected": 142
     },
-    "held_back_this_run": 24,
+    "held_back_this_run": 23,
     "held_already_published": 12,
-    "held_rejected": 12,
+    "held_rejected": 11,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
-    {
-      "url": "https://www.northernrailway.co.uk/service-updates#live-bec3500d9c9154bd15",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-10-16T00:35:28.580171Z"
-    },
     {
       "url": "https://www.manchestereveningnews.co.uk/whats-on/food-drink-news/rochdale-takeaway-owner-hails-incredible-34761476",
       "title": "Rochdale takeaway hails 'incredible honour' as it's declared North West's best",
@@ -229,7 +221,8 @@
   "selected_by_category": {
     "community": 1,
     "health": 1,
-    "news": 1
+    "news": 1,
+    "transport": 1
   },
   "published_by_category": {
     "business": 29,
@@ -268,11 +261,13 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "transport-v3-6765a3b84dd68bd79d9c",
     "community-v3-58303aedb3529e64c87d",
     "health-v3-37b8a9a8febb575171d0",
     "hard-news-v3-f2db7f0cf1c672e09a75"
   ],
   "selected_candidate_urls": [
+    "https://www.northernrailway.co.uk/service-updates#live-af2b6a637a81235f51",
     "https://www.rochvalleyradio.com/news-features/153/lifestyle-health/1045/springhill-hospice-to-host-free-will-information-clinic-in-rochdale",
     "https://ratings.food.gov.uk/open-data#rochdale-2026-10",
     "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church"
@@ -289,21 +284,25 @@
     "available_categories": [
       "community",
       "health",
-      "news"
+      "news",
+      "transport"
     ],
     "selected_categories": [
       "community",
       "health",
-      "news"
+      "news",
+      "transport"
     ],
     "available_wards": [],
     "selected_wards": [],
     "available_areas": [
-      "heywood"
+      "heywood",
+      "smithy_bridge"
     ],
     "selected_areas": [
       "heywood",
-      "rochdale"
+      "rochdale",
+      "smithy_bridge"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
@@ -311,15 +310,18 @@
     "selected_by_category": {
       "community": 1,
       "health": 1,
-      "news": 1
+      "news": 1,
+      "transport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "heywood": 2,
-      "rochdale": 1
+      "rochdale": 1,
+      "smithy_bridge": 1
     },
     "selected_by_source": {
       "food standards agency": 1,
+      "northern live service updates": 1,
       "roch valley radio local news": 2
     }
   },
@@ -876,7 +878,7 @@
     "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 1
+    "yourtrustrochdale.co.uk": 4
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -913,7 +915,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-16T00:55:44.704597Z",
+  "frontpage_generated_at": "2026-10-16T01:13:35.287637Z",
   "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
