@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-10-16T11:54:08.720355Z",
+  "examined_at": "2026-10-17T11:10:00.325276Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 104,
+  "candidates_examined": 119,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 78,
-    "would publish": 21,
-    "duplicate of published story": 5
+    "age": 99,
+    "would publish": 12,
+    "duplicate of published story": 8
   },
-  "would_publish": 21,
+  "would_publish": 12,
   "age_gate_sensitivity": {
-    "6h": 6,
-    "14h": 12,
-    "24h": 26,
-    "48h": 50,
-    "72h": 78,
-    "168h": 104
+    "6h": 0,
+    "14h": 0,
+    "24h": 20,
+    "48h": 52,
+    "72h": 76,
+    "168h": 119
   },
   "gates_unavailable": [],
   "examples": {
+    "duplicate of published story": [
+      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "The Bury Times: Rochdale high school evacuated after 'bomb threat' phone call - The Bu",
+      "Oldham Times: Rochdale high school evacuated after 'bomb threat' phone call - Oldham"
+    ],
     "would publish": [
-      "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "InYourArea: Leader outlines major investments, heritage rescue, and cost-of-living",
+      "Rochdale Borough Council: Contact Estates and Asset Management - Rochdale Borough Council - Roch",
+      "Manchester Evening News: Next steps for historic Hopwood Hall after council avoided £1 sale in ",
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
     ],
-    "duplicate of published story": [
-      "Rochdale Times: No decision yet on College Bank – but ‘renovation would take more than",
-      "Roch Valley Radio Local News: Heywood and Middleton North MP visits Redwood School’s sixth form at P",
-      "Roch Valley Radio Local News: Springhill Hospice to host free will information clinic in Rochdale"
-    ],
     "age": [
-      "Rochdale Times: Finalists revealed for Rochdale Business Awards 2026 - Rochdale Times",
-      "Rochdale AFC: A Tour Of Bowlee - Rochdale AFC",
-      "Premier Construction News: Rochdale opens gateway to UK's next generation of advanced manufacturi"
+      "Rochdale AFC: Co-Chair On State Of The Game Report - Rochdale AFC",
+      "InYourArea: What’s On Rochdale: Explosive 1980s Othello, street artist's legacy an",
+      "Rochdale Borough Council: Rochdale Borough Council"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
