@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-18T08:52:43.584970Z",
+  "updated_at": "2026-10-18T09:08:30.967597Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 239,
+  "count": 240,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -1918,12 +1918,29 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T08:52:43.584767Z",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "39882b18c40fbabc",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-80acd1e2cfecc27a16": {
+      "first_attempt_at": "2026-10-18T09:08:30.967404Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-80acd1e2cfecc27a16"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-18T09:08:30.967404Z",
       "outcome": "published",
       "reason": "",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
-      "text_fingerprint": "39882b18c40fbabc"
+      "text_fingerprint": "27ab0d0efdd48637"
     },
     "https://www.northernrailway.co.uk/service-updates#live-823753570300c9b9b1": {
       "first_attempt_at": "2026-10-18T07:58:15.364424Z",
@@ -3581,14 +3598,14 @@
         "https://www.rochvalleyradio.com/news-features/142/community/1110/bonfire-night-events-taking-place-in-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T08:35:13.029378Z",
+      "last_attempt_at": "2026-10-18T09:08:30.967153Z",
       "outcome": "published",
       "reason": "",
       "title": "Bonfire night events taking place in Rochdale",
       "source_name": "Roch Valley Radio Local News",
       "category": "transport",
       "text_fingerprint": "ff31840c8d46e8d5",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "final_gate_removal_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/908/the-hopwood-hall-saga": {
