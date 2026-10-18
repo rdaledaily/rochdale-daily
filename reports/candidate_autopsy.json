@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-10-17T11:10:00.325276Z",
+  "examined_at": "2026-10-18T11:41:27.949730Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 119,
+  "candidates_examined": 134,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 99,
-    "would publish": 12,
-    "duplicate of published story": 8
+    "age": 85,
+    "would publish": 46,
+    "duplicate of published story": 3
   },
-  "would_publish": 12,
+  "would_publish": 46,
   "age_gate_sensitivity": {
-    "6h": 0,
-    "14h": 0,
-    "24h": 20,
-    "48h": 52,
-    "72h": 76,
-    "168h": 119
+    "6h": 6,
+    "14h": 8,
+    "24h": 49,
+    "48h": 74,
+    "72h": 110,
+    "168h": 134
   },
   "gates_unavailable": [],
   "examples": {
     "duplicate of published story": [
-      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "The Bury Times: Rochdale high school evacuated after 'bomb threat' phone call - The Bu",
-      "Oldham Times: Rochdale high school evacuated after 'bomb threat' phone call - Oldham"
+      "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "BBC: Crewe Alexandra 3-2 Rochdale - BBC",
+      "Universidad de Córdoba (UCO): ~$!【SoCCER】 Rochdale v Crewe Alexandra 𝐋𝐈𝐕𝐄 Ｓｔｒｅａｍｓ ＯＮ Ｔｖ - Universida"
     ],
     "would publish": [
-      "Rochdale Borough Council: Contact Estates and Asset Management - Rochdale Borough Council - Roch",
-      "Manchester Evening News: Next steps for historic Hopwood Hall after council avoided £1 sale in ",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc"
+      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
+      "TfGM Travel Alerts: Travel alerts",
+      "TfGM Travel Alerts: Travel alerts"
     ],
     "age": [
-      "Rochdale AFC: Co-Chair On State Of The Game Report - Rochdale AFC",
-      "InYourArea: What’s On Rochdale: Explosive 1980s Othello, street artist's legacy an",
-      "Rochdale Borough Council: Rochdale Borough Council"
+      "Universidad de Córdoba (UCO): +[#!WATCHLIVE-Tv!]™Rochdale vs Crewe Live Free Football 17 October 202",
+      "Roch Valley Radio Local News: Hopwood Hall ‘will be brought back into community use’",
+      "Roch Valley Radio Local News: Town hall fears for the future of pubs"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
