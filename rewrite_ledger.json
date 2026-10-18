@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-18T18:34:44.950473Z",
+  "updated_at": "2026-10-18T19:13:49.896809Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 268,
+  "count": 266,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -584,12 +584,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T13:01:39.130241Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Updated: 18/10/2026 at 9:59am Live Freehold Tram Stop - Lifts out of service Duration Sun 18 Oct, 9:59am – until further notice Stops impact",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "66918512ed251000"
+      "text_fingerprint": "66918512ed251000",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-6ecbb4787d583cbfdf": {
       "first_attempt_at": "2026-10-13T18:20:19.452846Z",
@@ -901,8 +903,10 @@
     },
     "https://www.bordercountiesadvertizer.co.uk/sport/national/26646547.jordan-gibson-nets-twice-crewe-beat-rochdale-remain-unbeaten": {
       "first_attempt_at": "2026-10-18T13:00:28.965081Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMitwFBVV95cUxOUXZJR21jQ2U4MU0tSldOMEVkRTloMndJOUhLUXN4dW9XYWJPX1I3WHlrakxMMFRpTzhCbFd1ejFYd2RLTlZmNk5TYndBZzdycEFKbXRUa3JoSExYTXZ2bERPZm45eTJXdTVndm5UbWxWU0kwWlc0bUpFb2hkZWpIUjQ3SlpieUwxZ204LWpnX01QOEZMUWo4V2w5MnJUeHFqdTJQcl9oa1RTWEVscmphVHFSdkZ1QjQ?oc=5",
+        "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOaWUwWVl5ZVVIdTNIOFN2dmNpZFRMc1MzLVlVSHYyMXdQYy1meHZpRzh0SlpLclMtOFFpbVJDQVhHY0YwWEtmTUJvZUNjMnNCZWRaZEpXbDl4TkhEX2wwQ19hSmdnQlI0VGVORVM5Um5ncUx6bjNfYnQ1M0dZRFVyYnZiakFvMndhTVlpVXBiYUZjVG9kazFvRUw5Z211WW5PN28zemwyUVp3ekVHYmFKUVhJZVlJejRT?oc=5",
         "https://www.bordercountiesadvertizer.co.uk/sport/national/26646547.jordan-gibson-nets-twice-crewe-beat-rochdale-remain-unbeaten",
         "https://www.countytimes.co.uk/sport/national/26646547.jordan-gibson-nets-twice-crewe-beat-rochdale-remain-unbeaten",
         "https://www.lancashiretelegraph.co.uk/sport/national/26646547.jordan-gibson-nets-twice-crewe-beat-rochdale-remain-unbeaten",
@@ -910,7 +914,7 @@
         "https://www.somersetcountygazette.co.uk/sport/national/26646547.jordan-gibson-nets-twice-crewe-beat-rochdale-remain-unbeaten"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T15:31:34.000434Z",
+      "last_attempt_at": "2026-10-18T19:12:19.687348Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Jordan Gibson nets twice as Crewe beat Rochdale to remain unbeaten - Border Counties Advertizer",
@@ -1856,20 +1860,6 @@
       "category": "transport",
       "text_fingerprint": "85efbf7248f1e345"
     },
-    "https://www.northernrailway.co.uk/service-updates#live-460161b5a0b3cd3e27": {
-      "first_attempt_at": "2026-10-10T18:31:50.899276Z",
-      "attempts": 2,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-460161b5a0b3cd3e27"
-      ],
-      "last_attempt_at": "2026-10-10T18:42:41.278401Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "b40189ebf8775874"
-    },
     "https://www.northernrailway.co.uk/service-updates#live-4f1ed5afcf51f9da5b": {
       "first_attempt_at": "2026-10-12T04:58:16.147905Z",
       "attempts": 2,
@@ -2065,6 +2055,21 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "bdc3ba1c82b1d4ad"
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-6e4ac7c5e733ffff9d": {
+      "first_attempt_at": "2026-10-18T19:13:49.896603Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-6e4ac7c5e733ffff9d"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-18T19:13:49.896603Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "d728f6927b4312da"
     },
     "https://www.northernrailway.co.uk/service-updates#live-7294899d48c884f9b0": {
       "first_attempt_at": "2026-10-18T16:47:22.363988Z",
@@ -2615,20 +2620,6 @@
       "text_fingerprint": "955e243a366401af",
       "recovery_attempts": 1,
       "final_gate_removal_recovery": 1
-    },
-    "https://www.northernrailway.co.uk/service-updates#live-c03fe10c88bd6b7718": {
-      "first_attempt_at": "2026-10-10T18:55:05.320277Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-c03fe10c88bd6b7718"
-      ],
-      "last_attempt_at": "2026-10-10T18:55:05.320277Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "172800f741e0016a"
     },
     "https://www.northernrailway.co.uk/service-updates#live-c21ea5773f61dfb535": {
       "first_attempt_at": "2026-10-11T11:14:41.276544Z",
@@ -3984,20 +3975,6 @@
       "category": "education",
       "text_fingerprint": "4725313db939785e"
     },
-    "https://www.rochvalleyradio.com/news-features/3/politics/905/rochdale-manufacturing-centre-completes-base-build-ahead-of-planned-2027-opening": {
-      "first_attempt_at": "2026-10-10T08:38:06.665527Z",
-      "attempts": 17,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/3/politics/905/rochdale-manufacturing-centre-completes-base-build-ahead-of-planned-2027-opening"
-      ],
-      "last_attempt_at": "2026-10-10T18:55:18.222066Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
-      "title": "Rochdale manufacturing centre completes base build ahead of planned 2027 opening",
-      "source_name": "Roch Valley Radio",
-      "category": "news",
-      "text_fingerprint": "0139d49bf232304b"
-    },
     "https://www.skysports.com/football/news/13592710/tranmere-1-1-rochdale": {
       "first_attempt_at": "2026-10-10T23:40:32.545009Z",
       "attempts": 1,
@@ -4387,14 +4364,14 @@
     },
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-vbfukrz": {
       "first_attempt_at": "2026-10-18T15:48:30.663606Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMi4gJBVV95cUxOUnpFZEtZX0NjLXlKU2hScmRmaUZOWnZ1VFA0STVWaGNzYW5MaEhsV1RkMHM5YkpLYVhsVE5uR1VIa0tYZkU0S0FNbHQydTVXWTdWTjhTVm1YNGpFWUpPUVV1Qlo2bmVObFhaTkh3azBlM1pmM1hqN0R0TEpfbXFoS280QklQdXpZbS1NNlU1eFJra3poSHhGbTBQU0h2b0NHc0lLQy04RXcyMmNBcUJRMjA2eXBKNXVNemEwazVSaFBOZHZMVHhhN0pYTWM0RFc4QzRwMVlfRmt1WENmZE9vLWMtekhKU3otaWhQX1ZScVFCd09MMkw4TTRjcS1ISnBkYUVfM1RILVpYT0Z6aFhEdkE3bUlNM1NYU1RzTUVyZFV0MXhUVjJIWTU3VVk5bnZvRC1ad3hTV1MyTGE0ME9QdUdHZ2FyN2JuMzlVTU9LVldvQzg5M2hHb0twYUJ3dDNzQmc?oc=5",
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-lie-en-avqlwyi",
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-vbfukrz"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T18:33:21.510903Z",
+      "last_attempt_at": "2026-10-18T19:12:27.441286Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
       "title": "LIVESTREAMs]!REDDIT!] Rochdale vs Crewe Alexandra 𝐋𝐈𝐕𝐄 𝙵𝚛𝚎𝚎 𝚂𝚝𝚛𝚎𝚊𝚖𝚜 𝙾𝚗 𝚂𝚙𝚘𝚛𝚝'𝚜𝚃𝚟 - Universidad de Córdoba (UCO)",
