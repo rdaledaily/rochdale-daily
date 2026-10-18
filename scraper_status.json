@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-18T19:30:30.873312Z",
+  "last_run_at": "2026-10-18T19:44:23.236712Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,31 +27,26 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 110,
+  "raw_candidates_before_job_filter": 109,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 110,
+  "raw_candidates": 109,
   "candidate_clusters": 37,
   "google_news_resolution": {
     "wrappers": 66,
-    "resolved": 61,
+    "resolved": 62,
     "text_recovered": 34,
     "reattributed": 4,
     "images_found": 35
   },
-  "duplicates_merged": 73,
+  "duplicates_merged": 72,
   "attempted_rewrites": 3,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "train-services-disrupted-due-to-crew-shortages-on-leeds-to-rochdale-route",
-      "source_url": "https://www.northernrailway.co.uk/service-updates#live-3b96541153995955e5"
-    }
-  ],
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
   "new_articles": 0,
   "live_articles": 323,
-  "skipped": 2,
+  "skipped": 3,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2
+    "editorial gate: REJECTED_NON_LOCAL": 3
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -66,8 +61,8 @@
   "rewrite_ledger": {
     "entries": 267,
     "by_outcome": {
-      "failed": 27,
-      "published": 94,
+      "failed": 28,
+      "published": 93,
       "rejected": 146
     },
     "held_back_this_run": 28,
@@ -199,7 +194,7 @@
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 84,
-    "website_discovery": 9,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
     "facebook_official": 0,
@@ -237,7 +232,6 @@
     "Facebook": 1,
     "Somerset County Gazette": 1,
     "Cotswold Journal": 1,
-    "Northern Service Updates": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -257,7 +251,7 @@
     "politics": 11,
     "sport": 24,
     "traffic": 10,
-    "transport": 6
+    "transport": 5
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -283,12 +277,12 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-3f19787b223e8e960974",
-    "transport-v3-e61577aabce07fc5b280",
+    "transport-v3-aeb39745857657ff48b0",
     "sport-v3-06e796fb66e1f5e717f3"
   ],
   "selected_candidate_urls": [
     "https://www.bordercountiesadvertizer.co.uk/sport/national/26646547.jordan-gibson-nets-twice-crewe-beat-rochdale-remain-unbeaten/",
-    "https://www.northernrailway.co.uk/service-updates#live-3b96541153995955e5",
+    "https://www.northernrailway.co.uk/service-updates#live-ff1ebdca7434c36775",
     "https://rochdaleafc.co.uk/report-crewe-away-171026/"
   ],
   "x_social_records": 0,
@@ -884,22 +878,23 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 25,
+  "robots_denied_count": 26,
   "robots_denied_urls": [
     "https://www.uco.es",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2NpbWFuZ28uZ2l0aHViLmlvL3NhbmkvbXRwLnhtbCIvPjwva3JwYW5vPg==&id=crewe-vs-rochdale-live-online-optv-tvukk21-284",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-vbfukrz",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii8vc2Fnb3JtaWEwMDQ3LmdpdGh1Yi5pby9hbnRzdHJlYW0vZXBuLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-live-on-free-today-match-en-gb9001-1nzsbnw",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL3ZlbXBpcmVzLmdpdGh1Yi5pby9TVEYvZGVyLnhtbCIvPjwva3JwYW5vPg==&id=crewe-vs-rochdale-cbs-sports-ouiv7",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-v-rochdale-soccer-260",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-alex-vs-rochdale-afc-stream-757",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-vbfukrz",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-afc-vs-crewe-alexandra-fc-l-616",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-v-crewe-alexandra-lie-en-ihqoaje",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii8vc2Fnb3JtaWEwMDQ3LmdpdGh1Yi5pby9hbnRzdHJlYW0vZXBuLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-live-on-free-today-match-en-gb9001-1nzsbnw",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-v-rochdale-soccer-260",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-liv-str-yfknhao",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-now-327",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-alex-vs-rochdale-liv-378",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-liv-str-yfknhao",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64&xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2dldnRzdi5naXRodWIuaW8vaHFkdHZzL3h4LnhtbCIvPjwva3JwYW5vPg==&id=video-live-streams-stream-rochdale-m1vr87p0",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2NpbWFuZ28uZ2l0aHViLmlvL3Nhbmkvcm94LnhtbCIvPjwva3JwYW5vPg==&id=rochdale-vs-crewe-live-5k_today-match_tvx1-260",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-rochdale-es-899",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-now-327",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-v-crewe-us-football-53",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-tvs-355",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-v-crewe-2026-595",
@@ -907,8 +902,8 @@
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-alexandra-uk-243",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-lie-en-imakfzy",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2NpbWFuZ28uZ2l0aHViLmlvL3NhbmkvbXRwLnhtbCIvPjwva3JwYW5vPg==&id=crewe-vs-rochdale-liv-free-today-match-today-match-ukks-590",
-    "https://news.google.com/rss/articles/CBMitwFBVV95cUxOUXZJR21jQ2U4MU0tSldOMEVkRTloMndJOUhLUXN4dW9XYWJPX1I3WHlrakxMMFRpTzhCbFd1ejFYd2RLTlZmNk5TYndBZzdycEFKbXRUa3JoSExYTXZ2bERPZm45eTJXdTVndm5UbWxWU0kwWlc0bUpFb2hkZWpIUjQ3SlpieUwxZ204LWpnX01QOEZMUWo4V2w5MnJUeHFqdTJQcl9oa1RTWEVscmphVHFSdkZ1QjQ?oc=5",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-v-crewe-alexandra-lie-en-gvrunxl",
+    "https://news.google.com/rss/articles/CBMitwFBVV95cUxOUXZJR21jQ2U4MU0tSldOMEVkRTloMndJOUhLUXN4dW9XYWJPX1I3WHlrakxMMFRpTzhCbFd1ejFYd2RLTlZmNk5TYndBZzdycEFKbXRUa3JoSExYTXZ2bERPZm45eTJXdTVndm5UbWxWU0kwWlc0bUpFb2hkZWpIUjQ3SlpieUwxZ204LWpnX01QOEZMUWo4V2w5MnJUeHFqdTJQcl9oa1RTWEVscmphVHFSdkZ1QjQ?oc=5",
     "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOaWUwWVl5ZVVIdTNIOFN2dmNpZFRMc1MzLVlVSHYyMXdQYy1meHZpRzh0SlpLclMtOFFpbVJDQVhHY0YwWEtmTUJvZUNjMnNCZWRaZEpXbDl4TkhEX2wwQ19hSmdnQlI0VGVORVM5Um5ncUx6bjNfYnQ1M0dZRFVyYnZiakFvMndhTVlpVXBiYUZjVG9kazFvRUw5Z211WW5PN28zemwyUVp3ekVHYmFKUVhJZVlJejRT?oc=5",
     "https://news.google.com/rss/articles/CBMi1gJBVV95cUxNUS1TcU5KOF9lZG5TZFlOVWxzOVl5bDJqZU1VM3FjNUZVRVFuaEtZaE1vM3hvbnJxVW1QMTVuZGtOUDVScHJTYWo4X3pPNHNhTURlV2tod3UyeGpRZFREdDYtVlNFRUJkbzFlZFdIblZna05qVWE0Qks5OEoyemVpYkM5LXRpWW5sclIyM2o3ZGRJOFF2RDM4TUR1NzF2ZF83eHFXYUV3N1c1bWV5Tm15dmpvUWxqM3M3b3dPT21EZXlDSkxpcjJUNGxtUmZrd1g3MTNPa3ZmT3pWdDd3ZHA4NEVKNlZPSlpoa19XdmlLMFN4M3dSYzlBamNpVFZoWmJHNDc0MjVwdUZxS0g5X2d4VzlpcmhKa2hvMVY4UUtQb1l1Ujl3MGpCcUxhV1o3ekpMX2hTSW0talc5bFEzNHZlaUs0SGJ5Y1VZazFKQVMxaEg0cnA2Qmc?oc=5"
   ],
@@ -954,7 +949,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-18T19:31:21.441990Z",
+  "frontpage_generated_at": "2026-10-18T19:45:09.248895Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1062,7 +1057,7 @@
   "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
