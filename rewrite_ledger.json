@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-18T09:08:30.967597Z",
+  "updated_at": "2026-10-18T09:24:19.109212Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 240,
+  "count": 242,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -1122,10 +1122,11 @@
       "first_attempt_at": "2026-10-16T16:31:17.741064Z",
       "attempts": 1,
       "urls": [
-        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/next-steps-historic-hopwood-hall-34777240"
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/next-steps-historic-hopwood-hall-34777240",
+        "https://www.rochdaletimes.co.uk/court-rules-in-ownership-row-over-hopwood-hall"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-16T16:31:17.741064Z",
+      "last_attempt_at": "2026-10-18T09:24:19.108972Z",
       "outcome": "published",
       "reason": "",
       "title": "Next steps for historic Hopwood Hall after council avoided £1 sale in High Court",
@@ -1934,13 +1935,15 @@
         "https://www.northernrailway.co.uk/service-updates#live-80acd1e2cfecc27a16"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T09:08:30.967404Z",
+      "last_attempt_at": "2026-10-18T09:24:19.108717Z",
       "outcome": "published",
       "reason": "",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
-      "text_fingerprint": "27ab0d0efdd48637"
+      "text_fingerprint": "27ab0d0efdd48637",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-823753570300c9b9b1": {
       "first_attempt_at": "2026-10-18T07:58:15.364424Z",
@@ -3340,6 +3343,22 @@
       "category": "news",
       "text_fingerprint": "92469e317e869410"
     },
+    "https://www.rochdaletimes.co.uk/town-celebrates-the-people-and-stories-behind-broadfield-park-slopes-renovation": {
+      "first_attempt_at": "2026-10-18T09:24:19.109127Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMisgFBVV95cUxOU3d5ckdkTk9BRFppcmN4c0N6NGZ0dkN4aXo5ejRVaFZTZnFEeUR5eVdCaGE5eDR4TGh2a3cxbFYyN0FPQUJoZHBFaXhhelpCYW5xREpBa0xhM2tobHAtZFdXTVdHWGFmZmZMWFZ5bEZiMTFwQ29LU3QyN085dkhWLTlUNi16WGlXRmswSjFWMGRZc28tWXRZZzAxOUxaTWlZWmkzNzNlQ2thbDlPZFVjRG5n?oc=5",
+        "https://www.rochdaletimes.co.uk/town-celebrates-the-people-and-stories-behind-broadfield-park-slopes-renovation"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-18T09:24:19.109127Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Town celebrates the people and stories behind Broadfield Park Slopes renovation - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "news",
+      "text_fingerprint": "c7054dd6c5eb3ead"
+    },
     "https://www.rochdaletimes.co.uk/town-gets-ready-to-ignite-christmas-festivities": {
       "first_attempt_at": "2026-10-15T03:32:27.248314Z",
       "attempts": 1,
@@ -3389,6 +3408,22 @@
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "8b04bb34205c9b28"
+    },
+    "https://www.rochdaletimes.co.uk/win-will-help-keep-cottage-cosy-this-winter": {
+      "first_attempt_at": "2026-10-18T09:23:37.334635Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiggFBVV95cUxPWW5aRWhZamZsRzVzRWxNbjVlN1NCTnU0ZVFLRVVXeVI3WDVDejNaazVLVjlsaFhQQm4yQ2s4TWhVX3phZEJ2dUlXbG1kYWk0dW5jS1luU0QzdHVwRlJtM0d5THVyUmZ6b2lKb0RTTjA2WEdXdlVmTkJGdzEydGU0ZEtn?oc=5",
+        "https://www.rochdaletimes.co.uk/win-will-help-keep-cottage-cosy-this-winter"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-18T09:23:37.334635Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "title": "Win will help keep cottage cosy this winter - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "news",
+      "text_fingerprint": "9073b8e2dc689d48"
     },
     "https://www.rochdalevaliant.uk/2026": {
       "first_attempt_at": "2026-10-10T16:02:22.651642Z",
