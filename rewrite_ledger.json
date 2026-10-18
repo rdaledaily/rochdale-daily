@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-18T10:26:29.188100Z",
+  "updated_at": "2026-10-18T10:43:27.498002Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 243,
@@ -1739,13 +1739,15 @@
         "https://www.northernrailway.co.uk/service-updates#live-53e2482b5aba6573b1"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T10:26:29.187865Z",
+      "last_attempt_at": "2026-10-18T10:43:27.497649Z",
       "outcome": "published",
       "reason": "",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
-      "text_fingerprint": "fcb9e681824fa3a6"
+      "text_fingerprint": "41ba95842b9ed359",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-54e7a9879589805072": {
       "first_attempt_at": "2026-10-13T11:14:25.873286Z",
@@ -1952,14 +1954,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T10:10:54.343450Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "27ab0d0efdd48637",
-      "recovery_attempts": 2,
-      "final_gate_removal_recovery": 1
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1,
+      "evidence_recovery_policy": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-823753570300c9b9b1": {
       "first_attempt_at": "2026-10-18T07:58:15.364424Z",
