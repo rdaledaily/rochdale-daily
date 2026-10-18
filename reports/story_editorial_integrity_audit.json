@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 319,
-  "published_count": 319,
+  "article_count": 321,
+  "published_count": 321,
   "category_change_count": 41,
-  "image_change_count": 66,
+  "image_change_count": 67,
   "category_changes": [
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
@@ -318,6 +318,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/does-a-boggart-still-haunt-clegg-hall-generated-card.jpg"
+    },
+    {
+      "slug": "oktoberfest-rochdale-2027",
+      "title": "Oktoberfest Rochdale 2027",
+      "category": "events",
+      "reason": "weak filename image match score 8378; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg"
     },
     {
       "slug": "rochdale-council-addresses-concerns-over-local-pub-closures",
