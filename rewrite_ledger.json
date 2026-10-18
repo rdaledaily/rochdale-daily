@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-18T20:37:18.059168Z",
+  "updated_at": "2026-10-18T21:16:27.122659Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 266,
+  "count": 265,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -1530,6 +1530,21 @@
       "category": "transport",
       "text_fingerprint": "a99036323ef75127"
     },
+    "https://www.northernrailway.co.uk/service-updates#live-0c89e4edea79817ab7": {
+      "first_attempt_at": "2026-10-18T21:15:44.082436Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-0c89e4edea79817ab7"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-18T21:15:44.082436Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "18060dcddba13e77"
+    },
     "https://www.northernrailway.co.uk/service-updates#live-11144e7a0e5265fa1d": {
       "first_attempt_at": "2026-10-16T04:12:49.227202Z",
       "attempts": 3,
@@ -1848,20 +1863,6 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "f90291c6dad30fba"
-    },
-    "https://www.northernrailway.co.uk/service-updates#live-3e8add8b7d2835faaf": {
-      "first_attempt_at": "2026-10-10T20:49:19.199523Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-3e8add8b7d2835faaf"
-      ],
-      "last_attempt_at": "2026-10-10T20:49:19.199523Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "85efbf7248f1e345"
     },
     "https://www.northernrailway.co.uk/service-updates#live-4f1ed5afcf51f9da5b": {
       "first_attempt_at": "2026-10-12T04:58:16.147905Z",
@@ -2372,20 +2373,6 @@
       "category": "transport",
       "text_fingerprint": "9463bbf2bf6c096c"
     },
-    "https://www.northernrailway.co.uk/service-updates#live-9a674deec5dadc7198": {
-      "first_attempt_at": "2026-10-10T20:25:21.871747Z",
-      "attempts": 2,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-9a674deec5dadc7198"
-      ],
-      "last_attempt_at": "2026-10-10T20:37:06.837992Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "bceb599fdc284eb3"
-    },
     "https://www.northernrailway.co.uk/service-updates#live-9c8e01a3fa740bf27f": {
       "first_attempt_at": "2026-10-13T12:34:16.133078Z",
       "attempts": 1,
@@ -2483,12 +2470,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T20:37:18.058955Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
-      "text_fingerprint": "89bddbac91d1aede"
+      "text_fingerprint": "89bddbac91d1aede",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-a65193c297d61633e4": {
       "first_attempt_at": "2026-10-15T08:43:36.882540Z",
