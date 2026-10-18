@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-18T16:06:29.589622Z",
+  "updated_at": "2026-10-18T16:23:34.704143Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 272,
+  "count": 273,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -1532,12 +1532,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T16:06:29.589414Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
-      "text_fingerprint": "b9e4ed5308a8c232"
+      "text_fingerprint": "b9e4ed5308a8c232",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-081cbb3bd065b7e1b1": {
       "first_attempt_at": "2026-10-18T15:48:31.150033Z",
@@ -1627,6 +1629,21 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "fb7c36fd06dfd981"
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-1601a524b657307fdf": {
+      "first_attempt_at": "2026-10-18T16:22:11.475737Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-1601a524b657307fdf"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-18T16:22:11.475737Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "1e256583adbb56c9"
     },
     "https://www.northernrailway.co.uk/service-updates#live-18bdd3a7b6c4120582": {
       "first_attempt_at": "2026-10-13T13:12:21.574317Z",
@@ -4297,12 +4314,12 @@
     },
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-alex-vs-rochdale-afc-stream-757": {
       "first_attempt_at": "2026-10-18T15:48:30.948685Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-alex-vs-rochdale-afc-stream-757"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T16:05:27.661111Z",
+      "last_attempt_at": "2026-10-18T16:22:11.969011Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "![[[TOTAL SPORTEK>]]>>] Crewe Alex vs Rochdale AFC England League Two 𝐋𝐈𝐕𝐄 Ｓｔｒｅａｍｓ On TV - Universidad de Córdoba (UCO)",
@@ -4327,13 +4344,13 @@
     },
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-afc-vs-crewe-alexandra-fc-l-616": {
       "first_attempt_at": "2026-10-18T15:48:40.932028Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-afc-vs-crewe-alexandra-fc-l-616",
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-vs-rochdale-liv-str-jafyrnx"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T16:05:27.662001Z",
+      "last_attempt_at": "2026-10-18T16:22:11.424833Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Here's Got the ways to watch!!!~ Rochdale AFC vs Crewe Alexandra FC En streaming - Universidad de Córdoba (UCO)",
@@ -4380,13 +4397,13 @@
     },
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-tvs-355": {
       "first_attempt_at": "2026-10-18T15:48:30.496297Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-alex-vs-rochdale-liv-378",
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-tvs-355"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T16:05:27.774990Z",
+      "last_attempt_at": "2026-10-18T16:22:11.382585Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "[ＬＩＶＥ ＴＶ ＣＨＡＮＮＥＬ ＦＲＥＥ] Rochdale vs. Crewe Match Live streaming free - Universidad de Córdoba (UCO)",
@@ -4413,7 +4430,7 @@
     },
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-liv-str-yfknhao": {
       "first_attempt_at": "2026-10-18T15:48:30.937309Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-lie-en-imakfzy",
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-liv-str-yfknhao",
@@ -4421,7 +4438,7 @@
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-lie-en-avqlwyi"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T16:05:28.401739Z",
+      "last_attempt_at": "2026-10-18T16:22:11.384449Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "!$+?(-TOTAL_SPORTEK-) Crewe Alexandra v Rochdale 𝐋𝐈𝐕𝐄 Ｆｒｅｅ ＯＮ Ｔｖ Ｃｈａｎｎｅｌ stream in - Universidad de Córdoba (UCO)",
@@ -4431,12 +4448,12 @@
     },
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-vbfukrz": {
       "first_attempt_at": "2026-10-18T15:48:30.663606Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-vbfukrz"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T16:05:27.839507Z",
+      "last_attempt_at": "2026-10-18T16:22:11.767954Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "LIVESTREAMs]!REDDIT!] Rochdale vs Crewe Alexandra 𝐋𝐈𝐕𝐄 𝙵𝚛𝚎𝚎 𝚂𝚝𝚛𝚎𝚊𝚖𝚜 𝙾𝚗 𝚂𝚙𝚘𝚛𝚝'𝚜𝚃𝚟 - Universidad de Córdoba (UCO)",
