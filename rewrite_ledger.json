@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-18T08:35:13.029759Z",
+  "updated_at": "2026-10-18T08:52:43.584970Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 239,
@@ -21,21 +21,6 @@
       "text_fingerprint": "0cce6066df4978c0",
       "recovery_attempts": 0,
       "final_gate_removal_recovery": 1
-    },
-    "https://democracy.rochdale.gov.uk/documents/s123962/Final%20Report.pdf": {
-      "first_attempt_at": "2026-10-10T08:38:06.665457Z",
-      "attempts": 1,
-      "urls": [
-        "https://democracy.rochdale.gov.uk/documents/s123962/Final%20Report.pdf"
-      ],
-      "last_attempt_at": "2026-10-10T08:38:06.665457Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Committee Report - Rochdale Borough Council",
-      "source_name": "Rochdale Borough Council",
-      "category": "environment",
-      "text_fingerprint": "9f471b98ec305923",
-      "recovery_attempts": 1
     },
     "https://democracy.rochdale.gov.uk/documents/s123963/Append.%201%20Sustainability%20Impact%20Assessment%20for%20Rochdale%20Enhanced%20Live%20Well%20Service%20funded%20via%20Changi.pdf": {
       "first_attempt_at": "2026-10-11T08:53:28.376519Z",
@@ -766,12 +751,12 @@
     },
     "https://www.bbc.co.uk/news/articles/cmy0rw2z1402o": {
       "first_attempt_at": "2026-10-18T07:58:15.651802Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.bbc.co.uk/news/articles/cmy0rw2z1402o"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T08:33:38.921962Z",
+      "last_attempt_at": "2026-10-18T08:51:45.634592Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Historic pub objects to plan for 17-storey tower nearby",
@@ -1574,12 +1559,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T08:35:13.029165Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
       "source_name": "Northern live service updates",
       "category": "transport",
-      "text_fingerprint": "7e6905af9e129194"
+      "text_fingerprint": "7e6905af9e129194",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.northernrailway.co.uk/service-updates#live-37a43b471be2920cb5": {
       "first_attempt_at": "2026-10-12T11:19:13.840044Z",
@@ -1922,6 +1909,21 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "f150dc663fbc3da4"
+    },
+    "https://www.northernrailway.co.uk/service-updates#live-7f24014163898b2e0e": {
+      "first_attempt_at": "2026-10-18T08:52:43.584767Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.northernrailway.co.uk/service-updates#live-7f24014163898b2e0e"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "last_attempt_at": "2026-10-18T08:52:43.584767Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
+      "source_name": "Northern live service updates",
+      "category": "transport",
+      "text_fingerprint": "39882b18c40fbabc"
     },
     "https://www.northernrailway.co.uk/service-updates#live-823753570300c9b9b1": {
       "first_attempt_at": "2026-10-18T07:58:15.364424Z",
