@@ -1,0 +1,55 @@
+name: Rochdale Daily official source trace
+
+# Read-only. Replays the council RSS feed and the Northern Care Alliance news
+# pages through the real collector code and records the first step that stops
+# each item in reports/official_source_trace.json. Publishes nothing.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-official-source-trace
+  cancel-in-progress: true
+
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      MAX_NEWS_AGE_HOURS: "48"
+      PUBLISH_MAX_NEWS_AGE_HOURS: "48"
+      SAME_DAY_ONLY: "false"
+      BROWSER_RENDER_ENABLED: "false"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.txt
+      - name: Trace official sources
+        run: python scraper/official_source_trace.py
+      - name: Commit trace report
+        if: always()
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add reports/official_source_trace.json || exit 0
+          if git diff --cached --quiet; then echo 'no change'; exit 0; fi
+          git commit -m "Record official source trace"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 7))
+          done
+          echo "::warning::official source trace could not push after five attempts"
