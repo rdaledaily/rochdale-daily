@@ -1,0 +1,169 @@
+
+=== find_tender ===
+  fts_page0.json: HTTP 200 application/json 872432 bytes
+  fts_page1.json: HTTP 200 application/json 912844 bytes
+  fts_last.json: HTTP 200 application/json 1352468 bytes
+  fts_last.json: HTTP 200 application/json 1200993 bytes
+  fts_last.json: HTTP 200 application/json 1242399 bytes
+  fts_last.json: HTTP 200 application/json 827542 bytes
+  fts_last.json: HTTP 200 application/json 965691 bytes
+  fts_last.json: HTTP 200 application/json 1427330 bytes
+  fts_last.json: HTTP 200 application/json 1013508 bytes
+  fts_last.json: HTTP 200 application/json 909088 bytes
+  fts_last.json: HTTP 200 application/json 1320707 bytes
+  fts_last.json: HTTP 200 application/json 1015113 bytes
+  fts_last.json: HTTP 200 application/json 1224824 bytes
+  fts_last.json: HTTP 200 application/json 987666 bytes
+  fts_last.json: HTTP 200 application/json 1078924 bytes
+  fts_last.json: HTTP 200 application/json 972315 bytes
+  fts_last.json: HTTP 200 application/json 1340530 bytes
+  fts_last.json: HTTP 200 application/json 1064516 bytes
+  fts_last.json: HTTP 200 application/json 924812 bytes
+  fts_last.json: HTTP 200 application/json 964198 bytes
+  fts_last.json: HTTP 200 application/json 1058119 bytes
+  fts_last.json: HTTP 429 text/plain 58 bytes
+  pages=21 releases=2100 naming-borough=7 tags={'award': 5, 'contract': 5, 'tenderUpdate': 2}
+    2026-10-16T15:27:16+01:00 ['award', 'contract'] | HOPWOOD HALL COLLEGE | Provision of Drinking Water Fountains | [(None, None, ['BWT UK Ltd'])]
+    2026-10-16T12:04:11+01:00 ['award', 'contract'] | Salix Homes | Fire Remedial Works | [(None, None, ['JACKSON, JACKSON & SONS LIMITED'])]
+    2026-10-15T11:11:53+01:00 ['award', 'contract'] | Translink | P-3370 Supply of Double Deck Diesel Buses | [(None, None, ['Bamford Bus Company Ltd'])]
+    2026-10-15T10:53:29+01:00 ['award', 'contract'] | Lincolnshire County Council | 2377- C779 Boston Freiston Road | [(None, None, ['THOMAS BOW LIMITED'])]
+    2026-10-14T16:06:07+01:00 ['award', 'contract'] | Rochdale Borough Council | Replacement Render at Bowlee Park Community Primary School, Middleton | [(None, None, ['F.S. MOULT & SON LTD'])]
+    2026-10-14T11:33:03+01:00 ['tenderUpdate'] | Rochdale Borough Council | Provision of Single Homelessness Prevention Service (Rochdale) | []
+    2026-10-13T09:21:04+01:00 ['tenderUpdate'] | Hopwood Hall College | Hopwood Hall College - Provision of HR & Payroll System | []
+
+=== contracts_finder ===
+  cf_page0.json: HTTP 429 text/plain 58 bytes
+  pages=0 releases=0 naming-borough=0
+
+=== met_office_warnings ===
+  mo_nw.xml: HTTP 200 application/atom+xml 598 bytes
+   items=0
+  mo_uk.xml: HTTP 200 application/atom+xml 4274 bytes
+   items=4
+    - Yellow warning of wind affecting South West England
+    - Yellow warning of wind affecting London &amp; South East England
+    - Yellow warning of wind affecting Wales
+    - Yellow warning of wind affecting West Midlands
+
+=== gazette_all ===
+  gazette_p1.json: HTTP 200 application/json;charset=UTF-8 48018 bytes
+   code  2450 x6    {"@term": "Petitions to Wind Up (Companies)"} e.g. ['BATIM LIMITED', '/n SHELLCO 148 LIMITED', 'MERCO FACILITIES SERVICES LIMITED', 'DRIVE 2000 LIMITED']
+   code  2443 x5    {"@term": "Appointment of Liquidators"} e.g. ['YARWELL ADMIN LTD', 'TURKITA LTD', 'KAM PAYROLL LTD', 'BLUESKY EXEC LTD']
+   code  2441 x4    {"@term": "Resolutions for Winding-up"} e.g. ['PW GREENHALGH FINISHING LIMITED', 'KAM PAYROLL LTD', 'RJCA SOLUTIONS LIMITED', 'ALTERNATIVE APPROACH SUPPORTED ACCOMMODATION LTD']
+   code  2503 x3    {"@term": "Bankruptcy Orders"} e.g. ['Umer Farooq', 'ASIF SHARIF MOHAMMED', 'Natasha Harrison']
+   code  2903 x3    {"@term": "Deceased Estates"} e.g. ['Enid Ashworth', 'Ronald Butterworth', 'Paul Lockett']
+   code  2452 x1    {"@term": "Winding-Up Orders"} e.g. ['RICO FACILITIES LTD']
+   code  2603 x1    {"@term": "Notice of Disclaimer"} e.g. ['Notice of Disclaimer']
+
+=== nomis ===
+  nomis_geo.json: HTTP 200 application/json 1055 bytes
+    {  "structure" :{"codelists" :{"codelist" :[ {"agencyid" :"NOMIS","id" :"CL_162_1_GEOGRAPHY","code" :[ {"annotations" :{"annotation" :[ {"annotationtext" :"local authorities: district / unitary (as of April 2023)","annotationtitle" :"TypeName"},{"annotationtext" :424,"annotationtitle" :"TypeCode"},{"annotationtext" :"E08000005","annotationtitle" :"GeogCode"}]},"parentcode" :2013265922,"description" :{"value" :"Rochdale","lang" :"en"},"value" :1778385128}],"name" :{"value" :"geography","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_162_1","prepared" :"2026-10-19T14:17:55Z","sender" :{"con
+  nomis_cc.csv: HTTP 200 text/csv 500 bytes
+    "DATE_NAME","GEOGRAPHY_NAME","GEOGRAPHY_CODE","MEASURE_NAME","OBS_VALUE"
+"June 2026","Trafford","E08000009","Claimant count",
+"June 2026","Trafford","E08000009","Claimants as a proportion of residents aged 16-64",
+"July 2026","Trafford","E08000009","Claimant count",
+"July 2026","Trafford","E08000009","Claimants as a proportion of residents aged 16-64",
+"August 2026","Trafford","E08000009","Claimant count",
+"August 2026","Trafford","E08000009","Claimants as a proportion of residents aged 16-64",
+
+  nomis_lmp.html: HTTP 200 text/html; charset=utf-8 47333 bytes
+    lmp title: Labour Market Profile - Nomis - Official Census and Labour Market Statistics
+    claimant mention: None
+
+=== petitions ===
+  pet_open.json: HTTP 200 application/json; charset=utf-8 277 bytes
+   q=rochdale state=open: 0
+  pet_closed.json: HTTP 200 application/json; charset=utf-8 3706 bytes
+   q=rochdale state=closed: 2
+    - 751068 2025-11-17 206 Fund extensive support for victims of grooming gangs
+    - 762252 2026-02-23 65 Introduce Nitrous Oxide canister refunds
+
+=== case_law ===
+  caselaw.xml: HTTP 200 application/xml; charset=utf-8 13416 bytes
+   entries=10
+    - 2026-10-09 North Warwickshire Borough Council v Persons Unknown &amp; Ors
+    - 2026-10-06 R v Mohammed Qureshi &amp; Anor
+    - 2026-09-28 Pristine Health Solutions Limited v Care Quality Commission
+    - 2026-09-14 Steven Ball (deceased) v The Secretary of State for Work and Pensions
+    - 2026-08-26 Muhammad Asif Afzal v Registrar of Approved Driving Instructors
+    - 2026-07-31 Royal Mint Court Residents’ Association, R (on the application of) v Secretary of State for Housing, Communiti
+    - 2026-07-30 Tajamal Hazoor Randhawa v The Secretary of State for the Home Department
+    - 2026-07-28 ROR v The Secretary of State for Work and Pensions
+    - 2026-07-28 Frances Catherine Grogan &amp; Anor v Mohammed Alam &amp; Anor
+    - 2026-06-30 North Warwickshire Borough Council, R (on the application of) v The Secretary of State for Transport &amp; Ano
+
+=== leads ===
+  fms.xml: HTTP 200 application/xml; charset=utf-8 18985 bytes
+   items=20 first/last dates=['Mon, 19 Oct 2026 12:42:01 +0100'] / ['Sun, 04 Oct 2026 17:19:58 +0100']
+    - Garden area very overgrown, 19th October
+    - Street light not working, 19th October
+    - Persistent littering, 18th October
+    - Rubbish dumped, 18th October
+    - Trampoline tipped, 17th October
+  wdtk_council.xml: HTTP 403 text/html; charset=UTF-8 5739 bytes
+  wdtk_council_alt.xml: HTTP 403 text/html; charset=UTF-8 5739 bytes
+
+=== existing_rota ===
+{
+ "council_roadworks": {
+  "status": "ok",
+  "offered": 4,
+  "daily_cap": 4,
+  "offered_today": 4,
+  "listed": 52,
+  "already_seen": 0,
+  "started_long_ago": 19,
+  "too_far_ahead": 16,
+  "undated": 3,
+  "in_window": 14
+ },
+ "gazette_insolvency": {
+  "status": "ok",
+  "offered": 2,
+  "daily_cap": 2,
+  "offered_today": 2,
+  "listed": 10,
+  "other_notice_types": 5,
+  "already_seen": 0,
+  "new": 5
+ },
+ "written_answers": {
+  "status": "ok",
+  "offered": 0,
+  "daily_cap": 3,
+  "offered_today": 0,
+  "listed": 0,
+  "unanswered_or_holding": 0,
+  "not_about_the_borough": 0,
+  "already_seen": 0,
+  "new": 0
+ },
+ "gmca_decisions": {
+  "status": "ok",
+  "offered": 0,
+  "daily_cap": 1,
+  "offered_today": 0,
+  "listed": 13,
+  "not_decisions": 9,
+  "no_borough_place": 4,
+  "already_seen": 0,
+  "new": 0
+ },
+ "ons_housing": {
+  "status": "ok",
+  "offered": 1,
+  "daily_cap": 1,
+  "offered_today": 1,
+  "listed": 1,
+  "already_seen": 0,
+  "new": 1
+ }
+}
+   offer: council_roadworks | Madison Square, roadworks in Rochdale from 19 October 2026 | https://www.rochdale.gov.uk/directory-record/2632/madison-square-roadworks-in-rochdale-from-19-october-2026
+   offer: council_roadworks | Egerton Street, roadworks in Heywood from 20 October 2026 | https://www.rochdale.gov.uk/directory-record/2614/egerton-street-roadworks-in-heywood-from-20-october-2026
+   offer: council_roadworks | Mark Street, roadworks in Rochdale on 24 October 2026 | https://www.rochdale.gov.uk/directory-record/2610/mark-street-roadworks-in-rochdale-on-24-october-2026
+   offer: council_roadworks | Well i' th' Lane, roadworks in Rochdale from 24 October 2026 | https://www.rochdale.gov.uk/directory-record/2592/well-i-th-lane-roadworks-in-rochdale-from-24-october-2026
+   offer: gazette_insolvency | YARWELL ADMIN LTD: Appointment of Liquidators | https://www.thegazette.co.uk/notice/5230180
+   offer: gazette_insolvency | TURKITA LTD: Appointment of Liquidators | https://www.thegazette.co.uk/notice/5230170
+   offer: ons_housing | Rochdale house prices and rents: ONS figures updated 16 September 2026 | https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005/#updated-16-september-2026

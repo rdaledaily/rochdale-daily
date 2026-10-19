@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--[if lt IE 9]>
+    <script>
+      document.createElement('header');
+      document.createElement('nav');
+      document.createElement('section');
+      document.createElement('article');
+      document.createElement('aside');
+      document.createElement('footer');
+    </script>
+    <![endif]-->
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Labour Market Profile - Nomis - Official Census and Labour Market Statistics</title>
+
+    <meta name="description" content="nomis - official labour market statistics" />
+    <meta name="keywords" content="annual business inquiry" />
+    <meta name="viewport" content="initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link title="Easy Access version" rel="alternate" href="/home/accesskeys.htm" media="aural, braille, tty">
+    <link rel="alternate" type="application/rss+xml" title="Nomis RSS News Feed" href="/articles/rssArticles.asp" />
+    <link rel="alternate" type="application/rss+xml" title="Nomis RSS Release Dates Feed" href="/home/rssRelease_dates.asp" />
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="/libs/jqueryui/jquery-ui.min.css" />
+    <link rel="stylesheet" href="/libs/jquery-simplePagination/simplePagination.min.css" />
+    <link rel="stylesheet" href="/libs/leaflet/leaflet.css" type="text/css" />
+
+    <link rel="stylesheet" href="/css/nomis.css" type="text/css" />
+    <link rel="stylesheet" href="/css/standard.css" type="text/css" />
+    <link rel="stylesheet" href="/css/nomis-ui.css" type="text/css" />
+    <link rel="stylesheet" href="/css/menubar.css" type="text/css" />
+    <link rel="stylesheet" href="/css/responsive.css" type="text/css" />
+    <link rel="stylesheet" href="/css/print.css" type="text/css" media="print" />
+
+    <!--[if Safari]>
+        <link rel="stylesheet" href="/css/safari-nomis.css" type="text/css" />
+    <![endif]-->
+
+    <script type="text/javascript" src="/libs/modernizr/modernizr.min.js"></script>
+    <script type="text/javascript" src="/libs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/libs/jquery-cookie/jquery.cookie.min.js"></script>
+    <script type="text/javascript" src="/libs/jquery-simplePagination/jquery.simplePagination.min.js"></script>
+    <script type="text/javascript" src="/libs/jqueryui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/libs/jqueryui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="/libs/leaflet/leaflet.min.js"></script>
+    
+    <style>
+        .prefFntCtrl:hover, .prefFntCtrl:visited { color: #00B; }
+        .prefFntCtrl { border: 1px solid transparent; padding: 1px; }
+        .activeFntSz { border-color: #00b; font-weight: normal; }
+        #nomisweb-organisation-name-title:hover { text-decoration: underline; }
+        .fa-search { border: 0; padding: 0.7em; background: #5f7d41; font-size: 13px; color: #fff; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
+        .fa-search:hover { cursor: pointer; }
+    </style>
+    <script type="text/javascript">
+        // Include D3 for browsers that support it
+        if (Modernizr.inlinesvg) { document.write ('<script type="text\/javascript" src="\/libs\/d3\/d3.min.js"><\/script>'); }
+    </script>
+        
+    <script type="text/javascript" src="/js/PageScripts.js"></script>
+    <script type="text/javascript" src="/js/nomis-core.js"></script>
+	<script type="text/javascript" src="/js/nomis-geography.js"></script>
+    <script type="text/javascript" src="/js/nomis-api.js"></script>
+    <script type="text/javascript" src="/js/nomis-ui.js"></script>
+    <script type="text/javascript" src="/js/nomis-stat.js"></script>
+    <script type="text/javascript" src="/js/cookies.js"></script>
+       
+	<script type="text/javascript">
+        const GA_TRACKING_ID = 'UA-3628896-1';
+
+        // Disable GA by default
+        window[`ga-disable-${GA_TRACKING_ID}`] = true;
+        if(hasCookieConsent()){
+            // Enable GA if consent is given
+            window[`ga-disable-${GA_TRACKING_ID}`] = false;
+
+            (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', GA_TRACKING_ID, 'auto');
+            ga('send', 'pageview');
+        }else{
+            // Cookies disabled 
+        	function ga(){};
+        }
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script>
+    // Set GA4 Measurement ID
+    const GA4_MEASUREMENT_ID = 'G-LMNEJ7PM1T';
+
+    // Disable GA4 by default
+    window[`ga-disable-${GA4_MEASUREMENT_ID}`] = true;
+
+    if (hasCookieConsent()) {
+        // Enable GA4 if consent is given
+        window[`ga-disable-${GA4_MEASUREMENT_ID}`] = false;
+
+        // Load the GA4 script
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`;
+        document.head.appendChild(script);
+
+        script.onload = function () {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA4_MEASUREMENT_ID);
+        };
+    }else{
+        // Cookies disabled 
+        function gtag(){};
+    }
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+        if(hasCookieConsent()){
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-NJWJX69');
+        }
+    </script>
+    <!-- End Google Tag Manager -->
+
+</head>
+<body onload="javascript:try { pageLoaded(); } catch(er) { }" onunload="javascript:try { pageUnloaded(); } catch(er) { }">
+    <div role="status" id="titleStatusDiv" class="visually-hidden"></div>
+    <div id="nomis-webpage">
+        <div id="cookie-consent-wrapper" aria-labelledby="cookie-consent-heading" style="display: none;" role="alert">
+            <h1 id="cookie-consent-heading">Cookie Consent</h1>
+            <div class="cookie-container">
+                <div id="outstanding-cookie-decision-panel">
+                    <p id="cookie-consent-info">We use cookies to ensure you get the best experience on our website and to remember if you've accepted cookies.</p>
+                    <br>
+                    <button id="cookie-consent-accept-button" class="positive" aria-label="cookie-consent-accept" onclick="cookieAccept();" title="Consent to the use of cookies" type="button">Accept Cookies</button>
+                    <button id="cookie-consent-decline-button" class="positive" aria-label="cookie-consent-decline" onclick="cookieDecline();" title="Decline the use of cookies" type="button">Decline Cookies</button>
+                    <a href="/home/cookies.asp" id="cookie-link" title="Read about how cookies are used on the Nomis web site">View cookie policy</a>
+                </div>
+                <div id="confirmed-cookie-decision-panel" style="display: none;">
+                    <p>Thanks for confirming your cookie preference. You can view or change your <a href="javascript: showSitePrefs();">cookie settings</a> at any time.</p>
+                    <input id="cookie-consent-dismiss-button" aria-labelledby="cookie-consent-terms" onclick="cookieConsentDismiss();" title="Hide this message about cookies" type="button" value="Hide" />
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function shouldDisplayCookieConsent() { return $.cookie('cookie-consent') === undefined; }
+            function cookieAccept(){$('#outstanding-cookie-decision-panel').css('display', 'none'); $('#confirmed-cookie-decision-panel').css('display', 'block'); setCookieConsent(true);}
+            function cookieDecline(){$('#outstanding-cookie-decision-panel').css('display', 'none'); $('#confirmed-cookie-decision-panel').css('display', 'block'); setCookieConsent(false);}
+            function cookieConsentDismiss() { $('#cookie-consent-wrapper').slideUp(800); }
+            if (shouldDisplayCookieConsent()) { $('#cookie-consent-wrapper').css('display', 'block'); }
+        </script>
+        <div id="org-name-and-logo-wrapper" role="banner" aria-labelledby="nomisweb-organisation-name-title nomisweb-organisation-name-subtitle" style="overflow: hidden;">
+            <div class="hidden-until-focus">
+                <a href="#content-anchor" accesskey="s" class="skiptocontent">Skip to content</a>
+                <a href="/home/accessibility.asp" title="navigation link to Nomis website accessibility guide page">Skip to accessibility help</a>
+            </div>
+            <div id="nomisweb-organisation-name">
+                <div id="nomisweb-main-title-container"> <div id="nomisweb-organisation-name-title"><a href="/" accesskey="1">nomis</a></div> </div>
+                <div id="nomisweb-subtitle-container"> <div id="nomisweb-organisation-name-subtitle">official census and labour market statistics</div> </div>
+            </div>
+            <div class="nomisweb-ons-logo" style="float: none; text-align: right; margin-right: 0;">
+                <a href="https://www.ons.gov.uk">
+                    <img alt="National Statistics Logo" src="/images/ons-logo.svg" style="margin-top: 0; float: none; width: 19.7em;">
+                </a>
+                <div class="page-heading-tools" style="padding-left: 0 !important; background-color: #fff; margin-right: -5px; margin-top: 0; padding: 0 !important; clear: none;">
+                    <form id="site-search" onsubmit="if(document.getElementById('site-search-term').value == 'Search Nomis...') return false; else return true;" action="/home/Search" method="GET">
+                        <input type="hidden" id="site-search-context" name="context" value="" />
+                        <label class="obscure" for="site-search-term" id="lblsite-search-term">Search term</label>
+                        <input type="search" id="site-search-term" name="term" maxlength="75" aria-labelledby="lblsite-search-term" style="border: 1px solid #ddd; margin-right: 0; padding: 0.2em;" value="" />
+                        <button type="submit" style="padding: 0; border: 0;" title="Search" accesskey="4"><i class="fa fa-search"></i></button>
+                        <script type="text/javascript">
+                            NomisCore.setPlaceholder('site-search-term', 'Search...');
+                        </script>
+                    </form>
+                </div>               
+            </div>
+            
+        </div>
+        <form class="report_form" name="report" id="report" method="post"><input type="hidden" name="rep_nonce" value="3aa851b0-43b8-465e-af36-94a79c1f4b00" />
+        <div id="site-nav-banner">
+            <div id="menu-control">
+                <a title="Show/Hide site navigation menu" href="javascript:  $('#nomis-top-main-nav-wrapper').slideToggle(); event.preventDefault();"><img src="/images/menu.gif" alt="Picture of three horizontal lines representing a menu" /> Menu</a>
+                <a title="Set site preferences" href="javascript: showSitePrefs();"><img src="/images/cog.gif" alt="Picture of a cog representing settings for the web site" /></a>
+            </div>
+            <!-- Begin site navigation banner section -->
+            <div id="nomis-top-main-nav-wrapper" role="navigation" aria-label="Site Navigation">
+                <nav>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="/" accesskey="1">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/home/profiles.asp">Reports</a>
+                            <div class="sub-nav">
+                                <h1>Area reports</h1>
+                                <ul>
+                                    <li><a href="/reports/localarea">Local Area Report (district/county and smaller areas)</a></li>
+                                    <li><a href="/reports/lmp/lad/contents.aspx">Local Authority Profile (district/county areas)</a></li>
+                                    <li><a href="/reports/lmp/gor/contents.aspx">Regional and National Profile</a></li>
+                                    <li><a href="/reports/lmp/comb/contents.aspx">Combined Authority Profile</a></li>
+                                    <li><a href="/reports/lmp/wpca24/contents.aspx">2024 Parliamentary Constituencies Profile</a></li>
+                                    <li><a href="/reports/lmp/ward2011/contents.aspx">2011 Ward Profile</a></li>
+                                </ul>
+                                
+                                <h1>Topic reports</h1>
+                                <ul>
+                                    <li><a href="/datasets/aps218/reports/employment-by-occupation">Employment by occupation (SOC2020) by sex</a></li>
+                                    <li><a href="/datasets/aps218/reports/employment-by-status-and-occupation">Occupation (SOC2020) by sex, employment status and full/part-time</a></li>
+                                    <li><a href="/datasets/aps218/reports/employment-by-temp-workers">Temporary and permanent employees by sex and broad occupation (SOC2020)</a></li>
+                                    <li><a href="/datasets/aps218/reports/employment-by-part-time-workers">Employment by broad occupation (SOC2020) for part-time workers</a></li>
+                                    <li><a href="/datasets/aps218/reports/employment-by-sex-by-ftpt-by-emp-self">Broad occupation (SOC2020) by sex, employment status and full/part-time time-series</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a id="A5" href="/sources">Data Sources</a>
+                            <div class="sub-nav">
+                                <ul>
+                                    <li><a href="/sources/acses">Annual Civil Service Employment Survey</a></li>
+                                    <li><a href="/sources/aps">Annual Population Survey/Labour Force Survey</a></li>
+                                    <li><a href="/sources/ashe">Annual Survey of Hours and Earnings</a></li>
+                                    <li><a href="/sources/bres">Business Register and Employment Survey</a></li>
+                                    <li><a href="/sources/census">Census</a></li>
+                                    <li><a href="/sources/cc">Claimant Count</a></li>
+                                    <li><a href="/sources/dwp">DWP Benefits</a></li>
+                                    <li><a href="/sources/housing">Housing</a></li>
+                                    <li><a href="/sources/eop">Economic output and productivity</a></li>
+                                    <li><a href="/sources/jd">Jobs Density</a></li>
+                                    <li><a href="/sources/jsa">Jobseekers Allowance</a></li>
+                                    <li><a href="/sources/life">Life Events</a></li>
+                                    <li><a href="/sources/pest">Population Estimates/Projections</a></li>
+                                    <li><a href="/sources/ra">Regional Accounts</a></li>
+                                    <li><a href="/sources/ukbc">UK Business Counts</a></li>
+                                    <li><a href="/sources/wfj">Workforce Jobs</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a id="A6" href="/sources/census">Census</a>
+                            <div class="sub-nav">
+                                <ul>
+                                    <li><a href="/sources/census_2021">2021 Census</a></li>
+                                    <li><a href="/sources/census_2011">2011 Census</a></li>
+                                    <li><a href="/sources/census_2001">2001 Census</a></li>
+                                    <li><a href="/sources/census_1991">1991 Census</a></li>
+                                    <li><a href="/sources/census_1981">1981 Census</a></li>
+                                    <li><a href="/sources/census_1961">1961 Census</a></li>
+                                    <li><a href="/sources/census_1951">1951 Census</a></li>
+                                    <li><a href="/sources/census_1931">1931 Census</a></li>
+                                    <li><a href="/sources/census_1921">1921 Census</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a id="A8" href="/home/contacts.asp">Contact us</a>
+                        </li>
+
+                        <li class="nav-item nav-my-account">
+                            <a id="A7" href="/myaccount/overview.asp" title="My account overview">Sign-in</a>
+                            <div class="sub-nav">
+                                <div style="display: none;">
+                                    
+                                    <ul>
+                                        <li><a href="/myaccount/overview.asp">My account</a></li>
+                                    </ul>
+                                </div>
+                                <div id="menu-my-account-not-signed-in">
+                                    <h1>You're not signed in</h1>
+                                    <ul>
+                                        <li><a id="signin_link" href="/login/login.asp" title="Sign-in and return to the current page">Sign-in</a></li>
+                                    </ul>
+                                    <h1>New to Nomis?</h1>
+                                    <p>You can use most parts of this site without registering.</p>
+                                    <ul>
+                                        <li><a href="/myaccount/userjoin.asp">Register</a></li>
+                                        <li><a href="/home/register.asp">Benefits of registering</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <a id="nomisweb-prefs-link" title="Site settings" href="javascript: showSitePrefs();"><img src="/images/cog.gif" alt="Picture of a cog representing settings for the web site" /><span>Settings</span></a>
+
+                <!-- initialize a selector as an accessibleMegaMenu -->
+                <script type="text/javascript">
+                    var mmansi = document.getElementById('menu-my-account-not-signed-in');
+
+                    // Only change sign-in urls if the user is not logged in
+                    if (mmansi != null && mmansi != undefined && mmansi.style != undefined && mmansi.style.display != 'none') {
+                        var signina = document.getElementById('signin_link');
+                        var a7a = document.getElementById('A7');
+
+                        var signin_tgt = window.location.pathname
+                        var signin_par = window.location.search;
+                        if (signin_par.length > 0) signin_par = signin_par.substring(1); // Remove ?
+                        signin_par = encodeURIComponent(signin_par);
+
+                        var signin_hrefp = '?target=' + signin_tgt + '&params=' + signin_par;
+
+                        if (signina != null && signina != undefined) signina.href = signina.href + signin_hrefp; // Make sub-menu sign-in link target go to same page
+                        if (a7a != null && a7a != undefined) a7a.href = '/login/login.asp' + signin_hrefp; // Initially make my account link target go to same page
+                    }
+                </script>
+                <script src="/libs/jquery-accessibleMegaMenu.js"></script>
+                <script type="text/javascript">
+                    $("nav:first").accessibleMegaMenu({
+                        uuidPrefix: "accessible-megamenu",
+                        menuClass: "nav-menu",
+                        topNavItemClass: "nav-item",
+                        panelClass: "sub-nav",
+                        panelGroupClass: "sub-nav-group",
+                        hoverClass: "hover",
+                        focusClass: "focus",
+                        openClass: "open"
+                    });
+                </script>
+            </div>
+            <!-- End site navigation banner section -->
+            <!-- Begin breadcrumbs -->
+            <div id="breadcrumbs-wrapper">
+                <div id="BCBox" class="breadcrumbs" role="navigation" aria-label="Breadcrumbs"></div>
+            </div>
+            <!-- End breadcrumbs -->
+            <script type="text/javascript">
+                var BaseBreadCrumbs = new Array('/default.asp', 'home');
+                SetBreadCrumbs(null);
+            </script>
+
+            <div id="skip-to-content"><a id="content-anchor"></a></div>
+<div id="page-heading-and-sub-nav"><script type="text/javascript" language="javascript">
+//<[!CDATA[
+if(!document.layers) document.write('<div class="loading_banner" id="loadingbanner">Please wait...</div>');
+function HideLoadingBanner()
+{
+var lyr;
+if(document.layers) // Netscape 4
+{
+lyr = document.layers["loadingbanner"];
+}
+else if(document.all) // IE
+{
+lyr = document.all["loadingbanner"];
+}
+else if(!document.all && document.getElementById) // Netscape 6
+{
+lyr = document.getElementById("loadingbanner");
+}
+if(lyr && lyr.style) lyr.style.visibility = 'hidden';
+else if(lyr) lyr.left = -1000;
+}
+
+//]]>
+</script>
+
+<h1>local authority profile</h1>
+<div class="impactsearch">
+<script type="text/javascript" language="JavaScript">
+function doenter() {
+  if(window.event && window.event.keyCode == 13) { $('#searchBtn').click(); return false;}
+  else return true;
+}
+</script>
+<fieldset class="searchWrapper-right">
+<legend>Search</legend>
+<p>You can search for a profile by postcode or place name.</p>
+<label for="txtSearch" id="lbltxtSearch" class="obscure">Postcode or place name</label><input aria-labelledby="lbltxtSearch" type="text" id="txtSearch" class="searchIcon" onkeypress="return doenter();" name="txtSearch" size="20" placeholder="Postcode or place name..." maxlength="30">
+<input type="submit" name="searchBtn" class="searchIcon" id="searchBtn" value="Search" />
+</fieldset>
+<fieldset class="searchWrapper-left"><legend>Select from list</legend>
+<div class="label-container"><label for="selArea0">Choose a local authority</label>
+<select id="selArea0" name="selArea0"
+>
+<option value="-1">&gt; choose one &lt;</option>
+<option value="1946157405">Aberdeen City</option>
+<option value="1946157406">Aberdeenshire</option>
+<option value="1946157339">Adur</option>
+<option value="1946157075">Allerdale</option>
+<option value="1946157133">Amber Valley</option>
+<option value="1946157383">Anglesey</option>
+<option value="1946157407">Angus</option>
+<option value="1946157408">Argyll and Bute</option>
+<option value="1946157340">Arun</option>
+<option value="1946157162">Ashfield</option>
+<option value="1946157311">Ashford</option>
+<option value="1946157291">Aylesbury Vale</option>
+<option value="1946157239">Babergh</option>
+<option value="1946157260">Barking and Dagenham</option>
+<option value="1946157261">Barnet</option>
+<option value="1946157120">Barnsley</option>
+<option value="1946157076">Barrow-in-Furness</option>
+<option value="1946157210">Basildon</option>
+<option value="1946157300">Basingstoke and Deane</option>
+<option value="1946157163">Bassetlaw</option>
+<option value="1946157346">Bath and North East Somerset</option>
+<option value="1946157199">Bedford</option>
+<option value="1946157262">Bexley</option>
+<option value="1946157186">Birmingham</option>
+<option value="1946157141">Blaby</option>
+<option value="1946157069">Blackburn with Darwen</option>
+<option value="1946157070">Blackpool</option>
+<option value="1946157401">Blaenau Gwent</option>
+<option value="1946157134">Bolsover</option>
+<option value="1946157081">Bolton</option>
+<option value="1946157148">Boston</option>
+<option value="1820328225">Bournemouth, Christchurch and Poole</option>
+<option value="1946157279">Bracknell Forest</option>
+<option value="1946157124">Bradford</option>
+<option value="1946157211">Braintree</option>
+<option value="1946157232">Breckland</option>
+<option value="1946157263">Brent</option>
+<option value="1946157212">Brentwood</option>
+<option value="1946157395">Bridgend</option>
+<option value="1946157280">Brighton and Hove</option>
+<option value="1946157348">Bristol</option>
+<option value="1946157233">Broadland</option>
+<option value="1946157264">Bromley</option>
+<option value="1946157193">Bromsgrove</option>
+<option value="1946157222">Broxbourne</option>
+<option value="1946157164">Broxtowe</option>
+<option value="1941962882">Buckinghamshire</option>
+<option value="1946157091" selected>Burnley</option>
+<option value="1946157082">Bury</option>
+<option value="1946157400">Caerphilly</option>
+<option value="1946157125">Calderdale</option>
+<option value="1946157205">Cambridge</option>
+<option value="1941962832">Cambridgeshire</option>
+<option value="1946157246">Camden</option>
+<option value="1946157173">Cannock Chase</option>
+<option value="1946157312">Canterbury</option>
+<option value="1946157397">Cardiff</option>
+<option value="1946157077">Carlisle</option>
+<option value="1946157392">Carmarthenshire</option>
+<option value="1946157213">Castle Point</option>
+<option value="1946157200">Central Bedfordshire</option>
+<option value="1946157390">Ceredigion</option>
+<option value="1946157142">Charnwood</option>
+<option value="1946157214">Chelmsford</option>
+<option value="1946157372">Cheltenham</option>
+<option value="1946157323">Cherwell</option>
+<option value="1946157071">Cheshire East</option>
+<option value="1946157072">Cheshire West and Chester</option>
+<option value="1946157135">Chesterfield</option>
+<option value="1946157341">Chichester</option>
+<option value="1946157292">Chiltern</option>
+<option value="1946157092">Chorley</option>
+<option value="1946157247">City of London</option>
+<option value="1946157409">Clackmannanshire</option>
+<option value="1946157215">Colchester</option>
+<option value="1946157385">Conwy</option>
+<option value="1946157078">Copeland</option>
+<option value="1946157349">Cornwall</option>
+<option value="1946157373">Cotswold</option>
+<option value="1946157187">Coventry</option>
+<option value="1946157113">Craven</option>
+<option value="1946157342">Crawley</option>
+<option value="1946157265">Croydon</option>
+<option value="1941962771">Cumbria</option>
+<option value="1946157223">Dacorum</option>
+<option value="1946157057">Darlington</option>
+<option value="1946157313">Dartford</option>
+<option value="1946157386">Denbighshire</option>
+<option value="1946157129">Derby</option>
+<option value="1941962807">Derbyshire</option>
+<option value="1946157136">Derbyshire Dales</option>
+<option value="1941962901">Devon</option>
+<option value="1946157121">Doncaster</option>
+<option value="1820328243">Dorset</option>
+<option value="1946157314">Dover</option>
+<option value="1946157188">Dudley</option>
+<option value="1946157410">Dumfries and Galloway</option>
+<option value="1946157411">Dundee City</option>
+<option value="1946157058">Durham (County)</option>
+<option value="1946157266">Ealing</option>
+<option value="1946157412">East Ayrshire</option>
+<option value="1946157206">East Cambridgeshire</option>
+<option value="1946157358">East Devon</option>
+<option value="1946157413">East Dunbartonshire</option>
+<option value="1946157301">East Hampshire</option>
+<option value="1946157224">East Hertfordshire</option>
+<option value="1946157149">East Lindsey</option>
+<option value="1946157414">East Lothian</option>
+<option value="1946157415">East Renfrewshire</option>
+<option value="1946157108">East Riding of Yorkshire</option>
+<option value="1946157174">East Staffordshire</option>
+<option value="1820328121">East Suffolk</option>
+<option value="1941962883">East Sussex</option>
+<option value="1946157295">Eastbourne</option>
+<option value="1946157302">Eastleigh</option>
+<option value="1946157079">Eden</option>
+<option value="1946157416">Edinburgh, City of</option>
+<option value="1946157417">Eilean Siar</option>
+<option value="1946157328">Elmbridge</option>
+<option value="1946157267">Enfield</option>
+<option value="1946157216">Epping Forest</option>
+<option value="1946157329">Epsom and Ewell</option>
+<option value="1946157137">Erewash</option>
+<option value="1941962833">Essex</option>
+<option value="1946157359">Exeter</option>
+<option value="1946157418">Falkirk</option>
+<option value="1946157303">Fareham</option>
+<option value="1946157207">Fenland</option>
+<option value="1946157419">Fife</option>
+<option value="1946157387">Flintshire</option>
+<option value="1946157318">Folkestone and Hythe</option>
+<option value="1946157374">Forest of Dean</option>
+<option value="1946157093">Fylde</option>
+<option value="1946157064">Gateshead</option>
+<option value="1946157165">Gedling</option>
+<option value="1946157420">Glasgow City</option>
+<option value="1946157375">Gloucester</option>
+<option value="1941962903">Gloucestershire</option>
+<option value="1946157304">Gosport</option>
+<option value="1946157315">Gravesham</option>
+<option value="1946157234">Great Yarmouth</option>
+<option value="1967128590">Greater Manchester (Met County)</option>
+<option value="1946157268">Greenwich</option>
+<option value="1946157330">Guildford</option>
+<option value="1946157384">Gwynedd</option>
+<option value="1946157248">Hackney</option>
+<option value="1946157073">Halton</option>
+<option value="1946157114">Hambleton</option>
+<option value="1946157249">Hammersmith and Fulham</option>
+<option value="1941962884">Hampshire</option>
+<option value="1946157143">Harborough</option>
+<option value="1946157250">Haringey</option>
+<option value="1946157217">Harlow</option>
+<option value="1946157115">Harrogate</option>
+<option value="1946157269">Harrow</option>
+<option value="1946157305">Hart</option>
+<option value="1946157059">Hartlepool</option>
+<option value="1946157296">Hastings</option>
+<option value="1946157306">Havant</option>
+<option value="1946157270">Havering</option>
+<option value="1946157169">Herefordshire, County of</option>
+<option value="1941962834">Hertfordshire</option>
+<option value="1946157225">Hertsmere</option>
+<option value="1946157138">High Peak</option>
+<option value="1946157421">Highland</option>
+<option value="1946157271">Hillingdon</option>
+<option value="1946157144">Hinckley and Bosworth</option>
+<option value="1946157343">Horsham</option>
+<option value="1946157272">Hounslow</option>
+<option value="1946157208">Huntingdonshire</option>
+<option value="1946157094">Hyndburn</option>
+<option value="1967128593">Inner London</option>
+<option value="1946157422">Inverclyde</option>
+<option value="1946157241">Ipswich</option>
+<option value="1946157281">Isle of Wight</option>
+<option value="1946157350">Isles of Scilly</option>
+<option value="1946157251">Islington</option>
+<option value="1946157252">Kensington and Chelsea</option>
+<option value="1941962885">Kent</option>
+<option value="1946157235">King's Lynn and West Norfolk</option>
+<option value="1946157109">Kingston upon Hull, City of</option>
+<option value="1946157273">Kingston-upon-Thames</option>
+<option value="1946157126">Kirklees</option>
+<option value="1946157103">Knowsley</option>
+<option value="1946157253">Lambeth</option>
+<option value="1941962782">Lancashire</option>
+<option value="1946157095">Lancaster</option>
+<option value="1946157127">Leeds</option>
+<option value="1946157130">Leicester</option>
+<option value="1941962808">Leicestershire</option>
+<option value="1946157297">Lewes</option>
+<option value="1946157254">Lewisham</option>
+<option value="1946157175">Lichfield</option>
+<option value="1946157150">Lincoln</option>
+<option value="1941962809">Lincolnshire</option>
+<option value="1946157104">Liverpool</option>
+<option value="1946157201">Luton</option>
+<option value="1946157316">Maidstone</option>
+<option value="1946157218">Maldon</option>
+<option value="1946157194">Malvern Hills</option>
+<option value="1946157083">Manchester</option>
+<option value="1946157166">Mansfield</option>
+<option value="1946157282">Medway</option>
+<option value="1946157145">Melton</option>
+<option value="1946157378">Mendip</option>
+<option value="1967128598">Merseyside (Met County)</option>
+<option value="1946157399">Merthyr Tydfil</option>
+<option value="1946157274">Merton</option>
+<option value="1946157360">Mid Devon</option>
+<option value="1946157242">Mid Suffolk</option>
+<option value="1946157344">Mid Sussex</option>
+<option value="1946157060">Middlesbrough</option>
+<option value="1946157423">Midlothian</option>
+<option value="1946157283">Milton Keynes</option>
+<option value="1946157331">Mole Valley</option>
+<option value="1946157403">Monmouthshire</option>
+<option value="1946157424">Moray</option>
+<option value="1946157394">Neath Port Talbot</option>
+<option value="1946157307">New Forest</option>
+<option value="1946157167">Newark and Sherwood</option>
+<option value="1946157065">Newcastle upon Tyne</option>
+<option value="1946157176">Newcastle-under-Lyme</option>
+<option value="1946157255">Newham</option>
+<option value="1946157404">Newport</option>
+<option value="1941962835">Norfolk</option>
+<option value="1946157425">North Ayrshire</option>
+<option value="1946157361">North Devon</option>
+<option value="1946157139">North East Derbyshire</option>
+<option value="1946157110">North East Lincolnshire</option>
+<option value="1946157226">North Hertfordshire</option>
+<option value="1946157151">North Kesteven</option>
+<option value="1946157426">North Lanarkshire</option>
+<option value="1946157111">North Lincolnshire</option>
+<option value="1946157236">North Norfolk</option>
+<option value="1811939768">North Northamptonshire</option>
+<option value="1946157351">North Somerset</option>
+<option value="1946157066">North Tyneside</option>
+<option value="1946157181">North Warwickshire</option>
+<option value="1946157146">North West Leicestershire</option>
+<option value="1941962793">North Yorkshire</option>
+<option value="1946157061">Northumberland</option>
+<option value="1946157237">Norwich</option>
+<option value="1946157131">Nottingham</option>
+<option value="1941962811">Nottinghamshire</option>
+<option value="1946157182">Nuneaton and Bedworth</option>
+<option value="1946157147">Oadby and Wigston</option>
+<option value="1946157084">Oldham</option>
+<option value="1946157427">Orkney Islands</option>
+<option value="1967128604">Outer London</option>
+<option value="1946157324">Oxford</option>
+<option value="1941962886">Oxfordshire</option>
+<option value="1946157391">Pembrokeshire</option>
+<option value="1946157096">Pendle</option>
+<option value="1946157428">Perth and Kinross</option>
+<option value="1946157202">Peterborough</option>
+<option value="1946157352">Plymouth</option>
+<option value="1946157284">Portsmouth</option>
+<option value="1946157389">Powys</option>
+<option value="1946157097">Preston</option>
+<option value="1946157285">Reading</option>
+<option value="1946157275">Redbridge</option>
+<option value="1946157062">Redcar and Cleveland</option>
+<option value="1946157195">Redditch</option>
+<option value="1946157332">Reigate and Banstead</option>
+<option value="1946157429">Renfrewshire</option>
+<option value="1946157398">Rhondda Cynon Taff</option>
+<option value="1946157098">Ribble Valley</option>
+<option value="1946157116">Richmondshire</option>
+<option value="1946157276">Richmond upon Thames</option>
+<option value="1946157085">Rochdale</option>
+<option value="1946157219">Rochford</option>
+<option value="1946157099">Rossendale</option>
+<option value="1946157298">Rother</option>
+<option value="1946157122">Rotherham</option>
+<option value="1946157183">Rugby</option>
+<option value="1946157333">Runnymede</option>
+<option value="1946157168">Rushcliffe</option>
+<option value="1946157308">Rushmoor</option>
+<option value="1946157132">Rutland</option>
+<option value="1946157117">Ryedale</option>
+<option value="1946157086">Salford</option>
+<option value="1946157189">Sandwell</option>
+<option value="1946157118">Scarborough</option>
+<option value="1946157430">Scottish Borders</option>
+<option value="1946157379">Sedgemoor</option>
+<option value="1946157105">Sefton</option>
+<option value="1946157119">Selby</option>
+<option value="1946157317">Sevenoaks</option>
+<option value="1946157123">Sheffield</option>
+<option value="1946157431">Shetland Islands</option>
+<option value="1946157170">Shropshire</option>
+<option value="1946157286">Slough</option>
+<option value="1946157190">Solihull</option>
+<option value="1941962904">Somerset</option>
+<option value="1820328253">Somerset West and Taunton</option>
+<option value="1946157432">South Ayrshire</option>
+<option value="1946157293">South Bucks</option>
+<option value="1946157209">South Cambridgeshire</option>
+<option value="1946157140">South Derbyshire</option>
+<option value="1946157354">South Gloucestershire</option>
+<option value="1946157362">South Hams</option>
+<option value="1946157152">South Holland</option>
+<option value="1946157153">South Kesteven</option>
+<option value="1946157080">South Lakeland</option>
+<option value="1946157433">South Lanarkshire</option>
+<option value="1946157238">South Norfolk</option>
+<option value="1946157325">South Oxfordshire</option>
+<option value="1946157100">South Ribble</option>
+<option value="1946157380">South Somerset</option>
+<option value="1946157177">South Staffordshire</option>
+<option value="1946157067">South Tyneside</option>
+<option value="1967128608">South Yorkshire (Met County)</option>
+<option value="1946157287">Southampton</option>
+<option value="1946157203">Southend-on-Sea</option>
+<option value="1946157256">Southwark</option>
+<option value="1946157334">Spelthorne</option>
+<option value="1946157227">St Albans</option>
+<option value="1946157106">St. Helens</option>
+<option value="1946157178">Stafford</option>
+<option value="1941962816">Staffordshire</option>
+<option value="1946157179">Staffordshire Moorlands</option>
+<option value="1946157228">Stevenage</option>
+<option value="1946157434">Stirling</option>
+<option value="1946157087">Stockport</option>
+<option value="1946157063">Stockton-on-Tees</option>
+<option value="1946157171">Stoke-on-Trent</option>
+<option value="1946157184">Stratford-on-Avon</option>
+<option value="1946157376">Stroud</option>
+<option value="1941962836">Suffolk</option>
+<option value="1946157068">Sunderland</option>
+<option value="1941962887">Surrey</option>
+<option value="1946157335">Surrey Heath</option>
+<option value="1946157277">Sutton</option>
+<option value="1946157319">Swale</option>
+<option value="1946157393">Swansea</option>
+<option value="1946157355">Swindon</option>
+<option value="1946157088">Tameside</option>
+<option value="1946157180">Tamworth</option>
+<option value="1946157336">Tandridge</option>
+<option value="1946157363">Teignbridge</option>
+<option value="1946157172">Telford and Wrekin</option>
+<option value="1946157220">Tendring</option>
+<option value="1946157309">Test Valley</option>
+<option value="1946157377">Tewkesbury</option>
+<option value="1946157320">Thanet</option>
+<option value="1946157229">Three Rivers</option>
+<option value="1946157204">Thurrock</option>
+<option value="1946157321">Tonbridge and Malling</option>
+<option value="1946157356">Torbay</option>
+<option value="1946157402">Torfaen</option>
+<option value="1946157364">Torridge</option>
+<option value="1946157257">Tower Hamlets</option>
+<option value="1946157089">Trafford</option>
+<option value="1946157322">Tunbridge Wells</option>
+<option value="1967128612">Tyne and Wear (Met County)</option>
+<option value="1946157221">Uttlesford</option>
+<option value="1946157396">Vale of Glamorgan</option>
+<option value="1946157326">Vale of White Horse</option>
+<option value="1946157128">Wakefield</option>
+<option value="1946157191">Walsall</option>
+<option value="1946157278">Waltham Forest</option>
+<option value="1946157258">Wandsworth</option>
+<option value="1946157074">Warrington</option>
+<option value="1946157185">Warwick</option>
+<option value="1941962817">Warwickshire</option>
+<option value="1946157230">Watford</option>
+<option value="1946157337">Waverley</option>
+<option value="1946157299">Wealden</option>
+<option value="1946157231">Welwyn Hatfield</option>
+<option value="1946157288">West Berkshire</option>
+<option value="1946157365">West Devon</option>
+<option value="1946157435">West Dunbartonshire</option>
+<option value="1946157101">West Lancashire</option>
+<option value="1946157154">West Lindsey</option>
+<option value="1946157436">West Lothian</option>
+<option value="1967128614">West Midlands (Met County)</option>
+<option value="1811939769">West Northamptonshire</option>
+<option value="1946157327">West Oxfordshire</option>
+<option value="1820328123">West Suffolk</option>
+<option value="1941962888">West Sussex</option>
+<option value="1967128616">West Yorkshire (Met County)</option>
+<option value="1946157259">Westminster</option>
+<option value="1946157090">Wigan</option>
+<option value="1946157357">Wiltshire</option>
+<option value="1946157310">Winchester</option>
+<option value="1946157289">Windsor and Maidenhead</option>
+<option value="1946157107">Wirral</option>
+<option value="1946157338">Woking</option>
+<option value="1946157290">Wokingham</option>
+<option value="1946157192">Wolverhampton</option>
+<option value="1946157196">Worcester</option>
+<option value="1941962825">Worcestershire</option>
+<option value="1946157345">Worthing</option>
+<option value="1946157388">Wrexham</option>
+<option value="1946157197">Wychavon</option>
+<option value="1946157294">Wycombe</option>
+<option value="1946157102">Wyre</option>
+<option value="1946157198">Wyre Forest</option>
+<option value="1946157112">York</option>
+</select>
+</div>
+<input type="submit" name="goBtn" id="goBtn" value="View profile" /></fieldset>
+</div>
+</div>
+</div>
+<!-- End site navigation banner section -->
+<div id="page-wrap" role="main" class="content-after-subnav">
+<!-- Begin page content -->
+
+<script type="text/javascript" language="JavaScript">
+  $('#txtSearch').focus();
+function activateWard(val) { if(val==="-1")
+document.getElementById('selArea1').disabled = true;
+else document.getElementById('selArea1').disabled = false;
+document.getElementById('selArea1').selectedIndex = 0;
+$('#goBtn').click();
+}
+</script>
+
+<div class="descriptive-content-section-wrapper">
+<div class="descriptive-content-section">
+<div id="labour-profile-wrapper">
+    <h1 class="labour-market-profile-header">Labour Market Profile - 2011 Based Local Authorities</h1>
+    
+    <div class="page-print-share-section" style="padding-top: 3px; text-align: right;">
+        
+
+
+
+        <a class="linkbody" href="#" onclick="window.print()"><img width="18" height="18" border="0" src="/images/print.gif" alt=""> Print</a>
+    </div>
+    
+    <div class="summary-stat-overview-section-wrapper">
+        <div class="left">
+            <p>
+                Profiles for 2011 based local authorities have been superceeded by profiles for 2021 based local authorities.
+            </p>
+            <p>A Link to the new profiles is provided below:</p>
+              <a href="https://nmtest.dur.ac.uk/reports/lmp/lad/contents.aspx" class="linkbody">New 2021 based local authority profiles</a>
+            </p>
+        </div>
+
+</div> <!--End <div id="labour-profile-wrapper">--></div>
+</div>
+</div>
+
+<script language="javascript" type="text/javascript">
+  SetBreadCrumbs(new Array('/home/profiles.asp','Area profiles','../contents.aspx','Local authority profile','','Burnley'));
+if(HideLoadingBanner) HideLoadingBanner();
+</script>    </div>
+	<!-- Begin footer -->
+    <footer style="clear:both;">
+    <div id="nomis-footer-wrapper" role="contentinfo">
+		<ul>
+            <li><a href="/api">API</a></li>
+            <li><a href="/home/sitemap.asp" accesskey="3" id="Site-map">Site map</a></li>
+            <li><a href="/home/news.asp" id="News">News</a></li>
+            <li><a href="/home/accessibility.asp">Accessibility</a></li>
+            <li><a href="/home/accesskeys.asp" id="access-keys" accesskey="0">Access keys</a></li>
+            <li><a href="/home/privacy.asp" id="Privacy-and-Cookies">Privacy and Cookies</a></li>
+            <li><a href="/home/terms.asp" id="Terms-and-Conditions" accesskey="8">Terms and Conditions</a></li>
+			<li><a href="/home/copyright.asp" id="Crown-Copyright">&copy; Crown Copyright</a></li>
+		</ul>
+
+        
+        <div id="durham-uni-logo-container">
+            <a href="http://www.dur.ac.uk"><img border="0" src="/images/du_logo.png" alt="Durham University Logo" /></a>
+        </div>
+    </div>
+
+    </footer>
+	<!-- End footer -->
+
+    <!-- Begin Site-wide Information Popup Box -->
+        <div id="modalBack" role="alert" aria-labelledby="modalDivTitle" style="display: none;">
+            <div id="modalDiv" tabindex="-1">
+                <div id="modalDivHead">
+                     <h2 id="modalDivTitle"></h2>
+	                <div id="modalDivTools"><input type="button" title="Close this pop-up (esc)" id="modalCloseButton" value="Close" onclick="modalClose();" class="modalDivTool" /></div>
+                </div>
+	            <div id="modalBusy"><p>Please wait...</p></div>
+	            <div id="modalDivBody"></div>
+            </div>
+        </div>
+        <!-- End Site-wide Information Popup Box -->
+        </form>
+    </div>
+    
+    <script type="text/javascript" src="/js/tips.js"></script>
+    <!-- End Nomisweb Page div -->
+  </body>
+</html>
