@@ -129,7 +129,7 @@ def hub_page(months: dict[str, list[dict]], css: str) -> str:
         head.replace("</head>", LIST_CSS + "</head>", 1)
         + '<span class="rd-kicker">Archive</span><h1>Rochdale news, month by month</h1>'
         + f'<p class="rd-lede">{total} stories from across Rochdale borough. '
-        + 'To search by subject or place, use the <a href="/archive">archive search</a>.</p>'
+        + 'Browse <a href="/news/topics/">by topic and place</a>, or use the <a href="/archive">archive search</a>.</p>'
         + months_list(months) + FOOT
     )
 
@@ -137,7 +137,8 @@ def hub_page(months: dict[str, list[dict]], css: str) -> str:
 def archive_block(months: dict[str, list[dict]]) -> str:
     links = " · ".join(f'<a href="/news/archive/{k}">{month_label(k)}</a>' for k in sorted(months, reverse=True))
     return (f'{START}<nav class="archive-months" aria-label="Browse the archive by month" style="margin:28px 0">'
-            f'<h2>Browse by month</h2><p>{links}</p><p><a href="/news/archive/">Every month at a glance</a></p></nav>{END}')
+            f'<h2>Browse by month</h2><p>{links}</p><p><a href="/news/archive/">Every month at a glance</a> · '
+            f'<a href="/news/topics/">By topic and place</a></p></nav>{END}')
 
 
 def with_archive_block(html: str, block: str) -> str:
