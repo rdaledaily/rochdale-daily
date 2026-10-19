@@ -1,0 +1,46 @@
+name: Rochdale Daily primary-data dry run
+
+# Read-only. Runs every primary_data.py source once in dry-run mode against the
+# live endpoints and prints what each WOULD offer. Commits nothing, publishes
+# nothing, and never touches reports/primary_data_state.json.
+
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Comma-separated source keys (blank = all)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rd-primary-probe
+  cancel-in-progress: true
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --no-cache-dir requests
+      - name: Dry run
+        env:
+          PROBE_ONLY: ${{ inputs.only }}
+        run: python scraper/primary_data_dry_run.py | tee dry_run.txt
+      - name: Summary
+        if: always()
+        run: |
+          { echo '```'; cat dry_run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: primary-data-dry-run
+          path: |
+            dry_run.txt
+            dry_run_samples/
