@@ -151,6 +151,27 @@ class RejectionIsRemembered(LedgerCase):
         self.assertEqual(captured, ["editorial gate: REJECTED_NON_NEWS"])
 
 
+class OverlapPolicyRecovery(LedgerCase):
+    def test_old_copying_rejections_get_one_bounded_new_attempt_budget(self):
+        item = candidate()
+        reason = "quality gate after 4 repairs: Rewrite the long verbatim source passage."
+        for _ in range(core.REWRITE_REJECTION_ATTEMPT_LIMIT):
+            core.record_rewrite_attempt(item, "rejected", reason)
+        entry = core.load_rewrite_ledger()[core.candidate_identity(item)]
+        entry.pop("overlap_rebuild_epoch")
+        self.assertTrue(core.candidate_is_rewrite_eligible(item, {}))
+        core.record_rewrite_attempt(item, "rejected", reason)
+        self.assertEqual(entry["attempts"], 1)
+        for _ in range(core.REWRITE_REJECTION_ATTEMPT_LIMIT - 1):
+            core.record_rewrite_attempt(item, "rejected", reason)
+        self.assertFalse(core.candidate_is_rewrite_eligible(item, {}))
+
+    def test_dashboard_is_ineligible_even_with_new_fragment_and_text(self):
+        for fragment in ("live-a", "live-b"):
+            item = candidate(url="https://www.northernrailway.co.uk/service-updates#" + fragment)
+            self.assertFalse(core.candidate_is_rewrite_eligible(item, {}))
+
+
 class Persistence(LedgerCase):
     def test_ledger_round_trips_through_disk(self):
         core.record_rewrite_attempt(candidate(), "published")
