@@ -574,7 +574,7 @@ def newsletter_box_markup(form_id: str = 'article-newsletter') -> str:
     return f'''<section class="rail-newsletter" aria-labelledby="{fid}-title">
             <div class="rail-newsletter-kicker">Newsletter</div>
             <h3 id="{fid}-title">The borough in your inbox</h3>
-            <p>Local reporting and practical updates in a morning briefing. <a href="/start-here.html#briefing">Read an example and check delivery status</a>.</p>
+            <p>Local reporting and practical updates in a morning briefing. <a href="/start-here#briefing">Read an example and check delivery status</a>.</p>
             <form id="{fid}-form" novalidate>
               <label class="visually-hidden" for="{fid}-email">Email address</label>
               <input id="{fid}-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" required>
@@ -1068,7 +1068,7 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
         if not path.is_file():
             continue
         relative = path.relative_to(root).as_posix()
-        public_path = "wards/" if relative == "wards/index.html" else relative
+        public_path = "wards/" if relative == "wards/index.html" else "start-here" if relative == "start-here.html" else relative
         expected = f"{SITE_BASE_URL}/{public_path}"
         try:
             content = path.read_text(encoding="utf-8", errors="ignore")[:10000]
