@@ -76,7 +76,10 @@ def prune_dead_related_links(pages_dir: Path, skip: set[str]) -> tuple[int, int]
         def keep_or_drop(match: re.Match[str]) -> str:
             nonlocal dropped
             target = match.group('href').split('#', 1)[0].split('?', 1)[0]
-            if '/' in target or not target.endswith('.html') or target in existing:
+            if '/' in target or not re.fullmatch(r'[a-z0-9-]+(?:\.html)?', target):
+                return match.group(0)
+            filename = target if target.endswith('.html') else target + '.html'
+            if filename in existing:
                 return match.group(0)
             dropped += 1
             return ''
@@ -1191,6 +1194,8 @@ def main() -> None:
         sitemap_by_slug[slug] = lastmod
     sitemap_articles = sorted(sitemap_by_slug.items())
     write_sitemap(sitemap_articles)
+    from normalise_article_urls import normalise_snapshot
+    normalise_snapshot()
     print(
         f"Generated {written} live article page(s) "
         f"({updated_existing} existing pages refreshed), "

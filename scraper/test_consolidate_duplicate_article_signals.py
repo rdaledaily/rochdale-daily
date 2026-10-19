@@ -79,7 +79,7 @@ class DuplicateSeoTests(unittest.TestCase):
             pages, removed = apply(articles_path, sitemap, root)
             self.assertEqual((pages, removed), (1, 1))
             duplicate_html = (root / "articles" / "duplicate.html").read_text(encoding="utf-8")
-            self.assertIn('href="https://rochdaledaily.co.uk/articles/winner.html"', duplicate_html)
+            self.assertIn('href="https://rochdaledaily.co.uk/articles/winner"', duplicate_html)
             self.assertNotIn('/articles/duplicate.html</loc>', sitemap.read_text(encoding="utf-8"))
 
 

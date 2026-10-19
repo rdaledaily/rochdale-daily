@@ -150,7 +150,7 @@ def find_duplicates(articles: Any) -> list[Duplicate]:
 
 
 def _canonical_url(slug: str) -> str:
-    return f"{SITE_BASE}{slug}.html"
+    return f"{SITE_BASE}{slug}"
 
 
 def _rewrite_article_page(path: Path, canonical_slug: str) -> bool:
@@ -184,7 +184,7 @@ def _filter_sitemap(path: Path, duplicate_slugs: set[str]) -> int:
     for url in list(root.findall("s:url", ns)):
         loc = url.find("s:loc", ns)
         value = (loc.text or "").strip() if loc is not None else ""
-        if any(value.rstrip("/").endswith(f"/articles/{slug}.html") for slug in duplicate_slugs):
+        if any(value.rstrip("/").endswith((f"/articles/{slug}.html", f"/articles/{slug}")) for slug in duplicate_slugs):
             root.remove(url)
             removed += 1
     if removed:
@@ -213,6 +213,9 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=ROOT)
     args = parser.parse_args()
     pages, sitemap_rows = apply(args.articles, args.sitemap, args.root)
+    from normalise_article_urls import normalise_snapshot
+    aligned = normalise_snapshot(args.root)
+    print(f"Public article URL alignment: {aligned} file(s) updated.")
     print(f"Duplicate SEO consolidation: {pages} article canonical(s) updated; {sitemap_rows} sitemap URL(s) removed.")
     return 0
 
