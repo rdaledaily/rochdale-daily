@@ -316,6 +316,43 @@ def keyed() -> None:
           else "no key (CQC_SUBSCRIPTION_KEY secret not set)")
 
 
+def contracts_finder_full() -> None:
+    """Full 14-day crawl, paced, with the same postcode rule as Find a Tender."""
+    if not section("contracts_finder_full"):
+        return
+    import time
+    url = "https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search"
+    params = {"publishedFrom": (NOW - timedelta(days=14)).strftime("%Y-%m-%d"), "publishedTo": NOW.strftime("%Y-%m-%d"), "limit": "100"}
+    pages = total = 0
+    keep, loose = [], []
+    while url and pages < 80:
+        if pages:
+            time.sleep(2.5)
+        r = S.get(url, params=params, timeout=30) if params else S.get(url, timeout=30)
+        if r.status_code != 200:
+            print(f"  page {pages}: HTTP {r.status_code}")
+            break
+        d = r.json()
+        pages += 1
+        for rel in d.get("releases") or []:
+            total += 1
+            if primary_data.is_borough_buyer(rel):
+                keep.append(rel)
+            elif BOROUGH.search(json.dumps(rel.get("parties") or [])):
+                loose.append(rel)
+        nxt = (d.get("links") or {}).get("next")
+        url, params = (nxt, None) if nxt else (None, None)
+    print(f"  pages={pages} releases={total} complete={url is None} postcode_rule={len(keep)} regex_only={len(loose)}")
+    for rel in keep:
+        dsc = primary_data.describe_release(rel)
+        docs = [d.get("url") for d in ((rel.get("tender") or {}).get("documents") or []) + [x for a in rel.get("awards") or [] for x in a.get("documents") or []]][:2]
+        print("   KEEP", rel.get("id"), rel.get("tag"), rel.get("date"), "|", (rel.get("buyer") or {}).get("name"), "|", dsc[1][:100] if dsc else "(not story type)", "|", docs)
+    for rel in loose[:15]:
+        bp = primary_data._buyer_party(rel)
+        print("   DROP", rel.get("tag"), "|", (rel.get("buyer") or {}).get("name"), "| buyer pc", (bp.get("address") or {}).get("postalCode"))
+    save("cf_borough.json", json.dumps(keep[:20], indent=1))
+
+
 def contracts_finder_retry() -> None:
     """Round 2 returned 0 releases with publishedFrom dropped; try the documented parameter set."""
     if not section("contracts_finder_retry"):
@@ -334,7 +371,7 @@ def contracts_finder_retry() -> None:
 
 
 if __name__ == "__main__":
-    for fn in (keyed, contracts_finder_retry, existing_rota):
+    for fn in (contracts_finder_full,):
         try:
             fn()
         except Exception as exc:  # noqa: BLE001
