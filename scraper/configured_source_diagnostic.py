@@ -25,6 +25,72 @@ import feedparser  # noqa: E402
 from bs4 import BeautifulSoup  # noqa: E402
 
 import scraper as core  # noqa: E402
+import gzip  # noqa: E402
+import re  # noqa: E402
+
+try:  # Apply the production lanes' own source overrides first.
+    import run_newsroom_policy as _policy  # noqa: E402
+    import run_newspaper_pipeline as _pipeline  # noqa: E402
+    _policy.install_runtime_policy()
+    _pipeline.configure_source_resilience(48)
+except Exception as _exc:  # pragma: no cover - diagnostic must still run
+    print(f"::warning::production overrides not applied: {_exc}")
+
+HTML_DIR = Path(os.getenv("DIAG_HTML_DIR", "reports/diag_html"))
+FEED_PATHS = ["/feed/", "/rss", "/rss.xml", "/feed.xml", "/news/feed/", "/sitemap.xml",
+              "/sitemap_index.xml", "/wp-sitemap.xml", "/post-sitemap.xml", "/news-sitemap.xml"]
+
+
+def save_html(source_name: str, label: str, text: str) -> str:
+    if not text:
+        return ""
+    slug = re.sub(r"[^a-z0-9]+", "-", source_name.lower()).strip("-")[:60]
+    label = re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")[:80] or "page"
+    path = HTML_DIR / slug / f"{label}.html.gz"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(gzip.compress(text.encode("utf-8", "replace")))
+    return str(path)
+
+
+def feed_and_sitemap_probe(url: str) -> list[dict]:
+    """What machine-readable routes does this host offer? Status, item count, newest date."""
+    parsed = urlparse(url)
+    base = f"{parsed.scheme}://{parsed.netloc}"
+    found = []
+    try:
+        robots_txt = core.SESSION.get(base + "/robots.txt", timeout=15)
+        sitemaps = re.findall(r"(?im)^\s*sitemap:\s*(\S+)", robots_txt.text if robots_txt.status_code == 200 else "")
+    except Exception:
+        sitemaps = []
+    for candidate in [base + p for p in FEED_PATHS] + sitemaps[:4]:
+        row = {"url": candidate}
+        try:
+            r = core.SESSION.get(candidate, timeout=15, allow_redirects=True)
+            row["status"] = r.status_code
+            row["content_type"] = r.headers.get("content-type", "")[:60]
+            body = r.text or ""
+            if r.status_code == 200 and ("<rss" in body[:2000] or "<feed" in body[:2000]):
+                f = feedparser.parse(body.encode("utf-8"))
+                dates = [core.entry_datetime(e) for e in f.entries]
+                dates = [d for d in dates if d]
+                row.update({"type": "feed", "items": len(f.entries),
+                            "newest_days": round(min((now() - d).total_seconds() / 86400 for d in dates), 2) if dates else None,
+                            "last_14d": sum(1 for d in dates if (now() - d).days <= 14)})
+            elif r.status_code == 200 and ("<urlset" in body[:3000] or "<sitemapindex" in body[:3000]):
+                locs = re.findall(r"<loc>\s*([^<]+?)\s*</loc>", body)
+                mods = re.findall(r"<lastmod>\s*([^<]+?)\s*</lastmod>", body)
+                fresh = 0
+                for m in mods:
+                    d = core.parse_datetime(m)
+                    if d and (now() - d).days <= 14:
+                        fresh += 1
+                row.update({"type": "sitemapindex" if "<sitemapindex" in body[:3000] else "sitemap",
+                            "locs": len(locs), "lastmod_last_14d": fresh, "sample_locs": locs[:8]})
+        except Exception as exc:
+            row["error"] = f"{type(exc).__name__}: {exc}"[:160]
+        if row.get("status") == 200 and row.get("type"):
+            found.append(row)
+    return found
 
 TARGETS = [
     "Greater Manchester Police",
@@ -100,6 +166,8 @@ def diagnose_rss(source: dict) -> dict:
     text = probe.pop("_text", "")
     result["http"] = probe
     result["robots"] = robots(source["url"])
+    result["html_saved"] = save_html(source["name"], "feed", text)
+    result["machine_routes"] = feed_and_sitemap_probe(source["url"])
     feed = feedparser.parse(text.encode("utf-8") if text else b"")
     result["parse_error"] = str(getattr(feed, "bozo_exception", "")) if getattr(feed, "bozo", False) else ""
     ages = []
@@ -134,6 +202,8 @@ def diagnose_discovery(source: dict) -> dict:
     text = probe.pop("_text", "")
     result["http"] = probe
     result["robots"] = robots(listing)
+    result["html_saved"] = save_html(source["name"], "listing", text)
+    result["machine_routes"] = feed_and_sitemap_probe(listing)
     try:
         links = core.discovery_links(source)
     except Exception as exc:
@@ -152,8 +222,14 @@ def diagnose_discovery(source: dict) -> dict:
                 same_host.append(url)
         result["unmatched_same_host_links"] = same_host[:25]
     outcomes = []
-    for url in links[:SAMPLE_LINKS]:
+    for index, url in enumerate(links[:SAMPLE_LINKS]):
         row = {"url": url}
+        if index < 4:
+            try:
+                page = core.SESSION.get(url, timeout=20)
+                row["html_saved"] = save_html(source["name"], f"link{index}-" + urlparse(url).path, page.text)
+            except Exception:
+                pass
         try:
             meta = core.page_metadata(url, render=bool(source.get("render")))
             published = core.parse_datetime(meta.get("published"))

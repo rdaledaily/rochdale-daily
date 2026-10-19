@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name "Rochdale Daily Bot"
           git config user.email "bot@rochdaledaily.co.uk"
-          git add reports/configured_source_diagnostic.json
+          git add reports/configured_source_diagnostic.json reports/diag_html
           if git diff --cached --quiet; then echo 'no change'; exit 0; fi
           git commit -m "Record configured source diagnostic"
           git push origin HEAD:${GITHUB_REF_NAME}
