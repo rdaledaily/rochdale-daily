@@ -1,0 +1,54 @@
+name: Rochdale Daily newsletter
+
+# "The borough in your inbox": sends the day's Morning Briefing as a Brevo
+# campaign to the list newsletter sign-ups join. Sign-ups were collected and
+# synced to Brevo, but no campaign was ever sent; this is the sender.
+#
+# Runs when the canonical publisher finishes (that is when a newly published
+# Morning Briefing reaches articles.json) and on a late-morning schedule as a
+# backstop. The script sends at most once a day (each day's campaign has a
+# fixed name), only 09:00-13:00 London, and only when today's briefing exists.
+#
+# Needs BREVO_API_KEY and BREVO_LIST_ID as repository secrets, and a sender
+# verified in Brevo (repository variable NEWSLETTER_SENDER, default
+# newsletter@rochdaledaily.co.uk). Without them it sends nothing.
+
+on:
+  workflow_run:
+    workflows: ["Publish canonical Rochdale Daily site"]
+    types: [completed]
+  schedule:
+    - cron: "40 9,10,11 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Check everything, send nothing"
+        required: false
+        default: "false"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rd-newsletter
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Send today's newsletter if it is due
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID || vars.BREVO_LIST_ID }}
+          NEWSLETTER_SENDER: ${{ vars.NEWSLETTER_SENDER }}
+          NEWSLETTER_SENDER_NAME: ${{ vars.NEWSLETTER_SENDER_NAME }}
+          NEWSLETTER_DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: python scraper/send_newsletter.py

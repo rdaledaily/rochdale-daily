@@ -217,3 +217,21 @@ jobs:
           path: /tmp/rochdale-daily-editorial-review/
           if-no-files-found: ignore
           retention-days: 30
+      - name: Restart the fast lane
+        # The fast lane does not chain while this publisher is queued or
+        # running. Nothing restarted it afterwards: on 9 October 2026 fast run
+        # #4704 yielded to publisher #266 and the paper sat idle for 2h16m.
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active=$(gh run list --workflow scrape-fast.yml --limit 15 \
+            --json databaseId,status \
+            --jq '[.[] | select(.status != "completed")] | length' \
+            || echo 0)
+          if [ "${active:-0}" -gt 0 ]; then
+            echo "a fast run is already queued or in progress; nothing to restart"
+            exit 0
+          fi
+          gh workflow run scrape-fast.yml --ref main -f chain=1
+          echo "restarted the fast lane after the publisher"

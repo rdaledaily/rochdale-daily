@@ -225,6 +225,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_deterministic_draft_gate.py
           PYTHONPATH=scraper python scraper/test_daily_briefing.py
           PYTHONPATH=scraper python scraper/test_primary_data.py
+          PYTHONPATH=scraper python scraper/test_send_newsletter.py
           PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
           python scraper/test_ensure_article_images.py
           PYTHONPATH=scraper python scraper/test_licensed_source_images.py
