@@ -56,7 +56,7 @@ def xml_text(value: object) -> str:
 
 def item_xml(row: dict) -> str:
     slug = clean(row.get("slug")).strip("/")
-    url = f"{SITE}/articles/{slug}.html"
+    url = f"{SITE}/articles/{slug}"
     published = parse_dt(row.get("first_published_at") or row.get("published_at"))
     pub_date = format_datetime(published) if published.year > 1970 else ""
     category = clean(row.get("category") or "News").replace("-", " ").title()
