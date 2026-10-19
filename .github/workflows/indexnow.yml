@@ -1,0 +1,61 @@
+name: IndexNow submission
+
+# Tells Bing and the other IndexNow engines (DuckDuckGo, Yahoo, Ecosia,
+# ChatGPT search and Yandex use them) about pages that changed since the last
+# successful submission. See scraper/indexnow.py.
+
+on:
+  workflow_run:
+    workflows: ["Rochdale Daily fast local news", "Publish canonical Rochdale Daily site"]
+    types: [completed]
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Submit every page in the sitemap (one-off)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Find the last successful submission
+        id: since
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          since=$(gh api "repos/${{ github.repository }}/actions/workflows/indexnow.yml/runs?status=success&per_page=1" \
+            --jq '.workflow_runs[0].run_started_at // empty' 2>/dev/null || true)
+          echo "since=$since" >> "$GITHUB_OUTPUT"
+          echo "Previous successful submission: ${since:-none}"
+      - name: Wait for Cloudflare Pages to deploy
+        if: github.event_name == 'workflow_run'
+        run: sleep 120
+      - name: Submit changed pages
+        env:
+          SINCE: ${{ steps.since.outputs.since }}
+        run: |
+          set +e
+          if [ "${{ github.event_name == 'workflow_dispatch' && inputs.all }}" = "true" ]; then
+            out=$(python scraper/indexnow.py --all)
+          else
+            out=$(python scraper/indexnow.py)
+          fi
+          status=$?
+          echo "$out"
+          echo "::notice title=IndexNow::$out"
+          exit $status
