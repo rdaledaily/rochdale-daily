@@ -62,6 +62,13 @@ rebuild_from_merged_feed() {
   PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
   python scraper/article_gate.py articles.json
   python scraper/content_hygiene.py --fix
+  # frontpage_manual_publish.py has just re-injected manual records with their
+  # raw manual_articles.json image links (remote URLs, /assets/article-images/).
+  # Until 14 Oct 2026 this step repaired them into assets/img/cards/; when it
+  # became check-only, every push-race recovery failed here (0 of 31 runs
+  # succeeded that afternoon, 73 of 73 failed on 17 Oct) and the paper froze.
+  # Repair first, as before, then run the same strict check.
+  python scraper/enforce_cards_only_images.py --articles articles.json
   python scraper/enforce_cards_only_images.py --articles articles.json --check --baseline-ref HEAD
   python scraper/compact_live_updates.py --articles articles.json
   python scraper/repair_merged_bodies.py

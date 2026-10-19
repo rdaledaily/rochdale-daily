@@ -299,6 +299,51 @@ def gate_rejection(draft: dict[str, Any]) -> list[str]:
     return []
 
 
+# Month names as sources print them (capitalised), so "residents may 2..."
+# is never read as a date.
+_MONTHS = (
+    "January|February|March|April|May|June|July|August|September|October|"
+    "November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec"
+)
+_YEARLESS_DATE_RE = re.compile(
+    rf"\b(?:\d{{1,2}}(?:st|nd|rd|th)?\s+(?:of\s+)?(?:{_MONTHS})\b(?!\.?,?\s*20\d{{2}})"
+    rf"|(?:{_MONTHS})\.?\s+\d{{1,2}}(?:st|nd|rd|th)?\b(?!,?\s*20\d{{2}}))"
+)
+
+
+def _source_has_yearless_date(text: str) -> bool:
+    """True when the source names a day-and-month date without a year."""
+    return bool(_YEARLESS_DATE_RE.search(text or ""))
+
+
+def _borough_evidence_overrules_non_local(rejection: list[str], source_text: str) -> bool:
+    """Let the deterministic locality rules overrule the model's NON_LOCAL veto.
+
+    In the week to 19 Oct 2026 the model's own "not about the borough" answer
+    was the largest single cause of lost stories (181 rejections), and it
+    binned genuine borough reporting: a Heywood AODS visit, a Springhill
+    Hospice clinic in Rochdale, Rochdale AFC match reports from away grounds.
+    The veto now stands only when the source itself fails the same locality
+    test every candidate already passed at collection, or names somewhere else
+    (Massachusetts, Queensland, Leicester...). Bury, Oldham and other
+    neighbouring stories with no borough place keep their rejection.
+    """
+    if not any("NON_LOCAL" in str(item) for item in rejection):
+        return False
+    try:
+        from locality_rules import locality_evidence, rival_geography_evidence
+    except ImportError:
+        return False
+    text = plain_text(source_text)
+    if not text:
+        return False
+    # Any mention of rival geography keeps the model's verdict, not only a
+    # mention as a place ("Queensland Police News: ... Rochdale South").
+    if rival_geography_evidence(text, text):
+        return False
+    return bool(locality_evidence(text).get("local"))
+
+
 def plain_text(value: Any) -> str:
     text = html.unescape(str(value or ""))
     text = re.sub(r"<[^>]+>", " ", text)
@@ -762,6 +807,8 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
         if not bool(clean.get("publishable")):
             return ["The model marked the story unpublishable."]
         rejection = gate_rejection(clean)
+        if rejection and _borough_evidence_overrules_non_local(rejection, source_text):
+            rejection = []
         if rejection:
             return rejection
 
@@ -808,6 +855,14 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
     # by the draft must therefore be present in the actual source prose.
     source_years = set(re.findall(r"\b20\d{2}\b", plain_text(source_text)))
     output_years = set(re.findall(r"\b20\d{2}\b", combined))
+    # A current, dated source ("on Saturday 17 October") is about this year;
+    # writing "17 October 2026" adds no claim. This alone killed 20 stories in
+    # the week to 19 Oct 2026 ("New bid for extra trains from Rochdale to
+    # London is refused"). Only the current year is allowed, and only when the
+    # source states a month-dated event without a year of its own; any other
+    # year still has to appear in the source prose.
+    if _source_has_yearless_date(plain_text(source_text)):
+        source_years.add(str(time.gmtime().tm_year))
     unsupported_years = sorted(output_years - source_years)
     if unsupported_years:
         issues.append(
