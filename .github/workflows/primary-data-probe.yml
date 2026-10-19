@@ -5,6 +5,8 @@ name: Rochdale Daily primary-data dry run
 # nothing, and never touches reports/primary_data_state.json.
 
 on:
+  push:
+    branches: ['probe/**']
   workflow_dispatch:
     inputs:
       only:
