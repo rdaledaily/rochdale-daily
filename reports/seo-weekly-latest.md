@@ -1,25 +1,17 @@
 # Rochdale Daily weekly SEO technical audit
 
-Generated: 2026-10-13T18:12:38.378412+00:00
-URLs in sitemap: **1637**
-Files inspected: **1637**
+Generated: 2026-10-19T13:12:38.051483+00:00
+URLs in sitemap: **1745**
+Files inspected: **1745**
 
 ## Priorities
 
-- article without hero: **668**
-- generated hero cards: **204**
+- article without hero: **676**
+- generated hero cards: **227**
 - duplicate page title: **89**
-- canonical mismatch: **2**
-- duplicate sitemap canonical: **2**
-- missing description: **2**
-- sitemap noindex: **2**
 
 ## Top actionable issues
 
-- **ERROR** duplicate_sitemap_canonical at https://rochdaledaily.co.uk/articles/partial-solar-eclipse-rochdale-12-august-2026.html (https://rochdaledaily.co.uk/articles/rochdale-partial-solar-eclipse-12-august-2026.html)
-- **ERROR** duplicate_sitemap_canonical at https://rochdaledaily.co.uk/articles/why-does-rochdale-say-cruckle.html (https://rochdaledaily.co.uk/articles/why-rochdale-says-cruckle.html)
-- **ERROR** sitemap_noindex at https://rochdaledaily.co.uk/articles/partial-solar-eclipse-rochdale-12-august-2026.html
-- **ERROR** sitemap_noindex at https://rochdaledaily.co.uk/articles/why-does-rochdale-say-cruckle.html
 - **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/18-year-old-man-charged-following-high-speed-chase-in-middleton.html
 - **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/194kg-of-produce-transferred-to-rochdale-food-bank-following-pantry-closure.html
 - **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/64-rochdale-food-businesses-rated-0-or-1-for-hygiene.html
@@ -46,6 +38,10 @@ Files inspected: **1637**
 - **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/body-combat-classes-launch-at-your-trust.html
 - **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/boreham-wood-to-play-rochdale-in-upcoming-match.html
 - **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/boreham-wood-vs-rochdale-match-features-union-jack-flags.html
+- **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/bradford-city-to-face-rochdale-in-carabao-cup-first-round.html
+- **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/breakdown-recovery-services-available-in-heywood.html
+- **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/breakdown-recovery-services-available-in-whitworth.html
+- **WARNING** article_without_hero at https://rochdaledaily.co.uk/articles/britain-seeks-deportation-of-rochdale-rapist-as-islamabad-refuses.html
 
 ## What this does not tell us
 
