@@ -22,6 +22,12 @@ host that is not approved). These passed and are built here:
   gmca_decisions      GMCA decisions naming a borough place   under 1 a week
   ons_housing         ONS house price and rent page           1 a month
 
+Added 19 October 2026, each measured from a GitHub runner before it was built:
+
+  contract_notices    Find a Tender notices from borough buyers   about 2 a week
+  weather_warnings    Met Office warnings that list Rochdale      seasonal; none on the day
+  claimant_count      ONS claimant count for Rochdale (Nomis)     1 a month
+
 The rota
 --------
 Each source has an interval (how often its listing is fetched) and a daily cap
@@ -542,9 +548,19 @@ def _buyer_party(release: dict[str, Any]) -> dict[str, Any]:
 
 
 def is_borough_buyer(release: dict[str, Any]) -> bool:
+    """The buyer's own address is in the borough.
+
+    A buyer with no postcode at all counts only when its own name carries a
+    borough place ("Rochdale Borough Council"); a postcode elsewhere always
+    wins over a name.
+    """
     party = _buyer_party(release)
     address = party.get("address") or {}
-    return _postcode_district(address.get("postalCode")) in BOROUGH_POSTCODE_DISTRICTS
+    district = _postcode_district(address.get("postalCode"))
+    if district:
+        return district in BOROUGH_POSTCODE_DISTRICTS
+    name = plain(party.get("name") or (release.get("buyer") or {}).get("name"))
+    return names_borough_place(name)
 
 
 def _money(value: Any) -> str:
@@ -596,12 +612,15 @@ def describe_release(release: dict[str, Any]) -> tuple[str, str, str] | None:
     return kind, f"{buyer} {FTS_STORY_TAGS[kind]}: {subject}", summary
 
 
+def _pause(seconds: float) -> None:
+    import time
+    time.sleep(seconds)
+
+
 def contract_notices(get: Callable[..., Any], state: dict[str, Any], now: datetime, limit: int,
                      pause: Callable[[float], None] | None = None) -> tuple[list[dict[str, Any]], dict[str, int]]:
     key = "contract_notices"
-    if pause is None:
-        import time
-        pause = time.sleep
+    pause = pause or _pause
     slot = _slot(state, key)
     since = slot.get("read_until")
     try:
@@ -692,9 +711,11 @@ def weather_warnings(get: Callable[..., Any], state: dict[str, Any], now: dateti
         link = _rss_field(body, "link")
         match = _ITEM_DESCRIPTION_RE.search(body)
         description = plain(_CDATA_RE.sub(lambda m: m.group(1), match.group("v"))) if match else ""
-        # The authority list follows the first colon; Rochdale must be in it.
+        # The authority list follows the first colon and ends at "valid from";
+        # Rochdale must be one of its entries, not merely part of one.
         authorities = description.split(":", 1)[1] if ":" in description else ""
-        if not re.search(r"\bRochdale\b", authorities):
+        authorities = authorities.split(" valid from", 1)[0]
+        if "Rochdale" not in {part.strip() for part in authorities.split(",")}:
             stats["not_rochdale"] += 1
             continue
         warning = _WARNING_ID_RE.search(link)
@@ -729,12 +750,96 @@ def weather_warnings(get: Callable[..., Any], state: dict[str, Any], now: dateti
 
 
 # --------------------------------------------------------------------------
+# ONS claimant count for Rochdale (monthly, via Nomis)
+# --------------------------------------------------------------------------
+#
+# Measured 19 October 2026 from a GitHub runner: Nomis dataset NM_162_1,
+# geography 1778385128 (Rochdale, E08000005) returned June 8,510 (5.8%),
+# July 8,485 (5.8%), August 8,675 (6.0%). One story when a new month appears.
+
+NOMIS_CLAIMANTS_CSV = "https://www.nomisweb.co.uk/api/v01/dataset/NM_162_1.data.csv"
+NOMIS_ROCHDALE = "1778385128"
+NOMIS_PROFILE_PAGE = "https://www.nomisweb.co.uk/reports/lmp/la/1946157091/report.aspx"
+
+
+def parse_claimants_csv(text: str) -> list[dict[str, Any]]:
+    """Rows of {month, count, rate}, oldest first. Months missing a figure are dropped."""
+    import csv
+    import io
+    months: dict[str, dict[str, Any]] = {}
+    order: list[str] = []
+    for row in csv.DictReader(io.StringIO(text or "")):
+        month = str(row.get("DATE_NAME") or "").strip()
+        if row.get("GEOGRAPHY_CODE") != "E08000005" or not month:
+            continue
+        if month not in months:
+            months[month] = {"month": month}
+            order.append(month)
+        value = str(row.get("OBS_VALUE") or "").strip()
+        measure = str(row.get("MEASURE_NAME") or "").lower()
+        try:
+            number = float(value)
+        except ValueError:
+            continue
+        if measure == "claimant count":
+            months[month]["count"] = int(number)
+        elif "proportion" in measure:
+            months[month]["rate"] = number
+    return [months[m] for m in order if "count" in months[m]]
+
+
+def claimant_count(get: Callable[..., Any], state: dict[str, Any], now: datetime, limit: int) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    key = "claimant_count"
+    response = get(NOMIS_CLAIMANTS_CSV, params={
+        "geography": NOMIS_ROCHDALE, "date": "latestMINUS12-latest", "gender": "0", "age": "0",
+        "measure": "1,2", "measures": "20100",
+        "select": "date_name,geography_name,geography_code,measure_name,obs_value",
+    }, timeout=TIMEOUT)
+    response.raise_for_status()
+    rows = parse_claimants_csv(response.text)
+    stats = {"months": len(rows), "already_seen": 0, "new": 0}
+    if len(rows) < 2:
+        stats["unreadable"] = 1           # no comparison possible: say nothing
+        return [], stats
+    latest, previous = rows[-1], rows[-2]
+    identity = latest["month"].lower().replace(" ", "-")
+    if is_seen(state, key, identity):
+        stats["already_seen"] = 1
+        return [], stats
+    stats["new"] = 1
+    if limit < 1:
+        return [], stats
+    change = latest["count"] - previous["count"]
+    direction = "rose" if change > 0 else "fell" if change < 0 else "was unchanged"
+    moved = f" by {abs(change):,}" if change else ""
+    sentences = [
+        f"The number of people claiming unemployment-related benefits in Rochdale {direction}{moved} "
+        f"to {latest['count']:,} in {latest['month']}, from {previous['count']:,} in {previous['month']}.",
+    ]
+    if "rate" in latest:
+        sentences.append(f"That is {latest['rate']:.1f}% of residents aged 16 to 64"
+                         + (f", compared with {previous['rate']:.1f}% the month before." if "rate" in previous else "."))
+    year_ago = rows[0] if len(rows) >= 13 else None
+    if year_ago:
+        sentences.append(f"A year earlier, in {year_ago['month']}, the figure was {year_ago['count']:,}.")
+    sentences.append("The claimant count is published by the Office for National Statistics through Nomis; "
+                     "the latest month is provisional and can be revised.")
+    return [record(
+        key, identity, name="Office for National Statistics (Nomis)",
+        url=f"{NOMIS_PROFILE_PAGE}#claimants-{identity}",
+        title=f"Rochdale claimant count {direction} in {latest['month']}",
+        summary=" ".join(sentences), published=now, area="rochdale", category="business",
+    )], stats
+
+
+# --------------------------------------------------------------------------
 # The rota itself
 # --------------------------------------------------------------------------
 
 ROTA.update({
     "contract_notices": (6, 3),
-    "weather_warnings": (2, 2),
+    "weather_warnings": (6, 2),
+    "claimant_count": (24, 1),
 })
 
 SOURCES: dict[str, Callable[..., tuple[list[dict[str, Any]], dict[str, int]]]] = {
@@ -745,6 +850,7 @@ SOURCES: dict[str, Callable[..., tuple[list[dict[str, Any]], dict[str, int]]]] =
     "ons_housing": ons_housing,
     "contract_notices": contract_notices,
     "weather_warnings": weather_warnings,
+    "claimant_count": claimant_count,
 }
 
 

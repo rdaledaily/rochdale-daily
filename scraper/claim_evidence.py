@@ -17,6 +17,8 @@ PRIMARY = (
     "nhs.uk", "ofsted.gov.uk", "reports.ofsted.gov.uk",
     "tfgm.com", "greatermanchester-ca.gov.uk", "gmca.gov.uk",
     "ons.gov.uk", "parliament.uk", "thegazette.co.uk",
+    # Nomis is the ONS official labour-market statistics service.
+    "nomisweb.co.uk",
 )
 def host(url):
     p=urlparse(str(url or ""))

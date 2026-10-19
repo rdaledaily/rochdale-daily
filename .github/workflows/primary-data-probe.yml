@@ -35,6 +35,11 @@ jobs:
       - name: Dry run
         env:
           PROBE_ONLY: ${{ inputs.only }}
+          # Free keys. Each probe reports "no key" until its secret exists.
+          COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
+          SKIDDLE_API_KEY: ${{ secrets.SKIDDLE_API_KEY }}
+          TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY }}
+          CQC_SUBSCRIPTION_KEY: ${{ secrets.CQC_SUBSCRIPTION_KEY }}
         run: python scraper/primary_data_dry_run.py | tee dry_run.txt
       - name: Summary
         if: always()

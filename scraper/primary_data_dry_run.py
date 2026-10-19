@@ -251,8 +251,90 @@ def existing_rota() -> None:
         print("   offer:", rec["source_key"], "|", rec["source_title"][:110], "|", rec["source_url"])
 
 
+ROCHDALE_LAT, ROCHDALE_LNG = 53.6136, -2.1610
+
+
+def keyed() -> None:
+    """Sources that need a free key. Each says plainly when its key is missing."""
+    if not section("keyed"):
+        return
+    ch = os.getenv("COMPANIES_HOUSE_API_KEY", "").strip()
+    if not ch:
+        print("  companies_house: no key (COMPANIES_HOUSE_API_KEY secret not set)")
+    else:
+        since = (NOW - timedelta(days=30)).strftime("%Y-%m-%d")
+        r = S.get("https://api.company-information.service.gov.uk/advanced-search/companies",
+                  params={"location": "Rochdale", "incorporated_from": since, "size": "100"},
+                  auth=(ch, ""), timeout=25)
+        print(f"  companies_house new incorporations since {since}: HTTP {r.status_code}")
+        if r.ok:
+            d = r.json()
+            items = d.get("items") or []
+            print(f"   hits={d.get('hits')} returned={len(items)}")
+            save("ch_new.json", r.text)
+            for it in items[:10]:
+                print("    -", it.get("date_of_creation"), it.get("company_name"), "|",
+                      (it.get("registered_office_address") or {}).get("postal_code"), "|", it.get("sic_codes"))
+    sk = os.getenv("SKIDDLE_API_KEY", "").strip()
+    if not sk:
+        print("  skiddle: no key (SKIDDLE_API_KEY secret not set)")
+    else:
+        r = S.get("https://www.skiddle.com/api/v1/events/search/",
+                  params={"api_key": sk, "latitude": ROCHDALE_LAT, "longitude": ROCHDALE_LNG, "radius": "5",
+                          "minDate": NOW.strftime("%Y-%m-%d"), "maxDate": (NOW + timedelta(days=30)).strftime("%Y-%m-%d"),
+                          "limit": "100", "order": "date", "description": "1"}, timeout=25)
+        print(f"  skiddle events within 5 miles, next 30 days: HTTP {r.status_code}")
+        if r.ok:
+            d = r.json()
+            res = d.get("results") or []
+            print(f"   totalcount={d.get('totalcount')} returned={len(res)}")
+            save("skiddle.json", r.text)
+            towns: dict[str, int] = {}
+            for e in res:
+                town = str((e.get("venue") or {}).get("town") or "?")
+                towns[town] = towns.get(town, 0) + 1
+            print("   by town:", towns)
+            for e in res[:12]:
+                print("    -", e.get("date"), "|", (e.get("venue") or {}).get("name"), "|", (e.get("eventname") or "")[:80])
+    tm = os.getenv("TICKETMASTER_API_KEY", "").strip()
+    if not tm:
+        print("  ticketmaster: no key (TICKETMASTER_API_KEY secret not set)")
+    else:
+        r = S.get("https://app.ticketmaster.com/discovery/v2/events.json",
+                  params={"apikey": tm, "latlong": f"{ROCHDALE_LAT},{ROCHDALE_LNG}", "radius": "5", "unit": "miles",
+                          "countryCode": "GB", "size": "100", "sort": "date,asc"}, timeout=25)
+        print(f"  ticketmaster events within 5 miles: HTTP {r.status_code}")
+        if r.ok:
+            d = r.json()
+            ev = (d.get("_embedded") or {}).get("events") or []
+            print(f"   total={(d.get('page') or {}).get('totalElements')} returned={len(ev)}")
+            save("ticketmaster.json", r.text)
+            for e in ev[:12]:
+                v = ((e.get("_embedded") or {}).get("venues") or [{}])[0]
+                print("    -", (e.get("dates") or {}).get("start", {}).get("localDate"), "|", v.get("name"), "|", (v.get("city") or {}).get("name"), "|", e.get("name", "")[:70])
+    print("  cqc:", "key present (collector in register_watch.py will run)" if os.getenv("CQC_SUBSCRIPTION_KEY", "").strip()
+          else "no key (CQC_SUBSCRIPTION_KEY secret not set)")
+
+
+def contracts_finder_retry() -> None:
+    """Round 2 returned 0 releases with publishedFrom dropped; try the documented parameter set."""
+    if not section("contracts_finder_retry"):
+        return
+    for params in ({"publishedFrom": (NOW - timedelta(days=7)).strftime("%Y-%m-%d"), "publishedTo": NOW.strftime("%Y-%m-%d"), "limit": "100"},
+                   {"publishedFrom": (NOW - timedelta(days=7)).strftime("%Y-%m-%d"), "limit": "100", "stages": "award"}):
+        r = S.get("https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search", params=params, timeout=25)
+        try:
+            d = r.json()
+        except ValueError:
+            d = {}
+        rels = d.get("releases") or []
+        local = [x for x in rels if BOROUGH.search(json.dumps(x.get("parties") or []) + str((x.get("buyer") or {}).get("name")))]
+        print(f"  {params}: HTTP {r.status_code} releases={len(rels)} naming-borough={len(local)} next={bool((d.get('links') or {}).get('next'))} uri={d.get('uri')}")
+        __import__("time").sleep(3)
+
+
 if __name__ == "__main__":
-    for fn in (contracts_finder, nomis, met_office, find_tender, existing_rota):
+    for fn in (keyed, contracts_finder_retry, existing_rota):
         try:
             fn()
         except Exception as exc:  # noqa: BLE001
