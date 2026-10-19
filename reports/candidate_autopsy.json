@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-10-18T11:41:27.949730Z",
+  "examined_at": "2026-10-19T13:55:55.354085Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 134,
+  "candidates_examined": 101,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 85,
-    "would publish": 46,
+    "age": 86,
+    "would publish": 12,
     "duplicate of published story": 3
   },
-  "would_publish": 46,
+  "would_publish": 12,
   "age_gate_sensitivity": {
-    "6h": 6,
-    "14h": 8,
-    "24h": 49,
-    "48h": 74,
-    "72h": 110,
-    "168h": 134
+    "6h": 7,
+    "14h": 13,
+    "24h": 15,
+    "48h": 45,
+    "72h": 66,
+    "168h": 101
   },
   "gates_unavailable": [],
   "examples": {
     "duplicate of published story": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "BBC: Crewe Alexandra 3-2 Rochdale - BBC",
-      "Universidad de Córdoba (UCO): ~$!【SoCCER】 Rochdale v Crewe Alexandra 𝐋𝐈𝐕𝐄 Ｓｔｒｅａｍｓ ＯＮ Ｔｖ - Universida"
+      "Bee Network live travel alerts: Updated: 19/10/2026 at 12:59pm Live Freehold Tram Stop - Lifts out of ",
+      "Rochdale Borough Council: Greenhill Road, roadworks in Middleton from 2 November 2026"
     ],
     "would publish": [
+      "Rochdale AFC: Tuesday’s Matchday Guide - Rochdale AFC",
       "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "TfGM Travel Alerts: Travel alerts",
       "TfGM Travel Alerts: Travel alerts"
     ],
     "age": [
-      "Universidad de Córdoba (UCO): +[#!WATCHLIVE-Tv!]™Rochdale vs Crewe Live Free Football 17 October 202",
-      "Roch Valley Radio Local News: Hopwood Hall ‘will be brought back into community use’",
-      "Roch Valley Radio Local News: Town hall fears for the future of pubs"
+      "Manchester Evening News: 'Loud bang' heard as residents left without power",
+      "Yahoo News UK: 'Loud bang' heard as residents left without power after incident in Ro",
+      "Roch Valley Radio Local News: Man dies after flat fire in Prestwich"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
