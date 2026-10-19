@@ -149,7 +149,7 @@ async function newsArchive(loc,id){
   if(requestId!==id)return;
   archiveReadyForPostcode=false;
   putBrief("news","News archive unavailable. Open the full archive directly.");
-  unavailable("stories","/archive.html","Full news archive could not load. Open the archive to search directly.");
+  unavailable("stories","/archive","Full news archive could not load. Open the archive to search directly.");
  }
 }
 function roadworks(){
@@ -539,7 +539,7 @@ async function showBoroughIfLookupFails(id){
     (async()=>{await newsArchive(fallback,id);if(id!==requestId)return;active="all";news();putBrief("news","Borough-wide archive; your postcode could not be matched.");})(),
     (async()=>{try{const data=await readOwnData("/weather.json","weather",5500);if(id===requestId)weather(data);}catch{if(id===requestId){unavailable("weather","https://www.metoffice.gov.uk/");putBrief("weather","Forecast unavailable. Check the Met Office.");}}})(),
     (async()=>{try{const data=await read("/api/traffic");if(id===requestId)traffic(data,fallback);}catch{if(id===requestId){unavailable("traffic","https://tfgm.com/");putBrief("traffic","Travel feed unavailable. Check Bee Network.");}}})(),
-    (async()=>{try{await eventsForPostcode(id);}catch{if(id===requestId){unavailable("events","/news/events.html");putBrief("events","Events unavailable. Open What’s On.");}}})()
+    (async()=>{try{await eventsForPostcode(id);}catch{if(id===requestId){unavailable("events","/news/events");putBrief("events","Events unavailable. Open What’s On.");}}})()
   ]);
   if(id!==requestId)return;
   services(fallback);
@@ -565,7 +565,7 @@ async function archiveWhenLiveFeedFails(kind,id){
   if(!items.length)intro.textContent+=" No local archive matches are available either.";
   out(key,[intro,list(items),
     link(kind==="events"?"Browse the full events section →":"Open the official Bee Network journey planner ↗",
-      kind==="events"?"/archive.html":"https://tfgm.com/plan-a-journey")]);
+      kind==="events"?"/archive":"https://tfgm.com/plan-a-journey")]);
   putBrief(kind==="events"?"events":"traffic","Live "+(kind==="events"?"events":"transport")+" feed unavailable; "+items.length+" locally relevant archived reports available.");
 }
 function officialFallback(kind,loc){
@@ -582,7 +582,7 @@ function officialFallback(kind,loc){
  }else unavailable(kind,errorSources[kind]||"/");
 }
 
-const errorSources={councillors:"https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1",weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/news/events.html",flood:"https://check-for-flooding.service.gov.uk/",planning:"https://www.planning.data.gov.uk/"};
+const errorSources={councillors:"https://democracy.rochdale.gov.uk/mgMemberIndex.aspx?bcr=1",weather:"https://www.metoffice.gov.uk/",traffic:"https://tfgm.com/",events:"/news/events",flood:"https://check-for-flooding.service.gov.uk/",planning:"https://www.planning.data.gov.uk/"};
 async function start(e){
  e?.preventDefault();
  const input=byId("postcode").value.trim().toUpperCase();
@@ -637,7 +637,7 @@ async function start(e){
         await archiveWhenLiveFeedFails(x[0],id);
        }else if(x[0]==="flood"||x[0]==="planning"){
         officialFallback(x[0],loc);
-       }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive.html");
+       }else unavailable(x[0]==="archive"?"stories":x[0],errorSources[x[0]]||"/archive");
      };}}));
   if(id===requestId)report("Your briefing is ready for "+(loc.ward||loc.district)+(failed.length?". Some sources are unavailable; their panels explain where to check.":". Councillors, news and GMP priorities are shown next."),failed.length?"ready":"success");
  }catch(err){if(id===requestId)await showBoroughIfLookupFails(id);}

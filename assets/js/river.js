@@ -158,7 +158,7 @@
         '<p class="river-end-title">That is every story we have published &mdash; ' +
         items.length.toLocaleString("en-GB") + " of them.</p>" +
         '<p class="river-end-note">Nothing is hidden below this point. ' +
-        'Try <a href="/archive.html">the archive</a> to search, ' +
+        'Try <a href="/archive">the archive</a> to search, ' +
         'or read by <a href="/wards/">ward</a> or <a href="/news/">section</a>.</p>';
       status.hidden = false;
     }

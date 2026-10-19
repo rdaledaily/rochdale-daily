@@ -105,5 +105,16 @@ class DeniedLinkTests(unittest.TestCase):
         self.assertIn("bbc.co.uk", out)
         self.assertIn("<p>See the stream now.</p>", out)
 
+
+class ScriptLinkTests(unittest.TestCase):
+    def test_public_scripts_link_to_clean_addresses(self):
+        import re
+        root = Path(__file__).resolve().parents[1] / "assets"
+        offenders = []
+        for script in list(root.glob("*.js")) + list(root.glob("js/*.js")):
+            for match in re.finditer(r"""['"`]/[a-z0-9_/-]*\.html(?=[#?'"`])""", script.read_text(encoding="utf-8")):
+                offenders.append(f"{script.name}: {match.group(0)}")
+        self.assertEqual(offenders, [], "internal .html links answer 308; link to the clean address")
+
 if __name__ == "__main__":
     unittest.main()

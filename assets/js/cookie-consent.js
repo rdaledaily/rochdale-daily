@@ -81,8 +81,8 @@
        retired two palettes ago, and the last literal of it in the shell. */
     banner.innerHTML =
       '<div class="wrap cookie-row">' +
-      '<p class="cookie-long"><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. You can change your choice at any time using <a href="/privacy.html#cookies">Cookie settings</a>.</p>' +
-      '<p class="cookie-short"><strong>Cookie choices:</strong> Optional cookies stay off unless you allow them. <a href="/privacy.html#cookies">What we use and why</a>.</p>' +
+      '<p class="cookie-long"><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. You can change your choice at any time using <a href="/privacy#cookies">Cookie settings</a>.</p>' +
+      '<p class="cookie-short"><strong>Cookie choices:</strong> Optional cookies stay off unless you allow them. <a href="/privacy#cookies">What we use and why</a>.</p>' +
       '<div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div></div>';
     document.body.appendChild(banner);
     return banner;
@@ -139,15 +139,15 @@
         '<div class="trust-newspaper-footer__inner">' +
           '<strong>Rochdale Daily</strong> — independent local news for the Rochdale borough.' +
           '<div class="trust-newspaper-footer__links">' +
-            '<a href="/about.html">About</a>' +
-            '<a href="/editor.html">The editor</a>' +
-            '<a href="/editorial-standards.html">Editorial standards</a>' +
-            '<a href="/corrections-and-complaints.html">Corrections &amp; complaints</a>' +
-            '<a href="/contact.html">Contact</a>' +
-            '<a href="/privacy.html">Privacy</a>' +
+            '<a href="/about">About</a>' +
+            '<a href="/editor">The editor</a>' +
+            '<a href="/editorial-standards">Editorial standards</a>' +
+            '<a href="/corrections-and-complaints">Corrections &amp; complaints</a>' +
+            '<a href="/contact">Contact</a>' +
+            '<a href="/privacy">Privacy</a>' +
             '<a href="#" data-cookie-settings>Cookie settings</a>' +
-            '<a href="/terms.html">Terms</a>' +
-            '<a href="/accessibility.html">Accessibility</a>' +
+            '<a href="/terms">Terms</a>' +
+            '<a href="/accessibility">Accessibility</a>' +
           '</div>' +
         '</div>';
     }
@@ -185,10 +185,10 @@
     /* Article pages are generated separately. Add the public opt-in link to
        their existing navigation, without changing a single article file. */
     var list = document.querySelector(".primary-nav .nav-list");
-    if (!list || list.querySelector('a[href="/news-alerts.html"]')) return;
+    if (!list || list.querySelector('a[href="/news-alerts"]')) return;
     var item = document.createElement("li");
     var link = document.createElement("a");
-    link.href = "/news-alerts.html";
+    link.href = "/news-alerts";
     link.textContent = "News alerts";
     item.appendChild(link);
     list.appendChild(item);

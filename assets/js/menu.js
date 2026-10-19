@@ -120,7 +120,7 @@
  const nav=document.createElement('nav');nav.id='rd-reporting-links';nav.setAttribute('aria-label','Reporting standards and discussion');
  nav.style.cssText='display:flex;flex-wrap:wrap;gap:10px 18px;margin:14px 0 22px;padding:12px 0;border-top:1px solid #d9e4e8;border-bottom:1px solid #d9e4e8;font:700 12px/1.5 system-ui';
  const sources=document.querySelector('.article-sources');if(sources&&!sources.id)sources.id='rd-article-sources';
- const records=[['How we report','/editorial-standards.html'],['Corrections and right of reply','/corrections-and-complaints.html'],['Explore My Rochdale','/my-rochdale']];
+ const records=[['How we report','/editorial-standards'],['Corrections and right of reply','/corrections-and-complaints'],['Explore My Rochdale','/my-rochdale']];
  if(sources)records.unshift(['Read the sources','#'+sources.id]);
  if(document.getElementById('comments-root'))records.push(['Have your say','#comments-root']);
  for(const [text,href] of records){const a=document.createElement('a');a.textContent=text;a.href=href;a.style.color='#136c76';

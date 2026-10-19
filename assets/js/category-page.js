@@ -130,7 +130,7 @@
     const slug = normaliseSlug(story.slug || '');
     if (slug) return `/articles/${encodeURIComponent(slug)}.html`;
     const id = String(story.id || story.story_key || '').trim();
-    return `/post.html?id=${encodeURIComponent(id)}`;
+    return `/post?id=${encodeURIComponent(id)}`;
   }
 
   function buildFilterHref(category, area) {
@@ -140,14 +140,14 @@
     if (normalCategory && normalCategory !== 'news') query.set('type', normalCategory);
     if (normalArea) query.set('area', normalArea);
     const suffix = query.toString();
-    return suffix ? `/category.html?${suffix}` : '/category.html';
+    return suffix ? `/category?${suffix}` : '/category';
   }
 
   function preferredRoute() {
     if (selectedCategory && !selectedArea && STATIC_CATEGORY_ROUTES.has(selectedCategory)) {
       return `/news/${selectedCategory}.html`;
     }
-    if (!selectedCategory && !selectedArea) return '/category.html';
+    if (!selectedCategory && !selectedArea) return '/category';
     return buildFilterHref(selectedCategory, selectedArea);
   }
 
