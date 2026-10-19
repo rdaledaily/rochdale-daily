@@ -93,5 +93,17 @@ class PaidLinkTests(unittest.TestCase):
         tag = '<a href="https://www.rochdale.gov.uk/go/x" rel="noopener">'
         self.assertEqual(mark_paid_links(tag), tag)
 
+
+class DeniedLinkTests(unittest.TestCase):
+    def test_denied_source_item_removed_and_inline_link_unwrapped(self):
+        from clean_urls import strip_denied_links
+        html = ('<ul><li><a href="https://www.uco.es/scai/x?xml=data:video" rel="nofollow">Open source 1</a></li>'
+                '<li><a href="https://www.bbc.co.uk/sport">Open source 2</a></li></ul>'
+                '<p>See <a href="https://sub.uco.es/p">the stream</a> now.</p>')
+        out = strip_denied_links(html)
+        self.assertNotIn("uco.es", out)
+        self.assertIn("bbc.co.uk", out)
+        self.assertIn("<p>See the stream now.</p>", out)
+
 if __name__ == "__main__":
     unittest.main()

@@ -61,6 +61,30 @@ def mark_paid_links(text: str) -> str:
     return _TRACKER_A_RE.sub(fix, text)
 
 
+try:
+    from locality_rules import SOURCE_DENY_DOMAINS as DENIED_HOSTS
+except Exception:  # pragma: no cover - the rules module is always shipped
+    DENIED_HOSTS = set()
+
+# A link to a denied host (spam, hijacked or piracy pages) must not appear on
+# any page, whatever wrote it: such links tell Google the site vouches for a
+# bad neighbourhood. A source-list item is removed; inline, the words stay.
+_DENIED_ITEM_RE = re.compile(r'<li>\s*<a\b[^>]*\bhref="https?://([^"/:]+)[^"]*"[^>]*>.*?</a>\s*</li>', re.S | re.I)
+_DENIED_A_RE = re.compile(r'<a\b[^>]*\bhref="https?://([^"/:]+)[^"]*"[^>]*>(.*?)</a>', re.S | re.I)
+
+
+def _denied(host: str) -> bool:
+    host = host.lower().removeprefix("www.")
+    return any(host == d or host.endswith("." + d) for d in DENIED_HOSTS)
+
+
+def strip_denied_links(text: str) -> str:
+    if not DENIED_HOSTS or not any(d in text for d in DENIED_HOSTS):
+        return text
+    text = _DENIED_ITEM_RE.sub(lambda m: "" if _denied(m.group(1)) else m.group(0), text)
+    return _DENIED_A_RE.sub(lambda m: m.group(2) if _denied(m.group(1)) else m.group(0), text)
+
+
 def clean_text(text: str) -> str:
     def absolute(match: re.Match[str]) -> str:
         return _strip_index(match.group(1)) if match.group(1) != SITE else SITE + "/"
@@ -70,7 +94,7 @@ def clean_text(text: str) -> str:
         return f'{match.group("attr")}{path}{match.group("tail") or ""}"'
 
     text = _ABSOLUTE_RE.sub(absolute, text)
-    return mark_paid_links(_HREF_RE.sub(href, text))
+    return strip_denied_links(mark_paid_links(_HREF_RE.sub(href, text)))
 
 
 def file_for_url(url: str, root: Path) -> Path | None:

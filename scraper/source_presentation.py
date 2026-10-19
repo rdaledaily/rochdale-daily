@@ -41,6 +41,17 @@ _PUBLIC_TEXT_FIELDS = (
 )
 
 
+
+def _denied_source(url: str) -> bool:
+    """Spam, hijacked and piracy hosts are never shown as a source."""
+    try:
+        from locality_rules import SOURCE_DENY_DOMAINS
+    except Exception:
+        return False
+    from urllib.parse import urlparse
+    host = (urlparse(url).hostname or "").lower().removeprefix("www.")
+    return any(host == d or host.endswith("." + d) for d in SOURCE_DENY_DOMAINS)
+
 def _domain(value: Any) -> str:
     host = (urlparse(str(value or "")).hostname or "").casefold()
     return host[4:] if host.startswith("www.") else host
@@ -267,7 +278,7 @@ def generic_sources_markup(article: dict[str, Any]) -> str:
             urls.append(url)
     urls = [
         url for url in urls
-        if url.startswith(("https://", "http://")) and not is_social_source(url)
+        if url.startswith(("https://", "http://")) and not is_social_source(url) and not _denied_source(url)
     ]
     if not urls:
         return ""
