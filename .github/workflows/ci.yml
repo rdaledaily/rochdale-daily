@@ -219,6 +219,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_run_newsroom_policy.py
           PYTHONPATH=scraper python scraper/test_evergreen_fallback.py
           PYTHONPATH=scraper python scraper/test_rewrite_ledger.py
+          PYTHONPATH=scraper python scraper/test_overlap_rebuild.py
           PYTHONPATH=scraper python scraper/test_sponsored_frontpage_floor.py
           PYTHONPATH=scraper python scraper/test_generated_card_style.py
           PYTHONPATH=scraper python scraper/test_prune_dead_related_links.py
