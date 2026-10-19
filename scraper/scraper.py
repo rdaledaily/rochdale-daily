@@ -165,7 +165,7 @@ BROWSER_RENDER_ENABLED = os.getenv('BROWSER_RENDER_ENABLED', 'true').lower() not
 BROWSER_RENDER_TIMEOUT_MS = int(os.getenv('BROWSER_RENDER_TIMEOUT_MS', '30000'))
 FACEBOOK_EVENT_IMAGE_REUSE = os.getenv('FACEBOOK_EVENT_IMAGE_REUSE', 'false').lower() in {'1', 'true', 'yes'}
 IMAGE_REUSE_SOURCE_DOMAINS = {item.strip().lower() for item in os.getenv('IMAGE_REUSE_SOURCE_DOMAINS', 'rochdale.gov.uk,gmp.police.uk,manchesterfire.gov.uk,rochdaleafc.co.uk,hornetsrugbyleague.co.uk,tfgm.com,gmca.gov.uk,nationalhighways.co.uk,hopwood.ac.uk,northerncarealliance.nhs.uk,penninecare.nhs.uk,rochvalleyradio.com,actiontogether.org.uk,yourtrustrochdale.co.uk,facebook.com').split(',') if item.strip()}
-RSS_SOURCES = [{'name': 'BBC Manchester', 'url': 'https://feeds.bbci.co.uk/news/england/manchester/rss.xml', 'default_area': 'rochdale'}, {'name': 'Manchester Evening News — Rochdale', 'url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'default_area': 'rochdale', 'rss_only': True, 'publisher_domain': 'manchestereveningnews.co.uk'}, {'name': 'Manchester Evening News — Heywood', 'url': 'https://www.manchestereveningnews.co.uk/all-about/heywood?service=rss', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/heywood', 'default_area': 'heywood', 'rss_only': True, 'publisher_domain': 'manchestereveningnews.co.uk'}, {'name': 'Manchester Evening News — Middleton', 'url': 'https://www.manchestereveningnews.co.uk/all-about/middleton?service=rss', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/middleton', 'default_area': 'middleton', 'rss_only': True, 'publisher_domain': 'manchestereveningnews.co.uk'}, {'name': 'Manchester Evening News — Littleborough', 'url': 'https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/littleborough', 'default_area': 'littleborough', 'rss_only': True, 'publisher_domain': 'manchestereveningnews.co.uk'}, {'name': 'Roch Valley Radio', 'url': 'https://www.rochvalleyradio.com/news/local-news/feed.xml', 'default_area': 'rochdale'}, {'name': 'Rochdale Borough Council RSS', 'url': 'https://www.rochdale.gov.uk/rss/news', 'default_area': 'rochdale', 'trusted_local': True}, {'name': 'Hopwood Hall College', 'url': 'https://www.hopwood.ac.uk/feed/', 'default_area': 'rochdale', 'default_category': 'education', 'trusted_local': True}, {'name': 'Rochdale Town Hall', 'url': 'https://www.rochdaletownhall.co.uk/rss/news', 'default_area': 'rochdale', 'default_category': 'events', 'trusted_local': True}, {'name': 'Greater Manchester Fire and Rescue Service', 'url': 'https://www.manchesterfire.gov.uk/news-events/news/feed/', 'default_area': 'rochdale'}, {'name': 'Greater Manchester Police', 'url': 'https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/', 'default_area': 'rochdale', 'default_category': 'crime', 'trusted_local': True}, {'name': 'Rochdale AFC', 'url': 'https://rochdaleafc.co.uk/feed/', 'default_area': 'rochdale', 'default_category': 'sport'}]
+RSS_SOURCES = [{'name': 'BBC Manchester', 'url': 'https://feeds.bbci.co.uk/news/england/manchester/rss.xml', 'default_area': 'rochdale'}, {'name': 'Manchester Evening News — Rochdale', 'url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'default_area': 'rochdale', 'rss_only': True, 'publisher_domain': 'manchestereveningnews.co.uk'}, {'name': 'Manchester Evening News — Heywood', 'url': 'https://www.manchestereveningnews.co.uk/all-about/heywood?service=rss', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/heywood', 'default_area': 'heywood', 'rss_only': True, 'publisher_domain': 'manchestereveningnews.co.uk'}, {'name': 'Manchester Evening News — Middleton', 'url': 'https://www.manchestereveningnews.co.uk/all-about/middleton?service=rss', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/middleton', 'default_area': 'middleton', 'rss_only': True, 'publisher_domain': 'manchestereveningnews.co.uk'}, {'name': 'Manchester Evening News — Littleborough', 'url': 'https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/littleborough', 'default_area': 'littleborough', 'rss_only': True, 'publisher_domain': 'manchestereveningnews.co.uk'}, {'name': 'Roch Valley Radio', 'url': 'https://www.rochvalleyradio.com/rss', 'default_area': 'rochdale'}, {'name': 'Falinge Park High School', 'url': 'https://www.falingepark.com/feed/', 'default_area': 'falinge', 'default_category': 'education', 'trusted_local': True}, {'name': 'Rochdale Sixth Form College', 'url': 'https://www.rochdalesfc.ac.uk/rss', 'default_area': 'rochdale', 'default_category': 'education', 'trusted_local': True}, {'name': 'Oulder Hill Leadership Academy', 'url': 'https://www.oulderhillacademy.com/feed/', 'default_area': 'rochdale', 'default_category': 'education', 'trusted_local': True}, {'name': "St Cuthbert's RC High School", 'url': 'https://stcuthberts.com/feed/', 'default_area': 'rochdale', 'default_category': 'education', 'trusted_local': True}, {'name': 'Edgar Wood Academy', 'url': 'https://www.edgarwood.org/rss', 'default_area': 'middleton', 'default_category': 'education', 'trusted_local': True}, {'name': 'Your Trust Rochdale', 'url': 'https://www.yourtrustrochdale.co.uk/feed/', 'default_area': 'rochdale', 'default_category': 'community', 'trusted_local': True}, {'name': 'Rochdale AFC Community Trust', 'url': 'https://www.rochdaleafccommunity.org/feed/', 'default_area': 'rochdale', 'default_category': 'community', 'trusted_local': True}, {'name': 'Action Together', 'url': 'https://www.actiontogether.org.uk/rss.xml', 'default_area': 'rochdale', 'default_category': 'community'}, {'name': 'Rochdale Borough Council RSS', 'url': 'https://www.rochdale.gov.uk/rss/news', 'default_area': 'rochdale', 'trusted_local': True}, {'name': 'Hopwood Hall College', 'url': 'https://www.hopwood.ac.uk/feed/', 'default_area': 'rochdale', 'default_category': 'education', 'trusted_local': True}, {'name': 'Rochdale Town Hall', 'url': 'https://www.rochdaletownhall.co.uk/rss/news', 'default_area': 'rochdale', 'default_category': 'events', 'trusted_local': True}, {'name': 'Greater Manchester Fire and Rescue Service', 'url': 'https://www.manchesterfire.gov.uk/news-events/news/feed/', 'default_area': 'rochdale'}, {'name': 'Greater Manchester Police', 'url': 'https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/', 'default_area': 'rochdale', 'default_category': 'crime', 'trusted_local': True}, {'name': 'Rochdale AFC', 'url': 'https://rochdaleafc.co.uk/feed/', 'default_area': 'rochdale', 'default_category': 'sport'}]
 # Pages the scraper walks for candidate stories.
 #
 # "What's Occurrin' Events" was removed on 1 August 2026: it is a ticket box
@@ -192,12 +192,7 @@ DISCOVERY_PAGES = [
     {'name': 'Rochdale Development Agency', 'url': 'https://investinrochdale.co.uk/news', 'default_area': 'rochdale', 'link_pattern': '/news/'},
     {'name': 'Visit Rochdale', 'url': 'https://www.visitrochdale.com/whats-on', 'default_area': 'rochdale', 'link_pattern': '/whats-on/'},
     {'name': 'Rochdale Town Hall Events', 'url': 'https://www.rochdaletownhall.co.uk/events?page=1', 'default_area': 'rochdale', 'link_pattern': '/events/event/'},
-    {'name': 'Action Together Rochdale News', 'url': 'https://www.actiontogether.org.uk/rochdale-news', 'default_area': 'rochdale', 'link_pattern': '/'},
-    {'name': 'Action Together Latest News', 'url': 'https://www.actiontogether.org.uk/whats-happening', 'default_area': 'rochdale', 'link_pattern': '/'},
-    {'name': 'Your Trust Rochdale News', 'url': 'https://www.yourtrustrochdale.co.uk/news/', 'default_area': 'rochdale', 'link_pattern': '/news/|/category/news/'},
-    {'name': 'Your Trust Rochdale News Archive', 'url': 'https://www.yourtrustrochdale.co.uk/category/news/', 'default_area': 'rochdale', 'link_pattern': '/'},
-    {'name': 'Roch Valley Radio Local News', 'url': 'https://www.rochvalleyradio.com/news/local-news/', 'default_area': 'rochdale', 'default_category': 'news', 'trusted_local': True, 'link_pattern': '/news/local-news/'},
-    {'name': 'Roch Valley Radio Notices', 'url': 'https://www.rochvalleyradio.com/news/notices/', 'default_area': 'rochdale', 'default_category': 'community', 'trusted_local': True, 'link_pattern': '/news/notices/|/news/local-news/'},
+    {'name': 'Roch Valley Radio Local News', 'url': 'https://www.rochvalleyradio.com/', 'default_area': 'rochdale', 'default_category': 'news', 'trusted_local': True, 'link_pattern': '/news-features/'},
     {'name': 'Greater Manchester Fire and Rescue Service', 'url': 'https://www.manchesterfire.gov.uk/news-events/news/', 'default_area': 'rochdale', 'link_pattern': '/news'},
     {'name': 'TfGM Newsroom', 'url': 'https://news.tfgm.com/', 'default_area': 'rochdale', 'link_pattern': '/press-releases/'},
     {'name': 'TfGM Travel Alerts', 'url': 'https://tfgm.com/travel-updates/travel-alerts', 'default_area': 'rochdale', 'link_pattern': '/travel-updates/'},
@@ -206,27 +201,20 @@ DISCOVERY_PAGES = [
     {'name': 'National Highways North West', 'url': 'https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/', 'default_area': 'rochdale', 'link_pattern': '/'},
     {'name': 'United Utilities Incidents', 'url': 'https://www.unitedutilities.com/emergencies/up-my-street/', 'default_area': 'rochdale', 'link_pattern': '/emergencies/|/incident/'},
     {'name': 'GMCA News', 'url': 'https://www.greatermanchester-ca.gov.uk/news/', 'default_area': 'rochdale', 'link_pattern': '/news/'},
-    {'name': 'BBC Manchester', 'url': 'https://www.bbc.co.uk/news/england/manchester', 'default_area': 'rochdale', 'link_pattern': '/news/'},
+    {'name': 'BBC Manchester', 'url': 'https://www.bbc.co.uk/news/england/manchester', 'default_area': 'rochdale', 'link_pattern': '/news/articles/'},
     {'name': 'About Manchester', 'url': 'https://aboutmanchester.co.uk/?s=Rochdale', 'default_area': 'rochdale', 'link_pattern': '/'},
     {'name': 'Rochdale Boroughwide Housing', 'url': 'https://www.rbh.org.uk/', 'default_area': 'rochdale', 'default_category': 'community', 'trusted_local': True, 'link_pattern': '/news/|/latest-news/|/updates/|/our-news/'},
     {'name': 'Rochdale Riverside News', 'url': 'https://rochdaleriverside.com/news/', 'default_area': 'rochdale', 'default_category': 'business', 'trusted_local': True, 'link_pattern': '/news/'},
     {'name': 'The Independent — Rochdale', 'url': 'https://www.independent.co.uk/topic/rochdale', 'default_area': 'rochdale', 'default_category': 'news', 'link_pattern': '/news/|/topic/rochdale'},
     {'name': 'Rochdale Council Webcasts', 'url': 'https://rochdale.public-i.tv/core/data/21235/archived/1/future/1/agenda/1/enctag/Council', 'default_area': 'rochdale', 'default_category': 'politics', 'trusted_local': True, 'link_pattern': '/core/portal/|/core/data/'},
     {'name': 'Rochdale Valiant', 'url': 'https://www.rochdalevaliant.uk/', 'default_area': 'rochdale', 'default_category': 'news', 'trusted_local': True, 'link_pattern': '/'},
-    {'name': 'Northern Care Alliance Rochdale', 'url': 'https://www.northerncarealliance.nhs.uk/news/rochdale-news', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/news/'},
-    {'name': 'Northern Care Alliance News', 'url': 'https://www.northerncarealliance.nhs.uk/nca-news', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/nca-news/|/news/'},
+    {'name': 'Northern Care Alliance Rochdale', 'url': 'https://www.northerncarealliance.nhs.uk/news/rochdale-news', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/nca-news/[^/?]*-'},
+    {'name': 'Northern Care Alliance News', 'url': 'https://www.northerncarealliance.nhs.uk/nca-news', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/nca-news/[^/?]*-'},
     {'name': 'Pennine Care NHS', 'url': 'https://www.penninecare.nhs.uk/about-us/latest-news', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/latest-news/|/news/'},
-    {'name': 'Hopwood Hall College', 'url': 'https://www.hopwood.ac.uk/news-and-events/latest-news/', 'default_area': 'rochdale', 'default_category': 'education', 'link_pattern': '/news-and-events/'},
-    {'name': 'Rochdale Sixth Form College', 'url': 'https://www.rochdalesfc.ac.uk/128/news', 'default_area': 'rochdale', 'default_category': 'education', 'link_pattern': '/news/post/'},
-    {'name': 'Falinge Park High School', 'url': 'https://www.falingepark.com/news-and-events/', 'default_area': 'falinge', 'default_category': 'education', 'trusted_local': True, 'link_pattern': '/news-and-events/|/news/'},
-    {'name': 'Oulder Hill Leadership Academy', 'url': 'https://www.oulderhillacademy.com/latest-news/', 'default_area': 'rochdale', 'default_category': 'education', 'trusted_local': True, 'link_pattern': '/latest-news/|/news/'},
     {'name': 'Wardle Academy', 'url': 'https://www.wchs.co/topic/news-and-events', 'default_area': 'wardle', 'default_category': 'education', 'trusted_local': True, 'link_pattern': '/topic/news-and-events|/news/'},
-    {'name': "St Cuthbert's RC High School", 'url': 'https://stcuthberts.com/news', 'default_area': 'rochdale', 'default_category': 'education', 'trusted_local': True, 'link_pattern': '/news'},
-    {'name': 'Edgar Wood Academy', 'url': 'https://www.edgarwood.org/80/news-and-events', 'default_area': 'middleton', 'default_category': 'education', 'trusted_local': True, 'link_pattern': '/80/news-and-events|/news-and-events|/news/'},
     {'name': 'Rochdale AFC', 'url': 'https://rochdaleafc.co.uk/news/', 'default_area': 'rochdale', 'default_category': 'sport', 'link_pattern': '/club-news/|/first-team-news/|/match-report|/match-preview|/interview|/ticket-news/|/academy|/community|/womens-news/|/youth'},
-    {'name': 'Rochdale Hornets', 'url': 'https://www.hornetsrugbyleague.co.uk/news', 'default_area': 'rochdale', 'default_category': 'sport', 'link_pattern': '/news'},
+    {'name': 'Rochdale Hornets', 'url': 'https://www.hornetsrugbyleague.co.uk/news', 'default_area': 'rochdale', 'default_category': 'sport', 'link_pattern': '/article/'},
     {'name': 'Rochdale AFC Women', 'url': 'https://rochdaleafc.co.uk/rochdale-afc-women-news/', 'default_area': 'rochdale', 'default_category': 'sport', 'link_pattern': '/womens-news/|/club-news/|/match-report|/match-preview|/interview'},
-    {'name': 'Rochdale AFC Community Trust', 'url': 'https://www.rochdaleafccommunity.org/news/', 'default_area': 'rochdale', 'default_category': 'community', 'trusted_local': True, 'link_pattern': '/'},
 ]
 # Live pages whose text is genuinely event-driven: a service alert exists
 # because something happened. Traffic Update and the Met Office forecast were
@@ -955,11 +943,97 @@ def fetch_markup(url: str, render: bool = False) -> tuple[str, str]:
         log.warning('Browser render failed for %s: %s', url, exc)
         raise
 
+_VISIBLE_MONTHS = {
+    'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6, 'jul': 7, 'aug': 8,
+    'sep': 9, 'sept': 9, 'oct': 10, 'nov': 11, 'dec': 12,
+}
+_VISIBLE_DATE_RE = re.compile(
+    r'\b(?:(?P<d1>\d{1,2})(?:st|nd|rd|th)?\s+(?P<m1>Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept?|Oct|Nov|Dec)[a-z]*\.?,?\s+(?P<y1>20\d{2})'
+    r'|(?P<m2>Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept?|Oct|Nov|Dec)[a-z]*\.?\s+(?P<d2>\d{1,2})(?:st|nd|rd|th)?,?\s+(?P<y2>20\d{2})'
+    r'|(?P<d3>\d{1,2})/(?P<m3>\d{1,2})/(?P<y3>20\d{2}))\b',
+    re.IGNORECASE,
+)
+# Element classes that mark a publication date, and the ones that do not.
+_PUBLISH_CLASS_RE = re.compile(r'date|publish|posted', re.IGNORECASE)
+_NOT_PUBLISH_CLASS_RE = re.compile(r'updat|modif|event|expir|deadline|clos|start|end|print', re.IGNORECASE)
+_PUBLISH_LABEL_RE = re.compile(r'\b(?:posted|published|publication date|date published|news date)\b', re.IGNORECASE)
+
+
+def _visible_date_value(text: str) -> datetime | None:
+    match = _VISIBLE_DATE_RE.search(text or '')
+    if not match:
+        return None
+    try:
+        if match.group('y1'):
+            day, month, year = int(match.group('d1')), _VISIBLE_MONTHS[match.group('m1')[:3].lower()], int(match.group('y1'))
+        elif match.group('y2'):
+            day, month, year = int(match.group('d2')), _VISIBLE_MONTHS[match.group('m2')[:3].lower()], int(match.group('y2'))
+        else:
+            day, month, year = int(match.group('d3')), int(match.group('m3')), int(match.group('y3'))  # UK order
+        value = datetime(year, month, day, tzinfo=timezone.utc)
+    except (KeyError, ValueError):
+        return None
+    if value > utc_now() + timedelta(days=1):
+        return None  # a date in the future is an event or deadline, never publication
+    return value
+
+
+def visible_publication_date(soup: BeautifulSoup) -> str:
+    """A publication date the publisher PRINTS on the page, when it is labelled as one.
+
+    Many public-sector sites carry no metadata date at all and print it as text:
+    Northern Care Alliance in <p class="main__date">14 October 2026</p>, Pennine
+    Care "Published on: 13th October 2026" in .publish-date, RBH in
+    .m-news__published, Rochdale Development Agency "Posted by on 14 Oct 2026"
+    under the headline. Measured 19 Oct 2026, every sampled article from those
+    sites was discarded as undated. Only dates that the page itself marks as the
+    publication date are accepted - never "last updated", event or closing dates,
+    and never a bare date found somewhere in the body.
+    """
+    found: list[datetime] = []
+    for node in soup.find_all(True, attrs={'class': True}):
+        classes = ' '.join(node.get('class') or [])
+        if not _PUBLISH_CLASS_RE.search(classes) or _NOT_PUBLISH_CLASS_RE.search(classes):
+            continue
+        text = normalise_ws(node.get_text(' ', strip=True))
+        if 0 < len(text) <= 120:
+            value = _visible_date_value(text)
+            if value and value not in found:
+                found.append(value)
+    if not found:
+        scope = soup.select_one('article') or soup.select_one('main') or soup
+        for node in scope.find_all(['p', 'span', 'small', 'li']):
+            if _NOT_PUBLISH_CLASS_RE.search(' '.join(node.get('class') or [])):
+                continue
+            text = normalise_ws(node.get_text(' ', strip=True))
+            label = _PUBLISH_LABEL_RE.search(text) if 0 < len(text) <= 120 else None
+            if not label:
+                continue
+            value = _visible_date_value(text[label.start():])
+            if value and value not in found:
+                found.append(value)
+    # Three or more different publication dates is a LIST of articles (a
+    # listing, archive or "latest news" page), not one story. Never date it,
+    # or a listing page could pass as a fresh article.
+    if len(found) >= 3:
+        return ''
+    return found[0].isoformat() if found else ''
+
+
 def page_metadata(url: str, render: bool = False) -> dict[str, str]:
     final_url, raw_html = fetch_markup(url, render=render)
     soup = BeautifulSoup(raw_html, 'lxml')
     jsonld = extract_jsonld(soup)
     title = first_meta(soup, [('meta', {'property': 'og:title'}), ('meta', {'name': 'twitter:title'})])
+    site_name = first_meta(soup, [('meta', {'property': 'og:site_name'}), ('meta', {'name': 'application-name'})])
+    if title and site_name and title.casefold() == site_name.casefold():
+        # Some sites put their own name in og:title on every page (Rochdale
+        # Development Agency did, 19 Oct 2026), so every story was headlined
+        # "Rochdale Development Agency". The page's own headline wins then.
+        h1 = soup.find('h1')
+        headline = normalise_ws(h1.get_text(' ', strip=True) if h1 else '')
+        if headline and headline.casefold() != site_name.casefold():
+            title = headline
     if not title:
         h1 = soup.find('h1')
         title = normalise_ws(h1.get_text(' ', strip=True) if h1 else '')
@@ -1010,6 +1084,8 @@ def page_metadata(url: str, render: bool = False) -> dict[str, str]:
             if parse_datetime(candidate_date):
                 published = str(candidate_date)
                 break
+    if not published and content_type != 'event':
+        published = visible_publication_date(soup)
     if not event_start and content_type == 'event':
         visible = normalise_ws(soup.get_text(' ', strip=True))
         event_start = extract_future_event_date(visible)
@@ -1358,6 +1434,52 @@ def discovery_listing_urls(source: dict[str, Any]) -> list[str]:
         return [str(url) for url in listing_urls[:page_limit]]
     return [source['url']]
 
+# Discovery takes at most DISCOVERY_LINKS_PER_SOURCE links per source, so links
+# to navigation must never use those slots. Measured on 19 Oct 2026: Edgar Wood
+# spent every slot on "page1..page12" of its own listing, the Hornets on
+# "?page=2..6", Action Together and the AFC Community Trust on "Log in",
+# "Cart" and "Book now" (their pattern is "/"), Hopwood Hall and Oulder Hill on
+# their listing and category pages - so not one real article was ever opened.
+_NAV_SEGMENT_RE = re.compile(
+    r'(?:^|/)(?:page/?\d+|category|categories|tag|tags|topic|author|archives?|feed|'
+    r'login|log-in|logout|user|users|account|my-account|dashboard|register|signup|sign-up|'
+    r'cart|basket|checkout|shop|book-now|booking|donate|subscribe|search|contact|contact-us|'
+    r'privacy|privacy-policy|cookies?|cookie-policy|policies|accessibility|terms|sitemap|'
+    r'newsletters?|letters-home|vacancies|jobs|careers)(?:/|$)',
+    re.IGNORECASE,
+)
+_PAGINATION_QUERY_RE = re.compile(r'(?:^|&)(?:page|paged|p|pg|start|offset|ccm_paging_p[^=]*|ccm_order_by[^=]*)=', re.IGNORECASE)
+
+
+def _path_parts(path: str) -> list[str]:
+    return [part for part in path.split('/') if part]
+
+
+def discovery_link_is_navigation(url: str, listing_url: str) -> bool:
+    """True for links that lead to listings, pagination, sections or site chrome.
+
+    An article is a page BELOW or BESIDE the listing, never the listing itself,
+    one of its ancestors, another page of the same listing, or a utility page.
+    """
+    link = urlparse(url)
+    listing = urlparse(listing_url)
+    link_parts = _path_parts(link.path)
+    listing_parts = _path_parts(listing.path)
+    if not link_parts:
+        return True  # the home page
+    if link_parts == listing_parts:
+        return True  # the listing itself, or a re-sorted / paginated copy of it
+    if len(link_parts) < len(listing_parts) and listing_parts[:len(link_parts)] == link_parts:
+        return True  # a section above the listing ("/news-and-events/")
+    if re.fullmatch(r'page-?\d+', link_parts[-1], re.IGNORECASE):
+        return True  # "/news-and-events/page3"
+    if _NAV_SEGMENT_RE.search('/' + '/'.join(link_parts) + '/'):
+        return True
+    if link.query and _PAGINATION_QUERY_RE.search(link.query):
+        return True
+    return False
+
+
 def discovery_links(source: dict[str, str]) -> list[str]:
     pattern = re.compile(source['link_pattern'], re.IGNORECASE)
     links: list[str] = []
@@ -1376,6 +1498,8 @@ def discovery_links(source: dict[str, str]) -> list[str]:
             if source_is_denied(source.get('name', ''), url):
                 continue
             if not pattern.search(urlparse(url).path + '?' + urlparse(url).query):
+                continue
+            if discovery_link_is_navigation(url, final_url):
                 continue
             seen.add(url)
             links.append(url)
