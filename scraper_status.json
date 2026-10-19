@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-19T10:45:51.577677Z",
+  "last_run_at": "2026-10-19T11:03:19.692070Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,26 +27,31 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 106,
+  "raw_candidates_before_job_filter": 99,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 106,
-  "candidate_clusters": 37,
+  "raw_candidates": 99,
+  "candidate_clusters": 35,
   "google_news_resolution": {
-    "wrappers": 64,
-    "resolved": 60,
-    "text_recovered": 28,
+    "wrappers": 66,
+    "resolved": 61,
+    "text_recovered": 29,
     "reattributed": 3,
-    "images_found": 29
+    "images_found": 30
   },
-  "duplicates_merged": 69,
+  "duplicates_merged": 64,
   "attempted_rewrites": 3,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 326,
-  "skipped": 3,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "rochdale-vs-crewe-alexandra-live-stream-available",
+      "source_url": "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-match-lie-wcjivxs"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 327,
+  "skipped": 2,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 3
+    "editorial gate: REJECTED_NON_LOCAL": 2
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -59,14 +64,14 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 264,
+    "entries": 263,
     "by_outcome": {
       "failed": 30,
-      "published": 96,
-      "rejected": 138
+      "published": 97,
+      "rejected": 136
     },
-    "held_back_this_run": 29,
-    "held_already_published": 17,
+    "held_back_this_run": 27,
+    "held_already_published": 15,
     "held_rejected": 12,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -184,8 +189,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 81,
-    "website_discovery": 8,
+    "rss_and_google_news": 77,
+    "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 16,
     "facebook_official": 0,
@@ -200,25 +205,24 @@
     "Universidad de Córdoba (UCO)": 29,
     "Rochdale Times": 20,
     "Northern live service updates": 12,
-    "Roch Valley Radio": 6,
     "Manchester Evening News": 5,
-    "Roch Valley Radio Local News": 4,
     "Bee Network live travel alerts": 4,
     "Lancashire Telegraph": 3,
     "Birmingham Now": 3,
     "Wimbledon Times": 2,
     "County Times": 2,
     "The Northern Echo": 2,
+    "Rochdale AFC": 2,
     "Sky Sports": 2,
     "Leigh Journal": 2,
+    "Rochdale Borough Council": 2,
     "TfGM Travel Alerts": 2,
     "Clacton Gazette": 1,
-    "Rochdale AFC": 1,
     "Bescot Banter": 1,
     "Herts Advertiser": 1,
-    "Rochdale Borough Council": 1,
     "Peeblesshire News": 1,
     "Cotswold Journal": 1,
+    "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -235,7 +239,7 @@
     "health": 4,
     "news": 40,
     "politics": 11,
-    "sport": 24,
+    "sport": 25,
     "traffic": 11,
     "transport": 5
   },
@@ -262,12 +266,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-2def1c93df4a255116ab",
+    "transport-v3-97f3a7306e80df2702a9",
     "sport-v3-b6c3c3391073d4c1762c",
     "events-v3-0bb634e0341f0e28c2d0"
   ],
   "selected_candidate_urls": [
-    "https://www.northernrailway.co.uk/service-updates#live-8b6051527df10d7eb1",
+    "https://www.northernrailway.co.uk/service-updates#live-0c3c5eafc01a55c43f",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2NpbWFuZ28uZ2l0aHViLmlvL3NhbmkvbXRwLnhtbCIvPjwva3JwYW5vPg==&id=crewe-vs-rochdale-liv-free-today-match-today-match-ukks-590",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-match-lie-wcjivxs"
   ],
@@ -885,20 +889,16 @@
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-alexandra-uk-243",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-lie-en-imakfzy",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2NpbWFuZ28uZ2l0aHViLmlvL3NhbmkvbXRwLnhtbCIvPjwva3JwYW5vPg==&id=crewe-vs-rochdale-liv-free-today-match-today-match-ukks-590",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-lie-en-tyhvqsu",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-crewe-stream-360",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-alex-stm-405",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-v-rochdale-on-543",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-match-lie-wcjivxs",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-lie-en-tyhvqsu",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-v-crewe-alexandra-lie-en-rdfjxnm"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafccommunity.org"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafccommunity.org": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -934,12 +934,11 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-19T10:46:57.906149Z",
+  "frontpage_generated_at": "2026-10-19T11:04:18.475475Z",
   "frontpage_article_count": 7,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
-      "business",
       "crime",
       "environment",
       "news",
@@ -948,7 +947,6 @@
       "transport"
     ],
     "selected_categories": [
-      "business",
       "crime",
       "environment",
       "news",
@@ -965,17 +963,13 @@
       "Milnrow and Newhey"
     ],
     "available_areas": [
-      "littleborough",
       "middleton",
-      "newhey",
-      "syke"
+      "newhey"
     ],
     "selected_areas": [
-      "littleborough",
       "middleton",
       "newhey",
-      "rochdale",
-      "syke"
+      "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
@@ -993,11 +987,9 @@
       "Milnrow and Newhey": 1
     },
     "selected_by_area": {
-      "littleborough": 1,
       "middleton": 1,
       "newhey": 1,
-      "rochdale": 8,
-      "syke": 1
+      "rochdale": 10
     },
     "selected_by_source": {
       "rochdale daily": 2,
@@ -1008,8 +1000,8 @@
       "manchester evening news": 1
     },
     "pool_size": 12,
-    "primary_pool_size": 11,
-    "fallback_stories_used": 1,
+    "primary_pool_size": 10,
+    "fallback_stories_used": 2,
     "selection_window_days": 4,
     "frontpage_count": 7,
     "homepage_freshness_hours": 36,
@@ -1020,13 +1012,13 @@
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 12,
+  "ticket_events_collected_this_run": 13,
   "events_removed_other_source": 7,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 326,
+  "duplicate_articles_after_postprocessing": 327,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1037,8 +1029,10 @@
   "category_archive_count": 11,
   "area_archive_count": 26,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "rochdale-vs-crewe-alexandra-live-stream-available"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
