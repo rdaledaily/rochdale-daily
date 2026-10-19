@@ -38,7 +38,7 @@
   try { const target=new URL(href,location.href);if(target.origin!==location.origin||!/^\/articles\/[a-z0-9-]+(?:\.html)?$/i.test(target.pathname)||target.pathname.replace(/\.html$/, '')===location.pathname.replace(/\.html$/, ''))return; }catch{return;}
 
   var readNext = document.querySelector(".read-next");
-  var article = document.querySelector(".article-main") || document.body;
+  var article = document.querySelector(".article-copy") || document.querySelector(".article-main") || document.body;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------------------------------------------------------------- the bar */
@@ -79,7 +79,9 @@
   function update() {
     var start = article.getBoundingClientRect().top + window.scrollY;
     var passed = window.scrollY - start;
-    var want = passed > window.innerHeight * 0.9 && !atBlock;
+    var cookieOpen = document.querySelector(".cookie.show");
+    var inStory = article.getBoundingClientRect().bottom > window.innerHeight * 0.4;
+    var want = passed > window.innerHeight * 0.5 && inStory && !atBlock && !cookieOpen;
     if (want !== shown) {
       shown = want;
       bar.classList.toggle("is-visible", want);
