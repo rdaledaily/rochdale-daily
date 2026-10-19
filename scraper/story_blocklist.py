@@ -37,6 +37,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import urlsplit, urlunsplit
@@ -626,6 +627,25 @@ def is_blocked_article(
     )
 
 
+# Piracy "watch free" pages planted on hijacked hosts (week to 19 Oct 2026:
+# 70 of 603 rewrite slots went to "Crewe vs Rochdale LIVE free stream" pages on
+# a university domain). The hosts rotate, so match the page itself: a fixture
+# ("X vs Y") plus streaming bait. NFKC first, because these titles are written
+# in fullwidth and mathematical-bold letters (𝐋𝐈𝐕𝐄, ＬＩＶＥ) to dodge filters.
+_STREAM_BAIT_RE = re.compile(
+    r"live\s*-?\s*streams?|livestreams?|stream\s+free|free\s+stream|"
+    r"live\s+free|watch\s+live|live\s+tv\s+channel|tv\s+channel|"
+    r"en\s+streaming|streaming\s+free|sportek|reddit\s*!",
+    flags=re.IGNORECASE,
+)
+_FIXTURE_RE = re.compile(r"\b(?:vs?\.?|versus)\s", flags=re.IGNORECASE)
+
+
+def is_stream_spam_title(title: Any) -> bool:
+    text = unicodedata.normalize("NFKC", _plain(title))
+    return bool(_STREAM_BAIT_RE.search(text) and _FIXTURE_RE.search(text))
+
+
 def is_blocked_text(
     title: str,
     source_url: str,
@@ -643,6 +663,9 @@ def is_blocked_text(
         blocklist = {"slugs": blocklist}
 
     if contains_islamic_safety_term(title, summary, body):
+        return True
+
+    if is_stream_spam_title(title):
         return True
 
     lowered = _plain(title).lower()

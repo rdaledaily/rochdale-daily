@@ -53,6 +53,9 @@ SOURCE_DENY_DOMAINS = {
     # Scraper-spam subdomain that laundered a US "Montgomery County /
     # Middleton arson" story into Google News results.
     "presonus.com",
+    # Hijacked university host serving "Crewe vs Rochdale LIVE free stream"
+    # piracy pages: 70 rewrite slots in the week to 19 Oct 2026.
+    "uco.es",
 }
 SOURCE_DENY_NAMES = set()
 
@@ -370,6 +373,8 @@ RIVAL_GEOGRAPHY_TERMS = {
     "new york", "north carolina", "south carolina", "north dakota",
     "south dakota", "rhode island", "west virginia", "ncaa",
     "united states", "usa", "canada", "australia", "new zealand",
+    # Rochdale South is a Brisbane suburb (Queensland Police crash reports).
+    "queensland", "new south wales",
     # Canadian provinces (a Middleton, Nova Scotia fatal-crash story
     # published as borough news), plus North American geography markers
     # that never describe the borough: numbered highways and US-style
