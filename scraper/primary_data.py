@@ -500,8 +500,242 @@ def ons_housing(get: Callable[..., Any], state: dict[str, Any], now: datetime, l
 
 
 # --------------------------------------------------------------------------
+# Find a Tender: contracts the borough's public bodies put out and award
+# --------------------------------------------------------------------------
+#
+# Measured 19 October 2026 from a GitHub runner: the national OCDS feed carries
+# about 1,300 releases a day (100 releases covered two hours). In 1.5 days it
+# held four from borough bodies -- two Rochdale Borough Council notices (a
+# school render contract in Middleton, a homelessness prevention service) and
+# two from Hopwood Hall College. The service answers 429 after about twenty
+# quick requests, so pages are fetched with a pause between them.
+#
+# A buyer is local only when its own registered address is in a borough
+# postcode district. Matching any party or address anywhere in the release
+# produced false positives in the measurement (a Salford housing body; a
+# Belfast bus contract won by a supplier with "Bamford" in its name).
+
+FTS_API = "https://www.find-tender.service.gov.uk/api/1.0/ocdsReleasePackages"
+FTS_NOTICE = "https://www.find-tender.service.gov.uk/Notice/"
+BOROUGH_POSTCODE_DISTRICTS = {"OL10", "OL11", "OL12", "OL15", "OL16", "M24"}
+FTS_FIRST_LOOKBACK_HOURS = 48
+FTS_MAX_PAGES = 30
+FTS_PAUSE_SECONDS = 2.5
+# Only notices that tell a reader something has started or been decided.
+FTS_STORY_TAGS = {"tender": "invites bids", "award": "awards contract"}
+_FTS_ID_RE = re.compile(r"^\d{6}-20\d{2}$")
+
+
+def _postcode_district(postcode: Any) -> str:
+    text = str(postcode or "").upper().strip()
+    return text.split()[0] if " " in text else text[:-3].strip() if len(text) > 4 else text
+
+
+def _buyer_party(release: dict[str, Any]) -> dict[str, Any]:
+    buyer_id = str((release.get("buyer") or {}).get("id") or "")
+    for party in release.get("parties") or []:
+        if not isinstance(party, dict):
+            continue
+        if (buyer_id and str(party.get("id")) == buyer_id) or "buyer" in (party.get("roles") or []):
+            return party
+    return {}
+
+
+def is_borough_buyer(release: dict[str, Any]) -> bool:
+    party = _buyer_party(release)
+    address = party.get("address") or {}
+    return _postcode_district(address.get("postalCode")) in BOROUGH_POSTCODE_DISTRICTS
+
+
+def _money(value: Any) -> str:
+    try:
+        amount = float(value)
+    except (TypeError, ValueError):
+        return ""
+    return f"£{amount:,.0f}"
+
+
+def describe_release(release: dict[str, Any]) -> tuple[str, str, str] | None:
+    """(story kind, title, summary) built only from fields in the notice."""
+    tags = set(release.get("tag") or [])
+    kind = "award" if "award" in tags else "tender" if "tender" in tags else ""
+    if not kind:
+        return None
+    buyer = plain((release.get("buyer") or {}).get("name")) or plain(_buyer_party(release).get("name"))
+    tender = release.get("tender") or {}
+    subject = plain(tender.get("title"))
+    facts: list[str] = []
+    if kind == "award":
+        awards = [a for a in release.get("awards") or [] if isinstance(a, dict)]
+        if not subject and awards:
+            subject = plain(awards[0].get("title"))
+        for award in awards[:3]:
+            suppliers = ", ".join(plain(s.get("name")) for s in award.get("suppliers") or [] if plain(s.get("name")))
+            value = award.get("value") or {}
+            line = plain(award.get("title")) or subject
+            if suppliers:
+                line += f" awarded to {suppliers}"
+            if _money(value.get("amount")):
+                line += f", value {_money(value.get('amount'))} excluding VAT"
+            period = award.get("contractPeriod") or {}
+            if period.get("startDate") and period.get("endDate"):
+                line += f", running {str(period['startDate'])[:10]} to {str(period['endDate'])[:10]}"
+            facts.append(line + ".")
+    else:
+        value = tender.get("value") or {}
+        if _money(value.get("amount")):
+            facts.append(f"Estimated value {_money(value.get('amount'))}.")
+        period = tender.get("tenderPeriod") or {}
+        if period.get("endDate"):
+            facts.append(f"Bids close {str(period['endDate'])[:10]}.")
+    if not buyer or not subject:
+        return None
+    description = plain(tender.get("description"))
+    summary = (f"Notice published on Find a Tender by {buyer}: {subject}. " + " ".join(facts)
+               + (f" {description}" if description else ""))
+    return kind, f"{buyer} {FTS_STORY_TAGS[kind]}: {subject}", summary
+
+
+def contract_notices(get: Callable[..., Any], state: dict[str, Any], now: datetime, limit: int,
+                     pause: Callable[[float], None] | None = None) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    key = "contract_notices"
+    if pause is None:
+        import time
+        pause = time.sleep
+    slot = _slot(state, key)
+    since = slot.get("read_until")
+    try:
+        start = datetime.fromisoformat(str(since).replace("Z", "+00:00")) if since else None
+    except ValueError:
+        start = None
+    if start is None or now - start > timedelta(hours=FTS_FIRST_LOOKBACK_HOURS):
+        start = now - timedelta(hours=FTS_FIRST_LOOKBACK_HOURS)
+    window = {"updatedFrom": start.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+              "updatedTo": now.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"), "limit": "100"}
+    stats = {"pages": 0, "releases": 0, "borough_buyer": 0, "not_story_type": 0, "already_seen": 0,
+             "new": 0, "complete": 0}
+    wanted: list[tuple[str, dict[str, Any], tuple[str, str, str]]] = []
+    url, params = FTS_API, window
+    while url and stats["pages"] < FTS_MAX_PAGES:
+        if stats["pages"]:
+            pause(FTS_PAUSE_SECONDS)
+        response = get(url, params=params, timeout=TIMEOUT) if params else get(url, timeout=TIMEOUT)
+        if getattr(response, "status_code", 200) == 429:
+            break                                   # rate limited: keep what was read, try the rest next run
+        response.raise_for_status()
+        payload = response.json()
+        stats["pages"] += 1
+        for release in payload.get("releases") or []:
+            if not isinstance(release, dict):
+                continue
+            stats["releases"] += 1
+            if not is_borough_buyer(release):
+                continue
+            stats["borough_buyer"] += 1
+            notice_id = str(release.get("id") or "")
+            described = describe_release(release)
+            if not _FTS_ID_RE.match(notice_id) or described is None:
+                stats["not_story_type"] += 1
+                continue
+            if is_seen(state, key, notice_id):
+                stats["already_seen"] += 1
+                continue
+            stats["new"] += 1
+            wanted.append((notice_id, release, described))
+        next_url = (payload.get("links") or {}).get("next")
+        url, params = (next_url, None) if next_url else (None, None)
+    if url is None:
+        stats["complete"] = 1
+        slot["read_until"] = iso(now)        # only a complete crawl moves the window on
+    wanted.sort(key=lambda row: str(row[1].get("date") or ""))       # oldest first: a fair drip
+    out = []
+    for notice_id, release, (kind, title, summary) in wanted[:limit]:
+        try:
+            published = datetime.fromisoformat(str(release.get("date")))
+        except ValueError:
+            published = now
+        locality = plain(((_buyer_party(release).get("address") or {}).get("locality")))
+        out.append(record(
+            key, notice_id, name="Find a Tender", url=FTS_NOTICE + notice_id, title=title, summary=summary,
+            published=published, area=detect_town(f"{title} {locality}"), category="business",
+        ))
+    return out, stats
+
+
+# --------------------------------------------------------------------------
+# Met Office severe weather warnings that name Rochdale
+# --------------------------------------------------------------------------
+#
+# Measured 19 October 2026: the regional North West England feed was empty
+# while the UK feed carried four warnings, each listing the local authorities
+# it covers ("... Bristol, Cornwall, Devon ... valid from 2300 Thu 22 Oct to
+# 1100 Fri 23 Oct"). A warning is the borough's news only when Rochdale is in
+# that list, so the UK feed is read and filtered on the named authority.
+
+MET_OFFICE_WARNINGS_RSS = "https://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/UK"
+_ITEM_DESCRIPTION_RE = re.compile(r"<description\b[^>]*>(?P<v>.*?)</description>", re.I | re.S)
+_WARNING_ID_RE = re.compile(r"[?&](?:amp;)?id=(?P<id>[0-9a-f-]{20,})", re.I)
+_WARNING_TITLE_RE = re.compile(r"^(?P<colour>Yellow|Amber|Red) warning of (?P<hazard>.+?) affecting ", re.I)
+
+
+def weather_warnings(get: Callable[..., Any], state: dict[str, Any], now: datetime, limit: int) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    key = "weather_warnings"
+    response = get(MET_OFFICE_WARNINGS_RSS, timeout=TIMEOUT)
+    response.raise_for_status()
+    stats = {"listed": 0, "not_rochdale": 0, "already_seen": 0, "new": 0}
+    out: list[dict[str, Any]] = []
+    in_this_feed: set[str] = set()
+    for item in _RSS_ITEM_RE.finditer(response.text or ""):
+        body = item.group("body")
+        stats["listed"] += 1
+        title = _rss_field(body, "title")
+        link = _rss_field(body, "link")
+        match = _ITEM_DESCRIPTION_RE.search(body)
+        description = plain(_CDATA_RE.sub(lambda m: m.group(1), match.group("v"))) if match else ""
+        # The authority list follows the first colon; Rochdale must be in it.
+        authorities = description.split(":", 1)[1] if ":" in description else ""
+        if not re.search(r"\bRochdale\b", authorities):
+            stats["not_rochdale"] += 1
+            continue
+        warning = _WARNING_ID_RE.search(link)
+        colour = _WARNING_TITLE_RE.match(title)
+        if not warning or not colour:
+            continue
+        # The same warning is repeated once per region; an upgrade or a new
+        # validity period is a new story.
+        validity = description.rsplit("valid from", 1)[-1].strip() if "valid from" in description else ""
+        identity = f"{warning.group('id')}:{colour.group('colour').lower()}:{validity}"
+        if identity in in_this_feed:
+            continue
+        in_this_feed.add(identity)
+        if is_seen(state, key, identity):
+            stats["already_seen"] += 1
+            continue
+        stats["new"] += 1
+        if len(out) >= limit:
+            continue
+        try:
+            published = datetime.strptime(_rss_field(response.text, "pubDate"), "%a, %d %b %Y %H:%M:%S %Z").replace(tzinfo=timezone.utc)
+        except ValueError:
+            published = now
+        hazard = colour.group("hazard")
+        out.append(record(
+            key, identity, name="Met Office", url=link.replace("&amp;", "&"),
+            title=f"{colour.group('colour').title()} Met Office warning of {hazard} covers Rochdale",
+            summary=f"Met Office severe weather warning: {description}",
+            published=published, area="rochdale", category="environment",
+        ))
+    return out, stats
+
+
+# --------------------------------------------------------------------------
 # The rota itself
 # --------------------------------------------------------------------------
+
+ROTA.update({
+    "contract_notices": (6, 3),
+    "weather_warnings": (2, 2),
+})
 
 SOURCES: dict[str, Callable[..., tuple[list[dict[str, Any]], dict[str, int]]]] = {
     "council_roadworks": council_roadworks,
@@ -509,6 +743,8 @@ SOURCES: dict[str, Callable[..., tuple[list[dict[str, Any]], dict[str, int]]]] =
     "written_answers": written_answers,
     "gmca_decisions": gmca_decisions,
     "ons_housing": ons_housing,
+    "contract_notices": contract_notices,
+    "weather_warnings": weather_warnings,
 }
 
 

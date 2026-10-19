@@ -54,42 +54,43 @@ def section(key: str) -> bool:
 
 
 def find_tender() -> None:
+    """Full 72-hour crawl, paced, comparing the loose regex with the postcode rule."""
     if not section("find_tender"):
         return
-    frm = (NOW - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%S")
-    url = "https://www.find-tender.service.gov.uk/api/1.0/ocdsReleasePackages"
+    import time
+    frm = (NOW - timedelta(hours=72)).strftime("%Y-%m-%dT%H:%M:%S")
     params = {"updatedFrom": frm, "updatedTo": NOW.strftime("%Y-%m-%dT%H:%M:%S"), "limit": "100"}
-    total = local = pages = 0
-    tags: dict[str, int] = {}
-    hits = []
-    cursor_url, cursor_params = url, params
-    while cursor_url and pages < 60:
-        r = get(f"fts_page{pages}.json" if pages < 2 else "fts_last.json", cursor_url, params=cursor_params)
-        if r is None or r.status_code != 200:
+    url, total, pages, loose, strict, full = primary_data.FTS_API, 0, 0, [], [], []
+    while url and pages < 60:
+        if pages:
+            time.sleep(2.5)
+        r = S.get(url, params=params, timeout=30) if params else S.get(url, timeout=30)
+        if r.status_code != 200:
+            print(f"  page {pages}: HTTP {r.status_code}")
             break
         d = r.json()
         pages += 1
-        for rel in d.get("releases") or []:
+        rels = d.get("releases") or []
+        if pages == 1 or not d.get("links", {}).get("next"):
+            print(f"  page {pages}: {rels[0].get('date') if rels else None} .. {rels[-1].get('date') if rels else None}")
+        for rel in rels:
             total += 1
-            names = " ".join(str(p.get("name") or "") + " " + json.dumps(p.get("address") or {})
-                             for p in rel.get("parties") or [])
-            buyer = rel.get("buyer") or {}
-            if BOROUGH.search(names) or BOROUGH.search(str(buyer.get("name") or "")):
-                local += 1
-                for t in rel.get("tag") or []:
-                    tags[t] = tags.get(t, 0) + 1
-                hits.append({"ocid": rel.get("ocid"), "id": rel.get("id"), "date": rel.get("date"),
-                             "tag": rel.get("tag"), "buyer": buyer.get("name"),
-                             "title": (rel.get("tender") or {}).get("title"),
-                             "awards": [(a.get("title"), (a.get("value") or {}).get("amount"),
-                                         [s.get("name") for s in a.get("suppliers") or []])
-                                        for a in rel.get("awards") or []]})
+            blob = json.dumps(rel.get("parties") or []) + str((rel.get("buyer") or {}).get("name"))
+            a, b = bool(BOROUGH.search(blob)), primary_data.is_borough_buyer(rel)
+            if a or b:
+                (strict if b else loose).append(rel)
+                if b:
+                    full.append(rel)
         nxt = (d.get("links") or {}).get("next")
-        cursor_url, cursor_params = (nxt, None) if nxt else (None, None)
-    print(f"  pages={pages} releases={total} naming-borough={local} tags={tags}")
-    save("fts_hits.json", json.dumps(hits, indent=1, default=str))
-    for h in hits[:40]:
-        print("   ", h["date"], h["tag"], "|", h["buyer"], "|", (h["title"] or "")[:90], "|", h["awards"][:2])
+        url, params = (nxt, None) if nxt else (None, None)
+    print(f"  pages={pages} releases={total} complete={url is None} postcode_rule={len(strict)} regex_only={len(loose)}")
+    for rel in strict:
+        dsc = primary_data.describe_release(rel)
+        print("   KEEP", rel.get("id"), rel.get("tag"), "|", (rel.get("buyer") or {}).get("name"), "|", dsc[1][:110] if dsc else "(not a story type)")
+    for rel in loose:
+        bp = primary_data._buyer_party(rel)
+        print("   DROP", rel.get("id"), rel.get("tag"), "|", (rel.get("buyer") or {}).get("name"), "| buyer pc", (bp.get("address") or {}).get("postalCode"))
+    save("fts_borough_releases.json", json.dumps(full, indent=1))
 
 
 def contracts_finder() -> None:
@@ -102,6 +103,8 @@ def contracts_finder() -> None:
     hits = []
     cursor_url, cursor_params = url, params
     while cursor_url and pages < 40:
+        if pages:
+            __import__("time").sleep(3)
         r = get(f"cf_page{pages}.json" if pages < 2 else "cf_last.json", cursor_url, params=cursor_params)
         if r is None or r.status_code != 200:
             break
@@ -178,12 +181,16 @@ def nomis() -> None:
     if r is not None and r.ok:
         print("   ", r.text[:600].replace("\n", " "))
     r = get("nomis_cc.csv", "https://www.nomisweb.co.uk/api/v01/dataset/NM_162_1.data.csv",
-            params={"geography": "1820327969", "date": "latestMINUS2-latest", "gender": "0", "age": "0",
+            params={"geography": "1778385128", "date": "latestMINUS2-latest", "gender": "0", "age": "0",
                     "measure": "1,2", "measures": "20100",
                     "select": "date_name,geography_name,geography_code,measure_name,obs_value"})
     if r is not None:
         print("   ", r.text[:900])
     r = get("nomis_lmp.html", "https://www.nomisweb.co.uk/reports/lmp/la/1946157091/report.aspx")
+    if r is not None:
+        h = re.search(r"<h1[^>]*>(.*?)</h1>", r.text, re.S)
+        print("    lmp h1:", re.sub(r"<[^>]+>", " ", h.group(1)).strip()[:120] if h else None)
+        print("    lmp mentions Rochdale:", "Rochdale" in r.text, "| 'claimant' count:", r.text.lower().count("claimant"))
     if r is not None:
         t = re.search(r"<title>(.*?)</title>", r.text, re.S)
         print("    lmp title:", t.group(1).strip() if t else None)
@@ -245,7 +252,7 @@ def existing_rota() -> None:
 
 
 if __name__ == "__main__":
-    for fn in (find_tender, contracts_finder, met_office, gazette_all, nomis, petitions, case_law, leads, existing_rota):
+    for fn in (contracts_finder, nomis, met_office, find_tender, existing_rota):
         try:
             fn()
         except Exception as exc:  # noqa: BLE001
