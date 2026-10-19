@@ -1,0 +1,36 @@
+name: Newsroom rewrite regressions
+
+on:
+  pull_request:
+    paths:
+      - "scraper/**"
+      - "requirements.txt"
+      - ".github/workflows/rewrite-regressions.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rewrite-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install newsroom dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Check copying recovery, dashboard exclusions and retry bounds
+        env:
+          PYTHONPATH: scraper
+          TRUST_MODEL_SELF_CLASSIFICATION: "true"
+        run: |
+          python scraper/test_overlap_rebuild.py
+          python scraper/test_rewrite_ledger.py
+          python scraper/test_rewrite_terminal_reasons.py
+          python scraper/test_quality_gate_split.py
+          python scraper/test_editorial_length.py
+          python scraper/test_rewrite_quality.py
+          python scraper/test_production_rewrite_reports_skips.py
