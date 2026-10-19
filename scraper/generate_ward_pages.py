@@ -45,6 +45,24 @@ PLACE_PAGES = {
         "filter_area": "pennines-township",
         "description": "Milnrow and Newhey news from Rochdale Daily, with the ward's councillors and what they have voted on.",
     },
+    # Middleton (128 indexable stories) and Littleborough (64) had no page of
+    # their own, so stories naming them had nowhere to link to.
+    "middleton.html": {
+        "name": "Middleton",
+        "kind": "TOWNSHIP",
+        "wards": ["East Middleton", "North Middleton", "South Middleton", "West Middleton"],
+        "keywords": ["middleton", "alkrington", "boarshaw"],
+        "filter_area": "middleton-township",
+        "description": "Middleton news from Rochdale Daily, with the councillors for its four wards and what they have voted on.",
+    },
+    "littleborough.html": {
+        "name": "Littleborough",
+        "kind": "TOWN",
+        "wards": ["Littleborough Lakeside", "Wardle, Shore and West Littleborough"],
+        "keywords": ["littleborough", "smithy bridge", "hollingworth lake"],
+        "filter_area": "pennines-township",
+        "description": "Littleborough news from Rochdale Daily, with the councillors for its wards and what they have voted on.",
+    },
 }
 # The borough's four townships and their wards (the council's own grouping).
 # Used only to organise the index; ward data is unchanged.

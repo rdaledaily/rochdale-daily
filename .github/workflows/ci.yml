@@ -233,6 +233,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_publisher_markup.py
           PYTHONPATH=scraper python scraper/test_indexnow.py
           PYTHONPATH=scraper python scraper/test_archive_pages.py
+          PYTHONPATH=scraper python scraper/test_internal_links.py
           PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
           python scraper/test_ensure_article_images.py
           PYTHONPATH=scraper python scraper/test_licensed_source_images.py

@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-rd-theme="newspaper">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index,follow"><title>Rochdale AFC: Rochdale news and coverage | Rochdale Daily</title><meta name="description" content="Every Rochdale Daily story about Rochdale AFC: 236 reports from across Rochdale borough, newest first."><link rel="canonical" href="https://rochdaledaily.co.uk/news/topics/rochdale-afc"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/css/rd-tokens.css?v=20261014-font-repair"><style>/* Palette, type scale and spacing come from the one token file.
+   Nothing below may declare a raw colour. */
+* { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: #e9e9e9;
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.45;
+    }
+    body.modal-open { overflow: hidden; }
+    img { display: block; width: 100%; }
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .wrap { width: min(var(--max), calc(100% - 30px)); margin-inline: auto; }
+    .skip-link {
+      position: fixed; top: 8px; left: 8px; z-index: 9999;
+      background: #fff; color: #000; padding: 10px 14px; border: 3px solid #000;
+      transform: translateY(-160%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+    :focus-visible { outline: 3px solid #2a6fdb; outline-offset: 3px; }
+
+    .utility {
+      background: var(--black);
+      color: #fff;
+      font-size: 13px;
+      border-bottom: 1px solid #3a3a3a;
+    }
+    .utility-row {
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+    .utility-left, .utility-links { display: flex; align-items: center; gap: 16px; }
+    .utility-links a { text-decoration: none; color: #fff; }
+    .utility-links a:hover { color: var(--yellow); }
+    .date-stamp { color: var(--yellow); font-weight: 800; white-space: nowrap; }
+    .utility-divider { width: 1px; height: 16px; background: #4a4a4a; flex: 0 0 auto; }
+    .weather-compact {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 28px;
+      color: #fff;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .weather-icon { width: 22px; text-align: center; color: var(--yellow); font-size: 18px; line-height: 1; }
+    .weather-temp { color: #fff; }
+    .weather-location, .weather-condition { color: #cfcfcf; font-weight: 500; }
+    .weather-condition::before { content: "·"; margin-right: 7px; color: #777; }
+
+    .masthead {
+      /* One masthead for the whole paper: paper-white, hairline rule, logo.
+         Was var(--yellow), which had drifted to teal, with a gold rule. */
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .masthead-row {
+      min-height: 166px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 25px;
+    }
+    .brand {
+      text-decoration: none;
+      color: #050505;
+      display: inline-flex;
+      align-items: center;
+      min-width: 0;
+    }
+    .brand-logo {
+      width: clamp(255px, 31vw, 350px);
+      height: auto;
+      object-fit: contain;
+      object-position: left center;
+    }
+    .brand-text-fallback {
+      color: #050505;
+      font-family: var(--font-display);
+      font-size: clamp(34px, 5vw, 68px);
+      font-weight: 900;
+      line-height: .9;
+      letter-spacing: -0.05em;
+    }
+    .masthead-actions { display: flex; align-items: center; gap: 10px; }
+    .header-button {
+      border: 2px solid #111;
+      background: transparent;
+      color: #111;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 12px;
+      padding: 12px 15px;
+      text-decoration: none;
+    }
+    .header-button.solid { background: #111; color: #fff; }
+    .header-button:hover { transform: translateY(-1px); }
+
+    .primary-nav {
+      background: var(--paper);
+      color: var(--ink);
+      border-bottom: 2px solid var(--navy);
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+    .nav-row { display: flex; align-items: stretch; min-height: 50px; }
+    .menu-toggle {
+      display: none;
+      border: 0;
+      background: var(--yellow);
+      color: #000;
+      font-weight: 900;
+      padding: 0 16px;
+    }
+    .nav-list {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      scrollbar-width: none;
+    }
+    .nav-list::-webkit-scrollbar { display: none; }
+    .nav-list a, .nav-list button {
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      border: 0;
+      border-right: 1px solid #333;
+      background: transparent;
+      color: #fff;
+      text-decoration: none;
+      padding: 0 15px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .nav-list a:hover, .nav-list button:hover, .nav-list .active {
+      background: #2b2b2b;
+      color: var(--yellow);
+    }
+
+    .breaking-bar { background: var(--red); color: #fff; }
+    .breaking-row { display: flex; min-height: 46px; align-items: stretch; overflow: hidden; }
+    .breaking-label {
+      align-self: stretch;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      background: #8f0018;
+      padding: 0 17px;
+      font-family: var(--font-display);
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+    }
+    .breaking-copy {
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-weight: 700;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+      flex: 1 1 auto;
+      position: relative;
+    }
+    .breaking-track {
+      display: inline-flex;
+      align-items: center;
+      flex: 0 0 auto;
+      width: max-content;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+    }
+    .breaking-segment {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 42px;
+      min-height: 46px;
+      padding: 0 42px 0 18px;
+    }
+    .breaking-text { display: inline-block; }
+    .breaking-separator {
+      color: #ffccd5;
+      font-size: 9px;
+      line-height: 1;
+      flex: 0 0 auto;
+    }
+
+    .page-shell { background: var(--paper); min-height: 100vh; }
+    .ad-slot {
+      margin: 22px auto;
+      min-height: 92px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d3d3d3;
+      background: #fafafa;
+      color: #8a8a8a;
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .ad-slot strong { display: block; color: #555; margin-bottom: 3px; }
+
+    [data-content-slot] { position: relative; }
+    [data-content-slot]::before {
+      content: attr(data-content-slot);
+      position: absolute;
+      z-index: 3;
+      top: 8px;
+      left: 8px;
+      padding: 3px 6px;
+      background: rgba(17,17,17,.82);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      opacity: 0;
+      pointer-events: none;
+    }
+    body.show-slot-labels [data-content-slot]::before { opacity: 1; }
+    .feed-status {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .section { padding: 10px 0 34px; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 5px solid var(--black);
+      border-bottom: 1px solid var(--line);
+      padding: 11px 0 9px;
+      margin-bottom: 18px;
+    }
+    .section-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(25px, 4vw, 36px);
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: -.7px;
+    }
+    .section-link {
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+      text-transform: uppercase;
+      border-bottom: 3px solid var(--yellow);
+    }
+
+    .lead-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.75fr) minmax(250px, .9fr) minmax(260px, .8fr);
+      gap: 22px;
+    }
+    .lead-story, .secondary-story, .news-card, .event-card, .support-card, .directory-card {
+      background: #fff;
+    }
+    .story-link { display: block; text-decoration: none; }
+    .story-image-wrap { position: relative; overflow: hidden; background: #ddd; }
+    .story-image-wrap img { height: 100%; object-fit: cover; transition: transform .3s ease; }
+    .story-link:hover img { transform: scale(1.025); }
+    .lead-story .story-image-wrap { aspect-ratio: 16/9; }
+    .secondary-story .story-image-wrap { aspect-ratio: 16/8.4; }
+    .image-label {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background: rgba(0,0,0,.82);
+      color: #fff;
+      padding: 5px 8px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+    }
+    .story-kicker {
+      display: inline-block;
+      color: var(--red);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 900;
+      margin: 11px 0 5px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+    .story-kicker.black { color: #111; }
+    .lead-headline, .secondary-headline, .card-headline {
+      font-family: var(--display);
+      margin: 0;
+      color: #171717;
+      line-height: 1.05;
+      letter-spacing: -.45px;
+    }
+    .lead-headline { font-size: clamp(31px, 4.3vw, 52px); }
+    .secondary-headline { font-size: 24px; }
+    .story-summary { margin: 10px 0 0; color: #555; font-size: 16px; }
+    .story-meta { margin-top: 10px; color: #777; font-size: 12px; font-weight: 700; }
+    .secondary-stack { display: grid; gap: 22px; align-content: start; }
+    .secondary-story + .secondary-story { padding-top: 20px; border-top: 1px solid var(--line); }
+
+    .latest-panel { border-left: 1px solid var(--line); padding-left: 20px; }
+    .panel-title {
+      margin: 0 0 8px;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      border-bottom: 5px solid var(--yellow);
+      padding-bottom: 8px;
+    }
+    .latest-list { list-style: none; padding: 0; margin: 0; }
+    .latest-item { border-bottom: 1px solid var(--line); padding: 13px 0; }
+    .latest-item button {
+      width: 100%; border: 0; background: transparent; padding: 0; text-align: left;
+      color: #202020; font-weight: 800; line-height: 1.25;
+    }
+    .latest-item button:hover { color: var(--red); }
+    .latest-time { display: block; margin-top: 5px; color: #777; font-size: 11px; font-weight: 700; }
+
+    .category-toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .filter-button {
+      border: 1px solid #bbb;
+      background: #fff;
+      color: #222;
+      padding: 8px 11px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .filter-button:hover, .filter-button.active { background: var(--black); color: var(--yellow); border-color: var(--black); }
+
+    .news-layout { display: grid; grid-template-columns: minmax(0, 2fr) 330px; gap: 30px; }
+    .news-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 22px; }
+    .news-card { border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+    .news-card .story-image-wrap { aspect-ratio: 16/9; }
+    .card-headline { font-size: 25px; }
+    .card-summary { margin: 8px 0 0; color: #555; font-size: 14px; }
+    .tag-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 9px; }
+    .tag {
+      display: inline-block;
+      background: #eeeeee;
+      color: #333;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 4px 6px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .tag.crime { background: #ffe7ec; color: #9b0020; }
+    .tag.demo { background: #fff1a6; color: #4c3b00; }
+
+    .side-rail { display: grid; gap: 20px; align-content: start; }
+    .rail-box { border-top: 5px solid var(--black); background: #f4f4f4; padding: 17px; }
+    .rail-box.yellow { background: var(--yellow); }
+    .rail-box.red { border-top-color: var(--red); background: #fff; border-left: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .rail-title {
+      margin: 0 0 12px;
+      font-family: var(--font-display);
+      font-size: 23px;
+      line-height: 1;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .rail-copy { margin: 0 0 13px; color: #444; font-size: 14px; }
+    .rail-input {
+      width: 100%; min-height: 43px; border: 1px solid #8f8f8f; background: #fff; padding: 9px 10px; margin-bottom: 8px;
+    }
+    .rail-button {
+      width: 100%; border: 0; background: #111; color: var(--yellow); padding: 12px; font-weight: 900; text-transform: uppercase;
+    }
+    .rail-button:hover { background: #2a2a2a; }
+
+    .report-box {
+      border: 4px solid var(--red);
+      background: #fff;
+      padding: 18px;
+    }
+    .report-box h3 {
+      margin: 0 0 6px;
+      color: var(--red);
+      font-family: var(--font-display);
+      font-size: 27px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .report-actions { display: grid; gap: 8px; margin-top: 13px; }
+    .report-action {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #cfcfcf;
+      padding: 10px 11px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .report-action:hover { border-color: var(--red); }
+    .report-note { margin: 11px 0 0; color: #555; font-size: 12px; }
+    .incident-ref { display: grid; grid-template-columns: 1fr auto; margin-top: 12px; }
+    .incident-ref input { min-width: 0; border: 1px solid #999; padding: 9px; }
+    .incident-ref button { border: 0; background: var(--red); color: #fff; font-weight: 900; padding: 0 12px; }
+
+    .whats-on { background: #111; color: #fff; padding: 34px 0 40px; }
+    .whats-on .section-head { border-top-color: var(--yellow); border-bottom-color: #484848; }
+    .whats-on .section-link { color: #fff; }
+    .event-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .event-filter {
+      border: 1px solid #666; background: transparent; color: #fff; padding: 9px 12px; font-size: 12px; font-weight: 900; text-transform: uppercase;
+    }
+    .event-filter.active, .event-filter:hover { background: var(--yellow); color: #000; border-color: var(--yellow); }
+    .events-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .event-card { color: #111; min-width: 0; }
+    .event-card img { aspect-ratio: 16/9; object-fit: cover; }
+    .event-body { padding: 14px; }
+    .event-date {
+      color: var(--red); font-family: var(--font-display); font-size: 13px; font-weight: 900; text-transform: uppercase;
+    }
+    .event-card h3 { margin: 4px 0 8px; font-family: var(--font-display); font-size: 22px; line-height: 1.05; }
+    .event-facts { display: grid; gap: 3px; font-size: 12px; color: #4c4c4c; }
+    .event-cta {
+      display: inline-block; margin-top: 11px; border-bottom: 3px solid var(--yellow-dark); font-size: 12px; font-weight: 900; text-decoration: none; text-transform: uppercase;
+    }
+
+    .support-intro { max-width: 850px; color: #4d4d4d; margin-top: -7px; margin-bottom: 18px; }
+    .support-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .support-card { border: 1px solid var(--line); border-top: 5px solid var(--green); padding: 17px; }
+    .support-card.women { border-top-color: #8d2c83; }
+    .support-card.carers { border-top-color: var(--blue); }
+    .support-card.crisis { border-top-color: var(--red); }
+    .support-card h3 { margin: 0 0 7px; font-family: var(--font-display); font-size: 22px; line-height: 1.1; }
+    .support-card p { margin: 0 0 10px; color: #4d4d4d; font-size: 13px; }
+    .support-card a { font-size: 12px; font-weight: 900; text-transform: uppercase; text-decoration-thickness: 3px; text-decoration-color: var(--yellow); text-underline-offset: 4px; }
+    .support-small { display: block; margin-top: 9px; font-size: 11px; color: #777; }
+
+    .directory-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; }
+    .directory-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .directory-card { border: 1px solid var(--line); padding: 15px; }
+    .directory-card .sponsored { font-size: 9px; color: #777; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+    .directory-card h3 { margin: 5px 0 6px; font-family: var(--font-display); font-size: 19px; }
+    .directory-card p { margin: 0; color: #555; font-size: 12px; }
+    .directory-card a { display: inline-block; margin-top: 9px; font-size: 11px; font-weight: 900; text-transform: uppercase; }
+    .advertise-panel { background: var(--yellow); padding: 20px; border: 2px solid #111; }
+    .advertise-panel h3 { margin: 0 0 7px; font-family: var(--font-display); font-size: 27px; text-transform: uppercase; line-height: 1; }
+    .advertise-panel p { margin: 0 0 14px; font-size: 13px; }
+
+    .site-footer { background: var(--brand-navy); color: #fff; border-top: 0; padding: 36px 0 22px; }
+    .footer-grid { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 28px; }
+    .footer-brand { font-family: var(--font-display); color: var(--yellow); font-size: 30px; font-weight: 900; text-transform: uppercase; line-height: 1; }
+    .footer-copy { color: #bfbfbf; font-size: 13px; max-width: 330px; }
+    .footer-col h3 { font-family: var(--font-display); font-size: 16px; text-transform: uppercase; margin: 0 0 10px; color: var(--yellow); }
+    .footer-col ul { list-style: none; padding: 0; margin: 0; }
+    .footer-col li { margin: 7px 0; }
+    .footer-col a { color: #ddd; text-decoration: none; font-size: 13px; }
+    .footer-col a:hover { color: var(--yellow); }
+    .footer-bottom { margin-top: 28px; padding-top: 17px; border-top: 1px solid #3a3a3a; color: #9d9d9d; font-size: 12px; display: flex; justify-content: space-between; gap: 20px; }
+
+    .modal {
+      position: fixed; inset: 0; z-index: 1000; display: none; align-items: flex-start; justify-content: center;
+      background: rgba(0,0,0,.72); padding: 35px 15px; overflow: auto;
+    }
+    .modal.open { display: flex; }
+    .modal-card { width: min(1180px, 100%); background: #fff; box-shadow: 0 18px 60px rgba(0,0,0,.35); position: relative; }
+    .modal-close { position: sticky; float: right; top: 10px; margin: 10px 10px 0 0; z-index: 2; width: 42px; height: 42px; border: 0; background: #111; color: #fff; font-size: 24px; }
+    .modal-image { aspect-ratio: 16/8; object-fit: cover; }
+    .article-body { padding: 26px clamp(20px, 5vw, 56px) 42px; }
+    .article-body h1 { margin: 8px 0 13px; font-family: var(--display); font-weight: 900; font-size: clamp(34px, 5.4vw, 56px); line-height: 1.04; letter-spacing: -.5px; }
+    .article-standfirst { color: #505050; font-size: 19px; }
+    .article-byline { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 0; margin: 18px 0; font-size: 12px; font-weight: 700; }
+    .article-copy { font-family: var(--font-body); font-size: 18px; line-height: 1.7; }
+    .article-copy p { margin: 0 0 1.15em; }
+    .article-share { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
+    .article-share button { border: 1px solid #aaa; background: #fff; padding: 8px 11px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
+
+    /* Two-column article layout: main copy + sidebar rail for ads,
+       related stories. Collapses to a single
+       column on narrower screens (sidebar content moves below the copy). */
+    .article-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 36px; align-items: start; }
+    .article-sidebar { display: flex; flex-direction: column; gap: 22px; position: sticky; top: 20px; }
+    @media (max-width: 860px) {
+      .article-layout { grid-template-columns: 1fr; }
+      .article-sidebar { position: static; }
+    }
+
+    /* Ad slots: clearly labelled placeholders sized to standard IAB units
+       so a real ad network's script tag can be dropped straight in without
+       any layout rework. Remove the placeholder label/border once real
+       ad code is inserted. */
+    .ad-slot {
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      background: #f2f2f2; border: 1px dashed #b8b8b8; color: #8a8a8a;
+      font-family: var(--font-display); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em; margin: 0 auto;
+    }
+    .ad-slot-leaderboard { width: 100%; max-width: 728px; height: 90px; margin: 22px auto; }
+    .ad-slot-mrec { width: 300px; height: 250px; }
+    .ad-slot-incontent { width: 100%; max-width: 580px; height: 250px; margin: 28px auto; }
+    @media (max-width: 500px) {
+      .ad-slot-leaderboard { height: 50px; }
+      .ad-slot-leaderboard::after { content: "Ad — 320×50"; }
+    }
+    .ad-slot-leaderboard::after { content: "Ad — 728×90"; }
+    .ad-slot-mrec::after { content: "Ad — 300×250"; }
+    .ad-slot-incontent::after { content: "Ad — 300×250"; }
+
+    .sidebar-box { border: 1px solid var(--line); padding: 18px; }
+    .sidebar-box h3 { margin: 0 0 12px; font-family: var(--font-display); font-size: 14px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 3px solid var(--yellow); padding-bottom: 8px; }
+    .related-story { display: flex; gap: 10px; margin-bottom: 12px; text-decoration: none; color: inherit; cursor: pointer; }
+    .related-story:last-child { margin-bottom: 0; }
+    .related-story img { width: 72px; height: 54px; object-fit: cover; flex-shrink: 0; }
+    .related-story .related-title { font-family: var(--font-display); font-size: 14px; line-height: 1.25; font-weight: 700; }
+
+    .search-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.82); z-index: 950; display: none; align-items: flex-start; justify-content: center; padding: 85px 15px;
+    }
+    .search-overlay.open { display: flex; }
+    .search-panel { width: min(760px, 100%); background: #fff; padding: 22px; }
+    .search-panel-row { display: grid; grid-template-columns: 1fr auto; }
+    .search-panel input { min-width: 0; border: 2px solid #111; padding: 14px; font-size: 18px; }
+    .search-panel button { border: 0; background: var(--yellow); font-weight: 900; padding: 0 18px; }
+    .search-results { margin-top: 16px; max-height: 55vh; overflow: auto; }
+    .search-result { display: block; width: 100%; text-align: left; border: 0; border-top: 1px solid var(--line); background: #fff; padding: 12px 0; font-weight: 800; }
+    .search-result:hover { color: var(--red); }
+    .search-close { margin-top: 14px; border: 0; background: #111 !important; color: #fff; padding: 10px 15px !important; }
+
+    .cookie {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100; display: none;
+      background: #111; color: #fff; border-top: 4px solid var(--yellow); padding: 16px 0;
+    }
+    .cookie.show { display: block; }
+    .cookie-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .cookie p { margin: 0; font-size: 13px; }
+    .cookie-actions { display: flex; gap: 8px; flex: 0 0 auto; }
+    .cookie button { border: 1px solid var(--yellow); padding: 9px 12px; font-weight: 900; }
+    .cookie-accept { background: var(--yellow); color: #000; }
+    .cookie-decline { background: transparent; color: #fff; }
+
+    .toast { position: fixed; right: 18px; bottom: 18px; z-index: 1200; background: #111; color: #fff; border-left: 5px solid var(--yellow); padding: 12px 16px; box-shadow: var(--shadow); transform: translateY(140%); transition: transform .25s ease; max-width: 330px; font-weight: 700; }
+    .toast.show { transform: translateY(0); }
+    .hidden { display: none !important; }
+
+    @media (max-width: 1050px) {
+      .lead-grid { grid-template-columns: minmax(0, 1.55fr) minmax(260px, .8fr); }
+      .latest-panel { grid-column: 1 / -1; border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 15px; }
+      .latest-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 18px; }
+      .events-grid, .support-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .directory-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 820px) {
+      .utility-links a:nth-child(-n+2) { display: none; }
+      .masthead-row { min-height: 142px; }
+      .masthead-actions .header-button:not(.solid) { display: none; }
+      .brand-logo { width: clamp(235px, 39vw, 310px); }
+      .lead-grid, .news-layout, .directory-wrap { grid-template-columns: 1fr; }
+      .secondary-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .side-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .report-box { grid-column: 1 / -1; }
+      .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 20px, var(--max)); }
+      .utility-left { gap: 9px; }
+      .utility-divider { display: block; }
+      .weather-location, .weather-condition { display: none; }
+      .weather-compact { gap: 4px; }
+      .weather-icon { width: 20px; font-size: 17px; }
+      .utility-links { display: none; }
+      .masthead-row { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; min-height: 116px; }
+      .brand-logo { width: min(225px, 62vw); }
+      .header-button.solid { padding: 9px 10px; font-size: 10px; }
+      .menu-toggle { display: block; }
+      .nav-row { position: relative; }
+      .nav-list {
+        display: none; position: absolute; top: 50px; left: 0; right: 0; background: #111; flex-direction: column; overflow: visible; box-shadow: var(--shadow);
+      }
+      .nav-list.open { display: flex; }
+      .nav-list li, .nav-list a, .nav-list button { width: 100%; }
+      .nav-list a, .nav-list button { border-right: 0; border-bottom: 1px solid #333; justify-content: flex-start; }
+      .breaking-copy { font-size: 12px; }
+      .breaking-segment { gap: 28px; padding: 0 28px 0 12px; }
+      .breaking-label { padding-inline: 12px; font-size: 11px; }
+      .lead-grid { gap: 24px; }
+      .secondary-stack, .news-grid, .side-rail, .events-grid, .support-grid, .directory-grid, .latest-list { grid-template-columns: 1fr; }
+      .latest-panel { padding-top: 12px; }
+      .lead-headline { font-size: 37px; }
+      .secondary-headline, .card-headline { font-size: 24px; }
+      .section { padding-bottom: 28px; }
+      .section-head { align-items: center; }
+      .section-link { font-size: 11px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom, .cookie-row { flex-direction: column; align-items: flex-start; }
+      .cookie-actions { width: 100%; }
+      .cookie-actions button { flex: 1; }
+    }
+
+/* ROCHDALE_ONGOING_STORY_STYLES */
+.ongoing-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 0 0 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--red);
+  background: var(--red);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .055em;
+  line-height: 1;
+}
+.ongoing-label {
+  padding: 12px 14px;
+  border-left: 5px solid var(--red);
+  background: #f6f6f6;
+  font-family: var(--font-body);
+}
+
+/* ROCHDALE_EDITORIAL_QUALITY_V2 */
+.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.article-share{display:flex;align-items:center;gap:10px;margin:16px 0 22px}
+.share-icon-button{width:44px;height:44px;display:inline-grid;place-items:center;border:1px solid #bdbdbd;border-radius:50%;background:#fff;color:#111;padding:10px}
+.share-icon-button:hover{background:#111;color:#fff}
+.share-icon-button svg{width:21px;height:21px}
+/* Brand marks are solid single-path logos and set their own fill; the stroke
+   rule that suited the old hand-drawn glyphs thickened them into blobs. Only
+   the two outline icons (copy link, email) carry a stroke, set inline. */
+
+/* Each button sits in its brand colour permanently, so the row is legible at a
+   glance rather than only under a cursor - which never happens on a phone,
+   where most of this site is read. Hover deepens the same colour instead of
+   introducing one. */
+.share-icon-button.brand-facebook{background:#1877F2;border-color:#1877F2;color:#fff}
+.share-icon-button.brand-whatsapp{background:#25D366;border-color:#25D366;color:#fff}
+.share-icon-button.brand-x{background:#000;border-color:#000;color:#fff}
+.share-icon-button.brand-bluesky{background:#0285FF;border-color:#0285FF;color:#fff}
+.share-icon-button.brand-email{background:#4b5563;border-color:#4b5563;color:#fff}
+.share-icon-button.brand-copy{background:#4b5563;border-color:#4b5563;color:#fff}
+.share-icon-button:hover.brand-facebook{background:#0f5fc2;border-color:#0f5fc2}
+.share-icon-button:hover.brand-whatsapp{background:#1da851;border-color:#1da851}
+.share-icon-button:hover.brand-x{background:#333;border-color:#333}
+.share-icon-button:hover.brand-bluesky{background:#0169cc;border-color:#0169cc}
+.share-icon-button:hover.brand-email,
+.share-icon-button:hover.brand-copy{background:#111;border-color:#111}
+.article-sources{margin:24px 0 8px;font-size:14px;color:#555}
+.article-sources summary{display:inline-block;cursor:pointer;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.article-sources ul{margin:10px 0 0;padding-left:20px}
+.article-sources li{margin:5px 0}
+.article-breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;color:#666}
+.article-breadcrumb a{color:inherit}
+
+    /* A slot holding a real advert stops being a placeholder. ads.js adds
+       .ad-live once a creative renders, but nothing styled it, so the dashed
+       box and its grey fill stayed - and because the homepage leaderboard
+       container is plain .ad-slot with no width cap, it spanned the full
+       1220px wrap while the 970px banner sat centred inside it, leaving 125px
+       of empty placeholder either side. Shrink the box to the creative and
+       drop the placeholder chrome. */
+    .ad-slot.ad-live {
+      /* display:block, not the placeholder's flex. The two slots that failed
+         to render - the article leaderboard and the in-content rectangle -
+         both size themselves with width:100%, which is a percentage against a
+         flex container and can collapse. The sidebar rectangle worked because
+         it carries a fixed width:300px. Taking a live advert out of flex
+         removes the dependency entirely; the anchor ads.js writes is already
+         display:block with the image centred by margin:0 auto. */
+      display: block;
+      background: transparent; border: 0; padding: 0;
+      width: 100%; max-width: 100%; min-height: 0; height: auto;
+    }
+    .ad-slot.ad-live::after { content: none; }
+
+/* Article hero image (rendered by hero_image_markup in generate_pages.py) */
+.article-hero-image{margin:18px 0 22px}
+.article-hero-image img{display:block;width:100%;height:auto;max-height:560px;object-fit:cover;background:#e8e8e8}
+.article-image-credit{margin-top:6px;font-size:12px;color:#6a6a6a}
+.article-image-credit a{color:inherit}
+
+.rd-page{max-width:1080px;margin:0 auto;padding:28px 20px 64px}.rd-kicker{display:inline-block;margin:0 0 6px;font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.rd-page h1{margin:0 0 10px;font-family:var(--font-display);font-size:clamp(32px,5vw,50px);line-height:1.02;letter-spacing:-.02em;color:var(--ink)}.rd-lede{margin:0 0 26px;max-width:720px;color:var(--muted);font-size:17px;line-height:1.5}.rd-h2{margin:34px 0 14px;padding-top:10px;border-top:3px solid var(--ink);font-family:var(--font-display);font-size:24px;letter-spacing:-.01em}.rd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}.rd-card{display:flex;flex-direction:column;gap:6px;padding:16px;background:var(--card,#fff);border:1px solid var(--line);border-top:3px solid var(--ink)}.rd-card h3{margin:0;font-family:var(--font-display);font-size:19px;line-height:1.2}.rd-card h3 a{color:var(--ink);text-decoration:none}.rd-card h3 a:hover{text-decoration:underline;text-underline-offset:3px}.rd-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.rd-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--surface-2,#eceff1);margin:-16px -16px 8px;width:calc(100% + 32px)}.rd-meta{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.rd-links{margin:0 0 8px;color:var(--muted);font-size:15px}.rd-links a{color:var(--accent);font-weight:600}.site-footer{margin-top:40px;background:var(--brand-navy,#0b1f3a);color:#dfe6ee;padding:28px 0}.site-footer .footer-brand{margin:0 0 6px;font-family:var(--font-display);font-size:22px;font-weight:800;color:#fff;text-transform:none}.site-footer .footer-note{margin:0;font-size:14px;line-height:1.6}.site-footer a{color:#fff}@media(max-width:600px){.rd-page{padding:20px 16px 48px}}.cllr-photo{display:block;width:calc(100% + 32px);aspect-ratio:4/3;object-fit:cover;background:var(--surface-2,#eceff1);margin:-16px -16px 8px}.cllr-placeholder{aspect-ratio:4/3;background:var(--surface-2,#eceff1);display:grid;place-items:center;font-size:44px;font-weight:800;color:var(--muted);margin:-16px -16px 8px}.dem-vote-side{font-weight:800}.dem-vote-for{color:var(--positive,#18733a)}.dem-vote-against{color:var(--breaking,#a51d25)}.dem-vote-abstain{color:#695b00}</style>
+<link rel="stylesheet" href="/assets/css/editorial-theme.css" data-rd-asset="/assets/css/editorial-theme.css"><style>.rd-archive-list{list-style:none;margin:0;padding:0}.rd-archive-list li{padding:14px 0;border-top:1px solid var(--line)}.rd-archive-list a{font-family:var(--font-display);font-size:19px;line-height:1.25;color:var(--ink);text-decoration:none}.rd-archive-list a:hover{text-decoration:underline;text-underline-offset:3px}.rd-archive-list p{margin:4px 0 0;color:var(--muted);font-size:14px;line-height:1.5}.rd-topics{columns:3 200px;margin:0;padding:0;list-style:none}.rd-topics li{padding:4px 0}.rd-topics a{color:var(--accent);font-weight:600}</style>
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#0d2137"></head>
+<body>
+<header class="masthead">
+<div class="wrap masthead-row"><a class="brand" href="/" aria-label="Rochdale Daily home"><img class="brand-logo" src="/assets/img/logo.png" width="1292" height="706" alt="Rochdale Daily — independent local news" loading="eager" decoding="sync" onerror="this.hidden=true;document.getElementById('brand-text-fallback').hidden=false"><span id="brand-text-fallback" class="brand-text-fallback" hidden>ROCHDALE DAILY</span></a>
+<div class="masthead-actions"><a class="header-button" href="/">All stories</a><a class="header-button" href="/news/topics/">All topics</a></div>
+</div>
+</header>
+
+<main class="rd-page"><span class="rd-kicker">Topic</span>
+<h1>Rochdale AFC</h1>
+<p class="rd-lede">Every Rochdale Daily story that mentions Rochdale AFC: 236 reports, newest first. Stories are listed because they mention the subject; inclusion is not a judgement about it.</p>
+<ol class="rd-archive-list"><li><a href="/articles/rochdale-sleep-out-raises-funds-and-awareness-for-homelessness">Rochdale Sleep Out Raises Funds for Homeless Support</a><p><span class="rd-meta">19 Oct 2026 · Health</span> — Fundraisers gathered at Crown Oil Arena for the annual Sleep Out, raising awareness and funds for homelessness initiatives in the community.</p>
+</li>
+<li><a href="/articles/rochdale-afc-secures-first-victory-with-last-minute-goal-against-stockport-count">Rochdale AFC Secures First Victory with Last-Minute Goal Against Stockport County</a><p><span class="rd-meta">17 Oct 2026 · Sport</span> — Rochdale AFC achieved their first win of the season with a dramatic last-minute goal against Stockport County in a thrilling match on Saturday, October 17.</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-urges-team-to-aim-high-this-season">Rochdale AFC Manager Urges Team to Aim High This Season</a><p><span class="rd-meta">16 Oct 2026 · Sport</span> — Rochdale AFC&#x27;s manager has called on his players to set ambitious goals as they prepare for upcoming matches, emphasising their potential for success...</p>
+</li>
+<li><a href="/articles/rochdale-afc-confirms-fa-cup-first-round-draw-on-october-16">Rochdale AFC Confirms FA Cup First Round Draw on October 16</a><p><span class="rd-meta">16 Oct 2026 · Sport</span> — Rochdale AFC has confirmed the FA Cup first round draw will take place on October 16 at 7:00 PM, with live updates available on their official website.</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-urges-team-to-embrace-fearless-mentality">Rochdale AFC Manager Urges Team to Embrace Fearless Mentality</a><p><span class="rd-meta">15 Oct 2026 · Sport</span> — Rochdale AFC&#x27;s manager, Watson, has called on his players to adopt a fearless approach as they prepare for their next fixtures, emphasising confidence...</p>
+</li>
+<li><a href="/articles/rochdale-afc-announces-community-tour-of-bowlee">Rochdale AFC Announces Community Tour of Bowlee</a><p><span class="rd-meta">15 Oct 2026 · Sport</span> — Rochdale AFC has announced a community tour of Bowlee, inviting fans to explore the area significant to the club&#x27;s heritage. Details on the date and...</p>
+</li>
+<li><a href="/articles/rochdale-afc-co-chair-addresses-state-of-the-game-report">Rochdale AFC Co-Chair Addresses State of the Game Report</a><p><span class="rd-meta">15 Oct 2026 · Sport</span> — Rochdale AFC&#x27;s co-chair has discussed the recent State of the Game report, outlining key challenges and future directions for the club and the sport.</p>
+</li>
+<li><a href="/articles/nantwich-town-women-defeat-rochdale-women-3-1-in-wfa-cup">Nantwich Town Women Defeat Rochdale Women 3-1 in WFA Cup</a><p><span class="rd-meta">15 Oct 2026 · Sport</span> — Nantwich Town Women secured a place in the next round of the WFA Cup with a 3-1 victory over Rochdale AFC at the Crown Oil Arena on October 15.</p>
+</li>
+<li><a href="/articles/rochdale-sleep-out-nearly-10000-petrus-rafc-2026">Rochdale Sleep Out raises almost £10,000 as organisers make final appeal</a><p><span class="rd-meta">13 Oct 2026 · Community</span> — Supporters spent the night outdoors at the Crown Oil Arena for Petrus Community and Rochdale AFC Community Trust, with the annual charity Sleep Out now...</p>
+</li>
+<li><a href="/articles/rochdale-afc-confirms-back-to-back-home-matches">Rochdale AFC Confirms Back-to-Back Home Matches</a><p><span class="rd-meta">12 Oct 2026 · Sport</span> — Rochdale AFC has announced two consecutive home matches, providing fans with an opportunity to support the team at Spotland Stadium in the coming weeks.</p>
+</li>
+<li><a href="/articles/rochdale-afc-women-exit-fa-cup-after-defeat-to-atherton">Rochdale AFC Women Exit FA Cup After Defeat to Atherton</a><p><span class="rd-meta">12 Oct 2026 · Sport</span> — Rochdale AFC Women were eliminated from the Women&#x27;s FA Cup following a defeat against Atherton on Sunday, October 12.</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-calls-for-continued-effort-ahead-of-trophy-tie">Rochdale AFC Manager Calls for Continued Effort Ahead of Trophy Tie</a><p><span class="rd-meta">10 Oct 2026 · Sport</span> — Rochdale AFC&#x27;s manager emphasises the need for hard work as the team prepares for an upcoming trophy match, highlighting the importance of maintaining...</p>
+</li>
+<li><a href="/articles/rochdale-afc-extends-unbeaten-run-with-1-1-draw-against-tranmere-rovers">Rochdale AFC Extends Unbeaten Run with 1-1 Draw Against Tranmere Rovers</a><p><span class="rd-meta">10 Oct 2026 · Sport</span> — Rochdale AFC maintained their unbeaten streak in League Two with a hard-fought 1-1 draw against Tranmere Rovers at Prenton Park, marking their fifth...</p>
+</li>
+<li><a href="/articles/sponsored-dsm-social-media-co-rochdale-social-media-management">Sponsored: DSM Social Media Co. manages social media for businesses from Baillie Street, Rochdale</a><p><span class="rd-meta">9 Oct 2026 · Business</span> — Advertisement feature: DSM Social Media Co. is a Rochdale agency offering social media management, content, advertising, training and website design.</p>
+</li>
+<li><a href="/articles/andys-man-club-rochdale-four-groups-meeting-locations">Andy’s Man Club Rochdale has four groups helping men talk</a><p><span class="rd-meta">8 Oct 2026 · Community</span> — Andy’s Man Club has four groups meeting across the Rochdale borough, offering men a place to talk, listen and support one another.</p>
+</li>
+<li><a href="/articles/rochdale-procurement-360-summit-local-business-opportunities">Rochdale Procurement 360 Summit highlights opportunities for local businesses</a><p><span class="rd-meta">8 Oct 2026 · Business</span> — Businesses and organisations gathered at the Crown Oil Arena for the Rochdale Procurement 360 Summit, with discussions focused on accessing contracts,...</p>
+</li>
+<li><a href="/articles/rochdale-to-face-grimsby-town-on-20th-october-2026">Rochdale to Face Grimsby Town on 20th October 2026</a><p><span class="rd-meta">8 Oct 2026 · Sport</span> — Rochdale will host Grimsby Town in a League Two match on 20th October 2026, with both teams looking to improve their standings.</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-support-play-safe-campaign-this-weekend">Rochdale AFC to Support Play Safe Campaign This Weekend</a><p><span class="rd-meta">7 Oct 2026 · Sport</span> — Rochdale AFC will participate in the Play Safe campaign this weekend, promoting safety in youth football. The initiative aims to raise awareness about...</p>
+</li>
+<li><a href="/articles/rochdale-sleepout-2026-petrus">Rochdale Sleepout 2026 returns to raise funds and awareness for people facing homelessness</a><p><span class="rd-meta">6 Oct 2026 · Community</span> — Petrus is calling on Rochdale residents, businesses and community groups to get behind Rochdale Sleepout 2026 and help raise vital funds for local...</p>
+</li>
+<li><a href="/articles/rochdale-afc-prepares-for-efl-trophy-match-against-huddersfield-town">Rochdale AFC Manager Prepares for Upcoming Trophy Tie</a><p><span class="rd-meta">5 Oct 2026 · Sport</span> — Rochdale AFC will face Huddersfield Town in the EFL Trophy on October 6, 2026, with both teams looking to secure a win in this crucial group stage match.</p>
+</li>
+<li><a href="/articles/rochdale-fc-secures-1-0-victory-over-swindon-town-at-crown-oil-arena">Rochdale FC Secures 1-0 Victory Over Swindon Town at Crown Oil Arena</a><p><span class="rd-meta">5 Oct 2026 · Sport</span> — Rochdale FC manager Ian Watson praised his team</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-claims-team-deserved-recent-victory">Rochdale AFC Manager Claims Team Deserved Recent Victory</a><p><span class="rd-meta">3 Oct 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-to-host-swindon-town-in-league-two-match-on-3-october-2026">Rochdale AFC Secures 1-0 Victory Against Swindon Town</a><p><span class="rd-meta">3 Oct 2026 · Sport</span> — Rochdale will face Swindon Town at the Crown Oil Arena this Saturday, with both teams looking to improve their standings in League Two. The match will...</p>
+</li>
+<li><a href="/articles/rochdale-afc-launches-weekly-show-behind-the-sign">Rochdale AFC Launches Weekly Show</a><p><span class="rd-meta">2 Oct 2026 · Sport</span> — Rochdale AFC has introduced a new weekly show titled</p>
+</li>
+<li><a href="/articles/ian-holloway-discusses-fitness-and-away-form-ahead-of-rochdale-afc-match">Ian Holloway Discusses Fitness and Away Form Ahead of Rochdale AFC Match</a><p><span class="rd-meta">1 Oct 2026 · Sport</span> — Swindon Town manager Ian Holloway addressed the media in a pre-match press conference, focusing on player fitness and the team</p>
+</li>
+<li><a href="/articles/swindon-town-to-face-rochdale-without-14-players-due-to-injuries">Swindon Town to Face Rochdale Without 14 Players Due to Injuries</a><p><span class="rd-meta">1 Oct 2026 · Sport</span> — Swindon Town will be severely depleted for their match against Rochdale, missing 14 players due to injuries and suspensions, including key starters...</p>
+</li>
+<li><a href="/articles/swindon-town-hopeful-of-joe-snowdon-s-return-for-rochdale-match">Swindon Town Hope for Joe Snowdon</a><p><span class="rd-meta">29 Sep 2026 · Sport</span> — Swindon Town are optimistic that Joe Snowdon will be fit to play in their League Two match against Rochdale this weekend, following a series of injuries.</p>
+</li>
+<li><a href="/articles/rochdale-afc-u17-team-to-compete-in-pdl-cup-against-stockport">Rochdale AFC U17 Team to Compete in PDL Cup Against Stockport</a><p><span class="rd-meta">28 Sep 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-releases-admission-details-for-match-against-crewe">Rochdale AFC Releases Admission Details for Match Against Crewe</a><p><span class="rd-meta">28 Sep 2026 · Sport</span> — Rochdale AFC has announced admission details for their upcoming match against Crewe. Fans are encouraged to check the club</p>
+</li>
+<li><a href="/articles/rochdale-afc-women-secure-2-1-victory-against-altrincham-women">Rochdale AFC Women Secure 2-1 Victory Against Altrincham Women</a><p><span class="rd-meta">28 Sep 2026 · Sport</span> — Rochdale AFC Women triumphed over Altrincham Women with a 2-1 win at Kingsway Park High School on 27 September 2026, marking a significant achievement...</p>
+</li>
+<li><a href="/articles/rochdale-secures-2-1-victory-against-fleetwood-town-at-highbury-stadium">Rochdale Secures 2-1 Victory Against Fleetwood Town at Highbury Stadium</a><p><span class="rd-meta">26 Sep 2026 · Sport</span> — Rochdale defeated Fleetwood Town 2-1 at Highbury Stadium on September 26, 2026, despite finishing the match with ten players after Tobi...</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-face-fleetwood-town-at-highbury-stadium">Rochdale AFC to Face Fleetwood Town at Highbury Stadium</a><p><span class="rd-meta">25 Sep 2026 · Sport</span> — Rochdale AFC will play Fleetwood Town this Saturday, with Alex Chilowicz as the referee. Fans are looking forward to a competitive match following...</p>
+</li>
+<li><a href="/articles/middleton-residents-campaign-to-preserve-community-kickpitch">Middleton Residents Campaign to Preserve Kickpitch Amid Plans for Car Park</a><p><span class="rd-meta">23 Sep 2026 · Sport</span> — Residents of the Langley Estate in Middleton are actively campaigning to retain their community kickpitch, which is set to be replaced by a car park...</p>
+</li>
+<li><a href="/articles/rochdale-football-club-to-face-walsall-in-league-two-match">Rochdale to Face Walsall in League Two Match on September 22</a><p><span class="rd-meta">22 Sep 2026 · Sport</span> — Rochdale Football Club is set to play against Walsall in a League Two fixture, with live updates available for fans.</p>
+</li>
+<li><a href="/articles/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-penalty-shootout">Rochdale Draws 3-3 with Liverpool U21 in EFL Trophy Penalty Shootout</a><p><span class="rd-meta">22 Sep 2026 · Sport</span> — Rochdale AFC faced Liverpool Under-21s in a thrilling EFL Trophy match at Crown Oil Arena, ending in a penalty shootout after a 3-3 draw. The match had...</p>
+</li>
+<li><a href="/articles/ian-watson-praises-rochdale-afc-performance-in-trophy-tie-against-liverpool-unde">Ian Watson Praises Rochdale AFC Performance in Trophy Tie Against Liverpool Under-21s</a><p><span class="rd-meta">22 Sep 2026 · Sport</span> — Rochdale AFC faced Liverpool Under-21s in an exciting Jersey Mike</p>
+</li>
+<li><a href="/articles/rochdale-draws-3-3-with-liverpool-u21-in-efl-trophy-match-at-crown-oil-arena">Rochdale Draws 3-3 with Liverpool U21 in EFL Trophy Match at Crown Oil Arena</a><p><span class="rd-meta">21 Sep 2026 · Sport</span> — Rochdale AFC faced Liverpool Under-21s in a thrilling EFL Trophy match, ending in a 3-3 draw after penalties, with both teams showcasing their...</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-host-liverpool-under-21s-in-efl-trophy-tie">Rochdale AFC to Host Liverpool Under-21s in EFL Trophy</a><p><span class="rd-meta">21 Sep 2026 · Sport</span> — Rochdale will host Liverpool Academy at the Crown Oil Arena tonight in a crucial EFL Trophy fixture, with both teams aiming for progression in the...</p>
+</li>
+<li><a href="/articles/rochdale-to-host-liverpool-u21-in-efl-trophy-match">Rochdale AFC to Host Liverpool Under-21s in EFL Trophy Match</a><p><span class="rd-meta">21 Sep 2026 · Sport</span> — Rochdale AFC faced Liverpool U21 in the EFL Trophy on 22nd September 2026, ending in a 1-1 draw at Crown Oil Arena. The match featured key saves and a...</p>
+</li>
+<li><a href="/articles/rochdale-to-face-liverpool-academy-in-efl-trophy-match-tonight">Rochdale to Face Liverpool Academy in EFL Trophy Match Tonight</a><p><span class="rd-meta">21 Sep 2026 · Sport</span> — Rochdale will host Liverpool Academy at the Crown Oil Arena tonight in a Northern Group H fixture of the EFL Trophy, with both teams looking to secure...</p>
+</li>
+<li><a href="/articles/rochdale-to-face-liverpool-academy-in-efl-trophy-match-at-crown-oil-arena">Rochdale Draws 3-3 with Liverpool U21 in EFL Trophy Penalty Shootout</a><p><span class="rd-meta">21 Sep 2026 · Sport</span> — Rochdale AFC faced Liverpool Under-21s in a thrilling EFL Trophy match at Crown Oil Arena, ending in a penalty shootout after a 3-3 draw. The match...</p>
+</li>
+<li><a href="/articles/rochdale-afc-secures-2-0-victory-against-oldham-athletic-in-league-two">Rochdale AFC Secures 2-0 Victory Against Oldham Athletic in League Two</a><p><span class="rd-meta">20 Sep 2026 · Sport</span> — Rochdale AFC achieved a solid 2-0 win at home against Oldham Athletic in their latest Sky Bet League Two match, showcasing their competitive form ahead...</p>
+</li>
+<li><a href="/articles/rochdale-afc-secures-2-0-victory-against-oldham-athletic">Rochdale AFC Secures 2-0 Victory Against Oldham Athletic</a><p><span class="rd-meta">20 Sep 2026 · Sport</span> — Rochdale AFC achieved a 2-0 win over Oldham Athletic in Sky Bet League Two, marking a significant home victory for the team.</p>
+</li>
+<li><a href="/articles/rochdale-to-face-liverpool-u21-in-efl-trophy-match">Rochdale AFC to Host Liverpool U21 in EFL Trophy on September 21</a><p><span class="rd-meta">20 Sep 2026 · Sport</span> — Rochdale AFC will face Liverpool U21 in the EFL Trophy at Crown Oil Arena on Tuesday, September 21, 2026, as they seek to capitalise on home advantage.</p>
+</li>
+<li><a href="/articles/rochdale-afc-releases-efl-trophy-matchday-programme-preview">Rochdale AFC Releases Matchday Programme for EFL Trophy Fixture Against Liverpool U21</a><p><span class="rd-meta">20 Sep 2026 · Sport</span> — Rochdale AFC will face Liverpool U21 in the EFL Trophy at Crown Oil Arena on Tuesday, September 21, 2026, with fans looking forward to a competitive match.</p>
+</li>
+<li><a href="/articles/rochdale-afc-prepares-for-match-against-liverpool-under-21s">Rochdale AFC to Host Liverpool Under-21s in EFL Trophy Match</a><p><span class="rd-meta">20 Sep 2026 · Sport</span> — Rochdale will host Liverpool U21 in the EFL Trophy on September 22, 2026, at Crown Oil Arena, with both teams looking to secure a win in this knockout...</p>
+</li>
+<li><a href="/articles/rochdale-secures-2-0-victory-over-oldham-in-league-two-derby">Rochdale AFC Secures 2-0 Victory Against Oldham Athletic in League Two</a><p><span class="rd-meta">19 Sep 2026 · Sport</span> — Rochdale climbed off the bottom of the League Two table with a 2-0 win against Oldham Athletic in a closely contested Greater Manchester derby on 19...</p>
+</li>
+<li><a href="/articles/dajaune-brown-scores-first-goal-for-rochdale-afc-on-derby-day">Dajaune Brown Scores First Goal for Rochdale AFC on Derby Day</a><p><span class="rd-meta">19 Sep 2026 · Sport</span> — Dajaune Brown expressed his joy after scoring his first goal for Rochdale AFC during a derby match, describing the experience as a</p>
+</li>
+<li><a href="/articles/dajaune-brown-celebrates-first-goal-for-rochdale-afc-on-derby-day">Dajaune Brown Celebrates First Goal for Rochdale AFC on Derby Day</a><p><span class="rd-meta">19 Sep 2026 · Sport</span> — Dajaune Brown described scoring his first goal for Rochdale AFC as a</p>
+</li>
+<li><a href="/articles/rochdale-afc-hosts-oldham-athletic-in-league-two-match">Rochdale AFC Hosts Oldham Athletic in League Two Match</a><p><span class="rd-meta">19 Sep 2026 · Sport</span> — Rochdale AFC faced Oldham Athletic in a League Two match on 19 September 2026, with both teams competing for vital league points.</p>
+</li>
+<li><a href="/articles/rochdale-afc-u18-transfers-update-as-of-september-2026">Rochdale AFC U18 Transfers Update as of September 2026</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale AFC U18 has made significant transfers this month, reflecting the club</p>
+</li>
+<li><a href="/articles/rochdale-to-face-oldham-athletic-on-19-september-2026">Rochdale AFC Secures 2-0 Victory Against Oldham Athletic</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale climbed off the bottom of the League Two table with a 2-0 win against Oldham Athletic in a closely contested Greater Manchester derby on Saturday.</p>
+</li>
+<li><a href="/articles/rochdale-to-face-oldham-athletic-in-league-two-match-on-saturday">Rochdale AFC Secures 2-0 Victory Over Oldham Athletic in League Two Clash</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale AFC achieved a 2-0 win against Oldham Athletic in a League Two derby at the Crown Oil Arena on Saturday, 19th September 2026, marking their...</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-face-accrington-stanley-in-league-two-match-on-september-18-2026">Rochdale AFC to Face Accrington Stanley in League Two Match on September 18, 2026</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale AFC will compete against Accrington Stanley in a League Two fixture at Wham Stadium, with live updates available for fans unable to attend.</p>
+</li>
+<li><a href="/articles/rochdale-afc-and-oldham-athletic-release-joint-statement">Rochdale AFC to Face Oldham Athletic in League Two Derby on 19 September</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale AFC will face Oldham Athletic at the Crown Oil Arena on Saturday, 19 September, with kick-off scheduled for 12.30pm. This match marks a...</p>
+</li>
+<li><a href="/articles/rochdale-afc-youth-team-to-compete-in-u17-pdl-cup">Rochdale AFC Youth Team to Compete in U17 PDL Cup</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-confirms-ticket-details-for-tranmere-rovers-away-match">Rochdale AFC Announces Admission Details for Tranmere Away Match</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale AFC has released admission details for their away match against Tranmere Rovers, encouraging fans to check the club</p>
+</li>
+<li><a href="/articles/rochdale-afc-secures-2-0-victory-over-oldham-athletic">Rochdale AFC Wins 2-0 Against Oldham Athletic in League Two Derby</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale AFC moved off the bottom of the League Two table with a 2-0 win against Oldham Athletic in a closely contested Greater Manchester derby on...</p>
+</li>
+<li><a href="/articles/rochdale-afc-defeats-oldham-athletic-2-0-in-league-two-derby">Rochdale AFC to Host Oldham Athletic in League Two Match</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Rochdale AFC will face Oldham Athletic at the Crown Oil Arena this Saturday in a Sky Bet League Two fixture. Fans are advised to check important...</p>
+</li>
+<li><a href="/articles/rochdale-afc-player-statistics-available-on-transfermarkt">Rochdale AFC Player Statistics Now Available on Transfermarkt</a><p><span class="rd-meta">18 Sep 2026 · Sport</span> — Fans can access detailed player statistics and transfer information for Rochdale AFC on Transfermarkt, enhancing their understanding of the club</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-discusses-player-returns-and-new-signing-flint">Laurence Maguire Debuts for Rochdale AFC in 0-0 Draw Against Walsall</a><p><span class="rd-meta">17 Sep 2026 · Sport</span> — Laurence Maguire made his debut as a substitute in Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-hosts-oldham-athletic-in-sky-bet-league-two-match">Rochdale AFC Hosts Oldham Athletic in Sky Bet League Two Match</a><p><span class="rd-meta">17 Sep 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-and-oldham-athletic-issue-joint-message-ahead-of-league-two-fixture">Rochdale AFC and Oldham Athletic Issue Joint Message Ahead of League Two Fixture</a><p><span class="rd-meta">17 Sep 2026 · Sport</span> — Micky Mellon describes the Oldham Athletic versus Rochdale derby as a significant fixture, highlighting its competitive spirit and the passion of both...</p>
+</li>
+<li><a href="/articles/tickets-now-available-for-rochdale-afc-s-huddersfield-trophy-match">Tickets Now Available for Rochdale AFC</a><p><span class="rd-meta">17 Sep 2026 · Sport</span> — Rochdale AFC has announced that tickets for their upcoming match in the Huddersfield Trophy are now on sale, allowing fans to support the team in this...</p>
+</li>
+<li><a href="/articles/rochdale-afc-issues-key-information-ahead-of-saturday-s-match">Rochdale AFC Issues Matchday Information for Saturday</a><p><span class="rd-meta">16 Sep 2026 · Sport</span> — Rochdale AFC has released essential details for fans attending the upcoming match, including ticketing, travel advice, and safety measures.</p>
+</li>
+<li><a href="/articles/rochdale-afc-unveils-new-hy-lounge-at-crown-oil-arena">Rochdale AFC Unveils New HY Lounge at Crown Oil Arena</a><p><span class="rd-meta">16 Sep 2026 · Sport</span> — Rochdale AFC has launched the HY Lounge, a new hospitality area at the Crown Oil Arena, enhancing the matchday experience for fans and strengthening...</p>
+</li>
+<li><a href="/articles/rochdale-afc-sleep-out-scheduled-for-9th-october-2026">Rochdale AFC Sleep Out Scheduled for 9th October 2026</a><p><span class="rd-meta">16 Sep 2026 · Sport</span> — Rochdale AFC will host its annual Sleep Out event at the Crown Oil Arena on 9th October 2026, inviting community participation to support local...</p>
+</li>
+<li><a href="/articles/rochdale-afc-fans-urged-to-update-fanbase-app-before-next-match">Rochdale AFC Fans Required to Update Fanbase App Before Next Match</a><p><span class="rd-meta">16 Sep 2026 · Sport</span> — Rochdale AFC has announced that supporters must download the latest version of the Fanbase app before attending future matches, following a significant...</p>
+</li>
+<li><a href="/articles/rochdale-afc-youth-team-draws-2-2-in-u17-pdl-cup-match">Rochdale AFC Youth Team Draw 2-2 in U17 PDL Cup Match</a><p><span class="rd-meta">15 Sep 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-invites-community-feedback-on-bowlee-development">Rochdale AFC Invites Community Feedback on Bowlee Hub Proposal</a><p><span class="rd-meta">14 Sep 2026 · Sport</span> — Rochdale AFC is seeking input from local residents and stakeholders on plans for a new Community Football &amp; Wellbeing Hub at Bowlee, with the planning...</p>
+</li>
+<li><a href="/articles/rochdale-afc-fans-attend-0-0-draw-against-walsall">Rochdale AFC Fans Attend 0-0 Draw Against Walsall</a><p><span class="rd-meta">14 Sep 2026 · Sport</span> — Over 300 supporters of Rochdale AFC attended the match at the Pallet-Track Bescot Stadium, resulting in a goalless draw against Walsall on Saturday...</p>
+</li>
+<li><a href="/articles/walsall-and-rochdale-play-out-goalless-draw-in-league-two">Rochdale Earn Hard-Fought Draw Against Walsall in League Two</a><p><span class="rd-meta">13 Sep 2026 · Sport</span> — Rochdale secured a valuable point in a goalless draw against Walsall, marking their fourth draw in eight League Two matches this season.</p>
+</li>
+<li><a href="/articles/rochdale-afc-youth-team-competes-in-u17-pdl-cup">Rochdale AFC Youth Team Competes in U17 PDL Cup</a><p><span class="rd-meta">13 Sep 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-secures-hard-earned-point-in-0-0-draw-against-walsall">Ian Watson Praises Team</a><p><span class="rd-meta">12 Sep 2026 · Sport</span> — Rochdale</p>
+</li>
+<li><a href="/articles/aden-flint-walsall-draw-offers-foundation-for-rochdale-afc">Aden Flint Says Walsall Draw is a Positive Step for Rochdale AFC</a><p><span class="rd-meta">12 Sep 2026 · Sport</span> — Aden Flint has expressed optimism following Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-tickets-on-sale-for-fleetwood-town-match">Rochdale AFC Tickets on Sale for Fleetwood Town Match</a><p><span class="rd-meta">9 Sep 2026 · Sport</span> — Rochdale AFC has announced that tickets are now available for the team</p>
+</li>
+<li><a href="/articles/4-000-prize-won-on-rochdale-afc-s-forever-dale-scheme">£4,000 Prize Won on Rochdale AFC</a><p><span class="rd-meta">8 Sep 2026 · Sport</span> — Rochdale AFC Announces £4,000 Winner on Forever Dale Scheme. The club announced the winner on its website on 8 September 2026.</p>
+</li>
+<li><a href="/articles/rochdale-afc-partners-with-financial-solutions-to-enhance-financial-management">Rochdale AFC Announces Partnership with Financial Solutions</a><p><span class="rd-meta">4 Sep 2026 · Sport</span> — Rochdale AFC has entered into a new partnership with Financial Solutions, aimed at enhancing the club</p>
+</li>
+<li><a href="/articles/charlie-tasker-discusses-his-first-goal-aspirations-for-rochdale-afc">Charlie Tasker Discusses His First Goal Aspirations for Rochdale AFC</a><p><span class="rd-meta">4 Sep 2026 · Sport</span> — In a recent interview, Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-s-matchday-programme-returns-for-gillingham-fixture">Rochdale AFC Launches Matchday Programme for Gillingham Fixture</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale AFC will feature their matchday programme, The Voice of Spotland, for the upcoming Sky Bet League Two game against Gillingham on Saturday.</p>
+</li>
+<li><a href="/articles/rochdale-afc-releases-matchday-guide-for-saturday-s-fixture">Traffic Advisory for Rochdale AFC Matchday on Saturday</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale AFC has issued a traffic advisory for fans attending the match this Saturday, providing essential information on travel arrangements and...</p>
+</li>
+<li><a href="/articles/rochdale-youth-team-lose-4-3-to-salford-city-in-pdl-cup-opener">Rochdale Youth Team Lose 4-3 to Salford City in PDL Cup Opener</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-host-gillingham-in-upcoming-match">Rochdale AFC Set to Host Gillingham in Upcoming Match</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale AFC will face Gillingham at Spotland Stadium, with fans eager for a strong performance following recent league results. Kick-off details and...</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-host-gillingham-at-crown-oil-arena-this-saturday">Traffic Advisory for Rochdale AFC</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale AFC will face Gillingham in a Sky Bet League Two match at Crown Oil Arena on Saturday, 5th September, with kick-off scheduled for 3pm.</p>
+</li>
+<li><a href="/articles/rochdale-afc-set-to-host-gillingham-in-league-match">Rochdale AFC to Host Gillingham in Upcoming League Match</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale will face Gillingham at Spotland this Saturday, aiming for their second consecutive victory after a recent win against Shrewsbury. Gillingham...</p>
+</li>
+<li><a href="/articles/rochdale-afc-publishes-matchday-guide-for-saturday-s-game">Rochdale AFC Launches Matchday Programme Ahead of Gillingham Fixture</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale will host Gillingham at Spotland this weekend, aiming for their second consecutive victory after a strong performance against Shrewsbury. The...</p>
+</li>
+<li><a href="/articles/rochdale-afc-prepares-for-gillingham-match-on-5th-september">Rochdale AFC to Host Gillingham in League Two Match on 5th September</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale AFC will face Gillingham in a Sky Bet League Two match at Crown Oil Arena on Saturday, 5th September, with kick-off at 3pm.</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-face-gillingham-in-league-two-match-on-5th-september">Rochdale AFC to Face Gillingham in League Two Match on 5th September</a><p><span class="rd-meta">3 Sep 2026 · Sport</span> — Rochdale AFC will host Gillingham at the Crown Oil Arena on Saturday, 5th September, with kick-off scheduled for 3pm. The matchday programme, The Voice...</p>
+</li>
+<li><a href="/articles/rochdale-afc-injury-update-following-shrewsbury-town-victory">Rochdale AFC Injury Update Following Shrewsbury Town Victory</a><p><span class="rd-meta">2 Sep 2026 · Sport</span> — Rochdale AFC manager Ian Watson has provided an injury update following the team</p>
+</li>
+<li><a href="/articles/rochdale-afc-women-to-face-penwortham-town-in-fa-cup-match">Rochdale AFC Women to Face Penwortham Town in FA Cup Match</a><p><span class="rd-meta">2 Sep 2026 · Sport</span> — Rochdale AFC Women will compete against Penwortham Town in the Women</p>
+</li>
+<li><a href="/articles/rochdale-set-to-face-gillingham-in-search-of-first-win-of-the-season">Rochdale Secures First EFL Win with 3-0 Victory Over Shrewsbury Town</a><p><span class="rd-meta">2 Sep 2026 · Sport</span> — Rochdale achieved their first win since returning to the EFL, defeating Shrewsbury Town 3-0 at the Crown Oil Arena, with manager Ian Watson praising...</p>
+</li>
+<li><a href="/articles/rochdale-secures-first-league-win-of-the-season-against-shrewsbury-town">Rochdale Secures First League Win of the Season Against Shrewsbury Town</a><p><span class="rd-meta">2 Sep 2026 · Sport</span> — Rochdale achieved their first win since returning to the EFL with a convincing 3-0 victory against Shrewsbury at the Crown Oil Arena, praised by...</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-host-gillingham-in-upcoming-league-fixture">Rochdale AFC to Host Gillingham in Upcoming League Match</a><p><span class="rd-meta">2 Sep 2026 · Sport</span> — Rochdale achieved their first win since returning to the EFL with a decisive 3-0 victory over Shrewsbury at the Crown Oil Arena, showcasing a dominant...</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-aims-to-build-on-recent-performance">Rochdale AFC Manager Jim Watson Aims to Build on Recent Performance</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC manager has expressed a desire to build on the team</p>
+</li>
+<li><a href="/articles/rochdale-secures-first-efl-win-under-ian-watson-with-3-0-victory-over-shrewsbury">Rochdale Secures First EFL Win Under Ian Watson with 3-0 Victory Over Shrewsbury</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC achieved their first win since returning to the EFL, defeating Shrewsbury Town 3-0 at the Crown Oil Arena, with manager Ian Watson...</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-host-gillingham-in-upcoming-league-match">Rochdale AFC to Host Gillingham in Upcoming League Match</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC achieved their first win since returning to the English Football League, defeating Shrewsbury Town 3-0 at the Crown Oil Arena on 1...</p>
+</li>
+<li><a href="/articles/rochdale-youth-team-loses-4-3-to-salford-city-in-pdl-cup-opener">Rochdale AFC Secures 3-0 Victory Against Shrewsbury Town</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale Football Club achieved their first win since returning to the English Football League, defeating Shrewsbury Town 3-0 at the Crown Oil Arena on...</p>
+</li>
+<li><a href="/articles/rochdale-afc-signs-middleton-on-season-long-loan">Rochdale AFC Signs Middleton on Season-Long Loan</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC has announced the signing of midfielder Middleton on a season-long loan from a Premier League club, enhancing their squad ahead of the new...</p>
+</li>
+<li><a href="/articles/rochdale-afc-signs-goalkeeper-tasker-on-loan">Rochdale AFC Signs Goalkeeper Tasker on Loan from Cardiff City</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC has secured the loan signing of goalkeeper Tasker from Cardiff City, enhancing their squad ahead of the upcoming matches.</p>
+</li>
+<li><a href="/articles/rochdale-afc-signs-glenn-middleton-on-one-year-contract">Rochdale AFC Signs Glenn Middleton on One-Year Contract</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC has announced the signing of winger Glenn Middleton from Doncaster Rovers on a one-year deal, alongside a loan for defender Charlie Tasker...</p>
+</li>
+<li><a href="/articles/rochdale-afc-secures-3-0-victory-against-shrewsbury-town">Rochdale AFC Signs Glenn Middleton and Charlie Tasker Ahead of New Season</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC achieved their first win of the season with a convincing 3-0 victory over Shrewsbury Town at the Crown Oil Arena on Tuesday evening,...</p>
+</li>
+<li><a href="/articles/rochdale-football-club-to-face-exeter-city-in-league-two-match">Rochdale AFC to Face Exeter City in League Two Match Today</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC will compete against Exeter City in a League Two fixture today, September 1, 2026, with live updates available for fans.</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-face-shrewsbury-town-at-crown-oil-arena">Rochdale AFC Secures First Win of the Season with 3-0 Victory Over Shrewsbury Town</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC achieved their first win since returning to the English Football League, defeating Shrewsbury Town 3-0 at the Crown Oil Arena on 1...</p>
+</li>
+<li><a href="/articles/rochdale-afc-draws-1-1-with-shrewsbury-town-at-spotland-stadium">Rochdale AFC Draws 1-1 with Shrewsbury Town at Spotland Stadium</a><p><span class="rd-meta">1 Sep 2026 · Sport</span> — Rochdale AFC secured a 1-1 draw against Shrewsbury Town at Spotland Stadium on 1 September 2026, showcasing resilience after falling behind in the...</p>
+</li>
+<li><a href="/articles/rochdale-afc-women-secure-1-0-victory-over-accrington-stanley-in-fa-cup">Rochdale AFC Women Secure Victory with Clean Sheet at Crown Oil Arena</a><p><span class="rd-meta">31 Aug 2026 · Sport</span> — Rochdale AFC Women achieved a solid win at Crown Oil Arena, maintaining a clean sheet in their latest match. The team continues to show strong...</p>
+</li>
+<li><a href="/articles/rochdale-to-compete-against-shrewsbury-town-in-league-two-fixture">Rochdale AFC Prepares for Midweek Match Against Shrewsbury Town</a><p><span class="rd-meta">31 Aug 2026 · Sport</span> — Rochdale</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-host-exeter-city-in-league-two-match-today">Rochdale AFC Secures First Win of the Season with 3-0 Victory Over Shrewsbury Town</a><p><span class="rd-meta">31 Aug 2026 · Sport</span> — Rochdale Football Club achieved a significant 3-0 victory over Shrewsbury Town, marking their first win since returning to the EFL. Manager Ian Watson...</p>
+</li>
+<li><a href="/articles/rochdale-afc-publishes-midweek-fixtures-and-events-guide">Rochdale AFC Hosts Shrewsbury Town in Midweek League Match</a><p><span class="rd-meta">31 Aug 2026 · Sport</span> — Rochdale AFC will face Shrewsbury Town on Tuesday evening in Sky Bet League Two, with fans advised to consult the Matchday Guide for important details.</p>
+</li>
+<li><a href="/articles/simon-mather-to-officiate-rochdale-s-match-against-shrewsbury-town">Simon Mather to Officiate Rochdale</a><p><span class="rd-meta">31 Aug 2026 · Sport</span> — Referee Simon Mather has been appointed to officiate Rochdale</p>
+</li>
+<li><a href="/articles/rochdale-to-host-shrewsbury-town-live-stream-and-tv-details">Shrewsbury Town Includes New Signing for Match Against Rochdale</a><p><span class="rd-meta">31 Aug 2026 · Sport</span> — Rochdale AFC will host Shrewsbury Town in a League Two match on 1 September 2026, with both teams looking to secure vital points early in the season.</p>
+</li>
+<li><a href="/articles/rochdale-afc-signs-goalkeeper-tasker-on-loan-from-blackburn-rovers">Rochdale AFC Signs Charlie Tasker on Loan from Brighton &amp; Hove Albion</a><p><span class="rd-meta">31 Aug 2026 · Sport</span> — Rochdale AFC has announced the signing of winger Glenn Middleton from Doncaster Rovers on a one-year deal, alongside a loan agreement for defender...</p>
+</li>
+<li><a href="/articles/rochdale-afc-back-in-game-prostate-cancer-sanitary-bins">Rochdale AFC installs 26 male sanitary bins to support fans after prostate cancer treatment</a><p><span class="rd-meta">31 Aug 2026 · Sport</span> — Rochdale AFC has installed 26 specially designed male incontinence bins at the Crown Oil Arena and joined Prostate Cancer UK and phs Group&#x27;s BOG...</p>
+</li>
+<li><a href="/articles/rochdale-afc-set-to-face-shrewsbury-town-in-league-two-clash">Rochdale AFC to Face Shrewsbury Town in League Two Match</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Rochdale AFC will host Shrewsbury Town in a League Two match on September 1, 2026, with fans eager for a strong performance following recent results.</p>
+</li>
+<li><a href="/articles/rochdale-afc-prepares-for-league-two-match-against-shrewsbury-town">Rochdale AFC Prepares for League Two Clash Against Shrewsbury Town</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-hosts-shrewsbury-town-in-league-two-match">Rochdale AFC Hosts Shrewsbury Town in League Two Match</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Rochdale AFC will face Shrewsbury Town in a Sky Bet League Two match on Tuesday, with the club</p>
+</li>
+<li><a href="/articles/oldham-defeats-rochdale-hornets-32-14-in-season-finale">Oldham Secures 32-14 Victory Over Rochdale Hornets in Derby Match</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Oldham Roughyeds defeated Rochdale Hornets 32-14 in a closely contested derby at Crown Oil Arena, marking the end of the season for both teams.</p>
+</li>
+<li><a href="/articles/rochdale-afc-unveils-new-third-kit-for-2026-27-season">Rochdale AFC Unveils New Third Kit for 2026-27 Season</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Rochdale AFC has officially released its third kit for the upcoming 2026-27 season, featuring a fresh design aimed at energising fans and players alike.</p>
+</li>
+<li><a href="/articles/rochdale-manager-prepares-for-match-against-shrewsbury-town">Rochdale AFC to Release Matchday Programme for Shrewsbury Town Fixture</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-face-shrewsbury-town-in-league-two-match">Rochdale to Host Shrewsbury Town in League One Match</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Rochdale AFC will face Shrewsbury Town in a Sky Bet League Two match on Tuesday, with the club</p>
+</li>
+<li><a href="/articles/rochdale-afc-loses-1-2-to-crawley-town-in-efl-league-two">Rochdale AFC Loses 1-2 to Crawley Town in EFL League Two</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Rochdale AFC faced a disappointing defeat against Crawley Town, losing 1-2 in their latest EFL League Two match on August 30, 2026.</p>
+</li>
+<li><a href="/articles/rochdale-afc-releases-midweek-events-guide-for-fans">Rochdale AFC Hosts Shrewsbury Town in Sky Bet League Two</a><p><span class="rd-meta">30 Aug 2026 · Sport</span> — Rochdale AFC will host Shrewsbury Town in a League Two fixture on Tuesday, September 1, 2026, at Spotland Stadium, with fans eager for a strong...</p>
+</li>
+<li><a href="/articles/rochdale-competes-with-exeter-city-for-huddersfield-defender-jay-sway">Rochdale Competes with Exeter City for Huddersfield Defender Jay Sway</a><p><span class="rd-meta">28 Aug 2026 · Sport</span> — Rochdale is in a competitive bid to sign Huddersfield Town</p>
+</li>
+<li><a href="/articles/rochdale-to-host-shrewsbury-in-league-match-on-1-september-2026">Rochdale to Host Shrewsbury in League Match on 1 September 2026</a><p><span class="rd-meta">26 Aug 2026 · Sport</span> — Rochdale will face Shrewsbury Town on 1 September 2026 in a league match at the Crown Oil Arena. Betting odds and tips are available for fans ahead of...</p>
+</li>
+<li><a href="/articles/rochdale-afc-hosts-open-training-session-for-fans">Rochdale AFC Confirms Open Training Session for Fans</a><p><span class="rd-meta">25 Aug 2026 · Sport</span> — Rochdale AFC will hold its annual Open Training Session at the Crown Oil Arena on Tuesday, 25th August, inviting fans to watch the team prepare for the...</p>
+</li>
+<li><a href="/articles/rochdale-afc-lose-1-2-to-crawley-town-in-league-two-clash">Rochdale AFC Lose 1-2 to Crawley Town in League Two Clash</a><p><span class="rd-meta">24 Aug 2026 · Sport</span> — Rochdale AFC faced Crawley Town in a League Two match on 22 August 2026, suffering a 1-2 defeat at home. The match highlights and key moments are now...</p>
+</li>
+<li><a href="/articles/rochdale-afc-women-secure-victory-against-accrington">Rochdale AFC Women Secure Victory Against Accrington</a><p><span class="rd-meta">23 Aug 2026 · Sport</span> — Rochdale</p>
+</li>
+<li><a href="/articles/rochdale-afc-plays-first-home-game-in-efl-after-three-years">Rochdale AFC Plays First Home Game in EFL After Three Years</a><p><span class="rd-meta">22 Aug 2026 · Sport</span> — Rochdale AFC returns to the Crown Oil Arena for their first home game in the EFL in three years, with the venue recently refurbished and the National...</p>
+</li>
+<li><a href="/articles/rochdale-afc-defeated-3-0-by-newport-county-in-season-opener">Rochdale AFC Defeated 3-0 by Newport County in League Two Opener</a><p><span class="rd-meta">22 Aug 2026 · Sport</span> — Rochdale AFC faced a disappointing start to the Sky Bet League Two season, losing 3-0 to Newport County on the opening day of the campaign.</p>
+</li>
+<li><a href="/articles/rochdale-afc-submits-planning-application-for-bowlee-development">Rochdale AFC Submits Planning Application for Bowlee Development</a><p><span class="rd-meta">22 Aug 2026 · Sport</span> — Rochdale AFC has submitted a planning application for a new development at Bowlee, aiming to enhance facilities for the club and the community.</p>
+</li>
+<li><a href="/articles/plans-for-new-sports-complex-on-rochdale-bury-border">Plans for New Sports Complex on Heywood Old Road Near Rochdale</a><p><span class="rd-meta">22 Aug 2026 · Sport</span> — A new sports complex is proposed for the border of Rochdale and Bury, featuring facilities for Rochdale AFC and community sports.</p>
+</li>
+<li><a href="/articles/greater-manchester-police-reinforces-safety-measures-for-first-home-match-at-cro">Rochdale AFC Prepares for First EFL Home Game in Over Three Years</a><p><span class="rd-meta">22 Aug 2026 · Sport</span> — Rochdale AFC is set to host Crawley Town in their first home game in the EFL since May 2023, following a transformative summer for the club and its...</p>
+</li>
+<li><a href="/articles/rochdale-afc-launches-new-series-behind-the-sign">Rochdale AFC Launches New Series</a><p><span class="rd-meta">21 Aug 2026 · Sport</span> — Rochdale AFC has introduced a new series titled</p>
+</li>
+<li><a href="/articles/rochdale-sign-aston-villa-midfielder-kane-taylor-on-loan-until-january">Rochdale Sign Aston Villa Midfielder Kane Taylor on Loan Until January</a><p><span class="rd-meta">21 Aug 2026 · Sport</span> — Rochdale have secured the loan signing of Kane Taylor from Aston Villa, with the midfielder expected to enhance the squad</p>
+</li>
+<li><a href="/articles/rochdale-sign-kane-taylor-on-loan-from-aston-villa-until-january">Rochdale AFC Signs Kane Taylor on Loan from Birmingham City</a><p><span class="rd-meta">21 Aug 2026 · Sport</span> — Rochdale have secured the loan signing of Kane Taylor from Aston Villa, with the 21-year-old midfielder joining the club until January 2027.</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-host-crawley-town-in-league-two-match">Rochdale AFC to Host Crawley Town in League Two Match</a><p><span class="rd-meta">21 Aug 2026 · Sport</span> — Rochdale AFC will face Crawley Town in a League Two match on Saturday, August 21, 2026. Fans can follow live updates and commentary throughout the game.</p>
+</li>
+<li><a href="/articles/rochdale-afc-women-begin-season-with-5-0-victory">Rochdale AFC Women Begin Season with 5-0 Victory</a><p><span class="rd-meta">21 Aug 2026 · Sport</span> — Rochdale AFC Women secured a commanding 5-0 win in their season opener on August 21, 2026, continuing their perfect start to the campaign.</p>
+</li>
+<li><a href="/articles/rochdale-afc-youth-team-to-face-salford-city">Rochdale AFC Youth Team to Host Salford City</a><p><span class="rd-meta">21 Aug 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/ian-watson-urges-rochdale-afc-to-believe-ahead-of-crawley-town-match">Ian Watson Urges Rochdale AFC to Believe Ahead of Crawley Town Match</a><p><span class="rd-meta">20 Aug 2026 · Sport</span> — Rochdale AFC captain Ethan Ebanks-Landell shares insights on the team</p>
+</li>
+<li><a href="/articles/ethan-ebanks-landell-prepares-for-crawley-town-clash">Ethan Ebanks-Landell Prepares for Crawley Town Clash</a><p><span class="rd-meta">20 Aug 2026 · Sport</span> — Rochdale AFC captain Ethan Ebanks-Landell discusses the upcoming match against Crawley Town, highlighting the team</p>
+</li>
+<li><a href="/articles/smith-britannia-metals-extend-sponsorship-with-rochdale-afc">Rochdale AFC Announces Extension of Sponsorship with Smith &amp; Britannia Metals</a><p><span class="rd-meta">20 Aug 2026 · Sport</span> — Smith &amp; Britannia Metals have renewed their sponsorship agreement with Rochdale AFC, reinforcing their commitment to supporting local football and...</p>
+</li>
+<li><a href="/articles/rochdale-afc-prepares-for-home-match-against-crawley-town">Rochdale AFC Set to Host Crawley Town in League Two Match</a><p><span class="rd-meta">20 Aug 2026 · Sport</span> — Rochdale AFC will face Crawley Town in a Sky Bet League Two match this Saturday, with the matchday programme set to provide fans with insights and updates.</p>
+</li>
+<li><a href="/articles/rochdale-afc-women-to-play-bury-at-crown-oil-arena-on-sunday">Rochdale AFC Women to Play Bury at Crown Oil Arena on Sunday</a><p><span class="rd-meta">19 Aug 2026 · Sport</span> — Rochdale AFC Women will face Bury at the Crown Oil Arena this Sunday, with free admission for all attendees. The match is part of their ongoing season.</p>
+</li>
+<li><a href="/articles/rochdale-afc-efl-trophy-fixtures-confirmed-for-2026-season">Rochdale AFC Confirms EFL Trophy Fixtures for 2026 Season</a><p><span class="rd-meta">19 Aug 2026 · Sport</span> — Rochdale AFC has announced its fixtures for the EFL Trophy, detailing the matches scheduled for the upcoming season. Fans can look forward to an...</p>
+</li>
+<li><a href="/articles/rochdale-afc-women-to-play-at-crown-oil-arena-on-sunday">Rochdale AFC Women to Play at Crown Oil Arena on Sunday</a><p><span class="rd-meta">18 Aug 2026 · Sport</span> — Rochdale AFC Women will host a match at the Crown Oil Arena this Sunday, inviting fans to support the team in their latest fixture.</p>
+</li>
+<li><a href="/articles/rochdale-afc-and-rochdale-netball-club-launch-new-partnership-to-promote-netball">Rochdale AFC and Rochdale Netball Club Launch New Partnership to Promote Netball</a><p><span class="rd-meta">18 Aug 2026 · Sport</span> — Rochdale AFC and Rochdale Netball Club have announced a new partnership aimed at increasing participation in netball across the borough, providing...</p>
+</li>
+<li><a href="/articles/rochdale-afc-awarded-bronze-in-fan-engagement-index">Rochdale AFC Receives Bronze Award in Fan Engagement Index</a><p><span class="rd-meta">18 Aug 2026 · Sport</span> — Rochdale AFC has been awarded a Bronze Award in the Fan Engagement Index, recognising the club</p>
+</li>
+<li><a href="/articles/rochdale-afc-youth-team-begins-cup-campaign">Rochdale AFC Youth Team Begins Cup Campaign</a><p><span class="rd-meta">18 Aug 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-hosts-fleetwood-town-in-league-two-match">Rochdale AFC Hosts Fleetwood Town in League Two Match</a><p><span class="rd-meta">17 Aug 2026 · Sport</span> — Rochdale AFC is set to host Fleetwood Town in a League Two match on August 17, 2026, as both teams aim to secure vital points early in the season.</p>
+</li>
+<li><a href="/articles/rochdale-afc-faces-newport-county-in-league-two-match-today">Rochdale AFC Faces Newport County in League Two Match Today</a><p><span class="rd-meta">15 Aug 2026 · Sport</span> — Rochdale AFC will compete against Newport County this afternoon at Rodney Parade in a crucial League Two fixture. Fans are encouraged to arrive early...</p>
+</li>
+<li><a href="/articles/rochdale-to-face-bradford-city-in-season-opener-on-15-august">Rochdale to Face Bradford City in Season Opener on 15 August</a><p><span class="rd-meta">15 Aug 2026 · Sport</span> — Rochdale AFC will kick off their new season against Bradford City at Valley Parade on Saturday, 15 August, with a 3pm kick-off.</p>
+</li>
+<li><a href="/articles/rochdale-to-face-newport-county-in-league-two-opener-on-saturday">Rochdale AFC Set to Face Newport County in League Two Clash</a><p><span class="rd-meta">14 Aug 2026 · Sport</span> — Rochdale AFC will play against Newport County today at Rodney Parade in a League Two fixture. Fans can find essential matchday information ahead of the...</p>
+</li>
+<li><a href="/articles/rochdale-afc-netball-launched-rochdale-netball-club-joins-dale-family">Rochdale AFC Netball launched as Rochdale Netball Club joins Dale family</a><p><span class="rd-meta">13 Aug 2026 · Sport</span> — Rochdale Netball Club is becoming Rochdale AFC Netball in a new partnership with Rochdale AFC and its Community Trust, bringing nearly 200 weekly...</p>
+</li>
+<li><a href="/articles/rochdale-afc-signs-baba-adeeko-from-wigan-athletic">Rochdale AFC Signs Forward Adeeko</a><p><span class="rd-meta">13 Aug 2026 · Sport</span> — Rochdale have secured the signing of midfielder Baba Adeeko from Wigan Athletic on a one-year contract as they prepare for their League Two campaign.</p>
+</li>
+<li><a href="/articles/rochdale-afc-launches-new-netball-team-for-women-and-girls">Rochdale AFC Launches New Netball Team for Women and Girls</a><p><span class="rd-meta">13 Aug 2026 · Sport</span> — Rochdale AFC has announced the launch of a new netball initiative aimed at increasing participation among women and girls in the sport across the borough.</p>
+</li>
+<li><a href="/articles/rochdale-afc-launches-netball-initiative-to-promote-women-s-participation-in-spo">Rochdale AFC Launches New Netball Initiative to Boost Women</a><p><span class="rd-meta">13 Aug 2026 · Sport</span> — Rochdale AFC has announced the launch of its new netball programme aimed at increasing participation among women and girls in the borough. The...</p>
+</li>
+<li><a href="/articles/bluebird-care-rochdale-sponsors-added-time-for-rochdale-afc">Bluebird Care Rochdale Sponsors Added Time for Rochdale AFC</a><p><span class="rd-meta">12 Aug 2026 · Sport</span> — Rochdale AFC has announced Bluebird Care Rochdale as the sponsor for added time during all home matches in the upcoming season.</p>
+</li>
+<li><a href="/articles/bluebird-care-rochdale-becomes-added-time-sponsor-for-2026-27-season">Bluebird Care Rochdale Sponsors Added Time at Home Matches</a><p><span class="rd-meta">12 Aug 2026 · Sport</span> — Bluebird Care Rochdale has been announced as the added time sponsor for Rochdale AFC for the upcoming 2026/27 season, marking a new partnership between...</p>
+</li>
+<li><a href="/articles/young-people-engage-in-community-conversation-at-rochdale-afc">Young People Engage in Community Conversation at Rochdale AFC</a><p><span class="rd-meta">11 Aug 2026 · Sport</span> — Young people from Rochdale Association Football Club participated in a community conversation event today, facilitated by Charlotte Delves, aimed at...</p>
+</li>
+<li><a href="/articles/rochdale-afc-faces-bradford-city-in-august-2026-match">Rochdale AFC Faces Bradford City in August 2026 Match</a><p><span class="rd-meta">9 Aug 2026 · Sport</span> — Rochdale AFC faced Bradford City FC on August 8, 2026, in a competitive match. The game took place at Rochdale</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-calls-for-team-readiness-ahead-of-upcoming-matches">Rochdale AFC Manager Calls for Team Readiness Ahead of Upcoming Matches</a><p><span class="rd-meta">9 Aug 2026 · Sport</span> — Rochdale AFC manager has highlighted the need for his team to be prepared as they approach their next fixtures, emphasising the importance of focus and...</p>
+</li>
+<li><a href="/articles/superhero-day-at-crown-oil-arena-this-sunday">Superhero Day at Crown Oil Arena This Sunday</a><p><span class="rd-meta">7 Aug 2026 · Environment</span> — Superhero Day returns to the Crown Oil Arena on Sunday, 9 August, featuring Rochdale Hornets teams and their new superhero kits alongside Environmental...</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-calls-on-fans-to-dream-big">Rochdale AFC Manager Calls on Fans to Dream Big</a><p><span class="rd-meta">7 Aug 2026 · Sport</span> — Rochdale AFC manager has urged supporters to embrace optimism as the new season approaches, emphasising the importance of their support.</p>
+</li>
+<li><a href="/articles/rochdale-afc-five-vacancies-first-team-academy-womens-2026">Rochdale AFC recruiting for five roles across first team, academy and women&#x27;s side ahead of League Two return</a><p><span class="rd-meta">6 Aug 2026 · Sport</span> — Promotion back to the Football League means growth off the pitch too: Dale are hiring a kit assistant, performance analysts, an academy lead coach and...</p>
+</li>
+<li><a href="/articles/gates-are-crucial-for-rochdale-hornets-future-says-andy-mazey">Gates are crucial for Rochdale Hornets’ future, says Andy Mazey</a><p><span class="rd-meta">6 Aug 2026 · Sport</span> — Rochdale Hornets chairman Andy Mazey emphasised the importance of matchday gates for the club</p>
+</li>
+<li><a href="/articles/rochdale-afc-youth-team-to-start-efl-youth-alliance-campaign">Rochdale AFC Youth Team to Start EFL Youth Alliance Campaign</a><p><span class="rd-meta">6 Aug 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-hornets-women-to-host-first-superhero-day-fixture">Rochdale Hornets Women to Host First Superhero Day Fixture</a><p><span class="rd-meta">5 Aug 2026 · Sport</span> — Rochdale Hornets Women will play Leigh Miners Rangers on Sunday, 9 August, as part of their inaugural Superhero Day at The Hive, with a kick-off at 12pm.</p>
+</li>
+<li><a href="/articles/farnham-family-fun-day-set-for-rochdale-afc">Farnham Family Fun Day Set for Rochdale AFC</a><p><span class="rd-meta">5 Aug 2026 · Sport</span> — Rochdale AFC will host the Farnham Family Fun Day, offering a range of activities for families and fans.</p>
+</li>
+<li><a href="/articles/jonny-smith-joins-rochdale-afc">Jonny Smith Joins Rochdale AFC</a><p><span class="rd-meta">4 Aug 2026 · Sport</span> — Rochdale AFC has announced the signing of Jonny Smith from an undisclosed club. The winger</p>
+</li>
+<li><a href="/articles/jonny-smith-signs-for-rochdale-afc">Jonny Smith Signs for Rochdale AFC</a><p><span class="rd-meta">4 Aug 2026 · Sport</span> — Winger Jonny Smith has signed a permanent deal with Rochdale after leaving Wigan Athletic, where he made a significant impact during his time at the club.</p>
+</li>
+<li><a href="/articles/rochdale-afc-academy-receives-category-three-licence-under-eppp">Rochdale AFC Academy Receives Category Three Licence Under EPPP</a><p><span class="rd-meta">3 Aug 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-aims-to-build-momentum-after-recent-matches">Rochdale AFC Manager Aims for Progress Following Recent Matches</a><p><span class="rd-meta">3 Aug 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/bradford-city-to-face-rochdale-in-league-cup-match">Rochdale AFC Launches Ticket Sales for Carabao Cup Clash with Bradford City</a><p><span class="rd-meta">3 Aug 2026 · Sport</span> — Rochdale AFC becomes the first team to qualify through a preliminary round to the first round proper of the Carabao Cup after promotion from the...</p>
+</li>
+<li><a href="/articles/rochdale-set-to-face-exeter-city-in-league-two-clash">Rochdale Set to Face Exeter City in League Two Clash</a><p><span class="rd-meta">2 Aug 2026 · Sport</span> — Rochdale will host Exeter City in their upcoming League Two match, aiming for a crucial victory to boost their standings.</p>
+</li>
+<li><a href="/articles/rochdale-hornets-set-to-face-whitehaven-in-upcoming-match">Rochdale Hornets Set to Play Whitehaven R.L.F.C.</a><p><span class="rd-meta">2 Aug 2026 · Sport</span> — Rochdale Hornets will host Whitehaven at Crown Oil Arena on Sunday, 9 August 2026, as both teams look to improve their standings in the league.</p>
+</li>
+<li><a href="/articles/rochdale-to-host-barnet-in-league-two-match">Rochdale Face Bristol Rovers in League Two Clash</a><p><span class="rd-meta">2 Aug 2026 · Sport</span> — Rochdale will face Barnet in a League Two match on November 28, 2026, at the Crown Oil Arena, with live score updates available.</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-face-bradford-city-fc-on-august-8-2026">Rochdale to Face York City in Upcoming Match</a><p><span class="rd-meta">2 Aug 2026 · Sport</span> — Rochdale AFC will host Bradford City in a competitive fixture this weekend, with both teams looking to secure vital points in the league.</p>
+</li>
+<li><a href="/articles/silcott-duberry-reflects-on-goal-and-debut-at-tranmere">Silcott-Duberry Reflects on Goal and Debut at Tranmere</a><p><span class="rd-meta">1 Aug 2026 · Sport</span> — A player from Rochdale AFC, Silcott-Duberry, spoke about his recent goal and debut during the match against Tranmere. He expressed his excitement about...</p>
+</li>
+<li><a href="/articles/rochdale-afc-chairman-calls-for-club-s-return-to-efl">Rochdale AFC Chairman Affirms Club</a><p><span class="rd-meta">1 Aug 2026 · Sport</span> — Rochdale AFC chairman, David Pettit, has stated that the club belongs in the English Football League, emphasising its historical significance and...</p>
+</li>
+<li><a href="/articles/rochdale-afc-manager-sherring-expresses-excitement-ahead-of-new-season">Rochdale AFC Manager Sherring Expresses Excitement Ahead of New Season</a><p><span class="rd-meta">1 Aug 2026 · Sport</span> — Rochdale AFC manager, Jim Sherring, has expressed his enthusiasm for the upcoming season, highlighting the team</p>
+</li>
+<li><a href="/articles/rochdale-to-face-york-in-title-decider">Rochdale to Host York in Title Decider</a><p><span class="rd-meta">31 Jul 2026 · Sport</span> — Rochdale will face York in a crucial match that could determine the title outcome. The game will take place at the Crown Oil Arena this weekend, with...</p>
+</li>
+<li><a href="/articles/rochdale-a-f-c-draw-with-tranmere-rovers-in-carabao-cup-preliminary-round">Rochdale AFC Prepares for Carabao Cup Clash Against Tranmere Rovers</a><p><span class="rd-meta">31 Jul 2026 · Sport</span> — Rochdale AFC will face Tranmere Rovers in the first round of the Carabao Cup on Saturday, marking the start of the 2026/27 football season.</p>
+</li>
+<li><a href="/articles/rochdale-afc-confirms-squad-numbers-for-2026-27-season">Rochdale AFC Confirms Squad Numbers for 2026/27 Season</a><p><span class="rd-meta">31 Jul 2026 · Sport</span> — Rochdale AFC has announced the squad numbers for the upcoming 2026/27 season, detailing the players who will represent the club this year.</p>
+</li>
+<li><a href="/articles/rochdale-afc-begins-pre-season-training-camp-ahead-of-new-season">Rochdale AFC Begins Pre-Season Training Camp Ahead of New Season</a><p><span class="rd-meta">31 Jul 2026 · Sport</span> — Rochdale AFC has commenced an intensive training camp as they prepare for the upcoming football season, focusing on fitness and team cohesion.</p>
+</li>
+<li><a href="/articles/port-vale-trip-to-be-broadcast-live">Port Vale Trip To Be Broadcast Live</a><p><span class="rd-meta">30 Jul 2026 · Sport</span> — Rochdale AFC has announced that their upcoming match against Port Vale will be broadcast live, allowing fans to watch from home.</p>
+</li>
+<li><a href="/articles/ian-watson-previews-upcoming-match-against-tranmere">Ian Watson Previews Upcoming Match Against Tranmere</a><p><span class="rd-meta">30 Jul 2026 · Sport</span> — Ian Watson, manager of Rochdale AFC, discussed the team</p>
+</li>
+<li><a href="/articles/ian-watson-discusses-rochdale-afc-s-victory-over-tranmere">Ian Watson Discusses Rochdale AFC</a><p><span class="rd-meta">30 Jul 2026 · Sport</span> — Rochdale AFC manager Ian Watson discussed the team</p>
+</li>
+<li><a href="/articles/bradford-city-to-face-rochdale-in-carabao-cup-first-round">Rochdale AFC Wins Penalty Shootout Against Tranmere in Carabao Cup</a><p><span class="rd-meta">30 Jul 2026 · Sport</span> — Rochdale AFC secured a place in the first round of the 2026-27 Carabao Cup following a penalty shootout victory over Tranmere Rovers after a 2-2 draw.</p>
+</li>
+<li><a href="/articles/rochdale-afc-defeats-everton-in-pre-season-friendly">Rochdale AFC Beaten in Final Pre-Season Friendly</a><p><span class="rd-meta">30 Jul 2026 · Sport</span> — Rochdale St. Clements is set to host the final pre-season friendly today, with updates to follow on social media later.</p>
+</li>
+<li><a href="/articles/rochdale-afc-volunteers-week-celebrates-community-spirit">Rochdale AFC Thanks Volunteers for Successful Improvement Week</a><p><span class="rd-meta">29 Jul 2026 · Sport</span> — Rochdale AFC has thanked volunteers and supporters for their contributions during the recent Volunteers Week, which saw significant improvements made...</p>
+</li>
+<li><a href="/articles/rochdale-afc-announces-first-year-scholars-for-2026">Rochdale AFC Announces First-Year Scholars for 2026</a><p><span class="rd-meta">29 Jul 2026 · Sport</span> — Rochdale AFC has announced its first-year scholars for the upcoming season, highlighting the club</p>
+</li>
+<li><a href="/articles/kick-off-time-confirmed-for-rochdale-vs-fc-halifax-town">Kick-off Time Confirmed for Rochdale vs FC Halifax Town</a><p><span class="rd-meta">28 Jul 2026 · Sport</span> — Rochdale will face FC Halifax Town at the Crown Oil Arena with a kick-off time set for 7.45pm.</p>
+</li>
+<li><a href="/articles/rochdale-afc-signs-silcott-duberry-on-one-year-deal">Rochdale AFC signs Silcott-Duberry on one-year deal</a><p><span class="rd-meta">28 Jul 2026 · Sport</span> — Rochdale AFC has secured the signing of Silcott-Duberry on a one-year contract, strengthening their squad ahead of the upcoming season.</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-face-tranmere-rovers-in-season-opener">Rochdale AFC to Face Tranmere Rovers in Season Opener</a><p><span class="rd-meta">28 Jul 2026 · Sport</span> — Rochdale AFC will kick off the 2026/27 season with a match against Tranmere Rovers in the Energy Drink Cup on Saturday, live on Sky Sports+.</p>
+</li>
+<li><a href="/articles/jake-spaven-joins-rochdale-afc-from-wigan-athletic">Jake Spaven Joins Rochdale AFC from Wigan Athletic</a><p><span class="rd-meta">28 Jul 2026 · Sport</span> — Goalkeeper Jake Spaven has signed a one-year deal with Rochdale AFC after leaving Wigan Athletic</p>
+</li>
+<li><a href="/articles/rochdale-afc-announces-latest-news-update">Rochdale AFC Announces Latest News Update</a><p><span class="rd-meta">28 Jul 2026 · Sport</span> — Rochdale AFC has published its latest news update, detailing recent developments within the club. The announcement includes information on player...</p>
+</li>
+<li><a href="/articles/rochdale-to-face-cheltenham-in-league-two-match-today">Rochdale Faces Cheltenham in League Two Match Today</a><p><span class="rd-meta">28 Jul 2026 · Sport</span> — Rochdale will compete against Cheltenham Town in a League Two match today, with live updates available throughout the game.</p>
+</li>
+<li><a href="/articles/rochdale-afc-s-luke-hannant-shares-insights-from-training-camp">Rochdale AFC</a><p><span class="rd-meta">20 Jul 2026 · Sport</span> — Luke Hannant provides an update on Day 5 of Rochdale AFC</p>
+</li>
+<li><a href="/articles/tranmere-rovers-fc-to-face-rochdale-afc-on-august-1-2026">Tranmere Rovers FC to Face Rochdale AFC on August 1, 2026</a><p><span class="rd-meta">20 Jul 2026 · Sport</span> — Tranmere Rovers FC will play against Rochdale AFC on August 1, 2026, with odds and predictions now available for the match.</p>
+</li>
+<li><a href="/articles/rochdale-afc-community-trust-launches-summer-soccer-schools">Rochdale AFC Community Trust Launches Summer Soccer Schools</a><p><span class="rd-meta">19 Jul 2026 · Sport</span> — Rochdale AFC Community Trust is set to launch its Summer Soccer Schools tomorrow, inviting children to participate in football activities and make new...</p>
+</li>
+<li><a href="/articles/rochdale-afc-transfer-market-update">Rochdale AFC Transfer Market Update</a><p><span class="rd-meta">17 Jul 2026 · Sport</span> — Rochdale AFC has made significant moves in the transfer market as the new season approaches, aiming to strengthen the squad ahead of competitive fixtures.</p>
+</li>
+<li><a href="/articles/kaiden-wilson-joins-rochdale-afc-on-loan">Kaiden Wilson Joins Rochdale AFC on Loan</a><p><span class="rd-meta">17 Jul 2026 · Sport</span> — Rochdale Football Club has signed defender Kaiden Wilson from Chelsea on a season-long loan, bolstering their squad after promotion to League Two.</p>
+</li>
+<li><a href="/articles/rochdale-afc-announces-new-manager-appointment">Rochdale AFC Announces New Manager Appointment</a><p><span class="rd-meta">16 Jul 2026 · Sport</span> — Rochdale AFC has appointed a new manager following the departure of the previous head coach, aiming to improve the team</p>
+</li>
+<li><a href="/articles/new-sports-journalism-outlet-launches-for-rochdale-afc-coverage">New Site Launches for Rochdale AFC Coverage</a><p><span class="rd-meta">16 Jul 2026 · Sport</span> — A new journalism outlet, The Pearl Street Post, will provide dedicated coverage of Rochdale AFC starting in August.</p>
+</li>
+<li><a href="/articles/rochdale-afc-posts-update-on-social-media">Rochdale AFC Posts Update on Social Media</a><p><span class="rd-meta">16 Jul 2026 · Sport</span> — Rochdale AFC has been actively posting updates and engaging with fans on social media, showcasing the club</p>
+</li>
+<li><a href="/articles/rochdale-secures-season-long-loan-for-chelsea-defender-kaiden-wilson">Rochdale AFC Signs Goalkeeper Nils Ramming on Loan</a><p><span class="rd-meta">16 Jul 2026 · Sport</span> — Rochdale AFC has announced the loan signing of goalkeeper Nils Ramming, enhancing their squad ahead of the upcoming season.</p>
+</li>
+<li><a href="/articles/rochdale-afc-announces-nycda-weekly-draw-winners-for-15th-july-2026">Rochdale AFC Announces NYCDA Weekly Draw Winners for 15th July 2026</a><p><span class="rd-meta">15 Jul 2026 · Sport</span> — Rochdale AFC has revealed the winners of the NYCDA Weekly Draw held on 15th July 2026, celebrating local community engagement and support.</p>
+</li>
+<li><a href="/articles/farnham-family-fun-day-announced-by-rochdale-afc">Farnham Family Fun Day Announced by Rochdale AFC</a><p><span class="rd-meta">15 Jul 2026 · Sport</span> — Rochdale AFC has announced the Farnham Family Fun Day, set to take place at the club</p>
+</li>
+<li><a href="/articles/farnham-family-fun-day-announced-at-rochdale-afc">Farnham Family Fun Day Announced at Rochdale AFC</a><p><span class="rd-meta">15 Jul 2026 · Sport</span> — Rochdale AFC has announced the Farnham Family Fun Day, set to take place at the Crown Oil Arena. The event aims to provide a variety of activities...</p>
+</li>
+<li><a href="/articles/rochdale-afc-prepares-for-fc-united-match">Rochdale AFC Prepares for FC United Match</a><p><span class="rd-meta">15 Jul 2026 · Sport</span> — Rochdale AFC is set to face FC United in an upcoming fixture, with preparations underway for the match.</p>
+</li>
+<li><a href="/articles/fc-united-of-manchester-hosts-business-club-event-ahead-of-friendly-with-rochdal">Rochdale AFC Prepares for FC United Clash</a><p><span class="rd-meta">15 Jul 2026 · Sport</span> — Rochdale AFC gears up for an away match against FC United, aiming to secure vital points in the league.</p>
+</li>
+<li><a href="/articles/rochdale-afc-updates-fans-on-club-developments">Rochdale AFC Updates Fans on Club Developments</a><p><span class="rd-meta">15 Jul 2026 · Sport</span> — Rochdale AFC has provided fans with the latest updates on club activities through its official social media channels. The club aims to keep supporters...</p>
+</li>
+<li><a href="/articles/ian-watson-discusses-fc-united-outing">Ian Watson Reflects on FC United Match</a><p><span class="rd-meta">14 Jul 2026 · Sport</span> — Rochdale AFC manager Ian Watson reflects on the team</p>
+</li>
+<li><a href="/articles/mark-beesley-s-side-secures-victory-with-goals-either-side-of-half-time">Mark Beesley’s Side Secures Victory with Goals Either Side of Half-Time</a><p><span class="rd-meta">14 Jul 2026 · Sport</span> — Mark Beesley’s team claimed a win with goals scored before and after the interval. Rochdale AFC was thanked for their visit as they prepare for their...</p>
+</li>
+<li><a href="/articles/rochdale-afc-begins-pre-season-training">Rochdale AFC Begins Pre-Season with Loss to FC United</a><p><span class="rd-meta">14 Jul 2026 · Sport</span> — Rochdale AFC has commenced its pre-season training as players prepare for the upcoming season. The team is focusing on fitness and tactics during the...</p>
+</li>
+<li><a href="/articles/rochdale-hornets-superhero-day-whitehaven-august-2026">Superhero Day announced for Rochdale Hornets clash with Whitehaven</a><p><span class="rd-meta">11 Jul 2026 · Sport</span> — Rochdale Hornets will host a Superhero Day when Whitehaven visit the Crown Oil Arena on Sunday 9 August, with children admitted free.</p>
+</li>
+<li><a href="/articles/rochdale-afc-quiz-invites-fans-to-test-their-knowledge">Rochdale AFC Quiz Challenge Launched on TikTok and YouTube</a><p><span class="rd-meta">11 Jul 2026 · Sport</span> — A new quiz on TikTok challenges Rochdale AFC fans to showcase their knowledge of the club. Participants are encouraged to join the creator</p>
+</li>
+<li><a href="/articles/rochdale-afc-to-host-cheltenham-town-on-8-may-2027">Rochdale AFC to Host Cheltenham Town on 8 May 2027</a><p><span class="rd-meta">11 Jul 2026 · Sport</span> — Rochdale AFC will face Cheltenham Town at the Crown Oil Arena on 8 May 2027, with tickets now available for purchase.</p>
+</li>
+<li><a href="/articles/rochdale-afc-community-trust-engages-fans-with-latest-updates">Rochdale AFC Community Trust Engages Fans with Latest Updates</a><p><span class="rd-meta">11 Jul 2026 · Sport</span> — Rochdale AFC Community Trust has recently posted updates on social media, engaging with fans and the local community. The posts include information...</p>
+</li>
+<li><a href="/articles/rochdale-afc-players-create-ultimate-fifa-world-cup-player-on-tiktok">Rochdale AFC</a><p><span class="rd-meta">10 Jul 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+<li><a href="/articles/rochdale-afc-players-assemble-ultimate-fifa-world-cup-player-on-tiktok">Rochdale AFC Players Assemble Ultimate FIFA World Cup Player on TikTok</a><p><span class="rd-meta">10 Jul 2026 · Sport</span> — Rochdale AFC has shared a TikTok video featuring its latest EFL additions assembling the ultimate FIFA World Cup player, showcasing their skills and...</p>
+</li>
+<li><a href="/articles/rochdale-afc-confirms-new-player-signing-ahead-of-season">Rochdale AFC Confirms New Player Signing Ahead of Season</a><p><span class="rd-meta">10 Jul 2026 · Sport</span> — Rochdale AFC has confirmed the signing of a new player as they prepare for the upcoming season. The club aims to strengthen its squad ahead of the...</p>
+</li>
+<li><a href="/articles/changing-lives-fc-shines-at-beyond-the-pitch-tournament">Changing Lives FC Shines at Beyond the Pitch Tournament</a><p><span class="rd-meta">10 Jul 2026 · Sport</span> — Changing Lives FC, a programme by Rochdale AFC Community Trust, participated in the Beyond the Pitch Tournament, supporting people experiencing...</p>
+</li>
+<li><a href="/articles/ian-watson-reflects-on-first-week-with-rochdale-afc">Ian Watson Reviews First Week of Pre-Season at Rochdale AFC</a><p><span class="rd-meta">10 Jul 2026 · Sport</span> — Rochdale AFC manager Ian Watson provides an update on the team</p>
+</li>
+<li><a href="/articles/rochdale-afc-returns-to-training-ahead-of-new-season">Rochdale AFC Shares Ten Photos From Friday Training Session</a><p><span class="rd-meta">10 Jul 2026 · Sport</span> — Rochdale AFC has released ten photos showcasing the team</p>
+</li>
+<li><a href="/articles/joe-maguire-signs-for-rochdale-football-club">Joe Maguire Signs for Rochdale Football Club</a><p><span class="rd-meta">10 Jul 2026 · Sport</span> — Rochdale Football Club has confirmed the signing of Joe Maguire, brother of England international Harry Maguire, ahead of the new season.</p>
+</li>
+<li><a href="/articles/summer-soccer-school-launches-at-venues-across-rochdale">Summer Soccer School Launches at Venues Across Rochdale</a><p><span class="rd-meta">10 Jul 2026 · Education</span> — Summer Soccer School is set to take place at various venues across Rochdale, Pennines and Middleton, offering children the chance to join in football...</p>
+</li>
+<li><a href="/articles/tranmere-rovers-defeat-rochdale-afc-in-league-cup">Tranmere Rovers Defeat Rochdale AFC in League Cup</a><p><span class="rd-meta">10 Jul 2026 · Sport</span> — Rochdale AFC faced a defeat against Tranmere Rovers in the League Cup preliminary round on July 10, 2026.</p>
+</li>
+<li><a href="/articles/laurence-maguire-joins-rochdale-afc">Laurence Maguire Joins Rochdale AFC from Chesterfield</a><p><span class="rd-meta">9 Jul 2026 · Sport</span> — Defender Laurence Maguire has completed his transfer to Rochdale AFC from Chesterfield, expressing his excitement about joining the club and his...</p>
+</li>
+<li><a href="/articles/rochdale-afc-signs-midfielder-maguire">Rochdale AFC Signs New Player Maguire</a><p><span class="rd-meta">9 Jul 2026 · Sport</span> — Rochdale AFC has confirmed the signing of player Maguire as part of their preparations for the upcoming season. The club made the announcement on their...</p>
+</li>
+<li><a href="/articles/rochdale-afc-s-promotion-trophy-tour-visits-whitaker-moss-primary-school">Rochdale AFC</a><p><span class="rd-meta">9 Jul 2026 · Sport</span> — Pupils at Whitaker Moss Primary School had the opportunity to celebrate Rochdale AFC</p>
+</li>
+<li><a href="/articles/special-edition-wembley-shirts-available-for-local-supporters">Rochdale supporters can collect special edition Wembley shirts today</a><p><span class="rd-meta">9 Jul 2026 · Sport</span> — Fans who pre-ordered a special edition Wembley shirt can collect them from the Club Shop today, with postal options available for those unable to attend.</p>
+</li>
+<li><a href="/articles/rochdale-afc-announces-ticket-information-for-upcoming-matches">Rochdale AFC Announces Ticket Information for Upcoming Matches</a><p><span class="rd-meta">9 Jul 2026 · Sport</span> — Rochdale AFC has released details regarding ticket sales for their upcoming matches, providing fans with essential information for the new season.</p>
+</li>
+<li><a href="/articles/rochdale-afc-announces-new-signings-ahead-of-upcoming-season">Rochdale AFC Announces New Signings Ahead of Upcoming Season</a><p><span class="rd-meta">9 Jul 2026 · Sport</span> — Rochdale AFC has confirmed several new signings as they prepare for the upcoming football season, aiming to strengthen their squad for the challenges...</p>
+</li>
+<li><a href="/articles/rochdale-afc-signs-will-jenkins-on-two-year-deal">Rochdale AFC Signs Will Jenkins on Two-Year Deal</a><p><span class="rd-meta">8 Jul 2026 · Sport</span> — Rochdale AFC has announced the signing of Will Jenkins from South Shields on a two-year contract, marking a significant addition to the squad ahead of...</p>
+</li>
+<li><a href="/articles/rochdale-afc-hosts-exeter-city-in-live-match-at-crown-oil-arena">Rochdale AFC Faces Exeter City in Live Match Update</a><p><span class="rd-meta">7 Jul 2026 · Sport</span> — Rochdale AFC is set to face Exeter City in a live match at the Crown Oil Arena, with fans eager for an exciting encounter.</p>
+</li>
+<li><a href="/articles/rochdale-afc-first-team-returns-to-training-at-platt-lane">Rochdale AFC First Team resumes training at Platt Lane Sports Complex</a><p><span class="rd-meta">6 Jul 2026 · Sport</span> — Rochdale AFC</p>
+</li>
+</ol><p class="rd-links"><a href="/news/topics/">All topics</a> · <a href="/news/archive/">The archive by month</a></p>
+</main>
+<footer class="site-footer">
+<div class="wrap"><p class="footer-brand">Rochdale Daily</p>
+<p class="footer-note">Independent local news for the Rochdale borough. <a href="/editorial-standards">Editorial standards</a> · <a href="/corrections-and-complaints">Corrections</a> · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a></p>
+</div>
+</footer>
+<script defer src="/assets/js/cookie-consent.js"></script></body></html>

@@ -32,6 +32,8 @@ PUBLIC_ROOT_FILES = {
     "feel-good-live.html",
     "food-banks.html",
     "heywood.html",
+    "littleborough.html",
+    "middleton.html",
     "index.html",
     "milnrow.html",
     "post.html",
@@ -75,6 +77,7 @@ from clean_urls import clean_sitemaps, clean_text  # noqa: E402
 from archive_integrity import run as archive_integrity  # noqa: E402
 from publisher_markup import enrich_text  # noqa: E402
 from archive_pages import build as build_archive_pages  # noqa: E402
+from internal_links import build as build_internal_links  # noqa: E402
 
 FEEDS = ("rss.xml",)
 
@@ -170,6 +173,10 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
     # The month-by-month archive lists only what is indexable, so it is built
     # after the archive sweep, and themed like every other public page.
     pages, stale = build_archive_pages(root)
+    # Story text links to place and topic hubs, and the hubs list every story.
+    link_pages, link_stale = build_internal_links(root)
+    pages.update(link_pages)
+    stale += link_stale
     for path, html in pages.items():
         html = normalise_text(path, html)
         current = path.read_text(encoding="utf-8") if path.is_file() else None

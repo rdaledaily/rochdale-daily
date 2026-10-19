@@ -1054,7 +1054,12 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
     pages = [root / "wards" / "index.html"]
     if (root / "wards").is_dir():
         pages.extend(sorted((root / "wards").glob("*.html")))
-    pages.extend([root / "heywood.html", root / "milnrow.html", root / "start-here.html"])
+    pages.extend([root / "heywood.html", root / "milnrow.html", root / "middleton.html", root / "littleborough.html",
+                  root / "start-here.html"])
+    # Topic hubs and the month archive are built by the normaliser.
+    for folder in ("news/topics", "news/archive"):
+        if (root / folder).is_dir():
+            pages.extend(sorted((root / folder).glob("*.html")))
     urls: list[str] = []
     seen: set[str] = set()
     for path in pages:
@@ -1076,7 +1081,13 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
             r'<link rel="canonical" href="([^"]+)"',
             content, re.I,
         )
-        if not canonical or canonical.group(1) != expected or expected in seen:
+        # The normaliser rewrites canonicals to the clean address Cloudflare
+        # serves (no .html, no index), so compare clean forms.
+        def _clean(url: str) -> str:
+            return re.sub(r"(?:/index)?\.html$", "", url).rstrip("/")
+        if relative.endswith("/index.html") and relative != "wards/index.html":
+            expected = f"{SITE_BASE_URL}/{relative[:-len('index.html')]}"
+        if not canonical or _clean(canonical.group(1)) != _clean(expected) or expected in seen:
             continue
         seen.add(expected)
         urls.append(expected)
