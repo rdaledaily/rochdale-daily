@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 323,
-  "published_count": 323,
+  "article_count": 324,
+  "published_count": 324,
   "category_change_count": 41,
-  "image_change_count": 69,
+  "image_change_count": 70,
   "category_changes": [
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
@@ -342,6 +342,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-afc-secures-first-victory-with-last-minute-goal-against-stockport-count",
+      "title": "Rochdale AFC Secures First Victory with Last-Minute Goal Against Stockport County",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/fixtures.jpg",
+        "img": "assets/img/cards/fixtures.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-secures-first-victory-with-last-minute-goal-against-stockport-count-generated-card.jpg"
     },
     {
       "slug": "rochdale-youth-team-secures-2-1-victory-over-walsall-in-youth-alliance-match",
