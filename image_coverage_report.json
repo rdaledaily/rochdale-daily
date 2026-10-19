@@ -1,9 +1,9 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 128,
+    "kept_cards": 127,
     "cards_library": 0,
-    "cards_generated": 117,
+    "cards_generated": 119,
     "skipped": 0
   },
   "items": [
@@ -13,6 +13,13 @@
       "image_url": "assets/img/cards/homelessness.png",
       "matched_filename": "homelessness.png",
       "match_score": 15132
+    },
+    {
+      "slug": "nine-year-old-guitar-virtuoso-adrian-abraham-from-middleton-on-verge-of-world-re",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/nine-year-old-guitar-virtuoso-adrian-abraham-from-middleton-on-verge-of-world-re.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "rochdale-unemployment-claimants-rise-to-8-675-in-august-2026",
@@ -233,7 +240,7 @@
     },
     {
       "slug": "oktoberfest-rochdale-2027",
-      "result": "kept-cards",
+      "result": "cards-generated",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
