@@ -23,7 +23,15 @@ READER_FIRST_POLICY = (
     "identical list of sections. A thin source warrants a short brief and an "
     "honest account of what is not confirmed. Add useful links and official "
     "contact routes only where verified and permitted by the publishing format. "
-    "Never manufacture public reaction, promises, advice or reporting."
+    "Never manufacture public reaction, promises, advice or reporting. "
+    "Lead with the main verified finding, its local consequence and any confirmed "
+    "deadline; do not withhold the answer behind a teaser. For continuing issues, "
+    "compare the latest document with earlier coverage, distinguish a promise "
+    "from delivery, and state whose response is recorded. Original reporting "
+    "requires actual evidence gathering; never label a source rewrite as an "
+    "interview or investigation. Prefer updating the existing canonical story "
+    "when there is no materially separate development. Preserve uncertainty "
+    "rather than adding a list of unverified practical details."
 )
 
 
@@ -119,3 +127,4 @@ def reader_questions_for(category: str = "", source_kind: str = "") -> list[str]
     if str(source_kind or "").lower() in {"live", "breaking"}:
         questions.append("Which information is current and timestamped, and what remains unconfirmed?")
     return questions
+

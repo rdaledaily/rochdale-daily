@@ -574,7 +574,7 @@ def newsletter_box_markup(form_id: str = 'article-newsletter') -> str:
     return f'''<section class="rail-newsletter" aria-labelledby="{fid}-title">
             <div class="rail-newsletter-kicker">Newsletter</div>
             <h3 id="{fid}-title">The borough in your inbox</h3>
-            <p>Verified Rochdale news, what&rsquo;s on and the decisions that affect your street.</p>
+            <p>Local reporting and practical updates in a morning briefing. <a href="/start-here.html#briefing">Read an example and check delivery status</a>.</p>
             <form id="{fid}-form" novalidate>
               <label class="visually-hidden" for="{fid}-email">Email address</label>
               <input id="{fid}-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" required>
@@ -1061,7 +1061,7 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
     pages = [root / "wards" / "index.html"]
     if (root / "wards").is_dir():
         pages.extend(sorted((root / "wards").glob("*.html")))
-    pages.extend([root / "heywood.html", root / "milnrow.html"])
+    pages.extend([root / "heywood.html", root / "milnrow.html", root / "start-here.html"])
     urls: list[str] = []
     seen: set[str] = set()
     for path in pages:
@@ -1210,3 +1210,4 @@ def main() -> None:
     )
 if __name__ == '__main__':
     main()
+

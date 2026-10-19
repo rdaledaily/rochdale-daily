@@ -108,6 +108,7 @@
    const data=await response.json();
    if(!response.ok||data.ok!==true)throw Error(data.error||'Signup could not be saved. Please try again.');
    status.textContent=data.message||'Your newsletter signup has been saved.';form.reset();
+   if(typeof CustomEvent==='function'&&document.dispatchEvent)document.dispatchEvent(new CustomEvent('rd:newsletter-saved'));
   }catch(error){status.textContent=error.name==='AbortError'?'The request timed out. Your signup may have been saved; it is safe to try again.':error.message||'Could not connect. Please try again.';}
   finally{clearTimeout(timeout);delete form.dataset.submitting;form.setAttribute('aria-busy','false');if(button)button.disabled=false;}
  },true);
@@ -126,3 +127,4 @@
   if(sources&&href==='#'+sources.id)a.addEventListener('click',()=>{sources.open=true;});nav.append(a);}
  byline.after(nav);
 })();
+

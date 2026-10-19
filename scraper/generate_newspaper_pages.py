@@ -314,8 +314,10 @@ def _newsroom_read_next_markup(article, all_articles):
     same_cat = _newest_first([c for c in pool if str(c.get("category") or "").lower() == category and category])
     newest = _newest_first(pool)
 
-    # Ward first, then section, then simply the freshest thing they have not read.
-    lead = (same_area or same_cat or newest)[0]
+    # Match the subject before a generic locality: school readers should not
+    # be sent to an unrelated borough story merely because it is newer.
+    from reader_relevance import relevance
+    lead = max(pool, key=lambda candidate: (relevance(article, candidate), _related_score(article, candidate)[1]))
     used = {lead.get("slug")}
 
     area_rest = [c for c in same_area if c.get("slug") not in used][:5]
@@ -477,3 +479,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

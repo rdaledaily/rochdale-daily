@@ -1425,3 +1425,13 @@ body.is-advancing { opacity: .55; transition: opacity .18s ease; }
   .next-bar { bottom: 12px; max-height: 100px; }
   body:has(.cookie.show) .next-bar { visibility: hidden !important; pointer-events: none; }
 }
+
+
+/* One unobtrusive return route after the report; never over the reading text. */
+.reader-return{margin:28px 0;padding:20px 0;border-block:1px solid var(--line)}
+.reader-return h2{font:700 24px/1.25 var(--font-display);margin:0 0 10px}
+.reader-return p{font-size:16px;line-height:1.6}
+.reader-return a{display:inline-flex;align-items:center;min-height:44px;margin-right:20px;color:var(--accent);text-underline-offset:3px}
+.reader-archive-note,.reader-contents{padding:14px 16px;margin:18px 0;border-left:3px solid var(--accent);background:var(--surface);font-size:15px;line-height:1.6}
+.reader-contents summary{cursor:pointer;min-height:44px;display:list-item;padding-block:10px;font-weight:700}
+.reader-contents a{display:inline-block;min-height:44px;padding-block:9px}
