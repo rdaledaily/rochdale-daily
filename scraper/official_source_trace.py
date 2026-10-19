@@ -236,6 +236,91 @@ def trace_discovery(source: dict[str, Any]) -> dict[str, Any]:
     return report
 
 
+def replay_without_age_limit() -> dict[str, Any]:
+    """Run the REAL collectors for the official sources with the age limit lifted.
+
+    The per-item trace above stops at "too old" for anything already past its
+    window, which hides whatever would have stopped it when it was fresh. Here
+    the window is widened to TRACE_REPLAY_AGE_HOURS so every recent release
+    travels the whole collector and the candidate-reservoir door, exactly as a
+    run would have taken it. Read-only: nothing is saved but the report.
+    """
+    replay_hours = int(os.getenv("TRACE_REPLAY_AGE_HOURS", "720"))
+    result: dict[str, Any] = {"replay_age_hours": replay_hours}
+    saved = (
+        core.MAX_NEWS_AGE_HOURS,
+        list(core.RSS_SOURCES),
+        list(core.DISCOVERY_PAGES),
+        core.google_news_sources,
+    )
+    try:
+        core.MAX_NEWS_AGE_HOURS = replay_hours
+        try:
+            fast.RESERVOIR_HOURS = replay_hours
+        except Exception:  # noqa: BLE001
+            pass
+        core.google_news_sources = lambda: []
+        core.RSS_SOURCES[:] = [s for s in saved[1] if s.get("name") in OFFICIAL_RSS]
+        official_pages = OFFICIAL_DISCOVERY | {"Rochdale Borough Council News"}
+        core.DISCOVERY_PAGES[:] = [s for s in saved[2] if s.get("name") in official_pages]
+        result["rss_sources"] = [s["name"] for s in core.RSS_SOURCES]
+        result["discovery_sources"] = [s["name"] for s in core.DISCOVERY_PAGES]
+
+        collected: list[Any] = []
+        for label, collector in (
+            ("rss", core.collect_rss_candidates),
+            ("discovery", core.collect_discovery_candidates),
+        ):
+            try:
+                found = list(collector())
+                result[f"{label}_collected"] = len(found)
+                collected.extend((label, c) for c in found)
+            except Exception:  # noqa: BLE001
+                result[f"{label}_crash"] = traceback.format_exc()[-1500:]
+
+        blocklist = core.load_story_blocklist()
+        rows = []
+        for label, candidate in collected:
+            door = ""
+            try:
+                door = fast.reservoir_junk_reason(candidate, blocklist)
+                if not door and not fast._reservoir_candidate_allowed(candidate, blocklist):
+                    door = "reservoir door: event kind or undated"
+            except Exception as error:  # noqa: BLE001
+                door = f"door check error {type(error).__name__}: {error}"[:200]
+            rows.append(
+                {
+                    "via": label,
+                    "source_name": candidate.source_name,
+                    "title": str(candidate.source_title)[:110],
+                    "url": candidate.source_url,
+                    "published_at": candidate.source_published_at,
+                    "kind": candidate.source_kind,
+                    "category": candidate.category,
+                    "reservoir_door": door or "ADMITTED",
+                }
+            )
+        result["candidates"] = rows
+        seen = {row["url"] for row in rows}
+        # Official releases the feed lists that no collector produced at all.
+        missing = []
+        for source in saved[1]:
+            if source.get("name") not in OFFICIAL_RSS:
+                continue
+            feed = feedparser.parse(source["url"], agent=FEED_AGENT)
+            for entry in list(feed.entries)[:ITEMS_PER_SOURCE]:
+                url = core.canonicalise_url(str(getattr(entry, "link", "") or ""))
+                if url and url not in seen:
+                    missing.append({"title": core.strip_markdown(getattr(entry, "title", ""))[:110], "url": url})
+        result["feed_items_no_collector_produced"] = missing
+    finally:
+        core.MAX_NEWS_AGE_HOURS = saved[0]
+        core.RSS_SOURCES[:] = saved[1]
+        core.DISCOVERY_PAGES[:] = saved[2]
+        core.google_news_sources = saved[3]
+    return result
+
+
 def main() -> int:
     started = now()
     sources: list[dict[str, Any]] = []
@@ -251,10 +336,15 @@ def main() -> int:
                 sources.append(trace_discovery(source))
             except Exception:  # noqa: BLE001
                 sources.append({"source": source.get("name"), "crash": traceback.format_exc()[-1500:]})
+    try:
+        replay = replay_without_age_limit()
+    except Exception:  # noqa: BLE001
+        replay = {"crash": traceback.format_exc()[-1500:]}
     payload = {
         "traced_at": started.isoformat().replace("+00:00", "Z"),
         "max_news_age_hours": core.MAX_NEWS_AGE_HOURS,
         "sources": sources,
+        "replay_without_age_limit": replay,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
