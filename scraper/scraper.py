@@ -1025,6 +1025,15 @@ def page_metadata(url: str, render: bool = False) -> dict[str, str]:
     soup = BeautifulSoup(raw_html, 'lxml')
     jsonld = extract_jsonld(soup)
     title = first_meta(soup, [('meta', {'property': 'og:title'}), ('meta', {'name': 'twitter:title'})])
+    site_name = first_meta(soup, [('meta', {'property': 'og:site_name'}), ('meta', {'name': 'application-name'})])
+    if title and site_name and title.casefold() == site_name.casefold():
+        # Some sites put their own name in og:title on every page (Rochdale
+        # Development Agency did, 19 Oct 2026), so every story was headlined
+        # "Rochdale Development Agency". The page's own headline wins then.
+        h1 = soup.find('h1')
+        headline = normalise_ws(h1.get_text(' ', strip=True) if h1 else '')
+        if headline and headline.casefold() != site_name.casefold():
+            title = headline
     if not title:
         h1 = soup.find('h1')
         title = normalise_ws(h1.get_text(' ', strip=True) if h1 else '')

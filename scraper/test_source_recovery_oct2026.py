@@ -85,6 +85,22 @@ listing = "".join(f'<li><p class="main__date">{d} October 2026</p></li>' for d i
 check(date_of(f"<main>{listing}</main>") == "", "a listing page (many dates) must not be dated")
 
 
+# --- a site name in og:title must not become every headline --------------------
+_RDA = ('<html><head><meta property="og:title" content="Rochdale Development Agency">'
+        '<meta property="og:site_name" content="Rochdale Development Agency"></head>'
+        '<body><main><article><h1>Finalists revealed for Rochdale Business Awards 2026</h1>'
+        '<p>Posted by on 14 Oct 2026</p><p>' + "The finalists were announced today. " * 5 + '</p></article></main></body></html>')
+_saved_fetch = core.fetch_markup
+core.fetch_markup = lambda url, render=False: (url, _RDA)
+try:
+    meta = core.page_metadata("https://investinrochdale.co.uk/news/post/finalists")
+finally:
+    core.fetch_markup = _saved_fetch
+check(meta["title"] == "Finalists revealed for Rochdale Business Awards 2026",
+      f"site-name og:title still used as headline: {meta['title']!r}")
+check(meta["published"][:10] == "2026-10-14", f"printed date not reaching page_metadata: {meta['published']!r}")
+
+
 # --- the source list itself ----------------------------------------------------
 rss = {s["name"]: s for s in core.RSS_SOURCES}
 pages = {s["name"]: s for s in core.DISCOVERY_PAGES}
