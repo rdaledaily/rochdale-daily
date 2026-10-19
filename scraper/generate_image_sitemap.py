@@ -59,7 +59,7 @@ def main() -> int:
         if slug in seen:
             continue
         seen.add(slug)
-        page_url = f"{SITE_BASE}/articles/{quote(slug)}.html"
+        page_url = f"{SITE_BASE}/articles/{quote(slug)}"
         image_url = f"{SITE_BASE}/{quote(image, safe='/')}"
         title = str(row.get("title") or "").strip()[:200]
         caption = str(row.get("image_alt") or title).strip()[:200]

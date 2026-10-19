@@ -121,7 +121,7 @@ def build_sitemap(rows: list[dict], now: datetime | None = None) -> ET.ElementTr
     for published, article in eligible_articles(rows, now):
         slug, title = str(article["slug"]).strip().strip("/"), str(article["title"]).strip()
         url_el = ET.SubElement(root, ET.QName(SITEMAP_NS, "url"))
-        ET.SubElement(url_el, ET.QName(SITEMAP_NS, "loc")).text = f"{SITE_URL}/articles/{slug}.html"
+        ET.SubElement(url_el, ET.QName(SITEMAP_NS, "loc")).text = f"{SITE_URL}/articles/{slug}"
         news_el = ET.SubElement(url_el, ET.QName(NEWS_NS, "news"))
         publication_el = ET.SubElement(news_el, ET.QName(NEWS_NS, "publication"))
         ET.SubElement(publication_el, ET.QName(NEWS_NS, "name")).text = PUBLICATION_NAME
