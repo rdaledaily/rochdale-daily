@@ -66,6 +66,24 @@ def place(name: str) -> dict[str, Any]:
     }
 
 
+# Google News uses the favicon as the publication's logo, and Search shows it
+# beside every result. Google needs a square icon at a multiple of 48px.
+ICON_TAGS = (
+    '<link rel="icon" href="/favicon.ico" sizes="48x48">'
+    '<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">'
+    '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'
+    '<link rel="manifest" href="/site.webmanifest">'
+    '<meta name="theme-color" content="#111111">'
+)
+SITE_ALTERNATE_NAMES = ["Rochdale Daily News", "rochdaledaily.co.uk"]
+
+
+def ensure_icons(text: str) -> str:
+    if "</head>" not in text or 'rel="icon"' in text.split("</head>", 1)[0]:
+        return text
+    return text.replace("</head>", ICON_TAGS + "</head>", 1)
+
+
 def _enrich(node: Any) -> Any:
     if isinstance(node, list):
         return [_enrich(item) for item in node]
@@ -74,6 +92,8 @@ def _enrich(node: Any) -> Any:
     if node.get("@type") == "NewsMediaOrganization" and node.get("name") == "Rochdale Daily":
         return publisher(node)
     out = {key: _enrich(value) for key, value in node.items()}
+    if out.get("@type") == "WebSite" and out.get("name") == "Rochdale Daily" and "alternateName" not in out:
+        out["alternateName"] = list(SITE_ALTERNATE_NAMES)
     location = out.get("contentLocation")
     if isinstance(location, dict) and location.get("@type") == "Place" and "containedInPlace" not in location:
         out["contentLocation"] = place(location.get("name", ""))
@@ -81,7 +101,8 @@ def _enrich(node: Any) -> Any:
 
 
 def enrich_text(text: str) -> str:
-    """Rewrite only the JSON-LD blocks that change; anything unparseable is left as it is."""
+    """Icons in the head; JSON-LD blocks rewritten only where they change (unparseable ones left alone)."""
+    text = ensure_icons(text)
     if "application/ld+json" not in text:
         return text
 
