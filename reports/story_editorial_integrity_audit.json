@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 322,
-  "published_count": 322,
+  "article_count": 323,
+  "published_count": 323,
   "category_change_count": 41,
-  "image_change_count": 68,
+  "image_change_count": 69,
   "category_changes": [
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
@@ -296,6 +296,18 @@
   ],
   "image_changes": [
     {
+      "slug": "roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026",
+      "title": "Roadworks on Greenhill Road in Middleton to Begin on 2 November 2026",
+      "category": "traffic",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/roadworks.jpg",
+        "img": "assets/img/cards/roadworks.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026-generated-card.jpg"
+    },
+    {
       "slug": "lifts-at-freehold-tram-stop-out-of-service-for-repairs",
       "title": "Lifts Out of Service at Freehold Tram Stop Until Further Notice",
       "category": "transport",
@@ -332,18 +344,6 @@
       "after": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg"
     },
     {
-      "slug": "rochdale-football-club-to-play-crewe-alexandra-with-live-streaming-available",
-      "title": "Rochdale AFC's Unbeaten Streak Ends with 3-2 Defeat to Crewe Alexandra",
-      "category": "sport",
-      "reason": "weak filename image match score -1; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/fixtures.jpg",
-        "img": "assets/img/cards/fixtures.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-football-club-to-play-crewe-alexandra-with-live-streaming-available-generated-card.jpg"
-    },
-    {
       "slug": "rochdale-youth-team-secures-2-1-victory-over-walsall-in-youth-alliance-match",
       "title": "Rochdale Youth Team Secures 2-1 Victory Over Walsall in Youth Alliance Match",
       "category": "sport",
@@ -378,6 +378,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-council-to-host-free-bonfire-night-events-in-november-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-football-club-to-play-crewe-alexandra-with-live-streaming-available",
+      "title": "Rochdale AFC's Unbeaten Streak Ends with 3-2 Defeat to Crewe Alexandra",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/fixtures.jpg",
+        "img": "assets/img/cards/fixtures.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-football-club-to-play-crewe-alexandra-with-live-streaming-available-generated-card.jpg"
     },
     {
       "slug": "broadfield-park-slopes-renovation-celebrated-at-rochdale-town-hall",
