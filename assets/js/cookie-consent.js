@@ -144,6 +144,7 @@
             '<a href="/editorial-standards">Editorial standards</a>' +
             '<a href="/corrections-and-complaints">Corrections &amp; complaints</a>' +
             '<a href="/contact">Contact</a>' +
+            '<a href="https://www.google.com/preferences/source?q=rochdaledaily.co.uk" target="_blank" rel="noopener">Prefer us on Google</a>' +
             '<a href="/privacy">Privacy</a>' +
             '<a href="#" data-cookie-settings>Cookie settings</a>' +
             '<a href="/terms">Terms</a>' +
