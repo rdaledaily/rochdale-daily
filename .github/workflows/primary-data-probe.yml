@@ -1,0 +1,61 @@
+name: Rochdale Daily primary-data dry run
+
+# Read-only. Runs every primary_data.py source once in dry-run mode against the
+# live endpoints and prints what each WOULD offer. Commits nothing, publishes
+# nothing, and never touches reports/primary_data_state.json.
+
+on:
+  push:
+    branches: ['probe/**']
+    paths-ignore: ['probe-results/**']
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Comma-separated source keys (blank = all)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-primary-probe
+  cancel-in-progress: true
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --no-cache-dir requests
+      - name: Dry run
+        env:
+          PROBE_ONLY: ${{ inputs.only }}
+          # Free keys. Each probe reports "no key" until its secret exists.
+          COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
+          SKIDDLE_API_KEY: ${{ secrets.SKIDDLE_API_KEY }}
+          TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY }}
+          CQC_SUBSCRIPTION_KEY: ${{ secrets.CQC_SUBSCRIPTION_KEY }}
+        run: python scraper/primary_data_dry_run.py | tee dry_run.txt
+      - name: Summary
+        if: always()
+        run: |
+          { echo '```'; cat dry_run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      # Results go back to THIS probe branch only (never main), so they can be
+      # read without artifact downloads.
+      - name: Commit results to the probe branch
+        if: always() && startsWith(github.ref_name, 'probe/')
+        run: |
+          mkdir -p probe-results
+          cp dry_run.txt probe-results/ 2>/dev/null || true
+          rm -rf probe-results/samples && cp -r dry_run_samples probe-results/samples 2>/dev/null || true
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add probe-results
+          git diff --cached --quiet && exit 0
+          git commit -m "Probe results"
+          git push origin HEAD:${{ github.ref_name }}
