@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-19T02:11:56.826548Z",
+  "last_run_at": "2026-10-19T02:32:05.705460Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,26 +27,31 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 109,
+  "raw_candidates_before_job_filter": 112,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 109,
+  "raw_candidates": 112,
   "candidate_clusters": 37,
   "google_news_resolution": {
-    "wrappers": 66,
-    "resolved": 65,
+    "wrappers": 69,
+    "resolved": 68,
     "text_recovered": 38,
     "reattributed": 3,
     "images_found": 39
   },
-  "duplicates_merged": 72,
+  "duplicates_merged": 75,
   "attempted_rewrites": 2,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "rochdale-football-club-to-stream-match-against-crewe-alexandra-today",
+      "source_url": "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-today-rochdale-v-crewe-alexandra-liv-str-uewsgxj"
+    }
+  ],
+  "new_articles": 1,
   "live_articles": 322,
-  "skipped": 2,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 2
+    "editorial gate: REJECTED_NON_LOCAL": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -59,19 +64,28 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 264,
+    "entries": 265,
     "by_outcome": {
       "failed": 30,
-      "published": 93,
+      "published": 94,
       "rejected": 141
     },
-    "held_back_this_run": 29,
+    "held_back_this_run": 30,
     "held_already_published": 17,
-    "held_rejected": 12,
+    "held_rejected": 13,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-psdvhyo",
+      "title": "~$!Here's Got the ways to watch Rochdale vs Crewe Alexandra 𝐋𝐈𝐕𝐄 Ｆｒｅｅ Ｔｖ Ｃｈａｎｎｅｌ - Universidad de Córdoba (UCO)",
+      "source_name": "Universidad de Córdoba (UCO)",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-19T02:10:33.718667Z"
+    },
     {
       "url": "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-match-lie-wcjivxs",
       "title": "[#!LIVES-TREAMs!]™ Rochdale vs Crewe Alexandra ＬＩＶＥ Ｓｔｒｅａｍ Ｆｒｅｅ ＯＮ Ｔｖ Ｃｈａｎｎｅｌ - Universidad de Córdoba (UCO)",
@@ -181,10 +195,12 @@
       "last_attempt_at": "2026-10-12T17:24:09.440313Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 180 body words using only facts already present in the sources; the draft currently has 152.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 85,
+    "rss_and_google_news": 88,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 15,
@@ -197,8 +213,8 @@
   },
   "collector_errors": {},
   "source_counts": {
+    "Universidad de Córdoba (UCO)": 27,
     "Rochdale Times": 24,
-    "Universidad de Córdoba (UCO)": 24,
     "Northern live service updates": 11,
     "Roch Valley Radio": 6,
     "Manchester Evening News": 5,
@@ -270,7 +286,7 @@
   ],
   "selected_candidate_urls": [
     "https://www.northernrailway.co.uk/service-updates#live-0c462b9ca1784e5e28",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-psdvhyo"
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-today-rochdale-v-crewe-alexandra-liv-str-uewsgxj"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -861,7 +877,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 25,
+  "robots_denied_count": 29,
   "robots_denied_urls": [
     "https://www.uco.es",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2NpbWFuZ28uZ2l0aHViLmlvL3NhbmkvbXRwLnhtbCIvPjwva3JwYW5vPg==&id=crewe-vs-rochdale-live-online-optv-tvukk21-284",
@@ -874,27 +890,31 @@
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-v-crewe-alexandra-lie-en-ihqoaje",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-now-327",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-alex-vs-rochdale-liv-378",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-liv-str-yfknhao",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64&xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2dldnRzdi5naXRodWIuaW8vaHFkdHZzL3h4LnhtbCIvPjwva3JwYW5vPg==&id=video-live-streams-stream-rochdale-m1vr87p0",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2NpbWFuZ28uZ2l0aHViLmlvL3Nhbmkvcm94LnhtbCIvPjwva3JwYW5vPg==&id=rochdale-vs-crewe-live-5k_today-match_tvx1-260",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-rochdale-es-899",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-v-crewe-us-football-53",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-tvs-355",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-v-crewe-2026-595",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-alexandra-vs-rochdale-free-285",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-alexandra-uk-243",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-v-rochdale-lie-en-imakfzy",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-vs-rochdale-match-lie-oteudnz",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2NpbWFuZ28uZ2l0aHViLmlvL3NhbmkvbXRwLnhtbCIvPjwva3JwYW5vPg==&id=crewe-vs-rochdale-liv-free-today-match-today-match-ukks-590",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-crewe-rochdale-es-899",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-lie-en-tyhvqsu",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-crewe-stream-360",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-today-rochdale-v-crewe-alexandra-liv-str-uewsgxj",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-today-rochdale-v-crewe-alexandra-lie-en-ejwadci",
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-lie-en-avqlwyi",
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-v-crewe-alexandra-lie-en-gvrunxl",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-match-lie-wcjivxs",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-vs-crewe-alexandra-liv-str-psdvhyo",
-    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-crewe-alexandra-vs-rochdale-liv-str-jafyrnx"
+    "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-rochdale-v-crewe-alexandra-lie-en-rdfjxnm"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "yourtrustrochdale.co.uk"
+    "rochdaleafc.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 2
+    "rochdaleafc.co.uk": 3
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -931,7 +951,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-19T02:12:50.700608Z",
+  "frontpage_generated_at": "2026-10-19T02:33:02.345997Z",
   "frontpage_article_count": 4,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1015,7 +1035,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 7,
+  "event_dates_corrected_from_ledger": 3,
   "duplicate_articles_after_postprocessing": 322,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1027,8 +1047,10 @@
   "category_archive_count": 11,
   "area_archive_count": 26,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "rochdale-football-club-to-play-crewe-alexandra-with-live-streaming-available"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
