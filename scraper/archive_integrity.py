@@ -20,6 +20,10 @@ indexing:
     the page whose headline best matches its own body, then the oldest.
   * mismatched headline: an archived page whose headline shares no meaningful
     word with its own opening paragraphs is marked noindex,follow.
+  * same story twice: an archived page with the same headline, on the same day,
+    as another indexable page points its canonical at that page.
+  * shared titles: indexable pages with the same <title> (different stories,
+    same headline) get their publication date added to the title.
 
 Live stories are regenerated every run and are never edited here. The sitemap
 cleaner then lists only pages that are indexable and canonical to themselves.
@@ -114,6 +118,78 @@ def apply(html: str, action: dict) -> str:
     return html
 
 
+_TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
+_SUFFIX = " | Rochdale Daily"
+_DATED_RE = re.compile(r" \u00b7 \d{1,2} [A-Z][a-z]{2} \d{4}$")
+
+
+def _indexable(html: str, slug: str) -> bool:
+    head = html.split("</head>", 1)[0]
+    robots = _ROBOTS_RE.search(head)
+    canonical = _CANON_RE.search(head)
+    return not (robots and "noindex" in robots.group(2)) and bool(canonical) and canonical.group(2).rstrip("/").endswith("/" + slug)
+
+
+def _day(stamp: str) -> str:
+    match = re.match(r"(\d{4})-(\d{2})-(\d{2})", stamp or "")
+    if not match:
+        return ""
+    months = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split()
+    return f"{int(match.group(3))} {months[int(match.group(2)) - 1]} {match.group(1)}"
+
+
+def title_plan(pages: dict[str, str]) -> dict[str, str]:
+    """slug -> new <title> text, for indexable pages that share a title with another.
+
+    Different stories with the same headline (four weekends of "Service Changes
+    on Rochdale Line") compete with each other in search; the date tells them
+    apart honestly.
+    """
+    groups: dict[str, list[str]] = defaultdict(list)
+    for slug, html in pages.items():
+        title = _TITLE_RE.search(html.split("</head>", 1)[0])
+        if title and _indexable(html, slug):
+            groups[title.group(1).strip()].append(slug)
+    plan_: dict[str, str] = {}
+    for title, members in groups.items():
+        if len(members) < 2:
+            continue
+        stem = title[: -len(_SUFFIX)] if title.endswith(_SUFFIX) else title
+        if _DATED_RE.search(stem):
+            continue
+        for slug in members:
+            day = _day(page_parts(pages[slug])["date"])
+            if day:
+                plan_[slug] = f"{stem} \u00b7 {day}{_SUFFIX if title.endswith(_SUFFIX) else ''}"
+    return plan_
+
+
+def same_day_duplicates(pages: dict[str, str], live: set[str]) -> dict[str, dict]:
+    """Archived pages with the same headline on the same day as another indexable page are
+    the same story published twice: point them at one primary (the live page, else the fullest)."""
+    groups: dict[tuple[str, str], list[str]] = defaultdict(list)
+    for slug, html in pages.items():
+        if not _indexable(html, slug):
+            continue
+        parts = page_parts(html)
+        if parts["h1"] and parts["date"]:
+            groups[(parts["h1"].lower(), parts["date"][:10])].append(slug)
+    actions: dict[str, dict] = {}
+    for members in groups.values():
+        if len(members) < 2:
+            continue
+        live_members = sorted(m for m in members if m in live)
+        primary = live_members[0] if live_members else max(members, key=lambda m: (len(page_parts(pages[m])["body"]), m))
+        for member in members:
+            if member != primary and member not in live:
+                actions[member] = {"canonical": primary}
+    return actions
+
+
+def apply_title(html: str, title: str) -> str:
+    return _TITLE_RE.sub(lambda m: f"<title>{title}</title>", html, count=1)
+
+
 def live_slugs(root: Path) -> set[str]:
     try:
         rows = json.loads((root / "articles.json").read_text(encoding="utf-8"))
@@ -131,11 +207,17 @@ def run(root: Path, *, check: bool = False) -> list[str]:
     if not live:
         return []           # without the live list, never touch anything
     pages = {slug: path.read_text(encoding="utf-8", errors="ignore") for slug, path in files.items()}
-    changed = []
+    updated = dict(pages)
     for slug, action in plan(pages, live).items():
-        updated = apply(pages[slug], action)
-        if updated != pages[slug]:
+        updated[slug] = apply(updated[slug], action)
+    for slug, action in same_day_duplicates(updated, live).items():
+        updated[slug] = apply(updated[slug], action)
+    for slug, title in title_plan(updated).items():
+        updated[slug] = apply_title(updated[slug], title)
+    changed = []
+    for slug, html in updated.items():
+        if html != pages[slug]:
             changed.append(f"articles/{slug}.html")
             if not check:
-                files[slug].write_text(updated, encoding="utf-8")
+                files[slug].write_text(html, encoding="utf-8")
     return changed

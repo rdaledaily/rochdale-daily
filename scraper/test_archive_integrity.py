@@ -67,6 +67,21 @@ class ArchiveIntegrityTests(unittest.TestCase):
             (root / "articles" / "arch.html").write_text(page("arch", "Rochdale AFC signings", BODY))
             self.assertEqual(ai.run(root), [])
 
+    def test_shared_titles_get_their_dates(self):
+        def titled(slug, date, body):
+            return page(slug, "Service changes", body, date).replace("<head>", "<head><title>Service changes | Rochdale Daily</title>")
+        pages = {"a": titled("a", "2026-09-05T10:00:00Z", BODY), "b": titled("b", "2026-10-03T10:00:00Z", "Different weekend works " * 20)}
+        titles = ai.title_plan(pages)
+        self.assertEqual(titles["a"], "Service changes \u00b7 5 Sep 2026 | Rochdale Daily")
+        self.assertEqual(titles["b"], "Service changes \u00b7 3 Oct 2026 | Rochdale Daily")
+        dated = {k: ai.apply_title(v, titles[k]) for k, v in pages.items()}
+        self.assertEqual(ai.title_plan(dated), {})
+
+    def test_same_headline_same_day_points_at_the_live_page(self):
+        pages = {"copy": page("copy", "Fire festival returns", "Fireworks in the park " * 30, "2026-09-18T09:00:00Z"),
+                 "live": page("live", "Fire festival returns", "Organisers confirm three nights " * 20, "2026-09-18T15:00:00Z")}
+        self.assertEqual(ai.same_day_duplicates(pages, {"live"}), {"copy": {"canonical": "live"}})
+
 
 if __name__ == "__main__":
     unittest.main()
