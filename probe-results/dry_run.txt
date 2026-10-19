@@ -1,41 +1,13 @@
 
-=== contracts_finder ===
-  cf_page0.json: HTTP 200 application/json 1392 bytes
-  pages=1 releases=0 naming-borough=0
+=== keyed ===
+  companies_house: no key (COMPANIES_HOUSE_API_KEY secret not set)
+  skiddle: no key (SKIDDLE_API_KEY secret not set)
+  ticketmaster: no key (TICKETMASTER_API_KEY secret not set)
+  cqc: no key (CQC_SUBSCRIPTION_KEY secret not set)
 
-=== nomis ===
-  nomis_geo.json: HTTP 200 application/json 1055 bytes
-    {  "structure" :{"codelists" :{"codelist" :[ {"agencyid" :"NOMIS","id" :"CL_162_1_GEOGRAPHY","code" :[ {"annotations" :{"annotation" :[ {"annotationtext" :"local authorities: district / unitary (as of April 2023)","annotationtitle" :"TypeName"},{"annotationtext" :424,"annotationtitle" :"TypeCode"},{"annotationtext" :"E08000005","annotationtitle" :"GeogCode"}]},"parentcode" :2013265922,"description" :{"value" :"Rochdale","lang" :"en"},"value" :1778385128}],"name" :{"value" :"geography","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_162_1","prepared" :"2026-10-19T14:20:57Z","sender" :{"con
-  nomis_cc.csv: HTTP 200 text/csv 521 bytes
-    "DATE_NAME","GEOGRAPHY_NAME","GEOGRAPHY_CODE","MEASURE_NAME","OBS_VALUE"
-"June 2026","Rochdale","E08000005","Claimant count",8510
-"June 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",5.8
-"July 2026","Rochdale","E08000005","Claimant count",8485
-"July 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",5.8
-"August 2026","Rochdale","E08000005","Claimant count",8675
-"August 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",6.0
-
-  nomis_lmp.html: HTTP 200 text/html; charset=utf-8 47333 bytes
-    lmp h1: Cookie Consent
-    lmp mentions Rochdale: True | 'claimant' count: 1
-    lmp title: Labour Market Profile - Nomis - Official Census and Labour Market Statistics
-    claimant mention: None
-
-=== met_office_warnings ===
-  mo_nw.xml: HTTP 200 application/atom+xml 598 bytes
-   items=0
-  mo_uk.xml: HTTP 200 application/atom+xml 4274 bytes
-   items=4
-    - Yellow warning of wind affecting South West England
-    - Yellow warning of wind affecting London &amp; South East England
-    - Yellow warning of wind affecting Wales
-    - Yellow warning of wind affecting West Midlands
-
-=== find_tender ===
-  page 1: 2026-10-19T13:20:38+01:00 .. 2026-10-19T11:18:30+01:00
-  page 6: 2026-10-16T13:37:06+01:00 .. 2026-10-16T13:21:15+01:00
-  pages=6 releases=514 complete=True postcode_rule=1 regex_only=0
-   KEEP 098083-2026 ['award', 'contract'] | HOPWOOD HALL COLLEGE | HOPWOOD HALL COLLEGE awards contract: Provision of Drinking Water Fountains
+=== contracts_finder_retry ===
+  {'publishedFrom': '2026-10-12', 'publishedTo': '2026-10-19', 'limit': '100'}: HTTP 200 releases=100 naming-borough=1 next=True uri=https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search?publishedFrom=2026-10-12&publishedTo=2026-10-19&limit=100
+  {'publishedFrom': '2026-10-12', 'limit': '100', 'stages': 'award'}: HTTP 200 releases=100 naming-borough=1 next=True uri=https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search?publishedFrom=2026-10-12&limit=100&stages=award&publishedTo=2026-10-19T14:26:05+01:00
 
 === existing_rota ===
 {
@@ -52,8 +24,14 @@
   "in_window": 14
  },
  "gazette_insolvency": {
-  "status": "error",
-  "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+  "status": "ok",
+  "offered": 2,
+  "daily_cap": 2,
+  "offered_today": 2,
+  "listed": 10,
+  "other_notice_types": 5,
+  "already_seen": 0,
+  "new": 5
  },
  "written_answers": {
   "status": "ok",
@@ -67,8 +45,15 @@
   "new": 0
  },
  "gmca_decisions": {
-  "status": "error",
-  "error": "HTTPError: 403 Client Error: Forbidden for url: https://democracy.greatermanchester-ca.gov.uk/mgRss.aspx?XXR=0&M=0"
+  "status": "ok",
+  "offered": 0,
+  "daily_cap": 1,
+  "offered_today": 0,
+  "listed": 13,
+  "not_decisions": 9,
+  "no_borough_place": 4,
+  "already_seen": 0,
+  "new": 0
  },
  "ons_housing": {
   "status": "ok",
@@ -85,7 +70,7 @@
   "daily_cap": 3,
   "offered_today": 0,
   "pages": 3,
-  "releases": 241,
+  "releases": 244,
   "borough_buyer": 0,
   "not_story_type": 0,
   "already_seen": 0,
@@ -101,10 +86,22 @@
   "not_rochdale": 4,
   "already_seen": 0,
   "new": 0
+ },
+ "claimant_count": {
+  "status": "ok",
+  "offered": 1,
+  "daily_cap": 1,
+  "offered_today": 1,
+  "months": 13,
+  "already_seen": 0,
+  "new": 1
  }
 }
    offer: council_roadworks | Madison Square, roadworks in Rochdale from 19 October 2026 | https://www.rochdale.gov.uk/directory-record/2632/madison-square-roadworks-in-rochdale-from-19-october-2026
    offer: council_roadworks | Egerton Street, roadworks in Heywood from 20 October 2026 | https://www.rochdale.gov.uk/directory-record/2614/egerton-street-roadworks-in-heywood-from-20-october-2026
    offer: council_roadworks | Mark Street, roadworks in Rochdale on 24 October 2026 | https://www.rochdale.gov.uk/directory-record/2610/mark-street-roadworks-in-rochdale-on-24-october-2026
    offer: council_roadworks | Well i' th' Lane, roadworks in Rochdale from 24 October 2026 | https://www.rochdale.gov.uk/directory-record/2592/well-i-th-lane-roadworks-in-rochdale-from-24-october-2026
+   offer: gazette_insolvency | YARWELL ADMIN LTD: Appointment of Liquidators | https://www.thegazette.co.uk/notice/5230180
+   offer: gazette_insolvency | TURKITA LTD: Appointment of Liquidators | https://www.thegazette.co.uk/notice/5230170
    offer: ons_housing | Rochdale house prices and rents: ONS figures updated 16 September 2026 | https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005/#updated-16-september-2026
+   offer: claimant_count | Rochdale claimant count rose in August 2026 | https://www.nomisweb.co.uk/reports/lmp/la/1946157091/report.aspx#claimants-august-2026
