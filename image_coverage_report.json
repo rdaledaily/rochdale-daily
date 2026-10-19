@@ -1,12 +1,19 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 125,
+    "kept_cards": 126,
     "cards_library": 0,
-    "cards_generated": 118,
+    "cards_generated": 117,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/roadworks.jpg",
+      "matched_filename": "roadworks.jpg",
+      "match_score": 15129
+    },
     {
       "slug": "does-a-boggart-still-haunt-clegg-hall",
       "result": "kept-cards",
@@ -20,13 +27,6 @@
       "image_url": "assets/img/cards/rochdale_town_hall_square.jpg",
       "matched_filename": "rochdale_town_hall_square.jpg",
       "match_score": -1
-    },
-    {
-      "slug": "roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/roadworks.jpg",
-      "matched_filename": "roadworks.jpg",
-      "match_score": 15129
     },
     {
       "slug": "lifts-at-freehold-tram-stop-out-of-service-for-repairs",
@@ -219,7 +219,7 @@
     },
     {
       "slug": "oktoberfest-rochdale-2027",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
