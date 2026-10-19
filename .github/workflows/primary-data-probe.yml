@@ -7,6 +7,7 @@ name: Rochdale Daily primary-data dry run
 on:
   push:
     branches: ['probe/**']
+    paths-ignore: ['probe-results/**']
   workflow_dispatch:
     inputs:
       only:
@@ -15,7 +16,7 @@ on:
         default: ""
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: rd-primary-probe
@@ -39,10 +40,17 @@ jobs:
         if: always()
         run: |
           { echo '```'; cat dry_run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: primary-data-dry-run
-          path: |
-            dry_run.txt
-            dry_run_samples/
+      # Results go back to THIS probe branch only (never main), so they can be
+      # read without artifact downloads.
+      - name: Commit results to the probe branch
+        if: always() && startsWith(github.ref_name, 'probe/')
+        run: |
+          mkdir -p probe-results
+          cp dry_run.txt probe-results/ 2>/dev/null || true
+          rm -rf probe-results/samples && cp -r dry_run_samples probe-results/samples 2>/dev/null || true
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add probe-results
+          git diff --cached --quiet && exit 0
+          git commit -m "Probe results"
+          git push origin HEAD:${{ github.ref_name }}
