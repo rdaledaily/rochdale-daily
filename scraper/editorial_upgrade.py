@@ -10,6 +10,7 @@ from typing import Any
 
 from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
 from reader_usefulness import reader_questions_for
+from newsroom_source_policy import is_non_article_service_page
 
 
 
@@ -985,6 +986,95 @@ def compact_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return compacted
 
 
+
+FACT_NOTES_SCHEMA = {
+    "name": "source_fact_notes",
+    "strict": True,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "facts": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "fact": {"type": "string"},
+                        "evidence": {"type": "string"},
+                    },
+                    "required": ["fact", "evidence"],
+                    "additionalProperties": False,
+                },
+            },
+        },
+        "required": ["facts"],
+        "additionalProperties": False,
+    },
+}
+
+
+def extract_fact_notes(client, model: str, source_text: str, logger) -> list[str]:
+    """One bounded extraction call; only evidenced, independently worded notes survive.
+
+    Evidence is checked against the original prose here and then withheld from
+    the article writer. The final article still faces the original quality gate.
+    """
+    instructions = (
+        "Extract atomic fact notes for a local reporter. Return JSON with a facts "
+        "array of objects containing fact and evidence. Each fact must be at most "
+        "24 words, independently phrased, and supported entirely by its evidence. "
+        "Evidence must be an exact passage from the supplied source text. "
+        "Keep names, figures, dates, locations, attribution, uncertainty and legal "
+        "status exact. Do not infer event dates from publication metadata. "
+        "Do not include direct quotations in fact notes or invent context. "
+        "Do not repeat 12 consecutive source words. Cover the material facts, "
+        "up to 24 notes; omit anything the evidence cannot establish."
+    )
+    kwargs = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": instructions},
+            {"role": "user", "content": source_text},
+        ],
+        "temperature": 0.18,
+        "max_tokens": _int_env("LLM_MAX_TOKENS", 2000),
+    }
+    mode = os.getenv("LLM_RESPONSE_FORMAT", "json_schema").strip().lower()
+    if mode == "json_schema":
+        kwargs["response_format"] = {"type": "json_schema", "json_schema": FACT_NOTES_SCHEMA}
+    elif mode == "json_object":
+        kwargs["response_format"] = {"type": "json_object"}
+    try:
+        response = create_with_rate_limit_retry(client, kwargs, logger)
+        message = response.choices[0].message
+        content = (getattr(message, "content", "") or "").strip()
+        if not _looks_like_json(content):
+            reasoning = (getattr(message, "reasoning", "") or "").strip()
+            if _looks_like_json(reasoning):
+                content = reasoning
+        payload = json.loads(extract_json_object(content) or "{}")
+        facts = payload.get("facts", []) if isinstance(payload, dict) else []
+        source = plain_text(source_text)
+        notes = []
+        for item in facts[:24] if isinstance(facts, list) else []:
+            if not isinstance(item, dict):
+                continue
+            fact = plain_text(item.get("fact"))
+            evidence = plain_text(item.get("evidence"))
+            if not fact or not evidence or evidence not in source:
+                continue
+            if len(fact.split()) > 24 or contains_long_verbatim_phrase(fact, source_text, 12):
+                continue
+            # A note cannot introduce a number absent from its supporting passage.
+            if set(re.findall(r"\b\d+(?:[.,]\d+)*\b", fact)) - set(re.findall(r"\b\d+(?:[.,]\d+)*\b", evidence)):
+                continue
+            if fact not in notes:
+                notes.append(fact)
+        return notes
+    except Exception as exc:
+        logger.warning("Fact-note extraction failed: %s", type(exc).__name__)
+        return []
+
+
 def request_article(
     *,
     client,
@@ -1014,6 +1104,10 @@ def request_article(
                 on_skip(reason)
             except Exception:  # never let bookkeeping break a rewrite
                 pass
+
+    if is_non_article_service_page(getattr(candidate, "source_url", "")):
+        skip("editorial gate: REJECTED_NON_NEWS")
+        return None
 
     system_message = HOUSE_STYLE_SYSTEM
     source_kind = str(getattr(candidate, "source_kind", "") or "")
@@ -1079,10 +1173,24 @@ def request_article(
     last_feedback: list[str] = []
     api_failures = 0
     last_api_error = ""
+    fact_notes = None
+    fact_notes_attempted = False
     for attempt in range(4):
         payload = dict(base_payload)
+        if fact_notes:
+            # Remove both anchors that caused the copying loop. Source evidence
+            # remains available to the independent validator, never this writer.
+            payload["source_records"] = []
+            payload["social_context"] = []
+            payload["verified_fact_notes"] = fact_notes
+            payload["composition_instruction"] = (
+                "Write a new article from these fact notes in your own structure. "
+                "Use only these facts; preserve attribution and legal status. "
+                "Do not recreate the source wording or invent quotations."
+            )
         if attempt:
-            payload["previous_draft"] = previous
+            if not fact_notes:
+                payload["previous_draft"] = previous
             payload["repair_required"] = feedback
             payload["repair_instruction"] = (
                 "Correct every issue while preserving all supported facts. "
@@ -1160,6 +1268,18 @@ def request_article(
             return None
         previous = draft
         last_feedback = feedback
+        if (
+            attempt < 3
+            and not fact_notes_attempted
+            and any("long verbatim source passage" in issue for issue in feedback)
+        ):
+            fact_notes_attempted = True
+            fact_notes = extract_fact_notes(client, model, source_text, logger)
+            if not fact_notes:
+                # Do not spend the remaining calls repairing the same copied
+                # prose when a grounded fact pack could not be produced.
+                skip("quality gate: fact-note rebuild unavailable after source overlap")
+                return None
         logger.warning(
             "Journalism repair requested after attempt %d for %s: %s",
             attempt + 1,
