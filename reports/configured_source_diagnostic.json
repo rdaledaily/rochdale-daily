@@ -1,0 +1,2385 @@
+{
+  "checked_at": "2026-10-19T12:54:28.339391Z",
+  "runner": "GitHub Actions 1000020734",
+  "user_agent": "RochdaleDaily/3.2 (+https://rochdaledaily.co.uk; contact: news@rochdaledaily.co.uk)",
+  "results": [
+    {
+      "kind": "rss",
+      "name": "Greater Manchester Police",
+      "url": "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
+      "http": {
+        "url": "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
+        "status": 403,
+        "final_url": "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 5773,
+        "seconds": 0.85,
+        "server": "cloudflare",
+        "looks_like_challenge": true,
+        "anchors": 0,
+        "visible_text_chars": 58,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 403,
+        "allowed": true
+      },
+      "parse_error": "<unknown>:2:1326: not well-formed (invalid token)",
+      "entries": 0,
+      "newest_entry_days": null,
+      "entries_last_7d": 0,
+      "candidates_produced": 0,
+      "candidate_titles": [],
+      "verdict": "BLOCKED: HTTP 403 + challenge page"
+    },
+    {
+      "kind": "rss",
+      "name": "Roch Valley Radio",
+      "url": "https://www.rochvalleyradio.com/news/local-news/feed.xml",
+      "http": {
+        "url": "https://www.rochvalleyradio.com/news/local-news/feed.xml",
+        "status": 404,
+        "final_url": "https://www.rochvalleyradio.com/news/local-news/feed.xml",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 131124,
+        "seconds": 0.69,
+        "server": "cloudflare",
+        "looks_like_challenge": false,
+        "anchors": 0,
+        "visible_text_chars": 17,
+        "feeds_advertised": [
+          "https://www.rochvalleyradio.com/rss"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "parse_error": "<unknown>:2:2590: not well-formed (invalid token)",
+      "entries": 0,
+      "newest_entry_days": null,
+      "entries_last_7d": 0,
+      "candidates_produced": 0,
+      "candidate_titles": [],
+      "verdict": "BROKEN URL: HTTP 404"
+    },
+    {
+      "kind": "discovery",
+      "name": "Roch Valley Radio Local News",
+      "url": "https://www.rochvalleyradio.com/news/local-news/",
+      "link_pattern": "/news/local-news/",
+      "render": false,
+      "http": {
+        "url": "https://www.rochvalleyradio.com/news/local-news/",
+        "status": 404,
+        "final_url": "https://www.rochvalleyradio.com/news/local-news",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 131093,
+        "seconds": 0.48,
+        "server": "cloudflare",
+        "looks_like_challenge": false,
+        "anchors": 0,
+        "visible_text_chars": 17,
+        "feeds_advertised": [
+          "https://www.rochvalleyradio.com/rss"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 0,
+      "sample_links": [],
+      "unmatched_same_host_links": [],
+      "link_outcomes": [],
+      "candidates_from_sample": 0,
+      "verdict": "BROKEN URL: HTTP 404"
+    },
+    {
+      "kind": "discovery",
+      "name": "Roch Valley Radio Notices",
+      "url": "https://www.rochvalleyradio.com/news/notices/",
+      "link_pattern": "/news/notices/|/news/local-news/",
+      "render": false,
+      "http": {
+        "url": "https://www.rochvalleyradio.com/news/notices/",
+        "status": 404,
+        "final_url": "https://www.rochvalleyradio.com/news/notices",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 131084,
+        "seconds": 0.35,
+        "server": "cloudflare",
+        "looks_like_challenge": false,
+        "anchors": 0,
+        "visible_text_chars": 17,
+        "feeds_advertised": [
+          "https://www.rochvalleyradio.com/rss"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 0,
+      "sample_links": [],
+      "unmatched_same_host_links": [],
+      "link_outcomes": [],
+      "candidates_from_sample": 0,
+      "verdict": "BROKEN URL: HTTP 404"
+    },
+    {
+      "kind": "rss",
+      "name": "Greater Manchester Fire and Rescue Service",
+      "url": "https://www.manchesterfire.gov.uk/news-events/news/feed/",
+      "http": {
+        "url": "https://www.manchesterfire.gov.uk/news-events/news/feed/",
+        "status": 404,
+        "final_url": "https://manchesterfire.gov.uk/news-events/news/feed/",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 15185,
+        "seconds": 0.69,
+        "server": "cloudflare",
+        "looks_like_challenge": false,
+        "anchors": 24,
+        "visible_text_chars": 592,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "parse_error": "<unknown>:27:42: not well-formed (invalid token)",
+      "entries": 0,
+      "newest_entry_days": null,
+      "entries_last_7d": 0,
+      "candidates_produced": 0,
+      "candidate_titles": [],
+      "verdict": "BROKEN URL: HTTP 404"
+    },
+    {
+      "kind": "discovery",
+      "name": "Greater Manchester Fire and Rescue Service",
+      "url": "https://www.manchesterfire.gov.uk/news-events/news/",
+      "link_pattern": "/news",
+      "render": false,
+      "http": {
+        "url": "https://www.manchesterfire.gov.uk/news-events/news/",
+        "status": 404,
+        "final_url": "https://manchesterfire.gov.uk/news-events/news/",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 15180,
+        "seconds": 0.22,
+        "server": "cloudflare",
+        "looks_like_challenge": false,
+        "anchors": 24,
+        "visible_text_chars": 592,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 0,
+      "sample_links": [],
+      "unmatched_same_host_links": [
+        "https://manchesterfire.gov.uk/news-events/news/#main",
+        "https://manchesterfire.gov.uk/news-events/news/#footer-accessibility-link",
+        "https://manchesterfire.gov.uk/",
+        "https://manchesterfire.gov.uk/your-safety/",
+        "https://manchesterfire.gov.uk/your-area/",
+        "https://manchesterfire.gov.uk/education/",
+        "https://manchesterfire.gov.uk/community/",
+        "https://manchesterfire.gov.uk/news/",
+        "https://manchesterfire.gov.uk/join-us/",
+        "https://manchesterfire.gov.uk/fire-plan/",
+        "https://manchesterfire.gov.uk/contact-us/",
+        "https://manchesterfire.gov.uk/about-us/",
+        "https://manchesterfire.gov.uk/search/",
+        "https://manchesterfire.gov.uk/sitemap/",
+        "https://manchesterfire.gov.uk/about-us/accessibility-statement/",
+        "https://manchesterfire.gov.uk/translate-our-website/",
+        "https://manchesterfire.gov.uk/contact-us/compliments-and-complaints/",
+        "https://manchesterfire.gov.uk/about-us/publication-scheme/",
+        "https://manchesterfire.gov.uk/about-us/website-privacy-policy/",
+        "https://manchesterfire.gov.uk/contact-us/media/"
+      ],
+      "link_outcomes": [],
+      "candidates_from_sample": 0,
+      "verdict": "BROKEN URL: HTTP 404"
+    },
+    {
+      "kind": "rss",
+      "name": "BBC Manchester",
+      "url": "https://feeds.bbci.co.uk/news/england/manchester/rss.xml",
+      "http": {
+        "url": "https://feeds.bbci.co.uk/news/england/manchester/rss.xml",
+        "status": 200,
+        "final_url": "https://feeds.bbci.co.uk/news/england/manchester/rss.xml",
+        "content_type": "text/xml; charset=utf-8",
+        "bytes": 13576,
+        "seconds": 1.93,
+        "server": "Belfrage",
+        "looks_like_challenge": false,
+        "anchors": 0,
+        "visible_text_chars": 4241,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "parse_error": "",
+      "entries": 18,
+      "newest_entry_days": 0.02,
+      "entries_last_7d": 13,
+      "candidates_produced": 0,
+      "candidate_titles": [],
+      "verdict": "FILTERED: 13 fresh entries, 0 candidates"
+    },
+    {
+      "kind": "discovery",
+      "name": "BBC Manchester",
+      "url": "https://www.bbc.co.uk/news/england/manchester",
+      "link_pattern": "/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.bbc.co.uk/news/england/manchester",
+        "status": 200,
+        "final_url": "https://www.bbc.co.uk/news/england/manchester",
+        "content_type": "text/html",
+        "bytes": 644074,
+        "seconds": 0.11,
+        "server": "BBC-GTM",
+        "looks_like_challenge": false,
+        "anchors": 200,
+        "visible_text_chars": 11849,
+        "feeds_advertised": [
+          "https://feeds.bbci.co.uk/news/england/manchester/rss.xml"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 40,
+      "sample_links": [
+        "https://www.bbc.co.uk/news/england/manchester",
+        "https://www.bbc.co.uk/news/topics/cmj34zmwm1zt",
+        "https://www.bbc.co.uk/news/world",
+        "https://www.bbc.co.uk/news/world/us_and_canada",
+        "https://www.bbc.co.uk/news/uk",
+        "https://www.bbc.co.uk/news/business"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.bbc.co.uk/news/england/manchester",
+          "title": "Manchester | Latest News & Updates | BBC News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 490,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.bbc.co.uk/news/topics/cmj34zmwm1zt",
+          "title": "Climate | Latest News & Updates | BBC News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 711,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.bbc.co.uk/news/world",
+          "title": "World | Latest News & Updates | BBC News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 703,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.bbc.co.uk/news/world/us_and_canada",
+          "title": "US & Canada | Latest News & Updates | BBC News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 776,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.bbc.co.uk/news/uk",
+          "title": "UK | Latest News & Updates | BBC News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 578,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.bbc.co.uk/news/business",
+          "title": "Business | Latest News & Updates | BBC News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 525,
+          "became_candidate": false,
+          "local": false
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "GMCA News",
+      "url": "https://www.greatermanchester-ca.gov.uk/news/",
+      "link_pattern": "/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.greatermanchester-ca.gov.uk/news/",
+        "status": 200,
+        "final_url": "https://www.greatermanchester-ca.gov.uk/news/",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 24413,
+        "seconds": 0.69,
+        "server": "cloudflare",
+        "looks_like_challenge": false,
+        "anchors": 18,
+        "visible_text_chars": 1802,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 1,
+      "sample_links": [
+        "https://www.greatermanchester-ca.gov.uk/news/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.greatermanchester-ca.gov.uk/news/",
+          "title": "Home",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": false
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 1/1 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "United Utilities Incidents",
+      "url": "https://www.unitedutilities.com/emergencies/up-my-street/",
+      "link_pattern": "/emergencies/|/incident/",
+      "render": false,
+      "http": {
+        "url": "https://www.unitedutilities.com/emergencies/up-my-street/",
+        "status": 200,
+        "final_url": "https://www.unitedutilities.com/emergencies/up-my-street/",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 84800,
+        "seconds": 0.46,
+        "server": "cloudflare",
+        "looks_like_challenge": false,
+        "anchors": 101,
+        "visible_text_chars": 3569,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 9,
+      "sample_links": [
+        "https://www.unitedutilities.com/emergencies/up-my-street/",
+        "https://www.unitedutilities.com/emergencies/",
+        "https://www.unitedutilities.com/emergencies/got-a-problem/",
+        "https://www.unitedutilities.com/emergencies/got-a-problem/low-water-pressure/",
+        "https://www.unitedutilities.com/emergencies/got-a-problem/flooding/",
+        "https://www.unitedutilities.com/emergencies/got-a-problem/burst-pipe/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.unitedutilities.com/emergencies/up-my-street/",
+          "title": "Up my street | United Utilities",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.unitedutilities.com/emergencies/",
+          "title": "Emergencies",
+          "published": "",
+          "fresh": false,
+          "body_chars": 968,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.unitedutilities.com/emergencies/got-a-problem/",
+          "title": "Problem with your water or wastewater?",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1062,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.unitedutilities.com/emergencies/got-a-problem/low-water-pressure/",
+          "title": "Low pressure or no water?",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1157,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.unitedutilities.com/emergencies/got-a-problem/flooding/",
+          "title": "Is flooding affecting you?",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1134,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.unitedutilities.com/emergencies/got-a-problem/burst-pipe/",
+          "title": "Burst water pipe?",
+          "published": "",
+          "fresh": false,
+          "body_chars": 760,
+          "became_candidate": false,
+          "local": false
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "National Highways North West",
+      "url": "https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/",
+      "link_pattern": "/",
+      "render": false,
+      "http": {
+        "url": "https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/",
+        "status": 200,
+        "final_url": "https://nationalhighways.co.uk/roads-and-travel/road-projects/north-west/north-west-maintenance-schemes/",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 97392,
+        "seconds": 0.97,
+        "server": "",
+        "looks_like_challenge": false,
+        "anchors": 121,
+        "visible_text_chars": 22213,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 34,
+      "sample_links": [
+        "https://nationalhighways.co.uk/roads-and-travel/road-projects/north-west/north-west-maintenance-schemes/",
+        "https://nationalhighways.co.uk/",
+        "https://nationalhighways.co.uk/accessibility/",
+        "https://nationalhighways.co.uk/roads-and-travel/live-travel-updates/",
+        "https://nationalhighways.co.uk/roads-and-travel/road-projects/",
+        "https://nationalhighways.co.uk/roads-and-travel/freight-and-professional-drivers/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://nationalhighways.co.uk/roads-and-travel/road-projects/north-west/north-west-maintenance-schemes/",
+          "title": "North West maintenance schemes",
+          "published": "",
+          "fresh": false,
+          "body_chars": 646,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://nationalhighways.co.uk/",
+          "title": "Keeping you moving safely",
+          "published": "",
+          "fresh": false,
+          "body_chars": 617,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://nationalhighways.co.uk/accessibility/",
+          "title": "Accessibility",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1159,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://nationalhighways.co.uk/roads-and-travel/live-travel-updates/",
+          "title": "Live travel updates",
+          "published": "",
+          "fresh": false,
+          "body_chars": 609,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://nationalhighways.co.uk/roads-and-travel/road-projects/",
+          "title": "Road projects",
+          "published": "",
+          "fresh": false,
+          "body_chars": 238,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://nationalhighways.co.uk/roads-and-travel/freight-and-professional-drivers/",
+          "title": "Freight and professional drivers",
+          "published": "",
+          "fresh": false,
+          "body_chars": 312,
+          "became_candidate": false,
+          "local": false
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale Boroughwide Housing",
+      "url": "https://www.rbh.org.uk/",
+      "link_pattern": "/news/|/latest-news/|/updates/|/our-news/",
+      "render": false,
+      "http": {
+        "url": "https://www.rbh.org.uk/",
+        "status": 200,
+        "final_url": "https://www.rbh.org.uk/",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 107850,
+        "seconds": 0.52,
+        "server": "",
+        "looks_like_challenge": false,
+        "anchors": 124,
+        "visible_text_chars": 3806,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 2,
+      "sample_links": [
+        "https://www.rbh.org.uk/news/rbh-news/our-october-2026-neighbourhood-walkabouts/",
+        "https://www.rbh.org.uk/news/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.rbh.org.uk/news/rbh-news/our-october-2026-neighbourhood-walkabouts/",
+          "title": "Our October 2026 Neighbourhood Walkabouts",
+          "published": "",
+          "fresh": false,
+          "body_chars": 486,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rbh.org.uk/news/",
+          "title": "Latest RBH News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 587,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 2/2 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale Riverside News",
+      "url": "https://rochdaleriverside.com/news/",
+      "link_pattern": "/news/",
+      "render": false,
+      "http": {
+        "url": "https://rochdaleriverside.com/news/",
+        "status": 403,
+        "final_url": "https://rochdaleriverside.com/news/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 5480,
+        "seconds": 0.12,
+        "server": "cloudflare",
+        "looks_like_challenge": true,
+        "anchors": 0,
+        "visible_text_chars": 58,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 0,
+      "sample_links": [],
+      "unmatched_same_host_links": [],
+      "link_outcomes": [],
+      "candidates_from_sample": 0,
+      "verdict": "BLOCKED: HTTP 403 + challenge page"
+    },
+    {
+      "kind": "discovery",
+      "name": "Northern Care Alliance Rochdale",
+      "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news",
+      "link_pattern": "/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news",
+        "status": 200,
+        "final_url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 283469,
+        "seconds": 1.6,
+        "server": "nginx",
+        "looks_like_challenge": false,
+        "anchors": 187,
+        "visible_text_chars": 6071,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 9,
+      "sample_links": [
+        "https://www.northerncarealliance.nhs.uk/news/rochdale-news",
+        "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=1&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+        "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=2&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+        "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=3&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+        "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=4&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+        "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=5&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news",
+          "title": "Rochdale News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 247,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=1&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+          "title": "Rochdale News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 247,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=2&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+          "title": "Rochdale News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 386,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=3&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+          "title": "Rochdale News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 344,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=4&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+          "title": "Rochdale News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 328,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/news/rochdale-news?ccm_paging_p_b134=5&ccm_order_by_b134=cv.cvDatePublic&ccm_order_by_direction_b134=desc",
+          "title": "Rochdale News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 320,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Northern Care Alliance News",
+      "url": "https://www.northerncarealliance.nhs.uk/nca-news",
+      "link_pattern": "/nca-news/|/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.northerncarealliance.nhs.uk/nca-news",
+        "status": 200,
+        "final_url": "https://www.northerncarealliance.nhs.uk/nca-news",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 283556,
+        "seconds": 2.19,
+        "server": "nginx",
+        "looks_like_challenge": false,
+        "anchors": 184,
+        "visible_text_chars": 6790,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 6,
+      "sample_links": [
+        "https://www.northerncarealliance.nhs.uk/nca-news/nine-nca-community-nurses-awarded-prestigious-queens-nurse-title?q=%2Fnca-news",
+        "https://www.northerncarealliance.nhs.uk/nca-news/help-shape-our-care-environment-through-place-assessments?q=%2Fnca-news",
+        "https://www.northerncarealliance.nhs.uk/nca-news/working-together-help-people-age-well-salford-partnership-wins-national-award?q=%2Fnca-news",
+        "https://www.northerncarealliance.nhs.uk/nca-news/message-patients-industrial-action-affecting-operating-theatres-2?q=%2Fnca-news",
+        "https://www.northerncarealliance.nhs.uk/nca-news/silver-heart-unit-among-first-greater-manchester-offer-ultra-thin-defibrillator-lead-heart-patients?q=%2Fnca-news",
+        "https://www.northerncarealliance.nhs.uk/nca-news/news"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/nca-news/nine-nca-community-nurses-awarded-prestigious-queens-nurse-title?q=%2Fnca-news",
+          "title": "Nine NCA community nurses awarded prestigious Queen’s Nurse title",
+          "published": "",
+          "fresh": false,
+          "body_chars": 2086,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/nca-news/help-shape-our-care-environment-through-place-assessments?q=%2Fnca-news",
+          "title": "Help shape our care environment through PLACE assessments",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1559,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/nca-news/working-together-help-people-age-well-salford-partnership-wins-national-award?q=%2Fnca-news",
+          "title": "Working together to help people age well: Salford partnership wins national award",
+          "published": "",
+          "fresh": false,
+          "body_chars": 2134,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/nca-news/message-patients-industrial-action-affecting-operating-theatres-2?q=%2Fnca-news",
+          "title": "Message for patients - Industrial action affecting operating theatres",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1270,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/nca-news/silver-heart-unit-among-first-greater-manchester-offer-ultra-thin-defibrillator-lead-heart-patients?q=%2Fnca-news",
+          "title": "Silver Heart Unit among first in Greater Manchester to offer ultra-thin defibrillator lead for heart",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1545,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.northerncarealliance.nhs.uk/nca-news/news",
+          "title": "News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": false
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Pennine Care NHS",
+      "url": "https://www.penninecare.nhs.uk/about-us/latest-news",
+      "link_pattern": "/latest-news/|/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.penninecare.nhs.uk/about-us/latest-news",
+        "status": 200,
+        "final_url": "https://www.penninecare.nhs.uk/about-us/latest-news",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 78558,
+        "seconds": 1.64,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 184,
+        "visible_text_chars": 5525,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 7,
+      "sample_links": [
+        "https://www.penninecare.nhs.uk/about-us/latest-news/mud-sweat-and-cheers-october-charity-challenges",
+        "https://www.penninecare.nhs.uk/about-us/latest-news/flexible-online-therapy-helped-new-mum-manage-anxiety-and-ocd",
+        "https://www.penninecare.nhs.uk/about-us/latest-news/human-library-gives-voice-lived-experience",
+        "https://www.penninecare.nhs.uk/about-us/latest-news/crisis-care-help-home",
+        "https://www.penninecare.nhs.uk/about-us/latest-news/brave-fundraisers-invited-fire-walk-mental-health-charity",
+        "https://www.penninecare.nhs.uk/about-us/latest-news/join-greater-manchester-month-hope-2026"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.penninecare.nhs.uk/about-us/latest-news/mud-sweat-and-cheers-october-charity-challenges",
+          "title": "Mud, sweat and cheers – over £11k raised in October charity challenges",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1343,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.penninecare.nhs.uk/about-us/latest-news/flexible-online-therapy-helped-new-mum-manage-anxiety-and-ocd",
+          "title": "Flexible online therapy helped new mum manage anxiety and OCD",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1524,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.penninecare.nhs.uk/about-us/latest-news/human-library-gives-voice-lived-experience",
+          "title": "Human Library gives voice to lived experience",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1327,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.penninecare.nhs.uk/about-us/latest-news/crisis-care-help-home",
+          "title": "Crisis care help at home",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1089,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.penninecare.nhs.uk/about-us/latest-news/brave-fundraisers-invited-fire-walk-mental-health-charity",
+          "title": "Brave fundraisers invited to charity fire walk",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1255,
+          "became_candidate": false,
+          "local": false
+        },
+        {
+          "url": "https://www.penninecare.nhs.uk/about-us/latest-news/join-greater-manchester-month-hope-2026",
+          "title": "Join Greater Manchester Month of Hope 2026",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1051,
+          "became_candidate": false,
+          "local": false
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "rss",
+      "name": "Hopwood Hall College",
+      "url": "https://www.hopwood.ac.uk/feed/",
+      "http": {
+        "url": "https://www.hopwood.ac.uk/feed/",
+        "status": 200,
+        "final_url": "https://www.hopwood.ac.uk/feed/",
+        "content_type": "application/rss+xml; charset=UTF-8",
+        "bytes": 46367,
+        "seconds": 1.15,
+        "server": "LiteSpeed",
+        "looks_like_challenge": false,
+        "anchors": 42,
+        "visible_text_chars": 31834,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "parse_error": "",
+      "entries": 10,
+      "newest_entry_days": 18.95,
+      "entries_last_7d": 0,
+      "candidates_produced": 0,
+      "candidate_titles": [],
+      "verdict": "STALE FEED: newest entry 18.95 days old"
+    },
+    {
+      "kind": "discovery",
+      "name": "Hopwood Hall College",
+      "url": "https://www.hopwood.ac.uk/news-and-events/latest-news/",
+      "link_pattern": "/news-and-events/",
+      "render": false,
+      "http": {
+        "url": "https://www.hopwood.ac.uk/news-and-events/latest-news/",
+        "status": 200,
+        "final_url": "https://www.hopwood.ac.uk/news-and-events/latest-news/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 285385,
+        "seconds": 0.32,
+        "server": "LiteSpeed",
+        "looks_like_challenge": false,
+        "anchors": 368,
+        "visible_text_chars": 8165,
+        "feeds_advertised": [
+          "https://www.hopwood.ac.uk/feed/",
+          "https://www.hopwood.ac.uk/comments/feed/"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 8,
+      "sample_links": [
+        "https://www.hopwood.ac.uk/news-and-events/latest-news/",
+        "https://www.hopwood.ac.uk/news-and-events/",
+        "https://www.hopwood.ac.uk/news-and-events/upcoming-events/",
+        "https://www.hopwood.ac.uk/news-and-events/open-events/",
+        "https://www.hopwood.ac.uk/news-and-events/latest-news/page/2/",
+        "https://www.hopwood.ac.uk/news-and-events/latest-news/page/3/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.hopwood.ac.uk/news-and-events/latest-news/",
+          "title": "Latest News - Hopwood Hall College",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hopwood.ac.uk/news-and-events/",
+          "title": "News & Events - Hopwood Hall College",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hopwood.ac.uk/news-and-events/upcoming-events/",
+          "title": "Upcoming Events - Hopwood Hall College",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hopwood.ac.uk/news-and-events/open-events/",
+          "title": "Open Events - Hopwood Hall College",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hopwood.ac.uk/news-and-events/latest-news/page/2/",
+          "title": "Latest News - Hopwood Hall College",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hopwood.ac.uk/news-and-events/latest-news/page/3/",
+          "title": "Latest News - Hopwood Hall College",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale Sixth Form College",
+      "url": "https://www.rochdalesfc.ac.uk/128/news",
+      "link_pattern": "/news/post/",
+      "render": false,
+      "http": {
+        "url": "https://www.rochdalesfc.ac.uk/128/news",
+        "status": 404,
+        "final_url": "https://www.rochdalesfc.ac.uk/128/news",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 564632,
+        "seconds": 1.45,
+        "server": "nginx",
+        "looks_like_challenge": false,
+        "anchors": 65,
+        "visible_text_chars": 1333,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 0,
+      "sample_links": [],
+      "unmatched_same_host_links": [
+        "https://www.rochdalesfc.ac.uk/apply-to-study-at-rsfc/apply-now",
+        "https://www.rochdalesfc.ac.uk/",
+        "https://www.rochdalesfc.ac.uk/about-us/principals-welcome",
+        "https://www.rochdalesfc.ac.uk/about-us/vision-and-values",
+        "https://www.rochdalesfc.ac.uk/about-us/leadership-team-key-contacts",
+        "https://www.rochdalesfc.ac.uk/about-us/local-governing-body",
+        "https://www.rochdalesfc.ac.uk/about-us/ofsted",
+        "https://www.rochdalesfc.ac.uk/about-us/our-alumni",
+        "https://www.rochdalesfc.ac.uk/about-us/results-and-rsfc-success",
+        "https://www.rochdalesfc.ac.uk/about-us/altus-education-partnership",
+        "https://www.rochdalesfc.ac.uk/apply-to-study-at-rsfc/entry-requirements",
+        "https://www.rochdalesfc.ac.uk/apply-to-study-at-rsfc/the-year-ahead",
+        "https://www.rochdalesfc.ac.uk/apply-to-study-at-rsfc/application-faqs",
+        "https://www.rochdalesfc.ac.uk/apply-to-study-at-rsfc/prospectus",
+        "https://www.rochdalesfc.ac.uk/open-events",
+        "https://www.rochdalesfc.ac.uk/courses/what-will-i-study",
+        "https://www.rochdalesfc.ac.uk/courses/which-subjects-should-i-choose",
+        "https://www.rochdalesfc.ac.uk/courses/courses",
+        "https://www.rochdalesfc.ac.uk/student-life/aspire",
+        "https://www.rochdalesfc.ac.uk/student-life/aspire/spdls",
+        "https://www.rochdalesfc.ac.uk/student-life/aspire-1",
+        "https://www.rochdalesfc.ac.uk/student-life/employability-careers",
+        "https://www.rochdalesfc.ac.uk/student-life/typical-student-day",
+        "https://www.rochdalesfc.ac.uk/student-life/support-wellbeing",
+        "https://www.rochdalesfc.ac.uk/student-life/catering-1"
+      ],
+      "link_outcomes": [],
+      "candidates_from_sample": 0,
+      "verdict": "BROKEN URL: HTTP 404"
+    },
+    {
+      "kind": "discovery",
+      "name": "Falinge Park High School",
+      "url": "https://www.falingepark.com/news-and-events/",
+      "link_pattern": "/news-and-events/|/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.falingepark.com/news-and-events/",
+        "status": 200,
+        "final_url": "https://www.falingepark.com/news-and-events/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 203567,
+        "seconds": 0.66,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 147,
+        "visible_text_chars": 2483,
+        "feeds_advertised": [
+          "https://www.falingepark.com/feed/",
+          "https://www.falingepark.com/comments/feed/"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 1,
+      "sample_links": [
+        "https://www.falingepark.com/news-and-events/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.falingepark.com/news-and-events/",
+          "title": "News and Events",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 1/1 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Oulder Hill Leadership Academy",
+      "url": "https://www.oulderhillacademy.com/latest-news/",
+      "link_pattern": "/latest-news/|/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.oulderhillacademy.com/latest-news/",
+        "status": 200,
+        "final_url": "https://www.oulderhillacademy.com/latest-news/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 212839,
+        "seconds": 1.61,
+        "server": "nginx",
+        "looks_like_challenge": false,
+        "anchors": 163,
+        "visible_text_chars": 6337,
+        "feeds_advertised": [
+          "https://www.oulderhillacademy.com/feed/",
+          "https://www.oulderhillacademy.com/comments/feed/"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 5,
+      "sample_links": [
+        "https://www.oulderhillacademy.com/latest-news/",
+        "https://www.oulderhillacademy.com/news/newsletters/",
+        "https://www.oulderhillacademy.com/latest-news/starlight-magazine/",
+        "https://www.oulderhillacademy.com/category/latest-news/",
+        "https://www.oulderhillacademy.com/latest-news/page/2/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.oulderhillacademy.com/latest-news/",
+          "title": "Latest News - Oulder Hill Leadership Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.oulderhillacademy.com/news/newsletters/",
+          "title": "Newsletters - Oulder Hill Leadership Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.oulderhillacademy.com/latest-news/starlight-magazine/",
+          "title": "Starlight Magazine - Oulder Hill Leadership Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.oulderhillacademy.com/category/latest-news/",
+          "title": "Latest News Archives - Oulder Hill Leadership Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.oulderhillacademy.com/latest-news/page/2/",
+          "title": "Latest News - Page 2 of 6 - Oulder Hill Leadership Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 5/5 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Wardle Academy",
+      "url": "https://www.wchs.co/topic/news-and-events",
+      "link_pattern": "/topic/news-and-events|/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.wchs.co/topic/news-and-events",
+        "status": 200,
+        "final_url": "https://www.wchs.co/topic/news-and-events",
+        "content_type": "text/html",
+        "bytes": 54653,
+        "seconds": 1.19,
+        "server": "",
+        "looks_like_challenge": false,
+        "anchors": 86,
+        "visible_text_chars": 1969,
+        "feeds_advertised": [
+          "https://www.wchs.co/feeds/pages.asp?pid=117&lang=en",
+          "https://www.wchs.co/feeds/comments.asp?title=News and Events&item=page&pid=117"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 1,
+      "sample_links": [
+        "https://www.wchs.co/topic/news-and-events"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.wchs.co/topic/news-and-events",
+          "title": "News and Events",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 1/1 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "St Cuthbert's RC High School",
+      "url": "https://stcuthberts.com/news",
+      "link_pattern": "/news",
+      "render": false,
+      "http": {
+        "url": "https://stcuthberts.com/news",
+        "status": 200,
+        "final_url": "https://stcuthberts.com/news-media/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 121325,
+        "seconds": 2.69,
+        "server": "LiteSpeed",
+        "looks_like_challenge": false,
+        "anchors": 164,
+        "visible_text_chars": 2624,
+        "feeds_advertised": [
+          "https://stcuthberts.com/feed/",
+          "https://stcuthberts.com/comments/feed/"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 3,
+      "sample_links": [
+        "https://stcuthberts.com/news-media/",
+        "https://stcuthberts.com/news-media/news/",
+        "https://stcuthberts.com/news-media/letters-home/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://stcuthberts.com/news-media/",
+          "title": "News & Media | St Cuthbert's Catholic Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://stcuthberts.com/news-media/news/",
+          "title": "School News | St Cuthbert's Catholic Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://stcuthberts.com/news-media/letters-home/",
+          "title": "Letters Home | St Cuthbert's Catholic Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 3/3 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Edgar Wood Academy",
+      "url": "https://www.edgarwood.org/80/news-and-events",
+      "link_pattern": "/80/news-and-events|/news-and-events|/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.edgarwood.org/80/news-and-events",
+        "status": 200,
+        "final_url": "https://www.edgarwood.org/80/news-and-events",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 108626,
+        "seconds": 0.69,
+        "server": "nginx",
+        "looks_like_challenge": false,
+        "anchors": 114,
+        "visible_text_chars": 2926,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 7,
+      "sample_links": [
+        "https://www.edgarwood.org/80/news-and-events",
+        "https://www.edgarwood.org/80/news-and-events/page1",
+        "https://www.edgarwood.org/80/news-and-events/page2",
+        "https://www.edgarwood.org/80/news-and-events/page3",
+        "https://www.edgarwood.org/80/news-and-events/page4",
+        "https://www.edgarwood.org/80/news-and-events/page12"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.edgarwood.org/80/news-and-events",
+          "title": "News & Events | Edgar Wood Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.edgarwood.org/80/news-and-events/page1",
+          "title": "News & Events | Edgar Wood Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.edgarwood.org/80/news-and-events/page2",
+          "title": "News & Events | Edgar Wood Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.edgarwood.org/80/news-and-events/page3",
+          "title": "News & Events | Edgar Wood Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.edgarwood.org/80/news-and-events/page4",
+          "title": "News & Events | Edgar Wood Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.edgarwood.org/80/news-and-events/page12",
+          "title": "News & Events | Edgar Wood Academy",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Action Together Rochdale News",
+      "url": "https://www.actiontogether.org.uk/rochdale-news",
+      "link_pattern": "/",
+      "render": false,
+      "http": {
+        "url": "https://www.actiontogether.org.uk/rochdale-news",
+        "status": 200,
+        "final_url": "https://www.actiontogether.org.uk/rochdale-news",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 78290,
+        "seconds": 0.68,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 222,
+        "visible_text_chars": 5896,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 40,
+      "sample_links": [
+        "https://www.actiontogether.org.uk/rochdale-news",
+        "https://www.actiontogether.org.uk/",
+        "https://www.actiontogether.org.uk/community-activities/community-activity-directory",
+        "https://www.actiontogether.org.uk/user",
+        "https://www.actiontogether.org.uk/dashboard",
+        "https://www.actiontogether.org.uk/about-us"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.actiontogether.org.uk/rochdale-news",
+          "title": "Rochdale News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 111,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/",
+          "title": "For stronger communities in Oldham, Rochdale and Tameside",
+          "published": "",
+          "fresh": false,
+          "body_chars": 571,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/community-activities/community-activity-directory",
+          "title": "Community Activities",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1024,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/user",
+          "title": "Log in",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/dashboard",
+          "title": "Dashboard",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/about-us",
+          "title": "About us",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1243,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Action Together Latest News",
+      "url": "https://www.actiontogether.org.uk/whats-happening",
+      "link_pattern": "/",
+      "render": false,
+      "http": {
+        "url": "https://www.actiontogether.org.uk/whats-happening",
+        "status": 200,
+        "final_url": "https://www.actiontogether.org.uk/whats-happening",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 80013,
+        "seconds": 0.19,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 229,
+        "visible_text_chars": 6396,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 40,
+      "sample_links": [
+        "https://www.actiontogether.org.uk/whats-happening",
+        "https://www.actiontogether.org.uk/",
+        "https://www.actiontogether.org.uk/community-activities/community-activity-directory",
+        "https://www.actiontogether.org.uk/user",
+        "https://www.actiontogether.org.uk/dashboard",
+        "https://www.actiontogether.org.uk/about-us"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.actiontogether.org.uk/whats-happening",
+          "title": "Latest news",
+          "published": "",
+          "fresh": false,
+          "body_chars": 661,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/",
+          "title": "For stronger communities in Oldham, Rochdale and Tameside",
+          "published": "",
+          "fresh": false,
+          "body_chars": 571,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/community-activities/community-activity-directory",
+          "title": "Community Activities",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1024,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/user",
+          "title": "Log in",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/dashboard",
+          "title": "Dashboard",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.actiontogether.org.uk/about-us",
+          "title": "About us",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1243,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Your Trust Rochdale News",
+      "url": "https://www.yourtrustrochdale.co.uk/news/",
+      "link_pattern": "/news/|/category/news/",
+      "render": false,
+      "http": {
+        "url": "https://www.yourtrustrochdale.co.uk/news/",
+        "status": 200,
+        "final_url": "https://www.yourtrustrochdale.co.uk/news/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 126093,
+        "seconds": 2.04,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 128,
+        "visible_text_chars": 7887,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 6,
+      "sample_links": [
+        "https://www.yourtrustrochdale.co.uk/news/",
+        "https://www.yourtrustrochdale.co.uk/news/august-bank-holiday-opening-hours-2026/",
+        "https://www.yourtrustrochdale.co.uk/news/may-bank-holiday-hours/",
+        "https://www.yourtrustrochdale.co.uk/news/heywood-civic-reopens-after-redevelopment/",
+        "https://www.yourtrustrochdale.co.uk/news/page/2/",
+        "https://www.yourtrustrochdale.co.uk/news/page/14/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/news/",
+          "title": "News - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/news/august-bank-holiday-opening-hours-2026/",
+          "title": "August Bank Holiday Opening Hours 2026 - Your Trust",
+          "published": "2026-08-07T08:46:25+00:00",
+          "fresh": false,
+          "body_chars": 52,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/news/may-bank-holiday-hours/",
+          "title": "May Bank Holiday Opening Hours - Your Trust",
+          "published": "2026-04-27T08:55:58+00:00",
+          "fresh": false,
+          "body_chars": 44,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/news/heywood-civic-reopens-after-redevelopment/",
+          "title": "Heywood Civic reopens after redevelopment - Your Trust",
+          "published": "2026-03-02T14:19:38+00:00",
+          "fresh": false,
+          "body_chars": 1082,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/news/page/2/",
+          "title": "News - Page 2 of 14 - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/news/page/14/",
+          "title": "News - Page 14 of 14 - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Your Trust Rochdale News Archive",
+      "url": "https://www.yourtrustrochdale.co.uk/category/news/",
+      "link_pattern": "/",
+      "render": false,
+      "http": {
+        "url": "https://www.yourtrustrochdale.co.uk/category/news/",
+        "status": 200,
+        "final_url": "https://www.yourtrustrochdale.co.uk/category/news/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 128201,
+        "seconds": 2.33,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 128,
+        "visible_text_chars": 7751,
+        "feeds_advertised": [
+          "https://www.yourtrustrochdale.co.uk/category/news/feed/"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 40,
+      "sample_links": [
+        "https://www.yourtrustrochdale.co.uk/category/news/",
+        "https://www.yourtrustrochdale.co.uk/policies/cookie-policy/",
+        "https://www.yourtrustrochdale.co.uk/book-now/",
+        "https://www.yourtrustrochdale.co.uk/memberships/",
+        "https://www.yourtrustrochdale.co.uk/donate/",
+        "https://www.yourtrustrochdale.co.uk/support-us/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/category/news/",
+          "title": "News Archives - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/policies/cookie-policy/",
+          "title": "Cookie Policy - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1064,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/book-now/",
+          "title": "Book now - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/memberships/",
+          "title": "Health & Fitness membership - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1682,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/donate/",
+          "title": "Donate - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1333,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.yourtrustrochdale.co.uk/support-us/",
+          "title": "Support Us - Your Trust",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1605,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Groundwork Greater Manchester",
+      "url": "https://www.groundwork.org.uk/greatermanchester/latest/",
+      "link_pattern": "/greatermanchester/latest/",
+      "render": false,
+      "http": {
+        "url": "https://www.groundwork.org.uk/greatermanchester/latest/",
+        "status": 403,
+        "final_url": "https://www.groundwork.org.uk/greatermanchester/latest/",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 1480,
+        "seconds": 0.38,
+        "server": "cloudflare",
+        "looks_like_challenge": true,
+        "anchors": 1,
+        "visible_text_chars": 121,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 403,
+        "allowed": true
+      },
+      "matched_links": 0,
+      "sample_links": [],
+      "unmatched_same_host_links": [
+        "https://www.groundwork.org.uk/greatermanchester/latest/?ki-cf-botcl=1"
+      ],
+      "link_outcomes": [],
+      "candidates_from_sample": 0,
+      "verdict": "BLOCKED: HTTP 403 + challenge page"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale Creates What's On",
+      "url": "https://www.rochdalecreates.co.uk/whats-on",
+      "link_pattern": "/whats-on/",
+      "render": true,
+      "http": {
+        "url": "https://www.rochdalecreates.co.uk/whats-on",
+        "status": 200,
+        "final_url": "https://www.rochdalecreates.co.uk/whats-on",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 44823,
+        "seconds": 0.88,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 81,
+        "visible_text_chars": 2645,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 0,
+      "sample_links": [],
+      "unmatched_same_host_links": [
+        "https://www.rochdalecreates.co.uk/",
+        "https://www.rochdalecreates.co.uk/subscribe",
+        "https://www.rochdalecreates.co.uk/townofculture",
+        "https://www.rochdalecreates.co.uk/townofculture/awards",
+        "https://www.rochdalecreates.co.uk/townofculture/music-stories",
+        "https://www.rochdalecreates.co.uk/townofculture/sponsors",
+        "https://www.rochdalecreates.co.uk/whats-on",
+        "https://www.rochdalecreates.co.uk/whats-on/culture-quest",
+        "https://www.rochdalecreates.co.uk/news",
+        "https://www.rochdalecreates.co.uk/films",
+        "https://www.rochdalecreates.co.uk/opportunities",
+        "https://www.rochdalecreates.co.uk/opportunities/commissions",
+        "https://www.rochdalecreates.co.uk/opportunities/funding-grants",
+        "https://www.rochdalecreates.co.uk/opportunities/jobs",
+        "https://www.rochdalecreates.co.uk/opportunities/training-development",
+        "https://www.rochdalecreates.co.uk/directory",
+        "https://www.rochdalecreates.co.uk/spaces",
+        "https://www.rochdalecreates.co.uk/networks",
+        "https://www.rochdalecreates.co.uk/networks/create-rochdale",
+        "https://www.rochdalecreates.co.uk/networks/cultural-compact",
+        "https://www.rochdalecreates.co.uk/networks/culture-co-op",
+        "https://www.rochdalecreates.co.uk/networks/rochdale-borough-culture-network",
+        "https://www.rochdalecreates.co.uk/faqs",
+        "https://www.rochdalecreates.co.uk/my-account",
+        "https://www.rochdalecreates.co.uk/my-account/login"
+      ],
+      "link_outcomes": [],
+      "candidates_from_sample": 0,
+      "verdict": "LINK PATTERN MATCHES NOTHING"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale Creates News",
+      "url": "https://www.rochdalecreates.co.uk/news",
+      "link_pattern": "/news/",
+      "render": true,
+      "http": {
+        "url": "https://www.rochdalecreates.co.uk/news",
+        "status": 200,
+        "final_url": "https://www.rochdalecreates.co.uk/news",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 40897,
+        "seconds": 0.34,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 80,
+        "visible_text_chars": 2339,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 0,
+      "sample_links": [],
+      "unmatched_same_host_links": [
+        "https://www.rochdalecreates.co.uk/",
+        "https://www.rochdalecreates.co.uk/subscribe",
+        "https://www.rochdalecreates.co.uk/townofculture",
+        "https://www.rochdalecreates.co.uk/townofculture/awards",
+        "https://www.rochdalecreates.co.uk/townofculture/music-stories",
+        "https://www.rochdalecreates.co.uk/townofculture/sponsors",
+        "https://www.rochdalecreates.co.uk/whats-on",
+        "https://www.rochdalecreates.co.uk/whats-on/culture-quest",
+        "https://www.rochdalecreates.co.uk/news",
+        "https://www.rochdalecreates.co.uk/films",
+        "https://www.rochdalecreates.co.uk/opportunities",
+        "https://www.rochdalecreates.co.uk/opportunities/commissions",
+        "https://www.rochdalecreates.co.uk/opportunities/funding-grants",
+        "https://www.rochdalecreates.co.uk/opportunities/jobs",
+        "https://www.rochdalecreates.co.uk/opportunities/training-development",
+        "https://www.rochdalecreates.co.uk/directory",
+        "https://www.rochdalecreates.co.uk/spaces",
+        "https://www.rochdalecreates.co.uk/networks",
+        "https://www.rochdalecreates.co.uk/networks/create-rochdale",
+        "https://www.rochdalecreates.co.uk/networks/cultural-compact",
+        "https://www.rochdalecreates.co.uk/networks/culture-co-op",
+        "https://www.rochdalecreates.co.uk/networks/rochdale-borough-culture-network",
+        "https://www.rochdalecreates.co.uk/faqs",
+        "https://www.rochdalecreates.co.uk/my-account",
+        "https://www.rochdalecreates.co.uk/my-account/login"
+      ],
+      "link_outcomes": [],
+      "candidates_from_sample": 0,
+      "verdict": "LINK PATTERN MATCHES NOTHING"
+    },
+    {
+      "kind": "discovery",
+      "name": "Visit Rochdale",
+      "url": "https://www.visitrochdale.com/whats-on",
+      "link_pattern": "/whats-on/",
+      "render": false,
+      "http": {
+        "url": "https://www.visitrochdale.com/whats-on",
+        "status": 200,
+        "final_url": "https://www.visitrochdale.com/whats-on",
+        "content_type": "text/html; charset=utf-8",
+        "bytes": 129193,
+        "seconds": 0.69,
+        "server": "nginx",
+        "looks_like_challenge": false,
+        "anchors": 105,
+        "visible_text_chars": 6101,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 3,
+      "sample_links": [
+        "https://www.visitrochdale.com/whats-on/rochdale-borough-council-events-p1123171",
+        "https://www.visitrochdale.com/whats-on/rochdale-town-hall-events-p1123161",
+        "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.visitrochdale.com/whats-on/rochdale-borough-council-events-p1123171",
+          "title": "Rochdale Borough Council events",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.visitrochdale.com/whats-on/rochdale-town-hall-events-p1123161",
+          "title": "Rochdale Town Hall events",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.visitrochdale.com/whats-on/ignite-fire-festival-p938141",
+          "title": "Ignite Fire Festival",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 3/3 sampled pages not fresh"
+    },
+    {
+      "kind": "rss",
+      "name": "Rochdale Town Hall",
+      "url": "https://www.rochdaletownhall.co.uk/rss/news",
+      "http": {
+        "url": "https://www.rochdaletownhall.co.uk/rss/news",
+        "status": 200,
+        "final_url": "https://www.rochdaletownhall.co.uk/rss/news",
+        "content_type": "text/xml;charset=UTF-8",
+        "bytes": 3052,
+        "seconds": 0.54,
+        "server": "Web Server",
+        "looks_like_challenge": false,
+        "anchors": 0,
+        "visible_text_chars": 1955,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 404,
+        "allowed": true
+      },
+      "parse_error": "",
+      "entries": 5,
+      "newest_entry_days": 37.89,
+      "entries_last_7d": 0,
+      "candidates_produced": 0,
+      "candidate_titles": [],
+      "verdict": "STALE FEED: newest entry 37.89 days old"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale Town Hall Events",
+      "url": "https://www.rochdaletownhall.co.uk/events?page=1",
+      "link_pattern": "/events/event/",
+      "render": false,
+      "http": {
+        "url": "https://www.rochdaletownhall.co.uk/events?page=1",
+        "status": 200,
+        "final_url": "https://www.rochdaletownhall.co.uk/events?page=1",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 148876,
+        "seconds": 1.16,
+        "server": "Web Server",
+        "looks_like_challenge": false,
+        "anchors": 47,
+        "visible_text_chars": 14724,
+        "feeds_advertised": [
+          "https://www.rochdaletownhall.co.uk/rss/news"
+        ]
+      },
+      "robots": {
+        "robots_status": 404,
+        "allowed": true
+      },
+      "matched_links": 30,
+      "sample_links": [
+        "https://www.rochdaletownhall.co.uk/events/event/13/rochdale-town-hall-tours",
+        "https://www.rochdaletownhall.co.uk/events/event/89/historic-court-chamber-tours-at-rochdale-town-hall",
+        "https://www.rochdaletownhall.co.uk/events/event/111/organ-concerts-at-rochdale-town-hall",
+        "https://www.rochdaletownhall.co.uk/events/event/142/snuggle-up-with-a-book---rochdale-town-hall",
+        "https://www.rochdaletownhall.co.uk/events/event/26/tea-dances-at-rochdale-town-hall",
+        "https://www.rochdaletownhall.co.uk/events/event/190/rochdale-libraries-story-time-at-rochdale-town-hall"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.rochdaletownhall.co.uk/events/event/13/rochdale-town-hall-tours",
+          "title": "Rochdale Town Hall tours – Rochdale Town Hall",
+          "published": "",
+          "fresh": false,
+          "body_chars": 891,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rochdaletownhall.co.uk/events/event/89/historic-court-chamber-tours-at-rochdale-town-hall",
+          "title": "Historic Court Chamber Tours at Rochdale Town Hall – Rochdale Town Hall",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1063,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rochdaletownhall.co.uk/events/event/111/organ-concerts-at-rochdale-town-hall",
+          "title": "Organ concerts at Rochdale Town Hall – Rochdale Town Hall",
+          "published": "",
+          "fresh": false,
+          "body_chars": 763,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rochdaletownhall.co.uk/events/event/142/snuggle-up-with-a-book---rochdale-town-hall",
+          "title": "Snuggle Up with a Book - Rochdale Town Hall – Rochdale Town Hall",
+          "published": "",
+          "fresh": false,
+          "body_chars": 792,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rochdaletownhall.co.uk/events/event/26/tea-dances-at-rochdale-town-hall",
+          "title": "Tea Dances at Rochdale Town Hall – Rochdale Town Hall",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1562,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rochdaletownhall.co.uk/events/event/190/rochdale-libraries-story-time-at-rochdale-town-hall",
+          "title": "Rochdale Libraries Story Time at Rochdale Town Hall – Rochdale Town Hall",
+          "published": "",
+          "fresh": false,
+          "body_chars": 747,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale Development Agency",
+      "url": "https://investinrochdale.co.uk/news",
+      "link_pattern": "/news/",
+      "render": false,
+      "http": {
+        "url": "https://investinrochdale.co.uk/news",
+        "status": 200,
+        "final_url": "https://investinrochdale.co.uk/news",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 42646,
+        "seconds": 1.15,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 90,
+        "visible_text_chars": 5461,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 11,
+      "sample_links": [
+        "https://investinrochdale.co.uk/news/post/rochdale-celebrates-the-people-and-stories-behind-broadfield-park-slopes",
+        "https://investinrochdale.co.uk/news/post/finalists-revealed-for-rochdale-business-awards-2026",
+        "https://investinrochdale.co.uk/news/post/major-milestone-for-atom-valley-as-sustainable-materials-manufacturing-cent",
+        "https://investinrochdale.co.uk/news/post/on-record-rochdales-new-album-celebrates-towns-music-history",
+        "https://investinrochdale.co.uk/news/post/rochdale-creates-appoints-new-independent-chair",
+        "https://investinrochdale.co.uk/news/post/rochdale-cultural-organisations-secure-new-greater-manchester-culture-fund"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://investinrochdale.co.uk/news/post/rochdale-celebrates-the-people-and-stories-behind-broadfield-park-slopes",
+          "title": "Rochdale Development Agency",
+          "published": "",
+          "fresh": false,
+          "body_chars": 4548,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://investinrochdale.co.uk/news/post/finalists-revealed-for-rochdale-business-awards-2026",
+          "title": "Rochdale Development Agency",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1287,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://investinrochdale.co.uk/news/post/major-milestone-for-atom-valley-as-sustainable-materials-manufacturing-cent",
+          "title": "Rochdale Development Agency",
+          "published": "",
+          "fresh": false,
+          "body_chars": 2632,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://investinrochdale.co.uk/news/post/on-record-rochdales-new-album-celebrates-towns-music-history",
+          "title": "Rochdale Development Agency",
+          "published": "",
+          "fresh": false,
+          "body_chars": 4183,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://investinrochdale.co.uk/news/post/rochdale-creates-appoints-new-independent-chair",
+          "title": "Rochdale Development Agency",
+          "published": "",
+          "fresh": false,
+          "body_chars": 4308,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://investinrochdale.co.uk/news/post/rochdale-cultural-organisations-secure-new-greater-manchester-culture-fund",
+          "title": "Rochdale Development Agency",
+          "published": "",
+          "fresh": false,
+          "body_chars": 2801,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale Hornets",
+      "url": "https://www.hornetsrugbyleague.co.uk/news",
+      "link_pattern": "/news",
+      "render": false,
+      "http": {
+        "url": "https://www.hornetsrugbyleague.co.uk/news",
+        "status": 200,
+        "final_url": "https://www.hornetsrugbyleague.co.uk/news",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 38456,
+        "seconds": 0.45,
+        "server": "Apache/2.4.61 (Debian)",
+        "looks_like_challenge": false,
+        "anchors": 127,
+        "visible_text_chars": 4492,
+        "feeds_advertised": []
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 6,
+      "sample_links": [
+        "https://www.hornetsrugbyleague.co.uk/news",
+        "https://www.hornetsrugbyleague.co.uk/news?search=&page=2",
+        "https://www.hornetsrugbyleague.co.uk/news?search=&page=3",
+        "https://www.hornetsrugbyleague.co.uk/news?search=&page=4",
+        "https://www.hornetsrugbyleague.co.uk/news?search=&page=5",
+        "https://www.hornetsrugbyleague.co.uk/news?search=&page=6"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.hornetsrugbyleague.co.uk/news",
+          "title": "News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 988,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hornetsrugbyleague.co.uk/news?search=&page=2",
+          "title": "News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 988,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hornetsrugbyleague.co.uk/news?search=&page=3",
+          "title": "News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 988,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hornetsrugbyleague.co.uk/news?search=&page=4",
+          "title": "News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 988,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hornetsrugbyleague.co.uk/news?search=&page=5",
+          "title": "News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 988,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.hornetsrugbyleague.co.uk/news?search=&page=6",
+          "title": "News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 988,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    },
+    {
+      "kind": "discovery",
+      "name": "Rochdale AFC Community Trust",
+      "url": "https://www.rochdaleafccommunity.org/news/",
+      "link_pattern": "/",
+      "render": false,
+      "http": {
+        "url": "https://www.rochdaleafccommunity.org/news/",
+        "status": 200,
+        "final_url": "https://www.rochdaleafccommunity.org/news/",
+        "content_type": "text/html; charset=UTF-8",
+        "bytes": 157761,
+        "seconds": 1.08,
+        "server": "Apache",
+        "looks_like_challenge": false,
+        "anchors": 116,
+        "visible_text_chars": 3050,
+        "feeds_advertised": [
+          "https://www.rochdaleafccommunity.org/feed/",
+          "https://www.rochdaleafccommunity.org/comments/feed/"
+        ]
+      },
+      "robots": {
+        "robots_status": 200,
+        "allowed": true
+      },
+      "matched_links": 40,
+      "sample_links": [
+        "https://www.rochdaleafccommunity.org/news/",
+        "https://rochdaleafccommunity.org/",
+        "https://www.rochdaleafccommunity.org/book-now/",
+        "https://rochdaleafccommunity.org/cart/",
+        "https://www.rochdaleafccommunity.org/",
+        "https://www.rochdaleafccommunity.org/who-we-are/"
+      ],
+      "link_outcomes": [
+        {
+          "url": "https://www.rochdaleafccommunity.org/news/",
+          "title": "News",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://rochdaleafccommunity.org/",
+          "title": "Home",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rochdaleafccommunity.org/book-now/",
+          "title": "Book Now",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://rochdaleafccommunity.org/cart/",
+          "title": "Cart",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rochdaleafccommunity.org/",
+          "title": "Home",
+          "published": "",
+          "fresh": false,
+          "body_chars": 0,
+          "became_candidate": false,
+          "local": true
+        },
+        {
+          "url": "https://www.rochdaleafccommunity.org/who-we-are/",
+          "title": "Who We Are",
+          "published": "",
+          "fresh": false,
+          "body_chars": 1909,
+          "became_candidate": false,
+          "local": true
+        }
+      ],
+      "candidates_from_sample": 0,
+      "verdict": "NO FRESH ITEMS / NO DATES: 6/6 sampled pages not fresh"
+    }
+  ]
+}
