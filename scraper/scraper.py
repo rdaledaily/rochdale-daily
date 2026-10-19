@@ -23,6 +23,7 @@ and must come from the cited source records.
 from __future__ import annotations
 from source_presentation import clean_candidate_public_text, is_subtle_source, sanitise_article
 from house_style import STYLE_VERSION
+from newsroom_source_policy import is_non_article_service_page
 from editorial_upgrade import (
     SERVICE_SENTENCE_RE,
     SYMPATHY_SENTENCE_RE,
@@ -197,7 +198,6 @@ DISCOVERY_PAGES = [
     {'name': 'TfGM Newsroom', 'url': 'https://news.tfgm.com/', 'default_area': 'rochdale', 'link_pattern': '/press-releases/'},
     {'name': 'TfGM Travel Alerts', 'url': 'https://tfgm.com/travel-updates/travel-alerts', 'default_area': 'rochdale', 'link_pattern': '/travel-updates/'},
     {'name': 'Northern News', 'url': 'https://media.northernrailway.co.uk/news/', 'default_area': 'rochdale', 'link_pattern': '/news/'},
-    {'name': 'Northern Service Updates', 'url': 'https://www.northernrailway.co.uk/service-updates', 'default_area': 'rochdale', 'link_pattern': '/service-updates|/news/'},
     {'name': 'National Highways North West', 'url': 'https://nationalhighways.co.uk/our-roads/north-west/north-west-maintenance-schemes/', 'default_area': 'rochdale', 'link_pattern': '/'},
     {'name': 'United Utilities Incidents', 'url': 'https://www.unitedutilities.com/emergencies/up-my-street/', 'default_area': 'rochdale', 'link_pattern': '/emergencies/|/incident/'},
     {'name': 'GMCA News', 'url': 'https://www.greatermanchester-ca.gov.uk/news/', 'default_area': 'rochdale', 'link_pattern': '/news/'},
@@ -227,7 +227,6 @@ DISCOVERY_PAGES = [
 # in the story feed.
 LIVE_PAGE_SOURCES = [
     {'name': 'Bee Network live travel alerts', 'url': 'https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true', 'category': 'transport', 'default_area': 'rochdale'},
-    {'name': 'Northern live service updates', 'url': 'https://www.northernrailway.co.uk/service-updates', 'category': 'transport', 'default_area': 'rochdale'},
 ]
 AGGREGATOR_PAGES = [{'name': 'NewsNow — Rochdale', 'url': 'https://www.newsnow.co.uk/h/UK/England/Greater+Manchester/Rochdale', 'default_area': 'rochdale', 'default_category': 'news', 'max_links': 30}, {'name': 'Ground News — Rochdale', 'url': 'https://ground.news/interest/rochdale', 'default_area': 'rochdale', 'default_category': 'news', 'max_links': 30}]
 DISCOVERY_LISTING_OVERRIDES = {'Groundwork Greater Manchester': ['https://www.groundwork.org.uk/greatermanchester/latest/', 'https://www.groundwork.org.uk/greatermanchester/latest/?query-6-page=2'], 'Rochdale Borough Council News': ['https://www.rochdale.gov.uk/news', 'https://www.rochdale.gov.uk/news?page=2', 'https://www.rochdale.gov.uk/news?page=3'], 'Rochdale Council Events': ['https://www.rochdale.gov.uk/events?page=1', 'https://www.rochdale.gov.uk/events?page=2', 'https://www.rochdale.gov.uk/events?page=3'], 'Rochdale Town Hall Events': ['https://www.rochdaletownhall.co.uk/events?page=1', 'https://www.rochdaletownhall.co.uk/events?page=2', 'https://www.rochdaletownhall.co.uk/events?page=3'], 'Roch Valley Radio Local News': ['https://www.rochvalleyradio.com/news/local-news/', 'https://www.rochvalleyradio.com/news/local-news/?page=2', 'https://www.rochvalleyradio.com/news/local-news/?page=3']}
@@ -2664,6 +2663,9 @@ def article_is_low_quality(article: dict[str, Any]) -> bool:
     return bool(GENERIC_ARTICLE_RE.search(text))
 
 def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, Any] | None:
+    if is_non_article_service_page(candidate.source_url):
+        note_rewrite_skip('non-article service dashboard')
+        return None
     clean_candidate_public_text(candidate)
     if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate)):
         log.info('Rejected careers/vacancy post: %s', candidate.source_url)
@@ -3176,6 +3178,17 @@ def rewrite_outcome_for_reason(reason: str) -> str:
 
 
 NEWSROOM_RETRY_POLICY_EPOCH = '2026-10-11-unblock-source-attributed-v1'
+OVERLAP_REBUILD_POLICY_EPOCH = '2026-10-19-fact-notes-v1'
+
+
+def _overlap_rebuild_retry(entry: dict[str, Any]) -> bool:
+    """Reopen held copying failures once after introducing the fact-note rebuild."""
+    return (
+        entry.get('outcome') == 'rejected'
+        and 'long verbatim source passage' in str(entry.get('reason') or '')
+        and entry.get('overlap_rebuild_epoch') != OVERLAP_REBUILD_POLICY_EPOCH
+    )
+
 
 
 def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> None:
@@ -3199,11 +3212,12 @@ def record_rewrite_attempt(candidate: Any, outcome: str, reason: str = '') -> No
             and 'quality gate after' in str(entry.get('reason') or '')
             and entry.get('policy_epoch') != NEWSROOM_RETRY_POLICY_EPOCH
         )
-        if new_material or entry.get('outcome') != outcome or policy_retry:
+        if new_material or entry.get('outcome') != outcome or policy_retry or _overlap_rebuild_retry(entry):
             # Updated source material or a changed rewrite policy gets a
             # bounded fresh attempt, not an infinite retry on each run.
             entry['attempts'] = 0
         entry['policy_epoch'] = NEWSROOM_RETRY_POLICY_EPOCH
+        entry['overlap_rebuild_epoch'] = OVERLAP_REBUILD_POLICY_EPOCH
         entry['attempts'] = int(entry.get('attempts') or 0) + 1
         entry['last_attempt_at'] = now
         entry['outcome'] = outcome
@@ -3237,6 +3251,8 @@ def rewrite_ledger_block_reason(candidate: Any) -> str:
     reason = str(entry.get('reason') or '')
     if outcome == 'rejected' and 'quality gate after' in reason and entry.get('policy_epoch') != NEWSROOM_RETRY_POLICY_EPOCH:
         return ''  # One bounded reattempt after today's rewrite-policy fix.
+    if _overlap_rebuild_retry(entry):
+        return ''
     if outcome == 'published':
         return 'already published from this source material'
     if int(entry.get('attempts') or 0) < REWRITE_REJECTION_ATTEMPT_LIMIT:
@@ -3440,6 +3456,8 @@ def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[
     live site: 4.3 hours). A short article only genuinely improves when MORE
     source material arrives, and that is exactly the new-source-URL check.
     """
+    if is_non_article_service_page(candidate.source_url):
+        return False
     if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate)):
         return False
     candidate.story_key = candidate.story_key or build_story_key(candidate)
