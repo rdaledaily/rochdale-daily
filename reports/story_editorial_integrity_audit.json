@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 326,
-  "published_count": 326,
-  "category_change_count": 41,
+  "article_count": 331,
+  "published_count": 331,
+  "category_change_count": 42,
   "image_change_count": 69,
   "category_changes": [
+    {
+      "slug": "rochdale-sleep-out-raises-funds-and-awareness-for-homelessness",
+      "title": "Rochdale Sleep Out Raises Funds and Awareness for Homelessness",
+      "from": "health",
+      "to": "community",
+      "reason": "headline strongly identifies community"
+    },
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
       "title": "St Cuthbert’s RC High School Closes Following Bomb Threat",
@@ -296,6 +303,18 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-sleep-out-raises-funds-and-awareness-for-homelessness",
+      "title": "Rochdale Sleep Out Raises Funds and Awareness for Homelessness",
+      "category": "community",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/homelessness.png",
+        "img": "assets/img/cards/homelessness.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-sleep-out-raises-funds-and-awareness-for-homelessness-generated-card.jpg"
+    },
+    {
       "slug": "roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026",
       "title": "Greenhill Road, roadworks in Middleton from 2 November 2026",
       "category": "traffic",
@@ -378,18 +397,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-council-addresses-concerns-over-local-pub-closures-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-council-to-host-free-bonfire-night-events-in-november",
-      "title": "Rochdale Council to Host Free Bonfire Night Events in November",
-      "category": "transport",
-      "reason": "weak filename image match score -1; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_town_hall_square.jpg",
-        "img": "assets/img/cards/rochdale_town_hall_square.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/rochdale-council-to-host-free-bonfire-night-events-in-november-generated-card.jpg"
     },
     {
       "slug": "rochdale-football-club-to-play-crewe-alexandra-with-live-streaming-available",
