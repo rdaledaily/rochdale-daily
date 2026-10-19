@@ -1,0 +1,46 @@
+name: Rochdale Daily search audit
+
+# Requests every URL in the live sitemaps the way a crawler does (no redirect
+# following) and records status, redirects, canonical, noindex and structured
+# data problems in reports/seo_live_audit.json. Read-only against the site.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "37 5 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-seo-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Audit the live site
+        id: audit
+        run: |
+          python scraper/seo_live_audit.py | tee /tmp/seo.txt
+          head -12 /tmp/seo.txt | while IFS= read -r line; do echo "::notice title=search audit::${line}"; done
+      - name: Record the report
+        run: |
+          git config user.name "Rochdale Daily SEO audit"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add reports/seo_live_audit.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Record live search audit"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 7))
+          done
+          echo "::warning::could not record the report; it is in the step log"
