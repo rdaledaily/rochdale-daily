@@ -19,6 +19,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import primary_data as pd  # noqa: E402
 
+pd._pause = lambda seconds: None    # tests never wait between pages
+
 NOW = datetime(2026, 10, 9, 19, 30, tzinfo=timezone.utc)
 
 
@@ -96,6 +98,54 @@ ONS_HTML = """<html><head><script>var x = "Last updated: 1 January 2020";</scrip
 <p>Private rents rose to an average of £855 in August 2026, an annual increase of 8.5% from £788 in August 2025.</p></body></html>"""
 
 
+# ---- Added 19 October 2026: fixtures trimmed from responses read that day on a GitHub runner.
+
+# Real Find a Tender release (Hopwood Hall College, Middleton), plus three that must be refused.
+FTS_HOPWOOD = {"id": "098083-2026", "tag": ["award", "contract"], "date": "2026-10-16T15:27:16+01:00", "ocid": "ocds-h6vhtk-0789d4", "buyer": {"id": "GB-UKPRN-10003146", "name": "HOPWOOD HALL COLLEGE"}, "parties": [{"name": "HOPWOOD HALL COLLEGE", "id": "GB-UKPRN-10003146", "identifier": {"legalName": "HOPWOOD HALL COLLEGE", "id": "10003146", "scheme": "GB-UKPRN"}, "address": {"streetAddress": "Rochdale Road", "locality": "Middleton", "region": "UKD37", "postalCode": "M24 6XH", "countryName": "United Kingdom"}, "roles": ["buyer"]}], "awards": [{"id": "098083-2026-1", "suppliers": [{"id": "GB-COH-01386074", "name": "BWT UK Ltd"}]}], "tender": {"title": "Provision of Drinking Water Fountains", "description": "This award relates to the supply, installation, annual servicing, and ongoing maintenance of drinking water fountains."}}
+FTS_RBC_TENDER = {"id": "097501-2026", "tag": ["tender"], "date": "2026-10-14T11:33:03+01:00", "buyer": {"id": "GB-PPON-RBC", "name": "Rochdale Borough Council"},
+                  "parties": [{"id": "GB-PPON-RBC", "name": "Rochdale Borough Council", "roles": ["buyer"], "address": {"locality": "Rochdale"}}],
+                  "tender": {"title": "Provision of Single Homelessness Prevention Service (Rochdale)", "value": {"amount": 1200000},
+                             "tenderPeriod": {"endDate": "2026-11-20T12:00:00+00:00"}}}
+# The measurement's false positives: a Salford buyer, and a Belfast buyer whose supplier is "Bamford Bus".
+FTS_SALIX = {"id": "098100-2026", "tag": ["award", "contract"], "date": "2026-10-16T12:04:11+01:00", "buyer": {"id": "S", "name": "Salix Homes"},
+             "parties": [{"id": "S", "name": "Salix Homes", "roles": ["buyer"], "address": {"postalCode": "M5 4NJ", "locality": "Salford"}},
+                         {"id": "J", "name": "JACKSON, JACKSON & SONS LIMITED", "roles": ["supplier"], "address": {"postalCode": "OL11 1AA", "locality": "Rochdale"}}],
+             "awards": [{"title": "Fire Remedial Works", "suppliers": [{"name": "JACKSON, JACKSON & SONS LIMITED"}]}], "tender": {"title": "Fire Remedial Works"}}
+FTS_TRANSLINK = {"id": "098090-2026", "tag": ["award", "contract"], "date": "2026-10-15T11:11:53+01:00", "buyer": {"id": "T", "name": "Translink"},
+                 "parties": [{"id": "T", "name": "Translink", "roles": ["buyer"], "address": {"postalCode": "BT1 3PB"}}],
+                 "awards": [{"suppliers": [{"name": "Bamford Bus Company Ltd"}]}], "tender": {"title": "P-3370 Supply of Double Deck Diesel Buses"}}
+FTS_UPDATE = {"id": "097400-2026", "tag": ["tenderUpdate"], "date": "2026-10-13T09:21:04+01:00", "buyer": {"id": "H", "name": "Hopwood Hall College"},
+              "parties": [{"id": "H", "name": "Hopwood Hall College", "roles": ["buyer"], "address": {"postalCode": "M24 6XH"}}],
+              "tender": {"title": "Provision of HR & Payroll System"}}
+FTS_PAGE_1 = {"releases": [FTS_SALIX, FTS_HOPWOOD, FTS_UPDATE],
+              "links": {"next": "https://www.find-tender.service.gov.uk/api/1.0/ocdsReleasePackages?cursor=abc"}}
+FTS_PAGE_2 = {"releases": [FTS_TRANSLINK, FTS_RBC_TENDER], "links": {}}
+
+# Real Met Office UK feed item; Rochdale added to the authority list in the copy that must be offered.
+def met_item(region: str, authorities: str, warning_id: str = "91b2fc98-1e13-4c64-8443-c1de401b2e8c") -> str:
+    link = f"https://www.metoffice.gov.uk/weather/warnings-and-advice/uk-warnings#?date=2026-10-22&amp;id={warning_id}&amp;referrer=rss"
+    return (f"<item><title>Yellow warning of wind affecting {region}</title><link>{link}</link>"
+            f"<description>Yellow warning of wind affecting {region}: {authorities} valid from 2300 Thu 22 Oct to 1100 Fri 23 Oct</description>"
+            f"<guid isPermaLink=\"false\">{link}&amp;region={region}</guid></item>")
+MET_RSS = ('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Met Office warnings for UK</title>'
+           '<pubDate>Mon, 19 Oct 2026 10:05:02 GMT</pubDate>'
+           + met_item("South West England", "Bath and North East Somerset, Bristol, Cornwall, Devon")
+           + met_item("North West England", "Bolton, Bury, Manchester, Oldham, Rochdale, Salford")
+           + met_item("Yorkshire &amp; Humber", "Calderdale, Kirklees, Rochdale Canal Trust Area")   # not the authority
+           + met_item("North West England", "Bolton, Rochdale")      # the same warning again: one story
+           + "</channel></rss>")
+
+# Real Nomis claimant count CSV for Rochdale, read 19 October 2026.
+NOMIS_CSV = """"DATE_NAME","GEOGRAPHY_NAME","GEOGRAPHY_CODE","MEASURE_NAME","OBS_VALUE"
+"June 2026","Rochdale","E08000005","Claimant count",8510
+"June 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",5.8
+"July 2026","Rochdale","E08000005","Claimant count",8485
+"July 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",5.8
+"August 2026","Rochdale","E08000005","Claimant count",8675
+"August 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",6.0
+"""
+
+
 class Response:
     def __init__(self, text: str = "", payload=None, status: int = 200):
         self.text, self._payload, self.status_code = text, payload, status
@@ -128,6 +178,13 @@ class FakeWeb:
             return Response(GMCA_RSS)
         if "ons.gov.uk" in url:
             return Response(ONS_HTML)
+        if "find-tender" in url:
+            return Response(payload=FTS_PAGE_2 if "cursor=" in url else FTS_PAGE_1)
+        if "metoffice.gov.uk" in url:
+            return Response(MET_RSS)
+        if "nomisweb" in url:
+            assert params["geography"] == pd.NOMIS_ROCHDALE
+            return Response(NOMIS_CSV)
         raise AssertionError(f"unexpected request: {url}")
 
 
@@ -288,6 +345,94 @@ class Rota(unittest.TestCase):
         self.assertGreaterEqual(len(records), 9)
         for record in records:
             self.assertTrue(is_primary(record["source_url"]), record["source_url"])
+
+
+class ContractNotices(unittest.TestCase):
+    def test_only_borough_buyers_are_offered_and_story_types_only(self):
+        records, report, _ = run(only={"contract_notices"})
+        got = by_source(records, "contract_notices")
+        self.assertEqual([r["identity"] for r in got], ["097501-2026", "098083-2026"], "oldest first")
+        stats = report["contract_notices"]
+        self.assertEqual(stats["pages"], 2)
+        self.assertEqual(stats["borough_buyer"], 3)          # Hopwood x2 and the council
+        self.assertEqual(stats["not_story_type"], 1)         # the tenderUpdate
+        self.assertEqual(stats["complete"], 1)
+        titles = " | ".join(r["source_title"] for r in got)
+        self.assertNotIn("Salix", titles)
+        self.assertNotIn("Translink", titles)
+
+    def test_record_carries_the_notice_facts_and_page(self):
+        records, _, _ = run(only={"contract_notices"})
+        hopwood = next(r for r in records if r["identity"] == "098083-2026")
+        self.assertEqual(hopwood["source_url"], "https://www.find-tender.service.gov.uk/Notice/098083-2026")
+        self.assertIn("BWT UK Ltd", hopwood["source_summary"])
+        self.assertEqual(hopwood["area"], "middleton")
+        council = next(r for r in records if r["identity"] == "097501-2026")
+        self.assertIn("£1,200,000", council["source_summary"])
+        self.assertIn("Bids close 2026-11-20", council["source_summary"])
+        self.assertTrue(council["source_title"].startswith("Rochdale Borough Council invites bids"))
+
+    def test_window_moves_only_after_a_complete_crawl(self):
+        class Limited(FakeWeb):
+            def __call__(self, url, params=None, timeout=None, **_):
+                if "cursor=" in url:
+                    return Response(status=429)
+                return super().__call__(url, params=params, timeout=timeout)
+        _, report, state = run(web=Limited(), only={"contract_notices"})
+        self.assertEqual(report["contract_notices"]["complete"], 0)
+        self.assertNotIn("read_until", state["sources"]["contract_notices"])
+
+    def test_pages_are_paced(self):
+        pauses = []
+        pd.contract_notices(FakeWeb(), {"sources": {}}, NOW, 3, pause=pauses.append)
+        self.assertEqual(pauses, [pd.FTS_PAUSE_SECONDS])
+
+    def test_postcode_beats_name(self):
+        elsewhere = {"buyer": {"id": "x", "name": "Rochdale Road Housing Ltd"},
+                     "parties": [{"id": "x", "roles": ["buyer"], "address": {"postalCode": "LS1 1AA"}}]}
+        self.assertFalse(pd.is_borough_buyer(elsewhere))
+        self.assertTrue(pd.is_borough_buyer({"buyer": {"id": "x"}, "parties": [{"id": "x", "roles": ["buyer"], "address": {"postalCode": "ol16 1xu"}}]}))
+
+
+class WeatherWarnings(unittest.TestCase):
+    def test_only_warnings_listing_rochdale_once_each(self):
+        records, report, _ = run(only={"weather_warnings"})
+        got = by_source(records, "weather_warnings")
+        self.assertEqual(len(got), 1)
+        self.assertEqual(report["weather_warnings"]["not_rochdale"], 2)
+        self.assertEqual(got[0]["source_title"], "Yellow Met Office warning of wind covers Rochdale")
+        self.assertIn("valid from 2300 Thu 22 Oct", got[0]["source_summary"])
+        self.assertNotIn("&amp;", got[0]["source_url"])
+
+    def test_upgrade_is_a_new_story(self):
+        _, _, state = run(only={"weather_warnings"})
+        amber = MET_RSS.replace("Yellow warning", "Amber warning")
+        class Amber(FakeWeb):
+            def __call__(self, url, params=None, timeout=None, **_):
+                return Response(amber)
+        records, _, _ = run(state, NOW + timedelta(hours=7), web=Amber(), only={"weather_warnings"})
+        self.assertEqual(len(records), 1)
+        self.assertTrue(records[0]["source_title"].startswith("Amber"))
+
+
+class ClaimantCount(unittest.TestCase):
+    def test_month_on_month_story_from_published_figures_only(self):
+        records, _, state = run(only={"claimant_count"})
+        self.assertEqual(len(records), 1)
+        summary = records[0]["source_summary"]
+        self.assertIn("rose by 190 to 8,675 in August 2026, from 8,485 in July 2026", summary)
+        self.assertIn("6.0% of residents aged 16 to 64", summary)
+        self.assertIn("provisional", summary)
+        again, _, _ = run(state, NOW + timedelta(days=1), only={"claimant_count"})
+        self.assertEqual(again, [], "the same month is never offered twice")
+
+    def test_too_little_data_offers_nothing(self):
+        class Short(FakeWeb):
+            def __call__(self, url, params=None, timeout=None, **_):
+                return Response(NOMIS_CSV.split('"July')[0])
+        records, report, _ = run(web=Short(), only={"claimant_count"})
+        self.assertEqual(records, [])
+        self.assertEqual(report["claimant_count"]["unreadable"], 1)
 
 
 class Wiring(unittest.TestCase):
