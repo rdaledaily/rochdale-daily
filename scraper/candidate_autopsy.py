@@ -35,6 +35,7 @@ PUBLISHABLE = "would publish"
 GATE_ORDER = [
     "age",
     "denied source",
+    "junk page",
     "job or career post",
     "not local",
     "duplicate of published story",
@@ -130,6 +131,23 @@ def build_gates(now: datetime) -> tuple[dict[str, Callable[[dict[str, Any]], boo
         )
     except Exception as error:  # noqa: BLE001
         unavailable.append(f"scraper ({type(error).__name__})")
+
+    # The same door check the reservoir applies (blocklist, stream spam,
+    # denied publisher host, share/static pages, bare site-name pages). Older
+    # reservoir files written before that check existed still hold such leads,
+    # and without this gate they were reported as "would publish".
+    try:
+        from types import SimpleNamespace
+
+        from run_fast_local_pipeline import reservoir_junk_reason
+        from story_blocklist import load_blocklist
+
+        blocklist = load_blocklist()
+        gates["junk page"] = lambda record: bool(
+            reservoir_junk_reason(SimpleNamespace(**record), blocklist)
+        )
+    except Exception as error:  # noqa: BLE001
+        unavailable.append(f"run_fast_local_pipeline ({type(error).__name__})")
 
     try:
         from selection_policy import is_job_or_career_post

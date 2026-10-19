@@ -176,6 +176,19 @@ NEWS_ACTION_RE = re.compile(
     r"approved|refused|vote|election|strike|protest|disruption|cancel)\w*\b",
     re.I,
 )
+# Share/print/email-a-friend forms repeat a real story's headline ("Email a
+# friend — Lisa Riley opens new Peacocks store", Roch Valley Radio
+# /news-features/email-friend/1040, 19 Oct 2026), so NEWS_ACTION_RE would
+# exempt them. They are never stories in their own right: no exemption.
+UTILITY_PAGE_PATH_RE = re.compile(
+    r"/(?:email-?(?:a-)?friend|send-to-(?:a-)?friend|share|print)(?:/|$)",
+    re.I,
+)
+UTILITY_PAGE_TITLE_RE = re.compile(
+    r"^\W*(?:email\s+(?:this\s+to\s+)?a\s+friend|send\s+to\s+a\s+friend|"
+    r"share\s+this|print\s+this)\b",
+    re.I,
+)
 
 
 def _candidate_text(candidate) -> str:
@@ -395,13 +408,77 @@ def _candidate_richness(candidate) -> tuple[int, datetime]:
     return len(text), published or datetime.min.replace(tzinfo=timezone.utc)
 
 
-def _reservoir_candidate_allowed(candidate) -> bool:
+def _is_bare_site_name_page(candidate) -> bool:
+    """True for a page whose only content is the publisher's own name.
+
+    publicaccess.rochdale.gov.uk/online-applications/ arrived 19 Oct 2026 with
+    title, summary and body all reading "Rochdale Borough Council". Real
+    planning-application pages on the same host carry an address and a
+    proposal, so this keys on the absence of content, not on the host.
+    """
+    name = core.normalise_ws(str(getattr(candidate, "source_name", "") or "")).casefold()
+    title = core.normalise_ws(str(getattr(candidate, "source_title", "") or "")).casefold()
+    if not name:
+        return False
+    for separator in (" - ", " | ", " — ", " – "):
+        while title.endswith(separator + name):
+            title = title[: -len(separator + name)].strip()
+    if title not in {"", name}:
+        return False
+    rest = core.normalise_ws(
+        f"{getattr(candidate, 'source_summary', '') or ''} "
+        f"{getattr(candidate, 'source_body_excerpt', '') or ''}"
+    ).casefold().replace(name, " ")
+    return len(core.normalise_ws(rest)) < 40
+
+
+def reservoir_junk_reason(candidate, blocklist=None) -> str:
+    """Name the reason a lead must never sit in the reservoir, or return "".
+
+    Until 19 Oct 2026 the reservoir only checked event kind, denied source and
+    age, then was saved BEFORE deduplicate_and_cross_reference applied the
+    editorial blocklist. Blocked and static pages were therefore dropped from
+    each run yet kept for 96 hours and re-loaded every run, and the candidate
+    autopsy (which reads the file) counted them as "would publish": 8 of 102
+    leads on 19 Oct. Every check here is one the pipeline already makes later;
+    running it at the door keeps the reservoir and the autopsy honest.
+    """
+    source_name = str(getattr(candidate, "source_name", "") or "")
+    source_url = str(getattr(candidate, "source_url", "") or "")
+    publisher_url = str(getattr(candidate, "publisher_home_url", "") or "")
+    title = str(getattr(candidate, "source_title", "") or "")
+    if core.source_is_denied(source_name, source_url):
+        return "denied source"
+    # Google News wrappers hide the real host; the entry's own publisher URL
+    # does not (uco.es piracy pages: denied by host, but arriving as
+    # news.google.com links).
+    if publisher_url and core.source_is_denied("", publisher_url):
+        return "denied publisher host"
+    if blocklist is None:
+        blocklist = core.load_story_blocklist()
+    if core.is_blocked_text(title, source_url, blocklist):
+        return "editorial blocklist or stream spam"
+    path = urlparse(source_url).path or ""
+    if UTILITY_PAGE_PATH_RE.search(path) or UTILITY_PAGE_TITLE_RE.search(title):
+        return "share/print utility page"
+    if _looks_like_static_non_news(candidate):
+        return "static non-news page"
+    if _is_bare_site_name_page(candidate):
+        return "page carries only the site name"
+    return ""
+
+
+def _reservoir_candidate_allowed(candidate, blocklist=None) -> bool:
     if str(getattr(candidate, "source_kind", "") or "") == "event":
         return False
-    if core.source_is_denied(
-        str(getattr(candidate, "source_name", "") or ""),
-        str(getattr(candidate, "source_url", "") or ""),
-    ):
+    reason = reservoir_junk_reason(candidate, blocklist)
+    if reason:
+        core.log.info(
+            "Kept out of candidate reservoir (%s): %s | %s",
+            reason,
+            getattr(candidate, "source_title", ""),
+            getattr(candidate, "source_url", ""),
+        )
         return False
     published = core.parse_datetime(getattr(candidate, "source_published_at", ""))
     if published is None:
@@ -419,9 +496,10 @@ def _load_reservoir() -> list:
         return []
     records = payload.get("candidates", []) if isinstance(payload, dict) else payload
     candidates = []
+    blocklist = core.load_story_blocklist()
     for record in records if isinstance(records, list) else []:
         candidate = _candidate_from_record(record)
-        if candidate is not None and _reservoir_candidate_allowed(candidate):
+        if candidate is not None and _reservoir_candidate_allowed(candidate, blocklist):
             candidates.append(candidate)
     return candidates
 
@@ -454,8 +532,9 @@ def configure_candidate_reservoir() -> None:
                 core.log.debug("Reservoir wrapper resolution failed: %s", exc)
 
         merged: dict[str, object] = {}
+        blocklist = core.load_story_blocklist()
         for candidate in [*previous, *list(current_candidates)]:
-            if not _reservoir_candidate_allowed(candidate):
+            if not _reservoir_candidate_allowed(candidate, blocklist):
                 continue
             key = _candidate_identity(candidate)
             if not key:

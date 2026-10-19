@@ -635,7 +635,12 @@ def is_blocked_article(
 _STREAM_BAIT_RE = re.compile(
     r"live\s*-?\s*streams?|livestreams?|stream\s+free|free\s+stream|"
     r"live\s+free|watch\s+live|live\s+tv\s+channel|tv\s+channel|"
-    r"en\s+streaming|streaming\s+free|sportek|reddit\s*!",
+    r"en\s+streaming|streaming\s+free|sportek|reddit\s*!|"
+    # 19 Oct 2026: "+✨+Streaming/TV:Crewe vs Rochdale en direct Live" got past
+    # every term above. French/Spanish "live" and the bracketed "[!WATCH" tag
+    # are the other recurring shapes on the same hosts. Checked against all
+    # 1,552 real titles (live feed, archive, ledger): no new matches.
+    r"streaming\s*/\s*tv|en\s+direct|en\s+vivo|\[\s*!?\s*watch",
     flags=re.IGNORECASE,
 )
 _FIXTURE_RE = re.compile(r"\b(?:vs?\.?|versus)\s", flags=re.IGNORECASE)
