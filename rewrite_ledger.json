@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-19T20:53:23.739945Z",
+  "updated_at": "2026-10-19T21:10:30.002249Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 255,
+  "count": 254,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -3119,24 +3119,6 @@
       "category": "business",
       "text_fingerprint": "b9e1e51afcf5f9cc"
     },
-    "https://www.rochdaletimes.co.uk/flagship-training-centre-reaches-construction-milestone": {
-      "first_attempt_at": "2026-10-11T19:20:50.675058Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMikgFBVV95cUxOLXpydmc3S3VWOW5aNmxlYktpNU1FZllkWS03Mzg0OFQ1WHFtS0tjSWFfenBJM3l1LW13cjM2b3RYTVUtcGlVY21YMG5vZ1l4M1FXdldta2Zuck5jR2J4WTgwdVB6aU55NzhWVWlDZmpQYmUtYU5lZXk5WnRhblF3bmFvckRJQVZDV1hIV29HR0o1dw?oc=5",
-        "https://www.rochdaletimes.co.uk/flagship-training-centre-reaches-construction-milestone"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-11T20:48:54.265507Z",
-      "outcome": "failed",
-      "reason": "one-time retry after secondary publication gate removal",
-      "title": "Flagship training centre reaches construction milestone - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "news",
-      "text_fingerprint": "6ee9497e3defc2b4",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1
-    },
     "https://www.rochdaletimes.co.uk/help-uncover-fascinating-and-strange-tales-from-the-past": {
       "first_attempt_at": "2026-10-12T20:34:24.214086Z",
       "attempts": 1,
@@ -3333,16 +3315,18 @@
       "first_attempt_at": "2026-10-19T18:50:55.773003Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQYTA1TVl2VkRDZTBSWjJnY2dEektteU5uWjhyc20yXzRBT3RDMXgyVnBjVXlsMEtnLVlJRThFVkFQTkpKT3hhZzBldENDNS1zVWtIeFhwNGVxM2tteER6VDRmVlpDcUd3THF3SE1WNFh2UWcwYWFRSnhTa3JubDNJS3dnZXp5OUp0NGpDd1FobnY3b3R3X2FHdklWblg0RV9zRTl6QXF6eUV2d1k?oc=5",
         "https://www.rochdaletimes.co.uk/nobody-should-face-it-alone-sleep-out-isnt-about-pretending-to-be-homeless"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-19T18:50:55.773003Z",
+      "last_attempt_at": "2026-10-19T21:10:30.002012Z",
       "outcome": "published",
       "reason": "",
       "title": "‘Nobody should face it alone — Sleep Out isn’t about pretending to be homeless’ - Rochdale Times",
       "source_name": "Rochdale Times",
-      "category": "news",
-      "text_fingerprint": "a02111587561c16b"
+      "category": "sport",
+      "text_fingerprint": "a02111587561c16b",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1"
     },
     "https://www.rochdaletimes.co.uk/nominations-open-for-rochdale-man-of-the-year": {
       "first_attempt_at": "2026-10-14T12:42:28.903789Z",
@@ -3728,14 +3712,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T09:39:19.655064Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Bonfire night events taking place in Rochdale",
       "source_name": "Roch Valley Radio Local News",
       "category": "transport",
       "text_fingerprint": "ff31840c8d46e8d5",
-      "recovery_attempts": 2,
-      "final_gate_removal_recovery": 1
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochvalleyradio.com/news-features/149/education/1070/rochdale-school-evacuated-and-closed-after-suspected-hoax-call": {
       "first_attempt_at": "2026-10-16T12:58:45.695165Z",
