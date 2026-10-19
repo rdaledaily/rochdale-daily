@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""Duplicated or mislabelled archive pages are taken out of the index, never deleted."""
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import archive_integrity as ai  # noqa: E402
+from clean_urls import clean_sitemap_text  # noqa: E402
+
+BODY = "Council confirms the Seven Sisters tower blocks in College Bank will be refurbished rather than demolished, " * 4
+
+
+def page(slug, h1, body, date="2025-01-01"):
+    return (f'<html><head><link rel="canonical" href="https://rochdaledaily.co.uk/articles/{slug}">'
+            f'<meta property="og:url" content="https://rochdaledaily.co.uk/articles/{slug}">'
+            '<meta name="robots" content="index,follow,max-image-preview:large">'
+            f'<script type="application/ld+json">{{"datePublished": "{date}"}}</script></head>'
+            f'<body><h1>{h1}</h1><div class="article-body"><p>{body}</p></div></body></html>')
+
+
+class ArchiveIntegrityTests(unittest.TestCase):
+    def test_duplicates_point_at_the_live_story(self):
+        pages = {"old-copy": page("old-copy", "Seven Sisters blocks saved", BODY),
+                 "live-story": page("live-story", "Seven Sisters tower blocks to be refurbished", BODY)}
+        plan = ai.plan(pages, {"live-story"})
+        self.assertEqual(plan, {"old-copy": {"canonical": "live-story"}})
+
+    def test_without_a_live_member_the_matching_headline_wins(self):
+        pages = {"a-wrong": page("a-wrong", "Rochdale AFC announces new signings", BODY, "2024-01-01"),
+                 "b-right": page("b-right", "Seven Sisters tower blocks refurbished", BODY, "2025-01-01")}
+        plan = ai.plan(pages, {"unrelated"})
+        self.assertEqual(plan["a-wrong"], {"canonical": "b-right"})
+        self.assertNotIn("b-right", plan)
+
+    def test_mismatched_headline_is_noindexed_but_live_pages_never_touched(self):
+        pages = {"arch": page("arch", "Rochdale AFC announces new signings", BODY),
+                 "live": page("live", "Pickleball gains popularity", "Council tax bills are rising this April " * 5)}
+        plan = ai.plan(pages, {"live"})
+        self.assertEqual(plan, {"arch": {"noindex": True}})
+        html = ai.apply(pages["arch"], plan["arch"])
+        self.assertIn('content="noindex,follow"', html)
+
+    def test_apply_rewrites_canonical_and_og_url(self):
+        html = ai.apply(page("x", "h", BODY), {"canonical": "y"})
+        self.assertIn('rel="canonical" href="https://rochdaledaily.co.uk/articles/y"', html)
+        self.assertIn('og:url" content="https://rochdaledaily.co.uk/articles/y"', html)
+
+    def test_sitemap_lists_only_indexable_self_canonical_pages(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "articles").mkdir()
+            (root / "articles" / "keep.html").write_text(page("keep", "Seven Sisters", BODY))
+            (root / "articles" / "dupe.html").write_text(ai.apply(page("dupe", "S", BODY), {"canonical": "keep"}))
+            (root / "articles" / "bad.html").write_text(ai.apply(page("bad", "S", BODY), {"noindex": True}))
+            xml = "<urlset>" + "".join(
+                f"<url><loc>https://rochdaledaily.co.uk/articles/{s}</loc></url>" for s in ("keep", "dupe", "bad")) + "</urlset>"
+            cleaned, dropped = clean_sitemap_text(xml, root)
+            self.assertEqual(dropped, 2)
+            self.assertIn("/articles/keep<", cleaned)
+
+    def test_run_does_nothing_without_the_live_list(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "articles").mkdir()
+            (root / "articles" / "arch.html").write_text(page("arch", "Rochdale AFC signings", BODY))
+            self.assertEqual(ai.run(root), [])
+
+
+if __name__ == "__main__":
+    unittest.main()

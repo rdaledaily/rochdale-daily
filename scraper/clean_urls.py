@@ -70,6 +70,24 @@ def file_for_url(url: str, root: Path) -> Path | None:
     return None
 
 
+_HEAD_CANON_RE = re.compile(r'<link rel="canonical" href="([^"]+)"')
+_HEAD_ROBOTS_RE = re.compile(r'<meta name="robots" content="([^"]+)"')
+
+
+def indexable_as(page: Path, url: str) -> bool:
+    """A sitemap may only list a page Google may index, at its own canonical address."""
+    if page.suffix != ".html":
+        return True
+    head = page.read_text(encoding="utf-8", errors="ignore").split("</head>", 1)[0]
+    robots = _HEAD_ROBOTS_RE.search(head)
+    if robots and "noindex" in robots.group(1).lower():
+        return False
+    canonical = _HEAD_CANON_RE.search(head)
+    if canonical and clean_text(canonical.group(1)).rstrip("/") != url.rstrip("/"):
+        return False
+    return True
+
+
 _URL_BLOCK_RE = re.compile(r"\s*<url>.*?</url>", re.S)
 _LOC_RE = re.compile(r"<loc>\s*([^<\s]+)\s*</loc>")
 
@@ -82,7 +100,8 @@ def clean_sitemap_text(text: str, root: Path) -> tuple[str, int]:
         nonlocal dropped
         loc = _LOC_RE.search(match.group(0))
         if loc and not re.search(r"\.(?:jpe?g|png|webp|gif|svg)$", loc.group(1), re.I):
-            if file_for_url(loc.group(1), root) is None:
+            page = file_for_url(loc.group(1), root)
+            if page is None or not indexable_as(page, clean_text(loc.group(1))):
                 dropped += 1
                 return ""
         return match.group(0)

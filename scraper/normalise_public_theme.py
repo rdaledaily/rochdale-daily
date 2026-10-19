@@ -72,6 +72,7 @@ THEME_META_RE = re.compile(
 import sys as _sys  # noqa: E402
 _sys.path.insert(0, str(Path(__file__).resolve().parent))
 from clean_urls import clean_sitemaps, clean_text  # noqa: E402
+from archive_integrity import run as archive_integrity  # noqa: E402
 
 FEEDS = ("rss.xml",)
 
@@ -159,6 +160,11 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         changed.append(path.relative_to(root).as_posix())
         if not check:
             path.write_text(updated, encoding="utf-8")
+    # Duplicated and mislabelled archive pages leave the index before the
+    # sitemaps are cleaned, so the sitemaps list only what may be indexed.
+    for page in archive_integrity(root, check=check):
+        if page not in changed:
+            changed.append(page)
     changed += clean_sitemaps(root, check=check)
     for name in FEEDS:
         feed = root / name
