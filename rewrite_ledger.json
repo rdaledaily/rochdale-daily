@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-19T12:14:54.164159Z",
+  "updated_at": "2026-10-19T12:56:03.857374Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 262,
+  "count": 260,
   "entries": {
     "https://businessinthenews.co.uk/2026/10/12/rochdale-opens-gateway-to-uks-next-generation-of-advanced-manufacturing": {
       "first_attempt_at": "2026-10-12T22:20:25.067369Z",
@@ -662,12 +662,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T18:34:44.950354Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Updated: 18/10/2026 at 6:59pm Live Freehold Tram Stop - Lifts out of service Duration Sun 18 Oct, 6:59pm – until further notice Stops impact",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "00e565b0d08614f8"
+      "text_fingerprint": "00e565b0d08614f8",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?active_tab=tram&no-script=true": {
       "first_attempt_at": "2026-10-09T13:39:18.926514Z",
@@ -729,12 +731,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-13T15:23:05.300959Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Rochdale vs. Accrington Stanley: Live game updates, stats, play-by-play - Yahoo Sport",
       "source_name": "Yahoo",
       "category": "sport",
-      "text_fingerprint": "80e7d3e1b7b18bf9"
+      "text_fingerprint": "80e7d3e1b7b18bf9",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://uk.sports.yahoo.com/football/league-two/chesterfield-rochdale-13597644": {
       "first_attempt_at": "2026-10-12T09:38:12.779450Z",
@@ -779,12 +783,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-14T08:16:14.334736Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Rochdale vs. Rotherham United: Live game updates, stats, play-by-play - Yahoo Sport",
       "source_name": "Yahoo",
       "category": "sport",
-      "text_fingerprint": "3184fc7e5a9c3c1c"
+      "text_fingerprint": "3184fc7e5a9c3c1c",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.alloaadvertiser.com/sport/national/26625605.rochdale-continue-fine-run-hard-fought-draw-tranmere": {
       "first_attempt_at": "2026-10-12T22:41:50.903010Z",
@@ -894,13 +900,15 @@
         "https://www.thenorthernecho.co.uk/sport/national/26646644.lee-bell-salutes-record-breaking-crewe-victory-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T13:01:39.130460Z",
+      "last_attempt_at": "2026-10-19T12:56:03.857042Z",
       "outcome": "published",
       "reason": "",
       "title": "Lee Bell salutes record-breaking Crewe after victory over Rochdale - https://www.birmingham-now.co.uk/",
       "source_name": "Birmingham Now",
       "category": "politics",
-      "text_fingerprint": "0a3f8bbe1f131117"
+      "text_fingerprint": "0a3f8bbe1f131117",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.bordercountiesadvertizer.co.uk/sport/national/26646547.jordan-gibson-nets-twice-crewe-beat-rochdale-remain-unbeaten": {
       "first_attempt_at": "2026-10-18T13:00:28.965081Z",
@@ -3644,20 +3652,6 @@
       "category": "sport",
       "text_fingerprint": "66f7458bb2faf85a"
     },
-    "https://www.rochvalleyradio.com/local/photos/heywood-aods-visit-roch-valley-radio": {
-      "first_attempt_at": "2026-10-10T23:40:31.979111Z",
-      "attempts": 54,
-      "urls": [
-        "https://www.rochvalleyradio.com/local/photos/heywood-aods-visit-roch-valley-radio"
-      ],
-      "last_attempt_at": "2026-10-11T12:16:51.977800Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Heywood AODS visit",
-      "source_name": "Roch Valley Radio",
-      "category": "politics",
-      "text_fingerprint": "326a18137eae2e78"
-    },
     "https://www.rochvalleyradio.com/news-features/139/news/1043/nigel-clark-of-britpop-band-dodgy-to-perform-at-rochdale-church": {
       "first_attempt_at": "2026-10-15T20:52:13.793754Z",
       "attempts": 1,
@@ -3851,20 +3845,6 @@
       "source_name": "Roch Valley Radio Local News",
       "category": "education",
       "text_fingerprint": "9163776d7af3459f"
-    },
-    "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury": {
-      "first_attempt_at": "2026-10-10T16:02:16.798602Z",
-      "attempts": 87,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/149/education/910/13-million-millwood-primary-school-expansion-officially-opened-in-bury"
-      ],
-      "last_attempt_at": "2026-10-11T12:16:52.234353Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "£13 million Millwood Primary School expansion officially opened in Bury",
-      "source_name": "Roch Valley Radio",
-      "category": "news",
-      "text_fingerprint": "93f99ec11d3d95f9"
     },
     "https://www.rochvalleyradio.com/news-features/149/education/989/students-told-to-rank-their-looks-and-obey-the-founding-fathers-rules-at-rochdale-sixth-form-college": {
       "first_attempt_at": "2026-10-13T13:30:56.285509Z",
@@ -4213,12 +4193,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-18T22:51:12.797845Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "++【Live Streaming】TV!!】 Rochdale vs. Crewe Alexandra Live Free England League Two Today September, 20, 2026 - Universidad de Córdoba (UCO)",
       "source_name": "Universidad de Córdoba (UCO)",
       "category": "sport",
-      "text_fingerprint": "39b58b56ecc189d2"
+      "text_fingerprint": "39b58b56ecc189d2",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii9cL2hhcHB5bmVwcHkuZ2l0aHViLmlvL2JhYnUvU3BvcnRncmlkLnhtbCIvPjwva3JwYW5vPg==&id=video-rochdale-vs-crewe-tvs-355": {
       "first_attempt_at": "2026-10-18T15:48:30.496297Z",
@@ -4339,12 +4321,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-19T11:03:19.687757Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "[#!LIVES-TREAMs!]™ Rochdale vs Crewe Alexandra ＬＩＶＥ Ｓｔｒｅａｍ Ｆｒｅｅ ＯＮ Ｔｖ Ｃｈａｎｎｅｌ - Universidad de Córdoba (UCO)",
       "source_name": "Universidad de Córdoba (UCO)",
       "category": "events",
-      "text_fingerprint": "649cc8f4f04842cb"
+      "text_fingerprint": "649cc8f4f04842cb",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.uco.es/scai/visita_virtual/SCAI%20UCO.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Imh0dHBzOi8vbWl0c3Vrb25nYW5ndW8uZ2l0aHViLmlvL3JxcC9jdmIueG1sIi8+PC9rcnBhbm8+&id=video-today-rochdale-v-crewe-alexandra-liv-str-uewsgxj": {
       "first_attempt_at": "2026-10-19T02:32:05.700161Z",
