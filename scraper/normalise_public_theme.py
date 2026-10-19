@@ -69,6 +69,13 @@ THEME_META_RE = re.compile(
 )
 
 
+import sys as _sys  # noqa: E402
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+from clean_urls import clean_sitemaps, clean_text  # noqa: E402
+
+FEEDS = ("rss.xml",)
+
+
 def public_pages(root: Path = ROOT) -> list[Path]:
     pages: set[Path] = set()
     for filename in PUBLIC_ROOT_FILES:
@@ -109,7 +116,10 @@ def normalise_text(path: Path, text: str) -> str:
     if "</head>" not in text.lower():
         return text
 
-    result = _stamp_html_tag(text)
+    # Internal links and canonicals use the address that answers 200, not the
+    # .html address Cloudflare redirects (see clean_urls.py).
+    result = clean_text(text)
+    result = _stamp_html_tag(result)
     result = _normalise_theme_colour(result)
     # Refresh existing links as well as new ones: returning readers may hold
     # the malformed token stylesheet in their browser cache for four hours.
@@ -149,6 +159,16 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         changed.append(path.relative_to(root).as_posix())
         if not check:
             path.write_text(updated, encoding="utf-8")
+    changed += clean_sitemaps(root, check=check)
+    for name in FEEDS:
+        feed = root / name
+        if feed.is_file():
+            original = feed.read_text(encoding="utf-8")
+            updated = clean_text(original)
+            if updated != original:
+                changed.append(name)
+                if not check:
+                    feed.write_text(updated, encoding="utf-8")
     return len(changed), changed
 
 
