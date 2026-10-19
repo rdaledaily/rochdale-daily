@@ -40,6 +40,27 @@ def _strip_index(path: str) -> str:
     return path
 
 
+# Paid links all go through the advertising click tracker. Google requires paid
+# links to say so (rel="sponsored"); a paid link that passes ranking credit can
+# bring a manual penalty on the whole site.
+_TRACKER_A_RE = re.compile(r'<a\b[^>]*\bhref="https://rd-ads\.[^"/]+/go/[^"]*"[^>]*>', re.I)
+_REL_RE = re.compile(r'\srel="([^"]*)"', re.I)
+PAID_REL = ("sponsored", "nofollow", "noopener", "noreferrer")
+
+
+def mark_paid_links(text: str) -> str:
+    def fix(match: re.Match[str]) -> str:
+        tag = match.group(0)
+        rel = _REL_RE.search(tag)
+        have = rel.group(1).split() if rel else []
+        wanted = list(PAID_REL) + [r for r in have if r not in PAID_REL]
+        if all(r in have for r in PAID_REL):
+            return tag
+        value = f' rel="{" ".join(wanted)}"'
+        return _REL_RE.sub(value, tag, count=1) if rel else tag[:-1] + value + ">"
+    return _TRACKER_A_RE.sub(fix, text)
+
+
 def clean_text(text: str) -> str:
     def absolute(match: re.Match[str]) -> str:
         return _strip_index(match.group(1)) if match.group(1) != SITE else SITE + "/"
@@ -49,7 +70,7 @@ def clean_text(text: str) -> str:
         return f'{match.group("attr")}{path}{match.group("tail") or ""}"'
 
     text = _ABSOLUTE_RE.sub(absolute, text)
-    return _HREF_RE.sub(href, text)
+    return mark_paid_links(_HREF_RE.sub(href, text))
 
 
 def file_for_url(url: str, root: Path) -> Path | None:

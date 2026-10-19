@@ -79,5 +79,19 @@ class Sitemaps(unittest.TestCase):
         self.assertIn("<loc>https://rochdaledaily.co.uk/</loc>", out)
 
 
+
+class PaidLinkTests(unittest.TestCase):
+    def test_tracker_links_are_marked_sponsored(self):
+        from clean_urls import mark_paid_links
+        tag = '<a href="https://rd-ads.example.workers.dev/go/dir-x" target="_blank" rel="nofollow noopener noreferrer">'
+        self.assertIn('rel="sponsored nofollow noopener noreferrer"', mark_paid_links(tag))
+        bare = '<a href="https://rd-ads.example.workers.dev/go/dir-x">'
+        self.assertIn('rel="sponsored nofollow noopener noreferrer"', mark_paid_links(bare))
+
+    def test_editorial_links_are_left_alone(self):
+        from clean_urls import mark_paid_links
+        tag = '<a href="https://www.rochdale.gov.uk/go/x" rel="noopener">'
+        self.assertEqual(mark_paid_links(tag), tag)
+
 if __name__ == "__main__":
     unittest.main()

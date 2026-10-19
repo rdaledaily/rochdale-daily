@@ -13,6 +13,7 @@ exception: blocklisted pages are deleted and omitted from the sitemap.
 from __future__ import annotations
 from source_presentation import generic_sources_markup, sanitise_article
 from story_blocklist import is_blocked_article, load_blocklist
+from publisher_markup import place as borough_place, publisher as full_publisher
 import html
 import json
 import os
@@ -756,17 +757,9 @@ def json_ld(article: dict[str, Any], canonical_url: str, image_url: str) -> str:
                     "name": "Rochdale Daily Newsdesk",
                     "url": f"{SITE_BASE_URL}/about.html",
                 },
-                "publisher": {
-                    "@type": "NewsMediaOrganization",
-                    "name": "Rochdale Daily",
-                    "url": SITE_BASE_URL,
-                    "logo": {
-                        "@type": "ImageObject",
-                        "url": f"{SITE_BASE_URL}/assets/img/logo.png",
-                    },
-                },
+                "publisher": full_publisher(),
                 "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
-                "contentLocation": {"@type": "Place", "name": area},
+                "contentLocation": borough_place(area),
                 **(
                     {
                         "correction": [

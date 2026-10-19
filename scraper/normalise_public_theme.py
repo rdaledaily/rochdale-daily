@@ -73,6 +73,7 @@ import sys as _sys  # noqa: E402
 _sys.path.insert(0, str(Path(__file__).resolve().parent))
 from clean_urls import clean_sitemaps, clean_text  # noqa: E402
 from archive_integrity import run as archive_integrity  # noqa: E402
+from publisher_markup import enrich_text  # noqa: E402
 
 FEEDS = ("rss.xml",)
 
@@ -119,7 +120,7 @@ def normalise_text(path: Path, text: str) -> str:
 
     # Internal links and canonicals use the address that answers 200, not the
     # .html address Cloudflare redirects (see clean_urls.py).
-    result = clean_text(text)
+    result = enrich_text(clean_text(text))
     result = _stamp_html_tag(result)
     result = _normalise_theme_colour(result)
     # Refresh existing links as well as new ones: returning readers may hold
