@@ -74,6 +74,7 @@ _sys.path.insert(0, str(Path(__file__).resolve().parent))
 from clean_urls import clean_sitemaps, clean_text  # noqa: E402
 from archive_integrity import run as archive_integrity  # noqa: E402
 from publisher_markup import enrich_text  # noqa: E402
+from archive_pages import build as build_archive_pages  # noqa: E402
 
 FEEDS = ("rss.xml",)
 
@@ -166,6 +167,24 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
     for page in archive_integrity(root, check=check):
         if page not in changed:
             changed.append(page)
+    # The month-by-month archive lists only what is indexable, so it is built
+    # after the archive sweep, and themed like every other public page.
+    pages, stale = build_archive_pages(root)
+    for path, html in pages.items():
+        html = normalise_text(path, html)
+        current = path.read_text(encoding="utf-8") if path.is_file() else None
+        if html == current:
+            continue
+        rel = path.relative_to(root).as_posix()
+        if rel not in changed:
+            changed.append(rel)
+        if not check:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(html, encoding="utf-8")
+    for path in stale:
+        changed.append(path.relative_to(root).as_posix())
+        if not check:
+            path.unlink()
     changed += clean_sitemaps(root, check=check)
     for name in FEEDS:
         feed = root / name
