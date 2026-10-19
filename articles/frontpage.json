@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-19T17:13:21.763086Z",
+  "generated_at": "2026-10-19T17:40:28.890816Z",
   "minimum_articles": 12,
   "target_articles": 45,
   "count": 8,
@@ -312,7 +312,7 @@
       "published_at": "2026-10-19T08:30:24Z",
       "first_published_at": "2026-10-19T08:30:24Z",
       "last_updated_at": "2026-10-19T08:30:24Z",
-      "scraped_at": "2026-10-19T17:13:21Z",
+      "scraped_at": "2026-10-19T17:40:28Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -639,7 +639,7 @@
       "published_at": "2026-10-18T08:09:08Z",
       "first_published_at": "2026-10-18T08:09:08Z",
       "last_updated_at": "2026-10-18T08:09:08Z",
-      "scraped_at": "2026-10-19T17:13:21Z",
+      "scraped_at": "2026-10-19T17:40:28Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -1254,47 +1254,53 @@
   "coverage": {
     "available_categories": [
       "business",
+      "community",
       "crime",
       "environment",
       "news",
-      "sport",
       "traffic",
       "transport"
     ],
     "selected_categories": [
       "business",
+      "community",
       "crime",
       "environment",
       "news",
-      "sport",
       "traffic",
       "transport"
     ],
     "available_wards": [
+      "Castleton",
       "Kingsway",
       "Milnrow and Newhey"
     ],
     "selected_wards": [
+      "Castleton",
       "Kingsway",
       "Milnrow and Newhey"
     ],
     "available_areas": [
-      "middleton",
-      "newhey"
-    ],
-    "selected_areas": [
+      "castleton",
       "middleton",
       "newhey",
-      "rochdale"
+      "syke"
+    ],
+    "selected_areas": [
+      "castleton",
+      "middleton",
+      "newhey",
+      "rochdale",
+      "syke"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 1,
-      "crime": 1,
       "traffic": 1,
+      "crime": 1,
       "transport": 1,
+      "business": 1,
       "environment": 1,
       "news": 3
     },
@@ -1304,22 +1310,24 @@
       "Milnrow and Newhey": 1
     },
     "selected_by_area": {
+      "castleton": 1,
       "middleton": 1,
       "newhey": 1,
-      "rochdale": 10
+      "rochdale": 8,
+      "syke": 1
     },
     "selected_by_source": {
-      "office for national statistics (nomis)": 1,
-      "historic england": 1,
       "rochdale borough council": 1,
+      "historic england": 1,
       "bee network live travel alerts": 1,
+      "office for national statistics (nomis)": 1,
       "rochdale times": 1,
       "rochdale daily": 2,
       "manchester evening news": 1
     },
     "pool_size": 12,
-    "primary_pool_size": 10,
-    "fallback_stories_used": 2,
+    "primary_pool_size": 8,
+    "fallback_stories_used": 4,
     "selection_window_days": 4,
     "frontpage_count": 8,
     "homepage_freshness_hours": 36,
@@ -1349,7 +1357,7 @@
     "expired_same_day_deadlines_dropped": 0,
     "expired_sports_previews_dropped": 0,
     "stale_fallback_dropped": 0,
-    "enforced_at": "2026-10-19T17:21:34.444441Z"
+    "enforced_at": "2026-10-19T17:42:18.082781Z"
   },
   "source_quality_guard": {
     "marked_archive_records": 0,
@@ -1360,13 +1368,13 @@
     "fresh_hours": 36,
     "kept": 8,
     "removed": 0,
-    "enforced_at": "2026-10-19T17:21:34.621840Z"
+    "enforced_at": "2026-10-19T17:42:18.263166Z"
   },
   "manual_frontpage_guard": {
     "fresh_hours": 36,
     "eligible_manual": 2,
     "restored_manual": 0,
     "protected_manual": 3,
-    "enforced_at": "2026-10-19T17:21:34.668083Z"
+    "enforced_at": "2026-10-19T17:42:18.310149Z"
   }
 }
