@@ -64,7 +64,33 @@ def _iso(value: datetime) -> str:
     return value.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+# The Morning Briefing is assembled by daily_briefing.py from the paper's own
+# headlines: a lead sentence, a heading, a list of linked stories with their
+# summaries, the weather and a footer. Rebuilt from its tag-stripped "body" it
+# became one unpunctuated paragraph in which each headline ran into its area
+# and summary ("...to Begin on 2 November 2026 Middleton Rochdale Borough
+# Council has announced..."). Its HTML is accepted only when EVERY tag is one
+# of these; anything else falls back to the plain-text route below.
+_BRIEFING_TAG_RE = re.compile(
+    r'</?(?:p|h2|ul|li|strong)>|<br>|<p class="brief-foot">|<span class="brief-area">|</span>'
+    r'|<a href="/(?:articles/[a-z0-9-]+|contact)(?:\.html)?">|</a>'
+)
+
+
+def _briefing_html(entry: dict[str, Any]) -> str:
+    if entry.get("publication_route") != "daily-briefing":
+        return ""
+    value = str(entry.get("content_html") or "")
+    tags = re.findall(r"<[^>]*>", value)
+    if not value or not tags or any(not _BRIEFING_TAG_RE.fullmatch(tag) for tag in tags):
+        return ""
+    return value
+
+
 def _content_html(entry: dict[str, Any]) -> str:
+    briefing = _briefing_html(entry)
+    if briefing:
+        return briefing
     body = str(entry.get("body") or entry.get("content") or entry.get("description") or "")
     paragraphs = [
         html.escape(re.sub(r"\s+", " ", part).strip())
@@ -177,6 +203,10 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
                     cleaned.append({"date": _clean(item.get("date")), "note": text})
         if cleaned:
             record["corrections"] = cleaned
+
+    if entry.get("publication_route") == "daily-briefing" and entry.get("briefing_slot") in ("morning", "evening"):
+        # The newsletter sender finds the day's briefing by this field.
+        record["briefing_slot"] = entry["briefing_slot"]
 
     if entry.get("image_alt"):
         record["image_alt"] = _clean(entry.get("image_alt"))[:200]

@@ -165,13 +165,33 @@ def events_section(now_local, slot):
     return f"<h2>On today</h2><ul>{items}</ul>"
 
 
+def whole_sentences(text: str, limit: int = 200) -> str:
+    """As many complete sentences as fit in `limit` characters, ending with a
+    full stop. Cutting at a word left summaries hanging mid-sentence ("...after
+    National Offer Day on 1..."). A first sentence longer than the limit is
+    cut at a word and marked with an ellipsis."""
+    text = re.sub(r"\s+", " ", text or "").strip().rstrip("…").rstrip(".").strip()
+    if not text:
+        return ""
+    text += "."
+    if len(text) <= limit:
+        return text
+    sentences = re.findall(r".+?[.!?](?=\s+[A-Z0-9“\"']|$)", text)
+    kept = ""
+    for sentence in sentences:
+        if len(kept) + len(sentence) + 1 > limit:
+            break
+        kept = f"{kept} {sentence}".strip()
+    if kept:
+        return kept
+    return text[: limit - 1].rsplit(" ", 1)[0].rstrip(",;:") + "…"
+
+
 def story_items(stories):
     rows = []
     for story in stories:
         area = area_label(story.get("area"))
-        summary = str(story.get("excerpt") or story.get("summary") or "").strip()
-        if len(summary) > 180:
-            summary = summary[:177].rsplit(" ", 1)[0] + "…"
+        summary = whole_sentences(str(story.get("excerpt") or story.get("summary") or ""))
         rows.append(
             '<li><a href="/articles/{slug}.html"><strong>{title}</strong></a>'
             '{area}{summary}</li>'.format(
@@ -182,6 +202,33 @@ def story_items(stories):
             )
         )
     return "".join(rows)
+
+
+def plain_text(body_html: str) -> str:
+    """The briefing as readable text: one paragraph per block, each list item a
+    sentence ("Headline (Area). Summary."), separated by blank lines.
+
+    Used wherever the HTML is not (search snippets, feeds, the plain-text
+    fallback). Stripping the tags alone ran every headline into the next.
+    """
+    import html as _html
+
+    text = body_html
+    text = re.sub(r'\s*<span class="brief-area">(.*?)</span>', r" (\1)", text)
+    text = re.sub(r"</strong></a>\s*\(", "</strong></a> (", text)
+    text = re.sub(r"<br>", ". ", text)
+    text = re.sub(r"</?(?:p|h2|ul|li)(?:\s[^>]*)?>", "\n\n", text)
+    text = _html.unescape(re.sub(r"<[^>]+>", "", text))
+    blocks = []
+    for block in re.split(r"\n\s*\n", text):
+        block = re.sub(r"\s+", " ", block).strip()
+        block = re.sub(r"\.\s*\.", ".", block)
+        if not block:
+            continue
+        if block[-1] not in ".!?:…":
+            block += "." if block not in ("The stories", "Still worth reading", "On today") else ":"
+        blocks.append(block)
+    return "\n\n".join(blocks)
 
 
 def build(slot: str, now_local: datetime):
@@ -242,7 +289,7 @@ def build(slot: str, now_local: datetime):
         "excerpt": excerpt,
         "summary": excerpt,
         "content_html": body,
-        "body": re.sub(r"<[^>]+>", " ", body),
+        "body": plain_text(body),
         "category": "news",
         "area": "rochdale",
         "types": ["news"],

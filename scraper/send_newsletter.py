@@ -65,7 +65,11 @@ def todays_briefing(articles: list[dict[str, Any]], today: datetime) -> dict[str
     """The Morning Briefing first published today (London date), or None."""
     wanted = today.astimezone(LONDON).strftime("%Y-%m-%d")
     for article in articles:
-        if not isinstance(article, dict) or article.get("briefing_slot") != "morning":
+        if not isinstance(article, dict):
+            continue
+        # briefing_slot was dropped by the manual-article loader until
+        # 20 Oct 2026, so the briefing is also recognised by its address.
+        if article.get("briefing_slot") != "morning" and not str(article.get("slug") or "").startswith("morning-briefing-"):
             continue
         stamp = str(article.get("first_published_at") or article.get("published_at") or "")
         try:
