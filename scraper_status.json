@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-20T21:45:24.127886Z",
+  "last_run_at": "2026-10-20T21:59:10.673936Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,14 +7,9 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 6,
-      "other_notice_types": 3,
-      "already_seen": 3,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-20T21:43:15.734551Z",
+      "interval_hours": 12
     },
     "written_answers": {
       "status": "not due",
@@ -22,15 +17,9 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 31,
-      "not_decisions": 15,
-      "no_borough_place": 1,
-      "already_seen": 8,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-20T21:43:15.734551Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -38,14 +27,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-10-20T15:54:30.844722Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 76,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-10-20T15:54:30.844722Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 4,
+      "not_rochdale": 4,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -53,43 +55,35 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 112,
+  "raw_candidates_before_job_filter": 127,
   "job_or_career_posts_rejected": 2,
-  "raw_candidates": 110,
-  "candidate_clusters": 41,
+  "raw_candidates": 125,
+  "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 71,
-    "resolved": 44,
-    "text_recovered": 29,
+    "wrappers": 80,
+    "resolved": 43,
+    "text_recovered": 28,
     "reattributed": 5,
-    "images_found": 33
+    "images_found": 32
   },
-  "duplicates_merged": 69,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 83,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "teen-charged-following-bb-gun-incident-on-rochdale-boulevard",
-      "source_url": "https://www.sasktoday.ca/regina-today/regina-news/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-12910610?__cf_chl_rt_tk=IIdzzzSNDsRhIo_LGrAhx3c8yZ.n_xrB6Ux8LevQaCo-1792453383-1.0.1.1-TXOv06csoHE_OLQ8VXFuvOrc3CmvAaRw6NkvWG7YP40"
-    },
-    {
-      "slug": "rbh-submits-outline-planning-application-for-270-affordable-homes-in-lower-falin",
-      "source_url": "https://www.rochvalleyradio.com/news-features/139/news/1146/rbh-submits-plans-for-up-to-270-homes-in-lower-falinge"
-    },
-    {
-      "slug": "venus-lounge-in-heywood-wins-restaurant-of-the-year-at-national-curry-awards-202",
-      "source_url": "https://www.rochdaletimes.co.uk/heywood-restaurant-scoops-top-national-honour/"
+      "slug": "rochdale-afc-to-face-grimsby-town-at-crown-oil-arena-tonight",
+      "source_url": "https://www.tntsports.co.uk/football/league-two/2026-2027/live-rochdale-grimsby-town_mtc21888147/live.shtml"
     }
   ],
-  "new_articles": 3,
+  "new_articles": 1,
   "live_articles": 343,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 2,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 2,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -102,8 +96,8 @@
       "published": 90,
       "rejected": 108
     },
-    "held_back_this_run": 29,
-    "held_already_published": 23,
+    "held_back_this_run": 31,
+    "held_already_published": 25,
     "held_rejected": 6,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -164,12 +158,10 @@
       "last_attempt_at": "2026-10-20T08:43:30.162517Z"
     }
   ],
-  "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 185.": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 99,
+    "rss_and_google_news": 114,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -185,45 +177,49 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 40,
+    "Rochdale Times": 46,
     "Rochdale AFC": 8,
     "CTV News": 6,
-    "Rochdale Borough Council": 6,
     "Roch Valley Radio": 5,
+    "Rochdale Borough Council": 5,
     "Northwich Guardian": 4,
+    "Somerset County Gazette": 4,
     "InYourArea": 4,
     "Bee Network live travel alerts": 4,
+    "The Bury Times": 3,
     "Ca": 3,
     "https://www.kilmarnocktoday.co.uk/": 3,
-    "Somerset County Gazette": 3,
+    "Colchester Gazette": 2,
     "BBC": 2,
-    "FOX Sports": 2,
+    "The Northern Echo": 2,
     "SuaraGarut.ID": 2,
-    "Chard and Ilminster News": 2,
     "Manchester Evening News": 2,
     "London Now": 2,
+    "County Times": 2,
     "Yahoo News UK": 1,
-    "The Northern Echo": 1,
-    "Border Telegraph": 1,
+    "Sky Sports": 1,
+    "Swindon Advertiser": 1,
+    "FOX Sports": 1,
     "TNT Sports": 1,
-    "County Times": 1,
     "Fansnetwork": 1,
+    "Hampshire Chronicle": 1,
     "Cotswold Journal": 1,
-    "Colchester Gazette": 1,
+    "Maldon & Burnham Standard": 1,
+    "Herts Advertiser": 1,
+    "Stowmarket Mercury": 1,
     "Whoscored": 1,
+    "Chard and Ilminster News": 1,
     "Roch Valley Radio Local News": 1,
     "Rochdale Hornets": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "community": 1,
-    "news": 1,
-    "traffic": 1
+    "sport": 1
   },
   "published_by_category": {
     "business": 32,
-    "community": 61,
-    "crime": 15,
+    "community": 60,
+    "crime": 14,
     "education": 9,
     "environment": 19,
     "events": 20,
@@ -257,14 +253,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-bd4a89982010ab6653dd",
-    "community-v3-741c88f54b0a5fddd3ff",
-    "hard-news-v3-62539f66fc5d06977913"
+    "sport-v3-b794548ee6ecd2e588e8"
   ],
   "selected_candidate_urls": [
-    "https://www.sasktoday.ca/regina-today/regina-news/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-12910610?__cf_chl_rt_tk=IIdzzzSNDsRhIo_LGrAhx3c8yZ.n_xrB6Ux8LevQaCo-1792453383-1.0.1.1-TXOv06csoHE_OLQ8VXFuvOrc3CmvAaRw6NkvWG7YP40",
-    "https://www.rochvalleyradio.com/news-features/139/news/1146/rbh-submits-plans-for-up-to-270-homes-in-lower-falinge",
-    "https://www.rochdaletimes.co.uk/heywood-restaurant-scoops-top-national-honour/"
+    "https://www.tntsports.co.uk/football/league-two/2026-2027/live-rochdale-grimsby-town_mtc21888147/live.shtml"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -276,47 +268,29 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "community",
-      "news",
-      "traffic"
+      "sport"
     ],
     "selected_categories": [
-      "community",
-      "news",
-      "traffic"
+      "sport"
     ],
-    "available_wards": [
-      "Central Rochdale"
-    ],
-    "selected_wards": [
-      "Central Rochdale"
-    ],
-    "available_areas": [
-      "heywood"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
     "selected_areas": [
-      "heywood",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "community": 1,
-      "news": 1,
-      "traffic": 1
+      "sport": 1
     },
-    "selected_by_ward": {
-      "Central Rochdale": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
-      "heywood": 1,
-      "rochdale": 2
+      "rochdale": 1
     },
     "selected_by_source": {
-      "ca": 1,
-      "roch valley radio local news": 1,
-      "rochdale times": 1
+      "tnt sports": 1
     }
   },
   "official_ward_count": 20,
@@ -867,7 +841,7 @@
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
   "robots_denied_count": 1,
   "robots_denied_urls": [
-    "https://news.google.com/rss/articles/CBMihAFBVV95cUxOTW9yREc1X2FyQ24tU01aYXJMMHFySWJsQlZHcHBMcXhVdlJXMkpHSVhoUmVaWHB1UzFhM3ZHRFVBQ19CN1Y1Vml4UkEwTzl5M21YOWlPQWVBZUZrUmFONW9Bd1JLWERZcEdhLThzU29nd1pla095SmVJcE5KNzhjalVOYm4?oc=5"
+    "https://news.google.com/rss/articles/CBMilwFBVV95cUxNX0l3UUtncFFFemFHNHNfdkFIVEx3clpKQXQ2NlB6Ty1CbEFhYUl2TUFQbU1LYm1ubGRzUllqUGRsVjhfb2pLcmRxZk9DdjJaaExibHNDLWU3dG1xMTFzQVRzMGlhU0tjVE44dHNHS2JyQVZ2bGNpNTAwRWgyTkxCTnI5RlFzR2VNM3ppWUFmYV9xXzBVZVBV?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -907,7 +881,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-20T21:46:26.859800Z",
+  "frontpage_generated_at": "2026-10-20T22:00:09.389956Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1014,7 +988,7 @@
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 13,
+  "ticket_events_collected_this_run": 11,
   "events_removed_other_source": 7,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
@@ -1031,11 +1005,9 @@
   "category_archive_count": 11,
   "area_archive_count": 26,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 3,
+  "published_after_editorial_gate": 1,
   "published_new_slugs": [
-    "morning-briefing-20-october-2026",
-    "lower-falinge-270-homes-replacement-net-gain",
-    "venus-lounge-in-heywood-wins-restaurant-of-the-year-at-national-curry-awards-202"
+    "rochdale-afc-to-face-grimsby-town-at-crown-oil-arena-tonight"
   ],
   "drafts_not_published": 0,
   "publication_health": "ready",
