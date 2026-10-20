@@ -1,11 +1,18 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 342,
-  "published_count": 342,
-  "category_change_count": 40,
-  "image_change_count": 75,
+  "article_count": 346,
+  "published_count": 346,
+  "category_change_count": 41,
+  "image_change_count": 78,
   "category_changes": [
+    {
+      "slug": "venus-lounge-in-heywood-wins-restaurant-of-the-year-at-national-curry-awards-202",
+      "title": "Venus Lounge in Heywood Wins Restaurant of the Year at National Curry Awards 2026",
+      "from": "news",
+      "to": "business",
+      "reason": "headline strongly identifies business"
+    },
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
       "title": "St Cuthbert’s RC High School Closes Following Bomb Threat",
@@ -289,6 +296,30 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-afc-manager-discusses-challenges-after-recent-match",
+      "title": "Rochdale AFC Manager Discusses Challenges After Recent Match",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_fc.jpg",
+        "img": "assets/img/cards/rochdale_fc.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-manager-discusses-challenges-after-recent-match-generated-card.jpg"
+    },
+    {
+      "slug": "ian-henderson-scores-late-equaliser-for-rochdale-in-2-2-draw-against-grimsby",
+      "title": "Rochdale Draw 2-2 with Grimsby After Late Equaliser from Ian Henderson",
+      "category": "sport",
+      "reason": "weak filename image match score 8125; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/ian-henderson-scores-late-equaliser-for-rochdale-in-2-2-draw-against-grimsby-generated-card.jpg"
+    },
+    {
       "slug": "jolly-josh-christmas-ball-sells-out-rochdale-business-support",
       "title": "Jolly Josh Christmas Ball sells out as Rochdale businesses urged to help",
       "category": "community",
@@ -335,6 +366,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026-generated-card.jpg"
+    },
+    {
+      "slug": "six-rochdale-hornets-players-compete-in-international-matches",
+      "title": "Six Rochdale Hornets Players Compete in International Matches",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_hornets.jpg",
+        "img": "assets/img/cards/rochdale_hornets.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/six-rochdale-hornets-players-compete-in-international-matches-generated-card.jpg"
     },
     {
       "slug": "rochdale-sleep-out-raises-funds-and-awareness-for-homelessness",
@@ -385,16 +428,16 @@
       "after": "assets/img/cards/rochdale-hornets-assistant-coach-ryan-jackson-leaves-for-keighley-cougars-generated-card.jpg"
     },
     {
-      "slug": "rochdale-afc-to-face-grimsby-town-at-crown-oil-arena-tonight",
-      "title": "Rochdale AFC to Face Grimsby Town in EFL League Two Match on 20 October 2026",
+      "slug": "rochdale-afc-to-host-grimsby-town-on-21-october-2026",
+      "title": "Rochdale AFC Earns Goalless Draw Against Grimsby Town",
       "category": "sport",
-      "reason": "weak filename image match score -1; neutral card is safer",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/rochdale_fc.jpg",
-        "img": "assets/img/cards/rochdale_fc.jpg",
+        "image_url": "assets/img/cards/rochdale_afc.jpg",
+        "img": "assets/img/cards/rochdale_afc.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/rochdale-afc-to-face-grimsby-town-at-crown-oil-arena-tonight-generated-card.jpg"
+      "after": "assets/img/cards/rochdale-afc-to-host-grimsby-town-on-21-october-2026-generated-card.jpg"
     },
     {
       "slug": "lifts-at-freehold-tram-stop-out-of-service-for-repairs",
