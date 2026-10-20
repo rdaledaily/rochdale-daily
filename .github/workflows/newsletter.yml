@@ -51,4 +51,12 @@ jobs:
           NEWSLETTER_SENDER: ${{ vars.NEWSLETTER_SENDER }}
           NEWSLETTER_SENDER_NAME: ${{ vars.NEWSLETTER_SENDER_NAME }}
           NEWSLETTER_DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-        run: python scraper/send_newsletter.py
+        # The result is also written as an annotation, which can be read
+        # without access to the job log.
+        run: |
+          set +e
+          out=$(python scraper/send_newsletter.py)
+          status=$?
+          echo "$out"
+          echo "::notice title=Newsletter::$out"
+          exit $status
