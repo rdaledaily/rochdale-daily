@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 338,
-  "published_count": 338,
+  "article_count": 339,
+  "published_count": 339,
   "category_change_count": 40,
-  "image_change_count": 73,
+  "image_change_count": 75,
   "category_changes": [
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
@@ -289,6 +289,30 @@
   ],
   "image_changes": [
     {
+      "slug": "jolly-josh-christmas-ball-sells-out-rochdale-business-support",
+      "title": "Jolly Josh Christmas Ball sells out as Rochdale businesses urged to help",
+      "category": "community",
+      "reason": "weak filename image match score 8378; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/jolly-josh-christmas-ball-sells-out-rochdale-business-support-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-to-face-grimsby-in-upcoming-football-match",
+      "title": "Rochdale to Face Grimsby in Upcoming Football Match",
+      "category": "sport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-to-face-grimsby-in-upcoming-football-match-generated-card.jpg"
+    },
+    {
       "slug": "roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026",
       "title": "Fielding Street, roadworks in Middleton from 3 November 2026",
       "category": "traffic",
@@ -338,7 +362,7 @@
     },
     {
       "slug": "rochdale-afc-to-host-grimsby-town-on-tuesday-night",
-      "title": "Rochdale AFC to Host Grimsby Town on 20th October 2026",
+      "title": "Rochdale AFC to Face Grimsby Town at Spotland Stadium on 20 October 2026",
       "category": "sport",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
@@ -877,18 +901,6 @@
       "after": "assets/img/cards/rochdale-council-to-implement-new-planning-decision-guidelines-from-october-31-generated-card.jpg"
     },
     {
-      "slug": "roadworks-scheduled-on-nowell-road-pershore-road-and-thornham-lane-in-middleton",
-      "title": "Madison Square Roadworks Scheduled for 19 October 2026",
-      "category": "traffic",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/roadworks.jpg",
-        "img": "assets/img/cards/roadworks.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/roadworks-scheduled-on-nowell-road-pershore-road-and-thornham-lane-in-middleton-generated-card.jpg"
-    },
-    {
       "slug": "man-injured-in-altercation-on-rochdale-road-middleton",
       "title": "Man Injured in Altercation on Rochdale Road, Middleton",
       "category": "news",
@@ -911,6 +923,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-borough-council-approves-vcfse-accord-for-2026-2035-generated-card.jpg"
+    },
+    {
+      "slug": "roadworks-scheduled-on-nowell-road-pershore-road-and-thornham-lane-in-middleton",
+      "title": "Madison Square Roadworks Scheduled for 19 October 2026",
+      "category": "traffic",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/roadworks.jpg",
+        "img": "assets/img/cards/roadworks.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/roadworks-scheduled-on-nowell-road-pershore-road-and-thornham-lane-in-middleton-generated-card.jpg"
     },
     {
       "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
