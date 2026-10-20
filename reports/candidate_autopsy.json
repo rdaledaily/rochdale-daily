@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-10-19T13:55:55.354085Z",
+  "examined_at": "2026-10-20T12:09:15.117803Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 101,
+  "candidates_examined": 100,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 86,
-    "would publish": 12,
-    "duplicate of published story": 3
+    "age": 73,
+    "would publish": 14,
+    "duplicate of published story": 13
   },
-  "would_publish": 12,
+  "would_publish": 14,
   "age_gate_sensitivity": {
-    "6h": 7,
-    "14h": 13,
-    "24h": 15,
-    "48h": 45,
-    "72h": 66,
-    "168h": 101
+    "6h": 15,
+    "14h": 18,
+    "24h": 27,
+    "48h": 43,
+    "72h": 77,
+    "168h": 100
   },
   "gates_unavailable": [],
   "examples": {
     "duplicate of published story": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 19/10/2026 at 12:59pm Live Freehold Tram Stop - Lifts out of ",
-      "Rochdale Borough Council: Greenhill Road, roadworks in Middleton from 2 November 2026"
+      "Roch Valley Radio Local News: RBH submits plans for up to 270 homes in Lower Falinge",
+      "Bee Network live travel alerts: Updated: 19/10/2026 at 12:59pm Live Freehold Tram Stop - Lifts out of "
     ],
     "would publish": [
-      "Rochdale AFC: Tuesday’s Matchday Guide - Rochdale AFC",
-      "Northern live service updates: Service updates Live train times, planned disruption and events Breadc",
-      "TfGM Travel Alerts: Travel alerts"
+      "Roch Valley Radio Local News: finalize",
+      "WhoScored.com: Rochdale vs Grimsby: Lineups, Prediction, Odds & Bet Builder Tip - Who",
+      "Rochdale Times: Inspector rules on garden fence rejected by council - Rochdale Times"
     ],
     "age": [
-      "Manchester Evening News: 'Loud bang' heard as residents left without power",
-      "Yahoo News UK: 'Loud bang' heard as residents left without power after incident in Ro",
-      "Roch Valley Radio Local News: Man dies after flat fire in Prestwich"
+      "Rochdale AFC: TVOS Preview | Grimsby Town (H) - Rochdale AFC",
+      "Rochdale AFC: Dale Learn FA Cup Opponents",
+      "TfGM Travel Alerts: Travel alerts"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
