@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-20T00:49:49.810607Z",
+  "updated_at": "2026-10-20T01:05:13.456726Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 258,
@@ -2938,12 +2938,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-19T03:25:27.089878Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "retry with exact council fields review",
       "title": "Greenhill Road, roadworks in Middleton from 2 November 2026",
       "source_name": "Rochdale Borough Council",
       "category": "traffic",
-      "text_fingerprint": "df0e5d2f4d90f12c"
+      "text_fingerprint": "df0e5d2f4d90f12c",
+      "recovery_attempts": 0,
+      "structured_official_notice_recovery": 1
     },
     "https://www.rochdale.gov.uk/directory-record/2628/todmorden-road-roadworks-in-littleborough-from-10-october-2026": {
       "first_attempt_at": "2026-10-10T19:17:26.034180Z",

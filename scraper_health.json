@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-20T00:57:32.194034Z",
-  "raw_candidates": 70,
+  "checked_at": "2026-10-20T01:06:59.753649Z",
+  "raw_candidates": 69,
   "attempted_rewrites": 0,
   "new_articles": 0,
-  "live_articles": 332,
+  "live_articles": 333,
   "search_query_count": 60,
   "required_category_count": 11,
   "searched_category_count": 11,
@@ -14,8 +14,8 @@
   "eligible_published_news_records": 297,
   "frontpage_eligible_news_records": 296,
   "eligible_fresh_news_records": 11,
-  "frontpage_articles": 12,
-  "fresh_frontpage_articles": 11,
+  "frontpage_articles": 11,
+  "fresh_frontpage_articles": 10,
   "fresh_top_three_articles": 3,
   "eligible_top_fresh_feed_articles": 4,
   "configured_minimum_live_articles": 12,
@@ -29,9 +29,11 @@
   "lead_freshness_at": "2026-10-20T00:52:46Z",
   "collector_errors": {},
   "zero_new_after_editorial_rejection": false,
-  "frontpage_minimum_met": true,
-  "supply_shortfall": false,
-  "warnings": [],
-  "status": "healthy",
+  "frontpage_minimum_met": false,
+  "supply_shortfall": true,
+  "warnings": [
+    "homepage rendered 11 stories against a configured minimum of 12; only 11 eligible stories exist inside the 36-hour window, so this is a supply shortfall, not a render fault"
+  ],
+  "status": "short",
   "failures": []
 }
