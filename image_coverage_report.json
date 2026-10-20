@@ -1,12 +1,19 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 130,
+    "kept_cards": 131,
     "cards_library": 0,
-    "cards_generated": 124,
+    "cards_generated": 125,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "rbh-submits-plans-for-up-to-270-affordable-homes-in-lower-falinge",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/RBH.jpg",
+      "matched_filename": "RBH.jpg",
+      "match_score": 15123
+    },
     {
       "slug": "three-rochdale-artists-awarded-free-studio-space-to-develop-new-work",
       "result": "kept-cards",
@@ -48,6 +55,13 @@
       "image_url": "assets/img/cards/fixtures.jpg",
       "matched_filename": "fixtures.jpg",
       "match_score": -1
+    },
+    {
+      "slug": "teen-charged-following-bb-gun-incident-on-rochdale-boulevard",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/teen-charged-following-bb-gun-incident-on-rochdale-boulevard-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "rochdale-sleep-out-raises-funds-and-awareness-for-homelessness",
