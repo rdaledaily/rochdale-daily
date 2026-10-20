@@ -1,7 +1,7 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 131,
+    "kept_cards": 132,
     "cards_library": 0,
     "cards_generated": 123,
     "skipped": 0
@@ -48,6 +48,13 @@
       "image_url": "assets/img/cards/fixtures.jpg",
       "matched_filename": "fixtures.jpg",
       "match_score": -1
+    },
+    {
+      "slug": "teen-charged-after-bb-gun-incident-on-rochdale-boulevard",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "rochdale-sleep-out-raises-funds-and-awareness-for-homelessness",
@@ -282,7 +289,7 @@
     },
     {
       "slug": "oktoberfest-rochdale-2027",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
