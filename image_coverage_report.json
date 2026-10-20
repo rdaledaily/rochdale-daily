@@ -1,18 +1,25 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 131,
+    "kept_cards": 134,
     "cards_library": 0,
     "cards_generated": 124,
     "skipped": 0
   },
   "items": [
     {
+      "slug": "rochdale-wins-gold-and-national-britain-in-bloom-town-centre-title",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "does-a-boggart-still-haunt-clegg-hall",
       "result": "kept-cards",
-      "image_url": "assets/img/cards/murder.jpg",
-      "matched_filename": "murder.jpg",
-      "match_score": 4626
+      "image_url": "assets/img/cards/does-a-boggart-still-haunt-clegg-hall-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "east-lancashire-railway-portable-defibrillator-trains",
@@ -20,6 +27,20 @@
       "image_url": "assets/img/cards/east_lancashire_railway.jpg",
       "matched_filename": "",
       "match_score": null
+    },
+    {
+      "slug": "office-of-rail-and-road-rejects-proposal-for-extra-rochdale-to-london-train-serv",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/train.jpg",
+      "matched_filename": "train.jpg",
+      "match_score": 15125
+    },
+    {
+      "slug": "rbh-submits-plans-for-up-to-270-new-homes-in-lower-falinge",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/RBH.jpg",
+      "matched_filename": "RBH.jpg",
+      "match_score": 15123
     },
     {
       "slug": "rochdale-to-face-grimsby-in-upcoming-football-match",
@@ -296,7 +317,7 @@
     },
     {
       "slug": "oktoberfest-rochdale-2027",
-      "result": "cards-generated",
+      "result": "kept-cards",
       "image_url": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
