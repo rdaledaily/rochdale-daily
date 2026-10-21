@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-21T13:48:00.279339Z",
+  "updated_at": "2026-10-21T14:06:07.805221Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 240,
+  "count": 241,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/rochdale-crawley-town-13597784": {
       "first_attempt_at": "2026-10-20T07:42:50.504518Z",
@@ -35,6 +35,22 @@
       "source_name": "Rochdale Borough Council",
       "category": "politics",
       "text_fingerprint": "0e78e445d6c99377"
+    },
+    "https://democracy.rochdale.gov.uk/mgDecisionDetails.aspx?IId=64775&Opt=1&AIID=51378": {
+      "first_attempt_at": "2026-10-21T14:04:28.331842Z",
+      "attempts": 1,
+      "urls": [
+        "https://democracy.rochdale.gov.uk/mgDecisionDetails.aspx?IId=64775&Opt=1&AIID=51378"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-21T14:04:28.331842Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
+      "title": "Decisions for issue Satellite School Programme and cost update - Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council",
+      "category": "environment",
+      "text_fingerprint": "e105948e4299da03"
     },
     "https://gtfc.co.uk/mariners-battle-to-hard-earned-point-away-against-rochdale": {
       "first_attempt_at": "2026-10-20T23:31:40.896106Z",
@@ -1073,18 +1089,37 @@
       "recovery_attempts": 2,
       "final_gate_removal_recovery": 1
     },
+    "https://www.foxsports.com/soccer/fa-cup-fleetwood-twn-vs-rochdale-nov-07-2026-game-boxscore-1072373": {
+      "first_attempt_at": "2026-10-21T14:06:07.804162Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.foxsports.com/soccer/fa-cup-fleetwood-twn-vs-rochdale-nov-07-2026-game-boxscore-1072373"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-21T14:06:07.804162Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Fleetwood Twn vs. Rochdale - Live Score - November 07, 2026 - FOX Sports",
+      "source_name": "FOX Sports",
+      "category": "sport",
+      "text_fingerprint": "8d6248a4524c2fa3"
+    },
     "https://www.grimsbytelegraph.co.uk/sport/football/frantic-draw-rochdale-ends-grimsby-11208194": {
       "first_attempt_at": "2026-10-21T10:59:06.010931Z",
       "attempts": 1,
       "urls": [
         "https://www.clactonandfrintongazette.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
-        "https://www.grimsbytelegraph.co.uk/sport/football/frantic-draw-rochdale-ends-grimsby-11208194"
+        "https://www.grimsbytelegraph.co.uk/sport/football/frantic-draw-rochdale-ends-grimsby-11208194",
+        "https://www.grimsbytelegraph.co.uk/sport/football/frantic-draw-rochdale-ends-grimsby-11208194.amp",
+        "https://www.salisburyjournal.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
+        "https://www.somersetcountygazette.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T11:15:30.994233Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-21T14:04:31.762239Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date",
       "title": "Frantic draw at Rochdale ends Grimsby Town's losing streak",
       "source_name": "Grimsby Live",
       "category": "events",
@@ -1274,9 +1309,11 @@
         "https://www.expressandstar.com/uk-sports/substitute-ian-henderson-rescues-rochdale-point-against-grimsby-9300057",
         "https://www.gazette-news.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
         "https://www.hampshirechronicle.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
+        "https://www.harwichandmanningtreestandard.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
         "https://www.hertsad.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
         "https://www.kilmarnocktoday.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
         "https://www.lancashiretelegraph.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
+        "https://www.leighjournal.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
         "https://www.london-now.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
         "https://www.maldonandburnhamstandard.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
         "https://www.northwichguardian.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby",
@@ -1291,12 +1328,12 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T09:21:23.111962Z",
+      "last_attempt_at": "2026-10-21T14:06:07.804684Z",
       "outcome": "published",
       "reason": "",
       "title": "Substitute Ian Henderson rescues Rochdale point against Grimsby - https://www.kilmarnocktoday.co.uk/",
       "source_name": "Kilmarnocktoday",
-      "category": "community",
+      "category": "business",
       "text_fingerprint": "fd00aba6e89aa7b2"
     },
     "https://www.lancashiretelegraph.co.uk/sport/26633494.rossendale-rufc-overcome-rochdale-local-derby": {
@@ -1483,11 +1520,12 @@
       "first_attempt_at": "2026-10-21T13:12:45.233440Z",
       "attempts": 1,
       "urls": [
-        "https://www.manchestereveningnews.co.uk/news/wasteland-around-rochdale-train-station-34792226"
+        "https://www.manchestereveningnews.co.uk/news/wasteland-around-rochdale-train-station-34792226",
+        "https://www.manchestereveningnews.co.uk/news/wasteland-around-rochdale-train-station-34792226.amp"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T13:12:45.233440Z",
+      "last_attempt_at": "2026-10-21T14:06:07.804265Z",
       "outcome": "published",
       "reason": "",
       "title": "The wasteland around Rochdale train station is finally being put to use - Manchester Evening News",
@@ -1829,21 +1867,6 @@
       "source_name": "Northern live service updates",
       "category": "transport",
       "text_fingerprint": "1e256583adbb56c9"
-    },
-    "https://www.northernrailway.co.uk/service-updates#live-18bdd3a7b6c4120582": {
-      "first_attempt_at": "2026-10-13T13:12:21.574317Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-18bdd3a7b6c4120582"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-13T13:46:14.123706Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "d4c222e5c8f43a26"
     },
     "https://www.northernrailway.co.uk/service-updates#live-215dbd9190b6cb509e": {
       "first_attempt_at": "2026-10-18T12:40:08.215700Z",
@@ -3210,7 +3233,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T13:48:00.279021Z",
+      "last_attempt_at": "2026-10-21T14:06:07.804442Z",
       "outcome": "published",
       "reason": "",
       "title": "Town centre reclaims Britain in Bloom crown - Rochdale Times",
@@ -3642,7 +3665,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T13:32:30.789623Z",
+      "last_attempt_at": "2026-10-21T14:06:07.804366Z",
       "outcome": "published",
       "reason": "",
       "title": "Teen charged after BB gun incident on Rochdale Boulevard - SaskToday.ca",
