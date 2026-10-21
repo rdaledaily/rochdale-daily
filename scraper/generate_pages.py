@@ -11,6 +11,7 @@ retained to preserve published URLs. Explicit editorial takedowns are the
 exception: blocklisted pages are deleted and omitted from the sitemap.
 """
 from __future__ import annotations
+from feature_policy import is_reserve_feature, normalise_feature
 from source_presentation import generic_sources_markup, sanitise_article
 from story_blocklist import is_blocked_article, load_blocklist
 from publisher_markup import place as borough_place, publisher as full_publisher
@@ -849,6 +850,7 @@ def hero_image_markup(article: dict[str, Any], image_url: str) -> str:
 
 
 def render_article_page(article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
+    article = normalise_feature(article)
     slug = article.get('slug')
     title = str(article.get('title') or 'Local news update')
     canonical_url = f'{SITE_BASE_URL}/articles/{slug}.html'
@@ -881,7 +883,7 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     # row. It is drawn only where the record actually says so: under the
     # one-live-story-per-incident rule an ongoing story is updated in place, so
     # the chip reports a fact rather than decorating the page.
-    ongoing_chip = ''
+    ongoing_chip = '<span class="kicker-chip">Feature</span>' if is_reserve_feature(article) else ''
     if article.get('is_ongoing'):
         # ongoing_label is the pipeline's own wording for this incident where
         # it has one (15 of the 153 live records carry both fields).

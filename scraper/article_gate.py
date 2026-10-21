@@ -38,6 +38,7 @@ Run:
     python scraper/article_gate.py articles.json
 """
 from __future__ import annotations
+from feature_policy import is_reserve_feature, normalise_feature
 
 import copy
 import json
@@ -449,7 +450,7 @@ def normalise_article(
     if blocklist is None:
         blocklist = load_blocklist()
 
-    article = copy.deepcopy(source_article)
+    article = normalise_feature(copy.deepcopy(source_article))
 
     title = str(article.get("title") or "").strip()
     ident = str(article.get("slug") or title or article.get("id") or "?")

@@ -1,5 +1,6 @@
 """Apply LIVE labels and render timestamped updates for fresh crime stories."""
 from __future__ import annotations
+from feature_policy import is_reserve_feature, normalise_feature
 
 import html
 import json
@@ -36,7 +37,10 @@ def main() -> int:
     now = datetime.now(timezone.utc)
     changed = 0
 
-    for article in items:
+    for index, article in enumerate(items):
+        if isinstance(article, dict) and is_reserve_feature(article):
+            items[index] = normalise_feature(article)
+            continue
         if not isinstance(article, dict) or str(article.get("category") or "").lower() != "crime":
             continue
 

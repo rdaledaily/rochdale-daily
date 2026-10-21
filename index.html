@@ -1301,15 +1301,15 @@
 
   <div class="breaking-bar">
     <div class="wrap breaking-row">
-      <div class="breaking-label">Breaking</div>
-      <div class="breaking-copy" id="breaking-copy" role="status" aria-live="polite" aria-label="Does a boggart still haunt Clegg Hall?">
+      <div class="breaking-label">Latest</div>
+      <div class="breaking-copy" id="breaking-copy" role="status" aria-live="polite" aria-label="Castleton night works: Manchester Road’s three traffic phases">
         <div class="breaking-track" id="breaking-track">
           <span class="breaking-segment">
-            <span class="breaking-text">Does a boggart still haunt Clegg Hall?</span>
+            <span class="breaking-text">Castleton night works: Manchester Road’s three traffic phases</span>
             <span class="breaking-separator" aria-hidden="true">◆</span>
           </span>
           <span class="breaking-segment" aria-hidden="true">
-            <span class="breaking-text">Does a boggart still haunt Clegg Hall?</span>
+            <span class="breaking-text">Castleton night works: Manchester Road’s three traffic phases</span>
             <span class="breaking-separator" aria-hidden="true">◆</span>
           </span>
         </div>
@@ -2276,6 +2276,10 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     }
 
     function normaliseArticle(article, index) {
+      const reserveFeature = article.is_evergreen === true || Boolean(article.evergreen_id) || article.publication_route === "evergreen_fallback" || article.source_kind === "evergreen";
+      if (reserveFeature) {
+        article = { ...article, category: ["crime", "news"].includes(String(article.category || "").toLowerCase()) ? "community" : (article.category || "community"), categories: [], secondary_categories: [], secondary_category: "", is_ongoing: false, ongoing_label: "", policeMatter: false, police_matter: false, kicker: "Feature" };
+      }
       const category = String(
         article.category ||
         (Array.isArray(article.types) && article.types[0]) ||
@@ -2335,7 +2339,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         isOngoing: Boolean(article.is_ongoing),
         ongoingLabel: safeText(article.ongoing_label || (article.is_ongoing ? "ONGOING" : "")),
         updateCount: Number(article.update_count) || 1,
-        policeMatter: Boolean(article.policeMatter || article.police_matter || category === "crime"),
+        policeMatter: !reserveFeature && Boolean(article.policeMatter || article.police_matter),
         body: body.length ? body : ["Further verified details will be added by the Rochdale Daily newsdesk."],
         slot: article.slot || "",
         // A crime story outranks the rest of the paper while it is news, not
