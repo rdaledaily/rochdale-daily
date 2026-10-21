@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-21T09:35:43.275997Z",
+  "updated_at": "2026-10-21T09:47:59.488661Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 245,
+  "count": 243,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/rochdale-crawley-town-13597784": {
       "first_attempt_at": "2026-10-20T07:42:50.504518Z",
@@ -939,22 +939,6 @@
       "source_name": "Border Counties Advertizer",
       "category": "crime",
       "text_fingerprint": "273130aeb5b48da0"
-    },
-    "https://www.burytimes.co.uk/news/26628555.bury-man-face-trial-alleged-burglary-rochdale": {
-      "first_attempt_at": "2026-10-13T09:34:41.439674Z",
-      "attempts": 1,
-      "urls": [
-        "https://uk.news.yahoo.com/bury-man-due-crown-court-040000996.html",
-        "https://www.burytimes.co.uk/news/26628555.bury-man-face-trial-alleged-burglary-rochdale"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-13T09:34:41.439674Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Bury man due in Crown Court accused of burglary with knuckle dusters in Rochdale - The Bury Times",
-      "source_name": "The Bury Times",
-      "category": "crime",
-      "text_fingerprint": "8af7d8761d74fb9f"
     },
     "https://www.ctvnews.ca/regina/article/regina-teen-charged-after-bb-handgun-seized-on-rochdale-boulevard": {
       "first_attempt_at": "2026-10-19T23:46:20.043446Z",
@@ -3260,16 +3244,16 @@
     },
     "https://www.rochdaletimes.co.uk/town-centre-reclaims-britain-in-bloom-crown": {
       "first_attempt_at": "2026-10-21T08:32:07.579845Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMiggFBVV95cUxQUjFFYXMtQV81OW1MU3VxeHkyLXhGU0lfQ0Qzb1hJU2pvdmtKeDVKME1tVWs4R3NsUEZKdF83dU9jU1lVSWxwc1c1RVNrVlkyNU5yQUNrZTJuV1NqQnZ0VVV3SGU1Y0M0THNvTWtJTG5KdzM2WFh3cDVQbEZFbkE0UHln?oc=5",
         "https://www.rochdaletimes.co.uk/town-centre-reclaims-britain-in-bloom-crown"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T09:35:43.275125Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-21T09:47:08.519243Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2023; source publication timestamps are not event date",
       "title": "Town centre reclaims Britain in Bloom crown - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
@@ -3813,23 +3797,6 @@
       "source_name": "The League Paper",
       "category": "sport",
       "text_fingerprint": "8035dab06f2004f0"
-    },
-    "https://www.themanufacturer.com/articles/sustainable-materials-manufacturing-centre-takes-shape-in-rochdale": {
-      "first_attempt_at": "2026-10-13T09:34:41.439533Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.themanufacturer.com/articles/sustainable-materials-manufacturing-centre-takes-shape-in-rochdale"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-13T09:34:41.439533Z",
-      "outcome": "failed",
-      "reason": "one-time retry after secondary publication gate removal",
-      "title": "New Sustainable Materials & Manufacturing Centre takes shape in Rochdale - The Manufacturer",
-      "source_name": "The Manufacturer",
-      "category": "environment",
-      "text_fingerprint": "a41e22840033f299",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1
     },
     "https://www.theoldhamtimes.co.uk/news/26643588.luke-shaw-accused-strangling-victim-rochdale": {
       "first_attempt_at": "2026-10-18T13:00:42.493715Z",
