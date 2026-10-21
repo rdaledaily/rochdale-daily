@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-21T03:53:32.891988Z",
+  "last_run_at": "2026-10-21T04:04:34.002817Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -27,14 +27,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-10-20T21:57:07.849581Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 0,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-10-20T21:57:07.849581Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 4,
+      "not_rochdale": 4,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -42,37 +55,32 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 126,
+  "raw_candidates_before_job_filter": 142,
   "job_or_career_posts_rejected": 2,
-  "raw_candidates": 124,
+  "raw_candidates": 140,
   "candidate_clusters": 50,
   "google_news_resolution": {
-    "wrappers": 108,
-    "resolved": 96,
-    "text_recovered": 44,
-    "reattributed": 11,
-    "images_found": 48
+    "wrappers": 91,
+    "resolved": 86,
+    "text_recovered": 70,
+    "reattributed": 14,
+    "images_found": 75
   },
-  "duplicates_merged": 74,
-  "attempted_rewrites": 2,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "teen-charged-after-bb-gun-incident-on-rochdale-boulevard",
-      "source_url": "https://www.sasktoday.ca/regina-today/regina-news/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-12910610?__cf_chl_rt_tk=IIdzzzSNDsRhIo_LGrAhx3c8yZ.n_xrB6Ux8LevQaCo-1792453383-1.0.1.1-TXOv06csoHE_OLQ8VXFuvOrc3CmvAaRw6NkvWG7YP40"
-    }
-  ],
-  "new_articles": 1,
+  "duplicates_merged": 90,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
   "live_articles": 346,
   "skipped": 1,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -168,8 +176,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 119,
-    "website_discovery": 2,
+    "rss_and_google_news": 129,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -184,49 +192,51 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 45,
+    "Rochdale Times": 51,
     "Rochdale AFC": 9,
     "CTV News": 6,
     "Roch Valley Radio": 5,
+    "Rochdale Borough Council": 5,
+    "Southend Echo": 4,
     "Herts Advertiser": 4,
+    "Somerset County Gazette": 4,
     "InYourArea": 4,
-    "Rochdale Borough Council": 4,
+    "Stowmarket Mercury": 4,
     "Bee Network live travel alerts": 4,
-    "Southend Echo": 3,
     "Ca": 3,
     "Birmingham Now": 3,
-    "Stowmarket Mercury": 3,
+    "Kilmarnocktoday": 3,
     "Colchester Gazette": 2,
     "Clacton Gazette": 2,
-    "Somerset County Gazette": 2,
-    "The Northern Echo": 2,
-    "Kilmarnocktoday": 2,
+    "BBC": 2,
+    "Slough Observer": 2,
     "Express and Star": 2,
+    "Manchester Evening News": 2,
     "London Now": 2,
     "Chelmsfordcitynews": 2,
-    "Manchester Evening News": 2,
     "Yahoo News UK": 1,
+    "The Northern Echo": 1,
     "Sky Sports": 1,
     "FOX Sports": 1,
     "TNT Sports": 1,
+    "Surrey Comet": 1,
+    "Fansnetwork": 1,
+    "Id": 1,
     "Hampshire Chronicle": 1,
-    "Slough Observer": 1,
     "County Times": 1,
     "Lancashire Telegraph": 1,
-    "Runcorn and Widnes World": 1,
     "Whoscored": 1,
     "Roch Valley Radio Local News": 1,
     "Rochdale Hornets": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "environment": 1,
-    "traffic": 1
+    "environment": 1
   },
   "published_by_category": {
     "business": 33,
     "community": 60,
-    "crime": 15,
+    "crime": 14,
     "education": 9,
     "environment": 19,
     "events": 20,
@@ -260,11 +270,9 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-bd4a89982010ab6653dd",
     "environment-v3-0efa196ce43c0c3f3d40"
   ],
   "selected_candidate_urls": [
-    "https://www.sasktoday.ca/regina-today/regina-news/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-12910610?__cf_chl_rt_tk=IIdzzzSNDsRhIo_LGrAhx3c8yZ.n_xrB6Ux8LevQaCo-1792453383-1.0.1.1-TXOv06csoHE_OLQ8VXFuvOrc3CmvAaRw6NkvWG7YP40",
     "https://www.expressandstar.com/uk-sports/ian-watson-lauds-amazing-ian-henderson-after-late-rochdale-leveller-9300111"
   ],
   "x_social_records": 0,
@@ -277,12 +285,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment",
-      "traffic"
+      "environment"
     ],
     "selected_categories": [
-      "environment",
-      "traffic"
+      "environment"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -294,15 +300,13 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1,
-      "traffic": 1
+      "environment": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 2
+      "rochdale": 1
     },
     "selected_by_source": {
-      "ca": 1,
       "express and star": 1
     }
   },
@@ -895,7 +899,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-21T03:54:39.325547Z",
+  "frontpage_generated_at": "2026-10-21T04:05:06.589709Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1019,10 +1023,8 @@
   "category_archive_count": 11,
   "area_archive_count": 26,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "morning-briefing-20-october-2026"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
