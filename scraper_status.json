@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-21T21:43:54.536795Z",
+  "last_run_at": "2026-10-21T22:18:16.516384Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,9 +7,14 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "not due",
-      "last_checked": "2026-10-21T09:46:07.885331Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 1,
+      "listed": 7,
+      "other_notice_types": 3,
+      "already_seen": 4,
+      "new": 0
     },
     "written_answers": {
       "status": "not due",
@@ -17,9 +22,15 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "not due",
-      "last_checked": "2026-10-21T09:46:07.885331Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 1,
+      "offered_today": 0,
+      "listed": 32,
+      "not_decisions": 16,
+      "no_borough_place": 0,
+      "already_seen": 9,
+      "new": 0
     },
     "ons_housing": {
       "status": "not due",
@@ -42,28 +53,32 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 139,
-  "job_or_career_posts_rejected": 5,
-  "raw_candidates": 134,
+  "raw_candidates_before_job_filter": 150,
+  "job_or_career_posts_rejected": 1,
+  "raw_candidates": 149,
   "candidate_clusters": 53,
   "google_news_resolution": {
-    "wrappers": 70,
-    "resolved": 67,
-    "text_recovered": 60,
-    "reattributed": 7,
-    "images_found": 63
+    "wrappers": 119,
+    "resolved": 109,
+    "text_recovered": 50,
+    "reattributed": 11,
+    "images_found": 52
   },
-  "duplicates_merged": 81,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
+  "duplicates_merged": 96,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
+    {
+      "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
+      "source_url": "https://uk.news.yahoo.com/urgent-appeal-man-22-goes-124222085.html"
+    },
     {
       "slug": "emergency-services-conduct-search-following-welfare-concern-in-middleton",
       "source_url": "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 359,
+  "new_articles": 1,
+  "live_articles": 360,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -77,14 +92,14 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 241,
+    "entries": 240,
     "by_outcome": {
       "failed": 36,
       "published": 107,
-      "rejected": 98
+      "rejected": 97
     },
-    "held_back_this_run": 47,
-    "held_already_published": 39,
+    "held_back_this_run": 46,
+    "held_already_published": 38,
     "held_rejected": 8,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -166,10 +181,10 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 124,
-    "website_discovery": 9,
+    "rss_and_google_news": 145,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "live_service_pages": 0,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -182,39 +197,41 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 38,
-    "Roch Valley Radio": 19,
-    "Manchester Evening News": 9,
+    "Rochdale Times": 37,
+    "Roch Valley Radio": 20,
+    "Manchester Evening News": 13,
+    "Rochdale AFC": 6,
+    "I Love Manchester": 5,
     "Rochdale Borough Council": 5,
-    "Bee Network live travel alerts": 5,
-    "I Love Manchester": 4,
+    "Southend Echo": 4,
+    "Herts Advertiser": 4,
+    "Grimsby Live": 4,
     "InYourArea": 4,
-    "Southend Echo": 3,
-    "Herts Advertiser": 3,
-    "Grimsby Live": 3,
+    "Chelmsfordcitynews": 3,
+    "Somerset County Gazette": 3,
     "UKNIP": 3,
     "Birmingham Now": 3,
     "Roch Valley Radio Local News": 3,
     "Colchester Gazette": 2,
     "Clacton and Frinton Gazette": 2,
-    "Yahoo News UK": 2,
-    "Chelmsfordcitynews": 2,
-    "Somerset County Gazette": 2,
+    "Kilmarnocktoday": 2,
     "BBC": 2,
+    "Slough Observer": 2,
     "London Now": 2,
-    "Kilmarnocktoday": 1,
+    "Runcorn and Widnes World": 2,
+    "Yahoo News UK": 1,
     "The Bury Times": 1,
     "The Northern Echo": 1,
     "Sky Sports": 1,
+    "Hexham Courant": 1,
     "TNT Sports": 1,
     "FOX Sports": 1,
-    "Rochdale AFC": 1,
+    "Fansnetwork": 1,
+    "Id": 1,
     "Salisbury Journal": 1,
     "Hampshire Chronicle": 1,
     "Stowmarket Mercury": 1,
     "Leigh Journal": 1,
-    "Slough Observer": 1,
-    "Runcorn and Widnes World": 1,
     "Express and Star": 1,
     "Whoscored": 1,
     "Harwich and Manningtree Standard": 1,
@@ -222,7 +239,8 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "news": 1
+    "news": 1,
+    "traffic": 1
   },
   "published_by_category": {
     "business": 35,
@@ -261,9 +279,11 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "hard-news-v3-6b054a8e2f4159a684ed",
     "hard-news-v3-20b368b01ba1626965b7"
   ],
   "selected_candidate_urls": [
+    "https://uk.news.yahoo.com/urgent-appeal-man-22-goes-124222085.html",
     "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton"
   ],
   "x_social_records": 0,
@@ -276,31 +296,43 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "news"
+      "news",
+      "traffic"
     ],
     "selected_categories": [
-      "news"
+      "news",
+      "traffic"
     ],
-    "available_wards": [],
-    "selected_wards": [],
+    "available_wards": [
+      "Central Rochdale"
+    ],
+    "selected_wards": [
+      "Central Rochdale"
+    ],
     "available_areas": [
       "middleton"
     ],
     "selected_areas": [
-      "middleton"
+      "middleton",
+      "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "news": 1
+      "news": 1,
+      "traffic": 1
     },
-    "selected_by_ward": {},
+    "selected_by_ward": {
+      "Central Rochdale": 1
+    },
     "selected_by_area": {
-      "middleton": 1
+      "middleton": 1,
+      "rochdale": 1
     },
     "selected_by_source": {
-      "roch valley radio local news": 1
+      "roch valley radio local news": 1,
+      "yahoo news uk": 1
     }
   },
   "official_ward_count": 20,
@@ -849,8 +881,10 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
+  "robots_denied_count": 1,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQQmdlcmRuSFFtMTBSWS0yR3lXdkR1dXlaLUNCM2c2ems4WmpBSTNnQzNOUXFCNmFYc3NmVFZEQk5pVmhmUzQ1UWdJUTBzOWh6RGZRSWlacjdyX0pyUUEyQ0luQUgyeFRxRFhpZENNVlBIaGdSOTZIa1pzM0J5VmVmOWMyRVJXbVpPelN5YV8zMHNqLW54T1lCUkNNQTgzVmotSkNBWUpqb09wLVXSAasBQVVfeXFMUEJnZXJkbkhRbTEwUlktMkd5V3ZEdXV5Wi1DQjNnNnprOFpqQUkzZ0MzTlFxQjZhWHNzZlRWREJOaVZoZlM0NVFnSVEwczloekRmUUlpWnI3cl9KclFBMkNJbkFIMnhUcURYaWRDTVZQSGhnUjk2SGtaczNCeVZlZjljMkVSV21aT3pTeWFfMzBzai1ueE9ZQlJDTUE4M1ZqLUpDQVlKam9PcC1V?oc=5"
+  ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
   "slow_domain_failure_counts": {},
@@ -889,7 +923,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-21T22:03:46.118114Z",
+  "frontpage_generated_at": "2026-10-21T22:19:13.029903Z",
   "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -995,14 +1029,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_removed_other_source": 9,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
+  "events_removed_other_source": 7,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 359,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 360,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1012,10 +1046,12 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "whats_on_event_count": 14,
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale"
+  ],
   "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
