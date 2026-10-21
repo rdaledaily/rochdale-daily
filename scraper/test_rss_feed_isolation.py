@@ -43,6 +43,7 @@ class FeedIsolation(unittest.TestCase):
 
         with mock.patch.object(core, "RSS_SOURCES", [BAD, GOOD]), \
                 mock.patch.object(core, "google_news_sources", lambda: []), \
+                mock.patch.object(core, "men_newsletter_sources", lambda: []), \
                 mock.patch.object(core.feedparser, "parse", parse):
             core.collect_rss_candidates()          # must not raise
         self.assertEqual(reached, [BAD["url"], GOOD["url"]], "the feed after the failure must still be read")
