@@ -14,6 +14,7 @@ is non-fatal: a quiet-news feature must never stop the real-news edition from
 publishing.
 """
 from __future__ import annotations
+from feature_policy import is_reserve_feature, normalise_feature
 
 import html
 import json
@@ -233,7 +234,7 @@ CATEGORY: {topic.get('category')}
 
 Research this topic on the live web before writing. Prefer primary and authoritative material: Rochdale Council, UK government, ONS, Ofsted, Historic England, archives, museums, academic/heritage organisations and original records. Use at least two credible source pages. Do not use Rochdale Times, Rochdale Online or Rochdale Observer. For current statistics, planning or inspections, use the newest official data available and state the data period. For folklore, ghosts, fairies, boggarts, tunnels or disputed stories, explicitly distinguish legend/tradition from documented fact. Never invent a quote, witness, date, source, document, inspection result, statistic or planning status. If a claim cannot be verified, say so plainly. For allegations or abuse history, rely on official findings and attribute claims precisely; protect victims and avoid sensationalism.
 
-Follow this original Rochdale Daily editorial voice: {HUMAN_VOICE_BRIEF}\n\nApply the reader-first reporting template: {READER_FIRST_POLICY}\nConsider these relevant questions, answering only those supported by verified sources: {reader_questions_for(topic.get('category', ''), 'evergreen')}\n\nWrite a carefully observed, intellectually readable local feature of roughly 500-800 words. Use rhetorical questions sparingly and humour only when the subject warrants it. Do not manufacture experiences, interviews, impressions or reaction. No emojis. No clickbait. No model/citation tokens. Do not mention competing local news publishers in the title or body. Do not add a bibliography to the body.
+Follow this original Rochdale Daily editorial voice: {HUMAN_VOICE_BRIEF}\n\nThis is a reserve feature, never breaking news, a developing incident or a police appeal. Do not ask readers for witnesses or direct them to police.\n\nApply the reader-first reporting template: {READER_FIRST_POLICY}\nConsider these relevant questions, answering only those supported by verified sources: {reader_questions_for(topic.get('category', ''), 'evergreen')}\n\nWrite a carefully observed, intellectually readable local feature of roughly 500-800 words. Use rhetorical questions sparingly and humour only when the subject warrants it. Do not manufacture experiences, interviews, impressions or reaction. No emojis. No clickbait. No model/citation tokens. Do not mention competing local news publishers in the title or body. Do not add a bibliography to the body.
 
 Return ONLY one valid JSON object with exactly these keys:
 {{
@@ -383,7 +384,7 @@ def make_article(
 ) -> dict[str, Any]:
     stamp = now.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     slug = slugify(generated["title"])
-    return {
+    return normalise_feature({
         "id": f"evergreen-{topic['id']}-{now.strftime('%Y%m%d')}",
         "slug": slug,
         "title": generated["title"],
@@ -392,6 +393,7 @@ def make_article(
         "body": generated["body"],
         "content_html": paragraphs_to_html(generated["body"]),
         "category": str(topic.get("category") or "community"),
+        "feature_category": str(topic.get("category") or "community"),
         "area": str(topic.get("area") or "rochdale"),
         "byline": BYLINE,
         "status": "published",
@@ -420,7 +422,7 @@ def make_article(
         },
         "legal_disclaimer": "This article was compiled from identified public sources and may be updated when further verified information becomes available.",
         "right_to_reply": f"For corrections or a right of reply, email {RIGHT_TO_REPLY_EMAIL}.",
-    }
+    })
 
 
 def update_status_on_publish(decision: TriggerDecision, topic: dict[str, Any], article: dict[str, Any]) -> None:

@@ -2294,6 +2294,10 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     }
 
     function normaliseArticle(article, index) {
+      const reserveFeature = article.is_evergreen === true || Boolean(article.evergreen_id) || article.publication_route === "evergreen_fallback" || article.source_kind === "evergreen";
+      if (reserveFeature) {
+        article = { ...article, category: ["crime", "news"].includes(String(article.category || "").toLowerCase()) ? "community" : (article.category || "community"), categories: [], secondary_categories: [], secondary_category: "", is_ongoing: false, ongoing_label: "", policeMatter: false, police_matter: false, kicker: "Feature" };
+      }
       const category = String(
         article.category ||
         (Array.isArray(article.types) && article.types[0]) ||
@@ -2353,7 +2357,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         isOngoing: Boolean(article.is_ongoing),
         ongoingLabel: safeText(article.ongoing_label || (article.is_ongoing ? "ONGOING" : "")),
         updateCount: Number(article.update_count) || 1,
-        policeMatter: Boolean(article.policeMatter || article.police_matter || category === "crime"),
+        policeMatter: !reserveFeature && Boolean(article.policeMatter || article.police_matter),
         body: body.length ? body : ["Further verified details will be added by the Rochdale Daily newsdesk."],
         slot: article.slot || "",
         // A crime story outranks the rest of the paper while it is news, not

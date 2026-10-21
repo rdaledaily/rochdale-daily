@@ -8,6 +8,7 @@ are not automatically republished. The mandatory original rewrite, source-
 overlap and ordinary editorial integrity checks remain publication controls.
 """
 from __future__ import annotations
+from feature_policy import is_reserve_feature
 
 import json
 import os
@@ -125,6 +126,8 @@ def _should_watch_developing_article(article: dict) -> bool:
     directory records (the latter covers changing roadworks/closure notices).
     """
     if not isinstance(article, dict):
+        return False
+    if is_reserve_feature(article):
         return False
     kind = str(article.get("source_kind") or "").strip().lower()
     if kind in {"live", "live_refresh"} or article.get("breaking_news") is True:

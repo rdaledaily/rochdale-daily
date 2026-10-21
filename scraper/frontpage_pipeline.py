@@ -10,6 +10,7 @@ It deliberately leaves the site's typography untouched. Its responsibilities are
 * write ``articles/frontpage.json`` with category, ward and source coverage diagnostics.
 """
 from __future__ import annotations
+from feature_policy import is_reserve_feature, normalise_feature
 
 import hashlib
 import html
@@ -291,6 +292,8 @@ def clear_category_cache() -> None:
 
 
 def article_category(article: dict[str, Any]) -> str:
+    if is_reserve_feature(article):
+        return normalise_feature(article)["category"]
     key = _category_cache_key(article)
     cached = _CATEGORY_CACHE.get(key)
     if cached is None:
@@ -312,7 +315,9 @@ def _compute_article_category(article: dict[str, Any]) -> str:
 
 
 def apply_category_rules(article: dict[str, Any]) -> dict[str, Any]:
-    article = dict(article)
+    article = normalise_feature(article)
+    if is_reserve_feature(article):
+        return article
     if str(article.get("source_kind") or "").lower() == "event":
         # An approved ticket event's category is "events" by definition.
         # Text scoring misfiles them: the Black Dyke Band concert's only
@@ -1254,7 +1259,8 @@ def _article_rank(article: dict[str, Any], now: datetime) -> tuple[Any, ...]:
     pin_until = parse_datetime(article.get("frontpage_until"))
     pinned = bool(article.get("featured") is True and pin_until and pin_until >= now)
 
-    return (pinned, importance, latest_update)
+    feature = is_reserve_feature(article)
+    return (pinned and not feature, not feature, importance, latest_update)
 
 
 def _cap_selected(items: list[dict[str, Any]], target: int) -> list[dict[str, Any]]:
@@ -1323,6 +1329,7 @@ def arrange_frontpage(items: list[dict[str, Any]], now: datetime) -> list[dict[s
         if queue:
             category_order.append(category)
 
+    arranged = [a for a in arranged if not is_reserve_feature(a)] + [a for a in arranged if is_reserve_feature(a)]
     for index, article in enumerate(arranged):
         article["frontpage_rank"] = index
         article["frontpage_priority"] = max(1, 1000 - index)
@@ -1614,6 +1621,7 @@ def main() -> int:
     # articles.json, frontpage, area/category archives, or article pages are
     # derived. This prevents manual records, remote URLs and the legacy
     # assets/article-images event-card path from re-entering public output.
+    merged = [normalise_feature(article) for article in merged]
     for article in merged:
         if str(article.get("status") or "published").lower() == "published":
             enforce_article(article, Path.cwd())

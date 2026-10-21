@@ -7,6 +7,7 @@ The accepted development is then rendered as a timestamped update on the
 existing canonical article.
 """
 from __future__ import annotations
+from feature_policy import is_reserve_feature
 
 from difflib import SequenceMatcher
 import hashlib
@@ -119,6 +120,8 @@ def _updates(item: dict[str, Any]) -> list[dict[str, str]]:
 
 
 def _is_developing(item: dict[str, Any]) -> bool:
+    if is_reserve_feature(item):
+        return False
     kind = str(item.get("source_kind") or "").lower()
     return bool(
         item.get("live_story")
