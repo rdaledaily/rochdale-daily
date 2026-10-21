@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 346,
-  "published_count": 346,
+  "article_count": 348,
+  "published_count": 348,
   "category_change_count": 40,
-  "image_change_count": 77,
+  "image_change_count": 78,
   "category_changes": [
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
@@ -289,6 +289,18 @@
   ],
   "image_changes": [
     {
+      "slug": "rochdale-afc-manager-provides-update-on-injury-situation",
+      "title": "Rochdale AFC Manager Provides Update on Injury Situation",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/fixtures.jpg",
+        "img": "assets/img/cards/fixtures.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-afc-manager-provides-update-on-injury-situation-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-afc-manager-discusses-challenges-after-recent-match",
       "title": "Rochdale AFC Manager Discusses Challenges After Recent Match",
       "category": "sport",
@@ -410,7 +422,7 @@
     },
     {
       "slug": "rochdale-afc-to-host-grimsby-town-on-21-october-2026",
-      "title": "Rochdale AFC Draw 2-2 Against Grimsby Town in League Two Clash",
+      "title": "Rochdale AFC Draw 2-2 with Grimsby Town in League Match",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
