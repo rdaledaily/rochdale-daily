@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-21T17:18:35.927253Z",
+  "last_run_at": "2026-10-21T17:35:50.985352Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,32 +42,35 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 153,
-  "job_or_career_posts_rejected": 5,
-  "raw_candidates": 148,
+  "raw_candidates_before_job_filter": 146,
+  "job_or_career_posts_rejected": 6,
+  "raw_candidates": 140,
   "candidate_clusters": 53,
   "google_news_resolution": {
-    "wrappers": 90,
-    "resolved": 90,
-    "text_recovered": 71,
+    "wrappers": 107,
+    "resolved": 105,
+    "text_recovered": 52,
     "reattributed": 14,
-    "images_found": 76
+    "images_found": 58
   },
-  "duplicates_merged": 95,
+  "duplicates_merged": 87,
   "attempted_rewrites": 1,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 357,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2025; source publication timestamps are not event date": 1
-  },
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "teen-charged-after-bb-gun-incident-on-rochdale-boulevard",
+      "source_url": "https://www.sasktoday.ca/regina-today/regina-news/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-12910610?__cf_chl_rt_tk=IIdzzzSNDsRhIo_LGrAhx3c8yZ.n_xrB6Ux8LevQaCo-1792453383-1.0.1.1-TXOv06csoHE_OLQ8VXFuvOrc3CmvAaRw6NkvWG7YP40"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 356,
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
+    "missing_from_feed": 1,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -81,12 +84,21 @@
       "rejected": 98
     },
     "held_back_this_run": 47,
-    "held_already_published": 39,
-    "held_rejected": 8,
+    "held_already_published": 38,
+    "held_rejected": 9,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rochdaletimes.co.uk/town-centre-reclaims-britain-in-bloom-crown",
+      "title": "Town centre reclaims Britain in Bloom crown - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: quality gate after 4 repairs: Remove unsupported calendar year(s) 2025; source publication timestamps are not event date",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-10-21T17:17:46.039290Z"
+    },
     {
       "url": "https://www.grimsbytelegraph.co.uk/sport/football/frantic-draw-rochdale-ends-grimsby-11208194",
       "title": "Frantic draw at Rochdale ends Grimsby Town's losing streak",
@@ -163,8 +175,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 140,
-    "website_discovery": 7,
+    "rss_and_google_news": 138,
+    "website_discovery": 2,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -179,18 +191,18 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 42,
+    "Rochdale Times": 37,
     "Manchester Evening News": 12,
-    "Rochdale AFC": 8,
     "CTV News": 6,
+    "Rochdale AFC": 6,
     "Roch Valley Radio": 5,
     "I Love Manchester": 5,
     "Rochdale Borough Council": 5,
     "Bee Network live travel alerts": 5,
-    "Southend Echo": 4,
     "Herts Advertiser": 4,
     "Grimsby Live": 4,
     "InYourArea": 4,
+    "Southend Echo": 3,
     "Ca": 3,
     "Chelmsfordcitynews": 3,
     "Somerset County Gazette": 3,
@@ -202,7 +214,6 @@
     "Slough Observer": 2,
     "London Now": 2,
     "Runcorn and Widnes World": 2,
-    "Northwich Guardian": 1,
     "Yahoo News UK": 1,
     "The Northern Echo": 1,
     "BBC": 1,
@@ -211,6 +222,7 @@
     "FOX Sports": 1,
     "Fansnetwork": 1,
     "Id": 1,
+    "Salisbury Journal": 1,
     "Stowmarket Mercury": 1,
     "Hampshire Chronicle": 1,
     "Leigh Journal": 1,
@@ -222,12 +234,12 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "environment": 1
+    "traffic": 1
   },
   "published_by_category": {
     "business": 34,
     "community": 61,
-    "crime": 14,
+    "crime": 15,
     "education": 10,
     "environment": 19,
     "events": 20,
@@ -261,10 +273,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "environment-v3-70d74d6ee55de5347f22"
+    "transport-v3-bd4a89982010ab6653dd"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/town-centre-reclaims-britain-in-bloom-crown/"
+    "https://www.sasktoday.ca/regina-today/regina-news/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-12910610?__cf_chl_rt_tk=IIdzzzSNDsRhIo_LGrAhx3c8yZ.n_xrB6Ux8LevQaCo-1792453383-1.0.1.1-TXOv06csoHE_OLQ8VXFuvOrc3CmvAaRw6NkvWG7YP40"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -276,17 +288,13 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment"
+      "traffic"
     ],
     "selected_categories": [
-      "environment"
+      "traffic"
     ],
-    "available_wards": [
-      "Central Rochdale"
-    ],
-    "selected_wards": [
-      "Central Rochdale"
-    ],
+    "available_wards": [],
+    "selected_wards": [],
     "available_areas": [],
     "selected_areas": [
       "rochdale"
@@ -295,16 +303,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1
+      "traffic": 1
     },
-    "selected_by_ward": {
-      "Central Rochdale": 1
-    },
+    "selected_by_ward": {},
     "selected_by_area": {
       "rochdale": 1
     },
     "selected_by_source": {
-      "rochdale times": 1
+      "ca": 1
     }
   },
   "official_ward_count": 20,
@@ -853,10 +859,8 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 1,
-  "robots_denied_urls": [
-    "https://news.google.com/rss/articles/CBMiggFBVV95cUxQUjFFYXMtQV81OW1MU3VxeHkyLXhGU0lfQ0Qzb1hJU2pvdmtKeDVKME1tVWs4R3NsUEZKdF83dU9jU1lVSWxwc1c1RVNrVlkyNU5yQUNrZTJuV1NqQnZ0VVV3SGU1Y0M0THNvTWtJTG5KdzM2WFh3cDVQbEZFbkE0UHln?oc=5"
-  ],
+  "robots_denied_count": 0,
+  "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
   "slow_domain_failure_counts": {},
@@ -895,8 +899,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-21T17:20:52.631694Z",
-  "frontpage_article_count": 21,
+  "frontpage_generated_at": "2026-10-21T17:37:03.359653Z",
+  "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -951,11 +955,11 @@
       "education": 1,
       "sport": 2,
       "business": 2,
-      "community": 5,
+      "community": 4,
       "news": 7
     },
     "selected_by_ward": {
-      "borough-wide": 14,
+      "borough-wide": 13,
       "Central Rochdale": 5,
       "Castleton": 2
     },
@@ -964,7 +968,7 @@
       "heywood": 2,
       "lowerplace": 1,
       "middleton": 1,
-      "rochdale": 21,
+      "rochdale": 20,
       "spotland": 1
     },
     "selected_by_source": {
@@ -974,22 +978,21 @@
       "office for national statistics": 1,
       "rochdale times": 2,
       "rochdale afc": 1,
-      "rochdale daily": 2,
       "east lancashire railway press release": 1,
-      "source": 2,
+      "rochdale daily": 2,
       "jolly josh": 1,
+      "source": 2,
       "inyourarea": 1,
-      "announcement supplied to rochdale daily": 1,
-      "historic england (national heritage list for england)": 1
+      "announcement supplied to rochdale daily": 1
     },
-    "pool_size": 28,
-    "primary_pool_size": 28,
+    "pool_size": 27,
+    "primary_pool_size": 27,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 21,
+    "frontpage_count": 20,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 20,
+    "fresh_under_homepage_window": 19,
     "short_briefs_selected": 12,
     "frontpage_minimum_met": true
   },
@@ -1001,7 +1004,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 357,
+  "duplicate_articles_after_postprocessing": 356,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1012,8 +1015,10 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "morning-briefing-20-october-2026"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
