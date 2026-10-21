@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-21T09:47:59.492770Z",
+  "last_run_at": "2026-10-21T10:01:37.982879Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,14 +7,9 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 1,
-      "daily_cap": 2,
-      "offered_today": 1,
-      "listed": 7,
-      "other_notice_types": 3,
-      "already_seen": 3,
-      "new": 1
+      "status": "not due",
+      "last_checked": "2026-10-21T09:46:07.885331Z",
+      "interval_hours": 12
     },
     "written_answers": {
       "status": "not due",
@@ -22,15 +17,9 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 31,
-      "not_decisions": 15,
-      "no_borough_place": 0,
-      "already_seen": 9,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-21T09:46:07.885331Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -53,27 +42,38 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 136,
-  "job_or_career_posts_rejected": 4,
+  "raw_candidates_before_job_filter": 138,
+  "job_or_career_posts_rejected": 6,
   "raw_candidates": 132,
   "candidate_clusters": 53,
   "google_news_resolution": {
-    "wrappers": 114,
-    "resolved": 106,
-    "text_recovered": 48,
-    "reattributed": 14,
-    "images_found": 53
+    "wrappers": 108,
+    "resolved": 100,
+    "text_recovered": 44,
+    "reattributed": 11,
+    "images_found": 49
   },
   "duplicates_merged": 79,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 351,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2023; source publication timestamps are not event date": 1
-  },
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 3,
+  "drafted_articles": [
+    {
+      "slug": "plans-submitted-for-demolition-of-seven-blocks-on-lower-falinge-estate-in-rochda",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/major-redevelopment-scheme-doomed-housing-34792982"
+    },
+    {
+      "slug": "teen-charged-after-bb-gun-incident-on-rochdale-boulevard",
+      "source_url": "https://www.sasktoday.ca/regina-today/regina-news/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-12910610?__cf_chl_rt_tk=IIdzzzSNDsRhIo_LGrAhx3c8yZ.n_xrB6Ux8LevQaCo-1792453383-1.0.1.1-TXOv06csoHE_OLQ8VXFuvOrc3CmvAaRw6NkvWG7YP40"
+    },
+    {
+      "slug": "rochdale-town-centre-wins-gold-in-rhs-britain-in-bloom-uk-finals-2026",
+      "source_url": "https://www.rochdaletimes.co.uk/town-centre-reclaims-britain-in-bloom-crown/"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 350,
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 1,
@@ -88,11 +88,11 @@
     "entries": 243,
     "by_outcome": {
       "failed": 37,
-      "published": 101,
-      "rejected": 105
+      "published": 102,
+      "rejected": 104
     },
-    "held_back_this_run": 45,
-    "held_already_published": 37,
+    "held_back_this_run": 43,
+    "held_already_published": 35,
     "held_rejected": 8,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -171,10 +171,12 @@
       "last_attempt_at": "2026-10-20T08:43:30.162517Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 128,
+    "rss_and_google_news": 131,
     "website_discovery": 2,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -183,60 +185,59 @@
     "environment_agency": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 1
+    "primary_data": 0
   },
   "collector_errors": {},
   "rss_feed_failures": {
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 36,
-    "Rochdale AFC": 11,
+    "Rochdale Times": 38,
+    "Rochdale AFC": 12,
+    "Manchester Evening News": 8,
     "CTV News": 6,
-    "Manchester Evening News": 6,
     "Roch Valley Radio": 5,
+    "I Love Manchester": 5,
     "Rochdale Borough Council": 5,
     "Southend Echo": 4,
     "Herts Advertiser": 4,
-    "Somerset County Gazette": 4,
     "InYourArea": 4,
     "Bee Network live travel alerts": 4,
     "Ca": 3,
-    "Birmingham Now": 3,
     "Chelmsfordcitynews": 3,
+    "Birmingham Now": 3,
     "Colchester Gazette": 2,
-    "Kilmarnocktoday": 2,
-    "The Northern Echo": 2,
+    "Somerset County Gazette": 2,
     "Stowmarket Mercury": 2,
-    "FOX Sports": 2,
-    "TNT Sports": 2,
-    "Slough Observer": 2,
     "Express and Star": 2,
     "London Now": 2,
     "Clacton and Frinton Gazette": 1,
     "Northwich Guardian": 1,
     "Yahoo News UK": 1,
+    "Kilmarnocktoday": 1,
+    "The Northern Echo": 1,
     "Sky Sports": 1,
-    "Hexham Courant": 1,
-    "Fansnetwork": 1,
-    "Id": 1,
+    "FOX Sports": 1,
+    "TNT Sports": 1,
     "Salisbury Journal": 1,
     "Leigh Journal": 1,
+    "Slough Observer": 1,
     "Lancashire Telegraph": 1,
+    "Runcorn and Widnes World": 1,
     "Whoscored": 1,
     "Harwich and Manningtree Standard": 1,
     "Roch Valley Radio Local News": 1,
     "Rochdale Hornets": 1,
-    "Food Standards Agency": 1,
-    "The Gazette": 1
+    "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "environment": 1
+    "environment": 2,
+    "traffic": 1
   },
   "published_by_category": {
     "business": 34,
     "community": 61,
-    "crime": 14,
+    "crime": 15,
     "education": 9,
     "environment": 19,
     "events": 20,
@@ -270,10 +271,14 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "environment-v3-70d74d6ee55de5347f22"
+    "transport-v3-bd4a89982010ab6653dd",
+    "environment-v3-70d74d6ee55de5347f22",
+    "community-v3-3915e012cbb466744c72"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/town-centre-reclaims-britain-in-bloom-crown/"
+    "https://www.sasktoday.ca/regina-today/regina-news/teen-charged-after-bb-gun-incident-on-rochdale-boulevard-12910610?__cf_chl_rt_tk=IIdzzzSNDsRhIo_LGrAhx3c8yZ.n_xrB6Ux8LevQaCo-1792453383-1.0.1.1-TXOv06csoHE_OLQ8VXFuvOrc3CmvAaRw6NkvWG7YP40",
+    "https://www.rochdaletimes.co.uk/town-centre-reclaims-britain-in-bloom-crown/",
+    "https://www.manchestereveningnews.co.uk/news/major-redevelopment-scheme-doomed-housing-34792982"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -285,10 +290,12 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment"
+      "environment",
+      "traffic"
     ],
     "selected_categories": [
-      "environment"
+      "environment",
+      "traffic"
     ],
     "available_wards": [
       "Central Rochdale"
@@ -304,15 +311,18 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1
+      "environment": 2,
+      "traffic": 1
     },
     "selected_by_ward": {
-      "Central Rochdale": 1
+      "Central Rochdale": 2
     },
     "selected_by_area": {
-      "rochdale": 1
+      "rochdale": 3
     },
     "selected_by_source": {
+      "ca": 1,
+      "manchester evening news": 1,
       "rochdale times": 1
     }
   },
@@ -904,7 +914,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-21T09:49:02.763501Z",
+  "frontpage_generated_at": "2026-10-21T10:11:03.893085Z",
   "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1008,14 +1018,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 13,
-  "events_removed_other_source": 7,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
+  "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 351,
+  "approved_ticket_events": 12,
+  "event_dates_corrected_from_ledger": 0,
+  "duplicate_articles_after_postprocessing": 350,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1025,10 +1035,12 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "whats_on_event_count": 12,
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "plans-submitted-for-demolition-of-seven-blocks-on-lower-falinge-estate-in-rochda"
+  ],
+  "drafts_not_published": 2,
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
