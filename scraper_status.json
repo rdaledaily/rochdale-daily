@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-21T18:04:58.044243Z",
+  "last_run_at": "2026-10-21T18:16:34.881621Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,18 +42,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 136,
+  "raw_candidates_before_job_filter": 141,
   "job_or_career_posts_rejected": 5,
-  "raw_candidates": 131,
+  "raw_candidates": 136,
   "candidate_clusters": 51,
   "google_news_resolution": {
-    "wrappers": 100,
-    "resolved": 98,
-    "text_recovered": 53,
+    "wrappers": 103,
+    "resolved": 100,
+    "text_recovered": 54,
     "reattributed": 11,
-    "images_found": 55
+    "images_found": 58
   },
-  "duplicates_merged": 80,
+  "duplicates_merged": 85,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -63,20 +63,20 @@
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
-    "reopened_after_evidence_fix": 0,
+    "reopened_after_evidence_fix": 1,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
     "entries": 237,
     "by_outcome": {
-      "failed": 35,
+      "failed": 36,
       "published": 103,
-      "rejected": 99
+      "rejected": 98
     },
     "held_back_this_run": 46,
     "held_already_published": 37,
@@ -170,7 +170,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 128,
+    "rss_and_google_news": 133,
     "website_discovery": 2,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -186,29 +186,28 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 33,
-    "Manchester Evening News": 9,
+    "Rochdale Times": 34,
+    "Manchester Evening News": 12,
     "CTV News": 6,
     "Rochdale AFC": 6,
     "Roch Valley Radio": 5,
     "I Love Manchester": 5,
+    "InYourArea": 5,
     "Rochdale Borough Council": 5,
     "Bee Network live travel alerts": 5,
     "Southend Echo": 4,
     "Herts Advertiser": 4,
     "Grimsby Live": 4,
-    "InYourArea": 4,
     "Chelmsfordcitynews": 3,
     "Somerset County Gazette": 3,
     "Birmingham Now": 3,
     "Colchester Gazette": 2,
+    "Clacton and Frinton Gazette": 2,
     "Kilmarnocktoday": 2,
     "TNT Sports": 2,
     "Slough Observer": 2,
     "London Now": 2,
     "Runcorn and Widnes World": 2,
-    "Northwich Guardian": 1,
-    "Clacton and Frinton Gazette": 1,
     "Yahoo News UK": 1,
     "The Northern Echo": 1,
     "BBC": 1,
@@ -836,12 +835,8 @@
   "robots_denied_count": 0,
   "robots_denied_urls": [],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdale.laboursites.org"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdale.laboursites.org": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -877,8 +872,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-21T18:06:09.626368Z",
-  "frontpage_article_count": 20,
+  "frontpage_generated_at": "2026-10-21T18:17:18.410338Z",
+  "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -933,11 +928,11 @@
       "education": 1,
       "sport": 2,
       "business": 2,
-      "community": 4,
+      "community": 3,
       "news": 7
     },
     "selected_by_ward": {
-      "borough-wide": 13,
+      "borough-wide": 12,
       "Central Rochdale": 5,
       "Castleton": 2
     },
@@ -960,18 +955,17 @@
       "rochdale daily": 2,
       "jolly josh": 1,
       "source": 2,
-      "inyourarea": 1,
       "announcement supplied to rochdale daily": 1
     },
     "pool_size": 27,
     "primary_pool_size": 27,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 20,
+    "frontpage_count": 19,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 19,
-    "short_briefs_selected": 12,
+    "fresh_under_homepage_window": 18,
+    "short_briefs_selected": 11,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",

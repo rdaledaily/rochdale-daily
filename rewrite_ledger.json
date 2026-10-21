@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-21T18:04:58.039441Z",
+  "updated_at": "2026-10-21T18:16:34.877799Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 237,
@@ -3585,14 +3585,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-21T17:35:50.981912Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Teen charged after BB gun incident on Rochdale Boulevard - SaskToday.ca",
       "source_name": "Ca",
       "category": "traffic",
       "text_fingerprint": "b86b3492505fce13",
-      "recovery_attempts": 2,
-      "final_gate_removal_recovery": 1
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1,
+      "evidence_recovery_policy": 1
     },
     "https://www.skysports.com/football/news/13592865/crewe-3-2-rochdale": {
       "first_attempt_at": "2026-10-19T23:46:20.043835Z",
