@@ -1,18 +1,11 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 356,
-  "published_count": 356,
-  "category_change_count": 41,
-  "image_change_count": 82,
+  "article_count": 357,
+  "published_count": 357,
+  "category_change_count": 40,
+  "image_change_count": 83,
   "category_changes": [
-    {
-      "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
-      "title": "Police Appeal for Information on Missing 22-Year-Old Man in Rochdale",
-      "from": "crime",
-      "to": "news",
-      "reason": "headline strongly identifies news"
-    },
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
       "title": "St Cuthbert’s RC High School Closes Following Bomb Threat",
@@ -296,6 +289,18 @@
   ],
   "image_changes": [
     {
+      "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
+      "title": "Police Appeal for Information on Missing 22-Year-Old Man in Rochdale",
+      "category": "news",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/police_appeal.jpg",
+        "img": "assets/img/cards/police_appeal.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/police-appeal-for-information-on-missing-22-year-old-man-in-rochdale-generated-card.jpg"
+    },
+    {
       "slug": "plans-to-develop-wasteland-around-rochdale-train-station-confirmed",
       "title": "Plans to Develop Wasteland Around Rochdale Train Station Confirmed",
       "category": "transport",
@@ -380,6 +385,18 @@
       "after": "assets/img/cards/office-of-rail-and-road-rejects-proposal-for-extra-rochdale-to-london-train-serv-generated-card.jpg"
     },
     {
+      "slug": "rochdale-council-updates-on-satellite-school-programme-costs",
+      "title": "Rochdale Council Updates on Satellite School Programme Costs",
+      "category": "education",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_riverside.jpg",
+        "img": "assets/img/cards/rochdale_riverside.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/rochdale-council-updates-on-satellite-school-programme-costs-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-to-face-grimsby-in-upcoming-football-match",
       "title": "Rochdale to Face Grimsby in Upcoming Football Match",
       "category": "sport",
@@ -462,18 +479,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-hornets-assistant-coach-ryan-jackson-leaves-for-keighley-cougars-generated-card.jpg"
-    },
-    {
-      "slug": "ian-henderson-scores-late-equaliser-for-rochdale-in-2-2-draw-against-grimsby",
-      "title": "Ian Henderson's Late Equaliser Secures Draw for Rochdale Against Grimsby",
-      "category": "sport",
-      "reason": "weak filename image match score 8125; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/match.jpg",
-        "img": "assets/img/cards/match.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/ian-henderson-scores-late-equaliser-for-rochdale-in-2-2-draw-against-grimsby-generated-card.jpg"
     },
     {
       "slug": "rochdale-afc-to-host-grimsby-town-on-21-october-2026",
