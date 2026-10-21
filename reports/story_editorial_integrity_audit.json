@@ -1,9 +1,9 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 359,
-  "published_count": 359,
-  "category_change_count": 41,
+  "article_count": 358,
+  "published_count": 358,
+  "category_change_count": 40,
   "image_change_count": 82,
   "category_changes": [
     {
@@ -103,13 +103,6 @@
       "from": "politics",
       "to": "environment",
       "reason": "headline strongly identifies environment"
-    },
-    {
-      "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
-      "title": "Urgent Appeal for Information on Missing 22-Year-Old Man in Rochdale",
-      "from": "crime",
-      "to": "news",
-      "reason": "headline strongly identifies news"
     },
     {
       "slug": "sponsored-the-physiotherapy-clinic-rochdale-bamford",
@@ -522,18 +515,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/lifts-at-freehold-tram-stop-out-of-service-for-repairs-generated-card.jpg"
-    },
-    {
-      "slug": "oktoberfest-rochdale-2027",
-      "title": "Oktoberfest Rochdale 2027",
-      "category": "events",
-      "reason": "weak filename image match score 8378; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-        "img": "assets/img/cards/rochdale-town-hall.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg"
     },
     {
       "slug": "rochdale-falls-to-crewe-in-3-2-defeat-in-league-two",
@@ -1076,6 +1057,18 @@
       "after": "assets/img/cards/live-updates-from-rochdale-s-league-two-match-against-chesterfield-generated-card.jpg"
     },
     {
+      "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
+      "title": "Urgent Appeal for Information on Missing 22-Year-Old Man in Rochdale",
+      "category": "news",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/police_appeal.jpg",
+        "img": "assets/img/cards/police_appeal.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/police-appeal-for-information-on-missing-22-year-old-man-in-rochdale-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-borough-council-publishes-sustainability-impact-assessment-for-enhanced",
       "title": "Rochdale Borough Council Publishes Sustainability Impact Assessment for Enhanced Live Well Service",
       "category": "environment",
@@ -1245,7 +1238,7 @@
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
-      "title": "Ellie Sax - Endless Summer Tour 2026",
+      "title": "Ellie Sax",
       "category": "events",
       "reason": "weak filename image match score 8378; neutral card is safer",
       "before": {
