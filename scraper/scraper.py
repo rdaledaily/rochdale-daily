@@ -1321,6 +1321,40 @@ def resolve_google_candidate_to_publisher(candidate: Candidate) -> bool:
 RSS_FEED_FAILURES: dict[str, str] = {}
 
 
+
+def men_newsletter_sources() -> list[dict[str, str]]:
+    """Discover newsletter leads without storing subscriber or tracking links.
+
+    Gmail intake updates this file. Newsletter receipt is never a story date:
+    collect_rss_candidates applies the ordinary source date/locality checks.
+    """
+    path = ROOT / 'scraper' / 'men_newsletter_leads.json'
+    if not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding='utf-8'))
+    sources = []
+    seen = set()
+    for issue in payload.get('issues', [])[-14:]:
+        received = parse_datetime(issue.get('received_at'))
+        if not received or received > utc_now() or utc_now() - received > timedelta(days=7):
+            continue
+        for headline in issue.get('headlines', [])[:30]:
+            if not isinstance(headline, str):
+                continue
+            headline = ' '.join(headline.split())[:300]
+            if len(headline) < 15 or headline.casefold() in seen:
+                continue
+            seen.add(headline.casefold())
+            query = 'site:manchestereveningnews.co.uk "' + headline.replace('"', '') + '"'
+            sources.append({
+                'name': 'MEN MyRochdale newsletter discovery',
+                'url': 'https://news.google.com/rss/search?q=' + quote_plus(query) + '&hl=en-GB&gl=GB&ceid=GB:en',
+                'default_area': 'rochdale',
+                'aggregator': 'google',
+                'query_label': 'MEN MyRochdale newsletter lead',
+            })
+    return sources
+
 def collect_rss_candidates() -> list[Candidate]:
     """Read every configured feed. One feed failing never stops the others.
 
@@ -1334,7 +1368,7 @@ def collect_rss_candidates() -> list[Candidate]:
     """
     candidates: list[Candidate] = []
     RSS_FEED_FAILURES.clear()
-    for source in RSS_SOURCES + google_news_sources():
+    for source in RSS_SOURCES + men_newsletter_sources() + google_news_sources():
         log.info('Reading RSS: %s', source['name'])
         if source.get('aggregator') == 'google':
             time.sleep(GOOGLE_NEWS_REQUEST_DELAY_SECONDS)
