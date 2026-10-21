@@ -1,38 +1,42 @@
 {
-  "examined_at": "2026-10-20T12:09:15.117803Z",
+  "examined_at": "2026-10-21T12:23:33.783476Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 100,
+  "candidates_examined": 165,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 73,
-    "would publish": 14,
-    "duplicate of published story": 13
+    "age": 79,
+    "would publish": 77,
+    "duplicate of published story": 8,
+    "not local": 1
   },
-  "would_publish": 14,
+  "would_publish": 77,
   "age_gate_sensitivity": {
-    "6h": 15,
-    "14h": 18,
-    "24h": 27,
-    "48h": 43,
-    "72h": 77,
-    "168h": 100
+    "6h": 8,
+    "14h": 15,
+    "24h": 86,
+    "48h": 116,
+    "72h": 130,
+    "168h": 165
   },
   "gates_unavailable": [],
   "examples": {
     "duplicate of published story": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Roch Valley Radio Local News: RBH submits plans for up to 270 homes in Lower Falinge",
-      "Bee Network live travel alerts: Updated: 19/10/2026 at 12:59pm Live Freehold Tram Stop - Lifts out of "
+      "Grimsby Live: Frantic draw at Rochdale ends Grimsby Town's losing streak",
+      "BBC: Rochdale 2-2 Grimsby Town - BBC"
     ],
     "would publish": [
-      "Roch Valley Radio Local News: finalize",
-      "WhoScored.com: Rochdale vs Grimsby: Lineups, Prediction, Odds & Bet Builder Tip - Who",
-      "Rochdale Times: Inspector rules on garden fence rejected by council - Rochdale Times"
+      "Rochdale Times: Police target crime gang’s ‘spider web of criminality’ - Rochdale Time",
+      "I Love Manchester: Here's what a major housing scheme in Rochdale could look like accordi",
+      "Office for National Statistics: Rochdale house prices and rents: ONS figures updated 21 October 2026"
+    ],
+    "not local": [
+      "The Gazette: FOCUS REMOVALS & STORAGE/TEESSIDE LTD: Appointment of Liquidators"
     ],
     "age": [
-      "Rochdale AFC: TVOS Preview | Grimsby Town (H) - Rochdale AFC",
-      "Rochdale AFC: Dale Learn FA Cup Opponents",
-      "TfGM Travel Alerts: Travel alerts"
+      "Rochdale Times: New bid for extra trains from Rochdale to London is refused - Rochdale",
+      "Roch Valley Radio Local News: RBH submits plans for up to 270 homes in Lower Falinge",
+      "Rochdale Borough Council: Decisions for issue Satellite School Programme and cost update - Rochd"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
