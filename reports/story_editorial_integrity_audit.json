@@ -1,9 +1,9 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 356,
-  "published_count": 356,
-  "category_change_count": 40,
+  "article_count": 359,
+  "published_count": 359,
+  "category_change_count": 41,
   "image_change_count": 82,
   "category_changes": [
     {
@@ -103,6 +103,13 @@
       "from": "politics",
       "to": "environment",
       "reason": "headline strongly identifies environment"
+    },
+    {
+      "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
+      "title": "Urgent Appeal for Information on Missing 22-Year-Old Man in Rochdale",
+      "from": "crime",
+      "to": "news",
+      "reason": "headline strongly identifies news"
     },
     {
       "slug": "sponsored-the-physiotherapy-clinic-rochdale-bamford",
@@ -289,16 +296,28 @@
   ],
   "image_changes": [
     {
-      "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
-      "title": "Police Appeal for Information on Missing 22-Year-Old Man in Rochdale",
-      "category": "news",
+      "slug": "martlet-kitchen-at-rochdale-town-hall-wins-tripadvisor-travellers-choice-award-2",
+      "title": "Martlet Kitchen at Rochdale Town Hall Wins Tripadvisor Travellers’ Choice Award 2026",
+      "category": "business",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/police_appeal.jpg",
-        "img": "assets/img/cards/police_appeal.jpg",
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/police-appeal-for-information-on-missing-22-year-old-man-in-rochdale-generated-card.jpg"
+      "after": "assets/img/cards/martlet-kitchen-at-rochdale-town-hall-wins-tripadvisor-travellers-choice-award-2-generated-card.jpg"
+    },
+    {
+      "slug": "roadworks-on-oldham-road-in-rochdale-to-begin-on-20-october-2026",
+      "title": "Oldham Road, roadworks in Rochdale from 20 October 2026",
+      "category": "traffic",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/roadworks.jpg",
+        "img": "assets/img/cards/roadworks.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/roadworks-on-oldham-road-in-rochdale-to-begin-on-20-october-2026-generated-card.jpg"
     },
     {
       "slug": "chris-cheap-appointed-managing-director-of-atom-valley-s-northern-gateway-regene",
@@ -505,6 +524,18 @@
       "after": "assets/img/cards/lifts-at-freehold-tram-stop-out-of-service-for-repairs-generated-card.jpg"
     },
     {
+      "slug": "oktoberfest-rochdale-2027",
+      "title": "Oktoberfest Rochdale 2027",
+      "category": "events",
+      "reason": "weak filename image match score 8378; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/oktoberfest-rochdale-2027-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-falls-to-crewe-in-3-2-defeat-in-league-two",
       "title": "Rochdale Falls to Crewe in 3-2 Defeat in League Two",
       "category": "sport",
@@ -635,18 +666,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/rochdale-council-plans-major-investments-and-heritage-restoration-generated-card.jpg"
-    },
-    {
-      "slug": "high-court-trial-begins-over-ownership-of-hopwood-hall",
-      "title": "Hopwood Hall to be Restored for Community Use Following Court Ruling",
-      "category": "environment",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall.jpg",
-        "img": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/high-court-trial-begins-over-ownership-of-hopwood-hall-generated-card.jpg"
     },
     {
       "slug": "rochdale-council-safeguarding-community-costs-fireworks-october-2026",
@@ -1057,18 +1076,6 @@
       "after": "assets/img/cards/live-updates-from-rochdale-s-league-two-match-against-chesterfield-generated-card.jpg"
     },
     {
-      "slug": "urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale",
-      "title": "Urgent Appeal for Missing 16-Year-Old Girl Last Seen in Norden, Rochdale",
-      "category": "news",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden.jpg",
-        "img": "assets/img/cards/urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/urgent-appeal-for-missing-16-year-old-girl-last-seen-in-norden-rochdale-generated-card.jpg"
-    },
-    {
       "slug": "rochdale-borough-council-publishes-sustainability-impact-assessment-for-enhanced",
       "title": "Rochdale Borough Council Publishes Sustainability Impact Assessment for Enhanced Live Well Service",
       "category": "environment",
@@ -1238,7 +1245,7 @@
     },
     {
       "slug": "ellie-sax-endless-summer-tour-2026",
-      "title": "Ellie Sax",
+      "title": "Ellie Sax - Endless Summer Tour 2026",
       "category": "events",
       "reason": "weak filename image match score 8378; neutral card is safer",
       "before": {
