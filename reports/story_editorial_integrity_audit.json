@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 348,
-  "published_count": 348,
+  "article_count": 351,
+  "published_count": 351,
   "category_change_count": 40,
-  "image_change_count": 78,
+  "image_change_count": 80,
   "category_changes": [
     {
       "slug": "st-cuthbert-s-rc-high-school-evacuated-following-suspected-hoax-bomb-threat",
@@ -313,6 +313,18 @@
       "after": "assets/img/cards/rochdale-afc-manager-discusses-challenges-after-recent-match-generated-card.jpg"
     },
     {
+      "slug": "does-a-boggart-still-haunt-clegg-hall",
+      "title": "Does a boggart still haunt Clegg Hall?",
+      "category": "community",
+      "reason": "weak filename image match score 4626; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/murder.jpg",
+        "img": "assets/img/cards/murder.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/does-a-boggart-still-haunt-clegg-hall-generated-card.jpg"
+    },
+    {
       "slug": "jolly-josh-christmas-ball-sells-out-rochdale-business-support",
       "title": "Jolly Josh Christmas Ball sells out as Rochdale businesses urged to help",
       "category": "community",
@@ -421,8 +433,20 @@
       "after": "assets/img/cards/rochdale-hornets-assistant-coach-ryan-jackson-leaves-for-keighley-cougars-generated-card.jpg"
     },
     {
+      "slug": "ian-henderson-scores-late-equaliser-for-rochdale-in-2-2-draw-against-grimsby",
+      "title": "Ian Henderson Scores Late Equaliser for Rochdale in 2-2 Draw Against Grimsby",
+      "category": "sport",
+      "reason": "weak filename image match score 8125; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/match.jpg",
+        "img": "assets/img/cards/match.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/ian-henderson-scores-late-equaliser-for-rochdale-in-2-2-draw-against-grimsby-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-afc-to-host-grimsby-town-on-21-october-2026",
-      "title": "Rochdale AFC Draw 2-2 with Grimsby Town in League Match",
+      "title": "Rochdale AFC Draw 2-2 with Grimsby Town in League Two Match",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -543,7 +567,7 @@
     {
       "slug": "the-healey-dell-prophecy-the-lady-eleanor-who-was-said-to-be-maid-wife-and-widow",
       "title": "The Healey Dell prophecy: the Lady Eleanor who was said to be 'maid, wife and widow in one day'",
-      "category": "environment",
+      "category": "community",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
         "image_url": "assets/img/cards/healey-dell.jpg",
@@ -675,7 +699,7 @@
     {
       "slug": "did-robin-hood-really-come-to-healey-dell",
       "title": "Did Robin Hood really come to Healey Dell?",
-      "category": "environment",
+      "category": "community",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
         "image_url": "assets/img/cards/healey-dell.jpg",
@@ -843,7 +867,7 @@
     {
       "slug": "who-or-what-is-the-healey-dwarf",
       "title": "Who",
-      "category": "environment",
+      "category": "community",
       "reason": "weak filename image match score 4751; neutral card is safer",
       "before": {
         "image_url": "assets/img/cards/healey-dell.jpg",
@@ -1083,7 +1107,7 @@
     {
       "slug": "are-there-really-fairies-in-healey-dell",
       "title": "Are there really fairies in Healey Dell?",
-      "category": "environment",
+      "category": "community",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
         "image_url": "assets/img/cards/are-there-really-fairies-in-healey-dell.jpg",
