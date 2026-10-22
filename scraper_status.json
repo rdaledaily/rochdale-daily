@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-22T13:08:42.338019Z",
+  "last_run_at": "2026-10-22T13:21:49.850727Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,30 +42,39 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 141,
+  "raw_candidates_before_job_filter": 139,
   "job_or_career_posts_rejected": 2,
-  "raw_candidates": 139,
-  "candidate_clusters": 46,
+  "raw_candidates": 137,
+  "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 74,
-    "resolved": 70,
-    "text_recovered": 59,
+    "wrappers": 92,
+    "resolved": 78,
+    "text_recovered": 42,
     "reattributed": 11,
-    "images_found": 63
+    "images_found": 47
   },
-  "duplicates_merged": 93,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 90,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
+  "drafted_articles": [
+    {
+      "slug": "temporary-road-closures-for-rochdale-bonfire-and-firework-display-on-4-november",
+      "source_url": "https://www.rochdale.gov.uk/directory-record/2642/rochdale-bonfire-and-firework-display-road-closures-in-rochdale-on-4-november-2026"
+    },
+    {
+      "slug": "emergency-services-conduct-search-in-middleton-following-welfare-concern",
+      "source_url": "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton"
+    }
+  ],
+  "new_articles": 2,
   "live_articles": 361,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
+    "missing_from_feed": 1,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -78,8 +87,8 @@
       "published": 104,
       "rejected": 80
     },
-    "held_back_this_run": 39,
-    "held_already_published": 32,
+    "held_back_this_run": 37,
+    "held_already_published": 30,
     "held_rejected": 7,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -149,11 +158,13 @@
       "last_attempt_at": "2026-10-20T19:16:45.840745Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 136 body words using only facts already present in the sources; the draft currently has 132.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 126,
-    "website_discovery": 10,
+    "rss_and_google_news": 128,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -168,16 +179,17 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 39,
+    "Rochdale Times": 35,
     "Roch Valley Radio": 16,
     "Manchester Evening News": 11,
     "Rochdale AFC": 7,
-    "Rochdale Borough Council": 6,
+    "I Love Manchester": 5,
+    "Rochdale Borough Council": 5,
+    "Southend Echo": 4,
+    "Herts Advertiser": 4,
     "Chelmsfordcitynews": 4,
-    "I Love Manchester": 4,
     "Bee Network live travel alerts": 4,
-    "Southend Echo": 3,
-    "Herts Advertiser": 3,
+    "Runcorn and Widnes World": 3,
     "Grimsby Live": 3,
     "Kilmarnocktoday": 3,
     "Somerset County Gazette": 3,
@@ -185,14 +197,13 @@
     "Birmingham Now": 3,
     "Roch Valley Radio Local News": 3,
     "Colchester Gazette": 2,
-    "Runcorn and Widnes World": 2,
-    "The Northern Echo": 2,
     "Sky Sports": 2,
     "Slough Observer": 2,
     "London Now": 2,
     "Rochdale Valiant": 2,
     "Clacton and Frinton Gazette": 1,
     "Yahoo News UK": 1,
+    "The Northern Echo": 1,
     "FOX Sports": 1,
     "Peeblesshire News": 1,
     "Id": 1,
@@ -202,7 +213,10 @@
     "BBC Manchester": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "news": 1,
+    "traffic": 1
+  },
   "published_by_category": {
     "business": 36,
     "community": 61,
@@ -211,7 +225,7 @@
     "environment": 18,
     "events": 21,
     "health": 5,
-    "news": 45,
+    "news": 46,
     "politics": 11,
     "sport": 33,
     "traffic": 15,
@@ -239,8 +253,14 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "transport-v3-d56c49d1c0ab365f7cd0",
+    "hard-news-v3-20b368b01ba1626965b7"
+  ],
+  "selected_candidate_urls": [
+    "https://www.rochdale.gov.uk/directory-record/2642/rochdale-bonfire-and-firework-display-road-closures-in-rochdale-on-4-november-2026",
+    "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -250,16 +270,39 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [],
-    "selected_categories": [],
+    "available_categories": [
+      "news",
+      "traffic"
+    ],
+    "selected_categories": [
+      "news",
+      "traffic"
+    ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [],
+    "available_areas": [
+      "middleton"
+    ],
+    "selected_areas": [
+      "middleton",
+      "rochdale"
+    ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
-    "selected_by_source": {}
+    "selected_by_category": {
+      "news": 1,
+      "traffic": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "middleton": 1,
+      "rochdale": 1
+    },
+    "selected_by_source": {
+      "roch valley radio local news": 1,
+      "rochdale borough council": 1
+    }
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -807,8 +850,10 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
+  "robots_denied_count": 1,
+  "robots_denied_urls": [
+    "https://news.google.com/rss/articles/CBMizAFBVV95cUxPTjRjV1Z3NFZReDNtendmZFBFNzIxYjR5MWwySXZUdTlLUmFMdFNQTUp0YTY5c09HdEg3Q3lkY01qTTN0akRkREZsNTlCR05pdGlDRkU1dGM3T045TV9vVG91Z1paZFY3S1FTbEY5aDM3RlVZb0RYVTNSSmJOS0w4S2dmUWZ5S1RnUkVTQXg5Ui1yZlI3V2xvcGNYVXFSaXhfUFFOejhqZXF3V1FNYUtlNzRFY0d1czVCMHp5VlppcHppdWFjRk43MkhrNFk?oc=5"
+  ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
   "slow_domain_failure_counts": {},
@@ -847,7 +892,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-22T13:09:31.746392Z",
+  "frontpage_generated_at": "2026-10-22T13:22:25.861622Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -898,18 +943,18 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "news": 4,
       "traffic": 3,
       "transport": 1,
       "sport": 1,
       "business": 3,
-      "community": 2,
       "environment": 1,
-      "news": 4
+      "community": 2
     },
     "selected_by_ward": {
       "borough-wide": 10,
-      "Central Rochdale": 2,
       "Hopwood Hall": 1,
+      "Central Rochdale": 2,
       "Kingsway": 1,
       "Healey": 1
     },
@@ -921,14 +966,14 @@
       "rochdale": 17
     },
     "selected_by_source": {
-      "uknip": 1,
+      "rochdale daily": 2,
+      "rochdale borough council": 3,
       "manchester evening news": 2,
       "grimsby live": 1,
       "rochdale times": 2,
-      "rochdale borough council": 3,
-      "rochdale daily": 2,
-      "source": 1,
       "bbc manchester": 1,
+      "uknip": 1,
+      "source": 1,
       "office for national statistics": 1,
       "historic england (national heritage list for england)": 1
     },
@@ -962,8 +1007,11 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 2,
+  "published_new_slugs": [
+    "temporary-road-closures-for-rochdale-bonfire-and-firework-display-on-4-november",
+    "fireworks-distributor-rochdale-premises-40000-fine-gmfrs"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
