@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Any
 
 from selection_policy import ROCHDALE_WARDS, AREA_TO_WARD
-from story_integrity_audit import ALLOWED_CATEGORIES, headline_category
 
 NATURAL_STORY_POLICY = (
     "For non-crime reporting, tell the story naturally in this order where the evidence allows: "
@@ -27,6 +26,7 @@ def plain(value: Any) -> str:
 
 
 def category_for(article: dict) -> str:
+    from story_integrity_audit import ALLOWED_CATEGORIES, headline_category
     proposed = headline_category(article)
     current = str(article.get('category') or '').casefold()
     return proposed or (current if current in ALLOWED_CATEGORIES else 'news')

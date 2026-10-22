@@ -13,3 +13,9 @@ anchored=normalise(body,[{'timestamp':'2026-10-21T18:46:51Z','text':'A confirmed
 assert 'datetime="2026-10-21T18:46:51Z"' in anchored
 assert '19:46 BST' in anchored
 print('UK update time checks passed.')
+
+legacy='<h2>Update timeline</h2><ul><li><strong>21 October 2026, 19:46:</strong>Confirmed update</li><li><strong>21 December 2026, 18:46:</strong>Winter update</li></ul>'
+fixed=normalise(legacy)
+assert '19:46 BST, 21 October 2026:' in fixed
+assert '18:46 GMT, 21 December 2026:' in fixed
+assert normalise(fixed)==fixed

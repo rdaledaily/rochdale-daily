@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import re
 import time
+from datetime import datetime, timezone
 from urllib.parse import quote_plus, urlparse
 
 import feedparser
@@ -43,7 +44,12 @@ def plan_for(item):
     title = str(get(item, 'source_title') or get(item, 'title'))
     text = plain(title + ' ' + str(get(item, 'source_summary') or get(item, 'excerpt')))
     area = str(get(item, 'area') or 'Rochdale').replace('-', ' ')
-    plans = [{'role': 'same_incident', 'query': '"' + title.replace('"', '')[:180] + '"'}]
+    from story_identity import strip_publisher_suffix
+    clean_title=strip_publisher_suffix(title)
+    # Different outlets rarely use identical headlines. Discovery is broad;
+    # captured reports still have to pass the case-identity check below.
+    terms=' '.join(re.findall(r'[A-Za-z0-9]+',clean_title)[:12])
+    plans = [{'role': 'same_incident', 'query': terms+' '+area}]
     company = re.search(r'\b(Bellway|Barratt|David Wilson|Persimmon|Taylor Wimpey|Redrow|Bloor|Keepmoat|Vistry|Lovell|Countryside)\b', text, re.I)
     if company and re.search(r'\b(?:homes|housing|development|build|building|developer)\b', text, re.I):
         plans += [{'role': 'company_track_record', 'query': '"' + company.group(1) + '" completed development Greater Manchester'},
@@ -53,7 +59,9 @@ def plan_for(item):
     elif str(get(item, 'category')).casefold() == 'crime':
         subject = next((w for w in ('burglary', 'robbery', 'stabbing', 'fraud', 'theft', 'assault', 'murder') if re.search(r'\b' + w + r'\b', text, re.I)), '')
         if subject:
-            plans += [{'role': 'historical_comparison', 'query': '"' + area + '" ' + subject}]
+            cutoff=str(get(item,'source_published_at') or get(item,'published_at') or '')[:10]
+            before=' before:'+cutoff if re.fullmatch(r'\d{4}-\d{2}-\d{2}',cutoff) else ''
+            plans += [{'role': 'historical_comparison', 'query': '"' + area + '" ' + subject+before}]
     else:
         # Context search follows named subject terms, not an unrelated generic
         # borough search. It is evidence discovery, never a claim of corroboration.
@@ -123,6 +131,17 @@ def gather(item, existing, fetch_metadata, source_is_denied, root=None):
             if len(body) < 160:
                 continue  # A search snippet is discovery, not captured evidence.
             role = task['role']
+            if role=='historical_comparison':
+                published=str(metadata.get('published_at') or metadata.get('published') or '')
+                current=str(get(item,'source_published_at') or get(item,'published_at') or '')
+                try:
+                    past=datetime.fromisoformat(published.replace('Z','+00:00'))
+                    present=datetime.fromisoformat(current.replace('Z','+00:00'))
+                    if past.tzinfo is None:past=past.replace(tzinfo=timezone.utc)
+                    if present.tzinfo is None:present=present.replace(tzinfo=timezone.utc)
+                    if past>=present:continue
+                except ValueError:
+                    continue
             if role == 'same_incident':
                 probe = {'title': metadata.get('title'), 'excerpt':metadata.get('description'), 'content_html':body,
                          'source_url':url,'area':get(item,'area'), 'category':get(item,'category'),

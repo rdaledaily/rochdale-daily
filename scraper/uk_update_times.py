@@ -50,4 +50,20 @@ def normalise(body, updates=()):
                 return str(soup)
             except ValueError:pass
         return match.group(0)
-    return re.sub(r'<div\b[^>]*class=["\']live-update["\'][^>]*>.*?</div>',fix,body,flags=re.S)
+    body = re.sub(r'<div\b[^>]*class=["\']live-update["\'][^>]*>.*?</div>',fix,body,flags=re.S)
+    # Older merged articles use a list rather than live-update blocks. Those
+    # labels were already UK wall times; attach the zone without shifting them.
+    def legacy_list(match):
+        def stamp(label_match):
+            text = html.unescape(label_match.group(1)).strip()
+            if re.search(r'\b(?:BST|GMT)\b', text):
+                return label_match.group(0)
+            for fmt in ('%d %B %Y, %H:%M', '%H:%M, %d %B %Y'):
+                try:
+                    local = datetime.strptime(text.rstrip(':'), fmt).replace(tzinfo=UK)
+                    return '<strong>' + local.strftime('%H:%M %Z, %-d %B %Y') + ':</strong>'
+                except ValueError:
+                    pass
+            return label_match.group(0)
+        return re.sub(r'<strong>([^<]+)</strong>', stamp, match.group(0))
+    return re.sub(r'<h2>\s*Update timeline\s*</h2>\s*<ul>.*?</ul>', legacy_list, body, flags=re.S|re.I)

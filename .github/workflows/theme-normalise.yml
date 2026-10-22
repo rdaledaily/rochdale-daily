@@ -36,6 +36,13 @@ jobs:
           persist-credentials: true
           fetch-depth: 1
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install newsroom dependencies
+        run: pip install -r requirements.txt
+
       - name: Apply publication theme contract
         run: |
           python scraper/normalise_public_theme.py

@@ -10,7 +10,15 @@ from live_story_updates import _is_developing
 
 
 def main():
-    source = next(a for a in json.loads(Path('articles.json').read_text()) if a.get('evergreen_id') == 'clegg-hall-boggart')
+    # The active feed rotates; the regression must not depend on an old
+    # feature still appearing among today's stories.
+    topic = next(a for a in json.loads(Path('scraper/evergreen_topics.json').read_text()) if a['id'] == 'clegg-hall-boggart')
+    source = dict(topic, id=topic['id'], slug=topic['id'], evergreen_id=topic['id'],
+                  is_evergreen=True, source_kind='evergreen',
+                  first_published_at='2026-03-01T10:00:00Z',
+                  published_at='2026-03-01T10:00:00Z',
+                  sources=['Historical folklore reference'],
+                  content_html='<p>The Clegg Hall boggart is a local legend.</p>')
     broken = dict(source, category='crime', is_ongoing=True, live_story=True, breaking_news=True, police_matter=True)
     for marker in ({'is_evergreen': True}, {'evergreen_id': 'old-feature'}, {'source_kind': 'evergreen'}, {'publication_route': 'evergreen_fallback'}):
         assert is_reserve_feature(marker)
