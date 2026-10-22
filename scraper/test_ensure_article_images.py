@@ -44,7 +44,11 @@ def test_unrelated_existing_cards_image_is_not_preserved() -> None:
             "status": "published",
             "image_url": "assets/img/cards/gift_shop.jpg",
         }
-        result = mod.enforce_article(article, root)
+        # Exercise the final fallback deterministically; a real Commons search
+        # can now supply a valid photo before a place card is needed.
+        from unittest.mock import patch
+        with patch('image_hierarchy.commons_search', return_value={'status': 'no-match', 'pages': []}):
+            result = mod.enforce_article(article, root)
         assert result == "cards-generated"
         assert article["image_url"].startswith("assets/img/cards/")
         assert "gift_shop" not in article["image_url"]
