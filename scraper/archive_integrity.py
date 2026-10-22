@@ -61,7 +61,11 @@ def _tokens(text: str) -> set[str]:
 
 def page_parts(html: str) -> dict:
     h1 = _H1_RE.search(html)
-    body = " ".join(_plain(a or b) for a, b in _BODY_RE.findall(html))
+    copy=re.search(r'<div[^>]*class="article-copy"[^>]*>(.*?)(?=<details[^>]*class="article-sources"|<section[^>]*class="(?:comments|read-next)|$)',html,re.S)
+    if copy:
+        body=_plain(copy.group(1))
+    else:
+        body = " ".join(_plain(a or b) for a, b in _BODY_RE.findall(html))
     date = _DATE_RE.search(html)
     return {"h1": _plain(h1.group(1)) if h1 else "", "body": body, "date": date.group(1) if date else ""}
 
@@ -86,7 +90,7 @@ def plan(pages: dict[str, str], live: set[str]) -> dict[str, dict]:
             continue
         reference = parts[members[0]]["body"][:3000]
         group = [m for m in members
-                 if difflib.SequenceMatcher(None, reference, parts[m]["body"][:3000]).quick_ratio() >= SIMILARITY]
+                 if _plain(reference).casefold() == _plain(parts[m]["body"][:3000]).casefold()]
         if len(group) < 2:
             continue
         live_members = sorted(m for m in group if m in live)
@@ -181,7 +185,10 @@ def same_day_duplicates(pages: dict[str, str], live: set[str]) -> dict[str, dict
         live_members = sorted(m for m in members if m in live)
         primary = live_members[0] if live_members else max(members, key=lambda m: (len(page_parts(pages[m])["body"]), m))
         for member in members:
-            if member != primary and member not in live:
+            # A shared headline/date is not proof of the same event. Different
+            # incidents and service updates often use the same headline.
+            same_body=_plain(page_parts(pages[member])["body"]).casefold()==_plain(page_parts(pages[primary])["body"]).casefold()
+            if member != primary and member not in live and same_body:
                 actions[member] = {"canonical": primary}
     return actions
 

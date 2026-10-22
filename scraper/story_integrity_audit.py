@@ -107,7 +107,7 @@ def headline_category(article: dict[str, Any]) -> str | None:
     # Court Chamber tour is not a court case; police presence alone establishes
     # no offence; protests/planning meetings are general news unless the actual
     # headline establishes a more specific political/criminal event.
-    if hit(r"\b(?:missing|police appeal to find|police presence reported|guided court chamber tour|court chamber tours?)\b", title):
+    if hit(r"\b(?:missing (?:person|people|man|woman|boy|girl|child|teenager|[0-9]+[ -]year[ -]old)|police appeal to find|police presence reported|guided court chamber tour|court chamber tours?)\b", title):
         return "events" if hit(r"\b(?:guided|tour)\b", title) else "news"
     if hit(r"\b(?:protest planned|planning meeting|planning decision)\b", title):
         return "news"
@@ -135,12 +135,17 @@ def headline_category(article: dict[str, Any]) -> str | None:
     ):
         return "sport"
 
+    # A station/canal mentioned as the location of a housing scheme must not
+    # turn its main development story into transport or environmental coverage.
+    if hit(r"\b(?:new homes|housing development|housing estate|apartments|flats)\b", title) and not hit(r"\b(?:flood risk|wildlife|bird|bat|nature)\b",title):
+        return "business"
+
     # Health precedes Events so a clinic open day remains a health-service
     # story. A generic wellbeing/fitness event is not enough unless mental
     # health/clinical/service wording is explicit.
     if hit(
         r"\b(?:NHS|hospital|infirmary|doctor|GP\b|general practice|clinic|patient|pharmacy|"
-        r"vaccination|health service|mental health (?:service|support|session|team|clinic|fitness)|"
+        r"vaccination|defibrillator|cardiac arrest|resuscitation|health service|mental health (?:service|support|session|team|clinic|fitness)|"
         r"wellbeing service)\b",
         title,
     ):
@@ -374,7 +379,8 @@ def enforce_image(article: dict[str, Any], changes: list[dict[str, Any]]) -> Non
         "img": clean(article.get("img")),
         "status": clean(article.get("image_status")),
     }
-    set_generated(article, ROOT)
+    from image_hierarchy import choose_image
+    choose_image(article, ROOT, relevance=False)
     article["image_placeholder_reason"] = "Editorial integrity fallback: " + reason
     changes.append({
         "slug": clean(article.get("slug")),

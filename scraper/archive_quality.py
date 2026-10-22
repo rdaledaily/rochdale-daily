@@ -57,6 +57,8 @@ def article_body(page):
     fragment = RELATED.sub('', ENGAGEMENT.sub('', fragment))
     fragment = re.sub(r'<p\b[^>]*class=["\']rd-related-inline["\'][^>]*>.*?</p>', '', fragment, flags=re.S)
     # Remove closing layout divs outside the actual copy.
+    if page[match.end(2):].startswith('<details'):
+        return fragment.rstrip()
     return fragment.rstrip().removesuffix('</div>').rstrip()
 
 def fingerprint(row):
@@ -93,6 +95,11 @@ def scan(root: Path):
         row.setdefault('excerpt', meta.get('description', ''))
         image = head.select_one('meta[property="og:image"]')
         row.setdefault('image_url', image.get('content', '') if image else '')
+        credit = re.search(r'<figcaption[^>]*>(.*?)</figcaption>',page,re.S)
+        if credit:
+            row.setdefault('image_credit',plain(credit.group(1)).removeprefix('Image: '))
+            link=re.search(r'href=["\']([^"\']+)["\']',credit.group(1))
+            if link:row.setdefault('image_credit_url',html.unescape(link.group(1)))
         src = re.search(r'<details\b[^>]*class=["\']article-sources["\'].*?</details>', page, re.S)
         if src:
             links = BeautifulSoup(src.group(), 'lxml').select('a[href]')
@@ -155,10 +162,13 @@ def related_graph(rows):
             if row['slug'] not in edges[source['slug']]:
                 edges[source['slug']].append(row['slug'])
                 incoming[row['slug']] += 1
+            if not edges[row['slug']]:
+                edges[row['slug']].append(source['slug'])
+                incoming[source['slug']] += 1
     return edges, incoming
 
 def quote_strings(text):
-    return re.findall(r'[“\"]([^”\"]{2,})[”\"]', text)
+    return re.findall(r'[“\"]([^”\"]{2,})[”\"]|(?<!\w)[‘\'](.{2,}?)[’\'](?!\w)', text)
 
 def safe_edit(before, after):
     """Reject edits that alter quotations, quantities, named entities or legal status."""
@@ -180,8 +190,17 @@ def safe_edit(before, after):
     # content word needs editorial review, rather than silently changing meaning.
     function = set('a an the this that these those is are was were be been being has have had do does did to of in on at for from with by and or but as than then its it their there they he she we you his her our your who whom whose which what when where how while if because since until into over under about also more most very much many some any each every both all such can will would shall should'.split())
     def content(text):
-        return Counter(w for w in re.findall(r"[a-z]+", text.casefold()) if w not in function)
-    return content(before) == content(after)
+        return tuple(w for w in re.findall(r"[a-z]+", text.casefold().replace("’", "").replace("\'", "")) if w not in function)
+    if content(before) == content(after):
+        return True
+    # Closed spelling list: no dictionary guess may change an unfamiliar
+    # surname, place, technical term, or one valid word into another.
+    spelling = {'recieve':'receive','recieved':'received','occured':'occurred','occuring':'occurring','seperate':'separate','seperately':'separately','accomodation':'accommodation','commitee':'committee','commited':'committed','goverment':'government','definately':'definitely','untill':'until','alot':'a lot','everyday':'everyday','organize':'organise','organized':'organised','organization':'organisation','organizations':'organisations','center':'centre','centers':'centres','canceled':'cancelled','traveling':'travelling','favor':'favour','neighbors':'neighbours','neighborhood':'neighbourhood'}
+    normal = before.casefold()
+    for old,new in spelling.items():
+        normal = re.sub(r'\b' + old + r'\b', new, normal)
+    return content(normal) == content(after)
+
 
 def apply_edits(row, review):
     if review.get('fingerprint') != row['fingerprint']:
@@ -196,7 +215,7 @@ def apply_edits(row, review):
         key = 'content_html' if field == 'body' else field
         if key == 'content_html':
             soup = BeautifulSoup(row[key], 'html.parser')
-            candidates = [n for n in soup.find_all(string=True) if before in str(n) and not n.find_parent(['a', 'blockquote', 'script'])]
+            candidates = [n for n in soup.find_all(string=True) if before in str(n) and not quote_strings(str(n)) and not n.find_parent(['a', 'blockquote', 'script'])]
             if len(candidates) != 1 or str(candidates[0]).count(before) != 1:
                 continue
             candidates[0].replace_with(str(candidates[0]).replace(before, after, 1))
@@ -267,7 +286,7 @@ def review_all(root: Path, rows, batch_size=12):
             for row in batch:
                 if row['slug'] not in returned:
                     raise ValueError('Model omitted ' + row['slug'])
-                ledger[row['slug']] = {**returned[row['slug']], 'fingerprint': row['fingerprint'], 'status': 'reviewed'}
+                ledger[row['slug']] = {**returned[row['slug']], 'fingerprint': row['fingerprint'], 'reviewed_image_url':row.get('image_url'), 'status': 'reviewed'}
         except Exception as exc:
             for row in batch:
                 ledger[row['slug']] = {'fingerprint': row['fingerprint'], 'status': 'failed', 'error': type(exc).__name__}
@@ -276,14 +295,15 @@ def review_all(root: Path, rows, batch_size=12):
         print('ARCHIVE REVIEW', min(offset + batch_size, len(pending)), '/', len(pending), flush=True)
     return ledger
 
-def apply(root: Path, rows=None):
+def apply(root: Path, rows=None, images=False, network_images=True):
     rows = rows or scan(root)
     ledger = load(root / REVIEWS, {})
     edges, incoming = related_graph(rows)
     by_slug = {r['slug']: r for r in rows}
+    title_counts=Counter(r['title'] for r in rows if r['indexable'])
     feed = load(root / 'articles.json', [])
     feed_map = {r.get('slug'): r for r in feed}
-    report = {'articles_scanned': len(rows), 'indexable_articles': sum(r['indexable'] for r in rows), 'language_reviewed': 0, 'safe_text_edits': 0, 'category_changes': 0, 'related_links': sum(map(len, edges.values())), 'orphans': [], 'ward_unresolved': [], 'semantic_findings': [], 'items': []}
+    report = {'articles_scanned': len(rows), 'indexable_articles': sum(r['indexable'] for r in rows), 'language_reviewed': 0, 'safe_text_edits': 0, 'category_changes': 0, 'related_links': sum(map(len, edges.values())), 'orphans': [], 'ward_unresolved': [], 'semantic_findings': [], 'image_tiers': {}, 'items': []}
     for original in rows:
         slug = original['slug']
         review = ledger.get(slug, {})
@@ -294,6 +314,12 @@ def apply(root: Path, rows=None):
         category = category_for(row)
         report['category_changes'] += category != original['category']
         row['category'] = category
+        image_tier = None
+        if images:
+            from image_hierarchy import choose_image
+            image_relevance = review.get('image_relevant') if review.get('reviewed_image_url', original.get('image_url')) == original.get('image_url') else None
+            image_tier = choose_image(row, root, relevance=image_relevance, allow_network=network_images)
+            report['image_tiers'][image_tier] = report['image_tiers'].get(image_tier, 0) + 1
         geography = ward_decision(row)
         if not geography['wards']:
             report['ward_unresolved'].append(slug)
@@ -304,6 +330,8 @@ def apply(root: Path, rows=None):
         path = root / 'articles' / (slug + '.html')
         page = path.read_text(encoding='utf-8')
         page = RELATED.sub('', page)
+        from uk_update_times import normalise as normalise_update_times
+        row['content_html']=normalise_update_times(row['content_html'],row.get('live_updates') or [])
         body = row['content_html']
         ending = reader_ending(row)
         question = str(review.get('reader_question') or '').strip()
@@ -321,9 +349,60 @@ def apply(root: Path, rows=None):
         # The body regex retains the sources/details and outer layout unchanged.
         match = BODY.search(page)
         if match:
-            page = page[:match.start(2)] + body + '</div>\n' + related + '\n' + page[match.end(2):]
+            sources_follow = page[match.end(2):].startswith('<details')
+            if sources_follow:
+                page = page[:match.start(2)] + body + page[match.end(2):]
+                source_end = page.find('</details>', match.start(2))
+                if source_end >= 0:
+                    source_end += len('</details>')
+                    page = page[:source_end] + related + page[source_end:]
+            else:
+                page = page[:match.start(2)] + body + '</div>\n' + related + '\n' + page[match.end(2):]
+        # Keep visible headlines and search/social/schema metadata in agreement.
+        seo_title=row['title']
+        if title_counts[original['title']]>1:
+            from archive_integrity import _day
+            day=_day(row.get('published_at',''))
+            if day:seo_title+=' · '+day
+        page = re.sub(r'<title>.*?</title>', '<title>' + html.escape(seo_title) + ' | Rochdale Daily</title>', page, count=1, flags=re.S)
+        for key,value in [('og:title',row['title']),('twitter:title',row['title']),('og:description',row.get('excerpt','')),('twitter:description',row.get('excerpt','')),('description',row.get('excerpt',''))]:
+            pattern = r'(<meta\b[^>]*(?:property|name)=["\']' + re.escape(key) + r'["\'][^>]*content=["\'])(.*?)(["\'][^>]*>)'
+            page = re.sub(pattern, lambda m: m.group(1)+html.escape(value,quote=True)+m.group(3), page, flags=re.S)
+        page = re.sub(r'("headline"\s*:\s*)"(?:[^"\\]|\\.)*"', lambda m:m.group(1)+json.dumps(row['title'],ensure_ascii=False),page)
+        if images:
+            raw_image=str(row.get('image_url') or '')
+            absolute=raw_image if raw_image.startswith('http') else 'https://rochdaledaily.co.uk/'+raw_image.lstrip('/')
+            page=re.sub(r'(<meta\b[^>]*property=["\']og:image["\'][^>]*content=["\']).*?(["\'][^>]*>)',lambda m:m.group(1)+html.escape(absolute,quote=True)+m.group(2),page)
+            # An explicit caption distinguishes a file image/place illustration
+            # from a photograph of the reported incident.
+            figure='<figure class="article-hero-image"><img src="/'+html.escape(raw_image.lstrip('/'),quote=True)+'" alt="'+html.escape(str(row.get('image_alt') or row['title']),quote=True)+'" loading="eager"><figcaption>'+html.escape(str(row.get('image_credit') or 'Rochdale Daily'))
+            if row.get('image_credit_url'):
+                figure+=' <a href="'+html.escape(row['image_credit_url'],quote=True)+'" rel="noopener noreferrer">Image source</a>'
+            figure+='</figcaption></figure>'
+            hero=re.compile(r'<figure\b[^>]*class=["\']article-hero-image["\'][^>]*>.*?</figure>',re.S)
+            if hero.search(page):page=hero.sub(lambda _:figure,page,count=1)
+            else:page=page.replace('<div class="article-copy">',figure+'<div class="article-copy">',1)
         page = H1.sub(lambda m: m.group(1) + html.escape(row['title']) + m.group(3), page, count=1)
         page = re.sub(r'("articleSection"\s*:\s*)"[^"]*"', lambda m: m.group(1) + json.dumps(category), page)
+        def update_schema(match):
+            try:
+                data=json.loads(match.group(2))
+            except (TypeError,ValueError):return match.group(0)
+            def visit(node):
+                if isinstance(node,list):
+                    for child in node:visit(child)
+                if isinstance(node,dict):
+                    kind=node.get('@type')
+                    if kind=='NewsArticle' or (isinstance(kind,list) and 'NewsArticle' in kind):
+                        node.update(headline=row['title'],description=row.get('excerpt',''),articleSection=category)
+                        if images:node['image']=[absolute]
+                        if geography['wards']:node['spatialCoverage']=[{'@type':'AdministrativeArea','name':w} for w in geography['wards']]
+                        else:node.pop('spatialCoverage',None)
+                    for value in list(node.values()):
+                        if isinstance(value,(dict,list)):visit(value)
+            visit(data)
+            return match.group(1)+json.dumps(data,ensure_ascii=False)+match.group(3)
+        page=re.sub(r'(<script[^>]*type=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)',update_schema,page,flags=re.S)
         if page != path.read_text(encoding='utf-8'):
             path.write_text(page, encoding='utf-8')
         if slug in feed_map:
@@ -336,9 +415,42 @@ def apply(root: Path, rows=None):
             target['wards'] = geography['wards']
             target['ward_verification'] = geography
             target['related_article_slugs'] = edges[slug]
+            if images:
+                for key in row:
+                    if key.startswith('image_') or key in {'img','commons_image_search','source_image_reuse_status'}:
+                        target[key]=row[key]
         if review.get('status') == 'reviewed' and review.get('fingerprint') == original['fingerprint']:
             review['applied_fingerprint'] = fingerprint(row)
+            review.setdefault('reviewed_image_url',original.get('image_url'))
         report['items'].append({'slug': slug, 'language_review_status': review.get('status', 'not-reviewed'), 'text_edits': changed, 'category': category, 'geography': geography, 'image_relevant': review.get('image_relevant'), 'related': edges[slug], 'incoming_links': incoming[slug]})
+    # Derived indexes and JSON fallback feeds must agree with the canonical
+    # records; archived articles stay archived rather than becoming fresh news.
+    corrected={r['slug']:r for r in rows}
+    report_items={r['slug']:r for r in report['items']}
+    def sync(value):
+        if isinstance(value,list):return [sync(v) for v in value]
+        if isinstance(value,dict):
+            slug=value.get('slug')
+            if slug in report_items:
+                item=report_items[slug]
+                value=dict(value)
+                value['category']=item['category']
+                if 'types' in value:value['types']=[item['category']]
+                value['wards']=item['geography']['wards']
+                value['ward_verification']=item['geography']
+                if slug in feed_map:
+                    for k in ('title','excerpt','content_html','image_url','img','image_credit','image_credit_url','types','related_article_slugs'):
+                        if k in value and k in feed_map[slug]:value[k]=feed_map[slug][k]
+                return value
+            return {k:sync(v) for k,v in value.items()}
+        return value
+    for path in [root/'archive-index.json',root/'articles/frontpage.json',*(root/'articles/areas').glob('*.json'),*(root/'articles/categories').glob('*.json')]:
+        if path.exists():
+            value=sync(load(path,{}))
+            if path.parent.name=='categories' and isinstance(value,dict):
+                value['articles']=[r for r in feed if r.get('category')==path.stem]
+                value['count']=len(value['articles'])
+            save(path,value)
     save(root / 'articles.json', feed)
     save(root / REVIEWS, ledger)
     save(root / REPORT, report)
@@ -356,7 +468,10 @@ def main():
     if args.review:
         review_all(args.root, rows)
     if args.apply:
-        apply(args.root, rows)
+        if os.getenv('GITHUB_WORKFLOW') == 'Review the complete published archive' and os.getenv('OPENAI_API_KEY'):
+            # Include stories published or materially changed while this audit ran.
+            review_all(args.root, rows)
+        apply(args.root, rows, images=True)
 
 if __name__ == '__main__':
     main()

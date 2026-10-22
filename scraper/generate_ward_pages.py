@@ -9,6 +9,7 @@ import unicodedata
 from pathlib import Path
 
 from councillor_photos import build_local_portrait_map
+from editorial_contract import ward_decision
 
 ROOT = Path(__file__).resolve().parents[1]
 WARD_MAP_PATH = ROOT / "ward_areas.json"
@@ -318,7 +319,7 @@ def main():
 
     for ward, config in wards.items():
         areas = {area.lower() for area in config.get("areas", [])}
-        stories = [article for article in articles if str(article.get("area") or "").lower() in areas][:MAX_STORIES]
+        stories = [article for article in articles if ward in ward_decision(article)["wards"]][:MAX_STORIES]
         people = (votes.get("wards") or {}).get(ward, [])
 
         for person in people:
@@ -352,7 +353,7 @@ def main():
     def ward_card(ward):
         config = wards.get(ward) or {}
         areas = {area.lower() for area in config.get("areas", [])}
-        n_stories = sum(1 for a in articles if str(a.get("area") or "").lower() in areas)
+        n_stories = sum(1 for a in articles if ward in ward_decision(a)["wards"])
         n_people = len((votes.get("wards") or {}).get(ward, []))
         bits = []
         if n_stories:

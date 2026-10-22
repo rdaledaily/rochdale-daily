@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import re
+import json
+from pathlib import Path
 from typing import Any
 
 from selection_policy import ROCHDALE_WARDS, AREA_TO_WARD
@@ -37,16 +39,42 @@ def ward_decision(article: dict) -> dict:
     # A ward must describe the subject, not a source, councillor's portfolio,
     # address in the footer, or another incident in a rolling timeline.
     subject = title + ' ' + excerpt
-    explicit = [w for w in ROCHDALE_WARDS if re.search(
-        r'(?<!\w)' + re.escape(w).replace(r'\ ', r'\s+') + r'(?!\w)', subject, re.I)]
+    explicit = []
+    for ward in ROCHDALE_WARDS:
+        pattern = r'(?<!\w)' + re.escape(ward) + r'(?!\w)'
+        if ward == 'Hopwood Hall' and re.search(r'Hopwood Hall (?:College|campus)', subject, re.I):
+            continue
+        # One-word ward names are also surnames and street names. Require
+        # explicit ward language or a geographic preposition.
+        if len(ward.split()) == 1:
+            pattern = r'\b(?:in|across|around|from|at)\s+' + re.escape(ward) + r'(?!\s+(?:Road|Street|Lane))\b|' + re.escape(ward) + r'\s+ward\b'
+        if re.search(pattern, subject, re.I):
+            explicit.append(ward)
     if explicit:
         return {'wards': explicit, 'status': 'explicit-ward', 'evidence': subject}
+    # Full postcodes have an independently fetched ward, never a district
+    # prefix such as OL11. Multiple sites remain multiple wards.
+    cache_path = Path(__file__).resolve().parents[1] / 'ward_postcode_evidence.json'
+    try:
+        cache = json.loads(cache_path.read_text())
+    except (OSError, ValueError):
+        cache = {}
+    location = plain(article.get('event_location'))
+    lead = plain(article.get('content_html')).split('. ', 2)[0]
+    candidates = re.findall(r'\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b', location or lead, re.I)
+    verified = [cache.get(re.sub(r'\s+', '', pc).upper()) for pc in candidates]
+    verified = [v for v in verified if v and v.get('district') == 'Rochdale' and v.get('ward') in ROCHDALE_WARDS]
+    if verified:
+        return {'wards': sorted({v['ward'] for v in verified}), 'status': 'postcode-verified', 'evidence': verified}
     area = str(article.get('area') or '').casefold()
-    # These existing locality mappings cover one ward. Large towns such as
-    # Heywood and Middleton span several and intentionally have no mapping.
-    ward = AREA_TO_WARD.get(area, '')
-    if ward and re.search(r'\b(?:in|at|across|around|near|from)\s+' + re.escape(area) + r'\b', subject, re.I):
-        return {'wards': [ward], 'status': 'named-locality', 'evidence': subject}
+    local = []
+    for locality,ward in AREA_TO_WARD.items():
+        pattern = r'\b(?:in|at|across|around)\s+' + re.escape(locality) + r'(?!\s+(?:Road|Street|Lane))\b'
+        starts = r'^' + re.escape(locality) + r'\s+(?:road|roadworks|residents|community|park|school|village|estate)\b'
+        if re.search(pattern,subject,re.I) or (area==locality and re.search(starts,title,re.I)):
+            local.append(ward)
+    if local:
+        return {'wards':sorted(set(local)), 'status':'named-locality', 'evidence':subject}
     return {'wards': [], 'status': 'borough-or-location-unresolved', 'evidence': ''}
 
 
@@ -65,7 +93,7 @@ def reader_ending(article: dict) -> str:
     if category == 'traffic':
         return 'How does this affect your journeys, and what would make local roads work better for you? Share your experience in the comments.'
     if re.search(r'\b(?:housing|homes|development|planning|flats)\b', title):
-        return 'How would this proposal affect your neighbourhood, and what would you want decision makers to consider? Share your thoughts in the comments.'
+        return 'What does this mean for your neighbourhood, and what would you want decision makers to consider? Share your thoughts in the comments.'
     if category == 'education':
         return 'What does this mean for pupils and families in your area? Share your thoughts in the comments, without identifying children.'
     if category == 'health':

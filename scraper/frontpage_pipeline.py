@@ -912,7 +912,7 @@ def _timeline_label(article: dict[str, Any]) -> str:
     value = parse_datetime(article.get("published_at") or article.get("scraped_at"))
     if value is None:
         return "Date unavailable"
-    return value.astimezone(UK_TZ).strftime("%-d %B %Y, %H:%M")
+    return value.astimezone(UK_TZ).strftime("%-d %B %Y, %H:%M %Z")
 
 
 _ONGOING_LABEL_RE = re.compile(r'<p class="ongoing-label">.*?</p>', re.S)
@@ -1018,7 +1018,7 @@ def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
             break
 
     parts = [
-        f'<p class="ongoing-label"><strong>ONGOING STORY</strong> — Updated {html.escape(updated.astimezone(UK_TZ).strftime("%-d %B %Y at %H:%M"))}. {update_count} source updates have been combined into this article.</p>'
+        f'<p class="ongoing-label"><strong>ONGOING STORY</strong> — Updated {html.escape(updated.astimezone(UK_TZ).strftime("%-d %B %Y at %H:%M %Z"))}. {update_count} source updates have been combined into this article.</p>'
     ]
     if body:
         parts.append(body)

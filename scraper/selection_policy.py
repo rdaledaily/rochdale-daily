@@ -312,20 +312,16 @@ def is_job_or_career_post(item_or_text: Any, url: str = "") -> bool:
 
 
 def ward_for_item(item: Any) -> str:
-    text = item_text(item).lower()
-    area = str(get_value(item, "area", "") or "").lower().strip()
-
-    # Prefer explicit full ward language.
-    for ward, aliases in WARD_ALIASES.items():
-        for alias in sorted(aliases, key=len, reverse=True):
-            if re.search(
-                rf"(?<![a-z0-9]){re.escape(alias)}(?![a-z0-9])",
-                text,
-            ):
-                return ward
-
-    # Only map areas that identify a single ward unambiguously.
-    return AREA_TO_WARD.get(area, "")
+    from editorial_contract import ward_decision
+    article = {
+        'title': get_value(item, 'source_title', '') or get_value(item, 'title', ''),
+        'excerpt': get_value(item, 'source_summary', '') or get_value(item, 'excerpt', ''),
+        'area': get_value(item, 'area', ''),
+        'event_location': get_value(item, 'event_location', ''),
+        'content_html': get_value(item, 'content_html', ''),
+    }
+    result = ward_decision(article)
+    return result['wards'][0] if len(result['wards']) == 1 else ''
 
 
 def source_key(item: Any) -> str:

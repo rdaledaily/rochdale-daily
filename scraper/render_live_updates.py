@@ -27,7 +27,8 @@ def parse_time(value):
 
 def visible_time(value):
     dt = parse_time(value)
-    return dt.astimezone(UK).strftime("%H:%M, %d %B %Y") if dt else "Update"
+    from uk_update_times import label
+    return label(value)
 
 
 def main() -> int:

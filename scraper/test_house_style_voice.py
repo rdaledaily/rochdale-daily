@@ -12,7 +12,9 @@ def draft(title: str, paragraph: str) -> dict:
 
 
 def run() -> None:
-    assert STYLE_VERSION == "rochdale-human-newsroom-v9"
+    assert STYLE_VERSION == "rochdale-human-newsroom-v10"
+    from editorial_contract import NATURAL_STORY_POLICY
+    assert NATURAL_STORY_POLICY in HOUSE_STYLE_SYSTEM
     assert HUMAN_VOICE_BRIEF in HOUSE_STYLE_SYSTEM
     assert "Rhetorical question" not in HUMAN_VOICE_BRIEF  # no forced devices in every piece
     assert "A rhetorical question" in HUMAN_VOICE_BRIEF

@@ -77,9 +77,11 @@ class ArchiveIntegrityTests(unittest.TestCase):
         dated = {k: ai.apply_title(v, titles[k]) for k, v in pages.items()}
         self.assertEqual(ai.title_plan(dated), {})
 
-    def test_same_headline_same_day_points_at_the_live_page(self):
+    def test_same_headline_same_day_does_not_merge_different_events(self):
         pages = {"copy": page("copy", "Fire festival returns", "Fireworks in the park " * 30, "2026-09-18T09:00:00Z"),
                  "live": page("live", "Fire festival returns", "Organisers confirm three nights " * 20, "2026-09-18T15:00:00Z")}
+        self.assertEqual(ai.same_day_duplicates(pages, {"live"}), {})
+        pages["copy"]=page("copy", "Fire festival returns", "Organisers confirm three nights " * 20, "2026-09-18T09:00:00Z")
         self.assertEqual(ai.same_day_duplicates(pages, {"live"}), {"copy": {"canonical": "live"}})
 
 

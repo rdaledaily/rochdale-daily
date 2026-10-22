@@ -630,18 +630,9 @@ def enforce_article(article: dict[str, Any], root: Path) -> str:
         set_curated(article, root, chosen)
         return "kept-cards" if current == article["image_url"] else "cards-library"
 
-    current_rel = cards_relative(article.get("image_url") or article.get("img"))
-    if current_rel and valid_cards_image(root, current_rel):
-        current_path = root / current_rel
-        if is_generated_card(current_path):
-            article["image_url"] = current_rel
-            article["img"] = current_rel
-            article["source_image_reuse_status"] = "cards-only"
-            strip_remote_image_metadata(article)
-            return "kept-cards"
-
-    set_generated(article, root)
-    return "cards-generated"
+    from image_hierarchy import choose_image
+    tier = choose_image(article, root)
+    return 'kept-existing' if tier == 'commons' else ('cards-library' if tier == 'internal' else 'cards-generated')
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:

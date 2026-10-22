@@ -35,4 +35,14 @@ with tempfile.TemporaryDirectory() as tmp:
     assert before==after, 'Archive final pass must be idempotent'
     assert all(p.count('data-rd-reader-ending="1"')==1 for p in after)
     assert all(p.count('id="rd-archive-related"')==1 for p in after)
+    # Sources are inside article-copy in the current template: never add an
+    # extra closing div before them, and never swallow the source links.
+    p=root/'articles/story-0.html'
+    text=p.read_text().replace('</div><section class="comments-section">','<details class="article-sources"><summary>Sources</summary><a href="https://example.org/source">Source</a></details></div><section class="comments-section">')
+    # Use a clean current-template fixture with sources before its closing div.
+    text='<html><head><link rel="canonical" href="https://rochdaledaily.co.uk/articles/story-0"></head><body><h1>Local housing plans</h1><div class="article-copy"><p>New homes are proposed.</p><details class="article-sources"><summary>Sources</summary><a href="https://example.org/source">Source</a></details></div><section class="comments-section"></section></body></html>'
+    p.write_text(text)
+    apply(root); once=p.read_text();apply(root);assert p.read_text()==once
+    assert once.count('<div')==once.count('</div>')
+    assert 'https://example.org/source' in once
 print('Archive editorial contract checks passed.')

@@ -2722,10 +2722,15 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'searched_location_name': candidate.searched_location_name,
     }] + candidate.related_sources[:11]
     source_records = enrich_source_records(source_records)
+    context_research_status = []
+    if client is not None and os.getenv('OPENAI_API_KEY') and not candidate.deterministic_draft:
+        from context_research import gather as gather_context
+        source_records, context_research_status = gather_context(
+            candidate, source_records, page_metadata, source_is_denied, ROOT)
     source_records = compact_source_records(source_records)
     social_context = candidate.social_context[:SOCIAL_MAX_OFFICIAL_UPDATES + SOCIAL_MAX_PUBLIC_REACTIONS]
     source_text = normalise_ws(' '.join(
-        f"{item.get('title', '')} {item.get('summary', '')} {item.get('body_excerpt', '')}"
+        f"[SOURCE ROLE: {item.get('context_role', 'same_incident')}; source date: {item.get('published_at', 'unknown')}; URL: {item.get('url', '')}] {item.get('title', '')} {item.get('summary', '')} {item.get('body_excerpt', '')}"
         for item in source_records
     ))[:32000]
 
@@ -2885,8 +2890,8 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
             log.debug('Image backfill failed for %s: %s', candidate.source_url, exc)
 
     image_url, image_credit, image_credit_url, original_image_url = source_image(candidate, category, title)
-    source_urls = [candidate.source_url] + [item['url'] for item in candidate.related_sources[:11] if item.get('url')]
-    source_names = [candidate.source_name] + [item['name'] for item in candidate.related_sources[:11] if item.get('name')]
+    source_urls = [item['url'] for item in source_records if item.get('url')]
+    source_names = [str(item.get('name') or '') for item in source_records if item.get('url')]
     legal_disclaimer = strip_markdown(draft.get('legal_disclaimer')) or default_legal_disclaimer(sensitive)
     right_to_reply = strip_markdown(draft.get('right_to_reply')) or f'Anyone directly affected may request a correction or right of reply by emailing {RIGHT_TO_REPLY_EMAIL}.'
     if sensitive:
@@ -2925,6 +2930,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'source_names': source_names,
         'source_urls': source_urls,
         'source_count': len(source_urls),
+        'context_research': context_research_status,
         'social_context_used': social_context_used,
         'social_reaction_count': public_reaction_count,
         'official_social_update_count': official_social_count,
