@@ -1,42 +1,38 @@
 {
-  "examined_at": "2026-10-21T12:23:33.783476Z",
+  "examined_at": "2026-10-22T12:23:40.402706Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 165,
+  "candidates_examined": 156,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 79,
-    "would publish": 77,
-    "duplicate of published story": 8,
-    "not local": 1
+    "age": 133,
+    "duplicate of published story": 12,
+    "would publish": 11
   },
-  "would_publish": 77,
+  "would_publish": 11,
   "age_gate_sensitivity": {
-    "6h": 8,
-    "14h": 15,
-    "24h": 86,
-    "48h": 116,
-    "72h": 130,
-    "168h": 165
+    "6h": 6,
+    "14h": 9,
+    "24h": 23,
+    "48h": 113,
+    "72h": 142,
+    "168h": 156
   },
   "gates_unavailable": [],
   "examples": {
     "duplicate of published story": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Grimsby Live: Frantic draw at Rochdale ends Grimsby Town's losing streak",
-      "BBC: Rochdale 2-2 Grimsby Town - BBC"
+      "BBC Manchester: Doorman who witnessed racist outburst says abuse 'becoming normal'",
+      "Rochdale Times: No decision yet on College Bank – but ‘renovation would take more than"
     ],
     "would publish": [
-      "Rochdale Times: Police target crime gang’s ‘spider web of criminality’ - Rochdale Time",
-      "I Love Manchester: Here's what a major housing scheme in Rochdale could look like accordi",
-      "Office for National Statistics: Rochdale house prices and rents: ONS figures updated 21 October 2026"
-    ],
-    "not local": [
-      "The Gazette: FOCUS REMOVALS & STORAGE/TEESSIDE LTD: Appointment of Liquidators"
+      "Rochdale AFC: Another COA Tie For Dale Women - Rochdale AFC",
+      "Rochdale AFC: TVOS Preview | Accrington Stanley (H) - Rochdale AFC",
+      "Rochdale Times: New takeaway would be bad for people’s health - Rochdale Times"
     ],
     "age": [
-      "Rochdale Times: New bid for extra trains from Rochdale to London is refused - Rochdale",
-      "Roch Valley Radio Local News: RBH submits plans for up to 270 homes in Lower Falinge",
-      "Rochdale Borough Council: Decisions for issue Satellite School Programme and cost update - Rochd"
+      "Rochdale Times: Police target crime gang’s ‘spider web of criminality’ - Rochdale Time",
+      "Grimsby Live: Frantic draw at Rochdale ends Grimsby Town's losing streak",
+      "Grimsby Live: Frantic draw at Rochdale ends Grimsby Town's losing streak - Grimsby L"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
