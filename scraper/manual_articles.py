@@ -212,6 +212,11 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         record["image_alt"] = _clean(entry.get("image_alt"))[:200]
     if entry.get("featured") is True:
         record["featured"] = True
+    for flag in ("is_ongoing", "breaking_news", "developing", "police_matter"):
+        if entry.get(flag) is True:
+            record[flag] = True
+    if entry.get("ongoing_label"):
+        record["ongoing_label"] = _clean(entry["ongoing_label"])
     if entry.get("frontpage_until"):
         record["frontpage_until"] = _clean(entry.get("frontpage_until"))
     if entry.get("exclude_from_frontpage") is True:

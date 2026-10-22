@@ -1660,7 +1660,7 @@ def main() -> int:
 
     crime_headlines = [
         article.get("title") for article in frontpage
-        if article_category(article) == "crime" and article.get("title")
+        if (article_category(article) == "crime" or article.get("breaking_news")) and article.get("title")
     ][:5]
     payload = {
         "generated_at": iso_utc(now),
