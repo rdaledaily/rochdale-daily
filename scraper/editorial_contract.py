@@ -51,7 +51,7 @@ def ward_decision(article: dict) -> dict:
         if re.search(pattern, subject, re.I):
             explicit.append(ward)
     if explicit:
-        return {'wards': explicit, 'status': 'explicit-ward', 'evidence': subject}
+        return _scoped({'wards': explicit, 'status': 'explicit-ward', 'evidence': subject})
     # Full postcodes have an independently fetched ward, never a district
     # prefix such as OL11. Multiple sites remain multiple wards.
     cache_path = Path(__file__).resolve().parents[1] / 'ward_postcode_evidence.json'
@@ -60,12 +60,16 @@ def ward_decision(article: dict) -> dict:
     except (OSError, ValueError):
         cache = {}
     location = plain(article.get('event_location'))
-    lead = plain(article.get('content_html')).split('. ', 2)[0]
+    lead_paragraphs = re.findall(r'<p\b[^>]*>(.*?)</p>', str(article.get('content_html') or ''), re.S | re.I)
+    lead = ' '.join(plain(p) for p in lead_paragraphs[:2]) or plain(article.get('content_html')).split('. ', 2)[0]
     candidates = re.findall(r'\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b', location or lead, re.I)
     verified = [cache.get(re.sub(r'\s+', '', pc).upper()) for pc in candidates]
     verified = [v for v in verified if v and v.get('district') == 'Rochdale' and v.get('ward') in ROCHDALE_WARDS]
     if verified:
-        return {'wards': sorted({v['ward'] for v in verified}), 'status': 'postcode-verified', 'evidence': verified}
+        wards = sorted({v['ward'] for v in verified})
+        if len(wards) > MAX_SITE_WARDS:
+            return _scoped({'wards': [], 'status': 'multi-site-borough', 'evidence': verified})
+        return _scoped({'wards': wards, 'status': 'postcode-verified', 'evidence': verified})
     area = str(article.get('area') or '').casefold()
     local = []
     for locality,ward in AREA_TO_WARD.items():
@@ -74,8 +78,51 @@ def ward_decision(article: dict) -> dict:
         if re.search(pattern,subject,re.I) or (area==locality and re.search(starts,title,re.I)):
             local.append(ward)
     if local:
-        return {'wards':sorted(set(local)), 'status':'named-locality', 'evidence':subject}
-    return {'wards': [], 'status': 'borough-or-location-unresolved', 'evidence': ''}
+        return _scoped({'wards':sorted(set(local)), 'status':'named-locality', 'evidence':subject})
+    # Gazetteer: OSM streets and places assigned to wards by the ONS postcode
+    # directory (ward_gazetteer.json). Only the story's own subject text counts
+    # -- headline, standfirst, event location and the opening two paragraphs --
+    # never a footer address or an earlier incident further down the page.
+    from ward_gazetteer import places_in, streets_in, township_in, generic_street, WARD_TOWNSHIP
+    paragraphs = re.findall(r'<p\b[^>]*>(.*?)</p>', str(article.get('content_html') or ''), re.S | re.I)
+    lead_text = ' '.join(plain(p) for p in paragraphs[:2]) or plain(article.get('content_html'))[:600]
+    scope_text = ' '.join([subject, location, lead_text])
+    town_named = township_in(subject + ' ' + lead_text)
+    found = {}
+    for name, ward in places_in(scope_text):
+        found.setdefault(ward, []).append(name)
+    for name, ward in streets_in(scope_text):
+        # A unique-in-Rochdale "Church Street" may still be another town's.
+        if generic_street(name) and town_named != WARD_TOWNSHIP.get(ward) and not found.get(ward):
+            continue
+        found.setdefault(ward, []).append(name)
+    if found and len(found) <= MAX_SITE_WARDS:
+        return _scoped({'wards': sorted(found), 'status': 'gazetteer', 'evidence': {w: sorted(set(n)) for w, n in found.items()}})
+    if len(found) > MAX_SITE_WARDS:
+        # A borough-wide list (hygiene ratings, gritting routes) is not a ward story.
+        return _scoped({'wards': [], 'status': 'multi-site-borough', 'evidence': {w: sorted(set(n)) for w, n in found.items()}})
+    if town_named:
+        return _scoped({'wards': [], 'status': 'township-only', 'evidence': subject}, township=town_named)
+    return _scoped({'wards': [], 'status': 'borough-or-location-unresolved', 'evidence': ''})
+
+
+MAX_SITE_WARDS = 3
+
+
+def _scoped(decision: dict, township: str = '') -> dict:
+    """Every story gets a true geographic home: ward(s), else township, else borough."""
+    from ward_gazetteer import WARD_TOWNSHIP
+    if decision['wards']:
+        townships = {WARD_TOWNSHIP.get(w, '') for w in decision['wards']}
+        decision['township'] = townships.pop() if len(townships) == 1 else ''
+        decision['scope'] = 'ward'
+    elif township:
+        decision['township'] = township
+        decision['scope'] = 'township'
+    else:
+        decision['township'] = ''
+        decision['scope'] = 'borough'
+    return decision
 
 
 def reader_ending(article: dict) -> str:

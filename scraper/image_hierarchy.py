@@ -31,7 +31,14 @@ def subject_for(article):
     match = re.search(pattern, title)
     if match:
         return match.group(1)
-    return ''
+    # A village, neighbourhood or town named in the headline is a real place
+    # to illustrate (Geograph/Commons coverage of Rochdale places is good).
+    try:
+        from ward_gazetteer import place_in_text
+        place = place_in_text(title)
+    except ImportError:
+        place = ''
+    return place
 
 def commons_search(subject):
     global _LAST_NETWORK_FAILURE
@@ -87,7 +94,7 @@ def set_place_card(article, root):
 
 def choose_image(article, root, relevance=None, allow_network=True, rejected=()):
     """Apply the ordered policy once, recording failed searches honestly."""
-    from ensure_article_images import (choose_exact_story_photo, choose_named_library_photo,
+    from ensure_article_images import (choose_exact_story_photo, choose_library_photo,
         valid_cards_image, set_curated, is_generated_card, existing_meaningful_image)
     from repair_generated_with_commons import download
     raw = str(article.get('image_url') or article.get('img') or '')
@@ -101,7 +108,10 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
     if relevance is not False and not generated and not commons_current and current.is_file() and existing_meaningful_image(article, root):
         article['image_policy'] = POLICY
         return 'internal'
-    chosen = choose_exact_story_photo(article, root) or choose_named_library_photo(article, root)
+    # Same internal rule as the publish lanes (alias groups, then a headline/
+    # slug/standfirst filename match). Before this, the archive pass skipped the
+    # filename matcher and replaced relevant library photos with place cards.
+    chosen = choose_exact_story_photo(article, root) or choose_library_photo(article, root)
     if chosen is not None and chosen.is_file() and not is_generated_card(chosen) and chosen.relative_to(root).as_posix() not in rejected and not ('-commons-' in chosen.name) and not (relevance is False and chosen.resolve() == current.resolve()):
         set_curated(article, root, chosen)
         article['image_policy'] = POLICY

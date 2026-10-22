@@ -322,6 +322,8 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             image_tier = choose_image(row, root, relevance=image_relevance, allow_network=network_images, rejected=[review.get('reviewed_image_url', original.get('image_url'))] if review.get('image_relevant') is False else [])
             report['image_tiers'][image_tier] = report['image_tiers'].get(image_tier, 0) + 1
         geography = ward_decision(row)
+        report.setdefault('geography_scope',{})
+        report['geography_scope'][geography.get('scope','borough')]=report['geography_scope'].get(geography.get('scope','borough'),0)+1
         if not geography['wards']:
             report['ward_unresolved'].append(slug)
         if original['indexable'] and (not edges[slug] or not incoming[slug]):
@@ -407,8 +409,9 @@ def apply(root: Path, rows=None, images=False, network_images=True):
                         node['publisher']=publisher(node.get('publisher') if isinstance(node.get('publisher'),dict) else None)
                         if not node.get('author'):node['author']={'@type':'Organization','name':'Rochdale Daily Newsdesk','url':'https://rochdaledaily.co.uk/about'}
                         if images:node['image']=[absolute]
-                        if geography['wards']:node['spatialCoverage']=[{'@type':'AdministrativeArea','name':w} for w in geography['wards']]
-                        else:node.pop('spatialCoverage',None)
+                        if geography['wards']:node['spatialCoverage']=[{'@type':'AdministrativeArea','name':w+' ward, Rochdale'} for w in geography['wards']]
+                        elif geography.get('scope')=='township':node['spatialCoverage']=[{'@type':'AdministrativeArea','name':geography['township']+' township, Rochdale'}]
+                        else:node['spatialCoverage']=[{'@type':'AdministrativeArea','name':'Rochdale borough'}]
                     for value in list(node.values()):
                         if isinstance(value,(dict,list)):visit(value)
             visit(data)
@@ -426,6 +429,8 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             target['types'] = [category]
             target['police_matter'] = category == 'crime'
             target['wards'] = geography['wards']
+            target['township'] = geography.get('township','')
+            target['geography_scope'] = geography.get('scope','borough')
             target['ward_verification'] = geography
             target['related_article_slugs'] = edges[slug]
             if images:

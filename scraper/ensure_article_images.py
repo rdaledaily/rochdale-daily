@@ -612,19 +612,38 @@ def set_generated(article: dict[str, Any], root: Path) -> None:
     strip_remote_image_metadata(article)
 
 
+# A filename match counts as a relevant library photo only when it matches the
+# headline or slug, or appears as a whole phrase in the standfirst ("at Rochdale
+# Town Hall"). Scattered words ("jacket potato fans in Rochdale" ->
+# rochdale_fans.jpg) or a word deep in the body are not evidence of relevance,
+# so those stories fall through to Wikimedia Commons and then a place card.
+# Measured 22 Oct 2026: this threshold drops exactly the two scattered-word
+# matches among 113 library photos in the feed.
+LIBRARY_MIN_SCORE = 8000
+
+
+def choose_library_photo(article: dict[str, Any], root: Path) -> Path | None:
+    """The single internal-photo rule shared by the publish lanes and the
+    archive image hierarchy, so the two can never undo each other."""
+    if high_risk_photo_story(article):
+        return choose_exact_story_photo(article, root)
+    chosen = choose_named_library_photo(article, root)
+    if chosen is not None:
+        return chosen
+    candidate = choose_filename_match(article, root)
+    if candidate is not None and filename_match_score(article, candidate) >= LIBRARY_MIN_SCORE:
+        return candidate
+    return None
+
+
 def enforce_article(article: dict[str, Any], root: Path) -> str:
     if existing_meaningful_image(article, root):
         return "kept-existing"
 
     # Use the editor's full catalogue, including named alias groups, before
-    # looking for loosely overlapping words in a long article. Both work
-    # automatically; the editor does not need to choose each photo.
-    if high_risk_photo_story(article):
-        chosen = choose_exact_story_photo(article, root)
-    else:
-        chosen = choose_named_library_photo(article, root)
-        if chosen is None:
-            chosen = choose_filename_match(article, root)
+    # looking for overlapping words in the headline, slug or standfirst. Both
+    # work automatically; the editor does not need to choose each photo.
+    chosen = choose_library_photo(article, root)
     if chosen is not None and valid_cards_image(root, chosen.relative_to(root).as_posix()):
         current = cards_relative(article.get("image_url") or article.get("img"))
         set_curated(article, root, chosen)

@@ -1,0 +1,78 @@
+name: Build ward street and postcode lookup
+
+# Streets and places from OpenStreetMap, wards from the ONS Postcode Directory
+# (postcodes.io). The weekly run rebuilds the whole gazetteer; the daily run
+# only looks up postcodes that newly appeared in published articles. Each run
+# commits only when the data changed, because every commit is a deployment.
+on:
+  workflow_dispatch:
+    inputs:
+      postcodes_only:
+        description: "Only refresh postcodes found in articles"
+        required: false
+        default: "false"
+  push:
+    branches: [main]
+    paths:
+      - "scraper/build_ward_gazetteer.py"
+      - ".github/workflows/ward-gazetteer.yml"
+  schedule:
+    - cron: "13 4 * * 1"   # full rebuild, Monday
+    - cron: "17 5 * * *"   # new article postcodes, daily
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-ward-gazetteer
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Build lookup
+        run: |
+          if [ "${{ github.event.schedule }}" = "17 5 * * *" ] || [ "${{ github.event.inputs.postcodes_only }}" = "true" ]; then
+            python scraper/build_ward_gazetteer.py --postcodes-only
+          else
+            python scraper/build_ward_gazetteer.py
+          fi
+
+      - name: Commit changed lookup data
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp ward_gazetteer.json /tmp/ward_gazetteer.json 2>/dev/null || true
+          cp ward_postcode_evidence.json /tmp/ward_postcode_evidence.json
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/ward_gazetteer.json ward_gazetteer.json 2>/dev/null || true
+            cp /tmp/ward_postcode_evidence.json ward_postcode_evidence.json
+            git add ward_postcode_evidence.json
+            if [ -f ward_gazetteer.json ]; then git add ward_gazetteer.json; fi
+            if git diff --cached --quiet; then
+              echo "Ward lookup data unchanged."
+              exit 0
+            fi
+            git commit -m "Update ward street and postcode lookup"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 10
+          done
+          exit 1
