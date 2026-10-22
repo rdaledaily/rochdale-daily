@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Post a few recent Rochdale Daily stories together in a Facebook Page roundup.
+"""Post one fresh Rochdale Daily story to its Facebook Page each hour.
 
-This publisher only creates four locally timed grouped Page posts at most per day
-for fresh Rochdale Daily articles. It does not automate likes, comments, follows,
+This publisher shares individual fresh articles with at least an hour between posts. It does not automate likes, comments, follows,
 messages, audience manipulation, or behaviour intended to mimic a person.
 
 Required environment variables:
@@ -13,7 +12,7 @@ Optional:
   FACEBOOK_STATE_PATH (default: facebook/facebook_posted.json)
   FACEBOOK_RESULT_PATH (default: facebook/facebook_last_result.json)
   FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 48; 0 disables age filtering)
-  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 120)
+  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 60)
   FACEBOOK_MAX_POSTS_24H (default: 0; 0 disables the cap)
   FACEBOOK_MIN_ARTICLES_PER_ROUNDUP (default: 2)
   FACEBOOK_MAX_ARTICLES_PER_ROUNDUP (default: 5)
@@ -309,10 +308,9 @@ def main() -> int:
     result_path = Path(env("FACEBOOK_RESULT_PATH", str(ROOT / "facebook/facebook_last_result.json")))
     dry_run = truthy("FACEBOOK_DRY_RUN")
     max_age_hours = int_env("FACEBOOK_MAX_ARTICLE_AGE_HOURS", 48)
-    min_interval_minutes = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 120)
+    min_interval_minutes = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 60)
     max_posts_24h = int_env("FACEBOOK_MAX_POSTS_24H", 0)
-    max_stories = int_env("FACEBOOK_MAX_ARTICLES_PER_ROUNDUP", 5, minimum=2)
-    min_stories = min(max_stories, int_env("FACEBOOK_MIN_ARTICLES_PER_ROUNDUP", 2, minimum=2))
+    max_stories = 1
     now = datetime.now(timezone.utc)
 
     def report(status: str, reason: str = "", **details: Any) -> int:
@@ -324,7 +322,7 @@ def main() -> int:
         if reason:
             result["reason"] = reason
         write_json(result_path, result)
-        print(f"Facebook roundup: {status}" + (f" ({reason})" if reason else ""))
+        print(f"Facebook article: {status}" + (f" ({reason})" if reason else ""))
         return 0
 
     if not ARTICLES_PATH.exists():
@@ -351,18 +349,8 @@ def main() -> int:
         roundups = {}
         state["roundups"] = roundups
 
-    active_slot = roundup_slot(now)
-    if active_slot is None:
-        return report("idle", "Outside the four UK daytime roundup windows")
-    slot_key, caption = active_slot
-    if slot_key in roundups or any(
-        isinstance(row, dict) and row.get("roundup_slot") == slot_key
-        for row in posted.values()
-    ):
-        return report("idle", "This local-time roundup has already been posted", slot=slot_key)
-    if roundup_posts_today(posted, now) >= len(ROUNDUP_WINDOWS):
-        return report("idle", "Four Facebook posts already published today", slot=slot_key)
-
+    # UTC hour keys remain unique across the autumn clock change.
+    slot_key = now.strftime("%Y-%m-%dT%H")
     limit_reason = rate_limit_reason(posted, min_interval_minutes, max_posts_24h)
     if limit_reason:
         return report("idle", limit_reason, slot=slot_key)
@@ -391,15 +379,13 @@ def main() -> int:
         if len(selected) == max_stories:
             break
 
-    if len(selected) < min_stories:
-        return report(
-            "idle",
-            f"Only {len(selected)} new stories; waiting to bundle at least {min_stories}",
-            slot=slot_key,
-            remaining_unposted=len(candidates),
-        )
+    if not selected:
+        return report("idle", "No fresh unposted stories", remaining_unposted=0)
 
-    message = format_roundup(selected, caption)
+    article = selected[0]
+    title = html.unescape(" ".join(str(article.get("title") or "").split()))
+    message = "\n\n".join(part for part in [title, clean_excerpt(article)] if part)
+    destination = canonical_url(article)
     keys = [article_key(row) for row in selected]
     titles = [str(row.get("title") or "") for row in selected]
 
@@ -408,7 +394,7 @@ def main() -> int:
             post_id = "dry-run"
         else:
             page_id = resolve_page_id(token, graph_version)
-            post_id = graph_post(page_id, token, message, HOMEPAGE_URL, graph_version)
+            post_id = graph_post(page_id, token, message, destination, graph_version)
     except RuntimeError as exc:
         result = {
             "status": "error",
@@ -448,7 +434,7 @@ def main() -> int:
         article_count=len(selected),
         article_keys=keys,
         titles=titles,
-        url=HOMEPAGE_URL,
+        url=destination,
         remaining_unposted=max(0, len(candidates) - len(selected)),
         message_preview=message if dry_run else "",
     )
