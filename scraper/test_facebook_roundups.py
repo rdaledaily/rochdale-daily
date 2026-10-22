@@ -1,4 +1,4 @@
-"""Regression checks for restrained, grouped Facebook Page updates."""
+"""Regression checks for individual hourly Facebook Page updates."""
 
 from __future__ import annotations
 
@@ -37,28 +37,12 @@ class FixedDateTime(RealDatetime):
 
 def run() -> None:
     utc = timezone.utc
-    assert fb.roundup_slot(RealDatetime(2026, 7, 14, 7, 30, tzinfo=utc))[0].endswith(":morning")
-    assert fb.roundup_slot(RealDatetime(2026, 1, 14, 7, 30, tzinfo=utc)) is None
-    assert fb.roundup_slot(RealDatetime(2026, 1, 14, 12, 30, tzinfo=utc))[0].endswith(":lunchtime")
-    assert fb.roundup_slot(RealDatetime(2026, 10, 14, 22, 30, tzinfo=utc))[0].endswith(":evening")
-    assert fb.roundup_slot(RealDatetime(2026, 10, 14, 23, 30, tzinfo=utc)) is None
-
+    # Legacy grouped history still counts as a single successful Page post.
     posts = {
         "a": {"facebook_post_id": "page_100", "posted_at": "2026-10-14T08:10:00Z"},
         "b": {"facebook_post_id": "page_100", "posted_at": "2026-10-14T08:10:00Z"},
-        "c": {"facebook_post_id": "page_101", "posted_at": "2026-10-14T09:20:00Z"},
     }
-    assert fb.roundup_posts_today(posts, RealDatetime(2026, 10, 14, 9, 30, tzinfo=utc)) == 2
-    assert len(fb.recent_post_times(posts)) == 2
-
-    caption = fb.format_roundup(
-        [story("alpha", "2026-10-14T08:00:00Z"),
-         story("beta", "2026-10-14T08:00:00Z")],
-        "Morning news from Rochdale Daily",
-    )
-    assert caption.count("• ") == 2, caption
-    assert caption.count("rochdaledaily.co.uk") == 1, caption
-    assert "Morning news" in caption
+    assert len(fb.recent_post_times(posts)) == 1
 
     older = story("old", "2026-10-11T08:00:00Z")
     assert not fb.roundup_eligible(older, 48)
@@ -83,7 +67,7 @@ def run() -> None:
             "FACEBOOK_PAGE_ACCESS_TOKEN": "mock-token",
             "FACEBOOK_STATE_PATH": str(state_file),
             "FACEBOOK_RESULT_PATH": str(result_file),
-            "FACEBOOK_MIN_POST_INTERVAL_MINUTES": "0",
+            "FACEBOOK_MIN_POST_INTERVAL_MINUTES": "60",
             "FACEBOOK_MAX_POSTS_24H": "0",
             "FACEBOOK_MIN_ARTICLES_PER_ROUNDUP": "2",
             "FACEBOOK_MAX_ARTICLES_PER_ROUNDUP": "5",
@@ -96,32 +80,44 @@ def run() -> None:
             FixedDateTime.current = RealDatetime(2026, 10, 14, 9, 0, tzinfo=utc)
             assert fb.main() == 0
             result = json.loads(result_file.read_text(encoding="utf-8"))
-            assert result["status"] == "posted" and result["article_count"] == 2, result
+            assert result["status"] == "posted" and result["article_count"] == 1, result
             published_state = json.loads(state_file.read_text(encoding="utf-8"))
             assert len(published_state["roundups"]) == 1
-            assert len(published_state["posted"]) == 2
+            assert len(published_state["posted"]) == 1
             assert set(v["facebook_post_id"] for v in published_state["posted"].values()) == {"1234_999"}
             assert publish.call_count == 1
-            assert publish.call_args.args[3] == "https://rochdaledaily.co.uk/"
+            assert publish.call_args.args[3] == "https://rochdaledaily.co.uk/articles/b.html"
+            assert "Rochdale news item b" in publish.call_args.args[2]
+            assert "Rochdale news item a" not in publish.call_args.args[2]
 
             assert fb.main() == 0
             assert json.loads(result_file.read_text(encoding="utf-8"))["status"] == "idle"
             assert publish.call_count == 1
 
-            # Existing post history is preserved; two new stories are bundled.
-            remaining = [story("c", "2026-10-14T11:00:00Z"),
-                         story("d", "2026-10-14T11:20:00Z")]
-            article_file.write_text(json.dumps(remaining + [
-                story("a", "2026-10-14T08:00:00Z"), story("b", "2026-10-14T08:15:00Z")
-            ]), encoding="utf-8")
-            FixedDateTime.current = RealDatetime(2026, 10, 14, 12, 20, tzinfo=utc)
+            # A new run before the hour cannot post the next story.
+            FixedDateTime.current = RealDatetime(2026, 10, 14, 9, 59, tzinfo=utc)
             assert fb.main() == 0
-            state = json.loads(state_file.read_text(encoding="utf-8"))
-            assert len(state["roundups"]) == 2
-            assert len(state["posted"]) == 4
+            assert publish.call_count == 1
+            # At one hour, the remaining story can publish on its own.
+            FixedDateTime.current = RealDatetime(2026, 10, 14, 10, 0, tzinfo=utc)
+            publish.return_value = "1234_1000"
+            assert fb.main() == 0
             assert publish.call_count == 2
+            assert publish.call_args.args[3].endswith("/a.html")
+            state = json.loads(state_file.read_text(encoding="utf-8"))
+            assert set(state["posted"]) == {"a", "b"}
+            # Overnight posting is allowed, but an empty queue is never recycled.
+            FixedDateTime.current = RealDatetime(2026, 10, 14, 23, 0, tzinfo=utc)
+            assert fb.main() == 0
+            assert publish.call_count == 2
+            assert json.loads(result_file.read_text())["status"] == "idle"
+            article_file.write_text(json.dumps([story("c", "2026-10-14T22:00:00Z")]))
+            publish.return_value = "1234_1001"
+            assert fb.main() == 0
+            assert publish.call_count == 3
+            assert publish.call_args.args[3].endswith("/c.html")
 
-    print("Facebook grouped roundup tests passed.")
+    print("Facebook individual hourly posting tests passed.")
 
 
 if __name__ == "__main__":
