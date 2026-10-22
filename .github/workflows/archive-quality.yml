@@ -1,0 +1,74 @@
+name: Review the complete published archive
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/archive-quality.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: complete-archive-editorial-review
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ARCHIVE_REVIEW_MODEL: gpt-4o-mini
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install newsroom dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Review every published story and its image
+        run: |
+          python scraper/archive_quality.py --review
+          python scraper/archive_quality.py --review
+      - name: Preserve review checkpoint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: complete-archive-review
+          path: archive_quality_reviews.json
+          if-no-files-found: ignore
+      - name: Apply reviewed repairs to the latest newspaper
+        run: |
+          set -euo pipefail
+          cp archive_quality_reviews.json /tmp/archive_quality_reviews.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/archive_quality_reviews.json archive_quality_reviews.json
+            python scraper/archive_quality.py --apply
+            python scraper/test_archive_quality.py
+            git add articles.json articles archive_quality_reviews.json archive_quality_report.json
+            git add assets/img/cards
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Apply complete archive editorial review and related-story repairs"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          echo "Concurrent publication prevented a safe push; the review checkpoint is preserved."
+          exit 1
+      - name: Check complete review coverage
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('archive_quality_report.json'))
+          print({k:d[k] for k in ('articles_scanned','language_reviewed','safe_text_edits','category_changes','related_links','orphans')})
+          assert d['language_reviewed']==d['articles_scanned'], 'Some stories still require a successful language review; see the checkpoint.'
+          assert not d['orphans'], 'Some indexable stories still lack relevant incoming/outgoing article links.'
+          PY

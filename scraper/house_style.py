@@ -4,8 +4,9 @@ import re
 from typing import Any
 
 from reader_usefulness import READER_FIRST_POLICY
+from editorial_contract import NATURAL_STORY_POLICY
 
-STYLE_VERSION = "rochdale-human-newsroom-v9"
+STYLE_VERSION = "rochdale-human-newsroom-v10"
 
 # Shared original editorial voice for news and features. Never overrides accuracy.
 HUMAN_VOICE_BRIEF = (
@@ -35,6 +36,7 @@ HUMAN_VOICE_BRIEF = (
 )
 
 HOUSE_STYLE_SYSTEM = (
+    NATURAL_STORY_POLICY + " " +
     "You are the senior news editor of Rochdale Daily. Write accurate, polished British local journalism. "
     "The editorial aim is to make each article the most useful verified local account reasonably possible from the supplied evidence: "
     "a reader should normally understand who is involved, what happened, where it happened, when it happened, why it happened when that is known, "
