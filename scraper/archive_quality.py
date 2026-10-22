@@ -382,7 +382,8 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             page=re.sub(r'(<meta\b[^>]*property=["\']og:image["\'][^>]*content=["\']).*?(["\'][^>]*>)',lambda m:m.group(1)+html.escape(absolute,quote=True)+m.group(2),page)
             # An explicit caption distinguishes a file image/place illustration
             # from a photograph of the reported incident.
-            figure='<figure class="article-hero-image"><img src="/'+html.escape(raw_image.lstrip('/'),quote=True)+'" alt="'+html.escape(str(row.get('image_alt') or row['title']),quote=True)+'" loading="eager"><figcaption>'+html.escape(str(row.get('image_credit') or 'Rochdale Daily'))
+            hero_src=raw_image if raw_image.startswith(('https://','http://')) else '/'+raw_image.lstrip('/')
+            figure='<figure class="article-hero-image"><img src="'+html.escape(hero_src,quote=True)+'" alt="'+html.escape(str(row.get('image_alt') or row['title']),quote=True)+'" loading="eager"><figcaption>'+html.escape(str(row.get('image_credit') or 'Rochdale Daily'))
             if row.get('image_credit_url'):
                 figure+=' <a href="'+html.escape(row['image_credit_url'],quote=True)+'" rel="noopener noreferrer">Image source</a>'
             figure+='</figcaption></figure>'

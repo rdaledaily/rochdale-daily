@@ -45,4 +45,11 @@ with tempfile.TemporaryDirectory() as tmp:
     apply(root); once=p.read_text();apply(root);assert p.read_text()==once
     assert once.count('<div')==once.count('</div>')
     assert 'https://example.org/source' in once
+    # Absolute first-party images must stay valid URLs, never /https://...
+    from unittest.mock import patch
+    p.write_text(p.read_text().replace('</head>', '<meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/photo.jpg"></head>'))
+    with patch('image_hierarchy.choose_image', return_value='internal'):
+        apply(root, images=True, network_images=False)
+    assert 'src="https://rochdaledaily.co.uk/assets/img/cards/photo.jpg"' in p.read_text()
+    assert 'src="/https://' not in p.read_text()
 print('Archive editorial contract checks passed.')

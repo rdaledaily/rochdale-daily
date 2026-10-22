@@ -170,6 +170,11 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
     for page in archive_integrity(root, check=check):
         if page not in changed:
             changed.append(page)
+    if not check:
+        # Repair stories before deriving month, topic and ward indexes so the
+        # final newspaper uses one consistent set of titles and classifications.
+        from archive_quality import apply as apply_archive_quality
+        apply_archive_quality(root, images=True, network_images=False)
     # The month-by-month archive lists only what is indexable, so it is built
     # after the archive sweep, and themed like every other public page.
     pages, stale = build_archive_pages(root)
@@ -192,12 +197,6 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         changed.append(path.relative_to(root).as_posix())
         if not check:
             path.unlink()
-    if not check:
-        # The final stage covers archived HTML as well as the active feed.
-        # Network research is performed by the dedicated review/image steps;
-        # ordinary publication only reapplies cached, bounded decisions.
-        from archive_quality import apply as apply_archive_quality
-        apply_archive_quality(root, images=True, network_images=False)
     changed += clean_sitemaps(root, check=check)
     for name in FEEDS:
         feed = root / name
