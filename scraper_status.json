@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-22T00:48:00.851718Z",
+  "last_run_at": "2026-10-22T01:00:38.090242Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,18 +42,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 153,
+  "raw_candidates_before_job_filter": 158,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 147,
-  "candidate_clusters": 49,
+  "raw_candidates": 152,
+  "candidate_clusters": 52,
   "google_news_resolution": {
-    "wrappers": 78,
-    "resolved": 77,
-    "text_recovered": 63,
-    "reattributed": 10,
-    "images_found": 69
+    "wrappers": 82,
+    "resolved": 81,
+    "text_recovered": 66,
+    "reattributed": 11,
+    "images_found": 72
   },
-  "duplicates_merged": 98,
+  "duplicates_merged": 100,
   "attempted_rewrites": 1,
   "draft_rewrites_created": 1,
   "drafted_articles": [
@@ -63,7 +63,7 @@
     }
   ],
   "new_articles": 0,
-  "live_articles": 359,
+  "live_articles": 358,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -77,14 +77,14 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 238,
+    "entries": 237,
     "by_outcome": {
       "failed": 36,
       "published": 108,
-      "rejected": 94
+      "rejected": 93
     },
-    "held_back_this_run": 43,
-    "held_already_published": 35,
+    "held_back_this_run": 47,
+    "held_already_published": 39,
     "held_rejected": 8,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -164,11 +164,11 @@
     }
   ],
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+    "Write at least 136 body words using only facts already present in the sources; the draft currently has 129.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 139,
+    "rss_and_google_news": 144,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -184,18 +184,18 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 39,
+    "Rochdale Times": 42,
     "Roch Valley Radio": 20,
-    "Manchester Evening News": 9,
+    "Manchester Evening News": 8,
+    "Rochdale AFC": 6,
     "I Love Manchester": 5,
-    "Rochdale AFC": 5,
     "Rochdale Borough Council": 5,
     "Bee Network live travel alerts": 5,
     "Southend Echo": 4,
     "Herts Advertiser": 4,
+    "Grimsby Live": 4,
     "InYourArea": 4,
     "Clacton and Frinton Gazette": 3,
-    "Grimsby Live": 3,
     "Chelmsfordcitynews": 3,
     "Somerset County Gazette": 3,
     "UKNIP": 3,
@@ -211,6 +211,7 @@
     "TNT Sports": 1,
     "FOX Sports": 1,
     "Peeblesshire News": 1,
+    "Fansnetwork": 1,
     "Id": 1,
     "Salisbury Journal": 1,
     "Hampshire Chronicle": 1,
@@ -890,7 +891,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-22T00:49:02.083014Z",
+  "frontpage_generated_at": "2026-10-22T01:09:07.102834Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -928,15 +929,13 @@
       "castleton",
       "heywood",
       "hopwood",
-      "lowerplace",
-      "middleton"
+      "lowerplace"
     ],
     "selected_areas": [
       "castleton",
       "heywood",
       "hopwood",
       "lowerplace",
-      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -961,7 +960,6 @@
       "heywood": 2,
       "hopwood": 1,
       "lowerplace": 1,
-      "middleton": 1,
       "rochdale": 19
     },
     "selected_by_source": {
@@ -977,8 +975,8 @@
       "rochdale times": 2,
       "announcement supplied to rochdale daily": 1
     },
-    "pool_size": 26,
-    "primary_pool_size": 26,
+    "pool_size": 25,
+    "primary_pool_size": 25,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 16,
@@ -989,14 +987,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 14,
-  "events_removed_other_source": 7,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
+  "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 359,
+  "approved_ticket_events": 13,
+  "event_dates_corrected_from_ledger": 0,
+  "duplicate_articles_after_postprocessing": 358,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1006,7 +1004,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 14,
+  "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 1,
