@@ -1,4 +1,4 @@
-name: Post Rochdale Daily Facebook news roundups
+name: Post Rochdale Daily individual Facebook stories
 
 # Scheduled Page posting runs in GitHub Actions so the repository's saved
 # secrets can be used without exposing them locally.
@@ -10,8 +10,7 @@ on:
         required: false
         default: "0"
   schedule:
-    # Hourly recovery seed. A 10-minute continuation chain checks for the four
-    # UK-local roundup windows, but publishes at most once per window.
+    # Check hourly for one fresh, unposted article.
     - cron: "27 * * * *"
   push:
     branches: [main]
@@ -57,7 +56,7 @@ jobs:
             printf '{\n  "posted": {}\n}\n' > /tmp/facebook_posted.json
           fi
 
-      - name: Publish a grouped news roundup when a local posting window opens
+      - name: Publish one fresh story with an hourly cooldown
         env:
           FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
           # Page Graph API ID is resolved from the authenticated Page token.
@@ -65,11 +64,8 @@ jobs:
           FACEBOOK_STATE_PATH: /tmp/facebook_posted.json
           FACEBOOK_RESULT_PATH: /tmp/facebook_last_result.json
           FACEBOOK_MAX_ARTICLE_AGE_HOURS: "48"
-          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "120"
-          # Daily four-window cap is enforced in the Python publisher.
+          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "60"
           FACEBOOK_MAX_POSTS_24H: "0"
-          FACEBOOK_MIN_ARTICLES_PER_ROUNDUP: "2"
-          FACEBOOK_MAX_ARTICLES_PER_ROUNDUP: "5"
         run: python scraper/post_facebook_article.py
 
       - name: Save successful Facebook post to state branch
@@ -133,47 +129,3 @@ jobs:
           PY
           fi
   
-      # GitHub's cron scheduler can delay or silently omit scheduled checks.
-      # Keep a 10-minute recovery chain, but never publish outside the four
-      # daily UK-time windows. This is checking frequency, not posting frequency.
-      # The existing state branch, cooldown and queue filter prevent duplicates
-      # when cron and a self-dispatched run overlap.
-      - name: Schedule the next Facebook check
-        if: always()
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          CHAIN_DEPTH: ${{ github.event.inputs.chain || '0' }}
-          RUN_ID: ${{ github.run_id }}
-          MIN_CYCLE_SECONDS: "600"
-        run: |
-          set -euo pipefail
-          depth="${CHAIN_DEPTH:-0}"
-          case "$depth" in ''|*[!0-9]*) depth=0 ;; esac
-          if [ "$depth" -ge 10000 ]; then
-            echo "Self-dispatch depth cap reached; the cron recovery seed will restart the publisher."
-            exit 0
-          fi
-
-          started="$(cat "$RUNNER_TEMP/facebook_cycle_start" 2>/dev/null || date +%s)"
-          now="$(date +%s)"
-          elapsed=$(( now - started ))
-          if [ "$elapsed" -lt "$MIN_CYCLE_SECONDS" ]; then
-            echo "Waiting $(( MIN_CYCLE_SECONDS - elapsed )) seconds until next 10-minute check."
-            sleep "$(( MIN_CYCLE_SECONDS - elapsed ))"
-          fi
-
-          # Do not queue unnecessary successors if cron/manual dispatch already
-          # queued one. One publisher at a time also serialises state writes.
-          active="$(gh run list --workflow facebook-publisher.yml --limit 30 \
-            --json databaseId,status \
-            --jq "[.[] | select(.status != \"completed\") | select(.databaseId != $RUN_ID)] | length" \
-            || echo 0)"
-          if [ "${active:-0}" -gt 0 ]; then
-            echo "Another Facebook publisher is pending or running; yielding this chain."
-            exit 0
-          fi
-
-          gh workflow run facebook-publisher.yml --ref main -f chain="$((depth + 1))"
-          echo "Dispatched next Facebook check."
-
