@@ -25,6 +25,14 @@ def time_markup(value):
     exact=stamp.astimezone(timezone.utc).isoformat().replace('+00:00','Z')
     return '<time datetime="'+html.escape(exact,quote=True)+'">'+html.escape(label(exact))+'</time>'
 
+def wall_label(local):
+    # The repeated autumn hour cannot identify an offset without the original
+    # instant; the spring gap also cannot be interpreted as a valid UK instant.
+    if local.replace(fold=0).utcoffset() != local.replace(fold=1).utcoffset():
+        return local.strftime('%H:%M UK time (BST/GMT offset unavailable), %-d %B %Y')
+    return local.strftime('%H:%M %Z, %-d %B %Y')
+
+
 def normalise(body, updates=()):
     def plain(value):return ' '.join(BeautifulSoup(str(value or ''),'html.parser').get_text(' ',strip=True).split())
     lookup={plain(row.get('text')):row.get('timestamp') for row in updates if isinstance(row,dict) and row.get('timestamp')}
@@ -46,7 +54,7 @@ def normalise(body, updates=()):
                 # Legacy renderer already displayed UK wall time. Adding a
                 # label must not add the UTC offset a second time.
                 local=datetime.strptime(text.rstrip(':'),fmt).replace(tzinfo=UK)
-                heading.string=local.strftime('%H:%M %Z, %-d %B %Y')
+                heading.string=wall_label(local)
                 return str(soup)
             except ValueError:pass
         return match.group(0)
@@ -61,7 +69,7 @@ def normalise(body, updates=()):
             for fmt in ('%d %B %Y, %H:%M', '%H:%M, %d %B %Y'):
                 try:
                     local = datetime.strptime(text.rstrip(':'), fmt).replace(tzinfo=UK)
-                    return '<strong>' + local.strftime('%H:%M %Z, %-d %B %Y') + ':</strong>'
+                    return '<strong>' + wall_label(local) + ':</strong>'
                 except ValueError:
                     pass
             return label_match.group(0)

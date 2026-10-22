@@ -19,3 +19,8 @@ fixed=normalise(legacy)
 assert '19:46 BST, 21 October 2026:' in fixed
 assert '18:46 GMT, 21 December 2026:' in fixed
 assert normalise(fixed)==fixed
+
+ambiguous=normalise('<div class="live-update"><h3>01:30, 25 October 2026</h3><p>Legacy update.</p></div>')
+assert 'BST/GMT offset unavailable' in ambiguous
+assert '<time datetime=' not in ambiguous
+assert normalise(ambiguous)==ambiguous
