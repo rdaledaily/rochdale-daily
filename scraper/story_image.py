@@ -20,6 +20,7 @@ typographic card, and a real photo is a genuine, credited image of the place.
 from __future__ import annotations
 
 import colorsys
+from functools import lru_cache
 import hashlib
 import json
 import re
@@ -140,6 +141,18 @@ def _normalise(name: str) -> str:
 
 
 def _library(cards_dir: Path) -> list[tuple[str, list[Path]]]:
+    try:
+        directory_stamp=cards_dir.stat().st_mtime_ns
+        aliases=cards_dir/'aliases.json'
+        alias_stamp=aliases.stat().st_mtime_ns if aliases.exists() else 0
+    except OSError:
+        return []
+    return _library_cached(str(cards_dir.resolve()),directory_stamp,alias_stamp)
+
+
+@lru_cache(maxsize=16)
+def _library_cached(directory: str, _directory_stamp: int, _alias_stamp: int) -> list[tuple[str,list[Path]]]:
+    cards_dir=Path(directory)
     """Every name in the photo library, longest phrase first.
 
     A file's name IS the search term, which is what makes this safe: nothing

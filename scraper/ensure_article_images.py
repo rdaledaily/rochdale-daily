@@ -228,7 +228,7 @@ def filename_match_score(article: dict[str, Any], path: Path) -> int:
         return -1
 
     subject = filename_words(path)
-    if not subject:
+    if not subject or (len(subject) == 1 and subject[0] in TOO_GENERIC_SINGLE):
         return -1
 
     title_words = normal_words(article.get("title"))

@@ -85,7 +85,7 @@ def set_place_card(article, root):
                    image_alt='Illustration: ' + area + ', ' + category + '. Not a photograph of the event.',
                    image_policy=POLICY)
 
-def choose_image(article, root, relevance=None, allow_network=True):
+def choose_image(article, root, relevance=None, allow_network=True, rejected=()):
     """Apply the ordered policy once, recording failed searches honestly."""
     from ensure_article_images import (choose_exact_story_photo, choose_named_library_photo,
         valid_cards_image, set_curated, is_generated_card, existing_meaningful_image)
@@ -93,6 +93,8 @@ def choose_image(article, root, relevance=None, allow_network=True):
     raw = str(article.get('image_url') or article.get('img') or '')
     rel = raw.removeprefix('https://rochdaledaily.co.uk/').lstrip('/')
     current = root / rel
+    rejected={str(value or '').removeprefix('https://rochdaledaily.co.uk/').lstrip('/') for value in rejected}
+    if rel in rejected:relevance=False
     generated = 'generated' in str(article.get('image_status', '')) or is_generated_card(current)
     commons_current = 'commons' in str(article.get('image_status', '')).casefold() or 'commons.wikimedia.org' in str(article.get('image_credit_url', '')) or '-commons-' in rel
     # A previously reviewed, relevant internal image outranks external sources.
@@ -100,7 +102,7 @@ def choose_image(article, root, relevance=None, allow_network=True):
         article['image_policy'] = POLICY
         return 'internal'
     chosen = choose_exact_story_photo(article, root) or choose_named_library_photo(article, root)
-    if chosen is not None and chosen.is_file() and not is_generated_card(chosen) and not ('-commons-' in chosen.name) and not (relevance is False and chosen.resolve() == current.resolve()):
+    if chosen is not None and chosen.is_file() and not is_generated_card(chosen) and chosen.relative_to(root).as_posix() not in rejected and not ('-commons-' in chosen.name) and not (relevance is False and chosen.resolve() == current.resolve()):
         set_curated(article, root, chosen)
         article['image_policy'] = POLICY
         return 'internal'
