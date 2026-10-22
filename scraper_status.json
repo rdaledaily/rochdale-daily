@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-22T18:55:31.043152Z",
+  "last_run_at": "2026-10-22T19:12:47.290721Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,45 +42,47 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 218,
-  "job_or_career_posts_rejected": 4,
-  "raw_candidates": 214,
-  "candidate_clusters": 73,
+  "raw_candidates_before_job_filter": 183,
+  "job_or_career_posts_rejected": 2,
+  "raw_candidates": 181,
+  "candidate_clusters": 51,
   "google_news_resolution": {
-    "wrappers": 97,
-    "resolved": 95,
-    "text_recovered": 77,
+    "wrappers": 82,
+    "resolved": 80,
+    "text_recovered": 63,
     "reattributed": 13,
-    "images_found": 84
+    "images_found": 67
   },
-  "duplicates_merged": 141,
+  "duplicates_merged": 130,
   "attempted_rewrites": 4,
-  "draft_rewrites_created": 3,
+  "draft_rewrites_created": 4,
   "drafted_articles": [
     {
-      "slug": "rochdale-s-home-match-against-accrington-stanley-to-be-officiated-by-richie-watk",
-      "source_url": "https://www.fansnetwork.co.uk/football/rochdale/news/67090/"
+      "slug": "emergency-services-conduct-search-following-welfare-concern-in-middleton",
+      "source_url": "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton"
     },
     {
-      "slug": "rochdale-and-grimsby-town-share-points-in-2-2-draw-at-crown-oil-arena",
-      "source_url": "https://www.grimsbytelegraph.co.uk/sport/football/frantic-draw-rochdale-ends-grimsby-11208194"
+      "slug": "police-search-for-woman-who-may-have-recently-given-birth-in-rochdale",
+      "source_url": "https://www.rochvalleyradio.com/news-features/4/crime/1220/police-appeal-to-find-woman-who-may-have-recently-given-birth-in-rochdale"
     },
     {
-      "slug": "mother-and-baby-found-safe-following-police-appeal-in-rochdale",
-      "source_url": "https://www.rochdaletimes.co.uk/relief-as-mother-and-baby-are-found-safe/"
+      "slug": "ian-henderson-scores-late-equaliser-for-rochdale-in-2-2-draw-against-grimsby",
+      "source_url": "https://www.kilmarnocktoday.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby/"
+    },
+    {
+      "slug": "police-investigate-discovery-of-human-tissue-on-watkins-street-rochdale",
+      "source_url": "https://www.dailyrecord.co.uk/news/uk-world-news/human-tissue-found-rochdale-street-37800694"
     }
   ],
-  "new_articles": 3,
-  "live_articles": 369,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
-  },
+  "new_articles": 1,
+  "live_articles": 368,
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "missing_from_feed": 3,
+    "queued_for_retry": 1,
+    "recovery_limit_reached": 2,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -93,8 +95,8 @@
       "published": 112,
       "rejected": 85
     },
-    "held_back_this_run": 41,
-    "held_already_published": 33,
+    "held_back_this_run": 40,
+    "held_already_published": 32,
     "held_rejected": 8,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -157,7 +159,7 @@
     {
       "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-investigate-video-racist-abuse-34791886",
       "title": "Police investigate video of 'racist abuse' hurled outside Rochdale nightclub",
-      "source_name": "Manchestereveningnews",
+      "source_name": "Manchester Evening News",
       "held_because": "already rejected: not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "outcome": "rejected",
       "attempts": 3,
@@ -174,13 +176,14 @@
     }
   ],
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+    "Write at least 136 body words using only facts already present in the sources; the draft currently has 132.": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 184.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 193,
-    "website_discovery": 17,
-    "aggregator_discovery": 2,
+    "rss_and_google_news": 166,
+    "website_discovery": 11,
+    "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
     "x_official": 0,
@@ -194,73 +197,64 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 63,
-    "Roch Valley Radio": 26,
-    "Rochdale Borough Council": 24,
+    "Rochdale Times": 43,
+    "Roch Valley Radio": 22,
+    "Rochdale Borough Council": 19,
     "Manchester Evening News": 10,
-    "CTV News": 6,
-    "Roch Valley Radio Local News": 5,
+    "Rochdale AFC": 7,
+    "Chronicle Live": 5,
     "Bee Network live travel alerts": 5,
-    "Chronicle Live": 4,
-    "InYourArea": 4,
+    "Roch Valley Radio Local News": 4,
+    "Southend Echo": 3,
     "Grimsby Live": 3,
     "Yorkshire Live": 3,
     "Daily Record": 3,
     "UKNIP": 3,
-    "Rochdale AFC": 3,
     "Birmingham Now": 3,
+    "Chelmsfordcitynews": 3,
     "Net": 3,
+    "Herts Advertiser": 3,
     "Rochdale Borough Council RSS": 2,
     "Facebook": 2,
+    "Colchester Gazette": 2,
+    "Clacton and Frinton Gazette": 2,
     "Yahoo News UK": 2,
-    "Southend Echo": 2,
     "Somerset County Gazette": 2,
     "I Love Manchester": 2,
     "Sky Sports": 2,
-    "TNT Sports": 2,
-    "Chelmsfordcitynews": 2,
-    "Herts Advertiser": 2,
+    "Slough Observer": 2,
+    "Motherwell Today": 2,
+    "London Now": 2,
+    "Runcorn and Widnes World": 2,
     "Rochdale Valiant": 2,
     "Rochdale Town Hall": 1,
-    "Clacton and Frinton Gazette": 1,
-    "Colchester Gazette": 1,
     "Northwich Guardian": 1,
     "The Northern Echo": 1,
     "Fansnetwork": 1,
-    "Slough Observer": 1,
-    "Motherwell Today": 1,
     "Kilmarnocktoday": 1,
-    "FOX Sports": 1,
-    "The Herald": 1,
-    "Id": 1,
+    "EDP24": 1,
+    "Hampshire Chronicle": 1,
     "Leigh Journal": 1,
     "Greater Manchester Police": 1,
-    "London Now": 1,
-    "Runcorn and Widnes World": 1,
-    "Whoscored": 1,
     "Harwich and Manningtree Standard": 1,
     "Rochdale Borough Council News": 1,
     "BBC Manchester": 1,
-    "Rochdale Hornets": 1,
-    "Ilovemanchester": 1,
-    "Manchestereveningnews": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1,
-    "environment": 1,
-    "politics": 1,
-    "sport": 1
+    "business": 1,
+    "news": 2,
+    "traffic": 1
   },
   "published_by_category": {
     "business": 38,
     "community": 62,
-    "crime": 14,
+    "crime": 15,
     "education": 10,
     "environment": 17,
     "events": 21,
     "health": 5,
-    "news": 45,
+    "news": 46,
     "politics": 11,
     "sport": 36,
     "traffic": 15,
@@ -289,62 +283,71 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-84613e0e6ac8a7dcb37d",
-    "hard-news-v3-ff5b30b4b66066b6c721",
-    "sport-v3-d0456233fe40989c545a",
-    "sport-v3-254da652386a48b09e37"
+    "transport-v3-dfb5f90d0eb33965a83e",
+    "sport-v3-254da652386a48b09e37",
+    "hard-news-v3-24134debb38202e9d3d6",
+    "hard-news-v3-20b368b01ba1626965b7"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/relief-as-mother-and-baby-are-found-safe/",
-    "https://www.fansnetwork.co.uk/football/rochdale/news/67090/",
-    "https://www.grimsbytelegraph.co.uk/sport/football/frantic-draw-rochdale-ends-grimsby-11208194",
-    "https://www.expressandstar.com/uk-sports/ian-watson-lauds-amazing-ian-henderson-after-late-rochdale-leveller-9300111"
+    "https://www.dailyrecord.co.uk/news/uk-world-news/human-tissue-found-rochdale-street-37800694",
+    "https://www.kilmarnocktoday.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby/",
+    "https://www.rochvalleyradio.com/news-features/4/crime/1220/police-appeal-to-find-woman-who-may-have-recently-given-birth-in-rochdale",
+    "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
-  "x_enabled": true,
-  "facebook_comments_enabled": true,
+  "x_enabled": false,
+  "facebook_comments_enabled": false,
   "locality_rule": "Single-word locality names require geographical context; person surnames are not accepted as locations.",
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime",
+      "business",
       "environment",
-      "politics",
-      "sport"
+      "news",
+      "traffic"
     ],
     "selected_categories": [
-      "crime",
-      "environment",
-      "politics",
-      "sport"
+      "business",
+      "news",
+      "traffic"
     ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
+    "available_wards": [
+      "Kingsway"
+    ],
+    "selected_wards": [
+      "Kingsway"
+    ],
+    "available_areas": [
+      "middleton"
+    ],
     "selected_areas": [
+      "middleton",
       "rochdale"
     ],
-    "uncovered_categories": [],
+    "uncovered_categories": [
+      "environment"
+    ],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1,
-      "environment": 1,
-      "politics": 1,
-      "sport": 1
+      "business": 1,
+      "news": 2,
+      "traffic": 1
     },
-    "selected_by_ward": {},
+    "selected_by_ward": {
+      "Kingsway": 1
+    },
     "selected_by_area": {
-      "rochdale": 4
+      "middleton": 1,
+      "rochdale": 3
     },
     "selected_by_source": {
-      "express and star": 1,
-      "fansnetwork": 1,
-      "grimsby live": 1,
-      "rochdale times": 1
+      "daily record": 1,
+      "kilmarnocktoday": 1,
+      "roch valley radio local news": 2
     }
   },
   "official_ward_count": 20,
@@ -353,7 +356,7 @@
   "search_queries": [
     {
       "label": "category:crime",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (robbery OR burglary OR assault OR appeal OR wanted OR missing OR arrest OR murder) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (robbery OR burglary OR assault OR appeal OR wanted OR missing OR arrest OR murder) when:2d",
       "category": "crime",
       "ward": "",
       "person": "",
@@ -362,7 +365,7 @@
     },
     {
       "label": "category:traffic",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (traffic OR collision OR road closure OR roadworks OR potholes OR speeding OR M62) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (traffic OR collision OR road closure OR roadworks OR potholes OR speeding OR M62) when:2d",
       "category": "traffic",
       "ward": "",
       "person": "",
@@ -371,7 +374,7 @@
     },
     {
       "label": "category:transport",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (\"Bee Network\" OR bus OR tram OR train OR Northern OR disruption) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (\"Bee Network\" OR bus OR tram OR train OR Northern OR disruption) when:2d",
       "category": "transport",
       "ward": "",
       "person": "",
@@ -380,7 +383,7 @@
     },
     {
       "label": "category:politics",
-      "query": "(Rochdale OR Heywood OR Middleton) (councillor OR election OR vote OR voted OR motion) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton) (councillor OR election OR vote OR voted OR motion) when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -389,7 +392,7 @@
     },
     {
       "label": "category:education",
-      "query": "(Rochdale OR Heywood OR Middleton) (school OR college OR academy OR pupils OR students OR SATs OR \"A level results\") when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton) (school OR college OR academy OR pupils OR students OR SATs OR \"A level results\") when:2d",
       "category": "education",
       "ward": "",
       "person": "",
@@ -398,7 +401,7 @@
     },
     {
       "label": "category:sport",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (football OR rugby OR cricket OR athletics OR parkrun OR boxing OR MMA OR netball OR sport) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (football OR rugby OR cricket OR athletics OR parkrun OR boxing OR MMA OR netball OR sport) when:2d",
       "category": "sport",
       "ward": "",
       "person": "",
@@ -407,7 +410,7 @@
     },
     {
       "label": "category:events",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (event OR festival OR fair OR exhibition OR concert OR workshop OR \"coffee morning\") when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (event OR festival OR fair OR exhibition OR concert OR workshop OR \"coffee morning\") when:2d",
       "category": "events",
       "ward": "",
       "person": "",
@@ -416,7 +419,7 @@
     },
     {
       "label": "category:business",
-      "query": "(Rochdale OR Heywood OR Middleton) (business OR investment OR shop opening OR restaurant OR takeaway OR development OR regeneration OR \"house prices\") when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton) (business OR investment OR shop opening OR restaurant OR takeaway OR development OR regeneration OR \"house prices\") when:2d",
       "category": "business",
       "ward": "",
       "person": "",
@@ -425,7 +428,7 @@
     },
     {
       "label": "category:community",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (charity OR fundraiser OR community group OR volunteer OR donation OR protest) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough) (charity OR fundraiser OR community group OR volunteer OR donation OR protest) when:2d",
       "category": "community",
       "ward": "",
       "person": "",
@@ -434,7 +437,7 @@
     },
     {
       "label": "category:health",
-      "query": "(Rochdale OR Heywood OR Middleton) (NHS OR hospital OR clinic OR health service OR GP OR Sure Start) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton) (NHS OR hospital OR clinic OR health service OR GP OR Sure Start) when:2d",
       "category": "health",
       "ward": "",
       "person": "",
@@ -443,7 +446,7 @@
     },
     {
       "label": "category:environment",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Whitworth) (flood OR weather warning OR pollution OR canal OR reservoir OR fishing OR park OR environment) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Whitworth) (flood OR weather warning OR pollution OR canal OR reservoir OR fishing OR park OR environment) when:2d",
       "category": "environment",
       "ward": "",
       "person": "",
@@ -452,7 +455,7 @@
     },
     {
       "label": "category:environment",
-      "query": "(Rochdale OR Heywood OR Middleton) (planning application OR housing development OR HMO OR licensing OR demolition) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton) (planning application OR housing development OR HMO OR licensing OR demolition) when:2d",
       "category": "environment",
       "ward": "",
       "person": "",
@@ -461,7 +464,7 @@
     },
     {
       "label": "ward:Balderstone and Kirkholt",
-      "query": "\"Balderstone and Kirkholt\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Balderstone and Kirkholt\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Balderstone and Kirkholt",
       "person": "",
@@ -470,7 +473,7 @@
     },
     {
       "label": "ward:Bamford",
-      "query": "\"Bamford\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Bamford\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Bamford",
       "person": "",
@@ -479,7 +482,7 @@
     },
     {
       "label": "ward:Castleton",
-      "query": "\"Castleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Castleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Castleton",
       "person": "",
@@ -488,7 +491,7 @@
     },
     {
       "label": "ward:Central Rochdale",
-      "query": "\"Central Rochdale\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Central Rochdale\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Central Rochdale",
       "person": "",
@@ -497,7 +500,7 @@
     },
     {
       "label": "ward:East Middleton",
-      "query": "\"East Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"East Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "East Middleton",
       "person": "",
@@ -506,7 +509,7 @@
     },
     {
       "label": "ward:Healey",
-      "query": "\"Healey\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Healey\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Healey",
       "person": "",
@@ -515,7 +518,7 @@
     },
     {
       "label": "ward:Hopwood Hall",
-      "query": "\"Hopwood Hall\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Hopwood Hall\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Hopwood Hall",
       "person": "",
@@ -524,7 +527,7 @@
     },
     {
       "label": "ward:Kingsway",
-      "query": "\"Kingsway\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Kingsway\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Kingsway",
       "person": "",
@@ -533,7 +536,7 @@
     },
     {
       "label": "ward:Littleborough Lakeside",
-      "query": "\"Littleborough Lakeside\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Littleborough Lakeside\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Littleborough Lakeside",
       "person": "",
@@ -542,7 +545,7 @@
     },
     {
       "label": "ward:Milkstone and Deeplish",
-      "query": "\"Milkstone and Deeplish\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Milkstone and Deeplish\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Milkstone and Deeplish",
       "person": "",
@@ -551,7 +554,7 @@
     },
     {
       "label": "ward:Milnrow and Newhey",
-      "query": "\"Milnrow and Newhey\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Milnrow and Newhey\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Milnrow and Newhey",
       "person": "",
@@ -560,7 +563,7 @@
     },
     {
       "label": "ward:Norden",
-      "query": "\"Norden\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Norden\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Norden",
       "person": "",
@@ -569,7 +572,7 @@
     },
     {
       "label": "ward:North Heywood",
-      "query": "\"North Heywood\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"North Heywood\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "North Heywood",
       "person": "",
@@ -578,7 +581,7 @@
     },
     {
       "label": "ward:North Middleton",
-      "query": "\"North Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"North Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "North Middleton",
       "person": "",
@@ -587,7 +590,7 @@
     },
     {
       "label": "ward:Smallbridge and Firgrove",
-      "query": "\"Smallbridge and Firgrove\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Smallbridge and Firgrove\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Smallbridge and Firgrove",
       "person": "",
@@ -596,7 +599,7 @@
     },
     {
       "label": "ward:South Middleton",
-      "query": "\"South Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"South Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "South Middleton",
       "person": "",
@@ -605,7 +608,7 @@
     },
     {
       "label": "ward:Spotland and Falinge",
-      "query": "\"Spotland and Falinge\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Spotland and Falinge\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Spotland and Falinge",
       "person": "",
@@ -614,7 +617,7 @@
     },
     {
       "label": "ward:Wardle, Shore and West Littleborough",
-      "query": "\"Wardle, Shore and West Littleborough\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"Wardle, Shore and West Littleborough\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "Wardle, Shore and West Littleborough",
       "person": "",
@@ -623,7 +626,7 @@
     },
     {
       "label": "ward:West Heywood",
-      "query": "\"West Heywood\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"West Heywood\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "West Heywood",
       "person": "",
@@ -632,7 +635,7 @@
     },
     {
       "label": "ward:West Middleton",
-      "query": "\"West Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:3d",
+      "query": "\"West Middleton\" (news OR police OR appeal OR traffic OR council OR charity OR event OR sport) when:2d",
       "category": "news",
       "ward": "West Middleton",
       "person": "",
@@ -641,7 +644,7 @@
     },
     {
       "label": "source:roch-valley-radio",
-      "query": "site:rochvalleyradio.com/news-features/ (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) when:3d",
+      "query": "site:rochvalleyradio.com/news-features/ (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -650,7 +653,7 @@
     },
     {
       "label": "source:manchester-evening-news",
-      "query": "site:manchestereveningnews.co.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) when:3d",
+      "query": "site:manchestereveningnews.co.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -659,7 +662,7 @@
     },
     {
       "label": "source:rochdale-times",
-      "query": "site:rochdaletimes.co.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) when:3d",
+      "query": "site:rochdaletimes.co.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -668,7 +671,7 @@
     },
     {
       "label": "priority:reform-rochdale",
-      "query": "site:reformparty.uk Rochdale when:3d",
+      "query": "site:reformparty.uk Rochdale when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -677,7 +680,7 @@
     },
     {
       "label": "priority:reform-rochdale-local",
-      "query": "Rochdale \"Reform UK\" councillor when:3d",
+      "query": "Rochdale \"Reform UK\" councillor when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -686,7 +689,7 @@
     },
     {
       "label": "priority:restore-rochdale",
-      "query": "site:restorebritain.org.uk Rochdale when:3d",
+      "query": "site:restorebritain.org.uk Rochdale when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -695,7 +698,7 @@
     },
     {
       "label": "priority:workers-party-rochdale",
-      "query": "site:workerspartygb.org Rochdale councillor when:3d",
+      "query": "site:workerspartygb.org Rochdale councillor when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -704,7 +707,7 @@
     },
     {
       "label": "priority:labour-rochdale",
-      "query": "site:rochdale.laboursites.org Rochdale when:3d",
+      "query": "site:rochdale.laboursites.org Rochdale when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -713,7 +716,7 @@
     },
     {
       "label": "priority:libdem-rochdale",
-      "query": "site:rochdalelibdems.org.uk Rochdale when:3d",
+      "query": "site:rochdalelibdems.org.uk Rochdale when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -722,7 +725,7 @@
     },
     {
       "label": "priority:green-rochdale",
-      "query": "site:rochdale.greenparty.org.uk Rochdale when:3d",
+      "query": "site:rochdale.greenparty.org.uk Rochdale when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -731,7 +734,7 @@
     },
     {
       "label": "priority:conservative-rochdale",
-      "query": "site:hmnrconservatives.org.uk Rochdale when:3d",
+      "query": "site:hmnrconservatives.org.uk Rochdale when:2d",
       "category": "politics",
       "ward": "",
       "person": "",
@@ -740,7 +743,7 @@
     },
     {
       "label": "priority:planning-rochdale",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (\"planning application\" OR \"planning permission\" OR demolition OR development OR HMO) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (\"planning application\" OR \"planning permission\" OR demolition OR development OR HMO) when:2d",
       "category": "environment",
       "ward": "",
       "person": "",
@@ -749,7 +752,7 @@
     },
     {
       "label": "priority:planning-council",
-      "query": "site:rochdale.gov.uk (planning OR development OR demolition) (Rochdale OR Heywood OR Middleton OR Littleborough) when:3d",
+      "query": "site:rochdale.gov.uk (planning OR development OR demolition) (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
       "category": "environment",
       "ward": "",
       "person": "",
@@ -758,7 +761,7 @@
     },
     {
       "label": "priority:crime-fast",
-      "query": "site:gmp.police.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (arrest OR appeal OR murder OR robbery OR burglary OR assault OR collision OR missing OR wanted) when:3d",
+      "query": "site:gmp.police.uk (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (arrest OR appeal OR murder OR robbery OR burglary OR assault OR collision OR missing OR wanted) when:2d",
       "category": "crime",
       "ward": "",
       "person": "",
@@ -767,7 +770,7 @@
     },
     {
       "label": "priority:crime-web",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (arrested OR jailed OR charged OR police OR stabbing OR shooting OR collision OR crash) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) (arrested OR jailed OR charged OR police OR stabbing OR shooting OR collision OR crash) when:2d",
       "category": "crime",
       "ward": "",
       "person": "",
@@ -776,7 +779,7 @@
     },
     {
       "label": "priority:water",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"water off\" OR \"no water\" OR \"burst main\" OR \"low pressure\" OR \"United Utilities\") when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"water off\" OR \"no water\" OR \"burst main\" OR \"low pressure\" OR \"United Utilities\") when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -785,7 +788,7 @@
     },
     {
       "label": "priority:power",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"power cut\" OR outage OR electricity OR \"Electricity North West\") when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (\"power cut\" OR outage OR electricity OR \"Electricity North West\") when:2d",
       "category": "news",
       "ward": "",
       "person": "",
@@ -794,7 +797,7 @@
     },
     {
       "label": "priority:roads",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (collision OR crash OR \"road closed\" OR \"road closure\" OR incident) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (collision OR crash OR \"road closed\" OR \"road closure\" OR incident) when:2d",
       "category": "traffic",
       "ward": "",
       "person": "",
@@ -803,7 +806,7 @@
     },
     {
       "label": "priority:environment",
-      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (pollution OR landfill OR flooding OR river OR reservoir OR sewage OR wildlife OR environment) when:3d",
+      "query": "(Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow OR Newhey) (pollution OR landfill OR flooding OR river OR reservoir OR sewage OR wildlife OR environment) when:2d",
       "category": "environment",
       "ward": "",
       "person": "",
@@ -875,7 +878,7 @@
     },
     {
       "label": "official-gmp:1",
-      "query": "site:gmp.police.uk/news/greater-manchester/news/news/ (Rochdale OR Heywood OR Middleton OR Littleborough) when:3d",
+      "query": "site:gmp.police.uk/news/greater-manchester/news/news/ (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
       "category": "crime",
       "ward": "",
       "person": "",
@@ -884,7 +887,7 @@
     },
     {
       "label": "official-gmp:2",
-      "query": "site:gmp.police.uk \"GMP issue appeal for\" (Rochdale OR Heywood OR Middleton OR Littleborough) when:3d",
+      "query": "site:gmp.police.uk \"GMP issue appeal for\" (Rochdale OR Heywood OR Middleton OR Littleborough) when:2d",
       "category": "crime",
       "ward": "",
       "person": "",
@@ -893,43 +896,11 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 27,
-  "robots_denied_urls": [
-    "https://c.newsnow.co.uk/A/1327268560?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327778614?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327776856?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327775179?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327765929?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327763884?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327760570?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327760210?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327750073?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327725748?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327675739?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327649556?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327644719?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327615813?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327610619?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327610617?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327581474?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327570350?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327539100?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327784676?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327239552?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327367493?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327381894?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327295521?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327349131?-57568:46921",
-    "https://c.newsnow.co.uk/A/1327648752?-57568:46921",
-    "https://www.linkedin.com/company/groundnews"
-  ],
-  "slow_domain_failure_threshold": 3,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 3
-  },
+  "robots_denied_count": 0,
+  "robots_denied_urls": [],
+  "slow_domain_failure_threshold": 1,
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -965,7 +936,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-22T19:00:57.636868Z",
+  "frontpage_generated_at": "2026-10-22T19:24:56.685460Z",
   "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1051,8 +1022,8 @@
       "office for national statistics": 1,
       "historic england (national heritage list for england)": 1
     },
-    "pool_size": 26,
-    "primary_pool_size": 26,
+    "pool_size": 25,
+    "primary_pool_size": 25,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 19,
@@ -1063,14 +1034,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 14,
-  "events_removed_other_source": 11,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
+  "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 14,
+  "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 369,
+  "duplicate_articles_after_postprocessing": 368,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1080,14 +1051,12 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 14,
-  "published_after_editorial_gate": 3,
+  "whats_on_event_count": 13,
+  "published_after_editorial_gate": 1,
   "published_new_slugs": [
-    "rochdale-afc-prepares-for-home-match-against-accrington-stanley",
-    "rochdale-and-grimsby-town-share-points-in-2-2-draw-at-crown-oil-arena",
-    "mother-and-baby-found-safe-following-police-appeal-in-rochdale"
+    "ian-henderson-scores-late-equaliser-for-rochdale-in-2-2-draw-against-grimsby"
   ],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "drafts_not_published": 3,
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
