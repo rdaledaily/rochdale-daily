@@ -52,6 +52,7 @@ from story_identity import (
     named_entities,
     precise_locations,
     same_story,
+    missing_person_match,
     strip_publisher_suffix,
 )
 from manual_articles import load_manual_article_records
@@ -897,6 +898,9 @@ def extended_incident_match(left: dict[str, Any], right: dict[str, Any]) -> bool
 
 
 def records_match(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    person_match = missing_person_match(left, right)
+    if person_match is not None:
+        return person_match
     return (
         build_story_key(left) == build_story_key(right)
         or same_story(left, right)
@@ -1516,6 +1520,9 @@ def _same_frontpage_story(
     right: dict[str, Any],
 ) -> bool:
     """Catch duplicate stories that were assigned different categories."""
+    person_match = missing_person_match(left, right)
+    if person_match is not None:
+        return person_match
     left_event = is_event(left)
     right_event = is_event(right)
 

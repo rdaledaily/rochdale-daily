@@ -838,6 +838,54 @@ def _subject_divergence(left: Any, right: Any) -> bool:
     return True
 
 
+def missing_person_report(item: Any) -> bool:
+    text = combined_text(item).lower()
+    return bool(re.search(r"\bmissing\b", text) and re.search(
+        r"\b(?:person|people|man|woman|boy|girl|child|teenager|aged|year.old|appeal|whereabouts)\b", text
+    ))
+
+
+def missing_person_facts(item: Any) -> tuple[set[str], set[str], set[str]]:
+    # Headline/summary/body facts only: attribution and shared police/borough
+    # names are never evidence that two appeals concern the same person.
+    text = combined_text(item)
+    ages = set(re.findall(r"\b(\d{1,3})[ -]year[ -]old\b|\baged\s+(\d{1,3})\b", text, re.I))
+    ages = {a or b for a, b in ages}
+    names: set[str] = set()
+    for pattern in (
+        r"\bnamed\s+([A-Z][a-z]+)",
+        r"\b(?:locate|find|tracing|locating)\s+(?:a missing (?:man|woman|boy|girl),?\s*)?([A-Z][a-z]+)",
+        r"\b([A-Z][a-z]+),?\s+(?:a\s+)?(?:\d{1,3}[ -]year[ -]old|aged\s+\d{1,3})\b",
+        r"\bmissing (?:man|woman|boy|girl),?\s+([A-Z][a-z]+)\b",
+    ):
+        names.update(name.casefold() for name in re.findall(pattern, text))
+    refs = set(re.findall(r"\b(?:log|reference|incident)(?:\s+number)?\s+([A-Z0-9]+(?:[-/][A-Z0-9]+)+)\b", text, re.I))
+    return names, ages, {ref.casefold() for ref in refs}
+
+
+def missing_person_match(left: Any, right: Any) -> bool | None:
+    if not (missing_person_report(left) or missing_person_report(right)):
+        return None
+    if not (missing_person_report(left) and missing_person_report(right)):
+        return False
+    ln, la, lr = missing_person_facts(left)
+    rn, ra, rr = missing_person_facts(right)
+    if (ln and rn and ln.isdisjoint(rn)) or (la and ra and la.isdisjoint(ra)):
+        return False
+    if lr and rr and lr.isdisjoint(rr):
+        return False
+    urls = [canonicalise_url(str(get_value(item, "source_url", ""))).removesuffix(".amp") for item in (left, right)]
+    if urls[0] and urls[0] == urls[1]:
+        return True
+    if lr & rr:
+        return True
+    return bool(
+        ln & rn and la & ra
+        and areas_compatible(left, right)
+        and hours_apart(left, right) <= 14 * 24
+    )
+
+
 def ongoing_story_match(left: Any, right: Any) -> bool:
     """Guarded low-threshold route for differently worded updates.
 
@@ -851,6 +899,10 @@ def ongoing_story_match(left: Any, right: Any) -> bool:
         return False
     if hours_apart(left, right) > story_window_hours(left, right):
         return False
+
+    person_match = missing_person_match(left, right)
+    if person_match is not None:
+        return person_match
 
     # Structured incident facts override a weak headline similarity score.
     # This is what combines, for example, "mum" and "mother" reports about
@@ -901,6 +953,9 @@ def ongoing_story_match(left: Any, right: Any) -> bool:
 
 
 def story_similarity(left: Any, right: Any) -> float:
+    person_match = missing_person_match(left, right)
+    if person_match is not None:
+        return 1.0 if person_match else 0.0
     left_url = canonicalise_url(
         get_value(left, "source_url", "") or get_value(left, "url", "")
     )
@@ -971,6 +1026,9 @@ def story_similarity(left: Any, right: Any) -> float:
 
 
 def same_story(left: Any, right: Any) -> bool:
+    person_match = missing_person_match(left, right)
+    if person_match is not None:
+        return person_match
     # An identical id is a stronger statement than any text score: two records
     # only carry the same id because the pipeline already decided they are the
     # same story. Three reports of the Britain in Bloom judging sat in the feed
@@ -1057,6 +1115,9 @@ def build_story_key(item: Any) -> str:
     subject = "|".join(subject_parts) or canonicalise_url(
         get_value(item, "source_url", "")
     )
+    if missing_person_report(item):
+        # Generic appeal titles used to collide before pairwise comparison.
+        subject = canonicalise_url(str(get_value(item, "source_url", ""))).removesuffix(".amp") or combined_text(item)
     raw = f"{STORY_KEY_VERSION}|{family}|{area}|{bucket}|{subject}".lower()
     digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:20]
     return f"{family}-{STORY_KEY_VERSION}-{digest}"
@@ -1255,6 +1316,9 @@ def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[s
 
 
 def _records_match(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    person_match = missing_person_match(left, right)
+    if person_match is not None:
+        return person_match
     return left["story_key"] == right["story_key"] or same_story(left, right)
 
 
