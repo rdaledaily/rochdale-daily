@@ -1,40 +1,81 @@
 {
-  "last_run_at": "2026-10-22T21:30:10.911646Z",
+  "last_run_at": "2026-10-23T10:42:34.251920Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-10-22T21:10:10.034178Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 2,
+      "daily_cap": 4,
+      "offered_today": 2,
+      "listed": 53,
+      "already_seen": 33,
+      "started_long_ago": 0,
+      "too_far_ahead": 15,
+      "undated": 3,
+      "in_window": 2
     },
     "gazette_insolvency": {
-      "status": "not due",
-      "last_checked": "2026-10-22T10:29:03.484947Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 10,
+      "other_notice_types": 7,
+      "already_seen": 3,
+      "new": 0
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-10-22T21:10:10.034178Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 2,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 2,
+      "new": 0
     },
     "gmca_decisions": {
-      "status": "not due",
-      "last_checked": "2026-10-22T10:29:03.484947Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 1,
+      "offered_today": 0,
+      "listed": 31,
+      "not_decisions": 15,
+      "no_borough_place": 0,
+      "already_seen": 9,
+      "new": 0
     },
     "ons_housing": {
-      "status": "not due",
-      "last_checked": "2026-10-22T09:12:37.241890Z",
-      "interval_hours": 24
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 1,
+      "offered_today": 0,
+      "listed": 1,
+      "already_seen": 1,
+      "new": 0
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-10-22T17:13:13.774701Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 2,
+      "releases": 111,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-10-22T17:13:13.774701Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 35,
+      "not_rochdale": 35,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -42,47 +83,98 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 169,
-  "job_or_career_posts_rejected": 2,
-  "raw_candidates": 167,
-  "candidate_clusters": 49,
+  "raw_candidates_before_job_filter": 192,
+  "job_or_career_posts_rejected": 0,
+  "raw_candidates": 192,
+  "candidate_clusters": 50,
   "google_news_resolution": {
-    "wrappers": 68,
-    "resolved": 59,
-    "text_recovered": 37,
-    "reattributed": 3,
-    "images_found": 39
+    "wrappers": 73,
+    "resolved": 44,
+    "text_recovered": 29,
+    "reattributed": 4,
+    "images_found": 31
   },
-  "duplicates_merged": 118,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 369,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2026; source publication timestamps are not event date": 1
-  },
+  "duplicates_merged": 142,
+  "attempted_rewrites": 13,
+  "draft_rewrites_created": 13,
+  "drafted_articles": [
+    {
+      "slug": "roadworks-scheduled-on-kirkstall-avenue-in-littleborough-on-6-november-2026",
+      "source_url": "https://www.rochdale.gov.uk/directory-record/2639/kirkstall-avenue-roadworks-in-littleborough-on-6-november-2026"
+    },
+    {
+      "slug": "rochdale-council-generates-nearly-3-million-from-parking-fines-over-three-years",
+      "source_url": "https://www.theoldhamtimes.co.uk/news/26661999.parking-fine-hotspots-rochdale-rakes-nearly-3m/"
+    },
+    {
+      "slug": "plans-for-17-storey-tower-next-to-historic-marble-arch-pub-rejected",
+      "source_url": "https://www.bbc.co.uk/news/articles/cmd7qrqp1vg1o"
+    },
+    {
+      "slug": "emergency-services-conduct-search-in-middleton-following-welfare-concern",
+      "source_url": "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton"
+    },
+    {
+      "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-man-22-goes-34796406.amp"
+    },
+    {
+      "slug": "urgent-appeal-for-missing-22-year-old-man-in-rochdale",
+      "source_url": "https://uk.news.yahoo.com/urgent-appeal-man-22-goes-124222085.html"
+    },
+    {
+      "slug": "planning-approved-for-new-11-4-million-special-needs-school-in-rochdale",
+      "source_url": "https://www.rochdaletimes.co.uk/green-light-for-new-11-4m-special-needs-school/"
+    },
+    {
+      "slug": "police-search-for-woman-after-human-tissue-found-in-rochdale-street",
+      "source_url": "https://www.dailyrecord.co.uk/news/uk-world-news/human-tissue-found-rochdale-street-37800694"
+    },
+    {
+      "slug": "st-cuthbert-s-rc-high-school-closes-following-bomb-threat",
+      "source_url": "https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat/"
+    },
+    {
+      "slug": "roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026",
+      "source_url": "https://www.rochdale.gov.uk/directory-record/2640/joy-street-roadworks-in-rochdale-from-2-november-2026"
+    },
+    {
+      "slug": "rochdale-woman-reaches-semi-finals-in-national-weight-loss-competition-after-los",
+      "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1228/rochdale-woman-loses-more-than-12-stone-and-reaches-national-competition-semi-finals"
+    },
+    {
+      "slug": "chris-cheap-appointed-managing-director-for-northern-gateway-regeneration-in-roc",
+      "source_url": "https://www.rochvalleyradio.com/news-features/139/news/1229/chris-cheap-appointed-to-lead-northern-gateway-regeneration-across-bury-and-rochdale"
+    },
+    {
+      "slug": "m6-theatre-receives-73-500-funding-for-50th-anniversary-project",
+      "source_url": "https://www.rochvalleyradio.com/news-features/179/culture/1227/rochdale-s-m6-theatre-awarded-73-500-for-50th-anniversary-project"
+    }
+  ],
+  "new_articles": 9,
+  "live_articles": 375,
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
+    "missing_from_feed": 3,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "recovery_limit_reached": 3,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
-    "reopened_after_final_gate_removal": 0
+    "reopened_after_final_gate_removal": 5
   },
   "rewrite_ledger": {
-    "entries": 233,
+    "entries": 227,
     "by_outcome": {
-      "failed": 35,
-      "published": 113,
-      "rejected": 85
+      "failed": 36,
+      "published": 110,
+      "rejected": 81
     },
-    "held_back_this_run": 39,
-    "held_already_published": 33,
-    "held_rejected": 6,
+    "held_back_this_run": 23,
+    "held_already_published": 18,
+    "held_rejected": 5,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -131,80 +223,79 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-10-21T23:51:54.440175Z"
-    },
-    {
-      "url": "https://www.rochdaletimes.co.uk/final-crossing-for-popular-lollipop-lady-barbara",
-      "title": "Final crossing for popular lollipop lady Barbara - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-10-21T01:43:17.438225Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 4,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 172.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 150,
-    "website_discovery": 13,
-    "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "rss_and_google_news": 172,
+    "website_discovery": 15,
+    "aggregator_discovery": 2,
+    "live_service_pages": 0,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 0
+    "primary_data": 2
   },
   "collector_errors": {},
   "rss_feed_failures": {
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 49,
-    "Roch Valley Radio": 24,
-    "Rochdale Borough Council": 22,
-    "Rochdale AFC": 14,
-    "Manchester Evening News": 7,
+    "Roch Valley Radio": 60,
+    "Rochdale Times": 50,
+    "Rochdale Borough Council": 26,
     "Chronicle Live": 5,
-    "Bee Network live travel alerts": 5,
     "Facebook": 4,
-    "Grimsby Live": 4,
-    "Daily Record": 3,
+    "Rochdale AFC": 4,
+    "Roch Valley Radio Local News": 4,
+    "BBC Manchester": 3,
+    "Manchester Evening News": 3,
+    "Oldham Times": 3,
+    "Grimsby Live": 3,
     "UKNIP": 3,
-    "Roch Valley Radio Local News": 3,
+    "Net": 3,
     "Rochdale Borough Council RSS": 2,
-    "I Love Manchester": 2,
-    "Sky Sports": 2,
-    "Net": 2,
-    "Peeblesshire News": 2,
-    "County Times": 2,
+    "InYourArea": 2,
+    "Daily Record": 2,
     "Yorkshire Live": 2,
     "Rochdale Valiant": 2,
     "Rochdale Town Hall": 1,
-    "Northwich Guardian": 1,
-    "Somerset County Gazette": 1,
     "Fansnetwork": 1,
+    "Sky Sports": 1,
+    "Yahoo": 1,
+    "Transfermarkt": 1,
+    "Squawka": 1,
     "Greater Manchester Police": 1,
     "Rochdale Borough Council News": 1,
-    "BBC Manchester": 1,
+    "Theoldhamtimes": 1,
+    "Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "environment": 1
+    "business": 2,
+    "crime": 2,
+    "environment": 2,
+    "news": 3,
+    "traffic": 4
   },
   "published_by_category": {
-    "business": 38,
-    "community": 62,
-    "crime": 15,
-    "education": 10,
-    "environment": 17,
-    "events": 21,
-    "health": 5,
-    "news": 45,
-    "politics": 11,
-    "sport": 35,
-    "traffic": 15,
+    "business": 40,
+    "community": 52,
+    "crime": 17,
+    "education": 16,
+    "environment": 22,
+    "events": 24,
+    "health": 8,
+    "news": 44,
+    "politics": 13,
+    "sport": 37,
+    "traffic": 18,
     "transport": 6
   },
   "openai_enabled": true,
@@ -230,10 +321,34 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-254da652386a48b09e37"
+    "hard-news-v3-69931a8f24bd4c57ceee",
+    "transport-v3-426ff07aa9deb4ae0ed1",
+    "business-v3-7dac8c60ea87dfc5ac68",
+    "environment-v3-020279fbee3b381009c4",
+    "hard-news-v3-87a39c46e6706606ae59",
+    "transport-v3-b92f54ce7df4952cf937",
+    "transport-v3-dfb5f90d0eb33965a83e",
+    "hard-news-v3-ec9c58c15fe82ef02e43",
+    "business-v3-fc8a1c1e48f5754d3894",
+    "transport-v3-ca67945de50b1a7ccd24",
+    "transport-v3-177cbb5e2d2fa44e8576",
+    "hard-news-v3-6278dc3a0eea768bfacb",
+    "hard-news-v3-14b4ce649bb0f5844db6"
   ],
   "selected_candidate_urls": [
-    "https://www.expressandstar.com/uk-sports/ian-watson-lauds-amazing-ian-henderson-after-late-rochdale-leveller-9300111"
+    "https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat/",
+    "https://www.rochdale.gov.uk/directory-record/2639/kirkstall-avenue-roadworks-in-littleborough-on-6-november-2026",
+    "https://www.bbc.co.uk/news/articles/cmd7qrqp1vg1o",
+    "https://www.rochdaletimes.co.uk/green-light-for-new-11-4m-special-needs-school/",
+    "https://www.theoldhamtimes.co.uk/news/26661999.parking-fine-hotspots-rochdale-rakes-nearly-3m/",
+    "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton",
+    "https://www.dailyrecord.co.uk/news/uk-world-news/human-tissue-found-rochdale-street-37800694",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-man-22-goes-34796406.amp",
+    "https://www.rochvalleyradio.com/news-features/139/news/1229/chris-cheap-appointed-to-lead-northern-gateway-regeneration-across-bury-and-rochdale",
+    "https://uk.news.yahoo.com/urgent-appeal-man-22-goes-124222085.html",
+    "https://www.rochdale.gov.uk/directory-record/2640/joy-street-roadworks-in-rochdale-from-2-november-2026",
+    "https://www.rochvalleyradio.com/news-features/142/community/1228/rochdale-woman-loses-more-than-12-stone-and-reaches-national-competition-semi-finals",
+    "https://www.rochvalleyradio.com/news-features/179/culture/1227/rochdale-s-m6-theatre-awarded-73-500-for-50th-anniversary-project"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -245,29 +360,56 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment"
+      "business",
+      "crime",
+      "environment",
+      "news",
+      "traffic"
     ],
     "selected_categories": [
-      "environment"
+      "business",
+      "crime",
+      "environment",
+      "news",
+      "traffic"
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [],
+    "available_areas": [
+      "littleborough",
+      "middleton"
+    ],
     "selected_areas": [
+      "littleborough",
+      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1
+      "business": 2,
+      "crime": 2,
+      "environment": 2,
+      "news": 3,
+      "traffic": 4
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 1
+      "littleborough": 1,
+      "middleton": 1,
+      "rochdale": 11
     },
     "selected_by_source": {
-      "express and star": 1
+      "bbc manchester": 1,
+      "daily record": 1,
+      "manchester evening news": 1,
+      "roch valley radio": 1,
+      "roch valley radio local news": 3,
+      "rochdale borough council": 2,
+      "rochdale times": 2,
+      "theoldhamtimes": 1,
+      "yahoo news uk": 1
     }
   },
   "official_ward_count": 20,
@@ -816,11 +958,50 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 0,
-  "robots_denied_urls": [],
+  "robots_denied_count": 34,
+  "robots_denied_urls": [
+    "https://staywell.rochdale.gov.uk",
+    "https://c.newsnow.co.uk/A/1327268560?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327833830?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327823977?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327820079?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327794864?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327784676?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327778614?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327776856?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327775179?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327765929?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327763884?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327760570?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327760210?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327750073?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327725748?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327675739?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327649556?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327644719?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327615813?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327648752?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327239552?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327381894?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327834798?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327349131?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327367493?-57568:46921",
+    "https://c.newsnow.co.uk/A/1327295521?-57568:46921",
+    "https://www.linkedin.com/company/groundnews",
+    "https://news.google.com/rss/articles/CBMimgFBVV95cUxONUZTa05zc1FqbFNfMk54UXRDNi1aaWhnYk1RQjM4U2cwVFdkMEQ2V0lEYl9xTENiQnRGMlppUWhCTzFEMGVhM0phNkVaTWxqS0xVcVYycFFhTW1NY1oyT19pNTJVUTdKNHNSSVJIYzZqMVRuUVJJNlFoR1lZcEIxMklPeXJuRndqRUJ5R3BvX1IzNEVlaGFTc2RB?oc=5",
+    "https://news.google.com/rss/articles/CBMikgFBVV95cUxOYmdabllCUDBSbXBMZ3hTZjQxZ3J3UDdUMzFTYUt1cmw3Q0c2aGlRVVJTLWdxZlFaWGR0eEpWWGlfRDNlSm1CNDJwcGpTRGk5Y1J3ZlRZNEQ4R0ZXbG5GRmlXcXVwbWJZS0c0TFNQOHJrVWJRX2VTNnUwLXhQb3BXRlNOcUFOMTAzV3cxZkxFWWhSZ9IBlwFBVV95cUxPMlJXaktrbkdXUEJvYzVIb2toZFMyX1dPbFpnam9oSUEzLURYZUI5bjY0bVVqeUtqaDdfZlZubThmSVA5RjVZTWcxMnBNSUpwYjQ1MzVoMTlFcXluUEpTcDdCb2V6a2t3WkZHT0ZFc2JhY1dNR2RCeE9OOWdNc1NuaEFCN2VHUlBVMHpZN2lNSU9xVVBaZk1J?oc=5",
+    "https://news.google.com/rss/articles/CBMilwFBVV95cUxPMlJXaktrbkdXUEJvYzVIb2toZFMyX1dPbFpnam9oSUEzLURYZUI5bjY0bVVqeUtqaDdfZlZubThmSVA5RjVZTWcxMnBNSUpwYjQ1MzVoMTlFcXluUEpTcDdCb2V6a2t3WkZHT0ZFc2JhY1dNR2RCeE9OOWdNc1NuaEFCN2VHUlBVMHpZN2lNSU9xVVBaZk1J0gGXAUFVX3lxTE8yUldqS2tuR1dQQm9jNUhva2hkUzJfV09sWmdqb2hJQTMtRFhlQjluNjRtVWp5S2poN19mVm5tOGZJUDlGNVlNZzEycE1JSnBiNDUzNWgxOUVxeW5QSlNwN0JvZXpra3daRkdPRkVzYmFjV01HZEJ4T045Z01zU25oQUI3ZUdSUFUwelk3aU1JT3FVUFpmTUk?oc=5",
+    "https://news.google.com/rss/articles/CBMilwFBVV95cUxOZ04xS3I1Wms3WTNHWjlORFFTU0ZxTWptNVprdE5iRjJFTS1zZmNZYm9hS1NicEtoeVNXcnpoeDVacDNFWGlENjlZR0Riak5NSDduaXB4WmF1Q0diWTlPQ09GUm5tRlFFblBJZGxHeGphX0tXMGxqbzJxY3Bpc3hIRVlWc1NEWlM5N1VSZktsaUcybFczWGxJ0gGcAUFVX3lxTE0ySjdLMW43elowNlU0NXAweGdlWkkxanIwOGNCSE9XZUQxelVLM2VReG9PTkU1MjkzT2c1dGpaNG03WXQ2YW1pT1FCX001YlpibWk3SnhXS1dVbzA5VHhLUUhkTGJVa2VDWUpCUmNZaUdCS3FoNHJ5NHdYTjJHS2twWVVRRU44WDlWSzlPWkdnY0g0ZzhLV1Y4ck9URg?oc=5",
+    "https://news.google.com/rss/articles/CBMinAFBVV95cUxNMko3SzFuN3paMDZVNDVwMHhnZVpJMWpyMDhjQkhPV2VEMXpVSzNlUXhvT05FNTI5M09nNXRqWjRtN1l0NmFtaU9RQl9NNWJaYm1pN0p4V0tXVW8wOVR4S1FIZExiVWtlQ1lKQlJjWWlHQktxaDRyeTR3WE4yR0trcFlVUUVOOFg5Vks5T1pHZ2NINGc4S1dWOHJPVEbSAZwBQVVfeXFMTTJKN0sxbjd6WjA2VTQ1cDB4Z2VaSTFqcjA4Y0JIT1dlRDF6VUszZVF4b09ORTUyOTNPZzV0alo0bTdZdDZhbWlPUUJfTTViWmJtaTdKeFdLV1VvMDlUeEtRSGRMYlVrZUNZSkJSY1lpR0JLcWg0cnk0d1hOMkdLa3BZVVFFTjhYOVZLOU9aR2djSDRnOEtXVjhyT1RG?oc=5",
+    "https://news.google.com/rss/articles/CBMilwFBVV95cUxOMFNMVVFXQmlndkJxN1RNV3JEbGVhdzd0bWtqTHVFbXlVWXM5Wk1qZ3F2MTBZWDY3Tjl5VFgzMVliLUtrNjlhbTNWWmxjQVpVSkZBZkZaa09ITWhoclRBd1cwTjRseGhuZmhwU3N3ajNkSEEtb1lJMUpiNnA2WFZsdDVJc0doNHN3RXh2cmFjVTZxZW4waW930gGXAUFVX3lxTE4wU0xVUVdCaWd2QnE3VE1XckRsZWF3N3Rta2pMdUVteVVZczlaTWpncXYxMFlYNjdOOXlUWDMxWWItS2s2OWFtM1ZabGNBWlVKRkFmRlprT0hNaGhyVEF3VzBONGx4aG5maHBTc3dqM2RIQS1vWUkxSmI2cDZYVmx0NUlzR2g0c3dFeHZyYWNVNnFlbjBpb3c?oc=5"
+  ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 3
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -830,9 +1011,9 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-10-22T10:15:09.700915Z",
+  "evergreen_fallback_attempt_at": "2026-10-23T10:42:34.340977Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
-  "evergreen_fallback_attempt_count": 2,
+  "evergreen_fallback_attempt_count": 4,
   "evergreen_fallback": {
     "enabled": true,
     "thin_threshold": 6,
@@ -840,10 +1021,10 @@
     "cooldown_hours": 24,
     "publishing_window": "09:00-20:00 Europe/London",
     "last_trigger_reason": "thin_news_supply",
-    "qualifying_count": 2,
-    "last_topic_id": "fairies-chapel-healey-dell",
-    "last_article_slug": "are-there-really-fairies-in-healey-dell",
-    "last_published_at": "2026-10-22T10:15:09Z"
+    "qualifying_count": 4,
+    "last_topic_id": "eleanor-byron-prophecy",
+    "last_article_slug": "what-really-lies-behind-the-healey-dell-prophecy-that-a-bride-would-be-maid-wife-and-widow",
+    "last_published_at": "2026-10-23T10:42:34Z"
   },
   "local_publishers_discovery_enabled": [
     "manchestereveningnews.co.uk",
@@ -856,8 +1037,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-23T10:38:02.318105Z",
-  "frontpage_article_count": 13,
+  "frontpage_generated_at": "2026-10-23T10:57:38.767103Z",
+  "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -865,6 +1046,7 @@
       "community",
       "crime",
       "education",
+      "environment",
       "health",
       "news",
       "sport",
@@ -875,6 +1057,7 @@
       "community",
       "crime",
       "education",
+      "environment",
       "health",
       "news",
       "sport",
@@ -890,12 +1073,14 @@
       "healey",
       "heywood",
       "hopwood",
+      "littleborough",
       "middleton"
     ],
     "selected_areas": [
       "healey",
       "heywood",
       "hopwood",
+      "littleborough",
       "middleton",
       "rochdale"
     ],
@@ -905,44 +1090,48 @@
     "selected_by_category": {
       "health": 1,
       "crime": 1,
-      "education": 1,
+      "traffic": 2,
+      "education": 2,
       "sport": 2,
-      "business": 3,
-      "news": 4,
-      "community": 1
+      "business": 4,
+      "community": 2,
+      "environment": 1,
+      "news": 5
     },
     "selected_by_ward": {
-      "borough-wide": 12,
+      "borough-wide": 19,
       "Healey": 1
     },
     "selected_by_area": {
       "healey": 1,
       "heywood": 1,
       "hopwood": 1,
+      "littleborough": 1,
       "middleton": 1,
-      "rochdale": 17
+      "rochdale": 22
     },
     "selected_by_source": {
       "department of health and social care announcement supplied to rochdale daily": 1,
-      "rochdale times": 2,
-      "source": 1,
+      "rochdale times": 4,
+      "rochdale borough council": 2,
+      "source": 3,
       "rochdale afc": 2,
+      "bbc manchester": 2,
       "rochdale daily": 2,
-      "rochdale borough council news": 1,
+      "theoldhamtimes": 1,
       "greater manchester police": 1,
-      "rochdale borough council": 1,
-      "bbc manchester": 1,
+      "rochdale borough council news": 1,
       "historic england (national heritage list for england)": 1
     },
-    "pool_size": 21,
-    "primary_pool_size": 21,
+    "pool_size": 28,
+    "primary_pool_size": 28,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 13,
+    "frontpage_count": 20,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 6,
-    "fresh_under_homepage_window": 13,
-    "short_briefs_selected": 7,
+    "fresh_under_24h": 12,
+    "fresh_under_homepage_window": 20,
+    "short_briefs_selected": 10,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -951,9 +1140,9 @@
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 14,
+  "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 370,
+  "duplicate_articles_after_postprocessing": 375,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -963,10 +1152,20 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "whats_on_event_count": 13,
+  "published_after_editorial_gate": 9,
+  "published_new_slugs": [
+    "roadworks-scheduled-on-kirkstall-avenue-in-littleborough-on-6-november-2026",
+    "rochdale-council-generates-nearly-3-million-from-parking-fines-over-three-years",
+    "plans-for-17-storey-tower-next-to-historic-marble-arch-pub-rejected",
+    "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
+    "planning-approved-for-new-11-4-million-special-needs-school-in-rochdale",
+    "st-cuthbert-s-rc-high-school-closes-following-bomb-threat",
+    "roadworks-on-greenhill-road-in-middleton-to-begin-on-2-november-2026",
+    "rochdale-woman-reaches-semi-finals-in-national-weight-loss-competition-after-los",
+    "m6-theatre-receives-73-500-funding-for-50th-anniversary-project"
+  ],
+  "drafts_not_published": 4,
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }

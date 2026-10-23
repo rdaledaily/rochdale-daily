@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-22T21:30:10.906780Z",
+  "updated_at": "2026-10-23T10:42:34.246485Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 233,
+  "count": 227,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/rochdale-crawley-town-13597784": {
       "first_attempt_at": "2026-10-20T07:42:50.504518Z",
@@ -619,13 +619,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T23:24:50.123208Z",
+      "last_attempt_at": "2026-10-23T10:42:34.245155Z",
       "outcome": "published",
       "reason": "",
       "title": "Urgent appeal as man, 22, goes missing in Rochdale - Yahoo News UK",
       "source_name": "Yahoo News UK",
       "category": "traffic",
-      "text_fingerprint": "b9daa54d275cb1f1"
+      "text_fingerprint": "c3a3384272565e4f",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://uknip.co.uk/news/uk/uk-news/m62-eastbound-closed-near-rochdale-as-motorists-warned-to-expect-delays": {
       "first_attempt_at": "2026-10-21T23:24:50.122890Z",
@@ -693,6 +695,22 @@
       "source_name": "BBC Manchester",
       "category": "news",
       "text_fingerprint": "7e970bb87cd0ab65"
+    },
+    "https://www.bbc.co.uk/news/articles/cmd7qrqp1vg1o": {
+      "first_attempt_at": "2026-10-23T10:42:34.244749Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cmd7qrqp1vg1o"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.244749Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Plans for 17-storey tower by historical Marble Arch pub rejected",
+      "source_name": "BBC Manchester",
+      "category": "business",
+      "text_fingerprint": "f5866fb30e96fa89"
     },
     "https://www.bbc.co.uk/news/articles/cmy0rw2z1402o": {
       "first_attempt_at": "2026-10-18T07:58:15.651802Z",
@@ -881,17 +899,21 @@
       "urls": [
         "https://cedarnews.net/newstasks/1089390/police-search-for-woman-after-suspected-human-tissue-found-in-rochdale-england",
         "https://news.google.com/rss/articles/CBMijwFBVV95cUxNd1oxVTlBU2xaMUF5eHVXYTdVYjJteHVQQncwTUlEX2pua0o2M1lmSEFSVHJwVF9TNmVuTnh1TVhpWXlyVEVOQWRuMVZKSGFwclNGZzJzMTh6TXdCVEMxRkdGcVVhYU9QaFliYkg5WkFnS2pFcjRzekpSSU1JT09kd0s5Zi1ZckUtVHFpLUlwOA?oc=5",
+        "https://news.google.com/rss/articles/CBMikgFBVV95cUxOYmdabllCUDBSbXBMZ3hTZjQxZ3J3UDdUMzFTYUt1cmw3Q0c2aGlRVVJTLWdxZlFaWGR0eEpWWGlfRDNlSm1CNDJwcGpTRGk5Y1J3ZlRZNEQ4R0ZXbG5GRmlXcXVwbWJZS0c0TFNQOHJrVWJRX2VTNnUwLXhQb3BXRlNOcUFOMTAzV3cxZkxFWWhSZ9IBlwFBVV95cUxPMlJXaktrbkdXUEJvYzVIb2toZFMyX1dPbFpnam9oSUEzLURYZUI5bjY0bVVqeUtqaDdfZlZubThmSVA5RjVZTWcxMnBNSUpwYjQ1MzVoMTlFcXluUEpTcDdCb2V6a2t3WkZHT0ZFc2JhY1dNR2RCeE9OOWdNc1NuaEFCN2VHUlBVMHpZN2lNSU9xVVBaZk1J?oc=5",
+        "https://news.google.com/rss/articles/CBMilwFBVV95cUxOMFNMVVFXQmlndkJxN1RNV3JEbGVhdzd0bWtqTHVFbXlVWXM5Wk1qZ3F2MTBZWDY3Tjl5VFgzMVliLUtrNjlhbTNWWmxjQVpVSkZBZkZaa09ITWhoclRBd1cwTjRseGhuZmhwU3N3ajNkSEEtb1lJMUpiNnA2WFZsdDVJc0doNHN3RXh2cmFjVTZxZW4waW930gGXAUFVX3lxTE4wU0xVUVdCaWd2QnE3VE1XckRsZWF3N3Rta2pMdUVteVVZczlaTWpncXYxMFlYNjdOOXlUWDMxWWItS2s2OWFtM1ZabGNBWlVKRkFmRlprT0hNaGhyVEF3VzBONGx4aG5maHBTc3dqM2RIQS1vWUkxSmI2cDZYVmx0NUlzR2g0c3dFeHZyYWNVNnFlbjBpb3c?oc=5",
         "https://news.google.com/rss/articles/CBMilwFBVV95cUxOZ04xS3I1Wms3WTNHWjlORFFTU0ZxTWptNVprdE5iRjJFTS1zZmNZYm9hS1NicEtoeVNXcnpoeDVacDNFWGlENjlZR0Riak5NSDduaXB4WmF1Q0diWTlPQ09GUm5tRlFFblBJZGxHeGphX0tXMGxqbzJxY3Bpc3hIRVlWc1NEWlM5N1VSZktsaUcybFczWGxJ0gGcAUFVX3lxTE0ySjdLMW43elowNlU0NXAweGdlWkkxanIwOGNCSE9XZUQxelVLM2VReG9PTkU1MjkzT2c1dGpaNG03WXQ2YW1pT1FCX001YlpibWk3SnhXS1dVbzA5VHhLUUhkTGJVa2VDWUpCUmNZaUdCS3FoNHJ5NHdYTjJHS2twWVVRRU44WDlWSzlPWkdnY0g0ZzhLV1Y4ck9URg?oc=5",
+        "https://news.google.com/rss/articles/CBMilwFBVV95cUxPMlJXaktrbkdXUEJvYzVIb2toZFMyX1dPbFpnam9oSUEzLURYZUI5bjY0bVVqeUtqaDdfZlZubThmSVA5RjVZTWcxMnBNSUpwYjQ1MzVoMTlFcXluUEpTcDdCb2V6a2t3WkZHT0ZFc2JhY1dNR2RCeE9OOWdNc1NuaEFCN2VHUlBVMHpZN2lNSU9xVVBaZk1J0gGXAUFVX3lxTE8yUldqS2tuR1dQQm9jNUhva2hkUzJfV09sWmdqb2hJQTMtRFhlQjluNjRtVWp5S2poN19mVm5tOGZJUDlGNVlNZzEycE1JSnBiNDUzNWgxOUVxeW5QSlNwN0JvZXpra3daRkdPRkVzYmFjV01HZEJ4T045Z01zU25oQUI3ZUdSUFUwelk3aU1JT3FVUFpmTUk?oc=5",
         "https://news.google.com/rss/articles/CBMinAFBVV95cUxNMko3SzFuN3paMDZVNDVwMHhnZVpJMWpyMDhjQkhPV2VEMXpVSzNlUXhvT05FNTI5M09nNXRqWjRtN1l0NmFtaU9RQl9NNWJaYm1pN0p4V0tXVW8wOVR4S1FIZExiVWtlQ1lKQlJjWWlHQktxaDRyeTR3WE4yR0trcFlVUUVOOFg5Vks5T1pHZ2NINGc4S1dWOHJPVEbSAZwBQVVfeXFMTTJKN0sxbjd6WjA2VTQ1cDB4Z2VaSTFqcjA4Y0JIT1dlRDF6VUszZVF4b09ORTUyOTNPZzV0alo0bTdZdDZhbWlPUUJfTTViWmJtaTdKeFdLV1VvMDlUeEtRSGRMYlVrZUNZSkJSY1lpR0JLcWg0cnk0d1hOMkdLa3BZVVFFTjhYOVZLOU9aR2djSDRnOEtXVjhyT1RG?oc=5",
         "https://www.chroniclelive.co.uk/news/uk-news/human-tissue-found-rochdale-street-34803531",
         "https://www.dailyrecord.co.uk/news/uk-world-news/human-tissue-found-rochdale-street-37800694",
         "https://www.examinerlive.co.uk/news/uk-world-news/hunt-woman-feared-given-birth-34803222",
         "https://www.leeds-live.co.uk/news/uk-world-news/hunt-woman-feared-given-birth-34803222",
-        "https://www.rochdaletimes.co.uk/urgent-appeal-to-trace-woman-who-may-have-given-birth"
+        "https://www.rochdaletimes.co.uk/urgent-appeal-to-trace-woman-who-may-have-given-birth",
+        "https://www.rochvalleyradio.com/news-features/4/crime/1220/police-appeal-to-find-woman-who-may-have-recently-given-birth-in-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-22T21:12:13.728232Z",
+      "last_attempt_at": "2026-10-23T10:42:34.245398Z",
       "outcome": "published",
       "reason": "",
       "title": "Hunt for woman feared to have given birth in street after 'human tissue' found",
@@ -1041,23 +1063,6 @@
       "source_name": "Fansnetwork",
       "category": "politics",
       "text_fingerprint": "1b7fe59d4f8afbb8"
-    },
-    "https://www.firstpost.com/world/uk-lawmaker-threatens-flight-visa-bans-if-pakistan-wont-take-back-rochdale-grooming-gang-ringleader-14052629.html": {
-      "first_attempt_at": "2026-10-14T07:58:53.313562Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.firstpost.com/world/uk-lawmaker-threatens-flight-visa-bans-if-pakistan-wont-take-back-rochdale-grooming-gang-ringleader-14052629.html"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:43:36.882887Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "UK lawmaker threatens flight, visa bans if Pakistan won’t take back Rochdale grooming gang ringleader - Firstpost",
-      "source_name": "Firstpost",
-      "category": "crime",
-      "text_fingerprint": "92dfbc8a0c90ced4",
-      "recovery_attempts": 2,
-      "final_gate_removal_recovery": 1
     },
     "https://www.foxsports.com/soccer/fa-cup-fleetwood-twn-vs-rochdale-nov-07-2026-game-boxscore-1072373": {
       "first_attempt_at": "2026-10-21T14:06:07.804162Z",
@@ -1269,21 +1274,6 @@
       "category": "community",
       "text_fingerprint": "9fa173cbe6ac8be8"
     },
-    "https://www.inyourarea.co.uk/news/why-one-rochdale-family-took-a-leap-of-faith-to-change-a-young-life-forever": {
-      "first_attempt_at": "2026-10-15T07:33:08.629692Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.inyourarea.co.uk/news/why-one-rochdale-family-took-a-leap-of-faith-to-change-a-young-life-forever"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:42:40.027794Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
-      "title": "Why one Rochdale family took a leap of faith to change a young life forever - InYourArea",
-      "source_name": "InYourArea",
-      "category": "community",
-      "text_fingerprint": "ebbb26618477143c"
-    },
     "https://www.kilmarnocktoday.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby": {
       "first_attempt_at": "2026-10-20T23:30:01.863434Z",
       "attempts": 1,
@@ -1351,23 +1341,6 @@
       "source_name": "Legacy | Obituary",
       "category": "sport",
       "text_fingerprint": "d83d3e7118e759d6"
-    },
-    "https://www.machinery-market.co.uk/news/43628/Rochdale-opens-new-gateway-to-advanced-manufacturing": {
-      "first_attempt_at": "2026-10-15T08:05:57.272757Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.machinery-market.co.uk/news/43628/Rochdale-opens-new-gateway-to-advanced-manufacturing"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:05:57.272757Z",
-      "outcome": "failed",
-      "reason": "one-time retry after secondary publication gate removal",
-      "title": "Rochdale opens new gateway to advanced manufacturing - Machinery Market",
-      "source_name": "Machinery Market",
-      "category": "business",
-      "text_fingerprint": "2a9956a3c433d206",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1
     },
     "https://www.manchestereveningnews.co.uk/all-about/rochdale-town-centre": {
       "first_attempt_at": "2026-10-21T07:53:08.920884Z",
@@ -1452,21 +1425,6 @@
       "category": "traffic",
       "text_fingerprint": "7b272c1100d9049a"
     },
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/unlicenced-teen-taught-himself-drive-34759580": {
-      "first_attempt_at": "2026-10-15T07:34:20.166443Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/unlicenced-teen-taught-himself-drive-34759580"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T07:34:20.166443Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Unlicensed teen taught himself to drive on YouTube, ran red lights, then killed beloved dad in Middleton horror crash - Manchester Evening N",
-      "source_name": "Manchester Evening News",
-      "category": "news",
-      "text_fingerprint": "ce25da904afe5dfe"
-    },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-man-22-goes-34796406": {
       "first_attempt_at": "2026-10-21T12:59:12.874472Z",
       "attempts": 1,
@@ -1484,6 +1442,23 @@
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "82439f75d7a5c853"
+    },
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-man-22-goes-34796406.amp": {
+      "first_attempt_at": "2026-10-23T10:42:34.245019Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-man-22-goes-34796406",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/urgent-appeal-man-22-goes-34796406.amp"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.245019Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Urgent appeal as man, 22, goes missing in Rochdale - Manchester Evening News",
+      "source_name": "Manchester Evening News",
+      "category": "crime",
+      "text_fingerprint": "f4f4548f4cff07f2"
     },
     "https://www.manchestereveningnews.co.uk/news/major-redevelopment-scheme-doomed-housing-34792982": {
       "first_attempt_at": "2026-10-21T05:36:24.431842Z",
@@ -1585,12 +1560,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-16T16:00:42.461547Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "School plunged into emergency lockdown as pupils evacuated over ‘bomb’",
       "source_name": "Daily Mirror",
       "category": "crime",
-      "text_fingerprint": "7f26f5d8fdc1a508"
+      "text_fingerprint": "7f26f5d8fdc1a508",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.mirror.co.uk/news/uk-news/bomb-st-cuthberts-school-rochdale-37780121.amp": {
       "first_attempt_at": "2026-10-16T18:25:47.103488Z",
@@ -1601,12 +1578,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-16T18:25:47.103488Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Rochdale school plunged into emergency lockdown as pupils evacuated over ‘bomb’ - Daily Mirror",
       "source_name": "Daily Mirror",
       "category": "sport",
-      "text_fingerprint": "af7030e388391206"
+      "text_fingerprint": "af7030e388391206",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.nantwichtownfc.co.uk/match-report-darwen-fc-women-2-3-nantwich-town-women": {
       "first_attempt_at": "2026-10-15T06:27:19.965628Z",
@@ -1966,21 +1945,6 @@
       "category": "transport",
       "text_fingerprint": "f90291c6dad30fba"
     },
-    "https://www.northernrailway.co.uk/service-updates#live-5161773298966c85f2": {
-      "first_attempt_at": "2026-10-15T09:00:23.714852Z",
-      "attempts": 2,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-5161773298966c85f2"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T09:31:25.680644Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "399a78ff6e2b1ae9"
-    },
     "https://www.northernrailway.co.uk/service-updates#live-53e2482b5aba6573b1": {
       "first_attempt_at": "2026-10-18T10:26:29.187865Z",
       "attempts": 1,
@@ -1997,21 +1961,6 @@
       "text_fingerprint": "41ba95842b9ed359",
       "recovery_attempts": 1,
       "final_gate_removal_recovery": 1
-    },
-    "https://www.northernrailway.co.uk/service-updates#live-66b50f15700b88dc3f": {
-      "first_attempt_at": "2026-10-15T03:32:12.945122Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-66b50f15700b88dc3f"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T03:32:12.945122Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "6f242fa0ebff4a79"
     },
     "https://www.northernrailway.co.uk/service-updates#live-68f1a1b32cf5870047": {
       "first_attempt_at": "2026-10-18T12:00:12.099421Z",
@@ -2270,23 +2219,6 @@
       "recovery_attempts": 0,
       "final_gate_removal_recovery": 1
     },
-    "https://www.northernrailway.co.uk/service-updates#live-a65193c297d61633e4": {
-      "first_attempt_at": "2026-10-15T08:43:36.882540Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-a65193c297d61633e4"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:43:36.882540Z",
-      "outcome": "failed",
-      "reason": "one-time retry after secondary publication gate removal",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "91049a4e04f7731e",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1
-    },
     "https://www.northernrailway.co.uk/service-updates#live-a82f329cbed39fa04e": {
       "first_attempt_at": "2026-10-16T03:03:43.807441Z",
       "attempts": 1,
@@ -2446,21 +2378,6 @@
       "category": "business",
       "text_fingerprint": "842d887b054f354a"
     },
-    "https://www.rochdale.gov.uk/council-leaders-blog/borough-means-business-as-council-delivers-more-pioneering-projects": {
-      "first_attempt_at": "2026-10-15T07:34:20.166229Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/council-leaders-blog/borough-means-business-as-council-delivers-more-pioneering-projects"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T07:34:20.166229Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Borough means business as council delivers more pioneering projects - Rochdale Borough Council",
-      "source_name": "Rochdale Borough Council",
-      "category": "environment",
-      "text_fingerprint": "a2a2dc7df8a66584"
-    },
     "https://www.rochdale.gov.uk/directory-record/2594/withington-street-and-nearby-streets-roadworks-in-heywood-on-30-october-2026": {
       "first_attempt_at": "2026-10-16T03:05:13.716918Z",
       "attempts": 1,
@@ -2571,6 +2488,39 @@
       "source_name": "Rochdale Borough Council",
       "category": "environment",
       "text_fingerprint": "51542d6889453c8c"
+    },
+    "https://www.rochdale.gov.uk/directory-record/2639/kirkstall-avenue-roadworks-in-littleborough-on-6-november-2026": {
+      "first_attempt_at": "2026-10-23T10:42:34.244458Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/directory-record/2639/kirkstall-avenue-roadworks-in-littleborough-on-6-november-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.244458Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Kirkstall Avenue, roadworks in Littleborough on 6 November 2026",
+      "source_name": "Rochdale Borough Council",
+      "category": "traffic",
+      "text_fingerprint": "84665da94506caeb"
+    },
+    "https://www.rochdale.gov.uk/directory-record/2640/joy-street-roadworks-in-rochdale-from-2-november-2026": {
+      "first_attempt_at": "2026-10-23T10:42:34.246046Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/directory-record/2570/toad-lane-and-surrounding-streets-roadworks-in-rochdale-on-6-november-2026",
+        "https://www.rochdale.gov.uk/directory-record/2640/joy-street-roadworks-in-rochdale-from-2-november-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.246046Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Joy Street, roadworks in Rochdale from 2 November 2026 - Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council",
+      "category": "environment",
+      "text_fingerprint": "db53a7b306803ceb"
     },
     "https://www.rochdale.gov.uk/directory-record/2642/rochdale-bonfire-and-firework-display-road-closures-in-rochdale-on-4-november-2026": {
       "first_attempt_at": "2026-10-21T13:48:00.279288Z",
@@ -2806,6 +2756,22 @@
       "category": "business",
       "text_fingerprint": "b9e1e51afcf5f9cc"
     },
+    "https://www.rochdaletimes.co.uk/green-light-for-new-11-4m-special-needs-school": {
+      "first_attempt_at": "2026-10-23T10:42:34.245278Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/green-light-for-new-11-4m-special-needs-school"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.245278Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Green light for new £11.4m special needs school - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "environment",
+      "text_fingerprint": "5b2456264732aa0d"
+    },
     "https://www.rochdaletimes.co.uk/heywood-restaurant-scoops-top-national-honour": {
       "first_attempt_at": "2026-10-20T19:53:59.550824Z",
       "attempts": 1,
@@ -2926,25 +2892,6 @@
       "category": "environment",
       "text_fingerprint": "c74df04cf1955cf6"
     },
-    "https://www.rochdaletimes.co.uk/nine-people-charged-after-day-of-police-action": {
-      "first_attempt_at": "2026-10-15T03:33:19.232432Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdaletimes.co.uk/nine-people-charged-after-day-of-police-action",
-        "https://www.rochdaletimes.co.uk/police-target-crime-gangs-spider-web-of-criminality"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:05:57.273107Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Nine people charged after day of police action - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "crime",
-      "text_fingerprint": "99b353f5bca8252e",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1,
-      "evidence_recovery_policy": 1
-    },
     "https://www.rochdaletimes.co.uk/nine-year-old-guitar-virtuoso-on-verge-of-setting-world-record": {
       "first_attempt_at": "2026-10-19T18:37:35.478338Z",
       "attempts": 3,
@@ -2997,38 +2944,6 @@
       "text_fingerprint": "a02111587561c16b",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1"
     },
-    "https://www.rochdaletimes.co.uk/nominations-open-for-rochdale-man-of-the-year": {
-      "first_attempt_at": "2026-10-14T12:42:28.903789Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMihAFBVV95cUxPdUJXbGxmVUZWMGpZQjg5OGJtd0IxXzMzVm9JckRFc2ZJU1VnYWg0MTQyOFA5clkzWGgyclIweVUybDQwZVpISGJMRkFHUDhTMDQtMFJHQ2dVQmoyUVhmZXBPSnBwSE9PYjRDem9HWHMzdk1CZG1oLVRnb0hDX195bzNPdUc?oc=5",
-        "https://www.rochdaletimes.co.uk/album-is-still-banging-the-drum-for-towns-music-heritage",
-        "https://www.rochdaletimes.co.uk/nominations-open-for-rochdale-man-of-the-year"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T07:34:20.166705Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Nominations open for Rochdale Man of the Year - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "news",
-      "text_fingerprint": "2281a6a1ec64b762"
-    },
-    "https://www.rochdaletimes.co.uk/police-target-crime-gangs-spider-web-of-criminality": {
-      "first_attempt_at": "2026-10-15T07:33:04.575259Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdaletimes.co.uk/police-target-crime-gangs-spider-web-of-criminality"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:05:57.272932Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Police target crime gang’s ‘spider web of criminality’ - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "community",
-      "text_fingerprint": "f08d5afea7277caf"
-    },
     "https://www.rochdaletimes.co.uk/relief-as-mother-and-baby-are-found-safe": {
       "first_attempt_at": "2026-10-22T18:55:31.026718Z",
       "attempts": 1,
@@ -3045,24 +2960,6 @@
       "category": "crime",
       "text_fingerprint": "9f02dd356e30a027"
     },
-    "https://www.rochdaletimes.co.uk/rochdale-is-home-to-best-curry-takeaway-for-second-year-in-a-row": {
-      "first_attempt_at": "2026-10-15T03:32:23.681486Z",
-      "attempts": 3,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMingFBVV95cUxQblJSc2ZUVE9oWXNMUVR4WkZRbFdXWmNacnNwRDU2V1pXUU5OcW9BQzB2YUhlWFd1TUFSQ2d5R0xUTW8wRGJoX2xaNjFwMjVRVWxlX2E2cW95d2stUzRIVzBDZEFTWDhLNXhMZEpsVU9rQ0l3bDI4VzdGXzMyMUtnNTVkYVpTSmRIVXdSeHY3R1dnTDROTWpHZ21KOXdEUQ?oc=5",
-        "https://www.rochdaletimes.co.uk/rochdale-is-home-to-best-curry-takeaway-for-second-year-in-a-row"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T05:54:20.115336Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
-      "title": "Rochdale is home to best curry takeaway for second year in a row - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "business",
-      "text_fingerprint": "257935779ec20f46",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1
-    },
     "https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat": {
       "first_attempt_at": "2026-10-16T16:29:57.968885Z",
       "attempts": 1,
@@ -3078,14 +2975,16 @@
         "https://www.theoldhamtimes.co.uk/news/26644644.st-cuthberts-high-school-rochdale-evacuated-bomb-threat"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-22T20:18:12.675479Z",
+      "last_attempt_at": "2026-10-23T10:42:34.245847Z",
       "outcome": "published",
       "reason": "",
       "title": "School closes after bomb threat - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "4fbee0535a3f95f9",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1"
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/shop-selling-illegal-goods-is-shut-down-again": {
       "first_attempt_at": "2026-10-15T13:22:15.076237Z",
@@ -3294,6 +3193,23 @@
       "category": "news",
       "text_fingerprint": "64dc46810bceb2e6"
     },
+    "https://www.rochvalleyradio.com/news-features/139/news/1229/chris-cheap-appointed-to-lead-northern-gateway-regeneration-across-bury-and-rochdale": {
+      "first_attempt_at": "2026-10-23T10:42:34.246257Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/new-managing-director-to-lead-atom-valleys-northern-gateway-regeneration",
+        "https://www.rochvalleyradio.com/news-features/139/news/1229/chris-cheap-appointed-to-lead-northern-gateway-regeneration-across-bury-and-rochdale"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.246257Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "title": "Chris Cheap appointed to lead Northern Gateway regeneration across Bury and Rochdale",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "business",
+      "text_fingerprint": "598d0c953e9e441b"
+    },
     "https://www.rochvalleyradio.com/news-features/140/business/1040/lisa-riley-opens-new-peacocks-store-at-rochdale-riverside": {
       "first_attempt_at": "2026-10-15T13:22:17.865717Z",
       "attempts": 6,
@@ -3356,23 +3272,6 @@
       "category": "business",
       "text_fingerprint": "14bd30a2abf9020a"
     },
-    "https://www.rochvalleyradio.com/news-features/140/business/990/finalists-announced-for-rochdale-business-awards-2026": {
-      "first_attempt_at": "2026-10-13T10:11:32.680187Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMitwFBVV95cUxOTXJQaUVOZGpCUjBDajZHZ1A1WXY1bmwxUFZFR3FZTVllS2NMVXl3QWNTRUY5MlRTbHlhRmN0VF9VaHE1SUhXd2dSdGJqZXpIODRCeU1ZdUc0WF9nbkZaUVZVMEVXcFdKQ1hGNklNaGVxY1g1dFl6ai1uRE5rX01NSThZeUluU2JiRmtKNEtXcUgzVXhxUFktVXRzLUtzX2d2WURjTWM2WUZNYmZUX1FIVzJBTW1GREk?oc=5",
-        "https://www.rochvalleyradio.com/news-features/140/business/990/finalists-announced-for-rochdale-business-awards-2026",
-        "https://www.rochvalleyradio.com/news-features/142/community/1039/nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T03:33:19.232587Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Finalists announced for Rochdale Business Awards 2026",
-      "source_name": "Roch Valley Radio",
-      "category": "crime",
-      "text_fingerprint": "995eda76123baafd"
-    },
     "https://www.rochvalleyradio.com/news-features/142/community/1039/nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award": {
       "first_attempt_at": "2026-10-15T11:08:52.772112Z",
       "attempts": 1,
@@ -3409,6 +3308,22 @@
       "final_gate_removal_recovery": 1,
       "evidence_recovery_policy": 1
     },
+    "https://www.rochvalleyradio.com/news-features/142/community/1228/rochdale-woman-loses-more-than-12-stone-and-reaches-national-competition-semi-finals": {
+      "first_attempt_at": "2026-10-23T10:42:34.246150Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/142/community/1228/rochdale-woman-loses-more-than-12-stone-and-reaches-national-competition-semi-finals"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.246150Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale woman loses more than 12 stone and reaches national competition semi-finals",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "news",
+      "text_fingerprint": "80b3cf60bb4c30a1"
+    },
     "https://www.rochvalleyradio.com/news-features/149/education/1070/rochdale-school-evacuated-and-closed-after-suspected-hoax-call": {
       "first_attempt_at": "2026-10-16T12:58:45.695165Z",
       "attempts": 1,
@@ -3422,12 +3337,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "last_attempt_at": "2026-10-16T19:43:05.821990Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time retry after secondary publication gate removal",
       "title": "Rochdale school evacuated and closed after suspected hoax call",
       "source_name": "Roch Valley Radio Local News",
       "category": "education",
-      "text_fingerprint": "9163776d7af3459f"
+      "text_fingerprint": "9163776d7af3459f",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/149/education/1148/newhouse-academy-reports-best-ever-gcse-results-and-expected-standards-in-ofsted-inspection": {
       "first_attempt_at": "2026-10-20T18:58:57.751904Z",
@@ -3480,6 +3397,22 @@
       "recovery_attempts": 0,
       "final_gate_removal_recovery": 1
     },
+    "https://www.rochvalleyradio.com/news-features/179/culture/1227/rochdale-s-m6-theatre-awarded-73-500-for-50th-anniversary-project": {
+      "first_attempt_at": "2026-10-23T10:42:34.246394Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/179/culture/1227/rochdale-s-m6-theatre-awarded-73-500-for-50th-anniversary-project"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.246394Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale’s M6 Theatre awarded £73,500 for 50th anniversary project",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "news",
+      "text_fingerprint": "75924e3461d54a81"
+    },
     "https://www.rochvalleyradio.com/news-features/3/politics/1046/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-centre": {
       "first_attempt_at": "2026-10-15T21:32:31.685382Z",
       "attempts": 1,
@@ -3503,7 +3436,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-22T21:12:13.727957Z",
+      "last_attempt_at": "2026-10-23T10:42:34.244836Z",
       "outcome": "published",
       "reason": "",
       "title": "Emergency services carry out search after welfare concern in Middleton",
@@ -3524,8 +3457,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-22T21:12:13.728121Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Police appeal to find woman who may have recently given birth in Rochdale",
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
@@ -3655,37 +3588,6 @@
       "category": "sport",
       "text_fingerprint": "31dbfa13c9814b37"
     },
-    "https://www.squawka.com/en/news/crewe-vs-rochdale-predictions-betting-tips-17-10-26": {
-      "first_attempt_at": "2026-10-15T07:32:50.516402Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.squawka.com/en/news/crewe-vs-rochdale-predictions-betting-tips-17-10-26"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T08:42:22.600032Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Crewe Alexandra vs Rochdale predictions and betting tips: Points set to be split between tight sides - Squawka",
-      "source_name": "Squawka",
-      "category": "sport",
-      "text_fingerprint": "c32d6a980f6a3eb0"
-    },
-    "https://www.thegazette.co.uk/notice/5230180": {
-      "first_attempt_at": "2026-10-15T03:32:13.094711Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.thegazette.co.uk/notice/5230170",
-        "https://www.thegazette.co.uk/notice/5230180"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T04:41:54.589250Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "YARWELL ADMIN LTD: Appointment of Liquidators",
-      "source_name": "The Gazette",
-      "category": "business",
-      "text_fingerprint": "30f9be149eee363a"
-    },
     "https://www.theleaguepaper.com/latest-news/football-league-division-two/crewe-alexandra/467998/lees-record-moving-full-breakers-are-steam-ahead/?__cf_chl_rt_tk=7zSzqSazebh_AD1P.v6xFY8DMxMTkDBUPaRxyhz4xjE-1792453454-1.0.1.1-s5T2xVjgx2ghbReC6rpfDjIwGpDSkqrZE3amRpb4rAQ": {
       "first_attempt_at": "2026-10-20T00:10:11.143562Z",
       "attempts": 1,
@@ -3716,6 +3618,23 @@
       "source_name": "Oldham Times",
       "category": "crime",
       "text_fingerprint": "170495c045dd3dc6"
+    },
+    "https://www.theoldhamtimes.co.uk/news/26661999.parking-fine-hotspots-rochdale-rakes-nearly-3m": {
+      "first_attempt_at": "2026-10-23T10:42:34.244590Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMimgFBVV95cUxONUZTa05zc1FqbFNfMk54UXRDNi1aaWhnYk1RQjM4U2cwVFdkMEQ2V0lEYl9xTENiQnRGMlppUWhCTzFEMGVhM0phNkVaTWxqS0xVcVYycFFhTW1NY1oyT19pNTJVUTdKNHNSSVJIYzZqMVRuUVJJNlFoR1lZcEIxMklPeXJuRndqRUJ5R3BvX1IzNEVlaGFTc2RB?oc=5",
+        "https://www.theoldhamtimes.co.uk/news/26661999.parking-fine-hotspots-rochdale-rakes-nearly-3m"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-23T10:42:34.244590Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Parking fine hotspots revealed as Rochdale rakes in almost £3m",
+      "source_name": "Theoldhamtimes",
+      "category": "news",
+      "text_fingerprint": "db9a418c21ea9170"
     },
     "https://www.tntsports.co.uk/football/league-two/2026-2027/crewe-alexandra-rochdale_mtc21887992/live-stats.shtml": {
       "first_attempt_at": "2026-10-15T08:58:57.350799Z",
