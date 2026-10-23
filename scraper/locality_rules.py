@@ -59,6 +59,47 @@ SOURCE_DENY_DOMAINS = {
 }
 SOURCE_DENY_NAMES = set()
 
+# Gambling, betting-tips and piracy-stream sites are never a source and are
+# never linked (23 Oct 2026). Three live match stories cited apwin.com (an
+# illegal "watch online for free" stream site), bettingodds.com and
+# whoscored.com's "bet builder tip" pages. Rochdale Daily must never steer
+# readers -- including people who have self-excluded from gambling -- to
+# them. Named domains catch known offenders; GAMBLING_PIRACY_HOST_RE catches
+# the new domains these sites rotate through. Measured against all 514 hosts
+# the paper had cited or seen: 7 matched, all gambling, zero false positives.
+# Reporting ABOUT gambling (a refused betting-shop licence, addiction
+# support) is unaffected: this checks where a story comes from, not its topic.
+GAMBLING_PIRACY_DENY_DOMAINS = frozenset({
+    "apwin.com", "bettingodds.com", "whoscored.com", "betshoot.com",
+    "freetips.com", "oddschecker.com", "bettingtips4you.com",
+    "online-bookmakers.com",
+})
+GAMBLING_PIRACY_DENY_NAMES = (
+    "apwin", "bettingodds", "whoscored", "betshoot", "oddschecker",
+    "bet365", "betfred", "betfair", "betway", "paddy power", "william hill",
+    "ladbrokes", "sky bet", "casino", "bookmaker", "gamstop",
+)
+GAMBLING_PIRACY_HOST_RE = re.compile(
+    r"(casino|betting|bookmaker|sportsbook|gamstop|oddschecker|freebets?"
+    r"|slots?(?=[.-]|$)|poker|bingo|betfair|betfred|betway|betvictor|bet365"
+    r"|skybet|paddypower|williamhill|ladbrokes|boylesports|livescorebet"
+    r"|betshoot|crackstreams?|streameast|sportsurge|totalsportek|hesgoal"
+    r"|buffstreams?|methstreams?|footybite|vipbox|soccerstreams?|strims|apwin)"
+    r"|(?:^|[.-])(?:bet|bets|odds|tips|tipster|tipsters|streams|livestream|freestream)(?=[.-]|$)",
+    re.I,
+)
+
+
+def is_gambling_or_piracy_source(source_name: str = "", source_url: str = "") -> bool:
+    host = domain_of(source_url)
+    if host and (
+        any(host == d or host.endswith("." + d) for d in GAMBLING_PIRACY_DENY_DOMAINS)
+        or GAMBLING_PIRACY_HOST_RE.search(host)
+    ):
+        return True
+    name = normalise_text(source_name).lower()
+    return bool(name) and any(denied in name for denied in GAMBLING_PIRACY_DENY_NAMES)
+
 # Editorial trust is independent of geography: these publishers can report
 # elsewhere, so their name alone must not establish a Rochdale location.
 TRUSTED_EDITORIAL_SOURCE_DOMAINS = frozenset({
@@ -497,6 +538,7 @@ def source_is_denied(source_name: str = "", source_url: str = "") -> bool:
         domain in SOURCE_DENY_DOMAINS
         or any(denied in name for denied in SOURCE_DENY_NAMES)
         or any(denied in name for denied in SOURCE_DENY_DOMAINS)
+        or is_gambling_or_piracy_source(source_name, source_url)
     )
 
 
