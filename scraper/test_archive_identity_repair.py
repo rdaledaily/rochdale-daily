@@ -90,3 +90,67 @@ def test_genuine_duplicate_canonical_untouched_and_idempotent():
 
 def test_dynamic_rules_ignored():
     assert ":splat" not in R.retired_article_redirects(setup([], REDIRECTS) / "_redirects")
+
+
+def _page_with(slug, title, published, canonical=None):
+    canonical = canonical or slug
+    return (
+        f'<html><head><title>{title}</title>'
+        f'<link rel="canonical" href="https://rochdaledaily.co.uk/articles/{canonical}.html">'
+        f'<meta property="article:published_time" content="{published}"></head>'
+        f'<body><h1>{title}</h1><div class="article-copy"><p>{BODY_TEXT}</p></div></body></html>'
+    )
+
+
+BODY_TEXT = ("Rochdale AFC secured their first league win of the season with a three nil "
+             "victory over Shrewsbury Town at the Crown Oil Arena on Saturday afternoon, "
+             "with goals from Henderson, Tasker and Middleton sending the home supporters "
+             "away happy after a difficult opening month for the club and its manager")
+
+
+def test_identical_archived_titles_point_to_earliest():
+    tmp = setup([], "")
+    title = "Rochdale AFC Secures 3-0 Victory Against Shrewsbury Town | Rochdale Daily"
+    for slug, when in (("b-later", "2026-08-10T10:00:00Z"), ("a-first", "2026-08-09T10:00:00Z"), ("c-latest", "2026-08-11T10:00:00Z")):
+        (tmp / "articles" / f"{slug}.html").write_text(_page_with(slug, title, when), encoding="utf-8")
+    stats = R.repair(tmp / "articles", tmp / "_redirects", set())
+    assert stats["duplicate_titles_consolidated"] == 2
+    assert canonical(tmp, "b-later").endswith("/a-first.html")
+    assert canonical(tmp, "c-latest").endswith("/a-first.html")
+    assert canonical(tmp, "a-first").endswith("/a-first.html")
+    assert R.repair(tmp / "articles", tmp / "_redirects", set())["duplicate_titles_consolidated"] == 0
+
+
+def test_groups_with_a_live_story_are_left_alone():
+    tmp = setup([], "")
+    title = "Same headline | Rochdale Daily"
+    (tmp / "articles" / "live-one.html").write_text(_page_with("live-one", title, "2026-10-01T00:00:00Z"), encoding="utf-8")
+    (tmp / "articles" / "old-one.html").write_text(_page_with("old-one", title, "2026-08-01T00:00:00Z"), encoding="utf-8")
+    (tmp / "articles" / "old-two.html").write_text(_page_with("old-two", title, "2026-08-02T00:00:00Z"), encoding="utf-8")
+    R.repair(tmp / "articles", tmp / "_redirects", {"live-one"})
+    assert canonical(tmp, "old-two").endswith("/old-two.html")
+
+
+def test_same_headline_different_story_not_merged():
+    tmp = setup([], "")
+    title = "Rochdale fixture news | Rochdale Daily"
+    a = _page_with("first", title, "2026-08-01T00:00:00Z")
+    b = _page_with("second", title, "2026-08-02T00:00:00Z").replace(
+        BODY_TEXT, "Bradford City will host the club in the first round of the Carabao Cup next month "
+                   "after the draw was made on Thursday evening, with kick-off times still to be "
+                   "confirmed by the English Football League and both clubs awaiting broadcast picks")
+    (tmp / "articles" / "first.html").write_text(a, encoding="utf-8")
+    (tmp / "articles" / "second.html").write_text(b, encoding="utf-8")
+    R.repair(tmp / "articles", tmp / "_redirects", set())
+    assert canonical(tmp, "second").endswith("/second.html")
+
+
+def test_same_body_canonical_left_to_archive_integrity():
+    tmp = setup([], "")
+    copy = _page_with("al-rayyan-to-face-rochdale", "Al-Rayyan to face Rochdale", "2026-08-01T00:00:00Z", "york-city-to-face-rochdale")
+    primary = _page_with("york-city-to-face-rochdale", "York City visit Rochdale on Saturday", "2026-08-01T00:00:00Z")
+    (tmp / "articles" / "al-rayyan-to-face-rochdale.html").write_text(copy, encoding="utf-8")
+    (tmp / "articles" / "york-city-to-face-rochdale.html").write_text(primary, encoding="utf-8")
+    stats = R.repair(tmp / "articles", tmp / "_redirects", set())
+    assert canonical(tmp, "al-rayyan-to-face-rochdale").endswith("/york-city-to-face-rochdale.html")
+    assert stats["canonicals_to_self"] == 0

@@ -21,6 +21,15 @@ generate_pages.main() in every lane:
    story (headlines share under half their distinctive words) is pointed at
    itself. Near-duplicate consolidation (consolidate_duplicate_article_signals)
    only ever pairs strongly similar headlines, so it is unaffected.
+3. Identical archived headlines. When two or more archived (not live) pages
+   carry exactly the same <title> and each claims to be the original, they
+   compete with each other in search. All but the earliest-published point
+   their canonical at the earliest. Groups containing a live story are left
+   to consolidate_duplicate_article_signals, which owns live duplicates.
+   The story text must match as well as the headline. Measured on the full
+   lane 23 Oct 2026: 3 groups, 5 competing pages, all archived AFC reports.
+4. Deference. Where two pages carry the same copied body, archive_integrity.py
+   (which every lane runs after this) owns the canonical; this module leaves it.
 
 Only the canonical <link> and og:url are touched. Idempotent.
 """
@@ -41,6 +50,10 @@ _STOP = set(
 _CANONICAL = re.compile(r'<link rel="canonical" href="([^"]+)"')
 _OG_URL = re.compile(r'(<meta property="og:url" content=")[^"]+(")')
 _H1 = re.compile(r"<h1[^>]*>(.*?)</h1>", re.S)
+_BODY = re.compile(r'<div class="article-copy"[^>]*>(.*?)(?:<details|<section|</article>|$)', re.S)
+_TITLE = re.compile(r"<title>(.*?)</title>", re.S)
+_PUBLISHED = re.compile(r'<meta property="article:published_time" content="([^"]+)"')
+_NOINDEX = re.compile(r'<meta name="robots" content="[^"]*noindex')
 
 
 def _tokens(text: str) -> set[str]:
@@ -53,6 +66,20 @@ def _tokens(text: str) -> set[str]:
 def _headline(page: str) -> set[str]:
     match = _H1.search(page)
     return _tokens(html.unescape(re.sub(r"<[^>]+>", "", match.group(1)))) if match else set()
+
+
+def _body(page: str) -> set[str]:
+    match = _BODY.search(page)
+    return _tokens(html.unescape(re.sub(r"<[^>]+>", " ", match.group(1)))) if match else set()
+
+
+def _same_body(left: set[str], right: set[str]) -> bool:
+    """Identical or near-identical story text (the old body-copy bug).
+    archive_integrity.py owns canonicals for such pages and runs after this,
+    so this module must not overrule it."""
+    if len(left) < 20 or len(right) < 20:
+        return False
+    return len(left & right) / len(left | right) >= 0.6
 
 
 def _same_story(left: set[str], right: set[str]) -> bool:
@@ -85,7 +112,8 @@ def repair(articles_dir: Path, redirects_path: Path, live_slugs: Iterable[str]) 
     live = set(live_slugs)
     retired = retired_article_redirects(redirects_path)
     stats = {"retired_pages_removed": 0, "retired_but_live_kept": 0,
-             "canonicals_to_new_home": 0, "canonicals_to_self": 0}
+             "canonicals_to_new_home": 0, "canonicals_to_self": 0,
+             "duplicate_titles_consolidated": 0}
 
     for slug in retired:
         page = articles_dir / f"{slug}.html"
@@ -106,6 +134,13 @@ def repair(articles_dir: Path, redirects_path: Path, live_slugs: Iterable[str]) 
             headlines[slug] = _headline(pages[slug].read_text(encoding="utf-8"))
         return headlines[slug]
 
+    bodies: dict[str, set[str]] = {}
+
+    def body(slug: str) -> set[str]:
+        if slug not in bodies:
+            bodies[slug] = _body(pages[slug].read_text(encoding="utf-8"))
+        return bodies[slug]
+
     for slug, path in pages.items():
         text = path.read_text(encoding="utf-8")
         match = _CANONICAL.search(text)
@@ -120,6 +155,8 @@ def repair(articles_dir: Path, redirects_path: Path, live_slugs: Iterable[str]) 
             home = _slug_of(destination) if destination.startswith("/articles/") else ""
             new = home if home in pages and home != slug and _same_story(headline(slug), headline(home)) else slug
         elif not _same_story(headline(slug), headline(target)):
+            if _same_body(body(slug), body(target)):
+                continue  # same copied text: archive_integrity's decision stands
             new = slug
         if not new:
             continue
@@ -131,6 +168,44 @@ def repair(articles_dir: Path, redirects_path: Path, live_slugs: Iterable[str]) 
         else:
             stats["canonicals_to_new_home"] += 1
         path.write_text(fixed, encoding="utf-8")
+
+    # 3. Identical archived headlines that each claim to be the original.
+    groups: dict[str, list[tuple[str, str, Path]]] = {}
+    for slug, path in pages.items():
+        if slug in live:
+            continue
+        text = path.read_text(encoding="utf-8")
+        title = _TITLE.search(text)
+        match = _CANONICAL.search(text)
+        if not title or not match or _NOINDEX.search(text):
+            continue
+        if _slug_of(match.group(1)) != slug:
+            continue
+        name = html.unescape(title.group(1)).strip()
+        if not name or name.lower().startswith("redirecting"):
+            continue
+        published = _PUBLISHED.search(text)
+        groups.setdefault(name, []).append((published.group(1) if published else "9999", slug, path))
+    live_titles = set()
+    for slug in live & set(pages):
+        title = _TITLE.search(pages[slug].read_text(encoding="utf-8"))
+        if title:
+            live_titles.add(html.unescape(title.group(1)).strip())
+    for name, members in groups.items():
+        if len(members) < 2 or name in live_titles:
+            continue
+        members.sort()
+        keeper = members[0][1]
+        url = f"{SITE}/articles/{keeper}.html"
+        for _, slug, path in members[1:]:
+            # Same headline is not proof of the same story (a Bradford City
+            # preview and a Tranmere shoot-out report shared one): the text
+            # must match too.
+            if not _same_body(body(slug), body(keeper)):
+                continue
+            text = path.read_text(encoding="utf-8")
+            path.write_text(_CANONICAL.sub(f'<link rel="canonical" href="{url}"', text, count=1), encoding="utf-8")
+            stats["duplicate_titles_consolidated"] += 1
     return stats
 
 
