@@ -42,15 +42,52 @@ _PUBLIC_TEXT_FIELDS = (
 
 
 
+_GOOGLE_NEWS_RESOLUTIONS: dict[str, str] | None = None
+
+
+def _resolve_google_news(url: str) -> str:
+    """Where a news.google.com redirect really leads, from the pipeline's own
+    resolution record. Several gambling/piracy links reached article pages as
+    opaque Google News redirects, invisible to a domain check. Returns "" when
+    the redirect has not been resolved."""
+    global _GOOGLE_NEWS_RESOLUTIONS
+    if _GOOGLE_NEWS_RESOLUTIONS is None:
+        _GOOGLE_NEWS_RESOLUTIONS = {}
+        try:
+            import json
+            from pathlib import Path
+            path = Path(__file__).resolve().parents[1] / "google_news_resolutions.json"
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                _GOOGLE_NEWS_RESOLUTIONS = {
+                    str(key): str((value or {}).get("url") or "")
+                    for key, value in data.items() if isinstance(value, dict)
+                }
+        except Exception:
+            pass
+    parsed = urlparse(url)
+    if (parsed.hostname or "").lower() != "news.google.com":
+        return ""
+    token = parsed.path.rstrip("/").rsplit("/", 1)[-1]
+    return _GOOGLE_NEWS_RESOLUTIONS.get(token, "")
+
+
 def _denied_source(url: str) -> bool:
-    """Spam, hijacked and piracy hosts are never shown as a source."""
+    """Spam, hijacked, gambling and piracy hosts are never shown as a source,
+    including when reached through a Google News redirect."""
     try:
-        from locality_rules import SOURCE_DENY_DOMAINS
+        from locality_rules import SOURCE_DENY_DOMAINS, is_gambling_or_piracy_source
     except Exception:
         return False
-    from urllib.parse import urlparse
-    host = (urlparse(url).hostname or "").lower().removeprefix("www.")
-    return any(host == d or host.endswith("." + d) for d in SOURCE_DENY_DOMAINS)
+    for candidate in (url, _resolve_google_news(url)):
+        if not candidate:
+            continue
+        host = (urlparse(candidate).hostname or "").lower().removeprefix("www.")
+        if any(host == d or host.endswith("." + d) for d in SOURCE_DENY_DOMAINS):
+            return True
+        if is_gambling_or_piracy_source("", candidate):
+            return True
+    return False
 
 def _domain(value: Any) -> str:
     host = (urlparse(str(value or "")).hostname or "").casefold()
@@ -276,8 +313,18 @@ def generic_sources_markup(article: dict[str, Any]) -> str:
         url = str(value or "").strip()
         if url and url not in urls:
             urls.append(url)
+    # A Google News redirect hides where it leads. Link the real publisher when
+    # the pipeline resolved it; otherwise drop it. Unresolved redirects were
+    # sending readers to an illegal stream site (23 Oct 2026): we only link a
+    # source whose destination we can see.
+    shown: list[str] = []
+    for url in urls:
+        if (urlparse(url).hostname or "").lower() == "news.google.com":
+            url = _resolve_google_news(url)
+        if url and url not in shown:
+            shown.append(url)
     urls = [
-        url for url in urls
+        url for url in shown
         if url.startswith(("https://", "http://")) and not is_social_source(url) and not _denied_source(url)
     ]
     if not urls:
