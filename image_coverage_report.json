@@ -1,12 +1,19 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 69,
+    "kept_cards": 70,
     "cards_library": 0,
-    "cards_generated": 229,
+    "cards_generated": 230,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "roadworks-on-elizabethan-way-in-milnrow-to-begin-on-23-october-2026",
+      "result": "kept-cards",
+      "image_url": "assets/img/cards/roadworks.jpg",
+      "matched_filename": "roadworks.jpg",
+      "match_score": 15129
+    },
     {
       "slug": "your-trust-hosts-family-activities-during-october-half-term-in-rochdale",
       "result": "kept-existing",
@@ -193,6 +200,13 @@
       "slug": "police-appeal-for-information-on-missing-22-year-old-man-in-rochdale",
       "result": "kept-existing",
       "image_url": "assets/img/cards/police_appeal.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "emergency-services-conduct-search-in-middleton-following-welfare-concern",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/c9f6524d57d7-place-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
