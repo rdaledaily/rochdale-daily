@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-23T19:42:05.050563Z",
+  "updated_at": "2026-10-23T20:26:09.479745Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 229,
@@ -379,13 +379,13 @@
     },
     "https://rochdaleafc.co.uk/i-want-to-contribute-win-paterson": {
       "first_attempt_at": "2026-10-23T19:08:30.489469Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaleafc.co.uk/i-want-to-contribute-win-paterson"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:39:58.965116Z",
+      "last_attempt_at": "2026-10-23T20:24:06.906521Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "A Fair Result - Francis - Rochdale AFC",
@@ -1014,14 +1014,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-23T14:25:59.678783Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Hunt for woman feared to have given birth in street after 'human tissue' found",
       "source_name": "Daily Record",
       "category": "traffic",
       "text_fingerprint": "d7b9f3b8b345e76e",
-      "recovery_attempts": 2,
-      "final_gate_removal_recovery": 1
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1,
+      "evidence_recovery_policy": 1
     },
     "https://www.espn.in/football/team-stats/_/gameId/401881304/league/eng.4": {
       "first_attempt_at": "2026-10-20T23:31:40.895844Z",
@@ -1325,13 +1326,13 @@
     },
     "https://www.inyourarea.co.uk/news/whats-on-rochdale-david-threlfalls-mesmeric-king-lear-halloween-cabaret-and-spooky-half-term-fun": {
       "first_attempt_at": "2026-10-23T18:52:57.849014Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.inyourarea.co.uk/news/whats-on-rochdale-david-threlfalls-mesmeric-king-lear-halloween-cabaret-and-spooky-half-term-fun"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:42:05.049464Z",
+      "last_attempt_at": "2026-10-23T20:26:09.478944Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "What's On Rochdale: David Threlfall’s mesmeric King Lear, Halloween cabaret and spooky half-term fun - InYourArea",
@@ -3485,7 +3486,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:42:05.050296Z",
+      "last_attempt_at": "2026-10-23T20:26:09.479207Z",
       "outcome": "published",
       "reason": "",
       "title": "Police appeal to find woman who may have recently given birth in Rochdale",
@@ -3682,14 +3683,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:42:05.049951Z",
+      "last_attempt_at": "2026-10-23T20:26:09.479427Z",
       "outcome": "published",
       "reason": "",
       "title": "Update issued in search for woman suspected to have given birth near Rochdale street - Oldham Times",
       "source_name": "Oldham Times",
       "category": "crime",
       "text_fingerprint": "8d1d9315cd81c97c",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "final_gate_removal_recovery": 1
     },
     "https://www.tntsports.co.uk/football/league-two/2026-2027/live-rochdale-grimsby-town_mtc21888147/live.shtml": {
