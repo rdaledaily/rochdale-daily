@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-23T15:25:48.270390Z",
+  "last_run_at": "2026-10-23T15:41:04.303971Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -45,32 +45,40 @@
   "raw_candidates_before_job_filter": 198,
   "job_or_career_posts_rejected": 0,
   "raw_candidates": 198,
-  "candidate_clusters": 47,
+  "candidate_clusters": 48,
   "google_news_resolution": {
-    "wrappers": 60,
-    "resolved": 32,
+    "wrappers": 62,
+    "resolved": 33,
     "text_recovered": 22,
-    "reattributed": 3,
+    "reattributed": 4,
     "images_found": 21
   },
-  "duplicates_merged": 151,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
+  "duplicates_merged": 150,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 3,
   "drafted_articles": [
     {
       "slug": "rochdale-town-centre-wins-gold-at-britain-in-bloom-awards-2026",
       "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1232/rochdale-wins-town-and-city-centres-category-at-britain-in-bloom-awards"
+    },
+    {
+      "slug": "emergency-services-conduct-search-in-middleton-following-welfare-concern",
+      "source_url": "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton"
+    },
+    {
+      "slug": "martlet-kitchen-in-rochdale-wins-international-recognition",
+      "source_url": "https://www.rochdale.gov.uk/news/article/687/rochdale-town-hall-s-feted-restaurant-scoops-international-award"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 379,
+  "new_articles": 2,
+  "live_articles": 378,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 2,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 2,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -83,8 +91,8 @@
       "published": 110,
       "rejected": 77
     },
-    "held_back_this_run": 33,
-    "held_already_published": 27,
+    "held_back_this_run": 31,
+    "held_already_published": 25,
     "held_rejected": 6,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -145,7 +153,10 @@
       "last_attempt_at": "2026-10-21T23:51:54.440175Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 147 body words using only facts already present in the sources; the draft currently has 143.": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 185.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 176,
@@ -164,39 +175,39 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Roch Valley Radio": 74,
-    "Rochdale Times": 43,
-    "Rochdale Borough Council": 27,
-    "Chronicle Live": 5,
+    "Roch Valley Radio": 72,
+    "Rochdale Times": 42,
+    "Rochdale Borough Council": 28,
+    "Rochdale AFC": 6,
     "Roch Valley Radio Local News": 5,
     "Facebook": 4,
-    "Rochdale AFC": 4,
+    "Chronicle Live": 4,
     "Bee Network live travel alerts": 4,
     "Rochdale Borough Council RSS": 3,
     "Oldham Times": 3,
+    "Yorkshire Live": 3,
     "UKNIP": 3,
-    "About Manchester": 3,
+    "Daily Record": 3,
+    "Net": 3,
     "BBC Manchester": 2,
-    "Yorkshire Live": 2,
     "InYourArea": 2,
-    "Daily Record": 2,
-    "Net": 2,
+    "About Manchester": 2,
     "Rochdale Borough Council News": 2,
     "Rochdale Valiant": 2,
     "Rochdale Town Hall": 1,
     "Fansnetwork": 1,
-    "Yahoo": 1,
-    "Transfermarkt": 1,
+    "APWin": 1,
     "Greater Manchester Police": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "environment": 1
+    "environment": 2,
+    "traffic": 1
   },
   "published_by_category": {
-    "business": 40,
+    "business": 39,
     "community": 52,
-    "crime": 14,
+    "crime": 15,
     "education": 18,
     "environment": 23,
     "events": 24,
@@ -230,10 +241,14 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "environment-v3-812a90028c228a98c640"
+    "transport-v3-b92f54ce7df4952cf937",
+    "environment-v3-812a90028c228a98c640",
+    "business-v3-2bc5a87b94480d0e8f1c"
   ],
   "selected_candidate_urls": [
-    "https://www.rochvalleyradio.com/news-features/142/community/1232/rochdale-wins-town-and-city-centres-category-at-britain-in-bloom-awards"
+    "https://www.rochvalleyradio.com/news-features/4/crime/1153/emergency-services-carry-out-search-after-welfare-concern-in-middleton",
+    "https://www.rochvalleyradio.com/news-features/142/community/1232/rochdale-wins-town-and-city-centres-category-at-britain-in-bloom-awards",
+    "https://www.rochdale.gov.uk/news/article/687/rochdale-town-hall-s-feted-restaurant-scoops-international-award"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -245,10 +260,12 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment"
+      "environment",
+      "traffic"
     ],
     "selected_categories": [
-      "environment"
+      "environment",
+      "traffic"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -256,20 +273,25 @@
       "middleton"
     ],
     "selected_areas": [
-      "middleton"
+      "middleton",
+      "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1
+      "environment": 2,
+      "traffic": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "middleton": 1
+      "middleton": 2,
+      "rochdale": 1
     },
     "selected_by_source": {
-      "roch valley radio local news": 1
+      "roch valley radio": 1,
+      "roch valley radio local news": 1,
+      "rochdale borough council": 1
     }
   },
   "official_ward_count": 20,
@@ -824,10 +846,12 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "uknip.co.uk"
+    "northerncarealliance.nhs.uk",
+    "rochdaleafc.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "uknip.co.uk": 1
+    "rochdaleafc.co.uk": 3,
+    "northerncarealliance.nhs.uk": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -864,7 +888,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-23T15:26:22.372008Z",
+  "frontpage_generated_at": "2026-10-23T15:41:43.636678Z",
   "frontpage_article_count": 21,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -899,13 +923,11 @@
     "available_areas": [
       "healey",
       "heywood",
-      "hopwood",
       "littleborough"
     ],
     "selected_areas": [
       "healey",
       "heywood",
-      "hopwood",
       "littleborough",
       "rochdale"
     ],
@@ -930,7 +952,6 @@
     "selected_by_area": {
       "healey": 2,
       "heywood": 1,
-      "hopwood": 1,
       "littleborough": 1,
       "rochdale": 24
     },
@@ -951,8 +972,8 @@
       "traditions of lancashire (john roby) — project gutenberg": 1,
       "historic england (national heritage list for england)": 1
     },
-    "pool_size": 29,
-    "primary_pool_size": 29,
+    "pool_size": 28,
+    "primary_pool_size": 28,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 21,
@@ -970,7 +991,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
   "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 379,
+  "duplicate_articles_after_postprocessing": 378,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -981,9 +1002,12 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 2,
+  "published_new_slugs": [
+    "fireworks-distributor-rochdale-premises-40000-fine-gmfrs",
+    "martlet-kitchen-in-rochdale-wins-international-recognition"
+  ],
   "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
