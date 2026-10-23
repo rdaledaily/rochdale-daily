@@ -225,6 +225,9 @@ def run(root: Path, *, check: bool = False) -> list[str]:
     for slug, html in updated.items():
         if html != pages[slug]:
             changed.append(f"articles/{slug}.html")
+            if check:
+                print(f"Archive identity difference: {slug}")
+                print("".join(difflib.unified_diff(pages[slug].splitlines(True), html.splitlines(True)))[:6000])
             if not check:
                 files[slug].write_text(html, encoding="utf-8")
     return changed
