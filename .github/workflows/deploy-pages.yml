@@ -76,6 +76,9 @@ jobs:
           git reset --hard origin/main
           echo "Deploying commit $(git rev-parse HEAD)"
 
+      - name: Verify archive duplicate identity regression
+        run: python3 scraper/test_archive_identity_furniture.py
+
       - name: Reassert final homepage freshness before upload
         run: |
           python3 scraper/enforce_frontpage_freshness.py
