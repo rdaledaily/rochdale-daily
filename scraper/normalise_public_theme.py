@@ -162,10 +162,6 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         # headline/body relationship and therefore canonical/indexing decisions.
         from archive_quality import apply as apply_archive_quality
         apply_archive_quality(root, images=True, network_images=False)
-    # Evaluate the final repaired content before building indexes and sitemaps.
-    for page in archive_integrity(root, check=check):
-        if page not in changed:
-            changed.append(page)
     # Archive repair can rewrite article HTML; stamp those final pages afterwards.
     for path in public_pages(root):
         original = path.read_text(encoding="utf-8")
@@ -173,8 +169,16 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         if updated == original:
             continue
         changed.append(path.relative_to(root).as_posix())
+        if check:
+            import difflib
+            print("Theme/text difference:", path.relative_to(root))
+            print("".join(difflib.unified_diff(original.splitlines(True), updated.splitlines(True)))[:6000])
         if not check:
             path.write_text(updated, encoding="utf-8")
+    # Evaluate the final repaired content before building indexes and sitemaps.
+    for page in archive_integrity(root, check=check):
+        if page not in changed:
+            changed.append(page)
     # The month-by-month archive lists only what is indexable, so it is built
     # after the archive sweep, and themed like every other public page.
     pages, stale = build_archive_pages(root)
