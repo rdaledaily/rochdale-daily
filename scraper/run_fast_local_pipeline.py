@@ -28,6 +28,9 @@ from search_queries import (
 
 
 MIXED_SOURCE_NAMES = {
+    "Roch Valley Radio",
+    "Roch Valley Radio Local News",
+    "Roch Valley Radio Notices",
     "Greater Manchester Police",
     "Greater Manchester Fire and Rescue Service",
     "TfGM Newsroom",
@@ -588,3 +591,4 @@ def configure() -> None:
 if __name__ == "__main__":
     configure()
     raise SystemExit(core.main())
+

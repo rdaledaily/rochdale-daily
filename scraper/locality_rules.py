@@ -64,7 +64,6 @@ TRUSTED_LOCAL_SOURCE_PREFIXES = (
     "Rochdale Development Agency",
     "Rochdale Town Hall",
     "Rochdale Police",
-    "Roch Valley Radio",
     "Action Together Rochdale",
     "Your Trust Rochdale",
     "Visit Rochdale",
@@ -79,7 +78,6 @@ TRUSTED_LOCAL_DOMAINS = {
     "rochdaleafc.co.uk",
     "rochdalehornets.co.uk",
     "rochdaletownhall.co.uk",
-    "rochvalleyradio.com",
     "actiontogether.org.uk",
     "yourtrustrochdale.co.uk",
     "visitrochdale.com",
@@ -97,6 +95,8 @@ TRUSTED_LOCAL_DOMAINS = {
 # is exactly what a Middleton, Nova Scotia story says too.
 # ---------------------------------------------------------------------------
 KNOWN_GM_PUBLISHER_DOMAINS = {
+    # Covers Bury and Bolton too: publisher identity never proves locality.
+    "rochvalleyradio.com",
     "rochdaletimes.co.uk",
     "rochdaleonline.co.uk",
     "manchestereveningnews.co.uk",
@@ -118,6 +118,7 @@ KNOWN_GM_PUBLISHER_DOMAINS = {
     "itv.com",
 }
 KNOWN_GM_PUBLISHER_NAME_PREFIXES = (
+    "Roch Valley Radio",
     "Rochdale Times",
     "BBC Manchester",
     "Manchester Evening News",
@@ -766,3 +767,4 @@ def article_is_local(article: dict[str, Any]) -> bool:
         str(article.get("source_name") or ""),
         str(article.get("source_url") or ""),
     )
+
