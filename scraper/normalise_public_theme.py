@@ -157,16 +157,15 @@ def normalise_text(path: Path, text: str) -> str:
 
 def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]]:
     changed: list[str] = []
-    # Duplicated and mislabelled archive pages leave the index before the
-    # sitemaps are cleaned, so the sitemaps list only what may be indexed.
+    if not check:
+        # Repair text before checking archive identity: repairs can change the
+        # headline/body relationship and therefore canonical/indexing decisions.
+        from archive_quality import apply as apply_archive_quality
+        apply_archive_quality(root, images=True, network_images=False)
+    # Evaluate the final repaired content before building indexes and sitemaps.
     for page in archive_integrity(root, check=check):
         if page not in changed:
             changed.append(page)
-    if not check:
-        # Repair stories before deriving month, topic and ward indexes so the
-        # final newspaper uses one consistent set of titles and classifications.
-        from archive_quality import apply as apply_archive_quality
-        apply_archive_quality(root, images=True, network_images=False)
     # Archive repair can rewrite article HTML; stamp those final pages afterwards.
     for path in public_pages(root):
         original = path.read_text(encoding="utf-8")
