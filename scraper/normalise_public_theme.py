@@ -157,14 +157,6 @@ def normalise_text(path: Path, text: str) -> str:
 
 def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]]:
     changed: list[str] = []
-    for path in public_pages(root):
-        original = path.read_text(encoding="utf-8")
-        updated = normalise_text(path, original)
-        if updated == original:
-            continue
-        changed.append(path.relative_to(root).as_posix())
-        if not check:
-            path.write_text(updated, encoding="utf-8")
     # Duplicated and mislabelled archive pages leave the index before the
     # sitemaps are cleaned, so the sitemaps list only what may be indexed.
     for page in archive_integrity(root, check=check):
@@ -175,6 +167,15 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         # final newspaper uses one consistent set of titles and classifications.
         from archive_quality import apply as apply_archive_quality
         apply_archive_quality(root, images=True, network_images=False)
+    # Archive repair can rewrite article HTML; stamp those final pages afterwards.
+    for path in public_pages(root):
+        original = path.read_text(encoding="utf-8")
+        updated = normalise_text(path, original)
+        if updated == original:
+            continue
+        changed.append(path.relative_to(root).as_posix())
+        if not check:
+            path.write_text(updated, encoding="utf-8")
     # The month-by-month archive lists only what is indexable, so it is built
     # after the archive sweep, and themed like every other public page.
     pages, stale = build_archive_pages(root)
