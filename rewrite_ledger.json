@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-23T11:15:15.739447Z",
+  "updated_at": "2026-10-23T11:32:07.350542Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 228,
+  "count": 225,
   "entries": {
     "https://ca.sports.yahoo.com/soccer/league-two/rochdale-crawley-town-13597784": {
       "first_attempt_at": "2026-10-20T07:42:50.504518Z",
@@ -1852,23 +1852,6 @@
       "category": "transport",
       "text_fingerprint": "479ecc7cb1a8945c"
     },
-    "https://www.northernrailway.co.uk/service-updates#live-34185f53df5f3741b6": {
-      "first_attempt_at": "2026-10-15T11:09:45.362490Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-34185f53df5f3741b6"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T11:09:45.362490Z",
-      "outcome": "failed",
-      "reason": "one-time retry after secondary publication gate removal",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "f738dc4ba217260c",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1
-    },
     "https://www.northernrailway.co.uk/service-updates#live-3753dc2da06b812af1": {
       "first_attempt_at": "2026-10-18T08:35:13.029165Z",
       "attempts": 1,
@@ -2590,25 +2573,6 @@
       "category": "environment",
       "text_fingerprint": "ec45689e6c071443"
     },
-    "https://www.rochdale.gov.uk/news/article/683/fire-festival-set-to-return-to-rochdale-with-spectacular-new-attractions": {
-      "first_attempt_at": "2026-10-13T12:55:58.034214Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/news/article/683/fire-festival-set-to-return-to-rochdale-with-spectacular-new-attractions",
-        "https://www.rochdaletimes.co.uk/town-gets-ready-to-ignite-christmas-festivities"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T11:09:45.362652Z",
-      "outcome": "failed",
-      "reason": "one-time recheck after publication evidence fix",
-      "title": "Fire festival set to return to Rochdale with spectacular new attractions – Rochdale Borough Council",
-      "source_name": "Rochdale Borough Council",
-      "category": "environment",
-      "text_fingerprint": "3972c1f9b16b7e89",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1,
-      "evidence_recovery_policy": 1
-    },
     "https://www.rochdale.gov.uk/news/article/684/inspiring-cared-for-children-achievements-recognised-by-council": {
       "first_attempt_at": "2026-10-15T03:32:25.035673Z",
       "attempts": 2,
@@ -3198,14 +3162,14 @@
     },
     "https://www.rochvalleyradio.com/news-features/139/news/1229/chris-cheap-appointed-to-lead-northern-gateway-regeneration-across-bury-and-rochdale": {
       "first_attempt_at": "2026-10-23T10:42:34.246257Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.rochdaletimes.co.uk/new-managing-director-to-lead-atom-valleys-northern-gateway-regeneration",
         "https://www.rochvalleyradio.com/news-features/139/news/1229/chris-cheap-appointed-to-lead-northern-gateway-regeneration-across-bury-and-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T11:15:15.738175Z",
+      "last_attempt_at": "2026-10-23T11:32:07.350268Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Chris Cheap appointed to lead Northern Gateway regeneration across Bury and Rochdale",
@@ -3655,21 +3619,6 @@
       "source_name": "Theoldhamtimes",
       "category": "news",
       "text_fingerprint": "db9a418c21ea9170"
-    },
-    "https://www.tntsports.co.uk/football/league-two/2026-2027/crewe-alexandra-rochdale_mtc21887992/live-stats.shtml": {
-      "first_attempt_at": "2026-10-15T08:58:57.350799Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.tntsports.co.uk/football/league-two/2026-2027/crewe-alexandra-rochdale_mtc21887992/live-stats.shtml"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-15T11:08:36.878620Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Crewe Alexandra - Rochdale Stats: Football Scores & Results - TNT Sports",
-      "source_name": "TNT Sports",
-      "category": "sport",
-      "text_fingerprint": "7306c7d4e3a49516"
     },
     "https://www.tntsports.co.uk/football/league-two/2026-2027/live-rochdale-grimsby-town_mtc21888147/live.shtml": {
       "first_attempt_at": "2026-10-20T13:46:13.059349Z",
