@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-23T19:10:40.435775Z",
+  "updated_at": "2026-10-23T19:42:05.050563Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 229,
@@ -40,13 +40,13 @@
     },
     "https://ca.sports.yahoo.com/soccer/league-two/rochdale-gillingham-13597735": {
       "first_attempt_at": "2026-10-23T18:50:49.572704Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://ca.sports.yahoo.com/soccer/league-two/rochdale-gillingham-13597735"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:08:28.611811Z",
+      "last_attempt_at": "2026-10-23T19:39:58.877636Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The model marked the story unpublishable.",
       "title": "Gillingham vs. Rochdale: Live game updates, stats, play-by-play - Yahoo Sports",
@@ -379,13 +379,13 @@
     },
     "https://rochdaleafc.co.uk/i-want-to-contribute-win-paterson": {
       "first_attempt_at": "2026-10-23T19:08:30.489469Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaleafc.co.uk/i-want-to-contribute-win-paterson"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:08:30.489469Z",
+      "last_attempt_at": "2026-10-23T19:39:58.965116Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "A Fair Result - Francis - Rochdale AFC",
@@ -540,7 +540,7 @@
     },
     "https://rochdaleafc.co.uk/tvos-preview-accrington-stanley-h": {
       "first_attempt_at": "2026-10-22T14:05:27.651162Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMiZkFVX3lxTE8tTjdhalRLSmFhMmRMYzhhWUlKM2RkamhPN19FRW9GRW9UYXA2d2lXRlJYV2hzcG1ucnJlWXBIOUpIeHRpTmhmRVVaTGViVWpxMm91U1RLNGJuQXhVWV9iSW10M0RsQQ?oc=5",
         "https://rochdaleafc.co.uk/preview-accrington-stanley-h",
@@ -548,7 +548,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:08:29.162075Z",
+      "last_attempt_at": "2026-10-23T19:39:58.175960Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "TVOS Preview | Accrington Stanley (H) - Rochdale AFC",
@@ -1014,8 +1014,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-23T14:25:59.678783Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Hunt for woman feared to have given birth in street after 'human tissue' found",
       "source_name": "Daily Record",
       "category": "traffic",
@@ -1331,13 +1331,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:10:40.435296Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-10-23T19:42:05.049464Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "What's On Rochdale: David Threlfall’s mesmeric King Lear, Halloween cabaret and spooky half-term fun - InYourArea",
       "source_name": "InYourArea",
       "category": "events",
-      "text_fingerprint": "92a0d04583709e2c"
+      "text_fingerprint": "92a0d04583709e2c",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.inyourarea.co.uk/news/whats-on-rochdale-dynamic-circus-theatre-and-celebrity-traitors-secrets": {
       "first_attempt_at": "2026-10-20T07:41:15.514007Z",
@@ -3000,13 +3002,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-22T18:55:31.026718Z",
+      "last_attempt_at": "2026-10-23T19:42:05.049781Z",
       "outcome": "published",
       "reason": "",
       "title": "Relief as mother and baby are found safe - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
-      "text_fingerprint": "9f02dd356e30a027"
+      "text_fingerprint": "9f02dd356e30a027",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat": {
       "first_attempt_at": "2026-10-16T16:29:57.968885Z",
@@ -3481,12 +3485,12 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-22T21:12:13.728121Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-10-23T19:42:05.050296Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Police appeal to find woman who may have recently given birth in Rochdale",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "news",
+      "source_name": "Roch Valley Radio",
+      "category": "traffic",
       "text_fingerprint": "15251f0085c95341",
       "recovery_attempts": 2,
       "final_gate_removal_recovery": 1,
@@ -3678,13 +3682,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T18:52:57.849372Z",
+      "last_attempt_at": "2026-10-23T19:42:05.049951Z",
       "outcome": "published",
       "reason": "",
       "title": "Update issued in search for woman suspected to have given birth near Rochdale street - Oldham Times",
       "source_name": "Oldham Times",
       "category": "crime",
-      "text_fingerprint": "8d1d9315cd81c97c"
+      "text_fingerprint": "8d1d9315cd81c97c",
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1
     },
     "https://www.tntsports.co.uk/football/league-two/2026-2027/live-rochdale-grimsby-town_mtc21888147/live.shtml": {
       "first_attempt_at": "2026-10-20T13:46:13.059349Z",
@@ -3724,13 +3730,13 @@
     },
     "https://www.transfermarkt.com/vergleich/bilanzdetail/verein/1088/gegner_id/349/sort/anzahl_zuschauer": {
       "first_attempt_at": "2026-10-23T18:50:52.414234Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.transfermarkt.com/vergleich/bilanzdetail/verein/1088/gegner_id/349/sort/anzahl_zuschauer"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T19:08:29.525063Z",
+      "last_attempt_at": "2026-10-23T19:39:58.620382Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Rochdale AFC - Transfermarkt",
