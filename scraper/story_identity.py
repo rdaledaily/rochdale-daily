@@ -94,6 +94,46 @@ GENERIC_ENTITIES = {
     "house of commons",
 }
 
+# A publication's name and page furniture are not what a story is about.
+# Every Rochdale Times article carries "Rochdale Times" (and often "Read More"),
+# so counting them as named entities made ANY two of its articles share an
+# entity; one shared action word ("reject") then routed them through
+# ongoing_story_match to a forced 0.78 merge. Measured 23 Oct 2026: five live
+# records fused 3-5 unrelated Rochdale Times stories (a garden-fence appeal
+# under a car-wash URL; crime-gang and scam stories swallowed by a Hopwood
+# Hall ruling; planning and junction closures inside a survivors-support
+# story). The item's own source names are excluded dynamically as well, so a
+# new publisher cannot reopen the hole.
+PUBLISHER_AND_FURNITURE_ENTITIES = {
+    "rochdale times", "rochdale online", "rochdale observer",
+    "roch valley radio", "manchester evening news", "oldham times",
+    "bury times", "bolton news", "lancashire telegraph", "bbc news",
+    "bbc manchester", "itv news", "sky news", "about manchester",
+    "i love manchester", "google news", "yahoo news",
+    "read more", "read full", "full story", "click here", "find out more",
+    "share this", "sign up", "latest news", "related articles",
+    "related stories", "more news", "most read",
+}
+
+
+@lru_cache(maxsize=256)
+def _publisher_cutter(ignored: frozenset[str]) -> "re.Pattern[str]":
+    return re.compile(
+        r"(?<![A-Za-z0-9])(?:"
+        + "|".join(re.escape(name) for name in sorted(ignored, key=len, reverse=True) if name)
+        + r")(?![A-Za-z0-9])",
+        re.I,
+    )
+
+
+def _publisher_entities(item: Any) -> set[str]:
+    names = {str(get_value(item, "source_name", "") or "")}
+    for related in get_value(item, "related_sources", []) or []:
+        if isinstance(related, dict):
+            names.add(str(related.get("name") or ""))
+    names.update(str(name or "") for name in (get_value(item, "source_names", []) or []))
+    return {normalise_text(name).lower() for name in names if name} | PUBLISHER_AND_FURNITURE_ENTITIES
+
 # Words which commonly create false two-word "entities" in title case.
 ENTITY_VERB_WORDS = {
     "announces", "announced", "backs", "backed", "calls", "called",
@@ -655,13 +695,19 @@ def subject_tokens(item: Any) -> set[str]:
 
 def named_entities(item: Any) -> set[str]:
     entities: set[str] = set()
+    ignored = _publisher_entities(item)
+    # Cut publisher names and link text out BEFORE extraction: left in, they
+    # glue onto neighbouring capitals ("Read More Rochdale Times") and slip
+    # past an exact-match list as a longer fake entity.
+    cutter = _publisher_cutter(frozenset(ignored))
     # Analyse fields separately so the end of a headline cannot join the start
     # of an excerpt into a fake entity such as "Leader Pakistan".
     for field_text in text_fields(item):
+        field_text = cutter.sub(" . ", field_text)
         for match in ENTITY_RE.findall(field_text):
             entity = normalise_text(match).lower()
             words = entity.split()
-            if entity in GENERIC_ENTITIES or len(words) < 2:
+            if entity in GENERIC_ENTITIES or entity in ignored or len(words) < 2:
                 continue
             if all(word in STOPWORDS for word in words):
                 continue
