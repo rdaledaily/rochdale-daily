@@ -32,6 +32,7 @@ Applied by normalise_public_theme.py, which every lane runs last.
 from __future__ import annotations
 
 import difflib
+import html as html_lib
 import json
 import re
 from collections import defaultdict
@@ -52,7 +53,9 @@ _DATE_RE = re.compile(r'"datePublished":\s*"([^"]+)"')
 
 
 def _plain(html: str) -> str:
-    return " ".join(re.sub(r"<[^>]+>", " ", html or "").split())
+    # Inline links and emphasis do not change the words of a story.
+    text = re.sub(r"</?(?:a|span|strong|em|b|i|u|small|mark|time)\b[^>]*>", "", html or "", flags=re.I)
+    return " ".join(html_lib.unescape(re.sub(r"<[^>]+>", " ", text)).split())
 
 
 def _tokens(text: str) -> set[str]:
@@ -61,6 +64,10 @@ def _tokens(text: str) -> set[str]:
 
 def page_parts(html: str) -> dict:
     h1 = _H1_RE.search(html)
+    # Generated engagement/navigation is not part of the underlying report.
+    html = re.sub(r'<section\b[^>]*id=["\']rd-archive-related["\'][^>]*>.*?</section>', "", html, flags=re.S)
+    html = re.sub(r'<p\b[^>]*data-rd-reader-ending=["\']1["\'][^>]*>.*?</p>', "", html, flags=re.S)
+    html = re.sub(r'<p\b[^>]*class=["\']rd-related-inline["\'][^>]*>.*?</p>', "", html, flags=re.S)
     copy=re.search(r'<div[^>]*class="article-copy"[^>]*>(.*?)(?=<details[^>]*class="article-sources"|<section[^>]*class="(?:comments|read-next)|$)',html,re.S)
     if copy:
         body=_plain(copy.group(1))
@@ -93,7 +100,7 @@ def plan(pages: dict[str, str], live: set[str]) -> dict[str, dict]:
                  if _plain(reference).casefold() == _plain(parts[m]["body"][:3000]).casefold()]
         if len(group) < 2:
             continue
-        live_members = sorted(m for m in group if m in live)
+        live_members = sorted((m for m in group if m in live), key=lambda m: (not _indexable(pages[m], m), m))
         if live_members:
             primary = live_members[0]
         else:
@@ -225,9 +232,6 @@ def run(root: Path, *, check: bool = False) -> list[str]:
     for slug, html in updated.items():
         if html != pages[slug]:
             changed.append(f"articles/{slug}.html")
-            if check:
-                print(f"Archive identity difference: {slug}")
-                print("".join(difflib.unified_diff(pages[slug].splitlines(True), html.splitlines(True)))[:6000])
             if not check:
                 files[slug].write_text(html, encoding="utf-8")
     return changed
