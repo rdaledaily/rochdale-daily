@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-23T21:28:20.492523Z",
+  "updated_at": "2026-10-23T21:41:30.873910Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 227,
@@ -3179,14 +3179,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-21T03:06:43.485512Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "RBH submits plans for up to 270 homes in Lower Falinge",
       "source_name": "Roch Valley Radio Local News",
       "category": "community",
       "text_fingerprint": "b5c1b614febd4b06",
-      "recovery_attempts": 2,
-      "final_gate_removal_recovery": 1
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochvalleyradio.com/news-features/139/news/1150/greater-manchester-schools-receive-750-600-fruit-and-veg-portions-through-tesco-scheme": {
       "first_attempt_at": "2026-10-20T19:53:59.550626Z",
@@ -3461,7 +3462,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T21:28:20.492319Z",
+      "last_attempt_at": "2026-10-23T21:41:30.873705Z",
       "outcome": "published",
       "reason": "",
       "title": "Police appeal to find woman who may have recently given birth in Rochdale",
