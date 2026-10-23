@@ -38,7 +38,6 @@ on:
       - scraper/enforce_frontpage_freshness.py
       - scraper/enforce_live_homepage_window.py
       - scraper/content_hygiene.py
-      - scraper/normalise_public_theme.py
       - assets/css/rd-tokens.css
       - assets/css/site.css
       - assets/css/article-inline.css
@@ -46,6 +45,7 @@ on:
       - assets/css/public-families.css
       - assets/css/editorial-theme.css
       - assets/css/legacy-routing-pages.css
+      - scraper/normalise_public_theme.py
       - .github/workflows/publish.yml
   workflow_dispatch:
 
