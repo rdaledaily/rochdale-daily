@@ -24,6 +24,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from editorial_contract import category_for, ward_decision, reader_ending, NATURAL_STORY_POLICY
 from archive_integrity import _indexable
+from ad_slots import strip_ad_slots, insert_incontent_ad
 
 ROOT = Path(__file__).resolve().parents[1]
 REVIEWS = 'archive_quality_reviews.json'
@@ -53,6 +54,9 @@ def article_body(page):
     if not match:
         return ''
     fragment = match.group(2)
+    # Advert slots are page furniture added at render time. Reading them back
+    # into the record is what stacked 13 slots on 105 stories (23 Oct 2026).
+    fragment = strip_ad_slots(fragment)
     # Sources and related reporting are furniture, not article assertions.
     fragment = RELATED.sub('', ENGAGEMENT.sub('', fragment))
     fragment = re.sub(r'<p\b[^>]*class=["\']rd-related-inline["\'][^>]*>.*?</p>', '', fragment, flags=re.S)
@@ -355,16 +359,18 @@ def apply(root: Path, rows=None, images=False, network_images=True):
         related = '<section id="rd-archive-related" aria-label="Related local reporting"><h2>Related reporting</h2><ul>' + ''.join(links) + '</ul></section>' if links else ''
         # The body regex retains the sources/details and outer layout unchanged.
         match = BODY.search(page)
+        # The stored record stays slot-free; the page gets exactly one.
+        page_body = insert_incontent_ad(body)
         if match:
             sources_follow = page[match.end(2):].startswith('<details')
             if sources_follow:
-                page = page[:match.start(2)] + body + page[match.end(2):]
+                page = page[:match.start(2)] + page_body + page[match.end(2):]
                 source_end = page.find('</details>', match.start(2))
                 if source_end >= 0:
                     source_end += len('</details>')
                     page = page[:source_end] + related + page[source_end:]
             else:
-                page = page[:match.start(2)] + body + '</div>\n' + related + '\n' + page[match.end(2):]
+                page = page[:match.start(2)] + page_body + '</div>\n' + related + '\n' + page[match.end(2):]
         # Keep visible headlines and search/social/schema metadata in agreement.
         seo_title=row['title']
         if title_counts[original['title']]>1:

@@ -19,6 +19,7 @@ import html
 import json
 import os
 import re
+import ad_slots as _ad_slots
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -495,17 +496,10 @@ def category_label(category: str) -> str:
     return CATEGORY_LABELS.get(str(category or 'news').lower(), 'News')
 
 def insert_incontent_ad(content_html: str) -> str:
-    """Insert the ad slot after the third paragraph, or at the end for
-    short articles, matching the same placement used in the homepage
-    modal view."""
-    parts = content_html.split('</p>')
-    if len(parts) <= 1:
-        return content_html
-    ad_slot = '<div class="ad-slot ad-slot-incontent" data-ad-slot="article-incontent" role="presentation" aria-hidden="true"></div>'
-    break_index = min(3, len(parts) - 1)
-    parts.insert(break_index, ad_slot)
-    rebuilt = '</p>'.join(parts)
-    return rebuilt
+    """Exactly one advert slot after the third paragraph (or at the end of a
+    shorter story). Delegates to ad_slots so the render is idempotent: any
+    slot already in the stored body is removed first, never stacked."""
+    return _ad_slots.insert_incontent_ad(content_html)
 
 def edition_date() -> str:
     """Today's date, as the utility bar prints it. Written at generation time
@@ -1132,7 +1126,33 @@ def archive_page_lastmod(path: Path) -> str:
     except OSError:
         return ''
 
+def scrub_stored_ad_slots(path: Path = ARTICLES_JSON) -> int:
+    """Remove advert slots from stored story bodies. Slots are render-time
+    furniture; a stored one is a leak (see ad_slots.py). Runs first in every
+    lane so the feed, the homepage modal and the next render all start clean.
+    Rewrites the file only when something was removed. Returns slots removed."""
+    try:
+        records = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return 0
+    if not isinstance(records, list):
+        return 0
+    removed = 0
+    for record in records:
+        if not isinstance(record, dict):
+            continue
+        body = record.get('content_html')
+        if isinstance(body, str) and 'ad-slot-incontent' in body:
+            removed += _ad_slots.count_ad_slots(body)
+            record['content_html'] = _ad_slots.strip_ad_slots(body)
+    if removed:
+        path.write_text(json.dumps(records, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        print(f'Removed {removed} stored advert slot(s) from {path}')
+    return removed
+
+
 def main() -> None:
+    scrub_stored_ad_slots()
     from frontpage_pipeline import main as build_frontpage
     build_frontpage()
     blocklist = load_blocklist()
