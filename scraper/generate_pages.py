@@ -1188,6 +1188,16 @@ def main() -> None:
     # promoted in the XML sitemap. The sitemap is an editorial crawl hint, not
     # an inventory of every historical page ever published.
     live_slugs = {slug for slug, _ in slugs_with_dates}
+    # Retired URLs (in _redirects) lose their page; canonicals that name a
+    # missing or unrelated story are corrected. See archive_identity_repair.
+    try:
+        from archive_identity_repair import repair as repair_archive_identity
+        repair_stats = repair_archive_identity(
+            OUTPUT_DIR, Path('_redirects'), {str(a.get('slug')) for a in articles}
+        )
+        print(f'Archive identity repair: {repair_stats}')
+    except Exception as exc:  # never let the repair block the paper
+        print(f'Archive identity repair skipped: {type(exc).__name__}: {exc}')
     scrubbed = scrub_legacy_comment_markup(OUTPUT_DIR, live_slugs)
     remastheaded = modernise_archived_masthead(OUTPUT_DIR, live_slugs)
     related_pages, related_removed = prune_dead_related_links(OUTPUT_DIR, live_slugs)
