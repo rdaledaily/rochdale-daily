@@ -19,10 +19,10 @@ concurrency:
 
 jobs:
   inspect:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
       - name: Download official GMP workbook and inspect geography

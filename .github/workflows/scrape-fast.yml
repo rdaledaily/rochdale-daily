@@ -30,7 +30,7 @@ concurrency:
 jobs:
   fast-news:
     if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 * * * *'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -98,7 +98,7 @@ jobs:
     steps:
       - name: Record lane start
         run: date +%s > "$RUNNER_TEMP/lane_start"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -106,7 +106,7 @@ jobs:
         run: |
           git fetch origin main
           git reset --hard origin/main
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: "pip"
@@ -132,7 +132,7 @@ jobs:
           python scraper/article_gate.py articles.json
       - name: Preserve private editorial review for this run
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: editorial-review-${{ github.run_id }}-${{ github.run_attempt }}
           path: /tmp/rochdale-daily-editorial-review/
@@ -259,7 +259,7 @@ jobs:
 
   deep-browser:
     if: github.event.schedule == '10 2,8,14,20 * * *'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 70
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -309,7 +309,7 @@ jobs:
       COMMIT_MESSAGE: "Update Rochdale Daily deep local news"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -317,7 +317,7 @@ jobs:
         run: |
           git fetch origin main
           git reset --hard origin/main
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: "pip"
@@ -378,7 +378,7 @@ jobs:
         run: gh workflow run deploy-pages.yml --ref main
       - name: Preserve final rejected drafts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: final-editorial-review-${{ github.run_id }}-${{ github.run_attempt }}
           path: /tmp/rochdale-daily-editorial-review/

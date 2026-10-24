@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   fast-news:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 35
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -76,7 +76,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -85,7 +85,7 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: "pip"

@@ -61,7 +61,7 @@ concurrency:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       CSS_SOURCE_PATH: assets/css/article-inline.css
@@ -69,7 +69,7 @@ jobs:
       FRONTPAGE_MIN_ARTICLES: "12"
       FRONTPAGE_TARGET_ARTICLES: "45"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: true
           fetch-depth: 1
@@ -77,7 +77,7 @@ jobs:
         run: |
           git fetch origin main
           git reset --hard origin/main
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: "pip"
@@ -218,7 +218,7 @@ jobs:
         run: gh workflow run deploy-pages.yml --ref main
       - name: Preserve final rejected drafts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: final-editorial-review-${{ github.run_id }}-${{ github.run_attempt }}
           path: /tmp/rochdale-daily-editorial-review/

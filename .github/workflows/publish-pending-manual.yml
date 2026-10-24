@@ -19,10 +19,10 @@ concurrency:
 
 jobs:
   merge:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -40,7 +40,7 @@ jobs:
             echo 'run=false' >> "$GITHUB_OUTPUT"
             echo 'No pending manual articles.'
           fi
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         if: steps.pending.outputs.run == 'true'
         with:
           python-version: '3.11'
