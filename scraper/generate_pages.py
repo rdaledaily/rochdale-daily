@@ -856,6 +856,12 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     byline = esc(article.get('byline') or 'Rochdale Daily Newsdesk')
     police_matter = bool(article.get('police_matter'))
     content = insert_incontent_ad(str(article.get('content_html') or ''))
+    # In-text "Read more" links to genuinely related stories (inline_related.py).
+    try:
+        import inline_related
+        content = inline_related.insert(content, article, all_articles)
+    except Exception as exc:  # never let a link pass block a page
+        print(f'Inline related skipped for {article.get("slug")}: {type(exc).__name__}: {exc}')
     hero = hero_image_markup(article, image_url)
     # A thin story (still under the 200-word development floor) is published
     # timely and thickened in place as more sources arrive. While it is still

@@ -361,6 +361,14 @@ def apply(root: Path, rows=None, images=False, network_images=True):
         match = BODY.search(page)
         # The stored record stays slot-free; the page gets exactly one.
         page_body = insert_incontent_ad(body)
+        # In-text Read more links (inline_related.py). They are stripped when
+        # the body is read back above, so they are added again here; otherwise
+        # this pass deleted every one the page generator placed.
+        try:
+            import inline_related
+            page_body = inline_related.insert(page_body, row, feed)
+        except Exception as exc:  # never let a link pass block the sweep
+            print(f'Inline related skipped for {slug}: {type(exc).__name__}: {exc}')
         if match:
             sources_follow = page[match.end(2):].startswith('<details')
             if sources_follow:
