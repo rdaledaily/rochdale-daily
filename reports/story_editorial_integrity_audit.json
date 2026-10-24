@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 384,
-  "published_count": 384,
+  "article_count": 389,
+  "published_count": 389,
   "category_change_count": 1,
-  "image_change_count": 76,
+  "image_change_count": 77,
   "category_changes": [
     {
       "slug": "videos-raise-hygiene-concerns-rajdhani-halal-meats-halifax-road",
@@ -15,6 +15,18 @@
     }
   ],
   "image_changes": [
+    {
+      "slug": "weather-warning-issued-as-storm-boelo-approaches-rochdale",
+      "title": "Weather Warning Issued as Storm Boelo Approaches Rochdale",
+      "category": "environment",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/weather.png",
+        "img": "assets/img/cards/weather.png",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg"
+    },
     {
       "slug": "rochdale-borough-council-awards-1-1-million-contract-for-young-people-s-accommod",
       "title": "Rochdale Borough Council Awards £1.1 Million Contract for Young People's Accommodation",
@@ -66,7 +78,7 @@
     {
       "slug": "rochdale-council-generates-nearly-3-million-from-parking-fines-over-three-years",
       "title": "Rochdale Council Generates Nearly £3 Million from Parking Fines Over Three Years",
-      "category": "traffic",
+      "category": "news",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
         "image_url": "assets/img/cards/rochdale_riverside.jpg",
@@ -449,7 +461,7 @@
     },
     {
       "slug": "lifts-at-freehold-tram-stop-out-of-service-for-repairs",
-      "title": "Lifts at Freehold Tram Stop Out of Service Until Further Notice",
+      "title": "Lifts Out of Service at Freehold Tram Stop Due to Replacement Works",
       "category": "transport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
