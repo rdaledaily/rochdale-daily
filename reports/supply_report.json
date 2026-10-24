@@ -1,32 +1,32 @@
 {
-  "checked_at": "2026-10-24T12:13:31.324711Z",
+  "checked_at": "2026-10-24T18:21:11.771312Z",
   "daily_target": 60,
   "daily_floor": 12,
-  "published_last_24h": 12,
-  "published_last_7d": 92,
+  "published_last_24h": 8,
+  "published_last_7d": 94,
   "rolling_days": 7,
-  "rolling_mean_per_day": 13.14,
-  "shortfall_against_target_per_day": 48,
+  "rolling_mean_per_day": 13.43,
+  "shortfall_against_target_per_day": 52,
   "published_per_day": {
     "2026-10-18": 8,
     "2026-10-19": 15,
-    "2026-10-20": 16,
+    "2026-10-20": 15,
     "2026-10-21": 13,
     "2026-10-22": 20,
-    "2026-10-23": 15,
-    "2026-10-24": 5
+    "2026-10-23": 16,
+    "2026-10-24": 7
   },
-  "live_feed_records": 388,
+  "live_feed_records": 392,
   "live_feed_routes": {
-    "ai-grounded-rewrite": 109,
-    "editorial": 239,
-    "evergreen_fallback": 5,
+    "evergreen_fallback": 6,
+    "ai-grounded-rewrite": 107,
+    "editorial": 243,
     "official-record-grounded-rewrite": 2,
     "unknown": 1,
     "editorial-live-seed": 4
   },
-  "status": "short",
+  "status": "failed",
   "failures": [
-    "12 stories in the last 24 hours against a target of 60"
+    "only 8 news stories published in the last 24 hours, below the floor of 12 (newsroom target 60/day)"
   ]
 }
