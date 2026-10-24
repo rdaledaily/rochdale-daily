@@ -1051,7 +1051,7 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
     if (root / "wards").is_dir():
         pages.extend(sorted((root / "wards").glob("*.html")))
     pages.extend([root / "heywood.html", root / "milnrow.html", root / "middleton.html", root / "littleborough.html",
-                  root / "start-here.html", root / "whats-on.html"])
+                  root / "start-here.html", root / "whats-on.html", root / "roadworks.html"])
     # Topic hubs and the month archive are built by the normaliser.
     for folder in ("news/topics", "news/archive"):
         if (root / folder).is_dir():
@@ -1215,6 +1215,11 @@ def main() -> None:
         build_whats_on_page()
     except Exception as exc:  # never let a hub page failure block the paper
         print(f"What's On page skipped: {type(exc).__name__}: {exc}")
+    try:
+        from generate_roadworks_page import main as build_roadworks_page
+        build_roadworks_page()
+    except Exception as exc:  # never let a hub page failure block the paper
+        print(f"Roadworks page skipped: {type(exc).__name__}: {exc}")
 
     # Keep the full historical article archive discoverable. The normal XML
     # sitemap is not the Google News sitemap: older stories should remain in

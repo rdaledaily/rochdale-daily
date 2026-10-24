@@ -137,7 +137,7 @@ jobs:
             git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json \
               articles sitemap.xml news-sitemap.xml image-sitemap.xml assets/img/cards archive.html search.html archive-index.json \
               articles/frontpage.json index.html rss.xml wards/ councillor_photos.json \
-                news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html 2>/dev/null || true
+                news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json 2>/dev/null || true
           }
 
           rebuild_from_current_main() {

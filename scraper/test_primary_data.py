@@ -19,6 +19,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import primary_data as pd  # noqa: E402
 
+# council_roadworks() saves the whole listing for the /roadworks page. Tests feed
+# it fake listings, so point that file somewhere harmless: never the repo root.
+import tempfile as _tempfile
+pd.ROADWORKS_LISTING_FILE = Path(_tempfile.mkdtemp()) / "roadworks.json"
+
 pd._pause = lambda seconds: None    # tests never wait between pages
 
 NOW = datetime(2026, 10, 9, 19, 30, tzinfo=timezone.utc)
