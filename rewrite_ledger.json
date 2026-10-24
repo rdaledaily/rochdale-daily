@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-24T23:17:24.260263Z",
+  "updated_at": "2026-10-24T23:49:04.585191Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 200,
@@ -2892,15 +2892,16 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-24T22:45:00.680958Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-10-24T23:49:04.584938Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale wins town and city centres category at Britain in Bloom awards",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
       "text_fingerprint": "fb64a6dd4b4b396e",
-      "recovery_attempts": 2,
-      "final_gate_removal_recovery": 1
+      "recovery_attempts": 0,
+      "final_gate_removal_recovery": 1,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1235/the-potential-return-of-lodge-mill": {
       "first_attempt_at": "2026-10-24T10:12:24.957809Z",
