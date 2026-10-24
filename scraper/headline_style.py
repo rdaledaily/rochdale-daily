@@ -31,7 +31,7 @@ SMALL_WORDS = frozenset(
 ALWAYS_CAPITAL = frozenset(
     "i monday tuesday wednesday thursday friday saturday sunday january february march "
     "april may june july august september october november december christmas easter "
-    "halloween eid diwali ramadan".split()
+    "halloween eid diwali ramadan st saint mr mrs ms dr sir dame lord lady cllr".split()
 )
 # "may" and "march" are also ordinary words; they keep a capital only when the
 # body confirms the month (handled by the proper-noun check first).
@@ -46,7 +46,10 @@ PLACES = frozenset(
     "halifax burnley blackburn preston lancashire yorkshire cheshire pennines "
     "pakistan pakistani india indian bangladesh bangladeshi poland polish".split()
 )
-_WORD = re.compile(r"[A-Za-z][A-Za-z'’\-.&]*")
+# Digits are part of a word so road and code identifiers stay whole: "M62",
+# "A58", "A627(M)". Split on letters only, "M62" became "M" + "62" and the
+# "M" was lowered (review on #76).
+_WORD = re.compile(r"[A-Za-z0-9][A-Za-z0-9'’\-.&]*(?:\([A-Z]\))?")
 
 
 def _plain(value: str) -> str:
@@ -54,7 +57,8 @@ def _plain(value: str) -> str:
 
 
 def is_title_case(title: str) -> bool:
-    words = [w for w in _WORD.findall(title)[1:] if w.lower() not in SMALL_WORDS and len(w) > 3]
+    words = [w for w in _WORD.findall(title)[1:]
+             if w[0].isalpha() and w.lower() not in SMALL_WORDS and len(w) > 3]
     return len(words) >= 2 and sum(w[0].isupper() for w in words) / len(words) > 0.8
 
 
@@ -105,6 +109,15 @@ def _key(word: str) -> str:
 
 
 INSTITUTION_WORDS = frozenset({"council", "borough"})
+HONORIFICS = frozenset("st saint mr mrs ms dr sir dame lord lady cllr".split())
+NAMED_PLACE_WORDS = frozenset(
+    "church chapel cathedral mosque school academy college hospital hospice centre "
+    "hall park primary infirmary surgery".split()
+)
+GENERIC_ROAD_WORDS = frozenset(
+    "slip ring link access relief bypass trunk toll side back dual main service "
+    "private public new old busy major minor local".split()
+)
 STREET_WORDS = frozenset(
     "street road lane avenue way drive close park place square terrace crescent "
     "grove gardens walk row hill brow bridge green parade fold".split()
@@ -132,7 +145,7 @@ def sentence_case(title: str, body: str = "") -> str:
         if i == 0 or ":" in before:
             keep[i] = True
         elif any(ch.isdigit() for ch in word):
-            keep[i] = True
+            keep[i] = True                                   # M62, A58, 3-0, £1.1 (parts handled below)
         elif len(word) > 1 and re.sub(r"[-.&'’]", "", word).isupper():
             keep[i] = True                                   # AFC, GMP, HMO, RUFC
         elif key in ALWAYS_CAPITAL and key not in AMBIGUOUS_CALENDAR:
@@ -143,6 +156,12 @@ def sentence_case(title: str, body: str = "") -> str:
             keep[i] = True                                   # a name: Bolton, Abraham, Tesco, Ofsted
         elif key in INSTITUTION_WORDS and i and keys[i - 1] in PLACES:
             keep[i] = True                                   # Rochdale Council, Rochdale Borough
+    # After an honorific comes a name: "St Luke's Church", "Dr Ahmed", "Cllr Jones".
+    for i in range(len(matches) - 1):
+        if keys[i] in HONORIFICS and matches[i].group(0)[0].isupper():
+            keep[i] = keep[i + 1] = True
+            if i + 2 < len(matches) and keys[i + 2] in NAMED_PLACE_WORDS:
+                keep[i + 2] = True
     # Road names: "Trafalgar Street", "Elizabethan Way" -- when the story writes
     # that exact name ("Temporary Road closures" is not a road).
     for i in range(len(matches) - 1, 0, -1):
@@ -151,7 +170,8 @@ def sentence_case(title: str, body: str = "") -> str:
             confirmed = re.search(r"(?<![A-Za-z])" + re.escape(name) + r"(?![a-z])", plain_body)
             # Mid-headline "X Street" is a road name even if the text is silent;
             # only a headline's opening word ("Temporary Road ...") needs proof.
-            if confirmed or (i - 1 > 0 and keys[i - 1] not in SMALL_WORDS):
+            generic = keys[i - 1] in GENERIC_ROAD_WORDS        # "slip road", "ring road"
+            if confirmed or (i - 1 > 0 and keys[i - 1] not in SMALL_WORDS and not generic):
                 keep[i] = keep[i - 1] = True
     # Quoted titles and slogans stay exactly as written.
     for quoted in re.finditer(r"(?:^|(?<=\s))['‘\"“]([^'’\"”]{2,80})['’\"”](?=$|[\s,.;:!?])", title):
@@ -170,6 +190,15 @@ def sentence_case(title: str, body: str = "") -> str:
                          or part[1:] != part[1:].lower())
                 else part[:1].lower() + part[1:]
                 for part in rest]))
+        elif keep[i] and "-" in word and any(ch.isdigit() for ch in word) and i:
+            # "17-Storey" -> "17-storey"; "M62-A627" untouched: only the
+            # all-letter parts follow the normal rule.
+            out.append("-".join(
+                part if (any(ch.isdigit() for ch in part) or _key(part) in PLACES
+                         or (_key(part) in standalone and _key(part) not in lower)
+                         or part[1:] != part[1:].lower())
+                else part[:1].lower() + part[1:]
+                for part in word.split("-")))
         elif keep[i]:
             out.append(word)                                 # never add a capital
         else:

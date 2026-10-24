@@ -377,7 +377,9 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             from archive_integrity import _day
             day=_day(row.get('published_at',''))
             if day:seo_title+=' · '+day
-        page = re.sub(r'<title>.*?</title>', '<title>' + html.escape(seo_title) + ' | Rochdale Daily</title>', page, count=1, flags=re.S)
+        # Same rule as generate_pages: the brand suffix only when it fits.
+        from headline_style import title_tag
+        page = re.sub(r'<title>.*?</title>', '<title>' + html.escape(title_tag(seo_title)) + '</title>', page, count=1, flags=re.S)
         for key,value in [('og:title',row['title']),('twitter:title',row['title']),('og:description',row.get('excerpt','')),('twitter:description',row.get('excerpt','')),('description',row.get('excerpt',''))]:
             pattern = r'(<meta\b[^>]*(?:property|name)=["\']' + re.escape(key) + r'["\'][^>]*content=["\'])(.*?)(["\'][^>]*>)'
             page = re.sub(pattern, lambda m: m.group(1)+html.escape(value,quote=True)+m.group(3), page, flags=re.S)
