@@ -932,6 +932,31 @@ def missing_person_match(left: Any, right: Any) -> bool | None:
     )
 
 
+_OFFICIAL_RECORD_RE = re.compile(
+    r"rochdale\.gov\.uk/directory-record/(\d+)"
+    r"|publicaccess\.rochdale\.gov\.uk/online-applications/applicationDetails\.do\?.*?keyVal=([A-Za-z0-9]+)",
+    re.I,
+)
+
+
+def _official_record_id(url: str) -> str:
+    match = _OFFICIAL_RECORD_RE.search(str(url or ""))
+    return (match.group(1) or match.group(2) or "") if match else ""
+
+
+def _distinct_official_records(left_url: str, right_url: str) -> bool:
+    """Two different numbered council records are two different things.
+
+    Each council roadworks notice (directory-record/<id>) covers one road and
+    each planning application (keyVal) one site. Their headlines share most
+    words ("X Street, roadworks in Rochdale from ... 2026"), so notices for
+    different streets scored 0.80-0.94 and merged: on 24 Oct 2026 four live
+    stories carried 4-17 notices each, and one ran under the headline of a
+    notice its text never covered (Trafalgar/Joy Street over Nowell Road)."""
+    left_id, right_id = _official_record_id(left_url), _official_record_id(right_url)
+    return bool(left_id and right_id and left_id != right_id)
+
+
 def ongoing_story_match(left: Any, right: Any) -> bool:
     """Guarded low-threshold route for differently worded updates.
 
@@ -939,6 +964,11 @@ def ongoing_story_match(left: Any, right: Any) -> bool:
     areas.  It then requires either a shared named entity or a strong compound
     subject plus corroborating subject/action overlap.
     """
+    if _distinct_official_records(
+        get_value(left, "source_url", "") or get_value(left, "url", ""),
+        get_value(right, "source_url", "") or get_value(right, "url", ""),
+    ):
+        return False
     if not categories_compatible(left, right):
         return False
     if not areas_compatible(left, right):
@@ -1010,6 +1040,8 @@ def story_similarity(left: Any, right: Any) -> float:
     )
     if left_url and right_url and left_url == right_url:
         return 1.0
+    if _distinct_official_records(left_url, right_url):
+        return 0.0
 
     if not categories_compatible(left, right):
         return 0.0
