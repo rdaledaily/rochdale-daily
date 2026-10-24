@@ -134,10 +134,17 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           stage_publish() {
-            git add articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json \
-              articles sitemap.xml news-sitemap.xml image-sitemap.xml assets/img/cards archive.html search.html archive-index.json \
-              articles/frontpage.json index.html rss.xml wards/ councillor_photos.json \
-                news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json 2>/dev/null || true
+            # Only paths that exist: one missing path (roadworks.json before the
+            # council listing is first saved) made the single `git add` stage
+            # nothing at all, so articles.json and new pages stopped being
+            # committed on 24 Oct 2026.
+            local paths=(articles.json manual_articles.json manual_articles.d scraper_status.json event_dates.json
+              articles sitemap.xml news-sitemap.xml image-sitemap.xml assets/img/cards archive.html search.html archive-index.json
+              articles/frontpage.json index.html rss.xml wards/ councillor_photos.json
+              news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json)
+            local present=()
+            for path in "${paths[@]}"; do [ -e "${path}" ] && present+=("${path}"); done
+            git add -- "${present[@]}"
           }
 
           rebuild_from_current_main() {
