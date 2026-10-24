@@ -222,6 +222,36 @@ def parse_roadworks_listing(html: str) -> list[dict[str, Any]]:
     return rows
 
 
+ROADWORKS_LISTING_FILE = Path(__file__).resolve().parents[1] / "roadworks.json"
+
+
+def save_roadworks_listing(rows: list[dict[str, Any]], now: datetime,
+                           path: Path | None = None) -> None:
+    """Keep the council's complete current listing for the /roadworks page.
+
+    The news path below offers only a few notices a day; the page shows them
+    all. Written only when the listing parsed to something, so a failed or
+    empty fetch never blanks the page."""
+    if not rows:
+        return
+    path = Path(path) if path is not None else ROADWORKS_LISTING_FILE  # read at call time: tests redirect it
+    payload = {
+        "source": "Rochdale Borough Council roadworks directory",
+        "source_url": ROADWORKS_LISTINGS[0],
+        "fetched_at": iso(now),
+        "notices": [
+            {"id": row["id"], "title": row["title"], "url": row["url"],
+             "start": row["start"].date().isoformat() if row.get("start") else None,
+             "area": detect_town(row["title"])}
+            for row in rows
+        ],
+    }
+    try:
+        path.write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    except OSError:
+        pass
+
+
 def council_roadworks(get: Callable[..., Any], state: dict[str, Any], now: datetime, limit: int) -> tuple[list[dict[str, Any]], dict[str, int]]:
     key = "council_roadworks"
     rows: list[dict[str, Any]] = []
@@ -232,6 +262,7 @@ def council_roadworks(get: Callable[..., Any], state: dict[str, Any], now: datet
         rows.extend(page)
         if len(page) < 50:      # the directory lists fifty to a page
             break
+    save_roadworks_listing(rows, now)
     today = now.astimezone(LONDON).replace(hour=0, minute=0, second=0, microsecond=0)
     stats = {"listed": len(rows), "already_seen": 0, "started_long_ago": 0, "too_far_ahead": 0, "undated": 0, "in_window": 0}
     wanted: list[dict[str, Any]] = []
