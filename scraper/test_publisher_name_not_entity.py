@@ -85,3 +85,21 @@ def test_same_plan_from_two_outlets_still_merges():
         "related_sources": [],
     }
     assert S.same_story(FALINGE, other)
+
+
+def test_distinct_council_records_never_merge():
+    # 24 Oct 2026: notices for different streets scored 0.80-0.94 and fused
+    # 4-17 roadworks notices per story.
+    def notice(title, record):
+        return {"source_name": "Rochdale Borough Council",
+                "source_url": f"https://www.rochdale.gov.uk/directory-record/{record}/x",
+                "source_title": title, "source_summary": title, "source_published_at": WHEN,
+                "area": "rochdale", "category": "traffic", "related_sources": []}
+    joy = notice("Joy Street, roadworks in Rochdale from 2 November 2026", 2640)
+    trafalgar = notice("Trafalgar Street, roadworks in Rochdale on 26 November 2026", 2638)
+    assert not S.same_story(joy, trafalgar)
+    assert not S.ongoing_story_match(joy, trafalgar)
+    assert S.same_story(joy, dict(joy))
+    men = dict(joy, source_name="Manchester Evening News",
+               source_url="https://www.manchestereveningnews.co.uk/news/joy-street-roadworks")
+    assert S.same_story(joy, men)
