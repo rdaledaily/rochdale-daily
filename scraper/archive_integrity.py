@@ -68,6 +68,7 @@ def page_parts(html: str) -> dict:
     html = re.sub(r'<section\b[^>]*id=["\']rd-archive-related["\'][^>]*>.*?</section>', "", html, flags=re.S)
     html = re.sub(r'<p\b[^>]*data-rd-reader-ending=["\']1["\'][^>]*>.*?</p>', "", html, flags=re.S)
     html = re.sub(r'<p\b[^>]*class=["\']rd-related-inline["\'][^>]*>.*?</p>', "", html, flags=re.S)
+    html = re.sub(r'<div\b[^>]*data-rd-background=["\']1["\'][^>]*>.*?</div>', "", html, flags=re.S)
     copy=re.search(r'<div[^>]*class="article-copy"[^>]*>(.*?)(?=<details[^>]*class="article-sources"|<section[^>]*class="(?:comments|read-next)|$)',html,re.S)
     if copy:
         body=_plain(copy.group(1))

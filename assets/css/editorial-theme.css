@@ -1435,3 +1435,10 @@ body.is-advancing { opacity: .55; transition: opacity .18s ease; }
 .reader-archive-note,.reader-contents{padding:14px 16px;margin:18px 0;border-left:3px solid var(--accent);background:var(--surface);font-size:15px;line-height:1.6}
 .reader-contents summary{cursor:pointer;min-height:44px;display:list-item;padding-block:10px;font-weight:700}
 .reader-contents a{display:inline-block;min-height:44px;padding-block:9px}
+
+/* Background box for short stories (scraper/story_background.py): cited
+   context after the report, set apart so it never reads as new reporting. */
+.article-copy .rd-background{margin:28px 0 22px;padding:16px 18px 6px;border-left:3px solid var(--accent);background:var(--surface)}
+.article-copy .rd-background h2{font:700 19px/1.3 var(--font-display);margin:0 0 10px}
+.article-copy .rd-background p{font-size:16px;line-height:1.6;margin:0 0 12px}
+.article-copy .rd-background .rd-background-sources{font-size:13px;color:var(--muted)}

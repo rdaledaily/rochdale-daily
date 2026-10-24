@@ -37,7 +37,9 @@ READER_FIRST_POLICY = (
 
 COMMON_QUESTIONS = (
     "What happened, and what is the latest confirmed development?",
-    "Exactly where and when did it happen, if established?",
+    "Who is involved: full names and roles of the people and organisations, as the source gives them?",
+    "Exactly where and when did it happen, if established (street, place, town; day and date)?",
+    "How and why did it happen, according to the source?",
     "Who is affected locally, and what difference does it make?",
     "What is known from verifiable sources, and what remains uncertain?",
     "What is the next confirmed step, deadline or update, if any?",
