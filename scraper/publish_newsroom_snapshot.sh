@@ -24,7 +24,7 @@ stage_newsroom() {
     image_coverage_report.json image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json assets/img/cards \
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json \
     archive.html search.html archive-index.json rss.xml index.html \
-      news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html 2>/dev/null || true
+      news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html 2>/dev/null || true
   # State files that exist only once their collector has run. They are added on
   # their own: one missing path makes a single `git add` stage nothing at all.
   # Without them every fresh checkout forgets which official records it has
