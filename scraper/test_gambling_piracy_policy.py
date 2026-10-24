@@ -51,7 +51,7 @@ def test_local_newsrooms_and_ordinary_words_not_denied():
 def test_no_false_positive_on_any_published_source_host():
     """Every host the live feed cites, except the known offenders."""
     from urllib.parse import urlparse
-    offenders = {"apwin.com", "bettingodds.com", "whoscored.com"}
+    offenders = {"apwin.com", "bettingodds.com", "whoscored.com", "town.shodoshima.lg.jp"}
     feed = json.loads((ROOT / "articles.json").read_text(encoding="utf-8"))
     flagged = set()
     for row in feed:
@@ -102,3 +102,12 @@ def test_promo_title_patterns_present_and_clean_against_published_headlines():
     feed = json.loads((ROOT / "articles.json").read_text(encoding="utf-8"))
     hit = [r["title"] for r in feed for p in promo if p in r["title"].lower()]
     assert not hit, hit
+
+
+def test_hijacked_foreign_government_hosts_and_non_latin_names_denied():
+    # 24 Oct 2026: pirate-stream spam from town.shodoshima.lg.jp was published.
+    assert L.source_is_denied("", "https://www.town.shodoshima.lg.jp/section/x.html")
+    assert L.source_is_denied("", "https://www.city.example.go.jp/x")
+    assert L.source_is_denied("小豆島町", "https://news.google.com/rss/articles/CBMi")
+    assert not L.source_is_denied("Rochdale Times", "https://www.rochdaletimes.co.uk/x")
+    assert not L.source_is_denied("Café Nero", "https://www.example.co.uk/x")
