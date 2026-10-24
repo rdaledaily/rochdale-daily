@@ -89,3 +89,22 @@ def test_restyle_feed():
         assert out[1]["title"] == "Littleborough Cricket Club Bonfire 2026"
         assert out[2]["title"] == "Birtle View Nursery Opens"
         assert H.restyle_feed(path) == 0
+
+
+def test_road_and_code_identifiers_stay_whole():
+    assert H.sentence_case("Delays Expected After M62 Crash Near Rochdale", "") == \
+        "Delays expected after M62 crash near Rochdale"
+    assert H.sentence_case("Roadworks Planned on the A58 Through Littleborough Next Week", "") == \
+        "Roadworks planned on the A58 through Littleborough next week"
+    assert H.sentence_case("Overnight Closure of A627(M) Slip Road Near Rochdale", "") == \
+        "Overnight closure of A627(M) slip road near Rochdale"
+    assert H.sentence_case("Plans for 17-Storey Tower Next to Historic Pub Rejected", "") == \
+        "Plans for 17-storey tower next to historic pub rejected"
+    assert H.sentence_case("Rochdale AFC Draw 2-2 with Grimsby Town in League Two Match",
+                           "Rochdale drew with Grimsby Town in League Two.") == \
+        "Rochdale AFC draw 2-2 with Grimsby Town in League Two match"
+
+
+def test_titles_and_saints_keep_capitals():
+    assert H.sentence_case("Upcoming Services and Events at St Luke's Church, Deeplish", "") == \
+        "Upcoming services and events at St Luke's Church, Deeplish"
