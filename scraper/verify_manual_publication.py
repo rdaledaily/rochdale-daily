@@ -63,7 +63,15 @@ def source_entries() -> list[dict[str, Any]]:
                 rows.append(payload)
             elif isinstance(payload, list):
                 rows.extend(item for item in payload if isinstance(item, dict))
-    return [row for row in rows if not row.get("draft") and row.get("enabled") is not False]
+    # A deliberately taken-down story (story_blocklist.json "slugs") is not
+    # expected in the feed, even if its manual file remains.
+    try:
+        blocked = json.loads(Path("story_blocklist.json").read_text(encoding="utf-8")).get("slugs", [])
+    except (OSError, ValueError, AttributeError):
+        blocked = []
+    taken_down = {slugify(value) for value in blocked if value}
+    return [row for row in rows if not row.get("draft") and row.get("enabled") is not False
+            and canonical_source_slug(row) not in taken_down]
 
 
 def canonical_source_slug(entry: dict[str, Any]) -> str:

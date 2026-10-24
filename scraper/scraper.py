@@ -802,9 +802,11 @@ def load_robots(base: str):
     if status != 200:
         log.warning('robots.txt for %s returned %s, so it states no policy; allowing a standard public-page request.', base, status)
         return None
-    robot = urllib.robotparser.RobotFileParser()
     try:
-        robot.parse((response.text or '').splitlines())
+        # Wildcard-aware (robots_rules.py): Python 3.11's parser ignores
+        # Disallow rules that use * or $.
+        import robots_rules
+        robot = robots_rules.parse(response.text or '')
     except Exception as error:
         log.warning('robots.txt for %s could not be parsed (%s); allowing a standard public-page request.', base, error)
         return None
@@ -821,7 +823,8 @@ def robots_allows(url: str) -> bool:
     if robot is None:
         return True
     try:
-        return robot.can_fetch(SESSION.headers['User-Agent'], url)
+        import robots_rules
+        return robots_rules.can_fetch(robot, SESSION.headers['User-Agent'], url)
     except Exception:
         return True
 
@@ -3295,6 +3298,11 @@ def rewrite_ledger_block_reason(candidate: Any) -> str:
         return ''
     if outcome == 'published':
         return 'already published from this source material'
+    # Recovery exhausted: the story was published and then vanished from the
+    # feed more than twice. The attempt count resets whenever the outcome
+    # changes, so it cannot be what holds this back; the reason does.
+    if outcome == 'rejected' and reason.startswith('missing from feed after repeated publication attempts'):
+        return f'already rejected: {reason}'
     if int(entry.get('attempts') or 0) < REWRITE_REJECTION_ATTEMPT_LIMIT:
         return ''
     return f'already rejected: {reason}' if reason else 'already rejected'
@@ -3346,6 +3354,9 @@ def existing_article_for_candidate(candidate: Any, existing_by_story: dict[str, 
         if any(url and _identity_of_url(str(url)) == wanted for url in urls):
             return article
     return None
+
+
+FINAL_GATE_RETIRED_AT = '2026-10-12T00:00:00Z'
 
 
 def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[str, int]:
@@ -3431,7 +3442,11 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
             # drafts after the rewrite ledger marked them published. Reopen
             # those absent records ONCE under the new policy, even if the old
             # evidence-retry budget was exhausted. Never reopen takedowns.
-            if missing_publication and entry.get('final_gate_removal_recovery') != 1:
+            # Only for records from before that gate was retired (11 Oct
+            # 2026): applied to new records too, it gave every missing story an
+            # extra unbounded-looking reopen ahead of the normal two retries.
+            if (missing_publication and entry.get('final_gate_removal_recovery') != 1
+                    and str(entry.get('first_attempt_at') or '') < FINAL_GATE_RETIRED_AT):
                 probe = {
                     'title': entry.get('title') or '',
                     'source_name': entry.get('source_name') or '',

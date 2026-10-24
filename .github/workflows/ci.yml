@@ -266,7 +266,42 @@ jobs:
           python -m pytest -q scraper/test_story_background.py scraper/test_inline_related.py \
             scraper/test_headline_style.py scraper/test_ad_slots.py scraper/test_roadworks_page.py \
             scraper/test_archive_identity_repair.py scraper/test_gambling_piracy_policy.py \
-            scraper/test_publisher_name_not_entity.py
+            scraper/test_publisher_name_not_entity.py \
+            scraper/test_social_radar.py scraper/test_takedown_beats_manual.py
+          # Tests that existed but were never run by CI until 24 Oct 2026.
+          PYTHONPATH=scraper python scraper/test_advertising_commercial_launch.py
+          PYTHONPATH=scraper python scraper/test_archive_identity_furniture.py
+          PYTHONPATH=scraper python scraper/test_backfill_article_images.py
+          PYTHONPATH=scraper python scraper/test_broadsheet_article.py
+          PYTHONPATH=scraper python scraper/test_candidate_autopsy.py
+          PYTHONPATH=scraper python scraper/test_card_filename_matching.py
+          PYTHONPATH=scraper python scraper/test_council_vote_integrity.py
+          PYTHONPATH=scraper python scraper/test_gmp_watch.py
+          PYTHONPATH=scraper python scraper/test_homepage_democracy_portraits.py
+          PYTHONPATH=scraper python scraper/test_manual_image_boundary.py
+          PYTHONPATH=scraper python scraper/test_manual_photo_survives_all_lanes.py
+          PYTHONPATH=scraper python scraper/test_manual_source_links.py
+          PYTHONPATH=scraper python scraper/test_newsroom_archive_recovery.py
+          PYTHONPATH=scraper python scraper/test_newsroom_push_recovery.py
+          PYTHONPATH=scraper python scraper/test_newsroom_unblock_oct2026.py
+          PYTHONPATH=scraper python scraper/test_normalise_article_urls.py
+          PYTHONPATH=scraper python scraper/test_planning_in_environment.py
+          PYTHONPATH=scraper python scraper/test_production_rewrite_reports_skips.py
+          PYTHONPATH=scraper python scraper/test_quality_gate_split.py
+          PYTHONPATH=scraper python scraper/test_reader_growth.py
+          PYTHONPATH=scraper python scraper/test_register_watch.py
+          PYTHONPATH=scraper python scraper/test_reservoir_junk_oct2026.py
+          PYTHONPATH=scraper python scraper/test_rewrite_quality.py
+          PYTHONPATH=scraper python scraper/test_rewrite_skip_reasons.py
+          PYTHONPATH=scraper python scraper/test_rewrite_terminal_reasons.py
+          PYTHONPATH=scraper python scraper/test_robots_policy.py
+          PYTHONPATH=scraper python scraper/test_seo_image_metadata.py
+          PYTHONPATH=scraper python scraper/test_sitemap_canonical_routes.py
+          PYTHONPATH=scraper python scraper/test_source_recovery_oct2026.py
+          PYTHONPATH=scraper python scraper/test_theme_token_repair.py
+          PYTHONPATH=scraper python scraper/test_trusted_editorial_sources.py
+          PYTHONPATH=scraper python scraper/test_weekly_seo_audit.py
+          python scraper/test_every_test_runs_in_ci.py
           # Test the publishing contract (one normalise pass leaves nothing for
           # --check), not whether the last bot run has caught up with a code
           # change: on 24 Oct 2026 every rendering change failed this job until

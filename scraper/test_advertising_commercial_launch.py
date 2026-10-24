@@ -17,10 +17,13 @@ class CommercialAdvertisingContracts(unittest.TestCase):
         cls.editor = (ROOT / "editor/banner-bookings.html").read_text()
 
     def test_rate_card_and_entry_points(self):
-        for phrase in ("£75", "£175", "£295", "not independently audited"):
+        # The four tiers on the rate card since 13 Oct 2026 (the founding £295
+        # tier was replaced). The audience caveat must stay on the page.
+        for phrase in ("£75", "£175", "£350", "£1,200", "not an independently audited"):
             self.assertIn(phrase, self.rate_card)
-        self.assertIn('/advertise.html', self.home)
-        self.assertIn('/advertise.html', self.contact)
+        # Clean URLs (clean_urls.py) since Oct 2026: /advertise, not /advertise.html.
+        self.assertRegex(self.home, r'href="/advertise(?:\.html)?"')
+        self.assertRegex(self.contact, r'href="/advertise(?:\.html)?"')
 
     def test_checkout_is_not_automatically_assumed_paid(self):
         self.assertNotIn('pay.sumup.com', self.booking)

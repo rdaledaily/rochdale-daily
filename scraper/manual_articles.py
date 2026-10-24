@@ -313,10 +313,28 @@ def _absorb_scraped_match(
     return merged
 
 
+def taken_down_slugs() -> set[str]:
+    """Slugs listed for deliberate takedown in story_blocklist.json.
+
+    A takedown always wins over a manual file. Until 24 Oct 2026 manual records
+    were injected after the blocklist filter, so two taken-down stories stayed
+    in articles.json (and on the section pages) for a week while their pages
+    were deleted, leaving links that 404.
+    """
+    try:
+        payload = json.loads(Path("story_blocklist.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    if not isinstance(payload, dict):
+        return set()
+    return {_slugify(str(value)) for value in payload.get("slugs", []) if value}
+
+
 def load_manual_article_records(now: datetime | None = None) -> list[dict[str, Any]]:
     """Return manual records, folded into matching scraped stories when found."""
     reference = now or datetime.now(timezone.utc)
     entries: list[dict[str, Any]] = []
+    taken_down = taken_down_slugs()
 
     if MANUAL_ARTICLES_PATH.exists():
         entries.extend(_read_payload(MANUAL_ARTICLES_PATH))
@@ -346,6 +364,8 @@ def load_manual_article_records(now: datetime | None = None) -> list[dict[str, A
                 entry = {**entry, "published_at": _iso(min(known_dates))}
         record = _normalise(entry, reference)
         if record is None:
+            continue
+        if record["slug"] in taken_down:
             continue
 
         # A live-seed article stops being re-injected only when its own exact

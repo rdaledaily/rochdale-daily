@@ -42,7 +42,11 @@ stage_newsroom() {
     fi
   done
   # The theme normaliser can touch legacy pages outside the generated routes.
-  git add -u -- '*.html'
+  # Only when .html files are tracked: an unmatched pathspec is a fatal error
+  # under set -e (the push-recovery test's minimal repo has none).
+  if [ -n "$(git ls-files -- '*.html' | head -n 1)" ]; then
+    git add -u -- '*.html'
+  fi
 }
 
 finalise_cards_policy() {

@@ -71,8 +71,8 @@ def robots_verdict(url: str) -> tuple[str, bool]:
         try:
             with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
                 body = response.read(500_000).decode("utf-8", errors="replace")
-            parser = urllib.robotparser.RobotFileParser()
-            parser.parse(body.splitlines())
+            import robots_rules  # wildcard-aware on every Python version
+            parser = robots_rules.parse(body)
             _ROBOTS_CACHE[origin] = (ALLOWED, parser)
         except urllib.error.HTTPError as error:
             # 404/410 mean there is no robots.txt; anything else is a fault.
@@ -89,7 +89,8 @@ def robots_verdict(url: str) -> tuple[str, bool]:
     if verdict == ROBOTS_UNREACHABLE:
         return ROBOTS_UNREACHABLE, False
     try:
-        permitted = parser.can_fetch(USER_AGENT, url) if parser else False
+        import robots_rules
+        permitted = robots_rules.can_fetch(parser, USER_AGENT, url) if parser else False
     except Exception:  # noqa: BLE001 - a malformed robots file must not crash the probe
         return ROBOTS_UNREACHABLE, False
     return (ALLOWED, True) if permitted else (DISALLOWED, False)

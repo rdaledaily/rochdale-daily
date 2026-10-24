@@ -109,19 +109,23 @@ ALLOWED = [
 for url in ALLOWED:
     check(served.can_fetch(UA, url), f"allowed by GMP's real policy: {url[-52:]}")
 
-# Python's own parser matches rule paths by plain PREFIX -- it has no wildcard
-# support -- so every wildcard rule in a real robots.txt is silently ignored by
-# it. Pinned here because it is the reason the watcher compiles its own.
+# Python's parser before 3.13 matches rule paths by plain PREFIX, with no
+# wildcard support, so wildcard rules were silently ignored on the 3.11
+# runners (and enforced on newer Pythons). robots_rules.py compiles them, so
+# every fetcher refuses these on every Python version.
+import robots_rules
+
 WILDCARD_RULES = [
     "https://www.gmp.police.uk/api/something",
     "https://www.gmp.police.uk/news/mediacentre",
     "https://www.gmp.police.uk/page.aspx",
 ]
+shared = robots_rules.parse(GMP_ROBOTS)
 for url in WILDCARD_RULES:
-    check(
-        served.can_fetch(UA, url),
-        f"stdlib ignores the wildcard rule covering: {url[-46:]}",
-    )
+    check(not robots_rules.can_fetch(shared, UA, url),
+          f"wildcard rule honoured on any Python: {url[-46:]}")
+for url in ALLOWED:
+    check(robots_rules.can_fetch(shared, UA, url), f"still allowed with wildcard rules: {url[-46:]}")
 
 # --------------------------------------------------------------------------
 section("The watcher: a refusal needs a 200")
