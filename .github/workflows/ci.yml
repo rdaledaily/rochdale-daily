@@ -184,6 +184,9 @@ jobs:
           python -m json.tool scraper/evergreen_topics.json > /dev/null
       - name: Run test suite
         run: |
+          # Name the failing command in the run summary (annotations are readable
+          # without opening the raw log). bash -e stops at the first failure.
+          trap 'echo "::error title=Failing test::${BASH_COMMAND}"' ERR
           python scraper/test_frontpage_pipeline.py
           PYTHONPATH=scraper python scraper/test_frontpage_freshness_guard.py
           PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
