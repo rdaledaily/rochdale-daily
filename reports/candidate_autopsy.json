@@ -1,38 +1,46 @@
 {
-  "examined_at": "2026-10-23T12:05:38.832783Z",
+  "examined_at": "2026-10-24T11:37:33.517492Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 193,
+  "candidates_examined": 187,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 155,
-    "would publish": 27,
-    "duplicate of published story": 11
+    "age": 164,
+    "would publish": 12,
+    "duplicate of published story": 9,
+    "not local": 1,
+    "job or career post": 1
   },
-  "would_publish": 27,
+  "would_publish": 12,
   "age_gate_sensitivity": {
-    "6h": 7,
-    "14h": 12,
-    "24h": 38,
-    "48h": 70,
-    "72h": 164,
-    "168h": 193
+    "6h": 10,
+    "14h": 10,
+    "24h": 23,
+    "48h": 62,
+    "72h": 91,
+    "168h": 187
   },
   "gates_unavailable": [],
   "examples": {
-    "duplicate of published story": [
-      "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Rochdale Borough Council: Kirkstall Avenue, roadworks in Littleborough on 6 November 2026",
-      "Roch Valley Radio Local News: Rochdale wins town and city centres category at Britain in Bloom award"
-    ],
     "would publish": [
-      "Rochdale Borough Council: Toad Lane and surrounding streets, roadworks in Rochdale on 6 November",
-      "Oldham Times: Update issued in search for woman suspected to have given birth near R",
-      "InYourArea: What's On Rochdale: David Threlfall’s mesmeric King Lear, Halloween ca"
+      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "Bee Network live travel alerts: Updated: 24/10/2026 at 10:20am Live Freehold Tram Stop - Lifts out of ",
+      "Roch Valley Radio Local News: Rochdale Council rakes in almost £3m from parking fines"
+    ],
+    "not local": [
+      "BBC: Plan for Northern Olympics to get £7m in Healey's Budget - BBC"
+    ],
+    "duplicate of published story": [
+      "Rochdale Times: Weather warning as Storm Boelo approaches - Rochdale Times",
+      "Roch Valley Radio Local News: The potential return of Lodge Mill",
+      "beIN SPORTS: Fleetwood Town vs Rochdale - beIN SPORTS"
+    ],
+    "job or career post": [
+      "Aol: Paterson signs for League Two club Rochdale - AOL.com"
     ],
     "age": [
-      "Rochdale Borough Council: Joy Street, roadworks in Rochdale from 2 November 2026 - Rochdale Boro",
-      "Rochdale AFC: Another COA Tie For Dale Women - Rochdale AFC",
-      "Rochdale AFC: Your Guide To Saturday's Game - Rochdale AFC"
+      "Rochdale Borough Council: Toad Lane and surrounding streets, roadworks in Rochdale on 6 November",
+      "Rochdale Borough Council: Kirkstall Avenue, roadworks in Littleborough on 6 November 2026",
+      "Roch Valley Radio Local News: Rochdale wins town and city centres category at Britain in Bloom award"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
