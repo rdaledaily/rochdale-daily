@@ -97,3 +97,16 @@ def test_render_read_back_does_not_stack():
         assert page.count('class="rd-related-inline"') == 1
         record["content_html"] = article_body(page)
         assert "rd-related-inline" not in record["content_html"]
+
+
+def test_links_use_clean_urls():
+    # 24 Oct 2026: ".html" links were rewritten by the theme step after
+    # archive_quality had re-added them, so normalise_public_theme --check
+    # failed and every publishing lane stopped.
+    a = story("lake-a", "Hollingworth Lake visitor centre reopens")
+    b = story("lake-b", "Hollingworth Lake visitor centre summer guide")
+    articles = [a, b] + FILLER
+    R._CACHE.clear()
+    R._CACHE[id(articles)] = R.Index(articles, make_root([]))
+    out = R.insert(BODY, a, articles)
+    assert 'href="/articles/lake-b"' in out and ".html" not in out

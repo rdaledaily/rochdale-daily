@@ -214,7 +214,7 @@ def ward_line(article: dict[str, Any], root: Path = ROOT) -> tuple[str, dict[str
     if len(names) != 3:
         return None
     slug = re.sub(r"[^a-z0-9]+", "-", ward.lower()).strip("-")
-    link = f'<a href="/wards/{slug}.html">{_html.escape(ward)}</a>'
+    link = f'<a href="/wards/{slug}">{_html.escape(ward)}</a>'
     text = (f"Local councillors for the {link} ward are "
             f"{_html.escape(names[0])}, {_html.escape(names[1])} and {_html.escape(names[2])}.")
     return text, {"title": "Councillors by ward - Rochdale Borough Council", "url": COUNCILLORS_URL}

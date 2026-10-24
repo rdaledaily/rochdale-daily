@@ -187,7 +187,7 @@ def insert(content_html: str, article: dict[str, Any], all_articles: list[dict[s
         out.append(content_html[position:at])
         out.append(
             f'<p class="rd-related-inline">Read more: '
-            f'<a href="/articles/{_html.escape(slug, quote=True)}.html">{_html.escape(title)}</a></p>'
+            f'<a href="/articles/{_html.escape(slug, quote=True)}">{_html.escape(title)}</a></p>'
         )
         position = at
     out.append(content_html[position:])
