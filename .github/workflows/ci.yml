@@ -214,6 +214,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_editorial_review.py
           PYTHONPATH=scraper python scraper/test_claim_evidence.py
           PYTHONPATH=scraper python scraper/test_source_evidence_capture.py
+          PYTHONPATH=scraper python scraper/test_expanded_primary_sources.py
           PYTHONPATH=scraper python scraper/test_editorial_review_queue.py
           PYTHONPATH=scraper python scraper/test_evidence_publication_integration.py
           PYTHONPATH=scraper python scraper/test_evidence_publication_repair.py

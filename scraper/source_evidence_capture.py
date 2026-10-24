@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
-from claim_evidence import approved_evidence_source, is_primary, norm
+from claim_evidence import approved_evidence_source, is_primary, is_organisation_source, norm
 
 MAX_BYTES=1_000_000
 def safe_host(url):
@@ -46,7 +46,8 @@ def fetch_source(url, session=None):
     text=" ".join(soup.stripped_strings)
     if len(text)<60:
         raise ValueError("Insufficient source text")
-    return {"url":url,"source_type":"primary" if is_primary(url) else "publisher","captured_text":text[:25000],
+    source_type = "primary" if is_primary(url) else "organisation" if is_organisation_source(url) else "publisher"
+    return {"url":url,"source_type":source_type,"captured_text":text[:25000],
             "captured_at":datetime.now(timezone.utc).isoformat(),
             "sha256":hashlib.sha256(response.content).hexdigest()}
 

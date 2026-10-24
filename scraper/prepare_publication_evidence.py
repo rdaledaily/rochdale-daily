@@ -7,7 +7,7 @@ automated drafts, never rewrite source copy or mint a verification attestation.
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from claim_evidence import approved_evidence_source, is_primary, evidence_issues
+from claim_evidence import approved_evidence_source, is_primary, is_organisation_source, evidence_issues
 from source_evidence_capture import prepare
 from independent_fact_review import verify
 from structured_official_notices import verified_notice
@@ -69,7 +69,11 @@ def enrich(rows, capture=prepare, reviewer=verify):
             row["source_review_verified"]=True
             # Only verified official material may receive a primary-source label.
             row["primary_source_verified"]=all(is_primary(x.get("url")) for x in row["evidence_sources"])
-            row["verification_source_type"]="primary" if row["primary_source_verified"] else "attributed-publisher"
+            row["verification_source_type"] = (
+                "primary" if row["primary_source_verified"] else
+                "attributed-organisation" if all(is_organisation_source(x.get("url")) for x in row["evidence_sources"]) else
+                "attributed-publisher"
+            )
         else:
             row["source_review_verified"]=False
             row["primary_source_verified"]=False

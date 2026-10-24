@@ -203,13 +203,19 @@ DISCOVERY_PAGES = [
     {'name': 'GMCA News', 'url': 'https://www.greatermanchester-ca.gov.uk/news/', 'default_area': 'rochdale', 'link_pattern': '/news/'},
     {'name': 'BBC Manchester', 'url': 'https://www.bbc.co.uk/news/england/manchester', 'default_area': 'rochdale', 'link_pattern': '/news/articles/'},
     {'name': 'About Manchester', 'url': 'https://aboutmanchester.co.uk/?s=Rochdale', 'default_area': 'rochdale', 'link_pattern': '/'},
-    {'name': 'Rochdale Boroughwide Housing', 'url': 'https://www.rbh.org.uk/', 'default_area': 'rochdale', 'default_category': 'community', 'trusted_local': True, 'link_pattern': '/news/|/latest-news/|/updates/|/our-news/'},
+    {'name': 'Rochdale Boroughwide Housing', 'url': 'https://www.rbh.org.uk/news/', 'default_area': 'rochdale', 'default_category': 'community', 'trusted_local': True, 'link_pattern': '/news/rbh-news/[^/?]+'},
+    {'name': 'Healthwatch Rochdale', 'url': 'https://www.healthwatchrochdale.org.uk/news-and-reports', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/(?:news|report|response|blog)/[0-9]{4}-[0-9]{2}-[0-9]{2}/'},
+    # Heading links keep navigation out of these HTML alternatives to RSS.
+    # Regional sources still require explicit borough evidence per article.
+    {'name': 'Action Together Rochdale Articles', 'url': 'https://www.actiontogether.org.uk/rochdale-news', 'default_area': 'rochdale', 'default_category': 'community', 'require_locality_text': True, 'link_pattern': '/[^/?]+', 'link_selector': 'h2 a[href], h3 a[href]'},
+    {'name': 'Your Trust Rochdale Articles', 'url': 'https://www.yourtrustrochdale.co.uk/news/', 'default_area': 'rochdale', 'default_category': 'community', 'trusted_local': True, 'link_pattern': '/(?:news|culture|community|uncategorised)/[^/?]+', 'link_selector': 'h2 a[href], h3 a[href]'},
+    {'name': 'Greater Manchester Police News Pages', 'url': 'https://www.gmp.police.uk/news/news-search/', 'default_area': 'rochdale', 'default_category': 'crime', 'link_pattern': '/news/greater-manchester/news/(?:news|appeals)/[0-9]{4}/'},
     {'name': 'Rochdale Riverside News', 'url': 'https://rochdaleriverside.com/news/', 'default_area': 'rochdale', 'default_category': 'business', 'trusted_local': True, 'link_pattern': '/news/'},
     {'name': 'The Independent — Rochdale', 'url': 'https://www.independent.co.uk/topic/rochdale', 'default_area': 'rochdale', 'default_category': 'news', 'link_pattern': '/news/|/topic/rochdale'},
     {'name': 'Rochdale Council Webcasts', 'url': 'https://rochdale.public-i.tv/core/data/21235/archived/1/future/1/agenda/1/enctag/Council', 'default_area': 'rochdale', 'default_category': 'politics', 'trusted_local': True, 'link_pattern': '/core/portal/|/core/data/'},
     {'name': 'Rochdale Valiant', 'url': 'https://www.rochdalevaliant.uk/', 'default_area': 'rochdale', 'default_category': 'news', 'trusted_local': True, 'link_pattern': '/'},
-    {'name': 'Northern Care Alliance Rochdale', 'url': 'https://www.northerncarealliance.nhs.uk/news/rochdale-news', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/nca-news/[^/?]*-'},
-    {'name': 'Northern Care Alliance News', 'url': 'https://www.northerncarealliance.nhs.uk/nca-news', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/nca-news/[^/?]*-'},
+    {'name': 'Northern Care Alliance Rochdale', 'url': 'https://www.northerncarealliance.nhs.uk/news/rochdale-news', 'default_area': 'rochdale', 'default_category': 'health', 'require_locality_text': True, 'link_pattern': '/nca-news/[^/?]*-'},
+    {'name': 'Northern Care Alliance News', 'url': 'https://www.northerncarealliance.nhs.uk/news/nca-news', 'default_area': 'rochdale', 'default_category': 'health', 'require_locality_text': True, 'link_pattern': '/nca-news/[^/?]*-'},
     {'name': 'Pennine Care NHS', 'url': 'https://www.penninecare.nhs.uk/about-us/latest-news', 'default_area': 'rochdale', 'default_category': 'health', 'link_pattern': '/latest-news/|/news/'},
     {'name': 'Wardle Academy', 'url': 'https://www.wchs.co/topic/news-and-events', 'default_area': 'wardle', 'default_category': 'education', 'trusted_local': True, 'link_pattern': '/topic/news-and-events|/news/'},
     {'name': 'Rochdale AFC', 'url': 'https://rochdaleafc.co.uk/news/', 'default_area': 'rochdale', 'default_category': 'sport', 'link_pattern': '/club-news/|/first-team-news/|/match-report|/match-preview|/interview|/ticket-news/|/academy|/community|/womens-news/|/youth'},
@@ -1142,6 +1148,15 @@ def google_news_sources() -> list[dict[str, str]]:
             'query_location_slug': spec.location_slug,
             'query_location_name': spec.location_name,
         })
+    # TfGM's newsroom listing is populated by JavaScript. Keep an indexed
+    # discovery route in the fast lane, where browser rendering is disabled.
+    query = 'site:news.tfgm.com (Rochdale OR Heywood OR Middleton OR Littleborough OR Milnrow) when:2d'
+    sources.append({
+        'name': 'Google News — TfGM borough updates',
+        'url': f'https://news.google.com/rss/search?q={quote_plus(query)}&hl=en-GB&gl=GB&ceid=GB:en',
+        'default_area': 'rochdale', 'aggregator': 'google',
+        'query_label': 'TfGM borough updates', 'query_category': 'transport',
+    })
     return sources
 
 
@@ -1547,7 +1562,7 @@ def discovery_links(source: dict[str, str]) -> list[str]:
             log.warning('Discovery page failed for %s (%s): %s', source['name'], listing_url, exc)
             continue
         soup = BeautifulSoup(raw_html, 'lxml')
-        for anchor in soup.find_all('a', href=True):
+        for anchor in soup.select(source.get('link_selector', 'a[href]')):
             url = canonicalise_url(urljoin(final_url, anchor['href']))
             if url in seen or domain_of(url) != domain_of(final_url):
                 continue
@@ -1575,6 +1590,10 @@ def _discovery_candidate(source: dict[str, str], url: str) -> Candidate | None:
         log.debug('Page metadata failed for %s: %s', url, exc)
         return None
     text = f"{meta['title']} {meta['description']} {meta['body_excerpt']}"
+    # Regional organisations can include other towns even on a local listing.
+    # Test article text without source-name/domain trust before normal handling.
+    if source.get('require_locality_text') and not source_text_is_local(text):
+        return None
     trusted_local = bool(source.get('trusted_local'))
     if not meta['title'] or should_drop(text, meta['url']) or (not source_text_is_local(text, source['name'], meta['url'], trusted_local)):
         return None

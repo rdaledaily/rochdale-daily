@@ -41,8 +41,19 @@ def is_local_publisher(url):
     h = host(url)
     return bool(h and any(h == d or h.endswith("." + d) for d in LOCAL_PUBLISHERS))
 
+# First-party organisational statements are attributable evidence, not an
+# independent official verification of claims about services or third parties.
+ORGANISATION_SOURCES = (
+    "investinrochdale.co.uk", "healthwatchrochdale.org.uk", "rbh.org.uk",
+    "actiontogether.org.uk", "yourtrustrochdale.co.uk",
+)
+
+def is_organisation_source(url):
+    h = host(url)
+    return bool(h and any(h == d or h.endswith("." + d) for d in ORGANISATION_SOURCES))
+
 def approved_evidence_source(url):
-    return is_primary(url) or is_local_publisher(url)
+    return is_primary(url) or is_local_publisher(url) or is_organisation_source(url)
 
 def norm(s):
     return re.sub(r"\s+"," ",str(s or "").strip()).casefold()
