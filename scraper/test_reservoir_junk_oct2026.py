@@ -38,6 +38,12 @@ def lead(title, url, name, *, summary="", body="", kind="article", publisher="")
 
 
 JUNK = {
+    # A source named only in non-Latin script is denied outright (24 Oct 2026,
+    # after pirate-stream spam from a hijacked Japanese council host).
+    "denied source": [
+        lead("Hartlepool United vs Rochdale head-to-head record, results and stats | All Football",
+             "https://m.dongqiudi.com/article/1", "懂球帝"),
+    ],
     "denied publisher host": [
         lead(">[!WATCHLIVE]4K!]Rochdale vs Crewe 𝐋𝐈𝐕𝐄 ＯＮ Ｔｖ Ｃｈａｎｎｅｌ 17 october 2026 - Universidad de Córdoba (UCO)",
              GOOGLE, "Universidad de Córdoba (UCO)", publisher="https://www.uco.es"),
@@ -47,8 +53,6 @@ JUNK = {
     "editorial blocklist or stream spam": [
         lead("Service updates Live train times, planned disruption and events Breadcrumb Home",
              "https://www.northernrailway.co.uk/travel/service-updates", "Northern live service updates", kind="live"),
-        lead("Hartlepool United vs Rochdale head-to-head record, results and stats | All Football",
-             "https://m.dongqiudi.com/article/1", "懂球帝"),
         lead("Rochdale Valiant: News and Media", "https://www.rochdalevaliant.uk/", "Rochdale Valiant"),
     ],
     "share/print utility page": [

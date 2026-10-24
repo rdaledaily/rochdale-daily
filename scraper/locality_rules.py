@@ -73,6 +73,9 @@ GAMBLING_PIRACY_DENY_DOMAINS = frozenset({
     "apwin.com", "bettingodds.com", "whoscored.com", "betshoot.com",
     "freetips.com", "oddschecker.com", "bettingtips4you.com",
     "online-bookmakers.com",
+    # Hijacked Japanese town-council host serving "watch free" pirate-stream
+    # pages; one was published as a Rochdale AFC story on 24 Oct 2026.
+    "shodoshima.lg.jp",
 })
 GAMBLING_PIRACY_DENY_NAMES = (
     "apwin", "bettingodds", "whoscored", "betshoot", "oddschecker",
@@ -85,12 +88,21 @@ GAMBLING_PIRACY_HOST_RE = re.compile(
     r"|skybet|paddypower|williamhill|ladbrokes|boylesports|livescorebet"
     r"|betshoot|crackstreams?|streameast|sportsurge|totalsportek|hesgoal"
     r"|buffstreams?|methstreams?|footybite|vipbox|soccerstreams?|strims|apwin)"
-    r"|(?:^|[.-])(?:bet|bets|odds|tips|tipster|tipsters|streams|livestream|freestream)(?=[.-]|$)",
+    r"|(?:^|[.-])(?:bet|bets|odds|tips|tipster|tipsters|streams|livestream|freestream)(?=[.-]|$)"
+    # Japanese local/national government hosts: never a Rochdale source, and
+    # the hijacked ones are a known pirate-stream spam channel (like uco.es).
+    r"|\.(?:lg|go)\.jp$",
     re.I,
 )
 
 
 def is_gambling_or_piracy_source(source_name: str = "", source_url: str = "") -> bool:
+    name_text = normalise_text(source_name)
+    # A source whose name has letters but none in the Latin alphabet
+    # (e.g. "小豆島町") is not a Rochdale publisher; hijacked foreign hosts
+    # surface this way through Google News.
+    if re.search(r"[^\W\d_]", name_text) and not re.search(r"[A-Za-z]", name_text):
+        return True
     host = domain_of(source_url)
     if host and (
         any(host == d or host.endswith("." + d) for d in GAMBLING_PIRACY_DENY_DOMAINS)
