@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "_docs": {
+    "purpose": "Stable advertiser identities for Rochdale Daily advertising and commercial analysis.",
+    "privacy": "PUBLIC REPOSITORY: store only public business information here. Never commit private contact names, private email addresses, billing data, consent records or other personal data.",
+    "id_rule": "advertiser_id is permanent. Do not reuse an id when a business leaves; change status instead."
+  },
+  "advertisers": [
+    {
+      "advertiser_id": "adv-emoon-tuition",
+      "name": "E-Moon Tuition",
+      "status": "active",
+      "sector": "education-tutoring",
+      "areas": ["borough-wide"],
+      "website": "https://emoon.co.uk",
+      "notes": "Migrated from the existing live adverts.json placements."
+    },
+    {
+      "advertiser_id": "adv-wecovered",
+      "name": "WeCovered",
+      "status": "active",
+      "sector": "insurance",
+      "areas": ["borough-wide"],
+      "website": "https://wecovered.com",
+      "notes": "Migrated from the existing live adverts.json placements."
+    },
+    {
+      "advertiser_id": "adv-neb-electrical",
+      "name": "NEB Electrical",
+      "status": "needs-details",
+      "sector": "electrical",
+      "areas": ["rochdale"],
+      "website": "",
+      "notes": "Existing MREC placement has a placeholder destination URL and must not be activated until verified."
+    }
+  ]
+}
