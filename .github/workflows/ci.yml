@@ -184,132 +184,146 @@ jobs:
           python -m json.tool scraper/evergreen_topics.json > /dev/null
       - name: Run test suite
         run: |
-          python scraper/test_frontpage_pipeline.py
-          PYTHONPATH=scraper python scraper/test_frontpage_freshness_guard.py
-          PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
-          PYTHONPATH=scraper python scraper/test_manual_frontpage_guard.py
-          PYTHONPATH=scraper python scraper/test_check_scraper_health.py
-          PYTHONPATH=scraper python scraper/test_supply_watchdog.py
-          PYTHONPATH=scraper python scraper/test_source_yield_probe.py
-          python scraper/test_newspaper_freshness.py
-          python scraper/test_locality.py
-          python scraper/test_story_identity.py
-          python scraper/test_missing_person_identity.py
-          python scraper/test_archive_quality.py
-          python scraper/test_uk_update_times.py
-          python scraper/test_image_hierarchy.py
-          python scraper/test_context_research.py
-          python scraper/test_selection_policy.py
-          python scraper/test_search_queries.py
-          python scraper/test_rewrite_safety.py
-          PYTHONPATH=scraper python scraper/test_house_style_voice.py
-          PYTHONPATH=scraper python scraper/test_reader_first_template.py
-          PYTHONPATH=scraper python scraper/test_facebook_roundups.py
-          python scraper/test_editorial_length.py
-          python scraper/test_food_hygiene.py
-          python scraper/test_content_hygiene.py
-          python scraper/test_archive_persistence.py
-          python scraper/test_event_identity.py
-          python scraper/test_article_gate.py
-          PYTHONPATH=scraper python scraper/test_editorial_review.py
-          PYTHONPATH=scraper python scraper/test_claim_evidence.py
-          PYTHONPATH=scraper python scraper/test_source_evidence_capture.py
-          PYTHONPATH=scraper python scraper/test_editorial_review_queue.py
-          PYTHONPATH=scraper python scraper/test_evidence_publication_integration.py
-          PYTHONPATH=scraper python scraper/test_evidence_publication_repair.py
-          PYTHONPATH=scraper python scraper/test_structured_official_notices.py
-          PYTHONPATH=scraper python scraper/test_workflow_evidence_order.py
-          PYTHONPATH=scraper python scraper/test_prepare_publication_evidence.py
-          PYTHONPATH=scraper python scraper/test_independent_fact_review.py
-          python scraper/test_resolve_google_news_sources.py
-          PYTHONPATH=scraper python scraper/test_google_news_resolver.py
-          PYTHONPATH=scraper python scraper/test_run_newsroom_policy.py
-          PYTHONPATH=scraper python scraper/test_evergreen_fallback.py
-          PYTHONPATH=scraper python scraper/test_feature_policy.py
-          PYTHONPATH=scraper python scraper/test_rewrite_ledger.py
-          PYTHONPATH=scraper python scraper/test_overlap_rebuild.py
-          PYTHONPATH=scraper python scraper/test_sponsored_frontpage_floor.py
-          PYTHONPATH=scraper python scraper/test_generated_card_style.py
-          PYTHONPATH=scraper python scraper/test_prune_dead_related_links.py
-          PYTHONPATH=scraper python scraper/test_deterministic_draft_gate.py
-          PYTHONPATH=scraper python scraper/test_daily_briefing.py
-          PYTHONPATH=scraper python scraper/test_primary_data.py
-          PYTHONPATH=scraper python scraper/test_send_newsletter.py
-          PYTHONPATH=scraper python scraper/test_rss_feed_isolation.py
-          PYTHONPATH=scraper python scraper/test_clean_urls.py
-          PYTHONPATH=scraper python scraper/test_archive_integrity.py
-          PYTHONPATH=scraper python scraper/test_publisher_markup.py
-          PYTHONPATH=scraper python scraper/test_indexnow.py
-          PYTHONPATH=scraper python scraper/test_archive_pages.py
-          PYTHONPATH=scraper python scraper/test_internal_links.py
-          PYTHONPATH=scraper python scraper/test_briefing_formatting.py
-          PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
-          python scraper/test_ensure_article_images.py
-          PYTHONPATH=scraper python scraper/test_licensed_source_images.py
-          python scraper/test_councillor_photos.py
-          PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
-          PYTHONPATH=scraper python scraper/test_update_homepage_static_latest.py
-          PYTHONPATH=scraper python scraper/test_update_homepage_weekly_news.py
-          PYTHONPATH=scraper python scraper/test_sync_homepage_top_story.py
-          PYTHONPATH=scraper python scraper/test_homepage_discovery_metadata.py
-          PYTHONPATH=scraper python scraper/test_article_time_metadata.py
-          PYTHONPATH=scraper python scraper/test_externalise_article_css.py
-          PYTHONPATH=scraper python scraper/test_enhance_image_alt_text.py
-          PYTHONPATH=scraper python scraper/test_enhance_event_structured_data.py
-          PYTHONPATH=scraper python scraper/test_consolidate_duplicate_article_signals.py
-          PYTHONPATH=scraper python scraper/test_live_story_updates.py
-          PYTHONPATH=scraper python scraper/test_compact_live_updates.py
-          PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
-          PYTHONPATH=scraper python scraper/test_model_bridge.py -v
-          python scraper/test_workflow_architecture.py
-          python scraper/test_legacy_routing_pages.py
-          python -m pytest -q scraper/test_story_background.py scraper/test_inline_related.py \
+          # t runs one test and, if it fails, puts its last 30 lines in the run
+          # summary as an annotation, so a failure names itself and shows why
+          # without opening the raw log.
+          t() {
+            local out status
+            out=$("$@" 2>&1) && status=0 || status=$?
+            printf '%s\n' "$out"
+            if [ "$status" -ne 0 ]; then
+              local tail_lines
+              tail_lines=$(printf '%s' "$out" | tail -n 30 | sed -e 's/%/%25/g' -e 's/\r//g' | sed ':a;N;$!ba;s/\n/%0A/g')
+              echo "::error title=Failing test: $*::${tail_lines}"
+              return "$status"
+            fi
+          }
+          t python scraper/test_frontpage_pipeline.py
+          t env PYTHONPATH=scraper python scraper/test_frontpage_freshness_guard.py
+          t env PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
+          t env PYTHONPATH=scraper python scraper/test_manual_frontpage_guard.py
+          t env PYTHONPATH=scraper python scraper/test_check_scraper_health.py
+          t env PYTHONPATH=scraper python scraper/test_supply_watchdog.py
+          t env PYTHONPATH=scraper python scraper/test_source_yield_probe.py
+          t python scraper/test_newspaper_freshness.py
+          t python scraper/test_locality.py
+          t python scraper/test_story_identity.py
+          t python scraper/test_missing_person_identity.py
+          t python scraper/test_archive_quality.py
+          t python scraper/test_uk_update_times.py
+          t python scraper/test_image_hierarchy.py
+          t python scraper/test_context_research.py
+          t python scraper/test_selection_policy.py
+          t python scraper/test_search_queries.py
+          t python scraper/test_rewrite_safety.py
+          t env PYTHONPATH=scraper python scraper/test_house_style_voice.py
+          t env PYTHONPATH=scraper python scraper/test_reader_first_template.py
+          t env PYTHONPATH=scraper python scraper/test_facebook_roundups.py
+          t python scraper/test_editorial_length.py
+          t python scraper/test_food_hygiene.py
+          t python scraper/test_content_hygiene.py
+          t python scraper/test_archive_persistence.py
+          t python scraper/test_event_identity.py
+          t python scraper/test_article_gate.py
+          t env PYTHONPATH=scraper python scraper/test_editorial_review.py
+          t env PYTHONPATH=scraper python scraper/test_claim_evidence.py
+          t env PYTHONPATH=scraper python scraper/test_source_evidence_capture.py
+          t env PYTHONPATH=scraper python scraper/test_editorial_review_queue.py
+          t env PYTHONPATH=scraper python scraper/test_evidence_publication_integration.py
+          t env PYTHONPATH=scraper python scraper/test_evidence_publication_repair.py
+          t env PYTHONPATH=scraper python scraper/test_structured_official_notices.py
+          t env PYTHONPATH=scraper python scraper/test_workflow_evidence_order.py
+          t env PYTHONPATH=scraper python scraper/test_prepare_publication_evidence.py
+          t env PYTHONPATH=scraper python scraper/test_independent_fact_review.py
+          t python scraper/test_resolve_google_news_sources.py
+          t env PYTHONPATH=scraper python scraper/test_google_news_resolver.py
+          t env PYTHONPATH=scraper python scraper/test_run_newsroom_policy.py
+          t env PYTHONPATH=scraper python scraper/test_evergreen_fallback.py
+          t env PYTHONPATH=scraper python scraper/test_feature_policy.py
+          t env PYTHONPATH=scraper python scraper/test_rewrite_ledger.py
+          t env PYTHONPATH=scraper python scraper/test_overlap_rebuild.py
+          t env PYTHONPATH=scraper python scraper/test_sponsored_frontpage_floor.py
+          t env PYTHONPATH=scraper python scraper/test_generated_card_style.py
+          t env PYTHONPATH=scraper python scraper/test_prune_dead_related_links.py
+          t env PYTHONPATH=scraper python scraper/test_deterministic_draft_gate.py
+          t env PYTHONPATH=scraper python scraper/test_daily_briefing.py
+          t env PYTHONPATH=scraper python scraper/test_primary_data.py
+          t env PYTHONPATH=scraper python scraper/test_send_newsletter.py
+          t env PYTHONPATH=scraper python scraper/test_rss_feed_isolation.py
+          t env PYTHONPATH=scraper python scraper/test_clean_urls.py
+          t env PYTHONPATH=scraper python scraper/test_archive_integrity.py
+          t env PYTHONPATH=scraper python scraper/test_publisher_markup.py
+          t env PYTHONPATH=scraper python scraper/test_indexnow.py
+          t env PYTHONPATH=scraper python scraper/test_archive_pages.py
+          t env PYTHONPATH=scraper python scraper/test_internal_links.py
+          t env PYTHONPATH=scraper python scraper/test_briefing_formatting.py
+          t env PYTHONPATH=scraper python scraper/test_dual_agent_bridge.py
+          t python scraper/test_ensure_article_images.py
+          t env PYTHONPATH=scraper python scraper/test_licensed_source_images.py
+          t python scraper/test_councillor_photos.py
+          t env PYTHONPATH=scraper python scraper/test_generate_news_sitemap.py
+          t env PYTHONPATH=scraper python scraper/test_update_homepage_static_latest.py
+          t env PYTHONPATH=scraper python scraper/test_update_homepage_weekly_news.py
+          t env PYTHONPATH=scraper python scraper/test_sync_homepage_top_story.py
+          t env PYTHONPATH=scraper python scraper/test_homepage_discovery_metadata.py
+          t env PYTHONPATH=scraper python scraper/test_article_time_metadata.py
+          t env PYTHONPATH=scraper python scraper/test_externalise_article_css.py
+          t env PYTHONPATH=scraper python scraper/test_enhance_image_alt_text.py
+          t env PYTHONPATH=scraper python scraper/test_enhance_event_structured_data.py
+          t env PYTHONPATH=scraper python scraper/test_consolidate_duplicate_article_signals.py
+          t env PYTHONPATH=scraper python scraper/test_live_story_updates.py
+          t env PYTHONPATH=scraper python scraper/test_compact_live_updates.py
+          t env PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
+          t env PYTHONPATH=scraper python scraper/test_model_bridge.py -v
+          t python scraper/test_workflow_architecture.py
+          t python scraper/test_legacy_routing_pages.py
+          t python -m pytest -q scraper/test_story_background.py scraper/test_inline_related.py \
             scraper/test_headline_style.py scraper/test_ad_slots.py scraper/test_roadworks_page.py \
             scraper/test_archive_identity_repair.py scraper/test_gambling_piracy_policy.py \
             scraper/test_publisher_name_not_entity.py \
             scraper/test_social_radar.py scraper/test_takedown_beats_manual.py
           # Tests that existed but were never run by CI until 24 Oct 2026.
-          PYTHONPATH=scraper python scraper/test_advertising_commercial_launch.py
-          PYTHONPATH=scraper python scraper/test_archive_identity_furniture.py
-          PYTHONPATH=scraper python scraper/test_backfill_article_images.py
-          PYTHONPATH=scraper python scraper/test_broadsheet_article.py
-          PYTHONPATH=scraper python scraper/test_candidate_autopsy.py
-          PYTHONPATH=scraper python scraper/test_card_filename_matching.py
-          PYTHONPATH=scraper python scraper/test_council_vote_integrity.py
-          PYTHONPATH=scraper python scraper/test_gmp_watch.py
-          PYTHONPATH=scraper python scraper/test_homepage_democracy_portraits.py
-          PYTHONPATH=scraper python scraper/test_manual_image_boundary.py
-          PYTHONPATH=scraper python scraper/test_manual_photo_survives_all_lanes.py
-          PYTHONPATH=scraper python scraper/test_manual_source_links.py
-          PYTHONPATH=scraper python scraper/test_newsroom_archive_recovery.py
-          PYTHONPATH=scraper python scraper/test_newsroom_push_recovery.py
-          PYTHONPATH=scraper python scraper/test_newsroom_unblock_oct2026.py
-          PYTHONPATH=scraper python scraper/test_normalise_article_urls.py
-          PYTHONPATH=scraper python scraper/test_planning_in_environment.py
-          PYTHONPATH=scraper python scraper/test_production_rewrite_reports_skips.py
-          PYTHONPATH=scraper python scraper/test_quality_gate_split.py
-          PYTHONPATH=scraper python scraper/test_reader_growth.py
-          PYTHONPATH=scraper python scraper/test_register_watch.py
-          PYTHONPATH=scraper python scraper/test_reservoir_junk_oct2026.py
-          PYTHONPATH=scraper python scraper/test_rewrite_quality.py
-          PYTHONPATH=scraper python scraper/test_rewrite_skip_reasons.py
-          PYTHONPATH=scraper python scraper/test_rewrite_terminal_reasons.py
-          PYTHONPATH=scraper python scraper/test_robots_policy.py
-          PYTHONPATH=scraper python scraper/test_seo_image_metadata.py
-          PYTHONPATH=scraper python scraper/test_sitemap_canonical_routes.py
-          PYTHONPATH=scraper python scraper/test_source_recovery_oct2026.py
-          PYTHONPATH=scraper python scraper/test_theme_token_repair.py
-          PYTHONPATH=scraper python scraper/test_trusted_editorial_sources.py
-          PYTHONPATH=scraper python scraper/test_weekly_seo_audit.py
-          PYTHONPATH=scraper python scraper/test_feature_never_leads.py
-          python scraper/test_every_test_runs_in_ci.py
+          t env PYTHONPATH=scraper python scraper/test_advertising_commercial_launch.py
+          t env PYTHONPATH=scraper python scraper/test_archive_identity_furniture.py
+          t env PYTHONPATH=scraper python scraper/test_backfill_article_images.py
+          t env PYTHONPATH=scraper python scraper/test_broadsheet_article.py
+          t env PYTHONPATH=scraper python scraper/test_candidate_autopsy.py
+          t env PYTHONPATH=scraper python scraper/test_card_filename_matching.py
+          t env PYTHONPATH=scraper python scraper/test_council_vote_integrity.py
+          t env PYTHONPATH=scraper python scraper/test_gmp_watch.py
+          t env PYTHONPATH=scraper python scraper/test_homepage_democracy_portraits.py
+          t env PYTHONPATH=scraper python scraper/test_manual_image_boundary.py
+          t env PYTHONPATH=scraper python scraper/test_manual_photo_survives_all_lanes.py
+          t env PYTHONPATH=scraper python scraper/test_manual_source_links.py
+          t env PYTHONPATH=scraper python scraper/test_newsroom_archive_recovery.py
+          t env PYTHONPATH=scraper python scraper/test_newsroom_push_recovery.py
+          t env PYTHONPATH=scraper python scraper/test_newsroom_unblock_oct2026.py
+          t env PYTHONPATH=scraper python scraper/test_normalise_article_urls.py
+          t env PYTHONPATH=scraper python scraper/test_planning_in_environment.py
+          t env PYTHONPATH=scraper python scraper/test_production_rewrite_reports_skips.py
+          t env PYTHONPATH=scraper python scraper/test_quality_gate_split.py
+          t env PYTHONPATH=scraper python scraper/test_reader_growth.py
+          t env PYTHONPATH=scraper python scraper/test_register_watch.py
+          t env PYTHONPATH=scraper python scraper/test_reservoir_junk_oct2026.py
+          t env PYTHONPATH=scraper python scraper/test_rewrite_quality.py
+          t env PYTHONPATH=scraper python scraper/test_rewrite_skip_reasons.py
+          t env PYTHONPATH=scraper python scraper/test_rewrite_terminal_reasons.py
+          t env PYTHONPATH=scraper python scraper/test_robots_policy.py
+          t env PYTHONPATH=scraper python scraper/test_seo_image_metadata.py
+          t env PYTHONPATH=scraper python scraper/test_sitemap_canonical_routes.py
+          t env PYTHONPATH=scraper python scraper/test_source_recovery_oct2026.py
+          t env PYTHONPATH=scraper python scraper/test_theme_token_repair.py
+          t env PYTHONPATH=scraper python scraper/test_trusted_editorial_sources.py
+          t env PYTHONPATH=scraper python scraper/test_weekly_seo_audit.py
+          t env PYTHONPATH=scraper python scraper/test_feature_never_leads.py
+          t python scraper/test_every_test_runs_in_ci.py
           # Test the publishing contract (one normalise pass leaves nothing for
           # --check), not whether the last bot run has caught up with a code
           # change: on 24 Oct 2026 every rendering change failed this job until
           # the next lane rebuilt the committed pages. The lanes run this same
           # pair before they commit, so committed pages always pass it.
-          python scraper/normalise_public_theme.py
-          python scraper/normalise_public_theme.py --check
+          t python scraper/normalise_public_theme.py
+          t python scraper/normalise_public_theme.py --check
       - name: Enforce cards-only canonical article images
         run: python scraper/enforce_cards_only_images.py --articles articles.json --check
       - name: SEO feed quality gate

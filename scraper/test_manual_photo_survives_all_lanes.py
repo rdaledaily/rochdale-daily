@@ -3,6 +3,7 @@ ensure_article_images in every lane, not only the publish lane."""
 import json
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from PIL import Image
@@ -48,8 +49,15 @@ class ManualPhotoSurvivesAllLanes(unittest.TestCase):
         self.assertEqual(a["image_status"], "editorial-photo")
 
     def test_missing_manual_file_still_falls_back(self):
+        # Offline, so the result is the same on every machine. On the GitHub
+        # runners the fallback reached Wikimedia Commons, which enforce_article
+        # reports as "kept-existing", and this failed there only (24 Oct 2026).
+        import functools
+        import image_hierarchy
+        offline = functools.partial(image_hierarchy.choose_image, allow_network=False)
         a = self.manual(image_url="assets/img/cards/does-not-exist.webp")
-        self.assertNotEqual(images.enforce_article(a, self.root), "kept-existing")
+        with mock.patch.object(image_hierarchy, "choose_image", offline):
+            self.assertNotEqual(images.enforce_article(a, self.root), "kept-existing")
         self.assertIn("generated-card", a["image_url"])
 
     def test_manual_pointing_at_generated_card_is_not_treated_as_photo(self):
