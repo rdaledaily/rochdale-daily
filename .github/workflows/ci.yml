@@ -71,6 +71,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir -r requirements.txt
           python -m pip install --no-cache-dir "Pillow>=10,<13"
+          python -m pip install --no-cache-dir "pytest>=8,<9"
       - name: Verify Python dependencies
         run: |
           python - <<'PY'
@@ -262,6 +263,16 @@ jobs:
           PYTHONPATH=scraper python scraper/test_model_bridge.py -v
           python scraper/test_workflow_architecture.py
           python scraper/test_legacy_routing_pages.py
+          python -m pytest -q scraper/test_story_background.py scraper/test_inline_related.py \
+            scraper/test_headline_style.py scraper/test_ad_slots.py scraper/test_roadworks_page.py \
+            scraper/test_archive_identity_repair.py scraper/test_gambling_piracy_policy.py \
+            scraper/test_publisher_name_not_entity.py
+          # Test the publishing contract (one normalise pass leaves nothing for
+          # --check), not whether the last bot run has caught up with a code
+          # change: on 24 Oct 2026 every rendering change failed this job until
+          # the next lane rebuilt the committed pages. The lanes run this same
+          # pair before they commit, so committed pages always pass it.
+          python scraper/normalise_public_theme.py
           python scraper/normalise_public_theme.py --check
       - name: Enforce cards-only canonical article images
         run: python scraper/enforce_cards_only_images.py --articles articles.json --check
