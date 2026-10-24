@@ -19,12 +19,19 @@ git_fetch() {
 }
 
 stage_newsroom() {
-  git add articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json \
-    newsroom_candidates.json rewrite_ledger.json google_news_resolution_report.json google_news_resolutions.json live_source_state.json \
-    image_coverage_report.json image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json assets/img/cards \
-    articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json \
-    archive.html search.html archive-index.json rss.xml index.html \
-      news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json 2>/dev/null || true
+  # Only paths that exist. One missing path (roadworks.json before the council
+  # listing is first saved) made this single `git add` stage nothing at all:
+  # from 24 Oct 2026 13:08 articles.json, the sitemaps, RSS and every new
+  # story page stopped being committed while edited pages still went out.
+  local paths=(articles.json manual_articles.json manual_articles.d slow_domains.json scraper_status.json scraper_health.json event_dates.json
+    newsroom_candidates.json rewrite_ledger.json google_news_resolution_report.json google_news_resolutions.json live_source_state.json
+    image_coverage_report.json image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json assets/img/cards
+    articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json
+    archive.html search.html archive-index.json rss.xml index.html
+    news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json)
+  local present=()
+  for path in "${paths[@]}"; do [ -e "${path}" ] && present+=("${path}"); done
+  git add -- "${present[@]}"
   # State files that exist only once their collector has run. They are added on
   # their own: one missing path makes a single `git add` stage nothing at all.
   # Without them every fresh checkout forgets which official records it has
