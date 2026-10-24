@@ -2595,7 +2595,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
 
       // All sources failed (offline, laptop asleep, network suspended).
       // Keep whatever we already rendered rather than wiping the page.
-      if (!stories.some(story => !story.isReserveFeature)) {
+      if (!stories.length) {
         // Every source failed and nothing has been rendered from a feed yet, so
         // the static edition is the best thing on the page. Leave it — but the
         // side "Latest" panel is built entirely from the feed, so with no feed
@@ -2726,7 +2726,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
       const secondaryElement = document.getElementById("secondary-stories");
       const latestElement = document.getElementById("latest-list");
 
-      if (!stories.length) {
+      if (!stories.some(story => !story.isReserveFeature)) {
         const emptyStory = {
           image: "assets/img/category_news.svg",
           imageLabel: "Rochdale Daily",
