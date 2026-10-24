@@ -1163,6 +1163,14 @@ def request_article(
             "reader_first_questions": reader_questions_for(
                 getattr(candidate, "category", ""), source_kind
             ),
+            "five_ws": (
+                "The first two paragraphs answer who, what, where and when, as far as "
+                "the sources establish them: named people and organisations with their "
+                "roles, the street or place and town in the borough, and the day and "
+                "date. Then explain how and why, and what it means for people in the "
+                "borough: who is affected, what changes for them and what happens next. "
+                "Leave out any of these the sources do not establish; never guess one."
+            ),
             "reader_first_rule": (
                 "Answer only questions that the supplied evidence actually supports. "
                 "Make the result readable, not a stock question-and-answer template. "

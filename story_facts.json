@@ -1,0 +1,1001 @@
+{
+ "note": "Background facts for short stories (scraper/story_background.py). Every fact is a finished sentence with its source. Edit freely: change a sentence, add a fact, or delete one. 'match' is a regular expression tested against the headline and first paragraph; 'topics' are words that make a fact relevant to a story: a fact is used only when one of its topic words is in the story, or when it is marked core (who the subject is). Researched 24 October 2026. 'max_facts' limits how many facts one subject contributes (default 2 for the story's main subject, 1 for a second). 'from' is the date a fact became true: it is never shown beside a story published before then.",
+ "subjects": [
+  {
+   "id": "rochdale-afc",
+   "name": "Rochdale AFC",
+   "match": "Rochdale AFC|Rochdale A\\.F\\.C|\\bDale\\b(?! Women)|Rochdale (?:to face|to host|vs?\\.?|v) |(?:against|face|host|draw with|beat|defeat) Rochdale\\b",
+   "exclude": "Women|Hornets|RUFC|rugby",
+   "facts": [
+    {
+     "id": "afc-founded",
+     "core": true,
+     "topics": [
+      "history",
+      "club",
+      "community",
+      "tour",
+      "racism",
+      "initiative",
+      "chair"
+     ],
+     "text": "Rochdale AFC were founded in 1907 and have played at Spotland, now known as the Crown Oil Arena, ever since.",
+     "source": {
+      "title": "Rochdale A.F.C. - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_A.F.C."
+     }
+    },
+    {
+     "id": "afc-promotion-2026",
+     "from": "2026-05-10",
+     "topics": [
+      "league",
+      "two",
+      "match",
+      "win",
+      "victory",
+      "draw",
+      "season",
+      "points",
+      "home",
+      "host",
+      "aim"
+     ],
+     "text": "Dale returned to the Football League in May 2026, beating Boreham Wood on penalties at Wembley in the National League play-off final after finishing second with a club-record 106 points.",
+     "source": {
+      "title": "Rochdale A.F.C. - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_A.F.C."
+     }
+    },
+    {
+     "id": "afc-relegation-2023",
+     "from": "2026-05-10",
+     "topics": [
+      "return",
+      "history",
+      "season",
+      "aim",
+      "league",
+      "fearless"
+     ],
+     "text": "Rochdale had been relegated in 2023, ending 102 years as a Football League club, and spent three seasons in the National League before winning promotion back.",
+     "source": {
+      "title": "Rochdale A.F.C. - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_A.F.C."
+     }
+    },
+    {
+     "id": "afc-fa-cup-spurs",
+     "topics": [
+      "fa",
+      "cup",
+      "draw",
+      "round",
+      "fleetwood",
+      "tie"
+     ],
+     "text": "Dale's most famous recent FA Cup run came in 2018, when they drew 2-2 with Tottenham Hotspur at Spotland before losing the replay at Wembley.",
+     "source": {
+      "title": "Rochdale A.F.C. - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_A.F.C."
+     }
+    },
+    {
+     "id": "afc-league-cup-1962",
+     "topics": [
+      "cup",
+      "trophy",
+      "tie",
+      "bolton",
+      "history",
+      "midweek"
+     ],
+     "text": "Rochdale reached the League Cup final in 1962, losing 4-0 on aggregate to Norwich City.",
+     "source": {
+      "title": "Rochdale A.F.C. - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_A.F.C."
+     }
+    },
+    {
+     "id": "afc-manager",
+     "from": "2026-06-01",
+     "topics": [
+      "manager",
+      "head",
+      "coach",
+      "injury",
+      "urges",
+      "calls",
+      "discusses",
+      "effort",
+      "mentality",
+      "stockport"
+     ],
+     "text": "Head coach Ian Watson took charge in summer 2026 after Jimmy McNulty, who led the promotion campaign, left for Stockport County.",
+     "source": {
+      "title": "Rochdale A.F.C. - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_A.F.C."
+     }
+    },
+    {
+     "id": "afc-ownership",
+     "from": "2024-05-31",
+     "topics": [
+      "co-chair",
+      "chair",
+      "board",
+      "report",
+      "state",
+      "game",
+      "ownership",
+      "community",
+      "investment"
+     ],
+     "text": "The family of local businessman Peter Ogden completed a takeover of the club in May 2024; Simon Gauge and Cameron Ogden are co-chairmen.",
+     "source": {
+      "title": "Rochdale A.F.C. - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_A.F.C."
+     }
+    },
+    {
+     "id": "afc-1974-2010",
+     "topics": [
+      "history",
+      "promotion",
+      "season",
+      "aim"
+     ],
+     "text": "Before 2010 Rochdale spent 36 consecutive seasons in the Football League's bottom division, a run that ended with promotion that year.",
+     "source": {
+      "title": "Rochdale A.F.C. - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_A.F.C."
+     }
+    }
+   ]
+  },
+  {
+   "id": "crown-oil-arena",
+   "name": "Crown Oil Arena (Spotland)",
+   "match": "Crown Oil Arena|Spotland Stadium|\\bat Spotland\\b|home match|home matches|back-to-back home",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "spotland-history",
+     "core": true,
+     "topics": [
+      "home",
+      "youth",
+      "match",
+      "stadium",
+      "arena",
+      "host"
+     ],
+     "text": "Spotland, on Sandy Lane, has been a sports ground since 1878 and has carried the Crown Oil Arena name, after the Bury-based fuel company, since 2016.",
+     "source": {
+      "title": "Spotland Stadium - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Spotland_Stadium"
+     }
+    },
+    {
+     "id": "spotland-capacity",
+     "topics": [
+      "home",
+      "match",
+      "host",
+      "tickets",
+      "crowd",
+      "stadium"
+     ],
+     "text": "Spotland holds 10,249 and is shared by Rochdale AFC and Rochdale Hornets, who moved there in 1988.",
+     "source": {
+      "title": "Spotland Stadium - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Spotland_Stadium"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rochdale-afc-women",
+   "name": "Rochdale AFC Women",
+   "match": "Rochdale (?:AFC )?Women|Dale Women",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "afc-women-2025-26",
+     "core": true,
+     "from": "2026-05-01",
+     "topics": [
+      "women",
+      "league",
+      "cup",
+      "match",
+      "home",
+      "defeat",
+      "exit"
+     ],
+     "text": "Rochdale AFC Women finished fifth in the North West Regional League Division One Central in 2025-26, with 10 wins from 18 games.",
+     "source": {
+      "title": "Rochdale AFC Women - Real Rochdale, summer 2026",
+      "url": "https://realrochdale.co.uk/magazine/editions/summer-2026/rochdale-afc-women/"
+     }
+    },
+    {
+     "id": "afc-women-arena",
+     "from": "2026-09-01",
+     "topics": [
+      "home",
+      "match",
+      "host",
+      "arena"
+     ],
+     "text": "Rochdale AFC Women opened their last season with a fixture at the Crown Oil Arena, the club's Spotland home.",
+     "source": {
+      "title": "Rochdale AFC Women - Real Rochdale, summer 2026",
+      "url": "https://realrochdale.co.uk/magazine/editions/summer-2026/rochdale-afc-women/"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rochdale-hornets",
+   "name": "Rochdale Hornets",
+   "match": "Rochdale Hornets|\\bHornets\\b",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "hornets-founded",
+     "core": true,
+     "topics": [
+      "history",
+      "club",
+      "players",
+      "coach",
+      "leaves"
+     ],
+     "text": "Rochdale Hornets were formed at the Roebuck Hotel on 20 April 1871 and were one of the 22 founder members of the Northern Union, rugby league's first governing body, in 1895.",
+     "source": {
+      "title": "Rochdale Hornets - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Hornets"
+     }
+    },
+    {
+     "id": "hornets-cup-1922",
+     "topics": [
+      "cup",
+      "history",
+      "final",
+      "win"
+     ],
+     "text": "The Hornets' only Challenge Cup final, in 1922, ended in a 10-9 win over Hull at Headingley.",
+     "source": {
+      "title": "Rochdale Hornets - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Hornets"
+     }
+    },
+    {
+     "id": "hornets-fiji",
+     "topics": [
+      "international",
+      "players",
+      "fiji",
+      "fijian",
+      "compete",
+      "matches"
+     ],
+     "text": "Rochdale Hornets have had strong links with Fiji since the early 1960s, and Rochdale has a large Fijian community as a result.",
+     "source": {
+      "title": "Rochdale Hornets - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Hornets"
+     }
+    },
+    {
+     "id": "hornets-ground",
+     "from": "2026-01-01",
+     "topics": [
+      "home",
+      "ground",
+      "coach",
+      "championship",
+      "season"
+     ],
+     "text": "The Hornets play in the Championship, rugby league's second tier, and share the Crown Oil Arena at Spotland with Rochdale AFC.",
+     "source": {
+      "title": "Rochdale Hornets - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Hornets"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rochdale-council",
+   "name": "Rochdale Borough Council",
+   "match": "Rochdale (?:Borough )?Council|Rochdale Metropolitan Borough Council|\\bthe council\\b",
+   "exclude": "",
+   "max_facts": 1,
+   "facts": [
+    {
+     "id": "council-wards",
+     "core": true,
+     "topics": [
+      "motion",
+      "councillors",
+      "vote",
+      "budget",
+      "approves",
+      "consider",
+      "accord",
+      "plans",
+      "report"
+     ],
+     "text": "Rochdale Borough Council has 60 councillors, three for each of the borough's 20 wards, and is based at Number One Riverside in the town centre.",
+     "source": {
+      "title": "Metropolitan Borough of Rochdale - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Metropolitan_Borough_of_Rochdale"
+     }
+    },
+    {
+     "id": "borough-population",
+     "topics": [
+      "budget",
+      "care",
+      "services",
+      "residents",
+      "feedback",
+      "contract",
+      "young",
+      "accommodation",
+      "fee",
+      "population"
+     ],
+     "text": "Rochdale Borough Council serves a borough of 223,773 people, according to the 2021 census.",
+     "source": {
+      "title": "Metropolitan Borough of Rochdale - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Metropolitan_Borough_of_Rochdale"
+     }
+    },
+    {
+     "id": "borough-formed",
+     "topics": [
+      "history",
+      "1974",
+      "formed"
+     ],
+     "text": "The borough was formed in 1974 from Rochdale, Heywood, Middleton, Littleborough, Milnrow and Wardle.",
+     "source": {
+      "title": "Metropolitan Borough of Rochdale - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Metropolitan_Borough_of_Rochdale"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rochdale-town-hall",
+   "name": "Rochdale Town Hall",
+   "match": "Town Hall",
+   "exclude": "Middleton Town Hall|Heywood Town Hall",
+   "facts": [
+    {
+     "id": "town-hall-1871",
+     "core": true,
+     "topics": [
+      "history",
+      "building",
+      "event",
+      "celebration"
+     ],
+     "text": "Rochdale Town Hall, designed by William Henry Crossland, opened on 27 September 1871 and is Grade I listed.",
+     "source": {
+      "title": "Rochdale Town Hall - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Town_Hall"
+     }
+    },
+    {
+     "id": "town-hall-restoration",
+     "from": "2026-01-01",
+     "topics": [
+      "restoration",
+      "reopen",
+      "award",
+      "building"
+     ],
+     "text": "Rochdale Town Hall closed in 2020 for a conservation project that ran until 2024, and the restoration won a Europa Nostra Award in 2026.",
+     "source": {
+      "title": "Rochdale Town Hall - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Town_Hall"
+     }
+    },
+    {
+     "id": "town-hall-fire",
+     "topics": [
+      "history",
+      "tower",
+      "clock"
+     ],
+     "text": "Rochdale Town Hall's original clock tower spire burned down in 1883; the stone tower that replaced it, by Alfred Waterhouse, was finished in 1887.",
+     "source": {
+      "title": "Rochdale Town Hall - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Town_Hall"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rochdale-riverside",
+   "name": "Rochdale Riverside",
+   "match": "Rochdale Riverside|REEL Cinema|Reel Cinema",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "riverside-opened",
+     "core": true,
+     "topics": [
+      "opens",
+      "shop",
+      "restaurant",
+      "lounge",
+      "cinema",
+      "halloween",
+      "leisure",
+      "town",
+      "centre"
+     ],
+     "text": "Rochdale Riverside, the £80 million shopping and leisure scheme on the edge of the town centre, opened its first phase in April 2020.",
+     "source": {
+      "title": "Rochdale Riverside - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Riverside"
+     }
+    },
+    {
+     "id": "riverside-anchors",
+     "topics": [
+      "cinema",
+      "film",
+      "screen",
+      "party",
+      "shop"
+     ],
+     "text": "Rochdale Riverside's anchor tenants are a 50,000 sq ft Marks & Spencer and a six-screen Reel Cinema.",
+     "source": {
+      "title": "Rochdale Riverside - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rochdale_Riverside"
+     }
+    }
+   ]
+  },
+  {
+   "id": "metrolink",
+   "name": "Metrolink in the borough",
+   "match": "Metrolink|\\btram\\b|Tram Stop|East Didsbury line|Freehold",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "metrolink-dates",
+     "topics": [
+      "tram",
+      "line",
+      "delays",
+      "lifts",
+      "stop",
+      "service"
+     ],
+     "text": "Metrolink trams reached Rochdale railway station in February 2013 and Rochdale Town Centre, the end of the line, in March 2014.",
+     "source": {
+      "title": "Oldham and Rochdale line - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Oldham_and_Rochdale_line"
+     }
+    },
+    {
+     "id": "metrolink-route",
+     "topics": [
+      "line",
+      "delays",
+      "didsbury",
+      "route",
+      "service"
+     ],
+     "text": "Full-route trams run between Rochdale Town Centre and East Didsbury, calling at Newhey, Milnrow, Kingsway Business Park and Newbold within the borough.",
+     "source": {
+      "title": "Oldham and Rochdale line - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Oldham_and_Rochdale_line"
+     }
+    },
+    {
+     "id": "metrolink-freehold",
+     "topics": [
+      "freehold",
+      "lifts",
+      "stop"
+     ],
+     "text": "Freehold tram stop, between South Chadderton and Oldham town centre, was built new on the trackbed of the old railway line.",
+     "source": {
+      "title": "Oldham and Rochdale line - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Oldham_and_Rochdale_line"
+     }
+    }
+   ]
+  },
+  {
+   "id": "heywood",
+   "name": "Heywood",
+   "match": "\\bHeywood\\b",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "heywood-location",
+     "topics": [
+      "town",
+      "opens",
+      "opening"
+     ],
+     "text": "Heywood lies four miles south-west of Rochdale and grew as a cotton mill town from the late 18th century.",
+     "source": {
+      "title": "Heywood, Greater Manchester - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Heywood,_Greater_Manchester"
+     }
+    },
+    {
+     "id": "heywood-elr",
+     "topics": [
+      "railway",
+      "station",
+      "heritage",
+      "trains"
+     ],
+     "text": "Heywood station, closed in 1970, reopened in 2003 on the East Lancashire Railway heritage line.",
+     "source": {
+      "title": "Heywood, Greater Manchester - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Heywood,_Greater_Manchester"
+     }
+    },
+    {
+     "id": "heywood-queens-park",
+     "topics": [
+      "queens park",
+      "queen's park"
+     ],
+     "text": "Heywood's Queens Park reopened in 2006 after a multimillion-pound restoration of its Victorian fountain and statues.",
+     "source": {
+      "title": "Heywood, Greater Manchester - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Heywood,_Greater_Manchester"
+     }
+    },
+    {
+     "id": "heywood-st-lukes",
+     "topics": [
+      "church",
+      "history",
+      "landmark"
+     ],
+     "text": "Heywood's best-known landmark is the parish church of St Luke, whose spire stands 188 feet tall.",
+     "source": {
+      "title": "Heywood, Greater Manchester - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Heywood,_Greater_Manchester"
+     }
+    }
+   ]
+  },
+  {
+   "id": "heywood-civic",
+   "name": "Heywood Civic Centre",
+   "match": "Heywood Civic",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "civic-reopened",
+     "core": true,
+     "from": "2026-02-27",
+     "topics": [
+      "pantomime",
+      "panto",
+      "show",
+      "theatre",
+      "launch"
+     ],
+     "text": "Heywood Civic Centre reopened in February 2026 after a multi-million pound refurbishment funded by Rochdale Borough Council and Arts Council England, and is run by Your Trust.",
+     "source": {
+      "title": "First look: Inside Heywood's revamped civic - Rochdale Borough Council",
+      "url": "https://www.rochdale.gov.uk/news/article/588/first-look-inside-heywoods-revamped-civic"
+     }
+    },
+    {
+     "id": "civic-cartwheel",
+     "from": "2026-02-27",
+     "topics": [
+      "arts",
+      "community",
+      "venue"
+     ],
+     "text": "The refurbished Heywood Civic Centre added a glass-fronted bar and cafe and a Changing Places facility, and is home to the arts organisation Cartwheel Arts.",
+     "source": {
+      "title": "First look: Inside Heywood's revamped civic - Rochdale Borough Council",
+      "url": "https://www.rochdale.gov.uk/news/article/588/first-look-inside-heywoods-revamped-civic"
+     }
+    }
+   ]
+  },
+  {
+   "id": "middleton",
+   "name": "Middleton",
+   "match": "\\bMiddleton\\b",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "middleton-st-leonards",
+     "topics": [
+      "history",
+      "church",
+      "landmark",
+      "heritage"
+     ],
+     "text": "Middleton's parish church of St Leonard, finished in 1524, holds the Flodden Window, thought to be the UK's oldest war memorial.",
+     "source": {
+      "title": "Middleton, Greater Manchester - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Middleton,_Greater_Manchester"
+     }
+    },
+    {
+     "id": "middleton-bamford",
+     "topics": [
+      "history",
+      "radical",
+      "peterloo",
+      "protest"
+     ],
+     "text": "The radical writer Samuel Bamford led a Middleton contingent to St Peter's Fields in 1819, the meeting that ended in the Peterloo Massacre.",
+     "source": {
+      "title": "Middleton, Greater Manchester - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Middleton,_Greater_Manchester"
+     }
+    },
+    {
+     "id": "middleton-location",
+     "topics": [
+      "roadworks",
+      "road",
+      "town"
+     ],
+     "text": "Middleton lies about five miles from both Manchester and Rochdale.",
+     "source": {
+      "title": "Middleton, Greater Manchester - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Middleton,_Greater_Manchester"
+     }
+    }
+   ]
+  },
+  {
+   "id": "littleborough",
+   "name": "Littleborough",
+   "match": "\\bLittleborough\\b",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "littleborough-summit",
+     "topics": [
+      "history",
+      "canal",
+      "railway",
+      "road",
+      "roadworks"
+     ],
+     "text": "Littleborough, three miles north-east of Rochdale, sits at the Summit Gap, the low pass chosen for both the Rochdale Canal and the Manchester to Leeds railway across the Pennines.",
+     "source": {
+      "title": "Littleborough, Greater Manchester - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Littleborough,_Greater_Manchester"
+     }
+    },
+    {
+     "id": "littleborough-lake",
+     "topics": [
+      "lake",
+      "outdoor",
+      "walk",
+      "golf",
+      "club",
+      "pilates"
+     ],
+     "text": "Hollingworth Lake, on the south side of Littleborough, was built around 1800 to feed the Rochdale Canal and became a country park in 1974.",
+     "source": {
+      "title": "Hollingworth Lake - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hollingworth_Lake"
+     }
+    }
+   ]
+  },
+  {
+   "id": "hollingworth-lake",
+   "name": "Hollingworth Lake",
+   "match": "Hollingworth Lake",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "lake-canal",
+     "topics": [
+      "history",
+      "canal",
+      "reservoir",
+      "walk"
+     ],
+     "text": "Hollingworth Lake was completed in 1800 as a reservoir to feed the Rochdale Canal, and Rochdale Council made it a country park in 1974.",
+     "source": {
+      "title": "Hollingworth Lake - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hollingworth_Lake"
+     }
+    },
+    {
+     "id": "lake-webb",
+     "topics": [
+      "swim",
+      "swimming",
+      "history",
+      "record"
+     ],
+     "text": "Captain Matthew Webb trained on the lake before becoming the first person to swim the English Channel in 1875.",
+     "source": {
+      "title": "Hollingworth Lake - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hollingworth_Lake"
+     }
+    }
+   ]
+  },
+  {
+   "id": "milnrow",
+   "name": "Milnrow and Newhey",
+   "match": "\\bMilnrow\\b|\\bNewhey\\b",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "milnrow-location",
+     "topics": [
+      "road",
+      "roadworks",
+      "m62",
+      "shop",
+      "tobacco",
+      "close",
+      "town"
+     ],
+     "text": "Milnrow, about two miles east of Rochdale town centre, sits beside junction 21 of the M62 and has had its own Metrolink stop since 2013.",
+     "source": {
+      "title": "Milnrow - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Milnrow"
+     }
+    },
+    {
+     "id": "milnrow-ellenroad",
+     "topics": [
+      "history",
+      "heritage",
+      "engine",
+      "steam",
+      "mill"
+     ],
+     "text": "Newhey is home to the Ellenroad Engine House, which preserves what is described as the world's largest working steam mill engine.",
+     "source": {
+      "title": "Milnrow - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Milnrow"
+     }
+    },
+    {
+     "id": "milnrow-tim-bobbin",
+     "topics": [
+      "history",
+      "school",
+      "pupils",
+      "learn",
+      "children",
+      "dialect"
+     ],
+     "text": "The 18th-century dialect writer John Collier, known as Tim Bobbin, was Milnrow's schoolmaster from 1739 until his death in 1786.",
+     "source": {
+      "title": "Milnrow - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Milnrow"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rochdale-foodbank",
+   "name": "Rochdale Foodbank",
+   "match": "Rochdale Foodbank|\\bfoodbank\\b",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "foodbank-founded",
+     "core": true,
+     "topics": [
+      "appeal",
+      "donations",
+      "items",
+      "harvest",
+      "van",
+      "sponsors"
+     ],
+     "text": "Rochdale Foodbank was started in 2012 by local churches and community groups with £400 and six people, and now relies on more than 100 volunteers.",
+     "source": {
+      "title": "About our foodbank - Rochdale Foodbank",
+      "url": "https://rochdale.foodbank.org.uk/about/about-our-foodbank/"
+     }
+    },
+    {
+     "id": "foodbank-newgate",
+     "topics": [
+      "appeal",
+      "donations",
+      "items",
+      "deliveries",
+      "van",
+      "drop"
+     ],
+     "text": "Rochdale Foodbank is based at 14-16 Newgate in the town centre and also distributes food on Saturdays in Smallbridge.",
+     "source": {
+      "title": "About our foodbank - Rochdale Foodbank",
+      "url": "https://rochdale.foodbank.org.uk/about/about-our-foodbank/"
+     }
+    }
+   ]
+  },
+  {
+   "id": "springhill-hospice",
+   "name": "Springhill Hospice",
+   "match": "Springhill Hospice|\\bSpringhill\\b",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "springhill-1989",
+     "core": true,
+     "topics": [
+      "history",
+      "clinic",
+      "free",
+      "will",
+      "fundraising",
+      "charity"
+     ],
+     "text": "Springhill Hospice opened on 8 October 1989 after a public appeal led by founder Margaret Geoghegan raised the £1.5 million needed to build and equip it.",
+     "source": {
+      "title": "Hospice Chair looks back on 30 years of care - ehospice",
+      "url": "https://ehospice.com/?p=106015"
+     }
+    },
+    {
+     "id": "springhill-services",
+     "topics": [
+      "care",
+      "services",
+      "clinic",
+      "will",
+      "support"
+     ],
+     "text": "Springhill Hospice, on Broad Lane, provides an inpatient unit, day services, care at home and bereavement support for people across the borough.",
+     "source": {
+      "title": "Springhill Hospice - Hospice UK",
+      "url": "https://www.hospiceuk.org/hospice-care-finder/springhill-hospice"
+     }
+    }
+   ]
+  },
+  {
+   "id": "pioneers-museum",
+   "name": "Rochdale Pioneers Museum",
+   "match": "Pioneers Museum|Toad Lane|Rochdale Pioneers",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "pioneers-1844",
+     "core": true,
+     "topics": [
+      "archive",
+      "history",
+      "sessions",
+      "folklore",
+      "museum"
+     ],
+     "text": "The museum at 31 Toad Lane is the building where the Rochdale Pioneers opened their co-operative shop on 21 December 1844.",
+     "source": {
+      "title": "About Toad Lane - Rochdale Pioneers Museum",
+      "url": "https://rochdalepioneersmuseum.coop/about-us/about-toad-lane"
+     }
+    },
+    {
+     "id": "pioneers-museum-1931",
+     "topics": [
+      "museum",
+      "archive",
+      "sessions",
+      "visit"
+     ],
+     "text": "The Toad Lane building first opened as a museum in 1931 and reopened in October 2012 after a redevelopment; its front room recreates the original 1844 store.",
+     "source": {
+      "title": "About Toad Lane - Rochdale Pioneers Museum",
+      "url": "https://rochdalepioneersmuseum.coop/about-us/about-toad-lane"
+     }
+    }
+   ]
+  },
+  {
+   "id": "britain-in-bloom",
+   "name": "Rochdale in Bloom",
+   "match": "in Bloom",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "bloom-golds",
+     "core": true,
+     "topics": [
+      "gold",
+      "title",
+      "town",
+      "centre",
+      "national",
+      "wins"
+     ],
+     "text": "Rochdale has a strong Britain in Bloom record, with golds for the town centre in 2024 and as Best Small City in 2018 and 2022.",
+     "source": {
+      "title": "Rochdale town centre reaches RHS Britain in Bloom UK finals - Real Rochdale",
+      "url": "https://realrochdale.co.uk/magazine/editions/spring-2026/rochdale-town-centre-reaches-rhs-britain-in-bloom-uk-finals/"
+     }
+    },
+    {
+     "id": "bloom-volunteers",
+     "topics": [
+      "volunteers",
+      "community",
+      "town",
+      "centre"
+     ],
+     "text": "Rochdale's Bloom entries are led by Rochdale in Bloom volunteers working with the council's environmental team, the town centre Business Improvement District, community groups and businesses.",
+     "source": {
+      "title": "Rochdale town centre reaches RHS Britain in Bloom UK finals - Real Rochdale",
+      "url": "https://realrochdale.co.uk/magazine/editions/spring-2026/rochdale-town-centre-reaches-rhs-britain-in-bloom-uk-finals/"
+     }
+    }
+   ]
+  },
+  {
+   "id": "hopwood-hall-college",
+   "name": "Hopwood Hall College",
+   "match": "Hopwood Hall College|Hopwood Hall campus",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "hopwood-campuses",
+     "core": true,
+     "topics": [
+      "college",
+      "students",
+      "course",
+      "campus"
+     ],
+     "text": "Hopwood Hall College has campuses in Rochdale and Middleton and was incorporated in 1992, bringing together Rochdale's further education, art and technology colleges.",
+     "source": {
+      "title": "Hopwood Hall College - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hopwood_Hall_College"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rochdale-rufc",
+   "name": "Rochdale RUFC",
+   "match": "Rochdale RUFC|Rochdale Rugby Union|Rossendale RUFC",
+   "exclude": "",
+   "facts": [
+    {
+     "id": "rufc-1921",
+     "core": true,
+     "topics": [
+      "rugby",
+      "derby",
+      "match",
+      "club"
+     ],
+     "text": "Rochdale Rugby Union Football Club was founded in 1921 and plays at Bamford, at the top of Moorgate Avenue off Bury Road.",
+     "source": {
+      "title": "About us - Rochdale RUFC",
+      "url": "https://www.rrufc.org/about-us/"
+     }
+    }
+   ]
+  }
+ ]
+}

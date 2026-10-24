@@ -60,6 +60,7 @@ def article_body(page):
     # Sources and related reporting are furniture, not article assertions.
     fragment = RELATED.sub('', ENGAGEMENT.sub('', fragment))
     fragment = re.sub(r'<p\b[^>]*class=["\']rd-related-inline["\'][^>]*>.*?</p>', '', fragment, flags=re.S)
+    fragment = re.sub(r'<div\b[^>]*data-rd-background=["\']1["\'][^>]*>.*?</div>', '', fragment, flags=re.S)
     # Remove closing layout divs outside the actual copy.
     if page[match.end(2):].startswith('<details'):
         return fragment.rstrip()
@@ -369,6 +370,12 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             page_body = inline_related.insert(page_body, row, feed)
         except Exception as exc:  # never let a link pass block the sweep
             print(f'Inline related skipped for {slug}: {type(exc).__name__}: {exc}')
+        # Background box (story_background.py), stripped on read-back like the links.
+        try:
+            import story_background
+            page_body = story_background.insert(page_body, {**feed_map.get(slug, {}), **row})
+        except Exception as exc:
+            print(f'Background skipped for {slug}: {type(exc).__name__}: {exc}')
         if match:
             sources_follow = page[match.end(2):].startswith('<details')
             if sources_follow:

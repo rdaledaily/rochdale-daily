@@ -106,7 +106,10 @@ HUBS: list[dict] = [
 ]
 
 _BODY_START = '<div class="article-copy">'
-_BODY_END_RE = re.compile(r'<details class="article-sources"|<section class="(?:comments|read-next|editorial-legal|report-box)')
+# The story's own text ends where the Background box (story_background.py)
+# begins: those cited facts are context, not what the story is about, so they
+# neither put a story in a topic hub nor take auto links.
+_BODY_END_RE = re.compile(r'<div class="rd-background"|<details class="article-sources"|<section class="(?:comments|read-next|editorial-legal|report-box)')
 _PARA_RE = re.compile(r"<p>(.*?)</p>", re.S)
 _AUTO_RE = re.compile(r'<a class="rd-auto-link" href="[^"]*">(.*?)</a>', re.S)
 _TOKEN_RE = re.compile(r"(<[^>]+>)")
