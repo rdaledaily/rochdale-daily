@@ -1144,6 +1144,14 @@ def request_article(
                 "what happens next",
             ],
             "seo": "Natural descriptive headline; no keyword stuffing or clickbait.",
+            "headline_style": (
+                "British newspaper sentence case: capitalise only the first word and "
+                "proper nouns (people, places, organisations, named events). Never "
+                "Title Case. Lead with the place and the key fact; aim for 70 "
+                "characters or fewer. Example: 'Rochdale AFC draw 2-2 with Grimsby "
+                "Town after late equaliser', not 'Rochdale AFC Draw 2-2 With Grimsby "
+                "Town After Late Equaliser'."
+            ),
             "temporal_accuracy": (
                 "source_published_at is publication/index metadata only. Never infer "
                 "that the reported event happened on that date. State an event date "
