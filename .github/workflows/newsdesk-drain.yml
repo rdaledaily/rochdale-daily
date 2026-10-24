@@ -25,14 +25,14 @@ concurrency:
 
 jobs:
   drain:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 8
     env:
       SITE_BASE: "https://rochdaledaily.co.uk"
       NEWSDESK_ADMIN_TOKEN: ${{ secrets.EVENTS_ADMIN_TOKEN }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           persist-credentials: true
 
@@ -45,7 +45,7 @@ jobs:
           fi
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 

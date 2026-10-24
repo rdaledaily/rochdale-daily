@@ -30,18 +30,18 @@ concurrency:
 jobs:
   publish-one:
     if: github.event_name != 'push' || contains(github.event.head_commit.message, '[facebook-test]')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Record publisher cycle start
         run: date +%s > "$RUNNER_TEMP/facebook_cycle_start"
 
       - name: Check out current newspaper
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
