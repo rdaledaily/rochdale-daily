@@ -28,7 +28,9 @@ class PushRecovery(unittest.TestCase):
             # not obscure the push-race behavior under test.
             import re
             stage = script.split('stage_newsroom() {', 1)[1].split('finalise_cards_policy()', 1)[0]
-            paths = re.search(r'git add (.*?)2>/dev/null', stage, re.S).group(1).replace('\\', '').split()
+            # The staging list is a bash array since 24 Oct 2026 (only paths
+            # that exist are added).
+            paths = re.search(r'local paths=\((.*?)\)', stage, re.S).group(1).split()
             for name in paths:
                 path = local / name
                 if name in {'manual_articles.d','assets/img/cards','articles','wards/','news/'}:
