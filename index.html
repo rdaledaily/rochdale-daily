@@ -2374,6 +2374,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         timeLabel: formatArticleTime(publishedAt),
         byline: safeText(article.byline || article.author || "Rochdale Daily Newsdesk"),
         demo: false,
+        isReserveFeature: reserveFeature,
         isOngoing: Boolean(article.is_ongoing),
         ongoingLabel: safeText(article.ongoing_label || (article.is_ongoing ? "ONGOING" : "")),
         updateCount: Number(article.update_count) || 1,
@@ -2433,6 +2434,10 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     function orderArticles(items) {
       const slotOrder = { lead: 0, "secondary-1": 1, "secondary-2": 2 };
       return items.slice().sort((a, b) => {
+        // Reserve filler must stay below news, regardless of slot, priority or date.
+        if (Boolean(a.isReserveFeature) !== Boolean(b.isReserveFeature)) {
+          return a.isReserveFeature ? 1 : -1;
+        }
         const aRank = Number.isFinite(Number(a.frontpage_rank)) ? Number(a.frontpage_rank) : 9999;
         const bRank = Number.isFinite(Number(b.frontpage_rank)) ? Number(b.frontpage_rank) : 9999;
         if (aRank !== bRank) return aRank - bRank;
@@ -2590,7 +2595,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
 
       // All sources failed (offline, laptop asleep, network suspended).
       // Keep whatever we already rendered rather than wiping the page.
-      if (!stories.length) {
+      if (!stories.some(story => !story.isReserveFeature)) {
         // Every source failed and nothing has been rendered from a feed yet, so
         // the static edition is the best thing on the page. Leave it — but the
         // side "Latest" panel is built entirely from the feed, so with no feed
@@ -3024,7 +3029,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
       // same unfiltered set.
       const filtersActive = activeCategory !== "all" || activeArea !== "all";
       const featuredIds = new Set(
-        filtersActive ? [] : stories.slice(0, 9).map(story => story.id)
+        filtersActive || !stories.some(story => !story.isReserveFeature) ? [] : stories.slice(0, 9).map(story => story.id)
       );
       const MAX_EVENTS_IN_MIXED_GRID = 4;
       let eventsShown = 0;
