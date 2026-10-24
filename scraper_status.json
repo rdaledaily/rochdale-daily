@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-24T11:25:15.544916Z",
+  "last_run_at": "2026-10-24T11:40:08.952816Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,9 +7,14 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "not due",
-      "last_checked": "2026-10-23T23:35:14.645252Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 1,
+      "listed": 11,
+      "other_notice_types": 7,
+      "already_seen": 4,
+      "new": 0
     },
     "written_answers": {
       "status": "not due",
@@ -17,18 +22,20 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "not due",
-      "last_checked": "2026-10-23T23:35:14.645252Z",
-      "interval_hours": 12
-    },
-    "ons_housing": {
       "status": "ok",
       "offered": 0,
       "daily_cap": 1,
       "offered_today": 0,
-      "listed": 1,
-      "already_seen": 1,
+      "listed": 31,
+      "not_decisions": 15,
+      "no_borough_place": 0,
+      "already_seen": 9,
       "new": 0
+    },
+    "ons_housing": {
+      "status": "not due",
+      "last_checked": "2026-10-24T11:22:27.268366Z",
+      "interval_hours": 24
     },
     "contract_notices": {
       "status": "not due",
@@ -46,18 +53,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 164,
+  "raw_candidates_before_job_filter": 163,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 164,
+  "raw_candidates": 163,
   "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 56,
-    "resolved": 48,
-    "text_recovered": 32,
-    "reattributed": 6,
+    "wrappers": 54,
+    "resolved": 46,
+    "text_recovered": 31,
+    "reattributed": 5,
     "images_found": 34
   },
-  "duplicates_merged": 121,
+  "duplicates_merged": 120,
   "attempted_rewrites": 1,
   "draft_rewrites_created": 1,
   "drafted_articles": [
@@ -67,7 +74,7 @@
     }
   ],
   "new_articles": 0,
-  "live_articles": 389,
+  "live_articles": 388,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -87,8 +94,8 @@
       "published": 108,
       "rejected": 64
     },
-    "held_back_this_run": 33,
-    "held_already_published": 27,
+    "held_back_this_run": 32,
+    "held_already_published": 26,
     "held_rejected": 6,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -149,12 +156,10 @@
       "last_attempt_at": "2026-10-21T01:43:17.438225Z"
     }
   ],
-  "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 143,
+    "rss_and_google_news": 142,
     "website_discovery": 16,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -170,24 +175,24 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Roch Valley Radio": 56,
+    "Roch Valley Radio": 55,
     "Rochdale Times": 30,
-    "Rochdale Borough Council": 12,
+    "Rochdale Borough Council": 11,
+    "Manchester Evening News": 7,
     "Roch Valley Radio Local News": 6,
     "Chronicle Live": 5,
     "Yorkshire Live": 5,
-    "Manchester Evening News": 5,
     "Facebook": 4,
     "Daily Record": 4,
     "InYourArea": 4,
     "Bee Network live travel alerts": 4,
     "Oldham Evening Chronicle": 3,
     "Oldham Times": 3,
-    "Fansnetwork": 3,
     "About Manchester": 3,
     "Net": 3,
     "BBC Manchester": 2,
     "Rochdale AFC": 2,
+    "Fansnetwork": 2,
     "Rochdale Valiant": 2,
     "Rochdale Borough Council RSS": 1,
     "beIN SPORTS": 1,
@@ -864,7 +869,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-24T11:31:56.376446Z",
+  "frontpage_generated_at": "2026-10-24T11:52:14.612409Z",
   "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -942,7 +947,7 @@
       "littleborough": 2,
       "middleton": 2,
       "milnrow": 1,
-      "rochdale": 16
+      "rochdale": 15
     },
     "selected_by_source": {
       "source": 4,
@@ -958,26 +963,26 @@
       "bbc manchester": 1,
       "traditions of lancashire (john roby) — project gutenberg": 1
     },
-    "pool_size": 25,
-    "primary_pool_size": 25,
+    "pool_size": 24,
+    "primary_pool_size": 24,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 19,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 12,
+    "fresh_under_24h": 11,
     "fresh_under_homepage_window": 18,
     "short_briefs_selected": 7,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 14,
-  "events_removed_other_source": 11,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
+  "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 14,
+  "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 389,
+  "duplicate_articles_after_postprocessing": 388,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -987,7 +992,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 14,
+  "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 1,
