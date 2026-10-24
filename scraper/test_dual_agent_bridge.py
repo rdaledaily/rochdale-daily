@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import dual_agent_bridge as bridge
@@ -180,7 +181,9 @@ def test_workflow_is_secret_backed_and_comment_only() -> None:
     assert "contents: read" in body
     assert "issues: write" in body
     assert "pull-requests: write" in body
-    assert "actions/upload-artifact@v4" in body
+    # Any supported major: the workflows moved off Node 20 actions (v4 -> v6)
+    # on 24 Oct 2026. What matters is that the report is uploaded.
+    assert re.search(r"actions/upload-artifact@v\d+", body)
     for forbidden in ("contents: write", "git push", "git merge", "gh workflow run"):
         assert forbidden not in body
 

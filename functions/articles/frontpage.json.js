@@ -178,13 +178,22 @@ async function loadBreaking(env, requestUrl, now) {
 // stay in the feed, in order, from position ten onwards.
 const SPONSORED_FLOOR = 9;
 
+// Reserve features (evergreen folklore and explainers) are never top stories
+// either: same test as scraper/feature_policy.py is_reserve_feature.
+function isReserveFeature(article) {
+  return article.is_evergreen === true
+    || Boolean(article.evergreen_id)
+    || String(article.publication_route || '').toLowerCase() === 'evergreen_fallback'
+    || String(article.source_kind || '').toLowerCase() === 'evergreen';
+}
+
 function demoteSponsored(list, floor) {
   const top = [];
   const held = [];
   const rest = [];
   for (const article of list) {
     if (top.length < floor) {
-      (article && article.sponsored === true ? held : top).push(article);
+      (article && (article.sponsored === true || isReserveFeature(article)) ? held : top).push(article);
     } else {
       rest.push(article);
     }
