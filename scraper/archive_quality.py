@@ -102,7 +102,12 @@ def scan(root: Path):
         row.setdefault('image_url', image.get('content', '') if image else '')
         credit = re.search(r'<figcaption[^>]*>(.*?)</figcaption>',page,re.S)
         if credit:
-            row.setdefault('image_credit',plain(credit.group(1)).removeprefix('Image: '))
+            # The link text "Image source" is added when the caption is built;
+            # read back as part of the credit it stacked one more copy per run
+            # (106 copies on one page by 24 Oct 2026).
+            caption=re.sub(r'<a\b[^>]*>\s*Image source\s*</a>','',credit.group(1))
+            credit_text=re.sub(r'(?:\s*\bImage source\b)+\s*$','',plain(caption)).strip()
+            row.setdefault('image_credit',credit_text.removeprefix('Image: '))
             link=re.search(r'href=["\']([^"\']+)["\']',credit.group(1))
             if link:row.setdefault('image_credit_url',html.unescape(link.group(1)))
         src = re.search(r'<details\b[^>]*class=["\']article-sources["\'].*?</details>', page, re.S)

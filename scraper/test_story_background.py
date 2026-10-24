@@ -145,3 +145,24 @@ def test_time_bound_facts_never_appear_before_they_were_true():
     planning = story("Plans for 45-home development in Bamford face objections", category="environment",
                      published_at="2025-11-01T10:00:00Z")
     assert B.ward_line(planning) is None                       # before the current councillors were elected
+
+
+def test_ward_link_uses_clean_url():
+    s = story("Plans for 45-home development in Bamford face objections", category="environment",
+              published_at="2026-10-01T10:00:00Z")
+    assert 'href="/wards/bamford"' in B.ward_line(s)[0]
+
+
+def test_image_credit_read_back_does_not_stack():
+    from archive_quality import scan
+    import tempfile
+    root = Path(tempfile.mkdtemp())
+    (root / "articles").mkdir()
+    (root / "articles.json").write_text("[]", encoding="utf-8")
+    caption = "R lee / Wikimedia Commons" + " Image source" * 3 + ' <a href="https://example.org/x">Image source</a>'
+    (root / "articles" / "x.html").write_text(
+        '<html><head><title>X</title><link rel="canonical" href="https://rochdaledaily.co.uk/articles/x"></head><body>'
+        f'<h1>X</h1><figure class="article-hero-image"><img src="/a.jpg"><figcaption>{caption}</figcaption></figure>'
+        '<div class="article-copy"><p>Text.</p></div></body></html>', encoding="utf-8")
+    rows = [r for r in scan(root) if r["slug"] == "x"]
+    assert rows and rows[0]["image_credit"] == "R lee / Wikimedia Commons"
