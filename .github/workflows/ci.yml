@@ -301,6 +301,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_theme_token_repair.py
           PYTHONPATH=scraper python scraper/test_trusted_editorial_sources.py
           PYTHONPATH=scraper python scraper/test_weekly_seo_audit.py
+          PYTHONPATH=scraper python scraper/test_feature_never_leads.py
           python scraper/test_every_test_runs_in_ci.py
           # Test the publishing contract (one normalise pass leaves nothing for
           # --check), not whether the last bot run has caught up with a code
