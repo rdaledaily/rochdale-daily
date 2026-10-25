@@ -1,46 +1,38 @@
 {
-  "examined_at": "2026-10-24T11:37:33.517492Z",
+  "examined_at": "2026-10-25T11:58:45.445023Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 187,
+  "candidates_examined": 130,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 164,
-    "would publish": 12,
-    "duplicate of published story": 9,
-    "not local": 1,
-    "job or career post": 1
+    "age": 92,
+    "would publish": 22,
+    "duplicate of published story": 16
   },
-  "would_publish": 12,
+  "would_publish": 22,
   "age_gate_sensitivity": {
-    "6h": 10,
-    "14h": 10,
-    "24h": 23,
+    "6h": 2,
+    "14h": 8,
+    "24h": 38,
     "48h": 62,
-    "72h": 91,
-    "168h": 187
+    "72h": 98,
+    "168h": 130
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 24/10/2026 at 10:20am Live Freehold Tram Stop - Lifts out of ",
-      "Roch Valley Radio Local News: Rochdale Council rakes in almost £3m from parking fines"
-    ],
-    "not local": [
-      "BBC: Plan for Northern Olympics to get £7m in Healey's Budget - BBC"
+      "Manchester Evening News: The secret safety battle over Rochdale’s Seven Sisters",
+      "ESPN: Port Vale vs. Rochdale (Oct 31, 2026) Odds and Spread - ESPN"
     ],
     "duplicate of published story": [
-      "Rochdale Times: Weather warning as Storm Boelo approaches - Rochdale Times",
-      "Roch Valley Radio Local News: The potential return of Lodge Mill",
-      "beIN SPORTS: Fleetwood Town vs Rochdale - beIN SPORTS"
-    ],
-    "job or career post": [
-      "Aol: Paterson signs for League Two club Rochdale - AOL.com"
+      "Theboltonnews: Mum who felt perfectly healthy diagnosed with cancer after routine NHS",
+      "Rochdale Borough Council: Middleton Remembrance Sunday 2026, road closures in Middleton on 8 Nov",
+      "Rochdale Borough Council: Heywood Remembrance Sunday 2026, road closures in Heywood on 8 Novembe"
     ],
     "age": [
-      "Rochdale Borough Council: Toad Lane and surrounding streets, roadworks in Rochdale on 6 November",
-      "Rochdale Borough Council: Kirkstall Avenue, roadworks in Littleborough on 6 November 2026",
-      "Roch Valley Radio Local News: Rochdale wins town and city centres category at Britain in Bloom award"
+      "BBC: Northern Olympics plan to get Â£7m in John Healey's first Budget",
+      "BBC: Northern Olympics plan to get £7m in John Healey's first Budget",
+      "Rochdale Times: Weather warning as Storm Boelo approaches - Rochdale Times"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
