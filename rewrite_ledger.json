@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-25T12:03:02.853962Z",
+  "updated_at": "2026-10-25T13:27:04.227573Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 210,
+  "count": 211,
   "entries": {
     "https://aboutmanchester.co.uk/rochdale-charity-your-trust-is-hosting-a-variety-of-activities-across-its-venues-this-october-half-term-to-keep-children-and-their-families-entertained": {
       "first_attempt_at": "2026-10-23T12:58:07.186081Z",
@@ -1035,6 +1035,22 @@
       "recovery_attempts": 0,
       "final_gate_removal_recovery": 1,
       "evidence_recovery_policy": 1
+    },
+    "https://www.espn.com/soccer/odds/_/gameId/401881281": {
+      "first_attempt_at": "2026-10-25T13:25:13.193170Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.espn.com/soccer/odds/_/gameId/401881281"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-25T13:25:13.193170Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: The model marked the story unpublishable.",
+      "title": "Port Vale vs. Rochdale (Oct 31, 2026) Odds and Spread - ESPN",
+      "source_name": "ESPN",
+      "category": "crime",
+      "text_fingerprint": "f4d387821c05f546"
     },
     "https://www.espn.in/football/team-stats/_/gameId/401881304/league/eng.4": {
       "first_attempt_at": "2026-10-20T23:31:40.895844Z",
