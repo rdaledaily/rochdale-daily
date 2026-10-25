@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-25T06:51:20.714627Z",
+  "last_run_at": "2026-10-25T07:18:49.107969Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -45,27 +45,24 @@
   "raw_candidates_before_job_filter": 102,
   "job_or_career_posts_rejected": 0,
   "raw_candidates": 102,
-  "candidate_clusters": 38,
+  "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 45,
-    "resolved": 41,
-    "text_recovered": 35,
+    "wrappers": 64,
+    "resolved": 53,
+    "text_recovered": 28,
     "reattributed": 2,
-    "images_found": 35
+    "images_found": 29
   },
-  "duplicates_merged": 64,
+  "duplicates_merged": 63,
   "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "accrington-stanley-thrash-rochdale-5-0-in-league-two-clash",
-      "source_url": "https://www.chardandilminsternews.co.uk/sport/national/26667423.five-star-accrington-thrash-rochdale-keep-unbeaten-run-going/"
-    }
-  ],
-  "new_articles": 1,
-  "live_articles": 398,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
+  "live_articles": 399,
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "editorial gate: REJECTED_NON_LOCAL": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 0,
@@ -80,8 +77,8 @@
     "entries": 206,
     "by_outcome": {
       "failed": 37,
-      "published": 110,
-      "rejected": 59
+      "published": 109,
+      "rejected": 60
     },
     "held_back_this_run": 32,
     "held_already_published": 27,
@@ -139,8 +136,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 85,
-    "website_discovery": 12,
+    "rss_and_google_news": 90,
+    "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -155,11 +152,11 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 26,
+    "Rochdale Times": 21,
     "Roch Valley Radio": 20,
+    "Manchester Evening News": 6,
     "Rochdale Borough Council": 5,
     "Oxford Mail": 4,
-    "Manchester Evening News": 4,
     "Roch Valley Radio Local News": 4,
     "Bee Network live travel alerts": 4,
     "FC東京オフィシャルホームページ": 3,
@@ -176,11 +173,14 @@
     "BBC Manchester": 1,
     "Harrow Times": 1,
     "Yahoo Sports": 1,
+    "beIN SPORTS": 1,
+    "Futbol24": 1,
     "Herts Advertiser": 1,
+    "The Bury Times": 1,
     "BBC": 1,
     "Chard and Ilminster News": 1,
-    "County Times": 1,
     "Runcorn and Widnes World": 1,
+    "County Times": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -809,7 +809,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 8,
+  "robots_denied_count": 9,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -818,7 +818,8 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPZzlDcWJSVzBsaElDZUNmOTZIZ3I4MTBRY2ZWSk9wNXA3OU1FaG8tZ1RBM2ZRb0NiY2FZcXEzaDJhZUx1VUV0LW4wLXVMLTNZNGNTLWhtWDZWemhjeDh6MVVlWWNkaTRSMVlGMWNEV3BoUGRCY3QwU3RpcF9CdE12LTlnZndDTXhoWHVyZTI1NDc5d3M2bDhMUDdJLW5IUjZZNER5WkNpaGJnWDljbm95MElxSGZNVzk1ZEE1ZGdlcFNlVnc?oc=5"
+    "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPZzlDcWJSVzBsaElDZUNmOTZIZ3I4MTBRY2ZWSk9wNXA3OU1FaG8tZ1RBM2ZRb0NiY2FZcXEzaDJhZUx1VUV0LW4wLXVMLTNZNGNTLWhtWDZWemhjeDh6MVVlWWNkaTRSMVlGMWNEV3BoUGRCY3QwU3RpcF9CdE12LTlnZndDTXhoWHVyZTI1NDc5d3M2bDhMUDdJLW5IUjZZNER5WkNpaGJnWDljbm95MElxSGZNVzk1ZEE1ZGdlcFNlVnc?oc=5",
+    "https://news.google.com/rss/articles/CBMiygFBVV95cUxOYmo0aS1vMHZDcHRyTTVhZ3hUSGdBbGIzVTVxT0VPMTNYUWRCMGw4UHNOV1NWUGhFdS1LVE9GZm95cm9ldVoxUS1GLU14OTA2Qkk1Rm92UGtSSWYyX0lyemMxMHN0T2hHNVF4aURLdmdEc3R4dW8wMTNGeUp2YnVsUkYyRHRXbzBycmR4X0h0bVgwYXdud2YyZGY1ZWUwVmZLMzBvdmFUejBjcDMyUTdyN3NEYjlkSHlOc0tPZkhUMUp6c3hlRG80U1VR?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -858,7 +859,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-25T07:04:13.741545Z",
+  "frontpage_generated_at": "2026-10-25T07:19:26.227292Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -969,14 +970,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 398,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 399,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -986,11 +987,9 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "accrington-stanley-thrash-rochdale-5-0-in-league-two-clash"
-  ],
+  "whats_on_event_count": 14,
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
