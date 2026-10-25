@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-25T00:01:32.414620Z",
+  "last_run_at": "2026-10-25T00:24:54.799299Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,28 +42,36 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 104,
+  "raw_candidates_before_job_filter": 99,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 104,
-  "candidate_clusters": 36,
+  "raw_candidates": 99,
+  "candidate_clusters": 35,
   "google_news_resolution": {
-    "wrappers": 39,
-    "resolved": 38,
-    "text_recovered": 33,
-    "reattributed": 2,
-    "images_found": 33
+    "wrappers": 61,
+    "resolved": 55,
+    "text_recovered": 28,
+    "reattributed": 3,
+    "images_found": 30
   },
-  "duplicates_merged": 68,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
+  "duplicates_merged": 64,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 3,
   "drafted_articles": [
     {
       "slug": "rochdale-town-centre-wins-gold-at-britain-in-bloom-awards-2026",
       "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1232/rochdale-wins-town-and-city-centres-category-at-britain-in-bloom-awards"
+    },
+    {
+      "slug": "accrington-stanley-thrash-rochdale-5-0-in-league-two-clash",
+      "source_url": "https://www.birmingham-now.co.uk/sport/national/26667546.accrington-boss-john-doolan-sets-play-off-target-historic-win-rochdale/"
+    },
+    {
+      "slug": "police-seize-vehicles-after-drivers-fail-to-stop-for-heywood-school-crossing-pat",
+      "source_url": "https://www.rochdaletimes.co.uk/drivers-have-vehicles-seized-for-ignoring-school-crossing-patrols/"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 393,
+  "new_articles": 2,
+  "live_articles": 394,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -77,15 +85,15 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 200,
+    "entries": 201,
     "by_outcome": {
       "failed": 37,
-      "published": 105,
+      "published": 106,
       "rejected": 58
     },
-    "held_back_this_run": 30,
-    "held_already_published": 24,
-    "held_rejected": 6,
+    "held_back_this_run": 27,
+    "held_already_published": 22,
+    "held_rejected": 5,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -134,22 +142,13 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-10-23T19:39:58.877636Z"
-    },
-    {
-      "url": "https://www.rochdaletimes.co.uk/final-crossing-for-popular-lollipop-lady-barbara",
-      "title": "Final crossing for popular lollipop lady Barbara - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-10-21T01:43:17.438225Z"
     }
   ],
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 87,
-    "website_discovery": 12,
+    "rss_and_google_news": 88,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -164,16 +163,16 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 25,
+    "Rochdale Times": 23,
     "Roch Valley Radio": 20,
-    "Rochdale Borough Council": 8,
-    "Manchester Evening News": 6,
-    "Oxford Mail": 4,
+    "Oxford Mail": 5,
+    "Manchester Evening News": 5,
     "Roch Valley Radio Local News": 4,
     "Bee Network live travel alerts": 4,
     "FC東京オフィシャルホームページ": 3,
     "About Manchester": 3,
     "InYourArea": 3,
+    "Rochdale Borough Council": 3,
     "BBC Manchester": 2,
     "Oldham Times": 2,
     "The Northern Echo": 2,
@@ -182,17 +181,21 @@
     "Birmingham Now": 2,
     "Somerset County Gazette": 2,
     "Rochdale Valiant": 2,
-    "Rochdale Borough Council RSS": 1,
     "Rochdale AFC": 1,
+    "beIN SPORTS": 1,
     "Yahoo Sports": 1,
+    "Futbol24": 1,
+    "Denbighshire Free Press": 1,
+    "Fansnetwork": 1,
     "Herts Advertiser": 1,
     "Chard and Ilminster News": 1,
     "Runcorn and Widnes World": 1,
-    "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "environment": 1
+    "crime": 1,
+    "environment": 1,
+    "traffic": 1
   },
   "published_by_category": {
     "business": 42,
@@ -231,9 +234,13 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "education-v3-b0a06286c440cf62ca78",
+    "sport-v3-c4d9feec3014c0766e08",
     "environment-v3-812a90028c228a98c640"
   ],
   "selected_candidate_urls": [
+    "https://www.rochdaletimes.co.uk/drivers-have-vehicles-seized-for-ignoring-school-crossing-patrols/",
+    "https://www.birmingham-now.co.uk/sport/national/26667546.accrington-boss-john-doolan-sets-play-off-target-historic-win-rochdale/",
     "https://www.rochvalleyradio.com/news-features/142/community/1232/rochdale-wins-town-and-city-centres-category-at-britain-in-bloom-awards"
   ],
   "x_social_records": 0,
@@ -246,10 +253,14 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment"
+      "crime",
+      "environment",
+      "traffic"
     ],
     "selected_categories": [
-      "environment"
+      "crime",
+      "environment",
+      "traffic"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -257,20 +268,26 @@
       "middleton"
     ],
     "selected_areas": [
-      "middleton"
+      "middleton",
+      "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1
+      "crime": 1,
+      "environment": 1,
+      "traffic": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "middleton": 1
+      "middleton": 1,
+      "rochdale": 2
     },
     "selected_by_source": {
-      "roch valley radio local news": 1
+      "birmingham now": 1,
+      "roch valley radio local news": 1,
+      "rochdale times": 1
     }
   },
   "official_ward_count": 20,
@@ -819,7 +836,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -827,7 +844,8 @@
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNVkFIU3JyZ1k0RWFmS0VsVm9jZ21rYVFZcHotTXlvdEFTTlFRNlR4XzdXczYyMk5FZWZlZXJjZWszYUQ1RHF0S1FwR2FLRW5qZzhNcHdmc0p0NEtpMy1CaGZqeHltUFVZNkN4ZG9rQ3VabmF3Q2IyaHJHUDRuYm9IRnZfdjRQQTFkaTh0bktRdk01a0VjTnhVNmxIRk1uS1NjSnY1NGduQUNhMGR4dlpwY3FTX3hTMDhUTUxMWFNKYkcwM3Vuend4ME5ISlZNaE1M?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -867,7 +885,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-25T00:11:48.773422Z",
+  "frontpage_generated_at": "2026-10-25T00:25:28.448544Z",
   "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -953,7 +971,7 @@
       "rochdale sea cadets": 1,
       "rochdale borough council": 3,
       "about manchester": 1,
-      "sky sports": 1,
+      "birmingham now": 1,
       "source": 2,
       "rochdale afc": 1,
       "rochdale times": 1,
@@ -978,14 +996,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 393,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 394,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -995,10 +1013,13 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "whats_on_event_count": 14,
+  "published_after_editorial_gate": 2,
+  "published_new_slugs": [
+    "accrington-stanley-thrash-rochdale-5-0-in-league-two-clash",
+    "police-seize-vehicles-after-drivers-fail-to-stop-for-heywood-school-crossing-pat"
+  ],
   "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
