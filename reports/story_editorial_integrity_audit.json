@@ -1,12 +1,36 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 406,
-  "published_count": 406,
+  "article_count": 409,
+  "published_count": 409,
   "category_change_count": 0,
-  "image_change_count": 88,
+  "image_change_count": 90,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "rochdale-awards-event-recognises-achievements-of-over-200-cared-for-children",
+      "title": "Rochdale awards event recognises achievements of over 200 cared for children",
+      "category": "education",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
+        "status": "commons-photo-cached"
+      },
+      "after": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg"
+    },
+    {
+      "slug": "halloween-activities-for-families-at-rochdale-town-hall-this-half-term",
+      "title": "Halloween activities for families at Rochdale Town Hall this half-term",
+      "category": "community",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/c88cf4be775df99c-commons-photo.jpg"
+    },
     {
       "slug": "traffic-congestion-on-m62-near-rochdale-following-accident",
       "title": "Traffic congestion on M62 near Rochdale following accident",
@@ -93,7 +117,7 @@
     },
     {
       "slug": "accrington-stanley-thrash-rochdale-5-0-in-league-two-clash",
-      "title": "Accrington Stanley thrash Rochdale 5-0 in disappointing home defeat",
+      "title": "Accrington Stanley thrash Rochdale 5-0 in League Two clash",
       "category": "sport",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
