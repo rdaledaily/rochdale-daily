@@ -1,12 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 409,
-  "published_count": 409,
+  "article_count": 412,
+  "published_count": 412,
   "category_change_count": 0,
-  "image_change_count": 90,
+  "image_change_count": 92,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "new-documentary-explores-the-history-of-hollingworth-lake",
+      "title": "New documentary explores the history of Hollingworth Lake",
+      "category": "environment",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/hollingworth_lake.jpg",
+        "img": "assets/img/cards/hollingworth_lake.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/387adfb3113f3bf7-commons-photo.jpg"
+    },
     {
       "slug": "road-closures-for-wardle-remembrance-sunday-on-8-november-2026",
       "title": "Road closures for Wardle Remembrance Sunday on 8 November 2026",
@@ -28,6 +40,18 @@
         "image_url": "",
         "img": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
         "status": "commons-photo-cached"
+      },
+      "after": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg"
+    },
+    {
+      "slug": "rochdale-vs-lionesses-match-postponed-due-to-unforeseen-circumstances",
+      "title": "Rochdale vs Lionesses match postponed due to unforeseen circumstances",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_away.jpg",
+        "img": "assets/img/cards/rochdale_away.jpg",
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg"
     },
