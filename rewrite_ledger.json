@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-26T10:58:44.665402Z",
+  "updated_at": "2026-10-26T11:13:25.445362Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 211,
+  "count": 210,
   "entries": {
     "https://aboutmanchester.co.uk/rochdale-charity-your-trust-is-hosting-a-variety-of-activities-across-its-venues-this-october-half-term-to-keep-children-and-their-families-entertained": {
       "first_attempt_at": "2026-10-23T12:58:07.186081Z",
@@ -992,9 +992,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-26T10:56:25.786632Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "last_attempt_at": "2026-10-26T11:13:25.445040Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Five-star Accrington thrash Rochdale to keep unbeaten run going - Chard and Ilminster News",
       "source_name": "Chard and Ilminster News",
       "category": "environment",
@@ -1830,23 +1830,6 @@
       "category": "transport",
       "text_fingerprint": "b12be216fdf5fd02"
     },
-    "https://www.northernrailway.co.uk/service-updates#live-53e2482b5aba6573b1": {
-      "first_attempt_at": "2026-10-18T10:26:29.187865Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.northernrailway.co.uk/service-updates#live-53e2482b5aba6573b1"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-18T11:00:30.508732Z",
-      "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
-      "title": "Service updates Live train times, planned disruption and events Breadcrumb Home Service updates The route status and colour coding below rel",
-      "source_name": "Northern live service updates",
-      "category": "transport",
-      "text_fingerprint": "41ba95842b9ed359",
-      "recovery_attempts": 1,
-      "final_gate_removal_recovery": 1
-    },
     "https://www.northernrailway.co.uk/service-updates#live-68f1a1b32cf5870047": {
       "first_attempt_at": "2026-10-18T12:00:12.099421Z",
       "attempts": 1,
@@ -2634,8 +2617,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-26T10:58:44.665137Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "National spotlight shines on town’s live music - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
