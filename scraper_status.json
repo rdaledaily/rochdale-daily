@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-26T21:47:59.139358Z",
+  "last_run_at": "2026-10-26T22:05:07.799636Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,23 +42,23 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 82,
+  "raw_candidates_before_job_filter": 90,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 82,
+  "raw_candidates": 90,
   "candidate_clusters": 36,
   "google_news_resolution": {
-    "wrappers": 54,
-    "resolved": 32,
-    "text_recovered": 8,
+    "wrappers": 41,
+    "resolved": 23,
+    "text_recovered": 16,
     "reattributed": 0,
-    "images_found": 10
+    "images_found": 18
   },
-  "duplicates_merged": 46,
+  "duplicates_merged": 54,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
-  "live_articles": 420,
+  "live_articles": 422,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -72,9 +72,9 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 185,
+    "entries": 184,
     "by_outcome": {
-      "failed": 21,
+      "failed": 20,
       "published": 123,
       "rejected": 41
     },
@@ -116,8 +116,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 74,
-    "website_discovery": 3,
+    "rss_and_google_news": 79,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -132,24 +132,25 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 23,
-    "Roch Valley Radio": 12,
+    "Rochdale Times": 26,
+    "Roch Valley Radio": 14,
     "Rochdale Borough Council": 7,
+    "Manchester Evening News": 6,
     "Oldham Evening Chronicle": 6,
-    "Manchester Evening News": 5,
-    "The Bury Times": 4,
+    "The Bury Times": 5,
     "Rochdale AFC": 4,
     "Bee Network live travel alerts": 4,
     "Peeblesshire News": 3,
     "Facebook": 3,
     "Messenger Newspapers": 2,
-    "Rochdale Valiant": 2,
+    "Roch Valley Radio Local News": 2,
     "Rochdale Borough Council RSS": 1,
     "Salford City FC": 1,
     "Yahoo Sports": 1,
     "About Manchester": 1,
     "Oldham Times": 1,
     "Rochdale Borough Council News": 1,
+    "Rochdale Valiant": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {},
@@ -769,10 +770,10 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochvalleyradio.com"
+    "visitrochdale.com"
   ],
   "slow_domain_failure_counts": {
-    "rochvalleyradio.com": 2
+    "visitrochdale.com": 2
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -809,7 +810,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-26T21:48:45.416332Z",
+  "frontpage_generated_at": "2026-10-26T22:05:51.151138Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -918,14 +919,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "HTTPSConnectionPool(host='www.whatsoccurrinevents.co.uk', port=443): Read timed out. (read timeout=4)",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 13,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 12,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 420,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 3,
+  "duplicate_articles_after_postprocessing": 422,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -935,7 +936,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 12,
+  "whats_on_event_count": 14,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 0,
