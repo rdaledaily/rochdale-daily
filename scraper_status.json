@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-26T06:39:46.065621Z",
+  "last_run_at": "2026-10-26T07:14:18.506754Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,23 +42,23 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 94,
+  "raw_candidates_before_job_filter": 96,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 94,
+  "raw_candidates": 96,
   "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 47,
+    "wrappers": 48,
     "resolved": 41,
     "text_recovered": 34,
     "reattributed": 3,
-    "images_found": 37
+    "images_found": 35
   },
-  "duplicates_merged": 55,
+  "duplicates_merged": 57,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
-  "live_articles": 408,
+  "live_articles": 409,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -134,8 +134,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 82,
-    "website_discovery": 7,
+    "rss_and_google_news": 83,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -150,8 +150,8 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 26,
-    "Roch Valley Radio": 16,
+    "Rochdale Times": 25,
+    "Roch Valley Radio": 17,
     "Manchester Evening News": 6,
     "Oxford Mail": 4,
     "Rochdale Borough Council": 4,
@@ -167,6 +167,7 @@
     "Somerset County Gazette": 2,
     "BBC Manchester": 1,
     "Rochdale AFC": 1,
+    "Salford City FC": 1,
     "Yahoo Sports": 1,
     "beIN SPORTS": 1,
     "North Wales Pioneer": 1,
@@ -176,6 +177,7 @@
     "Chard and Ilminster News": 1,
     "Cambs Times": 1,
     "Oldham Times": 1,
+    "Rochdale Valiant": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {},
@@ -794,8 +796,14 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "visitrochdale.com",
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 12,
+    "visitrochdale.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -831,7 +839,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-26T06:55:11.087148Z",
+  "frontpage_generated_at": "2026-10-26T07:15:01.267532Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -946,14 +954,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 408,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 409,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -963,7 +971,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
+  "whats_on_event_count": 14,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 0,
