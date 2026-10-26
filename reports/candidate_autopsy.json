@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-10-25T11:58:45.445023Z",
+  "examined_at": "2026-10-26T13:32:56.879315Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 130,
+  "candidates_examined": 128,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 92,
-    "would publish": 22,
-    "duplicate of published story": 16
+    "age": 113,
+    "would publish": 10,
+    "duplicate of published story": 5
   },
-  "would_publish": 22,
+  "would_publish": 10,
   "age_gate_sensitivity": {
-    "6h": 2,
+    "6h": 4,
     "14h": 8,
-    "24h": 38,
-    "48h": 62,
-    "72h": 98,
-    "168h": 130
+    "24h": 15,
+    "48h": 68,
+    "72h": 93,
+    "168h": 128
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Manchester Evening News: The secret safety battle over Rochdale’s Seven Sisters",
-      "ESPN: Port Vale vs. Rochdale (Oct 31, 2026) Odds and Spread - ESPN"
+      "Rochdale Times: Town centre reclaims Britain in Bloom crown - Rochdale Times",
+      "Rochdale Times: National spotlight shines on town’s live music - Rochdale Times"
     ],
     "duplicate of published story": [
-      "Theboltonnews: Mum who felt perfectly healthy diagnosed with cancer after routine NHS",
-      "Rochdale Borough Council: Middleton Remembrance Sunday 2026, road closures in Middleton on 8 Nov",
-      "Rochdale Borough Council: Heywood Remembrance Sunday 2026, road closures in Heywood on 8 Novembe"
+      "Manchester Evening News: Unseen pictures of 1930s from Manchester's Ritz to Rochdale 'Riviera' ",
+      "Rochdale Borough Council: Wardle Remembrance Sunday 2026, road closures in Wardle on 8 November ",
+      "Roch Valley Radio: More than 200 cared for children recognised at Rochdale awards event"
     ],
     "age": [
-      "BBC: Northern Olympics plan to get Â£7m in John Healey's first Budget",
-      "BBC: Northern Olympics plan to get £7m in John Healey's first Budget",
-      "Rochdale Times: Weather warning as Storm Boelo approaches - Rochdale Times"
+      "Dailymail: Shocking moment woman hurls vile racist abuse at nightclub bouncer",
+      "Rochdale Times: School closes after bomb threat - Rochdale Times",
+      "4Barsrest: Results: 2026 Rochdale Contest"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
