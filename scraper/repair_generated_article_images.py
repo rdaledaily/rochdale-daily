@@ -154,6 +154,27 @@ def canonicalise_download(article: dict[str, Any]) -> str:
     return target.as_posix()
 
 
+def record_credit(target: Path, credit_line: str) -> None:
+    """Write the credit into assets/img/cards/credits.json so it survives.
+
+    Manual stories are rebuilt from the editor's files every run; the photo is
+    then re-selected by its slug filename through set_curated, which takes its
+    credit from credits.json. Without this entry the organisation's credit
+    would become "Rochdale Daily" on the next run.
+    """
+    path = target.parent / "credits.json"
+    try:
+        credits = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        credits = {}
+    if not isinstance(credits, dict):
+        credits = {}
+    if credits.get(target.stem) == credit_line:
+        return
+    credits[target.stem] = credit_line
+    path.write_text(json.dumps(credits, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--articles", type=Path, default=Path("articles.json"))
@@ -173,6 +194,16 @@ def try_licensed_source_photo(
     skip_urls: set[str] | frozenset[str] = frozenset(),
 ) -> tuple[bool, str]:
     """Set an approved original-source photograph; do not touch story facts."""
+    for suffix in (".jpg", ".jpeg", ".png", ".webp"):
+        cached = CARDS_DIR / f"{slug_for(article)}{suffix}"
+        try:
+            known = json.loads((CARDS_DIR / "credits.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            known = {}
+        if cached.is_file() and isinstance(known, dict) and "Used with permission" in str(known.get(cached.stem, "")):
+            # Already fetched on an earlier run; ensure_article_images re-selects it
+            # by slug with its recorded credit. No need to hit the source again.
+            return False, "source-photo-already-cached"
     for source_url in candidates:
         try:
             result = fetch_licensed_source_image(
@@ -202,6 +233,7 @@ def try_licensed_source_photo(
 
         credit = (rights.get("creator") or "Original source").strip()
         licence = (rights.get("license_name") or "Used with permission").strip()
+        record_credit(target, f"{credit} / {licence}")
         previous = clean(article.get("image_url"))
         article["image_url"] = target.as_posix()
         article["img"] = target.as_posix()

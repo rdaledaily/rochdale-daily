@@ -216,3 +216,45 @@ def run_source_grants(jpeg: bytes) -> None:
 
 if __name__ == "__main__":
     run()
+
+
+def run_manual_credit_survives_rebuild() -> None:
+    """A manual story is rebuilt from the editor's file every run; the
+    permitted source photo and its organisation credit must survive that."""
+    import os
+    import image_hierarchy
+    page = "https://www.rochdale.gov.uk/news/article/9/half-term"
+    photo = "https://www.rochdale.gov.uk/images/half-term.jpg"
+    grants = [{"organisation": "Rochdale Borough Council", "source_hosts": ["rochdale.gov.uk"],
+               "image_hosts": ["rochdale.gov.uk"], "credit": "Rochdale Borough Council",
+               "granted_by": "Press office", "granted_on": "2026-10-20", "exclude_categories": set()}]
+    stream = io.BytesIO()
+    Image.effect_noise((1200, 675), 64).convert("RGB").save(stream, "JPEG", quality=95)
+    result = (rights.Candidate(photo, "og:image"), stream.getvalue(), ".jpg", rights.grant_for(photo, page, grants))
+    here = os.getcwd()
+    with TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "assets/img/cards").mkdir(parents=True)
+        os.chdir(root)
+        try:
+            for run in (1, 2):
+                article = {"manual_article": True, "editorial_lock": True, "source_kind": "editorial",
+                           "status": "published", "category": "education",
+                           "title": "Rochdale October half-term 2026: school dates",
+                           "slug": "rochdale-october-half-term-2026", "source_url": page,
+                           "image_url": "assets/img/cards/community.jpg"}
+                with patch.object(repair, "CARDS_DIR", Path("assets/img/cards")), \
+                     patch.object(repair, "fetch_licensed_source_image", return_value=result) as fetch:
+                    _, reason = repair.try_licensed_source_photo(article, [page], timeout=1,
+                                                                 permissions={}, grants=grants)
+                with patch.object(image_hierarchy, "commons_search",
+                                  return_value={"status": "service-unavailable", "pages": []}):
+                    images.enforce_article(article, root)
+                assert article["image_url"] == "assets/img/cards/rochdale-october-half-term-2026.jpg", article
+                assert article["image_credit"] == "Rochdale Borough Council / Used with permission", article
+                assert fetch.called == (run == 1), reason
+        finally:
+            os.chdir(here)
+
+
+run_manual_credit_survives_rebuild()
