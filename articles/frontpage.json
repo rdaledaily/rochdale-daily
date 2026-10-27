@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-27T17:32:02.779274Z",
+  "generated_at": "2026-10-27T17:52:45.911240Z",
   "minimum_articles": 12,
   "target_articles": 45,
-  "count": 19,
+  "count": 18,
   "breaking": "",
   "articles": [
     {
@@ -22,7 +22,7 @@
       "published_at": "2026-10-27T14:33:53Z",
       "first_published_at": "2026-10-27T14:33:53Z",
       "last_updated_at": "2026-10-27T14:33:53Z",
-      "scraped_at": "2026-10-27T17:32:02Z",
+      "scraped_at": "2026-10-27T17:52:45Z",
       "source_name": "Greater Manchester Police",
       "source_url": "https://gmp-newsroom.prgloo.com/news/ten-people-charged-with-drugs-offences-across-greater-manchester-and-wolverhampton",
       "source_names": [
@@ -171,7 +171,7 @@
         ]
       },
       "verification_reasons": [
-        "Not all claims are supported by the source."
+        "Not all claims are supported by the source. Specifically, the claims regarding the official switch-on time and the fireworks display are unsupported."
       ],
       "source_review_verified": false,
       "primary_source_verified": false,
@@ -196,7 +196,7 @@
       "published_at": "2026-10-27T09:09:31Z",
       "first_published_at": "2026-10-27T09:09:31Z",
       "last_updated_at": "2026-10-27T09:09:31Z",
-      "scraped_at": "2026-10-27T17:32:02Z",
+      "scraped_at": "2026-10-27T17:52:45Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -487,7 +487,7 @@
       "image_url": "assets/img/cards/hopwood_hall_college.jpg",
       "image_credit": "Rochdale Daily",
       "image_credit_url": "https://rochdaledaily.co.uk/",
-      "source_image_reuse_status": "commons-free-license",
+      "source_image_reuse_status": "cards-only",
       "event_start_at": "",
       "event_end_at": "",
       "event_location": "",
@@ -535,8 +535,8 @@
       "searched_location_slug": "",
       "searched_location_name": "",
       "img": "assets/img/cards/hopwood_hall_college.jpg",
-      "image_status": "commons-photo-cached",
-      "image_backfill_method": "wikimedia-commons",
+      "image_status": "cards-library-photo",
+      "image_backfill_method": "cards-filename-match",
       "image_match_title": "hopwood_hall_college.jpg",
       "image_match_score": 15380,
       "ingested_at": "2026-10-26T23:36:35Z",
@@ -586,11 +586,10 @@
         ]
       },
       "verification_reasons": [
-        "All claims are supported by the source, but the article contains no contradictory or unsupported claims."
+        "Not all claims are supported by the source."
       ],
       "source_review_verified": false,
       "primary_source_verified": false,
-      "image_placeholder_reason": "Editorial integrity fallback: cached/library image lacks canonical/source provenance",
       "frontpage_rank": 5,
       "frontpage_priority": 995,
       "slot": ""
@@ -1049,6 +1048,14 @@
       "verification_reasons": [
         "Original URL is not an approved attributable source; editorial review required"
       ],
+      "source_names": [
+        "Historic England (National Heritage List for England)"
+      ],
+      "source_urls": [
+        "https://historicengland.org.uk/listing/the-list/list-entry/1309615"
+      ],
+      "source_count": 1,
+      "update_count": 1,
       "frontpage_rank": 9,
       "frontpage_priority": 991,
       "slot": ""
@@ -1171,7 +1178,7 @@
         ]
       },
       "verification_reasons": [
-        "Not all claims are supported by the source. Specifically, claims regarding the project's aims and completion date lack explicit support."
+        "Not all claims are supported by the source."
       ],
       "source_review_verified": false,
       "primary_source_verified": false,
@@ -1290,11 +1297,47 @@
           "Nursery loses bid to keep ‘outbuilding’ caravan - Rochdale Times Skip to content LATEST NEWS Nursery loses bid to keep ‘outbuilding’ caravan A nursery has lost its bid to keep a caravan which replaced a temporary Portakabin in its yard."
         ]
       },
-      "verification_reasons": [
-        "Unsupported material claim"
-      ],
-      "source_review_verified": false,
+      "verification_reasons": [],
+      "source_review_verified": true,
       "primary_source_verified": false,
+      "verified_claims": [
+        {
+          "claim": "Little Oaks Nursery in Heywood has been denied permission to retain a caravan used as an outbuilding.",
+          "source_url": "https://www.rochdaletimes.co.uk/nursery-loses-bid-to-keep-outbuilding-caravan/",
+          "supporting_excerpt": "Nursery loses bid to keep ‘outbuilding’ caravan - Rochdale Times"
+        },
+        {
+          "claim": "The nursery applied for retrospective planning permission for the caravan, which has been used as an outbuilding since the Portakabin was removed in 2024 after being granted temporary permission in 2022.",
+          "source_url": "https://www.rochdaletimes.co.uk/nursery-loses-bid-to-keep-outbuilding-caravan/",
+          "supporting_excerpt": "Little Oaks Nursery applied to Rochdale Council for retrospective planning permission for the caravan which is being used as an outbuilding at its site in Bamford Road, Heywood. It follows planning permission granted in 2022 for a temporary Portakabin classroom which was removed in 2024."
+        },
+        {
+          "claim": "A planning officer’s report indicated that pre-application advice had been sought regarding the placement of a static caravan on the site.",
+          "source_url": "https://www.rochdaletimes.co.uk/nursery-loses-bid-to-keep-outbuilding-caravan/",
+          "supporting_excerpt": "A planning officer’s report said: “Simultaneously, pre-application advice was requested and given for the siting of a static caravan on the site."
+        },
+        {
+          "claim": "The advice stated that such a structure would not be visually appropriate and would be highly visible from both directions along Bamford Road.",
+          "source_url": "https://www.rochdaletimes.co.uk/nursery-loses-bid-to-keep-outbuilding-caravan/",
+          "supporting_excerpt": "The advice given was that such a structure would not be visually appropriate for the site and would be highly visible from both directions along Bamford Road."
+        },
+        {
+          "claim": "The caravan does not meet the high-quality design standards required for a permanent structure.",
+          "source_url": "https://www.rochdaletimes.co.uk/nursery-loses-bid-to-keep-outbuilding-caravan/",
+          "supporting_excerpt": "The caravan does not provide the high-quality design that officers had previously stated would be required for a permanent structure."
+        },
+        {
+          "claim": "The caravan does not offer any visual improvement over the temporary Portakabin it replaced, which was only accepted for a limited time due to its unsuitability for permanent retention.",
+          "source_url": "https://www.rochdaletimes.co.uk/nursery-loses-bid-to-keep-outbuilding-caravan/",
+          "supporting_excerpt": "In design terms, the caravan is of no visual improvement over the temporary Portakabin it replaces, which was accepted only for a temporary period on the basis that it was unacceptable for permanent retention."
+        },
+        {
+          "claim": "The decision by Rochdale Council highlights ongoing concerns regarding planning regulations and the visual impact of structures within the area.",
+          "source_url": "https://www.rochdaletimes.co.uk/nursery-loses-bid-to-keep-outbuilding-caravan/",
+          "supporting_excerpt": "Refusing the application, the council said: “The proposed development, by reason of its siting, massing, design, and temporary utilitarian appearance, would appear as an incongruous, poorly designed feature which would be readily visible from the surrounding street scene by virtue of its prominent location along Bamford Road."
+        }
+      ],
+      "verification_source_type": "attributed-publisher",
       "frontpage_rank": 11,
       "frontpage_priority": 989,
       "slot": ""
@@ -1316,7 +1359,7 @@
       "published_at": "2026-10-26T12:15:51Z",
       "first_published_at": "2026-10-26T12:15:51Z",
       "last_updated_at": "2026-10-26T12:15:51Z",
-      "scraped_at": "2026-10-27T17:32:02Z",
+      "scraped_at": "2026-10-27T17:52:45Z",
       "source_name": "Get Together After Serving CIC",
       "source_url": "",
       "source_names": [
@@ -1364,7 +1407,7 @@
       "image_url": "assets/img/cards/roadworks.jpg",
       "image_credit": "Rochdale Daily",
       "image_credit_url": "https://rochdaledaily.co.uk/",
-      "source_image_reuse_status": "commons-free-license",
+      "source_image_reuse_status": "cards-only",
       "event_start_at": "",
       "event_end_at": "",
       "event_location": "",
@@ -1412,8 +1455,8 @@
       "searched_location_slug": "",
       "searched_location_name": "",
       "img": "assets/img/cards/roadworks.jpg",
-      "image_status": "commons-photo-cached",
-      "image_backfill_method": "wikimedia-commons",
+      "image_status": "cards-library-photo",
+      "image_backfill_method": "cards-filename-match",
       "image_match_title": "roadworks.jpg",
       "image_match_score": 15129,
       "ingested_at": "2026-10-26T16:11:31Z",
@@ -1489,7 +1532,6 @@
       "is_ongoing": false,
       "ongoing_label": "",
       "update_count": 1,
-      "image_placeholder_reason": "Editorial integrity fallback: cached/library image lacks canonical/source provenance",
       "frontpage_rank": 13,
       "frontpage_priority": 987,
       "slot": ""
@@ -1511,7 +1553,7 @@
       "published_at": "2026-10-26T09:16:02Z",
       "first_published_at": "2026-10-26T09:16:02Z",
       "last_updated_at": "2026-10-26T09:16:02Z",
-      "scraped_at": "2026-10-27T17:32:02Z",
+      "scraped_at": "2026-10-27T17:52:45Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -1544,6 +1586,59 @@
       }
     },
     {
+      "id": "rochdale-council-tax-direct-debit-delay-26-october-2026",
+      "slug": "rochdale-council-tax-direct-debit-delay-26-october-2026",
+      "story_key": "manual-article:rochdale-council-tax-direct-debit-delay-26-october-2026",
+      "title": "Rochdale Council Tax Direct Debits delayed by one day after system error",
+      "excerpt": "Council Tax Direct Debits due on Monday 26 October will instead be collected on Tuesday 27 October, Rochdale Council says. The notice applies to the affected collection date.",
+      "content_html": "<p>Residents whose Rochdale Council Tax Direct Debit was due to leave their account on Monday 26 October 2026 should expect it to be collected on Tuesday 27 October instead, following a system error at the council.</p><p>The authority has placed a notice across its official website explaining that payments scheduled for Monday 26 October will be taken one day later. It has not said in that notice how many accounts are affected, what caused the error or whether any other collection dates will change. The published change concerns this specific Monday collection date, not every Council Tax instalment.</p><p>For residents who budget closely around outgoing payments, the practical point is to leave enough money in the account for the revised Tuesday collection. A payment not showing as taken on Monday does not, by itself, mean the instalment has been cancelled. Residents should avoid making an additional manual payment simply because the usual Direct Debit has not yet appeared, without first checking their account or speaking to the council.</p><p>The council says residents can check their Council Tax balance through its MyAccount service. People who need help can contact the Council Tax team on 0300 303 8870. These are official council channels; no bank details should be supplied to an unsolicited caller or message claiming to be about the delay.</p><p>The notice was checked on Monday 26 October. It does not explain whether customers will receive individual notifications. Rochdale Daily will update this report if the council announces any further change.</p><p>Official information: <a href=\"https://www.rochdale.gov.uk/counciltax\" rel=\"noopener\">https://www.rochdale.gov.uk/counciltax</a>. Council Tax account guidance: <a href=\"https://www.rochdale.gov.uk/council-tax/council-tax-account-balance-enquiries\" rel=\"noopener\">https://www.rochdale.gov.uk/council-tax/council-tax-account-balance-enquiries</a>. Council contact details: <a href=\"https://www.rochdale.gov.uk/contactcentre\" rel=\"noopener\">https://www.rochdale.gov.uk/contactcentre</a>.</p><p>Was your collection affected, or did you receive a message from the council? Tell us in the comments without sharing personal account or banking details.</p>",
+      "area": "rochdale",
+      "category": "politics",
+      "types": [
+        "politics"
+      ],
+      "source_kind": "editorial",
+      "status": "published",
+      "published_at": "2026-10-26T08:35:00Z",
+      "first_published_at": "2026-10-26T08:35:00Z",
+      "last_updated_at": "2026-10-26T08:35:00Z",
+      "scraped_at": "2026-10-27T17:52:45Z",
+      "source_name": "Rochdale Borough Council Council Tax notice",
+      "source_url": "https://www.rochdale.gov.uk/counciltax",
+      "source_names": [
+        "Rochdale Borough Council Council Tax notice"
+      ],
+      "source_urls": [
+        "https://www.rochdale.gov.uk/counciltax"
+      ],
+      "image_credit": "Rochdale Daily",
+      "image_credit_url": "https://rochdaledaily.co.uk/",
+      "byline": "Rochdale Daily Newsdesk",
+      "manual_article": true,
+      "editorial_lock": true,
+      "allow_scrape_merge": false,
+      "publication_route": "editorial",
+      "rewrite_quality_checked": true,
+      "right_to_reply": "For corrections or an official council update, contact news@rochdaledaily.co.uk.",
+      "image_alt": "Council Tax information for Rochdale borough residents",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "img": "assets/img/cards/rochdale-town-hall.jpg",
+      "image_status": "cards-library-photo",
+      "image_backfill_method": "cards-filename-match",
+      "source_image_reuse_status": "cards-only",
+      "image_match_title": "rochdale-town-hall.jpg",
+      "image_match_score": -1,
+      "frontpage_rank": 15,
+      "frontpage_priority": 985,
+      "slot": "",
+      "wards": [],
+      "ward_verification": {
+        "wards": [],
+        "status": "borough-or-location-unresolved",
+        "evidence": ""
+      }
+    },
+    {
       "id": "rochdale-milnrow-littleborough-parking-proposals-objections-28-october-2026",
       "slug": "rochdale-milnrow-littleborough-parking-proposals-objections-28-october-2026",
       "story_key": "manual-article:rochdale-milnrow-littleborough-parking-proposals-objections-28-october-2026",
@@ -1560,7 +1655,7 @@
       "published_at": "2026-10-26T08:35:00Z",
       "first_published_at": "2026-10-26T08:35:00Z",
       "last_updated_at": "2026-10-26T08:35:00Z",
-      "scraped_at": "2026-10-27T17:32:02Z",
+      "scraped_at": "2026-10-27T17:52:45Z",
       "source_name": "Rochdale Borough Council traffic regulation orders and notices of intent",
       "source_url": "https://www.rochdale.gov.uk/roadworks-repairs-restrictions/proposed-permanent-restrictions-highways-traffic-regulation-orders",
       "source_names": [
@@ -1587,59 +1682,6 @@
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
       "image_backfill_method": "wikimedia-commons",
       "source_image_reuse_status": "commons-free-license",
-      "frontpage_rank": 15,
-      "frontpage_priority": 985,
-      "slot": "",
-      "wards": [],
-      "ward_verification": {
-        "wards": [],
-        "status": "borough-or-location-unresolved",
-        "evidence": ""
-      }
-    },
-    {
-      "id": "rochdale-council-tax-direct-debit-delay-26-october-2026",
-      "slug": "rochdale-council-tax-direct-debit-delay-26-october-2026",
-      "story_key": "manual-article:rochdale-council-tax-direct-debit-delay-26-october-2026",
-      "title": "Rochdale Council Tax Direct Debits delayed by one day after system error",
-      "excerpt": "Council Tax Direct Debits due on Monday 26 October will instead be collected on Tuesday 27 October, Rochdale Council says. The notice applies to the affected collection date.",
-      "content_html": "<p>Residents whose Rochdale Council Tax Direct Debit was due to leave their account on Monday 26 October 2026 should expect it to be collected on Tuesday 27 October instead, following a system error at the council.</p><p>The authority has placed a notice across its official website explaining that payments scheduled for Monday 26 October will be taken one day later. It has not said in that notice how many accounts are affected, what caused the error or whether any other collection dates will change. The published change concerns this specific Monday collection date, not every Council Tax instalment.</p><p>For residents who budget closely around outgoing payments, the practical point is to leave enough money in the account for the revised Tuesday collection. A payment not showing as taken on Monday does not, by itself, mean the instalment has been cancelled. Residents should avoid making an additional manual payment simply because the usual Direct Debit has not yet appeared, without first checking their account or speaking to the council.</p><p>The council says residents can check their Council Tax balance through its MyAccount service. People who need help can contact the Council Tax team on 0300 303 8870. These are official council channels; no bank details should be supplied to an unsolicited caller or message claiming to be about the delay.</p><p>The notice was checked on Monday 26 October. It does not explain whether customers will receive individual notifications. Rochdale Daily will update this report if the council announces any further change.</p><p>Official information: <a href=\"https://www.rochdale.gov.uk/counciltax\" rel=\"noopener\">https://www.rochdale.gov.uk/counciltax</a>. Council Tax account guidance: <a href=\"https://www.rochdale.gov.uk/council-tax/council-tax-account-balance-enquiries\" rel=\"noopener\">https://www.rochdale.gov.uk/council-tax/council-tax-account-balance-enquiries</a>. Council contact details: <a href=\"https://www.rochdale.gov.uk/contactcentre\" rel=\"noopener\">https://www.rochdale.gov.uk/contactcentre</a>.</p><p>Was your collection affected, or did you receive a message from the council? Tell us in the comments without sharing personal account or banking details.</p>",
-      "area": "rochdale",
-      "category": "politics",
-      "types": [
-        "politics"
-      ],
-      "source_kind": "editorial",
-      "status": "published",
-      "published_at": "2026-10-26T08:35:00Z",
-      "first_published_at": "2026-10-26T08:35:00Z",
-      "last_updated_at": "2026-10-26T08:35:00Z",
-      "scraped_at": "2026-10-27T17:32:02Z",
-      "source_name": "Rochdale Borough Council Council Tax notice",
-      "source_url": "https://www.rochdale.gov.uk/counciltax",
-      "source_names": [
-        "Rochdale Borough Council Council Tax notice"
-      ],
-      "source_urls": [
-        "https://www.rochdale.gov.uk/counciltax"
-      ],
-      "image_credit": "Rochdale Daily",
-      "image_credit_url": "https://rochdaledaily.co.uk/",
-      "byline": "Rochdale Daily Newsdesk",
-      "manual_article": true,
-      "editorial_lock": true,
-      "allow_scrape_merge": false,
-      "publication_route": "editorial",
-      "rewrite_quality_checked": true,
-      "right_to_reply": "For corrections or an official council update, contact news@rochdaledaily.co.uk.",
-      "image_alt": "Council Tax information for Rochdale borough residents",
-      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
-      "img": "assets/img/cards/rochdale-town-hall.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
-      "source_image_reuse_status": "cards-only",
-      "image_match_title": "rochdale-town-hall.jpg",
-      "image_match_score": -1,
       "frontpage_rank": 16,
       "frontpage_priority": 984,
       "slot": "",
@@ -1649,122 +1691,6 @@
         "status": "borough-or-location-unresolved",
         "evidence": ""
       }
-    },
-    {
-      "id": "8f6407473c9a08414c",
-      "story_key": "community-v3-d5f36bf4f255e60f0e45",
-      "title": "New book showcases unseen 1930s photographs of Rochdale's Norden Riviera",
-      "slug": "new-book-showcases-unseen-1930s-photographs-of-rochdale-s-norden-riviera",
-      "excerpt": "A new book featuring 600 unseen photographs captures the essence of 1930s Rochdale, including the lost Norden Riviera lido, highlighting the area's historical significance during a transformative decade.",
-      "content_html": "<p>A new book titled \"Britain in the 1930s\" by Steven Brindle and Maureen Hill features 600 previously unseen photographs, including images of Rochdale's lost Norden Riviera lido. This collection captures the essence of Greater Manchester on the brink of World War II, showcasing the stark contrasts of the era.</p><p>The Norden Riviera, which opened in 1935, was a popular outdoor swimming pool located off Edenfield Road in Norden. It provided a seaside experience for local families who could not afford to travel far. The facility included diving boards, slides, and spectator stands, surrounded by gardens and sports fields, making it a cherished local attraction during the 1930s.</p><p>The book highlights the economic challenges faced by the north of England during this decade, with unemployment rates soaring due to the decline of traditional industries. However, it also reflects a time of joy and resilience, as communities sought leisure and enjoyment amidst the hardships of the Great Depression and the aftermath of World War I.</p><p>\"Britain in the 1930s\" is available for £50 and covers various regions, including parts of the old Lancashire, now Greater Manchester. The inclusion of Rochdale's Norden Riviera serves to illustrate the area's rich history and the importance of preserving local heritage.</p>",
-      "area": "norden",
-      "category": "community",
-      "types": [
-        "community"
-      ],
-      "published_at": "2026-10-26T05:53:00Z",
-      "scraped_at": "2026-10-26T08:04:54Z",
-      "image_url": "assets/img/cards/7a8c9e8afd48-place-generated-card.jpg",
-      "image_credit": "Rochdale Daily illustration",
-      "image_credit_url": "https://rochdaledaily.co.uk/",
-      "source_image_candidate_url": "",
-      "source_image_reuse_status": "category-fallback",
-      "event_start_at": "",
-      "event_end_at": "",
-      "event_location": "",
-      "source_kind": "article",
-      "source_name": "Manchester Evening News",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/unseen-pictures-1930s-manchesters-ritz-34791857",
-      "source_names": [
-        "Manchester Evening News"
-      ],
-      "source_urls": [
-        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/unseen-pictures-1930s-manchesters-ritz-34791857"
-      ],
-      "source_count": 1,
-      "context_research": [
-        {
-          "question": "Unseen pictures of 1930s from Manchester s Ritz to Rochdale Riviera rochdale",
-          "role": "same_incident",
-          "status": "no-additional-verified-source",
-          "sources_added": 0
-        },
-        {
-          "question": "\"Manchester Evening News From\" rochdale public role background",
-          "role": "public_background",
-          "status": "no-additional-verified-source",
-          "sources_added": 0
-        }
-      ],
-      "social_context_used": false,
-      "social_reaction_count": 0,
-      "official_social_update_count": 0,
-      "social_platforms": [],
-      "social_context_note": "",
-      "sensitive_story": false,
-      "police_matter": false,
-      "requires_approval": false,
-      "legal_disclaimer": "This article was compiled from identified public sources and may be updated when further verified information becomes available.",
-      "right_to_reply": "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.",
-      "byline": "Rochdale Daily Newsdesk",
-      "status": "published",
-      "publication_route": "ai-grounded-rewrite",
-      "rewrite_quality_checked": true,
-      "editorial_style_version": "rochdale-human-newsroom-v10",
-      "style_rewrite_status": "generated-in-house-style",
-      "discovery_query_label": "fallback:men-rochdale-today",
-      "searched_location_slug": "",
-      "searched_location_name": "",
-      "commons_image_search": "searched",
-      "img": "assets/img/cards/7a8c9e8afd48-place-generated-card.jpg",
-      "image_status": "place-generated-card",
-      "image_backfill_method": "place-card-after-internal-and-commons",
-      "image_alt": "Illustration: Norden, community. Not a photograph of the event.",
-      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
-      "ingested_at": "2026-10-26T08:07:21Z",
-      "first_published_at": "2026-10-26T05:53:00Z",
-      "last_updated_at": "2026-10-26T08:04:54Z",
-      "wards": [],
-      "ward_verification": {
-        "wards": [],
-        "status": "borough-or-location-unresolved",
-        "evidence": ""
-      },
-      "related_article_slugs": [
-        "environmental-initiative-launched-in-norden"
-      ],
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1,
-      "evidence_sources": [
-        {
-          "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/unseen-pictures-1930s-manchesters-ritz-34791857",
-          "source_type": "publisher",
-          "captured_text": "Unseen pictures of 1930s from Manchester's Ritz to Rochdale 'Riviera' - Manchester Evening News ‌ ‌ Skip to main content Manchester Evening News: Number one for news, opinion, sport & celebrity news Unseen pictures of 1930s from Manchester's Ritz to Rochdale 'Riviera' From Rochdale's lost \"Norden Riviera\" lido to an almost deserted East Lancashire Road, a remarkable new book featuring 600 unseen 1930s archive photographs captures Greater Manchester on the brink of WWII. View 8 Images Cashier at the Ritz Dancing Hall. Manchester, on Boxing Day 1938 Add to preferred sources Comments News Neal Keeling Chief reporter 05:53, 26 Oct 2026 Storm clouds were gathering again globally. But on Boxing Day 1938 she captured, vivaciously, just one aspect of that decade. Crimson-lipped the cashier of the Ritz Dancing Hall in Manchester reflected the population's determination to find joy after the dark days of the First World War, the Great Depression, and unemployment. The 1930s led novelist and broadcaster JB Priestley to his famous vision of \"three Englands\" – the ancient country of cathedrals and villages, the blackened and scarred industrial Britain created by the Victorians, and the Americanised new consumer world of suburbs, cinemas and motorcars. He came to the conclusion after travelling the country with his suitcase and a typewriter to find material for his book \"English Journey\" published in 1934. ‌ Click here to get the biggest stories straight to your inbox in our Daily Newsletter The decade in Britain saw a nation in transition. The north was hit hard by economic turmoil with unemployment levels soaring above the national average due to the collapse of industries like coal mining and shipbuilding. However, seaside cities became alive in the 1930s, thanks to the expansion of cheap rail travel and the emerging concept of paid holidays with thousands of working-class families flooding to the coast during their “Wakes Weeks” But the south and the midlands had seen a growth in new industries, notably car making, and electrical goods, and were able to withstand the economic fallout which the book says were distributed in a \"grotesquely uneven way\". ‌ A picture of a young, very well dressed couple, on Oxford Street, London, shows how affluence thrived in parts of the country while elsewhere, like the Lancashire George Orwell (pen name for Eric Blair) discovered in his travelogue \"The Road to Wigan Pier\" working class communities were decimated by the decline of traditional industries. View 8 Images A Wigan street decorated with washing, 1930s. The land as a place of marked contrasts is captured in a new book, Britain in the 1930s by Steven Brindle and Maureen Hill from Atlantic Publishing, price £50. It features 600 unseen black and white historic photographs of the UK. Counties covered by the book include parts of the old Lancashire, which are now in Greater Manchester, Cheshire, Yorkshire, Lancashire, and Northumberland. ‌ Images include an outdoor swimming pool in Rochdale in 1936 known as the Norden Riviera; soldiers clearing snow from the Manchester to Sheffield railway line; and a busy Deansgate in December 1930. A now lost Rochdale lido gave Mancunians a chance to enjoy a seaside experience without having to travel to the coast or abroad. The Norden Riviera opened in 1935 during when open air swimming was booming in Britaian. Located just off Edenfield Road in Norden, it was 'Rochdale by the sea' for many who could not afford a longer journey or who preferred something nearer to home. The pool was heated and came equipped with diving boards, slides and spectator stands. It was surrounded by attractive gardens, a cafe, a sports field with horse riding facilities, fences for show jumping, cricket pitches and areas for ball games. ‌ View 8 Images The \"Rochdale Riviera\" - the open air pool as it was at Norden in 1936. The Manchester Guardian newspaper on August 17, 1935. described the facility. It said: \"The Norden pool, which measures 80ft by 40ft and is from 2ft 6in deep to 9ft deep is situated in the grounds of what, before the war, was Tenter House, just beyond the bleachworks at Norden, and the stables, where horses are kept for hire, belonged to this residence.\" \"It is surrounded by green deckchairs and by an outdoor café, where one may have tea (or other meals) under green and yellow umbrellas. All around are delightful woods, beyond which one can see a shoulder of hill - but not the three factory chimneys lower down the valley. \"A round paddling-pool satisfies the children too young to swim, and the conservatory of the old house has been turned into a ballroom. Next season, tennis courts, a gymnasium, a miniature golf course, and a children's playground will be added to the attractions of the Norden Riviera. ‌ View 8 Images A well-dressed couple in Oxford Street in 1932. \"Bathing in the warmed water often continues till late by the light of powerful electric lamps.\" Other images in the book include Manchester's Cenotaph in St Peter's Square in 1935 in its original location before it was dismantled and reconstructed by Manchester City Council in 2014 at the northeast corner of the square next to the town hall to make way for the expansion of the Metrolink tram service. The memorial was first unveiled on July 12th 1924 by the Earl of Derby assisted by a Mrs Bingle, a local resident, whose three sons all died in the First World War. ‌ View 8 Images Manchester's Cenotaph in St Peter's Square pictured in 1935. A street in Wigan is pictured decorated with washing strung out across it. A Liverpool policeman directing traffic is seen standing in a protector box. These days the East Lancashire Road can be a notorious spot for traffic chaos. But a 1933 picture of the then \"Liverpool to South East Lancashire Road\" shows just eight vehicles over a half mile distance. The 27 mile highway was built at a cost of £3m. Britain was on the cusp of change in the 1930s. A world that would soon be transformed forever by the Second World War. ‌ Photographs in the book cover every county and city at that time, revealing a nation poised between tradition and modernity. View 8 Images A busy Deansgaate, Manchester in December 1930 The 1930s marked the golden age of the British seaside. Packed beaches, bustling promenades, pleasure piers and elegant hotels lured millions. Blackpool and Morecambe became synonymous with summer holidays. Camping, walking and boating holidays grew in popularity, while lidos, dance halls and pavilion theatres reflected a new culture of recreation and entertainment. ‌ Beyond the towns and cities, much of rural Britain appeared little changed from previous centuries. Medieval market squares, village greens and ancient churches dominated the landscape, while agricultural shows, livestock markets and seasonal fairs continued to shape everyday life. The decade was a world where horses and carts still shared roads with motorcars, and where quaint picturesque villages, market towns and centuries-old buildings remained at the heart of British identity. Co-author, Steven Brindle, is an historian and conservationist from Blackburn. He studied History at Oxford and spent almost forty years with English Heritage in a variety of roles as a historian and Inspector of Ancient Monuments. He has published extensively on architectural and engineering history. The photographs in the collection are from the archive of Associated Newspapers, plus contrbutions from many distinguished photographers. ‌ View 8 Images Holidaymakers on the sea front in Blackpool 1930s. They include: James Dixon-Scott, a photographer who wanted to record landscapes and ways of life that he felt were vanishing. He travelled around Britain taking pictures of buildings and rural scenes with exceptional compositions. Anthony Frank Kersting was a leading British architectural photographer. He was a Londoner who studied at Dulwich College where he developed his creative interests. His work featured a wide range of subjects from industrial landscapes to village life across the country. He was one of the leading architectural photographers of his generation and a fellow of the Royal Geographical Society. Will F Taylor was known for photographing sweeping panoramic landscapes across Britain from the end of the Victorian period right through the 1930s. His work has featured in many social history collections. ‌ The book is published on November 5th. View 8 Images The book Britain In The 1930s will be published on November 5th. GET MORE FROM US Choose Manchester Evening News as a 'Preferred Source' on Google News for quick access to the news you value. Follow Manchester Evening News: Facebook X (Twitter) Instagram Comments ‌ ‌ At Reach and across our entities we and our partners use information collected through cookies and other identifiers from your device to improve experience on our site, analyse how it is used and to show personalised advertising. You can opt out of the sale or sharing of your data, at any time clicking the \"Do Not Sell or Share my Data\" button at the bottom of the webpage. Please note that your preferences are browser specific. Use of our website and any of our services represents your acceptance of the use of cookies and consent to the practices described in our Privacy Notice and Terms and Conditions . Accept",
-          "captured_at": "2026-10-26T09:30:59.248448+00:00",
-          "sha256": "47a4df3566283e3a5b77712e5a95e06fff678a1891269fac6d8009122f34d297"
-        }
-      ],
-      "evidence_candidates": {
-        "headline": [
-          "Unseen pictures of 1930s from Manchester's Ritz to Rochdale 'Riviera' - Manchester Evening News ‌ ‌ Skip to main content Manchester Evening News: Number one for news, opinion, sport & celebrity news Unseen pictures of 1930s from Manchester's Ritz to Rochdale 'Riviera' From Rochdale's lost \"Norden Riviera\" lido to an almost deserted East Lancashire Road, a remarkable new book featuring 600 unseen 1930s archive photographs captures Greater Manchester on the brink of WWII.",
-          "‌ Images include an outdoor swimming pool in Rochdale in 1936 known as the Norden Riviera; soldiers clearing snow from the Manchester to Sheffield railway line; and a busy Deansgate in December 1930.",
-          "‌ View 8 Images The \"Rochdale Riviera\" - the open air pool as it was at Norden in 1936."
-        ],
-        "summary": [
-          "Unseen pictures of 1930s from Manchester's Ritz to Rochdale 'Riviera' - Manchester Evening News ‌ ‌ Skip to main content Manchester Evening News: Number one for news, opinion, sport & celebrity news Unseen pictures of 1930s from Manchester's Ritz to Rochdale 'Riviera' From Rochdale's lost \"Norden Riviera\" lido to an almost deserted East Lancashire Road, a remarkable new book featuring 600 unseen 1930s archive photographs captures Greater Manchester on the brink of WWII.",
-          "‌ Images include an outdoor swimming pool in Rochdale in 1936 known as the Norden Riviera; soldiers clearing snow from the Manchester to Sheffield railway line; and a busy Deansgate in December 1930.",
-          "The Norden Riviera opened in 1935 during when open air swimming was booming in Britaian."
-        ]
-      },
-      "verification_reasons": [
-        "All material claims are supported by the source."
-      ],
-      "source_review_verified": false,
-      "primary_source_verified": false,
-      "frontpage_rank": 17,
-      "frontpage_priority": 983,
-      "slot": ""
     },
     {
       "id": "free-benefits-check-littleborough-wardle-libraries-26-27-october-2026",
@@ -1783,7 +1709,7 @@
       "published_at": "2026-10-26T08:35:00Z",
       "first_published_at": "2026-10-26T08:35:00Z",
       "last_updated_at": "2026-10-26T08:35:00Z",
-      "scraped_at": "2026-10-27T17:32:02Z",
+      "scraped_at": "2026-10-27T17:52:45Z",
       "source_name": "Rochdale Borough Council public events listings",
       "source_url": "https://www.rochdale.gov.uk/events/event/1484/pension-credit-awareness-drop-in-event---littleborough-library",
       "source_names": [
@@ -1808,8 +1734,8 @@
       "image_status": "place-generated-card",
       "image_backfill_method": "place-card-after-internal-and-commons",
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
-      "frontpage_rank": 18,
-      "frontpage_priority": 982,
+      "frontpage_rank": 17,
+      "frontpage_priority": 983,
       "slot": "",
       "wards": [],
       "ward_verification": {
@@ -1825,8 +1751,8 @@
       "story_key": "events-v3-f4a34690bc346b14b308",
       "title": "Monsters Of Rock Halloween Special 2026",
       "slug": "monsters-of-rock-halloween-special-2026",
-      "excerpt": "They're Back For 2026!!!! Monsters of Rock once again hits the Champness Hall, Rochdale on Saturday 31st October with Thunder Hammer blasting more epic tributes to AC/DC, Metallica, Bon Jovi, and more – doors open at 7pm! Show starts approx 8.30pm (subject to change) ** PREDOMINANTLY STANDING GIG** Rochdale, Champness ",
-      "summary": "They're Back For 2026!!!! Monsters of Rock once again hits the Champness Hall, Rochdale on Saturday 31st October with Thunder Hammer blasting more epic tributes to AC/DC, Metallica, Bon Jovi, and more – doors open at 7pm! Show starts approx 8.30pm (subject to change) ** PREDOMINANTLY STANDING GIG** Rochdale, Champness ",
+      "excerpt": "They're Back For 2026!!!! Monsters of Rock once again hits the Champness Hall, Rochdale on Saturday 31st October with Thunder Hammer blasting more epic tributes to AC/DC, Metallica, Bon Jovi, and more – doors open at 7pm! Show starts approx 8.30pm (subject to change) ** PREDOMINANTLY STANDING GIG** Rochdale, Champness",
+      "summary": "They're Back For 2026!!!! Monsters of Rock once again hits the Champness Hall, Rochdale on Saturday 31st October with Thunder Hammer blasting more epic tributes to AC/DC, Metallica, Bon Jovi, and more – doors open at 7pm! Show starts approx 8.30pm (subject to change) ** PREDOMINANTLY STANDING GIG** Rochdale, Champness",
       "content_html": "<p>They're Back For 2026!!!! Monsters of Rock once again hits the Champness Hall, Rochdale on Saturday 31st October with Thunder Hammer blasting more epic tributes to AC/DC, Metallica, Bon Jovi, and more – doors open at 7pm! Show starts approx 8.30pm (subject to change) ** PREDOMINANTLY STANDING GIG** Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Saturday 31 October 2026 at 19:30</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/monsters-of-rock-halloween-special-2026\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
@@ -1836,8 +1762,8 @@
       ],
       "published_at": "2026-07-17T11:40:01Z",
       "first_published_at": "2026-07-17T11:40:01Z",
-      "last_updated_at": "2026-10-27T17:32:03.940483Z",
-      "scraped_at": "2026-10-27T17:32:03.940483Z",
+      "last_updated_at": "2026-10-27T17:37:21Z",
+      "scraped_at": "2026-10-27T17:37:21Z",
       "image_credit": "R lee / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_b0e7d7855bcd4330a6c8c02934d8240f~mv2.jpg/v1/fill/w_1500,h_1500,al_c,q_90/ad4e9b_b0e7d7855bcd4330a6c8c02934d8240f~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1875,16 +1801,25 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "ellie-sax-endless-summer-tour-2026",
+        "rochdale-halloween-2026-events-area-guide",
+        "gtas-weekly-whats-on-26-october-1-november-2026"
+      ],
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:40Z"
     },
     {
       "id": "50dc452680b24367f173",
       "story_key": "events-v3-c36641ced9ed39773e3b",
       "title": "Littleborough Cricket Club Bonfire 2026",
       "slug": "littleborough-cricket-club-bonfire-2026",
-      "excerpt": "🎆 Fireworks • Food & Drink • Fun Fair 🎡 ✨ Children 2 and under go free 👨‍👩‍👧 All children must be accompanied by an adult. Child tickets apply to anyone under 18. 🕓 Gates Open: 16:00 🔥 Bonfire Lit: 17:30 Littleborough, Denhurst Rd, Littleborough OL15 9LD, UK",
-      "summary": "🎆 Fireworks • Food & Drink • Fun Fair 🎡 ✨ Children 2 and under go free 👨‍👩‍👧 All children must be accompanied by an adult. Child tickets apply to anyone under 18. 🕓 Gates Open: 16:00 🔥 Bonfire Lit: 17:30 Littleborough, Denhurst Rd, Littleborough OL15 9LD, UK",
-      "content_html": "<p>🎆 Fireworks • Food &amp; Drink • Fun Fair 🎡 ✨ Children 2 and under go free 👨‍👩‍👧 All children must be accompanied by an adult. Child tickets apply to anyone under 18. 🕓 Gates Open: 16:00 🔥 Bonfire Lit: 17:30 Littleborough, Denhurst Rd, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Saturday 7 November 2026 at 16:00</p><p><strong>Venue:</strong> Littleborough, Denhurst Rd, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/littleborough-cricket-club-bonfire-2026\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "Fireworks • Food & Drink • Fun Fair Children 2 and under go free All children must be accompanied by an adult. Child tickets apply to anyone under 18. Gates Open: 16:00 Bonfire Lit: 17:30 Littleborough, Denhurst Rd, Littleborough OL15 9LD, UK",
+      "summary": "Fireworks • Food & Drink • Fun Fair Children 2 and under go free All children must be accompanied by an adult. Child tickets apply to anyone under 18. Gates Open: 16:00 Bonfire Lit: 17:30 Littleborough, Denhurst Rd, Littleborough OL15 9LD, UK",
+      "content_html": "<p> Fireworks • Food &amp; Drink • Fun Fair Children 2 and under go free All children must be accompanied by an adult. Child tickets apply to anyone under 18. Gates Open: 16:00 Bonfire Lit: 17:30 Littleborough, Denhurst Rd, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Saturday 7 November 2026 at 16:00</p><p><strong>Venue:</strong> Littleborough, Denhurst Rd, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/littleborough-cricket-club-bonfire-2026\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "littleborough",
       "ward": "",
       "category": "sport",
@@ -1893,8 +1828,8 @@
       ],
       "published_at": "2026-10-01T23:21:41Z",
       "first_published_at": "2026-10-01T23:21:41Z",
-      "last_updated_at": "2026-10-27T17:32:04.145294Z",
-      "scraped_at": "2026-10-27T17:32:04.145294Z",
+      "last_updated_at": "2026-10-27T17:37:21Z",
+      "scraped_at": "2026-10-27T17:37:21Z",
       "image_credit": "Rochdale Daily",
       "source_image_reuse_status": "cards-only",
       "event_start_at": "2026-11-07T16:00:00Z",
@@ -1929,7 +1864,17 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "littleborough-dancers-achieve-eight-first-places-at-ibiza-championships",
+        "roadworks-scheduled-on-kirkstall-avenue-in-littleborough-on-6-november-2026",
+        "sponsored-hi-pilates-club-women-only-reformer-pilates-littleborough"
+      ],
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:39Z"
     },
     {
       "id": "b7ccff1be295d7031ea4",
@@ -1947,8 +1892,8 @@
       ],
       "published_at": "2026-10-13T06:28:12Z",
       "first_published_at": "2026-10-13T06:28:12Z",
-      "last_updated_at": "2026-10-27T17:32:04.308534Z",
-      "scraped_at": "2026-10-27T17:32:04.308534Z",
+      "last_updated_at": "2026-10-27T17:37:21Z",
+      "scraped_at": "2026-10-27T17:37:21Z",
       "image_credit": "Rochdale Daily illustration",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_69986e5cd0e640adba1944d9eef48049~mv2.jpeg/v1/fill/w_1024,h_1024,al_c,q_85/ad4e9b_69986e5cd0e640adba1944d9eef48049~mv2.jpeg",
       "source_image_reuse_status": "permission-required",
@@ -1985,16 +1930,28 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "tandoori-flames-north-west-takeaway-of-year-rochdale-arta-2026",
+        "a-consert-of-remembrance-with-littleborough-brass-bands-association",
+        "littleborough-and-wardle-brass-bands-prepare-for-national-finals-on-20-september"
+      ],
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:01Z",
+      "verification_reasons": [
+        "Original URL is not an approved attributable source; editorial review required"
+      ]
     },
     {
       "id": "e33c92479166c2f54317",
       "story_key": "events-v3-7fe4255df6bf2ef519bc",
       "title": "Rock Classics by Candlelight, Rochdale",
       "slug": "rock-classics-by-candlelight-rochdale",
-      "excerpt": "🎻 Strings of Fire — a classical string quartet like you’ve never seen before! Blending stunning strings with rock classics, electro sounds and high-energy performance, this is classical music with attitude. All in the stunning setting of Rochdale Town Hall 🔥🤘 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
-      "summary": "🎻 Strings of Fire — a classical string quartet like you’ve never seen before! Blending stunning strings with rock classics, electro sounds and high-energy performance, this is classical music with attitude. All in the stunning setting of Rochdale Town Hall 🔥🤘 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
-      "content_html": "<p>🎻 Strings of Fire — a classical string quartet like you’ve never seen before! Blending stunning strings with rock classics, electro sounds and high-energy performance, this is classical music with attitude. All in the stunning setting of Rochdale Town Hall 🔥🤘 Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Saturday 21 November 2026 at 19:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/rock-classics-by-candlelight-rochdale\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "Strings of Fire — a classical string quartet like you’ve never seen before! Blending stunning strings with rock classics, electro sounds and high-energy performance, this is classical music with attitude. All in the stunning setting of Rochdale Town Hall Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
+      "summary": "Strings of Fire — a classical string quartet like you’ve never seen before! Blending stunning strings with rock classics, electro sounds and high-energy performance, this is classical music with attitude. All in the stunning setting of Rochdale Town Hall Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
+      "content_html": "<p> Strings of Fire — a classical string quartet like you’ve never seen before! Blending stunning strings with rock classics, electro sounds and high-energy performance, this is classical music with attitude. All in the stunning setting of Rochdale Town Hall Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Saturday 21 November 2026 at 19:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/rock-classics-by-candlelight-rochdale\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -2003,10 +1960,10 @@
       ],
       "published_at": "2026-08-21T16:03:06Z",
       "first_published_at": "2026-08-21T16:03:06Z",
-      "last_updated_at": "2026-10-27T17:32:04.504293Z",
-      "scraped_at": "2026-10-27T17:32:04.504293Z",
+      "last_updated_at": "2026-10-27T17:37:22Z",
+      "scraped_at": "2026-10-27T17:37:22Z",
       "image_credit": "R lee / Wikimedia Commons (CC BY-SA 2.0)",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "2026-11-21T19:30:00Z",
       "event_end_at": "",
       "event_location": "Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
@@ -2030,8 +1987,8 @@
       "image_url": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "img": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_skyline_-_geograph.org.uk_-_311839.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "rochdale-town-hall.jpg",
       "image_match_score": 8378,
       "wards": [],
@@ -2039,12 +1996,25 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "festival-of-remembrance-scheduled-for-rochdale-town-hall-on-16-october",
+        "monsters-of-rock-halloween-special-2026",
+        "gtas-weekly-whats-on-26-october-1-november-2026"
+      ],
+      "commons_image_search": "matched",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "image_alt": "File image: Rochdale skyline. Not a photograph of this event.",
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:39Z"
     },
     {
       "id": "bf85aff55685cd511489",
       "story_key": "events-v3-3903dee5c11e2ccd5e44",
-      "title": "Ellie Sax - Endless Summer Tour 2026",
+      "title": "Ellie Sax",
       "slug": "ellie-sax-endless-summer-tour-2026",
       "excerpt": "An amazing evening of Summer Dance Anthems with Ellie Sax! Support: Doors 7.00pm Support DJ 8.00pm Ellie Sax 9pm Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
       "summary": "An amazing evening of Summer Dance Anthems with Ellie Sax! Support: Doors 7.00pm Support DJ 8.00pm Ellie Sax 9pm Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
@@ -2057,10 +2027,10 @@
       ],
       "published_at": "2026-07-17T11:55:32Z",
       "first_published_at": "2026-07-17T11:55:32Z",
-      "last_updated_at": "2026-10-27T17:32:04.670920Z",
-      "scraped_at": "2026-10-27T17:32:04.670920Z",
+      "last_updated_at": "2026-10-27T17:37:22Z",
+      "scraped_at": "2026-10-27T17:37:22Z",
       "image_credit": "R lee / Wikimedia Commons (CC BY-SA 2.0)",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "2026-12-04T19:00:00Z",
       "event_end_at": "",
       "event_location": "Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
@@ -2084,8 +2054,8 @@
       "image_url": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "img": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_skyline_-_geograph.org.uk_-_311839.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "rochdale-town-hall.jpg",
       "image_match_score": 8378,
       "wards": [],
@@ -2093,7 +2063,20 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "road-closures-announced-for-rochdale-feel-good-festival",
+        "gtas-weekly-whats-on-26-october-1-november-2026",
+        "rochdale-shortlisted-for-two-national-music-festival-awards"
+      ],
+      "commons_image_search": "matched",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "image_alt": "File image: Rochdale skyline. Not a photograph of this event.",
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:40Z"
     },
     {
       "id": "c592fb8668b47ed06903",
@@ -2111,10 +2094,10 @@
       ],
       "published_at": "2026-10-01T19:33:20Z",
       "first_published_at": "2026-10-01T19:33:20Z",
-      "last_updated_at": "2026-10-27T17:32:04.851770Z",
-      "scraped_at": "2026-10-27T17:32:04.851770Z",
+      "last_updated_at": "2026-10-27T17:37:22Z",
+      "scraped_at": "2026-10-27T17:37:22Z",
       "image_credit": "R lee / Wikimedia Commons (CC BY-SA 2.0)",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "2026-12-13T19:15:00Z",
       "event_end_at": "",
       "event_location": "Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
@@ -2138,8 +2121,8 @@
       "image_url": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "img": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_skyline_-_geograph.org.uk_-_311839.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "rochdale-town-hall.jpg",
       "image_match_score": 8378,
       "wards": [],
@@ -2147,7 +2130,20 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "east-lancashire-railway-volunteer-open-day-october-2026",
+        "rochdale-to-host-ignite-fire-festival-ahead-of-christmas-lights-switch-on",
+        "monsters-of-rock-halloween-special-2026"
+      ],
+      "commons_image_search": "matched",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "image_alt": "File image: Rochdale skyline. Not a photograph of this event.",
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:39Z"
     },
     {
       "id": "f53844ce2024dfdba99f",
@@ -2165,10 +2161,10 @@
       ],
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
-      "last_updated_at": "2026-10-27T17:32:05.054456Z",
-      "scraped_at": "2026-10-27T17:32:05.054456Z",
+      "last_updated_at": "2026-10-27T17:37:22Z",
+      "scraped_at": "2026-10-27T17:37:22Z",
       "image_credit": "R lee / Wikimedia Commons (CC BY-SA 2.0)",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "2026-12-19T19:00:00Z",
       "event_end_at": "",
       "event_location": "Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
@@ -2192,8 +2188,8 @@
       "image_url": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "img": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_skyline_-_geograph.org.uk_-_311839.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "rochdale-town-hall.jpg",
       "image_match_score": 8378,
       "wards": [],
@@ -2201,16 +2197,29 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "community-event-celebrates-remembrance-of-allah-in-rochdale",
+        "ignite-fire-festival-returns-to-rochdale-with-new-attractions-in-november-2026",
+        "ignite-fire-festival-returns-to-rochdale-from-november-20-22-2026"
+      ],
+      "commons_image_search": "matched",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "image_alt": "File image: Rochdale skyline. Not a photograph of this event.",
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:40Z"
     },
     {
       "id": "415013fd088800bd7e70",
       "story_key": "events-v3-f4787e6ee070aa696164",
       "title": "New Years Eve with the Jäger Maestro",
       "slug": "new-years-eve-with-the-j-ger-maestro",
-      "excerpt": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
-      "summary": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
-      "content_html": "<p>The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. 🍻🥨🇩🇪 Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Thursday 31 December 2026 at 20:00</p><p><strong>Venue:</strong> Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/new-years-eve-with-the-jager-maestro\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
+      "summary": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
+      "content_html": "<p>The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Thursday 31 December 2026 at 20:00</p><p><strong>Venue:</strong> Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/new-years-eve-with-the-jager-maestro\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "littleborough",
       "ward": "",
       "category": "events",
@@ -2219,8 +2228,8 @@
       ],
       "published_at": "2026-10-09T15:13:55Z",
       "first_published_at": "2026-10-09T15:13:55Z",
-      "last_updated_at": "2026-10-27T17:32:05.226764Z",
-      "scraped_at": "2026-10-27T17:32:05.226764Z",
+      "last_updated_at": "2026-10-27T17:37:22Z",
+      "scraped_at": "2026-10-27T17:37:22Z",
       "image_credit": "Rochdale Daily illustration",
       "source_image_reuse_status": "cards-only",
       "event_start_at": "2026-12-31T20:00:00Z",
@@ -2255,7 +2264,19 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "sponsored-hi-pilates-club-women-only-reformer-pilates-littleborough",
+        "new-years-eve-with-the-j-ger-maestros",
+        "a-concert-of-remembrance-with-littleborough-brass-bands-association"
+      ],
+      "commons_image_search": "searched",
+      "image_alt": "Illustration: Littleborough, events. Not a photograph of the event.",
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:38Z"
     },
     {
       "id": "33f0ab5d8c9d70577dfc",
@@ -2273,8 +2294,8 @@
       ],
       "published_at": "2026-10-21T20:14:20Z",
       "first_published_at": "2026-10-21T20:14:20Z",
-      "last_updated_at": "2026-10-27T17:32:05.420005Z",
-      "scraped_at": "2026-10-27T17:32:05.420005Z",
+      "last_updated_at": "2026-10-27T17:37:22Z",
+      "scraped_at": "2026-10-27T17:37:22Z",
       "image_credit": "R lee / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2312,16 +2333,28 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "rochdale-shortlisted-for-two-national-music-festival-awards",
+        "early-doors-club-st-chads-church-rochdale-live-music",
+        "saturday-sessions-live-music-rochdale-town-centre"
+      ],
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:48:05Z",
+      "verification_reasons": [
+        "Original URL is not an approved attributable source; editorial review required"
+      ]
     },
     {
       "id": "b97b37d71a7172bf89fa",
       "story_key": "events-v3-6a89fc56b9a23648589b",
-      "title": "Wonders Of Our Universe. The Next Chapter",
+      "title": "Wonders Of Our Universe: The Next Chapter",
       "slug": "wonders-of-our-universe-the-next-chapter",
-      "excerpt": "🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
-      "summary": "🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
-      "content_html": "<p>🪐 Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Saturday 17 April 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/wonders-of-our-universe-the-next-chapter\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "excerpt": "Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
+      "summary": "Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness H",
+      "content_html": "<p> Step into a world of wonder with Wonders of Our Universe – The Next Chapter. Join astrophysicist Ian Hall FRAS for a brand-new journey deeper into space and time: breathtaking visuals, captivating storytelling and atmospheric live music. Perfect for returning fans and first-time explorers alike. Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><strong>Date and time:</strong> Saturday 17 April 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/wonders-of-our-universe-the-next-chapter\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -2330,10 +2363,10 @@
       ],
       "published_at": "2026-09-28T18:06:54Z",
       "first_published_at": "2026-09-28T18:06:54Z",
-      "last_updated_at": "2026-10-27T17:32:05.576284Z",
-      "scraped_at": "2026-10-27T17:32:05.576284Z",
+      "last_updated_at": "2026-10-27T17:37:22Z",
+      "scraped_at": "2026-10-27T17:37:22Z",
       "image_credit": "R lee / Wikimedia Commons (CC BY-SA 2.0)",
-      "source_image_reuse_status": "cards-only",
+      "source_image_reuse_status": "commons-free-license",
       "event_start_at": "2027-04-17T18:30:00Z",
       "event_end_at": "",
       "event_location": "Rochdale, Champness Hall, Drake St, Rochdale OL16 1NZ, UK",
@@ -2357,8 +2390,8 @@
       "image_url": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "img": "assets/img/cards/5c4b8c73f2d8a375-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_skyline_-_geograph.org.uk_-_311839.jpg",
-      "image_status": "cards-library-photo",
-      "image_backfill_method": "cards-filename-match",
+      "image_status": "commons-photo-cached",
+      "image_backfill_method": "wikimedia-commons",
       "image_match_title": "rochdale_fans.jpg",
       "image_match_score": 6252,
       "wards": [],
@@ -2366,15 +2399,28 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "brass-and-bubl-a-christmas-special",
+        "creativity-for-all-free-family-festival-rochdale-13-august",
+        "rochdale-community-fair-scheduled-for-next-month"
+      ],
+      "commons_image_search": "matched",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "image_alt": "File image: Rochdale skyline. Not a photograph of this event.",
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:39Z"
     },
     {
       "id": "f0dd5ebdec74eead121f",
       "story_key": "events-v3-fa83eba7c4fc8fa82545",
       "title": "The Black Dyke Band at Rochdale Town Hall 2027",
       "slug": "the-black-dyke-band-at-rochdale-town-hall-2027",
-      "excerpt": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale ",
-      "summary": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale ",
+      "excerpt": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale",
+      "summary": "In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale",
       "content_html": "<p>In 1871 The Black Dyke Band performed at the original opening ceremony for Rochdale Town Hall. Since the post refurbishment of the Town Hall, the band have since gone on to perform every year bringing the best of brass band quality for all to enjoy. Join them again in 2027. Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Thursday 13 May 2027 at 19:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/the-black-dyke-band-at-rochdale-town-hall-2027\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
@@ -2384,8 +2430,8 @@
       ],
       "published_at": "2026-07-17T04:35:37Z",
       "first_published_at": "2026-07-17T04:35:37Z",
-      "last_updated_at": "2026-10-27T17:32:05.723519Z",
-      "scraped_at": "2026-10-27T17:32:05.723519Z",
+      "last_updated_at": "2026-10-27T17:37:22Z",
+      "scraped_at": "2026-10-27T17:37:22Z",
       "image_credit": "Rochdale Daily",
       "source_image_reuse_status": "cards-only",
       "event_start_at": "2027-05-13T18:30:00Z",
@@ -2420,7 +2466,17 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "premier-kia-renews-support-for-rochdale-feel-good-festival",
+        "not-quite-big-band-to-perform-at-rochdale-town-hall-on-7-november",
+        "ignite-fire-festival-rochdale-town-hall-square-november-20-22"
+      ],
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:40Z"
     },
     {
       "id": "d4989bbbd57e2f9ab29e",
@@ -2438,8 +2494,8 @@
       ],
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
-      "last_updated_at": "2026-10-27T17:32:05.885845Z",
-      "scraped_at": "2026-10-27T17:32:05.885845Z",
+      "last_updated_at": "2026-10-27T17:37:23Z",
+      "scraped_at": "2026-10-27T17:37:23Z",
       "image_credit": "Rochdale Daily illustration",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_0a200599185043b28943cf91fd33aa28~mv2.jpg/v1/fill/w_1000,h_1000,al_c,q_85/ad4e9b_0a200599185043b28943cf91fd33aa28~mv2.jpg",
       "source_image_reuse_status": "permission-required",
@@ -2476,7 +2532,16 @@
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "pure-80-s-festival-2026",
+        "a-concert-of-remembrance-with-littleborough-brass-bands-association",
+        "a-consert-of-remembrance-with-littleborough-brass-bands-association"
+      ],
+      "is_ongoing": false,
+      "ongoing_label": "",
+      "update_count": 1,
+      "ingested_at": "2026-10-27T17:51:40Z"
     }
   ],
   "coverage": {
@@ -2541,9 +2606,9 @@
       "education": 1,
       "sport": 2,
       "events": 1,
+      "community": 4,
       "environment": 1,
-      "news": 3,
-      "community": 4
+      "news": 3
     },
     "selected_by_ward": {
       "borough-wide": 17,
@@ -2566,12 +2631,12 @@
       "source": 1,
       "rochdale times": 4,
       "get together after serving cic": 1,
+      "rochdale boroughwide housing": 1,
       "rochdale daily": 2,
       "rochdale borough council": 1,
-      "rochdale boroughwide housing": 1,
+      "rochdale borough council council tax notice": 1,
       "rochdale borough council traffic regulation orders and notices of intent": 1,
       "messenger newspapers": 1,
-      "rochdale borough council council tax notice": 1,
       "manchester evening news": 1,
       "historic england (national heritage list for england)": 1
     },
@@ -2594,20 +2659,20 @@
     "fresh_hours": 36,
     "frontpage_minimum": 12,
     "frontpage_target": 45,
-    "reservoir_records": 432,
+    "reservoir_records": 431,
     "reservoir_fresh_candidates": 1,
     "reservoir_refilled": 1,
     "fresh_editor_pins": 0,
     "stale_editor_pins_retained": 0,
-    "fresh_articles": 19,
-    "fresh_substantive_articles": 19,
+    "fresh_articles": 18,
+    "fresh_substantive_articles": 18,
     "recent_live_updates": 0,
     "fresh_utility_articles": 0,
     "thin_utility_frontpage_dropped": 0,
     "expired_same_day_deadlines_dropped": 0,
     "expired_sports_previews_dropped": 0,
-    "stale_fallback_dropped": 0,
-    "enforced_at": "2026-10-27T17:34:39.098340Z"
+    "stale_fallback_dropped": 1,
+    "enforced_at": "2026-10-27T17:57:38.081603Z"
   },
   "source_quality_guard": {
     "marked_archive_records": 0,
@@ -2616,8 +2681,15 @@
   },
   "final_live_window_guard": {
     "fresh_hours": 36,
-    "kept": 19,
+    "kept": 18,
     "removed": 0,
-    "enforced_at": "2026-10-27T17:34:39.373598Z"
+    "enforced_at": "2026-10-27T17:57:38.290859Z"
+  },
+  "manual_frontpage_guard": {
+    "fresh_hours": 36,
+    "eligible_manual": 6,
+    "restored_manual": 0,
+    "protected_manual": 6,
+    "enforced_at": "2026-10-27T17:57:38.344957Z"
   }
 }
