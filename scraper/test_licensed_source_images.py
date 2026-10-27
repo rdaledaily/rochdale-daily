@@ -135,7 +135,83 @@ def run() -> None:
             dict(library_only, editorial_lock=True), datetime(2026, 10, 13, 12, tzinfo=timezone.utc)
         )
 
+    run_source_grants(jpeg)
     print("Licensed source image discovery, attribution and library fallback passed.")
+
+
+def run_source_grants(jpeg: bytes) -> None:
+    """Organisation-level written permission (council, club, college...)."""
+    council_page = "https://www.rochdale.gov.uk/news/article/1/park-reopens"
+    council_photo = "https://www.rochdale.gov.uk/images/park-reopens.jpg"
+    council_logo = "https://www.rochdale.gov.uk/images/council-logo.png"
+    grant = {"permission_type": "source-publication-permission", "organisation": "Rochdale Borough Council",
+             "credit": "Rochdale Borough Council", "source_hosts": ["rochdale.gov.uk"],
+             "granted_by": "Press office, Rochdale Borough Council", "granted_on": "2026-10-20",
+             "permission_verified": True}
+    with TemporaryDirectory() as root:
+        file = Path(root) / "permissions.json"
+        # Incomplete evidence grants nothing, and is reported.
+        file.write_text(json.dumps([dict(grant, granted_on="")]), encoding="utf-8")
+        assert rights.source_grants(file) == []
+        assert rights.inactive_grants(file) == ["Rochdale Borough Council"]
+        file.write_text(json.dumps([grant]), encoding="utf-8")
+        grants = rights.source_grants(file)
+        assert len(grants) == 1 and rights.inactive_grants(file) == []
+
+    got = rights.grant_for(council_photo, council_page, grants)
+    assert got and got["creator"] == "Rochdale Borough Council" and got["license_name"] == "Used with permission"
+    assert "2026-10-20" in got["evidence_ref"]
+    # Image on another domain, page on another domain, logo: never covered.
+    assert rights.grant_for("https://cdn.getty.example/x.jpg", council_page, grants) is None
+    assert rights.grant_for(council_photo, "https://www.manchestereveningnews.co.uk/a", grants) is None
+    assert rights.grant_for(council_logo, council_page, grants) is None
+    assert rights.grant_for(council_photo, "https://democracy.rochdale.gov.uk/x", grants)  # subdomain ok
+    # Per-grant category exclusion.
+    excl = [dict(grants[0], exclude_categories={"crime"})]
+    assert rights.grant_for(council_photo, council_page, excl, "crime") is None
+
+    page = f'''<html><head><meta property="og:image" content="{council_photo}"></head>
+      <body><article><figure><img src="{council_photo}"><figcaption>The reopened park</figcaption></figure></article></body></html>'''.encode()
+    agency = page.replace(b"The reopened park", b"Photo: Getty Images")
+    def fake(pages):
+        return lambda url, **kw: (pages, "text/html", council_page) if url == council_page else (jpeg, "image/jpeg", council_photo)
+    with patch.object(rights, "request_bytes", side_effect=fake(page)):
+        got = rights.fetch_licensed_source_image(council_page, permissions={}, grants=grants)
+        assert got and got[3]["creator"] == "Rochdale Borough Council"
+        # The same picture already used on a different story = default share image.
+        assert rights.fetch_licensed_source_image(council_page, permissions={}, grants=grants,
+                                                  skip_urls={rights.canonical(council_photo)}) is None
+        # No grant, no photo.
+        assert rights.fetch_licensed_source_image(council_page, permissions={}, grants=[]) is None
+    with patch.object(rights, "request_bytes", side_effect=fake(agency)):
+        assert rights.fetch_licensed_source_image(council_page, permissions={}, grants=grants) is None
+
+    # A recent council story carrying a Commons/library image is upgraded;
+    # editor photos, locked stories, old stories and other sources are not.
+    now = datetime(2026, 10, 27, 12, tzinfo=timezone.utc)
+    recent = {"source_url": council_page, "category": "community", "published_at": "2026-10-27T09:00:00Z",
+              "image_status": "commons-photo-cached", "image_url": "assets/img/cards/x-commons-photo.jpg"}
+    assert repair.granted_source_upgrade(recent, now, grants)
+    assert not repair.granted_source_upgrade(dict(recent, image_status="editorial-photo"), now, grants)
+    assert not repair.granted_source_upgrade(dict(recent, manual_article=True), now, grants)
+    assert not repair.granted_source_upgrade(dict(recent, published_at="2026-10-01T09:00:00Z"), now, grants)
+    assert not repair.granted_source_upgrade(dict(recent, source_url="https://www.rochdaletimes.co.uk/a"), now, grants)
+    assert not repair.granted_source_upgrade(recent, now, [])
+
+    # Credit names the organisation and links to its original story.
+    with TemporaryDirectory() as root:
+        base = Path(root)
+        article = dict(story(), source_url=council_page)
+        result = (rights.Candidate(council_photo, "og:image"), jpeg, ".jpg",
+                  rights.grant_for(council_photo, council_page, grants))
+        with patch.object(repair, "CARDS_DIR", base / "assets/img/cards"), \
+             patch.object(repair, "fetch_licensed_source_image", return_value=result):
+            ok, _ = repair.try_licensed_source_photo(article, [council_page], timeout=1,
+                                                      permissions={}, grants=grants)
+        assert ok
+        assert article["image_credit"] == "Rochdale Borough Council / Used with permission"
+        assert article["image_credit_url"] == council_page
+        assert "2026-10-20" in article["image_permission_ref"]
 
 
 if __name__ == "__main__":

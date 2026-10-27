@@ -69,6 +69,21 @@ def acceptable(page, subject):
     # Every named-subject word is necessary, not one generic overlap like Park.
     return all(re.search(r'\b' + re.escape(word) + r'\b', source_text) for word in words)
 
+def generic_commons_images(root):
+    """Commons files that were matched for a generic "<area> skyline" search."""
+    try:
+        cache = json.loads((root / 'assets/img/cards/commons_image_candidates.json').read_text())
+    except (OSError, ValueError):
+        return set()
+    return {str(record.get('image_url') or '') for key, record in cache.items()
+            if str(key).endswith(' skyline') and record.get('image_url')}
+
+
+def is_generic_commons(article, root, rel):
+    alt = plain(article.get('image_alt')).casefold()
+    return rel in generic_commons_images(root) or (alt.startswith('file image:') and ' skyline.' in alt)
+
+
 def set_place_card(article, root):
     from ensure_article_images import draw_generated_card
     area = plain(article.get('area') or 'Rochdale').replace('-', ' ').title()
@@ -106,6 +121,8 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
         set_curated(article, root, chosen)
         article['image_policy'] = POLICY
         return 'internal'
+    if commons_current and is_generic_commons(article, root, rel):
+        relevance = False
     if relevance is not False and commons_current and current.is_file() and not generated:
         article['image_policy'] = POLICY
         return 'commons'
@@ -114,9 +131,11 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
     # A police file photo is permitted only when that service is the named subject.
     if str(article.get('category') or '').casefold() == 'crime' and subject != 'Greater Manchester Police':
         subject = ''
-    if not subject:
-        area=str(article.get('area') or 'Rochdale').replace('-', ' ').title()
-        subject=area+' skyline'
+    # No named subject means no relevant Commons photograph exists for this
+    # story. Do not substitute a generic town view (the old "<area> skyline"
+    # tier put one Rochdale skyline photo on 87 unrelated stories, crime
+    # included). The labelled place card is the honest result, and
+    # commons_image_search records why.
     cache_file = root / 'assets/img/cards/commons_image_candidates.json'
     cache = {}
     if cache_file.exists():

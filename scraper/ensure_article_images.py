@@ -113,6 +113,13 @@ def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
     value = clean(article.get("image_url") or article.get("img"))
     if not value:
         return False
+    # A generic town view matched only for "<area> skyline" is not a relevant
+    # image for any one story. The pipeline (not the editor) attached it, so it
+    # is never protected as an editor photo; the hierarchy re-decides.
+    if "-commons-" in value.lower():
+        from image_hierarchy import is_generic_commons
+        if is_generic_commons(article, root, cards_relative(value) or value.lower().lstrip("/")):
+            return False
     # A manual article pointing at a real, non-generated file inside assets/img/cards
     # is authoritative in every lane (publish, scrape-fast, scrape-kick). Previously
     # this rule only existed as a monkey-patch in frontpage_manual_publish.py, so the
@@ -125,6 +132,7 @@ def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
     low = value.lower().replace("\\", "/")
     status = clean(article.get("image_status")).lower()
     real_status = any(token in status for token in ("source-photo", "commons-photo", "editorial-photo"))
+
     if any(token in status for token in ("generated", "placeholder")):
         return False
     if any(token in low for token in ("generated-card", "placeholder", "category_", "category-")):
