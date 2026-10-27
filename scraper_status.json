@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-27T16:35:40.008035Z",
+  "last_run_at": "2026-10-27T17:14:29.662838Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,23 +42,23 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 136,
+  "raw_candidates_before_job_filter": 127,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 136,
-  "candidate_clusters": 40,
+  "raw_candidates": 127,
+  "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 63,
-    "resolved": 39,
-    "text_recovered": 30,
+    "wrappers": 58,
+    "resolved": 38,
+    "text_recovered": 29,
     "reattributed": 0,
-    "images_found": 31
+    "images_found": 30
   },
-  "duplicates_merged": 96,
+  "duplicates_merged": 88,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
-  "live_articles": 431,
+  "live_articles": 432,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -78,8 +78,8 @@
       "published": 132,
       "rejected": 31
     },
-    "held_back_this_run": 29,
-    "held_already_published": 25,
+    "held_back_this_run": 28,
+    "held_already_published": 24,
     "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -125,7 +125,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 120,
+    "rss_and_google_news": 111,
     "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -141,15 +141,15 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 41,
-    "Roch Valley Radio": 33,
+    "Rochdale Times": 38,
+    "Roch Valley Radio": 29,
     "Rochdale Borough Council": 11,
-    "Oldham Evening Chronicle": 8,
     "The Bury Times": 6,
-    "InYourArea": 4,
+    "Oldham Evening Chronicle": 6,
     "Facebook": 4,
     "Manchester Evening News": 4,
     "Bee Network live travel alerts": 4,
+    "InYourArea": 3,
     "Rochdale AFC": 3,
     "Roch Valley Radio Local News": 3,
     "Rochdale Borough Council RSS": 2,
@@ -157,6 +157,7 @@
     "Messenger Newspapers": 2,
     "Rochdale Borough Council News": 2,
     "Rochdale Boroughwide Housing": 2,
+    "Salford City FC": 1,
     "beIN SPORTS": 1,
     "Yahoo Sports": 1,
     "The League Paper": 1,
@@ -167,7 +168,7 @@
   "published_by_category": {
     "business": 43,
     "community": 55,
-    "crime": 16,
+    "crime": 17,
     "education": 20,
     "environment": 32,
     "events": 25,
@@ -780,10 +781,14 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk",
+    "visitrochdale.com",
     "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 9
+    "yourtrustrochdale.co.uk": 7,
+    "rochdaleafc.co.uk": 3,
+    "visitrochdale.com": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -820,8 +825,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-27T16:52:27.270162Z",
-  "frontpage_article_count": 19,
+  "frontpage_generated_at": "2026-10-27T17:15:33.121579Z",
+  "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -885,12 +890,12 @@
       "education": 1,
       "sport": 2,
       "events": 1,
-      "environment": 2,
+      "environment": 1,
       "news": 3,
       "community": 4
     },
     "selected_by_ward": {
-      "borough-wide": 18,
+      "borough-wide": 17,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
@@ -913,7 +918,6 @@
       "rochdale daily": 2,
       "rochdale borough council": 1,
       "rochdale boroughwide housing": 1,
-      "theoldhamtimes": 1,
       "rochdale borough council traffic regulation orders and notices of intent": 1,
       "messenger newspapers": 1,
       "rochdale borough council council tax notice": 1,
@@ -924,22 +928,22 @@
     "primary_pool_size": 25,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 19,
+    "frontpage_count": 18,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 8,
-    "fresh_under_homepage_window": 19,
-    "short_briefs_selected": 9,
+    "fresh_under_24h": 7,
+    "fresh_under_homepage_window": 18,
+    "short_briefs_selected": 8,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 431,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 432,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -949,7 +953,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
+  "whats_on_event_count": 14,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 0,
