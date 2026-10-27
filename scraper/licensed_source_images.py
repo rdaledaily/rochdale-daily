@@ -284,6 +284,11 @@ def permitted_candidate(
             or (grant_for(key, page_url, grants, category) if grants else None))
 
 
+# Why the last fetch_licensed_source_image call found no usable photo, so the
+# run report can name the cause instead of a bare "no-cleared-source-image".
+LAST_DIAGNOSIS: dict[str, Any] = {}
+
+
 def fetch_licensed_source_image(
     source_url: str,
     *,
@@ -300,7 +305,11 @@ def fetch_licensed_source_image(
         accept="text/html,application/xhtml+xml;q=0.9,*/*;q=0.2",
         user_agent=user_agent,
     )
+    LAST_DIAGNOSIS.clear()
+    LAST_DIAGNOSIS.update(page=source_url, final_url=final_url, candidates=[])
+    seen = LAST_DIAGNOSIS["candidates"]
     if "html" not in content_type and not page.lstrip().startswith(b"<"):
+        LAST_DIAGNOSIS["verdict"] = f"page-not-html ({content_type})"
         return None
     verified = permission_entries() if permissions is None else permissions
     active_grants = source_grants() if grants is None else grants
@@ -309,10 +318,15 @@ def fetch_licensed_source_image(
         rights = permitted_candidate(candidate.url, final_url, rights_map, verified,
                                      active_grants, category)
         if rights is None:
+            if len(seen) < 8:
+                seen.append({"url": candidate.url[:200], "via": candidate.method,
+                             "verdict": _refusal(candidate.url, final_url, active_grants, category)})
             continue
         if rights.get("grant") and canonical(candidate.url, final_url) in skip_urls:
+            seen.append({"url": candidate.url[:200], "via": candidate.method, "verdict": "default-image-used-on-other-stories"})
             continue  # the same picture on another story = the site's default image
         if rights.get("grant") and agency_credited(page, candidate.url, final_url):
+            seen.append({"url": candidate.url[:200], "via": candidate.method, "verdict": "agency-credited"})
             continue
         try:
             payload, image_type, image_url = request_bytes(
@@ -320,9 +334,27 @@ def fetch_licensed_source_image(
                 accept="image/webp,image/png,image/jpeg,*/*;q=0.1",
                 user_agent=user_agent,
             )
-        except (OSError, ValueError):
+        except (OSError, ValueError) as exc:
+            seen.append({"url": candidate.url[:200], "via": candidate.method, "verdict": f"image-fetch-failed: {str(exc)[:80]}"})
             continue
         ext = extension_for(image_type, image_url, payload)
         if ext and plausible_dimensions(payload, ext):
+            LAST_DIAGNOSIS["verdict"] = "photo-found"
             return Candidate(image_url, candidate.method), payload, ext, rights
+        seen.append({"url": candidate.url[:200], "via": candidate.method, "verdict": "too-small-or-unreadable"})
+    LAST_DIAGNOSIS["verdict"] = "no-candidate-images-on-page" if not seen else "no-candidate-passed"
     return None
+
+
+def _refusal(url: str, page_url: str, grants: list[dict[str, Any]], category: Any) -> str:
+    page_host, image_host = bare_host(page_url), bare_host(url)
+    covering = [g for g in grants if _host_covered(page_host, g["source_hosts"])]
+    if not covering:
+        return "page-not-from-granting-organisation"
+    if CHROME_IMAGE_RE.search(urlparse(str(url)).path):
+        return "site-furniture (logo/default image)"
+    if not any(_host_covered(image_host, g["image_hosts"]) for g in covering):
+        return f"image-host-not-covered: {image_host}"
+    if any(str(category or "").casefold() in g["exclude_categories"] for g in covering):
+        return "category-excluded"
+    return "not-permitted"

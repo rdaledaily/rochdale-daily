@@ -25,6 +25,7 @@ from urllib.parse import urlparse
 from PIL import Image, UnidentifiedImageError
 
 from ensure_article_images import high_risk_photo_story
+import licensed_source_images
 from licensed_source_images import (
     canonical, fetch_licensed_source_image, inactive_grants,
     permission_entries, source_grants,
@@ -212,8 +213,10 @@ def try_licensed_source_photo(
                 skip_urls=skip_urls, user_agent=DEFAULT_USER_AGENT,
             )
         except (OSError, ValueError, TimeoutError, ConnectionError) as exc:
+            article["_image_diagnosis"] = {"page": source_url, "verdict": f"page-fetch-failed: {str(exc)[:120]}"}
             continue
         if result is None:
+            article["_image_diagnosis"] = dict(licensed_source_images.LAST_DIAGNOSIS)
             continue
 
         candidate, payload, extension, rights = result
@@ -321,12 +324,16 @@ def main(argv: list[str] | None = None) -> int:
                 used_by.setdefault(key, set()).add(own)
         else:
             no_image += 1
-        rows.append({
+        row = {
             "slug": clean(article.get("slug")),
             "result": reason,
             "source": candidates[0],
             "after": article.get("image_url"),
-        })
+        }
+        diagnosis = article.pop("_image_diagnosis", None)
+        if diagnosis and not updated:
+            row["why"] = diagnosis
+        rows.append(row)
         print(f"{reason:24} {clean(article.get('slug') or article.get('title'))}")
 
     if repaired:
