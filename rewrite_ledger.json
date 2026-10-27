@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-27T21:49:10.762458Z",
+  "updated_at": "2026-10-27T22:49:49.203235Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 177,
+  "count": 176,
   "entries": {
     "https://aboutmanchester.co.uk/rochdale-charity-your-trust-is-hosting-a-variety-of-activities-across-its-venues-this-october-half-term-to-keep-children-and-their-families-entertained": {
       "first_attempt_at": "2026-10-23T12:58:07.186081Z",
@@ -775,26 +775,6 @@
       "source_name": "BBC",
       "category": "transport",
       "text_fingerprint": "1862fd01b1069280"
-    },
-    "https://www.bbc.com/sport/football/live/cjwy97e3zqqzt": {
-      "first_attempt_at": "2026-10-19T18:38:59.491988Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQR3pQTDNuZWx4bUZHQWJOQzQtY1pqUEtFamdJNW82emN0d1JtUVVqV3pYUXN0LWF2UGpuZm5QMmdLcTBQLThYREVqM0tjazRWT3JxejdEeGh4WXlUa3hOdjB5QzQ0WFpvYjMtTWphdy1WZW5JaGI5RE1zNUpWeUotWW56YXpVQzhoRjJGNXZvek9UbE85Zjl3S29ZNHNDLUlBV2xtVlMtZDBaR1lUQ3ZLSnpiNGNnMUJLYjFURXBrSS1KREd4VWhDc0dNVHpCbVVKbTVhbk9oN0M2cWE1?oc=5",
-        "https://news.google.com/rss/articles/CBMigwFBVV95cUxOSnZEUjZHQ0pjMVcwYnN4Y1p1M3h6cGlYYmxWUW5oOGFSWTFRdUsyRlF4aTlJT2JfcS1BVXQxay1relNuaG5zVkQxTUpmbGFVY1YzWVJpcFozYlIwbHl6d19fNjZOc1JLU1JwSVpXWUJXMkVfOHFDdkhFWHNoLU11RGhXdw?oc=5",
-        "https://www.bbc.com/sport/football/live/cjwy97e3zqqzt"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-19T22:34:09.382386Z",
-      "outcome": "failed",
-      "reason": "one-time retry after secondary publication gate removal",
-      "title": "Crewe Alexandra 3-2 Rochdale - BBC",
-      "source_name": "BBC",
-      "category": "sport",
-      "text_fingerprint": "fa1ec19ee4b1d99a",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1
     },
     "https://www.beinsports.com/en-mena/football/fa-cup/fleetwood-town-vs-rochdale-2026-11-07": {
       "first_attempt_at": "2026-10-24T12:50:30.333675Z",
@@ -2468,8 +2448,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-27T21:49:10.762288Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Rochdale men among 10 charged with drugs conspiracy - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
