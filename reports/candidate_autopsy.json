@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-10-26T13:32:56.879315Z",
+  "examined_at": "2026-10-27T12:39:48.650040Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 128,
+  "candidates_examined": 125,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 113,
-    "would publish": 10,
-    "duplicate of published story": 5
+    "age": 102,
+    "would publish": 17,
+    "duplicate of published story": 6
   },
-  "would_publish": 10,
+  "would_publish": 17,
   "age_gate_sensitivity": {
-    "6h": 4,
-    "14h": 8,
-    "24h": 15,
-    "48h": 68,
-    "72h": 93,
-    "168h": 128
+    "6h": 6,
+    "14h": 9,
+    "24h": 23,
+    "48h": 47,
+    "72h": 101,
+    "168h": 125
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Rochdale Times: Town centre reclaims Britain in Bloom crown - Rochdale Times",
-      "Rochdale Times: National spotlight shines on town’s live music - Rochdale Times"
+      "Bee Network live travel alerts: Updated: 27/10/2026 at 12:12pm Live Failsworth Tram Stop - Lifts out o",
+      "Roch Valley Radio Local News: Lest We Forget: Rochdale Remembers"
     ],
     "duplicate of published story": [
-      "Manchester Evening News: Unseen pictures of 1930s from Manchester's Ritz to Rochdale 'Riviera' ",
-      "Rochdale Borough Council: Wardle Remembrance Sunday 2026, road closures in Wardle on 8 November ",
-      "Roch Valley Radio: More than 200 cared for children recognised at Rochdale awards event"
+      "Facebook: 🚨 Police remain on Rochdale Road, which remains closed. Police and par",
+      "Lancashire Telegraph: Man dies after serious three-vehicle crash on Rochdale Road in Edenfie",
+      "The Bury Times: Man dies after serious three-vehicle crash on Rochdale Road in Edenfie"
     ],
     "age": [
-      "Dailymail: Shocking moment woman hurls vile racist abuse at nightclub bouncer",
-      "Rochdale Times: School closes after bomb threat - Rochdale Times",
-      "4Barsrest: Results: 2026 Rochdale Contest"
+      "Rochdale AFC: Tickets On Sale For Final Trophy Group Game - Rochdale AFC",
+      "Rochdale Times: Town centre reclaims Britain in Bloom crown - Rochdale Times",
+      "Rochdale Borough Council: Heights Lane, roadworks in Rochdale from 26 October 2026 - Rochdale Bo"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
