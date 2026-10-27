@@ -34,13 +34,16 @@ class CardFilenameMatchingTests(unittest.TestCase):
         broad = filename_match_score(article, Path("hospital.jpeg"))
         self.assertGreater(specific, broad)
 
-    def test_excerpt_can_match_when_headline_does_not(self):
+    def test_excerpt_and_body_never_choose_a_photo(self):
+        # Live failures: murder.jpg on a folklore piece, weather.png on a rugby result.
         article = {
-            "title": "Emergency incident investigated in Rochdale",
-            "slug": "emergency-incident-investigated-rochdale",
-            "excerpt": "A resident was poisoned and taken for treatment.",
+            "title": "Littleborough defeat Trafford MV in ADM Lancs/Cheshire 2 clash",
+            "slug": "littleborough-defeat-trafford-mv",
+            "excerpt": "The weather held for a hard-fought win.",
+            "content": "Folklore says the hall saw a murder centuries ago.",
         }
-        self.assertGreater(filename_match_score(article, Path("poisoned.jpeg")), 0)
+        self.assertLess(filename_match_score(article, Path("weather.png")), 0)
+        self.assertLess(filename_match_score(article, Path("murder.jpg")), 0)
 
     def test_generic_town_filename_is_not_used_alone(self):
         self.assertLess(

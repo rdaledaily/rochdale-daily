@@ -89,6 +89,25 @@ class ManualPhotoSurvivesAllLanes(unittest.TestCase):
         self.assertIn("CC BY-SA 4.0", a["image_credit"])
         self.assertEqual(a["source_image_reuse_status"], "commons-free-license")
 
+    def test_pipeline_pick_on_manual_story_is_not_protected(self):
+        # Live case: rochdale_afc.jpg chosen from excerpt words on a Sleep Out story.
+        cards = self.root / "assets" / "img" / "cards"
+        Image.effect_noise((1200, 675), 64).convert("RGB").save(cards / "rochdale_afc.jpg", quality=95)
+        a = self.manual(title="Rochdale Sleep Out raises almost 10,000",
+                        slug="rochdale-sleep-out-nearly-10000",
+                        image_url="assets/img/cards/rochdale_afc.jpg",
+                        image_status="editorial-photo", image_match_score=8252)
+        images.enforce_article(a, self.root)
+        self.assertNotEqual(a["image_url"], "assets/img/cards/rochdale_afc.jpg")
+
+    def test_pipeline_pick_that_names_the_subject_is_kept(self):
+        cards = self.root / "assets" / "img" / "cards"
+        Image.effect_noise((1200, 675), 64).convert("RGB").save(cards / "norden_cricket_club.jpg", quality=95)
+        a = self.manual(title="Norden Cricket Club festival brings community together",
+                        slug="norden-cricket-club-festival",
+                        image_url="assets/img/cards/norden_cricket_club.jpg", image_match_score=15127)
+        self.assertEqual(images.enforce_article(a, self.root), "kept-existing")
+
     def test_no_named_subject_gets_place_card_not_a_skyline(self):
         self.commons.side_effect = AssertionError("no subject = no Commons search")
         a = self.manual(image_url="assets/img/cards/does-not-exist.webp")

@@ -108,6 +108,25 @@ def mark_editorial_photo(article: dict[str, Any], rel: str) -> None:
     article.pop("image_match_score", None)
 
 
+def stale_pipeline_pick(article: dict[str, Any], root: Path, rel: str) -> bool:
+    """True when the PIPELINE chose this photo and it no longer passes the
+    headline/slug rule.
+
+    Only an editor's own choice is authoritative. A photo the matcher picked
+    carries image_match_score; on a manual story it was being relabelled
+    "editorial-photo" and protected forever, including picks made from
+    excerpt/body words (rochdale_afc.jpg on a Sleep Out story whose editor
+    file named community.jpg) and picks that never matched at all.
+    """
+    if article.get("image_match_score") is None:
+        return False  # no matcher record: treat as the editor's choice
+    path = root / rel
+    if filename_match_score(article, path) >= 0:
+        return False
+    named = choose_named_library_photo(article, root)
+    return not (named is not None and named.resolve() == path.resolve())
+
+
 def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
     """Keep a real image already selected by editorial/source/Commons enrichment."""
     value = clean(article.get("image_url") or article.get("img"))
@@ -127,6 +146,9 @@ def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
     if is_manual_editorial(article):
         manual_rel = cards_relative(value)
         if manual_rel and valid_cards_image(root, manual_rel) and not is_generated_card(root / manual_rel):
+            if stale_pipeline_pick(article, root, manual_rel):
+                # Never let the "editorial-photo" label it was given keep it.
+                return False
             mark_editorial_photo(article, manual_rel)
             return True
     low = value.lower().replace("\\", "/")
@@ -224,13 +246,12 @@ def _field_match_score(subject: list[str], field_words: list[str], *, phrase_sco
 def filename_match_score(article: dict[str, Any], path: Path) -> int:
     """Score how strongly a cards filename identifies an article.
 
-    Priority is deliberately:
-      title > slug > excerpt > body
-
-    This means a filename matching the headline cannot be displaced by a random
-    word appearing deep in the article body. Body/excerpt matching exists so a
-    deliberately named image such as ``poisoned.jpeg`` can still be found when
-    the exact word is omitted from a shortened headline.
+    Only the headline and the slug are read, never the excerpt or body - the
+    same rule story_image.find_library_photo follows. A word mentioned in
+    passing is not what the story is about: body/excerpt matching put
+    murder.jpg on a folklore piece and weather.png on a rugby result (43 of
+    the live library picks on 27 Oct 2026 came from excerpt/body words). A
+    photo meant for one story is named after its slug.
     """
     if path.suffix.lower() not in IMAGE_SUFFIXES or is_generated_card(path):
         return -1
@@ -241,8 +262,6 @@ def filename_match_score(article: dict[str, Any], path: Path) -> int:
 
     title_words = normal_words(article.get("title"))
     slug_words = normal_words(slug_for(article))
-    excerpt_words = normal_words(article.get("excerpt") or article.get("summary") or article.get("description"))
-    body_words = normal_words(article.get("body") or article.get("content"))
 
     subject_phrase = " ".join(subject)
     title_phrase = " ".join(title_words)
@@ -257,8 +276,6 @@ def filename_match_score(article: dict[str, Any], path: Path) -> int:
     candidates = [
         _field_match_score(subject, title_words, phrase_score=15000, partial_score=12000),
         _field_match_score(subject, slug_words, phrase_score=14000, partial_score=11000),
-        _field_match_score(subject, excerpt_words, phrase_score=8000, partial_score=6000),
-        _field_match_score(subject, body_words, phrase_score=4500, partial_score=3000),
     ]
     return max(candidates)
 
