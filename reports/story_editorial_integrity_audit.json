@@ -1,12 +1,36 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 432,
-  "published_count": 432,
+  "article_count": 434,
+  "published_count": 434,
   "category_change_count": 0,
-  "image_change_count": 96,
+  "image_change_count": 98,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "roadworks-on-manchester-road-old-section-to-begin-on-25-october-2026",
+      "title": "Roadworks on Manchester Road Old Section to begin on 25 October 2026",
+      "category": "traffic",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/roadworks.jpg",
+        "img": "assets/img/cards/roadworks.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/477da0bb7cb1a301-commons-photo.jpg"
+    },
+    {
+      "slug": "rochdale-council-awards-contract-for-queen-s-park-send-improvement-project",
+      "title": "Rochdale Council awards contract for Queen's Park SEND improvement project",
+      "category": "community",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_town_hall_square.jpg",
+        "img": "assets/img/cards/rochdale_town_hall_square.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/b6cf2c727954481e-commons-photo.jpg"
+    },
     {
       "slug": "hopwood-hall-college-celebrates-topping-out-of-new-clegg-building",
       "title": "Hopwood Hall College celebrates topping out of new Clegg Building",
