@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-27T16:18:15.669099Z",
+  "last_run_at": "2026-10-27T16:35:40.008035Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,18 +42,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 126,
+  "raw_candidates_before_job_filter": 136,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 126,
+  "raw_candidates": 136,
   "candidate_clusters": 40,
   "google_news_resolution": {
-    "wrappers": 57,
-    "resolved": 38,
+    "wrappers": 63,
+    "resolved": 39,
     "text_recovered": 30,
     "reattributed": 0,
     "images_found": 31
   },
-  "duplicates_merged": 86,
+  "duplicates_merged": 96,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -125,7 +125,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 110,
+    "rss_and_google_news": 120,
     "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -141,20 +141,20 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 38,
+    "Rochdale Times": 41,
     "Roch Valley Radio": 33,
-    "Rochdale Borough Council": 9,
-    "Oldham Evening Chronicle": 6,
-    "The Bury Times": 5,
+    "Rochdale Borough Council": 11,
+    "Oldham Evening Chronicle": 8,
+    "The Bury Times": 6,
+    "InYourArea": 4,
     "Facebook": 4,
     "Manchester Evening News": 4,
     "Bee Network live travel alerts": 4,
-    "InYourArea": 3,
+    "Rochdale AFC": 3,
     "Roch Valley Radio Local News": 3,
     "Rochdale Borough Council RSS": 2,
     "Oldham Times": 2,
     "Messenger Newspapers": 2,
-    "Rochdale AFC": 2,
     "Rochdale Borough Council News": 2,
     "Rochdale Boroughwide Housing": 2,
     "beIN SPORTS": 1,
@@ -779,8 +779,12 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 9
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -790,9 +794,9 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-10-27T15:28:03.198088Z",
+  "evergreen_fallback_attempt_at": "2026-10-27T16:35:40.099757Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
-  "evergreen_fallback_attempt_count": 2,
+  "evergreen_fallback_attempt_count": 3,
   "evergreen_fallback": {
     "enabled": true,
     "thin_threshold": 6,
@@ -800,10 +804,10 @@
     "cooldown_hours": 24,
     "publishing_window": "09:00-20:00 Europe/London",
     "last_trigger_reason": "thin_news_supply",
-    "qualifying_count": 2,
+    "qualifying_count": 3,
     "last_topic_id": "clegg-hall-boggart",
     "last_article_slug": "does-a-boggart-still-haunt-clegg-hall",
-    "last_published_at": "2026-10-27T15:28:03Z"
+    "last_published_at": "2026-10-27T16:35:40Z"
   },
   "local_publishers_discovery_enabled": [
     "manchestereveningnews.co.uk",
@@ -816,8 +820,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-27T16:18:47.444600Z",
-  "frontpage_article_count": 18,
+  "frontpage_generated_at": "2026-10-27T16:52:27.270162Z",
+  "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -881,12 +885,12 @@
       "education": 1,
       "sport": 2,
       "events": 1,
-      "community": 3,
       "environment": 2,
-      "news": 3
+      "news": 3,
+      "community": 4
     },
     "selected_by_ward": {
-      "borough-wide": 17,
+      "borough-wide": 18,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
@@ -894,9 +898,9 @@
       "hopwood": 1,
       "littleborough": 2,
       "middleton": 1,
-      "milnrow": 3,
+      "milnrow": 2,
       "norden": 1,
-      "rochdale": 13,
+      "rochdale": 14,
       "wardle": 1
     },
     "selected_by_source": {
@@ -906,34 +910,35 @@
       "source": 1,
       "rochdale times": 4,
       "get together after serving cic": 1,
-      "rochdale boroughwide housing": 1,
       "rochdale daily": 2,
       "rochdale borough council": 1,
-      "rochdale borough council council tax notice": 1,
+      "rochdale boroughwide housing": 1,
       "theoldhamtimes": 1,
       "rochdale borough council traffic regulation orders and notices of intent": 1,
       "messenger newspapers": 1,
-      "manchester evening news": 1
+      "rochdale borough council council tax notice": 1,
+      "manchester evening news": 1,
+      "historic england (national heritage list for england)": 1
     },
     "pool_size": 25,
     "primary_pool_size": 25,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 18,
+    "frontpage_count": 19,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 7,
-    "fresh_under_homepage_window": 18,
+    "fresh_under_24h": 8,
+    "fresh_under_homepage_window": 19,
     "short_briefs_selected": 9,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 14,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 3,
+  "approved_ticket_events": 13,
+  "event_dates_corrected_from_ledger": 0,
   "duplicate_articles_after_postprocessing": 431,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -944,7 +949,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 14,
+  "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 0,
