@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-27T04:53:16.227283Z",
+  "last_run_at": "2026-10-27T05:06:53.323965Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,22 +42,27 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 102,
+  "raw_candidates_before_job_filter": 110,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 102,
-  "candidate_clusters": 34,
+  "raw_candidates": 110,
+  "candidate_clusters": 33,
   "google_news_resolution": {
-    "wrappers": 42,
-    "resolved": 32,
-    "text_recovered": 22,
+    "wrappers": 71,
+    "resolved": 42,
+    "text_recovered": 30,
     "reattributed": 0,
-    "images_found": 23
+    "images_found": 31
   },
-  "duplicates_merged": 68,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 77,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "heywood-school-pupil-names-new-road-in-6-4-million-development",
+      "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1241/an-eight-year-old-school-pupil-has-won-a-competition-to-name-a-road-for-a-new-6-4-million-development-in-heywood"
+    }
+  ],
+  "new_articles": 1,
   "live_articles": 426,
   "skipped": 0,
   "rewrite_skip_reasons": {},
@@ -78,8 +83,8 @@
       "published": 128,
       "rejected": 37
     },
-    "held_back_this_run": 27,
-    "held_already_published": 23,
+    "held_back_this_run": 25,
+    "held_already_published": 21,
     "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -122,10 +127,12 @@
       "last_attempt_at": "2026-10-25T21:19:35.439197Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 163.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 90,
+    "rss_and_google_news": 98,
     "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -141,15 +148,15 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 34,
-    "Roch Valley Radio": 25,
+    "Rochdale Times": 37,
+    "Roch Valley Radio": 27,
     "Rochdale Borough Council": 7,
     "Manchester Evening News": 6,
-    "Oldham Evening Chronicle": 5,
+    "Oldham Evening Chronicle": 6,
     "Facebook": 4,
+    "The Bury Times": 4,
+    "Rochdale AFC": 4,
     "Bee Network live travel alerts": 4,
-    "The Bury Times": 3,
-    "Rochdale AFC": 3,
     "Messenger Newspapers": 2,
     "Roch Valley Radio Local News": 2,
     "Rochdale Borough Council RSS": 1,
@@ -160,7 +167,9 @@
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "education": 1
+  },
   "published_by_category": {
     "business": 43,
     "community": 55,
@@ -197,8 +206,12 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "education-v3-9cf5023d39f480ba93ea"
+  ],
+  "selected_candidate_urls": [
+    "https://www.rochvalleyradio.com/news-features/142/community/1241/an-eight-year-old-school-pupil-has-won-a-competition-to-name-a-road-for-a-new-6-4-million-development-in-heywood"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -208,16 +221,33 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [],
-    "selected_categories": [],
+    "available_categories": [
+      "education"
+    ],
+    "selected_categories": [
+      "education"
+    ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [],
+    "available_areas": [
+      "heywood"
+    ],
+    "selected_areas": [
+      "heywood"
+    ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
-    "selected_by_source": {}
+    "selected_by_category": {
+      "education": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "heywood": 1
+    },
+    "selected_by_source": {
+      "roch valley radio": 1
+    }
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -765,7 +795,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 10,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -773,11 +803,18 @@
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMihAJBVV95cUxOZHZTczYwQTVuV3VKdThndHRaT1RaUFFHY2RQaVhNazdxMDBCMkV3Q0p5Zkg5STEzOWtKSm1BZ2J5SlotXzJ3d2p1amQtVFhoLUwzOGhEU3NiRmgxczZEWm9jTEVaRVFHbUpnclYxRy1iVGVmZEs1bzYycG5OMjdDLU5qc2xISXVRNml0dzMwaERoZFBSZlk2TmgweDJ0M3hmR0VTT1pjLWNJQWhqaXBVVlV3SjNQOXFHZ2d4amRwdThXSHA3ZGlrb3g3SFQtcThVNE5KcEZiclNydmhkR1UxQVVnWVkwNWJpXzBSeDZQSnB6VVJHck5KZFFlbHF4ak13eElXbA?oc=5",
+    "https://news.google.com/rss/articles/CBMicEFVX3lxTE9MNF9KNEtnb3doVDBPRXVjWHVLTlgxTzNCUjNkV0JobERkQVBEbmlHcEx0NEJJSUZYQ3hLcVh4NDI4VHY5Ny1NNXp6MnNZd3Q1RnhQMTlZTllZUkl3QVFrOFF1TEFjdDZTSUpYMHpmMDQ?oc=5",
+    "https://news.google.com/rss/articles/CBMiiAJBVV95cUxQRHNuTTVtM25sT2Ixb3AtMHFhdVMxQTladU1QNmFPc1N0UnhUc1p3N2Z0WmZUcFlXdjY3bmNzYUlVX2ZnSzZ4dXBFTUZLaU5TOGV4azI1ZUR0dFFUMmVwalUxeTZGOXBoNWM2cVBYYlpDdUdvYnlta2NSSl9Vc1JidHNvZFM2bGlhOExLSW9waktjUUd5cnZWdmVHa3BXc0NkdVNkUk1IRlRial9TcmdMWUh2RzI5VnhZdGtYV3RsS0dxWDJuVHNZT0dPR2s5Vzg2RFktOTBYQ0lDa2FlRHVkWGUwNkMxZ1lyekdrMTlJZk8xcHhOT3A0RE1fdlRRdFA2YUVUY2I1cjc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochvalleyradio.com"
+  ],
+  "slow_domain_failure_counts": {
+    "rochvalleyradio.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -813,7 +850,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-27T04:53:55.320291Z",
+  "frontpage_generated_at": "2026-10-27T05:07:39.035954Z",
   "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -824,7 +861,6 @@
       "education",
       "environment",
       "events",
-      "health",
       "news",
       "politics",
       "sport",
@@ -837,7 +873,6 @@
       "education",
       "environment",
       "events",
-      "health",
       "news",
       "politics",
       "sport",
@@ -874,8 +909,8 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "traffic": 5,
       "politics": 1,
+      "traffic": 5,
       "education": 2,
       "sport": 2,
       "events": 1,
@@ -884,8 +919,8 @@
       "news": 2
     },
     "selected_by_ward": {
-      "borough-wide": 15,
       "Hopwood Hall": 1,
+      "borough-wide": 15,
       "Milnrow and Newhey": 1,
       "Wardle, Shore and West Littleborough": 1
     },
@@ -895,31 +930,31 @@
       "littleborough": 2,
       "milnrow": 3,
       "norden": 1,
-      "rochdale": 14,
+      "rochdale": 13,
       "wardle": 1
     },
     "selected_by_source": {
-      "lancashire telegraph": 1,
-      "rochdale borough council": 2,
       "rochdale times": 2,
+      "lancashire telegraph": 1,
       "source": 3,
       "messenger newspapers": 1,
       "get together after serving cic": 1,
       "rochdale borough council council tax notice": 1,
       "rochdale daily": 2,
-      "rochdale borough council traffic regulation orders and notices of intent": 1,
+      "rochdale borough council": 2,
       "salford city fc": 1,
       "theoldhamtimes": 1,
       "rochdale borough council news": 1,
+      "rochdale borough council traffic regulation orders and notices of intent": 1,
       "manchester evening news": 1
     },
-    "pool_size": 24,
-    "primary_pool_size": 24,
+    "pool_size": 23,
+    "primary_pool_size": 23,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 18,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 13,
+    "fresh_under_24h": 12,
     "fresh_under_homepage_window": 18,
     "short_briefs_selected": 9,
     "frontpage_minimum_met": true
@@ -943,8 +978,10 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "heywood-school-pupil-names-new-road-in-6-4-million-development"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
