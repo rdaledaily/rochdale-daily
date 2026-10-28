@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Developers: public API | Rochdale Daily</title>
+  <meta name="description" content="Read-only feeds for Rochdale Daily stories, live coverage, community events and the Rochdale weather.">
+  <link rel="canonical" href="https://rochdaledaily.co.uk/developers.html">
+  <link rel="api-catalog" href="/.well-known/api-catalog">
+  <link rel="service-desc" href="/openapi.json" type="application/vnd.oai.openapi+json">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="stylesheet" href="/assets/css/rd-tokens.css">
+  <style>
+    body { margin: 0; background: var(--paper, #f6f5f1); color: var(--ink, #2b2824); font: 17px/1.6 var(--font-body, Georgia, serif); }
+    main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+    a { color: var(--breaking, #8c3a25); }
+    .home { font: 700 14px var(--font-ui, system-ui, sans-serif); text-decoration: none; color: var(--ink, #2b2824); }
+    h1 { font: 700 32px/1.15 var(--font-display, Georgia, serif); margin: 16px 0 8px; }
+    h2 { font: 700 21px/1.25 var(--font-display, Georgia, serif); margin: 32px 0 8px; border-top: 1px solid var(--line, #dcdad4); padding-top: 20px; }
+    p.lede { color: var(--muted, #6b675f); font-size: 18px; }
+    code { font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #fff; border: 1px solid var(--line, #dcdad4); padding: 1px 5px; overflow-wrap: anywhere; }
+    pre { background: #fff; border: 1px solid var(--line, #dcdad4); padding: 12px; overflow-x: auto; font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    table { width: 100%; border-collapse: collapse; font: 15px/1.45 var(--font-ui, system-ui, sans-serif); }
+    th, td { text-align: left; vertical-align: top; padding: 8px 6px; border-bottom: 1px solid var(--line, #dcdad4); }
+    th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted, #6b675f); }
+    @media (max-width: 560px) { table, tbody, tr, td { display: block; } thead { display: none; } td { border: 0; padding: 2px 0; } tr { border-bottom: 1px solid var(--line, #dcdad4); padding: 8px 0; } }
+  </style>
+</head>
+<body>
+<main>
+  <a class="home" href="/">&larr; Rochdale Daily</a>
+  <h1>Public API</h1>
+  <p class="lede">Read-only feeds for local news, live coverage, community events and the weather in the Rochdale borough. No key is needed.</p>
+
+  <h2>Endpoints</h2>
+  <table>
+    <thead><tr><th>Address</th><th>What it returns</th></tr></thead>
+    <tbody>
+      <tr><td><code>GET /articles.json</code></td><td>Every published story, newest first: headline, summary, area, ward, photo, credit, source and the story body as HTML.</td></tr>
+      <tr><td><code>GET /api/live-updates?index=1</code></td><td>Stories with live coverage running now.</td></tr>
+      <tr><td><code>GET /api/live-updates?slug=&lt;slug&gt;</code></td><td>The key points and timestamped updates for one live story.</td></tr>
+      <tr><td><code>GET /api/events</code></td><td>Community events approved by the newsdesk that have not yet finished, soonest first.</td></tr>
+      <tr><td><code>GET /weather.json</code></td><td>The Met Office forecast for Rochdale, by day.</td></tr>
+      <tr><td><code>GET /api/health</code></td><td><code>ok</code>, <code>degraded</code> (no new story for six hours) or <code>down</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Machine-readable descriptions</h2>
+  <p>The full OpenAPI 3.1 description is at <a href="/openapi.json"><code>/openapi.json</code></a>. An API catalog (RFC 9727) is at <a href="/.well-known/api-catalog"><code>/.well-known/api-catalog</code></a>.</p>
+  <pre>curl https://rochdaledaily.co.uk/api/live-updates?index=1</pre>
+
+  <h2>Using our journalism</h2>
+  <p>Story text and photos stay the copyright of Rochdale Daily or the credited source. You may show headlines and short summaries with a link back to the story. Please don't republish full stories or photos without asking. Poll at most once a minute; the feeds are cached.</p>
+  <p>Questions, corrections or permission requests: <a href="mailto:news@rochdaledaily.co.uk">news@rochdaledaily.co.uk</a>.</p>
+</main>
+</body>
+</html>
