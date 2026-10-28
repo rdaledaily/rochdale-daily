@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Guest columns: review | Rochdale Daily</title>
+  <link rel="stylesheet" href="/assets/css/rd-tokens.css">
+  <style>
+    body { margin: 0; background: var(--paper, #f6f5f1); color: var(--ink, #2b2824); font: 16px/1.5 var(--font-body, system-ui, sans-serif); }
+    main { max-width: 820px; margin: 0 auto; padding: 16px; }
+    h1 { font: 700 26px/1.2 var(--font-display, Georgia, serif); margin: 8px 0 4px; }
+    .note { color: var(--muted, #6b675f); font-size: 14px; }
+    .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; }
+    input, textarea { width: 100%; box-sizing: border-box; font: 16px var(--font-body, system-ui); padding: 10px; border: 1px solid #b9b5ab; background: #fff; border-radius: 0; }
+    .bar input { flex: 1 1 220px; width: auto; }
+    textarea { min-height: 320px; resize: vertical; }
+    button { min-height: 44px; padding: 0 14px; font: 700 14px var(--font-ui, system-ui); border: 1px solid var(--ink, #2b2824); background: var(--ink, #2b2824); color: #fff; cursor: pointer; }
+    button.secondary { background: transparent; color: var(--ink, #2b2824); }
+    button.danger { background: transparent; color: var(--breaking, #8c3a25); border-color: var(--breaking, #8c3a25); }
+    .card { background: #fff; border: 1px solid var(--line, #dcdad4); border-top: 3px solid var(--ink, #2b2824); padding: 14px; margin: 16px 0; }
+    .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; font-size: 14px; margin: 8px 0 12px; }
+    .meta div strong { display: block; font: 700 11px var(--font-ui, system-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--muted, #6b675f); }
+    label { display: block; font: 600 14px var(--font-ui, system-ui); margin: 10px 0 4px; }
+    .count { font: 700 13px var(--font-ui, system-ui); color: var(--muted, #6b675f); }
+    .count.over { color: var(--breaking, #8c3a25); }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .warn { background: #fff4e5; border-left: 4px solid #b26a00; padding: 10px 12px; margin: 12px 0; font-size: 14px; }
+    #status { font-weight: 600; min-height: 22px; }
+    @media (max-width: 560px) { .meta { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Guest columns awaiting review</h1>
+  <p class="note">Only columns whose authors have confirmed their email address appear here. Approving publishes the column through the newsdesk queue within about 15 minutes. Edit the headline or text first if you need to.</p>
+  <div class="bar">
+    <input id="token" type="password" placeholder="Admin token (saved on this device)" autocomplete="off">
+    <button type="button" id="load">Load queue</button>
+  </div>
+  <div class="warn" id="email-warning" hidden></div>
+  <p id="status" role="status" aria-live="polite"></p>
+  <div id="queue"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  var API = "/api/columns";
+  var $ = function (id) { return document.getElementById(id); };
+  var KEY = "rd_admin_token";
+  try { $("token").value = localStorage.getItem(KEY) || ""; } catch (e) {}
+
+  function status(t) { $("status").textContent = t; }
+  function el(tag, text, cls) { var n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
+  function words(t) { return (String(t || "").match(/\S+/g) || []).length; }
+  function token() { return $("token").value.trim(); }
+
+  function card(item) {
+    var c = el("article", null, "card");
+    var title = document.createElement("input"); title.value = item.title; title.maxLength = 140;
+    var tl = el("label", "Headline"); c.appendChild(tl); c.appendChild(title);
+    var meta = el("div", null, "meta");
+    [["Authored by", item.author + (item.authorRole ? ", " + item.authorRole : "")],
+     ["Email (private)", item.email], ["Declared interests", item.interests],
+     ["Section / ward", item.category + " · " + item.ward],
+     ["Submitted", new Date(item.submittedAt).toLocaleString("en-GB", { timeZone: "Europe/London" })],
+     ["Confirmed", item.verifiedAt ? new Date(item.verifiedAt).toLocaleString("en-GB", { timeZone: "Europe/London" }) : "?"]]
+      .forEach(function (pair) { var d = el("div"); d.appendChild(el("strong", pair[0])); d.appendChild(document.createTextNode(pair[1] || "")); meta.appendChild(d); });
+    c.appendChild(meta);
+    var withPhoto = { checked: false };
+    if (item.hasImage) {
+      var fig = el("figure"); fig.style.margin = "8px 0";
+      var img = el("img"); img.alt = item.photoCaption || ""; img.style.maxWidth = "100%"; img.style.maxHeight = "320px";
+      fetch(API + "?image=" + encodeURIComponent(item.id), { headers: { "x-admin-token": token() } })
+        .then(function (r) { return r.json(); }).then(function (d) { if (d && d.ok) img.src = d.image; });
+      fig.appendChild(img);
+      fig.appendChild(el("figcaption", (item.photoCaption || "") + " · Credit: " + (item.photoCredit || item.author)));
+      c.appendChild(fig);
+      var pl = el("label"); withPhoto = document.createElement("input"); withPhoto.type = "checkbox"; withPhoto.checked = true; withPhoto.style.width = "auto";
+      pl.appendChild(withPhoto); pl.appendChild(document.createTextNode(" Publish with this photo"));
+      c.appendChild(pl);
+    }
+    var body = document.createElement("textarea"); body.value = item.body;
+    c.appendChild(el("label", "Column (blank line between paragraphs)")); c.appendChild(body);
+    var count = el("div", "", "count");
+    function upd() { var n = words(body.value); count.textContent = n + " of 700 words"; count.classList.toggle("over", n > 700); }
+    body.addEventListener("input", upd); upd();
+    c.appendChild(count);
+    var actions = el("div", null, "actions");
+    var approve = el("button", "Approve and publish");
+    var reject = el("button", "Reject", "danger");
+    var mail = el("a", "Email the author");
+    mail.href = "mailto:" + encodeURIComponent(item.email) + "?subject=" + encodeURIComponent("Your Rochdale Daily column: " + item.title);
+    approve.addEventListener("click", function () {
+      if (words(body.value) > 700) { status("Cut it to 700 words first."); return; }
+      if (!confirm("Publish \"" + title.value + "\" by " + item.author + "?")) return;
+      send({ action: "approve", id: item.id, title: title.value, body: body.value, withPhoto: withPhoto.checked }).then(function (d) {
+        if (d && d.ok) { status("Approved. It will appear at " + d.url + " within about 15 minutes."); c.remove(); }
+      });
+    });
+    reject.addEventListener("click", function () {
+      if (!confirm("Reject this column? It will be removed from the queue.")) return;
+      send({ action: "reject", id: item.id }).then(function (d) { if (d && d.ok) { status("Rejected."); c.remove(); } });
+    });
+    actions.appendChild(approve); actions.appendChild(reject); actions.appendChild(mail);
+    c.appendChild(actions);
+    return c;
+  }
+
+  function send(payload) {
+    status("Working…");
+    return fetch(API, { method: "POST", headers: { "Content-Type": "application/json", "x-admin-token": token() }, body: JSON.stringify(payload) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (!d.ok) status(d.error || "Not done."); return d; })
+      .catch(function () { status("Network error."); });
+  }
+
+  function load() {
+    try { localStorage.setItem(KEY, token()); } catch (e) {}
+    status("Loading…");
+    fetch(API + "?queue=pending", { headers: { "x-admin-token": token() }, cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { status(d.error || "Could not load."); return; }
+        var q = $("queue"); q.textContent = "";
+        if (d.lastEmailError) {
+          var w = $("email-warning"); w.hidden = false;
+          w.textContent = "Last confirmation email that failed to send (" + new Date(d.lastEmailError.at).toLocaleString("en-GB", { timeZone: "Europe/London" }) + "): " + d.lastEmailError.reason + ". Writers are told when this happens; check the Brevo sender and API key.";
+        }
+        if (!d.pending.length) { status("Nothing waiting."); return; }
+        d.pending.forEach(function (item) { q.appendChild(card(item)); });
+        status(d.pending.length + " column" + (d.pending.length === 1 ? "" : "s") + " waiting.");
+      })
+      .catch(function () { status("Network error."); });
+  }
+  $("load").addEventListener("click", load);
+  if (token()) load();
+})();
+</script>
+</body>
+</html>

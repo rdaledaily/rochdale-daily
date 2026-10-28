@@ -59,10 +59,10 @@ jobs:
           base = os.environ["SITE_BASE"].rstrip("/")
           token = os.environ["NEWSDESK_ADMIN_TOKEN"]
 
-          def call(method, payload=None):
+          def call(method, payload=None, query="?queue=pending"):
               data = json.dumps(payload).encode() if payload is not None else None
               req = urllib.request.Request(
-                  f"{base}/api/newsdesk" + ("" if payload is not None else "?queue=pending"),
+                  f"{base}/api/newsdesk" + ("" if payload is not None else query),
                   data=data, method=method,
                   headers={"x-admin-token": token, "Content-Type": "application/json"},
               )
@@ -86,6 +86,28 @@ jobs:
               if not article or not article.get("title") or not article.get("body"):
                   continue
               slug = "".join(c for c in str(article.get("slug") or "article") if c.isalnum() or c == "-")[:80] or "article"
+              # A guest column's approved photo: saved beside the article as a
+              # real file, so the pipeline keeps it as the editor's photo. If
+              # it cannot be fetched the item stays queued for the next run
+              # rather than publishing without its picture.
+              image_key = str(entry.get("image_key") or "")
+              if image_key:
+                  import base64, re, urllib.parse
+                  try:
+                      got = call("GET", query="?image=" + urllib.parse.quote(image_key, safe=""))
+                      match = re.match(r"^data:image/(jpeg|png|webp);base64,(.+)$", str(got.get("image") or ""), re.S)
+                      if not match:
+                          raise ValueError("not an image")
+                      ext = "jpg" if match.group(1) == "jpeg" else match.group(1)
+                      image_path = pathlib.Path(f"assets/img/cards/column-{slug}.{ext}")
+                      image_path.parent.mkdir(parents=True, exist_ok=True)
+                      image_path.write_bytes(base64.b64decode(match.group(2)))
+                      rel = image_path.as_posix()
+                      article.update({"image_url": rel, "img": rel, "image_status": "editorial-photo"})
+                      print(f"saved {rel}")
+                  except Exception as error:
+                      print(f"photo for {slug} not fetched ({error}); leaving it queued")
+                      continue
               path = pathlib.Path(f"pending_manual_newsdesk_{slug}.json")
               path.write_text(json.dumps([article], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
               written.append(entry["id"])
@@ -102,6 +124,7 @@ jobs:
           git config user.name "Rochdale Daily Bot"
           git config user.email "bot@rochdaledaily.co.uk"
           git add pending_manual_newsdesk_*.json 2>/dev/null || true
+          git add assets/img/cards/column-* 2>/dev/null || true
           if git diff --cached --quiet; then
             echo 'committed=false' >> "$GITHUB_OUTPUT"
             echo 'nothing to commit'
