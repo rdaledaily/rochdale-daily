@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 436,
-  "published_count": 436,
+  "article_count": 439,
+  "published_count": 439,
   "category_change_count": 0,
-  "image_change_count": 94,
+  "image_change_count": 95,
   "category_changes": [],
   "image_changes": [
     {
@@ -54,6 +54,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
+    },
+    {
+      "slug": "heywood-prepares-for-remembrance-day-services-on-8-november-2026",
+      "title": "Heywood prepares for Remembrance Day services on 8 November 2026",
+      "category": "politics",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/heywood-prepares-for-remembrance-day-services-on-8-november-2026.jpg",
+        "status": "source-photo-cached"
+      },
+      "after": "assets/img/cards/ba638e8cf6b0-place-generated-card.jpg"
     },
     {
       "slug": "hopwood-hall-college-celebrates-topping-out-of-new-clegg-building",
