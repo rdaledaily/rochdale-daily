@@ -27,8 +27,9 @@ async function loadPoll(request) {
   const response = await fetch(url.toString(), { cf: { cacheTtl: 60 } });
   if (!response.ok) throw new Error("Poll configuration unavailable");
   const payload = await response.json();
-  if (!payload?.current) throw new Error("No current poll configured");
-  return payload.current;
+  // No live poll is the normal state between polls, not a failure: callers
+  // answer it with an ordinary "no poll" reply rather than a 503.
+  return payload?.current || null;
 }
 
 function optionMap(poll) {
@@ -94,6 +95,8 @@ async function confirmedVote(request, env, poll) {
 
 async function handleGet(request, env) {
   const poll = await loadPoll(request);
+  // The homepage removes the poll section when poll is null.
+  if (!poll) return json({ poll: null, state: null, results: null, voted_for: null }, 200, "no-store");
   const [results, votedFor] = await Promise.all([
     publicResults(env.EVENTS_KV, poll),
     confirmedVote(request, env, poll),
@@ -103,6 +106,7 @@ async function handleGet(request, env) {
 
 async function handlePost(request, env) {
   const poll = await loadPoll(request);
+  if (!poll) return json({ error: "There is no poll open at the moment." }, 409);
   const state = pollState(poll);
   if (!state.open) return json({ error: "This poll is closed.", state }, 409);
 
