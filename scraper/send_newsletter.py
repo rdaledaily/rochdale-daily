@@ -20,7 +20,8 @@ What it needs (GitHub repository secrets / variables)
   BREVO_API_KEY         secret: the same Brevo key the site uses
   BREVO_LIST_ID         secret or variable: the list sign-ups join
   NEWSLETTER_SENDER     variable: a sender address verified in Brevo
-                        (default newsletter@rochdaledaily.co.uk)
+                        (default news@rochdaledaily.co.uk, verified and
+                        DKIM-authenticated in Brevo on 28 Oct 2026)
 Optional: NEWSLETTER_SENDER_NAME, NEWSLETTER_DRY_RUN=true.
 
 Until the key and list exist it sends nothing and says which is missing.
@@ -51,7 +52,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ARTICLES = ROOT / "articles.json"
 SITE = "https://rochdaledaily.co.uk"
 BREVO = "https://api.brevo.com/v3"
-DEFAULT_SENDER = "newsletter@rochdaledaily.co.uk"
+DEFAULT_SENDER = "news@rochdaledaily.co.uk"
 DEFAULT_SENDER_NAME = "Rochdale Daily"
 # A morning newsletter goes out in the morning. If the briefing is published
 # late, or Brevo is down past lunchtime, that day is skipped.
@@ -168,7 +169,7 @@ def run(env: dict[str, str], now: datetime, request: Request = http,
     list_id = env.get("BREVO_LIST_ID", "").strip()
     missing = [n for n, v in (("BREVO_API_KEY", key), ("BREVO_LIST_ID", list_id)) if not v]
     if missing:
-        report["status"] = "not configured: missing " + ", ".join(missing) + "; nothing sent"
+        report["status"] = "not configured: missing " + ", ".join(missing) + " (GitHub repository secrets); nothing sent"
         return report
     if not list_id.isdigit():
         report["status"] = "BREVO_LIST_ID must be a number; nothing sent"

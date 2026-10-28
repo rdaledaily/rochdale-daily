@@ -10,7 +10,7 @@ name: Rochdale Daily newsletter
 # fixed name), only 09:00-13:00 London, and only when today's briefing exists.
 #
 # Needs BREVO_API_KEY and BREVO_LIST_ID as repository secrets, and a sender
-# verified in Brevo (repository variable NEWSLETTER_SENDER, default
+# verified in Brevo (repository variable NEWSLETTER_SENDER, default news@ -
 # newsletter@rochdaledaily.co.uk). Without them it sends nothing.
 
 on:
