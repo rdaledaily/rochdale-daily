@@ -73,6 +73,15 @@ export async function onRequestGet({ request, env }) {
   // No token, no access -- to submit, to list, or to drain.
   if (!isAdmin(request, env)) return json({ ok: false, error: "Unauthorised" }, 401);
   if (!env.EVENTS_KV) return json({ ok: false, error: "Not configured" }, 503);
+  // A guest column's approved photo (functions/api/columns.js), read by the
+  // drain workflow and saved to assets/img/cards/ beside the article.
+  const imageKey = String(new URL(request.url).searchParams.get("image") || "");
+  if (imageKey) {
+    if (!/^newsdesk:image:[a-z0-9-]{1,80}$/.test(imageKey)) return json({ ok: false, error: "Invalid image key" }, 400);
+    const stored = await env.EVENTS_KV.get(imageKey);
+    if (!stored) return json({ ok: false, error: "No such image" }, 404);
+    return json({ ok: true, image: stored });
+  }
   const pending = await readList(env.EVENTS_KV, PENDING_KEY);
   return json({ ok: true, pending, count: pending.length });
 }
@@ -104,6 +113,11 @@ export async function onRequestPost({ request, env }) {
     const pending = await readList(env.EVENTS_KV, PENDING_KEY);
     const remove = new Set(ids);
     const kept = pending.filter(item => !remove.has(item.id));
+    for (const item of pending) {
+      if (remove.has(item.id) && item.image_key && /^newsdesk:image:/.test(item.image_key)) {
+        await env.EVENTS_KV.delete(item.image_key);
+      }
+    }
     const drained = pending.length - kept.length;
     await env.EVENTS_KV.put(PENDING_KEY, JSON.stringify(kept));
     return json({ ok: true, drained, remaining: kept.length });

@@ -955,6 +955,10 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     # one-live-story-per-incident rule an ongoing story is updated in place, so
     # the chip reports a fact rather than decorating the page.
     ongoing_chip = '<span class="kicker-chip">Feature</span>' if is_reserve_feature(article) else ''
+    if article.get('kicker') and not ongoing_chip:
+        # An editor's label, e.g. "Opinion" on a guest column, so a reader
+        # never mistakes a columnist's view for the paper's reporting.
+        ongoing_chip = f'<span class="kicker-chip">{esc(str(article.get("kicker"))[:40])}</span>'
     if article.get('is_ongoing'):
         # ongoing_label is the pipeline's own wording for this incident where
         # it has one (15 of the 153 live records carry both fields).

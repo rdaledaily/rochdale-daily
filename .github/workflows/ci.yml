@@ -160,6 +160,7 @@ jobs:
           node --check assets/js/live-blog.js
           node --check assets/js/retention.js
           node --check functions/api/live-updates.js
+          node --check functions/api/columns.js
           node --check assets/js/onesignal-push.js
           node --check functions/api/news-push.js
           node --check functions/api/onesignal-web-config.js
@@ -211,6 +212,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_reader_copy.py
           PYTHONPATH=scraper python scraper/test_live_format.py
           node --test scraper/test_live_updates_api.mjs
+          node --test scraper/test_columns_api.mjs
           PYTHONPATH=scraper python scraper/test_retired_urls_and_source_links.py
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
