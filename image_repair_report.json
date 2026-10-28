@@ -1,7 +1,7 @@
 {
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
-  "skipped_sensitive_stories": 2,
+  "skipped_sensitive_stories": 1,
   "no_allowed_source": 1,
   "no_usable_source_image": 7,
   "permission_entries": 0,
@@ -16,6 +16,64 @@
   "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
+    {
+      "slug": "does-a-boggart-still-haunt-clegg-hall",
+      "result": "no-cleared-source-image",
+      "source": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
+      "after": "",
+      "why": {
+        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
+        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
+    {
+      "slug": "rochdale-town-hall-to-host-ignite-fire-festival-from-november-20-to-22",
+      "result": "no-cleared-source-image",
+      "source": "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/historic-rochdale-hall-gardens-spectacular-34827853",
+      "after": "assets/img/cards/rochdale-town-hall.jpg",
+      "why": {
+        "page": "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/historic-rochdale-hall-gardens-spectacular-34827853",
+        "final_url": "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/historic-rochdale-hall-gardens-spectacular-34827853",
+        "candidates": [
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34827878.ece/ALTERNATES/s1200d/0_AMR_MEN_281026_RF_05JPG.jpg",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34827878.ece/ALTERNATES/s1200/0_AMR_MEN_281026_RF_05JPG.jpg",
+            "via": "twitter:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34827878.ece/ALTERNATES/s1200b/0_AMR_MEN_281026_RF_05JPG.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34827878.ece/ALTERNATES/s1200c/0_AMR_MEN_281026_RF_05JPG.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34827878.ece/ALTERNATES/s1200f/0_AMR_MEN_281026_RF_05JPG.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34827872.ece/ALTERNATES/s1200e/0_AMR_MEN_281026_RF.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34827887.ece/ALTERNATES/s1200e/0_AMR_MEN_281026_RF_04JPG.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
     {
       "slug": "scrooge-live-orchestra-heywood-civic-november-2026",
       "result": "no-cleared-source-image",
@@ -134,34 +192,6 @@
             "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
             "via": "og:image",
             "verdict": "default-image-used-on-other-stories"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
-    },
-    {
-      "slug": "rochdale-council-awards-contract-for-queen-s-park-send-improvement-project",
-      "result": "no-cleared-source-image",
-      "source": "https://www.find-tender.service.gov.uk/Notice/101777-2026",
-      "after": "assets/img/cards/rochdale_town_hall_square.jpg",
-      "why": {
-        "page": "https://www.find-tender.service.gov.uk/Notice/101777-2026",
-        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
-      }
-    },
-    {
-      "slug": "middleton-prepares-for-christmas-lights-switch-on-event",
-      "result": "no-cleared-source-image",
-      "source": "https://www.rochdaletimes.co.uk/town-gets-ready-to-step-into-christmas/",
-      "after": "assets/img/cards/cea366c3cb5b-place-generated-card.jpg",
-      "why": {
-        "page": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBCUUhVeDJzaWVfS2ZTdTlleGVXclc4LUttTTBhVG9KWkVpY0xhbGhNeHZudG5kYm5zR2NESHZ5dkhRX1BBN2cyYXM3WWY3ZF9ycExzMm1oSlhRbkNWbEhhcXdFUW5HRjlUMDI0aDBhMjdUclk1ZUVNbmNBcw?oc=5",
-        "final_url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBCUUhVeDJzaWVfS2ZTdTlleGVXclc4LUttTTBhVG9KWkVpY0xhbGhNeHZudG5kYm5zR2NESHZ5dkhRX1BBN2cyYXM3WWY3ZF9ycExzMm1oSlhRbkNWbEhhcXdFUW5HRjlUMDI0aDBhMjdUclk1ZUVNbmNBcw?oc=5&hl=en-US&gl=US&ceid=US:en",
-        "candidates": [
-          {
-            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
-            "via": "og:image",
-            "verdict": "page-not-from-granting-organisation"
           }
         ],
         "verdict": "no-candidate-passed"
