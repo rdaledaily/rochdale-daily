@@ -62,7 +62,9 @@ class Sending(unittest.TestCase):
         self.assertEqual(campaign["name"], "Rochdale Daily briefing 2026-10-20")
         self.assertEqual(campaign["subject"], "Morning Briefing: Tuesday 20 October 2026")
         self.assertEqual(campaign["recipients"], {"listIds": [7]})
-        self.assertIn('href="https://rochdaledaily.co.uk/articles/a-story.html"', campaign["htmlContent"])
+        # Clean address plus utm tags, so Analytics counts what the email brings back.
+        self.assertIn('href="https://rochdaledaily.co.uk/articles/a-story?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=morning-briefing"', campaign["htmlContent"])
+        self.assertIn('width="600"', campaign["htmlContent"])
         self.assertIn("{{ unsubscribe }}", campaign["htmlContent"])
         self.assertNotIn("published every day at 9am", campaign["htmlContent"])
         self.assertEqual(web.sent, [mail.BREVO + "/emailCampaigns/42/sendNow"])
