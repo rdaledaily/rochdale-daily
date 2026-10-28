@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-28T20:00:24.623229Z",
+  "updated_at": "2026-10-28T21:05:00.508270Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 174,
@@ -277,9 +277,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-28T19:58:21.269412Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "last_attempt_at": "2026-10-28T21:05:00.507728Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Fleetwood FA Cup Ticket Details - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
@@ -320,13 +320,13 @@
     },
     "https://rochdaleafc.co.uk/northampton-tickets-on-sale": {
       "first_attempt_at": "2026-10-28T19:58:11.670538Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaleafc.co.uk/northampton-tickets-on-sale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-28T19:58:11.670538Z",
+      "last_attempt_at": "2026-10-28T21:03:10.906842Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "Northampton Town Tickets On Sale - Rochdale AFC",
@@ -1599,9 +1599,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-28T20:00:24.623094Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "last_attempt_at": "2026-10-28T21:05:00.507823Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Sustainable Materials & Manufacturing Centre reaches construction milestone at Atom Valley - netMAGmedia Ltd",
       "source_name": "Netmagmedia",
       "category": "business",
@@ -2110,11 +2110,12 @@
       "attempts": 1,
       "urls": [
         "https://www.rochdale.gov.uk/news/article/692/lest-we-forget-borough-comes-together-to-reflect-and-remember",
-        "https://www.rochvalleyradio.com/news-features/139/news/1242/lest-we-forget-rochdale-remembers"
+        "https://www.rochvalleyradio.com/news-features/139/news/1242/lest-we-forget-rochdale-remembers",
+        "https://www.rochvalleyradio.com/news-features/142/community/1242/lest-we-forget-rochdale-remembers"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-27T15:28:03.090841Z",
+      "last_attempt_at": "2026-10-28T21:05:00.508072Z",
       "outcome": "published",
       "reason": "",
       "title": "Lest We Forget: borough comes together to reflect and remember – Rochdale Borough Council",
@@ -2487,6 +2488,22 @@
       "category": "sport",
       "text_fingerprint": "68eeb5d2ed949811"
     },
+    "https://www.rochdaletimes.co.uk/rochdale-diversity-awards-shine-a-spotlight-on-those-making-a-difference": {
+      "first_attempt_at": "2026-10-28T21:05:00.508192Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/rochdale-diversity-awards-shine-a-spotlight-on-those-making-a-difference"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-28T21:05:00.508192Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale Diversity Awards Shine a Spotlight on Those Making a Difference - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "news",
+      "text_fingerprint": "dbc95ca0620c50d5"
+    },
     "https://www.rochdaletimes.co.uk/rochdale-men-among-10-charged-with-drugs-conspiracy": {
       "first_attempt_at": "2026-10-27T19:21:06.750506Z",
       "attempts": 1,
@@ -2628,22 +2645,6 @@
       "recovery_attempts": 0,
       "final_gate_removal_recovery": 1,
       "evidence_recovery_policy": 1
-    },
-    "https://www.rochvalleyradio.com/news-features/139/news/1150/greater-manchester-schools-receive-750-600-fruit-and-veg-portions-through-tesco-scheme": {
-      "first_attempt_at": "2026-10-20T19:53:59.550626Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/139/news/1150/greater-manchester-schools-receive-750-600-fruit-and-veg-portions-through-tesco-scheme"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-20T19:53:59.550626Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Greater Manchester schools receive 750,600 fruit and veg portions through Tesco scheme",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "news",
-      "text_fingerprint": "64dc46810bceb2e6"
     },
     "https://www.rochvalleyradio.com/news-features/139/news/1229/chris-cheap-appointed-to-lead-northern-gateway-regeneration-across-bury-and-rochdale": {
       "first_attempt_at": "2026-10-23T10:42:34.246257Z",
