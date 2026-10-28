@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-28T04:42:21.483582Z",
+  "last_run_at": "2026-10-28T04:58:54.518684Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,22 +42,27 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 122,
+  "raw_candidates_before_job_filter": 118,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 122,
+  "raw_candidates": 118,
   "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 59,
-    "resolved": 55,
-    "text_recovered": 41,
+    "wrappers": 58,
+    "resolved": 53,
+    "text_recovered": 39,
     "reattributed": 0,
-    "images_found": 44
+    "images_found": 41
   },
-  "duplicates_merged": 81,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 77,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "man-dies-in-three-vehicle-crash-on-rochdale-road-in-edenfield",
+      "source_url": "https://www.bbc.co.uk/news/articles/cwvg01jmjpm5o"
+    }
+  ],
+  "new_articles": 1,
   "live_articles": 437,
   "skipped": 0,
   "rewrite_skip_reasons": {},
@@ -72,14 +77,14 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 179,
+    "entries": 178,
     "by_outcome": {
       "failed": 10,
-      "published": 134,
+      "published": 133,
       "rejected": 35
     },
-    "held_back_this_run": 31,
-    "held_already_published": 24,
+    "held_back_this_run": 30,
+    "held_already_published": 23,
     "held_rejected": 7,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -149,10 +154,12 @@
       "last_attempt_at": "2026-10-26T13:08:21.816855Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 180.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 107,
+    "rss_and_google_news": 103,
     "website_discovery": 10,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -168,28 +175,30 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 47,
-    "Roch Valley Radio": 24,
+    "Rochdale Times": 42,
+    "Roch Valley Radio": 23,
     "Rochdale Borough Council": 8,
-    "Oldham Evening Chronicle": 7,
-    "The Bury Times": 6,
+    "Oldham Evening Chronicle": 8,
+    "The Bury Times": 5,
+    "InYourArea": 4,
     "Facebook": 4,
     "Bee Network live travel alerts": 4,
-    "InYourArea": 3,
     "Rochdale AFC": 3,
     "Manchester Evening News": 3,
+    "Oldham Times": 2,
     "Messenger Newspapers": 2,
     "Roch Valley Radio Local News": 2,
     "Rochdale Boroughwide Housing": 2,
     "Rochdale Borough Council RSS": 1,
-    "beIN SPORTS": 1,
     "Yahoo Sports": 1,
     "Yahoo News UK": 1,
-    "Oldham Times": 1,
+    "The Bolton News": 1,
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "traffic": 1
+  },
   "published_by_category": {
     "business": 44,
     "community": 56,
@@ -226,8 +235,12 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "transport-v3-a2cf97029dc7c4175ad6"
+  ],
+  "selected_candidate_urls": [
+    "https://www.bbc.co.uk/news/articles/cwvg01jmjpm5o"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -237,16 +250,31 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [],
-    "selected_categories": [],
+    "available_categories": [
+      "traffic"
+    ],
+    "selected_categories": [
+      "traffic"
+    ],
     "available_wards": [],
     "selected_wards": [],
     "available_areas": [],
-    "selected_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
-    "selected_by_source": {}
+    "selected_by_category": {
+      "traffic": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 1
+    },
+    "selected_by_source": {
+      "bbc": 1
+    }
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -794,7 +822,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -802,11 +830,16 @@
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNa01Ybjg2TnBibVcyclBNYTI2a2RfU3BDY0pCa1ZpeFViTVNKUndyaWFsS1ROekhxSXlQeXRoVGNxTjBIVHBxdHN6UGRTRWR6M1ZWenFCSW0xZEJTaVV2R0hLOUE5NGxsTmVKUEdfTmJnT096ajdMSXNlSHBXc2cxeDEtVWxpbzZSenRQN3k0Z2Nmb0pBODZ1VU9WSVRRbTVrV0FhZUs0VDBvRGc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "unitedutilities.com"
+  ],
+  "slow_domain_failure_counts": {
+    "unitedutilities.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -842,7 +875,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-28T04:43:29.150791Z",
+  "frontpage_generated_at": "2026-10-28T05:00:15.114522Z",
   "frontpage_article_count": 12,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -912,7 +945,7 @@
     "selected_by_area": {
       "heywood": 4,
       "hopwood": 1,
-      "littleborough": 2,
+      "littleborough": 1,
       "middleton": 1,
       "milnrow": 1,
       "norden": 1,
@@ -930,8 +963,8 @@
       "rochdale boroughwide housing": 1,
       "historic england (national heritage list for england)": 1
     },
-    "pool_size": 25,
-    "primary_pool_size": 25,
+    "pool_size": 24,
+    "primary_pool_size": 24,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 12,
@@ -960,8 +993,10 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "man-dies-in-three-vehicle-crash-on-rochdale-road-in-edenfield"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
