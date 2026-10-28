@@ -17,16 +17,6 @@
   "allowed_domains": [],
   "items": [
     {
-      "slug": "does-a-boggart-still-haunt-clegg-hall",
-      "result": "no-cleared-source-image",
-      "source": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
-      "after": "",
-      "why": {
-        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
-        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
-      }
-    },
-    {
       "slug": "rochdale-town-hall-to-host-ignite-fire-festival-from-november-20-to-22",
       "result": "no-cleared-source-image",
       "source": "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/historic-rochdale-hall-gardens-spectacular-34827853",
@@ -99,6 +89,24 @@
             "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
             "via": "og:image",
             "verdict": "default-image-used-on-other-stories"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
+    {
+      "slug": "new-industrial-units-planned-at-caldershaw-business-centre-in-rochdale",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdaletimes.co.uk/new-industrial-units-could-inspire-towns-entrepreneurs/",
+      "after": "",
+      "why": {
+        "page": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQRTBQMGw2NUY0R2RsRGl0Y1lfSmNzNGZmeWltNFRBMTdoMnZJM25nWUk0blozZ3cwTWxxRkEtSjBaTVNadk5zdlgydWgxOVdIVEhPdkR5VHJzQ0JEalJwdVdpWk5UMTVSVVpfQzEtY3JYWDRHOUpUc1g2SFE3aXNDSGttN1RRa19fYjlaTWFwNVg?oc=5",
+        "final_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQRTBQMGw2NUY0R2RsRGl0Y1lfSmNzNGZmeWltNFRBMTdoMnZJM25nWUk0blozZ3cwTWxxRkEtSjBaTVNadk5zdlgydWgxOVdIVEhPdkR5VHJzQ0JEalJwdVdpWk5UMTVSVVpfQzEtY3JYWDRHOUpUc1g2SFE3aXNDSGttN1RRa19fYjlaTWFwNVg?oc=5&hl=en-US&gl=US&ceid=US:en",
+        "candidates": [
+          {
+            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
           }
         ],
         "verdict": "no-candidate-passed"
