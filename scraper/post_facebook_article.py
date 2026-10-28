@@ -15,7 +15,7 @@ So each post is now a PHOTO post (the story's own image: the source
 organisation's original where Rochdale Daily holds its permission, cached
 under assets/img/cards/ by licensed_source_images.py) carrying the social
 headline and the key facts, with the article link placed as the Page's first
-comment. Posts go out in four fixed local-time slots, at most five a day, and
+comment. Posts go out in six fixed local-time slots, at most seven a day, and
 the strongest story wins each slot.
 
 It does not automate likes, follows, messages or comments on anyone else's
@@ -31,8 +31,8 @@ Optional:
   FACEBOOK_RESULT_PATH (default: facebook/facebook_last_result.json)
   FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 36; 0 disables age filtering)
   FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 60)
-  FACEBOOK_SLOT_HOURS (default: "7,12,17,20", Europe/London)
-  FACEBOOK_MAX_POSTS_PER_DAY (default: 5)
+  FACEBOOK_SLOT_HOURS (default: "7,12,15,17,20,22", Europe/London)
+  FACEBOOK_MAX_POSTS_PER_DAY (default: 7)
   FACEBOOK_DRY_RUN (1/true/yes to avoid the Graph API calls)
 """
 from __future__ import annotations
@@ -92,14 +92,14 @@ def int_env(name: str, default: int, minimum: int = 0) -> int:
 
 def slot_hours() -> tuple[int, ...]:
     hours: list[int] = []
-    for part in env("FACEBOOK_SLOT_HOURS", "7,12,17,20").split(","):
+    for part in env("FACEBOOK_SLOT_HOURS", "7,12,15,17,20,22").split(","):
         try:
             value = int(part.strip())
         except ValueError:
             continue
         if 0 <= value <= 23:
             hours.append(value)
-    return tuple(sorted(set(hours))) or (7, 12, 17, 20)
+    return tuple(sorted(set(hours))) or (7, 12, 15, 17, 20, 22)
 
 
 def parse_dt(value: Any) -> datetime:
@@ -283,7 +283,7 @@ def schedule_reason(state: dict[str, Any], posted: dict[str, Any], now: datetime
                     urgent_waiting: bool) -> str:
     """Why this run must not post, or '' when it may."""
     min_interval = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 60)
-    max_day = int_env("FACEBOOK_MAX_POSTS_PER_DAY", 5)
+    max_day = int_env("FACEBOOK_MAX_POSTS_PER_DAY", 7)
     times = recent_post_times(posted)
     if min_interval > 0 and times:
         next_allowed = max(times) + timedelta(minutes=min_interval)
