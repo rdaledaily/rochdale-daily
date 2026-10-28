@@ -1,6 +1,7 @@
 """Apply LIVE labels and render timestamped updates for fresh crime stories."""
 from __future__ import annotations
 from feature_policy import is_reserve_feature, normalise_feature
+import live_format
 
 import html
 import json
@@ -45,41 +46,21 @@ def main() -> int:
         if not isinstance(article, dict) or str(article.get("category") or "").lower() != "crime":
             continue
 
-        latest = parse_time(article.get("last_updated_at") or article.get("published_at"))
+        # LIVE means live coverage: at least two real updates, the newest under
+        # six hours old (live_format.live_state). Until 28 Oct 2026 every crime
+        # story under 72 hours old was badged BREAKING NEWS - LIVE, with its own
+        # standfirst seeded as a fake first "update". The page now renders its
+        # timeline itself, so nothing is baked into the body here.
         text = " ".join(str(article.get(k) or "") for k in ("title", "excerpt", "summary"))
-        live = bool(latest and latest >= now - timedelta(hours=72) and not FINISHED_RE.search(text))
+        state = live_format.live_state(article, now)
+        live = bool(state["is_live"] and not FINISHED_RE.search(text))
         article["live_story"] = live
         article["live_label"] = "LIVE" if live else ""
         article["breaking_news"] = live
         article["breaking_label"] = "BREAKING NEWS" if live else ""
         article["is_ongoing"] = live
         article["ongoing_label"] = "LIVE" if live else ""
-
-        updates = article.get("live_updates") if isinstance(article.get("live_updates"), list) else []
-        if live and not updates:
-            seed = re.sub(r"<[^>]+>", " ", str(article.get("excerpt") or article.get("summary") or article.get("title") or ""))
-            seed = re.sub(r"\s+", " ", seed).strip()
-            if seed:
-                updates = [{"timestamp": str(article.get("last_updated_at") or article.get("published_at") or ""), "text": seed}]
-                article["live_updates"] = updates
-                article["update_count"] = 1
-
-        body = TIMELINE_RE.sub("", str(article.get("content_html") or "")).strip()
-        if live and len(updates) >= 1:
-            rows = []
-            for row in updates[:30]:
-                if not isinstance(row, dict) or not row.get("text"):
-                    continue
-                rows.append(
-                    '<div class="live-update">'
-                    f'<h3>{html.escape(visible_time(row.get("timestamp")))}</h3>'
-                    f'<p>{html.escape(str(row.get("text")))}</p>'
-                    '</div>'
-                )
-            timeline = '<section class="live-update-timeline"><h2>BREAKING NEWS — LIVE</h2><p><strong>Live updates, newest first.</strong></p>' + "".join(rows) + '</section>'
-            article["content_html"] = timeline + body
-        else:
-            article["content_html"] = body
+        article["content_html"] = live_format.strip_baked_timeline(str(article.get("content_html") or ""))
         changed += 1
 
     ARTICLES.write_text(json.dumps(items, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

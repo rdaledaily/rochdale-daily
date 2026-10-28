@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Live desk | Rochdale Daily</title>
+  <link rel="stylesheet" href="/assets/css/rd-tokens.css">
+  <style>
+    body { margin: 0; background: var(--paper, #f6f5f1); color: var(--ink, #2b2824); font: 16px/1.5 var(--font-body, system-ui, sans-serif); }
+    main { max-width: 640px; margin: 0 auto; padding: 16px; }
+    h1 { font: 700 26px/1.2 var(--font-display, Georgia, serif); margin: 8px 0 4px; }
+    h2 { font: 700 17px/1.3 var(--font-ui, system-ui); margin: 22px 0 8px; }
+    p.note { color: var(--muted, #6b675f); font-size: 14px; margin: 0 0 14px; }
+    label { display: block; font: 600 14px var(--font-ui, system-ui); margin: 12px 0 4px; }
+    input, textarea { width: 100%; box-sizing: border-box; font: 16px var(--font-body, system-ui); padding: 11px; border: 1px solid #b9b5ab; background: #fff; border-radius: 0; }
+    textarea { min-height: 120px; resize: vertical; }
+    button { min-height: 48px; padding: 0 16px; font: 700 15px var(--font-ui, system-ui); border: 1px solid var(--ink, #2b2824); background: var(--ink, #2b2824); color: #fff; cursor: pointer; margin: 12px 8px 0 0; }
+    button.secondary { background: transparent; color: var(--ink, #2b2824); }
+    button.danger { background: var(--breaking, #8c3a25); border-color: var(--breaking, #8c3a25); }
+    .row { display: flex; flex-wrap: wrap; gap: 0 8px; }
+    #status { min-height: 24px; margin: 14px 0; font-weight: 600; }
+    #status.error { color: var(--breaking, #8c3a25); }
+    .story { border: 1px solid var(--line, #dcdad4); background: #fff; padding: 12px; margin-top: 10px; }
+    .story strong { display: block; font-size: 17px; }
+    .updates { list-style: none; padding: 0; margin: 8px 0 0; }
+    .updates li { border-top: 1px solid var(--line, #dcdad4); padding: 10px 0; }
+    .updates time { font: 700 13px var(--font-ui, system-ui); color: var(--breaking, #8c3a25); margin-right: 6px; }
+    .updates button { min-height: 36px; margin: 6px 0 0; font-size: 13px; }
+    details { margin-top: 18px; }
+    a { color: var(--accent, #0f6e80); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Live desk</h1>
+  <p class="note">Post timestamped updates to one story. They appear on the story page, newest first, within a minute. Only a story that is already published can go live.</p>
+
+  <details id="token-box">
+    <summary>Desk key</summary>
+    <label for="token">Admin token (saved on this device only)</label>
+    <input id="token" type="password" autocomplete="off">
+    <button type="button" id="save-token" class="secondary">Save key</button>
+  </details>
+
+  <label for="story">Story (paste its link or slug)</label>
+  <input id="story" list="story-options" placeholder="https://rochdaledaily.co.uk/articles/..." autocomplete="off">
+  <datalist id="story-options"></datalist>
+  <button type="button" id="load" class="secondary">Open story</button>
+
+  <div id="story-box" hidden>
+    <div class="story">
+      <strong id="story-title"></strong>
+      <span id="story-state"></span> · <a id="story-link" target="_blank" rel="noopener">View page</a>
+    </div>
+
+    <h2>New update</h2>
+    <label for="u-title">Bold line (optional)</label>
+    <input id="u-title" maxlength="140" placeholder="Road reopens">
+    <label for="u-text">Update</label>
+    <textarea id="u-text" maxlength="1500" placeholder="What has happened, who said it, and when."></textarea>
+    <label for="u-source">Source link (optional)</label>
+    <input id="u-source" type="url" placeholder="https://www.gmp.police.uk/...">
+    <label for="u-image">Photo address (optional, https or /assets/...)</label>
+    <input id="u-image" placeholder="/assets/img/cards/...">
+    <label for="u-credit">Photo credit (required with a photo)</label>
+    <input id="u-credit" maxlength="120">
+    <button type="button" id="post">Post update</button>
+
+    <h2>What we know so far</h2>
+    <p class="note">Up to six short points, one per line. Shown above the timeline.</p>
+    <textarea id="points" maxlength="1400"></textarea>
+    <button type="button" id="save-points" class="secondary">Save points</button>
+
+    <h2>Updates</h2>
+    <ul class="updates" id="updates"></ul>
+
+    <div class="row">
+      <button type="button" id="end" class="danger">End live coverage</button>
+      <button type="button" id="reopen" class="secondary">Reopen</button>
+    </div>
+  </div>
+
+  <p id="status" role="status" aria-live="polite"></p>
+</main>
+<script>
+(function () {
+  "use strict";
+  var API = "/api/live-updates";
+  var $ = function (id) { return document.getElementById(id); };
+  var current = "";
+
+  function status(text, isError) { var s = $("status"); s.textContent = text; s.className = isError ? "error" : ""; }
+  function token() { try { return localStorage.getItem("rd_live_token") || ""; } catch (e) { return ""; } }
+  $("token").value = token();
+  if (!token()) $("token-box").open = true;
+  $("save-token").addEventListener("click", function () {
+    try { localStorage.setItem("rd_live_token", $("token").value.trim()); status("Key saved on this device."); } catch (e) { status("Could not save the key.", true); }
+  });
+
+  function slugFrom(value) {
+    var m = String(value || "").trim().match(/([a-z0-9][a-z0-9-]{3,180})(?:\.html)?\/?(?:[?#].*)?$/);
+    return m ? m[1] : "";
+  }
+  function fmt(iso) {
+    return new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", day: "numeric", month: "short", timeZone: "Europe/London", timeZoneName: "short" }).format(new Date(iso));
+  }
+
+  // Suggestions: today's front page and anything already live.
+  Promise.all([
+    fetch("/articles/frontpage.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch(API + "?index=1").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
+  ]).then(function (res) {
+    var list = $("story-options"), seen = {};
+    ((res[1] && res[1].live) || []).concat((res[0] && res[0].articles) || []).forEach(function (s) {
+      if (!s.slug || seen[s.slug]) return;
+      seen[s.slug] = true;
+      var o = document.createElement("option");
+      o.value = s.slug; o.label = s.title || s.slug;
+      list.appendChild(o);
+    });
+  });
+
+  function render(data) {
+    $("story-box").hidden = false;
+    $("story-title").textContent = data.title || current;
+    var live = !data.ended_at && data.updated_at && (Date.now() - Date.parse(data.updated_at) < 6 * 3600 * 1000) && (data.updates || []).length;
+    $("story-state").textContent = data.ended_at ? "Ended " + fmt(data.ended_at) : (live ? "LIVE" : "Not live yet");
+    $("story-link").href = "/articles/" + current + "#live";
+    $("points").value = (data.key_points || []).join("\n");
+    var ul = $("updates"); ul.textContent = "";
+    (data.updates || []).forEach(function (u) {
+      var li = document.createElement("li");
+      var t = document.createElement("time"); t.textContent = fmt(u.timestamp); li.appendChild(t);
+      if (u.title) { var b = document.createElement("strong"); b.textContent = u.title + " "; li.appendChild(b); }
+      li.appendChild(document.createTextNode(u.text));
+      var del = document.createElement("button"); del.type = "button"; del.className = "secondary"; del.textContent = "Remove";
+      del.addEventListener("click", function () {
+        if (confirm("Remove this update from the live page?")) send({ action: "delete", id: u.id }, "Update removed.");
+      });
+      li.appendChild(document.createElement("br")); li.appendChild(del);
+      ul.appendChild(li);
+    });
+  }
+
+  function load() {
+    current = slugFrom($("story").value);
+    if (!current) { status("Paste the story's link or slug.", true); return; }
+    status("Opening…");
+    fetch(API + "?slug=" + encodeURIComponent(current) + "&t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) { if (!data.ok) throw new Error(data.error || "Could not open."); render(data); status(""); })
+      .catch(function (e) { status(e.message, true); });
+  }
+  $("load").addEventListener("click", load);
+
+  function send(payload, done) {
+    if (!token()) { status("Add the desk key first.", true); $("token-box").open = true; return Promise.resolve(); }
+    payload.slug = current;
+    status("Sending…");
+    return fetch(API, { method: "POST", headers: { "Content-Type": "application/json", "x-admin-token": token() }, body: JSON.stringify(payload) })
+      .then(function (r) { return r.json(); })
+      .then(function (data) { if (!data.ok) throw new Error(data.error || "Not saved."); render(data.record); status(done); return data; })
+      .catch(function (e) { status(e.message, true); });
+  }
+
+  $("post").addEventListener("click", function () {
+    var text = $("u-text").value.trim();
+    if (text.length < 5) { status("Write the update first.", true); return; }
+    if ($("u-image").value.trim() && !$("u-credit").value.trim()) { status("A photo needs a credit.", true); return; }
+    send({ action: "add", text: text, title: $("u-title").value, source_url: $("u-source").value, image_url: $("u-image").value, image_credit: $("u-credit").value },
+      "Posted. It will show on the page within a minute.").then(function (data) {
+        if (data && data.ok) ["u-title", "u-text", "u-source", "u-image", "u-credit"].forEach(function (id) { $(id).value = ""; });
+      });
+  });
+  $("save-points").addEventListener("click", function () { send({ action: "points", points: $("points").value.split("\n") }, "Points saved."); });
+  $("end").addEventListener("click", function () { if (confirm("End live coverage? The page will show it as 'As it happened'.")) send({ action: "end" }, "Live coverage ended."); });
+  $("reopen").addEventListener("click", function () { send({ action: "reopen" }, "Reopened."); });
+})();
+</script>
+</body>
+</html>
