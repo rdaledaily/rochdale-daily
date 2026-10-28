@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-28T04:58:54.518684Z",
+  "last_run_at": "2026-10-28T06:27:48.238246Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,28 +42,32 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 118,
+  "raw_candidates_before_job_filter": 117,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 118,
-  "candidate_clusters": 41,
+  "raw_candidates": 117,
+  "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 58,
-    "resolved": 53,
-    "text_recovered": 39,
+    "wrappers": 55,
+    "resolved": 51,
+    "text_recovered": 35,
     "reattributed": 0,
-    "images_found": 41
+    "images_found": 38
   },
-  "duplicates_merged": 77,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
+  "duplicates_merged": 78,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
     {
-      "slug": "man-dies-in-three-vehicle-crash-on-rochdale-road-in-edenfield",
-      "source_url": "https://www.bbc.co.uk/news/articles/cwvg01jmjpm5o"
+      "slug": "heywood-lollipop-man-forced-to-leap-out-of-way-as-drivers-ignore-crossing",
+      "source_url": "https://www.bbc.co.uk/news/articles/cmd7q0jjydl9o"
+    },
+    {
+      "slug": "police-arrest-17-in-operation-against-crime-gang-in-rochdale-and-heywood",
+      "source_url": "https://www.rochdaletimes.co.uk/police-target-crime-gangs-spider-web-of-criminality/"
     }
   ],
-  "new_articles": 1,
-  "live_articles": 437,
+  "new_articles": 2,
+  "live_articles": 439,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -77,15 +81,15 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 178,
+    "entries": 180,
     "by_outcome": {
       "failed": 10,
-      "published": 133,
+      "published": 135,
       "rejected": 35
     },
-    "held_back_this_run": 30,
-    "held_already_published": 23,
-    "held_rejected": 7,
+    "held_back_this_run": 27,
+    "held_already_published": 21,
+    "held_rejected": 6,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -118,15 +122,6 @@
       "last_attempt_at": "2026-10-28T00:21:46.988189Z"
     },
     {
-      "url": "https://www.rochdaletimes.co.uk/nine-people-charged-after-day-of-police-action",
-      "title": "Nine people charged after day of police action - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-10-27T20:58:23.204600Z"
-    },
-    {
       "url": "https://www.find-tender.service.gov.uk/Notice/101717-2026",
       "title": "ALTUS EDUCATION PARTNERSHIP invites bids: Altus Education Partnership - Waste Management Services",
       "source_name": "Find a Tender",
@@ -155,12 +150,12 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 180.": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 103,
-    "website_discovery": 10,
+    "rss_and_google_news": 101,
+    "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -175,39 +170,41 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 42,
-    "Roch Valley Radio": 23,
-    "Rochdale Borough Council": 8,
+    "Rochdale Times": 40,
+    "Roch Valley Radio": 25,
+    "Rochdale Borough Council": 9,
     "Oldham Evening Chronicle": 8,
     "The Bury Times": 5,
-    "InYourArea": 4,
     "Facebook": 4,
+    "Rochdale AFC": 4,
     "Bee Network live travel alerts": 4,
-    "Rochdale AFC": 3,
-    "Manchester Evening News": 3,
-    "Oldham Times": 2,
+    "InYourArea": 3,
     "Messenger Newspapers": 2,
     "Roch Valley Radio Local News": 2,
     "Rochdale Boroughwide Housing": 2,
     "Rochdale Borough Council RSS": 1,
+    "Oldham Times": 1,
+    "Lancashire Telegraph": 1,
+    "beIN SPORTS": 1,
     "Yahoo Sports": 1,
     "Yahoo News UK": 1,
-    "The Bolton News": 1,
     "Rochdale Borough Council News": 1,
+    "BBC Manchester": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "traffic": 1
+    "crime": 1,
+    "news": 1
   },
   "published_by_category": {
     "business": 44,
     "community": 56,
-    "crime": 17,
+    "crime": 18,
     "education": 20,
     "environment": 32,
     "events": 25,
     "health": 10,
-    "news": 50,
+    "news": 51,
     "politics": 16,
     "sport": 45,
     "traffic": 32,
@@ -236,10 +233,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "transport-v3-a2cf97029dc7c4175ad6"
+    "hard-news-v3-6d62e6623e336fc5c4e7",
+    "hard-news-v3-a9a994c791ae94ed99d0"
   ],
   "selected_candidate_urls": [
-    "https://www.bbc.co.uk/news/articles/cwvg01jmjpm5o"
+    "https://www.rochdaletimes.co.uk/police-target-crime-gangs-spider-web-of-criminality/",
+    "https://www.bbc.co.uk/news/articles/cmd7q0jjydl9o"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -251,29 +250,37 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "traffic"
+      "crime",
+      "news"
     ],
     "selected_categories": [
-      "traffic"
+      "crime",
+      "news"
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [],
+    "available_areas": [
+      "heywood"
+    ],
     "selected_areas": [
+      "heywood",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "traffic": 1
+      "crime": 1,
+      "news": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
+      "heywood": 1,
       "rochdale": 1
     },
     "selected_by_source": {
-      "bbc": 1
+      "bbc manchester": 1,
+      "rochdale times": 1
     }
   },
   "official_ward_count": 20,
@@ -822,7 +829,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 8,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -830,15 +837,14 @@
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNa01Ybjg2TnBibVcyclBNYTI2a2RfU3BDY0pCa1ZpeFViTVNKUndyaWFsS1ROekhxSXlQeXRoVGNxTjBIVHBxdHN6UGRTRWR6M1ZWenFCSW0xZEJTaVV2R0hLOUE5NGxsTmVKUEdfTmJnT096ajdMSXNlSHBXc2cxeDEtVWxpbzZSenRQN3k0Z2Nmb0pBODZ1VU9WSVRRbTVrV0FhZUs0VDBvRGc?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "unitedutilities.com"
+    "rochdaleafc.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "unitedutilities.com": 1
+    "rochdaleafc.co.uk": 3
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -875,9 +881,9 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-28T05:49:51.882422Z",
-  "frontpage_article_count": 11,
-  "frontpage_minimum_met": false,
+  "frontpage_generated_at": "2026-10-28T06:29:12.059565Z",
+  "frontpage_article_count": 12,
+  "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
       "business",
@@ -914,8 +920,7 @@
       "hopwood",
       "littleborough",
       "middleton",
-      "milnrow",
-      "norden"
+      "milnrow"
     ],
     "selected_areas": [
       "heywood",
@@ -923,65 +928,63 @@
       "littleborough",
       "middleton",
       "milnrow",
-      "norden",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "news": 2,
+      "crime": 2,
       "traffic": 2,
-      "crime": 1,
-      "politics": 2,
+      "politics": 1,
       "business": 1,
       "community": 3,
-      "news": 1,
       "sport": 1
     },
     "selected_by_ward": {
-      "borough-wide": 10,
-      "Hopwood Hall": 1
+      "borough-wide": 12
     },
     "selected_by_area": {
-      "heywood": 4,
+      "heywood": 5,
       "hopwood": 1,
       "littleborough": 1,
       "middleton": 1,
       "milnrow": 1,
-      "norden": 1,
-      "rochdale": 15
+      "rochdale": 16
     },
     "selected_by_source": {
-      "rochdale borough council": 2,
-      "greater manchester police": 1,
-      "rochdale borough council news": 1,
+      "bbc manchester": 1,
       "rochdale times": 2,
+      "rochdale borough council": 2,
+      "rochdale borough council news": 1,
       "find a tender": 1,
       "rochdale daily": 1,
+      "greater manchester police": 1,
       "rochdale afc": 1,
       "rochdale boroughwide housing": 1,
       "historic england (national heritage list for england)": 1
     },
-    "pool_size": 24,
-    "primary_pool_size": 24,
+    "pool_size": 25,
+    "primary_pool_size": 25,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 11,
+    "frontpage_count": 12,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 8,
-    "fresh_under_homepage_window": 11,
+    "fresh_under_24h": 10,
+    "fresh_under_homepage_window": 12,
     "short_briefs_selected": 7,
-    "frontpage_minimum_met": false
+    "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 437,
+  "event_dates_corrected_from_ledger": 3,
+  "duplicate_articles_after_postprocessing": 439,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -992,9 +995,10 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 1,
+  "published_after_editorial_gate": 2,
   "published_new_slugs": [
-    "man-dies-in-three-vehicle-crash-on-rochdale-road-in-edenfield"
+    "heywood-lollipop-man-forced-to-leap-out-of-way-as-drivers-ignore-crossing",
+    "police-arrest-17-in-operation-against-crime-gang-in-rochdale-and-heywood"
   ],
   "drafts_not_published": 0,
   "publication_health": "ready",
