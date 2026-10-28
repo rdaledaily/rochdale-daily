@@ -15,6 +15,11 @@
 /articles.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
+# Public API description, listed in /.well-known/api-catalog.
+/openapi.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
 /scraper_status.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 

@@ -1,0 +1,453 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Rochdale Daily public API",
+    "version": "1.0.0",
+    "description": "Read-only feeds for Rochdale Daily, independent local news for the Rochdale borough. Story text and photos remain the copyright of Rochdale Daily or the credited source; link back to the story when you quote it.",
+    "contact": {
+      "email": "news@rochdaledaily.co.uk",
+      "url": "https://rochdaledaily.co.uk/developers"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://rochdaledaily.co.uk"
+    }
+  ],
+  "externalDocs": {
+    "url": "https://rochdaledaily.co.uk/developers"
+  },
+  "paths": {
+    "/articles.json": {
+      "get": {
+        "operationId": "listStories",
+        "summary": "Published stories, newest first",
+        "tags": [
+          "News"
+        ],
+        "responses": {
+          "200": {
+            "description": "All currently published stories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Story"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weather.json": {
+      "get": {
+        "operationId": "getWeather",
+        "summary": "Met Office forecast for Rochdale",
+        "tags": [
+          "Weather"
+        ],
+        "responses": {
+          "200": {
+            "description": "Daily forecast.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Weather"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events": {
+      "get": {
+        "operationId": "listEvents",
+        "summary": "Approved community events that have not yet finished",
+        "tags": [
+          "Events"
+        ],
+        "responses": {
+          "200": {
+            "description": "Events sorted by start time.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Event"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/live-updates": {
+      "get": {
+        "operationId": "getLiveUpdates",
+        "summary": "Live coverage: the list of live stories, or the updates for one story",
+        "tags": [
+          "News"
+        ],
+        "parameters": [
+          {
+            "name": "index",
+            "in": "query",
+            "required": false,
+            "description": "Set to 1 to list stories with live coverage running now.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1"
+              ]
+            }
+          },
+          {
+            "name": "slug",
+            "in": "query",
+            "required": false,
+            "description": "Story slug, to fetch its live updates.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$",
+              "maxLength": 190
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Live index or one story's updates.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LiveIndex"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LiveStory"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid slug."
+          },
+          "503": {
+            "description": "Live storage unavailable."
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "getHealth",
+        "summary": "Service status",
+        "tags": [
+          "Status"
+        ],
+        "responses": {
+          "200": {
+            "description": "Feed readable; status is ok or degraded (feed older than six hours).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Feed cannot be read.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Story": {
+        "type": "object",
+        "description": "One published story. Further fields may appear; ignore any you do not use.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "area": {
+            "type": "string"
+          },
+          "ward": {
+            "type": "string"
+          },
+          "byline": {
+            "type": "string"
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "image_alt": {
+            "type": "string"
+          },
+          "image_credit": {
+            "type": "string"
+          },
+          "source_name": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": "string"
+          },
+          "content_html": {
+            "type": "string",
+            "description": "Story body as HTML."
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "title"
+        ]
+      },
+      "Weather": {
+        "type": "object",
+        "properties": {
+          "generated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "source": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "weekday": {
+                  "type": "string"
+                },
+                "temperature_c": {
+                  "type": "number"
+                },
+                "condition": {
+                  "type": "string"
+                },
+                "icon": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "event_start_at": {
+            "type": "string"
+          },
+          "event_end_at": {
+            "type": "string"
+          },
+          "event_location": {
+            "type": "string"
+          },
+          "event_cost": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "published_at": {
+            "type": "string"
+          }
+        }
+      },
+      "LiveUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": "string"
+          }
+        }
+      },
+      "LiveIndex": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "live": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "LiveStory": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "ended_at": {
+            "type": "string"
+          },
+          "key_points": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LiveUpdate"
+            }
+          }
+        }
+      },
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "degraded",
+              "down"
+            ]
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "stories": {
+            "type": "integer"
+          },
+          "latest_story_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "events_store": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "checked_at"
+        ]
+      }
+    }
+  }
+}
