@@ -227,12 +227,18 @@ def try_licensed_source_photo(
             continue
 
         target = CARDS_DIR / f"{slug_for(article)}{extension}"
-        if target.is_file():
+        if target.is_file() and target.read_bytes() == payload:
+            # The SAME permitted photo was cached by an earlier run whose credit
+            # was not recorded (before credits.json was written). Record it now
+            # rather than skipping, so the organisation's credit is restored.
+            pass
+        elif target.is_file():
             # A genuinely existing editor-supplied same-slug photograph wins;
             # the source photo must never overwrite an approved edit.
             continue
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(payload)
+        if not target.is_file():
+            target.write_bytes(payload)
 
         credit = (rights.get("creator") or "Original source").strip()
         licence = (rights.get("license_name") or "Used with permission").strip()

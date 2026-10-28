@@ -258,3 +258,49 @@ def run_manual_credit_survives_rebuild() -> None:
 
 
 run_manual_credit_survives_rebuild()
+
+
+def run_uncredited_cached_photo_is_healed() -> None:
+    """A permitted photo cached before credits were recorded gets its credit back."""
+    import os
+    import image_hierarchy
+    page = "https://www.rbh.org.uk/news/rbh-news/representative-body-update/"
+    photo = "https://www.rbh.org.uk/media/rep-body.jpg"
+    grants = [{"organisation": "RBH", "source_hosts": ["rbh.org.uk"], "image_hosts": ["rbh.org.uk"],
+               "credit": "Rochdale Boroughwide Housing", "granted_by": "Press office",
+               "granted_on": "2026-10-20", "exclude_categories": set()}]
+    stream = io.BytesIO()
+    Image.effect_noise((1200, 675), 64).convert("RGB").save(stream, "JPEG", quality=95)
+    payload = stream.getvalue()
+    here = os.getcwd()
+    with TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        cards = root / "assets/img/cards"
+        cards.mkdir(parents=True)
+        (cards / "rbh-rep-body.jpg").write_bytes(payload)  # cached earlier, no credit recorded
+        os.chdir(root)
+        try:
+            article = {"status": "published", "category": "community", "title": "RBH updates on Representative Body",
+                       "slug": "rbh-rep-body", "source_url": page, "image_url": "assets/img/cards/rbh-rep-body.jpg",
+                       "image_credit": "Rochdale Daily", "image_status": "cards-library-photo"}
+            result = (rights.Candidate(photo, "og:image"), payload, ".jpg", rights.grant_for(photo, page, grants))
+            with patch.object(repair, "CARDS_DIR", Path("assets/img/cards")), \
+                 patch.object(repair, "fetch_licensed_source_image", return_value=result):
+                ok, _ = repair.try_licensed_source_photo(article, [page], timeout=1, permissions={}, grants=grants)
+            assert ok and article["image_credit"] == "Rochdale Boroughwide Housing / Used with permission"
+            with patch.object(image_hierarchy, "commons_search", return_value={"status": "service-unavailable", "pages": []}):
+                images.enforce_article(article, root)
+            assert article["image_credit"] == "Rochdale Boroughwide Housing / Used with permission", article
+            # A DIFFERENT existing file (an editor's) is never overwritten or re-credited.
+            editor_bytes = payload + b"editor"
+            (cards / "rbh-rep-body.jpg").write_bytes(editor_bytes)
+            other = dict(article, slug="rbh-rep-body", image_credit="Rochdale Daily")
+            with patch.object(repair, "CARDS_DIR", Path("assets/img/cards")), \
+                 patch.object(repair, "fetch_licensed_source_image", return_value=result):
+                ok, _ = repair.try_licensed_source_photo(other, [page], timeout=1, permissions={}, grants=grants)
+            assert (cards / "rbh-rep-body.jpg").read_bytes() == editor_bytes
+        finally:
+            os.chdir(here)
+
+
+run_uncredited_cached_photo_is_healed()
