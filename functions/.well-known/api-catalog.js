@@ -11,7 +11,7 @@ function entry(anchor) {
   return {
     anchor: ORIGIN + anchor,
     "service-desc": [{ href: ORIGIN + "/openapi.json", type: "application/vnd.oai.openapi+json" }],
-    "service-doc": [{ href: ORIGIN + "/developers.html", type: "text/html" }],
+    "service-doc": [{ href: ORIGIN + "/developers", type: "text/html" }],
     status: [{ href: ORIGIN + "/api/health", type: "application/json" }],
   };
 }
