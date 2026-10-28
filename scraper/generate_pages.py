@@ -46,20 +46,28 @@ LEGACY_COMMENT_MARKUP = [
 ]
 
 
+# Story links on archived pages: the "Related stories" sidebar and the
+# "Read next" block (lead card and list items) at the foot of the article.
 RELATED_STORY_LINK = re.compile(
-    r'<a\b[^>]*\bclass="related-story"[^>]*\bhref="(?P<href>[^"]+)"[^>]*>.*?</a>\s*', re.S
+    r'<a\b[^>]*\bclass="(?:related-story|rn-card|rn-item)"[^>]*\bhref="(?P<href>[^"]+)"[^>]*>.*?</a>\s*', re.S
+)
+# A Read next column whose every link was removed: drop the empty heading too.
+EMPTY_READ_NEXT_COLUMN = re.compile(
+    r'<div class="rn-col"><h3 class="rn-heading">(?:(?!</h3>).)*</h3></div>', re.S
 )
 
 
 def prune_dead_related_links(pages_dir: Path, skip: set[str]) -> tuple[int, int]:
-    """Remove related-story cards that point at a page which no longer exists.
+    """Remove related-story and Read next links that point at a missing page.
 
     Archived pages are never rewritten, so when a story is taken down or its
     page is otherwise removed, every archived page that listed it under
     "related" keeps a card for it: a headline and thumbnail that lead to a
     404. Measured 9 October 2026: 44 such cards on 42 archived pages, twelve
-    missing targets. Only same-folder links to a missing .html file are
-    removed; every other link is left exactly as it is.
+    missing targets. The Read next block (added 10 Sep) was not covered: on
+    28 October it held 34 dead links on archived pages. Only same-folder
+    links to a missing .html file are removed; every other link is left
+    exactly as it is.
 
     Returns (pages changed, cards removed).
     """
@@ -73,7 +81,7 @@ def prune_dead_related_links(pages_dir: Path, skip: set[str]) -> tuple[int, int]
         if path.stem in skip:
             continue
         original = path.read_text(encoding='utf-8')
-        if 'class="related-story"' not in original:
+        if not any(marker in original for marker in ('class="related-story"', 'class="rn-card"', 'class="rn-item"')):
             continue
         dropped = 0
 
@@ -90,6 +98,7 @@ def prune_dead_related_links(pages_dir: Path, skip: set[str]) -> tuple[int, int]
 
         cleaned = RELATED_STORY_LINK.sub(keep_or_drop, original)
         if dropped:
+            cleaned = EMPTY_READ_NEXT_COLUMN.sub('', cleaned)
             path.write_text(cleaned, encoding='utf-8')
             changed += 1
             removed += dropped
@@ -1196,13 +1205,19 @@ def main() -> None:
     # Enforce explicit editorial takedowns against already-generated pages.
     # Ordinary archived pages remain available; only named slug/id removals
     # are deleted here. Feed records have already passed is_blocked_article().
+    # Each deleted page leaves a 301 to its section hub (retired_urls), so an
+    # old Facebook post or search result never lands on "Page not found".
+    from retired_urls import backfill as backfill_retired, retire_page
     blocked_slugs = explicit_blocked_slugs()
     deleted_takedowns = 0
     for blocked_slug in sorted(blocked_slugs):
         blocked_path = OUTPUT_DIR / f"{blocked_slug}.html"
         if blocked_path.exists():
-            blocked_path.unlink()
+            retire_page(blocked_path, Path('_redirects'))
             deleted_takedowns += 1
+    backfilled = backfill_retired(Path('_redirects'), OUTPUT_DIR, blocked_slugs)
+    if backfilled:
+        print(f'Takedown redirects backfilled: {len(backfilled)}')
 
     # Archived URLs remain reachable for readers, but they are not automatically
     # promoted in the XML sitemap. The sitemap is an editorial crawl hint, not

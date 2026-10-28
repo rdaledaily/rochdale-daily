@@ -28,6 +28,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from retired_urls import retire_page  # noqa: E402
 from story_blocklist import (  # noqa: E402
     canonical_url,
     is_blocked_article,
@@ -37,6 +38,7 @@ from story_blocklist import (  # noqa: E402
 
 ARTICLES_JSON = Path("articles.json")
 ARTICLE_PAGES_DIR = Path("articles")
+REDIRECTS = Path("_redirects")
 
 
 def split_arg(value: str) -> list[str]:
@@ -119,9 +121,10 @@ def main() -> int:
     for slug in set(blocklist["slugs"]):
         page = ARTICLE_PAGES_DIR / f"{slug}.html"
         if page.exists():
-            page.unlink()
+            # Leave a 301 to the story's section hub, never a 404.
+            destination = retire_page(page, REDIRECTS)
             deleted_pages += 1
-            print(f"Deleted page: {page}")
+            print(f"Deleted page: {page} (now redirects to {destination})")
     print(f"Article pages deleted: {deleted_pages}.")
 
     # 4. Rebuild pages, frontpage.json and sitemap.xml from the scrubbed feed.

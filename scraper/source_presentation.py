@@ -117,14 +117,43 @@ def clean_title(value: Any) -> str:
         flags=re.IGNORECASE,
     )
     text = re.sub(r"\broch\s+valley\s+radio\b", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"https?://(?:www\.)?rochvalleyradio\.com\S*", "", text, flags=re.IGNORECASE)
+    text = re.sub(_SUBTLE_URL, "", text, flags=re.IGNORECASE)
     text = re.sub(r"\s+(?:-|–|—|\||:)\s*$", "", text)
     text = re.sub(r"\s{2,}", " ", text).strip(" \t\r\n-|:–—")
     return text or "Local news update"
 
 
+# A source URL ends at whitespace, a quote or a tag. The old pattern (\S*)
+# ran on through the closing quote of an href and the `</a>` after a bare
+# link, turning `<a href="https://rochvalleyradio.com/x" rel="noopener">`
+# into `<a href="the source rel="noopener">` and swallowing the next source
+# into a broken link (28 Oct 2026: Peacocks and Queen's Drive pages).
+_SUBTLE_URL = r"https?://(?:www\.)?rochvalleyradio\.com(?:[^\s\"'<>]*[^\s\"'<>.,;:!?)])?"
+_SUBTLE_ANCHOR = re.compile(
+    r"<a\b[^>]*\bhref=[\"']https?://(?:www\.)?rochvalleyradio\.com[^\"']*[\"'][^>]*>.*?</a>",
+    re.IGNORECASE | re.S,
+)
+# What the old pattern left behind, after an HTML parser re-serialised it.
+_MANGLED_SOURCE_LINK = re.compile(
+    r":?\s*<a href=\"the source rel=\"[^>]*>\s*(?:the source\s*)?(?P<rest>.*?)</a>",
+    re.IGNORECASE | re.S,
+)
+
+
+def repair_mangled_source_links(value: Any) -> Any:
+    """Undo the broken-link damage the old source-name pattern caused.
+
+    The link to the withheld source is dropped and the text it swallowed is
+    restored as plain text after a full stop. Idempotent; text without the
+    damage is returned unchanged."""
+    if not isinstance(value, str) or 'href="the source' not in value:
+        return value
+    return _MANGLED_SOURCE_LINK.sub(lambda m: ". " + m.group("rest"), value)
+
+
 def clean_public_text(value: Any) -> str:
-    text = str(value or "")
+    text = repair_mangled_source_links(str(value or ""))
+    text = _SUBTLE_ANCHOR.sub("the source", text)
     text = re.sub(
         r"\s*(?:-|–|—|\||:)\s*roch\s+valley\s+radio(?=\s*(?:<|$|[.!?,;]))",
         "",
@@ -138,7 +167,7 @@ def clean_public_text(value: Any) -> str:
         flags=re.IGNORECASE,
     )
     text = re.sub(
-        r"https?://(?:www\.)?rochvalleyradio\.com\S*",
+        _SUBTLE_URL,
         "the source",
         text,
         flags=re.IGNORECASE,
@@ -237,6 +266,10 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     """Return a public-safe article record while retaining internal provenance."""
     if not isinstance(article, dict):
         return article
+
+    for field in _PUBLIC_TEXT_FIELDS:
+        if field in article:
+            article[field] = repair_mangled_source_links(article[field])
 
     source_name = article.get("source_name", "")
     source_url = article.get("source_url", "")
