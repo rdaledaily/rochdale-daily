@@ -6,8 +6,11 @@ from typing import Any
 from reader_usefulness import READER_FIRST_POLICY
 from editorial_contract import NATURAL_STORY_POLICY
 from context_research import CONTEXT_POLICY
+from reader_copy import (
+    ai_tell_issues, headline_issues, repetition_issues, social_headline_issues,
+)
 
-STYLE_VERSION = "rochdale-human-newsroom-v10"
+STYLE_VERSION = "rochdale-human-newsroom-v11"
 
 # Shared original editorial voice for news and features. Never overrides accuracy.
 HUMAN_VOICE_BRIEF = (
@@ -34,6 +37,26 @@ HUMAN_VOICE_BRIEF = (
     "In impartial news, neither cheerlead nor sneer. In analysis, separate established facts, interpretation and unanswered questions. "
     "Never manufacture first person experiences, sensory details, public reaction, community atmosphere, interviews or insider knowledge. "
     "Aim for distinctive, human Rochdale Daily journalism, not an algorithmic performance of personality."
+)
+
+# v11, 28 Oct 2026: written against the measured gap with the best regional
+# newsrooms on the same story (see reader_copy.py). The craft is general: no
+# newspaper is named or imitated.
+PEOPLE_FIRST_BRIEF = (
+    "Write about people, not incidents. Name the central person and the place in the headline and the first sentence whenever the sources name them; "
+    "a name and a street are what readers search for and recognise. Put the human stake early: who is affected and what it means for them. "
+    "Paragraphs are one or two sentences and never more than 45 words: readers are on phones. "
+    "The standfirst must add one fact the headline and first paragraph do not carry, such as a role, a figure, a consequence or what happens next. "
+    "Paragraph 2 must never restate paragraph 1. Each paragraph adds a new fact, a quote or a consequence. "
+    "When the sources contain a direct quotation from a named person, use the most telling part of it by the third or fourth paragraph, attributed and exact, and never longer than 20 words. "
+    "Prefer the concrete detail a neighbour would mention: the street, the time, the age, the number, the name of the school or shop. "
+    "Never open with or use these: 'This incident occurred', 'Fortunately', 'Unfortunately', 'Additionally', 'Furthermore', 'Moreover', 'It is worth noting', "
+    "'aims to strengthen', 'in light of', 'shortly thereafter', 'regarding the matter'. Say the thing plainly. "
+    "Headlines state the news in sentence case. A question headline is allowed only when readers are genuinely asking it, the article answers it with a figure, "
+    "and the story is not about crime, a court case or a named person's conduct. "
+    "Also write social_headline: the line a Facebook reader sees above the photo. It leads with the person or people and the human stake, in plain words a neighbour would use, "
+    "30-110 characters, sentence case, different wording from the headline, every fact in it verified in the sources. No clickbait, no teasing, no emoji, no capitals for emphasis, "
+    "and no question on crime, court or police stories."
 )
 
 HOUSE_STYLE_SYSTEM = (
@@ -77,7 +100,7 @@ HOUSE_STYLE_SYSTEM = (
     "Match the length budget supplied with each assignment: it reflects how much verified source material exists. A rich evidence pack should become a substantial, information-dense report; a thin source supports only a short, accurate brief. "
     "Never pad towards a word count with unsupported reaction, generic history, invented trends, speculation or repetitive paraphrase — a short true report always beats a long invented one. "
     "Use only the supplied source evidence."
-) + " " + HUMAN_VOICE_BRIEF + " " + READER_FIRST_POLICY
+) + " " + HUMAN_VOICE_BRIEF + " " + PEOPLE_FIRST_BRIEF + " " + READER_FIRST_POLICY
 
 WEAK_STYLE_RE = re.compile(
     r"\b(?:"
@@ -238,4 +261,15 @@ def style_issues(draft: dict[str, Any], source_kind: str = "") -> list[str]:
         )
 
     issues.extend(first_reference_issues(draft))
+    # v11 reader-copy rules (reader_copy.py). Style feedback only: a story is
+    # never spiked for them, but the repair loop is asked to fix them first.
+    category = _plain(draft.get("category"))
+    issues.extend(repetition_issues(excerpt, paragraphs))
+    # Paragraph length is NOT sent back to the model: reader_copy splits long
+    # paragraphs at sentence boundaries after the rewrite, losslessly, so a
+    # repair call (rate-limited and paid) is never spent on it.
+    issues.extend(ai_tell_issues(" ".join([excerpt, *paragraphs])))
+    issues.extend(headline_issues(title, category))
+    if "social_headline" in draft:
+        issues.extend(social_headline_issues(_plain(draft.get("social_headline")), title, category))
     return list(dict.fromkeys(issues))

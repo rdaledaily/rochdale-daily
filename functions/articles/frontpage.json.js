@@ -187,13 +187,21 @@ function isReserveFeature(article) {
     || String(article.source_kind || '').toLowerCase() === 'evergreen';
 }
 
+// Daily briefings (Morning Briefing / Evening Wrap-Up) summarise stories that
+// are already on the page: 2.6 views each against 11.7 for a crime story
+// (9-27 Oct 2026). Same test as scraper/feature_policy.py is_daily_briefing.
+function isDailyBriefing(article) {
+  return Boolean(article.briefing_slot)
+    || String(article.publication_route || '').toLowerCase() === 'daily-briefing';
+}
+
 function demoteSponsored(list, floor) {
   const top = [];
   const held = [];
   const rest = [];
   for (const article of list) {
     if (top.length < floor) {
-      (article && (article.sponsored === true || isReserveFeature(article)) ? held : top).push(article);
+      (article && (article.sponsored === true || isReserveFeature(article) || isDailyBriefing(article)) ? held : top).push(article);
     } else {
       rest.push(article);
     }

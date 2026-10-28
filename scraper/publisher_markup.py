@@ -41,6 +41,8 @@ PUBLISHER: dict[str, Any] = {
     "correctionsPolicy": f"{SITE}/corrections-and-complaints",
     "actionableFeedbackPolicy": f"{SITE}/corrections-and-complaints",
     "masthead": f"{SITE}/about",
+    # The paper's own Facebook Page (Graph API id from the publisher's posts).
+    "sameAs": ["https://www.facebook.com/1240511409139789"],
     "contactPoint": {"@type": "ContactPoint", "contactType": "newsdesk", "url": f"{SITE}/contact",
                      "areaServed": "GB", "availableLanguage": "en-GB"},
 }

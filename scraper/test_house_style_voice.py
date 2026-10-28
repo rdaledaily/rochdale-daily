@@ -12,7 +12,7 @@ def draft(title: str, paragraph: str) -> dict:
 
 
 def run() -> None:
-    assert STYLE_VERSION == "rochdale-human-newsroom-v10"
+    assert STYLE_VERSION == "rochdale-human-newsroom-v11"
     from editorial_contract import NATURAL_STORY_POLICY
     assert NATURAL_STORY_POLICY in HOUSE_STYLE_SYSTEM
     assert HUMAN_VOICE_BRIEF in HOUSE_STYLE_SYSTEM

@@ -1,4 +1,4 @@
-name: Post Rochdale Daily individual Facebook stories
+name: Post Rochdale Daily individual Facebook stories (photo + link comment)
 
 # Scheduled Page posting runs in GitHub Actions so the repository's saved
 # secrets can be used without exposing them locally.
@@ -10,7 +10,9 @@ on:
         required: false
         default: "0"
   schedule:
-    # Check hourly for one fresh, unposted article.
+    # Checked hourly; the script posts only in the 07, 12, 17 and 20 UK-time
+    # slots (plus genuine breaking news between 07:00 and 22:59), at most five
+    # posts a day. Each post is a photo with the link as the Page's first comment.
     - cron: "27 * * * *"
   push:
     branches: [main]
@@ -56,16 +58,17 @@ jobs:
             printf '{\n  "posted": {}\n}\n' > /tmp/facebook_posted.json
           fi
 
-      - name: Publish one fresh story with an hourly cooldown
+      - name: Publish the strongest fresh story in this slot
         env:
           FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
           # Page Graph API ID is resolved from the authenticated Page token.
           FACEBOOK_GRAPH_VERSION: v26.0
           FACEBOOK_STATE_PATH: /tmp/facebook_posted.json
           FACEBOOK_RESULT_PATH: /tmp/facebook_last_result.json
-          FACEBOOK_MAX_ARTICLE_AGE_HOURS: "48"
+          FACEBOOK_MAX_ARTICLE_AGE_HOURS: "36"
           FACEBOOK_MIN_POST_INTERVAL_MINUTES: "60"
-          FACEBOOK_MAX_POSTS_24H: "0"
+          FACEBOOK_SLOT_HOURS: "7,12,17,20"
+          FACEBOOK_MAX_POSTS_PER_DAY: "5"
         run: python scraper/post_facebook_article.py
 
       - name: Save successful Facebook post to state branch
@@ -124,8 +127,27 @@ jobs:
               print('Roundup destination:', d.get('url'))
           if d.get('facebook_post_id'):
               print('Facebook post ID:', d.get('facebook_post_id'))
+          if d.get('link_route'):
+              print('Link placed in:', d.get('link_route'))
+          if d.get('image_url'):
+              print('Photo:', d.get('image_url'), '(' + str(d.get('image_status') or '') + ')')
           if 'remaining_unposted' in d:
               print('Remaining queue:', d.get('remaining_unposted'))
           PY
           fi
-  
+
+      - name: Fail if the link could not go in the first comment
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          p = Path('/tmp/facebook_last_result.json')
+          d = json.loads(p.read_text()) if p.exists() else {}
+          route = d.get('link_route')
+          if d.get('status') == 'posted' and route and route != 'first-comment':
+              print('The post went out, but the Page token could not comment, so the link was put in the caption.')
+              print('Fix: regenerate the Page token with pages_manage_engagement and save it as FACEBOOK_PAGE_ACCESS_TOKEN.')
+              sys.exit(1)
+          PY

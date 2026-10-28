@@ -67,6 +67,15 @@
     if(enabled)chime();
   });
   document.body.appendChild(button);
+  // Sit above the cookie bar while it is open: at 12px from the bottom the
+  // pill covered the bar's "Accept all" button on phones (28 Oct 2026).
+  function place(){
+    const bar=document.querySelector('.cookie.show');
+    button.style.bottom=bar?(bar.offsetHeight+12)+'px':'12px';
+  }
+  place();
+  try{new MutationObserver(place).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class'],childList:true});}catch(_){}
+  window.addEventListener('resize',place);
 })();
 
 /* Shared newsletter controller, including previously generated article pages.

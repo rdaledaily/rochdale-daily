@@ -109,13 +109,13 @@ def demote_sponsored(rows: list[dict[str, Any]], floor: int = SPONSORED_FLOOR) -
     # newest-first with the news, so on a quiet afternoon "Does a boggart still
     # haunt Clegg Hall?" led the paper (24 Oct 2026). A feature is never a top
     # story; it stays on the page, below the news.
-    from feature_policy import is_reserve_feature
+    from feature_policy import is_daily_briefing, is_reserve_feature
     top: list[dict[str, Any]] = []
     held: list[dict[str, Any]] = []
     rest: list[dict[str, Any]] = []
     for row in rows:
         if len(top) < floor:
-            (held if row.get("sponsored") is True or is_reserve_feature(row) else top).append(row)
+            (held if row.get("sponsored") is True or is_reserve_feature(row) or is_daily_briefing(row) else top).append(row)
         else:
             rest.append(row)
     return top + held + rest

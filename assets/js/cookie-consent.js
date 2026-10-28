@@ -11,7 +11,7 @@
      It was left at -1 through several stylesheet uploads on 10 Sep, so a
      browser that visited in the morning could keep serving that morning's
      stylesheet -- without the river or filter-bar rules -- all day. */
-  var ASSET_VERSION = "20261019-reader-growth";
+  var ASSET_VERSION = "20261028-reader-behaviour";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -44,6 +44,42 @@
     script.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
     script.setAttribute("data-rd-analytics", GA_ID);
     document.head.appendChild(script);
+  }
+
+  /* Reader actions that build return visits, recorded as GA4 events so they
+     can be marked as key events (Admin > Events > "Mark as key event").
+     GA had 0 key events on 28 Oct 2026, so none of what brings a reader back
+     could be measured. Nothing is sent without analytics consent: gtag only
+     exists after loadAnalytics(), and ga-disable stops it on withdrawal. */
+  function track(name, params) {
+    if (!analyticsLoaded || typeof window.gtag !== "function") return;
+    try { window.gtag("event", name, params || {}); } catch (error) { /* no-op */ }
+  }
+  window.rdTrack = track;
+  document.addEventListener("submit", function (event) {
+    var form = event.target;
+    if (!form || !form.id) return;
+    if (/newsletter/i.test(form.id)) track("newsletter_signup", { form_id: form.id, page_type: pageType() });
+    else if (/comment/i.test(form.id + " " + form.className)) track("comment_submit", { page_type: pageType() });
+  }, true);
+  document.addEventListener("click", function (event) {
+    var el = event.target && event.target.closest ? event.target.closest("a, button") : null;
+    if (!el) return;
+    if (el.matches("[data-share]")) {
+      track("share", { method: el.getAttribute("data-share"), content_type: "article" });
+    } else if (el.closest(".read-next, .next-bar")) {
+      track("read_next_click", { link_url: el.getAttribute("href") || "" });
+    } else if (/facebook\.com\/1240511409139789/.test(el.getAttribute("href") || "")) {
+      track("facebook_follow_click", { page_type: pageType() });
+    } else if (/\/news-alerts|\/my-rochdale/.test(el.getAttribute("href") || "")) {
+      track("return_tool_click", { link_url: el.getAttribute("href") });
+    }
+  }, true);
+  function pageType() {
+    var path = window.location.pathname;
+    if (path === "/" || /^\/index(?:\.html)?$/.test(path)) return "home";
+    if (path.indexOf("/articles/") === 0) return "article";
+    return "other";
   }
 
   /* Withdrawing consent must take effect at once, not on the next visit: stop
@@ -82,8 +118,8 @@
     banner.innerHTML =
       '<div class="wrap cookie-row">' +
       '<p class="cookie-long"><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. You can change your choice at any time using <a href="/privacy#cookies">Cookie settings</a>.</p>' +
-      '<p class="cookie-short"><strong>Cookie choices:</strong> Optional cookies stay off unless you allow them. <a href="/privacy#cookies">What we use and why</a>.</p>' +
-      '<div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div></div>';
+      '<p class="cookie-short"><strong>Cookies:</strong> optional ones stay off unless you allow them. <a href="/privacy#cookies">Read more</a>.</p>' +
+      '<div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept all</button></div></div>';
     document.body.appendChild(banner);
     return banner;
   }

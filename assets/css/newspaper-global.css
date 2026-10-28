@@ -1594,9 +1594,14 @@ body > footer strong,
 @media (max-width: 760px) {
   .cookie-long { display: none !important; }
   .cookie-short { display: block !important; }
-  .cookie .cookie-row { padding-block: 10px !important; }
-  .cookie-actions { width: 100% !important; }
-  .cookie button { flex: 1 1 0 !important; min-height: 44px !important; font-size: 11.5px !important; padding-inline: 8px !important; }
+  /* One row: the short notice beside two 44px buttons. Stacked, the bar was
+     145-163px tall and covered the first headline on a 390 x 844 phone
+     (measured 28 Oct 2026); in one row it is about 80px. */
+  .cookie .cookie-row { padding-block: 6px !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; gap: 10px !important; }
+  .cookie p { flex: 1 1 auto !important; font-size: 11.5px !important; line-height: 1.35 !important; }
+  .cookie-actions { width: auto !important; flex: 0 0 auto !important; gap: 6px !important; }
+  .cookie-actions { display: flex !important; }
+  .cookie button { flex: 0 0 auto !important; width: auto !important; min-height: 44px !important; font-size: 11px !important; padding-inline: 8px !important; letter-spacing: .03em !important; }
 }
 
 
