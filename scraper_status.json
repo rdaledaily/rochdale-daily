@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-28T02:09:17.209045Z",
+  "last_run_at": "2026-10-28T02:49:19.876563Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,9 +7,14 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "not due",
-      "last_checked": "2026-10-27T14:21:59.979950Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 2,
+      "daily_cap": 2,
+      "offered_today": 2,
+      "listed": 9,
+      "other_notice_types": 5,
+      "already_seen": 2,
+      "new": 2
     },
     "written_answers": {
       "status": "not due",
@@ -17,9 +22,8 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "not due",
-      "last_checked": "2026-10-27T14:21:59.979950Z",
-      "interval_hours": 12
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='democracy.greatermanchester-ca.gov.uk', port=443): Max retries exceeded with url: /mgRss.aspx?XXR=0&M=0 (Caused by ReadTimeoutError(\"HTTPSConnectionPool(host"
     },
     "ons_housing": {
       "status": "not due",
@@ -42,14 +46,14 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 114,
+  "raw_candidates_before_job_filter": 115,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 114,
-  "candidate_clusters": 40,
+  "raw_candidates": 115,
+  "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 75,
-    "resolved": 62,
-    "text_recovered": 21,
+    "wrappers": 71,
+    "resolved": 60,
+    "text_recovered": 20,
     "reattributed": 0,
     "images_found": 23
   },
@@ -58,7 +62,7 @@
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
-  "live_articles": 436,
+  "live_articles": 437,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -152,7 +156,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 104,
+    "rss_and_google_news": 103,
     "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -161,28 +165,30 @@
     "environment_agency": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 0
+    "primary_data": 2
   },
   "collector_errors": {},
   "rss_feed_failures": {
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 37,
-    "Roch Valley Radio": 23,
-    "Rochdale Borough Council": 10,
+    "Rochdale Times": 33,
+    "Roch Valley Radio": 26,
+    "Rochdale Borough Council": 8,
     "Oldham Evening Chronicle": 7,
     "The Bury Times": 6,
+    "InYourArea": 4,
     "Facebook": 4,
     "Bee Network live travel alerts": 4,
-    "InYourArea": 3,
     "Rochdale AFC": 3,
     "Manchester Evening News": 3,
     "Oldham Times": 2,
     "Messenger Newspapers": 2,
     "Roch Valley Radio Local News": 2,
     "Rochdale Boroughwide Housing": 2,
+    "The Gazette": 2,
     "Rochdale Borough Council RSS": 1,
+    "beIN SPORTS": 1,
     "Yahoo Sports": 1,
     "Yahoo News UK": 1,
     "About Manchester": 1,
@@ -805,8 +811,12 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 4
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -842,8 +852,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-28T02:27:24.675497Z",
-  "frontpage_article_count": 15,
+  "frontpage_generated_at": "2026-10-28T02:50:53.443726Z",
+  "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -901,17 +911,16 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1,
       "traffic": 3,
+      "crime": 1,
       "politics": 2,
-      "education": 1,
       "business": 1,
       "community": 3,
       "news": 2,
       "sport": 2
     },
     "selected_by_ward": {
-      "borough-wide": 14,
+      "borough-wide": 13,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
@@ -925,10 +934,9 @@
       "wardle": 1
     },
     "selected_by_source": {
-      "greater manchester police": 1,
       "rochdale borough council": 2,
+      "greater manchester police": 1,
       "rochdale borough council news": 1,
-      "source": 1,
       "rochdale times": 3,
       "find a tender": 1,
       "rochdale daily": 1,
@@ -942,22 +950,22 @@
     "primary_pool_size": 26,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 15,
+    "frontpage_count": 14,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 8,
-    "fresh_under_homepage_window": 15,
-    "short_briefs_selected": 10,
+    "fresh_under_homepage_window": 14,
+    "short_briefs_selected": 9,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 436,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 437,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -967,7 +975,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
+  "whats_on_event_count": 14,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 0,

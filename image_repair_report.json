@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 2,
+  "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 1,
   "no_allowed_source": 0,
-  "no_usable_source_image": 6,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -132,16 +132,49 @@
       }
     },
     {
-      "slug": "rochdale-boroughwide-housing-updates-on-representative-body-developments",
-      "result": "licensed-source-photo",
-      "source": "https://www.rbh.org.uk/news/rbh-news/representative-body-update-october-2026/",
-      "after": "assets/img/cards/rochdale-boroughwide-housing-updates-on-representative-body-developments.jpg"
+      "slug": "hopwood-hall-college-celebrates-topping-out-of-new-clegg-building",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdaletimes.co.uk/new-college-building-reaches-construction-milestone/",
+      "after": "assets/img/cards/hopwood_hall_college.jpg",
+      "why": {
+        "page": "https://www.rochdaletimes.co.uk/new-college-building-reaches-construction-milestone/",
+        "final_url": "https://www.rochdaletimes.co.uk/new-college-building-reaches-construction-milestone/",
+        "candidates": [],
+        "verdict": "no-candidate-images-on-page"
+      }
     },
     {
-      "slug": "heywood-prepares-for-remembrance-day-services-on-8-november-2026",
-      "result": "licensed-source-photo",
-      "source": "https://www.rochdale.gov.uk/news/article/692/lest-we-forget-borough-comes-together-to-reflect-and-remember",
-      "after": "assets/img/cards/heywood-prepares-for-remembrance-day-services-on-8-november-2026.jpg"
+      "slug": "littleborough-defeat-trafford-mv-in-adm-lancs-cheshire-2-clash",
+      "result": "no-cleared-source-image",
+      "source": "https://www.messengernewspapers.co.uk/sport/26671180.trafford-mv-slip-third-defeat-littleborough/",
+      "after": "assets/img/cards/b0793532b82d-place-generated-card.jpg",
+      "why": {
+        "page": "https://www.messengernewspapers.co.uk/sport/26671180.trafford-mv-slip-third-defeat-littleborough/",
+        "final_url": "https://www.messengernewspapers.co.uk/sport/26671180.trafford-mv-slip-third-defeat-littleborough/",
+        "candidates": [
+          {
+            "url": "https://www.messengernewspapers.co.uk/resources/images/21632565.jpg?type=og-image",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.messengernewspapers.co.uk/resources/images/21632565/",
+            "via": "twitter:image:src",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.messengernewspapers.co.uk/resources/images/21632565.jpg/",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.messengernewspapers.co.uk/resources/images/21632565.jpg?type=mds-article-962",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
     }
   ]
 }
