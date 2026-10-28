@@ -1,38 +1,44 @@
 {
-  "examined_at": "2026-10-27T12:39:48.650040Z",
+  "examined_at": "2026-10-28T13:31:09.347276Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 125,
+  "candidates_examined": 126,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 102,
-    "would publish": 17,
-    "duplicate of published story": 6
+    "age": 104,
+    "would publish": 13,
+    "duplicate of published story": 6,
+    "not local": 3
   },
-  "would_publish": 17,
+  "would_publish": 13,
   "age_gate_sensitivity": {
-    "6h": 6,
-    "14h": 9,
-    "24h": 23,
-    "48h": 47,
-    "72h": 101,
-    "168h": 125
+    "6h": 7,
+    "14h": 10,
+    "24h": 22,
+    "48h": 50,
+    "72h": 73,
+    "168h": 126
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 27/10/2026 at 12:12pm Live Failsworth Tram Stop - Lifts out o",
-      "Roch Valley Radio Local News: Lest We Forget: Rochdale Remembers"
+      "Food Standards Agency: 67 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "Manchester Evening News: Rochdale council deputy leader detained in Pakistan for 'short period'",
+      "Rochdale Times: Inspector rules on garden fence rejected by council - Rochdale Times"
     ],
     "duplicate of published story": [
-      "Facebook: 🚨 Police remain on Rochdale Road, which remains closed. Police and par",
-      "Lancashire Telegraph: Man dies after serious three-vehicle crash on Rochdale Road in Edenfie",
-      "The Bury Times: Man dies after serious three-vehicle crash on Rochdale Road in Edenfie"
+      "BBC Manchester: Car and moped seized after drivers ignore Heywood lollipop man",
+      "Rochdale Times: School closes after bomb threat - Rochdale Times",
+      "Rochdale Borough Council: Manchester Road Old Section, roadworks in Rochdale from 25 October 202"
+    ],
+    "not local": [
+      "The Gazette: ASSISTNOW LTD: Appointment of Liquidators",
+      "The Gazette: BROTHERS BRICKWORK LTD: Appointment of Liquidators",
+      "Find a Tender: ALTUS EDUCATION PARTNERSHIP invites bids: Altus Education Partnership "
     ],
     "age": [
-      "Rochdale AFC: Tickets On Sale For Final Trophy Group Game - Rochdale AFC",
-      "Rochdale Times: Town centre reclaims Britain in Bloom crown - Rochdale Times",
-      "Rochdale Borough Council: Heights Lane, roadworks in Rochdale from 26 October 2026 - Rochdale Bo"
+      "Bee Network live travel alerts: Updated: 27/10/2026 at 12:12pm Live Failsworth Tram Stop - Lifts out o",
+      "Rochdale Borough Council: Broad Lane, roadworks in Rochdale from 11 January 2027 - Rochdale Boro",
+      "beIN SPORTS: Port Vale vs Rochdale - beIN SPORTS"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
