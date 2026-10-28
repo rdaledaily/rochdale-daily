@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 0,
+  "repaired_with_source_photo": 1,
   "skipped_sensitive_stories": 1,
   "no_allowed_source": 0,
-  "no_usable_source_image": 8,
+  "no_usable_source_image": 7,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -13,32 +13,96 @@
     "Rochdale Boroughwide Housing"
   ],
   "source_grants_incomplete": [],
-  "replaced_commons_or_library_with_source_photo": 0,
+  "replaced_commons_or_library_with_source_photo": 1,
   "allowed_domains": [],
   "items": [
     {
       "slug": "roadworks-on-manchester-road-old-section-to-begin-on-25-october-2026",
       "result": "no-cleared-source-image",
       "source": "https://www.rochdale.gov.uk/directory-record/2649/manchester-road-old-section-roadworks-in-rochdale-from-25-october-2026",
-      "after": "assets/img/cards/roadworks.jpg"
+      "after": "assets/img/cards/roadworks.jpg",
+      "why": {
+        "page": "https://www.rochdale.gov.uk/directory-record/2649/manchester-road-old-section-roadworks-in-rochdale-from-25-october-2026",
+        "final_url": "https://www.rochdale.gov.uk/directory-record/2649/manchester-road-old-section-roadworks-in-rochdale-from-25-october-2026",
+        "candidates": [
+          {
+            "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
+            "via": "og:image",
+            "verdict": "default-image-used-on-other-stories"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
     },
     {
       "slug": "rochdale-council-awards-contract-for-queen-s-park-send-improvement-project",
       "result": "no-cleared-source-image",
       "source": "https://www.find-tender.service.gov.uk/Notice/101777-2026",
-      "after": "assets/img/cards/rochdale_town_hall_square.jpg"
+      "after": "assets/img/cards/rochdale_town_hall_square.jpg",
+      "why": {
+        "page": "https://www.find-tender.service.gov.uk/Notice/101777-2026",
+        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
     },
     {
       "slug": "middleton-prepares-for-christmas-lights-switch-on-event",
       "result": "no-cleared-source-image",
       "source": "https://www.rochdaletimes.co.uk/town-gets-ready-to-step-into-christmas/",
-      "after": "assets/img/cards/cea366c3cb5b-place-generated-card.jpg"
+      "after": "assets/img/cards/cea366c3cb5b-place-generated-card.jpg",
+      "why": {
+        "page": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBCUUhVeDJzaWVfS2ZTdTlleGVXclc4LUttTTBhVG9KWkVpY0xhbGhNeHZudG5kYm5zR2NESHZ5dkhRX1BBN2cyYXM3WWY3ZF9ycExzMm1oSlhRbkNWbEhhcXdFUW5HRjlUMDI0aDBhMjdUclk1ZUVNbmNBcw?oc=5",
+        "final_url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBCUUhVeDJzaWVfS2ZTdTlleGVXclc4LUttTTBhVG9KWkVpY0xhbGhNeHZudG5kYm5zR2NESHZ5dkhRX1BBN2cyYXM3WWY3ZF9ycExzMm1oSlhRbkNWbEhhcXdFUW5HRjlUMDI0aDBhMjdUclk1ZUVNbmNBcw?oc=5&hl=en-US&gl=US&ceid=US:en",
+        "candidates": [
+          {
+            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
+    {
+      "slug": "broad-lane-roadworks-in-rochdale-set-to-begin-on-11-january-2027",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdale.gov.uk/directory-record/2633/broad-lane-roadworks-in-rochdale-from-11-january-2027",
+      "after": "/home/runner/work/rochdale-daily/rochdale-daily/assets/img/cards/roadworks.jpg",
+      "why": {
+        "page": "https://www.rochdale.gov.uk/directory-record/2633/broad-lane-roadworks-in-rochdale-from-11-january-2027",
+        "final_url": "https://www.rochdale.gov.uk/directory-record/2633/broad-lane-roadworks-in-rochdale-from-11-january-2027",
+        "candidates": [
+          {
+            "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
+            "via": "og:image",
+            "verdict": "default-image-used-on-other-stories"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
+    {
+      "slug": "rochdale-afc-shortlisted-for-fan-engagement-award",
+      "result": "licensed-source-photo",
+      "source": "https://rochdaleafc.co.uk/dale-shortlisted-for-fan-engagement-award/",
+      "after": "assets/img/cards/rochdale-afc-shortlisted-for-fan-engagement-award.jpg"
     },
     {
       "slug": "sunderland-held-to-a-draw-at-rochdale-in-league-one-clash",
       "result": "no-cleared-source-image",
       "source": "https://sports.yahoo.com/articles/otd-27-10-2020-sunderland-050000129.html",
-      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
+      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg",
+      "why": {
+        "page": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1XWUdQVUs3VFdtbDdmNzJ3Z2hROXR6S3l6bFllVFpsakNHclRFNEN5TlZ1OHd3a1QxVmN4RmlYVmt1eENmSUsxMHBVbkhUNGNMMFI5dnlsV2RzTDBkeFp3LTJ2eUNjU2xLY2ZoTW52ZjhyUEJpaFBicjh6al9LeGc?oc=5",
+        "final_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1XWUdQVUs3VFdtbDdmNzJ3Z2hROXR6S3l6bFllVFpsakNHclRFNEN5TlZ1OHd3a1QxVmN4RmlYVmt1eENmSUsxMHBVbkhUNGNMMFI5dnlsV2RzTDBkeFp3LTJ2eUNjU2xLY2ZoTW52ZjhyUEJpaFBicjh6al9LeGc?oc=5&hl=en-US&gl=US&ceid=US:en",
+        "candidates": [
+          {
+            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
     },
     {
       "slug": "rochdale-boroughwide-housing-updates-on-representative-body-developments",
@@ -50,19 +114,54 @@
       "slug": "heywood-prepares-for-remembrance-day-services-on-8-november-2026",
       "result": "no-cleared-source-image",
       "source": "https://www.rochdale.gov.uk/news/article/692/lest-we-forget-borough-comes-together-to-reflect-and-remember",
-      "after": ""
-    },
-    {
-      "slug": "hopwood-hall-college-celebrates-topping-out-of-new-clegg-building",
-      "result": "no-cleared-source-image",
-      "source": "https://www.rochdaletimes.co.uk/new-college-building-reaches-construction-milestone/",
-      "after": "assets/img/cards/hopwood_hall_college.jpg"
-    },
-    {
-      "slug": "littleborough-defeat-trafford-mv-in-adm-lancs-cheshire-2-clash",
-      "result": "no-cleared-source-image",
-      "source": "https://www.messengernewspapers.co.uk/sport/26671180.trafford-mv-slip-third-defeat-littleborough/",
-      "after": "assets/img/cards/b0793532b82d-place-generated-card.jpg"
+      "after": "",
+      "why": {
+        "page": "https://www.rochvalleyradio.com/news-features/139/news/1242/lest-we-forget-rochdale-remembers",
+        "final_url": "https://www.rochvalleyradio.com/news-features/139/news/1242/lest-we-forget-rochdale-remembers",
+        "candidates": [
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/496a8249a0350eb2a4902607c0cbf7cc.jpg",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/1cce1728b18914ad3a35f0bd334c0adf_thumb.png",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/21d47111f085e1c945aeca63e2cad764_thumb.png",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/584accabfa445d2931786465988f7200_thumb.jpg",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/026c8ffc0cfadfbc01d11a4558d7bf6c_thumb.jpg",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/1a234b98d42ef1c6dfa0db7882d62899_thumb.jpg",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/ee188003205d3e3501fafa74f1cdabf3_thumb.jpg",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/95337ca4a9292af33d4a558d26ba98f9_thumb.jpg",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
     }
   ]
 }
