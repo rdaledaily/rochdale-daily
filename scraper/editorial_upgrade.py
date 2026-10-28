@@ -11,6 +11,7 @@ from typing import Any
 from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
 from reader_usefulness import reader_questions_for
 from newsroom_source_policy import is_non_article_service_page
+from reader_copy import strip_filler_openers
 
 
 
@@ -640,7 +641,9 @@ def normalise_draft(draft: Any) -> dict[str, Any]:
     paragraphs: list[str] = []
     seen: set[str] = set()
     for raw in clean.get("paragraphs") or []:
-        paragraph = plain_text(raw)
+        # Sentence-opening filler ("Fortunately, ...") is removed here, before
+        # the gate, so no repair call is spent on a word the code can drop.
+        paragraph = strip_filler_openers(plain_text(raw))
         key = paragraph.casefold()
         if not paragraph or key in seen:
             continue
@@ -655,6 +658,8 @@ def normalise_draft(draft: Any) -> dict[str, Any]:
         if len(excerpt) >= 355 and " " in excerpt:
             excerpt = excerpt.rsplit(" ", 1)[0].rstrip(" ,;:-") + "…"
     clean["excerpt"] = excerpt
+    if "social_headline" in clean:
+        clean["social_headline"] = plain_text(clean.get("social_headline"))[:160]
     return clean
 
 
@@ -1147,8 +1152,8 @@ def request_article(
             "headline_style": (
                 "British newspaper sentence case: capitalise only the first word and "
                 "proper nouns (people, places, organisations, named events). Never "
-                "Title Case. Lead with the place and the key fact; aim for 70 "
-                "characters or fewer. Example: 'Rochdale AFC draw 2-2 with Grimsby "
+                "Title Case. Lead with the person or place and the key fact; aim for 70 "
+                "characters or fewer, and name the central person when the sources do. Example: 'Rochdale AFC draw 2-2 with Grimsby "
                 "Town after late equaliser', not 'Rochdale AFC Draw 2-2 With Grimsby "
                 "Town After Late Equaliser'."
             ),
@@ -1160,6 +1165,17 @@ def request_article(
             ),
             "house_style": STYLE_VERSION,
             "retain_local_impact_context": True,
+            "social_headline": (
+                "The line a Facebook reader sees above the photo: lead with the "
+                "person and the human stake, plain words, 30-110 characters, "
+                "sentence case, different wording from the headline, only "
+                "verified facts, no question on crime, court or police stories."
+            ),
+            "paragraph_style": (
+                "One or two sentences per paragraph, 45 words at most. The "
+                "standfirst adds a fact the headline and paragraph 1 lack; "
+                "paragraph 2 never restates paragraph 1."
+            ),
             "reader_first_questions": reader_questions_for(
                 getattr(candidate, "category", ""), source_kind
             ),

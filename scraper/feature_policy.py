@@ -13,6 +13,19 @@ def is_reserve_feature(article: dict[str, Any]) -> bool:
     )
 
 
+def is_daily_briefing(article: dict[str, Any]) -> bool:
+    """Morning Briefing / Evening Wrap-Up roundups of the paper's own stories.
+
+    Measured 9-27 Oct 2026: 2.6 views per briefing against 11.7 per crime
+    story, while each took a top-nine homepage slot from a real story. They
+    stay published and in the newsletter; they are held below the top nine
+    like sponsored pieces and reserve features."""
+    return bool(
+        article.get("briefing_slot")
+        or str(article.get("publication_route") or "").lower() == "daily-briefing"
+    )
+
+
 def normalise_feature(article: dict[str, Any]) -> dict[str, Any]:
     """Return a copy; preserve publication dates, sources and original prose."""
     result = dict(article)

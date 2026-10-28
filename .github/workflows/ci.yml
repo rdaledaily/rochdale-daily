@@ -205,6 +205,8 @@ jobs:
           PYTHONPATH=scraper python scraper/test_house_style_voice.py
           PYTHONPATH=scraper python scraper/test_reader_first_template.py
           PYTHONPATH=scraper python scraper/test_facebook_roundups.py
+          PYTHONPATH=scraper python scraper/test_reader_copy.py
+          PYTHONPATH=scraper python scraper/test_retired_urls_and_source_links.py
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
           python scraper/test_content_hygiene.py

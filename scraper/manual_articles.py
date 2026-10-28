@@ -210,6 +210,11 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
 
     if entry.get("image_alt"):
         record["image_alt"] = _clean(entry.get("image_alt"))[:200]
+    if entry.get("social_headline"):
+        # The editor's own Facebook line (reader_copy.py rules apply on post).
+        record["social_headline"] = _clean(entry.get("social_headline"))[:160]
+    if entry.get("kicker"):
+        record["kicker"] = _clean(entry.get("kicker"))[:40]
     if entry.get("featured") is True:
         record["featured"] = True
     for flag in ("is_ongoing", "breaking_news", "developing", "police_matter"):

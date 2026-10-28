@@ -42,7 +42,9 @@
   function seenSlugs() {
     var set = Object.create(null);
     document.querySelectorAll('a[href*="/articles/"], a[href^="articles/"]').forEach(function (a) {
-      var m = (a.getAttribute("href") || "").match(/([^/]+)\.html$/);
+      // Links are clean addresses now (/articles/x, no .html): match both,
+      // or every story already on the page reappeared in the river.
+      var m = (a.getAttribute("href") || "").match(/\/?articles\/([^/?#]+?)(?:\.html)?(?:[?#].*)?$/);
       if (m) set[m[1]] = true;
     });
     return set;
@@ -73,7 +75,8 @@
   function card(item) {
     var el = document.createElement("a");
     el.className = "river-item";
-    el.href = item.url || ("/articles/" + item.slug + ".html");
+    // Clean address: /x.html answers 308 to /x on Cloudflare Pages.
+    el.href = String(item.url || ("/articles/" + item.slug)).replace(/\.html(?=$|[?#])/, "");
     el.innerHTML =
       '<span class="river-meta">' + esc(item.category || "News") +
       (item._fresh ? " &middot; " + esc(ago(item._t)) : "") + "</span>" +
@@ -195,10 +198,30 @@
     }
   }
 
-  fetch(ARCHIVE, { credentials: "omit" })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (d) { if (d) start(d); })
-    .catch(function () { /* the page is complete without the river */ });
+  /* The archive index is 1.1 MB. It was fetched on arrival, by every reader,
+     although the river sits at the very end of the page: fetch it only when a
+     reader scrolls within about two screens of it (28 Oct 2026). */
+  var requested = false;
+  function loadArchive() {
+    if (requested) return;
+    requested = true;
+    fetch(ARCHIVE, { credentials: "omit" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d) start(d); })
+      .catch(function () { /* the page is complete without the river */ });
+  }
+  // The river stays hidden until it has stories, and a hidden element never
+  // intersects, so watch the last block of the page above it (not the
+  // page-shell itself, which is on screen from the start).
+  var anchor = document.querySelector("main > :last-child") || host.previousElementSibling;
+  if (anchor && "IntersectionObserver" in window) {
+    var near = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { near.disconnect(); loadArchive(); }
+    }, { rootMargin: "1600px 0px" });
+    near.observe(anchor);
+  } else {
+    loadArchive();
+  }
 
   /* ------------------------------------------------------------- pull to refresh
      A genuine check. It reports what it found, including nothing. */

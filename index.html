@@ -17,7 +17,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Rochdale Daily | Independent local news">
   <meta name="twitter:description" content="Independent news and public-interest reporting for Rochdale borough.">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@id": "https://rochdaledaily.co.uk/#publisher", "@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk/", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}, "areaServed": {"@type": "AdministrativeArea", "name": "Metropolitan Borough of Rochdale", "containedInPlace": {"@type": "AdministrativeArea", "name": "Greater Manchester"}}, "publishingPrinciples": "https://rochdaledaily.co.uk/editorial-standards", "ethicsPolicy": "https://rochdaledaily.co.uk/editorial-standards", "verificationFactCheckingPolicy": "https://rochdaledaily.co.uk/editorial-standards#accuracy", "noBylinesPolicy": "https://rochdaledaily.co.uk/editorial-standards#automation", "correctionsPolicy": "https://rochdaledaily.co.uk/corrections-and-complaints", "actionableFeedbackPolicy": "https://rochdaledaily.co.uk/corrections-and-complaints", "masthead": "https://rochdaledaily.co.uk/about", "contactPoint": {"@type": "ContactPoint", "contactType": "newsdesk", "url": "https://rochdaledaily.co.uk/contact", "areaServed": "GB", "availableLanguage": "en-GB"}}, {"@type": "WebSite", "@id": "https://rochdaledaily.co.uk/#website", "url": "https://rochdaledaily.co.uk/", "name": "Rochdale Daily", "publisher": {"@id": "https://rochdaledaily.co.uk/#publisher"}, "inLanguage": "en-GB", "alternateName": ["Rochdale Daily News", "rochdaledaily.co.uk"]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@id": "https://rochdaledaily.co.uk/#publisher", "@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": "https://rochdaledaily.co.uk/", "logo": {"@type": "ImageObject", "url": "https://rochdaledaily.co.uk/assets/img/logo.png"}, "areaServed": {"@type": "AdministrativeArea", "name": "Metropolitan Borough of Rochdale", "containedInPlace": {"@type": "AdministrativeArea", "name": "Greater Manchester"}}, "publishingPrinciples": "https://rochdaledaily.co.uk/editorial-standards", "ethicsPolicy": "https://rochdaledaily.co.uk/editorial-standards", "verificationFactCheckingPolicy": "https://rochdaledaily.co.uk/editorial-standards#accuracy", "noBylinesPolicy": "https://rochdaledaily.co.uk/editorial-standards#automation", "correctionsPolicy": "https://rochdaledaily.co.uk/corrections-and-complaints", "actionableFeedbackPolicy": "https://rochdaledaily.co.uk/corrections-and-complaints", "masthead": "https://rochdaledaily.co.uk/about", "sameAs": ["https://www.facebook.com/1240511409139789"], "contactPoint": {"@type": "ContactPoint", "contactType": "newsdesk", "url": "https://rochdaledaily.co.uk/contact", "areaServed": "GB", "availableLanguage": "en-GB"}}, {"@type": "WebSite", "@id": "https://rochdaledaily.co.uk/#website", "url": "https://rochdaledaily.co.uk/", "name": "Rochdale Daily", "publisher": {"@id": "https://rochdaledaily.co.uk/#publisher"}, "inLanguage": "en-GB", "alternateName": ["Rochdale Daily News", "rochdaledaily.co.uk"]}]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
@@ -1341,21 +1341,11 @@
     </div>
 
     <main id="main-content">
-      <div class="edition-strap" aria-label="Welcome to the daily edition">
-        <div class="wrap edition-strap-inner">
-          <div>
-            <span class="edition-eyebrow">Independent local journalism</span>
-            <strong>The borough, in focus.</strong>
-            <p>The news, decisions and everyday stories shaping Rochdale and its communities.</p>
-          </div>
-          <nav class="edition-links" aria-label="Explore Rochdale Daily">
-            <a href="/my-rochdale">Your postcode. Your news →</a>
-            <a href="#newsletter">Get the briefing →</a>
-            <a href="/news-alerts">Get news alerts →</a>
-          </nav>
-        </div>
-      </div>
-
+      <!-- The "The borough, in focus" welcome strap sat here, between the
+           leaderboard and the news. Measured 28 Oct 2026 at 390 x 844 it put
+           the lead headline at 759px, under the cookie bar, while 894 of 1,606
+           readers arrived from Facebook on a phone and left in 9 seconds. Its
+           links now sit under the front page (#edition-links-strip). -->
       <section class="section" aria-labelledby="top-stories-title">
         <div class="wrap">
           <!-- Front page: three columns separated by hairline rules —
@@ -1397,7 +1387,7 @@
       <span class="story-kicker">Events</span>
       <h2 class="lead-headline">Scrooge screening with live orchestra comes to Heywood Civic</h2>
       <p class="story-summary">The 1951 film starring Alastair Sim will be shown with a live score from the three-piece FB Pocket Orchestra on Saturday 14 November.</p>
-      <div class="story-meta">By Rochdale Daily Newsdesk · 28 Oct 2026 · 15:06 UTC</div>
+      <div class="story-meta">By Rochdale Daily Newsdesk · 28 Oct 2026 · 15:06 GMT</div>
       <span class="read-more-button" aria-hidden="true">Read More →</span>
     </a>
   </article>
@@ -1472,6 +1462,33 @@
         </div>
       </section>
 
+      <div class="edition-strap edition-strap--after" id="edition-links-strip" aria-label="Make Rochdale Daily yours">
+        <div class="wrap edition-strap-inner">
+          <div>
+            <span class="edition-eyebrow">Make it your paper</span>
+          </div>
+          <nav class="edition-links" aria-label="Explore Rochdale Daily">
+            <a href="/my-rochdale" id="edition-your-area">Your postcode. Your news →</a>
+            <a href="#newsletter">Get the briefing →</a>
+            <a href="/news-alerts">Get news alerts →</a>
+            <a href="https://www.facebook.com/1240511409139789" target="_blank" rel="noopener">Follow us on Facebook →</a>
+          </nav>
+        </div>
+      </div>
+
+      <script>
+        /* A reader who has used My Rochdale gets their own ward here next
+           time (stored on their device by my-rochdale.js; ward only). */
+        (function () {
+          try {
+            var saved = JSON.parse(localStorage.getItem("rd_my_ward") || "null");
+            var link = document.getElementById("edition-your-area");
+            if (!saved || !saved.ward || !link || !/^\/wards\/[a-z0-9-]+$/.test(saved.url || "")) return;
+            link.textContent = "Your area: " + saved.ward + " →";
+            link.href = saved.url;
+          } catch (error) { /* the default link stands */ }
+        })();
+      </script>
       <section class="section" aria-labelledby="latest-news-title">
         <div class="wrap">
           <div class="section-head browse-head">
@@ -1974,9 +1991,9 @@
 
   <div class="cookie" id="cookie-banner" role="region" aria-label="Cookie choices">
     <div class="wrap cookie-row">
-      <p class="cookie-short"><strong>Cookie choices:</strong> Essential cookies keep the site working. Optional analytics and advertising cookies only with your consent. <a href="/privacy">Read more</a>.</p>
+      <p class="cookie-short"><strong>Cookies:</strong> optional ones stay off unless you allow them. <a href="/privacy">Read more</a>.</p>
       <p class="cookie-long"><strong>Cookie choices:</strong> We use strictly necessary cookies and local storage to operate this website, keep it secure and remember your preferences. Optional analytics cookies help us understand how the site is used, while optional advertising cookies may be used to support relevant advertising. Optional cookies remain off unless you consent. Choose “Accept optional cookies” to allow them, or “Essential only” to continue without them. You can change your choice at any time using Cookie settings.</p>
-      <div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept optional cookies</button></div>
+      <div class="cookie-actions"><button class="cookie-decline" id="cookie-decline" type="button">Essential only</button><button class="cookie-accept" id="cookie-accept" type="button">Accept all</button></div>
     </div>
   </div>
 
@@ -2174,7 +2191,7 @@
     // How long a crime story keeps its lead-position boost before recency wins.
 const CRIME_PRIORITY_MS = 36 * 60 * 60 * 1000;
 const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
-    const ARTICLE_REFRESH_MS = 60 * 1000;
+    const ARTICLE_REFRESH_MS = 3 * 60 * 1000;
 
     function ukDateKey(value) {
       const date = value ? new Date(value) : new Date();
@@ -2499,7 +2516,21 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
       restartBreakingTicker();
     }
 
-    async function loadArticleFeed({ quiet = false } = {}) {
+    // One download at a time, and no repeat within 45 seconds of the last
+    // success. articles.json is 3.2 MB; on 28 Oct 2026 a single page load
+    // fetched it three times (start-up, pageshow and visibilitychange all
+    // called this), and the timer then fetched it again every minute.
+    let feedInFlight = null;
+    let feedLoadedAt = 0;
+    function loadArticleFeed(options = {}) {
+      if (feedInFlight) return feedInFlight;
+      if (options.quiet && Date.now() - feedLoadedAt < 45 * 1000) return Promise.resolve();
+      feedInFlight = loadArticleFeedOnce(options)
+        .finally(() => { feedInFlight = null; });
+      return feedInFlight;
+    }
+
+    async function loadArticleFeedOnce({ quiet = false } = {}) {
       const status = document.getElementById("feed-status");
       if (!quiet && status) status.textContent = "Checking news feed…";
 
@@ -2541,6 +2572,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
               })
               .map(normaliseArticle)
           );
+          feedLoadedAt = Date.now();
           renderTopStories();
           renderNewsGrid();
           renderMobileSections();
@@ -3374,7 +3406,7 @@ function shareIconMarkup(action, label) {
       modal.classList.add("open");
       document.body.classList.add("modal-open");
       document.getElementById("modal-close").focus();
-      history.replaceState(null, "", `articles/${story.slug}.html`);
+      history.replaceState(null, "", `articles/${story.slug}`);
       mountComments(story);
       // The modal is built here, long after ads.js ran, so its slots have to be
       // filled explicitly. Without this the sidebar showed an empty placeholder
@@ -3987,7 +4019,7 @@ function shareIconMarkup(action, label) {
       const hashMatch = location.hash.match(/^#article-(\d+)$/);
       if (hashMatch) {
         const target = stories.find(story => String(story.id) === hashMatch[1]);
-        if (target) location.replace(`articles/${target.slug}.html`);
+        if (target) location.replace(`articles/${target.slug}`);
       }
     });
     /* Ward picker: navigates to the ward page on choice. A select rather than
@@ -4007,7 +4039,7 @@ function shareIconMarkup(action, label) {
 
     loadWeather();
     loadForecast();
-    window.setInterval(() => loadArticleFeed({ quiet: true }), ARTICLE_REFRESH_MS);
+    window.setInterval(() => { if (!document.hidden) loadArticleFeed({ quiet: true }); }, ARTICLE_REFRESH_MS);
     window.setInterval(loadWeather, 15 * 60 * 1000);
 
     /* ---- Back to top ---------------------------------------------------

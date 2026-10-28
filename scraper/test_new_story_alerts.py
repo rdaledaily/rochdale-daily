@@ -26,7 +26,8 @@ class NewStoryAlertTests(unittest.TestCase):
         self.assertIn("card.matches(':hover')",self.script)
         self.assertIn("document.visibilityState === 'hidden'",self.script)
         self.assertIn('known.has(id(s))',self.script)
-        self.assertIn('INTERVAL = 90000',self.script)
+        self.assertIn('INTERVAL = 180000',self.script)
+        self.assertIn("fetch('/articles/frontpage.json?new_story_check=",self.script)
     def test_no_untrusted_markup(self):
         self.assertIn('link.textContent = String(story.title)',self.script)
         self.assertIn('/^[a-z0-9][a-z0-9-]{0,180}$/i.test(slug)',self.script)

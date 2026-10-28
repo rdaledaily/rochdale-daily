@@ -12,7 +12,8 @@ from __future__ import annotations
 import html
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any
 
@@ -57,7 +58,7 @@ def image_src(article: dict[str, Any]) -> str:
 
 def article_url(article: dict[str, Any]) -> str:
     slug = clean(article.get("slug")).strip("/")
-    return f"/articles/{slug}.html"
+    return f"/articles/{slug}.html"  # clean_urls.py strips .html at publish
 
 
 def date_label(article: dict[str, Any]) -> str:
@@ -66,7 +67,11 @@ def date_label(article: dict[str, Any]) -> str:
         return "Latest update"
     try:
         dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
-        return dt.strftime("%d %b %Y · %H:%M UTC")
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        local = dt.astimezone(ZoneInfo("Europe/London"))
+        zone = "BST" if local.utcoffset() == timedelta(hours=1) else "GMT"
+        return local.strftime("%d %b %Y · %H:%M ") + zone
     except ValueError:
         return "Latest update"
 

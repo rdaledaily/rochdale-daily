@@ -6,7 +6,10 @@
   'use strict';
   if (window.__rdNewStoryWatcher) return;
   window.__rdNewStoryWatcher = true;
-  const INTERVAL = 90000;
+  // Every 3 minutes against the 174 KB front-page feed, not the 3.2 MB full
+  // archive feed every 90 seconds (28 Oct 2026). A new story is always fresh,
+  // so it is always in the front-page feed.
+  const INTERVAL = 180000;
   const INITIAL_ALERT_WINDOW = 45 * 60 * 1000;
   const SESSION_KEY = 'rd_new_story_alerted_v1';
   const MAX_ALERTS_PER_SESSION = 3;
@@ -48,7 +51,7 @@
   function url(story) {
     const slug = String(story.slug || '').trim();
     if (!/^[a-z0-9][a-z0-9-]{0,180}$/i.test(slug)) return '';
-    return '/articles/' + encodeURIComponent(slug) + '.html';
+    return '/articles/' + encodeURIComponent(slug);
   }
   function eligible(story, now) {
     if (!story || typeof story !== 'object' || (story.status && story.status !== 'published')) return false;
@@ -86,7 +89,7 @@
     busy = true;
     const controller=new AbortController(),deadline=setTimeout(()=>controller.abort(),12000);
     try {
-      const response = await fetch('/articles.json?new_story_check=' + Date.now(), {
+      const response = await fetch('/articles/frontpage.json?new_story_check=' + Date.now(), {
         signal:controller.signal, cache: 'no-store', headers: { Accept: 'application/json' }
       });
       if (!response.ok) return;

@@ -291,9 +291,14 @@ body.rd-home-refresh .filter-bar .filter-button[aria-pressed="true"] {
 }
 body.rd-home-refresh .filter-bar .filter-button:hover:not(.active) { background:var(--surface)!important;color:var(--accent)!important; }
 body.rd-home-refresh .news-layout { grid-template-columns:minmax(0,1fr)!important; }
+/* No display on .news-grid here: below 820px index.html hides #news-grid in
+   favour of the capped mobile sections, and this more specific rule was
+   un-hiding it. Measured 28 Oct 2026 at 390px: all 353 feed cards and 397
+   images rendered under the mobile sections, a 128,553px page. The weekly
+   block shares the class but has no mobile equivalent, so it keeps display. */
+body.rd-home-refresh .weekly-news-grid { display:grid; }
 body.rd-home-refresh .news-grid,
 body.rd-home-refresh .weekly-news-grid {
-  display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
   gap:20px!important;
   border:0!important;

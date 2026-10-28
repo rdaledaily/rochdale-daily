@@ -604,6 +604,9 @@ async function start(e){
   if(id!==requestId)return;
   const loc=data.location;area=loc;
   byId("area-name").textContent=loc.ward||loc.district;
+  // Remember the WARD (never the postcode) on this device so the homepage can
+  // offer "Your area" on the next visit. Nothing leaves the browser.
+  try{if(loc.ward)localStorage.setItem("rd_my_ward",JSON.stringify({ward:loc.ward,url:"/wards/"+norm(loc.ward).replace(/\s+/g,"-"),saved:new Date().toISOString().slice(0,10)}));}catch(_){}
   byId("area-detail").textContent=(loc.nearbyWhitworth?"Whitworth and surrounding communities":"Rochdale borough")+" · Postcode location is approximate.";
   byId("area-postcode").textContent=loc.postcode;
   byId("location").hidden=false;

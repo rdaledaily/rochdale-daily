@@ -23,6 +23,7 @@ and must come from the cited source records.
 from __future__ import annotations
 from source_presentation import clean_candidate_public_text, is_subtle_source, sanitise_article
 from house_style import STYLE_VERSION
+from reader_copy import clean_social_headline, tidy_paragraphs
 from newsroom_source_policy import is_non_article_service_page
 from editorial_upgrade import (
     SERVICE_SENTENCE_RE,
@@ -311,7 +312,7 @@ PUBLISHED_CATEGORIES = ['news', 'crime', 'traffic', 'transport', 'politics', 'ed
 # is_about_rochdale_borough == false is never published (Middleton in
 # Idaho/Wisconsin/Leeds and every other namesake, without maintaining a
 # counter-term list per impostor town).
-ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'content_class': {'type': 'string', 'enum': ['news_report', 'advert_or_listing', 'job_or_recruitment', 'search_results_or_index_page', 'directory_or_services_page', 'press_release_marketing', 'other_non_news']}, 'is_about_rochdale_borough': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(PUBLISHED_CATEGORIES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'content_class', 'is_about_rochdale_borough', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_context_used', 'reason']}}
+ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'content_class': {'type': 'string', 'enum': ['news_report', 'advert_or_listing', 'job_or_recruitment', 'search_results_or_index_page', 'directory_or_services_page', 'press_release_marketing', 'other_non_news']}, 'is_about_rochdale_borough': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(PUBLISHED_CATEGORIES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_headline': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'content_class', 'is_about_rochdale_borough', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_headline', 'social_context_used', 'reason']}}
 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', handlers=[logging.FileHandler(LOG_FILE, encoding='utf-8'), logging.StreamHandler()])
 log = logging.getLogger('rochdale_daily')
@@ -2847,6 +2848,13 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         community_reaction = redact_private_location(community_reaction)
         paragraphs.append(f'Community reaction: {community_reaction}')
 
+    # Phone-length paragraphs (reader_copy.py): re-broken at sentence
+    # boundaries after every other paragraph pass, so the 8-paragraph cap above
+    # has already been applied to the model's paragraphs and no words are lost.
+    if not deterministic:
+        paragraphs = tidy_paragraphs(paragraphs)
+    social_headline = '' if sensitive else clean_social_headline(draft.get('social_headline'), title)
+
     final_draft = {
         'publishable': True,
         'title': title,
@@ -2927,6 +2935,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'slug': make_slug(title),
         'excerpt': excerpt,
         'content_html': ''.join(f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs),
+        'social_headline': social_headline,
         'area': area,
         'category': category,
         'types': [category],

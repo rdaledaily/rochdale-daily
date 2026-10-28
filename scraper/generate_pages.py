@@ -21,7 +21,9 @@ import os
 import re
 import ad_slots as _ad_slots
 from headline_style import title_tag as _title_tag
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
+from reader_copy import clean_social_headline, tidy_content_html
 from pathlib import Path
 from typing import Any
 SITE_BASE_URL = os.getenv('SITE_BASE_URL', 'https://rochdaledaily.co.uk').rstrip('/')
@@ -853,6 +855,49 @@ def hero_image_markup(article: dict[str, Any], image_url: str) -> str:
     )
 
 
+LONDON = ZoneInfo("Europe/London")
+
+
+def uk_stamp(dt: datetime) -> str:
+    """'28 Oct 2026 · 11:03 GMT' in the reader's own clock. The byline said UTC,
+    which is an hour behind every summer."""
+    local = dt.astimezone(LONDON)
+    zone = "BST" if local.utcoffset() == timedelta(hours=1) else "GMT"
+    return f"{local.day} {local.strftime('%b %Y')} · {local.strftime('%H:%M')} {zone}"
+
+
+def updated_stamp(article: dict[str, Any], published: datetime) -> str:
+    """'Updated 14:20 GMT' when the story changed more than ten minutes after
+    it was first published; nothing otherwise.
+
+    Same rule as add_article_time_metadata.py: a routine re-scrape of an
+    automated story is not an editorial update, so only the newsdesk's own
+    articles, corrected stories and live or ongoing stories carry the stamp."""
+    editorial = bool(
+        article.get("manual_article") or article.get("corrections")
+        or article.get("is_ongoing") or article.get("live_story") or article.get("live_updates")
+    )
+    if not editorial:
+        return ""
+    modified = parse_iso(last_modified_at(article))
+    if modified.year <= 1970 or published.year <= 1970:
+        return ""
+    if modified - published < timedelta(minutes=10):
+        return ""
+    local = modified.astimezone(LONDON)
+    zone = "BST" if local.utcoffset() == timedelta(hours=1) else "GMT"
+    same_day = local.date() == published.astimezone(LONDON).date()
+    when = local.strftime('%H:%M') + f" {zone}" if same_day else f"{local.day} {local.strftime('%b')} {local.strftime('%H:%M')} {zone}"
+    return f"Updated {when}"
+
+
+def share_title(article: dict[str, Any]) -> str:
+    """The Facebook and X preview title: the editor's or rewrite's social
+    headline when it passes reader_copy's rules, else the headline."""
+    title = str(article.get("title") or "")
+    return clean_social_headline(article.get("social_headline"), title) or title
+
+
 def render_article_page(article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
     article = normalise_feature(article)
     slug = article.get('slug')
@@ -864,7 +909,12 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     published = first_published_at(article)
     byline = esc(article.get('byline') or 'Rochdale Daily Newsdesk')
     police_matter = bool(article.get('police_matter'))
-    content = insert_incontent_ad(str(article.get('content_html') or ''))
+    raw_content = str(article.get('content_html') or '')
+    if not (article.get('manual_article') or article.get('editorial_lock')):
+        # Phone-length paragraphs for automated copy (reader_copy.py). An
+        # editor's own article is rendered exactly as written.
+        raw_content = tidy_content_html(raw_content)
+    content = insert_incontent_ad(raw_content)
     # In-text "Read more" links to genuinely related stories (inline_related.py).
     try:
         import inline_related
@@ -914,10 +964,19 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     byline_dt = parse_iso(published)
     byline_date = ''
     if byline_dt.year > 1970:
-        byline_date = f"{byline_dt.day} {byline_dt.strftime('%b %Y')} · {byline_dt.strftime('%H:%M')} UTC"
-    byline_date_span = f'<span>{esc(byline_date)}</span>' if byline_date else ''
+        byline_date = uk_stamp(byline_dt)
+    byline_date_span = (
+        f'<span><time datetime="{esc(published)}">{esc(byline_date)}</time></span>' if byline_date else ''
+    )
+    updated_text = updated_stamp(article, byline_dt)
+    if updated_text:
+        byline_date_span += (
+            f'<span class="article-updated"><time datetime="{esc(last_modified_at(article))}">'
+            f'{esc(updated_text)}</time></span>'
+        )
+    social_title = share_title(article)
     robots = 'noindex,follow,max-image-preview:large' if article_should_noindex(article) else 'index,follow,max-image-preview:large'
-    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="{robots}">\n  <title>{esc(_title_tag(title))}</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  {TOKEN_STYLESHEET_LINK}\n  <style>{SITE_CSS}</style>\n  {EDITORIAL_STYLESHEET_LINK}\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(last_modified_at(article) or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n  <meta name="twitter:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta name="news_keywords" content="{esc(seo_keywords(article))}">\n{article_tag_markup(article)}\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  {site_shell_markup("../index.html")}\n\n  <div class="page-shell">\n    <div class="wrap article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">News</a><span aria-hidden="true">/</span><a href="/news/{esc(category)}.html">{esc(category_label(category))}</a>{ongoing_chip}</nav>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          <div class="article-byline">\n            <span>By {byline}</span>\n            {byline_date_span}\n            {share_icons_markup(canonical_url, title)}\n          </div>\n          {developing_note}\n          {hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          {comments_markup(article, slug, category)}\n          {read_next_markup(article, all_articles)}\n          <section class="editorial-legal-note">\n            <h3>Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p class="legal-links"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n        </div>\n        <aside class="article-sidebar">\n          {related_stories_markup(article, all_articles)}\n          {newsletter_box_markup("article-newsletter")}\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" data-ad-optional hidden aria-hidden="true"></div>\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n\n    // The sidebar newsletter box. Same endpoint and same payload shape as the\n    // homepage, so there is one subscriber list; source says which box it came\n    // from. Guarded on the element so a page rendered without the box is fine.\n    (function () {{\n      var form = document.getElementById("article-newsletter-form");\n      if (!form) return;\n      var status = document.getElementById("article-newsletter-status");\n      form.addEventListener("submit", function (event) {{\n        event.preventDefault();\n        var email = (document.getElementById("article-newsletter-email").value || "").trim();\n        if (!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{{2,}}$/.test(email)) {{ status.textContent = "Please enter a valid email address."; return; }}\n        status.textContent = "Signing you up\\u2026";\n        fetch("/api/newsletter", {{ method: "POST", headers: {{ "Content-Type": "application/json" }}, body: JSON.stringify({{ email: email, consent: true, website: "", source: "article" }}) }})\n          .then(function (res) {{ return res.json().catch(function () {{ return {{}}; }}); }})\n          .then(function (data) {{\n            if (data && data.ok) {{ status.textContent = data.message || "Thanks. You're on the list."; form.reset(); }}\n            else {{ status.textContent = (data && data.error) || "Something went wrong. Please try again."; }}\n          }})\n          .catch(function () {{ status.textContent = "Something went wrong. Please try again."; }});\n      }});\n    }})();\n      </script>\n  <script defer src="/assets/js/menu.js"></script>
+    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="{robots}">\n  <title>{esc(_title_tag(title))}</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  {TOKEN_STYLESHEET_LINK}\n  <style>{SITE_CSS}</style>\n  {EDITORIAL_STYLESHEET_LINK}\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(social_title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(last_modified_at(article) or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(social_title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n  <meta name="twitter:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta name="news_keywords" content="{esc(seo_keywords(article))}">\n{article_tag_markup(article)}\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n</head>\n<body>\n  {site_shell_markup("../index.html")}\n\n  <div class="page-shell">\n    <div class="wrap article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">News</a><span aria-hidden="true">/</span><a href="/news/{esc(category)}.html">{esc(category_label(category))}</a>{ongoing_chip}</nav>\n          <h1>{esc(title)}</h1>\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          <div class="article-byline">\n            <span>By {byline}</span>\n            {byline_date_span}\n            {share_icons_markup(canonical_url, title)}\n          </div>\n          {developing_note}\n          {hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          {comments_markup(article, slug, category)}\n          {read_next_markup(article, all_articles)}\n          <section class="editorial-legal-note">\n            <h3>Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p class="legal-links"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n        </div>\n        <aside class="article-sidebar">\n          {related_stories_markup(article, all_articles)}\n          {newsletter_box_markup("article-newsletter")}\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" data-ad-optional hidden aria-hidden="true"></div>\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n\n    // The sidebar newsletter box. Same endpoint and same payload shape as the\n    // homepage, so there is one subscriber list; source says which box it came\n    // from. Guarded on the element so a page rendered without the box is fine.\n    (function () {{\n      var form = document.getElementById("article-newsletter-form");\n      if (!form) return;\n      var status = document.getElementById("article-newsletter-status");\n      form.addEventListener("submit", function (event) {{\n        event.preventDefault();\n        var email = (document.getElementById("article-newsletter-email").value || "").trim();\n        if (!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{{2,}}$/.test(email)) {{ status.textContent = "Please enter a valid email address."; return; }}\n        status.textContent = "Signing you up\\u2026";\n        fetch("/api/newsletter", {{ method: "POST", headers: {{ "Content-Type": "application/json" }}, body: JSON.stringify({{ email: email, consent: true, website: "", source: "article" }}) }})\n          .then(function (res) {{ return res.json().catch(function () {{ return {{}}; }}); }})\n          .then(function (data) {{\n            if (data && data.ok) {{ status.textContent = data.message || "Thanks. You're on the list."; form.reset(); }}\n            else {{ status.textContent = (data && data.error) || "Something went wrong. Please try again."; }}\n          }})\n          .catch(function () {{ status.textContent = "Something went wrong. Please try again."; }});\n      }});\n    }})();\n      </script>\n  <script defer src="/assets/js/menu.js"></script>
   <script defer src="/assets/js/new-story-alerts.js"></script>\n  <script defer src="/assets/js/article-comments.js"></script>\n  <script defer src="/assets/js/read-next.js"></script>\n  <script defer src="/assets/js/cookie-consent.js"></script>\n  <script defer src="/assets/ads.js"></script>\n</body>\n</html>\n'''
 
 def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
