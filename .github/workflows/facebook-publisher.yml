@@ -10,8 +10,8 @@ on:
         required: false
         default: "0"
   schedule:
-    # Checked hourly; the script posts only in the 07, 12, 17 and 20 UK-time
-    # slots (plus genuine breaking news between 07:00 and 22:59), at most five
+    # Checked hourly; the script posts only in the 07, 12, 15, 17, 20 and 22 UK-time
+    # slots (plus genuine breaking news between 07:00 and 22:59), at most seven
     # posts a day. Each post is a photo with the link as the Page's first comment.
     - cron: "27 * * * *"
   push:
@@ -67,8 +67,8 @@ jobs:
           FACEBOOK_RESULT_PATH: /tmp/facebook_last_result.json
           FACEBOOK_MAX_ARTICLE_AGE_HOURS: "36"
           FACEBOOK_MIN_POST_INTERVAL_MINUTES: "60"
-          FACEBOOK_SLOT_HOURS: "7,12,17,20"
-          FACEBOOK_MAX_POSTS_PER_DAY: "5"
+          FACEBOOK_SLOT_HOURS: "7,12,15,17,20,22"
+          FACEBOOK_MAX_POSTS_PER_DAY: "7"
         run: python scraper/post_facebook_article.py
 
       - name: Save successful Facebook post to state branch
