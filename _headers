@@ -75,8 +75,17 @@
 /*.html
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
+# Agent discovery (RFC 8288 / RFC 9727 section 3).
 /index.html
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json"
+  Link: </developers>; rel="service-doc"; type="text/html"
+  Link: </rss.xml>; rel="alternate"; type="application/rss+xml"; title="Rochdale Daily"
 
 /
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json"
+  Link: </developers>; rel="service-doc"; type="text/html"
+  Link: </rss.xml>; rel="alternate"; type="application/rss+xml"; title="Rochdale Daily"
