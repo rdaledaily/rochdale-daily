@@ -1346,6 +1346,16 @@
            the lead headline at 759px, under the cookie bar, while 894 of 1,606
            readers arrived from Facebook on a phone and left in 9 seconds. Its
            links now sit under the front page (#edition-links-strip). -->
+      <!-- Live coverage running now (assets/js/live-blog.js), and the reader's
+           own "new since your last visit" line (assets/js/retention.js). Both
+           stay hidden unless there is something to say. -->
+      <div class="wrap">
+        <section class="live-now" id="live-now" hidden aria-labelledby="live-now-title">
+          <h2 id="live-now-title">Live now</h2>
+          <ul class="live-now-list"></ul>
+        </section>
+        <p class="since-last" id="since-last" hidden></p>
+      </div>
       <section class="section" aria-labelledby="top-stories-title">
         <div class="wrap">
           <!-- Front page: three columns separated by hairline rules —
@@ -1461,6 +1471,15 @@
           </div>
         </div>
       </section>
+
+      <div class="wrap">
+        <a class="afc-strip" id="afc-strip" href="/rochdale-afc" hidden>
+          <span class="afc-strip-kicker">Rochdale AFC</span>
+          <span class="afc-strip-match"></span>
+          <span class="afc-strip-meta"></span>
+          <span class="afc-strip-go" aria-hidden="true">Matchday hub →</span>
+        </a>
+      </div>
 
       <div class="edition-strap edition-strap--after" id="edition-links-strip" aria-label="Make Rochdale Daily yours">
         <div class="wrap edition-strap-inner">
@@ -2578,6 +2597,11 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
           renderMobileSections();
           renderEvents();
           applyFilterFromUrl();
+          // For assets/js/retention.js: which stories are new since this
+          // reader's last visit. Slug and age only; no reader data leaves.
+          try {
+            window.dispatchEvent(new CustomEvent("rd:feed", { detail: stories.map(s => ({ slug: s.slug, minutesAgo: s.minutesAgo })) }));
+          } catch (error) { /* older browsers: no marker, nothing else changes */ }
 
           const crimeHeadlines = stories
             .filter(story => story.category === "crime")
@@ -4999,6 +5023,8 @@ function shareIconMarkup(action, label) {
     })();
   </script>
   <script defer src="/assets/js/river.js"></script>
+  <script defer src="/assets/js/live-blog.js"></script>
+  <script defer src="/assets/js/retention.js"></script>
 <style>.rd-area-badge{display:inline-block;margin:3px 6px;padding:3px 7px;border-radius:12px;background:#e7f4fd;color:#135778;font:700 11px system-ui;text-transform:none}</style>
 <script src="/assets/js/menu.js" defer></script>
 <script src="/assets/js/banner-rotation.js" defer></script>
