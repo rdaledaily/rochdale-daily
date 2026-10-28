@@ -128,5 +128,29 @@ class SourceLinkTests(unittest.TestCase):
         )
 
 
+class RedirectedFeedRecordTests(unittest.TestCase):
+    def test_record_whose_url_redirects_is_not_published(self):
+        import json
+        import os
+        import generate_pages
+        tmp = Path(tempfile.mkdtemp())
+        (tmp / "articles.json").write_text(json.dumps([
+            {"slug": "merged-duplicate", "title": "Dup", "status": "published"},
+            {"slug": "kept-story", "title": "Kept", "status": "published"},
+        ]), encoding="utf-8")
+        (tmp / "_redirects").write_text(
+            "/articles/merged-duplicate /articles/kept-story 301\n", encoding="utf-8"
+        )
+        old_cwd, old_path = os.getcwd(), generate_pages.ARTICLES_JSON
+        try:
+            os.chdir(tmp)
+            generate_pages.ARTICLES_JSON = Path("articles.json")
+            slugs = [a["slug"] for a in generate_pages.load_articles(blocklist={})]
+        finally:
+            os.chdir(old_cwd)
+            generate_pages.ARTICLES_JSON = old_path
+        self.assertEqual(slugs, ["kept-story"])
+
+
 if __name__ == "__main__":
     unittest.main()

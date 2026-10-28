@@ -47,6 +47,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read  # see "Verify manual stories survived publication"
 
 # Several workflows can push generated output to main seconds apart. Newest main
 # always wins so a stale queued Pages build cannot replace a newer one.
@@ -118,17 +119,41 @@ jobs:
       - name: Build privacy-safe local postcode dashboard fallback
         run: python3 scraper/generate_my_rochdale_snapshot.py
 
+      # A manual story committed while its publish run is still building is
+      # not lost, only not yet published (28 Oct 2026: the Scrooge event failed
+      # this check while publish.yml was mid-run). Stand aside only while a
+      # publish run is actually in flight: it dispatches a fresh deploy of the
+      # complete snapshot when it pushes. With no publish running, a missing
+      # story is a real loss and this step fails as before.
       - name: Verify manual stories survived publication
-        run: python3 scraper/verify_manual_publication.py
+        id: manual
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if python3 scraper/verify_manual_publication.py; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          inflight=$(gh api "repos/${{ github.repository }}/actions/workflows/publish.yml/runs?per_page=20" \
+            --jq '[.workflow_runs[] | select(.status != "completed")] | length')
+          if [ "${inflight:-0}" -gt 0 ]; then
+            echo "::notice::Manual publication in progress (${inflight} run); it will dispatch the next deploy. Skipping this one."
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          exit 1
 
       - name: Configure Pages
+        if: steps.manual.outputs.deploy == 'true'
         uses: actions/configure-pages@v6
 
       - name: Upload site
+        if: steps.manual.outputs.deploy == 'true'
         uses: actions/upload-pages-artifact@v5
         with:
           path: .
 
       - name: Deploy to GitHub Pages
+        if: steps.manual.outputs.deploy == 'true'
         id: deployment
         uses: actions/deploy-pages@v5

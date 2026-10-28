@@ -13,8 +13,10 @@ generate_pages.main() in every lane:
 
 1. Retired URLs. Every `/articles/<slug>` source in `_redirects` is a
    retired URL. Its page file is deleted so it can never return to the
-   sitemap or serve stale content. A slug that is still in the live feed is
-   never deleted (logged instead): the feed wins over a stale rule.
+   sitemap or serve stale content. generate_pages.load_articles drops a
+   feed record whose URL is retired, since Cloudflare redirects it before
+   the page can be served (28 Oct 2026); a live slug passed in here is
+   still never deleted, as a last guard.
 2. Canonicals. A page whose canonical names a missing page is pointed at
    that URL's redirect destination when that destination carries the same
    story, otherwise at itself. A page whose canonical names an unrelated
