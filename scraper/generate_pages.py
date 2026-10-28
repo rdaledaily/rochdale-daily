@@ -998,6 +998,15 @@ def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
     payload = json.loads(ARTICLES_JSON.read_text(encoding='utf-8'))
     articles = payload if isinstance(payload, list) else payload.get('articles', [])
     active_blocklist = blocklist if blocklist is not None else load_blocklist()
+    # A URL that _redirects sends elsewhere can never be shown: Cloudflare
+    # applies the rule before serving the page. Treating its record as live
+    # kept rebuilding the page, listing it in the sitemap and linking to it
+    # from other stories (28 Oct 2026: two merged duplicates, 16 links).
+    try:
+        from archive_identity_repair import retired_article_redirects
+        retired = retired_article_redirects(Path('_redirects'))
+    except Exception:  # never let the guard block the paper
+        retired = {}
     published = []
     for article in articles:
         if not isinstance(article, dict):
@@ -1012,6 +1021,9 @@ def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
         if is_blocked_article(article, active_blocklist):
             continue
         article = sanitise_article(article)
+        if str(article.get('slug')) in retired:
+            print(f"Retired by redirect, not published: {article.get('slug')} -> {retired[str(article.get('slug'))]}")
+            continue
         published.append(article)
     return published
 
