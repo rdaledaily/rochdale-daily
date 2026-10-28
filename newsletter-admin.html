@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Newsletter sign-ups | Rochdale Daily</title>
+  <link rel="stylesheet" href="/assets/css/rd-tokens.css">
+  <style>
+    body { margin: 0; background: var(--paper, #f6f5f1); color: var(--ink, #2b2824); font: 16px/1.5 var(--font-body, system-ui, sans-serif); }
+    main { max-width: 720px; margin: 0 auto; padding: 16px; }
+    h1 { font: 700 26px/1.2 var(--font-display, Georgia, serif); margin: 8px 0 4px; }
+    .note { color: var(--muted, #6b675f); font-size: 14px; }
+    .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; }
+    input { flex: 1 1 220px; box-sizing: border-box; font: 16px var(--font-body, system-ui); padding: 10px; border: 1px solid #b9b5ab; background: #fff; border-radius: 0; }
+    button { min-height: 44px; padding: 0 14px; font: 700 14px var(--font-ui, system-ui); border: 1px solid var(--ink, #2b2824); background: var(--ink, #2b2824); color: #fff; cursor: pointer; }
+    button[disabled] { opacity: .5; cursor: default; }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 16px 0; }
+    .stat { background: #fff; border: 1px solid var(--line, #dcdad4); border-top: 3px solid var(--ink, #2b2824); padding: 12px; }
+    .stat strong { display: block; font: 700 28px/1.1 var(--font-display, Georgia, serif); }
+    .stat span { font: 700 11px var(--font-ui, system-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--muted, #6b675f); }
+    .stat.waiting { border-top-color: var(--breaking, #8c3a25); }
+    .warn { background: #fff4e5; border-left: 4px solid #b26a00; padding: 10px 12px; margin: 12px 0; font-size: 14px; }
+    #status { font-weight: 600; min-height: 22px; }
+    @media (max-width: 560px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Newsletter sign-ups</h1>
+  <p class="note">Everyone who signed up on the site, and whether they have reached the Brevo list the Morning Briefing is sent to. Email addresses are not shown here.</p>
+  <div class="bar">
+    <input id="token" type="password" placeholder="Admin token (saved on this device)" autocomplete="off">
+    <button type="button" id="load">Load</button>
+  </div>
+  <div class="warn" id="provider" hidden>Brevo is not connected on the site, so sign-ups cannot be sent across yet.</div>
+  <div class="grid" id="grid" hidden>
+    <div class="stat"><strong id="n-total">0</strong><span>Signed up</span></div>
+    <div class="stat"><strong id="n-synced">0</strong><span>On the Brevo list</span></div>
+    <div class="stat waiting"><strong id="n-waiting">0</strong><span>Waiting to send</span></div>
+    <div class="stat"><strong id="n-held">0</strong><span>Already in Brevo</span></div>
+  </div>
+  <p class="note" id="held-note" hidden>"Already in Brevo" means Brevo already holds that address, often because the person unsubscribed or the address was blocked. They are left alone so nobody is re-added against their wishes. Check them in Brevo → Contacts if needed.</p>
+  <div class="bar"><button type="button" id="sync" hidden>Send waiting sign-ups to Brevo</button></div>
+  <p id="status" role="status" aria-live="polite"></p>
+</main>
+<script>
+(function () {
+  "use strict";
+  var API = "/api/newsletter";
+  var KEY = "rd_admin_token";
+  var $ = function (id) { return document.getElementById(id); };
+  try { $("token").value = localStorage.getItem(KEY) || ""; } catch (e) {}
+  function token() { return $("token").value.trim(); }
+  function say(t) { $("status").textContent = t; }
+
+  function show(counts, configured) {
+    $("grid").hidden = false;
+    $("n-total").textContent = counts.total;
+    $("n-synced").textContent = counts.synced;
+    $("n-waiting").textContent = counts.waiting;
+    $("n-held").textContent = counts.held;
+    $("held-note").hidden = !counts.held;
+    $("provider").hidden = configured !== false;
+    $("sync").hidden = !(counts.waiting && configured !== false);
+  }
+
+  function load() {
+    try { localStorage.setItem(KEY, token()); } catch (e) {}
+    say("Loading…");
+    fetch(API + "?status=1", { headers: { "x-admin-token": token() }, cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { say(d.error || "Could not load."); return; }
+        show(d.counts, d.providerConfigured);
+        say(d.counts.waiting ? d.counts.waiting + " sign-up" + (d.counts.waiting === 1 ? " is" : "s are") + " waiting to go to Brevo." : "Everyone who can be added is on the Brevo list.");
+      })
+      .catch(function () { say("Network error."); });
+  }
+
+  function sync(totals) {
+    $("sync").disabled = true;
+    say("Sending to Brevo…" + (totals.added ? " " + totals.added + " added so far." : ""));
+    fetch(API, { method: "POST", headers: { "Content-Type": "application/json", "x-admin-token": token() }, body: JSON.stringify({ action: "sync" }) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { $("sync").disabled = false; say(d.error || "Not done."); return; }
+        totals.added += d.added; totals.held += d.held; totals.failed += d.failed;
+        show(d.counts, true);
+        if (d.more) { sync(totals); return; }
+        $("sync").disabled = false;
+        load();
+        var parts = [totals.added + " added to the Brevo list"];
+        if (totals.held) parts.push(totals.held + " already in Brevo, left alone");
+        if (totals.failed) parts.push(totals.failed + " could not be sent (Brevo error); try again later");
+        setTimeout(function () { say("Done: " + parts.join("; ") + "."); }, 600);
+      })
+      .catch(function () { $("sync").disabled = false; say("Network error."); });
+  }
+
+  $("load").addEventListener("click", load);
+  $("sync").addEventListener("click", function () {
+    if (!confirm("Add every waiting sign-up to the Brevo newsletter list?")) return;
+    sync({ added: 0, held: 0, failed: 0 });
+  });
+  if (token()) load();
+})();
+</script>
+</body>
+</html>
