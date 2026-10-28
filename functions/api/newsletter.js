@@ -91,6 +91,7 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, error: "Invalid request" }, 400);
   }
   if (!body || typeof body!=="object" || Array.isArray(body)) return json({ok:false,error:"Invalid request"},400);
+  if (body.action === "sync") return syncPending(request, env);
   // Honeypot: real forms leave this empty; bots fill every field.
   if (String(body.website || "").trim()) return json({ ok: true });
 
@@ -167,10 +168,65 @@ function csvCell(value){
  return '"'+safe.replace(/"/g,'""')+'"';
 }
 
+/* Sign-ups saved before Brevo was connected (or while it was down) never
+ * reached the list. These states are retried; anything Brevo already holds
+ * (existing, unsubscribed or blocked contacts) is left alone and counted.
+ */
+const RETRYABLE = new Set(["", "not_configured", "provider_error", "provider_unavailable"]);
+const SYNC_BATCH = 40; // stays inside the per-request subrequest limit
+
+function syncState(record) {
+  if (record.brevo_sync_status === "synced") return "synced";
+  if (record.brevo_sync_status === "review_provider_existing_or_suppressed") return "held";
+  return "waiting";
+}
+
+async function ledger(kv) {
+  const records = [];
+  for (const hash of await subscriberHashes(kv)) {
+    const record = await readJson(kv, `newsletter:sub:${hash}`, null);
+    if (record && record.email) records.push({ hash, record });
+  }
+  return records;
+}
+
+function summary(records) {
+  const counts = { total: records.length, synced: 0, waiting: 0, held: 0 };
+  for (const { record } of records) counts[syncState(record)] += 1;
+  return counts;
+}
+
+async function syncPending(request, env) {
+  if (!env.EVENTS_KV) return json({ ok: false, error: "Not configured" }, 503);
+  if (!isAdmin(request, env)) return json({ ok: false, error: "Unauthorised" }, 401);
+  if (!env.BREVO_API_KEY || !env.BREVO_LIST_ID) return json({ ok: false, error: "Brevo is not connected (BREVO_API_KEY / BREVO_LIST_ID)." }, 503);
+  const records = await ledger(env.EVENTS_KV);
+  const waiting = records.filter(({ record }) => RETRYABLE.has(String(record.brevo_sync_status || "")) && record.brevo_sync_status !== "synced");
+  const batch = waiting.slice(0, SYNC_BATCH);
+  const result = { added: 0, held: 0, failed: 0 };
+  for (const { hash, record } of batch) {
+    const outcome = await syncBrevo(env, record);
+    record.brevo_sync_status = outcome.synced ? "synced" : (outcome.reason || "not_configured");
+    record.brevo_sync_attempt = new Date().toISOString();
+    await env.EVENTS_KV.put(`newsletter:sub:${hash}`, JSON.stringify(record));
+    if (outcome.synced) result.added += 1;
+    else if (outcome.reason === "review_provider_existing_or_suppressed") result.held += 1;
+    else result.failed += 1;
+  }
+  // A failure stops further batches from looping on a provider outage.
+  const remaining = waiting.length - batch.length;
+  return json({ ok: true, ...result, remaining, more: remaining > 0 && result.failed === 0, counts: summary(records) });
+}
+
 export async function onRequestGet({ request, env }) {
   if (!env.EVENTS_KV) return json({ ok: false, error: "Not configured" }, 503);
   if (!isAdmin(request, env)) return json({ ok: false, error: "Unauthorised" }, 401);
   const url = new URL(request.url);
+  if (url.searchParams.get("status") === "1") {
+    const counts = summary(await ledger(env.EVENTS_KV));
+    const providerConfigured = Boolean(env.BREVO_API_KEY && Number(env.BREVO_LIST_ID) > 0);
+    return json({ ok: true, providerConfigured, counts });
+  }
   const index = await subscriberHashes(env.EVENTS_KV);
   if (url.searchParams.get("export") !== "csv") return json({ ok: true, count: index.length });
 
