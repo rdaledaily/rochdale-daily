@@ -1,44 +1,42 @@
 {
-  "examined_at": "2026-10-28T13:31:09.347276Z",
+  "examined_at": "2026-10-29T13:42:24.286496Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 126,
+  "candidates_examined": 89,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 104,
-    "would publish": 13,
-    "duplicate of published story": 6,
-    "not local": 3
+    "age": 75,
+    "would publish": 10,
+    "duplicate of published story": 3,
+    "not local": 1
   },
-  "would_publish": 13,
+  "would_publish": 10,
   "age_gate_sensitivity": {
-    "6h": 7,
-    "14h": 10,
-    "24h": 22,
-    "48h": 50,
-    "72h": 73,
-    "168h": 126
+    "6h": 6,
+    "14h": 7,
+    "24h": 14,
+    "48h": 36,
+    "72h": 66,
+    "168h": 89
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 67 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Manchester Evening News: Rochdale council deputy leader detained in Pakistan for 'short period'",
-      "Rochdale Times: Inspector rules on garden fence rejected by council - Rochdale Times"
+      "The Manc: Rochdale set to be illuminated by fiery sculptures for this year’s Ign",
+      "Manchester Evening News: Rochdale Council - Manchester Evening News"
     ],
     "duplicate of published story": [
-      "BBC Manchester: Car and moped seized after drivers ignore Heywood lollipop man",
-      "Rochdale Times: School closes after bomb threat - Rochdale Times",
-      "Rochdale Borough Council: Manchester Road Old Section, roadworks in Rochdale from 25 October 202"
+      "Rochdale Borough Council: Spring Bank Lane, roadworks in Rochdale on 12 November 2026",
+      "Manchester Evening News: Rochdale Town Centre - Manchester Evening News",
+      "Rochdale Borough Council: Newhouse Crescent, roadworks in Rochdale from 27 October 2026"
     ],
     "not local": [
-      "The Gazette: ASSISTNOW LTD: Appointment of Liquidators",
-      "The Gazette: BROTHERS BRICKWORK LTD: Appointment of Liquidators",
-      "Find a Tender: ALTUS EDUCATION PARTNERSHIP invites bids: Altus Education Partnership "
+      "ITVX: Rise in bank tax and £100 energy payments: What’s in Healey’s debut Bu"
     ],
     "age": [
-      "Bee Network live travel alerts: Updated: 27/10/2026 at 12:12pm Live Failsworth Tram Stop - Lifts out o",
-      "Rochdale Borough Council: Broad Lane, roadworks in Rochdale from 11 January 2027 - Rochdale Boro",
-      "beIN SPORTS: Port Vale vs Rochdale - beIN SPORTS"
+      "BBC Manchester: Manchester Portland Street water main repairs could take days",
+      "Netmagmedia: Sustainable Materials & Manufacturing Centre reaches construction mile",
+      "Manchester Evening News: Rochdale council deputy leader detained in Pakistan for 'short period'"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
