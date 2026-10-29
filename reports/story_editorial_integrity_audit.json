@@ -1,12 +1,36 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 454,
-  "published_count": 454,
+  "article_count": 459,
+  "published_count": 459,
   "category_change_count": 0,
-  "image_change_count": 103,
+  "image_change_count": 106,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "police-appeal-for-help-finding-kibriya-ahmed-linked-to-missing-children",
+      "title": "Police appeal for help finding Kibriya Ahmed linked to missing children",
+      "category": "health",
+      "reason": "sensitive story image lacks explicit source/editorial provenance",
+      "before": {
+        "image_url": "assets/img/cards/police_appeal.jpg",
+        "img": "assets/img/cards/police_appeal.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/de7d2a1f9a7e-place-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-council-oversees-local-services-for-205-000-residents",
+      "title": "Rochdale Council oversees local services for 205,000 residents",
+      "category": "environment",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_town_hall_square.jpg",
+        "img": "assets/img/cards/rochdale_town_hall_square.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/b289bcf4e23d-place-generated-card.jpg"
+    },
     {
       "slug": "rochdale-bonfire-night-celebrations-set-for-bowlee-community-park-and-heywood",
       "title": "Rochdale Bonfire Night celebrations set for Bowlee Community Park and Heywood",
@@ -30,6 +54,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/77286766c9069d78-commons-photo.jpg"
+    },
+    {
+      "slug": "ignite-fire-festival-returns-to-rochdale-town-hall-from-november-20-22",
+      "title": "Ignite Fire Festival returns to Rochdale Town Hall from November 20-22",
+      "category": "events",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+        "img": "assets/img/cards/rochdale-town-hall.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/c88cf4be775df99c-commons-photo.jpg"
     },
     {
       "slug": "lachlan-lanskey-joins-rochdale-hornets-on-one-year-deal-for-2027-season",
