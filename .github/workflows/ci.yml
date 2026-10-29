@@ -215,6 +215,7 @@ jobs:
           node --test scraper/test_columns_api.mjs
           node --test scraper/test_api_catalog.mjs
           node --test scraper/test_newsletter_sync.mjs
+          node --test scraper/test_news_inbox_worker.mjs
           PYTHONPATH=scraper python scraper/test_retired_urls_and_source_links.py
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
@@ -279,7 +280,8 @@ jobs:
             scraper/test_headline_style.py scraper/test_ad_slots.py scraper/test_roadworks_page.py \
             scraper/test_archive_identity_repair.py scraper/test_gambling_piracy_policy.py \
             scraper/test_publisher_name_not_entity.py \
-            scraper/test_social_radar.py scraper/test_takedown_beats_manual.py
+            scraper/test_social_radar.py scraper/test_takedown_beats_manual.py \
+            scraper/test_save_email_images.py
           # Tests that existed but were never run by CI until 24 Oct 2026.
           PYTHONPATH=scraper python scraper/test_advertising_commercial_launch.py
           PYTHONPATH=scraper python scraper/test_archive_identity_furniture.py

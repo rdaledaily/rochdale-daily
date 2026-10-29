@@ -1,0 +1,90 @@
+name: Save news@ email images
+
+# Every picture emailed to news@rochdaledaily.co.uk is saved into
+# assets/img/cards/ as <hash>-email-photo.jpg (or .png).
+#
+# The rd-news-inbox Worker (workers/news-inbox/worker.js) forwards each email
+# to the editor and keeps a raw copy in KV. This lane collects those copies via
+# /api/inbox-images, saves their pictures (scraper/save_email_images.py),
+# commits, and only then deletes the copies from KV. A run with nothing waiting
+# commits nothing -- every commit to main is a Cloudflare deploy.
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # Its own lane: never queues behind, or cancels, the scrape (rd-site-writer).
+  group: rd-email-images
+  cancel-in-progress: false
+
+jobs:
+  save:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      SITE_BASE: "https://rochdaledaily.co.uk"
+      INBOX_ADMIN_TOKEN: ${{ secrets.EVENTS_ADMIN_TOKEN }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install image libraries
+        # pillow-heif reads iPhone HEIC photos; Pillow alone cannot.
+        run: python -m pip install --quiet "Pillow>=10,<13" pillow-heif
+
+      - name: Save waiting email images
+        run: python scraper/save_email_images.py
+
+      - name: Commit saved images
+        id: commit
+        run: |
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add assets/img/cards/*-email-photo.* assets/img/cards/credits.json reports/email_images.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo 'committed=false' >> "$GITHUB_OUTPUT"
+            echo 'nothing new to commit'
+            exit 0
+          fi
+          git commit -m "Save news@ email images ($(cat email_images_summary.txt 2>/dev/null))"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && { echo 'committed=true' >> "$GITHUB_OUTPUT"; exit 0; }
+            sleep $((attempt * 7))
+          done
+          echo "::error::email image saver could not push; the emails stay queued for the next run"
+          exit 1
+
+      - name: Clear handled emails from the queue
+        # Only after the pictures are safely on main. An email with no pictures
+        # (nothing to commit) is cleared too, so it is not re-read forever.
+        if: steps.commit.outcome == 'success' && hashFiles('email_images_ack.json') != ''
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request, pathlib
+          keys = json.loads(pathlib.Path("email_images_ack.json").read_text())
+          if not keys:
+              raise SystemExit(0)
+          base = os.environ["SITE_BASE"].rstrip("/")
+          for start in range(0, len(keys), 200):
+              req = urllib.request.Request(
+                  f"{base}/api/inbox-images",
+                  data=json.dumps({"action": "ack", "keys": keys[start:start + 200]}).encode(),
+                  method="POST",
+                  headers={"x-admin-token": os.environ["INBOX_ADMIN_TOKEN"], "Content-Type": "application/json",
+                           "User-Agent": "RochdaleDaily-email-images/1.0"},
+              )
+              with urllib.request.urlopen(req, timeout=30) as resp:
+                  print(resp.read().decode())
+          PY
