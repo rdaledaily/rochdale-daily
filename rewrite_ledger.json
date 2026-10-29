@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-29T01:22:48.216268Z",
+  "updated_at": "2026-10-29T02:31:17.387034Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 162,
+  "count": 159,
   "entries": {
     "https://aboutmanchester.co.uk/rochdale-charity-your-trust-is-hosting-a-variety-of-activities-across-its-venues-this-october-half-term-to-keep-children-and-their-families-entertained": {
       "first_attempt_at": "2026-10-23T12:58:07.186081Z",
@@ -288,13 +288,13 @@
     },
     "https://rochdaleafc.co.uk/northampton-tickets-on-sale": {
       "first_attempt_at": "2026-10-28T19:58:11.670538Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaleafc.co.uk/northampton-tickets-on-sale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-29T01:20:43.722021Z",
+      "last_attempt_at": "2026-10-29T02:28:32.423474Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "Northampton Town Tickets On Sale",
@@ -1366,14 +1366,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-29T01:22:48.215910Z",
+      "last_attempt_at": "2026-10-29T02:31:17.386620Z",
       "outcome": "published",
       "reason": "",
       "title": "The historic Rochdale hall and gardens with spectacular fire festival",
       "source_name": "Manchester Evening News",
       "category": "events",
       "text_fingerprint": "ba4fab01d83af43a",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.messengernewspapers.co.uk/sport/26671180.trafford-mv-slip-third-defeat-littleborough": {
       "first_attempt_at": "2026-10-27T00:08:24.710976Z",
@@ -1648,27 +1648,6 @@
       "source_name": "Rochdale Borough Council",
       "category": "environment",
       "text_fingerprint": "62cc6dd10f3b0120"
-    },
-    "https://www.rochdale.gov.uk/directory-record/2638/trafalgar-street-roadworks-in-rochdale-on-26-november-2026": {
-      "first_attempt_at": "2026-10-21T02:07:58.865667Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/directory-record/2615/fielding-street-roadworks-in-middleton-from-3-november-2026",
-        "https://www.rochdale.gov.uk/directory-record/2636/chesham-avenue-roadworks-in-rochdale-on-4-january-2027",
-        "https://www.rochdale.gov.uk/directory-record/2638/trafalgar-street-roadworks-in-rochdale-on-26-november-2026",
-        "https://www.rochdale.gov.uk/directory-record/2640/joy-street-roadworks-in-rochdale-from-2-november-2026"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T02:07:58.865667Z",
-      "outcome": "failed",
-      "reason": "retry with exact council fields review",
-      "title": "Trafalgar Street, roadworks in Rochdale on 26 November 2026 - Rochdale Borough Council",
-      "source_name": "Rochdale Borough Council",
-      "category": "environment",
-      "text_fingerprint": "51542d6889453c8c",
-      "recovery_attempts": 0,
-      "structured_official_notice_recovery": 1
     },
     "https://www.rochdale.gov.uk/directory-record/2639/kirkstall-avenue-roadworks-in-littleborough-on-6-november-2026": {
       "first_attempt_at": "2026-10-23T10:42:34.244458Z",
@@ -1989,22 +1968,6 @@
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "e76d7b2908cd0673"
-    },
-    "https://www.rochdaletimes.co.uk/final-crossing-for-popular-lollipop-lady-barbara": {
-      "first_attempt_at": "2026-10-16T03:40:07.934774Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.rochdaletimes.co.uk/final-crossing-for-popular-lollipop-lady-barbara"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "last_attempt_at": "2026-10-21T01:43:17.438225Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
-      "title": "Final crossing for popular lollipop lady Barbara - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "education",
-      "text_fingerprint": "76a47179406b0b7a",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1"
     },
     "https://www.rochdaletimes.co.uk/green-light-for-new-11-4m-special-needs-school": {
       "first_attempt_at": "2026-10-23T10:42:34.245278Z",
@@ -2698,33 +2661,6 @@
       "source_name": "Roch Valley Radio Local News",
       "category": "politics",
       "text_fingerprint": "1d02f6e79bf5225d"
-    },
-    "https://www.runcornandwidnesworld.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller": {
-      "first_attempt_at": "2026-10-20T23:30:08.846269Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPUjZOUFREeXpuQ3d2MExBOHlBNnJiZHdBeG1aa2pHX3IxY1BOQnUzRzh1R0U2TWhISjBYZ2pHTzc1VlJNREZNd3N0RGt0MFJRTFRDLVpDQ2pRWlVpQ1pOUVZGWkVKWjFFTzRJZ0FZbWZ0bng2bFEzNnNPUzVIU0M0M0Rod0hTbkFzaVdMT2FiZlRqWnlZSEJIdFRJNDhzbkQwTFo3TGdIM0dicEFNaWdZc3N0WVV0UEMx?oc=5",
-        "https://news.google.com/rss/articles/CBMixAFBVV95cUxOc1pBclRNTGRsS0JRbThFUWRiU0ZoTTZPQjJvR0x3U2tJMjZNeHdvbGxNWkJiMjE4TnZMQ2dTN2VsdnFrcHVxdFF3TEhVclpkNU9QdHRnd1hReGV3S2NpZTBsNmFneVlhMmNwdXRlYTdSdzlHQmlGU1AtTFFQZl8tUDg3U2VINS16N3Y5anF3ZmJXZkQ2TXdVWE10LWhTclZRMHV1Qmk0eFdTMVU0bnptb1I3SEhBOWhJVHNGNUpRYUZnT0tq?oc=5",
-        "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNMjFCRzBMUDZfQ3RVMElMQlM1QnhYdkZ0UEEydkdHcG5MV3RkMVBSX1QzOGRCakhTY3VtVWpkc01UclJuZzZlQlBoNEpBT3IzUHIyT1dzeFlSZWZLbHUtZXlraWNQS3A4X2NYZDdLckJJMW9QVTBIM0ZYMDlpd1Rab1daWnZjQjlFV2Fac2ZtaDdVQ2dxdjRZdUtkcG1MT3I4Qmo1LWxaYW5RZzhJcm9ZOHhJUHh4cnViWDdISEw1X2pjaUxvekFjSw?oc=5",
-        "https://www.burytimes.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller",
-        "https://www.countytimes.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller",
-        "https://www.hertsad.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller",
-        "https://www.northwichguardian.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller",
-        "https://www.runcornandwidnesworld.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller",
-        "https://www.somersetcountygazette.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller",
-        "https://www.stowmarketmercury.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller",
-        "https://www.surreycomet.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller",
-        "https://www.thenorthernecho.co.uk/sport/national/26655446.ian-watson-lauds-amazing-ian-henderson-late-rochdale-leveller"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T01:43:17.438472Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Ian Watson lauds ‘amazing’ Ian Henderson after late Rochdale leveller - Runcorn and Widnes World",
-      "source_name": "Runcorn and Widnes World",
-      "category": "crime",
-      "text_fingerprint": "5df4c679d05b04d7"
     },
     "https://www.salfordcityfc.co.uk/news/2026/october/25/postponed-rochdale-vs-lionesses": {
       "first_attempt_at": "2026-10-26T08:06:42.624060Z",
