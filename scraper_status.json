@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-29T09:42:06.612313Z",
+  "last_run_at": "2026-10-29T10:15:01.976405Z",
   "primary_data": {
     "council_roadworks": {
       "status": "ok",
@@ -45,7 +45,7 @@
       "daily_cap": 3,
       "offered_today": 0,
       "pages": 1,
-      "releases": 45,
+      "releases": 70,
       "borough_buyer": 0,
       "not_story_type": 0,
       "already_seen": 0,
@@ -68,54 +68,58 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 71,
+  "raw_candidates_before_job_filter": 66,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 71,
+  "raw_candidates": 66,
   "candidate_clusters": 32,
   "google_news_resolution": {
-    "wrappers": 25,
-    "resolved": 21,
-    "text_recovered": 17,
+    "wrappers": 47,
+    "resolved": 35,
+    "text_recovered": 4,
     "reattributed": 0,
-    "images_found": 19
+    "images_found": 6
   },
-  "duplicates_merged": 39,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "rochdale-town-hall-to-host-ignite-fire-festival-from-november-20-to-22",
-      "source_url": "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/historic-rochdale-hall-gardens-spectacular-34827853"
-    }
-  ],
+  "duplicates_merged": 34,
+  "attempted_rewrites": 0,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
   "new_articles": 0,
-  "live_articles": 452,
+  "live_articles": 454,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 1,
-    "queued_for_retry": 1,
-    "recovery_limit_reached": 0,
+    "queued_for_retry": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 153,
+    "entries": 152,
     "by_outcome": {
       "failed": 6,
-      "published": 119,
-      "rejected": 28
+      "published": 117,
+      "rejected": 29
     },
-    "held_back_this_run": 22,
+    "held_back_this_run": 23,
     "held_already_published": 19,
-    "held_rejected": 3,
+    "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/historic-rochdale-hall-gardens-spectacular-34827853",
+      "title": "The historic Rochdale hall and gardens with spectacular fire festival",
+      "source_name": "Manchester Evening News",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-10-29T09:42:06.604291Z"
+    },
     {
       "url": "https://rochdaleafc.co.uk/northampton-tickets-on-sale",
       "title": "Northampton Town Tickets On Sale",
@@ -144,15 +148,13 @@
       "last_attempt_at": "2026-10-27T18:59:50.564506Z"
     }
   ],
-  "published_with_style_issues": {
-    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 59,
-    "website_discovery": 6,
+    "rss_and_google_news": 60,
+    "website_discovery": 1,
     "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "live_service_pages": 4,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -165,21 +167,18 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 37,
-    "Manchester Evening News": 10,
-    "Roch Valley Radio": 8,
-    "Bee Network live travel alerts": 6,
+    "Rochdale Times": 36,
+    "Manchester Evening News": 11,
+    "Bee Network live travel alerts": 5,
+    "Rochdale AFC": 4,
+    "Roch Valley Radio": 3,
     "Rochdale Borough Council": 3,
-    "Rochdale AFC": 2,
     "beIN SPORTS": 1,
     "ITVX": 1,
     "The Bury Times": 1,
-    "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {
-    "events": 1
-  },
+  "selected_by_category": {},
   "published_by_category": {
     "business": 46,
     "community": 56,
@@ -189,7 +188,7 @@
     "events": 26,
     "health": 10,
     "news": 51,
-    "politics": 19,
+    "politics": 18,
     "sport": 47,
     "traffic": 34,
     "transport": 8
@@ -216,12 +215,8 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [
-    "events-v3-e823db60e4f9697b951e"
-  ],
-  "selected_candidate_urls": [
-    "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/historic-rochdale-hall-gardens-spectacular-34827853"
-  ],
+  "selected_story_keys": [],
+  "selected_candidate_urls": [],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -231,31 +226,16 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [
-      "events"
-    ],
-    "selected_categories": [
-      "events"
-    ],
+    "available_categories": [],
+    "selected_categories": [],
     "available_wards": [],
     "selected_wards": [],
     "available_areas": [],
-    "selected_areas": [
-      "rochdale"
-    ],
+    "selected_areas": [],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
-    "selected_by_category": {
-      "events": 1
-    },
-    "selected_by_ward": {},
-    "selected_by_area": {
-      "rochdale": 1
-    },
-    "selected_by_source": {
-      "manchester evening news": 1
-    }
+    "selected_by_source": {}
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -829,7 +809,7 @@
   },
   "developing_story_refresh_rule": "A developing story only renews freshness after a material change on its authoritative source; routine re-checks do not change publication freshness.",
   "evergreen_fallback_policy": "After each newsroom run: publish at most one researched evergreen when fewer than 6 qualifying new local stories exist in the trailing 12 hours, only 09:00-20:00 Europe/London, with a 24-hour publication cooldown and a 1-hour failed-attempt backoff.",
-  "evergreen_fallback_attempt_at": "2026-10-29T09:03:35.442131Z",
+  "evergreen_fallback_attempt_at": "2026-10-29T10:15:02.120537Z",
   "evergreen_fallback_attempt_reason": "thin_news_supply",
   "evergreen_fallback_attempt_count": 2,
   "evergreen_fallback": {
@@ -841,8 +821,8 @@
     "last_trigger_reason": "thin_news_supply",
     "qualifying_count": 2,
     "last_topic_id": "clegg-hall-priest-chicken-shoe",
-    "last_article_slug": "the-priest-the-chicken-and-the-shoe-the-clegg-hall-boggart-explained",
-    "last_published_at": "2026-10-29T09:03:35Z"
+    "last_article_slug": "the-priest-the-chicken-and-the-shoe-rochdale-s-strangest-clegg-hall-boggart-story",
+    "last_published_at": "2026-10-29T10:15:02Z"
   },
   "local_publishers_discovery_enabled": [
     "manchestereveningnews.co.uk",
@@ -855,7 +835,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-29T09:57:56.727986Z",
+  "frontpage_generated_at": "2026-10-29T10:17:40.620414Z",
   "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -902,14 +882,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "news": 3,
       "traffic": 2,
       "transport": 1,
       "politics": 2,
       "sport": 2,
       "events": 1,
       "business": 2,
-      "environment": 1,
-      "news": 3
+      "environment": 1
     },
     "selected_by_ward": {
       "borough-wide": 13,
@@ -921,17 +901,17 @@
       "rochdale": 18
     },
     "selected_by_source": {
+      "rochdale daily": 2,
       "rochdale borough council": 2,
       "greater manchester police": 1,
       "rochdale times": 2,
       "love rugby league": 1,
       "heywood civic; fb music and media press release": 1,
       "netmagmedia": 1,
-      "rochdale daily": 2,
       "manchester evening news": 1,
       "rochdale afc": 1,
-      "the right agency press release for aab and schofield sweeney": 1,
-      "bbc manchester": 1
+      "bbc manchester": 1,
+      "the right agency press release for aab and schofield sweeney": 1
     },
     "pool_size": 22,
     "primary_pool_size": 22,
@@ -939,20 +919,20 @@
     "selection_window_days": 2,
     "frontpage_count": 14,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 12,
+    "fresh_under_24h": 10,
     "fresh_under_homepage_window": 14,
     "short_briefs_selected": 9,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 15,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 452,
+  "approved_ticket_events": 15,
+  "event_dates_corrected_from_ledger": 6,
+  "duplicate_articles_after_postprocessing": 454,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -962,10 +942,10 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
+  "whats_on_event_count": 15,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
