@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-29T23:51:51.636996Z",
+  "updated_at": "2026-10-30T00:15:24.908917Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 155,
+  "count": 156,
   "entries": {
     "https://aboutmanchester.co.uk/rochdale-charity-your-trust-is-hosting-a-variety-of-activities-across-its-venues-this-october-half-term-to-keep-children-and-their-families-entertained": {
       "first_attempt_at": "2026-10-23T12:58:07.186081Z",
@@ -204,6 +204,22 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "3952e40cd2f8c6c4"
+    },
+    "https://rochdaleafc.co.uk/fa-youth-cup-report-291026": {
+      "first_attempt_at": "2026-10-30T00:15:24.908875Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/fa-youth-cup-report-291026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-30T00:15:24.908875Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Dale Exit FA Youth Cup - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "2f5eaf91d649c4d2"
     },
     "https://rochdaleafc.co.uk/fleetwood-fa-cup-ticket-details": {
       "first_attempt_at": "2026-10-28T19:58:21.269412Z",
@@ -1207,6 +1223,23 @@
       "category": "news",
       "text_fingerprint": "ff94b04c9413b3d6"
     },
+    "https://www.manchestereveningnews.co.uk/all-about/rochdale-town-centre/?service=responsive": {
+      "first_attempt_at": "2026-10-30T00:15:24.908731Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/all-about/rochdale-town-centre",
+        "https://www.manchestereveningnews.co.uk/all-about/rochdale-town-centre/?service=responsive"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-30T00:15:24.908731Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale Town Centre - Manchester Evening News",
+      "source_name": "Manchester Evening News",
+      "category": "news",
+      "text_fingerprint": "ff94b04c9413b3d6"
+    },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/appeal-wanted-man-rochdale-manchester-34836772": {
       "first_attempt_at": "2026-10-29T19:31:12.593367Z",
       "attempts": 1,
@@ -1924,22 +1957,6 @@
       "category": "crime",
       "text_fingerprint": "6d3ea136e816d8bd"
     },
-    "https://www.rochdaletimes.co.uk/enjoy-a-rubbish-day-out-this-half-term": {
-      "first_attempt_at": "2026-10-21T23:24:50.123006Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.rochdaletimes.co.uk/enjoy-a-rubbish-day-out-this-half-term"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-21T23:51:54.440175Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
-      "title": "Enjoy a rubbish day out this half-term - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "environment",
-      "text_fingerprint": "e76d7b2908cd0673"
-    },
     "https://www.rochdaletimes.co.uk/green-light-for-new-11-4m-special-needs-school": {
       "first_attempt_at": "2026-10-23T10:42:34.245278Z",
       "attempts": 1,
@@ -2092,8 +2109,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-29T23:51:51.636736Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "New trial gives children better mental health and social care support - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "health",
