@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-30T18:08:31.052461Z",
+  "last_run_at": "2026-10-30T18:23:52.915076Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,17 +7,9 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 2,
-      "listed": 12,
-      "other_notice_types": 5,
-      "already_seen": 6,
-      "new": 1,
-      "outside_borough": 0,
-      "no_company_address": 0,
-      "notice_unreadable": 0
+      "status": "not due",
+      "last_checked": "2026-10-30T18:05:29.217727Z",
+      "interval_hours": 12
     },
     "written_answers": {
       "status": "not due",
@@ -25,15 +17,9 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 46,
-      "not_decisions": 22,
-      "no_borough_place": 5,
-      "already_seen": 8,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-30T18:05:29.217727Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -56,18 +42,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 96,
+  "raw_candidates_before_job_filter": 104,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 90,
-  "candidate_clusters": 39,
+  "raw_candidates": 98,
+  "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 38,
-    "resolved": 24,
-    "text_recovered": 21,
+    "wrappers": 48,
+    "resolved": 30,
+    "text_recovered": 27,
     "reattributed": 0,
-    "images_found": 23
+    "images_found": 29
   },
-  "duplicates_merged": 51,
+  "duplicates_merged": 60,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -92,9 +78,9 @@
       "published": 126,
       "rejected": 29
     },
-    "held_back_this_run": 27,
+    "held_back_this_run": 26,
     "held_already_published": 21,
-    "held_rejected": 6,
+    "held_rejected": 5,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -143,21 +129,12 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-10-29T21:10:18.426175Z"
-    },
-    {
-      "url": "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/historic-rochdale-hall-gardens-spectacular-34827853",
-      "title": "The historic Rochdale hall and gardens with spectacular fire festival",
-      "source_name": "Manchester Evening News",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-10-29T19:57:56.774082Z"
     }
   ],
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 83,
+    "rss_and_google_news": 91,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -173,19 +150,22 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 35,
+    "Rochdale Times": 41,
     "Roch Valley Radio": 12,
-    "Manchester Evening News": 10,
+    "Manchester Evening News": 7,
+    "InYourArea": 5,
     "Bee Network live travel alerts": 5,
     "Port Vale Football Club": 4,
     "The Manc": 4,
-    "InYourArea": 4,
-    "Facebook": 3,
     "Rochdale AFC": 3,
+    "Facebook": 2,
     "Blog Preston": 2,
+    "Kashmir Times": 2,
+    "FansNetwork.co.uk": 2,
     "Roch Valley Radio Local News": 2,
     "Your Trust Rochdale": 1,
-    "Kashmir Times": 1,
+    "Yahoo News UK": 1,
+    "onevalefan": 1,
     "ITVX": 1,
     "Rochdale Borough Council": 1,
     "Oldham Times": 1,
@@ -807,12 +787,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 3
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -848,8 +824,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-30T18:10:08.521677Z",
-  "frontpage_article_count": 19,
+  "frontpage_generated_at": "2026-10-30T18:25:21.351303Z",
+  "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -892,7 +868,6 @@
       "community": 3,
       "crime": 2,
       "traffic": 2,
-      "transport": 1,
       "sport": 2,
       "business": 1,
       "health": 2,
@@ -900,7 +875,7 @@
       "news": 4
     },
     "selected_by_ward": {
-      "borough-wide": 19
+      "borough-wide": 18
     },
     "selected_by_area": {
       "heywood": 1,
@@ -911,7 +886,6 @@
       "find a tender": 1,
       "oldham times": 1,
       "facebook": 1,
-      "greater manchester police": 1,
       "rochdale times": 3,
       "source": 1,
       "your trust rochdale": 1,
@@ -926,10 +900,10 @@
     "primary_pool_size": 19,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 19,
+    "frontpage_count": 18,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 12,
-    "fresh_under_homepage_window": 19,
+    "fresh_under_homepage_window": 18,
     "short_briefs_selected": 14,
     "frontpage_minimum_met": true
   },
