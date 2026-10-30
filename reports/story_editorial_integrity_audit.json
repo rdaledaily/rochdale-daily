@@ -1,10 +1,10 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 465,
-  "published_count": 465,
+  "article_count": 470,
+  "published_count": 470,
   "category_change_count": 0,
-  "image_change_count": 107,
+  "image_change_count": 108,
   "category_changes": [],
   "image_changes": [
     {
@@ -966,6 +966,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/f0324b05b31a-place-generated-card.jpg"
+    },
+    {
+      "slug": "heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen",
+      "title": "Heywood and Middleton North MP visits Redwood School’s sixth form at Phoenix Centre",
+      "category": "education",
+      "reason": "uncanonical img fallback exists while image_url is empty",
+      "before": {
+        "image_url": "",
+        "img": "assets/img/cards/e5ddafbbf0d08f86-commons-photo.jpg",
+        "status": "commons-photo-cached"
+      },
+      "after": "assets/img/cards/e5ddafbbf0d08f86-commons-photo.jpg"
     },
     {
       "slug": "springhill-hospice-to-host-free-will-information-clinic-in-heywood",
