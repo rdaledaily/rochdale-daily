@@ -1,12 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 468,
-  "published_count": 468,
+  "article_count": 465,
+  "published_count": 465,
   "category_change_count": 0,
   "image_change_count": 107,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "rochdale-afc-faces-port-vale-in-a-vital-league-two-match-this-saturday",
+      "title": "Rochdale AFC faces Port Vale in a vital League Two match this Saturday",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/fixtures.jpg",
+        "img": "assets/img/cards/fixtures.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
+    },
     {
       "slug": "police-appeal-for-help-finding-kibriya-ahmed-linked-to-missing-children",
       "title": "Police appeal for help finding Kibriya Ahmed linked to missing children",
@@ -954,18 +966,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/f0324b05b31a-place-generated-card.jpg"
-    },
-    {
-      "slug": "heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen",
-      "title": "Heywood and Middleton North MP visits Redwood School’s sixth form at Phoenix Centre",
-      "category": "education",
-      "reason": "uncanonical img fallback exists while image_url is empty",
-      "before": {
-        "image_url": "",
-        "img": "assets/img/cards/e5ddafbbf0d08f86-commons-photo.jpg",
-        "status": "commons-photo-cached"
-      },
-      "after": "assets/img/cards/e5ddafbbf0d08f86-commons-photo.jpg"
     },
     {
       "slug": "springhill-hospice-to-host-free-will-information-clinic-in-heywood",
