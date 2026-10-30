@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-30T09:12:54.526358Z",
+  "updated_at": "2026-10-30T10:38:25.974715Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 164,
@@ -497,13 +497,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-30T03:55:49.639301Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Rochdale set to be illuminated by fiery sculptures for this year’s Ignite Fire Festival - The Manc",
       "source_name": "The Manc",
       "category": "news",
       "text_fingerprint": "c933cb25debcc71c",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://uk.news.yahoo.com/appeal-wanted-man-rochdale-manchester-190329727.html": {
@@ -1111,13 +1111,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-30T09:12:54.525520Z",
+      "last_attempt_at": "2026-10-30T10:38:25.974465Z",
       "outcome": "published",
       "reason": "",
       "title": "What’s On Rochdale: Sir Ian McKellen set for Factory International, plus share your ideas to reshape town spaces - InYourArea",
       "source_name": "InYourArea",
       "category": "events",
-      "text_fingerprint": "7f7d3078388af86c"
+      "text_fingerprint": "7f7d3078388af86c",
+      "recovery_attempts": 1
     },
     "https://www.kilmarnocktoday.co.uk/sport/national/26655390.substitute-ian-henderson-rescues-rochdale-point-grimsby": {
       "first_attempt_at": "2026-10-20T23:30:01.863434Z",
@@ -2146,25 +2147,6 @@
       "category": "environment",
       "text_fingerprint": "f6a838af27757d6c"
     },
-    "https://www.rochdaletimes.co.uk/new-takeaway-would-be-bad-for-peoples-health": {
-      "first_attempt_at": "2026-10-22T09:14:38.579619Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMigwFBVV95cUxOdGlLRkw5OEk4elg3a1ZrSm9obk83YnZZQmVfMUpTRWNRN1hGTUF2dy1WaWdIME1DV0NmZ3VOejJWMWkyUDU3bnJNY3RYQ0Nwc0VEd0U0MHkxdXdMYS1OUnNDMm9YQjJveFhLeEVpbVFFZWJTekhJZWN6Z1RVc0hCRjRHZw?oc=5",
-        "https://www.rochdaletimes.co.uk/inspector-rules-on-garden-fence-rejected-by-council",
-        "https://www.rochdaletimes.co.uk/new-takeaway-would-be-bad-for-peoples-health",
-        "https://www.rochdaletimes.co.uk/rbh-unveils-new-homes-plan-for-lower-falinge"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-22T09:59:42.971634Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "New takeaway would be bad for people’s health - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "environment",
-      "text_fingerprint": "c74df04cf1955cf6"
-    },
     "https://www.rochdaletimes.co.uk/new-trial-gives-children-better-mental-health-and-social-care-support": {
       "first_attempt_at": "2026-10-29T19:55:22.529384Z",
       "attempts": 1,
@@ -2387,6 +2369,22 @@
       "source_name": "Rochdale Times",
       "category": "news",
       "text_fingerprint": "a42d7b6b4de5bab0"
+    },
+    "https://www.rochdaletimes.co.uk/towns-regeneration-journey-takes-another-step-forward": {
+      "first_attempt_at": "2026-10-30T10:38:25.974266Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/towns-regeneration-journey-takes-another-step-forward"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-30T10:38:25.974266Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Town’s regeneration journey takes another step forward - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "environment",
+      "text_fingerprint": "fa4b069f4a644196"
     },
     "https://www.rochdaletimes.co.uk/two-days-that-will-decide-the-future-of-hopwood-hall": {
       "first_attempt_at": "2026-10-16T08:37:33.775608Z",

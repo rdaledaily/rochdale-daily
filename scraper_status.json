@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-30T09:12:54.530287Z",
+  "last_run_at": "2026-10-30T10:38:25.982207Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,44 +42,40 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 110,
+  "raw_candidates_before_job_filter": 117,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 104,
+  "raw_candidates": 111,
   "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 69,
-    "resolved": 62,
-    "text_recovered": 16,
+    "wrappers": 47,
+    "resolved": 37,
+    "text_recovered": 30,
     "reattributed": 0,
-    "images_found": 19
+    "images_found": 33
   },
-  "duplicates_merged": 66,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 73,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
     {
-      "slug": "sir-ian-mckellen-to-appear-at-factory-international-in-rochdale",
+      "slug": "middleton-designated-as-mayoral-development-area-to-boost-regeneration",
+      "source_url": "https://www.rochdaletimes.co.uk/towns-regeneration-journey-takes-another-step-forward/"
+    },
+    {
+      "slug": "sir-ian-mckellen-to-headline-event-at-factory-international-in-rochdale",
       "source_url": "https://www.inyourarea.co.uk/news/whats-on-rochdale-sir-ian-mckellen-set-for-factory-international-plus-share-your-ideas-to-reshape-town-spaces"
-    },
-    {
-      "slug": "rochdale-councillor-daalat-ali-briefly-detained-in-pakistan-during-civic-visit",
-      "source_url": "https://kashmirtimes.com/news/rochdale-councillor-daalat-ali-briefly-held-in-pakistan"
-    },
-    {
-      "slug": "rochdale-afc-faces-port-vale-in-a-vital-league-two-match-this-saturday",
-      "source_url": "https://www.onevalefan.co.uk/2026/10/mini-preview-port-vale-v-rochdale-league-two/"
     }
   ],
   "new_articles": 2,
-  "live_articles": 466,
+  "live_articles": 470,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
+    "missing_from_feed": 2,
+    "queued_for_retry": 2,
     "recovery_limit_reached": 0,
-    "deliberately_blocked": 1,
+    "deliberately_blocked": 2,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
@@ -87,12 +83,12 @@
   "rewrite_ledger": {
     "entries": 164,
     "by_outcome": {
-      "failed": 5,
-      "published": 127,
+      "failed": 6,
+      "published": 126,
       "rejected": 32
     },
-    "held_back_this_run": 29,
-    "held_already_published": 23,
+    "held_back_this_run": 28,
+    "held_already_published": 22,
     "held_rejected": 6,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -154,14 +150,13 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 187.": 1,
-    "Cut filler that reads as machine-written and say the thing plainly: reassured that": 1,
-    "Replace dash punctuation with ordinary sentence structure, while preserving exact quotations and proper names.": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Replace repetitive 'This...' openings with specific subjects.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 102,
-    "website_discovery": 3,
+    "rss_and_google_news": 103,
+    "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -176,14 +171,14 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 40,
+    "Rochdale Times": 46,
     "Manchester Evening News": 20,
     "Roch Valley Radio": 12,
     "The Manc": 5,
+    "Rochdale AFC": 5,
     "Bee Network live travel alerts": 5,
-    "Kashmir Times": 4,
-    "Rochdale AFC": 4,
-    "InYourArea": 3,
+    "InYourArea": 4,
+    "Kashmir Times": 3,
     "Rochdale Borough Council": 2,
     "Facebook": 2,
     "Roch Valley Radio Local News": 2,
@@ -194,19 +189,18 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "events": 1,
-    "news": 1,
-    "sport": 1
+    "environment": 1,
+    "events": 1
   },
   "published_by_category": {
     "business": 48,
-    "community": 59,
+    "community": 58,
     "crime": 19,
     "education": 20,
-    "environment": 35,
-    "events": 27,
+    "environment": 36,
+    "events": 26,
     "health": 11,
-    "news": 53,
+    "news": 54,
     "politics": 18,
     "sport": 50,
     "traffic": 35,
@@ -235,14 +229,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-65a287fea61ee4166d66",
     "events-v3-9b4dcf2ae34d5e606111",
-    "hard-news-v3-7f76f74b42b834a1bb14"
+    "environment-v3-ddcd7070701a4c1f5292"
   ],
   "selected_candidate_urls": [
-    "https://www.onevalefan.co.uk/2026/10/mini-preview-port-vale-v-rochdale-league-two/",
     "https://www.inyourarea.co.uk/news/whats-on-rochdale-sir-ian-mckellen-set-for-factory-international-plus-share-your-ideas-to-reshape-town-spaces",
-    "https://kashmirtimes.com/news/rochdale-councillor-daalat-ali-briefly-held-in-pakistan"
+    "https://www.rochdaletimes.co.uk/towns-regeneration-journey-takes-another-step-forward/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -254,14 +246,12 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "events",
-      "news",
-      "sport"
+      "environment",
+      "events"
     ],
     "selected_categories": [
-      "events",
-      "news",
-      "sport"
+      "environment",
+      "events"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -273,18 +263,16 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "events": 1,
-      "news": 1,
-      "sport": 1
+      "environment": 1,
+      "events": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 2
     },
     "selected_by_source": {
       "inyourarea": 1,
-      "kashmir times": 1,
-      "onevalefan": 1
+      "rochdale times": 1
     }
   },
   "official_ward_count": 20,
@@ -845,8 +833,12 @@
     "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQZmFPOWgwMUY3OGRva0pILW1aNFB4TTQ2MzR1bGpRSkNKNXRzV2RXOEZ5eDNNNVdQNWhEQ0xSRDhoSlh3czh3YlUySjQ0R0d0YTR0QnpQdGF6cjRCNWlUdU5ndlNWRXRlWDBHd3N4dXFMQUI2bEpWbVN4RXlaaXI5NDRYQjFDZE1ObGxvLUlVeWhpdnFMZWhVTkphZE9QMzVjTC16NHRQTHZZSTRMU3hxcjBMaGoyMDBpeGZUXzh2TnRVM0VCMlhtT0twYnE5RWoxVldXbmc4elVIbzFs?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 3
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -882,8 +874,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-30T09:56:20.272769Z",
-  "frontpage_article_count": 16,
+  "frontpage_generated_at": "2026-10-30T10:40:00.836084Z",
+  "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -935,18 +927,19 @@
       "crime": 2,
       "transport": 1,
       "sport": 3,
+      "business": 1,
       "community": 2,
       "health": 1,
-      "environment": 1,
+      "environment": 2,
       "news": 4
     },
     "selected_by_ward": {
-      "borough-wide": 16
+      "borough-wide": 18
     },
     "selected_by_area": {
       "heywood": 1,
-      "middleton": 1,
-      "rochdale": 24
+      "middleton": 2,
+      "rochdale": 23
     },
     "selected_by_source": {
       "facebook": 1,
@@ -954,33 +947,34 @@
       "rochdale borough council": 1,
       "greater manchester police": 1,
       "onevalefan": 1,
+      "rochdale times": 2,
       "source": 2,
       "yahoo news uk": 1,
-      "manchester evening news": 4,
+      "inyourarea": 1,
       "rochdale daily": 2,
-      "rochdale times": 1,
+      "manchester evening news": 4,
       "rochdale afc": 1
     },
     "pool_size": 26,
     "primary_pool_size": 26,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 16,
+    "frontpage_count": 18,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 12,
-    "fresh_under_homepage_window": 16,
-    "short_briefs_selected": 13,
+    "fresh_under_24h": 14,
+    "fresh_under_homepage_window": 18,
+    "short_briefs_selected": 15,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 15,
   "events_removed_other_source": 9,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 15,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 468,
+  "event_dates_corrected_from_ledger": 5,
+  "duplicate_articles_after_postprocessing": 470,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -993,10 +987,10 @@
   "whats_on_event_count": 15,
   "published_after_editorial_gate": 2,
   "published_new_slugs": [
-    "rochdale-council-deputy-leader-detained-briefly-in-pakistan-during-civic-visit",
-    "rochdale-afc-faces-port-vale-in-a-vital-league-two-match-this-saturday"
+    "middleton-designated-as-mayoral-development-area-to-boost-regeneration",
+    "sir-ian-mckellen-to-headline-event-at-factory-international-in-rochdale"
   ],
-  "drafts_not_published": 1,
-  "publication_health": "partial",
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
