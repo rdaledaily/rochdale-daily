@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 1,
+  "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 1,
   "no_allowed_source": 0,
-  "no_usable_source_image": 7,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -13,15 +13,9 @@
     "Rochdale Boroughwide Housing"
   ],
   "source_grants_incomplete": [],
-  "replaced_commons_or_library_with_source_photo": 1,
+  "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
-    {
-      "slug": "rochdale-afc-youth-team-eliminated-from-fa-youth-cup-by-wigan-athletic",
-      "result": "licensed-source-photo",
-      "source": "https://rochdaleafc.co.uk/fa-youth-cup-report-291026/",
-      "after": "assets/img/cards/rochdale-afc-youth-team-eliminated-from-fa-youth-cup-by-wigan-athletic.jpg"
-    },
     {
       "slug": "police-appeal-for-help-finding-kibriya-ahmed-linked-to-missing-children",
       "result": "no-cleared-source-image",
@@ -47,6 +41,16 @@
             "verdict": "page-not-from-granting-organisation"
           },
           {
+            "url": "https://s.yimg.com/lo/mysterio/api/e3e14f3a152a19c00ba87747354d8a073b37c9bbd24bceea65d67cb1ea56d739/lightyear_networkapi/smartcrop_w148_h148_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fthe",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://s.yimg.com/lo/mysterio/api/b252af81699a2a210cd92729c65874574c1452b1d58761c2ce24d8cc50b9a4bf/lightyear_networkapi/smartcrop_w896_h504_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fthe",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
             "url": "https://s.yimg.com/lo/mysterio/api/5c51ce853324c30c1c3523313658635325ec2878a46b9b7574028cac1cebbcee/lightyear_networkapi/smartcrop_w148_h148_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fthe",
             "via": "article figure img",
             "verdict": "page-not-from-granting-organisation"
@@ -58,16 +62,6 @@
           },
           {
             "url": "https://s.yimg.com/lo/mysterio/api/f064e4a45e8b225d51d3a53c41df9dba21fb458d60f05de5ad470d59ab46666c/lightyear_networkapi/smartcrop_w148_h148_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fthe",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/ac6ce6b1738c077678b7c7e466f2ae9ae492d73b50988b93f3d8c5ed6f7917f2/lightyear_networkapi/smartcrop_w896_h504_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fthe",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/4b4101af617cd0ee9dfd41419f2519343783416b7147f99411e22ed5f326cc70/lightyear_networkapi/smartcrop_w148_h148_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fpa_",
             "via": "article figure img",
             "verdict": "page-not-from-granting-organisation"
           }
@@ -117,7 +111,7 @@
       "slug": "comprehensive-news-updates-available-for-rochdale-town-centre",
       "result": "no-cleared-source-image",
       "source": "https://www.manchestereveningnews.co.uk/all-about/rochdale-town-centre/?service=responsive",
-      "after": "",
+      "after": "assets/img/cards/comprehensive-news-updates-available-for-rochdale-town-centre.jpg",
       "why": {
         "page": "https://www.manchestereveningnews.co.uk/all-about/rochdale-town-centre",
         "final_url": "https://www.manchestereveningnews.co.uk/all-about/rochdale-town-centre",
@@ -263,6 +257,24 @@
       "why": {
         "page": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/new-transport-policing-and-crime-command-launched-to-keep-greater-manchester-road-users-and-bee-network-passengers-safe/",
         "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
+    {
+      "slug": "rochdale-diversity-awards-celebrate-local-community-leaders",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdaletimes.co.uk/rochdale-diversity-awards-shine-a-spotlight-on-those-making-a-difference/",
+      "after": "assets/img/cards/8c4c259f0ef7-place-generated-card.jpg",
+      "why": {
+        "page": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQbmxKejN4dV9mREEwUC1VRTdaZGNMbS1xWGRKRlpwY0M5cEk3VmFLdHVJNnpXNE5TaXk1Z29oeS05R0pHVVNNcXNTc19XWEhlV3JZT21ubVlicENMX2NQVkk2TGhuNmFVdzI3REhyOWsyQ3dxdXpmaEQ4UnVWQmZIZXpkRVpfbkVLSG5zbllKc05wWFRUcUNGVks2cEptZ1B3TXY0OUxEZVg?oc=5",
+        "final_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQbmxKejN4dV9mREEwUC1VRTdaZGNMbS1xWGRKRlpwY0M5cEk3VmFLdHVJNnpXNE5TaXk1Z29oeS05R0pHVVNNcXNTc19XWEhlV3JZT21ubVlicENMX2NQVkk2TGhuNmFVdzI3REhyOWsyQ3dxdXpmaEQ4UnVWQmZIZXpkRVpfbkVLSG5zbllKc05wWFRUcUNGVks2cEptZ1B3TXY0OUxEZVg?oc=5&hl=en-US&gl=US&ceid=US:en",
+        "candidates": [
+          {
+            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
       }
     }
   ]
