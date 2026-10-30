@@ -10,6 +10,7 @@ Run:  PYTHONPATH=scraper python scraper/test_primary_data.py
 from __future__ import annotations
 
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -62,6 +63,49 @@ GAZETTE_JSON = {"f:total": "6", "entry": [
     notice(5220998, "2452", "RICO FACILITIES LTD", "Winding-Up Orders", "Castleton, Rochdale OL11 2QQ"),
     notice(5220001, "2503", "A PRIVATE PERSON", "Bankruptcy Orders"),
     notice(5220002, "2903", "ANOTHER PRIVATE PERSON", "Deceased Estates"),
+]}
+
+
+# Notice pages. The addresses are the real ones from the Gazette notices read on
+# 30 October 2026 (5241183 Hilton, 5228953 Greenhalgh, 5235480 A&J Attar); the
+# markup is written in both of the Gazette's layouts (running text and <dl>).
+def notice_page(body: str) -> str:
+    return ('<html><head><title>Notice - The Gazette</title></head><body>'
+            '<nav>Search notices in Rochdale, Bolton, Manchester</nav>'
+            f'<article class="notice">{body}</article></body></html>')
+
+
+GAZETTE_PAGES = {
+    "5227571": notice_page("<p>Name of Company: KAM PAYROLL LTD</p><p>Registered office: 3 Market Street, Heywood OL10 2TA</p>"
+                           "<p>Liquidator's name and address: A N Other, 1 King Street, Manchester M2 4LQ</p>"),
+    "5220998": notice_page("<dl><dt>Company Number</dt><dd>12345678</dd><dt>Company Address</dt>"
+                           "<dd>Unit 4, Castleton, Rochdale OL11 2QQ</dd></dl>"),
+    # Elland company; the ONLY Rochdale address is the liquidator's PO Box.
+    "5241183": notice_page("<p>Name of Company: HILTON PROCESS SOLUTIONS LIMITED</p><p>Company Number: 04598533</p>"
+                           "<p>Nature of Business: Engineering related scientific and technical consulting activities</p>"
+                           "<p>Registered office: Unit 11, Wellington Business Centre, Quebec Street, Elland, HX5 9AS</p>"
+                           "<p>Type of Liquidation: Creditors</p>"
+                           "<p>Liquidator's name and address: Peter John Harold (IP No. 10810) of Bespoke Insolvency Solutions, "
+                           "PO Box 798, Rochdale, OL16 9TX</p>"),
+    # Registered in Bolton, trades in Newhey: borough news through its trading address.
+    "5228953": notice_page("<dl><dt>Company Number</dt><dd>01234567</dd>"
+                           "<dt>Registered office</dt><dd>Fourth Floor, Unit 5b, The Parklands, Bolton, BL6 4SD</dd>"
+                           "<dt>Principal trading address</dt><dd>Ogden Mill, Ogden Lane, Newhey, Rochdale, OL16 3TQ</dd>"
+                           "<dt>Office Holder Details</dt><dd>Jason Mark Elliott (IP No. 9496), Cowgills Limited, "
+                           "Fourth Floor, Unit 5B, The Parklands, Bolton, BL6 4SD</dd></dl>"),
+    "5235480": notice_page("<p>Registered office: 12 Long Street, Middleton, Manchester, M24 1NF</p>"
+                           "<p>Principal trading address: 12 Long Street, Middleton, Manchester, M24 1NF</p>"),
+    # A notice whose company address has no postcode at all: reported, never guessed.
+    "5241155": notice_page("<p>Registered office: c/o the company's accountants</p>"
+                           "<p>Liquidator: Bespoke Insolvency Solutions, PO Box 798, Rochdale, OL16 9TX</p>"),
+}
+
+GAZETTE_LIQUIDATOR_JSON = {"entry": [
+    notice(5241183, "2443", "HILTON PROCESS SOLUTIONS LIMITED", "Appointment of Liquidators", "Elland ... Rochdale"),
+    notice(5228953, "2441", "PW GREENHALGH FINISHING LIMITED", "Resolutions for Winding-up", "Bolton"),
+    notice(5235480, "2443", "A&J ATTAR LIMITED", "Appointment of Liquidators", "Middleton"),
+    notice(5241155, "2443", "DOWIE EVENTS MANAGEMENT LIMITED", "Appointment of Liquidators", "\u2026"),
+    notice(5240000, "2443", "UNREACHABLE LTD", "Appointment of Liquidators", ""),
 ]}
 
 
@@ -164,9 +208,10 @@ class Response:
 
 
 class FakeWeb:
-    def __init__(self, broken: tuple[str, ...] = ()):
+    def __init__(self, broken: tuple[str, ...] = (), gazette=None):
         self.calls: list[str] = []
         self.broken = broken
+        self.gazette = gazette if gazette is not None else GAZETTE_JSON
 
     def __call__(self, url, params=None, timeout=None, **_):
         self.calls.append(url)
@@ -174,9 +219,12 @@ class FakeWeb:
             return Response(status=503)
         if "directory/22" in url:
             return Response(ROADWORKS_HTML if not url.endswith("/2") else "<ul></ul>")
+        page = re.search(r"thegazette\.co\.uk/notice/(\d+)$", url)
+        if page:
+            return Response(GAZETTE_PAGES[page.group(1)]) if page.group(1) in GAZETTE_PAGES else Response(status=404)
         if "thegazette" in url:
             assert params["location-local-authority-1"] == "rochdale"
-            return Response(payload=GAZETTE_JSON)
+            return Response(payload=self.gazette)
         if "questions-statements-api" in url:
             return Response(payload=QUESTIONS_BLUNDELL if params["askingMemberId"] == "5084" else QUESTIONS_WAUGH)
         if "greatermanchester-ca" in url:
@@ -258,6 +306,39 @@ class Gazette(unittest.TestCase):
     def test_only_reviewed_notice_types_are_enabled(self):
         self.assertEqual(set(pd.GAZETTE_NOTICE_CODES), {"2441", "2443", "2452"})
         self.assertFalse([code for code in pd.GAZETTE_NOTICE_CODES if code.startswith(("25", "29"))])
+
+
+class GazetteCompanyAddress(unittest.TestCase):
+    """30 October 2026: an Elland company was published because its liquidator has a Rochdale PO Box."""
+
+    def test_liquidator_address_never_makes_a_company_local(self):
+        addresses = pd.gazette_company_addresses(GAZETTE_PAGES["5241183"])
+        self.assertEqual([a["postcode"] for a in addresses], ["HX5 9AS"])
+        self.assertIsNone(pd.gazette_borough_address(addresses))
+
+    def test_trading_address_in_the_borough_counts_even_when_registered_elsewhere(self):
+        addresses = pd.gazette_company_addresses(GAZETTE_PAGES["5228953"])
+        self.assertEqual([a["postcode"] for a in addresses], ["BL6 4SD", "OL16 3TQ"])
+        self.assertEqual(pd.gazette_borough_address(addresses)["postcode"], "OL16 3TQ")
+
+    def test_only_borough_companies_are_offered_and_every_rejection_is_counted(self):
+        state = {"sources": {}}
+        records, report = pd.collect(FakeWeb(gazette=GAZETTE_LIQUIDATOR_JSON), state, NOW, only={"gazette_insolvency"})
+        self.assertEqual([r["source_title"] for r in records],
+                         ["PW GREENHALGH FINISHING LIMITED: Resolutions for Winding-up",
+                          "A&J ATTAR LIMITED: Appointment of Liquidators"])
+        self.assertEqual([r["area"] for r in records], ["newhey", "middleton"])
+        self.assertIn("OL16 3TQ", records[0]["source_summary"])
+        self.assertEqual(report["gazette_insolvency"]["outside_borough"], 1)
+        self.assertNotIn("HILTON", json.dumps(records))
+        # Over the daily cap, the rest wait untouched for tomorrow.
+        later, report = pd.collect(FakeWeb(gazette=GAZETTE_LIQUIDATOR_JSON), state,
+                                   NOW + timedelta(days=1), only={"gazette_insolvency"})
+        self.assertEqual(later, [])
+        stats = report["gazette_insolvency"]
+        self.assertEqual(stats["no_company_address"], 1)
+        self.assertEqual(stats["notice_unreadable"], 1)
+        self.assertEqual(stats["already_seen"], 3, "Hilton is decided once, not re-read every run")
 
 
 class WrittenAnswers(unittest.TestCase):

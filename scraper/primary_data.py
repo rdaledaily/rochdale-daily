@@ -307,6 +307,70 @@ GAZETTE_NOTICE_CODES = {
     "2452": "Winding-Up Orders",
 }
 GAZETTE_LOOKBACK_DAYS = 10
+GAZETTE_NOTICE_PAGE = "https://www.thegazette.co.uk/notice/{notice_id}"
+
+# Why the notice page is read before a story is offered (30 October 2026).
+# The feed's local-authority filter matches ANY address in a notice, including
+# the liquidator's. A Rochdale insolvency firm (PO Box, OL16) therefore pulls in
+# its clients from all over the country: measured on the feed for 20-30 October,
+# 12 notices listed, 7 of them companies registered and trading elsewhere
+# (Elland, Chorley, Oxford, Malvern, Newcastle, Hartlepool), and one of them,
+# Hilton Process Solutions of Elland, was published as Rochdale news. The feed's
+# own copy of the notice text is cut short with an ellipsis, so it cannot be
+# trusted to contain the company's addresses; the notice page always does.
+#
+# Rule: a notice is borough news only when the COMPANY's registered office or
+# trading address carries a borough postcode. Liquidator and office-holder
+# addresses are never read. A notice whose company address cannot be found is
+# reported as a shortfall, not guessed at.
+POSTCODE_DISTRICT_AREAS = {
+    "OL10": "heywood",
+    "OL11": "rochdale",
+    "OL12": "rochdale",      # includes Whitworth, which the paper covers
+    "OL15": "littleborough",
+    "OL16": "rochdale",
+    "M24": "middleton",
+}
+# One list for every source that tests an address (also Find a Tender buyers).
+BOROUGH_POSTCODE_DISTRICTS = set(POSTCODE_DISTRICT_AREAS)
+_COMPANY_ADDRESS_LABEL_RE = re.compile(
+    r"(?<!former )(?<!previous )\b(?:principal trading address|trading address|"
+    r"registered office(?: address)?|registered address|company address)\b\s*:?", re.I)
+# Where a company address ends: the next field of the notice, above all the
+# office holder's details, which must never be read as the company's address.
+_COMPANY_ADDRESS_END_RE = re.compile(
+    r"\b(?:liquidators?|joint liquidators?|office[- ]holders?|insolvency practitioners?|ip no|ip number|"
+    r"nature of business|type of liquidation|date of appointment|by whom appointed|telephone|tel|"
+    r"e-?mail|further details|company number|name of company|previous names?|trading names?|former|"
+    r"principal trading address|trading address|registered office|registered address|company address)\b", re.I)
+_POSTCODE_RE = re.compile(r"\b([A-Z]{1,2}\d[A-Z\d]?)\s*(\d[A-Z]{2})\b", re.I)
+
+
+def gazette_company_addresses(page_html: str) -> list[dict[str, str]]:
+    """The company's own addresses in a Gazette notice page, each with its postcode district."""
+    text = plain(page_html)
+    found: list[dict[str, str]] = []
+    for label in _COMPANY_ADDRESS_LABEL_RE.finditer(text):
+        segment = text[label.end(): label.end() + 250]
+        end = _COMPANY_ADDRESS_END_RE.search(segment)
+        if end:
+            segment = segment[: end.start()]
+        postcode = _POSTCODE_RE.search(segment)
+        if not postcode:
+            continue
+        address = segment[: postcode.end()].strip(" ,;:-")
+        if any(item["address"] == address for item in found):
+            continue
+        found.append({"address": address, "district": postcode.group(1).upper(),
+                      "postcode": f"{postcode.group(1)} {postcode.group(2)}".upper()})
+    return found
+
+
+def gazette_borough_address(addresses: list[dict[str, str]]) -> dict[str, str] | None:
+    for item in addresses:
+        if item["district"] in BOROUGH_POSTCODE_DISTRICTS:
+            return item
+    return None
 
 
 def _company_key(name: str) -> str:
@@ -327,7 +391,8 @@ def gazette_insolvency(get: Callable[..., Any], state: dict[str, Any], now: date
     entries = response.json().get("entry") or []
     if isinstance(entries, dict):
         entries = [entries]
-    stats = {"listed": len(entries), "other_notice_types": 0, "already_seen": 0, "new": 0}
+    stats = {"listed": len(entries), "other_notice_types": 0, "already_seen": 0, "new": 0,
+             "outside_borough": 0, "no_company_address": 0, "notice_unreadable": 0}
     out: list[dict[str, Any]] = []
     offered_companies: set[str] = set()
     for entry in entries:
@@ -350,16 +415,40 @@ def gazette_insolvency(get: Callable[..., Any], state: dict[str, Any], now: date
         stats["new"] += 1
         if len(out) >= limit:
             continue
+        url = GAZETTE_NOTICE_PAGE.format(notice_id=notice_id)
+        try:
+            page = get(url, timeout=TIMEOUT)
+            page.raise_for_status()
+            page_html = page.text or ""
+        except Exception:
+            # Not marked seen: it is read again on the next interval.
+            stats["notice_unreadable"] += 1
+            continue
+        addresses = gazette_company_addresses(page_html)
+        if not addresses:
+            stats["no_company_address"] += 1
+            mark_seen(state, key, notice_id)
+            continue
+        local = gazette_borough_address(addresses)
+        if local is None:
+            # The company is elsewhere; only its liquidator's address named the borough.
+            stats["outside_borough"] += 1
+            mark_seen(state, key, notice_id)
+            mark_seen(state, key, company_key)
+            continue
         offered_companies.add(company_key)
         try:
             published = datetime.fromisoformat(str(entry.get("published"))).replace(tzinfo=LONDON)
         except ValueError:
             published = now
         kind = GAZETTE_NOTICE_CODES[code]
+        area = detect_town(local["address"], default=POSTCODE_DISTRICT_AREAS[local["district"]])
         out.append(record(
-            key, notice_id, name="The Gazette", url=f"https://www.thegazette.co.uk/notice/{notice_id}",
-            title=f"{company}: {kind}", summary=f"Official notice in The Gazette ({kind}). {plain(entry.get('content'))}",
-            published=published, area=detect_town(plain(entry.get("content"))), category="business",
+            key, notice_id, name="The Gazette", url=url,
+            title=f"{company}: {kind}",
+            summary=f"Official notice in The Gazette ({kind}). Company address: {local['address']}. "
+                    f"{plain(entry.get('content'))}",
+            published=published, area=area, category="business",
             also_seen=(company_key,),
         ))
     return out, stats
@@ -554,7 +643,6 @@ def ons_housing(get: Callable[..., Any], state: dict[str, Any], now: datetime, l
 
 FTS_API = "https://www.find-tender.service.gov.uk/api/1.0/ocdsReleasePackages"
 FTS_NOTICE = "https://www.find-tender.service.gov.uk/Notice/"
-BOROUGH_POSTCODE_DISTRICTS = {"OL10", "OL11", "OL12", "OL15", "OL16", "M24"}
 FTS_FIRST_LOOKBACK_HOURS = 48
 FTS_MAX_PAGES = 30
 FTS_PAUSE_SECONDS = 2.5
