@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-31T16:08:54.248058Z",
+  "last_run_at": "2026-10-31T16:24:54.598277Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -22,13 +22,9 @@
       "interval_hours": 12
     },
     "ons_housing": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 1,
-      "already_seen": 1,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-31T16:06:41.962598Z",
+      "interval_hours": 24
     },
     "contract_notices": {
       "status": "not due",
@@ -46,42 +42,32 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 124,
+  "raw_candidates_before_job_filter": 116,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 124,
-  "candidate_clusters": 42,
+  "raw_candidates": 116,
+  "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 68,
-    "resolved": 35,
-    "text_recovered": 23,
+    "wrappers": 64,
+    "resolved": 31,
+    "text_recovered": 22,
     "reattributed": 0,
-    "images_found": 25
+    "images_found": 24
   },
-  "duplicates_merged": 82,
-  "attempted_rewrites": 4,
-  "draft_rewrites_created": 4,
+  "duplicates_merged": 75,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "rochdale-afc-suffers-defeat-at-vale-park",
-      "source_url": "https://rochdaleafc.co.uk/report-port-vale-away-311026/"
-    },
-    {
-      "slug": "lifts-at-freehold-tram-stop-out-of-service-due-to-replacement-works",
-      "source_url": "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b93998c54c21f45e8f"
-    },
-    {
-      "slug": "rochdale-afc-manager-reflects-on-defeat-to-port-vale",
-      "source_url": "https://rochdaleafc.co.uk/watson-on-vale-defeat/"
-    },
-    {
       "slug": "rochdale-afc-faces-port-vale-in-a-vital-league-two-match-this-saturday",
-      "source_url": "https://www.fansnetwork.co.uk/football/rochdale/news/67139/refwatch--port-vale-v-rochdale"
+      "source_url": "https://www.onevalefan.co.uk/2026/10/mini-preview-port-vale-v-rochdale-league-two/"
     }
   ],
-  "new_articles": 3,
+  "new_articles": 1,
   "live_articles": 479,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "editorial gate: REJECTED_NON_LOCAL": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 1,
@@ -95,12 +81,12 @@
   "rewrite_ledger": {
     "entries": 153,
     "by_outcome": {
-      "failed": 4,
-      "published": 118,
-      "rejected": 31
+      "failed": 5,
+      "published": 116,
+      "rejected": 32
     },
-    "held_back_this_run": 24,
-    "held_already_published": 20,
+    "held_back_this_run": 27,
+    "held_already_published": 23,
     "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -144,13 +130,11 @@
     }
   ],
   "published_with_style_issues": {
-    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 2,
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 154.": 1
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 112,
+    "rss_and_google_news": 104,
     "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -166,43 +150,46 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 41,
-    "Roch Valley Radio": 12,
-    "Port of Rotterdam": 8,
+    "Rochdale Times": 39,
+    "Roch Valley Radio": 11,
+    "Port of Rotterdam": 9,
     "InYourArea": 7,
-    "Rochdale AFC": 6,
     "Manchester Evening News": 5,
     "Bee Network live travel alerts": 4,
-    "Port Vale Football Club": 3,
-    "Blog Preston": 3,
     "Fan Banter": 3,
     "Rochdale Borough Council": 3,
-    "County Times": 2,
     "Free Press Series": 2,
+    "The Northern Echo": 2,
+    "Blog Preston": 2,
     "Oldham Times": 2,
     "Radio Times": 2,
-    "ayrshire-today.co.uk": 2,
-    "London Now": 2,
-    "Facebook": 2,
+    "Port Vale Football Club": 2,
     "Roch Valley Radio Local News": 2,
     "Your Trust Rochdale": 1,
-    "The Bury Times": 1,
-    "Northwich Guardian": 1,
+    "Rochdale AFC": 1,
     "Sky Sports": 1,
-    "Total Rugby League": 1,
+    "The Hereford Times": 1,
     "beIN SPORTS": 1,
+    "Total Rugby League": 1,
+    "Southend Echo": 1,
+    "ayrshire-today.co.uk": 1,
     "East London and West Essex Guardian": 1,
     "Westmorland Gazette": 1,
+    "https://www.kilmarnocktoday.co.uk/": 1,
     "Alloa Advertiser": 1,
-    "Lancashire Telegraph": 1,
-    "Express and Star": 1,
     "https://www.birmingham-now.co.uk/": 1,
+    "Express and Star": 1,
+    "London Now": 1,
+    "Maldon & Burnham Standard": 1,
+    "www.birmingham-now.co.uk": 1,
+    "Clacton Gazette": 1,
+    "County Times": 1,
+    "Facebook": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "crime": 1,
-    "sport": 2,
-    "transport": 1
+    "sport": 1
   },
   "published_by_category": {
     "business": 48,
@@ -241,16 +228,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-431d6ec72f7230253ef6",
-    "transport-v3-b4abd17264443e7c2601",
-    "sport-v3-86b7a4132dd9af69f01b",
-    "sport-v3-75362d9c7fcdc89ec973"
+    "hard-news-v3-b625ef6dbf0e2965cca4",
+    "sport-v3-431d6ec72f7230253ef6"
   ],
   "selected_candidate_urls": [
-    "https://www.fansnetwork.co.uk/football/rochdale/news/67139/refwatch--port-vale-v-rochdale",
-    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b93998c54c21f45e8f",
-    "https://rochdaleafc.co.uk/watson-on-vale-defeat/",
-    "https://rochdaleafc.co.uk/report-port-vale-away-311026/"
+    "https://www.expressandstar.com/uk-sports/jon-brady-delights-in-end-to-port-vale-profligacy-as-they-put-four-past-rochdale-9322224",
+    "https://www.onevalefan.co.uk/2026/10/mini-preview-port-vale-v-rochdale-league-two/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -263,13 +246,11 @@
   "coverage": {
     "available_categories": [
       "crime",
-      "sport",
-      "transport"
+      "sport"
     ],
     "selected_categories": [
       "crime",
-      "sport",
-      "transport"
+      "sport"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -282,17 +263,15 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "crime": 1,
-      "sport": 2,
-      "transport": 1
+      "sport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 4
+      "rochdale": 2
     },
     "selected_by_source": {
-      "bee network live travel alerts": 1,
-      "fansnetwork": 1,
-      "rochdale afc": 2
+      "express and star": 1,
+      "onevalefan": 1
     }
   },
   "official_ward_count": 20,
@@ -841,7 +820,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 16,
+  "robots_denied_count": 12,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -850,23 +829,15 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMiXEFVX3lxTFA1ODhGZ1cwd3otcFJScmFNQkJheWZuRGhiVkRzejhrRzU2allYUTZoNHNsT0VHUmlaeXBFMGtXY0NGN1Q2WklJUjEtNl9RcFNZclFOcHVMYlQ2dFFZ?oc=5",
-    "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1wY0xKb3oyREJkYzNjR3l5QlI3Z0xJTHVQUEpMLUFqS2M4YnZmTTRpTHFMbUFXMlZzWkZfbTN4TDAtMUp2dEZoZnpOeWNRUEJXSUM5QjA5QkVJTDZIc0tHQWE1cEZaZw?oc=5",
+    "https://news.google.com/rss/articles/CBMimgFBVV95cUxPZkdGTW85Y1UtYlE2OWFQNlYyVnI4UXA4VHE5WHlWcU1Oek1DajdxcmZDTW45ek5ZM0p6YlRqdHlKTjJmc2pySDVxaUVqaUhETXRNT2JJTTIwVUFxNUt4dGlCSFB4YlZoY1loeTlhMjVuSl9iTUR6T0g2VlZQVFZXSlZ6aFFFZGhXcnBRaHd4REJ5NUtQSHFVaG5B?oc=5",
     "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQNHI2X3hCdVhMdXNCbEdGU0NfRkp0QjJiVzQ3TTVaVHg5bGtXSnptcU1fZTRRekhlS3AwZG1NYU5YTm1zSkxEOHc2QmlPNHBncDBuYkZPeHFmcVEtczRIRnViR3phUEtydC1qMDFDZjFGd1Z2RldjdU15SjVuU1YtZXBWLUZEdkwxOWc4ZDJDYzEwTmdDdlAxcENocERBemFZdlFsN09XWGlXekRPOXJrT05XbDB6RlIwa3N5VnBYUkg?oc=5",
+    "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQSURaMDl4QldXcHFFUUZERXZHX2Q5MXNiWC00LTctOVRRVzQ2X1ctZ2tuQ2hwQnc3emE1RE1EbWhhcnpfSkNGSWxoY0I0UFRhRUx0b0FMTGN0RFVISUVLNEE1bHo0R1RuQnNjYnp5NXhQTktiSXY5aTR0aXdPc3lWSDRxTU5xcHVnc0dCMmtheWZmTG05bzFWRHdzT2lQd0NXaTZLd3I0TlVCeWxsd0M1N3huQXB0NTF0R1pQTDZmb1NGa3c?oc=5",
     "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPcTJROWRSWUlDX0hhRjdtNTM3MzBGVHBwTkhMbWxLU0hrMFg4WFRlLWpxNFIzLTJiYng3UTVfeVFmN3drZUU0Q2JUSWd1REZBYVVVM25FVGVpQVRLQjdYRF9QTkhWeVM0NElzUTViQXNfU3VRMENLd1NsSWRmbmRVV25DT2FOWFVfNkZZVGFtSGt6ZjdWb1k5X29tS0lObDI3NXM1eVdtd0x6clBodHZ4alBiMkFOUFptU3ZhZlZ2OThiRXZES1VkUw?oc=5",
-    "https://news.google.com/rss/articles/CBMirgFBVV95cUxQMFFGSnVQTTI1a3haWU55cGtnQkFza3Y4UVlERXJQNXphODM5X29JQjVBc3dqdjk5VTFoMXpHLWhOSV8tX2ZuZzRQWERxbnh6MnIwSUZzZ0JSbHU4VHR0eEI2RmVQRkFGbm9TRk9IbEZBS20zWDRwSGRCN3E4dUU2WDR3a05iN19UVGlxQWJYV3lNbVV5a1lPT2FiTUZINXRNZDVKc25HNEZVa1NRWEE?oc=5",
-    "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOM3BROWtNc0ZBLWdkeFhfX2tpZ2NlTkh5ZG5QOHVIZnNsc2Nob0lmdW85RU5kZUVkbGV4OEROaEdMWG92aTJ6eXJkLW9xMjNfcFpDMUJKV3hzR1ZULVZkWVB0NDAyTEMzdk9WbE4tVjV6OUpQRl9sdGtURUR4OXdaeG84TmpGTENmTjY3SllwWUloWElWY01Bam1DRjZ0YUxQaW9xcVVkSzNvMmM?oc=5",
-    "https://news.google.com/rss/articles/CBMirwFBVV95cUxPMVk2cjk3dGR5TmNVekVJLWRaMU5IZUJkTF9CLXREX1czRDVmNWIwSG9JWXJSbV80OG9mTXdCdUxRanlHVzM1alQ4SWpLdG83TmxGMTdVdFF6R3ptbDNyS2xiTkxvdEs0UXhBWm9wUjBMU0RET2w5eGhGUzVESmhpandQZEFUN25LWUxlbHhMcTZUSHloSHlpQ0VHSnpmVGU2dW94dTdFZ2pWMEpnUDdJ?oc=5",
-    "https://news.google.com/rss/articles/CBMivgFBVV95cUxNYk5mcFNPcm8taUl3emk3R1dLOGhYTkNPc0E3SWpGdjBSUktwRXhmQnlIZ3V2Xzl3SEI4c253Mzg4aVNOOGp2b1dQZHdzRmxFU3FNR1dsaVh1MHprZUF4bDY2YThNZjFuUi10ZlJkN00wVHdJdHMtTmJHWXFmTVA0N3ZpRmRYcW83RGk5bTI0R213aXVUbkpzelQ3cXdrWGNIY0p4YzRlcklzMHU1X0tfZlMzNkY1Wm1TaTdQWlpR?oc=5",
-    "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNR0tOdWtDMHFnemVkWGxDQlAySHQ1ZjNuYktmTzc0b1VMaVljbmpCSmVZaUdDUkxySHNEZFJITzFLMnh6RWwzV19TYXVKYXVBMXlOOVRqQnA4ZjNoWENXNnEzZ3NNWFFVY0JzcnhzbnlReXlSbW5TNXpXVEVJclRNQ0dMSWZpR1lFSlhZN1lEa3VrTFluLTJYNjlKUURmVUZTRVdKYkUwcWVUQQ?oc=5"
+    "https://news.google.com/rss/articles/CBMivgFBVV95cUxPdUdXZ2VKTHhPNnhwRUgyU2Jrb2JjcTg2UmZFYkhkS2lsYThjbnpDWTNUeVAydlljaXBpTlAtSFVuMjJsN0IwNWI1cFBvRDJRZnN0WUZGZ01kcjFULXlwLUJpaE1aX2dSZmkwTUlaWjdOd1JyaEVORkw1bDhUS0h4akgtRjBJaWhYR3U3dGlwTi1BZ2NzTjVqbG5TWDM5eGJJeFNYcnpGdnZZNVBESjhybDJ4WVBZLW0yNzc1XzB3?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 2
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -902,7 +873,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-31T16:10:23.651818Z",
+  "frontpage_generated_at": "2026-10-31T16:26:33.063811Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -994,7 +965,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 15,
-  "event_dates_corrected_from_ledger": 4,
+  "event_dates_corrected_from_ledger": 3,
   "duplicate_articles_after_postprocessing": 479,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1006,10 +977,8 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 15,
-  "published_after_editorial_gate": 3,
+  "published_after_editorial_gate": 1,
   "published_new_slugs": [
-    "rochdale-afc-suffers-defeat-at-vale-park",
-    "lifts-at-freehold-tram-stop-out-of-service-for-repairs",
     "rochdale-afc-faces-port-vale-in-a-vital-league-two-match-this-saturday"
   ],
   "drafts_not_published": 0,
