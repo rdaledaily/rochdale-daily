@@ -1,12 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 471,
-  "published_count": 471,
+  "article_count": 472,
+  "published_count": 472,
   "category_change_count": 0,
-  "image_change_count": 105,
+  "image_change_count": 106,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "road-closures-announced-for-heywood-christmas-festival-on-14-november-2026",
+      "title": "Road closures announced for Heywood Christmas Festival on 14 November 2026",
+      "category": "events",
+      "reason": "traffic visual (road-closure) does not match events story",
+      "before": {
+        "image_url": "assets/img/cards/road-closures-announced-for-heywood-christmas-festival-on-14-november-2026.jpg",
+        "img": "assets/img/cards/road-closures-announced-for-heywood-christmas-festival-on-14-november-2026.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/41ce020c71d0-place-generated-card.jpg"
+    },
     {
       "slug": "police-appeal-for-help-finding-kibriya-ahmed-linked-to-missing-children",
       "title": "Police appeal for help finding Kibriya Ahmed linked to missing children",
@@ -789,7 +801,7 @@
     },
     {
       "slug": "rochdale-afc-faces-port-vale-in-a-vital-league-two-match-this-saturday",
-      "title": "Rochdale AFC faces Port Vale in crucial League Two clash",
+      "title": "Port Vale host Rochdale in crucial League Two clash",
       "category": "sport",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
