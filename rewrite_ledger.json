@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-31T14:30:08.215060Z",
+  "updated_at": "2026-10-31T15:35:52.827853Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 154,
@@ -454,6 +454,22 @@
       "text_fingerprint": "a06fe7e1ba6f2231",
       "recovery_attempts": 1
     },
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b93998c54c21f45e8f": {
+      "first_attempt_at": "2026-10-31T15:35:52.827653Z",
+      "attempts": 1,
+      "urls": [
+        "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b93998c54c21f45e8f"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-31T15:35:52.827653Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Updated: 31/10/2026 at 2:32pm Live Freehold Tram Stop - Lifts out of service Duration Sat 31 Oct, 2:32pm – until further notice Stops impact",
+      "source_name": "Bee Network live travel alerts",
+      "category": "transport",
+      "text_fingerprint": "96a66c5dc34482b1"
+    },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-f42339b3decad80626": {
       "first_attempt_at": "2026-10-31T13:22:55.390358Z",
       "attempts": 1,
@@ -783,38 +799,6 @@
       "category": "news",
       "text_fingerprint": "c2fceaaf0de36666"
     },
-    "https://www.dailyrecord.co.uk/news/uk-world-news/human-tissue-found-rochdale-street-37800694": {
-      "first_attempt_at": "2026-10-22T15:25:02.040889Z",
-      "attempts": 1,
-      "urls": [
-        "https://cedarnews.net/newstasks/1089390/police-search-for-woman-after-suspected-human-tissue-found-in-rochdale-england",
-        "https://news.google.com/rss/articles/CBMijwFBVV95cUxNd1oxVTlBU2xaMUF5eHVXYTdVYjJteHVQQncwTUlEX2pua0o2M1lmSEFSVHJwVF9TNmVuTnh1TVhpWXlyVEVOQWRuMVZKSGFwclNGZzJzMTh6TXdCVEMxRkdGcVVhYU9QaFliYkg5WkFnS2pFcjRzekpSSU1JT09kd0s5Zi1ZckUtVHFpLUlwOA?oc=5",
-        "https://news.google.com/rss/articles/CBMikgFBVV95cUxOYmdabllCUDBSbXBMZ3hTZjQxZ3J3UDdUMzFTYUt1cmw3Q0c2aGlRVVJTLWdxZlFaWGR0eEpWWGlfRDNlSm1CNDJwcGpTRGk5Y1J3ZlRZNEQ4R0ZXbG5GRmlXcXVwbWJZS0c0TFNQOHJrVWJRX2VTNnUwLXhQb3BXRlNOcUFOMTAzV3cxZkxFWWhSZ9IBlwFBVV95cUxPMlJXaktrbkdXUEJvYzVIb2toZFMyX1dPbFpnam9oSUEzLURYZUI5bjY0bVVqeUtqaDdfZlZubThmSVA5RjVZTWcxMnBNSUpwYjQ1MzVoMTlFcXluUEpTcDdCb2V6a2t3WkZHT0ZFc2JhY1dNR2RCeE9OOWdNc1NuaEFCN2VHUlBVMHpZN2lNSU9xVVBaZk1J?oc=5",
-        "https://news.google.com/rss/articles/CBMikgFBVV95cUxQcnN3OVJSY2d3OWZ2YmNVS3MxRFJhcFE1RU01N0x5ZXROS2NfUEtnUDdmZmVleDAxb0l5Z2s5d25ONXdZTkJmT2ZEUnBObDJESkgzc0RDcXRLN3laY25TRTUxcUVaY3UtNVF0WXdIamkwSjV6NFJiRXRselNKOXdzUkF3aWxpYTBKeFFqU0tKc0FsZ9IBlwFBVV95cUxOMFNMVVFXQmlndkJxN1RNV3JEbGVhdzd0bWtqTHVFbXlVWXM5Wk1qZ3F2MTBZWDY3Tjl5VFgzMVliLUtrNjlhbTNWWmxjQVpVSkZBZkZaa09ITWhoclRBd1cwTjRseGhuZmhwU3N3ajNkSEEtb1lJMUpiNnA2WFZsdDVJc0doNHN3RXh2cmFjVTZxZW4waW93?oc=5",
-        "https://news.google.com/rss/articles/CBMilwFBVV95cUxOMFNMVVFXQmlndkJxN1RNV3JEbGVhdzd0bWtqTHVFbXlVWXM5Wk1qZ3F2MTBZWDY3Tjl5VFgzMVliLUtrNjlhbTNWWmxjQVpVSkZBZkZaa09ITWhoclRBd1cwTjRseGhuZmhwU3N3ajNkSEEtb1lJMUpiNnA2WFZsdDVJc0doNHN3RXh2cmFjVTZxZW4waW930gGXAUFVX3lxTE4wU0xVUVdCaWd2QnE3VE1XckRsZWF3N3Rta2pMdUVteVVZczlaTWpncXYxMFlYNjdOOXlUWDMxWWItS2s2OWFtM1ZabGNBWlVKRkFmRlprT0hNaGhyVEF3VzBONGx4aG5maHBTc3dqM2RIQS1vWUkxSmI2cDZYVmx0NUlzR2g0c3dFeHZyYWNVNnFlbjBpb3c?oc=5",
-        "https://news.google.com/rss/articles/CBMilwFBVV95cUxOZ04xS3I1Wms3WTNHWjlORFFTU0ZxTWptNVprdE5iRjJFTS1zZmNZYm9hS1NicEtoeVNXcnpoeDVacDNFWGlENjlZR0Riak5NSDduaXB4WmF1Q0diWTlPQ09GUm5tRlFFblBJZGxHeGphX0tXMGxqbzJxY3Bpc3hIRVlWc1NEWlM5N1VSZktsaUcybFczWGxJ0gGcAUFVX3lxTE0ySjdLMW43elowNlU0NXAweGdlWkkxanIwOGNCSE9XZUQxelVLM2VReG9PTkU1MjkzT2c1dGpaNG03WXQ2YW1pT1FCX001YlpibWk3SnhXS1dVbzA5VHhLUUhkTGJVa2VDWUpCUmNZaUdCS3FoNHJ5NHdYTjJHS2twWVVRRU44WDlWSzlPWkdnY0g0ZzhLV1Y4ck9URg?oc=5",
-        "https://news.google.com/rss/articles/CBMilwFBVV95cUxPMlJXaktrbkdXUEJvYzVIb2toZFMyX1dPbFpnam9oSUEzLURYZUI5bjY0bVVqeUtqaDdfZlZubThmSVA5RjVZTWcxMnBNSUpwYjQ1MzVoMTlFcXluUEpTcDdCb2V6a2t3WkZHT0ZFc2JhY1dNR2RCeE9OOWdNc1NuaEFCN2VHUlBVMHpZN2lNSU9xVVBaZk1J0gGXAUFVX3lxTE8yUldqS2tuR1dQQm9jNUhva2hkUzJfV09sWmdqb2hJQTMtRFhlQjluNjRtVWp5S2poN19mVm5tOGZJUDlGNVlNZzEycE1JSnBiNDUzNWgxOUVxeW5QSlNwN0JvZXpra3daRkdPRkVzYmFjV01HZEJ4T045Z01zU25oQUI3ZUdSUFUwelk3aU1JT3FVUFpmTUk?oc=5",
-        "https://news.google.com/rss/articles/CBMinAFBVV95cUxNMko3SzFuN3paMDZVNDVwMHhnZVpJMWpyMDhjQkhPV2VEMXpVSzNlUXhvT05FNTI5M09nNXRqWjRtN1l0NmFtaU9RQl9NNWJaYm1pN0p4V0tXVW8wOVR4S1FIZExiVWtlQ1lKQlJjWWlHQktxaDRyeTR3WE4yR0trcFlVUUVOOFg5Vks5T1pHZ2NINGc4S1dWOHJPVEbSAZwBQVVfeXFMTTJKN0sxbjd6WjA2VTQ1cDB4Z2VaSTFqcjA4Y0JIT1dlRDF6VUszZVF4b09ORTUyOTNPZzV0alo0bTdZdDZhbWlPUUJfTTViWmJtaTdKeFdLV1VvMDlUeEtRSGRMYlVrZUNZSkJSY1lpR0JLcWg0cnk0d1hOMkdLa3BZVVFFTjhYOVZLOU9aR2djSDRnOEtXVjhyT1RG?oc=5",
-        "https://www.chroniclelive.co.uk/news/uk-news/human-tissue-found-rochdale-street-34803531",
-        "https://www.dailyrecord.co.uk/news/uk-world-news/human-tissue-found-rochdale-street-37800694",
-        "https://www.examinerlive.co.uk/news/uk-world-news/hunt-woman-feared-given-birth-34803222",
-        "https://www.leeds-live.co.uk/news/uk-world-news/hunt-woman-feared-given-birth-34803222",
-        "https://www.rochdaletimes.co.uk/urgent-appeal-to-trace-woman-who-may-have-given-birth",
-        "https://www.rochvalleyradio.com/news-features/4/crime/1220/police-appeal-to-find-woman-who-may-have-recently-given-birth-in-rochdale"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T14:25:59.678783Z",
-      "outcome": "failed",
-      "reason": "one-time recheck after publication evidence fix",
-      "title": "Hunt for woman feared to have given birth in street after 'human tissue' found",
-      "source_name": "Daily Record",
-      "category": "traffic",
-      "text_fingerprint": "d7b9f3b8b345e76e",
-      "recovery_attempts": 0,
-      "final_gate_removal_recovery": 1,
-      "evidence_recovery_policy": 1
-    },
     "https://www.espn.com/soccer/odds/_/gameId/401881281": {
       "first_attempt_at": "2026-10-25T13:25:13.193170Z",
       "attempts": 3,
@@ -849,16 +833,18 @@
     },
     "https://www.fansnetwork.co.uk/football/rochdale/news/67139/refwatch--port-vale-v-rochdale": {
       "first_attempt_at": "2026-10-31T10:31:20.503732Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOM3BROWtNc0ZBLWdkeFhfX2tpZ2NlTkh5ZG5QOHVIZnNsc2Nob0lmdW85RU5kZUVkbGV4OEROaEdMWG92aTJ6eXJkLW9xMjNfcFpDMUJKV3hzR1ZULVZkWVB0NDAyTEMzdk9WbE4tVjV6OUpQRl9sdGtURUR4OXdaeG84TmpGTENmTjY3SllwWUloWElWY01Bam1DRjZ0YUxQaW9xcVVkSzNvMmM?oc=5",
+        "https://news.google.com/rss/articles/CBMivgFBVV95cUxNYk5mcFNPcm8taUl3emk3R1dLOGhYTkNPc0E3SWpGdjBSUktwRXhmQnlIZ3V2Xzl3SEI4c253Mzg4aVNOOGp2b1dQZHdzRmxFU3FNR1dsaVh1MHprZUF4bDY2YThNZjFuUi10ZlJkN00wVHdJdHMtTmJHWXFmTVA0N3ZpRmRYcW83RGk5bTI0R213aXVUbkpzelQ3cXdrWGNIY0p4YzRlcklzMHU1X0tfZlMzNkY1Wm1TaTdQWlpR?oc=5",
         "https://www.fansnetwork.co.uk/football/rochdale/news/67139",
         "https://www.fansnetwork.co.uk/football/rochdale/news/67139/refwatch--port-vale-v-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-31T11:53:27.238800Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "last_attempt_at": "2026-10-31T15:35:52.827484Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Refwatch - Port Vale v Rochdale - FansNetwork.co.uk",
       "source_name": "Fansnetwork",
       "category": "crime",
@@ -1681,24 +1667,6 @@
       "category": "environment",
       "text_fingerprint": "d2cf8f217b3a87e1"
     },
-    "https://www.rochdale.gov.uk/news/article/689/wheels-fall-off-for-drivers-who-failed-to-stop-for-heywood-school-crossing-patrol": {
-      "first_attempt_at": "2026-10-23T14:00:39.402101Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/news/article/689/wheels-fall-off-for-drivers-who-failed-to-stop-for-heywood-school-crossing-patrol",
-        "https://www.rochdaletimes.co.uk/drivers-have-vehicles-seized-for-ignoring-school-crossing-patrols",
-        "https://www.rochvalleyradio.com/news-features/4/crime/1223/police-seize-two-vehicles-after-drivers-fail-to-stop-for-heywood-school-crossing-patrol"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T15:12:47.272680Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Wheels fall off for drivers who failed to stop for Heywood school crossing patrol – Rochdale Borough Council",
-      "source_name": "Rochdale Borough Council News",
-      "category": "politics",
-      "text_fingerprint": "31e48a0463a62769"
-    },
     "https://www.rochdale.gov.uk/news/article/691/rochdale-foster-carers-honoured-for-465-years-of-dedicated-service": {
       "first_attempt_at": "2026-10-26T16:10:40.440334Z",
       "attempts": 1,
@@ -1750,6 +1718,22 @@
       "source_name": "Rochdale Times",
       "category": "news",
       "text_fingerprint": "261f97139f16da0b"
+    },
+    "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre": {
+      "first_attempt_at": "2026-10-31T15:35:52.827758Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-10-31T15:35:52.827758Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Affordable homes plan approved for town centre - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "environment",
+      "text_fingerprint": "2eeeb83754bf66dd"
     },
     "https://www.rochdaletimes.co.uk/bonfire-night-celebrations-return-with-a-bang": {
       "first_attempt_at": "2026-10-29T10:54:14.622160Z",
