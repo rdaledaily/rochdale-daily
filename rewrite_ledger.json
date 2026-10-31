@@ -1,27 +1,10 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-31T13:22:55.390539Z",
+  "updated_at": "2026-10-31T14:30:08.215060Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 155,
+  "count": 154,
   "entries": {
-    "https://aboutmanchester.co.uk/rochdale-charity-your-trust-is-hosting-a-variety-of-activities-across-its-venues-this-october-half-term-to-keep-children-and-their-families-entertained": {
-      "first_attempt_at": "2026-10-23T12:58:07.186081Z",
-      "attempts": 1,
-      "urls": [
-        "https://aboutmanchester.co.uk/rochdale-charity-your-trust-is-hosting-a-variety-of-activities-across-its-venues-this-october-half-term-to-keep-children-and-their-families-entertained",
-        "https://news.google.com/rss/articles/CBMijwJBVV95cUxOSHhQa2NEbG11b2NMZVlqYzFKb0E2N0U0VmUxUnc2WFg1Zm94a09WZTNVUXNVaV9IRDlvZUY1eFNoUVZYRk1mUFdoRmk1VEZPLVFoNUVNRlQwS2Q2UmNSODhlRVZuUGVnd3lYVFpkSFlvUXR5Rjl4SzJBazdmRGpGYkNmV0N3R2lIT2FaN2p6ZWRjeUZvWGxSSzBrMU9FNFF4a3lINjBORHhsSUtlUnFLbnhUTUVOWnl2eVgwYXItZjZpYk9RM18yZFVpNTZsY2xBeWFBeG9HZjllMk5XazVCMlpQT3JBbnNjZGVOYUpMZkJPQnVYanN1ajVXZWVKbXZYUERIR3VEUmV5TzVPNEJZ?oc=5"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-23T13:45:52.201411Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Rochdale charity Your Trust is hosting a variety of activities across its venues this October half term to keep children and their families ",
-      "source_name": "About Manchester",
-      "category": "health",
-      "text_fingerprint": "6bfc561cd60f6872"
-    },
     "https://aboutmanchester.co.uk/rochdale-crowned-britain-in-bloom-champion-after-striking-gold": {
       "first_attempt_at": "2026-10-25T10:57:56.696261Z",
       "attempts": 1,
@@ -463,12 +446,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-27T12:24:15.380746Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 27/10/2026 at 12:12pm Live Failsworth Tram Stop - Lifts out of service Duration Tue 27 Oct, 12:12pm – until further notice Stops",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "a06fe7e1ba6f2231"
+      "text_fingerprint": "a06fe7e1ba6f2231",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-f42339b3decad80626": {
       "first_attempt_at": "2026-10-31T13:22:55.390358Z",
