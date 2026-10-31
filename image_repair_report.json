@@ -1,7 +1,7 @@
 {
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
-  "skipped_sensitive_stories": 1,
+  "skipped_sensitive_stories": 0,
   "no_allowed_source": 1,
   "no_usable_source_image": 7,
   "permission_entries": 0,
@@ -16,6 +16,24 @@
   "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
+    {
+      "slug": "road-closures-announced-for-heywood-christmas-festival-on-14-november-2026",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdale.gov.uk/directory-record/2645/heywood-christmas-festival-road-closures-in-heywood-on-14-november-2026",
+      "after": "",
+      "why": {
+        "page": "https://www.rochdale.gov.uk/directory-record/2645/heywood-christmas-festival-road-closures-in-heywood-on-14-november-2026",
+        "final_url": "https://www.rochdale.gov.uk/directory-record/2645/heywood-christmas-festival-road-closures-in-heywood-on-14-november-2026",
+        "candidates": [
+          {
+            "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
+            "via": "og:image",
+            "verdict": "default-image-used-on-other-stories"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
     {
       "slug": "little-play-town-heywood-for-sale-stays-open",
       "result": "no-source"
@@ -65,7 +83,15 @@
       "after": "assets/img/cards/cea366c3cb5b-place-generated-card.jpg",
       "why": {
         "page": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVnZNMG5KYzdOQmhndHN1TThsaVVsQWZJSzd1MUtUZDRwQmJxRTdNMS1ZS25ScG1qa3dfd21va1dzZGs1bllvOUlGTjVoeC0zYzRpa20yUFZRYkFXamdlYkVBd2dFMGNnVDREUnZVTDd4dl9JYzRyTjJ1T1EyWW51WVRGS0lUaWd4U1p3UUU5OA?oc=5",
-        "verdict": "page-fetch-failed: HTTP Error 503: Service Unavailable"
+        "final_url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVnZNMG5KYzdOQmhndHN1TThsaVVsQWZJSzd1MUtUZDRwQmJxRTdNMS1ZS25ScG1qa3dfd21va1dzZGs1bllvOUlGTjVoeC0zYzRpa20yUFZRYkFXamdlYkVBd2dFMGNnVDREUnZVTDd4dl9JYzRyTjJ1T1EyWW51WVRGS0lUaWd4U1p3UUU5OA?oc=5&hl=en-US&gl=US&ceid=US:en",
+        "candidates": [
+          {
+            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
       }
     },
     {
@@ -75,7 +101,15 @@
       "after": "",
       "why": {
         "page": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNNkhfLTMyV1U4VXl3T3FoN0p4eHl6T0lhTmN0T0FlbkhUUGcxRUVYbUgyRG1INFNyNVp0TVFGd0pqZUhCbmMtLXBpUmhVaXpDcTBuOXFIY3laVnN4ajlta2hrU2dWdHdsTUZFN3pWTnhiTkJ3VjVyeFZCLVNrYXJLN0Nn?oc=5",
-        "verdict": "page-fetch-failed: HTTP Error 503: Service Unavailable"
+        "final_url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNNkhfLTMyV1U4VXl3T3FoN0p4eHl6T0lhTmN0T0FlbkhUUGcxRUVYbUgyRG1INFNyNVp0TVFGd0pqZUhCbmMtLXBpUmhVaXpDcTBuOXFIY3laVnN4ajlta2hrU2dWdHdsTUZFN3pWTnhiTkJ3VjVyeFZCLVNrYXJLN0Nn?oc=5&hl=en-US&gl=US&ceid=US:en",
+        "candidates": [
+          {
+            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
       }
     },
     {
@@ -85,7 +119,15 @@
       "after": "assets/img/cards/8501378fe52a-place-generated-card.jpg",
       "why": {
         "page": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOd0VBNHNKZFB2TGIxcTBaNlRfdjF1MlRZcThrc01DTlAxZklKNS1xMUk4VEJUSmVWZmM3NjI0TmdNNUtEQ3BkdFlzN29sVzhqNzBFT0NZQTd5Z2o2Q3AzZndGTGM5SFNUdDBFMjItelJJMXVoZzlTLU5JQnVac3VSdnBIR2FZcFJRajNMSHNKcHFDcUlBbFpIMEg3LXlNakM0aXJ0djRnMnRzSjZtNkQyQmJ4MTVXbkstbGR6R3FNZkExMEVMeWlTYWRsMHJsSkw5TVUyNlVOMkd2RjRUWGhz?oc=5",
-        "verdict": "page-fetch-failed: HTTP Error 503: Service Unavailable"
+        "final_url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOd0VBNHNKZFB2TGIxcTBaNlRfdjF1MlRZcThrc01DTlAxZklKNS1xMUk4VEJUSmVWZmM3NjI0TmdNNUtEQ3BkdFlzN29sVzhqNzBFT0NZQTd5Z2o2Q3AzZndGTGM5SFNUdDBFMjItelJJMXVoZzlTLU5JQnVac3VSdnBIR2FZcFJRajNMSHNKcHFDcUlBbFpIMEg3LXlNakM0aXJ0djRnMnRzSjZtNkQyQmJ4MTVXbkstbGR6R3FNZkExMEVMeWlTYWRsMHJsSkw5TVUyNlVOMkd2RjRUWGhz?oc=5&hl=en-US&gl=US&ceid=US:en",
+        "candidates": [
+          {
+            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
       }
     },
     {
@@ -139,16 +181,6 @@
           }
         ],
         "verdict": "no-candidate-passed"
-      }
-    },
-    {
-      "slug": "sir-ian-mckellen-to-headline-event-at-factory-international-in-rochdale",
-      "result": "no-cleared-source-image",
-      "source": "https://www.inyourarea.co.uk/news/whats-on-rochdale-sir-ian-mckellen-set-for-factory-international-plus-share-your-ideas-to-reshape-town-spaces",
-      "after": "assets/img/cards/b289bcf4e23d-place-generated-card.jpg",
-      "why": {
-        "page": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQZmFPOWgwMUY3OGRva0pILW1aNFB4TTQ2MzR1bGpRSkNKNXRzV2RXOEZ5eDNNNVdQNWhEQ0xSRDhoSlh3czh3YlUySjQ0R0d0YTR0QnpQdGF6cjRCNWlUdU5ndlNWRXRlWDBHd3N4dXFMQUI2bEpWbVN4RXlaaXI5NDRYQjFDZE1ObGxvLUlVeWhpdnFMZWhVTkphZE9QMzVjTC16NHRQTHZZSTRMU3hxcjBMaGoyMDBpeGZUXzh2TnRVM0VCMlhtT0twYnE5RWoxVldXbmc4elVIbzFs?oc=5",
-        "verdict": "page-fetch-failed: HTTP Error 503: Service Unavailable"
       }
     }
   ]
