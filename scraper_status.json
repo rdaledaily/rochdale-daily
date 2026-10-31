@@ -1,17 +1,10 @@
 {
-  "last_run_at": "2026-10-31T10:34:00.200919Z",
+  "last_run_at": "2026-10-31T10:55:15.461441Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 4,
-      "offered_today": 1,
-      "listed": 49,
-      "already_seen": 36,
-      "started_long_ago": 0,
-      "too_far_ahead": 11,
-      "undated": 2,
-      "in_window": 0
+      "status": "not due",
+      "last_checked": "2026-10-31T10:30:32.291610Z",
+      "interval_hours": 6
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -19,15 +12,9 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "listed": 2,
-      "unanswered_or_holding": 0,
-      "not_about_the_borough": 0,
-      "already_seen": 2,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-31T10:30:32.291610Z",
+      "interval_hours": 6
     },
     "gmca_decisions": {
       "status": "not due",
@@ -40,27 +27,14 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "pages": 1,
-      "releases": 0,
-      "borough_buyer": 0,
-      "not_story_type": 0,
-      "already_seen": 0,
-      "new": 0,
-      "complete": 1
+      "status": "not due",
+      "last_checked": "2026-10-31T10:30:32.291610Z",
+      "interval_hours": 6
     },
     "weather_warnings": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 0,
-      "not_rochdale": 0,
-      "already_seen": 0,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-10-31T10:30:32.291610Z",
+      "interval_hours": 6
     },
     "claimant_count": {
       "status": "not due",
@@ -68,27 +42,22 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 103,
+  "raw_candidates_before_job_filter": 104,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 97,
+  "raw_candidates": 98,
   "candidate_clusters": 41,
   "google_news_resolution": {
-    "wrappers": 41,
-    "resolved": 36,
-    "text_recovered": 25,
-    "reattributed": 2,
-    "images_found": 29
+    "wrappers": 70,
+    "resolved": 58,
+    "text_recovered": 14,
+    "reattributed": 1,
+    "images_found": 17
   },
-  "duplicates_merged": 56,
-  "attempted_rewrites": 2,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "rochdale-receives-2-24-million-to-revive-derelict-buildings",
-      "source_url": "https://www.rochdaletimes.co.uk/2-24m-to-bring-derelict-buildings-back-to-life/"
-    }
-  ],
-  "new_articles": 1,
+  "duplicates_merged": 57,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
   "live_articles": 476,
   "skipped": 1,
   "rewrite_skip_reasons": {
@@ -105,10 +74,10 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 162,
+    "entries": 155,
     "by_outcome": {
       "failed": 4,
-      "published": 126,
+      "published": 119,
       "rejected": 32
     },
     "held_back_this_run": 30,
@@ -185,8 +154,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 90,
-    "website_discovery": 8,
+    "rss_and_google_news": 96,
+    "website_discovery": 3,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -201,36 +170,35 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 41,
-    "Roch Valley Radio": 10,
+    "Rochdale Times": 38,
+    "Roch Valley Radio": 12,
+    "InYourArea": 6,
     "Manchester Evening News": 5,
-    "InYourArea": 5,
     "Bee Network live travel alerts": 5,
     "The Manc": 4,
+    "Facebook": 3,
     "Fan Banter": 3,
     "Port Vale Football Club": 3,
     "Rochdale Borough Council": 3,
-    "Facebook": 2,
     "Kashmir Times": 2,
-    "Fansnetwork": 2,
     "Radio Times": 2,
     "Rochdale AFC": 2,
+    "Blog Preston": 2,
     "Roch Valley Radio Local News": 2,
     "Your Trust Rochdale": 1,
     "Total Rugby League": 1,
     "beIN SPORTS": 1,
-    "Blog Preston": 1,
     "Oldham Times": 1,
+    "Fansnetwork": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1,
-    "news": 1
+    "crime": 1
   },
   "published_by_category": {
-    "business": 49,
+    "business": 48,
     "community": 60,
-    "crime": 19,
+    "crime": 20,
     "education": 20,
     "environment": 36,
     "events": 27,
@@ -264,12 +232,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-431d6ec72f7230253ef6",
-    "hard-news-v3-36d10445c7b6b6a1abaf"
+    "sport-v3-431d6ec72f7230253ef6"
   ],
   "selected_candidate_urls": [
-    "https://www.fansnetwork.co.uk/football/rochdale/news/67139/refwatch--port-vale-v-rochdale",
-    "https://www.rochdaletimes.co.uk/2-24m-to-bring-derelict-buildings-back-to-life/"
+    "https://www.fansnetwork.co.uk/football/rochdale/news/67139/refwatch--port-vale-v-rochdale"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -281,12 +247,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime",
-      "news"
+      "crime"
     ],
     "selected_categories": [
-      "crime",
-      "news"
+      "crime"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -298,16 +262,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1,
-      "news": 1
+      "crime": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 2
+      "rochdale": 1
     },
     "selected_by_source": {
-      "fansnetwork": 1,
-      "rochdale times": 1
+      "fansnetwork": 1
     }
   },
   "official_ward_count": 20,
@@ -856,7 +818,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 8,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -864,16 +826,11 @@
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMihgFBVV95cUxPVERUNkw0N0NheVpzRTR1S3ZBR2h0Wi1oUjlMWHptdXpKXzg5WUlxb0NDLTRGc1BYZHlZUHNkQUZTbUU1c1FmdGpNU1dDa1RWNURxQXBadmNsZXNId2toR1RsM042c3dLeE1Gc3pvbVU0LXlwVk8zTGtXdllkVFdlanFSbnRYQQ?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 3
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -909,7 +866,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-31T10:37:09.100463Z",
+  "frontpage_generated_at": "2026-10-31T10:56:54.918424Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1008,10 +965,8 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 15,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "rochdale-council-addresses-concerns-over-local-pub-closures"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
