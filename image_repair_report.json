@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 0,
+  "repaired_with_source_photo": 1,
   "skipped_sensitive_stories": 0,
   "no_allowed_source": 1,
-  "no_usable_source_image": 7,
+  "no_usable_source_image": 6,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -13,18 +13,14 @@
     "Rochdale Boroughwide Housing"
   ],
   "source_grants_incomplete": [],
-  "replaced_commons_or_library_with_source_photo": 0,
+  "replaced_commons_or_library_with_source_photo": 1,
   "allowed_domains": [],
   "items": [
     {
-      "slug": "does-a-boggart-still-haunt-clegg-hall",
-      "result": "no-cleared-source-image",
-      "source": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
-      "after": "",
-      "why": {
-        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
-        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
-      }
+      "slug": "rochdale-afc-suffers-defeat-at-vale-park",
+      "result": "licensed-source-photo",
+      "source": "https://rochdaleafc.co.uk/watson-on-vale-defeat/",
+      "after": "assets/img/cards/rochdale-afc-suffers-defeat-at-vale-park.jpg"
     },
     {
       "slug": "charlie-tasker-thriving-during-loan-spell-at-rochdale-from-brighton",
@@ -102,6 +98,59 @@
       "result": "no-source"
     },
     {
+      "slug": "plans-approved-for-27-affordable-homes-in-rochdale-town-centre",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/",
+      "after": "assets/img/cards/b289bcf4e23d-place-generated-card.jpg",
+      "why": {
+        "page": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/",
+        "final_url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/",
+        "candidates": [
+          {
+            "url": "https://www.rochdaletimes.co.uk/wp-content/uploads/2026/10/drake-street.jpg",
+            "via": "og:image:secure_url",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271200%27%20height%3D%27148%27%20viewBox%3D%270%20",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271254%27%20height%3D%271254%27%20viewBox%3D%270%2",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27350%27%20viewBox%3D%270%200",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271010%27%20height%3D%27527%27%20viewBox%3D%270%20",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271076%27%20height%3D%27601%27%20viewBox%3D%270%20",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271655%27%20height%3D%27531%27%20viewBox%3D%270%20",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%272224%27%20height%3D%27273%27%20viewBox%3D%270%20",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
+    {
       "slug": "rochdale-boroughwide-housing-limited-awards-vat-services-contract-to-s3tax-limit",
       "result": "no-cleared-source-image",
       "source": "https://www.find-tender.service.gov.uk/Notice/103216-2026",
@@ -145,24 +194,6 @@
           {
             "url": "https://your-content.s3.eu-west-2.amazonaws.com/wp-content/uploads/2026/10/29145546/CaseStudy_StevenLees_1350x1080px.jpg",
             "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
-    },
-    {
-      "slug": "middleton-designated-as-mayoral-development-area-to-boost-regeneration",
-      "result": "no-cleared-source-image",
-      "source": "https://www.rochdaletimes.co.uk/towns-regeneration-journey-takes-another-step-forward/",
-      "after": "assets/img/cards/cea366c3cb5b-place-generated-card.jpg",
-      "why": {
-        "page": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVnZNMG5KYzdOQmhndHN1TThsaVVsQWZJSzd1MUtUZDRwQmJxRTdNMS1ZS25ScG1qa3dfd21va1dzZGs1bllvOUlGTjVoeC0zYzRpa20yUFZRYkFXamdlYkVBd2dFMGNnVDREUnZVTDd4dl9JYzRyTjJ1T1EyWW51WVRGS0lUaWd4U1p3UUU5OA?oc=5",
-        "final_url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVnZNMG5KYzdOQmhndHN1TThsaVVsQWZJSzd1MUtUZDRwQmJxRTdNMS1ZS25ScG1qa3dfd21va1dzZGs1bllvOUlGTjVoeC0zYzRpa20yUFZRYkFXamdlYkVBd2dFMGNnVDREUnZVTDd4dl9JYzRyTjJ1T1EyWW51WVRGS0lUaWd4U1p3UUU5OA?oc=5&hl=en-US&gl=US&ceid=US:en",
-        "candidates": [
-          {
-            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
-            "via": "og:image",
             "verdict": "page-not-from-granting-organisation"
           }
         ],
