@@ -1,46 +1,38 @@
 {
-  "examined_at": "2026-10-30T13:32:24.814127Z",
+  "examined_at": "2026-10-31T13:03:19.471428Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 92,
+  "candidates_examined": 85,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 67,
-    "would publish": 17,
-    "duplicate of published story": 6,
-    "not local": 1,
-    "job or career post": 1
+    "age": 66,
+    "would publish": 13,
+    "duplicate of published story": 6
   },
-  "would_publish": 17,
+  "would_publish": 13,
   "age_gate_sensitivity": {
-    "6h": 10,
-    "14h": 14,
-    "24h": 25,
-    "48h": 42,
-    "72h": 61,
-    "168h": 92
+    "6h": 5,
+    "14h": 11,
+    "24h": 19,
+    "48h": 50,
+    "72h": 65,
+    "168h": 85
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Rochdale AFC: We Know What We’re Capable Of – Henderson - Rochdale AFC",
-      "Rochdale Times: Police target crime gang’s ‘spider web of criminality’ - Rochdale Time"
+      "Rochdale AFC: Another COA Tie For Dale Women - Rochdale AFC",
+      "InYourArea: Rochdale Faith News: Saturday, October 31 - InYourArea"
     ],
     "duplicate of published story": [
-      "Your Trust Rochdale: Member Success Story: Steven's Incredible 15-Stone Transformation - Yo",
-      "Roch Valley Radio Local News: Gymbound to sponsor Rochdale Mayfield shirts for next two seasons",
+      "Rochdale Borough Council: Heywood Christmas Festival, road closures in Heywood on 14 November 20",
+      "beIN SPORTS: Port Vale vs Rochdale - beIN SPORTS",
       "Facebook: Patrick Whelan (pictured) has been remembered by his devastated family"
     ],
-    "not local": [
-      "The Gazette: ELLIOTS RESTAURANT LTD: Appointment of Liquidators"
-    ],
-    "job or career post": [
-      "Manchester Evening News: Rent at new homes in Rochdale town centre will be affordable, develope"
-    ],
     "age": [
-      "The Manc: Rochdale set to be illuminated by fiery sculptures for this year’s Ign",
-      "Manchester Evening News: Rochdale grooming scandal - Page 6 - Manchester Evening News",
-      "Manchester Evening News: Rochdale Council - Manchester Evening News"
+      "Port Vale Football Club: Match Preview | Rochdale (H) - Port Vale Football Club",
+      "Blog Preston: SpudBros outlets open at Rochdale and Leicester as nationwide expansio",
+      "Blog Preston: SpudBros outlets open at Rochdale and Leicester as nationwide expansio"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
