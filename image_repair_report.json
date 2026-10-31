@@ -55,24 +55,6 @@
       }
     },
     {
-      "slug": "watch-port-vale-vs-rochdale-live-from-the-port-of-rotterdam",
-      "result": "no-cleared-source-image",
-      "source": "https://www.portofrotterdam.com/sites/default/files/uploads/360panorama/index.html?xml=data%3Avideo%2Fmp4%3Bbase64%2CPGtycGFubz48aW5jbHVkZSB1cmw9Ii8vY2ltYW5nby5naXRodWIuaW8vc2FuaS9idWQueG1sIi8+PC9rcnBhbm8+&id=video-port-vale-vs-rochdale-live-5k_today-match_tvx1-92",
-      "after": "assets/img/cards/rochdale_away.jpg",
-      "why": {
-        "page": "https://www.portofrotterdam.com/sites/default/files/uploads/360panorama/index.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii8vY2ltYW5nby5naXRodWIuaW8vc2FuaS9idWQueG1sIi8+PC9rcnBhbm8+&id=video-port-vale-vs-rochdale-live-5k_today-match_tvx1-92",
-        "final_url": "https://www.portofrotterdam.com/sites/default/files/uploads/360panorama/index.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii8vY2ltYW5nby5naXRodWIuaW8vc2FuaS9idWQueG1sIi8+PC9rcnBhbm8+&id=video-port-vale-vs-rochdale-live-5k_today-match_tvx1-92",
-        "candidates": [
-          {
-            "url": "https://www.portofrotterdam.com/sites/default/files/styles/large/public/Port360-Maasvlakte-2.PNG",
-            "via": "og:image",
-            "verdict": "page-not-from-granting-organisation"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
-    },
-    {
       "slug": "st-luke-s-church-in-deeplish-announces-upcoming-services-and-community-events",
       "result": "no-cleared-source-image",
       "source": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-31",
@@ -231,6 +213,18 @@
       "why": {
         "page": "https://www.find-tender.service.gov.uk/Notice/103216-2026",
         "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
+    {
+      "slug": "port-vale-to-stream-rochdale-match-live-on-october-30",
+      "result": "no-cleared-source-image",
+      "source": "https://www.port-vale.co.uk/news/watch-or-listen-live-rochdale-h",
+      "after": "assets/img/cards/fixtures.jpg",
+      "why": {
+        "page": "https://www.port-vale.co.uk/news/match-preview-rochdale-h",
+        "final_url": "https://www.port-vale.co.uk/news/match-preview-rochdale-h",
+        "candidates": [],
+        "verdict": "no-candidate-images-on-page"
       }
     }
   ]
