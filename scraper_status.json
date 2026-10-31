@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-10-31T00:59:53.602105Z",
+  "last_run_at": "2026-10-31T01:20:01.700032Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,18 +42,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 103,
+  "raw_candidates_before_job_filter": 96,
   "job_or_career_posts_rejected": 7,
-  "raw_candidates": 96,
+  "raw_candidates": 89,
   "candidate_clusters": 37,
   "google_news_resolution": {
-    "wrappers": 43,
-    "resolved": 29,
-    "text_recovered": 26,
+    "wrappers": 35,
+    "resolved": 23,
+    "text_recovered": 20,
     "reattributed": 0,
-    "images_found": 28
+    "images_found": 22
   },
-  "duplicates_merged": 59,
+  "duplicates_merged": 52,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -134,8 +134,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 90,
-    "website_discovery": 8,
+    "rss_and_google_news": 82,
+    "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -150,21 +150,22 @@
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Rochdale Times": 44,
+    "Rochdale Times": 37,
     "Roch Valley Radio": 12,
     "Manchester Evening News": 7,
     "Bee Network live travel alerts": 5,
-    "Port Vale Football Club": 4,
     "The Manc": 4,
     "InYourArea": 4,
+    "Port Vale Football Club": 3,
     "Rochdale Borough Council": 3,
     "Facebook": 2,
     "Blog Preston": 2,
-    "Kashmir Times": 2,
+    "Oldham Times": 2,
     "Rochdale AFC": 2,
     "Roch Valley Radio Local News": 2,
     "Your Trust Rochdale": 1,
-    "Oldham Times": 1,
+    "Kashmir Times": 1,
+    "FansNetwork.co.uk": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {},
@@ -783,8 +784,12 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 3
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -820,8 +825,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-10-31T01:01:28.521445Z",
-  "frontpage_article_count": 15,
+  "frontpage_generated_at": "2026-10-31T01:21:38.412806Z",
+  "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -862,7 +867,7 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "business": 2,
-      "crime": 2,
+      "crime": 1,
       "traffic": 1,
       "sport": 2,
       "community": 2,
@@ -871,7 +876,7 @@
       "news": 3
     },
     "selected_by_ward": {
-      "borough-wide": 15
+      "borough-wide": 14
     },
     "selected_by_area": {
       "heywood": 2,
@@ -887,20 +892,20 @@
       "your trust rochdale": 1,
       "inyourarea": 1,
       "rochdale daily": 1,
-      "manchester evening news": 3,
       "rochdale afc": 1,
       "source": 1,
-      "yahoo news uk": 1
+      "yahoo news uk": 1,
+      "manchester evening news": 2
     },
     "pool_size": 20,
     "primary_pool_size": 20,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 15,
+    "frontpage_count": 14,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 15,
-    "short_briefs_selected": 10,
+    "fresh_under_homepage_window": 14,
+    "short_briefs_selected": 9,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -910,7 +915,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 15,
-  "event_dates_corrected_from_ledger": 6,
+  "event_dates_corrected_from_ledger": 5,
   "duplicate_articles_after_postprocessing": 471,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
