@@ -1,12 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 478,
-  "published_count": 478,
+  "article_count": 481,
+  "published_count": 481,
   "category_change_count": 0,
-  "image_change_count": 108,
+  "image_change_count": 109,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "watch-port-vale-vs-rochdale-live-from-the-port-of-rotterdam",
+      "title": "Watch Port Vale vs Rochdale live from the Port of Rotterdam",
+      "category": "sport",
+      "reason": "weak filename image match score -1; neutral card is safer",
+      "before": {
+        "image_url": "assets/img/cards/rochdale_away.jpg",
+        "img": "assets/img/cards/rochdale_away.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
+    },
     {
       "slug": "road-closures-announced-for-heywood-christmas-festival-on-14-november-2026",
       "title": "Road closures announced for Heywood Christmas Festival on 14 November 2026",
@@ -201,7 +213,7 @@
     },
     {
       "slug": "rochdale-afc-suffers-defeat-at-vale-park",
-      "title": "Port Vale defeats Rochdale 4-2 in League Two clash",
+      "title": "Port Vale defeats Rochdale 4-1 in League Two match",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
