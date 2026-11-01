@@ -2,8 +2,8 @@
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
-  "no_allowed_source": 1,
-  "no_usable_source_image": 7,
+  "no_allowed_source": 0,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -16,6 +16,16 @@
   "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
+    {
+      "slug": "does-a-boggart-still-haunt-clegg-hall",
+      "result": "no-cleared-source-image",
+      "source": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
+      "after": "",
+      "why": {
+        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
+        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
     {
       "slug": "rochdale-remembers-as-community-gathers-for-remembrance-day-services",
       "result": "no-cleared-source-image",
@@ -145,12 +155,12 @@
             "verdict": "page-not-from-granting-organisation"
           },
           {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271010%27%20height%3D%27527%27%20viewBox%3D%2",
+            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271097%27%20height%3D%27500%27%20viewBox%3D%2",
             "via": "main img",
             "verdict": "page-not-from-granting-organisation"
           },
           {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%272224%27%20height%3D%27741%27%20viewBox%3D%2",
+            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271010%27%20height%3D%27527%27%20viewBox%3D%2",
             "via": "main img",
             "verdict": "page-not-from-granting-organisation"
           }
@@ -251,10 +261,6 @@
         ],
         "verdict": "no-candidate-passed"
       }
-    },
-    {
-      "slug": "little-play-town-heywood-for-sale-stays-open",
-      "result": "no-source"
     }
   ]
 }
