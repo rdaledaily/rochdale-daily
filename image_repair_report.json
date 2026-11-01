@@ -2,8 +2,8 @@
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
-  "no_allowed_source": 1,
-  "no_usable_source_image": 7,
+  "no_allowed_source": 0,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -16,6 +16,16 @@
   "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
+    {
+      "slug": "the-priest-the-chicken-and-the-shoe-what-s-behind-clegg-hall-s-boggart",
+      "result": "no-cleared-source-image",
+      "source": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
+      "after": "",
+      "why": {
+        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
+        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
     {
       "slug": "rochdale-remembers-as-community-gathers-for-remembrance-day-services",
       "result": "no-cleared-source-image",
@@ -251,10 +261,6 @@
         ],
         "verdict": "no-candidate-passed"
       }
-    },
-    {
-      "slug": "little-play-town-heywood-for-sale-stays-open",
-      "result": "no-source"
     }
   ]
 }
