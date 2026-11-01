@@ -2,8 +2,8 @@
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
-  "no_allowed_source": 1,
-  "no_usable_source_image": 7,
+  "no_allowed_source": 0,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -16,6 +16,69 @@
   "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
+    {
+      "slug": "the-priest-the-chicken-and-the-shoe-rochdale-s-strangest-boggart-story",
+      "result": "no-cleared-source-image",
+      "source": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
+      "after": "",
+      "why": {
+        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
+        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
+      }
+    },
+    {
+      "slug": "rochdale-remembers-as-community-gathers-for-remembrance-day-services",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/",
+      "after": "",
+      "why": {
+        "page": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/",
+        "final_url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/",
+        "candidates": [
+          {
+            "url": "https://www.rochdaletimes.co.uk/wp-content/uploads/2025/10/remembrance-sunday.jpg",
+            "via": "og:image:secure_url",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271200%27%20height%3D%27148%27%20vi",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271254%27%20height%3D%271254%27%20v",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27350%27%20vie",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27900%27%20height%3D%27450%27%20vie",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%272224%27%20height%3D%27273%27%20vi",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271097%27%20height%3D%27500%27%20vi",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271010%27%20height%3D%27527%27%20vi",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
     {
       "slug": "roadworks-on-smithy-bridge-road-in-littleborough-scheduled-for-15-november-2026",
       "result": "no-cleared-source-image",
@@ -214,63 +277,6 @@
             "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
             "via": "og:image",
             "verdict": "default-image-used-on-other-stories"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
-    },
-    {
-      "slug": "little-play-town-heywood-for-sale-stays-open",
-      "result": "no-source"
-    },
-    {
-      "slug": "plans-approved-for-27-affordable-homes-in-rochdale-town-centre",
-      "result": "no-cleared-source-image",
-      "source": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/",
-      "after": "assets/img/cards/b289bcf4e23d-place-generated-card.jpg",
-      "why": {
-        "page": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/",
-        "final_url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/",
-        "candidates": [
-          {
-            "url": "https://www.rochdaletimes.co.uk/wp-content/uploads/2026/10/drake-street.jpg",
-            "via": "og:image:secure_url",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271200%27%20height%3D%27148%27%20viewBox%3D%270%20",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271254%27%20height%3D%271254%27%20viewBox%3D%270%2",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27350%27%20viewBox%3D%270%200",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271010%27%20height%3D%27527%27%20viewBox%3D%270%20",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271076%27%20height%3D%27601%27%20viewBox%3D%270%20",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271655%27%20height%3D%27531%27%20viewBox%3D%270%20",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/affordable-homes-plan-approved-for-town-centre/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%272224%27%20height%3D%27273%27%20viewBox%3D%270%20",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
           }
         ],
         "verdict": "no-candidate-passed"
