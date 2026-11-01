@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-10-31T13:03:19.471428Z",
+  "examined_at": "2026-11-01T13:46:13.700605Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 85,
+  "candidates_examined": 125,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 66,
-    "would publish": 13,
-    "duplicate of published story": 6
+    "age": 64,
+    "would publish": 54,
+    "duplicate of published story": 7
   },
-  "would_publish": 13,
+  "would_publish": 54,
   "age_gate_sensitivity": {
-    "6h": 5,
-    "14h": 11,
-    "24h": 19,
-    "48h": 50,
-    "72h": 65,
-    "168h": 85
+    "6h": 7,
+    "14h": 8,
+    "24h": 61,
+    "48h": 79,
+    "72h": 109,
+    "168h": 125
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Rochdale AFC: Another COA Tie For Dale Women - Rochdale AFC",
-      "InYourArea: Rochdale Faith News: Saturday, October 31 - InYourArea"
+      "Bee Network live travel alerts: Updated: 31/10/2026 at 2:32pm Live Freehold Tram Stop - Lifts out of s",
+      "Manchester Evening News: Rochdale residents return to homes after car smashes into building"
     ],
     "duplicate of published story": [
-      "Rochdale Borough Council: Heywood Christmas Festival, road closures in Heywood on 14 November 20",
-      "beIN SPORTS: Port Vale vs Rochdale - beIN SPORTS",
-      "Facebook: Patrick Whelan (pictured) has been remembered by his devastated family"
+      "Rochdale Borough Council: Smithy Bridge Road, roadworks in Littleborough on 15 November 2026",
+      "Manchester Evening News: Homes evacuated after car crashes into house and causes gas leak",
+      "Rochdale Times: Schools face financial challenges over pupil places - Rochdale Times"
     ],
     "age": [
-      "Port Vale Football Club: Match Preview | Rochdale (H) - Port Vale Football Club",
-      "Blog Preston: SpudBros outlets open at Rochdale and Leicester as nationwide expansio",
-      "Blog Preston: SpudBros outlets open at Rochdale and Leicester as nationwide expansio"
+      "Port of Rotterdam: Here's Port Vale vs Rochdale Live - Port of Rotterdam",
+      "InYourArea: Rochdale Faith News: Saturday, October 31 - InYourArea",
+      "Rochdale AFC: Another COA Tie For Dale Women - Rochdale AFC"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
