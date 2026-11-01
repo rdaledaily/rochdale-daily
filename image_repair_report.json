@@ -17,17 +17,7 @@
   "allowed_domains": [],
   "items": [
     {
-      "slug": "does-a-boggart-still-haunt-clegg-hall",
-      "result": "no-cleared-source-image",
-      "source": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
-      "after": "",
-      "why": {
-        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
-        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
-      }
-    },
-    {
-      "slug": "stories-we-tell-returns-to-rochdale-for-final-night-after-sell-out-run",
+      "slug": "final-performance-of-stories-we-tell-returns-to-rochdale-after-sell-out-success",
       "result": "no-cleared-source-image",
       "source": "https://www.rochvalleyradio.com/news-features/179/culture/1272/stories-we-tell-returns-to-rochdale-for-final-night-after-sell-out-run",
       "after": "",
@@ -42,6 +32,11 @@
           },
           {
             "url": "https://cdn.rochvalleyradio.com/uploads/f1/profiles/user-20527.jpg",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/6639abc20958c7009285cc680de598fd_thumb.jpg",
             "via": "article img",
             "verdict": "page-not-from-granting-organisation"
           },
@@ -67,11 +62,6 @@
           },
           {
             "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/c321bc0da61ec8b92e5f309c7835d343_thumb.jpg",
-            "via": "article img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://cdn.rochvalleyradio.com/uploads/f1/news/img/03732aa0c22feb6eaeae12f674fd452d_thumb.png",
             "via": "article img",
             "verdict": "page-not-from-granting-organisation"
           }
@@ -250,6 +240,29 @@
           },
           {
             "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271010%27%20height%3D%27527%27%20viewBox%3D%2",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
+    {
+      "slug": "st-luke-s-church-in-deeplish-announces-upcoming-services-and-community-events",
+      "result": "no-cleared-source-image",
+      "source": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-31",
+      "after": "assets/img/cards/ab7fd4d4480c-place-generated-card.jpg",
+      "why": {
+        "page": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-31",
+        "final_url": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-31",
+        "candidates": [
+          {
+            "url": "https://images-cropper-prod.inyourarea.co.uk/unsafe/700x394/smart/harvester-img-e3ff5c2d49d3961e243fa87207168b6b.jpg",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://storage.ghost.io/c/9b/37/9b37512a-c253-4f99-bb04-2eceff8988c5/content/images/2025/03/InYourArea--1---2--1.png",
             "via": "main img",
             "verdict": "page-not-from-granting-organisation"
           }
