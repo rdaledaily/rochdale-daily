@@ -2,8 +2,8 @@
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
-  "no_allowed_source": 0,
-  "no_usable_source_image": 8,
+  "no_allowed_source": 1,
+  "no_usable_source_image": 7,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -17,20 +17,10 @@
   "allowed_domains": [],
   "items": [
     {
-      "slug": "the-priest-the-chicken-and-the-shoe-rochdale-s-strangest-boggart-story",
-      "result": "no-cleared-source-image",
-      "source": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
-      "after": "",
-      "why": {
-        "page": "https://historicengland.org.uk/listing/the-list/list-entry/1309615",
-        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
-      }
-    },
-    {
       "slug": "rochdale-remembers-as-community-gathers-for-remembrance-day-services",
       "result": "no-cleared-source-image",
       "source": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/",
-      "after": "",
+      "after": "assets/img/cards/86868628f2b0-place-generated-card.jpg",
       "why": {
         "page": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/",
         "final_url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-comes-together-to-reflect-and-remember/",
@@ -281,6 +271,10 @@
         ],
         "verdict": "no-candidate-passed"
       }
+    },
+    {
+      "slug": "little-play-town-heywood-for-sale-stays-open",
+      "result": "no-source"
     }
   ]
 }
