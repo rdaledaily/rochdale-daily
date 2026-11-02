@@ -401,8 +401,11 @@ def apply(root: Path, rows=None, images=False, network_images=True):
         from headline_style import title_tag
         page = re.sub(r'<title>.*?</title>', '<title>' + html.escape(title_tag(seo_title)) + '</title>', page, count=1, flags=re.S)
         for key,value in [('og:title',row['title']),('twitter:title',row['title']),('og:description',row.get('excerpt','')),('twitter:description',row.get('excerpt','')),('description',row.get('excerpt',''))]:
-            pattern = r'(<meta\b[^>]*(?:property|name)=["\']' + re.escape(key) + r'["\'][^>]*content=["\'])(.*?)(["\'][^>]*>)'
-            page = re.sub(pattern, lambda m: m.group(1)+html.escape(value,quote=True)+m.group(3), page, flags=re.S)
+            # Match the SAME quote that opened content. An apostrophe inside a
+            # double-quoted description must not terminate the attribute.
+            pattern = (r'(<meta\b[^>]*(?:property|name)=["\']' + re.escape(key)
+                       + r'["\'][^>]*content=(?P<quote>["\']))(?P<value>.*?)(?P=quote)(?P<tail>[^>]*>)')
+            page = re.sub(pattern, lambda m: m.group(1)+html.escape(value,quote=True)+m.group('quote')+m.group('tail'), page, flags=re.S)
         page = re.sub(r'("headline"\s*:\s*)"(?:[^"\\]|\\.)*"', lambda m:m.group(1)+json.dumps(row['title'],ensure_ascii=False),page)
         if images:
             raw_image=str(row.get('image_url') or '')
