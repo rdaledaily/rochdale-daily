@@ -62,7 +62,10 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # A first build (~12 min) plus one push-race rebuild (~8-10 min) does not
+    # fit in 20: on 2 Nov 2026 a correction timed out mid-rebuild and the
+    # story it published was left half-updated until the next run.
+    timeout-minutes: 40
     env:
       CSS_SOURCE_PATH: assets/css/article-inline.css
       FRONTPAGE_FRESH_HOURS: "36"
