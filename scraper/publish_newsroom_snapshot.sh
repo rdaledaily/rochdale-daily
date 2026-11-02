@@ -62,6 +62,58 @@ finalise_cards_policy() {
   python scraper/audit_published_news.py
 }
 
+# Stack-first race recovery. Most commits that beat this run to main touch
+# nothing the news build reads or writes: intake records, reports, code (2 Nov
+# 2026: 23 of 74 commits). For those, rebuilding the whole site (~12 minutes,
+# during which main usually moves again) is pointless: put this run's commit
+# on top and push in seconds. Anything else on main -> the full rebuild below.
+STACK_SAFE_PREFIXES="reports/ inbox/ docs/ .github/ scraper/ workers/ functions/ tests/"
+
+stack_is_safe() {
+  # $1 = the commit this run built on. Safe only when every file main gained
+  # since then is under a prefix the build never reads, and none of them is a
+  # file this run's own commit changed.
+  local base="$1" path prefix ok
+  local ours theirs
+  ours="$(git diff --name-only "${base}" HEAD)"
+  theirs="$(git diff --name-only "${base}" "origin/${branch}")"
+  [ -n "${theirs}" ] || return 1
+  while IFS= read -r path; do
+    [ -n "${path}" ] || continue
+    if printf '%s\n' "${ours}" | grep -qxF -- "${path}"; then
+      echo "  stacking unsafe: both changed ${path}"
+      return 1
+    fi
+    ok=1
+    for prefix in ${STACK_SAFE_PREFIXES}; do
+      case "${path}" in "${prefix}"*) ok=0; break ;; esac
+    done
+    if [ "${ok}" -ne 0 ]; then
+      echo "  stacking unsafe: main changed build file ${path}"
+      return 1
+    fi
+  done <<< "${theirs}"
+  return 0
+}
+
+try_stack_on_main() {
+  local attempt base
+  for attempt in 1 2 3 4 5; do
+    git_fetch || return 1
+    base="$(git merge-base HEAD "origin/${branch}")"
+    stack_is_safe "${base}" || return 1
+    echo "main moved with files the build does not use; stacking this commit on top (attempt ${attempt}/5)."
+    if ! git rebase -q "origin/${branch}"; then
+      git rebase --abort 2>/dev/null || true
+      return 1
+    fi
+    if git_push; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 # Race recovery must be local and bounded. The expensive network image-repair
 # passes already ran before the first commit; repeating them after every push
 # race is what allowed one writer to occupy the queue for tens of minutes.
@@ -130,6 +182,12 @@ if git_push; then
   mark_published
   exit 0
 fi
+if try_stack_on_main; then
+  mark_published
+  exit 0
+fi
+# A failed stack attempt may have rebased; rebuild from the original snapshot.
+git reset -q --hard "${local_snapshot_commit}"
 
 recovery_dir="$(mktemp -d)"
 trap 'rm -rf "${recovery_dir}"' EXIT
@@ -174,6 +232,11 @@ for attempt in 1 2; do
     mark_published
     exit 0
   fi
+  if try_stack_on_main; then
+    mark_published
+    exit 0
+  fi
+  git reset -q --hard "${local_snapshot_commit}"
 
   git show "${local_snapshot_commit}:articles.json" > "${recovery_dir}/local_articles.json"
 done

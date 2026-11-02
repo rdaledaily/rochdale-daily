@@ -13,6 +13,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class PushRecovery(unittest.TestCase):
     def test_push_race_merges_stories_and_renders_only_during_recovery(self):
+        self._race(editor_touches_build=True)
+
+    def test_unrelated_commit_on_main_is_stacked_without_a_rebuild(self):
+        self._race(editor_touches_build=False)
+
+    def _race(self, editor_touches_build):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             remote, local, editor = [root / name for name in ('remote.git', 'local', 'editor')]
@@ -51,8 +57,13 @@ class PushRecovery(unittest.TestCase):
             existing = {'id':'editor-story','slug':'editor-story','title':'Queen’s Drive homes approved',
                         'content_html':'<p>New homes in Kirkholt.</p>', 'editorial_lock':True,
                         'source_url':'https://example.org/editor', 'published_at':'2026-10-14T10:00:00Z'}
-            (editor / 'articles.json').write_text(json.dumps([existing]))
-            git('add', 'articles.json', cwd=editor)
+            if editor_touches_build:
+                (editor / 'articles.json').write_text(json.dumps([existing]))
+                git('add', 'articles.json', cwd=editor)
+            else:
+                (editor / 'reports').mkdir(exist_ok=True)
+                (editor / 'reports/email_submission_state.json').write_text('{"submissions": []}')
+                git('add', 'reports/email_submission_state.json', cwd=editor)
             git('commit', '-m', 'concurrent editor story', cwd=editor)
             git('push', 'origin', 'main', cwd=editor)
             incoming = {'id':'scraper-story','slug':'scraper-story','title':'Littleborough cricket club wins match',
@@ -74,11 +85,20 @@ class PushRecovery(unittest.TestCase):
             result=subprocess.run(['bash','scraper/publish_newsroom_snapshot.sh'],cwd=local,env=env,text=True,capture_output=True)
             self.assertEqual(result.returncode,0,result.stdout+result.stderr)
             published=json.loads(git('--git-dir',str(remote),'show','main:articles.json'))
-            self.assertEqual({r['slug'] for r in published},{'editor-story','scraper-story'})
-            self.assertTrue(next(r for r in published if r['slug']=='editor-story')['editorial_lock'])
             commands=[json.loads(line) for line in calls.read_text().splitlines()]
             renders=[c for c in commands if any('render_main' in arg or 'generate_newspaper_pages.py' in arg for arg in c)]
-            self.assertEqual(len(renders),1,commands)
+            if editor_touches_build:
+                self.assertEqual({r['slug'] for r in published},{'editor-story','scraper-story'})
+                self.assertTrue(next(r for r in published if r['slug']=='editor-story')['editorial_lock'])
+                self.assertEqual(len(renders),1,commands)
+            else:
+                # Stacked: this run's build pushed as-is on top of the editor's
+                # commit, with no rebuild, and the editor's file survives.
+                self.assertEqual({r['slug'] for r in published},{'scraper-story'})
+                self.assertEqual(renders,[],commands)
+                self.assertNotIn(['scraper/merge_feeds.py'], [c[:1] for c in commands])
+                self.assertEqual(git('--git-dir',str(remote),'show','main:reports/email_submission_state.json'),'{"submissions": []}')
+                self.assertIn('stacking this commit on top', result.stdout)
             self.assertIn('published=true',(root/'output').read_text())
 
 
