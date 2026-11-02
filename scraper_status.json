@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-02T08:52:39.870577Z",
+  "last_run_at": "2026-11-02T10:28:50.898130Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-02T04:06:22.913878Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 0,
+      "listed": 40,
+      "already_seen": 28,
+      "started_long_ago": 0,
+      "too_far_ahead": 10,
+      "undated": 2,
+      "in_window": 0
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-02T04:06:22.913878Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 2,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 2,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,14 +40,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-02T04:06:22.913878Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 1,
+      "daily_cap": 3,
+      "offered_today": 1,
+      "pages": 1,
+      "releases": 81,
+      "borough_buyer": 1,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 1,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-02T04:06:22.913878Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 0,
+      "not_rochdale": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -42,23 +68,32 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 123,
+  "raw_candidates_before_job_filter": 118,
   "job_or_career_posts_rejected": 6,
-  "raw_candidates": 117,
-  "candidate_clusters": 26,
+  "raw_candidates": 112,
+  "candidate_clusters": 28,
   "google_news_resolution": {
-    "wrappers": 57,
-    "resolved": 54,
-    "text_recovered": 40,
-    "reattributed": 5,
-    "images_found": 48
+    "wrappers": 51,
+    "resolved": 47,
+    "text_recovered": 37,
+    "reattributed": 6,
+    "images_found": 44
   },
-  "duplicates_merged": 91,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 487,
+  "duplicates_merged": 84,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
+  "drafted_articles": [
+    {
+      "slug": "planning-approved-for-new-storage-world-building-in-middleton",
+      "source_url": "https://www.rochdaletimes.co.uk/decision-made-over-rebuilding-of-storage-world/"
+    },
+    {
+      "slug": "rochdale-borough-council-awards-contract-for-supported-hostel-accommodation",
+      "source_url": "https://www.find-tender.service.gov.uk/Notice/103517-2026"
+    }
+  ],
+  "new_articles": 2,
+  "live_articles": 496,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -72,14 +107,14 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 129,
+    "entries": 131,
     "by_outcome": {
       "failed": 2,
-      "published": 102,
+      "published": 104,
       "rejected": 25
     },
-    "held_back_this_run": 19,
-    "held_already_published": 17,
+    "held_back_this_run": 18,
+    "held_already_published": 16,
     "held_rejected": 2,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -104,10 +139,13 @@
       "last_attempt_at": "2026-11-01T18:41:48.414791Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 111,
+    "rss_and_google_news": 105,
     "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -116,22 +154,20 @@
     "environment_agency": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 0
+    "primary_data": 1
   },
   "collector_errors": {},
   "rss_feed_failures": {
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "source_counts": {
-    "Roch Valley Radio": 29,
-    "Rochdale Times": 22,
-    "Manchester Evening News": 12,
-    "Port of Rotterdam": 7,
+    "Roch Valley Radio": 26,
+    "Rochdale Times": 26,
+    "Manchester Evening News": 10,
+    "Port of Rotterdam": 8,
     "Roch Valley Radio Local News": 4,
     "Bee Network live travel alerts": 4,
-    "Rochdale AFC": 3,
     "Runcorn and Widnes World": 2,
-    "Express and Star": 2,
     "The Northern Echo": 2,
     "Free Press Series": 2,
     "Sky Sports": 2,
@@ -139,36 +175,41 @@
     "InYourArea": 2,
     "Chelmsfordcitynews": 2,
     "Rochdale Borough Council": 2,
-    "London Now": 2,
-    "Oxford Mail": 2,
     "Somerset County Gazette": 1,
-    "Port Vale Football Club": 1,
+    "Express and Star": 1,
+    "Rochdale AFC": 1,
     "Futbol24": 1,
     "Slough Observer": 1,
     "Wattonandswaffhamtimes": 1,
     "East London and West Essex Guardian": 1,
     "Westmorland Gazette": 1,
-    "Yahoo News UK": 1,
-    "Herts Advertiser": 1,
+    "Birmingham Now": 1,
+    "Thurrock Gazette": 1,
+    "London Now": 1,
+    "Oxford Mail": 1,
     "Hampshire Chronicle": 1,
     "Southend Echo": 1,
     "County Times": 1,
     "Chelmsford Weekly News": 1,
-    "Food Standards Agency": 1
+    "Food Standards Agency": 1,
+    "Find a Tender": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "business": 1,
+    "environment": 1
+  },
   "published_by_category": {
-    "business": 48,
-    "community": 64,
+    "business": 49,
+    "community": 66,
     "crime": 19,
-    "education": 23,
-    "environment": 37,
+    "education": 25,
+    "environment": 38,
     "events": 27,
     "health": 12,
     "news": 54,
     "politics": 18,
     "sport": 51,
-    "traffic": 38,
+    "traffic": 39,
     "transport": 9
   },
   "openai_enabled": true,
@@ -193,8 +234,14 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "business-v3-598ba1fdc20f6a9a0fa2",
+    "environment-v3-3b282451bc118393ae93"
+  ],
+  "selected_candidate_urls": [
+    "https://www.find-tender.service.gov.uk/Notice/103517-2026",
+    "https://www.rochdaletimes.co.uk/decision-made-over-rebuilding-of-storage-world/"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -204,16 +251,35 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [],
-    "selected_categories": [],
+    "available_categories": [
+      "business",
+      "environment"
+    ],
+    "selected_categories": [
+      "business",
+      "environment"
+    ],
     "available_wards": [],
     "selected_wards": [],
     "available_areas": [],
-    "selected_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
-    "selected_by_source": {}
+    "selected_by_category": {
+      "business": 1,
+      "environment": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 2
+    },
+    "selected_by_source": {
+      "find a tender": 1,
+      "rochdale times": 1
+    }
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -772,8 +838,12 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 3
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -809,24 +879,24 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-02T09:55:25.551032Z",
-  "frontpage_article_count": 12,
+  "frontpage_generated_at": "2026-11-02T10:30:48.275655Z",
+  "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
       "business",
       "community",
       "education",
+      "environment",
       "news",
-      "sport",
       "traffic"
     ],
     "selected_categories": [
       "business",
       "community",
       "education",
+      "environment",
       "news",
-      "sport",
       "traffic"
     ],
     "available_wards": [
@@ -854,15 +924,16 @@
       "traffic": 2,
       "education": 4,
       "business": 1,
-      "community": 3
+      "community": 4,
+      "environment": 1
     },
     "selected_by_ward": {
-      "borough-wide": 12
+      "borough-wide": 14
     },
     "selected_by_area": {
       "deeplish": 1,
       "littleborough": 4,
-      "middleton": 1,
+      "middleton": 2,
       "rochdale": 11
     },
     "selected_by_source": {
@@ -871,29 +942,30 @@
       "rochdale borough council decision forward plan": 1,
       "rochdale borough council licensing register": 1,
       "rochdale borough council events listings": 1,
-      "source": 2,
-      "rochdale times": 2
+      "rochdale times": 3,
+      "find a tender": 1,
+      "source": 2
     },
-    "pool_size": 17,
-    "primary_pool_size": 17,
+    "pool_size": 18,
+    "primary_pool_size": 18,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 12,
+    "frontpage_count": 14,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 9,
-    "fresh_under_homepage_window": 12,
-    "short_briefs_selected": 6,
+    "fresh_under_24h": 11,
+    "fresh_under_homepage_window": 14,
+    "short_briefs_selected": 8,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 10,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 494,
+  "event_dates_corrected_from_ledger": 3,
+  "duplicate_articles_after_postprocessing": 496,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -904,8 +976,11 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 2,
+  "published_new_slugs": [
+    "planning-approved-for-new-storage-world-building-in-middleton",
+    "rochdale-borough-council-awards-contract-for-supported-hostel-accommodation"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"

@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 0,
+  "repaired_with_source_photo": 1,
   "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
-  "no_usable_source_image": 8,
+  "no_usable_source_image": 7,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -16,6 +16,34 @@
   "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
+    {
+      "slug": "free-library-play-littleborough-middleton-3-7-november-2026",
+      "result": "licensed-source-photo",
+      "source": "https://www.rochdale.gov.uk/events/event/258/library-time---littleborough-library",
+      "after": "assets/img/cards/free-library-play-littleborough-middleton-3-7-november-2026.png"
+    },
+    {
+      "slug": "rochdale-school-places-2027-2031-cabinet-24-november-2026",
+      "result": "no-cleared-source-image",
+      "source": "https://democracy.rochdale.gov.uk/mgListPlanItems.aspx?PlanId=1453",
+      "after": "assets/img/cards/d7e33ec254c1-place-generated-card.jpg",
+      "why": {
+        "page": "https://democracy.rochdale.gov.uk/mgListPlanItems.aspx?PlanId=1453",
+        "verdict": "page-fetch-failed: The read operation timed out"
+      }
+    },
+    {
+      "slug": "sandbrook-way-kfc-licence-late-night-service-5am-november-2026",
+      "result": "no-cleared-source-image",
+      "source": "https://licensing.rochdale.gov.uk/1/LicensingActPremises/Search/2860/Detail?LIC_ID=22977",
+      "after": "assets/img/cards/6a46c565ef76-place-generated-card.jpg",
+      "why": {
+        "page": "https://licensing.rochdale.gov.uk/1/LicensingActPremises/Search/2860/Detail?LIC_ID=22977",
+        "final_url": "https://licensing.rochdale.gov.uk/1/LicensingActPremises/Search/2860/Detail?LIC_ID=22977",
+        "candidates": [],
+        "verdict": "no-candidate-images-on-page"
+      }
+    },
     {
       "slug": "mark-winstanley-returns-to-stage-after-ms-diagnosis-for-rochdale-comedy-show",
       "result": "no-cleared-source-image",
@@ -171,135 +199,6 @@
             "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
             "via": "og:image",
             "verdict": "default-image-used-on-other-stories"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
-    },
-    {
-      "slug": "homes-evacuated-in-rochdale-after-car-crashes-into-house-and-causes-gas-leak",
-      "result": "no-cleared-source-image",
-      "source": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-residents-return-homes-after-34846262",
-      "after": "assets/img/cards/8501378fe52a-place-generated-card.jpg",
-      "why": {
-        "page": "https://uk.news.yahoo.com/rochdale-residents-return-homes-car-101606916.html",
-        "final_url": "https://uk.news.yahoo.com/rochdale-residents-return-homes-car-101606916.html",
-        "candidates": [
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/1505b8e62e7b6fb23faa96d8ad8052694d053e3c79d654653b28d1f5ef53db65/lightyear_networkapi/resizefill_w1200%3Bquality_80%3Bformat_jpg/https%3A%2F%2Fmedia.zenfs.com%2Fen%2",
-            "via": "og:image",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/f0b2cc2d62bb0cb9df76174a1a90230a1acd8121cce0d98459efc157dbc956ef/lightyear_networkapi/resizefill_w1200%3Bquality_80%3Bformat_webp/https%3A%2F%2Fmedia.zenfs.com%2Fen%",
-            "via": "json-ld",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/5fa7883fb61080271d0f09126b43d224d462edb0979241d705c39954cfb6e6b0/lightyear_networkapi/resizefill_w976%3Bquality_80%3Bformat_webp/https%3A%2F%2Fmedia.zenfs.com%2Fen%2",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/32ec2c710e2c2bb379c2f80e0dbe89b5d2e48ba723cff6ba6864900824cd3d1f/lightyear_networkapi/smartcrop_w148_h148_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Feve",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/833f470e0e681919acaba00d2be5d91726185fccaad69e45188748ed9ce34d87/lightyear_networkapi/smartcrop_w896_h504_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Feve",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/af25a0abe7ed801d89fc0bfef625caecaffb3fb1771fdf5f98bc74c19df84a89/lightyear_networkapi/smartcrop_w148_h148_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fpa_",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/f5a10a0f00607718ee653bb92d4d50eb4a09e9758d9af91f9bff52aa380ab73a/lightyear_networkapi/smartcrop_w896_h504_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fpa_",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://s.yimg.com/lo/mysterio/api/0a7b51efd7ad6dd52e0c922517645c840f2d189675ad91e3ba6240d2f98eb6ad/lightyear_networkapi/smartcrop_w148_h148_faces%3Bquality_95/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fthe",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
-    },
-    {
-      "slug": "middleton-schools-face-financial-challenges-due-to-declining-pupil-numbers",
-      "result": "no-cleared-source-image",
-      "source": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/",
-      "after": "assets/img/cards/513eaf1430e5-place-generated-card.jpg",
-      "why": {
-        "page": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/",
-        "final_url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/",
-        "candidates": [
-          {
-            "url": "https://www.rochdaletimes.co.uk/wp-content/uploads/2026/01/classroom-iStock-887318138.jpg",
-            "via": "og:image:secure_url",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271200%27%20height%3D%27148%27%20viewBox%3D%2",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271254%27%20height%3D%271254%27%20viewBox%3D%",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27400%27%20height%3D%27350%27%20viewBox%3D%27",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%272121%27%20height%3D%271414%27%20viewBox%3D%",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%272224%27%20height%3D%27273%27%20viewBox%3D%2",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27900%27%20height%3D%27450%27%20viewBox%3D%27",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://www.rochdaletimes.co.uk/schools-face-financial-challenges-over-pupil-places/%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271097%27%20height%3D%27500%27%20viewBox%3D%2",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
-    },
-    {
-      "slug": "st-luke-s-church-in-deeplish-announces-upcoming-services-and-community-events",
-      "result": "no-cleared-source-image",
-      "source": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-31",
-      "after": "assets/img/cards/ab7fd4d4480c-place-generated-card.jpg",
-      "why": {
-        "page": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-31",
-        "final_url": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-october-31",
-        "candidates": [
-          {
-            "url": "https://images-cropper-prod.inyourarea.co.uk/unsafe/700x394/smart/harvester-img-e3ff5c2d49d3961e243fa87207168b6b.jpg",
-            "via": "og:image",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://storage.ghost.io/c/9b/37/9b37512a-c253-4f99-bb04-2eceff8988c5/content/images/2025/03/InYourArea--1---2--1.png",
-            "via": "main img",
-            "verdict": "page-not-from-granting-organisation"
           }
         ],
         "verdict": "no-candidate-passed"
