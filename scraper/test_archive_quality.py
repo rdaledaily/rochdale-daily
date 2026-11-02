@@ -52,4 +52,32 @@ with tempfile.TemporaryDirectory() as tmp:
         apply(root, images=True, network_images=False)
     assert 'src="https://rochdaledaily.co.uk/assets/img/cards/photo.jpg"' in p.read_text()
     assert 'src="/https://' not in p.read_text()
+# A double-quoted meta description may contain an apostrophe. The archive
+# metadata refresh must replace the whole attribute, not stop at the apostrophe.
+with tempfile.TemporaryDirectory() as tmp:
+    root = Path(tmp)
+    (root / 'articles').mkdir()
+    slug = 'apostrophe-description'
+    excerpt = "Rochdale's deadline has passed; applications remain open."
+    page = (
+        '<html><head><link rel="canonical" href="https://rochdaledaily.co.uk/articles/' + slug + '">'
+        '<meta name="description" content="Rochdale&#x27;s deadline has passed; applications remain open.">'
+        '<meta property="og:description" content="Rochdale&#x27;s deadline has passed; applications remain open.">'
+        '</head><body><h1>School admissions update</h1>'
+        '<div class="article-copy"><p>Families can still apply for a place.</p></div></body></html>'
+    )
+    path = root / 'articles' / (slug + '.html')
+    path.write_text(page)
+    save(root / 'articles.json', [{
+        'slug': slug, 'title': 'School admissions update', 'excerpt': excerpt,
+        'category': 'education', 'area': 'rochdale',
+        'published_at': '2026-11-02T09:00:00Z',
+    }])
+    apply(root)
+    once = path.read_text()
+    assert '<meta name="description" content="Rochdale&#x27;s deadline has passed; applications remain open.">' in once
+    assert '<meta property="og:description" content="Rochdale&#x27;s deadline has passed; applications remain open.">' in once
+    apply(root)
+    assert path.read_text() == once, 'Description repair must be idempotent'
+
 print('Archive editorial contract checks passed.')
