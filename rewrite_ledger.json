@@ -1,10 +1,26 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-02T14:40:34.059315Z",
+  "updated_at": "2026-11-02T18:04:19.841193Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 132,
+  "count": 134,
   "entries": {
+    "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
+      "first_attempt_at": "2026-11-02T18:01:46.724961Z",
+      "attempts": 1,
+      "urls": [
+        "http://www.fansnetwork.co.uk/football/rochdale/news/67160"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-02T18:01:46.724961Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "title": "Rochdale must act on Ian Watson either way - Rochdale News",
+      "source_name": "FansNetwork.co.uk",
+      "category": "sport",
+      "text_fingerprint": "1efe1df4756ec6c9"
+    },
     "https://democracy.rochdale.gov.uk/mgCalendarMonthView.aspx?M=6&DD=2026&CID=559&OT=R&C=559R&MR=0": {
       "first_attempt_at": "2026-10-31T08:39:42.828816Z",
       "attempts": 1,
@@ -668,6 +684,22 @@
       "category": "news",
       "text_fingerprint": "c2fceaaf0de36666"
     },
+    "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820": {
+      "first_attempt_at": "2026-11-02T18:01:34.386434Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-02T18:01:34.386434Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Cliff Byrne sets ambitious EFL Trophy aim for Doncaster Rovers",
+      "source_name": "Doncaster Free Press",
+      "category": "crime",
+      "text_fingerprint": "cb7a8cd63183dc61"
+    },
     "https://www.expressandstar.com/uk-sports/jon-brady-delights-in-end-to-port-vale-profligacy-as-they-put-four-past-rochdale-9322224": {
       "first_attempt_at": "2026-10-31T16:22:40.873009Z",
       "attempts": 1,
@@ -838,17 +870,34 @@
       "first_attempt_at": "2026-11-02T10:28:50.894888Z",
       "attempts": 1,
       "urls": [
-        "https://www.find-tender.service.gov.uk/Notice/103517-2026"
+        "https://www.find-tender.service.gov.uk/Notice/103517-2026",
+        "https://www.find-tender.service.gov.uk/Notice/103655-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T10:28:50.894888Z",
+      "last_attempt_at": "2026-11-02T18:04:19.840713Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale Borough Council awards contract: ABEN Supported Hostel Accommodation and Services",
       "source_name": "Find a Tender",
       "category": "business",
       "text_fingerprint": "1e0e968857a3ae46"
+    },
+    "https://www.find-tender.service.gov.uk/Notice/103921-2026": {
+      "first_attempt_at": "2026-11-02T18:04:19.840557Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.find-tender.service.gov.uk/Notice/103921-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-02T18:04:19.840557Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale Borough Council awards contract: Homeless Family Leasing Scheme (HFLS) Management and Support Services",
+      "source_name": "Find a Tender",
+      "category": "business",
+      "text_fingerprint": "05b35e828c7a8485"
     },
     "https://www.guardian-series.co.uk/sport/national/26687234.port-vale-find-form-front-goal-sweep-aside-rochdale": {
       "first_attempt_at": "2026-10-31T19:03:49.103034Z",
@@ -1079,6 +1128,23 @@
       "category": "news",
       "text_fingerprint": "88a54180329e56dd",
       "recovery_attempts": 1
+    },
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/banned-driver-led-police-high-34852313": {
+      "first_attempt_at": "2026-11-02T18:04:19.840879Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/banned-driver-led-police-high-34852313",
+        "https://www.theoldhamtimes.co.uk/news/26691658.disqualified-driver-jailed-16-months-rochdale-chase"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-02T18:04:19.840879Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Banned driver led police on high-speed chase through the streets of Rochdale",
+      "source_name": "Manchester Evening News",
+      "category": "news",
+      "text_fingerprint": "fea7d0a4792f6089"
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/m62-crash-live-incident-causes-34815362": {
       "first_attempt_at": "2026-10-25T18:00:31.530214Z",
@@ -1509,6 +1575,22 @@
       "category": "traffic",
       "text_fingerprint": "8a03321592d5d850"
     },
+    "https://www.rochdale.gov.uk/directory-record/2652/dane-street-roadworks-in-rochdale-from-2-november-2026": {
+      "first_attempt_at": "2026-11-02T18:04:19.840828Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/directory-record/2652/dane-street-roadworks-in-rochdale-from-2-november-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-02T18:04:19.840828Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Dane Street, roadworks in Rochdale from 2 November 2026",
+      "source_name": "Rochdale Borough Council",
+      "category": "traffic",
+      "text_fingerprint": "ea7e1fb3dfa79503"
+    },
     "https://www.rochdale.gov.uk/news/article/691/rochdale-foster-carers-honoured-for-465-years-of-dedicated-service": {
       "first_attempt_at": "2026-10-26T16:10:40.440334Z",
       "attempts": 1,
@@ -1838,23 +1920,6 @@
       "category": "crime",
       "text_fingerprint": "f08d5afea7277caf"
     },
-    "https://www.rochdaletimes.co.uk/remembrance-sunday-services-across-the-borough": {
-      "first_attempt_at": "2026-10-25T15:23:46.249185Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMihgFBVV95cUxOWmV1VlVoMk1MRl9Ra01pcWNwSFdiZ29FVFktMllmYlljLVBhTWpXV2xxRmtrYm8tTzFPa3ptZGlmblR0dG5wU0RVTE1zMlpoZlpIcU4teG9vUzlPQU5LQ2xXcmtJaHREbm1Yd3RLVmozOXRWazR1SXNpXzBYaS1TOUhVT2U2Zw?oc=5",
-        "https://www.rochdaletimes.co.uk/remembrance-sunday-services-across-the-borough"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-25T15:23:46.249185Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Remembrance Sunday services across the borough - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "environment",
-      "text_fingerprint": "dd2799b05990526b"
-    },
     "https://www.rochdaletimes.co.uk/rochdale-afcs-fantastic-support-highlighted-among-award-nominations": {
       "first_attempt_at": "2026-10-28T10:52:53.693836Z",
       "attempts": 1,
@@ -1986,9 +2051,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T14:38:59.032807Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "last_attempt_at": "2026-11-02T18:04:19.841019Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Town gets ready to toast ale trail’s return - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
@@ -2010,41 +2075,6 @@
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "fa4b069f4a644196"
-    },
-    "https://www.rochvalleyradio.com/news-features/139/news/1236/the-scheme-to-regenerate-land-around-rochdale-station-progressing": {
-      "first_attempt_at": "2026-10-24T10:13:40.040525Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPSDZVNF83RHdjb09XQWpvNVgtVUIzek1fSUV0WE1helZzQjhjcnQ0YmN3eHVDcllrRS1ERk54WWNZRmZWYW4tZUxpaG1aOW83aGpXU2NyQW9sNUV6NTFHbWMxQ3NqNU01M2ZLUTZPdFdyM0RGZnlDRlRaX0Q3bHNHRXRaQmE1QXlLcm9lb3BVdjIxR1BwUFJhcGRuVGYteHpPVlBvSUQtb2xsck1RN3gxc2JzdGkwVGh3WmdvM1A2eWdFQkk?oc=5",
-        "https://www.rochvalleyradio.com/news-features/139/news/1236/the-scheme-to-regenerate-land-around-rochdale-station-progressing"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-25T17:07:50.197986Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "The scheme to regenerate land around Rochdale station progressing",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "business",
-      "text_fingerprint": "6fef213cd49e56c1"
-    },
-    "https://www.rochvalleyradio.com/news-features/139/news/1237/rochdale-council-rakes-in-almost-3m-from-parking-fines": {
-      "first_attempt_at": "2026-10-24T10:13:40.040339Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMitAFBVV95cUxOdHFrbVU1emt2WFVNTjBrQmZYcXNjMXZtZjRpZG9IRXh5STg4RENnem9kaE1WOTU3VjFhekpoRnRKQUM4UUlXMEFFeDNidjU5QUtHdDFmNDFOT3l6TmliV2hEVzlCNkRUVWpZdU55M1F0UTFRLWVsMHRzVklEYm1uSVg1WW82aEJvWTNhNXAwZlRxWXF2OWZoSUhMXzF3NC1QN2dwSWFLcXB6Vm16THBrZ3dCQkU?oc=5",
-        "https://www.rochvalleyradio.com/news-features/139/news/1237/rochdale-council-rakes-in-almost-3m-from-parking-fines",
-        "https://www.theoldhamtimes.co.uk/news/26661999.parking-fine-hotspots-rochdale-rakes-nearly-3m"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-25T17:07:50.197780Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Rochdale Council rakes in almost £3m from parking fines",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "news",
-      "text_fingerprint": "6a50fd7ba53832ea"
     },
     "https://www.rochvalleyradio.com/news-features/139/news/1242/lest-we-forget-rochdale-remembers": {
       "first_attempt_at": "2026-10-27T11:49:41.801718Z",
