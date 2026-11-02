@@ -1442,3 +1442,12 @@ body.is-advancing { opacity: .55; transition: opacity .18s ease; }
 .article-copy .rd-background h2{font:700 19px/1.3 var(--font-display);margin:0 0 10px}
 .article-copy .rd-background p{font-size:16px;line-height:1.6;margin:0 0 12px}
 .article-copy .rd-background .rd-background-sources{font-size:13px;color:var(--muted)}
+
+/* Read-next card with no picture: the generator omits the <img>, so the text
+   used to fall into the narrow photo column (headline 64px wide over 13 lines
+   on a phone, the rest of the card empty). Let a lone text block span the
+   whole card. :only-child needs no :has() support. */
+.rn-card > .rn-text:only-child { grid-column: 1 / -1; padding-left: var(--space-4); }
+@media (max-width: 820px) {
+  .article-main .rn-card > .rn-text:only-child { padding-left: 12px; }
+}
