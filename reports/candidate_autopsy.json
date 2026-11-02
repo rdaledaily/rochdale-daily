@@ -1,38 +1,46 @@
 {
-  "examined_at": "2026-11-01T13:46:13.700605Z",
+  "examined_at": "2026-11-02T16:31:30.546491Z",
   "reservoir_retention_hours": 96,
   "candidates_examined": 125,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 64,
-    "would publish": 54,
-    "duplicate of published story": 7
+    "age": 111,
+    "would publish": 8,
+    "duplicate of published story": 4,
+    "not local": 1,
+    "job or career post": 1
   },
-  "would_publish": 54,
+  "would_publish": 8,
   "age_gate_sensitivity": {
-    "6h": 7,
-    "14h": 8,
-    "24h": 61,
-    "48h": 79,
-    "72h": 109,
+    "6h": 6,
+    "14h": 11,
+    "24h": 14,
+    "48h": 29,
+    "72h": 99,
     "168h": 125
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 31/10/2026 at 2:32pm Live Freehold Tram Stop - Lifts out of s",
-      "Manchester Evening News: Rochdale residents return to homes after car smashes into building"
+      "Bee Network live travel alerts: Updated: 02/11/2026 at 12:01pm Live Freehold Tram Stop - Lifts out of ",
+      "Rochdale Times: Town gets ready to toast ale trail’s return - Rochdale Times"
     ],
     "duplicate of published story": [
-      "Rochdale Borough Council: Smithy Bridge Road, roadworks in Littleborough on 15 November 2026",
-      "Manchester Evening News: Homes evacuated after car crashes into house and causes gas leak",
-      "Rochdale Times: Schools face financial challenges over pupil places - Rochdale Times"
+      "Greater Manchester Police: Disqualified driver jailed after dangerous Rochdale pursuit - Greater ",
+      "Find a Tender: Rochdale Borough Council awards contract: ABEN Supported Hostel Accomm",
+      "Rochdale AFC: Fleetwood FA Cup Ticket Details - Rochdale AFC"
+    ],
+    "not local": [
+      "ITVX: Rise in bank tax and £100 energy payments: What’s in Healey’s debut Bu"
+    ],
+    "job or career post": [
+      "Manchester Evening News: The multi-billion plan to transform Rochdale - Manchester Evening News"
     ],
     "age": [
-      "Port of Rotterdam: Here's Port Vale vs Rochdale Live - Port of Rotterdam",
-      "InYourArea: Rochdale Faith News: Saturday, October 31 - InYourArea",
-      "Rochdale AFC: Another COA Tie For Dale Women - Rochdale AFC"
+      "Roch Valley Radio: Hopwood Hall marks construction milestone for Clegg Building in Rochda",
+      "Roch Valley Radio Local News: Stories We Tell returns to Rochdale for final night after sell-out run",
+      "Roch Valley Radio Local News: Springhill Hospice receives £1,500 donation towards running costs"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
