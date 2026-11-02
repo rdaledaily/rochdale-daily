@@ -103,6 +103,10 @@ try_stack_on_main() {
     base="$(git merge-base HEAD "origin/${branch}")"
     stack_is_safe "${base}" || return 1
     echo "main moved with files the build does not use; stacking this commit on top (attempt ${attempt}/5)."
+    # The build leaves edits in tracked files it never stages; git refuses to
+    # rebase over them ("cannot rebase: You have unstaged changes", first live
+    # run 2 Nov 2026). They are not part of the published commit: set aside.
+    git stash push -q 2>/dev/null || true
     if ! git rebase -q "origin/${branch}"; then
       git rebase --abort 2>/dev/null || true
       return 1

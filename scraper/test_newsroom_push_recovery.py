@@ -76,6 +76,8 @@ class PushRecovery(unittest.TestCase):
             shim.write_text('#!' + sys.executable + '\n' +
                 'import json,os,subprocess,sys\n' +
                 'with open(os.environ["CALLS"],"a") as f:f.write(json.dumps(sys.argv[1:])+"\\n")\n' +
+                'if sys.argv[1:2]==["scraper/content_hygiene.py"]:\n' +
+                ' open("story_blocklist.json","a").write(" ")\n' +  # build leaves an unstaged edit, as in production
                 'if sys.argv[1:2]==["scraper/merge_feeds.py"]:\n' +
                 ' sys.exit(subprocess.call([sys.executable,os.environ["MERGER"],*sys.argv[2:]]))\n')
             shim.chmod(0o755)

@@ -20,7 +20,7 @@ concurrency:
 jobs:
   fast-news:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 45
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       # register_watch.py's CQC collector stays dark until this secret exists.
@@ -141,7 +141,8 @@ jobs:
         run: python scraper/weather_forecast.py
       - name: Commit and push race-safe newsroom snapshot
         id: publish
-        timeout-minutes: 16
+        # First push + up to two race-safe rebuilds (~11 min each); 16 timed out mid-rebuild on 2 Nov 2026.
+        timeout-minutes: 26
         run: bash scraper/publish_newsroom_snapshot.sh
       - name: Deploy published newsroom snapshot
         if: steps.publish.outputs.published == 'true'
