@@ -39,8 +39,7 @@ jobs:
       - name: Guard on the secret
         run: |
           if [ -z "${NEWSDESK_ADMIN_TOKEN:-}" ]; then
-            echo "EVENTS_ADMIN_TOKEN is not set as a repository secret; nothing to do."
-            echo "Add it (same value as the Cloudflare EVENTS_ADMIN_TOKEN) to enable the newsdesk queue."
+            echo "::warning title=Newsdesk queue not connected::EVENTS_ADMIN_TOKEN is not set as a repository secret, so articles composed in the newsdesk are not being brought into the repo. Add it (same value as the Cloudflare EVENTS_ADMIN_TOKEN)."
             exit 0
           fi
 

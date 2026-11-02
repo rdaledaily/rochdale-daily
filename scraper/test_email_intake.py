@@ -141,6 +141,7 @@ def test_failure_recorded_once_and_not_acknowledged(tmp_path, monkeypatch):
     def boom(*args, **kwargs):
         raise ValueError("synthetic parse failure")
 
+    monkeypatch.setenv("EVENTS_ADMIN_TOKEN", "t")
     monkeypatch.setattr(email_intake, "api", fake_api)
     monkeypatch.setattr(email_intake, "parse_message", boom)
     email_intake.collect(tmp_path)
@@ -166,9 +167,18 @@ def test_ack_deletes_only_collected_keys(tmp_path, monkeypatch):
             return json.dumps({"keys": [{"name": key}]}).encode()
         return raw
 
+    monkeypatch.setenv("EVENTS_ADMIN_TOKEN", "t")
     monkeypatch.setattr(email_intake, "api", fake_api)
     email_intake.collect(tmp_path)
     assert deleted == [], "nothing deleted before the commit is pushed"
     email_intake.acknowledge(tmp_path)
     assert deleted == [key]
     assert not (tmp_path / email_intake.ACK_FILE).exists()
+
+
+def test_missing_token_is_a_visible_warning_not_a_failure(tmp_path, monkeypatch, capsys):
+    monkeypatch.delenv("EVENTS_ADMIN_TOKEN", raising=False)
+    assert email_intake.collect(tmp_path) == 0
+    assert "::warning title=Email intake not connected::" in capsys.readouterr().out
+    assert json.loads((tmp_path / email_intake.ACK_FILE).read_text()) == []
+    assert email_intake.acknowledge(tmp_path) == 0
