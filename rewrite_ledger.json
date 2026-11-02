@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-02T12:20:11.710438Z",
+  "updated_at": "2026-11-02T12:41:40.798153Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 131,
@@ -360,13 +360,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-10-31T16:08:54.242958Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 31/10/2026 at 2:32pm Live Freehold Tram Stop - Lifts out of service Duration Sat 31 Oct, 2:32pm – until further notice Stops impact",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
       "text_fingerprint": "96a66c5dc34482b1",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-c8676ee5595f449f7c": {
       "first_attempt_at": "2026-11-02T12:20:11.710266Z",
