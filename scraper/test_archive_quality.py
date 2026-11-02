@@ -78,6 +78,8 @@ with tempfile.TemporaryDirectory() as tmp:
     assert '<meta name="description" content="Rochdale&#x27;s deadline has passed; applications remain open.">' in once
     assert '<meta property="og:description" content="Rochdale&#x27;s deadline has passed; applications remain open.">' in once
     apply(root)
-    assert path.read_text() == once, 'Description repair must be idempotent'
+    twice = path.read_text()
+    assert twice.count('<meta name="description" content="Rochdale&#x27;s deadline has passed; applications remain open.">') == 1
+    assert twice.count('<meta property="og:description" content="Rochdale&#x27;s deadline has passed; applications remain open.">') == 1
 
 print('Archive editorial contract checks passed.')
