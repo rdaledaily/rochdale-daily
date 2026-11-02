@@ -16,6 +16,11 @@ on:
   schedule:
     - cron: "7,27,47 * * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scraper/email_intake.py
+      - .github/workflows/email-intake.yml
 
 permissions:
   contents: write
