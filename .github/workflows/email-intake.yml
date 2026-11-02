@@ -1,0 +1,75 @@
+name: Rochdale Daily email intake
+
+# Every email to news@rochdaledaily.co.uk lands in the repo:
+#   Cloudflare Email Routing -> workers/email-intake/worker.js
+#     (forwards to Gmail, keeps the raw message in private EVENTS_KV,
+#      fires repository_dispatch "email-received")
+#   -> this workflow -> scraper/email_intake.py
+#     inbox/YYYY/MM/<stamp>-<subject>-<id>/message.json (+ documents)
+#     assets/img/cards/email-*.jpg (photos)
+# The raw copy is deleted from KV only after the commit is on main. The
+# 20-minute sweep collects anything whose dispatch ping was lost.
+
+on:
+  repository_dispatch:
+    types: [email-received]
+  schedule:
+    - cron: "7,27,47 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rd-email-intake
+  cancel-in-progress: false
+
+jobs:
+  intake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      EVENTS_ADMIN_TOKEN: ${{ secrets.EVENTS_ADMIN_TOKEN }}
+      INBOX_API: "https://rochdaledaily.co.uk/api/inbox-raw"
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install image support
+        run: python -m pip install --no-cache-dir "Pillow>=10,<13" "pillow-heif>=0.18,<2"
+
+      - name: Collect waiting emails
+        run: python scraper/email_intake.py collect
+
+      - name: Commit to main
+        id: commit
+        run: |
+          git config user.name "Rochdale Daily Newsdesk"
+          git config user.email "news@rochdaledaily.co.uk"
+          git add inbox assets/img/cards/email-* 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "nothing new to commit"
+            exit 0
+          fi
+          count=$(git diff --cached --name-only -- 'inbox/*/message.json' 'inbox/*/*/*/message.json' | wc -l)
+          git commit -q -m "Inbox: ${count} email(s) received" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01FxqUNfd731jBzpMMzG5aVz"
+          for attempt in 1 2 3 4 5; do
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then
+              echo "pushed $(git rev-parse --short HEAD)"
+              exit 0
+            fi
+            sleep $((attempt * 7))
+          done
+          echo "::error::could not push the inbox commit after 5 attempts; raw copies stay in KV for the next run"
+          exit 1
+
+      - name: Acknowledge (delete raw copies now safely on main)
+        run: python scraper/email_intake.py ack
