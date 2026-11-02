@@ -5,6 +5,7 @@ Fail closed on unverified claims. Capture source material only for recent
 automated drafts, never rewrite source copy or mint a verification attestation.
 """
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from claim_evidence import approved_evidence_source, is_primary, is_organisation_source, evidence_issues
@@ -20,11 +21,17 @@ def recent(value):
     except (TypeError,ValueError):
         return False
 
-def enrich(rows, capture=prepare, reviewer=verify):
+def enrich(rows, capture=prepare, reviewer=verify, retry_reviewed=True):
     """Capture once, but retry unverified claims against already captured text.
 
     The previous implementation skipped every article with evidence_sources,
     leaving an unverified draft permanently unable to publish on subsequent runs.
+
+    retry_reviewed=False is for push-race recovery: the same run reviewed every
+    draft minutes earlier, so only drafts with no verdict yet are reviewed.
+    Already-judged drafts keep their verdict (unverified still fails closed).
+    Re-asking the model about all of them took ~10 minutes per recovery, long
+    enough for main to move again, so the fast lane never got its push in.
     """
     updated=0
     for row in rows:
@@ -40,6 +47,8 @@ def enrich(rows, capture=prepare, reviewer=verify):
         if not recent(row.get("ingested_at")):
             continue
         if not evidence_issues(row):
+            continue
+        if not retry_reviewed and "source_review_verified" in row:
             continue
         if not row.get("evidence_sources"):
             if not approved_evidence_source(row.get("source_url")):
@@ -85,7 +94,8 @@ def main():
     rows=json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(rows,list):
         raise ValueError("articles.json must be a list")
-    count=enrich(rows)
+    # Set by publish_newsroom_snapshot.sh when rebuilding after a lost push race.
+    count=enrich(rows, retry_reviewed=os.environ.get("RD_EVIDENCE_RECOVERY")!="1")
     if count:
         temp=path.with_suffix(".json.evidence-tmp")
         temp.write_text(json.dumps(rows,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")

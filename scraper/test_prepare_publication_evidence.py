@@ -22,4 +22,28 @@ class PreparationTests(unittest.TestCase):
              "evidence_sources":[{"url":"https://www.rochdale.gov.uk/news/article/1","captured_text":"Rochdale Council announced the plans for an improved public library in the borough."}]}
         self.assertEqual(enrich([row],lambda _:self.fail("unexpected refetch"),lambda _:{"approved":False,"reasons":["Unsupported amount"],"claims":[]}),1)
         self.assertFalse(row["primary_source_verified"])
+    def test_recovery_reviews_only_never_reviewed_drafts(self):
+        src="https://www.rochdale.gov.uk/news/article/1"
+        text="Rochdale Council announced the plans for an improved public library in the borough."
+        judged={"source_url":src,"published_at":"2026-10-10T10:00:00Z","ingested_at":"2026-10-10T10:01:00Z",
+                "evidence_sources":[{"url":src,"captured_text":text}],"source_review_verified":False,"primary_source_verified":False,
+                "verification_reasons":["Unsupported amount"]}
+        fresh={"source_url":src,"published_at":"2026-10-10T11:00:00Z","ingested_at":"2026-10-10T11:01:00Z",
+               "evidence_sources":[{"url":src,"captured_text":text}]}
+        reviewed=[]
+        def reviewer(article):
+            reviewed.append(article)
+            return {"approved":False,"reasons":["Unsupported amount"],"claims":[]}
+        self.assertEqual(enrich([judged,fresh],lambda _:self.fail("unexpected refetch"),reviewer,retry_reviewed=False),1)
+        self.assertEqual(reviewed,[fresh])
+        self.assertFalse(judged["source_review_verified"])
+        self.assertEqual(judged["verification_reasons"],["Unsupported amount"])
+    def test_normal_runs_still_retry_unverified(self):
+        src="https://www.rochdale.gov.uk/news/article/1"
+        judged={"source_url":src,"published_at":"2026-10-10T10:00:00Z","ingested_at":"2026-10-10T10:01:00Z",
+                "evidence_sources":[{"url":src,"captured_text":"Rochdale Council announced the plans for an improved public library in the borough."}],
+                "source_review_verified":False}
+        calls=[]
+        enrich([judged],lambda _:self.fail("unexpected refetch"),lambda a:calls.append(a) or {"approved":False,"reasons":["x"],"claims":[]})
+        self.assertEqual(len(calls),1)
 if __name__=="__main__":unittest.main()

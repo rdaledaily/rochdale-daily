@@ -70,7 +70,10 @@ finalise_cards_policy() {
 rebuild_from_merged_feed() {
   python -m json.tool articles.json > /dev/null
   python scraper/frontpage_manual_publish.py
-  PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
+  # Review only drafts with no verdict yet: this run reviewed the rest minutes
+  # ago, and re-asking the model about all of them (~10 min) let main move
+  # again before every retry could push (fast lane frozen 2 Nov 14:45-17:05).
+  RD_EVIDENCE_RECOVERY=1 PYTHONPATH=scraper python scraper/prepare_publication_evidence.py
   python scraper/article_gate.py articles.json
   python scraper/content_hygiene.py --fix
   # frontpage_manual_publish.py has just re-injected manual records with their
