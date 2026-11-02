@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-02T23:09:44.846339Z",
+  "updated_at": "2026-11-02T23:30:33.948146Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 139,
+  "count": 141,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -31,13 +31,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:09:44.846198Z",
+      "last_attempt_at": "2026-11-02T23:30:33.947903Z",
       "outcome": "published",
       "reason": "",
       "title": "Disqualified driver jailed after dangerous Rochdale pursuit - About Manchester",
       "source_name": "About Manchester",
       "category": "traffic",
-      "text_fingerprint": "6b704548af8c61ea"
+      "text_fingerprint": "6b704548af8c61ea",
+      "recovery_attempts": 1
     },
     "https://democracy.rochdale.gov.uk/mgCalendarMonthView.aspx?M=6&DD=2026&CID=559&OT=R&C=559R&MR=0": {
       "first_attempt_at": "2026-10-31T08:39:42.828816Z",
@@ -382,6 +383,22 @@
       "category": "sport",
       "text_fingerprint": "a5c7528e8b3b1c5a"
     },
+    "https://rochdaleafc.co.uk/women-progress-with-win-over-blackpool": {
+      "first_attempt_at": "2026-11-02T23:30:33.947414Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/women-progress-with-win-over-blackpool"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-02T23:30:33.947414Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Dale Exit Womens FA Cup - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "19c6b80b766efaf7"
+    },
     "https://rokerreport.sbnation.com/features/157554/otd-27-10-2020-sunderland-held-to-a-draw-at-rochdale": {
       "first_attempt_at": "2026-10-28T17:37:38.445567Z",
       "attempts": 1,
@@ -420,11 +437,12 @@
       "first_attempt_at": "2026-11-02T23:09:44.845718Z",
       "attempts": 1,
       "urls": [
-        "https://sports.yahoo.com/articles/port-vale-4-2-rochdale-000100704.html"
+        "https://sports.yahoo.com/articles/port-vale-4-2-rochdale-000100704.html",
+        "https://www.theleaguepaper.com/latest-news/football-league-division-two/port-vale/469156/hernandez-a-class-above-for/?__cf_chl_rt_tk=Ke7y28QZv4q2tnM7peKyCdV2dindDxQKnois6XiV864-1793660803-1.0.1.1-dLxUyGM6Xq7BnMGke8jFx3AmUQXTRH1Kd7.9FLkggjg"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:09:44.845718Z",
+      "last_attempt_at": "2026-11-02T23:30:33.947524Z",
       "outcome": "published",
       "reason": "",
       "title": "Port Vale 4-2 Rochdale: Onel Hernandez a class above for elated Job Brady as Valiants impress - Yahoo Sports",
@@ -699,17 +717,35 @@
       "category": "transport",
       "text_fingerprint": "a7979c6d5d50ae5a"
     },
+    "https://www.bordertelegraph.com/sport/national/26687321.jon-brady-delights-end-port-vale-profligacy-put-four-past-rochdale": {
+      "first_attempt_at": "2026-11-02T23:27:31.516155Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.bordertelegraph.com/sport/national/26687321.jon-brady-delights-end-port-vale-profligacy-put-four-past-rochdale",
+        "https://www.onevalefan.co.uk/2026/11/jon-brady-on-port-vales-win-over-rochdale-a-really-positive-first-half"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-02T23:27:31.516155Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Jon Brady delights in end to Port Vale profligacy as they put four past Rochdale - Border Telegraph",
+      "source_name": "Border Telegraph",
+      "category": "crime",
+      "text_fingerprint": "e7818e22fae5f9a3"
+    },
     "https://www.burytimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife": {
       "first_attempt_at": "2026-11-02T23:09:44.845876Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMipAFBVV95cUxOdm5IUmZaYW9KUWt2RjBkWTVCTng0bHBhMllhQ3h4clBDbE9fakItdFpPeG0wRlJ1TGt5UGNnUVJmcHhzT2N6Q1NTNVRHSEpqYWxUdlhXWE9tT1p5NF9fNFhTMTJEUHpFcDBfZk4tZ3lCNVl4UkhxZFh6Umo4NHRmNVcweEFwM2tYQ3k3d3lacF9hSndBeEhSS25qNmxyNlBfd0JOMg?oc=5",
         "https://www.burytimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:09:44.845876Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-02T23:27:41.498775Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: The model marked the story unpublishable.",
       "title": "Rochdale man on trial in case over husband's alleged abuse of unconscious wife - The Bury Times",
       "source_name": "The Bury Times",
       "category": "crime",
@@ -1144,15 +1180,15 @@
     },
     "https://www.manchestereveningnews.co.uk/all-about/rochdale-market": {
       "first_attempt_at": "2026-11-02T23:07:25.728491Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.manchestereveningnews.co.uk/all-about/rochdale-market"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:07:25.728491Z",
+      "last_attempt_at": "2026-11-02T23:27:41.093726Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
       "title": "Rochdale market - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -1767,14 +1803,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:09:44.845993Z",
+      "last_attempt_at": "2026-11-02T23:30:33.947673Z",
       "outcome": "published",
       "reason": "",
       "title": "Appeal over student accommodation at former care home is dismissed - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "44acd40a5695e09c",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochdaletimes.co.uk/bonfire-night-celebrations-return-with-a-bang": {
       "first_attempt_at": "2026-10-29T10:54:14.622160Z",
