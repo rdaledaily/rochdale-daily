@@ -76,10 +76,16 @@ jobs:
           git reset --hard origin/main
           echo "Deploying commit $(git rev-parse HEAD)"
 
+      - name: Defer while manual articles await the publish lane
+        id: gate
+        run: python3 scraper/verify_manual_publication.py --pending-gate
+
       - name: Verify archive duplicate identity regression
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/test_archive_identity_furniture.py
 
       - name: Reassert final homepage freshness before upload
+        if: steps.gate.outputs.pending != 'true'
         run: |
           python3 scraper/enforce_frontpage_freshness.py
           python3 scraper/enforce_live_homepage_window.py
@@ -89,46 +95,60 @@ jobs:
           python3 scraper/sync_homepage_top_story.py
 
       - name: Regenerate ward and place pages from shared chrome
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/generate_ward_pages.py
 
       - name: Add visible article publication timing
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/add_article_time_metadata.py
 
       - name: Add descriptive alt text to news images
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/enhance_image_alt_text.py
 
       - name: Add Event structured data to What's On pages
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/enhance_event_structured_data.py
 
       - name: Generate image sitemap for deployed snapshot
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/generate_image_sitemap.py
 
       - name: Audit sitemap modification dates
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/repair_sitemap_lastmod.py
 
       - name: Consolidate duplicate article SEO signals
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/consolidate_duplicate_article_signals.py
 
       - name: Refresh homepage discovery metadata
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/homepage_discovery_metadata.py
 
       - name: Externalise shared article CSS
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/externalise_article_css.py
 
       - name: Build privacy-safe local postcode dashboard fallback
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/generate_my_rochdale_snapshot.py
 
       - name: Verify manual stories survived publication
+        if: steps.gate.outputs.pending != 'true'
         run: python3 scraper/verify_manual_publication.py
 
       - name: Configure Pages
+        if: steps.gate.outputs.pending != 'true'
         uses: actions/configure-pages@v6
 
       - name: Upload site
+        if: steps.gate.outputs.pending != 'true'
         uses: actions/upload-pages-artifact@v5
         with:
           path: .
 
       - name: Deploy to GitHub Pages
+        if: steps.gate.outputs.pending != 'true'
         id: deployment
         uses: actions/deploy-pages@v5

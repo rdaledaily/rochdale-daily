@@ -127,6 +127,11 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     title = _clean(entry.get("title"))
     content_html = _content_html(entry)
     if not title or not content_html:
+        # Never drop an editor's article silently: name it and the reason.
+        # The body must be plain text in "body" (raw HTML is never accepted).
+        ident = _clean(entry.get("slug")) or title or _clean(entry.get("id")) or "unknown"
+        missing = "title" if not title else 'plain-text "body"'
+        print(f"Manual article rejected, missing {missing}: {ident}")
         return None
 
     slug = _slugify(entry.get("slug") or title)

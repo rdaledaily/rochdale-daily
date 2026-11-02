@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -115,7 +116,36 @@ def valid_cards_image(article: dict[str, Any]) -> bool:
         return False
 
 
+def pending_sources() -> list[str]:
+    """Manual sources committed but not yet merged into articles.json.
+
+    A push that adds a manual article (or its photo) reaches downstream
+    workflows before the publish lane has merged it. That snapshot is
+    mid-publication, not broken: publish.yml enforces the full invariant and
+    its own commit to articles.json triggers the next deploy.
+    """
+    articles = read_json(ARTICLES, [])
+    if not isinstance(articles, list):
+        return []
+    feed = {article_slug(row) for row in articles if isinstance(row, dict) and article_slug(row)}
+    return sorted(
+        slug for slug in (canonical_source_slug(row) for row in source_entries())
+        if slug and slug not in feed
+    )
+
+
 def main() -> int:
+    if "--pending-gate" in sys.argv[1:]:
+        pending = pending_sources()
+        out = os.environ.get("GITHUB_OUTPUT")
+        if out:
+            with open(out, "a", encoding="utf-8") as handle:
+                handle.write(f"pending={'true' if pending else 'false'}\n")
+        if pending:
+            print("Snapshot is mid-publication; deploy deferred to the publish lane's commit: " + ", ".join(pending))
+        else:
+            print("No manual sources awaiting the publish lane.")
+        return 0
     source = source_entries()
     articles = read_json(ARTICLES, [])
     frontpage_payload = read_json(FRONTPAGE, {})
