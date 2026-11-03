@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-03T18:26:17.939153Z",
+  "last_run_at": "2026-11-03T18:51:11.477625Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -22,9 +22,13 @@
       "interval_hours": 12
     },
     "ons_housing": {
-      "status": "not due",
-      "last_checked": "2026-11-02T18:35:08.598579Z",
-      "interval_hours": 24
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 1,
+      "offered_today": 0,
+      "listed": 1,
+      "already_seen": 1,
+      "new": 0
     },
     "contract_notices": {
       "status": "not due",
@@ -42,18 +46,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 122,
+  "raw_candidates_before_job_filter": 120,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 122,
+  "raw_candidates": 120,
   "candidate_clusters": 40,
   "google_news_resolution": {
     "wrappers": 62,
     "resolved": 48,
-    "text_recovered": 32,
+    "text_recovered": 33,
     "reattributed": 0,
-    "images_found": 33
+    "images_found": 34
   },
-  "duplicates_merged": 82,
+  "duplicates_merged": 80,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -143,7 +147,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 108,
+    "rss_and_google_news": 106,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -278,24 +282,25 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 34,
-    "Rochdale AFC": 20,
+    "Rochdale Times": 35,
+    "Rochdale AFC": 18,
     "Manchester Evening News": 17,
-    "Roch Valley Radio": 13,
+    "Roch Valley Radio": 11,
     "Rochdale Borough Council": 8,
-    "InYourArea": 6,
+    "InYourArea": 5,
     "Bee Network live travel alerts": 5,
     "Oldham Times": 2,
+    "ESPN": 2,
     "The League Paper": 2,
-    "FansNetwork.co.uk": 2,
+    "Yahoo News UK": 2,
     "About Manchester": 2,
     "Roch Valley Radio Local News": 2,
     "Rochdale Borough Council RSS": 1,
-    "ESPN": 1,
     "ITVX": 1,
     "Futbol24": 1,
+    "Doncaster Free Press": 1,
+    "FansNetwork.co.uk": 1,
     "Greater Manchester Police": 1,
-    "Yahoo News UK": 1,
     "The Bury Times": 1,
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
@@ -944,7 +949,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-03T18:27:23.470859Z",
+  "frontpage_generated_at": "2026-11-03T18:52:36.948225Z",
   "frontpage_article_count": 26,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -999,14 +1004,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 2,
+      "business": 5,
       "crime": 3,
       "traffic": 2,
       "transport": 1,
       "education": 2,
       "sport": 1,
-      "business": 5,
       "health": 1,
+      "environment": 2,
       "news": 4,
       "community": 5
     },
@@ -1024,19 +1029,19 @@
       "wardle": 1
     },
     "selected_by_source": {
-      "manchester evening news": 4,
+      "zambrero": 1,
       "the bury times": 1,
       "rochdale borough council": 3,
       "inyourarea": 1,
       "rochdale borough council decision forward plan": 1,
       "rochdale afc": 1,
-      "zambrero": 1,
-      "rochdale borough council news": 1,
-      "greater manchester police": 2,
       "find a tender": 3,
-      "asda rochdale": 1,
-      "rochdale daily": 2,
+      "manchester evening news": 4,
+      "greater manchester police": 2,
       "rochdale times": 2,
+      "asda rochdale": 1,
+      "rochdale borough council news": 1,
+      "rochdale daily": 2,
       "rochdale borough council licensing register": 1,
       "rochdale borough council events listings": 1,
       "historic england (national heritage list for england)": 1
@@ -1047,7 +1052,7 @@
     "selection_window_days": 2,
     "frontpage_count": 26,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 11,
+    "fresh_under_24h": 10,
     "fresh_under_homepage_window": 26,
     "short_briefs_selected": 13,
     "frontpage_minimum_met": true
