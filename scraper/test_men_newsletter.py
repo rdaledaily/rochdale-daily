@@ -168,6 +168,79 @@ with tempfile.TemporaryDirectory() as tmp:
     check(summary['covered'] == 1 and summary['by_status'].get('found') == 1 and summary['by_status'].get('not_found') == 1,
           f"ledger summary reflects outcomes ({summary['by_status']})")
 
+# --- duplicates, real reasons, source-text floor (3 Nov 2026 live run) -------
+from selection_policy import is_job_or_career_post  # noqa: E402
+
+def must(headline, title, url='https://www.manchestereveningnews.co.uk/news/x-1', text='y ' * 400, when=NOW):
+    return core.Candidate('Manchester Evening News', url, title, text, core.iso_utc(when), 'rochdale', 'news',
+                          source_body_excerpt=text, must_cover_source=mn.SOURCE_LABEL, newsletter_headline=headline)
+
+archive = [  # the originals the live run duplicated, with their real titles
+    {'slug': 'homes-evacuated-in-rochdale-after-car-crashes-into-house-and-causes-gas-leak', 'published_at': '2026-10-31T18:36:00Z',
+     'title': 'Homes evacuated in Rochdale after car crashes into house and causes gas leak'},
+    {'slug': 'police-appeal-for-help-in-locating-kibriya-ahmed', 'published_at': '2026-10-29T19:03:00Z',
+     'title': 'Police appeal for help in locating Kibriya Ahmed after his children reported missing'},
+    {'slug': 'rochdale-council-deputy-leader-detained-briefly-in-pakistan', 'published_at': '2026-10-28T11:03:00Z',
+     'title': 'Rochdale council deputy leader detained briefly in Pakistan during civic visit'},
+    {'slug': 'ignite-fire-festival-rochdale-town-hall-square-november-20-22', 'published_at': '2026-10-08T20:35:00Z',
+     'title': 'Ignite Fire Festival returns to Rochdale Town Hall Square from November 20 to 22'},
+    {'slug': 'rochdale-driver-jailed-16-months-dangerous-police-pursuit', 'published_at': '2026-11-02T14:58:00Z',
+     'title': 'Rochdale driver jailed for 16 months after dangerous police pursuit'},
+]
+by_story = {}
+cases = [
+    ('Homes evacuated after car crashes into house and causes gas leak',
+     'Rochdale homes evacuated after car crashes into house and causes a gas leak', '2026-10-31T18:40:00Z', archive[0]['slug']),
+    ('Appeal for wanted man with Rochdale links after his children reported missing',
+     'Appeal for wanted man with Rochdale and Manchester links after his children reported missing', '2026-10-29T19:03:00Z', archive[1]['slug']),
+    ("Rochdale council deputy leader detained in Pakistan for 'short period'",
+     "Rochdale council deputy leader Daalat Ali detained in Pakistan for 'short period'", '2026-10-28T11:07:00Z', archive[2]['slug']),
+]
+for headline, title, when, slug in cases:
+    c = must(headline, title, when=datetime.fromisoformat(when.replace('Z', '+00:00')))
+    status, _reason, got = core.must_cover_block(c, by_story, archive)
+    check(status == 'already_covered' and got == slug, f'duplicate caught: {headline[:45]}')
+banned = must('Banned driver led police on high-speed chase through the streets of Rochdale',
+              'Banned driver led police on high-speed chase through the streets of Rochdale', when=datetime(2026, 11, 2, 17, 12, tzinfo=timezone.utc))
+check(core.must_cover_block(banned, by_story, archive)[0] == '', 'a genuinely new story is still written')
+old = dict(archive[1], published_at='2026-09-01T10:00:00Z')
+check(core.find_covering_article(cases and must(cases[1][0], cases[1][1], when=datetime(2026, 10, 29, tzinfo=timezone.utc)), [old]) is None,
+      'an article outside the 14-day window does not count as cover')
+
+career = must('As she waited to learn her fate, her career was already gone', 'As she waited to learn her fate, her career was already gone')
+check(not is_job_or_career_post(career), 'the careers filter no longer removes a must-cover story')
+check(is_job_or_career_post({'title': 'Apply now: careers at the council, vacancies open', 'source_url': 'https://x.org/jobs/1'}),
+      'the careers filter still works for everything else')
+check(core.must_cover_block(career, by_story, archive)[0] == '', 'the career headline is written')
+
+thin = must('Some story with plenty of distinct words', 'Some story with plenty of distinct words',
+            url='https://news.google.com/rss/articles/CBMiabc?oc=5', text='short')
+status, reason, _ = core.must_cover_block(thin, by_story, archive)
+check(status == 'waiting_for_text' and 'characters of source text' in reason, 'an unresolved link with thin text waits, with the real reason')
+check(core.must_cover_block(must('Council dashboard', 'Council dashboard', url='https://www.rochdale.gov.uk/bin-collection-day'), by_story, archive)[0]
+      in ('rejected', ''), 'service pages are judged by the service-page rule only')
+
+# Same-run twins: an ordinary candidate on the same incident is dropped.
+gas = must(cases[0][0], cases[0][1])
+other = core.Candidate('Roch Valley Radio', 'https://www.rochvalleyradio.com/news/gas', 'Homes evacuated after car crashes into house causing gas leak',
+                       '', NOW.isoformat(), 'rochdale', 'news')
+unrelated = core.Candidate('Src', 'https://example.org/z', 'Library opens new reading room for children', '', NOW.isoformat(), 'rochdale', 'news')
+picked, _ = core.select_with_must_cover([other, unrelated], [gas], lambda items, limit, **kw: (list(items)[:limit], {}), limit=5)
+check(other not in picked and unrelated in picked, 'another outlet\'s report of the same incident is not written alongside')
+
+# Reconciliation: the ledger never points at a removed article.
+with tempfile.TemporaryDirectory() as tmp:
+    core.MEN_NEWSLETTER_LEDGER = mn.CoverageLedger(Path(tmp) / 'c.json')
+    row = core.MEN_NEWSLETTER_LEDGER.record({'headline': cases[0][0], 'received_at': '2026-11-02T08:04:39Z'})
+    core.MEN_NEWSLETTER_LEDGER.set(row, 'published', NOW, article_slug='rochdale-homes-evacuated-duplicate',
+                                   resolved_title=cases[0][1], resolved_published_at='2026-10-31T18:40:00Z')
+    row2 = core.MEN_NEWSLETTER_LEDGER.record({'headline': 'A story whose only article was taken down entirely', 'received_at': '2026-11-02T08:04:39Z'})
+    core.MEN_NEWSLETTER_LEDGER.set(row2, 'published', NOW, article_slug='gone-article', resolved_title='A story whose only article was taken down entirely')
+    changed = core.reconcile_men_newsletter_ledger(archive)
+    check(changed == 2, 'both stale rows reconciled')
+    check(row['status'] == 'already_covered' and row['article_slug'] == archive[0]['slug'], 're-pointed at the live original')
+    check(row2['status'] == 'not_found' and row2['article_slug'] == '', 'reopened when nothing live covers it')
+
 # Locality: a published must-cover story survives the retention pass.
 article = {'title': 'Storm Austen: when rain will batter Greater Manchester', 'excerpt': 'Met Office warning for the region.',
            'content_html': '<p>Bolton and Oldham will see heavy rain.</p>', 'source_name': 'Manchester Evening News',

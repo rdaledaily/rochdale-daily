@@ -1462,6 +1462,36 @@ def collect_men_newsletter_candidates(now: datetime | None = None, parse: Any = 
     return candidates
 
 
+def reconcile_men_newsletter_ledger(existing: list[dict[str, Any]]) -> int:
+    """The ledger never says a story is covered by an article that is not live.
+
+    A covering article can be removed afterwards (a duplicate taken down, a
+    legal removal). Re-point the story at a live article on the same story,
+    or reopen it. Returns the number of rows changed.
+    """
+    ledger = MEN_NEWSLETTER_LEDGER
+    if ledger is None:
+        return 0
+    live = {str(item.get('slug') or '') for item in existing if item.get('slug')}
+    changed = 0
+    for row in ledger.records.values():
+        slug = str(row.get('article_slug') or '')
+        if row.get('status') not in men_newsletter.DONE_STATUSES or not slug or slug in live:
+            continue
+        probe = Candidate('Manchester Evening News', row.get('resolved_url') or '', row.get('resolved_title') or row['headline'], '',
+                          row.get('resolved_published_at') or row.get('received_at') or '', 'rochdale', 'news',
+                          newsletter_headline=row['headline'])
+        covering = find_covering_article(probe, existing)
+        if covering is not None and covering.get('slug') in live:
+            ledger.set(row, 'already_covered', utc_now(), article_slug=str(covering['slug']),
+                       reason=f'its article {slug} was removed; covered by {covering["slug"]}'[:240])
+        else:
+            ledger.set(row, 'not_found', utc_now(), article_slug='', resolved_url='',
+                       reason=f'its article {slug} is no longer live; searching again')
+        changed += 1
+    return changed
+
+
 def record_men_newsletter_outcome(candidate: Candidate, status: str, reason: str = '', article_slug: str = '') -> None:
     ledger = MEN_NEWSLETTER_LEDGER
     if ledger is None or not candidate.newsletter_headline:
@@ -1480,16 +1510,74 @@ def select_with_must_cover(eligible: list[Candidate], must_cover: list[Candidate
     """Must-cover stories are always selected, outside the run's cap; the cap
     and balancing still apply to everything else."""
     must_urls = {canonicalise_url(item.source_url) for item in must_cover}
+    must_titles = [text for item in must_cover for text in (item.newsletter_headline, item.source_title) if text]
     rest = [
         item for item in eligible
         if canonicalise_url(item.source_url) not in must_urls
         and not ({canonicalise_url(src.get('url', '')) for src in item.related_sources if src.get('url')} & must_urls)
+        # Another outlet's report of the same incident must not be written
+        # alongside the must-cover story in the same run.
+        and not any(men_newsletter.is_match(title, item.source_title) for title in must_titles)
     ]
     limit = select_kwargs.pop('limit', len(rest))
     selected, diagnostics = select(rest, limit=min(limit, len(rest)), **select_kwargs) if rest else ([], {})
     diagnostics = dict(diagnostics or {})
     diagnostics['must_cover_selected'] = len(must_cover)
     return list(must_cover) + list(selected), diagnostics
+
+
+# A newsletter story is only written from real source text. Measured 3 Nov
+# 2026: a story whose Google News link never resolved was written from little
+# more than its headline and gained a claim no source supports. The fast lane
+# applies the same 500-character floor to unresolved Google links.
+MUST_COVER_MIN_SOURCE_CHARS = 500
+# How far either side of the source's date an existing article can cover it.
+MUST_COVER_ARCHIVE_WINDOW = timedelta(days=14)
+
+
+def find_covering_article(candidate: Candidate, existing: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """An existing Rochdale Daily article on the same story, matched on headline.
+
+    Source-URL matching alone missed articles written from another outlet's
+    report of the same incident: on 3 Nov 2026 the newsletter lane republished
+    the gas-leak crash, the Kibriya Ahmed appeal, the deputy leader in Pakistan
+    and the Ignite fire festival, all already on the site.
+    """
+    reference = parse_datetime(candidate.source_published_at) or utc_now()
+    probes = [text for text in (candidate.newsletter_headline, candidate.source_title) if text]
+    for article in existing:
+        published = parse_datetime(article.get('first_published_at') or article.get('published_at'))
+        if published is not None and abs(published - reference) > MUST_COVER_ARCHIVE_WINDOW:
+            continue
+        titles = [str(article.get(field) or '') for field in ('title', 'source_title')]
+        if any(men_newsletter.is_match(probe, title) for probe in probes for title in titles if title):
+            return article
+    return None
+
+
+def must_cover_block(candidate: Candidate, existing_by_story: dict[str, dict[str, Any]], existing: list[dict[str, Any]]) -> tuple[str, str, str]:
+    """(status, reason, article_slug) when a must-cover story is not to be
+    written this run; ('', '', '') when it is. Every reason is the real one."""
+    if is_non_article_service_page(candidate.source_url):
+        return 'rejected', 'matched page is a service or dashboard page, not an article', ''
+    candidate.story_key = candidate.story_key or build_story_key(candidate)
+    covering = (
+        existing_by_story.get(candidate.story_key)
+        or existing_article_for_candidate(candidate, existing_by_story)
+        or find_covering_article(candidate, existing)
+    )
+    if covering is not None:
+        return 'already_covered', '', str(covering.get('slug') or '')
+    held = rewrite_ledger_block_reason(candidate)
+    if held:
+        return 'held', held, ''
+    substance = normalise_ws(f'{candidate.source_summary or ""} {candidate.source_body_excerpt or ""}')
+    if is_google_wrapper(str(candidate.source_url or '')) and len(substance) < MUST_COVER_MIN_SOURCE_CHARS:
+        return 'waiting_for_text', (
+            f'Google News link not yet resolved to the MEN article; {len(substance)} characters of source text '
+            f'(needs {MUST_COVER_MIN_SOURCE_CHARS}) - retried next run'
+        ), ''
+    return '', '', ''
 
 
 def collect_rss_candidates() -> list[Candidate]:
@@ -3897,24 +3985,25 @@ def main() -> int:
     ]
     effective_limit = min(len(eligible_candidates), max(run_limit, MIN_BALANCED_SELECTION_LIMIT))
     must_cover_selected: list[Candidate] = []
-    seen_must_cover: set[str] = set()
+    existing_records = list(existing)
+    reconciled = reconcile_men_newsletter_ledger(existing_records)
+    if reconciled:
+        log.info('MEN MyRochdale newsletter ledger: %d story record(s) re-pointed after their article was removed', reconciled)
     for candidate in must_cover_candidates:
-        url_key = canonicalise_url(candidate.source_url)
-        if url_key in seen_must_cover:
-            record_men_newsletter_outcome(candidate, 'already_covered', 'same MEN article as another newsletter story this run')
+        status, reason, slug = must_cover_block(candidate, existing_by_story, existing_records)
+        if not status:
+            # Two newsletter stories on one incident (the gas-leak crash ran as
+            # two headlines on 2 Nov) are written once.
+            twin = next((other for other in must_cover_selected
+                         if canonicalise_url(other.source_url) == canonicalise_url(candidate.source_url)
+                         or men_newsletter.is_match(candidate.newsletter_headline, other.source_title)
+                         or men_newsletter.is_match(other.newsletter_headline, candidate.source_title)), None)
+            if twin is not None:
+                status, reason = 'already_covered', f'same story as newsletter headline "{twin.newsletter_headline[:80]}" this run'
+        if status:
+            record_men_newsletter_outcome(candidate, status, reason, slug)
             continue
-        seen_must_cover.add(url_key)
-        if _BASE_REWRITE_ELIGIBLE(candidate, existing_by_story):
-            must_cover_selected.append(candidate)
-            continue
-        held = rewrite_ledger_block_reason(candidate)
-        existing_article = existing_by_story.get(candidate.story_key) or existing_article_for_candidate(candidate, existing_by_story)
-        if existing_article is not None:
-            record_men_newsletter_outcome(candidate, 'already_covered', '', str(existing_article.get('slug') or ''))
-        elif held:
-            record_men_newsletter_outcome(candidate, 'held', held)
-        else:
-            record_men_newsletter_outcome(candidate, 'rejected', 'matched page is not a news article (service page, job or listing)')
+        must_cover_selected.append(candidate)
     selected_candidates, selection_diagnostics = select_with_must_cover(
         eligible_candidates, must_cover_selected, balanced_select,
         limit=effective_limit, max_per_source=MAX_SELECTED_PER_SOURCE, max_per_category=MAX_SELECTED_PER_CATEGORY,
