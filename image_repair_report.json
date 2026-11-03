@@ -1,7 +1,7 @@
 {
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
-  "skipped_sensitive_stories": 1,
+  "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
   "no_usable_source_image": 8,
   "permission_entries": 0,
@@ -16,6 +16,54 @@
   "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
+    {
+      "slug": "investigation-works-begin-at-former-turner-brothers-factory-site-in-rochdale",
+      "result": "no-cleared-source-image",
+      "source": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903",
+      "after": "assets/img/cards/turner_brothers.png",
+      "why": {
+        "page": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903",
+        "final_url": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903",
+        "candidates": [
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200d/0_Rochdale-Chernobyl.jpg",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200/0_Rochdale-Chernobyl.jpg",
+            "via": "twitter:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200b/0_Rochdale-Chernobyl.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200c/0_Rochdale-Chernobyl.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200f/0_Rochdale-Chernobyl.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34852943.ece/ALTERNATES/s1200e/0_Workers-pictured-on-the-old-Turner-Brother-factory-site-in-Rochdale-in-October-2026.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862073.ece/ALTERNATES/s1200e/0_Rochdale-Chernobyl.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
+    },
     {
       "slug": "rochdale-borough-council-awards-contract-for-new-income-management-system",
       "result": "no-cleared-source-image",
@@ -180,12 +228,6 @@
         "page": "https://www.find-tender.service.gov.uk/Notice/103921-2026",
         "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
       }
-    },
-    {
-      "slug": "rochdale-afc-hosts-doncaster-rovers-in-league-match-on-3-november",
-      "result": "source-photo-already-cached",
-      "source": "https://africa.espn.com/football/match/_/gameId/401906344/doncaster-rovers-rochdale",
-      "after": "assets/img/cards/rochdale-afc-hosts-doncaster-rovers-in-league-match-on-3-november.png"
     }
   ]
 }
