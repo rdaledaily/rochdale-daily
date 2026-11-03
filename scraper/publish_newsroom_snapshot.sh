@@ -27,7 +27,7 @@ stage_newsroom() {
     newsroom_candidates.json rewrite_ledger.json google_news_resolution_report.json google_news_resolutions.json live_source_state.json
     image_coverage_report.json image_repair_report.json commons_image_repair_report.json cards_image_policy_report.json assets/img/cards
     articles sitemap.xml news-sitemap.xml image-sitemap.xml wards/ ward_areas.json council_votes.json councillor_photos.json weather.json
-    archive.html search.html archive-index.json rss.xml index.html
+    archive.html search.html archive-index.json rss.xml index.html checks.json
     news/ corrections-log.html heywood.html milnrow.html middleton.html littleborough.html whats-on.html roadworks.html roadworks.json)
   local present=()
   for path in "${paths[@]}"; do [ -e "${path}" ] && present+=("${path}"); done
