@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T09:28:07.125669Z",
+  "updated_at": "2026-11-03T10:01:53.963313Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 136,
+  "count": 137,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -40,6 +40,22 @@
       "text_fingerprint": "6b704548af8c61ea",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://africa.espn.com/football/match/_/gameId/401906344/doncaster-rovers-rochdale": {
+      "first_attempt_at": "2026-11-03T10:01:53.962977Z",
+      "attempts": 1,
+      "urls": [
+        "https://africa.espn.com/football/match/_/gameId/401906344/doncaster-rovers-rochdale"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-03T10:01:53.962977Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale vs. Doncaster (3 Nov, 2026) Live Score - ESPN",
+      "source_name": "ESPN",
+      "category": "transport",
+      "text_fingerprint": "4da2e0596f4f2110"
     },
     "https://democracy.rochdale.gov.uk/mgCalendarMonthView.aspx?M=6&DD=2026&CID=559&OT=R&C=559R&MR=0": {
       "first_attempt_at": "2026-10-31T08:39:42.828816Z",
@@ -237,14 +253,14 @@
     },
     "https://rochdaleafc.co.uk/hendo-set-for-club-record": {
       "first_attempt_at": "2026-11-02T20:59:15.987499Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMiYkFVX3lxTE51dkp0cjdjR1plYm1zQlUydjhteVkzQU5DN1ByY0xJZ0xkOEJCM2ZfVkhVTUx3V3k2UjBPcnAwUUxEUWMwSkNIOGtHMWlWbGROdkNrTUQ1M1Uya3ctVkw4ODRR?oc=5",
         "https://rochdaleafc.co.uk/hendo-set-for-club-record"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-03T09:25:14.608638Z",
+      "last_attempt_at": "2026-11-03T09:59:45.496285Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Hendo Set For Club Record",
@@ -267,22 +283,6 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "e91a911d4ea978a4"
-    },
-    "https://rochdaleafc.co.uk/not-acceptable-watson": {
-      "first_attempt_at": "2026-10-26T08:05:00.152014Z",
-      "attempts": 3,
-      "urls": [
-        "https://rochdaleafc.co.uk/not-acceptable-watson"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-26T09:22:49.108156Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
-      "title": "Not Acceptable – Watson - Rochdale AFC",
-      "source_name": "Rochdale AFC",
-      "category": "sport",
-      "text_fingerprint": "4af2dab95f4a2690"
     },
     "https://rochdaleafc.co.uk/preview-doncaster-rovers-h": {
       "first_attempt_at": "2026-11-02T23:09:44.845623Z",
@@ -742,11 +742,12 @@
       "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMipAFBVV95cUxOdm5IUmZaYW9KUWt2RjBkWTVCTng0bHBhMllhQ3h4clBDbE9fakItdFpPeG0wRlJ1TGt5UGNnUVJmcHhzT2N6Q1NTNVRHSEpqYWxUdlhXWE9tT1p5NF9fNFhTMTJEUHpFcDBfZk4tZ3lCNVl4UkhxZFh6Umo4NHRmNVcweEFwM2tYQ3k3d3lacF9hSndBeEhSS25qNmxyNlBfd0JOMg?oc=5",
-        "https://www.burytimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife"
+        "https://www.burytimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife",
+        "https://www.theoldhamtimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-03T00:28:19.798800Z",
+      "last_attempt_at": "2026-11-03T10:01:53.963079Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale man on trial in case over husband's alleged abuse of unconscious wife - The Bury Times",
@@ -1096,6 +1097,22 @@
       "category": "events",
       "text_fingerprint": "7f7d3078388af86c",
       "recovery_attempts": 1
+    },
+    "https://www.inyourarea.co.uk/news/whats-on-rochdale-stunning-night-time-light-trail-puppet-cabaret-and-music-mixer": {
+      "first_attempt_at": "2026-11-03T10:01:53.963217Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.inyourarea.co.uk/news/whats-on-rochdale-stunning-night-time-light-trail-puppet-cabaret-and-music-mixer"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-03T10:01:53.963217Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "What's On Rochdale: Stunning night-time light trail and a raucous puppet cabaret - InYourArea",
+      "source_name": "InYourArea",
+      "category": "events",
+      "text_fingerprint": "56df36d78f5be278"
     },
     "https://www.lancashiretelegraph.co.uk/news/26671794.man-dies-serious-three-vehicle-crash-rochdale-road-edenfield": {
       "first_attempt_at": "2026-10-27T00:08:24.711122Z",
