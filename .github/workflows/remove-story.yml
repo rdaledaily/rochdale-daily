@@ -53,6 +53,14 @@ jobs:
             --slugs "${{ github.event.inputs.slugs }}" \
             --title-patterns "${{ github.event.inputs.title_patterns }}" \
             --source-urls "${{ github.event.inputs.source_urls }}"
+      # remove_story.py regenerates the site, and that rebuild re-selects images
+      # without the cards-only policy the newsroom lanes apply. On 3 Nov 2026 a
+      # four-story takedown committed four off-policy image paths (Wikimedia,
+      # missingpeople.org.uk, /assets/article-images/) and main's CI went red.
+      - name: Apply cards-only image policy
+        run: |
+          python scraper/enforce_cards_only_images.py --articles articles.json
+          python scraper/enforce_cards_only_images.py --articles articles.json --check
       - name: Commit takedown against newest canonical state
         id: commit
         shell: bash
@@ -62,7 +70,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           stage_takedown() {
-            git add story_blocklist.json articles.json event_dates.json articles sitemap.xml news-sitemap.xml articles/frontpage.json index.html 2>/dev/null || true
+            git add story_blocklist.json articles.json event_dates.json articles sitemap.xml news-sitemap.xml articles/frontpage.json index.html cards_image_policy_report.json assets/img/cards 2>/dev/null || true
           }
 
           reapply_takedown() {
@@ -70,6 +78,8 @@ jobs:
               --slugs "${{ github.event.inputs.slugs }}" \
               --title-patterns "${{ github.event.inputs.title_patterns }}" \
               --source-urls "${{ github.event.inputs.source_urls }}"
+            python scraper/enforce_cards_only_images.py --articles articles.json
+            python scraper/enforce_cards_only_images.py --articles articles.json --check
           }
 
           stage_takedown

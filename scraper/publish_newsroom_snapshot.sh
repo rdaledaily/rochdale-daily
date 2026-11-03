@@ -54,6 +54,11 @@ finalise_cards_policy() {
   # Rebuilding it here spent half the push-recovery budget before the push.
   python -m json.tool articles.json > /dev/null
   python scraper/content_hygiene.py --fix
+  # Apply the policy before checking it. The check tolerates image paths
+  # already on main (--baseline-ref HEAD), so an off-policy path that reached
+  # main any other way - a takedown rebuild did on 3 Nov 2026 - was never
+  # repaired and kept main's CI red. Idempotent: valid records are untouched.
+  python scraper/enforce_cards_only_images.py --articles articles.json
   python scraper/enforce_cards_only_images.py --articles articles.json --check --baseline-ref HEAD
   python scraper/verify_manual_publication.py
   python scraper/content_hygiene.py
