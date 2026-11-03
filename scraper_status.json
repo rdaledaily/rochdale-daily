@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-03T12:03:57.031373Z",
+  "last_run_at": "2026-11-03T12:35:22.494352Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,9 +7,17 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "not due",
-      "last_checked": "2026-11-03T00:02:45.587039Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 7,
+      "other_notice_types": 1,
+      "already_seen": 6,
+      "new": 0,
+      "outside_borough": 0,
+      "no_company_address": 0,
+      "notice_unreadable": 0
     },
     "written_answers": {
       "status": "not due",
@@ -17,9 +25,8 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "not due",
-      "last_checked": "2026-11-03T00:02:45.587039Z",
-      "interval_hours": 12
+      "status": "error",
+      "error": "ConnectionError: HTTPSConnectionPool(host='democracy.greatermanchester-ca.gov.uk', port=443): Max retries exceeded with url: /mgRss.aspx?XXR=0&M=0 (Caused by ReadTimeoutError(\"HTTPSConnectionPool(host"
     },
     "ons_housing": {
       "status": "not due",
@@ -42,34 +49,29 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 128,
+  "raw_candidates_before_job_filter": 135,
   "job_or_career_posts_rejected": 4,
-  "raw_candidates": 124,
+  "raw_candidates": 131,
   "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 37,
-    "resolved": 37,
-    "text_recovered": 27,
+    "wrappers": 45,
+    "resolved": 45,
+    "text_recovered": 32,
     "reattributed": 0,
-    "images_found": 28
+    "images_found": 33
   },
-  "duplicates_merged": 81,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "rochdale-afc-partners-with-hopwood-hall-college-for-youth-development",
-      "source_url": "https://rochdaleafc.co.uk/dale-partner-with-hopwood-hall-college/"
-    }
-  ],
-  "new_articles": 1,
-  "live_articles": 514,
+  "duplicates_merged": 88,
+  "attempted_rewrites": 0,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
+  "live_articles": 515,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 4,
-    "queued_for_retry": 4,
+    "missing_from_feed": 0,
+    "queued_for_retry": 0,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
@@ -154,13 +156,11 @@
       "last_attempt_at": "2026-11-01T18:41:48.414791Z"
     }
   ],
-  "published_with_style_issues": {
-    "Tighten the report to fewer than 141 body words. The source material only supports a short report; cut every sentence th": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 113,
-    "website_discovery": 10,
+    "rss_and_google_news": 119,
+    "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -246,12 +246,12 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 12,
-    "covered": 7,
-    "outstanding": 5,
+    "covered": 6,
+    "outstanding": 6,
     "by_status": {
-      "already_covered": 1,
-      "not_found": 3,
-      "published": 6,
+      "already_covered": 4,
+      "not_found": 4,
+      "published": 2,
       "rejected": 2
     },
     "outstanding_stories": [
@@ -260,6 +260,13 @@
         "received_at": "2026-10-28T08:06:52+00:00",
         "status": "not_found",
         "reason": "no MEN article matched the exact or keyword search",
+        "resolved_url": ""
+      },
+      {
+        "headline": "The historic Rochdale hall and gardens with spectacular fire festival",
+        "received_at": "2026-10-29T08:08:20+00:00",
+        "status": "not_found",
+        "reason": "its article rochdale-s-historic-hall-and-gardens-to-host-spectacular-fire-festival-and-light is no longer live; searching again",
         "resolved_url": ""
       },
       {
@@ -294,26 +301,25 @@
   },
   "source_counts": {
     "Rochdale Times": 37,
-    "Roch Valley Radio": 33,
-    "Rochdale AFC": 19,
-    "Manchester Evening News": 9,
+    "Roch Valley Radio": 31,
+    "Rochdale AFC": 21,
+    "Manchester Evening News": 13,
     "InYourArea": 6,
     "Roch Valley Radio Local News": 4,
     "Bee Network live travel alerts": 4,
+    "ESPN": 2,
+    "The League Paper": 2,
     "Rochdale Borough Council": 2,
     "About Manchester": 2,
     "Rochdale Borough Council RSS": 1,
-    "ESPN": 1,
-    "The League Paper": 1,
     "FansNetwork.co.uk": 1,
     "Greater Manchester Police": 1,
     "Yahoo News UK": 1,
+    "The Bury Times": 1,
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {
-    "sport": 1
-  },
+  "selected_by_category": {},
   "published_by_category": {
     "business": 52,
     "community": 68,
@@ -350,12 +356,8 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [
-    "sport-v3-99bd939ddb038eb6ebb3"
-  ],
-  "selected_candidate_urls": [
-    "https://rochdaleafc.co.uk/dale-partner-with-hopwood-hall-college/"
-  ],
+  "selected_story_keys": [],
+  "selected_candidate_urls": [],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -365,31 +367,6 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [
-      "sport"
-    ],
-    "selected_categories": [
-      "sport"
-    ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [
-      "rochdale"
-    ],
-    "uncovered_categories": [],
-    "uncovered_wards": [],
-    "uncovered_areas": [],
-    "selected_by_category": {
-      "sport": 1
-    },
-    "selected_by_ward": {},
-    "selected_by_area": {
-      "rochdale": 1
-    },
-    "selected_by_source": {
-      "rochdale afc": 1
-    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -938,7 +915,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 8,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -946,17 +923,14 @@
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMia0FVX3lxTE55anlLZXdsVkVtdjNUVW9VQUs5NjRyTDJKM3Rtb0RyZGpaRWV4aFJtWGhkR0RES2pkVlJfRjJWNEhYLTFBdkxpRXF3YmZUUmZrRGdQZF9MSGc1YUdqZG5iUHBuWDlEeXFXNXlr?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk",
-    "yourtrustrochdale.co.uk"
+    "rochdaleafc.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 2,
-    "yourtrustrochdale.co.uk": 1
+    "rochdaleafc.co.uk": 4
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -993,7 +967,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-03T12:17:00.107417Z",
+  "frontpage_generated_at": "2026-11-03T12:36:51.809307Z",
   "frontpage_article_count": 23,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1098,14 +1072,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 13,
   "events_removed_other_source": 10,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 514,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 515,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1115,11 +1089,9 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "rochdale-afc-partners-with-hopwood-hall-college-for-youth-development"
-  ],
+  "whats_on_event_count": 14,
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
