@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Newsdesk checks | Rochdale Daily</title>
+<style>
+@import url("/assets/css/rd-tokens.css");
+:root{--navy:#0b1f3a;--cyan:#22d3ee;--ink:#202020;--muted:#5f5f5f;--line:#d8d8d8;--paper:#fff;--ok:#137a45;--ok-soft:#e7f4ec;--warn:#b45309}
+*{box-sizing:border-box}
+body{margin:0;background:#ececec;color:var(--ink);font-family:var(--font-body,system-ui,sans-serif);line-height:1.45}
+header{background:var(--navy);color:#fff;padding:14px 0}
+.wrap{width:min(760px,calc(100% - 24px));margin-inline:auto}
+header b{font-size:18px;letter-spacing:.4px;text-transform:uppercase}
+header span{display:block;color:var(--cyan);font-size:12px;letter-spacing:1.4px;text-transform:uppercase}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.bar input,.bar select{flex:1;min-width:150px;padding:12px;border:1px solid var(--line);font:inherit;background:#fff}
+button{font:inherit;font-weight:700;border:0;padding:12px 16px;cursor:pointer;min-height:44px}
+.load{background:var(--navy);color:#fff}
+.summary{font-weight:700;margin:6px 0 12px}
+.status{color:var(--muted);font-size:14px;min-height:20px}
+.story{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--warn);padding:14px;margin:10px 0}
+.story.done{border-left-color:var(--ok);background:var(--ok-soft)}
+.story a{color:var(--ink);font-weight:700;text-decoration:none;font-size:17px;line-height:1.3;display:block}
+.story a:hover{text-decoration:underline}
+.meta{color:var(--muted);font-size:13px;margin:6px 0 10px}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.check{background:var(--ok);color:#fff;flex:1}
+.undo{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.stamp{color:var(--ok);font-weight:700;flex:1}
+.empty{background:#fff;border:1px solid var(--line);padding:16px}
+.note{font-size:13px;color:var(--muted);margin:18px 0 32px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><b>Rochdale Daily</b><span>Newsdesk checks</span></div></header>
+<main class="wrap">
+  <div class="bar">
+    <input id="token" type="password" placeholder="Admin token" autocomplete="current-password">
+    <select id="days" aria-label="Show stories from">
+      <option value="1">Last 24 hours</option>
+      <option value="3" selected>Last 3 days</option>
+      <option value="7">Last 7 days</option>
+    </select>
+    <button class="load" id="load">Load</button>
+  </div>
+  <p class="summary" id="summary"></p>
+  <p class="status" id="status" role="status">Use the same token as moderation.</p>
+  <div id="list"></div>
+  <p class="note">Tap <strong>Checked</strong> only after reading the published story against its linked sources. The time shown on the article is the moment you tap, set by the server. Undo removes a mistaken check.</p>
+</main>
+<script>
+(function () {
+  "use strict";
+  var API = "/api/checks";
+  var tokenEl = document.getElementById("token");
+  var daysEl = document.getElementById("days");
+  var list = document.getElementById("list");
+  var statusEl = document.getElementById("status");
+  var summary = document.getElementById("summary");
+  var stories = [];
+  var checks = {};
+  var saved = sessionStorage.getItem("rd_admin_token");
+  if (saved) tokenEl.value = saved;
+
+  function esc(value) {
+    return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function when(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    return new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(d);
+  }
+  function render() {
+    var cutoff = Date.now() - Number(daysEl.value) * 86400000;
+    var recent = stories.filter(function (s) { return new Date(s.published_at).getTime() >= cutoff; });
+    recent.sort(function (a, b) {
+      var ca = checks[a.slug] ? 1 : 0, cb = checks[b.slug] ? 1 : 0;
+      if (ca !== cb) return ca - cb;
+      return new Date(b.published_at) - new Date(a.published_at);
+    });
+    var done = recent.filter(function (s) { return checks[s.slug]; }).length;
+    summary.textContent = done + " of " + recent.length + " stories checked";
+    list.innerHTML = recent.length ? recent.map(function (s) {
+      var c = checks[s.slug];
+      return '<article class="story' + (c ? " done" : "") + '" data-slug="' + esc(s.slug) + '">' +
+        '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + "</a>" +
+        '<div class="meta">' + esc(s.category || "news") + " · published " + esc(when(s.published_at)) + "</div>" +
+        '<div class="actions">' + (c
+          ? '<span class="stamp">Checked ' + esc(when(c)) + '</span><button class="undo" data-action="undo">Undo</button>'
+          : '<button class="check" data-action="check">Checked</button>') +
+        "</div></article>";
+    }).join("") : '<div class="empty">No stories in this period.</div>';
+  }
+  async function load() {
+    var token = tokenEl.value.trim();
+    if (!token) { statusEl.textContent = "Enter the token."; return; }
+    sessionStorage.setItem("rd_admin_token", token);
+    statusEl.textContent = "Loading…";
+    try {
+      var [indexRes, checkRes] = await Promise.all([
+        fetch("/archive-index.json?t=" + Date.now()),
+        fetch(API + "?t=" + Date.now()),
+      ]);
+      stories = (await indexRes.json()).filter(function (s) { return s && s.slug && s.published_at; });
+      checks = ((await checkRes.json()) || {}).checks || {};
+      render();
+      statusEl.textContent = "";
+    } catch (err) {
+      statusEl.textContent = "Could not load the stories.";
+    }
+  }
+  async function act(card, action) {
+    var slug = card.dataset.slug;
+    var token = tokenEl.value.trim();
+    var res = action === "check"
+      ? await fetch(API, { method: "POST", headers: { "x-admin-token": token, "Content-Type": "application/json" }, body: JSON.stringify({ slug: slug }) })
+      : await fetch(API + "?slug=" + encodeURIComponent(slug), { method: "DELETE", headers: { "x-admin-token": token } });
+    var data = await res.json().catch(function () { return {}; });
+    if (!res.ok) { statusEl.textContent = data.error || "That did not save."; return; }
+    if (data.checked_at) checks[slug] = data.checked_at; else delete checks[slug];
+    statusEl.textContent = data.checked_at ? "Recorded." : "Check removed.";
+    render();
+  }
+  document.getElementById("load").onclick = load;
+  daysEl.onchange = render;
+  list.onclick = function (event) {
+    var button = event.target.closest("button[data-action]");
+    if (!button) return;
+    if (button.dataset.action === "undo" && !confirm("Remove this check?")) return;
+    button.disabled = true;
+    act(button.closest(".story"), button.dataset.action).finally(function () { button.disabled = false; });
+  };
+  if (saved) load();
+})();
+</script>
+</body>
+</html>
