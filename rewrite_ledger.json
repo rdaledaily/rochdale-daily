@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T00:28:19.799034Z",
+  "updated_at": "2026-11-03T01:04:45.007089Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 141,
+  "count": 142,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -31,14 +31,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-03T00:06:39.964291Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-03T01:04:45.006840Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Disqualified driver jailed after dangerous Rochdale pursuit - About Manchester",
       "source_name": "About Manchester",
       "category": "traffic",
       "text_fingerprint": "6b704548af8c61ea",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://democracy.rochdale.gov.uk/mgCalendarMonthView.aspx?M=6&DD=2026&CID=559&OT=R&C=559R&MR=0": {
       "first_attempt_at": "2026-10-31T08:39:42.828816Z",
@@ -786,16 +787,16 @@
     },
     "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820": {
       "first_attempt_at": "2026-11-02T18:01:34.386434Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaleafc.co.uk/preview-doncaster-rovers-h",
         "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-03T00:25:25.935521Z",
+      "last_attempt_at": "2026-11-03T01:01:49.776566Z",
       "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Cliff Byrne sets ambitious EFL Trophy aim for Doncaster Rovers",
       "source_name": "Doncaster Free Press",
       "category": "sport",
@@ -1614,6 +1615,22 @@
       "category": "traffic",
       "text_fingerprint": "bcb5c5e48d24a879"
     },
+    "https://www.rochdale.gov.uk/directory-record/2602/union-street-roadworks-in-rochdale-from-17-november-2026": {
+      "first_attempt_at": "2026-11-03T01:04:45.006416Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/directory-record/2602/union-street-roadworks-in-rochdale-from-17-november-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-03T01:04:45.006416Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Union Street, roadworks in Rochdale from 17 November 2026",
+      "source_name": "Rochdale Borough Council",
+      "category": "traffic",
+      "text_fingerprint": "355c852487900193"
+    },
     "https://www.rochdale.gov.uk/directory-record/2608/heights-lane-roadworks-in-rochdale-from-26-october-2026": {
       "first_attempt_at": "2026-10-26T16:10:40.440118Z",
       "attempts": 1,
@@ -1804,14 +1821,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-03T00:28:19.798517Z",
+      "last_attempt_at": "2026-11-03T01:04:45.006530Z",
       "outcome": "published",
       "reason": "",
       "title": "Appeal over student accommodation at former care home is dismissed - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "44acd40a5695e09c",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/bonfire-night-celebrations-return-with-a-bang": {
