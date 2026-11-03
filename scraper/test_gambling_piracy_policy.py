@@ -97,7 +97,11 @@ def test_promo_title_patterns_present_and_clean_against_published_headlines():
     promo = ("watch online for free", "watch live for free", "live stream free",
              "free live stream", "free stream", "bet builder", "non gamstop",
              "non-gamstop", "not on gamstop", "free bets", "free bet",
-             "betting odds", "odds & ", "prediction, odds", "casino bonus", "free spins")
+             "betting odds", "odds &", "prediction, odds", "casino bonus", "free spins")
+    # Patterns are stored trimmed: story_blocklist.save_blocklist strips them,
+    # so a trailing-space pattern ("odds & ") was rewritten by the first
+    # Remove story run (3 Nov 2026) and failed this check. "odds &" blocks the
+    # same promo headlines.
     assert set(promo) <= set(block["title_patterns"])
     feed = json.loads((ROOT / "articles.json").read_text(encoding="utf-8"))
     hit = [r["title"] for r in feed for p in promo if p in r["title"].lower()]

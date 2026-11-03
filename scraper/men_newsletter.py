@@ -202,7 +202,9 @@ class CoverageLedger:
       already_covered  an existing Rochdale Daily article already carries it
       rewrite_failed   matched but the rewrite/quality gate stopped it (reason)
       held             the rewrite ledger is holding it after repeated failures
-      rejected         the matched page is not an article (reason)
+      rejected         the matched page is a service/dashboard page, not an article
+      waiting_for_text the article was found but its text could not be read yet;
+                       retried every run, never written from a headline alone
     """
 
     def __init__(self, path: Path = COVERAGE_PATH):

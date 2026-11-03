@@ -266,7 +266,17 @@ CLASSIFIED_PATTERNS = (
 )
 
 
+def is_must_cover(item: Any) -> bool:
+    """A story the editor has ruled in (the MEN MyRochdale newsletter, 3 Nov
+    2026). The jobs and classified-listing filters are keyword heuristics and
+    misfire on news ("her career was already gone"), so they never remove one.
+    """
+    return not isinstance(item, str) and bool(get_value(item, "must_cover_source", ""))
+
+
 def is_classified_listing_post(item_or_text: Any, url: str = "") -> bool:
+    if is_must_cover(item_or_text):
+        return False
     if isinstance(item_or_text, str):
         text = normalise_text(item_or_text)
         candidate_url = str(url or "")
@@ -285,6 +295,8 @@ def is_classified_listing_post(item_or_text: Any, url: str = "") -> bool:
 
 
 def is_job_or_career_post(item_or_text: Any, url: str = "") -> bool:
+    if is_must_cover(item_or_text):
+        return False
     if isinstance(item_or_text, str):
         text = normalise_text(item_or_text)
         candidate_url = str(url or "")
