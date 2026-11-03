@@ -1385,7 +1385,7 @@ def collect_men_newsletter_candidates(now: datetime | None = None, parse: Any = 
     candidates: list[Candidate] = []
     for story in stories:
         row = ledger.record(story)
-        if row.get('status') in men_newsletter.DONE_STATUSES:
+        if row.get('status') in men_newsletter.TERMINAL_STATUSES:
             continue
         best: tuple[float, datetime, Any] | None = None
         if row.get('resolved_url'):
@@ -1473,21 +1473,35 @@ def reconcile_men_newsletter_ledger(existing: list[dict[str, Any]]) -> int:
     if ledger is None:
         return 0
     live = {str(item.get('slug') or '') for item in existing if item.get('slug')}
+    removed_by_editor = {str(slug).lower() for slug in load_story_blocklist().get('slugs', [])}
     changed = 0
     for row in ledger.records.values():
-        slug = str(row.get('article_slug') or '')
-        if row.get('status') not in men_newsletter.DONE_STATUSES or not slug or slug in live:
+        status = row.get('status')
+        slug = str(row.get('article_slug') or row.get('removed_slug') or '')
+        if not slug and status == 'not_found':
+            # Rows reopened before removed_slug existed carry the slug only in
+            # their reason ("its article <slug> is no longer live").
+            found = re.search(r'its article ([a-z0-9-]+) (?:is no longer live|was removed)', str(row.get('reason') or ''))
+            slug = found.group(1) if found else ''
+        if not slug or slug in live or status in ('removed_by_editor',):
+            continue
+        if status not in men_newsletter.DONE_STATUSES and not (status == 'not_found' and slug):
             continue
         probe = Candidate('Manchester Evening News', row.get('resolved_url') or '', row.get('resolved_title') or row['headline'], '',
                           row.get('resolved_published_at') or row.get('received_at') or '', 'rochdale', 'news',
                           newsletter_headline=row['headline'])
         covering = find_covering_article(probe, existing)
         if covering is not None and covering.get('slug') in live:
-            ledger.set(row, 'already_covered', utc_now(), article_slug=str(covering['slug']),
+            ledger.set(row, 'already_covered', utc_now(), article_slug=str(covering['slug']), removed_slug=slug,
                        reason=f'its article {slug} was removed; covered by {covering["slug"]}'[:240])
-        else:
-            ledger.set(row, 'not_found', utc_now(), article_slug='', resolved_url='',
+        elif slug.lower() in removed_by_editor:
+            ledger.set(row, 'removed_by_editor', utc_now(), article_slug='', removed_slug=slug, resolved_url='',
+                       reason=f'its article {slug} was taken down with Remove story; the lane will not re-create it')
+        elif status in men_newsletter.DONE_STATUSES:
+            ledger.set(row, 'not_found', utc_now(), article_slug='', removed_slug=slug, resolved_url='',
                        reason=f'its article {slug} is no longer live; searching again')
+        else:
+            continue
         changed += 1
     return changed
 
