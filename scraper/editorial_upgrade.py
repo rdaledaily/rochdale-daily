@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import threading
 import os
 import re
 import time
@@ -280,6 +281,13 @@ EDITORIAL_GATE_INSTRUCTIONS = {
 }
 
 
+# Set per worker thread while a must-cover story (the MEN MyRochdale
+# newsletter, 3 Nov 2026) is being written: the editor has ruled those stories
+# in, so the model's "not about the borough" answer must not spike them. Every
+# other check - news-not-advert, grounding, verbatim copying, length - stands.
+LOCALITY_VETO_WAIVER = threading.local()
+
+
 def gate_rejection(draft: dict[str, Any]) -> list[str]:
     """Deterministic veto on the model's own classification answers.
 
@@ -293,7 +301,7 @@ def gate_rejection(draft: dict[str, Any]) -> list[str]:
             f"{GATE_REJECTION_PREFIX}NON_NEWS: the model classified this "
             f"material as {content_class}, so it is never published."
         ]
-    if draft.get("is_about_rochdale_borough") is False:
+    if draft.get("is_about_rochdale_borough") is False and not getattr(LOCALITY_VETO_WAIVER, "active", False):
         return [
             f"{GATE_REJECTION_PREFIX}NON_LOCAL: the model determined the "
             "material is not about the Rochdale borough."

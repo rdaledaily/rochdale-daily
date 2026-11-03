@@ -25,6 +25,7 @@ from source_presentation import clean_candidate_public_text, is_subtle_source, s
 from house_style import STYLE_VERSION
 from reader_copy import clean_social_headline, tidy_paragraphs
 from newsroom_source_policy import is_non_article_service_page
+import editorial_upgrade
 from editorial_upgrade import (
     SERVICE_SENTENCE_RE,
     SYMPATHY_SENTENCE_RE,
@@ -450,6 +451,11 @@ class Candidate:
     searched_location_name: str = ''
     publisher_home_url: str = ''
     google_news_url: str = ''
+    # Set only for stories the editor has ruled must be covered (the MEN
+    # MyRochdale newsletter). Such a candidate skips the selection cap and the
+    # locality/age filters; every rewrite, copyright and legal gate still runs.
+    must_cover_source: str = ''
+    newsletter_headline: str = ''
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -631,6 +637,7 @@ def article_is_local(article: dict[str, Any]) -> bool:
     combined = ' '.join([str(article.get('title') or ''), str(article.get('excerpt') or ''), str(article.get('content_html') or ''), str(article.get('event_location') or '')])
     return is_local(combined, str(article.get('source_name') or ''), str(article.get('source_url') or ''))
 from rewrite_safety import excessive_source_overlap
+import men_newsletter
 from selection_policy import PUBLISH_CATEGORIES, ROCHDALE_WARDS, balanced_select, is_classified_listing_post, is_job_or_career_post, ward_for_item
 from story_identity import authority_score, build_story_key, dedupe_article_records, merge_article_records, same_story, strip_publisher_suffix
 from story_blocklist import is_blocked_article, is_blocked_text, load_blocklist as load_story_blocklist
@@ -1341,38 +1348,149 @@ RSS_FEED_FAILURES: dict[str, str] = {}
 
 
 
-def men_newsletter_sources() -> list[dict[str, str]]:
-    """Discover newsletter leads without storing subscriber or tracking links.
+# Per-run state for the MEN MyRochdale newsletter lane (see men_newsletter.py).
+MEN_NEWSLETTER_LEDGER: Any = None
+MEN_NEWSLETTER_ACTIVE_KEYS: set[str] = set()
+# Feeds that answered but carried no items: status/type tell a block page or a
+# moved feed from a quiet one. Measured 3 Nov 2026: all four MEN section feeds
+# had returned 0 items on every run since at least 20 Oct, with no warning.
+RSS_FEED_EMPTY: dict[str, dict[str, Any]] = {}
 
-    Gmail intake updates this file. Newsletter receipt is never a story date:
-    collect_rss_candidates applies the ordinary source date/locality checks.
+
+def _men_entry_is_men(entry: Any) -> bool:
+    source = getattr(entry, 'source', None)
+    href = str(source.get('href') or '') if isinstance(source, dict) else ''
+    link = str(getattr(entry, 'link', '') or '')
+    return men_newsletter.PUBLISHER_DOMAIN in href or men_newsletter.PUBLISHER_DOMAIN in domain_of(link)
+
+
+def collect_men_newsletter_candidates(now: datetime | None = None, parse: Any = None, sleep: Any = None) -> list[Candidate]:
+    """One must-cover candidate per newsletter story that resolves to a MEN article.
+
+    The newsletter is a list of stories to run, not leads to weigh, so a match
+    is NOT put through the RSS age/locality filters. A headline with no match
+    stays not_found in reports/men_newsletter_coverage.json and is searched
+    again later; no other source stands in for it.
     """
-    path = ROOT / 'scraper' / 'men_newsletter_leads.json'
-    if not path.exists():
-        return []
-    payload = json.loads(path.read_text(encoding='utf-8'))
-    sources = []
-    seen = set()
-    for issue in payload.get('issues', [])[-14:]:
-        received = parse_datetime(issue.get('received_at'))
-        if not received or received > utc_now() or utc_now() - received > timedelta(days=7):
+    global MEN_NEWSLETTER_LEDGER, MEN_NEWSLETTER_ACTIVE_KEYS
+    now = now or utc_now()
+    parse = parse or (lambda url: feedparser.parse(url, agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'))
+    sleep = sleep or time.sleep
+    ledger = men_newsletter.CoverageLedger()
+    MEN_NEWSLETTER_LEDGER = ledger
+    stories = men_newsletter.load_stories(now)
+    MEN_NEWSLETTER_ACTIVE_KEYS = {men_newsletter.story_key(story['headline']) for story in stories}
+    window_start = now - timedelta(days=men_newsletter.WINDOW_DAYS + 1)
+    queries = 0
+    candidates: list[Candidate] = []
+    for story in stories:
+        row = ledger.record(story)
+        if row.get('status') in men_newsletter.DONE_STATUSES:
             continue
-        for headline in issue.get('headlines', [])[:30]:
-            if not isinstance(headline, str):
+        best: tuple[float, datetime, Any] | None = None
+        if row.get('resolved_url'):
+            best_entry = {'link': row['resolved_url'], 'title': row.get('resolved_title') or story['headline'],
+                          'published': row.get('resolved_published_at') or story['received_at']}
+        else:
+            best_entry = None
+            if not ledger.needs_search(row, now):
                 continue
-            headline = ' '.join(headline.split())[:300]
-            if len(headline) < 15 or headline.casefold() in seen:
+            for kind, url in men_newsletter.search_urls(story['headline']):
+                if queries >= men_newsletter.MAX_QUERIES_PER_RUN:
+                    break
+                queries += 1
+                if queries > 1:
+                    sleep(GOOGLE_NEWS_REQUEST_DELAY_SECONDS)
+                try:
+                    feed = parse(url)
+                except Exception as exc:
+                    row['reason'] = f'search failed: {type(exc).__name__}'[:160]
+                    continue
+                for entry in list(getattr(feed, 'entries', []) or [])[:40]:
+                    title = strip_markdown(getattr(entry, 'title', ''))
+                    published = entry_datetime(entry)
+                    if not title or not _men_entry_is_men(entry):
+                        continue
+                    if published is None or published < window_start or published > now + timedelta(minutes=30):
+                        continue
+                    if not men_newsletter.is_match(story['headline'], title):
+                        continue
+                    score, _shared = men_newsletter.title_match(story['headline'], title)
+                    if best is None or (score, published) > (best[0], best[1]):
+                        best = (score, published, entry)
+                if best is not None:
+                    break
+            row['searches'] = int(row.get('searches') or 0) + 1
+            row['last_searched_at'] = iso_utc(now)
+            if best is None:
+                ledger.set(row, 'not_found', now, reason=row.get('reason') or 'no MEN article matched the exact or keyword search')
                 continue
-            seen.add(headline.casefold())
-            query = 'site:manchestereveningnews.co.uk "' + headline.replace('"', '') + '"'
-            sources.append({
-                'name': 'MEN MyRochdale newsletter discovery',
-                'url': 'https://news.google.com/rss/search?q=' + quote_plus(query) + '&hl=en-GB&gl=GB&ceid=GB:en',
-                'default_area': 'rochdale',
-                'aggregator': 'google',
-                'query_label': 'MEN MyRochdale newsletter lead',
-            })
-    return sources
+            entry = best[2]
+            best_entry = {'link': str(getattr(entry, 'link', '') or ''), 'title': strip_markdown(getattr(entry, 'title', '')),
+                          'published': iso_utc(best[1]), 'summary': str(getattr(entry, 'summary', '') or ''),
+                          'source': getattr(entry, 'source', None), 'image': rss_image(entry)}
+        summary_html = str(best_entry.get('summary') or '')
+        summary = strip_markdown(BeautifulSoup(summary_html, 'lxml').get_text(' ', strip=True)) if summary_html else ''
+        title = men_newsletter.clean_title(best_entry['title'])
+        source_meta = best_entry.get('source')
+        home_url = str(source_meta.get('href') or '') if isinstance(source_meta, dict) else ''
+        combined = f"{title} {summary} {story['headline']}"
+        category = categorise(combined)
+        candidate = Candidate(
+            source_name='Manchester Evening News',
+            source_url=canonicalise_url(best_entry['link']),
+            source_title=title,
+            source_summary=summary,
+            source_published_at=str(best_entry.get('published') or story['received_at']),
+            area=source_text_area(combined, 'rochdale', 'Manchester Evening News', best_entry['link'], True),
+            category=category if category != 'news' else 'news',
+            image_candidate_url=str(best_entry.get('image') or ''),
+            source_body_excerpt=summary,
+            discovery_query_label=men_newsletter.QUERY_LABEL,
+            publisher_home_url=home_url,
+            must_cover_source=men_newsletter.SOURCE_LABEL,
+            newsletter_headline=story['headline'],
+        )
+        if source_is_denied(candidate.source_name, candidate.source_url):
+            ledger.set(row, 'rejected', now, reason='matched page is on a denied source')
+            continue
+        ledger.set(row, 'found', now, resolved_url=candidate.source_url, resolved_title=candidate.source_title,
+                   resolved_published_at=candidate.source_published_at)
+        candidates.append(candidate)
+    log.info('MEN MyRochdale newsletter: %d stories in window, %d matched to MEN articles this run (%d searches)',
+             len(stories), len(candidates), queries)
+    return candidates
+
+
+def record_men_newsletter_outcome(candidate: Candidate, status: str, reason: str = '', article_slug: str = '') -> None:
+    ledger = MEN_NEWSLETTER_LEDGER
+    if ledger is None or not candidate.newsletter_headline:
+        return
+    row = ledger.record({'headline': candidate.newsletter_headline, 'received_at': iso_utc(utc_now())})
+    fields: dict[str, Any] = {'reason': reason[:240]}
+    if article_slug:
+        fields['article_slug'] = article_slug
+    if status == 'rejected':
+        # A page that is not an article must not be offered again.
+        fields['resolved_url'] = ''
+    ledger.set(row, status, utc_now(), **fields)
+
+
+def select_with_must_cover(eligible: list[Candidate], must_cover: list[Candidate], select: Any, **select_kwargs: Any) -> tuple[list[Candidate], dict[str, Any]]:
+    """Must-cover stories are always selected, outside the run's cap; the cap
+    and balancing still apply to everything else."""
+    must_urls = {canonicalise_url(item.source_url) for item in must_cover}
+    rest = [
+        item for item in eligible
+        if canonicalise_url(item.source_url) not in must_urls
+        and not ({canonicalise_url(src.get('url', '')) for src in item.related_sources if src.get('url')} & must_urls)
+    ]
+    limit = select_kwargs.pop('limit', len(rest))
+    selected, diagnostics = select(rest, limit=min(limit, len(rest)), **select_kwargs) if rest else ([], {})
+    diagnostics = dict(diagnostics or {})
+    diagnostics['must_cover_selected'] = len(must_cover)
+    return list(must_cover) + list(selected), diagnostics
+
 
 def collect_rss_candidates() -> list[Candidate]:
     """Read every configured feed. One feed failing never stops the others.
@@ -1387,7 +1505,8 @@ def collect_rss_candidates() -> list[Candidate]:
     """
     candidates: list[Candidate] = []
     RSS_FEED_FAILURES.clear()
-    for source in RSS_SOURCES + men_newsletter_sources() + google_news_sources():
+    RSS_FEED_EMPTY.clear()
+    for source in RSS_SOURCES + google_news_sources():
         log.info('Reading RSS: %s', source['name'])
         if source.get('aggregator') == 'google':
             time.sleep(GOOGLE_NEWS_REQUEST_DELAY_SECONDS)
@@ -1401,6 +1520,19 @@ def collect_rss_candidates() -> list[Candidate]:
             log.warning('RSS warning for %s: %s', source['name'], getattr(feed, 'bozo_exception', 'unknown'))
         raw_entry_count = len(feed.entries)
         log.info('Raw entries for %s: %d', source['name'], raw_entry_count)
+        if raw_entry_count == 0 and source.get('aggregator') != 'google':
+            headers = getattr(feed, 'headers', None) or {}
+            RSS_FEED_EMPTY[str(source['name'])] = {
+                'url': source['url'],
+                'http_status': getattr(feed, 'status', None),
+                'content_type': str(headers.get('content-type') or ''),
+                'final_url': str(getattr(feed, 'href', '') or ''),
+                'bozo': bool(getattr(feed, 'bozo', False)),
+                'feed_title': str((getattr(feed, 'feed', None) or {}).get('title') or '')[:120],
+            }
+            log.warning('Feed returned no items: %s (HTTP %s, %s)', source['name'],
+                        RSS_FEED_EMPTY[str(source['name'])]['http_status'],
+                        RSS_FEED_EMPTY[str(source['name'])]['content_type'] or 'no content-type')
         for entry in list(feed.entries)[:RSS_ITEMS_PER_SOURCE]:
             source_url = canonicalise_url(str(getattr(entry, 'link', '') or ''))
             source_title = strip_markdown(getattr(entry, 'title', ''))
@@ -2981,6 +3113,8 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'discovery_query_label': candidate.discovery_query_label,
         'searched_location_slug': candidate.searched_location_slug,
         'searched_location_name': candidate.searched_location_name,
+        **({'must_cover_source': candidate.must_cover_source, 'newsletter_headline': candidate.newsletter_headline}
+           if candidate.must_cover_source else {}),
     }
 
 def write_json_atomic(path: Path, payload: Any) -> None:
@@ -3052,6 +3186,12 @@ def article_passes_locality(article: dict[str, Any]) -> bool:
 
     if source_is_denied(source_name, source_url):
         return False
+
+    # The editor rules every MEN MyRochdale newsletter story in (3 Nov 2026).
+    # Without this the retention pass would delete a Greater Manchester-wide
+    # newsletter story from the archive on the run after it was published.
+    if article.get('must_cover_source'):
+        return True
 
     # This veto must be first. Positive local tokens must never cancel explicit
     # evidence of New York, another US state, another UK town, or other known
@@ -3576,6 +3716,11 @@ def candidate_is_rewrite_eligible(candidate: Candidate, existing_by_story: dict[
     candidate_urls = {canonicalise_url(candidate.source_url), *{canonicalise_url(item.get('url', '')) for item in candidate.related_sources if item.get('url')}}
     return bool(candidate_urls - known_urls)
 
+# The wrappers in run_fast_local_pipeline / run_newspaper_pipeline replace
+# core.candidate_is_rewrite_eligible with age and locality layers. A must-cover
+# story only needs the essential checks, so keep the original by name.
+_BASE_REWRITE_ELIGIBLE = candidate_is_rewrite_eligible
+
 # Display names for publishers whose domain stem doesn't title-case nicely.
 PUBLISHER_DISPLAY_NAMES = {
     'bbc.co.uk': 'BBC News',
@@ -3730,6 +3875,17 @@ def main() -> int:
     rejected_job_candidates = [candidate for candidate in raw_candidates_all if (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
     raw_candidates = [candidate for candidate in raw_candidates_all if not (is_job_or_career_post(candidate) or is_classified_listing_post(candidate))]
     google_resolution_stats = apply_google_news_resolution(raw_candidates)
+    # MEN MyRochdale newsletter: stories to run, not leads. They take their own
+    # path - no reservoir age window, no locality wrappers, no selection cap.
+    must_cover_candidates = safe_collect('men_newsletter', collect_men_newsletter_candidates, collector_counts, collector_errors)
+    if must_cover_candidates:
+        apply_google_news_resolution(must_cover_candidates)
+        for candidate in must_cover_candidates:
+            record_men_newsletter_outcome(candidate, 'found')
+            if MEN_NEWSLETTER_LEDGER is not None:
+                row = MEN_NEWSLETTER_LEDGER.record({'headline': candidate.newsletter_headline, 'received_at': iso_utc(utc_now())})
+                row['resolved_url'] = candidate.source_url
+                row['resolved_title'] = candidate.source_title
     candidates = deduplicate_and_cross_reference(raw_candidates)
     correlate_social_context(candidates, x_social_records + facebook_social_records)
     log.info('Candidate volume: %d raw items -> %d story clusters', len(raw_candidates), len(candidates))
@@ -3740,7 +3896,29 @@ def main() -> int:
         if candidate_is_rewrite_eligible(candidate, existing_by_story)
     ]
     effective_limit = min(len(eligible_candidates), max(run_limit, MIN_BALANCED_SELECTION_LIMIT))
-    selected_candidates, selection_diagnostics = balanced_select(eligible_candidates, limit=effective_limit, max_per_source=MAX_SELECTED_PER_SOURCE, max_per_category=MAX_SELECTED_PER_CATEGORY)
+    must_cover_selected: list[Candidate] = []
+    seen_must_cover: set[str] = set()
+    for candidate in must_cover_candidates:
+        url_key = canonicalise_url(candidate.source_url)
+        if url_key in seen_must_cover:
+            record_men_newsletter_outcome(candidate, 'already_covered', 'same MEN article as another newsletter story this run')
+            continue
+        seen_must_cover.add(url_key)
+        if _BASE_REWRITE_ELIGIBLE(candidate, existing_by_story):
+            must_cover_selected.append(candidate)
+            continue
+        held = rewrite_ledger_block_reason(candidate)
+        existing_article = existing_by_story.get(candidate.story_key) or existing_article_for_candidate(candidate, existing_by_story)
+        if existing_article is not None:
+            record_men_newsletter_outcome(candidate, 'already_covered', '', str(existing_article.get('slug') or ''))
+        elif held:
+            record_men_newsletter_outcome(candidate, 'held', held)
+        else:
+            record_men_newsletter_outcome(candidate, 'rejected', 'matched page is not a news article (service page, job or listing)')
+    selected_candidates, selection_diagnostics = select_with_must_cover(
+        eligible_candidates, must_cover_selected, balanced_select,
+        limit=effective_limit, max_per_source=MAX_SELECTED_PER_SOURCE, max_per_category=MAX_SELECTED_PER_CATEGORY,
+    )
     log.info('Balanced selection: %d eligible -> %d selected; categories=%s; wards=%s', len(eligible_candidates), len(selected_candidates), selection_diagnostics.get('selected_categories', []), selection_diagnostics.get('selected_wards', []))
     new_articles: list[dict[str, Any]] = []
     skipped = 0
@@ -3770,7 +3948,13 @@ def main() -> int:
             if retry_setting:
                 client_options['max_retries'] = max(0, int(retry_setting))
             worker_client = OpenAI(**client_options)
-        return rewrite_candidate(candidate, worker_client)
+        # The model's "is this about the Rochdale borough?" veto does not apply
+        # to a must-cover story: the editor has already decided it runs.
+        editorial_upgrade.LOCALITY_VETO_WAIVER.active = bool(candidate.must_cover_source)
+        try:
+            return rewrite_candidate(candidate, worker_client)
+        finally:
+            editorial_upgrade.LOCALITY_VETO_WAIVER.active = False
     with ThreadPoolExecutor(max_workers=max(1, AI_WORKERS)) as executor:
         future_map = {executor.submit(process_candidate, candidate): candidate for candidate in selected_candidates}
         for future in as_completed(future_map):
@@ -3783,14 +3967,20 @@ def main() -> int:
                 log.exception('Rewrite failed for %s: %s', candidate.source_url, exc)
                 note_rewrite_skip(f'worker crashed: {type(exc).__name__}')
                 record_rewrite_attempt(candidate, 'failed', f'worker crashed: {type(exc).__name__}')
+                if candidate.must_cover_source:
+                    record_men_newsletter_outcome(candidate, 'rewrite_failed', f'worker crashed: {type(exc).__name__}')
                 skipped += 1
                 continue
             if article:
                 new_articles.append(article)
                 article_candidates.append((article, candidate))
+                if candidate.must_cover_source:
+                    record_men_newsletter_outcome(candidate, 'published', '', str(article.get('slug') or ''))
             else:
                 reasons = attempt_reasons.get(id(candidate)) or []
                 reason = reasons[-1] if reasons else 'no article produced (reason not reported)'
+                if candidate.must_cover_source:
+                    record_men_newsletter_outcome(candidate, 'rewrite_failed', reason)
                 record_rewrite_attempt(candidate, rewrite_outcome_for_reason(reason), reason)
                 # Every return-None path inside rewrite_candidate records its own
                 # reason, so this only counts. If skipped ever exceeds the sum of
@@ -3899,7 +4089,16 @@ def main() -> int:
             record_rewrite_attempt(candidate, 'published', '')
         else:
             record_rewrite_attempt(candidate, 'rejected', 'not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check')
+            if candidate.must_cover_source:
+                record_men_newsletter_outcome(candidate, 'rewrite_failed', 'written but not in the feed: below the publication word minimum or merged away')
     save_rewrite_ledger()
+    men_newsletter_status: dict[str, Any] = {}
+    if MEN_NEWSLETTER_LEDGER is not None:
+        MEN_NEWSLETTER_LEDGER.save(utc_now())
+        men_newsletter_status = MEN_NEWSLETTER_LEDGER.summary(MEN_NEWSLETTER_ACTIVE_KEYS)
+        log.info('MEN MyRochdale newsletter coverage: %d of %d stories covered; outstanding by status %s',
+                 men_newsletter_status['covered'], men_newsletter_status['stories_in_window'],
+                 {k: v for k, v in men_newsletter_status['by_status'].items() if k not in men_newsletter.DONE_STATUSES})
     ledger_snapshot = load_rewrite_ledger()
     ledger_outcomes = Counter(str(entry.get('outcome') or 'unknown') for entry in ledger_snapshot.values())
     source_counts: dict[str, int] = {}
@@ -3920,7 +4119,7 @@ def main() -> int:
             {'slug': str(article.get('slug') or ''), 'source_url': str(article.get('source_url') or '')}
             for article in new_articles
         ],
-        'new_articles': 0, 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'rewrite_skips_unattributed': max(0, skipped - sum(REWRITE_SKIP_REASONS.values())), 'rewrite_ledger_integrity': ledger_integrity, 'rewrite_ledger': {'entries': len(ledger_snapshot), 'by_outcome': dict(sorted(ledger_outcomes.items())), 'held_back_this_run': len(REWRITE_LEDGER_HELD), 'held_already_published': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') == 'published'), 'held_rejected': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), 'rejection_attempt_limit': REWRITE_REJECTION_ATTEMPT_LIMIT, 'retention_hours': REWRITE_LEDGER_RETENTION_HOURS}, 'rewrite_ledger_held_rejected': sorted((row for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), key=lambda row: row.get('last_attempt_at') or '', reverse=True)[:60], 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'rss_feed_failures': dict(RSS_FEED_FAILURES), 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
+        'new_articles': 0, 'live_articles': len(published), 'skipped': skipped, 'rewrite_skip_reasons': dict(REWRITE_SKIP_REASONS.most_common(25)), 'rewrite_skips_unattributed': max(0, skipped - sum(REWRITE_SKIP_REASONS.values())), 'rewrite_ledger_integrity': ledger_integrity, 'rewrite_ledger': {'entries': len(ledger_snapshot), 'by_outcome': dict(sorted(ledger_outcomes.items())), 'held_back_this_run': len(REWRITE_LEDGER_HELD), 'held_already_published': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') == 'published'), 'held_rejected': sum(1 for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), 'rejection_attempt_limit': REWRITE_REJECTION_ATTEMPT_LIMIT, 'retention_hours': REWRITE_LEDGER_RETENTION_HOURS}, 'rewrite_ledger_held_rejected': sorted((row for row in REWRITE_LEDGER_HELD.values() if row.get('outcome') != 'published'), key=lambda row: row.get('last_attempt_at') or '', reverse=True)[:60], 'published_with_style_issues': dict(STYLE_ISSUES_PUBLISHED.most_common(25)), 'style_issues_block_publication': False, 'collector_counts': collector_counts, 'collector_errors': collector_errors, 'rss_feed_failures': dict(RSS_FEED_FAILURES), 'rss_feed_empty': dict(RSS_FEED_EMPTY), 'men_newsletter': men_newsletter_status, 'source_counts': dict(sorted(source_counts.items(), key=lambda item: item[1], reverse=True)), 'selected_by_category': dict(sorted(selected_by_category.items())), 'published_by_category': dict(sorted(published_by_category.items())), 'openai_enabled': bool(api_key), 'ai_rewrite_required': AI_REWRITE_REQUIRED, 'source_led_fallback_enabled': True, 'crime_auto_publish_enabled': True, 'crime_direct_publish_enabled': True, 'crime_ai_gate_enabled': False, 'crime_review_queue_enabled': False, 'crime_anonymisation_enabled': False, 'crime_source_overlap_guard_enabled': False, 'protected_identity_filter_enabled_for_non_crime': True, 'source_overlap_guard_enabled_for_non_crime': True, 'same_day_only': SAME_DAY_ONLY, 'prohibited_sources': ['rochdaleonline.co.uk'], 'selected_story_keys': [candidate.story_key for candidate in selected_candidates], 'selected_candidate_urls': [candidate.source_url for candidate in selected_candidates], 'x_social_records': len(x_social_records), 'facebook_social_records': len(facebook_social_records), 'stories_with_social_context': sum((1 for candidate in candidates if candidate.social_context)), 'x_enabled': bool(X_BEARER_TOKEN), 'facebook_comments_enabled': bool(FACEBOOK_PAGE_ACCESS_TOKEN and FACEBOOK_COMMENTS_ENABLED), 'locality_rule': 'Single-word locality names require geographical context; person surnames are not accepted as locations.', 'story_identity_rule': 'Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.', 'selection_policy': 'One story is reserved for each represented category and each represented official ward before source-rotating fill selection.', 'coverage': selection_diagnostics, 'official_ward_count': len(ROCHDALE_WARDS), 'career_and_vacancy_content_banned': True, 'search_query_count': len(SEARCH_QUERY_SPECS), 'search_queries': [{'label': spec.label, 'query': spec.query, 'category': spec.category, 'ward': spec.ward, 'person': spec.person, 'location_slug': spec.location_slug, 'location_name': spec.location_name} for spec in SEARCH_QUERY_SPECS], 'robots_policy': 'Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.', 'robots_denied_count': len(ROBOTS_DENIED_URLS), 'robots_denied_urls': ROBOTS_DENIED_URLS[:100], 'slow_domain_failure_threshold': SLOW_DOMAIN_FAILURE_THRESHOLD, 'slow_domains_circuit_broken_this_run': sorted(domain for domain, count in SLOW_DOMAIN_FAILURES.items() if count >= SLOW_DOMAIN_FAILURE_THRESHOLD), 'slow_domain_failure_counts': dict(sorted(SLOW_DOMAIN_FAILURES.items(), key=lambda item: item[1], reverse=True)), 'men_rochdale_source': {'enabled': True, 'mode': 'official section RSS', 'section_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale', 'feed_url': 'https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss', 'direct_page_crawling': False}})
     log.info('Complete: %d live articles, %d new, %d AI/fallback attempts, %d skipped, %d duplicates merged', len(published), len(new_articles), ai_count, skipped, max(0, len(raw_candidates) - len(candidates)))
     return 0
 if __name__ == '__main__':
