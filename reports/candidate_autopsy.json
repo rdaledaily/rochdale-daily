@@ -1,46 +1,38 @@
 {
-  "examined_at": "2026-11-02T16:31:30.546491Z",
+  "examined_at": "2026-11-03T14:39:28.282838Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 125,
+  "candidates_examined": 138,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 111,
-    "would publish": 8,
-    "duplicate of published story": 4,
-    "not local": 1,
-    "job or career post": 1
+    "age": 109,
+    "duplicate of published story": 18,
+    "would publish": 11
   },
-  "would_publish": 8,
+  "would_publish": 11,
   "age_gate_sensitivity": {
-    "6h": 6,
-    "14h": 11,
-    "24h": 14,
-    "48h": 29,
-    "72h": 99,
-    "168h": 125
+    "6h": 10,
+    "14h": 14,
+    "24h": 29,
+    "48h": 56,
+    "72h": 119,
+    "168h": 138
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 02/11/2026 at 12:01pm Live Freehold Tram Stop - Lifts out of ",
-      "Rochdale Times: Town gets ready to toast ale trail’s return - Rochdale Times"
+      "Rochdale AFC: Youth Development Explained - Rochdale AFC",
+      "Rochdale AFC: Youth Development Explained"
     ],
     "duplicate of published story": [
-      "Greater Manchester Police: Disqualified driver jailed after dangerous Rochdale pursuit - Greater ",
-      "Find a Tender: Rochdale Borough Council awards contract: ABEN Supported Hostel Accomm",
-      "Rochdale AFC: Fleetwood FA Cup Ticket Details - Rochdale AFC"
-    ],
-    "not local": [
-      "ITVX: Rise in bank tax and £100 energy payments: What’s in Healey’s debut Bu"
-    ],
-    "job or career post": [
-      "Manchester Evening News: The multi-billion plan to transform Rochdale - Manchester Evening News"
+      "Find a Tender: Rochdale Borough Council awards contract: Income Management System",
+      "Rochdale Times: Gold rush at North West in Bloom Awards - Rochdale Times",
+      "Rochdale AFC: Dale Partner With Hopwood Hall College - Rochdale AFC"
     ],
     "age": [
-      "Roch Valley Radio: Hopwood Hall marks construction milestone for Clegg Building in Rochda",
-      "Roch Valley Radio Local News: Stories We Tell returns to Rochdale for final night after sell-out run",
-      "Roch Valley Radio Local News: Springhill Hospice receives £1,500 donation towards running costs"
+      "Greater Manchester Police: Disqualified driver jailed after dangerous Rochdale pursuit - Greater ",
+      "Rochdale Times: Town gets ready to toast ale trail’s return - Rochdale Times",
+      "Rochdale Times: Appeal over student accommodation at former care home is dismissed - R"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
