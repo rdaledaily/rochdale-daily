@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-03T18:51:11.477625Z",
+  "last_run_at": "2026-11-03T19:19:21.067715Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-03T13:08:30.164315Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 1,
+      "listed": 39,
+      "already_seen": 28,
+      "started_long_ago": 0,
+      "too_far_ahead": 9,
+      "undated": 2,
+      "in_window": 0
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-03T13:08:30.164315Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 1,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 1,
+      "already_seen": 0,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -22,23 +35,32 @@
       "interval_hours": 12
     },
     "ons_housing": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 1,
-      "already_seen": 1,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-03T18:47:52.655946Z",
+      "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-03T13:08:30.164315Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 1,
+      "pages": 3,
+      "releases": 218,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-03T13:08:30.164315Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 0,
+      "not_rochdale": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -46,25 +68,32 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 120,
+  "raw_candidates_before_job_filter": 25,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 120,
+  "raw_candidates": 25,
   "candidate_clusters": 40,
   "google_news_resolution": {
-    "wrappers": 62,
-    "resolved": 48,
-    "text_recovered": 33,
+    "wrappers": 0,
+    "resolved": 0,
+    "text_recovered": 0,
     "reattributed": 0,
-    "images_found": 34
+    "images_found": 0
   },
-  "duplicates_merged": 80,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
+  "duplicates_merged": 0,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "rochdale-afc-partners-with-hopwood-hall-college-for-youth-development",
+      "source_url": "https://rochdaleafc.co.uk/dale-partner-with-hopwood-hall-college/"
+    }
+  ],
   "new_articles": 0,
-  "live_articles": 519,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "live_articles": 518,
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 0,
@@ -76,15 +105,15 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 142,
+    "entries": 141,
     "by_outcome": {
       "failed": 7,
-      "published": 106,
-      "rejected": 29
+      "published": 104,
+      "rejected": 30
     },
     "held_back_this_run": 28,
-    "held_already_published": 22,
-    "held_rejected": 6,
+    "held_already_published": 23,
+    "held_rejected": 5,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -97,15 +126,6 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-03T16:54:29.646445Z"
-    },
-    {
-      "url": "https://rochdaleafc.co.uk/hendo-set-for-club-record",
-      "title": "Hendo Set For Club Record",
-      "source_name": "Rochdale AFC",
-      "held_because": "already rejected: quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-03T09:59:45.496285Z"
     },
     {
       "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/banned-driver-led-police-high-34852313",
@@ -147,7 +167,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 106,
+    "rss_and_google_news": 11,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -196,36 +216,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Falinge Park High School": {
-      "url": "https://www.falingepark.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
-      "bozo": false,
-      "feed_title": ""
-    },
-    "Rochdale AFC Community Trust": {
-      "url": "https://www.rochdaleafccommunity.org/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.rochdaleafccommunity.org/feed/",
-      "bozo": false,
-      "feed_title": ""
-    },
     "Greater Manchester Police": {
       "url": "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
       "http_status": 403,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
       "bozo": true,
-      "feed_title": ""
-    },
-    "Rochdale AFC": {
-      "url": "https://rochdaleafc.co.uk/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://rochdaleafc.co.uk/feed/",
-      "bozo": false,
       "feed_title": ""
     }
   },
@@ -282,30 +278,18 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 35,
-    "Rochdale AFC": 18,
-    "Manchester Evening News": 17,
-    "Roch Valley Radio": 11,
-    "Rochdale Borough Council": 8,
-    "InYourArea": 5,
+    "Rochdale AFC": 8,
+    "Rochdale Times": 5,
     "Bee Network live travel alerts": 5,
-    "Oldham Times": 2,
-    "ESPN": 2,
-    "The League Paper": 2,
-    "Yahoo News UK": 2,
-    "About Manchester": 2,
+    "Roch Valley Radio": 2,
     "Roch Valley Radio Local News": 2,
     "Rochdale Borough Council RSS": 1,
-    "ITVX": 1,
-    "Futbol24": 1,
-    "Doncaster Free Press": 1,
-    "FansNetwork.co.uk": 1,
-    "Greater Manchester Police": 1,
-    "The Bury Times": 1,
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "sport": 2
+  },
   "published_by_category": {
     "business": 55,
     "community": 68,
@@ -316,7 +300,7 @@
     "health": 13,
     "news": 57,
     "politics": 18,
-    "sport": 54,
+    "sport": 53,
     "traffic": 40,
     "transport": 10
   },
@@ -342,8 +326,14 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "sport-v3-3842082adcd646f38382",
+    "sport-v3-99bd939ddb038eb6ebb3"
+  ],
+  "selected_candidate_urls": [
+    "https://rochdaleafc.co.uk/hendo-set-for-club-record/",
+    "https://rochdaleafc.co.uk/dale-partner-with-hopwood-hall-college/"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -353,6 +343,31 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "sport"
+    ],
+    "selected_categories": [
+      "sport"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "sport": 2
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 2
+    },
+    "selected_by_source": {
+      "rochdale afc": 2
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -901,7 +916,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
@@ -909,7 +924,8 @@
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMic0FVX3lxTE52NXZXTmtlSHl6U01ZX1VJbnlBUms4TkhHLUdzR21ETjFPZ2xHempSVkVPMTNIRVpmSzFtYkE3VDA2Z2hta0s0UjQxZS1GVlo4QkxZdVFGQlBWdXFMVjAteHBtT3ViNThfOG5ZN3dLUDdXN0k?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -949,8 +965,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-03T18:52:36.948225Z",
-  "frontpage_article_count": 26,
+  "frontpage_generated_at": "2026-11-03T19:20:56.032096Z",
+  "frontpage_article_count": 25,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1009,14 +1025,13 @@
       "traffic": 2,
       "transport": 1,
       "education": 2,
-      "sport": 1,
       "health": 1,
       "environment": 2,
       "news": 4,
       "community": 5
     },
     "selected_by_ward": {
-      "borough-wide": 25,
+      "borough-wide": 24,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
@@ -1024,7 +1039,7 @@
       "hopwood": 1,
       "littleborough": 2,
       "middleton": 2,
-      "rochdale": 20,
+      "rochdale": 19,
       "spotland": 1,
       "wardle": 1
     },
@@ -1034,27 +1049,26 @@
       "rochdale borough council": 3,
       "inyourarea": 1,
       "rochdale borough council decision forward plan": 1,
-      "rochdale afc": 1,
       "find a tender": 3,
       "manchester evening news": 4,
       "greater manchester police": 2,
       "rochdale times": 2,
-      "asda rochdale": 1,
       "rochdale borough council news": 1,
       "rochdale daily": 2,
       "rochdale borough council licensing register": 1,
       "rochdale borough council events listings": 1,
+      "asda rochdale": 1,
       "historic england (national heritage list for england)": 1
     },
-    "pool_size": 28,
-    "primary_pool_size": 28,
+    "pool_size": 27,
+    "primary_pool_size": 27,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 26,
+    "frontpage_count": 25,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 26,
-    "short_briefs_selected": 13,
+    "fresh_under_24h": 8,
+    "fresh_under_homepage_window": 25,
+    "short_briefs_selected": 12,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1065,7 +1079,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
   "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 519,
+  "duplicate_articles_after_postprocessing": 518,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1078,7 +1092,7 @@
   "whats_on_event_count": 14,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "drafts_not_published": 1,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
