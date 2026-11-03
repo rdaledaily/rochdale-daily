@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-02T23:30:33.948146Z",
+  "updated_at": "2026-11-03T00:06:39.964600Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 141,
@@ -31,14 +31,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:30:33.947903Z",
+      "last_attempt_at": "2026-11-03T00:06:39.964291Z",
       "outcome": "published",
       "reason": "",
       "title": "Disqualified driver jailed after dangerous Rochdale pursuit - About Manchester",
       "source_name": "About Manchester",
       "category": "traffic",
       "text_fingerprint": "6b704548af8c61ea",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://democracy.rochdale.gov.uk/mgCalendarMonthView.aspx?M=6&DD=2026&CID=559&OT=R&C=559R&MR=0": {
       "first_attempt_at": "2026-10-31T08:39:42.828816Z",
@@ -736,14 +736,14 @@
     },
     "https://www.burytimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife": {
       "first_attempt_at": "2026-11-02T23:09:44.845876Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMipAFBVV95cUxOdm5IUmZaYW9KUWt2RjBkWTVCTng0bHBhMllhQ3h4clBDbE9fakItdFpPeG0wRlJ1TGt5UGNnUVJmcHhzT2N6Q1NTNVRHSEpqYWxUdlhXWE9tT1p5NF9fNFhTMTJEUHpFcDBfZk4tZ3lCNVl4UkhxZFh6Umo4NHRmNVcweEFwM2tYQ3k3d3lacF9hSndBeEhSS25qNmxyNlBfd0JOMg?oc=5",
         "https://www.burytimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:27:41.498775Z",
+      "last_attempt_at": "2026-11-03T00:03:42.525377Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The model marked the story unpublishable.",
       "title": "Rochdale man on trial in case over husband's alleged abuse of unconscious wife - The Bury Times",
@@ -1180,15 +1180,15 @@
     },
     "https://www.manchestereveningnews.co.uk/all-about/rochdale-market": {
       "first_attempt_at": "2026-11-02T23:07:25.728491Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.manchestereveningnews.co.uk/all-about/rochdale-market"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:27:41.093726Z",
+      "last_attempt_at": "2026-11-03T00:03:39.773543Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Rochdale market - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -1804,8 +1804,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-02T23:30:33.947673Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Appeal over student accommodation at former care home is dismissed - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
