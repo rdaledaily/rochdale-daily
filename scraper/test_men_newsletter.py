@@ -241,6 +241,33 @@ with tempfile.TemporaryDirectory() as tmp:
     check(row['status'] == 'already_covered' and row['article_slug'] == archive[0]['slug'], 're-pointed at the live original')
     check(row2['status'] == 'not_found' and row2['article_slug'] == '', 'reopened when nothing live covers it')
 
+# Editor removals are final: the lane never re-creates a story taken down.
+with tempfile.TemporaryDirectory() as tmp:
+    core.MEN_NEWSLETTER_LEDGER = mn.CoverageLedger(Path(tmp) / 'r.json')
+    original_blocklist = core.load_story_blocklist
+    core.load_story_blocklist = lambda: {'slugs': ['rochdale-s-historic-hall-and-gardens-duplicate', 'legally-removed-story'],
+                                         'title_patterns': [], 'source_urls': []}
+    try:
+        # The live row as it stood on 3 Nov: reopened, slug only in the reason.
+        festival = core.MEN_NEWSLETTER_LEDGER.record({'headline': 'The historic Rochdale hall and gardens with spectacular fire festival',
+                                                      'received_at': '2026-10-29T08:08:20Z'})
+        core.MEN_NEWSLETTER_LEDGER.set(festival, 'not_found', NOW, article_slug='', resolved_url='',
+                                       reason='its article rochdale-s-historic-hall-and-gardens-duplicate is no longer live; searching again')
+        legal = core.MEN_NEWSLETTER_LEDGER.record({'headline': 'A court story that the editor took down on advice', 'received_at': '2026-11-02T08:00:00Z'})
+        core.MEN_NEWSLETTER_LEDGER.set(legal, 'published', NOW, article_slug='legally-removed-story')
+        changed = core.reconcile_men_newsletter_ledger([])
+        check(changed == 2, f'both removed stories reconciled ({changed})')
+        check(festival['status'] == 'removed_by_editor' and festival['removed_slug'] == 'rochdale-s-historic-hall-and-gardens-duplicate',
+              'a reopened row whose article the editor removed is closed, not re-searched')
+        check(legal['status'] == 'removed_by_editor', 'a story taken down by the editor is never re-created')
+        check(not core.MEN_NEWSLETTER_LEDGER.needs_search(legal, NOW + timedelta(days=1)), 'a removed story is never searched again')
+        summary = core.MEN_NEWSLETTER_LEDGER.summary()
+        check(summary['removed_by_editor'] == 2 and summary['outstanding'] == 0 and not summary['outstanding_stories'],
+              'removed stories are reported apart from outstanding ones')
+        check(core.reconcile_men_newsletter_ledger([]) == 0, 'reconciliation is stable on a second run')
+    finally:
+        core.load_story_blocklist = original_blocklist
+
 # Locality: a published must-cover story survives the retention pass.
 article = {'title': 'Storm Austen: when rain will batter Greater Manchester', 'excerpt': 'Met Office warning for the region.',
            'content_html': '<p>Bolton and Oldham will see heavy rain.</p>', 'source_name': 'Manchester Evening News',

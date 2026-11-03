@@ -60,6 +60,10 @@ MATCH_MIN_SHARED = 3
 
 # Terminal states: the story needs nothing more.
 DONE_STATUSES = {'published', 'already_covered'}
+# Never searched or written again. removed_by_editor: the story's article was
+# taken down with Remove story, and the editor's removal stands - the lane must
+# not re-create a story she removed (a legal takedown above all).
+TERMINAL_STATUSES = DONE_STATUSES | {'removed_by_editor'}
 
 STOPWORDS = frozenset('''
 a an the and or but if of to in on at by for with from as into onto over under
@@ -203,6 +207,7 @@ class CoverageLedger:
       rewrite_failed   matched but the rewrite/quality gate stopped it (reason)
       held             the rewrite ledger is holding it after repeated failures
       rejected         the matched page is a service/dashboard page, not an article
+      removed_by_editor its article was taken down with Remove story; never re-covered
       waiting_for_text the article was found but its text could not be read yet;
                        retried every run, never written from a headline alone
     """
@@ -239,7 +244,7 @@ class CoverageLedger:
         return row
 
     def needs_search(self, row: dict[str, Any], now: datetime) -> bool:
-        if row.get('status') in DONE_STATUSES:
+        if row.get('status') in TERMINAL_STATUSES:
             return False
         if row.get('resolved_url'):
             return False
@@ -268,18 +273,20 @@ class CoverageLedger:
         for row in rows:
             counts[row.get('status', 'unknown')] = counts.get(row.get('status', 'unknown'), 0) + 1
         covered = counts.get('published', 0) + counts.get('already_covered', 0)
+        removed = counts.get('removed_by_editor', 0)
         return {
             'source': SOURCE_LABEL,
             'rule': 'Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).',
             'window_days': WINDOW_DAYS,
             'stories_in_window': len(rows),
             'covered': covered,
-            'outstanding': len(rows) - covered,
+            'outstanding': len(rows) - covered - removed,
+            'removed_by_editor': removed,
             'by_status': dict(sorted(counts.items())),
             'outstanding_stories': [
                 {key: row.get(key, '') for key in ('headline', 'received_at', 'status', 'reason', 'resolved_url')}
                 for row in sorted(rows, key=lambda item: item.get('received_at', ''))
-                if row.get('status') not in DONE_STATUSES
+                if row.get('status') not in TERMINAL_STATUSES
             ],
         }
 
