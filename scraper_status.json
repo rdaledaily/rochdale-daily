@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-03T12:35:22.494352Z",
+  "last_run_at": "2026-11-03T12:51:36.014531Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,17 +7,9 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 7,
-      "other_notice_types": 1,
-      "already_seen": 6,
-      "new": 0,
-      "outside_borough": 0,
-      "no_company_address": 0,
-      "notice_unreadable": 0
+      "status": "not due",
+      "last_checked": "2026-11-03T12:32:44.525579Z",
+      "interval_hours": 12
     },
     "written_answers": {
       "status": "not due",
@@ -25,8 +17,9 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "error",
-      "error": "ConnectionError: HTTPSConnectionPool(host='democracy.greatermanchester-ca.gov.uk', port=443): Max retries exceeded with url: /mgRss.aspx?XXR=0&M=0 (Caused by ReadTimeoutError(\"HTTPSConnectionPool(host"
+      "status": "not due",
+      "last_checked": "2026-11-03T12:32:44.525579Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -49,25 +42,27 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 135,
+  "raw_candidates_before_job_filter": 127,
   "job_or_career_posts_rejected": 4,
-  "raw_candidates": 131,
+  "raw_candidates": 123,
   "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 45,
-    "resolved": 45,
-    "text_recovered": 32,
+    "wrappers": 77,
+    "resolved": 63,
+    "text_recovered": 18,
     "reattributed": 0,
-    "images_found": 33
+    "images_found": 19
   },
-  "duplicates_merged": 88,
-  "attempted_rewrites": 0,
+  "duplicates_merged": 80,
+  "attempted_rewrites": 1,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
   "live_articles": 515,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 0,
@@ -79,11 +74,11 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 145,
+    "entries": 146,
     "by_outcome": {
       "failed": 7,
       "published": 108,
-      "rejected": 30
+      "rejected": 31
     },
     "held_back_this_run": 31,
     "held_already_published": 24,
@@ -159,8 +154,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 119,
-    "website_discovery": 11,
+    "rss_and_google_news": 117,
+    "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -169,7 +164,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 0
+    "men_newsletter": 2
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -252,7 +247,8 @@
       "already_covered": 4,
       "not_found": 4,
       "published": 2,
-      "rejected": 2
+      "rewrite_failed": 1,
+      "waiting_for_text": 1
     },
     "outstanding_stories": [
       {
@@ -265,9 +261,9 @@
       {
         "headline": "The historic Rochdale hall and gardens with spectacular fire festival",
         "received_at": "2026-10-29T08:08:20+00:00",
-        "status": "not_found",
-        "reason": "its article rochdale-s-historic-hall-and-gardens-to-host-spectacular-fire-festival-and-light is no longer live; searching again",
-        "resolved_url": ""
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 217 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQWHhySjdjRGhrTWhQeHB6NlU3UmFkN2g5M1U5Q0ZiZHhyZkxyRzdkeEFoY3NHSXdhNjFNWk9pOUo5X2dCeWd5dWpWMDluOEZoVV9WX1EtWG9kWTI2X2lFTzZKWGd5UUdwZTBmYV94bDA2YXFvMjZ6MHhBT1VRU2ktMHRwN3YxazhSY3pYSjEyNGVCeU13Q1pWYWlwSmFBMGtyLTVVQkFSVnVUTXJXSzVHNW1iejfSAboBQVVfeXFMUHBhT2ZkZ05uaFRoa3ZLV2c1UlhEN3ZBV2RTUDFCVTBlZDhWSzd1TmkwVTZVcjNsVmJWSXdwODN4c2kxV2twQUhJamFuWUNNSVRCNlVoUW9HY1JDbkFIdlVlQzJ3QXYyVkFvYnVvVV9LMTZydDNQYnpLcmU1bldMTXJkQnBkVUZOR1EyeFRWMjkzM0hRRjVjUXhsa25NeER5TWFTQlRad0NLTFBtSDAyUk50bWxCUDM5WGRB?oc=5"
       },
       {
         "headline": "Homes at new Rochdale town centre housing complex will be affordable",
@@ -286,24 +282,24 @@
       {
         "headline": "The multi-billion plan to transform Rochdale",
         "received_at": "2026-11-02T08:04:39+00:00",
-        "status": "rejected",
-        "reason": "matched page is not a news article (service page, job or listing)",
-        "resolved_url": ""
+        "status": "rewrite_failed",
+        "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+        "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/multi-billion-plan-transform-rochdale-34839906"
       },
       {
         "headline": "As she waited to learn her fate, her career was already gone",
         "received_at": "2026-11-03T08:03:51+00:00",
-        "status": "rejected",
+        "status": "not_found",
         "reason": "matched page is not a news article (service page, job or listing)",
         "resolved_url": ""
       }
     ]
   },
   "source_counts": {
-    "Rochdale Times": 37,
-    "Roch Valley Radio": 31,
-    "Rochdale AFC": 21,
-    "Manchester Evening News": 13,
+    "Rochdale Times": 32,
+    "Roch Valley Radio": 30,
+    "Rochdale AFC": 20,
+    "Manchester Evening News": 12,
     "InYourArea": 6,
     "Roch Valley Radio Local News": 4,
     "Bee Network live travel alerts": 4,
@@ -319,7 +315,9 @@
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "news": 1
+  },
   "published_by_category": {
     "business": 52,
     "community": 68,
@@ -356,8 +354,12 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "hard-news-v3-c6180a516a9a799db2de"
+  ],
+  "selected_candidate_urls": [
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/multi-billion-plan-transform-rochdale-34839906"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -367,7 +369,7 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "must_cover_selected": 0
+    "must_cover_selected": 1
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -926,12 +928,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 4
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -967,7 +965,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-03T12:36:51.809307Z",
+  "frontpage_generated_at": "2026-11-03T12:53:11.358987Z",
   "frontpage_article_count": 23,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1073,12 +1071,12 @@
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 13,
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 10,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 4,
+  "event_dates_corrected_from_ledger": 3,
   "duplicate_articles_after_postprocessing": 515,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
