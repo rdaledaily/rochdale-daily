@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03T00:06:39.964600Z",
+  "updated_at": "2026-11-03T00:28:19.799034Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 141,
@@ -32,8 +32,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-03T00:06:39.964291Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Disqualified driver jailed after dangerous Rochdale pursuit - About Manchester",
       "source_name": "About Manchester",
       "category": "traffic",
@@ -736,16 +736,16 @@
     },
     "https://www.burytimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife": {
       "first_attempt_at": "2026-11-02T23:09:44.845876Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMipAFBVV95cUxOdm5IUmZaYW9KUWt2RjBkWTVCTng0bHBhMllhQ3h4clBDbE9fakItdFpPeG0wRlJ1TGt5UGNnUVJmcHhzT2N6Q1NTNVRHSEpqYWxUdlhXWE9tT1p5NF9fNFhTMTJEUHpFcDBfZk4tZ3lCNVl4UkhxZFh6Umo4NHRmNVcweEFwM2tYQ3k3d3lacF9hSndBeEhSS25qNmxyNlBfd0JOMg?oc=5",
         "https://www.burytimes.co.uk/news/26692073.rochdale-man-among-accused-husbands-alleged-abuse-wife"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-03T00:03:42.525377Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The model marked the story unpublishable.",
+      "last_attempt_at": "2026-11-03T00:28:19.798800Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale man on trial in case over husband's alleged abuse of unconscious wife - The Bury Times",
       "source_name": "The Bury Times",
       "category": "crime",
@@ -786,18 +786,19 @@
     },
     "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820": {
       "first_attempt_at": "2026-11-02T18:01:34.386434Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
+        "https://rochdaleafc.co.uk/preview-doncaster-rovers-h",
         "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T20:15:56.292162Z",
+      "last_attempt_at": "2026-11-03T00:25:25.935521Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "Cliff Byrne sets ambitious EFL Trophy aim for Doncaster Rovers",
       "source_name": "Doncaster Free Press",
-      "category": "crime",
+      "category": "sport",
       "text_fingerprint": "cb7a8cd63183dc61"
     },
     "https://www.expressandstar.com/uk-sports/jon-brady-delights-in-end-to-port-vale-profligacy-as-they-put-four-past-rochdale-9322224": {
@@ -1803,14 +1804,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T23:30:33.947673Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-03T00:28:19.798517Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Appeal over student accommodation at former care home is dismissed - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "44acd40a5695e09c",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/bonfire-night-celebrations-return-with-a-bang": {
       "first_attempt_at": "2026-10-29T10:54:14.622160Z",
