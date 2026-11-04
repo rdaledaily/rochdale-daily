@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 1,
+  "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
-  "no_usable_source_image": 7,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -13,7 +13,7 @@
     "Rochdale Boroughwide Housing"
   ],
   "source_grants_incomplete": [],
-  "replaced_commons_or_library_with_source_photo": 1,
+  "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
     {
@@ -25,12 +25,6 @@
         "page": "https://gunpowder-plot.org/monteagle.html",
         "verdict": "page-fetch-failed: HTTP Error 525: <none>"
       }
-    },
-    {
-      "slug": "cronkeyshaw-common-bonfire-fireworks-tonight-road-closures-parking",
-      "result": "licensed-source-photo",
-      "source": "https://www.rochdale.gov.uk/events/event/481/rochdale-bonfire-and-fireworks-display",
-      "after": "assets/img/cards/cronkeyshaw-common-bonfire-fireworks-tonight-road-closures-parking.jpg"
     },
     {
       "slug": "eg-on-the-move-plans-to-rebuild-rochdale-forecourt",
@@ -157,6 +151,16 @@
           }
         ],
         "verdict": "no-candidate-passed"
+      }
+    },
+    {
+      "slug": "rochdale-borough-council-awards-contract-for-new-income-management-system",
+      "result": "no-cleared-source-image",
+      "source": "https://www.find-tender.service.gov.uk/Notice/104203-2026",
+      "after": "assets/img/cards/rochdale-town-square.jpg",
+      "why": {
+        "page": "https://www.find-tender.service.gov.uk/Notice/104203-2026",
+        "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
       }
     }
   ]
