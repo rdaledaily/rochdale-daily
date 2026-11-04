@@ -198,6 +198,26 @@ def run_source_grants(jpeg: bytes) -> None:
     assert not repair.granted_source_upgrade(dict(recent, source_url="https://www.rochdaletimes.co.uk/a"), now, grants)
     assert not repair.granted_source_upgrade(recent, now, [])
 
+    # Standing rule: a manual council story whose own file names no photo gets
+    # the council's photo in place of the pipeline's library pick, at any age.
+    # An editor-supplied photo, or one already fetched, is never replaced.
+    with TemporaryDirectory() as root:
+        cards = Path(root) / "assets/img/cards"
+        cards.mkdir(parents=True)
+        manual = dict(recent, slug="council-park-story", manual_article=True, editorial_lock=True,
+                      image_status="editorial-photo", image_url="assets/img/cards/parking_restrictions.jpg",
+                      published_at="2026-09-01T09:00:00Z")
+        with patch.object(repair, "CARDS_DIR", cards):
+            assert repair.granted_source_upgrade(manual, now, grants, set())
+            assert not repair.granted_source_upgrade(manual, now, grants, {"council-park-story"})
+            assert not repair.granted_source_upgrade(manual, now, grants, None)
+            assert not repair.granted_source_upgrade(dict(manual, source_url="https://www.rochdaletimes.co.uk/a"),
+                                                     now, grants, set())
+            (cards / "council-park-story.jpg").write_bytes(jpeg)
+            (cards / "credits.json").write_text(json.dumps(
+                {"council-park-story": "Rochdale Borough Council / Used with permission"}), encoding="utf-8")
+            assert not repair.granted_source_upgrade(manual, now, grants, set())
+
     # Credit names the organisation and links to its original story.
     with TemporaryDirectory() as root:
         base = Path(root)

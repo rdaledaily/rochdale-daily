@@ -81,19 +81,74 @@ def _recent(article: dict[str, Any], now: datetime, hours: int = 48) -> bool:
     return now - timedelta(hours=hours) <= published <= now + timedelta(minutes=10)
 
 
+def editor_image_slugs() -> set[str] | None:
+    """Slugs of manual stories whose own file names a photo.
+
+    Only those photos are the editor's choice. A manual story whose file names
+    no image is given a library picture by the pipeline, which then labels it
+    "editorial-photo" like a supplied one, so the label alone cannot tell them
+    apart. Returns None if the manual files cannot be read: every manual story
+    is then treated as editor-chosen and left alone.
+    """
+    try:
+        import manual_articles
+        records = manual_articles.load_manual_article_records()
+    except Exception as exc:  # report, never guess
+        print(f"::warning::Could not read manual story files ({exc}); manual images left unchanged.")
+        return None
+    return {clean(row.get("slug")) for row in records if clean(row.get("image_url") or row.get("img"))}
+
+
+def source_photo_cached(article: dict[str, Any]) -> bool:
+    """An organisation's photo for this story was fetched on an earlier run."""
+    try:
+        known = json.loads((CARDS_DIR / "credits.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        known = {}
+    if not isinstance(known, dict):
+        return False
+    stem = slug_for(article)
+    return "Used with permission" in str(known.get(stem, "")) and any(
+        (CARDS_DIR / f"{stem}{suffix}").is_file() for suffix in (".jpg", ".jpeg", ".png", ".webp"))
+
+
+def pipeline_chose_manual_image(article: dict[str, Any], editor_images: set[str] | None) -> bool:
+    """Standing editorial rule: when a manual story comes from a granting
+    organisation (e.g. the council) and the editor supplied no photo, use that
+    organisation's own photo instead of the picture the pipeline attached.
+    A photo the editor supplied is never replaced."""
+    if editor_images is None:
+        return False
+    if not (article.get("manual_article") or article.get("editorial_lock")):
+        return False
+    if clean(article.get("slug")) in editor_images:
+        return False
+    return not source_photo_cached(article)
+
+
 def granted_source_upgrade(article: dict[str, Any], now: datetime,
-                           grants: list[dict[str, Any]]) -> bool:
-    """A recent story from a granting organisation should carry that
-    organisation's own photo rather than a Commons file image or a generic
-    library picture. Editor photos, manual/locked stories and photos already
-    taken from the source are never replaced."""
-    if not grants or article.get("manual_article") or article.get("editorial_lock"):
+                           grants: list[dict[str, Any]],
+                           editor_images: set[str] | None = None) -> bool:
+    """A story from a granting organisation should carry that organisation's
+    own photo rather than a Commons file image or a generic library picture.
+
+    Scraped stories: recent ones only. Manual/locked stories: only when the
+    editor supplied no photo of their own (see pipeline_chose_manual_image),
+    at any age. Editor photos and photos already taken from the source are
+    never replaced."""
+    if not grants:
+        return False
+    manual_pick = pipeline_chose_manual_image(article, editor_images)
+    if (article.get("manual_article") or article.get("editorial_lock")) and not manual_pick:
         return False
     status = clean(article.get("image_status")).lower()
-    if any(token in status for token in ("source-photo", "editorial-photo")):
+    if "source-photo" in status:
         return False
-    if not _recent(article, now):
-        return False
+    if not manual_pick:
+        if "editorial-photo" in status:
+            return False
+        if not _recent(article, now):
+            return False
     category = clean(article.get("category")).casefold()
     return any(_page_covered(url, grant) and category not in grant["exclude_categories"]
                for url in source_urls(article) for grant in grants)
@@ -270,6 +325,7 @@ def main(argv: list[str] | None = None) -> int:
     allowed = allowed_domains()
     permissions = permission_entries()
     grants = source_grants()
+    editor_images = editor_image_slugs() if grants else None
     # A picture already attached to a story from a DIFFERENT source page is the
     # organisation's default share image, not a story photo.
     used_by: dict[str, set[str]] = {}
@@ -293,7 +349,7 @@ def main(argv: list[str] | None = None) -> int:
             continue
         upgrade = False
         if not needs_source_photo_check(article, now):
-            if not granted_source_upgrade(article, now, grants):
+            if not granted_source_upgrade(article, now, grants, editor_images):
                 continue
             upgrade = True
         if high_risk_photo_story(article):
