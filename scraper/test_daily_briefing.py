@@ -76,8 +76,8 @@ class FastLaneIsTheClock(unittest.TestCase):
         workflow = (REPO / ".github" / "workflows" / "scrape-fast.yml").read_text(encoding="utf-8")
         fast, deep = workflow.split("\n  deep-browser:", 1)
         self.assertIn("daily_briefing.py --slot morning --check-due", fast)
-        self.assertIn("gh workflow run daily-briefing.yml --ref main", fast)
-        self.assertIn("gh workflow run scrape-fast.yml --ref main -f chain=1", deep,
+        self.assertIn("bash scraper/gh_dispatch.sh daily-briefing.yml --ref main", fast)
+        self.assertIn("bash scraper/gh_dispatch.sh scrape-fast.yml --ref main -f chain=1", deep,
                       "17 of 21 idle gaps began when a deep run ended and nothing restarted the chain")
 
     def test_check_due_reports_without_writing_a_file(self) -> None:

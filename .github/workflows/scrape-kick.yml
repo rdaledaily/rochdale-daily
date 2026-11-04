@@ -148,7 +148,7 @@ jobs:
         if: steps.publish.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-pages.yml --ref main
+        run: bash scraper/gh_dispatch.sh deploy-pages.yml --ref main
       - name: Re-seed the fast lane if nothing is keeping it alive
         if: always()
         env:
@@ -162,5 +162,5 @@ jobs:
             echo "a fast run is already queued or in progress; not re-seeding"
             exit 0
           fi
-          gh workflow run scrape-fast.yml --ref main -f chain=0
+          bash scraper/gh_dispatch.sh scrape-fast.yml --ref main -f chain=0
           echo "re-seeded the fast lane at chain depth 0"

@@ -88,5 +88,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run publish-pending-manual.yml --ref main
+          bash scraper/gh_dispatch.sh publish-pending-manual.yml --ref main
           echo "publish-pending-manual dispatched"
