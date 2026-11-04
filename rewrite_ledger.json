@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-04T12:39:55.878818Z",
+  "updated_at": "2026-11-04T13:00:37.023686Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 141,
@@ -361,16 +361,16 @@
     },
     "https://rochdaleafc.co.uk/henderson-breaks-appearance-record": {
       "first_attempt_at": "2026-11-04T12:39:55.878540Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMibkFVX3lxTE9NZXBTOXRsUmhkZFFSdzQtN2JOdHZ0VVRMSTZtLVdwRjItRVI5NWpQa1pvM0dkS3g0cVlPdVBNNzhDSF9BSGdTdE9sVTZnQjFLb2RkRGFiZFJvZDhySzlySGc1TjNrWldDMEw3QzVB?oc=5",
         "https://rochdaleafc.co.uk/henderson-breaks-appearance-record"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T12:39:55.878540Z",
+      "last_attempt_at": "2026-11-04T12:57:36.852857Z",
       "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Henderson Breaks Appearance Record",
       "source_name": "Rochdale AFC",
       "category": "sport",
@@ -857,7 +857,7 @@
     },
     "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820": {
       "first_attempt_at": "2026-11-02T18:01:34.386434Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPYW5TdHhQNnd2WERWMFByVEMzZE85NklQZml4bVJJQWxxZVB3bDZHTnFRaDRKTXdXY1VtNlQxcWtnRXNZWDhTRS1yNy0wbDd4TjBtUkZOT0ZyRVZZRVpBUlpxbVBDUW1TUUc1VVk3QUk3MEhXbk54OUpfWlZqOVhaSnZwUm41LW5yOUhMY1B5d2ZuOGFYSHdKWEpkeXJVY1VteFFTT1BMalVkTXZvUlBaV0FlVldnaHpJSlVkdHloUlhVU052d2s1UmxWU1NmYlFTN1E5VXduZWU?oc=5",
         "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOdHUtVmFPN21BbVdiZW94Q3hFU2lpTEFjeHd2Zlg4NmVRS1ZvV2tWeFE0bkdlS0JtTkdKTFJ5aHdzYmU3R0JTaXd3RXd4SUJDMVJiclc0X0lONjZwaEluZnk2N1J5dHNBQ0F6T1lDS01lcU9oZmREa3hPRjlmT285bUl2X3pyaW41dGN4WElLM0FiQzQ5VnNsdVNkU3JMNHlIYjRMVnF3Q3ZGWmNwVzdtLVQ0UkRMaWVGcnNPQUZJVlF1SFFZcDBJRFhNeHdQSGhGd3FLQXVvTEJOUQ?oc=5",
@@ -870,7 +870,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T12:37:16.685820Z",
+      "last_attempt_at": "2026-11-04T12:57:25.406149Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "‘Go as far as we can - Cliff Byrne looks ahead to Doncaster Rovers’ EFL Trophy clash with Rochdale - Doncaster Free Press",
@@ -2315,12 +2315,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-01T16:32:44.927506Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Hopwood Hall marks construction milestone for Clegg Building in Rochdale",
       "source_name": "Roch Valley Radio Local News",
       "category": "education",
-      "text_fingerprint": "de40a79e558f6290"
+      "text_fingerprint": "de40a79e558f6290",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/179/culture/1272/stories-we-tell-returns-to-rochdale-for-final-night-after-sell-out-run": {
       "first_attempt_at": "2026-11-01T16:32:44.927678Z",
