@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 0,
+  "repaired_with_source_photo": 1,
   "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
-  "no_usable_source_image": 8,
+  "no_usable_source_image": 7,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -13,7 +13,7 @@
     "Rochdale Boroughwide Housing"
   ],
   "source_grants_incomplete": [],
-  "replaced_commons_or_library_with_source_photo": 0,
+  "replaced_commons_or_library_with_source_photo": 1,
   "allowed_domains": [],
   "items": [
     {
@@ -53,6 +53,12 @@
         "page": "https://www.find-tender.service.gov.uk/Notice/104629-2026",
         "verdict": "page-fetch-failed: HTTP Error 403: Forbidden"
       }
+    },
+    {
+      "slug": "jim-watson-reflects-on-rochdale-afc-s-draw-with-doncaster-rovers",
+      "result": "licensed-source-photo",
+      "source": "https://rochdaleafc.co.uk/watson-post-doncaster-031126/",
+      "after": "assets/img/cards/jim-watson-reflects-on-rochdale-afc-s-draw-with-doncaster-rovers.jpg"
     },
     {
       "slug": "did-goblins-move-rochdale-parish-church-up-the-hill",
@@ -142,54 +148,6 @@
           {
             "url": "https://www.burytimes.co.uk/resources/images/21651429/?type=mds-article-620",
             "via": "article img",
-            "verdict": "page-not-from-granting-organisation"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
-    },
-    {
-      "slug": "investigation-works-begin-at-former-turner-brothers-factory-site-in-rochdale",
-      "result": "no-cleared-source-image",
-      "source": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903",
-      "after": "assets/img/cards/turner_brothers.png",
-      "why": {
-        "page": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903",
-        "final_url": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903",
-        "candidates": [
-          {
-            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200d/0_Rochdale-Chernobyl.jpg",
-            "via": "og:image",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200/0_Rochdale-Chernobyl.jpg",
-            "via": "twitter:image",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200b/0_Rochdale-Chernobyl.jpg",
-            "via": "json-ld",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200c/0_Rochdale-Chernobyl.jpg",
-            "via": "json-ld",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862068.ece/ALTERNATES/s1200f/0_Rochdale-Chernobyl.jpg",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://i2-prod.manchestereveningnews.co.uk/article34852943.ece/ALTERNATES/s1200e/0_Workers-pictured-on-the-old-Turner-Brother-factory-site-in-Rochdale-in-October-2026.jpg",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://i2-prod.manchestereveningnews.co.uk/article32862073.ece/ALTERNATES/s1200e/0_Rochdale-Chernobyl.jpg",
-            "via": "article figure img",
             "verdict": "page-not-from-granting-organisation"
           }
         ],
