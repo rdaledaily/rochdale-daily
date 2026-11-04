@@ -45,7 +45,16 @@ CATEGORY_ORDER = (
         r"police|wanted person|appeal for witnesses|"
         r"(?:police )?investigation (?:launched|underway|ongoing)|police investigation|"
         r"attacks? (?:on|against) (?:a |an )?\w+|child attacks?|"
-        r"criminal behaviour order|drugs raid|cannabis farm|deportation|parole)\b",
+        r"criminal behaviour order|drugs raid|cannabis farm|deportation|parole|"
+        # Threats and hate offences. Measured 4 Nov 2026: "Israeli man
+        # threatened with death at Rochdale gym after racist abuse" scored
+        # zero for crime and was filed as health on "gym" and "leisure
+        # centre". Phrases only - bare "abuse" or "threat" would catch
+        # child-safeguarding and weather copy.
+        r"death threats?|threats? to kill|threatened to kill|"
+        r"threatened with (?:death|violence|a knife|a weapon)|"
+        r"racist abuse|racially (?:aggravated|motivated|abused)|hate crimes?|hate incidents?|"
+        r"threatening behaviour|public order offences?)\b",
         re.I,
     )),
     ("traffic", re.compile(

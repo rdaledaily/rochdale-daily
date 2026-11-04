@@ -2705,8 +2705,9 @@ def recent_existing_articles() -> list[dict[str, Any]]:
             corrected = editorial_category(text, fallback=str(article.get('category') or 'news'))
             if corrected != article.get('category') and not article.get('editorial_lock'):
                 article['category'] = corrected
-                if corrected != 'crime':
-                    article['police_matter'] = False
+                # police_matter follows the category both ways: it adds the
+                # "report it to police" box and the comments rule keys on it.
+                article['police_matter'] = corrected == 'crime'
             kept.append(article)
     return dedupe_article_records(kept)
 
