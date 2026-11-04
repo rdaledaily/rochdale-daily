@@ -26,6 +26,7 @@ subscription and expose her subscriber id.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from datetime import datetime, timedelta, timezone
@@ -79,6 +80,29 @@ here there now then still yet ever been get got gets says said say
 # Words nearly every result of a site-restricted Rochdale search shares. They
 # say nothing about WHICH story it is, so they are not counted as evidence.
 GENERIC_PLACE_TERMS = frozenset({'rochdale', 'greater', 'manchester', 'borough', 'town', 'centre'})
+
+# Court and criminal-process reporting from the newsletter is never written
+# automatically: active proceedings carry contempt-of-court risk, and the
+# lane writes from the MEN's summary. Such a story waits for the editor's
+# approval on /checked (editor, 4 Nov 2026). Deliberately broad - a false
+# hold costs one tap; a missed one could prejudice a trial.
+COURT_RE = re.compile(
+    r"\b(?:trial|jury|jurors?|judge|crown court|magistrates'? court|court (?:heard|hearing|was told|case)|"
+    r"appeared (?:at|in|before) (?:the )?court|in the dock|denies|denied|pleads?|pleaded|plea|"
+    r"charged with|accused|defendants?|prosecut\w+|remanded|on bail|sentenc\w+|jailed|in jail|"
+    r"inquest|convicted|verdict|acquitted|alleged(?:ly)?|grooming gang)\b",
+    re.IGNORECASE,
+)
+
+
+def is_court_story(*texts: str) -> bool:
+    return bool(COURT_RE.search(' '.join(str(text or '') for text in texts)))
+
+
+def story_id(headline: str) -> str:
+    """Stable short id for a newsletter story, used for the editor's approval."""
+    return hashlib.sha1(story_key(headline).encode('utf-8')).hexdigest()[:16]
+
 
 _SUFFIX_RE = re.compile(r'\s+[-|–—]\s+(?:manchester evening news|men)\s*$', re.IGNORECASE)
 _WORD_RE = re.compile(r"[a-z0-9£]+(?:'[a-z]+)?")
@@ -208,6 +232,8 @@ class CoverageLedger:
       held             the rewrite ledger is holding it after repeated failures
       rejected         the matched page is a service/dashboard page, not an article
       removed_by_editor its article was taken down with Remove story; never re-covered
+      held_for_editor  court or criminal-process reporting; written only after the
+                       editor approves it on /checked
       waiting_for_text the article was found but its text could not be read yet;
                        retried every run, never written from a headline alone
     """
@@ -227,6 +253,8 @@ class CoverageLedger:
     def record(self, story: dict[str, str]) -> dict[str, Any]:
         key = story_key(story['headline'])
         row = self.records.get(key)
+        if row is not None and not row.get('id'):
+            row['id'] = story_id(row['headline'])
         if row is None:
             row = {
                 'headline': story['headline'],
@@ -236,6 +264,7 @@ class CoverageLedger:
                 'resolved_url': '',
                 'resolved_title': '',
                 'article_slug': '',
+                'id': story_id(story['headline']),
                 'searches': 0,
                 'last_searched_at': '',
                 'updated_at': '',
@@ -284,7 +313,7 @@ class CoverageLedger:
             'removed_by_editor': removed,
             'by_status': dict(sorted(counts.items())),
             'outstanding_stories': [
-                {key: row.get(key, '') for key in ('headline', 'received_at', 'status', 'reason', 'resolved_url')}
+                {key: row.get(key, '') for key in ('id', 'headline', 'received_at', 'status', 'reason', 'resolved_url', 'resolved_title')}
                 for row in sorted(rows, key=lambda item: item.get('received_at', ''))
                 if row.get('status') not in TERMINAL_STATUSES
             ],

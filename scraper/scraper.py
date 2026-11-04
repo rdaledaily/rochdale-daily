@@ -638,6 +638,7 @@ def article_is_local(article: dict[str, Any]) -> bool:
     return is_local(combined, str(article.get('source_name') or ''), str(article.get('source_url') or ''))
 from rewrite_safety import excessive_source_overlap
 import men_newsletter
+import story_checks
 from selection_policy import PUBLISH_CATEGORIES, ROCHDALE_WARDS, balanced_select, is_classified_listing_post, is_job_or_career_post, ward_for_item
 from story_identity import authority_score, build_story_key, dedupe_article_records, merge_article_records, same_story, strip_publisher_suffix
 from story_blocklist import is_blocked_article, is_blocked_text, load_blocklist as load_story_blocklist
@@ -1587,7 +1588,7 @@ def removed_story_match(candidate: Candidate, removed_slugs: list[str]) -> str:
 
 
 def must_cover_block(candidate: Candidate, existing_by_story: dict[str, dict[str, Any]], existing: list[dict[str, Any]],
-                     removed_slugs: list[str] | None = None) -> tuple[str, str, str]:
+                     removed_slugs: list[str] | None = None, approved_ids: set[str] | None = None) -> tuple[str, str, str]:
     """(status, reason, article_slug) when a must-cover story is not to be
     written this run; ('', '', '') when it is. Every reason is the real one."""
     if is_non_article_service_page(candidate.source_url):
@@ -1607,6 +1608,12 @@ def must_cover_block(candidate: Candidate, existing_by_story: dict[str, dict[str
     removed = removed_story_match(candidate, removed_slugs)
     if removed:
         return 'removed_by_editor', f'same story as {removed}, which was taken down with Remove story; not re-created', ''
+    # Court and criminal-process stories wait for the editor (4 Nov 2026).
+    # approved_ids None means the approvals could not be read: stay held.
+    if men_newsletter.is_court_story(candidate.newsletter_headline, candidate.source_title,
+                                     candidate.source_summary, candidate.source_body_excerpt):
+        if men_newsletter.story_id(candidate.newsletter_headline) not in (approved_ids or set()):
+            return 'held_for_editor', 'court or criminal-process reporting: waits for the editor to approve it on /checked', ''
     held = rewrite_ledger_block_reason(candidate)
     if held:
         return 'held', held, ''
@@ -4028,10 +4035,13 @@ def main() -> int:
     existing_records = list(existing)
     reconciled = reconcile_men_newsletter_ledger(existing_records)
     removed_slugs = list(load_story_blocklist().get('slugs', []))
+    approved_ids = story_checks.fetch_newsletter_approvals() if must_cover_candidates else set()
+    if approved_ids is None:
+        log.warning('MEN MyRochdale newsletter: editor approvals could not be read; court stories stay held this run')
     if reconciled:
         log.info('MEN MyRochdale newsletter ledger: %d story record(s) re-pointed after their article was removed', reconciled)
     for candidate in must_cover_candidates:
-        status, reason, slug = must_cover_block(candidate, existing_by_story, existing_records, removed_slugs)
+        status, reason, slug = must_cover_block(candidate, existing_by_story, existing_records, removed_slugs, approved_ids)
         if not status:
             # Two newsletter stories on one incident (the gas-leak crash ran as
             # two headlines on 2 Nov) are written once.

@@ -50,6 +50,22 @@ def fetch_checks(base: str = SITE, timeout: float = 6.0) -> dict[str, str] | Non
     return _clean(payload['checks'])
 
 
+def fetch_newsletter_approvals(base: str = SITE, timeout: float = 6.0) -> set[str] | None:
+    """Newsletter story ids the editor approved on /checked, or None when the
+    API can't be read. A caller must treat None as "nothing approved": a held
+    court story is never released by a failed read."""
+    try:
+        request = urllib.request.Request(f'{base}/api/checks?approvals=1', headers={'User-Agent': 'RochdaleDailyBuild/1.0'})
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            payload = json.loads(response.read().decode('utf-8'))
+    except Exception:
+        return None
+    approvals = payload.get('approvals') if isinstance(payload, dict) else None
+    if not isinstance(approvals, dict):
+        return None
+    return {str(key) for key in approvals if re.fullmatch(r'[0-9a-f]{16}', str(key))}
+
+
 def read_snapshot(path: Path = SNAPSHOT) -> dict[str, str]:
     try:
         return _clean(json.loads(path.read_text(encoding='utf-8')).get('checks'))
