@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-04T12:12:10.208806Z",
+  "updated_at": "2026-11-04T12:39:55.878818Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 142,
+  "count": 141,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -359,6 +359,23 @@
       "category": "sport",
       "text_fingerprint": "bb44e32208c8eb0b"
     },
+    "https://rochdaleafc.co.uk/henderson-breaks-appearance-record": {
+      "first_attempt_at": "2026-11-04T12:39:55.878540Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMibkFVX3lxTE9NZXBTOXRsUmhkZFFSdzQtN2JOdHZ0VVRMSTZtLVdwRjItRVI5NWpQa1pvM0dkS3g0cVlPdVBNNzhDSF9BSGdTdE9sVTZnQjFLb2RkRGFiZFJvZDhySzlySGc1TjNrWldDMEw3QzVB?oc=5",
+        "https://rochdaleafc.co.uk/henderson-breaks-appearance-record"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-04T12:39:55.878540Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "title": "Henderson Breaks Appearance Record",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "90789d1f983e41c6"
+    },
     "https://rochdaleafc.co.uk/hendo-set-for-club-record": {
       "first_attempt_at": "2026-11-02T20:59:15.987499Z",
       "attempts": 1,
@@ -577,23 +594,6 @@
       "source_name": "Yahoo Sports",
       "category": "crime",
       "text_fingerprint": "96aec40077753e95"
-    },
-    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b9214d621d15d18f02": {
-      "first_attempt_at": "2026-10-27T12:24:15.380746Z",
-      "attempts": 1,
-      "urls": [
-        "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b9214d621d15d18f02"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-27T12:24:15.380746Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Updated: 27/10/2026 at 12:12pm Live Failsworth Tram Stop - Lifts out of service Duration Tue 27 Oct, 12:12pm – until further notice Stops",
-      "source_name": "Bee Network live travel alerts",
-      "category": "transport",
-      "text_fingerprint": "a06fe7e1ba6f2231",
-      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b93998c54c21f45e8f": {
       "first_attempt_at": "2026-10-31T15:35:52.827653Z",
@@ -857,7 +857,7 @@
     },
     "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820": {
       "first_attempt_at": "2026-11-02T18:01:34.386434Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPYW5TdHhQNnd2WERWMFByVEMzZE85NklQZml4bVJJQWxxZVB3bDZHTnFRaDRKTXdXY1VtNlQxcWtnRXNZWDhTRS1yNy0wbDd4TjBtUkZOT0ZyRVZZRVpBUlpxbVBDUW1TUUc1VVk3QUk3MEhXbk54OUpfWlZqOVhaSnZwUm41LW5yOUhMY1B5d2ZuOGFYSHdKWEpkeXJVY1VteFFTT1BMalVkTXZvUlBaV0FlVldnaHpJSlVkdHloUlhVU052d2s1UmxWU1NmYlFTN1E5VXduZWU?oc=5",
         "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOdHUtVmFPN21BbVdiZW94Q3hFU2lpTEFjeHd2Zlg4NmVRS1ZvV2tWeFE0bkdlS0JtTkdKTFJ5aHdzYmU3R0JTaXd3RXd4SUJDMVJiclc0X0lONjZwaEluZnk2N1J5dHNBQ0F6T1lDS01lcU9oZmREa3hPRjlmT285bUl2X3pyaW41dGN4WElLM0FiQzQ5VnNsdVNkU3JMNHlIYjRMVnF3Q3ZGWmNwVzdtLVQ0UkRMaWVGcnNPQUZJVlF1SFFZcDBJRFhNeHdQSGhGd3FLQXVvTEJOUQ?oc=5",
@@ -870,7 +870,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T12:10:13.728402Z",
+      "last_attempt_at": "2026-11-04T12:37:16.685820Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_LOCAL",
       "title": "‘Go as far as we can - Cliff Byrne looks ahead to Doncaster Rovers’ EFL Trophy clash with Rochdale - Doncaster Free Press",
@@ -1487,8 +1487,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-04T03:03:43.081030Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "The historic Rochdale hall and gardens with spectacular fire festival and light show",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2014,11 +2014,12 @@
       "first_attempt_at": "2026-11-04T11:09:37.192870Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMigwFBVV95cUxPS2w2R3g2UEFFOTlpSm9kWkVWLW1sc1dlV3JBMnFDWDd1NzBlX2NOTnJUUXhnaHVXNDVEWDhFTi1OcUFpQmlNZFF0ZmdOUzJlVVktWklSdEFjWkFIekl2MHdQNFRYNVZFOXZBM1VfV29MeWFseGtwT0NETjFOQnpWVFpOYw?oc=5",
         "https://www.rochdaletimes.co.uk/new-drive-to-bring-greggs-to-service-station"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T11:09:37.192870Z",
+      "last_attempt_at": "2026-11-04T12:39:55.878670Z",
       "outcome": "published",
       "reason": "",
       "title": "New drive to bring Greggs to service station - Rochdale Times",
@@ -2272,22 +2273,6 @@
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "fa4b069f4a644196"
-    },
-    "https://www.rochvalleyradio.com/news-features/139/news/1242/lest-we-forget-rochdale-remembers": {
-      "first_attempt_at": "2026-10-27T11:49:41.801718Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/139/news/1242/lest-we-forget-rochdale-remembers"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-27T12:21:57.749211Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
-      "title": "Lest We Forget: Rochdale Remembers",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "politics",
-      "text_fingerprint": "4fcf8728ae0ceec7"
     },
     "https://www.rochvalleyradio.com/news-features/141/local-sport/1266/gymbound-to-sponsor-rochdale-mayfield-shirts-for-next-two-seasons": {
       "first_attempt_at": "2026-10-30T08:30:30.206266Z",
