@@ -215,6 +215,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_live_format.py
           node --test scraper/test_live_updates_api.mjs
           node --test scraper/test_checks_api.mjs
+          node --test workers/rd-relay/worker.test.mjs
           node --test scraper/test_columns_api.mjs
           node --test scraper/test_api_catalog.mjs
           node --test scraper/test_newsletter_sync.mjs
@@ -255,6 +256,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_story_checks.py
           PYTHONPATH=scraper python scraper/test_category_threats.py
           python scraper/test_gh_dispatch.py
+          PYTHONPATH=scraper python scraper/test_clean_ip_fetch.py
           PYTHONPATH=scraper python scraper/test_clean_urls.py
           PYTHONPATH=scraper python scraper/test_archive_integrity.py
           PYTHONPATH=scraper python scraper/test_publisher_markup.py
