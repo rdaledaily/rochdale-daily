@@ -268,6 +268,17 @@ with tempfile.TemporaryDirectory() as tmp:
     finally:
         core.load_story_blocklist = original_blocklist
 
+# Before writing: a story the editor removed is recognised from the takedown list itself.
+removed = ['rochdale-s-historic-hall-and-gardens-to-host-spectacular-fire-festival-and-light',
+           'police-appeal-for-information-on-wanted-man-linked-to-missing-children-in-rochda']
+festival_again = must('The historic Rochdale hall and gardens with spectacular fire festival',
+                      'The historic Rochdale hall and gardens with spectacular fire festival and light show')
+status, reason, _ = core.must_cover_block(festival_again, {}, [], removed)
+check(status == 'removed_by_editor' and removed[0] in reason, 'a removed story found again is not re-created')
+sean = must('Urgent appeal as man, 22, goes missing in Rochdale', 'Urgent appeal as man, 22, goes missing in Rochdale')
+check(core.must_cover_block(sean, {}, [], removed)[0] == '', 'a different appeal sharing a few words is still written')
+check(core.removed_story_match(sean, removed) == '', 'the removed-story match is two-way, not one-way')
+
 # Locality: a published must-cover story survives the retention pass.
 article = {'title': 'Storm Austen: when rain will batter Greater Manchester', 'excerpt': 'Met Office warning for the region.',
            'content_html': '<p>Bolton and Oldham will see heavy rain.</p>', 'source_name': 'Manchester Evening News',

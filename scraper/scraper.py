@@ -1569,7 +1569,25 @@ def find_covering_article(candidate: Candidate, existing: list[dict[str, Any]]) 
     return None
 
 
-def must_cover_block(candidate: Candidate, existing_by_story: dict[str, dict[str, Any]], existing: list[dict[str, Any]]) -> tuple[str, str, str]:
+def removed_story_match(candidate: Candidate, removed_slugs: list[str]) -> str:
+    """The slug of a story the editor took down that this candidate is, or ''.
+
+    Matched both ways on the slug's words: the headline must cover most of
+    the removed story's words and the removed story most of the headline's.
+    Measured 3 Nov 2026 against the 31-slug takedown list and 30 newsletter
+    headlines: exactly the four removed duplicates match; a one-way match also
+    caught an unrelated missing-person appeal.
+    """
+    probes = [text for text in (candidate.newsletter_headline, candidate.source_title) if text]
+    for slug in removed_slugs:
+        words = str(slug).replace('-', ' ')
+        if any(men_newsletter.is_match(probe, words) and men_newsletter.is_match(words, probe) for probe in probes):
+            return str(slug)
+    return ''
+
+
+def must_cover_block(candidate: Candidate, existing_by_story: dict[str, dict[str, Any]], existing: list[dict[str, Any]],
+                     removed_slugs: list[str] | None = None) -> tuple[str, str, str]:
     """(status, reason, article_slug) when a must-cover story is not to be
     written this run; ('', '', '') when it is. Every reason is the real one."""
     if is_non_article_service_page(candidate.source_url):
@@ -1582,6 +1600,13 @@ def must_cover_block(candidate: Candidate, existing_by_story: dict[str, dict[str
     )
     if covering is not None:
         return 'already_covered', '', str(covering.get('slug') or '')
+    # The editor's takedowns are final: a story she removed - a duplicate, or
+    # a legal removal - is never re-created by this lane.
+    if removed_slugs is None:
+        removed_slugs = list(load_story_blocklist().get('slugs', []))
+    removed = removed_story_match(candidate, removed_slugs)
+    if removed:
+        return 'removed_by_editor', f'same story as {removed}, which was taken down with Remove story; not re-created', ''
     held = rewrite_ledger_block_reason(candidate)
     if held:
         return 'held', held, ''
@@ -4001,10 +4026,11 @@ def main() -> int:
     must_cover_selected: list[Candidate] = []
     existing_records = list(existing)
     reconciled = reconcile_men_newsletter_ledger(existing_records)
+    removed_slugs = list(load_story_blocklist().get('slugs', []))
     if reconciled:
         log.info('MEN MyRochdale newsletter ledger: %d story record(s) re-pointed after their article was removed', reconciled)
     for candidate in must_cover_candidates:
-        status, reason, slug = must_cover_block(candidate, existing_by_story, existing_records)
+        status, reason, slug = must_cover_block(candidate, existing_by_story, existing_records, removed_slugs)
         if not status:
             # Two newsletter stories on one incident (the gas-leak crash ran as
             # two headlines on 2 Nov) are written once.
