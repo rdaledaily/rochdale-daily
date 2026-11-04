@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-04T05:57:35.556015Z",
+  "last_run_at": "2026-11-04T06:15:46.288699Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,18 +42,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 120,
+  "raw_candidates_before_job_filter": 124,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 120,
+  "raw_candidates": 124,
   "candidate_clusters": 44,
   "google_news_resolution": {
-    "wrappers": 47,
-    "resolved": 34,
-    "text_recovered": 24,
-    "reattributed": 0,
-    "images_found": 31
+    "wrappers": 51,
+    "resolved": 37,
+    "text_recovered": 26,
+    "reattributed": 1,
+    "images_found": 33
   },
-  "duplicates_merged": 76,
+  "duplicates_merged": 80,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -134,7 +134,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 107,
+    "rss_and_google_news": 111,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -261,21 +261,24 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 33,
+    "Rochdale Times": 34,
     "Rochdale AFC": 24,
     "Manchester Evening News": 18,
-    "Rochdale Borough Council": 9,
+    "Rochdale Borough Council": 10,
     "Doncaster Free Press": 7,
     "The Bury Times": 5,
     "InYourArea": 5,
     "Bee Network live travel alerts": 4,
     "BBC": 2,
     "ESPN": 2,
-    "ITVX": 2,
     "About Manchester": 2,
     "Rochdale Borough Council RSS": 1,
     "Oldham Times": 1,
+    "ITVX": 1,
+    "Transfermarkt": 1,
     "Futbol24": 1,
+    "Fansnetwork": 1,
+    "Roch Valley Radio": 1,
     "Greater Manchester Police": 1,
     "Yahoo News UK": 1,
     "Rochdale Borough Council News": 1,
@@ -888,8 +891,12 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "fansnetwork.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "fansnetwork.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -925,8 +932,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-04T05:59:00.808402Z",
-  "frontpage_article_count": 15,
+  "frontpage_generated_at": "2026-11-04T06:17:11.884460Z",
+  "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -981,7 +988,6 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "transport": 1,
-      "traffic": 1,
       "sport": 3,
       "business": 2,
       "health": 2,
@@ -990,7 +996,7 @@
       "community": 2
     },
     "selected_by_ward": {
-      "borough-wide": 14,
+      "borough-wide": 13,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
@@ -1004,7 +1010,6 @@
     },
     "selected_by_source": {
       "inyourarea": 1,
-      "rochdale borough council": 1,
       "rochdale times": 1,
       "zambrero": 1,
       "uk lawyers for israel": 1,
@@ -1020,11 +1025,11 @@
     "primary_pool_size": 29,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 15,
+    "frontpage_count": 14,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 11,
-    "fresh_under_homepage_window": 15,
-    "short_briefs_selected": 10,
+    "fresh_under_homepage_window": 14,
+    "short_briefs_selected": 9,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
