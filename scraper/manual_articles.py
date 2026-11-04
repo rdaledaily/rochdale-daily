@@ -84,7 +84,29 @@ def _briefing_html(entry: dict[str, Any]) -> str:
     tags = re.findall(r"<[^>]*>", value)
     if not value or not tags or any(not _BRIEFING_TAG_RE.fullmatch(tag) for tag in tags):
         return ""
-    return value
+    return _drop_taken_down_items(value, taken_down_slugs())
+
+
+def _drop_taken_down_items(value: str, taken_down: set[str]) -> str:
+    """Remove briefing list items that point at a taken-down story.
+
+    A briefing is written once and stored, so a story removed later stayed
+    listed in it with its headline and summary (4 Nov 2026: a story taken
+    down at 11:33 was still in that morning's briefing on the homepage).
+    """
+    if not taken_down:
+        return value
+
+    def keep(match: "re.Match[str]") -> str:
+        slug = match.group(1).lower()
+        return "" if slug in taken_down else match.group(0)
+
+    return re.sub(
+        r'<li>(?:(?!</li>).)*?<a href="/articles/([a-z0-9-]+)(?:\.html)?">(?:(?!</li>).)*</li>',
+        keep,
+        value,
+        flags=re.S,
+    )
 
 
 def _content_html(entry: dict[str, Any]) -> str:
