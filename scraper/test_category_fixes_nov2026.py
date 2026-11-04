@@ -26,10 +26,12 @@ def test_leisure_centre_pool_closure_is_not_health():
     assert deterministic_category(text, "health") == "community"
 
 
-def test_guided_walk_from_station_is_events_not_transport():
+def test_guided_walk_from_station_is_community_not_transport():
+    # Never "events": that category is reserved for the approved listings
+    # source, and any other "events" story is deleted from the feed.
     text = ("Outdoor guided walk 'Stories We Tell: Rochdale' to explore themes of belonging. "
             "The walk starts at Rochdale Train Station, sharing storytelling about the town.")
-    assert deterministic_category(text, "transport") == "events"
+    assert deterministic_category(text, "transport") == "community"
 
 
 def test_rail_disruption_stays_transport():
