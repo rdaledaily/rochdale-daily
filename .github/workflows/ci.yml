@@ -310,6 +310,9 @@ jobs:
           PYTHONPATH=scraper python scraper/test_normalise_article_urls.py
           PYTHONPATH=scraper python scraper/test_planning_in_environment.py
           PYTHONPATH=scraper python scraper/test_production_rewrite_reports_skips.py
+          PYTHONPATH=scraper python scraper/test_briefing_drops_taken_down.py
+          PYTHONPATH=scraper python scraper/test_category_fixes_nov2026.py
+          PYTHONPATH=scraper python scraper/test_uklfi_source_denied.py
           PYTHONPATH=scraper python scraper/test_quality_gate_split.py
           PYTHONPATH=scraper python scraper/test_reader_growth.py
           PYTHONPATH=scraper python scraper/test_register_watch.py
