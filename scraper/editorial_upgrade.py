@@ -43,6 +43,9 @@ CATEGORY_ORDER = (
         r"(?:crown|magistrates|county) court|court (?:hearing|case|appearance|proceedings)|"
         r"appeared? (?:at|in|before) (?:the )?court|"
         r"police|wanted person|appeal for witnesses|"
+        # A police appeal for a wanted man was filed as health on one
+        # "wellbeing" because crime scored only "police" (4 Nov 2026).
+        r"wanted in connection with|non-molestation orders?|restraining orders?|"
         r"(?:police )?investigation (?:launched|underway|ongoing)|police investigation|"
         r"attacks? (?:on|against) (?:a |an )?\w+|child attacks?|"
         r"criminal behaviour order|drugs raid|cannabis farm|deportation|parole|"
@@ -81,7 +84,7 @@ CATEGORY_ORDER = (
     )),
     ("health", re.compile(
         r"\b(?:NHS|hospital|doctor|GP\b|clinic|health service|mental health|"
-        r"patient|care service|pharmacy|vaccination|fitness|gym|leisure centre|exercise (?:class(?:es)?|session(?:s)?)|workout|body combat|zumba|cardiovascular|wellbeing)\b",
+        r"patient|care service|pharmacy|vaccination|fitness|gym|exercise (?:class(?:es)?|session(?:s)?)|workout|body combat|zumba|cardiovascular|wellbeing)\b",
         re.I,
     )),
     ("community", re.compile(
@@ -89,7 +92,10 @@ CATEGORY_ORDER = (
         r"fundraising|volunteer|donation|support group|community group|"
         r"family support|local families|neighbourhood project|hidden hero|"
         r"protests?|protesters?|demonstration|petition|campaigners?|"
-        r"safe haven|drop[- ]in|warm space|community centres?|support services?)\b",
+        r"safe haven|drop[- ]in|warm space|community centres?|support services?|"
+        # A leisure centre is a council facility: pool closures and opening
+        # hours are community news, not health (4 Nov 2026).
+        r"leisure centres?|homeless(?:ness)?|rough sleep(?:ers?|ing)|sleep out)\b",
         re.I,
     )),
     ("business", re.compile(
@@ -178,7 +184,10 @@ CATEGORY_ORDER = (
     )),
     ("events", re.compile(
         r"\b(?:festival|concert|gig|exhibition|performance|parade|fair|"
-        r"ticketed event|what'?s on|open day|coffee morning|reform club event)\b",
+        r"ticketed event|what'?s on|open day|coffee morning|reform club event|"
+        # A guided walk "starting at Rochdale Train Station" was filed as
+        # transport: the meeting point scored, the event itself did not.
+        r"guided walks?|heritage walks?|walking tours?|storytelling|workshops?)\b",
         re.I,
     )),
 )

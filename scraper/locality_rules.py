@@ -56,8 +56,15 @@ SOURCE_DENY_DOMAINS = {
     # Hijacked university host serving "Crewe vs Rochdale LIVE free stream"
     # piracy pages: 70 rewrite slots in the week to 19 Oct 2026.
     "uco.es",
+    # Campaigning legal group writing on behalf of its own clients, not a
+    # news source. Its 3 Nov 2026 post on an Oulder Hill gym dispute was
+    # published as a one-sided story with no right of reply; the editor
+    # discarded the source permanently on 4 Nov 2026.
+    "uklfi.com",
 }
-SOURCE_DENY_NAMES = set()
+# Google News entries often carry only the publisher NAME, so the name is
+# denied as well as the domain.
+SOURCE_DENY_NAMES = {"uk lawyers for israel", "uklfi"}
 
 # Gambling, betting-tips and piracy-stream sites are never a source and are
 # never linked (23 Oct 2026). Three live match stories cited apwin.com (an
