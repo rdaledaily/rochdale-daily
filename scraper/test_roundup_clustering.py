@@ -53,6 +53,15 @@ case = json.loads((Path(__file__).resolve().parent / 'fixtures_roundup_swallow.j
 out = {r['slug'] for r in dedupe_article_records([case['briefing'], case['gym']])}
 check(case['gym']['slug'] in out, 'live case: the 4 Nov briefing does not swallow the gym story re-filed as crime')
 
+# One record per page address, whatever the event import adds (4 Nov 2026).
+import frontpage_pipeline as fp  # noqa: E402
+article = {'slug': 'rock-classics-by-candlelight-rochdale', 'id': 'e33c', 'source_kind': 'article', 'title': 'Rock Classics by Candlelight',
+           'content_html': '<p>A concert at Rochdale Town Hall.</p>', 'published_at': '2026-08-21T16:03:06Z'}
+event = dict(article, source_kind='event', event_start_at='2026-11-21T19:30:00Z', source_url='https://www.whatsoccurrinevents.co.uk/x')
+other = dict(article, slug='another-story', id='zz')
+out = fp._dedupe_by_slug([article, other, event])
+check([r['slug'] for r in out] == ['rock-classics-by-candlelight-rochdale', 'another-story'], 'two records with one address become one; order kept')
+
 print()
 if FAILURES:
     print(f'{len(FAILURES)} FAILED')

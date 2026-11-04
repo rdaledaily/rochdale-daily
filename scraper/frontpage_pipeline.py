@@ -1568,6 +1568,30 @@ def _same_frontpage_story(
     )
 
 
+def _dedupe_by_slug(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """One record per page address. Two records with one slug can only render
+    one page, so they are the same record and are combined.
+
+    Measured 4 Nov 2026: the live ticket-event import added an event copy of
+    "Rock Classics by Candlelight" under the existing article's id and slug;
+    articles.json was written with both and the SEO feed gate failed main.
+    """
+    order: list[str] = []
+    by_slug: dict[str, dict[str, Any]] = {}
+    unslugged: list[dict[str, Any]] = []
+    for item in items:
+        slug = str(item.get("slug") or "")
+        if not slug:
+            unslugged.append(item)
+            continue
+        if slug in by_slug:
+            by_slug[slug] = merge_article_records(by_slug[slug], item)
+        else:
+            by_slug[slug] = item
+            order.append(slug)
+    return [by_slug[slug] for slug in order] + unslugged
+
+
 def _dedupe_by_url(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Final cross-category duplicate protection for the published feeds."""
     clusters: list[list[dict[str, Any]]] = []
@@ -1632,6 +1656,7 @@ def main() -> int:
     for article in merged:
         if str(article.get("status") or "published").lower() == "published":
             enforce_article(article, Path.cwd())
+    merged = _dedupe_by_slug(merged)
     merged.sort(
         key=lambda article: original_publication_date(article)
         or datetime.min.replace(tzinfo=timezone.utc),
