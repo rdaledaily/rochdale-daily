@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-04T08:40:25.248587Z",
+  "last_run_at": "2026-11-04T09:02:21.729958Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,32 +42,41 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 104,
+  "raw_candidates_before_job_filter": 99,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 104,
-  "candidate_clusters": 41,
+  "raw_candidates": 99,
+  "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 62,
-    "resolved": 48,
-    "text_recovered": 19,
+    "wrappers": 33,
+    "resolved": 23,
+    "text_recovered": 15,
     "reattributed": 1,
-    "images_found": 24
+    "images_found": 19
   },
-  "duplicates_merged": 63,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 522,
+  "duplicates_merged": 61,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
+  "drafted_articles": [
+    {
+      "slug": "bilal-ishaq-jailed-for-16-months-after-dangerous-pursuit-in-rochdale",
+      "source_url": "https://uk.news.yahoo.com/disqualified-driver-jailed-dangerous-rochdale-163912815.html"
+    },
+    {
+      "slug": "rochdale-borough-council-awards-contract-for-homeless-family-support-services",
+      "source_url": "https://www.find-tender.service.gov.uk/Notice/103921-2026"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 519,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 1,
-    "reopened_after_evidence_fix": 0,
+    "reopened_after_evidence_fix": 1,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
@@ -75,25 +84,16 @@
     "entries": 140,
     "by_outcome": {
       "failed": 7,
-      "published": 104,
-      "rejected": 29
+      "published": 105,
+      "rejected": 28
     },
-    "held_back_this_run": 30,
-    "held_already_published": 25,
-    "held_rejected": 5,
+    "held_back_this_run": 25,
+    "held_already_published": 21,
+    "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
-    {
-      "url": "https://uk.news.yahoo.com/disqualified-driver-jailed-dangerous-rochdale-163912815.html",
-      "title": "Disqualified driver jailed after dangerous Rochdale pursuit - Yahoo News UK",
-      "source_name": "Yahoo News UK",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-04T08:18:33.913246Z"
-    },
     {
       "url": "https://rochdaleafc.co.uk/report-doncaster-home-031126",
       "title": "Dale Exit Trophy",
@@ -131,11 +131,14 @@
       "last_attempt_at": "2026-11-03T01:23:14.852076Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 154.": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 96,
-    "website_discovery": 2,
+    "rss_and_google_news": 86,
+    "website_discovery": 7,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -144,7 +147,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 3
+    "men_newsletter": 2
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -253,6 +256,13 @@
         "resolved_url": ""
       },
       {
+        "headline": "17 months ago, she was a serving police officer. Now she's in jail",
+        "received_at": "2026-11-04T08:07:48+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 0 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQbXRVdFdNZThDdDkwb21YTEVPSlBmbWNVLXhpQmhVR1dtZ1BCZV9Cd3R0V2JfQk9vTXlfR3RidEZwYTIwNjBjZjlMd0czTGM2T05INWVyd2FqcHJ1Q2VId053YmI4c0NCazZxWTNCbDRRUWVZWDVUWTJaNGtwTFV6a0IwNDhsVUNjR3l1U1VYSC1RZ0JpZ0N2ZDl0ajd5TGNnM1EwYTJrNElCaWhlazhZ?oc=5"
+      },
+      {
         "headline": "Alleged grooming gang leader denies having sex with girls",
         "received_at": "2026-11-04T08:07:48+00:00",
         "status": "not_found",
@@ -263,44 +273,38 @@
         "headline": "The latest dangerous chapter in the story of 'Rochdale's Chernobyl'",
         "received_at": "2026-11-04T08:07:48+00:00",
         "status": "waiting_for_text",
-        "reason": "Google News link not yet resolved to the MEN article; 183 characters of source text (needs 500) - retried next run",
+        "reason": "Google News link not yet resolved to the MEN article; 0 characters of source text (needs 500) - retried next run",
         "resolved_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNUk83cnd5cXl6c2prTFpuQUNPZ3ExRmpsU240YjFCaFBWektOMFVJMGFOU2ZhWjNfYVpRNTFtYWw1SUppN252MTREc2g2aUs1TkR2WFByTFlmZEp0b2llNUdFNGVaaHUyWUJyS0J1NktCNzNrX0FHVUY1aDJMdzg1M2tKMmI4Q204bGZlRTdPSkZzUmFUVW83SW1zRDQtaE3SAZ8BQVVfeXFMTVJPN3J3eXF5enNqa0xabkFDT2dxMUZqbFNuNGIxQmhQVnpLTjBVSTBhTlNmYVozX2FaUTUxbWFsNUlKaTdudjE0RHNoNmlLNU5EdlhQckxZZmRKdG9pZTVHRTRlWmh1MllCcktCdTZLQjcza19BR1VGNWgyTHc4NTNrSjJiOENtOGxmZUU3T0pGc1JhVFVvN0ltc0Q0LWhN?oc=5"
-      },
-      {
-        "headline": "17 months ago, she was a serving police officer. Now she's in jail",
-        "received_at": "2026-11-04T08:07:48+00:00",
-        "status": "waiting_for_text",
-        "reason": "Google News link not yet resolved to the MEN article; 219 characters of source text (needs 500) - retried next run",
-        "resolved_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQbXRVdFdNZThDdDkwb21YTEVPSlBmbWNVLXhpQmhVR1dtZ1BCZV9Cd3R0V2JfQk9vTXlfR3RidEZwYTIwNjBjZjlMd0czTGM2T05INWVyd2FqcHJ1Q2VId053YmI4c0NCazZxWTNCbDRRUWVZWDVUWTJaNGtwTFV6a0IwNDhsVUNjR3l1U1VYSC1RZ0JpZ0N2ZDl0ajd5TGNnM1EwYTJrNElCaWhlazhZ?oc=5"
       }
     ]
   },
   "source_counts": {
-    "Rochdale Times": 26,
-    "Rochdale AFC": 19,
-    "Manchester Evening News": 18,
-    "Rochdale Borough Council": 9,
+    "Rochdale Times": 22,
+    "Rochdale AFC": 21,
+    "Manchester Evening News": 14,
+    "Rochdale Borough Council": 10,
+    "Doncaster Free Press": 6,
     "Bee Network live travel alerts": 5,
-    "Doncaster Free Press": 4,
     "InYourArea": 4,
     "The Bury Times": 4,
     "BBC": 2,
     "ESPN": 2,
-    "About Manchester": 2,
+    "ITVX": 2,
     "Rochdale Borough Council RSS": 1,
-    "Oldham Times": 1,
-    "ITVX": 1,
-    "Futbol24": 1,
     "Fansnetwork": 1,
+    "Roch Valley Radio": 1,
     "Greater Manchester Police": 1,
     "Yahoo News UK": 1,
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "business": 1,
+    "crime": 1
+  },
   "published_by_category": {
     "business": 55,
-    "community": 68,
+    "community": 67,
     "crime": 23,
     "education": 25,
     "environment": 39,
@@ -334,8 +338,14 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "hard-news-v3-66dbe757447130d58357",
+    "community-v3-cd34bae4239761702cd4"
+  ],
+  "selected_candidate_urls": [
+    "https://uk.news.yahoo.com/disqualified-driver-jailed-dangerous-rochdale-163912815.html",
+    "https://www.find-tender.service.gov.uk/Notice/103921-2026"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -345,6 +355,35 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "business",
+      "crime"
+    ],
+    "selected_categories": [
+      "business",
+      "crime"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "business": 1,
+      "crime": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 2
+    },
+    "selected_by_source": {
+      "find a tender": 1,
+      "yahoo news uk": 1
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -941,7 +980,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-04T08:41:50.870327Z",
+  "frontpage_generated_at": "2026-11-04T09:15:31.805813Z",
   "frontpage_article_count": 12,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1011,9 +1050,9 @@
     "selected_by_area": {
       "heywood": 1,
       "hopwood": 1,
-      "littleborough": 2,
+      "littleborough": 1,
       "middleton": 1,
-      "rochdale": 21,
+      "rochdale": 18,
       "spotland": 1,
       "wardle": 1
     },
@@ -1029,26 +1068,26 @@
       "rochdale daily": 1,
       "historic england (national heritage list for england)": 1
     },
-    "pool_size": 28,
-    "primary_pool_size": 28,
+    "pool_size": 24,
+    "primary_pool_size": 24,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 12,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 10,
+    "fresh_under_24h": 9,
     "fresh_under_homepage_window": 12,
     "short_briefs_selected": 8,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 14,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
   "events_removed_other_source": 10,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 3,
-  "duplicate_articles_after_postprocessing": 522,
+  "approved_ticket_events": 12,
+  "event_dates_corrected_from_ledger": 0,
+  "duplicate_articles_after_postprocessing": 519,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1058,10 +1097,12 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "whats_on_event_count": 12,
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "rochdale-borough-council-awards-contract-for-homeless-family-support-services"
+  ],
+  "drafts_not_published": 1,
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }

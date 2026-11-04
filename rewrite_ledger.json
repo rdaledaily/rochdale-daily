@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-04T08:40:25.244227Z",
+  "updated_at": "2026-11-04T09:02:21.725359Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 140,
@@ -689,14 +689,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T08:18:33.913246Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-04T09:02:21.724860Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Disqualified driver jailed after dangerous Rochdale pursuit - Yahoo News UK",
       "source_name": "Yahoo News UK",
       "category": "crime",
       "text_fingerprint": "327c8c5319532d2c",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.bbc.co.uk/news/articles/c6kgq915wvj1o": {
       "first_attempt_at": "2026-10-29T10:54:14.622027Z",
@@ -1063,11 +1064,12 @@
       "first_attempt_at": "2026-11-02T18:04:19.840557Z",
       "attempts": 1,
       "urls": [
+        "https://www.find-tender.service.gov.uk/Notice/103655-2026",
         "https://www.find-tender.service.gov.uk/Notice/103921-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-02T18:04:19.840557Z",
+      "last_attempt_at": "2026-11-04T09:02:21.725234Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale Borough Council awards contract: Homeless Family Leasing Scheme (HFLS) Management and Support Services",
