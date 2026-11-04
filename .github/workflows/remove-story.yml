@@ -69,8 +69,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          # _redirects carries the 301 remove_story.py writes for each deleted
+          # page. It was never staged, so every takedown left a dead link
+          # (measured 4 Nov 2026: four removed stories answered 404).
           stage_takedown() {
-            git add story_blocklist.json articles.json event_dates.json articles sitemap.xml news-sitemap.xml articles/frontpage.json index.html cards_image_policy_report.json assets/img/cards 2>/dev/null || true
+            git add story_blocklist.json articles.json event_dates.json articles sitemap.xml news-sitemap.xml articles/frontpage.json index.html cards_image_policy_report.json assets/img/cards _redirects 2>/dev/null || true
           }
 
           reapply_takedown() {
