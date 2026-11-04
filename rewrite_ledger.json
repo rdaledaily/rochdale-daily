@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-04T23:17:05.407936Z",
+  "updated_at": "2026-11-04T23:48:04.221386Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 146,
@@ -883,8 +883,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-04T23:17:05.407700Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Man, 38, threatened two police officers with kitchen knife in Heywood - The Bury Times",
       "source_name": "The Bury Times",
       "category": "traffic",
@@ -972,18 +972,19 @@
       "first_attempt_at": "2026-11-04T17:26:54.849013Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPdUs5N3VUSFNpa0huN1lOOHVMVk85TjBwT1BnOGN0UFBTZXV2WWsxRDFfemRBYzZmdGNoS04zYXowNDdtYmdlS1c0WEI3X0l5WF8wTmFsbEZaWEtNTHY4NHYyU3liM1Ryc0lpQS1UOE94OXk1N2JFcGlTV01oeG1zbWEtUXF0ZUNMTGM4UVg0SVBaTVZnR1JicDVKNFB0eG55UGRPMnF3Mkp5VTFWeF8xMm1VMXBGTFpYdjZOVWd5RHN5SVhYV1BoRnd3Yy1uRE1BeFBITTBDaHA?oc=5",
         "https://news.google.com/rss/articles/CBMijwJBVV95cUxOOGhKQWx0bHBfdXpRWENWTmlqLVMydmRhejA3YUNLLTU5Z3VOQkF3akd2UG1XWmhLT2xxSk9hbnpIVzVzX3U1T0c2WHJDbWZfdjJTaGVoSFRsSzNwY2JnQW1UREhSdEhmWjQ1b3dvVE9BMldobE5TVDdyQWdnSHYzd21LYnVqVUdWZVJxQzYxTFN5a09Pa0ZJUEtySUt4OHJnWUxzNXJicDl6YXdwMVVfMmVETktWMHkxVk5MdmlTUWtYTUota2VWM2huSk1JVURuMnYyay1TWjRETTUtVXZkeXdMZjdjcm9Ra3FRVW9DTDlleS1LdnpFVnBKY253cGxGNG1uVDNiaHNZS3pfZDJj?oc=5",
         "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrnes-assessment-of-doncaster-rovers-win-against-rochdale-9328688"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T17:26:54.849013Z",
+      "last_attempt_at": "2026-11-04T23:48:04.221222Z",
       "outcome": "published",
       "reason": "",
-      "title": "Cliff Byrne's praises 'exhilarating' Doncaster Rovers' win at Rochdale",
+      "title": "'Terrific at times' - Cliff Byrne's assessment of Doncaster Rovers' performance against Rochdale - Doncaster Free Press",
       "source_name": "Doncaster Free Press",
       "category": "environment",
-      "text_fingerprint": "9ed690cbeddbfa48"
+      "text_fingerprint": "1cd1c017c5f094db"
     },
     "https://www.expressandstar.com/uk-sports/jon-brady-delights-in-end-to-port-vale-profligacy-as-they-put-four-past-rochdale-9322224": {
       "first_attempt_at": "2026-10-31T16:22:40.873009Z",
