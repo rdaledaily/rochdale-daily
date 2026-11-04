@@ -1393,7 +1393,41 @@ def merge_article_records(left: dict[str, Any], right: dict[str, Any]) -> dict[s
     return merged
 
 
+# Briefings and wrap-ups summarise many stories, so their text resembles each
+# of them. Measured 4 Nov 2026: in one retention pass the Morning Briefings
+# absorbed each other and the 4 Nov briefing absorbed "Israeli man threatened
+# with death at Rochdale gym"; the briefing was then restored from its manual
+# copy and the story it had swallowed vanished from the feed.
+ROUNDUP_SLUG_RE = re.compile(r"^(?:morning-briefing|evening-wrap(?:-up)?|evening-briefing)-")
+
+
+def _is_roundup(record: dict[str, Any]) -> bool:
+    # daily_briefing.py ids every briefing "briefing-<slug>".
+    return bool(ROUNDUP_SLUG_RE.match(str(record.get("slug") or ""))
+                or str(record.get("id") or "").startswith("briefing-"))
+
+
+def _is_editor_record(record: dict[str, Any]) -> bool:
+    return bool(record.get("manual_article") or record.get("editorial_lock"))
+
+
+def _same_record(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    for field in ("id", "slug"):
+        if left.get(field) and left.get(field) == right.get(field):
+            return True
+    return False
+
+
 def _records_match(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    # A roundup is only ever the same record as itself.
+    if _is_roundup(left) or _is_roundup(right):
+        return _same_record(left, right)
+    # Two of the editor's own articles are separate stories by her decision
+    # (measured: an appeal for a woman merged with a murder arrest and the
+    # town-centre stabbing). A pipeline duplicate of her story may still fold
+    # into hers - that is how her version wins.
+    if _is_editor_record(left) and _is_editor_record(right):
+        return _same_record(left, right)
     person_match = missing_person_match(left, right)
     if person_match is not None:
         return person_match

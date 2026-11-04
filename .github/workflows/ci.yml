@@ -257,6 +257,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_category_threats.py
           python scraper/test_gh_dispatch.py
           PYTHONPATH=scraper python scraper/test_clean_ip_fetch.py
+          PYTHONPATH=scraper python scraper/test_roundup_clustering.py
           PYTHONPATH=scraper python scraper/test_clean_urls.py
           PYTHONPATH=scraper python scraper/test_archive_integrity.py
           PYTHONPATH=scraper python scraper/test_publisher_markup.py
