@@ -61,3 +61,18 @@ test('undo needs the token and removes the check', async () => {
   assert.equal((await del('drake-street-closes')).status, 200);
   assert.deepEqual((await (await get()).json()).checks, {});
 });
+
+test('newsletter approvals: token-only, id-validated, public to read, withdrawable', async () => {
+  const id = '0123456789abcdef';
+  assert.equal((await post({ approve: id }, 'wrong')).status, 401);
+  assert.equal((await post({ approve: 'not-an-id' })).status, 400);
+  const res = await post({ approve: id, approved_at: '2020-01-01T00:00:00Z' });
+  assert.equal(res.status, 200);
+  assert.notEqual((await res.json()).approved_at, '2020-01-01T00:00:00Z');
+  const list = await (await get('?approvals=1')).json();
+  assert.deepEqual(Object.keys(list.approvals), [id]);
+  assert.deepEqual((await (await get()).json()).checks, {}, 'approvals are not story checks');
+  const withdraw = await onRequestDelete({ env, request: new Request(base + '?approval=' + id, { method: 'DELETE', headers: { 'x-admin-token': 'desk-key-123' } }) });
+  assert.equal(withdraw.status, 200);
+  assert.deepEqual((await (await get('?approvals=1')).json()).approvals, {});
+});

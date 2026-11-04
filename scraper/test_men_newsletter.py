@@ -279,6 +279,21 @@ sean = must('Urgent appeal as man, 22, goes missing in Rochdale', 'Urgent appeal
 check(core.must_cover_block(sean, {}, [], removed)[0] == '', 'a different appeal sharing a few words is still written')
 check(core.removed_story_match(sean, removed) == '', 'the removed-story match is two-way, not one-way')
 
+# Court stories from the newsletter wait for the editor; a failed read keeps them held.
+trial = must('Alleged grooming gang leader denies having sex with girls',
+             'Alleged grooming gang leader denies having sex with girls', text='The trial at Minshull Street Crown Court heard ' * 20)
+tid = mn.story_id(trial.newsletter_headline)
+check(core.must_cover_block(trial, {}, [], [], set())[0] == 'held_for_editor', 'a trial story is held for the editor')
+check(core.must_cover_block(trial, {}, [], [], None)[0] == 'held_for_editor', 'held when approvals cannot be read')
+check(core.must_cover_block(trial, {}, [], [], {tid})[0] == '', 'written once the editor approves it')
+teaser = must('As she waited to learn her fate, her career was already gone', 'As she waited to learn her fate',
+              text='The former officer was jailed at Manchester Crown Court for misconduct. ' * 10)
+check(core.must_cover_block(teaser, {}, [], [], set())[0] == 'held_for_editor', 'a teaser headline is caught by its court text')
+plain = must('The multi-billion plan to transform Rochdale', 'The multi-billion plan to transform Rochdale',
+             text='The council set out plans for homes, offices and a new park in the town centre. ' * 10)
+check(core.must_cover_block(plain, {}, [], [], set())[0] == '', 'an ordinary story is not held')
+check(len(tid) == 16 and tid == mn.story_id(' alleged GROOMING gang leader denies having sex with girls '), 'story ids are stable')
+
 # Locality: a published must-cover story survives the retention pass.
 article = {'title': 'Storm Austen: when rain will batter Greater Manchester', 'excerpt': 'Met Office warning for the region.',
            'content_html': '<p>Bolton and Oldham will see heavy rain.</p>', 'source_name': 'Manchester Evening News',

@@ -31,6 +31,9 @@ button{font:inherit;font-weight:700;border:0;padding:12px 16px;cursor:pointer;mi
 .stamp{color:var(--ok);font-weight:700;flex:1}
 .empty{background:#fff;border:1px solid var(--line);padding:16px}
 .note{font-size:13px;color:var(--muted);margin:18px 0 32px}
+.held-title{font-size:18px;margin:18px 0 4px}
+.story.held{border-left-color:#8c3a25}
+.approve{background:#8c3a25;color:#fff;flex:1}
 </style>
 </head>
 <body>
@@ -45,6 +48,11 @@ button{font:inherit;font-weight:700;border:0;padding:12px 16px;cursor:pointer;mi
     </select>
     <button class="load" id="load">Load</button>
   </div>
+  <section id="held" hidden>
+    <h2 class="held-title">Waiting for your approval</h2>
+    <p class="meta">Court and criminal-process stories from the MEN newsletter are not written until you approve them. Read the MEN report first; approving lets the next newsroom run write it.</p>
+    <div id="held-list"></div>
+  </section>
   <p class="summary" id="summary"></p>
   <p class="status" id="status" role="status">Use the same token as moderation.</p>
   <div id="list"></div>
@@ -123,6 +131,46 @@ button{font:inherit;font-weight:700;border:0;padding:12px 16px;cursor:pointer;mi
     statusEl.textContent = data.checked_at ? "Recorded." : "Check removed.";
     render();
   }
+  var heldBox = document.getElementById("held");
+  var heldList = document.getElementById("held-list");
+  var approvals = {};
+  async function loadHeld() {
+    try {
+      var [ledgerRes, approvalRes] = await Promise.all([
+        fetch("/reports/men_newsletter_coverage.json?t=" + Date.now()),
+        fetch(API + "?approvals=1&t=" + Date.now()),
+      ]);
+      var rows = ((await ledgerRes.json()) || {}).stories || [];
+      approvals = ((await approvalRes.json()) || {}).approvals || {};
+      var held = rows.filter(function (r) { return r.status === "held_for_editor" && /^[0-9a-f]{16}$/.test(r.id || ""); });
+      heldBox.hidden = !held.length;
+      heldList.innerHTML = held.map(function (r) {
+        var ok = approvals[r.id];
+        var link = /^https:\/\/www\.manchestereveningnews\.co\.uk\//.test(r.resolved_url || "") ? r.resolved_url : "";
+        return '<article class="story held" data-id="' + esc(r.id) + '">' +
+          (link ? '<a href="' + esc(link) + '" target="_blank" rel="noopener">' + esc(r.headline) + "</a>" : "<strong>" + esc(r.headline) + "</strong>") +
+          '<div class="meta">MEN newsletter · ' + esc(when(r.received_at)) + '</div><div class="actions">' + (ok
+            ? '<span class="stamp">Approved ' + esc(when(ok)) + ' · written on the next run</span><button class="undo" data-held="withdraw">Withdraw</button>'
+            : '<button class="approve" data-held="approve">Approve for publication</button>') + "</div></article>";
+      }).join("");
+    } catch (err) { heldBox.hidden = true; }
+  }
+  heldList.onclick = async function (event) {
+    var button = event.target.closest("button[data-held]");
+    if (!button) return;
+    var id = button.closest(".story").dataset.id;
+    var token = tokenEl.value.trim();
+    if (button.dataset.held === "approve" && !confirm("Approve this court story for publication? Check the MEN report first.")) return;
+    button.disabled = true;
+    var res = button.dataset.held === "approve"
+      ? await fetch(API, { method: "POST", headers: { "x-admin-token": token, "Content-Type": "application/json" }, body: JSON.stringify({ approve: id }) })
+      : await fetch(API + "?approval=" + encodeURIComponent(id), { method: "DELETE", headers: { "x-admin-token": token } });
+    var data = await res.json().catch(function () { return {}; });
+    statusEl.textContent = res.ok ? (data.approved_at ? "Approved." : "Approval withdrawn.") : (data.error || "That did not save.");
+    loadHeld();
+  };
+  var baseLoad = load;
+  load = async function () { await baseLoad(); if (tokenEl.value.trim()) loadHeld(); };
   document.getElementById("load").onclick = load;
   daysEl.onchange = render;
   list.onclick = function (event) {
