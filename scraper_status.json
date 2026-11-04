@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-04T11:09:37.198602Z",
+  "last_run_at": "2026-11-04T11:43:41.371684Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,43 +42,30 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 106,
+  "raw_candidates_before_job_filter": 97,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 106,
+  "raw_candidates": 97,
   "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 51,
-    "resolved": 35,
-    "text_recovered": 16,
+    "wrappers": 32,
+    "resolved": 20,
+    "text_recovered": 15,
     "reattributed": 0,
-    "images_found": 17
+    "images_found": 16
   },
-  "duplicates_merged": 67,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 3,
-  "drafted_articles": [
-    {
-      "slug": "new-plans-submitted-for-greggs-bakery-at-littleborough-service-station",
-      "source_url": "https://www.rochdaletimes.co.uk/new-drive-to-bring-greggs-to-service-station/"
-    },
-    {
-      "slug": "bilal-ishaq-jailed-for-16-months-after-dangerous-pursuit-in-rochdale",
-      "source_url": "https://uk.news.yahoo.com/disqualified-driver-jailed-dangerous-rochdale-163912815.html"
-    },
-    {
-      "slug": "israeli-man-threatened-with-violence-at-rochdale-leisure-centre",
-      "source_url": "https://www.uklfi.com/israeli-man-threatened-with-death-at-rochdale-gym-but-leisure-centre-threatens-to-ban-him-too"
-    }
-  ],
-  "new_articles": 2,
-  "live_articles": 523,
+  "duplicates_merged": 58,
+  "attempted_rewrites": 0,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
+  "live_articles": 522,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 2,
-    "queued_for_retry": 2,
-    "recovery_limit_reached": 0,
+    "missing_from_feed": 1,
+    "queued_for_retry": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -88,16 +75,25 @@
     "entries": 142,
     "by_outcome": {
       "failed": 7,
-      "published": 107,
-      "rejected": 28
+      "published": 106,
+      "rejected": 29
     },
-    "held_back_this_run": 25,
-    "held_already_published": 22,
-    "held_rejected": 3,
+    "held_back_this_run": 28,
+    "held_already_published": 24,
+    "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://uk.news.yahoo.com/disqualified-driver-jailed-dangerous-rochdale-163912815.html",
+      "title": "Disqualified driver jailed after dangerous Rochdale pursuit - Yahoo News UK",
+      "source_name": "Yahoo News UK",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-04T11:09:37.193055Z"
+    },
     {
       "url": "https://rochdaleafc.co.uk/report-doncaster-home-031126",
       "title": "Dale Exit Trophy",
@@ -126,14 +122,10 @@
       "last_attempt_at": "2026-11-03T01:23:14.852076Z"
     }
   ],
-  "published_with_style_issues": {
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 179.": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 171.": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 95,
+    "rss_and_google_news": 86,
     "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -215,6 +207,21 @@
       "feed_title": ""
     }
   },
+  "clean_ip_relay": {
+    "enabled": false,
+    "relay": "",
+    "hosts": [
+      "falingepark.com",
+      "gmp.police.uk",
+      "rochdaleafc.co.uk",
+      "rochdaleafccommunity.org",
+      "www.falingepark.com",
+      "www.gmp.police.uk",
+      "www.rochdaleafc.co.uk",
+      "www.rochdaleafccommunity.org"
+    ],
+    "responses": {}
+  },
   "men_newsletter": {
     "source": "MEN MyRochdale newsletter",
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
@@ -289,31 +296,29 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 30,
-    "Rochdale AFC": 21,
+    "Rochdale Times": 27,
     "Manchester Evening News": 14,
+    "Rochdale AFC": 14,
     "Rochdale Borough Council": 9,
-    "Doncaster Free Press": 6,
+    "Doncaster Free Press": 5,
     "InYourArea": 4,
     "The Bury Times": 4,
     "Bee Network live travel alerts": 4,
+    "ESPN": 3,
     "BBC": 2,
-    "ESPN": 2,
-    "ITVX": 2,
     "Your Trust Rochdale": 1,
     "Rochdale Borough Council RSS": 1,
+    "ITVX": 1,
+    "Transfermarkt": 1,
     "Futbol24": 1,
     "Roch Valley Radio": 1,
     "Greater Manchester Police": 1,
     "Yahoo News UK": 1,
+    "UK Lawyers for Israel": 1,
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {
-    "crime": 1,
-    "environment": 1,
-    "health": 1
-  },
+  "selected_by_category": {},
   "published_by_category": {
     "business": 55,
     "community": 67,
@@ -350,16 +355,8 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [
-    "hard-news-v3-66dbe757447130d58357",
-    "health-v3-5a1479996eca4fb8f784",
-    "environment-v3-06b9231dd203b951046b"
-  ],
-  "selected_candidate_urls": [
-    "https://uk.news.yahoo.com/disqualified-driver-jailed-dangerous-rochdale-163912815.html",
-    "https://www.uklfi.com/israeli-man-threatened-with-death-at-rochdale-gym-but-leisure-centre-threatens-to-ban-him-too",
-    "https://www.rochdaletimes.co.uk/new-drive-to-bring-greggs-to-service-station/"
-  ],
+  "selected_story_keys": [],
+  "selected_candidate_urls": [],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -369,39 +366,6 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [
-      "crime",
-      "environment",
-      "health"
-    ],
-    "selected_categories": [
-      "crime",
-      "environment",
-      "health"
-    ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [
-      "rochdale"
-    ],
-    "uncovered_categories": [],
-    "uncovered_wards": [],
-    "uncovered_areas": [],
-    "selected_by_category": {
-      "crime": 1,
-      "environment": 1,
-      "health": 1
-    },
-    "selected_by_ward": {},
-    "selected_by_area": {
-      "rochdale": 3
-    },
-    "selected_by_source": {
-      "rochdale times": 1,
-      "uk lawyers for israel": 1,
-      "yahoo news uk": 1
-    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -962,10 +926,12 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
+    "rochdaleafc.co.uk",
+    "uklfi.com"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 3
+    "rochdaleafc.co.uk": 2,
+    "uklfi.com": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1002,8 +968,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-04T11:23:20.905276Z",
-  "frontpage_article_count": 16,
+  "frontpage_generated_at": "2026-11-04T11:53:54.938543Z",
+  "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1056,7 +1022,6 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "health": 1,
-      "crime": 1,
       "transport": 1,
       "sport": 3,
       "business": 2,
@@ -1065,7 +1030,7 @@
       "community": 2
     },
     "selected_by_ward": {
-      "borough-wide": 15,
+      "borough-wide": 14,
       "Hopwood Hall": 1
     },
     "selected_by_area": {
@@ -1073,13 +1038,12 @@
       "hopwood": 1,
       "littleborough": 1,
       "middleton": 1,
-      "rochdale": 18,
+      "rochdale": 17,
       "spotland": 1,
       "wardle": 1
     },
     "selected_by_source": {
       "your trust rochdale": 1,
-      "uk lawyers for israel": 1,
       "inyourarea": 1,
       "rochdale times": 2,
       "zambrero": 1,
@@ -1090,15 +1054,15 @@
       "rochdale borough council news": 1,
       "historic england (national heritage list for england)": 2
     },
-    "pool_size": 24,
-    "primary_pool_size": 24,
+    "pool_size": 23,
+    "primary_pool_size": 23,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 16,
+    "frontpage_count": 15,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 16,
-    "short_briefs_selected": 10,
+    "fresh_under_24h": 9,
+    "fresh_under_homepage_window": 15,
+    "short_briefs_selected": 9,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1109,7 +1073,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 12,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 523,
+  "duplicate_articles_after_postprocessing": 522,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1120,12 +1084,9 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 2,
-  "published_new_slugs": [
-    "new-plans-submitted-for-greggs-bakery-at-littleborough-service-station",
-    "israeli-man-threatened-with-violence-at-rochdale-leisure-centre"
-  ],
-  "drafts_not_published": 1,
-  "publication_health": "partial",
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
