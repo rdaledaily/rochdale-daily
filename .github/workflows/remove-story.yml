@@ -119,5 +119,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run deploy-pages.yml --ref main
+          bash scraper/gh_dispatch.sh deploy-pages.yml --ref main
           echo "Emergency takedown deployment requested from latest main, including already-blocklisted cases."

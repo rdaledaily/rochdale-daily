@@ -173,7 +173,7 @@ jobs:
         if: steps.publish.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-pages.yml --ref main
+        run: bash scraper/gh_dispatch.sh deploy-pages.yml --ref main
       - name: Start the Morning Briefing when it is due
         # GitHub starts the briefing's own 9am schedule four to ten hours late
         # (34 of 34 scheduled runs, 10 September to 9 October 2026), so it never
@@ -185,7 +185,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if python3 scraper/daily_briefing.py --slot morning --check-due; then
-            gh workflow run daily-briefing.yml --ref main
+            bash scraper/gh_dispatch.sh daily-briefing.yml --ref main
             echo "dispatched the Morning Briefing"
           fi
       # The independent Facebook loop covers 10-minute checks. The newsroom
@@ -206,7 +206,7 @@ jobs:
             echo "Facebook publisher is already running or queued."
             exit 0
           fi
-          if gh workflow run facebook-publisher.yml --ref main -f chain=0; then
+          if bash scraper/gh_dispatch.sh facebook-publisher.yml --ref main -f chain=0; then
             echo "Recovered the missing Facebook publisher loop."
           else
             echo "::warning::Could not restart Facebook publisher; its cron recovery remains enabled."
@@ -254,7 +254,7 @@ jobs:
             echo "another fast run is already queued or in progress; not chaining"
             exit 0
           fi
-          gh workflow run scrape-fast.yml --ref main -f chain="$(( depth + 1 ))"
+          bash scraper/gh_dispatch.sh scrape-fast.yml --ref main -f chain="$(( depth + 1 ))"
           echo "dispatched the next fast run at chain depth $(( depth + 1 ))"
 
   deep-browser:
@@ -375,7 +375,7 @@ jobs:
         if: steps.publish.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-pages.yml --ref main
+        run: bash scraper/gh_dispatch.sh deploy-pages.yml --ref main
       - name: Preserve final rejected drafts
         if: always()
         uses: actions/upload-artifact@v6
@@ -404,5 +404,5 @@ jobs:
             echo "a fast run is already queued or in progress; nothing to restart"
             exit 0
           fi
-          gh workflow run scrape-fast.yml --ref main -f chain=1
+          bash scraper/gh_dispatch.sh scrape-fast.yml --ref main -f chain=1
           echo "restarted the fast lane after the deep run"

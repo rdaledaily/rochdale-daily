@@ -43,13 +43,13 @@ def main() -> int:
     council = text("council-minutes.yml")
     assert "generate_ward_pages.py" not in council
     assert "index.html" not in council
-    assert "gh workflow run publish.yml" in council
+    assert "bash scraper/gh_dispatch.sh publish.yml" in council
 
     # Emergency removals have a separate priority lane, never merge stale pages,
     # and always deploy latest main even when the story was already blocklisted.
     takedown = text("remove-story.yml")
     assert "group: rd-emergency-takedown" in takedown
-    assert "gh workflow run deploy-pages.yml --ref main" in takedown
+    assert "bash scraper/gh_dispatch.sh deploy-pages.yml --ref main" in takedown
     assert "git merge" not in takedown
     deploy_step = takedown.split("- name: Deploy takedown immediately", 1)[1]
     assert "if: steps.commit" not in deploy_step
@@ -107,7 +107,7 @@ def main() -> int:
 
     # Each lane that makes the fast lane yield must restart it when it
     # finishes, or the paper waits hours for GitHub's late hourly tick.
-    restart = "gh workflow run scrape-fast.yml --ref main -f chain=1"
+    restart = "bash scraper/gh_dispatch.sh scrape-fast.yml --ref main -f chain=1"
     assert restart in text("publish.yml"), "publisher must restart the fast lane"
     assert restart in text("scrape-fast.yml").split("\n  deep-browser:", 1)[1], "deep lane must restart the fast lane"
 

@@ -218,7 +218,7 @@ jobs:
         if: steps.commit.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-pages.yml --ref main
+        run: bash scraper/gh_dispatch.sh deploy-pages.yml --ref main
       - name: Preserve final rejected drafts
         if: always()
         uses: actions/upload-artifact@v6
@@ -243,5 +243,5 @@ jobs:
             echo "a fast run is already queued or in progress; nothing to restart"
             exit 0
           fi
-          gh workflow run scrape-fast.yml --ref main -f chain=1
+          bash scraper/gh_dispatch.sh scrape-fast.yml --ref main -f chain=1
           echo "restarted the fast lane after the publisher"
