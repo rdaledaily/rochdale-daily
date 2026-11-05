@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-05T03:51:16.928875Z",
+  "last_run_at": "2026-11-05T09:11:13.052972Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-05T02:01:53.825441Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 0,
+      "listed": 39,
+      "already_seen": 28,
+      "started_long_ago": 0,
+      "too_far_ahead": 9,
+      "undated": 2,
+      "in_window": 0
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-05T02:01:53.825441Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 0,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,14 +40,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-05T02:01:53.825441Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 32,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-05T02:01:53.825441Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 0,
+      "not_rochdale": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -42,23 +68,36 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 14,
+  "raw_candidates_before_job_filter": 90,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 14,
-  "candidate_clusters": 38,
+  "raw_candidates": 90,
+  "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 0,
-    "resolved": 0,
-    "text_recovered": 0,
+    "wrappers": 34,
+    "resolved": 30,
+    "text_recovered": 26,
     "reattributed": 0,
-    "images_found": 0
+    "images_found": 27
   },
-  "duplicates_merged": 0,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 530,
+  "duplicates_merged": 48,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 3,
+  "drafted_articles": [
+    {
+      "slug": "jim-watson-reflects-on-rochdale-afc-s-draw-with-doncaster-rovers",
+      "source_url": "https://www.espn.co.uk/football/match/_/gameId/401906344"
+    },
+    {
+      "slug": "rochdale-afc-to-host-york-city-in-league-two-clash-on-november-14",
+      "source_url": "https://rochdaleafc.co.uk/dale-welcome-york-city-next-saturday/"
+    },
+    {
+      "slug": "six-vehicles-seized-during-road-safety-operation-in-rochdale",
+      "source_url": "https://www.rochdaletimes.co.uk/six-vehicles-seized-in-road-safety-drive/"
+    }
+  ],
+  "new_articles": 3,
+  "live_articles": 529,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -78,8 +117,8 @@
       "published": 107,
       "rejected": 26
     },
-    "held_back_this_run": 30,
-    "held_already_published": 29,
+    "held_back_this_run": 29,
+    "held_already_published": 28,
     "held_rejected": 1,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -95,11 +134,14 @@
       "last_attempt_at": "2026-11-04T23:17:05.407700Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Tighten the report to fewer than 110 body words. The source material only supports a short report; cut every sentence th": 1,
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 1,
-    "website_discovery": 8,
+    "rss_and_google_news": 76,
+    "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -108,7 +150,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 2
+    "men_newsletter": 4
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -200,15 +242,15 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 14,
-    "covered": 8,
-    "outstanding": 5,
-    "removed_by_editor": 1,
+    "covered": 7,
+    "outstanding": 7,
+    "removed_by_editor": 0,
     "by_status": {
-      "already_covered": 6,
+      "already_covered": 5,
       "held_for_editor": 2,
       "not_found": 3,
       "published": 2,
-      "removed_by_editor": 1
+      "waiting_for_text": 2
     },
     "outstanding_stories": [
       {
@@ -255,22 +297,55 @@
         "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/alleged-ringleader-group-men-accused-34856051",
         "resolved_title": "Alleged 'ringleader' of group of men accused of sexually abusing three girls denies having sex with accusers"
+      },
+      {
+        "id": "17ae316e2ac698df",
+        "headline": "Remembrance Sunday 2026 full list of services and parades in Greater Manchester",
+        "received_at": "2026-11-05T08:06:58+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 259 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxORktJcWdEcDBfOUdvTlN6c05UakVGTGE2WHFZdGR5UDV0X1dKMkp6ejJxbzZRZlk4bGdQaU1RVllsRndNS2dXWVZJQlpOTlY5SEl1SFhzYU96R3NRX25DN3VzWlBZN2c4MXVvR2t4MkVQNkgweG1lWXZhM0lqX1ItY3kzbGVnN21nekVvOUJuSk1YZWMtaElHRnctS0FueVlWOE02aG1MbUtZNE1lVXfSAa4BQVVfeXFMTkZLSXFnRHAwXzlHb05TenNOVGpFRkxhNlhxWXRkeVA1dF9XSjJKenoycW82UWZZOGxnUGlNUVZZbEZ3TUtnV1lWSUJaTk5WOUhJdUhYc2FPekdzUV9uQzd1c1pQWTdnODF1b0dreDJFUDZIMHhtZVl2YTNJal9SLWN5M2xlZzdtZ3pFbzlCbkpNWGVjLWhJR0Z3LUtBbnlZVjhNNmhtTG1LWTRNZVV3?oc=5",
+        "resolved_title": "Remembrance Sunday 2026 full list of services and parades across Greater Manchester including city centre"
+      },
+      {
+        "id": "2d7b41695261ac08",
+        "headline": "The former footballer who has built a multi-million pound shop empire",
+        "received_at": "2026-11-05T08:06:58+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 239 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPMDVMX0RrczZsT0x0RDNYalNqV2NkVWZqR1Q4cFBQYlpXR2R5dVhmQXdHSjFSek85bTNGMU50ejdNc1dKb28wZEZCMm9mRUN6MFRNVXk4akM2RnA3ZXRMSkFOdWg5MTVvMlhkNGRFRHhLdkJ3VjRIbWxwTEFOaHp5WkdONEo2WUFWTGRQVG9HaXlSZ0QtZmhTSWRaT005VXAzaHVMeVJuV3hOUWVua3N3?oc=5",
+        "resolved_title": "The former non-league footballer who has built up a multi-million pound high street shop empire"
       }
     ]
   },
   "source_counts": {
-    "Rochdale Times": 4,
-    "Bee Network live travel alerts": 4,
+    "Rochdale Times": 34,
+    "Rochdale AFC": 18,
+    "Manchester Evening News": 11,
+    "Doncaster Free Press": 7,
+    "Bee Network live travel alerts": 5,
+    "BBC": 2,
+    "The Bury Times": 2,
     "Roch Valley Radio Local News": 2,
-    "Rochdale Valiant": 2,
     "Your Trust Rochdale": 1,
+    "ESPN": 1,
+    "ITVX": 1,
+    "The Stats Zone": 1,
+    "Roch Valley Radio": 1,
+    "Forecourt Trader": 1,
+    "Rochdale Borough Council": 1,
+    "Rochdale Valiant": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "crime": 1,
+    "sport": 1,
+    "transport": 1
+  },
   "published_by_category": {
     "business": 57,
     "community": 74,
-    "crime": 28,
+    "crime": 29,
     "education": 27,
     "environment": 43,
     "events": 28,
@@ -303,8 +378,16 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "hard-news-v3-4aa61dd4b1b2ad77c3d8",
+    "sport-v3-df4ef6d6f09448a37f4d",
+    "sport-v3-6925261c4ad4da5483d2"
+  ],
+  "selected_candidate_urls": [
+    "https://www.rochdaletimes.co.uk/six-vehicles-seized-in-road-safety-drive/",
+    "https://www.espn.co.uk/football/match/_/gameId/401906344",
+    "https://rochdaleafc.co.uk/dale-welcome-york-city-next-saturday/"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -314,6 +397,39 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "crime",
+      "sport",
+      "transport"
+    ],
+    "selected_categories": [
+      "crime",
+      "sport",
+      "transport"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "crime": 1,
+      "sport": 1,
+      "transport": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 3
+    },
+    "selected_by_source": {
+      "espn": 1,
+      "rochdale afc": 1,
+      "rochdale times": 1
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -865,16 +981,24 @@
   "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
-    "https://www.rochdale.gov.uk/events/20173/bonfires-and-firework-displays?location=&period=full",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMihwFBVV95cUxPNDNQSFZURUhDeEZEMlJNZWtKMmxVY1J2Si14U3FHM2tHRWRSb3E3M1NEcjd2SGJRWm5nZmYtYnh4MU5lbHp6QWR4TjBSRmNxSVgyeXd3YkNQeWoyT2M5SFhCcF95b1JoNHFXVU1sc2ZvSlhoYW1tTVhtNXdNaWVGclhpVVBGYnc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "itv.com",
+    "rochdaleafc.co.uk",
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 4,
+    "visitrochdale.com": 2,
+    "itv.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -910,29 +1034,29 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-05T06:56:31.917078Z",
-  "frontpage_article_count": 12,
+  "frontpage_generated_at": "2026-11-05T09:25:19.707946Z",
+  "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
       "business",
       "community",
+      "crime",
       "education",
       "environment",
       "events",
       "news",
-      "sport",
-      "transport"
+      "sport"
     ],
     "selected_categories": [
       "business",
       "community",
+      "crime",
       "education",
       "environment",
       "events",
       "news",
-      "sport",
-      "transport"
+      "sport"
     ],
     "available_wards": [
       "Hopwood Hall"
@@ -957,46 +1081,47 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "crime": 1,
       "education": 2,
+      "sport": 1,
       "events": 1,
       "business": 1,
       "community": 3,
       "environment": 2,
-      "news": 2,
-      "sport": 1
+      "news": 2
     },
     "selected_by_ward": {
-      "borough-wide": 12
+      "borough-wide": 13
     },
     "selected_by_area": {
       "hopwood": 1,
       "littleborough": 1,
       "middleton": 1,
-      "rochdale": 18,
+      "rochdale": 16,
       "spotland": 1
     },
     "selected_by_source": {
+      "rochdale times": 3,
       "paul waugh mp; department for education": 1,
-      "falinge park high school": 1,
+      "rochdale afc": 1,
       "rochdale daily eyewitness report": 1,
       "find a tender": 1,
-      "rochdale times": 2,
-      "rochdale daily": 1,
       "forecourt trader": 1,
-      "rochdale afc": 1,
+      "rochdale daily": 1,
+      "falinge park high school": 1,
       "your trust rochdale": 1,
       "burytimes": 1,
       "historic england (national heritage list for england)": 1
     },
-    "pool_size": 22,
-    "primary_pool_size": 22,
+    "pool_size": 20,
+    "primary_pool_size": 20,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 12,
+    "frontpage_count": 13,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 12,
-    "short_briefs_selected": 9,
+    "fresh_under_homepage_window": 13,
+    "short_briefs_selected": 10,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1005,9 +1130,9 @@
   "events_removed_other_source": 10,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 14,
+  "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 530,
+  "duplicate_articles_after_postprocessing": 529,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1017,9 +1142,13 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "whats_on_event_count": 13,
+  "published_after_editorial_gate": 3,
+  "published_new_slugs": [
+    "rochdale-afc-faces-doncaster-rovers-in-league-one-match",
+    "rochdale-afc-to-host-york-city-in-league-two-clash-on-november-14",
+    "six-vehicles-seized-during-road-safety-operation-in-rochdale"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
