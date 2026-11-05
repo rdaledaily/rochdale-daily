@@ -73,7 +73,12 @@ jobs:
           # page. It was never staged, so every takedown left a dead link
           # (measured 4 Nov 2026: four removed stories answered 404).
           stage_takedown() {
-            git add story_blocklist.json articles.json event_dates.json articles sitemap.xml news-sitemap.xml articles/frontpage.json index.html cards_image_policy_report.json assets/img/cards _redirects 2>/dev/null || true
+            # Stage everything the takedown touched. A fixed file list missed
+            # the listing pages (news/, wards, archive, search, image sitemap),
+            # so on 5 Nov 2026 a removed story stayed listed on nine pages.
+            # The job starts from a clean checkout of main, so -A only picks up
+            # what remove_story.py itself wrote.
+            git add -A
           }
 
           reapply_takedown() {
@@ -121,3 +126,6 @@ jobs:
         run: |
           bash scraper/gh_dispatch.sh deploy-pages.yml --ref main
           echo "Emergency takedown deployment requested from latest main, including already-blocklisted cases."
+      - name: Verify no public page still lists the story
+        run: |
+          python scraper/takedown_sweep.py --verify

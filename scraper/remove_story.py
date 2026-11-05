@@ -41,6 +41,59 @@ ARTICLE_PAGES_DIR = Path("articles")
 REDIRECTS = Path("_redirects")
 
 
+def rebuild_listings() -> None:
+    """Rebuild every listing page that can still show a removed story."""
+    steps = (
+        ("generate_archive", "main", "archive index, archive and search pages"),
+        ("generate_ward_pages", "main", "ward and place pages"),
+    )
+    for module_name, func, description in steps:
+        try:
+            getattr(__import__(module_name), func)()
+            print(f"Rebuilt the {description}.")
+        except Exception as exc:  # noqa: BLE001 - never block a takedown
+            print(
+                f"WARNING: could not rebuild the {description}: "
+                f"{type(exc).__name__}: {exc}",
+                file=sys.stderr,
+            )
+    # Month archive and topic hubs: built from archive-index.json plus the
+    # pages on disk, so they drop the story once the page is gone.
+    try:
+        from archive_pages import build as build_archive_pages
+        from internal_links import build as build_internal_links
+
+        root = Path(".")
+        pages, stale = build_archive_pages(root)
+        link_pages, link_stale = build_internal_links(root)
+        pages.update(link_pages)
+        stale += link_stale
+        try:
+            from normalise_public_theme import normalise_text
+        except Exception:  # noqa: BLE001 - theme pass is cosmetic
+            normalise_text = None
+        for path, html in pages.items():
+            # internal_links.build also returns every article page with topic
+            # links woven into the body. Those never point at the removed
+            # story, and rewriting ~230 article pages is not a takedown's job,
+            # so only the hub and month pages under news/ are written here.
+            if path.parts[:1] != ("news",):
+                continue
+            if normalise_text is not None:
+                html = normalise_text(path, html)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(html, encoding="utf-8")
+        for path in stale:
+            path.unlink(missing_ok=True)
+        print("Rebuilt the month archive and topic hubs.")
+    except Exception as exc:  # noqa: BLE001 - never block a takedown
+        print(
+            f"WARNING: could not rebuild the month archive and topic hubs: "
+            f"{type(exc).__name__}: {exc}",
+            file=sys.stderr,
+        )
+
+
 def split_arg(value: str) -> list[str]:
     return [part.strip() for part in str(value or "").split(",") if part.strip()]
 
@@ -157,6 +210,20 @@ def main() -> int:
                     f"{type(exc).__name__}: {exc}",
                     file=sys.stderr,
                 )
+
+        # 5. Listing pages built by other lanes. On 5 Nov 2026 a takedown left
+        #    the story's headline and excerpt on the archive, search, ward,
+        #    section-hub, topic-hub and month-archive pages, because none of
+        #    them is rebuilt by generate_pages. archive-index.json is read by
+        #    the topic hubs and month archive, so it is refreshed first.
+        rebuild_listings()
+
+    # 6. Final sweep: cut any remaining card, list item, sitemap entry or
+    #    JSON-LD item that still links to a removed slug, wherever it lives
+    #    (e.g. a "More from <area>" list inside another article).
+    from takedown_sweep import sweep
+    for rel, count in sweep(Path("."), sorted(set(blocklist["slugs"]))).items():
+        print(f"Swept {count} listing(s) from {rel}")
 
     if not removed_records and not deleted_pages:
         print(
