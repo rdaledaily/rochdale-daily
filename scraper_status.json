@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-05T15:01:36.573775Z",
+  "last_run_at": "2026-11-05T15:23:31.083271Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,27 +42,30 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 84,
+  "raw_candidates_before_job_filter": 83,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 84,
-  "candidate_clusters": 36,
+  "raw_candidates": 83,
+  "candidate_clusters": 35,
   "google_news_resolution": {
-    "wrappers": 49,
+    "wrappers": 47,
     "resolved": 41,
-    "text_recovered": 31,
+    "text_recovered": 30,
     "reattributed": 0,
-    "images_found": 32
+    "images_found": 31
   },
   "duplicates_merged": 48,
   "attempted_rewrites": 1,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "rochdale-planners-object-to-unauthorised-fence-on-smithy-bridge-road",
+      "source_url": "https://www.rochdaletimes.co.uk/planners-cant-get-over-out-of-character-fence/"
+    }
+  ],
   "new_articles": 0,
   "live_articles": 534,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 0,
@@ -77,8 +80,8 @@
     "entries": 140,
     "by_outcome": {
       "failed": 7,
-      "published": 106,
-      "rejected": 27
+      "published": 107,
+      "rejected": 26
     },
     "held_back_this_run": 25,
     "held_already_published": 24,
@@ -97,10 +100,12 @@
       "last_attempt_at": "2026-11-04T23:17:05.407700Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 71,
+    "rss_and_google_news": 70,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -260,8 +265,8 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 33,
-    "Manchester Evening News": 13,
+    "Rochdale Times": 34,
+    "Manchester Evening News": 12,
     "Doncaster Free Press": 9,
     "Rochdale AFC": 8,
     "Bee Network live travel alerts": 5,
@@ -272,7 +277,6 @@
     "Your Trust Rochdale": 1,
     "ESPN": 1,
     "Squawka": 1,
-    "ITVX": 1,
     "The Stats Zone": 1,
     "Roch Valley Radio": 1,
     "Forecourt Trader": 1,
@@ -286,7 +290,7 @@
     "community": 75,
     "crime": 29,
     "education": 27,
-    "environment": 42,
+    "environment": 43,
     "events": 28,
     "health": 12,
     "news": 84,
@@ -915,8 +919,12 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "thestatszone.com"
+  ],
+  "slow_domain_failure_counts": {
+    "thestatszone.com": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -952,7 +960,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-05T15:03:30.991870Z",
+  "frontpage_generated_at": "2026-11-05T15:25:24.417570Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1058,7 +1066,7 @@
   "whats_on_event_count": 14,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "drafts_not_published": 1,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
