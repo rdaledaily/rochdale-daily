@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 1,
+  "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
-  "no_usable_source_image": 7,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -13,7 +13,7 @@
     "Rochdale Boroughwide Housing"
   ],
   "source_grants_incomplete": [],
-  "replaced_commons_or_library_with_source_photo": 1,
+  "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "items": [
     {
@@ -137,7 +137,15 @@
       "after": "assets/img/cards/24d275c09d75-place-generated-card.jpg",
       "why": {
         "page": "https://news.google.com/rss/articles/CBMigwFBVV95cUxPS2w2R3g2UEFFOTlpSm9kWkVWLW1sc1dlV3JBMnFDWDd1NzBlX2NOTnJUUXhnaHVXNDVEWDhFTi1OcUFpQmlNZFF0ZmdOUzJlVVktWklSdEFjWkFIekl2MHdQNFRYNVZFOXZBM1VfV29MeWFseGtwT0NETjFOQnpWVFpOYw?oc=5",
-        "verdict": "page-fetch-failed: HTTP Error 503: Service Unavailable"
+        "final_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxPS2w2R3g2UEFFOTlpSm9kWkVWLW1sc1dlV3JBMnFDWDd1NzBlX2NOTnJUUXhnaHVXNDVEWDhFTi1OcUFpQmlNZFF0ZmdOUzJlVVktWklSdEFjWkFIekl2MHdQNFRYNVZFOXZBM1VfV29MeWFseGtwT0NETjFOQnpWVFpOYw?oc=5&hl=en-US&gl=US&ceid=US:en",
+        "candidates": [
+          {
+            "url": "https://lh3.googleusercontent.com/J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc=s0-w300",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
       }
     },
     {
@@ -184,10 +192,37 @@
       }
     },
     {
-      "slug": "rochdale-afc-faces-doncaster-rovers-in-league-one-match",
-      "result": "licensed-source-photo",
-      "source": "https://rochdaleafc.co.uk/report-doncaster-home-031126/",
-      "after": "assets/img/cards/rochdale-afc-faces-doncaster-rovers-in-league-one-match.jpg"
+      "slug": "investigation-works-begin-at-former-turner-brothers-factory-site-in-rochdale",
+      "result": "no-cleared-source-image",
+      "source": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903",
+      "after": "assets/img/cards/turner_brothers.png",
+      "why": {
+        "page": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903.amp",
+        "final_url": "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903.amp",
+        "candidates": [
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/incoming/article32862068.ece/ALTERNATES/s1200/0_Rochdale-Chernobyl.jpg",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/incoming/article32862068.ece/ALTERNATES/s1200b/0_Rochdale-Chernobyl.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/incoming/article32862068.ece/ALTERNATES/s1200c/0_Rochdale-Chernobyl.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/incoming/article32862068.ece/ALTERNATES/s1200d/0_Rochdale-Chernobyl.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
     }
   ]
 }
