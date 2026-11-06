@@ -95,7 +95,13 @@ CATEGORY_ORDER = (
         r"safe haven|drop[- ]in|warm space|community centres?|support services?|"
         # A leisure centre is a council facility: pool closures and opening
         # hours are community news, not health (4 Nov 2026).
-        r"leisure centres?|homeless(?:ness)?|rough sleep(?:ers?|ing)|sleep out)\b",
+        r"leisure centres?|homeless(?:ness)?|rough sleep(?:ers?|ing)|sleep out|"
+        # A guided walk "starting at Rochdale Train Station" was filed as
+        # transport: the meeting point scored, the walk itself did not. These
+        # terms are community, NOT events: frontpage_pipeline deletes any
+        # "events" story not sourced from whatsoccurrinevents.co.uk, and on
+        # 4 Nov 2026 that removed this walk from the feed entirely.
+        r"guided walks?|heritage walks?|walking tours?|storytelling)\b",
         re.I,
     )),
     ("business", re.compile(
@@ -184,10 +190,7 @@ CATEGORY_ORDER = (
     )),
     ("events", re.compile(
         r"\b(?:festival|concert|gig|exhibition|performance|parade|fair|"
-        r"ticketed event|what'?s on|open day|coffee morning|reform club event|"
-        # A guided walk "starting at Rochdale Train Station" was filed as
-        # transport: the meeting point scored, the event itself did not.
-        r"guided walks?|heritage walks?|walking tours?|storytelling|workshops?)\b",
+        r"ticketed event|what'?s on|open day|coffee morning|reform club event)\b",
         re.I,
     )),
 )
