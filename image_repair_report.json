@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 1,
+  "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 1,
   "no_allowed_source": 0,
-  "no_usable_source_image": 7,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -73,10 +73,47 @@
       }
     },
     {
-      "slug": "middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration",
-      "result": "licensed-source-photo",
-      "source": "https://www.rochdale.gov.uk/news/article/694/major-boost-for-middleton-as-sale-of-landmark-town-centre-building-completes",
-      "after": "assets/img/cards/middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration.jpg"
+      "slug": "boyes-opens-new-store-in-middleton-shopping-centre-tomorrow",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdaletimes.co.uk/finishing-touches-being-applied-as-boyes-opens-new-store-tomorrow/",
+      "after": "",
+      "why": {
+        "page": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/horror-man-seriously-injured-stabbing-34869735",
+        "final_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/horror-man-seriously-injured-stabbing-34869735",
+        "candidates": [
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34869742.ece/ALTERNATES/s1200d/0_image-10.jpg",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34869742.ece/ALTERNATES/s1200/0_image-10.jpg",
+            "via": "twitter:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34869742.ece/ALTERNATES/s1200b/0_image-10.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34869742.ece/ALTERNATES/s1200c/0_image-10.jpg",
+            "via": "json-ld",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34869742.ece/ALTERNATES/s1200f/0_image-10.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://i2-prod.manchestereveningnews.co.uk/article34869749.ece/ALTERNATES/s1200e/0_image-8.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
     },
     {
       "slug": "resident-escapes-fire-at-lonsdale-court-sheltered-housing-in-middleton",
