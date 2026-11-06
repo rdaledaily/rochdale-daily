@@ -303,8 +303,75 @@ def article_category(article: dict[str, Any]) -> str:
     return cached
 
 
+# Headline rules (6 Nov 2026). Measured on the newest 120 stories: about 1 in
+# 8 was misfiled because their text scored only one or two incidental words,
+# so the rewrite's own guess stood (a flat fire filed as community on "local
+# families", a child critical after a nursery incident filed as health on
+# "hospital", council contract awards scattered across community and
+# business). The headline names what happened, so these patterns decide first.
+_HEADLINE_CRIME_RE = re.compile(
+    r"\b(?:murder|manslaughter|rape|stabb\w*|shooting|robbery|burglar\w*|theft|fraud|"
+    r"arrest\w*|charged|convicted|sentenced|jailed|police (?:chase|pursuit)|"
+    r"high[- ]speed (?:chase|pursuit)|banned driver|drink[- ]driv\w*|drunk driver|drug[- ]driv\w*)\b",
+    re.I,
+)
+_HEADLINE_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    # Emergencies that are not crimes and not road collisions are general
+    # news. Collisions stay with the traffic lexicon.
+    ("news", re.compile(
+        r"\b(?:escapes? (?:a )?fire|fire (?:at|in|on|breaks out|broke out)|blaze|firefighters?|fire crews?|"
+        r"gas leak|explosion|evacuated|critical condition|remains? critical|"
+        r"dies|died|killed|fatal|sudden death|serious(?:ly)? injur\w*)\b",
+        re.I,
+    )),
+    # A public body awarding a contract or buying a site is a business
+    # decision, whatever the contract is for.
+    ("business", re.compile(
+        r"\bawards? (?:a |new )?contracts?\b|\bcontract award|\b(?:completes?|agrees?|confirms?) (?:the )?purchase\b|"
+        r"\bacquires?\b|\bacquisition\b",
+        re.I,
+    )),
+    ("transport", re.compile(r"\bdriving tests?\b", re.I)),
+    # A road closure for a festival is a traffic notice, not the event.
+    ("traffic", re.compile(r"\b(?:road closures?|roadworks|road closed|diversions?)\b", re.I)),
+    # What's On news. Since 6 Nov 2026 an events story from outside the box
+    # office is kept, so the headline can file it here.
+    ("events", re.compile(
+        r"\b(?:panto(?:mime)?s?|comedy (?:show|night)s?|stand[- ]up|bonfire night|bonfire (?:and )?firework|"
+        r"firework(?:s)? displays?|ale trails?|beer festival|festivals?|concerts?|gigs?|"
+        r"switch[- ]on|christmas markets?|live music)\b",
+        re.I,
+    )),
+)
+
+
+_HEADLINE_NOT_EMERGENCY_RE = re.compile(
+    r"\b(?:crash|collision|moorland|moor|grass|wildfire|waste|landfill)\b", re.I)
+
+
+def headline_category_rule(title: str) -> str:
+    title = str(title or "")
+    # An inquest is a coroner's finding, not a criminal case ("Inquest jury
+    # clears police after fatal chase"): leave it to the full-text scoring.
+    if re.search(r"\binquests?\b", title, re.I):
+        return ""
+    if _HEADLINE_CRIME_RE.search(title):
+        return "crime"
+    for category, pattern in _HEADLINE_RULES:
+        # Collisions stay traffic; moorland, grass and waste-site fires stay
+        # environment, wherever those words sit in the headline.
+        if category == "news" and _HEADLINE_NOT_EMERGENCY_RE.search(title):
+            continue
+        if pattern.search(title):
+            return category
+    return ""
+
+
 def _compute_article_category(article: dict[str, Any]) -> str:
     text = article_text(article)
+    ruled = headline_category_rule(plain_text(article.get("title")))
+    if ruled:
+        return ruled
     if re.search(r"\b(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)\b", text, re.IGNORECASE):
         return "community"
     detected = editorial_category(text, str(article.get("category") or "news"))
@@ -1121,7 +1188,7 @@ def clean_and_integrate_events(
 ) -> tuple[list[dict[str, Any]], dict[str, int]]:
     existing_approved: dict[str, dict[str, Any]] = {}
     retained: list[dict[str, Any]] = []
-    removed_other_source = 0
+    kept_other_source = 0
     removed_online = 0
     removed_no_venue = 0
     event_dates = load_event_dates()
@@ -1132,7 +1199,13 @@ def clean_and_integrate_events(
             retained.append(article)
             continue
         if not approved_event_source(article):
-            removed_other_source += 1
+            # Editor's decision 6 Nov 2026: a story filed as events is kept
+            # whatever its source. Only ticket listings from the approved
+            # box office go through the listing checks below; news about an
+            # event (a panto, a bonfire, a comedy night) stays on the paper
+            # under Events instead of being deleted.
+            retained.append(article)
+            kept_other_source += 1
             continue
         if is_online_event(article):
             removed_online += 1
@@ -1172,7 +1245,7 @@ def clean_and_integrate_events(
     save_event_dates(event_dates)
     retained.extend(existing_approved.values())
     return retained, {
-        "events_removed_other_source": removed_other_source,
+        "events_kept_other_source": kept_other_source,
         "online_events_rejected": removed_online,
         "events_rejected_missing_physical_local_venue": removed_no_venue,
         "approved_ticket_events": len(existing_approved),

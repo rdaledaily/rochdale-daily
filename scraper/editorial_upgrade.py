@@ -97,10 +97,10 @@ CATEGORY_ORDER = (
         # hours are community news, not health (4 Nov 2026).
         r"leisure centres?|homeless(?:ness)?|rough sleep(?:ers?|ing)|sleep out|"
         # A guided walk "starting at Rochdale Train Station" was filed as
-        # transport: the meeting point scored, the walk itself did not. These
-        # terms are community, NOT events: frontpage_pipeline deletes any
-        # "events" story not sourced from whatsoccurrinevents.co.uk, and on
-        # 4 Nov 2026 that removed this walk from the feed entirely.
+        # transport: the meeting point scored, the walk itself did not. Filed
+        # as community (editor's call, 4 Nov 2026). The rule that deleted
+        # events stories from outside the box office, which first forced
+        # this, was removed on 6 Nov 2026.
         r"guided walks?|heritage walks?|walking tours?|storytelling)\b",
         re.I,
     )),
@@ -190,7 +190,16 @@ CATEGORY_ORDER = (
     )),
     ("events", re.compile(
         r"\b(?:festival|concert|gig|exhibition|performance|parade|fair|"
-        r"ticketed event|what'?s on|open day|coffee morning|reform club event)\b",
+        r"ticketed event|what'?s on|open day|coffee morning|reform club event|"
+        # 6 Nov 2026: events stories are no longer deleted for coming from
+        # outside the box office, so What's On news can be filed here. These
+        # were the words that left a panto, a bonfire and a comedy show
+        # under community.
+        r"pantos?|pantomimes?|comedy (?:show|night|club)s?|stand[- ]up|comedians?|"
+        r"bonfire (?:night|display|event)s?|firework(?:s)? displays?|"
+        r"ale trails?|beer festival|live music|tribute act|"
+        r"christmas (?:market|lights switch[- ]on|fair)s?|lights switch[- ]on|"
+        r"tickets (?:are )?(?:on sale|available)|box office|headline (?:act|event))\b",
         re.I,
     )),
 )
