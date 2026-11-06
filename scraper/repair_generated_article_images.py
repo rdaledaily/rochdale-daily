@@ -184,6 +184,56 @@ def needs_source_photo_check(article: dict[str, Any], now: datetime) -> bool:
     return now - timedelta(hours=48) <= published <= now + timedelta(minutes=10)
 
 
+# Council pages that never carry a story photograph: roadworks directory
+# records, downloads, service pages. Measured 6 Nov 2026: of 36 council-sourced
+# stories in the last 200, 24 came from such pages, and because the repair
+# pass works newest-first with a fixed per-run limit, they took every slot on
+# every run, so real council press releases (foster carers, 26 Oct) aged out
+# of the window without ever being checked.
+NO_PHOTO_PAGE_RE = re.compile(
+    r"/directory-record/|/downloads/|/counciltax\b|/school-admissions|"
+    r"/roadworks-repairs-restrictions/|/houses-multiple-occupation|mgListPlanItems|"
+    r"mgCalendar|/LicensingActPremises/",
+    re.I,
+)
+GRANT_BACKLOG_DAYS = 14
+
+
+def grant_pages(article: dict[str, Any], grants: list[dict[str, Any]]) -> list[str]:
+    """Source pages on a granting organisation's own site that can hold a
+    story photograph, in source order."""
+    pages: list[str] = []
+    for url in source_urls(article):
+        if url in pages or NO_PHOTO_PAGE_RE.search(url):
+            continue
+        if any(_page_covered(url, grant) for grant in grants):
+            pages.append(url)
+    return pages
+
+
+def grant_backlog(article: dict[str, Any], now: datetime, grants: list[dict[str, Any]],
+                  editor_images: set[str] | None = None) -> bool:
+    """A story from a granting organisation, published in the last
+    GRANT_BACKLOG_DAYS, still showing a generated card, a library picture or a
+    Commons file image. Editor photos and photos already taken from the source
+    are never replaced (same rule as granted_source_upgrade)."""
+    if not grants or not grant_pages(article, grants):
+        return False
+    status = clean(article.get("image_status")).lower()
+    if "source-photo" in status:
+        return False
+    if article.get("manual_article") or article.get("editorial_lock"):
+        if not pipeline_chose_manual_image(article, editor_images):
+            return False
+    elif "editorial-photo" in status:
+        return False
+    if not _recent(article, now, hours=24 * GRANT_BACKLOG_DAYS):
+        return False
+    category = clean(article.get("category")).casefold()
+    return any(_page_covered(url, grant) and category not in grant["exclude_categories"]
+               for url in grant_pages(article, grants) for grant in grants)
+
+
 def slug_for(article: dict[str, Any]) -> str:
     raw = clean(article.get("slug") or article.get("id") or article.get("title"))
     return re.sub(r"[^a-z0-9]+", "-", raw.lower()).strip("-")[:100] or "story"
@@ -344,14 +394,26 @@ def main(argv: list[str] | None = None) -> int:
     now = datetime.now(timezone.utc)
     # Newly published articles take priority over retrospective image repairs.
     candidates_by_age = sorted(articles, key=lambda row: clean(row.get("first_published_at") or row.get("published_at")), reverse=True)
+    # Stories whose source is a granting organisation's own page go first:
+    # they are the only ones a photo can actually be found for. Everything
+    # else (other publishers, which need an image-level licence) uses whatever
+    # of the per-run limit is left.
+    queue: list[tuple[dict[str, Any], bool, list[str]]] = []
     for article in candidates_by_age:
         if clean(article.get("status") or "published").lower() != "published":
             continue
         upgrade = False
-        if not needs_source_photo_check(article, now):
+        pages = grant_pages(article, grants)
+        if pages and grant_backlog(article, now, grants, editor_images):
+            upgrade = not is_generated_or_placeholder(article)
+        elif not needs_source_photo_check(article, now):
             if not granted_source_upgrade(article, now, grants, editor_images):
                 continue
             upgrade = True
+        queue.append((article, upgrade, pages))
+    queue.sort(key=lambda row: 0 if row[2] else 1)  # stable: newest first within each group
+
+    for article, upgrade, pages in queue:
         if high_risk_photo_story(article):
             skipped_risk += 1
             continue
@@ -359,7 +421,8 @@ def main(argv: list[str] | None = None) -> int:
             break
 
         eligible += 1
-        candidates = source_urls(article)
+        candidates = pages + [url for url in source_urls(article)
+                              if url not in pages and not NO_PHOTO_PAGE_RE.search(url)]
         # Configured domain restrictions are optional; a publisher domain alone
         # is never taken as permission. The individual image must have rights.
         if allowed:

@@ -52,7 +52,9 @@ AI_TELL_RE = re.compile(
     r"shortly thereafter|thereafter|aims? to strengthen|"
     r"reassured that|in light of|amid(?:st)? growing|"
     r"plays? a (?:crucial|vital|pivotal) role|navigat(?:e|ing) the|"
-    r"a reminder of|underscor(?:e|es|ing)|highlights? the importance"
+    r"a reminder of|underscor(?:e|es|ing)|highlights? the importance|"
+    r"(?:is|are) crucial|crucial (?:for|in|to|as)|critical importance|"
+    r"ensuring the safety and security|reflects? the \w+(?:'s|’s)? commitment"
     r")\b",
     re.IGNORECASE,
 )
@@ -162,6 +164,62 @@ def strip_filler_openers(text: str) -> str:
     return FILLER_OPENER_RE.sub(repl, text)
 
 
+# Closing commentary the paper never needs (measured 6 Nov 2026: 36 of 241
+# automated stories ended on one, e.g. "This warning is crucial for ensuring
+# the safety and security of residents in the community."). A sentence is
+# removed only when ALL of these hold: it is in one of the last two plain
+# paragraphs; it opens with a summary subject ("This incident", "These
+# events"); it moralises ("is crucial", "underscores the importance",
+# "reflects the council's commitment"); and it holds no number, no quotation
+# and no attribution. So no fact, figure or quote can be lost. Sentences that
+# tell the reader what changes for them ("may affect daily travel routes")
+# do not match and stay.
+_SUMMARY_SUBJECT_RE = re.compile(
+    r"^(?:This|These|The|Such) (?:[a-z]+ )?(?:incident|initiative|initiatives|event|events|case|"
+    r"situation|development|recognition|warning|warnings|news|move|scheme|project|decision|"
+    r"programme|investment|achievement|milestone|operation|effort|efforts|sessions?|award|"
+    r"celebration|appointment|partnership|closure|change|changes)\b"
+)
+_MORALISING_RE = re.compile(
+    r"\b(?:(?:is|are|was|were|remains?) (?:crucial|vital|essential)|crucial (?:for|in|to|as)|"
+    r"plays? an? (?:crucial|vital|pivotal|key|important) role|serves? as an? (?:important |timely |stark )?reminder|"
+    r"(?:is|are|was) a testament|underscor\w+|highlights? the (?:importance|need|value|critical)|"
+    r"critical (?:importance|role)|reflects? the \w+(?:'s|’s)? commitment|ensur\w+ the safety and security)\b",
+    re.I,
+)
+_FACT_MARK_RE = re.compile(r"\d|[\"“”]|\b(?:said|says|stated|according)\b", re.I)
+
+
+def is_filler_closer(sentence: str) -> bool:
+    sentence = plain(sentence)
+    return bool(
+        _SUMMARY_SUBJECT_RE.search(sentence)
+        and _MORALISING_RE.search(sentence)
+        and not _FACT_MARK_RE.search(sentence)
+    )
+
+
+_MONTHS = ("January|February|March|April|May|June|July|August|September|"
+           "October|November|December")
+_US_DATE_RE = re.compile(
+    r"\b(?:(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?"
+    r"(" + _MONTHS + r")\s+(\d{1,2})(?:st|nd|rd|th)?\b(?:,?\s+(\d{4})\b)?"
+)
+
+
+def uk_dates(text: str) -> str:
+    """'Tuesday, November 10' -> 'Tuesday 10 November'; 'November 8, 2026'
+    -> '8 November 2026'. Day-first dates are left alone. Case-sensitive, so
+    the verb 'may' is never touched."""
+    def repl(m: re.Match[str]) -> str:
+        weekday, month, day, year = m.group(1), m.group(2), m.group(3), m.group(4)
+        if int(day) > 31 or int(day) == 0:
+            return m.group(0)
+        out = f"{day} {month}" + (f" {year}" if year else "")
+        return f"{weekday} {out}" if weekday else out
+    return _US_DATE_RE.sub(repl, str(text or ""))
+
+
 def tidy_paragraphs(paragraphs: Iterable[str]) -> list[str]:
     return split_long_paragraphs(strip_filler_openers(plain(p)) for p in paragraphs)
 
@@ -178,13 +236,21 @@ def tidy_content_html(content_html: str) -> str:
     put there is lost.
     """
     source = str(content_html or "")
+    plain_spans = [m.span() for m in _P_RE.finditer(source) if "<" not in m.group(1)]
+    closing = set(plain_spans[-2:])
 
     def repl(match: re.Match[str]) -> str:
         inner = match.group(1)
         if "<" in inner:
             return match.group(0)
         text = html.unescape(inner)
-        pieces = tidy_paragraphs([text])
+        fixed = uk_dates(text)
+        if match.span() in closing:
+            kept = [s for s in split_sentences(fixed) if not is_filler_closer(s)]
+            if not kept:
+                return ""
+            fixed = " ".join(kept)
+        pieces = tidy_paragraphs([fixed])
         if len(pieces) == 1 and pieces[0] == plain(text):
             return match.group(0)
         return "".join(f"<p>{html.escape(piece, quote=False)}</p>" for piece in pieces)
