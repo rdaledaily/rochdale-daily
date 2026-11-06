@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-06T22:39:14.248473Z",
+  "updated_at": "2026-11-06T22:56:24.879112Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 139,
+  "count": 138,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -1432,8 +1432,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-06T22:20:33.061898Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Resident escapes from second floor as fire tears through sheltered housing flat",
       "source_name": "Manchester Evening News",
       "category": "traffic",
@@ -1900,16 +1900,16 @@
     },
     "https://www.rochdaletimes.co.uk/council-completes-3-3-million-purchase-of-warwick-mill": {
       "first_attempt_at": "2026-11-06T22:18:03.975713Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMikAFBVV95cUxPbEtYMjBMb0VXRXozRUlrUlRnbTh5ekhtT1Nad3FtWDExNTdubGkyTkd0Vl9pTDdLOHMzTTlob3NCVTR6aFlZdFNYYjJESHItcUNnaGtmUk1NT1NMc05QZFU2S0h0c25CQzUza3d6RGF4QlVhOFEzVS1uT0Z0V1FQejdaOTdNOWRZY1owR1I1N28?oc=5",
         "https://www.rochdaletimes.co.uk/council-completes-3-3-million-purchase-of-warwick-mill"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T22:36:26.553720Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2027; source publication timestamps are not event date",
+      "last_attempt_at": "2026-11-06T22:56:24.878824Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Council completes £3.3 million purchase of Warwick Mill - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
@@ -2037,24 +2037,6 @@
       "text_fingerprint": "6058d9af07078390",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
-    },
-    "https://www.rochdaletimes.co.uk/new-unit-to-tackle-anti-social-behaviour-and-crime-on-roads-and-transport-network": {
-      "first_attempt_at": "2026-10-29T15:51:01.442929Z",
-      "attempts": 3,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMitAFBVV95cUxOSEw4VkRsb1RwbGwzbjQ1MkIxOWRmMUljcGZtMDZHMFBmTFRFWXlXdEVhNnR4SFR5MTZyckVpZEk5VC1kTnNNaXZKa1NmWVdtMS01SFZPTW9EYVRpM0VEYU10NDVndTdwekdGUnVFdnVjdjhxRk9XR2xQVHR3VGZCRGwzYWRNNDFMN0FHakEyNzVNZUFueERZS1htbC1janVfQVk5SjM3cFV6MFpzTDFvOVNzZzQ?oc=5",
-        "https://www.rochdaletimes.co.uk/new-unit-to-tackle-anti-social-behaviour-and-crime-on-roads-and-transport-network"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-29T22:37:31.426858Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
-      "title": "New unit to tackle anti-social behaviour and crime on roads and transport network - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "news",
-      "text_fingerprint": "bc720820a2a481ba",
-      "recovery_attempts": 2
     },
     "https://www.rochdaletimes.co.uk/panto-lovers-will-have-a-ball-this-christmas": {
       "first_attempt_at": "2026-11-04T21:03:55.537605Z",
