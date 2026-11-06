@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-06T22:02:39.900826Z",
+  "last_run_at": "2026-11-06T22:20:33.065953Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,29 +42,40 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 90,
+  "raw_candidates_before_job_filter": 83,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 90,
+  "raw_candidates": 83,
   "candidate_clusters": 31,
   "google_news_resolution": {
-    "wrappers": 36,
-    "resolved": 24,
-    "text_recovered": 14,
+    "wrappers": 48,
+    "resolved": 30,
+    "text_recovered": 7,
     "reattributed": 0,
-    "images_found": 22
+    "images_found": 15
   },
-  "duplicates_merged": 59,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 52,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 2,
+  "drafted_articles": [
+    {
+      "slug": "fire-breaks-out-at-lonsdale-court-in-middleton-resident-escapes",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285"
+    },
+    {
+      "slug": "greater-manchester-police-to-host-pop-up-events-to-combat-online-scams-in-rochda",
+      "source_url": "https://www.rochdaletimes.co.uk/pop-up-events-to-help-avoid-online-scams/"
+    }
+  ],
+  "new_articles": 2,
   "live_articles": 548,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: Remove unsupported calendar year(s) 2027; source publication timestamps are not event date": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 2,
     "reopened_after_evidence_fix": 0,
@@ -72,14 +83,14 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 138,
+    "entries": 139,
     "by_outcome": {
       "failed": 22,
       "published": 91,
-      "rejected": 25
+      "rejected": 26
     },
-    "held_back_this_run": 22,
-    "held_already_published": 19,
+    "held_back_this_run": 20,
+    "held_already_published": 17,
     "held_rejected": 3,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -113,11 +124,14 @@
       "last_attempt_at": "2026-11-05T22:04:38.634211Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 173.": 1,
+    "Tighten the standfirst to one clear sentence.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 77,
-    "website_discovery": 8,
+    "rss_and_google_news": 75,
+    "website_discovery": 3,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -218,13 +232,13 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 13,
-    "covered": 10,
-    "outstanding": 3,
+    "covered": 9,
+    "outstanding": 4,
     "removed_by_editor": 0,
     "by_status": {
-      "already_covered": 8,
+      "already_covered": 7,
       "held_for_editor": 2,
-      "not_found": 1,
+      "not_found": 2,
       "published": 2
     },
     "outstanding_stories": [
@@ -254,13 +268,22 @@
         "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/alleged-ringleader-group-men-accused-34856051",
         "resolved_title": "Alleged 'ringleader' of group of men accused of sexually abusing three girls denies having sex with accusers"
+      },
+      {
+        "id": "c4d467c1587758ed",
+        "headline": "Resident escapes from second floor as fire tears through sheltered housing flat",
+        "received_at": "2026-11-06T08:06:01+00:00",
+        "status": "not_found",
+        "reason": "its article resident-escapes-fire-at-lonsdale-court-sheltered-housing-in-middleton is no longer live; searching again",
+        "resolved_url": "",
+        "resolved_title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton"
       }
     ]
   },
   "source_counts": {
-    "Rochdale Times": 24,
+    "Rochdale Times": 19,
     "Rochdale AFC": 18,
-    "Manchester Evening News": 15,
+    "Manchester Evening News": 13,
     "Rochdale Borough Council": 10,
     "Bee Network live travel alerts": 4,
     "Doncaster Free Press": 3,
@@ -277,11 +300,15 @@
     "Northern Care Alliance News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "crime": 1,
+    "news": 1,
+    "traffic": 1
+  },
   "published_by_category": {
     "business": 60,
     "community": 75,
-    "crime": 33,
+    "crime": 34,
     "education": 28,
     "environment": 44,
     "events": 32,
@@ -314,8 +341,16 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "hard-news-v3-5701701f55f0f7bf4ccc",
+    "transport-v3-98159e3b05f20b0183be",
+    "environment-v3-ed25431309a1cfed67af"
+  ],
+  "selected_candidate_urls": [
+    "https://www.rochdaletimes.co.uk/pop-up-events-to-help-avoid-online-scams/",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285",
+    "https://www.rochdaletimes.co.uk/council-completes-3-3-million-purchase-of-warwick-mill/"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -325,6 +360,42 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "crime",
+      "news",
+      "traffic"
+    ],
+    "selected_categories": [
+      "crime",
+      "news",
+      "traffic"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [
+      "middleton"
+    ],
+    "selected_areas": [
+      "middleton",
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "crime": 1,
+      "news": 1,
+      "traffic": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "middleton": 1,
+      "rochdale": 2
+    },
+    "selected_by_source": {
+      "manchester evening news": 1,
+      "rochdale times": 2
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -873,14 +944,17 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 9,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMifkFVX3lxTE9zYjByMUllSU9DNkZ3WEJLOGdtVVltZGlPZnlPNnVrQUEtY1l5cm84Ty1oOTJqNGk4ZkZ3ajE2UDVQR1NSd3dldHRpU0x4djA5dWxqcDVwaVh5dnJsMVhmaVdVN2tXUE54ZTZfT2VVdHMwUUVxc3d2VV9YMUtDQQ?oc=5",
+    "https://news.google.com/rss/articles/CBMikAFBVV95cUxPbEtYMjBMb0VXRXozRUlrUlRnbTh5ekhtT1Nad3FtWDExNTdubGkyTkd0Vl9pTDdLOHMzTTlob3NCVTR6aFlZdFNYYjJESHItcUNnaGtmUk1NT1NMc05QZFU2S0h0c25CQzUza3d6RGF4QlVhOFEzVS1uT0Z0V1FQejdaOTdNOWRZY1owR1I1N28?oc=5",
+    "https://news.google.com/rss/articles/CBMisgFBVV95cUxQMm5GVWoxejlvRHhwNnFFR1FHdVhPbkJyVUZ1Z2Nta3A0OGNfMnFVUTFxRDBuaTgya3M2LVJTdVFTc1IzcGEtWGRVaWZYSFQ3S3dod2h4aGdiXzd5NkZzcUN1VGhpVnRySS1Kb2dsWHpGcEpRcUppeXRLT08xZXRsUVIxeXBRRW5Oa01BaW1FUjhsMDd3aUkxVWtIUk01ZUJaRnFhTC12OGVYTDdxNl9NUGRn0gG3AUFVX3lxTE9TVHRsQjZZVHdGMzFmVUJydGp2RlJpRG93QlBldkVRMkhxR00zZW1OSFcxa21aUklGWHRiak9kZjJ4ckJhTmRDdFdNODhUWktqZVZidmY0T1RXR1djM2xzMElIX0tQUnV0UTZURlNlaWFfWlNybkI0cnJwTGtJbWpSZTZxV3BsMFJmNTRhVnpHZ3V0R0FGVzNGNXpQV1JiaGxxcmhfd0NIQmJvV3RYQmRienpQNDNnYw?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -920,7 +994,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-06T22:03:53.317934Z",
+  "frontpage_generated_at": "2026-11-06T22:21:28.202239Z",
   "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1019,8 +1093,11 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 2,
+  "published_new_slugs": [
+    "morning-briefing-6-november-2026",
+    "greater-manchester-police-to-host-pop-up-events-to-combat-online-scams-in-rochda"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
