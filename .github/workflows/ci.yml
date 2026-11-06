@@ -282,6 +282,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_live_story_updates.py
           PYTHONPATH=scraper python scraper/test_compact_live_updates.py
           PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
+          PYTHONPATH=scraper python scraper/test_headline_category_rules.py
           PYTHONPATH=scraper python scraper/test_model_bridge.py -v
           python scraper/test_workflow_architecture.py
           python scraper/test_legacy_routing_pages.py
