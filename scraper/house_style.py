@@ -270,6 +270,9 @@ def style_issues(draft: dict[str, Any], source_kind: str = "") -> list[str]:
     # repair call (rate-limited and paid) is never spent on it.
     issues.extend(ai_tell_issues(" ".join([excerpt, *paragraphs])))
     issues.extend(headline_issues(title, category))
-    if "social_headline" in draft:
-        issues.extend(social_headline_issues(_plain(draft.get("social_headline")), title, category))
+    # Every story gets a Facebook line of its own (measured 6 Nov 2026: only
+    # 77 of the last 200 had one; the rest went out under the site headline).
+    # A missing one is now reported to the repair loop like any other style
+    # issue; it never blocks publication.
+    issues.extend(social_headline_issues(_plain(draft.get("social_headline")), title, category))
     return list(dict.fromkeys(issues))

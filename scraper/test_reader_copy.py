@@ -78,6 +78,27 @@ def run() -> None:
     # Paragraph length is fixed by code, so it is never sent back to the model.
     assert not any("short paragraphs" in i for i in issues), issues
 
+    # 6 Nov 2026: UK date order, and moralising closers dropped only when
+    # they carry no fact, figure, quotation or attribution.
+    assert rc.uk_dates("on Tuesday, November 10, from 10am") == "on Tuesday 10 November, from 10am"
+    assert rc.uk_dates("events on November 8, 2026.") == "events on 8 November 2026."
+    assert rc.uk_dates("the 8 November 2026 event, in May 2026, people may 5") == \
+        "the 8 November 2026 event, in May 2026, people may 5"
+    closing = ("<p>Residents are advised to check ID.</p><p>Call 101 to report it. This warning is "
+               "crucial for ensuring the safety and security of residents in the community.</p>")
+    assert rc.tidy_content_html(closing) == "<p>Residents are advised to check ID.</p><p>Call 101 to report it.</p>"
+    for keep in (
+        "This development is significant for local commuters, as it may affect daily travel routes.",
+        "The council said this warning is crucial for residents.",
+        "This scheme is crucial for the 465 families involved.",
+        'This initiative "is crucial", the mayor said.',
+    ):
+        assert not rc.is_filler_closer(keep), keep
+    # Only the closing paragraphs are touched; an early sentence stays.
+    early = ("<p>This incident underscores the importance of fire alarms.</p><p>Two.</p>"
+             "<p>Three.</p><p>Four.</p>")
+    assert "underscores" in rc.tidy_content_html(early)
+
     print("Reader-copy rule tests passed.")
 
 

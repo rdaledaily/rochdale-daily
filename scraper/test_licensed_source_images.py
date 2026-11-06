@@ -198,6 +198,21 @@ def run_source_grants(jpeg: bytes) -> None:
     assert not repair.granted_source_upgrade(dict(recent, source_url="https://www.rochdaletimes.co.uk/a"), now, grants)
     assert not repair.granted_source_upgrade(recent, now, [])
 
+    # 6 Nov 2026: the hourly limit-8 pass spent every slot on roadworks
+    # directory records and other publishers' pages, so council press releases
+    # (foster carers, 26 Oct) aged out unchecked. Pages that can never hold a
+    # story photo are skipped, and a granted story still on a generated card
+    # within GRANT_BACKLOG_DAYS is in the backlog.
+    roadworks = "https://www.rochdale.gov.uk/directory-record/12345/roadworks-on-x"
+    assert repair.grant_pages({"source_url": roadworks}, grants) == []
+    assert repair.grant_pages({"source_url": council_page}, grants) == [council_page]
+    carded = dict(recent, image_status="place-generated-card",
+                  image_url="assets/img/cards/x-place-generated-card.jpg", published_at="2026-10-26T09:00:00Z")
+    assert repair.grant_backlog(carded, now, grants)
+    assert not repair.grant_backlog(dict(carded, source_url=roadworks), now, grants)
+    assert not repair.grant_backlog(dict(carded, image_status="source-photo-cached"), now, grants)
+    assert not repair.grant_backlog(dict(carded, published_at="2026-10-01T09:00:00Z"), now, grants)
+
     # Standing rule: a manual council story whose own file names no photo gets
     # the council's photo in place of the pipeline's library pick, at any age.
     # An editor-supplied photo, or one already fetched, is never replaced.

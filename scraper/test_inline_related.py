@@ -110,3 +110,39 @@ def test_links_use_clean_urls():
     R._CACHE[id(articles)] = R.Index(articles, make_root([]))
     out = R.insert(BODY, a, articles)
     assert 'href="/articles/lake-b"' in out and ".html" not in out
+
+
+def test_orphans_get_same_area_links_labelled_honestly():
+    """6 Nov 2026: 142 of the last 200 pages had no in-text link to another
+    story. A story with no subject match gets two "More from <area>" links to
+    the newest same-area stories; crime stories are never targets."""
+    from datetime import datetime, timedelta, timezone
+    now = datetime.now(timezone.utc)
+    stamp = lambda days: (now - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    a = story("milnrow-garden", "Garden wall plan refused", area="milnrow-and-newhey", first_published_at=stamp(0))
+    near = [story("milnrow-1", "Library opens longer hours", area="milnrow-and-newhey", first_published_at=stamp(1)),
+            story("milnrow-2", "Bowling green restored", area="milnrow-and-newhey", first_published_at=stamp(2)),
+            story("milnrow-old", "Old item", area="milnrow-and-newhey", first_published_at=stamp(90)),
+            story("milnrow-crime", "Man arrested after burglary", area="milnrow-and-newhey",
+                  category="crime", first_published_at=stamp(0)),
+            story("heywood-1", "Heywood market returns", area="heywood", first_published_at=stamp(0))]
+    articles = [a] + near + FILLER
+    R._CACHE.clear()
+    R._CACHE[id(articles)] = R.Index(articles, make_root([]))
+    out = R.insert(BODY, a, articles)
+    assert out.count('class="rd-related-inline">More from Milnrow &amp; Newhey: ') == 2, out
+    assert "milnrow-1" in out and "milnrow-2" in out
+    assert "milnrow-crime" not in out and "milnrow-old" not in out and "heywood-1" not in out
+    assert "Read more:" not in out
+    # Roadworks notices are never targets; the nearest stories in time win,
+    # so one new story does not become every page's link.
+    works = story("milnrow-works", "Roadworks on Newhey Road", area="milnrow-and-newhey", first_published_at=stamp(0))
+    older = dict(a, slug="milnrow-older", first_published_at=stamp(10))
+    pick = [story("milnrow-9", "Allotment open day", area="milnrow-and-newhey", first_published_at=stamp(9)),
+            story("milnrow-11", "Choir concert", area="milnrow-and-newhey", first_published_at=stamp(11))]
+    articles = [older, works] + near + pick + FILLER
+    R._CACHE.clear()
+    R._CACHE[id(articles)] = R.Index(articles, make_root([]))
+    out = R.insert(BODY, older, articles)
+    assert "milnrow-works" not in out
+    assert "milnrow-9" in out and "milnrow-11" in out

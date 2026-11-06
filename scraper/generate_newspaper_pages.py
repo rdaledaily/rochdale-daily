@@ -289,9 +289,18 @@ def _recirc_card(item, kicker=""):
 def _recirc_list(items, heading, destination=""):
     if not items:
         return ""
+    # Each line carries a small picture (measured 6 Nov 2026: the onward
+    # lists were text only, so nothing at the foot of a story caught the eye).
+    # A generated place card shows no story, so it gets no thumbnail.
+    def thumb(item):
+        src = generate_pages.absolute_url(item.get("image_url") or "")
+        if not src or generate_pages.is_generated_card(src):
+            return ""
+        return (f'<img class="rn-thumb" src="{generate_pages.esc(src)}" alt="" '
+                f'width="72" height="48" loading="lazy" decoding="async">')
     links = "".join(
         f'<a class="rn-item" href="{generate_pages.esc(item.get("slug"))}.html">'
-        f'{generate_pages.esc(item.get("title"))}</a>'
+        f'{thumb(item)}<span class="rn-item-title">{generate_pages.esc(item.get("title"))}</span></a>'
         for item in items
     )
     more = (

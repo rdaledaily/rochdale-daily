@@ -78,6 +78,20 @@ class ArticleTimeMetadataTests(unittest.TestCase):
         self.assertEqual(once, twice)
         self.assertEqual(once.count(timing.START), 1)
 
+    def test_developing_note_only_for_fresh_incidents(self) -> None:
+        """6 Nov 2026: "more details as they emerge" sat on scam warnings and
+        council notices that would never be updated. It now needs an incident
+        headline and a first publication within 24 hours."""
+        import generate_pages as gp
+        now = datetime(2026, 11, 6, 12, tzinfo=timezone.utc)
+        fresh = {"title": "Road closed after crash on Edenfield Road", "first_published_at": "2026-11-06T08:00:00Z"}
+        self.assertTrue(gp.is_developing_incident(fresh, now))
+        self.assertFalse(gp.is_developing_incident(dict(fresh, first_published_at="2026-11-04T08:00:00Z"), now))
+        for title in ("Police warn of doorstep scam in Heywood", "Council opens consultation on bin collections"):
+            self.assertFalse(gp.is_developing_incident(dict(fresh, title=title), now), title)
+        self.assertTrue(gp.is_generated_card("assets/img/cards/x-place-generated-card.jpg"))
+        self.assertFalse(gp.is_generated_card("assets/img/cards/warwick-mill.jpg"))
+
 
 if __name__ == "__main__":
     unittest.main()

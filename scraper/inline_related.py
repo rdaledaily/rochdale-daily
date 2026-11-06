@@ -175,18 +175,83 @@ def index_for(articles: list[dict[str, Any]]) -> Index:
     return _CACHE[key]
 
 
+AREA_MIN_LINKS = 2
+AREA_MAX_AGE_DAYS = 30
+
+
+def _area_label(area: str) -> str:
+    return area.replace("-", " ").replace(" and ", " & ").title()
+
+
+def _published(article: dict[str, Any]) -> str:
+    return str(article.get("first_published_at") or article.get("published_at") or "")
+
+
+# Notices, not stories: a "More from Heywood" line pointing at a roadworks
+# listing reads as filler.
+ROUTINE_TITLE = re.compile(r"\broad ?works?\b|\broad closures?\b|\btraffic regulation\b|\bplanning applications?\b", re.I)
+
+
+def _when(stamp: str):
+    from datetime import datetime, timezone
+    try:
+        value = datetime.fromisoformat(stamp.strip().replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+
+
+def area_links(article: dict[str, Any], all_articles: list[dict[str, Any]], taken: set[str],
+               limit: int) -> list[tuple[str, str, str]]:
+    """Newest stories from the same part of the borough, for stories the
+    strict subject match leaves orphaned (measured 6 Nov 2026: 142 of the last
+    200 pages had no in-text link to another story). These are labelled
+    "More from <area>", never "Read more", so they claim a shared place, not a
+    shared subject. Targets obey the same exclusions as Read more (no crime,
+    court, sensitive, event, sponsored or briefing pages)."""
+    area = str(article.get("area") or "").strip().lower()
+    if not area or limit <= 0:
+        return []
+    own_time = _when(_published(article))
+    if own_time is None:
+        return []
+    index = index_for(all_articles)
+    own = str(article.get("slug") or "")
+    pool = []
+    for row in all_articles:
+        slug = str(row.get("slug") or "")
+        if (slug not in index.targets or slug in taken or slug == own
+                or str(row.get("area") or "").strip().lower() != area
+                or ROUTINE_TITLE.search(str(row.get("title") or ""))):
+            continue
+        when = _when(_published(row))
+        if when is not None and abs((when - own_time).days) <= AREA_MAX_AGE_DAYS:
+            pool.append((abs((when - own_time).total_seconds()), slug, row))
+    # Nearest in time to this story, not the newest on the site: measured
+    # 6 Nov 2026, "newest" sent 127 of 200 pages to the same roadworks notice.
+    pool.sort(key=lambda item: (item[0], item[1]))
+    pool = [row for _, _, row in pool]
+    label = f"More from {_area_label(area)}"
+    return [(str(row["slug"]), str(row.get("title") or ""), label) for row in pool[:limit]]
+
+
 def insert(content_html: str, article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
-    """Place up to three Read more lines after paragraphs 2, 4 and 6."""
-    links = index_for(all_articles).related(article)
+    """Place up to three in-text links after paragraphs 2, 4 and 6: genuine
+    subject matches first ("Read more"), then same-area stories ("More from
+    Middleton") so no story is left without one."""
+    links = [(slug, title, "Read more") for slug, title in index_for(all_articles).related(article)]
+    if len(links) < AREA_MIN_LINKS:
+        links += area_links(article, all_articles, {slug for slug, _, _ in links},
+                            AREA_MIN_LINKS - len(links))
     if not links:
         return content_html
     ends = [m.end() for m in re.finditer(r"</p>", content_html, re.I)]
     slots = [ends[n - 1] for n in AFTER_PARAGRAPHS if n <= len(ends) - 1]  # never after the last paragraph
     out, position = [], 0
-    for at, (slug, title) in zip(slots, links):
+    for at, (slug, title, label) in zip(slots, links):
         out.append(content_html[position:at])
         out.append(
-            f'<p class="rd-related-inline">Read more: '
+            f'<p class="rd-related-inline">{_html.escape(label)}: '
             f'<a href="/articles/{_html.escape(slug, quote=True)}">{_html.escape(title)}</a></p>'
         )
         position = at

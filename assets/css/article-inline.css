@@ -176,3 +176,14 @@ svg {
     width: min(200px, 56vw);
   }
 }
+
+/* Onward-reading thumbnails (6 Nov 2026). The lists below a story were text
+   only; each line now carries the story's own picture where it has one. */
+.read-next .rn-item { gap: 12px; }
+.read-next .rn-item .rn-thumb {
+  flex: 0 0 72px; width: 72px; height: 48px;
+  object-fit: cover; border-radius: 2px; background: var(--surface, #f0efe9);
+}
+.read-next .rn-item .rn-item-title { flex: 1 1 auto; min-width: 0; }
+/* The story photo now sits directly under the headline. */
+.article-main h1 + .article-hero-image { margin: 12px 0 16px; }

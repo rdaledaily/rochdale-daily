@@ -161,6 +161,18 @@ def run() -> None:
             assert "Read the full story: https://rochdaledaily.co.uk/articles/v" in edit.call_args.args[2]
             assert "v" in json.loads(state_file.read_text())["posted"]
 
+    # 6 Nov 2026: a post goes out only with a photo of the story. A generated
+    # place card, or a stock picture used by more than two stories, waits.
+    feed = [
+        {"image_url": "assets/img/cards/abc-place-generated-card.jpg", "image_status": "place-generated-card"},
+        *[{"image_url": "assets/img/cards/rochdale-town-hall.jpg", "image_status": "cards-library-photo"}] * 3,
+        {"image_url": "assets/img/cards/warwick-mill.jpg", "image_status": "source-photo-cached"},
+    ]
+    usage = fb.image_usage(feed)
+    assert not fb.has_story_photo(feed[0], usage)
+    assert not fb.has_story_photo(feed[1], usage)
+    assert fb.has_story_photo(feed[-1], usage)
+
     print("Facebook photo-post and link-comment tests passed.")
 
 

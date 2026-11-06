@@ -12,7 +12,7 @@ from typing import Any
 from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
 from reader_usefulness import reader_questions_for
 from newsroom_source_policy import is_non_article_service_page
-from reader_copy import strip_filler_openers
+from reader_copy import strip_filler_openers, uk_dates
 
 
 
@@ -672,7 +672,7 @@ def normalise_draft(draft: Any) -> dict[str, Any]:
     for raw in clean.get("paragraphs") or []:
         # Sentence-opening filler ("Fortunately, ...") is removed here, before
         # the gate, so no repair call is spent on a word the code can drop.
-        paragraph = strip_filler_openers(plain_text(raw))
+        paragraph = uk_dates(strip_filler_openers(plain_text(raw)))
         key = paragraph.casefold()
         if not paragraph or key in seen:
             continue
@@ -681,7 +681,9 @@ def normalise_draft(draft: Any) -> dict[str, Any]:
         if len(paragraphs) >= 12:
             break
     clean["paragraphs"] = paragraphs
-    excerpt = plain_text(clean.get("excerpt"))[:360]
+    if clean.get("title"):
+        clean["title"] = uk_dates(plain_text(clean.get("title")))
+    excerpt = uk_dates(plain_text(clean.get("excerpt")))[:360]
     if len(excerpt.split()) < 18 and paragraphs:
         excerpt = plain_text(" ".join(paragraphs[:2]))[:360]
         if len(excerpt) >= 355 and " " in excerpt:

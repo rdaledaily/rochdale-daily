@@ -174,6 +174,39 @@ def eligible(article: Any, max_age_hours: int, now: datetime | None = None) -> b
     return True
 
 
+# A Facebook post is a photo post: the picture IS the post. Measured 6 Nov
+# 2026: of the last 15 posts, 4 carried the beige place card (a word such as
+# "Middleton" on a blank background) and 5 a stock picture shared by many
+# stories (rochdale-town-hall.jpg was on 26 of the last 200). Neither shows
+# the story, so neither earns a click. A story is posted only with a photo of
+# the story itself; anything else waits, and the run reports how many.
+STORY_PHOTO_STATUSES = {"editorial-photo", "source-photo-cached", "commons-photo-cached", "cards-library-photo"}
+SHARED_STOCK_LIMIT = 2
+
+
+def image_usage(articles: list[Any]) -> dict[str, int]:
+    """How many published stories use each image file."""
+    usage: dict[str, int] = {}
+    for row in articles:
+        if not isinstance(row, dict):
+            continue
+        name = str(row.get("image_url") or row.get("img") or "").split("?")[0].rsplit("/", 1)[-1].lower()
+        if name:
+            usage[name] = usage.get(name, 0) + 1
+    return usage
+
+
+def has_story_photo(article: dict[str, Any], usage: dict[str, int]) -> bool:
+    raw = str(article.get("image_url") or article.get("img") or "").split("?")[0]
+    name = raw.rsplit("/", 1)[-1].lower()
+    if not name or "generated" in name or "placeholder" in name or name.endswith(".svg"):
+        return False
+    if str(article.get("image_status") or "") not in STORY_PHOTO_STATUSES:
+        return False
+    # A picture used by more than two stories is stock, whatever its label.
+    return usage.get(name, 0) <= SHARED_STOCK_LIMIT
+
+
 def roundup_eligible(article: Any, max_age_hours: int, now: datetime | None = None) -> bool:
     """Name kept for older callers: is this story allowed on Facebook at all?"""
     if not eligible(article, max_age_hours, now):
@@ -425,14 +458,18 @@ def main() -> int:
         slots = state["slots"] = {}
 
     posted_urls = {str(v.get("url") or "").replace(".html", "") for v in posted.values() if isinstance(v, dict)}
-    candidates = [
+    unposted = [
         row for row in articles
         if roundup_eligible(row, max_age_hours, now)
         and article_key(row) not in posted
         and canonical_url(row) not in posted_urls
     ]
+    usage = image_usage(articles)
+    candidates = [row for row in unposted if has_story_photo(row, usage)]
+    waiting = [str(row.get("slug") or "") for row in unposted if not has_story_photo(row, usage)]
     if not candidates:
-        return report("idle", "No fresh unposted stories", remaining_unposted=0)
+        return report("idle", "No fresh unposted stories with a photo of the story",
+                      remaining_unposted=0, waiting_for_story_photo=waiting)
     candidates.sort(key=lambda row: (score(row, now), str(row.get("slug") or "")), reverse=True)
     urgent_waiting = any(
         is_urgent(row)
@@ -441,7 +478,7 @@ def main() -> int:
     )
     reason = schedule_reason(state, posted, now, urgent_waiting)
     if reason:
-        return report("idle", reason, remaining_unposted=len(candidates))
+        return report("idle", reason, remaining_unposted=len(candidates), waiting_for_story_photo=waiting)
 
     article = candidates[0]
     if urgent_waiting and not current_slot(now):
