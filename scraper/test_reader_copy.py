@@ -92,8 +92,19 @@ def run() -> None:
         "The council said this warning is crucial for residents.",
         "This scheme is crucial for the 465 families involved.",
         'This initiative "is crucial", the mayor said.',
+        # Reporting carried without a number, quote or attribution word.
+        "This closure is essential because engineers found structural damage to the bridge.",
+        "This development is crucial for Middleton, as it seeks to revitalise the town and provide housing.",
+        "This development reflects the council's commitment to better serve the community by streamlining operations.",
+        "This recognition is significant as it underscores the ongoing need for foster carers in the area.",
+        "This initiative is crucial for local families seeking tailored educational support for SEN pupils.",
     ):
         assert not rc.is_filler_closer(keep), keep
+    bridge = ("<p>The bridge is closed.</p><p>This closure is essential because engineers found "
+              "structural damage to the bridge.</p>")
+    assert rc.tidy_content_html(bridge) == bridge
+    assert rc.is_filler_closer("This case underscores the need for community awareness and support "
+                               "in safeguarding vulnerable individuals.")
     # Only the closing paragraphs are touched; an early sentence stays.
     early = ("<p>This incident underscores the importance of fire alarms.</p><p>Two.</p>"
              "<p>Three.</p><p>Four.</p>")

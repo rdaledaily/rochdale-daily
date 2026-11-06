@@ -238,7 +238,13 @@ def area_links(article: dict[str, Any], all_articles: list[dict[str, Any]], take
 def insert(content_html: str, article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
     """Place up to three in-text links after paragraphs 2, 4 and 6: genuine
     subject matches first ("Read more"), then same-area stories ("More from
-    Middleton") so no story is left without one."""
+    Middleton") so no story is left without one.
+
+    A crime, police, sensitive, sponsored, briefing or event story gets no
+    in-text links at all: Index.related() returns none for it on purpose, and
+    that exclusion must not be read as an orphan for the area fallback."""
+    if _excluded_source(article):
+        return content_html
     links = [(slug, title, "Read more") for slug, title in index_for(all_articles).related(article)]
     if len(links) < AREA_MIN_LINKS:
         links += area_links(article, all_articles, {slug for slug, _, _ in links},
