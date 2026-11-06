@@ -78,19 +78,53 @@ class ArticleTimeMetadataTests(unittest.TestCase):
         self.assertEqual(once, twice)
         self.assertEqual(once.count(timing.START), 1)
 
-    def test_developing_note_only_for_fresh_incidents(self) -> None:
-        """6 Nov 2026: "more details as they emerge" sat on scam warnings and
-        council notices that would never be updated. It now needs an incident
-        headline and a first publication within 24 hours."""
+    def test_developing_label_only_when_story_says_it_is_incomplete(self) -> None:
+        """6 Nov 2026 (editor's rule): the label goes only on a story that
+        states it is incomplete or waiting for information. A finished fire
+        report does not get it from its headline; a story waiting on a press
+        office does, whatever its headline."""
         import generate_pages as gp
-        now = datetime(2026, 11, 6, 12, tzinfo=timezone.utc)
-        fresh = {"title": "Road closed after crash on Edenfield Road", "first_published_at": "2026-11-06T08:00:00Z"}
-        self.assertTrue(gp.is_developing_incident(fresh, now))
-        self.assertFalse(gp.is_developing_incident(dict(fresh, first_published_at="2026-11-04T08:00:00Z"), now))
-        for title in ("Police warn of doorstep scam in Heywood", "Council opens consultation on bin collections"):
-            self.assertFalse(gp.is_developing_incident(dict(fresh, title=title), now), title)
+        done = {"title": "Resident escapes fire at Lonsdale Court", "content_html":
+                "<p>A fire broke out. All residents were evacuated safely and the building was made secure.</p>"}
+        self.assertFalse(gp.is_developing_story(done))
+        waiting = [
+            "Rochdale Daily has asked the press office to confirm the full term and will update this report.",
+            "This is a developing story and will be updated.",
+            "At the time of publication, police had not released the cause.",
+            "Further updates are expected as the situation develops.",
+            "The operator has been contacted for comment.",
+        ]
+        for line in waiting:
+            self.assertTrue(gp.is_developing_story({"title": "Council contract", "content_html": f"<p>{line}</p>"}), line)
+        incidental = [
+            "The cost of the scheme has not been disclosed.",
+            "Rochdale Daily will update this report if the council announces any further changes.",
+            "Police warn of doorstep scams in Heywood.",
+            "ONGOING STORY — Updated 3 September 2026 at 11:22.",
+        ]
+        for line in incidental:
+            self.assertFalse(gp.is_developing_story({"title": "Crash on Edenfield Road", "content_html": f"<p>{line}</p>"}), line)
+        # is_ongoing is set by the pipeline, not the copy: it does not count.
+        self.assertFalse(gp.is_developing_story({"title": "x", "is_ongoing": True, "content_html": "<p>x</p>"}))
         self.assertTrue(gp.is_generated_card("assets/img/cards/x-place-generated-card.jpg"))
         self.assertFalse(gp.is_generated_card("assets/img/cards/warwick-mill.jpg"))
+
+    def test_archived_pages_keep_label_only_if_copy_says_so(self) -> None:
+        import tempfile
+        from pathlib import Path
+        import generate_pages as gp
+        # Older pages carry the note with inline styles; both forms are swept.
+        note = '<p class="developing-note" style="margin:12px 0">This is a developing story.</p>\n'
+        page = '<div class="article-main">{n}<div class="article-copy"><p>{t}</p></div><section class="editorial-legal-note"><p>may be updated</p></section></div>'
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "old.html").write_text(page.format(n=note, t="The fire was put out."), encoding="utf-8")
+            (d / "wait.html").write_text(page.format(n=note, t="Awaiting confirmation from GMP."), encoding="utf-8")
+            (d / "live.html").write_text(page.format(n=note, t="The fire was put out."), encoding="utf-8")
+            self.assertEqual(gp.scrub_stale_developing_notes(d, {"live"}), 1)
+            self.assertNotIn("developing-note", (d / "old.html").read_text())
+            self.assertIn("developing-note", (d / "wait.html").read_text())
+            self.assertIn("developing-note", (d / "live.html").read_text())
 
     def test_page_dates_are_uk_not_utc(self) -> None:
         """23:30 UTC on 16 August is 00:30 on 17 August in Rochdale."""
