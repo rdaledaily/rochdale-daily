@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-06T15:28:51.311241Z",
+  "last_run_at": "2026-11-06T15:45:45.750192Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,30 +42,27 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 85,
+  "raw_candidates_before_job_filter": 84,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 85,
-  "candidate_clusters": 33,
+  "raw_candidates": 84,
+  "candidate_clusters": 32,
   "google_news_resolution": {
-    "wrappers": 37,
-    "resolved": 28,
+    "wrappers": 44,
+    "resolved": 31,
     "text_recovered": 18,
     "reattributed": 0,
     "images_found": 19
   },
   "duplicates_merged": 52,
   "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "greater-manchester-police-to-host-pop-up-events-to-combat-online-scams-in-rochda",
-      "source_url": "https://www.rochdaletimes.co.uk/pop-up-events-to-help-avoid-online-scams/"
-    }
-  ],
-  "new_articles": 1,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
   "live_articles": 547,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 0,
@@ -84,8 +81,8 @@
       "rejected": 28
     },
     "held_back_this_run": 24,
-    "held_already_published": 21,
-    "held_rejected": 3,
+    "held_already_published": 22,
+    "held_rejected": 2,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -100,15 +97,6 @@
       "last_attempt_at": "2026-11-06T14:49:58.471654Z"
     },
     {
-      "url": "https://rochdaleafc.co.uk/club-shop-closed-this-saturday",
-      "title": "Club Shop Closed This Saturday",
-      "source_name": "Rochdale AFC",
-      "held_because": "already rejected: quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-06T11:57:46.770246Z"
-    },
-    {
       "url": "https://rochdaleafc.co.uk/we-need-to-step-up-gilmour",
       "title": "We Need To Step Up – Gilmour - Rochdale AFC",
       "source_name": "Rochdale AFC",
@@ -121,7 +109,7 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 71,
+    "rss_and_google_news": 70,
     "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -263,7 +251,7 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 23,
+    "Rochdale Times": 22,
     "Rochdale AFC": 20,
     "Manchester Evening News": 15,
     "Doncaster Free Press": 8,
@@ -279,7 +267,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1
+    "sport": 1
   },
   "published_by_category": {
     "business": 61,
@@ -318,10 +306,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "hard-news-v3-e6aaf00bdd8b6f9d5b18"
+    "sport-v3-995ea5d7dc64f0118d0d"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/pop-up-events-to-help-avoid-online-scams/"
+    "https://rochdaleafc.co.uk/club-shop-closed-this-saturday/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -333,10 +321,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "crime"
+      "sport"
     ],
     "selected_categories": [
-      "crime"
+      "sport"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -348,14 +336,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1
+      "sport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "rochdale": 1
     },
     "selected_by_source": {
-      "rochdale times": 1
+      "rochdale afc": 1
     },
     "must_cover_selected": 0
   },
@@ -905,21 +893,22 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5lZVJWZFhrcm9QR1ZRWnFPYVI2QjFtb3NpeE1nb1N6b21IR3FBZ01UZGt4QTZ4Qk9yV1dIbHVuZWhTWjhnQi12OVRleHo0OTY3Mk5tVjAtZTg0NjZmeHF6UnlyNGR6bUx0?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
+    "visitrochdale.com"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 2
+    "visitrochdale.com": 2
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -956,7 +945,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-06T15:30:18.906249Z",
+  "frontpage_generated_at": "2026-11-06T15:47:30.216582Z",
   "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1046,7 +1035,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 4,
+  "event_dates_corrected_from_ledger": 3,
   "duplicate_articles_after_postprocessing": 547,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1058,10 +1047,8 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "greater-manchester-police-to-host-pop-up-events-to-combat-online-scams-in-rochda"
-  ],
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
