@@ -19,6 +19,11 @@ _LAST_NETWORK_FAILURE = 0.0
 def plain(value):
     return ' '.join(html.unescape(re.sub(r'<[^>]+>', ' ', str(value or ''))).split())
 
+SUBJECT_ALIASES = {
+    'Rochdale Parish Church': "St Chad's Church Rochdale",
+}
+
+
 def subject_for(article):
     title = plain(article.get('title'))
     # Search for the actual named subject, never a headline's verbs or a place
@@ -27,6 +32,10 @@ def subject_for(article):
     for subject in known:
         if subject.casefold() in title.casefold():
             return subject
+    # Local names for places Commons files under their formal name.
+    for local, formal in SUBJECT_ALIASES.items():
+        if local.casefold() in title.casefold():
+            return formal
     pattern = r'\b((?:[A-Z][A-Za-z’\'-]+\s+){1,3}(?:Park|School|College|Hall|Church|Mosque|Station|Reservoir|Library|Centre|Stadium|Road|Street|Lane))\b'
     match = re.search(pattern, title)
     if match:

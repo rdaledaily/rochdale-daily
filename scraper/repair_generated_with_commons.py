@@ -60,16 +60,17 @@ def named_place(title: str) -> str:
 
 
 def query_for(article: dict[str, Any]) -> str:
-    title = clean(article.get("title"))
-    place = named_place(title)
-    if place and len(place.split()) >= 2:
-        return f"{place} Rochdale"
-    area = clean(article.get("area"))
-    if area and area.lower() not in {"rochdale", "borough", "greater manchester"}:
-        return f"{area} Rochdale"
-    # Subject fallback: enough title words to keep the Commons search specific.
-    subject = words(title)[:6]
-    return " ".join(subject + ["Rochdale"]) if subject else "Rochdale"
+    """The story's named subject (image_hierarchy.subject_for), or "".
+
+    Measured 6 Nov 2026: this pass checked 145 stories and repaired none.
+    named_place() was compiled with re.I, so its "capitalised words" matched
+    any words and the search became the headline ("goblins move Rochdale
+    Parish Church Rochdale"); with no named place it fell back to the area or
+    to six headline words. Commons needs every word to match, so nothing
+    came back, and an area photo would only have decorated the story. One
+    rule now serves both Commons paths: a named subject, or no search."""
+    from image_hierarchy import subject_for
+    return subject_for(article)
 
 
 def strip_tags(value: Any) -> str:
@@ -87,7 +88,7 @@ def search(article: dict[str, Any], timeout: int) -> list[dict[str, Any]]:
     data = request_json({
         "action": "query",
         "generator": "search",
-        "gsrsearch": query_for(article),
+        "gsrsearch": '"' + query_for(article) + '"',
         "gsrnamespace": 6,
         "gsrlimit": 12,
         "prop": "imageinfo",
@@ -113,21 +114,14 @@ def score(article: dict[str, Any], page: dict[str, Any]) -> int:
 
 
 def acceptable(article: dict[str, Any], page: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
+    """image_hierarchy.acceptable: a bitmap under CC BY, CC BY-SA, CC0 or public
+    domain (never NC or ND: the site carries advertising), whose title or
+    description contains every word of the named subject. The old hint test
+    ("cc by" in the licence) also passed CC BY-NC."""
+    from image_hierarchy import acceptable as hierarchy_acceptable
     info = ((page.get("imageinfo") or [{}])[0])
-    mime = clean(info.get("mime")).lower()
-    if mime not in {"image/jpeg", "image/png", "image/webp"}:
-        return False, info
-    meta = info.get("extmetadata") or {}
-    license_name = strip_tags((meta.get("LicenseShortName") or {}).get("value")).lower()
-    usage = strip_tags((meta.get("UsageTerms") or {}).get("value")).lower()
-    if not any(hint in license_name or hint in usage for hint in FREE_LICENSE_HINTS):
-        return False, info
-    s = score(article, page)
-    place = named_place(clean(article.get("title")))
-    # A named place needs at least one matching place token; generic subject searches
-    # need two meaningful matches to avoid decorating a story with random scenery.
-    threshold = 8 if place else 6
-    return s >= threshold, info
+    subject = query_for(article)
+    return bool(subject) and hierarchy_acceptable(page, subject), info
 
 
 def download(url: str, target: Path, timeout: int) -> bool:
@@ -177,6 +171,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.limit and checked >= args.limit:
             break
         checked += 1
+        if not query_for(article):
+            rows.append({"slug": clean(article.get("slug")), "result": "no-specific-subject"})
+            continue
         best: tuple[int, dict[str, Any], dict[str, Any]] | None = None
         try:
             pages = search(article, args.timeout)
