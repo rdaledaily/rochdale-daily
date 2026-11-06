@@ -371,9 +371,12 @@ def apply(root: Path, rows=None, images=False, network_images=True):
         row['category'] = category
         image_tier = None
         if images:
-            from image_hierarchy import choose_image
+            from image_hierarchy import choose_image, named_for_story
             image_relevance = review.get('image_relevant') if review.get('reviewed_image_url', original.get('image_url')) == original.get('image_url') else None
-            image_tier = choose_image(row, root, relevance=image_relevance, allow_network=network_images, rejected=[review.get('reviewed_image_url', original.get('image_url'))] if review.get('image_relevant') is False else [])
+            veto = review.get('image_relevant') is False and not named_for_story(row, review.get('reviewed_image_url', original.get('image_url')))
+            if image_relevance is False and not veto:
+                image_relevance = None  # a photo named for this story outranks the low-detail image check
+            image_tier = choose_image(row, root, relevance=image_relevance, allow_network=network_images, rejected=[review.get('reviewed_image_url', original.get('image_url'))] if veto else [])
             report['image_tiers'][image_tier] = report['image_tiers'].get(image_tier, 0) + 1
         geography = ward_decision(row)
         if not geography['wards']:

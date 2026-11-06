@@ -82,4 +82,19 @@ with tempfile.TemporaryDirectory() as tmp:
     assert twice.count('<meta name="description" content="Rochdale&#x27;s deadline has passed; applications remain open.">') == 1
     assert twice.count('<meta property="og:description" content="Rochdale&#x27;s deadline has passed; applications remain open.">') == 1
 
+# 6 Nov 2026: the low-detail image check may veto generic stock on the wrong
+# story, never a photo named for the story or its subject.
+from image_hierarchy import named_for_story
+assert named_for_story({'slug': 'kingsway-hotel-in-rochdale-listed-for-sale-at-425-000', 'title': 'Kingsway Hotel listed'},
+                       'assets/img/cards/kingsway-hotel-in-rochdale-listed-for-sa.jpg')
+assert named_for_story({'slug': 'x', 'title': 'New Greater Manchester Mayor Bev Craig visits Rochdale'},
+                       'assets/img/cards/manchester_mayor.jpg')
+assert named_for_story({'slug': 'y', 'title': 'Littleborough residents help boost flood resilience through Resilient Roch project'},
+                       'assets/img/cards/resilient_roch_project.jpg')
+assert not named_for_story({'slug': 'z', 'title': 'Middleton protest planned as organiser sets out bail conditions'},
+                           'assets/img/cards/bail.jpg')
+assert not named_for_story({'slug': 'w', 'title': 'New MOT station opens on Maclure Road'}, 'assets/img/cards/tram.jpg')
+assert not named_for_story({'slug': 'v', 'title': 'Housing allocation for Bamford'}, 'assets/img/cards/rochdale-borough-housing.jpg')
+assert not named_for_story({'slug': 'u', 'title': 'Roadworks on Well i th Lane'}, 'assets/img/cards/x-place-generated-card.jpg')
+
 print('Archive editorial contract checks passed.')

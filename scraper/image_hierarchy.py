@@ -19,6 +19,40 @@ _LAST_NETWORK_FAILURE = 0.0
 def plain(value):
     return ' '.join(html.unescape(re.sub(r'<[^>]+>', ' ', str(value or ''))).split())
 
+SUBJECT_ALIASES = {
+    'Rochdale Parish Church': "St Chad's Church Rochdale",
+}
+
+
+_NAME_STOP = frozenset('the a an and of in on at to for from with by is as rochdale borough jpg jpeg png webp '
+                       'canonical photo image card supplied'.split())
+
+
+def named_for_story(article, rel):
+    """True when a library photo's file name names this story: either the
+    story's own photo (its name is the story's slug, or a long run of it) or
+    at least two distinctive words, all of which are in the headline
+    ("resilient_roch_project" on a Resilient Roch story, "manchester_mayor" on
+    "New Greater Manchester Mayor Bev Craig visits Rochdale").
+
+    Measured 6 Nov 2026: a low-detail AI image check rejected 34 real photos.
+    It was right about generic stock on the wrong story (bail.jpg on a protest,
+    tram.jpg on an MOT station) and wrong about story-named photos (the
+    Kingsway Hotel sale, the Middleton murals, Bev Craig), which then fell to
+    a beige card. Its veto now applies only to photos that are not named for
+    the story."""
+    name = str(rel or '').rsplit('/', 1)[-1].rsplit('.', 1)[0].lower()
+    if not name or 'generated' in name or '-commons-' in name or 'placeholder' in name:
+        return False
+    slug = str(article.get('slug') or '').lower()
+    stem = name.removesuffix('-canonical')
+    if slug and (stem == slug or (len(stem) >= 30 and (slug.startswith(stem) or stem.startswith(slug[:len(stem)])))):
+        return True
+    words = [w for w in re.findall(r'[a-z0-9]+', name) if w not in _NAME_STOP and not w.isdigit()]
+    title = set(re.findall(r'[a-z0-9]+', plain(article.get('title')).lower().replace('’', "'")))
+    return len(words) >= 2 and all(w in title for w in words)
+
+
 def subject_for(article):
     title = plain(article.get('title'))
     # Search for the actual named subject, never a headline's verbs or a place
@@ -27,6 +61,10 @@ def subject_for(article):
     for subject in known:
         if subject.casefold() in title.casefold():
             return subject
+    # Local names for places Commons files under their formal name.
+    for local, formal in SUBJECT_ALIASES.items():
+        if local.casefold() in title.casefold():
+            return formal
     pattern = r'\b((?:[A-Z][A-Za-z’\'-]+\s+){1,3}(?:Park|School|College|Hall|Church|Mosque|Station|Reservoir|Library|Centre|Stadium|Road|Street|Lane))\b'
     match = re.search(pattern, title)
     if match:

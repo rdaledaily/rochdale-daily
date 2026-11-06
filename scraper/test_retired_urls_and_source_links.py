@@ -121,6 +121,16 @@ class SourceLinkTests(unittest.TestCase):
         self.assertNotIn('href="the source', out)
         self.assertIn('<a href="https://www.rochdale.gov.uk/y" rel="noopener">council</a>', out)
 
+    def test_hidden_source_keeps_our_own_photo(self):
+        """6 Nov 2026: clearing every image on a hidden-source story blanked
+        16 of the paper's own photos into beige cards."""
+        base = {"title": "Plans", "content_html": "<p>x</p>", "source_name": "Roch Valley Radio",
+                "source_url": "https://rochvalleyradio.com/news/x"}
+        own = dict(base, image_url="assets/img/cards/rochdale_in_bloom.jpg", image_status="cards-library-photo")
+        self.assertEqual(SP.sanitise_article(own)["image_url"], "assets/img/cards/rochdale_in_bloom.jpg")
+        theirs = dict(base, image_url="https://rochvalleyradio.com/img/x.jpg", image_status="source-image")
+        self.assertEqual(SP.sanitise_article(theirs)["image_url"], "")
+
     def test_bare_url_keeps_sentence_punctuation(self):
         self.assertEqual(
             SP.clean_public_text("Read more at https://rochvalleyradio.com/story-1. Thanks"),

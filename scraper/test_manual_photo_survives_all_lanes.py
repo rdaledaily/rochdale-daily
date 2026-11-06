@@ -150,6 +150,33 @@ class ManualPhotoSurvivesAllLanes(unittest.TestCase):
         self.assertFalse(images.existing_meaningful_image(a, self.root))
 
 
+class HourlyCommonsPassTests(unittest.TestCase):
+    """6 Nov 2026: the hourly pass checked 145 stories and repaired none,
+    searching headline words; its licence test also passed CC BY-NC."""
+
+    def test_query_is_the_named_subject_or_nothing(self):
+        import repair_generated_with_commons as hourly
+        self.assertEqual(hourly.query_for({"title": "Did goblins move Rochdale Parish Church up the hill?"}),
+                         "St Chad's Church Rochdale")
+        self.assertEqual(hourly.query_for({"title": "Bridge Street in Heywood closed over building safety concerns"}),
+                         "Bridge Street")
+        self.assertEqual(hourly.query_for({"title": "Rochdale prepares for return of popular ale trail event",
+                                           "area": "rochdale"}), "")
+
+    def test_non_commercial_licence_rejected(self):
+        import repair_generated_with_commons as hourly
+        article = {"title": "Bridge Street in Heywood closed over building safety concerns"}
+        def page(licence):
+            return {"title": "File:Bridge Street, Heywood.jpg", "imageinfo": [{"mime": "image/jpeg",
+                    "extmetadata": {"LicenseShortName": {"value": licence}}}]}
+        self.assertTrue(hourly.acceptable(article, page("CC BY-SA 2.0"))[0])
+        self.assertFalse(hourly.acceptable(article, page("CC BY-NC-SA 2.0"))[0])
+        self.assertFalse(hourly.acceptable(article, page("CC BY-ND 4.0"))[0])
+        other = {"title": "File:Market Street, Heywood.jpg", "imageinfo": [{"mime": "image/jpeg",
+                 "extmetadata": {"LicenseShortName": {"value": "CC BY-SA 2.0"}}}]}
+        self.assertFalse(hourly.acceptable(article, other)[0])
+
+
 if __name__ == "__main__":
     unittest.main()
 
