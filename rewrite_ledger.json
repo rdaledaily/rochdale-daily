@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-06T11:19:20.788652Z",
+  "updated_at": "2026-11-06T11:39:33.703917Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 143,
@@ -248,13 +248,13 @@
     },
     "https://rochdaleafc.co.uk/club-shop-closed-this-saturday": {
       "first_attempt_at": "2026-11-06T11:16:58.298857Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaleafc.co.uk/club-shop-closed-this-saturday"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T11:16:58.298857Z",
+      "last_attempt_at": "2026-11-06T11:36:26.346848Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Club Shop Closed This Saturday",
@@ -640,12 +640,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-02T12:20:11.710266Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 02/11/2026 at 12:01pm Live Freehold Tram Stop - Lifts out of service Duration Mon 02 Nov, 12:01pm – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "62338d388a938adf"
+      "text_fingerprint": "62338d388a938adf",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-f42339b3decad80626": {
       "first_attempt_at": "2026-10-31T13:22:55.390358Z",
