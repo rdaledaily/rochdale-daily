@@ -188,15 +188,53 @@ _MORALISING_RE = re.compile(
     re.I,
 )
 _FACT_MARK_RE = re.compile(r"\d|[\"“”]|\b(?:said|says|stated|according)\b", re.I)
+# A clause that explains or reports ("because engineers found...", "as it
+# seeks to provide housing", "by streamlining operations") keeps the sentence.
+_EXPLAINS_RE = re.compile(
+    r"\b(?:because|since|after|following|due|as (?:it|they|he|she|the|this|these|a|an)|by|which|who|when|"
+    r"where|while|whilst|offering|providing|allowing|enabling|including|seeks?|aims?|will|would|found|"
+    r"not only)\b",
+    re.I,
+)
+# Every content word of a disposable closer comes from this list: the stock
+# vocabulary of an AI moral ending, with nothing about this particular story.
+# Measured 6 Nov 2026 on the 241 automated stories: a summary subject plus a
+# moralising phrase matched 22 closing sentences, several of which carried
+# reporting (housing plans, SEN services, the need for foster carers). Only
+# sentences made wholly of these words are removed.
+_BOILERPLATE_WORDS = frozenset("""
+this these the such a an of and or in to for on its their our is are was were be being remains
+incident initiative initiatives event events case situation development recognition warning warnings
+news move scheme project decision programme investment achievement milestone operation effort efforts
+session sessions award celebration appointment partnership closure change changes tragic recent latest
+crucial vital essential critical key important pivotal significant timely stark
+underscores underscore underscored highlights highlight highlighted serves serve reminder reminds testament
+reflects reflect reflected plays play role importance need needs value
+ensuring ensure maintaining maintain protecting protect safeguarding promoting
+safety security wellbeing welfare public community communities residents resident local people everyone
+individuals vulnerable area areas borough town region all those
+awareness vigilance vigilant proactive measures preparedness responsible responsibility cooperation
+support supporting involvement engagement commitment council council's councils
+trust integrity accountability transparency inclusivity accessibility
+staying informed being aware taking precautions caution care alert
+continued ongoing wider broader overall general importance particularly especially also
+""".split())
 
 
 def is_filler_closer(sentence: str) -> bool:
+    """A moralising closing sentence that carries no reporting at all.
+
+    Requires the summary subject ("This incident...") and a moralising
+    phrase, and then that EVERY content word is generic commentary
+    vocabulary, with no figure, quotation, attribution or explaining clause.
+    A sentence with anything specific in it is kept whole."""
     sentence = plain(sentence)
-    return bool(
-        _SUMMARY_SUBJECT_RE.search(sentence)
-        and _MORALISING_RE.search(sentence)
-        and not _FACT_MARK_RE.search(sentence)
-    )
+    if not (_SUMMARY_SUBJECT_RE.search(sentence) and _MORALISING_RE.search(sentence)):
+        return False
+    if _FACT_MARK_RE.search(sentence) or _EXPLAINS_RE.search(sentence):
+        return False
+    words = re.findall(r"[a-z][a-z'’]*", sentence.lower().replace("’", "'"))
+    return bool(words) and all(word in _BOILERPLATE_WORDS for word in words)
 
 
 _MONTHS = ("January|February|March|April|May|June|July|August|September|"

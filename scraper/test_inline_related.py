@@ -146,3 +146,24 @@ def test_orphans_get_same_area_links_labelled_honestly():
     out = R.insert(BODY, older, articles)
     assert "milnrow-works" not in out
     assert "milnrow-9" in out and "milnrow-11" in out
+
+
+def test_excluded_sources_get_no_area_fallback():
+    """6 Nov 2026: the area fallback read a deliberately excluded source as an
+    orphan, so "Drunk driver jailed..." linked to pathology and measles
+    stories. Crime, police, sensitive, sponsored and event stories get none."""
+    from datetime import datetime, timezone
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    near = [story(f"rochdale-{n}", f"Library story {n}", area="rochdale", first_published_at=stamp) for n in range(3)]
+    sources = [
+        story("drunk-driver", "Drunk driver jailed after pursuit", area="rochdale", category="crime", first_published_at=stamp),
+        story("police-advice", "Advice session for residents", area="rochdale", police_matter=True, first_published_at=stamp),
+        story("inquest", "Inquest opens into death of man", area="rochdale", first_published_at=stamp),
+        story("sponsored", "Shop offer", area="rochdale", sponsored=True, first_published_at=stamp),
+        story("fair", "Winter fair", area="rochdale", category="events", first_published_at=stamp),
+    ]
+    articles = sources + near + FILLER
+    R._CACHE.clear()
+    R._CACHE[id(articles)] = R.Index(articles, make_root([]))
+    for source in sources:
+        assert R.insert(BODY, source, articles) == BODY, source["slug"]
