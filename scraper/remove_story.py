@@ -23,12 +23,13 @@ source URLs canonicalised exact (checked against every merged source URL).
 from __future__ import annotations
 
 import argparse
+import shutil
 import json
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from retired_urls import retire_page  # noqa: E402
+from retired_urls import hub_for_page, record_redirect, retire_page  # noqa: E402
 from story_blocklist import (  # noqa: E402
     canonical_url,
     is_blocked_article,
@@ -178,6 +179,17 @@ def main() -> int:
             destination = retire_page(page, REDIRECTS)
             deleted_pages += 1
             print(f"Deleted page: {page} (now redirects to {destination})")
+        # Some pages are written as articles/<slug>/index.html. On 5 Nov 2026
+        # a rewritten page landed at that path under an already-removed slug
+        # and survived, because only <slug>.html was ever checked.
+        folder_page = ARTICLE_PAGES_DIR / slug / "index.html"
+        if folder_page.exists():
+            page_html = folder_page.read_text(encoding="utf-8", errors="ignore")
+            destination = hub_for_page(page_html)
+            record_redirect(REDIRECTS, slug, destination)
+            shutil.rmtree(folder_page.parent)
+            deleted_pages += 1
+            print(f"Deleted page: {folder_page} (now redirects to {destination})")
     print(f"Article pages deleted: {deleted_pages}.")
 
     # 4. Rebuild pages, frontpage.json and sitemap.xml from the scrubbed feed.

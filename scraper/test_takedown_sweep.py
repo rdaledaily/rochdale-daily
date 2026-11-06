@@ -120,3 +120,24 @@ def test_sweep_is_idempotent(tmp_path):
     build(tmp_path)
     sweep(tmp_path, [SLUG])
     assert sweep(tmp_path, [SLUG]) == {}
+
+
+def test_remove_story_deletes_folder_form_page(tmp_path, monkeypatch):
+    """A page written as articles/<slug>/index.html under a removed slug is deleted."""
+    import remove_story
+
+    slug = "new-stone-circle-installed-near-rochdale"
+    (tmp_path / "articles" / slug).mkdir(parents=True)
+    (tmp_path / "articles" / slug / "index.html").write_text(
+        '<html><head><meta property="article:section" content="community"></head></html>', encoding="utf-8"
+    )
+    (tmp_path / "articles.json").write_text("[]", encoding="utf-8")
+    (tmp_path / "story_blocklist.json").write_text(
+        json.dumps({"slugs": [slug], "title_patterns": [], "source_urls": []}), encoding="utf-8"
+    )
+    (tmp_path / "_redirects").write_text("", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(sys, "argv", ["remove_story.py", "--slugs", slug, "--skip-regenerate"])
+    assert remove_story.main() == 0
+    assert not (tmp_path / "articles" / slug).exists()
+    assert f"/articles/{slug} " in (tmp_path / "_redirects").read_text(encoding="utf-8")
