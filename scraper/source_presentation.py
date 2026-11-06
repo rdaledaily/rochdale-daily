@@ -262,6 +262,23 @@ def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
     return article
 
 
+# Photos the paper holds in its own library with their own rights: an
+# editor's photo, a library photo, a Commons file or a granted source's photo.
+# Measured 6 Nov 2026: clearing every image on a hidden-source story blanked
+# 16 such photos (13 library, 3 editor) and the page showed a beige card.
+# Only a picture that could have come from the hidden source is cleared.
+_OWN_PHOTO_STATUSES = frozenset({
+    "editorial-photo", "cards-library-photo", "commons-photo-cached",
+    "source-photo-cached", "standard-police-image", "supplied",
+})
+
+
+def _own_photo(article: dict[str, Any]) -> bool:
+    url = str(article.get("image_url") or "")
+    status = str(article.get("image_status") or "")
+    return url.startswith("assets/img/cards/") and status in _OWN_PHOTO_STATUSES
+
+
 def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     """Return a public-safe article record while retaining internal provenance."""
     if not isinstance(article, dict):
@@ -321,8 +338,9 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     if source_names:
         article["source_names"] = cleaned_names
 
-    article["image_url"] = ""
-    article["image_credit"] = "Rochdale Daily"
+    if not _own_photo(article):
+        article["image_url"] = ""
+        article["image_credit"] = "Rochdale Daily"
     article["source_image_candidate_url"] = ""
     article["source_image_reuse_status"] = ""
 
