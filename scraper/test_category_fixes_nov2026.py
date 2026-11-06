@@ -90,6 +90,16 @@ def test_events_story_from_outside_box_office_is_kept():
     assert stats["events_kept_other_source"] == 1
 
 
+def test_audio_walk_from_station_is_community_not_transport():
+    # The live record (6 Nov) says "audio walk" once and "guided walk" once,
+    # and "Rochdale Train Station" twice as the meeting point: a 2-2 tie that
+    # transport won on list order.
+    text = ("Outdoor guided walk 'Stories We Tell: Rochdale' starting at Rochdale Train "
+            "Station. Rochdale Town Centre will host an audio walk event; the audio walk "
+            "will begin at Rochdale Train Station.")
+    assert deterministic_category(text, "transport") == "community"
+
+
 if __name__ == "__main__":
     for _name, _fn in sorted(globals().items()):
         if _name.startswith("test_") and callable(_fn):

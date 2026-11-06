@@ -101,7 +101,7 @@ CATEGORY_ORDER = (
         # as community (editor's call, 4 Nov 2026). The rule that deleted
         # events stories from outside the box office, which first forced
         # this, was removed on 6 Nov 2026.
-        r"guided walks?|heritage walks?|walking tours?|storytelling)\b",
+        r"guided walks?|audio walks?|heritage walks?|walking tours?|storytelling)\b",
         re.I,
     )),
     ("business", re.compile(
