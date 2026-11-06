@@ -92,6 +92,12 @@ class ArticleTimeMetadataTests(unittest.TestCase):
         self.assertTrue(gp.is_generated_card("assets/img/cards/x-place-generated-card.jpg"))
         self.assertFalse(gp.is_generated_card("assets/img/cards/warwick-mill.jpg"))
 
+    def test_page_dates_are_uk_not_utc(self) -> None:
+        """23:30 UTC on 16 August is 00:30 on 17 August in Rochdale."""
+        import generate_pages as gp
+        self.assertEqual(gp.format_correction_date("2026-08-16T23:30:00Z"), "17 August 2026")
+        self.assertEqual(gp.format_correction_date("2026-12-01T09:00:00Z"), "1 December 2026")
+
 
 if __name__ == "__main__":
     unittest.main()

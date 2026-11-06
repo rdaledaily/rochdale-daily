@@ -23,7 +23,7 @@ import ad_slots as _ad_slots
 from headline_style import title_tag as _title_tag
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
-from reader_copy import clean_social_headline, tidy_content_html
+from reader_copy import clean_social_headline, tidy_content_html, tidy_editor_html
 import live_format
 import story_checks
 from pathlib import Path
@@ -386,8 +386,10 @@ def format_correction_date(value: str) -> str:
     parsed = parse_iso(value)
     if parsed == datetime.min.replace(tzinfo=timezone.utc):
         return ""
-    formatted = parsed.strftime("%d %B %Y")
-    return formatted.lstrip("0")
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    local = parsed.astimezone(LONDON)
+    return f"{local.day} {local.strftime('%B %Y')}"
 
 
 def corrections_markup(article: dict[str, Any]) -> str:
@@ -519,7 +521,9 @@ def edition_date() -> str:
     """Today's date, as the utility bar prints it. Written at generation time
     rather than by script: article pages do not load the homepage bundle, so
     the id="current-date" span it fills was simply blank on all of them."""
-    now = datetime.now(timezone.utc)
+    # UK date, not UTC: between midnight and 1am in summer the UTC date is
+    # still yesterday's.
+    now = datetime.now(ZoneInfo('Europe/London'))
     return f"{now.strftime('%A')} {now.day} {now.strftime('%B %Y')}"
 
 
@@ -947,9 +951,12 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     live_block = live_format.render_block(article)
     live_ld = live_format.json_ld(article, canonical_url.replace('.html', ''), full_publisher())
     if not (article.get('manual_article') or article.get('editorial_lock')):
-        # Phone-length paragraphs for automated copy (reader_copy.py). An
-        # editor's own article is rendered exactly as written.
+        # Phone-length paragraphs for automated copy (reader_copy.py).
         raw_content = tidy_content_html(raw_content)
+    else:
+        # The editor's own article keeps its paragraphing; UK date order and
+        # no filler ending, right of reply untouched (reader_copy.py).
+        raw_content = tidy_editor_html(raw_content)
     content = insert_incontent_ad(raw_content)
     # In-text "Read more" links to genuinely related stories (inline_related.py).
     try:
@@ -1067,15 +1074,13 @@ def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
         if is_blocked_article(article, active_blocklist):
             continue
         article = sanitise_article(article)
-        if not (article.get('manual_article') or article.get('editorial_lock')):
-            # UK date order on automated copy ("8 November 2026", never
-            # "November 8, 2026"): applied here so every headline the site
-            # shows (story, lists, read-next, homepage) is tidied, not only
-            # the story's own. 37 of the last 200 pages showed the US form.
-            import reader_copy
-            for field in ('title', 'excerpt', 'social_headline'):
-                if isinstance(article.get(field), str):
-                    article[field] = reader_copy.uk_dates(article[field])
+        # UK date order ("8 November 2026", never "November 8, 2026") on
+        # every headline the site shows (story, lists, read-next, homepage),
+        # the editor's own included; quoted words are left as spoken.
+        import reader_copy
+        for field in ('title', 'excerpt', 'social_headline'):
+            if isinstance(article.get(field), str):
+                article[field] = reader_copy.uk_dates_outside_quotes(article[field])
         published.append(article)
     return published
 

@@ -218,6 +218,8 @@ support supporting involvement engagement commitment council council's councils
 trust integrity accountability transparency inclusivity accessibility
 staying informed being aware taking precautions caution care alert
 continued ongoing wider broader overall general importance particularly especially also
+protocols procedures effective response emergency services situations such schools
+character neighbourhoods neighbourhood adhering adherence regulations rules planning
 """.split())
 
 
@@ -258,6 +260,95 @@ def uk_dates(text: str) -> str:
     return _US_DATE_RE.sub(repl, str(text or ""))
 
 
+def uk_dates_outside_quotes(html_text: str) -> str:
+    """uk_dates on the reporter's own words only. Text inside quotation marks
+    is someone else's words and is never altered, and nothing inside a tag
+    (an href, an alt) is touched. An unclosed quote protects the rest of the
+    paragraph."""
+    out: list[str] = []
+    run: list[str] = []
+    in_tag = in_quote = False
+
+    def flush(convert: bool) -> None:
+        if run:
+            text = "".join(run)
+            out.append(uk_dates(text) if convert else text)
+            run.clear()
+
+    for ch in str(html_text or ""):
+        if in_tag:
+            out.append(ch)
+            if ch == ">":
+                in_tag = False
+            continue
+        if ch == "<":
+            flush(not in_quote)
+            in_tag = True
+            out.append(ch)
+            continue
+        if ch in "“\"" and not in_quote:
+            flush(True)
+            in_quote = True
+            run.append(ch)
+            continue
+        if ch in "”\"" and in_quote:
+            run.append(ch)
+            flush(False)
+            in_quote = False
+            continue
+        run.append(ch)
+    flush(not in_quote)
+    return "".join(out)
+
+
+RIGHT_OF_REPLY_RE = re.compile(
+    r"right (?:of|to) reply|\b(?:in|by way of) (?:a )?(?:response|reply)\b|\bresponded\b|"
+    r"\b(?:said|says) in a statement\b|\bstatement (?:to|from) rochdale daily\b",
+    re.I,
+)
+
+
+def tidy_editor_html(content_html: str) -> str:
+    """House style for the editor's own articles, applied at render.
+
+    Unlike tidy_content_html, paragraphs are never split or re-joined: the
+    editor's paragraphing stands. Two things change: dates outside quotation
+    marks go into UK order ("Saturday 7 November 2026"), and a moralising
+    closing sentence made entirely of stock commentary (is_filler_closer) is
+    dropped from the last two paragraphs. A right-of-reply paragraph, or any
+    paragraph carrying someone's response, is left exactly as written."""
+    source = str(content_html or "")
+    spans = [m.span() for m in _P_RE.finditer(source)]
+    closing = set(spans[-2:])
+
+    def repl(match: re.Match[str]) -> str:
+        whole, inner = match.group(0), match.group(1)
+        if RIGHT_OF_REPLY_RE.search(plain(inner)):
+            return whole
+        fixed = uk_dates_outside_quotes(inner)
+        if match.span() in closing and "<" not in fixed:
+            sentences = split_sentences(html.unescape(fixed))
+            kept = [sentence for sentence in sentences if not is_filler_closer(sentence)]
+            if not kept:
+                return ""
+            if len(kept) != len(sentences):
+                fixed = html.escape(" ".join(kept), quote=False)
+        if fixed == inner:
+            return whole
+        start, end = match.start(1) - match.start(), match.end(1) - match.start()
+        return whole[:start] + fixed + whole[end:]
+
+    # Lists and subheadings between paragraphs (the morning briefing's
+    # bullets) get UK dates too.
+    out, position = [], 0
+    for match in _P_RE.finditer(source):
+        out.append(uk_dates_outside_quotes(source[position:match.start()]))
+        out.append(repl(match))
+        position = match.end()
+    out.append(uk_dates_outside_quotes(source[position:]))
+    return "".join(out)
+
+
 def tidy_paragraphs(paragraphs: Iterable[str]) -> list[str]:
     return split_long_paragraphs(strip_filler_openers(plain(p)) for p in paragraphs)
 
@@ -282,7 +373,7 @@ def tidy_content_html(content_html: str) -> str:
         if "<" in inner:
             return match.group(0)
         text = html.unescape(inner)
-        fixed = uk_dates(text)
+        fixed = html.unescape(uk_dates_outside_quotes(inner))
         if match.span() in closing:
             kept = [s for s in split_sentences(fixed) if not is_filler_closer(s)]
             if not kept:
