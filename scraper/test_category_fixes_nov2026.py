@@ -62,6 +62,34 @@ def test_headline_rules_on_live_misfiles():
         assert fp.headline_category_rule(title) == expected, title
 
 
+# 6 Nov 2026: events stories from outside the box office are kept, and the
+# headline files What's On news as events and festival road closures as traffic.
+def test_whats_on_news_is_events_and_closures_are_traffic():
+    import frontpage_pipeline as fp
+    cases = {
+        "Cinderella panto set to enchant audiences at Middleton Arena this Christmas": "events",
+        "Mark Winstanley returns to stage after MS diagnosis for Rochdale comedy show": "events",
+        "Middleton prepares for Christmas lights switch-on event": "events",
+        "Road closures announced for Heywood Christmas Festival on 14 November 2026": "traffic",
+    }
+    for title, expected in cases.items():
+        assert fp.headline_category_rule(title) == expected, title
+
+
+def test_events_story_from_outside_box_office_is_kept():
+    import frontpage_pipeline as fp
+    story = {"id": "x1", "slug": "panto", "title": "Cinderella panto at Middleton Arena",
+             "category": "events", "source_url": "https://www.manchestereveningnews.co.uk/x"}
+    original = fp.save_event_dates
+    fp.save_event_dates = lambda dates: None
+    try:
+        kept, stats = fp.clean_and_integrate_events([story], [])
+    finally:
+        fp.save_event_dates = original
+    assert [a["slug"] for a in kept] == ["panto"]
+    assert stats["events_kept_other_source"] == 1
+
+
 if __name__ == "__main__":
     for _name, _fn in sorted(globals().items()):
         if _name.startswith("test_") and callable(_fn):

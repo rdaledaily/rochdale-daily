@@ -332,6 +332,16 @@ _HEADLINE_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
         re.I,
     )),
     ("transport", re.compile(r"\bdriving tests?\b", re.I)),
+    # A road closure for a festival is a traffic notice, not the event.
+    ("traffic", re.compile(r"\b(?:road closures?|roadworks|road closed|diversions?)\b", re.I)),
+    # What's On news. Since 6 Nov 2026 an events story from outside the box
+    # office is kept, so the headline can file it here.
+    ("events", re.compile(
+        r"\b(?:panto(?:mime)?s?|comedy (?:show|night)s?|stand[- ]up|bonfire night|bonfire (?:and )?firework|"
+        r"firework(?:s)? displays?|ale trails?|beer festival|festivals?|concerts?|gigs?|"
+        r"switch[- ]on|christmas markets?|live music)\b",
+        re.I,
+    )),
 )
 
 
@@ -1178,7 +1188,7 @@ def clean_and_integrate_events(
 ) -> tuple[list[dict[str, Any]], dict[str, int]]:
     existing_approved: dict[str, dict[str, Any]] = {}
     retained: list[dict[str, Any]] = []
-    removed_other_source = 0
+    kept_other_source = 0
     removed_online = 0
     removed_no_venue = 0
     event_dates = load_event_dates()
@@ -1189,7 +1199,13 @@ def clean_and_integrate_events(
             retained.append(article)
             continue
         if not approved_event_source(article):
-            removed_other_source += 1
+            # Editor's decision 6 Nov 2026: a story filed as events is kept
+            # whatever its source. Only ticket listings from the approved
+            # box office go through the listing checks below; news about an
+            # event (a panto, a bonfire, a comedy night) stays on the paper
+            # under Events instead of being deleted.
+            retained.append(article)
+            kept_other_source += 1
             continue
         if is_online_event(article):
             removed_online += 1
@@ -1229,7 +1245,7 @@ def clean_and_integrate_events(
     save_event_dates(event_dates)
     retained.extend(existing_approved.values())
     return retained, {
-        "events_removed_other_source": removed_other_source,
+        "events_kept_other_source": kept_other_source,
         "online_events_rejected": removed_online,
         "events_rejected_missing_physical_local_venue": removed_no_venue,
         "approved_ticket_events": len(existing_approved),

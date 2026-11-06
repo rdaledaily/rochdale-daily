@@ -32,8 +32,8 @@ class HeadlineCategoryRules(unittest.TestCase):
         self.check("Man dies after crash on M62", "")
         self.check("Moorland blaze near Watergrove", "")
         self.check("Investigation Launched After Fire at Illegal Waste Site in Rochdale", "")
-        # Not an emergency at all.
-        self.check("Ignite Fire Festival returns to Rochdale Town Hall Square", "")
+        # Not an emergency: a festival is What's On news.
+        self.check("Ignite Fire Festival returns to Rochdale Town Hall Square", "events")
         self.check("Community efforts revive historic Lodge Mill after devastating fire", "")
 
     def test_rule_decides_over_text_scoring(self) -> None:
