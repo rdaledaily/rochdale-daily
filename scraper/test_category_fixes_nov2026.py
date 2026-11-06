@@ -46,6 +46,22 @@ def test_football_club_raffle_appeal_stays_sport():
     assert deterministic_category(text, "sport") == "sport"
 
 
+# 6 Nov 2026: headline rules in frontpage_pipeline. Full cases live in
+# test_headline_category_rules.py; these pin them in the CI-run file.
+def test_headline_rules_on_live_misfiles():
+    import frontpage_pipeline as fp
+    cases = {
+        "Resident escapes fire at Lonsdale Court sheltered housing in Middleton": "news",
+        "Banned driver leads police on high-speed chase through Rochdale": "crime",
+        "Rochdale Council awards contract for Queen's Park SEND improvement project": "business",
+        "Rochdale and Bury see significant increases in driving test pass rates": "transport",
+        "Inquest Jury Clears Police Following Fatal High-Speed Chase in Rochdale": "",
+        "Moorland blaze near Watergrove": "",
+    }
+    for title, expected in cases.items():
+        assert fp.headline_category_rule(title) == expected, title
+
+
 if __name__ == "__main__":
     for _name, _fn in sorted(globals().items()):
         if _name.startswith("test_") and callable(_fn):

@@ -303,8 +303,65 @@ def article_category(article: dict[str, Any]) -> str:
     return cached
 
 
+# Headline rules (6 Nov 2026). Measured on the newest 120 stories: about 1 in
+# 8 was misfiled because their text scored only one or two incidental words,
+# so the rewrite's own guess stood (a flat fire filed as community on "local
+# families", a child critical after a nursery incident filed as health on
+# "hospital", council contract awards scattered across community and
+# business). The headline names what happened, so these patterns decide first.
+_HEADLINE_CRIME_RE = re.compile(
+    r"\b(?:murder|manslaughter|rape|stabb\w*|shooting|robbery|burglar\w*|theft|fraud|"
+    r"arrest\w*|charged|convicted|sentenced|jailed|police (?:chase|pursuit)|"
+    r"high[- ]speed (?:chase|pursuit)|banned driver|drink[- ]driv\w*|drunk driver|drug[- ]driv\w*)\b",
+    re.I,
+)
+_HEADLINE_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    # Emergencies that are not crimes and not road collisions are general
+    # news. Collisions stay with the traffic lexicon.
+    ("news", re.compile(
+        r"\b(?:escapes? (?:a )?fire|fire (?:at|in|on|breaks out|broke out)|blaze|firefighters?|fire crews?|"
+        r"gas leak|explosion|evacuated|critical condition|remains? critical|"
+        r"dies|died|killed|fatal|sudden death|serious(?:ly)? injur\w*)\b",
+        re.I,
+    )),
+    # A public body awarding a contract or buying a site is a business
+    # decision, whatever the contract is for.
+    ("business", re.compile(
+        r"\bawards? (?:a |new )?contracts?\b|\bcontract award|\b(?:completes?|agrees?|confirms?) (?:the )?purchase\b|"
+        r"\bacquires?\b|\bacquisition\b",
+        re.I,
+    )),
+    ("transport", re.compile(r"\bdriving tests?\b", re.I)),
+)
+
+
+_HEADLINE_NOT_EMERGENCY_RE = re.compile(
+    r"\b(?:crash|collision|moorland|moor|grass|wildfire|waste|landfill)\b", re.I)
+
+
+def headline_category_rule(title: str) -> str:
+    title = str(title or "")
+    # An inquest is a coroner's finding, not a criminal case ("Inquest jury
+    # clears police after fatal chase"): leave it to the full-text scoring.
+    if re.search(r"\binquests?\b", title, re.I):
+        return ""
+    if _HEADLINE_CRIME_RE.search(title):
+        return "crime"
+    for category, pattern in _HEADLINE_RULES:
+        # Collisions stay traffic; moorland, grass and waste-site fires stay
+        # environment, wherever those words sit in the headline.
+        if category == "news" and _HEADLINE_NOT_EMERGENCY_RE.search(title):
+            continue
+        if pattern.search(title):
+            return category
+    return ""
+
+
 def _compute_article_category(article: dict[str, Any]) -> str:
     text = article_text(article)
+    ruled = headline_category_rule(plain_text(article.get("title")))
+    if ruled:
+        return ruled
     if re.search(r"\b(?:kirkholt pantry|community pantry|food bank|foodbank|pantry)\b", text, re.IGNORECASE):
         return "community"
     detected = editorial_category(text, str(article.get("category") or "news"))
