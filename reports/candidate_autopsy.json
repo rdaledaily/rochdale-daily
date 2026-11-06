@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-11-05T14:57:25.797176Z",
+  "examined_at": "2026-11-06T14:36:00.526039Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 95,
+  "candidates_examined": 93,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 81,
-    "would publish": 10,
-    "duplicate of published story": 4
+    "age": 69,
+    "would publish": 18,
+    "duplicate of published story": 6
   },
-  "would_publish": 10,
+  "would_publish": 18,
   "age_gate_sensitivity": {
-    "6h": 3,
-    "14h": 7,
-    "24h": 14,
-    "48h": 46,
+    "6h": 7,
+    "14h": 10,
+    "24h": 24,
+    "48h": 38,
     "72h": 69,
-    "168h": 95
+    "168h": 93
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Manchester Evening News: Enjoy spectacular free Ignite Fire Festival in Rochdale - Manchester E",
-      "Manchester Evening News: Enjoy spectacular free Ignite Fire Festival in Rochdale - Manchester E"
+      "Bee Network live travel alerts: Updated: 06/11/2026 at 10:50am Live Freehold Tram Stop - Lifts out of ",
+      "Rochdale AFC: Preview | Fleetwood Town (A) - Rochdale AFC"
     ],
     "duplicate of published story": [
-      "Rochdale Times: Six vehicles seized in road safety drive - Rochdale Times",
-      "Doncaster Free Press: Can you spot a Doncaster Rovers you know from the win at Rochdale?",
-      "Doncaster Free Press: Byrne heaps praise on Doncaster Rovers trio after Rochdale win - Donca"
+      "Rochdale Borough Council: Highlands Road, roadworks in Rochdale on 10 November 2026",
+      "Northern Care Alliance News: National Pathology Week: Meet the team behind millions of tests every ",
+      "Manchester Evening News: Resident escapes from second floor as fire tears through sheltered hou"
     ],
     "age": [
-      "Rochdale Times: New appointments to drive improvements in town - Rochdale Times",
-      "The Stats Zone: Fleetwood vs Rochdale Preview & Prediction | 2026-27 English FA Cup | ",
-      "Manchester Evening News: Police issue update as boy, 3, remains critical in hospital after 'eme"
+      "Rochdale Times: Planners can’t get over ‘out-of-character’ fence - Rochdale Times",
+      "Manchester Evening News: Enjoy spectacular free Ignite Fire Festival in Rochdale - Manchester E",
+      "Manchester Evening News: Enjoy spectacular free Ignite Fire Festival in Rochdale - Manchester E"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
