@@ -105,6 +105,24 @@ def run() -> None:
     assert rc.tidy_content_html(bridge) == bridge
     assert rc.is_filler_closer("This case underscores the need for community awareness and support "
                                "in safeguarding vulnerable individuals.")
+    # The editor's own articles (6 Nov 2026): UK dates and no filler ending,
+    # but paragraphs never split, quoted words and right of reply untouched.
+    own = ('<p>Kick-off is on Saturday, November 7, 2026 at <a href="/x?d=November 7, 2026">Spotland</a>.</p>'
+           '<ul><li>Panto starts December 20.</li></ul>'
+           '<p>He said: “We meet on November 7, 2026.”</p>'
+           '<p>Right of reply: anyone named can email us. This case underscores the importance of community awareness.</p>'
+           '<p>The decision underscores the importance of maintaining the character of local neighbourhoods '
+           'and adhering to planning regulations.</p>')
+    got = rc.tidy_editor_html(own)
+    assert "Saturday 7 November 2026 at" in got and 'd=November 7, 2026"' in got
+    assert "<li>Panto starts 20 December.</li>" in got
+    assert "“We meet on November 7, 2026.”" in got
+    assert "This case underscores the importance of community awareness.</p>" in got
+    assert "character of local neighbourhoods" not in got
+    long_para = "<p>" + " ".join(["A sentence about the plan."] * 12) + "</p>"
+    assert rc.tidy_editor_html(long_para) == long_para
+    assert rc.uk_dates_outside_quotes('Due November 8, 2026, said "from November 8"') == \
+        'Due 8 November 2026, said "from November 8"'
     # Only the closing paragraphs are touched; an early sentence stays.
     early = ("<p>This incident underscores the importance of fire alarms.</p><p>Two.</p>"
              "<p>Three.</p><p>Four.</p>")
