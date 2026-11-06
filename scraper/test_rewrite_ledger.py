@@ -234,5 +234,71 @@ class LanesCommitTheLedger(unittest.TestCase):
         self.assertEqual(script.count("newsroom_candidates.json rewrite_ledger.json live_source_state.json"), 2)
 
 
+# 6 Nov 2026: a new story whose URL had been attached to an older article as a
+# SECONDARY source adopted that article's slug, id and date and overwrote it
+# (a school bomb-threat page became a shop opening). Record trimmed from the
+# live feed as it stood at 18:36Z on 5 Nov, minutes before the overwrite.
+BOMB_THREAT = {
+    "id": "9c9220483799c4f562",
+    "slug": "st-cuthbert-s-rc-high-school-closes-following-bomb-threat",
+    "title": "St Cuthbert\u2019s RC High School closes following bomb threat",
+    "excerpt": (
+        "St Cuthbert\u2019s RC High School in Rochdale was closed after a bomb threat, "
+        "with all students and staff accounted for and safe. The school plans to reopen on Monday."
+    ),
+    "category": "education",
+    "area": "rochdale",
+    "source_name": "Rochdale Times",
+    "source_url": "https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat/",
+    "source_urls": [
+        "https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat/",
+        "https://www.rochdaletimes.co.uk/finishing-touches-being-applied-as-boyes-opens-new-store-tomorrow/",
+    ],
+    "story_key": "education-v3-0798c998333988a6efcd",
+    "published_at": "2026-10-22T00:33:25Z",
+    "first_published_at": "2026-10-22T00:33:25Z",
+}
+
+
+def _identity_candidate(**fields):
+    base = dict(source_name="Rochdale Times", source_url="", source_title="", source_summary="",
+                source_published_at="2026-11-04T16:00:00Z", area="rochdale", category="news")
+    base.update(fields)
+    return core.Candidate(**base)
+
+
+class SecondaryUrlIdentityCase(unittest.TestCase):
+    def test_unrelated_story_on_a_secondary_url_is_a_new_story(self) -> None:
+        boyes = _identity_candidate(
+            source_url="https://www.rochdaletimes.co.uk/finishing-touches-being-applied-as-boyes-opens-new-store-tomorrow/",
+            source_title="Finishing touches being applied as Boyes opens new store tomorrow",
+            source_summary="Discount retailer Boyes will open its new store in Middleton Shopping Centre, "
+            "filling the gap left by Wilko's closure.",
+            area="middleton", category="business",
+        )
+        self.assertIsNone(core.existing_article_for_candidate(boyes, {BOMB_THREAT["story_key"]: BOMB_THREAT}))
+
+    def test_primary_url_still_identifies_the_article(self) -> None:
+        retry = _identity_candidate(
+            source_url="https://www.rochdaletimes.co.uk/school-closes-after-bomb-threat/",
+            source_title="Totally different wording from a re-render", category="education",
+        )
+        found = core.existing_article_for_candidate(retry, {BOMB_THREAT["story_key"]: BOMB_THREAT})
+        self.assertEqual((found or {}).get("slug"), BOMB_THREAT["slug"])
+
+    def test_same_story_on_a_secondary_url_still_matches(self) -> None:
+        men_url = "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/school-bomb-threat-rochdale"
+        article = dict(BOMB_THREAT, source_urls=BOMB_THREAT["source_urls"] + [men_url])
+        same = _identity_candidate(
+            source_name="Manchester Evening News", source_url=men_url,
+            source_title="St Cuthbert's RC High School in Rochdale closes after bomb threat",
+            source_summary="St Cuthbert\u2019s RC High School in Rochdale was closed after a bomb threat; "
+            "pupils and staff are safe and the school will reopen on Monday.",
+            source_published_at="2026-10-22T09:00:00Z", category="education",
+        )
+        found = core.existing_article_for_candidate(same, {article["story_key"]: article})
+        self.assertEqual((found or {}).get("slug"), BOMB_THREAT["slug"])
+
+
 if __name__ == "__main__":
     unittest.main()
