@@ -3666,17 +3666,36 @@ def existing_article_for_candidate(candidate: Any, existing_by_story: dict[str, 
 
     The story-key lookup cannot do this for automated stories (see the ledger
     note above), so match on the URLs the article itself records.
+
+    Only the article's PRIMARY source URL proves identity on its own. A URL in
+    source_urls is often just corroboration -- and cross-referencing sometimes
+    attaches an unrelated page (a publisher's "latest news" sidebar headline).
+    Treating every secondary URL as identity made a later, different story on
+    that URL adopt the old article's key, slug, id and first-publication date
+    and overwrite it: measured 6 Nov 2026, four live pages carried a different
+    story from their URL (a school bomb-threat page became a shop opening, a
+    pub-closures page became a £2.24m regeneration grant, two Rochdale AFC
+    pages). Each new story was also hidden from the homepage under the old
+    date. A secondary-URL match therefore counts only when the text matcher
+    agrees it is the same story.
     """
     wanted = candidate_identity(candidate)
     if not wanted:
         return None
+    secondary_match: dict[str, Any] | None = None
     for article in existing_by_story.values():
         if not isinstance(article, dict):
             continue
-        urls = [article.get('source_url')] + list(article.get('source_urls') or [])
-        if any(url and _identity_of_url(str(url)) == wanted for url in urls):
+        primary = article.get('source_url')
+        if primary and _identity_of_url(str(primary)) == wanted:
             return article
-    return None
+        if secondary_match is not None:
+            continue
+        secondary = list(article.get('source_urls') or [])
+        if any(url and _identity_of_url(str(url)) == wanted for url in secondary):
+            if same_story(candidate, article):
+                secondary_match = article
+    return secondary_match
 
 
 FINAL_GATE_RETIRED_AT = '2026-10-12T00:00:00Z'

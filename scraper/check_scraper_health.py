@@ -12,6 +12,8 @@ from enforce_frontpage_freshness import (
     is_expired_today_deadline,
     is_thin_utility_not_frontpage,
 )
+from enforce_frontpage_freshness import first_published as selector_first_published
+from feature_policy import is_reserve_feature
 from search_queries import CATEGORY_QUERIES, ROCHDALE_WARDS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -83,12 +85,20 @@ def verified_development_at(article: dict[str, Any]) -> datetime | None:
 
 
 def freshness_at(article: dict[str, Any]) -> datetime | None:
-    """Freshness clock: first publication, or a newer verified live update."""
-    first = published_at(article)
-    development = verified_development_at(article)
-    if development is not None and (first is None or development > first):
-        return development
-    return first
+    """The homepage selector's own freshness clock: first publication.
+
+    A timestamped live update does not renew a story's homepage window; that
+    is the selector's deliberate rule (enforce_frontpage_freshness:
+    is_recent_live_update, pinned by test_recent_live_edit_does_not_renew_
+    original_publication_window). This audit used to count the update as
+    fresh anyway, so it disagreed with the page it audits: measured 5-6 Nov
+    2026, 22 fast-lane runs failed with "homepage has 11 stories despite 12
+    eligible" because of one old story carrying a new update. The failure
+    came BEFORE the commit step, so nothing those runs found was published
+    and the paper froze through both mornings. One clock, owned by the
+    selector, so the two can never disagree again.
+    """
+    return selector_first_published(article)
 
 
 def required_live_articles(configured_minimum: int, eligible_fresh_count: int) -> int:
@@ -202,10 +212,13 @@ def main() -> None:
     ]
     lead_first_published = published_at(valid_articles[0]) if valid_articles else None
     lead_freshness = freshness_at(valid_articles[0]) if valid_articles else None
+    # The selector never lifts a quiet-news reserve feature into the top three
+    # (editor's rule, 24 Oct 2026), so it is not evidence of a missing one.
     eligible_top_fresh = [
         article
         for article in frontpage_eligible_feed
-        if (freshness_at(article) or epoch_floor) >= top_fresh_cutoff
+        if not is_reserve_feature(article)
+        and (freshness_at(article) or epoch_floor) >= top_fresh_cutoff
     ]
 
     raw_candidates = int(status.get("raw_candidates") or 0)

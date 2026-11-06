@@ -64,7 +64,10 @@ def test_manual_editorial_contact_story_remains_eligible() -> None:
     assert mod.is_frontpage_eligible_news_article(article, NOW)
 
 
-def test_old_developing_story_uses_verified_timestamped_update_for_freshness() -> None:
+def test_old_developing_story_keeps_first_publication_as_homepage_freshness() -> None:
+    # The homepage selector does not let a live update renew the window
+    # (test_frontpage_freshness_guard); the audit must use the same clock or
+    # it fails runs before they publish (5-6 Nov 2026).
     article = base_article(
         first_published_at=(NOW - timedelta(days=3)).isoformat(),
         live_story=True,
@@ -80,7 +83,7 @@ def test_old_developing_story_uses_verified_timestamped_update_for_freshness() -
     )
     assert mod.published_at(article) == NOW - timedelta(days=3)
     assert mod.verified_development_at(article) == NOW - timedelta(hours=1)
-    assert mod.freshness_at(article) == NOW - timedelta(hours=1)
+    assert mod.freshness_at(article) == NOW - timedelta(days=3)
 
 
 def test_old_story_recheck_does_not_gain_freshness_from_maintenance_timestamps() -> None:
@@ -139,6 +142,82 @@ def test_sponsored_advertisement_is_not_counted_as_available_news() -> None:
     assert not mod.is_frontpage_eligible_news_article(advert, NOW)
 
 
+def _developing(**updates):
+    article = base_article(
+        category="sport",
+        first_published_at=(NOW - timedelta(days=10)).isoformat(),
+        live_story=True,
+        is_ongoing=True,
+        live_updates=[{"timestamp": (NOW - timedelta(hours=3)).isoformat(), "text": "New development."}],
+    )
+    article.update(updates)
+    return article
+
+
+def test_audit_and_homepage_selector_share_one_freshness_clock() -> None:
+    import enforce_frontpage_freshness as selector
+
+    cutoff = NOW - timedelta(hours=36)
+    floor = datetime.min.replace(tzinfo=timezone.utc)
+    for story in (
+        _developing(),
+        _developing(live_updates=[]),
+        _developing(manual_article=True, source_kind="editorial"),
+        base_article(),
+    ):
+        audit_fresh = (mod.freshness_at(story) or floor) >= cutoff
+        selector_fresh = selector._eligible_reservoir_article(story, NOW, cutoff)
+        assert audit_fresh is selector_fresh, story.get("title")
+
+
+def test_measured_6_nov_shape_does_not_fail_the_run() -> None:
+    """11 fresh stories on the page plus one 10-day-old story with a new live
+    update that the selector deliberately leaves off: 22 runs failed on this."""
+    import json
+    import tempfile
+    from pathlib import Path
+
+    fresh = [
+        base_article(id=f"f{i}", title=f"Fresh story {i}", slug=f"fresh-{i}",
+                     first_published_at=(NOW - timedelta(hours=i + 1)).isoformat())
+        for i in range(11)
+    ]
+    feed = fresh + [_developing(id="old-live", title="Old story with a new update", slug="old-live")]
+    saved = {name: getattr(mod, name) for name in (
+        "ARTICLES_PATH", "FRONTPAGE_PATH", "STATUS_PATH", "HEALTH_PATH",
+        "FRONTPAGE_MIN_ARTICLES", "MAX_FRESH_AGE_HOURS", "MIN_LIVE_STORIES", "datetime")}
+
+    class FrozenDatetime(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return NOW
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "articles").mkdir()
+        (root / "articles.json").write_text(json.dumps(feed))
+        (root / "articles" / "frontpage.json").write_text(json.dumps({"articles": fresh}))
+        (root / "scraper_status.json").write_text(json.dumps({"raw_candidates": 118, "live_articles": 488}))
+        mod.ARTICLES_PATH = root / "articles.json"
+        mod.FRONTPAGE_PATH = root / "articles" / "frontpage.json"
+        mod.STATUS_PATH = root / "scraper_status.json"
+        mod.HEALTH_PATH = root / "scraper_health.json"
+        mod.FRONTPAGE_MIN_ARTICLES = 12
+        mod.MAX_FRESH_AGE_HOURS = 36
+        mod.MIN_LIVE_STORIES = 24
+        mod.datetime = FrozenDatetime
+        try:
+            try:
+                mod.main()
+            except SystemExit:
+                pass  # this fixture has no search plan; only the minimum check is under test
+            report = json.loads((root / "scraper_health.json").read_text())
+        finally:
+            for name, value in saved.items():
+                setattr(mod, name, value)
+    assert not any("despite" in failure for failure in report.get("failures", [])), report.get("failures")
+
+
 if __name__ == "__main__":
     failures = 0
     for test in (
@@ -147,13 +226,15 @@ if __name__ == "__main__":
         test_expired_today_deadline_is_not_counted_as_available_news,
         test_expired_machine_sports_preview_is_not_counted_as_available_news,
         test_manual_editorial_contact_story_remains_eligible,
-        test_old_developing_story_uses_verified_timestamped_update_for_freshness,
+        test_old_developing_story_keeps_first_publication_as_homepage_freshness,
         test_old_story_recheck_does_not_gain_freshness_from_maintenance_timestamps,
         test_live_floor_scales_to_available_fresh_supply,
         test_zero_new_after_editorial_rejections_is_not_starvation_when_page_is_fresh,
         test_zero_new_is_starvation_when_fresh_supply_is_short,
         test_zero_new_is_starvation_when_collection_failed,
         test_sponsored_advertisement_is_not_counted_as_available_news,
+        test_audit_and_homepage_selector_share_one_freshness_clock,
+        test_measured_6_nov_shape_does_not_fail_the_run,
     ):
         try:
             test()
