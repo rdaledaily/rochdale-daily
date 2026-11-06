@@ -1,334 +1,11 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 547,
-  "published_count": 547,
-  "category_change_count": 46,
-  "image_change_count": 132,
-  "category_changes": [
-    {
-      "slug": "rochdale-ignite-fire-festival-to-feature-multi-sensory-experience",
-      "title": "Rochdale Ignite Fire Festival to feature multi-sensory experience",
-      "from": "community",
-      "to": "events",
-      "reason": "headline strongly identifies events"
-    },
-    {
-      "slug": "road-closures-announced-for-heywood-christmas-festival-on-14-november-2026",
-      "title": "Road closures announced for Heywood Christmas Festival on 14 November 2026",
-      "from": "traffic",
-      "to": "events",
-      "reason": "headline strongly identifies events"
-    },
-    {
-      "slug": "new-industrial-units-planned-at-caldershaw-business-centre-in-rochdale",
-      "title": "New industrial units planned at Caldershaw Business Centre in Rochdale",
-      "from": "environment",
-      "to": "business",
-      "reason": "headline strongly identifies business"
-    },
-    {
-      "slug": "rochdale-council-tax-direct-debit-delay-26-october-2026",
-      "title": "Rochdale Council Tax Direct Debits delayed by one day after system error",
-      "from": "community",
-      "to": "politics",
-      "reason": "headline strongly identifies politics"
-    },
-    {
-      "slug": "rochdale-afc-welcomes-community-flag-bearers-no-room-for-racism",
-      "title": "Rochdale AFC welcomes local groups for No Room for Racism fixture",
-      "from": "community",
-      "to": "sport",
-      "reason": "headline strongly identifies sport"
-    },
-    {
-      "slug": "planning-approved-for-new-11-4-million-special-needs-school-in-rochdale",
-      "title": "Planning approved for new £11.4 million special needs school in Rochdale",
-      "from": "environment",
-      "to": "education",
-      "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "east-lancashire-railway-portable-defibrillator-trains",
-      "title": "East Lancashire Railway secures portable defibrillator for its trains",
-      "from": "community",
-      "to": "health",
-      "reason": "headline strongly identifies health"
-    },
-    {
-      "slug": "future-of-college-bank-towers-uncertain-as-renovation-could-take-over-a-decade",
-      "title": "Future of College Bank towers uncertain as renovation could take over a decade",
-      "from": "community",
-      "to": "education",
-      "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen",
-      "title": "Heywood and Middleton North MP visits Redwood School’s sixth form at Phoenix Centre",
-      "from": "politics",
-      "to": "education",
-      "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "springhill-hospice-to-host-free-will-information-clinic-in-heywood",
-      "title": "Springhill Hospice to host free will information clinic in Heywood",
-      "from": "community",
-      "to": "health",
-      "reason": "headline strongly identifies health"
-    },
-    {
-      "slug": "college-bank-seven-sisters-housing-future",
-      "title": "College Bank’s future remains a housing question as residents move from the Seven Sisters",
-      "from": "news",
-      "to": "education",
-      "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "hollingworth-rise-littleborough-309-homes-school",
-      "title": "Hollingworth Road’s 309 homes: the school land promise needs a delivery explanation",
-      "from": "news",
-      "to": "education",
-      "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "rochdale-station-corner-plot-33-private-rent-flats",
-      "title": "Rochdale station’s 33 new flats are for private rent: what will tenants actually pay?",
-      "from": "news",
-      "to": "business",
-      "reason": "headline strongly identifies business"
-    },
-    {
-      "slug": "station-gardens-rochdale-81-homes-tenure",
-      "title": "Station Gardens turns former retail land into 81 homes, but the final tenure mix needs to be public",
-      "from": "news",
-      "to": "business",
-      "reason": "headline strongly identifies business"
-    },
-    {
-      "slug": "ramsbottom-retired-air-traffic-engineer-forget-me-not-alzheimers-society",
-      "title": "From air traffic control to author: Ramsbottom retiree supports dementia charity",
-      "from": "community",
-      "to": "traffic",
-      "reason": "headline strongly identifies traffic"
-    },
-    {
-      "slug": "rochdale-october-half-term-2026-dates-free-activities-guide",
-      "title": "Rochdale October half-term 2026: school dates and free family activities",
-      "from": "community",
-      "to": "education",
-      "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "rochdale-historic-council-tax-summons-residents-debt-help-2026",
-      "title": "Five years later, a court summons: Rochdale residents report historic Council Tax demands as arrears reach £28.4m",
-      "from": "news",
-      "to": "politics",
-      "reason": "headline strongly identifies politics"
-    },
-    {
-      "slug": "rochdale-upperbanks-50-million-loans-council-tax-investigation",
-      "title": "£50.3m owed by Rochdale Council companies as £19.5m Council Tax shortfall raises scrutiny",
-      "from": "news",
-      "to": "politics",
-      "reason": "headline strongly identifies politics"
-    },
-    {
-      "slug": "bus-services-suspended-between-rochdale-town-centre-and-freehold-following-colli",
-      "title": "No Metrolink service between Rochdale Town Centre and Freehold after collision at Westwood",
-      "from": "transport",
-      "to": "traffic",
-      "reason": "headline strongly identifies traffic"
-    },
-    {
-      "slug": "rochdale-council-to-implement-new-planning-decision-guidelines-from-october-31",
-      "title": "Rochdale Council to implement new planning decision rules from October 31",
-      "from": "environment",
-      "to": "news",
-      "reason": "headline strongly identifies news"
-    },
-    {
-      "slug": "rochdale-council-to-consider-motion-to-reassess-climate-targets-amid-cost-of-liv",
-      "title": "Rochdale Council to consider motion to reassess climate targets amid cost-of-living crisis",
-      "from": "politics",
-      "to": "environment",
-      "reason": "headline strongly identifies environment"
-    },
-    {
-      "slug": "sponsored-the-physiotherapy-clinic-rochdale-bamford",
-      "title": "Sponsored: The Physiotherapy Clinic offers physiotherapy, Pilates and home visits in Rochdale",
-      "from": "business",
-      "to": "health",
-      "reason": "headline strongly identifies health"
-    },
-    {
-      "slug": "rbh-football-team-housing-association-charity-cup-2026",
-      "title": "RBH football team takes part in Housing Association Charity Cup 2026",
-      "from": "community",
-      "to": "sport",
-      "reason": "headline strongly identifies sport"
-    },
-    {
-      "slug": "ignite-fire-festival-rochdale-town-hall-square-november-20-22",
-      "title": "Ignite Fire Festival returns to Rochdale Town Hall Square from November 20 to 22",
-      "from": "news",
-      "to": "events",
-      "reason": "headline strongly identifies events"
-    },
-    {
-      "slug": "rochdale-foodbank-harvest-donations-six-local-organisations",
-      "title": "Rochdale Foodbank receives more than 430kg of Harvest donations from local churches and school",
-      "from": "community",
-      "to": "education",
-      "reason": "headline strongly identifies education"
-    },
-    {
-      "slug": "festival-of-remembrance-rochdale-town-hall-october-16",
-      "title": "Festival of Remembrance to bring borough together at Rochdale Town Hall on October 16",
-      "from": "community",
-      "to": "events",
-      "reason": "headline strongly identifies events"
-    },
-    {
-      "slug": "east-lancashire-railway-volunteer-open-day-october-2026",
-      "title": "East Lancashire Railway to host first Event, Catering and Retail Volunteer Open Day",
-      "from": "community",
-      "to": "events",
-      "reason": "headline strongly identifies events"
-    },
-    {
-      "slug": "sculpt-edit-wellness-clinic-launch-founder-amy",
-      "title": "Sculpt & Edit launches wellness clinic after founder builds business from scratch",
-      "from": "business",
-      "to": "health",
-      "reason": "headline strongly identifies health"
-    },
-    {
-      "slug": "rochdale-masters-mayfield-movers-45-mile-charity-walk",
-      "title": "Rochdale Masters and Mayfield Movers take on 45-mile charity walk",
-      "from": "sport",
-      "to": "community",
-      "reason": "headline strongly identifies community"
-    },
-    {
-      "slug": "littleborough-cricket-club-bonfire-2026",
-      "title": "Littleborough Cricket Club Bonfire 2026",
-      "from": "events",
-      "to": "sport",
-      "reason": "headline strongly identifies sport"
-    },
-    {
-      "slug": "wellmental-uk-hosts-first-mens-mental-health-fitness-session-in-heywood",
-      "title": "WellMental UK hosts first men's mental health fitness session in Heywood",
-      "from": "community",
-      "to": "health",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "norden-cricket-club-festival-brings-community-together-today",
-      "title": "Norden Cricket Club festival brings community together today",
-      "from": "community",
-      "to": "sport",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "st-marys-ce-primary-school-rochdale-summer-makeover-watergrove",
-      "title": "Summer makeover under way at St Mary’s CE Primary School in Rochdale",
-      "from": "community",
-      "to": "education",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "heywood-marlborough-canal-street-alley-dumping-vermin",
-      "title": "Residents furious as waste returns to Heywood alley weeks after major council clean-up",
-      "from": "community",
-      "to": "environment",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "summit-inn-reopens-new-menu-pub-classics",
-      "title": "The Summit Inn reopens with new menu featuring pub classics and homemade favourites",
-      "from": "news",
-      "to": "business",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "steven-parker-rochdale-canal-basin-regeneration-vision",
-      "title": "Comment: Rochdale Canal should be the jewel in the town's crown",
-      "from": "community",
-      "to": "environment",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "police-increased-patrols-strand-kirkholt-verbal-abuse-begging",
-      "title": "Police promise increased patrols around The Strand after resident reports verbal abuse",
-      "from": "community",
-      "to": "crime",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "loombrook-meadows-302-new-homes-castleton-barratt",
-      "title": "Loombrook Meadows: 302 new homes coming to Castleton - what we know so far",
-      "from": "news",
-      "to": "business",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "81-year-old-man-left-outside-rochdale-infirmary-ten-hours",
-      "title": "Is this how the NHS treats its own? 81-year-old man left outside Rochdale Infirmary for ten hours",
-      "from": "news",
-      "to": "health",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "heat-exposes-challenges-facing-rochdale-workers-and-britains-infrastructure",
-      "title": "Heat exposes challenges facing Rochdale workers and Britain’s ageing infrastructure",
-      "from": "news",
-      "to": "environment",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "litter-concerns-deeplish-rochdale",
-      "title": "Litter blighting Deeplish remains a concern for residents",
-      "from": "community",
-      "to": "environment",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "anti-social-behaviour-kingsway-rochdale",
-      "title": "Residents raise concerns over anti-social behaviour around Kingsway",
-      "from": "news",
-      "to": "community",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "dangerous-driving-milkstone-road-rochdale",
-      "title": "Residents voice concerns over dangerous driving and alleged street racing on Milkstone Road",
-      "from": "news",
-      "to": "traffic",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "mayor-praises-merhaba-festival-2026",
-      "title": "Mayor praises Merhaba Festival as 'a wonderful celebration of community'",
-      "from": "community",
-      "to": "events",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "white-ribbon-football-tournament-returns-to-rochdale-for-2026",
-      "title": "White Ribbon Football Tournament returns to Rochdale for 2026",
-      "from": "community",
-      "to": "sport",
-      "reason": "human-reviewed archive classification override"
-    },
-    {
-      "slug": "syke-bowling-club-junior-fun-day",
-      "title": "Young bowlers invited to take part in Syke Bowling Club fun day",
-      "from": "events",
-      "to": "sport",
-      "reason": "human-reviewed archive classification override"
-    }
-  ],
+  "article_count": 548,
+  "published_count": 548,
+  "category_change_count": 0,
+  "image_change_count": 126,
+  "category_changes": [],
   "image_changes": [
     {
       "slug": "roadworks-on-highlands-road-in-rochdale-set-for-10-november-2026",
@@ -343,6 +20,18 @@
       "after": "assets/img/cards/b769b9dd95fd3c28-commons-photo.jpg"
     },
     {
+      "slug": "middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration",
+      "title": "Middleton Council completes £3.3 million purchase of Warwick Mill",
+      "category": "environment",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration.jpg",
+        "img": "assets/img/cards/middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/a145aae003e2-place-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-council-warns-of-confirmed-measles-cases-in-the-borough",
       "title": "Rochdale Council warns families of confirmed measles cases",
       "category": "health",
@@ -353,18 +42,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/de7d2a1f9a7e-place-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-afc-set-to-face-fleetwood-town-in-fa-cup-first-round",
-      "title": "Rochdale AFC set to face Fleetwood Town in FA Cup first round",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
     },
     {
       "slug": "moor-road-roadworks-in-littleborough-set-to-begin-on-5-november-2026",
@@ -417,14 +94,14 @@
     {
       "slug": "cinderella-panto-set-to-enchant-audiences-at-middleton-arena-this-christmas",
       "title": "Cinderella panto set to enchant audiences at Middleton Arena this Christmas",
-      "category": "community",
+      "category": "events",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
         "image_url": "assets/img/cards/middleton-arena.jpg",
         "img": "assets/img/cards/middleton-arena.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/83a4603a3557-place-generated-card.jpg"
+      "after": "assets/img/cards/77636af804e9-place-generated-card.jpg"
     },
     {
       "slug": "rochdale-borough-council-awards-contract-for-empty-homes-leasing-programme",
@@ -547,28 +224,16 @@
       "after": "assets/img/cards/5469b66fa258c94d-commons-photo.jpg"
     },
     {
-      "slug": "banned-driver-leads-police-on-high-speed-chase-through-rochdale",
-      "title": "Banned driver leads police on high-speed chase through Rochdale",
-      "category": "news",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/police.jpg",
-        "img": "assets/img/cards/police.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/4217e0f83d9e-place-generated-card.jpg"
-    },
-    {
       "slug": "rochdale-borough-council-awards-contract-for-homeless-family-support-services",
       "title": "Rochdale Borough Council awards contract for family temporary accommodation services",
-      "category": "community",
+      "category": "business",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
         "image_url": "assets/img/cards/rochdale_riverside.jpg",
         "img": "assets/img/cards/rochdale_riverside.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/86868628f2b0-place-generated-card.jpg"
+      "after": "assets/img/cards/6a46c565ef76-place-generated-card.jpg"
     },
     {
       "slug": "planning-approved-for-new-storage-world-building-in-middleton",
@@ -636,8 +301,8 @@
       "category": "community",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "assets/img/cards/upcoming-services-and-events-at-st-luke-s-church-deeplish.jpg",
-        "img": "assets/img/cards/upcoming-services-and-events-at-st-luke-s-church-deeplish.jpg",
+        "image_url": "assets/img/cards/st-luke-s-church-in-deeplish-announces-upcoming-services-and-community-events.jpg",
+        "img": "assets/img/cards/st-luke-s-church-in-deeplish-announces-upcoming-services-and-community-events.jpg",
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/ec77830f02939c00-commons-photo.jpg"
@@ -656,7 +321,7 @@
     },
     {
       "slug": "port-vale-to-stream-rochdale-match-live-on-october-30",
-      "title": "Port Vale to stream Rochdale match live on October 30",
+      "title": "Port Vale to stream Rochdale match live on 30 October",
       "category": "sport",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
@@ -701,18 +366,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/b289bcf4e23d-place-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-bonfire-night-celebrations-set-for-bowlee-community-park-and-heywood",
-      "title": "Rochdale Bonfire Night celebrations set for Bowlee Community Park and Heywood",
-      "category": "community",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/bowlee_community_park.jpg",
-        "img": "assets/img/cards/bowlee_community_park.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/83a4603a3557-place-generated-card.jpg"
     },
     {
       "slug": "spring-bank-lane-roadworks-scheduled-for-12-november-2026",
@@ -763,6 +416,18 @@
       "after": "assets/img/cards/35c8a2fb2d31-place-generated-card.jpg"
     },
     {
+      "slug": "construction-milestone-reached-for-sustainable-materials-manufacturing-centre-in",
+      "title": "Construction milestone reached for Sustainable Materials & Manufacturing Centre in Rochdale",
+      "category": "business",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/construction-milestone-reached-for-sustainable-materials-manufacturing-centre-in.jpg",
+        "img": "assets/img/cards/construction-milestone-reached-for-sustainable-materials-manufacturing-centre-in.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/6a46c565ef76-place-generated-card.jpg"
+    },
+    {
       "slug": "rochdale-council-deputy-leader-detained-briefly-in-pakistan-during-civic-visit",
       "title": "Rochdale council deputy leader detained briefly in Pakistan during civic visit",
       "category": "politics",
@@ -789,7 +454,7 @@
     {
       "slug": "rochdale-council-awards-contract-for-queen-s-park-send-improvement-project",
       "title": "Rochdale Council awards contract for Queen's Park SEND improvement project",
-      "category": "community",
+      "category": "business",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
         "image_url": "assets/img/cards/rochdale_town_hall_square.jpg",
@@ -931,18 +596,6 @@
       "after": "assets/img/cards/996c639b4caf-place-generated-card.jpg"
     },
     {
-      "slug": "rochdale-afc-women-s-match-against-salford-postponed",
-      "title": "Rochdale AFC Women’s match against Salford postponed",
-      "category": "sport",
-      "reason": "weak filename image match score -1; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_fc.jpg",
-        "img": "assets/img/cards/rochdale_fc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
-    },
-    {
       "slug": "road-closures-in-milnrow-for-remembrance-sunday-on-8-november-2026",
       "title": "Road closures in Milnrow for Remembrance Sunday on 8 November 2026",
       "category": "traffic",
@@ -1049,18 +702,6 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/ec77830f02939c00-commons-photo.jpg"
-    },
-    {
-      "slug": "rochdale-wins-gold-at-britain-in-bloom-awards-crowned-champion",
-      "title": "Rochdale wins gold at Britain in Bloom awards, crowned champion",
-      "category": "environment",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_in_bloom.jpg",
-        "img": "assets/img/cards/rochdale_in_bloom.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/b289bcf4e23d-place-generated-card.jpg"
     },
     {
       "slug": "rochdale-borough-council-awards-1-1-million-contract-for-young-people-s-accommod",
@@ -1185,18 +826,6 @@
     {
       "slug": "rochdale-afc-women-to-host-coa-in-home-match",
       "title": "Rochdale AFC Women to host COA in home match",
-      "category": "sport",
-      "reason": "weak filename image match score -1; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_away.jpg",
-        "img": "assets/img/cards/rochdale_away.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-afc-launches-together-against-racism-initiative",
-      "title": "Rochdale AFC launches 'Together Against Racism' initiative",
       "category": "sport",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
@@ -1340,7 +969,7 @@
     },
     {
       "slug": "rochdale-to-face-fleetwood-town-in-fa-cup-match-on-november-7-2026",
-      "title": "Rochdale to face Fleetwood Town in FA Cup match on November 7, 2026",
+      "title": "Rochdale to face Fleetwood Town in FA Cup match on 7 November 2026",
       "category": "sport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
@@ -1435,18 +1064,6 @@
       "after": "assets/img/cards/645326d68f691907-commons-photo.jpg"
     },
     {
-      "slug": "rochdale-afc-faces-port-vale-in-a-vital-league-two-match-this-saturday",
-      "title": "Port Vale hosts Rochdale in crucial League Two clash on 31 October",
-      "category": "sport",
-      "reason": "weak filename image match score -1; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/fixtures.jpg",
-        "img": "assets/img/cards/fixtures.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
-    },
-    {
       "slug": "lifts-at-freehold-tram-stop-out-of-service-for-repairs",
       "title": "Lifts out of service at Freehold tram stop due to replacement works",
       "category": "transport",
@@ -1466,18 +1083,6 @@
       "before": {
         "image_url": "assets/img/cards/rochdale_afc.jpg",
         "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
-    },
-    {
-      "slug": "rochdale-afc-secures-first-victory-with-last-minute-goal-against-stockport-count",
-      "title": "Rochdale AFC secures first victory with last-minute goal against Stockport County",
-      "category": "sport",
-      "reason": "weak filename image match score -1; neutral card is safer",
-      "before": {
-        "image_url": "assets/img/cards/fixtures.jpg",
-        "img": "assets/img/cards/fixtures.jpg",
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
@@ -1555,18 +1160,6 @@
       "after": "assets/img/cards/86868628f2b0-place-generated-card.jpg"
     },
     {
-      "slug": "rochdale-afc-confirms-fa-cup-first-round-draw-on-october-16",
-      "title": "Rochdale AFC confirms FA Cup first round draw on October 16",
-      "category": "sport",
-      "reason": "cached/library image lacks canonical/source provenance",
-      "before": {
-        "image_url": "assets/img/cards/rochdale_afc.jpg",
-        "img": "assets/img/cards/rochdale_afc.jpg",
-        "status": "cards-library-photo"
-      },
-      "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
-    },
-    {
       "slug": "rochdale-council-plans-major-investments-and-heritage-restoration",
       "title": "Rochdale Council plans major investments and heritage restoration",
       "category": "news",
@@ -1582,11 +1175,11 @@
       "slug": "heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen",
       "title": "Heywood and Middleton North MP visits Redwood School’s sixth form at Phoenix Centre",
       "category": "education",
-      "reason": "uncanonical img fallback exists while image_url is empty",
+      "reason": "cached/library image lacks canonical/source provenance",
       "before": {
-        "image_url": "",
-        "img": "assets/img/cards/e5ddafbbf0d08f86-commons-photo.jpg",
-        "status": "commons-photo-cached"
+        "image_url": "assets/img/cards/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen.jpg",
+        "img": "assets/img/cards/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen.jpg",
+        "status": "cards-library-photo"
       },
       "after": "assets/img/cards/e5ddafbbf0d08f86-commons-photo.jpg"
     },
@@ -1637,6 +1230,18 @@
         "status": "cards-library-photo"
       },
       "after": "assets/img/cards/e33dc298ae50-place-generated-card.jpg"
+    },
+    {
+      "slug": "rochdale-s-sustainable-materials-manufacturing-centre-set-to-drive-advanced-manu",
+      "title": "Rochdale's Sustainable Materials & Manufacturing Centre set to drive advanced manufacturing",
+      "category": "business",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/rochdale-s-sustainable-materials-manufacturing-centre-set-to-drive-advanced-manu.jpg",
+        "img": "assets/img/cards/rochdale-s-sustainable-materials-manufacturing-centre-set-to-drive-advanced-manu.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/f0b4f8d28408-place-generated-card.jpg"
     },
     {
       "slug": "rochdale-afc-co-chair-addresses-state-of-the-game-report",
@@ -1724,7 +1329,7 @@
     },
     {
       "slug": "rochdale-council-to-implement-new-planning-decision-guidelines-from-october-31",
-      "title": "Rochdale Council to implement new planning decision rules from October 31",
+      "title": "Rochdale Council to implement new planning decision rules from 31 October",
       "category": "news",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
@@ -1832,7 +1437,7 @@
     },
     {
       "slug": "overnight-road-closures-planned-at-sudden-junction-from-october-12-to-15",
-      "title": "Overnight road closures planned at Sudden Junction, Rochdale from October 12 to 15",
+      "title": "Overnight road closures planned at Sudden Junction, Rochdale from 12 October to 15",
       "category": "traffic",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
