@@ -101,7 +101,7 @@ CATEGORY_ORDER = (
         # terms are community, NOT events: frontpage_pipeline deletes any
         # "events" story not sourced from whatsoccurrinevents.co.uk, and on
         # 4 Nov 2026 that removed this walk from the feed entirely.
-        r"guided walks?|heritage walks?|walking tours?|storytelling)\b",
+        r"guided walks?|audio walks?|heritage walks?|walking tours?|storytelling)\b",
         re.I,
     )),
     ("business", re.compile(
