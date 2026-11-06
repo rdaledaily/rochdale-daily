@@ -60,6 +60,7 @@ def article_body(page):
     # Sources and related reporting are furniture, not article assertions.
     fragment = RELATED.sub('', ENGAGEMENT.sub('', fragment))
     fragment = re.sub(r'<p\b[^>]*class=["\']rd-related-inline["\'][^>]*>.*?</p>', '', fragment, flags=re.S)
+    fragment = re.sub(r'<p\b[^>]*class=["\']rd-series-links["\'][^>]*>.*?</p>', '', fragment, flags=re.S)
     fragment = re.sub(r'<div\b[^>]*data-rd-background=["\']1["\'][^>]*>.*?</div>', '', fragment, flags=re.S)
     # Remove closing layout divs outside the actual copy.
     if page[match.end(2):].startswith('<details'):
@@ -381,6 +382,12 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             page_body = story_background.insert(page_body, {**feed_map.get(slug, {}), **row})
         except Exception as exc:
             print(f'Background skipped for {slug}: {type(exc).__name__}: {exc}')
+        # Series line (story_series.py), stripped on read-back like the links.
+        try:
+            import story_series
+            page_body = story_series.insert(page_body, {**feed_map.get(slug, {}), **row}, feed)
+        except Exception as exc:
+            print(f'Series links skipped for {slug}: {type(exc).__name__}: {exc}')
         if match:
             sources_follow = page[match.end(2):].startswith('<details')
             if sources_follow:

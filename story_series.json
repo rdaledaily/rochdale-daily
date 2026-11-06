@@ -1,0 +1,41 @@
+{
+  "_note": "Topics that run as a series of separate stories (Christmas parking, every Christmas market, every switch-on...). Stories in the same series link to each other at the end of the copy: 'Enjoyed this article? We think you'll find ... interesting.' Matching is on the HEADLINE only. window_days keeps this year's season from linking to last year's. An editor can also put \"series\": \"<id>\" on a manual article to add it to a series whatever its headline says. Crime, police, sensitive, sponsored and briefing stories never join a series.",
+  "series": [
+    {
+      "id": "christmas",
+      "label": "Christmas in the borough",
+      "pattern": "\\b(?:christmas|xmas|festive|santa|grotto|pantomimes?|panto|nativity|carols?|winter wonderland|lights switch[- ]on|switch[- ]on of (?:the )?lights)\\b",
+      "window_days": 70
+    },
+    {
+      "id": "bonfire-night",
+      "label": "Bonfire night and fireworks",
+      "pattern": "\\b(?:bonfires?|fireworks?|guy fawkes|ignite fire festival)\\b",
+      "window_days": 40
+    },
+    {
+      "id": "remembrance",
+      "label": "Remembrance",
+      "pattern": "\\b(?:remembrance|armistice|poppy appeal|poppies)\\b",
+      "window_days": 21
+    },
+    {
+      "id": "halloween",
+      "label": "Halloween",
+      "pattern": "\\b(?:halloween|hallowe'en|trick or treat\\w*)\\b",
+      "window_days": 21
+    },
+    {
+      "id": "easter",
+      "label": "Easter",
+      "pattern": "\\b(?:easter)\\b",
+      "window_days": 30
+    },
+    {
+      "id": "summer-holidays",
+      "label": "Summer holidays",
+      "pattern": "\\b(?:summer holidays?|school holidays?|holiday activit\\w+|holiday club\\w*)\\b",
+      "window_days": 45
+    }
+  ]
+}
