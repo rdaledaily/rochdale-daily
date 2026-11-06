@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-06T16:24:50.394255Z",
+  "last_run_at": "2026-11-06T17:58:32.438048Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-06T11:15:53.818886Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 1,
+      "listed": 40,
+      "already_seen": 29,
+      "started_long_ago": 0,
+      "too_far_ahead": 9,
+      "undated": 2,
+      "in_window": 0
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-06T11:15:53.818886Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 5,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 5,
+      "already_seen": 0,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,14 +40,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-06T11:15:53.818886Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 0,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-06T11:15:53.818886Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 0,
+      "not_rochdale": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -42,31 +68,38 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 81,
+  "raw_candidates_before_job_filter": 83,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 81,
-  "candidate_clusters": 31,
+  "raw_candidates": 83,
+  "candidate_clusters": 30,
   "google_news_resolution": {
-    "wrappers": 40,
-    "resolved": 28,
-    "text_recovered": 15,
+    "wrappers": 34,
+    "resolved": 24,
+    "text_recovered": 14,
     "reattributed": 0,
-    "images_found": 16
+    "images_found": 22
   },
-  "duplicates_merged": 50,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 547,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
-  },
+  "duplicates_merged": 53,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
+  "drafted_articles": [
+    {
+      "slug": "middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration",
+      "source_url": "https://www.rochdale.gov.uk/news/article/694/major-boost-for-middleton-as-sale-of-landmark-town-centre-building-completes"
+    },
+    {
+      "slug": "boyes-opens-new-store-in-middleton-shopping-centre-tomorrow",
+      "source_url": "https://www.rochdaletimes.co.uk/finishing-touches-being-applied-as-boyes-opens-new-store-tomorrow/"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 548,
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
+    "missing_from_feed": 15,
+    "queued_for_retry": 15,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 2,
     "reopened_after_evidence_fix": 0,
@@ -74,19 +107,28 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 145,
+    "entries": 146,
     "by_outcome": {
-      "failed": 8,
-      "published": 109,
-      "rejected": 28
+      "failed": 22,
+      "published": 95,
+      "rejected": 29
     },
-    "held_back_this_run": 23,
-    "held_already_published": 21,
-    "held_rejected": 2,
+    "held_back_this_run": 22,
+    "held_already_published": 19,
+    "held_rejected": 3,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://rochdaleafc.co.uk/club-shop-closed-this-saturday",
+      "title": "Club Shop Closed This Saturday",
+      "source_name": "Rochdale AFC",
+      "held_because": "already rejected: quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-06T16:22:32.116238Z"
+    },
     {
       "url": "https://www.sportsmole.co.uk/football/fleetwood-town/fa-cup/preview/fleetwood-vs-rochdale-prediction-team-news-lineups_608463.html",
       "title": "Preview: Fleetwood Town vs Rochdale - prediction, team news, lineups - Sports Mole",
@@ -106,11 +148,13 @@
       "last_attempt_at": "2026-11-05T22:04:38.634211Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 176.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 67,
-    "website_discovery": 9,
+    "rss_and_google_news": 70,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -251,34 +295,39 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 23,
-    "Rochdale AFC": 20,
+    "Rochdale Times": 22,
+    "Rochdale AFC": 19,
     "Manchester Evening News": 15,
-    "Doncaster Free Press": 5,
+    "Rochdale Borough Council": 5,
+    "Doncaster Free Press": 4,
     "Bee Network live travel alerts": 4,
     "Secret Manchester": 3,
-    "Roch Valley Radio Local News": 3,
     "InYourArea": 2,
-    "Rochdale Borough Council": 2,
+    "Rochdale Borough Council RSS": 1,
+    "Transfermarkt": 1,
     "Squawka": 1,
     "Sports Mole": 1,
+    "Greater Manchester Police": 1,
+    "Rochdale Borough Council News": 1,
+    "Roch Valley Radio Local News": 1,
     "Northern Care Alliance News": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "sport": 1
+    "environment": 1,
+    "news": 1
   },
   "published_by_category": {
     "business": 61,
-    "community": 77,
+    "community": 78,
     "crime": 31,
-    "education": 27,
-    "environment": 43,
+    "education": 28,
+    "environment": 44,
     "events": 28,
     "health": 14,
     "news": 84,
-    "politics": 18,
-    "sport": 58,
+    "politics": 17,
+    "sport": 57,
     "traffic": 43,
     "transport": 10
   },
@@ -305,10 +354,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-995ea5d7dc64f0118d0d"
+    "environment-v3-259c94eae7338e024578",
+    "hard-news-v3-e6de20c2fd670e4b2b6d"
   ],
   "selected_candidate_urls": [
-    "https://rochdaleafc.co.uk/club-shop-closed-this-saturday/"
+    "https://www.rochdale.gov.uk/news/article/694/major-boost-for-middleton-as-sale-of-landmark-town-centre-building-completes",
+    "https://www.rochdaletimes.co.uk/finishing-touches-being-applied-as-boyes-opens-new-store-tomorrow/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -320,10 +371,12 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "sport"
+      "environment",
+      "news"
     ],
     "selected_categories": [
-      "sport"
+      "environment",
+      "news"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -335,14 +388,16 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "sport": 1
+      "environment": 1,
+      "news": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 1
+      "rochdale": 2
     },
     "selected_by_source": {
-      "rochdale afc": 1
+      "rochdale borough council news": 1,
+      "rochdale times": 1
     },
     "must_cover_selected": 0
   },
@@ -892,19 +947,22 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 6,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5lZVJWZFhrcm9QR1ZRWnFPYVI2QjFtb3NpeE1nb1N6b21IR3FBZ01UZGt4QTZ4Qk9yV1dIbHVuZWhTWjhnQi12OVRleHo0OTY3Mk5tVjAtZTg0NjZmeHF6UnlyNGR6bUx0?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -940,8 +998,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-06T17:35:54.526142Z",
-  "frontpage_article_count": 18,
+  "frontpage_generated_at": "2026-11-06T18:00:14.261294Z",
+  "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -986,16 +1044,16 @@
       "education": 1,
       "sport": 1,
       "health": 2,
-      "environment": 1,
+      "environment": 2,
       "news": 2,
       "community": 5
     },
     "selected_by_ward": {
-      "borough-wide": 18
+      "borough-wide": 19
     },
     "selected_by_area": {
       "littleborough": 1,
-      "middleton": 5,
+      "middleton": 6,
       "rochdale": 17
     },
     "selected_by_source": {
@@ -1003,6 +1061,7 @@
       "rochdale borough council": 2,
       "cranmer education trust": 1,
       "rochdale afc": 1,
+      "rochdale borough council news": 1,
       "rochdale daily": 2,
       "manchester evening news": 3,
       "northern care alliance news": 1,
@@ -1010,26 +1069,26 @@
       "historic england (national heritage list for england)": 1,
       "history of the parish of rochdale (fishwick) — rmnf": 1
     },
-    "pool_size": 23,
-    "primary_pool_size": 23,
+    "pool_size": 24,
+    "primary_pool_size": 24,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 18,
+    "frontpage_count": 19,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 9,
-    "fresh_under_homepage_window": 18,
+    "fresh_under_24h": 10,
+    "fresh_under_homepage_window": 19,
     "short_briefs_selected": 14,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
   "events_removed_other_source": 10,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 547,
+  "event_dates_corrected_from_ledger": 3,
+  "duplicate_articles_after_postprocessing": 548,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1040,9 +1099,11 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 14,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration"
+  ],
+  "drafts_not_published": 1,
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
