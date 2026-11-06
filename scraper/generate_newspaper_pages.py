@@ -362,6 +362,15 @@ def _newsroom_read_next_markup(article, all_articles):
     )
 
 
+def _sensitive(article) -> bool:
+    from inline_related import SENSITIVE
+    return (
+        fp.article_category(article) == "crime"
+        or bool(article.get("police_matter"))
+        or bool(SENSITIVE.search(str(article.get("title") or "")))
+    )
+
+
 def _newsroom_related_stories_markup(article, all_articles):
     slug = article.get("slug")
     related = [
@@ -370,6 +379,10 @@ def _newsroom_related_stories_markup(article, all_articles):
         and str(candidate.get("status") or "published") == "published"
         and not candidate.get("requires_approval")
         and not fp.is_event(candidate)
+        # Never a crime or court story beside an ordinary one (archive_quality
+        # applies the same rule to "Related reporting"); crime pages may still
+        # link to other crime stories.
+        and (_sensitive(article) or not _sensitive(candidate))
     ]
     related.sort(key=lambda candidate: _related_score(article, candidate), reverse=True)
     related = related[:6]

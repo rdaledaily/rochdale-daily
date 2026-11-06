@@ -1016,6 +1016,13 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
         content = story_background.insert(content, article)
     except Exception as exc:  # never let background block a page
         print(f'Background skipped for {article.get("slug")}: {type(exc).__name__}: {exc}')
+    # Series line last: "Enjoyed this article? We think you'll find ..." for
+    # stories on one running topic such as Christmas (story_series.py).
+    try:
+        import story_series
+        content = story_series.insert(content, article, all_articles)
+    except Exception as exc:  # never let a link pass block a page
+        print(f'Series links skipped for {article.get("slug")}: {type(exc).__name__}: {exc}')
     hero = hero_image_markup(article, image_url)
     # A photograph of the story goes straight under the headline, so it is on
     # the first screen of a phone (measured 6 Nov 2026: it started at 957px on

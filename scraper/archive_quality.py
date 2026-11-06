@@ -60,6 +60,7 @@ def article_body(page):
     # Sources and related reporting are furniture, not article assertions.
     fragment = RELATED.sub('', ENGAGEMENT.sub('', fragment))
     fragment = re.sub(r'<p\b[^>]*class=["\']rd-related-inline["\'][^>]*>.*?</p>', '', fragment, flags=re.S)
+    fragment = re.sub(r'<p\b[^>]*class=["\']rd-series-links["\'][^>]*>.*?</p>', '', fragment, flags=re.S)
     fragment = re.sub(r'<div\b[^>]*data-rd-background=["\']1["\'][^>]*>.*?</div>', '', fragment, flags=re.S)
     # Remove closing layout divs outside the actual copy.
     if page[match.end(2):].startswith('<details'):
@@ -124,18 +125,51 @@ def scan(root: Path):
 def tokens(text):
     return {w for w in re.findall(r'[a-z0-9]+', plain(text).casefold()) if len(w) > 2 and w not in STOP}
 
+def sensitivity(rows, category_cache=None):
+    """slug -> True for crime, court and other sensitive stories.
+
+    Uses the deterministic category, not the stored label, which is wrong on
+    some archive records (a sponsorship story was stored as crime)."""
+    from inline_related import SENSITIVE
+    category_cache = category_cache or {r['slug']: category_for(r) for r in rows}
+    return {r['slug']: category_cache[r['slug']] == 'crime' or bool(r.get('police_matter'))
+            or bool(SENSITIVE.search(str(r.get('title') or ''))) for r in rows}
+
+
+SIDEBAR_LINK = re.compile(r'<a class="related-story" href="([^"]+?)(?:\.html)?">.*?</a>', re.S)
+
+
+def scrub_sidebar(page: str, own_sensitive: bool, sensitive: dict) -> str:
+    """Archive pages are not rebuilt by the generator, so their "More on this"
+    sidebar is frozen from when they were made: 39 ordinary archive pages
+    still showed crime there (6 Nov 2026). Drop those links; crime pages keep
+    theirs."""
+    if own_sensitive:
+        return page
+    return SIDEBAR_LINK.sub(lambda m: '' if sensitive.get(m.group(1).rsplit('/', 1)[-1]) else m.group(0), page)
+
+
 def related_graph(rows):
     """A relevant ring in each area/topic supplies both incoming and outgoing links."""
     eligible = [r for r in rows if r['indexable']]
     category_cache = {r['slug']: category_for(r) for r in rows}
     token_cache = {r['slug']: tokens(r['title']) for r in rows}
+    # Crime, court and other sensitive stories never appear in the related box
+    # of an ordinary story: grouping by town alone put an abuse trial first on
+    # the Heywood Christmas Festival page (measured 6 Nov 2026: 140 non-crime
+    # pages linked to 161 crime/court stories). Crime pages may still link to
+    # other crime stories. Uses the deterministic category, not the stored
+    # label, which is wrong on some archive records.
+    sensitive = sensitivity(rows, category_cache)
+    def allowed(source, target):
+        return sensitive[source] or not sensitive[target]
     groups = defaultdict(list)
     for row in eligible:
         # A named local area is stronger than a topic. General borough news is
         # grouped by its deterministic section so unrelated subjects do not win.
         area = str(row.get('area') or 'rochdale').casefold()
         key = ('area', area) if area not in {'rochdale', 'borough', 'greater manchester'} else ('topic', category_for(row))
-        groups[key].append(row)
+        groups[key + (sensitive[row['slug']],)].append(row)
     edges = {r['slug']: [] for r in rows}
     incoming = Counter()
     for group in groups.values():
@@ -152,6 +186,8 @@ def related_graph(rows):
         for other in eligible:
             if row['slug'] == other['slug'] or other['slug'] in edges[row['slug']]:
                 continue
+            if not allowed(row['slug'], other['slug']):
+                continue
             shared = len(rt & token_cache[other['slug']])
             same_area = str(row.get('area', '')).casefold() == str(other.get('area', '')).casefold()
             same_topic = category_cache[row['slug']] == category_cache[other['slug']]
@@ -166,7 +202,14 @@ def related_graph(rows):
     for row in eligible:
         if incoming[row['slug']]:
             continue
-        choices = [r for r in eligible if r['slug'] != row['slug'] and category_for(r) == category_for(row)]
+        choices = [r for r in eligible if r['slug'] != row['slug'] and category_for(r) == category_for(row)
+                   and allowed(r['slug'], row['slug']) and allowed(row['slug'], r['slug'])]
+        if not choices:
+            # A court story filed under another section ("historic court
+            # chamber tours") has no same-section partner it may link with;
+            # pair it with the closest sensitive story so it is not orphaned.
+            choices = [r for r in eligible if r['slug'] != row['slug']
+                       and allowed(r['slug'], row['slug']) and allowed(row['slug'], r['slug'])]
         if choices:
             source = max(choices, key=lambda r: len(tokens(r['title']) & tokens(row['title'])))
             if row['slug'] not in edges[source['slug']]:
@@ -309,6 +352,7 @@ def apply(root: Path, rows=None, images=False, network_images=True):
     rows = rows or scan(root)
     ledger = load(root / REVIEWS, {})
     edges, incoming = related_graph(rows)
+    sensitive = sensitivity(rows)
     by_slug = {r['slug']: apply_edits(r,ledger.get(r['slug'],{}))[0] for r in rows}
     final_rows={}
     title_counts=Counter(r['title'] for r in rows if r['indexable'])
@@ -381,6 +425,12 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             page_body = story_background.insert(page_body, {**feed_map.get(slug, {}), **row})
         except Exception as exc:
             print(f'Background skipped for {slug}: {type(exc).__name__}: {exc}')
+        # Series line (story_series.py), stripped on read-back like the links.
+        try:
+            import story_series
+            page_body = story_series.insert(page_body, {**feed_map.get(slug, {}), **row}, feed)
+        except Exception as exc:
+            print(f'Series links skipped for {slug}: {type(exc).__name__}: {exc}')
         if match:
             sources_follow = page[match.end(2):].startswith('<details')
             if sources_follow:
@@ -445,6 +495,7 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             visit(data)
             return match.group(1)+json.dumps(data,ensure_ascii=False)+match.group(3)
         page=re.sub(r'(<script[^>]*type=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)',update_schema,page,flags=re.S)
+        page = scrub_sidebar(page, sensitive.get(slug, False), sensitive)
         if page != path.read_text(encoding='utf-8'):
             path.write_text(page, encoding='utf-8')
         final_rows[slug]=row
