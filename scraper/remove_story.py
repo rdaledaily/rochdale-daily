@@ -47,6 +47,10 @@ def rebuild_listings() -> None:
     steps = (
         ("generate_archive", "main", "archive index, archive and search pages"),
         ("generate_ward_pages", "main", "ward and place pages"),
+        # rss.xml lists the latest stories for feed readers and aggregators.
+        # It was never rebuilt here, so on 6 Nov 2026 a local dry run of a
+        # takedown left the removed story in the feed and the sweep failed.
+        ("generate_rss", "main", "RSS feed"),
     )
     for module_name, func, description in steps:
         try:
