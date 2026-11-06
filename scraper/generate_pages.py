@@ -904,28 +904,74 @@ def share_title(article: dict[str, Any]) -> str:
     return clean_social_headline(article.get("social_headline"), title) or title
 
 
-INCIDENT_RE = re.compile(
-    r"\b(?:fire|blaze|crash|collision|missing|flood\w*|evacuat\w*|"
-    r"incident|emergency|cordon|explosion|gas leak|power cut|outage|"
-    r"arrest\w*|stabb\w*|shooting|injur\w*|died|death|search for)\b",
+# 6 Nov 2026 (editor's rule): the "developing story" label goes only on a
+# story that itself says it is incomplete or waiting for information. The
+# previous rule guessed from incident words in the headline, so a finished
+# fire report carried the label while a story openly waiting on a press
+# office did not. Each phrase below is the story saying so in its own words;
+# incidental gaps ("the cost was not disclosed") do not count.
+STATES_INCOMPLETE_RE = re.compile(
+    "|".join((
+        # Not the old machine banner "ONGOING STORY — Updated <date>", which
+        # an earlier pipeline baked into bodies whenever it re-rewrote a source.
+        r"\b(?:developing|ongoing) story\b(?!\s*[\u2014\u2013-]+\s*updated)",
+        r"\b(?:this|the) (?:report|story|article|page|appeal) will be updated\b",
+        r"\bwill update (?:this|the) (?:report|story|article|appeal|page)\b(?![^.]{0,80}\bany (?:further )?changes?\b)",
+        r"\bwill update readers\b",
+        r"\bmore (?:details|information) (?:to follow|will follow|as they emerge|as it emerges|are expected)\b",
+        r"\bfurther (?:details|information|updates) (?:to follow|will follow|are expected|are awaited|when available)\b",
+        r"\bawaiting (?:further )?(?:details|information|confirmation|a response|a reply|comment|an update)\b",
+        r"\b(?:has|have) been (?:contacted|approached|asked) for (?:a )?(?:comment|response)\b",
+        r"\bno further (?:details|information) (?:has|have) (?:yet )?been (?:released|given|provided)\b",
+        r"\bat the time of (?:publication|writing)\b[^.]{0,120}\b(?:not|no|yet|unclear|unknown)\b",
+    )),
     re.I,
 )
 
 
-def is_developing_incident(article: dict[str, Any], now: datetime | None = None) -> bool:
-    """An incident story in its first 24 hours: the only kind where 'more
-    details as they emerge' is a promise the paper can keep. Decided by the
-    headline, not the category: a scam warning filed under crime, or a police
-    advice session, is not a developing incident."""
-    if not INCIDENT_RE.search(str(article.get('title') or '')):
+def text_states_incomplete(text: str) -> bool:
+    plain = html.unescape(re.sub(r"<[^>]+>", " ", str(text or "")))
+    return bool(STATES_INCOMPLETE_RE.search(plain))
+
+
+def is_developing_story(article: dict[str, Any]) -> bool:
+    """True only when the story's own copy says it is incomplete or waiting
+    for information. Word count, headline words, age and the pipeline's
+    is_ongoing flag no longer decide it (measured 6 Nov 2026: is_ongoing is set
+    automatically and sat on a finished fire report). An update that removes
+    the waiting line removes the label with it. A live story shows its own
+    timeline instead of this note."""
+    if is_reserve_feature(article):
         return False
-    published = parse_iso(first_published_at(article))
-    if published.year <= 1970:
-        return False
-    if published.tzinfo is None:
-        published = published.replace(tzinfo=timezone.utc)
-    now = now or datetime.now(timezone.utc)
-    return now - published <= timedelta(hours=24)
+    body = live_format.strip_baked_timeline(str(article.get('content_html') or ''))
+    return text_states_incomplete(body)
+
+
+DEVELOPING_NOTE_RE = re.compile(r'<p class="developing-note"[^>]*>.*?</p>\s*', re.S)
+
+
+def scrub_stale_developing_notes(pages_dir: Path, skip: set[str]) -> int:
+    """Archived pages are never re-rendered, so they kept whichever label rule
+    was in force when they were last written (measured 6 Nov 2026: 614
+    archived pages). Apply the same rule to them in place: the note stays only
+    where the page's own copy still says it is waiting for information."""
+    changed = 0
+    if not pages_dir.exists():
+        return changed
+    for path in pages_dir.glob('*.html'):
+        if path.stem in skip:
+            continue
+        original = path.read_text(encoding='utf-8')
+        if 'class="developing-note"' not in original:
+            continue
+        body = DEVELOPING_NOTE_RE.sub('', original)
+        # Only the story's own copy counts, not the legal note or sidebar.
+        copy = re.search(r'class="article-copy">(.*?)(?:<section class="editorial-legal-note"|$)', body, re.S)
+        if text_states_incomplete(copy.group(1) if copy else ''):
+            continue
+        path.write_text(body, encoding='utf-8')
+        changed += 1
+    return changed
 
 
 def is_generated_card(image_url: str) -> bool:
@@ -977,22 +1023,11 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     # generated place card stays where it was: it shows no story, and moving
     # it up would push the words down for nothing.
     hero_first = bool(hero) and not is_generated_card(image_url)
-    # A thin story (still under the 200-word development floor) is published
-    # timely and thickened in place as more sources arrive. While it is still
-    # short, tell the reader it is developing. Driven by the live word count at
-    # render time, so the banner disappears automatically once a merge grows the
-    # story past the floor - no stored flag to set or clear. Events are a
-    # separate, deliberately short format and never carry the note.
+    # The developing label is the story's own statement that it is waiting
+    # for information (is_developing_story), never a guess from word count,
+    # headline or age.
     developing_note = ''
-    # Measured 6 Nov 2026: the note sat on 120 of the last 200 stories,
-    # including plain press releases (a scam warning, a pathology week, a
-    # council contract) that will never be updated. A label on most of the
-    # paper means nothing and makes routine items look unfinished. It now
-    # appears only on an incident story in its first 24 hours, the case where
-    # more details really are expected.
-    if (str(article.get('source_kind') or 'article') != 'event'
-            and visible_word_count(article) < 200
-            and is_developing_incident(article)):
+    if is_developing_story(article):
         # The colours moved out of the markup. #b3001b and #fbeaec were the old
         # red palette, hardcoded here, so this note stayed red on a page that
         # had gone brick and cream around it.
@@ -1387,6 +1422,9 @@ def main() -> None:
     except Exception as exc:  # never let the repair block the paper
         print(f'Archive identity repair skipped: {type(exc).__name__}: {exc}')
     scrubbed = scrub_legacy_comment_markup(OUTPUT_DIR, live_slugs)
+    stale_developing = scrub_stale_developing_notes(OUTPUT_DIR, live_slugs)
+    if stale_developing:
+        print(f'Developing label removed from {stale_developing} archived page(s) that no longer say they are waiting for information')
     remastheaded = modernise_archived_masthead(OUTPUT_DIR, live_slugs)
     related_pages, related_removed = prune_dead_related_links(OUTPUT_DIR, live_slugs)
     corrections_logged = write_corrections_log(articles)
