@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "_docs": {
+    "purpose": "Campaign-level commercial metadata. Delivery remains controlled by /adverts.json so the live site stays backwards compatible.",
+    "state_values": ["draft", "needs-details", "approved", "scheduled", "live", "paused", "completed", "rejected"]
+  },
+  "campaigns": [
+    {
+      "campaign_id": "cmp-emoon-2026-08",
+      "advertiser_id": "adv-emoon-tuition",
+      "name": "E-Moon Tuition evergreen 2026",
+      "state": "live",
+      "start": "2026-08-13",
+      "end": "2028-09-01",
+      "target_areas": ["borough-wide"],
+      "target_categories": [],
+      "objective": "traffic"
+    },
+    {
+      "campaign_id": "cmp-wecovered-2026-08",
+      "advertiser_id": "adv-wecovered",
+      "name": "WeCovered evergreen 2026",
+      "state": "live",
+      "start": "2026-08-13",
+      "end": "2028-09-01",
+      "target_areas": ["borough-wide"],
+      "target_categories": [],
+      "objective": "traffic"
+    },
+    {
+      "campaign_id": "cmp-neb-electrical-2026-08",
+      "advertiser_id": "adv-neb-electrical",
+      "name": "NEB Electrical launch",
+      "state": "needs-details",
+      "start": "2026-08-01",
+      "end": "2028-09-01",
+      "target_areas": ["rochdale"],
+      "target_categories": [],
+      "objective": "traffic"
+    }
+  ]
+}
