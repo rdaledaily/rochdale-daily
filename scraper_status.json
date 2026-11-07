@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-07T13:15:03.191115Z",
+  "last_run_at": "2026-11-07T13:48:19.385764Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -47,25 +47,30 @@
   "raw_candidates": 73,
   "candidate_clusters": 30,
   "google_news_resolution": {
-    "wrappers": 34,
-    "resolved": 33,
-    "text_recovered": 17,
+    "wrappers": 33,
+    "resolved": 32,
+    "text_recovered": 16,
     "reattributed": 0,
     "images_found": 29
   },
   "duplicates_merged": 43,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 555,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "resident-escapes-fire-at-lonsdale-court-in-middleton",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 556,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -75,8 +80,8 @@
     "entries": 136,
     "by_outcome": {
       "failed": 23,
-      "published": 87,
-      "rejected": 26
+      "published": 88,
+      "rejected": 25
     },
     "held_back_this_run": 25,
     "held_already_published": 20,
@@ -131,7 +136,9 @@
       "last_attempt_at": "2026-11-05T22:04:38.634211Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 66,
@@ -144,7 +151,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 2
+    "men_newsletter": 3
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -236,14 +243,14 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 13,
-    "covered": 9,
-    "outstanding": 4,
+    "covered": 10,
+    "outstanding": 3,
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 7,
       "held_for_editor": 2,
-      "not_found": 2,
-      "published": 2
+      "not_found": 1,
+      "published": 3
     },
     "outstanding_stories": [
       {
@@ -272,23 +279,14 @@
         "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/alleged-ringleader-group-men-accused-34856051",
         "resolved_title": "Alleged 'ringleader' of group of men accused of sexually abusing three girls denies having sex with accusers"
-      },
-      {
-        "id": "c4d467c1587758ed",
-        "headline": "Resident escapes from second floor as fire tears through sheltered housing flat",
-        "received_at": "2026-11-06T08:06:01+00:00",
-        "status": "not_found",
-        "reason": "its article fire-breaks-out-in-sheltered-housing-flat-in-middleton-resident-escapes-safely is no longer live; searching again",
-        "resolved_url": "",
-        "resolved_title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton"
       }
     ]
   },
   "source_counts": {
-    "Rochdale Times": 14,
-    "Rochdale AFC": 14,
-    "Rochdale Borough Council": 10,
+    "Rochdale Times": 15,
+    "Rochdale AFC": 15,
     "Manchester Evening News": 9,
+    "Rochdale Borough Council": 9,
     "InYourArea": 4,
     "Bee Network live travel alerts": 4,
     "Secret Manchester": 3,
@@ -298,7 +296,6 @@
     "Squawka": 1,
     "Sports Mole": 1,
     "Greater Manchester Police": 1,
-    "About Manchester": 1,
     "The Bury Times": 1,
     "Oldham Times": 1,
     "Rochdale Borough Council News": 1,
@@ -306,7 +303,9 @@
     "Northern Care Alliance News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "news": 1
+  },
   "published_by_category": {
     "business": 60,
     "community": 77,
@@ -315,7 +314,7 @@
     "environment": 44,
     "events": 33,
     "health": 14,
-    "news": 84,
+    "news": 85,
     "politics": 18,
     "sport": 60,
     "traffic": 41,
@@ -343,8 +342,12 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "hard-news-v3-a5de031ceecba76d4eee"
+  ],
+  "selected_candidate_urls": [
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -354,7 +357,7 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "must_cover_selected": 0
+    "must_cover_selected": 1
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -912,12 +915,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "healthwatchrochdale.org.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "healthwatchrochdale.org.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -953,7 +952,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-07T13:25:42.948450Z",
+  "frontpage_generated_at": "2026-11-07T13:49:24.759046Z",
   "frontpage_article_count": 14,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1000,17 +999,17 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "news": 2,
+      "community": 4,
       "crime": 3,
       "traffic": 1,
       "education": 1,
       "sport": 2,
-      "community": 4,
-      "environment": 1
+      "environment": 1,
+      "news": 2
     },
     "selected_by_ward": {
-      "borough-wide": 13,
-      "Milkstone and Deeplish": 1
+      "Milkstone and Deeplish": 1,
+      "borough-wide": 13
     },
     "selected_by_area": {
       "deeplish": 1,
@@ -1019,15 +1018,15 @@
       "rochdale": 15
     },
     "selected_by_source": {
-      "rochdale daily": 2,
+      "inyourarea": 2,
       "rochdale times": 2,
       "rochdale borough council": 2,
       "cranmer education trust": 1,
       "rochdale afc": 1,
-      "inyourarea": 2,
+      "little acts of christmas": 1,
+      "rochdale daily": 2,
       "greater manchester police": 1,
       "doncaster free press": 1,
-      "little acts of christmas": 1,
       "visit rochdale (rochdale borough council)": 1
     },
     "pool_size": 22,
@@ -1042,14 +1041,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_kept_other_source": 34,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 14,
+  "events_kept_other_source": 22,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 555,
+  "approved_ticket_events": 14,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 556,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1058,10 +1057,12 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 26,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "area_archive_count": 27,
+  "whats_on_event_count": 14,
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "morning-briefing-6-november-2026"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
