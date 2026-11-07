@@ -101,16 +101,34 @@ def scan(root: Path):
         row.setdefault('excerpt', meta.get('description', ''))
         image = head.select_one('meta[property="og:image"]')
         row.setdefault('image_url', image.get('content', '') if image else '')
+        # Recover what the image IS, not only where it is (7 Nov 2026): the
+        # hero's alt text carries the "File photo: ... Not a photograph of this
+        # event." note, and the file name its kind. Without them a town photo
+        # lost its visible note on the next pass, and old unchecked Commons
+        # photos (247 archived pages) were kept as if an editor had chosen them.
+        hero_img = re.search(r'<figure\b[^>]*class=["\']article-hero-image["\'][^>]*>\s*<img\b[^>]*\balt="([^"]*)"', page, re.S)
+        if hero_img:
+            row.setdefault('image_alt', html.unescape(hero_img.group(1)))
+        image_name = str(row.get('image_url') or '').rsplit('/', 1)[-1].lower()
+        if not row.get('image_status'):
+            if '-town-photo' in image_name:
+                row['image_status'], row['image_backfill_method'] = 'town-file-photo', 'geograph-town'
+            elif '-commons-photo' in image_name:
+                row['image_status'] = 'commons-photo-cached'
         credit = re.search(r'<figcaption[^>]*>(.*?)</figcaption>',page,re.S)
         if credit:
             # The link text "Image source" is added when the caption is built;
             # read back as part of the credit it stacked one more copy per run
-            # (106 copies on one page by 24 Oct 2026).
+            # (106 copies on one page by 24 Oct 2026). The file-photo note is
+            # added the same way and is removed the same way.
             caption=re.sub(r'<a\b[^>]*>\s*Image source\s*</a>','',credit.group(1))
+            caption=re.sub(r'<span\b[^>]*class=["\']article-image-note["\'][^>]*>.*?</span>','',caption,flags=re.S)
             credit_text=re.sub(r'(?:\s*\bImage source\b)+\s*$','',plain(caption)).strip()
             row.setdefault('image_credit',credit_text.removeprefix('Image: '))
             link=re.search(r'href=["\']([^"\']+)["\']',credit.group(1))
             if link:row.setdefault('image_credit_url',html.unescape(link.group(1)))
+            if row.get('image_status') == 'commons-photo-cached' and not row.get('image_backfill_method'):
+                row['image_backfill_method'] = 'geograph' if '/ Geograph' in str(row.get('image_credit') or '') else 'wikimedia-commons'
         src = re.search(r'<details\b[^>]*class=["\']article-sources["\'].*?</details>', page, re.S)
         if src:
             links = BeautifulSoup(src.group(), 'lxml').select('a[href]')
