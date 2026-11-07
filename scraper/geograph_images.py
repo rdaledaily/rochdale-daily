@@ -106,6 +106,15 @@ def title_matches(subject: str, title: str) -> bool:
     return bool(words) and all(re.search(r"\b" + re.escape(w) + r"\b", low) for w in words)
 
 
+# Version of the search: a cached "searched, nothing found" from an older
+# version is searched again. 2: the first live run (7 Nov 2026) returned no
+# photo for 118 places, so those are retried once the reply is understood.
+SEARCH_VERSION = 2
+# What the last reply looked like, with the key removed: written to the
+# Commons cache as "__geograph_probe__" so a run's log of Geograph is visible.
+LAST_REPLY: dict[str, Any] = {}
+
+
 def search(subject: str, article: dict[str, Any], timeout: int = 10) -> list[dict[str, str]]:
     """Geograph photos of the named place near the story's town, best first."""
     key = api_key()
@@ -116,8 +125,16 @@ def search(subject: str, article: dict[str, Any], timeout: int = 10) -> list[dic
     params = {"key": key, "text": subject, "location": f"{lat},{lon}", "distance": GEOGRAPH_RADIUS_KM,
               "perpage": 30, "format": "RSS2.0"}
     response = requests.get(API + "?" + urlencode(params), headers={"User-Agent": USER_AGENT}, timeout=timeout)
+    rows = parse_rss(response.text) if response.ok else []
+    LAST_REPLY.clear()
+    LAST_REPLY.update({
+        "subject": subject, "http": response.status_code,
+        "content_type": response.headers.get("content-type", ""),
+        "items_in_reply": len(rows), "first_titles": [r["title"] for r in rows[:5]],
+        "head": response.text[:400].replace(key, "[key]"),
+    })
     response.raise_for_status()
-    return [row for row in parse_rss(response.text) if title_matches(subject, row["title"])]
+    return [row for row in rows if title_matches(subject, row["title"])]
 
 
 def as_commons_page(row: dict[str, str], town: str) -> dict[str, Any]:
