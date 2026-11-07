@@ -206,6 +206,9 @@ def grant_pages(article: dict[str, Any], grants: list[dict[str, Any]]) -> list[s
     for url in source_urls(article):
         if url in pages or NO_PHOTO_PAGE_RE.search(url):
             continue
+        # A home page's picture is the organisation's banner, not this story's.
+        if urlparse(url).path.strip("/") == "":
+            continue
         if any(_page_covered(url, grant) for grant in grants):
             pages.append(url)
     return pages
@@ -414,15 +417,20 @@ def main(argv: list[str] | None = None) -> int:
     queue.sort(key=lambda row: 0 if row[2] else 1)  # stable: newest first within each group
 
     for article, upgrade, pages in queue:
-        if high_risk_photo_story(article):
+        # Crime, court and sensitive stories: no guessed picture, but the photo
+        # the permitted source published with its own release (a GMP appeal,
+        # a council notice) is the story's photo and is used (editor's rule,
+        # 7 Nov 2026). Only the granted pages are tried for these stories.
+        risky = high_risk_photo_story(article)
+        if risky and not pages:
             skipped_risk += 1
             continue
         if args.limit and eligible >= args.limit:
             break
 
         eligible += 1
-        candidates = pages + [url for url in source_urls(article)
-                              if url not in pages and not NO_PHOTO_PAGE_RE.search(url)]
+        candidates = pages if risky else pages + [url for url in source_urls(article)
+                                                  if url not in pages and not NO_PHOTO_PAGE_RE.search(url)]
         # Configured domain restrictions are optional; a publisher domain alone
         # is never taken as permission. The individual image must have rights.
         if allowed:
