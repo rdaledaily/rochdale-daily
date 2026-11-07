@@ -12,7 +12,7 @@ from typing import Any
 from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
 from reader_usefulness import reader_questions_for
 from newsroom_source_policy import is_non_article_service_page
-from reader_copy import strip_filler_openers, uk_dates
+from reader_copy import strip_filler_openers, uk_dates, uk_dates_outside_quotes
 
 
 
@@ -404,8 +404,10 @@ SERVICE_SENTENCE_RE = re.compile(
     r"anyone with information[^.!?]{0,160}crimestoppers[^.!?]*[.!?]?",
     re.IGNORECASE,
 )
+# The paper's own sympathy line. Not when it opens a quotation: those are
+# someone else's words (editor, 7 Nov 2026: never in Rochdale Daily's voice).
 SYMPATHY_SENTENCE_RE = re.compile(
-    r"our thoughts (?:are|remain) with[^.!?]*[.!?]?",
+    r"(?<![\"“‘'])\bour thoughts (?:are|remain) with[^.!?]*[.!?]?",
     re.IGNORECASE,
 )
 DEATH_MARKER_RE = re.compile(
@@ -425,18 +427,16 @@ def strip_category_furniture(text: str) -> str:
 def strip_service_furniture(paragraphs: list[str], category: str) -> list[str]:
     """Deterministically remove misplaced furniture from finished copy.
 
-    The Crimestoppers service sentence is only permitted in crime reports;
-    the sympathy line is only permitted where the story actually reports a
-    death. Paragraphs left empty by the removal are dropped.
+    The Crimestoppers service sentence is only permitted in crime reports.
+    The paper's own sympathy line is never permitted, death reports included
+    (editor, 7 Nov 2026); a quoted person's words are kept. Paragraphs left
+    empty by the removal are dropped.
     """
     cleaned: list[str] = []
-    body = " ".join(paragraphs)
-    death_story = bool(DEATH_MARKER_RE.search(SYMPATHY_SENTENCE_RE.sub(" ", body)))
     for paragraph in paragraphs:
         if str(category).lower() != "crime":
             paragraph = SERVICE_SENTENCE_RE.sub(" ", paragraph)
-        if not death_story:
-            paragraph = SYMPATHY_SENTENCE_RE.sub(" ", paragraph)
+        paragraph = SYMPATHY_SENTENCE_RE.sub(" ", paragraph)
         paragraph = re.sub(r"\s+", " ", paragraph).strip()
         if paragraph:
             cleaned.append(paragraph)
@@ -681,7 +681,7 @@ def normalise_draft(draft: Any) -> dict[str, Any]:
     for raw in clean.get("paragraphs") or []:
         # Sentence-opening filler ("Fortunately, ...") is removed here, before
         # the gate, so no repair call is spent on a word the code can drop.
-        paragraph = uk_dates(strip_filler_openers(plain_text(raw)))
+        paragraph = uk_dates_outside_quotes(strip_filler_openers(plain_text(raw)))
         key = paragraph.casefold()
         if not paragraph or key in seen:
             continue
@@ -691,8 +691,8 @@ def normalise_draft(draft: Any) -> dict[str, Any]:
             break
     clean["paragraphs"] = paragraphs
     if clean.get("title"):
-        clean["title"] = uk_dates(plain_text(clean.get("title")))
-    excerpt = uk_dates(plain_text(clean.get("excerpt")))[:360]
+        clean["title"] = uk_dates_outside_quotes(plain_text(clean.get("title")))
+    excerpt = uk_dates_outside_quotes(plain_text(clean.get("excerpt")))[:360]
     if len(excerpt.split()) < 18 and paragraphs:
         excerpt = plain_text(" ".join(paragraphs[:2]))[:360]
         if len(excerpt) >= 355 and " " in excerpt:
@@ -1016,6 +1016,53 @@ def draft_has_quote(text: str) -> bool:
     return any(len(_quoted(m).split()) >= 3 for m in _DRAFT_QUOTE_RE.finditer(str(text or "")))
 
 
+# Sites whose pages help a reader act on a story: fundraisers, petitions and
+# public bodies. A news publisher's page is never a "useful link".
+_RESOURCE_HOST_RE = re.compile(
+    r"(?:^|\.)(?:gofundme\.com|justgiving\.com|crowdfunder\.co\.uk|change\.org|"
+    r"petition\.parliament\.uk|gov\.uk|nhs\.uk|police\.uk|org\.uk|ac\.uk|sch\.uk)$",
+    re.I,
+)
+
+
+def verified_useful_links(links: Any, source_text: str, limit: int = 4) -> list[dict[str, str]]:
+    """Links the rewrite offered, kept only when the exact address appears in
+    the supplied sources and the site is a fundraiser, petition or public body
+    (editor, 7 Nov 2026: a story concludes with how readers can act)."""
+    from urllib.parse import urlparse
+    out: list[dict[str, str]] = []
+    seen: set[str] = set()
+    text = str(source_text or "")
+    for item in links if isinstance(links, list) else []:
+        if not isinstance(item, dict):
+            continue
+        url = str(item.get("url") or "").strip().rstrip(".,;)")
+        label = plain_text(item.get("label"))[:80]
+        parsed = urlparse(url)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc or not label:
+            continue
+        host = parsed.netloc.lower().removeprefix("www.")
+        if not _RESOURCE_HOST_RE.search(host) or url in seen:
+            continue
+        if url not in text and url.rstrip("/") not in text:
+            continue
+        seen.add(url)
+        out.append({"label": label, "url": url})
+        if len(out) >= limit:
+            break
+    return out
+
+
+def useful_links_html(links: list[dict[str, str]]) -> str:
+    import html as _html
+    return "".join(
+        f'<p class="rd-useful-link">{_html.escape(link["label"])}: '
+        f'<a href="{_html.escape(link["url"], quote=True)}" target="_blank" rel="noopener nofollow">'
+        f'{_html.escape(link["url"].split("//", 1)[-1].rstrip("/"))}</a></p>'
+        for link in links
+    )
+
+
 def enrich_records(
     records: list[dict[str, Any]],
     fetch_metadata,
@@ -1221,14 +1268,18 @@ def request_article(
                 "a short true report always beats a long invented one."
             ),
             "paragraphs": "4-10",
-            "include_when_supported": [
-                "latest development",
-                "chronology",
-                "relevant background",
-                "local significance",
-                "practical information",
-                "what happens next",
+            "story_order": [
+                "why Rochdale readers are invested (with the news, in the opening)",
+                "what happened",
+                "quotes and comments",
+                "background",
+                "conclusion: decisions, next developments, how readers can act, or one closing fact",
             ],
+            "useful_links": (
+                "Up to 4 objects {label, url} for petitions, fundraisers (GoFundMe, JustGiving, Crowdfunder) "
+                "and official resources (council, NHS, police, charity pages) that help readers act. "
+                "Copy each url exactly from source_records; never write a url that is not there. Empty list when none."
+            ),
             "seo": "Natural descriptive headline; no keyword stuffing or clickbait.",
             "headline_style": (
                 "British newspaper sentence case: capitalise only the first word and "

@@ -959,7 +959,9 @@ def is_developing_story(article: dict[str, Any]) -> bool:
     return text_states_incomplete(body)
 
 
-ONGOING_CHIP_RE = re.compile(r'<span class="kicker-chip">\s*(?:ongoing|ONGOING|Ongoing[^<]{0,30}|ONGOING[^<]{0,30})\s*</span>')
+# The pipeline's ongoing labels, ONGOING and LIVE in any case (7 Nov 2026
+# review: a Politics page kept <span class="kicker-chip">LIVE</span>).
+ONGOING_CHIP_RE = re.compile(r'<span class="kicker-chip">\s*(?:ongoing|live)\b[^<]{0,30}</span>', re.I)
 DEVELOPING_NOTE_RE = re.compile(r'<p class="developing-note"[^>]*>.*?</p>\s*', re.S)
 
 

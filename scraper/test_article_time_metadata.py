@@ -132,8 +132,11 @@ class ArticleTimeMetadataTests(unittest.TestCase):
             chip = '<nav class="article-breadcrumb"><a>News</a><span class="kicker-chip">ONGOING</span></nav>'
             (d / "council.html").write_text(chip + page.format(n=note, t="Awaiting a reply from the council."), encoding="utf-8")
             (d / "crimechip.html").write_text(crime_meta + chip + page.format(n="", t="Police are investigating."), encoding="utf-8")
+            live_chip = '<meta property="article:section" content="Politics"><nav><span class="kicker-chip">LIVE</span></nav>'
+            (d / "politics.html").write_text(live_chip + page.format(n="", t="The meeting continues."), encoding="utf-8")
             (d / "live.html").write_text(page.format(n=note, t="The fire was put out."), encoding="utf-8")
-            self.assertEqual(gp.scrub_stale_developing_notes(d, {"live"}), 2)
+            self.assertEqual(gp.scrub_stale_developing_notes(d, {"live"}), 3)
+            self.assertNotIn("kicker-chip", (d / "politics.html").read_text())
             self.assertNotIn("developing-note", (d / "old.html").read_text())
             self.assertIn("developing-note", (d / "wait.html").read_text())
             council = (d / "council.html").read_text()

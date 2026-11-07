@@ -27,6 +27,8 @@ from reader_copy import clean_social_headline, tidy_paragraphs
 from newsroom_source_policy import is_non_article_service_page
 import editorial_upgrade
 from editorial_upgrade import (
+    useful_links_html,
+    verified_useful_links,
     SERVICE_SENTENCE_RE,
     SYMPATHY_SENTENCE_RE,
     article_word_count as editorial_word_count,
@@ -313,7 +315,7 @@ PUBLISHED_CATEGORIES = ['news', 'crime', 'traffic', 'transport', 'politics', 'ed
 # is_about_rochdale_borough == false is never published (Middleton in
 # Idaho/Wisconsin/Leeds and every other namesake, without maintaining a
 # counter-term list per impostor town).
-ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'content_class': {'type': 'string', 'enum': ['news_report', 'advert_or_listing', 'job_or_recruitment', 'search_results_or_index_page', 'directory_or_services_page', 'press_release_marketing', 'other_non_news']}, 'is_about_rochdale_borough': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(PUBLISHED_CATEGORIES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_headline': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}}, 'required': ['publishable', 'content_class', 'is_about_rochdale_borough', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_headline', 'social_context_used', 'reason']}}
+ARTICLE_SCHEMA = {'name': 'rochdale_daily_article', 'strict': True, 'schema': {'type': 'object', 'additionalProperties': False, 'properties': {'publishable': {'type': 'boolean'}, 'content_class': {'type': 'string', 'enum': ['news_report', 'advert_or_listing', 'job_or_recruitment', 'search_results_or_index_page', 'directory_or_services_page', 'press_release_marketing', 'other_non_news']}, 'is_about_rochdale_borough': {'type': 'boolean'}, 'title': {'type': 'string'}, 'excerpt': {'type': 'string'}, 'paragraphs': {'type': 'array', 'items': {'type': 'string'}, 'minItems': 4, 'maxItems': 12}, 'category': {'type': 'string', 'enum': list(PUBLISHED_CATEGORIES)}, 'area': {'type': 'string', 'enum': list(AREA_KEYWORDS)}, 'legal_disclaimer': {'type': 'string'}, 'right_to_reply': {'type': 'string'}, 'community_reaction': {'type': 'string'}, 'social_headline': {'type': 'string'}, 'social_context_used': {'type': 'boolean'}, 'reason': {'type': 'string'}, 'useful_links': {'type': 'array', 'maxItems': 4, 'items': {'type': 'object', 'additionalProperties': False, 'properties': {'label': {'type': 'string'}, 'url': {'type': 'string'}}, 'required': ['label', 'url']}}}, 'required': ['publishable', 'content_class', 'is_about_rochdale_borough', 'title', 'excerpt', 'paragraphs', 'category', 'area', 'legal_disclaimer', 'right_to_reply', 'community_reaction', 'social_headline', 'social_context_used', 'reason', 'useful_links']}}
 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', handlers=[logging.FileHandler(LOG_FILE, encoding='utf-8'), logging.StreamHandler()])
 log = logging.getLogger('rochdale_daily')
@@ -3221,7 +3223,10 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'title': title,
         'slug': make_slug(title),
         'excerpt': excerpt,
-        'content_html': ''.join(f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs),
+        # Petitions, fundraisers and official resources close the story when
+        # the sources give their address (editorial_upgrade.verified_useful_links).
+        'content_html': ''.join(f'<p>{html.escape(paragraph)}</p>' for paragraph in paragraphs)
+                        + useful_links_html(verified_useful_links(draft.get('useful_links'), source_text)),
         'social_headline': social_headline,
         'area': area,
         'category': category,

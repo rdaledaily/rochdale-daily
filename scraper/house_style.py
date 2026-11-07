@@ -10,7 +10,7 @@ from reader_copy import (
     ai_tell_issues, headline_issues, repetition_issues, social_headline_issues,
 )
 
-STYLE_VERSION = "rochdale-human-newsroom-v14"
+STYLE_VERSION = "rochdale-human-newsroom-v15"
 
 # Shared original editorial voice for news and features. Never overrides accuracy.
 HUMAN_VOICE_BRIEF = (
@@ -90,6 +90,20 @@ NEWS_SYNTAX_BRIEF = (
     "Headlines name the person or place and carry the most striking verified detail; plain verbs, no sensational adjectives."
 )
 
+# v15, 7 Nov 2026 (editor): the order every story follows.
+STORY_ORDER_BRIEF = (
+    "Story order. Every story runs in this order, leaving out any part the sources do not support: "
+    "1. Why Rochdale readers are invested: the opening sentence carries the news together with the local stake, "
+    "the person, place, service or consequence in the borough that makes it matter here. "
+    "2. What happened: the facts in order of importance, then the sequence of events. "
+    "3. Quotes and comments: what the people involved, officials or organisations said, exactly and attributed. "
+    "4. Background: earlier events, related decisions, figures and context that place the story. "
+    "5. Conclusion: decisions still to come, the next development and when, how readers can act; "
+    "put petitions, fundraisers and official resources in useful_links (only addresses that appear in the sources), "
+    "or close with one factual sentence that brings the story to an end. "
+    "The conclusion is never a summary, a moral, a wish or sympathy in Rochdale Daily's voice."
+)
+
 HOUSE_STYLE_SYSTEM = (
     NATURAL_STORY_POLICY + " " + CONTEXT_POLICY + " " +
     "You are the senior news editor of Rochdale Daily. Write accurate, polished British local journalism. "
@@ -131,7 +145,7 @@ HOUSE_STYLE_SYSTEM = (
     "Match the length budget supplied with each assignment: it reflects how much verified source material exists. A rich evidence pack should become a substantial, information-dense report; a thin source supports only a short, accurate brief. "
     "Never pad towards a word count with unsupported reaction, generic history, invented trends, speculation or repetitive paraphrase — a short true report always beats a long invented one. "
     "Use only the supplied source evidence."
-) + " " + HUMAN_VOICE_BRIEF + " " + PEOPLE_FIRST_BRIEF + " " + NEWS_SYNTAX_BRIEF + " " + READER_FIRST_POLICY
+) + " " + HUMAN_VOICE_BRIEF + " " + PEOPLE_FIRST_BRIEF + " " + NEWS_SYNTAX_BRIEF + " " + STORY_ORDER_BRIEF + " " + READER_FIRST_POLICY
 
 WEAK_STYLE_RE = re.compile(
     r"\b(?:"

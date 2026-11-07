@@ -228,7 +228,9 @@ character neighbourhoods neighbourhood adhering adherence regulations rules plan
 _SENTIMENT_CLOSER_RE = re.compile(
     r"^(?:Our|Rochdale Daily's|Rochdale Daily sends its) (?:deepest |sincere |heartfelt )?(?:thoughts|sympathies|condolences|prayers)\b"
     r"|^(?:We|Rochdale Daily) (?:wish|send|extend|offer)\b[^.]*\b(?:well|recovery|condolences|sympathies|best|love|thoughts)\b"
-    r"|^(?:Wishing|Best wishes|Get well soon|Thoughts and prayers|Rest in peace|RIP)\b",
+    r"|^Wishing (?:him|her|them|you|everyone|all|the [a-z]+|[A-Z][a-z]+(?: [A-Z][a-z]+)?) (?:a |the )?"
+    r"(?:well|speedy|swift|full|quick|happy|best|luck|good luck|all the best)\b"
+    r"|^(?:Best wishes|Get well soon|Thoughts and prayers|Rest in peace|RIP)\b",
     re.I,
 )
 
@@ -282,22 +284,59 @@ def uk_dates(text: str) -> str:
     return _ORDINAL_DAY_RE.sub(r"\1 \2", text)
 
 
+def _quote_step(in_quote: bool, ch: str, prev: str, nxt: str) -> tuple[bool, bool]:
+    """(new in_quote, is_quote_mark) for one character. Double and single
+    marks, straight or curly; a single mark with a letter on both sides is an
+    apostrophe (we're, park's), never a quotation mark."""
+    if ch == "“":
+        return True, True
+    if ch == "”":
+        return False, True
+    if ch == '"':
+        return (not in_quote), True
+    if ch in "‘'":
+        if prev.isalpha() and nxt.isalpha():
+            return in_quote, False
+        if not in_quote and not prev.isalnum() and nxt.isalnum():
+            return True, True
+        if ch == "‘":
+            return in_quote, False
+    if ch in "’'":
+        if prev.isalpha() and nxt.isalpha():
+            return in_quote, False
+        if in_quote and prev and not prev.isspace() and not nxt.isalnum():
+            return False, True
+    return in_quote, False
+
+
+def quote_open(text: str) -> bool:
+    """Whether a quotation opened in text is still open at its end: the next
+    words are someone else's (7 Nov 2026 review: 'The team is devastated.
+    Our thoughts are with his family.' lost its second sentence)."""
+    text = str(text or "")
+    in_quote = False
+    for i, ch in enumerate(text):
+        in_quote, _ = _quote_step(in_quote, ch, text[i - 1] if i else "", text[i + 1] if i + 1 < len(text) else "")
+    return in_quote
+
+
 def uk_dates_outside_quotes(html_text: str) -> str:
     """uk_dates on the reporter's own words only. Text inside quotation marks
-    is someone else's words and is never altered, and nothing inside a tag
-    (an href, an alt) is touched. An unclosed quote protects the rest of the
-    paragraph."""
+    (double or single, straight or curly) is someone else's words and is
+    never altered, and nothing inside a tag (an href, an alt) is touched. An
+    unclosed quote protects the rest of the text."""
+    text = str(html_text or "")
     out: list[str] = []
     run: list[str] = []
     in_tag = in_quote = False
 
     def flush(convert: bool) -> None:
         if run:
-            text = "".join(run)
-            out.append(uk_dates(text) if convert else text)
+            chunk = "".join(run)
+            out.append(uk_dates(chunk) if convert else chunk)
             run.clear()
 
-    for ch in str(html_text or ""):
+    for i, ch in enumerate(text):
         if in_tag:
             out.append(ch)
             if ch == ">":
@@ -308,17 +347,16 @@ def uk_dates_outside_quotes(html_text: str) -> str:
             in_tag = True
             out.append(ch)
             continue
-        if ch in "“\"" and not in_quote:
+        now, mark = _quote_step(in_quote, ch, text[i - 1] if i else "", text[i + 1] if i + 1 < len(text) else "")
+        if mark and now and not in_quote:
             flush(True)
-            in_quote = True
             run.append(ch)
-            continue
-        if ch in "”\"" and in_quote:
+        elif mark and not now and in_quote:
             run.append(ch)
             flush(False)
-            in_quote = False
-            continue
-        run.append(ch)
+        else:
+            run.append(ch)
+        in_quote = now
     flush(not in_quote)
     return "".join(out)
 
@@ -328,6 +366,24 @@ RIGHT_OF_REPLY_RE = re.compile(
     r"\b(?:said|says) in a statement\b|\bstatement (?:to|from) rochdale daily\b",
     re.I,
 )
+
+
+def _text_before(source: str, index: int) -> str:
+    return html.unescape(re.sub(r"<[^>]+>", " ", source[:index]))
+
+
+def _keep_reporting(sentences: list[str], before: str) -> list[str]:
+    """Drop filler and the paper's own sentiment from closing sentences, never
+    a sentence that sits inside a quotation opened earlier in the paragraph or
+    in an earlier one: those are someone else's words."""
+    kept: list[str] = []
+    context = before
+    for sentence in sentences:
+        quoted = quote_open(context)
+        if quoted or not (is_filler_closer(sentence) or is_sentiment_closer(sentence)):
+            kept.append(sentence)
+        context += " " + sentence
+    return kept
 
 
 def tidy_editor_html(content_html: str) -> str:
@@ -350,7 +406,7 @@ def tidy_editor_html(content_html: str) -> str:
         fixed = uk_dates_outside_quotes(inner)
         if match.span() in closing and "<" not in fixed:
             sentences = split_sentences(html.unescape(fixed))
-            kept = [sentence for sentence in sentences if not (is_filler_closer(sentence) or is_sentiment_closer(sentence))]
+            kept = _keep_reporting(sentences, _text_before(source, match.start()))
             if not kept:
                 return ""
             if len(kept) != len(sentences):
@@ -397,7 +453,7 @@ def tidy_content_html(content_html: str) -> str:
         text = html.unescape(inner)
         fixed = html.unescape(uk_dates_outside_quotes(inner))
         if match.span() in closing:
-            kept = [s for s in split_sentences(fixed) if not (is_filler_closer(s) or is_sentiment_closer(s))]
+            kept = _keep_reporting(split_sentences(fixed), _text_before(source, match.start()))
             if not kept:
                 return ""
             fixed = " ".join(kept)

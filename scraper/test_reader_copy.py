@@ -68,7 +68,7 @@ def run() -> None:
     assert rc.social_headline_issues("", title)
 
     # The house style carries the people-first brief and checks it.
-    assert STYLE_VERSION == "rochdale-human-newsroom-v14"
+    assert STYLE_VERSION == "rochdale-human-newsroom-v15"
     assert "Write about people, not incidents" in HOUSE_STYLE_SYSTEM
     issues = style_issues({"title": title, "excerpt": EXCERPT, "paragraphs": [P1, P2],
                            "social_headline": title, "category": "news"})
@@ -137,6 +137,18 @@ def run() -> None:
     quoted = "<p>The family paid tribute.</p><p>“Our thoughts are with everyone who knew him,” the club said.</p>"
     assert rc.tidy_content_html(quoted) == quoted
     assert not rc.is_sentiment_closer("Police thanked the public for their help.")
+    # 7 Nov 2026 review: quoted words survive sentence splitting, within a
+    # paragraph and across paragraphs; a pub named Wishing Well is news.
+    club = "<p>Police are investigating.</p><p>The club said: 'The team is devastated. Our thoughts are with his family.'</p>"
+    assert rc.tidy_content_html(club) == club and rc.tidy_editor_html(club) == club
+    across = "<p>The club said: 'The team is devastated.</p><p>Our thoughts are with his family.'</p>"
+    assert rc.tidy_content_html(across) == across
+    pub = "<p>Plans were approved.</p><p>Wishing Well pub will reopen on Monday after a £50,000 refurbishment.</p>"
+    assert rc.tidy_content_html(pub) == pub and rc.tidy_editor_html(pub) == pub
+    assert rc.is_sentiment_closer("Wishing her a speedy recovery.")
+    assert rc.quote_open("He said: 'We're nearly there") and not rc.quote_open("The park's gates")
+    assert rc.uk_dates_outside_quotes("She said: ‘It starts on 4th August.’ It ends on 5th August.") == \
+        "She said: ‘It starts on 4th August.’ It ends on 5 August."
     # Standard notices are kept as endings.
     notices = ("<p>The road reopened at 6pm.</p><p>Correction: an earlier version gave the wrong date.</p>"
                "<p>Right of reply: anyone named can email news@rochdaledaily.co.uk.</p>")
