@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 0,
-  "skipped_sensitive_stories": 1,
+  "repaired_with_source_photo": 1,
+  "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
-  "no_usable_source_image": 8,
+  "no_usable_source_image": 7,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -31,6 +31,12 @@
       "result": "source-photo-already-cached",
       "source": "https://www.rochdale.gov.uk/news/article/694/major-boost-for-middleton-as-sale-of-landmark-town-centre-building-completes",
       "after": "assets/img/cards/middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration.jpg"
+    },
+    {
+      "slug": "rochdale-afc-faces-fleetwood-town-in-fa-cup-match",
+      "result": "licensed-source-photo",
+      "source": "https://rochdaleafc.co.uk/preview-fleetwood-town-a-3/",
+      "after": "assets/img/cards/rochdale-afc-faces-fleetwood-town-in-fa-cup-match.png"
     },
     {
       "slug": "rochdale-afc-to-host-york-city-in-league-two-clash-on-november-14",
@@ -65,24 +71,6 @@
       "result": "no-cleared-source-image",
       "source": "https://www.rochdale.gov.uk/news/article/675/council-urges-families-to-apply-on-time-for-secondary-school-places",
       "after": "assets/img/cards/rochdale-secondary-school-applications-deadline-31-october-2026.jpg"
-    },
-    {
-      "slug": "rochdale-october-half-term-2026-dates-free-activities-guide",
-      "result": "no-cleared-source-image",
-      "source": "https://www.rochdale.gov.uk/schools/school-terms-holiday-dates-closures/2",
-      "after": "assets/img/cards/d7e33ec254c1-place-generated-card.jpg",
-      "why": {
-        "page": "https://www.rochdale.gov.uk/schools/school-terms-holiday-dates-closures/2",
-        "final_url": "https://www.rochdale.gov.uk/schools/school-terms-holiday-dates-closures/2",
-        "candidates": [
-          {
-            "url": "https://www.rochdale.gov.uk/site/dist/images/opengraph/opengraph.jpg?1.27.0",
-            "via": "og:image",
-            "verdict": "default-image-used-on-other-stories"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
     }
   ]
 }
