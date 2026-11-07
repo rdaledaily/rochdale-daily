@@ -206,6 +206,7 @@ def run_source_grants(jpeg: bytes) -> None:
     roadworks = "https://www.rochdale.gov.uk/directory-record/12345/roadworks-on-x"
     assert repair.grant_pages({"source_url": roadworks}, grants) == []
     assert repair.grant_pages({"source_url": council_page}, grants) == [council_page]
+    assert repair.grant_pages({"source_url": "https://www.rochdale.gov.uk/"}, grants) == []
     carded = dict(recent, image_status="place-generated-card",
                   image_url="assets/img/cards/x-place-generated-card.jpg", published_at="2026-10-26T09:00:00Z")
     assert repair.grant_backlog(carded, now, grants)
