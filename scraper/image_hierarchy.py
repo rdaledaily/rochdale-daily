@@ -359,8 +359,9 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
     # Geograph: street and building photos Commons does not hold
     # (geograph_images.py). Tried once per place and town; needs the
     # GEOGRAPH_API_KEY, without which nothing changes.
-    if subject and key and allow_network and record.get('status') != 'matched' and not record.get('geograph_tried'):
-        import geograph_images
+    import geograph_images
+    if subject and key and allow_network and record.get('status') != 'matched' \
+            and record.get('geograph_tried') != geograph_images.SEARCH_VERSION:
         if geograph_images.api_key():
             town = geograph_images.town_for(article)
             try:
@@ -368,7 +369,8 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
             except Exception:
                 rows = None  # retry next run; a failed service is not "no photo"
             if rows is not None:
-                record = dict(record or {'subject': subject}, geograph_tried=True)
+                record = dict(record or {'subject': subject}, geograph_tried=geograph_images.SEARCH_VERSION,
+                              geograph_items_in_reply=geograph_images.LAST_REPLY.get('items_in_reply'))
                 record.setdefault('status', 'searched')
                 for row in rows:
                     page = geograph_images.as_commons_page(row, town)
@@ -389,6 +391,7 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
                                   commons_title=row['title'], page=page)
                     break
                 cache[key] = record
+                cache['__geograph_probe__'] = dict(geograph_images.LAST_REPLY)
                 cache_file.parent.mkdir(parents=True, exist_ok=True)
                 cache_file.write_text(json.dumps(cache, ensure_ascii=False, indent=2) + '\n')
     article['commons_image_search'] = record.get('status', 'no-specific-subject' if not subject else 'not-yet-searched')
