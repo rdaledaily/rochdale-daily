@@ -183,8 +183,13 @@ def is_landmark(subject):
 def commons_checked(subject, article):
     """A Commons photo on a story was checked for it: a known landmark (one
     place wherever it appears), or a place checked for this story's town."""
-    return bool(subject) and (is_landmark(subject)
-                              or article.get('commons_validated_for') == commons_cache_key(subject, article))
+    if not subject:
+        return False
+    if article.get('image_backfill_method') == 'geograph':
+        # Geograph picks are re-checked whenever the matching rule changes.
+        import geograph_images
+        return article.get('commons_validated_for') == commons_cache_key(subject, article) + '#g' + str(geograph_images.SEARCH_VERSION)
+    return is_landmark(subject) or article.get('commons_validated_for') == commons_cache_key(subject, article)
 
 
 def _towns(article):
@@ -327,6 +332,10 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
     # story; one cached without the file's details cannot be checked.
     if record.get('status') == 'matched' and not (record.get('page') and acceptable(record['page'], subject, article)):
         record = {}
+    if record.get('source') == 'geograph':
+        import geograph_images as _g
+        if record.get('geograph_tried') != _g.SEARCH_VERSION or not _g.title_matches(subject, record.get('commons_title', '')):
+            record = {}
     if subject and not record and allow_network:
         result = commons_search(subject)
         record = {'status': result['status'], 'subject': subject}
@@ -402,7 +411,7 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
                        image_alt='File image: ' + subject + '. Not a photograph of this event.',
                        image_backfill_method='geograph' if record.get('source') == 'geograph' else 'wikimedia-commons',
                        source_image_reuse_status='commons-free-license',
-                       commons_validated_for=key)
+                       commons_validated_for=key + ('#g' + str(geograph_images.SEARCH_VERSION) if record.get('source') == 'geograph' else ''))
         return 'commons'
     article.pop('commons_validated_for', None)
     set_place_card(article, root)

@@ -100,16 +100,50 @@ def full_size(thumb: str) -> str:
     return re.sub(r"_\d+x\d+(\.jpe?g)$", r"\1", thumb, flags=re.I)
 
 
+_STREET_TYPES = frozenset("road street lane avenue way drive close crescent terrace brow row".split())
+
+
+def _words(text: str) -> list[str]:
+    return [w for w in re.findall(r"[a-z0-9]+", text.casefold().replace("’", "'").replace("'", ""))]
+
+
 def title_matches(subject: str, title: str) -> bool:
-    words = [w for w in re.findall(r"[a-z0-9]+", subject.casefold().replace("’", "'")) if w not in {"the", "and", "of", "s"}]
-    low = title.casefold().replace("’", "'")
-    return bool(words) and all(re.search(r"\b" + re.escape(w) + r"\b", low) for w in words)
+    """The place name appears in the photo title in order, with at most one
+    extra word inside it ("St Andrew's Church" finds "St Andrew's Parish
+    Church"), and a park, mill or church is not a road of the same name.
+
+    Measured 7 Nov 2026 (first 33 matches): any-order word matching took
+    "Norden Road" to "Edenfield Road, Norden", "Rochdale House" to "Craig Lee
+    House ... Rochdale" and "Queen's Park" to "Queen's Park Road"."""
+    want = [w for w in _words(subject) if w not in {"the", "of", "and"}]
+    have = _words(title)
+    if not want:
+        return False
+    for start in range(len(have)):
+        if have[start] != want[0]:
+            continue
+        i, j, skipped = start, 0, 0
+        while i < len(have) and j < len(want):
+            if have[i] == want[j]:
+                j += 1
+            elif j and skipped == 0:
+                skipped = 1
+            else:
+                break
+            i += 1
+        if j == len(want):
+            following = have[i] if i < len(have) else ""
+            if following in _STREET_TYPES and want[-1] not in _STREET_TYPES:
+                continue
+            return True
+    return False
 
 
-# Version of the search: a cached "searched, nothing found" from an older
-# version is searched again. 2: the first live run (7 Nov 2026) returned no
-# photo for 118 places, so those are retried once the reply is understood.
-SEARCH_VERSION = 3
+# Version of the search: a cached result from an older version is searched
+# again. 2: the first live run (7 Nov 2026) returned no photo for 118 places.
+# 3: expand=1, so replies carry image links. 4: the place name must appear in
+# order in the photo title (title_matches).
+SEARCH_VERSION = 4
 # What the last reply looked like, with the key removed: written to the
 # Commons cache as "__geograph_probe__" so a run's log of Geograph is visible.
 LAST_REPLY: dict[str, Any] = {}
