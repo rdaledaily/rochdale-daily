@@ -296,6 +296,8 @@ class GeographStreetPhotoTests(unittest.TestCase):
         import geograph_images as g
         rows = g.parse_rss(self.RSS)
         self.assertEqual([r["title"] for r in rows], ["Drake Street, Rochdale", "Bus stop"])
+        no_image = self.RSS.replace('<enclosure url="https://s0.geograph.org.uk/geophotos/00/01/23/123_abcd_120x120.jpg" type="image/jpeg"/>', '')
+        self.assertEqual(g.parse_rss(no_image)[0]["thumb"], "")   # counted, never used
         self.assertEqual(rows[0]["author"], "Jane Smith")
         self.assertEqual(g.full_size(rows[0]["thumb"]), "https://s0.geograph.org.uk/geophotos/00/01/23/123_abcd.jpg")
         self.assertTrue(g.title_matches("Drake Street", "Drake Street, Rochdale"))
