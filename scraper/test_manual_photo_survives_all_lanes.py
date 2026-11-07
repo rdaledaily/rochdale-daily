@@ -165,7 +165,7 @@ class HourlyCommonsPassTests(unittest.TestCase):
 
     def test_non_commercial_licence_rejected(self):
         import repair_generated_with_commons as hourly
-        article = {"title": "Bridge Street in Heywood closed over building safety concerns"}
+        article = {"title": "Bridge Street in Heywood closed over building safety concerns", "area": "heywood"}
         def page(licence):
             return {"title": "File:Bridge Street, Heywood.jpg", "imageinfo": [{"mime": "image/jpeg",
                     "extmetadata": {"LicenseShortName": {"value": licence}}}]}
@@ -175,6 +175,46 @@ class HourlyCommonsPassTests(unittest.TestCase):
         other = {"title": "File:Market Street, Heywood.jpg", "imageinfo": [{"mime": "image/jpeg",
                  "extmetadata": {"LicenseShortName": {"value": "CC BY-SA 2.0"}}}]}
         self.assertFalse(hourly.acceptable(article, other)[0])
+
+
+class PlaceFromStoryTests(unittest.TestCase):
+    """7 Nov 2026: 77 of 159 non-crime beige stories name their place in the
+    opening paragraph, 5 in the headline."""
+
+    def test_opening_paragraph_place_after_a_locative(self):
+        import image_hierarchy as ih
+        story = {"title": "Community efforts revive historic mill", "category": "community", "area": "littleborough",
+                 "content_html": "<p>Volunteers met at Lodge Mill on Saturday.</p><p>Later they walked to Hare Hill Park.</p>"}
+        self.assertEqual(ih.subject_for(story), "Lodge Mill")
+        passing = dict(story, content_html="<p>The group, founded near the canal, met again.</p><p>at Lodge Mill</p>")
+        self.assertEqual(ih.subject_for(passing), "")
+
+    def test_never_on_crime_sensitive_or_sponsored(self):
+        import image_hierarchy as ih
+        body = "<p>It happened on Halifax Road on Monday.</p>"
+        self.assertEqual(ih.subject_for({"title": "Driver arrested on Milnrow Road", "category": "crime"}), "")
+        self.assertEqual(ih.subject_for({"title": "Man died after crash", "category": "news", "content_html": body}), "")
+        self.assertEqual(ih.subject_for({"title": "Sponsored: Hi Pilates Club offers classes", "sponsored": True}), "")
+
+    def test_headline_names_cleaned(self):
+        import image_hierarchy as ih
+        self.assertEqual(ih._headline_place("Court Rules on Ownership Dispute Over Hopwood Hall"), "Hopwood Hall")
+        self.assertEqual(ih._headline_place("Volunteers tackle Middleton’s Jubilee Park"), "Jubilee Park")
+        self.assertEqual(ih._headline_place("Andy’s Man Club Rochdale has four groups"), "Andy’s Man Club")
+        self.assertEqual(ih._headline_place("Rochdale Golf Club pair crowned"), "Rochdale Golf Club")
+        self.assertEqual(ih._headline_place("Pupils at Primary School win"), "")
+
+    def test_photo_must_be_in_this_borough(self):
+        import image_hierarchy as ih
+        story = {"title": "Plans for tower", "area": "rochdale"}
+        def page(title, categories=""):
+            return {"title": title, "imageinfo": [{"mime": "image/jpeg", "extmetadata": {
+                "LicenseShortName": {"value": "CC BY-SA 2.0"}, "Categories": {"value": categories}}}]}
+        self.assertFalse(ih.acceptable(page("File:Rochdale Road, Collyhurst.jpg", "Streets in Manchester"), "Rochdale Road", story))
+        self.assertTrue(ih.acceptable(page("File:Lodge Mill.jpg", "Littleborough|Mills in Rochdale"), "Lodge Mill",
+                                      dict(story, area="littleborough")))
+        self.assertFalse(ih.acceptable(page("File:Jubilee Park, Bolton.jpg", "Parks in Bolton"), "Jubilee Park",
+                                       dict(story, area="middleton")))
 
 
 if __name__ == "__main__":

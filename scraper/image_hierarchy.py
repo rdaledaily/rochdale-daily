@@ -53,23 +53,109 @@ def named_for_story(article, rel):
     return len(words) >= 2 and all(w in title for w in words)
 
 
+_PLACE_TYPES = ('Park|School|Academy|College|Hall|Church|Mosque|Station|Reservoir|Library|Centre|Stadium|'
+                'Road|Street|Lane|Avenue|Square|Arena|Hospital|Infirmary|Mill|Bridge|Canal|Lake|Dell|Common|'
+                'Market|Precinct|Way|Brow|House|Hotel|Inn|Club')
+_PLACE_RE = re.compile(r"\b((?:St\.? )?(?:[A-Z][A-Za-z’'-]+\s+){1,4}(?:" + _PLACE_TYPES + r"))\b")
+# Title-case headlines ("Court Rules On Dispute Over Hopwood Hall") run
+# ordinary words into the name; cut after the last of these.
+_LEAD_CUT = frozenset('Over At In On For Of From To By Near The And With Into Outside Behind Opposite Along '
+                      'Across Beside Inside Around Rules Plans Opens Approved Celebrates'.split())
+# A name made only of these words names no particular place ("Primary
+# School", "Rugby Club", "Town Hall" with no town).
+_GENERIC = frozenset('primary secondary high junior infant nursery rugby football cricket golf bowling tennis '
+                     'community leisure sports sport business town village health medical car retail shopping '
+                     'old new main local public parish city county new'.split())
+# The story's own location follows one of these in the opening paragraph.
+_LOCATIVE_RE = re.compile(r"\b(?:at|on|in|outside|near|along|inside|opposite|behind|off|from|to)\s+(?:the\s+)?$", re.I)
+
+
+_BOROUGH_TOWNS = frozenset('rochdale middleton heywood littleborough milnrow newhey whitworth wardle norden bamford '
+                           'castleton smallbridge kirkholt balderstone syke healey spotland deeplish'.split())
+
+
+def _clean_place(name):
+    words = name.split()
+    cut = max((i for i, w in enumerate(words[:-1]) if w in _LEAD_CUT), default=-1)
+    words = words[cut + 1:]
+    # "Middleton’s Jubilee Park" -> "Jubilee Park": the town is checked
+    # against the photo separately (acceptable()).
+    while (len(words) > 2 and re.search(r"[’']s$", words[0])
+           and re.sub(r"[’']s$", '', words[0]).casefold() in _BOROUGH_TOWNS):
+        words = words[1:]
+    if len(words) < 2:
+        return ''
+    if all(re.sub(r"[’'].*$", '', w).casefold() in _GENERIC for w in words[:-1]):
+        return ''
+    return ' '.join(words)
+
+
+def _headline_place(title):
+    found = [_clean_place(m.group(1)) for m in _PLACE_RE.finditer(title)]
+    found = [f for f in found if f]
+    return max(found, key=lambda v: (len(v.split()), len(v))) if found else ''
+
+
+def body_place(article):
+    """The place a story happens, from its opening paragraph: a proper place
+    name straight after "at", "on", "in", "outside"... ("at Lodge Mill", "on
+    Drake Street"). A place mentioned in passing later on is not used."""
+    first = re.search(r'<p\b[^>]*>(.*?)</p>', str(article.get('content_html') or ''), re.S | re.I)
+    text = plain(first.group(1) if first else article.get('excerpt'))[:400]
+    for m in _PLACE_RE.finditer(text):
+        place = _clean_place(m.group(1))
+        if not place:
+            continue
+        lead = text[:m.start() + m.group(1).find(place.split()[0])]
+        if _LOCATIVE_RE.search(lead):
+            return place
+    return ''
+
+
+SUBJECT_ALIASES = {
+    'Rochdale Parish Church': "St Chad's Church Rochdale",
+}
+KNOWN_SUBJECTS = ('Rochdale Town Hall', 'Rochdale AFC', 'Rochdale Hornets', 'East Lancashire Railway', 'Hollingworth Lake',
+                  'Healey Dell', 'Falinge Park', 'Touchstones Rochdale', 'Hopwood Hall College', 'Rochdale Infirmary',
+                  'Rochdale Canal', 'Greater Manchester Police')
+_SENSITIVE_RE = re.compile(r"\b(?:died|death|dead|killed|fatal\w*|inquest|missing|murder\w*|stab\w*|assault\w*|"
+                           r"abuse\w*|arrest\w*|charged|court|jail\w*|sentenc\w*|crash\w*|collision|injur\w*|"
+                           r"fire|blaze|bomb|threat\w*)\b", re.I)
+
+
 def subject_for(article):
+    """The named subject a Commons photo may show, or ''.
+
+    Order: a known landmark in the headline, an alias, a place named in the
+    headline, then (6 Nov 2026) the place the story happens, from its
+    opening paragraph: 77 of 159 non-crime stories on beige cards name it
+    there and only 5 in the headline. The opening-paragraph place is never
+    used on a crime, court, death, injury, fire or threat story: a photo of
+    the street would point at the people involved."""
     title = plain(article.get('title'))
-    # Search for the actual named subject, never a headline's verbs or a place
-    # merely mentioned in the body. A generic town is not an incident image.
-    known = ('Rochdale Town Hall', 'Rochdale AFC', 'Rochdale Hornets', 'East Lancashire Railway', 'Hollingworth Lake', 'Healey Dell', 'Falinge Park', 'Touchstones Rochdale', 'Hopwood Hall College', 'Rochdale Infirmary', 'Rochdale Canal', 'Greater Manchester Police')
-    for subject in known:
+    for subject in KNOWN_SUBJECTS:
         if subject.casefold() in title.casefold():
             return subject
-    # Local names for places Commons files under their formal name.
     for local, formal in SUBJECT_ALIASES.items():
         if local.casefold() in title.casefold():
             return formal
-    pattern = r'\b((?:[A-Z][A-Za-z’\'-]+\s+){1,3}(?:Park|School|College|Hall|Church|Mosque|Station|Reservoir|Library|Centre|Stadium|Road|Street|Lane))\b'
-    match = re.search(pattern, title)
-    if match:
-        return match.group(1)
-    return ''
+    category = str(article.get('category') or '').casefold()
+    # Crime: no place photo at all (choose_image allows only the police
+    # service itself). Sponsored copy comes with the advertiser's own photo.
+    if category == 'crime' or article.get('police_matter') or article.get('sponsored') or title.startswith('Sponsored:'):
+        return ''
+    place = _headline_place(title)
+    if place:
+        return place
+    if _SENSITIVE_RE.search(title):
+        return ''
+    return body_place(article)
+
+
+def _towns(article):
+    area = str(article.get('area') or '').casefold()
+    return {w for w in re.findall(r'[a-z]+', area) if w not in {'and', 'the', 'town', 'centre', 'east', 'west', 'north', 'south'}} | {'rochdale'}
+
 
 def commons_search(subject):
     global _LAST_NETWORK_FAILURE
@@ -92,7 +178,7 @@ def commons_search(subject):
     _SEARCH_CACHE[subject] = result
     return result
 
-def acceptable(page, subject):
+def acceptable(page, subject, article=None):
     info = (page.get('imageinfo') or [{}])[0]
     if info.get('mime') not in {'image/jpeg', 'image/png', 'image/webp'}:
         return False
@@ -105,7 +191,18 @@ def acceptable(page, subject):
     source_text = plain(page.get('title', '') + ' ' + meta.get('ImageDescription', {}).get('value', '')).casefold()
     words = [w for w in re.findall(r'[a-z]+', subject.casefold()) if w not in {'the', 'and', 'of'}]
     # Every named-subject word is necessary, not one generic overlap like Park.
-    return all(re.search(r'\b' + re.escape(word) + r'\b', source_text) for word in words)
+    if not all(re.search(r'\b' + re.escape(word) + r'\b', source_text) for word in words):
+        return False
+    # A place name that is not a known landmark must be this borough's: "Bridge
+    # Street" or "Jubilee Park" exist in every town. The story's town, or
+    # Rochdale, must appear in the file's title, description or categories.
+    if article is not None and subject not in KNOWN_SUBJECTS and subject not in SUBJECT_ALIASES.values():
+        where = (source_text + ' ' + plain(meta.get('Categories', {}).get('value'))).casefold()
+        # "Rochdale Road" in Manchester: the town inside the name proves nothing.
+        where = where.replace(subject.casefold(), ' ')
+        if not any(re.search(r'\b' + town + r'\b', where) for town in _towns(article)):
+            return False
+    return True
 
 def generic_commons_images(root):
     """Commons files that were matched for a generic "<area> skyline" search."""
@@ -187,7 +284,7 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
         result = commons_search(subject)
         record = {'status': result['status'], 'subject': subject}
         for page in result['pages']:
-            if not acceptable(page, subject):
+            if not acceptable(page, subject, article):
                 continue
             info = page['imageinfo'][0]; meta = info.get('extmetadata') or {}
             name = hashlib.sha256(page['title'].encode()).hexdigest()[:16] + '-commons-photo.jpg'

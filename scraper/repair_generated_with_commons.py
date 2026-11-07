@@ -121,7 +121,7 @@ def acceptable(article: dict[str, Any], page: dict[str, Any]) -> tuple[bool, dic
     from image_hierarchy import acceptable as hierarchy_acceptable
     info = ((page.get("imageinfo") or [{}])[0])
     subject = query_for(article)
-    return bool(subject) and hierarchy_acceptable(page, subject), info
+    return bool(subject) and hierarchy_acceptable(page, subject, article), info
 
 
 def download(url: str, target: Path, timeout: int) -> bool:
