@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-11-06T14:36:00.526039Z",
+  "examined_at": "2026-11-07T13:31:23.577530Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 93,
+  "candidates_examined": 80,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 69,
-    "would publish": 18,
-    "duplicate of published story": 6
+    "age": 64,
+    "would publish": 11,
+    "duplicate of published story": 5
   },
-  "would_publish": 18,
+  "would_publish": 11,
   "age_gate_sensitivity": {
-    "6h": 7,
-    "14h": 10,
-    "24h": 24,
-    "48h": 38,
-    "72h": 69,
-    "168h": 93
+    "6h": 3,
+    "14h": 6,
+    "24h": 16,
+    "48h": 36,
+    "72h": 50,
+    "168h": 80
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 06/11/2026 at 10:50am Live Freehold Tram Stop - Lifts out of ",
-      "Rochdale AFC: Preview | Fleetwood Town (A) - Rochdale AFC"
+      "Bee Network live travel alerts: Updated: 07/11/2026 at 10:46am Live Freehold Tram Stop - Lifts out of ",
+      "InYourArea: Rochdale Faith News: Saturday, November 7 - InYourArea"
     ],
     "duplicate of published story": [
-      "Rochdale Borough Council: Highlands Road, roadworks in Rochdale on 10 November 2026",
-      "Northern Care Alliance News: National Pathology Week: Meet the team behind millions of tests every ",
-      "Manchester Evening News: Resident escapes from second floor as fire tears through sheltered hou"
+      "Rochdale Borough Council: Littleborough Christmas Lights Event 2026, road closures in Littleboro",
+      "About Manchester: Drunk driver jailed after a pursuit in Rochdale left pedestrian with l",
+      "Greater Manchester Police: Drunk driver jailed after a pursuit in Rochdale left pedestrian with l"
     ],
     "age": [
-      "Rochdale Times: Planners can’t get over ‘out-of-character’ fence - Rochdale Times",
-      "Manchester Evening News: Enjoy spectacular free Ignite Fire Festival in Rochdale - Manchester E",
-      "Manchester Evening News: Enjoy spectacular free Ignite Fire Festival in Rochdale - Manchester E"
+      "Rochdale Borough Council: Highlands Road, roadworks in Rochdale on 10 November 2026",
+      "Rochdale AFC: Club Shop Closed This Saturday - Rochdale AFC",
+      "Rochdale Times: Scammers try to get into people’s homes posing as council officials - "
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
