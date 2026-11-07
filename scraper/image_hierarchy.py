@@ -85,6 +85,9 @@ def _clean_place(name):
         words = words[1:]
     if len(words) < 2:
         return ''
+    # "Rochdale's College": a town's possessive plus a type names no place.
+    if len(words) == 2 and re.sub(r"[’']s$", '', words[0]).casefold() in _BOROUGH_TOWNS and re.search(r"[’']s$", words[0]):
+        return ''
     if all(re.sub(r"[’'].*$", '', w).casefold() in _GENERIC for w in words[:-1]):
         return ''
     return ' '.join(words)
@@ -96,20 +99,30 @@ def _headline_place(title):
     return max(found, key=lambda v: (len(v.split()), len(v))) if found else ''
 
 
+BODY_PARAGRAPHS = 3
+
+
 def body_place(article):
-    """The place a story happens, from its opening paragraph: a proper place
-    name straight after "at", "on", "in", "outside"... ("at Lodge Mill", "on
-    Drake Street"). A place mentioned in passing later on is not used."""
-    first = re.search(r'<p\b[^>]*>(.*?)</p>', str(article.get('content_html') or ''), re.S | re.I)
-    text = plain(first.group(1) if first else article.get('excerpt'))[:400]
-    for m in _PLACE_RE.finditer(text):
-        place = _clean_place(m.group(1))
-        if not place:
-            continue
-        lead = text[:m.start() + m.group(1).find(place.split()[0])]
-        if _LOCATIVE_RE.search(lead):
-            return place
-    return ''
+    """The place a story happens, from its first BODY_PARAGRAPHS paragraphs.
+
+    A place straight after "at", "on", "in", "outside"... wins ("at Lodge
+    Mill"); otherwise the first named street or building. Measured 7 Nov 2026:
+    the opening-paragraph-after-a-locative rule found 20 of 170 beige stories;
+    39 more name a street or building in their first three paragraphs. The
+    photo is captioned as a file photo of the place, never of the event."""
+    paragraphs = re.findall(r'<p\b[^>]*>(.*?)</p>', str(article.get('content_html') or ''), re.S | re.I)
+    texts = [plain(p) for p in paragraphs[:BODY_PARAGRAPHS]] or [plain(article.get('excerpt'))]
+    first_named = ''
+    for text in texts:
+        for m in _PLACE_RE.finditer(text):
+            place = _clean_place(m.group(1))
+            if not place:
+                continue
+            lead = text[:m.start() + m.group(1).find(place.split()[0])]
+            if _LOCATIVE_RE.search(lead):
+                return place
+            first_named = first_named or place
+    return first_named
 
 
 SUBJECT_ALIASES = {
@@ -120,7 +133,7 @@ KNOWN_SUBJECTS = ('Rochdale Town Hall', 'Rochdale AFC', 'Rochdale Hornets', 'Eas
                   'Rochdale Canal', 'Greater Manchester Police')
 _SENSITIVE_RE = re.compile(r"\b(?:died|death|dead|killed|fatal\w*|inquest|missing|murder\w*|stab\w*|assault\w*|"
                            r"abuse\w*|arrest\w*|charged|court|jail\w*|sentenc\w*|crash\w*|collision|injur\w*|"
-                           r"fire|blaze|bomb|threat\w*)\b", re.I)
+                           r"fire|blaze|bomb|threat\w*|disappear\w*|vanish\w*|without answers|search for)\b", re.I)
 
 
 def subject_for(article):
@@ -343,13 +356,49 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
             cache[key] = record
             cache_file.parent.mkdir(parents=True,exist_ok=True)
             cache_file.write_text(json.dumps(cache, ensure_ascii=False, indent=2) + '\n')
+    # Geograph: street and building photos Commons does not hold
+    # (geograph_images.py). Tried once per place and town; needs the
+    # GEOGRAPH_API_KEY, without which nothing changes.
+    if subject and key and allow_network and record.get('status') != 'matched' and not record.get('geograph_tried'):
+        import geograph_images
+        if geograph_images.api_key():
+            town = geograph_images.town_for(article)
+            try:
+                rows = geograph_images.search(subject, article)
+            except Exception:
+                rows = None  # retry next run; a failed service is not "no photo"
+            if rows is not None:
+                record = dict(record or {'subject': subject}, geograph_tried=True)
+                record.setdefault('status', 'searched')
+                for row in rows:
+                    page = geograph_images.as_commons_page(row, town)
+                    if not acceptable(page, subject, article):
+                        continue
+                    name = hashlib.sha256(row['page_url'].encode()).hexdigest()[:16] + '-commons-photo.jpg'
+                    target = root / 'assets/img/cards' / name
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    try:
+                        if not target.exists() and not download(geograph_images.full_size(row['thumb']), target, 10) \
+                                and not download(row['thumb'], target, 10):
+                            continue
+                    except Exception:
+                        continue
+                    record.update(status='matched', source='geograph', image_url=target.relative_to(root).as_posix(),
+                                  image_credit=(row['author'] or 'Geograph contributor') + ' / Geograph (' + geograph_images.LICENCE + ')',
+                                  image_credit_url=row['page_url'], image_license_url=geograph_images.LICENCE_URL,
+                                  commons_title=row['title'], page=page)
+                    break
+                cache[key] = record
+                cache_file.parent.mkdir(parents=True, exist_ok=True)
+                cache_file.write_text(json.dumps(cache, ensure_ascii=False, indent=2) + '\n')
     article['commons_image_search'] = record.get('status', 'no-specific-subject' if not subject else 'not-yet-searched')
     if record.get('status') == 'matched' and (root / record['image_url']).is_file():
         for field in ('image_url', 'image_credit', 'image_credit_url', 'image_license_url'):
             article[field] = record.get(field, '')
         article.update(img=article['image_url'], image_status='commons-photo-cached', image_policy=POLICY,
                        image_alt='File image: ' + subject + '. Not a photograph of this event.',
-                       image_backfill_method='wikimedia-commons', source_image_reuse_status='commons-free-license',
+                       image_backfill_method='geograph' if record.get('source') == 'geograph' else 'wikimedia-commons',
+                       source_image_reuse_status='commons-free-license',
                        commons_validated_for=key)
         return 'commons'
     article.pop('commons_validated_for', None)
