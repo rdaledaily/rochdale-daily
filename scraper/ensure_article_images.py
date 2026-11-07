@@ -132,7 +132,7 @@ def _unchecked_pipeline_commons(article: dict[str, Any], value: str) -> bool:
     commons = "commons-photo" in status or "-commons-" in value.lower()
     if not commons:
         return False
-    if is_manual_editorial(article) and clean(article.get("image_backfill_method")) != "wikimedia-commons":
+    if is_manual_editorial(article) and clean(article.get("image_backfill_method")) not in {"wikimedia-commons", "geograph"}:
         return False
     from image_hierarchy import commons_checked, subject_for
     return not commons_checked(subject_for(article), article)

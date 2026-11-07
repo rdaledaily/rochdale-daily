@@ -1,6 +1,7 @@
 """Regression: a manual article's supplied cards-folder photo must survive
 ensure_article_images in every lane, not only the publish lane."""
 import json
+import os
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -186,8 +187,15 @@ class PlaceFromStoryTests(unittest.TestCase):
         story = {"title": "Community efforts revive historic mill", "category": "community", "area": "littleborough",
                  "content_html": "<p>Volunteers met at Lodge Mill on Saturday.</p><p>Later they walked to Hare Hill Park.</p>"}
         self.assertEqual(ih.subject_for(story), "Lodge Mill")
-        passing = dict(story, content_html="<p>The group, founded near the canal, met again.</p><p>at Lodge Mill</p>")
-        self.assertEqual(ih.subject_for(passing), "")
+        # 7 Nov 2026: the first three paragraphs are read; a place after
+        # "at"/"on" wins over one merely named first.
+        later = dict(story, content_html="<p>The group met again.</p><p>Members of Hare Hill Park Friends "
+                                          "gathered on Drake Street.</p>")
+        self.assertEqual(ih.subject_for(later), "Drake Street")
+        named = dict(story, content_html="<p>The group met again.</p><p>Hare Hill Park was busy.</p>")
+        self.assertEqual(ih.subject_for(named), "Hare Hill Park")
+        too_late = dict(story, content_html="<p>a</p><p>b</p><p>c</p><p>They met at Lodge Mill.</p>")
+        self.assertEqual(ih.subject_for(too_late), "")
 
     def test_never_on_crime_sensitive_or_sponsored(self):
         import image_hierarchy as ih
@@ -271,6 +279,57 @@ class CommonsCacheLocalityTests(unittest.TestCase):
         own = dict(story, manual_article=True, editorial_lock=True, image_backfill_method="manual-editorial-photo",
                    image_status="editorial-photo")
         self.assertTrue(images.existing_meaningful_image(own, self.root))
+
+
+class GeographStreetPhotoTests(unittest.TestCase):
+    """7 Nov 2026: Geograph covers the streets Commons does not."""
+
+    RSS = ('<?xml version="1.0"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel>'
+           '<item><title>Drake Street, Rochdale</title><link>https://www.geograph.org.uk/photo/123</link>'
+           '<dc:creator>Jane Smith</dc:creator>'
+           '<enclosure url="https://s0.geograph.org.uk/geophotos/00/01/23/123_abcd_120x120.jpg" type="image/jpeg"/></item>'
+           '<item><title>Bus stop</title><link>https://www.geograph.org.uk/photo/124</link>'
+           '<description>&lt;img src="https://s0.geograph.org.uk/x/124_ef_120x90.jpg"&gt;</description></item>'
+           '</channel></rss>')
+
+    def test_feed_parsed_and_full_size_derived(self):
+        import geograph_images as g
+        rows = g.parse_rss(self.RSS)
+        self.assertEqual([r["title"] for r in rows], ["Drake Street, Rochdale", "Bus stop"])
+        self.assertEqual(rows[0]["author"], "Jane Smith")
+        self.assertEqual(g.full_size(rows[0]["thumb"]), "https://s0.geograph.org.uk/geophotos/00/01/23/123_abcd.jpg")
+        self.assertTrue(g.title_matches("Drake Street", "Drake Street, Rochdale"))
+        self.assertFalse(g.title_matches("Drake Street", "Bus stop"))
+        self.assertEqual(g.town_for({"area": "milnrow-and-newhey"}), "milnrow")
+        self.assertEqual(g.town_for({"area": ""}), "rochdale")
+
+    def test_no_key_no_search(self):
+        import geograph_images as g
+        with patch.dict(os.environ, {"GEOGRAPH_API_KEY": ""}):
+            self.assertEqual(g.search("Drake Street", {"area": "rochdale"}), [])
+
+    def test_geograph_photo_used_and_credited(self):
+        import tempfile
+        import image_hierarchy as ih
+        import geograph_images as g
+        root = Path(tempfile.mkdtemp())
+        (root / "assets/img/cards").mkdir(parents=True)
+        story = {"slug": "homes", "title": "Plans approved for 27 affordable homes", "category": "environment",
+                 "area": "rochdale", "content_html": "<p>The homes will be built on Drake Street.</p>",
+                 "image_url": "", "image_status": "place-generated-card"}
+        row = g.parse_rss(self.RSS)[0]
+        def fake_download(url, target, timeout):
+            Image.new("RGB", (640, 480), "grey").save(target)
+            return True
+        with patch.dict(os.environ, {"GEOGRAPH_API_KEY": "k"}), \
+             patch.object(ih, "commons_search", return_value={"status": "searched", "pages": []}), \
+             patch.object(g, "search", return_value=[row]), \
+             patch("repair_generated_with_commons.download", side_effect=fake_download):
+            self.assertEqual(ih.choose_image(story, root), "commons")
+        self.assertEqual(story["image_backfill_method"], "geograph")
+        self.assertEqual(story["image_credit"], "Jane Smith / Geograph (CC BY-SA 2.0)")
+        self.assertEqual(story["image_credit_url"], "https://www.geograph.org.uk/photo/123")
+        self.assertTrue(story["image_alt"].startswith("File image: Drake Street."))
 
 
 if __name__ == "__main__":
