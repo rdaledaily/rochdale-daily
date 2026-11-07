@@ -180,7 +180,10 @@ def eligible(article: Any, max_age_hours: int, now: datetime | None = None) -> b
 # stories (rochdale-town-hall.jpg was on 26 of the last 200). Neither shows
 # the story, so neither earns a click. A story is posted only with a photo of
 # the story itself; anything else waits, and the run reports how many.
-STORY_PHOTO_STATUSES = {"editorial-photo", "source-photo-cached", "commons-photo-cached", "cards-library-photo"}
+# Town photos (a varied Geograph photo of the story's town, used on no more
+# than two stories) are part of the article and post too (editor, 7 Nov 2026).
+STORY_PHOTO_STATUSES = {"editorial-photo", "source-photo-cached", "commons-photo-cached", "cards-library-photo",
+                        "town-file-photo"}
 SHARED_STOCK_LIMIT = 2
 
 

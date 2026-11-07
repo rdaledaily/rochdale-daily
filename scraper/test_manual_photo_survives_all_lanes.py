@@ -399,9 +399,11 @@ class TownPhotoTests(unittest.TestCase):
         self.assertEqual(story["image_credit"], "A N Other / Geograph (CC BY-SA 2.0)")
         self.assertNotIn("town", crime["image_url"])
 
-    def test_facebook_skips_town_photos(self):
+    def test_facebook_posts_town_photos(self):
+        """Editor, 7 Nov 2026: a town photo is part of the article, so it posts."""
         import post_facebook_article as fb
-        self.assertNotIn("town-file-photo", fb.STORY_PHOTO_STATUSES)
+        story = {"image_url": "assets/img/cards/abcd-town-photo.jpg", "image_status": "town-file-photo"}
+        self.assertTrue(fb.has_story_photo(story, fb.image_usage([story])))
 
 
 if __name__ == "__main__":
