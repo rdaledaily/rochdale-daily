@@ -94,6 +94,12 @@ def run() -> None:
     # The paper's own sympathy line goes from every story, death reports too.
     assert eu.strip_service_furniture(["A man, 52, died.", "Our thoughts are with the family and all those affected."], "news") == ["A man, 52, died."]
     assert eu.strip_service_furniture(["“Our thoughts are with his family,” the club said."], "sport") == ["“Our thoughts are with his family,” the club said."]
+    # A quotation is published whole, never cut by the paper's own rules
+    # (7 Nov 2026 review): within a paragraph and across paragraphs.
+    whole = ['A man, 52, died.', 'The club said: "The team is devastated. Our thoughts are with his family."']
+    assert eu.strip_service_furniture(whole, "news") == whole
+    spanning = ['The club said: "The team is devastated.', 'Our thoughts are with his family."']
+    assert eu.strip_service_furniture(spanning, "news") == spanning
     print("Human editorial voice checks passed.")
 
 

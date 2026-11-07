@@ -432,14 +432,32 @@ def strip_service_furniture(paragraphs: list[str], category: str) -> list[str]:
     (editor, 7 Nov 2026); a quoted person's words are kept. Paragraphs left
     empty by the removal are dropped.
     """
+    from reader_copy import quote_open
     cleaned: list[str] = []
+    before = ""  # everything already kept, so a quotation spanning paragraphs is known
+
+    def outside_quotes(pattern: "re.Pattern[str]", text: str) -> str:
+        """Remove pattern matches that are the paper's own words; a match
+        inside a quotation opened earlier (in this paragraph or an earlier
+        one) is someone else's speech and stays whole."""
+        out, last = [], 0
+        for match in pattern.finditer(text):
+            if quote_open(before + " " + text[:match.start()]):
+                continue
+            out.append(text[last:match.start()])
+            out.append(" ")
+            last = match.end()
+        out.append(text[last:])
+        return "".join(out)
+
     for paragraph in paragraphs:
         if str(category).lower() != "crime":
-            paragraph = SERVICE_SENTENCE_RE.sub(" ", paragraph)
-        paragraph = SYMPATHY_SENTENCE_RE.sub(" ", paragraph)
+            paragraph = outside_quotes(SERVICE_SENTENCE_RE, paragraph)
+        paragraph = outside_quotes(SYMPATHY_SENTENCE_RE, paragraph)
         paragraph = re.sub(r"\s+", " ", paragraph).strip()
         if paragraph:
             cleaned.append(paragraph)
+            before += " " + paragraph
     return cleaned
 
 

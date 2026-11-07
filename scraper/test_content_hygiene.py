@@ -48,6 +48,30 @@ def main() -> int:
     assert first_json["body"] == "Details"
     assert first_json["source_url"] == "https://example.com/story?id=7"
 
+    # 7 Nov 2026: a page is cleaned in its reader text only. Cleaning the whole
+    # file removed the space in '.401 0 .955' inside the Facebook icon's path
+    # data, breaking the share icons on 1,448 pages.
+    page = ('<div><svg viewBox="0 0 24 24"><path d="M9 5.978.401 0 .955.042"/></svg>'
+            '<p>Hello , world .</p><style>.a .b{x:1}</style><script>var a = b .c;</script></div>')
+    out = hygiene.clean_html_text(page)
+    assert '<path d="M9 5.978.401 0 .955.042"/>' in out, out
+    assert "<style>.a .b{x:1}</style>" in out and "<script>var a = b .c;</script>" in out
+    assert "<p>Hello, world.</p>" in out
+    assert hygiene.clean_html_text(out) == out
+    assert "<b>" not in hygiene.clean_html_text("<p>Tom &lt;b&gt; Jerry</p>")   # never creates a tag
+
+    # Share rows are rebuilt from the official icons; an older page gets the
+    # handler for the buttons its own script lacks; a second run changes nothing.
+    import repair_share_icons as rs
+    old_page = ('<html><body><h1>Old story</h1><div class="article-share" aria-label="Share this article">'
+                '<button class="share-icon-button" data-share="copy" data-url="https://rochdaledaily.co.uk/articles/old">'
+                '<svg><path d="M8 8h11v11H8z"/></svg></button></div>'
+                '<script>if (action === "copy") {} if (action === "facebook") {} if (action === "whatsapp") {}</script></body></html>')
+    fixed = rs.repair(old_page)
+    for brand in ("brand-facebook", "brand-whatsapp", "brand-x", "brand-bluesky", "brand-email"):
+        assert brand in fixed, brand
+    assert 'id="rd-share-extra"' in fixed and 'data-title="Old story"' in fixed
+    assert rs.repair(fixed) == fixed
     print("Content hygiene metadata and idempotency checks passed.")
     return 0
 

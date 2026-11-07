@@ -133,6 +133,43 @@ def clean_text(value: str) -> str:
     return text.strip() if value.strip() else text
 
 
+# Never cleaned: markup, and the blocks whose contents are code or drawing
+# data rather than reader text. 7 Nov 2026: cleaning a whole page removed the
+# space in '.401 0 .955' inside the Facebook icon's path data (and Bluesky's),
+# so every share row showed broken icons; the same rule also reached CSS
+# selectors and inline scripts.
+_PROTECTED_HTML_RE = re.compile(
+    r"<(script|style|svg|textarea|pre|code)\b[^>]*>.*?</\1\s*>|<!--.*?-->|<[^>]+>",
+    re.I | re.S,
+)
+
+
+def clean_html_text(document: str) -> str:
+    """clean_text on the reader-facing text of an HTML page only: tags,
+    attributes, scripts, styles, icons and comments pass through untouched."""
+    out, last = [], 0
+    for match in _PROTECTED_HTML_RE.finditer(document):
+        text = document[last:match.start()]
+        out.append(_clean_segment(text))
+        out.append(match.group(0))
+        last = match.end()
+    out.append(_clean_segment(document[last:]))
+    return "".join(out)
+
+
+def _clean_segment(text: str) -> str:
+    if not text.strip():
+        return text
+    cleaned = clean_text(text)
+    # A text node that unescaped into markup characters is escaped back, so
+    # cleaning never creates a tag.
+    cleaned = cleaned.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") if (
+        "<" in cleaned or ">" in cleaned) else cleaned
+    lead = text[:len(text) - len(text.lstrip())]
+    trail = text[len(text.rstrip()):]
+    return lead + cleaned.strip() + trail
+
+
 def clean_json(value: Any, key: str = "") -> Any:
     if isinstance(value, dict):
         return {item_key: clean_json(item, item_key) for item_key, item in value.items()}
@@ -192,8 +229,8 @@ def process(path: Path, fix: bool) -> tuple[bool, list[str]]:
         cleaned = json.dumps(clean_json(payload), ensure_ascii=False, indent=2) + "\n"
     else:
         findings = [pattern.pattern for pattern in DETECTORS if pattern.search(raw)]
-        cleaned = clean_text(raw)
-        if raw.endswith("\n"):
+        cleaned = clean_html_text(raw)
+        if raw.endswith("\n") and not cleaned.endswith("\n"):
             cleaned += "\n"
     changed = cleaned != raw
     if changed and fix:

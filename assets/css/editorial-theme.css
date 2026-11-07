@@ -988,6 +988,17 @@ body:has(.article-main) .article-body { padding: 40px 0 64px; }
 }
 .rn-item:last-child { border-bottom: 0; }
 .rn-item:hover, .rn-item:focus-visible { color: var(--brand-accent); }
+/* Read-next thumbnails: a fixed 72x48 crop beside the headline. These rules
+   lived only in article-inline.css, which published pages do not load, so the
+   global "img { width: 100% }" rule stretched every thumbnail sideways at its
+   48px height (7 Nov 2026). object-fit crops instead of stretching. */
+.read-next .rn-item { gap: 12px; }
+.read-next .rn-item .rn-thumb {
+  flex: 0 0 72px; width: 72px !important; height: 48px !important;
+  max-width: 72px; object-fit: cover; object-position: center;
+  border-radius: 2px; background: var(--surface, #f0efe9);
+}
+.read-next .rn-item .rn-item-title { flex: 1 1 auto; min-width: 0; }
 .rn-all {
   display: block; margin-top: var(--space-5); padding: var(--space-4);
   text-align: center; text-decoration: none;
