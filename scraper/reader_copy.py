@@ -247,6 +247,9 @@ _US_DATE_RE = re.compile(
 )
 
 
+_ORDINAL_DAY_RE = re.compile(r"\b(\d{1,2})(?:st|nd|rd|th) (" + _MONTHS + r")\b")
+
+
 def uk_dates(text: str) -> str:
     """'Tuesday, November 10' -> 'Tuesday 10 November'; 'November 8, 2026'
     -> '8 November 2026'. Day-first dates are left alone. Case-sensitive, so
@@ -257,7 +260,9 @@ def uk_dates(text: str) -> str:
             return m.group(0)
         out = f"{day} {month}" + (f" {year}" if year else "")
         return f"{weekday} {out}" if weekday else out
-    return _US_DATE_RE.sub(repl, str(text or ""))
+    text = _US_DATE_RE.sub(repl, str(text or ""))
+    # "4th August 1914" -> "4 August 1914" (v12 house style).
+    return _ORDINAL_DAY_RE.sub(r"\1 \2", text)
 
 
 def uk_dates_outside_quotes(html_text: str) -> str:
