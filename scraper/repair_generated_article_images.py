@@ -288,6 +288,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--articles", type=Path, default=Path("articles.json"))
     parser.add_argument("--report", type=Path, default=Path("image_repair_report.json"))
+    parser.add_argument("--no-gmp-match", action="store_true", help="skip the GMP release lookup (tests, offline runs)")
     parser.add_argument("--timeout", type=int, default=10)
     parser.add_argument("--limit", type=int, default=0)
     return parser.parse_args(argv)
@@ -395,6 +396,14 @@ def main(argv: list[str] | None = None) -> int:
     rows: list[dict[str, Any]] = []
 
     now = datetime.now(timezone.utc)
+    # GMP's own release for crime and police stories that reached the paper
+    # through other outlets (gmp_release_match.py). Report-only unless
+    # GMP_RELEASE_MATCH=apply; in apply mode the release joins the story's
+    # sources and the granted-source step below takes its photo.
+    gmp_release = {"mode": "off"}
+    if grants and any(g["organisation"] == "Greater Manchester Police" for g in grants) and not args.no_gmp_match:
+        from gmp_release_match import run as match_gmp_releases
+        gmp_release = match_gmp_releases(articles)
     # Newly published articles take priority over retrospective image repairs.
     candidates_by_age = sorted(articles, key=lambda row: clean(row.get("first_published_at") or row.get("published_at")), reverse=True)
     # Stories whose source is a granting organisation's own page go first:
@@ -482,6 +491,7 @@ def main(argv: list[str] | None = None) -> int:
         "source_grants_incomplete": inactive_grants(),
         "replaced_commons_or_library_with_source_photo": granted_upgrades,
         "allowed_domains": sorted(allowed),
+        "gmp_release_matches": gmp_release,
         "items": rows,
     }
     args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

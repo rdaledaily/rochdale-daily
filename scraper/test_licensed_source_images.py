@@ -250,8 +250,58 @@ def run_source_grants(jpeg: bytes) -> None:
         assert "2026-10-20" in article["image_permission_ref"]
 
 
+
+def run_gmp_release_match() -> None:
+    """7 Nov 2026: crime stories reach the paper through other outlets even when
+    GMP issued its own release; the release's photo is usable under the GMP
+    permission. Report-only by default."""
+    import gmp_release_match as gm
+    now = datetime(2026, 11, 7, 12, tzinfo=timezone.utc)
+    def story(slug, title, when="2026-10-29T10:00:00Z", **extra):
+        return dict({"slug": slug, "title": title, "category": "crime", "first_published_at": when,
+                     "image_status": "place-generated-card", "image_url": "assets/img/cards/x-place-generated-card.jpg",
+                     "source_url": "https://www.manchestereveningnews.co.uk/news/x"}, **extra)
+    wanted = story("kibriya", "Police appeal for help finding Kibriya Ahmed linked to missing children")
+    jailed = story("grainger", "Drunk driver Cameron Grainger jailed after Rochdale police pursuit", "2026-11-06T09:00:00Z")
+    releases = [
+        {"url": "https://www.gmp.police.uk/news/greater-manchester/news/appeals/2026/october/wanted-kibriya-ahmed/",
+         "title": "Appeal to find wanted man Kibriya Ahmed in Rochdale", "published": "28 October 2026"},
+        {"url": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/grainger-jailed/",
+         "title": "Cameron Grainger jailed after pursuit through Rochdale", "published": "5 November 2026"},
+        {"url": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/ahmed-bolton/",
+         "title": "Appeal after burglary in Bolton: Ahmed", "published": "29 October 2026"},
+    ]
+    found = {m["slug"]: m["release_url"] for m in gm.best_matches([wanted, jailed], releases, now)}
+    assert found == {"kibriya": releases[0]["url"], "grainger": releases[1]["url"]}, found
+    # Outside the date window: no match.
+    late = dict(jailed, first_published_at="2026-09-01T09:00:00Z")
+    assert gm.best_matches([late], releases[1:2], now) == []
+    # One shared word, or no shared name: no match.
+    assert gm.score(story("s", "Rochdale burglary appeal"), releases[2])[0] == 0
+    # Photos never taken from active proceedings, sexual offences, missing
+    # people, children or safeguarding releases.
+    for unsafe in ("Man charged after assault in Rochdale", "Man on trial over Heywood robbery",
+                   "Rochdale man jailed for rape", "Missing woman from Middleton", "Boy, 13, stabbed in Rochdale",
+                   "Appeal after child neglect in Heywood", "Inquest opens into Rochdale death"):
+        assert not gm.photo_safe(unsafe), unsafe
+    for safe in ("Cameron Grainger jailed after pursuit through Rochdale", "Appeal to find wanted man Kibriya Ahmed",
+                 "CCTV appeal after Rochdale shop robbery", "Wanted: man missing from bail in Rochdale"):
+        assert gm.photo_safe(safe), safe
+    # Not a candidate once it has a real photo or a GMP page already.
+    assert not gm.candidate_story(dict(wanted, image_status="editorial-photo", image_url="assets/img/cards/a.jpg"), now)
+    assert not gm.candidate_story(dict(wanted, source_urls=[releases[0]["url"]]), now)
+    # Apply mode attaches the release as a source; report mode changes nothing.
+    rows = [dict(wanted)]
+    report = gm.run(rows, "report", releases)
+    assert report["matches"] and "gmp_release_url" not in rows[0]
+    report = gm.run(rows, "apply", releases)
+    assert rows[0]["gmp_release_url"] == releases[0]["url"] and releases[0]["url"] in rows[0]["source_urls"]
+    print("GMP release matching passed.")
+
+
 if __name__ == "__main__":
     run()
+    run_gmp_release_match()
 
 
 def run_manual_credit_survives_rebuild() -> None:
