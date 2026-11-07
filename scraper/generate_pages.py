@@ -937,6 +937,15 @@ def text_states_incomplete(text: str) -> bool:
     return bool(STATES_INCOMPLETE_RE.search(plain))
 
 
+def is_crime_story(article: dict[str, Any]) -> bool:
+    """Crime, court or police story: the only kind that is ever labelled
+    developing or ongoing (editor, 7 Nov 2026). Measured that day: 45 stories
+    showed "This is a developing story", 5 of them crime; 14 showed ONGOING,
+    5 of them crime."""
+    return (str(article.get('category') or '').lower() in {'crime', 'courts'}
+            or bool(article.get('police_matter')))
+
+
 def is_developing_story(article: dict[str, Any]) -> bool:
     """True only when the story's own copy says it is incomplete or waiting
     for information. Word count, headline words, age and the pipeline's
@@ -944,12 +953,13 @@ def is_developing_story(article: dict[str, Any]) -> bool:
     automatically and sat on a finished fire report). An update that removes
     the waiting line removes the label with it. A live story shows its own
     timeline instead of this note."""
-    if is_reserve_feature(article):
+    if is_reserve_feature(article) or not is_crime_story(article):
         return False
     body = live_format.strip_baked_timeline(str(article.get('content_html') or ''))
     return text_states_incomplete(body)
 
 
+ONGOING_CHIP_RE = re.compile(r'<span class="kicker-chip">\s*(?:ongoing|ONGOING|Ongoing[^<]{0,30}|ONGOING[^<]{0,30})\s*</span>')
 DEVELOPING_NOTE_RE = re.compile(r'<p class="developing-note"[^>]*>.*?</p>\s*', re.S)
 
 
@@ -965,15 +975,22 @@ def scrub_stale_developing_notes(pages_dir: Path, skip: set[str]) -> int:
         if path.stem in skip:
             continue
         original = path.read_text(encoding='utf-8')
-        if 'class="developing-note"' not in original:
-            continue
-        body = DEVELOPING_NOTE_RE.sub('', original)
-        # Only the story's own copy counts, not the legal note or sidebar.
-        copy = re.search(r'class="article-copy">(.*?)(?:<section class="editorial-legal-note"|$)', body, re.S)
-        if text_states_incomplete(copy.group(1) if copy else ''):
-            continue
-        path.write_text(body, encoding='utf-8')
-        changed += 1
+        crime_page = bool(re.search(r'<meta property="article:section" content="(?:Crime|Courts)"', original)
+                          or 'class="report-box' in original)
+        body = original
+        if not crime_page:
+            # Crime and police stories only (editor, 7 Nov 2026): the
+            # ONGOING chip comes off every other archived page too.
+            body = ONGOING_CHIP_RE.sub('', body)
+        if 'class="developing-note"' in body:
+            stripped = DEVELOPING_NOTE_RE.sub('', body)
+            # Only the story's own copy counts, not the legal note or sidebar.
+            copy = re.search(r'class="article-copy">(.*?)(?:<section class="editorial-legal-note"|$)', stripped, re.S)
+            if not crime_page or not text_states_incomplete(copy.group(1) if copy else ''):
+                body = stripped
+        if body != original:
+            path.write_text(body, encoding='utf-8')
+            changed += 1
     return changed
 
 
@@ -1056,7 +1073,8 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
         # An editor's label, e.g. "Opinion" on a guest column, so a reader
         # never mistakes a columnist's view for the paper's reporting.
         ongoing_chip = f'<span class="kicker-chip">{esc(str(article.get("kicker"))[:40])}</span>'
-    if article.get('is_ongoing'):
+    if article.get('is_ongoing') and is_crime_story(article):
+        # Crime and police stories only (editor, 7 Nov 2026).
         # ongoing_label is the pipeline's own wording for this incident where
         # it has one (15 of the 153 live records carry both fields).
         ongoing_chip = f'<span class="kicker-chip">{esc(article.get("ongoing_label") or "Ongoing")}</span>'

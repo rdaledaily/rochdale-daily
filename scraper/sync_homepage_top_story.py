@@ -84,7 +84,9 @@ def render_lead(article: dict[str, Any]) -> str:
     src = html.escape(image_src(article), quote=True)
     href = html.escape(article_url(article), quote=True)
     alt = title
-    ongoing = bool(article.get("live_story") or article.get("is_ongoing") or article.get("breaking_news"))
+    # The ONGOING badge is for crime and police stories only (editor, 7 Nov 2026).
+    crime = str(article.get("category") or "").lower() in {"crime", "courts"} or bool(article.get("police_matter"))
+    ongoing = crime and bool(article.get("live_story") or article.get("is_ongoing") or article.get("breaking_news"))
     badge = '<span class="ongoing-badge">ONGOING</span>\n      ' if ongoing else ""
     return f'''<article class="lead-story" id="lead-story" data-content-slot="lead">
     <a href="{href}" class="story-link">
