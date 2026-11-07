@@ -10,7 +10,7 @@ from reader_copy import (
     ai_tell_issues, headline_issues, repetition_issues, social_headline_issues,
 )
 
-STYLE_VERSION = "rochdale-human-newsroom-v13"
+STYLE_VERSION = "rochdale-human-newsroom-v14"
 
 # Shared original editorial voice for news and features. Never overrides accuracy.
 HUMAN_VOICE_BRIEF = (
@@ -59,6 +59,9 @@ PEOPLE_FIRST_BRIEF = (
     "and no question on crime, court or police stories."
 )
 
+# v14, 7 Nov 2026 (editor): endings are facts or context, never sympathy or
+# good wishes in the paper's voice; the 'Our thoughts are with the family'
+# death-report closer is withdrawn.
 # v13, 7 Nov 2026: refined against a pasted national news article: lead with
 # the local connection, quote-then-speaker and woven partial quotes, role-then-
 # name for officials, courtesy titles on later reference.
@@ -79,7 +82,10 @@ NEWS_SYNTAX_BRIEF = (
     "On later references use a courtesy title and surname for adults: Mr Emmott, Mrs Smith, Ms Patel, Dr Khan; use the surname alone for anyone charged with or convicted of an offence. "
     "Keep most sentences under 25 words and none over 35. Put the subject and the verb first; move qualifications and dates to the end of the sentence. "
     "Specific beats general: the number, the street, the time, the price, the school, the shop. "
-    "End on the last new fact, what happens next or a quotation: never a summary, a moral or a reflection. "
+    "End on the last new fact, background context that places the story (an earlier event, a related decision, what is and is not known to be linked), what happens next or a quotation. "
+    "Never end on a summary, a moral, a reflection or any wish, sympathy or sentiment in Rochdale Daily's own voice. "
+    "The only editorial closing lines allowed are standard notices: 'Rochdale Daily has asked <the relevant body> for comment.' (only when the supplied records state that the request was made; never claim a request that is not recorded), "
+    "a right of reply line, a correction or clarification notice, and the source line. "
     "Write dates as '4 August 2026', never '4th August'. "
     "Headlines name the person or place and carry the most striking verified detail; plain verbs, no sensational adjectives."
 )
@@ -112,7 +118,7 @@ HOUSE_STYLE_SYSTEM = (
     "For police matters, do not say officers are appealing for witnesses unless the evidence records an appeal. "
     "ONLY in a report about a crime, a police investigation or a court case may Rochdale Daily add this service sentence, without treating it as a police statement: 'Anyone with information can find Greater Manchester Police and Crimestoppers contact details at the end of this article.' "
     "It must NEVER appear in any other kind of story: never in community, business, sport, education, health, events or human-interest reports. "
-    "ONLY in a report of a death may Rochdale Daily close with: 'Our thoughts are with the family and all those affected.' This is an editorial expression of sympathy, not a factual claim, and it must never appear in a story where nobody has died. "
+    "Rochdale Daily never offers sympathy, thoughts, prayers, condolences or good wishes in its own voice, in any story, including reports of a death: a quoted person's words may carry them, attributed. "
     "Never state or imply that a venue, organisation or event is in Rochdale or the borough unless the supplied records establish that location; a familiar-sounding venue name is not evidence of where it is. "
     "Never predict a council meeting, policy response, safety review, new measure or future announcement. Never claim residents posted condolences, expressed shock or rallied around a family unless attributable source material explicitly supports that statement. "
     "Use UK spelling and punctuation. Preserve the exact distinction between allegation, arrest, charge, conviction and sentence. For court and crime reporting, preserve attribution and procedural status precisely and do not imply guilt before conviction. "

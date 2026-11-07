@@ -223,6 +223,23 @@ character neighbourhoods neighbourhood adhering adherence regulations rules plan
 """.split())
 
 
+# 7 Nov 2026 (editor): no sympathy or good wishes in the paper's own voice.
+# A sentence inside quotation marks is someone's words and is never matched.
+_SENTIMENT_CLOSER_RE = re.compile(
+    r"^(?:Our|Rochdale Daily's|Rochdale Daily sends its) (?:deepest |sincere |heartfelt )?(?:thoughts|sympathies|condolences|prayers)\b"
+    r"|^(?:We|Rochdale Daily) (?:wish|send|extend|offer)\b[^.]*\b(?:well|recovery|condolences|sympathies|best|love|thoughts)\b"
+    r"|^(?:Wishing|Best wishes|Get well soon|Thoughts and prayers|Rest in peace|RIP)\b",
+    re.I,
+)
+
+
+def is_sentiment_closer(sentence: str) -> bool:
+    text = plain(sentence).strip()
+    if not text or text[0] in "\"“‘'":
+        return False
+    return bool(_SENTIMENT_CLOSER_RE.search(text))
+
+
 def is_filler_closer(sentence: str) -> bool:
     """A moralising closing sentence that carries no reporting at all.
 
@@ -333,7 +350,7 @@ def tidy_editor_html(content_html: str) -> str:
         fixed = uk_dates_outside_quotes(inner)
         if match.span() in closing and "<" not in fixed:
             sentences = split_sentences(html.unescape(fixed))
-            kept = [sentence for sentence in sentences if not is_filler_closer(sentence)]
+            kept = [sentence for sentence in sentences if not (is_filler_closer(sentence) or is_sentiment_closer(sentence))]
             if not kept:
                 return ""
             if len(kept) != len(sentences):
@@ -380,7 +397,7 @@ def tidy_content_html(content_html: str) -> str:
         text = html.unescape(inner)
         fixed = html.unescape(uk_dates_outside_quotes(inner))
         if match.span() in closing:
-            kept = [s for s in split_sentences(fixed) if not is_filler_closer(s)]
+            kept = [s for s in split_sentences(fixed) if not (is_filler_closer(s) or is_sentiment_closer(s))]
             if not kept:
                 return ""
             fixed = " ".join(kept)
