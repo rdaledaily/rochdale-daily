@@ -34,6 +34,7 @@ jobs:
     timeout-minutes: 45
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GEOGRAPH_API_KEY: ${{ secrets.GEOGRAPH_API_KEY }}
       # register_watch.py's CQC collector stays dark until this secret exists.
       CQC_SUBSCRIPTION_KEY: ${{ secrets.CQC_SUBSCRIPTION_KEY }}
       FACEBOOK_GRAPH_VERSION: "v22.0"
@@ -263,6 +264,7 @@ jobs:
     timeout-minutes: 70
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GEOGRAPH_API_KEY: ${{ secrets.GEOGRAPH_API_KEY }}
       # register_watch.py's CQC collector stays dark until this secret exists.
       CQC_SUBSCRIPTION_KEY: ${{ secrets.CQC_SUBSCRIPTION_KEY }}
       FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}

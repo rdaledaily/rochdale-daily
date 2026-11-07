@@ -20,6 +20,7 @@ jobs:
     timeout-minutes: 180
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GEOGRAPH_API_KEY: ${{ secrets.GEOGRAPH_API_KEY }}
       ARCHIVE_REVIEW_MODEL: gpt-4o-mini
       PYTHONUNBUFFERED: "1"
     steps:
