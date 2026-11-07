@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-07T10:40:26.332496Z",
+  "updated_at": "2026-11-07T10:59:11.103157Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 137,
@@ -55,14 +55,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-07T10:23:01.543002Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-07T10:59:11.102953Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Drunk driver jailed after a pursuit in Rochdale left pedestrian with life-changing injuries - About Manchester",
       "source_name": "About Manchester",
       "category": "crime",
       "text_fingerprint": "ed3e31642d60387a",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://africa.espn.com/football/match/_/gameId/401906344/doncaster-rovers-rochdale": {
       "first_attempt_at": "2026-11-03T10:01:53.962977Z",
@@ -609,6 +610,22 @@
       "source_name": "Yahoo Sports",
       "category": "crime",
       "text_fingerprint": "96aec40077753e95"
+    },
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-5dc75c177b0ccf35a2": {
+      "first_attempt_at": "2026-11-07T10:59:11.102611Z",
+      "attempts": 1,
+      "urls": [
+        "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-5dc75c177b0ccf35a2"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-07T10:59:11.102611Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Updated: 07/11/2026 at 10:46am Live Freehold Tram Stop - Lifts out of service Duration Sat 07 Nov, 10:46am – until further notice Stops impa",
+      "source_name": "Bee Network live travel alerts",
+      "category": "transport",
+      "text_fingerprint": "9674b974186f70ae"
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-b93998c54c21f45e8f": {
       "first_attempt_at": "2026-10-31T15:35:52.827653Z",
@@ -1304,24 +1321,6 @@
       "category": "environment",
       "text_fingerprint": "172bb82866f6dfd4"
     },
-    "https://www.inyourarea.co.uk/news/whats-on-rochdale-sir-ian-mckellen-set-for-factory-international-plus-share-your-ideas-to-reshape-town-spaces": {
-      "first_attempt_at": "2026-10-30T08:49:14.953641Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQZmFPOWgwMUY3OGRva0pILW1aNFB4TTQ2MzR1bGpRSkNKNXRzV2RXOEZ5eDNNNVdQNWhEQ0xSRDhoSlh3czh3YlUySjQ0R0d0YTR0QnpQdGF6cjRCNWlUdU5ndlNWRXRlWDBHd3N4dXFMQUI2bEpWbVN4RXlaaXI5NDRYQjFDZE1ObGxvLUlVeWhpdnFMZWhVTkphZE9QMzVjTC16NHRQTHZZSTRMU3hxcjBMaGoyMDBpeGZUXzh2TnRVM0VCMlhtT0twYnE5RWoxVldXbmc4elVIbzFs?oc=5",
-        "https://www.inyourarea.co.uk/news/whats-on-rochdale-sir-ian-mckellen-set-for-factory-international-plus-share-your-ideas-to-reshape-town-spaces"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-30T10:38:25.974465Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "What’s On Rochdale: Sir Ian McKellen set for Factory International, plus share your ideas to reshape town spaces - InYourArea",
-      "source_name": "InYourArea",
-      "category": "events",
-      "text_fingerprint": "7f7d3078388af86c",
-      "recovery_attempts": 1
-    },
     "https://www.inyourarea.co.uk/news/whats-on-rochdale-stunning-night-time-light-trail-puppet-cabaret-and-music-mixer": {
       "first_attempt_at": "2026-11-03T10:01:53.963217Z",
       "attempts": 1,
@@ -1453,13 +1452,13 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-07T10:23:01.542734Z",
+      "last_attempt_at": "2026-11-07T10:59:11.102770Z",
       "outcome": "published",
       "reason": "",
       "title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton",
       "source_name": "Manchester Evening News",
       "category": "news",
-      "text_fingerprint": "95c519f14cd25ecc",
+      "text_fingerprint": "2136530a0819d4d6",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },

@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-07T10:40:26.336219Z",
+  "last_run_at": "2026-11-07T10:59:11.107096Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -48,17 +48,30 @@
   "candidate_clusters": 33,
   "google_news_resolution": {
     "wrappers": 38,
-    "resolved": 36,
+    "resolved": 37,
     "text_recovered": 20,
     "reattributed": 0,
     "images_found": 33
   },
   "duplicates_merged": 49,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 3,
+  "drafted_articles": [
+    {
+      "slug": "lifts-out-of-service-at-freehold-tram-stop-due-to-replacement-works",
+      "source_url": "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-5dc75c177b0ccf35a2"
+    },
+    {
+      "slug": "resident-escapes-fire-at-lonsdale-court-sheltered-housing-in-middleton",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285"
+    },
+    {
+      "slug": "cameron-grainger-jailed-for-four-years-after-high-speed-police-chase-in-rochdale",
+      "source_url": "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries/"
+    }
+  ],
   "new_articles": 0,
-  "live_articles": 556,
+  "live_articles": 555,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -67,7 +80,7 @@
     "queued_for_retry": 0,
     "recovery_limit_reached": 1,
     "deliberately_blocked": 1,
-    "reopened_after_evidence_fix": 0,
+    "reopened_after_evidence_fix": 1,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
@@ -75,25 +88,16 @@
     "entries": 137,
     "by_outcome": {
       "failed": 22,
-      "published": 90,
-      "rejected": 25
+      "published": 91,
+      "rejected": 24
     },
-    "held_back_this_run": 28,
-    "held_already_published": 24,
-    "held_rejected": 4,
+    "held_back_this_run": 25,
+    "held_already_published": 22,
+    "held_rejected": 3,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
-    {
-      "url": "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries",
-      "title": "Drunk driver jailed after a pursuit in Rochdale left pedestrian with life-changing injuries - About Manchester",
-      "source_name": "About Manchester",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-07T10:23:01.543002Z"
-    },
     {
       "url": "https://www.transfermarkt.com/rochdale-afc-youth/legionaere/verein/120959",
       "title": "Rochdale AFC Youth - Transfermarkt",
@@ -122,7 +126,11 @@
       "last_attempt_at": "2026-11-05T22:04:38.634211Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write a social_headline for Facebook.": 1,
+    "Write at least 175 body words using only facts already present in the sources; the draft currently has 163.": 1,
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 74,
@@ -135,7 +143,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 2
+    "men_newsletter": 3
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -227,14 +235,14 @@
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
     "stories_in_window": 13,
-    "covered": 9,
-    "outstanding": 4,
+    "covered": 10,
+    "outstanding": 3,
     "removed_by_editor": 0,
     "by_status": {
       "already_covered": 7,
       "held_for_editor": 2,
-      "not_found": 2,
-      "published": 2
+      "not_found": 1,
+      "published": 3
     },
     "outstanding_stories": [
       {
@@ -263,15 +271,6 @@
         "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/alleged-ringleader-group-men-accused-34856051",
         "resolved_title": "Alleged 'ringleader' of group of men accused of sexually abusing three girls denies having sex with accusers"
-      },
-      {
-        "id": "c4d467c1587758ed",
-        "headline": "Resident escapes from second floor as fire tears through sheltered housing flat",
-        "received_at": "2026-11-06T08:06:01+00:00",
-        "status": "not_found",
-        "reason": "its article resident-escapes-fire-at-lonsdale-court-sheltered-housing-in-middleton is no longer live; searching again",
-        "resolved_url": "",
-        "resolved_title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton"
       }
     ]
   },
@@ -285,25 +284,28 @@
     "Secret Manchester": 3,
     "Transfermarkt": 2,
     "Doncaster Free Press": 2,
+    "Oldham Times": 2,
     "Rochdale Borough Council RSS": 1,
     "Squawka": 1,
     "Sports Mole": 1,
     "Greater Manchester Police": 1,
-    "Oldham Times": 1,
     "About Manchester": 1,
-    "The Bury Times": 1,
     "Rochdale Borough Council News": 1,
     "Roch Valley Radio Local News": 1,
     "Northern Care Alliance News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "crime": 1,
+    "news": 1,
+    "transport": 1
+  },
   "published_by_category": {
-    "business": 60,
-    "community": 77,
+    "business": 61,
+    "community": 78,
     "crime": 33,
     "education": 28,
-    "environment": 45,
+    "environment": 44,
     "events": 33,
     "health": 14,
     "news": 84,
@@ -334,8 +336,16 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "hard-news-v3-a5de031ceecba76d4eee",
+    "hard-news-v3-87f511fc5e76412d9473",
+    "transport-v3-6790546d805426d087f3"
+  ],
+  "selected_candidate_urls": [
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285",
+    "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries/",
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-5dc75c177b0ccf35a2"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -345,7 +355,36 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "must_cover_selected": 0
+    "available_categories": [
+      "crime",
+      "transport"
+    ],
+    "selected_categories": [
+      "crime",
+      "transport"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "crime": 1,
+      "transport": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 2
+    },
+    "selected_by_source": {
+      "about manchester": 1,
+      "bee network live travel alerts": 1
+    },
+    "must_cover_selected": 1
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -940,7 +979,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-07T10:50:12.803352Z",
+  "frontpage_generated_at": "2026-11-07T11:09:09.227132Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -987,19 +1026,19 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "community": 4,
+      "news": 2,
       "crime": 3,
       "traffic": 1,
       "education": 1,
       "sport": 2,
       "business": 1,
+      "community": 4,
       "environment": 2,
-      "news": 2,
       "health": 1
     },
     "selected_by_ward": {
-      "Milkstone and Deeplish": 1,
-      "borough-wide": 16
+      "borough-wide": 16,
+      "Milkstone and Deeplish": 1
     },
     "selected_by_area": {
       "deeplish": 1,
@@ -1008,15 +1047,15 @@
       "rochdale": 16
     },
     "selected_by_source": {
-      "inyourarea": 2,
+      "rochdale daily": 2,
       "rochdale times": 4,
       "rochdale borough council": 2,
       "cranmer education trust": 1,
       "rochdale afc": 1,
-      "little acts of christmas": 1,
-      "rochdale daily": 2,
+      "inyourarea": 2,
       "greater manchester police": 1,
       "doncaster free press": 1,
+      "little acts of christmas": 1,
       "northern care alliance news": 1,
       "rochdale borough council (middleton non‑designated heritage assets)": 1
     },
@@ -1032,14 +1071,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 14,
-  "events_kept_other_source": 26,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
+  "events_kept_other_source": 34,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 14,
+  "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 556,
+  "duplicate_articles_after_postprocessing": 555,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1048,11 +1087,11 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 27,
-  "whats_on_event_count": 14,
+  "area_archive_count": 26,
+  "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "drafts_not_published": 3,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
