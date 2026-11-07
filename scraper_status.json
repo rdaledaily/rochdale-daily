@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-07T21:31:48.092936Z",
+  "last_run_at": "2026-11-07T22:05:54.230584Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -37,23 +37,27 @@
       "interval_hours": 6
     },
     "claimant_count": {
-      "status": "not due",
-      "last_checked": "2026-11-06T21:35:12.889345Z",
-      "interval_hours": 24
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 1,
+      "offered_today": 0,
+      "months": 13,
+      "already_seen": 1,
+      "new": 0
     }
   },
-  "raw_candidates_before_job_filter": 76,
+  "raw_candidates_before_job_filter": 73,
   "job_or_career_posts_rejected": 5,
-  "raw_candidates": 71,
+  "raw_candidates": 68,
   "candidate_clusters": 31,
   "google_news_resolution": {
-    "wrappers": 41,
+    "wrappers": 40,
     "resolved": 32,
     "text_recovered": 23,
     "reattributed": 0,
     "images_found": 30
   },
-  "duplicates_merged": 40,
+  "duplicates_merged": 37,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -63,9 +67,9 @@
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
+    "missing_from_feed": 1,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -75,12 +79,12 @@
     "entries": 139,
     "by_outcome": {
       "failed": 23,
-      "published": 91,
-      "rejected": 25
+      "published": 90,
+      "rejected": 26
     },
     "held_back_this_run": 25,
-    "held_already_published": 22,
-    "held_rejected": 3,
+    "held_already_published": 21,
+    "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -93,6 +97,15 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-07T21:10:57.990709Z"
+    },
+    {
+      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285",
+      "title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton - Manchester Evening News",
+      "source_name": "Manchester Evening News",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-07T21:10:57.990388Z"
     },
     {
       "url": "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries",
@@ -116,10 +129,10 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 63,
+    "rss_and_google_news": 61,
     "website_discovery": 7,
     "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "live_service_pages": 4,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -270,18 +283,18 @@
     "Rochdale Times": 14,
     "Rochdale Borough Council": 7,
     "Rochdale AFC": 6,
-    "Manchester Evening News": 5,
-    "Bee Network live travel alerts": 5,
     "InYourArea": 4,
+    "Manchester Evening News": 4,
+    "Bee Network live travel alerts": 4,
     "The Bury Times": 3,
     "Roch Valley Radio": 2,
-    "https://www.birmingham-now.co.uk/": 2,
     "Southend Echo": 2,
     "The Northern Echo": 2,
     "Herts Advertiser": 2,
     "Rochdale Borough Council RSS": 1,
     "Hampshire Chronicle": 1,
     "Exmouth Journal": 1,
+    "https://www.birmingham-now.co.uk/": 1,
     "Slough Observer": 1,
     "FOX Sports": 1,
     "Ipswich Star": 1,
@@ -940,7 +953,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-07T21:45:00.922218Z",
+  "frontpage_generated_at": "2026-11-07T22:16:06.330801Z",
   "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
