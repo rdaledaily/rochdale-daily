@@ -160,7 +160,7 @@ def subject_for(article):
     place = _headline_place(title)
     if place:
         return place
-    if _SENSITIVE_RE.search(title):
+    if _SENSITIVE_RE.search(title) or article.get('sensitive_story'):
         return ''
     return body_place(article)
 
@@ -275,12 +275,29 @@ def set_place_card(article, root):
                    image_alt='Illustration: ' + area + ', ' + category + '. Not a photograph of the event.',
                    image_policy=POLICY)
 
+def visible_image_note(article):
+    """The reader-visible qualification for a file photo of a place or town
+    ("File photo: Heywood. Not a photograph of this event."), or "".
+
+    7 Nov 2026 review: the note lived only in image_alt, which sighted readers
+    never see; every caption builder (generate_pages, archive_quality and
+    post-page.js) now shows it before the photographer credit."""
+    alt = plain(article.get('image_alt'))
+    method = str(article.get('image_backfill_method') or '')
+    status = str(article.get('image_status') or '')
+    if alt.startswith(('File photo:', 'File image:')) and (
+            status in {'town-file-photo', 'commons-photo-cached'} or method in {'geograph', 'geograph-town', 'wikimedia-commons'}):
+        return alt
+    return ''
+
+
 def town_photo_allowed(article):
     """No town photo on crime, police, court, sensitive or sponsored stories:
     a picture of the town would still sit beside the people involved."""
     from ensure_article_images import high_risk_photo_story
     title = plain(article.get('title'))
     return not (str(article.get('category') or '').casefold() in {'crime', 'courts'} or article.get('police_matter')
+                or article.get('sensitive_story')  # set by the scraper from the source text, not the headline
                 or article.get('sponsored') or title.startswith('Sponsored:') or high_risk_photo_story(article)
                 or _SENSITIVE_RE.search(title))
 

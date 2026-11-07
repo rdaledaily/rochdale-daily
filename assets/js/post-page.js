@@ -391,8 +391,17 @@
       els.heroImg.src = image;
       els.heroImg.alt = String(story.image_alt || story.title || '');
       const credit = String(story.image_credit || '').trim();
-      els.heroCaption.textContent = credit ? `Image: ${credit}` : '';
-      els.heroCaption.hidden = !credit;
+      // A file photo of a place or town says so where readers can see it
+      // (image_hierarchy.visible_image_note): the alt text alone is unseen.
+      const alt = String(story.image_alt || '').trim();
+      const fileMethods = ['geograph', 'geograph-town', 'wikimedia-commons'];
+      const fileStatuses = ['town-file-photo', 'commons-photo-cached'];
+      const note = /^File (photo|image):/.test(alt)
+        && (fileStatuses.includes(String(story.image_status || '')) || fileMethods.includes(String(story.image_backfill_method || '')))
+        ? alt : '';
+      const caption = [note, credit ? `Image: ${credit}` : ''].filter(Boolean).join(' ');
+      els.heroCaption.textContent = caption;
+      els.heroCaption.hidden = !caption;
       els.hero.hidden = false;
       els.heroImg.addEventListener('error', () => { els.hero.hidden = true; }, { once: true });
     } else {

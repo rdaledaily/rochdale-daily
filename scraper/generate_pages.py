@@ -835,10 +835,13 @@ def hero_image_markup(article: dict[str, Any], image_url: str) -> str:
         license_url = ""
 
     caption = ""
+    from image_hierarchy import visible_image_note
+    note = visible_image_note(article)
+    note_html = ('<span class="article-image-note">' + esc(note) + '</span> ') if note else ''
     if credit and credit != "Rochdale Daily category image":
         if credit_url:
             caption = (
-                '<figcaption class="article-image-credit">'
+                '<figcaption class="article-image-credit">' + note_html +
                 'Image: <a href="' + esc(credit_url) + '" target="_blank" '
                 'rel="noopener noreferrer">' + esc(credit) + '</a>'
                 + (' · <a href="' + esc(license_url) + '" target="_blank" '
@@ -847,7 +850,7 @@ def hero_image_markup(article: dict[str, Any], image_url: str) -> str:
             )
         else:
             caption = (
-                '<figcaption class="article-image-credit">'
+                '<figcaption class="article-image-credit">' + note_html +
                 'Image: ' + esc(credit) +
                 '</figcaption>'
             )
