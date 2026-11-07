@@ -438,6 +438,36 @@ class TownPhotoTests(unittest.TestCase):
         self.assertFalse(images.existing_meaningful_image(story, root))
         self.assertEqual(story["image_status"], "town-file-photo")
 
+    def test_archive_read_back_keeps_the_note_and_never_stacks_it(self):
+        """7 Nov 2026: archived pages lost the note (247 pages) because the
+        read-back dropped alt text and image kind; the note must also never be
+        read back into the credit (as 'Image source' once stacked 106 times)."""
+        import tempfile
+        import archive_quality as aq
+        root = Path(tempfile.mkdtemp())
+        (root / "articles").mkdir()
+        (root / "articles.json").write_text("[]")
+        real = Path(__file__).resolve().parent.parent / "articles"
+        page = next(p for p in sorted(real.glob("*.html")) if "article-hero-image" in p.read_text(encoding="utf-8"))
+        html_text = page.read_text(encoding="utf-8")
+        figure = ('<figure class="article-hero-image"><img src="/assets/img/cards/ab12-town-photo.jpg" '
+                  'alt="File photo: Heywood. Not a photograph of this event." loading="eager"><figcaption>'
+                  '<span class="article-image-note">File photo: Heywood. Not a photograph of this event.</span> '
+                  'A N Other / Geograph (CC BY-SA 2.0) <a href="https://www.geograph.org.uk/photo/1" '
+                  'rel="noopener noreferrer">Image source</a></figcaption></figure>')
+        import re as _re
+        html_text = _re.sub(r'<figure\b[^>]*class=["\']article-hero-image["\'][^>]*>.*?</figure>', lambda _: figure, html_text,
+                            count=1, flags=_re.S)
+        html_text = _re.sub(r'(<meta\b[^>]*property=["\']og:image["\'][^>]*content=["\']).*?(["\'])',
+                            lambda m: m.group(1) + "https://rochdaledaily.co.uk/assets/img/cards/ab12-town-photo.jpg" + m.group(2),
+                            html_text, count=1)
+        (root / "articles" / page.name).write_text(html_text, encoding="utf-8")
+        row = next(r for r in aq.scan(root) if r["slug"] == page.stem)
+        self.assertEqual(row["image_status"], "town-file-photo")
+        self.assertEqual(row["image_alt"], "File photo: Heywood. Not a photograph of this event.")
+        self.assertEqual(row["image_credit"], "A N Other / Geograph (CC BY-SA 2.0)")
+        self.assertIn("Not a photograph of this event.", aq._image_note_html(row))
+
     def test_facebook_posts_town_photos(self):
         """Editor, 7 Nov 2026: a town photo is part of the article, so it posts."""
         import post_facebook_article as fb

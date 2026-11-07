@@ -380,6 +380,9 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
     validated = commons_checked(subject, article)
     if relevance is not False and commons_current and current.is_file() and not generated and validated:
         article['image_policy'] = POLICY
+        # A kept file photo still says so where readers can see it.
+        if not plain(article.get('image_alt')).startswith(('File photo:', 'File image:')):
+            article['image_alt'] = 'File image: ' + subject + '. Not a photograph of this event.'
         return 'commons'
     if commons_current and not validated:
         relevance = False
