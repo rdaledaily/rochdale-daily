@@ -305,6 +305,22 @@ class GeographStreetPhotoTests(unittest.TestCase):
         self.assertEqual(g.town_for({"area": "milnrow-and-newhey"}), "milnrow")
         self.assertEqual(g.town_for({"area": ""}), "rochdale")
 
+    def test_place_name_in_order_in_title(self):
+        """First live run, 7 Nov 2026: real Geograph titles, right and wrong."""
+        import geograph_images as g
+        wrong = [("Norden Road", "784 to 768 Edenfield Road, Norden"),
+                 ("Rochdale House", '"Craig Lee House" 25 Church Lane, Rochdale'),
+                 ("Heywood Park", "Sunset over Queen's Park Heywood"), ("Queen’s Park", "Queen's Park Road"),
+                 ("Rochdale Library", "Former library, The Esplanade, Rochdale")]
+        right = [("St Andrew’s Church", "St Andrew's Parish Church, Dearnley"), ("Drake Street", "Rochdale, Drake Street"),
+                 ("Jubilee Park", "Bandstand, Jubilee Park, Middleton"), ("Bury Old Road", "Bury Old Road. Heywood"),
+                 ("Rochdale AFC", "Spotland, the home of Rochdale AFC"),
+                 ("Manchester Road", "Rochdale Canal, Manchester Road Bridge")]
+        for subject, title in wrong:
+            self.assertFalse(g.title_matches(subject, title), (subject, title))
+        for subject, title in right:
+            self.assertTrue(g.title_matches(subject, title), (subject, title))
+
     def test_no_key_no_search(self):
         import geograph_images as g
         with patch.dict(os.environ, {"GEOGRAPH_API_KEY": ""}):
