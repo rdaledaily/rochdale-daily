@@ -185,3 +185,61 @@ def as_commons_page(row: dict[str, str], town: str) -> dict[str, Any]:
     return {"title": "File:" + row["title"], "imageinfo": [{"mime": "image/jpeg", "extmetadata": {
         "LicenseShortName": {"value": LICENCE}, "ImageDescription": {"value": row["title"]},
         "Categories": {"value": town.title() + "|Rochdale"}}}]}
+
+
+# --------------------------------------------------------------------------
+# Town photos for stories that name no place (editor's decision, 7 Nov 2026)
+# --------------------------------------------------------------------------
+# About 84 live and 400 archived stories name no street or building. They get
+# a general Geograph photo of their own town, varied (no photo on more than
+# TOWN_PHOTO_MAX_USES stories), captioned as a file photo of the town. Never
+# on crime, police, sensitive or sponsored stories (image_hierarchy).
+TOWN_POOL_VERSION = 1
+TOWN_PHOTO_MAX_USES = 2
+TOWN_RADIUS_KM = float(os.getenv("GEOGRAPH_TOWN_RADIUS_KM", "1.5"))
+_ADDRESS_RE = re.compile(r"^\s*\d|\b\d+\s*(?:to|-|&)\s*\d+\b|\bno\.?\s*\d|\b(?:flat|apartment|bungalow|semi|garden of)\b",
+                         re.I)
+_SCENE_RE = re.compile(r"\b(?:church|chapel|park|hall|mill|canal|station|market|square|centre|street|road|lane|"
+                       r"bridge|library|museum|memorial|war memorial|reservoir|lake|clough|moor|view|town|village|"
+                       r"precinct|high street|viaduct|cenotaph|gardens?|fold|brow|cottages|pub|inn|arms|hotel)\b", re.I)
+
+
+def suitable_town_photo(title: str, town: str) -> bool:
+    """A street scene, landmark or view, not a numbered private house, and
+    about this town or a recognisable kind of place."""
+    if not title or _ADDRESS_RE.search(title):
+        return False
+    return bool(re.search(r"\b" + re.escape(town) + r"\b", title, re.I) or _SCENE_RE.search(title))
+
+
+def town_pool(town: str, timeout: int = 15) -> list[dict[str, str]]:
+    """Up to 100 Geograph photos within TOWN_RADIUS_KM of the town centre that
+    are suitable town photos (empty without a key)."""
+    key = api_key()
+    if not key:
+        return []
+    import requests
+    lat, lon = TOWN_CENTRES.get(town, TOWN_CENTRES["rochdale"])
+    params = {"key": key, "location": f"{lat},{lon}", "distance": TOWN_RADIUS_KM, "perpage": 100,
+              "format": "RSS2.0", "expand": 1}
+    response = requests.get(API + "?" + urlencode(params), headers={"User-Agent": USER_AGENT}, timeout=timeout)
+    response.raise_for_status()
+    return [row for row in parse_rss(response.text) if row["thumb"] and suitable_town_photo(row["title"], town)]
+
+
+def pick_town_photo(pool: list[dict[str, str]], used_by: dict[str, list[str]], slug: str) -> dict[str, str] | None:
+    """The story's photo from the pool: the one it already has, else the first
+    with room, starting from a position fixed by the slug so neighbouring
+    stories spread across the pool."""
+    if not pool:
+        return None
+    for row in pool:
+        if slug in used_by.get(row["page_url"], []):
+            return row
+    import hashlib
+    start = int(hashlib.sha256(slug.encode()).hexdigest()[:8], 16) % len(pool)
+    for offset in range(len(pool)):
+        row = pool[(start + offset) % len(pool)]
+        if len(used_by.get(row["page_url"], [])) < TOWN_PHOTO_MAX_USES:
+            return row
+    return None

@@ -350,6 +350,60 @@ class GeographStreetPhotoTests(unittest.TestCase):
         self.assertTrue(story["image_alt"].startswith("File image: Drake Street."))
 
 
+class TownPhotoTests(unittest.TestCase):
+    """Editor's decision, 7 Nov 2026: stories naming no place get a varied
+    Geograph photo of their town; never crime, police, sensitive, sponsored."""
+
+    def pool(self, n):
+        return [{"title": f"Market Street {i}, Heywood", "page_url": f"https://www.geograph.org.uk/photo/{i}",
+                 "author": "A N Other", "thumb": f"https://s0.geograph.org.uk/x/{i}_ab_120x90.jpg"} for i in range(n)]
+
+    def test_photos_are_varied(self):
+        import geograph_images as g
+        pool, used = self.pool(3), {}
+        for slug in ("a", "b", "c", "d", "e", "f"):
+            row = g.pick_town_photo(pool, used, slug)
+            used.setdefault(row["page_url"], []).append(slug)
+        self.assertTrue(all(len(v) <= g.TOWN_PHOTO_MAX_USES for v in used.values()))
+        self.assertIsNone(g.pick_town_photo(pool, used, "g"))           # pool full: the card stays
+        self.assertEqual(g.pick_town_photo(pool, used, "a")["page_url"],
+                         next(u for u, s in used.items() if "a" in s))  # a story keeps its photo
+
+    def test_only_scenes_not_private_houses(self):
+        import geograph_images as g
+        self.assertTrue(g.suitable_town_photo("Market Street, Heywood", "heywood"))
+        self.assertTrue(g.suitable_town_photo("St Luke's Church", "heywood"))
+        self.assertFalse(g.suitable_town_photo("784 to 768 Edenfield Road, Norden", "norden"))
+        self.assertFalse(g.suitable_town_photo("No. 12 and its garden", "heywood"))
+
+    def test_town_photo_set_and_never_on_crime(self):
+        import tempfile
+        import image_hierarchy as ih
+        import geograph_images as g
+        root = Path(tempfile.mkdtemp())
+        (root / "assets/img/cards").mkdir(parents=True)
+        def fake_download(url, target, timeout):
+            Image.new("RGB", (640, 480), "grey").save(target)
+            return True
+        story = {"slug": "awards", "title": "Volunteers honoured at awards night", "category": "community",
+                 "area": "heywood", "content_html": "<p>Volunteers were thanked.</p>",
+                 "image_url": "", "image_status": "place-generated-card"}
+        crime = dict(story, slug="theft", title="Man charged after theft", category="crime")
+        with patch.dict(os.environ, {"GEOGRAPH_API_KEY": "k"}), \
+             patch.object(g, "town_pool", return_value=self.pool(5)), \
+             patch("repair_generated_with_commons.download", side_effect=fake_download):
+            self.assertEqual(ih.choose_image(story, root), "town-photo")
+            self.assertEqual(ih.choose_image(crime, root), "place-card")
+        self.assertEqual(story["image_status"], "town-file-photo")
+        self.assertEqual(story["image_alt"], "File photo: Heywood. Not a photograph of this event.")
+        self.assertEqual(story["image_credit"], "A N Other / Geograph (CC BY-SA 2.0)")
+        self.assertNotIn("town", crime["image_url"])
+
+    def test_facebook_skips_town_photos(self):
+        import post_facebook_article as fb
+        self.assertNotIn("town-file-photo", fb.STORY_PHOTO_STATUSES)
+
+
 if __name__ == "__main__":
     unittest.main()
 

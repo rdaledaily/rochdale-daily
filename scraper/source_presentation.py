@@ -269,7 +269,7 @@ def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
 # Only a picture that could have come from the hidden source is cleared.
 _OWN_PHOTO_STATUSES = frozenset({
     "editorial-photo", "cards-library-photo", "commons-photo-cached",
-    "source-photo-cached", "standard-police-image", "supplied",
+    "source-photo-cached", "standard-police-image", "supplied", "town-file-photo",
 })
 
 

@@ -275,6 +275,62 @@ def set_place_card(article, root):
                    image_alt='Illustration: ' + area + ', ' + category + '. Not a photograph of the event.',
                    image_policy=POLICY)
 
+def town_photo_allowed(article):
+    """No town photo on crime, police, court, sensitive or sponsored stories:
+    a picture of the town would still sit beside the people involved."""
+    from ensure_article_images import high_risk_photo_story
+    title = plain(article.get('title'))
+    return not (str(article.get('category') or '').casefold() in {'crime', 'courts'} or article.get('police_matter')
+                or article.get('sponsored') or title.startswith('Sponsored:') or high_risk_photo_story(article)
+                or _SENSITIVE_RE.search(title))
+
+
+def set_town_photo(article, root, cache, cache_file, allow_network):
+    """A varied Geograph photo of the story's town (geograph_images), for a
+    story with no photo of its own subject. Returns True when set."""
+    import geograph_images as g
+    if not town_photo_allowed(article):
+        return False
+    town = g.town_for(article)
+    key = f'__town_pool__|v{g.TOWN_POOL_VERSION}|{town}'
+    pool_record = cache.get(key) or {}
+    if not pool_record.get('rows') and allow_network and g.api_key() and not pool_record.get('empty'):
+        try:
+            rows = g.town_pool(town)
+        except Exception:
+            return False
+        pool_record = {'rows': rows, 'used_by': {}, 'empty': not rows}
+        cache[key] = pool_record
+    choice = g.pick_town_photo(pool_record.get('rows') or [], pool_record.setdefault('used_by', {}), str(article.get('slug') or ''))
+    if not choice:
+        return False
+    name = hashlib.sha256(choice['page_url'].encode()).hexdigest()[:16] + '-town-photo.jpg'
+    target = root / 'assets/img/cards' / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if not target.exists():
+        if not allow_network:
+            return False
+        from repair_generated_with_commons import download
+        try:
+            if not download(g.full_size(choice['thumb']), target, 10) and not download(choice['thumb'], target, 10):
+                return False
+        except Exception:
+            return False
+    users = pool_record['used_by'].setdefault(choice['page_url'], [])
+    if article.get('slug') not in users:
+        users.append(article.get('slug'))
+    cache[key] = pool_record
+    cache_file.parent.mkdir(parents=True, exist_ok=True)
+    cache_file.write_text(json.dumps(cache, ensure_ascii=False, indent=2) + '\n')
+    rel = target.relative_to(root).as_posix()
+    article.update(image_url=rel, img=rel, image_status='town-file-photo', image_policy=POLICY,
+                   image_credit=(choice['author'] or 'Geograph contributor') + ' / Geograph (' + g.LICENCE + ')',
+                   image_credit_url=choice['page_url'], image_license_url=g.LICENCE_URL,
+                   image_alt='File photo: ' + town.title() + '. Not a photograph of this event.',
+                   image_backfill_method='geograph-town', source_image_reuse_status='commons-free-license')
+    return True
+
+
 def choose_image(article, root, relevance=None, allow_network=True, rejected=()):
     """Apply the ordered policy once, recording failed searches honestly."""
     from ensure_article_images import (choose_exact_story_photo, choose_named_library_photo,
@@ -414,5 +470,7 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
                        commons_validated_for=key + ('#g' + str(geograph_images.SEARCH_VERSION) if record.get('source') == 'geograph' else ''))
         return 'commons'
     article.pop('commons_validated_for', None)
+    if set_town_photo(article, root, cache, cache_file, allow_network):
+        return 'town-photo'
     set_place_card(article, root)
     return 'place-card'
