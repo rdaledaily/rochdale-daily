@@ -12,7 +12,7 @@ def draft(title: str, paragraph: str) -> dict:
 
 
 def run() -> None:
-    assert STYLE_VERSION == "rochdale-human-newsroom-v14"
+    assert STYLE_VERSION == "rochdale-human-newsroom-v15"
     from editorial_contract import NATURAL_STORY_POLICY
     assert NATURAL_STORY_POLICY in HOUSE_STYLE_SYSTEM
     assert HUMAN_VOICE_BRIEF in HOUSE_STYLE_SYSTEM
@@ -69,6 +69,31 @@ def run() -> None:
     assert "Our thoughts are with the family and all those affected" not in _hs.HOUSE_STYLE_SYSTEM
     assert "has asked <the relevant body> for comment" in _hs.HOUSE_STYLE_SYSTEM
     assert "a right of reply line, a correction or clarification notice, and the source line" in _hs.HOUSE_STYLE_SYSTEM
+    # Draft normalisation never changes a date inside a quotation.
+    d = eu.normalise_draft({"title": "Party on 4th August", "excerpt": "x", "paragraphs": [
+        'Jane Smith said: "Our celebration will be on 4th August this year."',
+        "She said: 'It starts on 4th August.' It ends on 5th August."]})
+    assert d["paragraphs"][0] == 'Jane Smith said: "Our celebration will be on 4th August this year."'
+    assert d["paragraphs"][1] == "She said: 'It starts on 4th August.' It ends on 5 August."
+    assert d["title"] == "Party on 4 August"
+    # v15 story order (editor, 7 Nov 2026).
+    assert _hs.STORY_ORDER_BRIEF in _hs.HOUSE_STYLE_SYSTEM
+    order = _hs.STORY_ORDER_BRIEF
+    assert order.index("invested") < order.index("What happened") < order.index("Quotes and comments") \
+        < order.index("Background") < order.index("Conclusion")
+    links = eu.verified_useful_links(
+        [{"label": "Fundraiser for Amy", "url": "https://www.gofundme.com/f/help-amy"},
+         {"label": "Invented", "url": "https://www.gofundme.com/f/not-in-sources"},
+         {"label": "News site", "url": "https://www.manchestereveningnews.co.uk/news/x"},
+         {"label": "Petition", "url": "https://petition.parliament.uk/petitions/700001"}],
+        "Friends set up https://www.gofundme.com/f/help-amy and https://petition.parliament.uk/petitions/700001 "
+        "see https://www.manchestereveningnews.co.uk/news/x")
+    assert [l["label"] for l in links] == ["Fundraiser for Amy", "Petition"], links
+    html_links = eu.useful_links_html(links)
+    assert 'href="https://www.gofundme.com/f/help-amy"' in html_links and 'rel="noopener nofollow"' in html_links
+    # The paper's own sympathy line goes from every story, death reports too.
+    assert eu.strip_service_furniture(["A man, 52, died.", "Our thoughts are with the family and all those affected."], "news") == ["A man, 52, died."]
+    assert eu.strip_service_furniture(["“Our thoughts are with his family,” the club said."], "sport") == ["“Our thoughts are with his family,” the club said."]
     print("Human editorial voice checks passed.")
 
 
