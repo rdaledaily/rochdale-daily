@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-07T16:53:21.654224Z",
+  "updated_at": "2026-11-07T17:12:09.644075Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 133,
@@ -1422,8 +1422,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-07T16:37:13.113716Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2148,13 +2148,13 @@
     },
     "https://www.rochdaletimes.co.uk/star-pupils-shine-as-school-celebrates-its-new-name": {
       "first_attempt_at": "2026-11-07T16:53:21.654087Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochdaletimes.co.uk/star-pupils-shine-as-school-celebrates-its-new-name"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-07T16:53:21.654087Z",
+      "last_attempt_at": "2026-11-07T17:12:09.643841Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Star pupils shine as school celebrates its new name - Rochdale Times",
