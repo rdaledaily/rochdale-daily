@@ -348,6 +348,13 @@ def review_all(root: Path, rows, batch_size=12):
         print('ARCHIVE REVIEW', min(offset + batch_size, len(pending)), '/', len(pending), flush=True)
     return ledger
 
+def _image_note_html(row):
+    """The visible "File photo: ... Not a photograph of this event." note."""
+    from image_hierarchy import visible_image_note
+    note = visible_image_note(row)
+    return '<span class="article-image-note">' + html.escape(note) + '</span> ' if note else ''
+
+
 def apply(root: Path, rows=None, images=False, network_images=True):
     rows = rows or scan(root)
     ledger = load(root / REVIEWS, {})
@@ -467,7 +474,7 @@ def apply(root: Path, rows=None, images=False, network_images=True):
             # An explicit caption distinguishes a file image/place illustration
             # from a photograph of the reported incident.
             hero_src=raw_image if raw_image.startswith(('https://','http://')) else '/'+raw_image.lstrip('/')
-            figure='<figure class="article-hero-image"><img src="'+html.escape(hero_src,quote=True)+'" alt="'+html.escape(str(row.get('image_alt') or row['title']),quote=True)+'" loading="eager"><figcaption>'+html.escape(str(row.get('image_credit') or 'Rochdale Daily'))
+            figure='<figure class="article-hero-image"><img src="'+html.escape(hero_src,quote=True)+'" alt="'+html.escape(str(row.get('image_alt') or row['title']),quote=True)+'" loading="eager"><figcaption>'+_image_note_html(row)+html.escape(str(row.get('image_credit') or 'Rochdale Daily'))
             if row.get('image_credit_url'):
                 figure+=' <a href="'+html.escape(row['image_credit_url'],quote=True)+'" rel="noopener noreferrer">Image source</a>'
             figure+='</figcaption></figure>'

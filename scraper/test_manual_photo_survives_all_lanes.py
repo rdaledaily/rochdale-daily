@@ -399,6 +399,45 @@ class TownPhotoTests(unittest.TestCase):
         self.assertEqual(story["image_credit"], "A N Other / Geograph (CC BY-SA 2.0)")
         self.assertNotIn("town", crime["image_url"])
 
+    def test_note_is_visible_in_every_caption(self):
+        """7 Nov 2026 review: the file-photo note was only in alt text."""
+        import generate_pages as gp
+        import archive_quality as aq
+        story = {"title": "Volunteers honoured", "image_status": "town-file-photo", "image_backfill_method": "geograph-town",
+                 "image_alt": "File photo: Heywood. Not a photograph of this event.",
+                 "image_credit": "A N Other / Geograph (CC BY-SA 2.0)", "image_credit_url": "https://www.geograph.org.uk/photo/1",
+                 "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0/"}
+        markup = gp.hero_image_markup(story, "/assets/img/cards/x-town-photo.jpg")
+        caption = markup.split("<figcaption", 1)[1]
+        self.assertIn("File photo: Heywood. Not a photograph of this event.", caption)
+        self.assertIn("A N Other / Geograph (CC BY-SA 2.0)", caption)
+        self.assertIn("Not a photograph of this event.", aq._image_note_html(story))
+        own = dict(story, image_status="editorial-photo", image_backfill_method="manual-editorial-photo",
+                   image_alt="Volunteers at the awards")
+        self.assertNotIn("Not a photograph", gp.hero_image_markup(own, "/assets/img/cards/own.jpg"))
+
+    def test_sensitive_from_the_text_gets_no_place_photo(self):
+        """A story the scraper marked sensitive from its source text."""
+        import image_hierarchy as ih
+        story = {"slug": "s", "title": "Family thanks community", "category": "community", "area": "heywood",
+                 "content_html": "<p>They gathered at Heywood Library.</p>", "sensitive_story": True}
+        self.assertFalse(ih.town_photo_allowed(story))
+        self.assertEqual(ih.subject_for(story), "")
+        self.assertEqual(ih.subject_for(dict(story, sensitive_story=False)), "Heywood Library")
+
+    def test_town_photo_never_becomes_an_editor_photo(self):
+        """On a manual article a town photo stays a pipeline fallback."""
+        import tempfile
+        import ensure_article_images as images
+        root = Path(tempfile.mkdtemp())
+        (root / "assets/img/cards").mkdir(parents=True)
+        Image.effect_noise((800, 500), 64).convert("RGB").save(root / "assets/img/cards/abcd-town-photo.jpg", quality=95)
+        story = {"slug": "own", "title": "Volunteers honoured", "manual_article": True, "editorial_lock": True,
+                 "source_kind": "editorial", "image_url": "assets/img/cards/abcd-town-photo.jpg",
+                 "image_status": "town-file-photo", "image_backfill_method": "geograph-town"}
+        self.assertFalse(images.existing_meaningful_image(story, root))
+        self.assertEqual(story["image_status"], "town-file-photo")
+
     def test_facebook_posts_town_photos(self):
         """Editor, 7 Nov 2026: a town photo is part of the article, so it posts."""
         import post_facebook_article as fb

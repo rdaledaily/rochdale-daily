@@ -158,6 +158,12 @@ def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
     # (manual-editorial-photo) is never touched by this.
     if _unchecked_pipeline_commons(article, value):
         return False
+    # A town photo is the pipeline's last fallback, never an editor's choice:
+    # on a manual article it was being relabelled editorial-photo and
+    # protected for ever (7 Nov 2026 review). It is re-decided each run, so a
+    # photo of the story's own subject replaces it when one is found.
+    if clean(article.get("image_status")) == "town-file-photo" or clean(article.get("image_backfill_method")) == "geograph-town":
+        return False
     # A manual article pointing at a real, non-generated file inside assets/img/cards
     # is authoritative in every lane (publish, scrape-fast, scrape-kick). Previously
     # this rule only existed as a monkey-patch in frontpage_manual_publish.py, so the
