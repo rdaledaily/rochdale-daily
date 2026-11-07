@@ -424,7 +424,17 @@
       letter-spacing: .2px;
       line-height: 1;
       pointer-events: none;
+      /* One small line in the corner, never a block over the photo: a long
+         Geograph credit wrapped across a whole thumbnail (7 Nov 2026). */
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    /* Small card thumbnails link to the article, where the full credit sits
+       under the photo; the overlay is left off them. */
+    .news-card .image-credit,
+    .latest-item .image-credit { display: none; }
     .story-kicker {
       display: inline-block;
       color: var(--accent);
@@ -2376,7 +2386,9 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         byline: safeText(article.byline || article.author || "Rochdale Daily Newsdesk"),
         demo: false,
         isReserveFeature: reserveFeature,
-        isOngoing: Boolean(article.is_ongoing),
+        // Only crime and police stories are ever ongoing (editor, 7 Nov 2026).
+        isOngoing: Boolean(article.is_ongoing) &&
+          (["crime", "courts"].includes(String(article.category || "").toLowerCase()) || Boolean(article.police_matter)),
         ongoingLabel: safeText(article.ongoing_label || (article.is_ongoing ? "ONGOING" : "")),
         updateCount: Number(article.update_count) || 1,
         policeMatter: !reserveFeature && Boolean(article.policeMatter || article.police_matter),
