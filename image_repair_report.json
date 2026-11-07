@@ -2,8 +2,8 @@
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 1,
-  "no_allowed_source": 1,
-  "no_usable_source_image": 7,
+  "no_allowed_source": 0,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -75,8 +75,32 @@
       }
     },
     {
-      "slug": "roadworks-on-highlands-road-in-rochdale-set-for-10-november-2026",
-      "result": "no-source"
+      "slug": "st-luke-s-church-in-deeplish-to-hold-remembrance-day-service-on-8-november",
+      "result": "no-cleared-source-image",
+      "source": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-november-7",
+      "after": "assets/img/cards/st-luke-s-church-in-deeplish-to-hold-remembrance-day-service-on-8-november.jpg",
+      "why": {
+        "page": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-november-7",
+        "final_url": "https://www.inyourarea.co.uk/news/rochdale-faith-news-saturday-november-7",
+        "candidates": [
+          {
+            "url": "https://images-cropper-prod.inyourarea.co.uk/unsafe/700x394/smart/harvester-img-e3ff5c2d49d3961e243fa87207168b6b.jpg",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://storage.ghost.io/c/9b/37/9b37512a-c253-4f99-bb04-2eceff8988c5/content/images/2026/11/JS423396578.jpg",
+            "via": "article figure img",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://storage.ghost.io/c/9b/37/9b37512a-c253-4f99-bb04-2eceff8988c5/content/images/2025/03/InYourArea--1---2--1.png",
+            "via": "main img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
     }
   ]
 }
