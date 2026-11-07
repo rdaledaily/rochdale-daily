@@ -10,7 +10,7 @@ from reader_copy import (
     ai_tell_issues, headline_issues, repetition_issues, social_headline_issues,
 )
 
-STYLE_VERSION = "rochdale-human-newsroom-v12"
+STYLE_VERSION = "rochdale-human-newsroom-v13"
 
 # Shared original editorial voice for news and features. Never overrides accuracy.
 HUMAN_VOICE_BRIEF = (
@@ -59,16 +59,24 @@ PEOPLE_FIRST_BRIEF = (
     "and no question on crime, court or police stories."
 )
 
+# v13, 7 Nov 2026: refined against a pasted national news article: lead with
+# the local connection, quote-then-speaker and woven partial quotes, role-then-
+# name for officials, courtesy titles on later reference.
 # v12, 7 Nov 2026: news syntax measured against national tabloid-style news
 # writing (structure only, never its tone). Measured on our last 150 rewrites:
 # first paragraph median 38 words (87 over 35), a direct quote in only 18,
 # an age in only 24 intros, 147 sentences over 30 words.
 NEWS_SYNTAX_BRIEF = (
-    "News syntax. The first paragraph is ONE sentence of no more than 30 words carrying who, what and where, and the single most striking verified detail. "
+    "News syntax. The first paragraph is ONE sentence, ideally 20 to 25 words and never more than 30, carrying who, what and where, and the single most striking verified detail. "
+    "When a story's connection to the borough is a person or place from it, lead with that connection: 'A Heywood man...', 'A Middleton school...'. "
     "Give a named person's age and home area the first time they appear, in the form 'Jane Smith, 34, of Heywood', whenever the sources state them; never guess either. "
     "The second paragraph gives the next most important fact or the consequence for readers. "
     "When the sources quote a named person, give the most telling words as an exact quotation by the third to fifth paragraph, in its own paragraph, "
-    "introduced plainly: 'Jane Smith said: \"...\"' or ending ', she said.' Never paraphrase a quotation that the sources give word for word, never tidy it and never invent one. "
+    "either quotation first and then the speaker ('\"...,\" Ms Smith said.') or introduced plainly ('Jane Smith said: \"...\"'). "
+    "A short telling phrase may also be woven into a reported sentence in quotation marks, exactly as spoken: the council said the decision was 'final'. "
+    "Never paraphrase a quotation that the sources give word for word, never tidy it and never invent one. "
+    "Introduce an official by role then name, with no comma: 'Rochdale Council leader Neil Emmott'. "
+    "On later references use a courtesy title and surname for adults: Mr Emmott, Mrs Smith, Ms Patel, Dr Khan; use the surname alone for anyone charged with or convicted of an offence. "
     "Keep most sentences under 25 words and none over 35. Put the subject and the verb first; move qualifications and dates to the end of the sentence. "
     "Specific beats general: the number, the street, the time, the price, the school, the shop. "
     "End on the last new fact, what happens next or a quotation: never a summary, a moral or a reflection. "
