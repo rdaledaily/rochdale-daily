@@ -979,16 +979,17 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
     return issues
 
 
-# Double or single quotation marks, straight or curly. A straight single quote
-# only counts when it is not an apostrophe (no letter on both sides of it).
+# Double or single quotation marks, straight or curly. A single quote, straight
+# or curly, with a letter on both sides is an apostrophe (we're, park's), never
+# the end of the quotation (7 Nov 2026 review: ‘We’re working...’ was missed).
 _QUOTE_RE = re.compile(
     r"[\"“]([^\"“”]{25,}?)[\"”]"
-    r"|‘([^‘’]{25,}?)’"
+    r"|‘((?:[^‘’]|(?<=[A-Za-z])’(?=[A-Za-z])){25,}?)’(?![A-Za-z])"
     r"|(?<![A-Za-z])'((?:[^']|(?<=[A-Za-z])'(?=[A-Za-z])){25,}?)'(?![A-Za-z])"
 )
 _DRAFT_QUOTE_RE = re.compile(
     r"[\"“]([^\"“”]{8,}?)[\"”]"
-    r"|‘([^‘’]{8,}?)’"
+    r"|‘((?:[^‘’]|(?<=[A-Za-z])’(?=[A-Za-z])){8,}?)’(?![A-Za-z])"
     r"|(?<![A-Za-z])'((?:[^']|(?<=[A-Za-z])'(?=[A-Za-z])){8,}?)'(?![A-Za-z])"
 )
 

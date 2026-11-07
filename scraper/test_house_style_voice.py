@@ -57,6 +57,11 @@ def run() -> None:
     assert eu.source_has_quote("'It is a truly exceptional tragedy, we will act,' Mr Tusk said.")
     assert not eu.source_has_quote("The gunman's car and the officers' guns were found at the driver's home, police said.")
     assert eu.draft_has_quote("‘It was a proud day for us,’ she said.")
+    # Curly apostrophes inside a curly single-quoted quotation.
+    assert eu.source_has_quote("‘We’re working hard to keep this park open,’ she said.")
+    assert eu.draft_has_quote("‘We’re working hard to keep this park open,’ she said.")
+    assert eu.source_has_quote("‘The park’s future isn’t certain but we’ll fight for it,’ Mr Ali said.")
+    assert not eu.source_has_quote("The gunman’s car and the officers’ guns were found at the driver’s home, police said.")
     assert "Mr Emmott" in NEWS_SYNTAX_BRIEF and "A Heywood man" in NEWS_SYNTAX_BRIEF
     from reader_copy import uk_dates
     assert uk_dates("war on 4th August 1914 and 21st May") == "war on 4 August 1914 and 21 May"

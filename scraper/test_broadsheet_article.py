@@ -95,13 +95,18 @@ class OngoingChipTests(unittest.TestCase):
 
     def test_chip_uses_the_pipeline_label(self):
         page = gp.render_article_page(
-            _article(is_ongoing=True, ongoing_label="Live"), []
+            _article(is_ongoing=True, ongoing_label="Live", category="crime"), []
         )
         self.assertIn('<span class="kicker-chip">Live</span>', page)
 
     def test_chip_falls_back_to_ongoing(self):
-        page = gp.render_article_page(_article(is_ongoing=True), [])
+        page = gp.render_article_page(_article(is_ongoing=True, police_matter=True), [])
         self.assertIn('<span class="kicker-chip">Ongoing</span>', page)
+
+    def test_chip_only_on_crime_and_police_stories(self):
+        """7 Nov 2026 (editor's rule): only crime is ever ongoing."""
+        page = gp.render_article_page(_article(is_ongoing=True, category="business"), [])
+        self.assertNotIn('<span class="kicker-chip">Ongoing</span>', page)
 
 
 class ArchivedShellTests(unittest.TestCase):

@@ -95,7 +95,13 @@ class ArticleTimeMetadataTests(unittest.TestCase):
             "The operator has been contacted for comment.",
         ]
         for line in waiting:
-            self.assertTrue(gp.is_developing_story({"title": "Council contract", "content_html": f"<p>{line}</p>"}), line)
+            crime = {"title": "Police appeal after Rochdale burglary", "category": "crime", "content_html": f"<p>{line}</p>"}
+            self.assertTrue(gp.is_developing_story(crime), line)
+            self.assertTrue(gp.is_developing_story(dict(crime, category="news", police_matter=True)), line)
+            # 7 Nov 2026 (editor's rule): only crime and police stories are
+            # ever developing, whatever the copy says.
+            self.assertFalse(gp.is_developing_story({"title": "Council contract", "category": "politics",
+                                                     "content_html": f"<p>{line}</p>"}), line)
         incidental = [
             "The cost of the scheme has not been disclosed.",
             "Rochdale Daily will update this report if the council announces any further changes.",
@@ -119,11 +125,21 @@ class ArticleTimeMetadataTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             d = Path(tmp)
             (d / "old.html").write_text(page.format(n=note, t="The fire was put out."), encoding="utf-8")
-            (d / "wait.html").write_text(page.format(n=note, t="Awaiting confirmation from GMP."), encoding="utf-8")
+            crime_meta = '<meta property="article:section" content="Crime">'
+            (d / "wait.html").write_text(crime_meta + page.format(n=note, t="Awaiting confirmation from GMP."), encoding="utf-8")
+            # Not crime: the label goes even though the copy is waiting, and so
+            # does the ONGOING chip (7 Nov 2026, editor's rule).
+            chip = '<nav class="article-breadcrumb"><a>News</a><span class="kicker-chip">ONGOING</span></nav>'
+            (d / "council.html").write_text(chip + page.format(n=note, t="Awaiting a reply from the council."), encoding="utf-8")
+            (d / "crimechip.html").write_text(crime_meta + chip + page.format(n="", t="Police are investigating."), encoding="utf-8")
             (d / "live.html").write_text(page.format(n=note, t="The fire was put out."), encoding="utf-8")
-            self.assertEqual(gp.scrub_stale_developing_notes(d, {"live"}), 1)
+            self.assertEqual(gp.scrub_stale_developing_notes(d, {"live"}), 2)
             self.assertNotIn("developing-note", (d / "old.html").read_text())
             self.assertIn("developing-note", (d / "wait.html").read_text())
+            council = (d / "council.html").read_text()
+            self.assertNotIn("developing-note", council)
+            self.assertNotIn("ONGOING", council)
+            self.assertIn("ONGOING", (d / "crimechip.html").read_text())
             self.assertIn("developing-note", (d / "live.html").read_text())
 
     def test_page_dates_are_uk_not_utc(self) -> None:
