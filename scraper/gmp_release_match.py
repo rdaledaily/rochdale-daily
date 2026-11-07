@@ -39,6 +39,7 @@ from typing import Any, Iterable
 
 MODE = os.getenv("GMP_RELEASE_MATCH", "report").strip().lower()
 LISTING_PAGES = int(os.getenv("GMP_RELEASE_PAGES", "3"))
+DETAIL_FETCH_LIMIT = int(os.getenv("GMP_RELEASE_DETAIL_FETCHES", "40"))
 STORY_MAX_AGE_DAYS = 45
 BEFORE_DAYS, AFTER_DAYS = 10, 2
 
@@ -82,18 +83,34 @@ def _tokens(text: str) -> tuple[set[str], set[str]]:
     return words, names
 
 
+_MONTHS = {m: i for i, m in enumerate(
+    "january february march april may june july august september october november december".split(), 1)}
+_DMY_RE = re.compile(r"\b(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]{3,9})\.?,?\s+(\d{4})\b")
+
+
 def _when(value: Any) -> datetime | None:
+    """ISO, RFC 822 or "29 September 2026" anywhere in the text; None when no
+    full date (day, month and year) can be read."""
     text = str(value or "").strip()
     if not text:
         return None
-    for parse in (lambda t: datetime.fromisoformat(t.replace("Z", "+00:00")),
-                  lambda t: datetime.strptime(t[:16], "%d %B %Y"),
-                  lambda t: datetime.strptime(t, "%a, %d %b %Y %H:%M:%S %z")):
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+    except ValueError:
+        pass
+    try:
+        return datetime.strptime(text, "%a, %d %b %Y %H:%M:%S %z")
+    except ValueError:
+        pass
+    match = _DMY_RE.search(text)
+    if match:
+        day, month_name, year = match.groups()
+        month = next((n for name, n in _MONTHS.items() if name.startswith(month_name.casefold()[:3])), 0)
         try:
-            value = parse(text)
-            return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+            return datetime(int(year), month, int(day), tzinfo=timezone.utc) if month else None
         except ValueError:
-            continue
+            return None
     return None
 
 
@@ -133,7 +150,7 @@ def photo_safe(release_title: str) -> bool:
     can identify the complainant), missing people (GMP asks for their photos
     to come down once found), anything about a child or safeguarding, and
     inquests or suicides. Uses the GMP watcher's own legal patterns."""
-    from gmp_watch import _COMPILED_HOLDS, CHILD_PATTERN, SAFEGUARDING_PATTERN
+    from gmp_watch import _COMPILED_HOLDS, SAFEGUARDING_PATTERN
     reasons = {reason for pattern, reason in _COMPILED_HOLDS if pattern.search(release_title)}
     if reasons - _ALLOWED_HOLDS:
         return False
@@ -141,9 +158,29 @@ def photo_safe(release_title: str) -> bool:
         return False
     if _MISSING_RE.search(release_title) and not re.search(r"\bwanted\b", release_title, re.I):
         return False
-    if CHILD_PATTERN.search(release_title) or SAFEGUARDING_PATTERN.search(release_title):
+    if mentions_child(release_title) or SAFEGUARDING_PATTERN.search(release_title):
         return False
     return True
+
+
+_CHILD_WORDS_RE = re.compile(r"\b(?:child|children|kids?|boy|boys|girl|girls|teenager|teenagers|teen|teens|"
+                             r"youngsters?|juveniles?|pupils?|schoolgirls?|schoolboys?|baby|babies|toddlers?|"
+                             r"infants?|minors?)\b", re.I)
+_AGE_RE = re.compile(r"\b(\d{1,2})[- ]year[- ]olds?\b|\baged? (\d{1,2})\b|,\s*(\d{1,2})\s*,", re.I)
+
+
+def mentions_child(text: str) -> bool:
+    """A child is named or described: a child word, or an age under 18
+    ("13-year-old", "aged 15", "Boy, 13,"). gmp_watch's CHILD_PATTERN treats
+    any age as a child because it is paired there with safeguarding words;
+    used alone it rejected "wanted man, 35-year-old" appeals."""
+    if _CHILD_WORDS_RE.search(text):
+        return True
+    for match in _AGE_RE.finditer(text):
+        age = next(int(g) for g in match.groups() if g)
+        if age < 18:
+            return True
+    return False
 
 
 def score(article: dict[str, Any], release: dict[str, str]) -> tuple[int, list[str]]:
@@ -155,9 +192,11 @@ def score(article: dict[str, Any], release: dict[str, str]) -> tuple[int, list[s
     shared_names = story_names & rel_names
     if len(shared) < 2 or not shared_names:
         return 0, []
+    # A release with no readable date never matches: the same person can be in
+    # several releases, and only the date ties a photo to this incident.
     released, published = _when(release.get("published")), _when(
         article.get("first_published_at") or article.get("published_at"))
-    if released and published and not (
+    if not released or not published or not (
             published - timedelta(days=BEFORE_DAYS) <= released <= published + timedelta(days=AFTER_DAYS)):
         return 0, []
     rel_low = release.get("title", "").casefold()
@@ -218,6 +257,21 @@ def fetch_releases() -> list[dict[str, str]]:
                     releases.append(item)
             if not items:
                 break
+    # A listing without a machine-readable date: read the release's own page
+    # for it. Still undated after that, the release cannot match (score()).
+    from gmp_watch import parse_article
+    fetched = 0
+    for item in releases:
+        if _when(item.get("published")) or fetched >= DETAIL_FETCH_LIMIT:
+            continue
+        fetched += 1
+        try:
+            if fetcher.robots_allows(item["url"]):
+                status, html = fetcher.get(item["url"])
+                if status == 200 and html:
+                    item["published"] = parse_article(html).get("published", "") or ""
+        except Exception:
+            continue
     return releases
 
 

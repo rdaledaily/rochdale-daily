@@ -127,6 +127,17 @@ def stale_pipeline_pick(article: dict[str, Any], root: Path, rel: str) -> bool:
     return not (named is not None and named.resolve() == path.resolve())
 
 
+def _unchecked_pipeline_commons(article: dict[str, Any], value: str) -> bool:
+    status = clean(article.get("image_status")).lower()
+    commons = "commons-photo" in status or "-commons-" in value.lower()
+    if not commons:
+        return False
+    if is_manual_editorial(article) and clean(article.get("image_backfill_method")) != "wikimedia-commons":
+        return False
+    from image_hierarchy import commons_checked, subject_for
+    return not commons_checked(subject_for(article), article)
+
+
 def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
     """Keep a real image already selected by editorial/source/Commons enrichment."""
     value = clean(article.get("image_url") or article.get("img"))
@@ -139,6 +150,14 @@ def existing_meaningful_image(article: dict[str, Any], root: Path) -> bool:
         from image_hierarchy import is_generic_commons
         if is_generic_commons(article, root, cards_relative(value) or value.lower().lstrip("/")):
             return False
+    # A PIPELINE-chosen Commons photo stands only when it was checked for this
+    # story's subject and town (image_hierarchy.choose_image re-decides the
+    # rest). 7 Nov 2026: cached by subject alone, Tom Quad, Oxford sat on
+    # Christ Church Healey and a Vancouver street on Hornby Street, four of
+    # them on the editor's own articles. An editor's own photo
+    # (manual-editorial-photo) is never touched by this.
+    if _unchecked_pipeline_commons(article, value):
+        return False
     # A manual article pointing at a real, non-generated file inside assets/img/cards
     # is authoritative in every lane (publish, scrape-fast, scrape-kick). Previously
     # this rule only existed as a monkey-patch in frontpage_manual_publish.py, so the

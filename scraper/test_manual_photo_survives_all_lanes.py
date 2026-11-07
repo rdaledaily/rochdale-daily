@@ -217,6 +217,62 @@ class PlaceFromStoryTests(unittest.TestCase):
                                        dict(story, area="middleton")))
 
 
+class CommonsCacheLocalityTests(unittest.TestCase):
+    """7 Nov 2026 review: the Commons cache was keyed by place name alone and
+    reused without the borough check, so a Heywood "Jubilee Park" photo went
+    on a Middleton story; matches cached that way had also put Tom Quad,
+    Oxford on Christ Church Healey."""
+
+    def setUp(self):
+        import tempfile
+        from PIL import Image
+        self.root = Path(tempfile.mkdtemp())
+        cards = self.root / "assets/img/cards"
+        cards.mkdir(parents=True)
+        Image.new("RGB", (800, 500), "green").save(cards / "heywoodpark-commons-photo.jpg")
+        page = {"title": "File:Jubilee Park, Heywood.jpg", "imageinfo": [{"mime": "image/jpeg", "extmetadata": {
+            "LicenseShortName": {"value": "CC BY-SA 2.0"}, "Categories": {"value": "Heywood, Greater Manchester"}}}]}
+        self.cache = {
+            "jubilee park|heywood": {"status": "matched", "subject": "Jubilee Park", "page": page,
+                                     "image_url": "assets/img/cards/heywoodpark-commons-photo.jpg"},
+            # Old shape: keyed by name alone, no file details to check.
+            "jubilee park": {"status": "matched", "subject": "Jubilee Park",
+                             "image_url": "assets/img/cards/heywoodpark-commons-photo.jpg"},
+        }
+        (cards / "commons_image_candidates.json").write_text(json.dumps(self.cache))
+
+    def story(self, area):
+        return {"slug": f"jubilee-{area}", "title": f"Volunteers tidy {area.title()}’s Jubilee Park",
+                "category": "community", "area": area, "image_url": "", "image_status": "place-generated-card"}
+
+    def test_cache_key_carries_the_town(self):
+        import image_hierarchy as ih
+        self.assertEqual(ih.commons_cache_key("Jubilee Park", self.story("middleton")), "jubilee park|middleton")
+        self.assertEqual(ih.commons_cache_key("Rochdale Town Hall", self.story("middleton")), "rochdale town hall")
+
+    def test_heywood_photo_never_reaches_middleton(self):
+        import image_hierarchy as ih
+        middleton = self.story("middleton")
+        ih.choose_image(middleton, self.root, allow_network=False)
+        self.assertNotIn("heywoodpark", middleton["image_url"])
+        heywood = self.story("heywood")
+        ih.choose_image(heywood, self.root, allow_network=False)
+        self.assertIn("heywoodpark", heywood["image_url"])
+        self.assertEqual(heywood["commons_validated_for"], "jubilee park|heywood")
+
+    def test_unchecked_commons_photo_is_redecided(self):
+        import ensure_article_images as images
+        story = dict(self.story("heywood"), image_url="assets/img/cards/heywoodpark-commons-photo.jpg",
+                     image_status="commons-photo-cached", image_backfill_method="wikimedia-commons")
+        self.assertFalse(images.existing_meaningful_image(dict(story), self.root))
+        checked = dict(story, commons_validated_for="jubilee park|heywood")
+        self.assertTrue(images.existing_meaningful_image(checked, self.root))
+        # An editor's own photo is never re-decided.
+        own = dict(story, manual_article=True, editorial_lock=True, image_backfill_method="manual-editorial-photo",
+                   image_status="editorial-photo")
+        self.assertTrue(images.existing_meaningful_image(own, self.root))
+
+
 if __name__ == "__main__":
     unittest.main()
 
