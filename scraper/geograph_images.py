@@ -90,8 +90,8 @@ def parse_rss(text: str) -> list[dict[str, str]]:
             elif name == "description" and not row["thumb"]:
                 found = re.search(r'src="([^"]+\.jpe?g)"', value, re.I)
                 row["thumb"] = found.group(1) if found else ""
-        if row["title"] and row["page_url"] and row["thumb"]:
-            items.append(row)
+        if row["title"] and row["page_url"]:
+            items.append(row)  # an item with no image link is counted, then skipped by search()
     return items
 
 
@@ -109,7 +109,7 @@ def title_matches(subject: str, title: str) -> bool:
 # Version of the search: a cached "searched, nothing found" from an older
 # version is searched again. 2: the first live run (7 Nov 2026) returned no
 # photo for 118 places, so those are retried once the reply is understood.
-SEARCH_VERSION = 2
+SEARCH_VERSION = 3
 # What the last reply looked like, with the key removed: written to the
 # Commons cache as "__geograph_probe__" so a run's log of Geograph is visible.
 LAST_REPLY: dict[str, Any] = {}
@@ -123,18 +123,26 @@ def search(subject: str, article: dict[str, Any], timeout: int = 10) -> list[dic
     import requests
     lat, lon = TOWN_CENTRES[town_for(article)]
     params = {"key": key, "text": subject, "location": f"{lat},{lon}", "distance": GEOGRAPH_RADIUS_KM,
-              "perpage": 30, "format": "RSS2.0"}
+              "perpage": 30, "format": "RSS2.0",
+              # Geograph's API page: expand=1 "includes the thumbnail as HTML
+              # in the description". Without it the RSS reply carries no image
+              # link at all, which is why the first run (7 Nov 2026) found
+              # nothing for 118 places.
+              "expand": 1}
     response = requests.get(API + "?" + urlencode(params), headers={"User-Agent": USER_AGENT}, timeout=timeout)
     rows = parse_rss(response.text) if response.ok else []
     LAST_REPLY.clear()
     LAST_REPLY.update({
         "subject": subject, "http": response.status_code,
         "content_type": response.headers.get("content-type", ""),
-        "items_in_reply": len(rows), "first_titles": [r["title"] for r in rows[:5]],
+        "items_in_reply": len(rows), "items_with_image": sum(1 for r in rows if r["thumb"]),
+        "first_titles": [r["title"] for r in rows[:5]],
         "head": response.text[:400].replace(key, "[key]"),
+        "first_item": (re.search(r"<item>.*?</item>", response.text, re.S) or re.search(r"$", ""))
+                      .group(0)[:900].replace(key, "[key]"),
     })
     response.raise_for_status()
-    return [row for row in rows if title_matches(subject, row["title"])]
+    return [row for row in rows if row["thumb"] and title_matches(subject, row["title"])]
 
 
 def as_commons_page(row: dict[str, str], town: str) -> dict[str, Any]:
