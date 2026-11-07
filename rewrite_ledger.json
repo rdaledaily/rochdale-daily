@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-07T11:25:34.804984Z",
+  "updated_at": "2026-11-07T11:44:29.664874Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 137,
+  "count": 136,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -55,14 +55,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-07T11:25:34.804824Z",
+      "last_attempt_at": "2026-11-07T11:44:29.664540Z",
       "outcome": "published",
       "reason": "",
       "title": "Drunk driver jailed after a pursuit in Rochdale left pedestrian with life-changing injuries - About Manchester",
       "source_name": "About Manchester",
       "category": "crime",
       "text_fingerprint": "ed3e31642d60387a",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://africa.espn.com/football/match/_/gameId/401906344/doncaster-rovers-rochdale": {
@@ -688,12 +688,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-06T11:19:20.788531Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 06/11/2026 at 10:50am Live Freehold Tram Stop - Lifts out of service Duration Fri 06 Nov, 10:50am – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "e988b705dfbc8a1e"
+      "text_fingerprint": "e988b705dfbc8a1e",
+      "recovery_attempts": 1
     },
     "https://themanc.com/sponsored/ignite-fire-festival-rochdale-2026": {
       "first_attempt_at": "2026-10-30T00:30:45.404945Z",
@@ -2441,22 +2442,6 @@
       "category": "health",
       "text_fingerprint": "c4e10887b6917b95",
       "recovery_attempts": 1
-    },
-    "https://www.yourtrustrochdale.co.uk/health/member-success-story-stevens-incredible-15-stone-transformation": {
-      "first_attempt_at": "2026-10-30T11:19:33.083947Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.yourtrustrochdale.co.uk/health/member-success-story-stevens-incredible-15-stone-transformation"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-30T11:19:33.083947Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Member Success Story: Steven's Incredible 15-Stone Transformation - Your Trust",
-      "source_name": "Your Trust Rochdale",
-      "category": "health",
-      "text_fingerprint": "faf47da591dfcc8a"
     },
     "https://www.yourtrustrochdale.co.uk/health/rochdale-leisure-centre-small-pool-closure": {
       "first_attempt_at": "2026-11-04T09:39:26.692939Z",
