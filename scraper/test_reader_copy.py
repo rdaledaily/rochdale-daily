@@ -68,7 +68,7 @@ def run() -> None:
     assert rc.social_headline_issues("", title)
 
     # The house style carries the people-first brief and checks it.
-    assert STYLE_VERSION == "rochdale-human-newsroom-v11"
+    assert STYLE_VERSION == "rochdale-human-newsroom-v12"
     assert "Write about people, not incidents" in HOUSE_STYLE_SYSTEM
     issues = style_issues({"title": title, "excerpt": EXCERPT, "paragraphs": [P1, P2],
                            "social_headline": title, "category": "news"})

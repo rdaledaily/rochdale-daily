@@ -971,8 +971,33 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
         issues.append("Ground the report more clearly in the supplied facts.")
     if contains_long_verbatim_phrase(combined, source_text, 20):
         issues.append("Rewrite the long verbatim source passage.")
+    # v12: the sources quote someone, the draft quotes no one. Measured
+    # 7 Nov 2026: only 18 of the last 150 rewrites carried a direct quote.
+    if source_has_quote(source_text) and not draft_has_quote(combined):
+        issues.append("The sources quote a named person: use the most telling words as an exact, attributed quotation by the third to fifth paragraph.")
     issues.extend(style_issues(clean, source_kind))
     return issues
+
+
+_QUOTE_RE = re.compile(r"[\"“]([^\"“”]{25,}?)[\"”]")
+_SPEECH_RE = re.compile(r"\b(?:said|says|added|told|explained|commented|stated)\b", re.I)
+
+
+def source_has_quote(text: str) -> bool:
+    """A direct quotation of at least five words, with a speech verb within
+    120 characters of it: someone was quoted, not a title or a slogan."""
+    text = str(text or "")
+    for match in _QUOTE_RE.finditer(text):
+        if len(match.group(1).split()) < 5:
+            continue
+        window = text[max(0, match.start() - 120):match.end() + 120]
+        if _SPEECH_RE.search(window):
+            return True
+    return False
+
+
+def draft_has_quote(text: str) -> bool:
+    return any(len(m.group(1).split()) >= 3 for m in re.finditer(r"[\"“]([^\"“”]{8,}?)[\"”]", str(text or "")))
 
 
 def enrich_records(

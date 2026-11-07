@@ -10,7 +10,7 @@ from reader_copy import (
     ai_tell_issues, headline_issues, repetition_issues, social_headline_issues,
 )
 
-STYLE_VERSION = "rochdale-human-newsroom-v11"
+STYLE_VERSION = "rochdale-human-newsroom-v12"
 
 # Shared original editorial voice for news and features. Never overrides accuracy.
 HUMAN_VOICE_BRIEF = (
@@ -59,6 +59,23 @@ PEOPLE_FIRST_BRIEF = (
     "and no question on crime, court or police stories."
 )
 
+# v12, 7 Nov 2026: news syntax measured against national tabloid-style news
+# writing (structure only, never its tone). Measured on our last 150 rewrites:
+# first paragraph median 38 words (87 over 35), a direct quote in only 18,
+# an age in only 24 intros, 147 sentences over 30 words.
+NEWS_SYNTAX_BRIEF = (
+    "News syntax. The first paragraph is ONE sentence of no more than 30 words carrying who, what and where, and the single most striking verified detail. "
+    "Give a named person's age and home area the first time they appear, in the form 'Jane Smith, 34, of Heywood', whenever the sources state them; never guess either. "
+    "The second paragraph gives the next most important fact or the consequence for readers. "
+    "When the sources quote a named person, give the most telling words as an exact quotation by the third to fifth paragraph, in its own paragraph, "
+    "introduced plainly: 'Jane Smith said: \"...\"' or ending ', she said.' Never paraphrase a quotation that the sources give word for word, never tidy it and never invent one. "
+    "Keep most sentences under 25 words and none over 35. Put the subject and the verb first; move qualifications and dates to the end of the sentence. "
+    "Specific beats general: the number, the street, the time, the price, the school, the shop. "
+    "End on the last new fact, what happens next or a quotation: never a summary, a moral or a reflection. "
+    "Write dates as '4 August 2026', never '4th August'. "
+    "Headlines name the person or place and carry the most striking verified detail; plain verbs, no sensational adjectives."
+)
+
 HOUSE_STYLE_SYSTEM = (
     NATURAL_STORY_POLICY + " " + CONTEXT_POLICY + " " +
     "You are the senior news editor of Rochdale Daily. Write accurate, polished British local journalism. "
@@ -100,7 +117,7 @@ HOUSE_STYLE_SYSTEM = (
     "Match the length budget supplied with each assignment: it reflects how much verified source material exists. A rich evidence pack should become a substantial, information-dense report; a thin source supports only a short, accurate brief. "
     "Never pad towards a word count with unsupported reaction, generic history, invented trends, speculation or repetitive paraphrase — a short true report always beats a long invented one. "
     "Use only the supplied source evidence."
-) + " " + HUMAN_VOICE_BRIEF + " " + PEOPLE_FIRST_BRIEF + " " + READER_FIRST_POLICY
+) + " " + HUMAN_VOICE_BRIEF + " " + PEOPLE_FIRST_BRIEF + " " + NEWS_SYNTAX_BRIEF + " " + READER_FIRST_POLICY
 
 WEAK_STYLE_RE = re.compile(
     r"\b(?:"
@@ -247,6 +264,14 @@ def style_issues(draft: dict[str, Any], source_kind: str = "") -> list[str]:
         issues.append("Replace repetitive 'This...' openings with specific subjects.")
     if len(excerpt.split()) > 55:
         issues.append("Tighten the standfirst to one clear sentence.")
+    # v12: the opening is one sentence of no more than 30 words (35 allowed
+    # before the repair loop is asked: names and places run long).
+    # Only the clear failures go back (a repair call is paid): measured on the
+    # last 150 rewrites, 87 openings ran over 35 words.
+    if paragraphs:
+        opening = paragraphs[0]
+        if len(opening.split()) > 35:
+            issues.append("Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.")
 
     combined = " ".join([title, excerpt, *paragraphs])
     if EMOJI_RE.search(combined):
