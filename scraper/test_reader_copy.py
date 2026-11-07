@@ -68,7 +68,7 @@ def run() -> None:
     assert rc.social_headline_issues("", title)
 
     # The house style carries the people-first brief and checks it.
-    assert STYLE_VERSION == "rochdale-human-newsroom-v13"
+    assert STYLE_VERSION == "rochdale-human-newsroom-v14"
     assert "Write about people, not incidents" in HOUSE_STYLE_SYSTEM
     issues = style_issues({"title": title, "excerpt": EXCERPT, "paragraphs": [P1, P2],
                            "social_headline": title, "category": "news"})
@@ -127,6 +127,20 @@ def run() -> None:
     early = ("<p>This incident underscores the importance of fire alarms.</p><p>Two.</p>"
              "<p>Three.</p><p>Four.</p>")
     assert "underscores" in rc.tidy_content_html(early)
+
+    # 7 Nov 2026 (editor): no sympathy or good wishes in the paper's voice;
+    # quoted words stay.
+    died = "<p>The man, 52, died at the scene.</p><p>Police are investigating. Our thoughts are with the family and all those affected.</p>"
+    assert rc.tidy_content_html(died) == "<p>The man, 52, died at the scene.</p><p>Police are investigating.</p>"
+    own = "<p>She was taken to hospital.</p><p>We wish her a speedy recovery.</p><p>Right of reply: email us.</p>"
+    assert rc.tidy_editor_html(own) == "<p>She was taken to hospital.</p><p>Right of reply: email us.</p>"
+    quoted = "<p>The family paid tribute.</p><p>“Our thoughts are with everyone who knew him,” the club said.</p>"
+    assert rc.tidy_content_html(quoted) == quoted
+    assert not rc.is_sentiment_closer("Police thanked the public for their help.")
+    # Standard notices are kept as endings.
+    notices = ("<p>The road reopened at 6pm.</p><p>Correction: an earlier version gave the wrong date.</p>"
+               "<p>Right of reply: anyone named can email news@rochdaledaily.co.uk.</p>")
+    assert rc.tidy_editor_html(notices) == notices
 
     print("Reader-copy rule tests passed.")
 

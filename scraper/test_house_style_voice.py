@@ -12,7 +12,7 @@ def draft(title: str, paragraph: str) -> dict:
 
 
 def run() -> None:
-    assert STYLE_VERSION == "rochdale-human-newsroom-v13"
+    assert STYLE_VERSION == "rochdale-human-newsroom-v14"
     from editorial_contract import NATURAL_STORY_POLICY
     assert NATURAL_STORY_POLICY in HOUSE_STYLE_SYSTEM
     assert HUMAN_VOICE_BRIEF in HOUSE_STYLE_SYSTEM
@@ -65,6 +65,10 @@ def run() -> None:
     assert "Mr Emmott" in NEWS_SYNTAX_BRIEF and "A Heywood man" in NEWS_SYNTAX_BRIEF
     from reader_copy import uk_dates
     assert uk_dates("war on 4th August 1914 and 21st May") == "war on 4 August 1914 and 21 May"
+    # v14 (editor, 7 Nov 2026): no paper-voice sympathy closer.
+    assert "Our thoughts are with the family and all those affected" not in _hs.HOUSE_STYLE_SYSTEM
+    assert "has asked <the relevant body> for comment" in _hs.HOUSE_STYLE_SYSTEM
+    assert "a right of reply line, a correction or clarification notice, and the source line" in _hs.HOUSE_STYLE_SYSTEM
     print("Human editorial voice checks passed.")
 
 
