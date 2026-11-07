@@ -178,6 +178,13 @@ def run() -> None:
     assert fb.post_photo(crime_on_card) == "https://rochdaledaily.co.uk/assets/img/cards/police.jpg"
     assert fb.post_photo(feed[-1]).endswith("/assets/img/cards/warwick-mill.jpg")
     assert fb.post_photo(feed[0]) == ""
+    # story_image.compose_story_card's area-category card is a card, not a
+    # photo: it waits, and a crime story on one gets the police photo.
+    area_card = {"image_url": "assets/img/cards/heywood-area-category-card.jpg", "image_status": "area-category-card"}
+    assert not fb.has_story_photo(area_card, usage)
+    assert fb.post_photo(dict(area_card, category="crime")).endswith("/assets/img/cards/police.jpg")
+    renamed = {"image_url": "assets/img/cards/x.jpg", "image_status": "place-generated-card"}
+    assert not fb.has_story_photo(renamed, usage)            # status alone marks a card
 
     print("Facebook photo-post and link-comment tests passed.")
 

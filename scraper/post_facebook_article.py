@@ -202,10 +202,22 @@ def image_usage(articles: list[Any]) -> dict[str, int]:
 POLICE_STOCK_PHOTO = "assets/img/cards/police.jpg"
 
 
+# Every generated card format the site produces, by file name and by status:
+# the beige place card, placeholders, and story_image.compose_story_card's
+# "<area>-area-category-card.jpg" (the same markers as
+# generate_pages.is_generated_card). 7 Nov 2026 review: the area-category
+# card was missing and would have counted as a photo.
+_CARD_NAME_MARKERS = ("generated", "placeholder", "area-category-card")
+_CARD_STATUS_MARKERS = ("generated", "placeholder", "area-category-card")
+
+
 def _real_photo_name(article: dict[str, Any]) -> str:
     raw = str(article.get("image_url") or article.get("img") or "").split("?")[0]
     name = raw.rsplit("/", 1)[-1].lower()
-    if not name or "generated" in name or "placeholder" in name or name.endswith(".svg"):
+    status = str(article.get("image_status") or "").lower()
+    if not name or name.endswith(".svg") or any(m in name for m in _CARD_NAME_MARKERS):
+        return ""
+    if any(m in status for m in _CARD_STATUS_MARKERS):
         return ""
     return name
 
