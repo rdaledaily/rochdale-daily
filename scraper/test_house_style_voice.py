@@ -12,7 +12,7 @@ def draft(title: str, paragraph: str) -> dict:
 
 
 def run() -> None:
-    assert STYLE_VERSION == "rochdale-human-newsroom-v12"
+    assert STYLE_VERSION == "rochdale-human-newsroom-v13"
     from editorial_contract import NATURAL_STORY_POLICY
     assert NATURAL_STORY_POLICY in HOUSE_STYLE_SYSTEM
     assert HUMAN_VOICE_BRIEF in HOUSE_STYLE_SYSTEM
@@ -53,6 +53,11 @@ def run() -> None:
     assert eu.source_has_quote('The councillor said: "We will not let this park close while I am here."')
     assert not eu.source_has_quote('The "Love Rochdale Awards" return next week.')
     assert eu.draft_has_quote('She said: "It is a proud day for the bakery."')
+    # v13: single and curly quotation marks count; apostrophes do not.
+    assert eu.source_has_quote("'It is a truly exceptional tragedy, we will act,' Mr Tusk said.")
+    assert not eu.source_has_quote("The gunman's car and the officers' guns were found at the driver's home, police said.")
+    assert eu.draft_has_quote("‘It was a proud day for us,’ she said.")
+    assert "Mr Emmott" in NEWS_SYNTAX_BRIEF and "A Heywood man" in NEWS_SYNTAX_BRIEF
     from reader_copy import uk_dates
     assert uk_dates("war on 4th August 1914 and 21st May") == "war on 4 August 1914 and 21 May"
     print("Human editorial voice checks passed.")

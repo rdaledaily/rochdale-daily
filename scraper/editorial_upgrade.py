@@ -979,7 +979,22 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
     return issues
 
 
-_QUOTE_RE = re.compile(r"[\"“]([^\"“”]{25,}?)[\"”]")
+# Double or single quotation marks, straight or curly. A straight single quote
+# only counts when it is not an apostrophe (no letter on both sides of it).
+_QUOTE_RE = re.compile(
+    r"[\"“]([^\"“”]{25,}?)[\"”]"
+    r"|‘([^‘’]{25,}?)’"
+    r"|(?<![A-Za-z])'((?:[^']|(?<=[A-Za-z])'(?=[A-Za-z])){25,}?)'(?![A-Za-z])"
+)
+_DRAFT_QUOTE_RE = re.compile(
+    r"[\"“]([^\"“”]{8,}?)[\"”]"
+    r"|‘([^‘’]{8,}?)’"
+    r"|(?<![A-Za-z])'((?:[^']|(?<=[A-Za-z])'(?=[A-Za-z])){8,}?)'(?![A-Za-z])"
+)
+
+
+def _quoted(match: re.Match[str]) -> str:
+    return next((g for g in match.groups() if g), "")
 _SPEECH_RE = re.compile(r"\b(?:said|says|added|told|explained|commented|stated)\b", re.I)
 
 
@@ -988,7 +1003,7 @@ def source_has_quote(text: str) -> bool:
     120 characters of it: someone was quoted, not a title or a slogan."""
     text = str(text or "")
     for match in _QUOTE_RE.finditer(text):
-        if len(match.group(1).split()) < 5:
+        if len(_quoted(match).split()) < 5:
             continue
         window = text[max(0, match.start() - 120):match.end() + 120]
         if _SPEECH_RE.search(window):
@@ -997,7 +1012,7 @@ def source_has_quote(text: str) -> bool:
 
 
 def draft_has_quote(text: str) -> bool:
-    return any(len(m.group(1).split()) >= 3 for m in re.finditer(r"[\"“]([^\"“”]{8,}?)[\"”]", str(text or "")))
+    return any(len(_quoted(m).split()) >= 3 for m in _DRAFT_QUOTE_RE.finditer(str(text or "")))
 
 
 def enrich_records(
