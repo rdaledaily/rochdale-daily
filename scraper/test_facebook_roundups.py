@@ -161,17 +161,23 @@ def run() -> None:
             assert "Read the full story: https://rochdaledaily.co.uk/articles/v" in edit.call_args.args[2]
             assert "v" in json.loads(state_file.read_text())["posted"]
 
-    # 6 Nov 2026: a post goes out only with a photo of the story. A generated
-    # place card, or a stock picture used by more than two stories, waits.
+    # 7 Nov 2026 (editor): any real photo posts, stock included; a crime or
+    # police story is never held back and uses the police photo if on a card;
+    # only a non-crime story on a beige card waits.
     feed = [
         {"image_url": "assets/img/cards/abc-place-generated-card.jpg", "image_status": "place-generated-card"},
-        *[{"image_url": "assets/img/cards/rochdale-town-hall.jpg", "image_status": "cards-library-photo"}] * 3,
+        *[{"image_url": "assets/img/cards/police.jpg", "image_status": "standard-police-image", "category": "crime"}] * 8,
         {"image_url": "assets/img/cards/warwick-mill.jpg", "image_status": "source-photo-cached"},
     ]
     usage = fb.image_usage(feed)
     assert not fb.has_story_photo(feed[0], usage)
-    assert not fb.has_story_photo(feed[1], usage)
+    assert fb.has_story_photo(feed[1], usage)
     assert fb.has_story_photo(feed[-1], usage)
+    crime_on_card = dict(feed[0], category="crime")
+    assert fb.has_story_photo(crime_on_card, usage)
+    assert fb.post_photo(crime_on_card) == "https://rochdaledaily.co.uk/assets/img/cards/police.jpg"
+    assert fb.post_photo(feed[-1]).endswith("/assets/img/cards/warwick-mill.jpg")
+    assert fb.post_photo(feed[0]) == ""
 
     print("Facebook photo-post and link-comment tests passed.")
 

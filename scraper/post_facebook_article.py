@@ -199,15 +199,39 @@ def image_usage(articles: list[Any]) -> dict[str, int]:
     return usage
 
 
-def has_story_photo(article: dict[str, Any], usage: dict[str, int]) -> bool:
+POLICE_STOCK_PHOTO = "assets/img/cards/police.jpg"
+
+
+def _real_photo_name(article: dict[str, Any]) -> str:
     raw = str(article.get("image_url") or article.get("img") or "").split("?")[0]
     name = raw.rsplit("/", 1)[-1].lower()
     if not name or "generated" in name or "placeholder" in name or name.endswith(".svg"):
-        return False
-    if str(article.get("image_status") or "") not in STORY_PHOTO_STATUSES:
-        return False
-    # A picture used by more than two stories is stock, whatever its label.
-    return usage.get(name, 0) <= SHARED_STOCK_LIMIT
+        return ""
+    return name
+
+
+def is_crime_story(article: dict[str, Any]) -> bool:
+    return (str(article.get("category") or "").lower() in {"crime", "courts"}
+            or bool(article.get("police_matter")))
+
+
+def has_story_photo(article: dict[str, Any], usage: dict[str, int]) -> bool:
+    """A story posts when it carries a real photo of any kind, stock photos
+    included, or is a crime/police story (editor, 7 Nov 2026: crime is one of
+    the most-read sections and is never held back; a stock photo used on many
+    stories, such as the police photo, still earns the click there). Only a
+    non-crime story still on a beige card waits."""
+    return bool(_real_photo_name(article)) or is_crime_story(article)
+
+
+def post_photo(article: dict[str, Any]) -> str:
+    """The photo for the post: the story's own, or for a crime/police story
+    on a beige card, the standard police photo."""
+    if _real_photo_name(article):
+        return image_url(article)
+    if is_crime_story(article):
+        return SITE + "/" + POLICE_STOCK_PHOTO
+    return ""
 
 
 def roundup_eligible(article: Any, max_age_hours: int, now: datetime | None = None) -> bool:
@@ -229,7 +253,7 @@ def roundup_eligible(article: Any, max_age_hours: int, now: datetime | None = No
         "paid_reader_submission", "advertisement", "utility", "weather",
     }:
         return False
-    if not image_url(article):
+    if not image_url(article) and not is_crime_story(article):
         return False
     return True
 
@@ -487,7 +511,7 @@ def main() -> int:
     if urgent_waiting and not current_slot(now):
         article = next(row for row in candidates if is_urgent(row))
     caption = compose_caption(article)
-    photo = image_url(article)
+    photo = post_photo(article)
     destination = canonical_url(article)
     link_comment = f"Read the full story: {destination}"
     slot = current_slot(now) or now.astimezone(LONDON).strftime("%Y-%m-%d:%H") + "-urgent"
