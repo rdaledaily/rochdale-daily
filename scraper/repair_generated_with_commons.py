@@ -213,6 +213,8 @@ def main(argv: list[str] | None = None) -> int:
         article["image_credit"] = f"{artist} / Wikimedia Commons" + (f" ({license_name})" if license_name else "")
         article["image_credit_url"] = page_url
         article["image_status"] = "commons-photo-cached"
+        from image_hierarchy import commons_cache_key
+        article["commons_validated_for"] = commons_cache_key(query_for(article), article)
         article["image_backfill_method"] = "wikimedia-commons"
         article["source_image_reuse_status"] = "commons-free-license"
         article.pop("image_placeholder_reason", None)

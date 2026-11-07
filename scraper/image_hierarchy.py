@@ -152,6 +152,28 @@ def subject_for(article):
     return body_place(article)
 
 
+def commons_cache_key(subject, article):
+    """Cache key: a known landmark is the same place for every story; any
+    other place name is keyed with the story's town, so "Jubilee Park" for a
+    Heywood story never reuses the Middleton search (or the reverse)."""
+    key = subject.casefold()
+    if is_landmark(subject):
+        return key
+    towns = sorted(_towns(article) - {'rochdale'}) or ['rochdale']
+    return key + '|' + '+'.join(towns)
+
+
+def is_landmark(subject):
+    return subject in KNOWN_SUBJECTS or subject in SUBJECT_ALIASES.values()
+
+
+def commons_checked(subject, article):
+    """A Commons photo on a story was checked for it: a known landmark (one
+    place wherever it appears), or a place checked for this story's town."""
+    return bool(subject) and (is_landmark(subject)
+                              or article.get('commons_validated_for') == commons_cache_key(subject, article))
+
+
 def _towns(article):
     area = str(article.get('area') or '').casefold()
     return {w for w in re.findall(r'[a-z]+', area) if w not in {'and', 'the', 'town', 'centre', 'east', 'west', 'north', 'south'}} | {'rochdale'}
@@ -258,10 +280,18 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
         return 'internal'
     if commons_current and is_generic_commons(article, root, rel):
         relevance = False
-    if relevance is not False and commons_current and current.is_file() and not generated:
+    subject = subject_for(article)
+    # A Commons photo already on the story is kept only when it was checked
+    # for this story's subject AND town (commons_validated_for). 7 Nov 2026:
+    # matches cached by subject alone had put Tom Quad, Oxford on Christ Church
+    # Healey and a Vancouver street on Hornby Street; unchecked ones are
+    # searched again, and a right one is simply found again.
+    validated = commons_checked(subject, article)
+    if relevance is not False and commons_current and current.is_file() and not generated and validated:
         article['image_policy'] = POLICY
         return 'commons'
-    subject = subject_for(article)
+    if commons_current and not validated:
+        relevance = False
     # A named person or premise is never guessed for crime/safeguarding reports.
     # A police file photo is permitted only when that service is the named subject.
     if str(article.get('category') or '').casefold() == 'crime' and subject != 'Greater Manchester Police':
@@ -278,8 +308,12 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
             cache = json.loads(cache_file.read_text())
         except ValueError:
             pass
-    key = subject.casefold()
+    key = commons_cache_key(subject, article) if subject else ''
     record = cache.get(key, {}) if key else {}
+    # A cached match is used only after the full check again, against this
+    # story; one cached without the file's details cannot be checked.
+    if record.get('status') == 'matched' and not (record.get('page') and acceptable(record['page'], subject, article)):
+        record = {}
     if subject and not record and allow_network:
         result = commons_search(subject)
         record = {'status': result['status'], 'subject': subject}
@@ -299,7 +333,10 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
                           image_credit=plain(meta.get('Artist', {}).get('value')) + ' / Wikimedia Commons (' + plain(meta.get('LicenseShortName', {}).get('value')) + ')',
                           image_credit_url=info.get('descriptionurl', ''),
                           image_license_url=plain(meta.get('LicenseUrl', {}).get('value')),
-                          commons_title=page['title'])
+                          commons_title=page['title'],
+                          page={'title': page['title'], 'imageinfo': [{
+                              'mime': info.get('mime'),
+                              'extmetadata': {k: meta.get(k, {}) for k in ('LicenseShortName', 'ImageDescription', 'Categories')}}]})
             break
         # A failed service is retryable; do not persist it as "no image exists".
         if record['status'] != 'service-unavailable':
@@ -312,7 +349,9 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
             article[field] = record.get(field, '')
         article.update(img=article['image_url'], image_status='commons-photo-cached', image_policy=POLICY,
                        image_alt='File image: ' + subject + '. Not a photograph of this event.',
-                       image_backfill_method='wikimedia-commons', source_image_reuse_status='commons-free-license')
+                       image_backfill_method='wikimedia-commons', source_image_reuse_status='commons-free-license',
+                       commons_validated_for=key)
         return 'commons'
+    article.pop('commons_validated_for', None)
     set_place_card(article, root)
     return 'place-card'

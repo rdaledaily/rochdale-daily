@@ -296,6 +296,21 @@ def run_gmp_release_match() -> None:
     assert report["matches"] and "gmp_release_url" not in rows[0]
     report = gm.run(rows, "apply", releases)
     assert rows[0]["gmp_release_url"] == releases[0]["url"] and releases[0]["url"] in rows[0]["source_urls"]
+    # Dates (7 Nov 2026 review): an undated release never matches, and a
+    # long month name is read in full.
+    undated = dict(releases[1], published="")
+    assert gm.score(jailed, undated)[0] == 0
+    assert gm._when("29 September 2026") == datetime(2026, 9, 29, tzinfo=timezone.utc)
+    assert gm._when("Published 5 November 2026 at 10:31") == datetime(2026, 11, 5, tzinfo=timezone.utc)
+    september = dict(releases[1], published="29 September 2026")
+    assert gm.score(jailed, september)[0] == 0          # same person, different incident
+    assert gm._when("November 2026") is None
+    # Ages: adults stay eligible, children never.
+    assert gm.photo_safe("Appeal to find wanted man John Smith, 35-year-old, in Rochdale")
+    assert gm.photo_safe("Rochdale man, 42, jailed after pursuit")
+    for child in ("Appeal for 15-year-old from Heywood", "Rochdale boy, 13, hurt", "Girl aged 9 assaulted",
+                  "Teenager sought after Middleton incident"):
+        assert not gm.photo_safe(child), child
     print("GMP release matching passed.")
 
 
