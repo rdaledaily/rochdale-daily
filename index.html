@@ -2403,6 +2403,12 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         policeMatter: !reserveFeature && Boolean(article.policeMatter || article.police_matter),
         body: body.length ? body : ["Further verified details will be added by the Rochdale Daily newsdesk."],
         slot: article.slot || "",
+        // Editor pin (featured + frontpage_until), the same rule the server
+        // selector uses: the pinned story leads until the date passes. The
+        // browser sorts articles.json itself, so without this a newer story
+        // took the lead from a pinned one (8 Nov 2026).
+        pinned: article.featured === true && Boolean(article.frontpage_until)
+          && (new Date(article.frontpage_until).getTime() || 0) >= Date.now(),
         // A crime story outranks the rest of the paper while it is news, not
         // for ever. The flat "crime = 100" boost sorted above date, so every
         // crime story ever published sat above every other story: on 29 August
@@ -2460,6 +2466,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         if (Boolean(a.isReserveFeature) !== Boolean(b.isReserveFeature)) {
           return a.isReserveFeature ? 1 : -1;
         }
+        if (Boolean(a.pinned) !== Boolean(b.pinned)) return a.pinned ? -1 : 1;
         const aRank = Number.isFinite(Number(a.frontpage_rank)) ? Number(a.frontpage_rank) : 9999;
         const bRank = Number.isFinite(Number(b.frontpage_rank)) ? Number(b.frontpage_rank) : 9999;
         if (aRank !== bRank) return aRank - bRank;
