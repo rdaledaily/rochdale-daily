@@ -50,5 +50,25 @@ class ManualSourceLinks(unittest.TestCase):
                 self.assertEqual(generate_pages.load_articles(blocklist={}), [])
 
 
+class ManualGallery(unittest.TestCase):
+    """8 Nov 2026: editor-supplied parade photos shown under the story."""
+
+    def test_gallery_figures_sit_before_the_source_line(self):
+        import manual_articles
+        body = "First paragraph.\n\nSource: supplied."
+        gallery = [
+            {"src": "assets/img/logo.png", "caption": "Not in cards, ignored."},
+            {"src": "assets/img/cards/rochdale_cenotaph.jpg", "alt": "The Cenotaph", "caption": "The <Cenotaph>."},
+            {"src": "assets/img/cards/does-not-exist.jpg", "caption": "Missing, ignored."},
+            {"src": "javascript:alert(1)", "caption": "Ignored."},
+        ]
+        out = manual_articles._content_html({"body": body, "gallery": gallery})
+        self.assertEqual(out.count("<figure"), 1)
+        self.assertIn('src="/assets/img/cards/rochdale_cenotaph.jpg"', out)
+        self.assertIn("The &lt;Cenotaph&gt;.", out)
+        self.assertLess(out.index("<figure"), out.index("<p>Source:"))
+        self.assertEqual(manual_articles._content_html({"body": body}), "<p>First paragraph.</p><p>Source: supplied.</p>")
+
+
 if __name__ == '__main__':
     unittest.main()

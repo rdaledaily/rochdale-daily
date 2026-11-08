@@ -128,7 +128,41 @@ def _content_html(entry: dict[str, Any]) -> str:
         return f'<a href="{url}" rel="noopener">{url}</a>{suffix}'
 
     linked = [re.sub(r"https?://[^\s<>\"']+", link_urls, part) for part in paragraphs]
-    return "".join(f"<p>{part}</p>" for part in linked)
+    blocks = [f"<p>{part}</p>" for part in linked]
+    gallery = _gallery_html(entry.get("gallery"))
+    if gallery:
+        # Before the closing source line, so the photographs sit with the story.
+        at = len(blocks) - 1 if blocks and re.match(r"<p>Sources?:", blocks[-1]) else len(blocks)
+        blocks.insert(at, gallery)
+    return "".join(blocks)
+
+
+_GALLERY_SRC_RE = re.compile(r"assets/img/cards/[a-z0-9][a-z0-9_-]*\.(?:jpe?g|png|webp)")
+
+
+def _gallery_html(gallery: Any) -> str:
+    """Extra editor-supplied photographs for a manual story.
+
+    `gallery` is a list of {"src", "alt", "caption"}; src must be a photo in
+    assets/img/cards that exists. Anything else is ignored, never raw HTML."""
+    if not isinstance(gallery, list):
+        return ""
+    root = Path(__file__).resolve().parents[1]
+    figures = []
+    for item in gallery:
+        if not isinstance(item, dict):
+            continue
+        src = str(item.get("src") or "").strip().lstrip("/")
+        if not _GALLERY_SRC_RE.fullmatch(src) or not (root / src).is_file():
+            continue
+        alt = html.escape(_clean(item.get("alt") or item.get("caption")), quote=True)
+        caption = html.escape(_clean(item.get("caption")))
+        figures.append(
+            f'<figure class="article-gallery-item"><img src="/{src}" alt="{alt}" loading="lazy" decoding="async">'
+            + (f"<figcaption>{caption}</figcaption>" if caption else "")
+            + "</figure>"
+        )
+    return f'<div class="article-gallery">{"".join(figures)}</div>' if figures else ""
 
 
 def _excerpt(entry: dict[str, Any]) -> str:
