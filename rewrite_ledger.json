@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-08T22:16:28.523865Z",
+  "updated_at": "2026-11-08T22:59:16.505263Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 134,
@@ -693,14 +693,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T22:16:28.523562Z",
+      "last_attempt_at": "2026-11-08T22:59:16.505061Z",
       "outcome": "published",
       "reason": "",
       "title": "Man dies in Middleton flat fire despite emergency response",
       "source_name": "BBC Manchester",
       "category": "news",
       "text_fingerprint": "c2e2a246b4b63b84",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.bbc.co.uk/sport/football/live/c63el28n0pe5t": {
@@ -1373,14 +1373,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T21:14:22.928378Z",
+      "last_attempt_at": "2026-11-08T22:56:54.627932Z",
       "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "traffic",
       "text_fingerprint": "de4d107d98428f6c",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-lands-middleton-nursery-34853004": {
       "first_attempt_at": "2026-11-02T23:09:44.845795Z",
