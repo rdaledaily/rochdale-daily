@@ -275,6 +275,56 @@ def set_place_card(article, root):
                    image_alt='Illustration: ' + area + ', ' + category + '. Not a photograph of the event.',
                    image_policy=POLICY)
 
+POLICE_STOCK_IMAGE = 'assets/img/cards/police.jpg'
+_POLICE_HEADLINE_RE = re.compile(r"\b(?:police|policing|gmp|officers?|detectives?)\b", re.I)
+_POLICE_BODY_RE = re.compile(r"\b(?:greater manchester police|gmp|police)\b", re.I)
+# The headline words that make a passing police mention matter. Not "fire":
+# "fined as fire service takes enforcement action" is a business story.
+_POLICE_INCIDENT_RE = re.compile(r"\b(?:dies|died|die|death|dead|body|killed|fatal\w*|inquest|missing|murder\w*|"
+                                 r"stab\w*|assault\w*|abuse\w*|arrest\w*|crash\w*|collision|injur\w*|blaze|"
+                                 r"bomb|threat\w*|disappear\w*|vanish\w*|without answers|search for|incident)\b", re.I)
+
+
+def police_photo_story(article):
+    """A story police are part of: it takes the stock police photo instead of
+    the beige place card when no photo of its own is found.
+
+    Editor, 8 Nov 2026 ("use the generic police image for stories like
+    this"), after "Woman in her 50s dies at Tesco" went out on a beige card:
+    filed as news, not police_matter, no police word in the headline, but GMP
+    were called and confirmed the death. So it counts when the category is
+    crime or courts, the story is a police matter, the headline names the
+    police, or the copy names the police AND the headline or the scraper marks
+    it sensitive (a death, injury, crash, fire, threat, disappearance). A
+    business story that only mentions the police in passing stays as it was.
+    Sponsored copy never takes it."""
+    title = plain(article.get('title'))
+    if article.get('sponsored') or title.startswith('Sponsored:'):
+        return False
+    if str(article.get('category') or '').casefold() in {'crime', 'courts'} or article.get('police_matter'):
+        return True
+    if _POLICE_HEADLINE_RE.search(title):
+        return True
+    copy = plain(str(article.get('excerpt') or '') + ' ' + str(article.get('content_html') or ''))
+    return bool(_POLICE_BODY_RE.search(copy) and (_POLICE_INCIDENT_RE.search(title) or article.get('sensitive_story')))
+
+
+def set_police_image(article, root):
+    """The paper's own stock police photo. Returns False when the file is
+    missing, so the caller falls back to the place card rather than pointing
+    at nothing. image_placeholder_reason keeps it eligible for an upgrade:
+    a photo from GMP's own release (granted source) still replaces it."""
+    if not (root / POLICE_STOCK_IMAGE).is_file():
+        return False
+    article.update(image_url=POLICE_STOCK_IMAGE, img=POLICE_STOCK_IMAGE, image_credit='Rochdale Daily',
+                   image_credit_url='https://rochdaledaily.co.uk/', image_status='standard-police-image',
+                   image_backfill_method='stock-police-image',
+                   image_placeholder_reason='Stock police image: no photo of this story is held',
+                   image_alt='Stock image: police. Not a photograph of this event.',
+                   image_policy=POLICY)
+    return True
+
+
 def visible_image_note(article):
     """The reader-visible qualification for a file photo of a place or town
     ("File photo: Heywood. Not a photograph of this event."), or "".
@@ -287,6 +337,8 @@ def visible_image_note(article):
     status = str(article.get('image_status') or '')
     if alt.startswith(('File photo:', 'File image:')) and (
             status in {'town-file-photo', 'commons-photo-cached'} or method in {'geograph', 'geograph-town', 'wikimedia-commons'}):
+        return alt
+    if alt.startswith('Stock image:') and status == 'standard-police-image':
         return alt
     return ''
 
@@ -490,6 +542,8 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
                        commons_validated_for=key + ('#g' + str(geograph_images.SEARCH_VERSION) if record.get('source') == 'geograph' else ''))
         return 'commons'
     article.pop('commons_validated_for', None)
+    if police_photo_story(article) and set_police_image(article, root):
+        return 'police-image'
     if set_town_photo(article, root, cache, cache_file, allow_network):
         return 'town-photo'
     set_place_card(article, root)

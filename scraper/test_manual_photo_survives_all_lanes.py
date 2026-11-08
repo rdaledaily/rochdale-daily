@@ -393,6 +393,7 @@ class TownPhotoTests(unittest.TestCase):
              patch.object(g, "town_pool", return_value=self.pool(5)), \
              patch("repair_generated_with_commons.download", side_effect=fake_download):
             self.assertEqual(ih.choose_image(story, root), "town-photo")
+            # No police.jpg in this temp library: the place card, never a town photo.
             self.assertEqual(ih.choose_image(crime, root), "place-card")
         self.assertEqual(story["image_status"], "town-file-photo")
         self.assertEqual(story["image_alt"], "File photo: Heywood. Not a photograph of this event.")
