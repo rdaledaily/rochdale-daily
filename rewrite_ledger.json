@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-08T20:45:54.829666Z",
+  "updated_at": "2026-11-08T21:14:22.928549Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 133,
@@ -693,14 +693,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T20:32:12.210631Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-08T21:14:22.928138Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Man dies in Middleton flat fire despite emergency response",
       "source_name": "BBC Manchester",
       "category": "news",
       "text_fingerprint": "c2e2a246b4b63b84",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.bbc.co.uk/sport/football/live/c63el28n0pe5t": {
       "first_attempt_at": "2026-11-03T20:56:03.038304Z",
@@ -1366,19 +1367,20 @@
       "first_attempt_at": "2026-11-08T19:08:01.970577Z",
       "attempts": 1,
       "urls": [
+        "https://www.bbc.com/news/articles/crz65qelxw52o",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343.amp"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T20:32:12.210845Z",
+      "last_attempt_at": "2026-11-08T21:14:22.928378Z",
       "outcome": "published",
       "reason": "",
       "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "traffic",
       "text_fingerprint": "de4d107d98428f6c",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-lands-middleton-nursery-34853004": {
       "first_attempt_at": "2026-11-02T23:09:44.845795Z",
