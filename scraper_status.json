@@ -1,52 +1,25 @@
 {
-  "last_run_at": "2026-11-08T14:41:07.892576Z",
+  "last_run_at": "2026-11-08T14:55:18.900661Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 4,
-      "offered_today": 1,
-      "listed": 40,
-      "already_seen": 30,
-      "started_long_ago": 0,
-      "too_far_ahead": 8,
-      "undated": 2,
-      "in_window": 0
+      "status": "not due",
+      "last_checked": "2026-11-08T14:37:51.048623Z",
+      "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 5,
-      "other_notice_types": 1,
-      "already_seen": 4,
-      "new": 0,
-      "outside_borough": 0,
-      "no_company_address": 0,
-      "notice_unreadable": 0
+      "status": "not due",
+      "last_checked": "2026-11-08T14:37:51.048623Z",
+      "interval_hours": 12
     },
     "written_answers": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "listed": 5,
-      "unanswered_or_holding": 0,
-      "not_about_the_borough": 0,
-      "already_seen": 5,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-08T14:37:51.048623Z",
+      "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 18,
-      "not_decisions": 12,
-      "no_borough_place": 0,
-      "already_seen": 5,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-08T14:37:51.048623Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -54,27 +27,14 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 3,
-      "offered_today": 0,
-      "pages": 1,
-      "releases": 2,
-      "borough_buyer": 0,
-      "not_story_type": 0,
-      "already_seen": 0,
-      "new": 0,
-      "complete": 1
+      "status": "not due",
+      "last_checked": "2026-11-08T14:37:51.048623Z",
+      "interval_hours": 6
     },
     "weather_warnings": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 8,
-      "not_rochdale": 8,
-      "already_seen": 0,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-08T14:37:51.048623Z",
+      "interval_hours": 6
     },
     "claimant_count": {
       "status": "not due",
@@ -94,22 +54,17 @@
     "images_found": 16
   },
   "duplicates_merged": 50,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "rochdale-remembers-fallen-servicemen-and-women-on-remembrance-day",
-      "source_url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-falls-silent-to-pay-its-respects/"
-    }
-  ],
+  "attempted_rewrites": 0,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
   "new_articles": 0,
   "live_articles": 567,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 2,
-    "queued_for_retry": 1,
+    "missing_from_feed": 1,
+    "queued_for_retry": 0,
     "recovery_limit_reached": 1,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
@@ -120,16 +75,25 @@
     "entries": 137,
     "by_outcome": {
       "failed": 23,
-      "published": 90,
-      "rejected": 24
+      "published": 89,
+      "rejected": 25
     },
-    "held_back_this_run": 18,
+    "held_back_this_run": 19,
     "held_already_published": 15,
-    "held_rejected": 3,
+    "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-falls-silent-to-pay-its-respects",
+      "title": "Lest we forget: Borough falls silent to pay its respects - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-08T14:41:07.888270Z"
+    },
     {
       "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343",
       "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
@@ -158,9 +122,7 @@
       "last_attempt_at": "2026-11-07T16:16:30.159622Z"
     }
   ],
-  "published_with_style_issues": {
-    "Write a social_headline for Facebook.": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 67,
@@ -325,12 +287,12 @@
     "BBC Manchester": 2,
     "Roch Valley Radio": 2,
     "Exmouth Journal": 2,
-    "Express and Star": 2,
     "Ipswich Star": 2,
     "Rhyl Journal": 2,
     "https://www.birmingham-now.co.uk/": 1,
     "Hampshire Chronicle": 1,
     "The Northern Echo": 1,
+    "Express and Star": 1,
     "Stowmarket Mercury": 1,
     "Slough Observer": 1,
     "EDP24": 1,
@@ -338,13 +300,12 @@
     "Greater Manchester Police": 1,
     "About Manchester": 1,
     "Runcorn and Widnes World": 1,
+    "www.birmingham-now.co.uk": 1,
     "Thurrock Gazette": 1,
     "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {
-    "news": 1
-  },
+  "selected_by_category": {},
   "published_by_category": {
     "business": 63,
     "community": 81,
@@ -381,12 +342,8 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [
-    "hard-news-v3-9835ec78236cd525e32c"
-  ],
-  "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/lest-we-forget-borough-falls-silent-to-pay-its-respects/"
-  ],
+  "selected_story_keys": [],
+  "selected_candidate_urls": [],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -396,31 +353,6 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [
-      "news"
-    ],
-    "selected_categories": [
-      "news"
-    ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [
-      "rochdale"
-    ],
-    "uncovered_categories": [],
-    "uncovered_wards": [],
-    "uncovered_areas": [],
-    "selected_by_category": {
-      "news": 1
-    },
-    "selected_by_ward": {},
-    "selected_by_area": {
-      "rochdale": 1
-    },
-    "selected_by_source": {
-      "rochdale times": 1
-    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -979,12 +911,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "healthwatchrochdale.org.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "healthwatchrochdale.org.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1020,7 +948,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-08T14:42:03.883126Z",
+  "frontpage_generated_at": "2026-11-08T14:56:01.285018Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1028,7 +956,6 @@
       "business",
       "community",
       "crime",
-      "education",
       "environment",
       "news",
       "sport",
@@ -1038,7 +965,6 @@
       "business",
       "community",
       "crime",
-      "education",
       "environment",
       "news",
       "sport",
@@ -1082,7 +1008,7 @@
     "selected_by_area": {
       "castleton": 1,
       "deeplish": 1,
-      "middleton": 3,
+      "middleton": 2,
       "norden": 1,
       "rochdale": 14
     },
@@ -1100,8 +1026,8 @@
       "little acts of christmas": 1,
       "historic england — national heritage list for england (church of st leonard, middleton)": 1
     },
-    "pool_size": 21,
-    "primary_pool_size": 21,
+    "pool_size": 20,
+    "primary_pool_size": 20,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 16,
@@ -1132,7 +1058,7 @@
   "whats_on_event_count": 12,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
