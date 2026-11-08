@@ -189,7 +189,7 @@ def commons_checked(subject, article):
         # Geograph picks are re-checked whenever the matching rule changes.
         import geograph_images
         return article.get('commons_validated_for') == commons_cache_key(subject, article) + '#g' + str(geograph_images.SEARCH_VERSION)
-    return is_landmark(subject) or article.get('commons_validated_for') == commons_cache_key(subject, article)
+    return is_landmark(subject) or article.get('commons_validated_for') == commons_cache_key(subject, article) + '#c' + str(COMMONS_MATCH_VERSION)
 
 
 def _towns(article):
@@ -218,6 +218,20 @@ def commons_search(subject):
     _SEARCH_CACHE[subject] = result
     return result
 
+# Version of the Commons check: a Commons photo validated by an older rule is
+# checked again. 2: the place must be in the file title (8 Nov 2026).
+COMMONS_MATCH_VERSION = 2
+
+
+def file_title(title):
+    """A Commons/Geograph file title without "File:", the Geograph import
+    suffix, the grid-square prefix or the extension."""
+    t = re.sub(r'^File:', '', str(title or ''))
+    t = re.sub(r'\s*-\s*geograph\.org\.uk\s*-\s*\d+', '', t, flags=re.I)
+    t = re.sub(r'\.(jpe?g|png|webp|tiff?)$', '', t, flags=re.I)
+    return re.sub(r'^[A-Z]{1,2}\d{4}\s*:\s*', '', t).strip()
+
+
 def acceptable(page, subject, article=None):
     info = (page.get('imageinfo') or [{}])[0]
     if info.get('mime') not in {'image/jpeg', 'image/png', 'image/webp'}:
@@ -233,6 +247,16 @@ def acceptable(page, subject, article=None):
     # Every named-subject word is necessary, not one generic overlap like Park.
     if not all(re.search(r'\b' + re.escape(word) + r'\b', source_text) for word in words):
         return False
+    # The place must be what the photo SHOWS, so a place that is not a known
+    # landmark has to be named in the file's own title, in order. Measured
+    # 8 Nov 2026: 39 of 154 cached matches named the place only in the
+    # description ("a reservoir not far away from Syke Road", "taken from
+    # Clegg Hall Road"), so a reservoir went on Syke Road stories and Little
+    # Clegg Road on Clegg Hall Road. Geograph picks already had this rule.
+    if subject not in KNOWN_SUBJECTS and subject not in SUBJECT_ALIASES.values():
+        import geograph_images
+        if not geograph_images.title_matches(subject, file_title(page.get('title', ''))):
+            return False
     # A place name that is not a known landmark must be this borough's: "Bridge
     # Street" or "Jubilee Park" exist in every town. The story's town, or
     # Rochdale, must appear in the file's title, description or categories.
@@ -487,7 +511,7 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
                        image_alt='File image: ' + subject + '. Not a photograph of this event.',
                        image_backfill_method='geograph' if record.get('source') == 'geograph' else 'wikimedia-commons',
                        source_image_reuse_status='commons-free-license',
-                       commons_validated_for=key + ('#g' + str(geograph_images.SEARCH_VERSION) if record.get('source') == 'geograph' else ''))
+                       commons_validated_for=key + ('#g' + str(geograph_images.SEARCH_VERSION) if record.get('source') == 'geograph' else '#c' + str(COMMONS_MATCH_VERSION)))
         return 'commons'
     article.pop('commons_validated_for', None)
     if set_town_photo(article, root, cache, cache_file, allow_network):

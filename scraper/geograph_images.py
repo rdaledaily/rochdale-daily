@@ -142,11 +142,81 @@ def title_matches(subject: str, title: str) -> bool:
 # Version of the search: a cached result from an older version is searched
 # again. 2: the first live run (7 Nov 2026) returned no photo for 118 places.
 # 3: expand=1, so replies carry image links. 4: the place name must appear in
-# order in the photo title (title_matches).
-SEARCH_VERSION = 4
+# order in the photo title (title_matches). 5: a known street is searched
+# around its own postcode, not the town centre (street_centre).
+SEARCH_VERSION = 5
 # What the last reply looked like, with the key removed: written to the
 # Commons cache as "__geograph_probe__" so a run's log of Geograph is visible.
 LAST_REPLY: dict[str, Any] = {}
+
+
+# --------------------------------------------------------------------------
+# Where a street is (8 Nov 2026)
+# --------------------------------------------------------------------------
+# rochdale_streets.json lists every street in OL11, OL12 and OL16 with one
+# postcode per postcode sector it runs through (from the full Crystalroof
+# postcode lists). A street story's Geograph search is centred on that
+# street, within STREET_RADIUS_KM, instead of 4 km round the town centre, so
+# "Halifax Road" finds Rochdale's Halifax Road. Where a name runs through
+# several sectors, the one nearest the story's town is used. Postcode
+# coordinates come from postcodes.io (free, no key). Streets outside those
+# three districts, or a failed lookup, search round the town centre as before.
+STREET_RADIUS_KM = float(os.getenv("GEOGRAPH_STREET_RADIUS_KM", "0.8"))
+STREETS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rochdale_streets.json")
+_STREETS: dict[str, Any] | None = None
+_POSTCODE_CACHE: dict[str, tuple[float, float] | None] = {}
+
+
+def streets() -> dict[str, Any]:
+    global _STREETS
+    if _STREETS is None:
+        try:
+            import json
+            with open(STREETS_FILE, encoding="utf-8") as fh:
+                _STREETS = json.load(fh).get("streets", {})
+        except (OSError, ValueError):
+            _STREETS = {}
+    return _STREETS
+
+
+def postcode_location(postcode: str, timeout: int = 8) -> tuple[float, float] | None:
+    if postcode in _POSTCODE_CACHE:
+        return _POSTCODE_CACHE[postcode]
+    loc = None
+    try:
+        import requests
+        r = requests.get("https://api.postcodes.io/postcodes/" + postcode.replace(" ", ""),
+                         headers={"User-Agent": USER_AGENT}, timeout=timeout)
+        if r.ok:
+            res = (r.json() or {}).get("result") or {}
+            if res.get("latitude") is not None and res.get("longitude") is not None:
+                loc = (float(res["latitude"]), float(res["longitude"]))
+    except Exception:
+        loc = None
+    _POSTCODE_CACHE[postcode] = loc
+    return loc
+
+
+def _km(a: tuple[float, float], b: tuple[float, float]) -> float:
+    import math
+    dlat, dlon = math.radians(b[0] - a[0]), math.radians(b[1] - a[1])
+    h = math.sin(dlat / 2) ** 2 + math.cos(math.radians(a[0])) * math.cos(math.radians(b[0])) * math.sin(dlon / 2) ** 2
+    return 6371 * 2 * math.asin(math.sqrt(h))
+
+
+def street_centre(subject: str, article: dict[str, Any]) -> tuple[float, float, str] | None:
+    """(lat, lon, postcode) on the named street nearest the story's town, or
+    None when the street is not listed or no postcode could be located."""
+    rec = streets().get(re.sub(r"\s+", " ", subject.strip()).casefold())
+    if not rec:
+        return None
+    town = TOWN_CENTRES[town_for(article)]
+    best = None
+    for pc in rec.get("postcodes", []):
+        loc = postcode_location(pc)
+        if loc and (best is None or _km(loc, town) < _km(best[:2], town)):
+            best = (loc[0], loc[1], pc)
+    return best
 
 
 def search(subject: str, article: dict[str, Any], timeout: int = 10) -> list[dict[str, str]]:
@@ -155,8 +225,12 @@ def search(subject: str, article: dict[str, Any], timeout: int = 10) -> list[dic
     if not key or not subject:
         return []
     import requests
-    lat, lon = TOWN_CENTRES[town_for(article)]
-    params = {"key": key, "text": subject, "location": f"{lat},{lon}", "distance": GEOGRAPH_RADIUS_KM,
+    centre = street_centre(subject, article)
+    if centre:
+        (lat, lon), radius = centre[:2], STREET_RADIUS_KM
+    else:
+        (lat, lon), radius = TOWN_CENTRES[town_for(article)], GEOGRAPH_RADIUS_KM
+    params = {"key": key, "text": subject, "location": f"{lat},{lon}", "distance": radius,
               "perpage": 30, "format": "RSS2.0",
               # Geograph's API page: expand=1 "includes the thumbnail as HTML
               # in the description". Without it the RSS reply carries no image
@@ -168,6 +242,7 @@ def search(subject: str, article: dict[str, Any], timeout: int = 10) -> list[dic
     LAST_REPLY.clear()
     LAST_REPLY.update({
         "subject": subject, "http": response.status_code,
+        "centre": ("street " + centre[2]) if centre else "town " + town_for(article), "radius_km": radius,
         "content_type": response.headers.get("content-type", ""),
         "items_in_reply": len(rows), "items_with_image": sum(1 for r in rows if r["thumb"]),
         "first_titles": [r["title"] for r in rows[:5]],
