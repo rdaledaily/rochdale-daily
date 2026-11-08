@@ -10,9 +10,11 @@ on:
         required: false
         default: "0"
   schedule:
-    # Checked hourly; the script posts only in the 07, 12, 15, 17, 20 and 22 UK-time
-    # slots (plus genuine breaking news between 07:00 and 22:59), at most seven
+    # Checked hourly; the script posts once in every UK-time hour from 07:00 to
+    # 22:00 (plus genuine breaking news between 07:00 and 22:59), at most sixteen
     # posts a day. Each post is a photo with the link as the Page's first comment.
+    # Editor, 8 Nov 2026: "Post more times a day". Measured 1-8 Nov: 89 stories
+    # carried a photo, only 42 reached Facebook in six slots a day.
     - cron: "27 * * * *"
   push:
     branches: [main]
@@ -66,9 +68,11 @@ jobs:
           FACEBOOK_STATE_PATH: /tmp/facebook_posted.json
           FACEBOOK_RESULT_PATH: /tmp/facebook_last_result.json
           FACEBOOK_MAX_ARTICLE_AGE_HOURS: "36"
-          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "60"
-          FACEBOOK_SLOT_HOURS: "7,12,15,17,20,22"
-          FACEBOOK_MAX_POSTS_PER_DAY: "7"
+          # 45, not 60: runs fire hourly but GitHub starts them a few minutes
+          # late or early, and a 60-minute cooldown would skip whole hourly slots.
+          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "45"
+          FACEBOOK_SLOT_HOURS: "7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22"
+          FACEBOOK_MAX_POSTS_PER_DAY: "16"
         run: python scraper/post_facebook_article.py
 
       - name: Save successful Facebook post to state branch
