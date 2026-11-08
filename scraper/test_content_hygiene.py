@@ -71,6 +71,21 @@ def main() -> int:
     spaced = hygiene.clean_html_text("<p>Use <strong>bus</strong>&nbsp;services.</p>")
     assert "</strong>\xa0services" in spaced or "</strong> services" in spaced, spaced
 
+    # 8 Nov 2026 review: tracking parameters are removed without breaking the
+    # URL: the '?' stays while any parameter remains, '&amp;' stays escaped,
+    # fragments and other parameters are kept, trailing punctuation is text.
+    cases = {
+        '<a href="https://example.org/story?utm_medium=email&id=7">Source</a>':
+            '<a href="https://example.org/story?id=7">Source</a>',
+        '<a href="https://example.org/story?utm_medium=email&amp;id=7&amp;utm_source=fb#top">S</a>':
+            '<a href="https://example.org/story?id=7#top">S</a>',
+        '<a href="https://example.org/story?utm_source=x">S</a>': '<a href="https://example.org/story">S</a>',
+        '<a href="https://example.org/s?q=a%20b&page=2">S</a>': '<a href="https://example.org/s?q=a%20b&page=2">S</a>',
+        '<p>See https://example.org/p?id=3&utm_campaign=z.</p>': '<p>See https://example.org/p?id=3.</p>',
+    }
+    for before, after in cases.items():
+        assert hygiene.clean_html_text(before) == after, (before, hygiene.clean_html_text(before))
+
     # Share rows are rebuilt from the official icons; an older page gets the
     # handler for the buttons its own script lacks; a second run changes nothing.
     import repair_share_icons as rs
