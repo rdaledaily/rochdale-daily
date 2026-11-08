@@ -144,30 +144,62 @@ _PROTECTED_HTML_RE = re.compile(
 )
 
 
+def _clean_markup(segment: str, *, prose: bool) -> str:
+    """Remove what the verification pass rejects (DETECTORS) from markup,
+    without the text rules that break syntax: no unescaping, no whitespace or
+    punctuation changes. prose=True (tags, scripts such as JSON-LD) also drops
+    AI boilerplate sentences from attribute values and strings; CSS and SVG
+    drawing data get only the character-level removals."""
+    out = EMOJI_RE.sub("", segment)
+    out = EMOJI_COMPONENT_RE.sub("", out)
+    out = re.sub(r"([?&])utm_(?:source|medium|campaign|term|content)=[^&#\s\"')<]+", "", out, flags=re.I)
+    for pattern in CITATION_PATTERNS:
+        out = pattern.sub("", out)
+    if prose:
+        out = BAD_SENTENCES.sub(" ", out)
+    return out
+
+
 def clean_html_text(document: str) -> str:
-    """clean_text on the reader-facing text of an HTML page only: tags,
-    attributes, scripts, styles, icons and comments pass through untouched."""
+    """Clean an HTML page so the verification pass accepts it, without
+    breaking its code.
+
+    Reader text gets the full clean_text rules. Tags, scripts, styles, SVG and
+    comments get only the removals the verification pass checks for (emoji,
+    AI citation markers, utm tracking, AI boilerplate), never the text rules:
+    7 Nov 2026, cleaning whole files removed the space in '.401 0 .955' inside
+    the Facebook icon's path data. A link to a chat assistant is removed whole
+    first, as before."""
+    document = MODEL_ANCHOR.sub("", document)
     out, last = [], 0
     for match in _PROTECTED_HTML_RE.finditer(document):
-        text = document[last:match.start()]
-        out.append(_clean_segment(text))
-        out.append(match.group(0))
+        out.append(_clean_segment(document[last:match.start()]))
+        block = match.group(0)
+        tag = (match.group(1) or "").lower()
+        out.append(_clean_markup(block, prose=tag not in {"style", "svg"}))
         last = match.end()
     out.append(_clean_segment(document[last:]))
     return "".join(out)
 
 
 def _clean_segment(text: str) -> str:
+    """clean_text on one text node, keeping the whitespace at its edges. The
+    edges are measured after decoding entities: '&nbsp;' beside an inline
+    element is a space between two words (7 Nov 2026 review:
+    '<strong>bus</strong>&nbsp;services' must not become 'busservices')."""
     if not text.strip():
         return text
-    cleaned = clean_text(text)
+    decoded = html.unescape(text)
+    lead = decoded[:len(decoded) - len(decoded.lstrip())]
+    trail = decoded[len(decoded.rstrip()):]
+    cleaned = clean_text(text).strip()
     # A text node that unescaped into markup characters is escaped back, so
     # cleaning never creates a tag.
-    cleaned = cleaned.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") if (
-        "<" in cleaned or ">" in cleaned) else cleaned
-    lead = text[:len(text) - len(text.lstrip())]
-    trail = text[len(text.rstrip()):]
-    return lead + cleaned.strip() + trail
+    if "<" in cleaned or ">" in cleaned:
+        cleaned = cleaned.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    if not cleaned:
+        return lead or trail
+    return lead + cleaned + trail
 
 
 def clean_json(value: Any, key: str = "") -> Any:
