@@ -60,6 +60,17 @@ def main() -> int:
     assert hygiene.clean_html_text(out) == out
     assert "<b>" not in hygiene.clean_html_text("<p>Tom &lt;b&gt; Jerry</p>")   # never creates a tag
 
+    # 7 Nov 2026 review: what the verification pass rejects is removed from
+    # markup too (metadata, links, JSON-LD), and entity whitespace beside an
+    # inline element survives.
+    head = ('<head><meta name="description" content="News 📰"><a href="https://x.org/p?utm_source=chatgpt.com">x</a>'
+            '<script type="application/ld+json">{"d":"Hi 🎉"}</script></head>')
+    fixed = hygiene.clean_html_text(head)
+    assert not any(p.search(fixed) for p in hygiene.DETECTORS), fixed
+    assert hygiene.clean_html_text(fixed) == fixed
+    spaced = hygiene.clean_html_text("<p>Use <strong>bus</strong>&nbsp;services.</p>")
+    assert "</strong>\xa0services" in spaced or "</strong> services" in spaced, spaced
+
     # Share rows are rebuilt from the official icons; an older page gets the
     # handler for the buttons its own script lacks; a second run changes nothing.
     import repair_share_icons as rs

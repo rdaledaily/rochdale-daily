@@ -2542,8 +2542,13 @@ body > footer strong,
   grid-column: 1 !important;
   /* Down the whole card, not just the first row. grid-area:thumb pinned it to
      row 1, so the square sat beside the kicker with the headline starting on
-     the row below it. */
-  grid-row: 1 / -1 !important;
+     the row below it. "1 / -1" did not fix it: -1 counts only rows declared
+     in advance, and these rows are created by the text, so the photo still
+     filled row 1 alone and the label sat in an 84px row with the headline
+     below the photo (7 Nov 2026). Spanning a fixed count of rows lets the
+     text rows sit beside the photo; unused rows are empty. */
+  grid-row: 1 / span 7 !important;
+  align-self: start !important;
   width: 56px !important;
   height: 56px !important;
   aspect-ratio: auto !important;
