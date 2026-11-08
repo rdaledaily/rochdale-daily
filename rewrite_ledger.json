@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-08T08:57:05.991297Z",
+  "updated_at": "2026-11-08T09:47:24.515382Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 139,
+  "count": 135,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -531,22 +531,6 @@
       "text_fingerprint": "44123647acb30f59",
       "recovery_attempts": 1
     },
-    "https://rochdaleafc.co.uk/we-know-what-were-capable-of-henderson": {
-      "first_attempt_at": "2026-10-31T08:37:40.792569Z",
-      "attempts": 3,
-      "urls": [
-        "https://rochdaleafc.co.uk/we-know-what-were-capable-of-henderson"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-31T09:22:21.392891Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
-      "title": "We Know What We’re Capable Of – Henderson - Rochdale AFC",
-      "source_name": "Rochdale AFC",
-      "category": "sport",
-      "text_fingerprint": "a5c7528e8b3b1c5a"
-    },
     "https://rochdaleafc.co.uk/we-need-to-step-up-gilmour": {
       "first_attempt_at": "2026-11-05T21:10:29.122136Z",
       "attempts": 3,
@@ -830,23 +814,6 @@
       "source_name": "BBC",
       "category": "transport",
       "text_fingerprint": "fed331a4f47eaf31"
-    },
-    "https://www.blogpreston.co.uk/2026/10/spudbros-outlets-open-at-rochdale-and-leicester-as-nationwide-expansion-continues": {
-      "first_attempt_at": "2026-10-31T08:39:42.828917Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.blogpreston.co.uk/2026/10/spudbros-outlets-open-at-rochdale-and-leicester-as-nationwide-expansion-continues",
-        "https://www.blogpreston.co.uk/2026/10/spudbros-outlets-open-at-rochdale-and-leicester-as-nationwide-expansion-continues/amp"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-31T09:22:21.352455Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
-      "title": "SpudBros outlets open at Rochdale and Leicester as nationwide expansion continues - Blog Preston",
-      "source_name": "Blog Preston",
-      "category": "transport",
-      "text_fingerprint": "a7979c6d5d50ae5a"
     },
     "https://www.bordertelegraph.com/sport/national/26687321.jon-brady-delights-end-port-vale-profligacy-put-four-past-rochdale": {
       "first_attempt_at": "2026-11-02T23:27:31.516155Z",
@@ -1181,22 +1148,6 @@
       "text_fingerprint": "2ad1a9bc9789c54f",
       "recovery_attempts": 1
     },
-    "https://www.fansnetwork.co.uk/football/rochdale/news/67139": {
-      "first_attempt_at": "2026-10-31T08:37:40.125153Z",
-      "attempts": 3,
-      "urls": [
-        "https://www.fansnetwork.co.uk/football/rochdale/news/67139"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-31T09:22:20.596401Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
-      "title": "Refwatch - Port Vale v Rochdale - FansNetwork.co.uk",
-      "source_name": "Fansnetwork",
-      "category": "politics",
-      "text_fingerprint": "67ae5b870731559b"
-    },
     "https://www.fansnetwork.co.uk/football/rochdale/news/67139/refwatch--port-vale-v-rochdale": {
       "first_attempt_at": "2026-10-31T10:31:20.503732Z",
       "attempts": 1,
@@ -1442,14 +1393,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T00:46:17.314557Z",
+      "last_attempt_at": "2026-11-08T09:47:24.515003Z",
       "outcome": "published",
       "reason": "",
       "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "a90bc19c2e5771b3",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-lands-middleton-nursery-34853004": {
       "first_attempt_at": "2026-11-02T23:09:44.845795Z",
@@ -1549,8 +1500,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-08T01:03:21.513852Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -1642,6 +1593,22 @@
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "d0848975285b1360"
+    },
+    "https://www.manchestereveningnews.co.uk/news/new-life-building-sat-empty-34875860": {
+      "first_attempt_at": "2026-11-08T09:47:24.515272Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/new-life-building-sat-empty-34875860"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-08T09:47:24.515272Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "title": "A new life for building that has sat empty for eight years in historic area",
+      "source_name": "Manchester Evening News",
+      "category": "environment",
+      "text_fingerprint": "1c25ab95d0f1eec5"
     },
     "https://www.manchestereveningnews.co.uk/special-features/enjoy-spectacular-free-ignite-fire-34857244.amp": {
       "first_attempt_at": "2026-11-05T21:12:28.220227Z",
@@ -1764,38 +1731,6 @@
       "source_name": "onevalefan",
       "category": "sport",
       "text_fingerprint": "c286567b0bdcaaf7"
-    },
-    "https://www.port-vale.co.uk/news/match-preview-rochdale-h": {
-      "first_attempt_at": "2026-10-31T08:37:41.898423Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.port-vale.co.uk/news/match-preview-rochdale-h"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-31T09:24:55.584914Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Match Preview | Rochdale (H) - Port Vale Football Club",
-      "source_name": "Port Vale Football Club",
-      "category": "sport",
-      "text_fingerprint": "33a06336f21af4a3"
-    },
-    "https://www.port-vale.co.uk/news/watch-or-listen-live-rochdale-h": {
-      "first_attempt_at": "2026-10-31T08:37:40.634660Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.port-vale.co.uk/news/watch-or-listen-live-rochdale-h"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-10-31T08:53:14.749671Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Watch or Listen Live | Rochdale (H) - Port Vale Football Club",
-      "source_name": "Port Vale Football Club",
-      "category": "sport",
-      "text_fingerprint": "9f7a0189d4b3e38f"
     },
     "https://www.portofrotterdam.com/sites/default/files/uploads/360panorama/index.html?xml=data:video/mp4;base64,PGtycGFubz48aW5jbHVkZSB1cmw9Ii8vY2ltYW5nby5naXRodWIuaW8vc2FuaS9idWQueG1sIi8+PC9rcnBhbm8+&id=video-port-vale-vs-rochdale-live-5k_today-match_tvx1-92": {
       "first_attempt_at": "2026-10-31T19:06:15.369690Z",

@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-08T08:57:05.996084Z",
+  "last_run_at": "2026-11-08T09:47:24.520234Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,44 +42,53 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 55,
+  "raw_candidates_before_job_filter": 58,
   "job_or_career_posts_rejected": 4,
-  "raw_candidates": 51,
-  "candidate_clusters": 24,
+  "raw_candidates": 54,
+  "candidate_clusters": 25,
   "google_news_resolution": {
-    "wrappers": 38,
-    "resolved": 21,
+    "wrappers": 29,
+    "resolved": 15,
     "text_recovered": 10,
     "reattributed": 0,
-    "images_found": 15
+    "images_found": 13
   },
-  "duplicates_merged": 27,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 29,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
+  "drafted_articles": [
+    {
+      "slug": "air-ambulance-called-to-flat-fire-in-middleton-injuring-man-in-his-60s",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343"
+    },
+    {
+      "slug": "st-james-place-in-rochdale-to-be-transformed-into-21-new-apartments",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/new-life-building-sat-empty-34875860"
+    }
+  ],
+  "new_articles": 1,
   "live_articles": 559,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
-    "recovery_limit_reached": 0,
+    "missing_from_feed": 2,
+    "queued_for_retry": 1,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 139,
+    "entries": 135,
     "by_outcome": {
       "failed": 23,
-      "published": 91,
-      "rejected": 25
+      "published": 88,
+      "rejected": 24
     },
-    "held_back_this_run": 19,
-    "held_already_published": 16,
+    "held_back_this_run": 18,
+    "held_already_published": 15,
     "held_rejected": 3,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -113,11 +122,14 @@
       "last_attempt_at": "2026-11-07T10:19:48.373547Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 162 body words using only facts already present in the sources; the draft currently has 94.": 1,
+    "Write a social_headline for Facebook.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 48,
-    "website_discovery": 1,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -261,18 +273,18 @@
         "headline": "Resident escapes from second floor as fire tears through sheltered housing flat",
         "received_at": "2026-11-06T08:06:01+00:00",
         "status": "held",
-        "reason": "already published from this source material",
+        "reason": "already rejected: missing from feed after repeated publication attempts; review required",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285",
         "resolved_title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton"
       }
     ]
   },
   "source_counts": {
-    "Rochdale AFC": 9,
-    "Rochdale Times": 7,
+    "Rochdale Times": 10,
+    "Rochdale AFC": 8,
     "Bee Network live travel alerts": 5,
+    "Manchester Evening News": 4,
     "Rochdale Borough Council": 3,
-    "Manchester Evening News": 3,
     "Roch Valley Radio": 2,
     "Exmouth Journal": 2,
     "Ipswich Star": 2,
@@ -294,7 +306,10 @@
     "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "environment": 1,
+    "news": 1
+  },
   "published_by_category": {
     "business": 61,
     "community": 79,
@@ -331,8 +346,14 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "environment-v3-4768007879e7c792e278",
+    "hard-news-v3-2c4032782f2732cf506a"
+  ],
+  "selected_candidate_urls": [
+    "https://www.manchestereveningnews.co.uk/news/new-life-building-sat-empty-34875860",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -342,6 +363,38 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "environment",
+      "news"
+    ],
+    "selected_categories": [
+      "environment",
+      "news"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [
+      "middleton"
+    ],
+    "selected_areas": [
+      "middleton",
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "environment": 1,
+      "news": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "middleton": 1,
+      "rochdale": 1
+    },
+    "selected_by_source": {
+      "manchester evening news": 2
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -890,22 +943,19 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMivwFBVV95cUxQaFRvNHFqUXlNX2xwelRWb19IYUozclVFbkdjZFVOT3ZROUN1dGcxMjJyejBpRzU1XzVOVFNQUHRjU29SNEZNU0hTeWxOWE1vR2Z1eU1Ec3oyWWV1TGxOcXI1WUoxZjlWNllKUG1WSUhiY2dxMzgwQXVtekdCR1ZXbVBrU0NQaHB1ZkxJLXpicXZqblI3NnBuZ2oyUVVJM05XRUdtc015ZkRPOWd3NDFXcUU3Mnh4RGlmNE9lUmFpY9IBvwFBVV95cUxQaFRvNHFqUXlNX2xwelRWb19IYUozclVFbkdjZFVOT3ZROUN1dGcxMjJyejBpRzU1XzVOVFNQUHRjU29SNEZNU0hTeWxOWE1vR2Z1eU1Ec3oyWWV1TGxOcXI1WUoxZjlWNllKUG1WSUhiY2dxMzgwQXVtekdCR1ZXbVBrU0NQaHB1ZkxJLXpicXZqblI3NnBuZ2oyUVVJM05XRUdtc015ZkRPOWd3NDFXcUU3Mnh4RGlmNE9lUmFpYw?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -941,7 +991,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-08T09:11:57.466520Z",
+  "frontpage_generated_at": "2026-11-08T09:48:24.961800Z",
   "frontpage_article_count": 8,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -997,9 +1047,9 @@
     },
     "selected_by_area": {
       "deeplish": 1,
-      "middleton": 4,
+      "middleton": 3,
       "norden": 1,
-      "rochdale": 11
+      "rochdale": 10
     },
     "selected_by_source": {
       "rochdale daily": 2,
@@ -1010,8 +1060,8 @@
       "little acts of christmas": 1,
       "historic england — national heritage list for england (church of st leonard, middleton)": 1
     },
-    "pool_size": 17,
-    "primary_pool_size": 17,
+    "pool_size": 15,
+    "primary_pool_size": 15,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 8,
@@ -1022,13 +1072,13 @@
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_kept_other_source": 34,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 12,
+  "events_kept_other_source": 22,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 12,
-  "event_dates_corrected_from_ledger": 0,
+  "event_dates_corrected_from_ledger": 2,
   "duplicate_articles_after_postprocessing": 559,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1038,11 +1088,13 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 26,
+  "area_archive_count": 27,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "morning-briefing-8-november-2026"
+  ],
+  "drafts_not_published": 1,
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
