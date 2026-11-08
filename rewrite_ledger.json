@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-08T21:14:22.928549Z",
+  "updated_at": "2026-11-08T22:16:28.523865Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 133,
+  "count": 134,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -693,14 +693,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T21:14:22.928138Z",
+      "last_attempt_at": "2026-11-08T22:16:28.523562Z",
       "outcome": "published",
       "reason": "",
       "title": "Man dies in Middleton flat fire despite emergency response",
       "source_name": "BBC Manchester",
       "category": "news",
       "text_fingerprint": "c2e2a246b4b63b84",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.bbc.co.uk/sport/football/live/c63el28n0pe5t": {
@@ -1374,8 +1374,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-08T21:14:22.928378Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "traffic",
@@ -2245,6 +2245,22 @@
       "text_fingerprint": "8e19c208643c36fa",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://www.rochvalleyradio.com/news-features/142/community/1374/rochdale-veterans-breakfast-club-receives-500-donation-from-housebuilders": {
+      "first_attempt_at": "2026-11-08T22:16:28.523766Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/142/community/1374/rochdale-veterans-breakfast-club-receives-500-donation-from-housebuilders"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-08T22:16:28.523766Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale veterans breakfast club receives £500 donation from housebuilders",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "news",
+      "text_fingerprint": "eb89953564381c5e"
     },
     "https://www.rochvalleyradio.com/news-features/149/education/1273/hopwood-hall-marks-construction-milestone-for-clegg-building-in-rochdale": {
       "first_attempt_at": "2026-11-01T16:32:44.927506Z",
