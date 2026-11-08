@@ -13,7 +13,7 @@ from enforce_frontpage_freshness import (
     is_thin_utility_not_frontpage,
 )
 from enforce_frontpage_freshness import first_published as selector_first_published
-from feature_policy import is_reserve_feature
+from feature_policy import is_daily_briefing, is_reserve_feature
 from search_queries import CATEGORY_QUERIES, ROCHDALE_WARDS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -148,6 +148,18 @@ def is_frontpage_eligible_news_article(article: Any, now: datetime) -> bool:
     return True
 
 
+def can_lead_homepage(article: dict[str, Any]) -> bool:
+    """Whether the homepage selector may put this story in the top three.
+
+    The selector never lifts a quiet-news reserve feature (editor's rule,
+    24 Oct 2026) or a Morning Briefing / Evening Wrap-Up (held below the top
+    nine, ensure_manual_frontpage) into the top three, so a fresh one is not
+    evidence of a missing lead. Measured 8 Nov 2026: the 09:04 morning
+    briefing was the only story under six hours old, sat at position 6 as
+    designed, and failed the fast-lane run."""
+    return not is_reserve_feature(article) and not is_daily_briefing(article)
+
+
 def zero_new_attempts_are_starvation(
     *,
     attempted_rewrites: int,
@@ -212,12 +224,10 @@ def main() -> None:
     ]
     lead_first_published = published_at(valid_articles[0]) if valid_articles else None
     lead_freshness = freshness_at(valid_articles[0]) if valid_articles else None
-    # The selector never lifts a quiet-news reserve feature into the top three
-    # (editor's rule, 24 Oct 2026), so it is not evidence of a missing one.
     eligible_top_fresh = [
         article
         for article in frontpage_eligible_feed
-        if not is_reserve_feature(article)
+        if can_lead_homepage(article)
         and (freshness_at(article) or epoch_floor) >= top_fresh_cutoff
     ]
 
