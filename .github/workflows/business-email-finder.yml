@@ -1,0 +1,58 @@
+name: Business email finder
+
+# Read-only. Looks up published contact emails for the active borough companies
+# in tools/business_companies.csv. Publishes nothing and commits nothing: the
+# results are uploaded as the "business-emails" artifact on the run page.
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Check only the first N companies (0 = all 883)"
+        required: false
+        default: "0"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rd-business-email-finder
+  cancel-in-progress: true
+
+jobs:
+  find:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      FINDER_LIMIT: ${{ github.event.inputs.limit }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir requests beautifulsoup4 lxml pytest
+      - name: Test the finder
+        run: python -m pytest -q tools/test_business_email_finder.py
+      - name: Find published emails
+        run: python tools/business_email_finder.py
+      - name: Write job summary
+        if: always()
+        run: |
+          if [ -f business_emails_summary.md ]; then cat business_emails_summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: business-emails
+          path: |
+            business_emails.csv
+            business_emails_summary.md
+          if-no-files-found: warn
+          retention-days: 14
