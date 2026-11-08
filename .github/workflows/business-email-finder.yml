@@ -11,6 +11,10 @@ on:
         description: "Check only the first N companies (0 = all 883)"
         required: false
         default: "0"
+      print_rows:
+        description: "Also print the found rows in the log (for the newsdesk to read; delete the run logs afterwards)"
+        required: false
+        default: "false"
 
 permissions:
   contents: read
@@ -42,6 +46,10 @@ jobs:
         run: python -m pytest -q tools/test_business_email_finder.py
       - name: Find published emails
         run: python tools/business_email_finder.py
+      - name: Print found rows
+        if: github.event.inputs.print_rows == 'true'
+        run: |
+          python -c "import csv;[print('ROW\t'+'\t'.join([r['company_name'],r['company_number'],r['website'],r['email'],r['found_on'],r['evidence'],r['confidence']])) for r in csv.DictReader(open('business_emails.csv')) if r['email']]"
       - name: Write job summary
         if: always()
         run: |
