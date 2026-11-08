@@ -142,6 +142,15 @@ def test_sponsored_advertisement_is_not_counted_as_available_news() -> None:
     assert not mod.is_frontpage_eligible_news_article(advert, NOW)
 
 
+def test_fresh_briefing_is_not_expected_in_the_top_three() -> None:
+    # 8 Nov 2026: the 09:04 morning briefing was the only story under six
+    # hours old; the selector holds briefings below the top nine by design.
+    assert not mod.can_lead_homepage(base_article(briefing_slot="morning"))
+    assert not mod.can_lead_homepage(base_article(publication_route="daily-briefing"))
+    assert not mod.can_lead_homepage(base_article(is_evergreen=True))
+    assert mod.can_lead_homepage(base_article())
+
+
 def _developing(**updates):
     article = base_article(
         category="sport",
@@ -233,6 +242,7 @@ if __name__ == "__main__":
         test_zero_new_is_starvation_when_fresh_supply_is_short,
         test_zero_new_is_starvation_when_collection_failed,
         test_sponsored_advertisement_is_not_counted_as_available_news,
+        test_fresh_briefing_is_not_expected_in_the_top_three,
         test_audit_and_homepage_selector_share_one_freshness_clock,
         test_measured_6_nov_shape_does_not_fail_the_run,
     ):
