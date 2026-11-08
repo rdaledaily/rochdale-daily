@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-08T18:18:02.532498Z",
+  "last_run_at": "2026-11-08T18:34:44.797845Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,22 +42,27 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 76,
+  "raw_candidates_before_job_filter": 77,
   "job_or_career_posts_rejected": 4,
-  "raw_candidates": 72,
-  "candidate_clusters": 23,
+  "raw_candidates": 73,
+  "candidate_clusters": 22,
   "google_news_resolution": {
-    "wrappers": 36,
-    "resolved": 15,
-    "text_recovered": 11,
+    "wrappers": 35,
+    "resolved": 13,
+    "text_recovered": 9,
     "reattributed": 0,
-    "images_found": 14
+    "images_found": 12
   },
-  "duplicates_merged": 49,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 51,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "woman-in-her-50s-dies-at-tesco-in-rochdale-after-emergency-services-called",
+      "source_url": "https://www.dailyrecord.co.uk/news/uk-world-news/woman-dies-rochdale-tesco-after-37856301"
+    }
+  ],
+  "new_articles": 1,
   "live_articles": 567,
   "skipped": 0,
   "rewrite_skip_reasons": {},
@@ -72,14 +77,14 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 132,
+    "entries": 133,
     "by_outcome": {
       "failed": 21,
-      "published": 86,
+      "published": 87,
       "rejected": 25
     },
-    "held_back_this_run": 16,
-    "held_already_published": 12,
+    "held_back_this_run": 14,
+    "held_already_published": 10,
     "held_rejected": 4,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -122,10 +127,12 @@
       "last_attempt_at": "2026-11-07T16:16:30.159622Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 186.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 66,
+    "rss_and_google_news": 67,
     "website_discovery": 4,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -278,7 +285,7 @@
   },
   "source_counts": {
     "Manchester Evening News": 15,
-    "Rochdale AFC": 10,
+    "Rochdale AFC": 11,
     "Rochdale Times": 8,
     "Bee Network live travel alerts": 5,
     "Roch Valley Radio": 4,
@@ -289,30 +296,32 @@
     "Express and Star": 2,
     "Ipswich Star": 2,
     "Rhyl Journal": 2,
-    "The Bury Times": 2,
+    "Daily Record": 2,
     "London Now": 1,
-    "https://www.birmingham-now.co.uk/": 1,
+    "Stourbridge News": 1,
     "Hampshire Chronicle": 1,
     "The Northern Echo": 1,
     "Stowmarket Mercury": 1,
     "Slough Observer": 1,
     "EDP24": 1,
-    "Oldham Times": 1,
     "Leigh Journal": 1,
     "Thurrock Gazette": 1,
+    "The Bury Times": 1,
     "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "traffic": 1
+  },
   "published_by_category": {
     "business": 63,
     "community": 81,
-    "crime": 33,
+    "crime": 34,
     "education": 28,
     "environment": 44,
     "events": 32,
     "health": 14,
-    "news": 88,
+    "news": 87,
     "politics": 18,
     "sport": 60,
     "traffic": 42,
@@ -340,8 +349,12 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "transport-v3-0105924e2457fe2c19a7"
+  ],
+  "selected_candidate_urls": [
+    "https://www.dailyrecord.co.uk/news/uk-world-news/woman-dies-rochdale-tesco-after-37856301"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -351,6 +364,31 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "traffic"
+    ],
+    "selected_categories": [
+      "traffic"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "traffic": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 1
+    },
+    "selected_by_source": {
+      "daily record": 1
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -946,23 +984,19 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-08T18:18:58.336883Z",
+  "frontpage_generated_at": "2026-11-08T18:35:39.766786Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
       "business",
       "community",
-      "crime",
-      "environment",
       "news",
       "traffic"
     ],
     "selected_categories": [
       "business",
       "community",
-      "crime",
-      "environment",
       "news",
       "traffic"
     ],
@@ -1006,15 +1040,16 @@
       "deeplish": 1,
       "middleton": 2,
       "norden": 1,
-      "rochdale": 12
+      "rochdale": 10
     },
     "selected_by_source": {
       "roch valley radio": 1,
       "rochdale borough council": 2,
       "lidl": 1,
       "castleton community group": 1,
-      "manchester evening news": 2,
+      "manchester evening news": 1,
       "middleton in bloom": 1,
+      "daily record": 1,
       "get together after serving": 1,
       "rochdale times": 1,
       "rochdale daily": 3,
@@ -1022,8 +1057,8 @@
       "little acts of christmas": 1,
       "historic england — national heritage list for england (church of st leonard, middleton)": 1
     },
-    "pool_size": 18,
-    "primary_pool_size": 18,
+    "pool_size": 16,
+    "primary_pool_size": 16,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 16,
@@ -1052,8 +1087,10 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "woman-dies-after-emergency-services-called-to-tesco-in-rochdale"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
