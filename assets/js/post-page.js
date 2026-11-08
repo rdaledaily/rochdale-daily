@@ -396,9 +396,11 @@
       const alt = String(story.image_alt || '').trim();
       const fileMethods = ['geograph', 'geograph-town', 'wikimedia-commons'];
       const fileStatuses = ['town-file-photo', 'commons-photo-cached'];
-      const note = /^File (photo|image):/.test(alt)
-        && (fileStatuses.includes(String(story.image_status || '')) || fileMethods.includes(String(story.image_backfill_method || '')))
-        ? alt : '';
+      const fileNote = /^File (photo|image):/.test(alt)
+        && (fileStatuses.includes(String(story.image_status || '')) || fileMethods.includes(String(story.image_backfill_method || '')));
+      // The stock police photo says so too (8 Nov 2026), same rule as Python.
+      const stockNote = /^Stock image:/.test(alt) && String(story.image_status || '') === 'standard-police-image';
+      const note = fileNote || stockNote ? alt : '';
       const caption = [note, credit ? `Image: ${credit}` : ''].filter(Boolean).join(' ');
       els.heroCaption.textContent = caption;
       els.heroCaption.hidden = !caption;
