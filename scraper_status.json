@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-08T23:18:58.761188Z",
+  "last_run_at": "2026-11-08T23:40:19.223455Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,32 +42,35 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 88,
+  "raw_candidates_before_job_filter": 87,
   "job_or_career_posts_rejected": 4,
-  "raw_candidates": 84,
+  "raw_candidates": 83,
   "candidate_clusters": 22,
   "google_news_resolution": {
     "wrappers": 35,
     "resolved": 33,
-    "text_recovered": 11,
+    "text_recovered": 27,
     "reattributed": 1,
-    "images_found": 16
+    "images_found": 32
   },
-  "duplicates_merged": 62,
+  "duplicates_merged": 61,
   "attempted_rewrites": 1,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "man-dies-following-flat-fire-on-baguley-crescent-in-middleton",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343.amp"
+    }
+  ],
   "new_articles": 0,
   "live_articles": 572,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -77,8 +80,8 @@
     "entries": 134,
     "by_outcome": {
       "failed": 20,
-      "published": 88,
-      "rejected": 26
+      "published": 89,
+      "rejected": 25
     },
     "held_back_this_run": 18,
     "held_already_published": 14,
@@ -124,10 +127,12 @@
       "last_attempt_at": "2026-11-07T16:16:30.159622Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 154.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 77,
+    "rss_and_google_news": 76,
     "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -279,7 +284,7 @@
     ]
   },
   "source_counts": {
-    "Manchester Evening News": 16,
+    "Manchester Evening News": 15,
     "Rochdale Times": 14,
     "Roch Valley Radio": 9,
     "Rochdale AFC": 8,
@@ -983,7 +988,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-08T23:20:09.408689Z",
+  "frontpage_generated_at": "2026-11-08T23:41:30.510172Z",
   "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1091,7 +1096,7 @@
   "whats_on_event_count": 12,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "drafts_not_published": 1,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
