@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-08T13:38:13.672752Z",
+  "updated_at": "2026-11-08T14:41:07.888466Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 137,
@@ -1397,8 +1397,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-08T13:38:13.672322Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2084,14 +2084,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T13:38:13.672659Z",
+      "last_attempt_at": "2026-11-08T14:41:07.888270Z",
       "outcome": "published",
       "reason": "",
       "title": "Lest we forget: Borough falls silent to pay its respects - Rochdale Times",
       "source_name": "Rochdale Times",
-      "category": "education",
+      "category": "news",
       "text_fingerprint": "c8ce9b365a21c4fe",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochdaletimes.co.uk/new-appointments-to-drive-improvements-in-town": {
       "first_attempt_at": "2026-11-04T14:39:55.516934Z",

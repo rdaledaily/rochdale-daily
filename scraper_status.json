@@ -1,25 +1,52 @@
 {
-  "last_run_at": "2026-11-08T13:38:13.676511Z",
+  "last_run_at": "2026-11-08T14:41:07.892576Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-08T08:36:11.925234Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 1,
+      "listed": 40,
+      "already_seen": 30,
+      "started_long_ago": 0,
+      "too_far_ahead": 8,
+      "undated": 2,
+      "in_window": 0
     },
     "gazette_insolvency": {
-      "status": "not due",
-      "last_checked": "2026-11-08T02:15:15.274295Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 5,
+      "other_notice_types": 1,
+      "already_seen": 4,
+      "new": 0,
+      "outside_borough": 0,
+      "no_company_address": 0,
+      "notice_unreadable": 0
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-08T08:36:11.925234Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 5,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 5,
+      "new": 0
     },
     "gmca_decisions": {
-      "status": "not due",
-      "last_checked": "2026-11-08T02:15:15.274295Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 1,
+      "offered_today": 0,
+      "listed": 18,
+      "not_decisions": 12,
+      "no_borough_place": 0,
+      "already_seen": 5,
+      "new": 0
     },
     "ons_housing": {
       "status": "not due",
@@ -27,14 +54,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-08T08:36:11.925234Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 2,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-08T08:36:11.925234Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 8,
+      "not_rochdale": 8,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -42,43 +82,35 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 74,
+  "raw_candidates_before_job_filter": 79,
   "job_or_career_posts_rejected": 4,
-  "raw_candidates": 70,
+  "raw_candidates": 75,
   "candidate_clusters": 25,
   "google_news_resolution": {
-    "wrappers": 34,
-    "resolved": 15,
-    "text_recovered": 10,
+    "wrappers": 36,
+    "resolved": 18,
+    "text_recovered": 13,
     "reattributed": 0,
-    "images_found": 13
+    "images_found": 16
   },
-  "duplicates_merged": 45,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 50,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "man-in-his-60s-dies-following-flat-fire-in-middleton",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343"
-    },
-    {
-      "slug": "plans-approved-for-21-new-apartments-in-former-office-block-in-rochdale",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/new-life-building-sat-empty-34875860"
-    },
-    {
-      "slug": "rochdale-marks-remembrance-sunday-with-silence-and-reflection",
+      "slug": "rochdale-remembers-fallen-servicemen-and-women-on-remembrance-day",
       "source_url": "https://www.rochdaletimes.co.uk/lest-we-forget-borough-falls-silent-to-pay-its-respects/"
     }
   ],
-  "new_articles": 1,
-  "live_articles": 565,
+  "new_articles": 0,
+  "live_articles": 567,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 2,
     "queued_for_retry": 1,
-    "recovery_limit_reached": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 1,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -88,16 +120,25 @@
     "entries": 137,
     "by_outcome": {
       "failed": 23,
-      "published": 91,
-      "rejected": 23
+      "published": 90,
+      "rejected": 24
     },
-    "held_back_this_run": 16,
-    "held_already_published": 14,
-    "held_rejected": 2,
+    "held_back_this_run": 18,
+    "held_already_published": 15,
+    "held_rejected": 3,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343",
+      "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
+      "source_name": "Manchester Evening News",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-08T13:38:13.672322Z"
+    },
     {
       "url": "https://www.rochdaletimes.co.uk/star-pupils-shine-as-school-celebrates-its-new-name",
       "title": "Star pupils shine as school celebrates its new name - Rochdale Times",
@@ -118,13 +159,11 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 186.": 1,
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Write at least 128 body words using only facts already present in the sources; the draft currently has 104.": 1
+    "Write a social_headline for Facebook.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 62,
+    "rss_and_google_news": 67,
     "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -276,39 +315,38 @@
     ]
   },
   "source_counts": {
-    "Manchester Evening News": 14,
-    "Rochdale Times": 10,
-    "Rochdale AFC": 10,
+    "Manchester Evening News": 15,
+    "Rochdale Times": 13,
+    "Rochdale AFC": 8,
     "Bee Network live travel alerts": 5,
     "BBC": 3,
     "Rochdale Borough Council": 3,
+    "The Bury Times": 3,
     "BBC Manchester": 2,
     "Roch Valley Radio": 2,
     "Exmouth Journal": 2,
+    "Express and Star": 2,
     "Ipswich Star": 2,
     "Rhyl Journal": 2,
     "https://www.birmingham-now.co.uk/": 1,
     "Hampshire Chronicle": 1,
     "The Northern Echo": 1,
-    "Express and Star": 1,
     "Stowmarket Mercury": 1,
     "Slough Observer": 1,
-    "Eastern Daily Press": 1,
+    "EDP24": 1,
     "InYourArea": 1,
     "Greater Manchester Police": 1,
+    "About Manchester": 1,
     "Runcorn and Widnes World": 1,
-    "www.birmingham-now.co.uk": 1,
     "Thurrock Gazette": 1,
-    "The Bury Times": 1,
     "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "education": 1,
-    "news": 2
+    "news": 1
   },
   "published_by_category": {
-    "business": 62,
+    "business": 63,
     "community": 81,
     "crime": 33,
     "education": 28,
@@ -316,7 +354,7 @@
     "events": 32,
     "health": 14,
     "news": 88,
-    "politics": 19,
+    "politics": 18,
     "sport": 60,
     "traffic": 42,
     "transport": 9
@@ -344,14 +382,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "education-v3-e0219eb4819c25aa7527",
-    "hard-news-v3-b6fbf7e2ffda8af03cfe",
-    "hard-news-v3-2c4032782f2732cf506a"
+    "hard-news-v3-9835ec78236cd525e32c"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/lest-we-forget-borough-falls-silent-to-pay-its-respects/",
-    "https://www.manchestereveningnews.co.uk/news/new-life-building-sat-empty-34875860",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343"
+    "https://www.rochdaletimes.co.uk/lest-we-forget-borough-falls-silent-to-pay-its-respects/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -363,36 +397,28 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "education",
       "news"
     ],
     "selected_categories": [
-      "education",
       "news"
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [
-      "middleton"
-    ],
+    "available_areas": [],
     "selected_areas": [
-      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "education": 1,
-      "news": 2
+      "news": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "middleton": 1,
-      "rochdale": 2
+      "rochdale": 1
     },
     "selected_by_source": {
-      "manchester evening news": 2,
       "rochdale times": 1
     },
     "must_cover_selected": 0
@@ -943,23 +969,21 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 8,
+  "robots_denied_count": 6,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMivwFBVV95cUxQaFRvNHFqUXlNX2xwelRWb19IYUozclVFbkdjZFVOT3ZROUN1dGcxMjJyejBpRzU1XzVOVFNQUHRjU29SNEZNU0hTeWxOWE1vR2Z1eU1Ec3oyWWV1TGxOcXI1WUoxZjlWNllKUG1WSUhiY2dxMzgwQXVtekdCR1ZXbVBrU0NQaHB1ZkxJLXpicXZqblI3NnBuZ2oyUVVJM05XRUdtc015ZkRPOWd3NDFXcUU3Mnh4RGlmNE9lUmFpY9IBvwFBVV95cUxQaFRvNHFqUXlNX2xwelRWb19IYUozclVFbkdjZFVOT3ZROUN1dGcxMjJyejBpRzU1XzVOVFNQUHRjU29SNEZNU0hTeWxOWE1vR2Z1eU1Ec3oyWWV1TGxOcXI1WUoxZjlWNllKUG1WSUhiY2dxMzgwQXVtekdCR1ZXbVBrU0NQaHB1ZkxJLXpicXZqblI3NnBuZ2oyUVVJM05XRUdtc015ZkRPOWd3NDFXcUU3Mnh4RGlmNE9lUmFpYw?oc=5",
-    "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQYjNiWGVSYmIwbjVZWGI0MTRUb0tHT3ZOVlpBczlBV2M1MWdVS2dnOXRiSlpIV2dIYzI5QVYwQ2NrLUVYU0k0aFJfdk1Oak1fX25pZjBKV01DU25QS2JlYk1uRzh2b2hUem9rTXNPY2dMMUdtamNpeFkzVnVPb2lFTkZhWHBVSnpraDRyTGJOYzFNcEVuVkRLWFU4OVNBdGJBVDlWakF1V2tjeElSbm9fcUlBYlcwWEVRd05JUW9hTXVrRlNDTV9KX2FzcGxOTkhiT0JnaTJUNHdac3dtWmNWM1dPWQ?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochvalleyradio.com"
+    "healthwatchrochdale.org.uk"
   ],
   "slow_domain_failure_counts": {
-    "rochvalleyradio.com": 1
+    "healthwatchrochdale.org.uk": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -996,8 +1020,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-08T14:09:23.577500Z",
-  "frontpage_article_count": 15,
+  "frontpage_generated_at": "2026-11-08T14:42:03.883126Z",
+  "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1048,10 +1072,10 @@
       "community": 7,
       "traffic": 1,
       "business": 2,
-      "news": 5
+      "news": 6
     },
     "selected_by_ward": {
-      "borough-wide": 13,
+      "borough-wide": 14,
       "Norden": 1,
       "Milkstone and Deeplish": 1
     },
@@ -1060,41 +1084,41 @@
       "deeplish": 1,
       "middleton": 3,
       "norden": 1,
-      "rochdale": 13
+      "rochdale": 14
     },
     "selected_by_source": {
-      "castleton community group": 1,
-      "rochdale borough council": 1,
-      "lidl": 1,
       "roch valley radio": 1,
+      "rochdale borough council": 2,
+      "lidl": 1,
+      "castleton community group": 1,
       "manchester evening news": 2,
       "middleton in bloom": 1,
-      "rochdale daily": 3,
       "get together after serving": 1,
-      "source": 1,
+      "rochdale daily": 3,
       "inyourarea": 1,
+      "source": 1,
       "little acts of christmas": 1,
       "historic england — national heritage list for england (church of st leonard, middleton)": 1
     },
-    "pool_size": 20,
-    "primary_pool_size": 20,
+    "pool_size": 21,
+    "primary_pool_size": 21,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 15,
+    "frontpage_count": 16,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 11,
-    "fresh_under_homepage_window": 15,
+    "fresh_under_24h": 12,
+    "fresh_under_homepage_window": 16,
     "short_briefs_selected": 7,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_kept_other_source": 35,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 12,
+  "events_kept_other_source": 22,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 12,
-  "event_dates_corrected_from_ledger": 0,
+  "event_dates_corrected_from_ledger": 2,
   "duplicate_articles_after_postprocessing": 567,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1104,13 +1128,11 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 26,
+  "area_archive_count": 27,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "plans-approved-for-21-new-apartments-in-former-office-block-in-rochdale"
-  ],
-  "drafts_not_published": 2,
-  "publication_health": "partial",
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
+  "drafts_not_published": 1,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
