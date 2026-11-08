@@ -266,14 +266,14 @@ class CommonsCacheLocalityTests(unittest.TestCase):
         heywood = self.story("heywood")
         ih.choose_image(heywood, self.root, allow_network=False)
         self.assertIn("heywoodpark", heywood["image_url"])
-        self.assertEqual(heywood["commons_validated_for"], "jubilee park|heywood")
+        self.assertEqual(heywood["commons_validated_for"], "jubilee park|heywood#c" + str(ih.COMMONS_MATCH_VERSION))
 
     def test_unchecked_commons_photo_is_redecided(self):
         import ensure_article_images as images
         story = dict(self.story("heywood"), image_url="assets/img/cards/heywoodpark-commons-photo.jpg",
                      image_status="commons-photo-cached", image_backfill_method="wikimedia-commons")
         self.assertFalse(images.existing_meaningful_image(dict(story), self.root))
-        checked = dict(story, commons_validated_for="jubilee park|heywood")
+        checked = dict(story, commons_validated_for="jubilee park|heywood#c" + str(image_hierarchy.COMMONS_MATCH_VERSION))
         self.assertTrue(images.existing_meaningful_image(checked, self.root))
         # An editor's own photo is never re-decided.
         own = dict(story, manual_article=True, editorial_lock=True, image_backfill_method="manual-editorial-photo",
