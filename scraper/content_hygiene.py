@@ -75,6 +75,39 @@ DETECTORS = [
 ]
 
 
+# A URL ends before trailing sentence punctuation ('...?id=3&utm_campaign=z.'
+# keeps its full stop).
+_URL_IN_TEXT_RE = re.compile(r"https?://[^\s\"'<>()]+?(?=[.,;:!?]*(?:[\s\"'<>()]|$))", re.I)
+_TRACKING_PARAM_RE = re.compile(r"utm_(?:source|medium|campaign|term|content)(?:=|$)", re.I)
+
+
+def _strip_tracking_from_url(url: str) -> str:
+    """Drop utm_* parameters from one URL and rebuild the query: the '?'
+    stays while any parameter remains, the separators keep their written
+    form ('&' or '&amp;' inside an HTML attribute), and every other
+    parameter and the #fragment are left exactly as written. 8 Nov 2026
+    review: removing 'utm_medium=email' with its leading '?' turned
+    '/story?utm_medium=email&id=7' into '/story&id=7'."""
+    if "?" not in url:
+        return url
+    base, rest = url.split("?", 1)
+    query, hash_mark, fragment = rest.partition("#")
+    pieces = re.split(r"(&amp;|&)", query)
+    params, separators = pieces[0::2], pieces[1::2]
+    kept: list[str] = []
+    sep = separators[0] if separators else "&"
+    for param in params:
+        if param and not _TRACKING_PARAM_RE.match(param):
+            kept.append(param)
+    rebuilt = base + ("?" + sep.join(kept) if kept else "")
+    return rebuilt + (hash_mark + fragment if hash_mark else "")
+
+
+def strip_tracking_params(text: str) -> str:
+    """Remove utm_* tracking parameters from every URL in text or markup."""
+    return _URL_IN_TEXT_RE.sub(lambda m: _strip_tracking_from_url(m.group(0)), str(text or ""))
+
+
 def clean_url(value: str) -> str:
     if not value.startswith(("http://", "https://")):
         return value
@@ -107,7 +140,7 @@ def _clean_text_once(value: str) -> str:
     text = BAD_SENTENCES.sub(" ", text)
     text = EMOJI_RE.sub("", text)
     text = EMOJI_COMPONENT_RE.sub("", text)
-    text = re.sub(r"([?&])utm_(?:source|medium|campaign|term|content)=[^&#\s\"')<]+", "", text, flags=re.I)
+    text = strip_tracking_params(text)
     text = re.sub(r"[ \t]{2,}", " ", text)
     text = re.sub(r"\s+([,.;:!?])", r"\1", text)
     text = re.sub(r"(?:<p>\s*</p>)+", "", text, flags=re.I)
@@ -152,7 +185,7 @@ def _clean_markup(segment: str, *, prose: bool) -> str:
     drawing data get only the character-level removals."""
     out = EMOJI_RE.sub("", segment)
     out = EMOJI_COMPONENT_RE.sub("", out)
-    out = re.sub(r"([?&])utm_(?:source|medium|campaign|term|content)=[^&#\s\"')<]+", "", out, flags=re.I)
+    out = strip_tracking_params(out)
     for pattern in CITATION_PATTERNS:
         out = pattern.sub("", out)
     if prose:
