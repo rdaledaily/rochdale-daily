@@ -2609,7 +2609,11 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     function setBreakingTicker(message) {
       const ticker = document.getElementById("breaking-copy");
       const track = document.getElementById("breaking-track");
-      const cleanMessage = String(message || "").trim();
+      // Titles reach here already HTML-escaped (&#39;, &amp;). Decode them as
+      // plain text; textContent below keeps them inert.
+      const decoder = document.createElement("textarea");
+      decoder.innerHTML = String(message || "");
+      const cleanMessage = decoder.value.trim();
       if (!ticker || !track || !cleanMessage) return;
 
       track.querySelectorAll(".breaking-text").forEach(node => {

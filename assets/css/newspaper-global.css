@@ -2768,3 +2768,38 @@ body > footer strong,
 .afc-strip-match { font: 700 19px/1.25 var(--font-display) !important; }
 .afc-strip-meta { grid-column: 1 !important; font: 13px/1.4 var(--font-ui) !important; color: var(--muted) !important; }
 .afc-strip-go { grid-row: 2 / span 2 !important; grid-column: 2 !important; font: 700 13px var(--font-ui) !important; color: var(--accent) !important; white-space: nowrap !important; }
+
+/* Phone dropdown menu (<=620px), 9 Nov 2026.
+   The unscoped ".nav-list a { padding: 0 !important; border: 0 !important }"
+   rules above were written for the wrapped desktop row. Nothing limited them
+   to desktop, so on a phone the MENU dropdown rendered with every item jammed
+   against the left edge, no row dividers and the last item crushed against
+   the bottom. These rules restore a proper tap list. The extra "html body
+   .primary-nav" specificity is deliberate: this file is imported several
+   times and frontpage-refresh.css styles the list with body-class selectors,
+   so equal-specificity rules would lose depending on load order. */
+@media (max-width: 620px) {
+  html body .primary-nav .nav-list {
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+    padding: 6px 0 !important;
+  }
+  html body .primary-nav .nav-list li {
+    width: 100% !important;
+  }
+  html body .primary-nav .nav-list a,
+  html body .primary-nav .nav-list button {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-height: 46px !important;
+    padding: 0 18px !important;
+    border-bottom: 1px solid var(--line, #e2e8ee) !important;
+    line-height: 1.25 !important;
+    text-align: left !important;
+  }
+  html body .primary-nav .nav-list li:last-child a,
+  html body .primary-nav .nav-list li:last-child button {
+    border-bottom: 0 !important;
+  }
+}
