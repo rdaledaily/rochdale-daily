@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T22:47:17.537730Z",
+  "updated_at": "2026-11-09T23:04:09.645289Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 134,
+  "count": 135,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -735,6 +735,22 @@
       "text_fingerprint": "c2e2a246b4b63b84",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://www.bbc.co.uk/sport/football/articles/c6wyrynd848jo": {
+      "first_attempt_at": "2026-11-09T23:04:09.645065Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.bbc.co.uk/sport/football/articles/c6wyrynd848jo"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-09T23:04:09.645065Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Wigan, Oldham, Rochdale and Stockport drawn in FA Cup second round",
+      "source_name": "BBC Manchester",
+      "category": "news",
+      "text_fingerprint": "4e1925baecf641d6"
     },
     "https://www.bbc.co.uk/sport/football/live/c63el28n0pe5t": {
       "first_attempt_at": "2026-11-03T20:56:03.038304Z",
@@ -2102,14 +2118,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T22:28:38.548468Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-09T23:04:09.645167Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Residents urged to be vigilant as burglars target family gold - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "c52067307bab73e9",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/scammers-try-to-get-into-peoples-homes-posing-as-council-officials": {
       "first_attempt_at": "2026-11-06T11:00:06.384239Z",
