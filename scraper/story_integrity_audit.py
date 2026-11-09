@@ -94,6 +94,11 @@ def hit(pattern: str, value: str) -> bool:
 
 
 def headline_category(article: dict[str, Any]) -> str | None:
+    # Blanket rule (editor, 9 Nov 2026): "emergency" in the headline is
+    # Community, before slug overrides and every other rule.
+    from incident_rule import INCIDENT_CATEGORY, is_incident
+    if is_incident(article):
+        return INCIDENT_CATEGORY
     slug = clean(article.get("slug")).lower()
     if slug in CATEGORY_OVERRIDES:
         return CATEGORY_OVERRIDES[slug]

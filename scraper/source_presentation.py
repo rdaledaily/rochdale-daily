@@ -230,6 +230,10 @@ def _set_standard_police_image(article: dict[str, Any], reason: str) -> dict[str
 
 
 def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
+    # The Incident card outranks the police photo (incident_rule.py).
+    import incident_rule
+    if incident_rule.wants_incident_card(article):
+        return incident_rule.apply_incident_card(article)
     title = str(article.get("title") or "")
     article_text = " ".join(
         str(article.get(field) or "")
@@ -270,6 +274,7 @@ def enforce_police_image(article: dict[str, Any]) -> dict[str, Any]:
 _OWN_PHOTO_STATUSES = frozenset({
     "editorial-photo", "cards-library-photo", "commons-photo-cached",
     "source-photo-cached", "standard-police-image", "supplied", "town-file-photo",
+    "incident-card",
 })
 
 

@@ -663,6 +663,12 @@ def set_generated(article: dict[str, Any], root: Path) -> None:
 
 
 def enforce_article(article: dict[str, Any], root: Path) -> str:
+    # Blanket rule (editor, 9 Nov 2026): the red Incident card, before any
+    # kept, manual or library photo (incident_rule.py).
+    import incident_rule
+    if incident_rule.wants_incident_card(article):
+        incident_rule.apply_incident_card(article)
+        return "incident-card"
     if existing_meaningful_image(article, root):
         return "kept-existing"
 
@@ -707,7 +713,7 @@ def main(argv: list[str] | None = None) -> int:
 
     restyle = restyle_generated_cards(root, rows)
 
-    stats = {"kept_cards": 0, "cards_library": 0, "cards_generated": 0, "skipped": 0}
+    stats = {"kept_cards": 0, "cards_library": 0, "cards_generated": 0, "incident_card": 0, "skipped": 0}
     report: list[dict[str, Any]] = []
 
     for article in rows:
@@ -721,6 +727,8 @@ def main(argv: list[str] | None = None) -> int:
             stats["kept_cards"] += 1
         elif result == "cards-library":
             stats["cards_library"] += 1
+        elif result == "incident-card":
+            stats["incident_card"] += 1
         else:
             stats["cards_generated"] += 1
         report.append({

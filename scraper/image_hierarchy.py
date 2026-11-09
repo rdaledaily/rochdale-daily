@@ -374,6 +374,13 @@ def set_town_photo(article, root, cache, cache_file, allow_network):
 
 def choose_image(article, root, relevance=None, allow_network=True, rejected=()):
     """Apply the ordered policy once, recording failed searches honestly."""
+    # Blanket rule (editor, 9 Nov 2026): "emergency" in the headline always
+    # shows the red Incident card, before every other tier.
+    import incident_rule
+    if incident_rule.wants_incident_card(article):
+        incident_rule.apply_incident_card(article)
+        article['image_policy'] = POLICY
+        return 'incident'
     from ensure_article_images import (choose_exact_story_photo, choose_named_library_photo,
         valid_cards_image, set_curated, is_generated_card, existing_meaningful_image)
     from repair_generated_with_commons import download

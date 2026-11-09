@@ -351,6 +351,11 @@ _HEADLINE_NOT_EMERGENCY_RE = re.compile(
 
 def headline_category_rule(title: str) -> str:
     title = str(title or "")
+    # Blanket rule (editor, 9 Nov 2026): "emergency" in the headline is
+    # Community, before every other rule (incident_rule.py).
+    from incident_rule import INCIDENT_CATEGORY, is_incident_title
+    if is_incident_title(title):
+        return INCIDENT_CATEGORY
     # An inquest is a coroner's finding, not a criminal case ("Inquest jury
     # clears police after fatal chase"): leave it to the full-text scoring.
     if re.search(r"\binquests?\b", title, re.I):
@@ -403,12 +408,17 @@ def apply_category_rules(article: dict[str, Any]) -> dict[str, Any]:
     # piece on the mayoral result went to transport because it discusses the
     # Bee Network and Metrolink, and a festival guide went the same way on
     # the strength of its travel and parking section.
+    # The incident rule is blanket: it outranks an editor lock too.
+    import incident_rule
+    if incident_rule.enforce(article):
+        article["police_matter"] = False
+        return article
     if article.get("editorial_lock"):
         locked = str(article.get("category") or "news")
         article["category"] = locked
         article["types"] = [locked]
         article["police_matter"] = bool(article.get("police_matter")) and locked == "crime"
-        return article
+        return incident_rule.apply_card_if_wanted(article)
 
     category = article_category(article)
     article["category"] = category
@@ -421,7 +431,8 @@ def apply_category_rules(article: dict[str, Any]) -> dict[str, Any]:
         # keeps injecting the Crimestoppers box. Once the category is
         # corrected away from crime, the flag must go with it.
         article["police_matter"] = False
-    return article
+    # Crashes, collisions and health emergencies: the Incident card, section kept.
+    return incident_rule.apply_card_if_wanted(article)
 
 
 

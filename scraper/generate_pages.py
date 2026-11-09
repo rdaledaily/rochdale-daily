@@ -1006,6 +1006,13 @@ def is_generated_card(image_url: str) -> bool:
 
 def render_article_page(article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
     article = normalise_feature(article)
+    # Blanket rule (editor, 9 Nov 2026): section and picture of an
+    # "emergency" headline, whatever the stored record says.
+    import incident_rule
+    if incident_rule.is_incident(article):
+        article = incident_rule.apply_incident_card(incident_rule.apply_incident_category(dict(article)))
+    elif incident_rule.wants_incident_card(article):
+        article = incident_rule.apply_incident_card(dict(article))
     slug = article.get('slug')
     title = str(article.get('title') or 'Local news update')
     canonical_url = f'{SITE_BASE_URL}/articles/{slug}.html'
@@ -1461,6 +1468,13 @@ def main() -> None:
     related_pages, related_removed = prune_dead_related_links(OUTPUT_DIR, live_slugs)
     corrections_logged = write_corrections_log(articles)
     archived = sum(1 for path in OUTPUT_DIR.glob('*.html') if path.stem not in live_slugs)
+    # Blanket incident rule on archived pages and stored records (editor,
+    # 9 Nov 2026): runs before the hubs so they file these under Community.
+    try:
+        from apply_incident_rule import main as apply_incident_rule
+        apply_incident_rule()
+    except Exception as exc:  # never let the backfill block the paper
+        print(f'Incident rule backfill skipped: {type(exc).__name__}: {exc}')
     # Category hub pages are rebuilt here, inside the step every lane already
     # runs, so no workflow file needs to change and the sitemap below sees them.
     try:
