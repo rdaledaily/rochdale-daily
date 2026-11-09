@@ -3044,6 +3044,15 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     }
 
     function isCareerOrVacancyPost(article) {
+      // Editor's own articles are never job adverts. The pipeline's job filter
+      // has exempted them since August (frontpage_pipeline._is_manual_editorial);
+      // this homepage copy did not, so a fighter thanking sponsors for his
+      // "career" or a charity "recruiting" volunteers vanished from the page
+      // even though the feed carried the story (9 Nov 2026).
+      if (article.manual_article === true
+        || String(article.publication_route || "").toLowerCase() === "editorial") {
+        return false;
+      }
       const text = [
         article.title,
         article.excerpt,
