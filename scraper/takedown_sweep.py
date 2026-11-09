@@ -157,8 +157,52 @@ def renumber_list_items(text: str) -> str:
     )
 
 
-def sweep(root: Path, slugs: list[str]) -> dict[str, int]:
+# Public JSON record stores no generator rebuilds. 9 Nov 2026: the Highway
+# 101 takedown removed every page, but articles/archive.json (served publicly
+# at /articles/archive.json) still held its record, and 15 earlier taken-down
+# stories with it. Blocked records are dropped from these on every sweep.
+JSON_STORES = ("articles/archive.json",)
+
+
+def _store_rows(data):
+    if isinstance(data, list):
+        return data
+    if isinstance(data, dict) and isinstance(data.get("articles"), list):
+        return data["articles"]
+    return None
+
+
+def sweep_json_stores(root: Path) -> dict[str, int]:
+    """Drop every record the blocklist forbids (slug, title pattern or source)."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from story_blocklist import is_blocked_article, load_blocklist
+    blocklist = load_blocklist(root / "story_blocklist.json")
     changed: dict[str, int] = {}
+    for rel in JSON_STORES:
+        path = root / rel
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        rows = _store_rows(data)
+        if rows is None:
+            continue
+        kept = [r for r in rows if not (isinstance(r, dict) and is_blocked_article(r, blocklist))]
+        if len(kept) == len(rows):
+            continue
+        if isinstance(data, list):
+            data = kept
+        else:
+            data["articles"] = kept
+            if "count" in data:
+                data["count"] = len(kept)
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        changed[rel] = len(rows) - len(kept)
+    return changed
+
+
+def sweep(root: Path, slugs: list[str]) -> dict[str, int]:
+    changed: dict[str, int] = dict(sweep_json_stores(root))
     slugs = [slug for slug in slugs if slug]
     if not slugs:
         return changed
@@ -178,6 +222,13 @@ def sweep(root: Path, slugs: list[str]) -> dict[str, int]:
 def verify(root: Path, slugs: list[str]) -> list[str]:
     leftovers = []
     patterns = [(slug, _link_pattern(slug)) for slug in slugs if slug]
+    for rel in JSON_STORES:
+        try:
+            rows = _store_rows(json.loads((root / rel).read_text(encoding="utf-8"))) or []
+        except (OSError, ValueError):
+            continue
+        present = {str(r.get("slug") or "").lower() for r in rows if isinstance(r, dict)}
+        leftovers += [f"{rel}: {slug}" for slug in slugs if slug and slug in present]
     for path in public_files(root):
         text = path.read_text(encoding="utf-8", errors="ignore")
         rel = path.relative_to(root)

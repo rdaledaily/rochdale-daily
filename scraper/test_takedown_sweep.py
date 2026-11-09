@@ -141,3 +141,23 @@ def test_remove_story_deletes_folder_form_page(tmp_path, monkeypatch):
     assert remove_story.main() == 0
     assert not (tmp_path / "articles" / slug).exists()
     assert f"/articles/{slug} " in (tmp_path / "_redirects").read_text(encoding="utf-8")
+
+
+def test_public_json_store_loses_taken_down_records(tmp_path):
+    # 9 Nov 2026: the Highway 101 takedown left its record in the publicly
+    # served articles/archive.json, with 15 earlier taken-down stories.
+    import json as _json
+    from takedown_sweep import sweep, verify
+    (tmp_path / "articles").mkdir()
+    (tmp_path / "story_blocklist.json").write_text(_json.dumps(
+        {"slugs": ["gone-story"], "title_patterns": ["highway 101"], "source_urls": []}), encoding="utf-8")
+    store = {"count": 3, "articles": [
+        {"slug": "gone-story", "title": "Gone"},
+        {"slug": "other", "title": "Two die on Highway 101"},
+        {"slug": "kept", "title": "Kept story"}]}
+    (tmp_path / "articles" / "archive.json").write_text(_json.dumps(store), encoding="utf-8")
+    assert verify(tmp_path, ["gone-story"]) == ["articles/archive.json: gone-story"]
+    assert sweep(tmp_path, ["gone-story"])["articles/archive.json"] == 2
+    left = _json.loads((tmp_path / "articles" / "archive.json").read_text(encoding="utf-8"))
+    assert [r["slug"] for r in left["articles"]] == ["kept"] and left["count"] == 1
+    assert verify(tmp_path, ["gone-story"]) == []
