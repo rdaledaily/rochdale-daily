@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T16:40:55.361365Z",
+  "updated_at": "2026-11-09T16:57:19.466986Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 140,
+  "count": 139,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -341,6 +341,22 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "0bfe0d92470573ed"
+    },
+    "https://rochdaleafc.co.uk/northampton-tickets-on-sale": {
+      "first_attempt_at": "2026-11-09T16:55:32.821998Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/northampton-tickets-on-sale"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-09T16:55:32.821998Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_NEWS",
+      "title": "Northampton Town Tickets On Sale",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "e91a911d4ea978a4"
     },
     "https://rochdaleafc.co.uk/preview-doncaster-rovers-h": {
       "first_attempt_at": "2026-11-02T23:09:44.845623Z",
@@ -1431,8 +1447,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-09T16:40:55.360954Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Jailed, the 'trusted' dealer who ran the notorious 'Adam' line",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2356,23 +2372,6 @@
       "category": "news",
       "text_fingerprint": "eb89953564381c5e"
     },
-    "https://www.rochvalleyradio.com/news-features/149/education/1273/hopwood-hall-marks-construction-milestone-for-clegg-building-in-rochdale": {
-      "first_attempt_at": "2026-11-01T16:32:44.927506Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/149/education/1273/hopwood-hall-marks-construction-milestone-for-clegg-building-in-rochdale"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-01T16:32:44.927506Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Hopwood Hall marks construction milestone for Clegg Building in Rochdale",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "education",
-      "text_fingerprint": "de40a79e558f6290",
-      "recovery_attempts": 1
-    },
     "https://www.rochvalleyradio.com/news-features/179/culture/1272/stories-we-tell-returns-to-rochdale-for-final-night-after-sell-out-run": {
       "first_attempt_at": "2026-11-01T16:32:44.927678Z",
       "attempts": 1,
@@ -2390,22 +2389,6 @@
       "text_fingerprint": "fb693ed6b83f4e24",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
-    },
-    "https://www.rochvalleyradio.com/news-features/5/traffic-and-travel/1269/rochdale-and-bury-record-biggest-driving-test-pass-rate-increases-in-greater-manchester": {
-      "first_attempt_at": "2026-11-01T15:57:51.767351Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/5/traffic-and-travel/1269/rochdale-and-bury-record-biggest-driving-test-pass-rate-increases-in-greater-manchester"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-01T16:32:44.927835Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Rochdale and Bury record biggest driving test pass rate increases in Greater Manchester",
-      "source_name": "Roch Valley Radio",
-      "category": "traffic",
-      "text_fingerprint": "b87604d328640bca"
     },
     "https://www.rochvalleyradio.com/news-features/6/lifestyle-entertainment/1319/actor-returns-to-stage-after-ms-diagnosis-for-rochdale-comedy-show": {
       "first_attempt_at": "2026-11-01T22:09:44.993582Z",
