@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T17:26:24.231898Z",
+  "updated_at": "2026-11-09T17:53:40.064453Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 139,
@@ -1446,14 +1446,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T17:26:24.231580Z",
+      "last_attempt_at": "2026-11-09T17:53:40.063936Z",
       "outcome": "published",
       "reason": "",
       "title": "Jailed, the 'trusted' dealer who ran the notorious 'Adam' line",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "f0420e91cf4747d2",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/multi-billion-plan-transform-rochdale-34839906": {
@@ -2297,13 +2297,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T17:26:24.231296Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-09T17:50:18.730426Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Volunteers needed to help provide town centre Safe Haven - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "community",
-      "text_fingerprint": "e517ff2c8313f77d"
+      "text_fingerprint": "e517ff2c8313f77d",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/warning-as-measles-cases-are-confirmed": {
       "first_attempt_at": "2026-11-05T19:11:51.419219Z",
