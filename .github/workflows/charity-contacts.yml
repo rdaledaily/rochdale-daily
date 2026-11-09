@@ -1,0 +1,98 @@
+name: Charity contacts (one-off data job)
+
+# One-off: builds a list of registered charities based in Rochdale borough
+# from the Charity Commission's public register extract, keeping only
+# organisation email addresses (no personal webmail), for outreach.
+on:
+  push:
+    branches: [data/charity-contacts]
+    paths: [.github/workflows/charity-contacts.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - name: Download register extract
+        run: |
+          set -e
+          base=https://ccewuksprdoneregsadata1.blob.core.windows.net/data/txt
+          for t in charity charity_area_of_operation; do
+            curl -sSfL -o $t.zip "$base/publicextract.$t.zip"
+            unzip -o -q $t.zip
+          done
+          ls -la *.txt
+          head -1 publicextract.charity.txt | tr '\t' '\n' | nl
+      - name: Filter to Rochdale borough
+        run: |
+          python3 - <<'PY'
+          import csv, sys, re, json, collections
+          csv.field_size_limit(10**9)
+          def rows(path):
+              with open(path, encoding='utf-8-sig', errors='replace', newline='') as f:
+                  yield from csv.DictReader(f, delimiter='\t', quoting=csv.QUOTE_NONE)
+          # Charities whose area of operation is the Rochdale local authority
+          aoo = collections.defaultdict(set)
+          for r in rows('publicextract.charity_area_of_operation.txt'):
+              aoo[r.get('organisation_number')].add((r.get('geographic_area_description') or '').strip())
+          WEBMAIL = re.compile(r'@(gmail|googlemail|hotmail|outlook|live|yahoo|ymail|btinternet|btopenworld|aol|icloud|me|mac|msn|sky|talktalk|tiscali|virginmedia|virgin|ntlworld|blueyonder|protonmail|proton|mail|gmx|zoho|o2|orange|freeserve|lineone|fsmail|hotmail)\.', re.I)
+          DISTRICTS = {'OL10', 'OL11', 'OL12', 'OL15', 'OL16', 'M24'}
+          out, stats = [], collections.Counter()
+          cols = None
+          for r in rows('publicextract.charity.txt'):
+              if cols is None:
+                  cols = list(r.keys())
+              if (r.get('charity_registration_status') or '').strip().lower() != 'registered':
+                  continue
+              if (r.get('linked_charity_number') or '0').strip() not in ('', '0'):
+                  continue
+              pc = (r.get('charity_contact_postcode') or '').strip().upper()
+              district = pc.split(' ')[0] if ' ' in pc else pc[:-3].strip()
+              ops = aoo.get(r.get('organisation_number'), set())
+              in_area = 'Rochdale' in ops
+              based = district in DISTRICTS
+              if not (based or (in_area and len(ops) == 1)):
+                  continue
+              stats['in_borough'] += 1
+              email = (r.get('charity_contact_email') or '').strip().lower()
+              if not email or '@' not in email:
+                  stats['no_email'] += 1
+                  continue
+              if WEBMAIL.search(email):
+                  stats['personal_webmail_excluded'] += 1
+                  continue
+              stats['organisation_email'] += 1
+              out.append({
+                  'name': (r.get('charity_name') or '').strip(),
+                  'number': (r.get('registered_charity_number') or '').strip(),
+                  'email': email,
+                  'website': (r.get('charity_contact_web') or '').strip(),
+                  'phone': (r.get('charity_contact_phone') or '').strip(),
+                  'postcode': pc,
+                  'based_in_borough': based,
+                  'operates_only_in_rochdale': in_area and len(ops) == 1,
+                  'check': 'Whitworth/Rossendale postcode' if pc.startswith('OL12 8') else '',
+              })
+          out.sort(key=lambda x: x['name'].lower())
+          # one row per email address
+          seen, dedup = set(), []
+          for x in out:
+              if x['email'] in seen:
+                  stats['duplicate_email'] += 1
+                  continue
+              seen.add(x['email']); dedup.append(x)
+          with open('rochdale_charity_contacts.csv', 'w', newline='', encoding='utf-8') as f:
+              w = csv.DictWriter(f, fieldnames=list(dedup[0].keys())); w.writeheader(); w.writerows(dedup)
+          json.dump({'columns': cols, 'stats': stats, 'rows': len(dedup)}, open('summary.json', 'w'), indent=1)
+          print(json.dumps(stats), len(dedup))
+          PY
+      - name: Commit result to this branch
+        run: |
+          git config user.name "Rochdale Daily"
+          git config user.email "news@rochdaledaily.co.uk"
+          git add rochdale_charity_contacts.csv summary.json
+          git commit -m "Charity contacts extract" && git push
