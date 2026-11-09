@@ -1,0 +1,188 @@
+
+=== new_sources_nov9 ===
+
+ -- ukplanning_overview: https://ukplanningapi.co.uk/councils/rochdale
+   robots: ALLOWED
+  ukplanning_overview.html: HTTP 200 text/html; charset=utf-8 18429 bytes
+   title: Rochdale Planning Data — approval rates and coverage
+   borough mentions: 21
+   matching links=0
+
+ -- ukplanning_api_nokey: https://ukplanningapi.co.uk/v1/applications?council_id=5&limit=5
+   robots: ALLOWED
+  ukplanning_api_nokey.html: HTTP 401 application/json 88 bytes
+   borough mentions: 0
+   json head: {"code":"UNAUTHORIZED","error":"Invalid or missing API key. Include X-API-Key header."} 
+
+ -- datacommons_page: https://datacommons.org/place/wikidataId/Q474605
+   robots: ALLOWED
+  datacommons_page.html: HTTP 200 text/html; charset=utf-8 18422 bytes
+   title: Rochdale - Data Commons
+   borough mentions: 4
+   matching links=9
+    - https://datacommons.org/place/wikidataId/Q474605
+    - https://datacommons.org/place/wikidataId/Q474605?hl=de
+    - https://datacommons.org/place/wikidataId/Q474605?hl=es
+    - https://datacommons.org/place/wikidataId/Q474605?hl=fr
+    - https://datacommons.org/place/wikidataId/Q474605?hl=hi
+    - https://datacommons.org/place/wikidataId/Q474605?hl=it
+    - https://datacommons.org/place/wikidataId/Q474605?hl=ja
+    - https://datacommons.org/place/wikidataId/Q474605?hl=ko
+    - https://datacommons.org/place/wikidataId/Q474605?hl=ru
+
+ -- datacommons_api_nokey: https://api.datacommons.org/v2/observation?date=LATEST&select=date&select=value&select=variable&select=entity&entity.dcids=wikidataId/Q474605&variable.dcids=Count_Person
+   robots: robots HTTP 401 (no rules apply)
+  datacommons_api_nokey.html: HTTP 401 application/json 262 bytes
+   borough mentions: 0
+   json head: {"message": "UNAUTHENTICATED: Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API. Visit apikeys.datacommons.org to create or manage API keys.", "code": 401}
+
+ -- engage_comm: https://www.engagerochdale.org/Communication
+   robots: DISALLOWED
+  engage_comm.html: HTTP 200 text/html; charset=utf-8 65038 bytes
+   title: Communication | Engage Rochdale
+   borough mentions: 14
+   matching links=25
+    - /AboutUs
+    - /Communication
+    - /Contacts
+    - /Content/Accessibility.css
+    - /Content/Icons.css
+    - /Content/MediaQueries.css
+    - /Content/Normalize.css?v=20220928
+    - /Content/Site1200.css?v=20240702
+    - /Content/TextSize.css
+    - /Content/ToggleSwitch.css
+    - /Content/bootstrap.css
+    - /DataProtection/Accessibility
+
+ -- engage_home: https://www.engagerochdale.org/
+   robots: DISALLOWED
+  engage_home.html: HTTP 200 text/html; charset=utf-8 56720 bytes
+   title: Engage Rochdale
+   borough mentions: 7
+   matching links=26
+    - /AboutUs
+    - /Communication
+    - /Contacts
+    - /Content/Accessibility.css
+    - /Content/FlexSliderConverted.css
+    - /Content/Icons.css
+    - /Content/MediaQueries.css
+    - /Content/Normalize.css
+    - /Content/Site.css?v=20240702
+    - /Content/TextSize.css
+    - /Content/ToggleSwitch.css
+    - /Content/bootstrap.css
+
+ -- rda_regeneration: https://www.investinrochdale.co.uk/regeneration
+   robots: ALLOWED
+  rda_regeneration.html: HTTP 200 text/html; charset=UTF-8 24861 bytes
+   title: Rochdale Development Agency
+   borough mentions: 36
+   matching links=3
+    - /regeneration/projects/castleton-station
+    - /regeneration/projects/heywood-town-centre
+    - /regeneration/projects/rochdale-rail-corridor
+
+ -- rda_projects: https://www.investinrochdale.co.uk/regeneration/projects
+   robots: ALLOWED
+  rda_projects.html: HTTP 200 text/html; charset=UTF-8 32795 bytes
+   title: Rochdale Development Agency
+   borough mentions: 90
+   matching links=20
+    - /regeneration/projects/broadfield-slopes
+    - /regeneration/projects/castleton-station
+    - /regeneration/projects/culture-and-placemaking
+    - /regeneration/projects/heritage-action-zone
+    - /regeneration/projects/heywood-town-centre
+    - /regeneration/projects/littleborough-town-centre-master-plan-summary
+    - /regeneration/projects/middleton-town-centre-master-plan-summary
+    - /regeneration/projects/number-one-riverside
+    - /regeneration/projects/revealing-the-roch
+    - /regeneration/projects/richard-street-studios
+    - /regeneration/projects/riverside-phase-1
+    - /regeneration/projects/rochdale-at-work
+
+ -- iqair: https://www.iqair.com/gb/air-quality/uk/england/rochdale
+   robots: robots HTTP 429 (no rules apply)
+  iqair.html: HTTP 429 text/html; charset=utf-8 24732 bytes
+   title: Vercel Security Checkpoint
+   borough mentions: 0
+   matching links=0
+
+ -- wdtk_body_given: https://www.whatdotheyknow.com/body/rochdale_council
+   robots: robots HTTP 403 (no rules apply)
+  wdtk_body_given.html: HTTP 403 text/html; charset=UTF-8 5640 bytes
+   title: Just a moment...
+   borough mentions: 0
+   matching links=0
+
+ -- wdtk_feed_given: https://www.whatdotheyknow.com/feed/body/rochdale_council
+   robots: robots HTTP 403 (no rules apply)
+  wdtk_feed_given.html: HTTP 403 text/html; charset=UTF-8 5655 bytes
+   title: Just a moment...
+   borough mentions: 0
+   matching links=0
+
+ -- wdtk_feed_rmbc: https://www.whatdotheyknow.com/feed/body/rochdale_metropolitan_borough_council
+   robots: robots HTTP 403 (no rules apply)
+  wdtk_feed_rmbc.html: HTTP 403 text/html; charset=UTF-8 5739 bytes
+   title: Just a moment...
+   borough mentions: 0
+   matching links=0
+
+ -- fingertips_profiles: https://fingertips.phe.org.uk/api/profiles
+   robots: ALLOWED
+  fingertips_profiles.html: HTTP 200 application/json; charset=utf-8 83988 bytes
+   borough mentions: 0
+   json head: [{"Id":18,"Name":"Smoking Profile","Key":"tobacco-control","GroupIds":[1938132885,1938132886,1938132900,1938132887,1938132888,1938132889,1938132890],"GroupMetadata":[{"Id":1938132885,"Name":"Key indicators","Sequence":1,"ProfileId":18,"DataAvailable":[{"AreaTypeId":6,"IndicatorCount":26},{"AreaTypeId":15,"IndicatorCount":24},{"AreaTypeId":66,"IndicatorCount":12},{"AreaTypeId":221,"IndicatorCount":
+
+ -- fingertips_area_302: https://fingertips.phe.org.uk/api/areas/by_area_type?area_type_id=302
+   robots: ALLOWED
+  fingertips_area_302.html: HTTP 200 application/json; charset=utf-8 11799 bytes
+   borough mentions: 2
+   json head: [{"Name":"Barking and Dagenham","Short":"Bark & Dag","AreaTypeId":170,"Code":"E09000002"},{"Name":"Barnet","Short":"Barnet","AreaTypeId":170,"Code":"E09000003"},{"Name":"Barnsley","Short":"Barnsley","AreaTypeId":170,"Code":"E08000016"},{"Name":"Bath and North East Somerset","Short":"Bath & NESom","AreaTypeId":170,"Code":"E06000022"},{"Name":"Bedford","Short":"Bedford","AreaTypeId":170,"Code":"E060
+   E08000005 present: True
+
+ -- fingertips_area_502: https://fingertips.phe.org.uk/api/areas/by_area_type?area_type_id=502
+   robots: ALLOWED
+  fingertips_area_502.html: HTTP 200 application/json; charset=utf-8 12025 bytes
+   borough mentions: 2
+   json head: [{"Code":"E09000002","Name":"Barking and Dagenham","Short":"Bark & Dag","AreaTypeId":170},{"Code":"E09000003","Name":"Barnet","Short":"Barnet","AreaTypeId":170},{"Code":"E08000016","Name":"Barnsley","Short":"Barnsley","AreaTypeId":170},{"Code":"E06000022","Name":"Bath and North East Somerset","Short":"Bath & NESom","AreaTypeId":170},{"Code":"E06000055","Name":"Bedford","Short":"Bedford","AreaTypeI
+   E08000005 present: True
+
+ -- nca_given: https://www.northerncarealliance.nhs.uk/nca-news?q=%2Fnews%2Fnca-news
+   robots: ALLOWED
+  nca_given.html: HTTP 200 text/html; charset=UTF-8 284138 bytes
+   title: News :: Northern Care Alliance
+   borough mentions: 9
+   matching links=5
+    - https://www.northerncarealliance.nhs.uk/nca-news/manchester-arena-attack-survivors-pioneering-rehabilitation-programme-hope-recoveries?q=%2F
+    - https://www.northerncarealliance.nhs.uk/nca-news/national-pathology-week-meet-team-behind-millions-tests-every-year?q=%2Fnews%2Fnca-news
+    - https://www.northerncarealliance.nhs.uk/nca-news/nca-lead-gbp34-million-national-study-testing-whether-early-treatment-can-save-patients-hea
+    - https://www.northerncarealliance.nhs.uk/nca-news/nca-supports-roll-out-successful-greater-manchester-lung-cancer-screening-programme?q=%2Fne
+    - https://www.northerncarealliance.nhs.uk/nca-news/royal-oldham-hospital-celebrates-opening-new-fountain-garden?q=%2Fnews%2Fnca-news
+
+ -- nca_rochdale_existing: https://www.northerncarealliance.nhs.uk/news/rochdale-news
+   robots: ALLOWED
+  nca_rochdale_existing.html: HTTP 200 text/html; charset=UTF-8 284116 bytes
+   title: Rochdale News :: Northern Care Alliance
+   borough mentions: 31
+   matching links=5
+    - https://www.northerncarealliance.nhs.uk/nca-news/health-visitors-rochdale-achieve-national-first-support-parents-be?q=%2Fnews%2Frochdale-new
+    - https://www.northerncarealliance.nhs.uk/nca-news/marking-windrush-day?q=%2Fnews%2Frochdale-news&back=246
+    - https://www.northerncarealliance.nhs.uk/nca-news/message-sheena-mcdonnell-nca-chair-trust-leadership?q=%2Fnews%2Frochdale-news&back=246
+    - https://www.northerncarealliance.nhs.uk/nca-news/nca-supports-roll-out-successful-greater-manchester-lung-cancer-screening-programme?q=%2Fne
+    - https://www.northerncarealliance.nhs.uk/nca-news/salford-royal-joins-greater-manchester-roll-out-ai-prostate-cancer-detection-tool?q=%2Fnews
+
+ -- nca_all_existing: https://www.northerncarealliance.nhs.uk/news/nca-news
+   robots: ALLOWED
+  nca_all_existing.html: HTTP 200 text/html; charset=UTF-8 284138 bytes
+   title: News :: Northern Care Alliance
+   borough mentions: 9
+   matching links=5
+    - https://www.northerncarealliance.nhs.uk/nca-news/manchester-arena-attack-survivors-pioneering-rehabilitation-programme-hope-recoveries?q=%2F
+    - https://www.northerncarealliance.nhs.uk/nca-news/national-pathology-week-meet-team-behind-millions-tests-every-year?q=%2Fnews%2Fnca-news
+    - https://www.northerncarealliance.nhs.uk/nca-news/nca-lead-gbp34-million-national-study-testing-whether-early-treatment-can-save-patients-hea
+    - https://www.northerncarealliance.nhs.uk/nca-news/nca-supports-roll-out-successful-greater-manchester-lung-cancer-screening-programme?q=%2Fne
+    - https://www.northerncarealliance.nhs.uk/nca-news/royal-oldham-hospital-celebrates-opening-new-fountain-garden?q=%2Fnews%2Fnca-news

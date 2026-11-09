@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rochdale Planning Data — approval rates and coverage</title>
+<meta name="description" content="Rochdale approves 85.15% of the planning applications it decides. 4,530 records, 14 fields measured. Ask ChatGPT or Claude, or use the API. Free to try.">
+<link rel="canonical" href="https://ukplanningapi.co.uk/councils/rochdale">
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="UK Planning API">
+<meta property="og:title" content="Rochdale Planning Data — approval rates and coverage">
+<meta property="og:description" content="Rochdale approves 85.15% of the planning applications it decides. 4,530 records, 14 fields measured. Ask ChatGPT or Claude, or use the API. Free to try.">
+<meta property="og:url" content="https://ukplanningapi.co.uk/councils/rochdale">
+<meta property="og:image" content="https://ukplanningapi.co.uk/og/api.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rochdale Planning Data — approval rates and coverage">
+<meta name="twitter:description" content="Rochdale approves 85.15% of the planning applications it decides. 4,530 records, 14 fields measured. Ask ChatGPT or Claude, or use the API. Free to try.">
+<meta name="twitter:image" content="https://ukplanningapi.co.uk/og/api.png">
+
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+<link rel="stylesheet" href="/p5.css">
+
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8NDGP260CZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'granted'
+  });
+
+  gtag('config', 'G-8NDGP260CZ', {
+    'client_storage': 'none',
+    'anonymize_ip': true,
+    'allow_google_signals': false,
+    'allow_ad_personalization_signals': false
+  });
+</script>
+
+  <style>
+    .fields { width:100%; font-size:14px; }
+    .fields td, .fields th { padding:8px 10px; }
+    .fields td.num, .fields th.num { text-align:right;
+      font-variant-numeric:tabular-nums; white-space:nowrap; }
+    /* A bar reads faster than a percentage when scanning 30 rows. Monochrome
+       fill, so it stays consistent with the rest of the design. */
+    .bar { display:block; height:6px; background:#E0E0E0; border-radius:3px;
+           width:110px; overflow:hidden; }
+    .bar > i { display:block; height:100%; background:#212121; }
+    .facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+             gap:14px; margin:24px 0 30px; }
+    .facts > * { min-width:0; }
+    .fact .n { font-size:26px; font-weight:600; font-variant-numeric:tabular-nums; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">UK Planning API</a>
+    <span class="spacer"></span>
+    <a href="/councils">All councils</a>
+    <a href="/ai-planning-research">Planning research</a>
+    <a href="/mcp-setup">Connect Claude or ChatGPT</a>
+    <a href="/api-docs">API docs</a>
+    <a href="/api-login">Sign in</a>
+  </div>
+</nav>
+
+<section>
+  <div class="wrap">
+    
+    <p style="margin-bottom:14px">
+      <a href="/councils">← All councils</a>
+    </p>
+    <p class="eyebrow">
+      Greater Manchester
+    </p>
+    <h1 style="margin:10px 0 14px">Rochdale planning data</h1>
+    
+    <p class="lead" style="max-width:700px">
+      4,530 planning applications from
+      Rochdale. Ask questions about them in plain English from ChatGPT
+      or Claude — no coding, about two minutes to set up — or pull them straight
+      into your own software.
+      
+      14 pieces of information are filled in on at least
+      90% of records.
+      
+    </p>
+
+    <div class="facts">
+      <div class="card fact">
+        <div class="n">4,530</div>
+        <div class="muted">Applications</div>
+      </div>
+      <div class="card fact">
+        <div class="n">123</div>
+        <div class="muted">Enforcement notices</div>
+      </div>
+      <div class="card fact">
+        <div class="n">665</div>
+        <div class="muted">Appeals</div>
+      </div>
+      <div class="card fact">
+        <div class="n">1980–2026</div>
+        <div class="muted">Date range</div>
+      </div>
+    </div>
+
+    
+
+    
+
+    
+    
+    <h2 style="margin:34px 0 8px">What Rochdale decides</h2>
+    
+    <p style="max-width:700px">
+      Rochdale has approved
+      <strong>85.15%</strong> of the
+      3,515 applications it has decided
+      since January 2023.
+      
+      Across the 243 councils with a
+      comparable caseload the range is
+      71.3% to
+      99.16%, so this is
+      below the middle of the pack
+      (89.1%).
+      
+    </p>
+    
+
+    <div class="facts" style="margin-top:18px">
+      
+      <div class="card fact">
+        <div class="n">85.15%</div>
+        <div class="muted">Approved, of 3,515 decided</div>
+      </div>
+      
+      
+      
+    </div>
+
+    
+    <p class="muted" style="margin-top:12px;max-width:700px">
+      Decision times can't be measured here — Rochdale doesn't
+      publish both a received and a decision date on enough records. The
+      nationwide range across councils that do is
+      
+      31 to
+      301 days.
+    </p>
+    
+
+    
+    <h3 style="margin:24px 0 8px">What it mostly decides</h3>
+    <p class="muted" style="margin-bottom:10px;max-width:700px">
+      The mix of application types Rochdale handles — useful for
+      telling whether your kind of application is routine here or unusual.
+    </p>
+    <div class="scroll-x">
+      <table class="fields">
+        <thead><tr><th>Application type</th><th class="num">Applications</th>
+          <th class="num">Share</th></tr></thead>
+        <tbody>
+        
+          <tr>
+            <td>Householder</td>
+            <td class="num">1,329</td>
+            <td class="num">29.3%</td>
+          </tr>
+        
+          <tr>
+            <td>Full</td>
+            <td class="num">840</td>
+            <td class="num">18.5%</td>
+          </tr>
+        
+          <tr>
+            <td>Conditions</td>
+            <td class="num">722</td>
+            <td class="num">15.9%</td>
+          </tr>
+        
+          <tr>
+            <td>Other</td>
+            <td class="num">470</td>
+            <td class="num">10.4%</td>
+          </tr>
+        
+          <tr>
+            <td>Certificate</td>
+            <td class="num">433</td>
+            <td class="num">9.6%</td>
+          </tr>
+        
+        </tbody>
+      </table>
+    </div>
+    
+
+    <p class="muted" style="margin-top:14px">
+      <a href="/ai-planning-research">How approval rates and decision times
+      vary across the country →</a>
+    </p>
+    
+
+    <h2 style="margin:34px 0 8px">What Rochdale actually fills in</h2>
+    <p class="muted" style="margin-bottom:16px;max-width:680px">
+      A "field" is one piece of information on an application — the decision date,
+      the applicant's name, the address. Councils fill these in inconsistently, so
+      this table measures how often Rochdale actually provides each
+      one, across all 4,530 records. Anything listed
+      as reliable you can count on; anything lower, check the council's own record
+      before relying on it.
+    </p>
+    <p class="muted" style="margin-bottom:16px;max-width:680px">
+      Once this data is connected to ChatGPT or Claude you can just ask
+      <em>"what information does Rochdale actually fill in?"</em> and
+      get these same numbers back. <a href="/mcp-setup">How to connect →</a>
+    </p>
+
+    
+    
+      
+      <h3 style="margin:22px 0 8px">Reliable — 90% or more of records</h3>
+      <div class="scroll-x">
+        <table class="fields">
+          <thead>
+            <tr><th>Information</th><th class="num">Records with it</th>
+                <th class="num">Coverage</th><th></th></tr>
+          </thead>
+          <tbody>
+          
+            <tr>
+              
+              <td>Description of the works<br><code class="muted" style="font-size:12px">description</code></td>
+              <td class="num">4,530</td>
+              <td class="num">100.0%</td>
+              <td><span class="bar"><i style="width:100.0%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Council reference<br><code class="muted" style="font-size:12px">reference</code></td>
+              <td class="num">4,530</td>
+              <td class="num">100.0%</td>
+              <td><span class="bar"><i style="width:100.0%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Address<br><code class="muted" style="font-size:12px">address</code></td>
+              <td class="num">4,519</td>
+              <td class="num">99.8%</td>
+              <td><span class="bar"><i style="width:99.8%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Status<br><code class="muted" style="font-size:12px">status</code></td>
+              <td class="num">4,516</td>
+              <td class="num">99.7%</td>
+              <td><span class="bar"><i style="width:99.7%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Status (standardised wording)<br><code class="muted" style="font-size:12px">status_normalized</code></td>
+              <td class="num">4,496</td>
+              <td class="num">99.2%</td>
+              <td><span class="bar"><i style="width:99.2%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Application type<br><code class="muted" style="font-size:12px">application_type</code></td>
+              <td class="num">4,308</td>
+              <td class="num">95.1%</td>
+              <td><span class="bar"><i style="width:95.1%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Case officer<br><code class="muted" style="font-size:12px">case_officer</code></td>
+              <td class="num">4,303</td>
+              <td class="num">95.0%</td>
+              <td><span class="bar"><i style="width:95.0%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Who decided it (officer or committee)<br><code class="muted" style="font-size:12px">decision_level</code></td>
+              <td class="num">4,303</td>
+              <td class="num">95.0%</td>
+              <td><span class="bar"><i style="width:95.0%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Alternative reference<br><code class="muted" style="font-size:12px">alternative_reference</code></td>
+              <td class="num">4,292</td>
+              <td class="num">94.7%</td>
+              <td><span class="bar"><i style="width:94.7%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Decision date<br><code class="muted" style="font-size:12px">decision_date</code></td>
+              <td class="num">4,262</td>
+              <td class="num">94.1%</td>
+              <td><span class="bar"><i style="width:94.1%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Decision<br><code class="muted" style="font-size:12px">decision</code></td>
+              <td class="num">4,257</td>
+              <td class="num">94.0%</td>
+              <td><span class="bar"><i style="width:94.0%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Applicant&#39;s name<br><code class="muted" style="font-size:12px">applicant_name</code></td>
+              <td class="num">4,254</td>
+              <td class="num">93.9%</td>
+              <td><span class="bar"><i style="width:93.9%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Ward<br><code class="muted" style="font-size:12px">ward</code></td>
+              <td class="num">4,241</td>
+              <td class="num">93.6%</td>
+              <td><span class="bar"><i style="width:93.6%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Agent&#39;s name<br><code class="muted" style="font-size:12px">agent_name</code></td>
+              <td class="num">4,167</td>
+              <td class="num">92.0%</td>
+              <td><span class="bar"><i style="width:92.0%"></i></span></td>
+            </tr>
+          
+          </tbody>
+        </table>
+      </div>
+      
+    
+      
+      <h3 style="margin:22px 0 8px">Partial — use with care</h3>
+      <div class="scroll-x">
+        <table class="fields">
+          <thead>
+            <tr><th>Information</th><th class="num">Records with it</th>
+                <th class="num">Coverage</th><th></th></tr>
+          </thead>
+          <tbody>
+          
+            <tr>
+              
+              <td>Postcode<br><code class="muted" style="font-size:12px">postcode</code></td>
+              <td class="num">3,926</td>
+              <td class="num">86.7%</td>
+              <td><span class="bar"><i style="width:86.7%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Decision (standardised wording)<br><code class="muted" style="font-size:12px">decision_normalized</code></td>
+              <td class="num">3,735</td>
+              <td class="num">82.5%</td>
+              <td><span class="bar"><i style="width:82.5%"></i></span></td>
+            </tr>
+          
+            <tr>
+              
+              <td>Standardised type<br><code class="muted" style="font-size:12px">standard_type</code></td>
+              <td class="num">3,107</td>
+              <td class="num">68.6%</td>
+              <td><span class="bar"><i style="width:68.6%"></i></span></td>
+            </tr>
+          
+          </tbody>
+        </table>
+      </div>
+      
+    
+      
+      <h3 style="margin:22px 0 8px">Rarely or never published</h3>
+      <div class="scroll-x">
+        <table class="fields">
+          <thead>
+            <tr><th>Information</th><th class="num">Records with it</th>
+                <th class="num">Coverage</th><th></th></tr>
+          </thead>
+          <tbody>
+          
+            <tr>
+              
+              <td>Appeal decision (standardised wording)<br><code class="muted" style="font-size:12px">appeal_decision_normalized</code></td>
+              <td class="num">0</td>
+              <td class="num">0.0%</td>
+              <td><span class="bar"><i style="width:0.0%"></i></span></td>
+            </tr>
+          
+          </tbody>
+        </table>
+      </div>
+      
+    
+
+    
+    
+    <h3 style="margin:22px 0 8px">Not published by this council</h3>
+    <p class="muted" style="margin-bottom:10px;max-width:680px">
+      Rochdale's portal has been verified not to publish these
+      fields at all — different from a field that exists but is rarely filled in.
+    </p>
+    <p>
+      
+      
+        <span class="pill" style="margin:0 4px 6px 0">Agent&#39;s company</span>
+      
+        <span class="pill" style="margin:0 4px 6px 0">Agent&#39;s email</span>
+      
+        <span class="pill" style="margin:0 4px 6px 0">Agent&#39;s phone</span>
+      
+        <span class="pill" style="margin:0 4px 6px 0">Appeal decision</span>
+      
+        <span class="pill" style="margin:0 4px 6px 0">Type of development</span>
+      
+        <span class="pill" style="margin:0 4px 6px 0">Map coordinates (easting)</span>
+      
+        <span class="pill" style="margin:0 4px 6px 0">Map coordinates (northing)</span>
+      
+        <span class="pill" style="margin:0 4px 6px 0">Officer&#39;s recommendation</span>
+      
+        <span class="pill" style="margin:0 4px 6px 0">Date received</span>
+      
+    </p>
+    
+
+    
+    <h2 style="margin:34px 0 10px">Get this data</h2>
+
+    <h3 style="margin:18px 0 6px">Ask it in ChatGPT or Claude</h3>
+    <p style="margin-bottom:10px;max-width:680px">
+      Connect it once with your email address, then ask questions like
+      <em>"which extensions were refused in Rochdale last year?"</em>
+      or <em>"what's the planning history of this address?"</em> — no coding,
+      about two minutes to set up.
+      <a href="/mcp-setup">Setup guide →</a>
+    </p>
+
+    <h3 style="margin:22px 0 6px">Or call it from your own code</h3>
+    <pre>curl -H "X-Api-Key: pk_..." \
+  "https://ukplanningapi.co.uk/v1/applications?council_id=5&amp;limit=5"</pre>
+    <p class="muted" style="margin-top:10px">
+      Council id for Rochdale is <code>5</code>.
+      <a href="/api-docs">Full API reference for developers →</a>
+    </p>
+
+    <div class="card card-2" style="margin:32px 0">
+      <h3 style="margin-bottom:6px">Get free access to Rochdale data</h3>
+      <p class="muted" style="margin-bottom:16px">
+        500 lookups a month, free. No card, no password — we email you a sign-in
+        link and you're in.
+      </p>
+      <form method="post" action="/auth/request"
+            style="display:flex;gap:10px;flex-wrap:wrap">
+        <input name="email" type="email" required autocomplete="email"
+               placeholder="you@company.co.uk" style="flex:1;min-width:220px"
+               aria-label="Work email">
+        <button class="btn" type="submit">Email me a key</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<footer class="p5-footer">
+  <div class="p5-footer-inner">
+    <div>
+      <strong>UK Planning API</strong><br>
+      <a href="mailto:help@ukplanningapi.co.uk">help@ukplanningapi.co.uk</a>
+    </div>
+    <div class="p5-footer-links">
+      <a href="/ai-planning-research">Planning research with AI</a>
+      <a href="/mcp-setup">Connect Claude or ChatGPT</a>
+      <a href="/api-docs">API docs (for developers)</a>
+      
+      <a href="https://github.com/JanHendrikVermeer/ukplanningapi/issues"
+         target="_blank" rel="noopener">Report an issue (GitHub)</a>
+      <a href="/councils">Council coverage</a>
+      <a href="/api-dashboard">Dashboard</a>
+      <a href="/terms">Terms</a>
+      <a href="/privacy">Privacy</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
