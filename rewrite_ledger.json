@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T21:38:37.565963Z",
+  "updated_at": "2026-11-09T21:53:21.504434Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 134,
+  "count": 136,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -574,6 +574,24 @@
       "source_name": "Secret Manchester",
       "category": "transport",
       "text_fingerprint": "e6c86cba23aa4f79"
+    },
+    "https://sports.yahoo.com/articles/newport-handed-rochdale-trip-fa-194646067.html": {
+      "first_attempt_at": "2026-11-09T21:53:21.504192Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMihgFBVV95cUxPZGUxekdiMnNiLVZOblBVY3cxVklhTzBKTlpzQktGQUx4bThCd1lSRWpOQURLNFY2VnB5SEJmMktpZlNSckRpREk2ZW1zTWpYSnFBbXNKcVVqZTdSWlFSUFhxMGJZZGs2X0doZE5xdHlJVUxXamdDNmNJN2NjazhGd2ppRXRFUQ?oc=5",
+        "https://news.google.com/rss/articles/CBMihwFBVV95cUxPVmFicWYzdktJTFBqcVVaVFB0VWM0Q01XYTBFOXpfdWJGNFNUOHd3UlM5MWZmTnJBNDVZbmJ4WFhPNjVnY21nWTBkWDExMXpCZ1cwOEo1QlpGR0VuQVFRcU5tNXpBZmZ1ZVlGdlgxclBDNHY5bV9OdjEzaGFlZlFHeXlTOGZqN1U?oc=5",
+        "https://sports.yahoo.com/articles/newport-handed-rochdale-trip-fa-194646067.html"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-09T21:53:21.504192Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Newport handed Rochdale trip in FA Cup",
+      "source_name": "Yahoo Sports",
+      "category": "sport",
+      "text_fingerprint": "b0c3350673b5e1d7"
     },
     "https://sports.yahoo.com/articles/port-vale-4-2-rochdale-000100704.html": {
       "first_attempt_at": "2026-11-02T23:09:44.845718Z",
@@ -1721,11 +1739,12 @@
       "first_attempt_at": "2026-11-08T01:57:39.099693Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMivgFBVV95cUxQZXFQdldNdTRkOHFNM0tTaXMxQWhSZVRKQ0p6MXl2SC1wY0U4RnBwVzdnblFYdF9mT0xITVdzNXgtSjVOZjFnOEtVbEtjckRGRmVsMllJclNlOTNjOEwzMlUwd2FYSXFIVEdIUlpZS3BvNHd5LXdLWE53a19JaXdNejRNNW11S3pMMVBrMHlrRUxzMU9wbzd6cUtBa1h3b09Sb19wUTR2RE01S2h1ZUdMbVJmbmp4V21mY0pNckJn?oc=5",
         "https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T01:57:39.099693Z",
+      "last_attempt_at": "2026-11-09T21:53:21.504312Z",
       "outcome": "published",
       "reason": "",
       "title": "Norden Christmas Lights, road closures in Rochdale on 22 November 2026",
@@ -2128,6 +2147,22 @@
       "category": "crime",
       "text_fingerprint": "638da2c01864fb91"
     },
+    "https://www.rochdaletimes.co.uk/residents-urged-to-be-vigilant-as-burglars-target-family-gold": {
+      "first_attempt_at": "2026-11-09T21:53:21.504362Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/residents-urged-to-be-vigilant-as-burglars-target-family-gold"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-09T21:53:21.504362Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Residents urged to be vigilant as burglars target family gold - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "crime",
+      "text_fingerprint": "c52067307bab73e9"
+    },
     "https://www.rochdaletimes.co.uk/scammers-try-to-get-into-peoples-homes-posing-as-council-officials": {
       "first_attempt_at": "2026-11-06T11:00:06.384239Z",
       "attempts": 1,
@@ -2224,8 +2259,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-09T21:38:37.565674Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Volunteers needed to help provide town centre Safe Haven - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "community",
