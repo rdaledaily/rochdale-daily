@@ -372,7 +372,10 @@ class TownPhotoTests(unittest.TestCase):
     def test_only_scenes_not_private_houses(self):
         import geograph_images as g
         self.assertTrue(g.suitable_town_photo("Market Street, Heywood", "heywood"))
-        self.assertTrue(g.suitable_town_photo("St Luke's Church", "heywood"))
+        # 9 Nov 2026: a town photo is a neutral street scene, never a named
+        # building - a church beside a Morrisons story reads as the subject.
+        self.assertFalse(g.suitable_town_photo("St Luke's Church", "heywood"))
+        self.assertFalse(g.suitable_town_photo("SD8913 : 11 Davyhulme Street, Rochdale", "rochdale"))
         self.assertFalse(g.suitable_town_photo("784 to 768 Edenfield Road, Norden", "norden"))
         self.assertFalse(g.suitable_town_photo("No. 12 and its garden", "heywood"))
 

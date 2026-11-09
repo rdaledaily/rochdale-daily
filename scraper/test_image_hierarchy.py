@@ -80,3 +80,89 @@ with patch.object(requests, 'get', lambda url, headers=None, timeout=None: (_sen
 if os.environ.get('GEOGRAPH_API_KEY') == 'test-key':
     del os.environ['GEOGRAPH_API_KEY']
 print('street photo checks passed')
+
+
+# ---------------------------------------------------------------------------
+# Geograph photos must fit the story (9 Nov 2026). Measured on the live paper:
+# 19 of 82 town photos showed a church, others a named restaurant, hotel or
+# plaque (St Luke's Church on a Morrisons Heywood story, "China City
+# Restaurant" on a REEL Cinema story); a Yorkshire Street story carried a
+# Rochdale skyline; a death story got a town photo because "dies" was not a
+# sensitive word.
+# ---------------------------------------------------------------------------
+import geograph_images as g
+import image_hierarchy as ih
+from pathlib import Path as _Path
+
+
+def _gpage(title, town):
+    return g.as_commons_page({'title': title, 'page_url': 'u', 'author': 'a', 'thumb': 't.jpg'}, town)
+
+
+def test_town_pool_is_neutral_street_scenes_only():
+    ok = ["SD8913 : Drake Street, Rochdale", "SD8913 : Town Hall Square, Rochdale, Lancashire",
+          "SD8913 : Church Lane, Rochdale", "SD9010 : Middleton Market Place", "SD8812 : Heywood: View from the railway",
+          "SD9315 : Littleborough station"]
+    bad = ["SD8913 : Rochdale:  Parish Church of St.Chad", "SD9010 : St Leonard's Parish Church, Middleton",
+           'SD8913 : "China City Restaurant" 6 Nelson Street, Rochdale OL16 1NL', "SD8812 : Church steeple Heywood",
+           "SD8913 : Blue Plaque: Duke of Wellington Hotel", "SD9010 : The Olde Boar's Head, Middleton",
+           "SD8115 : The Horse & Farrier, Norden", "SD8913 : #1 Drake Street, Rochdale", "SD8812 : Heywood, St Luke",
+           "SD9315 : Holy Trinity, Littleborough", "SD8913 : Trafalgar Buildings, Rochdale, Lancashire"]
+    for title in ok:
+        town = 'middleton' if 'Middleton' in title else 'heywood' if 'Heywood' in title else \
+               'littleborough' if 'Littleborough' in title else 'rochdale'
+        assert g.suitable_town_photo(title, town), title
+    for title in bad:
+        assert not g.suitable_town_photo(title, 'rochdale') and not g.suitable_town_photo(title, 'middleton') \
+               and not g.suitable_town_photo(title, 'heywood'), title
+
+
+def test_business_in_headline_is_the_subject():
+    a = {'title': 'Construction begins on new banking hub at Morrisons in Heywood', 'area': 'heywood', 'category': 'news'}
+    assert ih.subject_for(a) == 'Morrisons'
+    a = {'title': 'Tesco in Middleton to open 24 hours from December', 'area': 'middleton', 'category': 'business'}
+    assert ih.subject_for(a) == 'Tesco'
+    assert ih.subject_for({'title': 'REEL Cinema Rochdale brings back Polar Express Pyjama Party',
+                           'area': 'rochdale', 'category': 'events'}) == 'Reel Cinema'
+    # A named street in the headline still wins over the business.
+    assert ih.subject_for({'title': 'New Tesco Express Opens on Oldham Road in Rochdale',
+                           'area': 'rochdale', 'category': 'business'}) == 'Oldham Road'
+
+
+def test_business_photo_must_name_the_storys_own_town():
+    story = {'title': 'Tesco in Middleton to open 24 hours', 'area': 'middleton'}
+    assert ih.acceptable(_gpage('SD8705 : Tesco, Middleton', 'middleton'), 'Tesco', story)
+    # A Rochdale Tesco is not the Middleton store.
+    assert not ih.acceptable(_gpage('SD8913 : Tesco Extra, Rochdale', 'middleton'), 'Tesco', story)
+    # A church near the store is not the store.
+    assert not ih.acceptable(_gpage("SD8705 : St Leonard's Parish Church, Middleton", 'middleton'), 'Tesco', story)
+
+
+def test_no_store_photo_on_a_death_at_the_store():
+    assert ih.subject_for({'title': 'Woman dies at Tesco in Rochdale after emergency services called',
+                           'area': 'rochdale', 'category': 'news'}) == ''
+
+
+def test_dies_and_bail_block_town_photos():
+    for title in ('Patrick Whelan, 62, dies in roadside work incident in Rochdale',
+                  'Middleton protest planned as organiser sets out bail conditions ahead of event'):
+        assert not ih.town_photo_allowed({'title': title, 'category': 'news', 'area': 'rochdale'}), title
+
+
+def test_pool_photo_of_the_storys_own_street_is_preferred():
+    pool = [{'title': 'SD8913 : Drake Street, Rochdale', 'page_url': 'a', 'thumb': 'a.jpg', 'author': ''},
+            {'title': 'SD8913 : Yorkshire Street, Rochdale', 'page_url': 'b', 'thumb': 'b.jpg', 'author': ''}]
+    story = {'title': 'Takeaway refused on Yorkshire Street', 'slug': 'x', 'area': 'rochdale', 'category': 'business',
+             'content_html': '<p>The council refused it.</p>'}
+    terms = ih.town_photo_terms(story)
+    assert terms[0] == 'Yorkshire Street'
+    row = g.pick_town_photo(pool, {}, 'x', terms)
+    assert row['page_url'] == 'b' and g.matched_term(row, terms) == 'Yorkshire Street'
+
+for _name, _fn in list(globals().items()):
+    if _name.startswith('test_') and callable(_fn) and _fn.__module__ == __name__ and _name in {
+            'test_town_pool_is_neutral_street_scenes_only', 'test_business_in_headline_is_the_subject',
+            'test_business_photo_must_name_the_storys_own_town', 'test_no_store_photo_on_a_death_at_the_store',
+            'test_dies_and_bail_block_town_photos', 'test_pool_photo_of_the_storys_own_street_is_preferred'}:
+        _fn()
+print('geograph story-fit checks passed')

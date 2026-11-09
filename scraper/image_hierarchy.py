@@ -131,7 +131,10 @@ SUBJECT_ALIASES = {
 KNOWN_SUBJECTS = ('Rochdale Town Hall', 'Rochdale AFC', 'Rochdale Hornets', 'East Lancashire Railway', 'Hollingworth Lake',
                   'Healey Dell', 'Falinge Park', 'Touchstones Rochdale', 'Hopwood Hall College', 'Rochdale Infirmary',
                   'Rochdale Canal', 'Greater Manchester Police')
-_SENSITIVE_RE = re.compile(r"\b(?:died|death|dead|killed|fatal\w*|inquest|missing|murder\w*|stab\w*|assault\w*|"
+# "dies"/"dying" and "bail" added 9 Nov 2026: "Patrick Whelan, 62, dies in
+# roadside work incident" and a protest story about bail conditions were both
+# given town photos because only "died"/"death" were listed.
+_SENSITIVE_RE = re.compile(r"\b(?:died|dies|dying|death|dead|killed|bail|fatal\w*|inquest|missing|murder\w*|stab\w*|assault\w*|"
                            r"abuse\w*|arrest\w*|charged|court|jail\w*|sentenc\w*|crash\w*|collision|injur\w*|"
                            r"fire|blaze|bomb|threat\w*|disappear\w*|vanish\w*|without answers|search for)\b", re.I)
 
@@ -162,7 +165,34 @@ def subject_for(article):
         return place
     if _SENSITIVE_RE.search(title) or article.get('sensitive_story'):
         return ''
+    # A shop or business named in the headline ("Tesco", "Morrisons", "REEL
+    # Cinema"): no place-type word, so _headline_place never saw it (9 Nov
+    # 2026). Only after the sensitive check: "Woman dies at Tesco" gets no
+    # photo of the store.
+    import geograph_images
+    business = geograph_images.business_in(title)
+    if business:
+        return business
     return body_place(article)
+
+
+def town_photo_terms(article):
+    """Streets and places the story itself names, most specific first: its
+    subject, then street names in the headline, then in the opening
+    paragraphs. A town photo of one of these is preferred (9 Nov 2026)."""
+    import geograph_images
+    terms = []
+    subject = subject_for(article)
+    if subject and not geograph_images.is_business(subject):
+        terms.append(subject)
+    paragraphs = re.findall(r'<p\b[^>]*>(.*?)</p>', str(article.get('content_html') or ''), re.S | re.I)
+    texts = [plain(article.get('title'))] + [plain(p) for p in paragraphs[:BODY_PARAGRAPHS]]
+    for text in texts:
+        for m in geograph_images._STREET_NAME_RE.finditer(text):
+            name = _clean_place(m.group(0).split(' (')[0])
+            if name and name.casefold() not in {t.casefold() for t in terms}:
+                terms.append(name)
+    return terms
 
 
 def commons_cache_key(subject, article):
@@ -257,6 +287,12 @@ def acceptable(page, subject, article=None):
         import geograph_images
         if not geograph_images.title_matches(subject, file_title(page.get('title', ''))):
             return False
+        # A business has a branch in every town: the photo's own title must
+        # name the story's town ("Tesco, Middleton"), not merely Rochdale.
+        if geograph_images.is_business(subject):
+            town = geograph_images.town_for(article or {})
+            if not re.search(r'\b' + re.escape(town) + r'\b', file_title(page.get('title', '')), re.I):
+                return False
     # A place name that is not a known landmark must be this borough's: "Bridge
     # Street" or "Jubilee Park" exist in every town. The story's town, or
     # Rochdale, must appear in the file's title, description or categories.
@@ -342,7 +378,12 @@ def set_town_photo(article, root, cache, cache_file, allow_network):
             return False
         pool_record = {'rows': rows, 'used_by': {}, 'empty': not rows}
         cache[key] = pool_record
-    choice = g.pick_town_photo(pool_record.get('rows') or [], pool_record.setdefault('used_by', {}), str(article.get('slug') or ''))
+    prefer = town_photo_terms(article)
+    # A pool cached under an older rule is filtered again here, so nothing
+    # that is not a neutral street scene can be picked.
+    rows = [r for r in (pool_record.get('rows') or []) if g.suitable_town_photo(r.get('title', ''), town)]
+    choice = g.pick_town_photo(rows, pool_record.setdefault('used_by', {}),
+                               str(article.get('slug') or ''), prefer)
     if not choice:
         return False
     name = hashlib.sha256(choice['page_url'].encode()).hexdigest()[:16] + '-town-photo.jpg'
@@ -367,7 +408,8 @@ def set_town_photo(article, root, cache, cache_file, allow_network):
     article.update(image_url=rel, img=rel, image_status='town-file-photo', image_policy=POLICY,
                    image_credit=(choice['author'] or 'Geograph contributor') + ' / Geograph (' + g.LICENCE + ')',
                    image_credit_url=choice['page_url'], image_license_url=g.LICENCE_URL,
-                   image_alt='File photo: ' + town.title() + '. Not a photograph of this event.',
+                   image_alt='File photo: ' + ((g.matched_term(choice, prefer) + ', ') if g.matched_term(choice, prefer) else '')
+                             + town.title() + '. Not a photograph of this event.',
                    image_backfill_method='geograph-town', source_image_reuse_status='commons-free-license')
     return True
 
@@ -515,7 +557,9 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
         for field in ('image_url', 'image_credit', 'image_credit_url', 'image_license_url'):
             article[field] = record.get(field, '')
         article.update(img=article['image_url'], image_status='commons-photo-cached', image_policy=POLICY,
-                       image_alt='File image: ' + subject + '. Not a photograph of this event.',
+                       image_alt='File image: ' + subject + (', ' + geograph_images.town_for(article).title()
+                                                             if geograph_images.is_business(subject) else '')
+                                 + '. Not a photograph of this event.',
                        image_backfill_method='geograph' if record.get('source') == 'geograph' else 'wikimedia-commons',
                        source_image_reuse_status='commons-free-license',
                        commons_validated_for=key + ('#g' + str(geograph_images.SEARCH_VERSION) if record.get('source') == 'geograph' else '#c' + str(COMMONS_MATCH_VERSION)))

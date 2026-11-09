@@ -269,22 +269,51 @@ def as_commons_page(row: dict[str, str], town: str) -> dict[str, Any]:
 # a general Geograph photo of their own town, varied (no photo on more than
 # TOWN_PHOTO_MAX_USES stories), captioned as a file photo of the town. Never
 # on crime, police, sensitive or sponsored stories (image_hierarchy).
-TOWN_POOL_VERSION = 1
+TOWN_POOL_VERSION = 2
 TOWN_PHOTO_MAX_USES = 2
 TOWN_RADIUS_KM = float(os.getenv("GEOGRAPH_TOWN_RADIUS_KM", "1.5"))
-_ADDRESS_RE = re.compile(r"^\s*\d|\b\d+\s*(?:to|-|&)\s*\d+\b|\bno\.?\s*\d|\b(?:flat|apartment|bungalow|semi|garden of)\b",
+# 9 Nov 2026 (version 2): measured on the live paper, 19 of 82 town photos
+# showed a church and others a named restaurant, hotel, plaque or private
+# house ("China City Restaurant" on a REEL Cinema story, St Luke's Church on a
+# Morrisons Heywood story). A town photo now has to be a NEUTRAL street scene:
+# its title may contain only street names, the town, and scene words. Anything
+# else in the title names a particular building, and a particular building
+# beside an unrelated story reads as the subject. Also: the address check ran
+# on the raw title, whose "SD8913 : " grid prefix meant "^\d" never matched,
+# so numbered houses ("11 Davyhulme Street") got through.
+_ADDRESS_RE = re.compile(r"^\s*#?\d|\b\d+\s*(?:to|-|&|and)\s*\d+\b|\bno\.?\s*\d|\b(?:flat|apartment|bungalow|semi|garden of)\b",
                          re.I)
-_SCENE_RE = re.compile(r"\b(?:church|chapel|park|hall|mill|canal|station|market|square|centre|street|road|lane|"
-                       r"bridge|library|museum|memorial|war memorial|reservoir|lake|clough|moor|view|town|village|"
-                       r"precinct|high street|viaduct|cenotaph|gardens?|fold|brow|cottages|pub|inn|arms|hotel)\b", re.I)
+_STREET_NAME_RE = re.compile(r"\b(?:[A-Z][\w\u2019'.-]*\s+){1,3}(?:Street|Road|Lane|Avenue|Way|Drive|Close|Crescent|Terrace|"
+                             r"Brow|Row|Square|Fold|Place|Walk|Parade|Hill|Bank)\b(?:\s*\([A-Z]\d+\))?")
+_PREMISES_RE = re.compile(r"\b(?:church|chapel|mosque|temple|parish|steeple|plaque|grave|cemetery|school|academy|college|"
+                          r"restaurant|takeaway|cafe|pub|inn|arms|hotel|tavern|bar|shop|store|house|cottage|farm|surgery|"
+                          r"hospital|police|garage|factory|works|office|offices|bank|club|building|buildings|mill|hall|"
+                          r"library|memorial|cenotaph|statue|sign|milestone|mark|nativity)\b", re.I)
+_SCENE_WORDS = frozenset("""street road lane square view views looking towards toward from down up along across over near by
+at on in of the a and with to into north south east west north-east north-west south-east south-west centre center town
+canal river weir bridge viaduct park precinct market brow moor reservoir skyline panorama junction roundabout tram trams
+tramline tramlines lines footpath path towpath lock locks gardens garden green fields houses housing terraced terrace
+traffic snow snowy evening morning winter summer autumn spring night lights street-lights christmas tree trees scene
+shops shopping high main corner end top bottom station railway line metrolink stop""".split())
+
+
+def bare_title(title: str) -> str:
+    """A Geograph title without its grid-square prefix ("SD8913 : ")."""
+    return re.sub(r"^[A-Z]{1,2}\d{4}\s*:\s*", "", str(title or "")).strip()
 
 
 def suitable_town_photo(title: str, town: str) -> bool:
-    """A street scene, landmark or view, not a numbered private house, and
-    about this town or a recognisable kind of place."""
-    if not title or _ADDRESS_RE.search(title):
+    """A neutral street scene of the town: after the street names, the town
+    and the county are taken out, every remaining word is a scene word. No
+    church, pub, shop, plaque, named building or numbered house."""
+    t = bare_title(title)
+    if not t or _ADDRESS_RE.search(t) or re.search(r"[\"\u201c\u201d]", t):
         return False
-    return bool(re.search(r"\b" + re.escape(town) + r"\b", title, re.I) or _SCENE_RE.search(title))
+    rest = _STREET_NAME_RE.sub(" ", t)
+    if _PREMISES_RE.search(rest):
+        return False
+    rest = re.sub(r"\b(?:" + re.escape(town) + r"|rochdale|lancashire|greater manchester|manchester)\b", " ", rest, flags=re.I)
+    return all(w in _SCENE_WORDS for w in re.findall(r"[a-z][a-z\u2019'-]*", rest.casefold()))
 
 
 def town_pool(town: str, timeout: int = 15) -> list[dict[str, str]]:
@@ -302,12 +331,22 @@ def town_pool(town: str, timeout: int = 15) -> list[dict[str, str]]:
     return [row for row in parse_rss(response.text) if row["thumb"] and suitable_town_photo(row["title"], town)]
 
 
-def pick_town_photo(pool: list[dict[str, str]], used_by: dict[str, list[str]], slug: str) -> dict[str, str] | None:
-    """The story's photo from the pool: the one it already has, else the first
-    with room, starting from a position fixed by the slug so neighbouring
-    stories spread across the pool."""
+def pick_town_photo(pool: list[dict[str, str]], used_by: dict[str, list[str]], slug: str,
+                    prefer: list[str] | tuple[str, ...] = ()) -> dict[str, str] | None:
+    """The story's photo from the pool.
+
+    1. A pool photo of a street or place the story itself names (``prefer``,
+       most specific first), so a Yorkshire Street story gets Yorkshire Street
+       whenever the pool holds it.
+    2. The photo it already has.
+    3. Otherwise the first with room, starting from a position fixed by the
+       slug so neighbouring stories spread across the pool."""
     if not pool:
         return None
+    for term in prefer:
+        for row in pool:
+            if term and title_matches(term, bare_title(row["title"])):
+                return row
     for row in pool:
         if slug in used_by.get(row["page_url"], []):
             return row
@@ -318,3 +357,48 @@ def pick_town_photo(pool: list[dict[str, str]], used_by: dict[str, list[str]], s
         if len(used_by.get(row["page_url"], [])) < TOWN_PHOTO_MAX_USES:
             return row
     return None
+
+
+def matched_term(row: dict[str, str], prefer: list[str] | tuple[str, ...]) -> str:
+    """The story's own street or place this pool photo shows, or ''."""
+    for term in prefer:
+        if term and title_matches(term, bare_title(row.get("title", ""))):
+            return term
+    return ""
+
+
+# --------------------------------------------------------------------------
+# Shops and businesses named in a headline (9 Nov 2026)
+# --------------------------------------------------------------------------
+# "Tesco", "Morrisons", "REEL Cinema" carry no place-type word, so the place
+# finder never saw them and the story fell to a random town photo (a church
+# on a Morrisons Heywood story). A business named in the headline is now
+# searched as the subject, and a photo is accepted only when its OWN title
+# names the business AND the story's town ("Tesco, Middleton"), so a
+# Rochdale Tesco is never put on a Middleton story.
+BUSINESSES = (
+    "Tesco", "Morrisons", "Asda", "Aldi", "Lidl", "Sainsbury's", "Co-op", "Iceland", "Farmfoods", "Home Bargains",
+    "Greggs", "McDonald's", "KFC", "Costa", "Starbucks", "Boots", "Wetherspoon", "Reel Cinema", "Matalan", "Primark",
+    "Marks and Spencer", "B&Q", "Dunelm", "Wilko", "Poundland", "Heron Foods",
+)
+_BUSINESS_ALIASES = {"m&s": "Marks and Spencer", "marks & spencer": "Marks and Spencer", "sainsburys": "Sainsbury's",
+                     "mcdonalds": "McDonald's", "wetherspoons": "Wetherspoon", "co-operative": "Co-op"}
+
+
+def business_in(text: str) -> str:
+    """The first business from BUSINESSES named in the text, or ''."""
+    low = str(text or "").casefold().replace("\u2019", "'")
+    found = []
+    for alias, name in _BUSINESS_ALIASES.items():
+        m = re.search(r"(?<![\w&])" + re.escape(alias) + r"(?![\w&])", low)
+        if m:
+            found.append((m.start(), name))
+    for name in BUSINESSES:
+        m = re.search(r"(?<![\w&])" + re.escape(name.casefold()) + r"(?:'s)?(?![\w&])", low)
+        if m:
+            found.append((m.start(), name))
+    return min(found)[1] if found else ""
+
+
+def is_business(subject: str) -> bool:
+    return subject in BUSINESSES
