@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T00:02:26.489520Z",
+  "updated_at": "2026-11-09T00:21:05.347906Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 134,
@@ -1373,14 +1373,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T00:02:26.489219Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-09T00:18:36.812390Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "traffic",
       "text_fingerprint": "de4d107d98428f6c",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-lands-middleton-nursery-34853004": {
@@ -1921,16 +1921,17 @@
       "first_attempt_at": "2026-11-08T20:32:12.210987Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiogFBVV95cUxOczZ6TzluYXJTNWcyWTZvVTZYYXZrRlVlckg3TjBJQk1yaGFscUc1bTF5VmR1b2U3eDUwTkJGODRtX1M0QWk4UzF3TXRQQnpPclNNVXRtelRVblNNbkFnR013Y254c2lTaURlNWFSU1ZSTDVaR0dib1RhNzJyU1FfZDF3TkpfVS1mLUJKUFdSREZkRlFpNEcyc1g1X0FDbzBUSnc?oc=5",
         "https://www.rochdaletimes.co.uk/education-support-service-told-it-needs-planning-permission-for-hub"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T20:32:12.210987Z",
+      "last_attempt_at": "2026-11-09T00:21:05.347700Z",
       "outcome": "published",
       "reason": "",
       "title": "Education support service told it needs planning permission for hub - Rochdale Times",
       "source_name": "Rochdale Times",
-      "category": "community",
+      "category": "environment",
       "text_fingerprint": "5bfb59ad2e984c54"
     },
     "https://www.rochdaletimes.co.uk/finishing-touches-being-applied-as-boyes-opens-new-store-tomorrow": {
