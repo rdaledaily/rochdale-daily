@@ -232,6 +232,87 @@ function demoteSponsored(list, floor) {
   return [...top, ...held, ...rest];
 }
 
+// Today's most-read (editor's rule, 9 Nov 2026): positions 1 and 2 keep the
+// crime and warning rules; from position 3 down, stories opened at least
+// MOST_READ_MIN_VIEWS times today (Europe/London day) rise in order of views.
+// Counts come from /api/story-views (D1 binding STORY_VIEWS_DB). Sponsored,
+// traffic, reserve-feature and briefing pieces never rise into the top nine,
+// and editor pins hold their position.
+const MOST_READ_FIXED = 2;
+const MOST_READ_MIN_VIEWS = 3;
+const MOST_READ_CACHE_MS = 60 * 1000;
+let mostReadCache = { day: '', at: 0, views: null };
+
+function londonDay(date = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
+}
+
+/** Returns a Map slug -> views for today, or null when counts cannot be read. */
+async function loadTodaysViews(env, now) {
+  const db = env.STORY_VIEWS_DB;
+  if (!db) return null;
+  const day = londonDay(now);
+  const nowMs = now.getTime();
+  if (mostReadCache.views && mostReadCache.day === day && nowMs - mostReadCache.at < MOST_READ_CACHE_MS) {
+    return mostReadCache.views;
+  }
+  try {
+    const result = await db.prepare(
+      'SELECT slug, views FROM story_views WHERE day = ?1 AND views >= ?2'
+    ).bind(day, MOST_READ_MIN_VIEWS).all();
+    const views = new Map((result.results || []).map((row) => [normaliseSlug(row.slug), Number(row.views) || 0]));
+    mostReadCache = { day, at: nowMs, views };
+    return views;
+  } catch (error) {
+    // "no such table" before the first view of all time is an empty day, not
+    // a failure.
+    if (/no such table/i.test(String(error && error.message))) {
+      const views = new Map();
+      mostReadCache = { day, at: nowMs, views };
+      return views;
+    }
+    return null;
+  }
+}
+
+function canRiseOnViews(article, isPinned) {
+  return Boolean(article)
+    && article.sponsored !== true
+    && !isPinned(article)
+    && !isReserveFeature(article)
+    && !isDailyBriefing(article)
+    && !isTrafficNotice(article);
+}
+
+/**
+ * Positions [0, fixed) are untouched. Below them, stories with views today
+ * move up in views order (ties: newer first) into the slots the eligible
+ * stories already occupy, so nothing held below the top nine is pulled up
+ * past ineligible pieces' positions and pins stay exactly where they were.
+ */
+function applyMostRead(list, views, { fixed = MOST_READ_FIXED, isPinned = () => false } = {}) {
+  if (!views || !views.size || list.length <= fixed) return { list, promoted: 0 };
+  const head = list.slice(0, fixed);
+  const tail = list.slice(fixed);
+  const slotIdx = [];
+  const movable = [];
+  tail.forEach((article, index) => {
+    if (canRiseOnViews(article, isPinned)) { slotIdx.push(index); movable.push(article); }
+  });
+  const viewsOf = (article) => views.get(slugOf(article)) || 0;
+  const ranked = movable
+    .map((article, order) => ({ article, order, v: viewsOf(article) }))
+    .sort((a, b) => (b.v - a.v) || (a.v && b.v ? storyTime(b.article) - storyTime(a.article) : a.order - b.order));
+  const promoted = ranked.filter((entry) => entry.v > 0).length;
+  const next = tail.slice();
+  slotIdx.forEach((slot, i) => { next[slot] = ranked[i].article; });
+  next.forEach((article) => {
+    const v = viewsOf(article);
+    if (v > 0) article.views_today = v;
+  });
+  return { list: [...head, ...next], promoted };
+}
+
 function storyTime(article) {
   const value = article?.first_published_at || article?.published_at || article?.last_updated_at || '';
   const parsed = Date.parse(value);
@@ -309,6 +390,17 @@ export async function onRequest(context) {
     && article.sponsored !== true && isPublicWarning(article));
   if (warningIndex > 1) articles.splice(1, 0, articles.splice(warningIndex, 1)[0]);
 
+  // Today's most-read fill from position 3 down (editor's rule, 9 Nov 2026).
+  // When the counts cannot be read the order above stands and the response
+  // says so in x-rd-most-read, rather than guessing.
+  const todaysViews = await loadTodaysViews(env, now);
+  let mostReadStatus = 'unavailable';
+  if (todaysViews) {
+    const applied = applyMostRead(articles, todaysViews, { isPinned: (a) => Boolean(pinUntil(a)) });
+    articles = applied.list;
+    mostReadStatus = `promoted=${applied.promoted}`;
+  }
+
   // Breaking entries go above the sorted feed but below a running live blog.
   // The blocklist applies to them too: a story you have taken down must not
   // come back through the breaking door.
@@ -357,13 +449,15 @@ export async function onRequest(context) {
     }
   }
   data.breaking_count = breakingArticles.length;
+  data.most_read = mostReadStatus;
 
   return new Response(JSON.stringify(data), {
     status: 200,
     headers: {
       'content-type': 'application/json; charset=utf-8',
       'cache-control': 'no-store, no-cache, must-revalidate, max-age=0',
-      'x-rd-homepage-fix': 'editorial-blocklist-v2'
+      'x-rd-homepage-fix': 'editorial-blocklist-v2',
+      'x-rd-most-read': mostReadStatus
     }
   });
 }

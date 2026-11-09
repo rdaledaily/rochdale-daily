@@ -18,6 +18,21 @@ export async function onRequest(context) {
       s.defer=true;
       document.head.appendChild(s);
     });
+  }());
+;(function(){
+    // Most-read counter (9 Nov 2026): one beacon per article open, read by
+    // /articles/frontpage.json to lift today's most-read stories from #3 down.
+    // Sends only the slug. Writes nothing to the reader's browser. Reloads and
+    // back/forward visits are not counted.
+    try {
+      var m = location.pathname.match(/^\\/articles\\/([a-z0-9][a-z0-9-]{1,198})(?:\\.html)?\\/?$/);
+      if (!m || navigator.webdriver) return;
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (nav && (nav.type === 'reload' || nav.type === 'back_forward')) return;
+      var body = JSON.stringify({ slug: m[1] });
+      if (navigator.sendBeacon && navigator.sendBeacon('/api/story-views', new Blob([body], { type: 'application/json' }))) return;
+      fetch('/api/story-views', { method: 'POST', headers: { 'content-type': 'application/json' }, body: body, keepalive: true }).catch(function(){});
+    } catch (e) {}
   }());\n`;
   const headers = new Headers(response.headers);
   headers.set('Content-Type', 'application/javascript; charset=utf-8');
