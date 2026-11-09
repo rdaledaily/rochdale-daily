@@ -245,6 +245,7 @@ def archived_shell_markup() -> tuple[str, str]:
         <li><a href="/#democracy">Democracy</a></li>
         <li><a href="/#support">Community support</a></li>
         <li><a href="/#advertise">Local services</a></li>
+        <li><a href="/write-a-column">Write a column</a></li>
         <li><a href="/contact.html">Contact</a></li>
       </ul>
       <a class="menu-search" href="/search.html" aria-label="Search Rochdale Daily"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span>Search</span></a>
@@ -571,6 +572,7 @@ def site_shell_markup(home_href: str = '/') -> str:
         <li><a href="{esc(home_href)}#democracy">Democracy</a></li>
         <li><a href="{esc(home_href)}#support">Community support</a></li>
         <li><a href="{esc(home_href)}#advertise">Local services</a></li>
+        <li><a href="/write-a-column">Write a column</a></li>
         <li><a href="/contact.html">Contact</a></li>
       </ul>
       <a class="menu-search" href="/search.html" aria-label="Search Rochdale Daily"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span>Search</span></a>
