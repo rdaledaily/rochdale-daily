@@ -446,8 +446,24 @@ def new_sources_nov9() -> None:
         time.sleep(2)
 
 
+def rba_logo() -> None:
+    """Download the Rochdale Business Awards 2026 logo as bytes for the newsroom."""
+    if not section("rba_logo"):
+        return
+    for name, url in (("RBA-2026.png", "https://rochdalebusinessawards.co.uk/wp-content/uploads/2023/07/RBA-2026-1024x561.png"),
+                      ("RBA-2026-full.png", "https://rochdalebusinessawards.co.uk/wp-content/uploads/2023/07/RBA-2026.png"),
+                      ("RBA-2026-icon.jpg", "https://rochdalebusinessawards.co.uk/wp-content/uploads/2026/05/cropped-RBA-2026-Icon-270x270.jpg")):
+        try:
+            r = S.get(url, timeout=25)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  {name}: FETCH FAILED {exc}"); continue
+        print(f"  {name}: HTTP {r.status_code} {r.headers.get('content-type','')} {len(r.content)} bytes")
+        if r.ok and r.headers.get("content-type", "").startswith("image/"):
+            (OUT / name).write_bytes(r.content)
+
+
 if __name__ == "__main__":
-    for fn in (new_sources_nov9,):
+    for fn in (rba_logo,):
         try:
             fn()
         except Exception as exc:  # noqa: BLE001
