@@ -7,6 +7,7 @@ on:
   push:
     branches: [data/charity-contacts]
     paths: [.github/workflows/charity-contacts.yml]
+# run 2: incorporation flag, more webmail domains
 
 permissions:
   contents: write
@@ -39,7 +40,7 @@ jobs:
           aoo = collections.defaultdict(set)
           for r in rows('publicextract.charity_area_of_operation.txt'):
               aoo[r.get('organisation_number')].add((r.get('geographic_area_description') or '').strip())
-          WEBMAIL = re.compile(r'@(gmail|googlemail|hotmail|outlook|live|yahoo|ymail|btinternet|btopenworld|aol|icloud|me|mac|msn|sky|talktalk|tiscali|virginmedia|virgin|ntlworld|blueyonder|protonmail|proton|mail|gmx|zoho|o2|orange|freeserve|lineone|fsmail|hotmail)\.', re.I)
+          WEBMAIL = re.compile(r'@(gmail|googlemail|hotmail|outlook|live|yahoo|ymail|btinternet|btopenworld|aol|icloud|me|mac|msn|sky|talktalk|tiscali|virginmedia|virgin|ntlworld|blueyonder|talk21|talktalk|tiscali|uwclub|supanet|eclipse|onetel|tesco|protonmail|proton|mail|gmx|zoho|o2|orange|freeserve|lineone|fsmail|hotmail)\.', re.I)
           DISTRICTS = {'OL10', 'OL11', 'OL12', 'OL15', 'OL16', 'M24'}
           out, stats = [], collections.Counter()
           cols = None
@@ -75,7 +76,8 @@ jobs:
                   'postcode': pc,
                   'based_in_borough': based,
                   'operates_only_in_rochdale': in_area and len(ops) == 1,
-                  'check': 'Whitworth/Rossendale postcode' if pc.startswith('OL12 8') else '',
+                  'incorporated': bool((r.get('charity_company_registration_number') or '').strip()) or (r.get('charity_is_cio') or '').strip().lower() in ('true','1','yes'),
+                  'check': 'Whitworth/Rossendale postcode' if pc.startswith('OL12 8') else ('registered outside the borough' if not based else ''),
               })
           out.sort(key=lambda x: x['name'].lower())
           # one row per email address
