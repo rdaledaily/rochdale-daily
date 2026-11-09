@@ -263,7 +263,25 @@ export async function onRequest(context) {
   const nowIso = now.toISOString();
   const blocklist = await loadBlocklist(env, request.url);
   let articles = data.articles.filter(a => a && a.id !== 'feel-good-festival-2026-live' && !isBlocked(a, blocklist));
-  articles.sort((a, b) => storyTime(b) - storyTime(a));
+  // Editor pins (featured: true + frontpage_until in the future) go first, then
+  // everything else newest-first. Until 9 Nov 2026 this sort was purely by
+  // time, so a pin set in manual_articles never held the top of the live page:
+  // the Remembrance Sunday roundup, pinned for 8 Nov, sat below the day's later
+  // small stories. Among several pins, the one pinned longest (latest
+  // frontpage_until) leads, then the newest.
+  const nowMs = now.getTime();
+  const pinUntil = (article) => {
+    if (!article || article.featured !== true) return 0;
+    const until = Date.parse(article.frontpage_until || '');
+    return Number.isFinite(until) && until >= nowMs ? until : 0;
+  };
+  articles.sort((a, b) => {
+    const pa = pinUntil(a);
+    const pb = pinUntil(b);
+    if (Boolean(pa) !== Boolean(pb)) return pa ? -1 : 1;
+    if (pa !== pb) return pb - pa;
+    return storyTime(b) - storyTime(a);
+  });
   articles = demoteSponsored(articles, SPONSORED_FLOOR);
 
   // Breaking entries go above the sorted feed but below a running live blog.
