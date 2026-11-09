@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T16:57:19.466986Z",
+  "updated_at": "2026-11-09T17:10:59.838187Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 139,
@@ -344,13 +344,13 @@
     },
     "https://rochdaleafc.co.uk/northampton-tickets-on-sale": {
       "first_attempt_at": "2026-11-09T16:55:32.821998Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://rochdaleafc.co.uk/northampton-tickets-on-sale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T16:55:32.821998Z",
+      "last_attempt_at": "2026-11-09T17:08:55.402388Z",
       "outcome": "rejected",
       "reason": "editorial gate: REJECTED_NON_NEWS",
       "title": "Northampton Town Tickets On Sale",
@@ -1446,14 +1446,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T16:40:55.360954Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-09T17:10:59.837790Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Jailed, the 'trusted' dealer who ran the notorious 'Adam' line",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "f0420e91cf4747d2",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/multi-billion-plan-transform-rochdale-34839906": {
       "first_attempt_at": "2026-11-03T12:49:28.849060Z",
@@ -1773,11 +1774,12 @@
       "first_attempt_at": "2026-11-09T03:25:28.762002Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMirgFBVV95cUxNNDB0NG9lTl9TdU9vUDExX29LN041VGF1QXBBNjB4VWFjOU9QNDhjMGxuZ3FnbXo3T2hwOVF2eV9HQUF2OVJOSzZWMURsSUZZYzhyU3ZZMEpIbDY2TlZPZmhiMzZDcnkzdXJIcHg3T045NllhcmFBZVBZTm55S0xwbE1Gdnp2alljMHhRai1kdHdQTW8wcWhuOVFJQlhrTTNhTVdKWmozaTktTWRtM0E?oc=5",
         "https://www.rochdale.gov.uk/directory-record/2644/schofield-street-roadworks-in-heywood-from-23-november-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T03:25:28.762002Z",
+      "last_attempt_at": "2026-11-09T17:10:59.838143Z",
       "outcome": "published",
       "reason": "",
       "title": "Schofield Street, roadworks in Heywood from 23 November 2026",
