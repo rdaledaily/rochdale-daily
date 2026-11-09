@@ -14,11 +14,16 @@ NATURAL_STORY_POLICY = (
     "where it happened; the established outcome or next step; and why it matters to readers. "
     "These are reporting questions, not mandatory headings. Do not invent affected people, "
     "police or ambulance attendance, causes, outcomes or public reactions to fill a slot. "
-    "End non-crime articles with a specific reader-relevant takeaway and an invitation to "
-    "comment on that story. Safety, green belt, school security or another lesson must follow "
-    "from the actual reporting, never insinuate blame or turn an unproved inference into fact. "
-    "Exclude crime and court reporting from this engagement structure and all comment invitations."
+    "End every article on its last verified fact, a quotation, background or what happens next. "
+    "Never end with a question to readers, an invitation to comment or share thoughts, a moral, "
+    "a line about what the story 'raises concerns about' or 'the importance of', or any lesson "
+    "in Rochdale Daily's own voice. Never insinuate blame or turn an unproved inference into fact. "
+    "The only closing notices allowed are right of reply, corrections and "
+    "'Rochdale Daily has asked <body> for comment' when that request is recorded."
 )
+# 9 Nov 2026 (editor): the 22 Oct "takeaway and invitation to comment" ending
+# is withdrawn (superseded 7 Nov). It opened HOUSE_STYLE_SYSTEM and so
+# contradicted house_style's own ending rules inside the same prompt.
 
 def plain(value: Any) -> str:
     from html import unescape
@@ -79,35 +84,7 @@ def ward_decision(article: dict) -> dict:
 
 
 def reader_ending(article: dict) -> str:
-    """Topic-specific invitation, with no invented event facts or advice."""
-    if category_for(article) == 'crime' or article.get('sponsored'):
-        return ''
-    title = plain(article.get('title')).casefold()
-    category = category_for(article)
-    if re.search(r'\bmissing\b', title):
-        return 'How can local communities support families during a missing person appeal? Share your thoughts in the comments. Any information about this appeal should go directly to the police using the contact details above.'
-    if re.search(r'\bgreen belt\b', title):
-        return 'What should decision makers weigh most carefully when considering development on green belt land? Tell us how the proposal would affect you in the comments.'
-    if re.search(r'\b(?:school|college)\b.*\b(?:threat|evacuat|security)|\b(?:threat|evacuat|security)\w*\b.*\b(?:school|college)\b', title):
-        return 'What information or reassurance would help pupils and families? Share your thoughts on school safety in the comments, without identifying children or sharing unverified claims.'
-    if category == 'traffic':
-        return 'How does this affect your journeys, and what would make local roads work better for you? Share your experience in the comments.'
-    if re.search(r'\b(?:housing|homes|development|planning|flats)\b', title):
-        return 'What does this mean for your neighbourhood, and what would you want decision makers to consider? Share your thoughts in the comments.'
-    if category == 'education':
-        return 'What does this mean for pupils and families in your area? Share your thoughts in the comments, without identifying children.'
-    if category == 'health':
-        return 'What would make local services work better for you and your family? Share your thoughts in the comments, keeping personal medical details private.'
-    if category == 'transport':
-        return 'How does this affect your travel, and what changes would help you? Tell us in the comments.'
-    if category == 'environment':
-        return 'How does this affect your local surroundings, and what would you like to happen next? Share your thoughts in the comments.'
-    if category == 'events':
-        return 'Is this the kind of event you would like to see more of locally? Tell us what matters to you in the comments.'
-    if category == 'sport':
-        return 'What is your view of this development, and what would you like to see next? Share your thoughts with other local supporters in the comments.'
-    if category == 'business':
-        return 'What does this mean for local customers, workers or businesses? Share your thoughts in the comments.'
-    if category == 'politics':
-        return 'How does this affect you, and what would you want your representatives to do next? Share your thoughts in the comments.'
-    return 'How does this affect you or your neighbourhood, and what would you like to happen next? Share your thoughts in the comments.'
+    """Withdrawn 9 Nov 2026: stories end on their last fact, never on a
+    comment invitation or a question to readers. Always returns ''; kept so
+    existing imports keep working."""
+    return ''

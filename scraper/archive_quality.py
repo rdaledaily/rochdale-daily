@@ -22,7 +22,8 @@ from urllib.parse import urlsplit
 
 from bs4 import BeautifulSoup
 from PIL import Image
-from editorial_contract import category_for, ward_decision, reader_ending, NATURAL_STORY_POLICY
+from editorial_contract import category_for, ward_decision, NATURAL_STORY_POLICY
+from reader_copy import strip_closing_html
 from archive_integrity import _indexable
 from ad_slots import strip_ad_slots, insert_incontent_ad
 
@@ -318,12 +319,11 @@ def review_all(root: Path, rows, batch_size=12):
         'Never invent a missing fact or decide a legal allegation is true. Report unresolved semantic or factual problems explicitly. '
         + NATURAL_STORY_POLICY + ' '
         'Return JSON {"reviews":[{"slug":string,"findings":[string],"corrections":[{"field":"title|excerpt|body","before":string,"after":string,"reason":string}],'
-        '"image_relevant":true|false|null,"image_reason":string,"structure_findings":[string],"paragraph_order":[integer],"reader_question":string}]}. '
+        '"image_relevant":true|false|null,"image_reason":string,"structure_findings":[string],"paragraph_order":[integer]}]}. '
         'Corrections must be minimal EXACT substrings of supplied text, not whole rewrites. Use British spelling. Never edit direct quotes. '
         'Do not add boilerplate or claim an absent service attended. A building/place image can illustrate a place only if the article concerns that named place; '
         'it must not imply a pictured person or premises was involved in an offence. A labelled place card is an illustration, not a photo of an incident. '
         'If reordering makes a non-crime story clearer, paragraph_order must be a complete permutation of the supplied zero-based paragraph indexes; otherwise return an empty list. Never reorder crime reporting. '
-        'reader_question is one specific, relevant question inviting reader comments without making factual assertions. It must end with an invitation to comment. Return empty for crime. '
         'Check whether background from other sources would help: other coverage of this incident, comparable dated local reports, official local crime statistics and GMP priorities, developers track records, and speakers documented public roles or interests. Flag missing context without fabricating it. '
         'For suicide coverage do not infer a hotspot, name an unreported site, describe methods or sensationalise a death. Any hotspot claim needs official evidence and prevention context. '
         'If no actual image was attached for a slug, image_relevant MUST be null. Return one review for every slug, including stories without errors.'
@@ -421,16 +421,13 @@ def apply(root: Path, rows=None, images=False, network_images=True):
         if fragment.body is not None:
             row['content_html']=fragment.body.decode_contents()
         row['content_html']=re.sub(r'<(/?)h1\b',r'<\1h2',row['content_html'],flags=re.I)
+        # 9 Nov 2026 (editor): no comment invitation, reader question, moral
+        # or unattributed "raises concerns" line at the end of any story. The
+        # old appended invitation (data-rd-reader-ending) is removed on
+        # read-back by ENGAGEMENT; filler the writer put in the copy itself
+        # is removed here, so the stored record is clean too.
+        row['content_html'] = strip_closing_html(row['content_html'])
         body = row['content_html']
-        ending = reader_ending(row)
-        question = str(review.get('reader_question') or '').strip()
-        if ending and '?' in question and 'comment' in question.casefold() and len(question) <= 400 and not re.search(r'[0-9]|\b(?:must|should|blame|caused|guilty)\b', question, re.I):
-            # A question invites reader views; it must not add a factual claim.
-            if question.index('?') > 0 and question.count('?') == 1:
-                ending = question
-
-        if ending:
-            body = body.rstrip() + '<p data-rd-reader-ending="1">' + html.escape(ending) + '</p>'
         links = []
         for target in edges[slug]:
             links.append('<li><a href="/articles/' + target + '">' + html.escape(by_slug[target]['title']) + '</a></li>')

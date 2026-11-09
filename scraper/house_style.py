@@ -28,6 +28,8 @@ HUMAN_VOICE_BRIEF = (
     "No jokes, glibness or rhetorical flourishes in reporting on deaths, bereavement, missing people, abuse, serious crime, trauma or victims. "
     "In straight news lead with the news. In reported features an unusual but verifiable opening may precede the development. "
     "Avoid press release flattery, generic civic pride and endings that tell the reader the story 'highlights' or 'serves as a reminder' of something. "
+    "Never close with a line saying the story 'raises concerns' or 'raises questions' about anything, or points to 'the importance of' something, unless a named source said so; "
+    "never close with a question to readers or an invitation to comment or share thoughts. "
     "Avoid formulaic phrases: 'a testament to', 'a significant milestone', 'at the heart of the community', 'in a move that', "
     "'sending a clear message', 'a shining example', 'it remains to be seen', 'one thing is clear'. "
     "Use commas, full stops, colons, brackets and semicolons instead of dash punctuation. "

@@ -235,6 +235,114 @@ _SENTIMENT_CLOSER_RE = re.compile(
 )
 
 
+# 9 Nov 2026 (editor): "This incident raises concerns about safety in public
+# spaces and the importance of rapid emergency response" closed a death report.
+# Nobody in the story raised that concern: it is the paper's own opinion
+# dressed as reporting. A summary-subject sentence that says the story
+# "raises concerns/questions" or points to "the importance of" something, with
+# no attribution, figure, quotation or explaining clause, is dropped whatever
+# its vocabulary. Attributed concern ("residents said it raises concerns")
+# carries a fact mark and stays.
+_UNATTRIBUTED_CONCERN_RE = re.compile(
+    r"\b(?:raises?|raised|raising|sparks?|sparked|prompts?|prompted|fuels?|fuelled)\s+"
+    r"(?:serious |fresh |further |renewed |new |wider |important )?(?:concerns?|questions?|fears?|debate)\b"
+    r"|\bthe (?:importance|need) (?:of|for)\b",
+    re.I,
+)
+
+# 7 Nov 2026 (editor): no invitation to comment and no question put to the
+# reader at the end of a story. The only closing notices are right of reply,
+# corrections and "Rochdale Daily has asked <body> for comment".
+_COMMENT_INVITE_RE = re.compile(
+    r"\bin the comments\b|\bcomments? (?:section )?below\b|\bbelow the (?:article|story)\b"
+    r"|\bshare your (?:thoughts|views|experiences?|stories|memories|opinions?)\b"
+    r"|\b(?:tell|let) us (?:know|what you think|your (?:views|thoughts))\b"
+    r"|^Tell us (?:what|your|how|whether|if)\b"
+    r"|\bencouraged to share (?:their|your) (?:thoughts|views)\b",
+    re.I,
+)
+
+
+# 9 Nov 2026 measurement: after the rules above, 91 of 1,944 pages still
+# ended on a lesson or forecast in the paper's own voice ("This tragic event
+# highlights the importance of road safety", "The sentencing serves as a
+# reminder", "it remains to be seen how it will affect..."). These three
+# patterns remove such a sentence only when it is unquoted, unattributed and
+# carries no figure; a named person emphasising something is reporting and
+# never matches, because the subject must be the story itself.
+_STORY_SUBJECT_RE = re.compile(
+    r"^(?:This|These|Such|Her|His|Their|Its|The (?:[a-z’']+ ){0,3}?(?:incident|initiative|initiatives|event|events|"
+    r"case|sentencing|story|visit|recognition|celebration|anniversary|funding|programme|call|win|victory|decision|"
+    r"acknowledg(?:e)?ment|assessment|effort|efforts|contributions|gathering|inclusion|refusal|move|scheme|project|"
+    r"development|news|achievement|milestone|award|awards|appointment|partnership|change|changes|success|campaign|"
+    r"festival|occasion|ceremony|opening|closure|investment|role|club(?:'s|’s)? [a-z]+))\b"
+)
+_MORAL_PREDICATE_RE = re.compile(
+    r"\b(?:highlight(?:s|ing)?|underscor(?:es?|ing)|serves? (?:as|to) (?:an? )?(?:important |timely |stark |poignant )?"
+    r"(?:reminder|inspiration|illustrate|highlight|showcase)|remind(?:s|ing)|(?:is|are|was) (?:a )?(?:testament|reminder)|"
+    r"reflects? (?:a|the) (?:broader|wider|ongoing|growing|effective|continued)|(?:is|are) (?:vital|crucial|essential) (?:for|in|to)|"
+    r"marks? a (?:significant|major|key|important)|represents? a (?:significant|major|key)|not only\b.*\bbut also|"
+    r"may (?:inspire|encourage)|is expected to (?:enhance|contribute|have a positive|strengthen|boost))\b",
+    re.I,
+)
+_VOICE_SPECULATION_RE = re.compile(
+    r"\bit remains to be seen\b|\bonly time will tell\b|\b(?:will|are likely to) be (?:keen|eager|watching closely) to see\b"
+    r"|\bare likely to use this case\b|\bwill be watching (?:closely|with interest)\b",
+    re.I,
+)
+_VOICE_EXHORTATION_RE = re.compile(
+    r"^(?:Local )?(?:residents|readers|people|everyone|women|parents|the public|members of the public)\b[^.?!]{0,40}?"
+    r"\b(?:are|is) (?:reminded (?:of|that)|encouraged to share (?:their|your) (?:thoughts|views))\b",
+    re.I,
+)
+_ATTRIBUTED_RE = re.compile(
+    r"\d|[\"“”]|\b(?:said|says|stated|according|told|added|explained|emphasi[sz]ed|stressed|noted|warned|confirmed)\b"
+    # A result or table position is a fact, even inside a moralising sentence.
+    r"|\b(?:first|second|third|last|only) (?:win|victory|defeat|loss|point|points|goal)\b|\bof the season\b"
+    r"|\b(?:moving|moves?|lifts?|lifting|takes?|taking|sends?|sending|puts?|putting) (?:them|him|her|it|the (?:team|club|side))\b"
+    r"|\badvanc(?:es?|ing)\b|\b(?:top|bottom) of the\b|\bpromot(?:ed|ion)\b|\brelegat"
+    # A stated next step is a fact, even inside a moralising sentence.
+    r"|\bwill (?:now|next|then)\b|\bwill (?:take place|be held|advance|open|close|reopen|return|resume|run|start|begin|finish)\b"
+    r"|\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|January|February|March|April|June|July|August|"
+    r"September|October|November|December)\b",
+    re.I,
+)
+
+
+def is_moral_closer(sentence: str) -> bool:
+    text = plain(sentence).strip()
+    if not text or text[0] in "\"“‘'" or _ATTRIBUTED_RE.search(text):
+        return False
+    if _VOICE_SPECULATION_RE.search(text) or _VOICE_EXHORTATION_RE.search(text):
+        return True
+    return bool(_STORY_SUBJECT_RE.search(text) and _MORAL_PREDICATE_RE.search(text))
+
+
+def is_concern_closer(sentence: str) -> bool:
+    text = plain(sentence).strip()
+    if not text or text[0] in "\"“‘'":
+        return False
+    if not (_SUMMARY_SUBJECT_RE.search(text) and _UNATTRIBUTED_CONCERN_RE.search(text)):
+        return False
+    return not (_FACT_MARK_RE.search(text) or _EXPLAINS_RE.search(text))
+
+
+def is_comment_invitation(sentence: str) -> bool:
+    text = plain(sentence).strip()
+    if not text or text[0] in "\"“‘'":
+        return False
+    return bool(_COMMENT_INVITE_RE.search(text))
+
+
+def _is_reader_question(sentence: str) -> bool:
+    text = plain(sentence).strip()
+    if not text or not text.endswith("?") or text[0] in "\"“‘'":
+        return False
+    # Addressed to the reader ("Have you received the £150?") or carrying no
+    # reporting at all. Only ever dropped when an invitation follows it.
+    return bool(re.search(r"\byou(?:r|rs)?\b", text, re.I)) or not _FACT_MARK_RE.search(text)
+
+
 def is_sentiment_closer(sentence: str) -> bool:
     text = plain(sentence).strip()
     if not text or text[0] in "\"“‘'":
@@ -368,8 +476,37 @@ RIGHT_OF_REPLY_RE = re.compile(
 )
 
 
+# A trailing line that is furniture, not copy: a link or other markup, a
+# source/photo credit, or a "Label: https://..." resource line. These sit
+# after the story's real ending and must not use up the two-paragraph
+# closing window (two pages kept an invitation above link lines, 9 Nov 2026).
+_NOTICE_LINE_RE = re.compile(
+    r"^(?:sources?|photo(?:graph)?s?|pictures?|images?|credits?|video)\s*:"
+    r"|^[^.?!]{0,80}:\s*https?://",
+    re.I,
+)
+
+
+def _closing_spans(matches: list) -> set:
+    """Spans of the last two paragraphs of actual copy, looking past any
+    trailing notice lines."""
+    copy = [m for m in matches
+            if "<" not in m.group(1) and not _NOTICE_LINE_RE.search(plain(m.group(1)))]
+    return {m.span() for m in copy[-2:]}
+
+
 def _text_before(source: str, index: int) -> str:
-    return html.unescape(re.sub(r"<[^>]+>", " ", source[:index]))
+    """Quote context for a closing paragraph: the previous paragraph only.
+
+    British style re-opens a quotation at the start of each paragraph it
+    continues into, so a quotation still open at a paragraph break can only
+    have begun in the paragraph just before. Reading the whole article let
+    one mismatched mark early in the copy (a curly opening closed by a
+    straight mark) leave every later sentence looking 'quoted', which kept
+    comment invitations on 3 pages (measured 9 Nov 2026)."""
+    previous = list(_P_RE.finditer(source[:index]))
+    start = previous[-1].start() if previous else 0
+    return html.unescape(re.sub(r"<[^>]+>", " ", source[start:index]))
 
 
 def _keep_reporting(sentences: list[str], before: str) -> list[str]:
@@ -377,13 +514,68 @@ def _keep_reporting(sentences: list[str], before: str) -> list[str]:
     a sentence that sits inside a quotation opened earlier in the paragraph or
     in an earlier one: those are someone else's words."""
     kept: list[str] = []
+    asked: list[bool] = []  # parallel to kept: an unquoted question to the reader
     context = before
     for sentence in sentences:
         quoted = quote_open(context)
-        if quoted or not (is_filler_closer(sentence) or is_sentiment_closer(sentence)):
-            kept.append(sentence)
         context += " " + sentence
+        if quoted:
+            kept.append(sentence)
+            asked.append(False)
+            continue
+        if is_comment_invitation(sentence):
+            # "What would you like to happen next? Share your thoughts..." -
+            # the question that sets up the invitation goes with it.
+            if kept and asked[-1]:
+                kept.pop()
+                asked.pop()
+            continue
+        if (is_filler_closer(sentence) or is_sentiment_closer(sentence)
+                or is_concern_closer(sentence) or is_moral_closer(sentence)):
+            continue
+        kept.append(sentence)
+        asked.append(_is_reader_question(sentence))
     return kept
+
+
+def strip_closing_html(content_html: str) -> str:
+    """Repeat _strip_closing_once until the ending is clean (bounded): taking
+    off a filler paragraph exposes the one before as the new ending."""
+    current = str(content_html or "")
+    for _ in range(4):
+        cleaned = _strip_closing_once(current)
+        if cleaned == current:
+            break
+        current = cleaned
+    return current
+
+
+def _strip_closing_once(content_html: str) -> str:
+    """Remove filler, sentiment and comment invitations from the last two
+    paragraphs only, leaving every other paragraph and all paragraphing as
+    written. Used by the archive sweep, which must not re-split old copy.
+    A right-of-reply paragraph or one holding inline markup is untouched."""
+    source = str(content_html or "")
+    closing = _closing_spans(list(_P_RE.finditer(source)))
+    out, position = [], 0
+    for match in _P_RE.finditer(source):
+        out.append(source[position:match.start()])
+        position = match.end()
+        whole, inner = match.group(0), match.group(1)
+        if match.span() not in closing or "<" in inner or RIGHT_OF_REPLY_RE.search(plain(inner)):
+            out.append(whole)
+            continue
+        sentences = split_sentences(html.unescape(inner))
+        kept = _keep_reporting(sentences, _text_before(source, match.start()))
+        if not kept:
+            continue
+        if len(kept) == len(sentences):
+            out.append(whole)
+            continue
+        start, end = match.start(1) - match.start(), match.end(1) - match.start()
+        out.append(whole[:start] + html.escape(" ".join(kept), quote=False) + whole[end:])
+    out.append(source[position:])
+    return "".join(out)
 
 
 def tidy_editor_html(content_html: str) -> str:
@@ -396,8 +588,7 @@ def tidy_editor_html(content_html: str) -> str:
     dropped from the last two paragraphs. A right-of-reply paragraph, or any
     paragraph carrying someone's response, is left exactly as written."""
     source = str(content_html or "")
-    spans = [m.span() for m in _P_RE.finditer(source)]
-    closing = set(spans[-2:])
+    closing = _closing_spans(list(_P_RE.finditer(source)))
 
     def repl(match: re.Match[str]) -> str:
         whole, inner = match.group(0), match.group(1)
@@ -443,8 +634,7 @@ def tidy_content_html(content_html: str) -> str:
     put there is lost.
     """
     source = str(content_html or "")
-    plain_spans = [m.span() for m in _P_RE.finditer(source) if "<" not in m.group(1)]
-    closing = set(plain_spans[-2:])
+    closing = _closing_spans(list(_P_RE.finditer(source)))
 
     def repl(match: re.Match[str]) -> str:
         inner = match.group(1)
