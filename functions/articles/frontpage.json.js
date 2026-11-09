@@ -195,13 +195,24 @@ function isDailyBriefing(article) {
     || String(article.publication_route || '').toLowerCase() === 'daily-briefing';
 }
 
+// Traffic notices (roadworks, road closures) are held below the top nine too
+// (editor's rule, 9 Nov 2026): two 03:21 roadworks notices led the paper over
+// seven Remembrance Sunday stories. Same test as scraper/feature_policy.py
+// is_traffic_notice.
+const TRAFFIC_HEADLINE = /\b(?:road\s*works?|road closures?|(?:street|lane|road|avenue|drive)s? (?:in \w+ )?(?:to|will) close\b|traffic diversions?|temporary traffic lights|lane closures?|resurfacing)\b/i;
+function isTrafficNotice(article) {
+  const category = String(article.category || '').trim().toLowerCase();
+  const types = Array.isArray(article.types) ? article.types.map((t) => String(t).trim().toLowerCase()) : [];
+  return category === 'traffic' || types.includes('traffic') || TRAFFIC_HEADLINE.test(String(article.title || ''));
+}
+
 function demoteSponsored(list, floor) {
   const top = [];
   const held = [];
   const rest = [];
   for (const article of list) {
     if (top.length < floor) {
-      (article && (article.sponsored === true || isReserveFeature(article) || isDailyBriefing(article)) ? held : top).push(article);
+      (article && (article.sponsored === true || isReserveFeature(article) || isDailyBriefing(article) || isTrafficNotice(article)) ? held : top).push(article);
     } else {
       rest.push(article);
     }

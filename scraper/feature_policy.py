@@ -26,6 +26,31 @@ def is_daily_briefing(article: dict[str, Any]) -> bool:
     )
 
 
+TRAFFIC_CATEGORIES = {"traffic"}
+TRAFFIC_HEADLINE = re.compile(
+    r"\b(?:road\s*works?|road closures?|"
+    r"(?:street|lane|road|avenue|drive)s? (?:in \w+ )?(?:to|will) close\b|"
+    r"traffic diversions?|temporary traffic lights|lane closures?|resurfacing)\b",
+    re.I,
+)
+
+
+def is_traffic_notice(article: dict[str, Any]) -> bool:
+    """Roadworks, road closures and diversions (editor's rule, 9 Nov 2026).
+
+    They never take a top-nine homepage position or a place in the Morning
+    Briefing. Measured 9 Nov 2026: two 03:21 roadworks notices led the front
+    page and the briefing list over seven Remembrance Sunday stories. They stay
+    published, in the traffic section and below the top nine. "Shop to close"
+    and "school closure" are not traffic: only roads, streets and lanes match.
+    Same test as isTrafficNotice in functions/articles/frontpage.json.js."""
+    category = str(article.get("category") or "").strip().lower()
+    types = {str(t).strip().lower() for t in (article.get("types") or []) if isinstance(t, str)}
+    if category in TRAFFIC_CATEGORIES or types & TRAFFIC_CATEGORIES:
+        return True
+    return bool(TRAFFIC_HEADLINE.search(str(article.get("title") or "")))
+
+
 def normalise_feature(article: dict[str, Any]) -> dict[str, Any]:
     """Return a copy; preserve publication dates, sources and original prose."""
     result = dict(article)

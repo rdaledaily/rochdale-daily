@@ -109,13 +109,23 @@ def demote_sponsored(rows: list[dict[str, Any]], floor: int = SPONSORED_FLOOR) -
     # newest-first with the news, so on a quiet afternoon "Does a boggart still
     # haunt Clegg Hall?" led the paper (24 Oct 2026). A feature is never a top
     # story; it stays on the page, below the news.
-    from feature_policy import is_daily_briefing, is_reserve_feature
+    #
+    # Traffic notices (roadworks, road closures) are held below the same line
+    # (editor's rule, 9 Nov 2026): two 03:21 roadworks notices led the paper
+    # over seven Remembrance Sunday stories.
+    from feature_policy import is_daily_briefing, is_reserve_feature, is_traffic_notice
     top: list[dict[str, Any]] = []
     held: list[dict[str, Any]] = []
     rest: list[dict[str, Any]] = []
     for row in rows:
         if len(top) < floor:
-            (held if row.get("sponsored") is True or is_reserve_feature(row) or is_daily_briefing(row) else top).append(row)
+            held_back = (
+                row.get("sponsored") is True
+                or is_reserve_feature(row)
+                or is_daily_briefing(row)
+                or is_traffic_notice(row)
+            )
+            (held if held_back else top).append(row)
         else:
             rest.append(row)
     return top + held + rest

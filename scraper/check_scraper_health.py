@@ -13,7 +13,7 @@ from enforce_frontpage_freshness import (
     is_thin_utility_not_frontpage,
 )
 from enforce_frontpage_freshness import first_published as selector_first_published
-from feature_policy import is_daily_briefing, is_reserve_feature
+from feature_policy import is_daily_briefing, is_reserve_feature, is_traffic_notice
 from search_queries import CATEGORY_QUERIES, ROCHDALE_WARDS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -157,7 +157,13 @@ def can_lead_homepage(article: dict[str, Any]) -> bool:
     evidence of a missing lead. Measured 8 Nov 2026: the 09:04 morning
     briefing was the only story under six hours old, sat at position 6 as
     designed, and failed the fast-lane run."""
-    return not is_reserve_feature(article) and not is_daily_briefing(article)
+    # Traffic notices are held below the top nine too (9 Nov 2026), so a fresh
+    # roadworks notice outside the top three is the rule working, not a fault.
+    return (
+        not is_reserve_feature(article)
+        and not is_daily_briefing(article)
+        and not is_traffic_notice(article)
+    )
 
 
 def zero_new_attempts_are_starvation(

@@ -42,8 +42,52 @@ WEATHER = ROOT / "weather.json"
 
 SLOTS = {
     # slot: (local hour it is due from, title, window start hour)
-    "morning": (9, "Morning Briefing", 18),   # since 6pm yesterday
+    # Since 9am yesterday, i.e. since the previous briefing. The window used to
+    # start at 6pm because a 6pm Evening Wrap-Up covered the day. That slot no
+    # longer exists, so a 6pm start meant every story published between 9am and
+    # 6pm appeared in NO briefing at all. Measured 9 Nov 2026: all seven
+    # Remembrance Sunday stories (published 10:38-15:02 on 8 Nov) fell in that
+    # gap, while two overnight roadworks notices made Monday's list.
+    "morning": (9, "Morning Briefing", 9),
 }
+
+# Traffic notices never take a place in the briefing (editor's rule, 9 Nov
+# 2026): the shared test lives in feature_policy.is_traffic_notice, which also
+# holds them below the top nine on the homepage.
+from feature_policy import is_traffic_notice  # noqa: E402
+
+# Significance, not the clock, decides the order. A topic covered by several
+# stories in the window (Remembrance Sunday: seven) is the day's big story and
+# leads; a single small item cannot jump it by being published later.
+CATEGORY_WEIGHT = {
+    "crime": 70,
+    "news": 65,
+    "politics": 62,
+    "health": 60,
+    "education": 58,
+    "community": 55,
+    "environment": 52,
+    "business": 50,
+    "sport": 50,
+    "transport": 45,
+    "events": 45,
+}
+TOPIC_BONUS_PER_STORY = 15
+TOPIC_BONUS_CAP = 60
+# Words too common in local headlines to say two stories share a topic.
+GENERIC_WORDS = {
+    "rochdale", "rochdales", "heywood", "middleton", "littleborough", "milnrow",
+    "newhey", "wardle", "castleton", "norden", "bamford", "whitworth", "borough",
+    "council", "street", "road", "people", "after", "about", "their", "there",
+    "which", "where", "plans", "school", "local", "years", "first", "being",
+    "could", "would", "should", "november", "december", "october", "january",
+    "february", "march", "april", "june", "july", "august", "september",
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+    "today", "since", "across", "against", "under", "other", "these", "those",
+    # "Emergency services", "Birch Services": too many unrelated uses.
+    "service", "services", "emergency",
+}
+MAX_ITEMS = 12
 
 # The briefing is due from 9am and is still worth publishing until noon. After
 # that a "morning" briefing would be wrong on its face, so it is skipped and the
@@ -103,6 +147,47 @@ def esc(value):
 def slugify(value):
     text = re.sub(r"[^a-z0-9]+", "-", str(value or "").lower()).strip("-")
     return re.sub(r"-{2,}", "-", text)[:80]
+
+
+def _topic_words(story) -> set:
+    words = re.findall(r"[a-z]+", str(story.get("title") or "").lower().replace("'", ""))
+    return {w for w in words if len(w) >= 5 and w not in GENERIC_WORDS}
+
+
+def rank_stories(stories):
+    """Order the window's stories by significance.
+
+    score = category weight + 15 for every other story in the window sharing a
+    distinctive headline word (capped at 60) + 10 for a full-length article.
+    Ties go to the newer story.
+    """
+    word_sets = [_topic_words(s) for s in stories]
+    counts = {}
+    for words in word_sets:
+        for word in words:
+            counts[word] = counts.get(word, 0) + 1
+
+    def score(index):
+        story = stories[index]
+        category = str(story.get("category") or "").strip().lower()
+        value = CATEGORY_WEIGHT.get(category, 50)
+        shared = max((counts[w] for w in word_sets[index]), default=1) - 1
+        value += min(TOPIC_BONUS_CAP, TOPIC_BONUS_PER_STORY * shared)
+        body = str(story.get("body") or story.get("content") or "")
+        if len(body.split()) >= 200:
+            value += 10
+        return value
+
+    order = sorted(
+        range(len(stories)),
+        key=lambda i: (
+            score(i),
+            parse_iso(stories[i].get("first_published_at") or stories[i].get("published_at"))
+            or datetime.min.replace(tzinfo=timezone.utc),
+        ),
+        reverse=True,
+    )
+    return [stories[i] for i in order]
 
 
 def window_start(slot: str, now_local: datetime) -> datetime:
@@ -241,27 +326,26 @@ def build(slot: str, now_local: datetime):
         and not str(story.get("id") or "").startswith("briefing-")
         # A paid-for advertisement feature is not one of the day's stories.
         and story.get("sponsored") is not True
+        # Traffic and roadworks notices never take a place in the briefing.
+        and not is_traffic_notice(story)
     ]
     fresh = []
     for story in published:
         moment = parse_iso(story.get("first_published_at") or story.get("published_at"))
         if moment and start <= moment.astimezone(LONDON) <= now_local:
             fresh.append(story)
-    fresh.sort(
-        key=lambda s: parse_iso(s.get("first_published_at") or s.get("published_at")) or start,
-        reverse=True,
-    )
+    fresh = rank_stories(fresh)
 
     date_text = now_local.strftime("%A %-d %B %Y") if hasattr(now_local, "strftime") else ""
     title = f"{title_word}: {date_text}"
-    since = "since yesterday evening"
+    since = "since yesterday morning"
 
     if fresh:
         count = len(fresh)
         lead = (
             f"{count} new {'story' if count == 1 else 'stories'} in the Rochdale borough {since}."
         )
-        body = f"<p>{esc(lead)}</p><h2>The stories</h2><ul>{story_items(fresh[:12])}</ul>"
+        body = f"<p>{esc(lead)}</p><h2>The stories</h2><ul>{story_items(fresh[:MAX_ITEMS])}</ul>"
     else:
         lead = f"A quiet night in the borough &mdash; nothing new published {since}."
         live = published[:5]

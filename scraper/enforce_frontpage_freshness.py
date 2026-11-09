@@ -22,7 +22,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from ensure_manual_frontpage import demote_sponsored
-from feature_policy import is_reserve_feature
+from feature_policy import is_reserve_feature, is_traffic_notice
 
 FRONTPAGE = Path(os.getenv("FRONTPAGE_JSON", "articles/frontpage.json"))
 ARTICLES = Path(os.getenv("ARTICLES_JSON", "articles.json"))
@@ -371,7 +371,7 @@ def main() -> None:
     top_cutoff = now - timedelta(hours=int(os.getenv("SCRAPER_HEALTH_TOP_FRESH_HOURS", "6")))
 
     def top_fresh(article: dict[str, Any]) -> bool:
-        if article.get("sponsored") is True or is_reserve_feature(article):
+        if article.get("sponsored") is True or is_reserve_feature(article) or is_traffic_notice(article):
             return False          # never pulled into the top three (see demote_sponsored)
         return bool(
             (first_published(article) or datetime.min.replace(tzinfo=timezone.utc)) >= top_cutoff
