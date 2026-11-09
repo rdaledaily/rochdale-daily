@@ -17,6 +17,7 @@ import html
 import json
 import os
 import re
+from contextlib import contextmanager
 from collections import Counter, defaultdict, deque
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -1146,6 +1147,76 @@ def _mergeable(left: dict[str, Any], right: dict[str, Any]) -> bool:
     return records_match(left, right)
 
 
+
+# --------------------------------------------------------------------------
+# Per-story memo for the duplicate clustering loops (9 Nov 2026)
+# --------------------------------------------------------------------------
+# merge_duplicate_articles and _dedupe_by_url compare every pair of stories
+# (~580 stories = ~168,000 pairs). Each comparison re-derived BOTH stories'
+# story key, named entities, tokens and plain text from scratch, so one
+# story's HTML was re-parsed hundreds of times. Profiled on real data:
+# 187 of 270 seconds of the front-page pipeline, which runs twice in every
+# push-race rebuild - the rebuild took ~13 minutes and lost to the next
+# commit on main, so scrapes were thrown away (12:00 and 12:16 runs, 9 Nov).
+#
+# Inside these loops the stories are never changed, and every function listed
+# is a pure function of one story, so each value is computed once per story
+# and the answers are identical. The cache exists only while a loop runs.
+_MEMO_STORY_FUNCTIONS = (
+    "text_fields", "combined_text", "named_entities", "primary_entity", "missing_person_report",
+    "_story_subject_parts", "build_story_key", "title_tokens", "content_tokens", "subject_tokens",
+    "incident_tokens", "precise_locations", "incident_locations",
+)
+_MEMO_PIPELINE_FUNCTIONS = (
+    "article_text", "plain_text", "article_category", "is_event", "build_story_key", "named_entities",
+    "incident_locations", "incident_tokens", "precise_locations", "_ages", "_genders", "_vehicles",
+)
+
+
+def _memo_one(function):
+    cache: dict[Any, tuple[Any, Any]] = {}
+
+    def wrapper(item, *args, **kwargs):
+        if isinstance(item, dict):
+            key = (id(item), args, tuple(sorted(kwargs.items())))
+        elif isinstance(item, str):
+            key = ("s", item, args, tuple(sorted(kwargs.items())))
+        else:
+            return function(item, *args, **kwargs)
+        hit = cache.get(key)
+        # The item is kept in the entry, so its id cannot be reused by another.
+        if hit is None or (isinstance(item, dict) and hit[0] is not item):
+            hit = (item, function(item, *args, **kwargs))
+            cache[key] = hit
+        value = hit[1]
+        # Callers get their own copy of a mutable result.
+        if isinstance(value, (set, list, dict)):
+            return value.copy()
+        return value
+
+    wrapper.__wrapped__ = function
+    return wrapper
+
+
+@contextmanager
+def _story_memo():
+    import sys
+    import story_identity as _si
+    targets = [(_si, name) for name in _MEMO_STORY_FUNCTIONS]
+    targets += [(sys.modules[__name__], name) for name in _MEMO_PIPELINE_FUNCTIONS]
+    saved = []
+    for module, name in targets:
+        original = getattr(module, name, None)
+        if callable(original):
+            saved.append((module, name, original))
+            setattr(module, name, _memo_one(original))
+    try:
+        yield
+    finally:
+        for module, name, original in reversed(saved):
+            setattr(module, name, original)
+
+
 def merge_duplicate_articles(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Collapse duplicate records using complete-linkage clustering.
 
@@ -1158,19 +1229,20 @@ def merge_duplicate_articles(items: list[dict[str, Any]]) -> list[dict[str, Any]
     """
     records = [dict(item) for item in items]
     clusters: list[list[dict[str, Any]]] = []
-    for record in records:
-        best_cluster: list[dict[str, Any]] | None = None
-        best_size = 0
-        for cluster in clusters:
-            if len(cluster) > best_size and all(
-                _mergeable(record, member) for member in cluster
-            ):
-                best_cluster = cluster
-                best_size = len(cluster)
-        if best_cluster is None:
-            clusters.append([record])
-        else:
-            best_cluster.append(record)
+    with _story_memo():
+        for record in records:
+            best_cluster: list[dict[str, Any]] | None = None
+            best_size = 0
+            for cluster in clusters:
+                if len(cluster) > best_size and all(
+                    _mergeable(record, member) for member in cluster
+                ):
+                    best_cluster = cluster
+                    best_size = len(cluster)
+            if best_cluster is None:
+                clusters.append([record])
+            else:
+                best_cluster.append(record)
     return [merge_group(cluster) for cluster in clusters]
 
 
@@ -1680,23 +1752,24 @@ def _dedupe_by_url(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Final cross-category duplicate protection for the published feeds."""
     clusters: list[list[dict[str, Any]]] = []
 
-    for item in items:
-        matching_cluster = next(
-            (
-                cluster
-                for cluster in clusters
-                if all(
-                    _same_frontpage_story(item, existing)
-                    for existing in cluster
-                )
-            ),
-            None,
-        )
+    with _story_memo():
+        for item in items:
+            matching_cluster = next(
+                (
+                    cluster
+                    for cluster in clusters
+                    if all(
+                        _same_frontpage_story(item, existing)
+                        for existing in cluster
+                    )
+                ),
+                None,
+            )
 
-        if matching_cluster is None:
-            clusters.append([item])
-        else:
-            matching_cluster.append(item)
+            if matching_cluster is None:
+                clusters.append([item])
+            else:
+                matching_cluster.append(item)
 
     return [merge_group(cluster) for cluster in clusters]
 

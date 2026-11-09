@@ -18,7 +18,12 @@ class PushRecovery(unittest.TestCase):
     def test_unrelated_commit_on_main_is_stacked_without_a_rebuild(self):
         self._race(editor_touches_build=False)
 
-    def _race(self, editor_touches_build):
+    def test_new_manual_article_on_main_is_stacked_without_a_rebuild(self):
+        # 9 Nov 2026: a new manual article is published by its own run
+        # (publish.yml), so the scrape stacks on it instead of rebuilding.
+        self._race(editor_touches_build=False, manual_article=True)
+
+    def _race(self, editor_touches_build, manual_article=False):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             remote, local, editor = [root / name for name in ('remote.git', 'local', 'editor')]
@@ -60,6 +65,9 @@ class PushRecovery(unittest.TestCase):
             if editor_touches_build:
                 (editor / 'articles.json').write_text(json.dumps([existing]))
                 git('add', 'articles.json', cwd=editor)
+            elif manual_article:
+                (editor / 'manual_articles.d/2026-11-09-new-comment-piece.json').write_text(json.dumps(existing))
+                git('add', 'manual_articles.d/2026-11-09-new-comment-piece.json', cwd=editor)
             else:
                 (editor / 'reports').mkdir(exist_ok=True)
                 (editor / 'reports/email_submission_state.json').write_text('{"submissions": []}')
@@ -99,7 +107,11 @@ class PushRecovery(unittest.TestCase):
                 self.assertEqual({r['slug'] for r in published},{'scraper-story'})
                 self.assertEqual(renders,[],commands)
                 self.assertNotIn(['scraper/merge_feeds.py'], [c[:1] for c in commands])
-                self.assertEqual(git('--git-dir',str(remote),'show','main:reports/email_submission_state.json'),'{"submissions": []}')
+                if manual_article:
+                    self.assertEqual(json.loads(git('--git-dir',str(remote),'show',
+                                     'main:manual_articles.d/2026-11-09-new-comment-piece.json'))['slug'], 'editor-story')
+                else:
+                    self.assertEqual(git('--git-dir',str(remote),'show','main:reports/email_submission_state.json'),'{"submissions": []}')
                 self.assertIn('stacking this commit on top', result.stdout)
             self.assertIn('published=true',(root/'output').read_text())
 
