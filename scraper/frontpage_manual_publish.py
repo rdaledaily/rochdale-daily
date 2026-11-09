@@ -59,9 +59,28 @@ def _category_for_signature(text: str, declared_category: str, source_kind: str)
     )
 
 
-def _cached_article_category(article: dict[str, Any]) -> str:
+# The fields pipeline.article_text() reads, in its order.
+_TEXT_FIELDS = ("title", "excerpt", "summary", "content_html", "event_location", "source_url")
+
+
+@lru_cache(maxsize=16384)
+def _category_for_raw(raw: tuple[str, ...], declared_category: str, source_kind: str) -> str:
     return _category_for_signature(
-        pipeline.article_text(article),
+        pipeline.article_text(dict(zip(_TEXT_FIELDS, raw))), declared_category, source_kind
+    )
+
+
+def _cached_article_category(article: dict[str, Any]) -> str:
+    """Same classification as before, keyed on the raw field values.
+
+    9 Nov 2026: the key used to be pipeline.article_text(article), so EVERY
+    lookup re-stripped the story's HTML just to build the key, and the cache
+    saved nothing. The related-stories and read-next boxes ask for every
+    story's category on every page (~580 x 580 lookups): 255 of 409 seconds of
+    the site render, which runs in every push-race rebuild. Keyed on the raw
+    strings, a repeat lookup costs a tuple of cached string hashes."""
+    return _category_for_raw(
+        tuple(str(article.get(field) or "") for field in _TEXT_FIELDS),
         str(article.get("category") or "news"),
         str(article.get("source_kind") or "").lower(),
     )

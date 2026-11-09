@@ -72,7 +72,16 @@ finalise_cards_policy() {
 # 2026: 23 of 74 commits). For those, rebuilding the whole site (~12 minutes,
 # during which main usually moves again) is pointless: put this run's commit
 # on top and push in seconds. Anything else on main -> the full rebuild below.
-STACK_SAFE_PREFIXES="reports/ inbox/ docs/ .github/ scraper/ workers/ functions/ tests/"
+#
+# manual_articles.d/ (9 Nov 2026): a new or edited manual article is published
+# by its OWN run - any push under manual_articles.d/ starts publish.yml, which
+# builds from main - and every scrape lane injects all manual articles each
+# run. Stacking on top of it loses nothing. Rebuilding for it did: a comment
+# piece landing at 12:49 forced a 13-minute rebuild, during which that
+# article's own publish landed (13:06), so the rebuild lost again and the
+# whole scrape - with the new Geograph photos - was thrown away at 13:26.
+# A file this run also changed is still unsafe ("both changed" below).
+STACK_SAFE_PREFIXES="reports/ inbox/ docs/ .github/ scraper/ workers/ functions/ tests/ manual_articles.d/"
 
 stack_is_safe() {
   # $1 = the commit this run built on. Safe only when every file main gained
