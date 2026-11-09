@@ -200,7 +200,19 @@ function isDailyBriefing(article) {
 // seven Remembrance Sunday stories. Same test as scraper/feature_policy.py
 // is_traffic_notice.
 const TRAFFIC_HEADLINE = /\b(?:road\s*works?|road closures?|(?:street|lane|road|avenue|drive)s? (?:in \w+ )?(?:to|will) close\b|traffic diversions?|temporary traffic lights|lane closures?|resurfacing)\b/i;
+// Warnings readers need now always sit at position 2, under crime (editor's
+// rule, 9 Nov 2026), and are never treated as traffic notices. Same test as
+// scraper/feature_policy.py is_public_warning.
+const PUBLIC_WARNING = /\b(?:(?:yellow|amber|red) (?:weather )?warnings?|weather warnings?|met office warnings?|(?:snow|ice|wind|rain|fog|thunderstorm|heat|flood) warnings?|flood alerts?|power cuts?|blackouts?|power outages?|without power|bomb scares?|suspicious (?:package|item|device|object)s?|controlled explosion|bomb disposal|evacuat\w*|lock ?downs?|locked down|gas leaks?)\b/i;
+const NAMED_STORM = /\bStorm [A-Z][a-z]+\b/;
+const COLLISION_CLOSURE = /\b(?:crash|collision|accident|lorry fire|overturned)\b.*\b(?:clos\w*|shut|blocked)\b|\b(?:closed|shut|blocked)\b.*\b(?:crash|collision|accident)\b/i;
+function isPublicWarning(article) {
+  const title = String(article.title || '');
+  return PUBLIC_WARNING.test(title) || NAMED_STORM.test(title) || COLLISION_CLOSURE.test(title);
+}
+
 function isTrafficNotice(article) {
+  if (isPublicWarning(article)) return false;
   const category = String(article.category || '').trim().toLowerCase();
   const types = Array.isArray(article.types) ? article.types.map((t) => String(t).trim().toLowerCase()) : [];
   return category === 'traffic' || types.includes('traffic') || TRAFFIC_HEADLINE.test(String(article.title || ''));
@@ -283,6 +295,19 @@ export async function onRequest(context) {
     return storyTime(b) - storyTime(a);
   });
   articles = demoteSponsored(articles, SPONSORED_FLOOR);
+  // Crime always leads (editor's rule, 9 Nov 2026): the newest crime story in
+  // the feed takes position 1, ahead of editor pins. Crime is among the most-
+  // read categories. With no crime story in the feed the order is unchanged.
+  const crimeIndex = articles.findIndex((article) => article
+    && String(article.category || '').trim().toLowerCase() === 'crime'
+    && article.sponsored !== true);
+  if (crimeIndex > 0) articles.unshift(articles.splice(crimeIndex, 1)[0]);
+  // Warnings always take position 2 (editor's rule, 9 Nov 2026): the newest
+  // weather warning, power cut, road-closing collision, bomb scare, evacuation,
+  // school lockdown or gas leak in the feed, under the crime lead.
+  const warningIndex = articles.findIndex((article, index) => index > 0 && article
+    && article.sponsored !== true && isPublicWarning(article));
+  if (warningIndex > 1) articles.splice(1, 0, articles.splice(warningIndex, 1)[0]);
 
   // Breaking entries go above the sorted feed but below a running live blog.
   // The blocklist applies to them too: a story you have taken down must not

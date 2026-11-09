@@ -15,7 +15,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_scraper_health import can_lead_homepage  # noqa: E402
 from ensure_manual_frontpage import demote_sponsored  # noqa: E402
-from feature_policy import is_traffic_notice  # noqa: E402
+from feature_policy import is_public_warning, is_traffic_notice  # noqa: E402
 
 
 def row(slug, title, category="news"):
@@ -42,6 +42,18 @@ class TrafficBelowTopNine(unittest.TestCase):
                       "Rochdale shop to close after 40 years",
                       "School closure consultation opens"):
             self.assertFalse(is_traffic_notice(row("z", title)), title)
+
+    def test_warnings_are_never_traffic_notices(self):
+        for title in ("Crash Closes Heywood Old Road in Middleton",
+                      "M62 Westbound Closed Between Junctions 22 and 21 After Multi-Vehicle Collision",
+                      "Power outage in Newhey linked to third-party interference",
+                      "Weather warning issued for Rochdale as Storm Boelo approaches",
+                      "St Cuthbert's evacuated as parents reassured",
+                      "School in lockdown after police called"):
+            warning = row("w", title, "traffic")
+            self.assertTrue(is_public_warning(warning), title)
+            self.assertFalse(is_traffic_notice(warning), title)
+        self.assertFalse(is_public_warning(row("r", "Roadworks to begin on various streets")))
 
     def test_fresh_roadworks_outside_top_three_is_not_a_health_failure(self):
         self.assertFalse(can_lead_homepage(row("schofield", "Roadworks on Schofield Street", "traffic")))

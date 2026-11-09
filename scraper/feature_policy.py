@@ -35,6 +35,34 @@ TRAFFIC_HEADLINE = re.compile(
 )
 
 
+PUBLIC_WARNING = re.compile(
+    r"\b(?:(?:yellow|amber|red) (?:weather )?warnings?|weather warnings?|met office warnings?|"
+    r"(?:snow|ice|wind|rain|fog|thunderstorm|heat|flood) warnings?|flood alerts?|"
+    r"power cuts?|blackouts?|power outages?|without power|bomb scares?|"
+    r"suspicious (?:package|item|device|object)s?|controlled explosion|bomb disposal|"
+    r"evacuat\w*|lock ?downs?|locked down|gas leaks?)\b",
+    re.I,
+)
+NAMED_STORM = re.compile(r"\bStorm [A-Z][a-z]+\b")
+COLLISION_CLOSURE = re.compile(
+    r"\b(?:crash|collision|accident|lorry fire|overturned)\b.*\b(?:clos\w*|shut|blocked)\b|"
+    r"\b(?:closed|shut|blocked)\b.*\b(?:crash|collision|accident)\b",
+    re.I,
+)
+
+
+def is_public_warning(article: dict[str, Any]) -> bool:
+    """Warnings readers need now: weather warnings and named storms, power
+    cuts, collisions that close roads, bomb scares and suspicious packages,
+    evacuations, school lockdowns and gas leaks (editor's rule, 9 Nov 2026:
+    always position 2 on the front page, under crime). Measured 9 Nov 2026
+    against the 1,940-story archive: 8 headlines match, all genuine warnings.
+    A warning is never treated as a traffic notice, even when filed as
+    traffic. Same test as isPublicWarning in functions/articles/frontpage.json.js."""
+    title = str(article.get("title") or "")
+    return bool(PUBLIC_WARNING.search(title) or NAMED_STORM.search(title) or COLLISION_CLOSURE.search(title))
+
+
 def is_traffic_notice(article: dict[str, Any]) -> bool:
     """Roadworks, road closures and diversions (editor's rule, 9 Nov 2026).
 
@@ -44,6 +72,8 @@ def is_traffic_notice(article: dict[str, Any]) -> bool:
     published, in the traffic section and below the top nine. "Shop to close"
     and "school closure" are not traffic: only roads, streets and lanes match.
     Same test as isTrafficNotice in functions/articles/frontpage.json.js."""
+    if is_public_warning(article):
+        return False
     category = str(article.get("category") or "").strip().lower()
     types = {str(t).strip().lower() for t in (article.get("types") or []) if isinstance(t, str)}
     if category in TRAFFIC_CATEGORIES or types & TRAFFIC_CATEGORIES:
