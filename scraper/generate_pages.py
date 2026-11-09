@@ -1482,6 +1482,16 @@ def main() -> None:
         build_category_pages()
     except Exception as exc:  # never let a hub page failure block the paper
         print(f'Category pages skipped: {type(exc).__name__}: {exc}')
+    # 9 Nov 2026 (editor): every story ends on its last fact. Removes comment
+    # invitations, reader questions and moralising closers from every page in
+    # articles/ (live and archived) and every feed record. Idempotent.
+    try:
+        from closing_filler_sweep import sweep as sweep_closing_filler
+        filler = sweep_closing_filler(pages_dir=OUTPUT_DIR, feed_path=ARTICLES_JSON)
+        print(f"Closing filler removed: {filler['pages_cleaned']} of {filler['pages_scanned']} pages, "
+              f"{filler['records_cleaned']} feed records")
+    except Exception as exc:  # never let the sweep block the paper
+        print(f'Closing filler sweep skipped: {type(exc).__name__}: {exc}')
     try:
         from generate_afc_hub import main as build_afc_hub
         build_afc_hub()

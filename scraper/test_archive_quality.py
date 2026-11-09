@@ -12,7 +12,7 @@ assert not safe_edit('Police said “wait here”.', 'Police said “go home”.
 assert not safe_edit('John Smith spoke.', 'James Smith spoke.')
 assert not safe_edit('The homes may open.', 'The homes will open.')
 assert not reader_ending({'title':'Man charged with burglary','category':'crime'})
-assert 'comments' in reader_ending({'title':'Roadworks in Heywood','category':'traffic'})
+assert not reader_ending({'title':'Roadworks in Heywood','category':'traffic'})  # withdrawn 9 Nov 2026
 assert not ward_decision({'title':'Glenn Middleton speaks','area':'rochdale'})['wards']
 assert not ward_decision({'title':'Work in Middleton','area':'middleton'})['wards']
 assert category_for({'title':'Guided court chamber tour','category':'crime'}) == 'events'
@@ -33,7 +33,7 @@ with tempfile.TemporaryDirectory() as tmp:
     apply(root)
     after=[p.read_text() for p in sorted((root/'articles').glob('*.html'))]
     assert before==after, 'Archive final pass must be idempotent'
-    assert all(p.count('data-rd-reader-ending="1"')==1 for p in after)
+    assert all(p.count('data-rd-reader-ending="1"')==0 for p in after)  # no comment invitation, 9 Nov 2026
     assert all(p.count('id="rd-archive-related"')==1 for p in after)
     # Sources are inside article-copy in the current template: never add an
     # extra closing div before them, and never swallow the source links.
