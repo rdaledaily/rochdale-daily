@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T08:44:20.674300Z",
+  "updated_at": "2026-11-09T11:38:20.827423Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 135,
+  "count": 136,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -721,26 +721,6 @@
       "text_fingerprint": "651019fd57f3ce63",
       "recovery_attempts": 1
     },
-    "https://www.bbc.co.uk/sport/football/live/cq70pnr4z2ezt": {
-      "first_attempt_at": "2026-10-31T19:06:15.370225Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMid0FVX3lxTE5rVmdCcjZJYWoya2t4aVJhZTVCTG1ISTJYTjN3eWdrcjlhRy1sc29sZ1ZaOW0tNFpwRlNNVTZ1UTVJZUZ6TVVwQ0gzMkhxS1B4TGlBc2t3dE91Mm5IVWYwMXVGY1Y1QWtsc0V3YWhyUmpiMkV1aW9V?oc=5",
-        "https://rochdaleafc.co.uk/preview-port-vale-away-311026",
-        "https://www.bbc.co.uk/sport/football/live/cq70pnr4z2ezt",
-        "https://www.fansnetwork.co.uk/football/rochdale/amp/news/67139/refwatch--port-vale-v-rochdale",
-        "https://www.skysports.com/football/video/13606190/port-vale-4-2-rochdale-league-two-highlights"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-01T10:39:53.210994Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Port Vale vs Rochdale: League Two stats & head-to-head - BBC",
-      "source_name": "BBC",
-      "category": "sport",
-      "text_fingerprint": "49ea601e15d8f63b"
-    },
     "https://www.bbc.com/sport/football/live/cw98zvd1n92dt": {
       "first_attempt_at": "2026-11-07T19:40:07.848423Z",
       "attempts": 1,
@@ -868,13 +848,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T08:03:39.618647Z",
+      "last_attempt_at": "2026-11-09T11:38:20.826980Z",
       "outcome": "published",
       "reason": "",
       "title": "Woman dies at Tesco after police called and store evacuated",
       "source_name": "Daily Record",
       "category": "traffic",
-      "text_fingerprint": "6f5c48e8bf4e64dd"
+      "text_fingerprint": "6f5c48e8bf4e64dd",
+      "recovery_attempts": 1
     },
     "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/byrne-heaps-praise-on-doncaster-rovers-trio-as-hanlan-claims-much-needed-goal-in-comfortable-rochdale-win-9330512": {
       "first_attempt_at": "2026-11-04T21:01:00.981268Z",
@@ -1539,12 +1520,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-08T12:50:25.271824Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Woman dies after police called and Tesco store evacuated",
       "source_name": "Manchester Evening News",
       "category": "news",
-      "text_fingerprint": "f15e41647fca3ffa"
+      "text_fingerprint": "f15e41647fca3ffa",
+      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/news/latest-dangerous-chapter-story-rochdales-34852903": {
       "first_attempt_at": "2026-11-03T16:34:52.588790Z",
@@ -1683,6 +1665,22 @@
       "source_name": "onevalefan",
       "category": "sport",
       "text_fingerprint": "c286567b0bdcaaf7"
+    },
+    "https://www.rbh.org.uk/news/rbh-news/national-tenant-satisfaction-figures-rank-rbh-among-the-top-25-of-landlords": {
+      "first_attempt_at": "2026-11-09T11:38:20.827342Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rbh.org.uk/news/rbh-news/national-tenant-satisfaction-figures-rank-rbh-among-the-top-25-of-landlords"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-09T11:38:20.827342Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "National tenant satisfaction figures rank RBH among the top 25% of landlords",
+      "source_name": "Rochdale Boroughwide Housing",
+      "category": "community",
+      "text_fingerprint": "0d9479f5ae4b8756"
     },
     "https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026": {
       "first_attempt_at": "2026-11-08T01:57:39.099693Z",
@@ -2215,6 +2213,22 @@
       "source_name": "Rochdale Times",
       "category": "news",
       "text_fingerprint": "5729a9c6e3991182"
+    },
+    "https://www.rochdaletimes.co.uk/volunteers-needed-to-help-provide-town-centre-safe-haven": {
+      "first_attempt_at": "2026-11-09T11:38:20.827240Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/volunteers-needed-to-help-provide-town-centre-safe-haven"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-09T11:38:20.827240Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Volunteers needed to help provide town centre Safe Haven - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "community",
+      "text_fingerprint": "e517ff2c8313f77d"
     },
     "https://www.rochdaletimes.co.uk/warning-as-measles-cases-are-confirmed": {
       "first_attempt_at": "2026-11-05T19:11:51.419219Z",

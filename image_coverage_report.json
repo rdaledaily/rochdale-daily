@@ -1,12 +1,41 @@
 {
   "policy": "preserve meaningful existing image; then filename-matched local photo; generated card only as final fallback",
   "stats": {
-    "kept_cards": 135,
+    "kept_cards": 132,
     "cards_library": 0,
-    "cards_generated": 384,
+    "cards_generated": 386,
+    "incident_card": 4,
     "skipped": 0
   },
   "items": [
+    {
+      "slug": "morning-briefing-9-november-2026",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "volunteers-sought-for-safe-haven-scheme-in-rochdale-town-centre",
+      "result": "cards-generated",
+      "image_url": "assets/img/cards/86868628f2b0-place-generated-card.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "rochdale-south-township-committee-meeting-11-november-2026",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "free-friendship-group-heywood-library-12-november-2026",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-town-hall.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
     {
       "slug": "part-of-schofield-street-in-heywood-to-close-for-roadworks-from-23-november-2026",
       "result": "kept-cards",
@@ -22,11 +51,18 @@
       "match_score": 15129
     },
     {
+      "slug": "rochdale-boroughwide-housing-ranks-among-top-25-landlords-in-national-tenant-sat",
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/rochdale-boroughwide-housing-ranks-among-top-25-landlords-in-national-tenant-sat.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
       "slug": "rochdale-veterans-breakfast-club-receives-500-donation-from-housebuilders",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/veterans-breakfast-club.jpg",
-      "matched_filename": "veterans-breakfast-club.jpg",
-      "match_score": 15383
+      "result": "kept-existing",
+      "image_url": "assets/img/cards/union-flag-file.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "best-beauty-salons-in-rochdale-ranked",
@@ -39,6 +75,13 @@
       "slug": "elsie-blundell-mp-remembrance-sunday-middleton-wreaths-constituency-2026",
       "result": "kept-existing",
       "image_url": "assets/img/cards/elsie-blundell-remembrance-sunday-2026-supplied.jpg",
+      "matched_filename": "",
+      "match_score": null
+    },
+    {
+      "slug": "woman-dies-at-tesco-in-rochdale-after-emergency-services-called",
+      "result": "incident-card",
+      "image_url": "assets/img/cards/incident-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -60,13 +103,6 @@
       "slug": "christmas-dinner-2026-supermarket-prices-compared",
       "result": "cards-generated",
       "image_url": "assets/img/cards/6a46c565ef76-place-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
-      "slug": "woman-dies-after-emergency-services-called-to-tesco-in-rochdale",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/4217e0f83d9e-place-generated-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -645,13 +681,6 @@
       "match_score": -1
     },
     {
-      "slug": "homes-evacuated-in-rochdale-after-car-crashes-into-house-and-causes-gas-leak",
-      "result": "cards-generated",
-      "image_url": "assets/img/cards/8501378fe52a-place-generated-card.jpg",
-      "matched_filename": "",
-      "match_score": null
-    },
-    {
       "slug": "middleton-schools-face-financial-challenges-due-to-declining-pupil-numbers",
       "result": "town-photo",
       "image_url": "assets/img/cards/99a01cf2f51e2e97-town-photo.jpg",
@@ -1037,18 +1066,11 @@
       "match_score": 21272
     },
     {
-      "slug": "heywood-prepares-for-remembrance-day-services-on-8-november-2026",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/heywood-prepares-for-remembrance-day-services-on-8-november-2026.jpg",
-      "matched_filename": "heywood-prepares-for-remembrance-day-services-on-8-november-2026.jpg",
-      "match_score": 16139
-    },
-    {
-      "slug": "man-dies-in-three-vehicle-crash-on-rochdale-road-in-edenfield",
-      "result": "kept-cards",
-      "image_url": "assets/img/cards/man-dies-in-three-vehicle-crash-on-rochdale-road-in-edenfield.jpg",
-      "matched_filename": "man-dies-in-three-vehicle-crash-on-rochdale-road-in-edenfield.jpg",
-      "match_score": 20711
+      "slug": "homes-evacuated-in-rochdale-after-car-crashes-into-house-and-causes-gas-leak",
+      "result": "incident-card",
+      "image_url": "assets/img/cards/incident-card.jpg",
+      "matched_filename": "",
+      "match_score": null
     },
     {
       "slug": "littleborough-defeat-trafford-mv-in-adm-lancs-cheshire-2-clash",
@@ -2438,8 +2460,8 @@
     },
     {
       "slug": "bus-services-suspended-between-rochdale-town-centre-and-freehold-following-colli",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/bus-services-suspended-between-rochdale-town-centre-and-freehold-following-colli-canonical.jpg",
+      "result": "incident-card",
+      "image_url": "assets/img/cards/incident-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
@@ -2956,8 +2978,8 @@
     },
     {
       "slug": "wildfire-emergency-alert-overreaction-or-sign-of-things-to-come",
-      "result": "kept-existing",
-      "image_url": "assets/img/cards/wildfire-emergency-alert-overreaction-or-sign-of-things-to-come-canonical.jpg",
+      "result": "incident-card",
+      "image_url": "assets/img/cards/incident-card.jpg",
       "matched_filename": "",
       "match_score": null
     },
