@@ -370,8 +370,84 @@ def contracts_finder_retry() -> None:
         __import__("time").sleep(3)
 
 
+def new_sources_nov9() -> None:
+    """Eight sources Sarah sent on 9 Nov 2026: robots verdict, HTTP status, and what each carries."""
+    if not section("new_sources_nov9"):
+        return
+    import time
+    import urllib.robotparser
+    from urllib.parse import urlsplit
+
+    def robots_ok(url: str) -> str:
+        parts = urlsplit(url)
+        robots = f"{parts.scheme}://{parts.netloc}/robots.txt"
+        try:
+            r = S.get(robots, timeout=20)
+        except Exception as exc:  # noqa: BLE001
+            return f"robots fetch failed ({type(exc).__name__})"
+        if r.status_code != 200:
+            return f"robots HTTP {r.status_code} (no rules apply)"
+        rp = urllib.robotparser.RobotFileParser()
+        rp.parse(r.text.splitlines())
+        save("robots_" + parts.netloc.replace(".", "_") + ".txt", r.text)
+        return "ALLOWED" if rp.can_fetch(UA, url) else "DISALLOWED"
+
+    def links(text: str, pattern: str) -> list[str]:
+        found = re.findall(r'href=["\']([^"\']+)["\']', text)
+        return sorted({h for h in found if re.search(pattern, h)})
+
+    checks = [
+        ("ukplanning_overview", "https://ukplanningapi.co.uk/councils/rochdale", r"/applications?/"),
+        ("ukplanning_api_nokey", "https://ukplanningapi.co.uk/v1/applications?council_id=5&limit=5", r"."),
+        ("datacommons_page", "https://datacommons.org/place/wikidataId/Q474605", r"/place/"),
+        ("datacommons_api_nokey", "https://api.datacommons.org/v2/observation?date=LATEST&select=date&select=value&select=variable&select=entity&entity.dcids=wikidataId/Q474605&variable.dcids=Count_Person", r"."),
+        ("engage_comm", "https://www.engagerochdale.org/Communication", r"engagerochdale|^/[A-Za-z]"),
+        ("engage_home", "https://www.engagerochdale.org/", r"engagerochdale|^/[A-Za-z]"),
+        ("rda_regeneration", "https://www.investinrochdale.co.uk/regeneration", r"/regeneration/projects/"),
+        ("rda_projects", "https://www.investinrochdale.co.uk/regeneration/projects", r"/regeneration/projects/"),
+        ("iqair", "https://www.iqair.com/gb/air-quality/uk/england/rochdale", r"air-quality"),
+        ("wdtk_body_given", "https://www.whatdotheyknow.com/body/rochdale_council", r"/request/"),
+        ("wdtk_feed_given", "https://www.whatdotheyknow.com/feed/body/rochdale_council", r"."),
+        ("wdtk_feed_rmbc", "https://www.whatdotheyknow.com/feed/body/rochdale_metropolitan_borough_council", r"."),
+        ("fingertips_profiles", "https://fingertips.phe.org.uk/api/profiles", r"."),
+        ("fingertips_area_302", "https://fingertips.phe.org.uk/api/areas/by_area_type?area_type_id=302", r"."),
+        ("fingertips_area_502", "https://fingertips.phe.org.uk/api/areas/by_area_type?area_type_id=502", r"."),
+        ("nca_given", "https://www.northerncarealliance.nhs.uk/nca-news?q=%2Fnews%2Fnca-news", r"/nca-news/[^/?]*-"),
+        ("nca_rochdale_existing", "https://www.northerncarealliance.nhs.uk/news/rochdale-news", r"/nca-news/[^/?]*-"),
+        ("nca_all_existing", "https://www.northerncarealliance.nhs.uk/news/nca-news", r"/nca-news/[^/?]*-"),
+    ]
+    for name, url, pat in checks:
+        print(f"\n -- {name}: {url}")
+        print(f"   robots: {robots_ok(url)}")
+        r = get(name + ".html", url)
+        if r is None:
+            continue
+        body = r.text
+        title = re.search(r"<title[^>]*>(.*?)</title>", body, re.S | re.I)
+        if title:
+            print("   title:", re.sub(r"\s+", " ", title.group(1)).strip()[:120])
+        print(f"   borough mentions: {len(BOROUGH.findall(body))}")
+        if "xml" in r.headers.get("content-type", "") or body.lstrip().startswith("<?xml"):
+            items = re.findall(r"<(?:item|entry)>.*?</(?:item|entry)>", body, re.S)
+            dates = re.findall(r"<(?:pubDate|updated|published)>(.*?)</", body)
+            print(f"   feed items={len(items)} newest={dates[1:2]} oldest={dates[-1:]}")
+            for it in items[:8]:
+                t = re.search(r"<title[^>]*>(.*?)</title>", it, re.S)
+                print("    -", (t.group(1) if t else "")[:120])
+        elif "json" in r.headers.get("content-type", ""):
+            print("   json head:", body[:400].replace("\n", " "))
+            if name.startswith("fingertips_area"):
+                print("   E08000005 present:", "E08000005" in body)
+        else:
+            found = links(body, pat)
+            print(f"   matching links={len(found)}")
+            for h in found[:12]:
+                print("    -", h[:140])
+        time.sleep(2)
+
+
 if __name__ == "__main__":
-    for fn in (keyed, met_office, nomis, find_tender, existing_rota):
+    for fn in (new_sources_nov9,):
         try:
             fn()
         except Exception as exc:  # noqa: BLE001
