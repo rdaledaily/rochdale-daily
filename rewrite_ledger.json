@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T18:48:38.125445Z",
+  "updated_at": "2026-11-09T19:22:30.507847Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 138,
+  "count": 137,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -342,6 +342,23 @@
       "category": "sport",
       "text_fingerprint": "0bfe0d92470573ed"
     },
+    "https://rochdaleafc.co.uk/highlights-fleetwood-town-1-2-dale-aet": {
+      "first_attempt_at": "2026-11-09T19:22:30.507507Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/a-victory-we-needed-hannant",
+        "https://rochdaleafc.co.uk/highlights-fleetwood-town-1-2-dale-aet"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-09T19:22:30.507507Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Highlights | Fleetwood Town 1-2 Dale (AET) - Rochdale AFC",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "3f2401577dd9c5e1"
+    },
     "https://rochdaleafc.co.uk/northampton-tickets-on-sale": {
       "first_attempt_at": "2026-11-09T16:55:32.821998Z",
       "attempts": 3,
@@ -459,26 +476,6 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "cf96d0ce824f90bd"
-    },
-    "https://rochdaleafc.co.uk/watson-on-vale-defeat": {
-      "first_attempt_at": "2026-10-31T16:08:54.243104Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMiXEFVX3lxTFA1ODhGZ1cwd3otcFJScmFNQkJheWZuRGhiVkRzejhrRzU2allYUTZoNHNsT0VHUmlaeXBFMGtXY0NGN1Q2WklJUjEtNl9RcFNZclFOcHVMYlQ2dFFZ?oc=5",
-        "https://news.google.com/rss/articles/CBMie0FVX3lxTE1xZjBsb1ZucHVYdXYtNFE0cDlvN1l6UE8tUGZzVWN6a0RUQ3k5NkRRdF9MclJzMkRVUUdJM1dUbkR5c183eDZQRFVuWGVnNnJOV1VnbXltUGc2SUdpYnM1VlVhbXdVUnFiaFpHcklnNVFOYlQ4MzdjSDU5Yw?oc=5",
-        "https://rochdaleafc.co.uk/report-port-vale-away-311026",
-        "https://rochdaleafc.co.uk/watson-on-vale-defeat",
-        "https://www.beinsports.com/en-nz/football/league-two/port-vale-vs-rochdale-2026-10-31"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-01T18:41:48.414580Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Watson On Vale Defeat - Rochdale AFC",
-      "source_name": "Rochdale AFC",
-      "category": "sport",
-      "text_fingerprint": "286b49f3bca5039c"
     },
     "https://rochdaleafc.co.uk/watson-post-doncaster-031126": {
       "first_attempt_at": "2026-11-04T21:03:55.537422Z",
@@ -2265,14 +2262,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T18:48:38.125045Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-09T19:20:03.782261Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Volunteers needed to help provide town centre Safe Haven - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "community",
       "text_fingerprint": "e517ff2c8313f77d",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochdaletimes.co.uk/warning-as-measles-cases-are-confirmed": {
       "first_attempt_at": "2026-11-05T19:11:51.419219Z",
@@ -2316,13 +2313,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T18:48:38.125276Z",
+      "last_attempt_at": "2026-11-09T19:22:30.507633Z",
       "outcome": "published",
       "reason": "",
       "title": "Lest We Forget as Rochdale battalion's valiant sacrifices during the First World War",
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
-      "text_fingerprint": "50c8b2d3cc97ee45"
+      "text_fingerprint": "50c8b2d3cc97ee45",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war": {
       "first_attempt_at": "2026-11-07T19:40:07.849079Z",
@@ -2361,24 +2359,6 @@
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
       "text_fingerprint": "eb89953564381c5e"
-    },
-    "https://www.rochvalleyradio.com/news-features/179/culture/1272/stories-we-tell-returns-to-rochdale-for-final-night-after-sell-out-run": {
-      "first_attempt_at": "2026-11-01T16:32:44.927678Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochvalleyradio.com/news-features/179/culture/1272/stories-we-tell-returns-to-rochdale-for-final-night-after-sell-out-run"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-01T18:41:48.414791Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
-      "title": "Stories We Tell returns to Rochdale for final night after sell-out run",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "news",
-      "text_fingerprint": "fb693ed6b83f4e24",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
     },
     "https://www.rochvalleyradio.com/news-features/6/lifestyle-entertainment/1319/actor-returns-to-stage-after-ms-diagnosis-for-rochdale-comedy-show": {
       "first_attempt_at": "2026-11-01T22:09:44.993582Z",
