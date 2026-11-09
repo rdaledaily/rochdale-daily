@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-09T15:38:31.718721Z",
+  "last_run_at": "2026-11-09T16:01:33.105705Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,43 +42,35 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 120,
+  "raw_candidates_before_job_filter": 119,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 120,
+  "raw_candidates": 119,
   "candidate_clusters": 35,
   "google_news_resolution": {
-    "wrappers": 60,
+    "wrappers": 58,
     "resolved": 31,
     "text_recovered": 25,
     "reattributed": 1,
     "images_found": 30
   },
-  "duplicates_merged": 85,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 3,
+  "duplicates_merged": 84,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
   "drafted_articles": [
-    {
-      "slug": "cranmer-education-trust-staff-gather-to-enhance-children-s-education",
-      "source_url": "https://www.rochdaletimes.co.uk/school-staff-unite-to-help-improve-childrens-lives/"
-    },
-    {
-      "slug": "rochdale-boroughwide-housing-ranks-among-top-25-landlords-in-national-tenant-sat",
-      "source_url": "https://www.rbh.org.uk/news/rbh-news/national-tenant-satisfaction-figures-rank-rbh-among-the-top-25-of-landlords/"
-    },
     {
       "slug": "rochdale-adam-drug-line-haider-ali-jailed",
       "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/jailed-trusted-dealer-who-ran-34885798"
     }
   ],
-  "new_articles": 3,
+  "new_articles": 1,
   "live_articles": 582,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 2,
     "queued_for_retry": 1,
-    "recovery_limit_reached": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 2,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -88,16 +80,25 @@
     "entries": 140,
     "by_outcome": {
       "failed": 21,
-      "published": 92,
-      "rejected": 27
+      "published": 91,
+      "rejected": 28
     },
-    "held_back_this_run": 21,
-    "held_already_published": 17,
-    "held_rejected": 4,
+    "held_back_this_run": 23,
+    "held_already_published": 18,
+    "held_rejected": 5,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rbh.org.uk/news/rbh-news/national-tenant-satisfaction-figures-rank-rbh-among-the-top-25-of-landlords",
+      "title": "National tenant satisfaction figures rank RBH among the top 25% of landlords",
+      "source_name": "Rochdale Boroughwide Housing",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-09T15:38:31.713324Z"
+    },
     {
       "url": "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war",
       "title": "Lest We Forget: Rochdale battalion's valiant sacrifices during the First World War",
@@ -136,13 +137,11 @@
     }
   ],
   "published_with_style_issues": {
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 152.": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 170.": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 107,
+    "rss_and_google_news": 106,
     "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
@@ -295,7 +294,7 @@
   },
   "source_counts": {
     "Manchester Evening News": 21,
-    "Rochdale Times": 16,
+    "Rochdale Times": 17,
     "Rochdale AFC": 12,
     "Roch Valley Radio": 9,
     "BBC": 9,
@@ -307,7 +306,6 @@
     "Slough Observer": 2,
     "The Northern Echo": 2,
     "Ipswich Star": 2,
-    "Place North West": 2,
     "Rhyl Journal": 2,
     "Rochdale Borough Council": 2,
     "Daily Record": 2,
@@ -318,10 +316,10 @@
     "Hampshire Chronicle": 1,
     "Exmouth Journal": 1,
     "Alloa Advertiser": 1,
-    "www.eastkilbridetoday.co.uk": 1,
     "Wirral Globe": 1,
     "EDP24": 1,
     "Yahoo News UK": 1,
+    "Place North West": 1,
     "Greater Manchester Police": 1,
     "Runcorn and Widnes World": 1,
     "Birmingham Now": 1,
@@ -331,13 +329,11 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "business": 1,
-    "community": 1,
     "news": 1
   },
   "published_by_category": {
     "business": 62,
-    "community": 85,
+    "community": 84,
     "crime": 36,
     "education": 28,
     "environment": 47,
@@ -372,13 +368,9 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "business-v3-e87a4b881d6a2bb10a60",
-    "community-v3-a8a11868e5c133c4b74c",
     "hard-news-v3-a8f5ede5f37b772b6c86"
   ],
   "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/school-staff-unite-to-help-improve-childrens-lives/",
-    "https://www.rbh.org.uk/news/rbh-news/national-tenant-satisfaction-figures-rank-rbh-among-the-top-25-of-landlords/",
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/jailed-trusted-dealer-who-ran-34885798"
   ],
   "x_social_records": 0,
@@ -391,13 +383,9 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "business",
-      "community",
       "news"
     ],
     "selected_categories": [
-      "business",
-      "community",
       "news"
     ],
     "available_wards": [],
@@ -410,18 +398,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "business": 1,
-      "community": 1,
       "news": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 1
     },
     "selected_by_source": {
-      "manchester evening news": 1,
-      "rochdale boroughwide housing": 1,
-      "rochdale times": 1
+      "manchester evening news": 1
     },
     "must_cover_selected": 0
   },
@@ -982,8 +966,12 @@
     "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPTzdqU1hOTGdyMmdNUWpOdUdiYXlRWFpwLW5DbmxabTZZSW4tazdOaTF0U1gzSERrcWtkRmt4X1NOTVpCRDBveEtTTXI1LTRHeV9TNnhHR19VZFU3VV9TdHBVcEVuSGw4cVpGSEl1cG5CdGp4cWM3S3BScmxVT2JRdlRWeWF1a3d0TXVXdEdVd2FkSFZaVlFGZDNUSlc4VkJUT1FLVWV0YXA1UHfSAbABQVVfeXFMUER0Y1BPWlZBWTZfZ0o3bFVfWUNTSHc2NjItLVhrTDFtcDlvOGp5Z0JOd1JwVTJ5eXJhaHBTTWtSOVBVUDRpQndNUHpVc0xWS0pvNkd1am5tS0M4dE56Vklud0NoNmN3Y2hMaGFPVnlna1d2d3hXVlRTYWxuUFpPZzBoNEY1NERvMWhFbXA3dTM0b2s3bGU2MUtwb2VfYnlzcnFqOHZlNGQzX1JhY2U4Rjc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "yourtrustrochdale.co.uk"
+  ],
+  "slow_domain_failure_counts": {
+    "yourtrustrochdale.co.uk": 1
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1019,7 +1007,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-09T15:56:58.151377Z",
+  "frontpage_generated_at": "2026-11-09T16:15:46.589899Z",
   "frontpage_article_count": 24,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1118,9 +1106,9 @@
   "events_kept_other_source": 36,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 12,
+  "approved_ticket_events": 11,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 583,
+  "duplicate_articles_after_postprocessing": 582,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1130,11 +1118,9 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 26,
-  "whats_on_event_count": 12,
-  "published_after_editorial_gate": 3,
+  "whats_on_event_count": 11,
+  "published_after_editorial_gate": 1,
   "published_new_slugs": [
-    "cranmer-education-trust-staff-gather-to-enhance-children-s-education",
-    "rochdale-boroughwide-housing-ranks-among-top-25-landlords-in-national-tenant-sat",
     "rochdale-adam-drug-line-haider-ali-jailed"
   ],
   "drafts_not_published": 0,
