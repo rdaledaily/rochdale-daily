@@ -54,7 +54,7 @@ PUBLIC_DIRS = ("articles", "news", "wards", "showbiz")
 DEDICATED_ROUTE_FILES = {"category.html", "post.html"}
 
 TOKEN_HREF = "/assets/css/rd-tokens.css"
-TOKEN_VERSIONED_HREF = TOKEN_HREF + "?v=20261014-font-repair"
+TOKEN_VERSIONED_HREF = TOKEN_HREF + "?v=20261109-phone-menu"
 EDITORIAL_HREF = "/assets/css/editorial-theme.css"
 ROUTE_HREF = "/assets/css/legacy-routing-pages.css"
 TOKEN_LINK = f'<link rel="stylesheet" href="{TOKEN_VERSIONED_HREF}" data-rd-universal="tokens">'

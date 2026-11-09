@@ -23,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
   <!-- The paper's single source of truth for colour, type and spacing.
        Every page loads this; nothing defines a raw palette of its own. -->
-  <link rel="stylesheet" href="/assets/css/rd-tokens.css?v=20261014-font-repair">
+  <link rel="stylesheet" href="/assets/css/rd-tokens.css?v=20261109-phone-menu">
   <style>
     /* The palette, type scale and spacing now live in
        /assets/css/rd-tokens.css, loaded above. This page used to carry its
@@ -1233,6 +1233,23 @@
   
   <!-- Modern editorial surface, loaded after the legacy newsroom styles -->
   <link rel="stylesheet" href="/assets/css/frontpage-refresh.css?v=20261013a">
+  <!-- Phone menu rows. Inline on purpose: phones kept a cached stylesheet
+       and showed the dropdown flush-left with no dividers. -->
+  <style id="rd-phone-menu">
+    @media (max-width: 620px) {
+      html body .primary-nav .nav-list { row-gap: 0 !important; column-gap: 0 !important; padding: 6px 0 !important; }
+      html body .primary-nav .nav-list li { width: 100% !important; margin: 0 !important; }
+      html body .primary-nav .nav-list a,
+      html body .primary-nav .nav-list button {
+        display: flex !important; align-items: center !important; width: 100% !important; box-sizing: border-box !important;
+        min-height: 46px !important; padding: 0 18px !important;
+        border: 0 !important; border-bottom: 1px solid var(--line, #e2e8ee) !important;
+        line-height: 1.25 !important; text-align: left !important;
+      }
+      html body .primary-nav .nav-list li:last-child a,
+      html body .primary-nav .nav-list li:last-child button { border-bottom: 0 !important; }
+    }
+  </style>
   
   
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#111111">  
