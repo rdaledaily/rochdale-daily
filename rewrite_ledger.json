@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-09T14:05:03.945313Z",
+  "updated_at": "2026-11-09T14:41:29.746980Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 137,
@@ -1515,11 +1515,12 @@
       "first_attempt_at": "2026-11-09T13:42:26.147342Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMigAFBVV95cUxNUWhjdGxPT3hFNzZiMl9TenItWW4wQ0JpT3BuN3o0X3M5UlFpNmNFYXYzdTRtbWRjblpBREY0TXJZcy1KNUQ1cE4tcEl6LWgyNEUyT3ljempOOXJlbGxTSlgxcTFKN2x5SWdvVWtkRWNxd1N1RnZaYU1sbkNpS3g4TA?oc=5",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/t-34884746"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T13:42:26.147342Z",
+      "last_attempt_at": "2026-11-09T14:41:29.746817Z",
       "outcome": "published",
       "reason": "",
       "title": "'Stay vigilant' warning after family gold burglaries in Greater Manchester",
@@ -1691,8 +1692,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-09T14:05:03.945041Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "National tenant satisfaction figures rank RBH among the top 25% of landlords",
       "source_name": "Rochdale Boroughwide Housing",
       "category": "community",
