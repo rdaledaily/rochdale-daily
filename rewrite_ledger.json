@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-10T21:06:43.165695Z",
+  "updated_at": "2026-11-10T21:21:01.281775Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 157,
@@ -786,13 +786,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T21:06:43.164494Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-10T21:21:01.281667Z",
+      "outcome": "editorial_twin",
+      "reason": "covered by the editor's story /articles/rochdale-adam-drug-line-haider-ali-jailed",
       "title": "Trusted Dealer in Rochdale's Notorious 'Adam' Drugs Gang Jailed for More Than 10 Years - UK News in Pictures",
       "source_name": "UKNIP",
       "category": "crime",
-      "text_fingerprint": "1be118bca876bb5b"
+      "text_fingerprint": "1be118bca876bb5b",
+      "recovery_attempts": 1
     },
     "https://www.alloaadvertiser.com/sport/national/26709073.ian-watson-praises-rochdale-bravery-beating-fleetwood-fa-cup": {
       "first_attempt_at": "2026-11-10T00:02:15.662881Z",
@@ -1637,8 +1638,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T21:06:43.165167Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Jailed, the 'trusted' dealer who ran the notorious 'Adam' line",
       "source_name": "Manchester Evening News",
       "category": "crime",
