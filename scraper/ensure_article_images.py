@@ -688,7 +688,8 @@ def enforce_article(article: dict[str, Any], root: Path) -> str:
 
     from image_hierarchy import choose_image
     tier = choose_image(article, root)
-    return {'commons': 'kept-existing', 'internal': 'cards-library', 'town-photo': 'town-photo'}.get(tier, 'cards-generated')
+    return {'commons': 'kept-existing', 'internal': 'cards-library', 'town-photo': 'town-photo',
+            'police-photo': 'police-photo'}.get(tier, 'cards-generated')
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:

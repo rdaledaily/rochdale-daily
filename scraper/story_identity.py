@@ -17,7 +17,7 @@ import html
 from functools import lru_cache
 import re
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Iterable
 from urllib.parse import urlparse, urlunparse
 
 TAG_RE = re.compile(r"<[^>]+>")
@@ -1123,6 +1123,85 @@ def same_story(left: Any, right: Any) -> bool:
         return True
 
     return story_similarity(left, right) >= DEFAULT_MATCH_THRESHOLD
+
+
+# Editorial twins (editor, 10 Nov 2026: "remove duplicates as a rule").
+#
+# The pipeline kept publishing its own rewrite of a story the editor had
+# already published by hand: the 'Adam' drug-line sentencing (0.64) and the
+# family-gold burglary warning (0.66) each ran twice on the front page, the
+# automated copy with a place card instead of her photo. Both pairs score
+# under DEFAULT_MATCH_THRESHOLD, and lowering that bar globally was measured
+# and rejected (it merges unrelated events first - see same_story()).
+#
+# The narrower case is safe at a lower bar. Measured 10 Nov 2026 over all 591
+# live records: of every editor-vs-automated pair published within 48 hours,
+# exactly three score 0.55 or more, and all three are the same story told
+# twice (the two above plus the Asda worker story, 0.60). The next pair down
+# is 0.48 (a College Bank feature against a different College Bank report).
+# Two of the editor's own stories never pass through here: she decides those.
+EDITORIAL_TWIN_THRESHOLD = 0.55
+EDITORIAL_TWIN_HOURS = 48.0
+
+
+def _is_roundup_like(record: Any) -> bool:
+    # Briefings summarise many stories and resemble each of them (see _is_roundup).
+    return bool(ROUNDUP_SLUG_RE.match(str(get_value(record, "slug", "") or ""))
+                or str(get_value(record, "id", "") or "").startswith("briefing-"))
+
+
+def is_editor_record(record: Any) -> bool:
+    return bool(get_value(record, "manual_article", False) or get_value(record, "editorial_lock", False))
+
+
+def editorial_twin(editor: Any, automated: Any) -> bool:
+    """True when ``automated`` is the pipeline's copy of the editor's story."""
+    if not is_editor_record(editor) or is_editor_record(automated):
+        return False
+    if _is_roundup_like(editor) or _is_roundup_like(automated):
+        return False
+    if _parsed_datetime(editor) is None or _parsed_datetime(automated) is None:
+        return False
+    if hours_apart(editor, automated) > EDITORIAL_TWIN_HOURS:
+        return False
+    if category_family(editor) == "sport" or category_family(automated) == "sport":
+        # A preview and a match report two days apart share every name.
+        if date_key(editor) != date_key(automated):
+            return False
+    if not _twin_evidence(editor, automated):
+        return False
+    return story_similarity(editor, automated) >= EDITORIAL_TWIN_THRESHOLD
+
+
+_TWIN_FILLER = frozenset({
+    "about", "after", "also", "and", "are", "for", "from", "have", "into", "over",
+    "says", "said", "that", "the", "their", "this", "what", "when", "where", "which",
+    "while", "who", "will", "with", "rochdale", "borough", "local", "news",
+})
+
+
+def _twin_evidence(left: Any, right: Any) -> bool:
+    """Shared facts, not just a shared floor.
+
+    ongoing_story_match() lifts some unrelated pairs to 0.78 with nothing in
+    common (measured: a Middleton flat-fire death against a war-memorial
+    feature). A twin must share a named entity or two real subject words.
+    """
+    if named_entities(left) & named_entities(right):
+        return True
+    shared = {
+        token for token in subject_tokens(left) & subject_tokens(right)
+        if len(token) > 3 and token not in _TWIN_FILLER
+    }
+    return len(shared) >= 2
+
+
+def editorial_twin_of(automated: Any, records: Iterable[Any]) -> Any:
+    """The editor record ``automated`` duplicates, else None."""
+    for record in records:
+        if editorial_twin(record, automated):
+            return record
+    return None
 
 
 def authority_score(item: Any) -> float:

@@ -567,5 +567,32 @@ def choose_image(article, root, relevance=None, allow_network=True, rejected=())
     article.pop('commons_validated_for', None)
     if set_town_photo(article, root, cache, cache_file, allow_network):
         return 'town-photo'
+    # Editor, 8 Nov 2026: a police-involved story with no photo of its own
+    # carries the standard police photo, never the beige place card. Measured
+    # 10 Nov 2026: 20 live crime/police stories were on the place card - the
+    # rule lived only in source_presentation.enforce_police_image, which runs
+    # before this backfill and also wanted a court word in the headline.
+    # (The Incident card already won at the top of choose_image.)
+    if police_story(article) and set_police_photo(article, root):
+        return 'police-photo'
     set_place_card(article, root)
     return 'place-card'
+
+
+POLICE_PHOTO = 'assets/img/cards/police.jpg'
+
+
+def police_story(article):
+    return (str(article.get('category') or '').casefold() in {'crime', 'courts'}
+            or bool(article.get('police_matter')))
+
+
+def set_police_photo(article, root):
+    if not (root / POLICE_PHOTO).is_file():
+        return False
+    article.update(image_url=POLICE_PHOTO, img=POLICE_PHOTO, image_credit='Rochdale Daily',
+                   image_credit_url='https://rochdaledaily.co.uk/', image_status='standard-police-image',
+                   image_backfill_method='police-photo-after-internal-and-commons',
+                   image_alt='Police file photo. Not a photograph of this event.',
+                   image_policy=POLICY)
+    return True

@@ -396,7 +396,14 @@ class TownPhotoTests(unittest.TestCase):
              patch.object(g, "town_pool", return_value=self.pool(5)), \
              patch("repair_generated_with_commons.download", side_effect=fake_download):
             self.assertEqual(ih.choose_image(story, root), "town-photo")
-            self.assertEqual(ih.choose_image(crime, root), "place-card")
+            # No police photo in the library: the honest place card.
+            self.assertEqual(ih.choose_image(dict(crime), root), "place-card")
+            # Editor, 8 Nov 2026: with the police photo present, a crime story
+            # with no photo of its own carries it, never a town photo or card.
+            Image.new("RGB", (640, 480), "navy").save(root / "assets/img/cards/police.jpg")
+            self.assertEqual(ih.choose_image(crime, root), "police-photo")
+        self.assertEqual(crime["image_url"], "assets/img/cards/police.jpg")
+        self.assertEqual(crime["image_status"], "standard-police-image")
         self.assertEqual(story["image_status"], "town-file-photo")
         self.assertEqual(story["image_alt"], "File photo: Heywood. Not a photograph of this event.")
         self.assertEqual(story["image_credit"], "A N Other / Geograph (CC BY-SA 2.0)")

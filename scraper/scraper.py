@@ -3612,6 +3612,10 @@ def rewrite_ledger_block_reason(candidate: Any) -> str:
     outcome = str(entry.get('outcome') or '')
     if outcome == 'failed':
         return ''
+    # The editor already published this story; editorial_twins.py removed the
+    # pipeline's copy and marked its source. New related links do not reopen it.
+    if outcome == 'editorial_twin':
+        return f'already covered by the editor: {entry.get("reason") or ""}'.rstrip(': ')
     if candidate_source_identities(candidate) - set(entry.get('urls') or []):
         return ''
     # A corrected or substantively updated source deserves reconsideration;

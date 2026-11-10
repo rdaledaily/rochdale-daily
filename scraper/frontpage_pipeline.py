@@ -57,6 +57,7 @@ from story_identity import (
     strip_publisher_suffix,
 )
 from manual_articles import load_manual_article_records
+from editorial_twins import retire_twins, split_editorial_twins
 from manual_events import load_manual_event_records
 from story_image import compose_story_card
 from ensure_article_images import enforce_article
@@ -1814,12 +1815,24 @@ def main() -> int:
         if str(article.get("status") or "published").lower() == "published":
             enforce_article(article, Path.cwd())
     merged = _dedupe_by_slug(merged)
+    # One story, one page (editor, 10 Nov 2026): the pipeline's own copy of a
+    # story the editor has already published leaves the feed here, before any
+    # front page, section, briefing or Facebook post is derived from it.
+    merged, editorial_twins = split_editorial_twins(merged)
     merged.sort(
         key=lambda article: original_publication_date(article)
         or datetime.min.replace(tzinfo=timezone.utc),
         reverse=True,
     )
     write_json_atomic(ARTICLES_PATH, merged)
+    twin_report = retire_twins(
+        editorial_twins,
+        pages_dir=ARTICLE_PAGES_DIR,
+        redirects_path=ARTICLES_PATH.parent / "_redirects",
+        ledger_path=ARTICLES_PATH.parent / "rewrite_ledger.json",
+    )
+    if editorial_twins:
+        print(f"Editorial twins removed: {twin_report}")
     stale_article_pages_removed = cleanup_stale_article_pages(merged, blocklist)
 
     frontpage, coverage = select_frontpage(merged, now)
