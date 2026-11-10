@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-10T16:56:29.830097Z",
+  "updated_at": "2026-11-10T17:17:38.366558Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 153,
@@ -1573,8 +1573,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T16:56:29.829797Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Man, 67, who died in flat fire named as friends pay tribute",
       "source_name": "Manchester Evening News",
       "category": "news",
@@ -2573,14 +2573,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T16:37:39.225177Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-10T17:17:38.366361Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Driver jailed after Rochdale pursuit in which police car struck pedestrian",
       "source_name": "Roch Valley Radio",
       "category": "crime",
       "text_fingerprint": "dcab480cb383b5cd",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.sportsmole.co.uk/football/fleetwood-town/fa-cup/preview/fleetwood-vs-rochdale-prediction-team-news-lineups_608463.html": {
       "first_attempt_at": "2026-11-05T21:10:34.592828Z",
