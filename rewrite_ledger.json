@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-10T00:28:21.581157Z",
+  "updated_at": "2026-11-10T00:42:13.526354Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 144,
@@ -1398,8 +1398,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T00:28:21.580864Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Rochdale residents stand together in silence to remember our nation's heroes - InYourArea",
       "source_name": "InYourArea",
       "category": "news",
@@ -2397,13 +2397,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-08T19:08:01.970490Z",
+      "last_attempt_at": "2026-11-10T00:42:13.526270Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale Remembrance Sunday",
       "source_name": "Roch Valley Radio",
       "category": "sport",
-      "text_fingerprint": "fa0316528700b1d6"
+      "text_fingerprint": "fa0316528700b1d6",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-as-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war": {
       "first_attempt_at": "2026-11-09T18:48:38.125276Z",
