@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-10T16:17:54.129405Z",
+  "updated_at": "2026-11-10T16:37:39.225807Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 152,
+  "count": 153,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -1555,8 +1555,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T16:17:54.129174Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Jailed, the 'trusted' dealer who ran the notorious 'Adam' line",
       "source_name": "Manchester Evening News",
       "category": "crime",
@@ -1572,13 +1572,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T16:00:32.540949Z",
+      "last_attempt_at": "2026-11-10T16:37:39.225377Z",
       "outcome": "published",
       "reason": "",
       "title": "Man, 67, who died in flat fire named as friends pay tribute",
       "source_name": "Manchester Evening News",
       "category": "news",
-      "text_fingerprint": "5353b103e380c358"
+      "text_fingerprint": "5353b103e380c358",
+      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/multi-billion-plan-transform-rochdale-34839906": {
       "first_attempt_at": "2026-11-03T12:49:28.849060Z",
@@ -1991,6 +1992,22 @@
       "source_name": "Rochdale Borough Council News",
       "category": "environment",
       "text_fingerprint": "f762d8fd771dea78"
+    },
+    "https://www.rochdale.gov.uk/news/article/695/shortlisting-announced-for-raising-rochdale-education-awards-2026": {
+      "first_attempt_at": "2026-11-10T16:37:39.225707Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/news/article/695/shortlisting-announced-for-raising-rochdale-education-awards-2026"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-10T16:37:39.225707Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Shortlisting announced for Raising Rochdale Education Awards 2026 – Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council News",
+      "category": "education",
+      "text_fingerprint": "29f3fbdd9e027059"
     },
     "https://www.rochdale.gov.uk/news/article/696/christmas-toy-appeal-calls-on-borough-residents-to-help-families-in-need": {
       "first_attempt_at": "2026-11-10T16:00:32.541251Z",
@@ -2556,14 +2573,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T16:17:54.129005Z",
+      "last_attempt_at": "2026-11-10T16:37:39.225177Z",
       "outcome": "published",
       "reason": "",
       "title": "Driver jailed after Rochdale pursuit in which police car struck pedestrian",
       "source_name": "Roch Valley Radio",
       "category": "crime",
       "text_fingerprint": "dcab480cb383b5cd",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.sportsmole.co.uk/football/fleetwood-town/fa-cup/preview/fleetwood-vs-rochdale-prediction-team-news-lineups_608463.html": {
       "first_attempt_at": "2026-11-05T21:10:34.592828Z",
