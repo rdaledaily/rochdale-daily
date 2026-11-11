@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-11T09:27:33.423418Z",
+  "updated_at": "2026-11-11T10:00:41.104590Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 154,
+  "count": 153,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -471,23 +471,6 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "e1eed1495da85ab1"
-    },
-    "https://rochdaleafc.co.uk/tuesdays-trophy-guide": {
-      "first_attempt_at": "2026-11-02T18:36:11.173351Z",
-      "attempts": 2,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBEamlFZlRDX01obkZVWE9HT3VibHhTd01HbldaMnV4ZnpJZVEzeUZ0aS1qOXBlaFJscjJJeXFUWDZSNnRhLUlrbE00czFmY2xZM2lId3hhckN6OVdU?oc=5",
-        "https://rochdaleafc.co.uk/tuesdays-trophy-guide"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-03T09:25:15.055032Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
-      "title": "Tuesday's Trophy Guide",
-      "source_name": "Rochdale AFC",
-      "category": "sport",
-      "text_fingerprint": "cf96d0ce824f90bd"
     },
     "https://rochdaleafc.co.uk/watson-post-doncaster-031126": {
       "first_attempt_at": "2026-11-04T21:03:55.537422Z",
@@ -2003,13 +1986,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T22:13:18.456367Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-11T10:00:41.104400Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "16 men charged with disorder ahead of Manchester United match - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
-      "text_fingerprint": "3ebd3c2bab8eefc4"
+      "text_fingerprint": "3ebd3c2bab8eefc4",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/college-kicks-off-football-partnership-with-rochdale-afc": {
       "first_attempt_at": "2026-11-03T19:40:06.769802Z",
@@ -2523,12 +2507,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T16:00:32.540890Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Sixteen men charged with violent disorder are on bail ahead of a court appearance on 4 January 2027",
       "source_name": "Roch Valley Radio",
       "category": "crime",
-      "text_fingerprint": "39e22e78f2999adf"
+      "text_fingerprint": "39e22e78f2999adf",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/4/crime/1421/driver-jailed-after-rochdale-pursuit-in-which-police-car-struck-pedestrian": {
       "first_attempt_at": "2026-11-10T16:00:32.540548Z",
