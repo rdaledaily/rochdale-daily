@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-11T13:06:26.433861Z",
+  "updated_at": "2026-11-11T13:23:36.292693Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 144,
@@ -1136,22 +1136,6 @@
       "category": "business",
       "text_fingerprint": "05b35e828c7a8485"
     },
-    "https://www.find-tender.service.gov.uk/Notice/104203-2026": {
-      "first_attempt_at": "2026-11-03T13:12:49.686208Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.find-tender.service.gov.uk/Notice/104203-2026"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-03T13:12:49.686208Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Rochdale Borough Council awards contract: Income Management System",
-      "source_name": "Find a Tender",
-      "category": "business",
-      "text_fingerprint": "f383fd75749a5b03"
-    },
     "https://www.find-tender.service.gov.uk/Notice/104534-2026": {
       "first_attempt_at": "2026-11-04T13:41:37.094695Z",
       "attempts": 1,
@@ -1852,14 +1836,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T12:26:04.323679Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-11T13:23:36.292398Z",
+      "outcome": "published",
+      "reason": "",
       "title": "16 men charged with disorder ahead of Manchester United match - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "3ebd3c2bab8eefc4",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/college-kicks-off-football-partnership-with-rochdale-afc": {
       "first_attempt_at": "2026-11-03T19:40:06.769802Z",
@@ -2226,6 +2211,22 @@
       "category": "sport",
       "text_fingerprint": "fa0316528700b1d6",
       "recovery_attempts": 2
+    },
+    "https://www.rochvalleyradio.com/news-features/140/business/1428/rochdale-shop-ireef-named-marine-fish-retailer-of-the-year": {
+      "first_attempt_at": "2026-11-11T13:23:36.292612Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/140/business/1428/rochdale-shop-ireef-named-marine-fish-retailer-of-the-year"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-11T13:23:36.292612Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rochdale shop iREEF named Marine Fish Retailer of the Year",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "news",
+      "text_fingerprint": "202a38380f397123"
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-as-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war": {
       "first_attempt_at": "2026-11-09T18:48:38.125276Z",
