@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-11T10:37:57.440724Z",
+  "updated_at": "2026-11-11T10:57:53.059671Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 152,
@@ -1968,14 +1968,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T10:23:43.904300Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-11T10:57:53.059449Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "16 men charged with disorder ahead of Manchester United match - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "3ebd3c2bab8eefc4",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochdaletimes.co.uk/college-kicks-off-football-partnership-with-rochdale-afc": {
       "first_attempt_at": "2026-11-03T19:40:06.769802Z",
