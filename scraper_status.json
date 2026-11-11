@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-11T08:00:10.928037Z",
+  "last_run_at": "2026-11-11T08:13:31.262415Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,18 +42,18 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 138,
-  "job_or_career_posts_rejected": 7,
-  "raw_candidates": 131,
-  "candidate_clusters": 48,
+  "raw_candidates_before_job_filter": 124,
+  "job_or_career_posts_rejected": 5,
+  "raw_candidates": 119,
+  "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 48,
-    "resolved": 37,
-    "text_recovered": 21,
+    "wrappers": 60,
+    "resolved": 48,
+    "text_recovered": 17,
     "reattributed": 0,
-    "images_found": 35
+    "images_found": 20
   },
-  "duplicates_merged": 83,
+  "duplicates_merged": 72,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -79,9 +79,9 @@
       "published": 105,
       "rejected": 28
     },
-    "held_back_this_run": 37,
+    "held_back_this_run": 36,
     "held_already_published": 27,
-    "held_rejected": 10,
+    "held_rejected": 9,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -103,15 +103,6 @@
       "outcome": "rejected",
       "attempts": 1,
       "last_attempt_at": "2026-11-11T02:49:01.239947Z"
-    },
-    {
-      "url": "https://uknip.co.uk/news/uk/uk-news/trusted-dealer-in-rochdales-notorious-adam-drugs-gang-jailed-for-more-than-10-years",
-      "title": "Trusted Dealer in Rochdale's Notorious 'Adam' Drugs Gang Jailed for More Than 10 Years - UK News in Pictures",
-      "source_name": "UKNIP",
-      "held_because": "already covered by the editor: covered by the editor's story /articles/rochdale-adam-drug-line-haider-ali-jailed",
-      "outcome": "editorial_twin",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-10T21:21:01.281667Z"
     },
     {
       "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/jailed-trusted-dealer-who-ran-34885798",
@@ -180,8 +171,8 @@
   "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 119,
-    "website_discovery": 14,
+    "rss_and_google_news": 111,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -190,7 +181,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 3
+    "men_newsletter": 1
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -237,12 +228,28 @@
       "bozo": false,
       "feed_title": ""
     },
+    "St Cuthbert's RC High School": {
+      "url": "https://stcuthberts.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html",
+      "final_url": "https://stcuthberts.com/feed/",
+      "bozo": true,
+      "feed_title": ""
+    },
     "Rochdale AFC Community Trust": {
       "url": "https://www.rochdaleafccommunity.org/feed/",
       "http_status": 403,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.rochdaleafccommunity.org/feed/",
       "bozo": false,
+      "feed_title": ""
+    },
+    "Hopwood Hall College": {
+      "url": "https://www.hopwood.ac.uk/feed/",
+      "http_status": 403,
+      "content_type": "text/html",
+      "final_url": "https://www.hopwood.ac.uk/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -281,34 +288,15 @@
     "source": "MEN MyRochdale newsletter",
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
-    "stories_in_window": 8,
-    "covered": 5,
-    "outstanding": 3,
+    "stories_in_window": 4,
+    "covered": 3,
+    "outstanding": 1,
     "removed_by_editor": 0,
     "by_status": {
-      "already_covered": 5,
-      "held": 1,
-      "held_for_editor": 2
+      "already_covered": 3,
+      "held": 1
     },
     "outstanding_stories": [
-      {
-        "id": "ea220735aa84d1eb",
-        "headline": "17 months ago, she was a serving police officer. Now she's in jail",
-        "received_at": "2026-11-04T08:07:48+00:00",
-        "status": "held_for_editor",
-        "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
-        "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/waited-learn-fate-career-already-34823808",
-        "resolved_title": "17 months ago, she was a serving Greater Manchester Police officer. Now she's in jail"
-      },
-      {
-        "id": "0407ddee9e571e8f",
-        "headline": "Alleged grooming gang leader denies having sex with girls",
-        "received_at": "2026-11-04T08:07:48+00:00",
-        "status": "held_for_editor",
-        "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
-        "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/alleged-ringleader-group-men-accused-34856051",
-        "resolved_title": "Alleged 'ringleader' of group of men accused of sexually abusing three girls denies having sex with accusers"
-      },
       {
         "id": "c4d467c1587758ed",
         "headline": "Resident escapes from second floor as fire tears through sheltered housing flat",
@@ -322,20 +310,19 @@
   },
   "source_counts": {
     "Roch Valley Radio": 25,
-    "Rochdale Times": 22,
-    "Rochdale Borough Council": 16,
-    "Rochdale AFC": 13,
+    "Rochdale Times": 16,
+    "Rochdale Borough Council": 15,
+    "Rochdale AFC": 10,
     "Manchester Evening News": 9,
-    "InYourArea": 7,
     "Oldham Times": 6,
+    "InYourArea": 6,
     "Facebook": 4,
     "Roch Valley Radio Local News": 4,
     "Bee Network live travel alerts": 4,
     "Rochdale Borough Council RSS": 2,
-    "UKNIP": 2,
+    "Total Rugby League": 2,
     "Asian Image": 2,
     "Rochdale Borough Council News": 2,
-    "St Cuthbert's RC High School": 1,
     "Netweather": 1,
     "Wirral Globe": 1,
     "Yahoo": 1,
@@ -955,8 +942,12 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "visitrochdale.com": 2
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -992,7 +983,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-11T08:01:10.167008Z",
+  "frontpage_generated_at": "2026-11-11T08:14:21.290629Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
