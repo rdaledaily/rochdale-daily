@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-11T15:52:19.070784Z",
+  "updated_at": "2026-11-11T16:12:23.954824Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 145,
+  "count": 146,
   "entries": {
     "http://www.fansnetwork.co.uk/football/rochdale/news/67160": {
       "first_attempt_at": "2026-11-02T18:01:46.724961Z",
@@ -1945,14 +1945,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T15:52:19.070392Z",
+      "last_attempt_at": "2026-11-11T16:12:23.954568Z",
       "outcome": "published",
       "reason": "",
       "title": "Middleton man charged with aggravated burglaries and attempted murder - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "79681a500b05cc6f",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/new-appointments-to-drive-improvements-in-town": {
@@ -1998,8 +1998,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-11T15:52:19.070600Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Organised crime gang ‘manager’ jailed for supplying class-A drugs - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
@@ -2403,6 +2403,23 @@
       "text_fingerprint": "dcab480cb383b5cd",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://www.rochvalleyradio.com/news-features/4/crime/1429/man-arrested-for-possessing-an-imitation-firearm-at-rochdale-armistice-day-event": {
+      "first_attempt_at": "2026-11-11T16:12:23.954754Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochvalleyradio.com/news-features/4/crime/1429/man-arrested-for-possessing-an-imitation-firearm-at-rochdale-armistice-day-event",
+        "https://www.rochvalleyradio.com/news-features/4/crime/1429/man-arrested-on-suspicion-of-possessing-imitation-firearm-at-rochdale-armistice-day-event"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-11T16:12:23.954754Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Man arrested for possessing an imitation firearm at Rochdale Armistice Day event",
+      "source_name": "Roch Valley Radio Local News",
+      "category": "crime",
+      "text_fingerprint": "abf9148b804d37c0"
     },
     "https://www.sportsmole.co.uk/football/fleetwood-town/fa-cup/preview/fleetwood-vs-rochdale-prediction-team-news-lineups_608463.html": {
       "first_attempt_at": "2026-11-05T21:10:34.592828Z",
