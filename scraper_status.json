@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-11T11:57:49.466886Z",
+  "last_run_at": "2026-11-11T12:26:04.328291Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,23 +42,28 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 124,
-  "job_or_career_posts_rejected": 6,
-  "raw_candidates": 118,
+  "raw_candidates_before_job_filter": 129,
+  "job_or_career_posts_rejected": 7,
+  "raw_candidates": 122,
   "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 39,
+    "wrappers": 43,
     "resolved": 28,
     "text_recovered": 16,
     "reattributed": 0,
     "images_found": 26
   },
-  "duplicates_merged": 75,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 606,
+  "duplicates_merged": 79,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "sixteen-men-charged-with-violent-disorder-ahead-of-manchester-united-match",
+      "source_url": "https://www.rochdaletimes.co.uk/16-men-charged-with-disorder-ahead-of-manchester-united-match/"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 607,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
@@ -76,25 +81,16 @@
     "by_outcome": {
       "editorial_twin": 3,
       "failed": 12,
-      "published": 101,
-      "rejected": 28
+      "published": 102,
+      "rejected": 27
     },
-    "held_back_this_run": 33,
+    "held_back_this_run": 32,
     "held_already_published": 24,
-    "held_rejected": 9,
+    "held_rejected": 8,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
-    {
-      "url": "https://www.rochdaletimes.co.uk/16-men-charged-with-disorder-ahead-of-manchester-united-match",
-      "title": "16 men charged with disorder ahead of Manchester United match - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "held_because": "already rejected: not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-11T11:36:34.542586Z"
-    },
     {
       "url": "https://www.hornetsrugbyleague.co.uk/article/1928/attend-our-2027-kit-launch-event",
       "title": "Attend our 2027 kit launch event",
@@ -168,13 +164,15 @@
       "last_attempt_at": "2026-11-09T23:42:53.832554Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 158.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 105,
+    "rss_and_google_news": 109,
     "website_discovery": 14,
     "aggregator_discovery": 0,
-    "live_service_pages": 4,
+    "live_service_pages": 5,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -332,20 +330,20 @@
     ]
   },
   "source_counts": {
-    "Roch Valley Radio": 26,
+    "Roch Valley Radio": 25,
     "Rochdale Times": 20,
-    "Rochdale Borough Council": 14,
+    "Rochdale Borough Council": 15,
     "Manchester Evening News": 9,
     "Rochdale AFC": 8,
     "InYourArea": 6,
+    "Oldham Times": 5,
+    "Bee Network live travel alerts": 5,
     "Roch Valley Radio Local News": 4,
-    "Bee Network live travel alerts": 4,
     "About Manchester": 3,
     "Rochdale Borough Council RSS": 2,
     "Total Rugby League": 2,
     "FOX Sports": 2,
     "Asian Image": 2,
-    "Oldham Times": 2,
     "Facebook": 2,
     "Rochdale Borough Council News": 2,
     "St Cuthbert's RC High School": 1,
@@ -359,16 +357,18 @@
     "Rochdale Hornets": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "crime": 1
+  },
   "published_by_category": {
     "business": 68,
-    "community": 87,
-    "crime": 36,
+    "community": 88,
+    "crime": 37,
     "education": 31,
     "environment": 48,
     "events": 35,
     "health": 15,
-    "news": 90,
+    "news": 89,
     "politics": 20,
     "sport": 63,
     "traffic": 43,
@@ -396,8 +396,12 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "hard-news-v3-03a679aaea812e2945a3"
+  ],
+  "selected_candidate_urls": [
+    "https://www.rochdaletimes.co.uk/16-men-charged-with-disorder-ahead-of-manchester-united-match/"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -407,6 +411,31 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "crime"
+    ],
+    "selected_categories": [
+      "crime"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "crime": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 1
+    },
+    "selected_by_source": {
+      "rochdale times": 1
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -955,14 +984,15 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMimgFBVV95cUxNN1JUZ2VQRXJGcnhDVkwxYXM1a3B0ZzJ4bFFCem5td1ZfTEtWb0ZDUFl2bmNpdjhLZlhydHBKNEtYVWYzX0YzVHRmdGxUSG9mbWZ5TUVvRENmNGdGd210ZXM5M0g3QVlFSk1VNkhKZWM2U2pRSHR5eG1kdDE3VmNVMEJQeUpEam1Oc1Q4LVBUZ09wZ2RKc1NEeXN3?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -1002,7 +1032,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-11T12:07:24.086780Z",
+  "frontpage_generated_at": "2026-11-11T12:27:26.401095Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1069,7 +1099,7 @@
       "littleborough": 2,
       "middleton": 3,
       "newhey": 1,
-      "rochdale": 16
+      "rochdale": 15
     },
     "selected_by_source": {
       "greater manchester police": 2,
@@ -1078,16 +1108,16 @@
       "rochdale afc": 1,
       "the gazette": 2,
       "nhs website": 1,
-      "rochdale daily": 1,
       "st cuthbert's rc high school": 1,
       "source": 1,
+      "rochdale daily": 1,
       "british guild of beer writers": 1,
       "businessmanchester": 1,
       "rochdale times": 2,
       "rochdale town hall (official site)": 1
     },
-    "pool_size": 24,
-    "primary_pool_size": 24,
+    "pool_size": 23,
+    "primary_pool_size": 23,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 16,
@@ -1098,13 +1128,13 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_kept_other_source": 37,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 12,
+  "events_kept_other_source": 25,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 12,
-  "event_dates_corrected_from_ledger": 0,
+  "event_dates_corrected_from_ledger": 2,
   "duplicate_articles_after_postprocessing": 607,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
@@ -1114,10 +1144,12 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 26,
+  "area_archive_count": 27,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "morning-briefing-11-november-2026"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
