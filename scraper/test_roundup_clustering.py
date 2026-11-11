@@ -62,6 +62,26 @@ other = dict(article, slug='another-story', id='zz')
 out = fp._dedupe_by_slug([article, other, event])
 check([r['slug'] for r in out] == ['rock-classics-by-candlelight-rochdale', 'another-story'], 'two records with one address become one; order kept')
 
+# The front-page merge had no roundup guard (7-8 Nov 2026): the Baguley
+# Crescent fire and two Lonsdale Court fire reports were folded into Morning
+# Briefings and their pages carried the briefing's title.
+fire = {'slug': 'man-in-his-60s-injured-in-flat-fire-on-baguley-crescent-middleton', 'id': 'f1', 'category': 'news',
+        'area': 'middleton', 'title': 'Man in his 60s injured in flat fire on Baguley Crescent, Middleton',
+        'content_html': '<p>A man in his 60s was injured in a flat fire on Baguley Crescent in Middleton on Saturday '
+                        'afternoon. Three fire engines from Blackley, Whitefield and Broughton attended.</p>',
+        'published_at': '2026-11-07T19:16:00Z', 'source_url': 'https://example.org/fire'}
+sunday = {'slug': 'morning-briefing-8-november-2026', 'id': 'briefing-morning-briefing-8-november-2026',
+          'manual_article': True, 'editorial_lock': True, 'category': 'news',
+          'title': 'Morning Briefing: Sunday 8 November 2026', 'excerpt': '4 new stories',
+          'content_html': '<ul><li>Man in his 60s injured in flat fire on Baguley Crescent, Middleton (Middleton). A man in '
+                          'his 60s was injured in a flat fire on Baguley Crescent in Middleton on Saturday afternoon.</li></ul>',
+          'published_at': '2026-11-08T09:04:16Z'}
+check(not fp._mergeable(fire, sunday), 'front-page merge: a briefing never matches a story it lists')
+check(not fp._same_frontpage_story(fire, sunday), 'front-page dedupe: a briefing never matches a story it lists')
+out = [r['slug'] for r in fp.merge_duplicate_articles([fire, sunday])]
+check(sorted(out) == sorted([fire['slug'], sunday['slug']]), 'front-page merge keeps the story and the briefing apart')
+check(fp._mergeable(sunday, dict(sunday)), 'a briefing still merges with its own record')
+
 print()
 if FAILURES:
     print(f'{len(FAILURES)} FAILED')

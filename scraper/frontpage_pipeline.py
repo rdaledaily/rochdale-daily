@@ -55,6 +55,7 @@ from story_identity import (
     same_story,
     missing_person_match,
     strip_publisher_suffix,
+    _is_roundup_like,
 )
 from manual_articles import load_manual_article_records
 from editorial_twins import retire_twins, split_editorial_twins
@@ -1137,6 +1138,13 @@ def _mergeable(left: dict[str, Any], right: dict[str, Any]) -> bool:
     Monsters of Rock and the Littlebrewer Ale Festival into a single record
     on the live site.
     """
+    # A briefing lists the day's stories, so its text matches each of them.
+    # story_identity._records_match already refused these merges, but this
+    # loop did not: on 7-8 Nov the Baguley Crescent fire and both Lonsdale
+    # Court fire reports were folded into Morning Briefings and their pages
+    # took the briefing's title. A roundup is only ever the same as itself.
+    if _is_roundup_like(left) or _is_roundup_like(right):
+        return any(left.get(f) and left.get(f) == right.get(f) for f in ("id", "slug"))
     left_event = is_event(left)
     right_event = is_event(right)
     if left_event or right_event:
@@ -1677,6 +1685,9 @@ def _same_frontpage_story(
     right: dict[str, Any],
 ) -> bool:
     """Catch duplicate stories that were assigned different categories."""
+    # A briefing is never a duplicate of a story it lists (see _mergeable).
+    if _is_roundup_like(left) or _is_roundup_like(right):
+        return any(left.get(f) and left.get(f) == right.get(f) for f in ("id", "slug"))
     person_match = missing_person_match(left, right)
     if person_match is not None:
         return person_match
