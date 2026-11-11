@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-11T08:13:31.262415Z",
+  "last_run_at": "2026-11-11T08:30:01.735205Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,22 +42,27 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 124,
-  "job_or_career_posts_rejected": 5,
-  "raw_candidates": 119,
+  "raw_candidates_before_job_filter": 131,
+  "job_or_career_posts_rejected": 7,
+  "raw_candidates": 124,
   "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 60,
-    "resolved": 48,
-    "text_recovered": 17,
+    "wrappers": 44,
+    "resolved": 35,
+    "text_recovered": 20,
     "reattributed": 0,
-    "images_found": 20
+    "images_found": 33
   },
-  "duplicates_merged": 72,
-  "attempted_rewrites": 0,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
+  "duplicates_merged": 77,
+  "attempted_rewrites": 1,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "rochdale-council-purchases-warwick-mill-for-3-3-million",
+      "source_url": "https://www.sustainableconstruction-now.com/article/561033/rochdale-completes-3.3m-warwick-mill-purchase"
+    }
+  ],
+  "new_articles": 1,
   "live_articles": 603,
   "skipped": 0,
   "rewrite_skip_reasons": {},
@@ -72,11 +77,11 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 152,
+    "entries": 153,
     "by_outcome": {
       "editorial_twin": 3,
       "failed": 16,
-      "published": 105,
+      "published": 106,
       "rejected": 28
     },
     "held_back_this_run": 36,
@@ -168,11 +173,13 @@
       "last_attempt_at": "2026-11-09T21:38:37.565674Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 111,
-    "website_discovery": 8,
+    "rss_and_google_news": 112,
+    "website_discovery": 14,
     "aggregator_discovery": 0,
     "live_service_pages": 4,
     "facebook_official": 0,
@@ -181,7 +188,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 1
+    "men_newsletter": 6
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -228,28 +235,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "St Cuthbert's RC High School": {
-      "url": "https://stcuthberts.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html",
-      "final_url": "https://stcuthberts.com/feed/",
-      "bozo": true,
-      "feed_title": ""
-    },
     "Rochdale AFC Community Trust": {
       "url": "https://www.rochdaleafccommunity.org/feed/",
       "http_status": 403,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.rochdaleafccommunity.org/feed/",
       "bozo": false,
-      "feed_title": ""
-    },
-    "Hopwood Hall College": {
-      "url": "https://www.hopwood.ac.uk/feed/",
-      "http_status": 403,
-      "content_type": "text/html",
-      "final_url": "https://www.hopwood.ac.uk/feed/",
-      "bozo": true,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -288,13 +279,16 @@
     "source": "MEN MyRochdale newsletter",
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
-    "stories_in_window": 4,
-    "covered": 3,
-    "outstanding": 1,
+    "stories_in_window": 10,
+    "covered": 4,
+    "outstanding": 6,
     "removed_by_editor": 0,
     "by_status": {
-      "already_covered": 3,
-      "held": 1
+      "already_covered": 4,
+      "held": 1,
+      "held_for_editor": 1,
+      "not_found": 1,
+      "waiting_for_text": 3
     },
     "outstanding_stories": [
       {
@@ -305,24 +299,69 @@
         "reason": "already rejected: missing from feed after repeated publication attempts; review required",
         "resolved_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285",
         "resolved_title": "Resident escapes from second floor as fire tears through sheltered housing flat in Middleton"
+      },
+      {
+        "id": "288e87c37e8aa858",
+        "headline": "Mystery over death of ex-rugby league star found dead with 'number of injuries'",
+        "received_at": "2026-11-11T08:05:01+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 255 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOSHF2amVrcmRldDEzZ2VTVU1HYzFyc0NQWHBLX0Z6LURxM2o2cnh5TkNWaVJaYUItN1I0RlMwWU96MG1fN2ZBWDJBV1NOU1d4OGluSTBnc0pfVDlDNkdBSmdGbEFJYUJaLXBtOWotdmY3Y2Exd3ZRa05aSG92LXJrR3V6dFdIbjY3bjNRN1JvLWJFQ3htakdJb2MzVE9rdmtwQjluM3IyUjVJSTY2cW5OS0lR0gG3AUFVX3lxTE4tdmZEQWtJeDFsSFQtWkFRbVZSWVI5Tm1EU2JaOTNoLUZKVkQ3N3MxaV9tWmpYUUlCaWk1ZVVsT3hLN0xyN1UxNm52NzhDSzF5TG01QktjdzVHVERJSFdOWDRNMnNvSG9RZTU2dElsRmxQcWEzM1V0MXpZNnVmWWZ1ZEd1M3pVMEFkQTFubTYwaEFRQ1VOaDc2UVpSWl80LUxfZHRMMHNqaFpTRFNPVHdFRzZtNDRjNA?oc=5",
+        "resolved_title": "Mystery surrounds death of ex-rugby league star Michael Martindale found dead with 'number of injuries'"
+      },
+      {
+        "id": "a16854cc7da77516",
+        "headline": "The downfall of 'The Ghost'",
+        "received_at": "2026-11-11T08:05:01+00:00",
+        "status": "not_found",
+        "reason": "no MEN article matched the exact or keyword search",
+        "resolved_url": "",
+        "resolved_title": ""
+      },
+      {
+        "id": "65770426160f9422",
+        "headline": "Man, 67, who died in flat fire named as friends pay tribute",
+        "received_at": "2026-11-11T08:05:01+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 187 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQZDB6UmFzRjZVRmpYN0FaTTd2MFZPWjhiZ0lJR1ZNUU9wWl92U0RCOGxXSFI1M0VURlIzYngxVHRBczR5VDRvNUZtMnZna3d1TmlfYUtGXzl4SWtLYXBtWWZuSktqYi1oeDBKaGtqakdGd1JGeVdtYWhRdWxBUmZoVlZwaEVmamlWZThEZ1R3UTNndE4wSEFadlJaQVUydXBMcGdzbXZR0gGrAUFVX3lxTE9SVWZ3MlJ5LTdleURvUjh2aXRXOUo1Snd3SkpYZ1NQX3Y5UU1RbTk3cGtQN09qX0hCSTlqcFk4aHNHS2JQalRaamVYaVI0Y3V2Y0RwbjlPaUxhbWZwX3ZEMGJJS2EyOThESWxiVkJ0WHZsc2xWaVlVZEFHWVkxbkFQRlZjNEZ6R3p5Vks3eDhXQXJuVGZvOHBNbEdlZnZxRDhEclJJMFAtNFRMbw?oc=5",
+        "resolved_title": "Man, 67, who died in Middleton flat fire named as friends pay tribute"
+      },
+      {
+        "id": "aaf8afd102ff7932",
+        "headline": "Greater Manchester areas where homes are cheaper than UK's average house price",
+        "received_at": "2026-11-11T08:05:01+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 233 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOLUR5dmFYdW90YXI4VzJ4elAzZ2JlMkpUSnVMVkhNSWhSeU9hNUZNWElpQk9zZFhwQ3JhbzdnQndrYW84VFl0MUZMNFVBYk50UlVJQU9PYUhxSTRaWW5VWnhRbjNlSzlrRVV1YlBBc0g0VUROZlBLbElFR2JZNUNMRU9LUUN0Ym82SGFTX0dLVHlzTkdSU2xLTFNXdw?oc=5",
+        "resolved_title": "The Greater Manchester areas where you can buy a home for less than UK's average house price"
+      },
+      {
+        "id": "c5f1f3093e408284",
+        "headline": "Alleged abuser denies being responsible for 'rape and exploitation', jury hears",
+        "received_at": "2026-11-11T08:05:01+00:00",
+        "status": "held_for_editor",
+        "reason": "court or criminal-process reporting: waits for the editor to approve it on /checked",
+        "resolved_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQN1lMM1NwU2pBTmZMMm5xV0VFTnItWkd4YjB3ZWxDTGFKR0ZNN3RmVDV2amp5QjJrZmJRY05fWWs5TWVxWXpfeHVhQjVOVnRxRUo2blFsV2ZqOWE0V2tFRm0wRmhJamF4c3NUNXczODBuaW1NU3pZUHF4SFU0V3kzSzd1Y0J5RjRIRW84Ukp1NklsazBpMkY3ejdMRXJMTmg5QlFwNVd2c0ZfM1FVMjI00gG0AUFVX3lxTE1PQ1JKN0JEYWhNRHdNRWhRZmtkSHlNLXg5bl9UblVQdl9ZZXFNdUFjbjJkV29Ganl3d1N2T0VSRVJERW1Gb3FUdWdRT3c2RzlHNF80NUxXWDB4TW9DUFRWV1BEdXZta1JQbUhhSGlWWC1YUURPazVnVVk4QUMtWWVKNjFGcFFxUTNCRmlmZzVBNXFKUkMxSUJveVVES2lOS2xndkExVGVJRFhDa2FxRGhILXBicA?oc=5",
+        "resolved_title": "Alleged abuser denies being responsible for 'rape and exploitation', jury hears"
       }
     ]
   },
   "source_counts": {
     "Roch Valley Radio": 25,
-    "Rochdale Times": 16,
-    "Rochdale Borough Council": 15,
-    "Rochdale AFC": 10,
+    "Rochdale Times": 22,
+    "Rochdale Borough Council": 16,
     "Manchester Evening News": 9,
+    "Rochdale AFC": 9,
+    "InYourArea": 7,
     "Oldham Times": 6,
-    "InYourArea": 6,
-    "Facebook": 4,
     "Roch Valley Radio Local News": 4,
     "Bee Network live travel alerts": 4,
+    "Facebook": 3,
     "Rochdale Borough Council RSS": 2,
-    "Total Rugby League": 2,
     "Asian Image": 2,
     "Rochdale Borough Council News": 2,
+    "St Cuthbert's RC High School": 1,
     "Netweather": 1,
     "Wirral Globe": 1,
     "Yahoo": 1,
@@ -330,13 +369,15 @@
     "FOX Sports": 1,
     "British Guild of Beer Writers": 1,
     "Yahoo News UK": 1,
-    "Place North West": 1,
+    "Trending Now Sustainable Construction": 1,
     "Greater Manchester Police": 1,
     "Rochdale Development Agency": 1,
     "Rochdale Hornets": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {},
+  "selected_by_category": {
+    "environment": 1
+  },
   "published_by_category": {
     "business": 68,
     "community": 87,
@@ -373,8 +414,12 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [],
-  "selected_candidate_urls": [],
+  "selected_story_keys": [
+    "environment-v3-ae991a24e2085debfe18"
+  ],
+  "selected_candidate_urls": [
+    "https://www.sustainableconstruction-now.com/article/561033/rochdale-completes-3.3m-warwick-mill-purchase"
+  ],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -384,6 +429,31 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
+    "available_categories": [
+      "environment"
+    ],
+    "selected_categories": [
+      "environment"
+    ],
+    "available_wards": [],
+    "selected_wards": [],
+    "available_areas": [],
+    "selected_areas": [
+      "rochdale"
+    ],
+    "uncovered_categories": [],
+    "uncovered_wards": [],
+    "uncovered_areas": [],
+    "selected_by_category": {
+      "environment": 1
+    },
+    "selected_by_ward": {},
+    "selected_by_area": {
+      "rochdale": 1
+    },
+    "selected_by_source": {
+      "trending now sustainable construction": 1
+    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -942,12 +1012,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "visitrochdale.com"
-  ],
-  "slow_domain_failure_counts": {
-    "visitrochdale.com": 2
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -983,7 +1049,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-11T08:14:21.290629Z",
+  "frontpage_generated_at": "2026-11-11T08:31:05.319806Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1101,8 +1167,10 @@
   "category_archive_count": 11,
   "area_archive_count": 27,
   "whats_on_event_count": 12,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "middleton-council-completes-purchase-of-warwick-mill-to-boost-regeneration"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
