@@ -3819,16 +3819,21 @@
     }
   },
   "__geograph_probe__": {
-    "subject": "St Cuthbert's RC High School",
+    "subject": "Gorrels Way",
     "http": 200,
     "centre": "town rochdale",
     "radius_km": 4.0,
     "content_type": "application/xml; charset=ISO-8859-1",
-    "items_in_reply": 0,
-    "items_with_image": 0,
-    "first_titles": [],
-    "head": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<!-- generator=\"FeedCreator 1.7.12(BH)\" -->\n<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n    <channel>\n        <title>Geograph Britain and Ireland</title>\n        <description>Images Nearby</description>\n        <link>https://www.geograph.org.uk/</link>\n        <lastBuildDate>Tue, 10 Nov 2026 16:18:26</lastBuildDate>\n        <generator",
-    "first_item": ""
+    "items_in_reply": 4,
+    "items_with_image": 4,
+    "first_titles": [
+      "SD8911 : Rochdale Canal Edinburgh Way",
+      "SD8911 : Rochdale Canal Gorrells Way",
+      "SD8911 : Rochdale Canal Deviation",
+      "SD8811 : Rochdale Canal Gorrells Way"
+    ],
+    "head": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<!-- generator=\"FeedCreator 1.7.12(BH)\" -->\n<rss version=\"2.0\" xmlns:creativeCommons=\"http://backend.userland.com/creativeCommonsRssModule\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n    <channel>\n        <title>Geograph Britain and Ireland</title>\n        <description>Images Nearby (4 in total)</description>\n        <link>https://www.geograph.org.uk/<",
+    "first_item": "<item>\n            <title>SD8911 : Rochdale Canal Edinburgh Way</title>\n            <link>https://www.geograph.org.uk/photo/1671473</link>\n            <description><![CDATA[<a href=\"https://www.geograph.org.uk/photo/1671473\" title=\"SD8911 : Rochdale Canal Edinburgh Way by michael ely\"><img alt=\"SD8911 : Rochdale Canal Edinburgh Way by michael ely\" src=\"https://s1.geograph.org.uk/geophotos/01/67/14/1671473_e42d1eb8_120x120.jpg\" width=\"120\" height=\"86\" /></a><br/>Dist:1.8km<br/>]]></description>\n            <dc:creator>michael ely</dc:creator>\n            <pubDate>Wed, 20 Jan 2010 22:31:29</pubDate>\n            <guid>https://www.geograph.org.uk/photo/1671473</guid>\n            <creativeCommons:license>http://creativecommons.org/licenses/by-sa/2.0/</creativeCommons:license>\n        </item>"
   },
   "__town_pool__|v1|rochdale": {
     "rows": [
@@ -10879,5 +10884,11 @@
       ]
     },
     "empty": false
+  },
+  "gorrels way|rochdale": {
+    "status": "searched",
+    "subject": "Gorrels Way",
+    "geograph_tried": 5,
+    "geograph_items_in_reply": 4
   }
 }
