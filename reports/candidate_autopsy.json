@@ -1,37 +1,42 @@
 {
-  "examined_at": "2026-11-10T15:14:04.562173Z",
+  "examined_at": "2026-11-11T14:42:47.773842Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 126,
+  "candidates_examined": 144,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 111,
-    "would publish": 13,
-    "duplicate of published story": 2
+    "age": 125,
+    "would publish": 10,
+    "duplicate of published story": 8,
+    "not local": 1
   },
-  "would_publish": 13,
+  "would_publish": 10,
   "age_gate_sensitivity": {
-    "6h": 0,
-    "14h": 6,
-    "24h": 15,
-    "48h": 40,
-    "72h": 104,
-    "168h": 126
+    "6h": 5,
+    "14h": 12,
+    "24h": 19,
+    "48h": 54,
+    "72h": 81,
+    "168h": 144
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Facebook: Manchester Evening News. . Haider Ali had progressed from being a stre",
-      "InYourArea: What’s On Rochdale: Spine-chilling 'Jekyll and Hyde' spectacle, dazzli"
+      "Roch Valley Radio: Armistice Day at Rochdale Cenotaph - Roch Valley Radio",
+      "Oldham Times: Rochdale man among 16 charged with violent disorder ahead of Man Unite"
     ],
     "duplicate of published story": [
-      "British Guild of Beer Writers: Littleborough pub brings community together with new pool league",
-      "Rochdale Borough Council: Smithy Bridge Road, roadworks in Littleborough on 15 November 2026 - R"
+      "Roch Valley Radio Local News: Rochdale shop iREEF named Marine Fish Retailer of the Year",
+      "Rochdale Times: Middleton man charged with aggravated burglaries and attempted murder ",
+      "About Manchester: 33 year old Middleton man charged with attempted murder and three aggr"
+    ],
+    "not local": [
+      "St Cuthbert's RC High School: Our New School Garden | St Cuthbert’s Catholic Academy"
     ],
     "age": [
-      "Manchester Evening News: Jailed, the 'trusted' dealer who ran the notorious 'Adam' line",
-      "Rochdale Times: School staff unite to help improve children’s lives - Rochdale Times",
-      "Oldham Times: Rochdale dealer jailed for 10 years over 'Adam' heroin and cocaine ope"
+      "Roch Valley Radio Local News: Hopwood Hall College partners with Rochdale AFC for football course",
+      "Asian Image: Drug dealer caught with £1,000 cash rose through ranks to run Rochdale",
+      "Roch Valley Radio Local News: Kirkholt Christmas lights switch-on to take place at Strand Community "
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
