@@ -208,14 +208,15 @@ def manual_entries() -> list[tuple[str, dict]]:
         if isinstance(entry, dict):
             found.append((f"manual_articles.json ({str(entry.get('slug') or index)[:48]})", entry))
     folder = REPO_ROOT / "manual_articles.d"
-    for path in sorted(folder.glob("*.json")) if folder.is_dir() else []:
+    # Recursive, like the publication loader (dated subfolders hold 30 stories).
+    for path in sorted(folder.rglob("*.json")) if folder.is_dir() else []:
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue  # reported by the loader and the publish workflow
         for entry in payload if isinstance(payload, list) else [payload]:
             if isinstance(entry, dict):
-                found.append((f"manual_articles.d/{path.name}", entry))
+                found.append((path.relative_to(REPO_ROOT).as_posix(), entry))
     return found
 
 
