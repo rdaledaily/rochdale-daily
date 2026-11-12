@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-12T22:50:02.116523Z",
+  "updated_at": "2026-11-12T23:15:31.622355Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 145,
@@ -1662,13 +1662,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T21:26:44.420138Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Fire festival returns to Rochdale with free entry and Christmas lights switch-on – Rochdale Borough Council",
       "source_name": "Rochdale Borough Council News",
       "category": "events",
       "text_fingerprint": "44674b010ac7f476",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdale.gov.uk/news/article/698/council-issues-admissions-reminder-to-parents-before-the-new-year": {
       "first_attempt_at": "2026-11-12T19:07:46.556891Z",
@@ -2114,13 +2115,13 @@
     },
     "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph": {
       "first_attempt_at": "2026-11-11T21:30:31.558094Z",
-      "attempts": 3,
+      "attempts": 4,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T22:46:21.614600Z",
+      "last_attempt_at": "2026-11-12T23:13:14.867872Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Armistice Day at Rochdale Cenotaph",
@@ -2164,13 +2165,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road": {
       "first_attempt_at": "2026-11-12T19:05:37.729201Z",
-      "attempts": 4,
+      "attempts": 5,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T22:46:35.381106Z",
+      "last_attempt_at": "2026-11-12T23:13:42.522470Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "The hidden Rochdale cafe with countryside views that you won’t find by road",
