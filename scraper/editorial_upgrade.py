@@ -1054,6 +1054,13 @@ _RESOURCE_HOST_RE = re.compile(
 )
 
 
+def _local_impact_instruction() -> str:
+    """The writer's brief for the 'What it means for <place>' box; the box
+    itself is built and policed in local_impact.py."""
+    from local_impact import WRITER_INSTRUCTION
+    return WRITER_INSTRUCTION
+
+
 def verified_useful_links(links: Any, source_text: str, limit: int = 4) -> list[dict[str, str]]:
     """Links the rewrite offered, kept only when the exact address appears in
     the supplied sources and the site is a fundraiser, petition or public body
@@ -1309,6 +1316,7 @@ def request_article(
                 "and official resources (council, NHS, police, charity pages) that help readers act. "
                 "Copy each url exactly from source_records; never write a url that is not there. Empty list when none."
             ),
+            "local_impact": _local_impact_instruction(),
             "seo": "Natural descriptive headline; no keyword stuffing or clickbait.",
             "headline_style": (
                 "British newspaper sentence case: capitalise only the first word and "
