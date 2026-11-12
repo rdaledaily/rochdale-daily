@@ -184,15 +184,9 @@ def generated_card(record: dict[str, Any], category: str) -> str:
 
 def replace_primary_image(source: str, old_url: str, new_path: str) -> str:
     absolute = new_path if re.match(r"https?://", new_path, re.I) else SITE + new_path.lstrip("/")
-    source = replace_meta_content(source, "og:image", absolute)
-    source = replace_meta_content(source, "twitter:image", absolute)
-    source = re.sub(
-        r'("image"\s*:\s*\[\s*")[^"]*("\s*\])',
-        lambda m: m.group(1) + absolute + m.group(2),
-        source,
-        count=1,
-        flags=re.I,
-    )
+    # Whole image set at once: crops, true sizes, twitter and schema (og_images.py).
+    from og_images import rewrite_page_image
+    source = rewrite_page_image(source, absolute)
 
     # Only replace the page's explicit hero/modal image. Never globally replace
     # the URL: the same old image may also be incorrectly attached to a

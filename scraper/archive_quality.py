@@ -485,7 +485,9 @@ def apply(root: Path, rows=None, images=False, network_images=True):
         if images:
             raw_image=str(row.get('image_url') or '')
             absolute=raw_image if raw_image.startswith('http') else 'https://rochdaledaily.co.uk/'+raw_image.lstrip('/')
-            page=re.sub(r'(<meta\b[^>]*property=["\']og:image["\'][^>]*content=["\']).*?(["\'][^>]*>)',lambda m:m.group(1)+html.escape(absolute,quote=True)+m.group(2),page)
+            # Whole image set at once: crops, true sizes, twitter and schema (og_images.py).
+            from og_images import rewrite_page_image
+            page=rewrite_page_image(page,raw_image,str(row.get('image_alt') or row['title']))
             # An explicit caption distinguishes a file image/place illustration
             # from a photograph of the reported incident.
             hero_src=raw_image if raw_image.startswith(('https://','http://')) else '/'+raw_image.lstrip('/')

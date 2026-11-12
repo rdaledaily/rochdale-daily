@@ -259,6 +259,23 @@ def test_listed_correction_that_is_not_applied_never_publishes():
         record = json.loads(Path(verdict["written_to"]).read_text(encoding="utf-8"))
         assert "approved the plan" not in record["body"] and "rejected the plan" in record["body"]
 
+
+def test_correction_whose_new_words_contain_the_old_ones_is_accepted():
+    proven = [{"was": "15 objections", "now": "150 objections", "source_quote": "x"},
+              {"was": "approved the plan", "now": "not approved the plan", "source_quote": "x"}]
+    good = {"title": "Plan refused", "excerpt": "", "paragraphs": [
+        "The council received 150 objections.", "Councillors have not approved the plan."]}
+    assert fr.unapplied_corrections(proven, good) == []
+    still_wrong = {"title": "Plan", "excerpt": "", "paragraphs": [
+        "The council received 15 objections.", "Councillors approved the plan, and later had not approved the plan."]}
+    assert [c["now"] for c in fr.unapplied_corrections(proven, still_wrong)] == ["150 objections", "not approved the plan"]
+
+
+def test_whole_word_matching_for_proof():
+    assert fr.has_words("received 150 objections", "150 objections")
+    assert not fr.has_words("received 150 objections", "15 objections")
+    assert not fr.has_words("received 150 objections", "15")
+
 def test_unproven_factual_claim_goes_to_the_editor():
     claim = dict(FIXED, factual_corrections=[{"was": "approved the plan", "now": "deferred the plan",
                                               "source_quote": "the plan was deferred until the next meeting of the committee"}])
