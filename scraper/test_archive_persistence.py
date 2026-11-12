@@ -83,6 +83,16 @@ def test_sitemap_includes_archived_pages() -> None:
         lastmod = gp.archive_page_lastmod(page)
         assert lastmod == "2026-07-01T09:30:00Z", f"unexpected lastmod: {lastmod!r}"
 
+        corrected = Path(tmp) / "corrected-story.html"
+        corrected.write_text(
+            '<html><script type="application/ld+json">'
+            '{"@type":"NewsArticle","datePublished":"2026-07-01T09:30:00Z",'
+            '"dateModified":"2026-11-12T21:00:00Z"}'
+            "</script></html>",
+            encoding="utf-8",
+        )
+        assert gp.archive_page_lastmod(corrected) == "2026-11-12T21:00:00Z"
+
         undated = Path(tmp) / "undated-story.html"
         undated.write_text("<html>no schema</html>", encoding="utf-8")
         assert gp.archive_page_lastmod(undated) == ""

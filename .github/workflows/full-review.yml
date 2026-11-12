@@ -1,0 +1,87 @@
+name: Full editorial review
+
+# Every article re-checked against its current sources, corrected with a dated
+# note or taken down (editor's instruction, 12 Nov 2026). Live feed first, crime
+# and court first, then the archive. Resumes from reports/full_review_state.json;
+# once every story has a verdict each run finishes in seconds.
+
+on:
+  schedule:
+    - cron: "17,47 * * * *"
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: "live, archive or auto"
+        required: false
+        default: "auto"
+      limit:
+        description: "Stories to review this run"
+        required: false
+        default: "60"
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: rd-full-review
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: "gpt-4o-mini"
+      RD_REVIEW_MINUTES: "35"
+      PYTHONPATH: scraper
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
+      - name: Install dependencies
+        run: python -m pip install --no-cache-dir -r requirements.txt
+      - name: Review the next batch of articles
+        run: |
+          python scraper/full_review.py \
+            --phase "${{ github.event.inputs.phase || 'auto' }}" \
+            --limit "${{ github.event.inputs.limit || '60' }}"
+      - name: Validate before publishing
+        run: python scraper/check_data_files.py
+      - name: Commit verdicts, corrections and takedowns
+        id: commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          paths=(manual_articles.d manual_articles.json story_blocklist.json reports/full_review_state.json reports/full_review_report.json)
+          stage() { for p in "${paths[@]}"; do [ -e "$p" ] && git add -- "$p"; done; return 0; }
+          stage
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No verdicts changed."
+            exit 0
+          fi
+          git commit -m "Full editorial review: next batch of verdicts and corrections"
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            git fetch origin main
+            git rebase origin/main
+          done
+          exit 1
+      - name: Publish corrections and takedowns
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scraper/gh_dispatch.sh publish.yml --ref main
