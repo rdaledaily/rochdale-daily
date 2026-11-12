@@ -186,6 +186,60 @@ def run() -> None:
     renamed = {"image_url": "assets/img/cards/x.jpg", "image_status": "place-generated-card"}
     assert not fb.has_story_photo(renamed, usage)            # status alone marks a card
 
+
+    # Hourly schedule (12 Nov 2026). Real failure that day: GitHub started the
+    # 12:27 check at 13:03 and the 20:27 check at 20:59 (checked 21:01), so
+    # fixed slots were missed. Every hour 07-22 is now a slot, and a 40-minute
+    # cooldown means a late post in one hour cannot block the next hour.
+    with patch.dict(os.environ, {"FACEBOOK_SLOT_HOURS": "7-22"}):
+        assert fb.slot_hours() == tuple(range(7, 23))
+    with patch.dict(os.environ, {"FACEBOOK_SLOT_HOURS": "7,12,17-19"}):
+        assert fb.slot_hours() == (7, 12, 17, 18, 19)
+    with patch.dict(os.environ, {"FACEBOOK_SLOT_HOURS": ""}):
+        assert fb.slot_hours() == tuple(range(7, 23))
+    with TemporaryDirectory() as temp:
+        base = Path(temp)
+        article_file = base / "articles.json"
+        state_file = base / "facebook_state.json"
+        result_file = base / "facebook_result.json"
+        article_file.write_text(json.dumps([
+            story(k, "2026-11-12T05:00:00Z") for k in "abcdefghijklmnopqrstu"
+        ]), encoding="utf-8")
+        config = {
+            "FACEBOOK_PAGE_ACCESS_TOKEN": "mock-token",
+            "FACEBOOK_STATE_PATH": str(state_file),
+            "FACEBOOK_RESULT_PATH": str(result_file),
+            "FACEBOOK_MAX_ARTICLE_AGE_HOURS": "0",
+            "FACEBOOK_MIN_POST_INTERVAL_MINUTES": "40",
+            "FACEBOOK_SLOT_HOURS": "7-22",
+            "FACEBOOK_MAX_POSTS_PER_DAY": "16",
+        }
+        with patch.dict(os.environ, config), \
+             patch.object(fb, "ARTICLES_PATH", article_file), \
+             patch.object(fb, "datetime", FixedDateTime), \
+             patch.object(fb, "resolve_page_id", return_value="1234"), \
+             patch.object(fb, "graph_photo_post", return_value="1234_1") as photo, \
+             patch.object(fb, "graph_comment", return_value="1_1"), \
+             patch.object(fb, "graph_edit_caption"):
+            def at(hour, minute):   # 12 Nov is GMT, so UTC == UK time
+                FixedDateTime.current = RealDatetime(2026, 11, 12, hour, minute, tzinfo=UTC)
+                fb.main()
+                return json.loads(result_file.read_text())
+            assert "Outside" in at(6, 47)["reason"]            # nothing before 07:00
+            assert at(12, 24)["status"] == "posted"
+            assert "cooldown" in at(12, 47)["reason"]          # same hour, too soon
+            assert at(13, 7)["status"] == "posted"             # late post at 12:24 no longer blocks 13:00
+            assert at(13, 47)["reason"] == "This slot has already been used"
+            assert at(14, 7)["status"] == "posted"
+            assert at(21, 1)["status"] == "posted"             # the run that missed on 12 Nov
+            assert "Outside" in at(23, 7)["reason"]            # nothing overnight
+            assert photo.call_count == 4
+            # A full day: one post each hour 07:00-22:00 = 16, then the cap holds.
+            state_file.unlink()
+            for h in range(7, 23):
+                assert at(h, 27)["status"] == "posted", h
+            assert photo.call_count == 20
+
     print("Facebook photo-post and link-comment tests passed.")
 
 

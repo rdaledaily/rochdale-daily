@@ -15,8 +15,9 @@ So each post is now a PHOTO post (the story's own image: the source
 organisation's original where Rochdale Daily holds its permission, cached
 under assets/img/cards/ by licensed_source_images.py) carrying the social
 headline and the key facts, with the article link placed as the Page's first
-comment. Posts go out in six fixed local-time slots, at most seven a day, and
-the strongest story wins each slot.
+comment. One post goes out each UK clock hour from 07:00 to 22:00 (16 a day;
+raised from six slots on 12 November 2026), and the strongest story wins each
+hour.
 
 It does not automate likes, follows, messages or comments on anyone else's
 posts. The only comment it writes is the Page's own link under its own post.
@@ -30,9 +31,9 @@ Optional:
   FACEBOOK_STATE_PATH (default: facebook/facebook_posted.json)
   FACEBOOK_RESULT_PATH (default: facebook/facebook_last_result.json)
   FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 36; 0 disables age filtering)
-  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 60)
-  FACEBOOK_SLOT_HOURS (default: "7,12,15,17,20,22", Europe/London)
-  FACEBOOK_MAX_POSTS_PER_DAY (default: 7)
+  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 40)
+  FACEBOOK_SLOT_HOURS (default: "7-22", Europe/London; ranges and lists, e.g. "7,12,17-20")
+  FACEBOOK_MAX_POSTS_PER_DAY (default: 16)
   FACEBOOK_DRY_RUN (1/true/yes to avoid the Graph API calls)
 """
 from __future__ import annotations
@@ -90,16 +91,23 @@ def int_env(name: str, default: int, minimum: int = 0) -> int:
         return default
 
 
+DEFAULT_SLOT_HOURS = "7-22"
+
+
 def slot_hours() -> tuple[int, ...]:
     hours: list[int] = []
-    for part in env("FACEBOOK_SLOT_HOURS", "7,12,15,17,20,22").split(","):
+    for part in env("FACEBOOK_SLOT_HOURS", DEFAULT_SLOT_HOURS).split(","):
+        part = part.strip()
         try:
-            value = int(part.strip())
+            if "-" in part:
+                start, end = (int(bit) for bit in part.split("-", 1))
+                values = range(start, end + 1)
+            else:
+                values = [int(part)]
         except ValueError:
             continue
-        if 0 <= value <= 23:
-            hours.append(value)
-    return tuple(sorted(set(hours))) or (7, 12, 15, 17, 20, 22)
+        hours.extend(value for value in values if 0 <= value <= 23)
+    return tuple(sorted(set(hours))) or tuple(range(7, 23))
 
 
 def parse_dt(value: Any) -> datetime:
@@ -354,8 +362,8 @@ def slot_used(state: dict[str, Any], slot: str) -> bool:
 def schedule_reason(state: dict[str, Any], posted: dict[str, Any], now: datetime,
                     urgent_waiting: bool) -> str:
     """Why this run must not post, or '' when it may."""
-    min_interval = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 60)
-    max_day = int_env("FACEBOOK_MAX_POSTS_PER_DAY", 7)
+    min_interval = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 40)
+    max_day = int_env("FACEBOOK_MAX_POSTS_PER_DAY", 16)
     times = recent_post_times(posted)
     if min_interval > 0 and times:
         next_allowed = max(times) + timedelta(minutes=min_interval)
