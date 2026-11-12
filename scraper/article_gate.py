@@ -315,9 +315,11 @@ def _normalise_timestamps(
         article["scraped_at"] = scraped
         notes.append(f"'{ident}': normalised scraped_at")
 
+    # scraped_at records when we last LOOKED at the story, not when it changed.
+    # Pulling last_updated_at up to it made every re-scrape an "update"
+    # (12 Nov 2026: 603 of 683 update stamps in 60 builds had no text change).
     last_updated = _latest_iso(
         article.get("last_updated_at"),
-        scraped,
         stable_publication,
     ) or stable_publication
     if article.get("last_updated_at") != last_updated:

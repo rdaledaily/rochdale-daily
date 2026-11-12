@@ -231,6 +231,11 @@ def main() -> int:
         print(f"Updated weekly local-news discovery section with {len(chosen)} stories.")
     else:
         print(f"Weekly local-news discovery section already current ({len(chosen)} stories).")
+
+    # Corrected and genuinely updated stories, linked from the most-crawled
+    # page so search engines pick up the new versions (12 Nov 2026).
+    from recently_updated import refresh
+    refresh(INDEX, payload, now=now, root=ROOT)
     return 0
 
 

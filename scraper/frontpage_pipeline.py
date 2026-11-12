@@ -202,6 +202,15 @@ def permanent_publication_iso(article: dict[str, Any]) -> str:
     return iso_utc(value) if value else ""
 
 
+def _event_fingerprint(article: dict[str, Any]) -> str:
+    """What a reader sees of an event listing; scrape times excluded."""
+    import hashlib
+
+    fields = ("title", "excerpt", "content_html", "event_start_at", "event_end_at", "event_location")
+    text = "\u0000".join(str(article.get(field) or "") for field in fields)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
 def preserve_publication_dates(
     article: dict[str, Any],
     *records: dict[str, Any],
@@ -1313,7 +1322,16 @@ def clean_and_integrate_events(
         if previous and _event_identity_trustworthy(previous):
             event["id"] = previous.get("id") or event["id"]
             event["slug"] = previous.get("slug") or event["slug"]
+            unchanged = _event_fingerprint(event) == _event_fingerprint(previous)
             event = preserve_publication_dates(event, previous)
+            # A re-scrape of an unchanged listing is not an update: keep the
+            # stored dates. A real change (time, venue, text) is recorded.
+            if unchanged:
+                event["last_updated_at"] = previous.get("last_updated_at") or event.get("published_at")
+                if previous.get("content_updated_at"):
+                    event["content_updated_at"] = previous["content_updated_at"]
+            else:
+                event["content_updated_at"] = event.get("scraped_at") or event.get("last_updated_at")
         else:
             event = preserve_publication_dates(event)
         # The ledger is the last line of defence against a lost git push

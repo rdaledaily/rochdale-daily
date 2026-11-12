@@ -346,17 +346,51 @@ def first_published_at(article: dict[str, Any]) -> str:
 
 
 def last_modified_at(article: dict[str, Any]) -> str:
-    """Return the most recent meaningful article modification timestamp.
+    """When the story itself last changed: JSON-LD dateModified,
+    article:modified_time, the sitemap lastmod and the "Updated" stamp.
 
-    A published correction is a modification, so the newest correction date
-    counts alongside last_updated_at. This keeps the sitemap lastmod,
-    article:modified_time and JSON-LD dateModified honest without the editor
-    having to remember to bump last_updated_at when logging a correction.
+    A routine re-scrape is not a modification. Until 12 Nov 2026 this returned
+    last_updated_at for every story, and the pipeline moves that field on every
+    scrape: in 60 builds it changed 683 times, 603 of them with no change to the
+    text, so Google was told untouched stories had just been updated, while the
+    visible page (add_article_time_metadata.py) correctly said they had not.
+    This is now the same rule as that page and repair_sitemap_lastmod.py:
+
+      * newsdesk stories: their own last_updated_at (the newsdesk sets it);
+      * every story: the date of each published correction;
+      * live, breaking and ongoing stories: their timestamped updates;
+      * any story: content_updated_at, set only when its text really changed.
+
+    datePublished is never moved; this never returns a date before it.
     """
-    candidates = [str(article.get("last_updated_at") or first_published_at(article))]
+    published = first_published_at(article)
+    candidates = [str(published or "")]
+    editorial = bool(
+        article.get("manual_article") is True
+        or article.get("editorial_lock") is True
+        or str(article.get("source_kind") or "").lower() == "editorial"
+    )
+    if editorial:
+        candidates.append(str(article.get("last_updated_at") or ""))
     candidates.extend(item["date"] for item in article_corrections(article) if item["date"])
-    return max(candidates, key=parse_iso)
-
+    if article.get("live_story") or article.get("breaking_news") or article.get("is_ongoing"):
+        updates = article.get("live_updates")
+        timestamps = [
+            str(item.get("timestamp") or item.get("updated_at") or item.get("published_at") or "")
+            for item in (updates if isinstance(updates, list) else [])
+            if isinstance(item, dict)
+        ]
+        timestamps = [t for t in timestamps if t]
+        if timestamps:
+            candidates.extend(timestamps)
+        elif article.get("is_ongoing"):
+            # A merged ongoing story with no timeline: its merge date is the update.
+            candidates.append(str(article.get("last_updated_at") or ""))
+    candidates.append(str(article.get("content_updated_at") or ""))
+    valid = [value for value in candidates if value and parse_iso(value).year > 1970]
+    if not valid:
+        return str(published or article.get("last_updated_at") or "")
+    return max(valid, key=parse_iso)
 
 def article_corrections(article: dict[str, Any]) -> list[dict[str, str]]:
     """Return the article's published corrections as [{date, note}], newest first.

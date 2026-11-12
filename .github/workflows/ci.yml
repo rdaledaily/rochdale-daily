@@ -117,6 +117,7 @@ jobs:
             scraper/generate_news_sitemap.py \
             scraper/update_homepage_static_latest.py \
             scraper/update_homepage_weekly_news.py \
+            scraper/recently_updated.py \
             scraper/sync_homepage_top_story.py \
             scraper/homepage_discovery_metadata.py \
             scraper/add_article_time_metadata.py \
@@ -330,6 +331,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_core_fact_backstop.py
           PYTHONPATH=scraper python scraper/test_full_review.py
           PYTHONPATH=scraper python scraper/test_press_office.py
+          PYTHONPATH=scraper python scraper/test_honest_modified_dates.py
           PYTHONPATH=scraper python scraper/test_reader_growth.py
           PYTHONPATH=scraper python scraper/test_register_watch.py
           PYTHONPATH=scraper python scraper/test_reservoir_junk_oct2026.py
