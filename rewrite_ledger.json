@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-12T19:07:46.557100Z",
+  "updated_at": "2026-11-12T20:55:23.163997Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 152,
+  "count": 151,
   "entries": {
     "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries": {
       "first_attempt_at": "2026-11-07T09:17:19.967332Z",
@@ -492,12 +492,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-08T13:06:49.734801Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 08/11/2026 at 12:51pm Live Freehold Tram Stop - Lifts out of service Duration Sun 08 Nov, 12:51pm – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "63e69c9848a92ede"
+      "text_fingerprint": "63e69c9848a92ede",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-fc341023c7c91993a1": {
       "first_attempt_at": "2026-11-06T11:19:20.788531Z",
@@ -752,24 +753,6 @@
       "source_name": "beIN SPORTS",
       "category": "sport",
       "text_fingerprint": "5f55fa51afb3f2c6"
-    },
-    "https://www.burytimes.co.uk/news/26684777.asda-worker-praised-supporting-widowed-customer": {
-      "first_attempt_at": "2026-11-04T17:45:12.196702Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.burytimes.co.uk/news/26684777.asda-worker-praised-supporting-widowed-customer"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T19:12:14.852683Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Why Asda worker kept promise to look after widow after husband's death",
-      "source_name": "Burytimes",
-      "category": "news",
-      "text_fingerprint": "2115016d054cf339",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
     },
     "https://www.burytimes.co.uk/news/26691556.hospital-order-man-threatened-police-knife": {
       "first_attempt_at": "2026-11-04T21:03:55.537711Z",
@@ -1139,25 +1122,6 @@
       "category": "events",
       "text_fingerprint": "e89978015e87ed1a"
     },
-    "https://www.inyourarea.co.uk/news/whats-on-rochdale-stunning-night-time-light-trail-puppet-cabaret-and-music-mixer": {
-      "first_attempt_at": "2026-11-03T10:01:53.963217Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMitgFBVV95cUxQb0VTWHhpRFRUcE1hYWZMd0ZWU0JHbWNYUzY5S21jYzFaZUVEX3l0bHdBSmtoQ2R6VjZVSWlwaG8tUWZUaldqdlg1NUFrWWVBbGpHZExrNUhLdlR5MEUyX1FUZHlqTWZEMFRpVmNZVVFhajF5ZXRmaE9FVmp3R3hhaVdmcVdCWk9HbmFqd0U0N0RleUtyOE1DeGNremk0MkpsZVhtRzVLY3NMOHc4c2M2dzVEMm1IZw?oc=5",
-        "https://www.inyourarea.co.uk/news/whats-on-rochdale-stunning-night-time-light-trail-puppet-cabaret-and-music-mixer"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T19:12:14.852831Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "What's On Rochdale: Stunning night-time light trail and a raucous puppet cabaret - InYourArea",
-      "source_name": "InYourArea",
-      "category": "events",
-      "text_fingerprint": "56df36d78f5be278",
-      "recovery_attempts": 1,
-      "evidence_recovery_policy": 1
-    },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343": {
       "first_attempt_at": "2026-11-07T23:24:30.313355Z",
       "attempts": 1,
@@ -1404,6 +1368,22 @@
       "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
+    "https://www.manchestereveningnews.co.uk/news/prime-minister-andy-burnham-backs-34904060": {
+      "first_attempt_at": "2026-11-12T20:55:23.163094Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.manchestereveningnews.co.uk/news/prime-minister-andy-burnham-backs-34904060"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-12T20:55:23.163094Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Prime Minister Andy Burnham backs new city centre 'express' bus service",
+      "source_name": "Manchester Evening News",
+      "category": "health",
+      "text_fingerprint": "4361ff467459a425"
+    },
     "https://www.manchestereveningnews.co.uk/news/property/greater-manchester-areas-you-can-34869674": {
       "first_attempt_at": "2026-11-11T21:30:31.558497Z",
       "attempts": 1,
@@ -1430,13 +1410,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-05T21:32:26.214522Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Enjoy spectacular free Ignite Fire Festival in Rochdale - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "380c3112c2ea3527",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/whats-on/whats-on-news/remembrance-sunday-2026-full-list-34861416.amp": {
       "first_attempt_at": "2026-11-05T09:50:24.119954Z",
@@ -1759,29 +1739,31 @@
       "first_attempt_at": "2026-11-12T09:50:53.814791Z",
       "attempts": 1,
       "urls": [
-        "https://www.rochdale.gov.uk/news/article/697/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on"
+        "https://www.rochdale.gov.uk/news/article/697/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on",
+        "https://www.rochdaletownhall.co.uk/news/article/76/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T09:50:53.814791Z",
+      "last_attempt_at": "2026-11-12T20:55:23.163333Z",
       "outcome": "published",
       "reason": "",
       "title": "Fire festival returns to Rochdale with free entry and Christmas lights switch-on – Rochdale Borough Council",
       "source_name": "Rochdale Borough Council News",
       "category": "events",
-      "text_fingerprint": "44674b010ac7f476"
+      "text_fingerprint": "44674b010ac7f476",
+      "recovery_attempts": 1
     },
     "https://www.rochdale.gov.uk/news/article/698/council-issues-admissions-reminder-to-parents-before-the-new-year": {
       "first_attempt_at": "2026-11-12T19:07:46.556891Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochdale.gov.uk/news/article/698/council-issues-admissions-reminder-to-parents-before-the-new-year"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T19:07:46.556891Z",
+      "last_attempt_at": "2026-11-12T20:51:33.119817Z",
       "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "reason": "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: The d",
       "title": "Council issues admissions reminder to parents before the New Year – Rochdale Borough Council",
       "source_name": "Rochdale Borough Council News",
       "category": "politics",
@@ -1939,8 +1921,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T19:07:46.556709Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Middleton man charged with aggravated burglaries and attempted murder - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
@@ -1988,18 +1970,18 @@
     },
     "https://www.rochdaletimes.co.uk/partnership-wins-award-for-manufacturing-innovation": {
       "first_attempt_at": "2026-11-12T19:07:46.556636Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochdaletimes.co.uk/partnership-wins-award-for-manufacturing-innovation"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T19:07:46.556636Z",
+      "last_attempt_at": "2026-11-12T20:55:23.162869Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Partnership wins award for manufacturing innovation - Rochdale Times",
       "source_name": "Rochdale Times",
-      "category": "news",
+      "category": "environment",
       "text_fingerprint": "4d3a456c4fc27178"
     },
     "https://www.rochdaletimes.co.uk/planners-cant-get-over-out-of-character-fence": {
@@ -2046,12 +2028,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-11T00:15:00.333777Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "RBH ranks among top 25% of landlords for tenant satisfaction - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
-      "text_fingerprint": "f10346349b81b7b6"
+      "text_fingerprint": "f10346349b81b7b6",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/residents-asked-to-help-families-in-need-with-christmas-toy-appeal": {
       "first_attempt_at": "2026-11-12T19:05:34.536536Z",
@@ -2061,9 +2044,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T19:05:34.536536Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "last_attempt_at": "2026-11-12T20:55:23.163691Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Residents asked to help families in need with Christmas toy appeal - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "community",
@@ -2165,13 +2148,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T12:47:16.992667Z",
+      "last_attempt_at": "2026-11-12T20:55:23.163537Z",
       "outcome": "published",
       "reason": "",
       "title": "Tributes pour in for former Rochdale councillor - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
-      "text_fingerprint": "744ed84a63d46cef"
+      "text_fingerprint": "744ed84a63d46cef",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/volunteers-needed-to-help-provide-town-centre-safe-haven": {
       "first_attempt_at": "2026-11-09T11:38:20.827240Z",
@@ -2217,13 +2201,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T21:30:31.558094Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-12T20:51:22.692785Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Armistice Day at Rochdale Cenotaph",
       "source_name": "Roch Valley Radio",
       "category": "sport",
-      "text_fingerprint": "b724759a23929235"
+      "text_fingerprint": "b724759a23929235",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/local/photos/rochdale-remembrance-sunday": {
       "first_attempt_at": "2026-11-08T19:08:01.970490Z",
@@ -2260,13 +2245,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road": {
       "first_attempt_at": "2026-11-12T19:05:37.729201Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T19:05:37.729201Z",
+      "last_attempt_at": "2026-11-12T20:51:35.905784Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "The hidden Rochdale cafe with countryside views that you won’t find by road",
@@ -2382,14 +2367,14 @@
     },
     "https://www.rochvalleyradio.com/news-features/3/politics/1427/tributes-paid-to-former-healey-councillor-and-firefighter-shaun-o-neill": {
       "first_attempt_at": "2026-11-10T22:13:18.456211Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMif0FVX3lxTE1BbUpCRi1IZmxkMldaSHc5MVdHbG9yb2EyZjRUU2VON0JEQzZDcWVXS3hIdmlkNlFuTXNBR3pnQm1CXzMxSHE5bWF1bGRxVEQybUtESGgtYi0tMnFiVU5vbkp2dzZDbXIzM3R3ZTNyRE04WGtQZl9yQlRKc2V3eDQ?oc=5",
         "https://www.rochvalleyradio.com/news-features/3/politics/1427/tributes-paid-to-former-healey-councillor-and-firefighter-shaun-o-neill"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T19:07:46.556825Z",
+      "last_attempt_at": "2026-11-12T20:55:23.163879Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Tributes paid to former Healey councillor and firefighter Shaun O’Neill",
