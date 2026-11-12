@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-12T09:21:06.422970Z",
+  "updated_at": "2026-11-12T09:50:53.815202Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 151,
@@ -580,14 +580,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T09:21:06.422505Z",
+      "last_attempt_at": "2026-11-12T09:50:53.815059Z",
       "outcome": "published",
       "reason": "",
       "title": "Drug dealer caught with £1,000 cash rose through ranks to run Rochdale ‘Adam’ line - Asian Image",
       "source_name": "Asian Image",
       "category": "crime",
       "text_fingerprint": "8e087e204cdc3975",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.bbc.co.uk/news/articles/c8ly0qpwee04o": {
@@ -1768,6 +1768,22 @@
       "category": "community",
       "text_fingerprint": "ef59bc1c9f1c5880"
     },
+    "https://www.rochdale.gov.uk/news/article/697/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on": {
+      "first_attempt_at": "2026-11-12T09:50:53.814791Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdale.gov.uk/news/article/697/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-12T09:50:53.814791Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Fire festival returns to Rochdale with free entry and Christmas lights switch-on – Rochdale Borough Council",
+      "source_name": "Rochdale Borough Council News",
+      "category": "events",
+      "text_fingerprint": "44674b010ac7f476"
+    },
     "https://www.rochdale.gov.uk/private-landlords/good-landlord-charter-support-landlords-tenants": {
       "first_attempt_at": "2026-11-07T09:17:19.967206Z",
       "attempts": 1,
@@ -2336,14 +2352,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T09:21:06.422732Z",
+      "last_attempt_at": "2026-11-12T09:50:53.814923Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale Christmas toy appeal opens donations after helping 3,000 children last year",
       "source_name": "Roch Valley Radio Local News",
       "category": "community",
       "text_fingerprint": "7daedf23638ebab6",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochvalleyradio.com/news-features/3/politics/1427/tributes-paid-to-former-healey-councillor-and-firefighter-shaun-o-neill": {
       "first_attempt_at": "2026-11-10T22:13:18.456211Z",
@@ -2405,13 +2421,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T16:12:23.954754Z",
+      "last_attempt_at": "2026-11-12T09:50:53.814404Z",
       "outcome": "published",
       "reason": "",
       "title": "Man arrested for possessing an imitation firearm at Rochdale Armistice Day event",
       "source_name": "Roch Valley Radio Local News",
       "category": "crime",
-      "text_fingerprint": "abf9148b804d37c0"
+      "text_fingerprint": "40ed1c91a0bb2d0a",
+      "recovery_attempts": 1
     },
     "https://www.sportsmole.co.uk/football/fleetwood-town/fa-cup/preview/fleetwood-vs-rochdale-prediction-team-news-lineups_608463.html": {
       "first_attempt_at": "2026-11-05T21:10:34.592828Z",
@@ -2554,14 +2571,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T08:52:39.445293Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-12T09:50:53.814636Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale man among 16 charged with violent disorder ahead of Man United match - Oldham Times",
       "source_name": "Oldham Times",
       "category": "crime",
       "text_fingerprint": "d70d452d1cc50eb9",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.totalrl.com/rochdale-hornets-move-is-right-for-ryan-millar": {
       "first_attempt_at": "2026-11-11T21:27:32.815976Z",
@@ -2701,22 +2719,6 @@
       "source_name": "Wirral Globe",
       "category": "sport",
       "text_fingerprint": "412c9de9141cf8c2"
-    },
-    "https://www.yourtrustrochdale.co.uk/health/rochdale-leisure-centre-small-pool-closure": {
-      "first_attempt_at": "2026-11-04T09:39:26.692939Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.yourtrustrochdale.co.uk/health/rochdale-leisure-centre-small-pool-closure"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T09:39:26.692939Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Rochdale Leisure Centre Small Pool Closure - Your Trust",
-      "source_name": "Your Trust Rochdale",
-      "category": "health",
-      "text_fingerprint": "352646e7497b51d5"
     }
   }
 }
