@@ -69,6 +69,14 @@ def test_old_checked_story_is_not_refetched():
     assert calls == []
 
 
+
+def test_crime_stories_are_checked_first():
+    older_crime = story(slug="older-crime", first_published_at="2026-11-01T10:00:00Z")
+    newer_other = story(slug="newer-other", category="community", first_published_at="2026-11-11T10:00:00Z")
+    seen = []
+    backstop.run([newer_other, older_crime], now=NOW, fetcher=lambda url: seen.append(url) or ORIGINAL, limit=1)
+    assert "core_fact_check" in older_crime and "core_fact_check" not in newer_other
+
 def test_partial_capture_never_fails_a_story():
     # A fact may come from the source that could not be read.
     row = story(source_urls=[URL, "https://www.rochdaletimes.co.uk/other-report/"])

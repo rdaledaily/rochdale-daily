@@ -222,8 +222,12 @@ def run(
     budget = limit if limit is not None else int(os.getenv("RD_CORE_FACT_FETCH_LIMIT", "30"))
     counts = {"checked": 0, "passed": 0, "failed": 0, "unchecked": 0, "fetches": 0, "changed_sources": 0}
     candidates = [r for r in rows if is_automated(r) and needs_capture(r, now)]
-    # Newest first: a fresh story is the one most readers are seeing now.
-    candidates.sort(key=lambda r: _parse(r.get("first_published_at") or r.get("published_at")) or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    # Crime, police and court stories first (contempt and defamation risk),
+    # then newest first: a fresh story is the one most readers see now.
+    candidates.sort(key=lambda r: (
+        str(r.get("category") or "") == "crime" or bool(r.get("police_matter")),
+        _parse(r.get("first_published_at") or r.get("published_at")) or datetime.min.replace(tzinfo=timezone.utc),
+    ), reverse=True)
     for row in candidates:
         urls = source_urls(row)
         fetchable = list(urls)
