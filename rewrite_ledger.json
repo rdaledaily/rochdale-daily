@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-12T08:33:17.727343Z",
+  "updated_at": "2026-11-12T08:52:39.445715Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 152,
@@ -580,14 +580,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T03:12:09.049982Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-12T08:52:39.445545Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Drug dealer caught with £1,000 cash rose through ranks to run Rochdale ‘Adam’ line - Asian Image",
       "source_name": "Asian Image",
       "category": "crime",
       "text_fingerprint": "8e087e204cdc3975",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.bbc.co.uk/news/articles/c8ly0qpwee04o": {
       "first_attempt_at": "2026-11-09T06:14:54.675806Z",
@@ -2561,16 +2562,16 @@
     },
     "https://www.theoldhamtimes.co.uk/news/26719221.rochdale-man-among-16-charged-violent-disorder": {
       "first_attempt_at": "2026-11-11T21:27:54.023907Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.rochdaletimes.co.uk/16-men-charged-with-disorder-ahead-of-manchester-united-match",
         "https://www.theoldhamtimes.co.uk/news/26719221.rochdale-man-among-16-charged-violent-disorder"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T08:30:06.626984Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Remove unsupported calendar year(s) 2027; source publication timestamps are not event date",
+      "last_attempt_at": "2026-11-12T08:52:39.445293Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale man among 16 charged with violent disorder ahead of Man United match - Oldham Times",
       "source_name": "Oldham Times",
       "category": "crime",
