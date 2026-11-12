@@ -100,6 +100,28 @@ def _public_https(url: str) -> None:
             raise ValueError("non-public address")
 
 
+def decode_google_news(url: str) -> str | None:
+    """Decode a current Google News link (CBMi...) through Google's own endpoint.
+
+    The first live run on 12 Nov 2026 left 9 of 14 unchecked stories on these
+    links: the older resolver reads redirects and page metadata, which current
+    links no longer carry. googlenewsdecoder (pinned in requirements.txt, added
+    with the editor's approval) asks Google to decode them. Any failure means
+    the story is reported unchecked, as before.
+    """
+    try:
+        from googlenewsdecoder import gnewsdecoder
+        decoded = gnewsdecoder(url, timeout=10)
+    except Exception:  # noqa: BLE001 - absent or failing decoder means unchecked
+        return None
+    if isinstance(decoded, dict) and decoded.get("success"):
+        value = str(decoded.get("decoded_url") or "")
+        host = urlparse(value).hostname or ""
+        if value.startswith("https://") and host and host not in UNFETCHABLE_HOSTS and not host.endswith("google.com"):
+            return value
+    return None
+
+
 def fetch_text(url: str) -> str:
     """Fetch a source page as plain text. Raises on anything unexpected."""
     import requests
@@ -111,6 +133,8 @@ def fetch_text(url: str) -> str:
         # publisher's URL; without it 80 live stories could not be checked.
         from resolve_google_news_sources import resolve_google_news_url
         resolved = resolve_google_news_url(url, timeout=10)
+        if not resolved:
+            resolved = decode_google_news(url)
         if not resolved:
             raise ValueError("Google News link did not resolve to a publisher page")
         current = resolved

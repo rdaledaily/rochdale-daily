@@ -188,6 +188,53 @@ def check_manual_articles() -> None:
     note(path.name, f"{len(data)} entries, {live} would publish")
 
 
+# A story written from a press release must name the press office that issued
+# it (editor's rule, 12 Nov 2026). The wording a writer uses when crediting a
+# release; a sentence saying no release was published does not match.
+PRESS_RELEASE_RE = re.compile(
+    r"press releases?(?:,)? (?:supplied|issued|sent|from|dated)|"
+    r"(?:a|the) press release (?:supplied|issued|sent)|"
+    r"press release supplied|from a press release|"
+    r"\bpress release\b(?= supplied| issued|[;.)]?\s*$)",
+    re.I,
+)
+
+
+def manual_entries() -> list[tuple[str, dict]]:
+    """Every hand-written entry, from manual_articles.json and manual_articles.d."""
+    found: list[tuple[str, dict]] = []
+    data = load(REPO_ROOT / "manual_articles.json")
+    for index, entry in enumerate(data if isinstance(data, list) else []):
+        if isinstance(entry, dict):
+            found.append((f"manual_articles.json ({str(entry.get('slug') or index)[:48]})", entry))
+    folder = REPO_ROOT / "manual_articles.d"
+    for path in sorted(folder.glob("*.json")) if folder.is_dir() else []:
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue  # reported by the loader and the publish workflow
+        for entry in payload if isinstance(payload, list) else [payload]:
+            if isinstance(entry, dict):
+                found.append((f"manual_articles.d/{path.name}", entry))
+    return found
+
+
+def check_press_offices() -> None:
+    for where, entry in manual_entries():
+        if entry.get("draft") or entry.get("enabled") is False:
+            continue
+        office = str(entry.get("press_office") or "").strip()
+        text = " ".join(str(entry.get(k) or "") for k in ("body", "content", "source_name"))
+        if entry.get("press_release") is True and not office:
+            fail(where, 'press_release is true but "press_office" is empty — name the press office '
+                        'that issued it, e.g. "Greater Manchester Police press office"')
+        elif not office and PRESS_RELEASE_RE.search(text):
+            fail(where, 'written from a press release but has no "press_office" — add the issuing '
+                        'press office, e.g. "press_office": "Greater Manchester Police press office"')
+        if office and "press office" not in office.lower() and "agency" not in office.lower():
+            note(where, f'press_office "{office}" does not say "press office"; check it names the office')
+
+
 def advert_is_live(ad: dict, today: str | None = None) -> bool:
     """True when today falls inside the placement's booked date range."""
     stamp = today or datetime.now(timezone.utc).date().isoformat()
@@ -418,6 +465,7 @@ def main() -> int:
     args = parser.parse_args()
 
     check_manual_articles()
+    check_press_offices()
     check_adverts()
     check_card_aliases()
     check_ward_map()

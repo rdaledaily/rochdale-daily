@@ -155,6 +155,23 @@ def test_gate_drops_failed_story_and_removes_its_page():
         assert log[-1]["slug"] == row["slug"] and log[-1]["issues"]
 
 
+
+def test_google_news_link_is_decoded_to_the_publisher():
+    import sys, types
+    calls = []
+    fake = types.ModuleType("googlenewsdecoder")
+    fake.gnewsdecoder = lambda url, timeout=10: calls.append(url) or {"success": True, "decoded_url": "https://www.rochdaletimes.co.uk/story/"}
+    sys.modules["googlenewsdecoder"] = fake
+    try:
+        assert backstop.decode_google_news("https://news.google.com/rss/articles/CBMiabc") == "https://www.rochdaletimes.co.uk/story/"
+        fake.gnewsdecoder = lambda url, timeout=10: {"success": True, "decoded_url": "https://news.google.com/x"}
+        assert backstop.decode_google_news("https://news.google.com/rss/articles/CBMiabc") is None
+        fake.gnewsdecoder = lambda url, timeout=10: {"success": False, "message": "blocked"}
+        assert backstop.decode_google_news("https://news.google.com/rss/articles/CBMiabc") is None
+    finally:
+        del sys.modules["googlenewsdecoder"]
+    assert calls
+
 if __name__ == "__main__":
     failures = []
     for name, test in sorted(globals().items()):

@@ -205,6 +205,13 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         category = "news"
 
     source_name = _clean(entry.get("source_name")) or "Rochdale Daily"
+    # A story from a press release names the press office that issued it as
+    # its source (editor's rule, 12 Nov 2026). The organisation it speaks for
+    # stays as a second source name.
+    press_office = _clean(entry.get("press_office"))
+    organisation = source_name
+    if press_office:
+        source_name = press_office
     image_url = _clean(entry.get("image_url") or entry.get("img"))
     allow_scrape_merge = entry.get("allow_scrape_merge") is True
 
@@ -226,7 +233,9 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         "scraped_at": _iso(now),
         "source_name": source_name,
         "source_url": source_url,
-        "source_names": [source_name],
+        "source_names": [source_name] + (
+            [organisation] if press_office and organisation not in ("Rochdale Daily", press_office) else []
+        ),
         "source_urls": [source_url] if source_url else [],
         "image_url": image_url,
         "image_credit": _clean(entry.get("image_credit")) or "Rochdale Daily",
@@ -268,6 +277,10 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     if entry.get("publication_route") == "daily-briefing" and entry.get("briefing_slot") in ("morning", "evening"):
         # The newsletter sender finds the day's briefing by this field.
         record["briefing_slot"] = entry["briefing_slot"]
+
+    if press_office:
+        record["press_release"] = True
+        record["press_office"] = press_office
 
     if entry.get("image_alt"):
         record["image_alt"] = _clean(entry.get("image_alt"))[:200]
