@@ -1350,6 +1350,7 @@ def write_sitemap(slugs_with_dates: list[tuple[str, str]]) -> None:
     SITEMAP_PATH.write_text(xml, encoding='utf-8')
 
 DATE_PUBLISHED_RE = re.compile(r'"datePublished"\s*:\s*"([^"]+)"')
+DATE_MODIFIED_RE = re.compile(r'"dateModified"\s*:\s*"([^"]+)"')
 
 def archive_page_lastmod(path: Path) -> str:
     """Read datePublished from an archived page's own JSON-LD.
@@ -1359,11 +1360,21 @@ def archive_page_lastmod(path: Path) -> str:
     story was published. Returns '' when unavailable; the sitemap entry is
     then written without a lastmod, which is valid.
     """
+    # A modified page (a correction, an update) reports dateModified; the
+    # sitemap must carry the newer date or search engines never recrawl it.
+    # Until 12 Nov 2026 only datePublished was read, so an archived page that
+    # had been corrected still told Google it was unchanged since publication.
     try:
-        match = DATE_PUBLISHED_RE.search(path.read_text(encoding='utf-8', errors='ignore'))
-        return match.group(1) if match else ''
+        text = path.read_text(encoding='utf-8', errors='ignore')
     except OSError:
         return ''
+    dates = [m.group(1) for m in (DATE_PUBLISHED_RE.search(text), DATE_MODIFIED_RE.search(text)) if m]
+    if not dates:
+        return ''
+    try:
+        return max(dates, key=parse_iso)
+    except (TypeError, ValueError):
+        return dates[0]
 
 def scrub_stored_ad_slots(path: Path = ARTICLES_JSON) -> int:
     """Remove advert slots from stored story bodies. Slots are render-time

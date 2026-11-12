@@ -246,7 +246,7 @@ def run(
                 texts[url] = fetcher(url)
             except Exception as exc:  # noqa: BLE001 - every failure is recorded, none is fatal
                 if url not in texts:
-                    errors[url] = f"capture failed ({type(exc).__name__})"
+                    errors[url] = f"capture failed ({type(exc).__name__}: {str(exc)[:80]})"
         verdict = check(row, texts, errors)
         if previous and any(previous.get(u) and previous.get(u) != verdict["source_sha"].get(u) for u in urls):
             counts["changed_sources"] += 1
