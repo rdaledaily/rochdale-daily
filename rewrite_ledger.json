@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-12T11:25:50.970968Z",
+  "updated_at": "2026-11-12T12:11:55.797475Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 153,
@@ -475,13 +475,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T11:25:50.970441Z",
+      "last_attempt_at": "2026-11-12T12:11:55.797104Z",
       "outcome": "published",
       "reason": "",
       "title": "Updated: 12/11/2026 at 11:09am Live Freehold Tram Stop - Lifts out of service Duration Thu 12 Nov, 11:09am – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "4024cad452f8e419"
+      "text_fingerprint": "4024cad452f8e419",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-7b08092838f6ebc8cc": {
       "first_attempt_at": "2026-11-08T13:06:49.734801Z",
@@ -2396,14 +2397,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T11:25:50.970797Z",
+      "last_attempt_at": "2026-11-12T12:11:55.797334Z",
       "outcome": "published",
       "reason": "",
       "title": "Rochdale Christmas toy appeal opens donations after helping 3,000 children last year",
       "source_name": "Roch Valley Radio Local News",
       "category": "community",
       "text_fingerprint": "7daedf23638ebab6",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.rochvalleyradio.com/news-features/3/politics/1427/tributes-paid-to-former-healey-councillor-and-firefighter-shaun-o-neill": {
@@ -2617,8 +2618,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T11:25:50.970216Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Rochdale man among 16 charged with violent disorder ahead of Man United match - Oldham Times",
       "source_name": "Oldham Times",
       "category": "crime",
