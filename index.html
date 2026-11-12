@@ -1203,6 +1203,12 @@
     .newsletter-row button:hover{filter:brightness(1.08)}
     .newsletter-consent{display:flex;gap:8px;align-items:flex-start;margin:10px 0 0;font-size:13px;color:#d7e0ea;line-height:1.4}
     .newsletter-consent a{color:#fff}
+    .newsletter-prefs{margin:12px 0 0;font-size:14px;color:#d7e0ea}
+    .newsletter-prefs summary{cursor:pointer;color:#fff;font-weight:600;padding:6px 0}
+    .newsletter-prefs select{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #3a5074;border-radius:8px;font-size:16px;background:#fff;color:#111}
+    .newsletter-prefs fieldset{border:0;margin:8px 0 0;padding:0}
+    .newsletter-prefs legend,.newsletter-prefs-label{display:block;margin:8px 0 6px;font-size:13px;font-weight:600;color:#fff}
+    .newsletter-prefs fieldset label{display:flex;gap:8px;align-items:flex-start;margin:8px 0 0;font-size:13px;line-height:1.4}
     .newsletter-status{margin:8px 0 0;font-size:14px;color:var(--cyan);min-height:1.2em}
     .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
     @media (max-width:820px){.newsletter-inner{grid-template-columns:1fr}.newsletter-row{flex-direction:column}.newsletter-row button{width:100%}}
@@ -1667,6 +1673,24 @@
             </div>
             <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
             <label class="newsletter-consent"><input type="checkbox" id="newsletter-consent" name="consent" required> Send me the Rochdale Daily newsletter. I can unsubscribe at any time. <a href="/privacy">Privacy</a></label>
+            <details class="newsletter-prefs">
+              <summary>Choose your area and topics (optional)</summary>
+              <label class="newsletter-prefs-label" for="newsletter-area">Your area</label>
+              <select id="newsletter-area" name="area">
+                <option value="">Whole borough</option>
+                <option value="rochdale">Rochdale</option>
+                <option value="heywood">Heywood</option>
+                <option value="middleton">Middleton</option>
+                <option value="pennines">Pennines (Littleborough, Milnrow, Newhey, Wardle)</option>
+              </select>
+              <fieldset>
+                <legend>What you most want to hear about</legend>
+                <label><input type="checkbox" name="topics" value="crime"> Crime</label>
+                <label><input type="checkbox" name="topics" value="whats-on"> What's on</label>
+                <label><input type="checkbox" name="topics" value="sport"> Rochdale AFC and sport</label>
+                <label><input type="checkbox" name="topics" value="council"> Council and planning</label>
+              </fieldset>
+            </details>
             <p class="newsletter-status" id="newsletter-status" role="status" aria-live="polite"></p>
           </form>
         </div>
@@ -5061,7 +5085,7 @@ function shareIconMarkup(action, label) {
         if (!consent) { status.textContent = "Please tick the box to consent."; return; }
         status.textContent = "Signing you up\u2026";
         try {
-          var res = await fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, consent: true, website: website, source: "homepage" }) });
+          var res = await fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, consent: true, website: website, source: "homepage", area: (form.querySelector('[name="area"]') || {}).value || "", topics: [].map.call(form.querySelectorAll('[name="topics"]:checked'), function (input) { return input.value; }) }) });
           var data = await res.json().catch(function () { return {}; });
           if (res.ok && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); }
           else { status.textContent = data.error || "Something went wrong. Please try again."; }

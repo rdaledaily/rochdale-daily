@@ -22,6 +22,9 @@ on:
       - "assets/js/new-story-alerts.js"
       - "assets/js/my-rochdale.js"
       - "tests/test_my_rochdale_crime.cjs"
+      - "tests/test_newsletter_signup.cjs"
+      - "assets/js/article-signup.js"
+      - "functions/api/newsletter.js"
       - "functions/api/borough-data.js"
       - "my-rochdale.html"
       - "assets/js/read-next.js"
@@ -169,6 +172,8 @@ jobs:
           node --check OneSignalSDKWorker.js
           node --check assets/js/my-rochdale.js
           node tests/test_my_rochdale_crime.cjs
+          node --check assets/js/article-signup.js
+          node tests/test_newsletter_signup.cjs
           node --check functions/api/borough-data.js
       - name: Verify live homepage inline JavaScript syntax
         run: |

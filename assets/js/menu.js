@@ -113,7 +113,8 @@
   const timeout=setTimeout(()=>controller.abort(),15000);
   try{
    const response=await fetch('/api/newsletter',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,
-    body:JSON.stringify({email,consent:true,website:form.querySelector('[name="website"]')?.value||'',source:prefix})});
+    body:JSON.stringify({email,consent:true,website:form.querySelector('[name="website"]')?.value||'',source:prefix,
+     area:form.querySelector('[name="area"]')?.value||'',topics:[...form.querySelectorAll('[name="topics"]:checked')].map(input=>input.value)})});
    const data=await response.json();
    if(!response.ok||data.ok!==true)throw Error(data.error||'Signup could not be saved. Please try again.');
    status.textContent=data.message||'Your newsletter signup has been saved.';form.reset();

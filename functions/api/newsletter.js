@@ -3,7 +3,7 @@
  * Bindings: EVENTS_KV (shared), EVENTS_ADMIN_TOKEN (shared), EVENTS_IP_SALT (shared).
  *
  * Storage layout in EVENTS_KV:
- *   newsletter:sub:<sha256(email)>   {"email","consented_at","source","ip_hash"}
+ *   newsletter:sub:<sha256(email)>   {"email","consented_at","source","ip_hash","area","topics"}
  *   newsletter:index                 legacy index; exports use individual records
  *   newsletter:rl:<ipHash>           rolling per-address rate limit
  *
@@ -20,6 +20,32 @@ const INDEX_KEY = "newsletter:index";
 const RL_WINDOW_MS = 10 * 60 * 1000;
 const RL_MAX = 5;
 const CONSENT_TEXT = "Send me the Rochdale Daily newsletter. I can unsubscribe at any time.";
+
+/* Optional reader preferences, collected at sign-up so area and topic editions
+ * can be switched on later without asking every subscriber again. Nothing is
+ * sent differently because of them yet.
+ *
+ * Areas are the borough's four townships, not wards: on 12 Nov 2026 none of
+ * the 618 live stories carried a ward, while every one carried an area that
+ * maps to a township, so a township edition can be filled and a ward one
+ * cannot. Anything outside these lists is dropped, never stored.
+ */
+const AREAS = new Set(["rochdale", "heywood", "middleton", "pennines"]);
+const TOPICS = new Set(["crime", "whats-on", "sport", "council"]);
+const BREVO_AREA_ATTR = "RD_AREA";
+const BREVO_TOPICS_ATTR = "RD_TOPICS";
+const ATTRS_READY_KEY = "newsletter:brevo_attrs_ready";
+
+function normalisePrefs(body) {
+  const area = String((body && body.area) || "").trim().toLowerCase();
+  const raw = Array.isArray(body && body.topics) ? body.topics : [];
+  const topics = [];
+  for (const value of raw.slice(0, 12)) {
+    const topic = String(value || "").trim().toLowerCase();
+    if (TOPICS.has(topic) && !topics.includes(topic)) topics.push(topic);
+  }
+  return { area: AREAS.has(area) ? area : "", topics };
+}
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -61,21 +87,56 @@ async function readJson(kv, key, fallback) {
  * this only joins the configured newsletter list, never sends a campaign.
  * Do not subscribe someone whom the provider has already suppressed.
  */
+function brevoHeaders(env){
+  return {'api-key':env.BREVO_API_KEY,'Content-Type':'application/json','Accept':'application/json'};
+}
+
+/* Brevo only keeps an attribute it already knows, so the two preference
+ * attributes are created once (a second create answers 400 and changes
+ * nothing). The flag in KV stops this running on every sign-up. If it fails,
+ * the preference is still in our own ledger and in the CSV export.
+ */
+async function ensureBrevoAttributes(env,signal){
+  const kv=env.EVENTS_KV;
+  try{ if(kv&&await kv.get(ATTRS_READY_KEY))return true; }catch{ /* fall through and try */ }
+  let ready=true;
+  for(const name of [BREVO_AREA_ATTR,BREVO_TOPICS_ATTR]){
+    try{
+      const r=await fetch('https://api.brevo.com/v3/contacts/attributes/normal/'+name,{
+        method:'POST',headers:brevoHeaders(env),body:JSON.stringify({type:'text'}),signal});
+      if(r.status!==201&&r.status!==400)ready=false;
+    }catch{ready=false}
+  }
+  if(ready&&kv){try{await kv.put(ATTRS_READY_KEY,'1')}catch{ /* retried next time */ }}
+  return ready;
+}
+
 async function syncBrevo(env,record){
   if(!env.BREVO_API_KEY||!env.BREVO_LIST_ID)return {configured:false,synced:false};
   const listId=Number(env.BREVO_LIST_ID);
   if(!Number.isSafeInteger(listId)||listId<=0)return {configured:false,synced:false};
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),6500);
   try{
+    const payload={email:record.email,listIds:[listId],updateEnabled:false};
+    const attributes={};
+    if(record.area)attributes[BREVO_AREA_ATTR]=record.area;
+    if(Array.isArray(record.topics)&&record.topics.length)attributes[BREVO_TOPICS_ATTR]=record.topics.join(',');
+    let prefs='none';
+    if(Object.keys(attributes).length){
+      // A sign-up is never lost to a preference problem: without the
+      // attributes in place the contact still joins the list.
+      if(await ensureBrevoAttributes(env,ctrl.signal)){payload.attributes=attributes;prefs='sent';}
+      else prefs='ledger_only';
+    }
     const r=await fetch('https://api.brevo.com/v3/contacts',{
       method:'POST',
-      headers:{'api-key':env.BREVO_API_KEY,'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({email:record.email,listIds:[listId],updateEnabled:false}),
+      headers:brevoHeaders(env),
+      body:JSON.stringify(payload),
       signal:ctrl.signal
     });
     // Provider duplicate/blacklisted contacts must not be reactivated just
     // because a local user retried the form.
-    if(r.status===201||r.status===204)return {configured:true,synced:true};
+    if(r.status===201||r.status===204)return {configured:true,synced:true,prefs};
     if(r.status===400||r.status===409)return {configured:true,synced:false,reason:'review_provider_existing_or_suppressed'};
     return {configured:true,synced:false,reason:'provider_error'};
   }catch{return {configured:true,synced:false,reason:'provider_unavailable'}}
@@ -116,6 +177,9 @@ export async function onRequestPost({ request, env }) {
   const hash = await sha256(email);
   const subKey = `newsletter:sub:${hash}`;
   const existing = await kv.get(subKey);
+  // Preferences are taken with a new sign-up only. An address already on the
+  // list is never changed by a later form post, which anyone could send.
+  const prefs = normalisePrefs(body);
   if (!existing) {
     await kv.put(
       subKey,
@@ -125,6 +189,8 @@ export async function onRequestPost({ request, env }) {
         consent_text: CONSENT_TEXT,
         source: String(body.source || "homepage").slice(0, 40),
         ip_hash: ipHash,
+        ...(prefs.area ? { area: prefs.area } : {}),
+        ...(prefs.topics.length ? { topics: prefs.topics } : {}),
       }),
     );
     // Count/export enumerate the consent ledger directly. A redundant shared
@@ -140,6 +206,7 @@ export async function onRequestPost({ request, env }) {
       const outcome = await syncBrevo(env, record);
       record.brevo_sync_status = outcome.synced ? "synced" : (outcome.reason || "not_configured");
       record.brevo_sync_attempt = new Date().toISOString();
+      if (outcome.prefs && outcome.prefs !== "none") record.brevo_prefs_status = outcome.prefs;
       await kv.put(subKey, JSON.stringify(record));
     }
   }
@@ -230,10 +297,10 @@ export async function onRequestGet({ request, env }) {
   const index = await subscriberHashes(env.EVENTS_KV);
   if (url.searchParams.get("export") !== "csv") return json({ ok: true, count: index.length });
 
-  const rows = ["email,consented_at,source"];
+  const rows = ["email,consented_at,source,area,topics"];
   for (const hash of index) {
     const record = await readJson(env.EVENTS_KV, `newsletter:sub:${hash}`, null);
-    if (record && record.email) rows.push([record.email,record.consented_at,record.source].map(csvCell).join(","));
+    if (record && record.email) rows.push([record.email,record.consented_at,record.source,record.area,(record.topics||[]).join(" ")].map(csvCell).join(","));
   }
   return new Response(rows.join("\n") + "\n", {
     headers: {
