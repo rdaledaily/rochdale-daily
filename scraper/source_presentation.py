@@ -383,9 +383,12 @@ def generic_sources_markup(article: dict[str, Any]) -> str:
         url for url in shown
         if url.startswith(("https://", "http://")) and not is_social_source(url) and not _denied_source(url)
     ]
-    if not urls:
+    # A press release has no link to show; its issuing press office is still
+    # the story's source and is named first (editor's rule, 12 Nov 2026).
+    office = str(article.get("press_office") or "").strip()
+    if not urls and not office:
         return ""
-    items = "".join(
+    items = (f"<li>Press release from {html.escape(office)}</li>" if office else "") + "".join(
         f'<li><a href="{html.escape(url, quote=True)}" target="_blank" '
         f'rel="nofollow noopener noreferrer">Open source {index}</a></li>'
         for index, url in enumerate(urls[:12], start=1)
