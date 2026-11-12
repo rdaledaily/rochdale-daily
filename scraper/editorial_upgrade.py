@@ -13,6 +13,7 @@ from house_style import HOUSE_STYLE_SYSTEM, STYLE_VERSION, style_issues
 from reader_usefulness import reader_questions_for
 from newsroom_source_policy import is_non_article_service_page
 from reader_copy import strip_filler_openers, uk_dates, uk_dates_outside_quotes
+from source_fidelity import fidelity_issues
 
 
 
@@ -832,6 +833,7 @@ INTEGRITY_ISSUE_MARKERS = (
     "long verbatim source passage",         # copyright
     "Carry the specific detail through",    # source has facts the draft dropped
     "unsupported calendar year",            # model invented a date/year not in evidence
+    "Source fidelity:",                     # figure, quotation or attributed statement not in the sources
     GATE_REJECTION_PREFIX,                  # advert, listing, out-of-borough
 )
 
@@ -989,6 +991,15 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
         issues.append("Ground the report more clearly in the supplied facts.")
     if contains_long_verbatim_phrase(combined, source_text, 20):
         issues.append("Rewrite the long verbatim source passage.")
+    # Every figure, quotation and "X said" sentence must come from the sources.
+    # Added 12 Nov 2026: four live stories carried statements their only source
+    # never made (an invented GMP line on the Armistice Day imitation-firearm
+    # arrest; invented council, RBH and GMP quotes on three others). The checks
+    # above only asked whether the draft shared some words with the source.
+    issues.extend(fidelity_issues(
+        ". ".join(part.strip().rstrip(".") for part in [title, excerpt, *paragraphs] if part.strip()),
+        source_text,
+    ))
     # v12: the sources quote someone, the draft quotes no one. Measured
     # 7 Nov 2026: only 18 of the last 150 rewrites carried a direct quote.
     if source_has_quote(source_text) and not draft_has_quote(combined):

@@ -39,6 +39,7 @@ Run:
 """
 from __future__ import annotations
 from feature_policy import is_reserve_feature, normalise_feature
+import core_fact_backstop
 
 import copy
 import json
@@ -473,6 +474,16 @@ def normalise_article(
         notes.append(f"DROPPED '{ident}': {violation}")
         return None
 
+    # Core facts (who, legal status, offence, harm, when, where, figures,
+    # quotes) must come from the sources. core_fact_backstop records the
+    # verdict; a failed automated story is never published (12 Nov 2026).
+    if core_fact_backstop.failed(article):
+        issues = (article.get("core_fact_check") or {}).get("issues") or []
+        notes.append(
+            f"DROPPED '{ident}': {CORE_FACT_HOLD}: " + " | ".join(str(i)[:160] for i in issues)
+        )
+        return None
+
     slug = _slugify(str(article.get("slug") or title))
     if not slug:
         notes.append(f"DROPPED '{ident}': could not derive a valid slug")
@@ -523,6 +534,50 @@ def normalise_article(
         notes.append(f"'{ident}': cleared stale ONGOING label")
 
     return article
+
+
+CORE_FACT_HOLD = "core facts not supported by sources"
+HOLDS_PATH = Path("reports/core_fact_holds.json")
+
+
+def hold_failed_pages(dropped: list[dict[str, Any]], root: Path = Path(".")) -> list[str]:
+    """Take down the public page of every story held for unsupported core facts.
+
+    Dropping the record alone left the old page public: on 12 Nov 2026 the
+    imitation-firearm story fell out of the feed but its page, with the wrong
+    age and an invented police statement, stayed online. Each held story is
+    logged in reports/core_fact_holds.json for the editor.
+    """
+    if not dropped:
+        return []
+    slugs = [str(row.get("slug") or "") for row in dropped if row.get("slug")]
+    for slug in slugs:
+        (root / "articles" / f"{slug}.html").unlink(missing_ok=True)
+    try:
+        from takedown_sweep import sweep
+        sweep(root, slugs)
+    except Exception as exc:  # noqa: BLE001 - the page itself is already gone
+        print(f"article_gate: listing sweep after core-fact hold failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+    path = root / HOLDS_PATH
+    try:
+        log = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(log, list):
+            log = []
+    except (OSError, json.JSONDecodeError):
+        log = []
+    for row in dropped:
+        check = row.get("core_fact_check") or {}
+        log.append({
+            "held_at": _now_iso(),
+            "slug": row.get("slug"),
+            "title": row.get("title"),
+            "source_urls": core_fact_backstop.source_urls(row),
+            "issues": check.get("issues") or [],
+            "source_changed_at": check.get("source_changed_at"),
+        })
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(log[-500:], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return slugs
 
 
 def _dedupe_slugs(
@@ -588,7 +643,19 @@ def main() -> int:
         print(f"article_gate: {path} is not a list of articles", file=sys.stderr)
         return 1
 
+    # Capture and check sources before gating. Network failures never stop
+    # publication of other stories; they leave the story "unchecked".
+    try:
+        counts = core_fact_backstop.run(articles)
+        print("article_gate: core-fact backstop " + json.dumps(counts))
+    except Exception as exc:  # noqa: BLE001
+        print(f"article_gate: core-fact backstop did not run: {type(exc).__name__}: {exc}", file=sys.stderr)
+
     kept, notes = gate_articles(articles)
+    held = [a for a in articles if isinstance(a, dict) and core_fact_backstop.failed(a)]
+    held_slugs = hold_failed_pages(held)
+    if held_slugs:
+        print("article_gate: held for unsupported core facts and page removed: " + ", ".join(held_slugs))
 
     for note in notes:
         print(f"article_gate: {note}")
