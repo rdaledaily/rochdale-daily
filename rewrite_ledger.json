@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-12T21:26:44.420624Z",
+  "updated_at": "2026-11-12T22:50:02.116523Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 146,
+  "count": 145,
   "entries": {
     "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries": {
       "first_attempt_at": "2026-11-07T09:17:19.967332Z",
@@ -120,12 +120,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-07T09:17:19.967014Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Behind The Sign | Player Visit Gymbound, Tranmere Prep & More - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
-      "text_fingerprint": "5ff856e01d75f5c2"
+      "text_fingerprint": "5ff856e01d75f5c2",
+      "recovery_attempts": 1
     },
     "https://rochdaleafc.co.uk/club-shop-closed-this-saturday": {
       "first_attempt_at": "2026-11-06T11:16:58.298857Z",
@@ -153,13 +154,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-05T12:15:29.881341Z",
+      "last_attempt_at": "2026-11-12T22:50:02.116406Z",
       "outcome": "published",
       "reason": "",
       "title": "Dale Welcome York City",
       "source_name": "Rochdale AFC",
       "category": "sport",
-      "text_fingerprint": "06665ea58c10fdc5"
+      "text_fingerprint": "c30396a25a8cb74c",
+      "recovery_attempts": 1
     },
     "https://rochdaleafc.co.uk/fa-cup-second-round-draw-details": {
       "first_attempt_at": "2026-11-07T19:40:07.847798Z",
@@ -288,12 +290,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-05T19:53:59.653989Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Thursday Night Football In February",
       "source_name": "Rochdale AFC",
       "category": "sport",
-      "text_fingerprint": "dd820488190b5b5b"
+      "text_fingerprint": "dd820488190b5b5b",
+      "recovery_attempts": 1
     },
     "https://rochdaleafc.co.uk/ticket-details-for-midweek-cheltenham-visit": {
       "first_attempt_at": "2026-11-10T21:06:43.164682Z",
@@ -306,12 +309,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T21:06:43.164682Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Cheltenham Town Away Tickets On Sale - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
-      "text_fingerprint": "e1eed1495da85ab1"
+      "text_fingerprint": "e1eed1495da85ab1",
+      "recovery_attempts": 1
     },
     "https://rochdaleafc.co.uk/we-need-to-step-up-gilmour": {
       "first_attempt_at": "2026-11-05T21:10:29.122136Z",
@@ -790,25 +794,6 @@
       "category": "traffic",
       "text_fingerprint": "fb472e1dd0badc29"
     },
-    "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/byrne-heaps-praise-on-doncaster-rovers-trio-as-hanlan-claims-much-needed-goal-in-comfortable-rochdale-win-9330512": {
-      "first_attempt_at": "2026-11-04T21:01:00.981268Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMijwJBVV95cUxQeFQ1QlQ4OVFzdFVjUHc5azFKZ0g4ckx3UDlhWjR4bE1rMEVQVmFRWFBjUWhDWm9tdk9MNE5HWlpialAyVE0tbE45SlR6SjBKU2xuTmljSHJna09OS3J2SjRpbUwzeGZXWU1uVnVDbExKeUZDQXAxTkZmM3FzakVMckZpaFg0RTJGSTBQSUY2cFNGMk1HZThvb3d2SEhic2ZCSEZtNVdqaVZzenFNVHRubnh3eU4xY3JUYkN5ZWRMYmxVN2owMy1RaTQyUjItZHJ0a0JoSVNGSVNOLWIzcklYQUlBM3NscnFLcERpcTNGdDFtUk44UENFdWtIVlRST3hJX3A0V1dtY3BRLWZxVWEw?oc=5",
-        "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/byrne-heaps-praise-on-doncaster-rovers-trio-as-hanlan-claims-much-needed-goal-in-comfortable-rochdale-win-9330512",
-        "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/cliff-byrne-sets-ambitious-efl-trophy-aim-for-doncaster-rovers-9324820"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-04T22:19:53.026950Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Byrne heaps praise on Doncaster Rovers trio after Rochdale win - Doncaster Free Press",
-      "source_name": "Doncaster Free Press",
-      "category": "environment",
-      "text_fingerprint": "c8ab88194126dd75",
-      "recovery_attempts": 1
-    },
     "https://www.doncasterfreepress.co.uk/sport/football/doncaster-rovers/can-you-spot-a-doncaster-rovers-you-know-from-the-win-away-at-rochdale-9330601": {
       "first_attempt_at": "2026-11-04T21:03:55.537090Z",
       "attempts": 1,
@@ -1044,13 +1029,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T01:10:09.389988Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Rochdale residents stand together in silence to remember our nation's heroes - InYourArea",
       "source_name": "InYourArea",
       "category": "news",
       "text_fingerprint": "49ff4ad4fef516cf",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://www.inyourarea.co.uk/news/whats-on-rochdale-moving-tales-of-103-year-old-d-day-hero-and-dodgy-frontmans-church-residency": {
@@ -1677,8 +1662,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T21:26:44.420138Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Fire festival returns to Rochdale with free entry and Christmas lights switch-on – Rochdale Borough Council",
       "source_name": "Rochdale Borough Council News",
       "category": "events",
@@ -1782,12 +1767,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-09T00:21:05.347700Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Education support service told it needs planning permission for hub - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
-      "text_fingerprint": "5bfb59ad2e984c54"
+      "text_fingerprint": "5bfb59ad2e984c54",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/finishing-touches-being-applied-as-boyes-opens-new-store-tomorrow": {
       "first_attempt_at": "2026-11-05T18:51:51.291816Z",
@@ -1833,13 +1819,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-08T15:50:10.860878Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Lest we forget: Borough falls silent to pay its respects - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
       "text_fingerprint": "c8ce9b365a21c4fe",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/middleton-man-charged-with-aggravated-burglaries-and-attempted-murder": {
@@ -2118,22 +2104,23 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-05T22:25:44.972253Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Warning as measles cases are confirmed - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
-      "text_fingerprint": "a74176930692f82d"
+      "text_fingerprint": "a74176930692f82d",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph": {
       "first_attempt_at": "2026-11-11T21:30:31.558094Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T21:23:26.171331Z",
+      "last_attempt_at": "2026-11-12T22:46:21.614600Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Armistice Day at Rochdale Cenotaph",
@@ -2177,13 +2164,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road": {
       "first_attempt_at": "2026-11-12T19:05:37.729201Z",
-      "attempts": 3,
+      "attempts": 4,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-12T21:23:41.236229Z",
+      "last_attempt_at": "2026-11-12T22:46:35.381106Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "The hidden Rochdale cafe with countryside views that you won’t find by road",
@@ -2201,13 +2188,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-09T19:22:30.507633Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Lest We Forget as Rochdale battalion's valiant sacrifices during the First World War",
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
       "text_fingerprint": "50c8b2d3cc97ee45",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war": {
       "first_attempt_at": "2026-11-07T19:40:07.849079Z",
@@ -2324,13 +2311,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-11T21:30:31.558375Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Sixteen men charged with violent disorder are on bail ahead of a court appearance on 4 January 2027",
       "source_name": "Roch Valley Radio Local News",
       "category": "crime",
       "text_fingerprint": "29a14aed5f3c1814",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochvalleyradio.com/news-features/4/crime/1421/driver-jailed-after-rochdale-pursuit-in-which-police-car-struck-pedestrian": {
       "first_attempt_at": "2026-11-10T16:00:32.540548Z",
