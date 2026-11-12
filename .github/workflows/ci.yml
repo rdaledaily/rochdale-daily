@@ -321,6 +321,8 @@ jobs:
           PYTHONPATH=scraper python scraper/test_category_fixes_nov2026.py
           PYTHONPATH=scraper python scraper/test_uklfi_source_denied.py
           PYTHONPATH=scraper python scraper/test_quality_gate_split.py
+          PYTHONPATH=scraper python scraper/test_source_fidelity.py
+          PYTHONPATH=scraper python scraper/test_core_fact_backstop.py
           PYTHONPATH=scraper python scraper/test_reader_growth.py
           PYTHONPATH=scraper python scraper/test_register_watch.py
           PYTHONPATH=scraper python scraper/test_reservoir_junk_oct2026.py

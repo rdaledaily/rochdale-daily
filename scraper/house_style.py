@@ -99,6 +99,7 @@ STORY_ORDER_BRIEF = (
     "the person, place, service or consequence in the borough that makes it matter here. "
     "2. What happened: the facts in order of importance, then the sequence of events. "
     "3. Quotes and comments: what the people involved, officials or organisations said, exactly and attributed. "
+    "When the sources contain no statement from someone, leave this part out: never write that a spokesperson, the police or a body said, confirmed, stated or stressed anything the sources do not say. "
     "4. Background: earlier events, related decisions, figures and context that place the story. "
     "5. Conclusion: decisions still to come, the next development and when, how readers can act; "
     "put petitions, fundraisers and official resources in useful_links (only addresses that appear in the sources), "
