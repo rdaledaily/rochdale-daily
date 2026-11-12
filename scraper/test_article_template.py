@@ -111,10 +111,22 @@ def test_newsletter_modal_is_hidden_until_the_script_opens_it(root):
     assert '<body class="single-article">' in page
     modal = re.search(r'<div id="rd-newsletter-modal"[^>]*>', page).group(0)
     assert " hidden " in modal and "display:flex" not in modal
-    assert "rd_visit_count" in page and "rd_newsletter_prompted" in page and "rd_subscribed" in page
+    assert "rd_visit_count" in page and "rd_newsletter_prompted" in page
+    # One subscriber marker site-wide: the modal reads and writes rd_newsletter_done
+    # and closes when any form on the page saves a signup.
+    assert 'get("localStorage", "rd_newsletter_done")' in page
+    assert 'document.addEventListener("rd:newsletter-saved"' in page
+    assert 'localStorage.setItem("rd_subscribed"' not in page
     assert "setTimeout(window.showNewsletterModal, 5000)" in page
     assert "jquery" not in page.lower()
 
+
+
+def test_shared_newsletter_handler_records_the_subscriber():
+    # menu.js stops every other submit listener, so it must write the marker itself.
+    script = (Path(__file__).resolve().parents[1] / "assets/js/menu.js").read_text(encoding="utf-8")
+    saved = script.index("dispatchEvent(new CustomEvent('rd:newsletter-saved'))")
+    assert "localStorage.setItem('rd_newsletter_done','1')" in script[max(0, saved - 400):saved]
 
 if __name__ == "__main__":
     failures = []

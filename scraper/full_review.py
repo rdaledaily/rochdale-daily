@@ -371,6 +371,27 @@ def verified_corrections(draft: dict[str, Any], article_text: str, source_text: 
     return proven, unproven
 
 
+def revision_text(draft: dict[str, Any]) -> str:
+    return " ".join(str(x) for x in [draft.get("title"), draft.get("excerpt"), *(draft.get("paragraphs") or [])] if x)
+
+
+def unapplied_corrections(proven: list[dict[str, str]], draft: dict[str, Any]) -> list[dict[str, str]]:
+    """Proven corrections the revision does not actually make.
+
+    Proving the error is not proving the fix: a revision that lists
+    "approved -> rejected" but still says "approved" would otherwise publish
+    with a correction note and keep the error. A correction counts as applied
+    only when the wrong words are gone and the corrected words are present.
+    """
+    text = _norm(revision_text(draft))
+    missing = []
+    for item in proven:
+        was, now = _norm(item.get("was")), _norm(item.get("now"))
+        if (was and was in text) or not now or now not in text:
+            missing.append(item)
+    return missing
+
+
 def correction_note(issues: list[str], development: bool, source_names: list[str], when: datetime,
                     factual: bool = False) -> str:
     parts = []
@@ -558,6 +579,14 @@ def review(row: dict[str, Any], client, fetcher: Callable[[str], str] = backstop
     for attempt in range(3):
         problems = gate(draft, source_text, published_on) if draft.get("paragraphs") else [
             "No revision was returned, but the checker found problems that must be fixed: rewrite the article."]
+        if attempt:
+            # Corrections proven in a later revision count too.
+            later, _ = verified_corrections(draft, original_text, " ".join(t for _, t in sources))
+            proven += [c for c in later if c["was"] not in {p["was"] for p in proven}]
+        problems += [
+            f'Apply the factual correction you listed: the article must no longer say "{c["was"]}" and must say "{c["now"]}".'
+            for c in unapplied_corrections(proven, draft)
+        ]
         if not problems:
             names = list(dict.fromkeys([str(n) for n in (row.get("source_names") or [row.get("source_name")]) if n and str(n) != "Source"]))
             note = correction_note(issues, bool(draft.get("development") or extra_urls), names, when, factual=bool(proven))
