@@ -17,8 +17,14 @@ on:
   workflow_run:
     workflows: ["Publish canonical Rochdale Daily site"]
     types: [completed]
+  # Primary start: publish.yml dispatches this after every publish (the
+  # workflow_run trigger above does not fire for dispatched publishes).
+  # Backstops: every 20 minutes 08:00-12:59 UTC, which covers 09:00-13:00
+  # London in both GMT and BST (the script gates on the London hour).
+  # Alarm: at 13:10 UTC the run fails if today's campaign does not exist.
   schedule:
-    - cron: "40 9,10,11 * * *"
+    - cron: "5,25,45 8-12 * * *"
+    - cron: "10 13 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -51,6 +57,8 @@ jobs:
           NEWSLETTER_SENDER: ${{ vars.NEWSLETTER_SENDER }}
           NEWSLETTER_SENDER_NAME: ${{ vars.NEWSLETTER_SENDER_NAME }}
           NEWSLETTER_DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          # Scheduled runs after the window are the missed-day alarm.
+          NEWSLETTER_ALARM: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
         # The result is also written as an annotation, which can be read
         # without access to the job log.
         run: |
