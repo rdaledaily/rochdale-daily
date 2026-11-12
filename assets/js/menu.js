@@ -118,6 +118,10 @@
    const data=await response.json();
    if(!response.ok||data.ok!==true)throw Error(data.error||'Signup could not be saved. Please try again.');
    status.textContent=data.message||'Your newsletter signup has been saved.';form.reset();
+   // One subscriber marker for every prompt on the site (article-signup.js,
+   // retention.js and the article modal read it). This handler stops other
+   // submit listeners, so it must record the signup itself.
+   try{localStorage.setItem('rd_newsletter_done','1');}catch(e){}
    if(typeof CustomEvent==='function'&&document.dispatchEvent)document.dispatchEvent(new CustomEvent('rd:newsletter-saved'));
   }catch(error){status.textContent=error.name==='AbortError'?'The request timed out. Your signup may have been saved; it is safe to try again.':error.message||'Could not connect. Please try again.';}
   finally{clearTimeout(timeout);delete form.dataset.submitting;form.setAttribute('aria-busy','false');if(button)button.disabled=false;}

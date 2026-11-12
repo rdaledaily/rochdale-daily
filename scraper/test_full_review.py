@@ -236,6 +236,29 @@ def test_factual_error_the_checker_cannot_see_is_corrected_when_proven():
         assert "reports differently" in verdict["note"]
 
 
+
+def test_listed_correction_that_is_not_applied_never_publishes():
+    # The revision lists approved -> rejected with a genuine quote, but still says "approved".
+    unapplied = dict(FIXED, title="Council approves Wardle carol concert closure",
+                     paragraphs=["Rochdale Borough Council approved the plan for the Wardle Village Carol Concert closure on Ramsden Road."],
+                     factual_corrections=[{"was": "approved the plan", "now": "rejected the plan",
+                                           "source_quote": "The council rejected the plan for a second closure on Ramsden Road"}])
+    applied = dict(FIXED, title="Council rejects second Ramsden Road closure",
+                   paragraphs=["The council rejected the plan for a second closure on Ramsden Road after objections from residents."],
+                   factual_corrections=unapplied["factual_corrections"])
+    with tempfile.TemporaryDirectory() as tmp:
+        root = site(Path(tmp))
+        client = FakeClient(unapplied, unapplied, unapplied)
+        verdict = fr.review(dict(APPROVED), client, fetcher=lambda u: REJECTED_SOURCE, when=WHEN, root=root)
+        assert verdict["outcome"] == "taken_down", verdict
+        assert "Apply the factual correction" in verdict["reason"]
+    with tempfile.TemporaryDirectory() as tmp:
+        root = site(Path(tmp))
+        verdict = fr.review(dict(APPROVED), FakeClient(unapplied, applied), fetcher=lambda u: REJECTED_SOURCE, when=WHEN, root=root)
+        assert verdict["outcome"] == "corrected", verdict
+        record = json.loads(Path(verdict["written_to"]).read_text(encoding="utf-8"))
+        assert "approved the plan" not in record["body"] and "rejected the plan" in record["body"]
+
 def test_unproven_factual_claim_goes_to_the_editor():
     claim = dict(FIXED, factual_corrections=[{"was": "approved the plan", "now": "deferred the plan",
                                               "source_quote": "the plan was deferred until the next meeting of the committee"}])
