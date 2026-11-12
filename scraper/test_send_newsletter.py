@@ -110,5 +110,36 @@ class NotSending(unittest.TestCase):
         self.assertTrue(report.get("error"))
 
 
+class Alarm(unittest.TestCase):
+    AFTERNOON = datetime(2026, 11, 12, 13, 10, tzinfo=timezone.utc)   # 13:10 London (GMT)
+    ALARM_ENV = dict(ENV, NEWSLETTER_ALARM="true")
+
+    def test_a_missed_day_fails_loudly_after_the_window(self):
+        report, web = run(env=self.ALARM_ENV, now=self.AFTERNOON)
+        self.assertTrue(report.get("error"))
+        self.assertIn("was NOT sent", report["status"])
+        self.assertEqual((web.created, web.sent), ([], []))
+
+    def test_a_sent_day_passes_the_alarm(self):
+        report, web = run(Brevo(existing=["Rochdale Daily briefing 2026-11-12"]),
+                          env=self.ALARM_ENV, now=self.AFTERNOON)
+        self.assertFalse(report.get("error"))
+        self.assertIn("was sent", report["status"])
+
+    def test_the_alarm_does_not_fire_inside_the_window_it_sends_instead(self):
+        report, web = run(env=self.ALARM_ENV)
+        self.assertTrue(report["sent"])
+
+    def test_the_alarm_names_an_unreachable_brevo(self):
+        report, web = run(Brevo(list_status=500), env=self.ALARM_ENV, now=self.AFTERNOON)
+        self.assertTrue(report.get("error"))
+        self.assertIn("cannot be confirmed", report["status"])
+
+    def test_without_alarm_mode_the_afternoon_is_a_quiet_skip(self):
+        report, web = run(now=self.AFTERNOON)
+        self.assertFalse(report.get("error"))
+        self.assertEqual(web.calls, [])
+
+
 if __name__ == "__main__":
     unittest.main()

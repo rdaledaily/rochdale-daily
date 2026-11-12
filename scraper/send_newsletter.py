@@ -317,6 +317,26 @@ def run(env: dict[str, str], now: datetime, request: Request = http,
     day = now.astimezone(LONDON).strftime("%Y-%m-%d")
     report: dict[str, Any] = {"date": day, "sent": False, "status": ""}
     hour = now.astimezone(LONDON).hour
+    # The alarm: once the sending window has closed, today's campaign must
+    # exist. On 3, 5, 6, 7 and 12 November 2026 the newsletter silently never
+    # went out and every run still showed green; a missed day now fails loudly.
+    if env.get("NEWSLETTER_ALARM", "").lower() == "true" and hour >= SEND_UNTIL_HOUR:
+        key = env.get("BREVO_API_KEY", "").strip()
+        if not key:
+            report["status"] = "ALARM: cannot check today's newsletter: BREVO_API_KEY is not set"
+            report["error"] = True
+            return report
+        exists = already_created(request, key, campaign_name(day))
+        if exists is None:
+            report["status"] = "ALARM: Brevo would not list campaigns, so today's newsletter cannot be confirmed"
+            report["error"] = True
+        elif exists:
+            report["status"] = "alarm check: today's newsletter was sent"
+        else:
+            report["status"] = (f"ALARM: today's newsletter ({campaign_name(day)}) was NOT sent "
+                                f"before {SEND_UNTIL_HOUR:02d}:00 London")
+            report["error"] = True
+        return report
     if not (SEND_FROM_HOUR <= hour < SEND_UNTIL_HOUR) and env.get("NEWSLETTER_FORCE", "").lower() != "true":
         report["status"] = f"outside the sending window ({SEND_FROM_HOUR:02d}:00 to {SEND_UNTIL_HOUR:02d}:00 London); nothing sent"
         return report

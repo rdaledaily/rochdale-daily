@@ -219,6 +219,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: bash scraper/gh_dispatch.sh deploy-pages.yml --ref main
+      - name: Start the newsletter
+        # The Morning Briefing reaches articles.json through THIS run, which is
+        # started by another workflow. GitHub does not fire workflow_run for
+        # such runs, so newsletter.yml's workflow_run trigger never saw the
+        # briefing: 5 of 11 days (3-12 Nov 2026) the newsletter never went out.
+        # Dispatching it explicitly does not depend on that trigger. The sender
+        # is once-a-day and 09:00-13:00 London gated, so starting it after
+        # every publish is safe.
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scraper/gh_dispatch.sh newsletter.yml --ref main
       - name: Preserve final rejected drafts
         if: always()
         uses: actions/upload-artifact@v6
