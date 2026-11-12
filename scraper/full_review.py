@@ -281,8 +281,13 @@ REVIEW_SYSTEM = (
     "Use UK spelling and dates such as 12 November 2026. Quote only words that appear verbatim in the sources. "
     "Never copy more than 15 consecutive words from a source except inside an attributed quotation. "
     "If no change is needed set changed to false. "
+    "List every factual error you corrected in factual_corrections: \"was\" is the article's wrong words "
+    "copied exactly, \"now\" is your corrected wording, and \"source_quote\" is at least eight consecutive "
+    "words copied exactly from a source that establish the correct fact. Wording, style or order changes are "
+    "not factual corrections and must not be listed. Developments go in development, not here. "
     "Respond with a JSON object: {\"changed\": boolean, \"title\": string, \"excerpt\": string, "
-    "\"paragraphs\": [string], \"development\": boolean}. No markdown."
+    "\"paragraphs\": [string], \"development\": boolean, "
+    "\"factual_corrections\": [{\"was\": string, \"now\": string, \"source_quote\": string}]}. No markdown."
 )
 
 
@@ -339,7 +344,35 @@ def gate(draft: dict[str, Any], source_text: str, published_on: date | None) -> 
 # Correction notes (deterministic: only what the checker established)
 # --------------------------------------------------------------------------
 
-def correction_note(issues: list[str], development: bool, source_names: list[str], when: datetime) -> str:
+def _norm(text: Any) -> str:
+    return " ".join(re.findall(r"[a-z0-9£%]+", plain(text).lower()))
+
+
+def verified_corrections(draft: dict[str, Any], article_text: str, source_text: str) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """Split the reviewer's claimed factual corrections into proven and unproven.
+
+    The word-level checker cannot see that "approved" should be "rejected";
+    the reviewer can. Its claim counts only when the wrong words really are in
+    the article and its quote really is in a source, so a correction can never
+    rest on the model's say-so alone.
+    """
+    article_norm, source_norm = _norm(article_text), _norm(source_text)
+    proven: list[dict[str, str]] = []
+    unproven: list[dict[str, str]] = []
+    for item in draft.get("factual_corrections") or []:
+        if not isinstance(item, dict):
+            continue
+        was, quote = _norm(item.get("was")), _norm(item.get("source_quote"))
+        claim = {k: str(item.get(k) or "")[:300] for k in ("was", "now", "source_quote")}
+        if was and was in article_norm and len(quote.split()) >= 8 and quote in source_norm:
+            proven.append(claim)
+        else:
+            unproven.append(claim)
+    return proven, unproven
+
+
+def correction_note(issues: list[str], development: bool, source_names: list[str], when: datetime,
+                    factual: bool = False) -> str:
     parts = []
     for issue in issues:
         if "figure(s)" in issue:
@@ -354,6 +387,8 @@ def correction_note(issues: list[str], development: bool, source_names: list[str
             parts.append("named a person, place or organisation the source does not name")
         elif "date(s)" in issue:
             parts.append("gave a date the source does not support")
+    if factual:
+        parts.append("stated a fact that the source reports differently")
     seen: list[str] = []
     for part in parts:
         if part not in seen:
@@ -377,7 +412,9 @@ def correction_note(issues: list[str], development: bool, source_names: list[str
 def _manual_locations(root: Path) -> dict[str, tuple[Path, int | None]]:
     """slug -> (file, list index or None) for every hand-written record."""
     where: dict[str, tuple[Path, int | None]] = {}
-    for path in sorted((root / MANUAL_DIR).glob("*.json")):
+    # Recursive, like the publication loader: 30 live stories sit in dated
+    # subfolders (manual_articles.d/2026/10/...).
+    for path in sorted((root / MANUAL_DIR).rglob("*.json")):
         payload = load_json(path, None)
         if isinstance(payload, dict) and payload.get("slug"):
             where[str(payload["slug"])] = (path, None)
@@ -506,9 +543,16 @@ def review(row: dict[str, Any], client, fetcher: Callable[[str], str] = backstop
         draft = request_revision(client, row, sources, feedback)
     except Exception as exc:  # noqa: BLE001
         return {**result, "outcome": "unchecked", "reason": f"review model unavailable ({type(exc).__name__})"}
-    # Without a checker finding or a reported development there is nothing to
-    # correct: cosmetic edits by the reviewer are discarded, never published.
-    if not issues and not (draft.get("changed") and (draft.get("development") or extra_urls)):
+    # The checker tests word presence, not meaning, so its silence does not make
+    # a revision cosmetic. Proceed on a checker finding, a development, or a
+    # factual correction the reviewer can prove from a source. A correction it
+    # claims but cannot prove goes to the editor; only a revision with none of
+    # these is cosmetic and discarded.
+    proven, unproven = verified_corrections(draft, original_text, " ".join(t for _, t in sources))
+    if not issues and not proven and not (draft.get("changed") and (draft.get("development") or extra_urls)):
+        if unproven:
+            return {**result, "outcome": "flagged", "reason": "reviewer reports a factual error it could not prove from the source; editor to check",
+                    "claims": unproven}
         return {**result, "outcome": "passed"}
 
     for attempt in range(3):
@@ -516,12 +560,12 @@ def review(row: dict[str, Any], client, fetcher: Callable[[str], str] = backstop
             "No revision was returned, but the checker found problems that must be fixed: rewrite the article."]
         if not problems:
             names = list(dict.fromkeys([str(n) for n in (row.get("source_names") or [row.get("source_name")]) if n and str(n) != "Source"]))
-            note = correction_note(issues, bool(draft.get("development") or extra_urls), names, when)
+            note = correction_note(issues, bool(draft.get("development") or extra_urls), names, when, factual=bool(proven))
             try:
                 path = write_correction(row, draft, note, extra_urls, when, root)
             except LookupError as exc:
                 return {**result, "outcome": "unchecked", "reason": f"correction ready but not written: {exc}", "issues": issues}
-            return {**result, "outcome": "corrected", "issues": issues, "development": bool(draft.get("development")),
+            return {**result, "outcome": "corrected", "issues": issues, "factual_corrections": proven, "development": bool(draft.get("development")),
                     "follow_ups": extra_urls, "note": note, "written_to": path}
         if attempt == 2:
             break
@@ -550,7 +594,7 @@ def run(phase: str, limit: int, minutes: float, client=None, fetcher=backstop.fe
     state = load_json(root / STATE_PATH, {})
     report = load_json(root / REPORT_PATH, [])
     deadline = time.monotonic() + minutes * 60
-    counts = {"reviewed": 0, "passed": 0, "corrected": 0, "taken_down": 0, "unchecked": 0, "remaining": 0}
+    counts = {"reviewed": 0, "passed": 0, "corrected": 0, "taken_down": 0, "unchecked": 0, "flagged": 0, "remaining": 0}
     targets = [r for r in load_targets(phase, root) if due(state, str(r["slug"]))]
     client = client or openai_client()
     for row in targets:

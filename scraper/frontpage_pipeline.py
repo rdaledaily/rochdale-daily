@@ -206,8 +206,17 @@ def _event_fingerprint(article: dict[str, Any]) -> str:
     """What a reader sees of an event listing; scrape times excluded."""
     import hashlib
 
+    # Visible text only: archive_quality.apply() re-serialises content_html
+    # through BeautifulSoup, which reorders attributes and changes entity
+    # forms. Hashing raw markup made an unchanged listing look edited on its
+    # next scrape (a fresh content_updated_at, a new dateModified and a place
+    # in "Recently updated"). Markup is reduced to its words before hashing.
+    def visible(value: Any) -> str:
+        text = BeautifulSoup(str(value or ""), "html.parser").get_text(" ")
+        return " ".join(html.unescape(text).split())
+
     fields = ("title", "excerpt", "content_html", "event_start_at", "event_end_at", "event_location")
-    text = "\u0000".join(str(article.get(field) or "") for field in fields)
+    text = "\u0000".join(visible(article.get(field)) for field in fields)
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 

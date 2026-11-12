@@ -236,7 +236,9 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         "source_names": [source_name] + (
             [organisation] if press_office and organisation not in ("Rochdale Daily", press_office) else []
         ),
-        "source_urls": [source_url] if source_url else [],
+        # Every URL the record lists, not only the first: a correction that
+        # adds a follow-up report must publish that report as a source.
+        "source_urls": _unique_strings(source_url, entry.get("source_urls")),
         "image_url": image_url,
         "image_credit": _clean(entry.get("image_credit")) or "Rochdale Daily",
         "image_credit_url": _clean(entry.get("image_credit_url")),

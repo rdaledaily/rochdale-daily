@@ -215,6 +215,51 @@ def test_archived_page_without_record_is_read_from_its_html():
         assert "ad" not in record["content_html"] and "44" in record["content_html"]
 
 
+
+APPROVED = dict(STORY, slug="planning-decision", title="Council approves Wardle carol concert closure",
+                content_html="<p>Rochdale Borough Council approved the plan for the Wardle Village Carol Concert closure on Ramsden Road.</p>")
+REJECTED_SOURCE = SOURCE + " The council rejected the plan for a second closure on Ramsden Road after objections from residents."
+
+
+def test_factual_error_the_checker_cannot_see_is_corrected_when_proven():
+    # fidelity_issues tests words, not meaning: "approved" vs "rejected" passes it.
+    from source_fidelity import fidelity_issues
+    assert fidelity_issues("The council approved the plan.", "The council rejected the plan.") == []
+    fix = dict(FIXED, title="Council rejects second Ramsden Road closure",
+               paragraphs=["The council rejected the plan for a second closure on Ramsden Road after objections from residents."],
+               factual_corrections=[{"was": "approved the plan", "now": "rejected the plan",
+                                     "source_quote": "The council rejected the plan for a second closure on Ramsden Road"}])
+    with tempfile.TemporaryDirectory() as tmp:
+        root = site(Path(tmp))
+        verdict = fr.review(dict(APPROVED), FakeClient(fix), fetcher=lambda u: REJECTED_SOURCE, when=WHEN, root=root)
+        assert verdict["outcome"] == "corrected", verdict
+        assert "reports differently" in verdict["note"]
+
+
+def test_unproven_factual_claim_goes_to_the_editor():
+    claim = dict(FIXED, factual_corrections=[{"was": "approved the plan", "now": "deferred the plan",
+                                              "source_quote": "the plan was deferred until the next meeting of the committee"}])
+    with tempfile.TemporaryDirectory() as tmp:
+        root = site(Path(tmp))
+        verdict = fr.review(dict(APPROVED), FakeClient(claim), fetcher=lambda u: REJECTED_SOURCE, when=WHEN, root=root)
+        assert verdict["outcome"] == "flagged", verdict
+        assert verdict["claims"][0]["now"] == "deferred the plan"
+        assert not list((root / "manual_articles.d").glob("*.json"))
+
+
+def test_hand_written_story_in_a_dated_subfolder_is_found():
+    with tempfile.TemporaryDirectory() as tmp:
+        root = site(Path(tmp))
+        nested = root / "manual_articles.d" / "2026" / "10"
+        nested.mkdir(parents=True)
+        own = nested / "2026-10-24-wardle-closure.json"
+        own.write_text(json.dumps({"id": STORY["id"], "slug": STORY["slug"], "title": STORY["title"],
+                                   "body": "Old body.", "manual_article": True}), encoding="utf-8")
+        verdict = fr.review(dict(STORY, manual_article=True), FakeClient(FIXED), fetcher=lambda u: SOURCE, when=WHEN, root=root)
+        assert verdict["outcome"] == "corrected", verdict
+        assert verdict["written_to"] == str(own)
+        assert json.loads(own.read_text(encoding="utf-8"))["corrections"]
+
 if __name__ == "__main__":
     failures = []
     for name, test in sorted(globals().items()):
