@@ -11,7 +11,7 @@
      It was left at -1 through several stylesheet uploads on 10 Sep, so a
      browser that visited in the morning could keep serving that morning's
      stylesheet -- without the river or filter-bar rules -- all day. */
-  var ASSET_VERSION = "20261109-phone-menu";
+  var ASSET_VERSION = "20261112-inline-signup";
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -265,6 +265,8 @@
     loadHomepageEnhancements();
     addNewsAlertsLink();
     addScript("/assets/js/reader-growth.js");
+    /* The in-article newsletter box, on every article page old and new. */
+    if (document.querySelector(".article-main .article-copy")) addScript("/assets/js/article-signup.js");
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
