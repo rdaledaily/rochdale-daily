@@ -40,7 +40,7 @@ from source_fidelity import fidelity_issues
 RECHECK_HOURS = 72
 RECAPTURE_MINUTES = 30
 MAX_BYTES = 1_500_000
-UNFETCHABLE_HOSTS = {"news.google.com"}  # JavaScript redirect pages, not articles
+UNFETCHABLE_HOSTS = {"news.google.com"}  # wrappers: resolved to the publisher before fetching
 # Deterministic records are rendered from a published data record, not
 # rewritten, and are guarded where they are generated (food_hygiene.py).
 SKIP_SOURCE_KINDS = {"food_hygiene_roundup"}
@@ -106,6 +106,14 @@ def fetch_text(url: str) -> str:
     from bs4 import BeautifulSoup
 
     current = url
+    if (urlparse(url).hostname or "") in UNFETCHABLE_HOSTS:
+        # The pipeline's own resolver turns a Google News wrapper into the
+        # publisher's URL; without it 80 live stories could not be checked.
+        from resolve_google_news_sources import resolve_google_news_url
+        resolved = resolve_google_news_url(url, timeout=10)
+        if not resolved:
+            raise ValueError("Google News link did not resolve to a publisher page")
+        current = resolved
     for _ in range(4):
         _public_https(current)
         response = requests.get(
@@ -218,7 +226,7 @@ def run(
     candidates.sort(key=lambda r: _parse(r.get("first_published_at") or r.get("published_at")) or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
     for row in candidates:
         urls = source_urls(row)
-        fetchable = [u for u in urls if (urlparse(u).hostname or "") not in UNFETCHABLE_HOSTS]
+        fetchable = list(urls)
         known = _known_text(row)
         previous = (row.get("core_fact_check") or {}).get("source_sha") or {}
         first = _parse(row.get("first_published_at") or row.get("published_at"))
@@ -227,7 +235,7 @@ def run(
         if counts["fetches"] + len(to_fetch) > budget and counts["checked"]:
             break
         texts: dict[str, str] = {u: known[u] for u in urls if known.get(u)}
-        errors: dict[str, str] = {u: "aggregator link, not an article" for u in urls if u not in fetchable}
+        errors: dict[str, str] = {}
         for url in to_fetch[:12]:
             counts["fetches"] += 1
             try:

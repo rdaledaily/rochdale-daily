@@ -95,11 +95,21 @@ def test_failed_capture_is_retried_then_checked():
     backstop.run([row], now=NOW + timedelta(days=5), fetcher=lambda url: CORRECTED, limit=10)
     assert row["core_fact_check"]["status"] == "failed"
 
-def test_aggregator_link_is_reported_not_guessed():
+def test_unresolvable_google_news_link_is_reported_not_guessed():
+    row = story(source_urls=["https://news.google.com/rss/articles/abc"])
+
+    def fetcher(url):
+        raise ValueError("Google News link did not resolve to a publisher page")
+
+    backstop.run([row], now=NOW, fetcher=fetcher, limit=10)
+    assert row["core_fact_check"]["status"] == "unchecked"
+    assert "capture failed" in row["core_fact_check"]["reason"]
+
+
+def test_resolved_google_news_link_is_checked():
     row = story(source_urls=["https://news.google.com/rss/articles/abc"])
     backstop.run([row], now=NOW, fetcher=lambda url: CORRECTED, limit=10)
-    assert row["core_fact_check"]["status"] == "unchecked"
-    assert "aggregator" in row["core_fact_check"]["reason"]
+    assert row["core_fact_check"]["status"] == "failed"
 
 
 def test_cookie_wall_capture_is_not_treated_as_the_source():
