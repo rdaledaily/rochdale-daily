@@ -537,7 +537,8 @@ def absolute_url(path_or_url: str) -> str:
     return f"{SITE_BASE_URL}/{value.lstrip('/')}"
 
 def meta_description(article: dict[str, Any]) -> str:
-    text = str(article.get('excerpt') or article.get('summary') or '').strip()
+    # A hand-written meta_description wins (editor's request, 12 Nov 2026).
+    text = str(article.get('meta_description') or article.get('excerpt') or article.get('summary') or '').strip()
     text = re.sub('\\s+', ' ', text)
     if len(text) > 155:
         text = text[:152].rsplit(' ', 1)[0] + '...'
@@ -775,6 +776,140 @@ def share_icons_markup(canonical_url: str, title: str) -> str:
     )
 
 
+SITE_AUTHOR_JSON = Path("site_author.json")
+DEFAULT_BYLINE = "Rochdale Daily Newsdesk"
+
+
+def site_author() -> dict[str, str]:
+    """The named author for newsdesk stories, from site_author.json.
+
+    Placeholders for the editor to fill in:
+      {"name": "", "slug": "", "job_title": "Local Reporter", "bio": ""}
+    While "name" is empty, newsdesk stories stay credited to Rochdale Daily
+    Newsdesk (the paper is edited anonymously), so no placeholder text ever
+    reaches a page or Google.
+    """
+    try:
+        data = json.loads(SITE_AUTHOR_JSON.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    author = {k: str(data.get(k) or "").strip() for k in ("name", "slug", "job_title", "bio")}
+    if author["name"] and not author["slug"]:
+        author["slug"] = re.sub(r"[^a-z0-9]+", "-", author["name"].lower()).strip("-")
+    author["job_title"] = author["job_title"] or "Local Reporter"
+    return author
+
+
+def author_url(author: dict[str, str]) -> str:
+    return f"{SITE_BASE_URL}/author/{author['slug']}"
+
+
+def display_byline(article: dict[str, Any]) -> str:
+    """The visible byline; the configured author replaces the default newsdesk byline."""
+    byline = str(article.get("byline") or DEFAULT_BYLINE).strip()
+    author = site_author()
+    if author.get("name") and byline == DEFAULT_BYLINE:
+        return author["name"]
+    return byline
+
+
+def author_schema(article: dict[str, Any]) -> list[dict[str, Any]]:
+    author = site_author()
+    byline = str(article.get("byline") or DEFAULT_BYLINE).strip()
+    if author.get("name") and byline == DEFAULT_BYLINE:
+        return [{
+            "@type": "Person",
+            "name": author["name"],
+            "url": author_url(author),
+            "jobTitle": author["job_title"],
+            **({"description": author["bio"]} if author.get("bio") else {}),
+            "worksFor": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": f"{SITE_BASE_URL}/"},
+        }]
+    return [{"@type": "Organization", "name": DEFAULT_BYLINE, "url": f"{SITE_BASE_URL}/about.html"}]
+
+
+def write_author_page(root: Path = Path(".")) -> str:
+    """author/<slug>.html for the configured author, so the schema URL resolves."""
+    author = site_author()
+    if not author.get("name"):
+        return ""
+    data = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": {
+        "@type": "Person", "name": author["name"], "url": author_url(author), "jobTitle": author["job_title"],
+        **({"description": author["bio"]} if author.get("bio") else {}),
+        "worksFor": {"@type": "NewsMediaOrganization", "name": "Rochdale Daily", "url": f"{SITE_BASE_URL}/"}}}
+    page = (
+        '<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n'
+        '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f'  <title>{esc(author["name"])}, {esc(author["job_title"])} | Rochdale Daily</title>\n'
+        f'  <meta name="description" content="{esc(author["bio"] or author["name"] + ", " + author["job_title"] + " at Rochdale Daily")}">\n'
+        f'  <link rel="canonical" href="{esc(author_url(author))}">\n'
+        f'  {TOKEN_STYLESHEET_LINK}\n  <style>{SITE_CSS}</style>\n  {EDITORIAL_STYLESHEET_LINK}\n'
+        f'  <script type="application/ld+json">{json.dumps(data, ensure_ascii=False)}</script>\n'
+        '</head>\n<body>\n'
+        f'  {site_shell_markup("../index.html")}\n'
+        '  <main class="page-shell"><div class="wrap article-body">\n'
+        f'    <h1>{esc(author["name"])}</h1>\n    <p class="article-standfirst">{esc(author["job_title"])}, Rochdale Daily</p>\n'
+        + (f'    <p>{esc(author["bio"])}</p>\n' if author.get("bio") else "")
+        + '  </div></main>\n  <script defer src="/assets/js/menu.js"></script>\n</body>\n</html>\n'
+    )
+    path = root / "author" / f"{author['slug']}.html"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(page, encoding="utf-8")
+    return str(path)
+
+
+def schema_images(article: dict[str, Any], image_url: str) -> list[dict[str, Any]]:
+    """16:9, 4:3 and 1:1 at 1200px wide when the picture is big enough, else the
+    original at its true size (see og_images.py)."""
+    from og_images import image_size, variants
+
+    caption = image_alt_text(article, image_url)
+    credit = {"creditText": str(article.get("image_credit"))} if article.get("image_credit") else {}
+    crops = variants(str(article.get("image_url") or ""))
+    if crops:
+        return [
+            {"@type": "ImageObject", "url": absolute_url(c["url"]), "width": c["width"], "height": c["height"],
+             "caption": caption, **credit}
+            for c in crops
+        ]
+    size = image_size(str(article.get("image_url") or ""))
+    return [{"@type": "ImageObject", "url": image_url, "caption": caption, **credit,
+             **({"width": size[0], "height": size[1]} if size else {})}]
+
+
+def og_image_tags(article: dict[str, Any], image_url: str) -> str:
+    """og:image tags with true dimensions; the 16:9 crop leads (the shape social
+    previews use), then 4:3 and 1:1."""
+    from og_images import image_size, variants
+
+    alt = esc(image_alt_text(article, image_url))
+    crops = variants(str(article.get("image_url") or ""))
+    if crops:
+        images = [(absolute_url(c["url"]), c["width"], c["height"]) for c in crops]
+    elif image_url:
+        size = image_size(str(article.get("image_url") or ""))
+        images = [(image_url, size[0] if size else None, size[1] if size else None)]
+    else:
+        return ""
+    lines = []
+    for url, width, height in images:
+        lines.append(f'  <meta property="og:image" content="{esc(url)}">')
+        if width and height:
+            lines.append(f'  <meta property="og:image:width" content="{width}">')
+            lines.append(f'  <meta property="og:image:height" content="{height}">')
+        lines.append(f'  <meta property="og:image:alt" content="{alt}">')
+    return "\n".join(lines) + "\n"
+
+
+def twitter_image(article: dict[str, Any], image_url: str) -> str:
+    from og_images import variants
+
+    crops = variants(str(article.get("image_url") or ""))
+    return absolute_url(crops[0]["url"]) if crops else image_url
+
+
 def json_ld(article: dict[str, Any], canonical_url: str, image_url: str) -> str:
     published = article.get("first_published_at") or article.get("published_at") or article.get("scraped_at") or ""
     modified = last_modified_at(article) or article.get("scraped_at") or published
@@ -788,14 +923,7 @@ def json_ld(article: dict[str, Any], canonical_url: str, image_url: str) -> str:
                 "@id": canonical_url + "#article",
                 "headline": str(article.get("title") or "")[:110],
                 "description": meta_description(article),
-                "image": [
-                    {
-                        "@type": "ImageObject",
-                        "url": image_url,
-                        "caption": image_alt_text(article, image_url),
-                        **({"creditText": str(article.get("image_credit"))} if article.get("image_credit") else {}),
-                    }
-                ],
+                "image": schema_images(article, image_url),
                 "datePublished": published,
                 "dateModified": modified,
                 "inLanguage": "en-GB",
@@ -803,11 +931,7 @@ def json_ld(article: dict[str, Any], canonical_url: str, image_url: str) -> str:
                 "articleSection": category_label(category),
                 "wordCount": visible_word_count(article),
                 "keywords": seo_keywords(article),
-                "author": {
-                    "@type": "Organization",
-                    "name": "Rochdale Daily Newsdesk",
-                    "url": f"{SITE_BASE_URL}/about.html",
-                },
+                "author": author_schema(article),
                 "publisher": full_publisher(),
                 "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
                 "contentLocation": borough_place(area),
@@ -1040,6 +1164,86 @@ def is_generated_card(image_url: str) -> bool:
             or 'area-category-card' in name or name.endswith('.svg'))
 
 
+# Newsletter prompt (editor's spec, 12 Nov 2026). On the reader's second article
+# page in a browser session, after 5 seconds, a modal asks them to subscribe.
+# It appears at most once per session and never to someone who has subscribed
+# from any of the site's newsletter forms (localStorage "rd_subscribed").
+# Vanilla JS; every storage call is guarded, because private windows and
+# blocked site data make sessionStorage/localStorage throw, and the page must
+# work without them. Minimal positioning only: styling is left to the editor
+# through the .rd-newsletter-modal classes.
+NEWSLETTER_MODAL = """  <div id="rd-newsletter-modal" class="rd-newsletter-modal" role="dialog" aria-modal="true" aria-labelledby="rd-newsletter-modal-title" hidden style="position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;background:rgba(0,0,0,.45);padding:16px">
+    <div class="rd-newsletter-modal__panel" style="background:#fff;max-width:420px;width:100%;padding:24px;position:relative">
+      <button type="button" class="rd-newsletter-modal__close" data-modal-close aria-label="Close" style="position:absolute;top:8px;right:8px">&times;</button>
+      <h2 id="rd-newsletter-modal-title" class="rd-newsletter-modal__title">Get Rochdale's news every morning</h2>
+      <p class="rd-newsletter-modal__text">The day's local stories in one free email. Unsubscribe at any time.</p>
+      <form id="rd-newsletter-modal-form" class="rd-newsletter-modal__form" novalidate>
+        <label for="rd-newsletter-modal-email">Email address</label>
+        <input id="rd-newsletter-modal-email" type="email" autocomplete="email" required>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+        <button type="submit">Subscribe</button>
+        <p id="rd-newsletter-modal-status" class="rd-newsletter-modal__status" role="status" aria-live="polite"></p>
+      </form>
+      <p class="rd-newsletter-modal__small"><a href="/privacy.html#newsletter">How we use your email</a></p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      function get(store, key) { try { return window[store].getItem(key); } catch (e) { return null; } }
+      function set(store, key, value) { try { window[store].setItem(key, value); return true; } catch (e) { return false; } }
+      var modal = document.getElementById("rd-newsletter-modal");
+      if (!modal || !document.body.classList.contains("single-article")) return;
+      var count = parseInt(get("sessionStorage", "rd_visit_count") || "0", 10) + 1;
+      // Without session storage there is no count to trust: never prompt.
+      if (!set("sessionStorage", "rd_visit_count", String(count))) return;
+      if (count < 2 || get("sessionStorage", "rd_newsletter_prompted") || get("localStorage", "rd_subscribed")) return;
+      var lastFocus = null;
+      function close() {
+        modal.hidden = true;
+        modal.style.display = "none";
+        document.removeEventListener("keydown", onKey);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+      function onKey(event) { if (event.key === "Escape") close(); }
+      window.showNewsletterModal = function () {
+        if (get("sessionStorage", "rd_newsletter_prompted")) return;
+        set("sessionStorage", "rd_newsletter_prompted", "1");
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        modal.style.display = "flex";
+        document.addEventListener("keydown", onKey);
+        var input = document.getElementById("rd-newsletter-modal-email");
+        if (input) input.focus();
+      };
+      modal.style.display = "none";
+      modal.addEventListener("click", function (event) {
+        if (event.target === modal || event.target.closest("[data-modal-close]")) close();
+      });
+      var form = document.getElementById("rd-newsletter-modal-form");
+      var status = document.getElementById("rd-newsletter-modal-status");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var email = (document.getElementById("rd-newsletter-modal-email").value || "").trim();
+        var trap = form.querySelector('input[name="website"]').value;
+        if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(email)) { status.textContent = "Please enter a valid email address."; return; }
+        status.textContent = "Signing you up\\u2026";
+        fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, consent: true, website: trap, source: "article-modal" }) })
+          .then(function (res) { return res.json().catch(function () { return {}; }); })
+          .then(function (data) {
+            if (data && data.ok) {
+              status.textContent = data.message || "Thanks. You're on the list.";
+              set("localStorage", "rd_subscribed", "1");
+              setTimeout(close, 2000);
+            } else { status.textContent = (data && data.error) || "Something went wrong. Please try again."; }
+          })
+          .catch(function () { status.textContent = "Something went wrong. Please try again."; });
+      });
+      setTimeout(window.showNewsletterModal, 5000);
+    })();
+  </script>"""
+
+
 def render_article_page(article: dict[str, Any], all_articles: list[dict[str, Any]]) -> str:
     article = normalise_feature(article)
     # Blanket rule (editor, 9 Nov 2026): section and picture of an
@@ -1056,7 +1260,7 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
     description = meta_description(article)
     category = str(article.get('category') or 'news').lower()
     published = first_published_at(article)
-    byline = esc(article.get('byline') or 'Rochdale Daily Newsdesk')
+    byline = esc(display_byline(article))
     police_matter = bool(article.get('police_matter'))
     # The page renders its own live timeline (live_format.py); a timeline an
     # older run baked into the body would otherwise show twice.
@@ -1161,7 +1365,7 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
         if live_ld else ''
     )
     robots = 'noindex,follow,max-image-preview:large' if article_should_noindex(article) else 'index,follow,max-image-preview:large'
-    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="{robots}">\n  <title>{esc(_title_tag(title))}</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  {TOKEN_STYLESHEET_LINK}\n  <style>{SITE_CSS}</style>\n  {EDITORIAL_STYLESHEET_LINK}\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="Rochdale Daily Newsdesk">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(social_title)}">\n  <meta property="og:description" content="{esc(description)}">\n  <meta property="og:image" content="{esc(image_url)}">\n  <meta property="og:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(last_modified_at(article) or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(social_title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(image_url)}">\n  <meta name="twitter:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta name="news_keywords" content="{esc(seo_keywords(article))}">\n{article_tag_markup(article)}\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n{live_ld_tag}</head>\n<body>\n  {site_shell_markup("../index.html")}\n\n  <div class="page-shell">\n    <div class="wrap article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main" data-live-slug="{esc(slug)}">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">News</a><span aria-hidden="true">/</span><a href="/news/{esc(category)}.html">{esc(category_label(category))}</a>{ongoing_chip}</nav>\n          <h1>{esc(title)}</h1>\n          {hero if hero_first else ''}\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          <div class="article-byline">\n            <span>By {byline}</span>\n            {byline_date_span}\n            {share_icons_markup(canonical_url, title)}\n          </div>\n          {live_block if live_block else developing_note}\n          {'' if hero_first else hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          {comments_markup(article, slug, category)}\n          {read_next_markup(article, all_articles)}\n          <section class="editorial-legal-note">\n            <h3>Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p class="legal-links"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n        </div>\n        <aside class="article-sidebar">\n          {related_stories_markup(article, all_articles)}\n          {newsletter_box_markup("article-newsletter")}\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" data-ad-optional hidden aria-hidden="true"></div>\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n\n    // The sidebar newsletter box. Same endpoint and same payload shape as the\n    // homepage, so there is one subscriber list; source says which box it came\n    // from. Guarded on the element so a page rendered without the box is fine.\n    (function () {{\n      var form = document.getElementById("article-newsletter-form");\n      if (!form) return;\n      var status = document.getElementById("article-newsletter-status");\n      form.addEventListener("submit", function (event) {{\n        event.preventDefault();\n        var email = (document.getElementById("article-newsletter-email").value || "").trim();\n        if (!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{{2,}}$/.test(email)) {{ status.textContent = "Please enter a valid email address."; return; }}\n        status.textContent = "Signing you up\\u2026";\n        fetch("/api/newsletter", {{ method: "POST", headers: {{ "Content-Type": "application/json" }}, body: JSON.stringify({{ email: email, consent: true, website: "", source: "article" }}) }})\n          .then(function (res) {{ return res.json().catch(function () {{ return {{}}; }}); }})\n          .then(function (data) {{\n            if (data && data.ok) {{ status.textContent = data.message || "Thanks. You're on the list."; form.reset(); }}\n            else {{ status.textContent = (data && data.error) || "Something went wrong. Please try again."; }}\n          }})\n          .catch(function () {{ status.textContent = "Something went wrong. Please try again."; }});\n      }});\n    }})();\n      </script>\n  <script defer src="/assets/js/menu.js"></script>
+    return f'''<!DOCTYPE html>\n<html lang="en-GB">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="robots" content="{robots}">\n  <title>{esc(_title_tag(str(article.get('seo_title') or '').strip() or title))}</title>\n  <meta name="description" content="{esc(description)}">\n  <link rel="canonical" href="{esc(canonical_url)}">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  {TOKEN_STYLESHEET_LINK}\n  <style>{SITE_CSS}</style>\n  {EDITORIAL_STYLESHEET_LINK}\n\n  <meta property="og:type" content="article">\n  <meta property="og:site_name" content="Rochdale Daily">\n  <meta name="author" content="{byline}">\n  <meta name="keywords" content="{esc(seo_keywords(article))}">\n  <meta property="og:title" content="{esc(social_title)}">\n  <meta property="og:description" content="{esc(description)}">\n{og_image_tags(article, image_url)}  <meta property="og:url" content="{esc(canonical_url)}">\n  <meta property="article:published_time" content="{esc(published)}">\n  <meta property="article:modified_time" content="{esc(last_modified_at(article) or published)}">\n  <meta property="article:section" content="{esc(category_label(category))}">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="{esc(social_title)}">\n  <meta name="twitter:description" content="{esc(description)}">\n  <meta name="twitter:image" content="{esc(twitter_image(article, image_url))}">\n  <meta name="twitter:image:alt" content="{esc(image_alt_text(article, image_url))}">\n  <meta name="news_keywords" content="{esc(seo_keywords(article))}">\n{article_tag_markup(article)}\n  <script type="application/ld+json">{json_ld(article, canonical_url, image_url)}</script>\n{live_ld_tag}</head>\n<body class="single-article">\n  {site_shell_markup("../index.html")}\n\n  <div class="page-shell">\n    <div class="wrap article-body">\n      <div class="ad-slot ad-slot-leaderboard" data-ad-slot="article-leaderboard" role="presentation" aria-hidden="true"></div>\n      <div class="article-layout">\n        <div class="article-main" data-live-slug="{esc(slug)}">\n          <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">News</a><span aria-hidden="true">/</span><a href="/news/{esc(category)}.html">{esc(category_label(category))}</a>{ongoing_chip}</nav>\n          <h1>{esc(title)}</h1>\n          {hero if hero_first else ''}\n          <p class="article-standfirst">{esc(article.get('excerpt') or article.get('summary') or '')}</p>\n          <div class="article-byline">\n            <span>By {byline}</span>\n            {byline_date_span}\n            {share_icons_markup(canonical_url, title)}\n          </div>\n          {live_block if live_block else developing_note}\n          {'' if hero_first else hero}\n          <div class="article-copy">{content}\n          {sources_markup(article)}</div>\n          {corrections_markup(article)}\n          {comments_markup(article, slug, category)}\n          {read_next_markup(article, all_articles)}\n          <section class="editorial-legal-note">\n            <h3>Legal and editorial note</h3>\n            <p>{esc(article.get('legal_disclaimer') or ('No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.' if article.get('sensitive_story') else 'This article was compiled from identified public sources and may be updated.'))}</p>\n            <p><strong>Right to reply:</strong> {esc(article.get('right_to_reply') or 'Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.')}</p>\n            <p class="legal-links"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/accessibility.html">Accessibility</a> &middot; <a href="#" data-cookie-settings>Cookie settings</a></p>\n          </section>\n          {(report_box_markup() if police_matter else '')}\n        </div>\n        <aside class="article-sidebar">\n          {related_stories_markup(article, all_articles)}\n          {newsletter_box_markup("article-newsletter")}\n          <div class="ad-slot ad-slot-mrec" data-ad-slot="article-mrec" data-ad-optional hidden aria-hidden="true"></div>\n        </aside>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    document.addEventListener("click", function(event) {{\n      var trigger = event.target.closest("[data-share]");\n      if (!trigger) return;\n      var action = trigger.dataset.share;\n      var url = trigger.dataset.url;\n      if (action === "copy") {{\n        navigator.clipboard.writeText(url).catch(function() {{}});\n      }}\n      if (action === "facebook") {{\n        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "whatsapp") {{\n        window.open("https://wa.me/?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "x") {{\n        window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(trigger.dataset.title || "") + "&url=" + encodeURIComponent(url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "bluesky") {{\n        window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent((trigger.dataset.title || "") + " " + url), "_blank", "noopener,noreferrer");\n      }}\n      if (action === "email") {{\n        window.location.href = "mailto:?subject=" + encodeURIComponent(trigger.dataset.title || "") + "&body=" + encodeURIComponent(url);\n      }}\n    }});\n\n    // The sidebar newsletter box. Same endpoint and same payload shape as the\n    // homepage, so there is one subscriber list; source says which box it came\n    // from. Guarded on the element so a page rendered without the box is fine.\n    (function () {{\n      var form = document.getElementById("article-newsletter-form");\n      if (!form) return;\n      var status = document.getElementById("article-newsletter-status");\n      form.addEventListener("submit", function (event) {{\n        event.preventDefault();\n        var email = (document.getElementById("article-newsletter-email").value || "").trim();\n        if (!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{{2,}}$/.test(email)) {{ status.textContent = "Please enter a valid email address."; return; }}\n        status.textContent = "Signing you up\\u2026";\n        fetch("/api/newsletter", {{ method: "POST", headers: {{ "Content-Type": "application/json" }}, body: JSON.stringify({{ email: email, consent: true, website: "", source: "article" }}) }})\n          .then(function (res) {{ return res.json().catch(function () {{ return {{}}; }}); }})\n          .then(function (data) {{\n            if (data && data.ok) {{ status.textContent = data.message || "Thanks. You're on the list."; form.reset(); try {{ localStorage.setItem("rd_subscribed", "1"); }} catch (e) {{}} }}\n            else {{ status.textContent = (data && data.error) || "Something went wrong. Please try again."; }}\n          }})\n          .catch(function () {{ status.textContent = "Something went wrong. Please try again."; }});\n      }});\n    }})();\n      </script>\n{NEWSLETTER_MODAL}\n  <script defer src="/assets/js/menu.js"></script>
   <script defer src="/assets/js/new-story-alerts.js"></script>\n  <script defer src="/assets/js/article-comments.js"></script>\n  <script defer src="/assets/js/read-next.js"></script>\n  <script defer src="/assets/js/live-blog.js"></script>\n  <script defer src="/assets/js/article-checked.js"></script>\n  <script defer src="/assets/js/cookie-consent.js"></script>\n  <script defer src="/assets/ads.js"></script>\n</body>\n</html>\n'''
 
 def load_articles(blocklist: Any | None = None) -> list[dict[str, Any]]:
@@ -1437,6 +1641,9 @@ def scrub_stored_ad_slots(path: Path = ARTICLES_JSON) -> int:
 
 def main() -> None:
     scrub_stored_ad_slots()
+    author_page = write_author_page()
+    if author_page:
+        print(f"Author page written: {author_page}")
     try:
         from headline_style import restyle_feed
         restyled = restyle_feed(ARTICLES_JSON)

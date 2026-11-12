@@ -284,6 +284,11 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         record["press_release"] = True
         record["press_office"] = press_office
 
+    # Hand-written SEO title and meta description (editor's request, 12 Nov 2026).
+    if entry.get("seo_title"):
+        record["seo_title"] = _clean(entry.get("seo_title"))[:70]
+    if entry.get("meta_description"):
+        record["meta_description"] = _clean(entry.get("meta_description"))[:160]
     if entry.get("image_alt"):
         record["image_alt"] = _clean(entry.get("image_alt"))[:200]
     if entry.get("social_headline"):
