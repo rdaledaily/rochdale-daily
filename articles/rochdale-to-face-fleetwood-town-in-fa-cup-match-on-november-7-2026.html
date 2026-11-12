@@ -301,7 +301,7 @@ svg {
           
         </div>
         <aside class="article-sidebar">
-          <div class="sidebar-box"><h3 class="rail-title">More on this</h3><a class="related-story" href="rochdale-afc-faces-fleetwood-town-in-fa-cup-match"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-afc-faces-fleetwood-town-in-fa-cup-match.png" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC set to face Fleetwood Town in FA Cup first round</span></a><a class="related-story" href="rochdale-afc-suffers-1-4-defeat-to-doncaster-rovers-in-efl-trophy"><img src="https://rochdaledaily.co.uk/assets/img/cards/fixtures.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC suffers 4-1 defeat to Doncaster Rovers in FA Trophy</span></a><a class="related-story" href="rochdale-afc-announces-ticket-details-for-fa-cup-match-against-fleetwood-town"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-afc-announces-ticket-details-for-fa-cup-match-against-fleetwood-town.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC announces ticket details for FA Cup match against Fleetwood Town</span></a><a class="related-story" href="rochdale-afc-to-face-bolton-in-midweek-cup-tie"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale_afc.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC to face Bolton in midweek cup tie</span></a><a class="related-story" href="rochdale-afc-women-to-host-wythenshawe-town-in-league-clash"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-afc-women-to-host-wythenshawe-town-in-league-clash.png" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC Women to host Wythenshawe Town in league clash</span></a><a class="related-story" href="ian-henderson-set-to-break-rochdale-afc-club-appearance-record"><img src="https://rochdaledaily.co.uk/assets/img/cards/ian-henderson-set-to-break-rochdale-afc-club-appearance-record.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Ian Henderson breaks Rochdale AFC appearance record</span></a></div>
+          <div class="sidebar-box"><h3 class="rail-title">More on this</h3><a class="related-story" href="rochdale-afc-faces-fleetwood-town-in-fa-cup-match"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-afc-faces-fleetwood-town-in-fa-cup-match.png" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC set to face Fleetwood Town in FA Cup first round</span></a><a class="related-story" href="rochdale-afc-suffers-1-4-defeat-to-doncaster-rovers-in-efl-trophy"><img src="https://rochdaledaily.co.uk/assets/img/cards/fixtures.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC suffers 4-1 defeat to Doncaster Rovers in FA Trophy</span></a><a class="related-story" href="rochdale-afc-announces-ticket-details-for-fa-cup-match-against-fleetwood-town"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-afc-announces-ticket-details-for-fa-cup-match-against-fleetwood-town.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC announces ticket details for FA Cup match against Fleetwood Town</span></a><a class="related-story" href="rochdale-afc-to-face-bolton-in-midweek-cup-tie"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale_afc.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC to face Bolton in midweek cup tie</span></a><a class="related-story" href="rochdale-afc-women-to-host-wythenshawe-town-in-league-clash"><img src="https://rochdaledaily.co.uk/assets/img/cards/rochdale-afc-women-to-host-wythenshawe-town-in-league-clash.png" alt="" loading="lazy" decoding="async"><span class="related-title">Rochdale AFC Women to host Wythenshawe Town in league clash</span></a><a class="related-story" href="port-vale-to-stream-rochdale-match-live-on-october-30"><img src="https://rochdaledaily.co.uk/assets/img/cards/fixtures.jpg" alt="" loading="lazy" decoding="async"><span class="related-title">Port Vale to stream Rochdale match live on 30 October</span></a></div>
           <section class="rail-newsletter" aria-labelledby="article-newsletter-title">
             <div class="rail-newsletter-kicker">Newsletter</div>
             <h3 id="article-newsletter-title">The borough in your inbox</h3>
@@ -361,7 +361,7 @@ svg {
         fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, consent: true, website: "", source: "article" }) })
           .then(function (res) { return res.json().catch(function () { return {}; }); })
           .then(function (data) {
-            if (data && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); try { localStorage.setItem("rd_subscribed", "1"); } catch (e) {} }
+            if (data && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); try { localStorage.setItem("rd_newsletter_done", "1"); } catch (e) {} }
             else { status.textContent = (data && data.error) || "Something went wrong. Please try again."; }
           })
           .catch(function () { status.textContent = "Something went wrong. Please try again."; });
@@ -392,7 +392,10 @@ svg {
       var count = parseInt(get("sessionStorage", "rd_visit_count") || "0", 10) + 1;
       // Without session storage there is no count to trust: never prompt.
       if (!set("sessionStorage", "rd_visit_count", String(count))) return;
-      if (count < 2 || get("sessionStorage", "rd_newsletter_prompted") || get("localStorage", "rd_subscribed")) return;
+      // rd_newsletter_done is the site-wide subscriber marker (menu.js, article-signup.js,
+      // retention.js); rd_subscribed is honoured for anyone who signed up here first.
+      function subscribed() { return get("localStorage", "rd_newsletter_done") || get("localStorage", "rd_subscribed"); }
+      if (count < 2 || get("sessionStorage", "rd_newsletter_prompted") || subscribed()) return;
       var lastFocus = null;
       function close() {
         modal.hidden = true;
@@ -402,7 +405,7 @@ svg {
       }
       function onKey(event) { if (event.key === "Escape") close(); }
       window.showNewsletterModal = function () {
-        if (get("sessionStorage", "rd_newsletter_prompted")) return;
+        if (get("sessionStorage", "rd_newsletter_prompted") || subscribed()) return;
         set("sessionStorage", "rd_newsletter_prompted", "1");
         lastFocus = document.activeElement;
         modal.hidden = false;
@@ -412,6 +415,11 @@ svg {
         if (input) input.focus();
       };
       modal.style.display = "none";
+      // A signup through any form on the page (sidebar, in-article box) counts.
+      document.addEventListener("rd:newsletter-saved", function () {
+        set("localStorage", "rd_newsletter_done", "1");
+        if (!modal.hidden) close();
+      });
       modal.addEventListener("click", function (event) {
         if (event.target === modal || event.target.closest("[data-modal-close]")) close();
       });
@@ -429,7 +437,8 @@ svg {
           .then(function (data) {
             if (data && data.ok) {
               status.textContent = data.message || "Thanks. You're on the list.";
-              set("localStorage", "rd_subscribed", "1");
+              set("localStorage", "rd_newsletter_done", "1");
+              try { document.dispatchEvent(new CustomEvent("rd:newsletter-saved")); } catch (e) {}
               setTimeout(close, 2000);
             } else { status.textContent = (data && data.error) || "Something went wrong. Please try again."; }
           })

@@ -368,7 +368,7 @@ svg {
         fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, consent: true, website: "", source: "article" }) })
           .then(function (res) { return res.json().catch(function () { return {}; }); })
           .then(function (data) {
-            if (data && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); try { localStorage.setItem("rd_subscribed", "1"); } catch (e) {} }
+            if (data && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); try { localStorage.setItem("rd_newsletter_done", "1"); } catch (e) {} }
             else { status.textContent = (data && data.error) || "Something went wrong. Please try again."; }
           })
           .catch(function () { status.textContent = "Something went wrong. Please try again."; });
@@ -399,7 +399,10 @@ svg {
       var count = parseInt(get("sessionStorage", "rd_visit_count") || "0", 10) + 1;
       // Without session storage there is no count to trust: never prompt.
       if (!set("sessionStorage", "rd_visit_count", String(count))) return;
-      if (count < 2 || get("sessionStorage", "rd_newsletter_prompted") || get("localStorage", "rd_subscribed")) return;
+      // rd_newsletter_done is the site-wide subscriber marker (menu.js, article-signup.js,
+      // retention.js); rd_subscribed is honoured for anyone who signed up here first.
+      function subscribed() { return get("localStorage", "rd_newsletter_done") || get("localStorage", "rd_subscribed"); }
+      if (count < 2 || get("sessionStorage", "rd_newsletter_prompted") || subscribed()) return;
       var lastFocus = null;
       function close() {
         modal.hidden = true;
@@ -409,7 +412,7 @@ svg {
       }
       function onKey(event) { if (event.key === "Escape") close(); }
       window.showNewsletterModal = function () {
-        if (get("sessionStorage", "rd_newsletter_prompted")) return;
+        if (get("sessionStorage", "rd_newsletter_prompted") || subscribed()) return;
         set("sessionStorage", "rd_newsletter_prompted", "1");
         lastFocus = document.activeElement;
         modal.hidden = false;
@@ -419,6 +422,11 @@ svg {
         if (input) input.focus();
       };
       modal.style.display = "none";
+      // A signup through any form on the page (sidebar, in-article box) counts.
+      document.addEventListener("rd:newsletter-saved", function () {
+        set("localStorage", "rd_newsletter_done", "1");
+        if (!modal.hidden) close();
+      });
       modal.addEventListener("click", function (event) {
         if (event.target === modal || event.target.closest("[data-modal-close]")) close();
       });
@@ -436,7 +444,8 @@ svg {
           .then(function (data) {
             if (data && data.ok) {
               status.textContent = data.message || "Thanks. You're on the list.";
-              set("localStorage", "rd_subscribed", "1");
+              set("localStorage", "rd_newsletter_done", "1");
+              try { document.dispatchEvent(new CustomEvent("rd:newsletter-saved")); } catch (e) {}
               setTimeout(close, 2000);
             } else { status.textContent = (data && data.error) || "Something went wrong. Please try again."; }
           })
