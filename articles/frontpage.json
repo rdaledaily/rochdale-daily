@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-13T11:02:12.733282Z",
+  "generated_at": "2026-11-13T11:25:07.089594Z",
   "minimum_articles": 12,
   "target_articles": 45,
   "count": 21,
@@ -90,15 +90,20 @@
       "ingested_at": "2026-11-13T11:01:56Z",
       "first_published_at": "2026-11-13T10:38:37Z",
       "last_updated_at": "2026-11-13T10:38:37Z",
-      "frontpage_rank": 0,
-      "frontpage_priority": 1000,
-      "slot": "lead",
       "wards": [],
       "ward_verification": {
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "rochdale-valiant-launches-new-media-portal-to-enhance-community-engagement",
+        "new-safe-haven-support-nights-out-rochdale-town-centre",
+        "sponsored-ctml-locksmiths-lock-repairs-key-cutting-safes"
+      ],
+      "frontpage_rank": 0,
+      "frontpage_priority": 1000,
+      "slot": "lead"
     },
     {
       "id": "d086e784c3c1a113e5",
@@ -821,7 +826,7 @@
     {
       "id": "rd-editorial-20261112-middleton-man-charged-assault-emergency-worker-lodge-street",
       "slug": "middleton-man-charged-assault-emergency-worker-lodge-street",
-      "story_key": "manual-article:middleton-man-charged-assault-emergency-worker-lodge-street",
+      "story_key": "community-v3-ffe762f120bbf50dec48",
       "title": "Middleton man charged with assaulting emergency worker after Lodge Street stop",
       "excerpt": "Lee Cartledge, 42, faces four charges following a vehicle stop in Middleton on Wednesday 11 November, Greater Manchester Police said.",
       "content_html": "<p>A Middleton man has been charged with assaulting an emergency worker following a vehicle stop on Lodge Street in the town on Wednesday 11 November.</p><p>Greater Manchester Police named the defendant as Lee Cartledge, 42, of Lawson Close, Middleton.</p><p>The force said he has also been charged with possession of a bladed article, driving a motor vehicle without insurance and failing to provide a specimen of breath.</p><p>Cartledge is due to appear at Manchester and Salford Magistrates’ Court on Thursday 12 November, according to the police statement issued that morning.</p><p>The charges are allegations. No finding of guilt should be inferred, and the defendant is presumed innocent unless and until convicted.</p><p>Source: Greater Manchester Police press release issued on 12 November 2026.</p>",
@@ -854,7 +859,7 @@
       "allow_scrape_merge": false,
       "publication_route": "editorial",
       "rewrite_quality_checked": true,
-      "police_matter": true,
+      "police_matter": false,
       "legal_disclaimer": "No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.",
       "press_release": true,
       "press_office": "Greater Manchester Police press office",
@@ -863,19 +868,26 @@
       "image_status": "incident-card",
       "image_backfill_method": "incident-card",
       "source_image_reuse_status": "cards-only",
-      "image_placeholder_reason": "Headline contains 'emergency': blanket Incident card rule",
-      "frontpage_rank": 8,
-      "frontpage_priority": 992,
-      "slot": "",
       "wards": [],
       "ward_verification": {
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "man-charged-after-assault-on-officer-in-middleton-town-centre",
+        "middleton-man-charged-attempted-murder-three-aggravated-burglaries",
+        "man-charged-with-drug-offences-in-middleton"
+      ],
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "image_placeholder_reason": "Headline contains 'emergency': blanket Incident card rule",
+      "ingested_at": "2026-11-13T11:24:45Z",
+      "frontpage_rank": 8,
+      "frontpage_priority": 992,
+      "slot": ""
     },
     {
-      "id": "briefing-morning-briefing-13-november-2026",
+      "id": "f6c6c9efd4ee57c2ab",
       "slug": "morning-briefing-13-november-2026",
       "story_key": "manual-article:morning-briefing-13-november-2026",
       "title": "Morning Briefing: Friday 13 November 2026",
@@ -891,13 +903,17 @@
       "published_at": "2026-11-13T09:09:32Z",
       "first_published_at": "2026-11-13T09:09:32Z",
       "last_updated_at": "2026-11-13T09:09:32Z",
-      "scraped_at": "2026-11-13T11:02:12Z",
+      "scraped_at": "2026-11-13T11:25:07Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
-        "Rochdale Daily"
+        "Rochdale Daily",
+        "Manchester Evening News"
       ],
-      "source_urls": [],
+      "source_urls": [
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/suspect-named-after-police-officer-34901257",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/suspect-named-after-police-officer-34901257.amp"
+      ],
       "image_url": "assets/img/cards/rochdale-town-hall.jpg",
       "image_credit": "Rochdale Daily",
       "image_credit_url": "",
@@ -909,6 +925,12 @@
       "rewrite_quality_checked": true,
       "right_to_reply": "Anyone named in a linked story can reply by emailing news@rochdaledaily.co.uk and we will publish or append their response.",
       "briefing_slot": "morning",
+      "manual_canonical_id": "briefing-morning-briefing-13-november-2026",
+      "source_count": 2,
+      "is_ongoing": true,
+      "ongoing_label": "ONGOING",
+      "update_count": 2,
+      "merged_scrape_duplicate": true,
       "img": "assets/img/cards/rochdale-town-hall.jpg",
       "image_status": "editorial-photo",
       "image_backfill_method": "manual-editorial-photo",
@@ -1092,7 +1114,7 @@
       "published_at": "2026-11-12T20:30:00Z",
       "first_published_at": "2026-11-12T20:30:00Z",
       "last_updated_at": "2026-11-12T20:30:00Z",
-      "scraped_at": "2026-11-13T11:02:12Z",
+      "scraped_at": "2026-11-13T11:25:07Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "https://www.rochdale.gov.uk/ignite",
       "source_names": [
@@ -1283,8 +1305,8 @@
         "source_sha": {
           "https://www.rochdale.gov.uk/directory-record/2638/trafalgar-street-roadworks-in-rochdale-on-26-november-2026": "c7cad7d48360fbdf"
         },
-        "checked_at": "2026-11-13T10:42:36.706191Z",
-        "attempts": 24
+        "checked_at": "2026-11-13T11:24:34.265018Z",
+        "attempts": 25
       },
       "frontpage_rank": 12,
       "frontpage_priority": 988,
@@ -1307,7 +1329,7 @@
       "published_at": "2026-11-12T09:29:17Z",
       "first_published_at": "2026-11-12T09:29:17Z",
       "last_updated_at": "2026-11-12T11:30:00Z",
-      "scraped_at": "2026-11-13T11:02:12Z",
+      "scraped_at": "2026-11-13T11:25:07Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -1449,8 +1471,8 @@
         "issues": [],
         "reason": "https://digventures.com/wp-content/uploads/2026/02/DV_SpoddenValleyRevealed_CommunityArchaeologyReport_v2.0-1.pdf: capture failed (ValueError: not an HTML page)",
         "source_sha": {},
-        "checked_at": "2026-11-13T10:42:36.706191Z",
-        "attempts": 25
+        "checked_at": "2026-11-13T11:24:34.265018Z",
+        "attempts": 26
       },
       "frontpage_rank": 14,
       "frontpage_priority": 986,
@@ -1473,7 +1495,7 @@
       "published_at": "2026-11-12T08:59:39Z",
       "first_published_at": "2026-11-12T08:59:39Z",
       "last_updated_at": "2026-11-12T08:59:39Z",
-      "scraped_at": "2026-11-13T11:02:12Z",
+      "scraped_at": "2026-11-13T11:25:07Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "https://www.rochdale.gov.uk/christmas/christmas-toy-appeal",
       "source_names": [
@@ -1639,12 +1661,12 @@
         "issues": [],
         "reason": "",
         "source_sha": {
-          "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-search-man-who-helped-34899246": "f367e02c77925e73",
+          "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/police-search-man-who-helped-34899246": "d4fa9f5d43c2e9cd",
           "https://www.rochdaletimes.co.uk/police-seek-key-witness-who-helped-sexual-assault-victim/": "8efc4f8ffe66d4ca"
         },
-        "source_changed_at": "2026-11-13T10:42:36.706191Z",
-        "checked_at": "2026-11-13T10:42:36.706191Z",
-        "attempts": 24
+        "source_changed_at": "2026-11-13T11:24:34.265018Z",
+        "checked_at": "2026-11-13T11:24:34.265018Z",
+        "attempts": 25
       },
       "frontpage_rank": 16,
       "frontpage_priority": 984,
@@ -1876,8 +1898,8 @@
         "source_sha": {
           "https://www.rochdale.gov.uk/news/article/698/council-issues-admissions-reminder-to-parents-before-the-new-year": "341430fd0d313f8e"
         },
-        "checked_at": "2026-11-13T10:42:36.706191Z",
-        "attempts": 23
+        "checked_at": "2026-11-13T11:24:34.265018Z",
+        "attempts": 24
       },
       "ingested_at": "2026-11-12T21:27:53Z",
       "first_published_at": "2026-11-12T00:00:00Z",
@@ -2004,8 +2026,8 @@
         "source_sha": {
           "https://www.hornetsrugbyleague.co.uk/article/1929/krisnan-inu-appointed-hornets-assistant-coach": "e9c0a3c9d9d469cb"
         },
-        "checked_at": "2026-11-13T10:42:36.706191Z",
-        "attempts": 9
+        "checked_at": "2026-11-13T11:24:34.265018Z",
+        "attempts": 10
       },
       "ingested_at": "2026-11-13T05:38:44Z",
       "first_published_at": "2026-11-12T00:00:00Z",
@@ -2054,8 +2076,8 @@
       ],
       "published_at": "2026-08-21T16:03:06Z",
       "first_published_at": "2026-08-21T16:03:06Z",
-      "last_updated_at": "2026-11-13T11:02:13.809382Z",
-      "scraped_at": "2026-11-13T11:02:13.809382Z",
+      "last_updated_at": "2026-11-13T11:25:08.364180Z",
+      "scraped_at": "2026-11-13T11:25:08.364180Z",
       "image_credit": "Adam Kerfoot-Roberts / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_7eb5ba7cf78e410ea7c34d50af897f61~mv2.jpg/v1/fill/w_1600,h_1600,al_c,q_90/ad4e9b_7eb5ba7cf78e410ea7c34d50af897f61~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2079,7 +2101,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-13T11:02:13.809382Z",
+      "content_updated_at": "2026-11-13T11:25:08.364180Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/c88cf4be775df99c-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_Town_Hall,_in_the_snow.jpg",
@@ -2114,7 +2136,7 @@
       "published_at": "2026-07-17T11:55:32Z",
       "first_published_at": "2026-07-17T11:55:32Z",
       "last_updated_at": "2026-11-13T10:43:02Z",
-      "scraped_at": "2026-11-13T11:02:13.914012Z",
+      "scraped_at": "2026-11-13T11:25:08.483405Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg/v1/fill/w_2000,h_2000,al_c,q_90/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2170,8 +2192,8 @@
       ],
       "published_at": "2026-11-12T23:30:44.228822Z",
       "first_published_at": "2026-11-12T23:30:44.228822Z",
-      "last_updated_at": "2026-11-13T11:02:14.047967Z",
-      "scraped_at": "2026-11-13T11:02:14.047967Z",
+      "last_updated_at": "2026-11-13T11:25:08.624194Z",
+      "scraped_at": "2026-11-13T11:25:08.624194Z",
       "image_credit": "Adam Kerfoot-Roberts / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2228,8 +2250,8 @@
       ],
       "published_at": "2026-10-01T19:33:20Z",
       "first_published_at": "2026-10-01T19:33:20Z",
-      "last_updated_at": "2026-11-13T11:02:14.151415Z",
-      "scraped_at": "2026-11-13T11:02:14.151415Z",
+      "last_updated_at": "2026-11-13T11:25:08.742643Z",
+      "scraped_at": "2026-11-13T11:25:08.742643Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg/v1/fill/w_1254,h_1254,al_c,q_85/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2286,7 +2308,7 @@
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
       "last_updated_at": "2026-11-12T21:28:20Z",
-      "scraped_at": "2026-11-13T11:02:14.305867Z",
+      "scraped_at": "2026-11-13T11:25:08.885077Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png/v1/fill/w_1297,h_1212,al_c/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2342,8 +2364,8 @@
       ],
       "published_at": "2026-10-09T15:13:55Z",
       "first_published_at": "2026-10-09T15:13:55Z",
-      "last_updated_at": "2026-11-13T11:02:14.443925Z",
-      "scraped_at": "2026-11-13T11:02:14.443925Z",
+      "last_updated_at": "2026-11-13T11:25:08.992050Z",
+      "scraped_at": "2026-11-13T11:25:08.992050Z",
       "image_credit": "BatAndBall / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg/v1/fill/w_890,h_624,al_c,q_85/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2367,7 +2389,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-13T11:02:14.443925Z",
+      "content_updated_at": "2026-11-13T11:25:08.992050Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/f4174a8ef48844b3-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Littleborough_Cricket_Club_-_geograph.org.uk_-_2498063.jpg",
@@ -2401,8 +2423,8 @@
       ],
       "published_at": "2026-10-28T19:02:26Z",
       "first_published_at": "2026-10-28T19:02:26Z",
-      "last_updated_at": "2026-11-13T11:02:14.569279Z",
-      "scraped_at": "2026-11-13T11:02:14.569279Z",
+      "last_updated_at": "2026-11-13T11:25:09.151378Z",
+      "scraped_at": "2026-11-13T11:25:09.151378Z",
       "image_credit": "R lee / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png/v1/fill/w_1206,h_1280,al_c/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2426,7 +2448,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-13T11:02:14.569279Z",
+      "content_updated_at": "2026-11-13T11:25:09.151378Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/28b4048459df187b-town-photo.jpg",
       "img": "assets/img/cards/28b4048459df187b-town-photo.jpg",
@@ -2460,7 +2482,7 @@
       "published_at": "2026-10-21T20:14:20Z",
       "first_published_at": "2026-10-21T20:14:20Z",
       "last_updated_at": "2026-11-12T21:28:24Z",
-      "scraped_at": "2026-11-13T11:02:14.672279Z",
+      "scraped_at": "2026-11-13T11:25:09.260378Z",
       "image_credit": "David Dixon / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2516,8 +2538,8 @@
       ],
       "published_at": "2026-09-28T18:06:54Z",
       "first_published_at": "2026-09-28T18:06:54Z",
-      "last_updated_at": "2026-11-13T11:02:14.800598Z",
-      "scraped_at": "2026-11-13T11:02:14.800598Z",
+      "last_updated_at": "2026-11-13T11:25:09.364745Z",
+      "scraped_at": "2026-11-13T11:25:09.364745Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg/v1/fill/w_1080,h_1080,al_c,q_85/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg",
       "source_image_reuse_status": "commons-free-license",
@@ -2541,7 +2563,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-13T11:02:14.800598Z",
+      "content_updated_at": "2026-11-13T11:25:09.364745Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
       "img": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
@@ -2575,7 +2597,7 @@
       "published_at": "2026-07-17T04:35:37Z",
       "first_published_at": "2026-07-17T04:35:37Z",
       "last_updated_at": "2026-11-12T21:28:27Z",
-      "scraped_at": "2026-11-13T11:02:14.938824Z",
+      "scraped_at": "2026-11-13T11:25:09.468280Z",
       "image_credit": "Rochdale Daily",
       "source_image_reuse_status": "cards-only",
       "event_start_at": "2027-05-13T18:30:00Z",
@@ -2629,7 +2651,7 @@
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
       "last_updated_at": "2026-11-12T21:28:28Z",
-      "scraped_at": "2026-11-13T11:02:15.041116Z",
+      "scraped_at": "2026-11-13T11:25:09.629941Z",
       "image_credit": "Robert Wade / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_0a200599185043b28943cf91fd33aa28~mv2.jpg/v1/fill/w_1000,h_1000,al_c,q_85/ad4e9b_0a200599185043b28943cf91fd33aa28~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2685,8 +2707,8 @@
       ],
       "published_at": "2026-10-15T20:53:22Z",
       "first_published_at": "2026-10-15T20:53:22Z",
-      "last_updated_at": "2026-11-13T11:02:15.181365Z",
-      "scraped_at": "2026-11-13T11:02:15.181365Z",
+      "last_updated_at": "2026-11-13T11:25:09.771763Z",
+      "scraped_at": "2026-11-13T11:25:09.771763Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_0cb34057003c425f856f07aec5451696~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_0cb34057003c425f856f07aec5451696~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2772,13 +2794,13 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "news": 4,
-      "crime": 3,
+      "crime": 2,
       "traffic": 2,
       "transport": 1,
       "education": 1,
       "sport": 2,
       "business": 3,
-      "community": 4,
+      "community": 5,
       "environment": 1
     },
     "selected_by_ward": {
@@ -2790,7 +2812,7 @@
       "littleborough": 1,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 18
+      "rochdale": 17
     },
     "selected_by_source": {
       "rochdale daily": 2,
@@ -2802,10 +2824,10 @@
       "source": 1,
       "inyourarea": 1,
       "bbc manchester": 1,
-      "greater manchester police press office": 1,
       "rochdale hornets": 1,
       "the gazette": 2,
       "rochdale times": 1,
+      "greater manchester police press office": 1,
       "digventures — spodden valley revealed: community archaeology report (2026)": 1
     },
     "pool_size": 27,
@@ -2840,7 +2862,7 @@
     "expired_same_day_deadlines_dropped": 0,
     "expired_sports_previews_dropped": 0,
     "stale_fallback_dropped": 0,
-    "enforced_at": "2026-11-13T11:03:35.905341Z"
+    "enforced_at": "2026-11-13T11:26:58.531701Z"
   },
   "source_quality_guard": {
     "marked_archive_records": 0,
@@ -2851,6 +2873,6 @@
     "fresh_hours": 36,
     "kept": 21,
     "removed": 0,
-    "enforced_at": "2026-11-13T11:03:36.150128Z"
+    "enforced_at": "2026-11-13T11:26:58.839424Z"
   }
 }
