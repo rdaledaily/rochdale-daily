@@ -73,7 +73,7 @@ from playwright.sync_api import sync_playwright
 from search_queries import build_search_query_specs
 from google_news_resolver import is_google_wrapper, resolve_wrappers
 from locations import LOCATION_BY_SLUG
-from food_hygiene import fetch_current_low_ratings, roundup_article_fields, roundup_paragraphs
+from food_hygiene import fetch_current_low_ratings, roundup_article_fields, roundup_paragraphs, plan_single_ratings, rating_source_url, single_rating_story, postcode_area, empty_state as food_hygiene_empty_state
 import primary_data
 from register_watch import cqc_candidates as register_cqc_candidates, load_state as register_load_state, ofsted_candidates as register_ofsted_candidates, save_state as register_save_state
 ROOT = Path(__file__).resolve().parents[1]
@@ -2529,54 +2529,131 @@ def collect_primary_data_candidates() -> list[Candidate]:
         ))
     return candidates
 
+FOOD_HYGIENE_STATE_FILE = ROOT / 'reports' / 'food_hygiene_state.json'
+FOOD_HYGIENE_REPORT: dict[str, Any] = {}
+
+def _food_hygiene_published_urls() -> set[str]:
+    """Source URLs already published, the only proof a rating story went out."""
+    urls: set[str] = set()
+    try:
+        records = json.loads((ROOT / 'articles.json').read_text(encoding='utf-8'))
+    except Exception as exc:
+        log.warning('food hygiene: articles.json unreadable, nothing confirmed this run: %s', exc)
+        return urls
+    if isinstance(records, dict):
+        records = records.get('articles', [])
+    for record in records if isinstance(records, list) else []:
+        if not isinstance(record, dict):
+            continue
+        for url in [record.get('source_url')] + list(record.get('source_urls') or []):
+            if isinstance(url, str) and url.startswith('https://ratings.food.gov.uk/business/'):
+                urls.add(url)
+    return urls
+
+def _food_hygiene_area(address: str) -> str:
+    area = detect_area(address, '')
+    if area in AREA_KEYWORDS and area != 'rochdale':
+        return area
+    return postcode_area(address) or 'rochdale'
+
 def collect_food_hygiene_candidates() -> list[Candidate]:
-    """The businesses in the borough currently rated 0 or 1, as one roundup.
+    """FSA food hygiene: one story per NEW low rating, plus the monthly roundup.
 
     Primary data, not aggregation: the FSA publishes this API for reuse, so
     there is no robots.txt question and no other outlet to rewrite. Prose is
-    generated deterministically in food_hygiene.py from published facts only.
+    generated deterministically in food_hygiene.py from published facts only
+    and published verbatim.
 
-    A roundup rather than one story per rating. Rochdale publishes a low rating
-    every few months, so the previous eight-day window for new ratings produced
-    nothing almost every run. The standing list is a story in a way a single
-    rating is not, and it can be republished each month from the same source.
+    One fetch serves both outputs. New ratings are found by diffing the
+    register against reports/food_hygiene_state.json, not by an
+    inspection-date window: the FSA publishes a low rating weeks after the
+    inspection, which is why the old eight-day window found nothing.
     """
+    FOOD_HYGIENE_REPORT.clear()
     if os.getenv('FOOD_HYGIENE_ENABLED', 'true').lower() != 'true':
+        FOOD_HYGIENE_REPORT['status'] = 'disabled'
         return []
-    max_rating = int(os.getenv('FOOD_HYGIENE_MAX_RATING', '1'))
+    roundup_max = int(os.getenv('FOOD_HYGIENE_MAX_RATING', '1'))
+    single_max = int(os.getenv('FOOD_HYGIENE_SINGLE_MAX_RATING', '1'))
+    singles_on = os.getenv('FOOD_HYGIENE_SINGLE_ENABLED', 'true').lower() == 'true'
     try:
-        records = fetch_current_low_ratings(SESSION.get, max_rating=max_rating)
+        records = fetch_current_low_ratings(SESSION.get, max_rating=max(roundup_max, single_max))
     except Exception as exc:
         log.warning('FSA food hygiene API unavailable: %s', exc)
+        FOOD_HYGIENE_REPORT['status'] = f'FSA API unavailable: {exc}'[:300]
         return []
     if not records:
-        # Nothing to report is not a story. The roundup's empty-case wording
-        # exists for a manual run, not for publishing an article saying so.
+        # fetch_current_low_ratings returns [] on a timeout rather than a
+        # partial list, so this is "no data this run", never "no low ratings".
+        FOOD_HYGIENE_REPORT['status'] = 'no data this run'
         return []
 
     now = datetime.now(timezone.utc)
-    detailed = roundup_paragraphs(records, now=now)
-    # A stable per-month identity, so the roundup is published once a month
-    # rather than re-offered on every run and deduplicated by chance.
-    period = now.strftime('%Y-%m')
-    return [Candidate(
-        source_name='Food Standards Agency',
-        source_url=f'https://ratings.food.gov.uk/open-data#rochdale-{period}',
-        source_title=detailed['title'][:160],
-        source_summary=detailed['summary'][:900],
-        source_published_at=iso_utc(now),
-        area='rochdale',
-        category='health',
-        # Not clipped: the full deterministic list is carried on the draft below
-        # and published verbatim, so nothing here needs to fit a rewrite budget.
-        source_body_excerpt=detailed['summary'][:900],
-        source_kind='food_hygiene_roundup',
-        deterministic_draft={
-            'title': detailed['title'],
-            'excerpt': detailed['summary'],
-            'paragraphs': detailed['paragraphs'],
-        },
-    )]
+    candidates: list[Candidate] = []
+    roundup_records = [r for r in records if r['rating'] <= roundup_max]
+    borough_low_count = sum(1 for r in records if r['rating'] <= 1)
+
+    if singles_on:
+        try:
+            state = json.loads(FOOD_HYGIENE_STATE_FILE.read_text(encoding='utf-8'))
+        except FileNotFoundError:
+            state = food_hygiene_empty_state()
+        except Exception as exc:
+            # A corrupt state file must not re-baseline silently (that would
+            # bury every pending rating) nor re-offer the whole register.
+            log.warning('food hygiene state unreadable, single-rating stories skipped this run: %s', exc)
+            FOOD_HYGIENE_REPORT['single_ratings'] = {'status': f'state unreadable: {exc}'[:300]}
+            state = None
+        if state is not None:
+            single_records = [r for r in records if r['rating'] <= single_max]
+            offer, report = plan_single_ratings(single_records, state, _food_hygiene_published_urls(), now)
+            FOOD_HYGIENE_REPORT['single_ratings'] = report
+            try:
+                FOOD_HYGIENE_STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+                FOOD_HYGIENE_STATE_FILE.write_text(json.dumps(state, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+            except Exception as exc:
+                log.warning('food hygiene state could not be saved: %s', exc)
+            for record in offer:
+                story = single_rating_story(record, borough_low_count=borough_low_count, checked_at=now)
+                candidates.append(Candidate(
+                    source_name='Food Standards Agency',
+                    source_url=rating_source_url(record),
+                    source_title=story['title'],
+                    source_summary=story['excerpt'][:900],
+                    # Detection time, not the inspection date: the rating was
+                    # only published recently, and the inspection date is always
+                    # weeks old, which the age gate would reject.
+                    source_published_at=iso_utc(now),
+                    area=_food_hygiene_area(record['address']),
+                    category='health',
+                    source_body_excerpt=story['excerpt'][:900],
+                    source_kind='food_hygiene_rating',
+                    deterministic_draft=story,
+                ))
+
+    if roundup_records:
+        detailed = roundup_paragraphs(roundup_records, now=now)
+        # A stable per-month identity, so the roundup is published once a month
+        # rather than re-offered on every run and deduplicated by chance.
+        period = now.strftime('%Y-%m')
+        candidates.append(Candidate(
+            source_name='Food Standards Agency',
+            source_url=f'https://ratings.food.gov.uk/open-data#rochdale-{period}',
+            source_title=detailed['title'][:160],
+            source_summary=detailed['summary'][:900],
+            source_published_at=iso_utc(now),
+            area='rochdale',
+            category='health',
+            source_body_excerpt=detailed['summary'][:900],
+            source_kind='food_hygiene_roundup',
+            deterministic_draft={
+                'title': detailed['title'],
+                'excerpt': detailed['summary'],
+                'paragraphs': detailed['paragraphs'],
+            },
+        ))
+    FOOD_HYGIENE_REPORT.setdefault('status', 'ok')
+    return candidates
 
 def candidate_related_record(candidate: Candidate) -> dict[str, str]:
     return {
@@ -4300,7 +4377,7 @@ def main() -> int:
     for candidate in selected_candidates:
         selected_by_category[candidate.category] = selected_by_category.get(candidate.category, 0) + 1
     save_benched_domains(BENCHED_DOMAINS)
-    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'primary_data': dict(PRIMARY_DATA_REPORT), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count,
+    write_json_atomic(STATUS_FILE, {'last_run_at': iso_utc(utc_now()), 'primary_data': dict(PRIMARY_DATA_REPORT), 'food_hygiene': dict(FOOD_HYGIENE_REPORT), 'raw_candidates_before_job_filter': len(raw_candidates_all), 'job_or_career_posts_rejected': len(rejected_job_candidates), 'raw_candidates': len(raw_candidates), 'candidate_clusters': len(candidates), 'google_news_resolution': google_resolution_stats, 'duplicates_merged': max(0, len(raw_candidates) - len(candidates)), 'attempted_rewrites': ai_count,
         # Drafts are NOT publications. The final page-generation audit sets new_articles.
         'draft_rewrites_created': len(new_articles),
         'drafted_articles': [

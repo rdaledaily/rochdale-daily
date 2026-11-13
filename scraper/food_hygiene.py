@@ -537,3 +537,218 @@ def rating_article_fields(record: dict[str, Any]) -> dict[str, str]:
     )
 
     return {"title": title, "summary": summary, "body": body}
+
+
+# ---------------------------------------------------------------------------
+# One story per new low rating.
+#
+# Why the old eight-day window "produced nothing": it compared the FSA's
+# RatingDate - the INSPECTION date - with today. The FSA publishes a rating
+# only after the business's 21-day appeal period and the council's upload, so
+# a rating appears in the API weeks after its RatingDate. Measured on the
+# 1 November 2026 roundup: the newest of 66 standing 0/1 ratings was inspected
+# on 29 September; standing 0/1 ratings arrive at about six a month
+# (May-Sept 2026: 3, 9, 4, 8, 6). An inspection-date window can never see
+# them. The test that works is "not seen before": diff the current register
+# against a stored baseline.
+#
+# Lifecycle of a rating key "<FHRSID>:<rating>:<YYYY-MM-DD>":
+#   baseline  - present when the baseline was taken; never a story.
+#   pending   - new since the baseline; offered as a candidate on every run
+#               until it is found published in articles.json.
+#   published - found in articles.json; never offered again.
+#   expired   - offered for SINGLE_RATING_PENDING_DAYS without publishing;
+#               dropped and reported by name in the run report, not retried.
+# A candidate can be dropped by the selection cap, so "offered" is never
+# treated as "done": only publication is.
+# ---------------------------------------------------------------------------
+
+SINGLE_RATING_PENDING_DAYS = 14
+
+_POSTCODE_AREAS = (
+    ("OL10", "heywood"),
+    ("M24", "middleton"),
+    ("OL15", "littleborough"),
+)
+
+
+def rating_key(record: dict[str, Any]) -> str:
+    return f"{int(record['fhrs_id'])}:{int(record['rating'])}:{record['rating_date']:%Y-%m-%d}"
+
+
+def rating_source_url(record: dict[str, Any]) -> str:
+    """The FSA's own page for the business, made unique per rating so a later
+    re-inspection with another low rating is a separate story, not a duplicate."""
+    return (
+        f"https://ratings.food.gov.uk/business/{int(record['fhrs_id'])}"
+        f"#rating-{int(record['rating'])}-{record['rating_date']:%Y-%m-%d}"
+    )
+
+
+def postcode_area(address: str) -> str:
+    """Township from the postcode district, for addresses that do not name it."""
+    match = re.search(r"\b([A-Z]{1,2}\d{1,2})\s*\d[A-Z]{2}\b", address.upper())
+    if not match:
+        return ""
+    district = match.group(1)
+    for prefix, area in _POSTCODE_AREAS:
+        if district == prefix:
+            return area
+    return ""
+
+
+def empty_state() -> dict[str, Any]:
+    return {"baseline_taken_at": "", "baseline": [], "pending": {}, "published": [], "expired": []}
+
+
+def plan_single_ratings(
+    records: list[dict[str, Any]],
+    state: dict[str, Any],
+    published_urls: set[str],
+    now: datetime,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Decide which low ratings to offer this run. Mutates and returns state.
+
+    ``records`` must be the COMPLETE current list of low ratings from one fetch
+    (fetch_current_low_ratings returns [] rather than a partial list, so an
+    empty list here means "no data this run", and nothing is changed).
+    """
+    report: dict[str, Any] = {"status": "ok", "current_low": len(records),
+                              "new": 0, "offered": 0, "newly_published": 0,
+                              "newly_expired": []}
+    if not records:
+        report["status"] = "no data this run"
+        return [], report
+
+    for key in ("baseline", "published", "expired"):
+        state.setdefault(key, [])
+    state.setdefault("pending", {})
+    keyed = {rating_key(r): r for r in records}
+
+    if not state.get("baseline_taken_at"):
+        # First run: everything already on the register is old news (the
+        # monthly roundup covers it). Record it; publish nothing.
+        state["baseline"] = sorted(keyed)
+        state["baseline_taken_at"] = now.isoformat()
+        report["status"] = "baseline taken"
+        report["baseline_size"] = len(keyed)
+        return [], report
+
+    baseline = set(state["baseline"])
+    published = set(state["published"])
+    expired = set(state["expired"])
+    pending: dict[str, str] = state["pending"]
+
+    # Confirm publication before anything else.
+    for key in list(pending):
+        record = keyed.get(key)
+        url = rating_source_url(record) if record else ""
+        if not record:
+            # Re-rated or removed before we published it: the rating no longer
+            # stands, so it must not be reported as current.
+            del pending[key]
+            continue
+        if url in published_urls:
+            published.add(key)
+            del pending[key]
+            report["newly_published"] += 1
+
+    offer: list[dict[str, Any]] = []
+    for key, record in keyed.items():
+        if key in baseline or key in published or key in expired:
+            continue
+        if rating_source_url(record) in published_urls:
+            published.add(key)
+            pending.pop(key, None)
+            continue
+        if key not in pending:
+            pending[key] = now.isoformat()
+            report["new"] += 1
+        first_offered = datetime.fromisoformat(pending[key])
+        if now - first_offered > timedelta(days=SINGLE_RATING_PENDING_DAYS):
+            expired.add(key)
+            del pending[key]
+            report["newly_expired"].append(f"{record['name']} ({key})")
+            continue
+        offer.append(record)
+
+    state["published"] = sorted(published)
+    state["expired"] = sorted(expired)
+    report["offered"] = len(offer)
+    report["pending"] = len(pending)
+    offer.sort(key=lambda r: (r["rating"], -r["rating_date"].timestamp()))
+    return offer, report
+
+
+_RATING_MEANING_PROSE = {
+    0: "urgent improvement is necessary",
+    1: "major improvement is necessary",
+    2: "improvement is necessary",
+}
+
+
+def single_rating_story(
+    record: dict[str, Any],
+    *,
+    borough_low_count: int,
+    checked_at: datetime,
+) -> dict[str, Any]:
+    """Deterministic story for one new low rating, published verbatim.
+
+    Every sentence restates a published FSA fact or the scheme's own rules.
+    Nothing is said about what the inspector found: the API carries only the
+    score, and an invented finding about a named business is defamation.
+    """
+    name = record["name"]
+    rating = int(record["rating"])
+    meaning = _RATING_MEANING_PROSE[rating]
+    business_type = _type_prose(record.get("business_type"))
+    inspected = record["rating_date"].strftime("%-d %B %Y")
+    checked = checked_at.strftime("%-d %B %Y")
+    address = record["address"]
+
+    title = f"{name} rated {rating} out of 5 for food hygiene"
+    excerpt = (
+        f"{name}, a {business_type} at {address}, has been given a food "
+        f"hygiene rating of {rating} out of 5, meaning {meaning}, after an "
+        f"inspection on {inspected}."
+    )
+    paragraphs = [
+        excerpt,
+        (
+            f"The rating appears on the Food Standards Agency's public register "
+            f"for the Rochdale borough, checked by Rochdale Daily on {checked}. "
+            f"A low rating is usually published only after the business's "
+            f"21-day appeal period has passed, so it appears some weeks after "
+            f"the inspection."
+        ),
+        (
+            "Under the national Food Hygiene Rating Scheme, councils score "
+            "businesses from 0, where urgent improvement is necessary, to 5, "
+            "where hygiene standards are very good. The score reflects how food "
+            "was handled, the condition of the premises and how food safety was "
+            "managed on the day of the inspection. It is not a judgement of the "
+            "quality of the food."
+        ),
+        (
+            f"{_NUMBER_WORDS.get(borough_low_count, str(borough_low_count))} "
+            f"food business{'es' if borough_low_count != 1 else ''} in the "
+            f"borough currently hold{'s' if borough_low_count == 1 else ''} a "
+            f"rating of 0 or 1, according to the same register."
+        ) if borough_low_count else "",
+        (
+            "A business can appeal its rating, publish a right of reply "
+            "alongside it on the Food Standards Agency website, and ask for a "
+            "re-inspection once improvements have been made, so the rating may "
+            f"since have changed. The current rating is at {rating_source_url(record).split('#')[0]}."
+        ),
+        (
+            f"Right of reply: {name} is welcome to respond to this report at "
+            "news@rochdaledaily.co.uk, and any reply will be published in full."
+        ),
+    ]
+    return {
+        "title": title[:160],
+        "excerpt": excerpt,
+        "paragraphs": [p for p in paragraphs if p],
+    }

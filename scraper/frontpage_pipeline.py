@@ -53,6 +53,7 @@ from story_identity import (
     named_entities,
     precise_locations,
     same_story,
+    keyed_record_identity,
     missing_person_match,
     strip_publisher_suffix,
     _is_roundup_like,
@@ -997,6 +998,10 @@ def extended_incident_match(left: dict[str, Any], right: dict[str, Any]) -> bool
 
 
 def records_match(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    # Official keyed records (FSA ratings) are one story per record, whatever the wording.
+    left_key, right_key = keyed_record_identity(left), keyed_record_identity(right)
+    if left_key and right_key:
+        return left_key == right_key
     person_match = missing_person_match(left, right)
     if person_match is not None:
         return person_match

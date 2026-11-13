@@ -1103,7 +1103,27 @@ def story_similarity(left: Any, right: Any) -> float:
     return min(score, 1.0)
 
 
+# Records that carry their own official identity. Two FSA rating stories have
+# near-identical wording ("<name> rated 1 out of 5 for food hygiene") and scored
+# as the same story, which would have merged two different takeaways and
+# silently dropped one. For these the identity is the record itself: the FSA
+# business page plus the rating and its date, carried in the source URL.
+_KEYED_RECORD_RE = re.compile(r"^https://ratings\.food\.gov\.uk/business/\d+#rating-\d-\d{4}-\d{2}-\d{2}$")
+
+
+def keyed_record_identity(record: Any) -> str:
+    urls = [get_value(record, "source_url", "")] + list(get_value(record, "source_urls", []) or [])
+    for url in urls:
+        if isinstance(url, str) and _KEYED_RECORD_RE.match(url.strip()):
+            return url.strip()
+    return ""
+
+
 def same_story(left: Any, right: Any) -> bool:
+    left_key = keyed_record_identity(left)
+    right_key = keyed_record_identity(right)
+    if left_key and right_key:
+        return left_key == right_key
     person_match = missing_person_match(left, right)
     if person_match is not None:
         return person_match
@@ -1498,6 +1518,9 @@ def _same_record(left: dict[str, Any], right: dict[str, Any]) -> bool:
 
 
 def _records_match(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    left_key, right_key = keyed_record_identity(left), keyed_record_identity(right)
+    if left_key and right_key:
+        return left_key == right_key
     # A roundup is only ever the same record as itself.
     if _is_roundup(left) or _is_roundup(right):
         return _same_record(left, right)

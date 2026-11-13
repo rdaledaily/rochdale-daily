@@ -43,7 +43,7 @@ MAX_BYTES = 1_500_000
 UNFETCHABLE_HOSTS = {"news.google.com"}  # wrappers: resolved to the publisher before fetching
 # Deterministic records are rendered from a published data record, not
 # rewritten, and are guarded where they are generated (food_hygiene.py).
-SKIP_SOURCE_KINDS = {"food_hygiene_roundup"}
+SKIP_SOURCE_KINDS = {"food_hygiene_roundup", "food_hygiene_rating"}
 SKIP_ROUTES = {"daily-briefing", "editorial", "deterministic"}
 
 _STOP = {
