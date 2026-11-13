@@ -1170,8 +1170,9 @@ def is_generated_card(image_url: str) -> bool:
 # from any of the site's newsletter forms (localStorage "rd_subscribed").
 # Vanilla JS; every storage call is guarded, because private windows and
 # blocked site data make sessionStorage/localStorage throw, and the page must
-# work without them. Minimal positioning only: styling is left to the editor
-# through the .rd-newsletter-modal classes.
+# work without them. Minimal positioning only inline; the look lives in
+# assets/css/editorial-theme.css under .rd-newsletter-modal, which every
+# article page already loads, so a restyle reaches pages built before it.
 NEWSLETTER_MODAL = """  <div id="rd-newsletter-modal" class="rd-newsletter-modal" role="dialog" aria-modal="true" aria-labelledby="rd-newsletter-modal-title" hidden style="position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;background:rgba(0,0,0,.45);padding:16px">
     <div class="rd-newsletter-modal__panel" style="background:#fff;max-width:420px;width:100%;padding:24px;position:relative">
       <button type="button" class="rd-newsletter-modal__close" data-modal-close aria-label="Close" style="position:absolute;top:8px;right:8px">&times;</button>

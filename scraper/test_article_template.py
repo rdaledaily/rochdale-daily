@@ -122,6 +122,13 @@ def test_newsletter_modal_is_hidden_until_the_script_opens_it(root):
 
 
 
+def test_newsletter_modal_is_styled_by_the_shared_theme():
+    # It shipped unstyled once (browser-default button and label on 12 Nov 2026).
+    css = (Path(__file__).resolve().parents[1] / "assets/css/editorial-theme.css").read_text(encoding="utf-8")
+    for cls in ("__panel", "__close", "__title", "__text", "__form", "__small"):
+        assert f".rd-newsletter-modal .rd-newsletter-modal{cls}" in css
+
+
 def test_shared_newsletter_handler_records_the_subscriber():
     # menu.js stops every other submit listener, so it must write the marker itself.
     script = (Path(__file__).resolve().parents[1] / "assets/js/menu.js").read_text(encoding="utf-8")
