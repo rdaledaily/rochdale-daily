@@ -208,9 +208,20 @@ _STATUS_GROUPS: tuple[tuple[str, str, str], ...] = (
 )
 
 
+# Legal boilerplate that names a status without asserting it. The first full
+# review (12 Nov 2026) read "presumed innocent unless and until convicted" as a
+# claim of conviction and took down charge stories over it.
+_NOT_ASSERTED = re.compile(
+    r"presumed innocent[^.]*|no finding of guilt[^.]*|"
+    r"\b(?:until|unless|before)\s+(?:and\s+until\s+)?(?:proven\s+guilty|convicted|found\s+guilty)|"
+    r"\b(?:not|never)\s+(?:yet\s+)?(?:been\s+)?(?:convicted|found\s+guilty|charged|arrested|jailed|sentenced)",
+    re.I,
+)
+
+
 def unsupported_status(draft: str, source: str) -> list[str]:
     """Legal-status and harm words in the draft that the source never uses."""
-    draft_l = _QUOTE_RE.sub(" ", _plain(draft)).lower()
+    draft_l = _NOT_ASSERTED.sub(" ", _QUOTE_RE.sub(" ", _plain(draft))).lower()
     source_l = _plain(source).lower()
     return [
         label for label, draft_re, source_re in _STATUS_GROUPS

@@ -104,3 +104,162 @@ for banned in ("dirty", "filthy", "unsafe", "pest", "mice", "shocking"):
     assert banned not in fields["body"].lower()
 
 print("Food hygiene collector tests passed.")
+
+
+# --- One story per NEW low rating (12 Nov 2026) ---
+
+from food_hygiene import (
+    empty_state,
+    plan_single_ratings,
+    postcode_area,
+    rating_key,
+    rating_source_url,
+    single_rating_story,
+)
+from story_identity import _records_match, keyed_record_identity, same_story
+from frontpage_pipeline import records_match
+
+SR_NOW = datetime(2026, 11, 12, 21, 0, tzinfo=timezone.utc)
+
+
+def sr_rec(fhrs, name, address, rating=1, inspected=datetime(2026, 10, 1, tzinfo=timezone.utc)):
+    return {"fhrs_id": fhrs, "name": name, "business_type": "Takeaway/sandwich shop",
+            "address": address, "rating": rating, "rating_date": inspected}
+
+
+OLD = sr_rec(1, "Old Grill", "1 Drake Street, Rochdale, OL16 1RE", inspected=datetime(2026, 6, 1, tzinfo=timezone.utc))
+SPICE = sr_rec(2, "Spice Corner", "12 Yorkshire Street, Rochdale, OL16 1JU")
+WOK = sr_rec(3, "Golden Wok", "4 Market Place, Heywood, OL10 1LL", rating=0)
+
+
+def baselined(records):
+    state = empty_state()
+    offer, report = plan_single_ratings(records, state, set(), SR_NOW - timedelta(days=1))
+    assert offer == [] and report["status"] == "baseline taken"
+    return state
+
+
+def test_first_run_takes_baseline_and_publishes_nothing():
+    state = empty_state()
+    offer, report = plan_single_ratings([OLD, SPICE], state, set(), SR_NOW)
+    assert offer == []
+    assert report["baseline_size"] == 2
+    assert set(state["baseline"]) == {rating_key(OLD), rating_key(SPICE)}
+
+
+def test_new_rating_is_offered_even_though_inspection_is_weeks_old():
+    # The bug: SPICE was inspected 6 weeks before SR_NOW. An inspection-date
+    # window would never see it; the baseline diff does.
+    state = baselined([OLD])
+    offer, report = plan_single_ratings([OLD, SPICE], state, set(), SR_NOW)
+    assert [r["name"] for r in offer] == ["Spice Corner"]
+    assert report["new"] == 1
+
+
+def test_offered_but_unpublished_is_offered_again():
+    # The selection cap can drop a candidate: offering is not publishing.
+    state = baselined([OLD])
+    plan_single_ratings([OLD, SPICE], state, set(), SR_NOW)
+    offer, _ = plan_single_ratings([OLD, SPICE], state, set(), SR_NOW + timedelta(hours=1))
+    assert [r["name"] for r in offer] == ["Spice Corner"]
+
+
+def test_published_rating_is_never_offered_again():
+    state = baselined([OLD])
+    plan_single_ratings([OLD, SPICE], state, set(), SR_NOW)
+    published = {rating_source_url(SPICE)}
+    offer, report = plan_single_ratings([OLD, SPICE], state, published, SR_NOW + timedelta(hours=1))
+    assert offer == [] and report["newly_published"] == 1
+    offer, _ = plan_single_ratings([OLD, SPICE], state, set(), SR_NOW + timedelta(days=30))
+    assert offer == []  # remembered in state, even after it leaves articles.json
+
+
+def test_unpublished_rating_expires_after_14_days_and_is_named():
+    state = baselined([OLD])
+    plan_single_ratings([OLD, SPICE], state, set(), SR_NOW)
+    offer, report = plan_single_ratings([OLD, SPICE], state, set(), SR_NOW + timedelta(days=15))
+    assert offer == []
+    assert report["newly_expired"] and "Spice Corner" in report["newly_expired"][0]
+
+
+def test_rerated_before_publication_is_withdrawn():
+    state = baselined([OLD])
+    plan_single_ratings([OLD, SPICE], state, set(), SR_NOW)
+    offer, _ = plan_single_ratings([OLD], state, set(), SR_NOW + timedelta(hours=1))
+    assert offer == [] and state["pending"] == {}
+
+
+def test_new_low_rating_for_a_baselined_business_is_a_new_story():
+    state = baselined([SPICE])
+    worse = sr_rec(2, "Spice Corner", SPICE["address"], rating=0, inspected=datetime(2026, 11, 1, tzinfo=timezone.utc))
+    offer, _ = plan_single_ratings([worse], state, set(), SR_NOW)
+    assert offer and offer[0]["rating"] == 0
+
+
+def test_no_data_run_changes_nothing():
+    state = baselined([OLD])
+    before = repr(state)
+    offer, report = plan_single_ratings([], state, set(), SR_NOW)
+    assert offer == [] and report["status"] == "no data this run" and repr(state) == before
+
+
+def test_story_states_only_published_facts_and_ends_on_right_of_reply():
+    story = single_rating_story(SPICE, borough_low_count=66, checked_at=SR_NOW)
+    text = " ".join(story["paragraphs"])
+    assert story["title"] == "Spice Corner rated 1 out of 5 for food hygiene"
+    assert "1 October 2026" in text and "12 November 2026" in text  # UK dates
+    assert "major improvement is necessary" in text
+    assert "66 food businesses" in text
+    assert "https://ratings.food.gov.uk/business/2" in text
+    assert story["paragraphs"][-1].startswith("Right of reply:")
+    for banned in ("dirty", "filthy", "shocking", "inspectors found", "we wish"):
+        assert banned not in text.lower()
+
+
+def sr_article(record):
+    story = single_rating_story(record, borough_low_count=66, checked_at=SR_NOW)
+    return {"title": story["title"], "excerpt": story["excerpt"],
+            "content_html": " ".join(story["paragraphs"]), "source_url": rating_source_url(record),
+            "category": "health", "area": "rochdale", "published_at": "2026-11-12T21:00:00Z",
+            "source_kind": "food_hygiene_rating"}
+
+
+def test_two_businesses_are_never_one_story():
+    # Measured before the fix: same_story(Spice Corner, Golden Wok) was True.
+    a, b = sr_article(SPICE), sr_article(WOK)
+    assert keyed_record_identity(a) and keyed_record_identity(b)
+    assert not same_story(a, b)
+    assert not _records_match(a, b)
+    assert not records_match(a, b)
+
+
+def test_same_rating_record_is_one_story():
+    assert same_story(sr_article(SPICE), sr_article(SPICE))
+
+
+def test_ordinary_stories_are_unaffected():
+    plain = {"title": "Bus lane cameras switched on", "source_url": "https://example.org/x"}
+    assert keyed_record_identity(plain) == ""
+
+
+def test_postcode_area():
+    assert postcode_area("4 Market Place, OL10 1LL") == "heywood"
+    assert postcode_area("Unit 3, M24 4EL") == "middleton"
+    assert postcode_area("Todmorden Road, OL15 9EG") == "littleborough"
+    assert postcode_area("12 Yorkshire Street, OL16 1JU") == ""
+
+
+if __name__ == "__main__":
+    # CI runs this file as a script (`python scraper/test_food_hygiene.py`).
+    # Without this block none of the tests above executed there.
+    import sys
+    tests = [(name, fn) for name, fn in sorted(globals().items()) if name.startswith("test_") and callable(fn)]
+    failed = 0
+    for name, fn in tests:
+        try:
+            fn()
+        except Exception as exc:  # report every failure, then exit non-zero
+            failed += 1
+            print(f"FAIL {name}: {exc!r}")
+    print(f"{len(tests) - failed}/{len(tests)} food hygiene tests passed")
+    sys.exit(1 if failed else 0)

@@ -207,18 +207,20 @@ svg {
   <meta name="keywords" content="Heywood, Politics, Rochdale, local news">
   <meta property="og:title" content="Heywood and Middleton North MP visits Redwood School’s sixth form at Phoenix Centre">
   <meta property="og:description" content="Elsie Blundell, MP for Heywood and Middleton North, visited Redwood School’s sixth form at the Phoenix Centre to engage with students and staff about their educational initiatives.">
-  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen.jpg">
+  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/og/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-51066ddf1e-1200x675.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="675">
   <meta property="og:image:alt" content="Illustration: Heywood, education. Not a photograph of the event.">
-  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen.jpg">
+  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/og/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-51066ddf1e-1200x900.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="900">
   <meta property="og:image:alt" content="Illustration: Heywood, education. Not a photograph of the event.">
-  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/cards/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen.jpg">
+  <meta property="og:image" content="https://rochdaledaily.co.uk/assets/img/og/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-51066ddf1e-1200x1200.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="1200">
   <meta property="og:image:alt" content="Illustration: Heywood, education. Not a photograph of the event.">
+  <meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/og/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-51066ddf1e-1200x675.jpg">
+  <meta name="twitter:image:alt" content="Illustration: Heywood, education. Not a photograph of the event.">
   <meta property="og:url" content="https://rochdaledaily.co.uk/articles/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-form-at-phoenix-cen">
   <meta property="article:published_time" content="2026-10-15T21:14:33Z">
   <meta property="article:modified_time" content="2026-10-15T21:14:33Z">
@@ -226,8 +228,6 @@ svg {
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Heywood and Middleton North MP visits Redwood School’s sixth form at Phoenix Centre">
   <meta name="twitter:description" content="Elsie Blundell, MP for Heywood and Middleton North, visited Redwood School’s sixth form at the Phoenix Centre to engage with students and staff about their educational initiatives.">
-  <meta name="twitter:image" content="https://rochdaledaily.co.uk/assets/img/og/heywood-and-middleton-north-mp-visits-redwood-school-s-sixth-51066ddf1e-1200x675.jpg">
-  <meta name="twitter:image:alt" content="Illustration: Heywood, education. Not a photograph of the event.">
   <meta name="news_keywords" content="Heywood, Politics, Rochdale, local news">
   <meta property="article:tag" content="Heywood">
   <meta property="article:tag" content="Politics">
@@ -238,7 +238,7 @@ svg {
   <div class="utility">
     <div class="wrap utility-row">
       <div class="utility-left">
-        <span class="date-stamp">Thursday 12 November 2026</span>
+        <span class="date-stamp">Friday 13 November 2026</span>
       </div>
       <div class="utility-links">
         <a class="utility-tip" href="mailto:news@rochdaledaily.co.uk?subject=News%20tip">Send a news tip</a>
@@ -361,7 +361,7 @@ svg {
         fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, consent: true, website: "", source: "article" }) })
           .then(function (res) { return res.json().catch(function () { return {}; }); })
           .then(function (data) {
-            if (data && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); try { localStorage.setItem("rd_subscribed", "1"); } catch (e) {} }
+            if (data && data.ok) { status.textContent = data.message || "Thanks. You're on the list."; form.reset(); try { localStorage.setItem("rd_newsletter_done", "1"); } catch (e) {} }
             else { status.textContent = (data && data.error) || "Something went wrong. Please try again."; }
           })
           .catch(function () { status.textContent = "Something went wrong. Please try again."; });
@@ -392,7 +392,10 @@ svg {
       var count = parseInt(get("sessionStorage", "rd_visit_count") || "0", 10) + 1;
       // Without session storage there is no count to trust: never prompt.
       if (!set("sessionStorage", "rd_visit_count", String(count))) return;
-      if (count < 2 || get("sessionStorage", "rd_newsletter_prompted") || get("localStorage", "rd_subscribed")) return;
+      // rd_newsletter_done is the site-wide subscriber marker (menu.js, article-signup.js,
+      // retention.js); rd_subscribed is honoured for anyone who signed up here first.
+      function subscribed() { return get("localStorage", "rd_newsletter_done") || get("localStorage", "rd_subscribed"); }
+      if (count < 2 || get("sessionStorage", "rd_newsletter_prompted") || subscribed()) return;
       var lastFocus = null;
       function close() {
         modal.hidden = true;
@@ -402,7 +405,7 @@ svg {
       }
       function onKey(event) { if (event.key === "Escape") close(); }
       window.showNewsletterModal = function () {
-        if (get("sessionStorage", "rd_newsletter_prompted")) return;
+        if (get("sessionStorage", "rd_newsletter_prompted") || subscribed()) return;
         set("sessionStorage", "rd_newsletter_prompted", "1");
         lastFocus = document.activeElement;
         modal.hidden = false;
@@ -412,6 +415,11 @@ svg {
         if (input) input.focus();
       };
       modal.style.display = "none";
+      // A signup through any form on the page (sidebar, in-article box) counts.
+      document.addEventListener("rd:newsletter-saved", function () {
+        set("localStorage", "rd_newsletter_done", "1");
+        if (!modal.hidden) close();
+      });
       modal.addEventListener("click", function (event) {
         if (event.target === modal || event.target.closest("[data-modal-close]")) close();
       });
@@ -429,7 +437,8 @@ svg {
           .then(function (data) {
             if (data && data.ok) {
               status.textContent = data.message || "Thanks. You're on the list.";
-              set("localStorage", "rd_subscribed", "1");
+              set("localStorage", "rd_newsletter_done", "1");
+              try { document.dispatchEvent(new CustomEvent("rd:newsletter-saved")); } catch (e) {}
               setTimeout(close, 2000);
             } else { status.textContent = (data && data.error) || "Something went wrong. Please try again."; }
           })

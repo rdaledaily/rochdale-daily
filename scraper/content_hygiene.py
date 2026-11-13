@@ -6,6 +6,8 @@ import html
 import json
 import re
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
@@ -318,7 +320,20 @@ def main() -> int:
             changed.append(relative)
         if findings:
             flagged.append(relative)
-    print(json.dumps({"changed": changed, "flagged": flagged}, indent=2))
+    # Banned links (gambling, betting, piracy, denied outlets): removed from
+    # every public file on --fix, and a hard failure on the check. Imported
+    # here so every lane that already runs content_hygiene enforces it.
+    import link_ban
+    banned = link_ban.sweep(root, fix=args.fix)
+    if args.fix and banned:
+        banned_left = link_ban.sweep(root, fix=False)
+    else:
+        banned_left = banned
+    print(json.dumps({"changed": changed, "flagged": flagged,
+                      "banned_links_removed": sum(map(len, banned.values())) if args.fix else 0,
+                      "banned_links": banned_left}, indent=2))
+    if banned_left:
+        return 1
     if not args.fix and (changed or flagged):
         return 1
     return 0

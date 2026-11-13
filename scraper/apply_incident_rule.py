@@ -45,13 +45,10 @@ def fix_page(page: str, recategorise: bool = True) -> str:
                                  + LABEL + '</a>', page, count=1)
         page = re.sub(r'("articleSection"\s*:\s*)"[^"]*"', lambda m: m.group(1) + json.dumps(LABEL.lower()), page)
         page = re.sub(r'(<meta property="article:section" content=")[^"]*(")', r'\g<1>' + LABEL + r'\2', page)
-    for key in ("og:image", "twitter:image"):
-        page = re.sub(r'(<meta\b[^>]*(?:property|name)=["\']' + key + r'["\'][^>]*content=["\'])[^"\']*(["\'])',
-                      lambda m: m.group(1) + absolute + m.group(2), page)
-    for key in ("og:image:alt", "twitter:image:alt"):
-        page = re.sub(r'(<meta\b[^>]*(?:property|name)=["\']' + key + r'["\'][^>]*content=["\'])[^"\']*(["\'])',
-                      lambda m: m.group(1) + ir.INCIDENT_ALT + m.group(2), page)
-    page = re.sub(r'("image"\s*:\s*)\[\s*"[^"]*"\s*\]', lambda m: m.group(1) + json.dumps([absolute]), page)
+    # The whole image set (crops, sizes, alt, twitter, schema) in one place,
+    # never a URL swap that leaves the old sizes behind (og_images.py).
+    from og_images import rewrite_page_image
+    page = rewrite_page_image(page, ir.INCIDENT_CARD, ir.INCIDENT_ALT)
     if HERO_RE.search(page):
         page = HERO_RE.sub(lambda _: _hero(), page, count=1)
     elif '<div class="article-copy">' in page:

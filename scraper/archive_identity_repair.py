@@ -55,10 +55,86 @@ def _headline(page: str) -> set[str]:
     return _tokens(html.unescape(re.sub(r"<[^>]+>", "", match.group(1)))) if match else set()
 
 
-def _same_story(left: set[str], right: set[str]) -> bool:
+# Words every fixture, preview and announcement headline shares. Two
+# headlines that agree only on these are NOT the same story: "Al Rayyan to
+# Face Rochdale in Upcoming Match" and "York City to Face Rochdale in
+# Upcoming Match" overlapped 3 of 4 words and the first pointed Google at the
+# second (audit, 12 Nov 2026: 34 of 107 canonicals named a different story).
+_GENERIC = set(
+    "afc fc face faces facing host hosts hosting match matches upcoming league two clash play plays "
+    "game games against versus prepares preparing preview previews set ahead season home away "
+    "victory win wins won draw draws defeat defeats beat beats secures secure secured earns earn "
+    "announces announced launches launch opens open returns return plans plan confirms confirmed "
+    "town city united rovers athletic stanley council borough club team fans "
+    "monday tuesday wednesday thursday friday saturday sunday tonight weekend "
+    "january february march april may june july august september october november december".split()
+)
+_P = re.compile(r"<p\b[^>]*>(.*?)</p>", re.S | re.I)
+_COPY = re.compile(r'class="article-copy"(.*?)(?:<section|<footer|</body>)', re.S)
+_SCORE = re.compile(r"\b(\d{1,2})\s*[-\u2013]\s*(\d{1,2})\b")
+_NUMBER = re.compile(r"\b\d{2,}\b")
+
+
+def _distinctive(tokens: set[str]) -> set[str]:
+    return {t for t in tokens if t not in _GENERIC}
+
+
+def _headline_text(page: str) -> str:
+    match = _H1.search(page)
+    return html.unescape(re.sub(r"<[^>]+>", "", match.group(1))) if match else ""
+
+
+def _body_text(page: str) -> str:
+    """The first two paragraphs of reporting, without the "ONGOING STORY"
+    banner that merged pages all share."""
+    copy = _COPY.search(page)
+    if not copy:
+        return ""
+    paragraphs = []
+    for raw in _P.findall(copy.group(1)):
+        text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", raw))).strip()
+        if not text or text.upper().startswith(("ONGOING STORY", "LIVE ", "DEVELOPING")):
+            continue
+        paragraphs.append(text)
+        if len(paragraphs) == 2:
+            break
+    return " ".join(paragraphs)
+
+
+def _signature(page: str) -> dict[str, set[str]]:
+    head = _headline_text(page)
+    body = _body_text(page)
+    lead = head + " " + body[:400]
+    return {
+        "head": _distinctive(_tokens(head)),
+        "body": _distinctive(_tokens(body)),
+        "scores": {f"{a}-{b}" for a, b in _SCORE.findall(lead)},
+        "numbers": set(_NUMBER.findall(head)),
+    }
+
+
+def _overlap(left: set[str], right: set[str], threshold: float) -> bool:
     if not left or not right:
-        return True  # redirect stubs and headline-less pages: never second-guess
-    return len(left & right) / min(len(left), len(right)) >= 0.5
+        return True
+    return len(left & right) / min(len(left), len(right)) >= threshold
+
+
+def _same_story(left, right) -> bool:
+    """Same story only when the headlines AND the reporting agree on their
+    distinctive words, and no score or headline figure contradicts.
+    (Accepts plain headline token sets too, for older callers.)"""
+    if isinstance(left, set) or isinstance(right, set):
+        left_set, right_set = set(left), set(right)
+        if not left_set or not right_set:
+            return True
+        return _overlap(_distinctive(left_set) or left_set, _distinctive(right_set) or right_set, 0.5)
+    if not (left["head"] or left["body"]) or not (right["head"] or right["body"]):
+        return True  # redirect stubs and empty pages: never second-guess
+    if left["scores"] and right["scores"] and not (left["scores"] & right["scores"]):
+        return False
+    if left["numbers"] and right["numbers"] and not (left["numbers"] & right["numbers"]):
+        return False
+    return _overlap(left["head"], right["head"], 0.5) and _overlap(left["body"], right["body"], 0.5)
 
 
 def _slug_of(url: str) -> str:
@@ -99,12 +175,12 @@ def repair(articles_dir: Path, redirects_path: Path, live_slugs: Iterable[str]) 
             stats["retired_pages_removed"] += 1
 
     pages = {path.stem: path for path in articles_dir.glob("*.html")}
-    headlines: dict[str, set[str]] = {}
+    signatures: dict[str, dict[str, set[str]]] = {}
 
-    def headline(slug: str) -> set[str]:
-        if slug not in headlines:
-            headlines[slug] = _headline(pages[slug].read_text(encoding="utf-8"))
-        return headlines[slug]
+    def headline(slug: str) -> dict[str, set[str]]:
+        if slug not in signatures:
+            signatures[slug] = _signature(pages[slug].read_text(encoding="utf-8"))
+        return signatures[slug]
 
     for slug, path in pages.items():
         text = path.read_text(encoding="utf-8")

@@ -155,19 +155,19 @@ def test_reported_development_is_published_as_an_update():
         assert verdict["outcome"] == "corrected", verdict
         assert verdict["note"].startswith("Updated on 12 November 2026 with later information")
 
-def test_hand_written_story_is_corrected_in_its_own_file():
+def test_hand_written_story_is_reported_not_rewritten():
+    # 12 Nov 2026: the first run took down accurate hand-written stories whose
+    # other sources (press-release emails, research) were not recorded links.
     with tempfile.TemporaryDirectory() as tmp:
         root = site(Path(tmp))
         own = root / "manual_articles.d" / "wardle-closure.json"
-        own.write_text(json.dumps({"id": STORY["id"], "slug": STORY["slug"], "title": STORY["title"],
-                                   "body": "Old body.", "manual_article": True}), encoding="utf-8")
-        row = dict(STORY, manual_article=True)
-        verdict = fr.review(row, FakeClient(FIXED), fetcher=lambda u: SOURCE, when=WHEN, root=root)
-        assert verdict["outcome"] == "corrected", verdict
-        assert verdict["written_to"] == str(own)
-        record = json.loads(own.read_text(encoding="utf-8"))
-        assert record["title"] == FIXED["title"] and record["corrections"]
-        assert len(list((root / "manual_articles.d").glob("*.json"))) == 1
+        original = {"id": STORY["id"], "slug": STORY["slug"], "title": STORY["title"], "body": "Old body.", "manual_article": True}
+        own.write_text(json.dumps(original), encoding="utf-8")
+        verdict = fr.review(dict(STORY, manual_article=True), FakeClient(FIXED), fetcher=lambda u: SOURCE, when=WHEN, root=root)
+        assert verdict["outcome"] == "flagged", verdict
+        assert verdict["issues"] and verdict["proposed"]["title"] == FIXED["title"]
+        assert json.loads(own.read_text(encoding="utf-8")) == original
+        assert STORY["slug"] not in json.loads((root / "story_blocklist.json").read_text(encoding="utf-8"))["slugs"]
 
 
 def test_story_with_no_source_is_reported():
@@ -259,6 +259,23 @@ def test_listed_correction_that_is_not_applied_never_publishes():
         record = json.loads(Path(verdict["written_to"]).read_text(encoding="utf-8"))
         assert "approved the plan" not in record["body"] and "rejected the plan" in record["body"]
 
+
+def test_correction_whose_new_words_contain_the_old_ones_is_accepted():
+    proven = [{"was": "15 objections", "now": "150 objections", "source_quote": "x"},
+              {"was": "approved the plan", "now": "not approved the plan", "source_quote": "x"}]
+    good = {"title": "Plan refused", "excerpt": "", "paragraphs": [
+        "The council received 150 objections.", "Councillors have not approved the plan."]}
+    assert fr.unapplied_corrections(proven, good) == []
+    still_wrong = {"title": "Plan", "excerpt": "", "paragraphs": [
+        "The council received 15 objections.", "Councillors approved the plan, and later had not approved the plan."]}
+    assert [c["now"] for c in fr.unapplied_corrections(proven, still_wrong)] == ["150 objections", "not approved the plan"]
+
+
+def test_whole_word_matching_for_proof():
+    assert fr.has_words("received 150 objections", "150 objections")
+    assert not fr.has_words("received 150 objections", "15 objections")
+    assert not fr.has_words("received 150 objections", "15")
+
 def test_unproven_factual_claim_goes_to_the_editor():
     claim = dict(FIXED, factual_corrections=[{"was": "approved the plan", "now": "deferred the plan",
                                               "source_quote": "the plan was deferred until the next meeting of the committee"}])
@@ -276,12 +293,43 @@ def test_hand_written_story_in_a_dated_subfolder_is_found():
         nested = root / "manual_articles.d" / "2026" / "10"
         nested.mkdir(parents=True)
         own = nested / "2026-10-24-wardle-closure.json"
-        own.write_text(json.dumps({"id": STORY["id"], "slug": STORY["slug"], "title": STORY["title"],
-                                   "body": "Old body.", "manual_article": True}), encoding="utf-8")
-        verdict = fr.review(dict(STORY, manual_article=True), FakeClient(FIXED), fetcher=lambda u: SOURCE, when=WHEN, root=root)
-        assert verdict["outcome"] == "corrected", verdict
-        assert verdict["written_to"] == str(own)
-        assert json.loads(own.read_text(encoding="utf-8"))["corrections"]
+        own.write_text(json.dumps({"id": STORY["id"], "slug": STORY["slug"], "manual_article": True}), encoding="utf-8")
+        assert fr._manual_locations(root)[STORY["slug"]][0] == own
+
+
+def test_failed_revision_of_an_accurate_story_is_flagged_not_taken_down():
+    accurate = dict(STORY, content_html="<p>Ramsden Road in Wardle will be temporarily closed on 24 December 2026 for the Wardle Village Carol Concert.</p>")
+    bad = dict(FIXED, development=True, paragraphs=FIXED["paragraphs"] + [
+        "A council spokesperson said the closure was vital for the safety of all concert-goers this year."])
+    with tempfile.TemporaryDirectory() as tmp:
+        root = site(Path(tmp))
+        verdict = fr.review(accurate, FakeClient(bad, bad, bad), fetcher=lambda u: SOURCE, when=WHEN, root=root)
+        assert verdict["outcome"] == "flagged", verdict
+        assert STORY["slug"] not in json.loads((root / "story_blocklist.json").read_text(encoding="utf-8"))["slugs"]
+
+
+def test_legal_boilerplate_is_not_a_conviction():
+    from source_fidelity import unsupported_status
+    source = "A 33-year-old man has been charged with attempted murder and remanded in custody."
+    for text in ("He is presumed innocent unless and until convicted.",
+                 "No finding of guilt should be inferred from a charge.",
+                 "He has not been convicted of any offence."):
+        assert "convicted / found guilty" not in unsupported_status(text, source), text
+    assert unsupported_status("He was convicted of attempted murder.", source) == ["convicted / found guilty"]
+
+
+def test_copying_already_in_the_story_is_not_new_copying():
+    names = ("Karl Anderson of Woodward Street Manchester Stefan Bezzina of Talbot Road Hyde George Boylin "
+             "of Brattice Drive Swinton Anthony Brown of Overdale Bonville Road Altrincham")
+    source = "Those charged are " + names + ". All are on bail."
+    original = "Sixteen men have been charged. Those charged are " + names + "."
+    revision = {"title": "Sixteen men charged with violent disorder", "excerpt": "Sixteen men have been charged.",
+                "paragraphs": ["Sixteen men have been charged with violent disorder.", "Those charged are " + names + "."]}
+    assert not any("verbatim" in p for p in fr.gate(revision, source, None, original))
+    added = "Those listed as charged are " + names + " according to the police statement."
+    copied = dict(revision, paragraphs=revision["paragraphs"] + [added])
+    assert any("verbatim" in p for p in fr.gate(copied, source + " " + added, None, original))
+
 
 if __name__ == "__main__":
     failures = []

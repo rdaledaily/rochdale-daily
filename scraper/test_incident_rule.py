@@ -79,7 +79,22 @@ def test_image_lanes_and_police_photo():
                  content_html="<p>A man was charged with an offence.</p>")
     assert e.enforce_article(dict(MIDDLETON), ROOT) == "incident-card"
     assert ih.choose_image(dict(MIDDLETON), ROOT, allow_network=False) == "incident"
-    assert sp.enforce_police_image(dict(crime))["image_url"] == ir.INCIDENT_CARD
+    # A charge headline is crime even when it says "emergency" (12 Nov 2026):
+    # no Incident card, so the police photo rule applies as for any crime.
+    assert sp.enforce_police_image(dict(crime))["image_url"] != ir.INCIDENT_CARD
+
+
+def test_charge_headline_with_emergency_is_crime():
+    import frontpage_pipeline as fp
+    title = "Middleton man charged with assaulting emergency worker after Lodge Street stop"
+    assert not ir.is_incident_title(title)
+    assert fp.headline_category_rule(title) == "crime"
+    record = fp.apply_category_rules({"title": title, "category": "community",
+                                      "content_html": "<p>He was charged by police.</p>", "source_kind": "article"})
+    assert record["category"] == "crime"
+    assert record["police_matter"] is True
+    # Incidents with nothing criminal in the headline keep the rule.
+    assert ir.is_incident_title("Emergency services respond to incident in Middleton town centre")
 
 
 def test_page_render():

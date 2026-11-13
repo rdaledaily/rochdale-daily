@@ -835,6 +835,7 @@ INTEGRITY_ISSUE_MARKERS = (
     "unsupported calendar year",            # model invented a date/year not in evidence
     "Source fidelity:",                     # figure, quotation or attributed statement not in the sources
     GATE_REJECTION_PREFIX,                  # advert, listing, out-of-borough
+    "Weekday does not match date",          # e.g. "Saturday, 10 September" on a Thursday (date_check.py)
 )
 
 
@@ -936,6 +937,13 @@ def quality_issues(draft: Any, source_text: str, source_kind: str = "") -> list[
             + ", ".join(unsupported_years)
             + "; source publication timestamps are not event dates."
         )
+
+    # A weekday the calendar contradicts is a wrong core fact (12 Nov 2026:
+    # 31 pages, mostly fixture previews where the model filled in a day).
+    from date_check import issue_text as _weekday_issue, weekday_errors as _weekday_errors
+    weekday_problems = _weekday_errors(" . ".join([title, excerpt, *paragraphs]), time.strftime("%Y-%m-%d"))
+    if weekday_problems:
+        issues.append(_weekday_issue(weekday_problems))
 
     body_only = plain_text(" ".join(paragraphs))
     if EVASIVE_RE.search(body_only):

@@ -37,6 +37,11 @@ NOT_INCIDENT_RE = re.compile(
     r"^\s*emergencies\s*[\u2013\u2014-]",
     re.IGNORECASE,
 )
+# Defined before CRIME_WORDS_RE below because is_incident_title uses it.
+_CRIME_HEADLINE_RE = re.compile(
+    r"\b(?:arrest\w*|charged|charges?|convicted|sentenced|jailed|murder\w*|manslaughter|"
+    r"court|guilty|assault\w*|attack\w* (?:on|an?) emergency worker)\b", re.IGNORECASE)
+
 INCIDENT_CATEGORY = "community"
 INCIDENT_CARD = "assets/img/cards/incident-card.jpg"
 INCIDENT_STATUS = "incident-card"
@@ -50,6 +55,13 @@ def _plain(value: Any) -> str:
 
 def is_incident_title(title: Any) -> bool:
     text = _plain(title)
+    # A charge, arrest, conviction or court headline is crime reporting, even
+    # when it says "emergency" ("Middleton man charged with assaulting
+    # emergency worker", 12 Nov 2026, was filed as Community, lost the crime
+    # lead and showed in ordinary related boxes). Crashes already had this
+    # exclusion; the "emergency" rule did not.
+    if _CRIME_HEADLINE_RE.search(text):
+        return False
     return bool(INCIDENT_HEADLINE_RE.search(text)) and not NOT_INCIDENT_RE.search(text)
 
 
