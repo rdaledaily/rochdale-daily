@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-13T08:13:10.533471Z",
+  "last_run_at": "2026-11-13T08:31:11.487165Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -44,36 +44,41 @@
   },
   "food_hygiene": {
     "single_ratings": {
-      "status": "baseline taken",
+      "status": "ok",
       "current_low": 66,
       "new": 0,
       "offered": 0,
       "newly_published": 0,
       "newly_expired": [],
-      "baseline_size": 66
+      "pending": 0
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 124,
+  "raw_candidates_before_job_filter": 128,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 123,
-  "candidate_clusters": 38,
+  "raw_candidates": 127,
+  "candidate_clusters": 39,
   "google_news_resolution": {
     "wrappers": 30,
-    "resolved": 11,
-    "text_recovered": 8,
+    "resolved": 8,
+    "text_recovered": 5,
     "reattributed": 0,
-    "images_found": 10
+    "images_found": 7
   },
-  "duplicates_merged": 85,
-  "attempted_rewrites": 2,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 603,
+  "duplicates_merged": 88,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "man-seriously-injured-in-attack-on-boundary-street-rochdale",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-seriously-injured-police-investigate-34905164"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 604,
   "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the name(s) World, War do not appear in the source. Name only people, pla": 1,
+    "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.": 1,
     "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
   },
   "rewrite_skips_unattributed": 0,
@@ -87,11 +92,11 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 143,
+    "entries": 144,
     "by_outcome": {
       "editorial_twin": 3,
       "failed": 22,
-      "published": 86,
+      "published": 87,
       "rejected": 32
     },
     "held_back_this_run": 22,
@@ -129,10 +134,12 @@
       "last_attempt_at": "2026-11-12T11:21:37.172300Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 144 body words using only facts already present in the sources; the draft currently has 112.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 107,
+    "rss_and_google_news": 111,
     "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -142,7 +149,7 @@
     "food_hygiene": 1,
     "inspection_registers": 0,
     "primary_data": 0,
-    "men_newsletter": 1
+    "men_newsletter": 3
   },
   "collector_errors": {},
   "rss_feed_failures": {
@@ -189,14 +196,6 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Rochdale AFC Community Trust": {
-      "url": "https://www.rochdaleafccommunity.org/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.rochdaleafccommunity.org/feed/",
-      "bozo": false,
-      "feed_title": ""
-    },
     "Greater Manchester Police": {
       "url": "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
       "http_status": 403,
@@ -233,15 +232,16 @@
     "source": "MEN MyRochdale newsletter",
     "rule": "Every story in the MEN MyRochdale newsletter is covered (editor, 3 Nov 2026).",
     "window_days": 7,
-    "stories_in_window": 7,
-    "covered": 5,
-    "outstanding": 2,
+    "stories_in_window": 9,
+    "covered": 6,
+    "outstanding": 3,
     "removed_by_editor": 0,
     "by_status": {
-      "already_covered": 3,
+      "already_covered": 4,
       "held_for_editor": 1,
       "not_found": 1,
-      "published": 2
+      "published": 2,
+      "waiting_for_text": 1
     },
     "outstanding_stories": [
       {
@@ -261,18 +261,27 @@
         "reason": "no MEN article matched the exact or keyword search",
         "resolved_url": "",
         "resolved_title": ""
+      },
+      {
+        "id": "8c025e6d65dc017f",
+        "headline": "Devastation in Rochdale as beloved ex-councillor suddenly dies",
+        "received_at": "2026-11-13T08:08:51+00:00",
+        "status": "waiting_for_text",
+        "reason": "Google News link not yet resolved to the MEN article; 201 characters of source text (needs 500) - retried next run",
+        "resolved_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQa1Y0ZUxfSXkxbUJLZ25jX3lyM3hhN2ZTR2RqZWR3VGdJeFNYNE43RlR4ZGhSMDYyVkQtZFo3S0M2Uk1PaUFjNEk3V1g3MktLNW52THZuQ1djanZXOVVsVC1WbGtTalZ5dE8tZTBUaDB0M3R6NXhLSTF4U1p3T2o4QzFTQnhfbko5dGxYMDdGQldkQkFUWjJUN3lxMFJVYm9SeGfSAaIBQVVfeXFMUGtWNGVMX0l5MW1CS2duY195cjN4YTdmU0dkamVkd1RnSXhTWDRON0ZUeGRoUjA2MlZELWRaN0tDNlJNT2lBYzRJN1dYNzJLSzVudkx2bkNXY2p2VzlVbFQtVmxrU2pWeXRPLWUwVGgwdDN0ejV4S0kxeFNad09qOEMxU0J4X25KOXRsWDA3RkJXZEJBVFoyVDd5cTBSVWJvUnhn?oc=5",
+        "resolved_title": "Devastation in Rochdale as beloved ex-councillor Shaun O’Neill suddenly dies"
       }
     ]
   },
   "source_counts": {
     "Roch Valley Radio": 26,
     "Rochdale Times": 26,
-    "Rochdale Borough Council": 15,
-    "Manchester Evening News": 13,
+    "Rochdale Borough Council": 18,
+    "Manchester Evening News": 16,
     "Rochdale AFC": 7,
-    "About Manchester": 6,
+    "BBC": 5,
     "Bee Network live travel alerts": 5,
-    "BBC": 4,
+    "About Manchester": 3,
     "Roch Valley Radio Local News": 3,
     "BBC Manchester": 2,
     "Rochdale Borough Council RSS": 2,
@@ -288,18 +297,19 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "environment": 1,
     "health": 1,
     "sport": 1
   },
   "published_by_category": {
     "business": 70,
-    "community": 92,
-    "crime": 35,
+    "community": 91,
+    "crime": 36,
     "education": 29,
     "environment": 49,
     "events": 33,
     "health": 14,
-    "news": 89,
+    "news": 90,
     "politics": 18,
     "sport": 56,
     "traffic": 44,
@@ -329,11 +339,13 @@
   ],
   "selected_story_keys": [
     "sport-v3-70d50c63f1ba56713213",
-    "health-v3-5dbab96b2a7dfd89747f"
+    "health-v3-5dbab96b2a7dfd89747f",
+    "environment-v3-90c8e1afad1fc3400c04"
   ],
   "selected_candidate_urls": [
     "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph",
-    "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
+    "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road",
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-seriously-injured-police-investigate-34905164"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -345,10 +357,12 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "environment",
       "health",
       "sport"
     ],
     "selected_categories": [
+      "environment",
       "health",
       "sport"
     ],
@@ -365,15 +379,17 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "environment": 1,
       "health": 1,
       "sport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "norden": 1,
-      "rochdale": 1
+      "rochdale": 2
     },
     "selected_by_source": {
+      "manchester evening news": 1,
       "roch valley radio": 1,
       "roch valley radio local news": 1
     },
@@ -935,12 +951,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "visitrochdale.com"
-  ],
-  "slow_domain_failure_counts": {
-    "visitrochdale.com": 4
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -976,8 +988,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-13T08:14:34.224181Z",
-  "frontpage_article_count": 18,
+  "frontpage_generated_at": "2026-11-13T08:32:19.034027Z",
+  "frontpage_article_count": 19,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1025,7 +1037,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1,
+      "news": 3,
       "crime": 2,
       "traffic": 2,
       "transport": 1,
@@ -1033,10 +1045,10 @@
       "sport": 2,
       "business": 2,
       "community": 5,
-      "news": 2
+      "environment": 1
     },
     "selected_by_ward": {
-      "borough-wide": 18
+      "borough-wide": 19
     },
     "selected_by_area": {
       "alkrington": 1,
@@ -1044,31 +1056,31 @@
       "littleborough": 1,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 17
+      "rochdale": 18
     },
     "selected_by_source": {
-      "bbc manchester": 1,
+      "manchester evening news": 3,
       "greater manchester police press office": 1,
       "rochdale borough council": 5,
-      "manchester evening news": 2,
       "rochdale borough council news": 1,
       "rochdale afc": 1,
       "the gazette": 2,
       "rochdale times": 1,
+      "bbc manchester": 1,
       "rochdale hornets": 1,
       "rochdale daily": 1,
       "springhill hospice press office": 1,
       "digventures — spodden valley revealed: community archaeology report (2026)": 1
     },
-    "pool_size": 25,
-    "primary_pool_size": 25,
+    "pool_size": 26,
+    "primary_pool_size": 26,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 18,
+    "frontpage_count": 19,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 18,
-    "short_briefs_selected": 12,
+    "fresh_under_24h": 11,
+    "fresh_under_homepage_window": 19,
+    "short_briefs_selected": 13,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1078,8 +1090,8 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 5,
-  "duplicate_articles_after_postprocessing": 603,
+  "event_dates_corrected_from_ledger": 4,
+  "duplicate_articles_after_postprocessing": 604,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1090,8 +1102,10 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "man-seriously-injured-in-attack-on-boundary-street-rochdale"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
