@@ -75,10 +75,16 @@ def _resolve_google_news(url: str) -> str:
 def _denied_source(url: str) -> bool:
     """Spam, hijacked, gambling and piracy hosts are never shown as a source,
     including when reached through a Google News redirect."""
+    # Fails CLOSED: if the rule cannot be loaded, no source link is shown.
+    # (Until 12 Nov 2026 an import failure here returned False and let every
+    # link through.)
     try:
-        from locality_rules import SOURCE_DENY_DOMAINS, is_gambling_or_piracy_source
-    except Exception:
-        return False
+        from link_ban import is_banned_url
+    except Exception:  # noqa: BLE001
+        return True
+    if is_banned_url(url):
+        return True
+    from locality_rules import SOURCE_DENY_DOMAINS, is_gambling_or_piracy_source
     for candidate in (url, _resolve_google_news(url)):
         if not candidate:
             continue

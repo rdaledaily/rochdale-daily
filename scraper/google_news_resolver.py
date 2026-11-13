@@ -92,7 +92,32 @@ def load_cache(path: Path = CACHE_PATH) -> dict[str, dict[str, Any]]:
     return payload if isinstance(payload, dict) else {}
 
 
+def _banned(url: str) -> bool:
+    try:
+        from link_ban import is_banned_url
+    except Exception:  # noqa: BLE001
+        return True  # fail closed
+    return is_banned_url(url)
+
+
+def _host(url: str) -> str:
+    from urllib.parse import urlparse as _u
+    return (_u(url).hostname or "").lower().removeprefix("www.")
+
+
+def _tombstone_banned(cache: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    try:
+        from link_ban import host_of, is_banned_host
+    except Exception:  # noqa: BLE001
+        return cache
+    for key, entry in list(cache.items()):
+        if isinstance(entry, dict) and entry.get("url") and is_banned_host(host_of(entry["url"])):
+            cache[key] = {"url": "", "blocked": host_of(entry["url"]), "at": entry.get("at", "")}
+    return cache
+
+
 def save_cache(cache: dict[str, dict[str, Any]], path: Path = CACHE_PATH) -> None:
+    cache = _tombstone_banned(cache)
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         temp = path.with_suffix(path.suffix + ".tmp")
@@ -108,6 +133,10 @@ def _cached_result(entry: Any, now: datetime) -> str | None:
     stamp = _parse(entry.get("at"))
     if stamp is None:
         return None
+    # A redirect that led to a banned host (gambling, betting, piracy,
+    # denied outlets) is a permanent tombstone: never resolved again.
+    if entry.get("blocked"):
+        return ""
     url = str(entry.get("url") or "")
     if url:
         return url if now - stamp < timedelta(days=SUCCESS_TTL_DAYS) else None
@@ -249,6 +278,9 @@ def resolve_wrappers(
             still_pending.extend(pending[index:])
             break
         final = _lightweight_resolve(url)
+        if final and _banned(final):
+            cache[_cache_key(url)] = {"url": "", "blocked": _host(final), "at": _iso(_now())}
+            continue
         if final:
             resolved[url] = final
             cache[_cache_key(url)] = {"url": final, "at": _iso(_now())}
@@ -304,6 +336,9 @@ def resolve_wrappers(
                     final = _resolve_one(page, url)
                 except Exception:
                     final = ""
+                if final and _banned(final):
+                    cache[_cache_key(url)] = {"url": "", "blocked": _host(final), "at": _iso(_now())}
+                    continue
                 cache[_cache_key(url)] = {"url": final, "at": _iso(_now())}
                 if final:
                     resolved[url] = final
