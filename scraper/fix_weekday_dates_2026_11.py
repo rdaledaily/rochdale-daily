@@ -26,6 +26,11 @@ FIXES: dict[str, tuple[list[tuple[str, str]], str]] = {
         [("this Saturday, 12 November", "this Saturday, 14 November"),
          ("Saturday, 12 November", "Saturday 14 November")],
         "The match date was given as Saturday 12 November. The match is on Saturday 14 November."),
+    # The 13 Nov Morning Briefing quoted the York City story before it was corrected.
+    "morning-briefing-13-november-2026": (
+        [("this Saturday, 12 November", "this Saturday, 14 November"),
+         ("Saturday, 12 November", "Saturday 14 November")],
+        "The York City match was dated Saturday 12 November. The match is on Saturday 14 November."),
     "union-street-roadworks-in-rochdale-to-begin-on-17-november-2026": (
         [("Tuesday, 17 November 2027", "Tuesday 17 November 2026")],
         "The start date was misprinted as 2027. The works start on Tuesday 17 November 2026."),

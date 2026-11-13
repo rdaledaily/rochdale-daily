@@ -301,7 +301,7 @@ jobs:
             scraper/test_email_intake.py scraper/test_takedown_sweep.py \
             scraper/test_story_series.py scraper/test_related_no_crime.py \
             scraper/test_incident_rule.py scraper/test_closing_filler.py \
-            scraper/test_editorial_twins.py
+            scraper/test_editorial_twins.py scraper/test_ward_tagging.py
           PYTHONPATH=scraper python scraper/test_briefing_ranking.py
           PYTHONPATH=scraper python scraper/test_traffic_below_top_nine.py
           # Tests that existed but were never run by CI until 24 Oct 2026.
