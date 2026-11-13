@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-13T06:08:46.213639Z",
+  "last_run_at": "2026-11-13T06:28:01.109211Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -42,27 +42,31 @@
       "interval_hours": 24
     }
   },
-  "raw_candidates_before_job_filter": 113,
+  "raw_candidates_before_job_filter": 121,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 112,
-  "candidate_clusters": 37,
+  "raw_candidates": 120,
+  "candidate_clusters": 38,
   "google_news_resolution": {
-    "wrappers": 22,
+    "wrappers": 28,
     "resolved": 11,
     "text_recovered": 8,
     "reattributed": 0,
     "images_found": 10
   },
-  "duplicates_merged": 75,
-  "attempted_rewrites": 2,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 602,
+  "duplicates_merged": 82,
+  "attempted_rewrites": 3,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "new-handmade-lock-gates-installed-at-rochdale-canal",
+      "source_url": "https://www.bbc.co.uk/news/articles/cw053j4v7mg4o"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 603,
   "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the name(s) World, War do not appear in the source. Name only people, pla": 1,
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 2
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -75,11 +79,11 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 142,
+    "entries": 143,
     "by_outcome": {
       "editorial_twin": 3,
       "failed": 22,
-      "published": 85,
+      "published": 86,
       "rejected": 32
     },
     "held_back_this_run": 22,
@@ -117,13 +121,15 @@
       "last_attempt_at": "2026-11-12T11:21:37.172300Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 181.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 98,
-    "website_discovery": 10,
+    "rss_and_google_news": 103,
+    "website_discovery": 12,
     "aggregator_discovery": 0,
-    "live_service_pages": 4,
+    "live_service_pages": 5,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -263,26 +269,29 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 28,
+    "Rochdale Times": 29,
     "Roch Valley Radio": 26,
-    "Rochdale Borough Council": 16,
-    "Manchester Evening News": 9,
+    "Rochdale Borough Council": 15,
+    "Manchester Evening News": 13,
     "About Manchester": 6,
     "Rochdale AFC": 6,
-    "Bee Network live travel alerts": 4,
+    "Bee Network live travel alerts": 5,
     "Roch Valley Radio Local News": 3,
     "Rochdale Borough Council RSS": 2,
     "FansNetwork.co.uk": 2,
+    "BBC": 2,
     "Oldham Times": 2,
     "Rochdale Borough Council News": 2,
     "Rochdale Town Hall": 1,
     "Gazetteherald.co.uk": 1,
     "The York Press": 1,
     "Greater Manchester Police": 1,
+    "BBC Manchester": 1,
     "Rochdale Hornets": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "environment": 1,
     "health": 1,
     "sport": 1
   },
@@ -291,7 +300,7 @@
     "community": 91,
     "crime": 35,
     "education": 29,
-    "environment": 48,
+    "environment": 49,
     "events": 33,
     "health": 14,
     "news": 90,
@@ -324,11 +333,13 @@
   ],
   "selected_story_keys": [
     "sport-v3-70d50c63f1ba56713213",
-    "health-v3-5dbab96b2a7dfd89747f"
+    "health-v3-5dbab96b2a7dfd89747f",
+    "environment-v3-9bc6be61ce4fef32130b"
   ],
   "selected_candidate_urls": [
     "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph",
-    "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
+    "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road",
+    "https://www.bbc.co.uk/news/articles/cw053j4v7mg4o"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -340,10 +351,12 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "environment",
       "health",
       "sport"
     ],
     "selected_categories": [
+      "environment",
       "health",
       "sport"
     ],
@@ -360,15 +373,17 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "environment": 1,
       "health": 1,
       "sport": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "norden": 1,
-      "rochdale": 1
+      "rochdale": 2
     },
     "selected_by_source": {
+      "bbc manchester": 1,
       "roch valley radio": 1,
       "roch valley radio local news": 1
     },
@@ -920,14 +935,16 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 6,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMipwFBVV95cUxOVXFvVDE4TUtPSTcxNEZ6T2s2bmdZUFJrZ3hpNEF2X0tpeVRxVE8yNUtFOUhhcmhNdm5BTHlTOXoxc2JiN1pCanJ3YmJvZWkwUWp2NU5iSjlPVXdEUHpDSHRvT25RWDZrdFZSeV8yZzQ4ZDdOcXFRMk5RcGlnb3RCdExtRzl4NTlMRFVULV9VSzRrSG0wZ2dWaC1MRXQ4MUZwTGo2dkJwa9IBrAFBVV95cUxOWVV3WVBIdnl2eFhVNnJUOVkzN0NMSTVLQU9UTFJYdVk0S0lsb0lEb2V0N2Q0S1hCanY4UXV5NVBETEx4NVZ5NTFhM1ROQVlpWUhRa3BockltVjgtWVp0VEJadTJsQWo0X3pBTXpYSDgwOXRIcml6NDZjWXk1Zk9BbG1jU3o1a3RMb0NQWkdINmZPc2dVWWdRanhHZGFhTWZRQ2ZrNGRQM1pVcVdu?oc=5",
+    "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBYbVc1NlVzSEtnamtfOEQxV2daa2M4aFQzZ1pFWG43blJLUHJSV0xtbmdkTDBsQ0E2c1RFaUtfQzEtRUdOekw1bG1VVERWWWxDcnVGQjhHakFINEJMR3c?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -967,8 +984,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-13T06:09:39.203957Z",
-  "frontpage_article_count": 17,
+  "frontpage_generated_at": "2026-11-13T06:29:32.063699Z",
+  "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -976,6 +993,7 @@
       "community",
       "crime",
       "education",
+      "environment",
       "health",
       "news",
       "sport",
@@ -987,6 +1005,7 @@
       "community",
       "crime",
       "education",
+      "environment",
       "health",
       "news",
       "sport",
@@ -1014,17 +1033,18 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "news": 2,
+      "environment": 1,
       "crime": 2,
       "traffic": 2,
       "transport": 1,
       "education": 1,
       "sport": 2,
       "business": 2,
-      "community": 5
+      "community": 5,
+      "news": 2
     },
     "selected_by_ward": {
-      "borough-wide": 17
+      "borough-wide": 18
     },
     "selected_by_area": {
       "alkrington": 1,
@@ -1032,30 +1052,31 @@
       "littleborough": 1,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 17
+      "rochdale": 18
     },
     "selected_by_source": {
-      "rochdale borough council": 5,
+      "bbc manchester": 1,
       "manchester evening news": 2,
+      "rochdale borough council": 5,
       "rochdale borough council news": 1,
       "rochdale afc": 1,
       "the gazette": 2,
       "rochdale times": 1,
-      "rochdale daily": 1,
       "greater manchester police press office": 1,
       "rochdale hornets": 1,
+      "rochdale daily": 1,
       "springhill hospice press office": 1,
       "digventures — spodden valley revealed: community archaeology report (2026)": 1
     },
-    "pool_size": 25,
-    "primary_pool_size": 25,
+    "pool_size": 26,
+    "primary_pool_size": 26,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 17,
+    "frontpage_count": 18,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 17,
-    "short_briefs_selected": 11,
+    "fresh_under_24h": 11,
+    "fresh_under_homepage_window": 18,
+    "short_briefs_selected": 12,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1066,7 +1087,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 4,
-  "duplicate_articles_after_postprocessing": 602,
+  "duplicate_articles_after_postprocessing": 603,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1077,8 +1098,10 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "new-handmade-lock-gates-installed-at-rochdale-canal"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
