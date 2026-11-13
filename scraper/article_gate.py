@@ -616,6 +616,10 @@ def gate_articles(
             kept.append(result)
 
     kept = _dedupe_slugs(kept, notes)
+    # Every lane gates articles.json; banned links are removed here too.
+    import link_ban
+    kept = link_ban.strip_value(kept)
+    link_ban.recount_sources(kept)
     kept.sort(
         key=lambda article: _parse_iso(
             article.get("first_published_at")

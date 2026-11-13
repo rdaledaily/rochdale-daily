@@ -151,6 +151,25 @@ def test_repository_has_no_banned_links():
     assert link_ban.sweep(ROOT) == {}, "run: python scraper/link_ban.py --fix"
 
 
+
+def test_every_lane_choke_point_strips():
+    """The page renderer, the live-feed writer and the gate all strip banned
+    links, so a lane that skips content_hygiene still cannot publish one
+    (13 Nov 2026: the integrity-audit lane re-rendered a page from a manual
+    article citing rochdaleonline.co.uk)."""
+    import article_gate
+    record = {"title": "Trows Farm decision", "slug": "trows-farm", "area": "castleton", "category": "news",
+              "content_html": '<p>Earlier: <a href="https://www.rochdaleonline.co.uk/x">report</a>.</p>',
+              "source_url": "https://www.rochdale.gov.uk/x",
+              "source_urls": ["https://www.rochdale.gov.uk/x", "https://www.rochdaleonline.co.uk/x"],
+              "published_at": "2026-11-12T10:00:00Z", "source_kind": "editorial", "manual_article": True}
+    kept, _ = article_gate.gate_articles([record])
+    assert not link_ban.banned_in_value(kept), kept
+    src = (HERE / "generate_pages.py").read_text(encoding="utf-8")
+    assert "link_ban.strip_html(raw_content)" in src
+    src = (HERE / "frontpage_pipeline.py").read_text(encoding="utf-8")
+    assert "link_ban.strip_value(merged)" in src
+
 if __name__ == "__main__":
     failures = 0
     for name, fn in list(globals().items()):
