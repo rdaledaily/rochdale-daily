@@ -459,6 +459,15 @@ def check_live_updates(name: str = "feel-good-live.json") -> None:
     note(name, f"{len(updates)} update(s), status {status or 'unset'}")
 
 
+def check_banned_links() -> None:
+    """No public file may link a gambling, betting, piracy or denied site."""
+    import link_ban
+    for name, urls in sorted(link_ban.sweep(REPO_ROOT, fix=False).items()):
+        for url in urls[:5]:
+            fail(name, f"links a banned site (gambling/betting/piracy/denied outlet): {url} "
+                       "-- run: python scraper/link_ban.py --fix")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate hand-edited data files.")
     parser.add_argument("--warn-only", action="store_true",
@@ -474,6 +483,7 @@ def main() -> int:
     check_simple("manual_events.json")
     check_simple("story_blocklist.json", key=None)
     check_simple("council_roster.json", key="councillors")
+    check_banned_links()
 
     for line in notes:
         print(f"  note   {line}")
