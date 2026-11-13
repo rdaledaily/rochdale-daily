@@ -445,6 +445,41 @@ function tidy(s) {
     .trim();
 }
 
+// ---------------------------------------------------------------- banned links
+//
+// Editor's rule: the paper never links a gambling, betting-tips or piracy
+// site, or a permanently denied outlet (Rochdale Online and others). The
+// pipeline removes them before every commit (scraper/link_ban.py); this is the
+// last line: any such <a> in ANY HTML page served from this site is unwrapped
+// to plain text at the edge, whatever route it arrived by. The lists below are
+// generated from scraper/locality_rules.py + scraper/link_ban.py and kept in
+// step by scraper/test_link_ban.py.
+// BANNED_LINK_LISTS_START
+export const BANNED_LINK_DOMAINS = ["apartments.com", "apwin.com", "betshoot.com", "bettingodds.com", "bettingtips4you.com", "freetips.com", "manchesterplumbers.com", "oddschecker.com", "online-bookmakers.com", "presonus.com", "pressreader.com", "rochdaleobserver.co.uk", "rochdaleonline.co.uk", "shodoshima.lg.jp", "uco.es", "uklfi.com", "whoscored.com"];
+export const BANNED_LINK_HOST_RE = new RegExp("(casino|betting|bookmaker|sportsbook|gamstop|oddschecker|freebets?|slots?(?=[.-]|$)|poker|bingo|betfair|betfred|betway|betvictor|bet365|skybet|paddypower|williamhill|ladbrokes|boylesports|livescorebet|betshoot|crackstreams?|streameast|sportsurge|totalsportek|hesgoal|buffstreams?|methstreams?|footybite|vipbox|soccerstreams?|strims|apwin)|(?:^|[.-])(?:bet|bets|odds|tips|tipster|tipsters|streams|livestream|freestream)(?=[.-]|$)|\\.(?:lg|go)\\.jp$", 'i');
+// BANNED_LINK_LISTS_END
+
+export function isBannedLink(href, base = 'https://rochdaledaily.co.uk/') {
+  let host = '';
+  try { host = new URL(String(href || ''), base).hostname.toLowerCase(); } catch { return false; }
+  host = host.replace(/^www\./, '');
+  if (!host) return false;
+  if (BANNED_LINK_DOMAINS.some((d) => host === d || host.endsWith('.' + d))) return true;
+  return BANNED_LINK_HOST_RE.test(host);
+}
+
+export function stripBannedLinksText(html) {
+  return String(html).replace(/<a\b[^>]*?\bhref\s*=\s*(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a\s*>/gi,
+    (whole, q, href, inner) => (isBannedLink(decodeEntities(href)) ? inner : whole));
+}
+
+function stripBannedLinks(response) {
+  if (typeof HTMLRewriter === 'undefined') return response;
+  return new HTMLRewriter()
+    .on('a[href]', { element(el) { if (isBannedLink(el.getAttribute('href'))) el.removeAndKeepContent(); } })
+    .transform(response);
+}
+
 // ---------------------------------------------------------------- handler
 
 export async function onRequest(context) {
@@ -460,10 +495,10 @@ export async function onRequest(context) {
   addVaryAccept(headers);
 
   if (!markdown || response.status !== 200) {
-    return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+    return stripBannedLinks(new Response(response.body, { status: response.status, statusText: response.statusText, headers }));
   }
 
-  const html = await response.text();
+  const html = stripBannedLinksText(await response.text());
   if (html.length > MAX_HTML_BYTES) {
     headers.set('x-markdown-status', 'too-large');
     return new Response(html, { status: 200, headers });
