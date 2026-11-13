@@ -134,6 +134,20 @@ def test_shared_newsletter_handler_records_the_subscriber():
     script = (Path(__file__).resolve().parents[1] / "assets/js/menu.js").read_text(encoding="utf-8")
     saved = script.index("dispatchEvent(new CustomEvent('rd:newsletter-saved'))")
     assert "localStorage.setItem('rd_newsletter_done','1')" in script[max(0, saved - 400):saved]
+@with_root
+def test_rewriting_a_page_image_replaces_the_whole_set(root):
+    # 12 Nov 2026: a post-processor swapped crop URLs for the original card
+    # and left the crop sizes behind, so pages claimed false dimensions.
+    page = gp.render_article_page(dict(ARTICLE, image_url="assets/img/cards/big.jpg"), [])
+    out = og_images.rewrite_page_image(page, "assets/img/cards/small.jpg", "Small picture")
+    urls = re.findall(r'<meta property="og:image" content="([^"]+)"', out)
+    assert urls == ["https://rochdaledaily.co.uk/assets/img/cards/small.jpg"]
+    assert re.findall(r'og:image:(width|height)" content="(\d+)"', out) == [("width", "800"), ("height", "500")]
+    assert re.findall(r'name="twitter:image" content="([^"]+)"', out) == urls
+    assert [(i["url"], i.get("width")) for i in schema(out)["image"]] == [(urls[0], 800)]
+    back = og_images.rewrite_page_image(out, "assets/img/cards/big.jpg")
+    assert len(re.findall(r'<meta property="og:image" content=', back)) == 3
+    assert og_images.rewrite_page_image(back, "assets/img/cards/big.jpg") == back
 
 if __name__ == "__main__":
     failures = []

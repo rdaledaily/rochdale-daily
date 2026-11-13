@@ -348,6 +348,21 @@ def _norm(text: Any) -> str:
     return " ".join(re.findall(r"[a-z0-9£%]+", plain(text).lower()))
 
 
+def has_words(text: str, words: str) -> bool:
+    """True when the normalised word sequence occurs as whole words.
+
+    A plain substring test finds "15" inside "150", so a correct revision to
+    150 objections would still look as if it said 15.
+    """
+    return bool(words) and f" {words} " in f" {text} "
+
+
+def without_words(text: str, words: str) -> str:
+    if not words:
+        return text
+    return f" {text} ".replace(f" {words} ", " ").strip()
+
+
 def verified_corrections(draft: dict[str, Any], article_text: str, source_text: str) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     """Split the reviewer's claimed factual corrections into proven and unproven.
 
@@ -364,7 +379,7 @@ def verified_corrections(draft: dict[str, Any], article_text: str, source_text: 
             continue
         was, quote = _norm(item.get("was")), _norm(item.get("source_quote"))
         claim = {k: str(item.get(k) or "")[:300] for k in ("was", "now", "source_quote")}
-        if was and was in article_norm and len(quote.split()) >= 8 and quote in source_norm:
+        if was and has_words(article_norm, was) and len(quote.split()) >= 8 and has_words(source_norm, quote):
             proven.append(claim)
         else:
             unproven.append(claim)
@@ -387,7 +402,12 @@ def unapplied_corrections(proven: list[dict[str, str]], draft: dict[str, Any]) -
     missing = []
     for item in proven:
         was, now = _norm(item.get("was")), _norm(item.get("now"))
-        if (was and was in text) or not now or now not in text:
+        if not now or not has_words(text, now):
+            missing.append(item)
+            continue
+        # The corrected words may contain the old ones ("approved" -> "not
+        # approved"): look for the old wording only outside the new wording.
+        if was and has_words(without_words(text, now), was):
             missing.append(item)
     return missing
 
