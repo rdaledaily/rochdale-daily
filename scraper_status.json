@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-13T12:23:24.070296Z",
+  "last_run_at": "2026-11-13T13:09:57.753633Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,19 +54,19 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 147,
-  "job_or_career_posts_rejected": 2,
-  "raw_candidates": 145,
-  "candidate_clusters": 39,
+  "raw_candidates_before_job_filter": 145,
+  "job_or_career_posts_rejected": 1,
+  "raw_candidates": 144,
+  "candidate_clusters": 37,
   "google_news_resolution": {
-    "wrappers": 43,
-    "resolved": 40,
-    "text_recovered": 29,
+    "wrappers": 64,
+    "resolved": 61,
+    "text_recovered": 28,
     "reattributed": 2,
-    "images_found": 37
+    "images_found": 36
   },
-  "duplicates_merged": 106,
-  "attempted_rewrites": 4,
+  "duplicates_merged": 107,
+  "attempted_rewrites": 2,
   "draft_rewrites_created": 1,
   "drafted_articles": [
     {
@@ -74,37 +74,46 @@
       "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/suspect-named-after-police-officer-34901257"
     }
   ],
-  "new_articles": 1,
-  "live_articles": 609,
-  "skipped": 3,
+  "new_articles": 0,
+  "live_articles": 607,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 3
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 0,
-    "queued_for_retry": 0,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 2,
-    "reopened_after_evidence_fix": 1,
+    "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
     "entries": 154,
     "by_outcome": {
-      "editorial_twin": 5,
+      "editorial_twin": 6,
       "failed": 22,
-      "published": 91,
+      "published": 90,
       "rejected": 36
     },
     "held_back_this_run": 30,
-    "held_already_published": 24,
-    "held_rejected": 6,
+    "held_already_published": 23,
+    "held_rejected": 7,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.gazetteherald.co.uk/sport/26723437.york-city-head-rochdale-saturday---place-memories",
+      "title": "RAMSEY RAMBLES: Rochdale away will always be the high of covering York City - Gazetteherald.co.uk",
+      "source_name": "Gazetteherald",
+      "held_because": "already rejected: quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-13T12:20:48.020702Z"
+    },
     {
       "url": "https://rochdaleafc.co.uk/tvos-preview-york-city-h-2",
       "title": "TVOS Preview | York City (H) - Rochdale AFC",
@@ -161,13 +170,13 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 144.": 1
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 142.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 128,
-    "website_discovery": 14,
-    "aggregator_discovery": 0,
+    "rss_and_google_news": 129,
+    "website_discovery": 10,
+    "aggregator_discovery": 1,
     "live_service_pages": 4,
     "facebook_official": 0,
     "x_official": 0,
@@ -298,8 +307,8 @@
     ]
   },
   "source_counts": {
-    "Roch Valley Radio": 32,
-    "Rochdale Times": 26,
+    "Roch Valley Radio": 34,
+    "Rochdale Times": 22,
     "Manchester Evening News": 21,
     "Rochdale Borough Council": 17,
     "Rochdale AFC": 11,
@@ -317,25 +326,25 @@
     "Gazetteherald": 1,
     "Greater Manchester Police": 1,
     "Rochdale Hornets": 1,
+    "Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "health": 1,
-    "sport": 2,
     "traffic": 1
   },
   "published_by_category": {
     "business": 71,
-    "community": 92,
+    "community": 91,
     "crime": 38,
     "education": 29,
     "environment": 49,
     "events": 33,
-    "health": 14,
+    "health": 15,
     "news": 90,
     "politics": 19,
     "sport": 56,
-    "traffic": 45,
+    "traffic": 44,
     "transport": 11
   },
   "openai_enabled": true,
@@ -362,15 +371,11 @@
   ],
   "selected_story_keys": [
     "transport-v3-7918d39366b5fdc287cb",
-    "sport-v3-16faf0b4ffa5f731246d",
-    "health-v3-5dbab96b2a7dfd89747f",
-    "sport-v3-70d50c63f1ba56713213"
+    "health-v3-5dbab96b2a7dfd89747f"
   ],
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/suspect-named-after-police-officer-34901257",
-    "https://www.gazetteherald.co.uk/sport/26723437.york-city-head-rochdale-saturday---place-memories/",
-    "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road",
-    "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph"
+    "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -383,12 +388,10 @@
   "coverage": {
     "available_categories": [
       "health",
-      "sport",
       "traffic"
     ],
     "selected_categories": [
       "health",
-      "sport",
       "traffic"
     ],
     "available_wards": [],
@@ -399,27 +402,22 @@
     ],
     "selected_areas": [
       "middleton",
-      "norden",
-      "rochdale"
+      "norden"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
       "health": 1,
-      "sport": 2,
       "traffic": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "middleton": 1,
-      "norden": 1,
-      "rochdale": 2
+      "norden": 1
     },
     "selected_by_source": {
-      "gazetteherald": 1,
       "manchester evening news": 1,
-      "roch valley radio": 1,
       "roch valley radio local news": 1
     },
     "must_cover_selected": 0
@@ -970,7 +968,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 33,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
@@ -978,7 +976,33 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMiXEFVX3lxTE93aDhEYmNrdDVtTEw3MU5icHBZeTlHUjQxZ19hRkpzZF9lTzgtdHhNZ0F1aTZPeFlra25hZVFESU8zLU95VGN4cy13ZEtqVm5yUUlKLTZreFZQQkEz?oc=5"
+    "https://c.newsnow.co.uk/A/1328568575?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329694800?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329690736?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329685434?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329646100?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329613630?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329609950?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329604647?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329591086?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329580953?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329580404?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329572545?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329540190?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329511378?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329503619?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329482042?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329436086?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329421091?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329388380?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329172291?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329231450?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329389348?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329714278?-57568:46921",
+    "https://c.newsnow.co.uk/A/1328615838?-57568:46921",
+    "https://c.newsnow.co.uk/A/1328691076?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329188487?-57568:46921",
+    "https://www.linkedin.com/company/groundnews"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -1018,8 +1042,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-13T12:59:18.561015Z",
-  "frontpage_article_count": 20,
+  "frontpage_generated_at": "2026-11-13T13:21:25.027966Z",
+  "frontpage_article_count": 18,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1080,13 +1104,13 @@
       "traffic": 2,
       "transport": 1,
       "sport": 1,
-      "business": 3,
+      "business": 1,
       "community": 4,
       "environment": 1,
       "news": 4
     },
     "selected_by_ward": {
-      "borough-wide": 20
+      "borough-wide": 18
     },
     "selected_by_area": {
       "alkrington": 1,
@@ -1094,7 +1118,7 @@
       "littleborough": 1,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 19,
+      "rochdale": 18,
       "wardle": 1
     },
     "selected_by_source": {
@@ -1107,20 +1131,19 @@
       "bbc manchester": 1,
       "rochdale daily": 2,
       "greater manchester police": 1,
-      "the gazette": 2,
       "greater manchester police press office": 1,
       "rochdale times": 1,
       "digventures — spodden valley revealed: community archaeology report (2026)": 1
     },
-    "pool_size": 29,
-    "primary_pool_size": 29,
+    "pool_size": 28,
+    "primary_pool_size": 28,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 20,
+    "frontpage_count": 18,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 20,
-    "short_briefs_selected": 13,
+    "fresh_under_homepage_window": 18,
+    "short_briefs_selected": 11,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1129,9 +1152,9 @@
   "events_kept_other_source": 34,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
+  "approved_ticket_events": 11,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 609,
+  "duplicate_articles_after_postprocessing": 607,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1141,12 +1164,10 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "morning-briefing-13-november-2026"
-  ],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "whats_on_event_count": 11,
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
+  "drafts_not_published": 1,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
