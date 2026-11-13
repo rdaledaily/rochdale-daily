@@ -25,10 +25,10 @@ const CONSENT_TEXT = "Send me the Rochdale Daily newsletter. I can unsubscribe a
  * can be switched on later without asking every subscriber again. Nothing is
  * sent differently because of them yet.
  *
- * Areas are the borough's four townships, not wards: on 12 Nov 2026 none of
- * the 618 live stories carried a ward, while every one carried an area that
- * maps to a township, so a township edition can be filled and a ward one
- * cannot. Anything outside these lists is dropped, never stored.
+ * Areas are the borough's four townships, not wards: on 12 Nov 2026 only 53
+ * of the 618 live stories carried a ward tag, while every one carried an area
+ * that maps to a township, so a township edition can be filled and a ward one
+ * cannot yet. Anything outside these lists is dropped, never stored.
  */
 const AREAS = new Set(["rochdale", "heywood", "middleton", "pennines"]);
 const TOPICS = new Set(["crime", "whats-on", "sport", "council"]);
