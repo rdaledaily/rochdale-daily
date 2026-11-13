@@ -173,6 +173,16 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
     if not check:
         # Repair stories before deriving month, topic and ward indexes so the
         # final newspaper uses one consistent set of titles and classifications.
+        # A story naming a full postcode takes that postcode's ward, so the
+        # lookups must be on file before the tags are stamped. Only for the
+        # real site (not a test's temporary copy), and never a reason to stop
+        # publishing: without an answer the story simply stays untagged.
+        if root.resolve() == ROOT.resolve():
+            try:
+                from ward_postcode_evidence import refresh as refresh_ward_postcodes
+                refresh_ward_postcodes(root)
+            except Exception as error:  # noqa: BLE001
+                print(f"::warning title=Ward postcodes::Lookup skipped ({type(error).__name__}: {error})")
         from archive_quality import apply as apply_archive_quality
         apply_archive_quality(root, images=True, network_images=False)
     # The month-by-month archive lists only what is indexable, so it is built
