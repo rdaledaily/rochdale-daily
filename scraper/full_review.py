@@ -323,9 +323,14 @@ def request_revision(client, row: dict[str, Any], sources: list[tuple[str, str]]
     return json.loads(response.choices[0].message.content or "{}")
 
 
-def gate(draft: dict[str, Any], source_text: str, published_on: date | None) -> list[str]:
-    """The same integrity gate a new story faces, plus the core-fact check."""
-    from editorial_upgrade import integrity_issues, quality_issues
+def gate(draft: dict[str, Any], source_text: str, published_on: date | None, original_text: str = "") -> list[str]:
+    """The same integrity gate a new story faces, plus the core-fact check.
+
+    Copying is judged only on what the revision adds: a list of defendants
+    already in the published story (names and addresses copied from a police
+    release) is not new copying, and the first run took stories down over it.
+    """
+    from editorial_upgrade import contains_long_verbatim_phrase, integrity_issues, quality_issues
 
     candidate = {
         "publishable": True, "content_class": "news_report", "is_about_rochdale_borough": True,
@@ -335,6 +340,12 @@ def gate(draft: dict[str, Any], source_text: str, published_on: date | None) -> 
     issues = integrity_issues(quality_issues(candidate, source_text, "article"))
     text = ". ".join(str(x).strip().rstrip(".") for x in [candidate["title"], candidate["excerpt"], *candidate["paragraphs"]] if str(x).strip())
     issues += [i for i in fidelity_issues(text, source_text, published_on) if i not in issues]
+    if original_text:
+        before = {_norm(x) for x in re.split(r"(?<=[.!?])\s+", plain(original_text)) if _norm(x)}
+        added = " ".join(x for x in re.split(r"(?<=[.!?])\s+", text) if _norm(x) and _norm(x) not in before)
+        issues = [i for i in issues if "verbatim" not in i]
+        if added and contains_long_verbatim_phrase(added, source_text, 20):
+            issues.append("Rewrite the long verbatim source passage.")
     # Length and quote-presence checks judge a new story's writing; a
     # correction that only removes an invented sentence must not fail them.
     return [i for i in issues if i.startswith("Source fidelity") or "verbatim" in i or "unsupported calendar year" in i]
@@ -590,6 +601,17 @@ def review(row: dict[str, Any], client, fetcher: Callable[[str], str] = backstop
     # claims but cannot prove goes to the editor; only a revision with none of
     # these is cosmetic and discarded.
     proven, unproven = verified_corrections(draft, original_text, " ".join(t for _, t in sources))
+    # Hand-written stories are reported, never rewritten or taken down. Their
+    # recorded link is rarely the whole evidence (press-release emails, the
+    # editor's own research), so a fact from another source looks unsupported:
+    # the first run took down accurate stories on exactly that.
+    if row.get("manual_article"):
+        if issues or proven or unproven or (draft.get("changed") and (draft.get("development") or extra_urls)):
+            return {**result, "outcome": "flagged",
+                    "reason": "hand-written story: findings for the editor (its recorded link may not be all its evidence)",
+                    "issues": issues, "claims": proven + unproven, "follow_ups": extra_urls,
+                    "proposed": {k: draft.get(k) for k in ("title", "excerpt", "paragraphs")}}
+        return {**result, "outcome": "passed"}
     if not issues and not proven and not (draft.get("changed") and (draft.get("development") or extra_urls)):
         if unproven:
             return {**result, "outcome": "flagged", "reason": "reviewer reports a factual error it could not prove from the source; editor to check",
@@ -597,7 +619,7 @@ def review(row: dict[str, Any], client, fetcher: Callable[[str], str] = backstop
         return {**result, "outcome": "passed"}
 
     for attempt in range(3):
-        problems = gate(draft, source_text, published_on) if draft.get("paragraphs") else [
+        problems = gate(draft, source_text, published_on, original_text) if draft.get("paragraphs") else [
             "No revision was returned, but the checker found problems that must be fixed: rewrite the article."]
         if attempt:
             # Corrections proven in a later revision count too.
@@ -624,6 +646,12 @@ def review(row: dict[str, Any], client, fetcher: Callable[[str], str] = backstop
                                      sources, list(dict.fromkeys(problems + issues)))
         except Exception as exc:  # noqa: BLE001
             return {**result, "outcome": "unchecked", "reason": f"review model unavailable ({type(exc).__name__})"}
+    # A story comes down only when the checker or a proven correction showed
+    # the PUBLISHED copy is wrong. A revision that merely fails to pass (an
+    # unconfirmed development, a checker false alarm on new wording) leaves
+    # the original up and goes to the editor.
+    if not issues and not proven:
+        return {**result, "outcome": "flagged", "reason": "revision could not pass the gate; original kept for the editor: " + "; ".join(problems)[:500]}
     take_down(slug, root)
     return {**result, "outcome": "taken_down", "issues": issues, "reason": "; ".join(problems)[:600]}
 
