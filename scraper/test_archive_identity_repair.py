@@ -90,3 +90,34 @@ def test_genuine_duplicate_canonical_untouched_and_idempotent():
 
 def test_dynamic_rules_ignored():
     assert ":splat" not in R.retired_article_redirects(setup([], REDIRECTS) / "_redirects")
+
+
+def test_generic_fixture_headlines_are_not_the_same_story():
+    # Audit 12 Nov 2026: "Al Rayyan ..." pointed Google at "York City ..."
+    # because the headlines shared only generic fixture words.
+    tmp = setup([
+        ("al-rayyan-to-face-rochdale", "Al Rayyan to Face Rochdale in Upcoming Match", "york-city-to-face-rochdale"),
+        ("york-city-to-face-rochdale", "York City to Face Rochdale in Upcoming Match", None),
+    ], REDIRECTS)
+    R.repair(tmp / "articles", tmp / "_redirects", set())
+    assert canonical(tmp, "al-rayyan-to-face-rochdale").endswith("/al-rayyan-to-face-rochdale.html")
+
+
+def test_conflicting_scores_are_not_the_same_story():
+    tmp = setup([
+        ("accrington-thrash-rochdale-5-0", "Accrington Stanley thrash Rochdale 5-0", "rochdale-beat-oldham-2-0"),
+        ("rochdale-beat-oldham-2-0", "Rochdale beat Oldham Athletic 2-0", None),
+    ], REDIRECTS)
+    R.repair(tmp / "articles", tmp / "_redirects", set())
+    assert canonical(tmp, "accrington-thrash-rochdale-5-0").endswith("/accrington-thrash-rochdale-5-0.html")
+
+
+def test_reworded_duplicate_keeps_its_canonical():
+    tmp = setup([
+        ("shisha-lounge-closed-over-carbon-monoxide", "Rochdale Shisha Lounge Closed Over Carbon Monoxide Levels",
+         "shisha-lounge-closed-after-carbon-monoxide"),
+        ("shisha-lounge-closed-after-carbon-monoxide", "Rochdale Shisha Lounge Closed After Carbon Monoxide Exposure", None),
+    ], REDIRECTS)
+    R.repair(tmp / "articles", tmp / "_redirects", set())
+    assert canonical(tmp, "shisha-lounge-closed-over-carbon-monoxide").endswith(
+        "/shisha-lounge-closed-after-carbon-monoxide.html")
