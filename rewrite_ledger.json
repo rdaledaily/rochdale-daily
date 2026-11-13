@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-13T12:02:31.776178Z",
+  "updated_at": "2026-11-13T12:23:24.066191Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 154,
@@ -968,7 +968,7 @@
     },
     "https://www.gazetteherald.co.uk/sport/26723437.york-city-head-rochdale-saturday---place-memories": {
       "first_attempt_at": "2026-11-13T09:44:48.674324Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMiXEFVX3lxTE93aDhEYmNrdDVtTEw3MU5icHBZeTlHUjQxZ19hRkpzZF9lTzgtdHhNZ0F1aTZPeFlra25hZVFESU8zLU95VGN4cy13ZEtqVm5yUUlKLTZreFZQQkEz?oc=5",
         "https://www.gazetteherald.co.uk/sport/26723437.york-city-head-rochdale-saturday---place-memories",
@@ -976,9 +976,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T11:59:01.667747Z",
+      "last_attempt_at": "2026-11-13T12:20:48.020702Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the figure(s) 3 do not appear in the source. Use only figures the source",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "RAMSEY RAMBLES: Rochdale away will always be the high of covering York City - Gazetteherald.co.uk",
       "source_name": "Gazetteherald",
       "category": "sport",
@@ -1334,14 +1334,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T11:23:34.968909Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-13T12:23:24.065996Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Suspect named after 'police officer attacked during vehicle stop' in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
-      "category": "news",
+      "category": "traffic",
       "text_fingerprint": "0772fa2e84663167",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/t-34884746": {
       "first_attempt_at": "2026-11-09T13:42:26.147342Z",
@@ -2230,15 +2231,15 @@
     },
     "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph": {
       "first_attempt_at": "2026-11-11T21:30:31.558094Z",
-      "attempts": 45,
+      "attempts": 46,
       "urls": [
         "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T11:58:57.078656Z",
+      "last_attempt_at": "2026-11-13T12:20:44.529125Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Ground the report more clearly in the supplied facts.",
+      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Armistice Day at Rochdale Cenotaph",
       "source_name": "Roch Valley Radio",
       "category": "sport",
@@ -2280,13 +2281,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road": {
       "first_attempt_at": "2026-11-12T19:05:37.729201Z",
-      "attempts": 46,
+      "attempts": 47,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T11:59:11.463192Z",
+      "last_attempt_at": "2026-11-13T12:20:56.967189Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "The hidden Rochdale cafe with countryside views that you won’t find by road",

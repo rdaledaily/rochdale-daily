@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-13T12:05:14.285945Z",
+  "generated_at": "2026-11-13T12:24:40.723028Z",
   "area": "middleton",
   "count": 37,
   "articles": [
@@ -84,8 +84,8 @@
         "source_sha": {
           "https://www.rochdale.gov.uk/directory-record/2659/manchester-old-road-prohibition-of-waiting-in-middleton-from-5-january-2027": "434b8aadd70f27a8"
         },
-        "checked_at": "2026-11-13T11:41:39.140623Z",
-        "attempts": 4
+        "checked_at": "2026-11-13T12:24:08.214073Z",
+        "attempts": 5
       },
       "ingested_at": "2026-11-13T09:50:46Z",
       "first_published_at": "2026-11-12T20:58:12Z",
@@ -236,8 +236,8 @@
         "issues": [],
         "reason": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/november/a-man-has-been-charged-after-an-officer-was-assaulted-in-middleton-town-centre/: capture failed (HTTPError: 403 Client Error: Forbidden for url: https://www.gmp.police.uk/news/greater-manc)",
         "source_sha": {},
-        "checked_at": "2026-11-13T11:41:39.140623Z",
-        "attempts": 5
+        "checked_at": "2026-11-13T12:24:08.214073Z",
+        "attempts": 6
       },
       "ingested_at": "2026-11-13T09:50:47Z",
       "first_published_at": "2026-11-12T11:52:00Z",
@@ -265,7 +265,7 @@
     {
       "id": "rd-editorial-20261112-middleton-man-charged-assault-emergency-worker-lodge-street",
       "slug": "middleton-man-charged-assault-emergency-worker-lodge-street",
-      "story_key": "manual-article:middleton-man-charged-assault-emergency-worker-lodge-street",
+      "story_key": "community-v3-ffe762f120bbf50dec48",
       "title": "Middleton man charged with assaulting emergency worker after Lodge Street stop",
       "excerpt": "Lee Cartledge, 42, faces four charges following a vehicle stop in Middleton on Wednesday 11 November, Greater Manchester Police said.",
       "content_html": "<p>A Middleton man has been charged with assaulting an emergency worker following a vehicle stop on Lodge Street in the town on Wednesday 11 November.</p><p>Greater Manchester Police named the defendant as Lee Cartledge, 42, of Lawson Close, Middleton.</p><p>The force said he has also been charged with possession of a bladed article, driving a motor vehicle without insurance and failing to provide a specimen of breath.</p><p>Cartledge is due to appear at Manchester and Salford Magistrates’ Court on Thursday 12 November, according to the police statement issued that morning.</p><p>The charges are allegations. No finding of guilt should be inferred, and the defendant is presumed innocent unless and until convicted.</p><p>Source: Greater Manchester Police press release issued on 12 November 2026.</p>",
@@ -298,7 +298,7 @@
       "allow_scrape_merge": false,
       "publication_route": "editorial",
       "rewrite_quality_checked": true,
-      "police_matter": true,
+      "police_matter": false,
       "legal_disclaimer": "No finding of guilt should be inferred from an arrest, allegation or charge. Anyone accused is presumed innocent unless and until convicted.",
       "press_release": true,
       "press_office": "Greater Manchester Police press office",
@@ -307,16 +307,23 @@
       "image_status": "incident-card",
       "image_backfill_method": "incident-card",
       "source_image_reuse_status": "cards-only",
-      "image_placeholder_reason": "Headline contains 'emergency': blanket Incident card rule",
-      "frontpage_rank": 21,
-      "frontpage_priority": 979,
-      "slot": "",
       "wards": [],
       "ward_verification": {
         "wards": [],
         "status": "borough-or-location-unresolved",
         "evidence": ""
-      }
+      },
+      "related_article_slugs": [
+        "man-charged-after-assault-on-officer-in-middleton-town-centre",
+        "middleton-man-charged-attempted-murder-three-aggravated-burglaries",
+        "man-charged-with-drug-offences-in-middleton"
+      ],
+      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "image_placeholder_reason": "Headline contains 'emergency': blanket Incident card rule",
+      "ingested_at": "2026-11-13T12:24:24Z",
+      "frontpage_rank": 19,
+      "frontpage_priority": 981,
+      "slot": ""
     },
     {
       "id": "rd-editorial-20261111-middleton-man-charged-attempted-murder-three-aggravated-burglaries",
@@ -335,7 +342,7 @@
       "published_at": "2026-11-11T10:04:02Z",
       "first_published_at": "2026-11-11T10:04:02Z",
       "last_updated_at": "2026-11-11T10:04:02Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Greater Manchester Police press office",
       "source_url": "https://gmp-newsroom.prgloo.com/news/man-charged-with-three-aggravated-burglaries-and-attempt-murder-in-oldham",
       "source_names": [
@@ -387,7 +394,7 @@
       "published_at": "2026-11-11T09:55:00Z",
       "first_published_at": "2026-11-11T09:55:00Z",
       "last_updated_at": "2026-11-11T09:55:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Greater Manchester Police",
       "source_url": "https://www.manchestereveningnews.co.uk/",
       "source_names": [
@@ -566,7 +573,7 @@
       "published_at": "2026-11-09T09:05:00Z",
       "first_published_at": "2026-11-09T09:05:00Z",
       "last_updated_at": "2026-11-09T09:05:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "https://www.rochdale.gov.uk/events/event/579/work-and-skills-hub---middleton-library",
       "source_names": [
@@ -612,7 +619,7 @@
       "published_at": "2026-11-08T19:50:00Z",
       "first_published_at": "2026-11-08T19:50:00Z",
       "last_updated_at": "2026-11-08T19:50:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Elsie Blundell MP",
       "source_url": "",
       "source_names": [
@@ -660,7 +667,7 @@
       "published_at": "2026-11-08T13:40:00Z",
       "first_published_at": "2026-11-08T13:40:00Z",
       "last_updated_at": "2026-11-08T13:40:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Roch Valley Radio",
       "source_url": "https://www.rochvalleyradio.com/news-features/5/traffic-and-travel/1280/ring-of-red-motorcycle-ride-to-support-heywood-veterans-on-remembrance-sunday",
       "source_names": [
@@ -710,7 +717,7 @@
       "published_at": "2026-11-08T11:28:00Z",
       "first_published_at": "2026-11-08T11:28:00Z",
       "last_updated_at": "2026-11-08T11:28:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Middleton in Bloom",
       "source_url": "http://www.middletoninbloom.co.uk/",
       "source_names": [
@@ -873,7 +880,7 @@
       "published_at": "2026-11-06T14:43:00Z",
       "first_published_at": "2026-11-06T14:43:00Z",
       "last_updated_at": "2026-11-06T17:30:22Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Cranmer Education Trust press office",
       "source_url": "https://www.cranmereducationtrust.com/",
       "source_names": [
@@ -1589,7 +1596,7 @@
       "published_at": "2026-11-02T11:30:00Z",
       "first_published_at": "2026-11-02T11:30:00Z",
       "last_updated_at": "2026-11-02T11:30:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Orchard Healthcare Group press office",
       "source_url": "https://orchardhealthcaregroup.com/about-us/",
       "source_names": [
@@ -2484,7 +2491,7 @@
       "published_at": "2026-10-15T20:07:07Z",
       "first_published_at": "2026-10-15T20:07:07Z",
       "last_updated_at": "2026-10-15T20:07:07Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Friends of Jubilee Park",
       "source_url": "",
       "source_names": [
@@ -2533,7 +2540,7 @@
       "published_at": "2026-10-14T23:10:00Z",
       "first_published_at": "2026-10-14T23:10:00Z",
       "last_updated_at": "2026-10-14T23:10:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -2770,7 +2777,7 @@
       "published_at": "2026-10-14T11:51:50Z",
       "first_published_at": "2026-10-14T11:51:50Z",
       "last_updated_at": "2026-10-14T11:51:50Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Rochdale Daily",
       "source_url": "https://www.duchyhomes.co.uk/northwest/holtwoodgreen",
       "source_names": [
@@ -2817,7 +2824,7 @@
       "published_at": "2026-10-14T11:51:50Z",
       "first_published_at": "2026-10-14T11:51:50Z",
       "last_updated_at": "2026-10-14T11:51:50Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Rochdale Daily",
       "source_url": "https://www.muller-property.co.uk/projects/care-home-and-residential-townhouses-middleton-greater-manchester/",
       "source_names": [
@@ -2864,7 +2871,7 @@
       "published_at": "2026-10-14T11:51:50Z",
       "first_published_at": "2026-10-14T11:51:50Z",
       "last_updated_at": "2026-10-14T11:51:50Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Rochdale Daily",
       "source_url": "https://www.bury.gov.uk/planning-building-control/planning-policy/strategic-sites-5/simisterbowlee-northern-gateway",
       "source_names": [
@@ -2911,7 +2918,7 @@
       "published_at": "2026-10-14T11:51:50Z",
       "first_published_at": "2026-10-14T11:51:50Z",
       "last_updated_at": "2026-10-14T11:51:50Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Rochdale Daily",
       "source_url": "https://www.stakehill-haveyoursay.co.uk/",
       "source_names": [
@@ -3193,7 +3200,7 @@
       "published_at": "2026-08-10T19:51:00Z",
       "first_published_at": "2026-08-10T19:51:00Z",
       "last_updated_at": "2026-08-10T19:51:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Place North West / Rochdale Development Agency",
       "source_url": "https://www.placenorthwest.co.uk/storage-world-middleton-launches-12m-rebirth-bid/",
       "source_names": [
@@ -3243,7 +3250,7 @@
       "published_at": "2026-08-01T12:45:00Z",
       "first_published_at": "2026-08-01T12:45:00Z",
       "last_updated_at": "2026-08-01T12:45:00Z",
-      "scraped_at": "2026-11-13T12:05:14Z",
+      "scraped_at": "2026-11-13T12:24:40Z",
       "source_name": "Jamie Thomason Facebook",
       "source_url": "https://www.facebook.com/",
       "source_names": [
