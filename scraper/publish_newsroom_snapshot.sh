@@ -36,7 +36,7 @@ stage_newsroom() {
   # their own: one missing path makes a single `git add` stage nothing at all.
   # Without them every fresh checkout forgets which official records it has
   # already offered (register_state.json was never committed until now).
-  for state_file in reports/primary_data_state.json reports/register_state.json reports/men_newsletter_coverage.json reports/core_fact_holds.json; do
+  for state_file in reports/primary_data_state.json reports/food_hygiene_state.json reports/register_state.json reports/men_newsletter_coverage.json reports/core_fact_holds.json; do
     if [ -f "${state_file}" ]; then
       git add -- "${state_file}" 2>/dev/null || true
     fi
