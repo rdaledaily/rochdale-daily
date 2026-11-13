@@ -1018,7 +1018,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-13T12:48:08.848178Z",
+  "frontpage_generated_at": "2026-11-13T12:59:18.561015Z",
   "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1047,17 +1047,20 @@
       "transport"
     ],
     "available_wards": [
-      "South Middleton"
+      "South Middleton",
+      "Wardle, Shore and West Littleborough"
     ],
     "selected_wards": [
-      "South Middleton"
+      "South Middleton",
+      "Wardle, Shore and West Littleborough"
     ],
     "available_areas": [
       "alkrington",
       "heywood",
       "littleborough",
       "middleton",
-      "milnrow"
+      "milnrow",
+      "wardle"
     ],
     "selected_areas": [
       "alkrington",
@@ -1065,7 +1068,8 @@
       "littleborough",
       "middleton",
       "milnrow",
-      "rochdale"
+      "rochdale",
+      "wardle"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
@@ -1090,7 +1094,8 @@
       "littleborough": 1,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 19
+      "rochdale": 19,
+      "wardle": 1
     },
     "selected_by_source": {
       "nhs": 1,
@@ -1103,25 +1108,25 @@
       "rochdale daily": 2,
       "greater manchester police": 1,
       "the gazette": 2,
-      "rochdale times": 1,
       "greater manchester police press office": 1,
+      "rochdale times": 1,
       "digventures — spodden valley revealed: community archaeology report (2026)": 1
     },
-    "pool_size": 28,
-    "primary_pool_size": 28,
+    "pool_size": 29,
+    "primary_pool_size": 29,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 20,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 11,
+    "fresh_under_24h": 10,
     "fresh_under_homepage_window": 20,
     "short_briefs_selected": 13,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 13,
-  "events_kept_other_source": 27,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
+  "events_kept_other_source": 34,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
@@ -1135,7 +1140,7 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 28,
+  "area_archive_count": 27,
   "whats_on_event_count": 13,
   "published_after_editorial_gate": 1,
   "published_new_slugs": [
