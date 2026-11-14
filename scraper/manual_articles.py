@@ -314,6 +314,11 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         # in the headline, byline and disclaimer the entry itself carries.
         record["sponsored"] = True
 
+    # Optional "What it means for <place>" box (local_impact.py): the same
+    # restate-only checks as the writer's box, applied to the editor's points.
+    import local_impact
+    record = local_impact.apply_to_editorial(record, entry)
+
     return record
 
 

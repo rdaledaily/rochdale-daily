@@ -257,3 +257,91 @@ def test_a_road_number_is_compared_whole():
     # A correct point about the road is untouched.
     good = li.build({"audience": "", "points": [sentence, "Diverted traffic will follow the A58 Halifax Road through Littleborough."]}, **MOTORWAY)
     assert good["points"] == [sentence, "Diverted traffic will follow the A58 Halifax Road through Littleborough."]
+
+
+def test_run_tally_says_why_a_story_has_no_box():
+    li.OUTCOMES.clear(); li.POINT_DROPS.clear()
+    li.build({"audience": "", "points": []}, **ROADWORKS)
+    li.build({"audience": "", "points": ["x"]}, **{**ROADWORKS, "category": "sport"})
+    li.build({"audience": "", "points": ["x"]}, **{**ROADWORKS, "category": "crime"})
+    li.build({"audience": "", "points": [
+        "The signed diversion runs via Egerton Street, Pilsworth Road and Tower Street.",
+        "Bee Network buses on the 471 route will be diverted nearby.",
+    ]}, **ROADWORKS)
+    li.build({"audience": "", "points": [
+        "The signed diversion runs via Egerton Street, Pilsworth Road and Tower Street.",
+        "The closure begins at the junction with Coomassie Street and ends 110 metres along the road.",
+    ]}, **ROADWORKS)
+    status = li.status()
+    assert status["outcomes"] == {
+        "writer offered no points": 1,
+        "not eligible: sport category": 1,
+        "not eligible: crime, court, police or death": 1,
+        "no box: fewer than two points survived": 1,
+        "shown": 1,
+    }
+    assert status["points"] == {"dropped: no story sentence to correct it to": 1}
+    assert status["shown"] == 1
+
+
+def test_status_is_in_the_run_report():
+    import inspect
+    import scraper
+    assert "'local_impact': local_impact.status()" in inspect.getsource(scraper)
+
+
+def _editorial_entry(**extra):
+    entry = {
+        "id": "rd-editorial-20261114-toy-appeal",
+        "slug": "heywood-toy-appeal-test",
+        "title": TOY_APPEAL["title"],
+        "excerpt": TOY_APPEAL["excerpt"],
+        "body": "\n\n".join(TOY_APPEAL["paragraphs"]),
+        "area": "heywood",
+        "category": "community",
+        "published_at": "2026-11-14T10:00:00Z",
+        "local_impact": {"audience": "families", "points": [
+            "Donations are being accepted until 11 December at local libraries and leisure centres.",
+            "Last year, the appeal distributed 10,000 toys to around 3,000 children.",
+        ]},
+    }
+    entry.update(extra)
+    return entry
+
+
+def _normalise(entry):
+    from datetime import datetime, timezone
+    import manual_articles
+    return manual_articles._normalise(entry, datetime(2026, 11, 14, 12, tzinfo=timezone.utc))
+
+
+def test_editorial_story_gets_the_same_checked_box():
+    record = _normalise(_editorial_entry())
+    assert record["content_html"].count('class="rd-impact"') == 1
+    assert record["content_html"].endswith("</section>")
+    assert "What it means for Heywood families" in record["content_html"] or "Heywood" in record["content_html"]
+    assert record["local_impact"]["audience"] == "families"
+    # Normalising again never stacks a second box.
+    assert _normalise(_editorial_entry())["content_html"] == record["content_html"]
+
+
+def test_editorial_box_corrects_or_drops_like_the_writer():
+    entry = _editorial_entry(local_impact={"audience": "", "points": [
+        "Donations are being accepted until 11 December at local libraries and leisure centres.",
+        "Last year, the appeal distributed 1,000 toys to around 3,000 children.",   # wrong figure
+    ]})
+    record = _normalise(entry)
+    assert "1,000 toys" not in record["content_html"].replace("10,000 toys", "")
+    assert "10,000 toys" in record["local_impact"]["points"][1]
+    invented = _editorial_entry(local_impact={"audience": "", "points": [
+        "Donations are being accepted until 11 December at local libraries and leisure centres.",
+        "Volunteers from Tesco Heywood will wrap every present this year.",
+    ]})
+    assert "rd-impact" not in _normalise(invented)["content_html"]
+
+
+def test_editorial_exclusions():
+    for extra in ({"category": "crime"}, {"sponsored": True},
+                  {"publication_route": "daily-briefing", "briefing_slot": "morning"},
+                  {"local_impact": None}):
+        assert "rd-impact" not in _normalise(_editorial_entry(**extra))["content_html"]
