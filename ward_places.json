@@ -1,0 +1,17 @@
+{
+  "_docs": {
+    "purpose": "Places and organisations whose stories belong to the ward they are based in (editor, 14 Nov 2026: 'yes, home ward' for clubs, colleges and hospitals). The ward is never typed here: the pipeline looks the postcode up (postcodes.io, ONS data) and writes the answer to ward_postcode_evidence.json. A place whose postcode has not been looked up yet decides nothing.",
+    "how_to_add": "Add an entry with the place's own address postcode and the names stories use for it (lower case). Check the postcode on the organisation's own website.",
+    "matching": "A name counts only in the headline, standfirst or the first paragraph."
+  },
+  "places": {
+    "Crown Oil Arena": {"postcode": "OL11 5DR", "names": ["crown oil arena", "spotland stadium", "rochdale afc", "rochdale a.f.c.", "rochdale football club", "rochdale hornets", "dale women"]},
+    "Rochdale Town Hall": {"postcode": "OL16 1AB", "names": ["rochdale town hall", "town hall square", "rochdale town centre"]},
+    "Number One Riverside": {"postcode": "OL16 1XU", "names": ["number one riverside", "rochdale library"]},
+    "Touchstones Rochdale": {"postcode": "OL16 1AQ", "names": ["touchstones"]},
+    "Rochdale Pioneers Museum": {"postcode": "OL12 0NU", "names": ["pioneers museum", "toad lane"]},
+    "St Chad's Church": {"postcode": "OL16 1QT", "names": ["st chad's", "st chad’s", "rochdale parish church"]},
+    "Rochdale Infirmary": {"postcode": "OL12 0NB", "names": ["rochdale infirmary"]},
+    "Hopwood Hall College (Middleton campus)": {"postcode": "M24 6XH", "names": ["hopwood hall college"]}
+  }
+}

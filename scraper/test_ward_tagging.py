@@ -50,6 +50,7 @@ def test_a_correspondence_address_is_not_where_the_story_is(tmp_path, monkeypatc
              "content_html": "<p>Parking charges would change in three towns.</p><p>Objections should be sent in writing to Legal Services, Number One Riverside, Smith Street, Rochdale OL16 1XU.</p>"}
     assert ec.story_postcodes(story) == []
     assert ec.ward_decision(story)["wards"] == []
+    assert ec.ward_decision(story)["status"] == "borough-wide"
 
 
 def test_round_ups_and_briefings_belong_to_no_ward(tmp_path, monkeypatch):
@@ -92,8 +93,14 @@ def test_neither_signal_alone_is_enough():
 
 
 def test_places_split_between_wards_are_never_guessed():
+    # A town spanning several wards is never guessed as ONE ward. Since
+    # 14 Nov 2026 (editor) its stories go to every ward of that town, marked
+    # "township", so the ward hubs carry them.
+    towns = ec.township_wards()
     for area, title in (("middleton", "Middleton market reopens"), ("heywood", "Heywood market reopens"), ("littleborough", "Littleborough market reopens")):
-        assert ec.ward_decision({"title": title, "area": area})["wards"] == [], area
+        decision = ec.ward_decision({"title": title, "area": area})
+        assert decision["status"] == "township", area
+        assert decision["wards"] == towns[area] and len(decision["wards"]) >= 2, area
     places = ec.locality_wards()
     assert not {"middleton", "heywood", "littleborough", "rochdale"} & set(places)
     assert places["syke"] == "Healey" and places["alkrington"] == "South Middleton" and places["balderstone"] == "Balderstone and Kirkholt"
@@ -134,3 +141,50 @@ def test_lookup_failure_changes_nothing_and_unknown_wards_are_reported():
 
     report = wpe.run([{"title": "A", "event_location": "Heywood Civic, OL10 1LW"}], cache, renamed)
     assert report["unmatched"] == ["Heywood Central"] and cache["OL101LW"]["ward"] == ""
+
+
+def test_every_story_has_a_place_on_the_hubs():
+    """Editor, 14 Nov 2026: every story carries a ward or a discoverable
+    scope. Nothing is left unresolved."""
+    import json
+    rows = json.loads((Path(__file__).resolve().parents[1] / "articles.json").read_text(encoding="utf-8"))
+    for row in rows:
+        decision = ec.ward_decision(row)
+        assert decision["status"] != "borough-or-location-unresolved", row.get("slug")
+        assert decision["wards"] or decision["status"] == "borough-wide", row.get("slug")
+
+
+def test_person_named_like_a_town_is_not_the_town():
+    story = {"title": "Rochdale draw 2-2 with Grimsby", "area": "rochdale",
+             "content_html": "<p>Ian Henderson equalised from a well-placed cross from Glenn Middleton.</p>"}
+    assert ec.ward_decision(story)["status"] == "borough-wide"
+
+
+def test_every_town_listed_is_a_borough_round_up():
+    story = {"title": "Christmas lights switch-ons in Rochdale, Heywood, Middleton and Littleborough", "area": "rochdale"}
+    assert ec.ward_decision(story)["status"] == "borough-wide"
+
+
+def test_club_goes_to_its_home_ward_once_its_postcode_is_looked_up(tmp_path, monkeypatch):
+    evidence(tmp_path, monkeypatch, {"OL115DR": {"postcode": "OL11 5DR", "district": "Rochdale", "ward": "Spotland and Falinge"}})
+    story = {"title": "Rochdale AFC sign new goalkeeper on loan", "area": "rochdale",
+             "content_html": "<p>Rochdale AFC have signed a goalkeeper.</p>"}
+    decision = ec.ward_decision(story)
+    assert decision["status"] == "place-verified" and decision["wards"] == ["Spotland and Falinge"]
+
+
+def test_club_without_a_looked_up_postcode_decides_nothing(tmp_path, monkeypatch):
+    evidence(tmp_path, monkeypatch, {})
+    story = {"title": "Rochdale AFC sign new goalkeeper on loan", "area": "rochdale"}
+    assert ec.ward_decision(story)["status"] == "borough-wide"
+
+
+def test_refresh_looks_up_place_postcodes():
+    asked = []
+
+    def fetch(batch):
+        asked.extend(batch)
+        return [{"query": pc, "result": None} for pc in batch]
+
+    wpe.run([], {}, fetch, today="2026-11-14", extra=ec.place_postcodes())
+    assert "OL115DR" in asked

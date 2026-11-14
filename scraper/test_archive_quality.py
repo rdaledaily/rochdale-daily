@@ -14,7 +14,9 @@ assert not safe_edit('The homes may open.', 'The homes will open.')
 assert not reader_ending({'title':'Man charged with burglary','category':'crime'})
 assert not reader_ending({'title':'Roadworks in Heywood','category':'traffic'})  # withdrawn 9 Nov 2026
 assert not ward_decision({'title':'Glenn Middleton speaks','area':'rochdale'})['wards']
-assert not ward_decision({'title':'Work in Middleton','area':'middleton'})['wards']
+# A town spanning wards is never ONE guessed ward; since 14 Nov 2026 it is every ward of the town.
+assert ward_decision({'title':'Work in Middleton','area':'middleton'})['status'] == 'township'
+assert len(ward_decision({'title':'Work in Middleton','area':'middleton'})['wards']) >= 2
 assert category_for({'title':'Guided court chamber tour','category':'crime'}) == 'events'
 rows=[{'slug':str(i),'title':'Local housing plans '+str(i),'area':'rochdale','category':'business','indexable':True,'published_at':'2026-10-01'} for i in range(5)]
 graph,incoming=related_graph(rows)

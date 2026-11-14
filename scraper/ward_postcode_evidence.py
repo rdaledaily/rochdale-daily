@@ -77,9 +77,10 @@ def wanted(articles: list[Any]) -> list[str]:
     return sorted(found)
 
 
-def run(articles: list[Any], cache: dict[str, Any], fetch: Fetch = fetch_bulk, today: str | None = None) -> dict[str, Any]:
+def run(articles: list[Any], cache: dict[str, Any], fetch: Fetch = fetch_bulk, today: str | None = None,
+        extra: list[str] | tuple[str, ...] = ()) -> dict[str, Any]:
     today = today or datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    needed = wanted(articles)
+    needed = sorted(set(wanted(articles)) | set(extra))
     missing = [pc for pc in needed if not isinstance(cache.get(pc), dict)]
     report: dict[str, Any] = {"in_stories": len(needed), "looked_up": 0, "failed": "", "unmatched": []}
     for start in range(0, len(missing), BATCH):
@@ -117,7 +118,10 @@ def refresh(root: Path = ROOT, fetch: Fetch = fetch_bulk) -> dict[str, Any]:
     if not isinstance(cache, dict):
         cache = {}
     before = json.dumps(cache, sort_keys=True)
-    report = run(articles, cache, fetch)
+    # Clubs, colleges and venues in ward_places.json: their ward comes from
+    # their own postcode, looked up like any story postcode.
+    from editorial_contract import place_postcodes
+    report = run(articles, cache, fetch, extra=place_postcodes())
     cache["_docs"] = DOCS
     if json.dumps(cache, sort_keys=True) != before:
         ordered = {"_docs": cache["_docs"], **{k: cache[k] for k in sorted(cache) if k != "_docs"}}
