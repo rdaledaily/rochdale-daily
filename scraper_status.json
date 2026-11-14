@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-14T01:06:53.279036Z",
+  "last_run_at": "2026-11-14T01:25:26.646423Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -57,18 +57,23 @@
   "raw_candidates_before_job_filter": 148,
   "job_or_career_posts_rejected": 2,
   "raw_candidates": 146,
-  "candidate_clusters": 45,
+  "candidate_clusters": 44,
   "google_news_resolution": {
-    "wrappers": 61,
+    "wrappers": 57,
     "resolved": 52,
     "text_recovered": 28,
     "reattributed": 2,
     "images_found": 45
   },
-  "duplicates_merged": 101,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
+  "duplicates_merged": 102,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "ignite-fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-sw",
+      "source_url": "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2/"
+    }
+  ],
   "new_articles": 0,
   "live_articles": 610,
   "skipped": 1,
@@ -77,11 +82,11 @@
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 2,
-    "reopened_after_evidence_fix": 0,
+    "reopened_after_evidence_fix": 1,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
@@ -90,25 +95,16 @@
     "by_outcome": {
       "editorial_twin": 6,
       "failed": 19,
-      "published": 85,
-      "rejected": 48
+      "published": 86,
+      "rejected": 47
     },
-    "held_back_this_run": 35,
-    "held_already_published": 17,
-    "held_rejected": 18,
+    "held_back_this_run": 33,
+    "held_already_published": 16,
+    "held_rejected": 17,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
-    {
-      "url": "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2",
-      "title": "Fire festival returns to Rochdale with free entry and Christmas lights switch-on - About Manchester",
-      "source_name": "About Manchester",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-14T00:46:17.577564Z"
-    },
     {
       "url": "https://www.visitrochdale.com/whats-on/middleton-christmas-lights-switch-on-p698641",
       "title": "Middleton Christmas Lights Switch-On",
@@ -263,7 +259,9 @@
       "last_attempt_at": "2026-11-13T02:13:21.642860Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 131,
@@ -312,6 +310,22 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Rochdale AFC Community Trust": {
+      "url": "https://www.rochdaleafccommunity.org/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.rochdaleafccommunity.org/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -400,8 +414,8 @@
     "AOL.com": 1,
     "Fansnetwork": 1,
     "The York Press": 1,
-    "The Sun": 1,
     "Total Rugby League": 1,
+    "The Sun": 1,
     "Gazetteherald": 1,
     "YorkMix": 1,
     "AFootballReport": 1,
@@ -410,6 +424,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "events": 1,
     "health": 1
   },
   "published_by_category": {
@@ -449,9 +464,11 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
+    "events-v3-17cd0fb9c051645faa07",
     "health-v3-5dbab96b2a7dfd89747f"
   ],
   "selected_candidate_urls": [
+    "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2/",
     "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
   ],
   "x_social_records": 0,
@@ -464,9 +481,11 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "events",
       "health"
     ],
     "selected_categories": [
+      "events",
       "health"
     ],
     "available_wards": [],
@@ -475,19 +494,23 @@
       "norden"
     ],
     "selected_areas": [
-      "norden"
+      "norden",
+      "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "events": 1,
       "health": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "norden": 1
+      "norden": 1,
+      "rochdale": 1
     },
     "selected_by_source": {
+      "about manchester": 1,
       "roch valley radio local news": 1
     },
     "must_cover_selected": 0
@@ -1050,10 +1073,10 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "totalrl.com"
+    "yourtrustrochdale.co.uk"
   ],
   "slow_domain_failure_counts": {
-    "totalrl.com": 1
+    "yourtrustrochdale.co.uk": 8
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1090,7 +1113,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-14T01:07:55.980950Z",
+  "frontpage_generated_at": "2026-11-14T01:26:42.016790Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1150,7 +1173,7 @@
       "heywood": 1,
       "littleborough": 1,
       "middleton": 3,
-      "rochdale": 15
+      "rochdale": 14
     },
     "selected_by_source": {
       "rochdale borough council": 1,
@@ -1163,8 +1186,8 @@
       "rochdale daily": 1,
       "greater manchester police press office": 1
     },
-    "pool_size": 20,
-    "primary_pool_size": 20,
+    "pool_size": 19,
+    "primary_pool_size": 19,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
     "frontpage_count": 10,
@@ -1195,7 +1218,7 @@
   "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 0,
-  "publication_health": "ready",
+  "drafts_not_published": 1,
+  "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
