@@ -1,9 +1,9 @@
 {
   "eligible_placeholders": 8,
-  "repaired_with_source_photo": 1,
+  "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
-  "no_usable_source_image": 7,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -13,7 +13,7 @@
     "Rochdale Boroughwide Housing"
   ],
   "source_grants_incomplete": [],
-  "replaced_commons_or_library_with_source_photo": 1,
+  "replaced_commons_or_library_with_source_photo": 0,
   "allowed_domains": [],
   "gmp_release_matches": {
     "mode": "report",
@@ -23,16 +23,10 @@
   },
   "items": [
     {
-      "slug": "jamie-allen-expresses-love-for-rochdale-afc-after-150-appearances",
-      "result": "licensed-source-photo",
-      "source": "https://rochdaleafc.co.uk/ive-got-nothing-but-love-for-rochdale-allen/",
-      "after": "assets/img/cards/jamie-allen-expresses-love-for-rochdale-afc-after-150-appearances.jpg"
-    },
-    {
       "slug": "rochdale-faces-york-city-in-league-two-clash-after-dramatic-title-decider",
       "result": "source-photo-already-cached",
       "source": "https://rochdaleafc.co.uk/preview-york-city-h-3/",
-      "after": "/home/runner/work/rochdale-daily/rochdale-daily/assets/img/cards/rochdale_fans.jpg"
+      "after": "assets/img/cards/rochdale-faces-york-city-in-league-two-clash-after-dramatic-title-decider.png"
     },
     {
       "slug": "man-charged-after-assault-on-officer-in-middleton-town-centre",
@@ -92,6 +86,16 @@
           }
         ],
         "verdict": "no-candidate-passed"
+      }
+    },
+    {
+      "slug": "rochdale-secondary-school-applications-deadline-31-october-2026",
+      "result": "no-cleared-source-image",
+      "source": "https://www.rochdale.gov.uk/news/article/675/council-urges-families-to-apply-on-time-for-secondary-school-places",
+      "after": "assets/img/cards/rochdale-secondary-school-applications-deadline-31-october-2026.jpg",
+      "why": {
+        "page": "https://www.rochdale.gov.uk/news/article/675/council-urges-families-to-apply-on-time-for-secondary-school-places",
+        "verdict": "page-fetch-failed: HTTP Error 502: Bad Gateway"
       }
     }
   ]
