@@ -352,6 +352,33 @@ def _unique_strings(*values: Any) -> list[str]:
     return result
 
 
+def _headline_corroborates(manual: dict[str, Any], scraped: dict[str, Any]) -> bool:
+    """A scrape may only be folded into an editor's story if the headlines agree.
+
+    same_story() also accepts the incident-fact route (same place, same kind of
+    incident, same victim gender within 72 hours). That suits short incident
+    reports, but a long editorial piece mentions many incidents in passing. On
+    14 Nov 2026 a 2,000-word analysis of Buckley Hall prison ("assault", "men",
+    "Rochdale") absorbed an unrelated sexual-assault witness appeal: it became
+    crime, ONGOING, took the police photo and the appeal's sources, with zero
+    headline words in common. Measured the same day over all 330 manual
+    records against 247 scraped ones, that was the only absorption live, so
+    requiring headline evidence removes no genuine merge.
+
+    Evidence is any of: the same source URL, a shared named entity, or at
+    least one shared significant headline word.
+    """
+    from story_identity import canonicalise_url, named_entities, title_tokens
+
+    left_url = canonicalise_url(manual.get("source_url") or "")
+    right_url = canonicalise_url(scraped.get("source_url") or "")
+    if left_url and left_url == right_url:
+        return True
+    if named_entities(manual) & named_entities(scraped):
+        return True
+    return bool(title_tokens(manual) & title_tokens(scraped))
+
+
 def _absorb_scraped_match(
     manual: dict[str, Any], scraped: dict[str, Any]
 ) -> dict[str, Any]:
@@ -474,6 +501,7 @@ def load_manual_article_records(now: datetime | None = None) -> list[dict[str, A
             if not item.get("manual_article")
             and str(item.get("source_kind") or "").lower() != "editorial"
             and same_story(record, item)
+            and _headline_corroborates(record, item)
         ]
 
         if scraped_matches:
