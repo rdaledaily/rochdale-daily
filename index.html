@@ -2946,7 +2946,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         const kicker = escapeHtmlText(String(story.category || "news").replace(/[-_]/g, " "));
         return `
         <li class="latest-item"><a href="articles/${story.slug}">
-          <span class="latest-thumb"><img src="${thumb}" alt="" loading="lazy" decoding="async"></span>
+          <span class="latest-thumb"><img src="${thumb}" alt="${story.title}" loading="lazy" decoding="async"></span>
           <span class="latest-body">
             <span class="latest-kicker">${kicker}</span>
             <span class="latest-title">${story.title}</span>
@@ -3434,7 +3434,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         const fallback = story.imageFallback || stockImage("events");
         const dateLabel = date ? formatEventDate(date) : "Date shown in full listing";
         return `<article class="event-card">
-          <img src="${story.image}" alt="" onerror="this.onerror=null;this.src='${fallback}'">
+          <img src="${story.image}" alt="${story.title}" onerror="this.onerror=null;this.src='${fallback}'">
           <div class="event-body">
             <div class="event-date">${dateLabel}</div>
             <h3>${story.title}</h3>
@@ -3472,7 +3472,7 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         ${related.map(item => {
           const fallback = item.imageFallback || stockImage(item.category || "news");
           return `<a class="related-story" href="articles/${item.slug}">
-            <img src="${item.image}" alt="" onerror="this.onerror=null;this.src='${fallback}'">
+            <img src="${item.image}" alt="${item.title}" onerror="this.onerror=null;this.src='${fallback}'">
             <span class="related-title">${item.title}</span>
           </div>`;
         }).join("")}
@@ -3514,7 +3514,7 @@ function shareIconMarkup(action, label) {
       bodyParagraphs.splice(breakIndex, 0, `<div class="ad-slot ad-slot-incontent" role="presentation" aria-hidden="true"></div>`);
 
       document.getElementById("modal-content").innerHTML = `
-        <img class="modal-image" src="${story.image}" alt="" onerror="this.onerror=null;this.src='${fallback}'">
+        <img class="modal-image" src="${story.image}" alt="${story.title}" onerror="this.onerror=null;this.src='${fallback}'">
         <div class="article-body">
           <div class="ad-slot ad-slot-leaderboard" role="presentation" aria-hidden="true"></div>
           <div class="article-layout">
@@ -4879,7 +4879,7 @@ function shareIconMarkup(action, label) {
 
         return '<article class="dem-card">' +
           '<div class="dem-mp">' +
-            (entry.thumbnail ? '<img loading="lazy" alt="" src="' + esc(entry.thumbnail) + '">' : "") +
+            (entry.thumbnail ? '<img loading="lazy" alt="' + esc(entry.name) + '" src="' + esc(entry.thumbnail) + '">' : "") +
             "<div><div class=\"who\">" + esc(entry.name) + "</div>" +
             '<div class="dem-sub">' + esc(entry.party) + " &middot; " + esc(entry.seat) + "</div></div>" +
           "</div>" +

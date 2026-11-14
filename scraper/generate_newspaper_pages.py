@@ -277,7 +277,8 @@ def _recirc_card(item, kicker=""):
     item_slug = generate_pages.esc(item.get("slug") or "")
     image = generate_pages.esc(generate_pages.absolute_url(item.get("image_url") or ""))
     label = generate_pages.esc(_area_label(_area_key(item)) or "Rochdale borough")
-    media = f'<img src="{image}" alt="" loading="lazy" decoding="async">' if image else ""
+    alt = generate_pages.esc(generate_pages.image_alt_text(item, item.get("image_url") or ""))
+    media = f'<img src="{image}" alt="{alt}" loading="lazy" decoding="async">' if image else ""
     kick = f'<span class="rn-kicker">{generate_pages.esc(kicker)}</span>' if kicker else ""
     return (
         f'<a class="rn-card" href="{item_slug}.html">{media}'
@@ -296,7 +297,8 @@ def _recirc_list(items, heading, destination=""):
         src = generate_pages.absolute_url(item.get("image_url") or "")
         if not src or generate_pages.is_generated_card(src):
             return ""
-        return (f'<img class="rn-thumb" src="{generate_pages.esc(src)}" alt="" '
+        alt = generate_pages.esc(generate_pages.image_alt_text(item, src))
+        return (f'<img class="rn-thumb" src="{generate_pages.esc(src)}" alt="{alt}" '
                 f'width="72" height="48" loading="lazy" decoding="async">')
     links = "".join(
         f'<a class="rn-item" href="{generate_pages.esc(item.get("slug"))}.html">'
@@ -395,7 +397,7 @@ def _newsroom_related_stories_markup(article, all_articles):
         item_slug = generate_pages.esc(item.get("slug") or item.get("id") or "")
         image = generate_pages.esc(generate_pages.absolute_url(item.get("image_url") or ""))
         image_markup = (
-            f'<img src="{image}" alt="" loading="lazy" decoding="async">'
+            f'<img src="{image}" alt="{generate_pages.esc(generate_pages.image_alt_text(item, item.get("image_url") or ""))}" loading="lazy" decoding="async">'
             if image else ""
         )
         items.append(

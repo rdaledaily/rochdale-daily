@@ -108,3 +108,73 @@ def test_road_and_code_identifiers_stay_whole():
 def test_titles_and_saints_keep_capitals():
     assert H.sentence_case("Upcoming Services and Events at St Luke's Church, Deeplish", "") == \
         "Upcoming services and events at St Luke's Church, Deeplish"
+
+
+# Bing Site Scan rules (14 Nov 2026): <title> at most 70 characters, and no
+# alt="" on story-link thumbnails, for new pages and the archive alike.
+import seo_page_sweep  # noqa: E402
+
+
+def test_short_titles_unchanged():
+    assert H.title_tag("Bolton cup tie") == "Bolton cup tie | Rochdale Daily"
+    seventy = "x" * 70
+    assert H.title_tag(seventy) == seventy
+
+
+def test_long_titles_cut_at_clause_or_word_never_mid_word():
+    cases = {
+        "Fire breaks out at Lonsdale Court in Middleton, resident escapes safely":
+            "Fire breaks out at Lonsdale Court in Middleton",
+        "Bikers in red leave Birch Services for 13th Ring of Red ride around the M60":
+            "Bikers in red leave Birch Services for 13th Ring of Red ride",
+        "Strike Planned by Staff at Rochdale Infirmary and Three Other Greater Manchester Hospitals":
+            "Strike Planned by Staff at Rochdale Infirmary",
+        "Train Services Disrupted on Leeds to Manchester Route Due to Planned Works":
+            "Train Services Disrupted on Leeds to Manchester Route",
+        "Syke Community Base seeks activity providers for its Over 50s group in 2027":
+            "Syke Community Base seeks activity providers for its Over 50s group",
+    }
+    for long, expected in cases.items():
+        assert H.title_tag(long) == expected
+
+
+def test_never_leaves_a_quote_open():
+    t = "The Healey Dell prophecy: the Lady Eleanor who was said to be 'maid, wife and widow in one day'"
+    out = H.title_tag(t)
+    assert len(out) <= 70 and "'" not in out
+
+
+def test_every_title_fits():
+    words = "Rochdale council approves new plan for town centre homes and shops near station".split()
+    for n in range(1, len(words) + 1):
+        assert len(H.title_tag(" ".join(words[:n]) * 2)) <= 70
+
+
+def test_sweep_shortens_title_and_fills_link_alts():
+    page = (
+        "<html><head><title>Fire breaks out at Lonsdale Court in Middleton, resident escapes safely</title></head>"
+        '<body><h1>Fire breaks out at Lonsdale Court in Middleton, resident escapes safely</h1>'
+        '<a class="related-story" href="a.html"><img src="x.jpg" alt="" loading="lazy">'
+        '<span class="related-title">Man &amp; dog &quot;rescued&quot;</span></a>'
+        '<a class="rn-item" href="b.html"><img class="rn-thumb" src="y.jpg" alt="">'
+        '<span class="rn-item-title">Second story</span></a>'
+        '<figure><img src="kept.jpg" alt="Editor alt"></figure></body></html>'
+    )
+    out = seo_page_sweep.fix_page(page)
+    assert "<title>Fire breaks out at Lonsdale Court in Middleton</title>" in out
+    assert "<h1>Fire breaks out at Lonsdale Court in Middleton, resident escapes safely</h1>" in out
+    assert 'alt="Man &amp; dog &quot;rescued&quot;"' in out
+    assert 'alt="Second story"' in out
+    assert 'alt="Editor alt"' in out
+    assert 'alt=""' not in out
+    assert seo_page_sweep.fix_page(out) == out  # idempotent
+
+
+def test_generator_related_box_has_alt():
+    import generate_pages as G
+    article = {"slug": "a", "title": "Story A", "category": "news", "area": "rochdale"}
+    others = [{"slug": f"s{i}", "title": f"Other story {i}", "category": "news", "area": "rochdale",
+               "image_url": "https://rochdaledaily.co.uk/assets/img/cards/p.jpg",
+               "published_at": "2026-11-14T10:00:00Z"} for i in range(3)]
+    markup = G.related_stories_markup(article, [article] + others)
+    assert markup and 'alt=""' not in markup and 'alt="Other story' in markup

@@ -148,7 +148,7 @@ def render_block(article: dict[str, Any], now: datetime | None = None) -> str:
         image = ""
         if row["image_url"]:
             credit = f'<figcaption>Image: {e(row["image_credit"])}</figcaption>' if row["image_credit"] else ""
-            image = (f'<figure class="live-figure"><img src="{e(row["image_url"])}" alt="" loading="lazy" '
+            image = (f'<figure class="live-figure"><img src="{e(row["image_url"])}" alt="{e(row["title"] or "Live update photo")}" loading="lazy" '
                      f'decoding="async" referrerpolicy="no-referrer">{credit}</figure>')
         source = (f' <a class="live-source" href="{e(row["source_url"])}" target="_blank" rel="noopener">Source</a>'
                   if row["source_url"] else "")
