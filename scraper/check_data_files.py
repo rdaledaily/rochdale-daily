@@ -468,6 +468,43 @@ def check_banned_links() -> None:
                        "-- run: python scraper/link_ban.py --fix")
 
 
+# Cloudflare Pages refuses any deployment of more than 20,000 files, and says
+# so only in its own dashboard. On 13 Nov 2026 the repository passed that at
+# 23:05 and the live site stopped updating for over ten hours while every
+# workflow here stayed green.
+CLOUDFLARE_FILE_LIMIT = 20000
+FILE_COUNT_ERROR = 19000
+FILE_COUNT_WARNING = 15000
+
+
+def site_file_count(root: Path = REPO_ROOT) -> tuple[int, list[tuple[int, str]]]:
+    """Files Cloudflare would be sent, and the folders holding most of them."""
+    import os
+    from collections import Counter
+
+    total = 0
+    by_folder: Counter[str] = Counter()
+    for folder, subfolders, files in os.walk(root):
+        subfolders[:] = [name for name in subfolders if name not in (".git", "node_modules", "__pycache__", ".pytest_cache")]
+        rel = os.path.relpath(folder, root)
+        total += len(files)
+        by_folder["/".join(rel.split(os.sep)[:3])] += len(files)
+    return total, [(count, name) for name, count in by_folder.most_common(3)]
+
+
+def check_file_count() -> None:
+    total, largest = site_file_count()
+    where = "site file count"
+    biggest = ", ".join(f"{name} ({count:,})" for count, name in largest)
+    if total >= FILE_COUNT_ERROR:
+        fail(where, f"{total:,} files; Cloudflare Pages stops deploying at {CLOUDFLARE_FILE_LIMIT:,}. Largest folders: {biggest}")
+    elif total >= FILE_COUNT_WARNING:
+        print(f"::warning title=Site file count::{total:,} files; Cloudflare Pages stops deploying at {CLOUDFLARE_FILE_LIMIT:,}. Largest folders: {biggest}")
+        note(where, f"{total:,} files, approaching Cloudflare's {CLOUDFLARE_FILE_LIMIT:,} limit. Largest folders: {biggest}")
+    else:
+        note(where, f"{total:,} files (Cloudflare Pages limit {CLOUDFLARE_FILE_LIMIT:,})")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate hand-edited data files.")
     parser.add_argument("--warn-only", action="store_true",
@@ -484,6 +521,7 @@ def main() -> int:
     check_simple("story_blocklist.json", key=None)
     check_simple("council_roster.json", key="councillors")
     check_banned_links()
+    check_file_count()
 
     for line in notes:
         print(f"  note   {line}")
