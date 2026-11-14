@@ -71,6 +71,83 @@ def _crop(img, width: int, height: int):
     return img.crop(box).resize((width, height), Image.LANCZOS)
 
 
+_CROP_NAME = re.compile(r"(.+)-(1200x675|1200x900|1200x1200)$")
+
+
+def _crop_set(path: Path, root: Path) -> list[dict[str, Any]] | None:
+    """None unless path is inside assets/img/og/. For one of our own crops:
+    the three crops it was made with, or [] when the set is incomplete (the
+    caller then uses that one file at its true size).
+
+    Why (14 Nov 2026): the post-processors read a page's image back out of the
+    rendered page, where it is already a crop. Each run then made crops of the
+    crop under a new name (...-1200x675-<hash>-1200x675-<hash>-1200x675.jpg),
+    which is how assets/img/og reached 19,428 files in two days, took the site
+    past Cloudflare's 20,000-file limit and stopped every deployment."""
+    try:
+        path.resolve().relative_to((root / OUT_DIR).resolve())
+    except ValueError:
+        return None
+    match = _CROP_NAME.fullmatch(path.stem)
+    if not match:
+        return []
+    found = []
+    for ratio, width, height in VARIANTS:
+        rel = OUT_DIR / f"{match.group(1)}-{ratio}.jpg"
+        if not (root / rel).is_file():
+            return []
+        found.append({"url": rel.as_posix(), "width": width, "height": height, "ratio": ratio})
+    return found
+
+
+_OG_REFERENCE = re.compile(r"assets/img/og/([^\"'<>\s\\)]+?\.jpg)", re.I)
+
+
+def referenced_crops(root: Path) -> set[str]:
+    """File names under assets/img/og/ that any page, feed or sitemap points at."""
+    from urllib.parse import unquote
+
+    names: set[str] = set()
+    files = [*root.glob("*.html"), *root.glob("*.json"), *root.glob("*.xml")]
+    for folder in ("articles", "news", "wards", "showbiz", "author", "manual_articles.d"):
+        base = root / folder
+        if base.is_dir():
+            files += [p for p in base.rglob("*") if p.suffix in (".html", ".json", ".xml")]
+    for path in files:
+        try:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        if "assets/img/og/" not in text:
+            continue
+        for name in _OG_REFERENCE.findall(text):
+            names.add(name)
+            names.add(unquote(html.unescape(name)))
+    return names
+
+
+def prune_unreferenced(root: Path | None = None) -> dict[str, int]:
+    """Delete crops nothing points at. Crops are named from their source's
+    content, so a re-rendered or replaced picture leaves its old crops behind;
+    without this the folder only ever grows. Does nothing when no reference at
+    all is found: that means the pages could not be read, not that every crop
+    is unused."""
+    root = root or ROOT
+    folder = root / OUT_DIR
+    if not folder.is_dir():
+        return {"kept": 0, "removed": 0}
+    wanted = referenced_crops(root)
+    files = [p for p in folder.iterdir() if p.is_file() and p.suffix.lower() == ".jpg"]
+    if not wanted:
+        return {"kept": len(files), "removed": 0}
+    removed = 0
+    for path in files:
+        if path.name not in wanted:
+            path.unlink()
+            removed += 1
+    return {"kept": len(files) - removed, "removed": removed}
+
+
 def variants(image_url: str, root: Path | None = None, create: bool = True) -> list[dict[str, Any]]:
     """[{url, width, height, ratio}] for a local image at least 1200px wide, else []."""
     root = root or ROOT
@@ -83,6 +160,13 @@ def variants(image_url: str, root: Path | None = None, create: bool = True) -> l
         try:
             from PIL import Image, ImageOps
 
+            existing = _crop_set(path, root)
+            if existing is not None:
+                # The picture handed in is itself one of our crops (a page's
+                # og:image read back out of the rendered page). Never crop a
+                # crop: answer with the set it belongs to, and make nothing.
+                _cache[key] = existing
+                return existing
             with Image.open(path) as opened:
                 img = ImageOps.exif_transpose(opened)
                 if img.size[0] >= WIDTH:
