@@ -121,6 +121,11 @@ def place_label(area: str, article_text: str) -> str:
 # follows it, so "15 days" can never borrow the 15 from "15 January" and "£2.5"
 # can never borrow from "£2.5m".
 _FIGURE_RE = re.compile(r"(?<![\w.,:])(\d+(?:[.,:]\d+)*[a-z%]*)(?![\w])(?:\W+([A-Za-z]+))?", re.I)
+# A name made of letters then digits: M62, A58, OL16, B6222. _FIGURE_RE skips
+# the digits of these on purpose (they are not quantities) and _WORD_RE reads
+# both M62 and M60 as "M", so without this a point could swap one road for
+# another and still match. They are compared whole.
+_IDENTIFIER_RE = re.compile(r"(?<![\w-])[A-Za-z]+\d[A-Za-z0-9]*(?![\w])")
 _NEGATION_RE = re.compile(
     r"\b(?:not|no|never|none|nobody|nothing|neither|nor|without|cannot|unable)\b|n[’']t\b", re.I
 )
@@ -143,6 +148,10 @@ def _figures(text: str) -> list[tuple[str, str]]:
     return [(m.group(1).replace(",", "").lower(), _stem(m.group(2) or "")) for m in _FIGURE_RE.finditer(text)]
 
 
+def _identifiers(text: str) -> set[str]:
+    return {m.upper() for m in _IDENTIFIER_RE.findall(text)}
+
+
 def _sentences(article_parts: list[str]) -> list[str]:
     out: list[str] = []
     for part in article_parts:
@@ -158,6 +167,10 @@ def _matches_sentence(point: str, sentence: str) -> bool:
         if not any(f == figure and (not after or not a or after == a or after in _STOP or a in _STOP)
                    for f, a in available):
             return False
+    # Every road number, postcode district or other lettered code is the
+    # sentence's own: the M62 is not the M60.
+    if not _identifiers(point) <= _identifiers(sentence):
+        return False
     # "will not close" and "will close" are opposite facts.
     if bool(_NEGATION_RE.search(point)) != bool(_NEGATION_RE.search(sentence)):
         return False

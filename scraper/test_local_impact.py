@@ -222,3 +222,38 @@ def test_schema_is_strict_compatible():
     sub = schema["properties"]["local_impact"]
     assert set(sub["required"]) == set(sub["properties"])
     assert sub["additionalProperties"] is False
+
+
+MOTORWAY = dict(
+    title="M62 to close overnight near Milnrow for resurfacing",
+    excerpt="National Highways has announced an overnight closure of the M62.",
+    paragraphs=[
+        "The M62 will close overnight for resurfacing work.",
+        "The closure runs between junction 21 at Milnrow and junction 22 at Rishworth Moor.",
+        "Drivers heading for the M60 at Simister should allow extra time, National Highways said.",
+        "Diverted traffic will follow the A58 Halifax Road through Littleborough.",
+    ],
+    category="traffic",
+    area="milnrow",
+)
+JUNCTIONS = "The closure runs between junction 21 at Milnrow and junction 22 at Rishworth Moor."
+
+
+def test_a_road_number_is_compared_whole():
+    # Review, 14 Nov 2026: _figures() skips the digits glued to a letter and
+    # _WORD_RE reads M62 and M60 both as "M", so "The M60 will close" matched
+    # "The M62 will close" and was published. The M60 is even named elsewhere
+    # in this story, which is what made the wrong road look grounded.
+    sentence = "The M62 will close overnight for resurfacing work."
+    assert li._identifiers("The M62, the A58 and OL16 but not 2.5m, 10.29am or 21st") == {"M62", "A58", "OL16"}
+    assert li._matches_sentence(sentence, sentence)
+    assert not li._matches_sentence("The M60 will close overnight for resurfacing work.", sentence)
+    assert not li._matches_sentence("The A58 will close overnight for resurfacing work.", sentence)
+    assert li._matches_sentence("The m62 will close overnight for resurfacing work.", sentence)
+    impact = li.build({"audience": "", "points": ["The M60 will close overnight for resurfacing work.", JUNCTIONS]}, **MOTORWAY)
+    assert impact is not None
+    assert impact["points"] == [sentence, JUNCTIONS]
+    assert not any("M60" in point for point in impact["points"])
+    # A correct point about the road is untouched.
+    good = li.build({"audience": "", "points": [sentence, "Diverted traffic will follow the A58 Halifax Road through Littleborough."]}, **MOTORWAY)
+    assert good["points"] == [sentence, "Diverted traffic will follow the A58 Halifax Road through Littleborough."]
