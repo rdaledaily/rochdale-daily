@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-14T18:09:42.476948Z",
+  "updated_at": "2026-11-14T18:27:13.115872Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 155,
+  "count": 156,
   "entries": {
     "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries": {
       "first_attempt_at": "2026-11-07T09:17:19.967332Z",
@@ -316,13 +316,13 @@
     },
     "https://rochdaleafc.co.uk/report-york-city-home-141126": {
       "first_attempt_at": "2026-11-14T17:43:58.524918Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://rochdaleafc.co.uk/report-york-city-home-141126"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-14T18:07:19.877110Z",
+      "last_attempt_at": "2026-11-14T18:24:20.583778Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Dale Fall To Narrow Defeat",
@@ -721,14 +721,15 @@
       "first_attempt_at": "2026-11-13T17:18:21.070262Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMimgFBVV95cUxOeF9ra1FuS25tU3ByX0ZaRktlRHlvYklOcWZrWGc5aFVJMXVGNXU4amdXZ1J4ME5EQXVwNnJjdjNBNkFLdWhpdlYyX1B4SXN5alNkVEhueTFKTHNzMlk3enp1WHI0aTFSSVZNRWU5cWpqRERXdlVGYUJEYnFOa25VTTJVdjBHaVkwQjBFb3JnUE5DSnpjN2pMbEtn?oc=5",
         "https://www.bbc.co.uk/sport/football/articles/ck1l05drreqqo",
         "https://www.bbc.com/sport/football/articles/ck1l05drreqqo"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T21:13:23.448671Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-14T18:24:22.782023Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) AFC do not appear in the source. Name only people, places and",
       "title": "Rochdale v York City: National League title rivals meet again in League Two",
       "source_name": "BBC",
       "category": "environment",
@@ -1005,17 +1006,19 @@
     },
     "https://www.gazetteherald.co.uk/sport/26723437.york-city-head-rochdale-saturday---place-memories": {
       "first_attempt_at": "2026-11-13T09:44:48.674324Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMiXEFVX3lxTE93aDhEYmNrdDVtTEw3MU5icHBZeTlHUjQxZ19hRkpzZF9lTzgtdHhNZ0F1aTZPeFlra25hZVFESU8zLU95VGN4cy13ZEtqVm5yUUlKLTZreFZQQkEz?oc=5",
+        "https://news.google.com/rss/articles/CBMigAFBVV95cUxNTGNNODlNZTBqclBHR042TldYSlByMzJiSms0WTJBY0VBNFR5Nno0bm4xaTBqX0hoeEdDQWZvU1JlSS1rSXVPU3RoMVhPRHZaMEdTekZrdzBlNjFEQm11ckRlS1FKazVaM0V6WDFmSFNNWDRrZWdNZmF2OV94QVctYQ?oc=5",
+        "https://news.google.com/rss/articles/CBMiggFBVV95cUxNdlJhczRpVTNlaTRkWExlTkRrb0ZaZUFnZUl6N29saEFyTWxVOVA4R2M0R0tOdXFuN1dnMHBtX1RjSV9sQXBJUXZxbVFDLWdlUlhmZmVWU0VueXY5MEtZMGNuYkYzZ0s5ZElyaG5vcU4tZGhRZmxKaTdaaUFPemNBMXdB?oc=5",
         "https://www.gazetteherald.co.uk/sport/26723437.york-city-head-rochdale-saturday---place-memories",
         "https://www.yorkpress.co.uk/features/columnists/26723437.york-city-head-rochdale-saturday---place-memories"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T12:20:48.020702Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
+      "last_attempt_at": "2026-11-14T18:27:13.115549Z",
+      "outcome": "published",
+      "reason": "",
       "title": "RAMSEY RAMBLES: Rochdale away will always be the high of covering York City - Gazetteherald.co.uk",
       "source_name": "Gazetteherald",
       "category": "sport",
@@ -2057,6 +2060,22 @@
       "category": "crime",
       "text_fingerprint": "638da2c01864fb91"
     },
+    "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year": {
+      "first_attempt_at": "2026-11-14T18:27:13.115780Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-14T18:27:13.115780Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "title": "Primary school admissions reminder for parents ahead of the new year - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "crime",
+      "text_fingerprint": "509a5b1695fd312c"
+    },
     "https://www.rochdaletimes.co.uk/rbh-ranks-among-top-25-of-landlords-for-tenant-satisfaction": {
       "first_attempt_at": "2026-11-11T00:15:00.333777Z",
       "attempts": 1,
@@ -2769,20 +2788,22 @@
     },
     "https://www.yorkshirepost.co.uk/sport/football/rochdale-afc-v-york-city-minstermen-chase-fresh-spotland-milestone-with-caged-lion-desperate-to-feature-9350057": {
       "first_attempt_at": "2026-11-13T19:25:47.231521Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQRHFTOUZKUTBIZlAwSG9nYkNPRWFyNFJJTDJFTTFfX0kwR3lzYlFfSTJDWUh2VlZ0aXZlV0JySm9XWUoxSEk4QjBSWV9RYUpOUWthYjdGTGNMdUpYc1NGT2JqTE5BU1BGWWJIQjhRUzc2WW51dTFCbDVIdDdtaGNoYlN0Sms4Q2VEUnRsNzUxM25aekRMbVRaYmVSS3NIUVBFYi1waEYxVGI4b25sbFVRalF2cFgxSUhWcFJEcGVhQnc0MWJoaUVyTWdvczZ5dnZYdjlnMGJxcFB3NnpqQS1tRUhDeXZENUpjSktaN2xnYw?oc=5",
         "https://news.google.com/rss/articles/CBMi8AFBVV95cUxPMi1nR3hkUmI3NjNDV1ZVWnJsMTF0MFc3S3ZSRU4xeVNvUTdJNFdnNlBucmFnMzZ4VFVlNmFmeE9VTnlYek9TOW1scmpfYzF3R0RMX0dNWFdjZGtWclJEdzQyWnEwbDFnVnlhVGZYeFgwV09DSG5iUHRGNW53WjZKNnc5bVVEX1dkeVh2ZlFGaENDSXU3WUpLWm9uTnpXbThQZGZCN25Rd1RtazZpT1lHY0UyU3hyQXlQRVBoMjB2M3kyOUYtVGdzWXRGMTdLVVRhZkZ1cHp4S0Q3Y3dwTnEzLUI1bDhIaHVqWi1Ub2UyRUU?oc=5",
+        "https://www.yorkmix.com/york-city-aim-for-first-away-win-at-rochdale-home-to-happy-memories",
+        "https://www.yorkpress.co.uk/sport/26727344.ollie-banks-feels-york-city-confidence-ahead-rochdale",
         "https://www.yorkshirepost.co.uk/sport/football/rochdale-afc-v-york-city-minstermen-chase-fresh-spotland-milestone-with-caged-lion-desperate-to-feature-9350057"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-14T04:57:12.486244Z",
+      "last_attempt_at": "2026-11-14T18:24:32.192200Z",
       "outcome": "rejected",
-      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
       "title": "Rochdale v York: Minstermen chase another milestone with 'caged lion' desperate to feature",
       "source_name": "Yorkshire Post",
-      "category": "environment",
+      "category": "sport",
       "text_fingerprint": "c567bf5ac892ae5a"
     }
   }
