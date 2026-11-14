@@ -32,7 +32,14 @@ import json
 from pathlib import Path
 from typing import Any
 
-from story_identity import canonicalise_url, editorial_twin_of, is_editor_record
+from story_identity import (
+    canonicalise_url,
+    editorial_twin_of,
+    headline_entities,
+    is_editor_record,
+    story_facts,
+    syndicated_twin,
+)
 
 TWIN_HEADER = "# Editorial twins: pipeline copies of the editor's own story (scraper/editorial_twins.py)"
 LEDGER_OUTCOME = "editorial_twin"
@@ -44,7 +51,7 @@ def split_editorial_twins(
     """Return (kept records, [(twin, editor record)])."""
     editors = [record for record in records if is_editor_record(record)]
     if not editors:
-        return list(records), []
+        return _split_syndicated_twins(list(records))
     kept: list[dict[str, Any]] = []
     twins: list[tuple[dict[str, Any], dict[str, Any]]] = []
     for record in records:
@@ -56,6 +63,48 @@ def split_editorial_twins(
             kept.append(record)
         else:
             twins.append((record, editor))
+    kept, syndicated = _split_syndicated_twins(kept)
+    return kept, twins + syndicated
+
+
+def _first_published(record: dict[str, Any]) -> str:
+    return str(record.get("first_published_at") or record.get("published_at") or "")
+
+
+def _split_syndicated_twins(
+    records: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[tuple[dict[str, Any], dict[str, Any]]]]:
+    """One release, one page (story_identity.syndicated_twin).
+
+    The editor's version is kept; with no editor version, the first one
+    published is kept, because that is the address already shared and indexed.
+    Returns (kept records in their original order, [(twin, kept record)]).
+    """
+    signature = {
+        id(record): (headline_entities(record), story_facts(record)) for record in records
+    }
+    keepers: list[dict[str, Any]] = [record for record in records if is_editor_record(record)]
+    retired: dict[int, dict[str, Any]] = {}
+    automated = sorted(
+        (record for record in records if not is_editor_record(record)), key=_first_published
+    )
+    for record in automated:
+        entities, facts = signature[id(record)]
+        keeper = None
+        if entities and facts and record.get("slug"):
+            for candidate in keepers:
+                other_entities, other_facts = signature[id(candidate)]
+                if not (entities & other_entities and facts & other_facts):
+                    continue
+                if candidate.get("slug") and candidate.get("slug") != record.get("slug") and syndicated_twin(candidate, record):
+                    keeper = candidate
+                    break
+        if keeper is None:
+            keepers.append(record)
+        else:
+            retired[id(record)] = keeper
+    kept = [record for record in records if id(record) not in retired]
+    twins = [(record, retired[id(record)]) for record in records if id(record) in retired]
     return kept, twins
 
 
