@@ -1224,6 +1224,81 @@ def editorial_twin_of(automated: Any, records: Iterable[Any]) -> Any:
     return None
 
 
+# Syndicated twins (editor, 10 Nov 2026: "a story must never appear twice").
+#
+# One press release, rewritten from three outlets on three days, ran as three
+# live stories: the borough's Christmas Toy Appeal from the council's own page
+# (10 Nov), the Rochdale Times (12 Nov, the editor's version) and InYourArea
+# (13 Nov), two of them on the front page together. The pairs score 0.54-0.56,
+# under both the general bar (0.72) and the editorial-twin bar (0.55 within 48
+# hours), and neither bar can move: the same score band holds four different
+# council contract awards (0.55-0.65), two different fixtures (0.57) and two
+# different winding-up orders (0.53).
+#
+# What the copies share and those look-alikes do not is the release itself: the
+# name of the thing in both headlines and the same hard fact in both texts.
+# Measured 14 Nov 2026 over every pair of the 535 live non-event stories
+# published within seven days of each other: three pairs score 0.50 or more,
+# name the same multi-word entity in both headlines and share a date or a
+# figure, and all three are the toy appeal. The nearest pairs that fail are a
+# church's Remembrance service against its later notices (0.57, no shared
+# fact) and an early Sleep Out report against the editor's later one (0.54, no
+# shared fact). Two of the editor's own stories never pass through here.
+SYNDICATED_TWIN_THRESHOLD = 0.50
+SYNDICATED_TWIN_HOURS = 7 * 24.0
+_FACT_MONTHS = "january|february|march|april|may|june|july|august|september|october|november|december"
+_FACT_DATE_RE = re.compile(
+    rf"\b(\d{{1,2}})(?:st|nd|rd|th)?\s+({_FACT_MONTHS})\b|\b({_FACT_MONTHS})\s+(\d{{1,2}})\b", re.I
+)
+_FACT_NUMBER_RE = re.compile(
+    r"£\s?\d[\d,.]*\s?(?:million|m|k|bn)?|\b\d{1,3}(?:,\d{3})+\b|\b\d+(?:\.\d+)?%|\b\d{3,}\b"
+)
+_FACT_YEAR_RE = re.compile(r"(?:19|20)\d\d")
+
+
+def story_facts(record: Any) -> set[str]:
+    """Dates ("11 december") and figures ("10000", "£1.1million") a story states."""
+    raw = " ".join(
+        str(get_value(record, name, "") or "") for name in ("title", "content_html", "body")
+    )
+    text = html.unescape(TAG_RE.sub(" ", raw))
+    facts: set[str] = set()
+    for match in _FACT_DATE_RE.finditer(text):
+        day, month = (match.group(1), match.group(2)) if match.group(1) else (match.group(4), match.group(3))
+        facts.add(f"d:{int(day)} {month.lower()}")
+    for match in _FACT_NUMBER_RE.finditer(text):
+        value = re.sub(r"[\s,]", "", match.group(0).lower())
+        if not _FACT_YEAR_RE.fullmatch(value):
+            facts.add("n:" + value)
+    return facts
+
+
+def headline_entities(record: Any) -> set[str]:
+    """Multi-word named entities that appear in the headline itself."""
+    title = str(get_value(record, "title", "") or "").lower()
+    return {entity for entity in named_entities(record) if " " in entity and entity in title}
+
+
+def syndicated_twin(left: Any, right: Any) -> bool:
+    """True when two records are the same release told twice (see above)."""
+    if is_editor_record(left) and is_editor_record(right):
+        return False
+    if _is_roundup_like(left) or _is_roundup_like(right):
+        return False
+    if _parsed_datetime(left) is None or _parsed_datetime(right) is None:
+        return False
+    if hours_apart(left, right) > SYNDICATED_TWIN_HOURS:
+        return False
+    if category_family(left) == "sport" or category_family(right) == "sport":
+        if date_key(left) != date_key(right):
+            return False
+    if not headline_entities(left) & headline_entities(right):
+        return False
+    if not story_facts(left) & story_facts(right):
+        return False
+    return story_similarity(left, right) >= SYNDICATED_TWIN_THRESHOLD
+
+
 def authority_score(item: Any) -> float:
     title = strip_publisher_suffix(
         get_value(item, "source_title", "") or get_value(item, "title", "")

@@ -1,38 +1,42 @@
 {
-  "examined_at": "2026-11-13T14:55:19.641322Z",
+  "examined_at": "2026-11-14T13:47:27.720369Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 107,
+  "candidates_examined": 106,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 80,
-    "would publish": 17,
-    "duplicate of published story": 10
+    "age": 71,
+    "would publish": 28,
+    "duplicate of published story": 6,
+    "job or career post": 1
   },
-  "would_publish": 17,
+  "would_publish": 28,
   "age_gate_sensitivity": {
-    "6h": 11,
-    "14h": 21,
-    "24h": 27,
-    "48h": 55,
-    "72h": 70,
-    "168h": 107
+    "6h": 9,
+    "14h": 16,
+    "24h": 35,
+    "48h": 63,
+    "72h": 89,
+    "168h": 106
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
-      "Food Standards Agency: 66 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "YorkMix: York City aim for first away win at Rochdale – home to happy memories!",
-      "Rochdale Times: New lease of life for vacant town centre offices - Rochdale Times"
+      "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
+      "Bee Network live travel alerts: Updated: 14/11/2026 at 9:21am Live Failsworth Tram Stop - Lifts out of",
+      "MrFixitsTips: MFT 10 – 1000 Betting Challenge: Rochdale and York to provide goals fo"
     ],
     "duplicate of published story": [
-      "Rochdale AFC: Preview | York City (H) - Rochdale AFC",
-      "Roch Valley Radio Local News: Springhill Hospice shops targeted in series of thefts and attempted br",
-      "Roch Valley Radio Local News: Rochdale IT provider explains how an alternative route can keep busine"
+      "Rochdale Times: Warning to think twice about buying e-bikes and e-scooters this Christ",
+      "Rochdale Times: Warning to think twice about buying e-bikes and e-scooters this Christ",
+      "Rochdale Borough Council: Littleborough Christmas Lights Event 2026, road closures in Littleboro"
+    ],
+    "job or career post": [
+      "Yahoo: Ex-Coventry midfielder Allen rejoins Rochdale - Yahoo"
     ],
     "age": [
-      "Roch Valley Radio Local News: Springhill Hospice appeals for volunteers to collect Christmas trees a",
-      "Roch Valley Radio Local News: The hidden Rochdale cafe with countryside views that you won’t find by",
-      "Fansnetwork: Refwatch - Rochdale v York City - FansNetwork.co.uk"
+      "Rochdale Times: New lease of life for vacant town centre offices - Rochdale Times",
+      "Rochdale AFC: Remembrance Fixture This Weekend - Rochdale AFC",
+      "Rochdale AFC: Preview | York City (H) - Rochdale AFC"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."

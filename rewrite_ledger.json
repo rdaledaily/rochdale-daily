@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-14T09:07:49.381309Z",
+  "updated_at": "2026-11-14T14:25:28.824582Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 158,
+  "count": 155,
   "entries": {
     "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries": {
       "first_attempt_at": "2026-11-07T09:17:19.967332Z",
@@ -284,13 +284,14 @@
       "first_attempt_at": "2026-11-10T16:00:32.541636Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiY0FVX3lxTE4tV3J1RUhua05IclVLcDk2dkJ0eUExSFBTVV84akxLeHkxV2VYSlMydzY5ZWVKOERuRlQzT29JMk1zMGRiT2F3VHRMaU9JLTVPY3daOV9pcnl3WGQydzM0M3ZXcw?oc=5",
         "https://rochdaleafc.co.uk/remembrance-fixture-141126"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-10T16:00:32.541636Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
+      "last_attempt_at": "2026-11-14T12:18:14.579185Z",
+      "outcome": "editorial_twin",
+      "reason": "covered by the editor's story /articles/rochdale-afc-to-host-york-city-in-league-two-clash-this-saturday",
       "title": "Remembrance Fixture This Weekend",
       "source_name": "Rochdale AFC",
       "category": "sport",
@@ -370,11 +371,12 @@
       "first_attempt_at": "2026-11-13T16:26:37.953491Z",
       "attempts": 3,
       "urls": [
+        "https://news.google.com/rss/articles/CBMiYEFVX3lxTFB3NDV5bm9sZENaZmF3RVRNaHV2d1BNV1pLN2RYVHZpeVFhTGhLMXZ4WmdMdGNfajZtb01iTnpwZ2l1bklmVldrOE4tNUtjU19DMXphOVZXZFRVYzZ2MHBaMQ?oc=5",
         "https://rochdaleafc.co.uk/welcome-back-jamie-allen"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T17:14:45.159979Z",
+      "last_attempt_at": "2026-11-14T11:03:11.056417Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "Welcome Back, Jamie Allen",
@@ -491,13 +493,31 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T19:07:46.556977Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "one-time recheck after publication evidence fix",
       "title": "Updated: 12/11/2026 at 11:09am Live Freehold Tram Stop - Lifts out of service Duration Thu 12 Nov, 11:09am – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
       "text_fingerprint": "4024cad452f8e419",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
+    },
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-763c2a4cc81a0e38d9": {
+      "first_attempt_at": "2026-11-14T09:33:18.816191Z",
+      "attempts": 1,
+      "urls": [
+        "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-763c2a4cc81a0e38d9"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-14T10:08:08.870676Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Updated: 14/11/2026 at 9:21am Live Failsworth Tram Stop - Lifts out of service Duration Sat 14 Nov, 9:21am – until further notice Stops impa",
+      "source_name": "Bee Network live travel alerts",
+      "category": "transport",
+      "text_fingerprint": "ffec96fec3950c87",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-7b08092838f6ebc8cc": {
       "first_attempt_at": "2026-11-08T13:06:49.734801Z",
@@ -514,23 +534,6 @@
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
       "text_fingerprint": "63e69c9848a92ede",
-      "recovery_attempts": 1
-    },
-    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-fc341023c7c91993a1": {
-      "first_attempt_at": "2026-11-06T11:19:20.788531Z",
-      "attempts": 1,
-      "urls": [
-        "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-fc341023c7c91993a1"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T11:19:20.788531Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Updated: 06/11/2026 at 10:50am Live Freehold Tram Stop - Lifts out of service Duration Fri 06 Nov, 10:50am – until further notice Stops impa",
-      "source_name": "Bee Network live travel alerts",
-      "category": "transport",
-      "text_fingerprint": "e988b705dfbc8a1e",
       "recovery_attempts": 1
     },
     "https://uk.news.yahoo.com/stay-vigilant-warning-spate-family-130751807.html": {
@@ -900,22 +903,6 @@
       "category": "environment",
       "text_fingerprint": "57b249124de1086f"
     },
-    "https://www.espn.com.au/football/team-stats/_/gameId/401906344/league/eng.trophy": {
-      "first_attempt_at": "2026-11-06T11:00:06.384394Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.espn.com.au/football/team-stats/_/gameId/401906344/league/eng.trophy"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T11:00:06.384394Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Rochdale 1-4 Doncaster (4 Nov, 2026) Team Stats - ESPN",
-      "source_name": "ESPN",
-      "category": "transport",
-      "text_fingerprint": "10d562e248730d7c"
-    },
     "https://www.expressandstar.com/uk-sports/ian-watson-praises-rochdale-bravery-after-beating-fleetwood-in-fa-cup-9337013": {
       "first_attempt_at": "2026-11-08T01:57:39.099804Z",
       "attempts": 1,
@@ -1091,8 +1078,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-13T09:48:19.048240Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "editorial_twin",
+      "reason": "covered by the editor's story /articles/rochdale-council-launches-christmas-toy-appeal-for-local-children-in-need",
       "title": "How Rochdale residents helped deliver 10,000 toys to 3,000 children as 2026 Christmas appeal launches - InYourArea",
       "source_name": "InYourArea",
       "category": "news",
@@ -1511,22 +1498,6 @@
       "category": "environment",
       "text_fingerprint": "9e59a060c13be6a7"
     },
-    "https://www.northerncarealliance.nhs.uk/nca-news/national-pathology-week-meet-team-behind-millions-tests-every-year?q=%2Fnews%2Fnca-news": {
-      "first_attempt_at": "2026-11-06T12:01:00.251945Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.northerncarealliance.nhs.uk/nca-news/national-pathology-week-meet-team-behind-millions-tests-every-year?q=%2Fnews%2Fnca-news"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T12:01:00.251945Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "National Pathology Week: Meet the team behind millions of tests every year",
-      "source_name": "Northern Care Alliance News",
-      "category": "health",
-      "text_fingerprint": "4729884f98beeccd"
-    },
     "https://www.rbh.org.uk/news/rbh-news/national-tenant-satisfaction-figures-rank-rbh-among-the-top-25-of-landlords": {
       "first_attempt_at": "2026-11-09T11:38:20.827342Z",
       "attempts": 1,
@@ -1633,22 +1604,6 @@
       "source_name": "Rochdale Borough Council",
       "category": "traffic",
       "text_fingerprint": "d23afbc6ebb7fc05"
-    },
-    "https://www.rochdale.gov.uk/directory-record/2654/highlands-road-roadworks-in-rochdale-on-10-november-2026": {
-      "first_attempt_at": "2026-11-06T11:19:20.788409Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.rochdale.gov.uk/directory-record/2654/highlands-road-roadworks-in-rochdale-on-10-november-2026"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T11:19:20.788409Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Highlands Road, roadworks in Rochdale on 10 November 2026",
-      "source_name": "Rochdale Borough Council",
-      "category": "traffic",
-      "text_fingerprint": "fe440a54a5fba3e8"
     },
     "https://www.rochdale.gov.uk/directory-record/2656/shawclough-road-roadworks-in-rochdale-from-10-november-2026": {
       "first_attempt_at": "2026-11-10T22:13:18.456329Z",
@@ -1790,8 +1745,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T16:00:32.541251Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "editorial_twin",
+      "reason": "covered by the editor's story /articles/rochdale-council-launches-christmas-toy-appeal-for-local-children-in-need",
       "title": "Christmas toy appeal calls on borough residents to help families in need – Rochdale Borough Council",
       "source_name": "Rochdale Borough Council News",
       "category": "community",
@@ -2016,14 +1971,15 @@
       "first_attempt_at": "2026-11-13T13:42:41.230628Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMi5gFBVV95cUxNcml3U3haNXdJNGFDLTVEalQ0U2xkQk1ycTcxMnc4aDhLRm04SWE2RXlzQTE1WkZ4cThfYVBSdmxuRElfa1J1RlFQcnhUWTZCN1RIcjN3bTYwMmFabm9XY3hkOTdwZGxDZmhiVHktcTNnY1ByVW1Gbjl1SmEwVm8ySVNTc25PU0ZlTXprbnpBYktCbFBaME14aVNUX3NiNnVPb1dnWWdqNjFvMjR5UmtnR3VzNkpKLUZ1a3p1N05KbW44UUQyZjlfNng1YmotUVFrdTd5MWtla1ZXandWM3g3QVRmcFJhUQ?oc=5",
         "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOcmRIcHoxWk4wNXJZT2J2Y0cza1lpQjFIdG9fSzV6T1UxTlktOGJtT3pHRUZHal9ERWtkN0pEVGpYdUdVYUZFRlQxTlprSkMwdVk1NEJ3ZVFiSlRlYUswVWFqNF93V0ZfTXdibTZ6YUpuWEhoX1RIaVlIUGU1VGpQNGQzNm1GdjI0?oc=5",
         "https://www.rochdaletimes.co.uk/new-lease-of-life-for-vacant-town-centre-offices"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T15:44:42.870215Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-14T14:25:28.824214Z",
+      "outcome": "published",
+      "reason": "",
       "title": "New lease of life for vacant town centre offices - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
@@ -2152,23 +2108,6 @@
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
-    "https://www.rochdaletimes.co.uk/scammers-try-to-get-into-peoples-homes-posing-as-council-officials": {
-      "first_attempt_at": "2026-11-06T11:00:06.384239Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMioAFBVV95cUxPWkpzLUVxcGNDeW5fTWJpMjdpbDBBNjR1RUc2VWFEV1ZrdGdBNTNZbFBIT3A3Tm9QSnhHd3dqYzd4TnRnd2tDMkJjR1kxdVBPdk1KV3VacFFwaFl6UlRlSmtnMVFZc2dKNUx5SWlKTDhmbmJDR053LTJsZkJqZkNfQUxSdURUc2llUDlJeUwybmJHcmhnV2dsRjNLYkdQTDMx?oc=5",
-        "https://www.rochdaletimes.co.uk/scammers-try-to-get-into-peoples-homes-posing-as-council-officials"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T12:01:00.252173Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Scammers try to get into people’s homes posing as council officials - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "crime",
-      "text_fingerprint": "71d64e3b3cd8504c"
-    },
     "https://www.rochdaletimes.co.uk/school-staff-unite-to-help-improve-childrens-lives": {
       "first_attempt_at": "2026-11-09T15:38:31.713130Z",
       "attempts": 1,
@@ -2241,6 +2180,23 @@
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
+    "https://www.rochdaletimes.co.uk/warning-to-think-twice-about-buying-e-bikes-and-e-scooters-this-christmas": {
+      "first_attempt_at": "2026-11-14T10:04:44.655718Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPQzFldmFrYnl0RUJGSlJYNi0zQUU5NmpSa2dva21pS0VGdWw4VHI3S3J1WGZnWjFlNVdDS3YyUmQ3S1hJMkpTcnBVZXFXV3F1UHM5YkhNS0w0ZTJ3UF9EZ3AxMU1OQlJtN2w1Sm5YTDdzaG8zQVNhbWpXOHJJYzY5NVBad2JUc3RUdUNueVhPN3hPZGlNbDdMREVhVFV6V0VsdHRTREExYi1rUQ?oc=5",
+        "https://www.rochdaletimes.co.uk/warning-to-think-twice-about-buying-e-bikes-and-e-scooters-this-christmas"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-14T10:30:25.258857Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Warning to think twice about buying e-bikes and e-scooters this Christmas - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "crime",
+      "text_fingerprint": "d469148c6ad8f17c"
+    },
     "https://www.rochvalleyradio.com/local/photos/armistice-day-at-rochdale-cenotaph": {
       "first_attempt_at": "2026-11-11T21:30:31.558094Z",
       "attempts": 46,
@@ -2293,14 +2249,14 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road": {
       "first_attempt_at": "2026-11-12T19:05:37.729201Z",
-      "attempts": 51,
+      "attempts": 66,
       "urls": [
         "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNWTBIZDNYWmVlZGp0cmlxYVp5Wko1SGV5YkpNOGpOUUlXWTN6N2dHRWZtWWZPRDVHMWJXUzREdXB6LU9kN1NyMV9fUUJnM1lMdUY2Y1FoeVduM2pzbjVTRTAwczdKWDg4LVdsQWNoeXpLUGtoa1hsRVZWZHNTNEJadExSaXdIN1F5Nzl4RWNJc2NhSkRUQzRGTG11MWV0UWl6dzYxNTIydE5UVW1CaGw0cUJISnZjMlJNbERvWWZBME01MGRpdWpzTzI5SGFaUXdYTVhDNUpR?oc=5",
         "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-14T09:05:28.634440Z",
+      "last_attempt_at": "2026-11-14T14:23:07.585509Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp",
       "title": "The hidden Rochdale cafe with countryside views that you won’t find by road",
@@ -2793,17 +2749,18 @@
     },
     "https://www.yorkmix.com/york-city-aim-for-first-away-win-at-rochdale-home-to-happy-memories": {
       "first_attempt_at": "2026-11-13T21:29:31.691313Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMigAFBVV95cUxNTGNNODlNZTBqclBHR042TldYSlByMzJiSms0WTJBY0VBNFR5Nno0bm4xaTBqX0hoeEdDQWZvU1JlSS1rSXVPU3RoMVhPRHZaMEdTekZrdzBlNjFEQm11ckRlS1FKazVaM0V6WDFmSFNNWDRrZWdNZmF2OV94QVctYQ?oc=5",
         "https://rochdaleafc.co.uk/preview-york-city-h-3",
         "https://www.yorkmix.com/york-city-aim-for-first-away-win-at-rochdale-home-to-happy-memories",
         "https://www.yorkpress.co.uk/sport/26727344.ollie-banks-feels-york-city-confidence-ahead-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T22:11:16.545250Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Spotland do not appear in the source. Name only people, place",
+      "last_attempt_at": "2026-11-14T14:25:28.824390Z",
+      "outcome": "published",
+      "reason": "",
       "title": "York City aim for first away win at Rochdale – home to happy memories! - YorkMix",
       "source_name": "YorkMix",
       "category": "sport",
