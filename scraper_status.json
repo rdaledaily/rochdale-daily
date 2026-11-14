@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-14T20:11:15.543297Z",
+  "last_run_at": "2026-11-14T20:32:44.737028Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,31 +54,33 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 123,
+  "raw_candidates_before_job_filter": 127,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 123,
+  "raw_candidates": 127,
   "candidate_clusters": 44,
   "google_news_resolution": {
-    "wrappers": 77,
-    "resolved": 72,
-    "text_recovered": 56,
+    "wrappers": 78,
+    "resolved": 73,
+    "text_recovered": 57,
     "reattributed": 3,
-    "images_found": 69
+    "images_found": 70
   },
-  "duplicates_merged": 79,
+  "duplicates_merged": 83,
   "attempted_rewrites": 7,
-  "draft_rewrites_created": 0,
-  "drafted_articles": [],
-  "new_articles": 0,
-  "live_articles": 617,
-  "skipped": 7,
+  "draft_rewrites_created": 1,
+  "drafted_articles": [
+    {
+      "slug": "york-city-secures-1-0-victory-against-rochdale-at-crown-oil-arena",
+      "source_url": "https://www.yorkpress.co.uk/sport/26727631.york-citys-history-rochdale-will-key-says-lindsey/"
+    }
+  ],
+  "new_articles": 1,
+  "live_articles": 615,
+  "skipped": 6,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 2,
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 4,
     "editorial gate: REJECTED_NON_LOCAL": 1,
-    "editorial gate: REJECTED_NON_NEWS": 1,
-    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: It was tough to t": 1,
-    "quality gate after 4 repairs: Source fidelity: the figure(s) 55th do not appear in the source. Use only figures the sour": 1,
-    "quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta": 1
+    "editorial gate: REJECTED_NON_NEWS": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -95,8 +97,8 @@
     "by_outcome": {
       "editorial_twin": 9,
       "failed": 18,
-      "published": 85,
-      "rejected": 51
+      "published": 86,
+      "rejected": 50
     },
     "held_back_this_run": 29,
     "held_already_published": 16,
@@ -223,11 +225,13 @@
       "last_attempt_at": "2026-11-09T17:24:10.128702Z"
     }
   ],
-  "published_with_style_issues": {},
+  "published_with_style_issues": {
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 171.": 1
+  },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 109,
-    "website_discovery": 7,
+    "rss_and_google_news": 112,
+    "website_discovery": 8,
     "aggregator_discovery": 0,
     "live_service_pages": 6,
     "facebook_official": 0,
@@ -360,7 +364,7 @@
   },
   "source_counts": {
     "Rochdale Times": 19,
-    "Rochdale AFC": 17,
+    "Rochdale AFC": 19,
     "InYourArea": 8,
     "Manchester Evening News": 8,
     "Rochdale Borough Council": 8,
@@ -380,6 +384,7 @@
     "BBC Manchester": 1,
     "Rochdale Borough Council RSS": 1,
     "Chelmsfordcitynews": 1,
+    "Herts Advertiser": 1,
     "The Northern Echo": 1,
     "Surrey Comet": 1,
     "Sky Sports": 1,
@@ -394,6 +399,7 @@
     "Lancashire Telegraph": 1,
     "Hillingdon Times": 1,
     "Rochdale Borough Council News": 1,
+    "Visit Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -403,13 +409,13 @@
   },
   "published_by_category": {
     "business": 71,
-    "community": 91,
+    "community": 90,
     "crime": 39,
     "education": 29,
     "environment": 50,
     "events": 33,
     "health": 16,
-    "news": 91,
+    "news": 92,
     "politics": 19,
     "sport": 59,
     "traffic": 44,
@@ -1097,7 +1103,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-14T20:28:18.857486Z",
+  "frontpage_generated_at": "2026-11-14T20:41:21.813503Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1165,8 +1171,8 @@
       "itv news": 1,
       "rochdale daily": 2,
       "nhs": 1,
-      "rochdale borough council": 1,
       "rochdale afc": 1,
+      "rochdale borough council": 1,
       "industrial archaeology guides to healey dell (healey dell heritage centre)": 1
     },
     "pool_size": 15,
@@ -1186,9 +1192,9 @@
   "events_kept_other_source": 36,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
+  "approved_ticket_events": 11,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 617,
+  "duplicate_articles_after_postprocessing": 615,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1198,9 +1204,11 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "whats_on_event_count": 11,
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "rochdale-faces-york-city-in-league-two-after-dramatic-title-decider"
+  ],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
