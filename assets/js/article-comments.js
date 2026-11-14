@@ -133,14 +133,6 @@
     link.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"></path></svg><span>Comments (${n})</span>${n===0?'<span class="article-comment-count-cta">Be the first</span>':'<span class="article-comment-count-cta">Join in</span>'}`;
     link.setAttribute('aria-label',`Comments (${n}). Go to comments`);
   }
-  // Show the number straight away from the cheap all-articles count, before the
-  // full comment list has loaded; mount() then corrects it.
-  if(category!=='crime'){
-    fetch(`${API}?counts=1`,{headers:{Accept:'application/json'}}).then(r=>r.ok?r.json():null).then(d=>{
-      if(!d||!d.counts||document.getElementById('article-comment-count'))return;
-      showTopCount(Number(d.counts[slug]||0));
-    }).catch(()=>{});
-  }
   let mountVersion=0;
   async function mount(){
     const version=++mountVersion;
@@ -160,6 +152,14 @@
     const question=storyQuestion();
     root.innerHTML=`<h2>Join the conversation <span style="font-size:.7em;color:#52717a">(${comments.length})</span></h2><div class="comments-invite"><strong>${esc(question[0])}</strong><span>${esc(question[1])}</span></div><p class="comments-note">Be civil, stick to the story, and remember real people live here. Comments are published straight away.</p><div class="comment-compose-first" id="comment-compose"></div><div id="comment-list">${comments.map(commentMarkup).join('')||'<p class="comments-note"><strong>No comments yet.</strong> Be the first Rochdale Daily reader to join the conversation.</p>'}</div>`;
     renderCompose();
+  }
+  // Show the number straight away from the cheap all-articles count, before the
+  // full comment list has loaded; mount() then corrects it.
+  if(category!=='crime'){
+    fetch(`${API}?counts=1`,{headers:{Accept:'application/json'}}).then(r=>r.ok?r.json():null).then(d=>{
+      if(!d||!d.counts||document.getElementById('article-comment-count'))return;
+      showTopCount(Number(d.counts[slug]||0));
+    }).catch(()=>{});
   }
   mount();
 })();

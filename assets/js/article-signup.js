@@ -157,5 +157,8 @@
     });
   });
 
-  copy.after(box);
+  // Comments come first, so the conversation sits straight after the story;
+  // the sign-up box follows them. Pages without comments keep it after the copy.
+  var commentsRoot = article.querySelector("#comments-root");
+  (commentsRoot || copy).after(box);
 })();
