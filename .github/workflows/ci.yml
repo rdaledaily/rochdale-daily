@@ -200,6 +200,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_frontpage_freshness_guard.py
           PYTHONPATH=scraper python scraper/test_frontpage_source_quality.py
           PYTHONPATH=scraper python scraper/test_manual_frontpage_guard.py
+          PYTHONPATH=scraper python scraper/test_manual_absorb_needs_headline.py
           PYTHONPATH=scraper python scraper/test_check_scraper_health.py
           PYTHONPATH=scraper python scraper/test_supply_watchdog.py
           PYTHONPATH=scraper python scraper/test_source_yield_probe.py
