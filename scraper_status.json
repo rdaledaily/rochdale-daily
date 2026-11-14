@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-14T05:39:44.703642Z",
+  "last_run_at": "2026-11-14T05:58:16.254803Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,28 +54,28 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 144,
+  "raw_candidates_before_job_filter": 148,
   "job_or_career_posts_rejected": 2,
-  "raw_candidates": 142,
+  "raw_candidates": 146,
   "candidate_clusters": 43,
   "google_news_resolution": {
-    "wrappers": 60,
+    "wrappers": 57,
     "resolved": 49,
     "text_recovered": 28,
     "reattributed": 2,
     "images_found": 45
   },
-  "duplicates_merged": 99,
+  "duplicates_merged": 103,
   "attempted_rewrites": 2,
   "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "young-traders-showcase-talents-at-rochdale-christmas-events",
+      "slug": "teenage-markets-return-to-rochdale-for-christmas-celebrations",
       "source_url": "https://www.inyourarea.co.uk/news/whats-on-rochdale-young-traders-turn-hobbies-into-cash-plus-carol-concerts-and-winter-events"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 611,
+  "new_articles": 1,
+  "live_articles": 612,
   "skipped": 1,
   "rewrite_skip_reasons": {
     "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
@@ -242,11 +242,11 @@
     }
   ],
   "published_with_style_issues": {
-    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1
+    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 127,
+    "rss_and_google_news": 131,
     "website_discovery": 11,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -260,7 +260,6 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
-    "Roch Valley Radio": "IncompleteRead: IncompleteRead(3605 bytes read)",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -380,9 +379,9 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 25,
+    "Rochdale Times": 26,
+    "Roch Valley Radio": 23,
     "Rochdale AFC": 22,
-    "Roch Valley Radio": 20,
     "Manchester Evening News": 18,
     "InYourArea": 9,
     "Rochdale Borough Council": 9,
@@ -416,7 +415,7 @@
     "crime": 38,
     "education": 29,
     "environment": 49,
-    "events": 33,
+    "events": 34,
     "health": 15,
     "news": 91,
     "politics": 19,
@@ -1055,14 +1054,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk",
-    "visitrochdale.com"
-  ],
-  "slow_domain_failure_counts": {
-    "visitrochdale.com": 2,
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1098,7 +1091,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-14T05:41:15.617113Z",
+  "frontpage_generated_at": "2026-11-14T05:59:19.455600Z",
   "frontpage_article_count": 10,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1184,12 +1177,12 @@
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
   "ticket_events_collected_this_run": 13,
-  "events_kept_other_source": 24,
+  "events_kept_other_source": 25,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 4,
-  "duplicate_articles_after_postprocessing": 611,
+  "duplicate_articles_after_postprocessing": 612,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1200,9 +1193,11 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "teenage-markets-return-to-rochdale-for-christmas-celebrations"
+  ],
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
