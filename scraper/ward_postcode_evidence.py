@@ -105,7 +105,8 @@ def run_streets(articles: list[Any], cache: dict[str, Any], fetch: FetchNearest 
     for article in articles:
         if isinstance(article, dict):
             for item in story_streets(article):
-                needed.setdefault(item["street"].casefold(), item)
+                if item["postcode"]:  # long roads and unlisted streets cannot be checked
+                    needed.setdefault(item["street"].casefold(), item)
     missing = [key for key in sorted(needed) if not isinstance(cache.get(key), dict)]
     report: dict[str, Any] = {"in_stories": len(needed), "looked_up": 0, "failed": "", "waiting": 0}
     for key in missing[:STREETS_PER_RUN]:

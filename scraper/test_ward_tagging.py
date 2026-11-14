@@ -169,8 +169,10 @@ def test_a_short_street_in_the_headline_decides_the_ward(tmp_path, monkeypatch):
 
 def test_long_roads_boundary_streets_and_unchecked_streets_decide_nothing(tmp_path, monkeypatch):
     street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY, "trafalgar street": EDGE})
-    # Listed in three postcode sectors: runs through several wards.
-    assert ec.story_streets({"title": "Manchester Road closed after collision", "area": "rochdale"}) == []
+    # Listed in three postcode sectors: runs through several wards. It is
+    # still reported, with nothing to check, so it can block a tag.
+    assert ec.story_streets({"title": "Manchester Road closed after collision", "area": "rochdale"}) == [{"street": "Manchester Road", "postcode": ""}]
+    assert ec.ward_decision({"title": "Manchester Road closed after collision", "area": "rochdale"})["wards"] == []
     # Checked, and found to sit on a ward boundary.
     assert ec.ward_decision({"title": "Trafalgar Street, roadworks in Rochdale", "area": "rochdale"})["wards"] == []
     # Named with a street that is settled and one that is not: left alone.
@@ -240,3 +242,28 @@ def test_street_check_failure_changes_nothing_and_is_capped(tmp_path, monkeypatc
     assert cache == {} and report["failed"] and report["waiting"] == 60
     report = wpe.run_streets(stories, cache, lambda pc: None)
     assert report["looked_up"] == wpe.STREETS_PER_RUN and report["waiting"] == 60 - wpe.STREETS_PER_RUN
+
+
+def test_a_settled_street_beside_a_long_or_unlisted_road_is_not_enough(tmp_path, monkeypatch):
+    # Review, 14 Nov 2026: the long road was dropped before the "every street
+    # settled" check, so Joy Street alone placed the whole story.
+    street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY})
+    mixed = {"title": "Joy Street and Manchester Road roadworks from Monday", "area": "rochdale"}
+    assert ec.story_streets(mixed) == [{"street": "Joy Street", "postcode": "OL120BY"}, {"street": "Manchester Road", "postcode": ""}]
+    assert ec.ward_decision(mixed)["wards"] == []
+    unlisted = {"title": "Joy Street and Gorrels Way to close for resurfacing", "area": "rochdale"}
+    assert {"street": "Gorrels Way", "postcode": ""} in ec.story_streets(unlisted)
+    assert ec.ward_decision(unlisted)["wards"] == []
+    # Evidence left on file for a road that later turns out to be long is ignored.
+    stale = dict(JOY, street="Manchester Road")
+    street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY, "manchester road": stale})
+    assert ec.ward_decision(mixed)["wards"] == []
+    assert ec.ward_decision({"title": "Manchester Road closed", "area": "rochdale"})["wards"] == []
+    # Joy Street on its own is still placed, and only checkable streets are looked up.
+    assert ec.ward_decision({"title": "Joy Street roadworks", "area": "rochdale"})["wards"] == ["Central Rochdale"]
+    asked = []
+    wpe.run_streets([mixed, unlisted], {}, lambda pc: asked.append(pc) or None)
+    assert asked == ["OL120BY"]
+    # The reviewer's own example, and a road named after a town the list does not cover.
+    assert ec.ward_decision({"title": "Joy Street and Halifax Road roadworks", "area": "rochdale"})["wards"] == []
+    assert ec.story_streets({"title": "Joy Street roadworks in Middleton", "area": "rochdale"}) == []
