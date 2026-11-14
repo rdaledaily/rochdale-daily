@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-14T02:11:53.248699Z",
+  "last_run_at": "2026-11-14T02:30:14.631075Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-13T20:20:39.233039Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 1,
+      "daily_cap": 4,
+      "offered_today": 1,
+      "listed": 32,
+      "already_seen": 22,
+      "started_long_ago": 0,
+      "too_far_ahead": 8,
+      "undated": 1,
+      "in_window": 1
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-13T20:20:39.233039Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 6,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 6,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,14 +40,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-13T20:20:39.233039Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 5,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-13T20:20:39.233039Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 0,
+      "not_rochdale": 0,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -54,58 +80,66 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 145,
+  "raw_candidates_before_job_filter": 148,
   "job_or_career_posts_rejected": 1,
-  "raw_candidates": 144,
-  "candidate_clusters": 44,
+  "raw_candidates": 147,
+  "candidate_clusters": 45,
   "google_news_resolution": {
-    "wrappers": 80,
-    "resolved": 73,
+    "wrappers": 57,
+    "resolved": 51,
     "text_recovered": 26,
-    "reattributed": 2,
+    "reattributed": 3,
     "images_found": 43
   },
-  "duplicates_merged": 100,
-  "attempted_rewrites": 3,
+  "duplicates_merged": 102,
+  "attempted_rewrites": 2,
   "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "ignite-fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-sw",
-      "source_url": "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2/"
+      "slug": "heywood-residents-praised-for-remembrance-tributes-on-armistice-day",
+      "source_url": "https://www.rochdaletimes.co.uk/residents-praised-for-remembrance-tributes/"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 610,
-  "skipped": 2,
+  "new_articles": 1,
+  "live_articles": 611,
+  "skipped": 1,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1,
     "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 1,
-    "queued_for_retry": 1,
-    "recovery_limit_reached": 0,
+    "queued_for_retry": 0,
+    "recovery_limit_reached": 1,
     "deliberately_blocked": 2,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 158,
+    "entries": 157,
     "by_outcome": {
       "editorial_twin": 6,
       "failed": 19,
-      "published": 86,
+      "published": 85,
       "rejected": 47
     },
-    "held_back_this_run": 32,
+    "held_back_this_run": 33,
     "held_already_published": 16,
-    "held_rejected": 16,
+    "held_rejected": 17,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2",
+      "title": "Fire festival returns to Rochdale with free entry and Christmas lights switch-on - About Manchester",
+      "source_name": "About Manchester",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-14T02:11:53.243136Z"
+    },
     {
       "url": "https://www.visitrochdale.com/whats-on/middleton-christmas-lights-switch-on-p698641",
       "title": "Middleton Christmas Lights Switch-On",
@@ -252,12 +286,12 @@
     }
   ],
   "published_with_style_issues": {
-    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 167.": 1
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 133,
-    "website_discovery": 6,
+    "rss_and_google_news": 129,
+    "website_discovery": 12,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -265,7 +299,7 @@
     "environment_agency": 0,
     "food_hygiene": 1,
     "inspection_registers": 0,
-    "primary_data": 0,
+    "primary_data": 1,
     "men_newsletter": 1
   },
   "collector_errors": {},
@@ -389,22 +423,22 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 25,
+    "Rochdale Times": 26,
     "Roch Valley Radio": 23,
     "Rochdale AFC": 22,
     "Manchester Evening News": 18,
-    "Rochdale Borough Council": 9,
+    "Rochdale Borough Council": 10,
     "InYourArea": 8,
-    "BBC": 6,
+    "BBC": 5,
     "Bee Network live travel alerts": 5,
     "BBC Manchester": 4,
     "Roch Valley Radio Local News": 4,
     "About Manchester": 3,
     "Yorkshire Post": 3,
+    "Fansnetwork": 2,
     "Yahoo Sports": 2,
     "Rochdale Borough Council RSS": 1,
     "AOL.com": 1,
-    "Fansnetwork": 1,
     "The York Press": 1,
     "Total Rugby League": 1,
     "The Sun": 1,
@@ -413,10 +447,10 @@
     "AFootballReport": 1,
     "Greater Manchester Police": 1,
     "Rochdale Borough Council News": 1,
+    "Visit Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "events": 1,
     "health": 1,
     "news": 1
   },
@@ -428,7 +462,7 @@
     "environment": 49,
     "events": 33,
     "health": 15,
-    "news": 90,
+    "news": 91,
     "politics": 19,
     "sport": 57,
     "traffic": 44,
@@ -457,12 +491,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "events-v3-17cd0fb9c051645faa07",
     "health-v3-5dbab96b2a7dfd89747f",
     "hard-news-v3-1fcefec136247f9f5287"
   ],
   "selected_candidate_urls": [
-    "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2/",
     "https://www.rochvalleyradio.com/news-features/140/business/1432/the-hidden-rochdale-cafe-with-countryside-views-that-you-won-t-find-by-road",
     "https://www.rochdaletimes.co.uk/residents-praised-for-remembrance-tributes/"
   ],
@@ -476,12 +508,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "events",
       "health",
       "news"
     ],
     "selected_categories": [
-      "events",
       "health",
       "news"
     ],
@@ -493,25 +523,21 @@
     ],
     "selected_areas": [
       "heywood",
-      "norden",
-      "rochdale"
+      "norden"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "events": 1,
       "health": 1,
       "news": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "heywood": 1,
-      "norden": 1,
-      "rochdale": 1
+      "norden": 1
     },
     "selected_by_source": {
-      "about manchester": 1,
       "roch valley radio local news": 1,
       "rochdale times": 1
     },
@@ -1075,8 +1101,12 @@
     "https://news.google.com/rss/articles/CBMigAFBVV95cUxQSHZBS3lCRUZjbDg4U3JJZWwzS3ZkVnNEcjBuMVY1SVk4S1pxbFdTZVE5THo5OGgwM25ZaVJwcERoWXdaTlliX2lFUzh1WXdTMy1RS3Z1bWtZZ3BUMk9LZWxvOExwT3BJODJTdUVDbjI5UmVIY1RNUUxNYkNwQVJnOQ?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "visitrochdale.com": 3
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1112,8 +1142,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-14T02:13:24.306962Z",
-  "frontpage_article_count": 10,
+  "frontpage_generated_at": "2026-11-14T02:31:11.165849Z",
+  "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -1155,45 +1185,46 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "news": 3,
       "traffic": 1,
       "transport": 1,
-      "sport": 1,
       "business": 1,
       "community": 1,
       "health": 1,
       "environment": 1,
-      "news": 2,
+      "sport": 1,
       "crime": 1
     },
     "selected_by_ward": {
-      "borough-wide": 10
+      "borough-wide": 11
     },
     "selected_by_area": {
-      "heywood": 1,
+      "heywood": 2,
       "littleborough": 1,
       "middleton": 3,
       "rochdale": 14
     },
     "selected_by_source": {
+      "rochdale times": 1,
       "rochdale borough council": 1,
       "manchester evening news": 2,
-      "rochdale afc": 1,
       "source": 1,
       "inyourarea": 1,
       "nhs": 1,
       "bbc manchester": 1,
       "rochdale daily": 1,
+      "rochdale afc": 1,
       "greater manchester police press office": 1
     },
-    "pool_size": 19,
-    "primary_pool_size": 19,
+    "pool_size": 20,
+    "primary_pool_size": 20,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 10,
+    "frontpage_count": 11,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 6,
-    "fresh_under_homepage_window": 9,
-    "short_briefs_selected": 5,
+    "fresh_under_24h": 7,
+    "fresh_under_homepage_window": 10,
+    "short_briefs_selected": 6,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1204,7 +1235,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 4,
-  "duplicate_articles_after_postprocessing": 610,
+  "duplicate_articles_after_postprocessing": 611,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1215,9 +1246,11 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
-  "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "heywood-residents-praised-for-remembrance-tributes-on-armistice-day"
+  ],
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
