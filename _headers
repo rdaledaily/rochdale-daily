@@ -46,6 +46,14 @@
 /assets/img/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
+# The masthead logo keeps one filename and is swapped seasonally (e.g. the
+# Remembrance poppy). Under the one-day image TTL above, readers kept the old
+# version for up to a day after a swap. Detach the inherited rule and make the
+# browser revalidate: a 304 costs a few hundred bytes.
+/assets/img/logo.png
+  ! Cache-Control
+  Cache-Control: public, max-age=0, must-revalidate
+
 # CSS and JS filenames are not content-hashed, so the browser must ask before
 # reusing a copy. max-age=0 + must-revalidate means every page load sends a
 # conditional request and gets a 304 (a few hundred bytes) unless the file has
