@@ -178,3 +178,10 @@ def test_generator_related_box_has_alt():
                "published_at": "2026-11-14T10:00:00Z"} for i in range(3)]
     markup = G.related_stories_markup(article, [article] + others)
     assert markup and 'alt=""' not in markup and 'alt="Other story' in markup
+
+
+def test_date_that_tells_shared_headlines_apart_is_kept():
+    t = "Investigation Launched After Fire at Illegal Waste Site in Rochdale · 1 Aug 2026"
+    out = H.title_tag(t)
+    assert out.endswith(" · 1 Aug 2026") and len(out) <= 70
+    assert H.title_tag(out) == out

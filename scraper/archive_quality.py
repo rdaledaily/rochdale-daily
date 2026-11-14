@@ -381,6 +381,11 @@ def apply(root: Path, rows=None, images=False, network_images=True):
     by_slug = {r['slug']: apply_edits(r,ledger.get(r['slug'],{}))[0] for r in rows}
     final_rows={}
     title_counts=Counter(r['title'] for r in rows if r['indexable'])
+    # Different headlines can shorten to the same <title> (headline_style.title_tag,
+    # 70-character limit). Count those as shared too, or archive_integrity dates
+    # them and this pass strips the date again on every run.
+    from headline_style import title_tag as _tt
+    tag_counts=Counter(_tt(r['title']) for r in rows if r['indexable'])
     feed = load(root / 'articles.json', [])
     feed_map = {r.get('slug'): r for r in feed}
     report = {'articles_scanned': len(rows), 'indexable_articles': sum(r['indexable'] for r in rows), 'language_reviewed': 0, 'safe_text_edits': 0, 'category_changes': 0, 'related_links': sum(map(len, edges.values())), 'orphans': [], 'ward_unresolved': [], 'semantic_findings': [], 'image_tiers': {}, 'items': []}
@@ -468,7 +473,7 @@ def apply(root: Path, rows=None, images=False, network_images=True):
                 page = page[:match.start(2)] + page_body + '</div>\n' + related + '\n' + page[match.end(2):]
         # Keep visible headlines and search/social/schema metadata in agreement.
         seo_title=row['title']
-        if title_counts[original['title']]>1:
+        if title_counts[original['title']]>1 or tag_counts[_tt(original['title'])]>1:
             from archive_integrity import _day
             day=_day(row.get('published_at',''))
             if day:seo_title+=' · '+day
