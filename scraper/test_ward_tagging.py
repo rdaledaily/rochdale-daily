@@ -134,3 +134,136 @@ def test_lookup_failure_changes_nothing_and_unknown_wards_are_reported():
 
     report = wpe.run([{"title": "A", "event_location": "Heywood Civic, OL10 1LW"}], cache, renamed)
     assert report["unmatched"] == ["Heywood Central"] and cache["OL101LW"]["ward"] == ""
+
+
+# ------------------------------------------------------------------ streets
+def street_files(tmp_path, monkeypatch, streets, checked):
+    listed = tmp_path / "rochdale_streets.json"
+    listed.write_text(json.dumps({"streets": streets}), encoding="utf-8")
+    on_file = tmp_path / "ward_street_evidence.json"
+    on_file.write_text(json.dumps(checked), encoding="utf-8")
+    monkeypatch.setattr(ec, "STREETS_PATH", listed)
+    monkeypatch.setattr(ec, "STREET_EVIDENCE_PATH", on_file)
+    monkeypatch.setattr(wpe, "STREET_EVIDENCE_PATH", on_file)
+    return on_file
+
+
+LISTED = {"joy street": {"name": "Joy Street", "postcodes": ["OL12 0BY"]},
+          "trafalgar street": {"name": "Trafalgar Street", "postcodes": ["OL16 2EB"]},
+          "manchester road": {"name": "Manchester Road", "postcodes": ["OL11 2SP", "OL11 3AA", "OL11 4HA"]},
+          "church street": {"name": "Church Street", "postcodes": ["OL16 3QS"]}}
+JOY = {"street": "Joy Street", "district": "Rochdale", "ward": "Central Rochdale", "nearby_wards": ["Central Rochdale"], "single_ward": True}
+EDGE = {"street": "Trafalgar Street", "district": "Rochdale", "ward": "Central Rochdale",
+        "nearby_wards": ["Central Rochdale", "Smallbridge and Firgrove"], "single_ward": False}
+
+
+def test_a_short_street_in_the_headline_decides_the_ward(tmp_path, monkeypatch):
+    street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY})
+    story = {"title": "Joy Street roadworks scheduled from 2 November 2026", "area": "rochdale"}
+    assert ec.story_streets(story) == [{"street": "Joy Street", "postcode": "OL120BY"}]
+    decision = ec.ward_decision(story)
+    assert decision["wards"] == ["Central Rochdale"] and decision["status"] == "street-verified"
+    # Leading words are not part of the name.
+    assert ec.story_streets({"title": "Police On Joy Street after reports of a disturbance", "area": "rochdale"})[0]["street"] == "Joy Street"
+
+
+def test_long_roads_boundary_streets_and_unchecked_streets_decide_nothing(tmp_path, monkeypatch):
+    street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY, "trafalgar street": EDGE})
+    # Listed in three postcode sectors: runs through several wards. It is
+    # still reported, with nothing to check, so it can block a tag.
+    assert ec.story_streets({"title": "Manchester Road closed after collision", "area": "rochdale"}) == [{"street": "Manchester Road", "postcode": ""}]
+    assert ec.ward_decision({"title": "Manchester Road closed after collision", "area": "rochdale"})["wards"] == []
+    # Checked, and found to sit on a ward boundary.
+    assert ec.ward_decision({"title": "Trafalgar Street, roadworks in Rochdale", "area": "rochdale"})["wards"] == []
+    # Named with a street that is settled and one that is not: left alone.
+    assert ec.ward_decision({"title": "Joy Street and Trafalgar Street to close", "area": "rochdale"})["wards"] == []
+    # Listed but not checked yet.
+    assert ec.ward_decision({"title": "Church Street resurfacing begins", "area": "rochdale"})["wards"] == []
+
+
+def test_streets_are_not_read_from_the_body_or_from_towns_the_list_does_not_cover(tmp_path, monkeypatch):
+    street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY})
+    assert ec.story_streets({"title": "Man charged after burglary", "area": "rochdale", "content_html": "<p>He was arrested on Joy Street.</p>"}) == []
+    assert ec.story_streets({"title": "Joy Street roadworks begin", "area": "heywood"}) == []
+    assert ec.story_streets({"title": "Joy Street, Middleton, to close for a week", "area": "rochdale"}) == []
+    briefing = {"title": "Morning Briefing", "slug": "morning-briefing-14-november-2026", "excerpt": "Joy Street roadworks and more", "area": "rochdale"}
+    assert ec.story_streets(briefing) == []
+
+
+def test_a_place_or_postcode_still_outranks_a_street(tmp_path, monkeypatch):
+    street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY})
+    decision = ec.ward_decision({"title": "Joy Street residents in Castleton call for crossing", "area": "castleton"})
+    assert decision["wards"] == ["Castleton"] and decision["status"] == "explicit-ward"
+
+
+def near(postcode, ward, district="Rochdale"):
+    return {"postcode": postcode, "admin_district": district, "admin_ward": ward}
+
+
+def test_street_check_needs_every_nearby_postcode_in_the_same_ward(tmp_path, monkeypatch):
+    on_file = street_files(tmp_path, monkeypatch, LISTED, {})
+    stories = [{"title": "Joy Street roadworks", "area": "rochdale"}, {"title": "Trafalgar Street roadworks", "area": "rochdale"},
+               {"title": "Church Street resurfacing", "area": "rochdale"}]
+    asked = []
+
+    def fetch(postcode):
+        asked.append(postcode)
+        return {"OL120BY": [near("OL12 0BY", "Central Rochdale"), near("OL12 0BZ", "Central Rochdale")],
+                "OL162EB": [near("OL16 2EB", "Central Rochdale"), near("OL16 2EA", "Smallbridge & Firgrove")],
+                "OL163QS": None}[postcode]
+
+    cache = {}
+    report = wpe.run_streets(stories, cache, fetch, today="2026-11-14")
+    assert report["looked_up"] == 3 and report["single_ward"] == 1 and report["boundary"] == 1 and report["waiting"] == 0
+    assert cache["joy street"]["single_ward"] is True and cache["joy street"]["ward"] == "Central Rochdale"
+    assert cache["trafalgar street"]["single_ward"] is False
+    assert cache["trafalgar street"]["nearby_wards"] == ["Central Rochdale", "Smallbridge and Firgrove"]
+    assert cache["church street"]["found"] is False
+    wpe.run_streets(stories, cache, fetch, today="2026-11-15")
+    assert len(asked) == 3  # asked once
+    # A neighbour outside the borough is a boundary too.
+    assert wpe.street_entry("X Street", "OL120BY", [near("OL12 0BY", "Healey"), near("OL12 8ZZ", "Facit and Shawforth", "Rossendale")], "2026-11-14")["single_ward"] is False
+    # An answer that leaves out the street's own postcode proves nothing.
+    assert wpe.street_entry("X Street", "OL120BY", [near("OL12 0BZ", "Healey")], "2026-11-14")["found"] is False
+    assert json.loads(on_file.read_text()) == {}
+
+
+def test_street_check_failure_changes_nothing_and_is_capped(tmp_path, monkeypatch):
+    names = [f"Test{chr(65 + i // 26)}{chr(97 + i % 26)} Street" for i in range(60)]
+    many = {name.casefold(): {"name": name, "postcodes": [f"OL12 {i % 10}A{chr(65 + i % 26)}"]} for i, name in enumerate(names)}
+    street_files(tmp_path, monkeypatch, many, {})
+    stories = [{"title": f"{name} roadworks", "area": "rochdale"} for name in names]
+
+    def down(postcode):
+        raise OSError("network unreachable")
+
+    cache = {}
+    report = wpe.run_streets(stories, cache, down)
+    assert cache == {} and report["failed"] and report["waiting"] == 60
+    report = wpe.run_streets(stories, cache, lambda pc: None)
+    assert report["looked_up"] == wpe.STREETS_PER_RUN and report["waiting"] == 60 - wpe.STREETS_PER_RUN
+
+
+def test_a_settled_street_beside_a_long_or_unlisted_road_is_not_enough(tmp_path, monkeypatch):
+    # Review, 14 Nov 2026: the long road was dropped before the "every street
+    # settled" check, so Joy Street alone placed the whole story.
+    street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY})
+    mixed = {"title": "Joy Street and Manchester Road roadworks from Monday", "area": "rochdale"}
+    assert ec.story_streets(mixed) == [{"street": "Joy Street", "postcode": "OL120BY"}, {"street": "Manchester Road", "postcode": ""}]
+    assert ec.ward_decision(mixed)["wards"] == []
+    unlisted = {"title": "Joy Street and Gorrels Way to close for resurfacing", "area": "rochdale"}
+    assert {"street": "Gorrels Way", "postcode": ""} in ec.story_streets(unlisted)
+    assert ec.ward_decision(unlisted)["wards"] == []
+    # Evidence left on file for a road that later turns out to be long is ignored.
+    stale = dict(JOY, street="Manchester Road")
+    street_files(tmp_path, monkeypatch, LISTED, {"joy street": JOY, "manchester road": stale})
+    assert ec.ward_decision(mixed)["wards"] == []
+    assert ec.ward_decision({"title": "Manchester Road closed", "area": "rochdale"})["wards"] == []
+    # Joy Street on its own is still placed, and only checkable streets are looked up.
+    assert ec.ward_decision({"title": "Joy Street roadworks", "area": "rochdale"})["wards"] == ["Central Rochdale"]
+    asked = []
+    wpe.run_streets([mixed, unlisted], {}, lambda pc: asked.append(pc) or None)
+    assert asked == ["OL120BY"]
+    # The reviewer's own example, and a road named after a town the list does not cover.
+    assert ec.ward_decision({"title": "Joy Street and Halifax Road roadworks", "area": "rochdale"})["wards"] == []
+    assert ec.story_streets({"title": "Joy Street roadworks in Middleton", "area": "rochdale"}) == []

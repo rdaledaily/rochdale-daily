@@ -19,6 +19,7 @@ on:
       - "scraper/editorial_contract.py"
       - "scraper/ward_postcode_evidence.py"
       - "ward_areas.json"
+      - "scraper/rochdale_streets.json"
       - ".github/workflows/theme-normalise.yml"
 
 permissions:
@@ -60,7 +61,7 @@ jobs:
 
           stage() {
             git add -u
-            git add assets/img/cards archive_quality_report.json archive_quality_reviews.json ward_postcode_evidence.json
+            git add assets/img/cards archive_quality_report.json archive_quality_reviews.json ward_postcode_evidence.json ward_street_evidence.json
           }
 
           # Several changes can land on main within the same minute (four did

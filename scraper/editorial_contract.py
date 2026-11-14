@@ -46,6 +46,28 @@ POSTCODE_RE = re.compile(r'\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b', re.I)
 # closes a contact line is where to send a letter, not where the story is.
 VENUE_POSTCODE_RE = re.compile(r'\bat\s+[^.;:!?]{3,140}?(' + POSTCODE_RE.pattern[2:-2] + r')\b', re.I)
 STREET_WORDS = r'(?:Road|Street|Lane|Avenue|Drive|Close|Way|Crescent|Grove|Terrace)'
+# --- Streets (14 Nov 2026) -------------------------------------------------
+# rochdale_streets.json lists every street in OL11, OL12 and OL16 with one
+# postcode for each postcode sector it runs through. A street listed in one
+# sector only is short enough to belong to one ward, provided it is not on a
+# ward boundary; ward_postcode_evidence.py checks that by asking which wards
+# the postcodes within STREET_CHECK_RADIUS_M of it lie in, and records the
+# answer in ward_street_evidence.json. Roads listed in two or more sectors
+# (Manchester Road, Halifax Road) run through several wards and are never used.
+STREETS_PATH = Path(__file__).resolve().parent / 'rochdale_streets.json'
+STREET_EVIDENCE_PATH = ROOT / 'ward_street_evidence.json'
+STREET_CHECK_RADIUS_M = 250
+STREET_NAME_RE = re.compile(
+    r"\b((?:[A-Z][A-Za-z']+\s+){1,3}(?:Street|Road|Lane|Avenue|Drive|Close|Crescent|Way|Grove|Terrace|Place|Square|Walk|Gardens|Court|Fold|Brow|Row|Mews|View|Parade))\b")
+# The street list does not cover Heywood (OL10), Middleton (M24) or
+# Littleborough (OL15). A story from one of those towns naming "Church Street"
+# means that town's Church Street, not the one in the list.
+STREET_UNCOVERED_AREAS = frozenset({'heywood', 'darnhill', 'hopwood', 'middleton', 'alkrington', 'boarshaw', 'littleborough',
+                                    'whitworth', 'bury', 'burnley', 'mytholmroyd', 'greater-manchester'})
+# "Manchester Road" and "Bury Old Road" are streets, not mentions of the town.
+STREET_UNCOVERED_TOWNS_RE = re.compile(
+    r'\b(?:Heywood|Middleton|Littleborough|Whitworth|Bury|Oldham|Manchester|Bacup|Todmorden)\b'
+    r'(?!\s+(?:(?:Old|New)\s+)?(?:Road|Street|Lane|Avenue|Drive|Close|Crescent|Way|Grove|Terrace|Place|Square|Walk|Gardens)\b)')
 _FILE_CACHE: dict[str, tuple[float, Any]] = {}
 
 
@@ -101,6 +123,41 @@ def story_postcodes(article: dict) -> list[str]:
             if 1 <= len(everywhere) <= 2:
                 found = VENUE_POSTCODE_RE.findall(body)
     return sorted({compact_postcode(pc) for pc in found})
+
+
+def story_streets(article: dict) -> list[dict[str, str]]:
+    """Every street named in the headline, standfirst or event location:
+    [{'street', 'postcode'}]. Never the body: a street mentioned in passing is
+    not where the story is.
+
+    A street the list places in a single postcode sector carries that
+    postcode and can be checked. A road listed in several sectors, or a street
+    the list does not know, is still returned, with an empty postcode: it
+    can never be settled, and ward_decision tags a story only when every
+    street it names is settled. Dropping such a road here would let "Joy
+    Street and Halifax Road roadworks" be placed by Joy Street alone."""
+    if str(article.get('area') or '').casefold() in STREET_UNCOVERED_AREAS or _is_roundup(article):
+        return []
+    subject = '. '.join(plain(article.get(key)) for key in ('title', 'excerpt', 'event_location')).replace('\u2019', "'")
+    if STREET_UNCOVERED_TOWNS_RE.search(subject):
+        return []
+    listed = (_json_file(STREETS_PATH) or {}).get('streets') or {}
+    found: dict[str, dict[str, str]] = {}
+    for match in STREET_NAME_RE.findall(subject):
+        words = match.split()
+        # "Police On Trafalgar Street" -> "Trafalgar Street": longest listed name wins.
+        for start in range(len(words) - 1):
+            key = ' '.join(words[start:]).casefold()
+            record = listed.get(key)
+            if record:
+                postcodes = record.get('postcodes') or []
+                found[key] = {'street': str(record.get('name') or key),
+                              'postcode': compact_postcode(postcodes[0]) if len(postcodes) == 1 else ''}
+                break
+        else:
+            # Not in the list at all: the last two words are the street name.
+            found[' '.join(words[-2:]).casefold()] = {'street': ' '.join(words[-2:]), 'postcode': ''}
+    return [found[key] for key in sorted(found)]
 
 
 def locality_wards() -> dict[str, str]:
@@ -183,6 +240,19 @@ def ward_decision(article: dict) -> dict:
                 if other != area and re.search(pair, title, re.I):
                     found.add(ward)
             return {'wards': sorted(found), 'status': 'area-and-headline', 'evidence': subject}
+    # A short street named in the headline, checked to lie in one ward. Last,
+    # so it only fills gaps and never overrides a place or postcode above.
+    named_streets = story_streets(article)
+    if named_streets:
+        on_file = _json_file(STREET_EVIDENCE_PATH) or {}
+        checked = [on_file.get(item['street'].casefold()) if item['postcode'] else None for item in named_streets]
+        good = [v for v in checked if isinstance(v, dict) and v.get('single_ward') is True
+                and v.get('district') == 'Rochdale' and v.get('ward') in ROCHDALE_WARDS]
+        # Every street named must be settled: one long road, unlisted street,
+        # unchecked street or boundary street leaves the story untagged rather
+        # than half-placed.
+        if good and len(good) == len(named_streets):
+            return {'wards': sorted({v['ward'] for v in good}), 'status': 'street-verified', 'evidence': good}
     return {'wards': [], 'status': 'borough-or-location-unresolved', 'evidence': ''}
 
 
