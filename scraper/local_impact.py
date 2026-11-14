@@ -16,6 +16,8 @@ from __future__ import annotations
 import hashlib
 import html
 import re
+import threading
+from collections import Counter
 from typing import Any
 
 # Crime, court and police stories never carry the box (house rule: crime is
@@ -229,6 +231,22 @@ def _grounded(point: str, article_text: str, sentences: list[str]) -> bool:
     return any(_matches_sentence(point, sentence) for sentence in sentences)
 
 
+# Run tally for scraper_status.json (editor, 14 Nov 2026): without it a story
+# with no box cannot be told apart from a box the checks threw away.
+OUTCOMES: Counter[str] = Counter()
+POINT_DROPS: Counter[str] = Counter()
+_LOCK = threading.Lock()
+
+
+def status() -> dict[str, Any]:
+    with _LOCK:
+        return {
+            "shown": OUTCOMES.get("shown", 0),
+            "outcomes": dict(OUTCOMES.most_common()),
+            "points": dict(POINT_DROPS.most_common()),
+        }
+
+
 def build(
     draft_impact: Any,
     *,
@@ -240,53 +258,89 @@ def build(
     sensitive: bool = False,
     police_matter: bool = False,
 ) -> dict[str, Any] | None:
-    """Return {'place','audience','points'} or None when no box should show."""
-    if sensitive or police_matter or str(category or "").lower() not in ELIGIBLE_CATEGORIES:
-        return None
-    if _SENSITIVE_RE.search(_plain(title)):
-        return None
-    if not isinstance(draft_impact, dict):
-        return None
+    """Return {'place','audience','points'} or None when no box should show,
+    and add the outcome to the run tally."""
+    impact, outcome, notes = assess(
+        draft_impact, title=title, excerpt=excerpt, paragraphs=paragraphs,
+        category=category, area=area, sensitive=sensitive, police_matter=police_matter,
+    )
+    with _LOCK:
+        OUTCOMES[outcome] += 1
+        for note in notes:
+            POINT_DROPS[note] += 1
+    return impact
+
+
+def assess(
+    draft_impact: Any,
+    *,
+    title: str,
+    excerpt: str,
+    paragraphs: list[str],
+    category: str,
+    area: str,
+    sensitive: bool = False,
+    police_matter: bool = False,
+) -> tuple[dict[str, Any] | None, str, list[str]]:
+    """(box or None, why, what happened to individual points)."""
+    cat = str(category or "").lower()
+    if sensitive or police_matter or cat == "crime" or _SENSITIVE_RE.search(_plain(title)):
+        return None, "not eligible: crime, court, police or death", []
+    if cat not in ELIGIBLE_CATEGORIES:
+        return None, f"not eligible: {cat or 'no'} category", []
+    raw_points = draft_impact.get("points") if isinstance(draft_impact, dict) else None
+    if not raw_points:
+        return None, "writer offered no points", []
     article_text = _plain(" ".join([title, excerpt, *paragraphs]))
     sentences = _sentences([title, excerpt, *paragraphs])
     # Corrections come from the body only: the headline is never repeated.
     body_sentences = _sentences([excerpt, *paragraphs])
     points: list[str] = []
+    notes: list[str] = []
     seen: set[str] = set()
-    for raw in draft_impact.get("points") or []:
+    for raw in raw_points:
         point = _plain(raw).strip(" -•*")
         if not point:
             continue
         if not point.endswith((".", "!", "?")):
             point += "."
         n_words = len(point.split())
-        if n_words < 6 or n_words > 30 or "?" in point or "!" in point:
+        if n_words < 6 or n_words > 30:
+            notes.append("dropped: wrong length")
+            continue
+        if "?" in point or "!" in point:
+            notes.append("dropped: question or exclamation")
             continue
         if _SENSITIVE_RE.search(point):
+            notes.append("dropped: crime or death wording")
             continue
         if not _grounded(point, article_text, sentences):
             point = corrected(point, body_sentences)
             if point is None:
+                notes.append("dropped: no story sentence to correct it to")
                 continue
+            notes.append("corrected to the story's own sentence")
         key = point.casefold()
         if key in seen:
+            notes.append("dropped: duplicate")
             continue
         # A point that only repeats the headline tells the reader nothing.
         if key.rstrip(".") == _plain(title).casefold():
+            notes.append("dropped: repeats the headline")
             continue
         seen.add(key)
         points.append(point)
         if len(points) >= MAX_POINTS:
             break
     if len(points) < MIN_POINTS:
-        return None
+        return None, "no box: fewer than two points survived", notes
     audience = ""
     wanted = str(draft_impact.get("audience") or "").strip().lower()
     if wanted in AUDIENCES:
         word, evidence = AUDIENCES[wanted]
         if re.search(r"\b(?:" + evidence + r")\b", article_text, re.I):
             audience = word
-    return {"place": place_label(area, article_text), "audience": audience, "points": points}
+    return {"place": place_label(area, article_text), "audience": audience, "points": points}, "shown", notes
 
 
 def heading(slug: str, place: str, audience: str = "") -> str:
@@ -315,3 +369,41 @@ def paragraphs_with_box(paragraph_html: list[str], box_html: str) -> str:
     story (12 Nov 2026): placed after paragraph 2 it sat directly above the
     paragraph it restates, so the reader met the same fact twice in a row."""
     return "".join(paragraph_html) + (box_html or "")
+
+
+def strip_box(content_html: str) -> str:
+    """Remove a rendered box so a rebuild never stacks a second one."""
+    return re.sub(r'<section class="rd-impact".*?</section>', "", str(content_html or ""), flags=re.S)
+
+
+def apply_to_editorial(record: dict[str, Any], entry: dict[str, Any]) -> dict[str, Any]:
+    """Editorial-route stories (explainers and service pieces written outside
+    the writer) may carry "local_impact": {"audience", "points"} in their
+    manual_articles.d entry. The same checks and corrections apply; briefings
+    and sponsored features never get a box. This runs on every rebuild, so it
+    logs instead of adding to the writer's run tally."""
+    spec = entry.get("local_impact")
+    if not isinstance(spec, dict):
+        return record
+    slug = str(record.get("slug") or "")
+    if record.get("sponsored") or entry.get("publication_route") == "daily-briefing":
+        print(f"local_impact: no box on {slug}: briefing or sponsored")
+        return record
+    body = strip_box(record.get("content_html"))
+    paragraphs = [_plain(p) for p in re.findall(r"<p\b[^>]*>(.*?)</p>", body, re.S)]
+    impact, outcome, notes = assess(
+        spec,
+        title=str(record.get("title") or ""),
+        excerpt=str(record.get("excerpt") or ""),
+        paragraphs=paragraphs,
+        category=str(record.get("category") or ""),
+        area=str(record.get("area") or ""),
+        police_matter=bool(record.get("police_matter")),
+    )
+    if notes or not impact:
+        print(f"local_impact: {slug}: {outcome}" + (f" ({'; '.join(notes)})" if notes else ""))
+    box = render(impact, slug)
+    if box:
+        record["content_html"] = body + box
+        record["local_impact"] = impact
+    return record
