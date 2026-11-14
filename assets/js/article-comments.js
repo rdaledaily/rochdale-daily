@@ -37,6 +37,8 @@
     .comment-submit:disabled{opacity:.55}.comment-auth .tabs{display:flex;gap:8px;margin-bottom:12px}.comment-auth .tabs button{flex:1;background:#fff;border:1px solid #bbb;padding:10px;font-weight:900;text-transform:uppercase}
     .comment-auth .tabs button.on{background:#0e7490;color:#fff}.comment-msg{margin:10px 0 0;font-size:13px;padding:9px 11px;display:none}.comment-msg.err,.comment-msg.ok{display:block}.comment-msg.err{background:#fbeaec;border-left:4px solid #c8102e}.comment-msg.ok{background:#e7f7ef;border-left:4px solid #23a06a}
     .comment-signedin{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#666;font-size:13px;margin-bottom:10px}.comment-signout,.comment-report{background:none;border:0;color:#666;text-decoration:underline;cursor:pointer;padding:0}
+    .comment-actions{margin-top:6px}.comment-delete{background:none;border:0;color:#b42318;text-decoration:underline;cursor:pointer;padding:0;font-size:13px}
+    .article-comment-count{display:inline-flex;align-items:center;gap:5px;color:#0e7490;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}.article-comment-count:hover{text-decoration:underline}.article-comment-count svg{width:17px;height:17px;stroke:currentColor;stroke-width:2;fill:none}
     .upvote{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:4px 2px;cursor:pointer;color:#666;min-width:42px}.upvote svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.4;fill:none}.upvote.voted{color:#0e7490}.upvote-count{font-size:13px;font-weight:900}
     .rd-area-badge{display:inline-block;margin:3px 0 0 7px;padding:3px 7px;border-radius:12px;background:#e7f4fd;color:#135778;font-size:11px;font-weight:700;letter-spacing:0;text-transform:none}.comment-quicklink{display:inline-block;margin:0 0 12px;color:#075d76;font-weight:700}.comment-compose-first{margin-bottom:12px}\n    @media(max-width:600px){.editorial-legal-note{padding:8px 10px!important}.comments-section{margin-top:10px;padding:17px 13px}.comments-invite{padding:12px}.comment{padding:12px 10px;gap:8px}.comment-auth{padding:13px}.comment-form .rowline{align-items:stretch;flex-direction:column}.comment-submit{width:100%;min-height:46px}.comment-signedin{align-items:flex-start}.comments-section h2{font-size:23px}}
   `;
@@ -82,7 +84,7 @@
 
   function commentMarkup(c){
     const mine=session&&session.username&&session.username.toLowerCase()===String(c.username||'').toLowerCase();
-    return `<article class="comment" data-comment="${esc(c.id)}"><button class="upvote${c.likedByMe?' voted':''}" data-upvote="${esc(c.id)}" aria-pressed="${c.likedByMe?'true':'false'}" ${mine?'disabled':''} aria-label="Upvote"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="5,15 12,8 19,15"></polyline></svg><span class="upvote-count">${Number(c.likeCount||0)}</span></button><div class="comment-main"><div class="comment-user">${esc(c.username)}<span class="comment-time">${esc(ago(c.postedAt))}</span>${Array.isArray(c.badges)?c.badges.map(b=>`<span class="rd-area-badge" title="Earned through constructive local participation">${esc(b)}</span>`).join(''):''}</div><p class="comment-body">${esc(c.body)}</p><button class="comment-report" data-report="${esc(c.id)}">Report</button></div></article>`;
+    return `<article class="comment" data-comment="${esc(c.id)}"><button class="upvote${c.likedByMe?' voted':''}" data-upvote="${esc(c.id)}" aria-pressed="${c.likedByMe?'true':'false'}" ${mine?'disabled':''} aria-label="Upvote"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="5,15 12,8 19,15"></polyline></svg><span class="upvote-count">${Number(c.likeCount||0)}</span></button><div class="comment-main"><div class="comment-user">${esc(c.username)}<span class="comment-time">${esc(ago(c.postedAt))}</span>${Array.isArray(c.badges)?c.badges.map(b=>`<span class="rd-area-badge" title="Earned through constructive local participation">${esc(b)}</span>`).join(''):''}</div><p class="comment-body">${esc(c.body)}</p><div class="comment-actions">${(c.mine||mine)?`<button class="comment-delete" type="button" data-delete="${esc(c.id)}">Delete</button>`:`<button class="comment-report" type="button" data-report="${esc(c.id)}">Report</button>`}</div></div></article>`;
   }
 
   function renderCompose(){
@@ -105,6 +107,7 @@
     const auth=async e=>{const b=e.currentTarget;b.disabled=true;const payload={action:mode,username:document.getElementById('auth-user').value,password:document.getElementById('auth-pass').value};if(mode==='register')payload.email=document.getElementById('auth-email').value;const {ok,data}=await api(payload);b.disabled=false;if(!ok){message((data.errors||[data.error||'That did not work.']).join(' '),'err');return;}save({token:data.token,username:data.username});mount();};
     tabIn?.addEventListener('click',()=>{mode='login';tabIn.classList.add('on');tabUp.classList.remove('on');draw();});tabUp?.addEventListener('click',()=>{mode='register';tabUp.classList.add('on');tabIn.classList.remove('on');draw();});if(fields)draw();
     root.querySelectorAll('[data-upvote]').forEach(btn=>btn.addEventListener('click',async()=>{if(!session){message('Sign in to upvote comments.','err');return;}const {ok}=await api({action:'like',token:session.token,slug,id:btn.dataset.upvote});if(ok)mount();else message('Unable to like this comment.','err');}));
+    root.querySelectorAll('[data-delete]').forEach(btn=>btn.addEventListener('click',async()=>{if(!session){message('Sign in to delete your comment.','err');return;}if(!confirm('Delete your comment? This cannot be undone.'))return;btn.disabled=true;const {ok,data}=await api({action:'delete',token:session.token,slug,id:btn.dataset.delete});if(ok){mount();return;}btn.disabled=false;message((data.errors||[data.error||'Your comment could not be deleted. Please try again.']).join(' '),'err');}));
     root.querySelectorAll('[data-report]').forEach(btn=>btn.addEventListener('click',async()=>{const reason=prompt('Briefly say why this comment should be reviewed:');if(!reason)return;const {ok,data}=await api({action:'report',slug,id:btn.dataset.report,reason});if(ok)alert('Thank you. The comment has been reported.');else message(data.error||'Your report could not be saved. Please try again.','err');}));
   }
 
@@ -117,6 +120,17 @@
       if(!response.ok||!payload||typeof payload!=='object'||payload.ok===false||(!Array.isArray(payload.comments)&&payload.closed!==true))throw Error('Comments unavailable');
       return payload;
     }finally{clearTimeout(timer);}
+  }
+  // Comment count beside the byline, linking down to the comments. Built here
+  // rather than in the page template so every archived article gets it too.
+  function showTopCount(n){
+    const byline=document.querySelector('.article-byline');
+    let link=document.getElementById('article-comment-count');
+    if(n===null){link?.remove();return;}
+    if(!byline)return;
+    if(!link){link=document.createElement('a');link.id='article-comment-count';link.className='article-comment-count';link.href='#comments-root';byline.appendChild(link);}
+    link.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"></path></svg><span>${n} ${n===1?'comment':'comments'}</span>`;
+    link.setAttribute('aria-label',`${n} ${n===1?'comment':'comments'}. Go to comments`);
   }
   let mountVersion=0;
   async function mount(){
@@ -131,8 +145,9 @@
       retry.addEventListener('click',()=>mount());root.appendChild(retry);return;
     }
     if(version!==mountVersion)return;
-    if(payload.closed||category==='crime'){root.innerHTML=`<h2>Comments</h2><div class="comments-closed"><strong>${esc(payload.closedReason||'Comments are closed on this article.')}</strong></div>`;return;}
+    if(payload.closed||category==='crime'){showTopCount(null);root.innerHTML=`<h2>Comments</h2><div class="comments-closed"><strong>${esc(payload.closedReason||'Comments are closed on this article.')}</strong></div>`;return;}
     const comments=Array.isArray(payload.comments)?payload.comments:[];
+    showTopCount(comments.length);
     const question=storyQuestion();
     root.innerHTML=`<h2>Join the conversation <span style="font-size:.7em;color:#52717a">(${comments.length})</span></h2><div class="comments-invite"><strong>${esc(question[0])}</strong><span>${esc(question[1])}</span></div><p class="comments-note">Be civil, stick to the story, and remember real people live here. Comments are published straight away.</p><div class="comment-compose-first" id="comment-compose"></div><div id="comment-list">${comments.map(commentMarkup).join('')||'<p class="comments-note"><strong>No comments yet.</strong> Be the first Rochdale Daily reader to join the conversation.</p>'}</div>`;
     renderCompose();

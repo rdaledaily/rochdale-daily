@@ -26,4 +26,12 @@ class LoyaltyTests(unittest.TestCase):
     def test_crime_comment_block(self):
         self.assertIn('new Set(["crime"])',self.api)
         self.assertIn("if (!gate.ok) return json",self.api)
+    def test_author_can_delete_own_comment(self):
+        # Ownership is checked server-side from the session token, never trusted from the page.
+        self.assertIn("target.usernameLower !== author.usernameLower",self.api)
+        self.assertIn("mine: Boolean(viewer) && c.usernameLower === viewer",self.api)
+        self.assertIn("action:'delete',token:session.token,slug,id:btn.dataset.delete",self.comments)
+    def test_comment_count_beside_byline(self):
+        self.assertIn("article-comment-count",self.comments)
+        self.assertIn("showTopCount(null)",self.comments)
 if __name__=="__main__":unittest.main()

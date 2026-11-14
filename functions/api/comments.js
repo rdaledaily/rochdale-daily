@@ -24,6 +24,7 @@
  *   POST { action: "comment", token, slug, body }
  *   POST { action: "like", token, slug, id }        -> toggles, returns count
  *   POST { action: "report", slug, id, reason }
+ *   POST { action: "delete", token, slug, id }      -> author removes own comment
  *
  * Newsdesk (header  x-admin-token: <EVENTS_ADMIN_TOKEN>):
  *   GET  /api/comments?queue=reported  -> reported comments, with emails
@@ -409,6 +410,9 @@ function publicComment(c, viewer = "") {
     reported: Boolean(c.reportCount),
     likeCount: likes.length,
     likedByMe: Boolean(viewer) && likes.includes(viewer),
+    // Lets the page offer a Delete button on the reader's own comments. The
+    // server re-checks ownership on delete; this flag only drives the UI.
+    mine: Boolean(viewer) && c.usernameLower === viewer,
   };
 }
 
@@ -713,16 +717,50 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: true, message: "Thank you. The newsdesk will review this comment." });
   }
 
-  /* ---------------- delete (newsdesk) ---------------- */
+  /* ---------------- delete (newsdesk, or the comment's own author) ---------------- */
   if (action === "delete") {
-    if (!isAdmin(request, env)) return json({ ok: false, error: "Unauthorised" }, 401);
+    const admin = isAdmin(request, env);
     const slug = clean(payload.slug);
     const id = clean(payload.id);
     const listKey = `comments:${slug}`;
     const list = await readList(kv, listKey);
+    const target = list.find(c => c.id === id);
+
+    // A reader may delete only their own comment, proven by their session
+    // token. Ownership is checked here, not in the browser.
+    let author = null;
+    if (!admin) {
+      author = await userFromToken(kv, payload.token);
+      if (!author) return json({ ok: false, error: "Please sign in to delete your comment.", errors: ["Please sign in to delete your comment."] }, 401);
+      if (!target) return json({ ok: false, error: "Comment not found.", errors: ["Comment not found."] }, 404);
+      if (target.usernameLower !== author.usernameLower) {
+        return json({ ok: false, error: "You can only delete your own comments.", errors: ["You can only delete your own comments."] }, 403);
+      }
+    }
+    if (!target) return json({ ok: false, error: "Comment not found." }, 404);
+
     const next = list.filter(c => c.id !== id);
-    if (next.length === list.length) return json({ ok: false, error: "Comment not found." }, 404);
     await kv.put(listKey, JSON.stringify(next));
+
+    // A comment already reported to the newsdesk is kept in a private log when
+    // its author deletes it, so a takedown complaint can still be answered.
+    if (!admin && Number(target.reportCount || 0) > 0) {
+      const log = await readList(kv, "comments:selfdeleted");
+      log.unshift({ ...target, slug, deletedAt: new Date().toISOString() });
+      log.splice(500);
+      await kv.put("comments:selfdeleted", JSON.stringify(log));
+    }
+
+    // Posting then deleting must not count towards an area badge.
+    if (!admin && target.area && earnedBadge(target.area)
+        && !next.some(c => c.usernameLower === target.usernameLower)) {
+      const key = `reader:area:${target.usernameLower}:${target.area}`;
+      const progress = await kv.get(key, { type: "json" });
+      if (progress && Array.isArray(progress.slugs)) {
+        progress.slugs = progress.slugs.filter(s => s !== slug);
+        await kv.put(key, JSON.stringify(progress));
+      }
+    }
 
     const counts = (await kv.get("comments:counts", { type: "json" })) || {};
     counts[slug] = next.length;
