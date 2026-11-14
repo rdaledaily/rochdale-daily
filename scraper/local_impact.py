@@ -117,20 +117,69 @@ def place_label(area: str, article_text: str) -> str:
     return label
 
 
-def _grounded(point: str, article_text: str, article_tokens: set[str]) -> bool:
-    low = article_text.lower()
-    # Every figure, date and time must already be in the article.
-    for number in _NUMBER_RE.findall(point):
-        if number not in article_text:
+# A figure with whatever is glued to it (2.5m, 10.29am, 21%), and the word that
+# follows it, so "15 days" can never borrow the 15 from "15 January" and "£2.5"
+# can never borrow from "£2.5m".
+_FIGURE_RE = re.compile(r"(?<![\w.,:])(\d+(?:[.,:]\d+)*[a-z%]*)(?![\w])(?:\W+([A-Za-z]+))?", re.I)
+_NEGATION_RE = re.compile(
+    r"\b(?:not|no|never|none|nobody|nothing|neither|nor|without|cannot|unable)\b|n[’']t\b", re.I
+)
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
+MIN_OVERLAP = 0.5
+
+
+def _stem(word: str) -> str:
+    word = word.lower().replace("’", "'")
+    word = re.sub(r"'s$", "", word)
+    return word[:-1] if len(word) > 3 and word.endswith("s") and not word.endswith("ss") else word
+
+
+def _content(text: str) -> set[str]:
+    return {_stem(w) for w in _WORD_RE.findall(text) if len(w) >= 3 and w.lower() not in _STOP}
+
+
+def _figures(text: str) -> list[tuple[str, str]]:
+    """[(figure, following word)] with the figure's thousands commas removed."""
+    return [(m.group(1).replace(",", "").lower(), _stem(m.group(2) or "")) for m in _FIGURE_RE.finditer(text)]
+
+
+def _sentences(article_parts: list[str]) -> list[str]:
+    out: list[str] = []
+    for part in article_parts:
+        out.extend(s for s in _SENTENCE_SPLIT_RE.split(_plain(part)) if s.strip())
+    return out
+
+
+def _matches_sentence(point: str, sentence: str) -> bool:
+    # Every figure comes from this one sentence, with the same word after it
+    # when both have one.
+    available = _figures(sentence)
+    for figure, after in _figures(point):
+        if not any(f == figure and (not after or not a or after == a or after in _STOP or a in _STOP)
+                   for f, a in available):
             return False
+    # "will not close" and "will close" are opposite facts.
+    if bool(_NEGATION_RE.search(point)) != bool(_NEGATION_RE.search(sentence)):
+        return False
+    # Mostly the sentence's own words.
+    content = _content(point)
+    if not content:
+        return False
+    return len(content & _content(sentence)) / len(content) >= MIN_OVERLAP
+
+
+def _grounded(point: str, article_text: str, sentences: list[str]) -> bool:
+    """A point must restate ONE sentence of the article: its figures (whole, with
+    the same unit), its negatives and most of its words all come from that
+    sentence. Facts from different sentences cannot be stitched together, which
+    is how a consultation's closing date became a library's (14 Nov 2026 test)."""
+    low = article_text.lower()
     # Every proper noun (a capitalised word that does not open the sentence).
     words = _WORD_RE.findall(point)
     for index, word in enumerate(words):
         if index and word[0].isupper() and word.lower() not in low:
             return False
-    # And the point must plainly be about this article.
-    content = {w.lower() for w in words if len(w) >= 4 and w.lower() not in _STOP}
-    return len(content & article_tokens) >= 2
+    return any(_matches_sentence(point, sentence) for sentence in sentences)
 
 
 def build(
@@ -152,7 +201,7 @@ def build(
     if not isinstance(draft_impact, dict):
         return None
     article_text = _plain(" ".join([title, excerpt, *paragraphs]))
-    article_tokens = {w.lower() for w in _WORD_RE.findall(article_text) if len(w) >= 4}
+    sentences = _sentences([title, excerpt, *paragraphs])
     points: list[str] = []
     seen: set[str] = set()
     for raw in draft_impact.get("points") or []:
@@ -167,7 +216,7 @@ def build(
         if _SENSITIVE_RE.search(point):
             continue
         key = point.casefold()
-        if key in seen or not _grounded(point, article_text, article_tokens):
+        if key in seen or not _grounded(point, article_text, sentences):
             continue
         # A point that only repeats the headline tells the reader nothing.
         if key.rstrip(".") == _plain(title).casefold():
