@@ -691,8 +691,10 @@ def related_stories_markup(article: dict[str, Any], all_articles: list[dict[str,
     for item in related:
         title = esc(item.get('title') or 'Local news update')
         item_slug = esc(item.get('slug') or item.get('id') or '')
-        image = esc(absolute_url(item.get('image_url') or ''))
-        items.append(f'<a class="related-story" href="{item_slug}.html"><img src="{image}" alt="" loading="lazy"><span class="related-title">{title}</span></a>')
+        raw_image = absolute_url(item.get('image_url') or '')
+        image = esc(raw_image)
+        alt = esc(image_alt_text(item, raw_image))
+        items.append(f'<a class="related-story" href="{item_slug}.html"><img src="{image}" alt="{alt}" loading="lazy"><span class="related-title">{title}</span></a>')
     return f'<div class="sidebar-box"><h3 class="rail-title">More on this</h3>' + ''.join(items) + '</div>'
 
 
@@ -1760,6 +1762,15 @@ def main() -> None:
               f"{filler['records_cleaned']} feed records")
     except Exception as exc:  # never let the sweep block the paper
         print(f'Closing filler sweep skipped: {type(exc).__name__}: {exc}')
+    # 14 Nov 2026 (Bing Site Scan): <title> no longer than 70 characters and
+    # no alt="" on story-link thumbnails, on archived pages too. Idempotent.
+    try:
+        from seo_page_sweep import sweep as seo_page_sweep
+        seo = seo_page_sweep(pages_dir=OUTPUT_DIR)
+        print(f"SEO page sweep: {seo['titles_shortened']} title(s) shortened, "
+              f"{seo['alts_filled']} image alt(s) filled on {seo['pages_fixed']} of {seo['pages_scanned']} pages")
+    except Exception as exc:  # never let the sweep block the paper
+        print(f'SEO page sweep skipped: {type(exc).__name__}: {exc}')
     try:
         from generate_afc_hub import main as build_afc_hub
         build_afc_hub()

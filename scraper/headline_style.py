@@ -226,15 +226,103 @@ TITLE_SUFFIX = " | Rochdale Daily"
 TITLE_TAG_LIMIT = 60
 
 
+# Bing Webmaster "Title too long" flags any <title> over 70 characters
+# (14 Nov 2026: 717 of 1,972 article pages). The page's <h1> keeps the full
+# headline; only the <title> is shortened, at a clause break where one exists,
+# otherwise at a word break, never mid-word and never with an ellipsis.
+TITLE_HARD_LIMIT = 70
+_CLAUSE_BREAKS = (": ", " – ", " — ", " - ", "; ", ", ", " as ", " after ",
+                  " amid ", " following ", " while ", " with ", " but ")
+_DANGLING = {
+    "a", "an", "the", "of", "in", "on", "at", "to", "for", "and", "or", "with",
+    "from", "by", "as", "after", "around", "over", "into", "near", "its", "their",
+    "his", "her", "is", "was", "are", "were", "be", "has", "have", "had", "but",
+    "than", "that", "who", "which", "while", "amid", "following", "about", "up",
+    "out", "off", "new", "says", "say", "said", "will", "could", "would", "can",
+    "due", "set", "being", "what", "where", "when", "how", "why", "against", "between", "under", "via", "per",
+}
+_MIN_CLAUSE = 35
+# Words that open a phrase which can be dropped whole ("of" is left out: it
+# binds too tightly, as in "Ring of Red").
+_PHRASE_STARTS = {"in", "on", "at", "for", "and", "with", "to", "from", "near",
+                  "around", "through", "into", "by", "after", "over", "amid"}
+
+
+_OPEN_QUOTES = ("'", '"', "\u2018", "\u201c")
+_CLOSE_QUOTES = ("'", '"', "\u2019", "\u201d")
+
+
+def _drop_dangling(words: list) -> bool:
+    popped = False
+    # Never leave a quotation opened and not closed ("... said to be 'maid").
+    for i in range(len(words) - 1, 0, -1):
+        if words[i].startswith(_OPEN_QUOTES) and not any(
+                w.rstrip(",;:.!?").endswith(_CLOSE_QUOTES) for w in words[i:]):
+            del words[i:]
+            popped = True
+            break
+    while len(words) > 1 and words[-1].lower().strip(",;:–—-") in _DANGLING:
+        words.pop()
+        popped = True
+    return popped
+
+
+def shorten_title(title: str, limit: int = TITLE_HARD_LIMIT) -> str:
+    """Shorten a headline to ``limit`` characters for use as a <title>.
+
+    Prefers the longest leading clause that fits (cut at a comma, colon, dash
+    or a joining word such as "after"), as long as it keeps at least 35
+    characters; otherwise cuts at the last whole word that fits and drops any
+    trailing joining word so the title does not end on "of" or "the"."""
+    title = " ".join(str(title or "").split())
+    if len(title) <= limit:
+        return title
+    best = ""
+    for sep in _CLAUSE_BREAKS:
+        start = 0
+        while True:
+            at = title.find(sep, start)
+            if at < 0 or at > limit:
+                break
+            head = title[:at].rstrip(" ,;:–—-")
+            if _MIN_CLAUSE <= len(head) <= limit and len(head) > len(best):
+                best = head
+            start = at + 1
+    if best and len(best) >= len(title) / 2:
+        words = best.split(" ")
+        _drop_dangling(words)
+        if len(" ".join(words)) >= _MIN_CLAUSE:
+            return " ".join(words)
+    words = [w for w in title[: limit + 1].split(" ") if w]
+    if title[limit] != " ":
+        words = words[:-1]  # the last word was cut part-way
+    popped = _drop_dangling(words)
+    # A cut inside a short trailing phrase ("... on off-site affordable",
+    # "... and Three Other Greater") reads as broken; end before that phrase.
+    # Not needed when the cut already fell at a joining word, which was dropped.
+    if not popped:
+        for i in range(len(words) - 1, max(len(words) - 5, 0), -1):
+            if words[i].lower() in _PHRASE_STARTS:
+                head = " ".join(words[:i]).rstrip(" ,;:–—-")
+                if len(head) >= _MIN_CLAUSE:
+                    words[:] = head.split(" ")
+                    _drop_dangling(words)
+                break
+    return " ".join(words).rstrip(" ,;:–—-") or title[:limit]
+
+
 def title_tag(title: str) -> str:
     """The <title>: the brand suffix only when it still fits Google's display.
 
     1,427 of 1,785 page titles ran past what Google shows, partly because the
     17-character suffix was always added. Google shows the site name beside
     results separately, so a long headline goes out alone rather than being
-    cut off mid-word."""
-    title = str(title or "").strip()
-    return title + TITLE_SUFFIX if len(title) + len(TITLE_SUFFIX) <= TITLE_TAG_LIMIT else title
+    cut off mid-word. A headline over 70 characters is shortened (see
+    shorten_title) so Bing does not flag it as too long."""
+    title = " ".join(str(title or "").split())
+    if len(title) + len(TITLE_SUFFIX) <= TITLE_TAG_LIMIT:
+        return title + TITLE_SUFFIX
+    return shorten_title(title)
 
 
 def restyle_feed(path) -> int:

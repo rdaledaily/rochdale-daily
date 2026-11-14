@@ -251,7 +251,7 @@ def card(row: dict) -> str:
     datetime_attr = published.isoformat().replace("+00:00", "Z") if published.year > 1970 else ""
     href = f"/articles/{slug}.html"
     image_markup = (
-        f'<div class="story-image-wrap"><img src="/{html.escape(image, quote=True)}" alt="" loading="lazy" decoding="async"></div>\n'
+        f'<div class="story-image-wrap"><img src="/{html.escape(image, quote=True)}" alt="{html.escape(clean(row.get("image_alt")) or clean(row.get("title")) or "Rochdale Daily story image", quote=True)}" loading="lazy" decoding="async"></div>\n'
         if image
         else ""
     )
