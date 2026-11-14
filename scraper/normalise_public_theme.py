@@ -185,6 +185,15 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
                 print(f"::warning title=Ward postcodes::Lookup skipped ({type(error).__name__}: {error})")
         from archive_quality import apply as apply_archive_quality
         apply_archive_quality(root, images=True, network_images=False)
+        # archive_quality rewrites every <title> through title_tag(), which
+        # shortens long headlines to 70 characters. Two different stories can
+        # shorten to the same title, and that also strips the publication date
+        # archive_integrity added above to tell shared titles apart. Without
+        # this second pass the --check run that follows always finds those
+        # pages "needing normalisation" again and fails the publish.
+        for page in archive_integrity(root, check=False):
+            if page not in changed:
+                changed.append(page)
     # The month-by-month archive lists only what is indexable, so it is built
     # after the archive sweep, and themed like every other public page.
     pages, stale = build_archive_pages(root)
