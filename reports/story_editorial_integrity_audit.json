@@ -1,12 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 611,
-  "published_count": 611,
+  "article_count": 615,
+  "published_count": 615,
   "category_change_count": 0,
-  "image_change_count": 128,
+  "image_change_count": 129,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "laced-vapes-spice-children-how-to-report-sellers-rochdale",
+      "title": "Laced vapes: what is in them, how they reach children, and how to report sellers",
+      "category": "health",
+      "reason": "crime visual (police) does not match health story",
+      "before": {
+        "image_url": "assets/img/cards/seized_by_police.jpg",
+        "img": "assets/img/cards/seized_by_police.jpg",
+        "status": "editorial-photo"
+      },
+      "after": "assets/img/cards/de7d2a1f9a7e-place-generated-card.jpg"
+    },
     {
       "slug": "rochdale-faces-york-city-in-league-two-clash-after-dramatic-title-decider",
       "title": "Rochdale to face York City again after April title decider",
@@ -1089,7 +1101,7 @@
     },
     {
       "slug": "lifts-at-freehold-tram-stop-out-of-service-for-repairs",
-      "title": "Lifts out of service at Freehold tram stop due to replacement works",
+      "title": "Failsworth tram stop lifts out of service until further notice",
       "category": "transport",
       "reason": "cached/library image lacks canonical/source provenance",
       "before": {
