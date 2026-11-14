@@ -19,6 +19,7 @@ CSS_PATH = ROOT / "assets" / "css" / "site.css"
 OUTPUT_DIR = ROOT / "wards"
 SITE = "https://rochdaledaily.co.uk"
 MAX_STORIES = 12
+MAX_BOROUGH_STORIES = 9
 ARCHIVE_INDEX_PATH = ROOT / "archive-index.json"
 PLACE_OUTPUT_DIR = ROOT
 
@@ -317,9 +318,15 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     missing = []
 
+    # Every story has a place on the hubs (editor, 14 Nov 2026): ward and
+    # town stories under "Ward news", stories about the whole borough under
+    # "Across the borough" on every hub, never claimed for one ward.
+    decisions = [(article, ward_decision(article)) for article in articles]
+    borough = [article for article, d in decisions if d.get("status") == "borough-wide"][:MAX_BOROUGH_STORIES]
+
     for ward, config in wards.items():
         areas = {area.lower() for area in config.get("areas", [])}
-        stories = [article for article in articles if ward in ward_decision(article)["wards"]][:MAX_STORIES]
+        stories = [article for article, d in decisions if ward in d["wards"]][:MAX_STORIES]
         people = (votes.get("wards") or {}).get(ward, [])
 
         for person in people:
@@ -340,6 +347,8 @@ def main():
             + f'<h2 class="rd-h2">Your councillors</h2><div class="rd-grid">{councillors}</div>'
             + '<p>Only votes taken by name are listed. Rochdale Daily never infers an individual vote where the minutes do not name the councillor.</p>'
             + f'<h2 class="rd-h2">Ward news</h2><div class="rd-grid">{"".join(story_card(article) for article in stories) or "<p>No stories filed for this ward yet.</p>"}</div>'
+            + (f'<h2 class="rd-h2">Across the borough</h2><p>Stories about Rochdale borough as a whole, which affect {esc(ward)} along with every other ward.</p>'
+               f'<div class="rd-grid">{"".join(story_card(article) for article in borough)}</div>' if borough else '')
             + FOOT
         )
         (OUTPUT_DIR / f"{slugify(ward)}.html").write_text(paste_friendly(page), encoding="utf-8")
@@ -353,7 +362,7 @@ def main():
     def ward_card(ward):
         config = wards.get(ward) or {}
         areas = {area.lower() for area in config.get("areas", [])}
-        n_stories = sum(1 for a in articles if ward in ward_decision(a)["wards"])
+        n_stories = sum(1 for a, d in decisions if ward in d["wards"])
         n_people = len((votes.get("wards") or {}).get(ward, []))
         bits = []
         if n_stories:
