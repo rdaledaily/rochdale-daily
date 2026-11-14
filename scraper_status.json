@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-14T17:28:53.046861Z",
+  "last_run_at": "2026-11-14T17:46:36.595971Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,30 +54,27 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 111,
+  "raw_candidates_before_job_filter": 117,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 111,
-  "candidate_clusters": 45,
+  "raw_candidates": 117,
+  "candidate_clusters": 47,
   "google_news_resolution": {
-    "wrappers": 80,
-    "resolved": 45,
-    "text_recovered": 21,
+    "wrappers": 66,
+    "resolved": 36,
+    "text_recovered": 24,
     "reattributed": 1,
-    "images_found": 32
+    "images_found": 35
   },
-  "duplicates_merged": 66,
+  "duplicates_merged": 70,
   "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "rochdale-faces-york-city-in-league-two-clash-after-dramatic-title-decider",
-      "source_url": "https://www.yorkmix.com/york-city-aim-for-first-away-win-at-rochdale-home-to-happy-memories"
-    }
-  ],
-  "new_articles": 1,
-  "live_articles": 615,
-  "skipped": 0,
-  "rewrite_skip_reasons": {},
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
+  "new_articles": 0,
+  "live_articles": 613,
+  "skipped": 1,
+  "rewrite_skip_reasons": {
+    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
+  },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 0,
@@ -89,15 +86,15 @@
     "reopened_after_final_gate_removal": 0
   },
   "rewrite_ledger": {
-    "entries": 154,
+    "entries": 155,
     "by_outcome": {
       "editorial_twin": 9,
       "failed": 18,
       "published": 84,
-      "rejected": 43
+      "rejected": 44
     },
-    "held_back_this_run": 26,
-    "held_already_published": 15,
+    "held_back_this_run": 27,
+    "held_already_published": 16,
     "held_rejected": 11,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -203,13 +200,11 @@
       "last_attempt_at": "2026-11-11T17:10:48.190927Z"
     }
   ],
-  "published_with_style_issues": {
-    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1
-  },
+  "published_with_style_issues": {},
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 102,
-    "website_discovery": 3,
+    "rss_and_google_news": 105,
+    "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -254,6 +249,14 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -333,32 +336,34 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 17,
-    "Rochdale AFC": 12,
+    "Rochdale Times": 20,
+    "Rochdale AFC": 13,
     "Manchester Evening News": 11,
     "Roch Valley Radio": 9,
     "InYourArea": 9,
-    "Rochdale Borough Council": 8,
+    "The York Press": 6,
+    "Rochdale Borough Council": 6,
     "BBC": 6,
-    "The York Press": 5,
     "Bee Network live travel alerts": 5,
     "Colchester Gazette": 3,
     "Somerset County Gazette": 3,
     "Yorkshire Post": 3,
+    "chelmsfordweeklynews.co.uk": 2,
     "Clacton Gazette": 2,
-    "https://www.birmingham-now.co.uk/": 2,
     "Sky Sports": 2,
+    "Thurrock Gazette": 2,
     "Roch Valley Radio Local News": 2,
     "BBC Manchester": 1,
     "Rochdale Borough Council RSS": 1,
     "AOL.com": 1,
+    "The Northern Echo": 1,
     "The Sun": 1,
     "Yahoo Sports": 1,
     "Total Rugby League": 1,
     "Gazetteherald": 1,
     "East Anglian Daily Times": 1,
     "Facebook": 1,
-    "chelmsfordweeklynews.co.uk": 1,
+    "Diss Mercury": 1,
     "Rochdale Borough Council News": 1,
     "Food Standards Agency": 1
   },
@@ -402,10 +407,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-326732920cd56d8cba86"
+    "sport-v3-cc2f21bc0ec17148536f"
   ],
   "selected_candidate_urls": [
-    "https://www.yorkmix.com/york-city-aim-for-first-away-win-at-rochdale-home-to-happy-memories"
+    "https://rochdaleafc.co.uk/report-york-city-home-141126/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -439,7 +444,7 @@
       "rochdale": 1
     },
     "selected_by_source": {
-      "yorkmix": 1
+      "rochdale afc": 1
     },
     "must_cover_selected": 0
   },
@@ -989,7 +994,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 10,
+  "robots_denied_count": 7,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -997,20 +1002,11 @@
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMimgFBVV95cUxOeF9ra1FuS25tU3ByX0ZaRktlRHlvYklOcWZrWGc5aFVJMXVGNXU4amdXZ1J4ME5EQXVwNnJjdjNBNkFLdWhpdlYyX1B4SXN5alNkVEhueTFKTHNzMlk3enp1WHI0aTFSSVZNRWU5cWpqRERXdlVGYUJEYnFOa25VTTJVdjBHaVkwQjBFb3JnUE5DSnpjN2pMbEtn?oc=5",
-    "https://news.google.com/rss/articles/CBMiggFBVV95cUxNdlJhczRpVTNlaTRkWExlTkRrb0ZaZUFnZUl6N29saEFyTWxVOVA4R2M0R0tOdXFuN1dnMHBtX1RjSV9sQXBJUXZxbVFDLWdlUlhmZmVWU0VueXY5MEtZMGNuYkYzZ0s5ZElyaG5vcU4tZGhRZmxKaTdaaUFPemNBMXdB?oc=5",
-    "https://news.google.com/rss/articles/CBMigAFBVV95cUxNTGNNODlNZTBqclBHR042TldYSlByMzJiSms0WTJBY0VBNFR5Nno0bm4xaTBqX0hoeEdDQWZvU1JlSS1rSXVPU3RoMVhPRHZaMEdTekZrdzBlNjFEQm11ckRlS1FKazVaM0V6WDFmSFNNWDRrZWdNZmF2OV94QVctYQ?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk",
-    "rochdalevaliant.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdalevaliant.uk": 1,
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1046,8 +1042,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-14T17:36:12.750636Z",
-  "frontpage_article_count": 12,
+  "frontpage_generated_at": "2026-11-14T17:54:05.642688Z",
+  "frontpage_article_count": 13,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1098,18 +1094,18 @@
       "business": 1,
       "health": 2,
       "environment": 1,
-      "news": 4,
+      "news": 5,
       "community": 1
     },
     "selected_by_ward": {
-      "borough-wide": 11,
+      "borough-wide": 12,
       "Healey": 1
     },
     "selected_by_area": {
       "healey": 1,
       "heywood": 2,
       "middleton": 1,
-      "rochdale": 10
+      "rochdale": 11
     },
     "selected_by_source": {
       "rochdale times": 2,
@@ -1120,14 +1116,15 @@
       "rochdale daily": 2,
       "rochdale afc": 1,
       "nhs": 1,
+      "rochdale borough council": 1,
       "manchester evening news": 1,
       "industrial archaeology guides to healey dell (healey dell heritage centre)": 1
     },
-    "pool_size": 14,
-    "primary_pool_size": 14,
+    "pool_size": 15,
+    "primary_pool_size": 15,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 12,
+    "frontpage_count": 13,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 5,
     "fresh_under_homepage_window": 12,
@@ -1135,14 +1132,14 @@
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 13,
-  "events_kept_other_source": 29,
+  "event_ticket_source_error": "manual publish reused existing approved ticket events",
+  "ticket_events_collected_this_run": 0,
+  "events_kept_other_source": 35,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
+  "approved_ticket_events": 11,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 615,
+  "duplicate_articles_after_postprocessing": 613,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1151,12 +1148,10 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 28,
-  "whats_on_event_count": 13,
-  "published_after_editorial_gate": 1,
-  "published_new_slugs": [
-    "rochdale-faces-york-city-in-league-two-clash-after-dramatic-title-decider"
-  ],
+  "area_archive_count": 27,
+  "whats_on_event_count": 11,
+  "published_after_editorial_gate": 0,
+  "published_new_slugs": [],
   "drafts_not_published": 0,
   "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
