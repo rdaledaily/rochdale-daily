@@ -1284,6 +1284,10 @@ def render_article_page(article: dict[str, Any], all_articles: list[dict[str, An
         # The editor's own article keeps its paragraphing; UK date order and
         # no filler ending, right of reply untouched (reader_copy.py).
         raw_content = tidy_editor_html(raw_content)
+    # Banned links (gambling, betting, piracy, denied outlets) never reach a
+    # rendered page, whatever lane renders it (link_ban.py). Fails closed.
+    import link_ban
+    raw_content = link_ban.strip_html(raw_content)
     content = insert_incontent_ad(raw_content)
     # In-text "Read more" links to genuinely related stories (inline_related.py).
     try:

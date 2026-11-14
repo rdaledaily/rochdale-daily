@@ -1867,6 +1867,11 @@ def main() -> int:
         or datetime.min.replace(tzinfo=timezone.utc),
         reverse=True,
     )
+    # No banned link (gambling, betting, piracy, denied outlets) is ever
+    # written to the live feed, from any record, manual or automated.
+    import link_ban
+    merged = link_ban.strip_value(merged)
+    link_ban.recount_sources(merged)
     write_json_atomic(ARTICLES_PATH, merged)
     twin_report = retire_twins(
         editorial_twins,
