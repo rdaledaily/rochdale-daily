@@ -38,7 +38,7 @@
     .comment-auth .tabs button.on{background:#0e7490;color:#fff}.comment-msg{margin:10px 0 0;font-size:13px;padding:9px 11px;display:none}.comment-msg.err,.comment-msg.ok{display:block}.comment-msg.err{background:#fbeaec;border-left:4px solid #c8102e}.comment-msg.ok{background:#e7f7ef;border-left:4px solid #23a06a}
     .comment-signedin{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#666;font-size:13px;margin-bottom:10px}.comment-signout,.comment-report{background:none;border:0;color:#666;text-decoration:underline;cursor:pointer;padding:0}
     .comment-actions{margin-top:6px}.comment-delete{background:none;border:0;color:#b42318;text-decoration:underline;cursor:pointer;padding:0;font-size:13px}
-    .article-comment-count{display:inline-flex;align-items:center;gap:5px;color:#0e7490;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}.article-comment-count:hover{text-decoration:underline}.article-comment-count svg{width:17px;height:17px;stroke:currentColor;stroke-width:2;fill:none}
+    .article-comment-count{display:inline-flex;align-items:center;gap:8px;margin:2px 0 14px;padding:7px 14px;border:2px solid #0e7490;border-radius:999px;background:#f0fcfe;color:#0b5265;font-family:var(--font-ui,inherit);font-weight:800;font-size:15px;line-height:1.2;text-decoration:none;white-space:nowrap}.article-comment-count:hover,.article-comment-count:focus-visible{background:#dff8fc}.article-comment-count svg{width:18px;height:18px;stroke:currentColor;stroke-width:2.2;fill:none}.article-comment-count-cta{font-weight:600;font-size:13px;color:#0e7490;text-decoration:underline;text-underline-offset:2px}
     .upvote{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:4px 2px;cursor:pointer;color:#666;min-width:42px}.upvote svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.4;fill:none}.upvote.voted{color:#0e7490}.upvote-count{font-size:13px;font-weight:900}
     .rd-area-badge{display:inline-block;margin:3px 0 0 7px;padding:3px 7px;border-radius:12px;background:#e7f4fd;color:#135778;font-size:11px;font-weight:700;letter-spacing:0;text-transform:none}.comment-quicklink{display:inline-block;margin:0 0 12px;color:#075d76;font-weight:700}.comment-compose-first{margin-bottom:12px}\n    @media(max-width:600px){.editorial-legal-note{padding:8px 10px!important}.comments-section{margin-top:10px;padding:17px 13px}.comments-invite{padding:12px}.comment{padding:12px 10px;gap:8px}.comment-auth{padding:13px}.comment-form .rowline{align-items:stretch;flex-direction:column}.comment-submit{width:100%;min-height:46px}.comment-signedin{align-items:flex-start}.comments-section h2{font-size:23px}}
   `;
@@ -121,16 +121,25 @@
       return payload;
     }finally{clearTimeout(timer);}
   }
-  // Comment count beside the byline, linking down to the comments. Built here
-  // rather than in the page template so every archived article gets it too.
+  // "Comments (n)" directly under the headline, linking down to the comments.
+  // It sits in the page flow (not in the byline row, where the floating sound
+  // button covered it on phones) and is built here so archived pages get it too.
   function showTopCount(n){
-    const byline=document.querySelector('.article-byline');
     let link=document.getElementById('article-comment-count');
     if(n===null){link?.remove();return;}
-    if(!byline)return;
-    if(!link){link=document.createElement('a');link.id='article-comment-count';link.className='article-comment-count';link.href='#comments-root';byline.appendChild(link);}
-    link.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"></path></svg><span>${n} ${n===1?'comment':'comments'}</span>`;
-    link.setAttribute('aria-label',`${n} ${n===1?'comment':'comments'}. Go to comments`);
+    const anchor=document.querySelector('.article-main h1')||document.querySelector('h1');
+    if(!anchor)return;
+    if(!link){link=document.createElement('a');link.id='article-comment-count';link.className='article-comment-count';link.href='#comments-root';anchor.insertAdjacentElement('afterend',link);}
+    link.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"></path></svg><span>Comments (${n})</span>${n===0?'<span class="article-comment-count-cta">Be the first</span>':'<span class="article-comment-count-cta">Join in</span>'}`;
+    link.setAttribute('aria-label',`Comments (${n}). Go to comments`);
+  }
+  // Show the number straight away from the cheap all-articles count, before the
+  // full comment list has loaded; mount() then corrects it.
+  if(category!=='crime'){
+    fetch(`${API}?counts=1`,{headers:{Accept:'application/json'}}).then(r=>r.ok?r.json():null).then(d=>{
+      if(!d||!d.counts||document.getElementById('article-comment-count'))return;
+      showTopCount(Number(d.counts[slug]||0));
+    }).catch(()=>{});
   }
   let mountVersion=0;
   async function mount(){

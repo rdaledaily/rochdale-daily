@@ -33,5 +33,7 @@ class LoyaltyTests(unittest.TestCase):
         self.assertIn("action:'delete',token:session.token,slug,id:btn.dataset.delete",self.comments)
     def test_comment_count_beside_byline(self):
         self.assertIn("article-comment-count",self.comments)
+        self.assertIn("Comments (${n})",self.comments)
+        self.assertIn("insertAdjacentElement('afterend',link)",self.comments)
         self.assertIn("showTopCount(null)",self.comments)
 if __name__=="__main__":unittest.main()
