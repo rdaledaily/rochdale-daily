@@ -208,6 +208,14 @@ def normalise(root: Path = ROOT, *, check: bool = False) -> tuple[int, list[str]
         if not check:
             path.unlink()
     changed += clean_sitemaps(root, check=check)
+    if not check:
+        # Share-image crops nothing points at any more. Last, once every page
+        # is in its final form. Cloudflare Pages refuses a deployment of more
+        # than 20,000 files; unpruned, this folder alone passed that.
+        from og_images import prune_unreferenced
+        pruned = prune_unreferenced(root)
+        if pruned["removed"]:
+            print(f"Share images: removed {pruned['removed']} unused crops, kept {pruned['kept']}.")
     for name in FEEDS:
         feed = root / name
         if feed.is_file():
