@@ -58,10 +58,11 @@ def test_a_point_with_a_new_figure_or_name_is_dropped():
         "Buses on the Bee Network 471 route will be diverted nearby.",  # names not in article
         "The signed diversion runs via Egerton Street, Pilsworth Road and Tower Street.",
     ]}, **ROADWORKS)
-    assert impact["points"] == [
-        "Work on the Cartridge Street closure will continue for a maximum of 21 days.",
-        "The signed diversion runs via Egerton Street, Pilsworth Road and Tower Street.",
-    ]
+    # The invented cost and bus route never appear; anything kept is either a
+    # grounded restatement or the story's own sentence.
+    text = " ".join(impact["points"])
+    assert "40,000" not in text and "Bee Network" not in text and "471" not in text
+    assert "The signed diversion runs via Egerton Street, Pilsworth Road and Tower Street." in impact["points"]
 
 
 LIBRARY = dict(
@@ -79,17 +80,43 @@ LIBRARY = dict(
 GOOD_LIBRARY_POINT = "Residents can use Littleborough library during the closure."
 
 
-def test_points_that_change_a_fact_are_dropped():
+CLOSURE = "Rochdale Council will close Smithy Bridge library on 15 January for 150 days of repairs."
+COST = "The work will cost £2.5m and is funded by the council."
+
+
+def test_points_that_change_a_fact_are_corrected_to_the_story_sentence():
     # Each of these got through the first version (14 Nov 2026 check): every
     # figure and name was somewhere in the story, but the point said something
-    # the story does not.
-    for wrong in (
-        "The library will close for 15 days of repairs from January.",      # 150 days; 15 is the date
-        "The library will close on 1 March for repairs to the building.",   # 1 March is the consultation
-        "Smithy Bridge library will not close for repairs, the council said.",  # negation flipped
-        "The repairs will cost £2.5 for each resident in Smithy Bridge.",   # £2.5m in total
+    # the story does not. Editor: change them, don't block them.
+    for wrong, right in (
+        ("The library will close for 15 days of repairs from January.", CLOSURE),       # 150 days
+        # 1 March belongs to the consultation, so that is the sentence it becomes.
+        ("The library will close on 1 March for repairs to the building.",
+         "A consultation on opening hours closes on 1 March."),
+        ("Smithy Bridge library will not close for repairs, the council said.", CLOSURE),  # negation
+        ("The repairs will cost £2.5 for each resident in Smithy Bridge.", COST),       # £2.5m in total
     ):
-        assert li.build({"audience": "", "points": [wrong, GOOD_LIBRARY_POINT]}, **LIBRARY) is None, wrong
+        impact = li.build({"audience": "", "points": [wrong, GOOD_LIBRARY_POINT]}, **LIBRARY)
+        assert impact is not None, wrong
+        assert impact["points"][0] == right, (wrong, impact["points"])
+        assert wrong not in impact["points"]
+
+
+def test_a_point_with_nothing_to_correct_it_to_is_dropped():
+    # Shares too few words with any sentence: no safe replacement exists.
+    assert li.build({"audience": "", "points": [
+        "Bin collections across Smithy Bridge move to a fortnightly timetable next spring.",
+        GOOD_LIBRARY_POINT,
+    ]}, **LIBRARY) is None
+
+
+def test_two_points_corrected_to_the_same_sentence_appear_once():
+    impact = li.build({"audience": "", "points": [
+        "The library will close for 15 days of repairs from January.",
+        "Smithy Bridge library will not close for repairs, the council said.",
+        GOOD_LIBRARY_POINT,
+    ]}, **LIBRARY)
+    assert impact["points"] == [CLOSURE, GOOD_LIBRARY_POINT]
 
 
 def test_true_restatements_of_the_library_story_survive():

@@ -168,6 +168,40 @@ def _matches_sentence(point: str, sentence: str) -> bool:
     return len(content & _content(sentence)) / len(content) >= MIN_OVERLAP
 
 
+CORRECTION_OVERLAP = 0.5
+
+
+def corrected(point: str, sentences: list[str]) -> str | None:
+    """Editor, 14 Nov 2026: "Change them, don't block them." A point that gets a
+    fact wrong is replaced by the story sentence it was restating, word for
+    word, so the box can only ever repeat what the checked story says. The
+    sentence is chosen by shared words, ignoring the figures and negatives the
+    point got wrong; if no sentence is clearly the one (at least half the
+    point's words), there is nothing safe to change it to and it is dropped."""
+    content = _content(point)
+    if not content:
+        return None
+    # The figure the point misquoted ("£2.5" for "£2.5m") says which sentence
+    # it came from, so a sentence holding those digits ranks higher.
+    digits = {re.sub(r"[^\d.]", "", f) for f, _ in _figures(point)}
+    best, best_rank = None, 0.0
+    for sentence in sentences:
+        overlap = len(content & _content(sentence)) / len(content)
+        held = {re.sub(r"[^\d.]", "", f) for f, _ in _figures(sentence)}
+        rank = overlap + (0.5 * len(digits & held) / len(digits) if digits else 0.0)
+        if (overlap >= CORRECTION_OVERLAP / 2 or digits & held) and rank > best_rank:
+            best, best_rank = sentence, rank
+    if best is None or best_rank < CORRECTION_OVERLAP:
+        return None
+    best = best.strip()
+    if not best.endswith((".", "!", "?")):
+        best += "."
+    n_words = len(best.split())
+    if n_words < 6 or n_words > 30 or "?" in best or "!" in best or _SENSITIVE_RE.search(best):
+        return None
+    return best
+
+
 def _grounded(point: str, article_text: str, sentences: list[str]) -> bool:
     """A point must restate ONE sentence of the article: its figures (whole, with
     the same unit), its negatives and most of its words all come from that
@@ -202,6 +236,8 @@ def build(
         return None
     article_text = _plain(" ".join([title, excerpt, *paragraphs]))
     sentences = _sentences([title, excerpt, *paragraphs])
+    # Corrections come from the body only: the headline is never repeated.
+    body_sentences = _sentences([excerpt, *paragraphs])
     points: list[str] = []
     seen: set[str] = set()
     for raw in draft_impact.get("points") or []:
@@ -215,8 +251,12 @@ def build(
             continue
         if _SENSITIVE_RE.search(point):
             continue
+        if not _grounded(point, article_text, sentences):
+            point = corrected(point, body_sentences)
+            if point is None:
+                continue
         key = point.casefold()
-        if key in seen or not _grounded(point, article_text, sentences):
+        if key in seen:
             continue
         # A point that only repeats the headline tells the reader nothing.
         if key.rstrip(".") == _plain(title).casefold():
