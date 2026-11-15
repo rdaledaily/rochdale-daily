@@ -6,16 +6,25 @@ name: Top-story follow-ups
 # a road reopening, or an MP's or councillor's comment (editor, 15 Nov 2026).
 # Each story is looked at no more than hourly. Legal developments not from an
 # official source are held for the editor on /checked.
+#
+# Each run starts the next one (wait_minutes later). Measured 15 Nov 2026: the
+# cron below did not fire once between 18:00 and 20:45, and the repo's other
+# scheduled lanes fire with gaps of an hour or more, so the cron is only a
+# backstop that restarts the chain if it ever breaks.
 
 on:
   schedule:
-    - cron: "12,42 * * * *"
+    - cron: "17 */3 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
         description: "Research and report only; change no story"
         required: false
         default: "false"
+      wait_minutes:
+        description: "Minutes to wait before starting (used by the chain)"
+        required: false
+        default: "0"
 
 permissions:
   contents: write
@@ -28,7 +37,7 @@ concurrency:
 jobs:
   followups:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       OPENAI_MODEL: "gpt-4o-mini"
@@ -38,6 +47,9 @@ jobs:
       RD_FOLLOWUP_APPLY: "true"
       PYTHONPATH: scraper
     steps:
+      - name: Wait for this run's slot
+        if: github.event.inputs.wait_minutes != '' && github.event.inputs.wait_minutes != '0'
+        run: sleep $(( ${{ github.event.inputs.wait_minutes }} * 60 ))
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
@@ -124,3 +136,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: bash scraper/gh_dispatch.sh publish.yml --ref main
+      - name: Start the next run in half an hour
+        if: always() && github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scraper/gh_dispatch.sh top-story-followups.yml --ref main -f dry_run=false -f wait_minutes=25
