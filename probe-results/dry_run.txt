@@ -25,7 +25,7 @@
 
 === nomis ===
   nomis_geo.json: HTTP 200 application/json 1055 bytes
-    {  "structure" :{"codelists" :{"codelist" :[ {"agencyid" :"NOMIS","id" :"CL_162_1_GEOGRAPHY","code" :[ {"annotations" :{"annotation" :[ {"annotationtext" :"local authorities: district / unitary (as of April 2023)","annotationtitle" :"TypeName"},{"annotationtext" :424,"annotationtitle" :"TypeCode"},{"annotationtext" :"E08000005","annotationtitle" :"GeogCode"}]},"parentcode" :2013265922,"description" :{"value" :"Rochdale","lang" :"en"},"value" :1778385128}],"name" :{"value" :"geography","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_162_1","prepared" :"2026-11-15T18:58:00Z","sender" :{"con
+    {  "structure" :{"codelists" :{"codelist" :[ {"agencyid" :"NOMIS","id" :"CL_162_1_GEOGRAPHY","code" :[ {"annotations" :{"annotation" :[ {"annotationtext" :"local authorities: district / unitary (as of April 2023)","annotationtitle" :"TypeName"},{"annotationtext" :424,"annotationtitle" :"TypeCode"},{"annotationtext" :"E08000005","annotationtitle" :"GeogCode"}]},"parentcode" :2013265922,"description" :{"value" :"Rochdale","lang" :"en"},"value" :1778385128}],"name" :{"value" :"geography","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_162_1","prepared" :"2026-11-15T19:07:40Z","sender" :{"con
   nomis_cc.csv: HTTP 200 text/csv 531 bytes
     "DATE_NAME","GEOGRAPHY_NAME","GEOGRAPHY_CODE","MEASURE_NAME","OBS_VALUE"
 "July 2026","Rochdale","E08000005","Claimant count",8485
@@ -43,8 +43,8 @@
 
 === find_tender ===
   page 1: 2026-11-15T17:06:00Z .. 2026-11-13T16:00:35Z
-  page 5: 2026-11-13T10:11:14Z .. 2026-11-12T18:59:51Z
-  pages=5 releases=464 complete=True postcode_rule=0 regex_only=2
+  page 5: 2026-11-13T10:11:14Z .. 2026-11-12T19:13:53Z
+  pages=5 releases=463 complete=True postcode_rule=0 regex_only=2
    DROP 108192-2026 ['award', 'contract'] | Stockport Metropolitan Borough Council | buyer pc SK1 3XE
    DROP 107849-2026 ['award', 'contract'] | Government Commercial Agency | buyer pc L3 9PP
 
@@ -69,11 +69,11 @@
   "offered_today": 2,
   "listed": 12,
   "other_notice_types": 2,
-  "already_seen": 1,
-  "new": 9,
+  "already_seen": 2,
+  "new": 8,
   "outside_borough": 0,
   "no_company_address": 0,
-  "notice_unreadable": 1
+  "notice_unreadable": 0
  },
  "written_answers": {
   "status": "ok",
@@ -112,7 +112,7 @@
   "daily_cap": 3,
   "offered_today": 0,
   "pages": 1,
-  "releases": 16,
+  "releases": 15,
   "borough_buyer": 0,
   "not_story_type": 0,
   "already_seen": 0,
@@ -143,7 +143,7 @@
    offer: council_roadworks | Smithy Bridge Road, roadworks in Littleborough on 15 November 2026 | https://www.rochdale.gov.uk/directory-record/2646/smithy-bridge-road-roadworks-in-littleborough-on-15-november-2026
    offer: council_roadworks | Union Street, roadworks in Rochdale from 17 November 2026 | https://www.rochdale.gov.uk/directory-record/2602/union-street-roadworks-in-rochdale-from-17-november-2026
    offer: council_roadworks | Norden Christmas Lights, road closures in Rochdale on 22 November 2026 | https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026
-   offer: gazette_insolvency | PANGAEA GLOBAL ASSOCIATES LIMITED: Appointment of Liquidators | https://www.thegazette.co.uk/notice/5252418
+   offer: gazette_insolvency | PANGAEA GLOBAL ASSOCIATES LIMITED: Resolutions for Winding-up | https://www.thegazette.co.uk/notice/5252419
    offer: gazette_insolvency | ILEARN INTERNATIONAL LIMITED: Resolutions for Winding-up | https://www.thegazette.co.uk/notice/5251424
    offer: ons_housing | Rochdale house prices and rents: ONS figures updated 21 October 2026 | https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005/#updated-21-october-2026
    offer: claimant_count | Rochdale claimant count rose in September 2026 | https://www.nomisweb.co.uk/reports/lmp/la/1946157091/report.aspx#claimants-september-2026
