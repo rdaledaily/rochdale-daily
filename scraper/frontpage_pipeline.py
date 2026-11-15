@@ -57,6 +57,7 @@ from story_identity import (
     missing_person_match,
     strip_publisher_suffix,
     _is_roundup_like,
+    is_editor_record,
 )
 from manual_articles import load_manual_article_records
 from editorial_twins import retire_twins, split_editorial_twins
@@ -1151,6 +1152,22 @@ def merge_group(group: list[dict[str, Any]]) -> dict[str, Any]:
     return merged
 
 
+def _two_editor_articles(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    """Two of the editor's own articles are separate stories by her decision.
+
+    story_identity._records_match has refused these merges since 4 Nov 2026,
+    but the two loops in this file did not. Measured on the live feed of
+    15 Nov 2026: this step grouped 64 of her articles into 26 groups on every
+    run (a road reopening with a girls' rugby session and a community cafe;
+    six unrelated crime stories). 43 of the 66 pairs matched because both
+    cite the same bare homepage as their source - facebook.com, gmp.police.uk
+    - which story_similarity scores as the same link, 1.0. A later step put
+    her articles back, so none was lost, but an automated story matching such
+    a group would have been. An automated copy may still fold into hers.
+    """
+    return is_editor_record(left) and is_editor_record(right)
+
+
 def _mergeable(left: dict[str, Any], right: dict[str, Any]) -> bool:
     """Decide whether two feed records are the same story.
 
@@ -1167,6 +1184,8 @@ def _mergeable(left: dict[str, Any], right: dict[str, Any]) -> bool:
     # Court fire reports were folded into Morning Briefings and their pages
     # took the briefing's title. A roundup is only ever the same as itself.
     if _is_roundup_like(left) or _is_roundup_like(right):
+        return any(left.get(f) and left.get(f) == right.get(f) for f in ("id", "slug"))
+    if _two_editor_articles(left, right):
         return any(left.get(f) and left.get(f) == right.get(f) for f in ("id", "slug"))
     left_event = is_event(left)
     right_event = is_event(right)
@@ -1719,6 +1738,8 @@ def _same_frontpage_story(
     """Catch duplicate stories that were assigned different categories."""
     # A briefing is never a duplicate of a story it lists (see _mergeable).
     if _is_roundup_like(left) or _is_roundup_like(right):
+        return any(left.get(f) and left.get(f) == right.get(f) for f in ("id", "slug"))
+    if _two_editor_articles(left, right):
         return any(left.get(f) and left.get(f) == right.get(f) for f in ("id", "slug"))
     person_match = missing_person_match(left, right)
     if person_match is not None:
