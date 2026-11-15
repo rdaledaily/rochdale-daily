@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-15T16:38:38.253079Z",
+  "updated_at": "2026-11-15T17:01:11.261703Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 156,
+  "count": 157,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -2228,15 +2228,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-15T16:38:38.252794Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-15T17:01:11.261453Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
@@ -2437,6 +2437,22 @@
       "category": "crime",
       "text_fingerprint": "40ed1c91a0bb2d0a",
       "recovery_attempts": 2
+    },
+    "https://www.skysports.com/football/video/13612256/rochdale-0-1-york-city-league-two-highlights": {
+      "first_attempt_at": "2026-11-15T16:58:39.233926Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.skysports.com/football/video/13612256/rochdale-0-1-york-city-league-two-highlights"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-15T16:58:39.233926Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 14 November are neither stated nor implied by the source. Use",
+      "title": "Rochdale 0-1 York City | League Two highlights - Sky Sports",
+      "source_name": "Sky Sports",
+      "category": "sport",
+      "text_fingerprint": "ef5cf0b0c77cb77b"
     },
     "https://www.sustainableconstruction-now.com/article/561033/rochdale-completes-3.3m-warwick-mill-purchase": {
       "first_attempt_at": "2026-11-11T08:30:01.729658Z",
