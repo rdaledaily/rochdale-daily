@@ -893,6 +893,67 @@ def _subject_divergence(left: Any, right: Any) -> bool:
     return True
 
 
+# Different fixtures are different stories (15 Nov 2026).
+#
+# Match coverage shares almost every word: the club, the league, "defeat",
+# "clash", the manager. On 6 Nov 2026 the report of the 4-2 league defeat at
+# Port Vale (31 Oct) was folded into the report of the 4-1 Trophy defeat to
+# Doncaster Rovers (3 Nov) and left the feed; a "watch Port Vale v Rochdale"
+# piece was folded into the FA Cup preview against Fleetwood Town; on 30 Oct
+# the Accrington Stanley report and preview and the Grimsby Town draw were all
+# folded into a Port Vale preview. What separates them is the opponent, and
+# it is in the headline. Same opponent (two previews, or a preview and its
+# report) is untouched.
+_FIXTURE_CLUBS = frozenset("""
+accrington stanley|afc wimbledon|aldershot town|altrincham|arsenal|aston villa|atherton|barnet|barnsley|barrow|
+birmingham city|blackburn rovers|blackpool|bolton wanderers|boreham wood|boston united|bradford city|braintree town|
+brentford|brighton|bristol city|bristol rovers|bromley|burnley|burton albion|bury|cambridge united|cardiff city|
+carlisle united|charlton athletic|chelsea|cheltenham town|chesterfield|colchester united|coventry city|crawley town|
+crewe alexandra|crewe|crystal palace|dagenham|derby county|doncaster rovers|eastleigh|everton|exeter city|
+fc halifax town|halifax town|fc united of manchester|fleetwood town|forest green rovers|fulham|gateshead|gillingham|
+grimsby town|harrogate town|hartlepool united|huddersfield town|hull city|ipswich town|leeds united|leicester city|
+leyton orient|lincoln city|liverpool|luton town|maidenhead united|manchester city|manchester united|mansfield town|
+middlesbrough|millwall|mk dons|morecambe|newcastle united|newport county|northampton town|norwich city|nottingham forest|
+notts county|oldham athletic|oldham|oxford united|peterborough united|plymouth argyle|port vale|portsmouth|preston north end|
+queens park rangers|reading|rotherham united|salford city|salford|scunthorpe united|sheffield united|sheffield wednesday|
+shrewsbury town|solihull moors|southampton|southend united|southport|stevenage|stockport county|stoke city|sunderland|
+sutton united|swansea city|swindon town|tamworth|tottenham hotspur|tranmere rovers|walsall|watford|wealdstone|
+west bromwich albion|west ham united|wigan athletic|woking|wolverhampton wanderers|wrexham|wycombe wanderers|yeovil town|
+york city|nantwich town|wythenshawe town|wythenshawe|lionesses
+""".replace("\n", "").split("|"))
+_FIXTURE_CLUB_RE = re.compile(
+    r"\b(" + "|".join(sorted((re.escape(club) for club in _FIXTURE_CLUBS if club), key=len, reverse=True)) + r")\b"
+)
+_FIXTURE_SUFFIX_RE = re.compile(
+    r"\b([A-Z][a-z]+(?: [A-Z][a-z]+)? (?:Town|City|United|Rovers|Athletic|Wanderers|County|Albion|Rangers|Stanley|Alexandra|Argyle|Orient))\b"
+)
+
+
+def fixture_opponents(item: Any) -> set[str]:
+    """Clubs other than Rochdale named in a headline."""
+    title = strip_publisher_suffix(get_value(item, "title", "") or "")
+    lowered = title.lower().replace("’", "'")
+    found = {match.group(1) for match in _FIXTURE_CLUB_RE.finditer(lowered)}
+    found |= {match.group(1).lower() for match in _FIXTURE_SUFFIX_RE.finditer(title)}
+    found = {club for club in found if not club.startswith("rochdale")}
+    # "crewe" inside "crewe alexandra", "oldham" inside "oldham athletic".
+    return {club for club in found if not any(club != other and club in other for other in found)}
+
+
+def different_fixtures(left: Any, right: Any) -> bool:
+    """True when two sport stories name different opponents in their headlines."""
+    if category_family(left) != "sport" or category_family(right) != "sport":
+        return False
+    left_clubs, right_clubs = fixture_opponents(left), fixture_opponents(right)
+    if not left_clubs or not right_clubs:
+        return False
+    for mine in left_clubs:
+        for theirs in right_clubs:
+            if mine == theirs or mine in theirs or theirs in mine:
+                return False
+    return True
+
+
 def missing_person_report(item: Any) -> bool:
     text = combined_text(item).lower()
     return bool(re.search(r"\bmissing\b", text) and re.search(
@@ -985,6 +1046,9 @@ def ongoing_story_match(left: Any, right: Any) -> bool:
     if hours_apart(left, right) > story_window_hours(left, right):
         return False
 
+    if different_fixtures(left, right):
+        return False
+
     person_match = missing_person_match(left, right)
     if person_match is not None:
         return person_match
@@ -1057,6 +1121,9 @@ def story_similarity(left: Any, right: Any) -> float:
     if not areas_compatible(left, right):
         return 0.0
     if hours_apart(left, right) > story_window_hours(left, right):
+        return 0.0
+
+    if different_fixtures(left, right):
         return 0.0
 
     score = 0.0
