@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-15T04:50:25.431686Z",
+  "last_run_at": "2026-11-15T05:08:29.502092Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,27 +54,25 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 111,
+  "raw_candidates_before_job_filter": 106,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 111,
-  "candidate_clusters": 41,
+  "raw_candidates": 106,
+  "candidate_clusters": 40,
   "google_news_resolution": {
-    "wrappers": 66,
-    "resolved": 61,
-    "text_recovered": 39,
+    "wrappers": 77,
+    "resolved": 72,
+    "text_recovered": 30,
     "reattributed": 0,
-    "images_found": 58
+    "images_found": 50
   },
-  "duplicates_merged": 70,
-  "attempted_rewrites": 1,
+  "duplicates_merged": 66,
+  "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
   "live_articles": 618,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "editorial gate: REJECTED_NON_LOCAL": 1
-  },
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 0,
@@ -94,12 +92,21 @@
       "rejected": 51
     },
     "held_back_this_run": 33,
-    "held_already_published": 15,
-    "held_rejected": 18,
+    "held_already_published": 14,
+    "held_rejected": 19,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://uk.sports.yahoo.com/news/well-definitely-lean-lindsey-plots-050000077.html",
+      "title": "'We'll definitely lean on it' - Lindsey plots to use York City's history at Rochdale - Yahoo",
+      "source_name": "Yahoo",
+      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-15T04:46:47.527736Z"
+    },
     {
       "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-seriously-injured-police-investigate-34905164",
       "title": "Man 'seriously injured' as police investigate attack near park in Rochdale",
@@ -271,8 +278,8 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 99,
-    "website_discovery": 6,
+    "rss_and_google_news": 98,
+    "website_discovery": 2,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
     "facebook_official": 0,
@@ -317,14 +324,6 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
-      "bozo": false,
-      "feed_title": ""
-    },
-    "Falinge Park High School": {
-      "url": "https://www.falingepark.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -415,13 +414,13 @@
   },
   "source_counts": {
     "Rochdale AFC": 22,
-    "Rochdale Times": 19,
+    "Rochdale Times": 15,
     "Manchester Evening News": 8,
     "Roch Valley Radio": 7,
     "InYourArea": 6,
     "BBC": 6,
-    "The York Press": 5,
     "Bee Network live travel alerts": 5,
+    "The York Press": 4,
     "Rochdale Borough Council": 4,
     "Yahoo Sports": 3,
     "Yorkshire Post": 3,
@@ -446,9 +445,7 @@
     "Hampshire Chronicle": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {
-    "environment": 1
-  },
+  "selected_by_category": {},
   "published_by_category": {
     "business": 71,
     "community": 92,
@@ -485,12 +482,8 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [
-    "environment-v3-87e9f28176f7f05acdb9"
-  ],
-  "selected_candidate_urls": [
-    "https://uk.sports.yahoo.com/news/well-definitely-lean-lindsey-plots-050000077.html"
-  ],
+  "selected_story_keys": [],
+  "selected_candidate_urls": [],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -500,31 +493,6 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [
-      "environment"
-    ],
-    "selected_categories": [
-      "environment"
-    ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [
-      "rochdale"
-    ],
-    "uncovered_categories": [],
-    "uncovered_wards": [],
-    "uncovered_areas": [],
-    "selected_by_category": {
-      "environment": 1
-    },
-    "selected_by_ward": {},
-    "selected_by_area": {
-      "rochdale": 1
-    },
-    "selected_by_source": {
-      "yahoo": 1
-    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -1122,7 +1090,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-15T04:51:57.804133Z",
+  "frontpage_generated_at": "2026-11-15T05:09:33.598021Z",
   "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1154,11 +1122,13 @@
     ],
     "available_areas": [
       "healey",
-      "heywood"
+      "heywood",
+      "middleton"
     ],
     "selected_areas": [
       "healey",
       "heywood",
+      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
@@ -1178,7 +1148,8 @@
     "selected_by_area": {
       "healey": 1,
       "heywood": 1,
-      "rochdale": 10
+      "middleton": 1,
+      "rochdale": 9
     },
     "selected_by_source": {
       "councillor dylan williams, rochdale borough council": 1,
@@ -1188,9 +1159,9 @@
       "industrial archaeology guides to healey dell (healey dell heritage centre)": 1
     },
     "pool_size": 12,
-    "primary_pool_size": 12,
-    "fallback_stories_used": 0,
-    "selection_window_days": 2,
+    "primary_pool_size": 11,
+    "fallback_stories_used": 1,
+    "selection_window_days": 4,
     "frontpage_count": 6,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 5,
