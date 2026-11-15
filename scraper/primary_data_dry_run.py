@@ -1,378 +1,251 @@
 #!/usr/bin/env python3
-"""Read-only measurement of candidate primary-data sources from a GitHub runner.
+"""PROBE BRANCH ONLY - never merge to main.
 
-Prints one block per source: HTTP status, how many items the endpoint carries,
-how many are about the borough, and the date span. Saves the raw response of
-each endpoint under dry_run_samples/ so parsers are written against real data,
-not a guess at the format. Publishes nothing and writes no state.
+Measures every North West and Lancashire news outlet as a candidate RSS source
+for Rochdale Daily, from a GitHub runner (the same network the newsroom runs
+on). For each outlet: which feed URL works, HTTP status, item count, items per
+day, robots verdict, and - the number that matters - how many current items
+pass the newsroom's OWN gates (is_fresh, should_drop, source_text_is_local)
+exactly as collect_rss_candidates() would apply them to an untrusted feed.
+Publishes nothing and writes no state.
 """
 from __future__ import annotations
 
 import json
-import os
 import re
+import subprocess
 import sys
+import urllib.parse
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-import requests
+subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '--no-cache-dir',
+                'beautifulsoup4', 'feedparser', 'lxml', 'openai', 'dateparser',
+                'Pillow', 'googlenewsdecoder==0.2.2'], check=False)
+
+import feedparser  # noqa: E402
+import requests  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import primary_data  # noqa: E402
+import scraper  # noqa: E402
+import robots_rules  # noqa: E402
 
-UA = "RochdaleDailyBot/1.0 (+https://rochdaledaily.co.uk/about.html)"
-S = requests.Session()
-S.headers["User-Agent"] = UA
-OUT = Path("dry_run_samples")
+# The production collector's feed User-Agent (collect_rss_candidates).
+FEED_UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+           '(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36')
+BOT_UA = 'RochdaleDailyBot/1.0'
+OUT = Path('dry_run_samples')
 OUT.mkdir(exist_ok=True)
 NOW = datetime.now(timezone.utc)
-ONLY = {k.strip() for k in os.getenv("PROBE_ONLY", "").split(",") if k.strip()}
-BOROUGH = re.compile(r"\b(rochdale|heywood|middleton|littleborough|milnrow|newhey|wardle|"
-                     r"castleton|smithy bridge|norden|bamford|kirkholt|alkrington|hopwood)\b", re.I)
+
+NQ = '/news/rss/'  # Newsquest pattern
+NW = '/rss'        # National World pattern
+RE = '/?service=rss'  # Reach pattern
+
+# (name, region, homepage, [candidate feed paths or absolute URLs])
+OUTLETS = [
+    # Greater Manchester
+    ('Manchester Evening News — news', 'Greater Manchester', 'https://www.manchestereveningnews.co.uk', ['/news/?service=rss', '/news/greater-manchester-news/?service=rss']),
+    ('Manchester Evening News — Rossendale', 'Lancashire', 'https://www.manchestereveningnews.co.uk', ['/all-about/rossendale?service=rss']),
+    ('Manchester Evening News — Whitworth', 'Lancashire', 'https://www.manchestereveningnews.co.uk', ['/all-about/whitworth?service=rss']),
+    ('Manchester Evening News — Oldham', 'Greater Manchester', 'https://www.manchestereveningnews.co.uk', ['/all-about/oldham?service=rss']),
+    ('Manchester Evening News — Bury', 'Greater Manchester', 'https://www.manchestereveningnews.co.uk', ['/all-about/bury?service=rss']),
+    ('The Bolton News', 'Greater Manchester', 'https://www.theboltonnews.co.uk', [NQ]),
+    ('Bury Times', 'Greater Manchester', 'https://www.burytimes.co.uk', [NQ]),
+    ('The Oldham Times', 'Greater Manchester', 'https://www.theoldhamtimes.co.uk', [NQ]),
+    ('Leigh Journal', 'Greater Manchester', 'https://www.leighjournal.co.uk', [NQ]),
+    ('Wigan Today', 'Greater Manchester', 'https://www.wigantoday.net', [NW]),
+    ('Manchester World', 'Greater Manchester', 'https://www.manchesterworld.uk', [NW]),
+    ('The Mill', 'Greater Manchester', 'https://manchestermill.co.uk', ['/feed']),
+    ('The Meteor', 'Greater Manchester', 'https://themeteor.org', ['/feed/']),
+    ('Salford Star', 'Greater Manchester', 'https://www.salfordstar.com', ['/feed', '/rss']),
+    ('Quest Media Network (Oldham/Tameside Reporter)', 'Greater Manchester', 'https://questmedianetwork.co.uk', ['/rss', '/feed']),
+    ('Oldham Chronicle', 'Greater Manchester', 'https://www.oldham-chronicle.co.uk', ['/feed', '/rss']),
+    ('Saddleworth Independent', 'Greater Manchester', 'https://saddleworthindependent.co.uk', ['/feed/']),
+    ('The Manc', 'Greater Manchester', 'https://themanc.com', ['/feed/']),
+    ('I Love Manchester', 'Greater Manchester', 'https://ilovemanchester.com', ['/feed']),
+    ('Manchester Wire', 'Greater Manchester', 'https://www.manchesterwire.co.uk', ['/feed']),
+    ('Stockport Nub News', 'Greater Manchester', 'https://stockport.nub.news', ['/rss', '/news/rss']),
+    ('Place North West', 'North West', 'https://www.placenorthwest.co.uk', ['/feed/']),
+    ('Prolific North', 'North West', 'https://www.prolificnorth.co.uk', ['/feed/']),
+    ('TheBusinessDesk North West', 'North West', 'https://www.thebusinessdesk.com', ['/northwest/rss', '/rss']),
+    ('Bdaily', 'North West', 'https://bdaily.co.uk', ['/feed', '/rss']),
+    ('BBC North West Tonight / ITV Granada (ITV)', 'North West', 'https://www.itv.com/news/granada', []),
+    # Lancashire
+    ('BBC Lancashire', 'Lancashire', 'https://www.bbc.co.uk/news/england/lancashire', ['https://feeds.bbci.co.uk/news/england/lancashire/rss.xml']),
+    ('Lancashire Telegraph', 'Lancashire', 'https://www.lancashiretelegraph.co.uk', [NQ]),
+    ('Asian Image', 'Lancashire', 'https://www.asianimage.co.uk', [NQ]),
+    ('Lancashire Post (LEP)', 'Lancashire', 'https://www.lep.co.uk', [NW]),
+    ('Blackpool Gazette', 'Lancashire', 'https://www.blackpoolgazette.co.uk', [NW]),
+    ('Lancaster Guardian', 'Lancashire', 'https://www.lancasterguardian.co.uk', [NW]),
+    ('Burnley Express', 'Lancashire', 'https://www.burnleyexpress.net', [NW]),
+    ('Pendle Today', 'Lancashire', 'https://www.pendletoday.co.uk', [NW]),
+    ('Clitheroe Advertiser', 'Lancashire', 'https://www.clitheroeadvertiser.co.uk', [NW]),
+    ('Chorley Guardian', 'Lancashire', 'https://www.chorley-guardian.co.uk', [NW]),
+    ('Leyland Guardian', 'Lancashire', 'https://www.leylandguardian.co.uk', [NW]),
+    ('Garstang Courier', 'Lancashire', 'https://www.garstangcourier.co.uk', [NW]),
+    ('Fleetwood Today', 'Lancashire', 'https://www.fleetwoodtoday.co.uk', [NW]),
+    ('Lancs Live', 'Lancashire', 'https://www.lancs.live', [RE, '/news/?service=rss']),
+    ('Blog Preston', 'Lancashire', 'https://www.blogpreston.co.uk', ['/feed/']),
+    ('Lancashire Business View', 'Lancashire', 'https://www.lancashirebusinessview.co.uk', ['/feed', '/rss']),
+    ('Central Radio', 'Lancashire', 'https://www.central.radio', ['/feed/', '/rss']),
+    ('Rossendale Radio', 'Lancashire', 'https://www.rossendaleradio.co.uk', ['/feed/']),
+    ('Bacup Times', 'Lancashire', 'https://www.bacuptimes.co.uk', ['/feed/']),
+    # Merseyside
+    ('BBC Merseyside', 'Merseyside', 'https://www.bbc.co.uk/news/england/merseyside', ['https://feeds.bbci.co.uk/news/england/merseyside/rss.xml']),
+    ('Liverpool Echo', 'Merseyside', 'https://www.liverpoolecho.co.uk', [RE, '/news/?service=rss']),
+    ('Liverpool World', 'Merseyside', 'https://www.liverpoolworld.uk', [NW]),
+    ('The Post (Liverpool)', 'Merseyside', 'https://www.livpost.co.uk', ['/feed']),
+    ('St Helens Star', 'Merseyside', 'https://www.sthelensstar.co.uk', [NQ]),
+    ('Wirral Globe', 'Merseyside', 'https://www.wirralglobe.co.uk', [NQ]),
+    # Cheshire
+    ('Cheshire Live', 'Cheshire', 'https://www.cheshire-live.co.uk', [RE, '/news/?service=rss']),
+    ('Warrington Guardian', 'Cheshire', 'https://www.warringtonguardian.co.uk', [NQ]),
+    ('Knutsford Guardian', 'Cheshire', 'https://www.knutsfordguardian.co.uk', [NQ]),
+    ('Northwich Guardian', 'Cheshire', 'https://www.northwichguardian.co.uk', [NQ]),
+    ('Runcorn and Widnes World', 'Cheshire', 'https://www.runcornandwidnesworld.co.uk', [NQ]),
+    ('Macclesfield Nub News', 'Cheshire', 'https://macclesfield.nub.news', ['/rss', '/news/rss']),
+    # Cumbria
+    ('BBC Cumbria', 'Cumbria', 'https://www.bbc.co.uk/news/england/cumbria', ['https://feeds.bbci.co.uk/news/england/cumbria/rss.xml']),
+    ('News & Star', 'Cumbria', 'https://www.newsandstar.co.uk', [NQ]),
+    ('Times & Star', 'Cumbria', 'https://www.timesandstar.co.uk', [NQ]),
+    ('Whitehaven News', 'Cumbria', 'https://www.whitehavennews.co.uk', [NQ]),
+    ('Westmorland Gazette', 'Cumbria', 'https://www.thewestmorlandgazette.co.uk', [NQ]),
+    ('North West Evening Mail', 'Cumbria', 'https://www.nwemail.co.uk', [NQ]),
+    ('Cumbria Crack', 'Cumbria', 'https://www.cumbriacrack.com', ['/feed/']),
+]
 
 
-def save(name: str, text: str) -> None:
-    (OUT / name).write_text(text[:2_000_000], encoding="utf-8")
-
-
-def get(name: str, url: str, **kw):
+def get(url: str, ua: str = FEED_UA, timeout: int = 20):
     try:
-        r = S.get(url, timeout=25, **kw)
+        r = requests.get(url, headers={'User-Agent': ua, 'Accept': 'application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.5'}, timeout=timeout, allow_redirects=True)
+        return r.status_code, r.headers.get('content-type', ''), r.content, r.url
     except Exception as exc:  # noqa: BLE001
-        print(f"  {name}: FETCH FAILED {type(exc).__name__}: {exc}"[:300])
-        return None
-    print(f"  {name}: HTTP {r.status_code} {r.headers.get('content-type','')} {len(r.content)} bytes")
-    save(name, r.text)
-    return r
+        return None, f'{type(exc).__name__}: {exc}'[:120], b'', url
 
 
-def section(key: str) -> bool:
-    if ONLY and key not in ONLY:
-        return False
-    print(f"\n=== {key} ===")
-    return True
+def robots(url: str) -> str:
+    parts = urllib.parse.urlsplit(url)
+    status, _, body, _ = get(f'{parts.scheme}://{parts.netloc}/robots.txt', BOT_UA, 15)
+    if status in (404, 410):
+        return 'no-robots-file'
+    if status != 200:
+        return f'robots-http-{status}'
+    try:
+        parser = robots_rules.parse(body.decode('utf-8', 'replace'))
+        ok_bot = parser.can_fetch(BOT_UA, url)
+        ok_any = parser.can_fetch('*', url)
+        return 'allowed' if (ok_bot and ok_any) else f'DISALLOWED(bot={ok_bot},*={ok_any})'
+    except Exception as exc:  # noqa: BLE001
+        return f'robots-parse-error {exc}'[:60]
 
 
-def find_tender() -> None:
-    """Full 72-hour crawl, paced, comparing the loose regex with the postcode rule."""
-    if not section("find_tender"):
-        return
-    import time
-    frm = (NOW - timedelta(hours=72)).strftime("%Y-%m-%dT%H:%M:%S")
-    params = {"updatedFrom": frm, "updatedTo": NOW.strftime("%Y-%m-%dT%H:%M:%S"), "limit": "100"}
-    url, total, pages, loose, strict, full = primary_data.FTS_API, 0, 0, [], [], []
-    while url and pages < 60:
-        if pages:
-            time.sleep(2.5)
-        r = S.get(url, params=params, timeout=30) if params else S.get(url, timeout=30)
-        if r.status_code != 200:
-            print(f"  page {pages}: HTTP {r.status_code}")
-            break
-        d = r.json()
-        pages += 1
-        rels = d.get("releases") or []
-        if pages == 1 or not d.get("links", {}).get("next"):
-            print(f"  page {pages}: {rels[0].get('date') if rels else None} .. {rels[-1].get('date') if rels else None}")
-        for rel in rels:
-            total += 1
-            blob = json.dumps(rel.get("parties") or []) + str((rel.get("buyer") or {}).get("name"))
-            a, b = bool(BOROUGH.search(blob)), primary_data.is_borough_buyer(rel)
-            if a or b:
-                (strict if b else loose).append(rel)
-                if b:
-                    full.append(rel)
-        nxt = (d.get("links") or {}).get("next")
-        url, params = (nxt, None) if nxt else (None, None)
-    print(f"  pages={pages} releases={total} complete={url is None} postcode_rule={len(strict)} regex_only={len(loose)}")
-    for rel in strict:
-        dsc = primary_data.describe_release(rel)
-        print("   KEEP", rel.get("id"), rel.get("tag"), "|", (rel.get("buyer") or {}).get("name"), "|", dsc[1][:110] if dsc else "(not a story type)")
-    for rel in loose:
-        bp = primary_data._buyer_party(rel)
-        print("   DROP", rel.get("id"), rel.get("tag"), "|", (rel.get("buyer") or {}).get("name"), "| buyer pc", (bp.get("address") or {}).get("postalCode"))
-    save("fts_borough_releases.json", json.dumps(full, indent=1))
+def discover(home: str) -> list[str]:
+    status, _, body, final = get(home)
+    if status != 200:
+        return []
+    html = body.decode('utf-8', 'replace')
+    found = re.findall(r'<link[^>]+type=["\']application/(?:rss|atom)\+xml["\'][^>]*>', html, re.I)
+    urls = []
+    for tag in found:
+        m = re.search(r'href=["\']([^"\']+)', tag)
+        if m:
+            urls.append(urllib.parse.urljoin(final, m.group(1)))
+    return urls[:4]
 
 
-def contracts_finder() -> None:
-    if not section("contracts_finder"):
-        return
-    url = "https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search"
-    params = {"publishedFrom": (NOW - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%S"),
-              "publishedTo": NOW.strftime("%Y-%m-%dT%H:%M:%S"), "size": "100"}
-    total = local = pages = 0
-    hits = []
-    cursor_url, cursor_params = url, params
-    while cursor_url and pages < 40:
-        if pages:
-            __import__("time").sleep(3)
-        r = get(f"cf_page{pages}.json" if pages < 2 else "cf_last.json", cursor_url, params=cursor_params)
-        if r is None or r.status_code != 200:
-            break
-        d = r.json()
-        pages += 1
-        for pkg in d.get("releases") or []:
-            total += 1
-            buyer = str((pkg.get("buyer") or {}).get("name") or "")
-            addr = json.dumps([p.get("address") for p in pkg.get("parties") or []])
-            if BOROUGH.search(buyer) or BOROUGH.search(addr):
-                local += 1
-                hits.append({"id": pkg.get("id"), "date": pkg.get("date"), "tag": pkg.get("tag"), "buyer": buyer,
-                             "title": (pkg.get("tender") or {}).get("title"),
-                             "awards": [((a.get("value") or {}).get("amount"), [s.get("name") for s in a.get("suppliers") or []])
-                                        for a in pkg.get("awards") or []]})
-        nxt = (d.get("links") or {}).get("next")
-        cursor_url, cursor_params = (nxt, None) if nxt else (None, None)
-    print(f"  pages={pages} releases={total} naming-borough={local}")
-    save("cf_hits.json", json.dumps(hits, indent=1, default=str))
-    for h in hits[:40]:
-        print("   ", h["date"], h["tag"], "|", h["buyer"], "|", (h["title"] or "")[:90], "|", h["awards"][:2])
-
-
-def met_office() -> None:
-    if not section("met_office_warnings"):
-        return
-    for name, url in (("mo_nw.xml", "https://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/nw"),
-                      ("mo_uk.xml", "https://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/UK")):
-        r = get(name, url)
-        if r is not None:
-            items = re.findall(r"<item>.*?</item>", r.text, re.S)
-            print(f"   items={len(items)}")
-            for it in items[:10]:
-                t = re.search(r"<title>(.*?)</title>", it, re.S)
-                print("    -", (t.group(1) if t else "")[:160])
-
-
-def gazette_all() -> None:
-    if not section("gazette_all"):
-        return
-    today = NOW.date()
-    counts: dict[str, list] = {}
-    page = 1
-    while page <= 12:
-        r = get(f"gazette_p{page}.json" if page < 3 else "gazette_last.json",
-                "https://www.thegazette.co.uk/all-notices/notice/data.json",
-                params={"location-local-authority-1": "rochdale",
-                        "start-publish-date": str(today - timedelta(days=30)),
-                        "end-publish-date": str(today), "results-page-size": "100",
-                        "results-page": str(page), "sort-by": "latest-date"})
-        if r is None or r.status_code != 200:
-            break
-        entries = r.json().get("entry") or []
-        if isinstance(entries, dict):
-            entries = [entries]
-        for e in entries:
-            code = str(e.get("f:notice-code") or "")
-            counts.setdefault(code, [0, e.get("category", ""), []])
-            counts[code][0] += 1
-            if len(counts[code][2]) < 4:
-                counts[code][2].append(str(e.get("title"))[:80])
-        if len(entries) < 100:
-            break
-        page += 1
-    for code, (n, cat, ex) in sorted(counts.items(), key=lambda kv: -kv[1][0]):
-        print(f"   code {code:>5} x{n:<4} {json.dumps(cat)[:60]} e.g. {ex}")
-
-
-def nomis() -> None:
-    if not section("nomis"):
-        return
-    r = get("nomis_geo.json", "https://www.nomisweb.co.uk/api/v01/dataset/NM_162_1/geography/TYPE424.def.sdmx.json",
-            params={"search": "rochdale"})
-    if r is not None and r.ok:
-        print("   ", r.text[:600].replace("\n", " "))
-    r = get("nomis_cc.csv", "https://www.nomisweb.co.uk/api/v01/dataset/NM_162_1.data.csv",
-            params={"geography": "1778385128", "date": "latestMINUS2-latest", "gender": "0", "age": "0",
-                    "measure": "1,2", "measures": "20100",
-                    "select": "date_name,geography_name,geography_code,measure_name,obs_value"})
-    if r is not None:
-        print("   ", r.text[:900])
-    r = get("nomis_lmp.html", "https://www.nomisweb.co.uk/reports/lmp/la/1946157091/report.aspx")
-    if r is not None:
-        h = re.search(r"<h1[^>]*>(.*?)</h1>", r.text, re.S)
-        print("    lmp h1:", re.sub(r"<[^>]+>", " ", h.group(1)).strip()[:120] if h else None)
-        print("    lmp mentions Rochdale:", "Rochdale" in r.text, "| 'claimant' count:", r.text.lower().count("claimant"))
-    if r is not None:
-        t = re.search(r"<title>(.*?)</title>", r.text, re.S)
-        print("    lmp title:", t.group(1).strip() if t else None)
-        m = re.search(r"Claimant count[^<]{0,200}", r.text)
-        print("    claimant mention:", m.group(0)[:200] if m else None)
-
-
-def petitions() -> None:
-    if not section("petitions"):
-        return
-    for state in ("open", "closed"):
-        r = get(f"pet_{state}.json", "https://petition.parliament.uk/petitions.json", params={"q": "rochdale", "state": state})
-        if r is not None and r.ok:
-            d = r.json().get("data") or []
-            print(f"   q=rochdale state={state}: {len(d)}")
-            for p in d[:8]:
-                a = p.get("attributes") or {}
-                print("    -", p.get("id"), a.get("created_at", "")[:10], a.get("signature_count"), a.get("action", "")[:90])
-
-
-def case_law() -> None:
-    if not section("case_law"):
-        return
-    r = get("caselaw.xml", "https://caselaw.nationalarchives.gov.uk/atom.xml", params={"query": "Rochdale", "order": "-date"})
-    if r is not None and r.ok:
-        entries = re.findall(r"<entry>.*?</entry>", r.text, re.S)
-        print(f"   entries={len(entries)}")
-        for e in entries[:15]:
-            t = re.search(r"<title>(.*?)</title>", e, re.S)
-            d = re.search(r"<published>(.*?)</published>", e) or re.search(r"<updated>(.*?)</updated>", e)
-            print("    -", (d.group(1) if d else "")[:10], (t.group(1) if t else "")[:110])
-
-
-def leads() -> None:
-    if not section("leads"):
-        return
-    for name, url in (("fms.xml", "https://www.fixmystreet.com/rss/reports/Rochdale"),
-                      ("wdtk_council.xml", "https://www.whatdotheyknow.com/feed/body/rochdale_metropolitan_borough_council"),
-                      ("wdtk_council_alt.xml", "https://www.whatdotheyknow.com/body/rochdale_metropolitan_borough_council/feed")):
-        r = get(name, url)
-        if r is not None and r.ok:
-            items = re.findall(r"<(?:item|entry)>.*?</(?:item|entry)>", r.text, re.S)
-            dates = re.findall(r"<(?:pubDate|updated|published)>(.*?)</", r.text)
-            print(f"   items={len(items)} first/last dates={dates[1:2]} / {dates[-1:]}")
-            for it in items[:5]:
-                t = re.search(r"<title[^>]*>(.*?)</title>", it, re.S)
-                print("    -", (t.group(1) if t else "")[:120])
-
-
-def existing_rota() -> None:
-    """Dry run the sources already on the rota, with a throwaway state."""
-    if not section("existing_rota"):
-        return
-    state: dict = {"sources": {}}
-    records, report = primary_data.collect(S.get, state, NOW)
-    print(json.dumps(report, indent=1)[:3000])
-    for rec in records:
-        print("   offer:", rec["source_key"], "|", rec["source_title"][:110], "|", rec["source_url"])
-
-
-ROCHDALE_LAT, ROCHDALE_LNG = 53.6136, -2.1610
-
-
-def keyed() -> None:
-    """Sources that need a free key. Each says plainly when its key is missing."""
-    if not section("keyed"):
-        return
-    ch = os.getenv("COMPANIES_HOUSE_API_KEY", "").strip()
-    if not ch:
-        print("  companies_house: no key (COMPANIES_HOUSE_API_KEY secret not set)")
-    else:
-        since = (NOW - timedelta(days=30)).strftime("%Y-%m-%d")
-        r = S.get("https://api.company-information.service.gov.uk/advanced-search/companies",
-                  params={"location": "Rochdale", "incorporated_from": since, "size": "100"},
-                  auth=(ch, ""), timeout=25)
-        print(f"  companies_house new incorporations since {since}: HTTP {r.status_code}")
-        if r.ok:
-            d = r.json()
-            items = d.get("items") or []
-            print(f"   hits={d.get('hits')} returned={len(items)}")
-            save("ch_new.json", r.text)
-            for it in items[:10]:
-                print("    -", it.get("date_of_creation"), it.get("company_name"), "|",
-                      (it.get("registered_office_address") or {}).get("postal_code"), "|", it.get("sic_codes"))
-    sk = os.getenv("SKIDDLE_API_KEY", "").strip()
-    if not sk:
-        print("  skiddle: no key (SKIDDLE_API_KEY secret not set)")
-    else:
-        r = S.get("https://www.skiddle.com/api/v1/events/search/",
-                  params={"api_key": sk, "latitude": ROCHDALE_LAT, "longitude": ROCHDALE_LNG, "radius": "5",
-                          "minDate": NOW.strftime("%Y-%m-%d"), "maxDate": (NOW + timedelta(days=30)).strftime("%Y-%m-%d"),
-                          "limit": "100", "order": "date", "description": "1"}, timeout=25)
-        print(f"  skiddle events within 5 miles, next 30 days: HTTP {r.status_code}")
-        if r.ok:
-            d = r.json()
-            res = d.get("results") or []
-            print(f"   totalcount={d.get('totalcount')} returned={len(res)}")
-            save("skiddle.json", r.text)
-            towns: dict[str, int] = {}
-            for e in res:
-                town = str((e.get("venue") or {}).get("town") or "?")
-                towns[town] = towns.get(town, 0) + 1
-            print("   by town:", towns)
-            for e in res[:12]:
-                print("    -", e.get("date"), "|", (e.get("venue") or {}).get("name"), "|", (e.get("eventname") or "")[:80])
-    tm = os.getenv("TICKETMASTER_API_KEY", "").strip()
-    if not tm:
-        print("  ticketmaster: no key (TICKETMASTER_API_KEY secret not set)")
-    else:
-        r = S.get("https://app.ticketmaster.com/discovery/v2/events.json",
-                  params={"apikey": tm, "latlong": f"{ROCHDALE_LAT},{ROCHDALE_LNG}", "radius": "5", "unit": "miles",
-                          "countryCode": "GB", "size": "100", "sort": "date,asc"}, timeout=25)
-        print(f"  ticketmaster events within 5 miles: HTTP {r.status_code}")
-        if r.ok:
-            d = r.json()
-            ev = (d.get("_embedded") or {}).get("events") or []
-            print(f"   total={(d.get('page') or {}).get('totalElements')} returned={len(ev)}")
-            save("ticketmaster.json", r.text)
-            for e in ev[:12]:
-                v = ((e.get("_embedded") or {}).get("venues") or [{}])[0]
-                print("    -", (e.get("dates") or {}).get("start", {}).get("localDate"), "|", v.get("name"), "|", (v.get("city") or {}).get("name"), "|", e.get("name", "")[:70])
-    print("  cqc:", "key present (collector in register_watch.py will run)" if os.getenv("CQC_SUBSCRIPTION_KEY", "").strip()
-          else "no key (CQC_SUBSCRIPTION_KEY secret not set)")
-
-
-def contracts_finder_full() -> None:
-    """Full 14-day crawl, paced, with the same postcode rule as Find a Tender."""
-    if not section("contracts_finder_full"):
-        return
-    import time
-    url = "https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search"
-    params = {"publishedFrom": (NOW - timedelta(days=14)).strftime("%Y-%m-%d"), "publishedTo": NOW.strftime("%Y-%m-%d"), "limit": "100"}
-    pages = total = 0
-    keep, loose = [], []
-    while url and pages < 80:
-        if pages:
-            time.sleep(2.5)
-        r = S.get(url, params=params, timeout=30) if params else S.get(url, timeout=30)
-        if r.status_code != 200:
-            print(f"  page {pages}: HTTP {r.status_code}")
-            break
-        d = r.json()
-        pages += 1
-        for rel in d.get("releases") or []:
-            total += 1
-            if primary_data.is_borough_buyer(rel):
-                keep.append(rel)
-            elif BOROUGH.search(json.dumps(rel.get("parties") or [])):
-                loose.append(rel)
-        nxt = (d.get("links") or {}).get("next")
-        url, params = (nxt, None) if nxt else (None, None)
-    print(f"  pages={pages} releases={total} complete={url is None} postcode_rule={len(keep)} regex_only={len(loose)}")
-    for rel in keep:
-        dsc = primary_data.describe_release(rel)
-        docs = [d.get("url") for d in ((rel.get("tender") or {}).get("documents") or []) + [x for a in rel.get("awards") or [] for x in a.get("documents") or []]][:2]
-        print("   KEEP", rel.get("id"), rel.get("tag"), rel.get("date"), "|", (rel.get("buyer") or {}).get("name"), "|", dsc[1][:100] if dsc else "(not story type)", "|", docs)
-    for rel in loose[:15]:
-        bp = primary_data._buyer_party(rel)
-        print("   DROP", rel.get("tag"), "|", (rel.get("buyer") or {}).get("name"), "| buyer pc", (bp.get("address") or {}).get("postalCode"))
-    save("cf_borough.json", json.dumps(keep[:20], indent=1))
-
-
-def contracts_finder_retry() -> None:
-    """Round 2 returned 0 releases with publishedFrom dropped; try the documented parameter set."""
-    if not section("contracts_finder_retry"):
-        return
-    for params in ({"publishedFrom": (NOW - timedelta(days=7)).strftime("%Y-%m-%d"), "publishedTo": NOW.strftime("%Y-%m-%d"), "limit": "100"},
-                   {"publishedFrom": (NOW - timedelta(days=7)).strftime("%Y-%m-%d"), "limit": "100", "stages": "award"}):
-        r = S.get("https://www.contractsfinder.service.gov.uk/Published/Notices/OCDS/Search", params=params, timeout=25)
+def measure_feed(name: str, url: str) -> dict:
+    status, ctype, body, final = get(url)
+    res = {'url': url, 'final_url': final, 'http': status, 'content_type': ctype}
+    if status != 200 or not body:
+        return res
+    feed = feedparser.parse(body)
+    entries = list(feed.entries)
+    res['entries'] = len(entries)
+    res['bozo'] = bool(getattr(feed, 'bozo', False)) and not entries
+    dates = [scraper.entry_datetime(e) for e in entries]
+    dates = [d for d in dates if d]
+    if dates:
+        newest, oldest = max(dates), min(dates)
+        span_days = max((newest - oldest).total_seconds() / 86400, 0.25)
+        res['newest'] = newest.isoformat()
+        res['per_day'] = round(len(dates) / span_days, 1)
+    fresh, local = 0, []
+    for e in entries:
+        title = scraper.strip_markdown(getattr(e, 'title', ''))
+        summ_html = str(getattr(e, 'summary', '') or getattr(e, 'description', '') or '')
         try:
-            d = r.json()
-        except ValueError:
-            d = {}
-        rels = d.get("releases") or []
-        local = [x for x in rels if BOROUGH.search(json.dumps(x.get("parties") or []) + str((x.get("buyer") or {}).get("name")))]
-        print(f"  {params}: HTTP {r.status_code} releases={len(rels)} naming-borough={len(local)} next={bool((d.get('links') or {}).get('next'))} uri={d.get('uri')}")
-        __import__("time").sleep(3)
+            from bs4 import BeautifulSoup
+            summ = scraper.strip_markdown(BeautifulSoup(summ_html, 'lxml').get_text(' ', strip=True))
+        except Exception:  # noqa: BLE001
+            summ = summ_html
+        link = scraper.canonicalise_url(str(getattr(e, 'link', '') or ''))
+        pub = scraper.entry_datetime(e)
+        if not (link and title and scraper.is_fresh(pub)):
+            continue
+        fresh += 1
+        text = f'{title} {summ}'
+        if scraper.should_drop(text, link):
+            continue
+        if not scraper.source_text_is_local(text, name, link, False):
+            continue
+        area = scraper.source_text_area(text, 'rochdale', name, link, False)
+        local.append({'title': title, 'area': area, 'published': pub.isoformat() if pub else '', 'url': link})
+    res['fresh'] = fresh
+    res['rochdale_pass'] = len(local)
+    res['rochdale_items'] = local
+    return res
 
 
-if __name__ == "__main__":
-    for fn in (keyed, met_office, nomis, find_tender, existing_rota):
-        try:
-            fn()
-        except Exception as exc:  # noqa: BLE001
-            print(f"  !! {fn.__name__} crashed: {type(exc).__name__}: {exc}"[:400])
+def probe(outlet) -> dict:
+    name, region, home, cands = outlet
+    urls = [c if c.startswith('http') else home.rstrip('/') + c for c in cands]
+    tried = []
+    best = None
+    for u in urls:
+        r = measure_feed(name, u)
+        tried.append({k: r.get(k) for k in ('url', 'http', 'content_type', 'entries')})
+        if r.get('entries'):
+            best = r
+            break
+    if best is None:
+        for u in discover(home):
+            if u in urls:
+                continue
+            r = measure_feed(name, u)
+            tried.append({k: r.get(k) for k in ('url', 'http', 'content_type', 'entries')})
+            if r.get('entries'):
+                best = r
+                best['discovered'] = True
+                break
+    out = {'name': name, 'region': region, 'homepage': home, 'tried': tried}
+    if best:
+        out.update(best)
+        out['robots'] = robots(best['url'])
+    return out
+
+
+def main() -> None:
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        results = list(pool.map(probe, OUTLETS))
+    (OUT / 'nw_outlets.json').write_text(json.dumps(results, indent=2, default=str))
+    print(f'North West / Lancashire outlet probe — {NOW:%Y-%m-%d %H:%M} UTC — {len(results)} outlets')
+    print('Gate = the newsroom\'s own is_fresh + should_drop + source_text_is_local (untrusted feed)\n')
+    working = [r for r in results if r.get('entries')]
+    for r in sorted(results, key=lambda x: (-(x.get('rochdale_pass') or -1), x['name'])):
+        if r.get('entries'):
+            print(f"OK   {r['name']} [{r['region']}] {r['url']}")
+            print(f"     items={r['entries']} per_day≈{r.get('per_day')} fresh={r.get('fresh')} ROCHDALE_PASS={r.get('rochdale_pass')} robots={r.get('robots')} newest={r.get('newest','')[:16]}")
+            for it in r.get('rochdale_items', [])[:12]:
+                print(f"       + [{it['area']}] {it['title'][:110]}")
+        else:
+            print(f"FAIL {r['name']} [{r['region']}]")
+            for t in r['tried']:
+                print(f"       {t['http']} {str(t['content_type'])[:50]} {t['url']}")
+    total = sum(r.get('rochdale_pass') or 0 for r in working)
+    print(f"\nWorking feeds: {len(working)}/{len(results)} · Rochdale items passing gates right now: {total}")
+
+
+if __name__ == '__main__':
+    main()
