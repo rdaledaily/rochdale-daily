@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-15T14:20:11.653821Z",
+  "updated_at": "2026-11-15T14:38:23.662213Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 157,
@@ -2257,13 +2257,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-15T14:38:23.661853Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
-      "text_fingerprint": "67e1f1768c5ea948"
+      "text_fingerprint": "67e1f1768c5ea948",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-as-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war": {
       "first_attempt_at": "2026-11-09T18:48:38.125276Z",
@@ -2329,13 +2330,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-15T14:20:11.653556Z",
+      "last_attempt_at": "2026-11-15T14:38:23.662095Z",
       "outcome": "published",
       "reason": "",
       "title": "Man who died in flat fire named",
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
-      "text_fingerprint": "80af030684e884cb"
+      "text_fingerprint": "80af030684e884cb",
+      "recovery_attempts": 1
     },
     "https://www.rochvalleyradio.com/news-features/149/education/1420/raising-rochdale-education-awards-shortlist-announced-after-record-896-nominations": {
       "first_attempt_at": "2026-11-10T16:17:54.129101Z",
