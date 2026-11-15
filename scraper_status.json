@@ -1,10 +1,17 @@
 {
-  "last_run_at": "2026-11-15T18:20:51.818604Z",
+  "last_run_at": "2026-11-15T18:42:02.187262Z",
   "primary_data": {
     "council_roadworks": {
-      "status": "not due",
-      "last_checked": "2026-11-15T12:32:42.906046Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 4,
+      "offered_today": 0,
+      "listed": 32,
+      "already_seen": 23,
+      "started_long_ago": 0,
+      "too_far_ahead": 8,
+      "undated": 1,
+      "in_window": 0
     },
     "gazette_insolvency": {
       "status": "not due",
@@ -12,9 +19,15 @@
       "interval_hours": 12
     },
     "written_answers": {
-      "status": "not due",
-      "last_checked": "2026-11-15T12:32:42.906046Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "listed": 6,
+      "unanswered_or_holding": 0,
+      "not_about_the_borough": 0,
+      "already_seen": 6,
+      "new": 0
     },
     "gmca_decisions": {
       "status": "not due",
@@ -27,14 +40,27 @@
       "interval_hours": 24
     },
     "contract_notices": {
-      "status": "not due",
-      "last_checked": "2026-11-15T12:32:42.906046Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 3,
+      "offered_today": 0,
+      "pages": 1,
+      "releases": 2,
+      "borough_buyer": 0,
+      "not_story_type": 0,
+      "already_seen": 0,
+      "new": 0,
+      "complete": 1
     },
     "weather_warnings": {
-      "status": "not due",
-      "last_checked": "2026-11-15T12:32:42.906046Z",
-      "interval_hours": 6
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 14,
+      "not_rochdale": 14,
+      "already_seen": 0,
+      "new": 0
     },
     "claimant_count": {
       "status": "not due",
@@ -54,18 +80,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 68,
+  "raw_candidates_before_job_filter": 67,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 68,
+  "raw_candidates": 67,
   "candidate_clusters": 29,
   "google_news_resolution": {
     "wrappers": 31,
     "resolved": 26,
-    "text_recovered": 21,
+    "text_recovered": 20,
     "reattributed": 1,
-    "images_found": 25
+    "images_found": 24
   },
-  "duplicates_merged": 39,
+  "duplicates_merged": 38,
   "attempted_rewrites": 1,
   "draft_rewrites_created": 1,
   "drafted_articles": [
@@ -213,21 +239,18 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 189 body words using only facts already present in the sources; the draft currently has 172.": 1
+    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "no box: fewer than two points survived": 1
+      "writer offered no points": 1
     },
-    "points": {
-      "dropped: no story sentence to correct it to": 2,
-      "corrected to the story's own sentence": 1
-    }
+    "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 57,
+    "rss_and_google_news": 56,
     "website_discovery": 5,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -360,17 +383,17 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 15,
+    "Rochdale Times": 14,
     "Rochdale AFC": 10,
     "Roch Valley Radio": 7,
     "Bee Network live travel alerts": 5,
     "The York Press": 4,
-    "Rochdale Borough Council": 3,
+    "Rochdale Borough Council": 4,
     "Roch Valley Radio Local News": 3,
     "County Times": 2,
-    "Southend Echo": 2,
     "Yorkshire Post": 2,
     "Yahoo": 2,
+    "Southend Echo": 1,
     "Slough Observer": 1,
     "Wilts and Gloucestershire Standard": 1,
     "The Northern Echo": 1,
@@ -1061,7 +1084,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-15T18:44:44.452618Z",
+  "frontpage_generated_at": "2026-11-15T18:52:31.688715Z",
   "frontpage_article_count": 8,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
