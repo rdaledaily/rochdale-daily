@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-15T00:37:59.698291Z",
+  "last_run_at": "2026-11-15T01:05:06.625969Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,28 +54,29 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 112,
+  "raw_candidates_before_job_filter": 114,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 112,
+  "raw_candidates": 114,
   "candidate_clusters": 42,
   "google_news_resolution": {
-    "wrappers": 68,
-    "resolved": 63,
-    "text_recovered": 38,
+    "wrappers": 69,
+    "resolved": 64,
+    "text_recovered": 42,
     "reattributed": 2,
-    "images_found": 56
+    "images_found": 61
   },
-  "duplicates_merged": 70,
-  "attempted_rewrites": 3,
+  "duplicates_merged": 72,
+  "attempted_rewrites": 4,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
   "new_articles": 0,
-  "live_articles": 617,
-  "skipped": 3,
+  "live_articles": 619,
+  "skipped": 4,
   "rewrite_skip_reasons": {
+    "editorial gate: REJECTED_NON_LOCAL": 1,
     "quality gate after 4 repairs: Source fidelity: the date(s) 13 November are neither stated nor implied by the source. Use": 1,
-    "quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta": 1,
-    "quality gate after 4 repairs: The source names a road, time, figure or organisation and the draft does not. Carry the sp": 1
+    "quality gate after 4 repairs: Source fidelity: the figure(s) 55th do not appear in the source. Use only figures the sour": 1,
+    "quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -95,9 +96,9 @@
       "published": 81,
       "rejected": 52
     },
-    "held_back_this_run": 32,
+    "held_back_this_run": 31,
     "held_already_published": 14,
-    "held_rejected": 18,
+    "held_rejected": 17,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -137,15 +138,6 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-14T20:28:50.704149Z"
-    },
-    {
-      "url": "https://www.yorkpress.co.uk/sport/26729538.live-blog-rochdale-0-1-york-city",
-      "title": "LIVE BLOG: Rochdale 0-1 York City - The York Press",
-      "source_name": "The York Press",
-      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-14T20:28:48.927092Z"
     },
     {
       "url": "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year",
@@ -273,7 +265,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 100,
+    "rss_and_google_news": 102,
     "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 5,
@@ -319,6 +311,14 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -408,13 +408,13 @@
     ]
   },
   "source_counts": {
-    "Rochdale AFC": 22,
+    "Rochdale AFC": 23,
     "Rochdale Times": 20,
     "Manchester Evening News": 8,
     "Roch Valley Radio": 7,
     "InYourArea": 6,
+    "The York Press": 6,
     "BBC": 6,
-    "The York Press": 5,
     "Bee Network live travel alerts": 5,
     "Rochdale Borough Council": 4,
     "Yahoo Sports": 3,
@@ -423,9 +423,8 @@
     "Sky Sports": 2,
     "Roch Valley Radio Local News": 2,
     "BBC Manchester": 1,
+    "Renfrewshire Gazette": 1,
     "Southend Echo": 1,
-    "Herts Advertiser": 1,
-    "Slough Observer": 1,
     "The Northern Echo": 1,
     "Leigh Journal": 1,
     "Gazetteherald": 1,
@@ -438,21 +437,22 @@
     "Express and Star": 1,
     "Clacton Gazette": 1,
     "Somerset County Gazette": 1,
+    "Harwich and Manningtree Standard": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
     "environment": 1,
-    "traffic": 2
+    "traffic": 3
   },
   "published_by_category": {
     "business": 71,
-    "community": 92,
+    "community": 93,
     "crime": 37,
     "education": 29,
     "environment": 50,
     "events": 33,
     "health": 16,
-    "news": 92,
+    "news": 91,
     "politics": 19,
     "sport": 59,
     "traffic": 45,
@@ -483,12 +483,14 @@
   "selected_story_keys": [
     "transport-v3-b4d5ed06732332329428",
     "environment-v3-87e9f28176f7f05acdb9",
-    "transport-v3-0e895557b31a2ff09dd3"
+    "transport-v3-0e895557b31a2ff09dd3",
+    "transport-v3-a13c41b8bc8dad447677"
   ],
   "selected_candidate_urls": [
     "https://www.wiltsglosstandard.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale/",
     "https://www.yorkpress.co.uk/sport/26727631.york-citys-history-rochdale-will-key-says-lindsey/",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-seriously-injured-police-investigate-34905164"
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-seriously-injured-police-investigate-34905164",
+    "https://www.yorkpress.co.uk/sport/26729538.live-blog-rochdale-0-1-york-city/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -518,15 +520,15 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "environment": 1,
-      "traffic": 2
+      "traffic": 3
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 4
     },
     "selected_by_source": {
       "manchester evening news": 1,
-      "the york press": 1,
+      "the york press": 2,
       "wilts and gloucestershire standard": 1
     },
     "must_cover_selected": 0
@@ -1090,12 +1092,10 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "healthwatchrochdale.org.uk",
-    "rochdalelibdems.org.uk"
+    "healthwatchrochdale.org.uk"
   ],
   "slow_domain_failure_counts": {
-    "healthwatchrochdale.org.uk": 1,
-    "rochdalelibdems.org.uk": 1
+    "healthwatchrochdale.org.uk": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1132,7 +1132,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-15T00:44:26.750327Z",
+  "frontpage_generated_at": "2026-11-15T01:06:44.773140Z",
   "frontpage_article_count": 7,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1211,14 +1211,14 @@
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
-  "event_ticket_source_error": "manual publish reused existing approved ticket events",
-  "ticket_events_collected_this_run": 0,
-  "events_kept_other_source": 38,
+  "event_ticket_source_error": "",
+  "ticket_events_collected_this_run": 13,
+  "events_kept_other_source": 27,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 11,
-  "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 617,
+  "approved_ticket_events": 13,
+  "event_dates_corrected_from_ledger": 5,
+  "duplicate_articles_after_postprocessing": 619,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1227,8 +1227,8 @@
     "whatsoccurrinevents.co.uk"
   ],
   "category_archive_count": 11,
-  "area_archive_count": 27,
-  "whats_on_event_count": 11,
+  "area_archive_count": 28,
+  "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 0,
