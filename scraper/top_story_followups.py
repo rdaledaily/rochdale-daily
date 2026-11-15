@@ -720,6 +720,12 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
         print(f"followups: {log['outcome']:16} {slug} | candidates={len(log.get('candidates') or [])} search={log.get('search')}")
         for item in (log.get("untrusted") or []) + [f"OFF-TOPIC {x}" for x in log.get("not_same_story") or []]:
             print(f"followups:    dropped {item}")
+        for c in log.get("candidates") or []:
+            print(f"followups:    read {c['publisher']} ({c.get('credibility')}): {c['url'][:90]}")
+        for item in log.get("rejected") or []:
+            print(f"followups:    rejected {item.get('type')} from {str(item.get('source_url'))[:70]}: {'; '.join(item.get('reasons') or [])[:300]}")
+        for item in log.get("applied") or []:
+            print(f"followups:    {'WOULD APPLY' if item.get('dry_run') else 'APPLIED'} {item.get('type')}: {item.get('update', '')[:300]}")
         events.append({**log, "dry_run": not apply})
     held_now = {}
     for event in events:
