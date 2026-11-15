@@ -275,6 +275,7 @@ def test_credible_outlet_used_whether_or_not_it_is_on_our_list():
         assert state["_outlets"]["uknip.co.uk"]["credible"] is False
     assert cred.assess("https://www.gmp.police.uk/x")["official"] is True
     assert cred.assess("https://www.bbc.co.uk/news/x")["credible"] is True
+    assert cred.assess("https://www.skysports.com/football")["credible"] is True
 
 
 def test_roch_valley_radio_named_only_discreetly_under_sources():

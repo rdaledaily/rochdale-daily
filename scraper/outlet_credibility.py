@@ -37,6 +37,9 @@ OFCOM_BROADCASTERS = {
     "channel5.com": "Channel 5", "lbc.co.uk": "LBC", "heart.co.uk": "Heart",
     "capitalfm.com": "Capital", "smoothradio.com": "Smooth Radio", "greatesthitsradio.co.uk": "Greatest Hits Radio",
     "hitsradio.co.uk": "Hits Radio", "planetradio.co.uk": "Hits Radio",
+    # Measured 15 Nov 2026: Sky Sports was refused because only Sky News was listed.
+    "skysports.com": "Sky Sports", "talksport.com": "talkSPORT", "gbnews.com": "GB News",
+    "radiox.co.uk": "Radio X", "classicfm.com": "Classic FM", "absoluteradio.co.uk": "Absolute Radio",
 }
 REGULATOR_LINK_RE = re.compile(r"""href=["']https?://(?:www\.)?(?:ipso\.co\.uk|impress\.press|impressorg\.com)""", re.I)
 REGULATOR_TEXT_RE = re.compile(
