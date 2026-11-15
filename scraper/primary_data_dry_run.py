@@ -20,16 +20,23 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '--no-cache-dir',
-                'beautifulsoup4', 'feedparser', 'lxml', 'openai', 'dateparser',
-                'Pillow', 'googlenewsdecoder==0.2.2'], check=False)
+sys.stderr = sys.stdout  # the workflow only tees stdout
+_pip = subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '--no-cache-dir', '-r',
+                       str(Path(__file__).resolve().parents[1] / 'requirements.txt')],
+                      capture_output=True, text=True)
+print('pip exit', _pip.returncode, _pip.stderr[-800:])
 
 import feedparser  # noqa: E402
 import requests  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import scraper  # noqa: E402
-import robots_rules  # noqa: E402
+try:
+    import scraper  # noqa: E402
+    import robots_rules  # noqa: E402
+except Exception:  # noqa: BLE001
+    import traceback
+    traceback.print_exc(file=sys.stdout)
+    raise
 
 # The production collector's feed User-Agent (collect_rss_candidates).
 FEED_UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
@@ -248,4 +255,9 @@ def main() -> None:
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception:  # noqa: BLE001
+        import traceback
+        traceback.print_exc(file=sys.stdout)
+        raise
