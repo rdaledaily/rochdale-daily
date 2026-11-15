@@ -224,10 +224,11 @@ def load_targets(root: Path = ROOT, top_n: int = TOP_N, when: datetime | None = 
     front = load_json(root / FRONTPAGE, {})
     rows = front.get("articles") if isinstance(front, dict) else front
     full = {str(r.get("slug")): r for r in load_json(root / ARTICLES, []) if isinstance(r, dict)}
-    targets = []
+    targets, slugs = [], set()
     for row in (rows or [])[:top_n]:
-        if not isinstance(row, dict) or not row.get("slug"):
+        if not isinstance(row, dict) or not row.get("slug") or str(row["slug"]) in slugs:
             continue
+        slugs.add(str(row["slug"]))
         record = {**row, **full.get(str(row["slug"]), {})}
         if _excluded(record):
             continue
@@ -321,7 +322,7 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
 
     # 2. Later reports from trusted publishers.
     log["queries"] = queries_for(row)
-    tally = {"hits": 0, "old_known_or_seen": 0, "untrusted_publisher": 0, "not_same_story": 0}
+    tally = {"hits": 0, "already_read": 0, "too_old": 0, "untrusted_publisher": 0, "not_same_story": 0}
     log["search"] = tally
     for query in log["queries"]:
         try:
@@ -334,8 +335,11 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
             if len(found) >= MAX_CANDIDATES:
                 break
             link, when = entry.get("link") or "", entry.get("published")
-            if not link or link in known or link in seen or not when or when <= cutoff:
-                tally["old_known_or_seen"] += 1
+            if not link or link in known or link in seen:
+                tally["already_read"] += 1
+                continue
+            if not when or when <= cutoff:
+                tally["too_old"] += 1
                 continue
             match = publisher_for(entry.get("source_href") or link)
             if not match:
@@ -349,6 +353,7 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
                 continue
             if not backstop._relevant(text, title):
                 tally["not_same_story"] += 1
+                log.setdefault("not_same_story", []).append(f"{match[1]}: {entry.get('title', '')[:90]}")
                 continue
             found.append({"url": link, "publisher": match[1], "text": text, "kind": "later report",
                           "official": match[0] in OFFICIAL})
@@ -717,6 +722,7 @@ def summary(root: Path = ROOT) -> str:
         for item in e.get("rejected") or []:
             detail.append(f"rejected {item.get('type')}: {'; '.join(item.get('reasons') or [])[:160]}")
         detail += [f"error: {x}" for x in (e.get("errors") or [])[:2]]
+        detail += [f"not the same story: {x}" for x in (e.get("not_same_story") or [])[:3]]
         detail.append("search " + json.dumps(e.get("search") or {}) + " for " + " / ".join(e.get("queries") or []))
         cell = "<br>".join(d.replace("|", "/") for d in detail)
         lines.append(f"| {e['title'][:70]} | {e['outcome']} | {len(e.get('candidates') or [])} | {cell} |")
