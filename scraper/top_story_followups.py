@@ -392,7 +392,7 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
                 log.setdefault("not_same_story", []).append(f"{name}: {entry.get('title', '')[:90]}")
                 continue
             found.append({"url": link, "publisher": name, "text": text, "kind": "later report",
-                          "official": official, "credibility": basis})
+                          "official": official, "credibility": basis, "published": iso(when)})
     memory["seen_links"] = sorted(seen)[-200:]
     for item in found:
         item.setdefault("official", is_official(item["url"]))
@@ -559,6 +559,12 @@ def _first_paragraph(entry: dict[str, Any]) -> str:
 def apply_update(row: dict[str, Any], dev: dict[str, Any], source: dict[str, str], when: datetime,
                  root: Path = ROOT) -> str:
     slug = str(row["slug"])
+    # A development is timed when it was reported, not when we read it: The
+    # Sun's "one lane has now reopened" (about 5pm, 15 Nov) stamped at our
+    # 7.12pm check would have read as the state of the road at 7.12pm.
+    reported = parse_time(source.get("published"))
+    if reported and reported < when:
+        when = reported
     paragraph = f"Update, {uk_stamp(when)}: {plain(dev['update'])}"
     live = is_live_incident(row, dev)
     location = _manual_location(slug, root)

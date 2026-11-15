@@ -157,11 +157,12 @@ def test_road_reopening_from_outlet_applies_and_gates_reject_invention():
         results = {"all": [{"link": MEN_ROAD, "source_href": "https://www.manchestereveningnews.co.uk",
                             "published": NOW, "title": "M62 reopens"}]}
         counts = fu.run(True, 5, client, fetcher({MEN_ROAD: ROAD_TEXT}), search(results), approvals=set(),
-                        root=tmp, when=NOW + timedelta(minutes=5))
+                        root=tmp, when=NOW + timedelta(minutes=50))
         assert counts["updated"] == 1 and counts["rejected"] == 1, counts
         entry = json.loads((tmp / "manual_articles.d" / "2026-11-15-m62.json").read_text())
         assert entry["title"] == good["headline"]
         assert [u["id"] for u in entry["live_updates"]][0] == "first-report"
+        assert entry["live_updates"][1]["timestamp"] == "2026-11-15T18:10:00Z", "timed when reported, not when read"
         assert entry["live_updates"][1]["text"].startswith("The Manchester Evening News reported")
         assert MEN_ROAD in entry["source_urls"] and "Manchester Evening News" in entry["source_names"]
         events = json.loads((tmp / "reports" / "top_story_followups_events.json").read_text())
