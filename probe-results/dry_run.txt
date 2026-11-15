@@ -25,7 +25,7 @@
 
 === nomis ===
   nomis_geo.json: HTTP 200 application/json 1055 bytes
-    {  "structure" :{"codelists" :{"codelist" :[ {"agencyid" :"NOMIS","id" :"CL_162_1_GEOGRAPHY","code" :[ {"annotations" :{"annotation" :[ {"annotationtext" :"local authorities: district / unitary (as of April 2023)","annotationtitle" :"TypeName"},{"annotationtext" :424,"annotationtitle" :"TypeCode"},{"annotationtext" :"E08000005","annotationtitle" :"GeogCode"}]},"parentcode" :2013265922,"description" :{"value" :"Rochdale","lang" :"en"},"value" :1778385128}],"name" :{"value" :"geography","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_162_1","prepared" :"2026-11-15T18:47:14Z","sender" :{"con
+    {  "structure" :{"codelists" :{"codelist" :[ {"agencyid" :"NOMIS","id" :"CL_162_1_GEOGRAPHY","code" :[ {"annotations" :{"annotation" :[ {"annotationtext" :"local authorities: district / unitary (as of April 2023)","annotationtitle" :"TypeName"},{"annotationtext" :424,"annotationtitle" :"TypeCode"},{"annotationtext" :"E08000005","annotationtitle" :"GeogCode"}]},"parentcode" :2013265922,"description" :{"value" :"Rochdale","lang" :"en"},"value" :1778385128}],"name" :{"value" :"geography","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_162_1","prepared" :"2026-11-15T18:58:00Z","sender" :{"con
   nomis_cc.csv: HTTP 200 text/csv 531 bytes
     "DATE_NAME","GEOGRAPHY_NAME","GEOGRAPHY_CODE","MEASURE_NAME","OBS_VALUE"
 "July 2026","Rochdale","E08000005","Claimant count",8485
@@ -43,8 +43,8 @@
 
 === find_tender ===
   page 1: 2026-11-15T17:06:00Z .. 2026-11-13T16:00:35Z
-  page 5: 2026-11-13T10:11:14Z .. 2026-11-12T18:50:50Z
-  pages=5 releases=465 complete=True postcode_rule=0 regex_only=2
+  page 5: 2026-11-13T10:11:14Z .. 2026-11-12T18:59:51Z
+  pages=5 releases=464 complete=True postcode_rule=0 regex_only=2
    DROP 108192-2026 ['award', 'contract'] | Stockport Metropolitan Borough Council | buyer pc SK1 3XE
    DROP 107849-2026 ['award', 'contract'] | Government Commercial Agency | buyer pc L3 9PP
 
