@@ -62,7 +62,7 @@ for month, files in sorted(by_month.items()):
         rows = [line for line in text.splitlines() if line.strip()]
     else:
         raw = r.content.decode("utf-8", "replace") if b"\x00" not in r.content[:200] else r.content.decode("utf-16", "replace")
-        rows = [" | ".join(row) for row in csv.reader(io.StringIO(raw))]
+        rows = [line.replace('","', ' | ').replace(",", " | ") for line in raw.splitlines() if line.strip()]
     out["files_read"] += 1
     for row in rows:
         if TERMS and PATTERN.search(row):
