@@ -349,11 +349,19 @@ def sanitise_article(article: dict[str, Any]) -> dict[str, Any]:
     if source_names:
         article["source_names"] = cleaned_names
 
-    if not _own_photo(article):
+    # The station's own pictures are never reused. A story that merely lists
+    # it as a later source (follow-up desk, 15 Nov 2026: "name it discreetly
+    # under sources") keeps its picture: measured that day, the 4 live
+    # stories with the station as a secondary source all kept own photos,
+    # so this changes nothing already published.
+    image_from_station = is_subtle_source("", article.get("image_url")) or is_subtle_source(
+        "", article.get("source_image_candidate_url"))
+    if (is_subtle_source(source_name, source_url) or image_from_station) and not _own_photo(article):
         article["image_url"] = ""
         article["image_credit"] = "Rochdale Daily"
-    article["source_image_candidate_url"] = ""
-    article["source_image_reuse_status"] = ""
+    if is_subtle_source(source_name, source_url) or image_from_station:
+        article["source_image_candidate_url"] = ""
+        article["source_image_reuse_status"] = ""
 
     old_slug = str(article.get("slug") or "")
     if (

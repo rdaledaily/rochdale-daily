@@ -277,6 +277,40 @@ def test_credible_outlet_used_whether_or_not_it_is_on_our_list():
     assert cred.assess("https://www.bbc.co.uk/news/x")["credible"] is True
 
 
+def test_roch_valley_radio_named_only_discreetly_under_sources():
+    import source_presentation as sp
+
+    rvr = "https://rochvalleyradio.com/news/m62-reopens"
+    with tempfile.TemporaryDirectory() as d:
+        tmp = Path(d)
+        site(tmp)
+        results = {"all": [{"link": rvr, "source_href": "https://rochvalleyradio.com", "source_name": "Roch Valley Radio",
+                            "published": NOW, "title": "M62 reopens"}]}
+        title = "M62 closed near Milnrow after lorry hits central reservation"
+        base = {"type": "road_reopened", "source_url": rvr, "same_incident": True, "already_in_story": False,
+                "source_quote": "all lanes between junction 21 and junction 22 reopened shortly after 7pm", "headline": ""}
+        named = {**base, "update": "Roch Valley Radio reported that all lanes between junction 21 and junction 22 reopened shortly after 7pm."}
+        discreet = {**base, "update": "It was reported that all lanes between junction 21 and junction 22 reopened shortly after 7pm."}
+        client = FakeClient({title: [named, discreet]})
+        counts = fu.run(True, 5, client, fetcher({rvr: ROAD_TEXT}), search(results), approvals=set(), root=tmp,
+                        when=NOW + timedelta(minutes=30))
+        assert counts["updated"] == 1 and counts["rejected"] == 1, counts
+        entry = json.loads((tmp / "manual_articles.d" / "2026-11-15-m62.json").read_text())
+        assert entry["live_updates"][-1]["text"].startswith("It was reported that")
+        assert "Source" in entry["source_names"] and "Roch Valley Radio" not in json.dumps(entry["source_names"])
+        assert rvr in entry["source_urls"]
+    # Listing the station as a later source keeps the story's own picture...
+    story = {"title": "M62 reopens", "source_name": "Lancashire Telegraph", "source_url": "https://www.lancashiretelegraph.co.uk/x",
+             "source_names": ["Lancashire Telegraph", "Source"], "source_urls": ["https://www.lancashiretelegraph.co.uk/x", rvr],
+             "image_url": "assets/img/cards/m62-place-generated-card.jpg", "image_status": "place-generated-card"}
+    assert sp.sanitise_article(dict(story))["image_url"] == story["image_url"]
+    # ...but a story led by the station, or using its picture, still loses it.
+    led = {**story, "source_name": "Roch Valley Radio", "source_url": rvr}
+    assert sp.sanitise_article(led)["image_url"] == ""
+    pic = {**story, "image_url": "https://rochvalleyradio.com/img/m62.jpg", "image_status": "source-photo"}
+    assert sp.sanitise_article(pic)["image_url"] == ""
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_"):

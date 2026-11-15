@@ -96,6 +96,13 @@ PUBLISHERS: dict[str, str] = {
 OFFICIAL = {"gmp.police.uk", "cps.gov.uk", "judiciary.uk", "rochdale.gov.uk", "gov.uk",
             "nationalhighways.co.uk", "tfgm.com", "manchesterfire.gov.uk",
             "greatermanchester-ca.gov.uk", "parliament.uk"}
+# Sources named only discreetly (source_presentation.SUBTLE_SOURCE_*): the
+# update never names them and they appear under Sources as "Source"
+# (editor, 15 Nov 2026: "name it discreetly under sources").
+DISCREET_LABEL = "Source"
+DISCREET_ATTRIBUTION = re.compile(
+    r"\b(?:it (?:was|has been) reported|according to (?:local )?reports|(?:local )?reports (?:said|say)|"
+    r"was reported|has been reported)\b", re.I)
 # Attribution words accepted for an official body besides its full name.
 ALIASES = {
     "Greater Manchester Police": ("GMP", "police"),
@@ -309,6 +316,9 @@ def outlet_for(entry: dict[str, Any], outlets: dict[str, Any] | None, assess=Non
     url = entry.get("source_href") or entry.get("link") or ""
     if cred.banned(url) or cred.banned(entry.get("link") or ""):
         return None
+    from source_presentation import is_subtle_source
+    if is_subtle_source(entry.get("source_name") or "", url):
+        return DISCREET_LABEL, False, "trusted local source, named discreetly"
     match = publisher_for(url)
     if match:
         return match[1], match[0] in OFFICIAL, "known publisher"
@@ -426,6 +436,8 @@ SYSTEM = (
 
 def ask_model(client, row: dict[str, Any], candidates: list[dict[str, str]]) -> list[dict[str, Any]]:
     payload = {
+        "attribution_rule": ("A report whose publisher is 'Source' must NOT be named: attribute it only as "
+                             "'it was reported that ...' or 'according to reports'."),
         "story": {"title": plain(row.get("title")), "published_at": row.get("published_at"),
                   "text": story_text(row)[:7000]},
         "reports": [{"url": c["url"], "publisher": c["publisher"], "text": c["text"][:9000]} for c in candidates],
@@ -443,6 +455,8 @@ def ask_model(client, row: dict[str, Any], candidates: list[dict[str, str]]) -> 
 
 
 def _attributed(update: str, publisher: str) -> bool:
+    if publisher == DISCREET_LABEL:
+        return bool(DISCREET_ATTRIBUTION.search(update))
     lowered = update.lower()
     if publisher.lower().removeprefix("the ") in lowered:
         return True
@@ -485,7 +499,11 @@ def gate(dev: dict[str, Any], row: dict[str, Any], sources: dict[str, dict[str, 
         if f"{first} {last}" not in raw_source and first not in _NOT_PEOPLE_FIRST:
             problems.append(f"name '{first} {last}' is not in the report")
     if not _attributed(update, source["publisher"]):
-        problems.append(f"update does not attribute it to {source['publisher']}")
+        problems.append(f"update does not attribute it to {source['publisher']}" if source["publisher"] != DISCREET_LABEL
+                        else "update must attribute a discreet source as 'it was reported' / 'according to reports'")
+    from source_presentation import is_subtle_source
+    if source["publisher"] == DISCREET_LABEL and (is_subtle_source(update, "") or "valley radio" in update.lower()):
+        problems.append("update names a source that is only named discreetly")
     existing = norm(story_text(row))
     if quote and quote in existing:
         problems.append("story already quotes this passage")
