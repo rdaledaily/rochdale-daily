@@ -15,13 +15,33 @@ LANDSCAPE = re.compile(r"TREES|SHRUBS|PLANTS|GROUNDS|LANDSCAP|GARDEN|HORTICULT|B
 REDACTED = re.compile(r"REDACT|PERSONAL DATA|WITHHELD", re.I)
 UA = {"User-Agent": "Rochdale Daily newsroom research (news@rochdaledaily.co.uk)"}
 
-pkg = requests.get(f"https://www.data.gov.uk/api/action/package_show?id={DATASET}", headers=UA, timeout=60).json()["result"]
-by_month: dict[str, dict[str, str]] = {}
-for res in pkg["resources"]:
-    url = (res.get("url") or "").replace("htts://", "https://").replace("http://", "https://")
-    fmt = (res.get("format") or url.rsplit(".", 1)[-1]).lower()
-    name = res.get("name") or res.get("description") or url
-    by_month.setdefault(name.replace(" (csv)", "").replace(" (pdf)", "").strip(), {})[fmt] = url
+def list_files() -> dict[str, dict[str, str]]:
+    """Monthly files from the data.gov.uk API; the dataset page's own links
+    if the API refuses."""
+    months: dict[str, dict[str, str]] = {}
+    try:
+        resp = requests.get(f"https://www.data.gov.uk/api/action/package_show?id={DATASET}", headers=UA, timeout=60)
+        print("CKAN API:", resp.status_code, resp.headers.get("content-type"))
+        for res in resp.json()["result"]["resources"]:
+            url = (res.get("url") or "").replace("htts://", "https://").replace("http://", "https://")
+            fmt = (res.get("format") or url.rsplit(".", 1)[-1]).lower()
+            name = res.get("name") or res.get("description") or url
+            months.setdefault(re.sub(r"\s*\((csv|pdf)\)\s*$", "", name, flags=re.I).strip(), {})[fmt] = url
+    except Exception as exc:
+        print("CKAN API failed:", repr(exc)[:300])
+    if months:
+        return months
+    page = requests.get(f"https://www.data.gov.uk/dataset/{DATASET}/council-spending-over-500", headers=UA, timeout=60)
+    print("Dataset page:", page.status_code)
+    for url in sorted(set(re.findall(r"https?://data\.rochdale\.gov\.uk/(?:files|pdf)/[^\"'<> ]+", page.text))):
+        url = url.replace("http://", "https://")
+        stem = url.rsplit("/", 1)[-1].rsplit(".", 1)[0].lower()
+        months.setdefault(stem, {})[url.rsplit(".", 1)[-1].lower()] = url
+    return months
+
+
+by_month = list_files()
+print("monthly entries:", len(by_month))
 
 out = {"terms": TERMS, "files_total": 0, "files_read": 0, "failed": [], "matches": [],
        "redacted_landscape_rows": 0, "redacted_landscape_total": 0.0, "landscape_examples": []}

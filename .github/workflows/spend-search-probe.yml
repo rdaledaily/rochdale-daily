@@ -20,7 +20,7 @@ jobs:
           python-version: "3.11"
       - run: sudo apt-get install -y -q poppler-utils && python -m pip install --no-cache-dir requests
       - name: Search
-        run: python probe-tools/spend_search.py "EVERGREEN,ELLISON,IN BLOOM,NEEVA,NORDEN ENVIRON,NORDEN VILLAGE" | tee spend_search.txt
+        run: python probe-tools/spend_search.py "EVERGREEN,ELLISON,IN BLOOM,NEEVA,NORDEN ENVIRON,NORDEN VILLAGE" 2>&1 | tee spend_search.txt; exit ${PIPESTATUS[0]}
       - name: Commit results to the probe branch
         if: always()
         run: |
