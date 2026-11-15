@@ -284,6 +284,7 @@ def google_news(query: str) -> list[dict[str, Any]]:
             "link": str(entry.get("link") or ""),
             "title": plain(entry.get("title")),
             "source_href": str(source.get("href") or ""),
+            "source_name": plain(source.get("title")),
             "published": datetime(*stamp[:6], tzinfo=timezone.utc) if stamp else None,
         })
     return out
@@ -344,6 +345,8 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
             match = publisher_for(entry.get("source_href") or link)
             if not match:
                 tally["untrusted_publisher"] += 1
+                log.setdefault("untrusted", []).append(
+                    f"{entry.get('source_name') or '?'} ({host_of(entry.get('source_href') or link)}): {entry.get('title', '')[:80]}")
                 continue
             seen.add(link)
             try:
@@ -647,6 +650,8 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
         counts["held"] += len(log.get("held") or [])
         counts["rejected"] += len(log.get("rejected") or [])
         print(f"followups: {log['outcome']:16} {slug} | candidates={len(log.get('candidates') or [])} search={log.get('search')}")
+        for item in (log.get("untrusted") or []) + [f"OFF-TOPIC {x}" for x in log.get("not_same_story") or []]:
+            print(f"followups:    dropped {item}")
         events.append({**log, "dry_run": not apply})
     held_now = {}
     for event in events:
