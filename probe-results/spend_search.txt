@@ -1,10 +1,18 @@
 CKAN API: 200 application/json;charset=utf-8
 monthly entries: 164
-Traceback (most recent call last):
-  File "/home/runner/work/rochdale-daily/rochdale-daily/probe-tools/spend_search.py", line 65, in <module>
-    rows = [" | ".join(row) for row in csv.reader(io.StringIO(raw))]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/rochdale-daily/rochdale-daily/probe-tools/spend_search.py", line 65, in <listcomp>
-    rows = [" | ".join(row) for row in csv.reader(io.StringIO(raw))]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-_csv.Error: new-line character seen in unquoted field - do you need to open the file with newline=''?
+{
+ "terms": [
+  "EVERGREEN",
+  "ELLISON",
+  "IN BLOOM",
+  "NEEVA",
+  "NORDEN ENVIRON",
+  "NORDEN VILLAGE"
+ ],
+ "files_total": 162,
+ "files_read": 162,
+ "failed": [],
+ "redacted_landscape_rows": 238,
+ "redacted_landscape_total": 97854.79999999999
+}
+matches: 86
