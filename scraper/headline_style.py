@@ -242,6 +242,7 @@ _DANGLING = {
     "due", "set", "being", "what", "where", "when", "how", "why", "against", "between", "under", "via", "per",
 }
 _MIN_CLAUSE = 35
+_DATE_SUFFIX_RE = re.compile(r" · \d{1,2} [A-Z][a-z]{2} \d{4}$")
 # Words that open a phrase which can be dropped whole ("of" is left out: it
 # binds too tightly, as in "Ring of Red").
 _PHRASE_STARTS = {"in", "on", "at", "for", "and", "with", "to", "from", "near",
@@ -277,6 +278,14 @@ def shorten_title(title: str, limit: int = TITLE_HARD_LIMIT) -> str:
     title = " ".join(str(title or "").split())
     if len(title) <= limit:
         return title
+    # Keep the " · 1 Aug 2026" that archive_integrity adds to tell apart
+    # different stories sharing a headline; shorten the headline before it.
+    # Cutting it off made the titles identical again, archive_integrity put
+    # it back, and the two passes undid each other every run (14 Nov 2026).
+    dated = _DATE_SUFFIX_RE.search(title)
+    if dated and dated.start() > 0:
+        suffix = dated.group(0)
+        return shorten_title(title[: dated.start()], limit - len(suffix)) + suffix
     best = ""
     for sep in _CLAUSE_BREAKS:
         start = 0
