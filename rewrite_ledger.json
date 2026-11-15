@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-15T18:42:02.178017Z",
+  "updated_at": "2026-11-15T19:08:02.942332Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 155,
+  "count": 157,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -444,6 +444,22 @@
       "category": "education",
       "text_fingerprint": "dca7933251076ebf",
       "recovery_attempts": 1
+    },
+    "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-0c809a74530401249d": {
+      "first_attempt_at": "2026-11-15T19:08:02.941996Z",
+      "attempts": 1,
+      "urls": [
+        "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-0c809a74530401249d"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-15T19:08:02.941996Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Updated: 15/11/2026 at 6:42pm Live Failsworth Tram Stop - Lifts out of service Duration Sun 15 Nov, 6:42pm – until further notice Stops impa",
+      "source_name": "Bee Network live travel alerts",
+      "category": "transport",
+      "text_fingerprint": "4a05e165fdab870d"
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-5d8b752d3488861278": {
       "first_attempt_at": "2026-11-15T09:05:12.455696Z",
@@ -2212,15 +2228,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 4,
+      "attempts": 1,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-15T18:42:02.177775Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "last_attempt_at": "2026-11-15T19:08:02.942178Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
@@ -2421,6 +2437,27 @@
       "category": "crime",
       "text_fingerprint": "40ed1c91a0bb2d0a",
       "recovery_attempts": 2
+    },
+    "https://www.skysports.com/football/news/13610288/rochdale-0-1-york": {
+      "first_attempt_at": "2026-11-15T19:05:35.765421Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMif0FVX3lxTFB5cm5reTczQTBnTVp3Q2piN1kwSjBIV3FEV25vSnJrUkwyVXRDTVpCS0pHZmpabl81dDV6MnZQRUxweW54MVphWFBBU2JWTmd0bVBHNWdzMU9MX0ZCaEtPVVdOS0U4TGxNTGxGODlSZV90a1M5RF8wWGtBYWVIc28?oc=5",
+        "https://www.bbc.co.uk/sport/football/live/ck1wvw97y218t",
+        "https://www.ipswichstar.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
+        "https://www.skysports.com/football/news/13610288/rochdale-0-1-york",
+        "https://www.yorkpress.co.uk/sport/26729538.live-blog-rochdale-0-1-york-city",
+        "https://www.yorkpress.co.uk/sport/yorkcityfc/matchreports/26729632.york-city-beat-rochdale-1-0-first-away-win-season"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-15T19:05:35.765421Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta",
+      "title": "Rochdale 0-1 York - Sky Sports",
+      "source_name": "Sky Sports",
+      "category": "sport",
+      "text_fingerprint": "3ba829b03a0fee26"
     },
     "https://www.skysports.com/football/video/13612256/rochdale-0-1-york-city-league-two-highlights": {
       "first_attempt_at": "2026-11-15T16:58:39.233926Z",
