@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-15T20:43:03.639624Z",
+  "last_run_at": "2026-11-15T21:03:04.442682Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,35 +54,35 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 67,
+  "raw_candidates_before_job_filter": 68,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 67,
-  "candidate_clusters": 29,
+  "raw_candidates": 68,
+  "candidate_clusters": 30,
   "google_news_resolution": {
-    "wrappers": 28,
-    "resolved": 23,
-    "text_recovered": 16,
+    "wrappers": 39,
+    "resolved": 32,
+    "text_recovered": 19,
     "reattributed": 1,
-    "images_found": 20
+    "images_found": 22
   },
   "duplicates_merged": 38,
   "attempted_rewrites": 1,
   "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "old-office-block-on-yorkshire-street-to-be-converted-into-21-apartments",
+      "slug": "old-office-block-in-rochdale-to-be-converted-into-21-apartments",
       "source_url": "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
     }
   ],
   "new_articles": 0,
-  "live_articles": 610,
+  "live_articles": 608,
   "skipped": 0,
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 1,
+    "missing_from_feed": 0,
     "queued_for_retry": 0,
-    "recovery_limit_reached": 1,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 2,
     "reopened_after_evidence_fix": 0,
     "reopened_verified_official_notices": 0,
@@ -93,8 +93,8 @@
     "by_outcome": {
       "editorial_twin": 9,
       "failed": 19,
-      "published": 75,
-      "rejected": 51
+      "published": 76,
+      "rejected": 50
     },
     "held_back_this_run": 21,
     "held_already_published": 9,
@@ -131,13 +131,13 @@
       "last_attempt_at": "2026-11-15T12:01:28.043912Z"
     },
     {
-      "url": "https://uk.sports.yahoo.com/news/well-definitely-lean-lindsey-plots-050000077.html",
-      "title": "'We'll definitely lean on it' - Lindsey plots to use York City's history at Rochdale - Yahoo",
-      "source_name": "Yahoo",
-      "held_because": "already rejected: editorial gate: REJECTED_NON_LOCAL",
+      "url": "https://www.yorkpress.co.uk/sport/26727631.york-citys-history-rochdale-will-key-says-lindsey",
+      "title": "'We'll definitely lean on it' - Lindsey plots to use York City's history at Rochdale - The York Press",
+      "source_name": "The York Press",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta",
       "outcome": "rejected",
       "attempts": 3,
-      "last_attempt_at": "2026-11-15T04:46:47.527736Z"
+      "last_attempt_at": "2026-11-15T01:35:41.451523Z"
     },
     {
       "url": "https://rochdaleafc.co.uk/watson-post-york-141126",
@@ -213,20 +213,18 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 189 body words using only facts already present in the sources; the draft currently has 179.": 1
+    "Write at least 189 body words using only facts already present in the sources; the draft currently has 159.": 1
   },
   "local_impact": {
-    "shown": 1,
+    "shown": 0,
     "outcomes": {
-      "shown": 1
+      "writer offered no points": 1
     },
-    "points": {
-      "corrected to the story's own sentence": 1
-    }
+    "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 54,
+    "rss_and_google_news": 55,
     "website_discovery": 6,
     "aggregator_discovery": 0,
     "live_service_pages": 6,
@@ -272,6 +270,14 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -353,13 +359,13 @@
   "source_counts": {
     "Rochdale Times": 15,
     "Rochdale AFC": 10,
-    "Roch Valley Radio": 8,
+    "Roch Valley Radio": 7,
     "Bee Network live travel alerts": 6,
-    "The York Press": 3,
-    "Yahoo": 3,
-    "Rochdale Borough Council": 3,
+    "The York Press": 5,
+    "Rochdale Borough Council": 4,
     "Roch Valley Radio Local News": 3,
     "County Times": 2,
+    "Yahoo": 2,
     "Southend Echo": 1,
     "Slough Observer": 1,
     "Wilts and Gloucestershire Standard": 1,
@@ -379,8 +385,8 @@
     "environment": 1
   },
   "published_by_category": {
-    "business": 71,
-    "community": 92,
+    "business": 70,
+    "community": 90,
     "crime": 39,
     "education": 29,
     "environment": 50,
@@ -388,9 +394,9 @@
     "health": 16,
     "news": 90,
     "politics": 19,
-    "sport": 54,
+    "sport": 52,
     "traffic": 46,
-    "transport": 11
+    "transport": 10
   },
   "openai_enabled": true,
   "ai_rewrite_required": true,
@@ -1002,7 +1008,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 8,
+  "robots_denied_count": 35,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -1011,15 +1017,38 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://c.newsnow.co.uk/A/1329231450?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329805864?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329797320?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329785017?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329745970?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329723768?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329714278?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329694800?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329690736?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329685434?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329646100?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329613630?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329609950?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329591086?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329580953?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329580404?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329572545?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329540190?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329511378?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329389348?-57568:46921",
+    "https://c.newsnow.co.uk/A/1328691076?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329604647?-57568:46921",
+    "https://c.newsnow.co.uk/A/1328615838?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329188487?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329172291?-57568:46921",
+    "https://c.newsnow.co.uk/A/1329837776?-57568:46921",
+    "https://www.linkedin.com/company/groundnews",
     "https://www.thesun.co.uk/sport/football/team/41020665/rochdale-afc/"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 2
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1055,8 +1084,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-15T20:56:08.265989Z",
-  "frontpage_article_count": 9,
+  "frontpage_generated_at": "2026-11-15T21:14:22.578733Z",
+  "frontpage_article_count": 8,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
@@ -1105,12 +1134,11 @@
       "transport": 1,
       "traffic": 2,
       "sport": 1,
-      "health": 1,
       "news": 2,
       "community": 2
     },
     "selected_by_ward": {
-      "borough-wide": 6,
+      "borough-wide": 5,
       "Milnrow and Newhey": 1,
       "Hopwood Hall": 1,
       "Healey": 1
@@ -1125,7 +1153,6 @@
       "bee network live travel alerts": 1,
       "lancashire telegraph": 1,
       "sky sports": 1,
-      "itv news": 1,
       "rochdale borough council; itv news granada; place north west": 1,
       "councillor dylan williams, rochdale borough council": 1,
       "rochdale daily": 1,
@@ -1136,10 +1163,10 @@
     "primary_pool_size": 10,
     "fallback_stories_used": 2,
     "selection_window_days": 4,
-    "frontpage_count": 9,
+    "frontpage_count": 8,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 5,
-    "fresh_under_homepage_window": 9,
+    "fresh_under_homepage_window": 8,
     "short_briefs_selected": 3,
     "frontpage_minimum_met": false
   },
@@ -1149,9 +1176,9 @@
   "events_kept_other_source": 39,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
+  "approved_ticket_events": 11,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 609,
+  "duplicate_articles_after_postprocessing": 608,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1161,7 +1188,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 27,
-  "whats_on_event_count": 13,
+  "whats_on_event_count": 11,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 1,
