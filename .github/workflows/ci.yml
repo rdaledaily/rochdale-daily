@@ -288,6 +288,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_enhance_event_structured_data.py
           PYTHONPATH=scraper python scraper/test_consolidate_duplicate_article_signals.py
           PYTHONPATH=scraper python scraper/test_live_story_updates.py
+          PYTHONPATH=scraper python scraper/test_top_story_followups.py
           PYTHONPATH=scraper python scraper/test_compact_live_updates.py
           PYTHONPATH=scraper python scraper/test_scrub_personal_name.py
           PYTHONPATH=scraper python scraper/test_headline_category_rules.py
