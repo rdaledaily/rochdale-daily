@@ -1,0 +1,149 @@
+
+=== keyed ===
+  companies_house: no key (COMPANIES_HOUSE_API_KEY secret not set)
+  skiddle: no key (SKIDDLE_API_KEY secret not set)
+  ticketmaster: no key (TICKETMASTER_API_KEY secret not set)
+  cqc: no key (CQC_SUBSCRIPTION_KEY secret not set)
+
+=== met_office_warnings ===
+  mo_nw.xml: HTTP 200 application/atom+xml 2269 bytes
+   items=2
+    - Yellow warning of ice affecting North West England
+    - Yellow warning of snow affecting North West England
+  mo_uk.xml: HTTP 200 application/atom+xml 12438 bytes
+   items=14
+    - Yellow warning of ice affecting Dumfries, Galloway, Lothian &amp; Borders
+    - Yellow warning of snow affecting Dumfries, Galloway, Lothian &amp; Borders
+    - Yellow warning of snow affecting East Midlands
+    - Yellow warning of ice affecting Grampian
+    - Yellow warning of ice affecting Highlands &amp; Eilean Siar
+    - Yellow warning of ice affecting North East England
+    - Yellow warning of snow affecting North East England
+    - Yellow warning of ice affecting North West England
+    - Yellow warning of snow affecting North West England
+    - Yellow warning of ice affecting Central, Tayside &amp; Fife
+
+=== nomis ===
+  nomis_geo.json: HTTP 200 application/json 1055 bytes
+    {  "structure" :{"codelists" :{"codelist" :[ {"agencyid" :"NOMIS","id" :"CL_162_1_GEOGRAPHY","code" :[ {"annotations" :{"annotation" :[ {"annotationtext" :"local authorities: district / unitary (as of April 2023)","annotationtitle" :"TypeName"},{"annotationtext" :424,"annotationtitle" :"TypeCode"},{"annotationtext" :"E08000005","annotationtitle" :"GeogCode"}]},"parentcode" :2013265922,"description" :{"value" :"Rochdale","lang" :"en"},"value" :1778385128}],"name" :{"value" :"geography","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_162_1","prepared" :"2026-11-15T18:47:14Z","sender" :{"con
+  nomis_cc.csv: HTTP 200 text/csv 531 bytes
+    "DATE_NAME","GEOGRAPHY_NAME","GEOGRAPHY_CODE","MEASURE_NAME","OBS_VALUE"
+"July 2026","Rochdale","E08000005","Claimant count",8485
+"July 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",5.8
+"August 2026","Rochdale","E08000005","Claimant count",8505
+"August 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",5.8
+"September 2026","Rochdale","E08000005","Claimant count",8775
+"September 2026","Rochdale","E08000005","Claimants as a proportion of residents aged 16-64",6.0
+
+  nomis_lmp.html: HTTP 200 text/html; charset=utf-8 47333 bytes
+    lmp h1: Cookie Consent
+    lmp mentions Rochdale: True | 'claimant' count: 1
+    lmp title: Labour Market Profile - Nomis - Official Census and Labour Market Statistics
+    claimant mention: None
+
+=== find_tender ===
+  page 1: 2026-11-15T17:06:00Z .. 2026-11-13T16:00:35Z
+  page 5: 2026-11-13T10:11:14Z .. 2026-11-12T18:50:50Z
+  pages=5 releases=465 complete=True postcode_rule=0 regex_only=2
+   DROP 108192-2026 ['award', 'contract'] | Stockport Metropolitan Borough Council | buyer pc SK1 3XE
+   DROP 107849-2026 ['award', 'contract'] | Government Commercial Agency | buyer pc L3 9PP
+
+=== existing_rota ===
+{
+ "council_roadworks": {
+  "status": "ok",
+  "offered": 4,
+  "daily_cap": 4,
+  "offered_today": 4,
+  "listed": 32,
+  "already_seen": 0,
+  "started_long_ago": 15,
+  "too_far_ahead": 8,
+  "undated": 1,
+  "in_window": 8
+ },
+ "gazette_insolvency": {
+  "status": "ok",
+  "offered": 2,
+  "daily_cap": 2,
+  "offered_today": 2,
+  "listed": 12,
+  "other_notice_types": 2,
+  "already_seen": 1,
+  "new": 9,
+  "outside_borough": 0,
+  "no_company_address": 0,
+  "notice_unreadable": 1
+ },
+ "written_answers": {
+  "status": "ok",
+  "offered": 0,
+  "daily_cap": 3,
+  "offered_today": 0,
+  "listed": 6,
+  "unanswered_or_holding": 0,
+  "not_about_the_borough": 6,
+  "already_seen": 0,
+  "new": 0
+ },
+ "gmca_decisions": {
+  "status": "ok",
+  "offered": 0,
+  "daily_cap": 1,
+  "offered_today": 0,
+  "listed": 28,
+  "not_decisions": 15,
+  "no_borough_place": 7,
+  "already_seen": 0,
+  "new": 0
+ },
+ "ons_housing": {
+  "status": "ok",
+  "offered": 1,
+  "daily_cap": 1,
+  "offered_today": 1,
+  "listed": 1,
+  "already_seen": 0,
+  "new": 1
+ },
+ "contract_notices": {
+  "status": "ok",
+  "offered": 0,
+  "daily_cap": 3,
+  "offered_today": 0,
+  "pages": 1,
+  "releases": 16,
+  "borough_buyer": 0,
+  "not_story_type": 0,
+  "already_seen": 0,
+  "new": 0,
+  "complete": 1
+ },
+ "weather_warnings": {
+  "status": "ok",
+  "offered": 0,
+  "daily_cap": 2,
+  "offered_today": 0,
+  "listed": 14,
+  "not_rochdale": 14,
+  "already_seen": 0,
+  "new": 0
+ },
+ "claimant_count": {
+  "status": "ok",
+  "offered": 1,
+  "daily_cap": 1,
+  "offered_today": 1,
+  "months": 13,
+  "already_seen": 0,
+  "new": 1
+ }
+}
+   offer: council_roadworks | Heywood Christmas Festival, road closures in Heywood on 14 November 2026 | https://www.rochdale.gov.uk/directory-record/2645/heywood-christmas-festival-road-closures-in-heywood-on-14-november-2026
+   offer: council_roadworks | Smithy Bridge Road, roadworks in Littleborough on 15 November 2026 | https://www.rochdale.gov.uk/directory-record/2646/smithy-bridge-road-roadworks-in-littleborough-on-15-november-2026
+   offer: council_roadworks | Union Street, roadworks in Rochdale from 17 November 2026 | https://www.rochdale.gov.uk/directory-record/2602/union-street-roadworks-in-rochdale-from-17-november-2026
+   offer: council_roadworks | Norden Christmas Lights, road closures in Rochdale on 22 November 2026 | https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026
+   offer: gazette_insolvency | PANGAEA GLOBAL ASSOCIATES LIMITED: Appointment of Liquidators | https://www.thegazette.co.uk/notice/5252418
+   offer: gazette_insolvency | ILEARN INTERNATIONAL LIMITED: Resolutions for Winding-up | https://www.thegazette.co.uk/notice/5251424
+   offer: ons_housing | Rochdale house prices and rents: ONS figures updated 21 October 2026 | https://www.ons.gov.uk/visualisations/housingpriceslocal/E08000005/#updated-21-october-2026
+   offer: claimant_count | Rochdale claimant count rose in September 2026 | https://www.nomisweb.co.uk/reports/lmp/la/1946157091/report.aspx#claimants-september-2026
