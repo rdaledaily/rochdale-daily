@@ -661,6 +661,15 @@ def incident_fact_match(left: Any, right: Any) -> bool:
         # When both reports name a street, venue or postcode, the precise
         # location must match; a shared broad area must not override a conflict.
         shared_locations = left_precise & right_precise
+    elif left_precise or right_precise:
+        # One report names a street and the other names only the town. The
+        # town alone is not the same place: on 14 Nov 2026 the editor's
+        # Buckley Hall Prison article (no street; mentions assaults, a man and
+        # Rochdale) matched a police appeal on King Street and an attack on
+        # Boundary Street on exactly that, took the appeal's id, and both
+        # stories left the live feed. Same route: a flat-fire death in
+        # Middleton against a feature on the borough's war dead.
+        return False
     else:
         shared_locations = incident_locations(left) & incident_locations(right)
     if not shared_locations:
