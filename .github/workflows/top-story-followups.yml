@@ -33,6 +33,8 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       OPENAI_MODEL: "gpt-4o-mini"
       RD_FOLLOWUP_MINUTES: "18"
+      # Off until the dry runs on real top stories have been checked (15 Nov).
+      RD_FOLLOWUP_APPLY: "false"
       PYTHONPATH: scraper
     steps:
       - uses: actions/checkout@v6

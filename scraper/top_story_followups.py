@@ -61,12 +61,14 @@ MANUAL_JSON = Path("manual_articles.json")
 REPORT_PATH = Path("reports/top_story_followups.json")          # public: holds + updates made
 STATE_PATH = Path("reports/top_story_followups_state.json")     # private (Actions cache)
 EVENTS_PATH = Path("reports/top_story_followups_events.json")   # private (Actions cache)
+DRY_REPORT_PATH = Path("reports/top_story_followups_dryrun.json")  # never committed
 UK = ZoneInfo("Europe/London")
 
 TOP_N = int(os.getenv("RD_FOLLOWUP_TOP_N", "12"))
 CHECK_EVERY_MINUTES = int(os.getenv("RD_FOLLOWUP_EVERY_MINUTES", "60"))
 MAX_AGE_DAYS = int(os.getenv("RD_FOLLOWUP_MAX_AGE_DAYS", "21"))
 MAX_CANDIDATES = 4
+LOOKBACK_HOURS = int(os.getenv("RD_FOLLOWUP_LOOKBACK_HOURS", "24"))
 REPORT_KEEP = 300
 
 # host suffix -> name the update must attribute it to
@@ -292,6 +294,10 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
     import core_fact_backstop as backstop
 
     published = parse_time(row.get("first_published_at") or row.get("published_at")) or (now_utc() - timedelta(days=2))
+    # A report from shortly before we published can still carry what we lack
+    # (measured 15 Nov: an after-publication cut-off found 0 reports for all 9
+    # top stories). Repeats are stopped by the already-in-story gates.
+    cutoff = published - timedelta(hours=LOOKBACK_HOURS)
     known = set(backstop.source_urls(row))
     seen = set(memory.get("seen_links") or [])
     fingerprints = dict(memory.get("fingerprints") or {})
@@ -315,20 +321,25 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
 
     # 2. Later reports from trusted publishers.
     log["queries"] = queries_for(row)
+    tally = {"hits": 0, "old_known_or_seen": 0, "untrusted_publisher": 0, "not_same_story": 0}
+    log["search"] = tally
     for query in log["queries"]:
         try:
             entries = search(query)
         except Exception as exc:  # noqa: BLE001
             log.setdefault("errors", []).append(f"search failed: {type(exc).__name__}")
             continue
+        tally["hits"] += len(entries)
         for entry in entries:
             if len(found) >= MAX_CANDIDATES:
                 break
             link, when = entry.get("link") or "", entry.get("published")
-            if not link or link in known or link in seen or not when or when <= published:
+            if not link or link in known or link in seen or not when or when <= cutoff:
+                tally["old_known_or_seen"] += 1
                 continue
             match = publisher_for(entry.get("source_href") or link)
             if not match:
+                tally["untrusted_publisher"] += 1
                 continue
             seen.add(link)
             try:
@@ -337,6 +348,7 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
                 log.setdefault("errors", []).append(f"{link[:80]}: {type(exc).__name__}")
                 continue
             if not backstop._relevant(text, title):
+                tally["not_same_story"] += 1
                 continue
             found.append({"url": link, "publisher": match[1], "text": text, "kind": "later report",
                           "official": match[0] in OFFICIAL})
@@ -611,7 +623,8 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
             approvals = story_checks.fetch_newsletter_approvals()
         except Exception:  # noqa: BLE001
             approvals = None
-    targets = [r for r in load_targets(root, when=when) if due(state, str(r["slug"]), when)]
+    # A dry run reads but never consumes: no cadence, no links marked read.
+    targets = [r for r in load_targets(root, when=when) if not apply or due(state, str(r["slug"]), when)]
     deadline = time.monotonic() + minutes * 60
     counts = {"top_stories_due": len(targets), "checked": 0, "updated": 0, "held": 0, "rejected": 0}
     for row in targets:
@@ -628,10 +641,12 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
         counts["updated"] += len(log.get("applied") or []) if apply else 0
         counts["held"] += len(log.get("held") or [])
         counts["rejected"] += len(log.get("rejected") or [])
-        print(f"followups: {log['outcome']:16} {slug} | candidates={len(log.get('candidates') or [])}")
+        print(f"followups: {log['outcome']:16} {slug} | candidates={len(log.get('candidates') or [])} search={log.get('search')}")
         events.append({**log, "dry_run": not apply})
     held_now = {}
     for event in events:
+        if event.get("dry_run"):
+            continue
         for item in event.get("held") or []:
             held_now[item["id"]] = {**item, "slug": event["slug"], "story_title": event["title"],
                                     "held_at": event["checked_at"]}
@@ -641,8 +656,9 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
                 held_now.pop(held_id(event["slug"], str(item.get("type")), str(item.get("source_url"))), None)
     live_slugs = {str(r["slug"]) for r in load_targets(root, when=when)}
     held = [h for h in held_now.values() if h["slug"] in live_slugs]
-    write_json(root / STATE_PATH, {k: v for k, v in state.items() if k in live_slugs or
-                                   (parse_time(v.get("checked_at")) and when - parse_time(v["checked_at"]) < timedelta(days=MAX_AGE_DAYS))})
+    if apply:
+        write_json(root / STATE_PATH, {k: v for k, v in state.items() if k in live_slugs or
+                                       (parse_time(v.get("checked_at")) and when - parse_time(v["checked_at"]) < timedelta(days=MAX_AGE_DAYS))})
     this_run = events[run_start:]
     events = events[-REPORT_KEEP:]
     write_json(root / EVENTS_PATH, events)
@@ -654,9 +670,15 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
                 updates.append({"slug": event["slug"], "at": event["checked_at"], "type": item.get("type"),
                                 "source_url": item.get("source_url"), "update": item.get("update"),
                                 "headline": item.get("headline")})
-    write_json(root / REPORT_PATH, {"generated_at": iso(when), "apply": apply, "last_run": counts,
-                                    "held_for_editor": sorted(held, key=lambda h: h["held_at"]),
-                                    "updates_made": updates[-100:]})
+    report = {"generated_at": iso(when), "apply": apply, "last_run": counts,
+              "held_for_editor": sorted(held, key=lambda h: h["held_at"]), "updates_made": updates[-100:]}
+    if not apply:
+        # Dry-run holds are not real holds: kept out of /checked.
+        dry_held = [{**item, "slug": e["slug"], "story_title": e["title"], "held_at": e["checked_at"]}
+                    for e in events[run_start:] for item in e.get("held") or []]
+        write_json(root / DRY_REPORT_PATH, {**report, "held_for_editor": dry_held})
+        return counts
+    write_json(root / REPORT_PATH, report)
     return counts
 
 
@@ -678,7 +700,8 @@ def report_changed(root: Path = ROOT) -> bool:
 
 
 def summary(root: Path = ROOT) -> str:
-    report = load_json(root / REPORT_PATH, {})
+    reports = [load_json(root / p, {}) for p in (REPORT_PATH, DRY_REPORT_PATH)]
+    report = max((r for r in reports if isinstance(r, dict)), key=lambda r: str(r.get("generated_at") or ""), default={})
     counts = report.get("last_run") or {}
     events = load_json(root / EVENTS_PATH, [])
     events = events[-counts.get("checked", 0):] if counts.get("checked") else []
@@ -694,7 +717,8 @@ def summary(root: Path = ROOT) -> str:
         for item in e.get("rejected") or []:
             detail.append(f"rejected {item.get('type')}: {'; '.join(item.get('reasons') or [])[:160]}")
         detail += [f"error: {x}" for x in (e.get("errors") or [])[:2]]
-        cell = "<br>".join(d.replace("|", "/") for d in detail) or "; ".join(e.get("queries") or [])
+        detail.append("search " + json.dumps(e.get("search") or {}) + " for " + " / ".join(e.get("queries") or []))
+        cell = "<br>".join(d.replace("|", "/") for d in detail)
         lines.append(f"| {e['title'][:70]} | {e['outcome']} | {len(e.get('candidates') or [])} | {cell} |")
     return "\n".join(lines)
 

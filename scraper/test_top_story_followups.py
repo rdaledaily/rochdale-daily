@@ -184,7 +184,10 @@ def test_briefings_skipped_cadence_respected_and_dry_run_writes_nothing():
                         approvals=set(), root=tmp, when=NOW)
         assert counts["checked"] == 2
         assert (tmp / "manual_articles.d" / "2026-11-15-m62.json").read_text() == before
-        again = fu.run(False, 5, FakeClient({}), fetcher({}), search({}), approvals=set(), root=tmp,
+        assert not (tmp / "reports" / "top_story_followups_state.json").exists(), "a dry run consumes nothing"
+        assert not (tmp / "reports" / "top_story_followups.json").exists(), "a dry run publishes no report"
+        fu.run(True, 5, FakeClient({}), fetcher({}), search({}), approvals=set(), root=tmp, when=NOW)
+        again = fu.run(True, 5, FakeClient({}), fetcher({}), search({}), approvals=set(), root=tmp,
                        when=NOW + timedelta(minutes=20))
         assert again["checked"] == 0, "checked within the hour: not due"
 
