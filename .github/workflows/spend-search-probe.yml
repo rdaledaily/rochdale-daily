@@ -31,4 +31,8 @@ jobs:
           git add probe-results
           git diff --cached --quiet && exit 0
           git commit -m "Spend search results"
-          git push origin HEAD:probe/spend-search
+          for i in 1 2 3 4 5; do
+            git pull --rebase -q origin probe/spend-search && git push origin HEAD:probe/spend-search && exit 0
+            sleep 10
+          done
+          exit 1
