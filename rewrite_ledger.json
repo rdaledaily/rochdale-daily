@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-14T22:12:12.189235Z",
+  "updated_at": "2026-11-14T23:51:13.670988Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 163,
+  "count": 161,
   "entries": {
     "https://aboutmanchester.co.uk/drunk-driver-jailed-after-a-pursuit-in-rochdale-left-pedestrian-with-life-changing-injuries": {
       "first_attempt_at": "2026-11-07T09:17:19.967332Z",
@@ -1383,13 +1383,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-13T08:31:11.483653Z",
+      "last_attempt_at": "2026-11-14T23:51:13.670804Z",
       "outcome": "published",
       "reason": "",
       "title": "Man 'seriously injured' as police investigate attack near park in Rochdale",
       "source_name": "Manchester Evening News",
-      "category": "environment",
-      "text_fingerprint": "bdcf0cfc2f4b7a86"
+      "category": "traffic",
+      "text_fingerprint": "bdcf0cfc2f4b7a86",
+      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/mystery-surrounds-death-much-loved-34891258": {
       "first_attempt_at": "2026-11-11T21:47:06.391997Z",
@@ -1437,12 +1438,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T09:21:06.422878Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Police search for man who helped woman after Rochdale 'sexual assault'",
       "source_name": "Manchester Evening News",
       "category": "crime",
-      "text_fingerprint": "ce0fc885a3a9cb52"
+      "text_fingerprint": "ce0fc885a3a9cb52",
+      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/resident-escapes-second-floor-fire-34870285": {
       "first_attempt_at": "2026-11-05T22:46:38.590275Z",
@@ -1924,23 +1926,6 @@
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
-    "https://www.rochdaletimes.co.uk/council-completes-3-3-million-purchase-of-warwick-mill": {
-      "first_attempt_at": "2026-11-06T22:18:03.975713Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMikAFBVV95cUxPbEtYMjBMb0VXRXozRUlrUlRnbTh5ekhtT1Nad3FtWDExNTdubGkyTkd0Vl9pTDdLOHMzTTlob3NCVTR6aFlZdFNYYjJESHItcUNnaGtmUk1NT1NMc05QZFU2S0h0c25CQzUza3d6RGF4QlVhOFEzVS1uT0Z0V1FQejdaOTdNOWRZY1owR1I1N28?oc=5",
-        "https://www.rochdaletimes.co.uk/council-completes-3-3-million-purchase-of-warwick-mill"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T22:56:24.878824Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Council completes £3.3 million purchase of Warwick Mill - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "news",
-      "text_fingerprint": "10a9cb02c910bae2"
-    },
     "https://www.rochdaletimes.co.uk/drink-driver-jailed-after-pursuit-left-pedestrian-with-life-changing-injuries": {
       "first_attempt_at": "2026-11-09T04:02:15.559589Z",
       "attempts": 1,
@@ -2089,23 +2074,6 @@
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "4d3a456c4fc27178"
-    },
-    "https://www.rochdaletimes.co.uk/pop-up-events-to-help-avoid-online-scams": {
-      "first_attempt_at": "2026-11-06T15:28:51.308085Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMifkFVX3lxTE9zYjByMUllSU9DNkZ3WEJLOGdtVVltZGlPZnlPNnVrQUEtY1l5cm84Ty1oOTJqNGk4ZkZ3ajE2UDVQR1NSd3dldHRpU0x4djA5dWxqcDVwaVh5dnJsMVhmaVdVN2tXUE54ZTZfT2VVdHMwUUVxc3d2VV9YMUtDQQ?oc=5",
-        "https://www.rochdaletimes.co.uk/pop-up-events-to-help-avoid-online-scams"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-06T22:20:33.062148Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Pop-up events to help avoid online scams - Rochdale Times",
-      "source_name": "Rochdale Times",
-      "category": "crime",
-      "text_fingerprint": "638da2c01864fb91"
     },
     "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year": {
       "first_attempt_at": "2026-11-14T18:27:13.115780Z",
@@ -2814,13 +2782,17 @@
     },
     "https://www.wiltsglosstandard.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale": {
       "first_attempt_at": "2026-11-14T19:26:57.925011Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMipAFBVV95cUxOb3hfNFFjT3U4eXQxdzlqWnVPekZxWTVKV0N4eDFaMzlUOFR6eFptNHUzLUdrZzRUbEdzV1hNWFM2TjFwV1FZMDJJaFBUQTdvYTg0VDFxNlVSUjF1elVkVFh3eXp0TzRkZXduMm9aa185QWxEbnRZbjd1dU5FZFNJVDVSVHdCbVJsQ1gtSVFHVlRPN1ViYlR0d3dtX2djT2pzNmlETA?oc=5",
+        "https://news.google.com/rss/articles/CBMirgFBVV95cUxOaXpPZ3lPWmVZRVNxTjJ1cnFUOW1rcXVubm1ocXljVmdob29vUVJwdWlyb1dTRy0tNEd0MUQ3emVlZG9CeTdIaFdDSVdFUTUybTVYQnNMbWdDQlVBOXJYZEd2TmltZEx2bjExem9iS3R4b2R4ZzNNSy1jWWdWVW5uVXhra3ZBaE9WbUExSXA3M0dvdUctZkRTR19LUm9WME10VVpmTElXYVFiYjliX1E?oc=5",
+        "https://news.google.com/rss/articles/CBMirgFBVV95cUxQTEl5dE54cEg2YWQ3ckZST2swUnlQYV9PY1l3N1pPeVdnMno5Z1ZPU0EyaEM5UlhxSmJZcTFRZm0xR1VxVi1wMkdaZWNlbjhmeXhxdjliNjkycUlrMXJtR1RObXZVN2pmNklCSW44UGh3emhZYWJSdFRTZGhSMEhIUElKb2dESk9yM3ZBdGZFQU5kQ3VVdk9vQWx6M2g0UEpPU2hDOWVKQmhwWU5LcUE?oc=5",
         "https://news.google.com/rss/articles/CBMirwFBVV95cUxQSDhqcnA4dElEakpaQ1NtYlhfT1ZxRVdkRVFraHliOGI5ejFBZ0cxWFhuT21uaWVMNWxBU0VTc1p3cXBhMjVRdEQ2R0d0MUxpN3FoQk1fSEoxUVBNQ1NxT2lkMjNjYV9sUmE4emhVbDJySzU2Um5rRG8yU1dDemVDcDhsNmlNd1U5WkF2MkZNaW5iS2hRRVRCNEtURlJIWjdac2piQTN2N0haektsVGFZ?oc=5",
         "https://news.google.com/rss/articles/CBMisgFBVV95cUxNUTN3Vmp4OTEyR29kMnhDbS1kYWdyZkZUUmp4SHAwVUVXSm9zeFNnQ2lkT1I3TzJBendwd081OWZFTkJPNXRQUlI1VTNpeGNkaVNBU19walc4STZEWWJUOHR0QkkyZVh6VERKRDJkcDd5RTE0Mjc3a01SbHh5MkdOemRvZGIwNDV3am9yRXAxTmdLM0Jpcks2R0lKWFVZa09fb25od1NreDVQZGhma3pzTFRR?oc=5",
         "https://news.google.com/rss/articles/CBMiswFBVV95cUxQSEJPVDdkbmQyVnRvUkhUNEVaMHlxMjhkejRFQmxVSTJPbnRGbEZMNHlzc1F2UExQM3hoWWFoMzlZOU1YWFlnd0swekFwOENvZVpONk9OOVVzbnVEemh3d2F6blBRSi1aUTRKa09ydjdMYVNhSDBFa1M0bk5YaDdUSzNOVXFyQk9zY1NlWjQyeTFPOTM0Qm1BVUttTVVHVXkySk44dWE0WWNHUFUxMHRMZmkxaw?oc=5",
         "https://news.google.com/rss/articles/CBMivwFBVV95cUxPcmVRYUtGSjV5S1ZBZ3NubHpsc3pIRmU2Z0g1cFVUOUZ0OU1uZVVBOTVNejN5WHltOUR1aWp0c3oyc0xJb3Zrd0xLT3paOFdwbDh0ZVp1c2E5MnM3M1MyN0lIaUZHQXhGbXFWM05yazlHU2JYVXBXUEZGeXd6andMY2RTRlc3RWhQcTBMS2QtQ0R3alFoSElrY2pSRnY1cVdxc24tX3d5dnNxdl9yS29RNk9VUHZpQ0NOVEdIZ1dsSQ?oc=5",
         "https://www.birmingham-now.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
+        "https://www.brentwoodlive.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
         "https://www.chelmsfordcitynews.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
         "https://www.clactonandfrintongazette.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
         "https://www.countytimes.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
@@ -2836,6 +2808,7 @@
         "https://www.maldonandburnhamstandard.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
         "https://www.northwichguardian.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
         "https://www.oxfordmail.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
+        "https://www.sloughobserver.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
         "https://www.somersetcountygazette.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
         "https://www.surreycomet.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
         "https://www.thenorthernecho.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale",
@@ -2845,7 +2818,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-14T22:08:59.045752Z",
+      "last_attempt_at": "2026-11-14T23:48:50.601532Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta",
       "title": "Ollie Banks goal secures maximum points for York at Rochdale - Wilts and Gloucestershire Standard",
