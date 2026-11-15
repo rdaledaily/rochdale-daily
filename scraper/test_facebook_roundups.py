@@ -73,6 +73,39 @@ def run() -> None:
     shouty = story("z", "2026-10-14T08:00:00Z", social_headline="YOU WON'T BELIEVE WHAT HAPPENED IN ROCHDALE TODAY")
     assert fb.compose_caption(shouty).startswith("Rochdale news item z")
 
+    # The second block adds detail or is left out (Sarah, 15 Nov 2026). The
+    # e-bike post repeated the headline as its second line; it must now skip
+    # the echo and take the facts from the body instead.
+    ebike = story(
+        "e", "2026-10-14T08:00:00Z", category="news",
+        title="Warning issued over e-bikes and e-scooters ahead of Christmas",
+        social_headline="Police warn against buying e-bikes and e-scooters this Christmas after tragic death of local teenager.",
+        excerpt="Police warn about the dangers of illegal e-bikes and e-scooters following a tragic incident involving a local teenager.",
+        content_html=(
+            "<h2>What happened</h2><p>Police have issued a warning to residents about the dangers of "
+            "purchasing e-bikes and e-scooters this Christmas, following the tragic death of a teenager.</p>"
+            "<p>Jacob, 16, died eight days after an accident involving an e-scooter.</p>"
+            "<p>The warning is part of Operation Hurricane, which targets anti-social riding.</p>"
+        ),
+    )
+    caption = fb.compose_caption(ebike)
+    blocks = caption.split("\n\n")
+    assert len(blocks) == 3, caption
+    assert "dangers of illegal" not in caption and "What happened" not in caption, caption
+    assert blocks[1].startswith("Jacob, 16, died eight days"), caption
+    assert "Operation Hurricane" in blocks[1], caption
+    # Nothing new anywhere: headline and the pointer only, never a reworded repeat.
+    echo_only = story(
+        "o", "2026-10-14T08:00:00Z",
+        title="Bus station toilets reopen in Rochdale",
+        excerpt="The toilets at the Rochdale bus station have reopened.",
+    )
+    caption = fb.compose_caption(echo_only)
+    assert caption.split("\n\n")[0] == "Bus station toilets reopen in Rochdale", caption
+    assert "have reopened" not in caption and len(caption.split("\n\n")) == 2, caption
+    assert fb.echoes("Police warn about the dangers of e-bikes", fb.content_words("Police warn against buying e-bikes"))
+    assert not fb.echoes("Jacob, 16, died eight days after the crash on Bury Road.", fb.content_words("Teenager dies after e-scooter crash"))
+
     # Ranking: a crime story outranks an older roadworks note; age halves pull every 12h.
     road = story("r", "2026-10-14T10:00:00Z", category="traffic")
     fresh_crime = story("k", "2026-10-14T09:00:00Z", category="crime")

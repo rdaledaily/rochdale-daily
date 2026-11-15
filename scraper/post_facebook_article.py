@@ -285,20 +285,104 @@ def score(article: dict[str, Any], now: datetime) -> float:
     return weight * (0.5 ** (age_hours / 12))
 
 
-def compose_caption(article: dict[str, Any]) -> str:
-    """Social headline, the key facts, and where the full story is.
+# Words that carry no news on their own. A sentence is judged by what is left.
+_CAPTION_STOPWORDS = {
+    "a", "an", "the", "and", "or", "but", "of", "to", "in", "on", "at", "for",
+    "by", "with", "from", "as", "is", "are", "was", "were", "be", "been", "has",
+    "have", "had", "it", "its", "this", "that", "these", "those", "after",
+    "following", "over", "about", "against", "into", "up", "out", "who",
+    "which", "their", "they", "his", "her", "he", "she", "has", "not", "no",
+    "said", "says", "say", "will", "would", "can", "could", "also", "than",
+    "issued", "issue", "issues", "involving", "amid", "ahead", "local",
+}
+# A sentence that shares this much of its content with the headline restates
+# it. Measured on the post Sarah flagged (15 Nov 2026): the excerpt "Police
+# warn about the dangers of illegal e-bikes and e-scooters following a tragic
+# incident involving a local teenager" shares 6 of its 9 content words with
+# the social headline. A sentence that adds a name, a date or a cause sits
+# well under half.
+ECHO_THRESHOLD = 0.5
+MAX_FACT_SENTENCES = 2
+MAX_FACTS_CHARS = 420
 
-    No link in the post body (the link goes in the first comment), no emoji,
-    no engagement bait. Crime and court posts carry no comment invitation:
-    comments are closed on those stories on the site too."""
+
+def _stem(word: str) -> str:
+    for suffix in ("ings", "ing", "ers", "er", "ies", "es", "ed", "s"):
+        if len(word) > len(suffix) + 3 and word.endswith(suffix):
+            return word[: -len(suffix)]
+    return word
+
+
+def content_words(text: str) -> set[str]:
+    tokens = re.findall(r"[a-z0-9][a-z0-9'\-]*", html.unescape(text).casefold())
+    return {_stem(t.strip("'-")) for t in tokens if t.strip("'-") and t not in _CAPTION_STOPWORDS}
+
+
+def echoes(sentence: str, reference: set[str]) -> bool:
+    """True when the sentence mostly restates words the reader already has."""
+    words = content_words(sentence)
+    if not words:
+        return True
+    return len(words & reference) / len(words) >= ECHO_THRESHOLD
+
+
+def body_sentences(article: dict[str, Any]) -> list[str]:
+    """Sentences from the article body, paragraph by paragraph. Headings,
+    labels and list fragments (blocks with no closing full stop) are left
+    out, so a section title can never run into the next sentence."""
+    body = article.get("body") or article.get("content_html") or article.get("content") or ""
+    if isinstance(body, list):
+        body = "\n\n".join(str(part) for part in body)
+    body = re.sub(r"<(?:/p|br\s*/?|/h\d|/li|/div|/blockquote)\s*>", "\n\n", str(body), flags=re.I)
+    body = re.sub(r"<[^>]+>", " ", body)
+    sentences: list[str] = []
+    for block in re.split(r"\n\s*\n", body):
+        block = one_line(block)
+        if not block or not re.search(r"[.!?][\"'”’)]*$", block):
+            continue
+        sentences.extend(split_sentences(block))
+    return sentences
+
+
+def additional_facts(article: dict[str, Any], headline: str, title: str) -> str:
+    """Up to two sentences the headline does not already tell the reader.
+
+    Draws from the excerpt first, then the article body, skipping any sentence
+    that restates the headline (or the verified title) or a sentence already
+    chosen. Returns '' when the copy has nothing new: a post with just the
+    headline beats one that says the same thing twice."""
+    seen = content_words(headline) | content_words(title)
+    chosen: list[str] = []
+    excerpt = one_line(article.get("excerpt") or article.get("summary"))
+    for sentence in split_sentences(excerpt) + body_sentences(article):
+        sentence = sentence.strip()
+        if len(sentence) < 20 or echoes(sentence, seen):
+            continue
+        if len(" ".join(chosen + [sentence])) > MAX_FACTS_CHARS:
+            if chosen:
+                break
+            continue
+        chosen.append(sentence)
+        seen |= content_words(sentence)
+        if len(chosen) >= MAX_FACT_SENTENCES:
+            break
+    return " ".join(chosen)
+
+
+def compose_caption(article: dict[str, Any]) -> str:
+    """Social headline, any facts it does not already give, and where the
+    full story is.
+
+    The second block must add detail (a name, a cause, a date, what happens
+    next) or be left out: it is never a reworded headline. No link in the post
+    body (the link goes in the first comment), no emoji, no engagement bait.
+    Crime and court posts carry no comment invitation: comments are closed on
+    those stories on the site too."""
     title = one_line(article.get("title"))
     headline = clean_social_headline(article.get("social_headline"), title) or title
-    excerpt = one_line(article.get("excerpt") or article.get("summary"))
-    facts = " ".join(split_sentences(excerpt)[:2]) if excerpt else ""
-    if len(facts) > 420:
-        facts = facts[:417].rsplit(" ", 1)[0].rstrip(",;:") + "..."
+    facts = additional_facts(article, headline, title)
     parts = [headline]
-    if facts and facts.casefold() != headline.casefold():
+    if facts:
         parts.append(facts)
     category = str(article.get("category") or "").lower()
     closing = "Full story in the first comment."
