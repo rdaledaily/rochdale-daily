@@ -99,9 +99,16 @@ def test_official_charge_applies_on_second_look_when_gmp_page_changes():
                         when=NOW + timedelta(minutes=61))
         assert counts["updated"] == 1, counts
         entry = json.loads((tmp / "manual_articles.d" / "2026-11-14-heywood-burglary.json").read_text())
-        paras = entry["body"].split("\n\n")
-        assert paras[0].startswith("Police are investigating"), paras
-        assert paras[1].startswith("Update, 15 November 2026, 7.11pm: Greater Manchester Police said Daniel Smith"), paras[1]
+        # A crime story is an updating incident: the live timeline, not a body paragraph.
+        assert "Update," not in entry["body"]
+        first, latest = entry["live_updates"]
+        assert first["id"] == "first-report" and first["timestamp"] == "2026-11-14T10:00:00Z"
+        assert first["text"].startswith("Police are investigating")
+        assert latest["timestamp"] == "2026-11-15T19:11:00Z" and latest["source_url"] == GMP
+        assert latest["text"].startswith("Greater Manchester Police said Daniel Smith")
+        import live_format
+        block = live_format.render_block(entry, now=NOW + timedelta(minutes=62))
+        assert 'class="live-pill"' in block and ">7.11pm<" in block and ">10am<" in block, block
         assert entry["title"] == CHARGE["headline"]
         assert entry["previous_titles"] == [title]
         assert entry["last_updated_at"] == "2026-11-15T19:11:00Z"
@@ -124,12 +131,12 @@ def test_charge_reported_only_by_news_outlet_is_held_then_applied_after_approval
         held = report["held_for_editor"][0]
         assert "update" not in held and "Daniel" not in json.dumps(held), "draft wording must not be public"
         entry = json.loads((tmp / "manual_articles.d" / "2026-11-14-heywood-burglary.json").read_text())
-        assert "Update," not in entry["body"]
+        assert not entry.get("live_updates")
         # The editor approves it on /checked; the next run applies it.
         fu.run(True, 5, client, fetcher(pages), search(results), approvals={held["id"]}, root=tmp,
                when=NOW + timedelta(minutes=61))
         entry = json.loads((tmp / "manual_articles.d" / "2026-11-14-heywood-burglary.json").read_text())
-        assert "Update, 15 November 2026" in entry["body"]
+        assert len(entry["live_updates"]) == 2 and MEN in entry["live_updates"][1]["source_url"]
         report = json.loads((tmp / "reports" / "top_story_followups.json").read_text())
         assert report["held_for_editor"] == []
 
@@ -154,6 +161,8 @@ def test_road_reopening_from_outlet_applies_and_gates_reject_invention():
         assert counts["updated"] == 1 and counts["rejected"] == 1, counts
         entry = json.loads((tmp / "manual_articles.d" / "2026-11-15-m62.json").read_text())
         assert entry["title"] == good["headline"]
+        assert [u["id"] for u in entry["live_updates"]][0] == "first-report"
+        assert entry["live_updates"][1]["text"].startswith("The Manchester Evening News reported")
         assert MEN_ROAD in entry["source_urls"] and "Manchester Evening News" in entry["source_names"]
         events = json.loads((tmp / "reports" / "top_story_followups_events.json").read_text())
         rejected = [r for e in events for r in e.get("rejected", [])][0]
@@ -202,7 +211,69 @@ def test_non_manual_story_gets_override_file():
         entry = json.loads(Path(path).read_text())
         assert Path(path).name == "followup-heywood-burglary-york-street.json"
         assert entry["manual_article"] and entry["editorial_lock"] and "content_html" not in entry
-        assert entry["body"].split("\n\n")[1].startswith("Update, 15 November 2026, 6.10pm:")
+        assert len(entry["live_updates"]) == 2
+
+
+def test_non_incident_development_is_a_dated_paragraph():
+    with tempfile.TemporaryDirectory() as d:
+        tmp = Path(d)
+        row = {"slug": "paws-christmas-fairs", "title": "Paws Christmas fairs appeal for stallholders",
+               "category": "community", "published_at": "2026-11-14T19:46:00Z",
+               "body": "Paws is looking for stallholders.\n\nFairs run in December."}
+        (tmp / "manual_articles.d").mkdir()
+        (tmp / "manual_articles.d" / "paws.json").write_text(json.dumps({**row, "id": "p1", "manual_article": True}))
+        dev = {"type": "councillor_comment", "update": "Rochdale Borough Council said the fairs would go ahead.", "headline": ""}
+        source = {"url": "https://www.rochdale.gov.uk/news/x", "publisher": "Rochdale Borough Council"}
+        fu.apply_update(row, dev, source, NOW, tmp)
+        entry = json.loads((tmp / "manual_articles.d" / "paws.json").read_text())
+        assert not entry.get("live_updates")
+        assert entry["body"].split("\n\n")[1] == "Update, 15 November 2026, 6.10pm: Rochdale Borough Council said the fairs would go ahead."
+
+
+def test_credible_outlet_used_whether_or_not_it_is_on_our_list():
+    import outlet_credibility as cred
+
+    homepages = {
+        "https://www.theboltonnews.co.uk": '<footer><a href="https://www.ipso.co.uk/">IPSO regulated</a></footer>',
+        "https://www.uknip.co.uk": "<footer>Copyright UKNIP. All rights reserved.</footer>",
+        "https://www.rochdaleonline.co.uk": '<a href="https://www.ipso.co.uk/">IPSO</a>',
+    }
+    fetched = []
+
+    def assess(url, memory):
+        return cred.assess(url, memory, fetch=lambda u: (fetched.append(u), homepages[u])[1])
+
+    with tempfile.TemporaryDirectory() as d:
+        tmp = Path(d)
+        site(tmp)
+        bolton = "https://www.theboltonnews.co.uk/news/m62-reopens-999/"
+        results = {"all": [
+            {"link": bolton, "source_href": "https://www.theboltonnews.co.uk", "source_name": "The Bolton News",
+             "published": NOW, "title": "M62 reopens"},
+            {"link": "https://www.uknip.co.uk/m62", "source_href": "https://www.uknip.co.uk", "source_name": "UKNIP",
+             "published": NOW, "title": "M62 closed"},
+            {"link": "https://www.rochdaleonline.co.uk/m62", "source_href": "https://www.rochdaleonline.co.uk",
+             "source_name": "Rochdale Online", "published": NOW, "title": "M62 closed"},
+        ]}
+        title = "M62 closed near Milnrow after lorry hits central reservation"
+        dev = {"type": "road_reopened", "source_url": bolton, "same_incident": True, "already_in_story": False,
+               "source_quote": "all lanes between junction 21 and junction 22 reopened shortly after 7pm",
+               "update": "The Bolton News reported that all lanes between junction 21 and junction 22 reopened shortly after 7pm.",
+               "headline": "M62 reopens near Milnrow after lorry hit central reservation"}
+        counts = fu.run(True, 5, FakeClient({title: [dev]}), fetcher({bolton: ROAD_TEXT}), search(results),
+                        approvals=set(), root=tmp, when=NOW, assess=assess)
+        assert counts["updated"] == 1, counts
+        entry = json.loads((tmp / "manual_articles.d" / "2026-11-15-m62.json").read_text())
+        assert "The Bolton News" in entry["source_names"]
+        assert "https://www.rochdaleonline.co.uk" not in fetched, "a banned outlet is never even assessed"
+        report = json.loads((tmp / "reports" / "top_story_followups.json").read_text())
+        assert any("UKNIP" in x for x in report["outlets_not_used"])
+        assert any("Rochdale Online" in x for x in report["outlets_not_used"])
+        state = json.loads((tmp / "reports" / "top_story_followups_state.json").read_text())
+        assert state["_outlets"]["theboltonnews.co.uk"]["credible"] is True
+        assert state["_outlets"]["uknip.co.uk"]["credible"] is False
+    assert cred.assess("https://www.gmp.police.uk/x")["official"] is True
+    assert cred.assess("https://www.bbc.co.uk/news/x")["credible"] is True
 
 
 if __name__ == "__main__":

@@ -1,4 +1,11 @@
-"""Apply LIVE labels and render timestamped updates for fresh crime stories."""
+"""Apply LIVE labels for fresh crime stories and updating incidents.
+
+Editor, 15 Nov 2026: "For incidents that are updating they should use the live
+template ... with a red light, and times (5.15pm) in a timeline". So besides
+crime, any story carrying a real timeline (two or more live_updates, e.g. the
+follow-up desk adding a road reopening to a crash) is LIVE while its newest
+update is under six hours old, then "As it happened" (live_format.live_state).
+"""
 from __future__ import annotations
 from feature_policy import is_reserve_feature, normalise_feature
 import live_format
@@ -13,7 +20,8 @@ from zoneinfo import ZoneInfo
 ARTICLES = Path(__file__).resolve().parents[1] / "articles.json"
 UK = ZoneInfo("Europe/London")
 TIMELINE_RE = re.compile(r'<section class="live-update-timeline".*?</section>', re.S)
-FINISHED_RE = re.compile(r"\b(?:sentenced|jailed|convicted|acquitted|no further action|case closed)\b", re.I)
+FINISHED_RE = re.compile(r"\b(?:sentenced|jailed|convicted|acquitted|no further action|case closed|"
+                         r"reopen(?:s|ed)?|re-opened|all clear|found safe|stood down)\b", re.I)
 
 
 def parse_time(value):
@@ -43,7 +51,10 @@ def main() -> int:
         if isinstance(article, dict) and is_reserve_feature(article):
             items[index] = normalise_feature(article)
             continue
-        if not isinstance(article, dict) or str(article.get("category") or "").lower() != "crime":
+        if not isinstance(article, dict):
+            continue
+        is_crime = str(article.get("category") or "").lower() == "crime"
+        if not is_crime and len(article.get("live_updates") or []) < 2:
             continue
 
         # LIVE means live coverage: at least two real updates, the newest under
@@ -56,15 +67,15 @@ def main() -> int:
         live = bool(state["is_live"] and not FINISHED_RE.search(text))
         article["live_story"] = live
         article["live_label"] = "LIVE" if live else ""
-        article["breaking_news"] = live
-        article["breaking_label"] = "BREAKING NEWS" if live else ""
+        article["breaking_news"] = live and is_crime
+        article["breaking_label"] = "BREAKING NEWS" if live and is_crime else ""
         article["is_ongoing"] = live
         article["ongoing_label"] = "LIVE" if live else ""
         article["content_html"] = live_format.strip_baked_timeline(str(article.get("content_html") or ""))
         changed += 1
 
     ARTICLES.write_text(json.dumps(items, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"render_live_updates: processed {changed} crime article(s)")
+    print(f"render_live_updates: processed {changed} crime or live incident article(s)")
     return 0
 
 

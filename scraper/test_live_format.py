@@ -34,7 +34,7 @@ def run() -> None:
     html = lf.render_block(two, NOW)
     assert html.index("One lane has reopened") < html.index("Police closed the westbound")
     assert "<b>" not in html and "javascript:" not in html
-    assert "What we know so far" in html and "15:30 GMT" in html and 'data-live="1"' in html
+    assert "What we know so far" in html and "3.30pm" in html and 'data-live="1"' in html
 
     # Older than six hours: kept as "As it happened", schema gets an end time.
     later = datetime(2026, 10, 28, 23, 0, tzinfo=timezone.utc)

@@ -112,6 +112,13 @@ TYPES = {
 }
 LEGAL = {"charged", "court_date", "convicted", "sentenced", "deceased_named"}
 HEADLINE_TYPES = {"charged", "convicted", "sentenced", "deceased_named", "road_reopened"}
+# Updating incidents go on the live template (red LIVE light, timeline with
+# times) instead of an "Update," paragraph (editor, 15 Nov 2026).
+LIVE_INCIDENT_RE = re.compile(
+    r"\b(?:closed|closure|shut|crash\w*|collision|collided|lorry|overturned|fire|blaze|cordon|lockdown|"
+    r"evacuat\w*|flood\w*|missing|explosion|gas leak|power cut|bomb|stabb\w*|shooting|incident|"
+    r"air ambulance|emergency services?)\b", re.I)
+LIVE_TYPES = {"road_reopened", "road_update"}
 ALWAYS_HOLD = re.compile(r"\b(?:rape|sexual|indecent|grooming|child abuse|inquest|coroner)\b", re.I)
 
 _STOP = set("""a an the and or of to in on at for with from by as is are was were be been after before over
@@ -194,7 +201,8 @@ def uk_stamp(value: datetime) -> str:
 
 
 def story_text(row: dict[str, Any]) -> str:
-    return " ".join(plain(row.get(k)) for k in ("title", "excerpt", "body", "content_html"))
+    timeline = " ".join(plain(u.get("text")) for u in row.get("live_updates") or [] if isinstance(u, dict))
+    return " ".join(plain(row.get(k)) for k in ("title", "excerpt", "body", "content_html")) + " " + timeline
 
 
 def held_id(slug: str, kind: str, url: str) -> str:
@@ -290,8 +298,31 @@ def google_news(query: str) -> list[dict[str, Any]]:
     return out
 
 
+def outlet_for(entry: dict[str, Any], outlets: dict[str, Any] | None, assess=None) -> tuple[str, bool, str] | None:
+    """(publisher name, official, basis) when the outlet is credible, else None.
+
+    Known publishers first; anything else is credible on a test, not a list
+    (outlet_credibility.py: press-regulated, public body or licensed
+    broadcaster, and never a source the paper has banned)."""
+    import outlet_credibility as cred
+
+    url = entry.get("source_href") or entry.get("link") or ""
+    if cred.banned(url) or cred.banned(entry.get("link") or ""):
+        return None
+    match = publisher_for(url)
+    if match:
+        return match[1], match[0] in OFFICIAL, "known publisher"
+    verdict = (assess or cred.assess)(url, outlets)
+    entry["_credibility"] = verdict.get("basis")
+    if not verdict.get("credible"):
+        return None
+    name = plain(entry.get("source_name")) or verdict.get("name") or cred.host_of(url)
+    return name, bool(verdict.get("official")), str(verdict.get("basis"))
+
+
 def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callable[[str], str],
-                   search: Callable[[str], list[dict[str, Any]]], log: dict[str, Any]) -> list[dict[str, str]]:
+                   search: Callable[[str], list[dict[str, Any]]], log: dict[str, Any],
+                   outlets: dict[str, Any] | None = None, assess=None) -> list[dict[str, str]]:
     """Later reports (and changed official source pages) that may carry a development."""
     import core_fact_backstop as backstop
 
@@ -323,7 +354,7 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
 
     # 2. Later reports from trusted publishers.
     log["queries"] = queries_for(row)
-    tally = {"hits": 0, "already_read": 0, "too_old": 0, "untrusted_publisher": 0, "not_same_story": 0}
+    tally = {"hits": 0, "already_read": 0, "too_old": 0, "not_credible": 0, "not_same_story": 0}
     log["search"] = tally
     for query in log["queries"]:
         try:
@@ -342,12 +373,14 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
             if not when or when <= cutoff:
                 tally["too_old"] += 1
                 continue
-            match = publisher_for(entry.get("source_href") or link)
-            if not match:
-                tally["untrusted_publisher"] += 1
+            outlet = outlet_for(entry, outlets, assess)
+            if not outlet:
+                tally["not_credible"] += 1
                 log.setdefault("untrusted", []).append(
-                    f"{entry.get('source_name') or '?'} ({host_of(entry.get('source_href') or link)}): {entry.get('title', '')[:80]}")
+                    f"{entry.get('source_name') or '?'} ({host_of(entry.get('source_href') or link)}) - "
+                    f"{entry.get('_credibility') or 'banned by the paper'}: {entry.get('title', '')[:80]}")
                 continue
+            name, official, basis = outlet
             seen.add(link)
             try:
                 text = fetcher(link)
@@ -356,10 +389,10 @@ def candidates_for(row: dict[str, Any], memory: dict[str, Any], fetcher: Callabl
                 continue
             if not backstop._relevant(text, title):
                 tally["not_same_story"] += 1
-                log.setdefault("not_same_story", []).append(f"{match[1]}: {entry.get('title', '')[:90]}")
+                log.setdefault("not_same_story", []).append(f"{name}: {entry.get('title', '')[:90]}")
                 continue
-            found.append({"url": link, "publisher": match[1], "text": text, "kind": "later report",
-                          "official": match[0] in OFFICIAL})
+            found.append({"url": link, "publisher": name, "text": text, "kind": "later report",
+                          "official": official, "credibility": basis})
     memory["seen_links"] = sorted(seen)[-200:]
     for item in found:
         item.setdefault("official", is_official(item["url"]))
@@ -446,7 +479,7 @@ def gate(dev: dict[str, Any], row: dict[str, Any], sources: dict[str, dict[str, 
     raw_source = " " + plain(source["text"]) + " "
     # Publisher names are attribution, not facts taken from the report.
     scan = update
-    for name in sorted(set(PUBLISHERS.values()), key=len, reverse=True):
+    for name in sorted(set(PUBLISHERS.values()) | {source["publisher"]}, key=len, reverse=True):
         scan = scan.replace(name, " ").replace(name.removeprefix("the "), " ")
     for first, last in _NAME_RE.findall(scan):
         if f"{first} {last}" not in raw_source and first not in _NOT_PEOPLE_FIRST:
@@ -456,9 +489,10 @@ def gate(dev: dict[str, Any], row: dict[str, Any], sources: dict[str, dict[str, 
     existing = norm(story_text(row))
     if quote and quote in existing:
         problems.append("story already quotes this passage")
-    for para in re.split(r"\n\s*\n", str(row.get("body") or "")):
-        if para.startswith("Update,") and SequenceMatcher(None, norm(para), norm(update)).ratio() > 0.75:
-            problems.append("story already carries this update")
+    earlier = [p for p in re.split(r"\n\s*\n", str(row.get("body") or "")) if p.startswith("Update,")]
+    earlier += [str(u.get("text") or "") for u in row.get("live_updates") or [] if isinstance(u, dict)]
+    if any(SequenceMatcher(None, norm(p), norm(update)).ratio() > 0.75 or (quote and quote in norm(p)) for p in earlier):
+        problems.append("story already carries this update")
     headline = plain(dev.get("headline"))
     if headline:
         for number in re.findall(r"\d+", headline):
@@ -507,10 +541,26 @@ def _body_paragraphs(entry: dict[str, Any]) -> list[str]:
     return [p for p in paras if p] or ([plain(html_body)] if plain(html_body) else [])
 
 
+def is_live_incident(row: dict[str, Any], dev: dict[str, Any]) -> bool:
+    from incident_rule import wants_incident_card
+
+    category = str(row.get("category") or "").lower()
+    return bool(
+        category in {"crime", "courts"} or row.get("police_matter") or dev.get("type") in LIVE_TYPES
+        or wants_incident_card(row) or LIVE_INCIDENT_RE.search(plain(row.get("title")))
+    )
+
+
+def _first_paragraph(entry: dict[str, Any]) -> str:
+    paras = _body_paragraphs(entry)
+    return paras[0][:600] if paras else plain(entry.get("excerpt"))[:600]
+
+
 def apply_update(row: dict[str, Any], dev: dict[str, Any], source: dict[str, str], when: datetime,
                  root: Path = ROOT) -> str:
     slug = str(row["slug"])
     paragraph = f"Update, {uk_stamp(when)}: {plain(dev['update'])}"
+    live = is_live_incident(row, dev)
     location = _manual_location(slug, root)
     if location:
         path, index = location
@@ -530,7 +580,22 @@ def apply_update(row: dict[str, Any], dev: dict[str, Any], source: dict[str, str
                       "publication_route": "follow-up-update", "status": "published"})
         path, index, payload = root / MANUAL_DIR / f"followup-{slug[:90]}.json", None, entry
     paragraphs = _body_paragraphs(entry)
-    paragraphs.insert(1 if paragraphs else 0, paragraph)
+    if live:
+        updates = [u for u in (entry.get("live_updates") or []) if isinstance(u, dict)]
+        if not updates:
+            # The timeline opens with what we first reported, at the time we
+            # reported it, so a reader sees what changed and when.
+            first_url = next((u for u in (entry.get("source_urls") or [entry.get("source_url")]) if
+                              str(u or "").startswith("https://")), "")
+            first_at = str(entry.get("first_published_at") or entry.get("published_at") or row.get("published_at") or "")
+            if first_at and _first_paragraph(entry):
+                updates.append({"id": "first-report", "timestamp": first_at, "text": _first_paragraph(entry),
+                                "source_url": first_url})
+        updates.append({"id": "fu-" + held_id(slug, str(dev["type"]), source["url"])[:10], "timestamp": iso(when),
+                        "text": plain(dev["update"]), "source_url": source["url"]})
+        entry["live_updates"] = updates
+    else:
+        paragraphs.insert(1 if paragraphs else 0, paragraph)
     entry["body"] = "\n\n".join(paragraphs)
     entry.pop("content_html", None)
     headline = plain(dev.get("headline"))
@@ -569,11 +634,13 @@ def openai_client():
 
 
 def check_story(row: dict[str, Any], client, memory: dict[str, Any], approvals: set[str] | None,
-                when: datetime, apply: bool, fetcher, search, root: Path = ROOT) -> dict[str, Any]:
+                when: datetime, apply: bool, fetcher, search, root: Path = ROOT,
+                outlets: dict[str, Any] | None = None, assess=None) -> dict[str, Any]:
     slug = str(row["slug"])
     log: dict[str, Any] = {"slug": slug, "title": plain(row.get("title")), "checked_at": iso(when)}
-    candidates = candidates_for(row, memory, fetcher, search, log)
-    log["candidates"] = [{"url": c["url"], "publisher": c["publisher"], "kind": c["kind"]} for c in candidates]
+    candidates = candidates_for(row, memory, fetcher, search, log, outlets, assess)
+    log["candidates"] = [{"url": c["url"], "publisher": c["publisher"], "kind": c["kind"],
+                          "credibility": c.get("credibility", "official source page")} for c in candidates]
     if not candidates:
         log["outcome"] = "nothing new"
         return log
@@ -615,13 +682,14 @@ def check_story(row: dict[str, Any], client, memory: dict[str, Any], approvals: 
 
 
 def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, approvals=None,
-        root: Path = ROOT, when: datetime | None = None) -> dict[str, Any]:
+        root: Path = ROOT, when: datetime | None = None, assess=None) -> dict[str, Any]:
     import core_fact_backstop as backstop
 
     when = when or now_utc()
     fetcher = fetcher or backstop.fetch_text
     search = search or google_news
     state = load_json(root / STATE_PATH, {})
+    outlets = state.pop("_outlets", {}) if isinstance(state.get("_outlets"), dict) else {}
     events = load_json(root / EVENTS_PATH, [])
     events = events if isinstance(events, list) else []
     run_start = len(events)
@@ -642,7 +710,7 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
         memory = dict(state.get(slug) or {})
         if client is None:
             client = openai_client()
-        log = check_story(row, client, memory, approvals, when, apply, fetcher, search, root)
+        log = check_story(row, client, memory, approvals, when, apply, fetcher, search, root, outlets, assess)
         memory["checked_at"] = log["checked_at"]
         state[slug] = memory
         counts["checked"] += 1
@@ -666,9 +734,10 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
                 held_now.pop(held_id(event["slug"], str(item.get("type")), str(item.get("source_url"))), None)
     live_slugs = {str(r["slug"]) for r in load_targets(root, when=when)}
     held = [h for h in held_now.values() if h["slug"] in live_slugs]
+    kept = {k: v for k, v in state.items() if k in live_slugs or
+            (parse_time(v.get("checked_at")) and when - parse_time(v["checked_at"]) < timedelta(days=MAX_AGE_DAYS))}
     if apply:
-        write_json(root / STATE_PATH, {k: v for k, v in state.items() if k in live_slugs or
-                                       (parse_time(v.get("checked_at")) and when - parse_time(v["checked_at"]) < timedelta(days=MAX_AGE_DAYS))})
+        write_json(root / STATE_PATH, {**kept, "_outlets": outlets})
     this_run = events[run_start:]
     events = events[-REPORT_KEEP:]
     write_json(root / EVENTS_PATH, events)
@@ -680,7 +749,9 @@ def run(apply: bool, minutes: float, client=None, fetcher=None, search=None, app
                 updates.append({"slug": event["slug"], "at": event["checked_at"], "type": item.get("type"),
                                 "source_url": item.get("source_url"), "update": item.get("update"),
                                 "headline": item.get("headline")})
+    not_established = sorted({u for e in this_run for u in e.get("untrusted") or []})
     report = {"generated_at": iso(when), "apply": apply, "last_run": counts,
+              "outlets_not_used": [x.split(":")[0] for x in not_established][:40],
               "held_for_editor": sorted(held, key=lambda h: h["held_at"]), "updates_made": updates[-100:]}
     if not apply:
         # Dry-run holds are not real holds: kept out of /checked.
@@ -728,6 +799,7 @@ def summary(root: Path = ROOT) -> str:
             detail.append(f"rejected {item.get('type')}: {'; '.join(item.get('reasons') or [])[:160]}")
         detail += [f"error: {x}" for x in (e.get("errors") or [])[:2]]
         detail += [f"not the same story: {x}" for x in (e.get("not_same_story") or [])[:3]]
+        detail += [f"outlet not used: {x}" for x in (e.get("untrusted") or [])[:4]]
         detail.append("search " + json.dumps(e.get("search") or {}) + " for " + " / ".join(e.get("queries") or []))
         cell = "<br>".join(d.replace("|", "/") for d in detail)
         lines.append(f"| {e['title'][:70]} | {e['outcome']} | {len(e.get('candidates') or [])} | {cell} |")

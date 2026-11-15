@@ -61,9 +61,10 @@ def _safe_url(value: Any) -> str:
 
 
 def uk_time(dt: datetime, with_date: bool = False) -> str:
+    """House style, UK local time: "5.15pm", "7pm" (editor, 15 Nov 2026)."""
     local = dt.astimezone(LONDON)
-    zone = "BST" if local.utcoffset() == timedelta(hours=1) else "GMT"
-    clock = local.strftime("%H:%M") + " " + zone
+    minute = local.strftime("%M")
+    clock = local.strftime("%-I") + ("" if minute == "00" else "." + minute) + local.strftime("%p").lower()
     return f"{clock}, {local.day} {local.strftime('%B %Y')}" if with_date else clock
 
 

@@ -2450,9 +2450,12 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         byline: safeText(article.byline || article.author || "Rochdale Daily Newsdesk"),
         demo: false,
         isReserveFeature: reserveFeature,
-        // Only crime and police stories are ever ongoing (editor, 7 Nov 2026).
+        // Crime and police stories, and incidents with a live timeline of
+        // updates (editor, 7 Nov 2026; incidents added 15 Nov 2026). The
+        // pipeline sets live_story only for a real timeline under six hours old.
         isOngoing: Boolean(article.is_ongoing) &&
-          (["crime", "courts"].includes(String(article.category || "").toLowerCase()) || Boolean(article.police_matter)),
+          (["crime", "courts"].includes(String(article.category || "").toLowerCase()) || Boolean(article.police_matter) ||
+           (Boolean(article.live_story) && Array.isArray(article.live_updates) && article.live_updates.length >= 2)),
         ongoingLabel: safeText(article.ongoing_label || (article.is_ongoing ? "ONGOING" : "")),
         updateCount: Number(article.update_count) || 1,
         policeMatter: !reserveFeature && Boolean(article.policeMatter || article.police_matter),

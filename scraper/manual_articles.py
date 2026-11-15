@@ -303,6 +303,29 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
             record[flag] = True
     if entry.get("ongoing_label"):
         record["ongoing_label"] = _clean(entry["ongoing_label"])
+    # Live timeline of an updating incident (live_format.py renders it with
+    # the LIVE light and times). Added by the follow-up desk or by hand;
+    # until 15 Nov 2026 this field was silently dropped from hand-written
+    # stories, so their timelines never reached the page.
+    timeline = []
+    rows = entry.get("live_updates") if isinstance(entry.get("live_updates"), list) else []
+    for row in rows:
+        if isinstance(row, dict) and _parse_dt(row.get("timestamp")) and _clean(row.get("text")):
+            item = {"timestamp": _iso(_parse_dt(row.get("timestamp"))), "text": _clean(row.get("text"))[:1500]}
+            for key in ("id", "title", "source_url", "image_url", "image_credit"):
+                if _clean(row.get(key)):
+                    item[key] = _clean(row.get(key))
+            timeline.append(item)
+    if timeline:
+        record["live_updates"] = timeline[:50]
+        record["update_count"] = len(timeline)
+    for key in ("live_ended_at", "content_updated_at"):
+        if _parse_dt(entry.get(key)):
+            record[key] = _iso(_parse_dt(entry.get(key)))
+    if isinstance(entry.get("key_points"), list):
+        record["key_points"] = [_clean(p)[:220] for p in entry["key_points"] if _clean(p)][:6]
+    if isinstance(entry.get("previous_titles"), list):
+        record["previous_titles"] = [_clean(t) for t in entry["previous_titles"] if _clean(t)][:10]
     if entry.get("frontpage_until"):
         record["frontpage_until"] = _clean(entry.get("frontpage_until"))
     if entry.get("exclude_from_frontpage") is True:
