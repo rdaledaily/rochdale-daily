@@ -36,6 +36,9 @@ ALLOWED_CATEGORIES = {
 # These records were reviewed individually after the first full-archive pass.
 # Explicit decisions beat generic keyword rules for ambiguous headlines.
 CATEGORY_OVERRIDES: dict[str, str] = {
+    # Editor, 15 Nov 2026: analysis of prison inspection findings, filed as news.
+    # "prison" in the headline would otherwise force crime and the police photo.
+    "buckley-hall-prison-drugs-self-harm-requires-improvement": "news",
     "rochdale-valiant-launches-new-media-portal-for-local-news": "news",
     "restoration-of-historic-packer-spout-steps-completed-in-rochdale-town-centre": "news",
     "rochdale-boroughwide-housing-appoints-paul-roberts-as-permanent-chair": "business",
