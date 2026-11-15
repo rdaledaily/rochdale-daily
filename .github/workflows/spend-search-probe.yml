@@ -1,0 +1,34 @@
+name: Spend search probe (one-off, probe branch only)
+
+# Read-only research job. Lives only on probe/spend-search; never on main.
+on:
+  push:
+    branches: ['probe/spend-search']
+    paths-ignore: ['probe-results/**']
+
+permissions:
+  contents: write
+
+jobs:
+  search:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: sudo apt-get install -y -q poppler-utils && python -m pip install --no-cache-dir requests
+      - name: Search
+        run: python probe-tools/spend_search.py "EVERGREEN,ELLISON,IN BLOOM,NEEVA,NORDEN ENVIRON,NORDEN VILLAGE" | tee spend_search.txt
+      - name: Commit results to the probe branch
+        if: always()
+        run: |
+          mkdir -p probe-results
+          cp spend_search.txt spend_search.json probe-results/ 2>/dev/null || true
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add probe-results
+          git diff --cached --quiet && exit 0
+          git commit -m "Spend search results"
+          git push origin HEAD:probe/spend-search
