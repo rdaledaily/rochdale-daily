@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-15T15:23:47.687970Z",
+  "last_run_at": "2026-11-15T15:41:56.473790Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -60,18 +60,22 @@
   "candidate_clusters": 35,
   "google_news_resolution": {
     "wrappers": 43,
-    "resolved": 40,
-    "text_recovered": 25,
+    "resolved": 39,
+    "text_recovered": 21,
     "reattributed": 1,
-    "images_found": 38
+    "images_found": 34
   },
   "duplicates_merged": 53,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
+  "attempted_rewrites": 2,
+  "draft_rewrites_created": 2,
   "drafted_articles": [
     {
-      "slug": "old-office-block-on-yorkshire-street-to-be-converted-into-21-apartments",
+      "slug": "old-office-block-in-rochdale-to-be-converted-into-21-apartments",
       "source_url": "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
+    },
+    {
+      "slug": "david-mills-67-named-as-victim-of-middleton-flat-fire",
+      "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1440/man-who-died-in-flat-fire-named"
     }
   ],
   "new_articles": 0,
@@ -80,11 +84,11 @@
   "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 2,
-    "queued_for_retry": 1,
-    "recovery_limit_reached": 1,
+    "missing_from_feed": 0,
+    "queued_for_retry": 0,
+    "recovery_limit_reached": 0,
     "deliberately_blocked": 2,
-    "reopened_after_evidence_fix": 0,
+    "reopened_after_evidence_fix": 1,
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0
   },
@@ -93,25 +97,16 @@
     "by_outcome": {
       "editorial_twin": 9,
       "failed": 18,
-      "published": 79,
-      "rejected": 51
+      "published": 80,
+      "rejected": 50
     },
-    "held_back_this_run": 26,
+    "held_back_this_run": 25,
     "held_already_published": 12,
-    "held_rejected": 14,
+    "held_rejected": 13,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
-    {
-      "url": "https://www.rochvalleyradio.com/news-features/142/community/1440/man-who-died-in-flat-fire-named",
-      "title": "Man who died in flat fire named",
-      "source_name": "Roch Valley Radio Local News",
-      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
-      "outcome": "rejected",
-      "attempts": 1,
-      "last_attempt_at": "2026-11-15T15:00:22.526685Z"
-    },
     {
       "url": "https://www.rochdaletimes.co.uk/fire-festival-returns-ahead-of-christmas-lights-switch-on",
       "title": "Fire festival returns ahead of Christmas lights switch-on - Rochdale Times",
@@ -231,15 +226,18 @@
     }
   ],
   "published_with_style_issues": {
-    "Write a social_headline for Facebook.": 1
+    "Write at least 189 body words using only facts already present in the sources; the draft currently has 120.": 1,
+    "The sources quote a named person: use the most telling words as an exact, attributed quotation by the third to fifth par": 1
   },
   "local_impact": {
     "shown": 1,
     "outcomes": {
-      "shown": 1
+      "shown": 1,
+      "writer offered no points": 1
     },
     "points": {
-      "corrected to the story's own sentence": 2
+      "corrected to the story's own sentence": 1,
+      "dropped: no story sentence to correct it to": 1
     }
   },
   "style_issues_block_publication": false,
@@ -290,14 +288,6 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
-      "bozo": false,
-      "feed_title": ""
-    },
-    "Falinge Park High School": {
-      "url": "https://www.falingepark.com/feed/",
-      "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -381,10 +371,10 @@
     "Rochdale Times": 17,
     "Roch Valley Radio": 7,
     "Bee Network live travel alerts": 5,
+    "Yahoo": 4,
     "The York Press": 4,
-    "Rochdale Borough Council": 4,
-    "Yahoo": 3,
     "Yorkshire Post": 3,
+    "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
     "County Times": 2,
     "Yahoo Sports": 2,
@@ -406,7 +396,8 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "environment": 1
+    "environment": 1,
+    "news": 1
   },
   "published_by_category": {
     "business": 71,
@@ -445,10 +436,12 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "environment-v3-ec072a2d13cef151ff41"
+    "environment-v3-ec072a2d13cef151ff41",
+    "hard-news-v3-2444d7eb923240a48cf7"
   ],
   "selected_candidate_urls": [
-    "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
+    "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments",
+    "https://www.rochvalleyradio.com/news-features/142/community/1440/man-who-died-in-flat-fire-named"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -460,29 +453,36 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "environment"
+      "environment",
+      "news"
     ],
     "selected_categories": [
-      "environment"
+      "environment",
+      "news"
     ],
     "available_wards": [],
     "selected_wards": [],
-    "available_areas": [],
+    "available_areas": [
+      "middleton"
+    ],
     "selected_areas": [
+      "middleton",
       "rochdale"
     ],
     "uncovered_categories": [],
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "environment": 1
+      "environment": 1,
+      "news": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
+      "middleton": 1,
       "rochdale": 1
     },
     "selected_by_source": {
-      "roch valley radio local news": 1
+      "roch valley radio local news": 2
     },
     "must_cover_selected": 0
   },
@@ -1081,7 +1081,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-15T15:25:09.922806Z",
+  "frontpage_generated_at": "2026-11-15T15:42:58.841233Z",
   "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1181,7 +1181,7 @@
   "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 1,
+  "drafts_not_published": 2,
   "publication_health": "blocked",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
