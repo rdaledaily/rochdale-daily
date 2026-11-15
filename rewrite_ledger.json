@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-15T19:08:02.942332Z",
+  "updated_at": "2026-11-15T19:30:05.449015Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 157,
@@ -453,13 +453,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-15T19:08:02.941996Z",
+      "last_attempt_at": "2026-11-15T19:30:05.448829Z",
       "outcome": "published",
       "reason": "",
       "title": "Updated: 15/11/2026 at 6:42pm Live Failsworth Tram Stop - Lifts out of service Duration Sun 15 Nov, 6:42pm – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "4a05e165fdab870d"
+      "text_fingerprint": "4a05e165fdab870d",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-5d8b752d3488861278": {
       "first_attempt_at": "2026-11-15T09:05:12.455696Z",
@@ -470,12 +471,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-15T09:05:12.455696Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 15/11/2026 at 8:04am Live Failsworth Tram Stop - Lifts out of service Duration Sun 15 Nov, 8:04am – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
-      "text_fingerprint": "bec1f29cf5b01ed0"
+      "text_fingerprint": "bec1f29cf5b01ed0",
+      "recovery_attempts": 1
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-6b0edf3037564413c4": {
       "first_attempt_at": "2026-11-12T11:25:50.970441Z",
@@ -2228,15 +2230,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-15T19:08:02.942178Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-15T19:30:05.448598Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
@@ -2440,7 +2442,7 @@
     },
     "https://www.skysports.com/football/news/13610288/rochdale-0-1-york": {
       "first_attempt_at": "2026-11-15T19:05:35.765421Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMif0FVX3lxTFB5cm5reTczQTBnTVp3Q2piN1kwSjBIV3FEV25vSnJrUkwyVXRDTVpCS0pHZmpabl81dDV6MnZQRUxweW54MVphWFBBU2JWTmd0bVBHNWdzMU9MX0ZCaEtPVVdOS0U4TGxNTGxGODlSZV90a1M5RF8wWGtBYWVIc28?oc=5",
         "https://www.bbc.co.uk/sport/football/live/ck1wvw97y218t",
@@ -2451,9 +2453,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-15T19:05:35.765421Z",
+      "last_attempt_at": "2026-11-15T19:27:46.496090Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) AFC do not appear in the source. Name only people, places and",
       "title": "Rochdale 0-1 York - Sky Sports",
       "source_name": "Sky Sports",
       "category": "sport",
