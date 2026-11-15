@@ -1,42 +1,40 @@
 {
-  "examined_at": "2026-11-14T13:47:27.720369Z",
+  "examined_at": "2026-11-15T14:17:47.203703Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 106,
+  "candidates_examined": 132,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 71,
-    "would publish": 28,
-    "duplicate of published story": 6,
+    "age": 85,
+    "would publish": 45,
+    "duplicate of published story": 1,
     "job or career post": 1
   },
-  "would_publish": 28,
+  "would_publish": 45,
   "age_gate_sensitivity": {
-    "6h": 9,
-    "14h": 16,
-    "24h": 35,
-    "48h": 63,
-    "72h": 89,
-    "168h": 106
+    "6h": 4,
+    "14h": 4,
+    "24h": 47,
+    "48h": 80,
+    "72h": 108,
+    "168h": 132
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 14/11/2026 at 9:21am Live Failsworth Tram Stop - Lifts out of",
-      "MrFixitsTips: MFT 10 – 1000 Betting Challenge: Rochdale and York to provide goals fo"
+      "Bee Network live travel alerts: Updated: 15/11/2026 at 8:04am Live Failsworth Tram Stop - Lifts out of",
+      "Rochdale Times: Fire festival returns ahead of Christmas lights switch-on - Rochdale T"
     ],
     "duplicate of published story": [
-      "Rochdale Times: Warning to think twice about buying e-bikes and e-scooters this Christ",
-      "Rochdale Times: Warning to think twice about buying e-bikes and e-scooters this Christ",
-      "Rochdale Borough Council: Littleborough Christmas Lights Event 2026, road closures in Littleboro"
+      "Rochdale Times: Fire festival returns ahead of Christmas lights switch-on - Rochdale T"
     ],
     "job or career post": [
-      "Yahoo: Ex-Coventry midfielder Allen rejoins Rochdale - Yahoo"
+      "The York Press: Rochdale 0-1 York: City clinch first away win of the season to defeat "
     ],
     "age": [
-      "Rochdale Times: New lease of life for vacant town centre offices - Rochdale Times",
-      "Rochdale AFC: Remembrance Fixture This Weekend - Rochdale AFC",
-      "Rochdale AFC: Preview | York City (H) - Rochdale AFC"
+      "The York Press: LIVE BLOG: Rochdale 0-1 York City - The York Press",
+      "BBC: Rochdale 0-1 York City: Ollie Pearce scores winner for visitors",
+      "InYourArea: Rochdale Faith News: Saturday, November 14 - InYourArea"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
