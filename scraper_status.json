@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-15T11:00:03.681427Z",
+  "last_run_at": "2026-11-15T11:16:41.342877Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,26 +54,21 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 83,
+  "raw_candidates_before_job_filter": 87,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 83,
-  "candidate_clusters": 33,
+  "raw_candidates": 87,
+  "candidate_clusters": 32,
   "google_news_resolution": {
-    "wrappers": 61,
-    "resolved": 54,
-    "text_recovered": 17,
+    "wrappers": 44,
+    "resolved": 41,
+    "text_recovered": 23,
     "reattributed": 1,
-    "images_found": 33
+    "images_found": 39
   },
-  "duplicates_merged": 50,
-  "attempted_rewrites": 1,
-  "draft_rewrites_created": 1,
-  "drafted_articles": [
-    {
-      "slug": "ignite-fire-festival-returns-to-rochdale-ahead-of-christmas-lights-switch-on",
-      "source_url": "https://www.rochdaletimes.co.uk/fire-festival-returns-ahead-of-christmas-lights-switch-on/"
-    }
-  ],
+  "duplicates_merged": 55,
+  "attempted_rewrites": 0,
+  "draft_rewrites_created": 0,
+  "drafted_articles": [],
   "new_articles": 0,
   "live_articles": 616,
   "skipped": 0,
@@ -93,16 +88,25 @@
     "by_outcome": {
       "editorial_twin": 9,
       "failed": 19,
-      "published": 80,
-      "rejected": 48
+      "published": 79,
+      "rejected": 49
     },
-    "held_back_this_run": 26,
+    "held_back_this_run": 27,
     "held_already_published": 12,
-    "held_rejected": 14,
+    "held_rejected": 15,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.rochdaletimes.co.uk/fire-festival-returns-ahead-of-christmas-lights-switch-on",
+      "title": "Fire festival returns ahead of Christmas lights switch-on - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "held_because": "already rejected: missing from feed after repeated publication attempts; review required",
+      "outcome": "rejected",
+      "attempts": 1,
+      "last_attempt_at": "2026-11-15T11:00:03.677172Z"
+    },
     {
       "url": "https://uk.sports.yahoo.com/news/well-definitely-lean-lindsey-plots-050000077.html",
       "title": "'We'll definitely lean on it' - Lindsey plots to use York City's history at Rochdale - Yahoo",
@@ -230,22 +234,18 @@
       "last_attempt_at": "2026-11-09T17:24:10.128702Z"
     }
   ],
-  "published_with_style_issues": {
-    "Complete or remove the sentence with a missing date, time or place; never leave a preposition hanging before punctuation": 1
-  },
+  "published_with_style_issues": {},
   "local_impact": {
     "shown": 0,
-    "outcomes": {
-      "not eligible: events category": 1
-    },
+    "outcomes": {},
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 76,
-    "website_discovery": 1,
+    "website_discovery": 4,
     "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "live_service_pages": 6,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -288,6 +288,14 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -367,9 +375,9 @@
     ]
   },
   "source_counts": {
+    "Rochdale Times": 23,
     "Rochdale AFC": 23,
-    "Rochdale Times": 19,
-    "Bee Network live travel alerts": 5,
+    "Bee Network live travel alerts": 6,
     "The York Press": 4,
     "Rochdale Borough Council": 4,
     "Yahoo Sports": 3,
@@ -391,12 +399,9 @@
     "Express and Star": 1,
     "Diss Mercury": 1,
     "Harwich and Manningtree Standard": 1,
-    "Roch Valley Radio Local News": 1,
     "Food Standards Agency": 1
   },
-  "selected_by_category": {
-    "events": 1
-  },
+  "selected_by_category": {},
   "published_by_category": {
     "business": 71,
     "community": 92,
@@ -433,12 +438,8 @@
     "classified/spam denylist",
     "captcha/challenge endpoints"
   ],
-  "selected_story_keys": [
-    "events-v3-2a07ff59a4bcb8394048"
-  ],
-  "selected_candidate_urls": [
-    "https://www.rochdaletimes.co.uk/fire-festival-returns-ahead-of-christmas-lights-switch-on/"
-  ],
+  "selected_story_keys": [],
+  "selected_candidate_urls": [],
   "x_social_records": 0,
   "facebook_social_records": 0,
   "stories_with_social_context": 0,
@@ -448,31 +449,6 @@
   "story_identity_rule": "Stories are clustered by named entities, subject terms, area, category and date; interviews/reactions are merged into the underlying announcement where they describe the same event.",
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
-    "available_categories": [
-      "events"
-    ],
-    "selected_categories": [
-      "events"
-    ],
-    "available_wards": [],
-    "selected_wards": [],
-    "available_areas": [],
-    "selected_areas": [
-      "rochdale"
-    ],
-    "uncovered_categories": [],
-    "uncovered_wards": [],
-    "uncovered_areas": [],
-    "selected_by_category": {
-      "events": 1
-    },
-    "selected_by_ward": {},
-    "selected_by_area": {
-      "rochdale": 1
-    },
-    "selected_by_source": {
-      "rochdale times": 1
-    },
     "must_cover_selected": 0
   },
   "official_ward_count": 20,
@@ -1021,7 +997,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 9,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
     "https://www.thesun.co.uk",
     "https://aboutmanchester.co.uk/?s=Rochdale",
@@ -1030,8 +1006,7 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://www.thesun.co.uk/sport/football/team/41020665/rochdale-afc/",
-    "https://news.google.com/rss/articles/CBMilAFBVV95cUxOOE12YU10SV9SYlNBZHJHLUdqWTBJX1hQLXdRTzJYS1RpRHEwTzhjejdvNldnSWl0N20yUW85d05YWkpxS2tlOUNKbExyWmpXaHU2RnRaM00xX2MzQjFZZGZlOVU1aGFuNHdWRW41WnpMUUx3S0JfR3JWV3haQjh1MHpBbDlfbnhfTGpTQklYcXJkTkhN?oc=5"
+    "https://www.thesun.co.uk/sport/football/team/41020665/rochdale-afc/"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -1071,7 +1046,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-15T11:01:15.137530Z",
+  "frontpage_generated_at": "2026-11-15T11:17:35.723020Z",
   "frontpage_article_count": 6,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
@@ -1171,7 +1146,7 @@
   "whats_on_event_count": 13,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
-  "drafts_not_published": 1,
-  "publication_health": "blocked",
+  "drafts_not_published": 0,
+  "publication_health": "ready",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
