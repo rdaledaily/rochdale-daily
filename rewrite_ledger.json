@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T07:55:13.594793Z",
+  "updated_at": "2026-11-16T08:11:35.930173Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 152,
+  "count": 153,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1874,6 +1874,22 @@
       "category": "environment",
       "text_fingerprint": "4d3a456c4fc27178"
     },
+    "https://www.rochdaletimes.co.uk/police-probe-horrific-spate-of-attacks-against-hospice": {
+      "first_attempt_at": "2026-11-16T08:11:35.929877Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/police-probe-horrific-spate-of-attacks-against-hospice"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-16T08:11:35.929877Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Police probe ‘horrific spate of attacks against hospice’ - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "crime",
+      "text_fingerprint": "2478a6b107d1aacb"
+    },
     "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year": {
       "first_attempt_at": "2026-11-14T18:27:13.115780Z",
       "attempts": 3,
@@ -2131,15 +2147,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T07:55:13.594618Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-16T08:11:35.930008Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
