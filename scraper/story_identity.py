@@ -1200,6 +1200,20 @@ def same_story(left: Any, right: Any) -> bool:
     right_key = keyed_record_identity(right)
     if left_key and right_key:
         return left_key == right_key
+    # A Morning Briefing lists the day's stories, so its text resembles every
+    # one of them. It is only ever the same record as itself. This guard lived
+    # in two clustering loops but not here, so any OTHER caller of same_story
+    # could still fold a real story into a briefing. Measured 16 Nov 2026:
+    # manual_articles' fold-in (briefings are editor records) let the
+    # 12 November briefing absorb the Springhill Hospice attacks story's
+    # identity, and the injector then deleted the story as a duplicate. The
+    # flat-fire death, fire festival and others were lost the same way and
+    # logged only as "missing from feed after repeated publication attempts".
+    if _is_roundup_like(left) or _is_roundup_like(right):
+        return any(
+            get_value(left, field, "") and get_value(left, field, "") == get_value(right, field, "")
+            for field in ("id", "slug")
+        )
     person_match = missing_person_match(left, right)
     if person_match is not None:
         return person_match
@@ -1657,6 +1671,12 @@ def _is_roundup(record: dict[str, Any]) -> bool:
                 or str(record.get("id") or "").startswith("briefing-"))
 
 
+def _is_event_record(record: dict[str, Any]) -> bool:
+    # A ticketed listing (source_kind "event"), not any events-category news:
+    # two outlets reporting the same new class are still one story.
+    return str(record.get("source_kind") or "").strip().lower() == "event"
+
+
 def _is_editor_record(record: dict[str, Any]) -> bool:
     return bool(record.get("manual_article") or record.get("editorial_lock"))
 
@@ -1675,6 +1695,18 @@ def _records_match(left: dict[str, Any], right: dict[str, Any]) -> bool:
     # A roundup is only ever the same record as itself.
     if _is_roundup(left) or _is_roundup(right):
         return _same_record(left, right)
+    # A ticketed event listing is only the same event as another listing with
+    # the same event page. Same-venue listings share boilerplate, and without this the
+    # push-race merge (merge_feeds.py -> dedupe_article_records) folded Brass
+    # and Buble into Christmas at the Movies and Pure 80s into Oktoberfest
+    # on 16 Nov 2026. frontpage_pipeline._mergeable already had this rule.
+    if _is_event_record(left) or _is_event_record(right):
+        if _same_record(left, right):
+            return True
+        if not (_is_event_record(left) and _is_event_record(right)):
+            return False
+        left_url = canonicalise_url(str(left.get("source_url") or ""))
+        return bool(left_url) and left_url == canonicalise_url(str(right.get("source_url") or ""))
     # Two of the editor's own articles are separate stories by her decision
     # (measured: an appeal for a woman merged with a murder arrest and the
     # town-centre stabbing). A pipeline duplicate of her story may still fold

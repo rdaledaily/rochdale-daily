@@ -296,6 +296,7 @@ jobs:
           python scraper/test_workflow_architecture.py
           python scraper/test_legacy_routing_pages.py
           python -m pytest -q scraper/test_story_background.py scraper/test_inline_related.py \
+            scraper/test_briefing_and_event_identity.py \
             scraper/test_headline_style.py scraper/test_ad_slots.py scraper/test_roadworks_page.py \
             scraper/test_archive_identity_repair.py scraper/test_gambling_piracy_policy.py \
             scraper/test_publisher_name_not_entity.py \
