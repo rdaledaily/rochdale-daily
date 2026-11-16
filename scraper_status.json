@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-16T14:56:31.495032Z",
+  "last_run_at": "2026-11-16T16:12:14.164341Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,36 +54,42 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 87,
+  "raw_candidates_before_job_filter": 88,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 87,
+  "raw_candidates": 88,
   "candidate_clusters": 30,
   "google_news_resolution": {
-    "wrappers": 28,
-    "resolved": 6,
-    "text_recovered": 3,
+    "wrappers": 27,
+    "resolved": 5,
+    "text_recovered": 2,
     "reattributed": 0,
-    "images_found": 6
+    "images_found": 5
   },
-  "duplicates_merged": 57,
-  "attempted_rewrites": 3,
-  "draft_rewrites_created": 2,
+  "duplicates_merged": 58,
+  "attempted_rewrites": 4,
+  "draft_rewrites_created": 4,
   "drafted_articles": [
+    {
+      "slug": "demolition-of-rochdale-s-seven-sisters-tower-blocks-confirmed",
+      "source_url": "https://www.bbc.co.uk/news/articles/c8lyd2l5xn6qo"
+    },
     {
       "slug": "old-office-block-in-rochdale-to-be-converted-into-21-apartments",
       "source_url": "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
     },
     {
-      "slug": "demolition-of-rochdale-s-seven-sisters-tower-blocks-confirmed",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/rochdales-iconic-seven-sisters-demolished-34919274"
+      "slug": "rochdale-boroughwide-housing-plans-redevelopment-of-college-bank-site",
+      "source_url": "https://www.rochvalleyradio.com/news-features/142/community/1442/decision-on-future-of-the-seven-sisters-has-been-made"
+    },
+    {
+      "slug": "kyle-howard-pleads-guilty-to-murder-of-keeley-aspinall-in-rochdale",
+      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533"
     }
   ],
-  "new_articles": 1,
-  "live_articles": 616,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the draft says arrested but the source does not. Never change a legal sta": 1
-  },
+  "new_articles": 3,
+  "live_articles": 617,
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
     "missing_from_feed": 1,
@@ -98,13 +104,13 @@
     "entries": 156,
     "by_outcome": {
       "editorial_twin": 9,
-      "failed": 17,
-      "published": 79,
-      "rejected": 51
+      "failed": 16,
+      "published": 82,
+      "rejected": 49
     },
     "held_back_this_run": 17,
-    "held_already_published": 9,
-    "held_rejected": 8,
+    "held_already_published": 10,
+    "held_rejected": 7,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
@@ -171,38 +177,29 @@
       "outcome": "rejected",
       "attempts": 3,
       "last_attempt_at": "2026-11-14T19:04:51.374207Z"
-    },
-    {
-      "url": "https://rochdaleafc.co.uk/northampton-tickets-on-sale",
-      "title": "Northampton Town Tickets On Sale",
-      "source_name": "Rochdale AFC",
-      "held_because": "already rejected: editorial gate: REJECTED_NON_NEWS",
-      "outcome": "rejected",
-      "attempts": 3,
-      "last_attempt_at": "2026-11-09T17:24:10.128702Z"
     }
   ],
   "published_with_style_issues": {
-    "Write at least 189 body words using only facts already present in the sources; the draft currently has 146.": 1,
-    "The standfirst repeats paragraph 1. Make the standfirst add one fact the headline and first paragraph do not carry (a ro": 1
+    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
+    "Write at least 189 body words using only facts already present in the sources; the draft currently has 103.": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 149.": 1,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 99.": 1
   },
   "local_impact": {
-    "shown": 2,
+    "shown": 1,
     "outcomes": {
-      "shown": 2
+      "writer offered no points": 2,
+      "shown": 1,
+      "not eligible: crime, court, police or death": 1
     },
-    "points": {
-      "corrected to the story's own sentence": 3,
-      "dropped: no story sentence to correct it to": 1,
-      "dropped: duplicate": 1
-    }
+    "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 68,
-    "website_discovery": 13,
+    "rss_and_google_news": 66,
+    "website_discovery": 15,
     "aggregator_discovery": 0,
-    "live_service_pages": 5,
+    "live_service_pages": 6,
     "facebook_official": 0,
     "x_official": 0,
     "environment_agency": 0,
@@ -333,39 +330,40 @@
   },
   "source_counts": {
     "Rochdale Times": 14,
-    "Roch Valley Radio": 12,
-    "Rochdale AFC": 12,
+    "Roch Valley Radio": 13,
+    "Rochdale AFC": 9,
+    "Manchester Evening News": 7,
     "Rochdale Borough Council": 7,
+    "Bee Network live travel alerts": 7,
     "Facebook": 6,
-    "Manchester Evening News": 6,
-    "Bee Network live travel alerts": 6,
+    "Roch Valley Radio Local News": 5,
     "Oldham Times": 4,
-    "Roch Valley Radio Local News": 4,
     "InYourArea": 3,
     "Your Trust Rochdale": 1,
     "Rochdale Borough Council RSS": 1,
     "Hampshire Chronicle": 1,
-    "The Northern Echo": 1,
-    "The York Press": 1,
     "Sky Sports": 1,
+    "The York Press": 1,
     "Brentwood Live": 1,
     "Diss Mercury": 1,
     "Rochdale Borough Council News": 1,
+    "BBC Manchester": 1,
     "Rochdale Development Agency": 1,
     "Rochdale Boroughwide Housing": 1,
     "Your Trust Rochdale Articles": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
+    "community": 2,
     "crime": 1,
-    "environment": 2
+    "environment": 1
   },
   "published_by_category": {
-    "business": 72,
+    "business": 71,
     "community": 93,
-    "crime": 39,
+    "crime": 40,
     "education": 29,
-    "environment": 48,
+    "environment": 49,
     "events": 33,
     "health": 16,
     "news": 91,
@@ -398,13 +396,15 @@
   ],
   "selected_story_keys": [
     "hard-news-v3-45fe9d8bf95a26db5fd3",
-    "environment-v3-f11fb3c85f42f7d84d0f",
-    "environment-v3-ec072a2d13cef151ff41"
+    "community-v3-6ffe4d5f15c2b00805f0",
+    "environment-v3-ec072a2d13cef151ff41",
+    "community-v3-a43c377220bba430f3a4"
   ],
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533",
-    "https://www.manchestereveningnews.co.uk/news/rochdales-iconic-seven-sisters-demolished-34919274",
-    "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
+    "https://www.bbc.co.uk/news/articles/c8lyd2l5xn6qo",
+    "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments",
+    "https://www.rochvalleyradio.com/news-features/142/community/1442/decision-on-future-of-the-seven-sisters-has-been-made"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -416,10 +416,12 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
+      "community",
       "crime",
       "environment"
     ],
     "selected_categories": [
+      "community",
       "crime",
       "environment"
     ],
@@ -433,16 +435,18 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
+      "community": 2,
       "crime": 1,
-      "environment": 2
+      "environment": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 3
+      "rochdale": 4
     },
     "selected_by_source": {
-      "manchester evening news": 2,
-      "roch valley radio local news": 1
+      "bbc manchester": 1,
+      "manchester evening news": 1,
+      "roch valley radio local news": 2
     },
     "must_cover_selected": 0
   },
@@ -992,7 +996,7 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 7,
+  "robots_denied_count": 8,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
@@ -1000,15 +1004,12 @@
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
+    "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQOHlnSnVINUc2aFhHUjBMakJiTW5MQjBENTFpZDlJNjY5c1JkUVFCZ014Q3B2VXhZVW5MTTlXY0xpRHAxWEtxWTJRaXItN0ZkX0FQZ0hQblRrYVFueGtxUnFNemNMdG9wM09fRjBoZVM2NDh2VE5Td2ZvS1VTd2hJWS1LU0h3OFlrMHhNeWREbmhuVE44Tld3a1pObnhjMVJpMkpzU2ZlT0twb3d6cWg2Y0xuZ005R19FMkdSZVNWMy1GMlI0Tk1UZkhaUU9mdU44Y211YTNVRjJtSWFIMGFWRHl6QjVHUQ?oc=5",
     "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOUWJFRVhqQU1RSXlhS3RjSmR0MTFkNzdaNUdIeDVoOENXNlY3R1JoYzExWUVkcVJla3pQWW55ZTFzR2x6S2ZhbGZvU2JBSEs1bGZqSHFRLWZhcGx5V1UtQ3BiWTA4YTZ2ak1lVmNzZnc1UnJ1OXk0cGNYWGp2V3hSMjZMRUdWSkxpYWhpYW1XOFdaVEhkQllOTHVqaWVQWUtad1ZzLUxOQXVNVGJZSVBLS1NJMlFTOHY0a2I2WV95T2l1THczV1hfeU1Ublh1MjJrck90ZTJYMVJXN0k4YXc?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "yourtrustrochdale.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "yourtrustrochdale.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1044,13 +1045,14 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-16T14:57:41.874761Z",
-  "frontpage_article_count": 10,
+  "frontpage_generated_at": "2026-11-16T16:13:56.453094Z",
+  "frontpage_article_count": 11,
   "frontpage_minimum_met": false,
   "frontpage_coverage": {
     "available_categories": [
       "business",
       "community",
+      "crime",
       "news",
       "politics",
       "sport",
@@ -1060,6 +1062,7 @@
     "selected_categories": [
       "business",
       "community",
+      "crime",
       "news",
       "politics",
       "sport",
@@ -1091,44 +1094,44 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "community": 5,
+      "crime": 1,
       "traffic": 1,
       "transport": 1,
       "politics": 1,
       "business": 1,
+      "community": 5,
       "news": 1
     },
     "selected_by_ward": {
-      "borough-wide": 9,
+      "borough-wide": 10,
       "Milnrow and Newhey": 1
     },
     "selected_by_area": {
       "healey": 1,
       "middleton": 1,
       "milnrow": 1,
-      "rochdale": 11
+      "rochdale": 12
     },
     "selected_by_source": {
-      "manchester evening news": 1,
+      "manchester evening news": 2,
       "lancashire telegraph": 1,
       "bee network live travel alerts": 1,
-      "source": 1,
+      "source": 2,
       "rochdale development agency": 1,
-      "your trust rochdale articles": 1,
       "rochdale daily": 1,
+      "your trust rochdale articles": 1,
       "rochdale borough council news": 1,
-      "rochdale boroughwide housing": 1,
       "broad, strong, and soft: using geospatial analysis to understand folk‑linguistic terminology (journal of linguistic geography, 2024)": 1
     },
-    "pool_size": 14,
-    "primary_pool_size": 14,
+    "pool_size": 15,
+    "primary_pool_size": 15,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 10,
+    "frontpage_count": 11,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 10,
-    "fresh_under_homepage_window": 10,
-    "short_briefs_selected": 6,
+    "fresh_under_24h": 11,
+    "fresh_under_homepage_window": 11,
+    "short_briefs_selected": 7,
     "frontpage_minimum_met": false
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1139,7 +1142,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
   "event_dates_corrected_from_ledger": 4,
-  "duplicate_articles_after_postprocessing": 616,
+  "duplicate_articles_after_postprocessing": 617,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1150,9 +1153,11 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 13,
-  "published_after_editorial_gate": 1,
+  "published_after_editorial_gate": 3,
   "published_new_slugs": [
-    "demolition-of-rochdale-s-seven-sisters-tower-blocks-confirmed"
+    "demolition-of-rochdale-s-seven-sisters-tower-blocks-confirmed",
+    "rochdale-boroughwide-housing-plans-redevelopment-of-college-bank-site",
+    "kyle-howard-pleads-guilty-to-murder-of-keeley-aspinall-in-rochdale"
   ],
   "drafts_not_published": 1,
   "publication_health": "partial",
