@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T10:09:43.111835Z",
+  "updated_at": "2026-11-16T10:31:39.704784Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 153,
+  "count": 154,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -360,6 +360,22 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "8a9fe53824947c8b"
+    },
+    "https://rochdaleafc.co.uk/youth-team-in-midweek-league-action": {
+      "first_attempt_at": "2026-11-16T10:29:16.775131Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/youth-team-in-midweek-league-action"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-16T10:29:16.775131Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) AFC's do not appear in the source. Name only people, places a",
+      "title": "Dale Face Bolton In Midweek Cup Tie",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "b3d82798fbc999ef"
     },
     "https://sports.yahoo.com/articles/memories-flood-back-rochdale-york-164011014.html": {
       "first_attempt_at": "2026-11-13T21:13:23.448566Z",
@@ -1878,18 +1894,19 @@
       "first_attempt_at": "2026-11-16T08:11:35.929877Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMikAFBVV95cUxPU0tiSHd5WGpBM3NxZWVBUW9EZkduWGNTZ0FHT0tQeDFkVERPaUYtNzVBTjFCSktjbjBiSEVEWkZjWlJWUHZUdnpJN0kyLUZxZkgycXY4UDR5MnZ3S1k0ekt1aXJLc0RiUlFSWGxaa0ZqNmV1ZmE3Y083RUFrY3dCbzV1TGdnLXJVcDFpa1NPV1o?oc=5",
         "https://www.rochdaletimes.co.uk/police-probe-horrific-spate-of-attacks-against-hospice"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T10:09:43.111709Z",
+      "last_attempt_at": "2026-11-16T10:31:39.704431Z",
       "outcome": "published",
       "reason": "",
       "title": "Police probe ‘horrific spate of attacks against hospice’ - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "2478a6b107d1aacb",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year": {
       "first_attempt_at": "2026-11-14T18:27:13.115780Z",
@@ -2148,13 +2165,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 3,
+      "attempts": 4,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T10:09:43.111447Z",
+      "last_attempt_at": "2026-11-16T10:31:39.704605Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
