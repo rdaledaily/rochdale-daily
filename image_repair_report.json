@@ -1,7 +1,7 @@
 {
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
-  "skipped_sensitive_stories": 1,
+  "skipped_sensitive_stories": 0,
   "no_allowed_source": 0,
   "no_usable_source_image": 8,
   "permission_entries": 0,
@@ -22,6 +22,12 @@
     "matches": []
   },
   "items": [
+    {
+      "slug": "rochdale-boroughwide-housing-plans-redevelopment-of-college-bank-site",
+      "result": "source-photo-already-cached",
+      "source": "https://www.rbh.org.uk/news/rbh-news/rbh-sets-out-future-plans-for-college-bank/",
+      "after": ""
+    },
     {
       "slug": "man-charged-after-assault-on-officer-in-middleton-town-centre",
       "result": "no-cleared-source-image",
@@ -87,49 +93,6 @@
       "result": "no-cleared-source-image",
       "source": "https://www.rochdale.gov.uk/news/article/675/council-urges-families-to-apply-on-time-for-secondary-school-places",
       "after": "assets/img/cards/rochdale-secondary-school-applications-deadline-31-october-2026.jpg"
-    },
-    {
-      "slug": "demolition-of-rochdale-s-seven-sisters-tower-blocks-confirmed",
-      "result": "no-cleared-source-image",
-      "source": "https://www.manchestereveningnews.co.uk/news/rochdales-iconic-seven-sisters-demolished-34919274",
-      "after": "assets/img/cards/86868628f2b0-place-generated-card.jpg",
-      "why": {
-        "page": "https://www.bbc.co.uk/news/articles/c8lyd2l5xn6qo",
-        "final_url": "https://www.bbc.co.uk/news/articles/c8lyd2l5xn6qo",
-        "candidates": [
-          {
-            "url": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/28b5/live/9ca07b50-e1d6-11f1-b8c8-67fa35f5afdb.jpg",
-            "via": "og:image",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/28b5/live/9ca07b50-e1d6-11f1-b8c8-67fa35f5afdb.jpg",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/1f11/live/dd6af450-e1cf-11f1-b8c8-67fa35f5afdb.jpg",
-            "via": "article figure img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/535d/live/14385320-3289-11f1-9fac-89e41bab67f2.jpg",
-            "via": "article img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/1508/live/53558480-af60-11f0-b2a1-6f537f66f9aa.jpg",
-            "via": "article img",
-            "verdict": "page-not-from-granting-organisation"
-          },
-          {
-            "url": "https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/f89c/live/df02b1f0-cf6f-11ef-9b5c-81c0bf469d0f.jpg",
-            "via": "article img",
-            "verdict": "page-not-from-granting-organisation"
-          }
-        ],
-        "verdict": "no-candidate-passed"
-      }
     }
   ]
 }
