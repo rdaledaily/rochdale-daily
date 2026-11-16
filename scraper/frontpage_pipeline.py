@@ -531,13 +531,35 @@ def inject_manual_events(
         return merged
     manual_ids = {record["id"] for record in manual}
     manual_slugs = {record["slug"] for record in manual}
-    manual_urls = {record["source_url"] for record in manual if record.get("source_url")}
+    # Every source an editor cites marks that scrape as the same story, not
+    # only the primary source_url. On 16 Nov 2026 a hand-written Seven Sisters
+    # story cited the MEN and Roch Valley Radio reports, yet both scraped
+    # versions stayed live beside it (three copies of one story). Measured that
+    # day against the live feed, citing-URL matching removed 5 scrapes, all
+    # genuine repeats of the editor's own stories.
+    from story_identity import canonicalise_url
+
+    manual_urls: set[str] = set()
+    for record in manual:
+        for value in [record.get("source_url"), *(record.get("source_urls") or [])]:
+            if value:
+                manual_urls.add(str(value))
+                canonical = canonicalise_url(str(value))
+                if canonical:
+                    manual_urls.add(canonical)
+
+    def _cited_by_editor(article: dict[str, Any]) -> bool:
+        if article.get("manual_article"):
+            return False
+        url = str(article.get("source_url") or "")
+        return bool(url) and (url in manual_urls or canonicalise_url(url) in manual_urls)
+
     kept = [
         article
         for article in merged
         if str(article.get("id") or "") not in manual_ids
         and str(article.get("slug") or "") not in manual_slugs
-        and str(article.get("source_url") or "") not in manual_urls
+        and not _cited_by_editor(article)
     ]
     return manual + kept
 
@@ -557,13 +579,35 @@ def inject_manual_articles(
         return merged
     manual_ids = {record["id"] for record in manual}
     manual_slugs = {record["slug"] for record in manual}
-    manual_urls = {record["source_url"] for record in manual if record.get("source_url")}
+    # Every source an editor cites marks that scrape as the same story, not
+    # only the primary source_url. On 16 Nov 2026 a hand-written Seven Sisters
+    # story cited the MEN and Roch Valley Radio reports, yet both scraped
+    # versions stayed live beside it (three copies of one story). Measured that
+    # day against the live feed, citing-URL matching removed 5 scrapes, all
+    # genuine repeats of the editor's own stories.
+    from story_identity import canonicalise_url
+
+    manual_urls: set[str] = set()
+    for record in manual:
+        for value in [record.get("source_url"), *(record.get("source_urls") or [])]:
+            if value:
+                manual_urls.add(str(value))
+                canonical = canonicalise_url(str(value))
+                if canonical:
+                    manual_urls.add(canonical)
+
+    def _cited_by_editor(article: dict[str, Any]) -> bool:
+        if article.get("manual_article"):
+            return False
+        url = str(article.get("source_url") or "")
+        return bool(url) and (url in manual_urls or canonicalise_url(url) in manual_urls)
+
     kept = [
         article
         for article in merged
         if str(article.get("id") or "") not in manual_ids
         and str(article.get("slug") or "") not in manual_slugs
-        and str(article.get("source_url") or "") not in manual_urls
+        and not _cited_by_editor(article)
     ]
     return manual + kept
 
