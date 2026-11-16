@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T08:31:28.372757Z",
+  "updated_at": "2026-11-16T09:00:48.706761Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 153,
@@ -1882,13 +1882,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T08:11:35.929877Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-16T09:00:48.706596Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Police probe ‘horrific spate of attacks against hospice’ - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
-      "text_fingerprint": "2478a6b107d1aacb"
+      "text_fingerprint": "2478a6b107d1aacb",
+      "recovery_attempts": 1
     },
     "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year": {
       "first_attempt_at": "2026-11-14T18:27:13.115780Z",
@@ -2147,13 +2148,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 3,
+      "attempts": 4,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T08:31:28.372477Z",
+      "last_attempt_at": "2026-11-16T09:00:48.706290Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
