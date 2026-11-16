@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T17:13:02.617748Z",
+  "updated_at": "2026-11-16T17:30:00.870840Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 156,
@@ -1173,14 +1173,15 @@
       "attempts": 1,
       "urls": [
         "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOUWJFRVhqQU1RSXlhS3RjSmR0MTFkNzdaNUdIeDVoOENXNlY3R1JoYzExWUVkcVJla3pQWW55ZTFzR2x6S2ZhbGZvU2JBSEs1bGZqSHFRLWZhcGx5V1UtQ3BiWTA4YTZ2ak1lVmNzZnc1UnJ1OXk0cGNYWGp2V3hSMjZMRUdWSkxpYWhpYW1XOFdaVEhkQllOTHVqaWVQWUtad1ZzLUxOQXVNVGJZSVBLS1NJMlFTOHY0a2I2WV95T2l1THczV1hfeU1Ublh1MjJrck90ZTJYMVJXN0k4YXc?oc=5",
+        "https://news.google.com/rss/articles/CBMipAFBVV95cUxNS1diS3VEdHR5QVpHWmIwaWhMYVhuZW5FcUh5VDhnR2Nqd0R3Q3MxdWdabW1ZY2YzTzRyMld1NUE4OV85UXRUWjJyTFR2QW9qX2w4ZFdQdEtFRS1IU2dRcGFhRUJDZUJZOWkzNUFFQzBTbUJYRWRDTTU4c3VvVWI5MDZyc0RpckhVelRPQ1pUb05zTHdNam5tVjNObHdBVzlZenUyLQ?oc=5",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533",
         "https://www.rochdaletimes.co.uk/man-admits-murder-of-keeley-kiki-aspinall"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T16:12:14.159512Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-16T17:27:56.780896Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the figure(s) 30 do not appear in the source. Use only figures the source",
       "title": "Man pleads GUILTY to murder of woman found dead in Rochdale flats",
       "source_name": "Manchester Evening News",
       "category": "crime",
@@ -2139,13 +2140,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 4,
+      "attempts": 5,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T17:13:02.617446Z",
+      "last_attempt_at": "2026-11-16T17:30:00.870631Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
@@ -2626,7 +2627,7 @@
     },
     "https://www.wiltsglosstandard.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale": {
       "first_attempt_at": "2026-11-14T19:26:57.925011Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMipAFBVV95cUxOb3hfNFFjT3U4eXQxdzlqWnVPekZxWTVKV0N4eDFaMzlUOFR6eFptNHUzLUdrZzRUbEdzV1hNWFM2TjFwV1FZMDJJaFBUQTdvYTg0VDFxNlVSUjF1elVkVFh3eXp0TzRkZXduMm9aa185QWxEbnRZbjd1dU5FZFNJVDVSVHdCbVJsQ1gtSVFHVlRPN1ViYlR0d3dtX2djT2pzNmlETA?oc=5",
         "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQbWVQd0NvTnpZSkJpXzk0dU1vank0YVBBcjJGN0Q5eGNLZUpoUDctUEI4ek40NGN5SmE3V3p2OWU3aGJfZmZldmh6LXBrZHgtY1F3a3UxQ3ZHN0hUa0t6cms5NUo1Y09uOEU1OTlMUlFXUFRHSmd4aFU0VzN0d3RaV0xwVExaSXY4OW4zOXMyeGhtdm8ycW9kNEZRRVR2XzRrNThtaDhUYm0?oc=5",
@@ -2674,9 +2675,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T17:09:24.570147Z",
+      "last_attempt_at": "2026-11-16T17:27:53.579287Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 14 November are neither stated nor implied by the source. Use",
+      "reason": "quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta",
       "title": "Ollie Pearce goal secures maximum points for York at Rochdale - Wilts and Gloucestershire Standard",
       "source_name": "Wilts and Gloucestershire Standard",
       "category": "traffic",
