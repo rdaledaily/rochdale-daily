@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T13:18:31.137179Z",
+  "updated_at": "2026-11-16T13:39:31.699890Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 153,
+  "count": 154,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1175,6 +1175,23 @@
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533": {
+      "first_attempt_at": "2026-11-16T13:39:31.699730Z",
+      "attempts": 1,
+      "urls": [
+        "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOUWJFRVhqQU1RSXlhS3RjSmR0MTFkNzdaNUdIeDVoOENXNlY3R1JoYzExWUVkcVJla3pQWW55ZTFzR2x6S2ZhbGZvU2JBSEs1bGZqSHFRLWZhcGx5V1UtQ3BiWTA4YTZ2ak1lVmNzZnc1UnJ1OXk0cGNYWGp2V3hSMjZMRUdWSkxpYWhpYW1XOFdaVEhkQllOTHVqaWVQWUtad1ZzLUxOQXVNVGJZSVBLS1NJMlFTOHY0a2I2WV95T2l1THczV1hfeU1Ublh1MjJrck90ZTJYMVJXN0k4YXc?oc=5",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-16T13:39:31.699730Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "title": "Man pleads GUILTY to murder of woman found dead in Rochdale flats",
+      "source_name": "Manchester Evening News",
+      "category": "crime",
+      "text_fingerprint": "a72b02e4068d7193"
+    },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-seriously-injured-police-investigate-34905164": {
       "first_attempt_at": "2026-11-13T08:31:11.483653Z",
       "attempts": 3,
@@ -1851,8 +1868,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-16T13:01:52.337362Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Police probe ‘horrific spate of attacks against hospice’ - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
@@ -2117,15 +2134,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T13:18:31.137033Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-16T13:39:31.699502Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
@@ -2756,13 +2773,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T13:18:31.136885Z",
+      "last_attempt_at": "2026-11-16T13:39:31.699282Z",
       "outcome": "published",
       "reason": "",
       "title": "Join For A Toy - Your Trust",
       "source_name": "Your Trust Rochdale Articles",
       "category": "community",
-      "text_fingerprint": "5dceb2f60af48df3"
+      "text_fingerprint": "5dceb2f60af48df3",
+      "recovery_attempts": 1
     }
   }
 }
