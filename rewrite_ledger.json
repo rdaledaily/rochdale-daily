@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T18:08:56.340907Z",
+  "updated_at": "2026-11-16T18:26:00.039887Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 157,
@@ -1196,13 +1196,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T18:08:56.340630Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-16T18:23:20.906702Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We will always lo",
       "title": "Man pleads GUILTY to murder of woman found dead in Rochdale flats",
       "source_name": "Manchester Evening News",
       "category": "crime",
-      "text_fingerprint": "a72b02e4068d7193"
+      "text_fingerprint": "a72b02e4068d7193",
+      "recovery_attempts": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-seriously-injured-police-investigate-34905164": {
       "first_attempt_at": "2026-11-13T08:31:11.483653Z",
@@ -2157,15 +2158,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T18:08:56.340262Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-16T18:26:00.039658Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
