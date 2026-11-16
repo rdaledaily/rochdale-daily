@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T14:02:12.541291Z",
+  "updated_at": "2026-11-16T14:21:24.382266Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 154,
+  "count": 155,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1177,14 +1177,14 @@
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533": {
       "first_attempt_at": "2026-11-16T13:39:31.699730Z",
-      "attempts": 2,
+      "attempts": 3,
       "urls": [
         "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOUWJFRVhqQU1RSXlhS3RjSmR0MTFkNzdaNUdIeDVoOENXNlY3R1JoYzExWUVkcVJla3pQWW55ZTFzR2x6S2ZhbGZvU2JBSEs1bGZqSHFRLWZhcGx5V1UtQ3BiWTA4YTZ2ak1lVmNzZnc1UnJ1OXk0cGNYWGp2V3hSMjZMRUdWSkxpYWhpYW1XOFdaVEhkQllOTHVqaWVQWUtad1ZzLUxOQXVNVGJZSVBLS1NJMlFTOHY0a2I2WV95T2l1THczV1hfeU1Ublh1MjJrck90ZTJYMVJXN0k4YXc?oc=5",
         "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T14:02:12.541042Z",
+      "last_attempt_at": "2026-11-16T14:21:24.382060Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Man pleads GUILTY to murder of woman found dead in Rochdale flats",
@@ -1367,6 +1367,22 @@
       "text_fingerprint": "0d9479f5ae4b8756",
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
+    },
+    "https://www.rbh.org.uk/news/rbh-news/rbh-sets-out-future-plans-for-college-bank": {
+      "first_attempt_at": "2026-11-16T14:18:54.846084Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rbh.org.uk/news/rbh-news/rbh-sets-out-future-plans-for-college-bank"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-16T14:18:54.846084Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "title": "RBH sets out future plans for College Bank",
+      "source_name": "Rochdale Boroughwide Housing",
+      "category": "community",
+      "text_fingerprint": "79850616aad653f2"
     },
     "https://www.rochdale.gov.uk/directory-record/2593/norden-christmas-lights-road-closures-in-rochdale-on-22-november-2026": {
       "first_attempt_at": "2026-11-08T01:57:39.099693Z",
@@ -2132,15 +2148,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 3,
+      "attempts": 1,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T14:02:12.540536Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "last_attempt_at": "2026-11-16T14:21:24.381844Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
