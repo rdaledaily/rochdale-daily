@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T11:26:44.008169Z",
+  "updated_at": "2026-11-16T11:44:37.543141Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 154,
@@ -1899,14 +1899,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T10:31:39.704431Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-16T11:44:37.542991Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Police probe ‘horrific spate of attacks against hospice’ - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "2478a6b107d1aacb",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year": {
       "first_attempt_at": "2026-11-14T18:27:13.115780Z",
@@ -2165,15 +2166,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T11:26:44.007940Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "last_attempt_at": "2026-11-16T11:44:37.542744Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
@@ -2634,7 +2635,7 @@
     },
     "https://www.wiltsglosstandard.co.uk/sport/national/26729787.ollie-pearce-goal-secures-maximum-points-york-rochdale": {
       "first_attempt_at": "2026-11-14T19:26:57.925011Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://news.google.com/rss/articles/CBMipAFBVV95cUxOb3hfNFFjT3U4eXQxdzlqWnVPekZxWTVKV0N4eDFaMzlUOFR6eFptNHUzLUdrZzRUbEdzV1hNWFM2TjFwV1FZMDJJaFBUQTdvYTg0VDFxNlVSUjF1elVkVFh3eXp0TzRkZXduMm9aa185QWxEbnRZbjd1dU5FZFNJVDVSVHdCbVJsQ1gtSVFHVlRPN1ViYlR0d3dtX2djT2pzNmlETA?oc=5",
         "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQbWVQd0NvTnpZSkJpXzk0dU1vank0YVBBcjJGN0Q5eGNLZUpoUDctUEI4ek40NGN5SmE3V3p2OWU3aGJfZmZldmh6LXBrZHgtY1F3a3UxQ3ZHN0hUa0t6cms5NUo1Y09uOEU1OTlMUlFXUFRHSmd4aFU0VzN0d3RaV0xwVExaSXY4OW4zOXMyeGhtdm8ycW9kNEZRRVR2XzRrNThtaDhUYm0?oc=5",
@@ -2680,7 +2681,7 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T11:24:14.658302Z",
+      "last_attempt_at": "2026-11-16T11:42:07.126984Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the draft says shooting but the source does not. Never change a legal sta",
       "title": "Ollie Pearce goal secures maximum points for York at Rochdale - Wilts and Gloucestershire Standard",
