@@ -831,7 +831,13 @@ INTEGRITY_ISSUE_MARKERS = (
     "marked the story unpublishable",
     "Ground the report more clearly",       # not grounded in the sources
     "long verbatim source passage",         # copyright
-    "Carry the specific detail through",    # source has facts the draft dropped
+    # "Carry the specific detail through" (the draft left out a road, time,
+    # figure or organisation the source names) is deliberately NOT here. Editor,
+    # 16 Nov 2026: publish regardless and use what is available at the time. An
+    # omission makes a story thinner, never untrue; it was the single biggest
+    # story-killer (103 of the weekend's binned rewrites, 14-16 Nov 2026,
+    # including a named flat-fire death and attacks on a hospice). It is still
+    # asked for on each repair, and logged in style_issues if it remains.
     "unsupported calendar year",            # model invented a date/year not in evidence
     "Source fidelity:",                     # figure, quotation or attributed statement not in the sources
     GATE_REJECTION_PREFIX,                  # advert, listing, out-of-borough
