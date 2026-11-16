@@ -96,13 +96,6 @@ BLOCKERS = [
         "long verbatim passage (copyright)",
     ),
     (
-        [
-            "The source names a road, time, figure or organisation and the "
-            "draft does not. Carry the specific detail through."
-        ],
-        "dropped the specific detail the source carried",
-    ),
-    (
         [f"{GATE_REJECTION_PREFIX}NON_NEWS: the model classified this as an advert."],
         "gate rejection (advert / listing)",
     ),
@@ -120,6 +113,13 @@ section("House-style failures do not block")
 # --------------------------------------------------------------------------
 
 STYLE = [
+    (
+        [
+            "The source names a road, time, figure or organisation and the "
+            "draft does not. Carry the specific detail through."
+        ],
+        "dropped a detail the source carried (editor, 16 Nov 2026: publish regardless)",
+    ),
     (["Write a specific complete headline of 4-26 words."], "headline word count"),
     (["Write a useful standfirst."], "thin standfirst"),
     (["Avoid a generic label followed by a colon in the headline."], "colon in headline"),
