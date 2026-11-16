@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-16T19:50:58.315159Z",
+  "updated_at": "2026-11-16T20:08:30.809087Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 160,
@@ -93,16 +93,16 @@
     },
     "https://investinrochdale.co.uk/news/post/rochdale-business-awards-2026-winners-announced-as-borough-celebrates-busin": {
       "first_attempt_at": "2026-11-16T12:00:47.214568Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://investinrochdale.co.uk/news/post/rochdale-business-awards-2026-winners-announced-as-borough-celebrates-busin",
         "https://www.rochdaletimes.co.uk/rochdale-business-awards-2026-winners-announced"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T19:47:17.298756Z",
+      "last_attempt_at": "2026-11-16T20:06:06.272632Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 16 November are neither stated nor implied by the source. Use",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 15 November are neither stated nor implied by the source. Use",
       "title": "Rochdale Business Awards 2026 winners announced as borough celebrates business excellence",
       "source_name": "Rochdale Development Agency",
       "category": "business",
@@ -456,13 +456,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-15T19:30:05.448829Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Updated: 15/11/2026 at 6:42pm Live Failsworth Tram Stop - Lifts out of service Duration Sun 15 Nov, 6:42pm – until further notice Stops impa",
       "source_name": "Bee Network live travel alerts",
       "category": "transport",
       "text_fingerprint": "4a05e165fdab870d",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-5d8b752d3488861278": {
       "first_attempt_at": "2026-11-15T09:05:12.455696Z",
@@ -2208,15 +2208,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T19:50:58.314944Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "last_attempt_at": "2026-11-16T20:08:30.808862Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
