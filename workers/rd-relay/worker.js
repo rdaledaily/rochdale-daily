@@ -28,12 +28,25 @@ const ALLOWED_HOSTS = new Set([
   "rochdaleafc.co.uk", "www.rochdaleafc.co.uk",
   "www.rochdaleafccommunity.org", "rochdaleafccommunity.org",
   "www.falingepark.com", "falingepark.com",
+  // Newsquest North West titles (403 to datacentre IPs, measured 15 Nov 2026).
+  "www.theboltonnews.co.uk", "theboltonnews.co.uk",
+  "www.burytimes.co.uk", "burytimes.co.uk",
+  "www.theoldhamtimes.co.uk", "theoldhamtimes.co.uk",
+  "www.lancashiretelegraph.co.uk", "lancashiretelegraph.co.uk",
+  "www.asianimage.co.uk", "asianimage.co.uk",
+  "www.leighjournal.co.uk", "leighjournal.co.uk",
 ]);
 const CHECK_URLS = [
   "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
   "https://rochdaleafc.co.uk/feed/",
   "https://www.rochdaleafccommunity.org/feed/",
   "https://www.falingepark.com/feed/",
+  "https://www.theboltonnews.co.uk/news/rss/",
+  "https://www.burytimes.co.uk/news/rss/",
+  "https://www.theoldhamtimes.co.uk/news/rss/",
+  "https://www.lancashiretelegraph.co.uk/news/rss/",
+  "https://www.asianimage.co.uk/news/rss/",
+  "https://www.leighjournal.co.uk/news/rss/",
 ];
 const CACHE_SECONDS = 600;
 

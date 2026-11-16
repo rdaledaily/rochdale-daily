@@ -64,6 +64,6 @@ test('debug and /check report measurements, not bodies', async () => {
   const d = await (await get(q('https://rochdaleafc.co.uk/feed/') + '&debug=1')).json();
   assert.equal(d.upstreamStatus, 200); assert.equal(d.looksLikeFeed, true); assert.equal(d.items, 2); assert.equal(d.robots, 'allows');
   const c = await (await get('/check')).json();
-  assert.equal(c.results.length, 4);
+  assert.equal(c.results.length, 10);
   assert.equal(c.results.find((r) => r.url.includes('falingepark')).robots, 'HTTP 403');
 });
