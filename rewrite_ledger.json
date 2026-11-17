@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T12:40:23.516612Z",
+  "updated_at": "2026-11-17T12:59:53.518347Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 165,
+  "count": 166,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1038,13 +1038,13 @@
     },
     "https://www.hopwood.ac.uk/college-tackling-neet-challenge-head-on": {
       "first_attempt_at": "2026-11-17T12:37:58.253980Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.hopwood.ac.uk/college-tackling-neet-challenge-head-on"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T12:37:58.253980Z",
+      "last_attempt_at": "2026-11-17T12:56:58.347193Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are committed",
       "title": "College tackling NEET challenge head on - Hopwood Hall College",
@@ -2319,20 +2319,21 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T12:40:23.516400Z",
+      "last_attempt_at": "2026-11-17T12:59:53.518108Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
       "text_fingerprint": "67e1f1768c5ea948",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "locality_evidence_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-as-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war": {
       "first_attempt_at": "2026-11-09T18:48:38.125276Z",
@@ -2975,6 +2976,22 @@
       "category": "community",
       "text_fingerprint": "5dceb2f60af48df3",
       "recovery_attempts": 1
+    },
+    "https://www.yourtrustrochdale.co.uk/uncategorised/rochdale-borough-active-awards-2026-celebrate-our-community-champions": {
+      "first_attempt_at": "2026-11-17T12:56:49.730601Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.yourtrustrochdale.co.uk/uncategorised/rochdale-borough-active-awards-2026-celebrate-our-community-champions"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-17T12:56:49.730601Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Rewrite the long verbatim source passage.",
+      "title": "Rochdale Borough Active Awards 2026 Celebrate Our Community Champions",
+      "source_name": "Your Trust Rochdale",
+      "category": "community",
+      "text_fingerprint": "f320ccbee4ea7a14"
     }
   }
 }
