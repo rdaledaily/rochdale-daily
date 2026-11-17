@@ -1,12 +1,24 @@
 {
   "policy": "Human-reviewed ambiguous-story overrides; headline-only high-confidence classification; canonical/source-backed images only; neutral Rochdale Daily card whenever a photo could create a false implication.",
   "mode": "final",
-  "article_count": 623,
-  "published_count": 623,
+  "article_count": 627,
+  "published_count": 627,
   "category_change_count": 0,
-  "image_change_count": 125,
+  "image_change_count": 126,
   "category_changes": [],
   "image_changes": [
+    {
+      "slug": "signalling-fault-disrupts-blackburn-and-rochdale-train-services",
+      "title": "Signalling fault disrupts Blackburn and Rochdale train services",
+      "category": "transport",
+      "reason": "cached/library image lacks canonical/source provenance",
+      "before": {
+        "image_url": "assets/img/cards/train.jpg",
+        "img": "assets/img/cards/train.jpg",
+        "status": "cards-library-photo"
+      },
+      "after": "assets/img/cards/35c8a2fb2d31-place-generated-card.jpg"
+    },
     {
       "slug": "clover-hall-crescent-roadworks-to-begin-on-17-november-2026",
       "title": "Clover Hall Crescent, roadworks in Rochdale from 17 November 2026",
@@ -394,14 +406,14 @@
     {
       "slug": "planning-approved-for-new-storage-world-building-in-middleton",
       "title": "Rochdale Council approves new Storage World building in Middleton",
-      "category": "environment",
+      "category": "news",
       "reason": "weak filename image match score -1; neutral card is safer",
       "before": {
         "image_url": "assets/img/cards/rochdale-town-square.jpg",
         "img": "assets/img/cards/rochdale-town-square.jpg",
         "status": "cards-library-photo"
       },
-      "after": "assets/img/cards/a145aae003e2-place-generated-card.jpg"
+      "after": "assets/img/cards/f0324b05b31a-place-generated-card.jpg"
     },
     {
       "slug": "rochdale-s-atom-valley-project-aims-to-create-thousands-of-jobs-and-homes",
