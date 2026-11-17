@@ -79,5 +79,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh workflow run immediate-watch.yml --repo "$GITHUB_REPOSITORY" --ref main \
+          bash scraper/gh_dispatch.sh immediate-watch.yml --repo "$GITHUB_REPOSITORY" --ref main \
             || echo "::warning::Could not start the next watch; the 20-minute cron re-seeds it."
