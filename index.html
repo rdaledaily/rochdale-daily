@@ -2332,7 +2332,11 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     function isCurrentOrFutureEvent(article) {
       if (String(article.source_kind || "").toLowerCase() !== "event") return false;
       const start = new Date(article.event_start_at || "").getTime();
-      return Number.isFinite(start) && start >= Date.now() - (12 * 60 * 60 * 1000);
+      if (!Number.isFinite(start)) return false;
+      /* Multi-day events stay listed until their end date. */
+      const endRaw = new Date(article.event_end_at || "").getTime();
+      const last = Number.isFinite(endRaw) && endRaw > start ? endRaw : start;
+      return last >= Date.now() - (12 * 60 * 60 * 1000);
     }
 
     function minutesSince(value) {
@@ -2792,7 +2796,12 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
     const events = [];
 
     const formatDate = (date) => new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(date);
-    const formatEventDate = (date) => new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(date);
+    const formatEventDate = (date) => new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/London" }).format(date);
+    /* Multi-day events: "12 Dec – 23 Dec" (UK dates, London time). */
+    const formatEventRange = (start, end) => {
+      const day = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "Europe/London" });
+      return `${day.format(start)} – ${day.format(end)}`;
+    };
 
     // Tidy the credit for display. Feed names arrive as things like
     // "Manchester Evening News — Rochdale" or a squashed "Manchestereveningnews";
@@ -3414,13 +3423,21 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         .filter(story => story.category === "events")
         .map(story => {
           const parsedDate = story.eventStartAt ? new Date(story.eventStartAt) : null;
+          const date = parsedDate && Number.isFinite(parsedDate.getTime()) ? parsedDate : null;
+          const parsedEnd = story.eventEndAt ? new Date(story.eventEndAt) : null;
+          /* A multi-day event ("12-23 December") carries an end date. It stays
+             listed until that date, and while it is running it counts as
+             happening now for the tonight / this week / weekend filters. */
+          const end = date && parsedEnd && Number.isFinite(parsedEnd.getTime()) && parsedEnd > date ? parsedEnd : null;
+          const effective = end && date.getTime() < Date.now() ? new Date(Math.min(Date.now(), end.getTime())) : date;
           return {
             story,
-            date: parsedDate && Number.isFinite(parsedDate.getTime()) ? parsedDate : null,
-            tags: eventTagsForStory(story, parsedDate)
+            date,
+            end,
+            tags: eventTagsForStory(story, effective)
           };
         })
-        .filter(item => !item.date || item.date.getTime() >= Date.now() - 12 * 60 * 60 * 1000)
+        .filter(item => !item.date || (item.end || item.date).getTime() >= Date.now() - 12 * 60 * 60 * 1000)
         .sort((a, b) => (a.date?.getTime() || Infinity) - (b.date?.getTime() || Infinity));
 
       const list = filter === "all"
@@ -3433,9 +3450,11 @@ const ARTICLE_FEED_SOURCES = ["/articles.json", "/articles/frontpage.json"];
         return;
       }
 
-      grid.innerHTML = list.slice(0, 12).map(({ story, date }) => {
+      grid.innerHTML = list.slice(0, 12).map(({ story, date, end }) => {
         const fallback = story.imageFallback || stockImage("events");
-        const dateLabel = date ? formatEventDate(date) : "Date shown in full listing";
+        const dateLabel = date
+          ? (end && end.toDateString() !== date.toDateString() ? formatEventRange(date, end) : formatEventDate(date))
+          : "Date shown in full listing";
         return `<article class="event-card">
           <img src="${story.image}" alt="${story.title}" onerror="this.onerror=null;this.src='${fallback}'">
           <div class="event-body">

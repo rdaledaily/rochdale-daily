@@ -102,8 +102,11 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
     start = _parse_dt(entry.get("event_start_at") or entry.get("start"))
     if not title or start is None:
         return None
-    # Drop events that have already happened (grace window mirrors the feed).
-    if start < now - timedelta(hours=12):
+    # Drop events that have already finished (grace window mirrors the feed).
+    # A multi-day event ("12-23 December") stays listed until its END date,
+    # not its first date.
+    end = _parse_dt(entry.get("event_end_at"))
+    if max(start, end or start) < now - timedelta(hours=12):
         return None
 
     slug = _slugify(entry.get("slug") or title)
@@ -127,7 +130,7 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         "source_kind": "event",
         "status": "published",
         "event_start_at": _iso(start),
-        "event_end_at": _iso(_parse_dt(entry.get("event_end_at"))) if _parse_dt(entry.get("event_end_at")) else "",
+        "event_end_at": _iso(end) if end and end >= start else "",
         "event_location": location,
         "published_at": _iso(published_at),
         "first_published_at": _iso(published_at),
