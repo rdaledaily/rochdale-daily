@@ -30,12 +30,26 @@ Optional:
   FACEBOOK_STATE_PATH (default: facebook/facebook_posted.json)
   FACEBOOK_RESULT_PATH (default: facebook/facebook_last_result.json)
   FACEBOOK_MAX_ARTICLE_AGE_HOURS (default: 36; 0 disables age filtering)
-  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 60)
-  FACEBOOK_SLOT_HOURS (default: "7,12,15,17,20,22", Europe/London)
-  FACEBOOK_MAX_POSTS_PER_DAY (default: 7)
+  FACEBOOK_SCHEDULE (default: slots; "as-published" posts each story as it goes live)
+  FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 60 in slots mode, 20 as-published)
+  FACEBOOK_SLOT_HOURS (default: "7,12,15,17,20,22", Europe/London; slots mode)
+  FACEBOOK_POSTING_HOURS (default: "7-22", Europe/London; as-published mode)
+  FACEBOOK_MAX_POSTS_PER_DAY (default: 7 in slots mode, 30 as-published)
   FACEBOOK_TODAY_MAX_AGE_HOURS (default: 12; how long a story that affects
                                readers today stays in the immediate lane)
   FACEBOOK_DRY_RUN (1/true/yes to avoid the Graph API calls)
+
+FACEBOOK_SCHEDULE=as-published (editor, 17 Nov 2026: "every other newspaper
+is beating us by about 12 hours") replaces the six fixed slots. Measured 7-17
+Nov: 76 stories qualified for Facebook, 47 were posted a median 3.0 hours
+after they went live (p90 20.3h) and 29 never posted at all, because six
+slots a day cannot carry 7-8 stories a day. In as-published mode the newest
+unposted story goes out on the first run after it is live, one per run, with
+FACEBOOK_MIN_POST_INTERVAL_MINUTES between posts, inside
+FACEBOOK_POSTING_HOURS (default "7-22", UK time) and up to
+FACEBOOK_MAX_POSTS_PER_DAY. Replaying the same ten days with a 20-minute gap
+posts all 76, a median 0.3 hours after they go live. FACEBOOK_SCHEDULE=slots
+keeps the old programme.
 
 Stories that affect readers TODAY (traffic incidents, power cuts, school,
 nursery and college closures, missing persons, public warnings; see
@@ -110,6 +124,24 @@ def slot_hours() -> tuple[int, ...]:
         if 0 <= value <= 23:
             hours.append(value)
     return tuple(sorted(set(hours))) or (7, 12, 15, 17, 20, 22)
+
+
+def schedule_mode() -> str:
+    """'as-published' or 'slots' (the old six-slot programme)."""
+    mode = env("FACEBOOK_SCHEDULE", "slots").lower().replace("_", "-")
+    return "as-published" if mode in {"as-published", "live", "immediate"} else "slots"
+
+
+def posting_hours() -> tuple[int, int]:
+    """First and last UK clock hour in which as-published posts may go out."""
+    raw = env("FACEBOOK_POSTING_HOURS", "7-22")
+    try:
+        first, last = (int(part) for part in raw.split("-", 1))
+    except ValueError:
+        return 7, 22
+    if not (0 <= first <= 23 and 0 <= last <= 23 and first <= last):
+        return 7, 22
+    return first, last
 
 
 def parse_dt(value: Any) -> datetime:
@@ -514,6 +546,35 @@ def schedule_reason(state: dict[str, Any], posted: dict[str, Any], now: datetime
     return "This slot has already been used"
 
 
+def as_published_reason(posted: dict[str, Any], now: datetime) -> str:
+    """Why an as-published run must not post, or '' when it may."""
+    first, last = posting_hours()
+    local_hour = now.astimezone(LONDON).hour
+    if not first <= local_hour <= last:
+        return f"Outside Facebook posting hours ({first:02d}:00-{last:02d}:59 UK time)"
+    min_interval = int_env("FACEBOOK_MIN_POST_INTERVAL_MINUTES", 20)
+    times = recent_post_times(posted)
+    if min_interval > 0 and times:
+        next_allowed = max(times) + timedelta(minutes=min_interval)
+        if now < next_allowed:
+            remaining = max(1, int((next_allowed - now).total_seconds() // 60) + 1)
+            return f"Facebook cooldown active; next post allowed in about {remaining} minutes"
+    max_day = int_env("FACEBOOK_MAX_POSTS_PER_DAY", 30)
+    if max_day and posts_today(posted, now) >= max_day:
+        return f"Daily Facebook limit reached ({max_day} posts)"
+    return ""
+
+
+def as_published_order(candidates: list[dict[str, Any]], now: datetime) -> list[dict[str, Any]]:
+    """Breaking/live stories from the last three hours first, then newest first,
+    so a fresh story is never stuck behind a backlog of older ones."""
+    def key(row: dict[str, Any]) -> tuple[int, datetime, str]:
+        published = parse_dt(row.get("first_published_at") or row.get("published_at"))
+        breaking = is_urgent(row) and published > now - timedelta(hours=3)
+        return (1 if breaking else 0, published, str(row.get("slug") or ""))
+    return sorted(candidates, key=key, reverse=True)
+
+
 def _graph_error(exc: urllib.error.HTTPError, action: str) -> RuntimeError:
     raw = exc.read().decode("utf-8", errors="replace")
     try:
@@ -689,7 +750,7 @@ def main() -> int:
         if not dry_run:
             stored = {k: v for k, v in record.items() if k != "caption"}
             posted[article_key(article)] = stored
-            if lane != TODAY_LANE:
+            if lane == "slot":
                 slots[slot] = {"facebook_post_id": post_id, "posted_at": posted_at, "article_key": article_key(article)}
             state["updated_at"] = posted_at
             state["schema_version"] = 2
@@ -721,6 +782,18 @@ def main() -> int:
         reason = "Stopped after a failed post"
     elif not candidates:
         reason = "No fresh unposted stories with a photo of the story"
+    elif schedule_mode() == "as-published":
+        candidates = as_published_order(candidates, now)
+        reason = as_published_reason(posted, now)
+        if not reason:
+            article = candidates[0]
+            slot = now.astimezone(LONDON).strftime("%Y-%m-%d:%H:%M") + "-live"
+            try:
+                done.append((article, publish(article, post_photo(article), slot, "as-published")))
+                candidates.remove(article)
+            except RuntimeError as exc:
+                failure = f"{article.get('title')}: {exc}"
+                print(str(exc), file=sys.stderr)
     else:
         candidates.sort(key=lambda row: (score(row, now), str(row.get("slug") or "")), reverse=True)
         urgent_waiting = any(
