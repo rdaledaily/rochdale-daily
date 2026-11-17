@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-17T19:01:45.046761Z",
+  "last_run_at": "2026-11-17T19:19:30.017286Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 113,
+  "raw_candidates_before_job_filter": 111,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 113,
-  "candidate_clusters": 38,
+  "raw_candidates": 111,
+  "candidate_clusters": 39,
   "google_news_resolution": {
-    "wrappers": 22,
-    "resolved": 18,
+    "wrappers": 31,
+    "resolved": 24,
     "text_recovered": 10,
     "reattributed": 0,
-    "images_found": 16
+    "images_found": 13
   },
-  "duplicates_merged": 75,
+  "duplicates_merged": 72,
   "attempted_rewrites": 1,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -73,7 +73,7 @@
   "live_articles": 634,
   "skipped": 1,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: the date(s) 17 November are neither stated nor implied by the source. Use": 1
+    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: Rugby has changed": 1
   },
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
@@ -88,20 +88,29 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 166,
+    "entries": 167,
     "by_outcome": {
       "editorial_twin": 16,
       "failed": 36,
       "published": 83,
-      "rejected": 31
+      "rejected": 32
     },
-    "held_back_this_run": 30,
+    "held_back_this_run": 31,
     "held_already_published": 18,
-    "held_rejected": 12,
+    "held_rejected": 13,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
   },
   "rewrite_ledger_held_rejected": [
+    {
+      "url": "https://www.bbc.co.uk/news/articles/c60mdvd4vpy4o",
+      "title": "York City player pleads not guilty over alleged punch of Rochdale fan",
+      "source_name": "BBC Manchester",
+      "held_because": "already rejected: quality gate after 4 repairs: Source fidelity: the date(s) 17 November are neither stated nor implied by the source. Use",
+      "outcome": "rejected",
+      "attempts": 3,
+      "last_attempt_at": "2026-11-17T18:59:01.613429Z"
+    },
     {
       "url": "https://rochdaleafc.co.uk/fill-the-family-stand-for-toy-appeal",
       "title": "Fill The Family Stand For Toy Appeal",
@@ -220,7 +229,7 @@
   "style_issues_block_publication": false,
   "collector_counts": {
     "rss_and_google_news": 88,
-    "website_discovery": 18,
+    "website_discovery": 16,
     "aggregator_discovery": 0,
     "live_service_pages": 6,
     "facebook_official": 0,
@@ -269,12 +278,12 @@
       "bozo": false,
       "feed_title": ""
     },
-    "Falinge Park High School": {
-      "url": "https://www.falingepark.com/feed/",
+    "St Cuthbert's RC High School": {
+      "url": "https://stcuthberts.com/feed/",
       "http_status": 403,
-      "content_type": "text/html; charset=UTF-8",
-      "final_url": "https://www.falingepark.com/feed/",
-      "bozo": false,
+      "content_type": "text/html",
+      "final_url": "https://stcuthberts.com/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Rochdale AFC Community Trust": {
@@ -283,6 +292,14 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.rochdaleafccommunity.org/feed/",
       "bozo": false,
+      "feed_title": ""
+    },
+    "Hopwood Hall College": {
+      "url": "https://www.hopwood.ac.uk/feed/",
+      "http_status": 403,
+      "content_type": "text/html",
+      "final_url": "https://www.hopwood.ac.uk/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Greater Manchester Police": {
@@ -357,8 +374,8 @@
   "immediate_first": [],
   "source_counts": {
     "Rochdale Times": 34,
-    "Rochdale AFC": 14,
     "Manchester Evening News": 14,
+    "Rochdale AFC": 11,
     "Rochdale Borough Council": 6,
     "Bee Network live travel alerts": 6,
     "BBC Manchester": 4,
@@ -368,17 +385,17 @@
     "UKNIP": 2,
     "Housing Today": 2,
     "Yahoo": 2,
+    "InYourArea": 2,
     "Milton Keynes Citizen": 2,
     "Roch Valley Radio Local News": 2,
     "Your Trust Rochdale Articles": 2,
+    "Falinge Park High School": 1,
     "Rochdale Borough Council RSS": 1,
-    "Hopwood Hall College": 1,
     "Oldham Times": 1,
     "The Bolton News": 1,
     "About Manchester": 1,
     "Total Rugby League": 1,
     "The York Press": 1,
-    "InYourArea": 1,
     "Building Design": 1,
     "Place North West": 1,
     "Rochdale Borough Council News": 1,
@@ -387,7 +404,7 @@
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "sport": 1
+    "news": 1
   },
   "published_by_category": {
     "business": 73,
@@ -426,10 +443,10 @@
     "captcha/challenge endpoints"
   ],
   "selected_story_keys": [
-    "sport-v3-9e626d2eac2129da654d"
+    "hard-news-v3-dc0d55684358ec2237a4"
   ],
   "selected_candidate_urls": [
-    "https://www.bbc.co.uk/news/articles/c60mdvd4vpy4o"
+    "https://www.rochdaletimes.co.uk/teenager-tackles-adversity-to-keep-rugby-dreams-alive/"
   ],
   "x_social_records": 0,
   "facebook_social_records": 0,
@@ -441,10 +458,10 @@
   "selection_policy": "One story is reserved for each represented category and each represented official ward before source-rotating fill selection.",
   "coverage": {
     "available_categories": [
-      "sport"
+      "news"
     ],
     "selected_categories": [
-      "sport"
+      "news"
     ],
     "available_wards": [],
     "selected_wards": [],
@@ -456,14 +473,14 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "sport": 1
+      "news": 1
     },
     "selected_by_ward": {},
     "selected_by_area": {
       "rochdale": 1
     },
     "selected_by_source": {
-      "bbc manchester": 1
+      "rochdale times": 1
     },
     "must_cover_selected": 0
   },
@@ -1013,16 +1030,14 @@
     }
   ],
   "robots_policy": "Direct fetching is never attempted when robots.txt declines it; RSS, indexed search results and authorised APIs are used instead.",
-  "robots_denied_count": 8,
+  "robots_denied_count": 6,
   "robots_denied_urls": [
     "https://aboutmanchester.co.uk/?s=Rochdale",
     "https://www.rochdale.gov.uk/events/20166/libraries?location=&period=full",
     "https://www.rochdale.gov.uk/events/20043/fostering?location=&period=full",
     "https://www.rochdale.gov.uk/events/20074/armed-forces-community?location=&period=full",
     "https://www.rochdale.gov.uk/events/20156/computers-and-technology?location=&period=full",
-    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full",
-    "https://news.google.com/rss/articles/CBMiekFVX3lxTE9KOEh0NnZJTXJHdTJ0VUlhZldNMEFSSTJ2ZDVleU1BTE9EcGxVMGppenZucXhtdTNBckkzNFpiYTY0SmwtTUFNWmdsTm1QZklncmVQZUJPVXlHRnQ3aFVXOWFNSVpwN1BZZ1ZHMWd5YUZCR1Q1MlN1YnFn?oc=5",
-    "https://news.google.com/rss/articles/CBMif0FVX3lxTE9tY0V3QkVCN1ZoWUN6S3pQMXUyTGRJMWljZjZYTWx3U0JHYjhHQ3VEdm5qOGhpMWhDWEFYNWFnVzQwMFRWa2xXbnd6RkNvcEtMNHlxb1ZqYjU0aWNJOXRXNHFESjlFbnhEbEJ0c1JfdFBGZGpLR2h4ek4yLTNxTW8?oc=5"
+    "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [],
@@ -1062,7 +1077,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-17T19:19:34.718108Z",
+  "frontpage_generated_at": "2026-11-17T19:26:06.462951Z",
   "frontpage_article_count": 20,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
