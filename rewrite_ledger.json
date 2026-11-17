@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T01:12:52.431631Z",
+  "updated_at": "2026-11-17T01:27:22.524405Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 164,
@@ -135,14 +135,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T01:12:52.431223Z",
+      "last_attempt_at": "2026-11-17T01:27:22.524158Z",
       "outcome": "published",
       "reason": "",
       "title": "2026 AGM Details - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "e48a1f16d58f92d5",
-      "recovery_attempts": 1,
+      "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
     "https://rochdaleafc.co.uk/behind-the-sign-inside-training-jamie-allen-signs": {
@@ -320,14 +320,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T00:57:41.430956Z",
+      "last_attempt_at": "2026-11-17T01:25:02.906271Z",
       "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Crown, Oil, Arena do not appear in the source. Name only peop",
       "title": "Dale Exit Womens FA Cup - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "19c6b80b766efaf7",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://rochdaleafc.co.uk/ticket-details-for-midweek-cheltenham-visit": {
       "first_attempt_at": "2026-11-10T21:06:43.164682Z",
@@ -1093,14 +1094,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T01:12:52.431485Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-17T01:25:18.719577Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 1 December, 3 December are neither stated nor implied by the",
       "title": "Inside the free illuminated wonderland transforming historic gardens in Rochdale - InYourArea",
       "source_name": "InYourArea",
-      "category": "community",
+      "category": "news",
       "text_fingerprint": "f459fccadb0a71b9",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.inyourarea.co.uk/news/rochdale-residents-stand-together-in-silence-to-remember-our-nations-heroes": {
       "first_attempt_at": "2026-11-09T23:42:53.832896Z",
@@ -2254,15 +2255,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 5,
+      "attempts": 1,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T01:12:52.431338Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "last_attempt_at": "2026-11-17T01:27:22.524264Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
