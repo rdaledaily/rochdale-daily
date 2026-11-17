@@ -33,7 +33,16 @@ Optional:
   FACEBOOK_MIN_POST_INTERVAL_MINUTES (default: 60)
   FACEBOOK_SLOT_HOURS (default: "7,12,15,17,20,22", Europe/London)
   FACEBOOK_MAX_POSTS_PER_DAY (default: 7)
+  FACEBOOK_TODAY_MAX_AGE_HOURS (default: 12; how long a story that affects
+                               readers today stays in the immediate lane)
   FACEBOOK_DRY_RUN (1/true/yes to avoid the Graph API calls)
+
+Stories that affect readers TODAY (traffic incidents, power cuts, school,
+nursery and college closures, missing persons, public warnings; see
+affects_today.py) skip the slots entirely (editor, 17 Nov 2026). They post on
+the first run after they go live, at any hour, every one of them, and they do
+not use up a slot, the cooldown or the daily limit, so the scheduled
+programme carries on around them.
 """
 from __future__ import annotations
 
@@ -52,6 +61,7 @@ from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from reader_copy import clean_social_headline, split_sentences  # noqa: E402
+from affects_today import today_kind  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTICLES_PATH = ROOT / "articles.json"
@@ -200,6 +210,7 @@ def image_usage(articles: list[Any]) -> dict[str, int]:
 
 
 POLICE_STOCK_PHOTO = "assets/img/cards/police.jpg"
+INCIDENT_CARD = "assets/img/cards/incident-card.jpg"
 
 
 # Every generated card format the site produces, by file name and by status:
@@ -246,7 +257,8 @@ def post_photo(article: dict[str, Any]) -> str:
     return ""
 
 
-def roundup_eligible(article: Any, max_age_hours: int, now: datetime | None = None) -> bool:
+def roundup_eligible(article: Any, max_age_hours: int, now: datetime | None = None,
+                     need_image: bool = True) -> bool:
     """Name kept for older callers: is this story allowed on Facebook at all?"""
     if not eligible(article, max_age_hours, now):
         return False
@@ -265,7 +277,7 @@ def roundup_eligible(article: Any, max_age_hours: int, now: datetime | None = No
         "paid_reader_submission", "advertisement", "utility", "weather",
     }:
         return False
-    if not image_url(article) and not is_crime_story(article):
+    if need_image and not image_url(article) and not is_crime_story(article):
         return False
     return True
 
@@ -407,10 +419,14 @@ def write_json(path: Path, payload: Any) -> None:
 
 
 def recent_post_times(posted: dict[str, Any]) -> list[datetime]:
-    """One timestamp per Facebook post, even when several articles share it."""
+    """One timestamp per scheduled Facebook post, even when several articles
+    share it. Immediate posts for stories that affect readers today are left
+    out: they never push back the scheduled programme."""
     unique: dict[str, datetime] = {}
     for key, value in posted.items():
         if not isinstance(value, dict):
+            continue
+        if value.get("lane") == TODAY_LANE:
             continue
         parsed = parse_dt(value.get("posted_at"))
         if parsed == MISSING:
@@ -433,6 +449,45 @@ def current_slot(now: datetime) -> str:
 
 def slot_used(state: dict[str, Any], slot: str) -> bool:
     return bool(slot) and slot in (state.get("slots") or {})
+
+
+TODAY_LANE = "today"
+# Two headlines about one incident (measured: the two Kibriya Ahmed appeals of
+# 29 Oct 2026 share 7 of their 9 content words) are one post, not two.
+TODAY_SAME_INCIDENT = 0.6
+
+
+def today_due(candidates: list[dict[str, Any]], posted: dict[str, Any], now: datetime) -> list[dict[str, Any]]:
+    """Unposted stories that affect readers today, oldest first."""
+    max_age = int_env("FACEBOOK_TODAY_MAX_AGE_HOURS", 12, minimum=1)
+    cutoff = now - timedelta(hours=max_age)
+    recent_today = [
+        content_words(str(v.get("title") or ""))
+        for v in posted.values()
+        if isinstance(v, dict) and v.get("lane") == TODAY_LANE and parse_dt(v.get("posted_at")) >= cutoff
+    ]
+    due: list[dict[str, Any]] = []
+    rows = sorted(candidates, key=lambda r: (parse_dt(r.get("first_published_at") or r.get("published_at")),
+                                             str(r.get("slug") or "")))
+    for row in rows:
+        if not today_kind(row):
+            continue
+        if parse_dt(row.get("first_published_at") or row.get("published_at")) < cutoff:
+            continue
+        words = content_words(str(row.get("title") or ""))
+        if any(words and other and len(words & other) / min(len(words), len(other)) >= TODAY_SAME_INCIDENT
+               for other in recent_today):
+            continue
+        recent_today.append(words)
+        due.append(row)
+    return due
+
+
+def today_photo(article: dict[str, Any]) -> str:
+    """A story that affects readers today never waits for a photo (editor,
+    7 Nov 2026: never hold a story back over its photo). Its own photo, the
+    police photo for a crime story, otherwise the paper's red Incident card."""
+    return post_photo(article) or SITE + "/" + INCIDENT_CARD
 
 
 def schedule_reason(state: dict[str, Any], posted: dict[str, Any], now: datetime,
@@ -581,44 +636,28 @@ def main() -> int:
         slots = state["slots"] = {}
 
     posted_urls = {str(v.get("url") or "").replace(".html", "") for v in posted.values() if isinstance(v, dict)}
-    unposted = [
-        row for row in articles
-        if roundup_eligible(row, max_age_hours, now)
-        and article_key(row) not in posted
-        and canonical_url(row) not in posted_urls
-    ]
-    usage = image_usage(articles)
-    candidates = [row for row in unposted if has_story_photo(row, usage)]
-    waiting = [str(row.get("slug") or "") for row in unposted if not has_story_photo(row, usage)]
-    if not candidates:
-        return report("idle", "No fresh unposted stories with a photo of the story",
-                      remaining_unposted=0, waiting_for_story_photo=waiting)
-    candidates.sort(key=lambda row: (score(row, now), str(row.get("slug") or "")), reverse=True)
-    urgent_waiting = any(
-        is_urgent(row)
-        and parse_dt(row.get("first_published_at") or row.get("published_at")) > now - timedelta(hours=3)
-        for row in candidates
-    )
-    reason = schedule_reason(state, posted, now, urgent_waiting)
-    if reason:
-        return report("idle", reason, remaining_unposted=len(candidates), waiting_for_story_photo=waiting)
+    def not_yet_posted(row: Any) -> bool:
+        return article_key(row) not in posted and canonical_url(row) not in posted_urls
 
-    article = candidates[0]
-    if urgent_waiting and not current_slot(now):
-        article = next(row for row in candidates if is_urgent(row))
-    caption = compose_caption(article)
-    photo = post_photo(article)
-    destination = canonical_url(article)
-    link_comment = f"Read the full story: {destination}"
-    slot = current_slot(now) or now.astimezone(LONDON).strftime("%Y-%m-%d:%H") + "-urgent"
-    link_route = "first-comment"
+    unposted = [row for row in articles if roundup_eligible(row, max_age_hours, now) and not_yet_posted(row)]
+    # A story that affects readers today does not need an image of its own.
+    today_pool = [row for row in articles
+                  if roundup_eligible(row, max_age_hours, now, need_image=False) and not_yet_posted(row)]
 
-    try:
+    page_id_cache: list[str] = []
+
+    def publish(article: dict[str, Any], photo: str, slot: str, lane: str) -> dict[str, Any]:
+        """Post one story; on success record it in the state and return the record."""
+        caption = compose_caption(article)
+        destination = canonical_url(article)
+        link_comment = f"Read the full story: {destination}"
+        link_route = "first-comment"
         if dry_run:
             post_id, comment_id = "dry-run", "dry-run"
         else:
-            page_id = resolve_page_id(token, graph_version)
-            post_id = graph_photo_post(page_id, token, photo, caption, graph_version)
+            if not page_id_cache:
+                page_id_cache.append(resolve_page_id(token, graph_version))
+            post_id = graph_photo_post(page_id_cache[0], token, photo, caption, graph_version)
             try:
                 comment_id = graph_comment(post_id, token, link_comment, graph_version)
             except RuntimeError as comment_error:
@@ -629,18 +668,8 @@ def main() -> int:
                 link_route = "caption-after-comment-failed"
                 comment_id = ""
                 print(f"Link comment failed; link added to the caption instead: {comment_error}", file=sys.stderr)
-    except RuntimeError as exc:
-        write_json(result_path, {
-            "status": "error", "reason": str(exc), "slot": slot,
-            "article_keys": [article_key(article)], "title": article.get("title"),
-            "checked_at": now.isoformat().replace("+00:00", "Z"),
-        })
-        print(str(exc), file=sys.stderr)
-        return 1
-
-    posted_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    if not dry_run:
-        posted[article_key(article)] = {
+        posted_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        record = {
             "facebook_post_id": post_id,
             "link_comment_id": comment_id,
             "link_route": link_route,
@@ -652,19 +681,93 @@ def main() -> int:
             "image_url": photo,
             "image_status": str(article.get("image_status") or ""),
             "slot": slot,
+            "lane": lane,
+            "caption": caption,
         }
-        slots[slot] = {"facebook_post_id": post_id, "posted_at": posted_at, "article_key": article_key(article)}
-        state["updated_at"] = posted_at
-        state["schema_version"] = 2
-        write_json(state_path, state)
+        if lane == TODAY_LANE:
+            record["today_kind"] = today_kind(article)
+        if not dry_run:
+            stored = {k: v for k, v in record.items() if k != "caption"}
+            posted[article_key(article)] = stored
+            if lane != TODAY_LANE:
+                slots[slot] = {"facebook_post_id": post_id, "posted_at": posted_at, "article_key": article_key(article)}
+            state["updated_at"] = posted_at
+            state["schema_version"] = 2
+            write_json(state_path, state)
+        return record
 
+    done: list[tuple[dict[str, Any], dict[str, Any]]] = []
+    failure = ""
+
+    # 1. Stories that affect readers today: every one, now, at any hour.
+    today_keys: set[str] = set()
+    for article in today_due(today_pool, posted, now):
+        slot = now.astimezone(LONDON).strftime("%Y-%m-%d:%H") + "-today"
+        try:
+            done.append((article, publish(article, today_photo(article), slot, TODAY_LANE)))
+            today_keys.add(article_key(article))
+        except RuntimeError as exc:
+            failure = f"{article.get('title')}: {exc}"
+            print(str(exc), file=sys.stderr)
+            break
+    unposted = [row for row in unposted if article_key(row) not in today_keys]
+
+    # 2. The scheduled programme.
+    usage = image_usage(articles)
+    candidates = [row for row in unposted if has_story_photo(row, usage)]
+    waiting = [str(row.get("slug") or "") for row in unposted if not has_story_photo(row, usage)]
+    reason = ""
+    if failure:
+        reason = "Stopped after a failed post"
+    elif not candidates:
+        reason = "No fresh unposted stories with a photo of the story"
+    else:
+        candidates.sort(key=lambda row: (score(row, now), str(row.get("slug") or "")), reverse=True)
+        urgent_waiting = any(
+            is_urgent(row)
+            and parse_dt(row.get("first_published_at") or row.get("published_at")) > now - timedelta(hours=3)
+            for row in candidates
+        )
+        reason = schedule_reason(state, posted, now, urgent_waiting)
+        if not reason:
+            article = candidates[0]
+            if urgent_waiting and not current_slot(now):
+                article = next(row for row in candidates if is_urgent(row))
+            slot = current_slot(now) or now.astimezone(LONDON).strftime("%Y-%m-%d:%H") + "-urgent"
+            try:
+                done.append((article, publish(article, post_photo(article), slot, "slot")))
+                candidates.remove(article)
+            except RuntimeError as exc:
+                failure = f"{article.get('title')}: {exc}"
+                print(str(exc), file=sys.stderr)
+
+    if not done:
+        if failure:
+            write_json(result_path, {
+                "status": "error", "reason": failure,
+                "checked_at": now.isoformat().replace("+00:00", "Z"),
+            })
+            return 1
+        return report("idle", reason, remaining_unposted=len(candidates), waiting_for_story_photo=waiting)
+
+    # Something went out. Report "posted" even if a later post failed, so the
+    # workflow saves the state and nothing is posted twice; the failure is
+    # named in the reason and the next run retries that story.
+    records = [record for _, record in done]
+    last = records[-1]
+    bad_route = next((r["link_route"] for r in records if r["link_route"] != "first-comment"), "first-comment")
     report(
         "dry-run" if dry_run else "posted",
-        slot=slot, facebook_post_id=post_id, link_route=link_route, posted_at=posted_at,
-        article_count=1, article_keys=[article_key(article)], titles=[str(article.get("title") or "")],
-        url=destination, image_url=photo, image_status=str(article.get("image_status") or ""),
-        remaining_unposted=max(0, len(candidates) - 1),
-        message_preview=caption if dry_run else "",
+        failure,
+        slot=last["slot"], facebook_post_id=last["facebook_post_id"], link_route=bad_route,
+        posted_at=last["posted_at"], article_count=len(records),
+        article_keys=[article_key(a) for a, _ in done], titles=[r["title"] for r in records],
+        url=last["url"], image_url=last["image_url"], image_status=last["image_status"],
+        today_posts=[{"title": r["title"], "kind": r.get("today_kind"), "image_url": r["image_url"]}
+                     for r in records if r["lane"] == TODAY_LANE],
+        remaining_unposted=len(candidates),
+        waiting_for_story_photo=waiting,
+        message_preview="\n\n---\n\n".join(r["caption"] for r in records) if dry_run else "",
     )
     # Exit 0 even when the link had to go in the caption: the post IS live, so
     # the workflow must still save state or the next run would post it again.
