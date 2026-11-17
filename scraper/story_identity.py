@@ -1258,6 +1258,8 @@ def editorial_twin(editor: Any, automated: Any) -> bool:
         return False
     if _parsed_datetime(editor) is None or _parsed_datetime(automated) is None:
         return False
+    if same_release_figures(editor, automated):
+        return True
     if hours_apart(editor, automated) > EDITORIAL_TWIN_HOURS:
         return False
     if category_family(editor) == "sport" or category_family(automated) == "sport":
@@ -1355,6 +1357,47 @@ def headline_entities(record: Any) -> set[str]:
     return {entity for entity in named_entities(record) if " " in entity and entity in title}
 
 
+# Same release, different filing (editor, 17 Nov 2026: the Seven Sisters
+# demolition went out twice in the morning newsletter). Her College Bank story
+# was filed under business and the pipeline's Place North West rewrite under
+# community; categories_compatible() zeroes story_similarity() across those
+# families before any evidence is weighed, so both twin rules scored the pair
+# 0.0. Even category-blind it scores 0.457 - the headlines share almost no
+# wording - yet both name "seven sisters" in the headline and state the same
+# three figures (600 homes, 766, GBP 269m).
+#
+# A category is a filing label, not evidence that two stories differ. Two
+# records that name the same multi-word subject in both headlines AND state
+# at least two of the same hard figures (amounts, counts - not dates or years)
+# within a week are one story. Measured 17 Nov 2026 over all 542 live
+# non-event stories: exactly one pair shares a headline entity and even ONE
+# figure, and it is this pair. Two of the editor's own stories never pass
+# through here: she decides those.
+SAME_RELEASE_MIN_FIGURES = 2
+SAME_RELEASE_HOURS = 7 * 24.0
+
+
+def shared_figures(left: Any, right: Any) -> set[str]:
+    return {fact for fact in story_facts(left) & story_facts(right) if fact.startswith("n:")}
+
+
+def same_release_figures(left: Any, right: Any) -> bool:
+    if is_editor_record(left) and is_editor_record(right):
+        return False
+    if _is_roundup_like(left) or _is_roundup_like(right):
+        return False
+    if _parsed_datetime(left) is None or _parsed_datetime(right) is None:
+        return False
+    if hours_apart(left, right) > SAME_RELEASE_HOURS:
+        return False
+    if category_family(left) == "sport" or category_family(right) == "sport":
+        # Fixtures repeat scores, ages and attendances across different matches.
+        return False
+    if not headline_entities(left) & headline_entities(right):
+        return False
+    return len(shared_figures(left, right)) >= SAME_RELEASE_MIN_FIGURES
+
+
 def syndicated_twin(left: Any, right: Any) -> bool:
     """True when two records are the same release told twice (see above)."""
     if is_editor_record(left) and is_editor_record(right):
@@ -1363,6 +1406,8 @@ def syndicated_twin(left: Any, right: Any) -> bool:
         return False
     if _parsed_datetime(left) is None or _parsed_datetime(right) is None:
         return False
+    if same_release_figures(left, right):
+        return True
     if hours_apart(left, right) > SYNDICATED_TWIN_HOURS:
         return False
     if category_family(left) == "sport" or category_family(right) == "sport":

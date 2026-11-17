@@ -101,3 +101,54 @@ def test_existing_redirect_rule_wins(tmp_path):
                           ledger_path=tmp_path / "missing.json")
     assert report["redirects_written"] == 0
     assert mark_ledger(tmp_path / "missing.json", [(DRUG_BOT, DRUG_ED)]) == 0
+
+
+# 17 Nov 2026 ("Seven Sisters story repeated twice in the newsletter this
+# morning"): one story filed under two categories is still one story. Her
+# College Bank demolition story (business) and the pipeline's Place North West
+# rewrite (community) both ran, because the category gate zeroed similarity.
+SS_FIX = json.loads((HERE / "fixtures_seven_sisters_twins.json").read_text(encoding="utf-8"))
+SS_ED = SS_FIX["college-bank-seven-sisters-demolition-decision"]
+SS_BOT = SS_FIX["rochdale-boroughwide-housing-to-demolish-seven-sisters-tower-blocks-due-to-high"]
+
+
+def test_category_label_no_longer_hides_the_duplicate():
+    assert si.category_family(SS_ED) != si.category_family(SS_BOT)
+    assert si.story_similarity(SS_ED, SS_BOT) == 0.0  # the gate that hid it
+    assert si.same_release_figures(SS_ED, SS_BOT)
+    assert si.editorial_twin(SS_ED, SS_BOT)
+
+
+def test_feed_keeps_only_the_editors_version():
+    kept, twins = split_editorial_twins([SS_ED, SS_BOT])
+    assert [r["slug"] for r in kept] == [SS_ED["slug"]]
+    assert [(t["slug"], e["slug"]) for t, e in twins] == [(SS_BOT["slug"], SS_ED["slug"])]
+
+
+def test_without_the_editor_the_first_published_copy_wins():
+    other = {**SS_ED, "manual_article": False, "editorial_lock": False, "slug": "later-copy",
+             "published_at": "2026-11-16T20:00:00Z", "first_published_at": "2026-11-16T20:00:00Z"}
+    kept, twins = split_editorial_twins([SS_BOT, other])
+    assert [r["slug"] for r in kept] == [SS_BOT["slug"]]
+
+
+def test_needs_two_figures_and_a_shared_headline_subject():
+    one_figure = {**SS_BOT, "content_html": "<p>Seven Sisters: 600 new homes.</p>", "body": "", "excerpt": "",
+                  "title": "Rochdale Boroughwide Housing to demolish Seven Sisters tower blocks"}
+    assert not si.same_release_figures(SS_ED, one_figure)
+    no_subject = {**SS_BOT, "title": "Housing provider to demolish tower blocks due to high costs"}
+    assert not si.same_release_figures(SS_ED, no_subject)
+
+
+def test_a_week_apart_is_a_new_story():
+    assert not si.same_release_figures(SS_ED, _shift(SS_BOT, 8 * 24))
+
+
+def test_two_editor_stories_are_hers_to_decide():
+    assert not si.same_release_figures(SS_ED, {**SS_BOT, "manual_article": True})
+
+
+def test_the_different_college_bank_report_stays_separate():
+    ed = FIX["college-bank-seven-sisters-housing-future"]
+    bot = FIX["future-of-college-bank-towers-uncertain-as-renovation-could-take-over-a-decade"]
+    assert not si.same_release_figures(ed, bot)
