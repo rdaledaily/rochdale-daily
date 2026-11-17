@@ -294,6 +294,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_headline_category_rules.py
           PYTHONPATH=scraper python scraper/test_model_bridge.py -v
           python scraper/test_workflow_architecture.py
+          PYTHONPATH=scraper python scraper/test_immediate_watch.py
           python scraper/test_legacy_routing_pages.py
           python -m pytest -q scraper/test_story_background.py scraper/test_inline_related.py \
             scraper/test_headline_style.py scraper/test_ad_slots.py scraper/test_roadworks_page.py \
