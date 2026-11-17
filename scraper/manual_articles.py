@@ -77,8 +77,13 @@ _BRIEFING_TAG_RE = re.compile(
 )
 
 
+# Roundups assembled from the paper's own stories: the Morning Briefing and
+# the Monday "Rochdale arrests this week" (weekly_arrests.py, 17 Nov 2026).
+ROUNDUP_ROUTES = {"daily-briefing", "weekly-arrests"}
+
+
 def _briefing_html(entry: dict[str, Any]) -> str:
-    if entry.get("publication_route") != "daily-briefing":
+    if entry.get("publication_route") not in ROUNDUP_ROUTES:
         return ""
     value = str(entry.get("content_html") or "")
     tags = re.findall(r"<[^>]*>", value)

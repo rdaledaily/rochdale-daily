@@ -1,0 +1,90 @@
+name: Rochdale arrests this week
+
+# Every Monday at 8am London: "Rochdale arrests this week" (editor, 17 Nov
+# 2026) -- arrests, charges, court proceedings, sentencing and appeals in the
+# borough over the previous Monday-to-Sunday, built from Rochdale Daily's own
+# published stories by scraper/weekly_arrests.py. No model call.
+#
+# GitHub cron speaks UTC only: firing at 07:00 and 08:00 UTC on Mondays and
+# letting the script check the real Europe/London clock keeps it at 8am
+# through BST and GMT. The script also refuses to publish the same week twice.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 7,8 * * 1"    # 8am London, BST and GMT respectively
+
+permissions:
+  contents: write
+  actions: write   # to start the publisher: pushes made with GITHUB_TOKEN never trigger other workflows
+
+concurrency:
+  group: rd-weekly-arrests
+  cancel-in-progress: false
+
+jobs:
+  arrests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Start from latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Build this week's round-up if it is due
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # A person pressed the button: build it now for the last full Monday-Sunday week.
+            python scraper/weekly_arrests.py --force
+          else
+            # Scheduled: the script self-gates on Monday 8am-noon London time.
+            python scraper/weekly_arrests.py
+          fi
+
+      - name: Publish it
+        id: publish
+        run: |
+          if ! ls pending_manual_arrests_*.json >/dev/null 2>&1; then
+            echo "No round-up due this hour."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "Rochdale Daily Bot"
+          git config user.email "bot@rochdaledaily.co.uk"
+          git add pending_manual_arrests_*.json
+          git commit -m "Publish this week's Rochdale arrests round-up
+
+          Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01FxqUNfXqnACisN24mMtChp"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main \
+              && git push origin HEAD:main \
+              && { echo "round-up queued for publication"; echo "committed=true" >> "$GITHUB_OUTPUT"; exit 0; }
+            sleep $((attempt * 6))
+          done
+          echo "::error::could not push the round-up"
+          exit 1
+
+      # A push made with the workflow's own token does not fire push-triggered
+      # workflows (GitHub's recursion guard), so the pending file would sit in
+      # the repo until something else drained the queue. Start the publisher
+      # explicitly, exactly as newsdesk-drain.yml does.
+      - name: Start the publisher
+        if: steps.publish.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash scraper/gh_dispatch.sh publish-pending-manual.yml --ref main
+          echo "publish-pending-manual dispatched"
