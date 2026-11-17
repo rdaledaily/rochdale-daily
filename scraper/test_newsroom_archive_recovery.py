@@ -86,6 +86,45 @@ class ArchiveAndLedgerRecovery(unittest.TestCase):
         self.assertEqual(state["missing_from_feed"], 0)
         self.assertFalse(core.candidate_is_rewrite_eligible(item, {}))
 
+    def test_story_lost_to_a_briefing_is_reopened_once(self):
+        # 16 Nov 2026: stories absorbed by a Morning Briefing were written off
+        # as "missing from feed". After the fix each gets exactly one retry.
+        url = "https://www.rochvalleyradio.com/news-features/142/community/1440/man-who-died-in-flat-fire-named"
+        ledger = core.load_rewrite_ledger()
+        ledger[url] = {
+            "first_attempt_at": "2026-11-15T14:20:11Z",
+            "last_attempt_at": "2026-11-15T16:16:27Z",
+            "attempts": 1, "urls": [url],
+            "outcome": "rejected",
+            "reason": "missing from feed after repeated publication attempts; review required",
+            "title": "Man who died in flat fire named",
+            "source_name": "Roch Valley Radio Local News",
+            "recovery_attempts": 2, "evidence_recovery_policy": 1,
+        }
+        core.save_rewrite_ledger()
+        state = core.reconcile_rewrite_ledger_with_feed([])
+        self.assertEqual(state["reopened_after_briefing_absorb_fix"], 1)
+        entry = core.load_rewrite_ledger()[url]
+        self.assertEqual(entry["outcome"], "failed")
+        # Lost again: the normal limit applies, no second briefing reopen.
+        entry.update(outcome="rejected", reason="missing from feed after repeated publication attempts; review required")
+        core.save_rewrite_ledger()
+        state = core.reconcile_rewrite_ledger_with_feed([])
+        self.assertEqual(state["reopened_after_briefing_absorb_fix"], 0)
+
+    def test_new_losses_after_the_fix_get_no_extra_reopen(self):
+        url = "https://example.org/story-lost-after-the-fix"
+        ledger = core.load_rewrite_ledger()
+        ledger[url] = {
+            "first_attempt_at": "2026-11-17T09:00:00Z", "last_attempt_at": "2026-11-17T09:00:00Z",
+            "attempts": 1, "urls": [url], "outcome": "rejected",
+            "reason": "missing from feed after repeated publication attempts; review required",
+            "title": "Later story", "source_name": "Example", "evidence_recovery_policy": 1,
+        }
+        core.save_rewrite_ledger()
+        state = core.reconcile_rewrite_ledger_with_feed([])
+        self.assertEqual(state["reopened_after_briefing_absorb_fix"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

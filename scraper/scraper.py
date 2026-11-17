@@ -3839,6 +3839,10 @@ def existing_article_for_candidate(candidate: Any, existing_by_story: dict[str, 
 
 
 FINAL_GATE_RETIRED_AT = '2026-10-12T00:00:00Z'
+# Stories lost before this time were absorbed by a Morning Briefing during
+# manual-article fold-in (story_identity.same_story had no briefing guard),
+# then logged as missing from the feed. Each is reopened once after the fix.
+BRIEFING_ABSORB_FIXED_AT = '2026-11-16T20:00:00Z'
 
 
 def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[str, int]:
@@ -3862,7 +3866,8 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
                    'recovery_limit_reached': 0, 'deliberately_blocked': 0,
                    'reopened_after_evidence_fix': 0,
                    'reopened_verified_official_notices': 0,
-                    'reopened_after_final_gate_removal': 0}
+                    'reopened_after_final_gate_removal': 0,
+                    'reopened_after_briefing_absorb_fix': 0}
     changed = False
     with _REWRITE_LEDGER_LOCK:
         for identity, entry in ledger.items():
@@ -3940,6 +3945,30 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
                     entry['recovery_attempts'] = 0
                     entry['final_gate_removal_recovery'] = 1
                     diagnostics['reopened_after_final_gate_removal'] += 1
+                    changed = True
+                    continue
+            # Reopen ONCE every story lost to the briefing-absorption bug
+            # (16 Nov 2026), including those whose retries were exhausted or
+            # that were written off as merged into another story. A genuine
+            # duplicate simply merges again and is recorded again.
+            lost_reason = str(entry.get('reason') or '')
+            if (entry.get('outcome') == 'rejected'
+                    and (lost_reason.startswith('missing from feed after repeated publication attempts')
+                         or lost_reason.startswith('not in the feed after rewrite'))
+                    and entry.get('briefing_absorb_recovery') != 1
+                    and str(entry.get('last_attempt_at') or '') < BRIEFING_ABSORB_FIXED_AT
+                    and _identity_of_url(str(identity)) not in present):
+                probe = {
+                    'title': entry.get('title') or '',
+                    'source_name': entry.get('source_name') or '',
+                    'source_url': identity,
+                }
+                if not is_blocked_article(probe, blocklist):
+                    entry['outcome'] = 'failed'
+                    entry['reason'] = 'one-time retry after briefing-absorption fix'
+                    entry['recovery_attempts'] = 0
+                    entry['briefing_absorb_recovery'] = 1
+                    diagnostics['reopened_after_briefing_absorb_fix'] += 1
                     changed = True
                     continue
             if entry.get('outcome') != 'published':
