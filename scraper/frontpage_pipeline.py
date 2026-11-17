@@ -586,7 +586,9 @@ def event_is_current(article: dict[str, Any], now: datetime | None = None) -> bo
     if start is None:
         return False
     reference = now or utc_now()
-    return start >= reference - timedelta(hours=12)
+    # Multi-day events stay current until their end date.
+    end = parse_datetime(article.get("event_end_at"))
+    return max(start, end or start) >= reference - timedelta(hours=12)
 
 
 def slugify(value: str) -> str:
