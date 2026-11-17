@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T08:16:33.098993Z",
+  "updated_at": "2026-11-17T08:36:24.640120Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 160,
+  "count": 161,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1815,6 +1815,22 @@
       "recovery_attempts": 2,
       "evidence_recovery_policy": 1
     },
+    "https://www.rochdaletimes.co.uk/dozens-of-properties-left-without-power": {
+      "first_attempt_at": "2026-11-17T08:36:24.639721Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.rochdaletimes.co.uk/dozens-of-properties-left-without-power"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-17T08:36:24.639721Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Dozens of properties left without power - Rochdale Times",
+      "source_name": "Rochdale Times",
+      "category": "environment",
+      "text_fingerprint": "c927dc189d3d9eb3"
+    },
     "https://www.rochdaletimes.co.uk/fire-festival-returns-ahead-of-christmas-lights-switch-on": {
       "first_attempt_at": "2026-11-15T09:47:42.241276Z",
       "attempts": 1,
@@ -2221,15 +2237,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 7,
+      "attempts": 1,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T08:16:33.098791Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "last_attempt_at": "2026-11-17T08:36:24.639909Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
