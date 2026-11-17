@@ -3384,6 +3384,7 @@ def rewrite_candidate(candidate: Candidate, client: OpenAI | None) -> dict[str, 
         'source_names': source_names,
         'source_urls': source_urls,
         'source_count': len(source_urls),
+        'locality_evidence': source_locality_evidence(candidate),
         'context_research': context_research_status,
         'social_context_used': social_context_used,
         'social_reaction_count': public_reaction_count,
@@ -3455,6 +3456,31 @@ BOROUGH_FINISHED_LOCATION_RE = re.compile(
 )
 
 
+def source_locality_evidence(candidate: Any) -> list[str]:
+    """Borough place names the candidate's own source text locates it in.
+
+    Only names from BOROUGH_PLACE_NAMES are kept (never source wording), and
+    only when the source text itself places the story there.
+    """
+    text = normalise_ws(" ".join(
+        str(getattr(candidate, name, "") or "")
+        for name in ("source_title", "source_summary", "source_body_excerpt", "event_location")
+    ))
+    found: list[str] = []
+    for place in BOROUGH_PLACE_NAMES:
+        if re.search(rf"\b{re.escape(place)}\b", text, flags=re.IGNORECASE):
+            found.append(place.title())
+    return found[:6]
+
+
+BOROUGH_PLACE_NAMES = (
+    "rochdale", "heywood", "middleton", "littleborough", "milnrow", "newhey",
+    "wardle", "norden", "bamford", "castleton", "kirkholt", "spotland",
+    "falinge", "deeplish", "smallbridge", "firgrove", "shawclough",
+    "balderstone", "darnhill", "alkrington", "boarshaw", "smithy bridge",
+)
+
+
 def article_passes_locality(article: dict[str, Any]) -> bool:
     """Final fail-closed locality validation for finished articles.
 
@@ -3473,6 +3499,15 @@ def article_passes_locality(article: dict[str, Any]) -> bool:
             "event_location", "source_title", "source_summary",
             "source_body_excerpt",
         )
+    )
+    # Borough places the SOURCE named (recorded when the article was built).
+    # A rewrite that says "Molesworth Street" and "the Oldham Road shop" but
+    # never "Rochdale" was rejected as non-local on 17 Nov 2026 (Springhill
+    # Hospice break-ins), although the source plainly said "Molesworth
+    # Street, Rochdale". Only place names are kept, never source wording.
+    text += " " + " ".join(
+        f"in {place}" for place in (article.get("locality_evidence") or [])
+        if isinstance(place, str)
     )
 
     if source_is_denied(source_name, source_url):
@@ -3843,6 +3878,9 @@ FINAL_GATE_RETIRED_AT = '2026-10-12T00:00:00Z'
 # manual-article fold-in (story_identity.same_story had no briefing guard),
 # then logged as missing from the feed. Each is reopened once after the fix.
 BRIEFING_ABSORB_FIXED_AT = '2026-11-16T20:00:00Z'
+# Rewrites lost before this time to the post-rewrite locality check (source
+# named the town, the rewrite did not) are reopened once after the fix.
+LOCALITY_EVIDENCE_FIXED_AT = '2026-11-17T14:00:00Z'
 
 
 def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[str, int]:
@@ -3867,7 +3905,8 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
                    'reopened_after_evidence_fix': 0,
                    'reopened_verified_official_notices': 0,
                     'reopened_after_final_gate_removal': 0,
-                    'reopened_after_briefing_absorb_fix': 0}
+                    'reopened_after_briefing_absorb_fix': 0,
+                    'reopened_after_locality_fix': 0}
     changed = False
     with _REWRITE_LEDGER_LOCK:
         for identity, entry in ledger.items():
@@ -3969,6 +4008,24 @@ def reconcile_rewrite_ledger_with_feed(articles: list[dict[str, Any]]) -> dict[s
                     entry['recovery_attempts'] = 0
                     entry['briefing_absorb_recovery'] = 1
                     diagnostics['reopened_after_briefing_absorb_fix'] += 1
+                    changed = True
+                    continue
+            if (entry.get('outcome') == 'rejected'
+                    and lost_reason.startswith('not in the feed after rewrite')
+                    and entry.get('locality_evidence_recovery') != 1
+                    and str(entry.get('last_attempt_at') or '') < LOCALITY_EVIDENCE_FIXED_AT
+                    and _identity_of_url(str(identity)) not in present):
+                probe = {
+                    'title': entry.get('title') or '',
+                    'source_name': entry.get('source_name') or '',
+                    'source_url': identity,
+                }
+                if not is_blocked_article(probe, blocklist):
+                    entry['outcome'] = 'failed'
+                    entry['reason'] = 'one-time retry after locality-evidence fix'
+                    entry['recovery_attempts'] = 0
+                    entry['locality_evidence_recovery'] = 1
+                    diagnostics['reopened_after_locality_fix'] += 1
                     changed = True
                     continue
             if entry.get('outcome') != 'published':
