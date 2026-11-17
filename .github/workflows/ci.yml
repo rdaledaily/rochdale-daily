@@ -325,6 +325,7 @@ jobs:
           PYTHONPATH=scraper python scraper/test_manual_photo_survives_all_lanes.py
           PYTHONPATH=scraper python scraper/test_manual_source_links.py
           PYTHONPATH=scraper python scraper/test_newsroom_archive_recovery.py
+          PYTHONPATH=scraper python scraper/test_locality_source_evidence.py
           PYTHONPATH=scraper python scraper/test_newsroom_push_recovery.py
           PYTHONPATH=scraper python scraper/test_newsroom_unblock_oct2026.py
           PYTHONPATH=scraper python scraper/test_normalise_article_urls.py
