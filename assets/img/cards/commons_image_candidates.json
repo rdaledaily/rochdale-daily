@@ -3819,21 +3819,22 @@
     }
   },
   "__geograph_probe__": {
-    "subject": "St Andrew’s Church",
+    "subject": "Bury Road",
     "http": 200,
-    "centre": "town littleborough",
-    "radius_km": 4.0,
+    "centre": "street OL11 4AA",
+    "radius_km": 0.8,
     "content_type": "application/xml; charset=ISO-8859-1",
-    "items_in_reply": 4,
-    "items_with_image": 4,
+    "items_in_reply": 15,
+    "items_with_image": 15,
     "first_titles": [
-      "SD9215 : St Andrew's Parish Church, Dearnley",
-      "SD9215 : Parish Church of St Andrew, Dearnley",
-      "SD9215 : St Andrew's Parish Church",
-      "SD9215 : St Andrew's School, Dearnley"
+      "SD8612 : Crimble Lane",
+      "SD8612 : Hare & Hounds",
+      "SD8612 : The Sir Winston Churchill, Rochdale",
+      "SD8612 : Bury Road (B6222), Rochdale",
+      "SD8612 : Elizabeth II postbox on Bury Road, Rochdale"
     ],
-    "head": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<!-- generator=\"FeedCreator 1.7.12(BH)\" -->\n<rss version=\"2.0\" xmlns:creativeCommons=\"http://backend.userland.com/creativeCommonsRssModule\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n    <channel>\n        <title>Geograph Britain and Ireland</title>\n        <description>Images Nearby (4 in total)</description>\n        <link>https://www.geograph.org.uk/<",
-    "first_item": "<item>\n            <title>SD9215 : St Andrew's Parish Church, Dearnley</title>\n            <link>https://www.geograph.org.uk/photo/1864594</link>\n            <description><![CDATA[<a href=\"https://www.geograph.org.uk/photo/1864594\" title=\"SD9215 : St Andrew's Parish Church, Dearnley by David Dixon\"><img alt=\"SD9215 : St Andrew's Parish Church, Dearnley by David Dixon\" src=\"https://s2.geograph.org.uk/geophotos/01/86/45/1864594_5e16ce49_120x120.jpg\" width=\"90\" height=\"120\" /></a><br/>Dist:1.5km<br/>]]></description>\n            <dc:creator>David Dixon</dc:creator>\n            <pubDate>Tue, 18 May 2010 19:35:51</pubDate>\n            <guid>https://www.geograph.org.uk/photo/1864594</guid>\n            <creativeCommons:license>http://creativecommons.org/licenses/by-sa/2.0/</creativeCommons:license>\n        </item>"
+    "head": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<!-- generator=\"FeedCreator 1.7.12(BH)\" -->\n<rss version=\"2.0\" xmlns:creativeCommons=\"http://backend.userland.com/creativeCommonsRssModule\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n    <channel>\n        <title>Geograph Britain and Ireland</title>\n        <description>Images Nearby (15 in total)</description>\n        <link>https://www.geograph.org.uk/",
+    "first_item": "<item>\n            <title>SD8612 : Crimble Lane</title>\n            <link>https://www.geograph.org.uk/photo/7310293</link>\n            <description><![CDATA[<a href=\"https://www.geograph.org.uk/photo/7310293\" title=\"SD8612 : Crimble Lane by Kevin Waterhouse\"><img alt=\"SD8612 : Crimble Lane by Kevin Waterhouse\" src=\"https://s1.geograph.org.uk/geophotos/07/31/02/7310293_2bd31fe7_120x120.jpg\" width=\"120\" height=\"68\" /></a><br/>]]></description>\n            <dc:creator>Kevin Waterhouse</dc:creator>\n            <pubDate>Fri, 14 Oct 2022 10:12:04</pubDate>\n            <guid>https://www.geograph.org.uk/photo/7310293</guid>\n            <creativeCommons:license>http://creativecommons.org/licenses/by-sa/2.0/</creativeCommons:license>\n        </item>"
   },
   "__town_pool__|v1|rochdale": {
     "rows": [
@@ -10144,8 +10145,7 @@
       ],
       "https://www.geograph.org.uk/photo/1976842": [
         "heywood-residents-frustrated-by-persistent-stench-and-unhygienic-conditions",
-        "twelve-green-spaces-in-heywood-celebrate-green-flag-award-success",
-        "roadworks-on-dawson-street-in-heywood-to-begin-on-16-november-2026"
+        "twelve-green-spaces-in-heywood-celebrate-green-flag-award-success"
       ],
       "https://www.geograph.org.uk/photo/2326955": [
         "meeting-requested-to-discuss-hopwood-triangle-road-closure",
@@ -11155,12 +11155,35 @@
       ]
     }
   },
-  "dawson street|heywood": {
-    "status": "searched",
-    "subject": "Dawson Street"
-  },
-  "clover hall|rochdale": {
-    "status": "searched",
-    "subject": "Clover Hall"
+  "bury road|bamford": {
+    "status": "matched",
+    "subject": "Bury Road",
+    "geograph_tried": 5,
+    "geograph_items_in_reply": 15,
+    "source": "geograph",
+    "image_url": "assets/img/cards/9cab2fc2e54cd950-commons-photo.jpg",
+    "image_credit": "JThomas / Geograph (CC BY-SA 2.0)",
+    "image_credit_url": "https://www.geograph.org.uk/photo/5921230",
+    "image_license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "commons_title": "SD8612 : Bury Road (B6222), Rochdale",
+    "page": {
+      "title": "File:SD8612 : Bury Road (B6222), Rochdale",
+      "imageinfo": [
+        {
+          "mime": "image/jpeg",
+          "extmetadata": {
+            "LicenseShortName": {
+              "value": "CC BY-SA 2.0"
+            },
+            "ImageDescription": {
+              "value": "SD8612 : Bury Road (B6222), Rochdale"
+            },
+            "Categories": {
+              "value": "Bamford|Rochdale"
+            }
+          }
+        }
+      ]
+    }
   }
 }
