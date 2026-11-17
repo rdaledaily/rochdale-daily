@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T21:14:04.465464Z",
+  "updated_at": "2026-11-17T21:39:28.914961Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 171,
@@ -136,13 +136,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T21:14:04.465125Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-17T21:36:54.029804Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Rescue do not appear in the source. Name only people, places",
       "title": "Manchester Evening News. . 🚨 Emergency services are responding to reports of a large explosion in Rochdale, with a number of police, fire en",
       "source_name": "Facebook",
       "category": "traffic",
-      "text_fingerprint": "9f9ef7746a45ed09"
+      "text_fingerprint": "9f9ef7746a45ed09",
+      "recovery_attempts": 1
     },
     "https://rochdaleafc.co.uk/2026-agm-details": {
       "first_attempt_at": "2026-11-16T23:46:40.860723Z",
@@ -1502,13 +1503,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T21:14:04.465293Z",
+      "last_attempt_at": "2026-11-17T21:39:28.914741Z",
       "outcome": "published",
       "reason": "",
       "title": "'Massive hot tub explosion' rocks UK town with blast heard five miles away",
       "source_name": "The Mirror",
-      "category": "news",
-      "text_fingerprint": "0d18c112ee2f860f"
+      "category": "crime",
+      "text_fingerprint": "0d18c112ee2f860f",
+      "recovery_attempts": 1
     },
     "https://www.netweather.tv/weather-forecasts/uk/10-day/24122~Rochdale?__cf_chl_rt_tk=8DeU.tLj3CsArXRwwdiUWEhtnNYdNjSiND2.E8reYVE-1794432390-1.0.1.1-fb8H7xETczuJAMNFs6Lqsp7wLtxrXWXlo5a8b4HeTvM": {
       "first_attempt_at": "2026-11-11T21:30:31.558458Z",
