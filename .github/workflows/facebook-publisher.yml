@@ -10,9 +10,11 @@ on:
         required: false
         default: "0"
   schedule:
-    # Checked hourly; the script posts only in the 07, 12, 15, 17, 20 and 22 UK-time
-    # slots (plus genuine breaking news between 07:00 and 22:59), at most seven
-    # posts a day. Each post is a photo with the link as the Page's first comment.
+    # Hourly re-seed only: the fast lane starts this workflow after every run
+    # (about every 17-20 minutes). Since 17 Nov 2026 each story posts on the
+    # first run after it goes live (as-published), 07:00-22:59 UK time, at
+    # least 20 minutes apart. Each post is a photo with the link as the Page's
+    # first comment.
     - cron: "27 * * * *"
   push:
     branches: [main]
@@ -58,7 +60,7 @@ jobs:
             printf '{\n  "posted": {}\n}\n' > /tmp/facebook_posted.json
           fi
 
-      - name: Publish the strongest fresh story in this slot
+      - name: Publish the newest unposted story
         env:
           FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
           # Page Graph API ID is resolved from the authenticated Page token.
@@ -66,9 +68,12 @@ jobs:
           FACEBOOK_STATE_PATH: /tmp/facebook_posted.json
           FACEBOOK_RESULT_PATH: /tmp/facebook_last_result.json
           FACEBOOK_MAX_ARTICLE_AGE_HOURS: "36"
-          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "60"
-          FACEBOOK_SLOT_HOURS: "7,12,15,17,20,22"
-          FACEBOOK_MAX_POSTS_PER_DAY: "7"
+          # Editor, 17 Nov 2026: other papers were beating us by ~12 hours on
+          # social. Six fixed slots left 29 of 76 stories unposted (7-17 Nov).
+          FACEBOOK_SCHEDULE: as-published
+          FACEBOOK_POSTING_HOURS: "7-22"
+          FACEBOOK_MIN_POST_INTERVAL_MINUTES: "20"
+          FACEBOOK_MAX_POSTS_PER_DAY: "30"
         run: python scraper/post_facebook_article.py
 
       - name: Save successful Facebook post to state branch

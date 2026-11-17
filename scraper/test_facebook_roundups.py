@@ -222,5 +222,100 @@ def run() -> None:
     print("Facebook photo-post and link-comment tests passed.")
 
 
+def as_published() -> None:
+    """Editor, 17 Nov 2026: post each story as it goes live, not in six slots."""
+    with TemporaryDirectory() as temp:
+        base = Path(temp)
+        article_file = base / "articles.json"
+        state_file = base / "facebook_state.json"
+        result_file = base / "facebook_result.json"
+        article_file.write_text(json.dumps([
+            story("older", "2026-10-14T08:00:00Z", category="crime"),
+            story("newer", "2026-10-14T13:05:00Z", category="community"),
+        ]), encoding="utf-8")
+        config = {
+            "FACEBOOK_PAGE_ACCESS_TOKEN": "mock-token",
+            "FACEBOOK_STATE_PATH": str(state_file),
+            "FACEBOOK_RESULT_PATH": str(result_file),
+            "FACEBOOK_SCHEDULE": "as-published",
+            "FACEBOOK_POSTING_HOURS": "7-22",
+            "FACEBOOK_MIN_POST_INTERVAL_MINUTES": "20",
+            "FACEBOOK_MAX_POSTS_PER_DAY": "3",
+            "FACEBOOK_SLOT_HOURS": "7,12",   # ignored in this mode
+        }
+        with patch.dict(os.environ, config), \
+             patch.object(fb, "ARTICLES_PATH", article_file), \
+             patch.object(fb, "datetime", FixedDateTime), \
+             patch.object(fb, "resolve_page_id", return_value="1234"), \
+             patch.object(fb, "graph_photo_post", return_value="1234_1") as photo, \
+             patch.object(fb, "graph_comment", return_value="1_1"), \
+             patch.object(fb, "graph_edit_caption"):
+            # 14:17 BST is not a slot hour: as-published still posts, newest first.
+            FixedDateTime.current = RealDatetime(2026, 10, 14, 13, 17, tzinfo=UTC)
+            assert fb.main() == 0
+            result = json.loads(result_file.read_text())
+            assert result["status"] == "posted" and result["article_keys"] == ["newer"], result
+            assert result["slot"].endswith("-live"), result
+            state = json.loads(state_file.read_text())
+            assert state["posted"]["newer"]["lane"] == "as-published"
+            assert not state.get("slots"), "as-published posts do not use up slots"
+
+            # Ten minutes later: the 20-minute gap holds the next one.
+            FixedDateTime.current = RealDatetime(2026, 10, 14, 13, 27, tzinfo=UTC)
+            assert fb.main() == 0
+            assert photo.call_count == 1
+            assert "cooldown" in json.loads(result_file.read_text())["reason"]
+
+            # Twenty minutes after the first post the older story goes.
+            FixedDateTime.current = RealDatetime(2026, 10, 14, 13, 38, tzinfo=UTC)
+            photo.return_value = "1234_2"
+            assert fb.main() == 0
+            assert photo.call_count == 2
+            assert json.loads(result_file.read_text())["article_keys"] == ["older"]
+
+            # A story going live overnight waits for 07:00 UK time.
+            article_file.write_text(json.dumps([story("night", "2026-10-15T00:30:00Z")]))
+            FixedDateTime.current = RealDatetime(2026, 10, 15, 0, 47, tzinfo=UTC)    # 01:47 BST
+            assert fb.main() == 0
+            assert photo.call_count == 2
+            assert "Outside Facebook posting hours" in json.loads(result_file.read_text())["reason"]
+            FixedDateTime.current = RealDatetime(2026, 10, 15, 6, 7, tzinfo=UTC)     # 07:07 BST
+            photo.return_value = "1234_3"
+            assert fb.main() == 0
+            assert photo.call_count == 3
+
+            # The daily ceiling still applies (3 here; posts on the 14th do not count on the 15th).
+            article_file.write_text(json.dumps([
+                story("m1", "2026-10-15T06:30:00Z"), story("m2", "2026-10-15T06:40:00Z"),
+                story("m3", "2026-10-15T06:50:00Z"),
+            ]))
+            for minute, post_id in ((30, "1234_4"), (55, "1234_5")):
+                FixedDateTime.current = RealDatetime(2026, 10, 15, 6, minute, tzinfo=UTC)
+                photo.return_value = post_id
+                assert fb.main() == 0
+            assert photo.call_count == 5
+            FixedDateTime.current = RealDatetime(2026, 10, 15, 7, 20, tzinfo=UTC)
+            assert fb.main() == 0
+            assert photo.call_count == 5
+            assert "Daily Facebook limit reached (3 posts)" in json.loads(result_file.read_text())["reason"]
+
+    # Breaking news from the last three hours jumps the queue; older breaking does not.
+    now = RealDatetime(2026, 10, 14, 13, 0, tzinfo=UTC)
+    rows = [
+        story("plain-new", "2026-10-14T12:50:00Z"),
+        story("breaking", "2026-10-14T11:00:00Z", breaking_news=True),
+        story("stale-breaking", "2026-10-14T08:00:00Z", breaking_news=True),
+    ]
+    assert [r["id"] for r in fb.as_published_order(rows, now)] == ["breaking", "plain-new", "stale-breaking"]
+    with patch.dict(os.environ, {"FACEBOOK_SCHEDULE": "slots"}):
+        assert fb.schedule_mode() == "slots"
+    with patch.dict(os.environ, {"FACEBOOK_SCHEDULE": "as-published"}):
+        assert fb.schedule_mode() == "as-published"
+    with patch.dict(os.environ, {"FACEBOOK_POSTING_HOURS": "nonsense"}):
+        assert fb.posting_hours() == (7, 22)
+    print("Facebook as-published tests passed.")
+
+
 if __name__ == "__main__":
     run()
+    as_published()
