@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T12:20:08.723366Z",
+  "updated_at": "2026-11-17T12:40:23.516612Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 164,
+  "count": 165,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1035,6 +1035,22 @@
       "category": "crime",
       "text_fingerprint": "09cd6f86fd8aaef5",
       "recovery_attempts": 1
+    },
+    "https://www.hopwood.ac.uk/college-tackling-neet-challenge-head-on": {
+      "first_attempt_at": "2026-11-17T12:37:58.253980Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.hopwood.ac.uk/college-tackling-neet-challenge-head-on"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-17T12:37:58.253980Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are committed",
+      "title": "College tackling NEET challenge head on - Hopwood Hall College",
+      "source_name": "Hopwood Hall College",
+      "category": "education",
+      "text_fingerprint": "74b190772d55e782"
     },
     "https://www.hornetsrugbyleague.co.uk/article/1928/attend-our-2027-kit-launch-event": {
       "first_attempt_at": "2026-11-11T06:37:51.787207Z",
@@ -2303,15 +2319,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T12:20:08.723097Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-17T12:40:23.516400Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
