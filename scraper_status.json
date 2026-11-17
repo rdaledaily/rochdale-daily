@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-17T05:01:11.206272Z",
+  "last_run_at": "2026-11-17T05:23:17.572880Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,18 +54,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 90,
+  "raw_candidates_before_job_filter": 87,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 90,
+  "raw_candidates": 87,
   "candidate_clusters": 32,
   "google_news_resolution": {
-    "wrappers": 18,
+    "wrappers": 16,
     "resolved": 12,
-    "text_recovered": 5,
+    "text_recovered": 6,
     "reattributed": 0,
     "images_found": 10
   },
-  "duplicates_merged": 58,
+  "duplicates_merged": 55,
   "attempted_rewrites": 1,
   "draft_rewrites_created": 1,
   "drafted_articles": [
@@ -93,8 +93,8 @@
     "by_outcome": {
       "editorial_twin": 14,
       "failed": 16,
-      "published": 84,
-      "rejected": 49
+      "published": 83,
+      "rejected": 50
     },
     "held_back_this_run": 25,
     "held_already_published": 12,
@@ -222,18 +222,20 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 189 body words using only facts already present in the sources; the draft currently has 141.": 1
+    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 1
   },
   "local_impact": {
-    "shown": 0,
+    "shown": 1,
     "outcomes": {
-      "writer offered no points": 1
+      "shown": 1
     },
-    "points": {}
+    "points": {
+      "corrected to the story's own sentence": 1
+    }
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 67,
+    "rss_and_google_news": 64,
     "website_discovery": 16,
     "aggregator_discovery": 0,
     "live_service_pages": 6,
@@ -366,26 +368,25 @@
     ]
   },
   "source_counts": {
-    "Rochdale Times": 26,
-    "Roch Valley Radio": 11,
-    "Manchester Evening News": 8,
-    "Rochdale AFC": 8,
-    "Rochdale Borough Council": 7,
+    "Rochdale Times": 30,
+    "Manchester Evening News": 9,
+    "Roch Valley Radio": 7,
+    "Rochdale AFC": 7,
     "Bee Network live travel alerts": 6,
+    "Rochdale Borough Council": 5,
     "Roch Valley Radio Local News": 5,
     "BBC": 3,
     "UKNIP": 2,
-    "The York Press": 2,
     "About Manchester": 2,
+    "InYourArea": 2,
     "Your Trust Rochdale": 1,
     "Rochdale Borough Council RSS": 1,
     "Place North West": 1,
-    "InYourArea": 1,
     "Rochdale Borough Council News": 1,
     "BBC Manchester": 1,
     "Rochdale Development Agency": 1,
-    "Your Trust Rochdale Articles": 1,
     "Rochdale Boroughwide Housing": 1,
+    "Your Trust Rochdale Articles": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
@@ -393,13 +394,13 @@
   },
   "published_by_category": {
     "business": 72,
-    "community": 94,
+    "community": 93,
     "crime": 40,
     "education": 29,
-    "environment": 49,
+    "environment": 48,
     "events": 34,
     "health": 16,
-    "news": 90,
+    "news": 91,
     "politics": 21,
     "sport": 54,
     "traffic": 47,
@@ -1025,12 +1026,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "uknip.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "uknip.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1066,7 +1063,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-17T05:02:47.074549Z",
+  "frontpage_generated_at": "2026-11-17T05:24:47.469508Z",
   "frontpage_article_count": 15,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1174,7 +1171,7 @@
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 13,
-  "event_dates_corrected_from_ledger": 5,
+  "event_dates_corrected_from_ledger": 4,
   "duplicate_articles_after_postprocessing": 623,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
