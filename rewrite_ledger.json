@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T19:19:30.013874Z",
+  "updated_at": "2026-11-17T19:42:10.785516Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 167,
+  "count": 165,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -212,23 +212,6 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "2af48f826d8220f8"
-    },
-    "https://rochdaleafc.co.uk/highlights-fleetwood-town-1-2-dale-aet": {
-      "first_attempt_at": "2026-11-09T19:22:30.507507Z",
-      "attempts": 1,
-      "urls": [
-        "https://rochdaleafc.co.uk/a-victory-we-needed-hannant",
-        "https://rochdaleafc.co.uk/highlights-fleetwood-town-1-2-dale-aet"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T19:22:30.507507Z",
-      "outcome": "published",
-      "reason": "",
-      "title": "Highlights | Fleetwood Town 1-2 Dale (AET) - Rochdale AFC",
-      "source_name": "Rochdale AFC",
-      "category": "sport",
-      "text_fingerprint": "3f2401577dd9c5e1"
     },
     "https://rochdaleafc.co.uk/ive-got-nothing-but-love-for-rochdale-allen": {
       "first_attempt_at": "2026-11-13T21:10:39.882642Z",
@@ -2134,13 +2117,14 @@
       "first_attempt_at": "2026-11-17T19:17:03.029088Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMijwFBVV95cUxQNld5T2FCeGo0VnBySk1LcGpqNkZDYjV2ZWx4UzlPSi1wdUpTbGFYN0RPQ2ZUNWMwZnZRMDVHZGdLWXM1MU9sZ1ZLYVJnSzd3RnIxaTl5MUx3SExhdVlsWFlSMjJuaUEtYWVrcUhTeFBpOHdMZjRfY0lKVEFvVDdMd3g3aTBqVWNiWndnV2hsMA?oc=5",
         "https://www.rochdaletimes.co.uk/teenager-tackles-adversity-to-keep-rugby-dreams-alive"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T19:17:03.029088Z",
+      "last_attempt_at": "2026-11-17T19:42:10.785340Z",
       "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: Rugby has changed",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Teenager tackles adversity to keep rugby dreams alive - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "news",
@@ -2318,24 +2302,6 @@
       "text_fingerprint": "67e1f1768c5ea948",
       "recovery_attempts": 1,
       "locality_evidence_recovery": 1
-    },
-    "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-as-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war": {
-      "first_attempt_at": "2026-11-09T18:48:38.125276Z",
-      "attempts": 1,
-      "urls": [
-        "https://news.google.com/rss/articles/CBMi4wFBVV95cUxPclVvV1BwQ3BxSmxNWFBrVHlWRUp1bG5vb3pQejVJdG1LRHR6WGlhc2JQa3RpMm1LNlh0YWFBOXRabTF1VVhkSloyRnhBMzBmLV96U25qaF9xcUVENXdFNGl1Y2JPYWtWVDliTVdrbXMzRFVFQTd0ZmlndWo0NzI5T28taHdWdmtNNndXNzFQYTdMYld3cG9KZXNmX09rNV9LNU10eC1Jd190dU91WEM4QnBBcDkyam13Yks4bE03OWlwRDI2Z3lBZzM4UlJzbGxLM1gtcHJnMlZIaV9xN09VejRHYw?oc=5",
-        "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-as-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T19:22:30.507633Z",
-      "outcome": "failed",
-      "reason": "recorded published but missing from feed; retry with current checks",
-      "title": "Lest We Forget as Rochdale battalion's valiant sacrifices during the First World War",
-      "source_name": "Roch Valley Radio Local News",
-      "category": "news",
-      "text_fingerprint": "50c8b2d3cc97ee45",
-      "recovery_attempts": 2
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1440/man-who-died-in-flat-fire-named": {
       "first_attempt_at": "2026-11-15T14:20:11.653556Z",

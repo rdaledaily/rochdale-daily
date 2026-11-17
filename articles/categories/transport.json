@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-17T19:26:06.462951Z",
+  "generated_at": "2026-11-17T19:43:29.183510Z",
   "category": "transport",
   "count": 11,
   "articles": [
@@ -76,15 +76,13 @@
       "image_match_title": "rochdale_riverside.jpg",
       "image_match_score": -1,
       "core_fact_check": {
-        "status": "passed",
+        "status": "unchecked",
         "issues": [],
-        "reason": "",
-        "source_sha": {
-          "https://www.rochdaletimes.co.uk/new-fire-station-moves-a-step-closer/": "c36ee66f7cf355d0",
-          "https://news.google.com/rss/articles/CBMieEFVX3lxTE4xd3htMVViSW04cVprbGwyVmZTTXVGQWxYcnBqMm9CR0sxa0FGNldMYXlYeXk4Q0tKWk1lUlluTUN1V1hVbHh3N3JuQkNmc0xURGk2UVgwQkp0UGEzb1ZfSF96RUZJbWJPVG93TmtLUTdGdm5qZXBYXw?oc=5": "c36ee66f7cf355d0"
-        },
-        "checked_at": "2026-11-17T19:02:27.457404Z",
-        "attempts": 38
+        "reason": "https://www.rochdaletimes.co.uk/new-fire-station-moves-a-step-closer/: not captured; https://news.google.com/rss/articles/CBMieEFVX3lxTE4xd3htMVViSW04cVprbGwyVmZTTXVGQWxYcnBqMm9CR0sxa0FGNldMYXlYeXk4Q0tKWk1lUlluTUN1V1hVbHh3N3JuQkNmc0xURGk2UVgwQkp0UGEzb1ZfSF96RUZJbWJPVG93TmtLUTdGdm5qZXBYXw?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
+        "source_sha": {},
+        "source_changed_at": "2026-11-17T19:42:49.834450Z",
+        "checked_at": "2026-11-17T19:42:49.834450Z",
+        "attempts": 39
       },
       "ingested_at": "2026-11-16T19:07:59Z",
       "first_published_at": "2026-11-16T12:36:40Z",
@@ -208,7 +206,7 @@
       "first_published_at": "2026-11-15T19:26:47Z",
       "last_updated_at": "2026-11-17T15:27:35Z",
       "is_ongoing": true,
-      "ongoing_label": "ONGOING",
+      "ongoing_label": "LIVE",
       "update_count": 3,
       "live_story": true,
       "live_label": "LIVE",
@@ -234,13 +232,13 @@
         "issues": [],
         "reason": "https://www.lancashiretelegraph.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault/: capture is not the story; https://www.theboltonnews.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault/: capture is not the story",
         "source_sha": {
-          "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-05503a1a42fec0ea92": "c1e9050d9394f96f",
+          "https://tfgm.com/travel-updates/travel-alerts?ContensisTextOnly=true#live-05503a1a42fec0ea92": "6def7627ab2da986",
           "https://www.lancashiretelegraph.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault/": "798f81a60c37213a",
           "https://www.theboltonnews.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault/": "070b068f8557dc7b"
         },
-        "source_changed_at": "2026-11-17T19:02:27.457404Z",
-        "checked_at": "2026-11-17T19:02:27.457404Z",
-        "attempts": 6
+        "source_changed_at": "2026-11-17T19:42:49.834450Z",
+        "checked_at": "2026-11-17T19:42:49.834450Z",
+        "attempts": 7
       },
       "ingested_at": "2026-11-17T15:30:59Z",
       "summary": "Train services between Blackburn and Rochdale are currently disrupted due to a signalling fault, causing delays and cancellations for passengers this morning. Northern has warned that the signalling issue is under investigation and may lead to further cancellations and delays. The disruption is particularly affecting m",
@@ -497,7 +495,7 @@
       "published_at": "2026-10-29T06:23:00Z",
       "first_published_at": "2026-10-29T06:23:00Z",
       "last_updated_at": "2026-10-29T06:23:00Z",
-      "scraped_at": "2026-11-17T19:26:06Z",
+      "scraped_at": "2026-11-17T19:43:29Z",
       "source_name": "Greater Manchester Police",
       "source_url": "https://www.gmp.police.uk/news/greater-manchester/news/news/2026/october/new-transport-policing-and-crime-command-launched-to-keep-greater-manchester-road-users-and-bee-network-passengers-safe/",
       "source_names": [
@@ -522,6 +520,7 @@
       "image_backfill_method": "manual-editorial-photo",
       "image_alt": "Police file photo. Not a photograph of this event.",
       "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
+      "source_image_reuse_status": "cards-only",
       "wards": [],
       "ward_verification": {
         "wards": [],
@@ -532,8 +531,7 @@
         "tram-services-suspended-between-shaw-and-rochdale-due-to-police-incident",
         "rochdale-10-6-million-roads-maintenance-spending-2026-27",
         "trams-cancelled-between-oldham-and-rochdale-for-two-weeks-due-to-major-works"
-      ],
-      "source_image_reuse_status": "cards-only"
+      ]
     },
     {
       "id": "caae51c1bba2171ff1",
@@ -656,7 +654,7 @@
       "published_at": "2026-10-23T17:51:20Z",
       "first_published_at": "2026-10-23T17:51:20Z",
       "last_updated_at": "2026-10-23T17:51:20Z",
-      "scraped_at": "2026-11-17T19:26:06Z",
+      "scraped_at": "2026-11-17T19:43:29Z",
       "source_name": "Rochdale Borough Council",
       "source_url": "https://www.rochdale.gov.uk/downloads/file/2902/highways-maintenance-transparency-report-part-a",
       "source_names": [
@@ -1056,7 +1054,7 @@
       "published_at": "2026-08-11T15:06:00Z",
       "first_published_at": "2026-08-11T15:06:00Z",
       "last_updated_at": "2026-08-11T15:06:00Z",
-      "scraped_at": "2026-11-17T19:26:06Z",
+      "scraped_at": "2026-11-17T19:43:29Z",
       "source_name": "National Rail",
       "source_url": "https://www.nationalrail.co.uk/engineering-works/mcv-10-aug-20260810/",
       "source_names": [
