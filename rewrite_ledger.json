@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T00:57:41.431241Z",
+  "updated_at": "2026-11-17T01:12:52.431631Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 165,
+  "count": 164,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -135,14 +135,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T00:57:41.430842Z",
+      "last_attempt_at": "2026-11-17T01:12:52.431223Z",
       "outcome": "published",
       "reason": "",
       "title": "2026 AGM Details - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "e48a1f16d58f92d5",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "evidence_recovery_policy": 1
     },
     "https://rochdaleafc.co.uk/behind-the-sign-inside-training-jamie-allen-signs": {
@@ -321,8 +321,8 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-17T00:57:41.430956Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "rejected",
+      "reason": "missing from feed after repeated publication attempts; review required",
       "title": "Dale Exit Womens FA Cup - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
@@ -1087,18 +1087,18 @@
     },
     "https://www.inyourarea.co.uk/news/inside-the-free-illuminated-wonderland-transforming-historic-gardens-in-rochdale": {
       "first_attempt_at": "2026-11-16T23:44:00.613286Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.inyourarea.co.uk/news/inside-the-free-illuminated-wonderland-transforming-historic-gardens-in-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T00:55:15.775630Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 1 December, 3 December are neither stated nor implied by the",
+      "last_attempt_at": "2026-11-17T01:12:52.431485Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Inside the free illuminated wonderland transforming historic gardens in Rochdale - InYourArea",
       "source_name": "InYourArea",
-      "category": "news",
+      "category": "community",
       "text_fingerprint": "f459fccadb0a71b9",
       "recovery_attempts": 1
     },
@@ -1203,26 +1203,6 @@
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "49ed69aead848b30"
-    },
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343.amp": {
-      "first_attempt_at": "2026-11-08T19:08:01.970577Z",
-      "attempts": 1,
-      "urls": [
-        "https://www.bbc.com/news/articles/crz65qelxw52o",
-        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343",
-        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/air-ambulance-called-firefighters-tackle-34879343.amp"
-      ],
-      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
-      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-09T00:50:17.132163Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
-      "title": "Air ambulance called as firefighters tackle blaze at flat in Middleton - Manchester Evening News",
-      "source_name": "Manchester Evening News",
-      "category": "traffic",
-      "text_fingerprint": "de4d107d98428f6c",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/jailed-trusted-dealer-who-ran-34885798": {
       "first_attempt_at": "2026-11-09T15:38:31.713519Z",
@@ -2274,13 +2254,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 4,
+      "attempts": 5,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T00:57:41.431027Z",
+      "last_attempt_at": "2026-11-17T01:12:52.431338Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
