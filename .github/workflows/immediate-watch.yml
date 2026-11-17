@@ -14,6 +14,14 @@ name: Immediate-news monitor
 
 on:
   workflow_dispatch:
+  # A change to the monitor starts it at once, so new code is live without
+  # waiting for the cron (which GitHub can take an hour to register).
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/immediate-watch.yml
+      - scraper/immediate_watch.py
+      - scraper/immediate_news.py
   schedule:
     - cron: "7,27,47 * * * *"
 
