@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T13:19:06.672696Z",
+  "updated_at": "2026-11-17T13:37:17.265435Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 166,
@@ -2325,14 +2325,14 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T13:19:06.672465Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-17T13:37:17.265258Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
       "text_fingerprint": "67e1f1768c5ea948",
-      "recovery_attempts": 0,
+      "recovery_attempts": 1,
       "locality_evidence_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1267/lest-we-forget-as-rochdale-battalion-s-valiant-sacrifices-during-the-first-world-war": {
@@ -2979,19 +2979,19 @@
     },
     "https://www.yourtrustrochdale.co.uk/uncategorised/rochdale-borough-active-awards-2026-celebrate-our-community-champions": {
       "first_attempt_at": "2026-11-17T12:56:49.730601Z",
-      "attempts": 2,
+      "attempts": 1,
       "urls": [
         "https://www.yourtrustrochdale.co.uk/uncategorised/rochdale-borough-active-awards-2026-celebrate-our-community-champions"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T13:16:15.391092Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: These awards reco",
+      "last_attempt_at": "2026-11-17T13:37:17.265079Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Rochdale Borough Active Awards 2026 Celebrate Our Community Champions",
       "source_name": "Your Trust Rochdale",
       "category": "community",
-      "text_fingerprint": "f320ccbee4ea7a14"
+      "text_fingerprint": "6b1a42795dbe9a62"
     }
   }
 }
