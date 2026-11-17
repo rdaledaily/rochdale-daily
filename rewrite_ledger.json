@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T10:35:18.095976Z",
+  "updated_at": "2026-11-17T10:58:09.355388Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 162,
+  "count": 165,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -15,14 +15,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-14T02:11:53.243136Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Fire festival returns to Rochdale with free entry and Christmas lights switch-on - About Manchester",
       "source_name": "About Manchester",
       "category": "events",
       "text_fingerprint": "ef9e1845be2e5488",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://aboutmanchester.co.uk/sale-of-landmark-middleton-town-centre-building-completes": {
       "first_attempt_at": "2026-11-09T23:42:53.831979Z",
@@ -194,6 +195,22 @@
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "283cdef4d710eb94"
+    },
+    "https://rochdaleafc.co.uk/fill-the-family-stand-for-toy-appeal": {
+      "first_attempt_at": "2026-11-17T10:55:57.949355Z",
+      "attempts": 1,
+      "urls": [
+        "https://rochdaleafc.co.uk/fill-the-family-stand-for-toy-appeal"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-17T10:55:57.949355Z",
+      "outcome": "rejected",
+      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Crown, Oil, Arena do not appear in the source. Name only peop",
+      "title": "Fill The Family Stand For Toy Appeal",
+      "source_name": "Rochdale AFC",
+      "category": "sport",
+      "text_fingerprint": "2af48f826d8220f8"
     },
     "https://rochdaleafc.co.uk/highlights-fleetwood-town-1-2-dale-aet": {
       "first_attempt_at": "2026-11-09T19:22:30.507507Z",
@@ -646,14 +663,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T09:50:53.815059Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Drug dealer caught with £1,000 cash rose through ranks to run Rochdale ‘Adam’ line - Asian Image",
       "source_name": "Asian Image",
       "category": "crime",
       "text_fingerprint": "8e087e204cdc3975",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.bbc.co.uk/news/articles/c8ly0qpwee04o": {
       "first_attempt_at": "2026-11-09T06:14:54.675806Z",
@@ -1155,6 +1173,23 @@
       "text_fingerprint": "03246ef1f9dcc3a0",
       "recovery_attempts": 2
     },
+    "https://www.lancashiretelegraph.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault": {
+      "first_attempt_at": "2026-11-17T10:58:09.355315Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.lancashiretelegraph.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault",
+        "https://www.theboltonnews.co.uk/news/26735293.blackburn-rochdale-trains-disrupted-signal-fault"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-17T10:58:09.355315Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "Rail chaos as signalling fault disrupts trains between Blackburn and Rochdale - Lancashire Telegraph",
+      "source_name": "Lancashire Telegraph",
+      "category": "transport",
+      "text_fingerprint": "690cee7b7a08080f"
+    },
     "https://www.manchestereveningnews.co.uk/all-about/rochdale-canal/?pageNumber=21": {
       "first_attempt_at": "2026-11-13T21:10:39.517098Z",
       "attempts": 3,
@@ -1221,14 +1256,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T21:06:43.165167Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Jailed, the 'trusted' dealer who ran the notorious 'Adam' line",
       "source_name": "Manchester Evening News",
       "category": "crime",
       "text_fingerprint": "f0420e91cf4747d2",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-67-who-died-middleton-34890616": {
       "first_attempt_at": "2026-11-10T16:00:32.540949Z",
@@ -1241,14 +1277,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T21:06:43.164929Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Man, 67, who died in flat fire named as friends pay tribute",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "5353b103e380c358",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/man-pleads-guilty-murder-woman-34918533": {
       "first_attempt_at": "2026-11-16T13:39:31.699730Z",
@@ -1351,14 +1388,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-13T13:42:41.230355Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Suspect named after 'police officer attacked during vehicle stop' in Middleton - Manchester Evening News",
       "source_name": "Manchester Evening News",
       "category": "traffic",
       "text_fingerprint": "0772fa2e84663167",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/t-34884746": {
       "first_attempt_at": "2026-11-09T13:42:26.147342Z",
@@ -1426,6 +1464,23 @@
       "category": "environment",
       "text_fingerprint": "0bd98d55d98a8af4"
     },
+    "https://www.miltonkeynes.co.uk/sport/football/mk-dons/ex-mk-dons-midfielder-in-court-after-york-city-rochdale-pitch-invasion-9355596?__cf_chl_rt_tk=Gp86EDMgQJKiTycSm29X3_6mjtT02Bo9sZSI9vAmmIw-1794912919-1.0.1.1-3ooB5egYRxTWIxczyvIESPfnw8.U3N5VYZpZBnv8XfA": {
+      "first_attempt_at": "2026-11-17T10:55:57.079854Z",
+      "attempts": 1,
+      "urls": [
+        "https://www.miltonkeynes.co.uk/sport/football/mk-dons/ex-mk-dons-midfielder-in-court-after-york-city-rochdale-pitch-invasion-9355596",
+        "https://www.miltonkeynes.co.uk/sport/football/mk-dons/ex-mk-dons-midfielder-in-court-after-york-city-rochdale-pitch-invasion-9355596?__cf_chl_rt_tk=Gp86EDMgQJKiTycSm29X3_6mjtT02Bo9sZSI9vAmmIw-1794912919-1.0.1.1-3ooB5egYRxTWIxczyvIESPfnw8.U3N5VYZpZBnv8XfA"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-17T10:55:57.079854Z",
+      "outcome": "rejected",
+      "reason": "editorial gate: REJECTED_NON_LOCAL",
+      "title": "Ex-MK Dons midfielder in court after York City-Rochdale pitch invasion - Milton Keynes Citizen",
+      "source_name": "Milton Keynes Citizen",
+      "category": "traffic",
+      "text_fingerprint": "4da2102f9f5e022e"
+    },
     "https://www.netweather.tv/weather-forecasts/uk/10-day/24122~Rochdale?__cf_chl_rt_tk=8DeU.tLj3CsArXRwwdiUWEhtnNYdNjSiND2.E8reYVE-1794432390-1.0.1.1-fb8H7xETczuJAMNFs6Lqsp7wLtxrXWXlo5a8b4HeTvM": {
       "first_attempt_at": "2026-11-11T21:30:31.558458Z",
       "attempts": 1,
@@ -1469,14 +1524,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T18:19:15.130600Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "National tenant satisfaction figures rank RBH among the top 25% of landlords",
       "source_name": "Rochdale Boroughwide Housing",
       "category": "community",
       "text_fingerprint": "0d9479f5ae4b8756",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rbh.org.uk/news/rbh-news/rbh-sets-out-future-plans-for-college-bank": {
       "first_attempt_at": "2026-11-16T14:18:54.846084Z",
@@ -1555,15 +1611,16 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-11T02:49:01.239947Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Smithy Bridge Road, roadworks in Littleborough on 15 November 2026 - Rochdale Borough Council",
       "source_name": "Rochdale Borough Council",
       "category": "environment",
       "text_fingerprint": "0a1f8ba93701e7cd",
-      "recovery_attempts": 2,
+      "recovery_attempts": 0,
       "structured_official_notice_recovery": 1,
-      "evidence_recovery_policy": 1
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdale.gov.uk/directory-record/2656/shawclough-road-roadworks-in-rochdale-from-10-november-2026": {
       "first_attempt_at": "2026-11-10T22:13:18.456329Z",
@@ -1806,14 +1863,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-11T14:57:17.057109Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "16 men charged with disorder ahead of Manchester United match - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "3ebd3c2bab8eefc4",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/campaigners-hit-out-at-absurd-college-bank-demolition-decision": {
       "first_attempt_at": "2026-11-17T10:12:35.358818Z",
@@ -1859,14 +1917,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-15T12:01:28.043912Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Fire festival returns ahead of Christmas lights switch-on - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "events",
       "text_fingerprint": "9fce9b6b4f3f8810",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/getting-ready-to-light-up-the-town": {
       "first_attempt_at": "2026-11-11T21:30:31.558296Z",
@@ -1897,14 +1956,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-13T02:13:21.642860Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Middleton man charged with aggravated burglaries and attempted murder - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "83dac437765eda87",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/new-fire-station-moves-a-step-closer": {
       "first_attempt_at": "2026-11-16T19:06:55.184604Z",
@@ -1934,14 +1994,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-14T14:25:28.824214Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "New lease of life for vacant town centre offices - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "environment",
       "text_fingerprint": "5ed7f7cea062c5ce",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/organised-crime-gang-manager-jailed-for-supplying-class-a-drugs": {
       "first_attempt_at": "2026-11-11T15:15:29.480989Z",
@@ -1952,15 +2013,16 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-11T17:10:48.190927Z",
+      "last_attempt_at": "2026-11-17T10:56:00.154156Z",
       "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "reason": "quality gate after 4 repairs: Source fidelity: the figure(s) 30 do not appear in the source. Use only figures the source",
       "title": "Organised crime gang ‘manager’ jailed for supplying class-A drugs - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "59bf452b7b17aff3",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/partnership-wins-award-for-manufacturing-innovation": {
       "first_attempt_at": "2026-11-12T19:07:46.556636Z",
@@ -1988,15 +2050,16 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T13:01:52.337362Z",
+      "last_attempt_at": "2026-11-17T10:58:09.355098Z",
       "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Police probe ‘horrific spate of attacks against hospice’ - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "2478a6b107d1aacb",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/primary-school-admissions-reminder-for-parents-ahead-of-the-new-year": {
       "first_attempt_at": "2026-11-14T18:27:13.115780Z",
@@ -2007,12 +2070,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-14T19:04:51.374207Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Primary school admissions reminder for parents ahead of the new year - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "education",
-      "text_fingerprint": "509a5b1695fd312c"
+      "text_fingerprint": "509a5b1695fd312c",
+      "recovery_attempts": 0,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/rbh-ranks-among-top-25-of-landlords-for-tenant-satisfaction": {
       "first_attempt_at": "2026-11-11T00:15:00.333777Z",
@@ -2073,14 +2138,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-09T23:42:53.832554Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Residents urged to be vigilant as burglars target family gold - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "crime",
       "text_fingerprint": "c52067307bab73e9",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/school-staff-unite-to-help-improve-childrens-lives": {
       "first_attempt_at": "2026-11-09T15:38:31.713130Z",
@@ -2127,14 +2193,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-09T21:38:37.565674Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Volunteers needed to help provide town centre Safe Haven - Rochdale Times",
       "source_name": "Rochdale Times",
       "category": "community",
       "text_fingerprint": "e517ff2c8313f77d",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochdaletimes.co.uk/warning-to-think-twice-about-buying-e-bikes-and-e-scooters-this-christmas": {
       "first_attempt_at": "2026-11-14T10:04:44.655718Z",
@@ -2255,15 +2322,15 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T10:35:18.095767Z",
-      "outcome": "published",
-      "reason": "",
+      "last_attempt_at": "2026-11-17T10:58:09.354898Z",
+      "outcome": "rejected",
+      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
       "source_name": "Roch Valley Radio Local News",
       "category": "environment",
@@ -2296,15 +2363,16 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-15T16:16:27.459290Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-17T10:58:09.355220Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Man who died in flat fire named",
       "source_name": "Roch Valley Radio Local News",
       "category": "news",
       "text_fingerprint": "80af030684e884cb",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/142/community/1442/decision-on-future-of-the-seven-sisters-has-been-made": {
       "first_attempt_at": "2026-11-16T16:12:14.159321Z",
@@ -2367,14 +2435,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T12:11:55.797334Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Rochdale Christmas toy appeal opens donations after helping 3,000 children last year",
       "source_name": "Roch Valley Radio Local News",
       "category": "community",
       "text_fingerprint": "7daedf23638ebab6",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/3/politics/1427/tributes-paid-to-former-healey-councillor-and-firefighter-shaun-o-neill": {
       "first_attempt_at": "2026-11-10T22:13:18.456211Z",
@@ -2386,12 +2455,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T21:26:44.419839Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Tributes paid to former Healey councillor and firefighter Shaun O’Neill",
       "source_name": "Roch Valley Radio",
       "category": "news",
-      "text_fingerprint": "83002cc1cd3476c7"
+      "text_fingerprint": "83002cc1cd3476c7",
+      "recovery_attempts": 0,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/4/crime/1419/sixteen-men-charged-with-violent-disorder-are-on-bail-ahead-of-a-court-appearance-on-4-january-2027": {
       "first_attempt_at": "2026-11-10T16:00:32.540890Z",
@@ -2419,14 +2490,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-10T17:46:41.313230Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Driver jailed after Rochdale pursuit in which police car struck pedestrian",
       "source_name": "Roch Valley Radio",
       "category": "crime",
       "text_fingerprint": "dcab480cb383b5cd",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.rochvalleyradio.com/news-features/4/crime/1429/man-arrested-for-possessing-an-imitation-firearm-at-rochdale-armistice-day-event": {
       "first_attempt_at": "2026-11-11T16:12:23.954754Z",
@@ -2608,14 +2680,15 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-12T11:25:50.970216Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Rochdale man among 16 charged with violent disorder ahead of Man United match - Oldham Times",
       "source_name": "Oldham Times",
       "category": "crime",
       "text_fingerprint": "d70d452d1cc50eb9",
-      "recovery_attempts": 2,
-      "evidence_recovery_policy": 1
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1,
+      "briefing_absorb_recovery": 1
     },
     "https://www.thesun.co.uk/sport/football/team/41020665/rochdale-afc": {
       "first_attempt_at": "2026-11-14T19:23:45.725367Z",
@@ -2642,12 +2715,14 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-11T22:12:03.658387Z",
-      "outcome": "rejected",
-      "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
+      "outcome": "failed",
+      "reason": "one-time retry after briefing-absorption fix",
       "title": "Rochdale Hornets move is right for Ryan Millar - Total Rugby League",
       "source_name": "Total Rugby League",
       "category": "sport",
-      "text_fingerprint": "ab8c92cbb3cedded"
+      "text_fingerprint": "ab8c92cbb3cedded",
+      "recovery_attempts": 0,
+      "briefing_absorb_recovery": 1
     },
     "https://www.visitrochdale.com/whats-on/middleton-christmas-lights-switch-on-p698641": {
       "first_attempt_at": "2026-11-13T23:38:01.871038Z",
