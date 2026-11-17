@@ -35,8 +35,14 @@ test('robots parser handles wildcards, $ anchors and Allow precedence', () => {
   assert.equal(robotsAllows(a, 'RochdaleDaily', '/wp-admin/edit.php'), false);
 });
 
-test('only the allowed hosts are served; the MEN is not one of them', async () => {
-  assert.equal((await get(q('https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss'))).status, 403);
+test('the MEN borough feeds are relayed (editor, 17 Nov 2026)', async () => {
+  const res = await get(q('https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss'));
+  assert.equal(res.status, 200);
+  assert.ok(seen.some((s) => s.url === 'https://www.manchestereveningnews.co.uk/robots.txt'), 'MEN robots.txt is read first');
+});
+
+test('only the allowed hosts are served', async () => {
+  assert.equal((await get(q('https://www.manchestereveningnews.co.uk.evil.example/x'))).status, 403);
   assert.equal((await get(q('https://example.org/'))).status, 403);
   assert.equal((await get('/fetch?url=javascript:alert(1)')).status, 403);
 });
@@ -64,6 +70,6 @@ test('debug and /check report measurements, not bodies', async () => {
   const d = await (await get(q('https://rochdaleafc.co.uk/feed/') + '&debug=1')).json();
   assert.equal(d.upstreamStatus, 200); assert.equal(d.looksLikeFeed, true); assert.equal(d.items, 2); assert.equal(d.robots, 'allows');
   const c = await (await get('/check')).json();
-  assert.equal(c.results.length, 4);
+  assert.equal(c.results.length, 8);
   assert.equal(c.results.find((r) => r.url.includes('falingepark')).robots, 'HTTP 403');
 });

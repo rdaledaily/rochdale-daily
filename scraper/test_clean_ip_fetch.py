@@ -63,15 +63,16 @@ with tempfile.TemporaryDirectory() as tmp:
           'a listed host goes to the relay with the page URL encoded')
     check(response.url == 'https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/',
           'the response carries the site\'s own URL, not the relay\'s')
-    session.get('https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss')
-    check(sent[-1].startswith('https://www.manchestereveningnews.co.uk/'), 'an unlisted host (the MEN) is never relayed')
+    session.get('https://www.bbc.co.uk/news/england/manchester')
+    check(sent[-1].startswith('https://www.bbc.co.uk/'), 'an unlisted host is never relayed')
     session.get('https://www.gmp.police.uk.evil.example/x')
     check(sent[-1].startswith('https://www.gmp.police.uk.evil.example/'), 'look-alike hosts are not relayed')
     check(any('HTTP 200' in key for key in cif.status(on)['responses']), 'relayed responses are counted for the run status')
 
 repo_cfg = cif.load_config()
 check(repo_cfg['base_url'] == '' or repo_cfg['base_url'].startswith('https://'), 'the repo config is off or https')
-check(not any('manchestereveningnews' in host for host in repo_cfg['hosts']), 'the MEN is not on the relay list')
+# Editor, 17 Nov 2026: the MEN's borough feeds go through the relay.
+check('www.manchestereveningnews.co.uk' in repo_cfg['hosts'], 'the MEN is on the relay list')
 
 worker = (Path(__file__).resolve().parents[1] / 'workers' / 'rd-relay' / 'worker.js').read_text()
 for host in repo_cfg['hosts']:
