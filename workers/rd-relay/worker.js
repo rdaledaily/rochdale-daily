@@ -7,8 +7,10 @@
  * pages, identified honestly as Rochdale Daily.
  *
  * Rules it enforces itself:
- *   - Only the hosts in ALLOWED_HOSTS. Not the MEN: that publisher runs a
- *     bot challenge on purpose, and the editor decided not to route around it.
+ *   - Only the hosts in ALLOWED_HOSTS. The MEN was added 17 Nov 2026 by the
+ *     editor's decision: its four borough feeds answer GitHub Actions with an
+ *     HTTP 202 bot-check page on every run, so MEN stories only reached us
+ *     through Google News, hours late. Its robots.txt is still obeyed here.
  *   - Each host's robots.txt, read through this Worker. A disallowed path is
  *     refused with 451. If robots.txt cannot be read, the request is refused
  *     too (fails closed).
@@ -28,12 +30,17 @@ const ALLOWED_HOSTS = new Set([
   "rochdaleafc.co.uk", "www.rochdaleafc.co.uk",
   "www.rochdaleafccommunity.org", "rochdaleafccommunity.org",
   "www.falingepark.com", "falingepark.com",
+  "www.manchestereveningnews.co.uk", "manchestereveningnews.co.uk",
 ]);
 const CHECK_URLS = [
   "https://www.gmp.police.uk/news/greater-manchester/news/GetNewsRss/",
   "https://rochdaleafc.co.uk/feed/",
   "https://www.rochdaleafccommunity.org/feed/",
   "https://www.falingepark.com/feed/",
+  "https://www.manchestereveningnews.co.uk/all-about/rochdale?service=rss",
+  "https://www.manchestereveningnews.co.uk/all-about/heywood?service=rss",
+  "https://www.manchestereveningnews.co.uk/all-about/middleton?service=rss",
+  "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
 ];
 const CACHE_SECONDS = 600;
 
