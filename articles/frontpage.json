@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-17T17:46:00.960049Z",
+  "generated_at": "2026-11-17T18:03:56.729322Z",
   "minimum_articles": 12,
   "target_articles": 45,
   "count": 19,
@@ -22,7 +22,7 @@
       "published_at": "2026-11-17T17:10:00Z",
       "first_published_at": "2026-11-17T17:10:00Z",
       "last_updated_at": "2026-11-17T17:27:00Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Rochdale Daily newsdesk",
       "source_url": "https://rochdaledaily.co.uk/",
       "source_names": [
@@ -62,9 +62,10 @@
       ],
       "update_count": 3,
       "img": "assets/img/cards/incident-card.jpg",
-      "image_status": "editorial-photo",
-      "image_backfill_method": "manual-editorial-photo",
+      "image_status": "incident-card",
+      "image_backfill_method": "incident-card",
       "source_image_reuse_status": "cards-only",
+      "image_placeholder_reason": "Headline contains 'emergency': blanket Incident card rule",
       "frontpage_rank": 0,
       "frontpage_priority": 1000,
       "slot": "lead",
@@ -153,15 +154,16 @@
       "image_match_title": "investigation.jpg",
       "image_match_score": 15133,
       "core_fact_check": {
-        "status": "unchecked",
+        "status": "passed",
         "issues": [],
-        "reason": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9KOEh0NnZJTXJHdTJ0VUlhZldNMEFSSTJ2ZDVleU1BTE9EcGxVMGppenZucXhtdTNBckkzNFpiYTY0SmwtTUFNWmdsTm1QZklncmVQZUJPVXlHRnQ3aFVXOWFNSVpwN1BZZ1ZHMWd5YUZCR1Q1MlN1YnFn?oc=5: capture failed (ValueError: Google News link did not resolve to a publisher page)",
+        "reason": "",
         "source_sha": {
-          "https://www.bbc.co.uk/news/articles/c60mdvd4vpy4o": "96bfaba5c5837545"
+          "https://www.bbc.co.uk/news/articles/c60mdvd4vpy4o": "9e5abf8c5f6cf081",
+          "https://news.google.com/rss/articles/CBMiekFVX3lxTE9KOEh0NnZJTXJHdTJ0VUlhZldNMEFSSTJ2ZDVleU1BTE9EcGxVMGppenZucXhtdTNBckkzNFpiYTY0SmwtTUFNWmdsTm1QZklncmVQZUJPVXlHRnQ3aFVXOWFNSVpwN1BZZ1ZHMWd5YUZCR1Q1MlN1YnFn?oc=5": "1d6f41e22f267ad0"
         },
-        "source_changed_at": "2026-11-17T17:44:38.222495Z",
-        "checked_at": "2026-11-17T17:44:38.222495Z",
-        "attempts": 2
+        "source_changed_at": "2026-11-17T18:03:36.057270Z",
+        "checked_at": "2026-11-17T18:03:36.057270Z",
+        "attempts": 3
       },
       "ingested_at": "2026-11-17T17:39:10Z",
       "first_published_at": "2026-11-17T16:03:15Z",
@@ -340,7 +342,7 @@
       "published_at": "2026-11-17T10:50:00Z",
       "first_published_at": "2026-11-17T10:50:00Z",
       "last_updated_at": "2026-11-17T10:50:00Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Manchester Evening News",
       "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/greater-manchesters-400-clean-air-34920877",
       "source_names": [
@@ -393,7 +395,7 @@
       "published_at": "2026-11-17T10:30:00Z",
       "first_published_at": "2026-11-17T10:30:00Z",
       "last_updated_at": "2026-11-17T10:30:00Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Department of Health and Social Care",
       "source_url": "https://www.gov.uk/government/news/tobacco-and-vapes-bill-becomes-law",
       "source_names": [
@@ -455,7 +457,7 @@
       "published_at": "2026-11-17T09:44:00Z",
       "first_published_at": "2026-11-17T09:44:00Z",
       "last_updated_at": "2026-11-17T09:44:00Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Rochdale Times; BBC North West; Brit Brief",
       "source_url": "https://www.rochdaletimes.co.uk/dozens-of-properties-left-without-power/",
       "source_names": [
@@ -637,7 +639,7 @@
       "published_at": "2026-11-16T18:10:00Z",
       "first_published_at": "2026-11-16T18:10:00Z",
       "last_updated_at": "2026-11-16T18:10:00Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Springhill Hospice press office",
       "source_url": "https://www.springhill.org.uk/event/christmas-appeal-2026/",
       "source_names": [
@@ -691,7 +693,7 @@
       "published_at": "2026-11-16T17:40:00Z",
       "first_published_at": "2026-11-16T17:40:00Z",
       "last_updated_at": "2026-11-16T17:40:00Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Rochdale Boroughwide Housing press office",
       "source_url": "https://www.rbh.org.uk/news/rbh-news/rbh-sets-out-future-plans-for-college-bank/",
       "source_names": [
@@ -757,7 +759,7 @@
       "published_at": "2026-11-17T09:04:38Z",
       "first_published_at": "2026-11-17T09:04:38Z",
       "last_updated_at": "2026-11-17T09:04:38Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -983,7 +985,7 @@
       "published_at": "2026-11-16T13:14:17Z",
       "first_published_at": "2026-11-16T13:14:17Z",
       "last_updated_at": "2026-11-16T18:56:28Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Greater Manchester Police press office",
       "source_url": "https://gmp-newsroom.prgloo.com/news/a-man-has-today-pleaded-guilty-following-the-fatal-stabbing-of-keeley-aspinall",
       "source_names": [
@@ -1551,7 +1553,7 @@
       "published_at": "2026-11-16T09:09:28Z",
       "first_published_at": "2026-11-16T09:09:28Z",
       "last_updated_at": "2026-11-16T09:09:28Z",
-      "scraped_at": "2026-11-17T17:46:00Z",
+      "scraped_at": "2026-11-17T18:03:56Z",
       "source_name": "Rochdale Daily",
       "source_url": "",
       "source_names": [
@@ -1585,7 +1587,7 @@
     },
     {
       "id": "71806463bf40d6cee9",
-      "story_key": "hard-news-v3-dc839d9ffcf7037ac594",
+      "story_key": "business-v3-65f9907eb5935f0a2986",
       "title": "Springhill Hospice furniture store in Rochdale targeted in break-in",
       "slug": "police-investigate-series-of-break-ins-at-springhill-hospice-shops",
       "excerpt": "A brick was thrown through the window of Springhill Hospice's furniture store on 15 November, following a series of break-ins.",
@@ -1638,7 +1640,7 @@
       "social_platforms": [],
       "social_context_note": "",
       "sensitive_story": false,
-      "police_matter": true,
+      "police_matter": false,
       "requires_approval": false,
       "legal_disclaimer": "This article was compiled from identified public sources and may be updated when further verified information becomes available.",
       "right_to_reply": "Anyone directly affected may request a correction or right of reply by emailing news@rochdaledaily.co.uk.",
@@ -1657,8 +1659,8 @@
       "ongoing_label": "ONGOING",
       "update_count": 3,
       "img": "assets/img/cards/springhill_hospice.png",
-      "image_status": "standard-police-image",
-      "image_backfill_method": "police-photo-after-internal-and-commons",
+      "image_status": "cards-library-photo",
+      "image_backfill_method": "cards-filename-match",
       "image_match_title": "springhill_hospice.png",
       "image_match_score": 15258,
       "core_fact_check": {
@@ -1681,7 +1683,7 @@
         "evidence": ""
       },
       "related_article_slugs": [
-        "bus-driver-shot-dead-outside-london-pub-named-by-police",
+        "college-bank-seven-sisters-demolition-decision",
         "nominations-open-for-springhill-hospice-s-2026-man-of-rochdale-award",
         "springhill-hospice-christmas-appeal-leanne-field-minions-party"
       ],
@@ -1863,8 +1865,8 @@
       ],
       "published_at": "2026-08-21T16:03:06Z",
       "first_published_at": "2026-08-21T16:03:06Z",
-      "last_updated_at": "2026-11-17T17:39:35Z",
-      "scraped_at": "2026-11-17T17:39:35Z",
+      "last_updated_at": "2026-11-17T18:03:57.882334Z",
+      "scraped_at": "2026-11-17T18:03:57.882334Z",
       "image_credit": "Adam Kerfoot-Roberts / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_7eb5ba7cf78e410ea7c34d50af897f61~mv2.jpg/v1/fill/w_1600,h_1600,al_c,q_90/ad4e9b_7eb5ba7cf78e410ea7c34d50af897f61~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1888,7 +1890,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-17T17:07:44.847271Z",
+      "content_updated_at": "2026-11-17T18:03:57.882334Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/c88cf4be775df99c-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_Town_Hall,_in_the_snow.jpg",
@@ -1916,21 +1918,12 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "festival-of-remembrance-scheduled-for-rochdale-town-hall-on-16-october",
-        "monsters-of-rock-halloween-special-2026",
-        "free-illuminated-festival-to-transform-historic-gardens-in-rochdale"
-      ],
-      "ingested_at": "2026-11-17T17:14:09Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1
+      }
     },
     {
       "id": "bf85aff55685cd511489",
       "story_key": "events-v3-3903dee5c11e2ccd5e44",
-      "title": "Ellie Sax",
+      "title": "Ellie Sax - Endless Summer Tour 2026",
       "slug": "ellie-sax-endless-summer-tour-2026",
       "excerpt": "An amazing evening of Summer Dance Anthems with Ellie Sax! Support: Doors 7.00pm Support DJ 8.00pm Ellie Sax 9pm Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
       "summary": "An amazing evening of Summer Dance Anthems with Ellie Sax! Support: Doors 7.00pm Support DJ 8.00pm Ellie Sax 9pm Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
@@ -1943,8 +1936,8 @@
       ],
       "published_at": "2026-07-17T11:55:32Z",
       "first_published_at": "2026-07-17T11:55:32Z",
-      "last_updated_at": "2026-11-17T14:40:18Z",
-      "scraped_at": "2026-11-17T17:07:44Z",
+      "last_updated_at": "2026-11-17T18:03:58.005515Z",
+      "scraped_at": "2026-11-17T18:03:58.005515Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg/v1/fill/w_2000,h_2000,al_c,q_90/e5fc8c_b4074f58e7ce468e91b70fdbb18bae03~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -1994,16 +1987,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "road-closures-announced-for-rochdale-feel-good-festival",
-        "free-illuminated-festival-to-transform-historic-gardens-in-rochdale",
-        "teenage-markets-return-to-rochdale-for-christmas-celebrations"
-      ],
-      "ingested_at": "2026-11-17T17:14:10Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1
+      }
     },
     {
       "id": "816e767e2395c24a63be",
@@ -2019,10 +2003,10 @@
       "types": [
         "events"
       ],
-      "published_at": "2026-11-17T13:20:24Z",
-      "first_published_at": "2026-11-17T13:20:24Z",
-      "last_updated_at": "2026-11-17T17:39:35Z",
-      "scraped_at": "2026-11-17T17:39:35Z",
+      "published_at": "2026-11-17T13:20:24.340775Z",
+      "first_published_at": "2026-11-17T13:20:24.340775Z",
+      "last_updated_at": "2026-11-17T18:03:58.124336Z",
+      "scraped_at": "2026-11-17T18:03:58.124336Z",
       "image_credit": "David Dixon / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_0a405cafb8b14670ad53684ecb84c5c4~mv2.jpeg/v1/fill/w_1600,h_1600,al_c,q_90/ad4e9b_0a405cafb8b14670ad53684ecb84c5c4~mv2.jpeg",
       "source_image_reuse_status": "commons-free-license",
@@ -2073,26 +2057,6 @@
             "checked": "2026-11-17"
           }
         ]
-      },
-      "related_article_slugs": [
-        "new-muga-pitch-surfaces-installed-in-littleborough",
-        "a-concert-of-remembrance-with-littleborough-brass-bands-association",
-        "a-consert-of-remembrance-with-littleborough-brass-bands-association"
-      ],
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1,
-      "ingested_at": "2026-11-17T17:44:15Z",
-      "verification_reasons": [
-        "Original URL is not an approved attributable source; editorial review required"
-      ],
-      "core_fact_check": {
-        "status": "unchecked",
-        "issues": [],
-        "reason": "https://www.whatsoccurrinevents.co.uk/event-details/littleborough-brass-bands-association-christmas-concert: capture failed (ValueError: page too large)",
-        "source_sha": {},
-        "checked_at": "2026-11-17T17:44:38.222495Z",
-        "attempts": 1
       }
     },
     {
@@ -2102,7 +2066,7 @@
       "slug": "christmas-at-the-movies",
       "excerpt": "Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
       "summary": "Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK",
-      "content_html": "<p>Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon!</p><p>Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Sunday 13 December 2026 at 13:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/christmas-at-the-movies\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "content_html": "<p>Something special is coming to Rochdale Town Hall this Christmas! Shaun the Sheep, festive film favourites and the spectacular sound of a live brass band… all in one magical afternoon! Keep your eyes peeled for more details! Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><strong>Date and time:</strong> Sunday 13 December 2026 at 13:30</p><p><strong>Venue:</strong> Rochdale, Town Hall, The Esplanade, Rochdale OL16 1AZ, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/christmas-at-the-movies\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "rochdale",
       "ward": "",
       "category": "events",
@@ -2111,8 +2075,8 @@
       ],
       "published_at": "2026-11-12T23:30:44Z",
       "first_published_at": "2026-11-12T23:30:44Z",
-      "last_updated_at": "2026-11-17T17:39:35Z",
-      "scraped_at": "2026-11-17T17:39:35Z",
+      "last_updated_at": "2026-11-17T18:03:58.447897Z",
+      "scraped_at": "2026-11-17T18:03:58.447897Z",
       "image_credit": "Adam Kerfoot-Roberts / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_44044016be294a9c8bf35afb67a9539c~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2136,7 +2100,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-17T17:07:47.256373Z",
+      "content_updated_at": "2026-11-17T18:03:58.447897Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/c88cf4be775df99c-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Rochdale_Town_Hall,_in_the_snow.jpg",
@@ -2164,27 +2128,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "teenage-markets-return-to-rochdale-for-christmas-celebrations",
-        "brass-and-bubl-a-christmas-special",
-        "free-illuminated-festival-to-transform-historic-gardens-in-rochdale"
-      ],
-      "core_fact_check": {
-        "status": "unchecked",
-        "issues": [],
-        "reason": "https://www.whatsoccurrinevents.co.uk/event-details/christmas-at-the-movies: capture failed (ValueError: page too large)",
-        "source_sha": {},
-        "checked_at": "2026-11-17T17:44:38.222495Z",
-        "attempts": 3
-      },
-      "ingested_at": "2026-11-17T17:14:02Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1,
-      "verification_reasons": [
-        "Original URL is not an approved attributable source; editorial review required"
-      ]
+      }
     },
     {
       "id": "c592fb8668b47ed06903",
@@ -2203,7 +2147,7 @@
       "published_at": "2026-10-01T19:33:20Z",
       "first_published_at": "2026-10-01T19:33:20Z",
       "last_updated_at": "2026-11-17T10:36:28Z",
-      "scraped_at": "2026-11-17T17:07:47Z",
+      "scraped_at": "2026-11-17T18:03:58.566040Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg/v1/fill/w_1254,h_1254,al_c,q_85/ad4e9b_ecc0f71adcf54997a279d89fc0ad2311~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2253,16 +2197,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "east-lancashire-railway-volunteer-open-day-october-2026",
-        "littleborough-brass-bands-association-christmas-concert",
-        "teenage-markets-return-to-rochdale-for-christmas-celebrations"
-      ],
-      "ingested_at": "2026-11-17T17:14:08Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1
+      }
     },
     {
       "id": "f53844ce2024dfdba99f",
@@ -2281,7 +2216,7 @@
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
       "last_updated_at": "2026-11-12T21:28:20Z",
-      "scraped_at": "2026-11-17T17:07:47Z",
+      "scraped_at": "2026-11-17T18:03:58.699528Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png/v1/fill/w_1297,h_1212,al_c/ad4e9b_2a3d04de4da3465e93daab444e5054e3~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2331,16 +2266,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "community-event-celebrates-remembrance-of-allah-in-rochdale",
-        "ignite-fire-festival-rochdale-town-hall-square-november-20-22",
-        "rochdale-feel-good-festival-2026-celebrates-community-spirit"
-      ],
-      "ingested_at": "2026-11-17T17:14:10Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1
+      }
     },
     {
       "id": "415013fd088800bd7e70",
@@ -2349,7 +2275,7 @@
       "slug": "new-years-eve-with-the-j-ger-maestro",
       "excerpt": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
       "summary": "The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK",
-      "content_html": "<p>The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm.</p><p>Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Thursday 31 December 2026 at 20:00</p><p><strong>Venue:</strong> Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/new-years-eve-with-the-jager-maestro\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
+      "content_html": "<p>The irrepressible Jager Maestros return to Littleborough CC to get you swaying, singing, dancing and drinking the New Year in. Doors open at 8pm and the show starts at 9pm. Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><strong>Date and time:</strong> Thursday 31 December 2026 at 20:00</p><p><strong>Venue:</strong> Littleborough Cricket Club, Littleborough OL15 9LD, UK</p><p><a href=\"https://www.whatsoccurrinevents.co.uk/event-details/new-years-eve-with-the-jager-maestro\" rel=\"noopener noreferrer\" target=\"_blank\">View details and buy tickets</a>.</p>",
       "area": "littleborough",
       "ward": "",
       "category": "events",
@@ -2358,8 +2284,8 @@
       ],
       "published_at": "2026-10-09T15:13:55Z",
       "first_published_at": "2026-10-09T15:13:55Z",
-      "last_updated_at": "2026-11-17T17:39:35Z",
-      "scraped_at": "2026-11-17T17:39:35Z",
+      "last_updated_at": "2026-11-17T18:03:58.840734Z",
+      "scraped_at": "2026-11-17T18:03:58.840734Z",
       "image_credit": "BatAndBall / Wikimedia Commons (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg/v1/fill/w_890,h_624,al_c,q_85/ad4e9b_7b38958f61e04878a8f46dc68c94aac8~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2383,7 +2309,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-17T17:07:47.656919Z",
+      "content_updated_at": "2026-11-17T18:03:58.840734Z",
       "commons_image_search": "matched",
       "image_url": "assets/img/cards/f4174a8ef48844b3-commons-photo.jpg",
       "image_credit_url": "https://commons.wikimedia.org/wiki/File:Littleborough_Cricket_Club_-_geograph.org.uk_-_2498063.jpg",
@@ -2411,16 +2337,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "sponsored-hi-pilates-club-women-only-reformer-pilates-littleborough",
-        "new-years-eve-with-the-j-ger-maestros",
-        "littleborough-brass-bands-association-christmas-concert"
-      ],
-      "ingested_at": "2026-11-17T17:14:08Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1
+      }
     },
     {
       "id": "e1a795e06c7230612548",
@@ -2438,8 +2355,8 @@
       ],
       "published_at": "2026-10-28T19:02:26Z",
       "first_published_at": "2026-10-28T19:02:26Z",
-      "last_updated_at": "2026-11-17T17:39:36Z",
-      "scraped_at": "2026-11-17T17:39:36Z",
+      "last_updated_at": "2026-11-17T18:03:58.958415Z",
+      "scraped_at": "2026-11-17T18:03:58.958415Z",
       "image_credit": "R lee / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png/v1/fill/w_1206,h_1280,al_c/ad4e9b_d39a429fbddd42df92c05ada49ec9fd8~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2463,7 +2380,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-17T17:07:47.770997Z",
+      "content_updated_at": "2026-11-17T18:03:58.958415Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/28b4048459df187b-town-photo.jpg",
       "img": "assets/img/cards/28b4048459df187b-town-photo.jpg",
@@ -2490,27 +2407,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "rochdale-magicians-north-west-magic-dealers-day-november-2026",
-        "free-illuminated-festival-to-transform-historic-gardens-in-rochdale",
-        "teenage-markets-return-to-rochdale-for-christmas-celebrations"
-      ],
-      "core_fact_check": {
-        "status": "unchecked",
-        "issues": [],
-        "reason": "https://www.whatsoccurrinevents.co.uk/event-details/swift-friends: capture failed (ValueError: page too large)",
-        "source_sha": {},
-        "checked_at": "2026-11-17T17:44:38.222495Z",
-        "attempts": 3
-      },
-      "ingested_at": "2026-11-17T17:14:05Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1,
-      "verification_reasons": [
-        "Original URL is not an approved attributable source; editorial review required"
-      ]
+      }
     },
     {
       "id": "33f0ab5d8c9d70577dfc",
@@ -2529,7 +2426,7 @@
       "published_at": "2026-10-21T20:14:20Z",
       "first_published_at": "2026-10-21T20:14:20Z",
       "last_updated_at": "2026-11-12T21:28:24Z",
-      "scraped_at": "2026-11-17T17:07:47Z",
+      "scraped_at": "2026-11-17T18:03:59.077564Z",
       "image_credit": "David Dixon / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png/v1/fill/w_1254,h_1254,al_c/ad4e9b_acaf558666574c36a3562b52002ee064~mv2.png",
       "source_image_reuse_status": "commons-free-license",
@@ -2579,27 +2476,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "rochdale-wins-gold-at-britain-in-bloom-awards-crowned-champion",
-        "ignite-fire-festival-rochdale-town-hall-square-november-20-22",
-        "early-doors-club-st-chads-church-rochdale-live-music"
-      ],
-      "core_fact_check": {
-        "status": "unchecked",
-        "issues": [],
-        "reason": "https://www.whatsoccurrinevents.co.uk/event-details/what-a-feeling-live: capture failed (ValueError: page too large)",
-        "source_sha": {},
-        "checked_at": "2026-11-17T17:44:38.222495Z",
-        "attempts": 3
-      },
-      "ingested_at": "2026-11-17T17:14:06Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1,
-      "verification_reasons": [
-        "Original URL is not an approved attributable source; editorial review required"
-      ]
+      }
     },
     {
       "id": "b97b37d71a7172bf89fa",
@@ -2617,8 +2494,8 @@
       ],
       "published_at": "2026-09-28T18:06:54Z",
       "first_published_at": "2026-09-28T18:06:54Z",
-      "last_updated_at": "2026-11-17T17:39:36Z",
-      "scraped_at": "2026-11-17T17:39:36Z",
+      "last_updated_at": "2026-11-17T18:03:59.243509Z",
+      "scraped_at": "2026-11-17T18:03:59.243509Z",
       "image_credit": "Dr Neil Clifton / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg/v1/fill/w_1080,h_1080,al_c,q_85/ad4e9b_20c288024cdd4ab5922ede3b4a041f25~mv2.jpeg",
       "source_image_reuse_status": "commons-free-license",
@@ -2642,7 +2519,7 @@
       "right_to_reply": "Organisers may request a correction by emailing news@rochdaledaily.co.uk.",
       "byline": "Rochdale Daily What's On",
       "status": "published",
-      "content_updated_at": "2026-11-17T17:07:47.985465Z",
+      "content_updated_at": "2026-11-17T18:03:59.243509Z",
       "commons_image_search": "searched",
       "image_url": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
       "img": "assets/img/cards/d5cf6b2b6b8c2205-town-photo.jpg",
@@ -2669,16 +2546,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "brass-and-bubl-a-christmas-special",
-        "creativity-for-all-free-family-festival-rochdale-13-august",
-        "rochdale-community-fair-scheduled-for-next-month"
-      ],
-      "ingested_at": "2026-11-17T17:14:08Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1
+      }
     },
     {
       "id": "f0dd5ebdec74eead121f",
@@ -2697,7 +2565,7 @@
       "published_at": "2026-07-17T04:35:37Z",
       "first_published_at": "2026-07-17T04:35:37Z",
       "last_updated_at": "2026-11-12T21:28:27Z",
-      "scraped_at": "2026-11-17T17:07:48Z",
+      "scraped_at": "2026-11-17T18:03:59.394485Z",
       "image_credit": "Rochdale Daily",
       "source_image_reuse_status": "cards-only",
       "event_start_at": "2027-05-13T18:30:00Z",
@@ -2744,18 +2612,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "premier-kia-renews-support-for-rochdale-feel-good-festival",
-        "not-quite-big-band-to-perform-at-rochdale-town-hall-on-7-november",
-        "ignite-fire-festival-rochdale-town-hall-square-november-20-22"
-      ],
-      "image_alt": "The Black Dyke Band at Rochdale Town Hall 2027",
-      "image_policy": "relevant-internal > relevant-licensed-wikimedia-commons > labelled-place-card",
-      "ingested_at": "2026-11-17T17:14:10Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1
+      }
     },
     {
       "id": "d4989bbbd57e2f9ab29e",
@@ -2774,7 +2631,7 @@
       "published_at": "2026-07-16T04:48:12Z",
       "first_published_at": "2026-07-16T04:48:12Z",
       "last_updated_at": "2026-11-15T19:09:20Z",
-      "scraped_at": "2026-11-17T17:07:48Z",
+      "scraped_at": "2026-11-17T18:03:59.551990Z",
       "image_credit": "Robert Wade / Geograph (CC BY-SA 2.0)",
       "source_image_candidate_url": "https://static.wixstatic.com/media/ad4e9b_0a200599185043b28943cf91fd33aa28~mv2.jpg/v1/fill/w_1000,h_1000,al_c,q_85/ad4e9b_0a200599185043b28943cf91fd33aa28~mv2.jpg",
       "source_image_reuse_status": "commons-free-license",
@@ -2825,16 +2682,7 @@
             "checked": "2026-11-13"
           }
         ]
-      },
-      "related_article_slugs": [
-        "pure-80-s-festival-2026",
-        "pure-80-s-festival-2027",
-        "littleborough-brass-bands-association-christmas-concert"
-      ],
-      "ingested_at": "2026-11-17T17:14:10Z",
-      "is_ongoing": false,
-      "ongoing_label": "",
-      "update_count": 1
+      }
     }
   ],
   "coverage": {
@@ -2892,10 +2740,11 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "community": 4,
-      "crime": 2,
+      "crime": 1,
       "traffic": 1,
       "politics": 1,
       "sport": 3,
+      "business": 1,
       "health": 2,
       "environment": 1,
       "news": 4,
@@ -2917,18 +2766,18 @@
     },
     "selected_by_source": {
       "rochdale daily newsdesk": 1,
-      "manchester evening news": 2,
+      "greater manchester police press office": 1,
       "rochdale borough council": 1,
       "source": 1,
       "bbc manchester": 1,
+      "manchester evening news": 2,
       "springhill hospice press office": 1,
       "your trust rochdale articles": 2,
       "rochdale boroughwide housing press office": 1,
-      "greater manchester police press office": 1,
+      "rochdale daily": 2,
       "rochdale times": 1,
       "total rugby league": 1,
       "department of health and social care": 1,
-      "rochdale daily": 2,
       "falinge park high school": 1,
       "rochdale times; bbc north west; brit brief": 1,
       "broad, strong, and soft: using geospatial analysis to understand folk‑linguistic terminology (journal of linguistic geography, 2024)": 1
@@ -2965,7 +2814,7 @@
     "expired_same_day_deadlines_dropped": 0,
     "expired_sports_previews_dropped": 0,
     "stale_fallback_dropped": 0,
-    "enforced_at": "2026-11-17T17:47:14.293383Z"
+    "enforced_at": "2026-11-17T18:05:30.609888Z"
   },
   "source_quality_guard": {
     "marked_archive_records": 0,
@@ -2976,13 +2825,6 @@
     "fresh_hours": 36,
     "kept": 19,
     "removed": 0,
-    "enforced_at": "2026-11-17T17:47:14.514741Z"
-  },
-  "manual_frontpage_guard": {
-    "fresh_hours": 36,
-    "eligible_manual": 9,
-    "restored_manual": 0,
-    "protected_manual": 9,
-    "enforced_at": "2026-11-17T17:47:14.567095Z"
+    "enforced_at": "2026-11-17T18:05:30.873173Z"
   }
 }
