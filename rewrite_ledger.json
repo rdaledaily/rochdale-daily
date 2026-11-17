@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-17T00:41:15.730970Z",
+  "updated_at": "2026-11-17T00:57:41.431241Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
   "count": 165,
@@ -135,14 +135,15 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T00:25:14.036774Z",
-      "outcome": "rejected",
-      "reason": "missing from feed after repeated publication attempts; review required",
+      "last_attempt_at": "2026-11-17T00:57:41.430842Z",
+      "outcome": "published",
+      "reason": "",
       "title": "2026 AGM Details - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
       "text_fingerprint": "e48a1f16d58f92d5",
-      "recovery_attempts": 2
+      "recovery_attempts": 0,
+      "evidence_recovery_policy": 1
     },
     "https://rochdaleafc.co.uk/behind-the-sign-inside-training-jamie-allen-signs": {
       "first_attempt_at": "2026-11-13T21:10:36.668331Z",
@@ -319,9 +320,9 @@
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T00:38:42.041781Z",
-      "outcome": "rejected",
-      "reason": "quality gate after 4 repairs: Source fidelity: the name(s) Crown, Oil, Arena do not appear in the source. Name only peop",
+      "last_attempt_at": "2026-11-17T00:57:41.430956Z",
+      "outcome": "published",
+      "reason": "",
       "title": "Dale Exit Womens FA Cup - Rochdale AFC",
       "source_name": "Rochdale AFC",
       "category": "sport",
@@ -1086,13 +1087,13 @@
     },
     "https://www.inyourarea.co.uk/news/inside-the-free-illuminated-wonderland-transforming-historic-gardens-in-rochdale": {
       "first_attempt_at": "2026-11-16T23:44:00.613286Z",
-      "attempts": 1,
+      "attempts": 2,
       "urls": [
         "https://www.inyourarea.co.uk/news/inside-the-free-illuminated-wonderland-transforming-historic-gardens-in-rochdale"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T00:38:51.672300Z",
+      "last_attempt_at": "2026-11-17T00:55:15.775630Z",
       "outcome": "rejected",
       "reason": "quality gate after 4 repairs: Source fidelity: the date(s) 1 December, 3 December are neither stated nor implied by the",
       "title": "Inside the free illuminated wonderland transforming historic gardens in Rochdale - InYourArea",
@@ -1667,11 +1668,12 @@
       "first_attempt_at": "2026-11-16T19:50:58.314872Z",
       "attempts": 1,
       "urls": [
+        "https://news.google.com/rss/articles/CBMitAFBVV95cUxNcjRNc2lCb2tlY2kyVHZ1SUpRWWtrNklhT21waGNuektGRnc3aEZqa01GakFBY3B4bHJvQkFqRTNnR3ZRSTBGT0FFaXVNVURLQWNkV19Zd0hxc1J1eWFYREJ1ZERDREFoSVVZbmNEdGFyOVV3OXdmQndNamwySl9mRTR3WGhFcTZnNzVoZHFxMUpJYWN1ZktsY1BfMFAtU29pRGtkZHctZlRkQ29RRnExaHY2X0M?oc=5",
         "https://www.rochdale.gov.uk/directory-record/2665/clover-hall-crescent-roadworks-in-rochdale-from-17-november-2026"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-16T19:50:58.314872Z",
+      "last_attempt_at": "2026-11-17T00:57:41.431185Z",
       "outcome": "published",
       "reason": "",
       "title": "Clover Hall Crescent, roadworks in Rochdale from 17 November 2026",
@@ -2272,13 +2274,13 @@
     },
     "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments": {
       "first_attempt_at": "2026-11-15T14:20:11.653715Z",
-      "attempts": 3,
+      "attempts": 4,
       "urls": [
         "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
       ],
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
-      "last_attempt_at": "2026-11-17T00:41:15.730778Z",
+      "last_attempt_at": "2026-11-17T00:57:41.431027Z",
       "outcome": "rejected",
       "reason": "not in the feed after rewrite: merged into another story, or failed the post-rewrite locality or length check",
       "title": "Old office block in Rochdale will be turned into apartments",
