@@ -2,8 +2,8 @@
   "eligible_placeholders": 8,
   "repaired_with_source_photo": 0,
   "skipped_sensitive_stories": 0,
-  "no_allowed_source": 1,
-  "no_usable_source_image": 7,
+  "no_allowed_source": 0,
+  "no_usable_source_image": 8,
   "permission_entries": 0,
   "source_grants_active": [
     "Rochdale Borough Council",
@@ -89,8 +89,27 @@
       "after": "assets/img/cards/rochdale-secondary-school-applications-deadline-31-october-2026.jpg"
     },
     {
-      "slug": "morning-briefing-17-november-2026",
-      "result": "no-source"
+      "slug": "rochdale-borough-active-awards-2026-celebrate-community-champions-at-middleton-a",
+      "result": "no-cleared-source-image",
+      "source": "https://www.yourtrustrochdale.co.uk/uncategorised/rochdale-borough-active-awards-2026-celebrate-our-community-champions/",
+      "after": "assets/img/cards/middleton-arena.jpg",
+      "why": {
+        "page": "https://www.yourtrustrochdale.co.uk/uncategorised/rochdale-borough-active-awards-2026-celebrate-our-community-champions/",
+        "final_url": "https://www.yourtrustrochdale.co.uk/uncategorised/rochdale-borough-active-awards-2026-celebrate-our-community-champions/",
+        "candidates": [
+          {
+            "url": "https://your-content.s3.eu-west-2.amazonaws.com/wp-content/uploads/2026/11/17124014/NOV10193.jpg",
+            "via": "og:image",
+            "verdict": "page-not-from-granting-organisation"
+          },
+          {
+            "url": "https://your-content.s3.eu-west-2.amazonaws.com/wp-content/uploads/2026/11/17124014/NOV10193-3840x1048.jpg",
+            "via": "article img",
+            "verdict": "page-not-from-granting-organisation"
+          }
+        ],
+        "verdict": "no-candidate-passed"
+      }
     }
   ]
 }
