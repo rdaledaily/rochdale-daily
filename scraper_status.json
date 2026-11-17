@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-17T12:59:53.522978Z",
+  "last_run_at": "2026-11-17T13:19:06.676972Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,17 +7,9 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 2,
-      "offered_today": 0,
-      "listed": 11,
-      "other_notice_types": 1,
-      "already_seen": 10,
-      "new": 0,
-      "outside_borough": 0,
-      "no_company_address": 0,
-      "notice_unreadable": 0
+      "status": "not due",
+      "last_checked": "2026-11-17T12:55:15.732640Z",
+      "interval_hours": 12
     },
     "written_answers": {
       "status": "not due",
@@ -25,15 +17,9 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "ok",
-      "offered": 0,
-      "daily_cap": 1,
-      "offered_today": 0,
-      "listed": 12,
-      "not_decisions": 9,
-      "no_borough_place": 0,
-      "already_seen": 2,
-      "new": 0
+      "status": "not due",
+      "last_checked": "2026-11-17T12:55:15.732640Z",
+      "interval_hours": 12
     },
     "ons_housing": {
       "status": "not due",
@@ -84,15 +70,15 @@
   "draft_rewrites_created": 1,
   "drafted_articles": [
     {
-      "slug": "old-office-block-on-yorkshire-street-to-be-converted-into-21-apartments",
+      "slug": "old-office-block-in-rochdale-to-be-converted-into-21-apartments",
       "source_url": "https://www.rochvalleyradio.com/news-features/140/business/1439/old-office-block-in-rochdale-will-be-turned-into-apartments"
     }
   ],
   "new_articles": 0,
-  "live_articles": 628,
+  "live_articles": 629,
   "skipped": 2,
   "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Rewrite the long verbatim source passage.": 1,
+    "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: These awards reco": 1,
     "quality gate after 4 repairs: Source fidelity: these quotation(s) are not in the source word for word: We are committed": 1
   },
   "rewrite_skips_unattributed": 0,
@@ -105,15 +91,15 @@
     "reopened_verified_official_notices": 0,
     "reopened_after_final_gate_removal": 0,
     "reopened_after_briefing_absorb_fix": 0,
-    "reopened_after_locality_fix": 1
+    "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
     "entries": 166,
     "by_outcome": {
       "editorial_twin": 16,
       "failed": 35,
-      "published": 83,
-      "rejected": 32
+      "published": 84,
+      "rejected": 31
     },
     "held_back_this_run": 28,
     "held_already_published": 14,
@@ -250,17 +236,14 @@
     }
   ],
   "published_with_style_issues": {
-    "Write at least 189 body words using only facts already present in the sources; the draft currently has 186.": 1
+    "Write at least 189 body words using only facts already present in the sources; the draft currently has 125.": 1
   },
   "local_impact": {
-    "shown": 1,
+    "shown": 0,
     "outcomes": {
-      "shown": 1
+      "writer offered no points": 1
     },
-    "points": {
-      "corrected to the story's own sentence": 1,
-      "dropped: no story sentence to correct it to": 1
-    }
+    "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
@@ -438,7 +421,7 @@
     "community": 92,
     "crime": 41,
     "education": 29,
-    "environment": 48,
+    "environment": 49,
     "events": 36,
     "health": 17,
     "news": 94,
@@ -1083,12 +1066,8 @@
     "https://www.rochdale.gov.uk/events/20056/training-courses-and-job-support?location=&period=full"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
-  ],
-  "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
-  },
+  "slow_domains_circuit_broken_this_run": [],
+  "slow_domain_failure_counts": {},
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1124,7 +1103,7 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-17T13:01:20.846734Z",
+  "frontpage_generated_at": "2026-11-17T13:20:21.747377Z",
   "frontpage_article_count": 16,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
@@ -1203,7 +1182,7 @@
     },
     "selected_by_source": {
       "department of health and social care": 1,
-      "greater manchester police press office": 1,
+      "rochdale times": 2,
       "rochdale borough council": 1,
       "lancashire telegraph": 1,
       "source": 1,
@@ -1211,7 +1190,7 @@
       "springhill hospice press office": 1,
       "rochdale boroughwide housing press office": 1,
       "manchester evening news": 1,
-      "rochdale times": 2,
+      "greater manchester police press office": 1,
       "your trust rochdale articles": 1,
       "rochdale daily": 2,
       "rochdale times; bbc north west; brit brief": 1,
@@ -1223,20 +1202,20 @@
     "selection_window_days": 2,
     "frontpage_count": 16,
     "homepage_freshness_hours": 36,
-    "fresh_under_24h": 10,
+    "fresh_under_24h": 8,
     "fresh_under_homepage_window": 16,
     "short_briefs_selected": 7,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
   "event_ticket_source_error": "",
-  "ticket_events_collected_this_run": 13,
+  "ticket_events_collected_this_run": 14,
   "events_kept_other_source": 28,
   "online_events_rejected": 0,
   "events_rejected_missing_physical_local_venue": 0,
-  "approved_ticket_events": 13,
+  "approved_ticket_events": 14,
   "event_dates_corrected_from_ledger": 0,
-  "duplicate_articles_after_postprocessing": 628,
+  "duplicate_articles_after_postprocessing": 629,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1246,7 +1225,7 @@
   ],
   "category_archive_count": 11,
   "area_archive_count": 28,
-  "whats_on_event_count": 13,
+  "whats_on_event_count": 14,
   "published_after_editorial_gate": 0,
   "published_new_slugs": [],
   "drafts_not_published": 1,
