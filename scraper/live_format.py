@@ -100,7 +100,13 @@ def normalise_updates(rows: Iterable[Any]) -> list[dict[str, Any]]:
 def live_state(article: dict[str, Any], now: datetime | None = None) -> dict[str, Any]:
     now = now or datetime.now(timezone.utc)
     updates = normalise_updates(article.get("live_updates") or [])
-    desk = bool(article.get("live_desk"))
+    # A live story the editor wrote herself (manual JSON with live_story) is
+    # editor-started, like one opened from the desk: it shows LIVE from its
+    # first update. On 17 Nov 2026 the Bamford explosion page went out with
+    # no timeline because its single opening update did not count.
+    desk = bool(article.get("live_desk")) or bool(
+        article.get("live_story") and (article.get("manual_article") is True or article.get("editorial_lock") is True)
+    )
     real = desk or len(updates) >= 2
     newest = updates[0]["when"] if updates else None
     ended = _dt(article.get("live_ended_at"))
