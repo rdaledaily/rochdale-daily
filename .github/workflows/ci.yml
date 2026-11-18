@@ -228,6 +228,7 @@ jobs:
           node --test scraper/test_columns_api.mjs
           node --test scraper/test_api_catalog.mjs
           node --test scraper/test_newsletter_sync.mjs
+          node --test scraper/test_tidy_internal_links.mjs
           PYTHONPATH=scraper python scraper/test_retired_urls_and_source_links.py
           python scraper/test_editorial_length.py
           python scraper/test_food_hygiene.py
