@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-18T17:06:40.492983Z",
+  "last_run_at": "2026-11-18T17:24:31.176557Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -54,40 +54,42 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 121,
-  "job_or_career_posts_rejected": 0,
-  "raw_candidates": 121,
+  "raw_candidates_before_job_filter": 138,
+  "job_or_career_posts_rejected": 1,
+  "raw_candidates": 137,
   "candidate_clusters": 51,
   "google_news_resolution": {
-    "wrappers": 39,
-    "resolved": 30,
-    "text_recovered": 19,
+    "wrappers": 62,
+    "resolved": 37,
+    "text_recovered": 9,
     "reattributed": 0,
-    "images_found": 24
+    "images_found": 15
   },
-  "duplicates_merged": 70,
+  "duplicates_merged": 86,
   "attempted_rewrites": 3,
-  "draft_rewrites_created": 2,
+  "draft_rewrites_created": 3,
   "drafted_articles": [
     {
       "slug": "gas-explosion-in-bamford-area-of-rochdale-causes-property-damage-but-no-injuries",
       "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078"
     },
     {
-      "slug": "explosion-on-bury-road-in-rochdale-leads-to-emergency-evacuations",
-      "source_url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831"
+      "slug": "government-seeks-to-deport-rochdale-grooming-gang-leader-shabir-ahmed-after-pris",
+      "source_url": "https://www.independent.co.uk/news/uk/crime/rochdale-grooming-gang-shabir-ahmed-deport-government-b3087399.html"
+    },
+    {
+      "slug": "rochdale-man-arrested-for-murder-after-wife-s-body-found-under-bed",
+      "source_url": "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell"
     }
   ],
-  "new_articles": 0,
-  "live_articles": 653,
-  "skipped": 1,
-  "rewrite_skip_reasons": {
-    "quality gate after 4 repairs: Source fidelity: these sentence(s) attribute statements the source does not contain: A pol": 1
-  },
+  "new_articles": 1,
+  "live_articles": 654,
+  "skipped": 0,
+  "rewrite_skip_reasons": {},
   "rewrite_skips_unattributed": 0,
   "rewrite_ledger_integrity": {
-    "missing_from_feed": 2,
-    "queued_for_retry": 2,
+    "missing_from_feed": 1,
+    "queued_for_retry": 1,
     "recovery_limit_reached": 0,
     "deliberately_blocked": 0,
     "reopened_after_evidence_fix": 0,
@@ -97,15 +99,15 @@
     "reopened_after_locality_fix": 0
   },
   "rewrite_ledger": {
-    "entries": 180,
+    "entries": 181,
     "by_outcome": {
       "editorial_twin": 16,
       "failed": 31,
-      "published": 91,
-      "rejected": 42
+      "published": 93,
+      "rejected": 41
     },
-    "held_back_this_run": 34,
-    "held_already_published": 21,
+    "held_back_this_run": 35,
+    "held_already_published": 22,
     "held_rejected": 13,
     "rejection_attempt_limit": 3,
     "retention_hours": 192
@@ -230,20 +232,21 @@
     }
   ],
   "published_with_style_issues": {
-    "Remove filler phrasing such as \"a major route\", \"in the area\" and \"further updates will be provided\". Name the road, the": 1,
-    "Write at least 200 body words using only facts already present in the sources; the draft currently has 110.": 1
+    "Make the first paragraph one sentence of no more than 30 words: who, what, where and the most striking verified detail.": 2,
+    "Write at least 200 body words using only facts already present in the sources; the draft currently has 125.": 1
   },
   "local_impact": {
     "shown": 0,
     "outcomes": {
-      "writer offered no points": 2
+      "not eligible: crime, court, police or death": 2,
+      "writer offered no points": 1
     },
     "points": {}
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 102,
-    "website_discovery": 11,
+    "rss_and_google_news": 121,
+    "website_discovery": 9,
     "aggregator_discovery": 0,
     "live_service_pages": 7,
     "facebook_official": 0,
@@ -256,7 +259,6 @@
   },
   "collector_errors": {},
   "rss_feed_failures": {
-    "Rochdale Times": "RemoteDisconnected: Remote end closed connection without response",
     "Oulder Hill Leadership Academy": "RemoteDisconnected: Remote end closed connection without response"
   },
   "rss_feed_empty": {
@@ -290,6 +292,14 @@
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
       "bozo": false,
+      "feed_title": ""
+    },
+    "Rochdale Times": {
+      "url": "https://www.rochdaletimes.co.uk/feed/",
+      "http_status": 202,
+      "content_type": "text/html",
+      "final_url": "https://www.rochdaletimes.co.uk/feed/",
+      "bozo": true,
       "feed_title": ""
     },
     "Falinge Park High School": {
@@ -382,30 +392,26 @@
       "source": "Manchester Evening News",
       "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078",
       "kind": "live-incident"
-    },
-    {
-      "title": "'It was like a bomb': Shock after huge explosion as new statements issued",
-      "source": "Manchester Evening News",
-      "url": "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831",
-      "kind": "live-incident"
     }
   ],
   "source_counts": {
-    "Rochdale Times": 34,
-    "Manchester Evening News": 17,
+    "Rochdale Times": 30,
+    "Manchester Evening News": 23,
     "Roch Valley Radio": 15,
+    "BBC Manchester": 7,
     "Bee Network live travel alerts": 7,
-    "BBC Manchester": 6,
-    "Oldham Times": 4,
-    "Rochdale Borough Council": 4,
+    "BBC": 6,
+    "Rochdale Borough Council": 5,
+    "Housing Today": 4,
+    "Nacionale": 4,
+    "Rochdale AFC": 3,
+    "Oldham Times": 3,
     "I Love Manchester": 3,
-    "Housing Today": 3,
+    "Inside Housing": 3,
     "Roch Valley Radio Local News": 3,
-    "Rochdale AFC": 2,
     "UKNIP": 2,
-    "Inside Housing": 2,
-    "BBC": 2,
-    "Nacionale": 2,
+    "Building Design": 2,
+    "About Manchester": 2,
     "Greater Manchester Police": 2,
     "Your Trust Rochdale": 1,
     "Hopwood Hall College": 1,
@@ -415,26 +421,25 @@
     "Yahoo": 1,
     "Sporticos": 1,
     "InYourArea": 1,
-    "Building Design": 1,
+    "The Mirror": 1,
     "Metro.co.uk": 1,
-    "About Manchester": 1,
     "Your Trust Rochdale Articles": 1,
+    "The Independent — Rochdale": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {
-    "crime": 1,
-    "environment": 1,
-    "news": 1
+    "crime": 2,
+    "environment": 1
   },
   "published_by_category": {
     "business": 72,
     "community": 98,
-    "crime": 45,
+    "crime": 46,
     "education": 30,
     "environment": 51,
     "events": 39,
     "health": 18,
-    "news": 97,
+    "news": 96,
     "politics": 20,
     "sport": 57,
     "traffic": 48,
@@ -464,12 +469,12 @@
   ],
   "selected_story_keys": [
     "environment-v3-a5bb48bfb6799d00974e",
-    "hard-news-v3-701e7ae73f637a8b10a8",
+    "hard-news-v3-ebc98dd13d0c9ba9bb46",
     "hard-news-v3-45fe9d8bf95a26db5fd3"
   ],
   "selected_candidate_urls": [
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/gallery/rochdale-home-explosion-drone-pictures-34930078",
-    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831",
+    "https://www.independent.co.uk/news/uk/crime/rochdale-grooming-gang-shabir-ahmed-deport-government-b3087399.html",
     "https://www.rochvalleyradio.com/news-features/4/crime/1446/rochdale-man-murdered-wife-and-hid-her-body-under-bed-for-two-days-before-calling-police-over-smell"
   ],
   "x_social_records": 0,
@@ -497,16 +502,17 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 1
+      "crime": 2
     },
     "selected_by_ward": {},
     "selected_by_area": {
-      "rochdale": 1
+      "rochdale": 2
     },
     "selected_by_source": {
-      "roch valley radio local news": 1
+      "roch valley radio local news": 1,
+      "the independent — rochdale": 1
     },
-    "must_cover_selected": 2
+    "must_cover_selected": 1
   },
   "official_ward_count": 20,
   "career_and_vacancy_content_banned": true,
@@ -1065,8 +1071,14 @@
     "https://news.google.com/rss/articles/CBMinAFBVV95cUxPSEl3YjJNWGNSOS1rSUlvdTNEMWpxSVZHXzk3ZnUwcWUzVnR4dkttMWwxVHlOQ29lUW9LRHBvN0RpQmFEQTExRmI1QjI2Z0tzaDYyZjc2c0Fvek50ZjFidTlrRG05NVZpZGNGRVdJQ0M1QjVnZUVEdzR4WFY1VThkSV90NDJOUzAtUXdaQ2ZGYndEUlJaQldxd0d2WHE?oc=5"
   ],
   "slow_domain_failure_threshold": 1,
-  "slow_domains_circuit_broken_this_run": [],
-  "slow_domain_failure_counts": {},
+  "slow_domains_circuit_broken_this_run": [
+    "rochdaleafc.co.uk",
+    "visitrochdale.com"
+  ],
+  "slow_domain_failure_counts": {
+    "rochdaleafc.co.uk": 7,
+    "visitrochdale.com": 3
+  },
   "men_rochdale_source": {
     "enabled": true,
     "mode": "official section RSS",
@@ -1102,8 +1114,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-18T17:07:54.772842Z",
-  "frontpage_article_count": 25,
+  "frontpage_generated_at": "2026-11-18T17:25:55.789442Z",
+  "frontpage_article_count": 26,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1163,7 +1175,7 @@
     "uncovered_wards": [],
     "uncovered_areas": [],
     "selected_by_category": {
-      "crime": 5,
+      "crime": 6,
       "traffic": 1,
       "education": 1,
       "events": 1,
@@ -1174,7 +1186,7 @@
       "news": 6
     },
     "selected_by_ward": {
-      "borough-wide": 21,
+      "borough-wide": 22,
       "Spotland and Falinge": 1,
       "Central Rochdale": 1,
       "Bamford": 1,
@@ -1186,11 +1198,11 @@
       "heywood": 2,
       "middleton": 3,
       "milnrow": 1,
-      "rochdale": 21
+      "rochdale": 22
     },
     "selected_by_source": {
       "gmp press office": 2,
-      "bbc manchester": 1,
+      "the independent — rochdale": 1,
       "rochdale borough council": 1,
       "falinge park high school": 1,
       "grushka house": 1,
@@ -1199,24 +1211,25 @@
       "your trust rochdale articles": 1,
       "building design": 2,
       "rochdale daily": 2,
+      "bbc manchester": 1,
       "manchester evening news": 5,
       "find a tender": 1,
-      "the bury times": 1,
       "department of health and social care": 1,
       "inyourarea": 1,
+      "the bury times": 1,
       "milton keynes citizen": 1,
       "greater manchester fire and rescue service": 1,
       "rochdale times; bbc north west; brit brief": 1
     },
-    "pool_size": 29,
-    "primary_pool_size": 29,
+    "pool_size": 30,
+    "primary_pool_size": 30,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 25,
+    "frontpage_count": 26,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 15,
-    "fresh_under_homepage_window": 24,
-    "short_briefs_selected": 14,
+    "fresh_under_homepage_window": 25,
+    "short_briefs_selected": 15,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
@@ -1227,7 +1240,7 @@
   "events_rejected_missing_physical_local_venue": 0,
   "approved_ticket_events": 14,
   "event_dates_corrected_from_ledger": 1,
-  "duplicate_articles_after_postprocessing": 653,
+  "duplicate_articles_after_postprocessing": 654,
   "blocked_articles_removed": 0,
   "low_quality_articles_removed": 0,
   "stale_article_pages_removed": 0,
@@ -1238,9 +1251,11 @@
   "category_archive_count": 11,
   "area_archive_count": 28,
   "whats_on_event_count": 16,
-  "published_after_editorial_gate": 0,
-  "published_new_slugs": [],
+  "published_after_editorial_gate": 1,
+  "published_new_slugs": [
+    "government-seeks-to-deport-rochdale-grooming-gang-leader-shabir-ahmed-after-pris"
+  ],
   "drafts_not_published": 2,
-  "publication_health": "blocked",
+  "publication_health": "partial",
   "publication_audit": "counted only in final feed AND generated article pages"
 }
