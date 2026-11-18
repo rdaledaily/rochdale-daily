@@ -633,7 +633,7 @@ def newsletter_box_markup(form_id: str = 'article-newsletter') -> str:
               <p class="rail-newsletter-status">By signing up you agree to our <a href="/privacy.html">privacy policy</a>. Unsubscribe any time.</p>
               <p class="rail-newsletter-status" id="{fid}-status" role="status" aria-live="polite"></p>
             </form>
-            <p><a href="https://www.google.com/preferences/source?q=rochdaledaily.co.uk">Add Rochdale Daily as a preferred source on Google</a> or <a href="/rss.xml">follow the RSS feed</a>.</p>
+            <nav class="reader-follow-links" aria-label="Follow Rochdale Daily"><a href="https://www.google.com/preferences/source?q=rochdaledaily.co.uk">Add Rochdale Daily as a preferred source on Google</a><a href="/rss.xml">Follow the RSS feed</a></nav>
           </section>'''
 
 
