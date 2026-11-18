@@ -1,38 +1,38 @@
 {
-  "examined_at": "2026-11-17T16:28:12.587571Z",
+  "examined_at": "2026-11-18T15:57:54.022037Z",
   "reservoir_retention_hours": 96,
-  "candidates_examined": 146,
+  "candidates_examined": 154,
   "publish_age_gate_hours": 24,
   "first_blocking_gate": {
-    "age": 108,
-    "would publish": 31,
-    "duplicate of published story": 7
+    "age": 109,
+    "would publish": 27,
+    "duplicate of published story": 18
   },
-  "would_publish": 31,
+  "would_publish": 27,
   "age_gate_sensitivity": {
-    "6h": 15,
-    "14h": 24,
-    "24h": 38,
-    "48h": 67,
-    "72h": 114,
-    "168h": 146
+    "6h": 13,
+    "14h": 26,
+    "24h": 45,
+    "48h": 82,
+    "72h": 111,
+    "168h": 154
   },
   "gates_unavailable": [],
   "examples": {
     "would publish": [
       "Food Standards Agency: 65 Rochdale food businesses currently rated 0 or 1 for hygiene",
-      "Bee Network live travel alerts: Updated: 17/11/2026 at 3:09pm Live Failsworth Tram Stop - Lifts out of",
-      "BBC Manchester: York City player pleads not guilty over alleged punch of Rochdale fan"
+      "Bee Network live travel alerts: Updated: 18/11/2026 at 1:09pm Live Failsworth Tram Stop - Lifts out of",
+      "Greater Manchester Police: Man jailed for life for murdering woman in Rochdale - Greater Manchest"
     ],
     "duplicate of published story": [
-      "Your Trust Rochdale Articles: Rochdale Borough Active Awards 2026 Celebrate Our Community Champions ",
-      "Your Trust Rochdale: Rochdale Borough Active Awards 2026 Celebrate Our Community Champions",
-      "Rochdale Times: More support for homeless up as winter bites - Rochdale Times"
+      "I Love Manchester: What a £5.6m temporary accommodation plan could mean for Rochdale",
+      "BBC Manchester: Police investigate death of boy, 3, after incident at nursery",
+      "About Manchester: Police confirm investigation into death of three year old boy at Middl"
     ],
     "age": [
-      "The York Press: Defeat was 'tough to take' for Rochdale as boss questions goal line cl",
-      "About Manchester: Rochdale’s Seven Sisters to be demolished and replaced with 600 new ho",
-      "BBC Manchester: Rochdale's landmark Seven Sisters tower blocks to be demolished"
+      "Manchester Evening News: Outrage as brick launched through hospice window in 'horrific spate of",
+      "Yahoo News UK: Heartbreak as brick launched through Rochdale hospice window in 'horri",
+      "Building Design: Seven modernist tower blocks in Rochdale to be demolished - Building D"
     ]
   },
   "note": "Gates are applied in pipeline order and each candidate is attributed to the first gate that stops it, so the counts sum to the reservoir rather than double-counting. age_gate_sensitivity ignores every other gate: it is the ceiling the age setting allows, not a forecast of published stories."
