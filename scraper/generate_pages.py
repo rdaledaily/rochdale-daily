@@ -1545,6 +1545,13 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
         pages.extend(sorted((root / "wards").glob("*.html")))
     pages.extend([root / "heywood.html", root / "milnrow.html", root / "middleton.html", root / "littleborough.html",
                   root / "start-here.html", root / "whats-on.html", root / "roadworks.html", root / "rochdale-afc.html"])
+    # Evergreen guides (18 Nov 2026), written by generate_guides.py.
+    if (root / "guides").is_dir():
+        pages.append(root / "guides" / "index.html")
+        pages.extend(sorted(p for p in (root / "guides").glob("*.html") if p.name != "index.html"))
+    # Community directory (18 Nov 2026), written by generate_groups.py.
+    if (root / "groups" / "index.html").exists():
+        pages.append(root / "groups" / "index.html")
     # Township weather pages (18 Nov 2026), written by generate_weather_pages.py.
     if (root / "weather").is_dir():
         pages.append(root / "weather" / "index.html")
@@ -1560,6 +1567,8 @@ def locally_indexable_hub_urls(root: Path = Path(".")) -> list[str]:
             continue
         relative = path.relative_to(root).as_posix()
         public_path = ("wards/" if relative == "wards/index.html" else "weather/" if relative == "weather/index.html"
+                       else "guides/" if relative == "guides/index.html"
+                       else "groups/" if relative == "groups/index.html"
                        else "start-here" if relative == "start-here.html" else relative)
         expected = f"{SITE_BASE_URL}/{public_path}"
         try:
@@ -1776,6 +1785,19 @@ def main() -> None:
               f"{seo['alts_filled']} image alt(s) filled on {seo['pages_fixed']} of {seo['pages_scanned']} pages")
     except Exception as exc:  # never let the sweep block the paper
         print(f'SEO page sweep skipped: {type(exc).__name__}: {exc}')
+    # Evergreen guides (18 Nov 2026): standalone pages, never articles, so they
+    # never reach the front page, newsletter or RSS. Built here so every lane
+    # rebuilds them and the sitemap below lists them.
+    try:
+        from generate_guides import main as build_guides
+        build_guides()
+    except Exception as exc:  # never let a guide failure block the paper
+        print(f'Guides skipped: {type(exc).__name__}: {exc}')
+    try:
+        from generate_groups import main as build_groups
+        build_groups()
+    except Exception as exc:  # never let the directory block the paper
+        print(f'Community directory skipped: {type(exc).__name__}: {exc}')
     try:
         from generate_afc_hub import main as build_afc_hub
         build_afc_hub()
