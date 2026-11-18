@@ -1,5 +1,5 @@
 {
-  "last_run_at": "2026-11-18T00:46:42.875797Z",
+  "last_run_at": "2026-11-18T01:06:01.722839Z",
   "primary_data": {
     "council_roadworks": {
       "status": "not due",
@@ -7,9 +7,17 @@
       "interval_hours": 6
     },
     "gazette_insolvency": {
-      "status": "not due",
-      "last_checked": "2026-11-17T12:55:15.732640Z",
-      "interval_hours": 12
+      "status": "ok",
+      "offered": 0,
+      "daily_cap": 2,
+      "offered_today": 0,
+      "listed": 11,
+      "other_notice_types": 1,
+      "already_seen": 10,
+      "new": 0,
+      "outside_borough": 0,
+      "no_company_address": 0,
+      "notice_unreadable": 0
     },
     "written_answers": {
       "status": "not due",
@@ -17,18 +25,20 @@
       "interval_hours": 6
     },
     "gmca_decisions": {
-      "status": "not due",
-      "last_checked": "2026-11-17T12:55:15.732640Z",
-      "interval_hours": 12
-    },
-    "ons_housing": {
       "status": "ok",
       "offered": 0,
       "daily_cap": 1,
       "offered_today": 0,
-      "listed": 1,
+      "listed": 12,
+      "not_decisions": 10,
+      "no_borough_place": 0,
       "already_seen": 1,
       "new": 0
+    },
+    "ons_housing": {
+      "status": "not due",
+      "last_checked": "2026-11-18T00:43:44.644702Z",
+      "interval_hours": 24
     },
     "contract_notices": {
       "status": "not due",
@@ -58,18 +68,18 @@
     },
     "status": "ok"
   },
-  "raw_candidates_before_job_filter": 134,
+  "raw_candidates_before_job_filter": 117,
   "job_or_career_posts_rejected": 0,
-  "raw_candidates": 134,
+  "raw_candidates": 117,
   "candidate_clusters": 44,
   "google_news_resolution": {
-    "wrappers": 34,
-    "resolved": 31,
-    "text_recovered": 19,
-    "reattributed": 1,
-    "images_found": 24
+    "wrappers": 23,
+    "resolved": 22,
+    "text_recovered": 15,
+    "reattributed": 0,
+    "images_found": 19
   },
-  "duplicates_merged": 90,
+  "duplicates_merged": 73,
   "attempted_rewrites": 0,
   "draft_rewrites_created": 0,
   "drafted_articles": [],
@@ -257,7 +267,7 @@
   },
   "style_issues_block_publication": false,
   "collector_counts": {
-    "rss_and_google_news": 111,
+    "rss_and_google_news": 94,
     "website_discovery": 16,
     "aggregator_discovery": 0,
     "live_service_pages": 6,
@@ -304,6 +314,14 @@
       "http_status": 202,
       "content_type": "text/html; charset=UTF-8",
       "final_url": "https://www.manchestereveningnews.co.uk/all-about/littleborough?service=rss",
+      "bozo": false,
+      "feed_title": ""
+    },
+    "Falinge Park High School": {
+      "url": "https://www.falingepark.com/feed/",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://www.falingepark.com/feed/",
       "bozo": false,
       "feed_title": ""
     },
@@ -386,34 +404,32 @@
   },
   "immediate_first": [],
   "source_counts": {
-    "Rochdale Times": 40,
-    "Roch Valley Radio": 19,
+    "Rochdale Times": 36,
+    "Roch Valley Radio": 18,
     "Rochdale AFC": 13,
-    "Manchester Evening News": 12,
+    "Manchester Evening News": 9,
     "Bee Network live travel alerts": 6,
     "BBC Manchester": 4,
     "BBC": 4,
-    "Rochdale Borough Council": 3,
     "Roch Valley Radio Local News": 3,
     "Your Trust Rochdale": 2,
-    "Oldham Times": 2,
-    "UKNIP": 2,
-    "About Manchester": 2,
     "Yahoo": 2,
     "InYourArea": 2,
     "Building Design": 2,
-    "Facebook": 2,
-    "Milton Keynes Citizen": 2,
     "Your Trust Rochdale Articles": 2,
-    "Falinge Park High School": 1,
     "Hopwood Hall College": 1,
+    "Oldham Times": 1,
+    "UKNIP": 1,
     "The Bolton News": 1,
     "Housing Today": 1,
+    "About Manchester": 1,
     "Total Rugby League": 1,
     "The York Press": 1,
+    "Yahoo News UK": 1,
     "The Mirror": 1,
     "Place North West": 1,
-    "Net": 1,
+    "Milton Keynes Citizen": 1,
+    "Facebook": 1,
     "Food Standards Agency": 1
   },
   "selected_by_category": {},
@@ -1023,10 +1039,10 @@
   ],
   "slow_domain_failure_threshold": 1,
   "slow_domains_circuit_broken_this_run": [
-    "rochdaleafc.co.uk"
+    "visitrochdale.com"
   ],
   "slow_domain_failure_counts": {
-    "rochdaleafc.co.uk": 1
+    "visitrochdale.com": 1
   },
   "men_rochdale_source": {
     "enabled": true,
@@ -1063,8 +1079,8 @@
   "publisher_source_image_policy": "Automatic source-image reuse is limited to IMAGE_REUSE_SOURCE_DOMAINS; other sources fall back to curated/Commons/generated artwork.",
   "rich_source_length_policy": "200 words remains the target; grounded drafts within 10 words of it are accepted rather than padded.",
   "developing_story_watch_policy": "Only explicit live/breaking/timestamped-update records and plausible changing authoritative pages are rechecked; static legacy council guidance is not.",
-  "frontpage_generated_at": "2026-11-18T00:47:52.407036Z",
-  "frontpage_article_count": 18,
+  "frontpage_generated_at": "2026-11-18T01:07:40.009940Z",
+  "frontpage_article_count": 17,
   "frontpage_minimum_met": true,
   "frontpage_coverage": {
     "available_categories": [
@@ -1119,7 +1135,7 @@
     "uncovered_areas": [],
     "selected_by_category": {
       "traffic": 2,
-      "crime": 2,
+      "crime": 1,
       "business": 1,
       "community": 4,
       "health": 3,
@@ -1128,7 +1144,7 @@
       "sport": 1
     },
     "selected_by_ward": {
-      "borough-wide": 14,
+      "borough-wide": 13,
       "Smallbridge and Firgrove": 1,
       "Bamford": 2,
       "North Heywood": 1
@@ -1148,7 +1164,6 @@
       "find a tender": 1,
       "rochdale boroughwide housing press office": 1,
       "dailymail": 1,
-      "oldham times": 1,
       "greater manchester fire and rescue service": 1,
       "your trust rochdale articles": 2,
       "rochdale daily": 1,
@@ -1161,11 +1176,11 @@
     "primary_pool_size": 28,
     "fallback_stories_used": 0,
     "selection_window_days": 2,
-    "frontpage_count": 18,
+    "frontpage_count": 17,
     "homepage_freshness_hours": 36,
     "fresh_under_24h": 11,
-    "fresh_under_homepage_window": 18,
-    "short_briefs_selected": 9,
+    "fresh_under_homepage_window": 17,
+    "short_briefs_selected": 8,
     "frontpage_minimum_met": true
   },
   "event_ticket_source": "https://www.whatsoccurrinevents.co.uk/ticket-box-office",
