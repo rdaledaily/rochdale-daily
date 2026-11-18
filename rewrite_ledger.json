@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-18T11:24:43.724884Z",
+  "updated_at": "2026-11-18T11:42:42.338805Z",
   "retention_hours": 192,
   "rejection_attempt_limit": 3,
-  "count": 173,
+  "count": 174,
   "entries": {
     "https://aboutmanchester.co.uk/fire-festival-returns-to-rochdale-with-free-entry-and-christmas-lights-switch-on-2": {
       "first_attempt_at": "2026-11-14T00:06:10.120674Z",
@@ -1266,13 +1266,13 @@
       "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
       "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
       "last_attempt_at": "2026-11-18T11:24:43.724587Z",
-      "outcome": "published",
-      "reason": "",
+      "outcome": "failed",
+      "reason": "recorded published but missing from feed; retry with current checks",
       "title": "Homes rocked by 'massive' explosion as emergency services scrambled to 'hot tub' blast",
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "bbd1f6d90bedd6a6",
-      "recovery_attempts": 1
+      "recovery_attempts": 2
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/hot-tub-explode-rochdale-moment-34927608": {
       "first_attempt_at": "2026-11-18T10:29:58.946911Z",
@@ -1289,6 +1289,28 @@
       "source_name": "Manchester Evening News",
       "category": "news",
       "text_fingerprint": "c6c04ac15b58c0fb"
+    },
+    "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831": {
+      "first_attempt_at": "2026-11-18T11:42:42.338488Z",
+      "attempts": 1,
+      "urls": [
+        "https://cedarnews.net/newstasks/1162032/explosion-rochdale-live-emergency-services-scrambled-massive",
+        "https://www.dailyrecord.co.uk/news/uk-world-news/dramatic-moment-rochdale-hot-tub-37888389",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/homes-rocked-massive-explosion-emergency-34927464",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/hot-tub-explode-rochdale-moment-34927608",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/it-like-bomb-going-off-34928831",
+        "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/rochdale-explosion-live-emergency-services-34926953",
+        "https://www.mirror.co.uk/news/uk-news/hot-tub-explosion-rochdale-37887848"
+      ],
+      "policy_epoch": "2026-10-11-unblock-source-attributed-v1",
+      "overlap_rebuild_epoch": "2026-10-19-fact-notes-v1",
+      "last_attempt_at": "2026-11-18T11:42:42.338488Z",
+      "outcome": "published",
+      "reason": "",
+      "title": "'It was like a bomb': Shock after huge explosion as new statements issued",
+      "source_name": "Manchester Evening News",
+      "category": "news",
+      "text_fingerprint": "45246234109a57c1"
     },
     "https://www.manchestereveningnews.co.uk/news/greater-manchester-news/jailed-trusted-dealer-who-ran-34885798": {
       "first_attempt_at": "2026-11-09T15:38:31.713519Z",
