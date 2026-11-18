@@ -422,6 +422,11 @@ def compose_caption(article: dict[str, Any]) -> str:
     body (the link goes in the first comment), no emoji, no engagement bait.
     Crime and court posts carry no comment invitation: comments are closed on
     those stories on the site too."""
+    # Editor's own wording for a one-off repost (editor, 18 Nov 2026): used
+    # exactly as written, followed only by where the full story is.
+    custom = str(article.get("facebook_caption") or "").strip()
+    if custom and article.get("facebook_repost_id"):
+        return custom + "\n\nFull story in the first comment."
     title = one_line(article.get("title"))
     headline = clean_social_headline(article.get("social_headline"), title) or title
     facts = additional_facts(article, headline, title)
@@ -707,7 +712,8 @@ def main() -> int:
 
     page_id_cache: list[str] = []
 
-    def publish(article: dict[str, Any], photo: str, slot: str, lane: str) -> dict[str, Any]:
+    def publish(article: dict[str, Any], photo: str, slot: str, lane: str,
+                key: str = "") -> dict[str, Any]:
         """Post one story; on success record it in the state and return the record."""
         caption = compose_caption(article)
         destination = canonical_url(article)
@@ -749,7 +755,7 @@ def main() -> int:
             record["today_kind"] = today_kind(article)
         if not dry_run:
             stored = {k: v for k, v in record.items() if k != "caption"}
-            posted[article_key(article)] = stored
+            posted[key or article_key(article)] = stored
             if lane == "slot":
                 slots[slot] = {"facebook_post_id": post_id, "posted_at": posted_at, "article_key": article_key(article)}
             state["updated_at"] = posted_at
@@ -759,6 +765,29 @@ def main() -> int:
 
     done: list[tuple[dict[str, Any], dict[str, Any]]] = []
     failure = ""
+
+    # 0. Editor-requested reposts: a story already on Facebook that the editor
+    # wants posted again now, with her own wording (facebook_caption) under a
+    # new facebook_repost_id. Posts once per id, at any hour, whatever its age.
+    for article in articles:
+        if not isinstance(article, dict):
+            continue
+        repost_id = str(article.get("facebook_repost_id") or "").strip()
+        if not repost_id or not str(article.get("facebook_caption") or "").strip():
+            continue
+        if not eligible(article, 0, now) or article.get("sponsored") or article.get("paid_submission"):
+            continue
+        repost_key = f"{article_key(article)}#repost:{repost_id}"
+        if repost_key in posted:
+            continue
+        photo = post_photo(article) or today_photo(article)
+        slot = now.astimezone(LONDON).strftime("%Y-%m-%d:%H:%M") + "-repost"
+        try:
+            done.append((article, publish(article, photo, slot, "editor-repost", key=repost_key)))
+        except RuntimeError as exc:
+            failure = f"{article.get('title')}: {exc}"
+            print(str(exc), file=sys.stderr)
+            break
 
     # 1. Stories that affect readers today: every one, now, at any hour.
     today_keys: set[str] = set()

@@ -328,6 +328,10 @@ def _normalise(entry: dict[str, Any], now: datetime) -> dict[str, Any] | None:
         record["previous_titles"] = [_clean(t) for t in entry["previous_titles"] if _clean(t)][:10]
     if entry.get("frontpage_until"):
         record["frontpage_until"] = _clean(entry.get("frontpage_until"))
+    # Editor-requested Facebook repost with her own wording (18 Nov 2026).
+    if entry.get("facebook_caption") and entry.get("facebook_repost_id"):
+        record["facebook_caption"] = _clean(entry.get("facebook_caption"))
+        record["facebook_repost_id"] = _clean(entry.get("facebook_repost_id"))
     if entry.get("exclude_from_frontpage") is True:
         record["exclude_from_frontpage"] = True
     if entry.get("sponsored") is True:
