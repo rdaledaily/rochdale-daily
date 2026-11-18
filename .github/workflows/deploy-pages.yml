@@ -45,6 +45,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -148,7 +149,44 @@ jobs:
         with:
           path: .
 
+      # deploy-pages looks the artifact up by name the instant it starts, and
+      # GitHub sometimes takes a few seconds to list a freshly uploaded one.
+      # Nine of the ten failed deploys from 10-18 Nov 2026 were exactly that:
+      # "No artifacts named github-pages were found" 0.4s after a successful
+      # upload. Wait until the API lists it before deploying.
+      - name: Wait for the site artifact to be listed
+        if: steps.gate.outputs.pending != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 24); do
+            n=$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" \
+                  --jq '[.artifacts[] | select(.name == "github-pages")] | length' 2>/dev/null || echo 0)
+            if [ "${n:-0}" -ge 1 ]; then echo "artifact listed after $(( (i-1)*5 ))s"; exit 0; fi
+            sleep 5
+          done
+          echo "::error::github-pages artifact still not listed after 2 minutes"
+          exit 1
+
       - name: Deploy to GitHub Pages
         if: steps.gate.outputs.pending != 'true'
-        id: deployment
+        id: first_deploy
+        continue-on-error: true
         uses: actions/deploy-pages@v5
+
+      # One retry for a transient Pages API error (metadata fetch or timeout).
+      # A second failure fails the run.
+      - name: Retry deploy after a transient Pages error
+        if: steps.gate.outputs.pending != 'true' && steps.first_deploy.outcome == 'failure'
+        id: retry_deploy
+        run: sleep 30
+
+      - name: Deploy to GitHub Pages (retry)
+        if: steps.gate.outputs.pending != 'true' && steps.first_deploy.outcome == 'failure'
+        id: second_deploy
+        uses: actions/deploy-pages@v5
+
+      - name: Record the deployed URL
+        if: steps.gate.outputs.pending != 'true'
+        id: deployment
+        run: echo "page_url=${{ steps.first_deploy.outputs.page_url || steps.second_deploy.outputs.page_url }}" >> "$GITHUB_OUTPUT"
