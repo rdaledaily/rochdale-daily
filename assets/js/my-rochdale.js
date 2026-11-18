@@ -5,7 +5,7 @@
 (() => {
 "use strict";
 const byId=id=>document.getElementById(id);
-const councillorView = new URLSearchParams(window.location.search).get("view") === "councillors";
+const councillorView = globalThis.location?.search ? new URLSearchParams(globalThis.location.search).get("view") === "councillors" : false;
 const lookupLabel = councillorView ? "Find my councillors" : "Explore my area →";
 if (councillorView) {
  const hero = document.querySelector(".hero");
